@@ -1,11 +1,12 @@
-const path = require('path');
+// next.config.js
+const isProd = process.env.NODE_ENV === 'production'
+const repo = 'ingles'  // <- nombre exacto del repo
 
 /** @type {import('next').NextConfig} */
-const nextConfig = {
-  webpack(config) {
-    config.resolve.alias['@'] = path.resolve(__dirname, './src');
-    return config;
-  },
-};
-
-module.exports = nextConfig;
+module.exports = {
+  output: 'export',              // genera HTML estático en /out
+  images: { unoptimized: true }, // requerido para Pages
+  basePath: isProd ? `/${repo}` : '',
+  assetPrefix: isProd ? `/${repo}/` : '',
+  trailingSlash: true            // evita 404 con rutas estáticas
+}

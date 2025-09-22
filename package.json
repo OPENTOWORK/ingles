@@ -1,15 +1,16 @@
 {
-  "name": "english-practice",
   "version": "0.1.0",
   "private": true,
   "scripts": {
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "export": "next export",
+    "pages": "npm run build && npm run export"
   },
   "dependencies": {
-    "@react-email/components": "^0.0.42",
+    "@react-email/components": "0.0.42",
     "@supabase/auth-helpers-nextjs": "^0.10.0",
     "@supabase/supabase-js": "^2.50.0",
     "i18next-resources-to-backend": "^1.2.1",
