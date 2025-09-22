@@ -15,6 +15,16 @@ export default function RootLayoutClient({ children }) {
   const pathname = usePathname();
 
   const publicRoutes = ['/', '/login', '/registro', '/reset-password'];
+  // Normalizar pathname removiendo barra final para comparación
+  const normalizedPathname = pathname.endsWith('/') && pathname !== '/' ? pathname.slice(0, -1) : pathname;
+  const isPublic = publicRoutes.includes(normalizedPathname);
+
+  // Debug: agregar logging temporal
+  console.log('Current pathname:', pathname);
+  console.log('Normalized pathname:', normalizedPathname);
+  console.log('Is public route:', isPublic);
+  console.log('Loading:', loading);
+  console.log('Session:', session);
 
   useEffect(() => {
     const getSession = async () => {
@@ -22,10 +32,12 @@ export default function RootLayoutClient({ children }) {
       setSession(data.session);
       setLoading(false);
     };
+    
     getSession();
 
     const { data: listener } = supabase.auth.onAuthStateChange((_event, newSession) => {
       setSession(newSession);
+      setLoading(false);
     });
 
     return () => {
@@ -33,7 +45,13 @@ export default function RootLayoutClient({ children }) {
     };
   }, []);
 
-  const isPublic = publicRoutes.includes(pathname);
+  useEffect(() => {
+    console.log('Redirect check:', { loading, session: !!session, isPublic, pathname: normalizedPathname });
+    if (!loading && !session && !isPublic) {
+      console.log('Redirecting to login from:', pathname);
+      router.replace('/login');
+    }
+  }, [loading, session, isPublic, router, normalizedPathname]);
 
   const handleLogout = async () => {
     await supabase.auth.signOut();
@@ -42,11 +60,6 @@ export default function RootLayoutClient({ children }) {
 
   if (loading) {
     return <p style={{ textAlign: 'center' }}>Loading...</p>;
-  }
-
-  if (!session && !isPublic) {
-    router.replace('/login');
-    return null;
   }
 
   return (
