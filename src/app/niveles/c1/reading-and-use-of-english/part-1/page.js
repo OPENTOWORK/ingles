@@ -46,11 +46,7 @@ export default function ReadingPart1() {
       </div>
 
       <div style={{ display: 'flex', justifyContent: 'center' }}>
-        <NavigationButtons
-          back="/niveles/c1"
-          next="/niveles/c1/reading-and-use-of-english/part-2"
-          home="/niveles/c1"
-        />
+        <NavigationButtons part="part-1" />
       </div>
     </div>
   );
