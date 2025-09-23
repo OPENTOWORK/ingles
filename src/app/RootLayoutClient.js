@@ -15,16 +15,7 @@ export default function RootLayoutClient({ children }) {
   const pathname = usePathname();
 
   const publicRoutes = ['/', '/login', '/registro', '/reset-password'];
-  // Normalizar pathname removiendo barra final para comparación
-  const normalizedPathname = pathname.endsWith('/') && pathname !== '/' ? pathname.slice(0, -1) : pathname;
-  const isPublic = publicRoutes.includes(normalizedPathname);
-
-  // Debug: agregar logging temporal
-  console.log('Current pathname:', pathname);
-  console.log('Normalized pathname:', normalizedPathname);
-  console.log('Is public route:', isPublic);
-  console.log('Loading:', loading);
-  console.log('Session:', session);
+  
 
   useEffect(() => {
     const getSession = async () => {
@@ -35,32 +26,32 @@ export default function RootLayoutClient({ children }) {
     
     getSession();
 
-    const { data: listener } = supabase.auth.onAuthStateChange((_event, newSession) => {
+    const { data: sub } = supabase.auth.onAuthStateChange((_event, newSession) => {
       setSession(newSession);
       setLoading(false);
     });
-
-    return () => {
-      listener?.subscription?.unsubscribe?.();
-    };
+    return () => sub?.subscription?.unsubscribe?.();
   }, []);
 
+  // incluye subrutas (p.ej. /reset-password/xyz)
+  const isPublic = publicRoutes.some(
+    (route) => pathname === route || pathname.startsWith(`${route}/`)
+  );
+
+  // ⚠️ Redirige DESPUÉS del render
   useEffect(() => {
-    console.log('Redirect check:', { loading, session: !!session, isPublic, pathname: normalizedPathname });
-    if (!loading && !session && !isPublic) {
-      console.log('Redirecting to login from:', pathname);
+    if (!loading && !isPublic && !session) {
       router.replace('/login');
     }
-  }, [loading, session, isPublic, router, normalizedPathname]);
+  }, [loading, isPublic, session, router]);
+
+  // Mientras resolvemos sesión o estamos redirigiendo, no pintes nada
+  if (!isPublic && (loading || !session)) return null;
 
   const handleLogout = async () => {
     await supabase.auth.signOut();
     router.push('/login');
   };
-
-  if (loading) {
-    return <p style={{ textAlign: 'center' }}>Loading...</p>;
-  }
 
   return (
     <ExamProvider>
@@ -68,7 +59,7 @@ export default function RootLayoutClient({ children }) {
 
       <header className="header">
         <div className="container">
-          <Link href="/" className="logo" style={{ textDecoration: "none", color: "inherit" }}>
+          <Link href="/" className="logo" style={{ textDecoration: 'none', color: 'inherit' }}>
             <img src="/uk-flag.png" alt="UK Flag" className="bandera" />
             <span>English Practice</span>
           </Link>
@@ -80,7 +71,6 @@ export default function RootLayoutClient({ children }) {
             <Link href="/prueba-nivel">Placement Test</Link>
             <Link href="/training">Training</Link>
             <Link href="/contacto">Contact</Link>
-
             {session ? (
               <>
                 <Link href="/perfil">Profile</Link>
@@ -108,24 +98,14 @@ export default function RootLayoutClient({ children }) {
         </div>
       </header>
 
-      <main className="page-content">
-        {children}
-      </main>
+      <main className="page-content">{children}</main>
 
-      <footer
-        className="footer"
-        style={{
-          textAlign: "center",
-          padding: "1rem",
-          fontSize: "0.85rem",
-          color: "#666",
-        }}
-      >
+      <footer className="footer" style={{ textAlign: 'center', padding: '1rem', fontSize: '0.85rem', color: '#666' }}>
         <p style={{ margin: 0 }}>
           Exercises designed to practice the same format as Cambridge exams. <br />
           Not affiliated with or endorsed by Cambridge English.
         </p>
-        <p style={{ marginTop: "0.5rem", fontSize: "0.9rem", color: "#777" }}>
+        <p style={{ marginTop: '0.5rem', fontSize: '0.9rem', color: '#777' }}>
           © {new Date().getFullYear()} English Practice
         </p>
       </footer>

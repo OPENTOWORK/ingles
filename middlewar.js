@@ -1,29 +1,30 @@
 import { NextResponse } from 'next/server'
 import { createMiddlewareSupabaseClient } from '@supabase/auth-helpers-nextjs'
-import { NextRequest } from 'next/server'
 
 export async function middleware(req) {
   const res = NextResponse.next()
-
   const supabase = createMiddlewareSupabaseClient({ req, res })
   const {
-    data: { session }
+    data: { session },
   } = await supabase.auth.getSession()
 
+  // rutas protegidas
   const protectedRoutes = [
     '/teoria',
     '/training',
     '/niveles',
     '/prueba-nivel',
     '/update-password',
-    '/reset-password',
-    '/perfil' // ✅ Ahora también protegida
+    '/perfil',
   ]
 
   const pathname = req.nextUrl.pathname
-  const isProtected = protectedRoutes.some(route => pathname.startsWith(route))
+  const isProtected = protectedRoutes.some(route =>
+    pathname.startsWith(route)
+  )
 
-  if (isProtected && !session) {
+  // ❌ evitar bucle infinito: no redirigir si ya estoy en /login
+  if (isProtected && !session && pathname !== '/login') {
     const loginUrl = new URL('/login', req.url)
     return NextResponse.redirect(loginUrl)
   }
@@ -38,7 +39,6 @@ export const config = {
     '/niveles/:path*',
     '/prueba-nivel/:path*',
     '/update-password/:path*',
-    '/reset-password/:path*',
-    '/perfil/:path*' // ✅ Protege también esta ruta
-  ]
+    '/perfil/:path*',
+  ],
 }

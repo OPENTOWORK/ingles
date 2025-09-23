@@ -8,6 +8,9 @@ export async function getUserProgress(userId) {
     stats: {},
   };
 
+  const isMissingTable = (err) =>
+    !!err && (err.code === '42P01' || /Could not find the table/i.test(err.message || ''));
+
   // 1. Obtener exámenes
   const { data: exams, error: examError } = await supabase
     .from('answers')
@@ -15,8 +18,10 @@ export async function getUserProgress(userId) {
     .eq('user_id', userId);
 
   if (examError) {
-    console.error('Error al obtener exámenes:', examError.message);
-  } else {
+    if (!isMissingTable(examError)) {
+      console.error('Error al obtener exámenes:', examError.message);
+    }
+  } else if (exams) {
     progress.exams = exams.map((exam) => ({
       id: exam.exam_id,
       date: exam.created_at,
@@ -33,18 +38,26 @@ export async function getUserProgress(userId) {
     .eq('user_id', userId);
 
   if (trainError) {
-    console.error('Error al obtener entrenamientos:', trainError.message);
+    if (!isMissingTable(trainError)) {
+      console.error('Error al obtener entrenamientos:', trainError.message);
+    }
   } else {
     progress.training = trainings || [];
   }
 
   // 3. Teoría (opcional, si tienes algo como theory_progress)
-  const { data: theory } = await supabase
+  const { data: theory, error: theoryError } = await supabase
     .from('theory_progress')
     .select('*')
     .eq('user_id', userId);
 
-  progress.theory = theory || [];
+  if (theoryError) {
+    if (!isMissingTable(theoryError)) {
+      console.error('Error al obtener teoría:', theoryError.message);
+    }
+  } else {
+    progress.theory = theory || [];
+  }
 
   // 4. Cálculo de estadísticas globales
   progress.stats = calculateStats(progress);
