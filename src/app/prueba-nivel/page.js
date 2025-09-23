@@ -357,13 +357,13 @@ export default function PlacementTestPage() {
           </div>
         )}
       </div>
-      {style}
+      {styleGlobal}
     </main>
   );
 }
 
 // Fallback CSS global embebido para cuando Tailwind no esté cargado
-export const style = (
+const styleGlobal = (
   <style jsx global>{`
   *,*::before,*::after{box-sizing:border-box}
   html,body{margin:0;padding:0}
