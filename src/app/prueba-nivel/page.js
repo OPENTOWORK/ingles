@@ -6,14 +6,17 @@ import { supabase } from '@/utils/supabaseClient';
 import { placementQuestions as rawQuestions, levelFromScore, levelRecommendations } from '@/data/placementTest';
 
 /**
- * Versión con nivel CEFR, redirección automática al training recomendado
- * + progreso legible y otras mejoras de UX.
+ * Versión con nivel CEFR, progreso legible y mejoras de UX.
+ * Cambios solicitados:
+ *  - Visual de opción seleccionada antes de enviar (clase .opt.selected)
+ *  - Sin “Ir a la primera sin responder”
+ *  - Sin “Saltar a sin responder”
+ *  - Sin redirección automática al terminar
  */
 
 const LOCAL_KEY = 'placement.v3';
-const AUTO_REDIRECT_MS = 3500; // tiempo antes de enviar al módulo recomendado
+const AUTO_REDIRECT_MS = 3500; // (ya no se usa para redirigir)
 
-// Utilidad simple para mezclar arrays
 const shuffle = (arr) => {
   const a = [...arr];
   for (let i = a.length - 1; i > 0; i--) {
@@ -34,7 +37,7 @@ export default function PlacementTestPage() {
   const [isPaused, setIsPaused] = useState(false);
   const [confirmOpen, setConfirmOpen] = useState(false);
   const [index, setIndex] = useState(0); // índice de pregunta activa
-  const [cancelAuto, setCancelAuto] = useState(false);
+  const [cancelAuto, setCancelAuto] = useState(false); // (se queda por compatibilidad)
 
   const topRef = useRef(null);
 
@@ -119,11 +122,6 @@ export default function PlacementTestPage() {
   }, []);
 
   const goto = (next) => setIndex((i) => Math.min(Math.max(next, 0), total - 1));
-  const nextUnanswered = () => {
-    const ids = questions.map((q) => q.id);
-    const pos = ids.findIndex((id) => !answers[id]);
-    if (pos >= 0) setIndex(pos);
-  };
 
   const submitNow = (e) => {
     e?.preventDefault?.();
@@ -146,22 +144,42 @@ export default function PlacementTestPage() {
   // Puntuación
   const score = useMemo(() => {
     if (!submitted) return 0;
-    return questions.reduce((acc, q) => acc + (String(answers[q.id] ?? '').trim() === String(q.answer).trim() ? 1 : 0), 0);
+    return questions.reduce(
+      (acc, q) =>
+        acc + (String(answers[q.id] ?? '').trim() === String(q.answer).trim() ? 1 : 0),
+      0
+    );
   }, [submitted, answers, questions]);
 
   // Renderizador de pregunta por tipo (mcq, tf, cloze)
   const renderQuestion = (q) => {
     if (!q) return null;
+
     if (q.type === 'tf') {
       const opts = q.options?.length ? q.options : ['True', 'False'];
       return (
         <div className="grid grid-cols-2 gap-3">
-          {opts.map((opt) => (
-            <label key={opt} className={`opt ${submitted ? (opt === q.answer ? 'correct' : answers[q.id] === opt ? 'wrong' : '') : ''} text-lg justify-center`}>
-              <input type="radio" name={`q-${q.id}`} value={opt} disabled={submitted} checked={answers[q.id] === opt} onChange={(e) => handleChange(q.id, e.target.value)} className="sr-only" />
-              {opt}
-            </label>
-          ))}
+          {opts.map((opt) => {
+            const isSelected = answers[q.id] === opt;
+            const cls =
+              submitted
+                ? (opt === q.answer ? 'correct' : isSelected ? 'wrong' : '')
+                : (isSelected ? 'selected' : '');
+            return (
+              <label key={opt} className={`opt ${cls} text-lg justify-center`}>
+                <input
+                  type="radio"
+                  name={`q-${q.id}`}
+                  value={opt}
+                  disabled={submitted}
+                  checked={answers[q.id] === opt}
+                  onChange={(e) => handleChange(q.id, e.target.value)}
+                  className="sr-only"
+                />
+                {opt}
+              </label>
+            );
+          })}
         </div>
       );
     }
@@ -194,12 +212,26 @@ export default function PlacementTestPage() {
     const opts = Array.isArray(q.options) ? q.options : [];
     return (
       <div className="grid sm:grid-cols-2 gap-3">
-        {opts.map((opt) => (
-          <label key={opt} className={`opt ${submitted ? (opt === q.answer ? 'correct' : answers[q.id] === opt ? 'wrong' : '') : ''}`}>
-            <input type="radio" name={`q-${q.id}`} value={opt} disabled={submitted} checked={answers[q.id] === opt} onChange={(e) => handleChange(q.id, e.target.value)} />
-            <span>{opt}</span>
-          </label>
-        ))}
+        {opts.map((opt) => {
+          const isSelected = answers[q.id] === opt;
+          const cls =
+            submitted
+              ? (opt === q.answer ? 'correct' : isSelected ? 'wrong' : '')
+              : (isSelected ? 'selected' : '');
+          return (
+            <label key={opt} className={`opt ${cls}`}>
+              <input
+                type="radio"
+                name={`q-${q.id}`}
+                value={opt}
+                disabled={submitted}
+                checked={answers[q.id] === opt}
+                onChange={(e) => handleChange(q.id, e.target.value)}
+              />
+              <span>{opt}</span>
+            </label>
+          );
+        })}
       </div>
     );
   };
@@ -208,14 +240,7 @@ export default function PlacementTestPage() {
   const level = useMemo(() => (submitted ? levelFromScore(score) : null), [submitted, score]);
   const recommendation = useMemo(() => (level ? levelRecommendations[level] : null), [level]);
 
-  // Auto-redirección al training recomendado
-  useEffect(() => {
-    if (!submitted || !level || !recommendation?.link || cancelAuto) return;
-    const t = setTimeout(() => {
-      try { router.push(recommendation.link); } catch {}
-    }, AUTO_REDIRECT_MS);
-    return () => clearTimeout(t);
-  }, [submitted, level, recommendation?.link, cancelAuto, router]);
+  // >>> Redirección automática DESACTIVADA a petición <<<
 
   // ====================== UI ======================
   return (
@@ -239,7 +264,7 @@ export default function PlacementTestPage() {
                 <strong>{progressLabel}</strong>
               </span>
               <span className="opacity-70" aria-label="porcentaje completado">{progress}%</span>
-              <button type="button" className="text-blue-700 underline decoration-dotted" onClick={nextUnanswered}>Ir a la primera sin responder</button>
+              {/* (Eliminado) Ir a la primera sin responder */}
             </div>
             <div className="flex items-center gap-3">
               <span className="font-mono">⏱ {fmt(seconds)}</span>
@@ -282,7 +307,7 @@ export default function PlacementTestPage() {
               <div className="mt-6 flex items-center justify-between">
                 <button type="button" onClick={() => goto(index - 1)} disabled={index === 0} className="btn disabled:opacity-40">Anterior</button>
                 <div className="flex items-center gap-2">
-                  <button type="button" onClick={() => nextUnanswered()} className="btn">Saltar a sin responder</button>
+                  {/* (Eliminado) Saltar a sin responder */}
                   <button type="button" onClick={() => goto(index + 1)} disabled={index === total - 1} className="btn disabled:opacity-40">Siguiente</button>
                 </div>
               </div>
@@ -318,8 +343,7 @@ export default function PlacementTestPage() {
                       <div className="mt-3 flex items-center gap-3">
                         <Link href={recommendation.link} className="btn btn-primary">Comenzar en {level}: {recommendation.title}</Link>
                         <button type="button" className="btn" onClick={() => router.push(recommendation.link)}>Ir ahora</button>
-                        {!cancelAuto && <button type="button" className="btn" onClick={() => setCancelAuto(true)}>No redirigir</button>}
-                        <span className="text-xs text-slate-500">Redirigiendo automáticamente…</span>
+                        {/* Eliminado: botón “No redirigir” y aviso de redirección automática */}
                       </div>
                     )}
                   </div>
@@ -395,6 +419,7 @@ const styleGlobal = (
   .opt input{accent-color:#2563eb}
   .opt.correct{border-color:#86efac;background:#f0fdf4}
   .opt.wrong{border-color:#fecaca;background:#fef2f2}
+  .opt.selected{border-color:#93c5fd;background:#eff6ff;box-shadow:inset 0 0 0 3px rgba(59,130,246,.25)}
   .bubble{width:2.25rem;height:2.25rem;border-radius:9999px;border:1px solid #e2e8f0;background:#fff;display:grid;place-items:center}
   .bubble--active{background:#2563eb;border-color:#2563eb;color:#fff}
   .bubble--done{background:#f0fdf4;border-color:#86efac}

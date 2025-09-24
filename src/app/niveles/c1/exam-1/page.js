@@ -2,39 +2,43 @@
 import Link from 'next/link';
 import { useExam } from '@/context/ExamContext';
 
+// ====== Página ======
 export default function C1ExamHomePage() {
   const { answers } = useExam();
 
   return (
-    <main style={{ padding: '2rem', fontFamily: 'Segoe UI, sans-serif' }}>
-      <h1 style={{ textAlign: 'center' }}>Cambridge C1 Exam Practice</h1>
+    <main className="shell exam-page">
+      <header className="header">
+        <h1>Cambridge C1 Exam Practice</h1>
+        <p>Welcome to the C1 Advanced (CAE) Cambridge English Exam Practice page.</p>
+      </header>
 
-      <section style={{ maxWidth: '800px', margin: '1.5rem auto', lineHeight: '1.6', color: '#333' }}>
-        <p>
-          Welcome to the <strong>C1 Advanced (CAE)</strong> Cambridge English Exam Practice page.
-          This platform is designed to help you prepare for the full Reading and Use of English paper, structured in the same format as the official exam.
-        </p>
-        <p>
-          Each full exam consists of <strong>7 parts</strong>, testing your understanding of grammar, vocabulary, collocations, paraphrasing, and reading comprehension.
-          You will receive immediate feedback and know exactly which answers you got right or wrong.
-        </p>
-        <p>
-          Select any of the <strong>12 full exams</strong> below to begin your training. Each exam starts from Part 1 and guides you all the way through Part 7.
-        </p>
-        <p>
-          Practicing consistently is the key to success. Let’s get started!
-        </p>
+      {/* Información */}
+      <section className="info-section">
+        <div className="info-content">
+          <p>
+            This platform is designed to help you prepare for the full Reading and Use of English paper, structured in the same format as the official exam.
+          </p>
+          <p>
+            Each full exam consists of <strong>7 parts</strong>, testing your understanding of grammar, vocabulary, collocations, paraphrasing, and reading comprehension.
+            You will receive immediate feedback and know exactly which answers you got right or wrong.
+          </p>
+          <p>
+            Select any of the <strong>12 full exams</strong> below to begin your training. Each exam starts from Part 1 and guides you all the way through Part 7.
+          </p>
+          <p>
+            Practicing consistently is the key to success. Let's get started!
+          </p>
+        </div>
       </section>
 
-      <section style={{ maxWidth: '700px', margin: '2rem auto' }}>
-        <div
-          style={{
-            display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(140px, 1fr))',
-            gap: '1rem',
-            justifyItems: 'center',
-          }}
-        >
+      {/* Exámenes */}
+      <section className="exams-section">
+        <div className="section__head">
+          <h2>Available Exams</h2>
+          <span className="count">12</span>
+        </div>
+        <div className="exams-grid">
           {[...Array(12)].map((_, i) => {
             const examKey = `exam-${i + 1}`;
             const progress = Object.keys(answers?.[examKey] || {}).length;
@@ -44,57 +48,58 @@ export default function C1ExamHomePage() {
               <Link
                 key={i}
                 href={`/niveles/c1/exam-${i + 1}/part-1`}
-                style={{
-                  backgroundColor: finished ? '#a7f3d0' : '#c1f2cd',
-                  padding: '1rem',
-                  borderRadius: '8px',
-                  textDecoration: 'none',
-                  color: '#000',
-                  fontWeight: 'bold',
-                  textAlign: 'center',
-                  boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
-                  transition: 'transform 0.2s ease',
-                }}
-                onMouseOver={(e) => (e.currentTarget.style.transform = 'scale(1.03)')}
-                onMouseOut={(e) => (e.currentTarget.style.transform = 'scale(1)')}
+                className={`exam-card ${finished ? 'exam-card--completed' : ''}`}
               >
-                Exam {i + 1}
-                <br />
-                <span style={{ fontSize: '0.9rem' }}>
+                <div className="exam-card__title">Exam {i + 1}</div>
+                <div className="exam-card__status">
                   {finished ? '✅ Completed' : `Progress: ${progress}/7`}
-                </span>
+                </div>
               </Link>
             );
           })}
         </div>
       </section>
 
-      <div style={{ textAlign: 'center', marginTop: '2rem' }}>
-        <Link
-          href="/niveles/c1"
-          style={{
-            textDecoration: 'none',
-            color: '#0070f3',
-            fontWeight: 'bold',
-            display: 'inline-block',
-            padding: '0.75rem 1.25rem',
-            border: '2px solid #0070f3',
-            borderRadius: '6px',
-            marginTop: '2rem',
-            transition: 'background 0.3s, color 0.3s',
-          }}
-          onMouseOver={(e) => {
-            e.currentTarget.style.backgroundColor = '#0070f3';
-            e.currentTarget.style.color = '#fff';
-          }}
-          onMouseOut={(e) => {
-            e.currentTarget.style.backgroundColor = 'transparent';
-            e.currentTarget.style.color = '#0070f3';
-          }}
-        >
+      {/* Navegación */}
+      <div className="navigation">
+        <Link href="/niveles/c1" className="back-link">
           ← Back to C1 Overview
         </Link>
       </div>
+
+      <GlobalStyles />
     </main>
+  );
+}
+
+// ====== Estilos (styled-jsx global + locales) ======
+function GlobalStyles() {
+  return (
+    <style jsx global>{`
+      .exam-page {
+        background-color: var(--bg);
+        color: var(--text);
+        min-height: 100vh;
+      }
+      .shell{min-height:100svh;max-width:1100px;margin:0 auto;padding:32px 20px}
+      .header h1{font-size:44px;margin:0 0 6px;color:var(--text)}
+      .header p{margin:0;color:#666;max-width:800px;margin:0 auto;text-align:center;font-size:1.1rem}
+      .info-section{margin:2rem 0;padding:6px}
+      .info-content{max-width:800px;margin:0 auto;line-height:1.6;color:#333}
+      .info-content p{margin-bottom:1rem}
+      .exams-section{margin:2rem 0;padding:6px}
+      .section__head{display:flex;align-items:center;gap:8px;margin-bottom:10px}
+      .section__head h2{margin:0;font-size:22px;color:var(--text)}
+      .count{display:inline-grid;place-items:center;width:28px;height:28px;border-radius:9999px;border:1px solid #eaeaea;background:var(--card);font-size:12px;color:#666}
+      .exams-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:1rem;justify-items:center;max-width:700px;margin:0 auto}
+      .exam-card{background:#c1f2cd;padding:1rem;border-radius:8px;text-decoration:none;color:#000;font-weight:bold;text-align:center;box-shadow:0 2px 4px rgba(0,0,0,0.1);transition:transform 0.2s ease,background 0.2s}
+      .exam-card:hover{transform:scale(1.03)}
+      .exam-card--completed{background:#a7f3d0}
+      .exam-card__title{font-size:16px;margin-bottom:4px}
+      .exam-card__status{font-size:0.9rem;color:#333}
+      .navigation{text-align:center;margin-top:2rem}
+      .back-link{text-decoration:none;color:#0070f3;font-weight:bold;display:inline-block;padding:0.75rem 1.25rem;border:2px solid #0070f3;border-radius:6px;transition:background 0.3s,color 0.3s}
+      .back-link:hover{background:#0070f3;color:#fff}
+    `}</style>
   );
 }

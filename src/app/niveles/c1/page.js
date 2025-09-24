@@ -1,74 +1,137 @@
+'use client';
 import Link from 'next/link';
 
-const buttonStyle = {
-  backgroundColor: '#d1fae5',
-  color: '#047857',
-  padding: '0.75rem 1.25rem',
-  borderRadius: '8px',
-  fontWeight: 'bold',
-  textDecoration: 'none',
-  boxShadow: '0 1px 4px rgba(0,0,0,0.1)'
+// ====== Datos ======
+const SECTIONS = {
+  "Reading and Use of English": [
+    { text: "Part 1: Multiple-choice cloze", href: "/niveles/c1/reading-and-use-of-english/part-1" },
+    { text: "Part 2: Open cloze", href: "/niveles/c1/reading-and-use-of-english/part-2" },
+    { text: "Part 3: Word formation", href: "/niveles/c1/reading-and-use-of-english/part-3" },
+    { text: "Part 4: Key word transformations", href: "/niveles/c1/reading-and-use-of-english/part-4" },
+    { text: "Part 5: Multiple choice (reading)", href: "/niveles/c1/reading-and-use-of-english/part-5" },
+    { text: "Part 6: Cross-text multiple matching", href: "/niveles/c1/reading-and-use-of-english/part-6" },
+    { text: "Part 7: Gapped text", href: "/niveles/c1/reading-and-use-of-english/part-7" },
+    { text: "Part 8: Multiple matching", href: "/niveles/c1/reading-and-use-of-english/part-8" },
+  ],
+  "Writing": [
+    { text: "Part 1: Compulsory essay", href: "/niveles/c1/writing/part-1" },
+    { text: "Part 2: Choose from article, review, report, letter, etc.", href: "/niveles/c1/writing/part-2" },
+  ],
+  "Listening": [
+    { text: "Part 1: Short extracts – multiple choice", href: "/niveles/c1/listening/part-1" },
+    { text: "Part 2: Monologue – sentence completion", href: "/niveles/c1/listening/part-2" },
+    { text: "Part 3: Long conversation – multiple choice", href: "/niveles/c1/listening/part-3" },
+    { text: "Part 4: Multiple speakers – matching task", href: "/niveles/c1/listening/part-4" },
+  ],
+  "Speaking": [
+    { text: "Part 1: General conversation", href: "/niveles/c1/speaking/part-1" },
+    { text: "Part 2: Long turn (describe photos)", href: "/niveles/c1/speaking/part-2" },
+    { text: "Part 3: Collaborative task", href: "/niveles/c1/speaking/part-3" },
+    { text: "Part 4: Discussion", href: "/niveles/c1/speaking/part-4" },
+  ],
 };
 
+const EXAM_LINKS = [
+  { text: "📝 Full Exam", href: "/niveles/c1/exam-1" },
+  { text: "📘 Use of English", href: "/niveles/c1/exam-useofenglish" },
+  { text: "📖 Reading", href: "/niveles/c1/exam-reading" },
+  { text: "✍️ Writing", href: "/niveles/c1/exam-writing" },
+  { text: "🎧 Listening", href: "/niveles/c1/exam-listening" },
+  { text: "🗣️ Speaking", href: "/niveles/c1/exam-speaking" },
+];
+
+// ====== Página ======
 export default function C1Page() {
   return (
-    <div style={{ padding: '2rem', fontFamily: 'Segoe UI, sans-serif' }}>
-      <h1 style={{ textAlign: 'center' }}>C1 Exam: Advanced (CAE)</h1>
+    <main className="shell c1-page">
+      <header className="header">
+        <h1>C1 Exam: Advanced (CAE)</h1>
+        <p>This is an advanced English language qualification for professional and academic purposes.</p>
+      </header>
 
-      <p style={{ maxWidth: '700px', margin: '1rem auto', textAlign: 'center', fontSize: '1.1rem' }}>
-        This is an advanced English language qualification for professional and academic purposes.
-      </p>
-
-      <h2>1. Reading and Use of English</h2>
-      <ul>
-        <li><Link href="/niveles/c1/reading-and-use-of-english/part-1">Part 1: Multiple-choice cloze</Link></li>
-        <li><Link href="/niveles/c1/reading-and-use-of-english/part-2">Part 2: Open cloze</Link></li>
-        <li><Link href="/niveles/c1/reading-and-use-of-english/part-3">Part 3: Word formation</Link></li>
-        <li><Link href="/niveles/c1/reading-and-use-of-english/part-4">Part 4: Key word transformations</Link></li>
-        <li><Link href="/niveles/c1/reading-and-use-of-english/part-5">Part 5: Multiple choice (reading)</Link></li>
-        <li><Link href="/niveles/c1/reading-and-use-of-english/part-6">Part 6: Cross-text multiple matching</Link></li>
-        <li><Link href="/niveles/c1/reading-and-use-of-english/part-7">Part 7: Gapped text</Link></li>
-        <li><Link href="/niveles/c1/reading-and-use-of-english/part-8">Part 8: Multiple matching</Link></li>
-      </ul>
-
-      <h2>2. Writing</h2>
-      <ul>
-        <li><Link href="/niveles/c1/writing/part-1">Part 1: Compulsory essay</Link></li>
-        <li><Link href="/niveles/c1/writing/part-2">Part 2: Choose from article, review, report, letter, etc.</Link></li>
-      </ul>
-
-      <h2>3. Listening</h2>
-      <ul>
-        <li><Link href="/niveles/c1/listening/part-1">Part 1: Short extracts – multiple choice</Link></li>
-        <li><Link href="/niveles/c1/listening/part-2">Part 2: Monologue – sentence completion</Link></li>
-        <li><Link href="/niveles/c1/listening/part-3">Part 3: Long conversation – multiple choice</Link></li>
-        <li><Link href="/niveles/c1/listening/part-4">Part 4: Multiple speakers – matching task</Link></li>
-      </ul>
-
-      <h2>4. Speaking</h2>
-      <ul>
-        <li><Link href="/niveles/c1/speaking/part-1">Part 1: General conversation</Link></li>
-        <li><Link href="/niveles/c1/speaking/part-2">Part 2: Long turn (describe photos)</Link></li>
-        <li><Link href="/niveles/c1/speaking/part-3">Part 3: Collaborative task</Link></li>
-        <li><Link href="/niveles/c1/speaking/part-4">Part 4: Discussion</Link></li>
-      </ul>
-
-      <div style={{ display: "flex", justifyContent: "center", gap: "1rem", flexWrap: "wrap", marginTop: "3rem" }}>
-        <Link href="/niveles/c1/exam-1" className="card special" style={buttonStyle}>📝 Full Exam</Link>
-        <Link href="/niveles/c1/exam-useofenglish" className="card special" style={buttonStyle}>📘 Use of English</Link>
-        <Link href="/niveles/c1/exam-reading" className="card special" style={buttonStyle}>📖 Reading</Link>
-        <Link href="/niveles/c1/exam-writing" className="card special" style={buttonStyle}>✍️ Writing</Link>
-        <Link href="/niveles/c1/exam-listening" className="card special" style={buttonStyle}>🎧 Listening</Link>
-        <Link href="/niveles/c1/exam-speaking" className="card special" style={buttonStyle}>🗣️ Speaking</Link>
+      {/* Contenido */}
+      <div className="sections">
+        {Object.entries(SECTIONS).map(([title, topics]) => (
+          <Section key={title} title={title} topics={topics} />
+        ))}
       </div>
 
-      <p style={{ marginTop: '2rem', fontStyle: 'italic', textAlign: 'center' }}>
-        Interactive examples and exam simulations coming soon.
-      </p>
+      {/* Enlaces de exámenes */}
+      <section className="exam-section">
+        <div className="section__head">
+          <h2>Exam Practice</h2>
+          <span className="count">{EXAM_LINKS.length}</span>
+        </div>
+        <div className="exam-grid">
+          {EXAM_LINKS.map((exam, i) => (
+            <Link key={i} href={exam.href} className="exam-card">
+              {exam.text}
+            </Link>
+          ))}
+        </div>
+      </section>
 
-      <footer style={{ marginTop: "3rem", fontSize: "0.9rem", color: "#555", textAlign: "center" }}>
-        © 2025 English Practice
-      </footer>
-    </div>
+      {/* Nota */}
+      <div className="note">
+        <p>Interactive examples and exam simulations coming soon.</p>
+      </div>
+
+      <GlobalStyles />
+    </main>
+  );
+}
+
+// ====== Subcomponentes ======
+function Section({ title, topics }) {
+  return (
+    <section className="section">
+      <div className="section__head">
+        <h2>{title}</h2>
+        <span className="count">{topics.length}</span>
+      </div>
+      <ul className="grid">
+        {topics.map((topic, i) => (
+          <li key={`${topic.href}-${i}`}>
+            <Link href={topic.href} className="card">
+              <div className="card__title">{topic.text}</div>
+            </Link>
+          </li>
+        ))}
+      </ul>
+    </section>
+  );
+}
+
+// ====== Estilos (styled-jsx global + locales) ======
+function GlobalStyles() {
+  return (
+    <style jsx global>{`
+      .c1-page {
+        background-color: var(--bg);
+        color: var(--text);
+        min-height: 100vh;
+      }
+      .shell{min-height:100svh;max-width:1100px;margin:0 auto;padding:32px 20px}
+      .header h1{font-size:44px;margin:0 0 6px;color:var(--text)}
+      .header p{margin:0;color:#666;max-width:700px;margin:0 auto;text-align:center;font-size:1.1rem}
+      .sections{display:flex;flex-direction:column;gap:28px}
+      .section{padding:6px}
+      .section__head{display:flex;align-items:center;gap:8px;margin-bottom:10px}
+      .section__head h2{margin:0;font-size:22px;color:var(--text)}
+      .count{display:inline-grid;place-items:center;width:28px;height:28px;border-radius:9999px;border:1px solid #eaeaea;background:var(--card);font-size:12px;color:#666}
+      .grid{list-style:none;margin:0;padding:0;display:grid;gap:12px;grid-template-columns:repeat(1,minmax(0,1fr))}
+      @media (min-width:640px){ .grid{grid-template-columns:repeat(2,minmax(0,1fr));} }
+      @media (min-width:980px){ .grid{grid-template-columns:repeat(3,minmax(0,1fr));} }
+      .card{display:block;height:100%;border:1px solid #eaeaea;border-radius:18px;background:var(--card);padding:18px;transition:transform .2s, box-shadow .2s, border-color .2s}
+      .card:hover{transform:translateY(-2px);box-shadow:0 18px 40px rgba(0,0,0,.1);border-color:#0070f3;background:#b0d6fa}
+      .card:focus{outline:none;box-shadow:0 0 0 6px rgba(0,112,243,.35)}
+      .card__title{font-size:16px;font-weight:600;line-height:1.25;color:var(--text)}
+      .exam-section{margin-top:3rem;padding:6px}
+      .exam-grid{display:flex;justify-content:center;gap:1rem;flex-wrap:wrap;margin-top:1rem}
+      .exam-card{background:#d1fae5;color:#047857;padding:0.75rem 1.25rem;border-radius:8px;font-weight:bold;text-decoration:none;box-shadow:0 1px 4px rgba(0,0,0,0.1);transition:transform .2s, box-shadow .2s}
+      .exam-card:hover{transform:translateY(-2px);box-shadow:0 4px 12px rgba(0,0,0,0.15)}
+      .note{margin-top:2rem;text-align:center}
+      .note p{font-style:italic;color:#666;margin:0}
+    `}</style>
   );
 }

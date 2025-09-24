@@ -69,75 +69,133 @@ export default function Part4Page() {
   const formatTime = (seconds) => `${Math.floor(seconds / 60)}:${String(seconds % 60).padStart(2, '0')}`;
 
   return (
-    <main style={{ padding: '2rem', fontFamily: 'Segoe UI, sans-serif', background: '#e6f0ff' }}>
-      <h1 style={{ fontSize: '1.8rem', fontWeight: 'bold' }}>Part 4: Key Word Transformations</h1>
+    <main className="shell part-page">
+      <header className="header">
+        <h1>Part 4: Key Word Transformations</h1>
+        <p>Complete the second sentence so that it means the same as the first, using the word given. Use between two and five words.</p>
+      </header>
 
-      <div style={{ marginBottom: '0.25rem', textAlign: 'right', fontWeight: 'bold', fontSize: '0.9rem' }}>Progress: {progress}%</div>
-      <div style={{ height: '12px', backgroundColor: '#ddd', borderRadius: '6px', overflow: 'hidden', marginBottom: '1rem' }}>
-        <div style={{ width: `${progress}%`, backgroundColor: '#3b82f6', height: '100%' }} />
+      {/* Progress */}
+      <div className="progress-section">
+        <div className="progress-info">
+          <span>Progress: {progress}%</span>
+        </div>
+        <div className="progress-bar">
+          <div className="progress-fill" style={{ width: `${progress}%` }} />
+        </div>
       </div>
 
-      <div style={{ textAlign: 'right', fontSize: '0.95rem', fontWeight: 'bold', color: '#333', marginBottom: '1rem' }}>
+      {/* Timer */}
+      <div className="timer">
         ⏱️ Time remaining for Parts 1–7: {formatTime(Math.max(90 * 60 - sectionTimers.reading, 0))}
       </div>
 
-      <p style={{ fontSize: '1rem', color: '#333', marginBottom: '2rem' }}>
-        Complete the second sentence so that it means the same as the first, using the word given. Use between two and five words.
-      </p>
-
-      {questions.map(q => (
-        <div key={q.id} style={{ marginBottom: '2rem', background: '#fefefe', padding: '1rem', borderRadius: '8px' }}>
-          <p><strong>{q.id}.</strong> {q.text}</p>
-          <p style={{ fontWeight: 'bold' }}>{q.keyword}</p>
-          <p>{q.secondSentence}</p>
-          <input
-            type="text"
-            placeholder="Type your answer"
-            value={userAnswers[q.id] || ''}
-            onChange={(e) => handleChange(e, q.id)}
-            onKeyDown={(e) => handleKeyPress(e, q.id, q.answer)}
-            disabled={!!feedback[q.id]}
-            style={{
-              width: '100%',
-              padding: '0.5rem',
-              fontSize: '1rem',
-              border: '1px solid #ccc',
-              borderRadius: '4px',
-              backgroundColor: feedback[q.id]?.correct ? '#d4edda' : feedback[q.id] ? '#f8d7da' : 'white'
-            }}
-          />
-          {feedback[q.id] && (
-            <p style={{ marginTop: '0.5rem' }}>
-              {feedback[q.id].correct ? (
-                <span style={{ color: 'green' }}>✔ Correct</span>
-              ) : (
-                <span style={{ color: 'red' }}>✘ Incorrect. Correct answer: <strong>{feedback[q.id].answer}</strong></span>
+      {/* Questions */}
+      <section className="questions-section">
+        {questions.map(q => (
+          <div key={q.id} className="transformation-question">
+            <div className="question-content">
+              <p><strong>{q.id}.</strong> {q.text}</p>
+              <p className="keyword">{q.keyword}</p>
+              <p>{q.secondSentence}</p>
+              <input
+                type="text"
+                placeholder="Type your answer"
+                value={userAnswers[q.id] || ''}
+                onChange={(e) => handleChange(e, q.id)}
+                onKeyDown={(e) => handleKeyPress(e, q.id, q.answer)}
+                disabled={!!feedback[q.id]}
+                className={`transformation-input ${feedback[q.id]?.correct ? 'correct' : feedback[q.id] ? 'incorrect' : ''}`}
+              />
+              {feedback[q.id] && (
+                <div className="feedback">
+                  {feedback[q.id].correct ? (
+                    <span className="correct">✔ Correct</span>
+                  ) : (
+                    <span className="incorrect">
+                      ✘ Incorrect. Correct answer: <strong>{feedback[q.id].answer}</strong>
+                    </span>
+                  )}
+                  <button className="explanation-button">
+                    📘 Obtener explicación
+                  </button>
+                </div>
               )}
-              <br />
-              <button style={{ marginTop: '0.5rem', padding: '0.3rem 0.6rem', fontWeight: 'bold', fontSize: '0.9rem', cursor: 'pointer' }}>
-                📘 Obtener explicación
-              </button>
-            </p>
-          )}
-        </div>
-      ))}
+            </div>
+          </div>
+        ))}
+      </section>
 
-      <div style={{ marginTop: '2.5rem' }}>
+      {/* Score */}
+      <div className="score-section">
         <h3>Your score: {score} / {total}</h3>
-        <p style={{ fontSize: '0.95rem', color: '#333' }}>🎯 You need <strong>{required}</strong> correct answers to pass.</p>
+        <p className="score-info">
+          🎯 You need <strong>{required}</strong> correct answers to pass.
+        </p>
         {answered === total && (
           passed ? (
-            <p style={{ color: 'green' }}>✅ You passed the test!</p>
+            <p className="passed">✅ You passed the test!</p>
           ) : (
-            <p style={{ color: 'red' }}>❌ You did not pass. Try again to improve your score.</p>
+            <p className="failed">❌ You did not pass. Try again to improve your score.</p>
           )
         )}
       </div>
 
-      <div style={{ marginTop: '2.5rem', display: 'flex', justifyContent: 'space-between' }}>
-        <Link href="/niveles/c1/exam-1/part-3">⬅ Back to Part 3</Link>
-        <Link href="/niveles/c1/exam-1/part-5">Next ➡️</Link>
+      {/* Navigation */}
+      <div className="navigation">
+        <Link href="/niveles/c1/exam-1/part-3" className="nav-button">
+          ⬅ Back to Part 3
+        </Link>
+        <Link href="/niveles/c1/exam-1/part-5" className="nav-button nav-button--next">
+          Next ➡️
+        </Link>
       </div>
+
+      <GlobalStyles />
     </main>
+  );
+}
+
+// ====== Estilos (styled-jsx global + locales) ======
+function GlobalStyles() {
+  return (
+    <style jsx global>{`
+      .part-page {
+        background-color: var(--bg);
+        color: var(--text);
+        min-height: 100vh;
+      }
+      .shell{min-height:100svh;max-width:1100px;margin:0 auto;padding:32px 20px}
+      .header h1{font-size:1.8rem;font-weight:bold;margin:0 0 6px;color:var(--text)}
+      .header p{margin:0;color:#666;font-size:1rem}
+      .progress-section{margin:1rem 0}
+      .progress-info{margin-bottom:0.25rem;text-align:right;font-weight:bold;font-size:0.9rem;color:#333}
+      .progress-bar{height:12px;background-color:#ddd;border-radius:6px;overflow:hidden;margin-bottom:1rem}
+      .progress-fill{background-color:#3b82f6;height:100%;transition:width 0.3s}
+      .timer{text-align:right;font-size:0.95rem;font-weight:bold;color:#333;margin-bottom:1rem}
+      .questions-section{margin-top:2rem}
+      .transformation-question{margin-bottom:2rem;background:#fefefe;padding:1rem;border-radius:8px;box-shadow:0 2px 4px rgba(0,0,0,0.1)}
+      .question-content p{margin-bottom:0.5rem;color:var(--text)}
+      .keyword{font-weight:bold;color:#0070f3;font-size:1.1rem}
+      .transformation-input{width:100%;padding:0.5rem;font-size:1rem;border:1px solid #ccc;border-radius:4px;margin-top:0.5rem;transition:all 0.2s}
+      .transformation-input:focus{outline:none;border-color:#0070f3;box-shadow:0 0 0 2px rgba(0,112,243,0.2)}
+      .transformation-input.correct{background-color:#d4edda;border-color:#28a745}
+      .transformation-input.incorrect{background-color:#f8d7da;border-color:#dc3545}
+      .feedback{margin-top:0.5rem}
+      .correct{color:green}
+      .incorrect{color:red}
+      .explanation-button{margin-top:0.5rem;padding:0.3rem 0.6rem;font-weight:bold;font-size:0.9rem;cursor:pointer;background:#fef3c7;border:1px solid #fcd34d;border-radius:4px;transition:background 0.2s}
+      .explanation-button:hover{background:#fde68a}
+      .score-section{margin-top:2.5rem}
+      .score-section h3{margin-bottom:0.5rem;color:var(--text)}
+      .score-info{font-size:0.95rem;color:#333;margin-bottom:0.5rem}
+      .passed{color:green;font-weight:bold}
+      .failed{color:red;font-weight:bold}
+      .navigation{margin-top:2.5rem;display:flex;justify-content:space-between;align-items:center}
+      .nav-button{text-decoration:none;color:#0070f3;font-weight:bold;padding:0.5rem 1rem;border:1px solid #0070f3;border-radius:4px;background:transparent;cursor:pointer;transition:all 0.2s}
+      .nav-button:hover{background:#0070f3;color:#fff}
+      .nav-button--next{background:#0070f3;color:#fff}
+      .nav-button--next:hover{background:#005bb5}
+    `}</style>
   );
 }

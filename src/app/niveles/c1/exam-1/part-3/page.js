@@ -93,40 +93,35 @@ export default function Part3() {
   };
 
   return (
-    <main style={{ padding: "2rem", fontFamily: "Segoe UI, sans-serif", background: "#e6f0ff" }}>
-      <h1 style={{ fontSize: "1.8rem", fontWeight: "bold" }}>Part 3: Word Formation</h1>
+    <main className="shell part-page">
+      <header className="header">
+        <h1>Part 3: Word Formation</h1>
+        <p>In this part, you will read a short text containing eight gaps. Each gap corresponds to a word that needs to be formed from a given base word.</p>
+      </header>
 
-      <div style={{ marginBottom: "0.25rem", textAlign: "right", fontWeight: "bold", fontSize: "0.9rem", color: "#333" }}>
-        Progress: {progress}%
+      {/* Progress */}
+      <div className="progress-section">
+        <div className="progress-info">
+          <span>Progress: {progress}%</span>
+        </div>
+        <div className="progress-bar">
+          <div className="progress-fill" style={{ width: `${progress}%` }} />
+        </div>
       </div>
 
-      <div style={{
-        height: "12px",
-        backgroundColor: "#ddd",
-        borderRadius: "6px",
-        overflow: "hidden",
-        marginBottom: "1rem"
-      }}>
-        <div style={{
-          width: `${progress}%`,
-          backgroundColor: "#3b82f6",
-          height: "100%",
-          transition: "width 0.3s"
-        }} />
-      </div>
-
-      <div style={{ textAlign: "right", fontSize: "0.95rem", fontWeight: "bold", color: "#333", marginBottom: "1rem" }}>
+      {/* Timer */}
+      <div className="timer">
         ⏱️ Time remaining for Parts 1–7: {formatTime(Math.max(90 * 60 - sectionTimers.reading, 0))}
       </div>
 
-      <p style={{ fontSize: "1rem", marginTop: "0.5rem", color: "#333" }}>
-        In this part, you will read a short text containing eight gaps. Each gap corresponds to a word that needs to be formed from a given base word. 
-        You must use the correct form of the word to complete the sentence meaningfully and grammatically. This exercise tests your understanding of word families, prefixes, suffixes, and spelling.
-      </p>
+      {/* Instructions */}
+      <div className="instructions">
+        <p>You must use the correct form of the word to complete the sentence meaningfully and grammatically. This exercise tests your understanding of word families, prefixes, suffixes, and spelling.</p>
+      </div>
 
-      <h2 style={{ marginTop: "1rem", fontWeight: "normal" }}>An Incredible Vegetable</h2>
-
-      <div style={{ backgroundColor: "#fefefe", padding: "1rem", borderRadius: "6px", lineHeight: "1.6" }}>
+      {/* Text */}
+      <div className="text-section">
+        <h2>An Incredible Vegetable</h2>
         <p>
           Garlic, a member of the Liliaceae family which also includes onions, is <strong>(0)</strong> <em>commonly</em> used in cooking all around the world.
           China is currently the largest <strong>(17)</strong> ........ of garlic, which is particularly associated with the dishes of northern Africa and southern Europe.
@@ -147,82 +142,119 @@ export default function Part3() {
         </p>
       </div>
 
-      <h2 style={{ marginTop: "2rem" }}>Your Answers (press Enter to check)</h2>
-
-      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))", gap: "1rem", marginTop: "1rem" }}>
-        {inputs.map((n) => (
-          <div key={n}>
-            <label htmlFor={`gap-${n}`}>({n}) {baseWords[n]}</label>
-            <input
-              type="text"
-              id={`gap-${n}`}
-              placeholder="Your answer"
-              value={localAnswers[n] || ""}
-              onChange={(e) => handleChange(e, n)}
-              onKeyDown={(e) => handleKeyPress(e, n)}
-              disabled={!!feedback[n]}
-              style={{
-                width: "100%",
-                padding: "0.5rem",
-                fontSize: "1rem",
-                border: "1px solid #ccc",
-                borderRadius: "4px",
-                boxSizing: "border-box",
-                backgroundColor:
-                  feedback[n]?.correct === true ? "#d4edda" :
-                  feedback[n]?.correct === false ? "#f8d7da" : "white"
-              }}
-            />
-            {feedback[n] && (
-              <>
-                <p style={{ fontSize: "0.9rem", marginTop: "0.25rem" }}>
+      {/* Questions */}
+      <section className="questions-section">
+        <h2>Your Answers (press Enter to check)</h2>
+        <div className="inputs-grid">
+          {inputs.map((n) => (
+            <div key={n} className="input-group">
+              <label htmlFor={`gap-${n}`}>({n}) {baseWords[n]}</label>
+              <input
+                type="text"
+                id={`gap-${n}`}
+                placeholder="Your answer"
+                value={localAnswers[n] || ""}
+                onChange={(e) => handleChange(e, n)}
+                onKeyDown={(e) => handleKeyPress(e, n)}
+                disabled={!!feedback[n]}
+                className={`answer-input ${feedback[n]?.correct === true ? 'correct' : feedback[n]?.correct === false ? 'incorrect' : ''}`}
+              />
+              {feedback[n] && (
+                <div className="feedback">
                   {feedback[n].correct ? (
-                    <span style={{ color: "green" }}>✔ Correct</span>
+                    <span className="correct">✔ Correct</span>
                   ) : (
-                    <span style={{ color: "red" }}>
+                    <span className="incorrect">
                       ✘ Incorrect. Answer: <strong>{feedback[n].answer}</strong>
                     </span>
                   )}
-                </p>
-                <button
-                  onClick={() => alert(`Explicación para la palabra (${n}): ${baseWords[n]}`)}
-                  style={{
-                    marginTop: "0.4rem",
-                    backgroundColor: "#fef3c7",
-                    border: "1px solid #facc15",
-                    borderRadius: "4px",
-                    padding: "0.3rem 0.6rem",
-                    fontWeight: "bold",
-                    fontSize: "0.9rem",
-                    cursor: "pointer"
-                  }}
-                >
-                  📘 Obtener explicación
-                </button>
-              </>
-            )}
-          </div>
-        ))}
-      </div>
+                  <button
+                    onClick={() => alert(`Explicación para la palabra (${n}): ${baseWords[n]}`)}
+                    className="explanation-button"
+                  >
+                    📘 Obtener explicación
+                  </button>
+                </div>
+              )}
+            </div>
+          ))}
+        </div>
+      </section>
 
-      <div style={{ marginTop: "2.5rem" }}>
+      {/* Score */}
+      <div className="score-section">
         <h3>Your score: {score} / {total}</h3>
-        <p style={{ fontSize: "0.95rem", color: "#333" }}>
+        <p className="score-info">
           🎯 You need <strong>{required}</strong> correct answers to pass.
         </p>
         {allAnswered && (
           passed ? (
-            <p style={{ color: "green" }}>✅ You passed the test!</p>
+            <p className="passed">✅ You passed the test!</p>
           ) : (
-            <p style={{ color: "red" }}>❌ You did not pass. Try again to improve your score.</p>
+            <p className="failed">❌ You did not pass. Try again to improve your score.</p>
           )
         )}
       </div>
 
-      <div style={{ marginTop: "2.5rem", display: "flex", justifyContent: "space-between" }}>
-        <Link href="/niveles/c1/exam-1/part-2">⬅ Back to Part 2</Link>
-        <Link href="/niveles/c1/exam-1/part-4">Next ➡️</Link>
+      {/* Navigation */}
+      <div className="navigation">
+        <Link href="/niveles/c1/exam-1/part-2" className="nav-button">
+          ⬅ Back to Part 2
+        </Link>
+        <Link href="/niveles/c1/exam-1/part-4" className="nav-button nav-button--next">
+          Next ➡️
+        </Link>
       </div>
+
+      <GlobalStyles />
     </main>
+  );
+}
+
+// ====== Estilos (styled-jsx global + locales) ======
+function GlobalStyles() {
+  return (
+    <style jsx global>{`
+      .part-page {
+        background-color: var(--bg);
+        color: var(--text);
+        min-height: 100vh;
+      }
+      .shell{min-height:100svh;max-width:1100px;margin:0 auto;padding:32px 20px}
+      .header h1{font-size:1.8rem;font-weight:bold;margin:0 0 6px;color:var(--text)}
+      .header p{margin:0;color:#666;font-size:1rem}
+      .progress-section{margin:1rem 0}
+      .progress-info{margin-bottom:0.25rem;text-align:right;font-weight:bold;font-size:0.9rem;color:#333}
+      .progress-bar{height:12px;background-color:#ddd;border-radius:6px;overflow:hidden;margin-bottom:1rem}
+      .progress-fill{background-color:#3b82f6;height:100%;transition:width 0.3s}
+      .timer{text-align:right;font-size:0.95rem;font-weight:bold;color:#333;margin-bottom:1rem}
+      .instructions{margin:1rem 0;color:#333}
+      .text-section{background-color:#fefefe;padding:1rem;border-radius:6px;line-height:1.6;margin-top:1.5rem;box-shadow:0 0 4px rgba(0,0,0,0.1)}
+      .text-section h2{margin-top:0;margin-bottom:1rem;font-weight:normal;color:var(--text)}
+      .questions-section{margin-top:2rem}
+      .questions-section h2{margin-bottom:1rem;color:var(--text)}
+      .inputs-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:1rem;margin-top:1rem}
+      .input-group{display:flex;flex-direction:column;gap:0.25rem}
+      .input-group label{font-weight:bold;color:var(--text)}
+      .answer-input{width:100%;padding:0.5rem;font-size:1rem;border:1px solid #ccc;border-radius:4px;box-sizing:border-box;transition:all 0.2s}
+      .answer-input:focus{outline:none;border-color:#0070f3;box-shadow:0 0 0 2px rgba(0,112,243,0.2)}
+      .answer-input.correct{background-color:#d4edda;border-color:#28a745}
+      .answer-input.incorrect{background-color:#f8d7da;border-color:#dc3545}
+      .feedback{margin-top:0.25rem}
+      .correct{color:green}
+      .incorrect{color:red}
+      .explanation-button{margin-top:0.4rem;display:inline-block;background-color:#fef3c7;border:1px solid #facc15;border-radius:4px;padding:0.3rem 0.6rem;font-weight:bold;font-size:0.9rem;cursor:pointer;transition:background 0.2s}
+      .explanation-button:hover{background-color:#fde68a}
+      .score-section{margin-top:2.5rem}
+      .score-section h3{margin-bottom:0.5rem;color:var(--text)}
+      .score-info{font-size:0.95rem;color:#333;margin-bottom:0.5rem}
+      .passed{color:green;font-weight:bold}
+      .failed{color:red;font-weight:bold}
+      .navigation{margin-top:2.5rem;display:flex;justify-content:space-between;align-items:center}
+      .nav-button{text-decoration:none;color:#0070f3;font-weight:bold;padding:0.5rem 1rem;border:1px solid #0070f3;border-radius:4px;background:transparent;cursor:pointer;transition:all 0.2s}
+      .nav-button:hover{background:#0070f3;color:#fff}
+      .nav-button--next{background:#0070f3;color:#fff}
+      .nav-button--next:hover{background:#005bb5}
+    `}</style>
   );
 }
