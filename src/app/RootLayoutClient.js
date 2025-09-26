@@ -7,6 +7,7 @@ import Link from 'next/link';
 import LanguageSwitcher from '../components/LanguageSwitcher';
 import { Toaster } from 'react-hot-toast';
 import { ExamProvider } from '../context/ExamContext';
+import ExamNavigationGuard from '../components/ExamNavigationGuard';
 
 export default function RootLayoutClient({ children }) {
   const [loading, setLoading] = useState(true);
@@ -98,7 +99,11 @@ export default function RootLayoutClient({ children }) {
         </div>
       </header>
 
-      <main className="page-content">{children}</main>
+      <main className="page-content">
+        <ExamNavigationGuard>
+          {children}
+        </ExamNavigationGuard>
+      </main>
 
       <footer className="footer" style={{ textAlign: 'center', padding: '1rem', fontSize: '0.85rem', color: '#666' }}>
         <p style={{ margin: 0 }}>

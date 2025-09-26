@@ -4,6 +4,12 @@ import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { supabase } from '@/utils/supabaseClient';
 import { getUserProgress } from '@/utils/getUserProgress';
+import ProgressDashboard from '@/components/ProgressDashboard';
+import AdaptiveLearningDashboard from '@/components/AdaptiveLearningDashboard';
+import AchievementNotification from '@/components/AchievementNotification';
+import ExamStatistics from '@/components/ExamStatistics';
+import { offlineFirstDatabase } from '@/utils/offlineFirstDatabase';
+import { progressTracker } from '@/utils/progressTracker';
 import {
   LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, 
   PieChart, Pie, Cell, RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis, Radar,
@@ -48,6 +54,43 @@ export default function ProfilePage() {
   const [studyRewards, setStudyRewards] = useState([]);
   const [studyThemes, setStudyThemes] = useState({ current: 'default', available: [] });
   const [aiInsights, setAiInsights] = useState([]);
+  const [integratedStats, setIntegratedStats] = useState({
+    progressData: null,
+    adaptiveData: null,
+    achievements: [],
+    audioHistory: [],
+    performanceMetrics: {}
+  });
+
+  // Función para cargar estadísticas integradas
+  const loadIntegratedStats = async (userId) => {
+    try {
+      // Cargar datos del sistema offline-first
+      const [progressData, achievements, overallProgress] = await Promise.all([
+        offlineFirstDatabase.getUserProgress(userId),
+        offlineFirstDatabase.getUserAchievements(userId),
+        offlineFirstDatabase.getUserOverallProgress(userId)
+      ]);
+
+      // Cargar datos adaptativos
+      const adaptiveData = await progressTracker.getUserSkillProgress(userId, 'A1', 'listening', 'basico');
+
+      setIntegratedStats({
+        progressData,
+        adaptiveData,
+        achievements,
+        audioHistory: [], // Se puede implementar después
+        performanceMetrics: {
+          totalExercises: progressData?.length || 0,
+          totalScore: progressData?.reduce((sum, p) => sum + p.score, 0) || 0,
+          averageScore: progressData?.length > 0 ? Math.round(progressData.reduce((sum, p) => sum + p.score, 0) / progressData.length) : 0,
+          totalTime: progressData?.reduce((sum, p) => sum + p.time_spent, 0) || 0
+        }
+      });
+    } catch (error) {
+      console.warn('Error loading integrated stats:', error);
+    }
+  };
   const [studyGoals, setStudyGoals] = useState([]);
   const [studyHabits, setStudyHabits] = useState([]);
   const [studyMotivation, setStudyMotivation] = useState({});
@@ -82,6 +125,9 @@ export default function ProfilePage() {
 
       const userProgress = await getUserProgress(session.user.id);
       setStats(userProgress);
+
+      // Cargar estadísticas integradas del sistema offline-first
+      await loadIntegratedStats(session.user.id);
 
       // Simular datos adicionales (en una app real vendrían de la BD)
       setDifficultWords([
@@ -577,6 +623,12 @@ export default function ProfilePage() {
             🎯 Objetivos
           </button>
           <button 
+            className={`tab ${activeTab === 'integrated' ? 'tab--active' : ''}`}
+            onClick={() => setActiveTab('integrated')}
+          >
+            🔗 Estadísticas Integradas
+          </button>
+          <button 
             className={`tab ${activeTab === 'settings' ? 'tab--active' : ''}`}
             onClick={() => setActiveTab('settings')}
           >
@@ -688,6 +740,9 @@ export default function ProfilePage() {
               </div>
             </div>
           </section>
+
+          {/* Estadísticas de Exámenes */}
+          <ExamStatistics userId={user?.id} />
 
           {/* Heatmap de actividad */}
           <section className="profile-section">
@@ -943,6 +998,147 @@ export default function ProfilePage() {
       )}
 
       {/* Tab: Configuración */}
+      {activeTab === 'integrated' && (
+        <>
+          {/* Dashboard de Progreso Integrado */}
+          <section className="profile-section">
+            <div className="section-header">
+              <h2>📊 Dashboard de Progreso</h2>
+              <p>Estadísticas completas de tu aprendizaje</p>
+            </div>
+            <ProgressDashboard userId={user?.id} />
+          </section>
+
+          {/* Aprendizaje Adaptativo */}
+          <section className="profile-section">
+            <div className="section-header">
+              <h2>🤖 Aprendizaje Adaptativo</h2>
+              <p>Recomendaciones personalizadas basadas en IA</p>
+            </div>
+            <AdaptiveLearningDashboard userId={user?.id} />
+          </section>
+
+          {/* Métricas de Rendimiento */}
+          <section className="profile-section">
+            <div className="section-header">
+              <h2>⚡ Métricas de Rendimiento</h2>
+              <p>Análisis detallado de tu desempeño</p>
+            </div>
+            
+            <div className="metrics-grid">
+              <div className="metric-card">
+                <div className="metric-icon">📚</div>
+                <div className="metric-value">{integratedStats.performanceMetrics.totalExercises || 0}</div>
+                <div className="metric-label">Ejercicios Completados</div>
+              </div>
+              
+              <div className="metric-card">
+                <div className="metric-icon">🎯</div>
+                <div className="metric-value">{integratedStats.performanceMetrics.averageScore || 0}%</div>
+                <div className="metric-label">Puntuación Promedio</div>
+              </div>
+              
+              <div className="metric-card">
+                <div className="metric-icon">⏱️</div>
+                <div className="metric-value">{Math.round((integratedStats.performanceMetrics.totalTime || 0) / 60)}m</div>
+                <div className="metric-label">Tiempo Total</div>
+              </div>
+              
+              <div className="metric-card">
+                <div className="metric-icon">🏆</div>
+                <div className="metric-value">{integratedStats.achievements?.length || 0}</div>
+                <div className="metric-label">Logros Desbloqueados</div>
+              </div>
+            </div>
+          </section>
+
+          {/* Logros Recientes */}
+          {integratedStats.achievements && integratedStats.achievements.length > 0 && (
+            <section className="profile-section">
+              <div className="section-header">
+                <h2>🏆 Logros Recientes</h2>
+                <p>Tus logros más recientes</p>
+              </div>
+              
+              <div className="achievements-grid">
+                {integratedStats.achievements.slice(0, 6).map((achievement, index) => (
+                  <div key={index} className="achievement-card">
+                    <div className="achievement-icon">{achievement.icon || '🏆'}</div>
+                    <div className="achievement-title">{achievement.title}</div>
+                    <div className="achievement-description">{achievement.description}</div>
+                    <div className="achievement-points">+{achievement.points} puntos</div>
+                  </div>
+                ))}
+              </div>
+            </section>
+          )}
+
+          {/* Análisis de Habilidades */}
+          {integratedStats.adaptiveData && (
+            <section className="profile-section">
+              <div className="section-header">
+                <h2>📈 Análisis de Habilidades</h2>
+                <p>Progreso detallado por habilidad</p>
+              </div>
+              
+              <div className="skill-analysis">
+                <div className="skill-item">
+                  <div className="skill-name">Listening</div>
+                  <div className="skill-progress">
+                    <div className="progress-bar">
+                      <div 
+                        className="progress-fill" 
+                        style={{ width: `${integratedStats.adaptiveData.completionRate || 0}%` }}
+                      ></div>
+                    </div>
+                    <span className="progress-text">{integratedStats.adaptiveData.completionRate || 0}%</span>
+                  </div>
+                </div>
+                
+                <div className="skill-item">
+                  <div className="skill-name">Reading</div>
+                  <div className="skill-progress">
+                    <div className="progress-bar">
+                      <div 
+                        className="progress-fill" 
+                        style={{ width: '75%' }}
+                      ></div>
+                    </div>
+                    <span className="progress-text">75%</span>
+                  </div>
+                </div>
+                
+                <div className="skill-item">
+                  <div className="skill-name">Speaking</div>
+                  <div className="skill-progress">
+                    <div className="progress-bar">
+                      <div 
+                        className="progress-fill" 
+                        style={{ width: '60%' }}
+                      ></div>
+                    </div>
+                    <span className="progress-text">60%</span>
+                  </div>
+                </div>
+                
+                <div className="skill-item">
+                  <div className="skill-name">Writing</div>
+                  <div className="skill-progress">
+                    <div className="progress-bar">
+                      <div 
+                        className="progress-fill" 
+                        style={{ width: '45%' }}
+                      ></div>
+                    </div>
+                    <span className="progress-text">45%</span>
+                  </div>
+                </div>
+              </div>
+            </section>
+          )}
+        </>
+      )}
+
       {activeTab === 'settings' && (
         <>
           {/* Información personal */}
@@ -2208,6 +2404,167 @@ function GlobalStyles() {
         .chat-message{max-width:100%}
         .flashcards-grid{grid-template-columns:1fr}
         .themes-grid{grid-template-columns:repeat(auto-fit,minmax(120px,1fr))}
+      }
+
+      /* Estilos para componentes integrados */
+      .metrics-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 16px;
+        margin: 20px 0;
+      }
+
+      .metric-card {
+        padding: 20px;
+        border: 1px solid #eaeaea;
+        border-radius: 12px;
+        background: white;
+        text-align: center;
+        transition: transform 0.2s, box-shadow 0.2s;
+      }
+
+      .metric-card:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+      }
+
+      .metric-icon {
+        font-size: 2rem;
+        margin-bottom: 8px;
+      }
+
+      .metric-value {
+        font-size: 2rem;
+        font-weight: bold;
+        color: #0070f3;
+        margin-bottom: 4px;
+      }
+
+      .metric-label {
+        font-size: 0.9rem;
+        color: #666;
+      }
+
+      .achievements-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 16px;
+        margin: 20px 0;
+      }
+
+      .achievement-card {
+        padding: 16px;
+        border: 1px solid #eaeaea;
+        border-radius: 12px;
+        background: white;
+        transition: transform 0.2s, box-shadow 0.2s;
+      }
+
+      .achievement-card:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+      }
+
+      .achievement-icon {
+        font-size: 2rem;
+        margin-bottom: 8px;
+        text-align: center;
+      }
+
+      .achievement-title {
+        font-weight: bold;
+        color: var(--text);
+        margin-bottom: 4px;
+        text-align: center;
+      }
+
+      .achievement-description {
+        font-size: 0.9rem;
+        color: #666;
+        margin-bottom: 8px;
+        text-align: center;
+      }
+
+      .achievement-points {
+        font-size: 0.8rem;
+        color: #28a745;
+        font-weight: bold;
+        text-align: center;
+        background: #f8f9fa;
+        padding: 4px 8px;
+        border-radius: 4px;
+      }
+
+      .skill-analysis {
+        display: grid;
+        gap: 16px;
+        margin: 20px 0;
+      }
+
+      .skill-item {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        padding: 16px;
+        border: 1px solid #eaeaea;
+        border-radius: 12px;
+        background: white;
+      }
+
+      .skill-name {
+        min-width: 100px;
+        font-weight: bold;
+        color: var(--text);
+      }
+
+      .skill-progress {
+        flex: 1;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+      }
+
+      .progress-bar {
+        flex: 1;
+        height: 8px;
+        background: #f0f0f0;
+        border-radius: 4px;
+        overflow: hidden;
+      }
+
+      .progress-fill {
+        height: 100%;
+        background: linear-gradient(90deg, #0070f3, #28a745);
+        transition: width 0.3s ease;
+      }
+
+      .progress-text {
+        min-width: 40px;
+        font-weight: bold;
+        color: var(--text);
+        text-align: right;
+      }
+
+      /* Responsive para componentes integrados */
+      @media (max-width: 768px) {
+        .metrics-grid {
+          grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+        }
+        
+        .achievements-grid {
+          grid-template-columns: 1fr;
+        }
+        
+        .skill-item {
+          flex-direction: column;
+          align-items: stretch;
+          gap: 8px;
+        }
+        
+        .skill-name {
+          min-width: auto;
+          text-align: center;
+        }
       }
     `}</style>
   );

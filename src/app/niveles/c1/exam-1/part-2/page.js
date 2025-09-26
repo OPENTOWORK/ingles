@@ -1,8 +1,15 @@
 'use client';
 
-import { useState, useEffect } from 'react';
 import { useExam } from '@/context/ExamContext';
+import { useRouter, usePathname } from 'next/navigation';
 import Link from 'next/link';
+import { useState, useEffect, useRef } from 'react';
+import ExamExitWarning from '@/components/ExamExitWarning';
+import ExamTimer from '@/components/ExamTimer';
+import AdvancedProgress from '@/components/AdvancedProgress';
+import QuickNavigation from '@/components/QuickNavigation';
+import EnhancedFeedback from '@/components/EnhancedFeedback';
+import '@/styles/quick-exam-navigation.css';
 
 const correctAnswers = {
   1: 'as',
@@ -18,19 +25,28 @@ const correctAnswers = {
 
 const EXAM_ID = 'exam-1';
 const PART_ID = 'part-2';
-const CURRENT_PART = 2;
-const TOTAL_PARTS = 17;
+const TOTAL_TIME = 90 * 60;
 
-export default function Part2() {
-  const { answers, updateAnswer, globalStart, setGlobalStart, sectionTimers } = useExam();
-  const [feedback, setFeedback] = useState({});
+export default function Part2Page() {
+  const { answers, updateAnswer, globalStart, setGlobalStart, sectionTimers, clearAllAnswers } = useExam();
+  const [showResult, setShowResult] = useState({});
+  const [showExplanation, setShowExplanation] = useState({});
+  const [currentQuestion, setCurrentQuestion] = useState(1);
   const [localAnswers, setLocalAnswers] = useState({});
+  const partAnswers = answers?.[EXAM_ID]?.[PART_ID] || {};
+  const initializedRef = useRef(false);
+
+  const router = useRouter();
+  const pathname = usePathname();
 
   useEffect(() => {
-    if (!globalStart) {
+    if (!initializedRef.current && !globalStart) {
       setGlobalStart(new Date());
+      initializedRef.current = true;
     }
+  }, [setGlobalStart]);
 
+  useEffect(() => {
     const stored = answers?.[EXAM_ID]?.[PART_ID] || {};
     setLocalAnswers(stored);
     const prefeedback = {};
@@ -41,23 +57,23 @@ export default function Part2() {
         answer: correct
       };
     });
-    setFeedback(prefeedback);
-  }, [answers, globalStart, setGlobalStart]);
+    setShowResult(prefeedback);
+  }, [answers?.[EXAM_ID]?.[PART_ID]]);
 
   const handleChange = (e, index) => {
     setLocalAnswers({ ...localAnswers, [index]: e.target.value });
   };
 
   const handleKeyPress = (e, index) => {
-    if (e.key === 'Enter' && !feedback[index]) {
+    if (e.key === 'Enter' && !showResult[index]) {
       e.preventDefault();
       const userInput = localAnswers[index]?.trim().toLowerCase();
       const correct = correctAnswers[index];
 
       updateAnswer(EXAM_ID, PART_ID, index, userInput);
 
-      setFeedback({
-        ...feedback,
+      setShowResult({
+        ...showResult,
         [index]: {
           correct: userInput === correct,
           answer: correct
@@ -66,176 +82,326 @@ export default function Part2() {
     }
   };
 
+  const handleBackToIndex = (e) => {
+    e.preventDefault();
+    const isExamRoute = /^\/niveles\/c1\/exam-1\/part-\d+$/.test(pathname);
+    if (isExamRoute && globalStart) {
+      const confirmLeave = window.confirm(
+        "⚠️ Estás a punto de salir del examen.\n\nPerderás todo tu progreso si continúas.\n¿Deseas salir?"
+      );
+      if (!confirmLeave) return;
+      clearAllAnswers();
+    }
+    router.push("/niveles/c1");
+  };
+
+  // Función para navegar a una pregunta específica
+  const handleNavigateToQuestion = (questionId) => {
+    setCurrentQuestion(questionId);
+    const element = document.getElementById(`question-${questionId}`);
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+  };
+
+  // Función para obtener el nombre de la sección
+  function getSectionName(partId) {
+    const sectionNames = {
+      'part-1': 'Reading - Part 1',
+      'part-2': 'Reading - Part 2',
+      'part-3': 'Reading - Part 3',
+      'part-4': 'Reading - Part 4',
+      'part-5': 'Reading - Part 5',
+      'part-6': 'Reading - Part 6',
+      'part-7': 'Reading - Part 7',
+      'part-8': 'Use of English - Part 1',
+      'part-9': 'Use of English - Part 2',
+      'part-10': 'Use of English - Part 3',
+      'part-11': 'Use of English - Part 4',
+      'part-12': 'Writing - Part 1',
+      'part-13': 'Writing - Part 2',
+      'part-14': 'Writing - Part 2',
+      'part-15': 'Listening - Part 1',
+      'part-16': 'Listening - Part 2',
+      'part-17': 'Speaking - Part 1'
+    };
+    return sectionNames[partId] || 'Unknown Section';
+  }
+
+  // Función para obtener la siguiente parte
+  const getNextPart = (currentPart) => {
+    const partNumbers = {
+      'part-1': 1, 'part-2': 2, 'part-3': 3, 'part-4': 4, 'part-5': 5,
+      'part-6': 6, 'part-7': 7, 'part-8': 8, 'part-9': 9, 'part-10': 10,
+      'part-11': 11, 'part-12': 12, 'part-13': 13, 'part-14': 14, 'part-15': 15,
+      'part-16': 16, 'part-17': 17
+    };
+    const currentNum = partNumbers[currentPart];
+    const nextNum = currentNum + 1;
+    if (nextNum <= 17) {
+      return `part-${nextNum}`;
+    }
+    return 'resultado';
+  };
+
+  // Función para obtener la parte anterior
+  const getPrevPart = (currentPart) => {
+    const partNumbers = {
+      'part-1': 1, 'part-2': 2, 'part-3': 3, 'part-4': 4, 'part-5': 5,
+      'part-6': 6, 'part-7': 7, 'part-8': 8, 'part-9': 9, 'part-10': 10,
+      'part-11': 11, 'part-12': 12, 'part-13': 13, 'part-14': 14, 'part-15': 15,
+      'part-16': 16, 'part-17': 17
+    };
+    const currentNum = partNumbers[currentPart];
+    const prevNum = currentNum - 1;
+    if (prevNum >= 1) {
+      return `part-${prevNum}`;
+    }
+    return null;
+  };
+
   const inputs = Object.keys(correctAnswers).map(Number);
   const total = inputs.length;
-  const score = Object.values(feedback).filter((f) => f.correct).length;
+  const answered = Object.keys(showResult).length;
+  const score = Object.values(showResult).filter((f) => f.correct).length;
   const required = Math.ceil(total * 0.6);
   const passed = score >= required;
-  const answered = Object.keys(feedback).length;
   const progress = Math.round((answered / total) * 100);
+
   const formatTime = (seconds) => {
     const m = Math.floor(seconds / 60);
     const s = seconds % 60;
     return `${m}:${String(s).padStart(2, '0')}`;
   };
 
+  const timeRemaining = Math.max(TOTAL_TIME - sectionTimers.reading, 0);
+
   return (
-    <main className="shell part-page">
-      <header className="header">
-        <h1>Part 2: Open Cloze</h1>
-        <p>In this part, you read a text with gaps. Each gap requires a single word.</p>
-      </header>
-
-      {/* Progress */}
-      <div className="progress-section">
-        <div className="progress-info">
-          <span>Progress: {progress}%</span>
+    <div className="shell">
+      <ExamExitWarning />
+      
+      <div className="exam-header">
+        <div className="header">
+          <h1>Part 2: Use of english - Open Cloze</h1>
+          <p>Cambridge C1 Advanced - Reading</p>
         </div>
-        <div className="progress-bar">
-          <div className="progress-fill" style={{ width: `${progress}%` }} />
+        
+        <div className="exam-controls">
+          <ExamTimer 
+            totalTime={TOTAL_TIME}
+            sectionName={`${getSectionName(PART_ID)}`}
+            onTimeUp={() => {
+              alert('¡Tiempo agotado! Serás redirigido al siguiente examen.');
+              const nextPart = getNextPart(PART_ID);
+              if (nextPart === 'resultado') {
+                router.push(`/niveles/c1/exam-1/${nextPart}`);
+              } else {
+                router.push(`/niveles/c1/exam-1/${nextPart}`);
+              }
+            }}
+            onWarning={(timeLeft) => {
+              if (timeLeft <= 300) {
+                alert(`¡Atención! Te quedan ${Math.floor(timeLeft / 60)} minutos.`);
+              }
+            }}
+          />
+          
+          <AdvancedProgress 
+            questions={inputs.map(n => ({ id: n }))}
+            answers={partAnswers}
+            showResult={showResult}
+            sectionName={`${getSectionName(PART_ID)}`}
+          />
         </div>
       </div>
 
-      {/* Timer */}
-      <div className="timer">
-        ⏳ Time remaining for Parts 1–7: {formatTime(90 * 60 - sectionTimers.reading)}
-      </div>
+      <div className="exam-content">
+        {/* Progress bar with modern styling */}
+        <div className="progress-section">
+          <div className="progress-info">
+            <span className="progress-label">Progress: {progress}%</span>
+          </div>
+          <div className="progress-bar">
+            <div 
+              className="progress-fill" 
+              style={{ width: `${progress}%` }}
+            />
+          </div>
+        </div>
 
-      {/* Instructions */}
-      <div className="instructions">
-        <p>You must write a grammatically and lexically correct word that fits the context.</p>
-      </div>
+        {/* Timer with modern styling */}
+        <div className={`timer-section ${timeRemaining <= 60 ? 'timer-warning' : ''}`}>
+          <span className="timer-icon">⏳</span>
+          <span className="timer-text">Time remaining for Parts 1–7: {formatTime(timeRemaining)}</span>
+        </div>
 
-      {/* Text */}
-      <div className="text-section">
-        <h2>Motorbike stunt rider</h2>
-        <p>
-          I work <strong>(0)</strong> <em>as</em> a motorbike stunt rider – that is, I do tricks on my motorbike at shows.
-          The Le Mans race track in France was <strong>(9)</strong> ........ I first saw some guys doing motorbike stunts.
-          I'd never seen anyone riding a motorbike using just the back wheel before and I was <strong>(10)</strong> ........ impressed
-          I went straight home and taught <strong>(11)</strong> ........ to do the same.
-        </p>
-        <p>
-          I have a degree <strong>(12)</strong> ........ mechanical engineering; this helps me to look at the physics <strong>(13)</strong> ........
-          lies behind each stunt. In addition to being responsible for design changes to the motorbike, I have to work <strong>(14)</strong> ........
-          every stunt I do. Apart <strong>(15)</strong> ........ some minor mechanical problem happening occasionally,
-          I never feel in <strong>(16)</strong> ........ kind of danger because I'm very experienced.
-        </p>
-      </div>
+        {/* Instructions with modern styling */}
+        <div className="instructions-section">
+          <p className="instructions-text">
+            In this part, you read a text with gaps. Each gap requires a single word.
+            You must write a grammatically and lexically correct word that fits the context.
+          </p>
+        </div>
 
-      {/* Questions */}
-      <section className="questions-section">
-        <h2>Your Answers (press Enter to check)</h2>
-        <div className="inputs-grid">
-          {inputs.map((n) => (
-            <div key={n} className="input-group">
-              <label htmlFor={`gap-${n}`}>({n})</label>
-              <input
-                type="text"
-                id={`gap-${n}`}
-                placeholder="Your answer"
-                value={localAnswers[n] || ""}
-                onChange={(e) => handleChange(e, n)}
-                onKeyDown={(e) => handleKeyPress(e, n)}
-                disabled={!!feedback[n]}
-                className={`answer-input ${feedback[n]?.correct === true ? 'correct' : feedback[n]?.correct === false ? 'incorrect' : ''}`}
-              />
-              {feedback[n] && (
-                <div className="feedback">
-                  {feedback[n].correct ? (
-                    <span className="correct">✔ Correct</span>
-                  ) : (
-                    <span className="incorrect">
-                      ✘ Incorrect. Answer: <strong>{feedback[n].answer}</strong>
-                    </span>
+        {/* Reading text with modern styling */}
+        <div className="reading-text-modern">
+          <div className="text-content">
+            <h2>Motorbike stunt rider</h2>
+            <p>
+              I work <strong>(0)</strong> <em>as</em> a motorbike stunt rider – that is, I do tricks on my motorbike at shows.
+              The Le Mans race track in France was <strong>(9)</strong> ........ I first saw some guys doing motorbike stunts.
+              I'd never seen anyone riding a motorbike using just the back wheel before and I was <strong>(10)</strong> ........ impressed
+              I went straight home and taught <strong>(11)</strong> ........ to do the same.
+            </p>
+            <p>
+              I have a degree <strong>(12)</strong> ........ mechanical engineering; this helps me to look at the physics <strong>(13)</strong> ........
+              lies behind each stunt. In addition to being responsible for design changes to the motorbike, I have to work <strong>(14)</strong> ........
+              every stunt I do. Apart <strong>(15)</strong> ........ some minor mechanical problem happening occasionally,
+              I never feel in <strong>(16)</strong> ........ kind of danger because I'm very experienced.
+            </p>
+          </div>
+        </div>
+
+        <div className="questions-section-header">
+          <h2>Your Answers (press Enter to check)</h2>
+        </div>
+
+        <div className="questions-container">
+          {inputs.map((n) => {
+            const selected = partAnswers[n];
+            const correct = correctAnswers[n];
+            const wasAnswered = !!showResult[n];
+
+            return (
+              <div key={n} className="question" id={`question-${n}`}>
+                <div className="question-header">
+                  <h3>Gap {n}</h3>
+                  {wasAnswered && (
+                    <div className="question-status">
+                      <span className="status-badge answered">✅ Respondida</span>
+                    </div>
                   )}
-                  <button
-                    onClick={() => alert(`📘 Explicación para la respuesta (${n})`)}
-                    className="explanation-button"
-                  >
-                    📘 Obtener explicación
-                  </button>
                 </div>
-              )}
-            </div>
+                
+                <div className="question-content">
+                  <p><strong>({n})</strong> Write the missing word:</p>
+                  
+                  <div className="input-group">
+                    <input
+                      type="text"
+                      placeholder="Your answer"
+                      value={localAnswers[n] || ""}
+                      onChange={(e) => handleChange(e, n)}
+                      onKeyDown={(e) => handleKeyPress(e, n)}
+                      disabled={wasAnswered}
+                      className={`answer-input ${wasAnswered ? (showResult[n]?.correct ? 'correct' : 'incorrect') : ''}`}
+                    />
+                  </div>
+
+                  {wasAnswered && (
+                    <div className="question-feedback">
+                      <div className="feedback-actions">
+                        <button
+                          className={`btn ${showExplanation[n] ? 'btn-info' : 'btn-secondary'}`}
+                          onClick={() => setShowExplanation(prev => ({ ...prev, [n]: !prev[n] }))}
+                        >
+                          📘 {showExplanation[n] ? 'Ocultar explicación' : 'Obtener explicación'}
+                        </button>
+                      </div>
+
+                      {showExplanation[n] && (
+                        <div className="explanation">
+                          <div className="explanation-header">
+                            <h4>📖 Explicación Detallada</h4>
+                            <div className="explanation-status">
+                              {showResult[n]?.correct ? (
+                                <span className="status-correct">✅ Correcto</span>
+                              ) : (
+                                <span className="status-incorrect">❌ Incorrecto</span>
+                              )}
+                            </div>
+                          </div>
+                          
+                          <div className="explanation-content">
+                            <div className="answer-section">
+                              <p><strong>Tu respuesta:</strong> <span className="user-answer">{selected}</span></p>
+                              <p><strong>Respuesta correcta:</strong> <span className="correct-answer">{correct}</span></p>
+                            </div>
+                            
+                            <div className="explanation-text">
+                              <p><strong>Explicación:</strong></p>
+                              <p>Esta palabra encaja gramatical y semánticamente en el contexto de la oración.</p>
+                            </div>
+                            
+                            <div className="learning-tip">
+                              <p><strong>💡 Consejo:</strong> En ejercicios de Open Cloze, presta atención a la gramática y el significado del contexto.</p>
+                            </div>
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  )}
+                </div>
+              </div>
+            );
+          })}
+        </div>
+
+        <div className="score-section">
+          <h3>Your score: {score} / {total}</h3>
+          <p className="score-info">
+            🎯 You need <strong>{required}</strong> correct answers to pass.
+          </p>
+          {answered === total && (
+            passed ? (
+              <p className="score-passed">✅ You passed the test!</p>
+            ) : (
+              <p className="score-failed">❌ You did not pass. Try again to improve your score.</p>
+            )
+          )}
+        </div>
+      </div>
+
+      {/* Navegación rápida - 17 botones para todas las partes */}
+      <div className="quick-exam-navigation">
+        <div className="nav-header">
+          <h3>📚 Navegación Rápida del Examen</h3>
+        </div>
+        <div className="nav-buttons-grid">
+          {Array.from({ length: 17 }, (_, i) => i + 1).map(partNum => (
+            <Link 
+              key={partNum} 
+              href={`/niveles/c1/exam-1/part-${partNum}`}
+              className={`nav-part-btn ${partNum === 2 ? 'current' : ''}`}
+            >
+              Part {partNum}
+            </Link>
           ))}
         </div>
-      </section>
-
-      {/* Score */}
-      <div className="score-section">
-        <h3>Your score: {score} / {total}</h3>
-        <p className="score-info">
-          🎯 You need <strong>{required}</strong> correct answers to pass.
-        </p>
-        {answered === total && (
-          passed ? (
-            <p className="passed">✅ You passed the test!</p>
-          ) : (
-            <p className="failed">❌ You did not pass. Try again to improve your score.</p>
-          )
-        )}
       </div>
 
-      {/* Navigation */}
-      <div className="navigation">
-        <Link href="/niveles/c1/exam-1/part-1" className="nav-button">
-          ⬅ Back to Part 1
-        </Link>
-        <Link href="/niveles/c1/exam-1/part-3" className="nav-button nav-button--next">
-          Next ➡️
-        </Link>
+      <div className="exam-navigation">
+        <div className="nav-buttons">
+          <button onClick={handleBackToIndex} className="btn btn-secondary">
+            ⬅ Back to C1 Overview
+          </button>
+          <Link href="/niveles/c1/exam-1/part-1" className="btn btn-secondary">
+            ⬅ Previous
+          </Link>
+          <Link href="/niveles/c1/exam-1/part-3" className="btn btn-primary">
+            Next ➡️
+          </Link>
+        </div>
       </div>
 
-      <GlobalStyles />
-    </main>
+      <QuickNavigation 
+        questions={inputs.map(n => ({ id: n }))}
+        answers={partAnswers}
+        currentQuestion={currentQuestion}
+        onNavigate={handleNavigateToQuestion}
+        sectionName={`${getSectionName(PART_ID)}`}
+      />
+    </div>
   );
 }
 
-// ====== Estilos (styled-jsx global + locales) ======
-function GlobalStyles() {
-  return (
-    <style jsx global>{`
-      .part-page {
-        background-color: var(--bg);
-        color: var(--text);
-        min-height: 100vh;
-      }
-      .shell{min-height:100svh;max-width:1100px;margin:0 auto;padding:32px 20px}
-      .header h1{font-size:1.8rem;font-weight:bold;margin:0 0 6px;color:var(--text)}
-      .header p{margin:0;color:#666;font-size:1rem}
-      .progress-section{margin:1rem 0}
-      .progress-info{margin-bottom:0.25rem;text-align:right;font-weight:bold;font-size:0.9rem;color:#333}
-      .progress-bar{height:12px;background-color:#ddd;border-radius:6px;overflow:hidden;margin-bottom:1rem}
-      .progress-fill{background-color:#3b82f6;height:100%;transition:width 0.3s}
-      .timer{text-align:right;font-size:0.95rem;font-weight:bold;color:#333;margin-bottom:1rem}
-      .instructions{margin:1rem 0;color:#333}
-      .text-section{background-color:#fefefe;padding:1rem;border-radius:6px;line-height:1.6;margin-top:1.5rem;box-shadow:0 0 4px rgba(0,0,0,0.1)}
-      .text-section h2{margin-top:0;margin-bottom:1rem;font-weight:normal;color:var(--text)}
-      .questions-section{margin-top:2rem}
-      .questions-section h2{margin-bottom:1rem;color:var(--text)}
-      .inputs-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:1rem;margin-top:1rem}
-      .input-group{display:flex;flex-direction:column;gap:0.25rem}
-      .input-group label{font-weight:bold;color:var(--text)}
-      .answer-input{width:100%;padding:0.5rem;font-size:1rem;border:1px solid #ccc;border-radius:4px;box-sizing:border-box;transition:all 0.2s}
-      .answer-input:focus{outline:none;border-color:#0070f3;box-shadow:0 0 0 2px rgba(0,112,243,0.2)}
-      .answer-input.correct{background-color:#d4edda;border-color:#28a745}
-      .answer-input.incorrect{background-color:#f8d7da;border-color:#dc3545}
-      .feedback{margin-top:0.25rem}
-      .correct{color:green}
-      .incorrect{color:red}
-      .explanation-button{margin-top:0.3rem;display:inline-block;background-color:#fef3c7;border:1px solid #fcd34d;border-radius:6px;padding:0.4rem 0.8rem;font-weight:bold;cursor:pointer;font-size:0.9rem;transition:background 0.2s}
-      .explanation-button:hover{background-color:#fde68a}
-      .score-section{margin-top:2.5rem}
-      .score-section h3{margin-bottom:0.5rem;color:var(--text)}
-      .score-info{font-size:0.95rem;color:#333;margin-bottom:0.5rem}
-      .passed{color:green;font-weight:bold}
-      .failed{color:red;font-weight:bold}
-      .navigation{margin-top:2.5rem;display:flex;justify-content:space-between;align-items:center}
-      .nav-button{text-decoration:none;color:#0070f3;font-weight:bold;padding:0.5rem 1rem;border:1px solid #0070f3;border-radius:4px;background:transparent;cursor:pointer;transition:all 0.2s}
-      .nav-button:hover{background:#0070f3;color:#fff}
-      .nav-button--next{background:#0070f3;color:#fff}
-      .nav-button--next:hover{background:#005bb5}
-    `}</style>
-  );
-}

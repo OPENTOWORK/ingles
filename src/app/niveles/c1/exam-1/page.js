@@ -1,6 +1,8 @@
 'use client';
 import Link from 'next/link';
 import { useExam } from '@/context/ExamContext';
+import SimpleExamManager from '@/components/SimpleExamManager';
+import '@/styles/exam-styles.css';
 
 // ====== Página ======
 export default function C1ExamHomePage() {
@@ -12,6 +14,9 @@ export default function C1ExamHomePage() {
         <h1>Cambridge C1 Exam Practice</h1>
         <p>Welcome to the C1 Advanced (CAE) Cambridge English Exam Practice page.</p>
       </header>
+
+      {/* Gestión del Examen */}
+      <SimpleExamManager examId="exam-1" />
 
       {/* Información */}
       <section className="info-section">
@@ -47,7 +52,7 @@ export default function C1ExamHomePage() {
             return (
               <Link
                 key={i}
-                href={`/niveles/c1/exam-${i + 1}/part-1`}
+                href={`/niveles/c1/exam-${i + 1}`}
                 className={`exam-card ${finished ? 'exam-card--completed' : ''}`}
               >
                 <div className="exam-card__title">Exam {i + 1}</div>

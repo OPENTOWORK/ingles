@@ -1,15 +1,18 @@
-"use client";
+'use client';
 import Link from "next/link";
 
-const habilidades = [
+const skills = [
   { id: "use-of-english", label: "Use of English", emoji: "📘" },
   { id: "writing", label: "Writing", emoji: "✍️" },
   { id: "listening", label: "Listening", emoji: "🎧" },
   { id: "speaking", label: "Speaking", emoji: "🗣️" },
-  { id: "reading", label: "Reading", emoji: "📖" },         
-  { id: "vocabulary", label: "Vocabulary", emoji: "🧠" },   
+  { id: "reading", label: "Reading", emoji: "📖" },
+  { id: "vocabulary", label: "Vocabulary", emoji: "🧠" },
+  { id: "all", label: "All Together", emoji: "🧩" },
+  { id: "challenge", label: "Challenge", emoji: "🏆" }, // <- Nueva opción
 ];
-export default function NivelB2() {
+
+export default function B2LevelPage() {
   return (
     <main
       style={{
@@ -20,8 +23,8 @@ export default function NivelB2() {
         minHeight: "100vh",
       }}
     >
-      <h1 style={{ fontSize: "2rem", marginBottom: "0.5rem" }}>🌟 Nivel B2</h1>
-      <p style={{ marginBottom: "2rem", color: "#444" }}>Elige una habilidad:</p>
+      <h1 style={{ fontSize: "2rem", marginBottom: "0.5rem" }}>🌟 Level B2</h1>
+      <p style={{ marginBottom: "2rem", color: "#444" }}>Choose a skill:</p>
 
       <div
         style={{
@@ -32,10 +35,10 @@ export default function NivelB2() {
           margin: "0 auto",
         }}
       >
-        {habilidades.map((hab) => (
+        {skills.map((skill) => (
           <Link
-            key={hab.id}
-            href={`/training/b2/${hab.id}`}
+            key={skill.id}
+            href={`/training/b2/${skill.id}`} // Cambia "b2" si es otro nivel
             style={{
               padding: "2rem 1rem",
               backgroundColor: "#d6eaff",
@@ -54,8 +57,8 @@ export default function NivelB2() {
             onMouseEnter={(e) => (e.currentTarget.style.transform = "scale(1.05)")}
             onMouseLeave={(e) => (e.currentTarget.style.transform = "scale(1)")}
           >
-            <div style={{ fontSize: "2.5rem", marginBottom: "0.5rem" }}>{hab.emoji}</div>
-            {hab.label}
+            <div style={{ fontSize: "2.5rem", marginBottom: "0.5rem" }}>{skill.emoji}</div>
+            {skill.label}
           </Link>
         ))}
       </div>

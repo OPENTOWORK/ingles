@@ -1,13 +1,15 @@
 "use client";
 
-import { createContext, useContext, useState, useEffect } from "react";
+import { createContext, useContext, useState, useEffect, useRef } from "react";
 import { usePathname } from "next/navigation";
+import { initializeExamData } from "@/utils/clearCorruptedData";
 
 const ExamContext = createContext();
 export const useExam = () => useContext(ExamContext);
 
 export const ExamProvider = ({ children }) => {
   const pathname = usePathname();
+  const lastSavedRef = useRef(null);
 
   const [answers, setAnswers] = useState({});
   const [globalStart, setGlobalStart] = useState(null);
@@ -17,36 +19,122 @@ export const ExamProvider = ({ children }) => {
     listening: 0,
     speaking: 0,
   });
+  const [lastSaved, setLastSaved] = useState(null);
+  const [isSaving, setIsSaving] = useState(false);
 
   // ✅ Cargar datos desde localStorage solo en el cliente
   useEffect(() => {
     if (typeof window === "undefined") return;
 
-    const savedAnswers = localStorage.getItem("examAnswers");
-    if (savedAnswers) {
-      setAnswers(JSON.parse(savedAnswers));
+    // Inicializar y limpiar datos corruptos
+    initializeExamData();
+
+    try {
+      const savedAnswers = localStorage.getItem("examAnswers");
+      if (savedAnswers) {
+        const parsed = JSON.parse(savedAnswers);
+        if (parsed && typeof parsed === 'object') {
+          setAnswers(parsed);
+        }
+      }
+    } catch (error) {
+      console.warn('Error parsing exam answers from localStorage:', error);
+      localStorage.removeItem("examAnswers");
     }
 
-    const savedStart = localStorage.getItem("examGlobalStart");
-    if (savedStart) {
-      setGlobalStart(new Date(savedStart));
+    try {
+      const savedStart = localStorage.getItem("examGlobalStart");
+      if (savedStart) {
+        const date = new Date(savedStart);
+        if (!isNaN(date.getTime())) {
+          setGlobalStart(date);
+        }
+      }
+    } catch (error) {
+      console.warn('Error parsing exam start time from localStorage:', error);
+      localStorage.removeItem("examGlobalStart");
     }
 
-    const savedTimers = localStorage.getItem("examSectionTimers");
-    if (savedTimers) {
-      setSectionTimers(JSON.parse(savedTimers));
+    try {
+      const savedTimers = localStorage.getItem("examSectionTimers");
+      if (savedTimers) {
+        const parsed = JSON.parse(savedTimers);
+        if (parsed && typeof parsed === 'object') {
+          setSectionTimers(parsed);
+        }
+      }
+    } catch (error) {
+      console.warn('Error parsing exam timers from localStorage:', error);
+      localStorage.removeItem("examSectionTimers");
     }
   }, []);
 
-  // 💾 Guardar cambios en localStorage
+  // 💾 Guardar cambios en localStorage con debounce para evitar bucles
   useEffect(() => {
     if (typeof window === "undefined") return;
-    localStorage.setItem("examAnswers", JSON.stringify(answers));
+    
+    // Evitar guardar si answers está vacío
+    if (!answers || typeof answers !== 'object' || Object.keys(answers).length === 0) {
+      return;
+    }
+    
+    // Debounce para evitar guardados excesivos
+    const timeoutId = setTimeout(() => {
+      setIsSaving(true);
+      try {
+        localStorage.setItem("examAnswers", JSON.stringify(answers));
+        const now = new Date();
+        lastSavedRef.current = now;
+        // Actualizar lastSaved solo si ha pasado suficiente tiempo
+        setLastSaved(now);
+      } catch (error) {
+        console.error("Error saving exam answers:", error);
+        try {
+          localStorage.removeItem("examAnswers");
+        } catch (cleanupError) {
+          console.error("Error cleaning up localStorage:", cleanupError);
+        }
+      } finally {
+        setTimeout(() => setIsSaving(false), 500);
+      }
+    }, 300); // Debounce de 300ms
+
+    return () => clearTimeout(timeoutId);
   }, [answers]);
 
   useEffect(() => {
-    if (typeof window === "undefined" || !globalStart) return;
-    localStorage.setItem("examGlobalStart", globalStart.toISOString());
+    if (typeof window === "undefined") return;
+    
+    if (!globalStart) {
+      // Si no hay globalStart, limpiar el localStorage
+      localStorage.removeItem("examGlobalStart");
+      return;
+    }
+    
+    try {
+      let dateToSave;
+      
+      if (globalStart instanceof Date) {
+        dateToSave = globalStart;
+      } else if (typeof globalStart === 'string') {
+        dateToSave = new Date(globalStart);
+      } else if (typeof globalStart === 'number') {
+        dateToSave = new Date(globalStart);
+      } else {
+        console.warn("Invalid globalStart type:", typeof globalStart, globalStart);
+        return;
+      }
+      
+      if (!isNaN(dateToSave.getTime())) {
+        localStorage.setItem("examGlobalStart", dateToSave.toISOString());
+      } else {
+        console.warn("Invalid date for globalStart:", globalStart);
+        localStorage.removeItem("examGlobalStart");
+      }
+    } catch (error) {
+      console.error("Error saving global start time:", error);
+      localStorage.removeItem("examGlobalStart");
+    }
   }, [globalStart]);
 
   useEffect(() => {
@@ -56,21 +144,27 @@ export const ExamProvider = ({ children }) => {
 
   // ⏱ Temporizador para cada sección
   useEffect(() => {
+    if (!globalStart) return;
+    
     const interval = setInterval(() => {
-      if (!globalStart) return;
-
       const now = new Date();
       const elapsed = Math.floor((now - globalStart) / 1000);
 
-      if (/\/part-[1-8]$/.test(pathname)) {
-        setSectionTimers((prev) => ({ ...prev, reading: elapsed }));
-      } else if (/\/part-(9|10)$/.test(pathname)) {
-        setSectionTimers((prev) => ({ ...prev, writing: elapsed }));
-      } else if (/\/part-1(1|2|3)$/.test(pathname)) {
-        setSectionTimers((prev) => ({ ...prev, listening: elapsed }));
-      } else if (/\/part-1(4|5|6|7)$/.test(pathname)) {
-        setSectionTimers((prev) => ({ ...prev, speaking: elapsed }));
-      }
+      setSectionTimers((prev) => {
+        const newTimers = { ...prev };
+        
+        if (/\/part-[1-8]$/.test(pathname)) {
+          newTimers.reading = elapsed;
+        } else if (/\/part-(9|10)$/.test(pathname)) {
+          newTimers.writing = elapsed;
+        } else if (/\/part-1(1|2|3)$/.test(pathname)) {
+          newTimers.listening = elapsed;
+        } else if (/\/part-1(4|5|6|7)$/.test(pathname)) {
+          newTimers.speaking = elapsed;
+        }
+        
+        return newTimers;
+      });
     }, 1000);
 
     return () => clearInterval(interval);
@@ -163,6 +257,8 @@ export const ExamProvider = ({ children }) => {
         globalStart,
         setGlobalStart,
         sectionTimers,
+        lastSaved,
+        isSaving,
       }}
     >
       {children}

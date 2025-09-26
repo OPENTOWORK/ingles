@@ -3,6 +3,13 @@ import { useEffect, useState } from 'react';
 import Link from "next/link";
 import { useRouter } from 'next/navigation';
 import { supabase } from '@/utils/supabaseClient';
+import ProgressDashboard from '@/components/ProgressDashboard';
+import AdaptiveLearningDashboard from '@/components/AdaptiveLearningDashboard';
+import { AccessibilityPanel } from '@/components/AccessibilityProvider';
+import SkipLinks from '@/components/SkipLinks';
+import DatabaseSetup from '@/components/DatabaseSetup';
+import UserOnboarding from '@/components/UserOnboarding';
+import { checkDatabaseHealth } from '@/utils/databaseInitializer';
 
 const sortedLevels = [
   { level: "A1", color: "#7bed9f", emoji: "😁" },
@@ -16,6 +23,11 @@ const sortedLevels = [
 export default function TrainingHome() {
   const router = useRouter();
   const [loading, setLoading] = useState(true);
+  const [user, setUser] = useState(null);
+  const [databaseReady, setDatabaseReady] = useState(false);
+  const [showDatabaseSetup, setShowDatabaseSetup] = useState(false);
+  const [showOnboarding, setShowOnboarding] = useState(false);
+  const [onboardingCompleted, setOnboardingCompleted] = useState(false);
 
   useEffect(() => {
     const checkSession = async () => {
@@ -23,30 +35,112 @@ export default function TrainingHome() {
       if (!data.session) {
         router.push('/login');
       } else {
+        setUser(data.session.user);
+        
+        // Check database health
+        const health = await checkDatabaseHealth();
+        setDatabaseReady(health.healthy);
+        setShowDatabaseSetup(!health.healthy);
+        
+        // Check if user has completed onboarding
+        await checkOnboardingStatus(data.session.user.id);
+        
         setLoading(false);
       }
     };
     checkSession();
   }, [router]);
 
+  const checkOnboardingStatus = async (userId) => {
+    try {
+      // Try database first
+      const { data } = await supabase
+        .from('user_preferences')
+        .select('onboarding_completed')
+        .eq('user_id', userId)
+        .single();
+
+      if (data && data.onboarding_completed) {
+        setOnboardingCompleted(true);
+        return;
+      }
+    } catch (error) {
+      console.warn('Database check failed, trying localStorage:', error);
+    }
+
+    // Fallback to localStorage
+    try {
+      const localData = localStorage.getItem('user_preferences');
+      if (localData) {
+        const preferences = JSON.parse(localData);
+        if (preferences.onboarding_completed && preferences.user_id === userId) {
+          setOnboardingCompleted(true);
+          return;
+        }
+      }
+    } catch (error) {
+      console.warn('localStorage check failed:', error);
+    }
+
+    // If neither database nor localStorage has onboarding data, show onboarding
+    setShowOnboarding(true);
+  };
+
+  const handleDatabaseSetupComplete = (success) => {
+    setShowDatabaseSetup(false);
+    if (success) {
+      setDatabaseReady(true);
+    }
+  };
+
+  const handleOnboardingComplete = (userData) => {
+    setShowOnboarding(false);
+    setOnboardingCompleted(true);
+    console.log('Onboarding completed with data:', userData);
+  };
+
   if (loading) return <p style={{ textAlign: 'center' }}>Cargando...</p>;
 
+  // Show database setup if needed
+  if (showDatabaseSetup) {
+    return <DatabaseSetup onSetupComplete={handleDatabaseSetupComplete} />;
+  }
+
+  // Show onboarding if needed
+  if (showOnboarding) {
+    return <UserOnboarding userId={user?.id} onComplete={handleOnboardingComplete} />;
+  }
+
   return (
-    <main
-      style={{
-        padding: "2rem",
-        fontFamily: "Segoe UI, sans-serif",
-        textAlign: "center",
-        minHeight: "100vh",
-        background: "linear-gradient(to right, #f0f8ff, #e6f0ff)",
-      }}
-    >
+    <>
+      <SkipLinks />
+      <main
+        id="main-content"
+        style={{
+          padding: "2rem",
+          fontFamily: "Segoe UI, sans-serif",
+          textAlign: "center",
+          minHeight: "100vh",
+          background: "linear-gradient(to right, #f0f8ff, #e6f0ff)",
+        }}
+      >
       <h1 style={{ fontSize: "2rem", marginBottom: "1rem" }}>🎯 Choose Your Practice Level</h1>
       <p style={{ color: "#444", marginBottom: "2rem" }}>
         Start training your English with interactive exercises by level.
       </p>
 
+      {/* Progress Dashboard */}
+      <div id="progress-dashboard" style={{ marginBottom: "3rem", maxWidth: "1000px", margin: "0 auto 3rem auto" }}>
+        <ProgressDashboard userId={user?.id} />
+      </div>
+
+      {/* Adaptive Learning Dashboard */}
+      <div style={{ marginBottom: "3rem", maxWidth: "1200px", margin: "0 auto 3rem auto" }}>
+        <AdaptiveLearningDashboard userId={user?.id} />
+      </div>
+
       <div
+        id="level-selection"
         style={{
           display: "grid",
           gridTemplateColumns: "repeat(3, 1fr)",
@@ -81,6 +175,12 @@ export default function TrainingHome() {
           </Link>
         ))}
       </div>
-    </main>
+
+      {/* Accessibility Panel */}
+      <div id="accessibility-panel">
+        <AccessibilityPanel />
+      </div>
+      </main>
+    </>
   );
 }

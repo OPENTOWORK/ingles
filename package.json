@@ -1,35 +1,59 @@
 {
-  "version": "0.1.0",
+  "name": "english-practice",
+  "version": "1.0.0",
+  "description": "Plataforma completa de práctica de inglés con IA adaptativa, gamificación y modo offline",
   "private": true,
   "scripts": {
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "export": "next export",
-    "pages": "npm run build && npm run export"
+    "setup": "node setup.js",
+    "clean": "rm -rf .next out node_modules/.cache",
+    "db:setup": "echo 'Configurar base de datos desde la aplicación'",
+    "db:reset": "echo 'Reiniciar base de datos desde la aplicación'",
+    "analyze": "ANALYZE=true npm run build",
+    "test": "echo 'Tests no implementados aún'",
+    "type-check": "tsc --noEmit",
+    "postinstall": "node setup.js"
   },
   "dependencies": {
-    "@react-email/components": "0.0.42",
-    "@supabase/auth-helpers-nextjs": "^0.10.0",
-    "@supabase/supabase-js": "^2.50.0",
-    "i18next-resources-to-backend": "^1.2.1",
-    "next": "15.3.2",
-    "next-i18next": "^15.4.2",
-    "openai": "^5.1.1",
-    "react": "^19.0.0",
-    "react-dom": "^19.0.0",
-    "react-hot-toast": "^2.5.2",
-    "recharts": "^3.0.0",
-    "resend": "^4.5.2"
+    "next": "^14.0.0",
+    "react": "^18.0.0",
+    "react-dom": "^18.0.0",
+    "@supabase/supabase-js": "^2.38.0"
   },
   "devDependencies": {
-    "@tailwindcss/postcss": "^4",
-    "@types/node": "^24.0.0",
-    "@types/react": "^19.1.7",
-    "autoprefixer": "^10.4.21",
-    "postcss": "^8.5.6",
-    "tailwindcss": "^4",
-    "typescript": "^5.8.3"
+    "@types/node": "^20.0.0",
+    "@types/react": "^18.0.0",
+    "@types/react-dom": "^18.0.0",
+    "eslint": "^8.0.0",
+    "eslint-config-next": "^14.0.0",
+    "typescript": "^5.0.0"
+  },
+  "keywords": [
+    "english",
+    "learning",
+    "education",
+    "nextjs",
+    "react",
+    "supabase",
+    "offline-first",
+    "adaptive-learning",
+    "gamification"
+  ],
+  "author": "Tu Nombre <tu-email@ejemplo.com>",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/tu-usuario/english-practice.git"
+  },
+  "bugs": {
+    "url": "https://github.com/tu-usuario/english-practice/issues"
+  },
+  "homepage": "https://github.com/tu-usuario/english-practice#readme",
+  "engines": {
+    "node": ">=18.0.0",
+    "npm": ">=8.0.0"
   }
 }
