@@ -381,14 +381,17 @@ const ActiveListeningStrategiesPage = () => {
   );
 
   const exercises = [
-    <FillBlanksExercise
+    <MultipleChoiceExercise
       key="1"
-      text="La escucha ___ (activa/pasiva) mejora la comprensión. La ___ (predicción/verificación) prepara la mente. La ___ (inferencia/escucha) permite entender información implícita."
-      blanks={[
-        { answer: "activa" },
-        { answer: "predicción" },
-        { answer: "inferencia" }
+      question="¿Qué tipo de escucha mejora más la comprensión?"
+      options={[
+        "Escucha pasiva",
+        "Escucha activa",
+        "Escucha rápida",
+        "Escucha silenciosa"
       ]}
+      correctAnswer={1}
+      explanation="La escucha activa implica participación mental y mejora significativamente la comprensión."
     />,
 
     <MultipleChoiceExercise
@@ -454,6 +457,82 @@ const ActiveListeningStrategiesPage = () => {
       ]}
       correctAnswer={1}
       explanation="La gestión de atención y concentración es más importante, ya que incluye técnicas para manejar fatiga, recuperar atención perdida y mantener el enfoque."
+    />,
+
+    <TrueFalseExercise
+      key="6"
+      statements={[
+        {
+          text: "Taking notes while listening improves comprehension.",
+          isTrue: true,
+          explanation: "Correcto. Tomar notas ayuda a mantener la concentración y retener información importante."
+        },
+        {
+          text: "You should understand every word to be a good listener.",
+          isTrue: false,
+          explanation: "Incorrecto. Un buen oyente se enfoca en el mensaje general y usa el contexto para inferir significado."
+        },
+        {
+          text: "Predicting content before listening is a useful strategy.",
+          isTrue: true,
+          explanation: "Correcto. Predecir el contenido activa conocimientos previos y mejora la comprensión."
+        }
+      ]}
+    />,
+
+    <MultipleChoiceExercise
+      key="7"
+      question="¿Qué debes hacer cuando no entiendes una palabra importante?"
+      options={[
+        "Parar de escuchar",
+        "Usar el contexto para inferir el significado",
+        "Preguntar inmediatamente",
+        "Ignorar completamente el audio"
+      ]}
+      correctAnswer={1}
+      explanation="Usar el contexto para inferir significado es la mejor estrategia, ya que mantiene el flujo de comprensión."
+    />,
+
+    <MultipleChoiceExercise
+      key="8"
+      question="¿Cuál es el beneficio principal de la escucha activa?"
+      options={[
+        "Memorizar todo el vocabulario",
+        "Mejorar la comprensión y retención",
+        "Hablar más rápido",
+        "Evitar errores gramaticales"
+      ]}
+      correctAnswer={1}
+      explanation="La escucha activa mejora significativamente la comprensión y retención al involucrar procesos mentales conscientes."
+    />,
+
+    <TrueFalseExercise
+      key="9"
+      statements={[
+        {
+          text: "Background knowledge helps with listening comprehension.",
+          isTrue: true,
+          explanation: "Correcto. El conocimiento previo sobre el tema facilita la comprensión y predicción del contenido."
+        },
+        {
+          text: "Listening to different accents is not important for language learning.",
+          isTrue: false,
+          explanation: "Incorrecto. Exponerse a diferentes acentos mejora la comprensión auditiva general y prepara para situaciones reales."
+        }
+      ]}
+    />,
+
+    <MultipleChoiceExercise
+      key="10"
+      question="¿Cuál es la mejor manera de desarrollar estrategias de escucha?"
+      options={[
+        "Escuchar solo música",
+        "Práctica regular con diferentes tipos de audio",
+        "Leer solo textos escritos",
+        "Evitar audio difícil"
+      ]}
+      correctAnswer={1}
+      explanation="La práctica regular con diferentes tipos de audio (conversaciones, noticias, podcasts) desarrolla estrategias versátiles de escucha."
     />
   ];
 

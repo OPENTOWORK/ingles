@@ -332,16 +332,17 @@ const WordFormationPage = () => {
   );
 
   const exercises = [
-    <FillBlanksExercise
+    <MultipleChoiceExercise
       key="1"
-      text="I need to ___ (write) this essay. The ___ (educate) system needs improvement. She is a very ___ (beauty) person. The ___ (hope) situation made everyone sad. I ___ (email) you tomorrow."
-      blanks={[
-        { answer: "rewrite" },
-        { answer: "education" },
-        { answer: "beautiful" },
-        { answer: "hopeless" },
-        { answer: "will email" }
+      question="Complete: 'She is a very _____ person.' (beauty → adjective)"
+      options={[
+        "beauty",
+        "beautiful",
+        "beautifully",
+        "beautify"
       ]}
+      correctAnswer={1}
+      explanation="Para describir personas usamos el adjetivo 'beautiful' (beauty → beautiful)."
     />,
 
     <MultipleChoiceExercise
@@ -407,6 +408,82 @@ const WordFormationPage = () => {
       ]}
       correctAnswer={1}
       explanation="Cuando 'email' es verbo, no necesita preposición: 'I will email you'."
+    />,
+
+    <TrueFalseExercise
+      key="6"
+      statements={[
+        {
+          text: "'Impossible' is formed with the prefix 'im-'.",
+          isTrue: true,
+          explanation: "Correcto. 'Impossible' = 'im-' (not) + 'possible'."
+        },
+        {
+          text: "'Friendship' is formed with the suffix '-ship'.",
+          isTrue: true,
+          explanation: "Correcto. 'Friendship' = 'friend' + '-ship' (estado o condición)."
+        },
+        {
+          text: "All compound words are written as one word.",
+          isTrue: false,
+          explanation: "Incorrecto. Algunos se escriben separados (ice cream), otros con guión (mother-in-law)."
+        }
+      ]}
+    />,
+
+    <MultipleChoiceExercise
+      key="7"
+      question="Complete: 'The ___ of the building took two years.'"
+      options={[
+        "construct",
+        "construction",
+        "constructive",
+        "constructing"
+      ]}
+      correctAnswer={1}
+      explanation="Necesitamos un sustantivo. 'Construction' se forma agregando '-tion' al verbo 'construct'."
+    />,
+
+    <MultipleChoiceExercise
+      key="8"
+      question="¿Cuál es el antónimo de 'legal' usando prefijos?"
+      options={[
+        "unlegal",
+        "illegal",
+        "inlegal",
+        "dislegal"
+      ]}
+      correctAnswer={1}
+      explanation="'Illegal' es correcto. Usamos 'il-' antes de palabras que empiezan con 'l'."
+    />,
+
+    <TrueFalseExercise
+      key="9"
+      statements={[
+        {
+          text: "'Homeless' means 'without a home'.",
+          isTrue: true,
+          explanation: "Correcto. El sufijo '-less' significa 'sin' o 'without'."
+        },
+        {
+          text: "'Childhood' refers to the time when someone is a child.",
+          isTrue: true,
+          explanation: "Correcto. El sufijo '-hood' indica un período o estado."
+        }
+      ]}
+    />,
+
+    <MultipleChoiceExercise
+      key="10"
+      question="Complete: 'She works as a ___.' (person who teaches)"
+      options={[
+        "teach",
+        "teaching",
+        "teacher",
+        "taught"
+      ]}
+      correctAnswer={2}
+      explanation="Para formar el sustantivo de persona agregamos '-er' a 'teach': 'teacher'."
     />
   ];
 
@@ -414,7 +491,7 @@ const WordFormationPage = () => {
     <TheoryLayout
       title="Word Formation"
       description="Domina la formación de palabras en inglés: prefijos, sufijos, palabras compuestas, conversión y abreviaciones. Esencial para expandir tu vocabulario."
-      level="B2"
+      level="B2-C1-C2"
       theoryContent={theoryContent}
       exercises={exercises}
       prerequisites={["Advanced vocabulary", "Understanding of word categories"]}

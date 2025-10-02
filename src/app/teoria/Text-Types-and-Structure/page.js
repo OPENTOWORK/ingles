@@ -348,15 +348,17 @@ const TextTypesAndStructurePage = () => {
   );
 
   const exercises = [
-    <FillBlanksExercise
+    <MultipleChoiceExercise
       key="1"
-      text="___ (Furthermore/But), technology has many benefits. ___ (First/Finally), it improves communication. ___ (For example/Therefore), smartphones allow instant messaging. ___ (In conclusion/Meanwhile), technology is very useful."
-      blanks={[
-        { answer: "Furthermore" },
-        { answer: "First" },
-        { answer: "For example" },
-        { answer: "In conclusion" }
+      question="Complete: '_____, technology has many benefits.'"
+      options={[
+        "But",
+        "Furthermore",
+        "Finally",
+        "However"
       ]}
+      correctAnswer={1}
+      explanation="'Furthermore' añade información adicional que apoya la idea anterior sobre los beneficios de la tecnología."
     />,
 
     <MultipleChoiceExercise
@@ -422,6 +424,82 @@ const TextTypesAndStructurePage = () => {
       ]}
       correctAnswer={2}
       explanation="La conclusión debe resumir las ideas principales, dar una opinión final y cerrar el tema de manera efectiva."
+    />,
+
+    <TrueFalseExercise
+      key="6"
+      statements={[
+        {
+          text: "Narrative texts should be written in chronological order.",
+          isTrue: true,
+          explanation: "Correcto. Los textos narrativos generalmente siguen un orden cronológico para mantener la coherencia temporal."
+        },
+        {
+          text: "Descriptive texts focus on explaining how something works.",
+          isTrue: false,
+          explanation: "Incorrecto. Los textos descriptivos se enfocan en características y cualidades, no en procesos o funcionamiento."
+        },
+        {
+          text: "Each paragraph should have only one main idea.",
+          isTrue: true,
+          explanation: "Correcto. Cada párrafo debe desarrollar una sola idea principal para mantener la claridad y organización."
+        }
+      ]}
+    />,
+
+    <MultipleChoiceExercise
+      key="7"
+      question="¿Qué tipo de texto usarías para explicar las ventajas y desventajas de la tecnología?"
+      options={[
+        "Narrative",
+        "Argumentative",
+        "Descriptive",
+        "Instructional"
+      ]}
+      correctAnswer={1}
+      explanation="Un texto argumentativo es ideal para presentar y analizar ventajas y desventajas, desarrollando argumentos balanceados."
+    />,
+
+    <MultipleChoiceExercise
+      key="8"
+      question="¿Cuál es la función principal de la conclusión en un ensayo?"
+      options={[
+        "Introducir nuevas ideas",
+        "Resumir puntos principales y dar cierre",
+        "Dar ejemplos detallados",
+        "Hacer preguntas al lector"
+      ]}
+      correctAnswer={1}
+      explanation="La conclusión debe resumir los puntos principales y dar un cierre efectivo, no introducir ideas nuevas."
+    />,
+
+    <TrueFalseExercise
+      key="9"
+      statements={[
+        {
+          text: "Formal texts should avoid contractions like 'don't' and 'can't'.",
+          isTrue: true,
+          explanation: "Correcto. En textos formales se evitan las contracciones; se usa 'do not' y 'cannot'."
+        },
+        {
+          text: "The introduction should be 50% of your essay.",
+          isTrue: false,
+          explanation: "Incorrecto. La introducción debe ser solo 10-15% del ensayo; el desarrollo debe ser 70-80%."
+        }
+      ]}
+    />,
+
+    <MultipleChoiceExercise
+      key="10"
+      question="¿Qué estructura es más apropiada para un texto expositivo?"
+      options={[
+        "Problema → Solución",
+        "Introducción → Desarrollo → Conclusión",
+        "Causa → Efecto",
+        "Comparación → Contraste"
+      ]}
+      correctAnswer={1}
+      explanation="La estructura Introducción → Desarrollo → Conclusión es la más versátil y apropiada para textos expositivos."
     />
   ];
 
@@ -439,6 +517,25 @@ const TextTypesAndStructurePage = () => {
 };
 
 export default TextTypesAndStructurePage;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

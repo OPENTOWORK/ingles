@@ -341,13 +341,17 @@ const ComparativesSuperlativesPage = () => {
   );
 
   const exercises = [
-    <FillBlanksExercise
+    <MultipleChoiceExercise
       key="1"
-      text="This is the ___ (good) movie I've ever seen. It's ___ (good) than the previous one."
-      blanks={[
-        { answer: "best" },
-        { answer: "better" }
+      question="Complete: 'This is the ___ movie I've ever seen.'"
+      options={[
+        "gooder",
+        "better",
+        "best",
+        "more good"
       ]}
+      correctAnswer={2}
+      explanation="'Best' es la forma superlativa irregular de 'good'."
     />,
 
     <MultipleChoiceExercise
@@ -413,6 +417,82 @@ const ComparativesSuperlativesPage = () => {
       ]}
       correctAnswer={1}
       explanation="'Tall' is a short adjective, so we use -est for superlative, and we need 'the' before superlatives."
+    />,
+
+    <TrueFalseExercise
+      key="6"
+      statements={[
+        {
+          text: "'Less' is the opposite of 'more' in comparisons.",
+          isTrue: true,
+          explanation: "Correcto. 'Less' se usa para comparativos negativos: 'less expensive' = 'cheaper'."
+        },
+        {
+          text: "We can use 'much' to emphasize comparatives.",
+          isTrue: true,
+          explanation: "Correcto. 'Much better', 'much more expensive', 'much taller' enfatizan la diferencia."
+        },
+        {
+          text: "All two-syllable adjectives use 'more' and 'most'.",
+          isTrue: false,
+          explanation: "Incorrecto. Algunos adjetivos de dos sílabas pueden usar -er/-est: 'simpler', 'cleverer'."
+        }
+      ]}
+    />,
+
+    <MultipleChoiceExercise
+      key="7"
+      question="Complete: 'She is ___ person I know.'"
+      options={[
+        "the kindest",
+        "the most kind",
+        "kinder",
+        "more kind"
+      ]}
+      correctAnswer={0}
+      explanation="'Kind' es un adjetivo corto, usa -est para superlativo: 'the kindest'."
+    />,
+
+    <MultipleChoiceExercise
+      key="8"
+      question="Complete: 'Today is ___ than yesterday.'"
+      options={[
+        "more hot",
+        "hotter",
+        "hottest",
+        "most hot"
+      ]}
+      correctAnswer={1}
+      explanation="'Hot' duplica la consonante final y añade -er para comparativo: 'hotter'."
+    />,
+
+    <TrueFalseExercise
+      key="9"
+      statements={[
+        {
+          text: "'Elder' and 'older' can both be used for age.",
+          isTrue: true,
+          explanation: "Correcto. 'Older' es más común, pero 'elder' se usa especialmente para familia: 'my elder brother'."
+        },
+        {
+          text: "We need 'than' after superlatives.",
+          isTrue: false,
+          explanation: "Incorrecto. Los superlativos usan 'of' o 'in', no 'than': 'the tallest in the class'."
+        }
+      ]}
+    />,
+
+    <MultipleChoiceExercise
+      key="10"
+      question="Complete: 'This exercise is ___ difficult ___ the previous one.'"
+      options={[
+        "as... than",
+        "as... as",
+        "so... as",
+        "more... than"
+      ]}
+      correctAnswer={1}
+      explanation="Para igualdad usamos 'as... as': 'This exercise is as difficult as the previous one'."
     />
   ];
 
@@ -420,7 +500,7 @@ const ComparativesSuperlativesPage = () => {
     <TheoryLayout
       title="Comparatives and Superlatives"
       description="Domina los comparativos y superlativos en inglés. Aprende a comparar personas, cosas y situaciones usando -er, -est, more, most y estructuras especiales."
-      level="A2-B1"
+      level="A2-B1-B2-C1-C2"
       theoryContent={theoryContent}
       exercises={exercises}
       prerequisites={["Basic adjectives", "Understanding of sentence structure"]}

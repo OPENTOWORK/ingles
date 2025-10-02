@@ -384,14 +384,17 @@ const MultiSpeakerDialoguesPage = () => {
   );
 
   const exercises = [
-    <FillBlanksExercise
+    <MultipleChoiceExercise
       key="1"
-      text="Los multi-speaker dialogues tienen ___ (3 o más/2) participantes. Requieren ___ (identificación sistemática/seguimiento simple) de voces. La ___ (síntesis/interrupción) de información es clave."
-      blanks={[
-        { answer: "3 o más" },
-        { answer: "identificación sistemática" },
-        { answer: "síntesis" }
+      question="¿Cuántos participantes tienen los multi-speaker dialogues?"
+      options={[
+        "2 participantes",
+        "3 o más participantes",
+        "Solo 1 participante",
+        "Máximo 2 participantes"
       ]}
+      correctAnswer={1}
+      explanation="Los multi-speaker dialogues se caracterizan por tener 3 o más participantes, lo que los hace más complejos que los diálogos simples."
     />,
 
     <MultipleChoiceExercise
@@ -457,6 +460,82 @@ const MultiSpeakerDialoguesPage = () => {
       ]}
       correctAnswer={1}
       explanation="Usar contexto para mantener comprensión es la mejor estrategia, ya que las interrupciones son normales y el contexto te ayuda a seguir el hilo de la conversación."
+    />,
+
+    <TrueFalseExercise
+      key="6"
+      statements={[
+        {
+          text: "Multi-speaker dialogues are always more difficult than two-person conversations.",
+          isTrue: true,
+          explanation: "Correcto. Los diálogos multi-hablante son más complejos debido a múltiples voces, perspectivas e interacciones."
+        },
+        {
+          text: "You should focus on only one speaker in multi-speaker dialogues.",
+          isTrue: false,
+          explanation: "Incorrecto. Es importante seguir a todos los hablantes para entender la dinámica completa y diferentes perspectivas."
+        },
+        {
+          text: "Interruptions are more common in multi-speaker dialogues.",
+          isTrue: true,
+          explanation: "Correcto. Con más participantes, las interrupciones y solapamientos son más frecuentes."
+        }
+      ]}
+    />,
+
+    <MultipleChoiceExercise
+      key="7"
+      question="¿Qué es lo más difícil de seguir en un diálogo multi-hablante?"
+      options={[
+        "El vocabulario usado",
+        "Los cambios de hablante y perspectiva",
+        "La velocidad del habla",
+        "El acento de los hablantes"
+      ]}
+      correctAnswer={1}
+      explanation="Los cambios de hablante y perspectiva son lo más difícil, ya que requiere seguir múltiples líneas de pensamiento simultáneamente."
+    />,
+
+    <MultipleChoiceExercise
+      key="8"
+      question="¿Cuál es la mejor técnica para identificar hablantes en diálogos complejos?"
+      options={[
+        "Solo usar nombres",
+        "Combinar características vocales, roles y contenido",
+        "Solo escuchar el tono",
+        "Ignorar las diferencias"
+      ]}
+      correctAnswer={1}
+      explanation="Combinar características vocales, roles y contenido proporciona la identificación más confiable de hablantes."
+    />,
+
+    <TrueFalseExercise
+      key="9"
+      statements={[
+        {
+          text: "Consensus and disagreement patterns are important in multi-speaker dialogues.",
+          isTrue: true,
+          explanation: "Correcto. Identificar patrones de consenso y desacuerdo ayuda a entender la dinámica grupal y las conclusiones."
+        },
+        {
+          text: "Taking notes is less important in multi-speaker dialogues than in monologues.",
+          isTrue: false,
+          explanation: "Incorrecto. Tomar notas es aún más importante para organizar múltiples perspectivas y mantener el seguimiento."
+        }
+      ]}
+    />,
+
+    <MultipleChoiceExercise
+      key="10"
+      question="¿Qué debes hacer cuando los hablantes hablan simultáneamente?"
+      options={[
+        "Parar de escuchar",
+        "Enfocarte en el hablante más fuerte y usar contexto",
+        "Intentar escuchar todo perfectamente",
+        "Cambiar de tema mental"
+      ]}
+      correctAnswer={1}
+      explanation="Enfocarte en el hablante más fuerte y usar contexto es la mejor estrategia cuando hay solapamiento de voces."
     />
   ];
 
@@ -474,6 +553,25 @@ const MultiSpeakerDialoguesPage = () => {
 };
 
 export default MultiSpeakerDialoguesPage;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

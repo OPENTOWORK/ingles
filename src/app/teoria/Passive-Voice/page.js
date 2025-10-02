@@ -372,13 +372,17 @@ const PassiveVoicePage = () => {
   );
 
   const exercises = [
-    <FillBlanksExercise
+    <MultipleChoiceExercise
       key="1"
-      text="The house ___ (build) last year. English ___ (speak) all over the world."
-      blanks={[
-        { answer: "was built" },
-        { answer: "is spoken" }
+      question="Complete: 'The house ___ last year.'"
+      options={[
+        "built",
+        "was built",
+        "was building",
+        "has built"
       ]}
+      correctAnswer={1}
+      explanation="'Was built' es la forma correcta de voz pasiva en pasado simple para 'build'."
     />,
 
     <MultipleChoiceExercise
@@ -444,6 +448,71 @@ const PassiveVoicePage = () => {
       ]}
       correctAnswer={1}
       explanation="The correct passive form is 'The project will be finished tomorrow' using 'will be' + past participle 'finished'."
+    />,
+
+    <MultipleChoiceExercise
+      key="6"
+      question="Complete: 'The house ___ by a famous architect.'"
+      options={[
+        "designed",
+        "was designed",
+        "is designed",
+        "has designed"
+      ]}
+      correctAnswer={1}
+      explanation="Para una acción completada en el pasado usamos Past Simple passive: 'was designed'."
+    />,
+
+    <MultipleChoiceExercise
+      key="7"
+      question="¿Cuál es correcto?"
+      options={[
+        "The letter was written by me",
+        "The letter was wrote by me",
+        "The letter written by me",
+        "The letter is wrote by me"
+      ]}
+      correctAnswer={0}
+      explanation="La voz pasiva usa 'be' + participio pasado: 'was written' (no 'wrote')."
+    />,
+
+    <MultipleChoiceExercise
+      key="8"
+      question="Complete: 'English ___ all over the world.'"
+      options={[
+        "speaks",
+        "is speaking",
+        "is spoken",
+        "has spoken"
+      ]}
+      correctAnswer={2}
+      explanation="Para hechos generales en voz pasiva usamos Present Simple: 'is spoken'."
+    />,
+
+    <MultipleChoiceExercise
+      key="9"
+      question="¿Cuándo NO usamos 'by' en voz pasiva?"
+      options={[
+        "Cuando el agente es obvio",
+        "Cuando el agente es desconocido",
+        "Cuando no es importante quién hizo la acción",
+        "All of the above"
+      ]}
+      correctAnswer={3}
+      explanation="Omitimos 'by' cuando el agente es obvio, desconocido o no importante."
+    />,
+
+    <MultipleChoiceExercise
+      key="10"
+      question="Complete: 'The car ___ right now.'"
+      options={[
+        "is repairing",
+        "is being repaired",
+        "is repaired",
+        "repairs"
+      ]}
+      correctAnswer={1}
+      explanation="Para acciones en progreso en voz pasiva usamos 'is being' + participio pasado."
     />
   ];
 
@@ -451,7 +520,7 @@ const PassiveVoicePage = () => {
     <TheoryLayout
       title="Passive Voice"
       description="Domina la voz pasiva en inglés. Aprende a cambiar el foco de la oración, expresar acciones sin agente y usar la voz pasiva en todos los tiempos."
-      level="B1-B2-C1"
+      level="B1-B2-C1-C2"
       theoryContent={theoryContent}
       exercises={exercises}
       prerequisites={["All verb tenses", "Past participles", "Modal verbs"]}

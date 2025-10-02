@@ -297,20 +297,17 @@ const PronounsPage = () => {
   );
 
   const exercises = [
-    <FillBlanksExercise
+    <MultipleChoiceExercise
       key="1"
-      text="___ am a teacher. ___ name is Sarah. ___ students are very smart. ___ like ___ very much. ___ book is on ___ desk. ___ is ___ favorite book."
-      blanks={[
-        { answer: "I" },
-        { answer: "My" },
-        { answer: "My" },
-        { answer: "I" },
-        { answer: "them" },
-        { answer: "My" },
-        { answer: "my" },
-        { answer: "It" },
-        { answer: "my" }
+      question="Complete: '_____ am a teacher. _____ name is Sarah.'"
+      options={[
+        "I, My",
+        "Me, My",
+        "I, Mine",
+        "Me, Mine"
       ]}
+      correctAnswer={0}
+      explanation="Como sujeto usamos 'I' y como determinante posesivo usamos 'My'."
     />,
 
     <MultipleChoiceExercise
@@ -376,6 +373,71 @@ const PronounsPage = () => {
       ]}
       correctAnswer={1}
       explanation="En sujeto usamos pronombres personales: 'I' y 'he'. Además, seguimos el orden de cortesía poniendo 'I' al final."
+    />,
+
+    <MultipleChoiceExercise
+      key="6"
+      question="Complete: 'She hurt _____ while playing tennis.'"
+      options={[
+        "her",
+        "herself",
+        "hers",
+        "she"
+      ]}
+      correctAnswer={1}
+      explanation="Para acciones reflexivas usamos pronombres reflexivos: 'herself'."
+    />,
+
+    <MultipleChoiceExercise
+      key="7"
+      question="¿Cuál es correcto?"
+      options={[
+        "This car is her",
+        "This car is hers",
+        "This car is she",
+        "This car is herself"
+      ]}
+      correctAnswer={1}
+      explanation="'Hers' es el pronombre posesivo que reemplaza al sustantivo. 'Her' sería determinante: 'her car'."
+    />,
+
+    <MultipleChoiceExercise
+      key="8"
+      question="Complete: 'Between you and ___, I think he's wrong.'"
+      options={[
+        "I",
+        "me",
+        "my",
+        "mine"
+      ]}
+      correctAnswer={1}
+      explanation="Después de preposiciones como 'between' usamos pronombres de objeto: 'me'."
+    />,
+
+    <MultipleChoiceExercise
+      key="9"
+      question="Complete: '_____ house is bigger than _____.' (comparing two houses)"
+      options={[
+        "Their, ours",
+        "They, us",
+        "Them, we",
+        "Theirs, our"
+      ]}
+      correctAnswer={0}
+      explanation="'Their house' (determinante) y 'ours' (pronombre posesivo que reemplaza 'our house')."
+    />,
+
+    <MultipleChoiceExercise
+      key="10"
+      question="¿Cuál es la forma correcta?"
+      options={[
+        "Who's book is this?",
+        "Whose book is this?",
+        "Who book is this?",
+        "Whos book is this?"
+      ]}
+      correctAnswer={1}
+      explanation="'Whose' es el pronombre interrogativo posesivo. 'Who's' = 'who is'."
     />
   ];
 
@@ -383,7 +445,7 @@ const PronounsPage = () => {
     <TheoryLayout
       title="Pronouns"
       description="Domina todos los tipos de pronombres en inglés: personales, posesivos, de objeto, reflexivos y demostrativos. Esencial para hablar con fluidez."
-      level="A1"
+      level="A1-A2-B1-B2-C1-C2"
       theoryContent={theoryContent}
       exercises={exercises}
       prerequisites={["Verb to be", "Nociones básicas de sustantivos"]}
@@ -393,6 +455,25 @@ const PronounsPage = () => {
 };
 
 export default PronounsPage;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

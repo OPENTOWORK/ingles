@@ -367,14 +367,17 @@ const CohesionAndConnectorsPage = () => {
   );
 
   const exercises = [
-    <FillBlanksExercise
+    <MultipleChoiceExercise
       key="1"
-      text="Technology has many benefits. ___ (Furthermore/But), it improves communication. ___ (However/And), there are some disadvantages. ___ (Therefore/Because), we should use it wisely."
-      blanks={[
-        { answer: "Furthermore" },
-        { answer: "However" },
-        { answer: "Therefore" }
+      question="Complete: 'Technology has many benefits. _____, it improves communication.'"
+      options={[
+        "However",
+        "Furthermore",
+        "But",
+        "Although"
       ]}
+      correctAnswer={1}
+      explanation="'Furthermore' añade información adicional que apoya la idea anterior."
     />,
 
     <MultipleChoiceExercise
@@ -440,6 +443,82 @@ const CohesionAndConnectorsPage = () => {
       ]}
       correctAnswer={1}
       explanation="El error es usar 'But' y 'However' juntos, ambos son conectores de contraste. Debe ser solo uno."
+    />,
+
+    <TrueFalseExercise
+      key="6"
+      statements={[
+        {
+          text: "'However' and 'but' can be used interchangeably in all contexts.",
+          isTrue: false,
+          explanation: "Incorrecto. 'However' es más formal y va al inicio de oración con coma, mientras que 'but' conecta cláusulas directamente."
+        },
+        {
+          text: "Cohesion can be achieved without using connectors.",
+          isTrue: true,
+          explanation: "Correcto. La cohesión también se logra con pronombres, repetición, sinónimos y referencias."
+        },
+        {
+          text: "'Therefore' shows cause and effect relationship.",
+          isTrue: true,
+          explanation: "Correcto. 'Therefore' indica resultado o consecuencia: 'It's raining, therefore I'll stay home'."
+        }
+      ]}
+    />,
+
+    <MultipleChoiceExercise
+      key="7"
+      question="Complete: 'I studied hard. _____, I passed the exam.'"
+      options={[
+        "However",
+        "Although",
+        "Therefore",
+        "Nevertheless"
+      ]}
+      correctAnswer={2}
+      explanation="'Therefore' muestra resultado: estudié mucho, por lo tanto aprobé el examen."
+    />,
+
+    <MultipleChoiceExercise
+      key="8"
+      question="¿Cuál conector es mejor para agregar un punto importante?"
+      options={[
+        "However",
+        "Moreover",
+        "Nevertheless",
+        "Although"
+      ]}
+      correctAnswer={1}
+      explanation="'Moreover' se usa para agregar información importante que refuerza el argumento anterior."
+    />,
+
+    <TrueFalseExercise
+      key="9"
+      statements={[
+        {
+          text: "'In addition' and 'furthermore' have similar functions.",
+          isTrue: true,
+          explanation: "Correcto. Ambos conectores agregan información adicional que apoya la idea anterior."
+        },
+        {
+          text: "Connectors should be used in every sentence for good cohesion.",
+          isTrue: false,
+          explanation: "Incorrecto. El uso excesivo de conectores puede hacer el texto repetitivo. La cohesión también se logra con otros recursos."
+        }
+      ]}
+    />,
+
+    <MultipleChoiceExercise
+      key="10"
+      question="Complete: '_____ the rain, we went to the park.'"
+      options={[
+        "Because",
+        "Despite",
+        "Therefore",
+        "Furthermore"
+      ]}
+      correctAnswer={1}
+      explanation="'Despite' muestra contraste: a pesar de la lluvia, fuimos al parque."
     />
   ];
 
@@ -457,6 +536,25 @@ const CohesionAndConnectorsPage = () => {
 };
 
 export default CohesionAndConnectorsPage;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

@@ -380,17 +380,17 @@ const SpeakingConnectorsPage = () => {
   );
 
   const exercises = [
-    <FillBlanksExercise
+    <MultipleChoiceExercise
       key="1"
-      text="Para organizar ideas uso conectores como ___ (first/but) y ___ (second/however). Para agregar información uso ___ (also/although) y ___ (furthermore/yet). Para contrastar uso ___ (but/also) y ___ (however/first)."
-      blanks={[
-        { answer: "first" },
-        { answer: "second" },
-        { answer: "also" },
-        { answer: "furthermore" },
-        { answer: "but" },
-        { answer: "however" }
+      question="¿Qué conector usas para organizar ideas en primer lugar?"
+      options={[
+        "However",
+        "First",
+        "But",
+        "Although"
       ]}
+      correctAnswer={1}
+      explanation="'First' se usa para introducir el primer punto en una secuencia de ideas."
     />,
 
     <MultipleChoiceExercise
@@ -456,6 +456,82 @@ const SpeakingConnectorsPage = () => {
       ]}
       correctAnswer={1}
       explanation="El error es usar 'But' y 'However' juntos, ambos son conectores de contraste. Debe ser solo uno: 'But I disagree' o 'However, I disagree'."
+    />,
+
+    <TrueFalseExercise
+      key="6"
+      statements={[
+        {
+          text: "Speaking connectors should be used in every sentence.",
+          isTrue: false,
+          explanation: "Incorrecto. Los conectores deben usarse estratégicamente para crear fluidez sin sobrecargar el discurso."
+        },
+        {
+          text: "'On the other hand' is used to introduce a contrasting point.",
+          isTrue: true,
+          explanation: "Correcto. 'On the other hand' introduce una perspectiva contrastante o alternativa."
+        },
+        {
+          text: "Formal connectors are always better than informal ones.",
+          isTrue: false,
+          explanation: "Incorrecto. La elección depende del contexto; en conversaciones casuales, los conectores informales son más apropiados."
+        }
+      ]}
+    />,
+
+    <MultipleChoiceExercise
+      key="7"
+      question="Complete: 'I like coffee. _____, I prefer tea in the morning.'"
+      options={[
+        "Therefore",
+        "However",
+        "Furthermore",
+        "First"
+      ]}
+      correctAnswer={1}
+      explanation="'However' introduce un contraste: me gusta el café, pero prefiero el té por la mañana."
+    />,
+
+    <MultipleChoiceExercise
+      key="8"
+      question="¿Qué conector usarías para dar un ejemplo específico?"
+      options={[
+        "However",
+        "For instance",
+        "Therefore",
+        "Nevertheless"
+      ]}
+      correctAnswer={1}
+      explanation="'For instance' se usa específicamente para introducir ejemplos concretos que ilustran un punto."
+    />,
+
+    <TrueFalseExercise
+      key="9"
+      statements={[
+        {
+          text: "'Moreover' and 'furthermore' have similar functions.",
+          isTrue: true,
+          explanation: "Correcto. Ambos conectores agregan información adicional que apoya o refuerza la idea anterior."
+        },
+        {
+          text: "You should pause after using speaking connectors.",
+          isTrue: true,
+          explanation: "Correcto. Una breve pausa después de conectores ayuda a que el oyente procese la transición."
+        }
+      ]}
+    />,
+
+    <MultipleChoiceExercise
+      key="10"
+      question="Complete: 'The weather was terrible. _____, we had a great time.'"
+      options={[
+        "Therefore",
+        "Nevertheless",
+        "Furthermore",
+        "Moreover"
+      ]}
+      correctAnswer={1}
+      explanation="'Nevertheless' (sin embargo/no obstante) muestra contraste: a pesar del mal tiempo, la pasamos bien."
     />
   ];
 
@@ -463,7 +539,7 @@ const SpeakingConnectorsPage = () => {
     <TheoryLayout
       title="Speaking Connectors"
       description="Domina los conectores para hablar en inglés: organización, adición, contraste, ejemplos y opinión. Aprende a hacer tu discurso más fluido y coherente."
-      level="A2-B1-B2"
+      level="A2-B1-B2-C1-C2"
       theoryContent={theoryContent}
       exercises={exercises}
       prerequisites={["Basic speaking skills", "Understanding of sentence structure"]}
@@ -473,6 +549,24 @@ const SpeakingConnectorsPage = () => {
 };
 
 export default SpeakingConnectorsPage;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

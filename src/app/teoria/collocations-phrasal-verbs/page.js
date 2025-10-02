@@ -372,13 +372,17 @@ const CollocationsPhrasalVerbsPage = () => {
   );
 
   const exercises = [
-    <FillBlanksExercise
+    <MultipleChoiceExercise
       key="1"
-      text="Please ___ (turn on) the lights. Can you ___ (look after) my dog while I'm away?"
-      blanks={[
-        { answer: "turn on" },
-        { answer: "look after" }
+      question="Complete: 'Please ___ the lights.'"
+      options={[
+        "turn off",
+        "turn on",
+        "turn up",
+        "turn down"
       ]}
+      correctAnswer={1}
+      explanation="'Turn on' significa encender algo, como luces, televisión, radio, etc."
     />,
 
     <MultipleChoiceExercise
@@ -444,6 +448,82 @@ const CollocationsPhrasalVerbsPage = () => {
       ]}
       correctAnswer={1}
       explanation="'Turn it on' is correct because 'turn on' is separable, so the pronoun 'it' goes between the verb and particle."
+    />,
+
+    <TrueFalseExercise
+      key="6"
+      statements={[
+        {
+          text: "'Put off' means to postpone something.",
+          isTrue: true,
+          explanation: "Correcto. 'Put off' significa posponer o retrasar algo: 'I put off the meeting'."
+        },
+        {
+          text: "'Look after' and 'look for' have the same meaning.",
+          isTrue: false,
+          explanation: "Incorrecto. 'Look after' significa cuidar, 'look for' significa buscar."
+        },
+        {
+          text: "We say 'take a photo' not 'make a photo'.",
+          isTrue: true,
+          explanation: "Correcto. En inglés decimos 'take a photo/picture', no 'make'."
+        }
+      ]}
+    />,
+
+    <MultipleChoiceExercise
+      key="7"
+      question="Complete: 'She ___ her job last month.'"
+      options={[
+        "gave up",
+        "gave in",
+        "gave out",
+        "gave away"
+      ]}
+      correctAnswer={0}
+      explanation="'Give up' significa abandonar o renunciar a algo: 'She gave up her job'."
+    />,
+
+    <MultipleChoiceExercise
+      key="8"
+      question="Choose the correct collocation: 'Can you ___ me a favor?'"
+      options={[
+        "make",
+        "do",
+        "take",
+        "give"
+      ]}
+      correctAnswer={1}
+      explanation="'Do someone a favor' es la colocación correcta para pedir un favor."
+    />,
+
+    <TrueFalseExercise
+      key="9"
+      statements={[
+        {
+          text: "'Break down' can mean both 'to stop working' and 'to become emotional'.",
+          isTrue: true,
+          explanation: "Correcto. 'Break down' tiene múltiples significados: una máquina se descompone o una persona se quiebra emocionalmente."
+        },
+        {
+          text: "'Run into' means to exercise by running.",
+          isTrue: false,
+          explanation: "Incorrecto. 'Run into' significa encontrarse con alguien por casualidad o chocar con algo."
+        }
+      ]}
+    />,
+
+    <MultipleChoiceExercise
+      key="10"
+      question="Complete: 'I ___ my old friend at the supermarket yesterday.'"
+      options={[
+        "ran into",
+        "ran out of",
+        "ran away",
+        "ran over"
+      ]}
+      correctAnswer={0}
+      explanation="'Run into' significa encontrarse con alguien por casualidad: 'I ran into my old friend'."
     />
   ];
 

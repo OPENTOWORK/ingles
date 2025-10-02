@@ -341,15 +341,17 @@ const ShortDialoguesPage = () => {
   );
 
   const exercises = [
-    <FillBlanksExercise
+    <MultipleChoiceExercise
       key="1"
-      text="En short dialogues, debo ___ (leer/escribir) las preguntas antes del audio. Debo enfocarme en ___ (información clave/todas las palabras). Los diálogos cortos duran entre ___ (30 segundos/5 minutos) y ___ (2 minutos/10 minutos)."
-      blanks={[
-        { answer: "leer" },
-        { answer: "información clave" },
-        { answer: "30 segundos" },
-        { answer: "2 minutos" }
+      question="En short dialogues, ¿qué debo hacer antes del audio?"
+      options={[
+        "Escribir las respuestas",
+        "Leer las preguntas",
+        "Tomar notas extensas",
+        "Cerrar los ojos"
       ]}
+      correctAnswer={1}
+      explanation="Es esencial leer las preguntas antes del audio para saber qué información buscar durante la escucha."
     />,
 
     <MultipleChoiceExercise
@@ -415,6 +417,82 @@ const ShortDialoguesPage = () => {
       ]}
       correctAnswer={2}
       explanation="Los short dialogues están diseñados para niveles A1-A2 (principiante a elemental) con vocabulario simple y situaciones cotidianas."
+    />,
+
+    <TrueFalseExercise
+      key="6"
+      statements={[
+        {
+          text: "Short dialogues usually have complex vocabulary.",
+          isTrue: false,
+          explanation: "Incorrecto. Los diálogos cortos suelen usar vocabulario cotidiano y situaciones familiares."
+        },
+        {
+          text: "Context clues are very important in short dialogues.",
+          isTrue: true,
+          explanation: "Correcto. Las pistas de contexto (lugar, situación, relación entre hablantes) son cruciales para la comprensión."
+        },
+        {
+          text: "You should listen to short dialogues multiple times during the exam.",
+          isTrue: false,
+          explanation: "Incorrecto. En exámenes reales, los diálogos cortos se escuchan solo una vez, por eso la preparación es importante."
+        }
+      ]}
+    />,
+
+    <MultipleChoiceExercise
+      key="7"
+      question="¿Qué información es menos común en short dialogues?"
+      options={[
+        "Precios y horarios",
+        "Teorías académicas complejas",
+        "Ubicaciones",
+        "Planes inmediatos"
+      ]}
+      correctAnswer={1}
+      explanation="Las teorías académicas complejas son menos comunes; los diálogos cortos se enfocan en situaciones cotidianas prácticas."
+    />,
+
+    <MultipleChoiceExercise
+      key="8"
+      question="¿Cuál es la mejor estrategia cuando no entiendes una palabra clave?"
+      options={[
+        "Parar de escuchar",
+        "Usar el contexto y continuar escuchando",
+        "Preocuparse por la palabra perdida",
+        "Cambiar todas las respuestas"
+      ]}
+      correctAnswer={1}
+      explanation="Usar el contexto y continuar escuchando es la mejor estrategia; a menudo puedes inferir el significado o encontrar la respuesta de otra manera."
+    />,
+
+    <TrueFalseExercise
+      key="9"
+      statements={[
+        {
+          text: "Predicting possible answers before listening is helpful.",
+          isTrue: true,
+          explanation: "Correcto. Predecir posibles respuestas basándose en las preguntas ayuda a enfocar la atención durante la escucha."
+        },
+        {
+          text: "Short dialogues always end with a clear conclusion.",
+          isTrue: false,
+          explanation: "Incorrecto. Algunos diálogos cortos pueden terminar abruptamente o con información implícita."
+        }
+      ]}
+    />,
+
+    <MultipleChoiceExercise
+      key="10"
+      question="¿Qué debes hacer inmediatamente después de escuchar un short dialogue?"
+      options={[
+        "Esperar al siguiente audio",
+        "Responder rápidamente mientras la información está fresca",
+        "Revisar todas las respuestas anteriores",
+        "Tomar un descanso"
+      ]}
+      correctAnswer={1}
+      explanation="Responder rápidamente mientras la información está fresca en la memoria es la mejor estrategia para diálogos cortos."
     />
   ];
 
@@ -422,7 +500,7 @@ const ShortDialoguesPage = () => {
     <TheoryLayout
       title="Short Dialogues"
       description="Domina la comprensión de diálogos cortos en inglés. Aprende estrategias para entender conversaciones breves en situaciones cotidianas como tiendas, restaurantes y transporte."
-      level="A1-A2"
+      level="A1-A2-B1-B2-C1-C2"
       theoryContent={theoryContent}
       exercises={exercises}
       prerequisites={["Basic listening skills", "Basic vocabulary"]}
@@ -432,6 +510,25 @@ const ShortDialoguesPage = () => {
 };
 
 export default ShortDialoguesPage;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

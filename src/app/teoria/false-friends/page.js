@@ -358,13 +358,17 @@ const FalseFriendsPage = () => {
   );
 
   const exercises = [
-    <FillBlanksExercise
+    <MultipleChoiceExercise
       key="1"
-      text="The ___ (actual/current) situation is difficult. I'm going to the ___ (library/bookstore) to buy books."
-      blanks={[
-        { answer: "current" },
-        { answer: "bookstore" }
+      question="Complete: 'The _____ situation is difficult.' (presente/actual)"
+      options={[
+        "actual",
+        "current",
+        "real",
+        "true"
       ]}
+      correctAnswer={1}
+      explanation="'Current' significa actual/presente. 'Actual' en inglés significa real/verdadero."
     />,
 
     <MultipleChoiceExercise
@@ -430,6 +434,82 @@ const FalseFriendsPage = () => {
       ]}
       correctAnswer={1}
       explanation="The correct English word for 'éxito' (success) is 'success'. 'Exit' means 'salida' (way out)."
+    />,
+
+    <TrueFalseExercise
+      key="6"
+      statements={[
+        {
+          text: "'Success' in English means the same as 'suceso' in Spanish.",
+          isTrue: false,
+          explanation: "Incorrecto. 'Success' significa éxito, mientras que 'suceso' significa event o occurrence."
+        },
+        {
+          text: "'Fabric' in English refers to cloth or textile material.",
+          isTrue: true,
+          explanation: "Correcto. 'Fabric' significa tela o material textil, no fábrica (factory)."
+        },
+        {
+          text: "'Sensible' in English means the same as 'sensible' in Spanish.",
+          isTrue: false,
+          explanation: "Incorrecto. 'Sensible' en inglés significa practical/reasonable, no sensitive (sensible en español)."
+        }
+      ]}
+    />,
+
+    <MultipleChoiceExercise
+      key="7"
+      question="Complete: 'She is very _____ about her appearance.' (sensitive)"
+      options={[
+        "sensible",
+        "sensitive",
+        "sensual",
+        "sense"
+      ]}
+      correctAnswer={1}
+      explanation="'Sensitive' significa sensible (que se ofende fácilmente). 'Sensible' significa practical/reasonable."
+    />,
+
+    <MultipleChoiceExercise
+      key="8"
+      question="What does 'exit' mean in English?"
+      options={[
+        "success",
+        "way out",
+        "entrance",
+        "failure"
+      ]}
+      correctAnswer={1}
+      explanation="'Exit' significa salida (way out). 'Éxito' en español es 'success' en inglés."
+    />,
+
+    <TrueFalseExercise
+      key="9"
+      statements={[
+        {
+          text: "'Attend' in English means to be present at an event.",
+          isTrue: true,
+          explanation: "Correcto. 'Attend' significa asistir a un evento, no atender (serve/help)."
+        },
+        {
+          text: "'Carpet' and 'carpeta' refer to the same object.",
+          isTrue: false,
+          explanation: "Incorrecto. 'Carpet' es alfombra, 'carpeta' es folder en inglés."
+        }
+      ]}
+    />,
+
+    <MultipleChoiceExercise
+      key="10"
+      question="Complete: 'I need to _____ the meeting tomorrow.' (asistir)"
+      options={[
+        "assist",
+        "attend",
+        "help",
+        "support"
+      ]}
+      correctAnswer={1}
+      explanation="'Attend' significa asistir a un evento. 'Assist' significa ayudar."
     />
   ];
 
@@ -437,7 +517,7 @@ const FalseFriendsPage = () => {
     <TheoryLayout
       title="False Friends"
       description="Domina los falsos amigos entre inglés y español. Aprende a evitar confusiones comunes y usar las palabras correctas para cada contexto."
-      level="B1-B2"
+      level="B1-B2-C1-C2"
       theoryContent={theoryContent}
       exercises={exercises}
       prerequisites={["Basic vocabulary", "Understanding of word formation"]}

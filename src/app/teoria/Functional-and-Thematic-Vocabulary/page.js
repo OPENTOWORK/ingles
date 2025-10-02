@@ -388,14 +388,17 @@ const FunctionalAndThematicVocabularyPage = () => {
   );
 
   const exercises = [
-    <FillBlanksExercise
+    <MultipleChoiceExercise
       key="1"
-      text="El vocabulario ___ (funcional/temático) se organiza por función comunicativa. El vocabulario ___ (temático/funcional) se agrupa por temas. El ___ (contexto/nivel) determina qué vocabulario usar."
-      blanks={[
-        { answer: "funcional" },
-        { answer: "temático" },
-        { answer: "contexto" }
+      question="¿Cómo se organiza el vocabulario funcional?"
+      options={[
+        "Por temas",
+        "Por función comunicativa",
+        "Por nivel",
+        "Por frecuencia"
       ]}
+      correctAnswer={1}
+      explanation="El vocabulario funcional se organiza por función comunicativa, agrupando palabras según su propósito en la comunicación."
     />,
 
     <MultipleChoiceExercise
@@ -461,6 +464,82 @@ const FunctionalAndThematicVocabularyPage = () => {
       ]}
       correctAnswer={2}
       explanation="'What's up? How's it going?' es apropiada para conversaciones informales con amigos, mientras que las otras son más formales."
+    />,
+
+    <TrueFalseExercise
+      key="6"
+      statements={[
+        {
+          text: "Functional vocabulary focuses on what you can do with language.",
+          isTrue: true,
+          explanation: "Correcto. El vocabulario funcional se enfoca en las funciones comunicativas: pedir, sugerir, acordar, etc."
+        },
+        {
+          text: "Thematic vocabulary is organized by topics or subjects.",
+          isTrue: true,
+          explanation: "Correcto. El vocabulario temático se organiza por temas como salud, trabajo, viajes, etc."
+        },
+        {
+          text: "You should learn vocabulary in isolation without context.",
+          isTrue: false,
+          explanation: "Incorrecto. Es mejor aprender vocabulario en contexto para entender su uso apropiado."
+        }
+      ]}
+    />,
+
+    <MultipleChoiceExercise
+      key="7"
+      question="Complete: 'I _____ you to consider this option.' (suggesting)"
+      options={[
+        "order",
+        "recommend",
+        "demand",
+        "force"
+      ]}
+      correctAnswer={1}
+      explanation="'Recommend' es apropiado para sugerir. 'Order' y 'demand' son muy directos, 'force' es coercitivo."
+    />,
+
+    <MultipleChoiceExercise
+      key="8"
+      question="¿Qué vocabulario temático necesitas para hablar de medio ambiente?"
+      options={[
+        "Cooking terms",
+        "Pollution, recycling, climate change",
+        "Sports equipment",
+        "Fashion vocabulary"
+      ]}
+      correctAnswer={1}
+      explanation="Para medio ambiente necesitas vocabulario como 'pollution', 'recycling', 'climate change', 'sustainability'."
+    />,
+
+    <TrueFalseExercise
+      key="9"
+      statements={[
+        {
+          text: "Functional vocabulary changes depending on the level of formality.",
+          isTrue: true,
+          explanation: "Correcto. 'Could you please...' (formal) vs 'Can you...' (informal) para la misma función de pedir."
+        },
+        {
+          text: "Thematic vocabulary is the same in all languages.",
+          isTrue: false,
+          explanation: "Incorrecto. Cada idioma tiene su propio vocabulario temático específico y expresiones culturales."
+        }
+      ]}
+    />,
+
+    <MultipleChoiceExercise
+      key="10"
+      question="Complete: 'I'm afraid I have to _____ with you on this.' (disagreeing politely)"
+      options={[
+        "fight",
+        "disagree",
+        "argue",
+        "battle"
+      ]}
+      correctAnswer={1}
+      explanation="'Disagree' es la forma educada de expresar desacuerdo. Las otras opciones son demasiado agresivas."
     />
   ];
 

@@ -290,21 +290,17 @@ const PrepositionsPage = () => {
   );
 
   const exercises = [
-    <FillBlanksExercise
+    <MultipleChoiceExercise
       key="1"
-      text="I live ___ Spain ___ 2020. I work ___ an office ___ the city center. My office is ___ the second floor. I usually arrive ___ work ___ 9 AM and leave ___ 6 PM. ___ weekends, I like to go ___ the beach."
-      blanks={[
-        { answer: "in" },
-        { answer: "since" },
-        { answer: "in" },
-        { answer: "in" },
-        { answer: "on" },
-        { answer: "at" },
-        { answer: "at" },
-        { answer: "at" },
-        { answer: "On" },
-        { answer: "to" }
+      question="Complete: 'I live _____ Spain _____ 2020.'"
+      options={[
+        "in, from",
+        "in, since",
+        "at, from",
+        "on, since"
       ]}
+      correctAnswer={1}
+      explanation="Usamos 'in' para países y 'since' para un punto específico en el tiempo."
     />,
 
     <MultipleChoiceExercise
@@ -370,6 +366,82 @@ const PrepositionsPage = () => {
       ]}
       correctAnswer={1}
       explanation="Para superficies usamos 'on': 'The book is on the table'."
+    />,
+
+    <TrueFalseExercise
+      key="6"
+      statements={[
+        {
+          text: "We use 'in' for months and years.",
+          isTrue: true,
+          explanation: "Correcto. Usamos 'in' para meses (in January) y años (in 2023)."
+        },
+        {
+          text: "We say 'at night' but 'in the morning'.",
+          isTrue: true,
+          explanation: "Correcto. Decimos 'at night' pero 'in the morning/afternoon/evening'."
+        },
+        {
+          text: "'I'm interested about music' is correct.",
+          isTrue: false,
+          explanation: "Incorrecto. Decimos 'interested IN music', no 'about'."
+        }
+      ]}
+    />,
+
+    <MultipleChoiceExercise
+      key="7"
+      question="Complete: 'I'll see you ___ Friday ___ 3 PM.'"
+      options={[
+        "in / at",
+        "on / at",
+        "at / in",
+        "on / in"
+      ]}
+      correctAnswer={1}
+      explanation="Usamos 'on' para días (on Friday) y 'at' para horas específicas (at 3 PM)."
+    />,
+
+    <MultipleChoiceExercise
+      key="8"
+      question="¿Cuál es la preposición correcta: 'She is good ___ mathematics'?"
+      options={[
+        "in",
+        "at",
+        "on",
+        "with"
+      ]}
+      correctAnswer={1}
+      explanation="Decimos 'good AT' algo: 'She is good at mathematics'."
+    />,
+
+    <TrueFalseExercise
+      key="9"
+      statements={[
+        {
+          text: "'I go to work by car' means I drive to work.",
+          isTrue: true,
+          explanation: "Correcto. 'By car' indica el medio de transporte utilizado."
+        },
+        {
+          text: "We can say 'I live in London' and 'I live at London'.",
+          isTrue: false,
+          explanation: "Incorrecto. Para ciudades usamos 'in': 'I live IN London'. 'At' se usa para direcciones específicas."
+        }
+      ]}
+    />,
+
+    <MultipleChoiceExercise
+      key="10"
+      question="Complete: 'The cat is hiding ___ the bed.'"
+      options={[
+        "on",
+        "in",
+        "under",
+        "at"
+      ]}
+      correctAnswer={2}
+      explanation="'Under' significa debajo de: 'The cat is hiding under the bed' (El gato se esconde debajo de la cama)."
     />
   ];
 
@@ -377,7 +449,7 @@ const PrepositionsPage = () => {
     <TheoryLayout
       title="Prepositions"
       description="Domina las preposiciones en inglés: lugar, tiempo, dirección y verbos con preposiciones. Esencial para expresar relaciones espaciales y temporales."
-      level="A1-A2"
+      level="A1-A2-B1-B2-C1-C2"
       theoryContent={theoryContent}
       exercises={exercises}
       prerequisites={["Basic vocabulary", "Understanding of nouns and verbs"]}
@@ -387,6 +459,25 @@ const PrepositionsPage = () => {
 };
 
 export default PrepositionsPage;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

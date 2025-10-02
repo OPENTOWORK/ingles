@@ -1,144 +1,110 @@
 'use client';
-import { useState } from 'react';
 import Link from 'next/link';
+import { useExam } from '@/context/ExamContext';
+import SimpleExamManager from '@/components/SimpleExamManager';
+import '@/styles/exam-styles.css';
 
-const questions = [
-  {
-    id: 1,
-    text: "(1) ........",
-    options: ["instead", "rather", "except", "sooner"],
-    correct: "B"
-  },
-  {
-    id: 2,
-    text: "(2) ........",
-    options: ["cause", "mean", "result", "lead"],
-    correct: "D"
-  },
-  {
-    id: 3,
-    text: "(3) ........",
-    options: ["accomplish", "access", "approach", "admit"],
-    correct: "B"
-  },
-  {
-    id: 4,
-    text: "(4) ........",
-    options: ["fee", "price", "charge", "expense"],
-    correct: "D"
-  },
-  {
-    id: 5,
-    text: "(5) ........",
-    options: ["describe", "define", "remark", "regard"],
-    correct: "C"
-  },
-  {
-    id: 6,
-    text: "(6) ........",
-    options: ["reveals", "opens", "begins", "arises"],
-    correct: "A"
-  },
-  {
-    id: 7,
-    text: "(7) ........",
-    options: ["older", "greater", "higher", "further"],
-    correct: "D"
-  },
-  {
-    id: 8,
-    text: "(8) ........",
-    options: ["attended", "participated", "included", "associated"],
-    correct: "B"
-  }
-];
-
-export default function Part1() {
-  const [answers, setAnswers] = useState({});
-  const [showResult, setShowResult] = useState({});
-
-  const handleSelect = (id, option) => {
-    const isCorrect = questions.find(q => q.id === id).correct === option;
-    setAnswers({ ...answers, [id]: option });
-    setShowResult({ ...showResult, [id]: isCorrect });
-  };
+// ====== Página ======
+export default function B2ExamHomePage() {
+  const { answers } = useExam();
 
   return (
-    <main style={{ padding: "2rem", fontFamily: "Segoe UI, sans-serif" }}>
-      <h1>Part 1: Multiple-Choice Cloze</h1>
+    <main className="shell exam-page">
+      <header className="header">
+        <h1>Cambridge B2 Exam Practice</h1>
+        <p>Welcome to the B2 Cambridge English Exam Practice page.</p>
+      </header>
 
-      <div style={{ backgroundColor: "#f5f5f5", padding: "1rem", borderRadius: "6px", lineHeight: "1.6" }}>
-        <p>
-          Genealogy is a <strong>(1)</strong> ........ of history. It concerns family history, <strong>(2)</strong> ........ than
-          the national or world history studied at school. It doesn’t merely involve drawing a family tree, however –
-          tracing your family history can also <strong>(3)</strong> ........ in learning about your roots and your identity.
-          The internet enables millions of people worldwide to <strong>(4)</strong> ........ information about their family
-          history, without great <strong>(5)</strong> ........ .
-        </p>
-        <p>
-          People who research their family history often <strong>(6)</strong> ........ that it’s a fascinating hobby which
-          <strong> (7)</strong> ........ a lot about where they come from and whether they have famous ancestors.
-          According to a survey involving 900 people who had researched their family history, the chances of discovering
-          a celebrity in your past are one in ten. The survey also concluded that the <strong>(8)</strong> ........ back you
-          follow your family line, the more likely you are to find a relation who was much wealthier than you are.
-        </p>
-      </div>
+      {/* Gestión del Examen */}
+      <SimpleExamManager examId="exam-1" />
 
-      <h2 style={{ marginTop: "2rem" }}>Choose your answers</h2>
-
-      {questions.map((q) => (
-        <div key={q.id} style={{ marginTop: "1.5rem" }}>
-          <p><strong>({q.id})</strong> Choose the correct word:</p>
-          <div style={{ display: "flex", flexWrap: "wrap", gap: "1rem" }}>
-            {q.options.map((opt, idx) => {
-              const letter = String.fromCharCode(65 + idx); // A, B, C, D
-              const selected = answers[q.id] === letter;
-              const correct = q.correct === letter;
-              const isCorrect = showResult[q.id] !== undefined && correct;
-              const isWrong = showResult[q.id] === false && selected;
-
-              return (
-                <button
-                  key={letter}
-                  onClick={() => handleSelect(q.id, letter)}
-                  style={{
-                    padding: "0.5rem 1rem",
-                    backgroundColor: isCorrect
-                      ? "lightgreen"
-                      : isWrong
-                      ? "#f8d7da"
-                      : selected
-                      ? "#cce4ff"
-                      : "#eee",
-                    border: "1px solid #ccc",
-                    borderRadius: "4px",
-                    cursor: "pointer",
-                  }}
-                >
-                  {letter}. {opt}
-                </button>
-              );
-            })}
-          </div>
-
-          {showResult[q.id] !== undefined && (
-            <div style={{ marginTop: "0.5rem" }}>
-              {showResult[q.id] ? (
-                <span style={{ color: "green" }}>✔ Correct</span>
-              ) : (
-                <span style={{ color: "red" }}>
-                  ✘ Incorrect. Correct answer: {q.correct}
-                </span>
-              )}
-            </div>
-          )}
+      {/* Información */}
+      <section className="info-section">
+        <div className="info-content">
+          <p>
+            This platform is designed to help you prepare for the full Reading and Use of English paper, structured in the same format as the official exam.
+          </p>
+          <p>
+            Each full exam consists of <strong>7 parts</strong>, testing your understanding of grammar, vocabulary, collocations, paraphrasing, and reading comprehension.
+            You will receive immediate feedback and know exactly which answers you got right or wrong.
+          </p>
+          <p>
+            Select any of the <strong>12 full exams</strong> below to begin your training. Each exam starts from Part 1 and guides you all the way through Part 7.
+          </p>
+          <p>
+            Practicing consistently is the key to success. Let's get started!
+          </p>
         </div>
-      ))}
+      </section>
 
-      <div style={{ marginTop: "2.5rem", display: "flex", justifyContent: "space-between" }}>
-        <Link href="/niveles/b2">⬅ Back to B2 Overview</Link>
-        <Link href="/niveles/b2/exam-1/part-2">Next ➡️</Link>
+      {/* Exámenes */}
+      <section className="exams-section">
+        <div className="section__head">
+          <h2>Available Exams</h2>
+          <span className="count">12</span>
+        </div>
+        <div className="exams-grid">
+          {[...Array(12)].map((_, i) => {
+            const examKey = `exam-${i + 1}`;
+            const progress = Object.keys(answers?.[examKey] || {}).length;
+            const finished = progress >= 7;
+
+            return (
+              <Link
+                key={i}
+                href={`/niveles/b2/exam-${i + 1}`}
+                className={`exam-card ${finished ? 'exam-card--completed' : ''}`}
+              >
+                <div className="exam-card__title">Exam {i + 1}</div>
+                <div className="exam-card__status">
+                  {finished ? '✅ Completed' : `Progress: ${progress}/7`}
+                </div>
+              </Link>
+            );
+          })}
+        </div>
+      </section>
+
+      {/* Navegación */}
+      <div className="navigation">
+        <Link href="/niveles/b2" className="back-link">
+          ← Back to B2 Overview
+        </Link>
       </div>
+
+      <GlobalStyles />
     </main>
+  );
+}
+
+// ====== Estilos (styled-jsx global + locales) ======
+function GlobalStyles() {
+  return (
+    <style jsx global>{`
+      .exam-page {
+        background-color: var(--bg);
+        color: var(--text);
+        min-height: 100vh;
+      }
+      .shell{min-height:100svh;max-width:1100px;margin:0 auto;padding:32px 20px}
+      .header h1{font-size:44px;margin:0 0 6px;color:var(--text)}
+      .header p{margin:0;color:#666;max-width:800px;margin:0 auto;text-align:center;font-size:1.1rem}
+      .info-section{margin:2rem 0;padding:6px}
+      .info-content{max-width:800px;margin:0 auto;line-height:1.6;color:#333}
+      .info-content p{margin-bottom:1rem}
+      .exams-section{margin:2rem 0;padding:6px}
+      .section__head{display:flex;align-items:center;gap:8px;margin-bottom:10px}
+      .section__head h2{margin:0;font-size:22px;color:var(--text)}
+      .count{display:inline-grid;place-items:center;width:28px;height:28px;border-radius:9999px;border:1px solid #eaeaea;background:var(--card);font-size:12px;color:#666}
+      .exams-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:1rem;justify-items:center;max-width:700px;margin:0 auto}
+      .exam-card{background:#c1f2cd;padding:1rem;border-radius:8px;text-decoration:none;color:#000;font-weight:bold;text-align:center;box-shadow:0 2px 4px rgba(0,0,0,0.1);transition:transform 0.2s ease,background 0.2s}
+      .exam-card:hover{transform:scale(1.03)}
+      .exam-card--completed{background:#a7f3d0}
+      .exam-card__title{font-size:16px;margin-bottom:4px}
+      .exam-card__status{font-size:0.9rem;color:#333}
+      .navigation{text-align:center;margin-top:2rem}
+      .back-link{text-decoration:none;color:#0070f3;font-weight:bold;display:inline-block;padding:0.75rem 1.25rem;border:2px solid #0070f3;border-radius:6px;transition:background 0.3s,color 0.3s}
+      .back-link:hover{background:#0070f3;color:#fff}
+    `}</style>
   );
 }

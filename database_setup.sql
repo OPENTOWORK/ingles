@@ -172,3 +172,22 @@ CREATE TRIGGER update_user_stats_trigger AFTER INSERT OR UPDATE ON user_progress
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

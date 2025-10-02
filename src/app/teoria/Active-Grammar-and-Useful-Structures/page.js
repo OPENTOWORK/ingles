@@ -392,14 +392,17 @@ const ActiveGrammarAndUsefulStructuresPage = () => {
   );
 
   const exercises = [
-    <FillBlanksExercise
+    <MultipleChoiceExercise
       key="1"
-      text="Las estructuras ___ (activas/pasivas) se usan para hablar con fluidez. La ___ (variedad/repetición) en estructuras hace el habla más natural. El ___ (contexto/nivel) determina qué estructuras usar."
-      blanks={[
-        { answer: "activas" },
-        { answer: "variedad" },
-        { answer: "contexto" }
+      question="¿Qué tipo de estructuras se usan para hablar con fluidez?"
+      options={[
+        "Pasivas",
+        "Activas",
+        "Complejas",
+        "Simples"
       ]}
+      correctAnswer={1}
+      explanation="Las estructuras activas se usan para hablar con fluidez, ya que son más directas y naturales en la conversación."
     />,
 
     <MultipleChoiceExercise

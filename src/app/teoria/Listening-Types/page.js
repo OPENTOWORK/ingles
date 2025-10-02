@@ -348,14 +348,17 @@ const ListeningTypesPage = () => {
   );
 
   const exercises = [
-    <FillBlanksExercise
+    <MultipleChoiceExercise
       key="1"
-      text="Para identificar la ___ (idea principal/detalle), debo escuchar las palabras clave. Para captar ___ (detalles/tono), necesito prestar atención a números y nombres. Para reconocer ___ (contraste/tono), debo escuchar palabras como 'however' y 'but'."
-      blanks={[
-        { answer: "idea principal" },
-        { answer: "detalles" },
-        { answer: "contraste" }
+      question="Para identificar la idea principal, ¿qué debo escuchar?"
+      options={[
+        "Todos los detalles",
+        "Las palabras clave",
+        "Solo los números",
+        "Los nombres propios"
       ]}
+      correctAnswer={1}
+      explanation="Para identificar la idea principal, es esencial escuchar las palabras clave que resumen el tema central del audio."
     />,
 
     <MultipleChoiceExercise
@@ -421,6 +424,82 @@ const ListeningTypesPage = () => {
       ]}
       correctAnswer={1}
       explanation="Intentar entender cada palabra es un error común. Es mejor enfocarse en la comprensión general y la información específica que necesitas."
+    />,
+
+    <TrueFalseExercise
+      key="6"
+      statements={[
+        {
+          text: "Listening for gist means understanding every single word.",
+          isTrue: false,
+          explanation: "Incorrecto. Listening for gist significa entender la idea general, no cada palabra individual."
+        },
+        {
+          text: "Scanning for specific information requires focused attention on particular details.",
+          isTrue: true,
+          explanation: "Correcto. Scanning requiere atención enfocada para encontrar información específica como nombres, fechas, números."
+        },
+        {
+          text: "Inferential listening involves understanding implied meanings.",
+          isTrue: true,
+          explanation: "Correcto. Inferential listening requiere entender significados implícitos, actitudes y emociones no expresadas directamente."
+        }
+      ]}
+    />,
+
+    <MultipleChoiceExercise
+      key="7"
+      question="¿Qué tipo de listening usarías para encontrar la hora de una cita en una conversación?"
+      options={[
+        "Listening for gist",
+        "Scanning for specific information",
+        "Inferential listening",
+        "Critical listening"
+      ]}
+      correctAnswer={1}
+      explanation="Scanning for specific information es apropiado para encontrar detalles específicos como horas, fechas o números."
+    />,
+
+    <MultipleChoiceExercise
+      key="8"
+      question="¿Cuál es la característica principal del critical listening?"
+      options={[
+        "Entender cada palabra",
+        "Evaluar y analizar la información",
+        "Solo escuchar la idea general",
+        "Buscar información específica"
+      ]}
+      correctAnswer={1}
+      explanation="Critical listening implica evaluar y analizar la información, juzgar su validez, detectar sesgos y formar opiniones."
+    />,
+
+    <TrueFalseExercise
+      key="9"
+      statements={[
+        {
+          text: "You should use the same listening strategy for all types of audio.",
+          isTrue: false,
+          explanation: "Incorrecto. Diferentes tipos de audio requieren diferentes estrategias de listening según el propósito."
+        },
+        {
+          text: "Predictive listening involves using context to anticipate content.",
+          isTrue: true,
+          explanation: "Correcto. Predictive listening usa el contexto, conocimiento previo y pistas para anticipar el contenido."
+        }
+      ]}
+    />,
+
+    <MultipleChoiceExercise
+      key="10"
+      question="¿Qué estrategia es más útil para entender el estado de ánimo del hablante?"
+      options={[
+        "Scanning for details",
+        "Listening for gist",
+        "Inferential listening",
+        "Note-taking"
+      ]}
+      correctAnswer={2}
+      explanation="Inferential listening es más útil para entender emociones, actitudes y estados de ánimo que no se expresan directamente."
     />
   ];
 
@@ -438,6 +517,25 @@ const ListeningTypesPage = () => {
 };
 
 export default ListeningTypesPage;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

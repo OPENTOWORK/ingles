@@ -377,13 +377,17 @@ const ReportedSpeechPage = () => {
   );
 
   const exercises = [
-    <FillBlanksExercise
+    <MultipleChoiceExercise
       key="1"
-      text="He said: 'I am tired' → He said he ___ (be) tired. She asked: 'Are you coming?' → She asked if I ___ (be) coming."
-      blanks={[
-        { answer: "was" },
-        { answer: "was" }
+      question="Complete the reported speech: He said: 'I am tired' → He said he _____ tired."
+      options={[
+        "is",
+        "was",
+        "will be",
+        "has been"
       ]}
+      correctAnswer={1}
+      explanation="En reported speech, 'am' cambia a 'was' cuando reportamos en pasado."
     />,
 
     <MultipleChoiceExercise
@@ -449,6 +453,82 @@ const ReportedSpeechPage = () => {
       ]}
       correctAnswer={1}
       explanation="The correct reported speech changes 'can't' to 'couldn't': 'He said he couldn't come to the party.'"
+    />,
+
+    <TrueFalseExercise
+      key="6"
+      statements={[
+        {
+          text: "'Today' changes to 'that day' in reported speech.",
+          isTrue: true,
+          explanation: "Correcto. Los adverbios de tiempo cambian: today → that day, yesterday → the day before."
+        },
+        {
+          text: "We use 'if' or 'whether' for yes/no questions in reported speech.",
+          isTrue: true,
+          explanation: "Correcto. 'Are you coming?' → 'He asked if/whether I was coming.'"
+        },
+        {
+          text: "Modal verbs never change in reported speech.",
+          isTrue: false,
+          explanation: "Incorrecto. Algunos modales cambian: will → would, can → could, may → might."
+        }
+      ]}
+    />,
+
+    <MultipleChoiceExercise
+      key="7"
+      question="Complete: 'I will help you' → He said he _____ help me."
+      options={[
+        "will",
+        "would",
+        "can",
+        "could"
+      ]}
+      correctAnswer={1}
+      explanation="'Will' cambia a 'would' en reported speech: 'He said he would help me.'"
+    />,
+
+    <MultipleChoiceExercise
+      key="8"
+      question="Transform: 'Don't be late!' → She told me ______."
+      options={[
+        "don't be late",
+        "not to be late",
+        "to not be late",
+        "not be late"
+      ]}
+      correctAnswer={1}
+      explanation="Los imperativos negativos se reportan con 'told + object + not to + infinitive'."
+    />,
+
+    <TrueFalseExercise
+      key="9"
+      statements={[
+        {
+          text: "'Here' changes to 'there' in reported speech.",
+          isTrue: true,
+          explanation: "Correcto. Los adverbios de lugar cambian según la perspectiva: here → there."
+        },
+        {
+          text: "Present Perfect changes to Past Perfect in reported speech.",
+          isTrue: true,
+          explanation: "Correcto. 'I have finished' → 'He said he had finished.'"
+        }
+      ]}
+    />,
+
+    <MultipleChoiceExercise
+      key="10"
+      question="Complete: 'Are you ready?' → She asked me ______."
+      options={[
+        "am I ready",
+        "if I was ready",
+        "if am I ready",
+        "was I ready"
+      ]}
+      correctAnswer={1}
+      explanation="Las preguntas sí/no se reportan con 'if/whether' + orden afirmativo: 'if I was ready'."
     />
   ];
 
@@ -456,7 +536,7 @@ const ReportedSpeechPage = () => {
     <TheoryLayout
       title="Reported Speech"
       description="Domina el discurso indirecto en inglés. Aprende a reportar lo que otros dijeron, cambiar tiempos verbales y usar reporting verbs correctamente."
-      level="B1-B2-C1"
+      level="B1-B2-C1-C2"
       theoryContent={theoryContent}
       exercises={exercises}
       prerequisites={["All verb tenses", "Question forms", "Modal verbs"]}

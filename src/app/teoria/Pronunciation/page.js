@@ -361,14 +361,17 @@ const PronunciationPage = () => {
   );
 
   const exercises = [
-    <FillBlanksExercise
+    <MultipleChoiceExercise
       key="1"
-      text="Para pronunciar /θ/ como en 'think', debo poner la ___ (lengua/labios) entre los dientes. El acento en 'COMputer' está en la ___ (primera/segunda) sílaba. En 'I BOUGHT a NEW CAR', las palabras acentuadas son ___ (content/function) words."
-      blanks={[
-        { answer: "lengua" },
-        { answer: "primera" },
-        { answer: "content" }
+      question="Para pronunciar /θ/ como en 'think', ¿qué debo hacer?"
+      options={[
+        "Poner los labios juntos",
+        "Poner la lengua entre los dientes",
+        "Cerrar la boca completamente",
+        "Abrir mucho la boca"
       ]}
+      correctAnswer={1}
+      explanation="Para el sonido /θ/, la lengua debe ir entre los dientes superiores e inferiores."
     />,
 
     <MultipleChoiceExercise
@@ -434,6 +437,82 @@ const PronunciationPage = () => {
       ]}
       correctAnswer={1}
       explanation="Las declaraciones generalmente terminan con entonación descendente, indicando que la información está completa."
+    />,
+
+    <TrueFalseExercise
+      key="6"
+      statements={[
+        {
+          text: "The /r/ sound in English is the same as the Spanish 'rr'.",
+          isTrue: false,
+          explanation: "Incorrecto. El sonido /r/ en inglés es más suave y se produce con la lengua curvada hacia atrás."
+        },
+        {
+          text: "Word stress can change the meaning of a word in English.",
+          isTrue: true,
+          explanation: "Correcto. Por ejemplo: 'REcord' (sustantivo) vs 'reCORD' (verbo)."
+        },
+        {
+          text: "Silent letters in English words should always be pronounced.",
+          isTrue: false,
+          explanation: "Incorrecto. Las letras mudas no se pronuncian: 'knife' /naɪf/, 'lamb' /læm/."
+        }
+      ]}
+    />,
+
+    <MultipleChoiceExercise
+      key="7"
+      question="¿Cómo se pronuncia la 'ed' en 'walked'?"
+      options={[
+        "/ed/",
+        "/d/",
+        "/t/",
+        "/ɪd/"
+      ]}
+      correctAnswer={2}
+      explanation="Después de consonantes sordas como /k/, la terminación -ed se pronuncia /t/: walked /wɔːkt/."
+    />,
+
+    <MultipleChoiceExercise
+      key="8"
+      question="¿Cuál es la diferencia entre /b/ y /v/ en inglés?"
+      options={[
+        "No hay diferencia",
+        "/b/ usa ambos labios, /v/ usa dientes y labio inferior",
+        "/v/ es más fuerte",
+        "/b/ es más largo"
+      ]}
+      correctAnswer={1}
+      explanation="/b/ se produce con ambos labios juntos, /v/ se produce con los dientes superiores tocando el labio inferior."
+    />,
+
+    <TrueFalseExercise
+      key="9"
+      statements={[
+        {
+          text: "Intonation is more important than individual sounds for communication.",
+          isTrue: true,
+          explanation: "Correcto. La entonación ayuda a transmitir emociones, actitudes y significado, siendo crucial para la comunicación efectiva."
+        },
+        {
+          text: "All English vowels are pronounced the same length.",
+          isTrue: false,
+          explanation: "Incorrecto. Las vocales en inglés tienen diferentes longitudes: /i:/ es larga, /ɪ/ es corta."
+        }
+      ]}
+    />,
+
+    <MultipleChoiceExercise
+      key="10"
+      question="¿Cuál es el patrón de acento más común en palabras de 2 sílabas?"
+      options={[
+        "Siempre en la primera sílaba",
+        "Sustantivos: primera sílaba, Verbos: segunda sílaba",
+        "Siempre en la segunda sílaba",
+        "No hay patrón"
+      ]}
+      correctAnswer={1}
+      explanation="En palabras de 2 sílabas, los sustantivos tienden a acentuarse en la primera sílaba ('TAble') y los verbos en la segunda ('reLAX')."
     />
   ];
 
@@ -451,6 +530,25 @@ const PronunciationPage = () => {
 };
 
 export default PronunciationPage;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

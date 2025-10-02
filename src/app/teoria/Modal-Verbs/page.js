@@ -395,13 +395,17 @@ const ModalVerbsPage = () => {
   );
 
   const exercises = [
-    <FillBlanksExercise
+    <MultipleChoiceExercise
       key="1"
-      text="You ___ (must/should) study harder if you want to pass the exam. I ___ (can/may) speak three languages."
-      blanks={[
-        { answer: "should" },
-        { answer: "can" }
+      question="Complete: 'You ___ study harder if you want to pass the exam.'"
+      options={[
+        "must",
+        "should",
+        "can",
+        "might"
       ]}
+      correctAnswer={1}
+      explanation="'Should' expresa consejo o recomendación, lo más apropiado en este contexto."
     />,
 
     <MultipleChoiceExercise
@@ -467,6 +471,71 @@ const ModalVerbsPage = () => {
       ]}
       correctAnswer={2}
       explanation="'Had better' is used for strong advice with an implied warning or consequence if the advice is not followed."
+    />,
+
+    <MultipleChoiceExercise
+      key="6"
+      question="Complete: 'You ___ smoke in the hospital.'"
+      options={[
+        "mustn't",
+        "don't have to",
+        "shouldn't",
+        "can't"
+      ]}
+      correctAnswer={0}
+      explanation="'Mustn't' expresa prohibición fuerte. Es una regla que no se puede romper."
+    />,
+
+    <MultipleChoiceExercise
+      key="7"
+      question="¿Cuál expresa posibilidad en el pasado?"
+      options={[
+        "He can be at home",
+        "He could be at home",
+        "He might have been at home",
+        "He must be at home"
+      ]}
+      correctAnswer={2}
+      explanation="'Might have been' expresa posibilidad sobre algo que ocurrió en el pasado."
+    />,
+
+    <MultipleChoiceExercise
+      key="8"
+      question="Complete: 'I ___ speak three languages when I was younger.'"
+      options={[
+        "can",
+        "could",
+        "was able to",
+        "Both B and C"
+      ]}
+      correctAnswer={3}
+      explanation="Para habilidades generales en el pasado, tanto 'could' como 'was able to' son correctos."
+    />,
+
+    <MultipleChoiceExercise
+      key="9"
+      question="¿Cuál es más educado?"
+      options={[
+        "Can you help me?",
+        "Could you help me?",
+        "Will you help me?",
+        "Do you help me?"
+      ]}
+      correctAnswer={1}
+      explanation="'Could you...?' es más educado y formal que 'Can you...?'"
+    />,
+
+    <MultipleChoiceExercise
+      key="10"
+      question="Complete: 'She ___ have forgotten about the meeting.'"
+      options={[
+        "can",
+        "could",
+        "may",
+        "All of the above"
+      ]}
+      correctAnswer={3}
+      explanation="'Can', 'could' y 'may' pueden expresar posibilidad presente. 'Could' y 'may' son más formales."
     />
   ];
 
@@ -474,7 +543,7 @@ const ModalVerbsPage = () => {
     <TheoryLayout
       title="Modal Verbs"
       description="Domina los verbos modales en inglés. Aprende a expresar habilidad, posibilidad, obligación, permiso y consejos con can, could, must, should, may, might."
-      level="A2-B1-B2-C1"
+      level="A2-B1-B2-C1-C2"
       theoryContent={theoryContent}
       exercises={exercises}
       prerequisites={["Basic verb tenses", "Understanding of auxiliary verbs"]}

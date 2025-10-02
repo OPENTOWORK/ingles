@@ -283,16 +283,17 @@ const InfinitiveVsGerundPage = () => {
   );
 
   const exercises = [
-    <FillBlanksExercise
+    <MultipleChoiceExercise
       key="1"
-      text="I want ___ (learn) English. I enjoy ___ (read) books. It's important ___ (study) hard. I'm good at ___ (sing). I stopped ___ (smoke) last year."
-      blanks={[
-        { answer: "to learn" },
-        { answer: "reading" },
-        { answer: "to study" },
-        { answer: "singing" },
-        { answer: "smoking" }
+      question="Complete: 'I want _____ English.'"
+      options={[
+        "learn",
+        "to learn",
+        "learning",
+        "learned"
       ]}
+      correctAnswer={1}
+      explanation="Después de 'want' usamos infinitivo con 'to': 'want to learn'."
     />,
 
     <MultipleChoiceExercise
@@ -358,6 +359,82 @@ const InfinitiveVsGerundPage = () => {
       ]}
       correctAnswer={2}
       explanation="Después de 'It's + adjetivo' usamos infinitivo: 'It's easy to learn English'."
+    />,
+
+    <TrueFalseExercise
+      key="6"
+      statements={[
+        {
+          text: "'I enjoy to read books' is correct.",
+          isTrue: false,
+          explanation: "Incorrecto. 'Enjoy' requiere gerundio: 'I enjoy reading books'."
+        },
+        {
+          text: "'She decided to study medicine' is correct.",
+          isTrue: true,
+          explanation: "Correcto. 'Decide' requiere infinitivo: 'decided to study'."
+        },
+        {
+          text: "'I'm looking forward to see you' is correct.",
+          isTrue: false,
+          explanation: "Incorrecto. Después de 'to' como preposición usamos gerundio: 'looking forward to seeing you'."
+        }
+      ]}
+    />,
+
+    <MultipleChoiceExercise
+      key="7"
+      question="Complete: 'I can't stand ___ in long queues.'"
+      options={[
+        "to wait",
+        "waiting",
+        "wait",
+        "waited"
+      ]}
+      correctAnswer={1}
+      explanation="'Can't stand' requiere gerundio: 'I can't stand waiting'."
+    />,
+
+    <MultipleChoiceExercise
+      key="8"
+      question="¿Cuál es la forma correcta: 'I remember ___ her at the party'?"
+      options={[
+        "to meet",
+        "meeting",
+        "meet",
+        "met"
+      ]}
+      correctAnswer={1}
+      explanation="'Remember' + gerundio se refiere a recordar algo que ya pasó: 'I remember meeting her'."
+    />,
+
+    <TrueFalseExercise
+      key="9"
+      statements={[
+        {
+          text: "'Stop to smoke' and 'stop smoking' have the same meaning.",
+          isTrue: false,
+          explanation: "Incorrecto. 'Stop to smoke' = parar para fumar; 'stop smoking' = dejar de fumar."
+        },
+        {
+          text: "After prepositions we use gerund.",
+          isTrue: true,
+          explanation: "Correcto. Después de preposiciones usamos gerundio: 'interested in learning'."
+        }
+      ]}
+    />,
+
+    <MultipleChoiceExercise
+      key="10"
+      question="Complete: 'She forgot ___ the door before leaving.'"
+      options={[
+        "locking",
+        "to lock",
+        "lock",
+        "locked"
+      ]}
+      correctAnswer={1}
+      explanation="'Forget' + infinitivo se refiere a olvidar hacer algo: 'forgot to lock' (olvidó cerrar con llave)."
     />
   ];
 
@@ -365,7 +442,7 @@ const InfinitiveVsGerundPage = () => {
     <TheoryLayout
       title="Infinitive vs Gerund"
       description="Domina el uso del infinitivo y gerundio en inglés. Aprende qué verbos requieren cada forma y cuándo usar cada una para expresarte correctamente."
-      level="B1"
+      level="B1-B2-C1-C2"
       theoryContent={theoryContent}
       exercises={exercises}
       prerequisites={["Present Tenses", "Basic vocabulary", "Understanding of verb forms"]}
@@ -375,6 +452,25 @@ const InfinitiveVsGerundPage = () => {
 };
 
 export default InfinitiveVsGerundPage;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

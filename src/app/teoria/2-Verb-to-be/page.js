@@ -285,17 +285,17 @@ const VerbToBePage = () => {
   );
 
   const exercises = [
-    <FillBlanksExercise
+    <MultipleChoiceExercise
       key="1"
-      text="I ___ a student. My name ___ María. I ___ 20 years old. My friends ___ very nice. They ___ from Spain. We ___ happy to be here."
-      blanks={[
-        { answer: "am" },
-        { answer: "is" },
-        { answer: "am" },
-        { answer: "are" },
-        { answer: "are" },
-        { answer: "are" }
+      question="Complete: 'I _____ a student. My name _____ María.'"
+      options={[
+        "am, is",
+        "is, am",
+        "are, is",
+        "am, are"
       ]}
+      correctAnswer={0}
+      explanation="Con 'I' usamos 'am' y con nombres propios (tercera persona singular) usamos 'is'."
     />,
 
     <MultipleChoiceExercise
@@ -361,6 +361,82 @@ const VerbToBePage = () => {
       ]}
       correctAnswer={1}
       explanation="Las opciones correctas son 'She is not tall' o 'She isn't tall'. La opción 4 también es correcta, pero la 2 es la forma completa."
+    />,
+
+    <TrueFalseExercise
+      key="6"
+      statements={[
+        {
+          text: "We can use 'am' with 'you'.",
+          isTrue: false,
+          explanation: "Incorrecto. 'Am' solo se usa con 'I'. Con 'you' usamos 'are'."
+        },
+        {
+          text: "'It's' is the contraction of 'it is'.",
+          isTrue: true,
+          explanation: "Correcto. 'It's' es la contracción de 'it is'."
+        },
+        {
+          text: "We can say 'I amn't' as a contraction.",
+          isTrue: false,
+          explanation: "Incorrecto. 'I amn't' no existe. Solo podemos decir 'I'm not'."
+        }
+      ]}
+    />,
+
+    <MultipleChoiceExercise
+      key="7"
+      question="Complete: 'My parents ___ doctors.'"
+      options={[
+        "is",
+        "are",
+        "am",
+        "be"
+      ]}
+      correctAnswer={1}
+      explanation="'Parents' es plural, por lo que usamos 'are'. 'My parents are doctors' (Mis padres son doctores)."
+    />,
+
+    <MultipleChoiceExercise
+      key="8"
+      question="¿Cuál es la pregunta correcta para obtener la respuesta 'I am fine'?"
+      options={[
+        "How you are?",
+        "How are you?",
+        "How is you?",
+        "How do you are?"
+      ]}
+      correctAnswer={1}
+      explanation="La pregunta correcta es 'How are you?' Con verb to be, invertimos el orden: are + you."
+    />,
+
+    <TrueFalseExercise
+      key="9"
+      statements={[
+        {
+          text: "The sentence 'The cat is in the garden' uses 'is' for location.",
+          isTrue: true,
+          explanation: "Correcto. Usamos 'is' para indicar ubicación (estar): el gato está en el jardín."
+        },
+        {
+          text: "'We're' can mean both 'we are' and 'we were'.",
+          isTrue: false,
+          explanation: "Incorrecto. 'We're' solo es contracción de 'we are' (presente). 'We were' no tiene contracción."
+        }
+      ]}
+    />,
+
+    <MultipleChoiceExercise
+      key="10"
+      question="Complete the dialogue: 'Is John at home?' - 'No, he ___.'"
+      options={[
+        "isn't",
+        "aren't",
+        "am not",
+        "not is"
+      ]}
+      correctAnswer={0}
+      explanation="Con 'he' usamos 'is', por lo que la forma negativa es 'isn't' o 'is not'. 'No, he isn't' (No, él no está)."
     />
   ];
 
@@ -368,7 +444,7 @@ const VerbToBePage = () => {
     <TheoryLayout
       title="Verb to Be"
       description="Domina el verbo más importante del inglés: to be (ser/estar). Aprende sus formas, usos, contracciones y cómo hacer preguntas y negaciones."
-      level="A1"
+      level="A1-A2-B1-B2-C1-C2"
       theoryContent={theoryContent}
       exercises={exercises}
       prerequisites={["Nociones básicas de pronombres personales"]}
@@ -378,6 +454,25 @@ const VerbToBePage = () => {
 };
 
 export default VerbToBePage;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

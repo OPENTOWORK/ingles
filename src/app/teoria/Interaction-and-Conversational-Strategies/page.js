@@ -392,14 +392,17 @@ const InteractionAndConversationalStrategiesPage = () => {
   );
 
   const exercises = [
-    <FillBlanksExercise
+    <MultipleChoiceExercise
       key="1"
-      text="Las estrategias de ___ (interacción/conversación) te permiten participar efectivamente. El manejo de ___ (turnos/conflictos) mantiene conversaciones fluidas. Mostrar ___ (interés/desacuerdo) genuino es crucial."
-      blanks={[
-        { answer: "interacción" },
-        { answer: "turnos" },
-        { answer: "interés" }
+      question="¿Qué te permiten las estrategias de interacción?"
+      options={[
+        "Evitar conversaciones",
+        "Participar efectivamente",
+        "Hablar más rápido",
+        "Interrumpir constantemente"
       ]}
+      correctAnswer={1}
+      explanation="Las estrategias de interacción te permiten participar efectivamente en conversaciones, manteniendo un flujo natural y productivo."
     />,
 
     <MultipleChoiceExercise
@@ -465,6 +468,82 @@ const InteractionAndConversationalStrategiesPage = () => {
       ]}
       correctAnswer={1}
       explanation="Hacer preguntas de seguimiento relevantes es la estrategia más efectiva, ya que demuestra que estás escuchando activamente y quieres profundizar en el tema."
+    />,
+
+    <TrueFalseExercise
+      key="6"
+      statements={[
+        {
+          text: "Active listening involves only hearing the words someone says.",
+          isTrue: false,
+          explanation: "Incorrecto. La escucha activa incluye entender el mensaje, las emociones y responder apropiadamente."
+        },
+        {
+          text: "Turn-taking is important for smooth conversations.",
+          isTrue: true,
+          explanation: "Correcto. El manejo de turnos permite que todos participen y mantiene el flujo natural de la conversación."
+        },
+        {
+          text: "You should avoid asking clarifying questions during conversations.",
+          isTrue: false,
+          explanation: "Incorrecto. Las preguntas de clarificación muestran interés y ayudan a entender mejor."
+        }
+      ]}
+    />,
+
+    <MultipleChoiceExercise
+      key="7"
+      question="Complete: 'I see what you mean, _____ I think there's another perspective.'"
+      options={[
+        "and",
+        "but",
+        "so",
+        "because"
+      ]}
+      correctAnswer={1}
+      explanation="'But' introduce una perspectiva diferente de manera educada después de reconocer el punto de vista del otro."
+    />,
+
+    <MultipleChoiceExercise
+      key="8"
+      question="¿Cuál es la mejor manera de manejar un desacuerdo en conversación?"
+      options={[
+        "Evitar el tema completamente",
+        "Reconocer el punto de vista y expresar el tuyo respetuosamente",
+        "Insistir hasta que la otra persona cambie de opinión",
+        "Cambiar de tema inmediatamente"
+      ]}
+      correctAnswer={1}
+      explanation="Reconocer el punto de vista del otro y expresar el tuyo respetuosamente mantiene la conversación constructiva."
+    />,
+
+    <TrueFalseExercise
+      key="9"
+      statements={[
+        {
+          text: "Interrupting is always rude in conversations.",
+          isTrue: false,
+          explanation: "Incorrecto. Interrupciones cooperativas (para mostrar entendimiento o hacer preguntas relevantes) pueden ser apropiadas."
+        },
+        {
+          text: "Body language is important in face-to-face interactions.",
+          isTrue: true,
+          explanation: "Correcto. El lenguaje corporal comunica interés, atención y actitudes, siendo crucial en interacciones cara a cara."
+        }
+      ]}
+    />,
+
+    <MultipleChoiceExercise
+      key="10"
+      question="Complete: 'Could you _____ on that point? I'd like to understand better.'"
+      options={[
+        "expand",
+        "reduce",
+        "avoid",
+        "skip"
+      ]}
+      correctAnswer={0}
+      explanation="'Expand' es apropiado para pedir más información o clarificación sobre un punto específico."
     />
   ];
 
@@ -482,6 +561,24 @@ const InteractionAndConversationalStrategiesPage = () => {
 };
 
 export default InteractionAndConversationalStrategiesPage;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

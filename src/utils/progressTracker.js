@@ -23,7 +23,10 @@ export class ProgressTracker {
 
       return { success: true, offline: result.offline };
     } catch (error) {
-      console.error('Error saving progress:', error);
+      // Solo mostrar error si es crítico, no para problemas de conexión menores
+      if (!error.message?.includes('Failed to fetch') && !error.message?.includes('Network')) {
+        console.warn('Progress save warning:', error.message);
+      }
       return { success: false, error: error.message };
     }
   }
@@ -53,7 +56,10 @@ export class ProgressTracker {
 
       return progress;
     } catch (error) {
-      console.error('Error fetching progress:', error);
+      // Solo mostrar error si no es un error de "no encontrado" o problemas de conexión menores
+      if (error.code !== 'PGRST116' && !error.message?.includes('Failed to fetch')) {
+        console.warn('Progress fetch warning:', error.message);
+      }
       return null;
     }
   }
@@ -143,8 +149,11 @@ export class ProgressTracker {
 
       return data;
     } catch (error) {
-      console.error('Error awarding achievement:', error);
-      throw error;
+      // Silenciar errores de achievements si la tabla no existe o hay problemas de conexión
+      if (!error.message?.includes('Failed to fetch') && !error.message?.includes('relation') && error.code !== 'PGRST116') {
+        console.warn('Achievement warning:', error.message);
+      }
+      return null;
     }
   }
 
@@ -201,7 +210,7 @@ export class ProgressTracker {
           time_spent: exerciseData.timeSpent
         });
       } catch (error) {
-        console.error('Error awarding achievement:', error);
+        // Silenciar errores de achievements - no críticos
       }
     }
 

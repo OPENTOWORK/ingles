@@ -363,17 +363,17 @@ const FutureTensesPage = () => {
   );
 
   const exercises = [
-    <FillBlanksExercise
+    <MultipleChoiceExercise
       key="1"
-      text="Tomorrow I ___ (meet) my friend at 3 PM. I ___ (go) to buy her a birthday present. I think she ___ (like) the book I ___ (choose). The bookstore ___ (close) at 8 PM, so I ___ (be) shopping before then."
-      blanks={[
-        { answer: "am meeting" },
-        { answer: "am going" },
-        { answer: "will like" },
-        { answer: "have chosen" },
-        { answer: "closes" },
-        { answer: "will be" }
+      question="Complete: 'Tomorrow I _____ my friend at 3 PM.' (arranged plan)"
+      options={[
+        "will meet",
+        "am going to meet",
+        "am meeting",
+        "meet"
       ]}
+      correctAnswer={2}
+      explanation="Para citas y planes ya organizados usamos Present Continuous: 'am meeting'."
     />,
 
     <MultipleChoiceExercise
@@ -439,6 +439,82 @@ const FutureTensesPage = () => {
       ]}
       correctAnswer={1}
       explanation="Para acciones en progreso en un momento específico del futuro usamos Future Continuous: 'I will be lying'."
+    />,
+
+    <TrueFalseExercise
+      key="6"
+      statements={[
+        {
+          text: "'I will call you later' shows a spontaneous decision.",
+          isTrue: true,
+          explanation: "Correcto. 'Will' se usa para decisiones espontáneas tomadas en el momento de hablar."
+        },
+        {
+          text: "'She is meeting her boss at 2 PM' refers to a scheduled appointment.",
+          isTrue: true,
+          explanation: "Correcto. Present Continuous se usa para citas y planes ya organizados."
+        },
+        {
+          text: "'The movie starts at 7 PM' uses Present Simple for timetables.",
+          isTrue: true,
+          explanation: "Correcto. Present Simple se usa para horarios y programas fijos."
+        }
+      ]}
+    />,
+
+    <MultipleChoiceExercise
+      key="7"
+      question="Complete: 'The train ___ at 8:30 AM' (horario fijo)?"
+      options={[
+        "will leave",
+        "is going to leave", 
+        "leaves",
+        "is leaving"
+      ]}
+      correctAnswer={2}
+      explanation="Para horarios fijos usamos Present Simple: 'The train leaves at 8:30 AM'."
+    />,
+
+    <MultipleChoiceExercise
+      key="8"
+      question="¿Cuál es la diferencia entre 'I'll help you' y 'I'm going to help you'?"
+      options={[
+        "No hay diferencia",
+        "'I'll help' es decisión espontánea, 'going to help' es plan previo",
+        "'I'll help' es más formal",
+        "'Going to help' es más educado"
+      ]}
+      correctAnswer={1}
+      explanation="'I'll help' es una decisión espontánea, mientras que 'I'm going to help' indica un plan o intención previa."
+    />,
+
+    <TrueFalseExercise
+      key="9"
+      statements={[
+        {
+          text: "'Will' can be used for promises and offers.",
+          isTrue: true,
+          explanation: "Correcto. 'Will' se usa para promesas ('I will be there') y ofertas ('I will help you')."
+        },
+        {
+          text: "'I'm working tomorrow' means I have a scheduled work day.",
+          isTrue: true,
+          explanation: "Correcto. Present Continuous indica un plan ya organizado para el futuro."
+        }
+      ]}
+    />,
+
+    <MultipleChoiceExercise
+      key="10"
+      question="Complete the dialogue: 'The phone is ringing.' - 'I ___ get it.'"
+      options={[
+        "am going to",
+        "will",
+        "am getting",
+        "get"
+      ]}
+      correctAnswer={1}
+      explanation="Para una decisión espontánea (decidir contestar el teléfono en ese momento) usamos 'will': 'I will get it'."
     />
   ];
 
@@ -446,7 +522,7 @@ const FutureTensesPage = () => {
     <TheoryLayout
       title="Future Tenses"
       description="Domina todas las formas de expresar el futuro en inglés: will, going to, Present Continuous, Present Simple y Future Continuous. Aprende cuándo usar cada una."
-      level="A2-B1-B2"
+      level="A2-B1-B2-C1-C2"
       theoryContent={theoryContent}
       exercises={exercises}
       prerequisites={["Present Tenses", "Past Tenses", "Verb to be"]}
@@ -456,6 +532,25 @@ const FutureTensesPage = () => {
 };
 
 export default FutureTensesPage;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

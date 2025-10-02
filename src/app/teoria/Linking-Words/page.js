@@ -348,13 +348,17 @@ const LinkingWordsPage = () => {
   );
 
   const exercises = [
-    <FillBlanksExercise
+    <MultipleChoiceExercise
       key="1"
-      text="I like coffee. ___, I prefer tea in the morning. The weather is bad. ___, we should stay inside."
-      blanks={[
-        { answer: "However" },
-        { answer: "Therefore" }
+      question="Complete: 'I like coffee. _____, I prefer tea in the morning.'"
+      options={[
+        "Therefore",
+        "However",
+        "Because",
+        "So"
       ]}
+      correctAnswer={1}
+      explanation="'However' introduce un contraste: me gusta el café, pero prefiero el té por la mañana."
     />,
 
     <MultipleChoiceExercise
@@ -420,6 +424,82 @@ const LinkingWordsPage = () => {
       ]}
       correctAnswer={1}
       explanation="'However' es la opción más apropiada para contextos académicos y formales. 'But' es más informal, 'though' es casual, y 'and' no muestra contraste."
+    />,
+
+    <TrueFalseExercise
+      key="6"
+      statements={[
+        {
+          text: "'Although' and 'despite' can be used interchangeably in all contexts.",
+          isTrue: false,
+          explanation: "Incorrecto. 'Although' va seguido de una cláusula completa, mientras que 'despite' va seguido de un sustantivo o gerundio."
+        },
+        {
+          text: "Linking words help create logical flow in writing.",
+          isTrue: true,
+          explanation: "Correcto. Los linking words conectan ideas y crean un flujo lógico que facilita la comprensión."
+        },
+        {
+          text: "'Furthermore' and 'moreover' have similar meanings.",
+          isTrue: true,
+          explanation: "Correcto. Ambos significan 'además' y se usan para agregar información que apoya la idea anterior."
+        }
+      ]}
+    />,
+
+    <MultipleChoiceExercise
+      key="7"
+      question="Complete: '_____ studying hard, he failed the exam.'"
+      options={[
+        "Although",
+        "Despite",
+        "Because",
+        "Therefore"
+      ]}
+      correctAnswer={1}
+      explanation="'Despite' + gerundio es correcto: 'Despite studying hard'. 'Although' necesitaría 'Although he studied hard'."
+    />,
+
+    <MultipleChoiceExercise
+      key="8"
+      question="¿Cuál linking word es mejor para agregar un ejemplo?"
+      options={[
+        "However",
+        "For instance",
+        "Nevertheless",
+        "Therefore"
+      ]}
+      correctAnswer={1}
+      explanation="'For instance' (por ejemplo) es específico para introducir ejemplos, junto con 'for example'."
+    />,
+
+    <TrueFalseExercise
+      key="9"
+      statements={[
+        {
+          text: "You can start a sentence with 'And' in formal writing.",
+          isTrue: false,
+          explanation: "Incorrecto. En escritura formal es mejor usar conectores como 'Furthermore', 'Moreover', o 'In addition'."
+        },
+        {
+          text: "'On the other hand' is used to show contrast.",
+          isTrue: true,
+          explanation: "Correcto. 'On the other hand' introduce una perspectiva contrastante o alternativa."
+        }
+      ]}
+    />,
+
+    <MultipleChoiceExercise
+      key="10"
+      question="Complete: 'The weather was terrible. _____, we decided to go hiking.'"
+      options={[
+        "Therefore",
+        "Nevertheless",
+        "Furthermore",
+        "Consequently"
+      ]}
+      correctAnswer={1}
+      explanation="'Nevertheless' (sin embargo/no obstante) muestra contraste: a pesar del mal tiempo, decidimos ir de excursión."
     />
   ];
 

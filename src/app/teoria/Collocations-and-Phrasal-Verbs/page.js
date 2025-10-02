@@ -155,42 +155,148 @@ const CollocationsandPhrasalVerbsPage = () => {
   );
 
   const exercises = [
-    <FillBlanksExercise
+    <MultipleChoiceExercise
       key="1"
-      text="Ejemplo de ejercicio de completar espacios: ___ (palabra) ___ (palabra)."
-      blanks={[
-        { answer: "Respuesta1" },
-        { answer: "Respuesta2" }
+      question="Complete: 'I need to _____ up early tomorrow.'"
+      options={[
+        "get",
+        "take",
+        "make",
+        "do"
       ]}
+      correctAnswer={0}
+      explanation="'Get up' es un phrasal verb que significa levantarse/despertarse."
     />,
 
     <MultipleChoiceExercise
       key="2"
-      question="¿Cuál es la pregunta del ejercicio de opción múltiple?"
+      question="Choose the correct collocation: 'I need to ___ a decision about my future.'"
       options={[
-        "Opción incorrecta 1",
-        "Opción correcta",
-        "Opción incorrecta 2",
-        "Opción incorrecta 3"
+        "do",
+        "make",
+        "take",
+        "have"
       ]}
       correctAnswer={1}
-      explanation="Explicación de por qué la opción correcta es la respuesta."
+      explanation="'Make a decision' es la colocación correcta. Usamos 'make' con decisiones, planes, y elecciones."
     />,
 
     <TrueFalseExercise
       key="3"
       statements={[
         {
-          text: "Esta afirmación es verdadera.",
+          text: "'Turn on' and 'turn off' are separable phrasal verbs.",
           isTrue: true,
-          explanation: "Explicación de por qué esta afirmación es verdadera."
+          explanation: "Correcto. Podemos decir 'turn on the light' o 'turn the light on'."
         },
         {
-          text: "Esta afirmación es falsa.",
+          text: "'Look after' means 'to search for something'.",
           isTrue: false,
-          explanation: "Explicación de por qué esta afirmación es falsa."
+          explanation: "Incorrecto. 'Look after' significa cuidar de alguien o algo. 'Look for' significa buscar."
         }
       ]}
+    />,
+
+    <MultipleChoiceExercise
+      key="4"
+      question="Complete: 'She ___ her job last month.'"
+      options={[
+        "gave up",
+        "gave in",
+        "gave out",
+        "gave away"
+      ]}
+      correctAnswer={0}
+      explanation="'Give up' significa abandonar o renunciar a algo: 'She gave up her job' (Ella renunció a su trabajo)."
+    />,
+
+    <MultipleChoiceExercise
+      key="5"
+      question="Choose the correct collocation: 'I ___ a mistake in my homework.'"
+      options={[
+        "did",
+        "made",
+        "took",
+        "had"
+      ]}
+      correctAnswer={1}
+      explanation="'Make a mistake' es la colocación correcta. Usamos 'make' con errores y equivocaciones."
+    />,
+
+    <TrueFalseExercise
+      key="6"
+      statements={[
+        {
+          text: "'Put off' means to postpone something.",
+          isTrue: true,
+          explanation: "Correcto. 'Put off' significa posponer o retrasar algo: 'I put off the meeting'."
+        },
+        {
+          text: "We say 'do homework' not 'make homework'.",
+          isTrue: true,
+          explanation: "Correcto. 'Do homework' es la colocación correcta en inglés."
+        },
+        {
+          text: "'Run into' means to exercise by running.",
+          isTrue: false,
+          explanation: "Incorrecto. 'Run into' significa encontrarse con alguien por casualidad o chocar con algo."
+        }
+      ]}
+    />,
+
+    <MultipleChoiceExercise
+      key="7"
+      question="Complete: 'I ___ my old friend at the supermarket yesterday.'"
+      options={[
+        "ran into",
+        "ran out of",
+        "ran away",
+        "ran over"
+      ]}
+      correctAnswer={0}
+      explanation="'Run into' significa encontrarse con alguien por casualidad: 'I ran into my old friend'."
+    />,
+
+    <MultipleChoiceExercise
+      key="8"
+      question="Choose the correct collocation: 'Can you ___ me a favor?'"
+      options={[
+        "make",
+        "do",
+        "take",
+        "give"
+      ]}
+      correctAnswer={1}
+      explanation="'Do someone a favor' es la colocación correcta para pedir un favor."
+    />,
+
+    <TrueFalseExercise
+      key="9"
+      statements={[
+        {
+          text: "'Break down' can mean both 'to stop working' and 'to become emotional'.",
+          isTrue: true,
+          explanation: "Correcto. 'Break down' tiene múltiples significados: una máquina se descompone o una persona se quiebra emocionalmente."
+        },
+        {
+          text: "We say 'take a photo' not 'make a photo'.",
+          isTrue: true,
+          explanation: "Correcto. En inglés decimos 'take a photo/picture', no 'make'."
+        }
+      ]}
+    />,
+
+    <MultipleChoiceExercise
+      key="10"
+      question="Complete: 'I need to ___ early tomorrow for my flight.'"
+      options={[
+        "get up",
+        "get on",
+        "get off",
+        "get over"
+      ]}
+      correctAnswer={0}
+      explanation="'Get up' significa levantarse de la cama: 'I need to get up early' (Necesito levantarme temprano)."
     />
   ];
 

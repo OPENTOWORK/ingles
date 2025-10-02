@@ -355,15 +355,17 @@ const EnglishVarietiesPage = () => {
   );
 
   const exercises = [
-    <FillBlanksExercise
+    <MultipleChoiceExercise
       key="1"
-      text="En British English, 'lift' significa ___ (elevator/truck), mientras que en American English es '___' (elevator/truck). En British English se escribe '___' (color/colour), pero en American English es '___' (color/colour)."
-      blanks={[
-        { answer: "elevator" },
-        { answer: "elevator" },
-        { answer: "colour" },
-        { answer: "color" }
+      question="En British English, ¿qué significa 'lift'?"
+      options={[
+        "Truck",
+        "Elevator",
+        "Car",
+        "Bus"
       ]}
+      correctAnswer={1}
+      explanation="En British English, 'lift' significa 'elevator' (ascensor), mientras que en American English se usa directamente 'elevator'."
     />,
 
     <MultipleChoiceExercise
@@ -429,6 +431,82 @@ const EnglishVarietiesPage = () => {
       ]}
       correctAnswer={1}
       explanation="Exponerse regularmente a diferentes variedades mejora la comprensión auditiva y familiariza tu oído con diferentes acentos y vocabulario."
+    />,
+
+    <TrueFalseExercise
+      key="6"
+      statements={[
+        {
+          text: "Australian English has unique vocabulary and expressions.",
+          isTrue: true,
+          explanation: "Correcto. El inglés australiano tiene vocabulario único como 'arvo' (afternoon), 'barbie' (barbecue), y 'mate' (friend)."
+        },
+        {
+          text: "All English varieties use the same spelling system.",
+          isTrue: false,
+          explanation: "Incorrecto. British English usa 'colour', 'centre'; American English usa 'color', 'center'."
+        },
+        {
+          text: "Understanding different varieties improves global communication.",
+          isTrue: true,
+          explanation: "Correcto. Conocer diferentes variedades del inglés mejora la comunicación con hablantes de todo el mundo."
+        }
+      ]}
+    />,
+
+    <MultipleChoiceExercise
+      key="7"
+      question="In American English, what do you call the 'boot' of a car?"
+      options={[
+        "Hood",
+        "Trunk",
+        "Bonnet",
+        "Bumper"
+      ]}
+      correctAnswer={1}
+      explanation="En American English, el 'boot' (British) se llama 'trunk'. 'Hood' es el capó, 'bonnet' es British para capó."
+    />,
+
+    <MultipleChoiceExercise
+      key="8"
+      question="¿Cuál es una característica del inglés canadiense?"
+      options={[
+        "Es idéntico al americano",
+        "Combina elementos británicos y americanos",
+        "Solo usa vocabulario francés",
+        "No tiene características propias"
+      ]}
+      correctAnswer={1}
+      explanation="El inglés canadiense combina elementos británicos (spelling: 'colour') y americanos (pronunciation), con algunas características únicas."
+    />,
+
+    <TrueFalseExercise
+      key="9"
+      statements={[
+        {
+          text: "Indian English is considered a legitimate variety of English.",
+          isTrue: true,
+          explanation: "Correcto. El inglés indio es una variedad legítima con sus propias características fonológicas, léxicas y gramaticales."
+        },
+        {
+          text: "You should avoid learning about different English accents.",
+          isTrue: false,
+          explanation: "Incorrecto. Exponerse a diferentes acentos mejora la comprensión auditiva y prepara para la comunicación internacional."
+        }
+      ]}
+    />,
+
+    <MultipleChoiceExercise
+      key="10"
+      question="Complete: In South African English, 'now now' means:"
+      options={[
+        "Right now",
+        "Very soon",
+        "Never",
+        "Sometimes"
+      ]}
+      correctAnswer={1}
+      explanation="En South African English, 'now now' significa 'very soon' (muy pronto), no 'right now' (ahora mismo)."
     />
   ];
 

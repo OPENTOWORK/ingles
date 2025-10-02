@@ -30,23 +30,29 @@ const AudioPlayer = ({
       setError('Error loading audio');
       setIsLoading(false);
     };
+    const handleEnded = () => {
+      setIsPlaying(false);
+      onPlayEnd?.();
+    };
 
     audio.addEventListener('timeupdate', updateTime);
     audio.addEventListener('loadedmetadata', updateDuration);
     audio.addEventListener('loadstart', handleLoadStart);
     audio.addEventListener('loadeddata', handleLoadedData);
     audio.addEventListener('error', handleError);
-    audio.addEventListener('ended', () => {
-      setIsPlaying(false);
-      onPlayEnd?.();
-    });
+    audio.addEventListener('ended', handleEnded);
 
     return () => {
+      // Detener el audio antes de limpiar
+      if (!audio.paused) {
+        audio.pause();
+      }
       audio.removeEventListener('timeupdate', updateTime);
       audio.removeEventListener('loadedmetadata', updateDuration);
       audio.removeEventListener('loadstart', handleLoadStart);
       audio.removeEventListener('loadeddata', handleLoadedData);
       audio.removeEventListener('error', handleError);
+      audio.removeEventListener('ended', handleEnded);
     };
   }, [onPlayEnd]);
 
@@ -59,13 +65,19 @@ const AudioPlayer = ({
         audio.pause();
         setIsPlaying(false);
       } else {
-        await audio.play();
-        setIsPlaying(true);
-        onPlayStart?.();
+        const playPromise = audio.play();
+        if (playPromise !== undefined) {
+          await playPromise;
+          setIsPlaying(true);
+          onPlayStart?.();
+        }
       }
     } catch (err) {
-      console.error('Error playing audio:', err);
-      setError('Error playing audio');
+      // Silenciar el error si el audio fue removido del documento
+      if (err.name !== 'AbortError' && !err.message?.includes('removed from the document')) {
+        console.warn('Audio playback issue:', err.message);
+      }
+      setIsPlaying(false);
     }
   };
 
@@ -223,10 +235,24 @@ const AudioPlayer = ({
 
         {/* Replay Button */}
         <button
-          onClick={() => {
-            audioRef.current.currentTime = 0;
-            audioRef.current.play();
-            setIsPlaying(true);
+          onClick={async () => {
+            const audio = audioRef.current;
+            if (!audio) return;
+            
+            try {
+              audio.currentTime = 0;
+              const playPromise = audio.play();
+              if (playPromise !== undefined) {
+                await playPromise;
+                setIsPlaying(true);
+              }
+            } catch (err) {
+              // Silenciar el error si el audio fue removido del documento
+              if (err.name !== 'AbortError' && !err.message?.includes('removed from the document')) {
+                console.warn('Audio replay issue:', err.message);
+              }
+              setIsPlaying(false);
+            }
           }}
           style={{
             backgroundColor: '#6b7280',
@@ -280,6 +306,14 @@ const AudioPlayer = ({
 };
 
 export default AudioPlayer;
+
+
+
+
+
+
+
+
 
 
 

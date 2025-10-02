@@ -348,14 +348,17 @@ const PlanningReviewingAndSelfEditingPage = () => {
   );
 
   const exercises = [
-    <FillBlanksExercise
+    <MultipleChoiceExercise
       key="1"
-      text="La ___ (planificación/revisión) debe hacerse antes de escribir. La ___ (revisión/autocorrección) evalúa el contenido y estructura. La ___ (autocorrección/planificación) corrige errores específicos."
-      blanks={[
-        { answer: "planificación" },
-        { answer: "revisión" },
-        { answer: "autocorrección" }
+      question="¿Qué debe hacerse antes de escribir?"
+      options={[
+        "Revisión",
+        "Planificación",
+        "Autocorrección",
+        "Publicación"
       ]}
+      correctAnswer={1}
+      explanation="La planificación debe hacerse antes de escribir para organizar ideas y estructurar el contenido de manera efectiva."
     />,
 
     <MultipleChoiceExercise
@@ -421,6 +424,82 @@ const PlanningReviewingAndSelfEditingPage = () => {
       ]}
       correctAnswer={1}
       explanation="Leer el texto al revés (de atrás hacia adelante) es una técnica efectiva para detectar errores ortográficos porque te enfocas en palabras individuales."
+    />,
+
+    <TrueFalseExercise
+      key="6"
+      statements={[
+        {
+          text: "Self-editing should focus on all types of errors simultaneously.",
+          isTrue: false,
+          explanation: "Incorrecto. Es mejor hacer múltiples revisiones enfocándose en diferentes aspectos: contenido, organización, gramática, vocabulario."
+        },
+        {
+          text: "Reading your text aloud helps identify flow and rhythm problems.",
+          isTrue: true,
+          explanation: "Correcto. Leer en voz alta ayuda a detectar problemas de fluidez, repeticiones y errores que no se notan al leer silenciosamente."
+        },
+        {
+          text: "Planning is less important than writing in timed essays.",
+          isTrue: false,
+          explanation: "Incorrecto. La planificación es crucial en ensayos cronometrados para evitar desorganización y pérdida de tiempo."
+        }
+      ]}
+    />,
+
+    <MultipleChoiceExercise
+      key="7"
+      question="¿Cuál es el primer paso en la revisión de un texto?"
+      options={[
+        "Corregir errores gramaticales",
+        "Revisar el contenido y la estructura general",
+        "Verificar la ortografía",
+        "Contar las palabras"
+      ]}
+      correctAnswer={1}
+      explanation="El primer paso es revisar el contenido y estructura general (macro-editing) antes de enfocarse en detalles específicos."
+    />,
+
+    <MultipleChoiceExercise
+      key="8"
+      question="¿Qué herramienta es más útil para la planificación de ensayos?"
+      options={[
+        "Solo la memoria",
+        "Esquemas y mapas mentales",
+        "Escribir directamente",
+        "Usar solo el diccionario"
+      ]}
+      correctAnswer={1}
+      explanation="Los esquemas y mapas mentales ayudan a organizar ideas, establecer estructura y asegurar coherencia antes de escribir."
+    />,
+
+    <TrueFalseExercise
+      key="9"
+      statements={[
+        {
+          text: "Spell checkers catch all types of writing errors.",
+          isTrue: false,
+          explanation: "Incorrecto. Los correctores ortográficos no detectan errores de estilo, coherencia, registro o palabras correctas en contexto incorrecto."
+        },
+        {
+          text: "Taking breaks between writing and reviewing improves editing effectiveness.",
+          isTrue: true,
+          explanation: "Correcto. Un descanso breve ayuda a ver el texto con perspectiva fresca y detectar más errores."
+        }
+      ]}
+    />,
+
+    <MultipleChoiceExercise
+      key="10"
+      question="¿Cuál es la diferencia entre revisión y corrección?"
+      options={[
+        "No hay diferencia",
+        "Revisión se enfoca en contenido, corrección en errores específicos",
+        "Corrección es más importante",
+        "Solo se hace una de las dos"
+      ]}
+      correctAnswer={1}
+      explanation="Revisión se enfoca en contenido, estructura y organización; corrección se enfoca en gramática, vocabulario y mecánica."
     />
   ];
 
@@ -438,6 +517,25 @@ const PlanningReviewingAndSelfEditingPage = () => {
 };
 
 export default PlanningReviewingAndSelfEditingPage;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

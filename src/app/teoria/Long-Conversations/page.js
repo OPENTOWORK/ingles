@@ -382,14 +382,17 @@ const LongConversationsPage = () => {
   );
 
   const exercises = [
-    <FillBlanksExercise
+    <MultipleChoiceExercise
       key="1"
-      text="Las long conversations duran entre ___ (3-8 minutos/1-3 minutos). Tienen ___ (múltiples voces/una sola voz). Requieren ___ (identificación de hablantes/seguimiento de temas)."
-      blanks={[
-        { answer: "3-8 minutos" },
-        { answer: "múltiples voces" },
-        { answer: "identificación de hablantes" }
+      question="¿Cuánto duran típicamente las long conversations?"
+      options={[
+        "1-3 minutos",
+        "3-8 minutos",
+        "30 segundos-2 minutos",
+        "Más de 10 minutos"
       ]}
+      correctAnswer={1}
+      explanation="Las long conversations duran entre 3-8 minutos, siendo más extensas que los diálogos cortos pero más manejables que presentaciones largas."
     />,
 
     <MultipleChoiceExercise
@@ -455,6 +458,82 @@ const LongConversationsPage = () => {
       ]}
       correctAnswer={1}
       explanation="Organizar notas por hablante y tema es el sistema más efectivo, ya que te permite manejar la complejidad de múltiples voces y temas."
+    />,
+
+    <TrueFalseExercise
+      key="6"
+      statements={[
+        {
+          text: "Long conversations typically involve multiple topic changes.",
+          isTrue: true,
+          explanation: "Correcto. Las conversaciones largas suelen incluir múltiples cambios de tema y transiciones naturales."
+        },
+        {
+          text: "You should try to understand every single word in long conversations.",
+          isTrue: false,
+          explanation: "Incorrecto. Es mejor enfocarse en ideas principales y información específica relevante."
+        },
+        {
+          text: "Taking notes helps maintain focus during long conversations.",
+          isTrue: true,
+          explanation: "Correcto. Tomar notas ayuda a mantener la concentración y organizar la información compleja."
+        }
+      ]}
+    />,
+
+    <MultipleChoiceExercise
+      key="7"
+      question="¿Qué debes hacer cuando pierdes el hilo de una conversación larga?"
+      options={[
+        "Parar de escuchar completamente",
+        "Usar el contexto para recuperar el hilo",
+        "Preocuparse por lo que perdiste",
+        "Empezar a tomar notas diferentes"
+      ]}
+      correctAnswer={1}
+      explanation="Usar el contexto para recuperar el hilo es la mejor estrategia cuando te pierdes en una conversación larga."
+    />,
+
+    <MultipleChoiceExercise
+      key="8"
+      question="¿Cuál es la característica principal de las transiciones en conversaciones largas?"
+      options={[
+        "Son siempre muy obvias",
+        "Pueden ser sutiles y graduales",
+        "Nunca ocurren",
+        "Solo ocurren al final"
+      ]}
+      correctAnswer={1}
+      explanation="Las transiciones en conversaciones largas pueden ser sutiles y graduales, requiriendo atención para seguirlas."
+    />,
+
+    <TrueFalseExercise
+      key="9"
+      statements={[
+        {
+          text: "Speaker identification becomes more important in longer conversations.",
+          isTrue: true,
+          explanation: "Correcto. En conversaciones largas es crucial mantener la identificación de hablantes para seguir el desarrollo."
+        },
+        {
+          text: "Long conversations always follow a strict structure.",
+          isTrue: false,
+          explanation: "Incorrecto. Las conversaciones largas pueden ser más naturales y menos estructuradas que presentaciones formales."
+        }
+      ]}
+    />,
+
+    <MultipleChoiceExercise
+      key="10"
+      question="¿Qué tipo de información es más importante capturar en conversaciones largas?"
+      options={[
+        "Solo detalles específicos",
+        "Solo ideas principales",
+        "Tanto ideas principales como detalles relevantes",
+        "Solo la conclusión"
+      ]}
+      correctAnswer={2}
+      explanation="Es importante capturar tanto ideas principales como detalles relevantes para tener una comprensión completa."
     />
   ];
 
@@ -462,7 +541,7 @@ const LongConversationsPage = () => {
     <TheoryLayout
       title="Long Conversations"
       description="Domina la comprensión de conversaciones largas en inglés. Aprende estrategias para seguir múltiples hablantes, cambios de tema y dinámicas complejas en diálogos extensos."
-      level="B1-B2"
+      level="B1-B2-C1-C2"
       theoryContent={theoryContent}
       exercises={exercises}
       prerequisites={["Experience with short dialogues and monologues", "Basic note-taking skills"]}
@@ -472,6 +551,25 @@ const LongConversationsPage = () => {
 };
 
 export default LongConversationsPage;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

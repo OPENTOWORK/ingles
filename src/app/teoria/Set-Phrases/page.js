@@ -386,14 +386,17 @@ const SetPhrasesPage = () => {
   );
 
   const exercises = [
-    <FillBlanksExercise
+    <MultipleChoiceExercise
       key="1"
-      text="Para saludar informalmente uso ___ (Hi there!/Good morning). Para expresar acuerdo total uso ___ (I completely agree/I partly agree). Para cambiar de tema casualmente uso ___ (By the way/On a different note)."
-      blanks={[
-        { answer: "Hi there!" },
-        { answer: "I completely agree" },
-        { answer: "By the way" }
+      question="¿Cuál es la frase más informal para saludar?"
+      options={[
+        "Good morning",
+        "Hi there!",
+        "How do you do?",
+        "Good evening"
       ]}
+      correctAnswer={1}
+      explanation="'Hi there!' es un saludo muy informal y amigable, perfecto para situaciones casuales."
     />,
 
     <MultipleChoiceExercise
@@ -459,6 +462,82 @@ const SetPhrasesPage = () => {
       ]}
       correctAnswer={1}
       explanation="'By the way' es la expresión más apropiada para cambiar de tema de manera casual, mientras que las otras son más formales o para cambios relacionados."
+    />,
+
+    <TrueFalseExercise
+      key="6"
+      statements={[
+        {
+          text: "Set phrases can be translated literally from Spanish to English.",
+          isTrue: false,
+          explanation: "Incorrecto. Las set phrases son específicas de cada idioma y raramente se traducen literalmente."
+        },
+        {
+          text: "'How are you?' is a set phrase used for greeting.",
+          isTrue: true,
+          explanation: "Correcto. 'How are you?' es una frase fija común para saludar en inglés."
+        },
+        {
+          text: "Set phrases make speech sound more natural and fluent.",
+          isTrue: true,
+          explanation: "Correcto. Las set phrases ayudan a sonar más natural y fluido, como un hablante nativo."
+        }
+      ]}
+    />,
+
+    <MultipleChoiceExercise
+      key="7"
+      question="Complete: 'I'm sorry, I didn't _____ that.'"
+      options={[
+        "listen",
+        "catch",
+        "hear",
+        "understand"
+      ]}
+      correctAnswer={1}
+      explanation="'I didn't catch that' es una set phrase común para pedir repetición de manera educada."
+    />,
+
+    <MultipleChoiceExercise
+      key="8"
+      question="¿Cuál es la respuesta más apropiada a 'How's it going?'"
+      options={[
+        "It's going to the store",
+        "Not bad, thanks",
+        "Yes, it is",
+        "I don't know where"
+      ]}
+      correctAnswer={1}
+      explanation="'Not bad, thanks' es una respuesta natural y común a 'How's it going?'"
+    />,
+
+    <TrueFalseExercise
+      key="9"
+      statements={[
+        {
+          text: "'Break a leg' literally means to injure your leg.",
+          isTrue: false,
+          explanation: "Incorrecto. 'Break a leg' es una expresión idiomática que significa 'good luck' en el teatro."
+        },
+        {
+          text: "Set phrases are more common in spoken English than written English.",
+          isTrue: true,
+          explanation: "Correcto. Las set phrases son especialmente comunes en conversaciones informales."
+        }
+      ]}
+    />,
+
+    <MultipleChoiceExercise
+      key="10"
+      question="Complete: 'I'm _____ forward to seeing you.'"
+      options={[
+        "going",
+        "looking",
+        "moving",
+        "coming"
+      ]}
+      correctAnswer={1}
+      explanation="'Looking forward to' es una set phrase que significa 'tener ganas de' o 'esperar con ansias'."
     />
   ];
 
@@ -466,7 +545,7 @@ const SetPhrasesPage = () => {
     <TheoryLayout
       title="Set Phrases"
       description="Domina las frases hechas en inglés: saludos, despedidas, cortesía, opinión, acuerdo/desacuerdo y cambio de tema. Aprende a sonar más natural en conversaciones."
-      level="A2-B1-B2"
+      level="A2-B1-B2-C1-C2"
       theoryContent={theoryContent}
       exercises={exercises}
       prerequisites={["Basic speaking skills", "Understanding of formal vs informal language"]}
@@ -476,6 +555,24 @@ const SetPhrasesPage = () => {
 };
 
 export default SetPhrasesPage;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

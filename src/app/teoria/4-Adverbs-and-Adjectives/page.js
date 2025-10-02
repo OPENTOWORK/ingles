@@ -286,16 +286,17 @@ const AdverbsAndAdjectivesPage = () => {
   );
 
   const exercises = [
-    <FillBlanksExercise
+    <MultipleChoiceExercise
       key="1"
-      text="She is a ___ (beautiful) girl who sings ___ (beautiful). She ___ (always) practices and is ___ (good) at music. Her voice is ___ (sweet) than her sister's voice."
-      blanks={[
-        { answer: "beautiful" },
-        { answer: "beautifully" },
-        { answer: "always" },
-        { answer: "good" },
-        { answer: "sweeter" }
+      question="Complete: 'She is a _____ girl who sings _____.' (beautiful)"
+      options={[
+        "beautiful, beautiful",
+        "beautifully, beautifully", 
+        "beautiful, beautifully",
+        "beautifully, beautiful"
       ]}
+      correctAnswer={2}
+      explanation="'Beautiful' (adjetivo) describe sustantivos, 'beautifully' (adverbio) describe verbos."
     />,
 
     <MultipleChoiceExercise
@@ -361,6 +362,82 @@ const AdverbsAndAdjectivesPage = () => {
       ]}
       correctAnswer={0}
       explanation="Después de 'be' usamos adjetivos. 'Good' es el adjetivo correcto aquí."
+    />,
+
+    <TrueFalseExercise
+      key="6"
+      statements={[
+        {
+          text: "Adverbs usually end in -ly.",
+          isTrue: true,
+          explanation: "Correcto. La mayoría de adverbios terminan en -ly: quickly, slowly, carefully."
+        },
+        {
+          text: "We can say 'She sings beautiful'.",
+          isTrue: false,
+          explanation: "Incorrecto. Necesitamos el adverbio 'beautifully' para modificar el verbo: 'She sings beautifully'."
+        },
+        {
+          text: "Adjectives describe nouns.",
+          isTrue: true,
+          explanation: "Correcto. Los adjetivos describen o modifican sustantivos: 'beautiful flower', 'tall building'."
+        }
+      ]}
+    />,
+
+    <MultipleChoiceExercise
+      key="7"
+      question="Complete: 'She drives very _____.'"
+      options={[
+        "careful",
+        "carefully",
+        "care",
+        "caring"
+      ]}
+      correctAnswer={1}
+      explanation="Para modificar un verbo necesitamos un adverbio: 'carefully'. 'She drives very carefully'."
+    />,
+
+    <MultipleChoiceExercise
+      key="8"
+      question="¿Cuál es el superlativo de 'bad'?"
+      options={[
+        "baddest",
+        "most bad",
+        "worst",
+        "worse"
+      ]}
+      correctAnswer={2}
+      explanation="'Bad' tiene forma irregular: bad → worse → worst. 'Worst' es el superlativo."
+    />,
+
+    <TrueFalseExercise
+      key="9"
+      statements={[
+        {
+          text: "'Fast' can be both an adjective and an adverb.",
+          isTrue: true,
+          explanation: "Correcto. 'Fast' funciona como adjetivo ('a fast car') y como adverbio ('he runs fast')."
+        },
+        {
+          text: "We say 'more better' for emphasis.",
+          isTrue: false,
+          explanation: "Incorrecto. 'Better' ya es comparativo. No podemos decir 'more better', solo 'better'."
+        }
+      ]}
+    />,
+
+    <MultipleChoiceExercise
+      key="10"
+      question="Complete: 'This is the ___ book I've ever read.'"
+      options={[
+        "more interesting",
+        "most interesting",
+        "interestinger",
+        "interestingest"
+      ]}
+      correctAnswer={1}
+      explanation="Para superlativos de adjetivos largos usamos 'the most + adjective': 'the most interesting'."
     />
   ];
 
@@ -368,7 +445,7 @@ const AdverbsAndAdjectivesPage = () => {
     <TheoryLayout
       title="Adverbs and Adjectives"
       description="Domina los adjetivos y adverbios en inglés. Aprende sus usos, posiciones, comparativos y superlativos para expresarte con precisión."
-      level="A1-A2"
+      level="A1-A2-B1-B2-C1-C2"
       theoryContent={theoryContent}
       exercises={exercises}
       prerequisites={["Basic vocabulary", "Understanding of nouns and verbs"]}

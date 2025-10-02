@@ -402,14 +402,17 @@ const ConnectedSpeechPage = () => {
   );
 
   const exercises = [
-    <FillBlanksExercise
+    <MultipleChoiceExercise
       key="1"
-      text="En connected speech, los sonidos se ___ (conectan/separan) para crear fluidez. La ___ (elision/assimilation) elimina sonidos, mientras que la ___ (intrusion/linking) agrega sonidos de transición."
-      blanks={[
-        { answer: "conectan" },
-        { answer: "elision" },
-        { answer: "intrusion" }
+      question="En connected speech, ¿qué hacen los sonidos para crear fluidez?"
+      options={[
+        "Se separan claramente",
+        "Se conectan",
+        "Se eliminan completamente",
+        "Se pronuncian más lento"
       ]}
+      correctAnswer={1}
+      explanation="En connected speech, los sonidos se conectan para crear fluidez natural en el habla, haciendo que las palabras fluyan juntas."
     />,
 
     <MultipleChoiceExercise
@@ -475,6 +478,82 @@ const ConnectedSpeechPage = () => {
       ]}
       correctAnswer={1}
       explanation="Usar el contexto para inferir significado es la estrategia más efectiva, ya que te ayuda a entender el mensaje general incluso cuando no entiendes cada palabra."
+    />,
+
+    <TrueFalseExercise
+      key="6"
+      statements={[
+        {
+          text: "Weak forms only occur with function words.",
+          isTrue: true,
+          explanation: "Correcto. Las formas débiles ocurren principalmente con palabras funcionales como artículos, preposiciones y auxiliares."
+        },
+        {
+          text: "Assimilation makes sounds more similar to neighboring sounds.",
+          isTrue: true,
+          explanation: "Correcto. La asimilación hace que los sonidos se parezcan más a los sonidos vecinos para facilitar la pronunciación."
+        },
+        {
+          text: "Connected speech only happens in informal situations.",
+          isTrue: false,
+          explanation: "Incorrecto. El habla conectada ocurre en todas las situaciones, tanto formales como informales."
+        }
+      ]}
+    />,
+
+    <MultipleChoiceExercise
+      key="7"
+      question="¿Qué ocurre en 'good day' con connected speech?"
+      options={[
+        "No hay cambios",
+        "Se convierte en 'goo day'",
+        "Se convierte en 'good-day'",
+        "Se pronuncia más lento"
+      ]}
+      correctAnswer={1}
+      explanation="En 'good day', la 'd' final de 'good' se elide (se omite) resultando en 'goo day'."
+    />,
+
+    <MultipleChoiceExercise
+      key="8"
+      question="¿Cuál es un ejemplo de intrusion?"
+      options={[
+        "I am → I'm",
+        "law and order → 'lawr and order'",
+        "good boy → 'goo boy'",
+        "ten boys → 'tem boys'"
+      ]}
+      correctAnswer={1}
+      explanation="En 'law and order' se inserta un sonido /r/ entre 'law' y 'and' para facilitar la transición: 'lawr and order'."
+    />,
+
+    <TrueFalseExercise
+      key="9"
+      statements={[
+        {
+          text: "Elision always makes speech faster.",
+          isTrue: true,
+          explanation: "Correcto. La elisión (omisión de sonidos) hace que el habla sea más rápida y fluida."
+        },
+        {
+          text: "Understanding connected speech requires knowing every sound change.",
+          isTrue: false,
+          explanation: "Incorrecto. No necesitas conocer cada cambio; el contexto y la práctica te ayudan a entender el significado general."
+        }
+      ]}
+    />,
+
+    <MultipleChoiceExercise
+      key="10"
+      question="¿Cuál es la mejor manera de mejorar la comprensión del habla conectada?"
+      options={[
+        "Estudiar solo gramática",
+        "Escuchar habla natural regularmente",
+        "Evitar hablantes nativos",
+        "Leer solo textos escritos"
+      ]}
+      correctAnswer={1}
+      explanation="Escuchar habla natural regularmente es la mejor manera de acostumbrarse a los patrones del habla conectada."
     />
   ];
 
@@ -482,7 +561,7 @@ const ConnectedSpeechPage = () => {
     <TheoryLayout
       title="Pronunciation and Connected Speech"
       description="Comprende el habla conectada en inglés: linking, elision, assimilation, intrusion y weak forms. Aprende estrategias para entender el inglés hablado natural."
-      level="A1-A2-B1"
+      level="A1-A2-B1-B2-C1-C2"
       theoryContent={theoryContent}
       exercises={exercises}
       prerequisites={["Basic pronunciation", "Understanding of English sounds"]}
@@ -492,6 +571,25 @@ const ConnectedSpeechPage = () => {
 };
 
 export default ConnectedSpeechPage;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

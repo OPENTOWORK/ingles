@@ -384,14 +384,17 @@ const ContextualVocabularyPage = () => {
   );
 
   const exercises = [
-    <FillBlanksExercise
+    <MultipleChoiceExercise
       key="1"
-      text="El vocabulario contextual cambia significado según ___ (contexto/pronunciación). Las expresiones ___ (idiomáticas/literales) tienen significado no literal. La ___ (inferencia/traducción) es clave para entender vocabulario contextual."
-      blanks={[
-        { answer: "contexto" },
-        { answer: "idiomáticas" },
-        { answer: "inferencia" }
+      question="¿Según qué cambia significado el vocabulario contextual?"
+      options={[
+        "Pronunciación",
+        "Contexto",
+        "Gramática",
+        "Ortografía"
       ]}
+      correctAnswer={1}
+      explanation="El vocabulario contextual cambia significado según el contexto en el que se usa, siendo crucial entender la situación para interpretar correctamente."
     />,
 
     <MultipleChoiceExercise
@@ -457,6 +460,82 @@ const ContextualVocabularyPage = () => {
       ]}
       correctAnswer={1}
       explanation="'Break the ice' en contexto social significa iniciar una conversación o hacer que las personas se sientan más cómodas, no tiene significado literal."
+    />,
+
+    <TrueFalseExercise
+      key="6"
+      statements={[
+        {
+          text: "Context clues help understand unknown vocabulary.",
+          isTrue: true,
+          explanation: "Correcto. Las pistas del contexto (palabras cercanas, situación, tema) ayudan a inferir significados de palabras desconocidas."
+        },
+        {
+          text: "All words have only one meaning regardless of context.",
+          isTrue: false,
+          explanation: "Incorrecto. Muchas palabras tienen múltiples significados que cambian según el contexto: 'bank' (banco financiero vs orilla del río)."
+        },
+        {
+          text: "Cultural knowledge helps understand contextual vocabulary.",
+          isTrue: true,
+          explanation: "Correcto. El conocimiento cultural es crucial para entender referencias, expresiones idiomáticas y vocabulario específico de una cultura."
+        }
+      ]}
+    />,
+
+    <MultipleChoiceExercise
+      key="7"
+      question="In 'The company will launch a new product', what does 'launch' mean?"
+      options={[
+        "To throw something",
+        "To start or introduce",
+        "To eat lunch",
+        "To travel by boat"
+      ]}
+      correctAnswer={1}
+      explanation="En contexto empresarial, 'launch' significa 'start or introduce' (lanzar/introducir un producto al mercado)."
+    />,
+
+    <MultipleChoiceExercise
+      key="8"
+      question="¿Qué tipo de contexto es más útil para inferir significado?"
+      options={[
+        "Solo la oración anterior",
+        "Solo la palabra siguiente",
+        "El contexto completo del párrafo o conversación",
+        "Solo el diccionario"
+      ]}
+      correctAnswer={2}
+      explanation="El contexto completo del párrafo o conversación proporciona más información para inferir significado correctamente."
+    />,
+
+    <TrueFalseExercise
+      key="9"
+      statements={[
+        {
+          text: "Formal and informal contexts use different vocabulary.",
+          isTrue: true,
+          explanation: "Correcto. El vocabulario formal ('commence') vs informal ('start') cambia según el contexto social y situacional."
+        },
+        {
+          text: "You should always stop reading when you find an unknown word.",
+          isTrue: false,
+          explanation: "Incorrecto. Es mejor continuar leyendo para obtener más contexto que ayude a inferir el significado."
+        }
+      ]}
+    />,
+
+    <MultipleChoiceExercise
+      key="10"
+      question="Complete: 'The weather forecast predicts _____ conditions.' (context: winter storm warning)"
+      options={[
+        "pleasant",
+        "severe",
+        "mild",
+        "perfect"
+      ]}
+      correctAnswer={1}
+      explanation="Dado el contexto de 'winter storm warning', 'severe' (severas) es la opción más lógica para describir las condiciones climáticas."
     />
   ];
 

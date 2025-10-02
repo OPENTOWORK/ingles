@@ -58,44 +58,275 @@ export default function RootLayoutClient({ children }) {
     <ExamProvider>
       <Toaster position="top-center" reverseOrder={false} />
 
-      <header className="header">
-        <div className="container">
-          <Link href="/" className="logo" style={{ textDecoration: 'none', color: 'inherit' }}>
-            <img src="/uk-flag.png" alt="UK Flag" className="bandera" />
-            <span>English Practice</span>
+      <header 
+        className="header"
+        style={{
+          background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+          backdropFilter: 'blur(10px)',
+          borderBottom: '1px solid rgba(255, 255, 255, 0.1)',
+          boxShadow: '0 8px 32px rgba(0, 0, 0, 0.1)',
+          position: 'sticky',
+          top: 0,
+          zIndex: 1000,
+        }}
+      >
+        <div 
+          className="container"
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            padding: '1rem 2rem',
+            maxWidth: '1200px',
+            margin: '0 auto',
+          }}
+        >
+          <Link 
+            href="/" 
+            className="logo" 
+            style={{ 
+              textDecoration: 'none', 
+              color: 'white',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '0.75rem',
+              fontWeight: '700',
+              fontSize: '1.5rem',
+              letterSpacing: '-0.025em',
+            }}
+          >
+            <img 
+              src="/uk-flag.png" 
+              alt="UK Flag" 
+              className="bandera" 
+              style={{
+                width: '32px',
+                height: '24px',
+                borderRadius: '4px',
+                boxShadow: '0 2px 8px rgba(0, 0, 0, 0.2)',
+              }}
+            />
+            <span>Dralo</span>
           </Link>
 
-          <nav className="nav">
-            <Link href="/">Home</Link>
-            <Link href="/teoria">Theory</Link>
-            <Link href="/niveles">Levels</Link>
-            <Link href="/prueba-nivel">Placement Test</Link>
-            <Link href="/training">Training</Link>
-            <Link href="/contacto">Contact</Link>
+          <nav 
+            className="nav"
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: '2rem',
+            }}
+          >
+            <Link 
+              href="/"
+              style={{
+                color: 'rgba(255, 255, 255, 0.9)',
+                textDecoration: 'none',
+                fontWeight: '500',
+                padding: '0.5rem 1rem',
+                borderRadius: '8px',
+                transition: 'all 0.3s ease',
+                fontSize: '0.95rem',
+              }}
+              onMouseEnter={(e) => {
+                e.target.style.backgroundColor = 'rgba(255, 255, 255, 0.1)';
+                e.target.style.color = 'white';
+                e.target.style.transform = 'translateY(-1px)';
+              }}
+              onMouseLeave={(e) => {
+                e.target.style.backgroundColor = 'transparent';
+                e.target.style.color = 'rgba(255, 255, 255, 0.9)';
+                e.target.style.transform = 'translateY(0)';
+              }}
+            >Home</Link>
+            <Link 
+              href="/teoria"
+              style={{
+                color: 'rgba(255, 255, 255, 0.9)',
+                textDecoration: 'none',
+                fontWeight: '500',
+                padding: '0.5rem 1rem',
+                borderRadius: '8px',
+                transition: 'all 0.3s ease',
+                fontSize: '0.95rem',
+              }}
+              onMouseEnter={(e) => {
+                e.target.style.backgroundColor = 'rgba(255, 255, 255, 0.1)';
+                e.target.style.color = 'white';
+                e.target.style.transform = 'translateY(-1px)';
+              }}
+              onMouseLeave={(e) => {
+                e.target.style.backgroundColor = 'transparent';
+                e.target.style.color = 'rgba(255, 255, 255, 0.9)';
+                e.target.style.transform = 'translateY(0)';
+              }}
+            >Theory</Link>
+            <Link 
+              href="/niveles"
+              style={{
+                color: 'rgba(255, 255, 255, 0.9)',
+                textDecoration: 'none',
+                fontWeight: '500',
+                padding: '0.5rem 1rem',
+                borderRadius: '8px',
+                transition: 'all 0.3s ease',
+                fontSize: '0.95rem',
+              }}
+              onMouseEnter={(e) => {
+                e.target.style.backgroundColor = 'rgba(255, 255, 255, 0.1)';
+                e.target.style.color = 'white';
+                e.target.style.transform = 'translateY(-1px)';
+              }}
+              onMouseLeave={(e) => {
+                e.target.style.backgroundColor = 'transparent';
+                e.target.style.color = 'rgba(255, 255, 255, 0.9)';
+                e.target.style.transform = 'translateY(0)';
+              }}
+            >Levels</Link>
+            <Link 
+              href="/prueba-nivel"
+              style={{
+                color: 'rgba(255, 255, 255, 0.9)',
+                textDecoration: 'none',
+                fontWeight: '500',
+                padding: '0.5rem 1rem',
+                borderRadius: '8px',
+                transition: 'all 0.3s ease',
+                fontSize: '0.95rem',
+              }}
+              onMouseEnter={(e) => {
+                e.target.style.backgroundColor = 'rgba(255, 255, 255, 0.1)';
+                e.target.style.color = 'white';
+                e.target.style.transform = 'translateY(-1px)';
+              }}
+              onMouseLeave={(e) => {
+                e.target.style.backgroundColor = 'transparent';
+                e.target.style.color = 'rgba(255, 255, 255, 0.9)';
+                e.target.style.transform = 'translateY(0)';
+              }}
+            >Placement Test</Link>
+            <Link 
+              href="/training"
+              style={{
+                color: 'rgba(255, 255, 255, 0.9)',
+                textDecoration: 'none',
+                fontWeight: '500',
+                padding: '0.5rem 1rem',
+                borderRadius: '8px',
+                transition: 'all 0.3s ease',
+                fontSize: '0.95rem',
+              }}
+              onMouseEnter={(e) => {
+                e.target.style.backgroundColor = 'rgba(255, 255, 255, 0.1)';
+                e.target.style.color = 'white';
+                e.target.style.transform = 'translateY(-1px)';
+              }}
+              onMouseLeave={(e) => {
+                e.target.style.backgroundColor = 'transparent';
+                e.target.style.color = 'rgba(255, 255, 255, 0.9)';
+                e.target.style.transform = 'translateY(0)';
+              }}
+            >Training</Link>
+            <Link 
+              href="/contacto"
+              style={{
+                color: 'rgba(255, 255, 255, 0.9)',
+                textDecoration: 'none',
+                fontWeight: '500',
+                padding: '0.5rem 1rem',
+                borderRadius: '8px',
+                transition: 'all 0.3s ease',
+                fontSize: '0.95rem',
+              }}
+              onMouseEnter={(e) => {
+                e.target.style.backgroundColor = 'rgba(255, 255, 255, 0.1)';
+                e.target.style.color = 'white';
+                e.target.style.transform = 'translateY(-1px)';
+              }}
+              onMouseLeave={(e) => {
+                e.target.style.backgroundColor = 'transparent';
+                e.target.style.color = 'rgba(255, 255, 255, 0.9)';
+                e.target.style.transform = 'translateY(0)';
+              }}
+            >Contact</Link>
             {session ? (
               <>
-                <Link href="/perfil">Profile</Link>
+                <Link 
+                  href="/perfil"
+                  style={{
+                    color: 'rgba(255, 255, 255, 0.9)',
+                    textDecoration: 'none',
+                    fontWeight: '500',
+                    padding: '0.5rem 1rem',
+                    borderRadius: '8px',
+                    transition: 'all 0.3s ease',
+                    fontSize: '0.95rem',
+                  }}
+                  onMouseEnter={(e) => {
+                    e.target.style.backgroundColor = 'rgba(255, 255, 255, 0.1)';
+                    e.target.style.color = 'white';
+                    e.target.style.transform = 'translateY(-1px)';
+                  }}
+                  onMouseLeave={(e) => {
+                    e.target.style.backgroundColor = 'transparent';
+                    e.target.style.color = 'rgba(255, 255, 255, 0.9)';
+                    e.target.style.transform = 'translateY(0)';
+                  }}
+                >Profile</Link>
                 <button
                   onClick={handleLogout}
                   style={{
-                    background: 'none',
-                    border: 'none',
-                    color: '#0070f3',
+                    background: 'rgba(255, 255, 255, 0.1)',
+                    border: '1px solid rgba(255, 255, 255, 0.2)',
+                    color: 'white',
                     cursor: 'pointer',
-                    fontWeight: 'bold',
-                    padding: 0,
-                    marginLeft: '1rem',
+                    fontWeight: '500',
+                    padding: '0.5rem 1rem',
+                    borderRadius: '8px',
+                    transition: 'all 0.3s ease',
+                    fontSize: '0.95rem',
+                  }}
+                  onMouseEnter={(e) => {
+                    e.target.style.backgroundColor = 'rgba(255, 255, 255, 0.2)';
+                    e.target.style.transform = 'translateY(-1px)';
+                  }}
+                  onMouseLeave={(e) => {
+                    e.target.style.backgroundColor = 'rgba(255, 255, 255, 0.1)';
+                    e.target.style.transform = 'translateY(0)';
                   }}
                 >
                   Logout
                 </button>
               </>
             ) : (
-              <Link href="/login">Login</Link>
+              <Link 
+                href="/login"
+                style={{
+                  background: 'rgba(255, 255, 255, 0.1)',
+                  border: '1px solid rgba(255, 255, 255, 0.2)',
+                  color: 'white',
+                  textDecoration: 'none',
+                  fontWeight: '500',
+                  padding: '0.5rem 1rem',
+                  borderRadius: '8px',
+                  transition: 'all 0.3s ease',
+                  fontSize: '0.95rem',
+                }}
+                onMouseEnter={(e) => {
+                  e.target.style.backgroundColor = 'rgba(255, 255, 255, 0.2)';
+                  e.target.style.transform = 'translateY(-1px)';
+                }}
+                onMouseLeave={(e) => {
+                  e.target.style.backgroundColor = 'rgba(255, 255, 255, 0.1)';
+                  e.target.style.transform = 'translateY(0)';
+                }}
+              >Login</Link>
             )}
           </nav>
 
-          <LanguageSwitcher />
+          <div style={{ marginLeft: '1rem' }}>
+            <LanguageSwitcher />
+          </div>
         </div>
       </header>
 
@@ -107,11 +338,10 @@ export default function RootLayoutClient({ children }) {
 
       <footer className="footer" style={{ textAlign: 'center', padding: '1rem', fontSize: '0.85rem', color: '#666' }}>
         <p style={{ margin: 0 }}>
-          Exercises designed to practice the same format as Cambridge exams. <br />
-          Not affiliated with or endorsed by Cambridge English.
+          Exercises designed to practice your English skills. <br />
         </p>
         <p style={{ marginTop: '0.5rem', fontSize: '0.9rem', color: '#777' }}>
-          © {new Date().getFullYear()} English Practice
+          © {new Date().getFullYear()} Dralo
         </p>
       </footer>
     </ExamProvider>

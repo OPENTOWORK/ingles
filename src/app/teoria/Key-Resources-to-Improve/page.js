@@ -381,14 +381,17 @@ const KeyResourcesToImprovePage = () => {
   );
 
   const exercises = [
-    <FillBlanksExercise
+    <MultipleChoiceExercise
       key="1"
-      text="Los recursos ___ (digitales/tradicionales) ofrecen acceso inmediato. La práctica ___ (activa/pasiva) es esencial para la fluidez. La ___ (evaluación/planificación) regular ayuda a identificar progreso."
-      blanks={[
-        { answer: "digitales" },
-        { answer: "activa" },
-        { answer: "evaluación" }
+      question="¿Qué tipo de recursos ofrecen acceso inmediato?"
+      options={[
+        "Tradicionales",
+        "Digitales",
+        "Impresos",
+        "Manuscritos"
       ]}
+      correctAnswer={1}
+      explanation="Los recursos digitales ofrecen acceso inmediato y flexibilidad para el aprendizaje en cualquier momento y lugar."
     />,
 
     <MultipleChoiceExercise
@@ -454,6 +457,82 @@ const KeyResourcesToImprovePage = () => {
       ]}
       correctAnswer={1}
       explanation="La consistencia del estudio es más importante que la intensidad. Es mejor estudiar regularmente poco tiempo que mucho tiempo ocasionalmente."
+    />,
+
+    <TrueFalseExercise
+      key="6"
+      statements={[
+        {
+          text: "Free resources are always lower quality than paid resources.",
+          isTrue: false,
+          explanation: "Incorrecto. Muchos recursos gratuitos (BBC Learning English, YouTube channels, podcasts) son de excelente calidad."
+        },
+        {
+          text: "Combining different types of resources improves learning outcomes.",
+          isTrue: true,
+          explanation: "Correcto. Combinar recursos digitales, tradicionales, formales e informales proporciona una experiencia de aprendizaje más completa."
+        },
+        {
+          text: "You should only use resources designed for your exact level.",
+          isTrue: false,
+          explanation: "Incorrecto. Es beneficioso usar recursos ligeramente por encima de tu nivel para desafiarte y crecer."
+        }
+      ]}
+    />,
+
+    <MultipleChoiceExercise
+      key="7"
+      question="¿Cuál es el beneficio principal de los recursos interactivos?"
+      options={[
+        "Son más baratos",
+        "Proporcionan feedback inmediato",
+        "Requieren menos tiempo",
+        "Son más fáciles"
+      ]}
+      correctAnswer={1}
+      explanation="Los recursos interactivos proporcionan feedback inmediato, lo que permite corrección y aprendizaje en tiempo real."
+    />,
+
+    <MultipleChoiceExercise
+      key="8"
+      question="¿Qué tipo de recurso es mejor para mejorar la pronunciación?"
+      options={[
+        "Solo libros de texto",
+        "Audio y video con hablantes nativos",
+        "Solo gramática escrita",
+        "Solo vocabulario"
+      ]}
+      correctAnswer={1}
+      explanation="Audio y video con hablantes nativos son esenciales para mejorar la pronunciación, ya que proporcionan modelos auténticos."
+    />,
+
+    <TrueFalseExercise
+      key="9"
+      statements={[
+        {
+          text: "Self-assessment is an important part of language learning.",
+          isTrue: true,
+          explanation: "Correcto. La autoevaluación ayuda a identificar fortalezas, debilidades y áreas que necesitan más práctica."
+        },
+        {
+          text: "You should stick to one resource until you master it completely.",
+          isTrue: false,
+          explanation: "Incorrecto. Usar variedad de recursos expone a diferentes estilos de enseñanza y mantiene el interés."
+        }
+      ]}
+    />,
+
+    <MultipleChoiceExercise
+      key="10"
+      question="¿Cuál es la mejor frecuencia para evaluar tu progreso?"
+      options={[
+        "Solo al final del año",
+        "Regularmente (semanal o mensualmente)",
+        "Solo cuando sientes que no progresas",
+        "Nunca, es innecesario"
+      ]}
+      correctAnswer={1}
+      explanation="La evaluación regular (semanal o mensualmente) permite ajustar estrategias y mantener la motivación al ver el progreso."
     />
   ];
 
@@ -471,6 +550,25 @@ const KeyResourcesToImprovePage = () => {
 };
 
 export default KeyResourcesToImprovePage;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

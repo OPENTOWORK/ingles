@@ -381,14 +381,17 @@ const MonologuesPage = () => {
   );
 
   const exercises = [
-    <FillBlanksExercise
+    <MultipleChoiceExercise
       key="1"
-      text="Los monólogos duran entre ___ (2-5 minutos/30 segundos-2 minutos). Tienen ___ (una sola voz/múltiples voces). La estructura típica incluye ___ (introducción, desarrollo, conclusión/solo desarrollo)."
-      blanks={[
-        { answer: "2-5 minutos" },
-        { answer: "una sola voz" },
-        { answer: "introducción, desarrollo, conclusión" }
+      question="¿Cuánto duran típicamente los monólogos?"
+      options={[
+        "30 segundos-2 minutos",
+        "2-5 minutos",
+        "5-10 minutos",
+        "Más de 10 minutos"
       ]}
+      correctAnswer={1}
+      explanation="Los monólogos duran entre 2-5 minutos, permitiendo el desarrollo completo de un tema con una sola voz."
     />,
 
     <MultipleChoiceExercise
@@ -454,6 +457,82 @@ const MonologuesPage = () => {
       ]}
       correctAnswer={1}
       explanation="Usar abreviaciones y palabras clave es la técnica más efectiva, ya que te permite captar información importante sin perder tiempo escribiendo todo."
+    />,
+
+    <TrueFalseExercise
+      key="6"
+      statements={[
+        {
+          text: "Monologues are easier than dialogues because there's only one speaker.",
+          isTrue: false,
+          explanation: "Incorrecto. Los monólogos pueden ser más difíciles porque requieren concentración sostenida sin la variedad de múltiples voces."
+        },
+        {
+          text: "Predicting content before listening helps with monologue comprehension.",
+          isTrue: true,
+          explanation: "Correcto. Predecir el contenido basándose en el título o contexto ayuda a preparar la mente para el tema."
+        },
+        {
+          text: "You should write down everything the speaker says in a monologue.",
+          isTrue: false,
+          explanation: "Incorrecto. Es mejor tomar notas estratégicas enfocándose en información clave y estructura."
+        }
+      ]}
+    />,
+
+    <MultipleChoiceExercise
+      key="7"
+      question="¿Qué elemento es más importante para seguir un monólogo académico?"
+      options={[
+        "La personalidad del hablante",
+        "La estructura y organización del contenido",
+        "El acento del hablante",
+        "La velocidad del habla"
+      ]}
+      correctAnswer={1}
+      explanation="La estructura y organización del contenido es lo más importante para seguir un monólogo académico efectivamente."
+    />,
+
+    <MultipleChoiceExercise
+      key="8"
+      question="¿Cuándo es más probable que pierdas la concentración en un monólogo?"
+      options={[
+        "Al principio",
+        "En la mitad del monólogo",
+        "Al final",
+        "Nunca"
+      ]}
+      correctAnswer={1}
+      explanation="Es más probable perder concentración en la mitad, cuando la novedad inicial se desvanece pero aún queda mucho contenido."
+    />,
+
+    <TrueFalseExercise
+      key="9"
+      statements={[
+        {
+          text: "Signposting language is more important in monologues than in dialogues.",
+          isTrue: true,
+          explanation: "Correcto. El lenguaje de señalización es crucial en monólogos para guiar al oyente a través de la estructura."
+        },
+        {
+          text: "Mental breaks during natural pauses can help maintain focus.",
+          isTrue: true,
+          explanation: "Correcto. Usar pausas naturales para descansos mentales breves ayuda a mantener la concentración."
+        }
+      ]}
+    />,
+
+    <MultipleChoiceExercise
+      key="10"
+      question="¿Qué tipo de monólogo requiere más atención a detalles específicos?"
+      options={[
+        "Narrativa personal",
+        "Presentación académica con datos",
+        "Descripción general",
+        "Opinión personal"
+      ]}
+      correctAnswer={1}
+      explanation="Las presentaciones académicas con datos requieren más atención a detalles específicos como números, fechas y estadísticas."
     />
   ];
 
@@ -461,7 +540,7 @@ const MonologuesPage = () => {
     <TheoryLayout
       title="Monologues"
       description="Domina la comprensión de monólogos en inglés. Aprende estrategias para entender discursos largos de una sola persona en presentaciones, conferencias y narraciones."
-      level="A2-B1"
+      level="A2-B1-B2-C1-C2"
       theoryContent={theoryContent}
       exercises={exercises}
       prerequisites={["Basic listening skills", "Experience with short dialogues"]}
@@ -471,6 +550,25 @@ const MonologuesPage = () => {
 };
 
 export default MonologuesPage;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

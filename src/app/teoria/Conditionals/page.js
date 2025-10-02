@@ -404,15 +404,17 @@ const ConditionalsPage = () => {
   );
 
   const exercises = [
-    <FillBlanksExercise
+    <MultipleChoiceExercise
       key="1"
-      text="If I ___ (have) time tomorrow, I ___ (call) you. If I ___ (be) you, I ___ (study) harder."
-      blanks={[
-        { answer: "have" },
-        { answer: "will call" },
-        { answer: "were" },
-        { answer: "would study" }
+      question="Complete: 'If I _____ time tomorrow, I _____ you.'"
+      options={[
+        "have, call",
+        "have, will call",
+        "will have, call",
+        "had, would call"
       ]}
+      correctAnswer={1}
+      explanation="En first conditional usamos: If + present simple, will + infinitive."
     />,
 
     <MultipleChoiceExercise
@@ -478,6 +480,82 @@ const ConditionalsPage = () => {
       ]}
       correctAnswer={1}
       explanation="The correct Second Conditional uses 'were' for all persons with 'be': 'If I were rich, I would buy a house.'"
+    />,
+
+    <TrueFalseExercise
+      key="6"
+      statements={[
+        {
+          text: "Third Conditional is used for impossible past situations.",
+          isTrue: true,
+          explanation: "Correcto. Third Conditional expresa situaciones pasadas que no pueden cambiar: 'If I had studied, I would have passed.'"
+        },
+        {
+          text: "'Unless' means the same as 'if'.",
+          isTrue: false,
+          explanation: "Incorrecto. 'Unless' significa 'if not': 'Unless you study' = 'If you don't study'."
+        },
+        {
+          text: "Zero Conditional uses present tense in both clauses.",
+          isTrue: true,
+          explanation: "Correcto. Zero Conditional usa presente en ambas partes para hechos generales: 'If you heat water, it boils.'"
+        }
+      ]}
+    />,
+
+    <MultipleChoiceExercise
+      key="7"
+      question="Complete: 'If I ___ you, I would apologize.'"
+      options={[
+        "am",
+        "was",
+        "were",
+        "will be"
+      ]}
+      correctAnswer={2}
+      explanation="En Second Conditional con 'be', usamos 'were' para todas las personas: 'If I were you'."
+    />,
+
+    <MultipleChoiceExercise
+      key="8"
+      question="Complete: 'If she ___ earlier, she wouldn't have missed the train.'"
+      options={[
+        "left",
+        "had left",
+        "leaves",
+        "would leave"
+      ]}
+      correctAnswer={1}
+      explanation="Third Conditional usa 'had + past participle' en la cláusula if: 'If she had left earlier'."
+    />,
+
+    <TrueFalseExercise
+      key="9"
+      statements={[
+        {
+          text: "First Conditional expresses real possibilities in the future.",
+          isTrue: true,
+          explanation: "Correcto. First Conditional expresa posibilidades reales: 'If it rains, I will stay home.'"
+        },
+        {
+          text: "We can start a conditional sentence with the main clause.",
+          isTrue: true,
+          explanation: "Correcto. Podemos decir 'I will help you if you ask me' (sin coma cuando la cláusula if va al final)."
+        }
+      ]}
+    />,
+
+    <MultipleChoiceExercise
+      key="10"
+      question="Complete: '___ you don't study, you will fail the exam.'"
+      options={[
+        "If",
+        "Unless",
+        "When",
+        "Because"
+      ]}
+      correctAnswer={0}
+      explanation="'If you don't study' es correcto. 'Unless' ya incluye el negativo, sería 'Unless you study'."
     />
   ];
 
@@ -485,7 +563,7 @@ const ConditionalsPage = () => {
     <TheoryLayout
       title="Conditionals"
       description="Domina los condicionales en inglés. Aprende a expresar situaciones hipotéticas, posibilidades reales e imposibles con if, unless, provided that."
-      level="B1-B2-C1"
+      level="B1-B2-C1-C2"
       theoryContent={theoryContent}
       exercises={exercises}
       prerequisites={["Present and past tenses", "Future forms", "Modal verbs"]}

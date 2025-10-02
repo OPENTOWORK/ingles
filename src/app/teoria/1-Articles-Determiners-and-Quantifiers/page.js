@@ -225,17 +225,17 @@ const ArticlesPage = () => {
       explanation="'Money' es incontable, por lo que usamos 'some' o no usamos cuantificador. 'Much' también es correcto, pero 'some' es más natural en este contexto."
     />,
 
-    <FillBlanksExercise
+    <MultipleChoiceExercise
       key="2"
-      text="I need ___ book for school. ___ book I need is about ___ history of ___ English language. I don't have ___ money to buy it, so I'll borrow it from ___ library."
-      blanks={[
-        { answer: "a" },
-        { answer: "The" },
-        { answer: "the" },
-        { answer: "the" },
-        { answer: "much" },
-        { answer: "the" }
+      question="Complete: 'I need ___ book for school.'"
+      options={[
+        "the",
+        "a",
+        "an",
+        "some"
       ]}
+      correctAnswer={1}
+      explanation="'A' se usa con sustantivos contables singulares cuando hablamos de algo por primera vez o en general."
     />,
 
     <TrueFalseExercise
@@ -288,6 +288,71 @@ const ArticlesPage = () => {
       ]}
       correctAnswer={1}
       explanation="'Time' es incontable, por lo que usamos 'much'. También podríamos usar 'a little' para decir 'un poco de tiempo'."
+    />,
+
+    <MultipleChoiceExercise
+      key="6"
+      question="Complete: 'There are ___ students in the classroom.'"
+      options={[
+        "a",
+        "an",
+        "some",
+        "much"
+      ]}
+      correctAnswer={2}
+      explanation="'Students' es contable plural, por lo que usamos 'some' en oraciones afirmativas."
+    />,
+
+    <MultipleChoiceExercise
+      key="7"
+      question="¿Cuál es correcto?"
+      options={[
+        "I need an advice",
+        "I need some advice",
+        "I need many advice",
+        "I need few advice"
+      ]}
+      correctAnswer={1}
+      explanation="'Advice' es incontable, por lo que usamos 'some' y no lleva artículo indefinido."
+    />,
+
+    <MultipleChoiceExercise
+      key="8"
+      question="Complete: 'Do you have ___ money?'"
+      options={[
+        "some",
+        "any",
+        "many",
+        "few"
+      ]}
+      correctAnswer={1}
+      explanation="En preguntas usamos 'any' con sustantivos incontables como 'money'."
+    />,
+
+    <MultipleChoiceExercise
+      key="9"
+      question="¿Cuál artículo es correcto: '___ university'?"
+      options={[
+        "a",
+        "an",
+        "the",
+        "no article"
+      ]}
+      correctAnswer={0}
+      explanation="'University' empieza con sonido consonántico /j/, por lo que usamos 'a'."
+    />,
+
+    <MultipleChoiceExercise
+      key="10"
+      question="Complete: 'There isn't ___ water left.'"
+      options={[
+        "some",
+        "any",
+        "many",
+        "few"
+      ]}
+      correctAnswer={1}
+      explanation="En oraciones negativas usamos 'any' con sustantivos incontables como 'water'."
     />
   ];
 
@@ -295,7 +360,7 @@ const ArticlesPage = () => {
     <TheoryLayout
       title="Articles, Determiners and Quantifiers"
       description="Aprende a usar correctamente los artículos (a, an, the), determinantes (this, that, my, your) y cuantificadores (some, any, many, much) en inglés."
-      level="A1"
+      level="A1-A2-B1-B2-C1-C2"
       theoryContent={theoryContent}
       exercises={exercises}
       prerequisites={["Nociones básicas de sustantivos"]}
@@ -305,6 +370,25 @@ const ArticlesPage = () => {
 };
 
 export default ArticlesPage;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

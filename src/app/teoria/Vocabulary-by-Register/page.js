@@ -350,14 +350,17 @@ const VocabularyByRegisterPage = () => {
   );
 
   const exercises = [
-    <FillBlanksExercise
+    <MultipleChoiceExercise
       key="1"
-      text="En un ensayo académico, debo usar registro ___ (formal/informal). Para un email personal, puedo usar registro ___ (formal/informal). En un informe empresarial, el registro apropiado es ___ (neutral/formal)."
-      blanks={[
-        { answer: "formal" },
-        { answer: "informal" },
-        { answer: "neutral" }
+      question="¿Qué registro debo usar en un ensayo académico?"
+      options={[
+        "Informal",
+        "Formal",
+        "Neutral",
+        "Coloquial"
       ]}
+      correctAnswer={1}
+      explanation="En ensayos académicos siempre se debe usar registro formal con vocabulario preciso y estructuras complejas."
     />,
 
     <MultipleChoiceExercise
@@ -423,6 +426,82 @@ const VocabularyByRegisterPage = () => {
       ]}
       correctAnswer={1}
       explanation="El contexto (donde se usa el texto) y la audiencia (quién lo va a leer) son los factores más importantes para elegir el registro apropiado."
+    />,
+
+    <TrueFalseExercise
+      key="6"
+      statements={[
+        {
+          text: "Academic vocabulary is more precise than everyday vocabulary.",
+          isTrue: true,
+          explanation: "Correcto. El vocabulario académico tiende a ser más específico y preciso para expresar conceptos complejos."
+        },
+        {
+          text: "You should always use the most formal word available.",
+          isTrue: false,
+          explanation: "Incorrecto. Debes usar el registro apropiado para el contexto; demasiada formalidad puede sonar artificial."
+        },
+        {
+          text: "Register consistency is important throughout a text.",
+          isTrue: true,
+          explanation: "Correcto. Mantener el mismo registro a lo largo del texto crea coherencia y profesionalismo."
+        }
+      ]}
+    />,
+
+    <MultipleChoiceExercise
+      key="7"
+      question="¿Cuál es la versión formal de 'help'?"
+      options={[
+        "aid",
+        "assist",
+        "support",
+        "todas las anteriores"
+      ]}
+      correctAnswer={3}
+      explanation="'Aid', 'assist' y 'support' son todas versiones más formales de 'help', cada una con matices ligeramente diferentes."
+    />,
+
+    <MultipleChoiceExercise
+      key="8"
+      question="¿En qué contexto usarías 'purchase' en lugar de 'buy'?"
+      options={[
+        "Conversación casual",
+        "Documentos legales o comerciales",
+        "Mensajes de texto",
+        "Conversaciones familiares"
+      ]}
+      correctAnswer={1}
+      explanation="'Purchase' es más formal y se usa en documentos legales, comerciales o contextos profesionales."
+    />,
+
+    <TrueFalseExercise
+      key="9"
+      statements={[
+        {
+          text: "Colloquial expressions are appropriate in academic writing.",
+          isTrue: false,
+          explanation: "Incorrecto. Las expresiones coloquiales no son apropiadas en escritura académica formal."
+        },
+        {
+          text: "The same idea can be expressed with different levels of formality.",
+          isTrue: true,
+          explanation: "Correcto. Una misma idea puede expresarse de manera informal ('big problem') o formal ('significant issue')."
+        }
+      ]}
+    />,
+
+    <MultipleChoiceExercise
+      key="10"
+      question="¿Cuál es la diferencia entre 'get' y 'obtain'?"
+      options={[
+        "'Get' es más formal",
+        "'Obtain' es más formal",
+        "No hay diferencia",
+        "Ambas son coloquiales"
+      ]}
+      correctAnswer={1}
+      explanation="'Obtain' es más formal y se usa en contextos académicos o profesionales, mientras que 'get' es informal y cotidiano."
     />
   ];
 

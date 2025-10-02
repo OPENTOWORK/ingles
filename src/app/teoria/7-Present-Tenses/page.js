@@ -265,16 +265,17 @@ const PresentTensesPage = () => {
   );
 
   const exercises = [
-    <FillBlanksExercise
+    <MultipleChoiceExercise
       key="1"
-      text="I ___ (work) in a hospital. Every day I ___ (wake up) at 6 AM. Right now I ___ (write) a report. I ___ (work) here for 3 years. I ___ (never/be) late to work."
-      blanks={[
-        { answer: "work" },
-        { answer: "wake up" },
-        { answer: "am writing" },
-        { answer: "have worked" },
-        { answer: "have never been" }
+      question="Complete: 'I ___ in a hospital.'"
+      options={[
+        "am working",
+        "work",
+        "worked",
+        "have worked"
       ]}
+      correctAnswer={1}
+      explanation="'Work' es presente simple para expresar un hecho general o rutina habitual."
     />,
 
     <MultipleChoiceExercise
@@ -340,6 +341,71 @@ const PresentTensesPage = () => {
       ]}
       correctAnswer={1}
       explanation="Con 'never' y experiencias de vida usamos Present Perfect: 'She has never been to Japan'."
+    />,
+
+    <MultipleChoiceExercise
+      key="6"
+      question="Complete: 'I ___ my homework right now.'"
+      options={[
+        "do",
+        "am doing",
+        "have done",
+        "did"
+      ]}
+      correctAnswer={1}
+      explanation="'Right now' indica acción en progreso en este momento, por lo que usamos Present Continuous."
+    />,
+
+    <MultipleChoiceExercise
+      key="7"
+      question="¿Cuál es correcto?"
+      options={[
+        "He is having a car",
+        "He has a car",
+        "He is have a car",
+        "He having a car"
+      ]}
+      correctAnswer={1}
+      explanation="'Have' para posesión no se usa en continuous. Usamos Present Simple: 'He has a car'."
+    />,
+
+    <MultipleChoiceExercise
+      key="8"
+      question="Complete: 'How long ___ you ___ English?'"
+      options={[
+        "do, study",
+        "are, studying",
+        "have, studied",
+        "did, study"
+      ]}
+      correctAnswer={2}
+      explanation="'How long' con una acción que empezó en el pasado y continúa requiere Present Perfect."
+    />,
+
+    <MultipleChoiceExercise
+      key="9"
+      question="¿Cuál es la forma correcta?"
+      options={[
+        "She always is complaining",
+        "She is always complaining",
+        "She always complains",
+        "Both B and C are correct"
+      ]}
+      correctAnswer={3}
+      explanation="Ambas son correctas: 'always complains' (hábito) y 'is always complaining' (irritación)."
+    />,
+
+    <MultipleChoiceExercise
+      key="10"
+      question="Complete: 'I ___ three cups of coffee today.'"
+      options={[
+        "drink",
+        "am drinking",
+        "have drunk",
+        "drank"
+      ]}
+      correctAnswer={2}
+      explanation="'Today' es un período que no ha terminado, por lo que usamos Present Perfect."
     />
   ];
 
@@ -347,7 +413,7 @@ const PresentTensesPage = () => {
     <TheoryLayout
       title="Present Tenses"
       description="Domina los tres tiempos presentes del inglés: Simple, Continuous y Perfect. Aprende cuándo usar cada uno y evita errores comunes."
-      level="A1-A2-B1"
+      level="A1-A2-B1-B2-C1-C2"
       theoryContent={theoryContent}
       exercises={exercises}
       prerequisites={["Verb to be", "Pronouns", "Basic vocabulary"]}
@@ -357,6 +423,25 @@ const PresentTensesPage = () => {
 };
 
 export default PresentTensesPage;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

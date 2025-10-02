@@ -289,17 +289,17 @@ const PastTensesPage = () => {
   );
 
   const exercises = [
-    <FillBlanksExercise
+    <MultipleChoiceExercise
       key="1"
-      text="Yesterday I ___ (go) to the store. While I ___ (shop), I ___ (meet) my friend. She ___ (tell) me that she ___ (already/buy) everything she needed. We ___ (decide) to have lunch together."
-      blanks={[
-        { answer: "went" },
-        { answer: "was shopping" },
-        { answer: "met" },
-        { answer: "told" },
-        { answer: "had already bought" },
-        { answer: "decided" }
+      question="Complete: 'Yesterday I ___ to the store.'"
+      options={[
+        "go",
+        "went",
+        "was going",
+        "have gone"
       ]}
+      correctAnswer={1}
+      explanation="'Went' es la forma correcta del pasado simple de 'go' para acciones completadas en el pasado."
     />,
 
     <MultipleChoiceExercise
@@ -365,6 +365,71 @@ const PastTensesPage = () => {
       ]}
       correctAnswer={2}
       explanation="'By the time' indica que una acción ocurrió antes que otra en el pasado, por lo que usamos Past Perfect: 'had started'."
+    />,
+
+    <MultipleChoiceExercise
+      key="6"
+      question="Complete: 'While I ___ TV, the phone ___'"
+      options={[
+        "watched, rang",
+        "was watching, rang",
+        "was watching, was ringing",
+        "watched, was ringing"
+      ]}
+      correctAnswer={1}
+      explanation="Una acción en progreso (was watching) fue interrumpida por otra acción (rang)."
+    />,
+
+    <MultipleChoiceExercise
+      key="7"
+      question="¿Cuál es correcto?"
+      options={[
+        "I have seen him yesterday",
+        "I saw him yesterday",
+        "I had seen him yesterday",
+        "I was seeing him yesterday"
+      ]}
+      correctAnswer={1}
+      explanation="Con 'yesterday' (tiempo específico pasado) usamos Past Simple, no Present Perfect."
+    />,
+
+    <MultipleChoiceExercise
+      key="8"
+      question="Complete: 'She told me she ___ never ___ such a beautiful place.'"
+      options={[
+        "has, seen",
+        "had, seen",
+        "was, seeing",
+        "did, see"
+      ]}
+      correctAnswer={1}
+      explanation="En reported speech, Present Perfect se convierte en Past Perfect: 'had never seen'."
+    />,
+
+    <MultipleChoiceExercise
+      key="9"
+      question="¿Cuál expresa una acción habitual en el pasado?"
+      options={[
+        "I went to school every day",
+        "I used to go to school every day",
+        "I would go to school every day",
+        "All of the above"
+      ]}
+      correctAnswer={3}
+      explanation="Las tres formas pueden expresar hábitos pasados, con diferentes matices."
+    />,
+
+    <MultipleChoiceExercise
+      key="10"
+      question="Complete: 'I ___ for two hours when you called.'"
+      options={[
+        "studied",
+        "was studying",
+        "had been studying",
+        "have been studying"
+      ]}
+      correctAnswer={2}
+      explanation="'For two hours' + acción interrumpida requiere Past Perfect Continuous."
     />
   ];
 
@@ -372,7 +437,7 @@ const PastTensesPage = () => {
     <TheoryLayout
       title="Past Tenses"
       description="Domina todos los tiempos pasados del inglés: Simple, Continuous y Perfect. Aprende cuándo usar cada uno y practica con verbos irregulares."
-      level="A2-B1-B2"
+      level="A2-B1-B2-C1-C2"
       theoryContent={theoryContent}
       exercises={exercises}
       prerequisites={["Present Tenses", "Verb to be", "Basic vocabulary"]}

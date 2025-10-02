@@ -379,14 +379,17 @@ const UsefulGrammarAndStructuresPage = () => {
   );
 
   const exercises = [
-    <FillBlanksExercise
+    <MultipleChoiceExercise
       key="1"
-      text="___ (It is widely believed/It seems to me) that technology improves life. ___ (This is due to the fact that/What is more important is) people work more efficiently. ___ (In conclusion/Similarly to), it can be said that progress is beneficial."
-      blanks={[
-        { answer: "It is widely believed" },
-        { answer: "This is due to the fact that" },
-        { answer: "In conclusion" }
+      question="Complete: '_____ that technology improves life.'"
+      options={[
+        "It seems to me",
+        "It is widely believed",
+        "I think",
+        "Maybe"
       ]}
+      correctAnswer={1}
+      explanation="'It is widely believed' es una estructura formal para expresar una opinión general o ampliamente aceptada."
     />,
 
     <MultipleChoiceExercise
@@ -452,6 +455,82 @@ const UsefulGrammarAndStructuresPage = () => {
       ]}
       correctAnswer={0}
       explanation="'Unlike the previous example...' es una estructura formal para mostrar contraste entre ejemplos."
+    />,
+
+    <TrueFalseExercise
+      key="6"
+      statements={[
+        {
+          text: "Passive voice is more formal than active voice.",
+          isTrue: true,
+          explanation: "Correcto. La voz pasiva es más formal y común en textos académicos y profesionales."
+        },
+        {
+          text: "'It is important to note that' is a useful academic phrase.",
+          isTrue: true,
+          explanation: "Correcto. Esta estructura es muy útil para introducir puntos importantes en textos académicos."
+        },
+        {
+          text: "Complex sentences always sound better than simple ones.",
+          isTrue: false,
+          explanation: "Incorrecto. La claridad es más importante que la complejidad; usa estructuras apropiadas para el contexto."
+        }
+      ]}
+    />,
+
+    <MultipleChoiceExercise
+      key="7"
+      question="Complete: '_____ the benefits, there are also disadvantages.'"
+      options={[
+        "Despite",
+        "Because of",
+        "Due to",
+        "Thanks to"
+      ]}
+      correctAnswer={0}
+      explanation="'Despite' introduce un contraste: a pesar de los beneficios, también hay desventajas."
+    />,
+
+    <MultipleChoiceExercise
+      key="8"
+      question="¿Qué estructura es mejor para hacer sugerencias formales?"
+      options={[
+        "You should",
+        "I suggest that you",
+        "Why don't you",
+        "Maybe you can"
+      ]}
+      correctAnswer={1}
+      explanation="'I suggest that you' es la estructura más formal y apropiada para hacer sugerencias en contextos profesionales."
+    />,
+
+    <TrueFalseExercise
+      key="9"
+      statements={[
+        {
+          text: "'It is worth noting that' is useful for emphasizing important points.",
+          isTrue: true,
+          explanation: "Correcto. Esta estructura enfatiza puntos importantes de manera formal y académica."
+        },
+        {
+          text: "Conditional structures are only used for hypothetical situations.",
+          isTrue: false,
+          explanation: "Incorrecto. Los condicionales también se usan para situaciones reales, cortesía y sugerencias."
+        }
+      ]}
+    />,
+
+    <MultipleChoiceExercise
+      key="10"
+      question="Complete: '_____ research shows that exercise improves health.'"
+      options={[
+        "Recent",
+        "Recently",
+        "Recents",
+        "Recenting"
+      ]}
+      correctAnswer={0}
+      explanation="'Recent research' es correcto. 'Recent' es adjetivo que modifica 'research'."
     />
   ];
 
@@ -469,6 +548,25 @@ const UsefulGrammarAndStructuresPage = () => {
 };
 
 export default UsefulGrammarAndStructuresPage;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

@@ -190,19 +190,9 @@ export const useAccessibility = () => {
 const AccessibilityStyles = () => {
   return (
     <style jsx global>{`
-      /* High Contrast Mode */
+      /* High Contrast Mode - Disabled by default, no visual changes */
       .high-contrast {
-        --primary-color: #000000;
-        --secondary-color: #ffffff;
-        --background-color: #ffffff;
-        --text-color: #000000;
-        --border-color: #000000;
-      }
-      
-      .high-contrast * {
-        background-color: var(--background-color) !important;
-        color: var(--text-color) !important;
-        border-color: var(--border-color) !important;
+        /* No changes applied - feature disabled */
       }
       
       /* Large Text Mode */
@@ -657,6 +647,15 @@ export const AccessibilityPanel = () => {
 };
 
 export default AccessibilityProvider;
+
+
+
+
+
+
+
+
+
 
 
 

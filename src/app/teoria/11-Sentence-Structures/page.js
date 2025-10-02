@@ -326,15 +326,17 @@ const SentenceStructuresPage = () => {
   );
 
   const exercises = [
-    <FillBlanksExercise
+    <MultipleChoiceExercise
       key="1"
-      text="I like coffee ___ I don't like tea. ___ it's raining, I stay home. I study hard, ___ I want to pass the exam. I'll go to the party ___ I finish my homework."
-      blanks={[
-        { answer: "but" },
-        { answer: "Because" },
-        { answer: "because" },
-        { answer: "if" }
+      question="Complete: 'I like coffee _____ I don't like tea.'"
+      options={[
+        "and",
+        "but",
+        "because",
+        "so"
       ]}
+      correctAnswer={1}
+      explanation="'But' expresa contraste entre dos ideas opuestas: me gusta el café pero no me gusta el té."
     />,
 
     <MultipleChoiceExercise
@@ -400,6 +402,82 @@ const SentenceStructuresPage = () => {
       ]}
       correctAnswer={0}
       explanation="Para mostrar razón usamos 'because': 'I study hard, because I want to pass'."
+    />,
+
+    <TrueFalseExercise
+      key="6"
+      statements={[
+        {
+          text: "'Although it's raining, I will go out' is a complex sentence.",
+          isTrue: true,
+          explanation: "Correcto. Es una oración compleja con una cláusula subordinada de concesión."
+        },
+        {
+          text: "'I like pizza and pasta' is a compound sentence.",
+          isTrue: false,
+          explanation: "Incorrecto. Es una oración simple con sujeto compuesto. Una oración compuesta tiene dos cláusulas independientes."
+        },
+        {
+          text: "A comma is needed after 'If I have time' in 'If I have time I will call you'.",
+          isTrue: true,
+          explanation: "Correcto. Cuando la cláusula subordinada va al inicio, necesita coma: 'If I have time, I will call you'."
+        }
+      ]}
+    />,
+
+    <MultipleChoiceExercise
+      key="7"
+      question="Complete: '___ I was tired, I finished my homework.'"
+      options={[
+        "Because",
+        "Although",
+        "So",
+        "And"
+      ]}
+      correctAnswer={1}
+      explanation="'Although' muestra contraste: 'Although I was tired, I finished my homework' (Aunque estaba cansado, terminé mi tarea)."
+    />,
+
+    <MultipleChoiceExercise
+      key="8"
+      question="¿Cuál es la estructura correcta para una oración compuesta?"
+      options={[
+        "Independent clause + dependent clause",
+        "Independent clause + conjunction + independent clause",
+        "Dependent clause + independent clause",
+        "Subject + verb + object"
+      ]}
+      correctAnswer={1}
+      explanation="Una oración compuesta tiene: cláusula independiente + conjunción + cláusula independiente."
+    />,
+
+    <TrueFalseExercise
+      key="9"
+      statements={[
+        {
+          text: "'When I arrive, I will call you' has the dependent clause first.",
+          isTrue: true,
+          explanation: "Correcto. 'When I arrive' es la cláusula dependiente que va primero."
+        },
+        {
+          text: "'I went to the store, I bought milk' is correctly punctuated.",
+          isTrue: false,
+          explanation: "Incorrecto. Necesita una conjunción: 'I went to the store, and I bought milk' o usar punto y coma."
+        }
+      ]}
+    />,
+
+    <MultipleChoiceExercise
+      key="10"
+      question="Complete: 'I will go to the party ___ you come with me.'"
+      options={[
+        "because",
+        "if",
+        "so",
+        "but"
+      ]}
+      correctAnswer={1}
+      explanation="'If' introduce una condición: 'I will go to the party if you come with me' (Iré a la fiesta si vienes conmigo)."
     />
   ];
 
@@ -407,7 +485,7 @@ const SentenceStructuresPage = () => {
     <TheoryLayout
       title="Sentence Structures"
       description="Domina las estructuras de oraciones en inglés: simples, compuestas, complejas y compound-complex. Aprende a usar conectores para crear oraciones más sofisticadas."
-      level="A1-B1-B2"
+      level="A1-A2-B1-B2-C1-C2"
       theoryContent={theoryContent}
       exercises={exercises}
       prerequisites={["Basic grammar", "Understanding of subjects and verbs", "Basic vocabulary"]}

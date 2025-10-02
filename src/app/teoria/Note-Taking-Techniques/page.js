@@ -382,14 +382,17 @@ const NoteTakingTechniquesPage = () => {
   );
 
   const exercises = [
-    <FillBlanksExercise
+    <MultipleChoiceExercise
       key="1"
-      text="Las técnicas de toma de notas ayudan a ___ (retener/organizar) información. Usar ___ (abreviaciones/palabras completas) aumenta la velocidad. ___ (Revisar/Escribir) las notas asegura precisión."
-      blanks={[
-        { answer: "retener" },
-        { answer: "abreviaciones" },
-        { answer: "Revisar" }
+      question="¿Qué ayudan a hacer las técnicas de toma de notas?"
+      options={[
+        "Organizar información",
+        "Retener información",
+        "Escribir más rápido",
+        "All of the above"
       ]}
+      correctAnswer={3}
+      explanation="Las técnicas de toma de notas ayudan con todos estos aspectos: organizar, retener información y escribir más eficientemente."
     />,
 
     <MultipleChoiceExercise
@@ -455,6 +458,82 @@ const NoteTakingTechniquesPage = () => {
       ]}
       correctAnswer={1}
       explanation="Es más importante tomar notas en audios largos con mucha información, ya que es fácil olvidar detalles específicos."
+    />,
+
+    <TrueFalseExercise
+      key="6"
+      statements={[
+        {
+          text: "You should write complete sentences when taking notes during listening.",
+          isTrue: false,
+          explanation: "Incorrecto. Es mejor usar palabras clave, frases cortas y abreviaciones para no perder información importante."
+        },
+        {
+          text: "Symbols like arrows and abbreviations speed up note-taking.",
+          isTrue: true,
+          explanation: "Correcto. Los símbolos (→, ↑, &, etc.) y abreviaciones (w/ = with, b/c = because) aceleran significativamente la toma de notas."
+        },
+        {
+          text: "Your notes should be perfectly organized during listening.",
+          isTrue: false,
+          explanation: "Incorrecto. Durante la escucha, prioriza capturar información; puedes organizar después."
+        }
+      ]}
+    />,
+
+    <MultipleChoiceExercise
+      key="7"
+      question="¿Cuál es la mejor abreviación para 'information'?"
+      options={[
+        "information",
+        "info",
+        "inform",
+        "infm"
+      ]}
+      correctAnswer={1}
+      explanation="'Info' es una abreviación estándar y reconocible para 'information'."
+    />,
+
+    <MultipleChoiceExercise
+      key="8"
+      question="¿Qué técnica es más útil para monólogos largos?"
+      options={[
+        "Escribir todo literalmente",
+        "Usar estructura jerárquica con puntos principales y detalles",
+        "Solo tomar notas al final",
+        "No usar ninguna organización"
+      ]}
+      correctAnswer={1}
+      explanation="La estructura jerárquica (puntos principales → detalles → ejemplos) es ideal para monólogos largos."
+    />,
+
+    <TrueFalseExercise
+      key="9"
+      statements={[
+        {
+          text: "Mind mapping is useful for brainstorming but not for listening.",
+          isTrue: false,
+          explanation: "Incorrecto. Los mapas mentales pueden ser muy útiles para tomar notas durante presentaciones con múltiples temas relacionados."
+        },
+        {
+          text: "You should develop your own consistent system of abbreviations.",
+          isTrue: true,
+          explanation: "Correcto. Un sistema personal y consistente de abreviaciones mejora la velocidad y eficiencia."
+        }
+      ]}
+    />,
+
+    <MultipleChoiceExercise
+      key="10"
+      question="¿Cuándo debes revisar y organizar tus notas?"
+      options={[
+        "Durante la escucha",
+        "Inmediatamente después del audio",
+        "Una semana después",
+        "Nunca"
+      ]}
+      correctAnswer={1}
+      explanation="Revisar y organizar las notas inmediatamente después del audio ayuda a clarificar y completar la información mientras está fresca en la memoria."
     />
   ];
 
@@ -472,6 +551,25 @@ const NoteTakingTechniquesPage = () => {
 };
 
 export default NoteTakingTechniquesPage;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
