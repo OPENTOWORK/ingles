@@ -10,5 +10,7 @@ const nextConfig = {
   trailingSlash: true            // evita 404 con rutas estáticas
 }
 
-// Solo export estático en producción (por ejemplo, para GitHub Pages)
-module.exports = isProd ? { ...nextConfig, output: 'export' } : nextConfig
+// Export estático solo si NEXT_STATIC_EXPORT=1 (GitHub Pages). Sin eso, `next build` falla por rutas dinámicas [part], etc.
+const useStaticExport = process.env.NEXT_STATIC_EXPORT === '1'
+module.exports =
+  isProd && useStaticExport ? { ...nextConfig, output: 'export' } : nextConfig

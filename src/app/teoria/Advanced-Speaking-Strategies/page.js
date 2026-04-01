@@ -65,7 +65,7 @@ const AdvancedSpeakingPage = () => {
 
         <Tip type="success">
           <strong>Práctica:</strong> Grábate hablando durante 2 minutos sobre cualquier tema. 
-          Cuenta las pausas largas (>3 segundos) y trabaja en reducirlas.
+          Cuenta las pausas largas ({'>'}3 segundos) y trabaja en reducirlas.
         </Tip>
       </TheorySection>
 

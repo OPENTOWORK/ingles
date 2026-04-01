@@ -1,0 +1,339 @@
+-- =====================================================
+-- SISTEMA DE USUARIOS Y ROLES PARA ENGLISH PRACTICE
+-- Estructura: Usuarios > Roles > Perfil
+-- =====================================================
+
+-- 1. TABLA DE PERFILES DE USUARIO (extiende auth.users)
+CREATE TABLE IF NOT EXISTS public.user_profiles (
+    id UUID REFERENCES auth.users(id) ON DELETE CASCADE PRIMARY KEY,
+    email TEXT UNIQUE NOT NULL,
+    full_name TEXT,
+    avatar_url TEXT,
+    role TEXT NOT NULL DEFAULT 'student' CHECK (role IN ('admin', 'teacher', 'student')),
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+    updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+    is_active BOOLEAN DEFAULT TRUE,
+    last_login TIMESTAMP WITH TIME ZONE,
+    metadata JSONB DEFAULT '{}'::jsonb
+);
+
+-- 2. TABLA DE ESTUDIANTES (datos específicos)
+CREATE TABLE IF NOT EXISTS public.students (
+    id UUID REFERENCES public.user_profiles(id) ON DELETE CASCADE PRIMARY KEY,
+    current_level TEXT DEFAULT 'A1' CHECK (current_level IN ('A1', 'A2', 'B1', 'B2', 'C1', 'C2')),
+    target_level TEXT DEFAULT 'C2' CHECK (target_level IN ('A1', 'A2', 'B1', 'B2', 'C1', 'C2')),
+    enrollment_date TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+    progress_data JSONB DEFAULT '{}'::jsonb,
+    study_preferences JSONB DEFAULT '{}'::jsonb
+);
+
+-- 3. TABLA DE PROFESORES (datos específicos)
+CREATE TABLE IF NOT EXISTS public.teachers (
+    id UUID REFERENCES public.user_profiles(id) ON DELETE CASCADE PRIMARY KEY,
+    specializations TEXT[] DEFAULT '{}',
+    experience_years INTEGER DEFAULT 0,
+    bio TEXT,
+    hourly_rate DECIMAL(10,2),
+    rating DECIMAL(3,2) DEFAULT 0.00,
+    total_reviews INTEGER DEFAULT 0,
+    is_verified BOOLEAN DEFAULT FALSE,
+    hire_date TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+    availability JSONB DEFAULT '{}'::jsonb
+);
+
+-- 4. TABLA DE ADMINISTRADORES (datos específicos)
+CREATE TABLE IF NOT EXISTS public.administrators (
+    id UUID REFERENCES public.user_profiles(id) ON DELETE CASCADE PRIMARY KEY,
+    permissions TEXT[] DEFAULT ARRAY['manage_users', 'manage_content', 'view_analytics'],
+    department TEXT,
+    access_level INTEGER DEFAULT 1 CHECK (access_level BETWEEN 1 AND 5),
+    admin_since TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
+
+-- =====================================================
+-- ÍNDICES PARA RENDIMIENTO
+-- =====================================================
+
+CREATE INDEX IF NOT EXISTS idx_user_profiles_role ON public.user_profiles(role);
+CREATE INDEX IF NOT EXISTS idx_user_profiles_email ON public.user_profiles(email);
+CREATE INDEX IF NOT EXISTS idx_user_profiles_active ON public.user_profiles(is_active);
+
+CREATE INDEX IF NOT EXISTS idx_students_level ON public.students(current_level);
+CREATE INDEX IF NOT EXISTS idx_teachers_verified ON public.teachers(is_verified);
+CREATE INDEX IF NOT EXISTS idx_teachers_specializations ON public.teachers USING GIN(specializations);
+
+-- =====================================================
+-- FUNCIONES Y TRIGGERS
+-- =====================================================
+
+-- Función para actualizar updated_at automáticamente
+CREATE OR REPLACE FUNCTION update_updated_at_column()
+RETURNS TRIGGER AS $$
+BEGIN
+    NEW.updated_at = NOW();
+    RETURN NEW;
+END;
+$$ language 'plpgsql';
+
+-- Trigger para updated_at en user_profiles
+CREATE TRIGGER update_user_profiles_updated_at 
+    BEFORE UPDATE ON public.user_profiles 
+    FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+
+-- Función para crear perfil automáticamente al registrarse
+CREATE OR REPLACE FUNCTION public.handle_new_user()
+RETURNS TRIGGER AS $$
+BEGIN
+    INSERT INTO public.user_profiles (id, email, full_name, role)
+    VALUES (
+        NEW.id,
+        NEW.email,
+        COALESCE(NEW.raw_user_meta_data->>'full_name', NEW.email),
+        COALESCE(NEW.raw_user_meta_data->>'role', 'student')
+    );
+    
+    -- Crear registro específico según el rol
+    IF COALESCE(NEW.raw_user_meta_data->>'role', 'student') = 'student' THEN
+        INSERT INTO public.students (id) VALUES (NEW.id);
+    ELSIF NEW.raw_user_meta_data->>'role' = 'teacher' THEN
+        INSERT INTO public.teachers (id) VALUES (NEW.id);
+    ELSIF NEW.raw_user_meta_data->>'role' = 'admin' THEN
+        INSERT INTO public.administrators (id) VALUES (NEW.id);
+    END IF;
+    
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql SECURITY DEFINER;
+
+-- Trigger para crear perfil automáticamente
+DROP TRIGGER IF EXISTS on_auth_user_created ON auth.users;
+CREATE TRIGGER on_auth_user_created
+    AFTER INSERT ON auth.users
+    FOR EACH ROW EXECUTE FUNCTION public.handle_new_user();
+
+-- Función para manejar cambios de rol
+CREATE OR REPLACE FUNCTION public.handle_role_change()
+RETURNS TRIGGER AS $$
+BEGIN
+    -- Eliminar de tablas específicas si el rol cambió
+    IF OLD.role IS NOT NULL AND OLD.role != NEW.role THEN
+        IF OLD.role = 'student' THEN
+            DELETE FROM public.students WHERE id = OLD.id;
+        ELSIF OLD.role = 'teacher' THEN
+            DELETE FROM public.teachers WHERE id = OLD.id;
+        ELSIF OLD.role = 'admin' THEN
+            DELETE FROM public.administrators WHERE id = OLD.id;
+        END IF;
+    END IF;
+
+    -- Insertar en nueva tabla según el rol
+    IF NEW.role = 'student' AND NOT EXISTS (SELECT 1 FROM public.students WHERE id = NEW.id) THEN
+        INSERT INTO public.students (id) VALUES (NEW.id);
+    ELSIF NEW.role = 'teacher' AND NOT EXISTS (SELECT 1 FROM public.teachers WHERE id = NEW.id) THEN
+        INSERT INTO public.teachers (id) VALUES (NEW.id);
+    ELSIF NEW.role = 'admin' AND NOT EXISTS (SELECT 1 FROM public.administrators WHERE id = NEW.id) THEN
+        INSERT INTO public.administrators (id) VALUES (NEW.id);
+    END IF;
+
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql SECURITY DEFINER;
+
+-- Trigger para manejar cambios de rol
+DROP TRIGGER IF EXISTS on_role_change ON public.user_profiles;
+CREATE TRIGGER on_role_change
+    AFTER INSERT OR UPDATE OF role ON public.user_profiles
+    FOR EACH ROW EXECUTE FUNCTION public.handle_role_change();
+
+-- =====================================================
+-- POLÍTICAS RLS (ROW LEVEL SECURITY)
+-- =====================================================
+
+-- Habilitar RLS en todas las tablas
+ALTER TABLE public.user_profiles ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.students ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.teachers ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.administrators ENABLE ROW LEVEL SECURITY;
+
+-- Políticas para user_profiles
+CREATE POLICY "Users can view their own profile" ON public.user_profiles
+    FOR SELECT USING (auth.uid() = id);
+
+CREATE POLICY "Users can update their own profile" ON public.user_profiles
+    FOR UPDATE USING (auth.uid() = id);
+
+CREATE POLICY "Admins can view all profiles" ON public.user_profiles
+    FOR SELECT USING (
+        EXISTS (
+            SELECT 1 FROM public.user_profiles 
+            WHERE id = auth.uid() AND role = 'admin'
+        )
+    );
+
+CREATE POLICY "Teachers can view student profiles" ON public.user_profiles
+    FOR SELECT USING (
+        role = 'student' AND EXISTS (
+            SELECT 1 FROM public.user_profiles 
+            WHERE id = auth.uid() AND role = 'teacher'
+        )
+    );
+
+-- Políticas para students
+CREATE POLICY "Students can view their own data" ON public.students
+    FOR SELECT USING (auth.uid() = id);
+
+CREATE POLICY "Students can update their own data" ON public.students
+    FOR UPDATE USING (auth.uid() = id);
+
+CREATE POLICY "Teachers can view student data" ON public.students
+    FOR SELECT USING (
+        EXISTS (
+            SELECT 1 FROM public.user_profiles 
+            WHERE id = auth.uid() AND role = 'teacher'
+        )
+    );
+
+CREATE POLICY "Admins can manage all student data" ON public.students
+    FOR ALL USING (
+        EXISTS (
+            SELECT 1 FROM public.user_profiles 
+            WHERE id = auth.uid() AND role = 'admin'
+        )
+    );
+
+-- Políticas para teachers
+CREATE POLICY "Teachers can view their own data" ON public.teachers
+    FOR SELECT USING (auth.uid() = id);
+
+CREATE POLICY "Teachers can update their own data" ON public.teachers
+    FOR UPDATE USING (auth.uid() = id);
+
+CREATE POLICY "Students can view teacher profiles" ON public.teachers
+    FOR SELECT USING (is_verified = true);
+
+CREATE POLICY "Admins can manage all teacher data" ON public.teachers
+    FOR ALL USING (
+        EXISTS (
+            SELECT 1 FROM public.user_profiles 
+            WHERE id = auth.uid() AND role = 'admin'
+        )
+    );
+
+-- Políticas para administrators
+CREATE POLICY "Admins can view their own data" ON public.administrators
+    FOR SELECT USING (auth.uid() = id);
+
+CREATE POLICY "Admins can update their own data" ON public.administrators
+    FOR UPDATE USING (auth.uid() = id);
+
+CREATE POLICY "Admins can view other admin data" ON public.administrators
+    FOR SELECT USING (
+        EXISTS (
+            SELECT 1 FROM public.user_profiles 
+            WHERE id = auth.uid() AND role = 'admin'
+        )
+    );
+
+-- =====================================================
+-- VISTAS ÚTILES
+-- =====================================================
+
+-- Vista para obtener información completa de usuarios con roles
+CREATE OR REPLACE VIEW public.v_users_with_roles AS
+SELECT 
+    up.id,
+    up.email,
+    up.full_name,
+    up.role,
+    up.is_active,
+    up.last_login,
+    up.created_at,
+    CASE 
+        WHEN up.role = 'student' THEN jsonb_build_object(
+            'current_level', s.current_level,
+            'target_level', s.target_level,
+            'enrollment_date', s.enrollment_date
+        )
+        WHEN up.role = 'teacher' THEN jsonb_build_object(
+            'specializations', t.specializations,
+            'experience_years', t.experience_years,
+            'rating', t.rating,
+            'is_verified', t.is_verified
+        )
+        WHEN up.role = 'admin' THEN jsonb_build_object(
+            'permissions', a.permissions,
+            'access_level', a.access_level,
+            'department', a.department
+        )
+        ELSE '{}'::jsonb
+    END as role_data
+FROM public.user_profiles up
+LEFT JOIN public.students s ON up.id = s.id
+LEFT JOIN public.teachers t ON up.id = t.id
+LEFT JOIN public.administrators a ON up.id = a.id;
+
+-- =====================================================
+-- DATOS INICIALES
+-- =====================================================
+
+-- Insertar el usuario administrador existente
+-- NOTA: Reemplaza 'DIRECCION_USER_ID' con el ID real del usuario direccion@opentowork.com
+-- Puedes obtenerlo ejecutando: SELECT id FROM auth.users WHERE email = 'direccion@opentowork.com';
+
+-- Ejemplo de inserción (descomenta y modifica cuando tengas el ID real):
+/*
+INSERT INTO public.user_profiles (id, email, full_name, role)
+VALUES (
+    'DIRECCION_USER_ID', -- Reemplazar con el ID real
+    'direccion@opentowork.com',
+    'Administrador',
+    'admin'
+) ON CONFLICT (id) DO UPDATE SET
+    role = 'admin',
+    updated_at = NOW();
+
+INSERT INTO public.administrators (id, permissions, department, access_level)
+VALUES (
+    'DIRECCION_USER_ID', -- Reemplazar con el ID real
+    ARRAY['manage_users', 'manage_content', 'view_analytics', 'system_settings'],
+    'IT',
+    5
+) ON CONFLICT (id) DO UPDATE SET
+    permissions = ARRAY['manage_users', 'manage_content', 'view_analytics', 'system_settings'],
+    updated_at = NOW();
+*/
+
+-- =====================================================
+-- COMENTARIOS Y DOCUMENTACIÓN
+-- =====================================================
+
+COMMENT ON TABLE public.user_profiles IS 'Perfiles de usuario que extienden auth.users con roles';
+COMMENT ON TABLE public.students IS 'Datos específicos de estudiantes';
+COMMENT ON TABLE public.teachers IS 'Datos específicos de profesores';
+COMMENT ON TABLE public.administrators IS 'Datos específicos de administradores';
+
+COMMENT ON COLUMN public.user_profiles.role IS 'Rol del usuario: admin, teacher, o student';
+COMMENT ON COLUMN public.students.current_level IS 'Nivel actual del estudiante (A1-C2)';
+COMMENT ON COLUMN public.teachers.is_verified IS 'Si el profesor está verificado por administradores';
+COMMENT ON COLUMN public.administrators.access_level IS 'Nivel de acceso del admin (1-5, donde 5 es máximo)';
+
+-- =====================================================
+-- INSTRUCCIONES POST-EJECUCIÓN
+-- =====================================================
+
+-- 1. Después de ejecutar este script, obtén el ID del usuario admin:
+--    SELECT id FROM auth.users WHERE email = 'direccion@opentowork.com';
+
+-- 2. Actualiza el rol del usuario admin:
+--    UPDATE public.user_profiles 
+--    SET role = 'admin' 
+--    WHERE email = 'direccion@opentowork.com';
+
+-- 3. Inserta en la tabla de administradores:
+--    INSERT INTO public.administrators (id, permissions, department, access_level)
+--    SELECT id, ARRAY['manage_users', 'manage_content', 'view_analytics'], 'IT', 5
+--    FROM public.user_profiles 
+--    WHERE email = 'direccion@opentowork.com';
+
+-- 4. Verifica que todo esté funcionando:
+--    SELECT * FROM public.v_users_with_roles WHERE role = 'admin';

@@ -1,0 +1,557 @@
+-- ############################################################
+-- 🧸 ESQUEMA COMPLETO (SUPABASE / POSTGRES) — “VERSIÓN PEQUES”
+-- Imagina muchas piezas LEGO:
+--   - Piezas pequeñas: PREGUNTAS (y sus OPCIONES)
+--   - Cajitas que juntan piezas: EJERCICIOS
+--   - Jugar con las cajitas: TRAINING (intentos y respuestas)
+-- Este script crea todo lo necesario.
+-- ############################################################
+
+-- === 0) EXTENSIONES Y UTILIDADES ============================
+
+create extension if not exists pgcrypto;
+create extension if not exists pg_trgm;
+
+-- función para actualizar "updated_at" automáticamente
+create or replace function public.set_updated_at()
+returns trigger
+language plpgsql
+as $$
+begin
+  new.updated_at = now();
+  return new;
+end;
+$$;
+
+-- === 1) ETIQUETAS (como pegatinas que describen cosas) =====
+
+create table if not exists public.grupos_etiquetas (
+  id uuid primary key default gen_random_uuid(),
+  name text not null unique,
+  created_at timestamptz not null default now(),
+  updated_at timestamptz not null default now()
+);
+create trigger tg_grupos_etiquetas_updated
+before update on public.grupos_etiquetas
+for each row execute function public.set_updated_at();
+
+create table if not exists public.etiquetas (
+  id uuid primary key default gen_random_uuid(),
+  group_id uuid references public.grupos_etiquetas(id) on delete set null,
+  name text not null,
+  slug text not null unique,
+  parent_id uuid references public.etiquetas(id) on delete set null,
+  created_at timestamptz not null default now(),
+  updated_at timestamptz not null default now(),
+  constraint etiquetas_name_trim check (length(trim(name)) > 0)
+);
+create index if not exists idx_etiquetas_group  on public.etiquetas(group_id);
+create index if not exists idx_etiquetas_parent on public.etiquetas(parent_id);
+create index if not exists idx_etiquetas_trgm   on public.etiquetas using gin (name gin_trgm_ops);
+create trigger tg_etiquetas_updated
+before update on public.etiquetas
+for each row execute function public.set_updated_at();
+
+-- puente “pegatina pegada a algo”
+create table if not exists public.etiquetados (
+  tag_id uuid not null references public.etiquetas(id) on delete cascade,
+  object_type text not null, -- 'pregunta','ejercicio','medio', ...
+  object_id uuid not null,
+  created_at timestamptz not null default now(),
+  primary key (tag_id, object_type, object_id)
+);
+create index if not exists idx_etiquetados_object on public.etiquetados(object_type, object_id);
+
+-- === 2) CONTENIDO: PREGUNTAS + VERSIONES + OPCIONES =========
+
+-- pregunta “madre” (la idea)
+create table if not exists public.preguntas (
+  id uuid primary key default gen_random_uuid(),
+  skill text,                   -- reading | listening | writing | speaking | use_of_english
+  language text default 'en',
+  base_stem text not null,      -- enunciado neutral
+  created_by uuid references auth.users(id) on delete set null,
+  is_active boolean not null default true,
+  created_at timestamptz not null default now(),
+  updated_at timestamptz not null default now()
+);
+create index if not exists idx_preguntas_skill on public.preguntas(skill);
+create trigger tg_preguntas_updated
+before update on public.preguntas
+for each row execute function public.set_updated_at();
+
+-- versiones de la pregunta (como ediciones del mismo lego)
+create table if not exists public.versiones_preguntas (
+  id uuid primary key default gen_random_uuid(),
+  question_id uuid not null references public.preguntas(id) on delete cascade,
+  version integer not null,
+  stem text not null,
+  explanation text,
+  question_type text not null,  -- multiple_choice | open | gap_fill | matching | ...
+  difficulty numeric(4,2),
+  language text default 'en',
+  status text not null default 'draft',  -- draft | published | retired
+  published_at timestamptz,
+  created_at timestamptz not null default now(),
+  updated_at timestamptz not null default now(),
+  unique (question_id, version)
+);
+create index if not exists idx_vp_question on public.versiones_preguntas(question_id);
+create index if not exists idx_vp_status   on public.versiones_preguntas(status);
+create trigger tg_versiones_preguntas_updated
+before update on public.versiones_preguntas
+for each row execute function public.set_updated_at();
+
+-- opciones (las piezas A, B, C de “elige la correcta”)
+create table if not exists public.opciones (
+  id uuid primary key default gen_random_uuid(),
+  question_version_id uuid not null references public.versiones_preguntas(id) on delete cascade,
+  body text not null,
+  is_correct boolean not null default false,
+  weight numeric(6,3) default 1,
+  "order" integer,
+  created_at timestamptz not null default now(),
+  updated_at timestamptz not null default now()
+);
+create index if not exists idx_opciones_qv on public.opciones(question_version_id);
+create trigger tg_opciones_updated
+before update on public.opciones
+for each row execute function public.set_updated_at();
+
+-- === 3) MEDIOS (audios, imágenes) y su relación =============
+
+create table if not exists public.media (
+  id uuid primary key default gen_random_uuid(),
+  media_type text not null,       -- image | audio | video | pdf
+  storage_path text not null,     -- p.ej. 'public/medialib/abc123.mp3'
+  hash text,
+  license text,
+  language text,
+  duration_ms integer,
+  created_by uuid references auth.users(id) on delete set null,
+  created_at timestamptz not null default now(),
+  updated_at timestamptz not null default now()
+);
+create index if not exists idx_media_type on public.media(media_type);
+create index if not exists idx_media_hash on public.media(hash);
+create trigger tg_media_updated
+before update on public.media
+for each row execute function public.set_updated_at();
+
+-- relación m:n entre versión de pregunta y medios
+create table if not exists public.preguntas_media (
+  question_version_id uuid not null references public.versiones_preguntas(id) on delete cascade,
+  media_id uuid not null references public.media(id) on delete cascade,
+  role text,       -- prompt | illustration | audio_source | ...
+  "order" integer,
+  primary key (question_version_id, media_id)
+);
+create index if not exists idx_pm_media on public.preguntas_media(media_id);
+
+-- === 4) EJERCICIOS (cajitas que agrupan preguntas) ==========
+
+create table if not exists public.ejercicios (
+  id uuid primary key default gen_random_uuid(),
+  title text not null,
+  description text,
+  skill text,
+  level_ref text,               -- A2 | B1 | B2 | C1 ...
+  time_cap_seconds integer,
+  created_by uuid references auth.users(id) on delete set null,
+  is_active boolean not null default true,
+  created_at timestamptz not null default now(),
+  updated_at timestamptz not null default now()
+);
+create index if not exists idx_ejercicios_skill on public.ejercicios(skill);
+create trigger tg_ejercicios_updated
+before update on public.ejercicios
+for each row execute function public.set_updated_at();
+
+-- composición: qué preguntas (versiones) lleva cada ejercicio
+create table if not exists public.preguntas_ejercicio (
+  exercise_id uuid not null references public.ejercicios(id) on delete cascade,
+  question_version_id uuid not null references public.versiones_preguntas(id) on delete restrict,
+  "order" integer not null,
+  points numeric(6,2) default 1,
+  suggested_time_seconds integer,
+  primary key (exercise_id, question_version_id)
+);
+create index if not exists idx_pe_exercise_order on public.preguntas_ejercicio(exercise_id, "order");
+
+-- === 5) RLS (quién puede ver/tocar) =========================
+-- idea: todo el mundo puede LEER; solo el dueño (created_by) puede ESCRIBIR
+
+alter table public.grupos_etiquetas  enable row level security;
+alter table public.etiquetas        enable row level security;
+alter table public.etiquetados      enable row level security;
+alter table public.preguntas        enable row level security;
+alter table public.versiones_preguntas enable row level security;
+alter table public.opciones         enable row level security;
+alter table public.media            enable row level security;
+alter table public.preguntas_media  enable row level security;
+alter table public.ejercicios       enable row level security;
+alter table public.preguntas_ejercicio enable row level security;
+
+-- leer: todos
+do $$
+begin
+  if not exists (select 1 from pg_policies where schemaname='public' and tablename='grupos_etiquetas' and policyname='read_all_grupos') then
+    create policy "read_all_grupos" on public.grupos_etiquetas for select using (true);
+  end if;
+  if not exists (select 1 from pg_policies where schemaname='public' and tablename='etiquetas' and policyname='read_all_etiquetas') then
+    create policy "read_all_etiquetas" on public.etiquetas for select using (true);
+  end if;
+  if not exists (select 1 from pg_policies where schemaname='public' and tablename='etiquetados' and policyname='read_all_etiquetados') then
+    create policy "read_all_etiquetados" on public.etiquetados for select using (true);
+  end if;
+
+  if not exists (select 1 from pg_policies where schemaname='public' and tablename='preguntas' and policyname='read_all_preguntas') then
+    create policy "read_all_preguntas" on public.preguntas for select using (true);
+  end if;
+  if not exists (select 1 from pg_policies where schemaname='public' and tablename='versiones_preguntas' and policyname='read_all_vp') then
+    create policy "read_all_vp" on public.versiones_preguntas for select using (true);
+  end if;
+  if not exists (select 1 from pg_policies where schemaname='public' and tablename='opciones' and policyname='read_all_opciones') then
+    create policy "read_all_opciones" on public.opciones for select using (true);
+  end if;
+
+  if not exists (select 1 from pg_policies where schemaname='public' and tablename='media' and policyname='read_all_media') then
+    create policy "read_all_media" on public.media for select using (true);
+  end if;
+  if not exists (select 1 from pg_policies where schemaname='public' and tablename='preguntas_media' and policyname='read_all_pm') then
+    create policy "read_all_pm" on public.preguntas_media for select using (true);
+  end if;
+
+  if not exists (select 1 from pg_policies where schemaname='public' and tablename='ejercicios' and policyname='read_all_ejercicios') then
+    create policy "read_all_ejercicios" on public.ejercicios for select using (true);
+  end if;
+  if not exists (select 1 from pg_policies where schemaname='public' and tablename='preguntas_ejercicio' and policyname='read_all_pe') then
+    create policy "read_all_pe" on public.preguntas_ejercicio for select using (true);
+  end if;
+end$$;
+
+-- escribir: solo dueño (created_by = auth.uid())
+create policy if not exists "write_own_preguntas" on public.preguntas
+  for all to authenticated using (created_by = auth.uid()) with check (created_by = auth.uid());
+
+create policy if not exists "write_own_vp" on public.versiones_preguntas
+  for all to authenticated
+  using (exists (select 1 from public.preguntas q
+                 where q.id = versiones_preguntas.question_id
+                   and q.created_by = auth.uid()))
+  with check (exists (select 1 from public.preguntas q
+                      where q.id = versiones_preguntas.question_id
+                        and q.created_by = auth.uid()));
+
+create policy if not exists "write_own_opciones" on public.opciones
+  for all to authenticated
+  using (exists (select 1 from public.versiones_preguntas vp
+                 join public.preguntas q on q.id = vp.question_id
+                 where vp.id = opciones.question_version_id
+                   and q.created_by = auth.uid()))
+  with check (exists (select 1 from public.versiones_preguntas vp
+                      join public.preguntas q on q.id = vp.question_id
+                      where vp.id = opciones.question_version_id
+                        and q.created_by = auth.uid()));
+
+create policy if not exists "write_own_media" on public.media
+  for all to authenticated using (created_by = auth.uid()) with check (created_by = auth.uid());
+
+create policy if not exists "write_own_pm" on public.preguntas_media
+  for all to authenticated
+  using (
+    exists (select 1 from public.versiones_preguntas vp
+            join public.preguntas q on q.id = vp.question_id
+            where vp.id = preguntas_media.question_version_id and q.created_by = auth.uid())
+    and exists (select 1 from public.media m
+                where m.id = preguntas_media.media_id and m.created_by = auth.uid())
+  )
+  with check (
+    exists (select 1 from public.versiones_preguntas vp
+            join public.preguntas q on q.id = vp.question_id
+            where vp.id = preguntas_media.question_version_id and q.created_by = auth.uid())
+    and exists (select 1 from public.media m
+                where m.id = preguntas_media.media_id and m.created_by = auth.uid())
+  );
+
+create policy if not exists "write_own_ejercicios" on public.ejercicios
+  for all to authenticated using (created_by = auth.uid()) with check (created_by = auth.uid());
+
+create policy if not exists "write_own_pe" on public.preguntas_ejercicio
+  for all to authenticated
+  using (
+    exists (select 1 from public.ejercicios e
+            where e.id = preguntas_ejercicio.exercise_id and e.created_by = auth.uid())
+    and
+    exists (select 1 from public.versiones_preguntas vp
+            join public.preguntas q on q.id = vp.question_id
+            where vp.id = preguntas_ejercicio.question_version_id and q.created_by = auth.uid())
+  )
+  with check (
+    exists (select 1 from public.ejercicios e
+            where e.id = preguntas_ejercicio.exercise_id and e.created_by = auth.uid())
+    and
+    exists (select 1 from public.versiones_preguntas vp
+            join public.preguntas q on q.id = vp.question_id
+            where vp.id = preguntas_ejercicio.question_version_id and q.created_by = auth.uid())
+  );
+
+-- === 6) VISTAS (atajos para leer bonito) ====================
+
+drop view if exists public.v_ultima_version_publicada;
+create or replace view public.v_ultima_version_publicada as
+select distinct on (vp.question_id)
+  vp.id,
+  vp.question_id,
+  vp.version,
+  vp.stem,
+  vp.explanation,
+  vp.question_type,
+  vp.difficulty,
+  vp.language,
+  vp.published_at
+from public.versiones_preguntas vp
+where vp.status = 'published'
+order by vp.question_id, vp.version desc;
+
+drop view if exists public.v_ejercicio_expandido;
+create or replace view public.v_ejercicio_expandido as
+select
+  e.id as ejercicio_id, e.title, e.description, e.skill, e.level_ref, e.time_cap_seconds,
+  pe."order" as pregunta_orden,
+  vp.id as pregunta_version_id, vp.stem as pregunta_stem, vp.question_type,
+  o.id as opcion_id, o.body as opcion_body, o.is_correct, o."order" as opcion_orden,
+  pm.media_id, m.media_type, m.storage_path, pm.role as media_rol, pm."order" as media_orden
+from public.ejercicios e
+join public.preguntas_ejercicio pe on pe.exercise_id = e.id
+join public.versiones_preguntas vp  on vp.id = pe.question_version_id
+left join public.opciones o         on o.question_version_id = vp.id
+left join public.preguntas_media pm on pm.question_version_id = vp.id
+left join public.media m            on m.id = pm.media_id
+order by e.id, pe."order", o."order", pm."order";
+
+-- === 7) TRAINING (jugar con las cajitas) ====================
+
+-- intentos (una sesión de juego)
+create table if not exists public.intentos_training (
+  id uuid primary key default gen_random_uuid(),
+  user_id uuid not null references auth.users(id) on delete cascade,
+  ejercicio_id uuid not null references public.ejercicios(id) on delete cascade,
+  estado text not null default 'in_progress', -- in_progress | submitted | cancelled
+  inicio timestamptz not null default now(),
+  fin timestamptz,
+  puntaje_total numeric(8,2),
+  created_at timestamptz not null default now(),
+  updated_at timestamptz not null default now()
+);
+create trigger tg_intentos_training_updated
+before update on public.intentos_training
+for each row execute function public.set_updated_at();
+create index if not exists idx_it_user on public.intentos_training(user_id);
+create index if not exists idx_it_ejercicio on public.intentos_training(ejercicio_id);
+
+-- respuestas dentro del intento
+create table if not exists public.respuestas_training (
+  id uuid primary key default gen_random_uuid(),
+  intento_id uuid not null references public.intentos_training(id) on delete cascade,
+  pregunta_version_id uuid not null references public.versiones_preguntas(id) on delete restrict,
+  opcion_id uuid references public.opciones(id) on delete set null, -- para multiple choice
+  respuesta_texto text,   -- para preguntas abiertas
+  correcta boolean,
+  tiempo_ms integer,
+  raw jsonb,
+  created_at timestamptz not null default now(),
+  updated_at timestamptz not null default now(),
+  unique (intento_id, pregunta_version_id)
+);
+create trigger tg_respuestas_training_updated
+before update on public.respuestas_training
+for each row execute function public.set_updated_at();
+
+-- auto-evaluación si marcó opción
+create or replace function public._eval_respuesta_training()
+returns trigger
+language plpgsql
+as $$
+begin
+  if new.opcion_id is not null then
+    select o.is_correct into new.correcta from public.opciones o where o.id = new.opcion_id;
+  end if;
+  return new;
+end;
+$$;
+
+drop trigger if exists tg_eval_respuesta_training_ins on public.respuestas_training;
+create trigger tg_eval_respuesta_training_ins
+before insert or update on public.respuestas_training
+for each row execute function public._eval_respuesta_training();
+
+-- RLS: solo el dueño ve/escribe sus intentos y respuestas
+alter table public.intentos_training  enable row level security;
+alter table public.respuestas_training enable row level security;
+
+create policy if not exists "it_read_own" on public.intentos_training
+  for select to authenticated using (user_id = auth.uid());
+create policy if not exists "it_write_own" on public.intentos_training
+  for all to authenticated using (user_id = auth.uid()) with check (user_id = auth.uid());
+
+create policy if not exists "rt_read_own" on public.respuestas_training
+  for select to authenticated
+  using (exists (select 1 from public.intentos_training it where it.id = respuestas_training.intento_id and it.user_id = auth.uid()));
+
+create policy if not exists "rt_write_own" on public.respuestas_training
+  for all to authenticated
+  using (exists (select 1 from public.intentos_training it where it.id = respuestas_training.intento_id and it.user_id = auth.uid()))
+  with check (exists (select 1 from public.intentos_training it where it.id = respuestas_training.intento_id and it.user_id = auth.uid()));
+
+-- === 8) RPC (funciones para el frontend) ====================
+
+-- leer un ejercicio completo en JSON (ejercicio + preguntas + opciones + medios)
+drop function if exists public.get_ejercicio_completo(uuid);
+create or replace function public.get_ejercicio_completo(p_ejercicio_id uuid)
+returns jsonb
+language plpgsql
+security definer
+set search_path = public
+as $$
+declare out_json jsonb;
+begin
+  with
+  ex as (select * from public.ejercicios where id = p_ejercicio_id),
+  qs as (
+    select pe."order" as q_order, vp.id as qv_id, vp.stem, vp.question_type
+    from public.preguntas_ejercicio pe
+    join public.versiones_preguntas vp on vp.id = pe.question_version_id
+    where pe.exercise_id = p_ejercicio_id
+    order by pe."order"
+  ),
+  opts as (
+    select o.question_version_id qv_id,
+           jsonb_agg(jsonb_build_object('id',o.id,'body',o.body,'is_correct',o.is_correct,'order',o."order")
+           order by o."order") as opciones
+    from public.opciones o join qs on qs.qv_id=o.question_version_id
+    group by o.question_version_id
+  ),
+  meds as (
+    select pm.question_version_id qv_id,
+           jsonb_agg(jsonb_build_object('media_id',m.id,'type',m.media_type,'path',m.storage_path,'role',pm.role,'order',pm."order")
+           order by pm."order") as medios
+    from public.preguntas_media pm
+    join public.media m on m.id=pm.media_id
+    join qs on qs.qv_id=pm.question_version_id
+    group by pm.question_version_id
+  ),
+  qpack as (
+    select q_order,
+           jsonb_build_object('pregunta_version_id',qs.qv_id,'stem',qs.stem,'type',qs.question_type,
+                              'opciones',coalesce(opts.opciones,'[]'::jsonb),
+                              'medios',coalesce(meds.medios,'[]'::jsonb)) as qjson
+    from qs left join opts on opts.qv_id=qs.qv_id
+            left join meds on meds.qv_id=qs.qv_id
+    order by q_order
+  )
+  select jsonb_build_object(
+    'ejercicio', jsonb_build_object('id',ex.id,'title',ex.title,'description',ex.description,'skill',ex.skill,'level_ref',ex.level_ref,'time_cap_seconds',ex.time_cap_seconds),
+    'preguntas', coalesce((select jsonb_agg(qjson order by q_order) from qpack), '[]'::jsonb)
+  )
+  into out_json
+  from ex;
+  return out_json;
+end; $$;
+
+-- empezar intento (devuelve id)
+drop function if exists public.start_training_intent(uuid);
+create or replace function public.start_training_intent(p_ejercicio_id uuid)
+returns uuid
+language sql
+security definer
+set search_path = public
+as $$
+  insert into public.intentos_training(user_id, ejercicio_id)
+  values (auth.uid(), p_ejercicio_id)
+  returning id;
+$$;
+
+-- guardar respuesta (choice u abierta)
+drop function if exists public.save_training_answer(uuid,uuid,uuid,text,int, jsonb);
+create or replace function public.save_training_answer(
+  p_intento_id uuid,
+  p_pregunta_version_id uuid,
+  p_opcion_id uuid default null,
+  p_respuesta_texto text default null,
+  p_tiempo_ms integer default null,
+  p_raw jsonb default null
+)
+returns void
+language sql
+security definer
+set search_path = public
+as $$
+  insert into public.respuestas_training(
+    intento_id, pregunta_version_id, opcion_id, respuesta_texto, tiempo_ms, raw
+  )
+  values (p_intento_id, p_pregunta_version_id, p_opcion_id, p_respuesta_texto, p_tiempo_ms, p_raw)
+  on conflict (intento_id, pregunta_version_id) do update
+    set opcion_id = excluded.opcion_id,
+        respuesta_texto = excluded.respuesta_texto,
+        tiempo_ms = excluded.tiempo_ms,
+        raw = excluded.raw,
+        updated_at = now();
+$$;
+
+-- enviar intento (calcula puntos y cierra)
+drop function if exists public.submit_training_intent(uuid);
+create or replace function public.submit_training_intent(p_intento_id uuid)
+returns numeric
+language plpgsql
+security definer
+set search_path = public
+as $$
+declare total numeric;
+begin
+  select coalesce(sum(pe.points),0) into total
+  from public.respuestas_training r
+  join public.intentos_training it on it.id = r.intento_id
+  join public.preguntas_ejercicio pe
+       on pe.exercise_id = it.ejercicio_id
+      and pe.question_version_id = r.pregunta_version_id
+  where r.intento_id = p_intento_id
+    and coalesce(r.correcta,false) = true;
+
+  update public.intentos_training
+    set estado = 'submitted', fin = now(), puntaje_total = total
+  where id = p_intento_id;
+
+  return total;
+end;
+$$;
+
+-- === 9) SEMILLA (opcional) — crea un ejemplo mínimo =========
+-- Esto mete 1 pregunta MCQ con 3 opciones y un ejercicio con esa pregunta.
+
+with q as (
+  insert into public.preguntas (skill, base_stem, created_by)
+  values ('reading','Choose the correct option', null)
+  returning id
+),
+vp as (
+  insert into public.versiones_preguntas (question_id, version, stem, question_type, status)
+  select id, 1, 'Choose the correct option', 'multiple_choice', 'published' from q
+  returning id
+),
+ej as (
+  insert into public.ejercicios (title, skill, level_ref, created_by)
+  values ('Reading Part 1', 'reading', 'B1', null)
+  returning id
+),
+op as (
+  insert into public.opciones (question_version_id, body, is_correct, "order")
+  select vp.id, v.body, v.is_correct, v.ord
+  from vp
+  join (values ('A',false,1),('B',true,2),('C',false,3)) as v(body,is_correct,ord) on true
+  returning 1
+)
+insert into public.preguntas_ejercicio (exercise_id, question_version_id, "order", points)
+select ej.id, vp.id, 1, 1 from ej, vp;
+
+-- FIN DEL SCRIPT 🧸
