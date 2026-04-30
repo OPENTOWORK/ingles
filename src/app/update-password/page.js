@@ -6,10 +6,34 @@ import { supabase } from '../../utils/supabaseClient';
 export default function UpdatePasswordPage() {
   const [newPassword, setNewPassword] = useState('');
   const [updated, setUpdated] = useState(false);
+  const [canUpdatePassword, setCanUpdatePassword] = useState(true);
   const router = useRouter();
+
+  useEffect(() => {
+    const checkRecoverySession = async () => {
+      const { data: { session } } = await supabase.auth.getSession();
+      setCanUpdatePassword(Boolean(session));
+    };
+    checkRecoverySession();
+  }, []);
 
   const handleUpdate = async (e) => {
     e.preventDefault();
+    if (!canUpdatePassword) {
+      alert('El enlace de recuperación no es válido o ha expirado. Solicita uno nuevo.');
+      return;
+    }
+
+    const passwordIsStrong =
+      newPassword.length >= 8 &&
+      /[A-Z]/.test(newPassword) &&
+      /[a-z]/.test(newPassword) &&
+      /\d/.test(newPassword);
+
+    if (!passwordIsStrong) {
+      alert('La nueva contraseña debe tener al menos 8 caracteres, una mayúscula, una minúscula y un número.');
+      return;
+    }
 
     const { error } = await supabase.auth.updateUser({
       password: newPassword,
@@ -39,6 +63,11 @@ export default function UpdatePasswordPage() {
 
       {!updated ? (
         <form onSubmit={handleUpdate}>
+          {!canUpdatePassword && (
+            <p style={{ marginBottom: "1rem", color: "red" }}>
+              Este enlace no es válido o ha expirado. Solicita uno nuevo desde "¿Has olvidado tu contraseña?".
+            </p>
+          )}
           <label style={{ display: "block", marginBottom: "0.5rem" }}>
             Introduce tu nueva contraseña
           </label>

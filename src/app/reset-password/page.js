@@ -8,9 +8,13 @@ export default function ResetPasswordPage() {
 
   const handlePasswordReset = async (e) => {
     e.preventDefault();
+    const redirectBase =
+      typeof window !== 'undefined'
+        ? window.location.origin
+        : process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000';
 
     const { error } = await supabase.auth.resetPasswordForEmail(email, {
-      redirectTo: 'http://localhost:3000/update-password', // cámbialo a tu dominio final
+      redirectTo: `${redirectBase}/update-password`,
     });
 
     if (error) {

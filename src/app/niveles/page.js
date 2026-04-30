@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from "next/link";
 import { supabase } from '@/utils/supabaseClient';
+import { getRoleNameByUserId, normalizeRoleName } from '@/utils/authRoles';
 
 // ====== Datos ======
 const NIVELES = [
@@ -66,6 +67,7 @@ const NIVELES = [
 export default function Niveles() {
   const router = useRouter();
   const [loading, setLoading] = useState(true);
+  const [userRole, setUserRole] = useState('');
 
   // Auth
   useEffect(() => {
@@ -74,6 +76,8 @@ export default function Niveles() {
       if (!data.session) {
         router.push('/login');
       } else {
+        const roleName = await getRoleNameByUserId(data.session.user.id, data.session.user.email);
+        setUserRole(normalizeRoleName(roleName));
         setLoading(false);
       }
     };
@@ -87,6 +91,8 @@ export default function Niveles() {
       </main>
     );
   }
+
+  const isStudent = userRole === 'student' || userRole === 'alumno';
 
   return (
     <main className="shell niveles-page">
@@ -103,9 +109,10 @@ export default function Niveles() {
             <span className="count">{NIVELES.length}</span>
           </div>
           <ul className="grid">
-            {NIVELES.map((nivelData) => (
-              <li key={nivelData.nivel}>
-                <Link href={`/niveles/${nivelData.nivel.toLowerCase()}`} className="card" style={{ borderColor: nivelData.color }}>
+            {NIVELES.map((nivelData) => {
+              const isLockedForStudent = isStudent && nivelData.nivel !== 'B2';
+              const cardContent = (
+                <>
                   <div className="card__header" style={{ backgroundColor: nivelData.color }}>
                     <div className="card__title">{nivelData.nivel} – {nivelData.nombre}</div>
                   </div>
@@ -125,9 +132,26 @@ export default function Niveles() {
                       </div>
                     </div>
                   </div>
-                </Link>
-              </li>
-            ))}
+                </>
+              );
+
+              return (
+                <li key={nivelData.nivel} className={isLockedForStudent ? 'card-wrap is-locked' : 'card-wrap'}>
+                  {isLockedForStudent ? (
+                    <div className="card card-disabled" style={{ borderColor: nivelData.color }} aria-disabled="true">
+                      {cardContent}
+                    </div>
+                  ) : (
+                    <Link href={`/niveles/${nivelData.nivel.toLowerCase()}`} className="card" style={{ borderColor: nivelData.color }}>
+                      {cardContent}
+                    </Link>
+                  )}
+                  {isLockedForStudent && (
+                    <div className="locked-overlay">Proximamente disponible</div>
+                  )}
+                </li>
+              );
+            })}
           </ul>
         </section>
       </div>
@@ -158,9 +182,24 @@ function GlobalStyles() {
       .grid{list-style:none;margin:0;padding:0;display:grid;gap:12px;grid-template-columns:repeat(1,minmax(0,1fr))}
       @media (min-width:640px){ .grid{grid-template-columns:repeat(2,minmax(0,1fr));} }
       @media (min-width:980px){ .grid{grid-template-columns:repeat(3,minmax(0,1fr));} }
+      .card-wrap{position:relative}
       .card{display:block;height:100%;border:2px solid #eaeaea;border-radius:18px;background:var(--card);padding:0;transition:transform .2s, box-shadow .2s, border-color .2s;overflow:hidden}
       .card:hover{transform:translateY(-2px);box-shadow:0 18px 40px rgba(0,0,0,.15)}
       .card:focus{outline:none;box-shadow:0 0 0 6px rgba(0,112,243,.35)}
+      .card-disabled{cursor:not-allowed;filter:grayscale(.15)}
+      .locked-overlay{
+        position:absolute;
+        inset:0;
+        display:grid;
+        place-items:center;
+        border-radius:18px;
+        background:rgba(0,0,0,.45);
+        color:#fff;
+        font-weight:700;
+        text-transform:uppercase;
+        letter-spacing:.03em;
+        pointer-events:none;
+      }
       .card__header{color:white;padding:16px 18px;font-weight:600}
       .card__title{font-size:16px;font-weight:600;line-height:1.25;color:white;margin:0}
       .card__content{padding:18px}

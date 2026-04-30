@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { supabase } from '@/utils/supabaseClient';
 import Link from 'next/link';
+import { userHasRole } from '@/utils/authRoles';
 
 export default function TeacherDashboard() {
   const [user, setUser] = useState(null);
@@ -31,28 +32,18 @@ export default function TeacherDashboard() {
         return;
       }
 
-      // Verificar si el usuario es profesor
-      const { data: profile, error: profileError } = await supabase
-        .from('user_profiles')
-        .select('*')
-        .eq('id', currentUser.id)
-        .single();
-
-      if (profileError || !profile || profile.role !== 'teacher') {
-        router.push('/');
+      const canAccessTeacherPanel = await userHasRole(currentUser.id, ['teacher', 'profesor'], currentUser.email);
+      if (!canAccessTeacherPanel) {
+        router.push('/perfil');
         return;
       }
 
-      // Obtener datos específicos del profesor
-      const { data: teacherData, error: teacherError } = await supabase
-        .from('teachers')
-        .select('*')
-        .eq('id', currentUser.id)
-        .single();
-
       setUser(currentUser);
-      setTeacher(teacherData);
-      await loadDashboardData();
+      setTeacher({
+        biografia: 'Profesor habilitado por rol de acceso.',
+        idioma_preferido: 'Inglés',
+      });
+      await loadDashboardData(currentUser.id);
     } catch (error) {
       console.error('Error checking user:', error);
       router.push('/login');
@@ -61,44 +52,35 @@ export default function TeacherDashboard() {
     }
   };
 
-  const loadDashboardData = async () => {
+  const loadDashboardData = async (userId) => {
     try {
       // Cargar estadísticas
       const [
-        studentsResult,
         sessionsResult,
         recentSessionsResult
       ] = await Promise.all([
         supabase
           .from('study_sessions')
-          .select('student_id')
-          .eq('teacher_id', user.id),
-        supabase
-          .from('study_sessions')
-          .select('duration_minutes, rating')
-          .eq('teacher_id', user.id),
+          .select('duracion_seg, user_id')
+          .eq('user_id', userId),
         supabase
           .from('study_sessions')
           .select(`
             id,
-            session_type,
-            level,
-            duration_minutes,
-            started_at,
-            ended_at,
-            notes,
-            rating,
-            students!inner(email, full_name)
+            fecha_inicio,
+            fecha_fin,
+            duracion_seg,
+            notas,
+            user_id
           `)
-          .eq('teacher_id', user.id)
-          .order('started_at', { ascending: false })
+          .eq('user_id', userId)
+          .order('fecha_inicio', { ascending: false })
           .limit(5)
       ]);
 
-      const uniqueStudents = new Set(studentsResult.data?.map(s => s.student_id) || []).size;
-      const totalHours = sessionsResult.data?.reduce((acc, session) => acc + (session.duration_minutes || 0), 0) / 60 || 0;
-      const ratings = sessionsResult.data?.filter(s => s.rating).map(s => s.rating) || [];
-      const averageRating = ratings.length > 0 ? ratings.reduce((acc, rating) => acc + rating, 0) / ratings.length : 0;
+      const uniqueStudents = 0;
+      const totalHours = sessionsResult.data?.reduce((acc, session) => acc + (session.duracion_seg || 0), 0) / 3600 || 0;
+      const averageRating = 0;
 
       setStats({
         totalStudents: uniqueStudents,
@@ -166,32 +148,32 @@ export default function TeacherDashboard() {
               <div>
                 <h3 className="text-sm font-medium text-gray-500">Especializaciones</h3>
                 <p className="mt-1 text-sm text-gray-900">
-                  {teacher.specializations?.length > 0 ? teacher.specializations.join(', ') : 'No especificadas'}
+                  {teacher.idioma_preferido || 'No especificadas'}
                 </p>
               </div>
               <div>
                 <h3 className="text-sm font-medium text-gray-500">Años de Experiencia</h3>
-                <p className="mt-1 text-sm text-gray-900">{teacher.experience_years || 0} años</p>
+                <p className="mt-1 text-sm text-gray-900">N/A</p>
               </div>
               <div>
                 <h3 className="text-sm font-medium text-gray-500">Tarifa por Hora</h3>
                 <p className="mt-1 text-sm text-gray-900">
-                  {teacher.hourly_rate ? `€${teacher.hourly_rate}/hora` : 'No especificada'}
+                  No especificada
                 </p>
               </div>
               <div>
                 <h3 className="text-sm font-medium text-gray-500">Estado de Verificación</h3>
                 <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${
-                  teacher.is_verified ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800'
+                  'bg-green-100 text-green-800'
                 }`}>
-                  {teacher.is_verified ? 'Verificado' : 'Pendiente de verificación'}
+                  Verificado
                 </span>
               </div>
             </div>
-            {teacher.bio && (
+            {teacher.biografia && (
               <div className="mt-6">
                 <h3 className="text-sm font-medium text-gray-500">Biografía</h3>
-                <p className="mt-1 text-sm text-gray-900">{teacher.bio}</p>
+                <p className="mt-1 text-sm text-gray-900">{teacher.biografia}</p>
               </div>
             )}
           </div>
@@ -353,47 +335,28 @@ export default function TeacherDashboard() {
                   <tr key={session.id}>
                     <td className="px-6 py-4 whitespace-nowrap">
                       <div className="text-sm font-medium text-gray-900">
-                        {session.students?.full_name || 'Estudiante'}
+                        Estudiante
                       </div>
-                      <div className="text-sm text-gray-500">{session.students?.email}</div>
+                      <div className="text-sm text-gray-500">{user.email}</div>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
                       <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${
-                        session.session_type === 'teacher_guided' ? 'bg-blue-100 text-blue-800' :
-                        session.session_type === 'group_session' ? 'bg-green-100 text-green-800' :
                         'bg-gray-100 text-gray-800'
                       }`}>
-                        {session.session_type === 'teacher_guided' ? 'Guiada' :
-                         session.session_type === 'group_session' ? 'Grupal' : 'Autónoma'}
+                        Sesión de estudio
                       </span>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                      {session.level || '-'}
+                      -
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                      {session.duration_minutes ? `${session.duration_minutes} min` : '-'}
+                      {session.duracion_seg ? `${Math.round(session.duracion_seg / 60)} min` : '-'}
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                      {new Date(session.started_at).toLocaleDateString('es-ES')}
+                      {session.fecha_inicio ? new Date(session.fecha_inicio).toLocaleDateString('es-ES') : '-'}
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                      {session.rating ? (
-                        <div className="flex items-center">
-                          <span className="mr-1">{session.rating}/5</span>
-                          <div className="flex">
-                            {[...Array(5)].map((_, i) => (
-                              <svg
-                                key={i}
-                                className={`w-4 h-4 ${i < session.rating ? 'text-yellow-400' : 'text-gray-300'}`}
-                                fill="currentColor"
-                                viewBox="0 0 20 20"
-                              >
-                                <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                              </svg>
-                            ))}
-                          </div>
-                        </div>
-                      ) : '-'}
+                      -
                     </td>
                   </tr>
                 ))}

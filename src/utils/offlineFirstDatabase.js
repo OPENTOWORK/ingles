@@ -267,9 +267,15 @@ export class OfflineFirstDatabase {
     // Try to sync with database
     if (this.isOnline) {
       try {
+        const today = new Date().toISOString().split('T')[0];
         const { error } = await supabase
           .from('user_progress')
-          .upsert(progressData, { onConflict: 'user_id,exercise_id' });
+          .upsert({
+            user_id: userId,
+            tipo: 'training',
+            fecha: today,
+            porcentaje: Number(score) || 0
+          });
         
         if (error) {
           console.warn('Failed to sync progress to database:', error);
@@ -296,13 +302,21 @@ export class OfflineFirstDatabase {
           .eq('user_id', userId);
         
         if (!error && data) {
-          // Update local data
-          data.forEach(progress => {
+          // Normalize Supabase shape into legacy frontend shape
+          const normalized = data.map(progress => ({
+            ...progress,
+            exercise_id: progress.id,
+            score: progress.porcentaje || 0,
+            time_spent: progress.tiempo_dedicado || 0,
+            completed_at: progress.creado_en || progress.fecha
+          }));
+
+          normalized.forEach(progress => {
             const key = `${progress.user_id}_${progress.exercise_id}`;
             this.localData.userProgress[key] = progress;
           });
           this.saveToLocalStorage();
-          return data;
+          return normalized;
         }
       } catch (error) {
         console.warn('Failed to fetch progress from database:', error);
@@ -323,9 +337,14 @@ export class OfflineFirstDatabase {
           .eq('user_id', userId);
         
         if (!error && data) {
-          this.localData.userAchievements[userId] = data;
+          const normalized = data.map(item => ({
+            ...item,
+            achievement_id: item.tipo || item.id,
+            earned_at: item.fecha_conseguido || item.creado_en
+          }));
+          this.localData.userAchievements[userId] = normalized;
           this.saveToLocalStorage();
-          return data;
+          return normalized;
         }
       } catch (error) {
         console.warn('Failed to fetch user achievements from database:', error);
@@ -389,7 +408,12 @@ export class OfflineFirstDatabase {
       try {
         const { error } = await supabase
           .from('user_preferences')
-          .upsert(preferencesData);
+          .upsert({
+            user_id: userId,
+            estilo_aprendizaje: preferences.current_level || preferences.name || null,
+            notificaciones: Boolean(preferences.notifications?.email ?? true),
+            recordatorios: Boolean(preferences.notifications?.push ?? true)
+          });
         
         if (error) {
           console.warn('Failed to sync preferences to database:', error);
@@ -417,9 +441,19 @@ export class OfflineFirstDatabase {
           .single();
         
         if (!error && data) {
-          this.localData.userPreferences[userId] = data;
+          const normalized = {
+            ...data,
+            name: '',
+            current_level: data.estilo_aprendizaje || 'A1',
+            notifications: {
+              email: Boolean(data.notificaciones),
+              push: Boolean(data.recordatorios)
+            },
+            onboarding_completed: true
+          };
+          this.localData.userPreferences[userId] = normalized;
           this.saveToLocalStorage();
-          return data;
+          return normalized;
         }
       } catch (error) {
         console.warn('Failed to fetch preferences from database:', error);
@@ -431,84 +465,20 @@ export class OfflineFirstDatabase {
 
   // Setup database (creates tables and inserts data)
   async setupDatabase(onProgress = null) {
-    console.log('🚀 Starting offline-first database setup...');
-    
-    try {
-      // Check if database is available
-      const isAvailable = await this.checkDatabaseAvailability();
-      
-      if (!isAvailable) {
-        console.log('📱 Database not available, working in offline mode');
-        onProgress?.({
-          current: 100,
-          total: 100,
-          step: 'Working in offline mode',
-          percentage: 100
-        });
-        return { success: true, message: 'Working in offline mode', offline: true };
-      }
-
-      this.isOnline = true;
-
-      // Try to insert achievements
-      onProgress?.({
-        current: 1,
-        total: 3,
-        step: 'Inserting achievements',
-        percentage: 33
-      });
-
-      for (const achievement of this.localData.achievements) {
-        try {
-          const { error } = await supabase
-            .from('achievements')
-            .upsert(achievement, { onConflict: 'achievement_id' });
-          
-          if (error) {
-            console.warn(`Failed to insert achievement ${achievement.achievement_id}:`, error);
-          }
-        } catch (error) {
-          console.warn(`Error inserting achievement ${achievement.achievement_id}:`, error);
-        }
-      }
-
-      // Try to insert exercises
-      onProgress?.({
-        current: 2,
-        total: 3,
-        step: 'Inserting exercises',
-        percentage: 66
-      });
-
-      for (const exercise of this.localData.exercises) {
-        try {
-          const { error } = await supabase
-            .from('exercises')
-            .upsert(exercise, { onConflict: 'id' });
-          
-          if (error) {
-            console.warn(`Failed to insert exercise ${exercise.id}:`, error);
-          }
-        } catch (error) {
-          console.warn(`Error inserting exercise ${exercise.id}:`, error);
-        }
-      }
-
-      // Verify setup
-      onProgress?.({
-        current: 3,
-        total: 3,
-        step: 'Setup completed',
-        percentage: 100
-      });
-
-      console.log('✅ Offline-first database setup completed');
-      return { success: true, message: 'Database setup completed', offline: false };
-
-    } catch (error) {
-      console.error('❌ Setup failed:', error);
-      return { success: false, error: error.message, offline: true };
-    }
+    // External-schema mode: do not mutate Supabase (no seed, no table creation).
+    const isAvailable = await this.checkDatabaseAvailability();
+    this.isOnline = isAvailable;
+    onProgress?.({
+      current: 100,
+      total: 100,
+      step: isAvailable ? 'Connected to Supabase schema' : 'Working in offline mode',
+      percentage: 100
+    });
+    return {
+      success: true,
+      message: isAvailable ? 'Connected to existing Supabase schema' : 'Working in offline mode',
+      offline: !isAvailable
+    };
   }
 
   // Check database health
@@ -550,15 +520,26 @@ export class OfflineFirstDatabase {
     for (const item of this.syncQueue) {
       try {
         if (item.type === 'progress') {
+          const today = new Date().toISOString().split('T')[0];
           const { error } = await supabase
             .from('user_progress')
-            .upsert(item.data, { onConflict: 'user_id,exercise_id' });
+            .upsert({
+              user_id: item.data.user_id,
+              tipo: 'training',
+              fecha: today,
+              porcentaje: Number(item.data.score) || 0
+            });
           
           if (!error) synced.push(item);
         } else if (item.type === 'preferences') {
           const { error } = await supabase
             .from('user_preferences')
-            .upsert(item.data);
+            .upsert({
+              user_id: item.data.user_id,
+              estilo_aprendizaje: item.data.current_level || item.data.name || null,
+              notificaciones: Boolean(item.data.notifications?.email ?? true),
+              recordatorios: Boolean(item.data.notifications?.push ?? true)
+            });
           
           if (!error) synced.push(item);
         }

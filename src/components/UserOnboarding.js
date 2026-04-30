@@ -133,14 +133,9 @@ const UserOnboarding = ({ userId, onComplete }) => {
       // Try to save user preferences to database
       const preferencesData = {
         user_id: userId,
-        name: userData.name,
-        current_level: userData.currentLevel,
-        learning_goals: userData.learningGoals,
-        available_time: userData.availableTime,
-        preferred_skills: userData.preferredSkills,
-        accessibility_needs: userData.accessibilityNeeds,
-        onboarding_completed: true,
-        updated_at: new Date().toISOString()
+        estilo_aprendizaje: userData.currentLevel || 'A1',
+        notificaciones: true,
+        recordatorios: true
       };
 
       const { error } = await supabase
@@ -164,13 +159,9 @@ const UserOnboarding = ({ userId, onComplete }) => {
       try {
         const preferencesData = {
           user_id: userId,
-          name: userData.name,
-          current_level: userData.currentLevel,
-          learning_goals: userData.learningGoals,
-          available_time: userData.availableTime,
-          preferred_skills: userData.preferredSkills,
-          accessibility_needs: userData.accessibilityNeeds,
-          onboarding_completed: true,
+          estilo_aprendizaje: userData.currentLevel || 'A1',
+          notificaciones: true,
+          recordatorios: true,
           updated_at: new Date().toISOString()
         };
         localStorage.setItem('user_preferences', JSON.stringify(preferencesData));

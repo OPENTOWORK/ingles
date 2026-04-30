@@ -262,7 +262,7 @@ export default function Part6Page() {
         </div>
 
         {/* Reading text with modern styling */}
-        <div className="reading-text-modern">
+        <div className="reading-text-modern" style={{ position: 'sticky', top: '1rem', zIndex: 5 }}>
           <div className="text-content">
             <h2>Texts about Duncan's Football Career</h2>
             <div className="text-options">

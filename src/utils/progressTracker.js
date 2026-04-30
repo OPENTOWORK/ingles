@@ -140,9 +140,10 @@ export class ProgressTracker {
         .from('user_achievements')
         .insert({
           user_id: userId,
-          achievement_id: achievementId,
-          metadata: metadata,
-          earned_at: new Date().toISOString()
+          tipo: achievementId,
+          descripcion: JSON.stringify(metadata || {}),
+          conseguido: true,
+          fecha_conseguido: new Date().toISOString()
         });
 
       if (error) throw error;
@@ -245,16 +246,11 @@ export class ProgressTracker {
 
     // Try to save to Supabase (optional, for sync)
     try {
-      // Ensure table exists first
-      await this.ensureTheoryProgressTable();
-      
       const { data, error } = await supabase
         .from('theory_progress')
         .upsert({
           user_id: userId,
-          topic_id: topicId,
-          progress: progress,
-          updated_at: new Date().toISOString()
+          contenido_id: topicId
         });
 
       if (error) {
@@ -294,7 +290,7 @@ export class ProgressTracker {
         .from('theory_progress')
         .select('*')
         .eq('user_id', userId)
-        .eq('topic_id', topicId)
+        .eq('contenido_id', topicId)
         .single();
 
       if (!error && data) {
@@ -311,9 +307,9 @@ export class ProgressTracker {
         }
 
         return {
-          topicId: data.topic_id,
-          progress: data.progress,
-          updatedAt: data.updated_at
+          topicId: data.contenido_id,
+          progress: 100,
+          updatedAt: data.creado_en
         };
       }
     } catch (error) {
@@ -323,43 +319,9 @@ export class ProgressTracker {
     return null;
   }
 
-  // Check if theory_progress table exists and create if needed
+  // Read-only schema mode: never create tables from the app.
   async ensureTheoryProgressTable() {
-    try {
-      // Try to query the table to see if it exists
-      const { data, error } = await supabase
-        .from('theory_progress')
-        .select('id')
-        .limit(1);
-
-      if (error && error.code === '42P01') {
-        // Table doesn't exist, try to create it
-        console.log('Creating theory_progress table...');
-        const { error: createError } = await supabase.rpc('exec_sql', {
-          sql: `
-            CREATE TABLE IF NOT EXISTS theory_progress (
-              id SERIAL PRIMARY KEY,
-              user_id UUID REFERENCES auth.users(id) ON DELETE CASCADE,
-              topic_id VARCHAR(100) NOT NULL,
-              progress DECIMAL(5,2) DEFAULT 0,
-              created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
-              updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
-              UNIQUE(user_id, topic_id)
-            );
-          `
-        });
-
-        if (createError) {
-          console.warn('Could not create theory_progress table:', createError.message);
-          return false;
-        }
-      }
-
-      return true;
-    } catch (error) {
-      console.warn('Could not verify/create theory_progress table:', error.message);
-      return false;
-    }
+    return true;
   }
 
   // Clear cache

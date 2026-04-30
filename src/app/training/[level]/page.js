@@ -1,6 +1,9 @@
 'use client';
 import Link from "next/link";
-import { use } from "react";
+import { use, useEffect, useState } from "react";
+import { useRouter } from 'next/navigation';
+import { supabase } from '@/utils/supabaseClient';
+import { getRoleNameByUserId, normalizeRoleName } from '@/utils/authRoles';
 
 const skills = [
   { id: "use-of-english", label: "Use of English", emoji: "📘" },
@@ -15,6 +18,72 @@ const skills = [
 
 export default function LevelPage({ params }) {
   const { level } = use(params);
+  const router = useRouter();
+  const [loading, setLoading] = useState(true);
+  const [isLockedForStudent, setIsLockedForStudent] = useState(false);
+
+  useEffect(() => {
+    const checkAccess = async () => {
+      const { data } = await supabase.auth.getSession();
+
+      if (!data.session) {
+        router.push('/login');
+        return;
+      }
+
+      const roleName = await getRoleNameByUserId(data.session.user.id, data.session.user.email);
+      const normalizedRole = normalizeRoleName(roleName);
+      const studentWithLockedLevel =
+        normalizedRole === 'student' || normalizedRole === 'alumno';
+
+      setIsLockedForStudent(studentWithLockedLevel);
+      setLoading(false);
+    };
+
+    checkAccess();
+  }, [level, router]);
+
+  if (loading) {
+    return <p style={{ textAlign: 'center', marginTop: '2rem' }}>Cargando...</p>;
+  }
+
+  if (isLockedForStudent) {
+    return (
+      <main
+        style={{
+          padding: "2rem",
+          fontFamily: "Segoe UI, sans-serif",
+          textAlign: "center",
+          background: "linear-gradient(to right, #f0f8ff, #e6f0ff)",
+          minHeight: "100vh",
+          display: "grid",
+          placeItems: "center",
+        }}
+      >
+        <div style={{ maxWidth: "580px", backgroundColor: "#fff", borderRadius: "12px", padding: "2rem", boxShadow: "0 10px 24px rgba(0,0,0,0.1)" }}>
+          <h1 style={{ marginTop: 0 }}>Proximamente disponible</h1>
+          <p style={{ color: "#444", lineHeight: 1.5 }}>
+            Training todavia no esta habilitado para alumnos. Puedes seguir practicando desde la seccion de niveles.
+          </p>
+          <Link
+            href="/niveles/b2"
+            style={{
+              display: "inline-block",
+              marginTop: "1rem",
+              padding: "0.8rem 1.2rem",
+              borderRadius: "8px",
+              backgroundColor: "#1cb0f6",
+              color: "#fff",
+              textDecoration: "none",
+              fontWeight: "bold",
+            }}
+          >
+            Ir a Levels B2
+          </Link>
+        </div>
+      </main>
+    );
+  }
   
   return (
     <main

@@ -8,6 +8,11 @@ export class DatabaseInitializer {
 
   // Initialize database with all required tables and data
   async initialize() {
+    // This project uses an existing Supabase schema managed outside the app.
+    // Keep initialization read-only and never attempt to mutate schema/data.
+    this.isInitialized = true;
+    return { success: true, message: 'External Supabase schema mode enabled' };
+
     try {
       console.log('🚀 Initializing database...');
       
@@ -516,6 +521,34 @@ export class DatabaseInitializer {
 
   // Check database health
   async checkHealth() {
+    try {
+      const checks = {
+        users: false,
+        profiles: false,
+        training_exercises: false,
+      };
+
+      const [{ error: usersError }, { error: profilesError }, { error: trainingError }] = await Promise.all([
+        supabase.from('user_profiles').select('id').limit(1),
+        supabase.from('profiles').select('id').limit(1),
+        supabase.from('exercises').select('id').limit(1),
+      ]);
+
+      checks.users = !usersError;
+      checks.profiles = !profilesError;
+      checks.training_exercises = !trainingError;
+
+      return {
+        healthy: checks.users && checks.profiles,
+        checks,
+      };
+    } catch (error) {
+      return {
+        healthy: false,
+        error: error.message,
+      };
+    }
+
     try {
       const checks = {
         tables: false,

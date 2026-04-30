@@ -9,41 +9,13 @@ export class RobustDatabaseSetup {
 
   // Main setup method with comprehensive error handling
   async setupDatabase(onProgress = null) {
-    console.log('🚀 Starting robust database setup...');
-    
-    try {
-      // Step 1: Check if database is already set up
-      const isSetup = await this.checkIfDatabaseExists();
-      if (isSetup) {
-        console.log('✅ Database already exists and is properly configured');
-        onProgress?.({
-          current: 100,
-          total: 100,
-          step: 'Database already configured',
-          percentage: 100
-        });
-        return { success: true, message: 'Database already configured' };
-      }
-
-      // Step 2: Create tables using Supabase client operations
-      await this.createTablesSafely(onProgress);
-
-      // Step 3: Insert initial data safely
-      await this.insertDataSafely(onProgress);
-
-      // Step 4: Verify setup
-      const verification = await this.verifySetup();
-      if (!verification.success) {
-        throw new Error(`Setup verification failed: ${verification.error}`);
-      }
-
-      console.log('🎉 Robust database setup completed successfully!');
-      return { success: true, message: 'Database setup completed successfully' };
-
-    } catch (error) {
-      console.error('❌ Robust setup failed:', error);
-      return { success: false, error: error.message };
-    }
+    onProgress?.({
+      current: 100,
+      total: 100,
+      step: 'External Supabase schema mode (read-only)',
+      percentage: 100
+    });
+    return { success: true, message: 'Read-only mode: no schema/data mutations executed' };
   }
 
   // Check if database tables exist

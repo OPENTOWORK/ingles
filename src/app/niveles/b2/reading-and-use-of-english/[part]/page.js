@@ -13,6 +13,7 @@ export default function DynamicPartPage() {
   const numExercises = exercisesConfig[`part-${part}`] || 12;
   const exercise = getExercise(part, selected + 1);
   const info = partInfo[part] || {};
+  const shouldStickExerciseText = part >= 1 && part <= 7;
   
   const backLink = part === 1 ? '/niveles/b2' : `/niveles/b2/reading-and-use-of-english/${part - 1}`;
   const nextLink = part === 8 ? '/niveles/b2' : `/niveles/b2/reading-and-use-of-english/${part + 1}`;
@@ -92,7 +93,10 @@ export default function DynamicPartPage() {
         padding: '1.5rem',
         borderRadius: '8px',
         boxShadow: '0 0 10px rgba(0,0,0,0.1)',
-        marginBottom: '2rem'
+        marginBottom: '2rem',
+        position: shouldStickExerciseText ? 'sticky' : 'static',
+        top: shouldStickExerciseText ? '1rem' : 'auto',
+        zIndex: shouldStickExerciseText ? 5 : 'auto'
       }}>
         <div>
           <h2>{exercise.title}</h2>

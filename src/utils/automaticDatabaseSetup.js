@@ -20,42 +20,13 @@ export class AutomaticDatabaseSetup {
 
   // Main setup method
   async setupDatabase(onProgress = null) {
-    console.log('🚀 Starting automatic database setup...');
-    
-    try {
-      for (let i = 0; i < this.setupSteps.length; i++) {
-        const step = this.setupSteps[i];
-        
-        if (onProgress) {
-          onProgress({
-            current: i + 1,
-            total: this.setupSteps.length,
-            step: step.name,
-            percentage: Math.round(((i + 1) / this.setupSteps.length) * 100)
-          });
-        }
-
-        console.log(`📋 ${step.name}...`);
-        
-        try {
-          await this[step.method]();
-          console.log(`✅ ${step.name} completed`);
-        } catch (error) {
-          console.warn(`⚠️ ${step.name} failed:`, error.message);
-          // Continue with other steps even if one fails
-        }
-        
-        // Small delay to prevent rate limiting
-        await new Promise(resolve => setTimeout(resolve, 100));
-      }
-
-      console.log('🎉 Automatic database setup completed!');
-      return { success: true, message: 'Database setup completed successfully' };
-      
-    } catch (error) {
-      console.error('❌ Automatic setup failed:', error);
-      return { success: false, error: error.message };
-    }
+    onProgress?.({
+      current: 100,
+      total: 100,
+      step: 'External Supabase schema mode (read-only)',
+      percentage: 100
+    });
+    return { success: true, message: 'Read-only mode: no schema/data mutations executed' };
   }
 
   // Create exercises table by inserting sample data (table will be created automatically)

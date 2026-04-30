@@ -1,16 +1,17 @@
-// next.config.js
-const isProd = process.env.NODE_ENV === 'production'
-const repo = 'ingles'  // <- nombre exacto del repo
+// Build estático: tras `npm run build`, sube TODO el contenido de la carpeta `out/`
+// al directorio public_html de tu hosting (Dondominio), sustituyendo o mezclando archivos según tu caso.
+// Si el sitio vive en una subcarpeta del dominio, compila con NEXT_PUBLIC_BASE_PATH=/nombre-subcarpeta
+const basePath = process.env.NEXT_PUBLIC_BASE_PATH || '';
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  images: { unoptimized: true }, // requerido para Pages
-  basePath: isProd ? `/${repo}` : '',
-  assetPrefix: isProd ? `/${repo}/` : '',
-  trailingSlash: true            // evita 404 con rutas estáticas
-}
+  output: 'export',
+  images: {
+    unoptimized: true,
+  },
+  trailingSlash: true,
+  basePath,
+  assetPrefix: basePath ? `${basePath}/` : '',
+};
 
-// Export estático solo si NEXT_STATIC_EXPORT=1 (GitHub Pages). Sin eso, `next build` falla por rutas dinámicas [part], etc.
-const useStaticExport = process.env.NEXT_STATIC_EXPORT === '1'
-module.exports =
-  isProd && useStaticExport ? { ...nextConfig, output: 'export' } : nextConfig
+module.exports = nextConfig;

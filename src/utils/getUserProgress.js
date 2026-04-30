@@ -23,11 +23,11 @@ export async function getUserProgress(userId) {
     }
   } else if (exams) {
     progress.exams = exams.map((exam) => ({
-      id: exam.exam_id,
-      date: exam.created_at,
-      answers: exam.answers,
-      total_score: exam.total_score || 0,
-      correct_answers: exam.correct_answers || 0
+      id: exam.intento_id || exam.id,
+      date: exam.creado_en || null,
+      answers: exam.respuesta || null,
+      total_score: exam.correcta ? 100 : 0,
+      correct_answers: exam.correcta ? 1 : 0
     }));
   }
 
@@ -42,7 +42,11 @@ export async function getUserProgress(userId) {
       console.error('Error al obtener entrenamientos:', trainError.message);
     }
   } else {
-    progress.training = trainings || [];
+    progress.training = (trainings || []).map((item) => ({
+      ...item,
+      score: item.correcta ? 100 : 0,
+      time_spent: 0
+    }));
   }
 
   // 3. Teoría (opcional, si tienes algo como theory_progress)
@@ -56,7 +60,10 @@ export async function getUserProgress(userId) {
       console.error('Error al obtener teoría:', theoryError.message);
     }
   } else {
-    progress.theory = theory || [];
+    progress.theory = (theory || []).map((item) => ({
+      ...item,
+      topic_id: item.contenido_id
+    }));
   }
 
   // 4. Cálculo de estadísticas globales

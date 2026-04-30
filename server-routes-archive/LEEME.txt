@@ -1,0 +1,2 @@
+Estas rutas estaban en src/app/.../route.js y no se pueden incluir en la carpeta out/ (sitio estático).
+Si necesitas envío de correo desde admin, despliega admin-send-mail-route.js en un servidor Node (o Vercel) y al compilar el front define NEXT_PUBLIC_ADMIN_SEND_MAIL_URL con la URL completa de ese POST.

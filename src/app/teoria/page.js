@@ -1,8 +1,6 @@
 'use client';
-import { useEffect, useMemo, useState } from 'react';
-import { useRouter } from 'next/navigation';
+import { useMemo, useState } from 'react';
 import Link from 'next/link';
-import { supabase } from '@/utils/supabaseClient';
 
 // ====== Datos ======
 const LEVELS = [
@@ -130,19 +128,8 @@ const SECTIONS = {
 
 // ====== Página ======
 export default function TeoriaPage() {
-  const router = useRouter();
-  const [loading, setLoading] = useState(true);
   const [selected, setSelected] = useState([]);
   const [query, setQuery] = useState('');
-
-  // Auth
-  useEffect(() => {
-    (async () => {
-      const { data: { session } } = await supabase.auth.getSession();
-      if (!session) router.replace('/login');
-      else setLoading(false);
-    })();
-  }, [router]);
 
   const toggle = (lvl) =>
     setSelected((prev) => prev.includes(lvl) ? prev.filter(l => l !== lvl) : [...prev, lvl]);
@@ -165,14 +152,6 @@ export default function TeoriaPage() {
     () => Object.values(filtered).reduce((n, arr) => n + arr.length, 0),
     [filtered]
   );
-
-  if (loading) {
-    return (
-      <main className="shell teoria-page center">
-        <div className="loader" aria-label="Cargando" />
-      </main>
-    );
-  }
 
   return (
     <main className="shell teoria-page">

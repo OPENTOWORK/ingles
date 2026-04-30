@@ -2,6 +2,7 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { supabase } from '@/utils/supabaseClient';
+import { getRedirectPathByUserId } from '@/utils/authRoles';
 import toast from 'react-hot-toast';
 
 export default function LoginPage() {
@@ -19,15 +20,7 @@ export default function LoginPage() {
       const { data: { session } } = await supabase.auth.getSession();
       if (session) {
         const { data: { user } } = await supabase.auth.getUser();
-        const role = user?.user_metadata?.role;
-
-        if (role === 'admin') {
-          router.push('/admin');
-        } else if (role === 'student') {
-          router.push('/perfil');
-        } else {
-          router.push('/inicio');
-        }
+        router.push(await getRedirectPathByUserId(user?.id, user?.email));
       }
     };
     checkSession();
@@ -94,15 +87,7 @@ export default function LoginPage() {
       setFailedAttempts(0);
 
       const { data: { user } } = await supabase.auth.getUser();
-      const role = user?.user_metadata?.role;
-
-      if (role === 'admin') {
-        router.push('/admin');
-      } else if (role === 'student') {
-        router.push('/perfil');
-      } else {
-        router.push('/inicio');
-      }
+      router.push(await getRedirectPathByUserId(user?.id, user?.email));
     }
   };
 

@@ -22,6 +22,11 @@ export default function ProfilePage() {
   const [fullName, setFullName] = useState('');
   const [birthDate, setBirthDate] = useState('');
   const [newPassword, setNewPassword] = useState('');
+  const [deleteCode, setDeleteCode] = useState('');
+  const [deleteFlowActive, setDeleteFlowActive] = useState(false);
+  const [deleteCodeSentAt, setDeleteCodeSentAt] = useState(null);
+  const [deletingAccount, setDeletingAccount] = useState(false);
+  const [sendingDeleteCode, setSendingDeleteCode] = useState(false);
   const [saving, setSaving] = useState(false);
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState('overview');
@@ -109,19 +114,41 @@ export default function ProfilePage() {
 
       setUser(session.user);
 
-      const { data } = await supabase
-        .from('profiles')
-        .select('full_name, birth_date, goals, notifications, theme, study_streak, total_study_time')
+      const { data: userRow } = await supabase
+        .from('user_profiles')
+        .select('nombre, email')
         .eq('id', session.user.id)
         .single();
 
-      setFullName(data?.full_name || '');
-      setBirthDate(data?.birth_date || '');
-      setGoals(data?.goals || { weekly: 5, monthly: 20 });
-      setNotifications(data?.notifications || { email: true, push: true });
-      setTheme(data?.theme || 'light');
-      setStudyStreak(data?.study_streak || 0);
-      setTotalStudyTime(data?.total_study_time || 0);
+      const { data: profileRow } = await supabase
+        .from('profiles')
+        .select('id, user_id, fecha_nacimiento, idioma_preferido, biografia')
+        .eq('user_id', session.user.id)
+        .single();
+
+      const { data: preferencesRow } = await supabase
+        .from('user_preferences')
+        .select('notificaciones, recordatorios')
+        .eq('user_id', session.user.id)
+        .single();
+
+      const localSettings = typeof window !== 'undefined'
+        ? JSON.parse(localStorage.getItem(`profile_settings_${session.user.id}`) || '{}')
+        : {};
+      const localGoals = typeof window !== 'undefined'
+        ? JSON.parse(localStorage.getItem(`profile_goals_${session.user.id}`) || '{}')
+        : {};
+
+      setFullName(userRow?.nombre || session.user?.user_metadata?.name || '');
+      setBirthDate(profileRow?.fecha_nacimiento || '');
+      setGoals(localGoals?.weekly ? localGoals : { weekly: 5, monthly: 20 });
+      setNotifications({
+        email: Boolean(preferencesRow?.notificaciones ?? true),
+        push: Boolean(preferencesRow?.recordatorios ?? true),
+      });
+      setTheme(localSettings?.theme || 'light');
+      setStudyStreak(0);
+      setTotalStudyTime(0);
 
       const userProgress = await getUserProgress(session.user.id);
       setStats(userProgress);
@@ -384,37 +411,121 @@ export default function ProfilePage() {
 
   const handleProfileUpdate = async () => {
     setSaving(true);
-    await supabase.from('profiles').upsert({
+    await supabase.from('user_profiles').upsert({
       id: user.id,
-      full_name: fullName,
-      birth_date: birthDate
+      nombre: fullName,
+      email: user.email
+    });
+    await supabase.from('profiles').upsert({
+      user_id: user.id,
+      fecha_nacimiento: birthDate || null
     });
     setSaving(false);
   };
 
   const handlePasswordChange = async () => {
-    if (!newPassword || newPassword.length < 6) return alert('Password must be at least 6 characters.');
+    const passwordIsStrong =
+      newPassword.length >= 8 &&
+      /[A-Z]/.test(newPassword) &&
+      /[a-z]/.test(newPassword) &&
+      /\d/.test(newPassword);
+
+    if (!passwordIsStrong) {
+      alert('La contraseña debe tener al menos 8 caracteres, una mayúscula, una minúscula y un número.');
+      return;
+    }
     const { error } = await supabase.auth.updateUser({ password: newPassword });
     if (error) alert('Error changing password');
     else alert('Password updated successfully');
   };
 
+  const handleSendDeleteCode = async () => {
+    if (!user?.email) {
+      alert('No se pudo detectar tu email para enviar el codigo.');
+      return;
+    }
+
+    setSendingDeleteCode(true);
+    try {
+      const { error } = await supabase.auth.signInWithOtp({
+        email: user.email,
+        options: {
+          shouldCreateUser: false,
+        },
+      });
+
+      if (error) {
+        throw error;
+      }
+
+      setDeleteFlowActive(true);
+      setDeleteCodeSentAt(new Date().toISOString());
+      alert('Te hemos enviado un codigo de 6 cifras al correo para confirmar la eliminacion.');
+    } catch (error) {
+      console.error('Error sending delete code:', error);
+      alert(error.message || 'No se pudo enviar el codigo de verificacion.');
+    } finally {
+      setSendingDeleteCode(false);
+    }
+  };
+
+  const handleDeleteAccount = async () => {
+    if (!user?.email) {
+      alert('No se pudo identificar tu cuenta.');
+      return;
+    }
+    if (!deleteCode || deleteCode.length !== 6) {
+      alert('Introduce el codigo de 6 cifras recibido por email.');
+      return;
+    }
+
+    setDeletingAccount(true);
+    try {
+      const { error: otpError } = await supabase.auth.verifyOtp({
+        email: user.email,
+        token: deleteCode.trim(),
+        type: 'email',
+      });
+
+      if (otpError) {
+        throw new Error('Codigo no valido o caducado. Solicita uno nuevo.');
+      }
+
+      await supabase.from('user_preferences').delete().eq('user_id', user.id);
+      await supabase.from('profiles').delete().eq('user_id', user.id);
+      await supabase.from('user_profiles').delete().eq('id', user.id);
+      await supabase.auth.updateUser({
+        data: {
+          account_status: 'deleted',
+          account_deleted_at: new Date().toISOString(),
+        },
+      });
+
+      await supabase.auth.signOut();
+      alert('Cuenta eliminada correctamente.');
+      router.push('/registro');
+    } catch (error) {
+      console.error('Error deleting account:', error);
+      alert(error.message || 'No se pudo eliminar la cuenta.');
+    } finally {
+      setDeletingAccount(false);
+    }
+  };
+
   const handleGoalsUpdate = async () => {
     setSaving(true);
-    await supabase.from('profiles').upsert({
-      id: user.id,
-      goals: goals
-    });
+    localStorage.setItem(`profile_goals_${user.id}`, JSON.stringify(goals));
     setSaving(false);
   };
 
   const handleSettingsUpdate = async () => {
     setSaving(true);
-    await supabase.from('profiles').upsert({
-      id: user.id,
-      notifications: notifications,
-      theme: theme
+    await supabase.from('user_preferences').upsert({
+      user_id: user.id,
+      notificaciones: Boolean(notifications.email),
+      recordatorios: Boolean(notifications.push)
     });
+    localStorage.setItem(`profile_settings_${user.id}`, JSON.stringify({ theme }));
     setSaving(false);
   };
 
@@ -1187,6 +1298,51 @@ export default function ProfilePage() {
             <button onClick={handlePasswordChange} className="action-btn">
               🔑 Actualizar Contraseña
             </button>
+          </section>
+
+          <section className="profile-section" style={{ border: '1px solid #fecaca', background: '#fff5f5' }}>
+            <div className="section-head">
+              <h2>🗑️ Eliminar cuenta</h2>
+            </div>
+            <p style={{ marginTop: 0, color: '#7f1d1d' }}>
+              Esta accion es irreversible. Para confirmar, te enviaremos un codigo de 6 cifras al correo de tu cuenta.
+            </p>
+
+            <button
+              onClick={handleSendDeleteCode}
+              className="action-btn"
+              disabled={sendingDeleteCode || deletingAccount}
+              style={{ background: '#b91c1c' }}
+            >
+              {sendingDeleteCode ? 'Enviando codigo...' : 'Enviar codigo de confirmacion'}
+            </button>
+
+            {deleteFlowActive && (
+              <div className="form-group" style={{ marginTop: '1rem' }}>
+                <label className="form-label">Codigo de verificacion (6 cifras)</label>
+                <input
+                  type="text"
+                  inputMode="numeric"
+                  pattern="[0-9]*"
+                  maxLength={6}
+                  value={deleteCode}
+                  onChange={(e) => setDeleteCode(e.target.value.replace(/\D/g, '').slice(0, 6))}
+                  className="form-input"
+                  placeholder="123456"
+                />
+                <small style={{ color: '#7f1d1d', marginTop: '0.5rem' }}>
+                  Codigo enviado a {user?.email}. {deleteCodeSentAt ? 'Si caduca, solicita uno nuevo.' : ''}
+                </small>
+                <button
+                  onClick={handleDeleteAccount}
+                  className="action-btn"
+                  disabled={deletingAccount}
+                  style={{ marginTop: '0.8rem', background: '#991b1b' }}
+                >
+                  {deletingAccount ? 'Eliminando...' : 'Confirmar eliminacion de cuenta'}
+                </button>
+              </div>
+            )}
           </section>
 
           {/* Notificaciones */}

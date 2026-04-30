@@ -10,6 +10,7 @@ import SkipLinks from '@/components/SkipLinks';
 import DatabaseSetup from '@/components/DatabaseSetup';
 import UserOnboarding from '@/components/UserOnboarding';
 import { checkDatabaseHealth } from '@/utils/databaseInitializer';
+import { getRoleNameByUserId, normalizeRoleName } from '@/utils/authRoles';
 
 const sortedLevels = [
   { level: "A1", color: "#7bed9f", emoji: "😁" },
@@ -28,6 +29,7 @@ export default function TrainingHome() {
   const [showDatabaseSetup, setShowDatabaseSetup] = useState(false);
   const [showOnboarding, setShowOnboarding] = useState(false);
   const [onboardingCompleted, setOnboardingCompleted] = useState(false);
+  const [userRole, setUserRole] = useState('');
 
   useEffect(() => {
     const checkSession = async () => {
@@ -36,6 +38,8 @@ export default function TrainingHome() {
         router.push('/login');
       } else {
         setUser(data.session.user);
+        const roleName = await getRoleNameByUserId(data.session.user.id, data.session.user.email);
+        setUserRole(normalizeRoleName(roleName));
         
         // Check database health
         const health = await checkDatabaseHealth();
@@ -56,11 +60,11 @@ export default function TrainingHome() {
       // Try database first
       const { data } = await supabase
         .from('user_preferences')
-        .select('onboarding_completed')
+        .select('id')
         .eq('user_id', userId)
         .single();
 
-      if (data && data.onboarding_completed) {
+      if (data && data.id) {
         setOnboardingCompleted(true);
         return;
       }
@@ -111,6 +115,8 @@ export default function TrainingHome() {
     return <UserOnboarding userId={user?.id} onComplete={handleOnboardingComplete} />;
   }
 
+  const isStudent = userRole === 'student' || userRole === 'alumno';
+
   return (
     <>
       <SkipLinks />
@@ -149,31 +155,74 @@ export default function TrainingHome() {
           margin: "0 auto",
         }}
       >
-        {sortedLevels.map(({ level, color, emoji }) => (
-          <Link
-            key={level}
-            href={`/training/${level.toLowerCase()}`}
-            style={{
-              display: "flex",
-              flexDirection: "column",
-              alignItems: "center",
-              justifyContent: "center",
-              padding: "2rem 1rem",
-              borderRadius: "12px",
-              backgroundColor: color,
-              color: "#fff",
-              textDecoration: "none",
-              fontWeight: "bold",
-              boxShadow: "0 4px 10px rgba(0,0,0,0.1)",
-              transition: "transform 0.2s ease",
-            }}
-            onMouseEnter={(e) => (e.currentTarget.style.transform = "scale(1.05)")}
-            onMouseLeave={(e) => (e.currentTarget.style.transform = "scale(1)")}
-          >
-            <div style={{ fontSize: "2.5rem" }}>{emoji}</div>
-            <div style={{ fontSize: "1.5rem", marginTop: "0.5rem" }}>Level {level}</div>
-          </Link>
-        ))}
+        {sortedLevels.map(({ level, color, emoji }) => {
+          const isLockedForStudent = isStudent;
+          const baseCardStyle = {
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            justifyContent: "center",
+            padding: "2rem 1rem",
+            borderRadius: "12px",
+            backgroundColor: color,
+            color: "#fff",
+            textDecoration: "none",
+            fontWeight: "bold",
+            boxShadow: "0 4px 10px rgba(0,0,0,0.1)",
+            transition: "transform 0.2s ease",
+            minHeight: "150px",
+          };
+
+          return (
+            <div key={level} style={{ position: "relative" }}>
+              {isLockedForStudent ? (
+                <div
+                  aria-disabled="true"
+                  style={{
+                    ...baseCardStyle,
+                    cursor: "not-allowed",
+                    filter: "grayscale(0.15)",
+                  }}
+                >
+                  <div style={{ fontSize: "2.5rem" }}>{emoji}</div>
+                  <div style={{ fontSize: "1.5rem", marginTop: "0.5rem" }}>Level {level}</div>
+                </div>
+              ) : (
+                <Link
+                  href={`/training/${level.toLowerCase()}`}
+                  style={baseCardStyle}
+                  onMouseEnter={(e) => (e.currentTarget.style.transform = "scale(1.05)")}
+                  onMouseLeave={(e) => (e.currentTarget.style.transform = "scale(1)")}
+                >
+                  <div style={{ fontSize: "2.5rem" }}>{emoji}</div>
+                  <div style={{ fontSize: "1.5rem", marginTop: "0.5rem" }}>Level {level}</div>
+                </Link>
+              )}
+
+              {isLockedForStudent && (
+                <div
+                  style={{
+                    position: "absolute",
+                    inset: 0,
+                    borderRadius: "12px",
+                    backgroundColor: "rgba(0, 0, 0, 0.45)",
+                    color: "#fff",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    fontWeight: "bold",
+                    fontSize: "1rem",
+                    textTransform: "uppercase",
+                    letterSpacing: "0.03em",
+                    pointerEvents: "none",
+                  }}
+                >
+                  Proximamente disponible
+                </div>
+              )}
+            </div>
+          );
+        })}
       </div>
 
       {/* Accessibility Panel */}

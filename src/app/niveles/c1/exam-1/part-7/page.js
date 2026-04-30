@@ -249,7 +249,7 @@ export default function Part7Page() {
         </div>
 
         {/* Reading text with modern styling */}
-        <div className="reading-text-modern">
+        <div className="reading-text-modern" style={{ position: 'sticky', top: '1rem', zIndex: 5 }}>
           <div className="text-content">
             <h2>Texts about Ballet Training</h2>
             <div className="text-options">
