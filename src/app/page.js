@@ -1,6 +1,7 @@
 'use client';
 
 import Link from "next/link";
+import SiteMascot from "@/components/SiteMascot";
 
 const cardStyle = {
   background: "linear-gradient(135deg, #667eea 0%, #764ba2 60%, #ffffff 100%)",
@@ -35,7 +36,17 @@ export default function Home() {
         justifyContent: "space-between",
       }}
     >
-      <div>
+      <div
+        style={{
+          display: "flex",
+          flexWrap: "wrap",
+          alignItems: "center",
+          justifyContent: "center",
+          gap: "clamp(1rem, 4vw, 3rem)",
+          marginBottom: "0.5rem",
+        }}
+      >
+        <div style={{ flex: "1 1 260px", maxWidth: "640px" }}>
         <h1 
           style={{
             fontSize: "3.5rem",
@@ -62,6 +73,18 @@ export default function Home() {
         >
           Prepare for the smart and interactive way to learn English.
         </p>
+        </div>
+        <div
+          style={{
+            flex: "0 0 auto",
+            filter: "drop-shadow(0 12px 28px rgba(0, 0, 0, 0.2))",
+            lineHeight: 0,
+          }}
+        >
+          <SiteMascot variant={10} width={240} priority alt="Dralo mascot" />
+        </div>
+      </div>
+      <div>
 
         <blockquote
           style={{

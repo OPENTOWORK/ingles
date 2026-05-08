@@ -6,7 +6,7 @@ import { AccessibilityProvider } from '@/components/AccessibilityProvider';
 
 export const metadata = {
   title: 'English Practice',
-  description: 'Practice Cambridge Exams Online',
+  description: 'Practice English certification exams online',
 };
 
 export default function RootLayout({ children }) {

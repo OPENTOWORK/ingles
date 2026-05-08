@@ -1,6 +1,5 @@
 "use client";
 import Link from "next/link";
-import { use } from "react";
 
 const levels = [
   { id: "basico", label: "🟢 Basic", description: "Basic phrases and vocabulary" },
@@ -9,7 +8,7 @@ const levels = [
 ];
 
 export default function SkillPage({ params }) {
-  const { level, skill } = use(params);
+  const { level, skill } = params;
   
   return (
     <main

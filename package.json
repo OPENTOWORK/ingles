@@ -7,17 +7,20 @@
     "dev": "next dev",
     "prebuild": "node scripts/write-static-export-layouts.mjs",
     "build": "next build",
-    "build:static": "npm run build",
+    "build:static": "cross-env NEXT_STATIC_EXPORT=true npm run build",
+    "build:static:full": "node scripts/build-static-full.mjs",
     "start": "next start",
     "lint": "next lint",
     "setup": "node setup.js",
     "clean": "rm -rf .next out node_modules/.cache",
+    "clean:next": "node scripts/clean-next-cache.mjs",
     "db:setup": "echo 'Configurar base de datos desde la aplicación'",
     "db:reset": "echo 'Reiniciar base de datos desde la aplicación'",
     "analyze": "ANALYZE=true npm run build",
     "test": "echo 'Tests no implementados aún'",
     "type-check": "tsc --noEmit",
-    "postinstall": "node setup.js"
+    "postinstall": "node setup.js",
+    "supabase:auth-disable-email-confirm": "node scripts/supabase-patch-auth-mailer-autoconfirm.mjs"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.38.0",

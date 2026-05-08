@@ -3,11 +3,14 @@ import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { supabase } from '@/utils/supabaseClient';
+import { useUserRole } from '@/context/UserRoleContext';
 import { getUserProgress } from '@/utils/getUserProgress';
 import ProgressDashboard from '@/components/ProgressDashboard';
 import AdaptiveLearningDashboard from '@/components/AdaptiveLearningDashboard';
 import AchievementNotification from '@/components/AchievementNotification';
 import ExamStatistics from '@/components/ExamStatistics';
+import LevelsEstadisticasPanel from '@/components/LevelsEstadisticasPanel';
+import SiteMascot from '@/components/SiteMascot';
 import { offlineFirstDatabase } from '@/utils/offlineFirstDatabase';
 import { progressTracker } from '@/utils/progressTracker';
 import {
@@ -22,6 +25,9 @@ export default function ProfilePage() {
   const [fullName, setFullName] = useState('');
   const [birthDate, setBirthDate] = useState('');
   const [newPassword, setNewPassword] = useState('');
+  const [inviteEmail, setInviteEmail] = useState('');
+  const [inviteMessage, setInviteMessage] = useState('');
+  const [invitingFriend, setInvitingFriend] = useState(false);
   const [deleteCode, setDeleteCode] = useState('');
   const [deleteFlowActive, setDeleteFlowActive] = useState(false);
   const [deleteCodeSentAt, setDeleteCodeSentAt] = useState(null);
@@ -103,6 +109,7 @@ export default function ProfilePage() {
   const [studyChallenges, setStudyChallenges] = useState([]);
   const [studyLeaderboard, setStudyLeaderboard] = useState([]);
   const router = useRouter();
+  const { session: layoutSession } = useUserRole();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -114,23 +121,16 @@ export default function ProfilePage() {
 
       setUser(session.user);
 
-      const { data: userRow } = await supabase
-        .from('user_profiles')
-        .select('nombre, email')
-        .eq('id', session.user.id)
-        .single();
-
-      const { data: profileRow } = await supabase
-        .from('profiles')
-        .select('id, user_id, fecha_nacimiento, idioma_preferido, biografia')
-        .eq('user_id', session.user.id)
-        .single();
-
-      const { data: preferencesRow } = await supabase
-        .from('user_preferences')
-        .select('notificaciones, recordatorios')
-        .eq('user_id', session.user.id)
-        .single();
+      const userId = session.user.id;
+      const [{ data: userRow }, { data: profileRow }, { data: preferencesRow }] = await Promise.all([
+        supabase.from('user_profiles').select('nombre, email').eq('id', userId).single(),
+        supabase
+          .from('profiles')
+          .select('id, user_id, fecha_nacimiento, idioma_preferido, biografia')
+          .eq('user_id', userId)
+          .single(),
+        supabase.from('user_preferences').select('notificaciones, recordatorios').eq('user_id', userId).single(),
+      ]);
 
       const localSettings = typeof window !== 'undefined'
         ? JSON.parse(localStorage.getItem(`profile_settings_${session.user.id}`) || '{}')
@@ -150,11 +150,12 @@ export default function ProfilePage() {
       setStudyStreak(0);
       setTotalStudyTime(0);
 
-      const userProgress = await getUserProgress(session.user.id);
-      setStats(userProgress);
-
-      // Cargar estadísticas integradas del sistema offline-first
-      await loadIntegratedStats(session.user.id);
+      await Promise.all([
+        getUserProgress(session.user.id).then((userProgress) => {
+          setStats(userProgress);
+        }),
+        loadIntegratedStats(session.user.id),
+      ]);
 
       // Simular datos adicionales (en una app real vendrían de la BD)
       setDifficultWords([
@@ -529,6 +530,70 @@ export default function ProfilePage() {
     setSaving(false);
   };
 
+  const handleInviteFriend = async () => {
+    const recipient = inviteEmail.trim().toLowerCase();
+    if (!recipient || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(recipient)) {
+      alert('Introduce un email válido para la invitación.');
+      return;
+    }
+    if (!user?.id) {
+      alert('No se pudo validar tu sesión para enviar la invitación.');
+      return;
+    }
+
+    setInvitingFriend(true);
+    try {
+      const accessToken =
+        layoutSession?.access_token ||
+        (await supabase.auth.getSession()).data?.session?.access_token;
+      if (!accessToken) {
+        throw new Error('No se pudo obtener sesión para enviar la invitación.');
+      }
+
+      const inviteUrl =
+        (typeof process !== 'undefined' &&
+          process.env.NEXT_PUBLIC_INVITE_SEND_MAIL_URL?.trim()) ||
+        '/api/invitations/send-mail';
+
+      const response = await fetch(inviteUrl, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${accessToken}`,
+        },
+        body: JSON.stringify({
+          to: recipient,
+          message: inviteMessage.trim(),
+        }),
+      });
+
+      let payload = {};
+      try {
+        payload = await response.json();
+      } catch {
+        /* respuesta no JSON */
+      }
+
+      if (response.status === 404 && !process.env.NEXT_PUBLIC_INVITE_SEND_MAIL_URL) {
+        throw new Error(
+          'La invitación por email no está disponible en la versión estática. Despliega la API o define NEXT_PUBLIC_INVITE_SEND_MAIL_URL.'
+        );
+      }
+      if (!response.ok) {
+        throw new Error(payload?.error || 'No se pudo enviar la invitación.');
+      }
+
+      alert('Invitación enviada correctamente.');
+      setInviteEmail('');
+      setInviteMessage('');
+    } catch (error) {
+      console.error('Error inviting friend:', error);
+      alert(error.message || 'Error enviando invitación.');
+    } finally {
+      setInvitingFriend(false);
+    }
+  };
+
   const exportData = () => {
     const data = {
       user: { name: fullName, email: user.email },
@@ -701,9 +766,14 @@ export default function ProfilePage() {
 
   return (
     <main className="shell perfil-page">
-      <header className="header">
-        <h1>👤 Mi Perfil</h1>
-        <p>Gestiona tu información personal y revisa tu progreso de aprendizaje.</p>
+      <header className="header header--mascot">
+        <div className="header__copy">
+          <h1>👤 Mi Perfil</h1>
+          <p>Gestiona tu información personal y revisa tu progreso de aprendizaje.</p>
+        </div>
+        <div className="header__mascot" aria-hidden>
+          <SiteMascot variant={6} width={130} alt="" />
+        </div>
       </header>
 
       {/* Tabs de navegación */}
@@ -854,6 +924,9 @@ export default function ProfilePage() {
 
           {/* Estadísticas de Exámenes */}
           <ExamStatistics userId={user?.id} />
+
+          {/* Estadísticas Levels B2 (solo visibles para el propio usuario; RLS en Supabase) */}
+          <LevelsEstadisticasPanel userId={user?.id} displayName={fullName || user?.email || ''} />
 
           {/* Heatmap de actividad */}
           <section className="profile-section">
@@ -1374,6 +1447,38 @@ export default function ProfilePage() {
             </div>
             <button onClick={handleSettingsUpdate} className="action-btn" disabled={saving}>
               {saving ? 'Guardando...' : '💾 Guardar Configuración'}
+            </button>
+          </section>
+
+          <section className="profile-section">
+            <div className="section-head">
+              <h2>📨 Invitar amigos</h2>
+            </div>
+            <p style={{ marginTop: 0, color: '#334155' }}>
+              Envía una invitación por correo para que tus amigos se unan a practicar contigo.
+            </p>
+            <div className="form-group">
+              <label className="form-label">Email de tu amigo</label>
+              <input
+                type="email"
+                value={inviteEmail}
+                onChange={(e) => setInviteEmail(e.target.value)}
+                className="form-input"
+                placeholder="amigo@email.com"
+              />
+            </div>
+            <div className="form-group">
+              <label className="form-label">Mensaje personalizado (opcional)</label>
+              <textarea
+                value={inviteMessage}
+                onChange={(e) => setInviteMessage(e.target.value)}
+                className="form-input"
+                rows={4}
+                placeholder="¡Hola! Te invito a practicar inglés conmigo en English Practice."
+              />
+            </div>
+            <button onClick={handleInviteFriend} className="action-btn" disabled={invitingFriend}>
+              {invitingFriend ? 'Enviando invitación...' : 'Enviar invitación'}
             </button>
           </section>
 
@@ -2120,6 +2225,9 @@ function GlobalStyles() {
       .center{display:grid;place-items:center}
       .header h1{font-size:44px;margin:0 0 6px;color:var(--text)}
       .header p{margin:0;color:#666}
+      .header--mascot{display:flex;flex-wrap:wrap;align-items:center;gap:20px 32px;margin-bottom:8px}
+      .header__copy{flex:1 1 240px;min-width:0}
+      .header__mascot{flex:0 0 auto;line-height:0;filter:drop-shadow(0 8px 18px rgba(0,0,0,.12))}
       
       /* Tabs */
       .tabs-container{margin:22px 0;position:sticky;top:16px;z-index:5;background:var(--card);border-radius:16px;box-shadow:0 2px 6px rgba(0,0,0,0.1)}

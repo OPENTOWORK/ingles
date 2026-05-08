@@ -11,8 +11,8 @@ export default function B2ExamHomePage() {
   return (
     <main className="shell exam-page">
       <header className="header">
-        <h1>Cambridge B2 Exam Practice</h1>
-        <p>Welcome to the B2 Cambridge English Exam Practice page.</p>
+        <h1>B2 English Exam Practice</h1>
+        <p>Welcome to the B2 English exam practice page.</p>
       </header>
 
       {/* Gestión del Examen */}

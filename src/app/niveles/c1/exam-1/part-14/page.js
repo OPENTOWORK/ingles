@@ -364,7 +364,7 @@ export default function Part14Page() {
       <div className="exam-header">
         <div className="header">
           <h1>Part 14: Speaking - Personal questions</h1>
-          <p>Cambridge C1 Advanced - Speaking</p>
+          <p>C1 Advanced - Speaking</p>
         </div>
         
         <div className="exam-controls">

@@ -1,7 +1,7 @@
 export const partInfo = {
   "1": {
     "title": "Part 1: Multiple choice (pictures)",
-    "description": "In this part of the Cambridge English: Movers (A2) exam, you will see five pictures and five sentences. Each sentence describes one of the pictures. You need to choose the correct picture for each sentence. This tests your reading comprehension and ability to understand simple present and past tense sentences.",
+    "description": "In this part of the A2 Movers exam, you will see five pictures and five sentences. Each sentence describes one of the pictures. You need to choose the correct picture for each sentence. This tests your reading comprehension and ability to understand simple present and past tense sentences.",
     "tips": "Read each sentence carefully and identify the key words. Look for specific details mentioned in the sentence that appear in the pictures. Pay attention to verb tenses (present/past) and time expressions. Don't choose based on just one word - make sure the whole sentence matches the picture.",
     "commonErrors": "Focusing on just one word instead of understanding the complete sentence, confusing present and past tense, or choosing pictures that have similar elements but don't match the full description"
   },

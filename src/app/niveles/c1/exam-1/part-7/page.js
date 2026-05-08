@@ -188,7 +188,7 @@ export default function Part7Page() {
       <div className="exam-header">
         <div className="header">
           <h1>Part 7: Reading - Cross-text Multiple Matching</h1>
-          <p>Cambridge C1 Advanced - Reading</p>
+          <p>C1 Advanced - Reading</p>
         </div>
         
         <div className="exam-controls">

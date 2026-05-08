@@ -229,7 +229,7 @@ export default function Part17Page() {
       <div className="exam-header">
         <div className="header">
           <h1>Part 17: Speaking - General discussion</h1>
-          <p>Cambridge C1 Advanced - Speaking</p>
+          <p>C1 Advanced - Speaking</p>
         </div>
         
         <div className="exam-controls">

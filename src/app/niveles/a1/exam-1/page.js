@@ -11,8 +11,8 @@ export default function A1ExamHomePage() {
   return (
     <main className="shell exam-page">
       <header className="header">
-        <h1>Cambridge A1 Exam Practice</h1>
-        <p>Welcome to the A1 Cambridge English Exam Practice page.</p>
+        <h1>A1 English Exam Practice</h1>
+        <p>Welcome to the A1 English exam practice page.</p>
       </header>
 
       {/* Gestión del Examen */}

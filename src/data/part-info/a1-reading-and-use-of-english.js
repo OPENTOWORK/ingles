@@ -1,7 +1,7 @@
 export const partInfo = {
   "1": {
     "title": "Part 1: Names and pictures",
-    "description": "In this part of the Cambridge English: Starters (A1) exam, you will see five pictures of people and five names. You need to match each name to the correct person in the pictures. This tests your ability to understand basic personal information and visual recognition.",
+    "description": "In this part of the A1 Starters exam, you will see five pictures of people and five names. You need to match each name to the correct person in the pictures. This tests your ability to understand basic personal information and visual recognition.",
     "tips": "Look carefully at each picture before you start. Notice details like hair color, clothing, and facial features. Read all the names first, then match them systematically. The names will be clearly pronounced in the audio, so listen carefully for each name.",
     "commonErrors": "Rushing through without looking carefully at the pictures, confusing similar-looking people, or not listening to the complete name before deciding"
   },

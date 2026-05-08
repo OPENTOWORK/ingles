@@ -20,7 +20,7 @@ const EssayWritingPage = () => {
     <div>
       <TheorySection title="Técnicas de Escritura de Essays" icon="✍️">
         <p style={{ fontSize: '1.1rem', lineHeight: 1.6, color: '#4a5568', marginBottom: '1rem' }}>
-          En los exámenes de Cambridge (B2 First, C1 Advanced, C2 Proficiency), el <strong>essay</strong> 
+          En los exámenes certificados (B2 First, C1 Advanced, C2 Proficiency), el <strong>essay</strong> 
           es una tarea obligatoria en Writing Paper. Debes escribir 140-190 palabras (B2), 220-260 palabras (C1), 
           o 280-320 palabras (C2) en respuesta a una pregunta específica, demostrando capacidad argumentativa y estilo académico.
         </p>
@@ -237,7 +237,7 @@ const EssayWritingPage = () => {
           Debe cerrar, no abrir nuevos debates.
         </Tip>
       </TheorySection>
-      <TheorySection title="Tipos de Essays en Cambridge" icon="📚">
+      <TheorySection title="Tipos de essays en el examen" icon="📚">
         <div style={{ display: 'grid', gap: '1rem' }}>
           <Rule 
             title="1. Opinion Essay (Más común en B2/C1)"
@@ -273,7 +273,7 @@ const EssayWritingPage = () => {
           />
 
           <Rule 
-            title="Criterios de evaluación Cambridge"
+            title="Criterios de evaluación del writing"
             description="Cómo se evalúan los essays en los exámenes oficiales."
             examples={[
               "Content: Relevancia y desarrollo de ideas (25%)",

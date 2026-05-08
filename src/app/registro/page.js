@@ -1,8 +1,11 @@
 'use client';
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
+import toast from 'react-hot-toast';
 import { supabase } from '../../utils/supabaseClient';
 import { normalizeEmail } from '@/utils/authRoles';
+import { mapSignupErrorMessage } from '@/utils/authSignupErrors';
+import SiteMascot from '@/components/SiteMascot';
 
 export default function RegistroPage() {
   const [email, setEmail] = useState('');
@@ -10,6 +13,7 @@ export default function RegistroPage() {
   const [acceptedTerms, setAcceptedTerms] = useState(false);
   const [acceptedDataProtection, setAcceptedDataProtection] = useState(false);
   const [acceptedMarketing, setAcceptedMarketing] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
   const router = useRouter();
 
   const persistMarketingConsent = async (userId, userEmail, marketingAccepted) => {
@@ -66,7 +70,7 @@ export default function RegistroPage() {
     const normalizedEmail = normalizeEmail(email);
 
     if (!acceptedTerms || !acceptedDataProtection) {
-      alert('Debes aceptar Términos y condiciones y Protección de datos para registrarte.');
+      toast.error('Debes aceptar Términos y condiciones y Protección de datos para registrarte.');
       return;
     }
 
@@ -78,32 +82,115 @@ export default function RegistroPage() {
       /\d/.test(password);
 
     if (!passwordIsStrong) {
-      alert('La contraseña debe tener al menos 8 caracteres, una mayúscula, una minúscula y un número.');
+      toast.error('La contraseña debe tener al menos 8 caracteres, una mayúscula, una minúscula y un número.');
       return;
     }
 
-    const { data, error } = await supabase.auth.signUp({
-      email: normalizedEmail,
-      password,
-      options: {
-        data: {
-          role: 'student',
-          legal_acceptance: {
-            terms_and_conditions: true,
-            data_protection: true,
-            marketing_updates: Boolean(acceptedMarketing),
-            accepted_at: new Date().toISOString(),
+    setSubmitting(true);
+    const loadingToast = toast.loading('Creando cuenta…');
+
+    const legal_acceptance = {
+      terms_and_conditions: true,
+      data_protection: true,
+      marketing_updates: Boolean(acceptedMarketing),
+      accepted_at: new Date().toISOString(),
+    };
+
+    const tryServerRegister = async () => {
+      let res;
+      try {
+        res = await fetch('/api/auth/register', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            email: normalizedEmail,
+            password,
+            acceptedTerms: true,
+            acceptedDataProtection: true,
+            acceptedMarketing,
+          }),
+        });
+      } catch {
+        return { ok: false, useFallback: true, data: {} };
+      }
+
+      let data = {};
+      try {
+        data = await res.json();
+      } catch {
+        data = {};
+      }
+
+      if (res.ok && data.ok) {
+        return { ok: true, data, useFallback: false };
+      }
+
+      const useFallback =
+        res.status === 404 ||
+        res.status === 0 ||
+        (res.status === 503 && data.code === 'NO_SERVICE_ROLE');
+
+      return { ok: false, data, res, useFallback };
+    };
+
+    const tryClientSignUp = async () => {
+      const { data, error } = await supabase.auth.signUp({
+        email: normalizedEmail,
+        password,
+        options: {
+          data: {
+            role: 'student',
+            legal_acceptance,
           },
         },
-      },
-    });
+      });
+      return { data, error };
+    };
 
-    if (error) {
-      alert(error.message);
-    } else {
-      await persistMarketingConsent(data?.user?.id, normalizedEmail, acceptedMarketing);
-      alert('¡Registro exitoso! Revisa tu correo para confirmar tu cuenta.');
-      router.push('/login');
+    const isDev = process.env.NODE_ENV === 'development';
+
+    try {
+      const server = await tryServerRegister();
+
+      if (server.ok) {
+        toast.success(server.data?.message || 'Cuenta creada. Ya puedes iniciar sesión.');
+        router.push('/login');
+        return;
+      }
+
+      if (server.useFallback) {
+        if (isDev) {
+          const { data, error } = await tryClientSignUp();
+          if (error) {
+            toast.error(mapSignupErrorMessage(error.message));
+            return;
+          }
+          await persistMarketingConsent(data?.user?.id, normalizedEmail, acceptedMarketing);
+          const needsConfirm = !data?.session;
+          toast.success(
+            needsConfirm
+              ? 'Revisa tu correo para confirmar la cuenta antes de iniciar sesión.'
+              : '¡Registro exitoso! Ya puedes iniciar sesión.'
+          );
+          router.push('/login');
+          return;
+        }
+        const isMissingServiceRole =
+          server.res?.status === 503 && server.data?.code === 'NO_SERVICE_ROLE';
+        toast.error(
+          isMissingServiceRole
+            ? 'Registro sin confirmación por email: añade SUPABASE_SERVICE_ROLE_KEY en el hosting (Variables de entorno). Ver .env.example.'
+            : 'Registro solo disponible con la API del servidor (no export estático sin /api). Añade SUPABASE_SERVICE_ROLE_KEY o usa despliegue con Node.'
+        );
+        return;
+      }
+
+      toast.error(server.data?.error || 'No se pudo registrar.');
+    } catch {
+      toast.error('Error de red. Intenta de nuevo.');
+    } finally {
+      toast.dismiss(loadingToast);
+      setSubmitting(false);
     }
   };
 
@@ -119,6 +206,9 @@ export default function RegistroPage() {
         fontFamily: "Segoe UI, sans-serif",
       }}
     >
+      <div style={{ textAlign: "center", marginBottom: "0.75rem", lineHeight: 0 }}>
+        <SiteMascot variant={5} width={120} alt="Dralo" />
+      </div>
       <h2 style={{ textAlign: "center", marginBottom: "1.5rem" }}>Crear cuenta</h2>
 
       <form onSubmit={handleRegister}>
@@ -140,7 +230,13 @@ export default function RegistroPage() {
           onChange={(e) => setPassword(e.target.value)}
         />
 
-        <button type="submit" style={buttonStyle}>Registrarme</button>
+        <button
+          type="submit"
+          style={submitting ? { ...buttonStyle, opacity: 0.7, cursor: 'not-allowed' } : buttonStyle}
+          disabled={submitting}
+        >
+          {submitting ? 'Creando cuenta…' : 'Registrarme'}
+        </button>
 
         <div style={{ marginTop: '1rem', display: 'grid', gap: '0.75rem' }}>
           <label style={checkboxLabelStyle}>
@@ -213,6 +309,7 @@ const buttonStyle = {
   borderRadius: "4px",
   cursor: "pointer",
 };
+
 
 const checkboxLabelStyle = {
   display: 'flex',

@@ -2,7 +2,8 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
-import { supabase } from '@/utils/supabaseClient';
+import { useUserRole } from '@/context/UserRoleContext';
+import SiteMascot from '@/components/SiteMascot';
 import { placementQuestions as rawQuestions, levelFromScore, levelRecommendations } from '@/data/placementTest';
 
 /**
@@ -28,7 +29,7 @@ const shuffle = (arr) => {
 
 export default function PlacementTestPage() {
   const router = useRouter();
-  const [loading, setLoading] = useState(true);
+  const { session } = useUserRole();
 
   // Estado principal
   const [answers, setAnswers] = useState({}); // { [qid]: value }
@@ -41,15 +42,11 @@ export default function PlacementTestPage() {
 
   const topRef = useRef(null);
 
-  // Autenticación
   useEffect(() => {
-    const checkSession = async () => {
-      const { data } = await supabase.auth.getSession();
-      if (!data?.session) router.push('/login');
-      else setLoading(false);
-    };
-    checkSession();
-  }, [router]);
+    if (!session) {
+      router.push('/login');
+    }
+  }, [session, router]);
 
   // Dataset preparado: barajado y con tipo por defecto
   const questions = useMemo(() => {
@@ -249,9 +246,14 @@ export default function PlacementTestPage() {
 
       <div className="mx-auto max-w-3xl px-4 py-10">
         {/* Header */}
-        <header className="text-center mb-8">
-          <h1 className="text-4xl font-semibold tracking-tight">Placement Test</h1>
-          <p className="mt-2 text-slate-600">Un test moderno para estimar tu nivel de inglés. Sin secciones, sin ruido.</p>
+        <header className="flex flex-col sm:flex-row items-center justify-center gap-6 mb-8 text-center sm:text-left">
+          <div className="shrink-0 leading-none drop-shadow-md" aria-hidden>
+            <SiteMascot variant={2} width={112} alt="" />
+          </div>
+          <div>
+            <h1 className="text-4xl font-semibold tracking-tight">Placement Test</h1>
+            <p className="mt-2 text-slate-600">Un test moderno para estimar tu nivel de inglés. Sin secciones, sin ruido.</p>
+          </div>
         </header>
 
         {/* Barra superior */}
@@ -281,7 +283,7 @@ export default function PlacementTestPage() {
           </div>
         </div>
 
-        {loading ? (
+        {!session ? (
           <p className="text-center">Cargando…</p>
         ) : (
           <div className="space-y-6">
@@ -333,8 +335,15 @@ export default function PlacementTestPage() {
             {/* Resultados */}
             {submitted && (
               <section className="rounded-3xl border bg-white shadow-sm p-6" aria-live="polite">
+                <div className="flex flex-col sm:flex-row sm:items-center gap-4 mb-2">
+                  <div className="shrink-0 leading-none mx-auto sm:mx-0" aria-hidden>
+                    <SiteMascot variant={7} width={100} alt="" />
+                  </div>
+                  <div className="min-w-0 text-center sm:text-left">
                 <h3 className="text-xl font-semibold">Resultados</h3>
                 <p className="mt-1">Aciertos: <span className="font-semibold">{score}</span> / {total}</p>
+                  </div>
+                </div>
 
                 {level && (
                   <div className="mt-3">

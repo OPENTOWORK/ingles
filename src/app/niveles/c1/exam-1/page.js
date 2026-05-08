@@ -11,8 +11,8 @@ export default function C1ExamHomePage() {
   return (
     <main className="shell exam-page">
       <header className="header">
-        <h1>Cambridge C1 Exam Practice</h1>
-        <p>Welcome to the C1 Advanced (CAE) Cambridge English Exam Practice page.</p>
+        <h1>C1 English Exam Practice</h1>
+        <p>Welcome to the C1 Advanced (CAE) English exam practice page.</p>
       </header>
 
       {/* Gestión del Examen */}

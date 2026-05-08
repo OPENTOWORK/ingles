@@ -36,6 +36,10 @@ export default function AdminDashboard() {
   const [mailSubject, setMailSubject] = useState('');
   const [mailMessage, setMailMessage] = useState('');
   const [mailing, setMailing] = useState(false);
+  const [newUserEmail, setNewUserEmail] = useState('');
+  const [newUserName, setNewUserName] = useState('');
+  const [newUserRoleId, setNewUserRoleId] = useState('');
+  const [creatingUser, setCreatingUser] = useState(false);
   const [period, setPeriod] = useState('meses');
   const [startDate, setStartDate] = useState('');
   const [endDate, setEndDate] = useState('');
@@ -479,6 +483,80 @@ export default function AdminDashboard() {
     await sendMail([targetUser.email], mailSubject, mailMessage);
   };
 
+  const generateTemporaryPassword = () => {
+    const randomPart = Math.random().toString(36).slice(-8);
+    return `Tmp-${randomPart}A1`;
+  };
+
+  const handleCreateUser = async () => {
+    const email = newUserEmail.trim().toLowerCase();
+    if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      alert('Introduce un email válido para el nuevo usuario.');
+      return;
+    }
+    if (!newUserRoleId) {
+      alert('Selecciona un rol para el nuevo usuario.');
+      return;
+    }
+
+    setCreatingUser(true);
+    try {
+      const { data: sessionData } = await supabase.auth.getSession();
+      const accessToken = sessionData?.session?.access_token;
+      if (!accessToken) {
+        throw new Error('No se pudo obtener sesión para crear usuarios.');
+      }
+
+      const tempPassword = generateTemporaryPassword();
+      const createUserUrl =
+        (typeof process !== 'undefined' &&
+          process.env.NEXT_PUBLIC_ADMIN_CREATE_USER_URL?.trim()) ||
+        '/api/admin/create-user';
+
+      const res = await fetch(createUserUrl, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${accessToken}`,
+        },
+        body: JSON.stringify({
+          email,
+          name: newUserName.trim() || null,
+          roleId: newUserRoleId,
+          temporaryPassword: tempPassword,
+        }),
+      });
+
+      let payload = {};
+      try {
+        payload = await res.json();
+      } catch {
+        /* respuesta no JSON */
+      }
+
+      if (res.status === 404 && !process.env.NEXT_PUBLIC_ADMIN_CREATE_USER_URL) {
+        throw new Error(
+          'El alta de usuarios no está disponible en la versión estática. Despliega la API en un servidor o define NEXT_PUBLIC_ADMIN_CREATE_USER_URL al compilar.'
+        );
+      }
+
+      if (!res.ok) {
+        throw new Error(payload?.error || 'No se pudo crear el usuario.');
+      }
+
+      alert(`Usuario creado correctamente: ${email}. Se envió email de acceso.`);
+      setNewUserEmail('');
+      setNewUserName('');
+      setNewUserRoleId('');
+      await Promise.all([loadUsers(), loadAnalytics()]);
+    } catch (error) {
+      console.error('Error creating user:', error);
+      alert(error.message || 'Error creando usuario.');
+    } finally {
+      setCreatingUser(false);
+    }
+  };
+
   return (
     <div className="min-h-screen bg-gray-50">
       <header className="bg-white shadow-sm border-b">
@@ -622,6 +700,46 @@ export default function AdminDashboard() {
           </div>
           <div className="p-6">
             <div className="border rounded-lg p-4 mb-6 bg-gray-50">
+              <h3 className="text-md font-semibold text-gray-900 mb-3">Alta de usuario por administrador</h3>
+              <p className="text-sm text-gray-600 mb-3">
+                Crea una cuenta nueva y envía automáticamente un correo con acceso inicial.
+              </p>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-3 mb-3">
+                <input
+                  type="text"
+                  value={newUserName}
+                  onChange={(e) => setNewUserName(e.target.value)}
+                  placeholder="Nombre (opcional)"
+                  className="border rounded px-3 py-2 text-sm"
+                />
+                <input
+                  type="email"
+                  value={newUserEmail}
+                  onChange={(e) => setNewUserEmail(e.target.value)}
+                  placeholder="Email del usuario"
+                  className="border rounded px-3 py-2 text-sm"
+                />
+                <select
+                  value={newUserRoleId}
+                  onChange={(e) => setNewUserRoleId(e.target.value)}
+                  className="border rounded px-3 py-2 text-sm"
+                >
+                  <option value="">Selecciona rol</option>
+                  {roles.map((role) => (
+                    <option key={role.id} value={role.id}>
+                      {role.nombre}
+                    </option>
+                  ))}
+                </select>
+              </div>
+              <button
+                onClick={handleCreateUser}
+                disabled={creatingUser}
+                className="px-4 py-2 rounded bg-indigo-600 text-white hover:bg-indigo-700 disabled:opacity-50 mb-5"
+              >
+                {creatingUser ? 'Creando usuario...' : 'Crear usuario y enviar mail'}
+              </button>
+
               <h3 className="text-md font-semibold text-gray-900 mb-3">Envio de correo masivo</h3>
               <p className="text-sm text-gray-600 mb-3">
                 Selecciona usuarios con las casillas y envía un correo a todos los marcados.

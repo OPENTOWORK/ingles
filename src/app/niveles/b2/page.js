@@ -1,5 +1,6 @@
 'use client';
 import Link from 'next/link';
+import { useUserRole } from '@/context/UserRoleContext';
 
 // ====== Datos ======
 const SECTIONS = {
@@ -31,16 +32,21 @@ const SECTIONS = {
 };
 
 const EXAM_LINKS = [
-  { text: "📝 Full Exam", href: "/niveles/b2/exam-1" },
-  { text: "📘 Use of English", href: "/niveles/b2/exam-useofenglish" },
-  { text: "📖 Reading", href: "/niveles/b2/exam-reading" },
-  { text: "✍️ Writing", href: "/niveles/b2/exam-writing" },
-  { text: "🎧 Listening", href: "/niveles/b2/exam-listening" },
-  { text: "🗣️ Speaking", href: "/niveles/b2/exam-speaking" },
+  { text: "📝 Full Exam", href: "/niveles/b2/exam-1", enabledForStudents: false },
+  { text: "📘 Use of English", href: "/niveles/b2/exam-useofenglish", enabledForStudents: true },
+  { text: "📖 Reading", href: "/niveles/b2/exam-reading", enabledForStudents: true },
+  { text: "✍️ Writing", href: "/niveles/b2/exam-writing", enabledForStudents: true },
+  { text: "🎧 Listening", href: "/niveles/b2/exam-listening", enabledForStudents: false },
+  { text: "🗣️ Speaking", href: "/niveles/b2/exam-speaking", enabledForStudents: false },
 ];
 
 // ====== Página ======
 export default function B2Page() {
+  const { userRole: roleName } = useUserRole();
+
+  const isAdmin = roleName === 'admin' || roleName === 'administrador';
+  const isStudent = !isAdmin;
+
   return (
     <main className="shell b2-page">
       <header className="header">
@@ -62,11 +68,22 @@ export default function B2Page() {
           <span className="count">{EXAM_LINKS.length}</span>
         </div>
         <div className="exam-grid">
-          {EXAM_LINKS.map((exam, i) => (
-            <Link key={i} href={exam.href} className="exam-card">
-              {exam.text}
-            </Link>
-          ))}
+          {EXAM_LINKS.map((exam, i) => {
+            const blockedForStudent = isStudent && !exam.enabledForStudents;
+            if (blockedForStudent) {
+              return (
+                <div key={i} className="exam-card exam-card-disabled" aria-disabled="true">
+                  <span>{exam.text}</span>
+                  <small className="exam-card-badge">Próximamente disponible</small>
+                </div>
+              );
+            }
+            return (
+              <Link key={i} href={exam.href} className="exam-card">
+                {exam.text}
+              </Link>
+            );
+          })}
         </div>
       </section>
 
@@ -129,6 +146,22 @@ function GlobalStyles() {
       .exam-grid{display:flex;justify-content:center;gap:1rem;flex-wrap:wrap;margin-top:1rem}
       .exam-card{background:#d1fae5;color:#047857;padding:0.75rem 1.25rem;border-radius:8px;font-weight:bold;text-decoration:none;box-shadow:0 1px 4px rgba(0,0,0,0.1);transition:transform .2s, box-shadow .2s}
       .exam-card:hover{transform:translateY(-2px);box-shadow:0 4px 12px rgba(0,0,0,0.15)}
+      .exam-card-disabled{
+        background:#e5e7eb;
+        color:#6b7280;
+        cursor:not-allowed;
+        display:flex;
+        flex-direction:column;
+        align-items:center;
+        gap:0.2rem;
+        filter:grayscale(.2);
+      }
+      .exam-card-badge{
+        font-size:0.75rem;
+        font-weight:700;
+        text-transform:uppercase;
+        letter-spacing:.02em;
+      }
       .note{margin-top:2rem;text-align:center}
       .note p{font-style:italic;color:#666;margin:0}
     `}</style>

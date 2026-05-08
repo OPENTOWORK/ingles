@@ -57,11 +57,11 @@ const OpenClozePage = () => {
         </div>
       </TheorySection>
 
-      <TheorySection title="Tipos Comunes de Palabras en Cambridge" icon="🔍">
+      <TheorySection title="Tipos comunes de palabras en certificación B2" icon="🔍">
         <div style={{ display: 'grid', gap: '1rem' }}>
           <Rule 
             title="1. Palabras funcionales (70% del examen)"
-            description="Las más frecuentes en Open Cloze de Cambridge."
+            description="Las más frecuentes en ejercicios tipo Open Cloze."
             examples={[
               "Artículos: a, an, the (especialmente 'the' con superlativos)",
               "Preposiciones: in, on, at, for, with, by, of, from",
@@ -131,7 +131,7 @@ const OpenClozePage = () => {
         </div>
       </TheorySection>
 
-      <TheorySection title="Estrategias Específicas para Cambridge" icon="🎯">
+      <TheorySection title="Estrategias específicas para el examen" icon="🎯">
         <div style={{ display: 'grid', gap: '1rem' }}>
           <Rule 
             title="Gestión del tiempo (10-12 minutos)"
@@ -145,7 +145,7 @@ const OpenClozePage = () => {
           />
 
           <Rule 
-            title="Patrones frecuentes en Cambridge"
+            title="Patrones frecuentes en el examen"
             description="Estructuras que aparecen regularmente en los exámenes."
             examples={[
               "Phrasal verbs: look forward TO, depend ON",

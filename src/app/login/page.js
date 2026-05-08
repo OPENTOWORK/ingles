@@ -4,6 +4,7 @@ import { useRouter } from 'next/navigation';
 import { supabase } from '@/utils/supabaseClient';
 import { getRedirectPathByUserId } from '@/utils/authRoles';
 import toast from 'react-hot-toast';
+import SiteMascot from '@/components/SiteMascot';
 
 export default function LoginPage() {
   const [email, setEmail] = useState('');
@@ -100,6 +101,9 @@ export default function LoginPage() {
 
   return (
     <main style={styles.main}>
+      <div style={{ textAlign: "center", marginBottom: "1rem", lineHeight: 0 }}>
+        <SiteMascot variant={3} width={132} alt="Dralo te da la bienvenida" />
+      </div>
       <h2 style={{ textAlign: "center", marginBottom: "1.5rem" }}>Login / Register</h2>
 
       <form onSubmit={handleLogin}>

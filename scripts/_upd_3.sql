@@ -1,0 +1,39 @@
+update public.levels_partes set "Descripción"='Part 5 – Multiple Choice
+You are going to read a text about learning new skills. For questions 31–36, choose the answer (A, B, C or D) which you think fits best according to the text.
+
+The Challenge of Learning Something New
+Many people believe that learning new skills becomes increasingly difficult with age. While it is true that children often pick up new abilities more quickly, research suggests that adults have their own advantages when it comes to learning.
+One reason adults may struggle is that they tend to be more afraid of making mistakes. Unlike children, who often learn through trial and error without worrying about failure, adults can become discouraged if they do not succeed immediately. This fear can slow down the learning process, as it prevents them from experimenting freely.
+However, adults usually have better concentration and are more motivated. They often choose to learn skills that are directly relevant to their personal or professional lives. For example, someone might learn a new language to improve their job opportunities or take up cooking to lead a healthier lifestyle. This clear purpose can make learning more effective.
+Another advantage adults have is their ability to connect new information with existing knowledge. Because they have more life experience, they can relate what they are learning to something they already understand. This can help them grasp complex ideas more easily than younger learners.
+On the other hand, adults may have less time to dedicate to learning. Responsibilities such as work and family can limit the hours available for practice. As a result, progress may appear slower, even if the quality of learning is high.
+Experts suggest that the best approach for adult learners is to focus on consistency rather than speed. Short, regular practice sessions are more effective than occasional long ones. In addition, creating a supportive environment and setting realistic goals can help maintain motivation over time.
+In conclusion, although adults may face certain challenges when learning new skills, they also possess strengths that can lead to success. With the right strategies, learning can remain a rewarding experience at any age.
+
+Questions
+31. What is the writer’s main point in the first paragraph?
+A. Children are better learners than adults in every wayB. Adults and children learn differently, but both have advantagesC. Adults should not try to learn new skillsD. Learning becomes impossible after a certain age
+
+32. Why do adults sometimes learn more slowly than children?
+A. They have less intelligenceB. They lack interest in learningC. They are afraid of making mistakesD. They prefer learning alone
+
+33. What helps adults learn more effectively according to the text?
+A. Having a clear reason for learningB. Competing with other learnersC. Avoiding difficult subjectsD. Studying for long hours every day
+
+34. What advantage do adults have because of their experience?
+A. They can memorise information fasterB. They need less practiceC. They can connect new ideas to what they already knowD. They understand everything immediately
+
+35. Why might adults seem to make slower progress?
+A. They are less capable than childrenB. They forget information quicklyC. They have limited time to practiseD. They choose difficult topics
+
+36. What does the writer suggest is the best way for adults to learn?
+A. Studying as quickly as possibleB. Practising regularly in short sessionsC. Learning only with teachersD. Avoiding challenging material
+
+Answer Key
+B 
+C 
+A 
+C 
+C 
+B
+' where id='6f873582-07bf-436a-9a25-492b748678c7';

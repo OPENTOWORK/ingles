@@ -179,7 +179,7 @@ export default function Part4Page() {
       <div className="exam-header">
         <div className="header">
           <h1>Part 4: Use of english - Key Word Transformations</h1>
-          <p>Cambridge C1 Advanced - Reading</p>
+          <p>C1 Advanced - Reading</p>
         </div>
         
         <div className="exam-controls">

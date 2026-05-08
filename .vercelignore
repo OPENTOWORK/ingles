@@ -1,0 +1,17 @@
+.git
+.next
+out
+node_modules
+agent-transcripts
+mcps
+Ejercicios
+Imagenes
+public/mascot
+public/listening
+scripts
+*.sql
+*.txt
+*.docx
+*.mpeg
+*.mp3
+temp_part1_backup.js

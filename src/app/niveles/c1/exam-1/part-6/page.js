@@ -201,7 +201,7 @@ export default function Part6Page() {
       <div className="exam-header">
         <div className="header">
           <h1>Part 6: Reading - Gapped Text</h1>
-          <p>Cambridge C1 Advanced - Reading</p>
+          <p>C1 Advanced - Reading</p>
         </div>
         
         <div className="exam-controls">

@@ -1,5 +1,5 @@
 "use client";
-import { useState, useEffect, use } from 'react';
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import AudioPlayer from '@/components/AudioPlayer';
 import { getExercisesByLevel } from '@/data/trainingExercises';
@@ -7,7 +7,7 @@ import { saveExerciseResult, getUserProgress, progressTracker } from '@/utils/pr
 import { supabase } from '@/utils/supabaseClient';
 
 export default function ExercisePage({ params }) {
-  const { level, skill, difficulty, levelNumber } = use(params);
+  const { level, skill, difficulty, levelNumber } = params;
   
   // Convertir level-1 a level1 para la función getExercisesByLevel
   const levelKey = levelNumber.replace('level-', 'level');

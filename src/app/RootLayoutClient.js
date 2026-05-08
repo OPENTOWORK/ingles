@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useRouter, usePathname } from 'next/navigation';
 import { supabase } from '@/utils/supabaseClient';
 import { normalizeRoleName, getRoleNameByUserId, ROLE_ROUTE_MAP } from '@/utils/authRoles';
@@ -8,6 +8,7 @@ import Link from 'next/link';
 import LanguageSwitcher from '../components/LanguageSwitcher';
 import { Toaster } from 'react-hot-toast';
 import { ExamProvider } from '../context/ExamContext';
+import { UserRoleProvider } from '../context/UserRoleContext';
 import ExamNavigationGuard from '../components/ExamNavigationGuard';
 
 export default function RootLayoutClient({ children }) {
@@ -23,6 +24,7 @@ export default function RootLayoutClient({ children }) {
   });
   const router = useRouter();
   const pathname = usePathname();
+  const roleFetchedForUserIdRef = useRef(null);
 
   const publicRoutes = [
     '/',
@@ -39,31 +41,42 @@ export default function RootLayoutClient({ children }) {
   
 
   useEffect(() => {
-    const getSession = async () => {
-      const { data } = await supabase.auth.getSession();
-      setSession(data.session);
-      if (data.session?.user?.id) {
-        const roleName = await getRoleNameByUserId(data.session.user.id, data.session.user.email);
-        setUserRole(normalizeRoleName(roleName));
-      } else {
+    let cancelled = false;
+
+    const hydrateAuth = async (newSession) => {
+      if (cancelled) return;
+      setSession(newSession);
+      if (!newSession?.user?.id) {
+        roleFetchedForUserIdRef.current = null;
         setUserRole('student');
+        if (!cancelled) setLoading(false);
+        return;
       }
+      const uid = newSession.user.id;
+      if (roleFetchedForUserIdRef.current === uid) {
+        if (!cancelled) setLoading(false);
+        return;
+      }
+      const roleName = await getRoleNameByUserId(uid, newSession.user.email);
+      if (cancelled) return;
+      roleFetchedForUserIdRef.current = uid;
+      setUserRole(normalizeRoleName(roleName));
       setLoading(false);
     };
-    
-    getSession();
+    (async () => {
+      const { data } = await supabase.auth.getSession();
+      if (cancelled) return;
+      await hydrateAuth(data.session);
+    })();
 
     const { data: sub } = supabase.auth.onAuthStateChange(async (_event, newSession) => {
-      setSession(newSession);
-      if (newSession?.user?.id) {
-        const roleName = await getRoleNameByUserId(newSession.user.id, newSession.user.email);
-        setUserRole(normalizeRoleName(roleName));
-      } else {
-        setUserRole('student');
-      }
-      setLoading(false);
+      if (cancelled) return;
+      await hydrateAuth(newSession);
     });
-    return () => sub?.subscription?.unsubscribe?.();
+    return () => {
+      cancelled = true;
+      sub?.subscription?.unsubscribe?.();
+    };
   }, []);
 
   useEffect(() => {
@@ -461,9 +474,11 @@ export default function RootLayoutClient({ children }) {
       </header>
 
       <main className="page-content">
-        <ExamNavigationGuard>
-          {children}
-        </ExamNavigationGuard>
+        <UserRoleProvider userRole={userRole} session={session}>
+          <ExamNavigationGuard>
+            {children}
+          </ExamNavigationGuard>
+        </UserRoleProvider>
       </main>
 
       {!cookieConsent && (

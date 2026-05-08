@@ -9,6 +9,7 @@ import ExamTimer from '@/components/ExamTimer';
 import AdvancedProgress from '@/components/AdvancedProgress';
 import QuickNavigation from '@/components/QuickNavigation';
 import EnhancedFeedback from '@/components/EnhancedFeedback';
+import { buildClientApiUrl, getStaticApiHint } from '@/utils/clientApiUrl';
 import '@/styles/quick-exam-navigation.css';
 
 const EXAM_ID = 'exam-1';
@@ -66,7 +67,10 @@ export default function Part8Page() {
     setAiFeedback('');
 
     try {
-      const res = await fetch('/api/feedback/essay', {
+      const externalBaseConfigured = Boolean(
+        String(process.env.NEXT_PUBLIC_AI_API_BASE_URL || '').trim(),
+      );
+      const res = await fetch(buildClientApiUrl('/api/feedback/essay'), {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ essay }),
@@ -85,10 +89,14 @@ export default function Part8Page() {
         });
 
       } else {
-        setAiFeedback('⚠️ Error: ' + (data.error || 'Unknown error.'));
+        const hint =
+          !externalBaseConfigured && (res.status === 404 || res.status === 405)
+            ? ` ${getStaticApiHint()}`
+            : '';
+        setAiFeedback('⚠️ Error: ' + (data.error || 'Unknown error.') + hint);
       }
     } catch (err) {
-      setAiFeedback('⚠️ Error connecting to AI.');
+      setAiFeedback('⚠️ Error al conectar con Dralo.');
     }
 
     setLoading(false);
@@ -262,7 +270,7 @@ export default function Part8Page() {
                     cursor: loading ? 'not-allowed' : 'pointer'
                   }}
                 >
-                  {loading ? 'Sending to AI...' : 'Submit Essay for AI Feedback'}
+                  {loading ? 'Enviando a Dralo para corrección…' : 'Enviar a Dralo para corrección'}
                 </button>
               </div>
             </div>
@@ -270,11 +278,11 @@ export default function Part8Page() {
         </div>
       </div>
 
-      {/* AI Feedback Section */}
+      {/* Corrección Dralo */}
       {aiFeedback && (
         <div className="explanation" style={{ marginTop: '2rem', backgroundColor: '#eef7ff', border: '1px solid #3b82f6' }}>
           <div className="explanation-header">
-            <h4>🧠 AI Feedback</h4>
+            <h4>🧠 Corrección Dralo</h4>
           </div>
           <div className="explanation-content">
             <div dangerouslySetInnerHTML={{ __html: aiFeedback.replace(/\n/g, '<br />') }} />

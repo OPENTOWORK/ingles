@@ -1,0 +1,246 @@
+begin;
+insert into public.levels_preguntas (id, examen_id, level_id, parte_id, enunciado, creado_en) values (gen_random_uuid(), 'ae0e85e8-3d63-11f1-b2e3-0b27f7b23431', 'ae0e85e8-3d63-11f1-b2e3-0b27f7b23431', '6f873582-07bf-436a-9a25-492b748678c7', 'Text\nPart 5 – Multiple Choice
+You are going to read a text about remote working. For questions 31–36, choose the answer (A, B, C or D) which you think fits best according to the text.
+
+The Rise of Remote Work
+In recent years, remote work has become increasingly popular, changing the way many people approach their jobs. Advances in technology have made it possible for employees to work from almost anywhere, as long as they have access to a computer and a stable internet connection. While this shift offers many benefits, it also presents certain challenges.
+One of the main advantages of remote work is flexibility. Employees can often choose their working hours, which allows them to balance their professional and personal lives more effectively. For instance, some people may prefer to start work early in the morning, while others feel more productive later in the day. This flexibility can lead to higher job satisfaction and improved well-being.
+However, working from home can also create difficulties. One common problem is the lack of clear boundaries between work and personal life. Without a physical separation, such as an office, some workers find it hard to switch off at the end of the day. This can result in longer working hours and increased stress.
+Communication is another important issue. In a traditional office, employees can easily share ideas and ask questions in person. In contrast, remote workers rely on emails, messages, or video calls. Although these tools are useful, they may sometimes lead to misunderstandings or delays in communication.
+Despite these challenges, many companies have recognised the advantages of remote work. They have found that employees can be just as productive, or even more so, when working from home. Additionally, businesses can reduce costs by needing less office space.
+Experts suggest that successful remote workers develop good habits, such as setting a daily routine and creating a dedicated workspace. These strategies can help maintain focus and improve efficiency.
+Overall, remote work is likely to remain an important part of modern life. By understanding both its benefits and its drawbacks, individuals and organisations can make the most of this way of working.
+
+Questions
+31. What is the main idea of the first paragraph?
+A. Remote work is only possible for certain jobsB. Technology has made remote work more commonC. Most people prefer working in officesD. Remote work is a recent failure
+
+32. What is one benefit of remote work mentioned in the text?
+A. Employees earn more moneyB. Workers have more control over their schedulesC. People work fewer hoursD. Companies provide better equipment
+
+33. What problem do some remote workers experience?
+A. They cannot communicate with colleaguesB. They lose interest in their workC. They find it difficult to separate work from personal lifeD. They are unable to use technology
+
+34. Why can communication be challenging in remote work?
+A. Workers do not like using digital toolsB. Messages can sometimes be unclear or slowC. Employees refuse to communicateD. Video calls are too expensive
+
+35. What have companies discovered about remote work?
+A. It always reduces productivityB. Employees cannot work independentlyC. It can maintain or increase productivityD. It is too expensive to organise
+
+36. What does the writer recommend for remote workers?
+A. Working without a scheduleB. Avoiding communication with colleaguesC. Creating routines and a specific workspaceD. Changing jobs regularly
+
+Answer Key
+B 
+B 
+C 
+B 
+C 
+C
+
+', now());
+
+insert into public.levels_preguntas (id, examen_id, level_id, parte_id, enunciado, creado_en) values (gen_random_uuid(), 'ae0e85e8-3d63-11f1-b2e3-0b27f7b23431', 'ae0e85e8-3d63-11f1-b2e3-0b27f7b23431', '6f873582-07bf-436a-9a25-492b748678c7', 'Text\nPart 5 – Multiple Choice
+You are going to read a text about the impact of social media. For questions 31–36, choose the answer (A, B, C or D) which you think fits best according to the text.
+
+The Influence of Social Media on Daily Life
+Over the past decade, social media has become an essential part of everyday life for millions of people around the world. Platforms that allow users to share photos, videos, and messages have transformed the way individuals communicate and interact. While these changes have brought many positive effects, they have also raised some concerns.
+One clear benefit of social media is the ability to stay connected with others. People can easily communicate with friends and family, even if they live far away. In addition, social media allows users to meet new people who share similar interests, which can lead to the creation of online communities.
+However, the widespread use of social media has also led to certain problems. For example, some users may spend too much time online, which can reduce the amount of time they dedicate to other activities such as studying, exercising, or socialising in person. This can negatively affect both physical and mental health.
+Another issue is the way people present themselves online. Many users only share the most positive aspects of their lives, creating an unrealistic image. As a result, others may compare themselves to these idealised versions and feel dissatisfied with their own lives.
+Despite these drawbacks, social media can also be a powerful tool for learning and awareness. Educational content is widely available, and users can quickly access information on a variety of topics. Furthermore, social media has been used to raise awareness about important global issues.
+Experts recommend using social media in a balanced way. Setting time limits and being aware of how online content affects emotions can help users avoid negative experiences. By using these platforms responsibly, individuals can enjoy their benefits while reducing potential risks.
+In conclusion, social media plays a significant role in modern society. Although it presents challenges, it also offers valuable opportunities when used carefully.
+
+Questions
+31. What is the main idea of the first paragraph?
+A. Social media is only used for entertainmentB. Social media has changed communication and interactionC. People no longer communicate in real lifeD. Social media is unpopular today
+
+32. What is one advantage of social media mentioned in the text?
+A. It replaces face-to-face communication completelyB. It helps people stay in contact with othersC. It improves people’s physical healthD. It limits communication
+
+33. What problem related to time does the writer mention?
+A. People cannot access social media easilyB. Users spend too little time onlineC. People may spend too much time using social mediaD. Social media reduces working hours
+
+34. Why can social media affect people’s self-image?
+A. Users share only negative experiencesB. People compare themselves to unrealistic contentC. Social media shows real life exactly as it isD. Users do not look at other profiles
+
+35. What positive use of social media is highlighted?
+A. It reduces global problemsB. It replaces traditional educationC. It provides access to information and raises awarenessD. It eliminates the need for teachers
+
+36. What does the writer suggest users should do?
+A. Stop using social media completelyB. Use social media without limitsC. Use social media carefully and in moderationD. Only use social media for work
+
+Answer Key
+B 
+B 
+C 
+B 
+C 
+C 
+
+', now());
+
+insert into public.levels_preguntas (id, examen_id, level_id, parte_id, enunciado, creado_en) values (gen_random_uuid(), 'ae0e85e8-3d63-11f1-b2e3-0b27f7b23431', 'ae0e85e8-3d63-11f1-b2e3-0b27f7b23431', '6f873582-07bf-436a-9a25-492b748678c7', 'Text\nPart 5 – Multiple Choice
+You are going to read a text about the importance of hobbies. For questions 31–36, choose the answer (A, B, C or D) which you think fits best according to the text.
+
+Why Hobbies Matter More Than You Think
+In today’s busy world, many people focus most of their time on work or studies, often forgetting the importance of hobbies. However, having an activity that you enjoy in your free time can bring significant benefits to both your mental and physical health.
+One of the main advantages of hobbies is that they help reduce stress. After a long day, engaging in a relaxing or enjoyable activity can help people disconnect from their responsibilities. Whether it is painting, gardening, or playing a musical instrument, hobbies allow individuals to focus on something positive and creative.
+In addition, hobbies can help people develop new skills. For example, someone who starts cooking as a hobby may improve their ability to prepare healthy meals. Others might learn practical skills such as repairing objects or managing their time more effectively. These abilities can sometimes even be useful in professional situations.
+Hobbies can also play an important role in social life. Joining clubs or groups related to a particular interest can help people meet others with similar passions. This can be especially valuable for those who find it difficult to make friends in other situations.
+Despite these benefits, some people feel they do not have enough time for hobbies. Busy schedules and daily responsibilities can make it difficult to find free time. However, experts suggest that even short periods of time dedicated to hobbies can be beneficial.
+Another common misunderstanding is that hobbies must be expensive or require special talent. In reality, many enjoyable activities are simple and affordable. Reading, walking, or writing are examples of hobbies that do not require significant resources.
+In conclusion, hobbies are not just a way to pass the time. They can improve well-being, develop useful skills, and strengthen social connections. Making time for them, even in a busy life, can have a positive impact.
+
+Questions
+31. What is the writer’s main point in the first paragraph?
+A. People should stop working so muchB. Hobbies are not important in modern lifeC. Hobbies are often forgotten but are beneficialD. Only students need hobbies
+
+32. How do hobbies help reduce stress?
+A. They make people more productiveB. They allow people to focus on enjoyable activitiesC. They increase responsibilitiesD. They require a lot of effort
+
+33. What is one benefit of hobbies mentioned in relation to skills?
+A. They guarantee better jobsB. They help people learn useful abilitiesC. They replace formal educationD. They are only useful for professionals
+
+34. How can hobbies improve social life?
+A. By helping people meet others with similar interestsB. By reducing communicationC. By encouraging people to work aloneD. By limiting free time
+
+35. Why do some people avoid having hobbies?
+A. They think hobbies are boringB. They believe hobbies are only for childrenC. They feel they do not have enough timeD. They do not understand hobbies
+
+36. What does the writer say about hobbies and cost?
+A. All hobbies are expensiveB. Only talented people can have hobbiesC. Hobbies usually require special equipmentD. Many hobbies are simple and affordable
+
+Answer Key
+C 
+B 
+B 
+A 
+C 
+D
+
+', now());
+
+insert into public.levels_preguntas (id, examen_id, level_id, parte_id, enunciado, creado_en) values (gen_random_uuid(), 'ae0e85e8-3d63-11f1-b2e3-0b27f7b23431', 'ae0e85e8-3d63-11f1-b2e3-0b27f7b23431', '6f873582-07bf-436a-9a25-492b748678c7', 'Text\nPart 5 – Multiple Choice
+You are going to read a text about living in cities. For questions 31–36, choose the answer (A, B, C or D) which you think fits best according to the text.
+
+City Life: Advantages and Challenges
+For many people, living in a large city is an exciting and attractive option. Cities offer a wide range of opportunities, from career possibilities to entertainment and cultural experiences. However, city life also comes with certain disadvantages that can affect people’s quality of life.
+One of the biggest advantages of living in a city is access to employment. Large cities usually have more job opportunities and a greater variety of industries. This makes it easier for people to find work that suits their skills and interests. In addition, cities often offer better public services, such as education and healthcare.
+Another positive aspect is the variety of activities available. Residents can enjoy museums, theatres, restaurants, and sporting events. This means there is always something to do, regardless of personal interests. For many, this makes city life more dynamic and enjoyable.
+On the other hand, living in a city can be expensive. Housing costs are often much higher than in smaller towns or rural areas. As a result, many people have to spend a large part of their income on rent or mortgages. This financial pressure can reduce the overall benefits of city living.
+Traffic and pollution are also common problems in urban areas. Heavy traffic can make daily travel stressful and time-consuming. At the same time, air pollution can have a negative impact on people’s health, especially for those who live in highly populated areas.
+Despite these challenges, many people continue to choose city life. Some believe that the opportunities and experiences available in cities outweigh the disadvantages. Others enjoy the fast pace and energy that cities provide.
+In conclusion, living in a city has both advantages and disadvantages. The decision depends on individual preferences and priorities, as different people value different aspects of urban life.
+
+Questions
+31. What is the main idea of the first paragraph?
+A. City life is perfect for everyoneB. Cities only offer advantagesC. Living in a city has both positive and negative aspectsD. People should avoid cities
+
+32. What is one benefit of living in a city mentioned in the text?
+A. Lower cost of livingB. Fewer job opportunitiesC. Greater access to employmentD. Less competition for jobs
+
+33. Why do some people find city life enjoyable?
+A. Because there are many activities and eventsB. Because cities are always quietC. Because people work lessD. Because life is slower
+
+34. What is one disadvantage related to money?
+A. Salaries are too lowB. Housing is expensiveC. Food is unavailableD. Transport is free
+
+35. What problem is mentioned about transport?
+A. Public transport is not availableB. Travel is always fastC. Traffic can be stressful and slowD. People do not travel
+
+36. What does the writer suggest in the conclusion?
+A. Everyone should live in citiesB. Cities are better than rural areasC. The choice depends on personal preferencesD. Cities will disappear in the future
+
+Answer Key
+C 
+C 
+A 
+B 
+C 
+C 
+', now());
+
+insert into public.levels_preguntas (id, examen_id, level_id, parte_id, enunciado, creado_en) values (gen_random_uuid(), 'ae0e85e8-3d63-11f1-b2e3-0b27f7b23431', 'ae0e85e8-3d63-11f1-b2e3-0b27f7b23431', 'b170ab5a-f54f-4cae-ac2e-bd194181cafe', 'Text\nPart 6: Gapped Text
+You are going to read an article about developing new hobbies. Six sentences have been removed from the article. Choose from the sentences A–G the one which fits each gap (31–36). There is one extra sentence which you do not need to use.
+
+Text
+Discovering New Hobbies
+Trying out new hobbies can be an exciting way to spend your free time and learn new skills. Many people, however, find it difficult to get started because they are unsure of what they might enjoy.
+(31) ______Sometimes, the best approach is simply to experiment with different activities until you find something that interests you. You might discover a passion you never expected.
+It is important not to feel discouraged if you do not enjoy something straight away.(32) ______Giving yourself time to improve can make the experience more enjoyable.
+Another useful idea is to learn from others. Joining a club or taking a class can provide valuable guidance and support.(33) ______Being part of a group can also make the activity more social and motivating.
+In addition, hobbies do not need to be expensive or complicated. Many enjoyable activities require very little equipment or preparation.(34) ______Simple hobbies such as reading, drawing or walking can be just as rewarding.
+It is also worth considering how much time you can realistically dedicate to your new hobby.(35) ______Choosing something that fits into your routine will make it easier to continue.
+Finally, remember that hobbies are meant to be enjoyable.(36) ______The goal is to relax and have fun, not to create unnecessary pressure.
+
+Sentences
+A This allows you to meet people who share similar interests.B You should avoid choosing activities that require too much time.C In fact, many skills take time and practice to develop.D There is no need to become an expert immediately.E Some people worry about failing before they even begin.F As a result, it is important to choose something simple at first.G It is not necessary to spend a lot of money to get started.
+
+Answer Key
+31 E32 C33 A34 G35 B36 D
+', now());
+
+insert into public.levels_preguntas (id, examen_id, level_id, parte_id, enunciado, creado_en) values (gen_random_uuid(), 'ae0e85e8-3d63-11f1-b2e3-0b27f7b23431', 'ae0e85e8-3d63-11f1-b2e3-0b27f7b23431', 'b170ab5a-f54f-4cae-ac2e-bd194181cafe', 'Text\nPart 6: Gapped Text
+You are going to read an article about the importance of learning new skills. Six sentences have been removed from the article. Choose from the sentences A–G the one which fits each gap (31–36). There is one extra sentence which you do not need to use.
+
+Text
+Why Learning Never Stops
+In today’s fast-moving world, learning does not end when you leave school. In fact, many people continue to develop new skills throughout their lives.
+(31) ______This is because industries are constantly changing, and new technologies appear every year.
+For many individuals, learning something new can feel challenging at first.(32) ______However, overcoming this fear is often the first step towards personal growth.
+One effective way to learn is by setting clear and realistic goals.(33) ______Breaking a large goal into smaller steps makes the process more manageable.
+Another useful strategy is to practise regularly.(34) ______Consistency is often more important than the amount of time spent learning.
+In addition, it can be helpful to learn from others.(35) ______Sharing experiences and advice can make learning more enjoyable and effective.
+Finally, it is important to stay motivated.(36) ______Remembering why you started can help you continue even when progress seems slow.
+
+Sentences
+A This helps learners stay focused and measure their progress.B Some people are afraid of making mistakes or failing.C For this reason, continuous learning has become essential.D Even a small amount of practice each day can lead to improvement.E Joining a group or finding a mentor can be very beneficial.F Motivation can sometimes decrease over time.G Not everyone enjoys studying in a traditional environment.
+
+Answer Key
+31 C32 B33 A34 D35 E36 F
+', now());
+
+insert into public.levels_preguntas (id, examen_id, level_id, parte_id, enunciado, creado_en) values (gen_random_uuid(), 'ae0e85e8-3d63-11f1-b2e3-0b27f7b23431', 'ae0e85e8-3d63-11f1-b2e3-0b27f7b23431', 'b170ab5a-f54f-4cae-ac2e-bd194181cafe', 'Text\nPart 6: Gapped Text
+You are going to read an article about the benefits of working in a team. Six sentences have been removed from the article. Choose from the sentences A–G the one which fits each gap (31–36). There is one extra sentence which you do not need to use.
+
+Text
+Working Together Effectively
+In many areas of life, from school projects to professional environments, teamwork plays a key role in achieving success. Working with others can bring many advantages, but it also requires certain skills.
+(31) ______When people collaborate, they can combine their strengths and produce better results than they would individually.
+However, teamwork is not always easy.(32) ______Differences in opinion can sometimes lead to conflict if they are not managed properly.
+For this reason, good communication is essential.(33) ______Clear communication helps avoid misunderstandings and ensures that everyone understands their role.
+Another important factor is trust.(34) ______Team members need to feel confident that others will complete their tasks on time.
+In addition, it is important to respect different perspectives.(35) ______Being open to new ideas can improve the quality of the final result.
+Finally, successful teams often share a common goal.(36) ______This helps keep everyone motivated and focused on achieving the same objective.
+
+Sentences
+A Without it, teamwork can quickly break down.B People may have different ideas about how to approach a task.C This allows for a wider range of solutions.D Everyone should have the chance to express their views.E A shared objective gives direction to the group.F As a result, working in a team can be highly productive.G It is important that all members communicate regularly.
+
+Answer Key
+31 F32 B33 G34 A35 D36 E
+', now());
+
+insert into public.levels_preguntas (id, examen_id, level_id, parte_id, enunciado, creado_en) values (gen_random_uuid(), 'ae0e85e8-3d63-11f1-b2e3-0b27f7b23431', 'ae0e85e8-3d63-11f1-b2e3-0b27f7b23431', 'b170ab5a-f54f-4cae-ac2e-bd194181cafe', 'Text\nB2 First (FCE) – Reading and Use of English
+Part 6: Gapped Text
+You are going to read an article about developing healthy routines. Six sentences have been removed from the article. Choose from the sentences A–G the one which fits each gap (31–36). There is one extra sentence which you do not need to use.
+
+Text
+Building Healthy Daily Habits
+Creating healthy daily habits can have a significant impact on your overall well-being. However, many people struggle to maintain routines over a long period of time.
+(31) ______Small, consistent actions are often more effective than making big changes all at once.
+At the beginning, it is important to set realistic goals.(32) ______If your expectations are too high, you may feel discouraged and give up quickly.
+Another key factor is consistency.(33) ______Repeating the same behaviour regularly helps turn it into a habit.
+It can also be helpful to track your progress.(34) ______Seeing improvement over time can increase motivation and keep you focused.
+In addition, your environment plays an important role.(35) ______For example, keeping healthy food visible can encourage better choices.
+Finally, it is essential to be patient.(36) ______Developing habits takes time, and results may not appear immediately.
+
+Sentences
+A This is because habits are built gradually.B Making small changes is a good place to start.C Keeping a record can make your efforts more visible.D Your surroundings can influence your behaviour more than you think.E Doing something every day is more important than doing it perfectly.F Many people try to change everything at once and fail.G Setting goals that are too difficult can have negative effects.
+
+Answer Key
+31 F32 G33 E34 C35 D36 A
+', now());
+
+commit;

@@ -47,7 +47,7 @@ const KeyResourcesToImprovePage = () => {
             ["Videos Online", "YouTube channels, TED Talks", "Comprensión visual, pronunciación", "A1-C2"],
             ["Cursos Online", "Coursera, edX, Khan Academy", "Estructura, certificación", "B1-C2"],
             ["Herramientas de Escritura", "Grammarly, Hemingway Editor", "Corrección, mejora de estilo", "B1-C2"],
-            ["Diccionarios Online", "Cambridge, Oxford, Merriam-Webster", "Definiciones, pronunciación", "A1-C2"]
+            ["Diccionarios Online", "Oxford, Merriam-Webster, Collins", "Definiciones, pronunciación", "A1-C2"]
           ]}
         />
 
@@ -105,9 +105,9 @@ const KeyResourcesToImprovePage = () => {
 
         <div style={{ display: 'grid', gap: '1rem' }}>
           <Example 
-            spanish="Diccionario: 'Cambridge Advanced Learner's Dictionary'"
-            english="Dictionary: 'Cambridge Advanced Learner's Dictionary'"
-            translation="Diccionario: 'Cambridge Advanced Learner's Dictionary'"
+            spanish="Diccionario: 'Oxford Advanced Learner's Dictionary'"
+            english="Dictionary: 'Oxford Advanced Learner's Dictionary'"
+            translation="Diccionario: 'Oxford Advanced Learner's Dictionary'"
           />
           <Example 
             spanish="Gramática: 'English Grammar in Use'"

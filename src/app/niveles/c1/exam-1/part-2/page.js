@@ -183,7 +183,7 @@ export default function Part2Page() {
       <div className="exam-header">
         <div className="header">
           <h1>Part 2: Use of english - Open Cloze</h1>
-          <p>Cambridge C1 Advanced - Reading</p>
+          <p>C1 Advanced - Reading</p>
         </div>
         
         <div className="exam-controls">

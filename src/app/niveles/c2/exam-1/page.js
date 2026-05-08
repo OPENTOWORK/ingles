@@ -11,8 +11,8 @@ export default function C2ExamHomePage() {
   return (
     <main className="shell exam-page">
       <header className="header">
-        <h1>Cambridge C2 Exam Practice</h1>
-        <p>Welcome to the C2 Cambridge English Exam Practice page.</p>
+        <h1>C2 English Exam Practice</h1>
+        <p>Welcome to the C2 English exam practice page.</p>
       </header>
 
       {/* Gestión del Examen */}

@@ -21,7 +21,7 @@ export default function UseOfEnglishExamsPage() {
 
       <section style={{ maxWidth: '800px', margin: '1.5rem auto', lineHeight: '1.6', color: '#333', textAlign: 'center' }}>
         <p>
-          Select from <strong>12 Use of English exams</strong>, each containing all 8 parts of the official Cambridge Advanced format.
+          Select from <strong>12 Use of English exams</strong>, each containing all 8 parts of the official C1 Advanced format.
         </p>
       </section>
 

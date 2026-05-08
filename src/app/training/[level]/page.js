@@ -1,9 +1,8 @@
 'use client';
 import Link from "next/link";
-import { use, useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useRouter } from 'next/navigation';
-import { supabase } from '@/utils/supabaseClient';
-import { getRoleNameByUserId, normalizeRoleName } from '@/utils/authRoles';
+import { useUserRole } from '@/context/UserRoleContext';
 
 const skills = [
   { id: "use-of-english", label: "Use of English", emoji: "📘" },
@@ -17,35 +16,21 @@ const skills = [
 ];
 
 export default function LevelPage({ params }) {
-  const { level } = use(params);
+  const { level } = params;
   const router = useRouter();
-  const [loading, setLoading] = useState(true);
-  const [isLockedForStudent, setIsLockedForStudent] = useState(false);
+  const { userRole, session } = useUserRole();
 
   useEffect(() => {
-    const checkAccess = async () => {
-      const { data } = await supabase.auth.getSession();
+    if (!session) {
+      router.push('/login');
+    }
+  }, [session, router]);
 
-      if (!data.session) {
-        router.push('/login');
-        return;
-      }
-
-      const roleName = await getRoleNameByUserId(data.session.user.id, data.session.user.email);
-      const normalizedRole = normalizeRoleName(roleName);
-      const studentWithLockedLevel =
-        normalizedRole === 'student' || normalizedRole === 'alumno';
-
-      setIsLockedForStudent(studentWithLockedLevel);
-      setLoading(false);
-    };
-
-    checkAccess();
-  }, [level, router]);
-
-  if (loading) {
+  if (!session) {
     return <p style={{ textAlign: 'center', marginTop: '2rem' }}>Cargando...</p>;
   }
+
+  const isLockedForStudent = userRole === 'student' || userRole === 'alumno';
 
   if (isLockedForStudent) {
     return (

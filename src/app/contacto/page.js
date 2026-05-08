@@ -8,6 +8,7 @@ import {
   TICKET_STATUS,
   USER_TYPES,
 } from '@/utils/contactModuleConfig';
+import SiteMascot from '@/components/SiteMascot';
 
 export default function ContactPage() {
   const [session, setSession] = useState(null);
@@ -166,9 +167,14 @@ export default function ContactPage() {
 
   return (
     <main className="shell contacto-page">
-      <header className="header">
-        <h1>Contacto</h1>
-        <p>Area de comunicacion dentro de la plataforma que permite la interaccion entre usuarios, profesores y soporte para resolver dudas, incidencias o consultas.</p>
+      <header className="header header--mascot">
+        <div className="header__copy">
+          <h1>Contacto</h1>
+          <p>Area de comunicacion dentro de la plataforma que permite la interaccion entre usuarios, profesores y soporte para resolver dudas, incidencias o consultas.</p>
+        </div>
+        <div className="header__mascot" aria-hidden>
+          <SiteMascot variant={8} width={140} alt="" />
+        </div>
       </header>
 
       <section className="contact-section">
@@ -352,6 +358,9 @@ function GlobalStyles() {
       .center{display:grid;place-items:center}
       .header h1{font-size:44px;margin:0 0 6px;color:var(--text)}
       .header p{margin:0;color:#666}
+      .header--mascot{display:flex;flex-wrap:wrap;align-items:center;gap:20px 32px;margin-bottom:8px}
+      .header__copy{flex:1 1 240px;min-width:0}
+      .header__mascot{flex:0 0 auto;line-height:0;filter:drop-shadow(0 8px 18px rgba(0,0,0,.12))}
       h2{margin:0 0 8px}
       h3{margin:0 0 12px}
       .contact-section{margin:22px 0;padding:24px;border:1px solid #eaeaea;border-radius:16px;background:var(--card);box-shadow:0 2px 6px rgba(0,0,0,0.1)}

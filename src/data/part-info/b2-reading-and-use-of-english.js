@@ -1,7 +1,7 @@
 export const partInfo = {
   "1": {
     "title": "Part 1: Multiple-choice cloze",
-    "description": "In this part of the Cambridge English: First (B2) exam, you will read a text with eight gaps. For each gap, you need to choose the correct word from four options (A, B, C, D). This tests your understanding of vocabulary, collocations, fixed phrases, and context at B2 level.",
+    "description": "In this part of the B2 First exam, you will read a text with eight gaps. For each gap, you need to choose the correct word from four options (A, B, C, D). This tests your understanding of vocabulary, collocations, fixed phrases, and context at B2 level.",
     "tips": "Read the whole text first to understand the general meaning and tone. Consider collocations (words that naturally go together) and fixed phrases. Look for context clues around each gap. Eliminate obviously wrong answers first, then choose the best option that fits both grammatically and contextually.",
     "commonErrors": "Choosing words that fit grammatically but don't fit the collocation or register, not reading the whole text first, or choosing answers based on individual words rather than context"
   },

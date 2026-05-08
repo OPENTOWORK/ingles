@@ -35,6 +35,9 @@ export const getRedirectPathByRoleName = (roleName = '') => {
   return ROLE_ROUTE_MAP[normalized] || '/perfil';
 };
 
+/** Evita múltiples lecturas en paralelo para el mismo usuario (mismo resultado). */
+const roleFetchInflight = new Map();
+
 export const getRoleNameByUserId = async (userId, email = '') => {
   if (normalizeEmail(email) === normalizeEmail(ADMIN_EMAIL)) {
     return 'admin';
@@ -42,23 +45,36 @@ export const getRoleNameByUserId = async (userId, email = '') => {
 
   if (!userId) return 'student';
 
-  const { data: userRow, error: userError } = await supabase
-    .from('user_profiles')
-    .select('rol_id')
-    .eq('id', userId)
-    .single();
+  if (roleFetchInflight.has(userId)) {
+    return roleFetchInflight.get(userId);
+  }
 
-  if (userError || !userRow?.rol_id) return 'student';
+  const fetchPromise = (async () => {
+    const { data: userRow, error: userError } = await supabase
+      .from('user_profiles')
+      .select('rol_id')
+      .eq('id', userId)
+      .single();
 
-  const { data: roleRow, error: roleError } = await supabase
-    .from('Usuarios_y_Perfil_roles')
-    .select('nombre')
-    .eq('id', userRow.rol_id)
-    .single();
+    if (userError || !userRow?.rol_id) return 'student';
 
-  if (roleError || !roleRow?.nombre) return 'student';
+    const { data: roleRow, error: roleError } = await supabase
+      .from('Usuarios_y_Perfil_roles')
+      .select('nombre')
+      .eq('id', userRow.rol_id)
+      .single();
 
-  return roleRow.nombre;
+    if (roleError || !roleRow?.nombre) return 'student';
+
+    return roleRow.nombre;
+  })();
+
+  roleFetchInflight.set(userId, fetchPromise);
+  try {
+    return await fetchPromise;
+  } finally {
+    roleFetchInflight.delete(userId);
+  }
 };
 
 export const getRedirectPathByUserId = async (userId, email = '') => {

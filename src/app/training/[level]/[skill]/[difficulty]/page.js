@@ -1,11 +1,11 @@
 "use client";
 import Link from "next/link";
-import { use, useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 
 const levelNumbers = Array.from({ length: 12 }, (_, i) => i + 1);
 
 export default function DifficultyPage({ params }) {
-  const { level, skill, difficulty } = use(params);
+  const { level, skill, difficulty } = params;
   const [levelStars, setLevelStars] = useState({});
   
   // Cargar estrellas guardadas desde localStorage

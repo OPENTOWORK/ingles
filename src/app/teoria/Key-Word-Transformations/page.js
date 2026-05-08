@@ -133,7 +133,7 @@ const KeyWordTransformationsPage = () => {
         </div>
       </TheorySection>
 
-      <TheorySection title="Patrones Frecuentes en Cambridge" icon="📋">
+      <TheorySection title="Patrones frecuentes en el examen" icon="📋">
         <div style={{ display: 'grid', gap: '1rem' }}>
           <Rule 
             title="Transformaciones más comunes (B2/C1)"

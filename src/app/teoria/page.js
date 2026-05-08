@@ -1,6 +1,7 @@
 'use client';
 import { useMemo, useState } from 'react';
 import Link from 'next/link';
+import SiteMascot from '@/components/SiteMascot';
 
 // ====== Datos ======
 const LEVELS = [
@@ -155,9 +156,14 @@ export default function TeoriaPage() {
 
   return (
     <main className="shell teoria-page">
-      <header className="header">
-        <h1>Theory</h1>
-        <p>Filtra por nivel, busca por título y explora los temas.</p>
+      <header className="header header--mascot">
+        <div className="header__copy">
+          <h1>Theory</h1>
+          <p>Filtra por nivel, busca por título y explora los temas.</p>
+        </div>
+        <div className="header__mascot" aria-hidden>
+          <SiteMascot variant={4} width={150} alt="" />
+        </div>
       </header>
 
       {/* Filtros */}
@@ -270,7 +276,9 @@ function Section({ title, topics }) {
 function EmptyState({ onReset }) {
   return (
     <div className="empty">
-      <div className="empty__icon">😕</div>
+      <div className="empty__mascot">
+        <SiteMascot variant={6} width={128} alt="" />
+      </div>
       <h3>Sin resultados</h3>
       <p>Prueba quitando filtros o buscando otra palabra.</p>
       <button className="btn" onClick={onReset}>Quitar filtros</button>
@@ -291,6 +299,9 @@ function GlobalStyles() {
       .center{display:grid;place-items:center}
       .header h1{font-size:44px;margin:0 0 6px;color:var(--text)}
       .header p{margin:0;color:#666}
+      .header--mascot{display:flex;flex-wrap:wrap;align-items:center;gap:20px 32px;margin-bottom:8px}
+      .header__copy{flex:1 1 240px;min-width:0}
+      .header__mascot{flex:0 0 auto;line-height:0;filter:drop-shadow(0 8px 18px rgba(0,0,0,.12))}
       .toolbar{position:sticky;top:16px;z-index:5;margin:22px 0 18px;padding:14px;border:1px solid #eaeaea;border-radius:16px;background:var(--card);box-shadow:0 2px 6px rgba(0,0,0,0.1)}
       .chips{display:flex;flex-wrap:wrap;gap:8px}
       .chip{padding:8px 12px;border-radius:9999px;border:1px solid #eaeaea;background:var(--card);color:var(--text);cursor:pointer;transition:.2s;display:flex;align-items:center;gap:0.25rem}
@@ -328,7 +339,7 @@ function GlobalStyles() {
       .card__levels{margin-top:12px;display:flex;flex-wrap:wrap;gap:6px}
       .pill{font-size:11px;border:1px solid #eaeaea;border-radius:9999px;padding:4px 8px;background:white;color:#666}
       .empty{display:grid;place-items:center;text-align:center;padding:48px;border:1px dashed #eaeaea;border-radius:16px;background:var(--card)}
-      .empty__icon{font-size:36px;margin-bottom:6px}
+      .empty__mascot{line-height:0;margin-bottom:12px;opacity:.95}
       .btn{margin-top:10px;padding:10px 14px;border-radius:12px;background:#0070f3;border:none;color:white;cursor:pointer;box-shadow:0 10px 24px rgba(0,112,243,.35)}
       .loader{width:48px;height:48px;border-radius:50%;border:3px solid rgba(0,112,243,.2);border-top-color:#0070f3;animation:spin 1s linear infinite}
       @keyframes spin{to{transform:rotate(360deg)}}

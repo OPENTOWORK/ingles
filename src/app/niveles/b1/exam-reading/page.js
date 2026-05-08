@@ -21,7 +21,7 @@ export default function B1ReadingExamsPage() {
 
       <section style={{ maxWidth: '800px', margin: '1.5rem auto', lineHeight: '1.6', color: '#333', textAlign: 'center' }}>
         <p>
-          Select from <strong>12 Reading exams</strong> based on authentic Cambridge B1 texts. Each exam includes all 4 reading parts.
+          Select from <strong>12 Reading exams</strong> based on authentic B1-level texts. Each exam includes all 4 reading parts.
         </p>
       </section>
 

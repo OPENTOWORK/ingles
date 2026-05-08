@@ -21,7 +21,7 @@ export default function ListeningExamPage() {
 
       <section style={{ maxWidth: '800px', margin: '1.5rem auto', lineHeight: '1.6', color: '#333', textAlign: 'center' }}>
         <p>
-          Practice your <strong>Listening skills</strong> with exercises based on the official Cambridge A1 exam format.
+          Practice your <strong>Listening skills</strong> with exercises based on the official A1 exam format.
         </p>
         <p>
           This section includes <strong>4 parts</strong> testing your ability to understand short extracts, monologues, conversations, and discussions.

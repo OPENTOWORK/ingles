@@ -1,9 +1,9 @@
 'use client';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from "next/link";
-import { supabase } from '@/utils/supabaseClient';
-import { getRoleNameByUserId, normalizeRoleName } from '@/utils/authRoles';
+import { useUserRole } from '@/context/UserRoleContext';
+import SiteMascot from '@/components/SiteMascot';
 
 // ====== Datos ======
 const NIVELES = [
@@ -66,25 +66,15 @@ const NIVELES = [
 // ====== Página ======
 export default function Niveles() {
   const router = useRouter();
-  const [loading, setLoading] = useState(true);
-  const [userRole, setUserRole] = useState('');
+  const { userRole, session } = useUserRole();
 
-  // Auth
   useEffect(() => {
-    const checkSession = async () => {
-      const { data } = await supabase.auth.getSession();
-      if (!data.session) {
-        router.push('/login');
-      } else {
-        const roleName = await getRoleNameByUserId(data.session.user.id, data.session.user.email);
-        setUserRole(normalizeRoleName(roleName));
-        setLoading(false);
-      }
-    };
-    checkSession();
-  }, [router]);
+    if (!session) {
+      router.push('/login');
+    }
+  }, [session, router]);
 
-  if (loading) {
+  if (!session) {
     return (
       <main className="shell niveles-page center">
         <div className="loader" aria-label="Cargando" />
@@ -96,9 +86,14 @@ export default function Niveles() {
 
   return (
     <main className="shell niveles-page">
-      <header className="header">
-        <h1>Choose your level</h1>
-        <p>Selecciona tu nivel de inglés para acceder a los ejercicios correspondientes.</p>
+      <header className="header header--mascot">
+        <div className="header__copy">
+          <h1>Choose your level</h1>
+          <p>Selecciona tu nivel de inglés para acceder a los ejercicios correspondientes.</p>
+        </div>
+        <div className="header__mascot" aria-hidden>
+          <SiteMascot variant={1} width={168} alt="" />
+        </div>
       </header>
 
       {/* Contenido */}
@@ -174,6 +169,9 @@ function GlobalStyles() {
       .center{display:grid;place-items:center}
       .header h1{font-size:44px;margin:0 0 6px;color:var(--text)}
       .header p{margin:0;color:#666}
+      .header--mascot{display:flex;flex-wrap:wrap;align-items:center;gap:20px 32px;margin-bottom:8px}
+      .header__copy{flex:1 1 240px;min-width:0}
+      .header__mascot{flex:0 0 auto;line-height:0;filter:drop-shadow(0 8px 20px rgba(102,126,234,.25))}
       .sections{display:flex;flex-direction:column;gap:28px}
       .section{padding:6px}
       .section__head{display:flex;align-items:center;gap:8px;margin-bottom:10px}

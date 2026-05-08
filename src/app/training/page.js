@@ -10,7 +10,8 @@ import SkipLinks from '@/components/SkipLinks';
 import DatabaseSetup from '@/components/DatabaseSetup';
 import UserOnboarding from '@/components/UserOnboarding';
 import { checkDatabaseHealth } from '@/utils/databaseInitializer';
-import { getRoleNameByUserId, normalizeRoleName } from '@/utils/authRoles';
+import { useUserRole } from '@/context/UserRoleContext';
+import SiteMascot from '@/components/SiteMascot';
 
 const sortedLevels = [
   { level: "A1", color: "#7bed9f", emoji: "😁" },
@@ -23,37 +24,32 @@ const sortedLevels = [
 
 export default function TrainingHome() {
   const router = useRouter();
+  const { userRole, session } = useUserRole();
   const [loading, setLoading] = useState(true);
   const [user, setUser] = useState(null);
   const [databaseReady, setDatabaseReady] = useState(false);
   const [showDatabaseSetup, setShowDatabaseSetup] = useState(false);
   const [showOnboarding, setShowOnboarding] = useState(false);
   const [onboardingCompleted, setOnboardingCompleted] = useState(false);
-  const [userRole, setUserRole] = useState('');
 
   useEffect(() => {
     const checkSession = async () => {
-      const { data } = await supabase.auth.getSession();
-      if (!data.session) {
+      if (!session) {
         router.push('/login');
-      } else {
-        setUser(data.session.user);
-        const roleName = await getRoleNameByUserId(data.session.user.id, data.session.user.email);
-        setUserRole(normalizeRoleName(roleName));
-        
-        // Check database health
-        const health = await checkDatabaseHealth();
-        setDatabaseReady(health.healthy);
-        setShowDatabaseSetup(!health.healthy);
-        
-        // Check if user has completed onboarding
-        await checkOnboardingStatus(data.session.user.id);
-        
-        setLoading(false);
+        return;
       }
+      setUser(session.user);
+
+      const health = await checkDatabaseHealth();
+      setDatabaseReady(health.healthy);
+      setShowDatabaseSetup(!health.healthy);
+
+      await checkOnboardingStatus(session.user.id);
+
+      setLoading(false);
     };
     checkSession();
-  }, [router]);
+  }, [router, session]);
 
   const checkOnboardingStatus = async (userId) => {
     try {
@@ -130,10 +126,26 @@ export default function TrainingHome() {
           background: "linear-gradient(to right, #f0f8ff, #e6f0ff)",
         }}
       >
-      <h1 style={{ fontSize: "2rem", marginBottom: "1rem" }}>🎯 Choose Your Practice Level</h1>
-      <p style={{ color: "#444", marginBottom: "2rem" }}>
-        Start training your English with interactive exercises by level.
-      </p>
+      <div
+        style={{
+          display: "flex",
+          flexWrap: "wrap",
+          alignItems: "center",
+          justifyContent: "center",
+          gap: "1.25rem 2rem",
+          marginBottom: "1.75rem",
+        }}
+      >
+        <div style={{ lineHeight: 0, filter: "drop-shadow(0 6px 14px rgba(28,176,246,.35))" }}>
+          <SiteMascot variant={2} width={120} alt="" />
+        </div>
+        <div>
+          <h1 style={{ fontSize: "2rem", margin: "0 0 0.5rem" }}>🎯 Choose Your Practice Level</h1>
+          <p style={{ color: "#444", margin: 0 }}>
+            Start training your English with interactive exercises by level.
+          </p>
+        </div>
+      </div>
 
       {/* Progress Dashboard */}
       <div id="progress-dashboard" style={{ marginBottom: "3rem", maxWidth: "1000px", margin: "0 auto 3rem auto" }}>

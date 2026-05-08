@@ -185,7 +185,7 @@ export const translations = {
     
     // A1 Part descriptions
     a1Part1Title: "Part 1: Names and pictures",
-    a1Part1Description: "In this part of the Cambridge English: Starters (A1) exam, you will see five pictures of people and five names. You need to match each name to the correct person in the pictures. This tests your ability to understand basic personal information and visual recognition.",
+    a1Part1Description: "In this part of the A1 Starters exam, you will see five pictures of people and five names. You need to match each name to the correct person in the pictures. This tests your ability to understand basic personal information and visual recognition.",
     a1Part1Tips: "Look carefully at each picture before you start. Notice details like hair color, clothing, and facial features. Read all the names first, then match them systematically. The names will be clearly pronounced in the audio, so listen carefully for each name.",
     a1Part1CommonErrors: "Rushing through without looking carefully at the pictures, confusing similar-looking people, or not listening to the complete name before deciding",
     
@@ -211,7 +211,7 @@ export const translations = {
     
     // A2 Part descriptions
     a2Part1Title: "Part 1: Names and pictures",
-    a2Part1Description: "In this part of the Cambridge English: Movers (A2) exam, you will see five pictures of people and five names. You need to match each name to the correct person in the pictures. This tests your ability to understand basic personal information and visual recognition.",
+    a2Part1Description: "In this part of the A2 Movers exam, you will see five pictures of people and five names. You need to match each name to the correct person in the pictures. This tests your ability to understand basic personal information and visual recognition.",
     a2Part1Tips: "Look carefully at each picture before you start. Notice details like hair color, clothing, and facial features. Read all the names first, then match them systematically. The names will be clearly pronounced in the audio, so listen carefully for each name.",
     a2Part1CommonErrors: "Rushing through without looking carefully at the pictures, confusing similar-looking people, or not listening to the complete name before deciding",
     
@@ -893,7 +893,7 @@ export const translations = {
     
     // A1 Part descriptions
     a1Part1Title: "Parte 1: Nombres e imágenes",
-    a1Part1Description: "En esta parte del examen Cambridge English: Starters (A1), verás cinco imágenes de personas y cinco nombres. Necesitas emparejar cada nombre con la persona correcta en las imágenes. Esto evalúa tu capacidad para entender información personal básica y reconocimiento visual.",
+    a1Part1Description: "En esta parte del examen A1 Starters, verás cinco imágenes de personas y cinco nombres. Necesitas emparejar cada nombre con la persona correcta en las imágenes. Esto evalúa tu capacidad para entender información personal básica y reconocimiento visual.",
     a1Part1Tips: "Mira cuidadosamente cada imagen antes de empezar. Nota detalles como color de pelo, ropa y características faciales. Lee todos los nombres primero, luego empareja sistemáticamente. Los nombres se pronunciarán claramente en el audio, así que escucha cuidadosamente cada nombre.",
     a1Part1CommonErrors: "Ir deprisa sin mirar cuidadosamente las imágenes, confundir personas que se parecen, o no escuchar el nombre completo antes de decidir",
     
@@ -919,7 +919,7 @@ export const translations = {
     
     // A2 Part descriptions
     a2Part1Title: "Parte 1: Nombres e imágenes",
-    a2Part1Description: "En esta parte del examen Cambridge English: Movers (A2), verás cinco imágenes de personas y cinco nombres. Necesitas emparejar cada nombre con la persona correcta en las imágenes. Esto evalúa tu capacidad para entender información personal básica y reconocimiento visual.",
+    a2Part1Description: "En esta parte del examen A2 Movers, verás cinco imágenes de personas y cinco nombres. Necesitas emparejar cada nombre con la persona correcta en las imágenes. Esto evalúa tu capacidad para entender información personal básica y reconocimiento visual.",
     a2Part1Tips: "Mira cuidadosamente cada imagen antes de empezar. Nota detalles como color de pelo, ropa y características faciales. Lee todos los nombres primero, luego empareja sistemáticamente. Los nombres se pronunciarán claramente en el audio, así que escucha cuidadosamente cada nombre.",
     a2Part1CommonErrors: "Ir deprisa sin mirar cuidadosamente las imágenes, confundir personas que se parecen, o no escuchar el nombre completo antes de decidir",
     
@@ -2024,9 +2024,9 @@ export const translations = {
 
     // Essay Writing Techniques specific content
     essayWritingTechniquesTitle: "Essay Writing Techniques",
-    essayWritingTechniquesDescription: "Master essay writing techniques for Cambridge exams. Learn structure, argumentation, and academic style for B2, C1, and C2 levels.",
+    essayWritingTechniquesDescription: "Master essay writing techniques for international certification exams. Learn structure, argumentation, and academic style for B2, C1, and C2 levels.",
     essayWritingTechniques: "Essay Writing Techniques",
-    essayWritingIntro: "In Cambridge exams (B2 First, C1 Advanced, C2 Proficiency), the essay is a mandatory task in Writing Paper. You must write 140-190 words (B2), 220-260 words (C1), or 280-320 words (C2) in response to a specific question, demonstrating argumentative ability and academic style.",
+    essayWritingIntro: "In international certification exams (B2 First, C1 Advanced, C2 Proficiency), the essay is a mandatory task in Writing Paper. You must write 140-190 words (B2), 220-260 words (C1), or 280-320 words (C2) in response to a specific question, demonstrating argumentative ability and academic style.",
     essayStructureTitle: "Essay Structure",
     essayStructureDescription: "A well-structured essay follows a logical pattern that guides the reader through your argument.",
     basicEssayStructure: "Basic Essay Structure",
@@ -2137,7 +2137,7 @@ export const translations = {
 
     // Open Cloze specific content
     openClozeTitle: "Open Cloze",
-    openClozeDescription: "Master Open Cloze exercises for Cambridge exams. Learn strategies for completing gaps with single words using grammar and context clues.",
+    openClozeDescription: "Master Open Cloze exercises for international certification exams. Learn strategies for completing gaps with single words using grammar and context clues.",
     whatIsOpenCloze: "What is Open Cloze?",
     openClozeIntro: "Open Cloze is Part 2 of the Use of English exam in First Certificate (B2) and Advanced (C1). You must complete 8 gaps in a text without multiple choice options, using only ONE word per gap. This exercise evaluates grammar, functional vocabulary and contextual comprehension.",
     exampleOfOpenCloze: "Example of Open Cloze",
@@ -2155,7 +2155,7 @@ export const translations = {
 
     // Multiple Choice Cloze specific content
     multipleChoiceClozeTitle: "Multiple Choice Cloze",
-    multipleChoiceClozeDescription: "Master Multiple Choice Cloze exercises for Cambridge exams. Learn strategies for choosing correct words from four options using vocabulary and context.",
+    multipleChoiceClozeDescription: "Master Multiple Choice Cloze exercises for international certification exams. Learn strategies for choosing correct words from four options using vocabulary and context.",
     whatIsMultipleChoiceCloze: "What is Multiple Choice Cloze?",
     multipleChoiceClozeIntro: "Multiple Choice Cloze is a part of the Use of English exam where you must complete a text by choosing the correct word from four options. It focuses on vocabulary, collocations, idiomatic expressions and grammatical structures.",
     keyStrategiesTitle: "Key Strategies",
@@ -2170,7 +2170,7 @@ export const translations = {
 
     // Key Word Transformations specific content
     keyWordTransformationsTitle: "Key Word Transformations",
-    keyWordTransformationsDescription: "Master Key Word Transformations for Cambridge exams. Learn strategies for completing transformations using given keywords while maintaining exact meaning.",
+    keyWordTransformationsDescription: "Master Key Word Transformations for international certification exams. Learn strategies for completing transformations using given keywords while maintaining exact meaning.",
     whatAreKeyWordTransformations: "What are Key Word Transformations?",
     keyWordTransformationsIntro: "Key Word Transformations is Part 4 of Use of English in First Certificate (B2) and Advanced (C1). You must complete 6 transformations using a given keyword, maintaining the exact meaning. You can use 2-5 words (B2) or 3-6 words (C1) including the keyword without changing it.",
     exampleOfKeyWordTransformation: "Example of Key Word Transformation",
@@ -2188,7 +2188,7 @@ export const translations = {
 
     // Gapped Text specific content
     gappedTextTitle: "Gapped Text",
-    gappedTextDescription: "Master Gapped Text exercises for Cambridge exams. Learn strategies for choosing correct paragraphs or sentences to fill gaps using text coherence and cohesion.",
+    gappedTextDescription: "Master Gapped Text exercises for international certification exams. Learn strategies for choosing correct paragraphs or sentences to fill gaps using text coherence and cohesion.",
     whatIsGappedText: "What is Gapped Text?",
     gappedTextIntro: "Gapped Text is an exercise where paragraphs or sentences have been removed from a text, and you must choose from a list which ones fit in each space. You must understand the coherence and cohesion of the text.",
     exampleOfGappedText: "Example of Gapped Text",
@@ -2206,7 +2206,7 @@ export const translations = {
 
     // Multiple Matching specific content
     multipleMatchingTitle: "Multiple Matching",
-    multipleMatchingDescription: "Master Multiple Matching exercises for Cambridge exams. Learn strategies for matching questions or statements with different texts or sections.",
+    multipleMatchingDescription: "Master Multiple Matching exercises for international certification exams. Learn strategies for matching questions or statements with different texts or sections.",
     whatIsMultipleMatching: "What is Multiple Matching?",
     multipleMatchingIntro: "Multiple Matching is an exercise where you must relate questions or statements with different texts or sections. Each text can be used more than once, and some options may not be used.",
     exampleOfMultipleMatching: "Example of Multiple Matching",
@@ -2224,7 +2224,7 @@ export const translations = {
 
     // Advanced Speaking Strategies specific content
     advancedSpeakingStrategiesTitle: "Advanced Speaking Strategies",
-    advancedSpeakingStrategiesDescription: "Master advanced speaking strategies for Cambridge exams. Learn fluency techniques, discourse management, and natural communication skills.",
+    advancedSpeakingStrategiesDescription: "Master advanced speaking strategies for international certification exams. Learn fluency techniques, discourse management, and natural communication skills.",
     advancedSpeakingStrategiesIntro: "Advanced speaking strategies go beyond vocabulary and grammar. They include fluency techniques, pause management, discourse structuring and context adaptation to communicate naturally and sophisticatedly.",
     fluencyTechniquesTitle: "Fluency Techniques",
     advancedSpeakingStrategiesKeywords: "speaking strategies, fluency, discourse management, natural communication, fillers, connectors",
@@ -2238,7 +2238,7 @@ export const translations = {
 
     // Active Listening Strategies specific content
     activeListeningStrategiesTitle: "Active Listening Strategies",
-    activeListeningStrategiesDescription: "Master active listening strategies for Cambridge exams. Learn techniques to participate actively in the listening comprehension process and improve understanding.",
+    activeListeningStrategiesDescription: "Master active listening strategies for international certification exams. Learn techniques to participate actively in the listening comprehension process and improve understanding.",
     whatAreActiveListeningStrategies: "What are Active Listening Strategies?",
     activeListeningStrategiesIntro: "Active listening strategies are specific techniques that allow you to participate actively in the listening comprehension process, significantly improving your ability to understand.",
     differencesBetweenPassiveAndActiveListeningTitle: "Differences between Passive and Active Listening",
@@ -2253,7 +2253,7 @@ export const translations = {
 
     // Connected Speech specific content
     connectedSpeechTitle: "Connected Speech",
-    connectedSpeechDescription: "Master connected speech patterns for Cambridge exams. Learn how sounds connect and modify in natural English speech to improve listening comprehension.",
+    connectedSpeechDescription: "Master connected speech patterns for international certification exams. Learn how sounds connect and modify in natural English speech to improve listening comprehension.",
     whatIsConnectedSpeech: "What is Connected Speech?",
     connectedSpeechIntro: "Connected speech refers to how sounds are modified and connected when we speak naturally and fluently. It is fundamental for understanding real spoken English.",
     linkingTitle: "Linking (Sound Connection)",
@@ -2268,7 +2268,7 @@ export const translations = {
 
     // Contextual Vocabulary specific content
     contextualVocabularyTitle: "Contextual Vocabulary",
-    contextualVocabularyDescription: "Master contextual vocabulary for Cambridge exams. Learn how words and expressions acquire specific meaning according to context for effective listening comprehension.",
+    contextualVocabularyDescription: "Master contextual vocabulary for international certification exams. Learn how words and expressions acquire specific meaning according to context for effective listening comprehension.",
     whatIsContextualVocabulary: "What is Contextual Vocabulary?",
     contextualVocabularyIntro: "Contextual vocabulary refers to words and expressions that acquire specific meaning according to the context in which they are used. It is fundamental for effective listening comprehension.",
     typesOfContextualVocabularyTitle: "Types of Contextual Vocabulary",
@@ -2283,7 +2283,7 @@ export const translations = {
 
     // Cross Text Multiple Matching specific content
     crossTextMultipleMatchingTitle: "Cross Text Multiple Matching",
-    crossTextMultipleMatchingDescription: "Master Cross Text Multiple Matching exercises for Cambridge exams. Learn strategies for relating information between multiple different texts and finding connections.",
+    crossTextMultipleMatchingDescription: "Master Cross Text Multiple Matching exercises for international certification exams. Learn strategies for relating information between multiple different texts and finding connections.",
     whatIsCrossTextMultipleMatching: "What is Cross-text Multiple Matching?",
     crossTextMultipleMatchingIntro: "Cross-text Multiple Matching is an advanced exercise where you must relate information between multiple different texts. You compare, contrast and connect ideas, opinions or specific information that appears in several texts on related topics.",
     exampleOfCrossTextMultipleMatching: "Example of Cross-text Multiple Matching",
@@ -2301,7 +2301,7 @@ export const translations = {
 
     // English Varieties specific content
     englishVarietiesTitle: "English Varieties",
-    englishVarietiesDescription: "Master English varieties for Cambridge exams. Learn about different forms of English spoken worldwide, including British, American, and other regional varieties.",
+    englishVarietiesDescription: "Master English varieties for international certification exams. Learn about different forms of English spoken worldwide, including British, American, and other regional varieties.",
     whatAreEnglishVarieties: "What are English Varieties?",
     englishVarietiesIntro: "English varieties are the different ways English is spoken in different countries and regions of the world. Each variety has its own characteristics of pronunciation, vocabulary and grammar.",
     britishEnglishVsAmericanEnglishTitle: "British English vs American English",
@@ -2316,7 +2316,7 @@ export const translations = {
 
     // Functional and Thematic Vocabulary specific content
     functionalAndThematicVocabularyTitle: "Functional and Thematic Vocabulary",
-    functionalAndThematicVocabularyDescription: "Master functional and thematic vocabulary for Cambridge exams. Learn words and expressions organized by communicative function and specific topics for effective communication.",
+    functionalAndThematicVocabularyDescription: "Master functional and thematic vocabulary for international certification exams. Learn words and expressions organized by communicative function and specific topics for effective communication.",
     whatIsFunctionalAndThematicVocabulary: "What is Functional and Thematic Vocabulary?",
     functionalAndThematicVocabularyIntro: "Functional and thematic vocabulary refers to words and expressions organized by communicative function and specific topics. It is essential for speaking effectively in different situations.",
     functionalVocabularyTitle: "Functional Vocabulary",
@@ -2331,7 +2331,7 @@ export const translations = {
 
     // Inference and Implication specific content
     inferenceAndImplicationTitle: "Inference and Implication",
-    inferenceAndImplicationDescription: "Master inference and implication skills for Cambridge exams. Learn to understand information not explicitly stated and read between the lines.",
+    inferenceAndImplicationDescription: "Master inference and implication skills for international certification exams. Learn to understand information not explicitly stated and read between the lines.",
     whatAreInferenceAndImplication: "What are Inference and Implication?",
     inferenceAndImplicationIntro: "Inference is the ability to understand information that is not explicitly stated in the text. Implication is what the author suggests or implies without saying it directly. It is 'reading between the lines' to capture hidden meanings.",
     exampleOfInferenceAndImplication: "Example of Inference and Implication",
@@ -2349,7 +2349,7 @@ export const translations = {
 
     // Interaction and Conversational Strategies specific content
     interactionAndConversationalStrategiesTitle: "Interaction and Conversational Strategies",
-    interactionAndConversationalStrategiesDescription: "Master interaction and conversational strategies for Cambridge exams. Learn techniques to participate effectively in conversations and create successful interactions.",
+    interactionAndConversationalStrategiesDescription: "Master interaction and conversational strategies for international certification exams. Learn techniques to participate effectively in conversations and create successful interactions.",
     whatAreInteractionAndConversationalStrategies: "What are Interaction and Conversational Strategies?",
     interactionAndConversationalStrategiesIntro: "Interaction and conversational strategies are specific techniques that allow you to participate effectively in conversations, maintain communicative flow and create successful interactions.",
     startingConversationsTitle: "Starting Conversations",
@@ -2364,7 +2364,7 @@ export const translations = {
 
     // Long Conversations specific content
     longConversationsTitle: "Long Conversations",
-    longConversationsDescription: "Master long conversations for Cambridge exams. Learn to understand extensive dialogues between multiple people and track complex information over extended periods.",
+    longConversationsDescription: "Master long conversations for international certification exams. Learn to understand extensive dialogues between multiple people and track complex information over extended periods.",
     whatAreLongConversations: "What are Long Conversations?",
     longConversationsIntro: "Long conversations are extensive dialogues between two or more people that appear in listening exams. They require advanced comprehension and tracking skills.",
     characteristicsOfLongConversationsTitle: "Characteristics of Long Conversations",
@@ -2379,7 +2379,7 @@ export const translations = {
 
     // Monologues specific content
     monologuesTitle: "Monologues",
-    monologuesDescription: "Master monologues for Cambridge exams. Learn to understand extended speeches by a single person and extract detailed information from structured presentations.",
+    monologuesDescription: "Master monologues for international certification exams. Learn to understand extended speeches by a single person and extract detailed information from structured presentations.",
     whatAreMonologues: "What are Monologues?",
     monologuesIntro: "Monologues are spoken speeches by a single person that frequently appear in listening exams. They are longer than dialogues and require different comprehension strategies.",
     characteristicsOfMonologuesTitle: "Characteristics of Monologues",
@@ -2394,7 +2394,7 @@ export const translations = {
 
     // Note-Taking Techniques specific content
     noteTakingTechniquesTitle: "Note-Taking Techniques",
-    noteTakingTechniquesDescription: "Master note-taking techniques for Cambridge exams. Learn systematic methods to capture important information during listening and retain it effectively.",
+    noteTakingTechniquesDescription: "Master note-taking techniques for international certification exams. Learn systematic methods to capture important information during listening and retain it effectively.",
     whatAreNoteTakingTechniques: "What are Note-Taking Techniques?",
     noteTakingTechniquesIntro: "Note-taking techniques are systematic methods for capturing important information during listening. They are essential for retaining and processing information in long exams.",
     importanceOfNoteTakingTitle: "Importance of Note-Taking",
@@ -2409,7 +2409,7 @@ export const translations = {
 
     // Short Dialogues specific content
     shortDialoguesTitle: "Short Dialogues",
-    shortDialoguesDescription: "Master short dialogues for Cambridge exams. Learn to understand brief conversations between people in everyday situations and extract specific information quickly.",
+    shortDialoguesDescription: "Master short dialogues for international certification exams. Learn to understand brief conversations between people in everyday situations and extract specific information quickly.",
     whatAreShortDialogues: "What are Short Dialogues?",
     shortDialoguesIntro: "Short dialogues are brief conversations between two or more people that frequently appear in listening exams. They are ideal for practicing basic listening comprehension.",
     characteristicsOfShortDialoguesTitle: "Characteristics of Short Dialogues",
@@ -2424,7 +2424,7 @@ export const translations = {
 
     // Multi-speaker Dialogues specific content
     multiSpeakerDialoguesTitle: "Multi-speaker Dialogues",
-    multiSpeakerDialoguesDescription: "Master multi-speaker dialogues for Cambridge exams. Learn to understand complex conversations between three or more people and track multiple interactions simultaneously.",
+    multiSpeakerDialoguesDescription: "Master multi-speaker dialogues for international certification exams. Learn to understand complex conversations between three or more people and track multiple interactions simultaneously.",
     whatAreMultiSpeakerDialogues: "What are Multi-speaker Dialogues?",
     multiSpeakerDialoguesIntro: "Multi-speaker dialogues are conversations between three or more people that appear in advanced listening exams. They require sophisticated comprehension and tracking skills.",
     characteristicsOfMultiSpeakerDialoguesTitle: "Characteristics of Multi-speaker Dialogues",
@@ -2439,7 +2439,7 @@ export const translations = {
 
     // Opinion and Attitude specific content
     opinionAndAttitudeTitle: "Opinion and Attitude",
-    opinionAndAttitudeDescription: "Master opinion and attitude identification for Cambridge exams. Learn to identify author's personal views and emotional stance towards topics in texts.",
+    opinionAndAttitudeDescription: "Master opinion and attitude identification for international certification exams. Learn to identify author's personal views and emotional stance towards topics in texts.",
     whatAreOpinionAndAttitude: "What are Opinion and Attitude?",
     opinionAndAttitudeIntro: "Opinion is the author's personal point of view on a topic. Attitude is the author's emotional or mental stance towards the topic (positive, negative, neutral). Identifying opinions and attitudes helps you understand the author's perspective.",
     exampleOfOpinionAndAttitude: "Example of Opinion and Attitude",
@@ -2457,7 +2457,7 @@ export const translations = {
 
     // Set Phrases specific content
     setPhrasesTitle: "Set Phrases",
-    setPhrasesDescription: "Master set phrases for Cambridge exams. Learn fixed expressions commonly used in spoken English to sound more natural and fluent.",
+    setPhrasesDescription: "Master set phrases for international certification exams. Learn fixed expressions commonly used in spoken English to sound more natural and fluent.",
     whatAreSetPhrases: "What are Set Phrases?",
     setPhrasesIntro: "Set phrases are fixed expressions commonly used in spoken English. They are word combinations that have a specific meaning and are used as a unit.",
     greetingsAndFarewellsTitle: "Greetings and Farewells",
@@ -2472,7 +2472,7 @@ export const translations = {
 
     // Speaking Connectors specific content
     speakingConnectorsTitle: "Speaking Connectors",
-    speakingConnectorsDescription: "Master speaking connectors for Cambridge exams. Learn words and phrases to connect ideas, organize your speech and make your speaking more fluent and coherent.",
+    speakingConnectorsDescription: "Master speaking connectors for international certification exams. Learn words and phrases to connect ideas, organize your speech and make your speaking more fluent and coherent.",
     whatAreSpeakingConnectors: "What are Speaking Connectors?",
     speakingConnectorsIntro: "Speaking connectors are words and phrases that help you connect ideas, organize your speech and make your speaking more fluent and coherent in English.",
     connectorsForOrganizingIdeasTitle: "Connectors for Organizing Ideas",
@@ -2487,7 +2487,7 @@ export const translations = {
 
     // Text Organization Structure specific content
     textOrganizationStructureTitle: "Text Organization Structure",
-    textOrganizationStructureDescription: "Master text organization and structure for Cambridge exams. Learn how texts are organized with logical sequences, paragraph division, connectors, and coherent message creation.",
+    textOrganizationStructureDescription: "Master text organization and structure for international certification exams. Learn how texts are organized with logical sequences, paragraph division, connectors, and coherent message creation.",
     whatIsTextOrganizationAndStructure: "What is Text Organization and Structure?",
     textOrganizationStructureIntro: "Text Organization and Structure refers to how a text is organized: the logical sequence of ideas, paragraph division, use of connectors, and how different parts relate to create a coherent and effective message.",
     exampleOfTextOrganization: "Example of Text Organization",
@@ -2505,7 +2505,7 @@ export const translations = {
 
     // Text Types and Structure specific content
     textTypesAndStructureTitle: "Text Types and Structure",
-    textTypesAndStructureDescription: "Master text types and structure for Cambridge exams. Learn different text types, their purposes, structures, and conventions to write effectively in English.",
+    textTypesAndStructureDescription: "Master text types and structure for international certification exams. Learn different text types, their purposes, structures, and conventions to write effectively in English.",
     whatAreTextTypesAndStructure: "What are Text Types and Structure?",
     textTypesAndStructureIntro: "Text types and structure are fundamental for writing well in English. Each text type has its own structure, purpose and conventions that you must follow to communicate effectively.",
     mainTextTypesTitle: "Main Text Types",
@@ -2962,9 +2962,9 @@ export const translations = {
 
     // Essay Writing Techniques specific content (Spanish)
     essayWritingTechniquesTitle: "Técnicas de Escritura de Ensayos",
-    essayWritingTechniquesDescription: "Domina las técnicas de escritura de ensayos para exámenes Cambridge. Aprende estructura, argumentación y estilo académico para niveles B2, C1 y C2.",
+    essayWritingTechniquesDescription: "Domina las técnicas de escritura de ensayos para exámenes certificados internacionales. Aprende estructura, argumentación y estilo académico para niveles B2, C1 y C2.",
     essayWritingTechniques: "Técnicas de Escritura de Ensayos",
-    essayWritingIntro: "En los exámenes Cambridge (B2 First, C1 Advanced, C2 Proficiency), el ensayo es una tarea obligatoria en el Paper de Escritura. Debes escribir 140-190 palabras (B2), 220-260 palabras (C1), o 280-320 palabras (C2) en respuesta a una pregunta específica, demostrando capacidad argumentativa y estilo académico.",
+    essayWritingIntro: "En los exámenes certificados internacionales (B2 First, C1 Advanced, C2 Proficiency), el ensayo es una tarea obligatoria en el Paper de Escritura. Debes escribir 140-190 palabras (B2), 220-260 palabras (C1), o 280-320 palabras (C2) en respuesta a una pregunta específica, demostrando capacidad argumentativa y estilo académico.",
     essayStructureTitle: "Estructura del Ensayo",
     essayStructureDescription: "Un ensayo bien estructurado sigue un patrón lógico que guía al lector a través de tu argumento.",
     basicEssayStructure: "Estructura Básica del Ensayo",
@@ -3075,7 +3075,7 @@ export const translations = {
 
     // Open Cloze specific content (Spanish)
     openClozeTitle: "Open Cloze",
-    openClozeDescription: "Domina los ejercicios de Open Cloze para exámenes Cambridge. Aprende estrategias para completar espacios con palabras únicas usando gramática y pistas contextuales.",
+    openClozeDescription: "Domina los ejercicios de Open Cloze para exámenes certificados internacionales. Aprende estrategias para completar espacios con palabras únicas usando gramática y pistas contextuales.",
     whatIsOpenCloze: "¿Qué es Open Cloze?",
     openClozeIntro: "Open Cloze es la Parte 2 del examen Use of English en First Certificate (B2) y Advanced (C1). Debes completar 8 espacios en blanco en un texto sin opciones múltiples, usando solo UNA palabra por espacio. Este ejercicio evalúa gramática, vocabulario funcional y comprensión contextual.",
     exampleOfOpenCloze: "Ejemplo de Open Cloze",
@@ -3093,7 +3093,7 @@ export const translations = {
 
     // Multiple Choice Cloze specific content (Spanish)
     multipleChoiceClozeTitle: "Multiple Choice Cloze",
-    multipleChoiceClozeDescription: "Domina los ejercicios de Multiple Choice Cloze para exámenes Cambridge. Aprende estrategias para elegir palabras correctas de cuatro opciones usando vocabulario y contexto.",
+    multipleChoiceClozeDescription: "Domina los ejercicios de Multiple Choice Cloze para exámenes certificados internacionales. Aprende estrategias para elegir palabras correctas de cuatro opciones usando vocabulario y contexto.",
     whatIsMultipleChoiceCloze: "¿Qué es Multiple Choice Cloze?",
     multipleChoiceClozeIntro: "El Multiple Choice Cloze es una parte del examen de Use of English donde debes completar un texto eligiendo la palabra correcta de entre cuatro opciones. Se enfoca en vocabulario, colocaciones, expresiones idiomáticas y estructuras gramaticales.",
     keyStrategiesTitle: "Estrategias Clave",
@@ -3108,7 +3108,7 @@ export const translations = {
 
     // Key Word Transformations specific content (Spanish)
     keyWordTransformationsTitle: "Key Word Transformations",
-    keyWordTransformationsDescription: "Domina las Key Word Transformations para exámenes Cambridge. Aprende estrategias para completar transformaciones usando palabras clave dadas manteniendo el significado exacto.",
+    keyWordTransformationsDescription: "Domina las Key Word Transformations para exámenes certificados internacionales. Aprende estrategias para completar transformaciones usando palabras clave dadas manteniendo el significado exacto.",
     whatAreKeyWordTransformations: "¿Qué son las Key Word Transformations?",
     keyWordTransformationsIntro: "Key Word Transformations es la Parte 4 del Use of English en First Certificate (B2) y Advanced (C1). Debes completar 6 transformaciones usando una palabra clave dada, manteniendo el significado exacto. Puedes usar 2-5 palabras (B2) o 3-6 palabras (C1) incluyendo la palabra clave sin cambiarla.",
     exampleOfKeyWordTransformation: "Ejemplo de Key Word Transformation",
@@ -3126,7 +3126,7 @@ export const translations = {
 
     // Gapped Text specific content (Spanish)
     gappedTextTitle: "Gapped Text",
-    gappedTextDescription: "Domina los ejercicios de Gapped Text para exámenes Cambridge. Aprende estrategias para elegir párrafos u oraciones correctas para llenar espacios usando coherencia y cohesión textual.",
+    gappedTextDescription: "Domina los ejercicios de Gapped Text para exámenes certificados internacionales. Aprende estrategias para elegir párrafos u oraciones correctas para llenar espacios usando coherencia y cohesión textual.",
     whatIsGappedText: "¿Qué es Gapped Text?",
     gappedTextIntro: "Gapped Text es un ejercicio donde se han eliminado párrafos o oraciones de un texto, y debes elegir de una lista cuáles encajan en cada espacio. Debes entender la coherencia y cohesión del texto.",
     exampleOfGappedText: "Ejemplo de Gapped Text",
@@ -3144,7 +3144,7 @@ export const translations = {
 
     // Multiple Matching specific content (Spanish)
     multipleMatchingTitle: "Multiple Matching",
-    multipleMatchingDescription: "Domina los ejercicios de Multiple Matching para exámenes Cambridge. Aprende estrategias para relacionar preguntas o declaraciones con diferentes textos o secciones.",
+    multipleMatchingDescription: "Domina los ejercicios de Multiple Matching para exámenes certificados internacionales. Aprende estrategias para relacionar preguntas o declaraciones con diferentes textos o secciones.",
     whatIsMultipleMatching: "¿Qué es Multiple Matching?",
     multipleMatchingIntro: "Multiple Matching es un ejercicio donde debes relacionar preguntas o declaraciones con diferentes textos o secciones. Cada texto puede usarse más de una vez, y algunas opciones pueden no usarse.",
     exampleOfMultipleMatching: "Ejemplo de Multiple Matching",
@@ -3162,7 +3162,7 @@ export const translations = {
 
     // Advanced Speaking Strategies specific content (Spanish)
     advancedSpeakingStrategiesTitle: "Estrategias Avanzadas de Speaking",
-    advancedSpeakingStrategiesDescription: "Domina las estrategias avanzadas de speaking para exámenes Cambridge. Aprende técnicas de fluidez, manejo del discurso y habilidades de comunicación natural.",
+    advancedSpeakingStrategiesDescription: "Domina las estrategias avanzadas de speaking para exámenes certificados internacionales. Aprende técnicas de fluidez, manejo del discurso y habilidades de comunicación natural.",
     advancedSpeakingStrategiesIntro: "Las estrategias avanzadas de speaking van más allá del vocabulario y la gramática. Incluyen técnicas de fluidez, manejo de pausas, estructuración del discurso y adaptación al contexto para comunicarse con naturalidad y sofisticación.",
     fluencyTechniquesTitle: "Técnicas de Fluidez",
     advancedSpeakingStrategiesKeywords: "speaking strategies, fluency, discourse management, natural communication, fillers, connectors",
@@ -3176,7 +3176,7 @@ export const translations = {
 
     // Active Listening Strategies specific content (Spanish)
     activeListeningStrategiesTitle: "Estrategias de Escucha Activa",
-    activeListeningStrategiesDescription: "Domina las estrategias de escucha activa para exámenes Cambridge. Aprende técnicas para participar activamente en el proceso de comprensión auditiva y mejorar la comprensión.",
+    activeListeningStrategiesDescription: "Domina las estrategias de escucha activa para exámenes certificados internacionales. Aprende técnicas para participar activamente en el proceso de comprensión auditiva y mejorar la comprensión.",
     whatAreActiveListeningStrategies: "¿Qué son las Active Listening Strategies?",
     activeListeningStrategiesIntro: "Las active listening strategies (estrategias de escucha activa) son técnicas específicas que te permiten participar activamente en el proceso de comprensión auditiva, mejorando significativamente tu capacidad de entender.",
     differencesBetweenPassiveAndActiveListeningTitle: "Diferencias entre Escucha Pasiva y Activa",
@@ -3191,7 +3191,7 @@ export const translations = {
 
     // Connected Speech specific content (Spanish)
     connectedSpeechTitle: "Connected Speech",
-    connectedSpeechDescription: "Domina los patrones de connected speech para exámenes Cambridge. Aprende cómo los sonidos se conectan y modifican en el habla natural del inglés para mejorar la comprensión auditiva.",
+    connectedSpeechDescription: "Domina los patrones de connected speech para exámenes certificados internacionales. Aprende cómo los sonidos se conectan y modifican en el habla natural del inglés para mejorar la comprensión auditiva.",
     whatIsConnectedSpeech: "¿Qué es Connected Speech?",
     connectedSpeechIntro: "El connected speech (habla conectada) se refiere a cómo los sonidos se modifican y conectan cuando hablamos de forma natural y fluida. Es fundamental para entender el inglés hablado real.",
     linkingTitle: "Linking (Conexión de Sonidos)",
@@ -3206,7 +3206,7 @@ export const translations = {
 
     // Contextual Vocabulary specific content (Spanish)
     contextualVocabularyTitle: "Vocabulario Contextual",
-    contextualVocabularyDescription: "Domina el vocabulario contextual para exámenes Cambridge. Aprende cómo las palabras y expresiones adquieren significado específico según el contexto para una comprensión auditiva efectiva.",
+    contextualVocabularyDescription: "Domina el vocabulario contextual para exámenes certificados internacionales. Aprende cómo las palabras y expresiones adquieren significado específico según el contexto para una comprensión auditiva efectiva.",
     whatIsContextualVocabulary: "¿Qué es Contextual Vocabulary?",
     contextualVocabularyIntro: "El contextual vocabulary (vocabulario contextual) se refiere a palabras y expresiones que adquieren significado específico según el contexto en el que se usan. Es fundamental para la comprensión auditiva efectiva.",
     typesOfContextualVocabularyTitle: "Tipos de Vocabulario Contextual",
@@ -3221,7 +3221,7 @@ export const translations = {
 
     // Cross Text Multiple Matching specific content (Spanish)
     crossTextMultipleMatchingTitle: "Cross Text Multiple Matching",
-    crossTextMultipleMatchingDescription: "Domina los ejercicios de Cross Text Multiple Matching para exámenes Cambridge. Aprende estrategias para relacionar información entre múltiples textos diferentes y encontrar conexiones.",
+    crossTextMultipleMatchingDescription: "Domina los ejercicios de Cross Text Multiple Matching para exámenes certificados internacionales. Aprende estrategias para relacionar información entre múltiples textos diferentes y encontrar conexiones.",
     whatIsCrossTextMultipleMatching: "¿Qué es Cross-text Multiple Matching?",
     crossTextMultipleMatchingIntro: "Cross-text Multiple Matching es un ejercicio avanzado donde debes relacionar información entre múltiples textos diferentes. Comparas, contrastas y conectas ideas, opiniones o información específica que aparece en varios textos sobre temas relacionados.",
     exampleOfCrossTextMultipleMatching: "Ejemplo de Cross-text Multiple Matching",
@@ -3239,7 +3239,7 @@ export const translations = {
 
     // English Varieties specific content (Spanish)
     englishVarietiesTitle: "Variedades del Inglés",
-    englishVarietiesDescription: "Domina las variedades del inglés para exámenes Cambridge. Aprende sobre las diferentes formas del inglés hablado en todo el mundo, incluyendo británico, americano y otras variedades regionales.",
+    englishVarietiesDescription: "Domina las variedades del inglés para exámenes certificados internacionales. Aprende sobre las diferentes formas del inglés hablado en todo el mundo, incluyendo británico, americano y otras variedades regionales.",
     whatAreEnglishVarieties: "¿Qué son las English Varieties?",
     englishVarietiesIntro: "Las English varieties (variedades del inglés) son las diferentes formas en que se habla el inglés en diferentes países y regiones del mundo. Cada variedad tiene sus propias características de pronunciación, vocabulario y gramática.",
     britishEnglishVsAmericanEnglishTitle: "British English vs American English",
@@ -3254,7 +3254,7 @@ export const translations = {
 
     // Functional and Thematic Vocabulary specific content (Spanish)
     functionalAndThematicVocabularyTitle: "Vocabulario Funcional y Temático",
-    functionalAndThematicVocabularyDescription: "Domina el vocabulario funcional y temático para exámenes Cambridge. Aprende palabras y expresiones organizadas por función comunicativa y temas específicos para una comunicación efectiva.",
+    functionalAndThematicVocabularyDescription: "Domina el vocabulario funcional y temático para exámenes certificados internacionales. Aprende palabras y expresiones organizadas por función comunicativa y temas específicos para una comunicación efectiva.",
     whatIsFunctionalAndThematicVocabulary: "¿Qué es Functional and Thematic Vocabulary?",
     functionalAndThematicVocabularyIntro: "El functional and thematic vocabulary (vocabulario funcional y temático) se refiere a palabras y expresiones organizadas por función comunicativa y temas específicos. Es esencial para hablar de manera efectiva en diferentes situaciones.",
     functionalVocabularyTitle: "Vocabulario Funcional",
@@ -3269,7 +3269,7 @@ export const translations = {
 
     // Inference and Implication specific content (Spanish)
     inferenceAndImplicationTitle: "Inferencia e Implicación",
-    inferenceAndImplicationDescription: "Domina las habilidades de inferencia e implicación para exámenes Cambridge. Aprende a entender información no explícitamente declarada y leer entre líneas.",
+    inferenceAndImplicationDescription: "Domina las habilidades de inferencia e implicación para exámenes certificados internacionales. Aprende a entender información no explícitamente declarada y leer entre líneas.",
     whatAreInferenceAndImplication: "¿Qué son Inference e Implication?",
     inferenceAndImplicationIntro: "Inference es la habilidad de entender información que no está explícitamente declarada en el texto. Implication es lo que el autor sugiere o da a entender sin decirlo directamente. Es 'leer entre líneas' para captar significados ocultos.",
     exampleOfInferenceAndImplication: "Ejemplo de Inference e Implication",
@@ -3287,7 +3287,7 @@ export const translations = {
 
     // Interaction and Conversational Strategies specific content (Spanish)
     interactionAndConversationalStrategiesTitle: "Estrategias de Interacción y Conversación",
-    interactionAndConversationalStrategiesDescription: "Domina las estrategias de interacción y conversación para exámenes Cambridge. Aprende técnicas para participar efectivamente en conversaciones y crear interacciones exitosas.",
+    interactionAndConversationalStrategiesDescription: "Domina las estrategias de interacción y conversación para exámenes certificados internacionales. Aprende técnicas para participar efectivamente en conversaciones y crear interacciones exitosas.",
     whatAreInteractionAndConversationalStrategies: "¿Qué son Interaction and Conversational Strategies?",
     interactionAndConversationalStrategiesIntro: "Las interaction and conversational strategies (estrategias de interacción y conversación) son técnicas específicas que te permiten participar efectivamente en conversaciones, mantener el flujo comunicativo y crear interacciones exitosas.",
     startingConversationsTitle: "Iniciar Conversaciones",
@@ -3302,7 +3302,7 @@ export const translations = {
 
     // Long Conversations specific content (Spanish)
     longConversationsTitle: "Conversaciones Largas",
-    longConversationsDescription: "Domina las conversaciones largas para exámenes Cambridge. Aprende a entender diálogos extensos entre múltiples personas y rastrear información compleja durante períodos prolongados.",
+    longConversationsDescription: "Domina las conversaciones largas para exámenes certificados internacionales. Aprende a entender diálogos extensos entre múltiples personas y rastrear información compleja durante períodos prolongados.",
     whatAreLongConversations: "¿Qué son las Long Conversations?",
     longConversationsIntro: "Las long conversations son diálogos extensos entre dos o más personas que aparecen en exámenes de listening. Requieren habilidades avanzadas de comprensión y seguimiento.",
     characteristicsOfLongConversationsTitle: "Características de las Long Conversations",
@@ -3317,7 +3317,7 @@ export const translations = {
 
     // Monologues specific content (Spanish)
     monologuesTitle: "Monólogos",
-    monologuesDescription: "Domina los monólogos para exámenes Cambridge. Aprende a entender discursos extensos de una sola persona y extraer información detallada de presentaciones estructuradas.",
+    monologuesDescription: "Domina los monólogos para exámenes certificados internacionales. Aprende a entender discursos extensos de una sola persona y extraer información detallada de presentaciones estructuradas.",
     whatAreMonologues: "¿Qué son los Monologues?",
     monologuesIntro: "Los monologues (monólogos) son discursos hablados por una sola persona que aparecen frecuentemente en exámenes de listening. Son más largos que los diálogos y requieren diferentes estrategias de comprensión.",
     characteristicsOfMonologuesTitle: "Características de los Monologues",
@@ -3332,7 +3332,7 @@ export const translations = {
 
     // Note-Taking Techniques specific content (Spanish)
     noteTakingTechniquesTitle: "Técnicas de Toma de Notas",
-    noteTakingTechniquesDescription: "Domina las técnicas de toma de notas para exámenes Cambridge. Aprende métodos sistemáticos para capturar información importante durante el listening y retenerla efectivamente.",
+    noteTakingTechniquesDescription: "Domina las técnicas de toma de notas para exámenes certificados internacionales. Aprende métodos sistemáticos para capturar información importante durante el listening y retenerla efectivamente.",
     whatAreNoteTakingTechniques: "¿Qué son las Note-Taking Techniques?",
     noteTakingTechniquesIntro: "Las note-taking techniques (técnicas de toma de notas) son métodos sistemáticos para capturar información importante durante el listening. Son esenciales para retener y procesar información en exámenes largos.",
     importanceOfNoteTakingTitle: "Importancia de la Toma de Notas",
@@ -3347,7 +3347,7 @@ export const translations = {
 
     // Short Dialogues specific content (Spanish)
     shortDialoguesTitle: "Diálogos Cortos",
-    shortDialoguesDescription: "Domina los diálogos cortos para exámenes Cambridge. Aprende a entender conversaciones breves entre personas en situaciones cotidianas y extraer información específica rápidamente.",
+    shortDialoguesDescription: "Domina los diálogos cortos para exámenes certificados internacionales. Aprende a entender conversaciones breves entre personas en situaciones cotidianas y extraer información específica rápidamente.",
     whatAreShortDialogues: "¿Qué son los Short Dialogues?",
     shortDialoguesIntro: "Los short dialogues son conversaciones breves entre dos o más personas que aparecen frecuentemente en exámenes de listening. Son ideales para practicar comprensión auditiva básica.",
     characteristicsOfShortDialoguesTitle: "Características de los Short Dialogues",
@@ -3362,7 +3362,7 @@ export const translations = {
 
     // Multi-speaker Dialogues specific content (Spanish)
     multiSpeakerDialoguesTitle: "Diálogos Multi-hablante",
-    multiSpeakerDialoguesDescription: "Domina los diálogos multi-hablante para exámenes Cambridge. Aprende a entender conversaciones complejas entre tres o más personas y rastrear múltiples interacciones simultáneamente.",
+    multiSpeakerDialoguesDescription: "Domina los diálogos multi-hablante para exámenes certificados internacionales. Aprende a entender conversaciones complejas entre tres o más personas y rastrear múltiples interacciones simultáneamente.",
     whatAreMultiSpeakerDialogues: "¿Qué son los Multi-speaker Dialogues?",
     multiSpeakerDialoguesIntro: "Los multi-speaker dialogues (diálogos multi-hablante) son conversaciones entre tres o más personas que aparecen en exámenes de listening avanzados. Requieren habilidades sofisticadas de comprensión y seguimiento.",
     characteristicsOfMultiSpeakerDialoguesTitle: "Características de los Multi-speaker Dialogues",
@@ -3377,7 +3377,7 @@ export const translations = {
 
     // Opinion and Attitude specific content (Spanish)
     opinionAndAttitudeTitle: "Opinión y Actitud",
-    opinionAndAttitudeDescription: "Domina la identificación de opinión y actitud para exámenes Cambridge. Aprende a identificar las perspectivas personales del autor y su postura emocional hacia los temas en los textos.",
+    opinionAndAttitudeDescription: "Domina la identificación de opinión y actitud para exámenes certificados internacionales. Aprende a identificar las perspectivas personales del autor y su postura emocional hacia los temas en los textos.",
     whatAreOpinionAndAttitude: "¿Qué son Opinion y Attitude?",
     opinionAndAttitudeIntro: "Opinion es el punto de vista personal del autor sobre un tema. Attitude es la postura emocional o mental del autor hacia el tema (positiva, negativa, neutral). Identificar opiniones y actitudes te ayuda a entender la perspectiva del autor.",
     exampleOfOpinionAndAttitude: "Ejemplo de Opinion y Attitude",
@@ -3395,7 +3395,7 @@ export const translations = {
 
     // Set Phrases specific content (Spanish)
     setPhrasesTitle: "Frases Hechas",
-    setPhrasesDescription: "Domina las frases hechas para exámenes Cambridge. Aprende expresiones fijas comúnmente usadas en inglés hablado para sonar más natural y fluido.",
+    setPhrasesDescription: "Domina las frases hechas para exámenes certificados internacionales. Aprende expresiones fijas comúnmente usadas en inglés hablado para sonar más natural y fluido.",
     whatAreSetPhrases: "¿Qué son las Set Phrases?",
     setPhrasesIntro: "Las set phrases (frases hechas) son expresiones fijas que se usan comúnmente en inglés hablado. Son combinaciones de palabras que tienen un significado específico y se usan como una unidad.",
     greetingsAndFarewellsTitle: "Saludos y Despedidas",
@@ -3410,7 +3410,7 @@ export const translations = {
 
     // Speaking Connectors specific content (Spanish)
     speakingConnectorsTitle: "Conectores para Hablar",
-    speakingConnectorsDescription: "Domina los conectores para hablar en exámenes Cambridge. Aprende palabras y frases para conectar ideas, organizar tu discurso y hacer que tu habla sea más fluida y coherente.",
+    speakingConnectorsDescription: "Domina los conectores para hablar en exámenes certificados internacionales. Aprende palabras y frases para conectar ideas, organizar tu discurso y hacer que tu habla sea más fluida y coherente.",
     whatAreSpeakingConnectors: "¿Qué son los Speaking Connectors?",
     speakingConnectorsIntro: "Los speaking connectors (conectores para hablar) son palabras y frases que te ayudan a conectar ideas, organizar tu discurso y hacer que tu habla sea más fluida y coherente en inglés.",
     connectorsForOrganizingIdeasTitle: "Conectores para Organizar Ideas",
@@ -3425,7 +3425,7 @@ export const translations = {
 
     // Text Organization Structure specific content (Spanish)
     textOrganizationStructureTitle: "Organización y Estructura del Texto",
-    textOrganizationStructureDescription: "Domina la organización y estructura del texto para exámenes Cambridge. Aprende cómo se organizan los textos con secuencias lógicas, división en párrafos, conectores y creación de mensajes coherentes.",
+    textOrganizationStructureDescription: "Domina la organización y estructura del texto para exámenes certificados internacionales. Aprende cómo se organizan los textos con secuencias lógicas, división en párrafos, conectores y creación de mensajes coherentes.",
     whatIsTextOrganizationAndStructure: "¿Qué es Text Organization and Structure?",
     textOrganizationStructureIntro: "Text Organization and Structure se refiere a cómo está organizado un texto: la secuencia lógica de ideas, la división en párrafos, el uso de conectores, y cómo las diferentes partes se relacionan para crear un mensaje coherente y efectivo.",
     exampleOfTextOrganization: "Ejemplo de Text Organization",
@@ -3443,7 +3443,7 @@ export const translations = {
 
     // Text Types and Structure specific content (Spanish)
     textTypesAndStructureTitle: "Tipos de Texto y Estructura",
-    textTypesAndStructureDescription: "Domina los tipos de texto y estructura para exámenes Cambridge. Aprende diferentes tipos de texto, sus propósitos, estructuras y convenciones para escribir efectivamente en inglés.",
+    textTypesAndStructureDescription: "Domina los tipos de texto y estructura para exámenes certificados internacionales. Aprende diferentes tipos de texto, sus propósitos, estructuras y convenciones para escribir efectivamente en inglés.",
     whatAreTextTypesAndStructure: "¿Qué son los Text Types and Structure?",
     textTypesAndStructureIntro: "Los text types (tipos de texto) y structure (estructura) son fundamentales para escribir bien en inglés. Cada tipo de texto tiene su propia estructura, propósito y convenciones que debes seguir para comunicarte efectivamente.",
     mainTextTypesTitle: "Tipos de Texto Principales",

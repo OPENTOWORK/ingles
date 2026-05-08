@@ -122,3 +122,4 @@ temp/
 
 # Audio files (si no quieres subirlos)
 # public/audio/
+.vercel

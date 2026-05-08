@@ -1,7 +1,7 @@
 export const partInfo = {
   "1": {
     "title": "Part 1: Multiple-choice cloze",
-    "description": "In this part of the Cambridge English: Advanced (C1) exam, you will read a text with eight gaps. For each gap, you need to choose the correct word from four options (A, B, C, D). This tests your understanding of vocabulary, collocations, fixed phrases, idioms, and context at C1 level.",
+    "description": "In this part of the C1 Advanced exam, you will read a text with eight gaps. For each gap, you need to choose the correct word from four options (A, B, C, D). This tests your understanding of vocabulary, collocations, fixed phrases, idioms, and context at C1 level.",
     "tips": "Read the whole text first to understand the general meaning, tone, and register. Consider sophisticated collocations and fixed phrases. Look for context clues and subtle differences in meaning. Eliminate obviously wrong answers first, then choose the option that fits both grammatically and contextually with the appropriate register.",
     "commonErrors": "Choosing words that fit grammatically but don't fit the collocation, register, or subtle context, not reading the whole text first, or choosing answers based on individual words rather than sophisticated context"
   },
