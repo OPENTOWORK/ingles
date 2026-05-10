@@ -13,6 +13,7 @@ import { resolveB2ExamenId, fetchB2PreguntasByExamen } from '@/utils/b2ResolveEx
 import { formatLevelsPartDisplayName } from '@/utils/formatLevelsPartDisplayName';
 import { useUserRole } from '@/context/UserRoleContext';
 import { getSessionUserId, mergeLevelsEstadisticas } from '@/utils/levelsEstadisticas';
+import { getOpenAnswerMap, inferOpenQuestionNumbersFromPrompt } from '@/utils/b2ExamPaperShared';
 
 export default function UseOfEnglishExamsPage() {
   const { userRole } = useUserRole();
@@ -372,35 +373,6 @@ export default function UseOfEnglishExamsPage() {
       .trim()
       .toLowerCase();
 
-  const getOpenAnswerMap = (answers = [], fallbackClosedAnswers = []) => {
-    const map = new Map();
-    const source = answers.length > 0
-      ? answers.map((item) => item.respuesta_texto || '')
-      : fallbackClosedAnswers.map((item) => item.respuesta || '');
-
-    source.forEach((raw) => {
-      const text = String(raw || '').trim();
-      // Parser tolerante: acepta basura inicial/BOM y distintos espacios.
-      const match = text.match(/(?:^|[^\d])(\d+)\s+(.+)$/);
-      if (!match) return;
-      const number = Number(match[1]);
-      const answer = normalizeText(match[2]);
-      if (!map.has(number)) map.set(number, new Set());
-      map.get(number).add(answer);
-    });
-
-    return map;
-  };
-
-  const inferOpenQuestionNumbersFromPrompt = (rawText = '', partNumber = 0) => {
-    const matches = [...String(rawText || '').matchAll(/(?:^|\n)\s*(\d{1,2})\b/gm)];
-    const numbers = [...new Set(matches.map((m) => Number(m[1])).filter((n) => Number.isFinite(n)))].sort((a, b) => a - b);
-    if (numbers.length > 0) return numbers;
-    if (partNumber === 2) return [9, 10, 11, 12, 13, 14, 15, 16];
-    if (partNumber === 3) return [17, 18, 19, 20, 21, 22, 23, 24];
-    if (partNumber === 4) return [25, 26, 27, 28, 29, 30];
-    return [];
-  };
   const getFormattedEnunciado = (rawText = '') => {
     const normalized = rawText.replace(/\r\n/g, '\n').trim();
     if (!normalized) return [];
@@ -477,17 +449,30 @@ export default function UseOfEnglishExamsPage() {
   };
 
   const isOpenClozePart = partNumberUoe >= 2 && partNumberUoe <= 4;
+  const inferredOpenQuestionNumbers = useMemo(
+    () => inferOpenQuestionNumbersFromPrompt(selectedQuestion?.enunciado || '', partNumberUoe),
+    [selectedQuestion?.enunciado, partNumberUoe],
+  );
   const openAnswerMap = useMemo(
-    () => getOpenAnswerMap(selectedQuestion?.respuestasAbiertas || [], selectedQuestion?.respuestas || []),
-    [selectedQuestion?.respuestasAbiertas, selectedQuestion?.respuestas],
+    () =>
+      getOpenAnswerMap(
+        selectedQuestion?.respuestasAbiertas || [],
+        selectedQuestion?.respuestas || [],
+        inferredOpenQuestionNumbers,
+      ),
+    [
+      inferredOpenQuestionNumbers,
+      selectedQuestion?.respuestasAbiertas,
+      selectedQuestion?.respuestas,
+    ],
   );
   const openQuestionNumbers = useMemo(
     () => {
       const fromAnswers = [...openAnswerMap.keys()].sort((a, b) => a - b);
       if (fromAnswers.length > 0) return fromAnswers;
-      return inferOpenQuestionNumbersFromPrompt(selectedQuestion?.enunciado || '', partNumberUoe);
+      return inferredOpenQuestionNumbers;
     },
-    [openAnswerMap, selectedQuestion?.enunciado, partNumberUoe],
+    [inferredOpenQuestionNumbers, openAnswerMap],
   );
 
   const groupedAnswersSelected = useMemo(

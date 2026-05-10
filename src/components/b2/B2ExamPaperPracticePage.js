@@ -374,23 +374,37 @@ function B2ExamPaperPracticePageInner({
     [groupedAnswers],
   );
 
+  const inferredOpenQuestionNumbers = useMemo(
+    () => inferOpenQuestionNumbersFromPrompt(selectedQuestion?.enunciado || '', partNumber),
+    [selectedQuestion?.enunciado, partNumber],
+  );
+
   const openAnswerMap = useMemo(
     () =>
       getOpenAnswerMap(
         selectedQuestion?.respuestasAbiertas || [],
         selectedQuestion?.respuestas || [],
+        inferredOpenQuestionNumbers,
       ),
-    [selectedQuestion?.respuestasAbiertas, selectedQuestion?.respuestas],
+    [
+      selectedQuestion?.respuestasAbiertas,
+      selectedQuestion?.respuestas,
+      inferredOpenQuestionNumbers,
+    ],
   );
 
   const openQuestionNumbers = useMemo(() => {
     const fromAnswers = [...openAnswerMap.keys()].sort((a, b) => a - b);
     if (fromAnswers.length > 0) return fromAnswers;
     if ((selectedQuestion?.respuestasAbiertas?.length ?? 0) > 0) {
-      return inferOpenQuestionNumbersFromPrompt(selectedQuestion?.enunciado || '', partNumber);
+      return inferredOpenQuestionNumbers;
     }
     return [];
-  }, [openAnswerMap, selectedQuestion?.enunciado, partNumber, selectedQuestion?.respuestasAbiertas]);
+  }, [
+    inferredOpenQuestionNumbers,
+    openAnswerMap,
+    selectedQuestion?.respuestasAbiertas,
+  ]);
 
   /** Writing: inputs abiertos solo si hay claves comprobables y no es MCQ clásico. */
   const useOpenInputUi = Boolean(

@@ -100,30 +100,78 @@ export function normalizeText(value = '') {
     .toLowerCase();
 }
 
-export function getOpenAnswerMap(answers = [], fallbackClosedAnswers = []) {
-  const map = new Map();
-  const source =
-    answers.length > 0
-      ? answers.map((item) => item.respuesta_texto || '')
-      : fallbackClosedAnswers.map((item) => item.respuesta || '');
+/**
+ * Mapa número de hueco → variantes válidas (normalizadas).
+ * Si `respuesta_texto` en BD viene sin prefijo (`from` en vez de `9 from`), `orderedQuestionNumbers`
+ * debe listar los huecos en el mismo orden que las filas (p. ej. 9–16 en Parte 2).
+ */
+export function getOpenAnswerMap(
+  answers = [],
+  fallbackClosedAnswers = [],
+  orderedQuestionNumbers = null,
+) {
+  const usesOpen = answers.length > 0;
+  const source = usesOpen
+    ? answers.map((item) => item.respuesta_texto || '')
+    : fallbackClosedAnswers.map((item) => item.respuesta || '');
+
+  /** @type {Array<{ num: number, norm: string }>} */
+  const keyed = [];
+  /** @type {string[]} */
+  const plainNorm = [];
 
   source.forEach((raw) => {
     const text = String(raw || '').trim();
-    const match = text.match(/(?:^|[^\d])(\d+)\s+(.+)$/);
-    if (!match) return;
-    const number = Number(match[1]);
-    const answer = normalizeText(match[2]);
-    if (!map.has(number)) map.set(number, new Set());
-    map.get(number).add(answer);
+    const match = text.match(/(?:^|[^\d])(\d{1,2})\s+(.+)$/);
+    if (match) {
+      keyed.push({ num: Number(match[1]), norm: normalizeText(match[2]) });
+      return;
+    }
+    plainNorm.push(normalizeText(text));
   });
+
+  const map = new Map();
+  for (const { num, norm } of keyed) {
+    if (!norm) continue;
+    if (!map.has(num)) map.set(num, new Set());
+    map.get(num).add(norm);
+  }
+
+  const hints =
+    Array.isArray(orderedQuestionNumbers) && orderedQuestionNumbers.length > 0
+      ? [...orderedQuestionNumbers].sort((a, b) => a - b)
+      : null;
+
+  if (
+    usesOpen &&
+    plainNorm.length > 0 &&
+    keyed.length === 0 &&
+    hints &&
+    hints.length >= plainNorm.length &&
+    plainNorm.every(Boolean)
+  ) {
+    for (let i = 0; i < plainNorm.length; i++) {
+      const num = hints[i];
+      if (num == null) continue;
+      if (!map.has(num)) map.set(num, new Set());
+      map.get(num).add(plainNorm[i]);
+    }
+  }
 
   return map;
 }
 
-/** @param {string} rawText @param {number} _partNumber */
-export function inferOpenQuestionNumbersFromPrompt(rawText = '', _partNumber = 0) {
+/** @param {string} rawText @param {number} partNumber */
+export function inferOpenQuestionNumbersFromPrompt(rawText = '', partNumber = 0) {
   const matches = [...String(rawText || '').matchAll(/(?:^|\n)\s*(\d{1,2})\b/gm)];
-  return [...new Set(matches.map((m) => Number(m[1])).filter((n) => Number.isFinite(n)))].sort((a, b) => a - b);
+  const nums = [...new Set(matches.map((m) => Number(m[1])).filter((n) => Number.isFinite(n)))].sort(
+    (a, b) => a - b,
+  );
+  if (nums.length > 0) return nums;
+  if (partNumber === 2) return [9, 10, 11, 12, 13, 14, 15, 16];
+  if (partNumber === 3) return [17, 18, 19, 20, 21, 22, 23, 24];
+  if (partNumber === 4) return [25, 26, 27, 28, 29, 30];
+  return [];
 }
 
 /**
