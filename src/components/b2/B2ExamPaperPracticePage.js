@@ -1,6 +1,8 @@
 'use client';
 
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { Suspense, useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { useB2ExamPracticeSlot } from '@/hooks/useB2ExamPracticeSlot';
+import { B2ExamSlotPicker } from '@/components/b2/B2ExamSlotPicker';
 import LevelsCategoryTimer from '@/components/levels/LevelsCategoryTimer';
 import LevelsPartScorePanel from '@/components/levels/LevelsPartScorePanel';
 import LevelsAnswerJustification from '@/components/levels/LevelsAnswerJustification';
@@ -22,6 +24,7 @@ import {
 } from '@/utils/b2ExamPaperShared';
 import { getSessionUserId, mergeLevelsEstadisticas } from '@/utils/levelsEstadisticas';
 import { resolveB2ExamenId, fetchB2PreguntasByExamen } from '@/utils/b2ResolveExam';
+import { formatLevelsPartDisplayName } from '@/utils/formatLevelsPartDisplayName';
 import B2WritingLongFormAiPanel from '@/components/b2/B2WritingLongFormAiPanel';
 
 const buttonStyle = {
@@ -52,7 +55,7 @@ const buttonStyle = {
  * @param {number} [props.writingWordMin]
  * @param {number} [props.writingWordMax]
  */
-export default function B2ExamPaperPracticePage({
+function B2ExamPaperPracticePageInner({
   title,
   partMin,
   partMax,
@@ -66,6 +69,7 @@ export default function B2ExamPaperPracticePage({
   writingWordMin = 140,
   writingWordMax = 190,
 }) {
+  const { examSlot, selectExamSlot } = useB2ExamPracticeSlot();
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [partsData, setPartsData] = useState([]);
@@ -100,7 +104,9 @@ export default function B2ExamPaperPracticePage({
 
       if (levelError || !levelData) throw new Error('No se pudo obtener el nivel B2.');
 
-      const { examenId, error: examResolveError } = await resolveB2ExamenId(supabase, levelData.id);
+      const { examenId, error: examResolveError } = await resolveB2ExamenId(supabase, levelData.id, {
+        slot: examSlot,
+      });
       if (examResolveError || !examenId) {
         const detail =
           typeof examResolveError?.message === 'string'
@@ -165,7 +171,7 @@ export default function B2ExamPaperPracticePage({
 
       const groupedByPart = questionsData.reduce((acc, question) => {
         const tablePart = partsById[question.parte_id];
-        const partName = tablePart?.nombre_parte || 'Parte sin nombre';
+        const partName = formatLevelsPartDisplayName(tablePart?.nombre_parte || 'Parte sin nombre');
         const partNumber = Number(partName.match(/\d+/)?.[0] || 0);
         if (partNumber < partMin || partNumber > partMax) return acc;
 
@@ -216,7 +222,7 @@ export default function B2ExamPaperPracticePage({
     } finally {
       if (mountedRef.current) setLoading(false);
     }
-  }, [emptyErrorMessage, partMax, partMin]);
+  }, [emptyErrorMessage, examSlot, partMax, partMin]);
 
   useEffect(() => {
     mountedRef.current = true;
@@ -428,6 +434,7 @@ export default function B2ExamPaperPracticePage({
   return (
     <main style={{ padding: '2rem', fontFamily: 'Segoe UI, sans-serif' }}>
       <h1 style={{ textAlign: 'center' }}>{title}</h1>
+      <B2ExamSlotPicker value={examSlot} onSelect={selectExamSlot} />
       {subtitle ? (
         <p style={{ textAlign: 'center', margin: '0.35rem 0 0', color: '#4a5568', fontSize: '1rem' }}>
           {subtitle}
@@ -914,5 +921,19 @@ export default function B2ExamPaperPracticePage({
         </Link>
       </div>
     </main>
+  );
+}
+
+export default function B2ExamPaperPracticePage(props) {
+  return (
+    <Suspense
+      fallback={
+        <main style={{ padding: '2rem', textAlign: 'center', fontFamily: 'Segoe UI, sans-serif' }}>
+          Cargando práctica…
+        </main>
+      }
+    >
+      <B2ExamPaperPracticePageInner {...props} />
+    </Suspense>
   );
 }

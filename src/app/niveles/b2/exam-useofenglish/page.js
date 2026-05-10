@@ -8,8 +8,9 @@ import { computeLevelsPartScore } from '@/utils/levelsPaperScoreMetrics';
 import { postLevelsAnswerJustification } from '@/utils/levelsJustifyClient';
 import Link from 'next/link';
 import { supabase } from '@/utils/supabaseClient';
-import { extractTextoBloque } from '@/utils/b2ExamTextBlocks';
+import { extractTextoBloque, splitPart1TextoYPreguntas, parsePart1QuestionOptions } from '@/utils/b2ExamTextBlocks';
 import { resolveB2ExamenId, fetchB2PreguntasByExamen } from '@/utils/b2ResolveExam';
+import { formatLevelsPartDisplayName } from '@/utils/formatLevelsPartDisplayName';
 import { useUserRole } from '@/context/UserRoleContext';
 import { getSessionUserId, mergeLevelsEstadisticas } from '@/utils/levelsEstadisticas';
 
@@ -127,7 +128,7 @@ export default function UseOfEnglishExamsPage() {
 
       const groupedByPart = questionsData.reduce((acc, question) => {
         const tablePart = partsById[question.parte_id];
-        const partName = tablePart?.nombre_parte || 'Parte sin nombre';
+        const partName = formatLevelsPartDisplayName(tablePart?.nombre_parte || 'Parte sin nombre');
         if (!acc[question.parte_id]) {
           acc[question.parte_id] = {
             id: question.parte_id,
@@ -276,11 +277,63 @@ export default function UseOfEnglishExamsPage() {
     const desc = (selectedPart?.descripcion || '').replace(/\r\n/g, '\n').trim();
     const fallback = splitEnunciadoAndText(rawPregunta);
     const textoExtracted = extractTextoBloque(rawPregunta, partNumberUoe);
+    let texto = (textoExtracted || fallback.texto || '').trim();
+    /** Parte 1: el pasaje y el bloque Questions suelen ir juntos tras `Text`; mostramos solo el pasaje arriba. */
+    let preguntasPart1Parse = [];
+    if (partNumberUoe === 1 && texto) {
+      const split = splitPart1TextoYPreguntas(texto);
+      texto = split.texto.trim();
+      preguntasPart1Parse = parsePart1QuestionOptions(split.preguntas);
+    }
     return {
       enunciado: desc || fallback.enunciado,
-      texto: (textoExtracted || fallback.texto || '').trim(),
+      texto,
+      preguntasPart1Parse,
     };
   }, [selectedPart?.descripcion, selectedQuestion?.enunciado, partNumberUoe]);
+
+  /** Mapa pregunta → letra correcta desde `levels_respuestas` (p. ej. `1 C`, `2 B follow`). */
+  const part1CorrectLetterByQuestion = useMemo(() => {
+    const map = new Map();
+    if (partNumberUoe !== 1) return map;
+    for (const row of selectedQuestion?.respuestas || []) {
+      const t = String(row.respuesta || '').trim();
+      const m = t.match(/^(\d{1,2})\s+([A-D])\b/i);
+      if (m) map.set(Number(m[1]), m[2].toUpperCase());
+    }
+    return map;
+  }, [partNumberUoe, selectedQuestion?.preguntaId, selectedQuestion?.respuestas]);
+
+  /** Parte 1: 4 opciones A–D por pregunta (texto del enunciado + una correcta según BD). */
+  const part1McqGroups = useMemo(() => {
+    if (partNumberUoe !== 1) return null;
+    const parsed = selectedPartContent.preguntasPart1Parse || [];
+    if (!parsed.length || !selectedQuestion?.preguntaId) return null;
+    const pid = selectedQuestion.preguntaId;
+    const letters = ['A', 'B', 'C', 'D'];
+    return parsed.map(({ questionNumber, options: byLetter }) => {
+      const correctL = part1CorrectLetterByQuestion.get(questionNumber);
+      const opts = letters
+        .map((L) => {
+          const word = byLetter[L];
+          if (!word || !String(word).trim()) return null;
+          return {
+            id: `part1-${pid}-q${questionNumber}-${L}`,
+            respuesta: `${questionNumber} ${L} ${word}`,
+            formattedText: `${L}) ${word}`,
+            correcta: correctL != null ? L === correctL : false,
+          };
+        })
+        .filter(Boolean);
+      if (opts.length < 2) return null;
+      return { questionNumber, options: opts };
+    }).filter(Boolean);
+  }, [
+    part1CorrectLetterByQuestion,
+    partNumberUoe,
+    selectedPartContent.preguntasPart1Parse,
+    selectedQuestion?.preguntaId,
+  ]);
 
   const contextSnippetForAi = useMemo(() => {
     const pack = [selectedPartContent.enunciado, selectedPartContent.texto].filter(Boolean).join('\n\n');
@@ -442,13 +495,15 @@ export default function UseOfEnglishExamsPage() {
     [selectedQuestion?.respuestas],
   );
 
+  const groupedAnswersForUiAndScore = part1McqGroups ?? groupedAnswersSelected;
+
   const partScoreMetrics = useMemo(
     () =>
       computeLevelsPartScore({
         useOpenInputUi: isOpenClozePart,
         openQuestionNumbers,
         openChecks,
-        groupedAnswers: groupedAnswersSelected,
+        groupedAnswers: groupedAnswersForUiAndScore,
         checkedQuestions,
         selectedOptions,
         getQuestionKey,
@@ -458,7 +513,7 @@ export default function UseOfEnglishExamsPage() {
       isOpenClozePart,
       openQuestionNumbers,
       openChecks,
-      groupedAnswersSelected,
+      groupedAnswersForUiAndScore,
       checkedQuestions,
       selectedOptions,
       selectedPart?.id,
@@ -765,7 +820,7 @@ export default function UseOfEnglishExamsPage() {
                         );
                       })
                     ) : (
-                    groupedAnswersSelected.map((group, groupIndex) => (
+                    groupedAnswersForUiAndScore.map((group, groupIndex) => (
                       <div
                         key={`group-${selectedQuestion.preguntaId}-${group.questionNumber ?? 'extra'}-${groupIndex}`}
                         style={{

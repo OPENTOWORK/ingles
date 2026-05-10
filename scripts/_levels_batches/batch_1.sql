@@ -1,0 +1,143 @@
+INSERT INTO "public"."levels_preguntas" ("id", "examen_id", "level_id", "parte_id", "enunciado", "creado_en") VALUES ('27eded7a-5666-4986-86ef-5b1053a853b5', 'ae0e85e8-3d63-11f1-b2e3-0b27f7b23431', '8b180126-a2fe-47fc-b9b2-8af875e25593', '9f50cc1e-de64-43aa-b45c-49e160f9793f', 'Text
+The Power of Small Habits
+Many people believe that achieving success requires big changes, but in reality, it is often the small daily habits that (0) ___ the biggest difference. Experts suggest that focusing on tiny improvements can lead to impressive results over time.
+For instance, instead of trying to completely change your lifestyle overnight, it is more effective to (1) ___ simple goals that are easy to follow. These could include reading for ten minutes a day or going for a short walk every evening.
+One reason why small habits are so powerful is that they are easier to (2) ___. When a task feels manageable, people are more likely to continue doing it regularly. Over time, these actions become automatic and require less effort.
+Another advantage is that small habits help build confidence. Each time you successfully complete a task, you (3) ___ a sense of achievement, which encourages you to keep going. This positive feeling can motivate you to gradually take on more challenging goals.
+However, it is important to remember that progress may not always be (4) ___. Sometimes, results take time to appear, and it is easy to feel discouraged. In these moments, patience is essential.
+In addition, creating a supportive environment can make a big difference. For example, placing reminders in visible places or (5) ___ your goals with friends can help you stay focused and committed.
+Finally, consistency is key. Even small actions, when repeated regularly, can (6) ___ into significant changes over time. By staying dedicated and not giving up, you increase your chances of success.
+In conclusion, small habits may seem unimportant at first, but they can (7) ___ a powerful impact on your life. By making simple, consistent efforts, you can achieve your long-term goals more effectively.
+', '2026-04-30 16:39:10.185198'), ('2a868000-c16a-43ee-830a-b25e5b4a589d', 'ae0e85e8-3d63-11f1-b2e3-0b27f7b23431', '8b180126-a2fe-47fc-b9b2-8af875e25593', '66d184e5-b7d8-477f-b087-8a65d243de48', '2
+Reviews wanted
+Write a review of a restaurant, café or place to eat you have visited.
+Describe the experience and say what made it good or bad.
+Would you recommend it?
+Write your review.
+3
+You see this announcement on an English-language website.
+Articles wanted
+Is it better to travel alone or with others?
+What are the advantages of each option? What do you prefer?
+Write an article answering these questions.
+Write your article.
+4
+You have received this email from your English-speaking friend Sarah.
+From: Sarah
+Subject: exams
+I’ve got some important exams soon and I’m feeling quite stressed.
+Can you give me some advice on how to prepare and stay calm?
+Thanks a lot!
+Sarah
+Write your email.
+', '2026-05-03 07:35:28.578941'), ('2ea16d50-b994-49ec-a895-2a3b005e09de', 'ae0e85e8-3d63-11f1-b2e3-0b27f7b23431', '8b180126-a2fe-47fc-b9b2-8af875e25593', '66d184e5-b7d8-477f-b087-8a65d243de48', '2
+Book reviews wanted
+Have you read a book that taught you something important?
+Write a review describing the book and explaining what you learned from it.
+Say whether you would recommend it to others.
+Write your review.
+3
+You see this announcement on an English-language website.
+Articles wanted
+How to stay healthy as a student
+What do students do to stay healthy? What advice would you give?
+Write an article answering these questions.
+Write your article.
+4
+You have received this email from your English-speaking friend Mark.
+From: Mark
+Subject: new hobby
+I want to start a new hobby but I’m not sure what to choose.
+Can you suggest something interesting? Why do you think I would enjoy it?
+Let me know!
+Mark
+Write your email.
+
+', '2026-05-03 07:30:26.965262'), ('2f846c58-fe7d-4980-a3d6-0b6389a7429d', 'ae0e85e8-3d63-11f1-b2e3-0b27f7b23431', '8b180126-a2fe-47fc-b9b2-8af875e25593', 'f64f5c5c-010b-43db-b637-5574386f8ac3', 'Technology in Daily Life
+Text 1: The Benefits of Technology
+Technology has made everyday tasks faster and more convenient. Smartphones, apps, and digital services allow people to communicate instantly and access information easily. Many believe that technology improves quality of life and increases efficiency.
+Text 2: The Drawbacks of Technology
+Nevertheless, overreliance on technology can reduce face-to-face interaction and lead to unhealthy habits. Some people become too dependent on devices, affecting their concentration and social skills. There are also concerns about privacy and data security.
+Instructions:
+Write an essay summarising and evaluating the key points from both texts. Use your own words as much as possible and include your personal opinion.
+Word limit: 240–280 words
+', '2026-05-03 07:17:11.886046'), ('3ec1eb11-8ae5-4ba2-a819-1dd3d820e1e7', 'ae0e85e8-3d63-11f1-b2e3-0b27f7b23431', '8b180126-a2fe-47fc-b9b2-8af875e25593', '9f50cc1e-de64-43aa-b45c-49e160f9793f', 'Text
+The Rise of Online Shopping
+In the past decade, more and more people have started to (0) ___ advantage of online shopping. This trend has changed the way consumers buy products and services.
+One of the main reasons for its popularity is convenience. Customers can (1) ___ their orders from the comfort of their homes without needing to visit physical stores. This saves both time and effort.
+Another important factor is the wide variety of options available. Online platforms often (2) ___ a greater selection of products than traditional shops. As a result, customers are more likely to find exactly what they are looking for.
+However, there are also some disadvantages. For example, it is not always possible to (3) ___ the quality of a product before purchasing it. This can sometimes lead to disappointment when the item arrives.
+In addition, delivery times can vary. While some items arrive quickly, others may (4) ___ longer than expected, especially if they are shipped from abroad.
+To reduce these risks, many consumers read reviews before making a purchase. This helps them (5) ___ a better decision and avoid potential problems.
+Businesses have also adapted to this trend by improving their online services. Many companies now (6) ___ fast delivery and easy return policies to attract customers.
+Overall, online shopping continues to grow, and it is likely to (7) ___ an even bigger role in the future of retail.
+', '2026-04-30 18:00:48.582942'), ('4168e4c0-c281-4376-9866-3267584c9669', 'ae0e85e8-3d63-11f1-b2e3-0b27f7b23431', '8b180126-a2fe-47fc-b9b2-8af875e25593', '6f873582-07bf-436a-9a25-492b748678c7', 'City Life: Advantages and Challenges
+For many people, living in a large city is an exciting and attractive option. Cities offer a wide range of opportunities, from career possibilities to entertainment and cultural experiences. However, city life also comes with certain disadvantages that can affect people’s quality of life.
+One of the biggest advantages of living in a city is access to employment. Large cities usually have more job opportunities and a greater variety of industries. This makes it easier for people to find work that suits their skills and interests. In addition, cities often offer better public services, such as education and healthcare.
+Another positive aspect is the variety of activities available. Residents can enjoy museums, theatres, restaurants, and sporting events. This means there is always something to do, regardless of personal interests. For many, this makes city life more dynamic and enjoyable.
+On the other hand, living in a city can be expensive. Housing costs are often much higher than in smaller towns or rural areas. As a result, many people have to spend a large part of their income on rent or mortgages. This financial pressure can reduce the overall benefits of city living.
+Traffic and pollution are also common problems in urban areas. Heavy traffic can make daily travel stressful and time-consuming. At the same time, air pollution can have a negative impact on people’s health, especially for those who live in highly populated areas.
+Despite these challenges, many people continue to choose city life. Some believe that the opportunities and experiences available in cities outweigh the disadvantages. Others enjoy the fast pace and energy that cities provide.
+In conclusion, living in a city has both advantages and disadvantages. The decision depends on individual preferences and priorities, as different people value different aspects of urban life.
+', '2026-05-01 07:08:00.741951'), ('43d0b450-c585-4248-b1db-e6b02f4d683e', 'ae0e85e8-3d63-11f1-b2e3-0b27f7b23431', '8b180126-a2fe-47fc-b9b2-8af875e25593', '1c4186d0-fdbe-41e7-8266-efdf712c3006', 'Text
+The Impact of Technology on Education
+Technology has had a significant impact on modern education, making learning more (0) ___ and accessible than ever before. (HEALTH)
+One of the main advantages is the (17) ___ of online resources. Students can access information quickly and easily from almost anywhere. (AVAILABLE)
+In addition, digital tools allow for greater (18) ___ in the classroom. Teachers can use videos, apps and interactive materials to engage students. (CREATE)
+Another benefit is the (19) ___ of learning methods. Technology enables teachers to adapt their lessons to suit different learning styles. (VARIOUS)
+However, there are also some (20) ___. Not all students have equal access to technology, which can create inequality. (ADVANTAGE)
+Furthermore, excessive use of devices can lead to (21) ___ and reduced concentration. (DISTRACT)
+It is also important to consider the role of teachers. While technology can be helpful, it cannot replace human (22) ___ and guidance. (INTERACT)
+Schools must find a balance between using technology and maintaining traditional teaching methods. This requires careful (23) ___ and planning. (DECIDE)
+In conclusion, technology has brought many changes to education, and its influence is likely to continue growing. However, its use must be (24) ___ managed to ensure the best results for students. (CARE)
+', '2026-04-30 20:12:48.689083'), ('52757177-147a-4fa4-9c77-d57331818a05', 'ae0e85e8-3d63-11f1-b2e3-0b27f7b23431', '8b180126-a2fe-47fc-b9b2-8af875e25593', 'bd41d80c-bcdd-4ac9-9c06-13c2ab8fab6e', 'Which person…
+37 says they didn’t enjoy the activity at the beginning?
+38 mentions that they needed encouragement to continue?
+39 talks about doing the activity for health reasons?
+40 says they have made new friends through the activity?
+41 mentions noticing gradual improvement?
+42 says they now feel more energetic?
+________________________________________
+Texts
+A – Tom
+I started running because my doctor advised me to be more active. At first, I didn’t really like it and found it quite tiring. However, I kept going because I knew it was good for my health. After a few weeks, I began to feel fitter and had much more energy during the day.
+________________________________________
+B – Lisa
+Joining a local yoga class was one of the best decisions I’ve made. Not only have I become more flexible, but I’ve also met some great people. We often talk after class, and sometimes we even meet outside the sessions. It has become both a social and relaxing activity for me.
+________________________________________
+C – David
+When I first started going to the gym, I found it difficult to stay motivated. There were days when I wanted to give up, but my friend encouraged me to keep going. Thanks to that support, I didn’t quit. Over time, I noticed small improvements, which helped me stay focused.
+________________________________________
+D – Anna
+Swimming has always been something I enjoyed, but I never took it seriously until recently. Now I go to the pool three times a week. I’ve seen my technique improve gradually, and I feel more confident in the water. It’s satisfying to see progress, even if it’s slow.
+', '2026-05-01 07:13:13.774662'), ('54001506-c6e7-4652-b3ff-6e3111f7a8fa', 'ae0e85e8-3d63-11f1-b2e3-0b27f7b23431', '8b180126-a2fe-47fc-b9b2-8af875e25593', 'b170ab5a-f54f-4cae-ac2e-bd194181cafe', 'Text
+Building Healthy Daily Habits
+Creating healthy daily habits can have a significant impact on your overall well-being. However, many people struggle to maintain routines over a long period of time.
+(31) ______
+Small, consistent actions are often more effective than making big changes all at once.
+At the beginning, it is important to set realistic goals.
+(32) ______
+If your expectations are too high, you may feel discouraged and give up quickly.
+Another key factor is consistency.
+(33) ______
+Repeating the same behaviour regularly helps turn it into a habit.
+It can also be helpful to track your progress.
+(34) ______
+Seeing improvement over time can increase motivation and keep you focused.
+In addition, your environment plays an important role.
+(35) ______
+For example, keeping healthy food visible can encourage better choices.
+Finally, it is essential to be patient.
+(36) ______
+Developing habits takes time, and results may not appear immediately.
+', '2026-05-01 07:10:34.649937'), ('54347e30-f37f-4247-b6a4-0d401ed9bbb9', 'ae0e85e8-3d63-11f1-b2e3-0b27f7b23431', '8b180126-a2fe-47fc-b9b2-8af875e25593', 'c7d425b7-63cf-4420-abdc-f38a28111259', 'Text
+The Influence of Social Media
+Social media has had a major impact (0) ___ the way people communicate in recent years. It allows individuals to share information instantly and stay connected with others around the world.
+One of the main reasons (9) ___ its popularity is that it is easy to use and widely accessible. Most people can create an account and start sharing content within minutes.
+However, social media is not without its drawbacks. Some users spend too much time (10) ___ their devices, which can affect their daily routines and productivity.
+Another issue is the pressure to present a perfect image online. People often compare themselves (11) ___ others, which can lead to feelings of insecurity.
+Despite these disadvantages, social media can also be used (12) ___ a positive way. It provides a platform for raising awareness about important issues and connecting people with similar interests.
+In addition, many businesses rely (13) ___ social media to promote their products and reach a wider audience. This has changed the way companies interact with customers.
+It is important for users to be aware (14) ___ how they use social media and to set limits if necessary. Maintaining a healthy balance between online and offline life is essential.
+Overall, social media is a powerful tool that can have both positive and negative effects. The key is to use it wisely and take advantage (15) ___ its benefits without letting it take control (16) ___ your time.
+', '2026-05-01 06:50:32.429141');

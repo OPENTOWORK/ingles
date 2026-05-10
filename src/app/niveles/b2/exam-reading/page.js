@@ -1,5 +1,7 @@
 'use client';
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { Suspense, useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { useB2ExamPracticeSlot } from '@/hooks/useB2ExamPracticeSlot';
+import { B2ExamSlotPicker } from '@/components/b2/B2ExamSlotPicker';
 import LevelsCategoryTimer from '@/components/levels/LevelsCategoryTimer';
 import LevelsPartScorePanel from '@/components/levels/LevelsPartScorePanel';
 import LevelsAnswerJustification from '@/components/levels/LevelsAnswerJustification';
@@ -8,8 +10,19 @@ import { computeLevelsPartScore } from '@/utils/levelsPaperScoreMetrics';
 import { postLevelsAnswerJustification } from '@/utils/levelsJustifyClient';
 import Link from 'next/link';
 import { supabase } from '@/utils/supabaseClient';
-import { extractTextoBloque } from '@/utils/b2ExamTextBlocks';
+import {
+  extractTextoBloque,
+  extractPart7ProfilesBlock,
+  extractPart7PromptStemBlob,
+  extractReadingPart5QuestionsBlock,
+  extractReadingPart6SentencesBlock,
+  parsePart7NumberedStems,
+  parsePart7PeopleProfiles,
+  parseReadingAdMcqChunks,
+  parseReadingPart6SentencePool,
+} from '@/utils/b2ExamTextBlocks';
 import { resolveB2ExamenId, fetchB2PreguntasByExamen } from '@/utils/b2ResolveExam';
+import { formatLevelsPartDisplayName } from '@/utils/formatLevelsPartDisplayName';
 import { getSessionUserId, mergeLevelsEstadisticas } from '@/utils/levelsEstadisticas';
 
 function splitEnunciadoAndTextFallback(rawText = '') {
@@ -43,7 +56,8 @@ function getFormattedEnunciado(rawText = '') {
     });
 }
 
-export default function B2ReadingExamsPage() {
+function B2ReadingExamsPageInner() {
+  const { examSlot, selectExamSlot } = useB2ExamPracticeSlot();
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [partsData, setPartsData] = useState([]);
@@ -74,7 +88,9 @@ export default function B2ReadingExamsPage() {
 
       if (levelError || !levelData) throw new Error('No se pudo obtener el nivel B2.');
 
-      const { examenId, error: examResolveError } = await resolveB2ExamenId(supabase, levelData.id);
+      const { examenId, error: examResolveError } = await resolveB2ExamenId(supabase, levelData.id, {
+        slot: examSlot,
+      });
       if (examResolveError || !examenId) {
         const detail =
           typeof examResolveError?.message === 'string'
@@ -124,7 +140,7 @@ export default function B2ReadingExamsPage() {
 
       const groupedByPart = questionsData.reduce((acc, question) => {
         const tablePart = partsById[question.parte_id];
-        const partName = tablePart?.nombre_parte || 'Parte sin nombre';
+        const partName = formatLevelsPartDisplayName(tablePart?.nombre_parte || 'Parte sin nombre');
         const partNumber = Number(partName.match(/\d+/)?.[0] || 0);
         if (partNumber < 5 || partNumber > 7) return acc;
 
@@ -174,7 +190,7 @@ export default function B2ReadingExamsPage() {
     } finally {
       if (mountedRef.current) setLoading(false);
     }
-  }, []);
+  }, [examSlot]);
 
   useEffect(() => {
     mountedRef.current = true;
@@ -342,20 +358,129 @@ export default function B2ReadingExamsPage() {
     [selectedQuestion?.respuestas],
   );
 
+  /** Clave sólo número + letra (BD Reading 5–7). */
+  const readingCorrectLetterByQuestion = useMemo(() => {
+    const map = new Map();
+    for (const row of selectedQuestion?.respuestas || []) {
+      const t = String(row.respuesta || '').trim();
+      const m = t.match(/^(\d{1,2})\s+([A-G])\s*$/i);
+      if (m) map.set(Number(m[1]), m[2].toUpperCase());
+    }
+    return map;
+  }, [selectedQuestion?.preguntaId, selectedQuestion?.respuestas]);
+
+  /**
+   * Reconstruye 4 opciones (5 y 7) o A–G (6) desde el enunciado; la BD suele tener sólo «31 B».
+   */
+  const readingSyntheticMcqGroups = useMemo(() => {
+    const raw = selectedQuestion?.enunciado || '';
+    const pid = selectedQuestion?.preguntaId;
+    if (!raw || !pid || partNumberReading < 5 || partNumberReading > 7) return null;
+
+    if (partNumberReading === 5) {
+      const block = extractReadingPart5QuestionsBlock(raw);
+      const chunks = parseReadingAdMcqChunks(block);
+      if (!chunks.length) return null;
+      const letters = ['A', 'B', 'C', 'D'];
+      const groups = chunks
+        .map(({ questionNumber, stem, options: byLetter }) => {
+          const correctL = readingCorrectLetterByQuestion.get(questionNumber);
+          const opts = letters
+            .map((L) => {
+              const text = byLetter[L];
+              if (!text || !String(text).trim()) return null;
+              return {
+                id: `reading-${pid}-q${questionNumber}-${L}`,
+                respuesta: `${questionNumber} ${L} ${text}`,
+                formattedText: `${L}) ${text}`,
+                correcta: correctL != null ? L === correctL : false,
+              };
+            })
+            .filter(Boolean);
+          if (!opts.length) return null;
+          return { questionNumber, questionStem: stem || '', options: opts };
+        })
+        .filter(Boolean);
+      return groups.length ? groups : null;
+    }
+
+    if (partNumberReading === 6) {
+      const block = extractReadingPart6SentencesBlock(raw);
+      const pool = parseReadingPart6SentencePool(block);
+      const letters = [...'ABCDEFG'];
+      if (!letters.every((L) => pool[L] != null && String(pool[L]).trim())) return null;
+      const qnums = [...readingCorrectLetterByQuestion.keys()].sort((a, b) => a - b);
+      if (!qnums.length) return null;
+      const groups = qnums.map((questionNumber) => {
+        const correctL = readingCorrectLetterByQuestion.get(questionNumber);
+        const opts = letters.map((L) => {
+          const text = pool[L];
+          return {
+            id: `reading-${pid}-q${questionNumber}-${L}`,
+            respuesta: `${questionNumber} ${L} ${text}`,
+            formattedText: `${L}) ${text}`,
+            correcta: correctL != null ? L === correctL : false,
+          };
+        });
+        return { questionNumber, questionStem: '', options: opts };
+      });
+      return groups;
+    }
+
+    if (partNumberReading === 7) {
+      const stemBlob = extractPart7PromptStemBlob(raw);
+      const stemsParsed = parsePart7NumberedStems(stemBlob);
+      const stemByNum = new Map(stemsParsed.map((x) => [x.questionNumber, x.stem]));
+      const people = parsePart7PeopleProfiles(extractPart7ProfilesBlock(raw));
+      const letters = ['A', 'B', 'C', 'D'];
+      if (!letters.every((L) => people[L]?.label)) return null;
+      const qnums = [...readingCorrectLetterByQuestion.keys()].sort((a, b) => a - b);
+      if (!qnums.length) return null;
+      const groups = qnums.map((questionNumber) => {
+        const stem = stemByNum.get(questionNumber) || '';
+        const correctL = readingCorrectLetterByQuestion.get(questionNumber);
+        const opts = letters.map((L) => {
+          const { label = '', body = '' } = people[L];
+          const oneLine = body.replace(/\s+/g, ' ').trim();
+          const clipped = oneLine.slice(0, 360);
+          const suffix = body.length > 360 ? '…' : '';
+          const formattedText = `${L}) ${label}\n${clipped}${suffix}`;
+          return {
+            id: `reading-${pid}-q${questionNumber}-${L}`,
+            respuesta: `${questionNumber} ${L}`,
+            formattedText,
+            correcta: correctL != null ? L === correctL : false,
+          };
+        });
+        return { questionNumber, questionStem: stem, options: opts };
+      });
+      return groups;
+    }
+
+    return null;
+  }, [
+    partNumberReading,
+    readingCorrectLetterByQuestion,
+    selectedQuestion?.enunciado,
+    selectedQuestion?.preguntaId,
+  ]);
+
+  const groupedAnswersForUiAndScore = readingSyntheticMcqGroups || groupedAnswersSelected;
+
   const partScoreMetrics = useMemo(
     () =>
       computeLevelsPartScore({
         useOpenInputUi: false,
         openQuestionNumbers: [],
         openChecks: {},
-        groupedAnswers: groupedAnswersSelected,
+        groupedAnswers: groupedAnswersForUiAndScore,
         checkedQuestions,
         selectedOptions,
         getQuestionKey,
         partId: selectedPart?.id,
       }),
     [
-      groupedAnswersSelected,
+      groupedAnswersForUiAndScore,
       checkedQuestions,
       selectedOptions,
       selectedPart?.id,
@@ -379,6 +504,10 @@ export default function B2ReadingExamsPage() {
   return (
     <main style={{ padding: '2rem', fontFamily: 'Segoe UI, sans-serif' }}>
       <h1 style={{ textAlign: 'center' }}>B2 Reading Practice</h1>
+      <B2ExamSlotPicker value={examSlot} onSelect={selectExamSlot} />
+      <p style={{ textAlign: 'center', margin: '0.35rem 0 0', fontSize: '0.8rem', color: '#718096' }}>
+        El mismo selector se puede cambiar después de cargar; los datos salen del examen marcado arriba.
+      </p>
       <p style={{ textAlign: 'center', margin: '0.35rem 0 0', color: '#4a5568', fontSize: '1rem' }}>
         Partes 5 a 7
       </p>
@@ -568,7 +697,7 @@ export default function B2ReadingExamsPage() {
                 <div style={{ marginTop: '1.25rem' }}>
                   <h3 style={{ margin: '0 0 0.75rem', color: '#1a202c' }}>Preguntas</h3>
                   <div style={{ display: 'grid', gap: '1rem' }}>
-                    {groupedAnswersSelected.map((group, groupIndex) => (
+                    {groupedAnswersForUiAndScore.map((group, groupIndex) => (
                       <div
                         key={`group-${selectedQuestion.preguntaId}-${group.questionNumber ?? 'extra'}-${groupIndex}`}
                         style={{
@@ -579,7 +708,16 @@ export default function B2ReadingExamsPage() {
                         }}
                       >
                         <p style={{ margin: '0 0 0.65rem', fontWeight: 700, color: '#2d3748' }}>
-                          {group.questionNumber ? `Pregunta ${group.questionNumber}` : 'Opciones'}
+                          {!group.questionNumber
+                            ? 'Opciones'
+                            : group.questionStem
+                              ? (
+                                  <>
+                                    <span>{group.questionNumber}.</span>{' '}
+                                    <span style={{ fontWeight: 600 }}>{group.questionStem}</span>
+                                  </>
+                                )
+                              : `Pregunta ${group.questionNumber}`}
                         </p>
                         <div style={{ display: 'grid', gap: '0.6rem' }}>
                           {group.options.map((option) => {
@@ -638,6 +776,7 @@ export default function B2ReadingExamsPage() {
                                 }}
                                 style={{
                                   textAlign: 'left',
+                                  whiteSpace: 'pre-line',
                                   borderRadius: '8px',
                                   padding: '0.75rem 1rem',
                                   border: showCorrect
@@ -719,5 +858,15 @@ export default function B2ReadingExamsPage() {
         </Link>
       </div>
     </main>
+  );
+}
+
+export default function B2ReadingExamsPage() {
+  return (
+    <Suspense
+      fallback={<main style={{ padding: '2rem', textAlign: 'center', fontFamily: 'Segoe UI, sans-serif' }}>Cargando práctica…</main>}
+    >
+      <B2ReadingExamsPageInner />
+    </Suspense>
   );
 }

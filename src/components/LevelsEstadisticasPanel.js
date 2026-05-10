@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useState } from 'react';
 import { supabase } from '@/utils/supabaseClient';
+import { formatLevelsPartDisplayName } from '@/utils/formatLevelsPartDisplayName';
 
 function formatDate(iso) {
   if (!iso) return '—';
@@ -74,7 +75,7 @@ export default function LevelsEstadisticasPanel({ userId, displayName = '' }) {
       if (!pErr && parts?.length) {
         const map = {};
         parts.forEach((p) => {
-          map[p.id] = p.nombre_parte || p.id;
+          map[p.id] = formatLevelsPartDisplayName(p.nombre_parte) || p.id;
         });
         setPartNames(map);
       } else {

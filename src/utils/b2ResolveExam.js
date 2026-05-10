@@ -1,30 +1,66 @@
+/** Máximo slot de examen en la UI B2 (catálogo en levels_examenes). */
+export const B2_EXAM_SLOT_MAX = 5;
+
+/**
+ * @param {unknown} value
+ * @returns {number} entero 1..B2_EXAM_SLOT_MAX
+ */
+export function clampB2ExamSlot(value) {
+  const n = typeof value === 'number' ? value : parseInt(String(value ?? '1'), 10);
+  if (!Number.isFinite(n)) return 1;
+  return Math.min(Math.max(Math.floor(n), 1), B2_EXAM_SLOT_MAX);
+}
+
+/** Orden estable: número en `nombre` ("Examen 3"), luego por id. */
+function sortLevelsExamenesRows(rows) {
+  return [...(rows || [])].sort((a, b) => {
+    const na = parseInt(String(a?.nombre ?? '').match(/\d+/)?.[0] || '0', 10);
+    const nb = parseInt(String(b?.nombre ?? '').match(/\d+/)?.[0] || '0', 10);
+    if (na !== nb) return na - nb;
+    return String(a?.id ?? '').localeCompare(String(b?.id ?? ''));
+  });
+}
+
 /**
  * Resuelve el id del examen B2 para el id de fila en public.levels (nivel B2).
  *
- * - No usa .maybeSingle() en catálogos: con varias filas en levels_examenes para el
- *   mismo level_id, PostgREST devolvía error y la página fallaba.
+ * - Con varias filas en `levels_examenes`, elige por `slot` (1-based): Examen 1…5.
+ * - No usa .maybeSingle() en catálogos.
  * - Varios fallbacks para datos legacy (examen_id = id del nivel) sin tocar la BD.
+ *
+ * @param {import('@supabase/supabase-js').SupabaseClient} supabase
+ * @param {string} levelId
+ * @param {{ slot?: number }} [options] — `slot` = 1…5 (por defecto 1)
  */
-export async function resolveB2ExamenId(supabase, levelId) {
+export async function resolveB2ExamenId(supabase, levelId, options = {}) {
   if (!levelId) {
     return { examenId: null, error: { message: 'Falta level_id.' } };
   }
 
+  const slot = clampB2ExamSlot(options.slot ?? options.examSlot ?? 1);
   const firstRow = (res) => (Array.isArray(res.data) && res.data[0] ? res.data[0] : null);
 
   const examList = await supabase
     .from('levels_examenes')
-    .select('id')
-    .eq('level_id', levelId)
-    .order('id', { ascending: true })
-    .limit(1);
+    .select('id, nombre')
+    .eq('level_id', levelId);
 
   if (examList.error) {
     return { examenId: null, error: examList.error };
   }
-  const fromCatalog = firstRow(examList)?.id;
-  if (fromCatalog) {
-    return { examenId: fromCatalog, error: null };
+
+  const ordered = sortLevelsExamenesRows(examList.data);
+  if (ordered.length > 0) {
+    const pick = ordered[slot - 1];
+    if (pick) {
+      return { examenId: pick.id, error: null };
+    }
+    return {
+      examenId: null,
+      error: {
+        message: `No existe el examen ${slot} para B2 (hay ${ordered.length} en levels_examenes).`,
+      },
+    };
   }
 
   // Legacy: preguntas con examen_id = id del nivel (mismo UUID que el nivel).

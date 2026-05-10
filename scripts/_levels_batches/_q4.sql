@@ -1,0 +1,57 @@
+INSERT INTO "public"."levels_preguntas" ("id", "examen_id", "level_id", "parte_id", "enunciado", "creado_en") VALUES ('f0dc5cbe-ed44-4b72-8df3-0809e5b08637', 'ae0e85e8-3d63-11f1-b2e3-0b27f7b23431', '8b180126-a2fe-47fc-b9b2-8af875e25593', '6f873582-07bf-436a-9a25-492b748678c7', 'The Rise of Remote Work
+In recent years, remote work has become increasingly popular, changing the way many people approach their jobs. Advances in technology have made it possible for employees to work from almost anywhere, as long as they have access to a computer and a stable internet connection. While this shift offers many benefits, it also presents certain challenges.
+One of the main advantages of remote work is flexibility. Employees can often choose their working hours, which allows them to balance their professional and personal lives more effectively. For instance, some people may prefer to start work early in the morning, while others feel more productive later in the day. This flexibility can lead to higher job satisfaction and improved well-being.
+However, working from home can also create difficulties. One common problem is the lack of clear boundaries between work and personal life. Without a physical separation, such as an office, some workers find it hard to switch off at the end of the day. This can result in longer working hours and increased stress.
+Communication is another important issue. In a traditional office, employees can easily share ideas and ask questions in person. In contrast, remote workers rely on emails, messages, or video calls. Although these tools are useful, they may sometimes lead to misunderstandings or delays in communication.
+Despite these challenges, many companies have recognised the advantages of remote work. They have found that employees can be just as productive, or even more so, when working from home. Additionally, businesses can reduce costs by needing less office space.
+Experts suggest that successful remote workers develop good habits, such as setting a daily routine and creating a dedicated workspace. These strategies can help maintain focus and improve efficiency.
+Overall, remote work is likely to remain an important part of modern life. By understanding both its benefits and its drawbacks, individuals and organisations can make the most of this way of working.
+', '2026-05-01 07:06:57.633397'), ('f1d2527a-f931-4ed9-9f12-4cd3774b2938', 'ae0e85e8-3d63-11f1-b2e3-0b27f7b23431', '8b180126-a2fe-47fc-b9b2-8af875e25593', '1c4186d0-fdbe-41e7-8266-efdf712c3006', 'Text
+The Role of Music in Everyday Life
+Music plays an important role in people’s lives and can have a powerful effect on our emotions. People listen to music for many (0) ___ reasons, depending on their mood and preferences. (DIFFER)
+One of the main benefits of music is its ability to provide (17) ___. Listening to your favourite songs can help you relax after a stressful day. (ENJOY)
+In addition, music can improve (18) ___ by helping people remember information more easily. For this reason, it is sometimes used as a learning tool. (MEMBER)
+Music also has a strong social aspect. Concerts and festivals bring people together and create a sense of (19) ___ among participants. (COMMUNE)
+For some individuals, music is more than just entertainment. It can become a (20) ___ career, allowing them to express their creativity. (PROFESSION)
+However, not all effects of music are positive. Listening to loud music for long periods can be (21) ___ to your hearing. (HARM)
+It is important to be (22) ___ of how often and how loudly you listen to music. Taking breaks can help reduce the risk of damage. (CARE)
+Another interesting point is the (23) ___ of music across cultures. Every country has its own musical traditions and styles. (VARY)
+In conclusion, music is a highly (24) ___ part of human life that influences people in many different ways. (VALUE)
+', '2026-04-30 20:12:48.689083'), ('f1e62b13-9a4d-4fb6-bb12-8ba33f49ec4d', 'ae0e85e8-3d63-11f1-b2e3-0b27f7b23431', '8b180126-a2fe-47fc-b9b2-8af875e25593', '6f873582-07bf-436a-9a25-492b748678c7', 'The Challenge of Learning Something New
+Many people believe that learning new skills becomes increasingly difficult with age. While it is true that children often pick up new abilities more quickly, research suggests that adults have their own advantages when it comes to learning.
+One reason adults may struggle is that they tend to be more afraid of making mistakes. Unlike children, who often learn through trial and error without worrying about failure, adults can become discouraged if they do not succeed immediately. This fear can slow down the learning process, as it prevents them from experimenting freely.
+However, adults usually have better concentration and are more motivated. They often choose to learn skills that are directly relevant to their personal or professional lives. For example, someone might learn a new language to improve their job opportunities or take up cooking to lead a healthier lifestyle. This clear purpose can make learning more effective.
+Another advantage adults have is their ability to connect new information with existing knowledge. Because they have more life experience, they can relate what they are learning to something they already understand. This can help them grasp complex ideas more easily than younger learners.
+On the other hand, adults may have less time to dedicate to learning. Responsibilities such as work and family can limit the hours available for practice. As a result, progress may appear slower, even if the quality of learning is high.
+Experts suggest that the best approach for adult learners is to focus on consistency rather than speed. Short, regular practice sessions are more effective than occasional long ones. In addition, creating a supportive environment and setting realistic goals can help maintain motivation over time.
+In conclusion, although adults may face certain challenges when learning new skills, they also possess strengths that can lead to success. With the right strategies, learning can remain a rewarding experience at any age.
+', '2026-05-01 07:06:20.208115'), ('f21b15a9-6b08-4f2d-bb6b-bc949cd5e9ed', 'ae0e85e8-3d63-11f1-b2e3-0b27f7b23431', '8b180126-a2fe-47fc-b9b2-8af875e25593', 'c7d425b7-63cf-4420-abdc-f38a28111259', 'Text
+The Value of Teamwork
+Working with others is an essential skill in both education and professional life. Many tasks are too complex for one person to complete alone, which is why teamwork plays such an important role (0) ___ achieving success.
+One of the main advantages of teamwork is that it allows people to benefit (9) ___ each other’s strengths. Every member of a group can contribute different skills and ideas.
+In addition, working in a team often leads (10) ___ more creative solutions. When people share their opinions, they can build (11) ___ each other’s suggestions and develop better results.
+However, teamwork can also present challenges. For example, disagreements may arise, and it is important to deal (12) ___ them in a respectful way.
+Communication is key to effective teamwork. Without clear communication, it is easy (13) ___ misunderstand instructions or expectations, which can cause problems within the group.
+Another important aspect is responsibility. Each member must carry (14) ___ their part of the work in order for the team to succeed.
+Trust is also essential. Team members need to rely (15) ___ one another and feel confident that everyone is working towards the same goal.
+Overall, teamwork is a valuable skill that can lead (16) ___ better outcomes and stronger relationships when managed effectively.
+', '2026-05-01 06:50:50.228574'), ('f852014d-66b9-4f76-811f-bb10dbf8b1ce', 'ae0e85e8-3d63-11f1-b2e3-0b27f7b23431', '8b180126-a2fe-47fc-b9b2-8af875e25593', '1c4186d0-fdbe-41e7-8266-efdf712c3006', 'Text
+The Growth of Urban Cycling
+In recent years, cycling in cities has become increasingly (0) ___ as more people look for alternative ways of travelling. (SUCCESS)
+One of the main reasons for this trend is the growing (17) ___ of environmental issues. People are becoming more concerned about pollution and climate change. (AWARE)
+Cycling is also a (18) ___ form of transport, as it does not require fuel and has low maintenance costs. (COST)
+In addition, many cities have made improvements to their infrastructure to ensure the (19) ___ of cyclists. This includes building dedicated bike lanes and improving road conditions. (SAFE)
+Another advantage is the positive effect on health. Regular cycling can lead to significant (20) ___ in physical fitness and overall well-being. (IMPROVE)
+However, there are still some challenges. In certain areas, cycling can be (21) ___ due to heavy traffic or poor road design. (DANGER)
+To address these issues, governments need to invest in better facilities and encourage more (22) ___ participation in cycling programmes. (WIDE)
+Public campaigns can also help change people''s attitudes and increase the (23) ___ of cycling as a daily activity. (POPULAR)
+Overall, urban cycling is a (24) ___ solution that benefits both individuals and the environment. (PRACTICE)
+', '2026-04-30 20:12:48.689083'), ('fce5015e-d544-4133-9ba2-fbbcc3ea2d05', 'ae0e85e8-3d63-11f1-b2e3-0b27f7b23431', '8b180126-a2fe-47fc-b9b2-8af875e25593', 'f64f5c5c-010b-43db-b637-5574386f8ac3', 'Social Media Influence
+Text 1: The Power of Social Media
+Social media platforms allow people to connect, share ideas, and stay informed. They give individuals a voice and can raise awareness about important issues. Businesses also use social media to promote products and reach new customers effectively.
+Text 2: The Risks of Social Media
+On the other hand, social media can negatively affect mental health, especially among young people. It may encourage unrealistic expectations and addiction. Furthermore, misinformation spreads quickly, making it difficult for users to distinguish between reliable and false content.
+Instructions:
+Write an essay summarising and evaluating the key points from both texts. Use your own words as much as possible and include your personal opinion.
+Word limit: 240–280 words
+', '2026-05-03 07:15:25.433537');
