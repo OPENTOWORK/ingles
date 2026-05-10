@@ -16,6 +16,16 @@ const nextConfig = {
   trailingSlash: true,
   basePath,
   assetPrefix: basePath ? `${basePath}/` : '',
+  async redirects() {
+    /* Old URLs /niveles/b2/speaking-lab/… → /niveles/speaking-lab/b2/… (path* may be empty for hub) */
+    return [
+      {
+        source: '/niveles/:cefr(a2|b1|b2|c1|c2)/speaking-lab/:path*',
+        destination: '/niveles/speaking-lab/:cefr/:path*',
+        permanent: false,
+      },
+    ];
+  },
 };
 
 module.exports = nextConfig;

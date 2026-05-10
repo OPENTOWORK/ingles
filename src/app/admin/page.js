@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 import * as XLSX from 'xlsx';
 import { supabase } from '@/utils/supabaseClient';
 import { userHasRole, normalizeRoleName } from '@/utils/authRoles';
@@ -571,6 +572,12 @@ export default function AdminDashboard() {
           </div>
         </div>
       </header>
+
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-4">
+        <Link href="/admin/speaking-tasks/" className="text-sky-600 underline font-medium">
+          Speaking tasks (CMS)
+        </Link>
+      </div>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">

@@ -19,6 +19,7 @@ const SECTIONS = {
     { text: "Part 4: Gap-fill (notes)", href: "/niveles/a2/listening/part-4" },
   ],
   "Speaking": [
+    { text: "Speaking Lab (AI) — Practice / Exam", href: "/niveles/speaking-lab/a2/" },
     { text: "Part 1: Personal information interview", href: "/niveles/a2/speaking/part-1" },
     { text: "Part 2: Simulated situation task", href: "/niveles/a2/speaking/part-2" },
   ],

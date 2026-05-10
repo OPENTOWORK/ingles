@@ -32,6 +32,7 @@ export default function RootLayoutClient({ children }) {
     '/registro',
     '/reset-password',
     '/contacto',
+    '/speaking',
     '/teoria',
     '/politica-privacidad',
     '/politica-cookies',
@@ -102,15 +103,21 @@ export default function RootLayoutClient({ children }) {
     (route) => pathname === route || pathname.startsWith(`${route}/`)
   );
 
-  // ⚠️ Redirige DESPUÉS del render
+  /** Contenido Cambridge / niveles: debe verse sin login (cabecera sigue mostrando login si no hay sesión). */
+  const isNivelesRoute =
+    pathname === '/niveles' || (pathname && pathname.startsWith('/niveles/'));
+
+  const allowWithoutAuth = isPublic || isNivelesRoute;
+
+  // ⚠️ Redirige DESPUÉS del render (no aplica a rutas públicas ni /niveles/*)
   useEffect(() => {
-    if (!loading && !isPublic && !session) {
+    if (!loading && !allowWithoutAuth && !session) {
       router.replace('/login');
     }
-  }, [loading, isPublic, session, router]);
+  }, [loading, allowWithoutAuth, session, router]);
 
-  // Mientras resolvemos sesión o estamos redirigiendo, no pintes nada
-  if (!isPublic && (loading || !session)) return null;
+  // Mientras resolvemos sesión o estamos redirigiendo, no pintes nada (excepto públicas y niveles)
+  if (!allowWithoutAuth && (loading || !session)) return null;
 
   const handleLogout = async () => {
     await supabase.auth.signOut();
@@ -283,6 +290,28 @@ export default function RootLayoutClient({ children }) {
                 e.target.style.transform = 'translateY(0)';
               }}
             >Levels</Link>
+            <Link 
+              href="/speaking"
+              style={{
+                color: 'rgba(255, 255, 255, 0.9)',
+                textDecoration: 'none',
+                fontWeight: '500',
+                padding: '0.5rem 1rem',
+                borderRadius: '8px',
+                transition: 'all 0.3s ease',
+                fontSize: '0.95rem',
+              }}
+              onMouseEnter={(e) => {
+                e.target.style.backgroundColor = 'rgba(255, 255, 255, 0.1)';
+                e.target.style.color = 'white';
+                e.target.style.transform = 'translateY(-1px)';
+              }}
+              onMouseLeave={(e) => {
+                e.target.style.backgroundColor = 'transparent';
+                e.target.style.color = 'rgba(255, 255, 255, 0.9)';
+                e.target.style.transform = 'translateY(0)';
+              }}
+            >Speaking</Link>
             <Link 
               href="/prueba-nivel"
               style={{

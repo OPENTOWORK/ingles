@@ -25,9 +25,11 @@ function tryConsumeRate(ip) {
   return true;
 }
 
-const openai = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY,
-});
+function getOpenAI() {
+  const key = process.env.OPENAI_API_KEY;
+  if (!key) return null;
+  return new OpenAI({ apiKey: key });
+}
 
 const OPENAI_CHAT_MODEL = process.env.OPENAI_MODEL || 'gpt-4o-mini';
 
@@ -161,6 +163,17 @@ ${
       : ''
     : `CLAVE_OFICIAL (official key from DB—use only for reasoning; do NOT paste this full string or "The correct answer is:" in your reply; the UI shows the key): ${correctChoiceText}`
 }`;
+
+  const openai = getOpenAI();
+  if (!openai) {
+    return NextResponse.json(
+      {
+        error:
+          'Falta OPENAI_API_KEY en el servidor. Añádela en .env.local. Opcional: OPENAI_MODEL=gpt-4o-mini',
+      },
+      { status: 503 },
+    );
+  }
 
   try {
     const completion = await openai.chat.completions.create({

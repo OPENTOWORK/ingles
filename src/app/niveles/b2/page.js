@@ -24,6 +24,7 @@ const SECTIONS = {
     { text: "Part 4: Multiple matching (short monologues)", href: "/niveles/b2/listening/part-4" },
   ],
   "Speaking": [
+    { text: "Speaking Lab (AI) — Practice / Exam", href: "/niveles/speaking-lab/b2/" },
     { text: "Part 1: Interview", href: "/niveles/b2/speaking/part-1" },
     { text: "Part 2: Long turn (photos)", href: "/niveles/b2/speaking/part-2" },
     { text: "Part 3: Collaborative task", href: "/niveles/b2/speaking/part-3" },

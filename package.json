@@ -16,6 +16,11 @@
     "clean:next": "node scripts/clean-next-cache.mjs",
     "db:setup": "echo 'Configurar base de datos desde la aplicación'",
     "db:reset": "echo 'Reiniciar base de datos desde la aplicación'",
+    "db:migrate": "prisma migrate deploy",
+    "db:push": "prisma db push",
+    "db:generate": "prisma generate",
+    "db:seed": "node prisma/seed.cjs",
+    "db:studio": "prisma studio",
     "analyze": "ANALYZE=true npm run build",
     "test": "echo 'Tests no implementados aún'",
     "type-check": "tsc --noEmit",
@@ -23,8 +28,11 @@
     "supabase:auth-disable-email-confirm": "node scripts/supabase-patch-auth-mailer-autoconfirm.mjs"
   },
   "dependencies": {
+    "@prisma/client": "^6.16.0",
+    "@supabase/ssr": "^0.5.2",
     "@supabase/supabase-js": "^2.38.0",
     "autoprefixer": "^10.4.20",
+    "lucide-react": "^1.14.0",
     "next": "^14.0.0",
     "openai": "^4.0.0",
     "postcss": "^8.4.49",
@@ -34,7 +42,8 @@
     "recharts": "^2.12.0",
     "resend": "^4.0.0",
     "tailwindcss": "^3.4.15",
-    "xlsx": "^0.18.5"
+    "xlsx": "^0.18.5",
+    "zod": "^3.24.0"
   },
   "devDependencies": {
     "@types/node": "^20.0.0",
@@ -43,6 +52,7 @@
     "cross-env": "^7.0.3",
     "eslint": "^8.0.0",
     "eslint-config-next": "^14.0.0",
+    "prisma": "^6.16.0",
     "typescript": "5.9.3"
   },
   "keywords": [
@@ -69,5 +79,8 @@
   "engines": {
     "node": ">=18.0.0",
     "npm": ">=8.0.0"
+  },
+  "prisma": {
+    "seed": "node prisma/seed.cjs"
   }
 }

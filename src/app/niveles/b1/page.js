@@ -22,6 +22,7 @@ const SECTIONS = {
     { text: "Part 4: Multiple choice (interview)", href: "/niveles/b1/listening/part-4" },
   ],
   "Speaking": [
+    { text: "Speaking Lab (AI) — Practice / Exam", href: "/niveles/speaking-lab/b1/" },
     { text: "Part 1: Personal information", href: "/niveles/b1/speaking/part-1" },
     { text: "Part 2: Simulated situation", href: "/niveles/b1/speaking/part-2" },
     { text: "Part 3: Describe photograph", href: "/niveles/b1/speaking/part-3" },

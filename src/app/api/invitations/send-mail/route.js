@@ -2,7 +2,6 @@ import { NextResponse } from 'next/server';
 import { Resend } from 'resend';
 import { createClient } from '@supabase/supabase-js';
 
-const resend = new Resend(process.env.RESEND_API_KEY);
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
 const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
 
@@ -31,7 +30,7 @@ export async function POST(req) {
     if (authError || !authData?.user) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
-    if (!process.env.RESEND_API_KEY) {
+    if (!process.env.RESEND_API_KEY?.trim()) {
       return NextResponse.json(
         { error: 'No hay configuración de RESEND_API_KEY para enviar invitaciones.' },
         { status: 500 }
@@ -59,6 +58,7 @@ export async function POST(req) {
       appUrl ? `Únete aquí: ${appUrl}` : '',
     ].filter(Boolean).join('\n');
 
+    const resend = new Resend(process.env.RESEND_API_KEY);
     const { error: sendError } = await resend.emails.send({
       from: process.env.RESEND_FROM_EMAIL || 'onboarding@resend.dev',
       to: [to],
