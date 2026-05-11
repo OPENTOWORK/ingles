@@ -393,11 +393,23 @@ function B2ExamPaperPracticePageInner({
     ],
   );
 
+  /**
+   * Los huecos a pintar se derivan del enunciado (marcadores `(N) ___` o números a inicio
+   * de línea). Si la BD tiene respuestas para huecos que no figuran en el texto, se
+   * descartan para evitar inputs huérfanos.
+   */
   const openQuestionNumbers = useMemo(() => {
     const fromAnswers = [...openAnswerMap.keys()].sort((a, b) => a - b);
+    const fromPrompt = inferredOpenQuestionNumbers;
+    if (fromPrompt.length > 0 && fromAnswers.length > 0) {
+      const promptSet = new Set(fromPrompt);
+      const intersection = fromAnswers.filter((n) => promptSet.has(n));
+      if (intersection.length > 0) return intersection;
+      return fromPrompt;
+    }
     if (fromAnswers.length > 0) return fromAnswers;
     if ((selectedQuestion?.respuestasAbiertas?.length ?? 0) > 0) {
-      return inferredOpenQuestionNumbers;
+      return fromPrompt;
     }
     return [];
   }, [
@@ -757,15 +769,28 @@ function B2ExamPaperPracticePageInner({
                               </button>
                             </div>
                             {typeof checkResult === 'boolean' && (
-                              <p
-                                style={{
-                                  margin: '0.7rem 0 0',
-                                  fontWeight: 700,
-                                  color: checkResult ? '#2f855a' : '#c53030',
-                                }}
-                              >
-                                {checkResult ? 'Correcta' : 'Incorrecta'}
-                              </p>
+                              <>
+                                <p
+                                  style={{
+                                    margin: '0.7rem 0 0',
+                                    fontWeight: 700,
+                                    color: checkResult ? '#2f855a' : '#c53030',
+                                  }}
+                                >
+                                  {checkResult ? 'Correcta' : 'Incorrecta'}
+                                </p>
+                                {(() => {
+                                  const expected = openAnswerMap.get(questionNumber);
+                                  const list =
+                                    expected && expected.size > 0 ? [...expected] : [];
+                                  return (
+                                    <p style={{ margin: '0.4rem 0 0', fontWeight: 600, color: '#1f2937' }}>
+                                      Correct answer:{' '}
+                                      {list.length > 0 ? list.join(' · ') : 'Not available'}
+                                    </p>
+                                  );
+                                })()}
+                              </>
                             )}
                             <LevelsAnswerJustification hint={aiHintsByKey[questionKey]} />
                           </div>

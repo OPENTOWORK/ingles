@@ -1,5 +1,5 @@
 'use client';
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { Suspense, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import LevelsCategoryTimer from '@/components/levels/LevelsCategoryTimer';
 import LevelsPartScorePanel from '@/components/levels/LevelsPartScorePanel';
 import LevelsAnswerJustification from '@/components/levels/LevelsAnswerJustification';
@@ -13,10 +13,13 @@ import { resolveB2ExamenId, fetchB2PreguntasByExamen } from '@/utils/b2ResolveEx
 import { formatLevelsPartDisplayName } from '@/utils/formatLevelsPartDisplayName';
 import { useUserRole } from '@/context/UserRoleContext';
 import { getSessionUserId, mergeLevelsEstadisticas } from '@/utils/levelsEstadisticas';
-import { getOpenAnswerMap, inferOpenQuestionNumbersFromPrompt } from '@/utils/b2ExamPaperShared';
+import { getOpenAnswerMap, inferOpenQuestionNumbersFromPrompt, normalizeText } from '@/utils/b2ExamPaperShared';
+import { useB2ExamPracticeSlot } from '@/hooks/useB2ExamPracticeSlot';
+import { B2ExamSlotPicker } from '@/components/b2/B2ExamSlotPicker';
 
-export default function UseOfEnglishExamsPage() {
+function UseOfEnglishExamsPageInner() {
   const { userRole } = useUserRole();
+  const { examSlot, selectExamSlot } = useB2ExamPracticeSlot();
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [partsData, setPartsData] = useState([]);
@@ -54,7 +57,9 @@ export default function UseOfEnglishExamsPage() {
         throw new Error('No se pudo obtener el nivel B2 desde la base de datos.');
       }
 
-      const { examenId, error: examResolveError } = await resolveB2ExamenId(supabase, levelData.id);
+      const { examenId, error: examResolveError } = await resolveB2ExamenId(supabase, levelData.id, {
+        slot: examSlot,
+      });
       if (examResolveError || !examenId) {
         const detail =
           typeof examResolveError?.message === 'string'
@@ -186,7 +191,7 @@ export default function UseOfEnglishExamsPage() {
         setLoading(false);
       }
     }
-  }, []);
+  }, [examSlot]);
 
   useEffect(() => {
     mountedRef.current = true;
@@ -293,11 +298,14 @@ export default function UseOfEnglishExamsPage() {
     };
   }, [selectedPart?.descripcion, selectedQuestion?.enunciado, partNumberUoe]);
 
-  /** Mapa pregunta → letra correcta desde `levels_respuestas` (p. ej. `1 C`, `2 B follow`). */
+  /** Mapa pregunta → letra correcta desde `levels_respuestas` (p. ej. `1 C`, `2 B follow`).
+   *  Solo se consideran filas con `correcta === true`; en caso contrario, al iterar todas las
+   *  opciones (A–D) el `map.set` quedaría sobrescrito por la última letra vista. */
   const part1CorrectLetterByQuestion = useMemo(() => {
     const map = new Map();
     if (partNumberUoe !== 1) return map;
     for (const row of selectedQuestion?.respuestas || []) {
+      if (row?.correcta !== true) continue;
       const t = String(row.respuesta || '').trim();
       const m = t.match(/^(\d{1,2})\s+([A-D])\b/i);
       if (m) map.set(Number(m[1]), m[2].toUpperCase());
@@ -365,13 +373,6 @@ export default function UseOfEnglishExamsPage() {
     },
     [contextSnippetForAi],
   );
-
-  const normalizeText = (value = '') =>
-    value
-      .normalize('NFD')
-      .replace(/[\u0300-\u036f]/g, '')
-      .trim()
-      .toLowerCase();
 
   const getFormattedEnunciado = (rawText = '') => {
     const normalized = rawText.replace(/\r\n/g, '\n').trim();
@@ -466,14 +467,22 @@ export default function UseOfEnglishExamsPage() {
       selectedQuestion?.respuestas,
     ],
   );
-  const openQuestionNumbers = useMemo(
-    () => {
-      const fromAnswers = [...openAnswerMap.keys()].sort((a, b) => a - b);
-      if (fromAnswers.length > 0) return fromAnswers;
-      return inferredOpenQuestionNumbers;
-    },
-    [inferredOpenQuestionNumbers, openAnswerMap],
-  );
+  /**
+   * Los huecos a pintar deben coincidir con los marcadores presentes en el enunciado
+   * (`(N) ___` o números al inicio de línea según parte). Si la BD tiene respuestas extra
+   * para huecos que no aparecen en el texto, se ignoran para no mostrar inputs huérfanos.
+   */
+  const openQuestionNumbers = useMemo(() => {
+    const fromAnswers = [...openAnswerMap.keys()].sort((a, b) => a - b);
+    const fromPrompt = inferredOpenQuestionNumbers;
+    if (fromPrompt.length > 0 && fromAnswers.length > 0) {
+      const promptSet = new Set(fromPrompt);
+      const intersection = fromAnswers.filter((n) => promptSet.has(n));
+      return intersection.length > 0 ? intersection : fromPrompt;
+    }
+    if (fromAnswers.length > 0) return fromAnswers;
+    return fromPrompt;
+  }, [inferredOpenQuestionNumbers, openAnswerMap]);
 
   const groupedAnswersSelected = useMemo(
     () => getGroupedAnswers(selectedQuestion?.respuestas || []),
@@ -522,6 +531,7 @@ export default function UseOfEnglishExamsPage() {
   return (
     <main style={{ padding: '2rem', fontFamily: 'Segoe UI, sans-serif' }}>
       <h1 style={{ textAlign: 'center' }}>B2 Use of English Practice</h1>
+      <B2ExamSlotPicker value={examSlot} onSelect={selectExamSlot} />
       <p style={{ textAlign: 'center', margin: '0.35rem 0 0', color: '#4a5568', fontSize: '1rem' }}>
         Partes 1 a 4
       </p>
@@ -790,15 +800,28 @@ export default function UseOfEnglishExamsPage() {
                               </button>
                             </div>
                             {typeof checkResult === 'boolean' && (
-                              <p
-                                style={{
-                                  margin: '0.7rem 0 0',
-                                  fontWeight: 700,
-                                  color: checkResult ? '#2f855a' : '#c53030',
-                                }}
-                              >
-                                {checkResult ? 'Correcta' : 'Incorrecta'}
-                              </p>
+                              <>
+                                <p
+                                  style={{
+                                    margin: '0.7rem 0 0',
+                                    fontWeight: 700,
+                                    color: checkResult ? '#2f855a' : '#c53030',
+                                  }}
+                                >
+                                  {checkResult ? 'Correcta' : 'Incorrecta'}
+                                </p>
+                                {(() => {
+                                  const expected = openAnswerMap.get(questionNumber);
+                                  const list =
+                                    expected && expected.size > 0 ? [...expected] : [];
+                                  return (
+                                    <p style={{ margin: '0.4rem 0 0', fontWeight: 600, color: '#1f2937' }}>
+                                      Correct answer:{' '}
+                                      {list.length > 0 ? list.join(' · ') : 'Not available'}
+                                    </p>
+                                  );
+                                })()}
+                              </>
                             )}
                             <LevelsAnswerJustification hint={aiHintsByKey[questionKey]} />
                           </div>
@@ -967,5 +990,19 @@ export default function UseOfEnglishExamsPage() {
         </Link>
       </div>
     </main>
+  );
+}
+
+export default function UseOfEnglishExamsPage() {
+  return (
+    <Suspense
+      fallback={
+        <main style={{ padding: '2rem', textAlign: 'center', fontFamily: 'Segoe UI, sans-serif' }}>
+          Cargando práctica…
+        </main>
+      }
+    >
+      <UseOfEnglishExamsPageInner />
+    </Suspense>
   );
 }

@@ -42,12 +42,18 @@ export function extractTextoBloque(raw, partNumber) {
     return t.trim();
   }
 
-  // Part 7: cuerpo habitualmente empieza en "Which person"
+  // Part 7: el panel muestra los perfiles A–D (bloque tras "Texts").
+  // Las preguntas "Which person…" se renderizan abajo junto a los botones.
   if (partNumber === 7) {
-    const wp = joined.search(/\nWhich person/im);
-    if (wp >= 0) {
-      let body = joined.slice(wp + 1).trim();
-      return body;
+    const txMatch = joined.match(/(?:^|\n)\s*Texts\s*\n/im);
+    if (txMatch) {
+      const after = joined.slice(txMatch.index + txMatch[0].length);
+      return after.trim();
+    }
+    const wpMatch = joined.match(/(?:^|\n)\s*Which person/im);
+    if (wpMatch) {
+      const wp = wpMatch.index + (wpMatch[0].startsWith('\n') ? 1 : 0);
+      return joined.slice(wp).trim();
     }
   }
 
@@ -55,6 +61,7 @@ export function extractTextoBloque(raw, partNumber) {
   if (textLineIdxs.length >= 2) {
     let body = lines.slice(textLineIdxs[textLineIdxs.length - 1] + 1).join('\n').trim();
     if (partNumber === 5) body = truncateBeforeLine(body, /^questions$/i);
+    if (partNumber === 6) body = stripPart6SentencesTail(body);
     return body;
   }
 
@@ -71,13 +78,22 @@ export function extractTextoBloque(raw, partNumber) {
     }
     let body = afterText.trim();
     if (partNumber === 5) body = truncateBeforeLine(body, /^questions$/i);
+    if (partNumber === 6) body = stripPart6SentencesTail(body);
     return body;
   }
 
   let body = t;
   if (partNumber === 5) body = truncateBeforeLine(body, /^questions$/i);
+  if (partNumber === 6) body = stripPart6SentencesTail(body);
   return body;
 }
+
+function stripPart6SentencesTail(text) {
+  let body = truncateBeforeLine(text, /^sentences$/i);
+  body = body.replace(/\n\s*[_=\-–—]{3,}\s*$/g, '').trimEnd();
+  return body;
+}
+
 
 /**
  * Parte 1 (multiple-choice cloze): el pasaje y el bloque "Questions" van en el mismo
@@ -148,12 +164,17 @@ export function extractPart7PromptStemBlob(raw) {
   let t = String(raw || '').replace(/\r\n/g, '\n').trim();
   if (!t) return '';
   t = stripAnswerKeyBlock(t);
-  const wp = t.search(/\nWhich person/im);
-  if (wp < 0) return '';
+  const wpMatch = t.match(/(?:^|\n)\s*Which person/im);
+  if (!wpMatch) return '';
+  const wp = wpMatch.index + (wpMatch[0].startsWith('\n') ? 1 : 0);
   const after = t.slice(wp);
   const tx = after.search(/\n\s*Texts\s*\n/im);
-  const chunk = tx >= 0 ? after.slice(0, tx) : after;
-  return chunk.replace(/^Which person.*?\n+/is, '').trim();
+  let chunk = tx >= 0 ? after.slice(0, tx) : after;
+  chunk = chunk
+    .replace(/^Which person.*?\n+/is, '')
+    .replace(/\n\s*[_=\-–—]{3,}\s*$/g, '')
+    .trim();
+  return chunk;
 }
 
 export function extractPart7ProfilesBlock(raw) {
@@ -166,9 +187,10 @@ export function extractPart7ProfilesBlock(raw) {
 
 function findAdOptionBoundary(s, nextLetter) {
   const normal = new RegExp(`\\.\\s+${nextLetter}\\.\\s+`, 'i');
+  const newlineSep = new RegExp(`\\n\\s*${nextLetter}\\.\\s+`, 'i');
   const glued = new RegExp(`(?<=[a-z0-9\\)])${nextLetter}\\.\\s+`, 'i');
   let best = -1;
-  for (const re of [normal, glued]) {
+  for (const re of [normal, newlineSep, glued]) {
     const m = re.exec(s);
     if (m && (best < 0 || m.index < best)) best = m.index;
   }
@@ -190,20 +212,32 @@ function extractAdFourOptionsFromATail(tailFromA) {
     if (boundary < 0) return {};
     const cur = letters[i];
     out[cur] = rest.slice(0, boundary).trim();
-    rest = rest.slice(boundary).replace(new RegExp(`^\\.\\s+${nextL}\\.\\s+|^${nextL}\\.\\s+`, 'i'), '');
-    rest = rest.trimStart();
+    rest = rest
+      .slice(boundary)
+      .replace(new RegExp(`^\\s*\\.?\\s*${nextL}\\.\\s+`, 'i'), '')
+      .trimStart();
   }
   return out;
 }
 
 /**
- * Reading Part 5 / 7 (estilo cloze MCQ Cambridge): líneas `31. …` + `A. …B. …` (a veces pegadas en Word).
+ * Reading Part 5 / 7 (estilo cloze MCQ Cambridge): líneas `31. …` + `A. …B. …`
+ * (a veces pegadas en Word, a veces una por línea con `\n` entre opciones).
  * @returns {Array<{ questionNumber: number, stem: string, options: Partial<Record<'A'|'B'|'C'|'D', string>> }>}
  */
 export function parseReadingAdMcqChunks(questionsBody) {
   const block = String(questionsBody || '').replace(/\r\n/g, '\n').trim();
   if (!block) return [];
-  const chunks = block.split(/\n+(?=\d{1,2}\.\s+)/).map((c) => c.trim()).filter(Boolean);
+  /** Limpia líneas separadoras (underscores / guiones / em-dashes) que el original Word coloca entre ítems. */
+  const stripSeparatorLines = (s) =>
+    s
+      .replace(/\n\s*[_=\-–—]{3,}\s*(?=\n|$)/g, '')
+      .replace(/\n{3,}/g, '\n\n');
+  const cleaned = stripSeparatorLines(block);
+  const chunks = cleaned
+    .split(/\n+(?=\d{1,2}\.\s+)/)
+    .map((c) => c.trim())
+    .filter(Boolean);
   /** @type {Array<{ questionNumber: number, stem: string, options: Partial<Record<'A'|'B'|'C'|'D', string>> }>} */
   const parsed = [];
   for (const chunk of chunks) {
@@ -224,9 +258,10 @@ export function parseReadingAdMcqChunks(questionsBody) {
 
 function findAgSentenceBoundary(s, nextLetter) {
   const afterPeriod = new RegExp(`\\.${nextLetter}\\s+[A-Z]`, '');
-  const glued = new RegExp(`(?<=[a-z0-9\\)])${nextLetter}\\s+[A-Z]`, 'i');
+  const newlineSep = new RegExp(`\\n\\s*${nextLetter}\\s+[A-Z]`, '');
+  const glued = new RegExp(`(?<=[a-z0-9\\)])${nextLetter}\\s+[A-Z]`, '');
   let best = -1;
-  for (const re of [afterPeriod, glued]) {
+  for (const re of [afterPeriod, newlineSep, glued]) {
     const m = re.exec(s);
     if (m && (best < 0 || m.index < best)) best = m.index;
   }
@@ -254,7 +289,7 @@ export function parseReadingPart6SentencePool(block) {
     if (cut < 0) return {};
     pool[cur] = rest.slice(0, cut).trim();
     rest = rest.slice(cut);
-    const lead = rest.match(new RegExp(`^\\.?${nextL}\\s+(?=[A-Z])`, 'i'));
+    const lead = rest.match(new RegExp(`^\\s*\\.?${nextL}\\s+(?=[A-Z])`, 'i'));
     if (!lead) return {};
     rest = rest.slice(lead[0].length);
   }

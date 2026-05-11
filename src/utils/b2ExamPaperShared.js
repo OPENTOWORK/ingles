@@ -92,10 +92,20 @@ export function getGroupedAnswers(answers = []) {
   return grouped;
 }
 
+/**
+ * Normaliza para comparar respuestas del usuario contra la BD:
+ * - Quita diacríticos (NFD + strip de marcas combinantes).
+ * - Mapea comillas tipográficas (’ ‘ ‛ ′ → '; “ ” „ ‟ ″ → ") a sus equivalentes ASCII
+ *   para que `didn't` (escrito por el alumno) coincida con `didn’t` (importado del Excel).
+ * - Colapsa espacios internos y aplica trim + lowercase.
+ */
 export function normalizeText(value = '') {
   return value
     .normalize('NFD')
     .replace(/[\u0300-\u036f]/g, '')
+    .replace(/[\u2018\u2019\u201B\u2032]/g, "'")
+    .replace(/[\u201C\u201D\u201E\u201F\u2033]/g, '"')
+    .replace(/\s+/g, ' ')
     .trim()
     .toLowerCase();
 }
@@ -161,13 +171,33 @@ export function getOpenAnswerMap(
   return map;
 }
 
-/** @param {string} rawText @param {number} partNumber */
+/**
+ * Detecta los números de hueco realmente presentes en el enunciado.
+ *
+ * Orden de detección:
+ * 1) Marcadores `(N) ___` (Open Cloze, Word Formation, Missing Sentences). Se descarta `(0)`
+ *    por ser ejemplo y no un hueco evaluable.
+ * 2) Números al inicio de línea (Key Word Transformation, Multiple Matching).
+ * 3) Rangos canónicos de Use of English como último recurso.
+ *
+ * @param {string} rawText
+ * @param {number} partNumber
+ */
 export function inferOpenQuestionNumbersFromPrompt(rawText = '', partNumber = 0) {
-  const matches = [...String(rawText || '').matchAll(/(?:^|\n)\s*(\d{1,2})\b/gm)];
-  const nums = [...new Set(matches.map((m) => Number(m[1])).filter((n) => Number.isFinite(n)))].sort(
-    (a, b) => a - b,
-  );
-  if (nums.length > 0) return nums;
+  const text = String(rawText || '');
+
+  const gapMatches = [...text.matchAll(/\((\d{1,2})\)\s*_+/g)];
+  const gapNums = [
+    ...new Set(gapMatches.map((m) => Number(m[1])).filter((n) => Number.isFinite(n) && n > 0)),
+  ].sort((a, b) => a - b);
+  if (gapNums.length > 0) return gapNums;
+
+  const lineMatches = [...text.matchAll(/(?:^|\n)\s*(\d{1,2})\b/gm)];
+  const lineNums = [
+    ...new Set(lineMatches.map((m) => Number(m[1])).filter((n) => Number.isFinite(n))),
+  ].sort((a, b) => a - b);
+  if (lineNums.length > 0) return lineNums;
+
   if (partNumber === 2) return [9, 10, 11, 12, 13, 14, 15, 16];
   if (partNumber === 3) return [17, 18, 19, 20, 21, 22, 23, 24];
   if (partNumber === 4) return [25, 26, 27, 28, 29, 30];

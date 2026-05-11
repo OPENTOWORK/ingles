@@ -358,10 +358,13 @@ function B2ReadingExamsPageInner() {
     [selectedQuestion?.respuestas],
   );
 
-  /** Clave sólo número + letra (BD Reading 5–7). */
+  /** Clave sólo número + letra (BD Reading 5–7).
+   *  Sólo se consideran filas con `correcta === true`; en caso contrario, al iterar las 4
+   *  opciones (A–D / A–G) el `map.set` quedaría sobrescrito por la última letra vista. */
   const readingCorrectLetterByQuestion = useMemo(() => {
     const map = new Map();
     for (const row of selectedQuestion?.respuestas || []) {
+      if (row?.correcta !== true) continue;
       const t = String(row.respuesta || '').trim();
       const m = t.match(/^(\d{1,2})\s+([A-G])\s*$/i);
       if (m) map.set(Number(m[1]), m[2].toUpperCase());
@@ -440,11 +443,8 @@ function B2ReadingExamsPageInner() {
         const stem = stemByNum.get(questionNumber) || '';
         const correctL = readingCorrectLetterByQuestion.get(questionNumber);
         const opts = letters.map((L) => {
-          const { label = '', body = '' } = people[L];
-          const oneLine = body.replace(/\s+/g, ' ').trim();
-          const clipped = oneLine.slice(0, 360);
-          const suffix = body.length > 360 ? '…' : '';
-          const formattedText = `${L}) ${label}\n${clipped}${suffix}`;
+          const { label = '' } = people[L];
+          const formattedText = `${L}) ${label}`;
           return {
             id: `reading-${pid}-q${questionNumber}-${L}`,
             respuesta: `${questionNumber} ${L}`,
