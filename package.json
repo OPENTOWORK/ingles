@@ -7,7 +7,7 @@
     "dev": "next dev",
     "prebuild": "node scripts/write-static-export-layouts.mjs",
     "build": "next build",
-    "build:static": "cross-env NEXT_STATIC_EXPORT=true npm run build",
+    "build:static": "node scripts/build-static.mjs",
     "build:static:full": "node scripts/build-static-full.mjs",
     "start": "next start",
     "lint": "next lint",

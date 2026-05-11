@@ -56,20 +56,20 @@ enum TranscriptSource {
 }
 
 model SpeakingTask {
-  id                 String           @id @default(cuid())
-  title              String
-  cefr               CefrLevel
-  examType           CambridgeExam    @map("exam_type")
-  part               Int
-  prompt             String           @db.Text
-  followUpQuestions  Json             @default("[]") @map("follow_up_questions")
-  targetVocabulary   Json             @default("[]") @map("target_vocabulary")
-  timeLimitSec       Int?             @map("time_limit_sec")
-  taskType           SpeakingTaskType @map("task_type")
-  metadata           Json?
-  published          Boolean          @default(true)
-  createdAt          DateTime         @default(now()) @map("created_at")
-  updatedAt          DateTime         @updatedAt @map("updated_at")
+  id                String           @id @default(cuid())
+  title             String
+  cefr              CefrLevel
+  examType          CambridgeExam    @map("exam_type")
+  part              Int
+  prompt            String           @db.Text
+  followUpQuestions Json             @default("[]") @map("follow_up_questions")
+  targetVocabulary  Json             @default("[]") @map("target_vocabulary")
+  timeLimitSec      Int?             @map("time_limit_sec")
+  taskType          SpeakingTaskType @map("task_type")
+  metadata          Json?
+  published         Boolean          @default(true)
+  createdAt         DateTime         @default(now()) @map("created_at")
+  updatedAt         DateTime         @updatedAt @map("updated_at")
 
   @@index([cefr, examType, part])
   @@index([published])
@@ -77,16 +77,16 @@ model SpeakingTask {
 }
 
 model SpeakingSession {
-  id                  String        @id @default(cuid())
-  userId              String?       @map("user_id")
-  mode                SpeakingMode
-  cefr                CefrLevel
-  exam                CambridgeExam
-  state               SessionState  @default(ACTIVE)
-  examBlueprintVersion String       @default("1") @map("exam_blueprint_version")
-  examState           Json?         @map("exam_state")
-  startedAt           DateTime      @default(now()) @map("started_at")
-  endedAt             DateTime?     @map("ended_at")
+  id                   String        @id @default(cuid())
+  userId               String?       @map("user_id")
+  mode                 SpeakingMode
+  cefr                 CefrLevel
+  exam                 CambridgeExam
+  state                SessionState  @default(ACTIVE)
+  examBlueprintVersion String        @default("1") @map("exam_blueprint_version")
+  examState            Json?         @map("exam_state")
+  startedAt            DateTime      @default(now()) @map("started_at")
+  endedAt              DateTime?     @map("ended_at")
 
   turns       SpeakingTurn[]
   evaluations SpeakingEvaluation[]
@@ -97,15 +97,15 @@ model SpeakingSession {
 }
 
 model SpeakingTurn {
-  id               String            @id @default(cuid())
-  sessionId        String            @map("session_id")
-  session          SpeakingSession   @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+  id               String           @id @default(cuid())
+  sessionId        String           @map("session_id")
+  session          SpeakingSession  @relation(fields: [sessionId], references: [id], onDelete: Cascade)
   role             TurnRole
-  text             String            @db.Text
-  transcriptSource TranscriptSource  @default(MOCK) @map("transcript_source")
-  audioUrl         String?           @map("audio_url")
+  text             String           @db.Text
+  transcriptSource TranscriptSource @default(MOCK) @map("transcript_source")
+  audioUrl         String?          @map("audio_url")
   microFeedback    Json?            @map("micro_feedback")
-  createdAt        DateTime          @default(now()) @map("created_at")
+  createdAt        DateTime         @default(now()) @map("created_at")
 
   evaluations SpeakingEvaluation[]
 
@@ -114,11 +114,11 @@ model SpeakingTurn {
 }
 
 model SpeakingEvaluation {
-  id        String            @id @default(cuid())
-  sessionId String            @map("session_id")
-  session   SpeakingSession   @relation(fields: [sessionId], references: [id], onDelete: Cascade)
-  turnId    String?            @map("turn_id")
-  turn      SpeakingTurn?     @relation(fields: [turnId], references: [id], onDelete: SetNull)
+  id        String          @id @default(cuid())
+  sessionId String          @map("session_id")
+  session   SpeakingSession @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+  turnId    String?         @map("turn_id")
+  turn      SpeakingTurn?   @relation(fields: [turnId], references: [id], onDelete: SetNull)
   payload   Json
 
   createdAt DateTime @default(now()) @map("created_at")

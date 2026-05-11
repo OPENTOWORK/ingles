@@ -5,10 +5,16 @@ import { usePathname, useRouter } from 'next/navigation';
 import { useEffect } from 'react';
 
 export default function NavigationButtons({ part }) {
-  const num = parseInt(part.split("-")[1], 10);
-  const prevPart = num > 1 ? `/niveles/c1/exam-1/part-${num - 1}` : null;
-  const nextPart = num < 18 ? `/niveles/c1/exam-1/part-${num + 1}` : null;
-  const homeLevel = "/niveles/c1";
+  const partString = typeof part === 'string' ? part : '';
+  const parsedNum = Number.parseInt(partString.split('-')[1], 10);
+  const hasValidPart = Number.isFinite(parsedNum);
+  const prevPart = hasValidPart && parsedNum > 1
+    ? `/niveles/c1/exam-1/part-${parsedNum - 1}`
+    : null;
+  const nextPart = hasValidPart && parsedNum < 18
+    ? `/niveles/c1/exam-1/part-${parsedNum + 1}`
+    : null;
+  const homeLevel = '/niveles/c1';
 
   const { globalStart, clearAllAnswers } = useExam();
   const router = useRouter();
