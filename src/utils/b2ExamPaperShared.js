@@ -216,6 +216,54 @@ export function extractFirstAudioUrl(text = '') {
   return m ? m[0] : '';
 }
 
+const AUDIO_EXT_RE = /\.(?:mp3|m4a|wav|ogg)(?:\?|#|$)/i;
+
+/**
+ * URL usable en un elemento `<audio>`: http(s) con extensión de audio, o Storage público de Supabase.
+ * Rechaza cadenas truncadas (p. ej. solo `https://ref.supabase` sin `.co` ni ruta).
+ *
+ * @param {string} url
+ */
+export function isPlausibleAudioUrl(url = '') {
+  const s = String(url).trim();
+  if (!s || !/^https?:\/\//i.test(s)) return false;
+  try {
+    const u = new URL(s);
+    const host = u.hostname.toLowerCase();
+    if (host.endsWith('.supabase.co')) {
+      return u.pathname.includes('/storage/v1/object/') && AUDIO_EXT_RE.test(u.pathname + u.search);
+    }
+    return AUDIO_EXT_RE.test(u.pathname + u.search + u.hash) || AUDIO_EXT_RE.test(s);
+  } catch {
+    return AUDIO_EXT_RE.test(s);
+  }
+}
+
+/**
+ * URL en `levels_preguntas_audios.audio_url` lista para `<audio src>`.
+ * Acepta cualquier objeto bajo `/storage/v1/object/` en `*.supabase.co` con ruta suficiente
+ * (p. ej. firmada o con extensión no listada en AUDIO_EXT_RE). Rechaza hosts truncados tipo `*.supabase` sin `.co`.
+ *
+ * @param {string} url
+ */
+export function isUsableQuestionAudioUrl(url = '') {
+  const s = String(url).trim();
+  if (!/^https?:\/\//i.test(s)) return false;
+  let u;
+  try {
+    u = new URL(s);
+  } catch {
+    return false;
+  }
+  const host = u.hostname.toLowerCase();
+  if (host.endsWith('.supabase') && !host.endsWith('.supabase.co')) return false;
+  if (isPlausibleAudioUrl(s)) return true;
+  if (host.endsWith('.supabase.co') && u.pathname.includes('/storage/v1/object/')) {
+    return u.pathname.length >= 28;
+  }
+  return false;
+}
+
 /** Línea que solo es una referencia a audio (no mostrarla como párrafo de “Texto”). */
 export function isStandaloneAudioLine(line = '') {
   const t = String(line).trim();

@@ -331,3 +331,55 @@ export function parsePart7PeopleProfiles(profilesBlock) {
   }
   return pool;
 }
+
+/**
+ * Listening (p. ej. Part 1 / B2 parte 10): el bloque "Texto" trae ítems separados por una
+ * línea que es solo el número (`1` … `8`). Opciones A/B/C a veces vienen en el Word;
+ * si `stripInlineOptions` es true, se omiten esas líneas porque las pintamos desde la BD.
+ *
+ * @param {string[]} lines - líneas ya recortadas (p. ej. sin URLs sueltas de audio)
+ * @param {{ stripInlineOptions?: boolean }} [opts]
+ * @returns {Array<{ questionNumber: number, contextLines: string[] }>}
+ */
+export function splitListeningMcqContextByQuestion(lines, opts = {}) {
+  const stripInlineOptions = opts.stripInlineOptions !== false;
+  const raw = Array.isArray(lines)
+    ? lines.map((l) => String(l || '').trim()).filter(Boolean)
+    : [];
+  if (raw.length === 0) return [];
+
+  const isItemNumberLine = (l) => /^(?:[1-9]|1[0-9]|2[0-9]|30)\s*$/.test(l);
+
+  const looksLikeMcqOptionLine = (l) => {
+    const t = String(l || '').trim();
+    if (/^[ABC]\s*\)\s+\S/.test(t) || /^[ABC]\.\s+\S/.test(t)) return true;
+    if (!/^[ABC]\s+\S/.test(t)) return false;
+    return !/^[ABC]\s+(?:you\s+hear|you\s+overhear|what|why|how|which|who|where|when|whose|the\s+)/i.test(
+      t,
+    );
+  };
+
+  /** @type {Array<{ questionNumber: number, contextLines: string[] }>} */
+  const blocks = [];
+  let i = 0;
+  while (i < raw.length) {
+    if (!isItemNumberLine(raw[i])) {
+      i += 1;
+      continue;
+    }
+    const questionNumber = Number(raw[i]);
+    if (!Number.isFinite(questionNumber) || questionNumber < 1) {
+      i += 1;
+      continue;
+    }
+    i += 1;
+    const contextLines = [];
+    while (i < raw.length && !isItemNumberLine(raw[i])) {
+      const ln = raw[i];
+      if (!stripInlineOptions || !looksLikeMcqOptionLine(ln)) contextLines.push(ln);
+      i += 1;
+    }
+    blocks.push({ questionNumber, contextLines });
+  }
+  return blocks.sort((a, b) => a.questionNumber - b.questionNumber);
+}

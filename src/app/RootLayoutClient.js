@@ -7,9 +7,16 @@ import { normalizeRoleName, getRoleNameByUserId, ROLE_ROUTE_MAP } from '@/utils/
 import Link from 'next/link';
 import LanguageSwitcher from '../components/LanguageSwitcher';
 import { Toaster } from 'react-hot-toast';
-import { ExamProvider } from '../context/ExamContext';
 import { UserRoleProvider } from '../context/UserRoleContext';
 import ExamNavigationGuard from '../components/ExamNavigationGuard';
+
+const DRALO_MENU_ITEMS = [
+  { label: 'Use of English', href: '/dralo-ai/use-of-english' },
+  { label: 'Reading', href: '/dralo-ai/reading' },
+  { label: 'Writing', href: '/dralo-ai/writing' },
+  { label: 'Listening', href: '/dralo-ai/listening' },
+  { label: 'Speaking', href: '/speaking' },
+];
 
 export default function RootLayoutClient({ children }) {
   const [loading, setLoading] = useState(true);
@@ -17,6 +24,20 @@ export default function RootLayoutClient({ children }) {
   const [userRole, setUserRole] = useState('student');
   const [cookieConsent, setCookieConsent] = useState(null);
   const [showCookieSettings, setShowCookieSettings] = useState(false);
+  const [showDraloMenu, setShowDraloMenu] = useState(false);
+  const draloMenuTimerRef = useRef(null);
+
+  const openDraloMenu = () => {
+    if (draloMenuTimerRef.current) {
+      clearTimeout(draloMenuTimerRef.current);
+      draloMenuTimerRef.current = null;
+    }
+    setShowDraloMenu(true);
+  };
+  const scheduleCloseDraloMenu = () => {
+    if (draloMenuTimerRef.current) clearTimeout(draloMenuTimerRef.current);
+    draloMenuTimerRef.current = setTimeout(() => setShowDraloMenu(false), 150);
+  };
   const [cookiePreferences, setCookiePreferences] = useState({
     necessary: true,
     analytics: false,
@@ -29,6 +50,7 @@ export default function RootLayoutClient({ children }) {
   const publicRoutes = [
     '/',
     '/login',
+    '/auth/callback',
     '/registro',
     '/reset-password',
     '/contacto',
@@ -162,7 +184,7 @@ export default function RootLayoutClient({ children }) {
   };
 
   return (
-    <ExamProvider>
+    <>
       <Toaster position="top-center" reverseOrder={false} />
 
       <header 
@@ -290,28 +312,96 @@ export default function RootLayoutClient({ children }) {
                 e.target.style.transform = 'translateY(0)';
               }}
             >Levels</Link>
-            <Link 
-              href="/speaking"
-              style={{
-                color: 'rgba(255, 255, 255, 0.9)',
-                textDecoration: 'none',
-                fontWeight: '500',
-                padding: '0.5rem 1rem',
-                borderRadius: '8px',
-                transition: 'all 0.3s ease',
-                fontSize: '0.95rem',
-              }}
-              onMouseEnter={(e) => {
-                e.target.style.backgroundColor = 'rgba(255, 255, 255, 0.1)';
-                e.target.style.color = 'white';
-                e.target.style.transform = 'translateY(-1px)';
-              }}
-              onMouseLeave={(e) => {
-                e.target.style.backgroundColor = 'transparent';
-                e.target.style.color = 'rgba(255, 255, 255, 0.9)';
-                e.target.style.transform = 'translateY(0)';
-              }}
-            >Speaking</Link>
+            <div
+              style={{ position: 'relative' }}
+              onMouseEnter={openDraloMenu}
+              onMouseLeave={scheduleCloseDraloMenu}
+            >
+              <button
+                type="button"
+                onClick={() => setShowDraloMenu((prev) => !prev)}
+                aria-haspopup="true"
+                aria-expanded={showDraloMenu}
+                style={{
+                  background: showDraloMenu ? 'rgba(255, 255, 255, 0.15)' : 'transparent',
+                  border: 'none',
+                  color: showDraloMenu ? 'white' : 'rgba(255, 255, 255, 0.9)',
+                  cursor: 'pointer',
+                  fontWeight: '500',
+                  padding: '0.5rem 1rem',
+                  borderRadius: '8px',
+                  transition: 'all 0.3s ease',
+                  fontSize: '0.95rem',
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: '0.35rem',
+                  fontFamily: 'inherit',
+                }}
+              >
+                Dralo AI
+                <span
+                  aria-hidden="true"
+                  style={{
+                    display: 'inline-block',
+                    transition: 'transform 0.2s ease',
+                    transform: showDraloMenu ? 'rotate(180deg)' : 'rotate(0deg)',
+                    fontSize: '0.7rem',
+                  }}
+                >
+                  ▼
+                </span>
+              </button>
+              {showDraloMenu && (
+                <div
+                  role="menu"
+                  style={{
+                    position: 'absolute',
+                    top: 'calc(100% + 6px)',
+                    left: '50%',
+                    transform: 'translateX(-50%)',
+                    background: 'white',
+                    border: '1px solid rgba(0, 0, 0, 0.08)',
+                    borderRadius: '12px',
+                    boxShadow: '0 12px 32px rgba(0, 0, 0, 0.18)',
+                    padding: '0.5rem',
+                    minWidth: '210px',
+                    zIndex: 1100,
+                    display: 'flex',
+                    flexDirection: 'column',
+                    gap: '0.15rem',
+                  }}
+                >
+                  {DRALO_MENU_ITEMS.map((item) => (
+                    <Link
+                      key={item.href}
+                      href={item.href}
+                      role="menuitem"
+                      onClick={() => setShowDraloMenu(false)}
+                      style={{
+                        color: '#374151',
+                        textDecoration: 'none',
+                        fontWeight: 500,
+                        fontSize: '0.95rem',
+                        padding: '0.6rem 0.85rem',
+                        borderRadius: '8px',
+                        transition: 'background 0.2s ease, color 0.2s ease',
+                        display: 'block',
+                      }}
+                      onMouseEnter={(e) => {
+                        e.currentTarget.style.background = 'rgba(102, 126, 234, 0.12)';
+                        e.currentTarget.style.color = '#4f46e5';
+                      }}
+                      onMouseLeave={(e) => {
+                        e.currentTarget.style.background = 'transparent';
+                        e.currentTarget.style.color = '#374151';
+                      }}
+                    >
+                      {item.label}
+                    </Link>
+                  ))}
+                </div>
+              )}
+            </div>
             <Link 
               href="/prueba-nivel"
               style={{
@@ -632,6 +722,6 @@ export default function RootLayoutClient({ children }) {
           © {new Date().getFullYear()} Dralo
         </p>
       </footer>
-    </ExamProvider>
+    </>
   );
 }

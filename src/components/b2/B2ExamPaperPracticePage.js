@@ -11,7 +11,7 @@ import { computeLevelsPartScore } from '@/utils/levelsPaperScoreMetrics';
 import { postLevelsAnswerJustification } from '@/utils/levelsJustifyClient';
 import Link from 'next/link';
 import { supabase } from '@/utils/supabaseClient';
-import { extractTextoBloque } from '@/utils/b2ExamTextBlocks';
+import { extractTextoBloque, splitListeningMcqContextByQuestion } from '@/utils/b2ExamTextBlocks';
 import {
   getFormattedEnunciado,
   getGroupedAnswers,
@@ -21,11 +21,30 @@ import {
   splitEnunciadoAndTextFallback,
   extractFirstAudioUrl,
   isStandaloneAudioLine,
+  isUsableQuestionAudioUrl,
 } from '@/utils/b2ExamPaperShared';
 import { getSessionUserId, mergeLevelsEstadisticas } from '@/utils/levelsEstadisticas';
 import { resolveB2ExamenId, fetchB2PreguntasByExamen } from '@/utils/b2ResolveExam';
 import { formatLevelsPartDisplayName } from '@/utils/formatLevelsPartDisplayName';
 import B2WritingLongFormAiPanel from '@/components/b2/B2WritingLongFormAiPanel';
+
+/** @param {string} url */
+function resolvePublicOrSiteAudioSrc(url) {
+  const u = String(url || '').trim();
+  if (!u) return '';
+  if (/^https?:\/\//i.test(u)) return u;
+  const bp = (process.env.NEXT_PUBLIC_BASE_PATH || '').replace(/\/$/, '');
+  const path = u.startsWith('/') ? u : `/${u}`;
+  return `${bp}${path}`;
+}
+
+/** @param {Array<{ orden?: unknown, url?: string, id?: string, titulo?: string }>} clips */
+function pickListeningClipForQuestion(clips, questionNumber) {
+  if (!Array.isArray(clips) || clips.length === 0 || !Number.isFinite(questionNumber)) return null;
+  const byOrden = clips.find((c) => Number(c.orden) === questionNumber);
+  if (byOrden) return byOrden;
+  return clips[questionNumber - 1] || null;
+}
 
 const buttonStyle = {
   backgroundColor: '#c1f2cd',
@@ -81,6 +100,8 @@ function B2ExamPaperPracticePageInner({
   const [openChecks, setOpenChecks] = useState({});
   /** @type {Record<string, { loading?: boolean, error?: string | null, text?: string | null }>} */
   const [aiHintsByKey, setAiHintsByKey] = useState({});
+  /** Mensaje si la consulta a `levels_preguntas_audios` falla (p. ej. RLS). */
+  const [preguntaAudiosError, setPreguntaAudiosError] = useState('');
 
   const mountedRef = useRef(true);
   const { label: timerLabel } = useLevelsCategoryTimer();
@@ -93,6 +114,9 @@ function B2ExamPaperPracticePageInner({
     setOpenInputs({});
     setOpenChecks({});
     setAiHintsByKey({});
+    setPreguntaAudiosError('');
+
+    const partDescription = (row) => row?.['Descripción'] ?? row?.Descripción ?? '';
 
     try {
       const { data: levelData, error: levelError } = await supabase
@@ -104,61 +128,22 @@ function B2ExamPaperPracticePageInner({
 
       if (levelError || !levelData) throw new Error('No se pudo obtener el nivel B2.');
 
-      const { examenId, error: examResolveError } = await resolveB2ExamenId(supabase, levelData.id, {
-        slot: examSlot,
-      });
-      if (examResolveError || !examenId) {
-        const detail =
-          typeof examResolveError?.message === 'string'
-            ? examResolveError.message
-            : examResolveError?.details || '';
-        throw new Error(
-          detail ? `No se pudo obtener el examen de B2. (${detail})` : 'No se pudo obtener el examen de B2.',
-        );
-      }
-
-      const { data: questionsData, error: questionsError } = await fetchB2PreguntasByExamen(supabase, {
-        examenId,
-        levelId: levelData.id,
-      });
-
-      if (questionsError || !questionsData?.length) {
-        throw new Error(emptyErrorMessage);
-      }
-
-      const partIds = [...new Set(questionsData.map((q) => q.parte_id).filter(Boolean))];
-      const questionIds = questionsData.map((q) => q.id);
+      // 1) Cargamos SIEMPRE las partes (con su `Descripción`) desde Supabase,
+      //    así los enunciados se muestran aunque todavía no haya preguntas.
+      const partNames = Array.from(
+        { length: Math.max(0, partMax - partMin + 1) },
+        (_, i) => `Parte ${partMin + i} B2`,
+      );
 
       const { data: partsTableData, error: partsError } = await supabase
         .from('levels_partes')
         .select('*')
-        .in('id', partIds);
+        .in('nombre_parte', partNames);
+
       if (partsError) throw new Error('No se pudieron obtener las partes.');
 
-      const { data: answersData, error: answersError } = await supabase
-        .from('levels_respuestas')
-        .select('id, pregunta_id, respuesta, correcta')
-        .in('pregunta_id', questionIds);
-      if (answersError) throw new Error('No se pudieron obtener las respuestas.');
-
-      const { data: openAnswersData, error: openAnswersError } = await supabase
-        .from('levels_respuestas_abiertas')
-        .select('id, pregunta_id_abierta, respuesta_texto')
-        .in('pregunta_id_abierta', questionIds);
-
-      if (openAnswersError) {
-        console.warn('No se pudieron obtener respuestas abiertas:', openAnswersError);
-      }
-
-      const answersByQuestion = (answersData || []).reduce((acc, a) => {
-        if (!acc[a.pregunta_id]) acc[a.pregunta_id] = [];
-        acc[a.pregunta_id].push(a);
-        return acc;
-      }, {});
-
-      const openAnswersByQuestion = (openAnswersData || []).reduce((acc, a) => {
-        if (!acc[a.pregunta_id_abierta]) acc[a.pregunta_id_abierta] = [];
-        acc[a.pregunta_id_abierta].push(a);
+      const partsByName = (partsTableData || []).reduce((acc, part) => {
+        acc[part.nombre_parte] = part;
         return acc;
       }, {});
 
@@ -167,34 +152,149 @@ function B2ExamPaperPracticePageInner({
         return acc;
       }, {});
 
-      const partDescription = (row) => row?.['Descripción'] ?? row?.Descripción ?? '';
+      // Partes en el rango, ordenadas, con `questions: []` por defecto.
+      const baseParts = partNames
+        .map((name) => partsByName[name])
+        .filter(Boolean)
+        .map((part) => ({
+          id: part.id,
+          nombre: formatLevelsPartDisplayName(part?.nombre_parte || 'Parte sin nombre'),
+          descripcion: partDescription(part),
+          questions: [],
+        }));
 
-      const groupedByPart = questionsData.reduce((acc, question) => {
-        const tablePart = partsById[question.parte_id];
-        const partName = formatLevelsPartDisplayName(tablePart?.nombre_parte || 'Parte sin nombre');
-        const partNumber = Number(partName.match(/\d+/)?.[0] || 0);
-        if (partNumber < partMin || partNumber > partMax) return acc;
+      // 2) Intentamos cargar preguntas + respuestas. Si falla, seguimos con
+      //    las partes "vacías" para mostrar al menos los enunciados.
+      let questionsData = [];
+      let answersByQuestion = {};
+      let openAnswersByQuestion = {};
+      /** @type {Record<string, Array<{ id: string, url: string, titulo: string, orden: unknown }>>} */
+      let audioClipsByPreguntaId = {};
 
-        if (!acc[question.parte_id]) {
-          acc[question.parte_id] = {
-            id: question.parte_id,
-            nombre: partName,
-            descripcion: partDescription(tablePart),
-            questions: [],
-          };
+      try {
+        const { examenId, error: examResolveError } = await resolveB2ExamenId(supabase, levelData.id, {
+          slot: examSlot,
+        });
+        if (examResolveError || !examenId) {
+          throw new Error(
+            examResolveError?.message || examResolveError?.details || 'Examen de B2 no resuelto.',
+          );
         }
 
-        acc[question.parte_id].questions.push({
+        const { data: rawQuestions, error: questionsError } = await fetchB2PreguntasByExamen(supabase, {
+          examenId,
+          levelId: levelData.id,
+        });
+        if (questionsError) throw questionsError;
+
+        questionsData = rawQuestions || [];
+
+        if (questionsData.length > 0) {
+          const questionIds = questionsData.map((q) => q.id);
+
+          let audioRows = null;
+          let audioError = null;
+          const maxAudioAttempts = 5;
+          for (let attempt = 1; attempt <= maxAudioAttempts; attempt++) {
+            const res = await supabase
+              .from('levels_preguntas_audios')
+              .select('id, pregunta_id, audio_url, orden, titulo')
+              .in('pregunta_id', questionIds);
+            audioRows = res.data;
+            audioError = res.error;
+            if (!audioError) break;
+            const errText = `${audioError.message || ''} ${audioError.details || ''}`;
+            if (!/schema cache|pgrst205/i.test(errText) || attempt === maxAudioAttempts) break;
+            await new Promise((r) => setTimeout(r, 400 * attempt));
+          }
+
+          if (audioError) {
+            const msg = audioError.message || audioError.details || String(audioError);
+            console.warn('No se pudieron obtener audios (levels_preguntas_audios):', audioError);
+            setPreguntaAudiosError(msg);
+          } else {
+            setPreguntaAudiosError('');
+            const sorted = [...(audioRows || [])].sort((a, b) => {
+              if (a.pregunta_id !== b.pregunta_id) {
+                return String(a.pregunta_id).localeCompare(String(b.pregunta_id));
+              }
+              const ao = a.orden == null || a.orden === '' ? 9999 : Number(a.orden);
+              const bo = b.orden == null || b.orden === '' ? 9999 : Number(b.orden);
+              if (Number.isFinite(ao) && Number.isFinite(bo) && ao !== bo) return ao - bo;
+              return Number(a.id) - Number(b.id);
+            });
+            audioClipsByPreguntaId = {};
+            for (const row of sorted) {
+              const pid = row.pregunta_id;
+              const raw = String(row.audio_url || '').trim();
+              if (!pid || !raw) continue;
+              if (!audioClipsByPreguntaId[pid]) audioClipsByPreguntaId[pid] = [];
+              audioClipsByPreguntaId[pid].push({
+                id: String(row.id),
+                url: raw,
+                titulo: String(row.titulo || '').trim(),
+                orden: row.orden,
+              });
+            }
+          }
+
+          const { data: answersData, error: answersError } = await supabase
+            .from('levels_respuestas')
+            .select('id, pregunta_id, respuesta, correcta')
+            .in('pregunta_id', questionIds);
+          if (answersError) throw answersError;
+
+          const { data: openAnswersData, error: openAnswersError } = await supabase
+            .from('levels_respuestas_abiertas')
+            .select('id, pregunta_id_abierta, respuesta_texto')
+            .in('pregunta_id_abierta', questionIds);
+
+          if (openAnswersError) {
+            console.warn('No se pudieron obtener respuestas abiertas:', openAnswersError);
+          }
+
+          answersByQuestion = (answersData || []).reduce((acc, a) => {
+            if (!acc[a.pregunta_id]) acc[a.pregunta_id] = [];
+            acc[a.pregunta_id].push(a);
+            return acc;
+          }, {});
+
+          openAnswersByQuestion = (openAnswersData || []).reduce((acc, a) => {
+            if (!acc[a.pregunta_id_abierta]) acc[a.pregunta_id_abierta] = [];
+            acc[a.pregunta_id_abierta].push(a);
+            return acc;
+          }, {});
+        }
+      } catch (innerErr) {
+        console.warn(
+          'No se pudieron cargar preguntas (se mostrarán solo los enunciados):',
+          innerErr?.message || innerErr,
+        );
+      }
+
+      // 3) Inyectamos las preguntas en cada parte del rango.
+      const partsIndex = baseParts.reduce((acc, part) => {
+        acc[part.id] = part;
+        return acc;
+      }, {});
+
+      questionsData.forEach((question) => {
+        const tablePart = partsById[question.parte_id];
+        if (!tablePart) return;
+        const target = partsIndex[question.parte_id];
+        if (!target) return;
+        const clips = audioClipsByPreguntaId[question.id] || [];
+        target.questions.push({
           preguntaId: question.id,
           enunciado: question.enunciado || 'Pregunta sin enunciado',
           respuestas: answersByQuestion[question.id] || [],
           respuestasAbiertas: openAnswersByQuestion[question.id] || [],
+          audioClipsDb: clips,
+          audioUrlDb: clips[0]?.url || '',
         });
+      });
 
-        return acc;
-      }, {});
-
-      const normalizedParts = Object.values(groupedByPart).sort((a, b) => {
+      const normalizedParts = baseParts.sort((a, b) => {
         const aNumber = Number(a.nombre.match(/\d+/)?.[0] || 999);
         const bNumber = Number(b.nombre.match(/\d+/)?.[0] || 999);
         return aNumber - bNumber;
@@ -202,7 +302,8 @@ function B2ExamPaperPracticePageInner({
 
       if (!normalizedParts.length) {
         throw new Error(
-          `No hay ejercicios para las partes ${partMin} a ${partMax}. Comprueba que existan preguntas enlazadas a esas partes.`,
+          `No hay partes definidas en Supabase para el rango ${partMin}-${partMax}. ` +
+            `Comprueba la tabla levels_partes.`,
         );
       }
 
@@ -299,7 +400,29 @@ function B2ExamPaperPracticePageInner({
     return pack.slice(0, 5500);
   }, [selectedPartContent.enunciado, selectedPartContent.texto]);
 
-  const audioUrl = useMemo(() => {
+  /** Clips válidos y ordenados (`orden` o posición) para listening con varios audios por pregunta. */
+  const listeningReadyClips = useMemo(() => {
+    if (!showAudioFromEnunciado || !Array.isArray(selectedQuestion?.audioClipsDb)) return [];
+    return [...selectedQuestion.audioClipsDb]
+      .filter((c) => c?.url && isUsableQuestionAudioUrl(String(c.url).trim()))
+      .sort((a, b) => {
+        const ao = a.orden == null || a.orden === '' ? 9999 : Number(a.orden);
+        const bo = b.orden == null || b.orden === '' ? 9999 : Number(b.orden);
+        if (Number.isFinite(ao) && Number.isFinite(bo) && ao !== bo) return ao - bo;
+        return String(a.id || '').localeCompare(String(b.id || ''));
+      });
+  }, [showAudioFromEnunciado, selectedQuestion?.audioClipsDb]);
+
+  const audioPlayersFromDb = useMemo(() => {
+    if (!showAudioFromEnunciado) return [];
+    return listeningReadyClips.map((c, idx) => ({
+      key: String(c.id ?? `idx-${idx}`),
+      src: resolvePublicOrSiteAudioSrc(c.url),
+      label: c.titulo || `Audio ${idx + 1}`,
+    }));
+  }, [showAudioFromEnunciado, listeningReadyClips]);
+
+  const textEnunciadoAudioUrl = useMemo(() => {
     if (!showAudioFromEnunciado) return '';
     const blob = [
       selectedQuestion?.enunciado,
@@ -318,14 +441,29 @@ function B2ExamPaperPracticePageInner({
     selectedPartContent.enunciado,
   ]);
 
-  /** Rutas relativas al sitio: respeta `NEXT_PUBLIC_BASE_PATH` (next.config). */
-  const resolvedAudioSrc = useMemo(() => {
-    if (!audioUrl) return '';
-    if (/^https?:\/\//i.test(audioUrl)) return audioUrl;
-    const bp = (process.env.NEXT_PUBLIC_BASE_PATH || '').replace(/\/$/, '');
-    const path = audioUrl.startsWith('/') ? audioUrl : `/${audioUrl}`;
-    return `${bp}${path}`;
-  }, [audioUrl]);
+  const resolvedTextEnunciadoAudioSrc = useMemo(
+    () => resolvePublicOrSiteAudioSrc(textEnunciadoAudioUrl),
+    [textEnunciadoAudioUrl],
+  );
+
+  const showEnunciadoFallbackAudio =
+    showAudioFromEnunciado &&
+    audioPlayersFromDb.length === 0 &&
+    Boolean(String(textEnunciadoAudioUrl || '').trim());
+
+  const hasDbClipsWithNoValidUrl = useMemo(() => {
+    const raw = selectedQuestion?.audioClipsDb;
+    if (!showAudioFromEnunciado) return false;
+    if (!Array.isArray(raw) || raw.length === 0) return false;
+    if (audioPlayersFromDb.length > 0) return false;
+    if (showEnunciadoFallbackAudio) return false;
+    return true;
+  }, [
+    showAudioFromEnunciado,
+    selectedQuestion?.audioClipsDb,
+    audioPlayersFromDb.length,
+    showEnunciadoFallbackAudio,
+  ]);
 
   const textoLinesForDisplay = useMemo(() => {
     const raw = selectedPartContent.texto || '';
@@ -373,6 +511,39 @@ function B2ExamPaperPracticePageInner({
     () => groupedAnswers.some((g) => g.questionNumber != null && g.options.length >= 2),
     [groupedAnswers],
   );
+
+  const listeningContextBlocks = useMemo(
+    () => splitListeningMcqContextByQuestion(textoLinesForDisplay),
+    [textoLinesForDisplay],
+  );
+
+  const useListeningItemLayout = useMemo(() => {
+    if (!showAudioFromEnunciado || !hasMcqStyle) return false;
+    const hasMcqGroups = groupedAnswers.some(
+      (g) => g.questionNumber != null && g.options.length >= 2,
+    );
+    if (!hasMcqGroups) return false;
+    const hasAudio = listeningReadyClips.length > 0 || showEnunciadoFallbackAudio;
+    if (!hasAudio) return false;
+    if (listeningContextBlocks.length >= 1) return true;
+    return groupedAnswers.some((g) => g.questionNumber != null);
+  }, [
+    showAudioFromEnunciado,
+    hasMcqStyle,
+    groupedAnswers,
+    listeningReadyClips.length,
+    showEnunciadoFallbackAudio,
+    listeningContextBlocks.length,
+  ]);
+
+  const listeningQuestionNumbersOrdered = useMemo(() => {
+    const s = new Set();
+    groupedAnswers.forEach((g) => {
+      if (g.questionNumber != null) s.add(g.questionNumber);
+    });
+    listeningContextBlocks.forEach((b) => s.add(b.questionNumber));
+    return [...s].sort((a, b) => a - b);
+  }, [groupedAnswers, listeningContextBlocks]);
 
   const inferredOpenQuestionNumbers = useMemo(
     () => inferOpenQuestionNumbersFromPrompt(selectedQuestion?.enunciado || '', partNumber),
@@ -551,6 +722,108 @@ function B2ExamPaperPracticePageInner({
               ))}
             </div>
 
+            {selectedPart && !selectedQuestion && (
+              <div
+                style={{
+                  background: '#fff',
+                  borderRadius: '12px',
+                  padding: '1.25rem',
+                  boxShadow: '0 4px 12px rgba(0, 0, 0, 0.08)',
+                }}
+              >
+                <h2 style={{ marginTop: 0 }}>{selectedPart.nombre}</h2>
+
+                {selectedPart.descripcion ? (
+                  <div style={{ color: '#2d3748', marginTop: '0.6rem' }}>
+                    <strong>Pregunta:</strong>
+                    <div
+                      style={{
+                        marginTop: '0.6rem',
+                        background: '#f8fafc',
+                        border: '1px solid #e2e8f0',
+                        borderRadius: '10px',
+                        padding: '0.95rem 1rem',
+                      }}
+                    >
+                      <p style={{ margin: '0 0 0.65rem', fontWeight: 700, color: '#1a365d' }}>Enunciado</p>
+                      {getFormattedEnunciado(selectedPart.descripcion).map((block, index) => {
+                        if (block.type === 'label') {
+                          return (
+                            <p
+                              key={`preview-${block.type}-${index}`}
+                              style={{ margin: '0.7rem 0 0.45rem', fontWeight: 700, color: '#1a365d' }}
+                            >
+                              {block.text}
+                            </p>
+                          );
+                        }
+                        if (block.type === 'answer') {
+                          return (
+                            <p
+                              key={`preview-${block.type}-${index}`}
+                              style={{
+                                margin: '0.45rem 0',
+                                padding: '0.45rem 0.6rem',
+                                background: '#ebf8ff',
+                                borderRadius: '8px',
+                                fontWeight: 600,
+                              }}
+                            >
+                              {block.text}
+                            </p>
+                          );
+                        }
+                        if (block.type === 'number') {
+                          return (
+                            <p
+                              key={`preview-${block.type}-${index}`}
+                              style={{ margin: '0.35rem 0', fontWeight: 700, color: '#2d3748' }}
+                            >
+                              {block.text}
+                            </p>
+                          );
+                        }
+                        if (block.type === 'option') {
+                          return (
+                            <p
+                              key={`preview-${block.type}-${index}`}
+                              style={{ margin: '0.2rem 0', paddingLeft: '0.35rem', color: '#334155' }}
+                            >
+                              {block.text}
+                            </p>
+                          );
+                        }
+                        return (
+                          <p
+                            key={`preview-${block.type}-${index}`}
+                            style={{ margin: '0.45rem 0', lineHeight: 1.7, color: '#1f2937' }}
+                          >
+                            {block.text}
+                          </p>
+                        );
+                      })}
+                    </div>
+                  </div>
+                ) : (
+                  <p style={{ margin: '0.6rem 0 0', color: '#4a5568' }}>
+                    Esta parte aún no tiene enunciado en la base de datos.
+                  </p>
+                )}
+
+                <p
+                  style={{
+                    marginTop: '1.25rem',
+                    margin: '1.25rem 0 0',
+                    color: '#4a5568',
+                    fontSize: '0.95rem',
+                    fontStyle: 'italic',
+                  }}
+                >
+                  Las preguntas para esta parte estarán disponibles próximamente.
+                </p>
+              </div>
+            )}
+
             {selectedPart && selectedQuestion && (
               <div
                 style={{
@@ -633,16 +906,329 @@ function B2ExamPaperPracticePageInner({
                   </div>
                 </div>
 
-                {audioUrl ? (
+                {showAudioFromEnunciado && preguntaAudiosError ? (
+                  <p
+                    style={{
+                      marginTop: '0.75rem',
+                      padding: '0.6rem 0.75rem',
+                      background: '#fff5f5',
+                      border: '1px solid #feb2b2',
+                      borderRadius: '8px',
+                      color: '#9b2c2c',
+                      fontSize: '0.9rem',
+                      lineHeight: 1.5,
+                    }}
+                  >
+                    {/could not find the table|does not exist|schema cache/i.test(preguntaAudiosError) ? (
+                      <>
+                        En este proyecto Supabase{' '}
+                        <strong>no existe la tabla</strong>{' '}
+                        <code style={{ fontSize: '0.85em' }}>public.levels_preguntas_audios</code> (o la clave
+                        pública de la app apunta a otro proyecto). En Supabase → SQL → pega y ejecuta{' '}
+                        <code style={{ fontSize: '0.85em' }}>scripts/setup-levels-preguntas-audios.sql</code> (todo
+                        en un solo archivo). Alternativa en dos pasos:{' '}
+                        <code style={{ fontSize: '0.85em' }}>scripts/create-levels-preguntas-audios.sql</code> y luego{' '}
+                        <code style={{ fontSize: '0.85em' }}>scripts/levels-preguntas-audios-rls.sql</code>.
+                        <br />
+                        <span style={{ opacity: 0.92 }}>Detalle: {preguntaAudiosError}</span>
+                      </>
+                    ) : (
+                      <>
+                        No se pudieron leer los audios desde{' '}
+                        <code style={{ fontSize: '0.85em' }}>levels_preguntas_audios</code>: {preguntaAudiosError}.
+                        Si es un problema de permisos, en Supabase añade una política RLS de SELECT para el rol{' '}
+                        <code style={{ fontSize: '0.85em' }}>anon</code> (ver{' '}
+                        <code style={{ fontSize: '0.85em' }}>scripts/levels-preguntas-audios-rls.sql</code>).
+                      </>
+                    )}
+                  </p>
+                ) : null}
+
+                {showAudioFromEnunciado && hasDbClipsWithNoValidUrl ? (
+                  <p
+                    style={{
+                      marginTop: '0.75rem',
+                      padding: '0.6rem 0.75rem',
+                      background: '#fffbeb',
+                      border: '1px solid #fbd38d',
+                      borderRadius: '8px',
+                      color: '#744210',
+                      fontSize: '0.9rem',
+                      lineHeight: 1.5,
+                    }}
+                  >
+                    Hay filas en <code style={{ fontSize: '0.85em' }}>levels_preguntas_audios</code> para esta
+                    pregunta, pero ninguna <code style={{ fontSize: '0.85em' }}>audio_url</code> es válida (revisa
+                    URL pública o firmada hasta el fichero .mp3). Puedes tener varias filas por la misma{' '}
+                    <code style={{ fontSize: '0.85em' }}>pregunta_id</code> con distinto <code style={{ fontSize: '0.85em' }}>orden</code>.
+                  </p>
+                ) : null}
+
+                {useListeningItemLayout ? (
+                  <>
+                    {showEnunciadoFallbackAudio ? (
+                      <div
+                        style={{
+                          marginTop: '0.85rem',
+                          padding: '0.85rem 1rem',
+                          background: '#f0f9ff',
+                          border: '1px solid #bae6fd',
+                          borderRadius: '10px',
+                        }}
+                      >
+                        <p style={{ margin: '0 0 0.5rem', fontWeight: 700, color: '#0c4a6e' }}>
+                          Audio (instrucciones / enunciado)
+                        </p>
+                        <audio
+                          key={resolvedTextEnunciadoAudioSrc}
+                          controls
+                          src={resolvedTextEnunciadoAudioSrc}
+                          style={{ width: '100%' }}
+                        >
+                          <track kind="captions" />
+                        </audio>
+                      </div>
+                    ) : null}
+                    <div style={{ marginTop: '1rem', display: 'grid', gap: '1.25rem' }}>
+                      {listeningQuestionNumbersOrdered.map((qn) => {
+                        const group = groupedAnswers.find((g) => g.questionNumber === qn);
+                        if (!group || !group.options?.length) return null;
+                        const groupIndex = groupedAnswers.indexOf(group);
+                        const ctx = listeningContextBlocks.find((b) => b.questionNumber === qn);
+                        const clip = pickListeningClipForQuestion(listeningReadyClips, qn);
+                        const clipSrc = clip?.url ? resolvePublicOrSiteAudioSrc(String(clip.url)) : '';
+                        const clipLabel = String(clip?.titulo || '').trim();
+
+                        return (
+                          <div
+                            key={`listen-item-${selectedQuestion.preguntaId}-${qn}`}
+                            style={{
+                              border: '1px solid #cbd5e1',
+                              borderRadius: '12px',
+                              padding: '1rem 1.1rem',
+                              background: '#ffffff',
+                              boxShadow: '0 1px 5px rgba(15, 23, 42, 0.07)',
+                            }}
+                          >
+                            <p
+                              style={{
+                                margin: '0 0 0.75rem',
+                                fontWeight: 800,
+                                color: '#0f172a',
+                                fontSize: '1.05rem',
+                              }}
+                            >
+                              Ítem {qn}
+                            </p>
+                            {clipSrc ? (
+                              <div style={{ marginBottom: ctx?.contextLines?.length ? '0.85rem' : 0 }}>
+                                {clipLabel ? (
+                                  <p
+                                    style={{
+                                      margin: '0 0 0.35rem',
+                                      fontSize: '0.9rem',
+                                      color: '#334155',
+                                      fontWeight: 600,
+                                    }}
+                                  >
+                                    {clipLabel}
+                                  </p>
+                                ) : null}
+                                <audio controls src={clipSrc} style={{ width: '100%' }}>
+                                  <track kind="captions" />
+                                </audio>
+                              </div>
+                            ) : (
+                              <p
+                                style={{
+                                  margin: '0 0 0.75rem',
+                                  fontSize: '0.88rem',
+                                  color: '#64748b',
+                                  fontStyle: 'italic',
+                                }}
+                              >
+                                No hay audio enlazado para este ítem en la base de datos.
+                              </p>
+                            )}
+                            {ctx?.contextLines?.length ? (
+                              <div
+                                style={{
+                                  marginBottom: '0.85rem',
+                                  padding: '0.75rem 0.85rem',
+                                  background: '#f8fafc',
+                                  border: '1px solid #e2e8f0',
+                                  borderRadius: '10px',
+                                }}
+                              >
+                                {ctx.contextLines.map((line, li) => (
+                                  <p
+                                    key={`ctx-${qn}-${li}`}
+                                    style={{ margin: li === 0 ? '0 0 0.4rem' : '0.4rem 0', lineHeight: 1.65 }}
+                                  >
+                                    {line}
+                                  </p>
+                                ))}
+                              </div>
+                            ) : null}
+                            <p style={{ margin: '0 0 0.55rem', fontWeight: 700, color: '#1e293b' }}>Opciones</p>
+                            <div style={{ display: 'grid', gap: '0.6rem' }}>
+                              {group.options.map((option) => {
+                                const questionKey = getQuestionKey(
+                                  selectedPart.id,
+                                  group.questionNumber,
+                                  `extra-${groupIndex}`,
+                                );
+                                const isSelected = selectedOptions[questionKey] === option.id;
+                                const isChecked = checkedQuestions[questionKey];
+                                const isCorrect = !!option.correcta;
+                                const showCorrect = isChecked && isCorrect;
+                                const showIncorrect = isChecked && isSelected && !isCorrect;
+
+                                return (
+                                  <button
+                                    key={option.id}
+                                    type="button"
+                                    onClick={() => {
+                                      const wasChecked = checkedQuestions[questionKey];
+                                      setSelectedOptions((prev) => ({ ...prev, [questionKey]: option.id }));
+                                      setCheckedQuestions((prev) => ({ ...prev, [questionKey]: true }));
+                                      if (!wasChecked) {
+                                        const correctOpt = group.options.find((o) => o.correcta);
+                                        const answersFromDatabase = group.options
+                                          .map((o) => (o.formattedText || o.respuesta || '').trim())
+                                          .filter(Boolean)
+                                          .join('\n');
+                                        requestAiJustification(questionKey, {
+                                          partLabel: selectedPart?.nombre || '',
+                                          questionLabel: group.questionNumber
+                                            ? `Pregunta ${group.questionNumber}`
+                                            : 'Ítem',
+                                          userChoiceText: option.formattedText || option.respuesta || '',
+                                          correctChoiceText:
+                                            correctOpt?.formattedText || correctOpt?.respuesta || '',
+                                          isCorrect: !!option.correcta,
+                                          answersFromDatabase: answersFromDatabase || undefined,
+                                        });
+                                        void (async () => {
+                                          const uid = await getSessionUserId();
+                                          const pid = selectedQuestion?.preguntaId;
+                                          const parteId = selectedPart?.id;
+                                          if (!uid || !pid || !parteId) return;
+                                          const { error } = await mergeLevelsEstadisticas({
+                                            userId: uid,
+                                            preguntaId: pid,
+                                            parteId,
+                                            deltaEvaluadas: 1,
+                                            deltaCorrectas: option.correcta ? 1 : 0,
+                                            deltaIncorrectas: option.correcta ? 0 : 1,
+                                          });
+                                          if (error) console.warn('levels_estadisticas (eval):', error.message || error);
+                                        })();
+                                      }
+                                    }}
+                                    style={{
+                                      textAlign: 'left',
+                                      borderRadius: '8px',
+                                      padding: '0.75rem 1rem',
+                                      border: showCorrect
+                                        ? '2px solid #2f855a'
+                                        : showIncorrect
+                                          ? '2px solid #c53030'
+                                          : isSelected
+                                            ? '2px solid #3182ce'
+                                            : '1px solid #e2e8f0',
+                                      backgroundColor: showCorrect
+                                        ? '#f0fff4'
+                                        : showIncorrect
+                                          ? '#fff5f5'
+                                          : isSelected
+                                            ? '#ebf8ff'
+                                            : '#fff',
+                                      cursor: 'pointer',
+                                    }}
+                                  >
+                                    {option.formattedText || option.respuesta}
+                                  </button>
+                                );
+                              })}
+                            </div>
+                            {(() => {
+                              const questionKey = getQuestionKey(
+                                selectedPart.id,
+                                group.questionNumber,
+                                `extra-${groupIndex}`,
+                              );
+                              const hasChecked = checkedQuestions[questionKey];
+                              if (!hasChecked) return null;
+                              const correct = group.options.find((o) => o.correcta);
+                              return (
+                                <>
+                                  <p style={{ margin: '0.7rem 0 0', fontWeight: 600, color: '#1f2937' }}>
+                                    Correct answer:{' '}
+                                    {correct?.formattedText || correct?.respuesta || 'Not available'}
+                                  </p>
+                                  <LevelsAnswerJustification hint={aiHintsByKey[questionKey]} />
+                                </>
+                              );
+                            })()}
+                          </div>
+                        );
+                      })}
+                    </div>
+                  </>
+                ) : null}
+
+                {!useListeningItemLayout &&
+                (audioPlayersFromDb.length > 0 || showEnunciadoFallbackAudio) ? (
                   <div style={{ marginTop: '0.85rem' }}>
                     <p style={{ margin: '0 0 0.5rem', fontWeight: 700, color: '#1a365d' }}>Audio</p>
-                    <audio key={resolvedAudioSrc} controls src={resolvedAudioSrc} style={{ width: '100%' }}>
-                      <track kind="captions" />
-                    </audio>
+                    {audioPlayersFromDb.map((p) => (
+                      <div key={p.key} style={{ marginBottom: '0.85rem' }}>
+                        {audioPlayersFromDb.length > 1 ? (
+                          <p
+                            style={{
+                              margin: '0 0 0.35rem',
+                              fontSize: '0.9rem',
+                              color: '#334155',
+                              fontWeight: 600,
+                            }}
+                          >
+                            {p.label}
+                          </p>
+                        ) : null}
+                        <audio controls src={p.src} style={{ width: '100%' }}>
+                          <track kind="captions" />
+                        </audio>
+                      </div>
+                    ))}
+                    {showEnunciadoFallbackAudio ? (
+                      <div style={{ marginTop: audioPlayersFromDb.length > 0 ? '0.75rem' : 0 }}>
+                        {audioPlayersFromDb.length > 0 ? (
+                          <p
+                            style={{
+                              margin: '0 0 0.35rem',
+                              fontSize: '0.9rem',
+                              color: '#334155',
+                              fontWeight: 600,
+                            }}
+                          >
+                            Audio (enunciado)
+                          </p>
+                        ) : null}
+                        <audio
+                          key={resolvedTextEnunciadoAudioSrc}
+                          controls
+                          src={resolvedTextEnunciadoAudioSrc}
+                          style={{ width: '100%' }}
+                        >
+                          <track kind="captions" />
+                        </audio>
+                      </div>
+                    ) : null}
                   </div>
                 ) : null}
 
-                {textoLinesForDisplay.length > 0 ? (
+                {!useListeningItemLayout && textoLinesForDisplay.length > 0 ? (
                   <div
                     style={{
                       marginTop: '0.7rem',
@@ -681,7 +1267,7 @@ function B2ExamPaperPracticePageInner({
                     />
                   ) : null}
 
-                  {!showLongWritingWithAi ? (
+                  {!showLongWritingWithAi && !useListeningItemLayout ? (
                     <h3 style={{ margin: '0 0 0.75rem', color: '#1a202c' }}>Preguntas</h3>
                   ) : null}
                   {!showLongWritingWithAi && useOpenInputUi && openQuestionNumbers.length > 0 ? (
@@ -798,7 +1384,9 @@ function B2ExamPaperPracticePageInner({
                       })}
                     </div>
                   ) : null}
-                  {!showLongWritingWithAi && !(useOpenInputUi && openQuestionNumbers.length > 0) ? (
+                  {!showLongWritingWithAi &&
+                  !(useOpenInputUi && openQuestionNumbers.length > 0) &&
+                  !useListeningItemLayout ? (
                     <div style={{ display: 'grid', gap: '1rem' }}>
                       {groupedAnswers.length === 0 ? (
                         <p style={{ margin: 0, color: '#4a5568', fontSize: '0.95rem' }}>

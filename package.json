@@ -5,6 +5,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
+    "dev:fresh": "node scripts/clean-next-cache.mjs && next dev",
     "prebuild": "node scripts/write-static-export-layouts.mjs",
     "build": "next build",
     "build:static": "node scripts/build-static.mjs",
@@ -49,6 +50,7 @@
     "@types/node": "^20.0.0",
     "@types/react": "18.3.28",
     "@types/react-dom": "^18.0.0",
+    "baseline-browser-mapping": "^2.10.29",
     "cross-env": "^7.0.3",
     "eslint": "^8.0.0",
     "eslint-config-next": "^14.0.0",

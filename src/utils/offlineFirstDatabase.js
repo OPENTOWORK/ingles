@@ -162,6 +162,7 @@ export class OfflineFirstDatabase {
 
   // Load data from localStorage
   loadFromLocalStorage() {
+    if (typeof window === 'undefined') return;
     try {
       const stored = localStorage.getItem('offline_database');
       if (stored) {
@@ -175,6 +176,7 @@ export class OfflineFirstDatabase {
 
   // Save data to localStorage
   saveToLocalStorage() {
+    if (typeof window === 'undefined') return;
     try {
       localStorage.setItem('offline_database', JSON.stringify(this.localData));
     } catch (error) {

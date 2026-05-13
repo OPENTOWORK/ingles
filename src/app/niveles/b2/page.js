@@ -4,11 +4,13 @@ import { useUserRole } from '@/context/UserRoleContext';
 
 // ====== Datos ======
 const SECTIONS = {
-  "Reading and Use of English": [
+  "Use of English": [
     { text: "Part 1: Multiple-choice cloze", href: "/niveles/b2/reading-and-use-of-english/part-1" },
     { text: "Part 2: Open cloze", href: "/niveles/b2/reading-and-use-of-english/part-2" },
     { text: "Part 3: Word formation", href: "/niveles/b2/reading-and-use-of-english/part-3" },
     { text: "Part 4: Key word transformations", href: "/niveles/b2/reading-and-use-of-english/part-4" },
+  ],
+  "Reading": [
     { text: "Part 5: Multiple-choice (reading)", href: "/niveles/b2/reading-and-use-of-english/part-5" },
     { text: "Part 6: Gapped text", href: "/niveles/b2/reading-and-use-of-english/part-6" },
     { text: "Part 7: Multiple matching", href: "/niveles/b2/reading-and-use-of-english/part-7" },
@@ -51,7 +53,7 @@ export default function B2Page() {
   return (
     <main className="shell b2-page">
       <header className="header">
-        <h1>B2 Exam: First (FCE)</h1>
+        <h1>B2 Tips and Exams</h1>
         <p>This is an upper-intermediate level qualification that proves you can use everyday written and spoken English for work or study.</p>
       </header>
 
@@ -105,6 +107,7 @@ function Section({ title, topics }) {
       <div className="section__head">
         <h2>{title}</h2>
         <span className="count">{topics.length}</span>
+        <span className="section__subtitle">Description and interactive tips</span>
       </div>
       <ul className="grid">
         {topics.map((topic, i) => (
@@ -133,9 +136,10 @@ function GlobalStyles() {
       .header p{margin:0;color:#666;max-width:700px;margin:0 auto;text-align:center;font-size:1.1rem}
       .sections{display:flex;flex-direction:column;gap:28px}
       .section{padding:6px}
-      .section__head{display:flex;align-items:center;gap:8px;margin-bottom:10px}
+      .section__head{display:flex;align-items:center;gap:8px;margin-bottom:10px;flex-wrap:wrap}
       .section__head h2{margin:0;font-size:22px;color:var(--text)}
       .count{display:inline-grid;place-items:center;width:28px;height:28px;border-radius:9999px;border:1px solid #eaeaea;background:var(--card);font-size:12px;color:#666}
+      .section__subtitle{font-size:0.9rem;color:#666;font-style:italic;margin-left:4px}
       .grid{list-style:none;margin:0;padding:0;display:grid;gap:12px;grid-template-columns:repeat(1,minmax(0,1fr))}
       @media (min-width:640px){ .grid{grid-template-columns:repeat(2,minmax(0,1fr));} }
       @media (min-width:980px){ .grid{grid-template-columns:repeat(3,minmax(0,1fr));} }

@@ -93,9 +93,32 @@ export default function LoginPage() {
   };
 
   const handleOAuthLogin = async (provider) => {
-    const { error } = await supabase.auth.signInWithOAuth({ provider });
+    const redirectTo =
+      typeof window !== 'undefined'
+        ? `${window.location.origin}/auth/callback`
+        : undefined;
+
+    const { error } = await supabase.auth.signInWithOAuth({
+      provider,
+      options: {
+        redirectTo,
+        queryParams: {
+          access_type: 'offline',
+          prompt: 'consent',
+        },
+      },
+    });
+
     if (error) {
-      toast.error("Error con el inicio de sesión de " + provider);
+      console.error(`Error OAuth (${provider}):`, error);
+      const msg = (error.message || '').toLowerCase();
+      if (msg.includes('provider is not enabled') || msg.includes('unsupported provider')) {
+        toast.error(
+          `El proveedor ${provider} no está habilitado en Supabase. Actívalo en Authentication → Providers.`
+        );
+      } else {
+        toast.error('No se pudo iniciar sesión con ' + provider + '. ' + error.message);
+      }
     }
   };
 
@@ -153,24 +176,14 @@ export default function LoginPage() {
 
       <div>
         <button
+          type="button"
           onClick={() => handleOAuthLogin('google')}
           style={{
             ...styles.button,
             backgroundColor: "#db4437",
-            marginBottom: "1rem"
           }}
         >
           Continuar con Google
-        </button>
-
-        <button
-          onClick={() => handleOAuthLogin('github')}
-          style={{
-            ...styles.button,
-            backgroundColor: "#333"
-          }}
-        >
-          Continuar con GitHub
         </button>
       </div>
     </main>
