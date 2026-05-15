@@ -11,7 +11,15 @@ import { computeLevelsPartScore } from '@/utils/levelsPaperScoreMetrics';
 import { postLevelsAnswerJustification } from '@/utils/levelsJustifyClient';
 import Link from 'next/link';
 import { supabase } from '@/utils/supabaseClient';
-import { extractTextoBloque, splitListeningMcqContextByQuestion } from '@/utils/b2ExamTextBlocks';
+import {
+  extractTextoBloque,
+  extractListeningMatchingOptionPool,
+  isB2ListeningItemLayoutPart,
+  splitListeningMcqContextByQuestion,
+  splitListeningOpenGapContextByQuestion,
+  splitListeningSpeakerContextByQuestion,
+  trimListeningPart10DuplicateCycles,
+} from '@/utils/b2ExamTextBlocks';
 import {
   getFormattedEnunciado,
   getGroupedAnswers,
@@ -39,11 +47,29 @@ function resolvePublicOrSiteAudioSrc(url) {
 }
 
 /** @param {Array<{ orden?: unknown, url?: string, id?: string, titulo?: string }>} clips */
-function pickListeningClipForQuestion(clips, questionNumber) {
+function pickListeningClipForQuestion(clips, questionNumber, partNumber = 0) {
   if (!Array.isArray(clips) || clips.length === 0 || !Number.isFinite(questionNumber)) return null;
-  const byOrden = clips.find((c) => Number(c.orden) === questionNumber);
-  if (byOrden) return byOrden;
-  return clips[questionNumber - 1] || null;
+  const lookupKeys = [questionNumber];
+  if (partNumber === 12 && questionNumber >= 19 && questionNumber <= 23) {
+    lookupKeys.unshift(questionNumber - 18);
+  }
+  if (partNumber === 13 && questionNumber >= 24 && questionNumber <= 30) {
+    lookupKeys.unshift(questionNumber - 23);
+  }
+  for (const key of lookupKeys) {
+    const byOrden = clips.find((c) => Number(c.orden) === key);
+    if (byOrden) return byOrden;
+  }
+  // Parte 13 con varios clips: orden 1–7 ↔ preguntas 24–30 (un clip por ítem).
+  // Si hay un solo clip, la UI usa listeningMonologueClip arriba (no por ítem).
+  if (clips.length === 1 && partNumber !== 13) return clips[0];
+  const idx =
+    partNumber === 12 && questionNumber >= 19 && questionNumber <= 23
+      ? questionNumber - 19
+      : partNumber === 13 && questionNumber >= 24 && questionNumber <= 30
+        ? questionNumber - 24
+        : questionNumber - 1;
+  return clips[idx] || null;
 }
 
 const buttonStyle = {
@@ -389,9 +415,13 @@ function B2ExamPaperPracticePageInner({
     const desc = (selectedPart?.descripcion || '').replace(/\r\n/g, '\n').trim();
     const fallback = splitEnunciadoAndTextFallback(rawPregunta);
     const textoExtracted = extractTextoBloque(rawPregunta, partNumber) || '';
+    let texto = (textoExtracted || fallback.texto || '').trim();
+    if (partNumber === 10) {
+      texto = trimListeningPart10DuplicateCycles(texto);
+    }
     return {
       enunciado: desc || fallback.enunciado,
-      texto: (textoExtracted || fallback.texto || '').trim(),
+      texto,
     };
   }, [selectedPart?.descripcion, selectedQuestion?.enunciado, partNumber]);
 
@@ -512,38 +542,29 @@ function B2ExamPaperPracticePageInner({
     [groupedAnswers],
   );
 
-  const listeningContextBlocks = useMemo(
-    () => splitListeningMcqContextByQuestion(textoLinesForDisplay),
-    [textoLinesForDisplay],
-  );
+  const listeningContextBlocks = useMemo(() => {
+    if (partNumber === 11) {
+      return splitListeningOpenGapContextByQuestion(selectedQuestion?.enunciado || '');
+    }
+    if (partNumber === 12) {
+      const blob = textoLinesForDisplay.length
+        ? textoLinesForDisplay.join('\n')
+        : selectedQuestion?.enunciado || '';
+      return splitListeningSpeakerContextByQuestion(blob);
+    }
+    return splitListeningMcqContextByQuestion(textoLinesForDisplay);
+  }, [partNumber, textoLinesForDisplay, selectedQuestion?.enunciado]);
 
-  const useListeningItemLayout = useMemo(() => {
-    if (!showAudioFromEnunciado || !hasMcqStyle) return false;
-    const hasMcqGroups = groupedAnswers.some(
-      (g) => g.questionNumber != null && g.options.length >= 2,
-    );
-    if (!hasMcqGroups) return false;
-    const hasAudio = listeningReadyClips.length > 0 || showEnunciadoFallbackAudio;
-    if (!hasAudio) return false;
-    if (listeningContextBlocks.length >= 1) return true;
-    return groupedAnswers.some((g) => g.questionNumber != null);
-  }, [
-    showAudioFromEnunciado,
-    hasMcqStyle,
-    groupedAnswers,
-    listeningReadyClips.length,
-    showEnunciadoFallbackAudio,
-    listeningContextBlocks.length,
-  ]);
-
-  const listeningQuestionNumbersOrdered = useMemo(() => {
-    const s = new Set();
-    groupedAnswers.forEach((g) => {
-      if (g.questionNumber != null) s.add(g.questionNumber);
-    });
-    listeningContextBlocks.forEach((b) => s.add(b.questionNumber));
-    return [...s].sort((a, b) => a - b);
-  }, [groupedAnswers, listeningContextBlocks]);
+  const listeningMatchingPool = useMemo(() => {
+    if (partNumber !== 12) return [];
+    const blob = textoLinesForDisplay.length
+      ? textoLinesForDisplay
+      : String(selectedQuestion?.enunciado || '')
+          .split('\n')
+          .map((l) => l.trim())
+          .filter(Boolean);
+    return extractListeningMatchingOptionPool(blob);
+  }, [partNumber, textoLinesForDisplay, selectedQuestion?.enunciado]);
 
   const inferredOpenQuestionNumbers = useMemo(
     () => inferOpenQuestionNumbersFromPrompt(selectedQuestion?.enunciado || '', partNumber),
@@ -589,15 +610,66 @@ function B2ExamPaperPracticePageInner({
     selectedQuestion?.respuestasAbiertas,
   ]);
 
-  /** Writing: inputs abiertos solo si hay claves comprobables y no es MCQ clásico. */
-  const useOpenInputUi = Boolean(
-    preferOpenInputs && !hasMcqStyle && openQuestionNumbers.length > 0,
+  const hasOpenAnswerSlots = Boolean(
+    !hasMcqStyle &&
+      openQuestionNumbers.length > 0 &&
+      (preferOpenInputs || (showAudioFromEnunciado && partNumber === 11)),
   );
+
+  const useListeningItemLayout = useMemo(() => {
+    if (!showAudioFromEnunciado || !isB2ListeningItemLayoutPart(partNumber)) return false;
+
+    if (partNumber === 11) {
+      return openQuestionNumbers.length > 0;
+    }
+
+    if (!hasMcqStyle) return false;
+    const canParseItems =
+      listeningContextBlocks.length >= 1 || groupedAnswers.some((g) => g.questionNumber != null);
+    if (canParseItems) return true;
+
+    const hasAudio = listeningReadyClips.length > 0 || showEnunciadoFallbackAudio;
+    if (!hasAudio) return false;
+    if (listeningContextBlocks.length >= 1) return true;
+    return groupedAnswers.some((g) => g.questionNumber != null);
+  }, [
+    showAudioFromEnunciado,
+    partNumber,
+    openQuestionNumbers.length,
+    hasMcqStyle,
+    groupedAnswers,
+    listeningReadyClips.length,
+    showEnunciadoFallbackAudio,
+    listeningContextBlocks.length,
+  ]);
+
+  const listeningQuestionNumbersOrdered = useMemo(() => {
+    const s = new Set();
+    if (partNumber === 11) {
+      openQuestionNumbers.forEach((n) => s.add(n));
+    }
+    groupedAnswers.forEach((g) => {
+      if (g.questionNumber != null) s.add(g.questionNumber);
+    });
+    listeningContextBlocks.forEach((b) => s.add(b.questionNumber));
+    return [...s].sort((a, b) => a - b);
+  }, [groupedAnswers, listeningContextBlocks, partNumber, openQuestionNumbers]);
+
+  /** Parte 11 y 13: un único audio por pregunta de examen (monólogo / entrevista). */
+  const listeningMonologueClip = useMemo(() => {
+    if (listeningReadyClips.length === 0) return null;
+    if (partNumber === 11) return listeningReadyClips[0];
+    if (partNumber === 13 && listeningReadyClips.length === 1) return listeningReadyClips[0];
+    return null;
+  }, [partNumber, listeningReadyClips]);
+
+  /** Writing: inputs abiertos; en Listening parte 11 van en el layout por ítems. */
+  const useOpenInputUi = Boolean(hasOpenAnswerSlots && !useListeningItemLayout);
 
   const partScoreMetrics = useMemo(
     () =>
       computeLevelsPartScore({
-        useOpenInputUi,
+        useOpenInputUi: hasOpenAnswerSlots,
         openQuestionNumbers,
         openChecks,
         groupedAnswers,
@@ -607,7 +679,7 @@ function B2ExamPaperPracticePageInner({
         partId: selectedPart?.id,
       }),
     [
-      useOpenInputUi,
+      hasOpenAnswerSlots,
       openQuestionNumbers,
       openChecks,
       groupedAnswers,
@@ -966,7 +1038,38 @@ function B2ExamPaperPracticePageInner({
 
                 {useListeningItemLayout ? (
                   <>
-                    {showEnunciadoFallbackAudio ? (
+                    {listeningMonologueClip?.url ? (
+                      <div
+                        style={{
+                          marginTop: '0.85rem',
+                          padding: '0.85rem 1rem',
+                          background: '#f0f9ff',
+                          border: '1px solid #bae6fd',
+                          borderRadius: '10px',
+                        }}
+                      >
+                        <p style={{ margin: '0 0 0.5rem', fontWeight: 700, color: '#0c4a6e' }}>Audio</p>
+                        {listeningMonologueClip.titulo ? (
+                          <p
+                            style={{
+                              margin: '0 0 0.35rem',
+                              fontSize: '0.9rem',
+                              color: '#334155',
+                              fontWeight: 600,
+                            }}
+                          >
+                            {listeningMonologueClip.titulo}
+                          </p>
+                        ) : null}
+                        <audio
+                          controls
+                          src={resolvePublicOrSiteAudioSrc(String(listeningMonologueClip.url))}
+                          style={{ width: '100%' }}
+                        >
+                          <track kind="captions" />
+                        </audio>
+                      </div>
+                    ) : showEnunciadoFallbackAudio ? (
                       <div
                         style={{
                           marginTop: '0.85rem',
@@ -989,15 +1092,183 @@ function B2ExamPaperPracticePageInner({
                         </audio>
                       </div>
                     ) : null}
+                    {listeningMatchingPool.length > 0 ? (
+                      <div
+                        style={{
+                          marginTop: '1rem',
+                          padding: '0.85rem 1rem',
+                          background: '#f8fafc',
+                          border: '1px solid #e2e8f0',
+                          borderRadius: '10px',
+                        }}
+                      >
+                        <p style={{ margin: '0 0 0.55rem', fontWeight: 700, color: '#1e293b' }}>
+                          Opciones A–H
+                        </p>
+                        {listeningMatchingPool.map((line, pi) => (
+                          <p key={`pool-${pi}`} style={{ margin: '0.35rem 0', lineHeight: 1.6, color: '#334155' }}>
+                            {line}
+                          </p>
+                        ))}
+                      </div>
+                    ) : null}
                     <div style={{ marginTop: '1rem', display: 'grid', gap: '1.25rem' }}>
                       {listeningQuestionNumbersOrdered.map((qn) => {
-                        const group = groupedAnswers.find((g) => g.questionNumber === qn);
-                        if (!group || !group.options?.length) return null;
-                        const groupIndex = groupedAnswers.indexOf(group);
+                        const isOpenGapItem = partNumber === 11;
+                        const group = isOpenGapItem
+                          ? null
+                          : groupedAnswers.find((g) => g.questionNumber === qn);
+                        if (!isOpenGapItem && (!group || !group.options?.length)) return null;
+
+                        const groupIndex = group ? groupedAnswers.indexOf(group) : -1;
                         const ctx = listeningContextBlocks.find((b) => b.questionNumber === qn);
-                        const clip = pickListeningClipForQuestion(listeningReadyClips, qn);
-                        const clipSrc = clip?.url ? resolvePublicOrSiteAudioSrc(String(clip.url)) : '';
+                        const hidePerItemAudio = Boolean(listeningMonologueClip);
+                        const clip = isOpenGapItem || hidePerItemAudio
+                          ? null
+                          : pickListeningClipForQuestion(listeningReadyClips, qn, partNumber);
+                        const clipSrc =
+                          !hidePerItemAudio && clip?.url
+                            ? resolvePublicOrSiteAudioSrc(String(clip.url))
+                            : '';
                         const clipLabel = String(clip?.titulo || '').trim();
+
+                        if (isOpenGapItem) {
+                          const questionKey = getQuestionKey(selectedPart.id, qn, 'open');
+                          const currentValue = openInputs[questionKey] || '';
+                          const checkResult = openChecks[questionKey];
+                          return (
+                            <div
+                              key={`listen-item-${selectedQuestion.preguntaId}-${qn}`}
+                              style={{
+                                border: '1px solid #cbd5e1',
+                                borderRadius: '12px',
+                                padding: '1rem 1.1rem',
+                                background: '#ffffff',
+                                boxShadow: '0 1px 5px rgba(15, 23, 42, 0.07)',
+                              }}
+                            >
+                              <p
+                                style={{
+                                  margin: '0 0 0.75rem',
+                                  fontWeight: 800,
+                                  color: '#0f172a',
+                                  fontSize: '1.05rem',
+                                }}
+                              >
+                                Ítem {qn}
+                              </p>
+                              {ctx?.contextLines?.length ? (
+                                <div
+                                  style={{
+                                    marginBottom: '0.85rem',
+                                    padding: '0.75rem 0.85rem',
+                                    background: '#f8fafc',
+                                    border: '1px solid #e2e8f0',
+                                    borderRadius: '10px',
+                                  }}
+                                >
+                                  {ctx.contextLines.map((line, li) => (
+                                    <p
+                                      key={`ctx-${qn}-${li}`}
+                                      style={{ margin: li === 0 ? '0 0 0.4rem' : '0.4rem 0', lineHeight: 1.65 }}
+                                    >
+                                      {line}
+                                    </p>
+                                  ))}
+                                </div>
+                              ) : null}
+                              <div style={{ display: 'flex', gap: '0.6rem', alignItems: 'center', flexWrap: 'wrap' }}>
+                                <input
+                                  type="text"
+                                  value={currentValue}
+                                  onChange={(e) => {
+                                    const value = e.target.value;
+                                    setOpenInputs((prev) => ({ ...prev, [questionKey]: value }));
+                                    setOpenChecks((prev) => ({ ...prev, [questionKey]: undefined }));
+                                  }}
+                                  placeholder="Tu respuesta"
+                                  style={{
+                                    minWidth: '240px',
+                                    flex: '1 1 240px',
+                                    borderRadius: '8px',
+                                    border: '1px solid #cbd5e0',
+                                    padding: '0.65rem 0.75rem',
+                                  }}
+                                />
+                                <button
+                                  type="button"
+                                  onClick={() => {
+                                    const expectedAnswers = openAnswerMap.get(qn) || new Set();
+                                    const isCorrect = expectedAnswers.has(normalizeText(currentValue));
+                                    const prevResult = openChecks[questionKey];
+                                    setOpenChecks((prev) => ({ ...prev, [questionKey]: isCorrect }));
+                                    if (typeof prevResult !== 'boolean') {
+                                      const correctChoiceText =
+                                        [...expectedAnswers].slice(0, 4).join(' · ') || 'respuesta modelo';
+                                      const answersFromDatabase = [...expectedAnswers].join(' · ');
+                                      requestAiJustification(questionKey, {
+                                        partLabel: selectedPart?.nombre || '',
+                                        questionLabel: `Pregunta ${qn}`,
+                                        userChoiceText: currentValue,
+                                        correctChoiceText,
+                                        isCorrect,
+                                        answersFromDatabase: answersFromDatabase || undefined,
+                                      });
+                                      void (async () => {
+                                        const uid = await getSessionUserId();
+                                        const pid = selectedQuestion?.preguntaId;
+                                        const parteId = selectedPart?.id;
+                                        if (!uid || !pid || !parteId) return;
+                                        const { error } = await mergeLevelsEstadisticas({
+                                          userId: uid,
+                                          preguntaId: pid,
+                                          parteId,
+                                          deltaEvaluadas: 1,
+                                          deltaCorrectas: isCorrect ? 1 : 0,
+                                          deltaIncorrectas: isCorrect ? 0 : 1,
+                                        });
+                                        if (error) console.warn('levels_estadisticas (eval):', error.message || error);
+                                      })();
+                                    }
+                                  }}
+                                  style={{
+                                    borderRadius: '8px',
+                                    border: '1px solid #2b6cb0',
+                                    background: '#ebf8ff',
+                                    color: '#1a365d',
+                                    padding: '0.6rem 0.9rem',
+                                    cursor: 'pointer',
+                                  }}
+                                >
+                                  Comprobar
+                                </button>
+                              </div>
+                              {typeof checkResult === 'boolean' ? (
+                                <>
+                                  <p
+                                    style={{
+                                      margin: '0.7rem 0 0',
+                                      fontWeight: 700,
+                                      color: checkResult ? '#2f855a' : '#c53030',
+                                    }}
+                                  >
+                                    {checkResult ? 'Correcta' : 'Incorrecta'}
+                                  </p>
+                                  {(() => {
+                                    const expected = openAnswerMap.get(qn);
+                                    const list = expected && expected.size > 0 ? [...expected] : [];
+                                    return (
+                                      <p style={{ margin: '0.4rem 0 0', fontWeight: 600, color: '#1f2937' }}>
+                                        Correct answer: {list.length > 0 ? list.join(' · ') : 'Not available'}
+                                      </p>
+                                    );
+                                  })()}
+                                  <LevelsAnswerJustification hint={aiHintsByKey[questionKey]} />
+                                </>
+                              ) : null}
+                            </div>
+                          );
+                        }
 
                         return (
                           <div
@@ -1038,7 +1309,7 @@ function B2ExamPaperPracticePageInner({
                                   <track kind="captions" />
                                 </audio>
                               </div>
-                            ) : (
+                            ) : !listeningMonologueClip ? (
                               <p
                                 style={{
                                   margin: '0 0 0.75rem',
@@ -1049,7 +1320,7 @@ function B2ExamPaperPracticePageInner({
                               >
                                 No hay audio enlazado para este ítem en la base de datos.
                               </p>
-                            )}
+                            ) : null}
                             {ctx?.contextLines?.length ? (
                               <div
                                 style={{

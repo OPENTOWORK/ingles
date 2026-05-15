@@ -1,12 +1,15 @@
 -- Generado por scripts/generate-parte10-respuestas-sql.mjs
--- Modo --full: todas las filas (TRUE + FALSE).
--- 120 INSERTs (24 × 5 exámenes).
--- No incluye DELETE.
+-- Modo --full: todas las filas (TRUE + FALSE). Excel: todas las hojas (examen 1 + examen 2,3,4 y 5). Exámenes 1–5.
+-- 120 INSERTs (5 × 8 preguntas × 3 opciones).
+-- Incluye DELETE previo para los pregunta_id generados.
+
+-- Quitar respuestas previas de Parte 10 (exámenes 1–5) antes de reinsertar.
+DELETE FROM public.levels_respuestas WHERE pregunta_id IN ('2e44ac3c-2e7e-430b-9b0d-226f7e459bea'::uuid, 'ba46a83c-6f2f-4899-bb82-01cc3ca1d561'::uuid, '81a4a85a-c928-4260-84f2-3aa5c585ffad'::uuid, 'a73489dd-47ad-4cb2-997d-ad605c898cff'::uuid, 'a3bf3439-57c9-48bf-992b-2cff82a00eb8'::uuid);
 
 -- Examen / pregunta 1 (2e44ac3c-2e7e-430b-9b0d-226f7e459bea)
 INSERT INTO public.levels_respuestas (pregunta_id, respuesta, correcta) VALUES ('2e44ac3c-2e7e-430b-9b0d-226f7e459bea'::uuid, '1 A The manager was ill.', false);
 INSERT INTO public.levels_respuestas (pregunta_id, respuesta, correcta) VALUES ('2e44ac3c-2e7e-430b-9b0d-226f7e459bea'::uuid, '1 B Not enough people could attend.', false);
-INSERT INTO public.levels_respuestas (pregunta_id, respuesta, correcta) VALUES ('2e44ac3c-2e7e-430b-9b0d-226f7e459bea'::uuid, '1 C The information wasn’t ready.', true);
+INSERT INTO public.levels_respuestas (pregunta_id, respuesta, correcta) VALUES ('2e44ac3c-2e7e-430b-9b0d-226f7e459bea'::uuid, '1 C The information wasn''t ready.', true);
 INSERT INTO public.levels_respuestas (pregunta_id, respuesta, correcta) VALUES ('2e44ac3c-2e7e-430b-9b0d-226f7e459bea'::uuid, '2 A the opening hours', false);
 INSERT INTO public.levels_respuestas (pregunta_id, respuesta, correcta) VALUES ('2e44ac3c-2e7e-430b-9b0d-226f7e459bea'::uuid, '2 B the attitude of the staff', true);
 INSERT INTO public.levels_respuestas (pregunta_id, respuesta, correcta) VALUES ('2e44ac3c-2e7e-430b-9b0d-226f7e459bea'::uuid, '2 C the lack of equipment', false);
@@ -14,7 +17,7 @@ INSERT INTO public.levels_respuestas (pregunta_id, respuesta, correcta) VALUES (
 INSERT INTO public.levels_respuestas (pregunta_id, respuesta, correcta) VALUES ('2e44ac3c-2e7e-430b-9b0d-226f7e459bea'::uuid, '3 B how expensive lessons became', false);
 INSERT INTO public.levels_respuestas (pregunta_id, respuesta, correcta) VALUES ('2e44ac3c-2e7e-430b-9b0d-226f7e459bea'::uuid, '3 C how nervous he felt during the test', false);
 INSERT INTO public.levels_respuestas (pregunta_id, respuesta, correcta) VALUES ('2e44ac3c-2e7e-430b-9b0d-226f7e459bea'::uuid, '4 A the lighting effects', false);
-INSERT INTO public.levels_respuestas (pregunta_id, respuesta, correcta) VALUES ('2e44ac3c-2e7e-430b-9b0d-226f7e459bea'::uuid, '4 B the singer’s voice', true);
+INSERT INTO public.levels_respuestas (pregunta_id, respuesta, correcta) VALUES ('2e44ac3c-2e7e-430b-9b0d-226f7e459bea'::uuid, '4 B the singer''s voice', true);
 INSERT INTO public.levels_respuestas (pregunta_id, respuesta, correcta) VALUES ('2e44ac3c-2e7e-430b-9b0d-226f7e459bea'::uuid, '4 C the energy of the audience', false);
 INSERT INTO public.levels_respuestas (pregunta_id, respuesta, correcta) VALUES ('2e44ac3c-2e7e-430b-9b0d-226f7e459bea'::uuid, '5 A the room was too noisy', true);
 INSERT INTO public.levels_respuestas (pregunta_id, respuesta, correcta) VALUES ('2e44ac3c-2e7e-430b-9b0d-226f7e459bea'::uuid, '5 B the food was disappointing', false);
@@ -46,7 +49,7 @@ INSERT INTO public.levels_respuestas (pregunta_id, respuesta, correcta) VALUES (
 INSERT INTO public.levels_respuestas (pregunta_id, respuesta, correcta) VALUES ('ba46a83c-6f2f-4899-bb82-01cc3ca1d561'::uuid, '5 B to celebrate local artists', false);
 INSERT INTO public.levels_respuestas (pregunta_id, respuesta, correcta) VALUES ('ba46a83c-6f2f-4899-bb82-01cc3ca1d561'::uuid, '5 C to encourage healthy living', true);
 INSERT INTO public.levels_respuestas (pregunta_id, respuesta, correcta) VALUES ('ba46a83c-6f2f-4899-bb82-01cc3ca1d561'::uuid, '6 A They may miss the deadline.', true);
-INSERT INTO public.levels_respuestas (pregunta_id, respuesta, correcta) VALUES ('ba46a83c-6f2f-4899-bb82-01cc3ca1d561'::uuid, '6 B Their experiment isn’t working.', false);
+INSERT INTO public.levels_respuestas (pregunta_id, respuesta, correcta) VALUES ('ba46a83c-6f2f-4899-bb82-01cc3ca1d561'::uuid, '6 B Their experiment isn''t working.', false);
 INSERT INTO public.levels_respuestas (pregunta_id, respuesta, correcta) VALUES ('ba46a83c-6f2f-4899-bb82-01cc3ca1d561'::uuid, '6 C They disagree about the topic.', false);
 INSERT INTO public.levels_respuestas (pregunta_id, respuesta, correcta) VALUES ('ba46a83c-6f2f-4899-bb82-01cc3ca1d561'::uuid, '7 A attending formal classes', false);
 INSERT INTO public.levels_respuestas (pregunta_id, respuesta, correcta) VALUES ('ba46a83c-6f2f-4899-bb82-01cc3ca1d561'::uuid, '7 B living with local people', true);
@@ -67,7 +70,7 @@ INSERT INTO public.levels_respuestas (pregunta_id, respuesta, correcta) VALUES (
 INSERT INTO public.levels_respuestas (pregunta_id, respuesta, correcta) VALUES ('81a4a85a-c928-4260-84f2-3aa5c585ffad'::uuid, '3 C reading customer reviews', false);
 INSERT INTO public.levels_respuestas (pregunta_id, respuesta, correcta) VALUES ('81a4a85a-c928-4260-84f2-3aa5c585ffad'::uuid, '4 A surprised by her success', true);
 INSERT INTO public.levels_respuestas (pregunta_id, respuesta, correcta) VALUES ('81a4a85a-c928-4260-84f2-3aa5c585ffad'::uuid, '4 B embarrassed by her mistakes', false);
-INSERT INTO public.levels_respuestas (pregunta_id, respuesta, correcta) VALUES ('81a4a85a-c928-4260-84f2-3aa5c585ffad'::uuid, '4 C disappointed with the audience’s reaction', false);
+INSERT INTO public.levels_respuestas (pregunta_id, respuesta, correcta) VALUES ('81a4a85a-c928-4260-84f2-3aa5c585ffad'::uuid, '4 C disappointed with the audience''s reaction', false);
 INSERT INTO public.levels_respuestas (pregunta_id, respuesta, correcta) VALUES ('81a4a85a-c928-4260-84f2-3aa5c585ffad'::uuid, '5 A He is very helpful.', true);
 INSERT INTO public.levels_respuestas (pregunta_id, respuesta, correcta) VALUES ('81a4a85a-c928-4260-84f2-3aa5c585ffad'::uuid, '5 B He complains too much.', false);
 INSERT INTO public.levels_respuestas (pregunta_id, respuesta, correcta) VALUES ('81a4a85a-c928-4260-84f2-3aa5c585ffad'::uuid, '5 C He works too hard.', false);
@@ -94,7 +97,7 @@ INSERT INTO public.levels_respuestas (pregunta_id, respuesta, correcta) VALUES (
 INSERT INTO public.levels_respuestas (pregunta_id, respuesta, correcta) VALUES ('a73489dd-47ad-4cb2-997d-ad605c898cff'::uuid, '4 A having face-to-face conversations', true);
 INSERT INTO public.levels_respuestas (pregunta_id, respuesta, correcta) VALUES ('a73489dd-47ad-4cb2-997d-ad605c898cff'::uuid, '4 B travelling to different places', false);
 INSERT INTO public.levels_respuestas (pregunta_id, respuesta, correcta) VALUES ('a73489dd-47ad-4cb2-997d-ad605c898cff'::uuid, '4 C using office equipment', false);
-INSERT INTO public.levels_respuestas (pregunta_id, respuesta, correcta) VALUES ('a73489dd-47ad-4cb2-997d-ad605c898cff'::uuid, '5 A He didn’t perform as well as expected.', true);
+INSERT INTO public.levels_respuestas (pregunta_id, respuesta, correcta) VALUES ('a73489dd-47ad-4cb2-997d-ad605c898cff'::uuid, '5 A He didn''t perform as well as expected.', true);
 INSERT INTO public.levels_respuestas (pregunta_id, respuesta, correcta) VALUES ('a73489dd-47ad-4cb2-997d-ad605c898cff'::uuid, '5 B His team arrived late.', false);
 INSERT INTO public.levels_respuestas (pregunta_id, respuesta, correcta) VALUES ('a73489dd-47ad-4cb2-997d-ad605c898cff'::uuid, '5 C The event was poorly organised.', false);
 INSERT INTO public.levels_respuestas (pregunta_id, respuesta, correcta) VALUES ('a73489dd-47ad-4cb2-997d-ad605c898cff'::uuid, '6 A the historical information', false);

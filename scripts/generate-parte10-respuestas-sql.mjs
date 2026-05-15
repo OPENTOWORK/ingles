@@ -1,11 +1,18 @@
 /**
- * Lee Script para tabla levels_respuestas parte 10.xlsx (solo filas correcta=TRUE)
- * y EJERCICIO 1–5.docx (opciones A/B/C). Genera INSERTs para levels_respuestas
- * con las dos opciones FALSE por cada pregunta (no borra nada en BD).
+ * Lee Script para tabla levels_respuestas parte 10.xlsx (filas correcta=TRUE)
+ * y EJERCICIO 1–5.docx (opciones A/B/C). Genera INSERTs para levels_respuestas.
  *
  * Uso:
  *   node scripts/generate-parte10-respuestas-sql.mjs
  *   node scripts/generate-parte10-respuestas-sql.mjs --full
+ *   # Sin --sheet: fusiona todas las hojas del xlsx (examen 1 + examen 2,3,4 y 5).
+ *   node scripts/generate-parte10-respuestas-sql.mjs --full --sheet "examen 2,3,4 y 5" --exam-from 2 --exam-to 5
+ *
+ * Opciones:
+ *   --sheet "nombre"     Solo esa hoja (si se omite, se fusionan todas las hojas).
+ *   --exam-from N       Número de examen 1–5 (inicio, por defecto 1).
+ *   --exam-to N         Fin inclusive (por defecto 5).
+ *   --with-delete       Anteponer DELETE de respuestas de esos pregunta_id (solo con --full).
  *
  * Salida (sin --full):
  *   scripts/generated/parte10_levels_respuestas_solo_false.sql
@@ -102,18 +109,77 @@ function insertLine(preguntaId, respuesta, correcta) {
   );
 }
 
-async function main() {
-  const includeFull = process.argv.includes('--full');
-  const xlsxPath = path.join(PARTE10, 'Script para tabla levels_respuestas parte 10.xlsx');
-  const wb = XLSX.readFile(xlsxPath);
-  const rows = XLSX.utils.sheet_to_json(wb.Sheets[wb.SheetNames[0]]);
+function parseArgs(argv) {
+  const get = (flag) => {
+    const i = argv.indexOf(flag);
+    if (i === -1) return null;
+    return argv[i + 1] ?? null;
+  };
+  const sheet = get('--sheet');
+  const examFrom = Math.max(1, Math.min(5, Number(get('--exam-from') || '1') || 1));
+  const examTo = Math.max(examFrom, Math.min(5, Number(get('--exam-to') || '5') || 5));
+  return {
+    includeFull: argv.includes('--full'),
+    withDelete: argv.includes('--with-delete'),
+    sheet: sheet && String(sheet).trim() ? String(sheet).trim() : null,
+    examFrom,
+    examTo,
+  };
+}
 
-  const byPregunta = new Map();
+/**
+ * Filas con correcta=TRUE (o 1) → Map pregunta_id → textos en orden de fila.
+ */
+function trueAnswersByPreguntaFromRows(rows) {
+  const m = new Map();
   for (const r of rows) {
     const pid = String(r.pregunta_id || '').trim();
     if (!pid) continue;
-    if (!byPregunta.has(pid)) byPregunta.set(pid, []);
-    byPregunta.get(pid).push(String(r.respuesta || '').trim());
+    const corr = String(r.correcta ?? '')
+      .trim()
+      .toUpperCase();
+    if (corr && corr !== 'TRUE' && corr !== '1') continue;
+    if (!m.has(pid)) m.set(pid, []);
+    m.get(pid).push(String(r.respuesta || '').trim());
+  }
+  return m;
+}
+
+/**
+ * Fusiona todas las hojas en orden: si un pregunta_id aparece en varias hojas,
+ * gana la última (p. ej. "examen 2,3,4 y 5" sobrescribe TRUE de esos exámenes).
+ */
+function mergeTrueAnswersAllSheets(wb) {
+  const merged = new Map();
+  for (const name of wb.SheetNames) {
+    const rows = XLSX.utils.sheet_to_json(wb.Sheets[name], { defval: '' });
+    const chunk = trueAnswersByPreguntaFromRows(rows);
+    for (const [pid, arr] of chunk) {
+      merged.set(pid, arr);
+    }
+  }
+  return merged;
+}
+
+async function main() {
+  const { includeFull, withDelete, sheet: sheetName, examFrom, examTo } = parseArgs(process.argv);
+  const xlsxPath = path.join(PARTE10, 'Script para tabla levels_respuestas parte 10.xlsx');
+  const wb = XLSX.readFile(xlsxPath);
+
+  let byPregunta;
+  /** Etiqueta para comentarios en el SQL generado */
+  let sheetLabel;
+  if (sheetName) {
+    const sheetKey = wb.SheetNames.includes(sheetName) ? sheetName : wb.SheetNames[0];
+    if (sheetName && sheetKey !== sheetName) {
+      console.warn(`Hoja "${sheetName}" no encontrada. Disponibles: ${wb.SheetNames.join(', ')}. Uso: "${sheetKey}".`);
+    }
+    sheetLabel = sheetKey;
+    const rows = XLSX.utils.sheet_to_json(wb.Sheets[sheetKey], { defval: '' });
+    byPregunta = trueAnswersByPreguntaFromRows(rows);
+  } else {
+    sheetLabel = `todas las hojas (${wb.SheetNames.join(' + ')})`;
+    byPregunta = mergeTrueAnswersAllSheets(wb);
   }
 
   const linesTrue = [];
@@ -123,16 +189,31 @@ async function main() {
     arr.push('-- Generado por scripts/generate-parte10-respuestas-sql.mjs');
     arr.push(`-- ${title}`);
     if (extra) arr.push(`-- ${extra}`);
-    arr.push('-- No incluye DELETE.');
+    if (withDelete && includeFull) arr.push('-- Incluye DELETE previo para los pregunta_id generados.');
+    else arr.push('-- No incluye DELETE.');
     arr.push('');
   };
+
+  const examStartIdx = examFrom - 1;
+  const examEndIdx = examTo - 1;
+  const nExams = examEndIdx - examStartIdx + 1;
+  const insertCount = nExams * 8 * 3;
 
   if (includeFull) {
     pushHeader(
       linesTrue,
-      'Modo --full: todas las filas (TRUE + FALSE).',
-      '120 INSERTs (24 × 5 exámenes).',
+      `Modo --full: todas las filas (TRUE + FALSE). Excel: ${sheetLabel}. Exámenes ${examFrom}–${examTo}.`,
+      `${insertCount} INSERTs (${nExams} × 8 preguntas × 3 opciones).`,
     );
+    if (withDelete) {
+      const ids = [];
+      for (let i = examStartIdx; i <= examEndIdx; i++) {
+        ids.push(`'${PREGUNTA_IDS_IN_ORDER[i]}'::uuid`);
+      }
+      linesTrue.push(`-- Quitar respuestas previas de Parte 10 (exámenes ${examFrom}–${examTo}) antes de reinsertar.`);
+      linesTrue.push(`DELETE FROM public.levels_respuestas WHERE pregunta_id IN (${ids.join(', ')});`);
+      linesTrue.push('');
+    }
   } else {
     pushHeader(
       linesFalse,
@@ -146,7 +227,7 @@ async function main() {
     );
   }
 
-  for (let i = 0; i < PREGUNTA_IDS_IN_ORDER.length; i++) {
+  for (let i = examStartIdx; i <= examEndIdx; i++) {
     const preguntaId = PREGUNTA_IDS_IN_ORDER[i];
     const docPath = path.join(PARTE10, `EJERCICIO ${i + 1}.docx`);
     const { value: raw } = await mammoth.extractRawText({ path: docPath });
@@ -203,7 +284,11 @@ async function main() {
   const outDir = path.join(ROOT, 'scripts', 'generated');
   fs.mkdirSync(outDir, { recursive: true });
   if (includeFull) {
-    const outPath = path.join(outDir, 'parte10_levels_respuestas_completo.sql');
+    const outName =
+      examFrom === 1 && examTo === 5
+        ? 'parte10_levels_respuestas_completo.sql'
+        : `parte10_levels_respuestas_examenes_${examFrom}_${examTo}_completo.sql`;
+    const outPath = path.join(outDir, outName);
     fs.writeFileSync(outPath, linesTrue.join('\n') + '\n', 'utf8');
     console.log('Escrito:', outPath, 'líneas:', linesTrue.length);
   } else {

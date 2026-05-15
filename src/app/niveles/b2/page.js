@@ -39,8 +39,8 @@ const EXAM_LINKS = [
   { text: "📘 Use of English", href: "/niveles/b2/exam-useofenglish", enabledForStudents: true },
   { text: "📖 Reading", href: "/niveles/b2/exam-reading", enabledForStudents: true },
   { text: "✍️ Writing", href: "/niveles/b2/exam-writing", enabledForStudents: true },
-  { text: "🎧 Listening", href: "/niveles/b2/exam-listening", enabledForStudents: false },
-  { text: "🗣️ Speaking", href: "/niveles/b2/exam-speaking", enabledForStudents: false },
+  { text: "🎧 Listening", href: "/niveles/b2/exam-listening", enabledForStudents: true },
+  { text: "🗣️ Speaking", href: "/niveles/b2/exam-speaking", enabledForStudents: true },
 ];
 
 // ====== Página ======

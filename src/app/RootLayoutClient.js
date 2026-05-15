@@ -5,7 +5,6 @@ import { useRouter, usePathname } from 'next/navigation';
 import { supabase } from '@/utils/supabaseClient';
 import { normalizeRoleName, getRoleNameByUserId, ROLE_ROUTE_MAP } from '@/utils/authRoles';
 import Link from 'next/link';
-import LanguageSwitcher from '../components/LanguageSwitcher';
 import { Toaster } from 'react-hot-toast';
 import { UserRoleProvider } from '../context/UserRoleContext';
 import ExamNavigationGuard from '../components/ExamNavigationGuard';
@@ -585,10 +584,6 @@ export default function RootLayoutClient({ children }) {
               >Login</Link>
             )}
           </nav>
-
-          <div style={{ marginLeft: '1rem' }}>
-            <LanguageSwitcher />
-          </div>
         </div>
       </header>
 

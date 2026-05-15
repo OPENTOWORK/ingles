@@ -333,6 +333,30 @@ export function parsePart7PeopleProfiles(profilesBlock) {
 }
 
 /**
+ * Algunos `levels_preguntas.enunciado` de B2 Parte 10 repiten el bloque ítems 1–8 (p. ej. Excel).
+ * Recorta al primer ciclo para que el layout coincida con el examen 1.
+ *
+ * @param {string} text
+ */
+/** Partes B2 Listening con layout por ítems (10–13). */
+export function isB2ListeningItemLayoutPart(partNumber) {
+  return partNumber >= 10 && partNumber <= 13;
+}
+
+export function trimListeningPart10DuplicateCycles(text = '') {
+  const t = String(text || '').replace(/\r\n/g, '\n');
+  if (!t.trim()) return t;
+  const re = /(?:^|\n)\s*1\s*\n\s*\n\s*(?:You hear|You overhear)\b/gi;
+  const hits = [];
+  let m;
+  while ((m = re.exec(t)) !== null) {
+    hits.push(m.index);
+  }
+  if (hits.length <= 1) return t;
+  return t.slice(0, hits[1]).replace(/[ \t\u00a0]+$/g, '').replace(/\n+$/, '');
+}
+
+/**
  * Listening (p. ej. Part 1 / B2 parte 10): el bloque "Texto" trae ítems separados por una
  * línea que es solo el número (`1` … `8`). Opciones A/B/C a veces vienen en el Word;
  * si `stripInlineOptions` es true, se omiten esas líneas porque las pintamos desde la BD.
@@ -382,4 +406,74 @@ export function splitListeningMcqContextByQuestion(lines, opts = {}) {
     blocks.push({ questionNumber, contextLines });
   }
   return blocks.sort((a, b) => a.questionNumber - b.questionNumber);
+}
+
+/**
+ * Parte 11 listening: huecos `(9) ___` con la frase de contexto en el mismo párrafo.
+ *
+ * @param {string} text
+ * @returns {Array<{ questionNumber: number, contextLines: string[] }>}
+ */
+export function splitListeningOpenGapContextByQuestion(text = '') {
+  const t = String(text || '').replace(/\r\n/g, '\n').trim();
+  if (!t) return [];
+  /** @type {Array<{ questionNumber: number, contextLines: string[] }>} */
+  const blocks = [];
+  for (const part of t.split(/\n\s*\n/)) {
+    const gapMatch = part.match(/\((\d{1,2})\)\s*_+/);
+    if (!gapMatch) continue;
+    const questionNumber = Number(gapMatch[1]);
+    if (!Number.isFinite(questionNumber)) continue;
+    const contextLines = part
+      .split('\n')
+      .map((l) => l.trim())
+      .filter(Boolean);
+    if (contextLines.length) blocks.push({ questionNumber, contextLines });
+  }
+  return blocks.sort((a, b) => a.questionNumber - b.questionNumber);
+}
+
+/**
+ * Parte 12 listening: `Speaker 1` … `Speaker 5` → preguntas 19–23.
+ *
+ * @param {string} text
+ * @returns {Array<{ questionNumber: number, contextLines: string[] }>}
+ */
+export function splitListeningSpeakerContextByQuestion(text = '') {
+  const raw = String(text || '')
+    .replace(/\r\n/g, '\n')
+    .split('\n')
+    .map((l) => l.trim())
+    .filter(Boolean);
+  /** @type {Array<{ questionNumber: number, contextLines: string[] }>} */
+  const blocks = [];
+  for (const line of raw) {
+    const m = line.match(/^Speaker\s+(\d+)\s*[_\s.]*$/i);
+    if (!m) continue;
+    const speakerNum = Number(m[1]);
+    if (!Number.isFinite(speakerNum) || speakerNum < 1) continue;
+    blocks.push({ questionNumber: 18 + speakerNum, contextLines: [line] });
+  }
+  return blocks.sort((a, b) => a.questionNumber - b.questionNumber);
+}
+
+/**
+ * Pool A–H (multiple matching) antes de los speakers en Parte 12.
+ *
+ * @param {string[]|string} linesOrText
+ */
+export function extractListeningMatchingOptionPool(linesOrText) {
+  const raw = Array.isArray(linesOrText)
+    ? linesOrText.map((l) => String(l || '').trim()).filter(Boolean)
+    : String(linesOrText || '')
+        .replace(/\r\n/g, '\n')
+        .split('\n')
+        .map((l) => l.trim())
+        .filter(Boolean);
+  const pool = [];
+  for (const line of raw) {
+    if (/^Speaker\s+\d/i.test(line)) break;
+    if (/^[A-H]\s+\S/.test(line)) pool.push(line);
+  }
+  return pool;
 }

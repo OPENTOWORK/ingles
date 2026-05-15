@@ -23,6 +23,20 @@ const xlsxPath = path.join(
 
 const outputPath = path.join(__dirname, '_b2-listening-insert.sql');
 
+/** Parte 10: quita ciclos 1–8 duplicados en el Excel (misma lógica que `trimListeningPart10DuplicateCycles`). */
+function trimPart10DuplicateListeningBody(text) {
+  const t = String(text || '').replace(/\r\n/g, '\n');
+  if (!t.trim()) return t;
+  const re = /(?:^|\n)\s*1\s*\n\s*\n\s*(?:You hear|You overhear)\b/gi;
+  const hits = [];
+  let m;
+  while ((m = re.exec(t)) !== null) {
+    hits.push(m.index);
+  }
+  if (hits.length <= 1) return t;
+  return t.slice(0, hits[1]).replace(/[ \t\u00a0]+$/g, '').replace(/\n+$/, '');
+}
+
 const wb = XLSX.readFile(xlsxPath);
 const ws = wb.Sheets[wb.SheetNames[0]];
 const rows = XLSX.utils.sheet_to_json(ws, { defval: null, raw: false });
@@ -37,7 +51,10 @@ for (const row of rows) {
     console.error('Fila inválida, se omite:', row);
     continue;
   }
-  const enunciado = String(row.enunciado).replace(/\r\n/g, '\n');
+  let enunciado = String(row.enunciado).replace(/\r\n/g, '\n');
+  if (row.parte_id === 'be502acc-2e8b-4088-9f86-a9eb6e1ed209') {
+    enunciado = trimPart10DuplicateListeningBody(enunciado);
+  }
   // Comprobación de seguridad por si el contenido incluye el tag.
   if (enunciado.includes(`$${TAG}$`)) {
     throw new Error('El contenido incluye el tag dollar-quoted; cambia TAG.');

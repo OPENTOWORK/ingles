@@ -1,0 +1,1 @@
+DELETE FROM public.levels_respuestas WHERE pregunta_id IN ('714c245a-7ee2-4430-aefe-5b4afdd543f9'::uuid, '938c432c-b310-400f-b068-5c3a2ffcd0d9'::uuid, 'd7f347d4-b348-4e51-9978-2f3400a0be55'::uuid, '9ccf27bd-7686-4feb-96bf-92ae66dffede'::uuid, 'bce76f33-230d-4ddb-ade3-d8d62e50e592'::uuid);

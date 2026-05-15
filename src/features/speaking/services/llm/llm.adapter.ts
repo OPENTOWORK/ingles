@@ -17,6 +17,10 @@ export type ExamTurnParams = {
   part: ExamPartDefinition;
   transcript: string;
   history: { role: 'user' | 'assistant'; content: string }[];
+  /** Texto extra (enunciado BD, situación, etc.). */
+  taskContext?: string;
+  /** Primera intervención del examinador sin respuesta del candidato. */
+  isOpening?: boolean;
 };
 
 const practiceSystem = (cefr: CefrLevel, prompt: string) =>
@@ -25,12 +29,19 @@ const practiceSystem = (cefr: CefrLevel, prompt: string) =>
     `Keep replies concise (2-5 sentences) as spoken dialogue. ` +
     `Topic context: ${prompt}`;
 
-const examinerSystem = (cefr: CefrLevel, examName: string, part: ExamPartDefinition) =>
+const examinerSystem = (
+  cefr: CefrLevel,
+  examName: string,
+  part: ExamPartDefinition,
+  taskContext = '',
+) =>
   `You are a Cambridge speaking examiner only (${examName}, CEFR ${cefr}). ` +
     `Part ${part.part}: ${part.name}. ` +
     `Examinee instructions: ${part.instructions} ` +
+    (taskContext ? `Additional context:\n${taskContext}\n` : '') +
     `Do not teach grammar or correct the candidate during the exam. ` +
-    `One question or instruction per message. No feedback on language form.`;
+    `One question or instruction per message. No feedback on language form. ` +
+    `Speak naturally as an examiner (British English). Keep each turn under 80 words.`;
 
 export class MockLLMAdapter {
   async practiceReply(p: PracticeTurnParams): Promise<string> {
@@ -43,6 +54,15 @@ export class MockLLMAdapter {
 
   async examReply(p: ExamTurnParams): Promise<string> {
     await delay(250);
+    if (p.isOpening) {
+      const openers: Record<number, string> = {
+        1: 'Good morning. Can you tell me your name and where you come from?',
+        2: 'Now, in this part I\'d like you to talk about these photographs. Compare them and say why the people might be enjoying these activities.',
+        3: 'Now, talk together about the situation and decide which option would be best.',
+        4: 'Thank you. Now I\'d like to ask you some questions related to what we discussed.',
+      };
+      return openers[p.part.part] ?? 'Let\'s begin. Please answer when you are ready.';
+    }
     return `Thank you. ${p.part.part === 1 ? 'Can you tell me something about your free time?' : 'What might be a disadvantage of that idea?'}`;
   }
 
@@ -86,19 +106,28 @@ export class OpenAILLMAdapter extends MockLLMAdapter {
   }
 
   override async examReply(p: ExamTurnParams): Promise<string> {
+    const system = examinerSystem(p.cefr, p.examName, p.part, p.taskContext);
     const messages: OpenAI.Chat.ChatCompletionMessageParam[] = [
-      { role: 'system', content: examinerSystem(p.cefr, p.examName, p.part) },
+      { role: 'system', content: system },
       ...p.history.map((h) => ({
         role: h.role,
         content: h.content,
       })) as OpenAI.Chat.ChatCompletionMessageParam[],
-      { role: 'user', content: p.transcript },
     ];
+    if (p.isOpening) {
+      messages.push({
+        role: 'user',
+        content:
+          'The speaking test for this part is starting now. Greet the candidate briefly and give the first instruction or question only.',
+      });
+    } else {
+      messages.push({ role: 'user', content: p.transcript });
+    }
     const res = await this.client.chat.completions.create({
       model: process.env.OPENAI_MODEL ?? 'gpt-4o-mini',
       messages,
       temperature: 0.5,
-      max_tokens: 200,
+      max_tokens: 220,
     });
     return res.choices[0]?.message?.content?.trim() ?? (await super.examReply(p));
   }

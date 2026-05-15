@@ -31,14 +31,14 @@ export function getFormattedEnunciado(rawText = '') {
     });
 }
 
-/** Agrupa respuestas tipo Reading / Listening / MCQ (A–G) y huecos numerados. */
+/** Agrupa respuestas tipo Reading / Listening / MCQ (A–H) y huecos numerados. */
 export function getGroupedAnswers(answers = []) {
   const groupsMap = new Map();
   const ungrouped = [];
 
   answers.forEach((answer) => {
     const text = answer.respuesta || '';
-    const matchMcq = text.match(/^(\d+)\s+([A-G])\b\s*\)?\s+(.+)$/i);
+    const matchMcq = text.match(/^(\d+)\s+([A-H])\b\s*\)?\s+(.+)$/i);
 
     if (matchMcq) {
       const questionNumber = Number(matchMcq[1]);
@@ -52,7 +52,7 @@ export function getGroupedAnswers(answers = []) {
       return;
     }
 
-    const matchLetterOnly = text.match(/^(\d+)\s+([A-G])$/i);
+    const matchLetterOnly = text.match(/^(\d+)\s+([A-H])$/i);
     if (matchLetterOnly) {
       const questionNumber = Number(matchLetterOnly[1]);
       const optionLetter = matchLetterOnly[2].toUpperCase();
@@ -132,7 +132,10 @@ export function getOpenAnswerMap(
 
   source.forEach((raw) => {
     const text = String(raw || '').trim();
-    const match = text.match(/(?:^|[^\d])(\d{1,2})\s+(.+)$/);
+    let match = text.match(/(?:^|[^\d])(\d{1,2})\s+(.+)$/);
+    if (!match) match = text.match(/^(\d{1,2})[\.\)]\s*(.+)$/);
+    // p. ej. "10wildlife" desde Excel sin espacio tras el número
+    if (!match) match = text.match(/^(\d{1,2})([A-Za-z].+)$/);
     if (match) {
       keyed.push({ num: Number(match[1]), norm: normalizeText(match[2]) });
       return;
