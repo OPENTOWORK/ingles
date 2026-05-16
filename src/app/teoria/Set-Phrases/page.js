@@ -9,375 +9,345 @@ import {
   GrammarTable, 
   QuickReference 
 } from '@/components/theory/TheoryContent';
-import { 
-  MultipleChoiceExercise, 
-  FillBlanksExercise, 
-  TrueFalseExercise 
+import {
+  MultipleChoiceExercise,
+  FillBlanksExercise,
+  TrueFalseExercise
 } from '@/components/theory/ExerciseComponents';
 
 const SetPhrasesPage = () => {
   const theoryContent = (
     <div>
-      <TheorySection title="¿Qué son las Set Phrases?" icon="💬">
+      <TheorySection title="What Are Set Phrases?" icon="💬">
         <p style={{ fontSize: '1.1rem', lineHeight: 1.6, color: '#4a5568', marginBottom: '1rem' }}>
-          Las <strong>set phrases</strong> (frases hechas) son expresiones fijas que se usan comúnmente en inglés hablado. 
-          Son combinaciones de palabras que tienen un significado específico y se usan como una unidad.
+          <strong>Set phrases</strong> (idiomatic expressions) are fixed expressions commonly used in spoken English. 
+          They are word combinations with a specific meaning that are used as a single unit.
         </p>
         
         <QuickReference items={[
-          "Frases fijas con significado específico",
-          "Se usan como una unidad completa",
-          "Comunes en conversación cotidiana",
-          "Ayudan a sonar más natural",
-          "Incluyen: saludos, despedidas, expresiones de cortesía"
+          "Fixed phrases with a specific meaning",
+          "Used as one complete unit",
+          "Common in everyday conversation",
+          "Help you sound more natural",
+          "Include: greetings, goodbyes, courtesy expressions"
         ]} />
       </TheorySection>
 
-      <TheorySection title="Saludos y Despedidas" icon="👋">
+      <TheorySection title="Greetings and Goodbyes" icon="👋">
         <p style={{ fontSize: '1rem', lineHeight: 1.6, color: '#4a5568', marginBottom: '1rem' }}>
-          Los saludos y despedidas son frases esenciales para la interacción social básica.
+          Greetings and goodbyes are essential phrases for basic social interaction.
         </p>
 
         <GrammarTable
-          caption="Saludos y Despedidas Comunes"
-          headers={["Situación", "Frase", "Respuesta Típica", "Nivel de Formalidad"]}
+          caption="Common Greetings and Goodbyes"
+          headers={["Situation", "Phrase", "Typical Response", "Formality Level"]}
           rows={[
-            ["Saludo informal", "Hi there!", "Hi! How are you?", "Informal"],
-            ["Saludo formal", "Good morning", "Good morning to you too", "Formal"],
-            ["Saludo casual", "Hey, what's up?", "Not much, you?", "Muy informal"],
-            ["Despedida informal", "See you later!", "See you!", "Informal"],
-            ["Despedida formal", "Have a good day", "Thank you, you too", "Formal"],
-            ["Despedida casual", "Catch you later!", "Sure thing!", "Muy informal"],
-            ["Despedida con planes", "Talk to you soon", "Looking forward to it", "Neutral"]
+            ["Informal greeting", "Hi there!", "Hi! How are you?", "Informal"],
+            ["Formal greeting", "Good morning", "Good morning to you too", "Formal"],
+            ["Casual greeting", "Hey, what's up?", "Not much, you?", "Very informal"],
+            ["Informal goodbye", "See you later!", "See you!", "Informal"],
+            ["Formal goodbye", "Have a good day", "Thank you, you too", "Formal"],
+            ["Casual goodbye", "Catch you later!", "Sure thing!", "Very informal"],
+            ["Goodbye with future plans", "Talk to you soon", "Looking forward to it", "Neutral"]
           ]}
         />
 
         <div style={{ display: 'grid', gap: '1rem' }}>
           <Example 
-            spanish="Saludo informal: '¡Hola! ¿Qué tal?'"
             english="Informal greeting: 'Hi there! How are you?'"
-            translation="Saludo informal: '¡Hola! ¿Qué tal?'"
           />
           <Example 
-            spanish="Saludo formal: 'Buenos días'"
             english="Formal greeting: 'Good morning'"
-            translation="Saludo formal: 'Buenos días'"
           />
           <Example 
-            spanish="Despedida informal: '¡Hasta luego!'"
             english="Informal goodbye: 'See you later!'"
-            translation="Despedida informal: '¡Hasta luego!'"
           />
         </div>
 
         <Rule 
-          title="Uso de Saludos y Despedidas"
-          description="Para usar efectivamente:"
+          title="Using Greetings and Goodbyes"
+          description="To use them effectively:"
           examples={[
-            "Elige el nivel apropiado de formalidad",
-            "Responde de manera apropiada",
-            "Considera la relación con la persona",
-            "Usa expresiones naturales y auténticas"
+            "Choose the appropriate level of formality",
+            "Respond in an appropriate way",
+            "Consider your relationship with the person",
+            "Use natural, authentic expressions"
           ]}
         />
 
         <Tip type="info">
-          <strong>Consejo:</strong> Los saludos y despedidas establecen el tono de la conversación.
+          <strong>Tip:</strong> Greetings and goodbyes set the tone of the conversation.
         </Tip>
       </TheorySection>
 
-      <TheorySection title="Expresiones de Cortesía" icon="🙏">
+      <TheorySection title="Courtesy Expressions" icon="🙏">
         <p style={{ fontSize: '1rem', lineHeight: 1.6, color: '#4a5568', marginBottom: '1rem' }}>
-          Las expresiones de cortesía son fundamentales para mantener relaciones sociales positivas.
+          Courtesy expressions are fundamental for maintaining positive social relationships.
         </p>
 
         <GrammarTable
-          caption="Expresiones de Cortesía"
-          headers={["Situación", "Frase", "Respuesta Típica", "Cuándo Usar"]}
+          caption="Courtesy Expressions"
+          headers={["Situation", "Phrase", "Typical Response", "When to Use"]}
           rows={[
-            ["Agradecimiento", "Thanks a lot!", "You're welcome!", "Después de recibir ayuda"],
-            ["Disculpa", "Excuse me", "That's okay", "Al interrumpir o pedir algo"],
-            ["Perdón", "I'm sorry", "No problem", "Al cometer un error"],
-            ["Permiso", "May I...?", "Of course", "Al pedir permiso"],
-            ["Favor", "Could you...?", "Sure, no problem", "Al pedir un favor"],
-            ["Felicitación", "Congratulations!", "Thank you!", "Al celebrar logros"],
-            ["Condolencia", "I'm sorry for your loss", "Thank you", "En situaciones tristes"]
+            ["Gratitude", "Thanks a lot!", "You're welcome!", "After receiving help"],
+            ["Excuse me (attention)", "Excuse me", "That's okay", "When interrupting or asking for something"],
+            ["Apology", "I'm sorry", "No problem", "When you make a mistake"],
+            ["Permission", "May I...?", "Of course", "When asking for permission"],
+            ["Request", "Could you...?", "Sure, no problem", "When asking for a favor"],
+            ["Congratulations", "Congratulations!", "Thank you!", "When celebrating achievements"],
+            ["Sympathy", "I'm sorry for your loss", "Thank you", "In sad situations"]
           ]}
         />
 
         <div style={{ display: 'grid', gap: '1rem' }}>
           <Example 
-            spanish="Agradecimiento: '¡Muchas gracias!'"
             english="Gratitude: 'Thanks a lot!'"
-            translation="Agradecimiento: '¡Muchas gracias!'"
           />
           <Example 
-            spanish="Disculpa: 'Disculpe, ¿puedo pasar?'"
-            english="Apology: 'Excuse me, may I pass?'"
-            translation="Disculpa: 'Disculpe, ¿puedo pasar?'"
+            english="Excuse me: 'Excuse me, may I pass?'"
           />
           <Example 
-            spanish="Permiso: '¿Puedo usar su teléfono?'"
             english="Permission: 'May I use your phone?'"
-            translation="Permiso: '¿Puedo usar su teléfono?'"
           />
         </div>
 
         <Tip type="success">
-          <strong>Consejo:</strong> Las expresiones de cortesía muestran respeto y consideración por los demás.
+          <strong>Tip:</strong> Courtesy expressions show respect and consideration for others.
         </Tip>
       </TheorySection>
 
-      <TheorySection title="Expresiones para Dar Opinión" icon="💭">
+      <TheorySection title="Giving Opinions" icon="💭">
         <p style={{ fontSize: '1rem', lineHeight: 1.6, color: '#4a5568', marginBottom: '1rem' }}>
-          Estas frases te ayudan a expresar tu opinión de manera natural y apropiada.
+          These phrases help you share your opinion in a natural, appropriate way.
         </p>
 
         <GrammarTable
-          caption="Expresiones para Dar Opinión"
-          headers={["Nivel de Certeza", "Frase", "Uso", "Ejemplo"]}
+          caption="Phrases for Giving Opinions"
+          headers={["Certainty Level", "Phrase", "Use", "Example"]}
           rows={[
-            ["Muy seguro", "I'm absolutely sure", "Cuando estás muy seguro", "I'm absolutely sure it's true"],
-            ["Seguro", "I'm convinced that", "Cuando tienes una creencia fuerte", "I'm convinced that it works"],
-            ["Moderado", "I think that", "Opinión personal", "I think that's a good idea"],
-            ["Inseguro", "I'm not sure, but", "Cuando no estás seguro", "I'm not sure, but it might work"],
-            ["Muy inseguro", "I have no idea", "Cuando no sabes", "I have no idea what to do"],
-            ["Neutral", "It seems to me", "Opinión neutral", "It seems to me it's okay"],
-            ["Personal", "In my view", "Perspectiva personal", "In my view, it's important"]
+            ["Very sure", "I'm absolutely sure", "When you are very confident", "I'm absolutely sure it's true"],
+            ["Sure", "I'm convinced that", "When you hold a strong belief", "I'm convinced that it works"],
+            ["Moderate", "I think that", "Personal opinion", "I think that's a good idea"],
+            ["Unsure", "I'm not sure, but", "When you are not certain", "I'm not sure, but it might work"],
+            ["Very unsure", "I have no idea", "When you do not know", "I have no idea what to do"],
+            ["Neutral", "It seems to me", "Neutral opinion", "It seems to me it's okay"],
+            ["Personal", "In my view", "Personal perspective", "In my view, it's important"]
           ]}
         />
 
         <div style={{ display: 'grid', gap: '1rem' }}>
           <Example 
-            spanish="Muy seguro: 'Estoy completamente seguro de que es verdad'"
             english="Very sure: 'I'm absolutely sure it's true'"
-            translation="Muy seguro: 'Estoy completamente seguro de que es verdad'"
+            translation="Sounds confident; use when the evidence is strong."
           />
           <Example 
-            spanish="Moderado: 'Creo que es una buena idea'"
             english="Moderate: 'I think that's a good idea'"
-            translation="Moderado: 'Creo que es una buena idea'"
+            translation="Softens the claim; typical in discussion."
           />
           <Example 
-            spanish="Inseguro: 'No estoy seguro, pero podría funcionar'"
             english="Uncertain: 'I'm not sure, but it might work'"
-            translation="Inseguro: 'No estoy seguro, pero podría funcionar'"
           />
         </div>
 
         <Rule 
-          title="Uso de Expresiones de Opinión"
-          description="Para expresar opinión efectivamente:"
+          title="Using Opinion Phrases"
+          description="To express opinions effectively:"
           examples={[
-            "Elige el nivel apropiado de certeza",
-            "Considera el contexto y la audiencia",
-            "Sé honesto sobre tu nivel de conocimiento",
-            "Usa expresiones que reflejen tu verdadero sentimiento"
+            "Choose the right level of certainty",
+            "Consider the context and your audience",
+            "Be honest about how much you know",
+            "Use phrases that match how you really feel"
           ]}
         />
 
         <Tip type="warning">
-          <strong>¡Cuidado!</strong> No uses expresiones de certeza absoluta cuando no estés seguro.
+          <strong>Watch out!</strong> Do not use expressions of absolute certainty when you are not sure.
         </Tip>
       </TheorySection>
 
-      <TheorySection title="Expresiones para Acordar y Discrepar" icon="🤝">
+      <TheorySection title="Agreeing and Disagreeing" icon="🤝">
         <p style={{ fontSize: '1rem', lineHeight: 1.6, color: '#4a5568', marginBottom: '1rem' }}>
-          Estas frases te ayudan a expresar acuerdo o desacuerdo de manera educada.
+          These phrases help you express agreement or disagreement politely.
         </p>
 
         <GrammarTable
-          caption="Expresiones de Acuerdo y Desacuerdo"
-          headers={["Tipo", "Frase", "Nivel de Intensidad", "Ejemplo"]}
+          caption="Agreement and Disagreement"
+          headers={["Type", "Phrase", "Intensity Level", "Example"]}
           rows={[
-            ["Acuerdo total", "I completely agree", "Muy fuerte", "I completely agree with you"],
-            ["Acuerdo fuerte", "I totally agree", "Fuerte", "I totally agree on that point"],
-            ["Acuerdo moderado", "I agree with you", "Moderado", "I agree with you on this"],
-            ["Acuerdo parcial", "I partly agree", "Débil", "I partly agree with your idea"],
-            ["Desacuerdo suave", "I'm not sure I agree", "Suave", "I'm not sure I agree with that"],
-            ["Desacuerdo moderado", "I disagree", "Moderado", "I disagree with your opinion"],
-            ["Desacuerdo fuerte", "I completely disagree", "Fuerte", "I completely disagree with that"]
+            ["Full agreement", "I completely agree", "Very strong", "I completely agree with you"],
+            ["Strong agreement", "I totally agree", "Strong", "I totally agree on that point"],
+            ["Moderate agreement", "I agree with you", "Moderate", "I agree with you on this"],
+            ["Partial agreement", "I partly agree", "Weak", "I partly agree with your idea"],
+            ["Soft disagreement", "I'm not sure I agree", "Soft", "I'm not sure I agree with that"],
+            ["Moderate disagreement", "I disagree", "Moderate", "I disagree with your opinion"],
+            ["Strong disagreement", "I completely disagree", "Strong", "I completely disagree with that"]
           ]}
         />
 
         <div style={{ display: 'grid', gap: '1rem' }}>
           <Example 
-            spanish="Acuerdo total: 'Estoy completamente de acuerdo contigo'"
-            english="Total agreement: 'I completely agree with you'"
-            translation="Acuerdo total: 'Estoy completamente de acuerdo contigo'"
+            english="Full agreement: 'I completely agree with you'"
+            translation="Use with peers when you want to be emphatic but polite."
           />
           <Example 
-            spanish="Acuerdo moderado: 'Estoy de acuerdo contigo en esto'"
             english="Moderate agreement: 'I agree with you on this'"
-            translation="Acuerdo moderado: 'Estoy de acuerdo contigo en esto'"
+            translation="Narrows agreement to one point; useful in debates."
           />
           <Example 
-            spanish="Desacuerdo suave: 'No estoy seguro de estar de acuerdo'"
             english="Soft disagreement: 'I'm not sure I agree with that'"
-            translation="Desacuerdo suave: 'No estoy seguro de estar de acuerdo'"
+            translation="Hedges disagreement; keeps rapport."
           />
         </div>
 
         <Tip type="info">
-          <strong>Consejo:</strong> Usa expresiones apropiadas para el nivel de desacuerdo y la relación con la persona.
+          <strong>Tip:</strong> Choose phrases that match how strongly you disagree and your relationship with the person.
         </Tip>
       </TheorySection>
 
-      <TheorySection title="Expresiones para Cambiar de Tema" icon="🔄">
+      <TheorySection title="Changing the Topic" icon="🔄">
         <p style={{ fontSize: '1rem', lineHeight: 1.6, color: '#4a5568', marginBottom: '1rem' }}>
-          Estas frases te ayudan a cambiar de tema de manera natural y educada.
+          These phrases help you move to a new topic in a natural, polite way.
         </p>
 
         <GrammarTable
-          caption="Expresiones para Cambiar de Tema"
-          headers={["Frase", "Nivel de Formalidad", "Uso", "Ejemplo"]}
+          caption="Phrases for Changing the Topic"
+          headers={["Phrase", "Formality Level", "Use", "Example"]}
           rows={[
-            ["By the way", "Informal", "Cambio casual de tema", "By the way, did you hear about...?"],
-            ["Speaking of which", "Neutral", "Cambio relacionado", "Speaking of which, how is your job?"],
-            ["That reminds me", "Neutral", "Recordar algo relacionado", "That reminds me, I need to call..."],
-            ["On a different note", "Formal", "Cambio formal de tema", "On a different note, let's discuss..."],
-            ["Incidentally", "Formal", "Información adicional", "Incidentally, I heard that..."],
-            ["Before I forget", "Neutral", "Recordar algo importante", "Before I forget, don't forget to..."],
-            ["Oh, I almost forgot", "Informal", "Recordar algo olvidado", "Oh, I almost forgot to tell you..."]
+            ["By the way", "Informal", "Casual topic shift", "By the way, did you hear about...?"],
+            ["Speaking of which", "Neutral", "Related shift", "Speaking of which, how is your job?"],
+            ["That reminds me", "Neutral", "Remember something related", "That reminds me, I need to call..."],
+            ["On a different note", "Formal", "Formal topic shift", "On a different note, let's discuss..."],
+            ["Incidentally", "Formal", "Additional information", "Incidentally, I heard that..."],
+            ["Before I forget", "Neutral", "Remember something important", "Before I forget, don't forget to..."],
+            ["Oh, I almost forgot", "Informal", "Remember something you forgot", "Oh, I almost forgot to tell you..."]
           ]}
         />
 
         <div style={{ display: 'grid', gap: '1rem' }}>
           <Example 
-            spanish="Cambio casual: 'Por cierto, ¿escuchaste sobre...?'"
             english="Casual change: 'By the way, did you hear about...?'"
-            translation="Cambio casual: 'Por cierto, ¿escuchaste sobre...?'"
           />
           <Example 
-            spanish="Cambio relacionado: 'Hablando de eso, ¿cómo está tu trabajo?'"
             english="Related change: 'Speaking of which, how is your job?'"
-            translation="Cambio relacionado: 'Hablando de eso, ¿cómo está tu trabajo?'"
           />
           <Example 
-            spanish="Recordar: 'Eso me recuerda, necesito llamar...'"
             english="Reminder: 'That reminds me, I need to call...'"
-            translation="Recordar: 'Eso me recuerda, necesito llamar...'"
+            translation="Links the new point to what was just said."
           />
         </div>
 
         <Rule 
-          title="Uso de Expresiones de Cambio de Tema"
-          description="Para cambiar de tema efectivamente:"
+          title="Changing the Topic"
+          description="To change topics effectively:"
           examples={[
-            "Usa expresiones apropiadas para el nivel de formalidad",
-            "Asegúrate de que el cambio sea natural",
-            "Considera si el cambio es apropiado",
-            "Usa expresiones que faciliten la transición"
+            "Use phrases that fit the formality level",
+            "Make sure the shift feels natural",
+            "Consider whether a change is appropriate",
+            "Use phrases that smooth the transition"
           ]}
         />
 
         <Tip type="success">
-          <strong>Consejo:</strong> Los cambios de tema naturales mantienen la conversación fluida.
+          <strong>Tip:</strong> Natural topic changes keep the conversation flowing.
         </Tip>
       </TheorySection>
 
-      <TheorySection title="Expresiones para Mostrar Interés" icon="😊">
+      <TheorySection title="Showing Interest" icon="😊">
         <p style={{ fontSize: '1rem', lineHeight: 1.6, color: '#4a5568', marginBottom: '1rem' }}>
-          Estas frases te ayudan a mostrar interés y mantener la conversación activa.
+          These phrases help you show interest and keep the conversation active.
         </p>
 
         <GrammarTable
-          caption="Expresiones para Mostrar Interés"
-          headers={["Frase", "Uso", "Respuesta Esperada", "Nivel de Entusiasmo"]}
+          caption="Phrases for Showing Interest"
+          headers={["Phrase", "Use", "Expected Response", "Enthusiasm Level"]}
           rows={[
-            ["That's interesting!", "Mostrar interés", "Continuar explicando", "Moderado"],
-            ["Really?", "Mostrar sorpresa", "Confirmar o explicar", "Alto"],
-            ["Wow!", "Mostrar asombro", "Continuar la historia", "Muy alto"],
-            ["I see", "Mostrar comprensión", "Continuar explicando", "Bajo"],
-            ["That's amazing!", "Mostrar admiración", "Continuar explicando", "Alto"],
-            ["No way!", "Mostrar incredulidad", "Confirmar o explicar", "Muy alto"],
-            ["That's cool!", "Mostrar aprobación", "Continuar explicando", "Moderado"]
+            ["That's interesting!", "Show interest", "They continue explaining", "Moderate"],
+            ["Really?", "Show surprise", "They confirm or explain", "High"],
+            ["Wow!", "Show amazement", "They continue the story", "Very high"],
+            ["I see", "Show understanding", "They continue explaining", "Low"],
+            ["That's amazing!", "Show admiration", "They continue explaining", "High"],
+            ["No way!", "Show disbelief", "They confirm or explain", "Very high"],
+            ["That's cool!", "Show approval", "They continue explaining", "Moderate"]
           ]}
         />
 
         <div style={{ display: 'grid', gap: '1rem' }}>
           <Example 
-            spanish="Interés: '¡Eso es interesante!'"
             english="Interest: 'That's interesting!'"
-            translation="Interés: '¡Eso es interesante!'"
           />
           <Example 
-            spanish="Sorpresa: '¿En serio?'"
             english="Surprise: 'Really?'"
-            translation="Sorpresa: '¿En serio?'"
           />
           <Example 
-            spanish="Asombro: '¡Wow!'"
             english="Amazement: 'Wow!'"
-            translation="Asombro: '¡Wow!'"
           />
         </div>
 
         <Tip type="info">
-          <strong>Consejo:</strong> Mostrar interés genuino hace que la conversación sea más agradable para todos.
+          <strong>Tip:</strong> Showing genuine interest makes the conversation more pleasant for everyone.
         </Tip>
       </TheorySection>
 
-      <TheorySection title="Errores Comunes" icon="⚠️">
+      <TheorySection title="Common Mistakes" icon="⚠️">
         <div style={{ display: 'grid', gap: '1rem' }}>
           <Tip type="error">
-            <strong>Error:</strong> Usar expresiones demasiado formales en contexto informal ❌<br/>
-            <strong>Correcto:</strong> Adaptar el nivel de formalidad al contexto ✅<br/>
-            <em>El contexto determina el nivel apropiado</em>
+            <strong>Error:</strong> Using expressions that are too formal in informal contexts ❌<br/>
+            <strong>Correct:</strong> Match formality to the situation ✅<br/>
+            <em>Context determines the right level</em>
           </Tip>
 
           <Tip type="error">
-            <strong>Error:</strong> No responder apropiadamente a las frases ❌<br/>
-            <strong>Correcto:</strong> Responder de manera natural y apropiada ✅<br/>
-            <em>Las respuestas apropiadas mantienen la conversación fluida</em>
+            <strong>Error:</strong> Not responding appropriately to set phrases ❌<br/>
+            <strong>Correct:</strong> Reply in a natural, appropriate way ✅<br/>
+            <em>Good back-and-forth keeps conversation flowing</em>
           </Tip>
 
           <Tip type="error">
-            <strong>Error:</strong> Usar expresiones de certeza cuando no estás seguro ❌<br/>
-            <strong>Correcto:</strong> Usar expresiones apropiadas para tu nivel de certeza ✅<br/>
-            <em>La honestidad sobre tu nivel de conocimiento es importante</em>
+            <strong>Error:</strong> Using certainty phrases when you are not sure ❌<br/>
+            <strong>Correct:</strong> Use phrases that match your real level of certainty ✅<br/>
+            <em>Being honest about what you know matters</em>
           </Tip>
 
           <Tip type="error">
-            <strong>Error:</strong> No considerar la relación con la persona ❌<br/>
-            <strong>Correcto:</strong> Elegir expresiones apropiadas para la relación ✅<br/>
-            <em>La relación determina el nivel de formalidad apropiado</em>
+            <strong>Error:</strong> Ignoring your relationship with the person ❌<br/>
+            <strong>Correct:</strong> Pick phrases that fit the relationship ✅<br/>
+            <em>Relationship often sets how formal you should be</em>
           </Tip>
         </div>
       </TheorySection>
 
-      <TheorySection title="Reglas Importantes" icon="⚡">
+      <TheorySection title="Important Rules" icon="⚡">
         <div style={{ display: 'grid', gap: '1rem' }}>
           <Rule 
-            title="1. Contexto determina uso"
-            description="Elige expresiones apropiadas para el contexto."
+            title="1. Context drives usage"
+            description="Choose phrases that fit the situation."
             examples={[
-              "Formal: reuniones, presentaciones, entrevistas",
-              "Informal: amigos, familia, conversaciones casuales",
-              "Neutral: colegas, conocidos, situaciones mixtas",
-              "Considera la relación con la persona"
+              "Formal: meetings, presentations, interviews",
+              "Informal: friends, family, casual chat",
+              "Neutral: colleagues, acquaintances, mixed settings",
+              "Consider your relationship with the person"
             ]}
           />
 
           <Rule 
-            title="2. Respuestas apropiadas"
-            description="Responde de manera natural y apropiada."
+            title="2. Appropriate responses"
+            description="Answer in a natural, fitting way."
             examples={[
-              "Saludos requieren respuestas de saludo",
-              "Preguntas requieren respuestas informativas",
-              "Expresiones de cortesía requieren respuestas de cortesía",
-              "Mantén el nivel de formalidad consistente"
+              "Greetings invite greeting replies",
+              "Questions invite informative answers",
+              "Courtesy phrases invite courteous replies",
+              "Keep formality consistent"
             ]}
           />
 
           <Rule 
-            title="3. Autenticidad y naturalidad"
-            description="Usa expresiones que suenen naturales para ti."
+            title="3. Authenticity and naturalness"
+            description="Use phrases that sound natural for you."
             examples={[
-              "Practica hasta que suenen naturales",
-              "No fuerces expresiones que no te sientan bien",
-              "Adapta las expresiones a tu personalidad",
-              "La autenticidad es más importante que la perfección"
+              "Practice until they feel natural",
+              "Do not force phrases that feel wrong for you",
+              "Adapt expressions to your personality",
+              "Authenticity matters more than perfection"
             ]}
           />
         </div>
@@ -388,7 +358,7 @@ const SetPhrasesPage = () => {
   const exercises = [
     <MultipleChoiceExercise
       key="1"
-      question="¿Cuál es la frase más informal para saludar?"
+      question="What is the most informal greeting?"
       options={[
         "Good morning",
         "Hi there!",
@@ -396,12 +366,12 @@ const SetPhrasesPage = () => {
         "Good evening"
       ]}
       correctAnswer={1}
-      explanation="'Hi there!' es un saludo muy informal y amigable, perfecto para situaciones casuales."
+      explanation="'Hi there!' is a very informal, friendly greeting, ideal for casual situations."
     />,
 
     <MultipleChoiceExercise
       key="2"
-      question="¿Cuál es la respuesta más apropiada a 'Thanks a lot!'?"
+      question="What is the most appropriate response to 'Thanks a lot!'?"
       options={[
         "You're welcome!",
         "Thank you!",
@@ -409,38 +379,38 @@ const SetPhrasesPage = () => {
         "Excuse me"
       ]}
       correctAnswer={0}
-      explanation="'You're welcome!' es la respuesta más apropiada a 'Thanks a lot!' para expresar que no hay problema en ayudar."
+      explanation="'You're welcome!' is the most natural reply to 'Thanks a lot!' when you want to say helping was no trouble."
     />,
 
     <TrueFalseExercise
       key="3"
       statements={[
         {
-          text: "Las set phrases son expresiones fijas que se usan como una unidad.",
+          text: "Set phrases are fixed expressions used as a single unit.",
           isTrue: true,
-          explanation: "Correcto. Las set phrases son combinaciones fijas de palabras con significado específico que se usan como una unidad."
+          explanation: "Correct. Set phrases are fixed word combinations with a specific meaning, used as one unit."
         },
         {
-          text: "Es apropiado usar expresiones muy informales en contextos formales.",
+          text: "It is appropriate to use very informal expressions in formal contexts.",
           isTrue: false,
-          explanation: "Incorrecto. Debes adaptar el nivel de formalidad al contexto. Las expresiones muy informales no son apropiadas en contextos formales."
+          explanation: "Incorrect. Match formality to the context. Very informal expressions are not appropriate in formal settings."
         },
         {
-          text: "Mostrar interés genuino hace que la conversación sea más agradable.",
+          text: "Showing genuine interest makes the conversation more pleasant.",
           isTrue: true,
-          explanation: "Correcto. Mostrar interés genuino con expresiones como 'That's interesting!' o 'Really?' hace que la conversación sea más agradable para todos."
+          explanation: "Correct. Genuine interest with phrases like 'That's interesting!' or 'Really?' makes conversation nicer for everyone."
         },
         {
-          text: "No es importante responder apropiadamente a las frases de cortesía.",
+          text: "It does not matter how you reply to courtesy phrases.",
           isTrue: false,
-          explanation: "Incorrecto. Responder apropiadamente a las frases de cortesía es importante para mantener la conversación fluida y mostrar respeto."
+          explanation: "Incorrect. Responding well to courtesy phrases keeps the flow going and shows respect."
         }
       ]}
     />,
 
     <MultipleChoiceExercise
       key="4"
-      question="¿Cuál es la expresión más apropiada para mostrar desacuerdo suave?"
+      question="What phrase best expresses soft disagreement?"
       options={[
         "I completely disagree",
         "I'm not sure I agree",
@@ -448,12 +418,12 @@ const SetPhrasesPage = () => {
         "That's amazing!"
       ]}
       correctAnswer={1}
-      explanation="'I'm not sure I agree' es la expresión más apropiada para mostrar desacuerdo suave, mientras que las otras expresan acuerdo total, desacuerdo fuerte o asombro."
+      explanation="'I'm not sure I agree' softens disagreement. The others express strong disagreement, full agreement, or amazement."
     />,
 
     <MultipleChoiceExercise
       key="5"
-      question="¿Cuál es la expresión más apropiada para cambiar de tema de manera casual?"
+      question="What phrase best changes the topic in a casual way?"
       options={[
         "On a different note",
         "By the way",
@@ -461,7 +431,7 @@ const SetPhrasesPage = () => {
         "Speaking of which"
       ]}
       correctAnswer={1}
-      explanation="'By the way' es la expresión más apropiada para cambiar de tema de manera casual, mientras que las otras son más formales o para cambios relacionados."
+      explanation="'By the way' is the most casual way to shift topic; the others tend to be more formal or tied to the previous subject."
     />,
 
     <TrueFalseExercise
@@ -470,17 +440,17 @@ const SetPhrasesPage = () => {
         {
           text: "Set phrases can be translated literally from Spanish to English.",
           isTrue: false,
-          explanation: "Incorrecto. Las set phrases son específicas de cada idioma y raramente se traducen literalmente."
+          explanation: "Incorrect. Set phrases are language-specific and are rarely translated word for word."
         },
         {
           text: "'How are you?' is a set phrase used for greeting.",
           isTrue: true,
-          explanation: "Correcto. 'How are you?' es una frase fija común para saludar en inglés."
+          explanation: "Correct. 'How are you?' is a common fixed greeting in English."
         },
         {
           text: "Set phrases make speech sound more natural and fluent.",
           isTrue: true,
-          explanation: "Correcto. Las set phrases ayudan a sonar más natural y fluido, como un hablante nativo."
+          explanation: "Correct. Set phrases help you sound more natural and fluent, closer to a native speaker."
         }
       ]}
     />,
@@ -495,12 +465,12 @@ const SetPhrasesPage = () => {
         "understand"
       ]}
       correctAnswer={1}
-      explanation="'I didn't catch that' es una set phrase común para pedir repetición de manera educada."
+      explanation="'I didn't catch that' is a common polite way to ask someone to repeat what they said."
     />,
 
     <MultipleChoiceExercise
       key="8"
-      question="¿Cuál es la respuesta más apropiada a 'How's it going?'"
+      question="What is the most natural reply to 'How's it going?'?"
       options={[
         "It's going to the store",
         "Not bad, thanks",
@@ -508,7 +478,7 @@ const SetPhrasesPage = () => {
         "I don't know where"
       ]}
       correctAnswer={1}
-      explanation="'Not bad, thanks' es una respuesta natural y común a 'How's it going?'"
+      explanation="'Not bad, thanks' is a natural, common reply to 'How's it going?'."
     />,
 
     <TrueFalseExercise
@@ -517,12 +487,12 @@ const SetPhrasesPage = () => {
         {
           text: "'Break a leg' literally means to injure your leg.",
           isTrue: false,
-          explanation: "Incorrecto. 'Break a leg' es una expresión idiomática que significa 'good luck' en el teatro."
+          explanation: "Incorrect. 'Break a leg' is an idiom meaning 'good luck,' especially in theater, not literal injury."
         },
         {
           text: "Set phrases are more common in spoken English than written English.",
           isTrue: true,
-          explanation: "Correcto. Las set phrases son especialmente comunes en conversaciones informales."
+          explanation: "Correct. Set phrases are especially common in informal spoken conversation."
         }
       ]}
     />,
@@ -537,14 +507,14 @@ const SetPhrasesPage = () => {
         "coming"
       ]}
       correctAnswer={1}
-      explanation="'Looking forward to' es una set phrase que significa 'tener ganas de' o 'esperar con ansias'."
+      explanation="'Look forward to' is a set phrase meaning you are eager to see someone or something."
     />
   ];
 
   return (
     <TheoryLayout
       title="Set Phrases"
-      description="Domina las frases hechas en inglés: saludos, despedidas, cortesía, opinión, acuerdo/desacuerdo y cambio de tema. Aprende a sonar más natural en conversaciones."
+      description="Master fixed expressions in English: greetings, goodbyes, courtesy, opinions, agreement and disagreement, and changing the topic. Learn to sound more natural in conversation."
       level="A2-B1-B2-C1-C2"
       theoryContent={theoryContent}
       exercises={exercises}
@@ -555,24 +525,3 @@ const SetPhrasesPage = () => {
 };
 
 export default SetPhrasesPage;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

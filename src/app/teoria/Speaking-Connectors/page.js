@@ -18,360 +18,324 @@ import {
 const SpeakingConnectorsPage = () => {
   const theoryContent = (
     <div>
-      <TheorySection title="¿Qué son los Speaking Connectors?" icon="🗣️">
+      <TheorySection title="What Are Speaking Connectors?" icon="🗣️">
         <p style={{ fontSize: '1.1rem', lineHeight: 1.6, color: '#4a5568', marginBottom: '1rem' }}>
-          Los <strong>speaking connectors</strong> (conectores para hablar) son palabras y frases que te ayudan a conectar 
-          ideas, organizar tu discurso y hacer que tu habla sea más fluida y coherente en inglés.
+          <strong>Speaking connectors</strong> are words and phrases that help you link 
+          ideas, organize your speech, and make your speaking more fluent and coherent in English.
         </p>
         
         <QuickReference items={[
-          "Conectores para organizar ideas: first, second, finally",
-          "Conectores para agregar información: also, besides, furthermore",
-          "Conectores para contrastar: but, however, on the other hand",
-          "Conectores para dar ejemplos: for example, such as, like",
-          "Conectores para expresar opinión: I think, in my opinion, personally"
+          "Connectors to organize ideas: first, second, finally",
+          "Connectors to add information: also, besides, furthermore",
+          "Connectors to contrast: but, however, on the other hand",
+          "Connectors to give examples: for example, such as, like",
+          "Connectors to express opinion: I think, in my opinion, personally"
         ]} />
       </TheorySection>
 
-      <TheorySection title="Conectores para Organizar Ideas" icon="📋">
+      <TheorySection title="Connectors to Organize Ideas" icon="📋">
         <p style={{ fontSize: '1rem', lineHeight: 1.6, color: '#4a5568', marginBottom: '1rem' }}>
-          Estos conectores te ayudan a estructurar tu discurso y hacer que sea fácil de seguir.
+          These connectors help you structure your speech and make it easy to follow.
         </p>
 
         <GrammarTable
-          caption="Conectores de Organización"
-          headers={["Función", "Conectores", "Uso", "Ejemplo"]}
+          caption="Organization Connectors"
+          headers={["Function", "Connectors", "Use", "Example"]}
           rows={[
-            ["Inicio", "First, To begin with, Firstly", "Empezar una lista o argumento", "First, I think technology is important"],
-            ["Continuación", "Second, Then, Next, Also", "Agregar puntos adicionales", "Second, it helps communication"],
-            ["Final", "Finally, Lastly, To conclude", "Terminar una lista o argumento", "Finally, it makes life easier"],
-            ["Secuencia", "First... second... third", "Lista ordenada", "First, we need money. Second, we need time"],
-            ["Transición", "Now, So, Well", "Cambiar de tema o idea", "Now, let's talk about education"],
-            ["Resumen", "In summary, To sum up", "Resumir ideas principales", "In summary, technology is beneficial"]
+            ["Beginning", "First, To begin with, Firstly", "Start a list or argument", "First, I think technology is important"],
+            ["Continuation", "Second, Then, Next, Also", "Add further points", "Second, it helps communication"],
+            ["End", "Finally, Lastly, To conclude", "End a list or argument", "Finally, it makes life easier"],
+            ["Sequence", "First... second... third", "Ordered list", "First, we need money. Second, we need time"],
+            ["Transition", "Now, So, Well", "Change topic or idea", "Now, let's talk about education"],
+            ["Summary", "In summary, To sum up", "Summarize main ideas", "In summary, technology is beneficial"]
           ]}
         />
 
         <div style={{ display: 'grid', gap: '1rem' }}>
           <Example 
-            spanish="Inicio: 'Primero, creo que la tecnología es importante'"
             english="Beginning: 'First, I think technology is important'"
-            translation="Inicio: 'Primero, creo que la tecnología es importante'"
           />
           <Example 
-            spanish="Continuación: 'Segundo, ayuda con la comunicación'"
             english="Continuation: 'Second, it helps with communication'"
-            translation="Continuación: 'Segundo, ayuda con la comunicación'"
           />
           <Example 
-            spanish="Final: 'Finalmente, hace la vida más fácil'"
             english="End: 'Finally, it makes life easier'"
-            translation="Final: 'Finalmente, hace la vida más fácil'"
           />
         </div>
 
         <Rule 
-          title="Uso de Conectores de Organización"
-          description="Para usar efectivamente:"
+          title="Using Organization Connectors"
+          description="To use them effectively:"
           examples={[
-            "Usa conectores apropiados para cada función",
-            "Mantén la consistencia en tu discurso",
-            "No uses demasiados conectores seguidos",
-            "Varía los conectores para evitar repetición"
+            "Use connectors appropriate for each function",
+            "Keep your speech consistent",
+            "Don't use too many connectors in a row",
+            "Vary connectors to avoid repetition"
           ]}
         />
 
         <Tip type="info">
-          <strong>Consejo:</strong> Los conectores de organización hacen que tu discurso sea más profesional y fácil de seguir.
+          <strong>Tip:</strong> Organization connectors make your speech more professional and easier to follow.
         </Tip>
       </TheorySection>
 
-      <TheorySection title="Conectores para Agregar Información" icon="➕">
+      <TheorySection title="Connectors to Add Information" icon="➕">
         <p style={{ fontSize: '1rem', lineHeight: 1.6, color: '#4a5568', marginBottom: '1rem' }}>
-          Estos conectores te permiten agregar información adicional y desarrollar tus ideas.
+          These connectors let you add extra information and develop your ideas.
         </p>
 
         <GrammarTable
-          caption="Conectores de Adición"
-          headers={["Conector", "Nivel de Formalidad", "Uso", "Ejemplo"]}
+          caption="Addition Connectors"
+          headers={["Connector", "Formality Level", "Use", "Example"]}
           rows={[
-            ["And", "Informal", "Agregar información simple", "I like music and movies"],
-            ["Also", "Neutral", "Agregar información adicional", "I like music. Also, I enjoy movies"],
-            ["Besides", "Neutral", "Agregar punto adicional", "Besides music, I like movies"],
-            ["Furthermore", "Formal", "Agregar información importante", "Music is enjoyable. Furthermore, it's educational"],
-            ["Moreover", "Formal", "Agregar punto significativo", "It's fun. Moreover, it's good for health"],
-            ["In addition", "Formal", "Agregar información complementaria", "It's fun. In addition, it's educational"]
+            ["And", "Informal", "Add simple information", "I like music and movies"],
+            ["Also", "Neutral", "Add extra information", "I like music. Also, I enjoy movies"],
+            ["Besides", "Neutral", "Add an extra point", "Besides music, I like movies"],
+            ["Furthermore", "Formal", "Add important information", "Music is enjoyable. Furthermore, it's educational"],
+            ["Moreover", "Formal", "Add a significant point", "It's fun. Moreover, it's good for health"],
+            ["In addition", "Formal", "Add complementary information", "It's fun. In addition, it's educational"]
           ]}
         />
 
         <div style={{ display: 'grid', gap: '1rem' }}>
           <Example 
-            spanish="Neutral: 'Me gusta la música. También, disfruto las películas'"
             english="Neutral: 'I like music. Also, I enjoy movies'"
-            translation="Neutral: 'Me gusta la música. También, disfruto las películas'"
           />
           <Example 
-            spanish="Formal: 'Es divertido. Además, es educativo'"
             english="Formal: 'It's fun. Furthermore, it's educational'"
-            translation="Formal: 'Es divertido. Además, es educativo'"
           />
           <Example 
-            spanish="Informal: 'Me gusta la música y las películas'"
             english="Informal: 'I like music and movies'"
-            translation="Informal: 'Me gusta la música y las películas'"
           />
         </div>
 
         <Tip type="success">
-          <strong>Consejo:</strong> Varía los conectores según el nivel de formalidad de tu discurso.
+          <strong>Tip:</strong> Vary connectors according to the formality of your speech.
         </Tip>
       </TheorySection>
 
-      <TheorySection title="Conectores para Contrastar" icon="⚖️">
+      <TheorySection title="Connectors to Contrast" icon="⚖️">
         <p style={{ fontSize: '1rem', lineHeight: 1.6, color: '#4a5568', marginBottom: '1rem' }}>
-          Estos conectores te permiten mostrar diferencias, oposiciones o contrastes entre ideas.
+          These connectors let you show differences, oppositions, or contrasts between ideas.
         </p>
 
         <GrammarTable
-          caption="Conectores de Contraste"
-          headers={["Conector", "Nivel de Formalidad", "Uso", "Ejemplo"]}
+          caption="Contrast Connectors"
+          headers={["Connector", "Formality Level", "Use", "Example"]}
           rows={[
-            ["But", "Informal", "Contraste simple", "I like music, but I don't like jazz"],
-            ["However", "Formal", "Contraste fuerte", "I like music. However, I don't like jazz"],
-            ["On the other hand", "Formal", "Mostrar alternativa", "Music is fun. On the other hand, it can be expensive"],
-            ["Although", "Neutral", "Contraste con concesión", "Although I like music, I don't play any instruments"],
-            ["Despite", "Formal", "Contraste con obstáculo", "Despite the cost, I still buy music"],
-            ["Yet", "Neutral", "Contraste inesperado", "It's expensive, yet I still buy it"]
+            ["But", "Informal", "Simple contrast", "I like music, but I don't like jazz"],
+            ["However", "Formal", "Strong contrast", "I like music. However, I don't like jazz"],
+            ["On the other hand", "Formal", "Show an alternative", "Music is fun. On the other hand, it can be expensive"],
+            ["Although", "Neutral", "Concessive contrast", "Although I like music, I don't play any instruments"],
+            ["Despite", "Formal", "Contrast despite obstacle", "Despite the cost, I still buy music"],
+            ["Yet", "Neutral", "Unexpected contrast", "It's expensive, yet I still buy it"]
           ]}
         />
 
         <div style={{ display: 'grid', gap: '1rem' }}>
           <Example 
-            spanish="Informal: 'Me gusta la música, pero no me gusta el jazz'"
             english="Informal: 'I like music, but I don't like jazz'"
-            translation="Informal: 'Me gusta la música, pero no me gusta el jazz'"
           />
           <Example 
-            spanish="Formal: 'Me gusta la música. Sin embargo, no me gusta el jazz'"
             english="Formal: 'I like music. However, I don't like jazz'"
-            translation="Formal: 'Me gusta la música. Sin embargo, no me gusta el jazz'"
           />
           <Example 
-            spanish="Neutral: 'Aunque me gusta la música, no toco instrumentos'"
             english="Neutral: 'Although I like music, I don't play instruments'"
-            translation="Neutral: 'Aunque me gusta la música, no toco instrumentos'"
           />
         </div>
 
         <Rule 
-          title="Uso de Conectores de Contraste"
-          description="Para contrastar efectivamente:"
+          title="Using Contrast Connectors"
+          description="To contrast effectively:"
           examples={[
-            "Usa conectores apropiados para el nivel de formalidad",
-            "Asegúrate de que el contraste sea claro",
-            "No uses demasiados conectores de contraste seguidos",
-            "Varía los conectores para evitar repetición"
+            "Use connectors appropriate for the level of formality",
+            "Make sure the contrast is clear",
+            "Don't use too many contrast connectors in a row",
+            "Vary connectors to avoid repetition"
           ]}
         />
 
         <Tip type="warning">
-          <strong>¡Cuidado!</strong> No uses 'but' y 'however' juntos - son redundantes.
+          <strong>Watch out!</strong> Don't use 'but' and 'however' together — they are redundant.
         </Tip>
       </TheorySection>
 
-      <TheorySection title="Conectores para Dar Ejemplos" icon="💡">
+      <TheorySection title="Connectors to Give Examples" icon="💡">
         <p style={{ fontSize: '1rem', lineHeight: 1.6, color: '#4a5568', marginBottom: '1rem' }}>
-          Estos conectores te ayudan a ilustrar tus ideas con ejemplos específicos.
+          These connectors help you illustrate your ideas with specific examples.
         </p>
 
         <GrammarTable
-          caption="Conectores de Ejemplo"
-          headers={["Conector", "Uso", "Posición", "Ejemplo"]}
+          caption="Example Connectors"
+          headers={["Connector", "Use", "Position", "Example"]}
           rows={[
-            ["For example", "Dar ejemplo específico", "Inicio de oración", "I like many genres. For example, I enjoy rock"],
-            ["For instance", "Dar ejemplo específico", "Inicio de oración", "Music is diverse. For instance, there's jazz"],
-            ["Such as", "Listar ejemplos", "Medio de oración", "I like genres such as rock and jazz"],
-            ["Like", "Dar ejemplo informal", "Medio de oración", "I like genres like rock and jazz"],
-            ["Namely", "Especificar exactamente", "Inicio de oración", "I like two genres, namely rock and jazz"],
-            ["Including", "Incluir en lista", "Medio de oración", "I like many genres, including rock and jazz"]
+            ["For example", "Give a specific example", "Start of sentence", "I like many genres. For example, I enjoy rock"],
+            ["For instance", "Give a specific example", "Start of sentence", "Music is diverse. For instance, there's jazz"],
+            ["Such as", "List examples", "Middle of sentence", "I like genres such as rock and jazz"],
+            ["Like", "Give an informal example", "Middle of sentence", "I like genres like rock and jazz"],
+            ["Namely", "Specify exactly", "Start of sentence", "I like two genres, namely rock and jazz"],
+            ["Including", "Include in a list", "Middle of sentence", "I like many genres, including rock and jazz"]
           ]}
         />
 
         <div style={{ display: 'grid', gap: '1rem' }}>
           <Example 
-            spanish="Específico: 'Me gustan muchos géneros. Por ejemplo, disfruto el rock'"
             english="Specific: 'I like many genres. For example, I enjoy rock'"
-            translation="Específico: 'Me gustan muchos géneros. Por ejemplo, disfruto el rock'"
           />
           <Example 
-            spanish="Lista: 'Me gustan géneros como rock y jazz'"
             english="List: 'I like genres such as rock and jazz'"
-            translation="Lista: 'Me gustan géneros como rock y jazz'"
           />
           <Example 
-            spanish="Específico: 'Me gustan dos géneros, específicamente rock y jazz'"
             english="Specific: 'I like two genres, namely rock and jazz'"
-            translation="Específico: 'Me gustan dos géneros, específicamente rock y jazz'"
           />
         </div>
 
         <Tip type="info">
-          <strong>Consejo:</strong> Los ejemplos hacen que tu discurso sea más convincente y fácil de entender.
+          <strong>Tip:</strong> Examples make your speech more convincing and easier to understand.
         </Tip>
       </TheorySection>
 
-      <TheorySection title="Conectores para Expresar Opinión" icon="💬">
+      <TheorySection title="Connectors to Express Opinion" icon="💬">
         <p style={{ fontSize: '1rem', lineHeight: 1.6, color: '#4a5568', marginBottom: '1rem' }}>
-          Estos conectores te permiten expresar tu opinión de manera clara y apropiada.
+          These connectors let you express your opinion clearly and appropriately.
         </p>
 
         <GrammarTable
-          caption="Conectores de Opinión"
-          headers={["Conector", "Nivel de Certeza", "Uso", "Ejemplo"]}
+          caption="Opinion Connectors"
+          headers={["Connector", "Certainty Level", "Use", "Example"]}
           rows={[
-            ["I think", "Moderado", "Opinión personal", "I think music is important"],
-            ["In my opinion", "Moderado", "Opinión personal formal", "In my opinion, music is important"],
-            ["Personally", "Personal", "Opinión muy personal", "Personally, I love music"],
-            ["I believe", "Firme", "Creencia fuerte", "I believe music is essential"],
-            ["I feel", "Emocional", "Sentimiento personal", "I feel music connects people"],
-            ["From my perspective", "Formal", "Punto de vista personal", "From my perspective, music is valuable"]
+            ["I think", "Moderate", "Personal opinion", "I think music is important"],
+            ["In my opinion", "Moderate", "Personal opinion formal", "In my opinion, music is important"],
+            ["Personally", "Personal", "Very personal opinion", "Personally, I love music"],
+            ["I believe", "Strong", "Strong belief", "I believe music is essential"],
+            ["I feel", "Emotional", "Personal feeling", "I feel music connects people"],
+            ["From my perspective", "Formal", "Personal point of view", "From my perspective, music is valuable"]
           ]}
         />
 
         <div style={{ display: 'grid', gap: '1rem' }}>
           <Example 
-            spanish="Moderado: 'Creo que la música es importante'"
             english="Moderate: 'I think music is important'"
-            translation="Moderado: 'Creo que la música es importante'"
           />
           <Example 
-            spanish="Firme: 'Creo que la música es esencial'"
             english="Strong: 'I believe music is essential'"
-            translation="Firme: 'Creo que la música es esencial'"
           />
           <Example 
-            spanish="Emocional: 'Siento que la música conecta a las personas'"
             english="Emotional: 'I feel music connects people'"
-            translation="Emocional: 'Siento que la música conecta a las personas'"
           />
         </div>
 
         <Rule 
-          title="Uso de Conectores de Opinión"
-          description="Para expresar opinión efectivamente:"
+          title="Using Opinion Connectors"
+          description="To express opinions effectively:"
           examples={[
-            "Elige conectores apropiados para tu nivel de certeza",
-            "Varía los conectores para evitar repetición",
-            "Usa conectores formales en contextos profesionales",
-            "Sé consistente con el nivel de formalidad"
+            "Choose connectors appropriate for your level of certainty",
+            "Vary connectors to avoid repetition",
+            "Use formal connectors in professional contexts",
+            "Be consistent with the level of formality"
           ]}
         />
 
         <Tip type="success">
-          <strong>Consejo:</strong> Los conectores de opinión hacen que tu discurso sea más personal y convincente.
+          <strong>Tip:</strong> Opinion connectors make your speech more personal and persuasive.
         </Tip>
       </TheorySection>
 
-      <TheorySection title="Conectores para Causa y Resultado" icon="🎯">
+      <TheorySection title="Connectors for Cause and Result" icon="🎯">
         <p style={{ fontSize: '1rem', lineHeight: 1.6, color: '#4a5568', marginBottom: '1rem' }}>
-          Estos conectores te permiten explicar relaciones de causa y efecto.
+          These connectors let you explain cause-and-effect relationships.
         </p>
 
         <GrammarTable
-          caption="Conectores de Causa y Resultado"
-          headers={["Tipo", "Conectores", "Uso", "Ejemplo"]}
+          caption="Cause and Result Connectors"
+          headers={["Type", "Connectors", "Use", "Example"]}
           rows={[
-            ["Causa", "Because, Since, As", "Explicar razón", "I like music because it's relaxing"],
-            ["Resultado", "So, Therefore, Thus", "Mostrar consecuencia", "Music is relaxing, so I listen daily"],
-            ["Causa Formal", "Due to, Owing to", "Explicar causa formal", "Due to its benefits, I listen to music"],
-            ["Resultado Formal", "Consequently, As a result", "Mostrar resultado formal", "It's relaxing. Consequently, I listen daily"],
-            ["Causa Informal", "Because of", "Explicar causa informal", "Because of its benefits, I listen to music"],
-            ["Resultado Informal", "So, That's why", "Mostrar resultado informal", "It's relaxing, so I listen daily"]
+            ["Cause", "Because, Since, As", "Explain reason", "I like music because it's relaxing"],
+            ["Result", "So, Therefore, Thus", "Show consequence", "Music is relaxing, so I listen daily"],
+            ["Cause Formal", "Due to, Owing to", "Explain cause formally", "Due to its benefits, I listen to music"],
+            ["Result Formal", "Consequently, As a result", "Show result formally", "It's relaxing. Consequently, I listen daily"],
+            ["Cause Informal", "Because of", "Explain cause informally", "Because of its benefits, I listen to music"],
+            ["Result Informal", "So, That's why", "Show result informally", "It's relaxing, so I listen daily"]
           ]}
         />
 
         <div style={{ display: 'grid', gap: '1rem' }}>
           <Example 
-            spanish="Causa: 'Me gusta la música porque es relajante'"
             english="Cause: 'I like music because it's relaxing'"
-            translation="Causa: 'Me gusta la música porque es relajante'"
           />
           <Example 
-            spanish="Resultado: 'Es relajante, así que escucho diariamente'"
             english="Result: 'It's relaxing, so I listen daily'"
-            translation="Resultado: 'Es relajante, así que escucho diariamente'"
           />
           <Example 
-            spanish="Causa formal: 'Debido a sus beneficios, escucho música'"
             english="Formal cause: 'Due to its benefits, I listen to music'"
-            translation="Causa formal: 'Debido a sus beneficios, escucho música'"
           />
         </div>
 
         <Tip type="info">
-          <strong>Consejo:</strong> Los conectores de causa y resultado hacen que tu discurso sea más lógico y convincente.
+          <strong>Tip:</strong> Cause-and-result connectors make your speech more logical and persuasive.
         </Tip>
       </TheorySection>
 
-      <TheorySection title="Errores Comunes" icon="⚠️">
+      <TheorySection title="Common Mistakes" icon="⚠️">
         <div style={{ display: 'grid', gap: '1rem' }}>
           <Tip type="error">
-            <strong>Error:</strong> Usar demasiados conectores seguidos ❌<br/>
-            <strong>Correcto:</strong> Usar conectores de manera equilibrada ✅<br/>
-            <em>Demasiados conectores hacen el discurso artificial</em>
+            <strong>Error:</strong> Using too many connectors in a row ❌<br/>
+            <strong>Correct:</strong> Using connectors in a balanced way ✅<br/>
+            <em>Too many connectors make speech sound artificial</em>
           </Tip>
 
           <Tip type="error">
-            <strong>Error:</strong> Mezclar niveles de formalidad ❌<br/>
-            <strong>Correcto:</strong> Mantener consistencia en el registro ✅<br/>
-            <em>La consistencia mejora la claridad</em>
+            <strong>Error:</strong> Mixing levels of formality ❌<br/>
+            <strong>Correct:</strong> Keeping register consistent ✅<br/>
+            <em>Consistency improves clarity</em>
           </Tip>
 
           <Tip type="error">
-            <strong>Error:</strong> Usar conectores incorrectos para la función ❌<br/>
-            <strong>Correcto:</strong> Elegir conectores apropiados ✅<br/>
-            <em>Cada conector tiene una función específica</em>
+            <strong>Error:</strong> Using the wrong connector for the function ❌<br/>
+            <strong>Correct:</strong> Choosing appropriate connectors ✅<br/>
+            <em>Each connector has a specific function</em>
           </Tip>
 
           <Tip type="error">
-            <strong>Error:</strong> No variar los conectores ❌<br/>
-            <strong>Correcto:</strong> Usar diferentes conectores ✅<br/>
-            <em>La variedad hace el discurso más interesante</em>
+            <strong>Error:</strong> Not varying connectors ❌<br/>
+            <strong>Correct:</strong> Using different connectors ✅<br/>
+            <em>Variety makes speech more interesting</em>
           </Tip>
         </div>
       </TheorySection>
 
-      <TheorySection title="Reglas Importantes" icon="⚡">
+      <TheorySection title="Important Rules" icon="⚡">
         <div style={{ display: 'grid', gap: '1rem' }}>
           <Rule 
-            title="1. Función específica"
-            description="Cada conector tiene una función específica."
+            title="1. Specific function"
+            description="Each connector has a specific function."
             examples={[
-              "Conectores de organización: estructurar ideas",
-              "Conectores de adición: agregar información",
-              "Conectores de contraste: mostrar diferencias",
-              "Conectores de ejemplo: ilustrar ideas"
+              "Organization connectors: structure ideas",
+              "Addition connectors: add information",
+              "Contrast connectors: show differences",
+              "Example connectors: illustrate ideas"
             ]}
           />
 
           <Rule 
-            title="2. Nivel de formalidad"
-            description="Elige conectores apropiados para el contexto."
+            title="2. Level of formality"
+            description="Choose connectors appropriate for the context."
             examples={[
               "Informal: and, but, so",
               "Neutral: also, however, therefore",
               "Formal: furthermore, nevertheless, consequently",
-              "Mantén consistencia en todo el discurso"
+              "Keep consistency throughout your speech"
             ]}
           />
 
           <Rule 
-            title="3. Variedad y equilibrio"
-            description="Usa diferentes conectores de manera equilibrada."
+            title="3. Variety and balance"
+            description="Use different connectors in a balanced way."
             examples={[
-              "No uses el mismo conector repetidamente",
-              "Varía los conectores según la función",
-              "No uses demasiados conectores seguidos",
-              "Balancea conectores con pausas naturales"
+              "Don't use the same connector repeatedly",
+              "Vary connectors according to function",
+              "Don't use too many connectors in a row",
+              "Balance connectors with natural pauses"
             ]}
           />
         </div>
@@ -382,7 +346,7 @@ const SpeakingConnectorsPage = () => {
   const exercises = [
     <MultipleChoiceExercise
       key="1"
-      question="¿Qué conector usas para organizar ideas en primer lugar?"
+      question="Which connector do you use to organize ideas first?"
       options={[
         "However",
         "First",
@@ -390,12 +354,12 @@ const SpeakingConnectorsPage = () => {
         "Although"
       ]}
       correctAnswer={1}
-      explanation="'First' se usa para introducir el primer punto en una secuencia de ideas."
+      explanation="'First' is used to introduce the first point in a sequence of ideas."
     />,
 
     <MultipleChoiceExercise
       key="2"
-      question="¿Cuál es el conector más apropiado para empezar una lista de ideas?"
+      question="Which connector is most appropriate to start a list of ideas?"
       options={[
         "But",
         "First",
@@ -403,59 +367,59 @@ const SpeakingConnectorsPage = () => {
         "Also"
       ]}
       correctAnswer={1}
-      explanation="'First' es el conector más apropiado para empezar una lista de ideas, mientras que los otros tienen funciones diferentes."
+      explanation="'First' is the most appropriate connector to start a list of ideas; the others have different functions."
     />,
 
     <TrueFalseExercise
       key="3"
       statements={[
         {
-          text: "Es importante mantener consistencia en el nivel de formalidad de los conectores.",
+          text: "It is important to keep consistency in the formality level of connectors.",
           isTrue: true,
-          explanation: "Correcto. Mantener consistencia en el nivel de formalidad mejora la claridad y profesionalismo del discurso."
+          explanation: "Correct. Keeping formality consistent improves clarity and professionalism."
         },
         {
-          text: "Puedo usar 'but' y 'however' juntos en la misma oración.",
+          text: "I can use 'but' and 'however' together in the same sentence.",
           isTrue: false,
-          explanation: "Incorrecto. 'But' y 'however' son redundantes - usa solo uno para evitar repetición."
+          explanation: "Incorrect. 'But' and 'however' are redundant — use only one."
         },
         {
-          text: "Los conectores de ejemplo como 'for example' y 'such as' tienen usos diferentes.",
+          text: "Example connectors like 'for example' and 'such as' have different uses.",
           isTrue: true,
-          explanation: "Correcto. 'For example' va al inicio de oración, 'such as' va en medio de oración."
+          explanation: "Correct. 'For example' goes at the start of a sentence; 'such as' goes in the middle."
         },
         {
-          text: "Es mejor usar siempre el mismo conector para evitar confusión.",
+          text: "It is better to always use the same connector to avoid confusion.",
           isTrue: false,
-          explanation: "Incorrecto. Es mejor variar los conectores para hacer el discurso más interesante y evitar repetición."
+          explanation: "Incorrect. It is better to vary connectors to keep speech interesting."
         }
       ]}
     />,
 
     <MultipleChoiceExercise
       key="4"
-      question="¿Cuál es la diferencia entre 'I think' e 'I believe'?"
+      question="What is the difference between 'I think' and 'I believe'?"
       options={[
-        "No hay diferencia",
-        "'I think' es más firme que 'I believe'",
-        "'I believe' es más firme que 'I think'",
-        "Uno es formal y otro informal"
+        "There is no difference",
+        "'I think' is stronger than 'I believe'",
+        "'I believe' is stronger than 'I think'",
+        "One is formal and the other is informal"
       ]}
       correctAnswer={2}
-      explanation="'I believe' expresa una creencia más firme y segura, mientras que 'I think' es más moderado."
+      explanation="'I believe' expresses a firmer belief, while 'I think' is more moderate."
     />,
 
     <MultipleChoiceExercise
       key="5"
-      question="¿Cuál es el error en esta oración: 'But however, I disagree'?"
+      question="What is the error in this sentence: 'But however, I disagree'?"
       options={[
-        "Falta un conector",
-        "Usa dos conectores de contraste juntos",
-        "El conector está mal posicionado",
-        "Falta puntuación"
+        "A connector is missing",
+        "Uses two contrast connectors together",
+        "The connector is in the wrong position",
+        "Punctuation is missing"
       ]}
       correctAnswer={1}
-      explanation="El error es usar 'But' y 'However' juntos, ambos son conectores de contraste. Debe ser solo uno: 'But I disagree' o 'However, I disagree'."
+      explanation="The error is using 'But' and 'However' together — both are contrast connectors. Use only one: 'But I disagree' or 'However, I disagree'."
     />,
 
     <TrueFalseExercise
@@ -464,17 +428,17 @@ const SpeakingConnectorsPage = () => {
         {
           text: "Speaking connectors should be used in every sentence.",
           isTrue: false,
-          explanation: "Incorrecto. Los conectores deben usarse estratégicamente para crear fluidez sin sobrecargar el discurso."
+          explanation: "Incorrect. Connectors should be used strategically to create fluency without overloading your speech."
         },
         {
           text: "'On the other hand' is used to introduce a contrasting point.",
           isTrue: true,
-          explanation: "Correcto. 'On the other hand' introduce una perspectiva contrastante o alternativa."
+          explanation: "Correct. 'On the other hand' introduces a contrasting or alternative perspective."
         },
         {
           text: "Formal connectors are always better than informal ones.",
           isTrue: false,
-          explanation: "Incorrecto. La elección depende del contexto; en conversaciones casuales, los conectores informales son más apropiados."
+          explanation: "Incorrect. The choice depends on context; in casual conversations, informal connectors are more appropriate."
         }
       ]}
     />,
@@ -489,12 +453,12 @@ const SpeakingConnectorsPage = () => {
         "First"
       ]}
       correctAnswer={1}
-      explanation="'However' introduce un contraste: me gusta el café, pero prefiero el té por la mañana."
+      explanation="'However' introduces a contrast: I like coffee, but I prefer tea in the morning."
     />,
 
     <MultipleChoiceExercise
       key="8"
-      question="¿Qué conector usarías para dar un ejemplo específico?"
+      question="Which connector would you use to give a specific example?"
       options={[
         "However",
         "For instance",
@@ -502,7 +466,7 @@ const SpeakingConnectorsPage = () => {
         "Nevertheless"
       ]}
       correctAnswer={1}
-      explanation="'For instance' se usa específicamente para introducir ejemplos concretos que ilustran un punto."
+      explanation="'For instance' is used specifically to introduce concrete examples that illustrate a point."
     />,
 
     <TrueFalseExercise
@@ -511,12 +475,12 @@ const SpeakingConnectorsPage = () => {
         {
           text: "'Moreover' and 'furthermore' have similar functions.",
           isTrue: true,
-          explanation: "Correcto. Ambos conectores agregan información adicional que apoya o refuerza la idea anterior."
+          explanation: "Correct. Both connectors add extra information that supports or reinforces the previous idea."
         },
         {
           text: "You should pause after using speaking connectors.",
           isTrue: true,
-          explanation: "Correcto. Una breve pausa después de conectores ayuda a que el oyente procese la transición."
+          explanation: "Correct. A brief pause after connectors helps the listener process the transition."
         }
       ]}
     />,
@@ -531,14 +495,14 @@ const SpeakingConnectorsPage = () => {
         "Moreover"
       ]}
       correctAnswer={1}
-      explanation="'Nevertheless' (sin embargo/no obstante) muestra contraste: a pesar del mal tiempo, la pasamos bien."
+      explanation="'Nevertheless' shows contrast: despite the bad weather, we had a great time."
     />
   ];
 
   return (
     <TheoryLayout
       title="Speaking Connectors"
-      description="Domina los conectores para hablar en inglés: organización, adición, contraste, ejemplos y opinión. Aprende a hacer tu discurso más fluido y coherente."
+      description="Master speaking connectors in English: organization, addition, contrast, examples, and opinion. Learn to make your speech more fluent and coherent."
       level="A2-B1-B2-C1-C2"
       theoryContent={theoryContent}
       exercises={exercises}

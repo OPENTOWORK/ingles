@@ -18,328 +18,313 @@ import {
 const PlanningReviewingAndSelfEditingPage = () => {
   const theoryContent = (
     <div>
-      <TheorySection title="¿Qué son Planning, Reviewing, and Self-Editing?" icon="📋">
+      <TheorySection title="What Are Planning, Reviewing, and Self-Editing?" icon="📋">
         <p style={{ fontSize: '1.1rem', lineHeight: 1.6, color: '#4a5568', marginBottom: '1rem' }}>
-          <strong>Planning</strong> (planificación), <strong>Reviewing</strong> (revisión) y <strong>Self-Editing</strong> (autocorrección) 
-          son procesos esenciales para producir textos de alta calidad. Cada etapa tiene objetivos específicos y estrategias particulares.
+          <strong>Planning</strong>, <strong>reviewing</strong>, and <strong>self-editing</strong> are essential stages for producing high-quality texts. 
+          Each stage has its own goals and strategies.
         </p>
         
         <QuickReference items={[
-          "Planning: organizar ideas antes de escribir",
-          "Reviewing: evaluar contenido y estructura",
-          "Self-Editing: corregir errores y mejorar estilo",
-          "Proceso cíclico de mejora continua",
-          "Herramientas y estrategias específicas"
+          "Planning: organise ideas before you write",
+          "Reviewing: evaluate content and structure",
+          "Self-editing: fix errors and improve style",
+          "A cyclical process of continuous improvement",
+          "Specific tools and strategies for each stage"
         ]} />
       </TheorySection>
 
-      <TheorySection title="Planning (Planificación)" icon="🎯">
+      <TheorySection title="Planning" icon="🎯">
         <p style={{ fontSize: '1rem', lineHeight: 1.6, color: '#4a5568', marginBottom: '1rem' }}>
-          La planificación es el proceso de organizar tus ideas antes de empezar a escribir. Una buena planificación facilita el proceso de escritura.
+          Planning is how you organise ideas before drafting. Good planning makes writing and revision easier.
         </p>
 
         <GrammarTable
-          caption="Estrategias de Planificación"
-          headers={["Estrategia", "Descripción", "Herramientas", "Beneficios"]}
+          caption="Planning Strategies"
+          headers={["Strategy", "Description", "Tools", "Benefits"]}
           rows={[
-            ["Brainstorming", "Generar ideas libremente", "Listas, mapas mentales", "Creatividad, ideas diversas"],
-            ["Outlining", "Organizar ideas jerárquicamente", "Esquemas, numeración", "Estructura clara, coherencia"],
-            ["Mind Mapping", "Conectar ideas visualmente", "Diagramas, conexiones", "Relaciones entre ideas"],
-            ["Freewriting", "Escribir sin restricciones", "Texto libre, cronómetro", "Fluidez, ideas espontáneas"],
-            ["Clustering", "Agrupar ideas relacionadas", "Círculos, agrupaciones", "Organización temática"]
+            ["Brainstorming", "Generate ideas freely", "Lists, mind maps", "Creativity, range of ideas"],
+            ["Outlining", "Order ideas hierarchically", "Numbered outlines", "Clear structure, coherence"],
+            ["Mind mapping", "Connect ideas visually", "Diagrams, links", "See relationships between ideas"],
+            ["Freewriting", "Write without stopping", "Free text, timer", "Fluency, spontaneous ideas"],
+            ["Clustering", "Group related ideas", "Clusters, circles", "Thematic organisation"]
           ]}
         />
 
         <div style={{ display: 'grid', gap: '1rem' }}>
           <Example 
-            spanish="Brainstorming: Lista todas las ideas sobre 'tecnología'"
-            english="Brainstorming: List all ideas about 'technology'"
-            translation="Brainstorming: Lista todas las ideas sobre 'tecnología'"
+            english="Brainstorming: list every idea you have about “technology”"
+            note="Get ideas down before you judge them."
           />
           <Example 
-            spanish="Outline: I. Introducción, II. Desarrollo, III. Conclusión"
-            english="Outline: I. Introduction, II. Development, III. Conclusion"
-            translation="Outline: I. Introducción, II. Desarrollo, III. Conclusión"
+            english="Outline: I. Introduction, II. Body, III. Conclusion"
+            note="Simple skeleton for longer pieces."
           />
           <Example 
-            spanish="Mind Map: Tecnología → Comunicación → Redes sociales → Facebook"
-            english="Mind Map: Technology → Communication → Social media → Facebook"
-            translation="Mind Map: Tecnología → Comunicación → Redes sociales → Facebook"
+            english="Mind map: Technology → Communication → Social media → Facebook"
+            note="Shows branches from general to specific."
           />
         </div>
 
         <Rule 
-          title="Proceso de Planificación Efectiva"
-          description="Sigue estos pasos:"
+          title="Effective planning process"
+          description="Follow these steps:"
           examples={[
-            "1. Identifica el propósito y audiencia",
-            "2. Genera ideas (brainstorming)",
-            "3. Organiza ideas (outlining)",
-            "4. Define la estructura principal",
-            "5. Establece objetivos por sección"
+            "1. Identify purpose and audience",
+            "2. Generate ideas (brainstorming)",
+            "3. Organise ideas (outlining)",
+            "4. Define the main structure",
+            "5. Set goals for each section"
           ]}
         />
 
         <Tip type="info">
-          <strong>Consejo:</strong> Dedica el 20% de tu tiempo a planificar - esto ahorra tiempo en la escritura y revisión.
+          <strong>Tip:</strong> Spend about 20% of your time planning—it often saves time when drafting and revising.
         </Tip>
       </TheorySection>
 
-      <TheorySection title="Reviewing (Revisión)" icon="🔍">
+      <TheorySection title="Reviewing" icon="🔍">
         <p style={{ fontSize: '1rem', lineHeight: 1.6, color: '#4a5568', marginBottom: '1rem' }}>
-          La revisión implica evaluar el contenido, la estructura y la organización de tu texto para asegurar que cumple su propósito.
+          Reviewing means evaluating content, structure, and organisation so the text meets its purpose.
         </p>
 
         <GrammarTable
-          caption="Aspectos a Revisar"
-          headers={["Aspecto", "Preguntas Clave", "Qué Buscar", "Herramientas"]}
+          caption="What to Review"
+          headers={["Aspect", "Key questions", "Look for", "Tools"]}
           rows={[
-            ["Contenido", "¿Cumple el propósito?", "Ideas claras, argumentos sólidos", "Lista de verificación"],
-            ["Estructura", "¿Está bien organizado?", "Introducción, desarrollo, conclusión", "Outline del texto"],
-            ["Coherencia", "¿Las ideas se conectan?", "Transiciones, conectores", "Lectura fluida"],
-            ["Audiencia", "¿Es apropiado para el lector?", "Registro, vocabulario", "Perspectiva del lector"],
-            ["Completitud", "¿Está completo?", "Todas las partes necesarias", "Lista de requisitos"]
+            ["Content", "Does it fulfil the brief?", "Clear ideas, strong arguments", "Checklist"],
+            ["Structure", "Is it well organised?", "Introduction, body, conclusion", "Outline of the draft"],
+            ["Coherence", "Do ideas connect?", "Transitions, connectors", "Read for flow"],
+            ["Audience", "Is it right for the reader?", "Register, vocabulary", "Reader's perspective"],
+            ["Completeness", "Is anything missing?", "All required parts", "Task requirements list"]
           ]}
         />
 
         <div style={{ display: 'grid', gap: '1rem' }}>
           <Example 
-            spanish="Revisión de contenido: '¿Mi argumento es convincente?'"
             english="Content review: 'Is my argument convincing?'"
-            translation="Revisión de contenido: '¿Mi argumento es convincente?'"
+            note="Focus on substance before small details."
           />
           <Example 
-            spanish="Revisión de estructura: '¿Mi introducción presenta claramente el tema?'"
-            english="Structure review: 'Does my introduction clearly present the topic?'"
-            translation="Revisión de estructura: '¿Mi introducción presenta claramente el tema?'"
+            english="Structure review: 'Does my introduction set up the topic clearly?'"
+            note="Check macro-level organisation."
           />
           <Example 
-            spanish="Revisión de audiencia: '¿Mi vocabulario es apropiado para mi audiencia?'"
-            english="Audience review: 'Is my vocabulary appropriate for my audience?'"
-            translation="Revisión de audiencia: '¿Mi vocabulario es apropiado para mi audiencia?'"
+            english="Audience review: 'Is my vocabulary right for my readers?'"
+            note="Match register to who will read it."
           />
         </div>
 
         <Rule 
-          title="Estrategias de Revisión Efectiva"
-          description="Para revisar efectivamente:"
+          title="Effective reviewing strategies"
+          description="To review well:"
           examples={[
-            "Lee el texto completo primero",
-            "Revisa por aspectos específicos",
-            "Usa una lista de verificación",
-            "Tómate un descanso entre revisiones",
-            "Lee en voz alta para detectar problemas"
+            "Read the whole draft first",
+            "Review one focus at a time",
+            "Use a checklist",
+            "Take breaks between passes",
+            "Read aloud to spot problems"
           ]}
         />
 
         <Tip type="success">
-          <strong>Consejo:</strong> Revisa en múltiples sesiones - cada vez enfócate en un aspecto diferente.
+          <strong>Tip:</strong> Review in several short sessions—each time focus on a different aspect.
         </Tip>
       </TheorySection>
 
-      <TheorySection title="Self-Editing (Autocorrección)" icon="✏️">
+      <TheorySection title="Self-editing" icon="✏️">
         <p style={{ fontSize: '1rem', lineHeight: 1.6, color: '#4a5568', marginBottom: '1rem' }}>
-          La autocorrección se enfoca en corregir errores específicos y mejorar el estilo y la claridad del texto.
+          Self-editing targets specific errors and improves style and clarity.
         </p>
 
         <GrammarTable
-          caption="Niveles de Autocorrección"
-          headers={["Nivel", "Enfoque", "Qué Corregir", "Ejemplos"]}
+          caption="Levels of Self-Editing"
+          headers={["Level", "Focus", "What to fix", "Examples"]}
           rows={[
-            ["Macro-editing", "Estructura general", "Organización, flujo, propósito", "Reorganizar párrafos"],
-            ["Meso-editing", "Párrafos y oraciones", "Coherencia, transiciones", "Mejorar conectores"],
-            ["Micro-editing", "Palabras y gramática", "Errores, estilo, precisión", "Corregir verbos, preposiciones"],
-            ["Proofreading", "Errores finales", "Ortografía, puntuación", "Typos, comas, mayúsculas"]
+            ["Macro-editing", "Overall structure", "Organisation, flow, purpose", "Moving whole paragraphs"],
+            ["Meso-editing", "Paragraphs and sentences", "Coherence, transitions", "Improving connectors"],
+            ["Micro-editing", "Words and grammar", "Errors, precision", "Verbs, prepositions"],
+            ["Proofreading", "Final surface issues", "Spelling, punctuation", "Typos, commas, capitals"]
           ]}
         />
 
         <div style={{ display: 'grid', gap: '1rem' }}>
           <Example 
-            spanish="Macro-editing: Reorganizar párrafos para mejor flujo"
-            english="Macro-editing: Reorganize paragraphs for better flow"
-            translation="Macro-editing: Reorganizar párrafos para mejor flujo"
+            english="Macro-editing: reorder paragraphs for better flow"
+            note="Big-picture changes first."
           />
           <Example 
-            spanish="Meso-editing: Mejorar transiciones entre párrafos"
-            english="Meso-editing: Improve transitions between paragraphs"
-            translation="Meso-editing: Mejorar transiciones entre párrafos"
+            english="Meso-editing: improve transitions between paragraphs"
+            note="Strengthen links between ideas."
           />
           <Example 
-            spanish="Micro-editing: Corregir errores gramaticales específicos"
-            english="Micro-editing: Correct specific grammatical errors"
-            translation="Micro-editing: Corregir errores gramaticales específicos"
+            english="Micro-editing: correct specific grammar mistakes"
+            note="Sentence-level accuracy."
           />
         </div>
 
         <Rule 
-          title="Proceso de Autocorrección"
-          description="Sigue este orden:"
+          title="Self-editing order"
+          description="Work in this sequence:"
           examples={[
-            "1. Macro-editing: estructura y organización",
-            "2. Meso-editing: párrafos y coherencia",
-            "3. Micro-editing: oraciones y vocabulario",
-            "4. Proofreading: errores finales"
+            "1. Macro-editing: structure and organisation",
+            "2. Meso-editing: paragraphs and coherence",
+            "3. Micro-editing: sentences and vocabulary",
+            "4. Proofreading: final surface checks"
           ]}
         />
 
         <Tip type="warning">
-          <strong>¡Cuidado!</strong> No trates de corregir todo a la vez - enfócate en un nivel a la vez.
+          <strong>Watch out:</strong> Do not try to fix everything at once—handle one level per pass.
         </Tip>
       </TheorySection>
 
-      <TheorySection title="Herramientas y Técnicas" icon="🛠️">
+      <TheorySection title="Tools and Techniques" icon="🛠️">
         <p style={{ fontSize: '1rem', lineHeight: 1.6, color: '#4a5568', marginBottom: '1rem' }}>
-          Existen diversas herramientas y técnicas que pueden ayudarte en cada etapa del proceso.
+          Many tools and techniques support each stage of the writing process.
         </p>
 
         <GrammarTable
-          caption="Herramientas por Etapa"
-          headers={["Etapa", "Herramientas", "Técnicas", "Beneficios"]}
+          caption="Tools by Stage"
+          headers={["Stage", "Tools", "Techniques", "Benefits"]}
           rows={[
-            ["Planning", "Mapas mentales, esquemas", "Freewriting, clustering", "Organización, creatividad"],
-            ["Reviewing", "Listas de verificación", "Lectura en voz alta", "Evaluación sistemática"],
-            ["Self-Editing", "Diccionarios, gramática", "Lectura al revés", "Precisión, corrección"],
-            ["Proofreading", "Correctores ortográficos", "Impresión en papel", "Errores finales"]
+            ["Planning", "Mind maps, outlines", "Freewriting, clustering", "Organisation, ideas"],
+            ["Reviewing", "Checklists", "Reading aloud", "Systematic evaluation"],
+            ["Self-editing", "Dictionaries, grammar references", "Reading backwards", "Accuracy, correction"],
+            ["Proofreading", "Spell checkers", "Printing on paper", "Final surface errors"]
           ]}
         />
 
         <div style={{ display: 'grid', gap: '1rem' }}>
           <Example 
-            spanish="Herramienta de planificación: 'MindMeister para mapas mentales'"
             english="Planning tool: 'MindMeister for mind maps'"
-            translation="Herramienta de planificación: 'MindMeister para mapas mentales'"
+            note="Digital mapping for brainstorming."
           />
           <Example 
-            spanish="Técnica de revisión: 'Leer el texto en voz alta'"
             english="Review technique: 'Read the text aloud'"
-            translation="Técnica de revisión: 'Leer el texto en voz alta'"
+            note="Hear rhythm and awkward phrasing."
           />
           <Example 
-            spanish="Técnica de corrección: 'Leer el texto al revés'"
             english="Editing technique: 'Read the text backwards'"
-            translation="Técnica de corrección: 'Leer el texto al revés'"
+            note="Isolate words for spelling checks."
           />
         </div>
 
         <Tip type="info">
-          <strong>Consejo:</strong> Combina herramientas digitales con técnicas tradicionales para mejores resultados.
+          <strong>Tip:</strong> Combine digital tools with paper-based techniques for best results.
         </Tip>
       </TheorySection>
 
-      <TheorySection title="Lista de Verificación" icon="✅">
+      <TheorySection title="Checklist" icon="✅">
         <p style={{ fontSize: '1rem', lineHeight: 1.6, color: '#4a5568', marginBottom: '1rem' }}>
-          Una lista de verificación te ayuda a asegurar que no olvides ningún aspecto importante.
+          A checklist helps you avoid skipping important points.
         </p>
 
         <GrammarTable
-          caption="Lista de Verificación Completa"
-          headers={["Categoría", "Preguntas", "Sí/No", "Notas"]}
+          caption="Complete Checklist"
+          headers={["Category", "Questions", "Yes/No", "Notes"]}
           rows={[
-            ["Contenido", "¿El texto cumple su propósito?", "☐", "Verificar objetivo"],
-            ["Estructura", "¿Tiene introducción, desarrollo y conclusión?", "☐", "Revisar organización"],
-            ["Coherencia", "¿Las ideas se conectan lógicamente?", "☐", "Verificar transiciones"],
-            ["Registro", "¿El vocabulario es apropiado?", "☐", "Adaptar a audiencia"],
-            ["Gramática", "¿Hay errores gramaticales?", "☐", "Revisar verbos, preposiciones"],
-            ["Ortografía", "¿Hay errores ortográficos?", "☐", "Usar corrector"],
-            ["Puntuación", "¿La puntuación es correcta?", "☐", "Revisar comas, puntos"],
-            ["Longitud", "¿Cumple los requisitos de extensión?", "☐", "Contar palabras"]
+            ["Content", "Does the text fulfil its purpose?", "☐", "Check against the brief"],
+            ["Structure", "Does it have introduction, body, and conclusion?", "☐", "Check organisation"],
+            ["Coherence", "Do ideas connect logically?", "☐", "Check transitions"],
+            ["Register", "Is vocabulary appropriate?", "☐", "Match audience"],
+            ["Grammar", "Are there grammar errors?", "☐", "Check verbs, agreement"],
+            ["Spelling", "Are there spelling mistakes?", "☐", "Use spell check + human read"],
+            ["Punctuation", "Is punctuation correct?", "☐", "Check commas, full stops"],
+            ["Length", "Does it meet length requirements?", "☐", "Word count"]
           ]}
         />
 
         <div style={{ display: 'grid', gap: '1rem' }}>
           <Example 
-            spanish="Verificación de contenido: '¿Mi argumento es convincente y completo?'"
             english="Content check: 'Is my argument convincing and complete?'"
-            translation="Verificación de contenido: '¿Mi argumento es convincente y completo?'"
+            note="Holistic read for the main message."
           />
           <Example 
-            spanish="Verificación de gramática: '¿Todos los verbos están en el tiempo correcto?'"
-            english="Grammar check: 'Are all verbs in the correct tense?'"
-            translation="Verificación de gramática: '¿Todos los verbos están en el tiempo correcto?'"
+            english="Grammar check: 'Are all verbs in the right tense?'"
+            note="Systematic grammar pass."
           />
           <Example 
-            spanish="Verificación final: '¿El texto está listo para entregar?'"
             english="Final check: 'Is the text ready to submit?'"
-            translation="Verificación final: '¿El texto está listo para entregar?'"
+            note="Last look before hand-in."
           />
         </div>
 
         <Rule 
-          title="Uso de la Lista de Verificación"
-          description="Para usar efectivamente:"
+          title="Using the checklist"
+          description="To use it effectively:"
           examples={[
-            "Revisa cada elemento sistemáticamente",
-            "Marca los elementos completados",
-            "Toma notas sobre mejoras necesarias",
-            "Revisa la lista al final del proceso"
+            "Go through each item in order",
+            "Tick off completed items",
+            "Note changes still needed",
+            "Run through the list once more at the end"
           ]}
         />
 
         <Tip type="success">
-          <strong>Consejo:</strong> Personaliza tu lista de verificación según tus necesidades específicas.
+          <strong>Tip:</strong> Adapt the checklist to your own strengths and weaknesses.
         </Tip>
       </TheorySection>
 
-      <TheorySection title="Errores Comunes" icon="⚠️">
+      <TheorySection title="Common Mistakes" icon="⚠️">
         <div style={{ display: 'grid', gap: '1rem' }}>
           <Tip type="error">
-            <strong>Error:</strong> Saltarse la planificación ❌<br/>
-            <strong>Correcto:</strong> Siempre planificar antes de escribir ✅<br/>
-            <em>La planificación ahorra tiempo y mejora la calidad</em>
+            <strong>Mistake:</strong> Skipping planning ❌<br/>
+            <strong>Better:</strong> Always plan before drafting ✅<br/>
+            <em>Planning saves time and improves quality</em>
           </Tip>
 
           <Tip type="error">
-            <strong>Error:</strong> Revisar solo una vez ❌<br/>
-            <strong>Correcto:</strong> Revisar en múltiples sesiones ✅<br/>
-            <em>Múltiples revisiones detectan más problemas</em>
+            <strong>Mistake:</strong> Only one quick read-through ❌<br/>
+            <strong>Better:</strong> Review in several sessions ✅<br/>
+            <em>Multiple passes catch more issues</em>
           </Tip>
 
           <Tip type="error">
-            <strong>Error:</strong> Corregir todo al mismo tiempo ❌<br/>
-            <strong>Correcto:</strong> Enfocarse en un nivel a la vez ✅<br/>
-            <em>Corrección sistemática es más efectiva</em>
+            <strong>Mistake:</strong> Fixing every kind of error at once ❌<br/>
+            <strong>Better:</strong> Focus on one level per pass ✅<br/>
+            <em>Systematic editing is more effective</em>
           </Tip>
 
           <Tip type="error">
-            <strong>Error:</strong> Confiar solo en correctores automáticos ❌<br/>
-            <strong>Correcto:</strong> Combinar herramientas automáticas y manuales ✅<br/>
-            <em>Los correctores no detectan todos los errores</em>
+            <strong>Mistake:</strong> Relying only on automated checkers ❌<br/>
+            <strong>Better:</strong> Combine tools with careful human reading ✅<br/>
+            <em>Software misses style, register, and meaning errors</em>
           </Tip>
         </div>
       </TheorySection>
 
-      <TheorySection title="Reglas Importantes" icon="⚡">
+      <TheorySection title="Key Rules" icon="⚡">
         <div style={{ display: 'grid', gap: '1rem' }}>
           <Rule 
-            title="1. Proceso cíclico"
-            description="Planning, reviewing y self-editing son procesos que se repiten."
+            title="1. Cyclical process"
+            description="Planning, reviewing, and self-editing repeat in cycles."
             examples={[
-              "Planifica → Escribe → Revisa → Corrige",
-              "Cada ciclo mejora el texto",
-              "No esperes perfección en el primer intento",
-              "Itera hasta lograr la calidad deseada"
+              "Plan → Write → Review → Revise",
+              "Each cycle improves the draft",
+              "Do not expect perfection on the first try",
+              "Iterate until the quality is right"
             ]}
           />
 
           <Rule 
-            title="2. Tiempo y descanso"
-            description="Dedica tiempo suficiente y toma descansos."
+            title="2. Time and breaks"
+            description="Allow enough time and rest between passes."
             examples={[
-              "Planifica: 20% del tiempo total",
-              "Escribe: 50% del tiempo total",
-              "Revisa y corrige: 30% del tiempo total",
-              "Toma descansos entre sesiones"
+              "Planning: about 20% of total time",
+              "Drafting: about 50%",
+              "Review and editing: about 30%",
+              "Break between writing and editing when you can"
             ]}
           />
 
           <Rule 
-            title="3. Perspectiva externa"
-            description="Intenta ver tu texto con ojos de lector."
+            title="3. Reader perspective"
+            description="Try to read as your audience would."
             examples={[
-              "Lee como si fueras el destinatario",
-              "Identifica posibles confusiones",
-              "Verifica que el propósito sea claro",
-              "Asegúrate de que sea apropiado para la audiencia"
+              "Read as if you were the intended reader",
+              "Spot possible confusion",
+              "Check that the purpose is clear",
+              "Check appropriateness for the audience"
             ]}
           />
         </div>
@@ -350,163 +335,163 @@ const PlanningReviewingAndSelfEditingPage = () => {
   const exercises = [
     <MultipleChoiceExercise
       key="1"
-      question="¿Qué debe hacerse antes de escribir?"
+      question="What should you do before you start writing?"
       options={[
-        "Revisión",
-        "Planificación",
-        "Autocorrección",
-        "Publicación"
+        "Review only",
+        "Planning",
+        "Self-editing",
+        "Publishing"
       ]}
       correctAnswer={1}
-      explanation="La planificación debe hacerse antes de escribir para organizar ideas y estructurar el contenido de manera efectiva."
+      explanation="Plan first to organise ideas and structure the piece effectively."
     />,
 
     <MultipleChoiceExercise
       key="2"
-      question="¿Cuál es el orden correcto del proceso de escritura?"
+      question="What is the usual order of the writing process?"
       options={[
-        "Escribir → Planificar → Revisar → Corregir",
-        "Planificar → Escribir → Revisar → Corregir",
-        "Revisar → Planificar → Escribir → Corregir",
-        "Corregir → Planificar → Escribir → Revisar"
+        "Write → Plan → Review → Revise",
+        "Plan → Write → Review → Revise",
+        "Review → Plan → Write → Revise",
+        "Revise → Plan → Write → Review"
       ]}
       correctAnswer={1}
-      explanation="El orden correcto es: Planificar → Escribir → Revisar → Corregir. La planificación debe hacerse primero para organizar las ideas."
+      explanation="Typical order: plan → draft → review → revise. Planning comes first."
     />,
 
     <TrueFalseExercise
       key="3"
       statements={[
         {
-          text: "La planificación debe tomar aproximadamente el 20% del tiempo total de escritura.",
+          text: "Planning should take roughly 20% of total writing time.",
           isTrue: true,
-          explanation: "Correcto. Una buena distribución del tiempo es: 20% planificación, 50% escritura, 30% revisión y corrección."
+          explanation: "Correct. A useful split is roughly 20% planning, 50% drafting, 30% review and editing."
         },
         {
-          text: "Es mejor corregir todos los tipos de errores al mismo tiempo.",
+          text: "It is better to fix every type of error in a single pass.",
           isTrue: false,
-          explanation: "Incorrecto. Es mejor enfocarse en un nivel de corrección a la vez: macro-editing, meso-editing, micro-editing, y proofreading."
+          explanation: "Incorrect. Focus on one editing level at a time: macro, meso, micro, then proofreading."
         },
         {
-          text: "Leer el texto en voz alta es una técnica útil para detectar problemas de flujo.",
+          text: "Reading aloud helps spot problems with flow.",
           isTrue: true,
-          explanation: "Correcto. Leer en voz alta ayuda a detectar problemas de ritmo, fluidez y coherencia que no se notan al leer silenciosamente."
+          explanation: "Correct. Reading aloud reveals rhythm, awkward phrasing, and gaps in logic."
         },
         {
-          text: "Los correctores automáticos detectan todos los errores de un texto.",
+          text: "Automated checkers catch every error in a text.",
           isTrue: false,
-          explanation: "Incorrecto. Los correctores automáticos no detectan todos los errores, especialmente problemas de estilo, coherencia y registro."
+          explanation: "Incorrect. They miss register, style, coherence, and wrong-word errors."
         }
       ]}
     />,
 
     <MultipleChoiceExercise
       key="4"
-      question="¿Qué aspecto se revisa en el nivel de macro-editing?"
+      question="What do you focus on at the macro-editing stage?"
       options={[
-        "Errores ortográficos",
-        "Estructura general y organización",
-        "Errores gramaticales específicos",
-        "Puntuación y mayúsculas"
+        "Spelling only",
+        "Overall structure and organisation",
+        "Specific grammar mistakes in isolation",
+        "Capital letters only"
       ]}
       correctAnswer={1}
-      explanation="El macro-editing se enfoca en la estructura general, organización y flujo del texto, no en errores específicos de gramática u ortografía."
+      explanation="Macro-editing deals with overall structure, order, and flow—not tiny mechanical details."
     />,
 
     <MultipleChoiceExercise
       key="5"
-      question="¿Cuál es la mejor técnica para detectar errores ortográficos?"
+      question="Which technique helps most with catching spelling mistakes?"
       options={[
-        "Leer el texto en voz alta",
-        "Leer el texto al revés",
-        "Usar solo correctores automáticos",
-        "Revisar solo una vez"
+        "Reading aloud only",
+        "Reading backwards",
+        "Using only spell check",
+        "Reading through once quickly"
       ]}
       correctAnswer={1}
-      explanation="Leer el texto al revés (de atrás hacia adelante) es una técnica efectiva para detectar errores ortográficos porque te enfocas en palabras individuales."
+      explanation="Reading backwards (sentence by sentence from the end) helps you focus on individual words."
     />,
 
     <TrueFalseExercise
       key="6"
       statements={[
         {
-          text: "Self-editing should focus on all types of errors simultaneously.",
+          text: "Self-editing should tackle all error types at the same time.",
           isTrue: false,
-          explanation: "Incorrecto. Es mejor hacer múltiples revisiones enfocándose en diferentes aspectos: contenido, organización, gramática, vocabulario."
+          explanation: "Incorrect. Use several passes, each with a different focus: content, organisation, grammar, vocabulary."
         },
         {
           text: "Reading your text aloud helps identify flow and rhythm problems.",
           isTrue: true,
-          explanation: "Correcto. Leer en voz alta ayuda a detectar problemas de fluidez, repeticiones y errores que no se notan al leer silenciosamente."
+          explanation: "Correct. Reading aloud reveals fluency issues and errors you might skip when reading silently."
         },
         {
           text: "Planning is less important than writing in timed essays.",
           isTrue: false,
-          explanation: "Incorrecto. La planificación es crucial en ensayos cronometrados para evitar desorganización y pérdida de tiempo."
+          explanation: "Incorrect. Even under time pressure, a short plan reduces disorganisation and wasted time."
         }
       ]}
     />,
 
     <MultipleChoiceExercise
       key="7"
-      question="¿Cuál es el primer paso en la revisión de un texto?"
+      question="What is the first step when reviewing a draft?"
       options={[
-        "Corregir errores gramaticales",
-        "Revisar el contenido y la estructura general",
-        "Verificar la ortografía",
-        "Contar las palabras"
+        "Fix grammar mistakes immediately",
+        "Review overall content and structure",
+        "Check spelling only",
+        "Count words only"
       ]}
       correctAnswer={1}
-      explanation="El primer paso es revisar el contenido y estructura general (macro-editing) antes de enfocarse en detalles específicos."
+      explanation="Start with big-picture content and structure (macro) before fine details."
     />,
 
     <MultipleChoiceExercise
       key="8"
-      question="¿Qué herramienta es más útil para la planificación de ensayos?"
+      question="Which tool is most useful when planning essays?"
       options={[
-        "Solo la memoria",
-        "Esquemas y mapas mentales",
-        "Escribir directamente",
-        "Usar solo el diccionario"
+        "Memory alone",
+        "Outlines and mind maps",
+        "Writing with no plan",
+        "A dictionary only"
       ]}
       correctAnswer={1}
-      explanation="Los esquemas y mapas mentales ayudan a organizar ideas, establecer estructura y asegurar coherencia antes de escribir."
+      explanation="Outlines and mind maps help organise ideas and ensure coherence before drafting."
     />,
 
     <TrueFalseExercise
       key="9"
       statements={[
         {
-          text: "Spell checkers catch all types of writing errors.",
+          text: "Spell checkers catch every kind of writing error.",
           isTrue: false,
-          explanation: "Incorrecto. Los correctores ortográficos no detectan errores de estilo, coherencia, registro o palabras correctas en contexto incorrecto."
+          explanation: "Incorrect. They often miss wrong words, style, register, and coherence problems."
         },
         {
-          text: "Taking breaks between writing and reviewing improves editing effectiveness.",
+          text: "Taking a break between drafting and reviewing improves editing.",
           isTrue: true,
-          explanation: "Correcto. Un descanso breve ayuda a ver el texto con perspectiva fresca y detectar más errores."
+          explanation: "Correct. A short break gives you a fresh eye for errors and weak spots."
         }
       ]}
     />,
 
     <MultipleChoiceExercise
       key="10"
-      question="¿Cuál es la diferencia entre revisión y corrección?"
+      question="What is the difference between reviewing and editing?"
       options={[
-        "No hay diferencia",
-        "Revisión se enfoca en contenido, corrección en errores específicos",
-        "Corrección es más importante",
-        "Solo se hace una de las dos"
+        "No difference",
+        "Review focuses on content; editing on specific errors and wording",
+        "Editing is always more important",
+        "You only ever do one of them"
       ]}
       correctAnswer={1}
-      explanation="Revisión se enfoca en contenido, estructura y organización; corrección se enfoca en gramática, vocabulario y mecánica."
+      explanation="Reviewing targets meaning, structure, and fit to the task; editing targets grammar, vocabulary, and mechanics."
     />
   ];
 
   return (
     <TheoryLayout
       title="Planning, Reviewing, and Self-Editing"
-      description="Domina los procesos de planificación, revisión y autocorrección para producir textos de alta calidad. Aprende estrategias y herramientas para cada etapa."
+      description="Master planning, reviewing, and self-editing to produce high-quality writing. Learn practical strategies and tools for each stage."
       level="B2-C1-C2"
       theoryContent={theoryContent}
       exercises={exercises}
@@ -517,25 +502,3 @@ const PlanningReviewingAndSelfEditingPage = () => {
 };
 
 export default PlanningReviewingAndSelfEditingPage;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

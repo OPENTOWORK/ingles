@@ -18,362 +18,289 @@ import {
 const LongConversationsPage = () => {
   const theoryContent = (
     <div>
-      <TheorySection title="¿Qué son las Long Conversations?" icon="💬">
+      <TheorySection title="What Are Long Conversations?" icon="💬">
         <p style={{ fontSize: '1.1rem', lineHeight: 1.6, color: '#4a5568', marginBottom: '1rem' }}>
-          Las <strong>long conversations</strong> (conversaciones largas) son diálogos extensos entre dos o más personas 
-          que aparecen en exámenes de listening. Requieren habilidades avanzadas de comprensión y seguimiento.
+          <strong>Long conversations</strong> are extended dialogues between two or more people in listening exams. They require advanced comprehension and tracking skills.
         </p>
         
         <QuickReference items={[
-          "Duración: 3-8 minutos",
-          "Participantes: 2-4 personas",
-          "Contextos: debates, entrevistas, discusiones",
-          "Objetivo: información detallada y relaciones",
-          "Nivel: B1-B2 (intermedio a intermedio-alto)"
+          "Duration: 3–8 minutes",
+          "Participants: 2–4 people",
+          "Contexts: debates, interviews, discussions",
+          "Goal: detailed information and relationships",
+          "Level: B1–B2 (intermediate to upper-intermediate)"
         ]} />
       </TheorySection>
 
-      <TheorySection title="Características de las Long Conversations" icon="📋">
+      <TheorySection title="Features of Long Conversations" icon="📋">
         <p style={{ fontSize: '1rem', lineHeight: 1.6, color: '#4a5568', marginBottom: '1rem' }}>
-          Las conversaciones largas tienen características específicas que las distinguen de diálogos cortos.
+          Long conversations differ from short dialogues in specific ways.
         </p>
 
         <GrammarTable
-          caption="Características de Long Conversations"
-          headers={["Característica", "Descripción", "Desafío", "Estrategia"]}
+          caption="Features of Long Conversations"
+          headers={["Feature", "Description", "Challenge", "Strategy"]}
           rows={[
-            ["Duración Extendida", "3-8 minutos de conversación", "Mantener concentración", "Toma de notas activa"],
-            ["Múltiples Voces", "2-4 personas hablando", "Distinguir entre hablantes", "Identificar voces y roles"],
-            ["Cambios de Tema", "Múltiples temas en una conversación", "Seguir transiciones", "Identificar conectores"],
-            ["Interrupciones", "Habla superpuesta, interrupciones", "Entender contexto", "Usar contexto para inferir"],
-            ["Información Compleja", "Detalles, opiniones, hechos", "Procesar mucha información", "Priorizar información relevante"],
-            ["Relaciones", "Interacciones entre hablantes", "Entender dinámicas", "Observar tono y actitud"]
+            ["Extended length", "3–8 minutes of talk", "Staying focused", "Active note-taking"],
+            ["Multiple voices", "2–4 speakers", "Telling speakers apart", "Track voices and roles"],
+            ["Topic shifts", "Several topics in one talk", "Following transitions", "Spot connectors"],
+            ["Overlaps", "Overlapping speech, interruptions", "Keeping context", "Use context to infer"],
+            ["Complex information", "Details, opinions, facts", "Processing a lot at once", "Prioritize task-relevant detail"],
+            ["Relationships", "How speakers interact", "Understanding dynamics", "Notice tone and attitude"]
           ]}
         />
 
         <div style={{ display: 'grid', gap: '1rem' }}>
-          <Example 
-            spanish="Contexto: Entrevista de trabajo de 5 minutos"
-            english="Context: 5-minute job interview"
-            translation="Contexto: Entrevista de trabajo de 5 minutos"
-          />
-          <Example 
-            spanish="Participantes: Entrevistador y candidato"
-            english="Participants: Interviewer and candidate"
-            translation="Participantes: Entrevistador y candidato"
-          />
-          <Example 
-            spanish="Objetivo: Evaluar habilidades y experiencia"
-            english="Objective: Assess skills and experience"
-            translation="Objetivo: Evaluar habilidades y experiencia"
-          />
+          <Example english="Context: 5-minute job interview" />
+          <Example english="Participants: Interviewer and candidate" />
+          <Example english="Objective: Assess skills and experience" />
         </div>
 
         <Rule 
-          title="Desafíos de las Long Conversations"
-          description="Los principales desafíos incluyen:"
+          title="Challenges of Long Conversations"
+          description="Main challenges include:"
           examples={[
-            "Mantener la concentración durante toda la duración",
-            "Distinguir entre diferentes hablantes",
-            "Seguir cambios de tema y transiciones",
-            "Procesar múltiples tipos de información simultáneamente"
+            "Maintaining focus for the full recording",
+            "Distinguishing different speakers",
+            "Following topic shifts and transitions",
+            "Processing several kinds of information at once"
           ]}
         />
 
         <Tip type="info">
-          <strong>Consejo:</strong> Las conversaciones largas requieren habilidades de escucha activa y gestión de información.
+          <strong>Tip:</strong> Long conversations need active listening and solid information management.
         </Tip>
       </TheorySection>
 
-      <TheorySection title="Tipos de Long Conversations" icon="🗂️">
+      <TheorySection title="Types of Long Conversations" icon="🗂️">
         <p style={{ fontSize: '1rem', lineHeight: 1.6, color: '#4a5568', marginBottom: '1rem' }}>
-          Las conversaciones largas pueden ser de diferentes tipos según su contexto y propósito.
+          They vary by context and purpose.
         </p>
 
         <GrammarTable
-          caption="Tipos de Long Conversations"
-          headers={["Tipo", "Contexto", "Participantes", "Información Clave"]}
+          caption="Types of Long Conversations"
+          headers={["Type", "Context", "Participants", "Key Information"]}
           rows={[
-            ["Entrevista", "Trabajo, investigación, medios", "Entrevistador y entrevistado", "Experiencia, opiniones, planes"],
-            ["Debate", "Política, sociedad, educación", "Múltiples participantes", "Argumentos, contraargumentos, opiniones"],
-            ["Discusión", "Trabajo, estudio, personal", "2-4 personas", "Problemas, soluciones, decisiones"],
-            ["Consulta", "Médica, legal, profesional", "Profesional y cliente", "Síntomas, consejos, recomendaciones"],
-            ["Reunión", "Trabajo, comité, proyecto", "Equipo de trabajo", "Agenda, decisiones, acciones"],
-            ["Conversación Social", "Amigos, familia, conocidos", "2-4 personas", "Eventos, planes, experiencias"]
+            ["Interview", "Work, research, media", "Interviewer and interviewee", "Experience, opinions, plans"],
+            ["Debate", "Politics, society, education", "Several participants", "Arguments, rebuttals, views"],
+            ["Discussion", "Work, study, personal", "2–4 people", "Problems, solutions, decisions"],
+            ["Consultation", "Medical, legal, professional", "Professional and client", "Symptoms, advice, recommendations"],
+            ["Meeting", "Work, committee, project", "Team", "Agenda, decisions, actions"],
+            ["Social chat", "Friends, family, acquaintances", "2–4 people", "Events, plans, experiences"]
           ]}
         />
 
         <div style={{ display: 'grid', gap: '1rem' }}>
-          <Example 
-            spanish="Entrevista: 'Entrevista de trabajo sobre experiencia previa'"
-            english="Interview: 'Job interview about previous experience'"
-            translation="Entrevista: 'Entrevista de trabajo sobre experiencia previa'"
-          />
-          <Example 
-            spanish="Debate: 'Discusión sobre el cambio climático'"
-            english="Debate: 'Discussion about climate change'"
-            translation="Debate: 'Discusión sobre el cambio climático'"
-          />
-          <Example 
-            spanish="Consulta: 'Consulta médica sobre síntomas'"
-            english="Consultation: 'Medical consultation about symptoms'"
-            translation="Consulta: 'Consulta médica sobre síntomas'"
-          />
+          <Example english="Interview: 'Job interview about previous experience'" />
+          <Example english="Debate: 'Discussion about climate change'" />
+          <Example english="Consultation: 'Medical consultation about symptoms'" />
         </div>
 
         <Tip type="success">
-          <strong>Consejo:</strong> Identifica el tipo de conversación para anticipar el tipo de información y dinámicas.
+          <strong>Tip:</strong> Identify the conversation type to anticipate information and interaction patterns.
         </Tip>
       </TheorySection>
 
-      <TheorySection title="Estrategias para Long Conversations" icon="🎯">
+      <TheorySection title="Strategies for Long Conversations" icon="🎯">
         <p style={{ fontSize: '1rem', lineHeight: 1.6, color: '#4a5568', marginBottom: '1rem' }}>
-          Las conversaciones largas requieren estrategias específicas para manejar la complejidad y duración.
+          Long conversations need targeted strategies for complexity and length.
         </p>
 
         <GrammarTable
-          caption="Estrategias Específicas para Long Conversations"
-          headers={["Estrategia", "Descripción", "Cuándo Usar", "Beneficio"]}
+          caption="Strategies for Long Conversations"
+          headers={["Strategy", "Description", "When to Use", "Benefit"]}
           rows={[
-            ["Identificación de Hablantes", "Distinguir entre diferentes voces", "Al inicio de la conversación", "Seguir quién dice qué"],
-            ["Seguimiento de Temas", "Identificar cambios de tema", "Durante toda la conversación", "Mantener orientación"],
-            ["Toma de Notas Estructurada", "Organizar notas por hablante/tema", "Durante toda la conversación", "Retener información"],
-            ["Identificación de Relaciones", "Entender dinámicas entre hablantes", "A lo largo de la conversación", "Comprensión profunda"],
-            ["Gestión de Información", "Priorizar información relevante", "Durante toda la conversación", "Enfoque en lo importante"],
-            ["Verificación Continua", "Confirmar comprensión durante la conversación", "En pausas naturales", "Mantener precisión"]
+            ["Speaker ID", "Tell voices/speakers apart", "Early in the recording", "Track who says what"],
+            ["Topic tracking", "Notice topic changes", "Throughout", "Stay oriented"],
+            ["Structured notes", "Organize by speaker/topic", "Throughout", "Retain information"],
+            ["Relationship clues", "Grasp dynamics between speakers", "Throughout", "Deeper understanding"],
+            ["Information management", "Prioritize relevant points", "Throughout", "Stay on what matters"],
+            ["Ongoing verification", "Check understanding as you go", "At natural breaks", "Stay accurate"]
           ]}
         />
 
         <div style={{ display: 'grid', gap: '1rem' }}>
-          <Example 
-            spanish="Identificación: 'Entrevistador (voz grave) vs Candidato (voz aguda)'"
-            english="Identification: 'Interviewer (deep voice) vs Candidate (high voice)'"
-            translation="Identificación: 'Entrevistador (voz grave) vs Candidato (voz aguda)'"
-          />
-          <Example 
-            spanish="Seguimiento: 'Ahora cambian de experiencia a planes futuros'"
-            english="Tracking: 'Now they change from experience to future plans'"
-            translation="Seguimiento: 'Ahora cambian de experiencia a planes futuros'"
-          />
-          <Example 
-            spanish="Toma de notas: 'Candidato: 5 años experiencia, Entrevistador: pregunta sobre liderazgo'"
-            english="Note-taking: 'Candidate: 5 years experience, Interviewer: asks about leadership'"
-            translation="Toma de notas: 'Candidato: 5 años experiencia, Entrevistador: pregunta sobre liderazgo'"
-          />
+          <Example english="Identification: 'Interviewer (deep voice) vs candidate (higher voice)'" />
+          <Example english="Tracking: 'They move from experience to future plans'" />
+          <Example english="Note-taking: 'Candidate: 5 years experience; interviewer: asks about leadership'" />
         </div>
 
         <Rule 
-          title="Proceso Paso a Paso"
-          description="Sigue este proceso para conversaciones largas:"
+          title="Step-by-Step Process"
+          description="Use this process for long conversations:"
           examples={[
-            "1. Identifica a los hablantes y sus roles",
-            "2. Lee todas las preguntas para saber qué buscar",
-            "3. Toma notas organizadas por hablante/tema",
-            "4. Sigue los cambios de tema y transiciones",
-            "5. Identifica las relaciones entre hablantes",
-            "6. Verifica tu comprensión continuamente"
+            "1. Identify speakers and roles",
+            "2. Read all questions to see what you need",
+            "3. Take notes organized by speaker/topic",
+            "4. Follow topic shifts and transitions",
+            "5. Notice how speakers relate to each other",
+            "6. Check your understanding as you listen"
           ]}
         />
 
         <Tip type="warning">
-          <strong>¡Cuidado!</strong> No te pierdas en detalles menores - mantén el enfoque en la información que necesitas.
+          <strong>Watch out!</strong> Do not get lost in minor details—stay focused on the information you need.
         </Tip>
       </TheorySection>
 
-      <TheorySection title="Identificación de Hablantes" icon="👥">
+      <TheorySection title="Identifying Speakers" icon="👥">
         <p style={{ fontSize: '1rem', lineHeight: 1.6, color: '#4a5568', marginBottom: '1rem' }}>
-          Distinguir entre diferentes hablantes es crucial para entender las conversaciones largas.
+          Telling speakers apart is essential in long conversations.
         </p>
 
         <GrammarTable
-          caption="Estrategias para Identificar Hablantes"
-          headers={["Característica", "Descripción", "Ejemplo", "Cómo Usar"]}
+          caption="Ways to Identify Speakers"
+          headers={["Cue", "Description", "Example", "How to Use It"]}
           rows={[
-            ["Voz", "Tono, altura, características", "Voz grave vs aguda", "Distinguir por características vocales"],
-            ["Rol", "Función en la conversación", "Entrevistador vs entrevistado", "Identificar por función"],
-            ["Lenguaje", "Estilo, vocabulario, formalidad", "Formal vs informal", "Diferenciar por estilo"],
-            ["Contenido", "Tipo de información que proporciona", "Preguntas vs respuestas", "Identificar por función"],
-            ["Turnos", "Cuándo y cómo habla", "Inicia vs responde", "Seguir patrones de conversación"],
-            ["Actitud", "Tono emocional, postura", "Amigable vs formal", "Identificar por actitud"]
+            ["Voice", "Pitch, tone, quality", "Deep vs higher voice", "Use vocal traits"],
+            ["Role", "Function in the talk", "Interviewer vs interviewee", "Use job in the conversation"],
+            ["Language", "Style, vocabulary, formality", "Formal vs informal", "Contrast registers"],
+            ["Content", "What each person contributes", "Questions vs answers", "Use communicative role"],
+            ["Turn-taking", "Who speaks when", "Opens vs responds", "Follow conversation pattern"],
+            ["Attitude", "Emotional tone, stance", "Friendly vs formal", "Listen to how they sound"]
           ]}
         />
 
         <div style={{ display: 'grid', gap: '1rem' }}>
-          <Example 
-            spanish="Voz: 'Entrevistador tiene voz grave y lenta'"
-            english="Voice: 'Interviewer has deep and slow voice'"
-            translation="Voz: 'Entrevistador tiene voz grave y lenta'"
-          />
-          <Example 
-            spanish="Rol: 'Entrevistador hace preguntas, candidato responde'"
-            english="Role: 'Interviewer asks questions, candidate answers'"
-            translation="Rol: 'Entrevistador hace preguntas, candidato responde'"
-          />
-          <Example 
-            spanish="Lenguaje: 'Entrevistador usa lenguaje formal'"
-            english="Language: 'Interviewer uses formal language'"
-            translation="Lenguaje: 'Entrevistador usa lenguaje formal'"
-          />
+          <Example english="Voice: 'Interviewer has a deep, slow voice'" />
+          <Example english="Role: 'Interviewer asks questions; candidate answers'" />
+          <Example english="Language: 'Interviewer uses formal language'" />
         </div>
 
         <Tip type="info">
-          <strong>Consejo:</strong> Combina múltiples características para identificar hablantes de manera confiable.
+          <strong>Tip:</strong> Combine several cues to identify speakers reliably.
         </Tip>
       </TheorySection>
 
-      <TheorySection title="Seguimiento de Temas y Transiciones" icon="🔄">
+      <TheorySection title="Topic Tracking and Transitions" icon="🔄">
         <p style={{ fontSize: '1rem', lineHeight: 1.6, color: '#4a5568', marginBottom: '1rem' }}>
-          Seguir los cambios de tema y transiciones es esencial para mantener la orientación en conversaciones largas.
+          Following topic shifts and transitions keeps you oriented in long talks.
         </p>
 
         <GrammarTable
-          caption="Tipos de Transiciones"
-          headers={["Tipo", "Indicadores", "Ejemplo", "Función"]}
+          caption="Types of Transitions"
+          headers={["Type", "Indicators", "Example", "Function"]}
           rows={[
-            ["Cambio de Tema", "Now, let's talk about...", "Now, let's talk about your experience", "Introducir nuevo tema"],
-            ["Retorno", "Going back to...", "Going back to your previous job", "Volver a tema anterior"],
-            ["Desarrollo", "Can you tell me more about...?", "Can you tell me more about that?", "Profundizar en tema"],
-            ["Resumen", "So, to summarize...", "So, to summarize your experience", "Resumir información"],
-            ["Clarificación", "What do you mean by...?", "What do you mean by leadership?", "Aclarar información"],
-            ["Confirmación", "So you're saying that...", "So you're saying that you led a team?", "Confirmar comprensión"]
+            ["Topic shift", "Now, let's talk about...", "Now, let's talk about your experience", "Introduce a new topic"],
+            ["Return", "Going back to...", "Going back to your previous job", "Return to an earlier topic"],
+            ["Elaboration", "Can you tell me more about...?", "Can you tell me more about that?", "Go deeper"],
+            ["Summary", "So, to summarize...", "So, to summarize your experience", "Sum up"],
+            ["Clarification", "What do you mean by...?", "What do you mean by leadership?", "Clarify meaning"],
+            ["Confirmation", "So you're saying that...", "So you're saying that you led a team?", "Check understanding"]
           ]}
         />
 
         <div style={{ display: 'grid', gap: '1rem' }}>
-          <Example 
-            spanish="Cambio de tema: 'Ahora, hablemos de tu experiencia'"
-            english="Topic change: 'Now, let's talk about your experience'"
-            translation="Cambio de tema: 'Ahora, hablemos de tu experiencia'"
-          />
-          <Example 
-            spanish="Desarrollo: '¿Puedes contarme más sobre eso?'"
-            english="Development: 'Can you tell me more about that?'"
-            translation="Desarrollo: '¿Puedes contarme más sobre eso?'"
-          />
-          <Example 
-            spanish="Clarificación: '¿Qué quieres decir con liderazgo?'"
-            english="Clarification: 'What do you mean by leadership?'"
-            translation="Clarificación: '¿Qué quieres decir con liderazgo?'"
-          />
+          <Example english="Topic change: 'Now, let's talk about your experience'" />
+          <Example english="Elaboration: 'Can you tell me more about that?'" />
+          <Example english="Clarification: 'What do you mean by leadership?'" />
         </div>
 
         <Rule 
-          title="Consejos para Seguir Transiciones"
-          description="Para seguir transiciones efectivamente:"
+          title="Tips for Following Transitions"
+          description="To follow transitions effectively:"
           examples={[
-            "Escucha palabras y frases de transición",
-            "Identifica cuando cambia el tema",
-            "Observa cambios en el tono y ritmo",
-            "Usa el contexto para entender el propósito del cambio"
+            "Listen for transition words and phrases",
+            "Notice when the topic changes",
+            "Notice shifts in tone and pace",
+            "Use context to see why the topic moved"
           ]}
         />
 
         <Tip type="success">
-          <strong>Consejo:</strong> Las transiciones te ayudan a mantener la orientación en conversaciones largas.
+          <strong>Tip:</strong> Transitions help you stay oriented in long conversations.
         </Tip>
       </TheorySection>
 
-      <TheorySection title="Toma de Notas para Conversaciones Largas" icon="📝">
+      <TheorySection title="Note-Taking for Long Conversations" icon="📝">
         <p style={{ fontSize: '1rem', lineHeight: 1.6, color: '#4a5568', marginBottom: '1rem' }}>
-          La toma de notas estructurada es esencial para manejar la complejidad de las conversaciones largas.
+          Structured notes help you handle complexity and multiple speakers.
         </p>
 
         <GrammarTable
-          caption="Sistema de Toma de Notas para Conversaciones Largas"
-          headers={["Elemento", "Descripción", "Ejemplo", "Beneficio"]}
+          caption="Note-Taking System for Long Conversations"
+          headers={["Element", "Description", "Example", "Benefit"]}
           rows={[
-            ["Identificación de Hablantes", "Marcar quién habla", "I: (Entrevistador), C: (Candidato)", "Seguir quién dice qué"],
-            ["Temas Principales", "Marcar cambios de tema", "T1: Experiencia, T2: Habilidades", "Seguir estructura"],
-            ["Información Clave", "Detalles importantes", "5 años experiencia, lideró equipo", "Retener datos específicos"],
-            ["Opiniones y Actitudes", "Sentimientos y evaluaciones", "Entusiasmado, preocupado, seguro", "Entender dinámicas"],
-            ["Preguntas y Respuestas", "Intercambio de información", "P: ¿Experiencia? R: 5 años", "Seguir flujo de conversación"],
-            ["Transiciones", "Cambios y conexiones", "→ ahora habla de habilidades", "Mantener orientación"]
+            ["Speaker tags", "Mark who speaks", "I: (Interviewer), C: (Candidate)", "Track who said what"],
+            ["Main topics", "Mark topic shifts", "T1: Experience, T2: Skills", "See structure"],
+            ["Key facts", "Important details", "5 years experience, led team", "Retain specifics"],
+            ["Opinions and attitude", "Feelings, evaluations", "Enthusiastic, worried, confident", "Grasp dynamics"],
+            ["Q and A", "Exchange of information", "Q: Experience? A: 5 years", "Follow the flow"],
+            ["Transitions", "Shifts and links", "→ now discussing skills", "Stay oriented"]
           ]}
         />
 
         <div style={{ display: 'grid', gap: '1rem' }}>
-          <Example 
-            spanish="Identificación: 'I: ¿Cuál es tu experiencia? C: Tengo 5 años'"
-            english="Identification: 'I: What's your experience? C: I have 5 years'"
-            translation="Identificación: 'I: ¿Cuál es tu experiencia? C: Tengo 5 años'"
-          />
-          <Example 
-            spanish="Temas: 'T1: Experiencia → T2: Habilidades → T3: Planes'"
-            english="Topics: 'T1: Experience → T2: Skills → T3: Plans'"
-            translation="Temas: 'T1: Experiencia → T2: Habilidades → T3: Planes'"
-          />
-          <Example 
-            spanish="Información clave: '5 años, lideró equipo de 10, Python, JavaScript'"
-            english="Key info: '5 years, led team of 10, Python, JavaScript'"
-            translation="Información clave: '5 años, lideró equipo de 10, Python, JavaScript'"
-          />
+          <Example english="Identification: 'I: What's your experience? C: I have 5 years'" />
+          <Example english="Topics: 'T1: Experience → T2: Skills → T3: Plans'" />
+          <Example english="Key info: '5 years, led team of 10, Python, JavaScript'" />
         </div>
 
         <Tip type="warning">
-          <strong>¡Cuidado!</strong> No trates de escribir todo - enfócate en la información relevante para las preguntas.
+          <strong>Watch out!</strong> Do not try to write everything—focus on what the questions need.
         </Tip>
       </TheorySection>
 
-      <TheorySection title="Errores Comunes" icon="⚠️">
+      <TheorySection title="Common Mistakes" icon="⚠️">
         <div style={{ display: 'grid', gap: '1rem' }}>
           <Tip type="error">
-            <strong>Error:</strong> No identificar a los hablantes ❌<br/>
-            <strong>Correcto:</strong> Identificar voces y roles desde el inicio ✅<br/>
-            <em>Distinguir hablantes es crucial para conversaciones largas</em>
+            <strong>Mistake:</strong> Not identifying speakers ❌<br/>
+            <strong>Better:</strong> Label voices and roles early ✅<br/>
+            <em>Speaker ID is crucial in long conversations</em>
           </Tip>
 
           <Tip type="error">
-            <strong>Error:</strong> Perderse en cambios de tema ❌<br/>
-            <strong>Correcto:</strong> Seguir transiciones y cambios ✅<br/>
-            <em>Las transiciones te ayudan a mantener orientación</em>
+            <strong>Mistake:</strong> Getting lost when topics change ❌<br/>
+            <strong>Better:</strong> Track transitions and shifts ✅<br/>
+            <em>Transitions keep you oriented</em>
           </Tip>
 
           <Tip type="error">
-            <strong>Error:</strong> No tomar notas estructuradas ❌<br/>
-            <strong>Correcto:</strong> Organizar notas por hablante/tema ✅<br/>
-            <em>La organización es clave para conversaciones complejas</em>
+            <strong>Mistake:</strong> Unstructured notes ❌<br/>
+            <strong>Better:</strong> Organize by speaker/topic ✅<br/>
+            <em>Structure matters when complexity is high</em>
           </Tip>
 
           <Tip type="error">
-            <strong>Error:</strong> Perder la concentración ❌<br/>
-            <strong>Correcto:</strong> Mantener enfoque activo ✅<br/>
-            <em>La concentración sostenida es esencial</em>
+            <strong>Mistake:</strong> Losing focus ❌<br/>
+            <strong>Better:</strong> Stay actively engaged ✅<br/>
+            <em>Sustained attention is essential</em>
           </Tip>
         </div>
       </TheorySection>
 
-      <TheorySection title="Reglas Importantes" icon="⚡">
+      <TheorySection title="Important Rules" icon="⚡">
         <div style={{ display: 'grid', gap: '1rem' }}>
           <Rule 
-            title="1. Identificación temprana"
-            description="Identifica a los hablantes desde el inicio."
+            title="1. Early identification"
+            description="Identify speakers from the start."
             examples={[
-              "Escucha las primeras palabras de cada hablante",
-              "Identifica características vocales distintivas",
-              "Observa roles y funciones en la conversación",
-              "Mantén la identificación durante toda la conversación"
+              "Listen to each speaker’s first turns",
+              "Notice distinctive vocal traits",
+              "Observe roles in the interaction",
+              "Maintain speaker tags throughout"
             ]}
           />
 
           <Rule 
-            title="2. Seguimiento activo"
-            description="Mantén el seguimiento activo de temas y transiciones."
+            title="2. Active tracking"
+            description="Actively track topics and transitions."
             examples={[
-              "Escucha palabras y frases de transición",
-              "Identifica cambios de tema",
-              "Observa cambios en tono y ritmo",
-              "Usa contexto para entender el propósito"
+              "Listen for transition phrases",
+              "Mark topic changes",
+              "Notice tone and pace shifts",
+              "Use context to infer purpose"
             ]}
           />
 
           <Rule 
-            title="3. Toma de notas estructurada"
-            description="Organiza tus notas de manera lógica y útil."
+            title="3. Structured notes"
+            description="Organize notes in a clear, consistent way."
             examples={[
-              "Usa un sistema consistente de identificación",
-              "Organiza por hablante y tema",
-              "Enfócate en información relevante",
-              "Mantén las notas claras y legibles"
+              "Use a consistent tagging system",
+              "Group by speaker and topic",
+              "Focus on relevant information",
+              "Keep notes legible"
             ]}
           />
         </div>
@@ -384,80 +311,80 @@ const LongConversationsPage = () => {
   const exercises = [
     <MultipleChoiceExercise
       key="1"
-      question="¿Cuánto duran típicamente las long conversations?"
+      question="How long do long conversations typically last?"
       options={[
-        "1-3 minutos",
-        "3-8 minutos",
-        "30 segundos-2 minutos",
-        "Más de 10 minutos"
+        "1–3 minutes",
+        "3–8 minutes",
+        "30 seconds–2 minutes",
+        "More than 10 minutes"
       ]}
       correctAnswer={1}
-      explanation="Las long conversations duran entre 3-8 minutos, siendo más extensas que los diálogos cortos pero más manejables que presentaciones largas."
+      explanation="Long conversations usually run 3–8 minutes—longer than short dialogues but often shorter than full lectures."
     />,
 
     <MultipleChoiceExercise
       key="2"
-      question="¿Cuál es la estrategia más importante para long conversations?"
+      question="What is the most important strategy for long conversations?"
       options={[
-        "No tomar notas",
-        "Identificar a los hablantes desde el inicio",
-        "Escuchar solo al final",
-        "Ignorar las transiciones"
+        "Avoid taking notes",
+        "Identify speakers from the beginning",
+        "Only listen at the end",
+        "Ignore transitions"
       ]}
       correctAnswer={1}
-      explanation="Identificar a los hablantes desde el inicio es crucial para long conversations, ya que te permite seguir quién dice qué durante toda la conversación."
+      explanation="Identifying speakers early lets you follow who says what for the whole recording."
     />,
 
     <TrueFalseExercise
       key="3"
       statements={[
         {
-          text: "Las long conversations requieren identificación de hablantes.",
+          text: "Long conversations require speaker identification.",
           isTrue: true,
-          explanation: "Correcto. Distinguir entre diferentes hablantes es esencial para entender quién dice qué en conversaciones largas."
+          explanation: "Correct. You must distinguish speakers to know who contributes what."
         },
         {
-          text: "Es mejor no tomar notas en long conversations para evitar distracciones.",
+          text: "It is better not to take notes in long conversations to avoid distraction.",
           isTrue: false,
-          explanation: "Incorrecto. La toma de notas estructurada es esencial para manejar la complejidad y cantidad de información en conversaciones largas."
+          explanation: "Incorrect. Structured notes help you manage the amount and complexity of information."
         },
         {
-          text: "Seguir las transiciones ayuda a mantener la orientación en la conversación.",
+          text: "Following transitions helps you stay oriented in the conversation.",
           isTrue: true,
-          explanation: "Correcto. Las transiciones indican cambios de tema y te ayudan a mantener la orientación en conversaciones largas."
+          explanation: "Correct. Transitions signal topic shifts and support orientation."
         },
         {
-          text: "Las long conversations son más fáciles que los monólogos porque hay más voces.",
+          text: "Long conversations are easier than monologues because there are more voices.",
           isTrue: false,
-          explanation: "Incorrecto. Las long conversations pueden ser más complejas porque requieren distinguir entre hablantes y seguir múltiples líneas de conversación."
+          explanation: "Incorrect. They can be harder because you must track several speakers and threads at once."
         }
       ]}
     />,
 
     <MultipleChoiceExercise
       key="4"
-      question="¿Qué indica una transición en una conversación?"
+      question="What does a transition usually signal?"
       options={[
-        "Un cambio de hablante",
-        "Un cambio de tema",
-        "Un silencio",
-        "Un error de pronunciación"
+        "A change of speaker",
+        "A change of topic",
+        "A silence",
+        "A pronunciation error"
       ]}
       correctAnswer={1}
-      explanation="Una transición indica un cambio de tema, no necesariamente un cambio de hablante. Las transiciones ayudan a seguir la estructura de la conversación."
+      explanation="A transition usually marks a topic shift—not necessarily a different speaker—and helps you follow structure."
     />,
 
     <MultipleChoiceExercise
       key="5"
-      question="¿Cuál es el sistema de toma de notas más efectivo para long conversations?"
+      question="What is the most effective note-taking approach for long conversations?"
       options={[
-        "Escribir todo lo que se dice",
-        "Organizar notas por hablante y tema",
-        "No tomar notas",
-        "Escribir solo al final"
+        "Write down everything",
+        "Organize notes by speaker and topic",
+        "Take no notes",
+        "Write only at the end"
       ]}
       correctAnswer={1}
-      explanation="Organizar notas por hablante y tema es el sistema más efectivo, ya que te permite manejar la complejidad de múltiples voces y temas."
+      explanation="Notes by speaker and topic handle multiple voices and several subjects efficiently."
     />,
 
     <TrueFalseExercise
@@ -466,45 +393,45 @@ const LongConversationsPage = () => {
         {
           text: "Long conversations typically involve multiple topic changes.",
           isTrue: true,
-          explanation: "Correcto. Las conversaciones largas suelen incluir múltiples cambios de tema y transiciones naturales."
+          explanation: "Correct. Longer talks often move through several topics with natural transitions."
         },
         {
           text: "You should try to understand every single word in long conversations.",
           isTrue: false,
-          explanation: "Incorrecto. Es mejor enfocarse en ideas principales y información específica relevante."
+          explanation: "Incorrect. Focus on main ideas and task-relevant detail instead of every word."
         },
         {
           text: "Taking notes helps maintain focus during long conversations.",
           isTrue: true,
-          explanation: "Correcto. Tomar notas ayuda a mantener la concentración y organizar la información compleja."
+          explanation: "Correct. Notes support focus and organize complex information."
         }
       ]}
     />,
 
     <MultipleChoiceExercise
       key="7"
-      question="¿Qué debes hacer cuando pierdes el hilo de una conversación larga?"
+      question="What should you do if you lose the thread in a long conversation?"
       options={[
-        "Parar de escuchar completamente",
-        "Usar el contexto para recuperar el hilo",
-        "Preocuparse por lo que perdiste",
-        "Empezar a tomar notas diferentes"
+        "Stop listening altogether",
+        "Use context to get back on track",
+        "Worry about what you missed",
+        "Switch to a different note system mid-way"
       ]}
       correctAnswer={1}
-      explanation="Usar el contexto para recuperar el hilo es la mejor estrategia cuando te pierdes en una conversación larga."
+      explanation="Using context is the best way to recover without losing the rest of the recording."
     />,
 
     <MultipleChoiceExercise
       key="8"
-      question="¿Cuál es la característica principal de las transiciones en conversaciones largas?"
+      question="What is typical of transitions in long conversations?"
       options={[
-        "Son siempre muy obvias",
-        "Pueden ser sutiles y graduales",
-        "Nunca ocurren",
-        "Solo ocurren al final"
+        "They are always obvious",
+        "They can be subtle and gradual",
+        "They never happen",
+        "They only occur at the end"
       ]}
       correctAnswer={1}
-      explanation="Las transiciones en conversaciones largas pueden ser sutiles y graduales, requiriendo atención para seguirlas."
+      explanation="Transitions are often subtle and gradual, so you need attentive listening."
     />,
 
     <TrueFalseExercise
@@ -513,34 +440,34 @@ const LongConversationsPage = () => {
         {
           text: "Speaker identification becomes more important in longer conversations.",
           isTrue: true,
-          explanation: "Correcto. En conversaciones largas es crucial mantener la identificación de hablantes para seguir el desarrollo."
+          explanation: "Correct. Longer talks require you to sustain who is speaking across many turns."
         },
         {
           text: "Long conversations always follow a strict structure.",
           isTrue: false,
-          explanation: "Incorrecto. Las conversaciones largas pueden ser más naturales y menos estructuradas que presentaciones formales."
+          explanation: "Incorrect. They can be more natural and less rigid than formal monologues."
         }
       ]}
     />,
 
     <MultipleChoiceExercise
       key="10"
-      question="¿Qué tipo de información es más importante capturar en conversaciones largas?"
+      question="What kind of information matters most in long conversations?"
       options={[
-        "Solo detalles específicos",
-        "Solo ideas principales",
-        "Tanto ideas principales como detalles relevantes",
-        "Solo la conclusión"
+        "Only specific details",
+        "Only main ideas",
+        "Both main ideas and relevant details",
+        "Only the conclusion"
       ]}
       correctAnswer={2}
-      explanation="Es importante capturar tanto ideas principales como detalles relevantes para tener una comprensión completa."
+      explanation="You usually need main ideas plus relevant supporting detail for a full picture."
     />
   ];
 
   return (
     <TheoryLayout
       title="Long Conversations"
-      description="Domina la comprensión de conversaciones largas en inglés. Aprende estrategias para seguir múltiples hablantes, cambios de tema y dinámicas complejas en diálogos extensos."
+      description="Master long conversations in English. Learn to follow multiple speakers, topic shifts, and complex interaction in extended dialogues."
       level="B1-B2-C1-C2"
       theoryContent={theoryContent}
       exercises={exercises}
@@ -551,25 +478,3 @@ const LongConversationsPage = () => {
 };
 
 export default LongConversationsPage;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

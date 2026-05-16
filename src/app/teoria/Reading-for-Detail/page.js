@@ -6,83 +6,83 @@ import { MultipleChoiceExercise, TrueFalseExercise } from '@/components/theory/E
 const ReadingForDetailPage = () => {
   const theoryContent = (
     <div>
-      <TheorySection title="¿Qué es Reading for Detail?" icon="🔍">
+      <TheorySection title="What is Reading for Detail?" icon="🔍">
         <p>
-          <strong>Reading for Detail</strong> significa leer cuidadosamente para encontrar información específica, 
-          datos exactos, detalles particulares y hechos concretos. Es como usar una lupa para examinar partes específicas del texto.
+          <strong>Reading for Detail</strong> means reading carefully to find specific information, 
+          exact data, particular facts, and concrete details. It is like using a magnifying glass on chosen parts of the text.
         </p>
         
         <Example 
-          title="Ejemplo de Reading for Detail"
-          content="Si necesitas encontrar: '¿A qué hora abre la biblioteca los sábados?' debes buscar específicamente información sobre horarios y días de la semana, no la historia de la biblioteca."
-          explanation="Te enfocas en encontrar datos específicos y precisos, no en la comprensión general."
+          title="Reading for detail example"
+          content="If you need: 'What time does the library open on Saturdays?' you search specifically for times and days of the week—not the whole history of the library."
+          explanation="You aim for precise facts, not general understanding only."
         />
       </TheorySection>
 
-      <TheorySection title="Estrategias Principales" icon="🎯">
+      <TheorySection title="Main strategies" icon="🎯">
         <div style={{ display: 'grid', gap: '1rem' }}>
           <Rule 
-            title="1. Identifica qué buscas primero"
-            description="Antes de leer, define exactamente qué información necesitas."
+            title="1. Know what you are looking for"
+            description="Before reading, define exactly what information you need."
             examples={[
-              "¿Buscas números, fechas, nombres?",
-              "¿Necesitas causas, efectos, procesos?",
-              "¿Qué palabras clave podrían aparecer?",
-              "¿En qué sección del texto podría estar?"
+              "Are you looking for numbers, dates, names?",
+              "Do you need causes, effects, or steps?",
+              "Which keywords might appear?",
+              "Which part of the text might hold the answer?"
             ]}
           />
 
           <Rule 
-            title="2. Usa técnicas de scanning"
-            description="Escanea el texto buscando palabras clave específicas."
+            title="2. Use scanning"
+            description="Sweep the text for specific keywords."
             examples={[
-              "Busca números si necesitas datos estadísticos",
-              "Busca nombres propios para personas o lugares",
-              "Busca palabras de tiempo para secuencias",
-              "Busca conectores para relaciones causa-efecto"
+              "Look for numbers if you need statistics",
+              "Look for proper nouns for people or places",
+              "Look for time words for sequences",
+              "Look for connectors for cause and effect"
             ]}
           />
 
           <Rule 
-            title="3. Lee intensivamente la sección relevante"
-            description="Una vez que encuentres la sección, léela cuidadosamente."
+            title="3. Read the relevant stretch intensively"
+            description="When you find the right section, read it closely."
             examples={[
-              "Lee palabra por palabra en esa sección",
-              "Presta atención a modificadores (very, quite, almost)",
-              "Nota negaciones (not, never, hardly)",
-              "Verifica que entiendes exactamente"
+              "Read word by word in that stretch",
+              "Watch modifiers (very, quite, almost)",
+              "Note negation (not, never, hardly)",
+              "Check you understand exactly"
             ]}
           />
         </div>
       </TheorySection>
 
-      <TheorySection title="Tipos de Información Detallada" icon="📊">
+      <TheorySection title="Types of detailed information" icon="📊">
         <div style={{ display: 'grid', gap: '1rem' }}>
           <Rule 
-            title="1. Datos numéricos y estadísticas"
-            description="Números exactos, porcentajes, medidas, cantidades."
+            title="1. Numbers and statistics"
+            description="Exact figures, percentages, measures, quantities."
             examples={[
-              "Fechas: 15th March, 2023, last Tuesday",
-              "Cantidades: 50%, three quarters, majority",
-              "Medidas: 5 kilometers, 2 hours, €100",
-              "Rangos: between 20-30, approximately 500"
+              "Dates: 15th March, 2023, last Tuesday",
+              "Amounts: 50%, three quarters, majority",
+              "Measures: 5 kilometers, 2 hours, €100",
+              "Ranges: between 20–30, approximately 500"
             ]}
           />
 
           <Rule 
-            title="2. Secuencias y procesos"
-            description="Orden de eventos, pasos, instrucciones."
+            title="2. Sequences and processes"
+            description="Order of events, steps, instructions."
             examples={[
-              "Primero, segundo, luego, finalmente",
-              "Antes de, después de, mientras",
-              "Siguiente paso, procedimiento",
-              "Cronología de eventos"
+              "First, second, then, finally",
+              "Before, after, while",
+              "Next step, procedure",
+              "Chronology of events"
             ]}
           />
 
           <Rule 
-            title="3. Relaciones causa-efecto"
-            description="Por qué sucede algo y cuáles son las consecuencias."
+            title="3. Cause and effect"
+            description="Why something happens and what follows."
             examples={[
               "Because, since, due to, as a result",
               "Therefore, consequently, thus, hence",
@@ -93,38 +93,38 @@ const ReadingForDetailPage = () => {
         </div>
       </TheorySection>
 
-      <TheorySection title="Reglas Importantes" icon="⚡">
+      <TheorySection title="Important rules" icon="⚡">
         <div style={{ display: 'grid', gap: '1rem' }}>
           <Rule 
-            title="1. Precisión es clave"
-            description="En reading for detail, cada palabra cuenta."
+            title="1. Precision matters"
+            description="In reading for detail, every word can count."
             examples={[
-              "Diferencia entre 'most' y 'all'",
-              "Nota 'usually' vs 'always'",
-              "Distingue 'increase' de 'decrease'",
-              "Observa 'before' vs 'after'"
+              "Difference between 'most' and 'all'",
+              "Note 'usually' vs 'always'",
+              "Distinguish 'increase' from 'decrease'",
+              "Watch 'before' vs 'after'"
             ]}
           />
 
           <Rule 
-            title="2. Contexto inmediato"
-            description="Lee las oraciones antes y después para contexto completo."
+            title="2. Immediate context"
+            description="Read sentences before and after for full sense."
             examples={[
-              "La información puede estar distribuida",
-              "Pronombres pueden referirse a información anterior",
-              "Ejemplos pueden aclarar conceptos",
-              "Definiciones pueden aparecer después"
+              "Information may be spread across sentences",
+              "Pronouns may point to earlier detail",
+              "Examples may clarify a point",
+              "Definitions may follow the term"
             ]}
           />
 
           <Rule 
-            title="3. Verificación cruzada"
-            description="Confirma la información con otras partes del texto."
+            title="3. Cross-check"
+            description="Confirm information against other parts of the text."
             examples={[
-              "¿La información es consistente?",
-              "¿Hay contradicciones aparentes?",
-              "¿Se repite la misma información?",
-              "¿Los ejemplos apoyan la información?"
+              "Is the information consistent?",
+              "Are there apparent contradictions?",
+              "Is the same point repeated?",
+              "Do examples support the claim?"
             ]}
           />
         </div>
@@ -135,158 +135,158 @@ const ReadingForDetailPage = () => {
   const exercises = [
     <MultipleChoiceExercise
       key="1"
-      question="¿Cuál es el objetivo principal de reading for detail?"
+      question="What is the main goal of reading for detail?"
       options={[
-        "Leer lo más rápido posible",
-        "Encontrar información específica y exacta",
-        "Entender solo la idea general",
-        "Memorizar todo el vocabulario"
+        "Read as fast as possible",
+        "Find specific, exact information",
+        "Understand only the general idea",
+        "Memorise every word"
       ]}
       correctAnswer={1}
-      explanation="Reading for detail se enfoca en encontrar información específica, datos exactos y detalles particulares."
+      explanation="Reading for detail targets specific facts, exact data, and particular points."
     />,
 
     <MultipleChoiceExercise
       key="2"
-      question="¿Qué debes hacer antes de empezar a leer para detalles?"
+      question="What should you do before you read for detail?"
       options={[
-        "Leer todo el texto primero",
-        "Identificar exactamente qué información necesitas",
-        "Contar las páginas del texto",
-        "Buscar todas las palabras desconocidas"
+        "Read the whole text first",
+        "State exactly what information you need",
+        "Count the pages",
+        "Look up every unknown word"
       ]}
       correctAnswer={1}
-      explanation="Antes de leer para detalles, debes definir claramente qué información específica estás buscando."
+      explanation="First define clearly what specific information you are searching for."
     />,
 
     <TrueFalseExercise
       key="3"
       statements={[
         {
-          text: "En reading for detail, cada palabra es importante.",
+          text: "In reading for detail, every word can matter.",
           isTrue: true,
-          explanation: "Correcto. En lectura detallada, modificadores, negaciones y palabras específicas pueden cambiar completamente el significado."
+          explanation: "Correct. Modifiers, negation, and small words can completely change meaning."
         },
         {
-          text: "Debes leer a la misma velocidad que para obtener la idea general.",
+          text: "You should read at the same speed as for gist.",
           isTrue: false,
-          explanation: "Incorrecto. Reading for detail requiere lectura más lenta y cuidadosa que reading for gist."
+          explanation: "Incorrect. Detail reading is slower and more careful than gist reading."
         },
         {
-          text: "Es útil usar técnicas de scanning para encontrar secciones relevantes.",
+          text: "Scanning helps you find the right section.",
           isTrue: true,
-          explanation: "Correcto. Scanning te ayuda a localizar rápidamente las secciones que contienen la información que buscas."
+          explanation: "Correct. Scanning locates the parts that likely contain your answer."
         }
       ]}
     />,
 
     <MultipleChoiceExercise
       key="4"
-      question="¿Cuál es la diferencia entre 'most students' y 'all students'?"
+      question="What is the difference between 'most students' and 'all students'?"
       options={[
-        "No hay diferencia",
-        "'Most' significa la mayoría, 'all' significa todos",
-        "'Most' es más formal que 'all'",
-        "Significan exactamente lo mismo"
+        "There is no difference",
+        "'Most' means a majority; 'all' means everyone",
+        "'Most' is more formal than 'all'",
+        "They mean exactly the same"
       ]}
       correctAnswer={1}
-      explanation="'Most' significa la mayoría (más del 50% pero no todos), mientras que 'all' significa el 100%, todos sin excepción."
+      explanation="'Most' means a majority (more than half but not everyone); 'all' means 100% with no exceptions."
     />,
 
     <MultipleChoiceExercise
       key="5"
-      question="¿Qué tipo de palabras debes buscar para encontrar información sobre causas?"
+      question="Which words help you find information about causes?"
       options={[
-        "Números y fechas",
+        "Numbers and dates",
         "Because, since, due to",
         "First, second, third",
         "Always, never, sometimes"
       ]}
       correctAnswer={1}
-      explanation="Palabras como 'because', 'since', 'due to' indican relaciones de causa y te ayudan a encontrar por qué sucede algo."
+      explanation="Words like 'because', 'since', and 'due to' signal cause and help you find why something happens."
     />,
 
     <TrueFalseExercise
       key="6"
       statements={[
         {
-          text: "Debes leer solo la oración que contiene la información que buscas.",
+          text: "You should read only the sentence that holds your answer.",
           isTrue: false,
-          explanation: "Incorrecto. Debes leer el contexto inmediato (oraciones antes y después) para entender completamente."
+          explanation: "Incorrect. Read the surrounding sentences too for full meaning."
         },
         {
-          text: "Los pronombres pueden referirse a información en oraciones anteriores.",
+          text: "Pronouns can refer to information in earlier sentences.",
           isTrue: true,
-          explanation: "Correcto. Pronombres como 'it', 'they', 'this' a menudo se refieren a información mencionada anteriormente."
+          explanation: "Correct. Pronouns like 'it', 'they', and 'this' often refer back to earlier content."
         },
         {
-          text: "En reading for detail no necesitas verificar la consistencia de la información.",
+          text: "You do not need to check consistency when reading for detail.",
           isTrue: false,
-          explanation: "Incorrecto. Es importante verificar que la información sea consistente en todo el texto."
+          explanation: "Incorrect. Check that information is consistent across the text."
         }
       ]}
     />,
 
     <MultipleChoiceExercise
       key="7"
-      question="¿Cuál es la mejor estrategia para encontrar información sobre secuencias temporales?"
+      question="What is the best strategy for information about time order?"
       options={[
-        "Buscar solo números",
-        "Buscar conectores temporales como 'first', 'then', 'finally'",
-        "Leer solo el primer párrafo",
-        "Ignorar las fechas"
+        "Look only for numbers",
+        "Look for time connectors like 'first', 'then', 'finally'",
+        "Read only the first paragraph",
+        "Ignore dates"
       ]}
       correctAnswer={1}
-      explanation="Los conectores temporales te indican el orden de eventos y procesos en secuencias temporales."
+      explanation="Time connectors show the order of events and processes."
     />,
 
     <MultipleChoiceExercise
       key="8"
-      question="¿Por qué es importante prestar atención a palabras como 'not', 'never', 'hardly'?"
+      question="Why note words like 'not', 'never', and 'hardly'?"
       options={[
-        "Son palabras muy comunes",
-        "Cambian completamente el significado de la oración",
-        "Son difíciles de pronunciar",
-        "Siempre aparecen en exámenes"
+        "They are very common",
+        "They can completely change sentence meaning",
+        "They are hard to pronounce",
+        "They always appear in exams"
       ]}
       correctAnswer={1}
-      explanation="Las negaciones como 'not', 'never', 'hardly' cambian completamente el significado y son cruciales para la comprensión exacta."
+      explanation="Negation such as 'not', 'never', and 'hardly' is crucial for exact understanding."
     />,
 
     <TrueFalseExercise
       key="9"
       statements={[
         {
-          text: "Reading for detail es útil cuando necesitas seguir instrucciones específicas.",
+          text: "Reading for detail helps when you must follow precise instructions.",
           isTrue: true,
-          explanation: "Correcto. Para seguir instrucciones necesitas entender cada paso exactamente, lo que requiere lectura detallada."
+          explanation: "Correct. Instructions require exact understanding of each step."
         },
         {
-          text: "Debes usar reading for detail para todos los textos que leas.",
+          text: "You should use reading for detail for every text you read.",
           isTrue: false,
-          explanation: "Incorrecto. Reading for detail se usa solo cuando necesitas información específica; para comprensión general usa gist reading."
+          explanation: "Incorrect. Use it when you need specifics; use gist reading for the overview."
         }
       ]}
     />,
 
     <MultipleChoiceExercise
       key="10"
-      question="¿Cuál es la mejor manera de verificar que has encontrado la información correcta?"
+      question="What is the best way to check you found the right information?"
       options={[
-        "Leer solo una vez más",
-        "Verificar consistencia con otras partes del texto",
-        "Traducir al español",
-        "Contar las palabras de la respuesta"
+        "Read once more only",
+        "Check consistency with other parts of the text",
+        "Translate into Spanish",
+        "Count the words in the answer"
       ]}
       correctAnswer={1}
-      explanation="Verificar la consistencia con otras partes del texto te asegura que has interpretado correctamente la información."
+      explanation="Cross-checking with the rest of the text helps confirm your interpretation."
     />
   ];
 
   return (
     <TheoryLayout
       title="Reading for Detail"
-      description="Domina la lectura detallada para encontrar información específica. Aprende técnicas para localizar datos exactos, secuencias y relaciones causa-efecto en textos."
+      description="Master careful reading for specifics. Learn how to locate exact facts, sequences, and cause–effect links in texts."
       level="A2-B1-B2-C1-C2"
       theoryContent={theoryContent}
       exercises={exercises}

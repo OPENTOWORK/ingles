@@ -6,27 +6,27 @@ import { MultipleChoiceExercise, TrueFalseExercise } from '@/components/theory/E
 const OpinionAndAttitudePage = () => {
   const theoryContent = (
     <div>
-      <TheorySection title="¿Qué son Opinion y Attitude?" icon="💭">
+      <TheorySection title="What are Opinion and Attitude?" icon="💭">
         <p>
-          <strong>Opinion</strong> es el punto de vista personal del autor sobre un tema. 
-          <strong>Attitude</strong> es la postura emocional o mental del autor hacia el tema (positiva, negativa, neutral). 
-          Identificar opiniones y actitudes te ayuda a entender la perspectiva del autor.
+          <strong>Opinion</strong> is the author's personal view on a topic. 
+          <strong>Attitude</strong> is the author's emotional or mental stance (positive, negative, neutral). 
+          Spotting both helps you see where the author stands.
         </p>
         
         <Example 
-          title="Ejemplo de Opinion y Attitude"
-          content="Texto: 'While some argue that social media connects people, I believe it actually isolates us from genuine human interaction.'
-          Opinion: El autor cree que las redes sociales aíslan a las personas.
-          Attitude: Crítica/negativa hacia las redes sociales."
-          explanation="El autor expresa claramente su opinión personal y muestra una actitud crítica hacia el tema."
+          title="Opinion and attitude example"
+          content="Text: 'While some argue that social media connects people, I believe it actually isolates us from genuine human interaction.'
+          Opinion: The author thinks social media isolates people.
+          Attitude: Critical / negative toward social media."
+          explanation="The author states a clear personal view and a critical stance toward the topic."
         />
       </TheorySection>
 
-      <TheorySection title="Identificando Opiniones" icon="🎯">
+      <TheorySection title="Spotting opinions" icon="🎯">
         <div style={{ display: 'grid', gap: '1rem' }}>
           <Tip 
-            title="1. Palabras de opinión explícitas"
-            description="Frases que indican claramente que es una opinión personal."
+            title="1. Explicit opinion markers"
+            description="Phrases that flag a personal view."
             examples={[
               "I believe, I think, In my opinion, I feel",
               "It seems to me, From my perspective",
@@ -36,8 +36,8 @@ const OpinionAndAttitudePage = () => {
           />
 
           <Tip 
-            title="2. Verbos de opinión"
-            description="Verbos que expresan creencias, juicios o evaluaciones."
+            title="2. Opinion verbs"
+            description="Verbs that express belief, judgement, or evaluation."
             examples={[
               "Suggest, imply, indicate, demonstrate",
               "Prove, show, reveal, confirm",
@@ -47,8 +47,8 @@ const OpinionAndAttitudePage = () => {
           />
 
           <Tip 
-            title="3. Adjetivos evaluativos"
-            description="Adjetivos que expresan juicios de valor."
+            title="3. Evaluative adjectives"
+            description="Adjectives that carry value judgements."
             examples={[
               "Excellent, terrible, wonderful, awful",
               "Effective, ineffective, successful, failed",
@@ -59,75 +59,75 @@ const OpinionAndAttitudePage = () => {
         </div>
       </TheorySection>
 
-      <TheorySection title="Identificando Actitudes" icon="🔍">
+      <TheorySection title="Spotting attitudes" icon="🔍">
         <div style={{ display: 'grid', gap: '1rem' }}>
           <Rule 
-            title="1. Actitud positiva"
-            description="El autor muestra aprobación, entusiasmo o apoyo."
+            title="1. Positive attitude"
+            description="Approval, enthusiasm, or support."
             examples={[
-              "Palabras positivas: excellent, brilliant, outstanding",
-              "Tono optimista: promising, encouraging, hopeful",
-              "Apoyo explícito: I fully support, I strongly recommend",
-              "Énfasis en beneficios: advantages, benefits, strengths"
+              "Positive words: excellent, brilliant, outstanding",
+              "Optimistic tone: promising, encouraging, hopeful",
+              "Explicit support: I fully support, I strongly recommend",
+              "Stress on benefits: advantages, benefits, strengths"
             ]}
           />
 
           <Rule 
-            title="2. Actitud negativa"
-            description="El autor muestra desaprobación, crítica o rechazo."
+            title="2. Negative attitude"
+            description="Disapproval, criticism, or rejection."
             examples={[
-              "Palabras negativas: terrible, disastrous, appalling",
-              "Tono pesimista: concerning, alarming, worrying",
-              "Crítica explícita: I strongly oppose, I disagree",
-              "Énfasis en problemas: disadvantages, flaws, weaknesses"
+              "Negative words: terrible, disastrous, appalling",
+              "Pessimistic tone: concerning, alarming, worrying",
+              "Explicit criticism: I strongly oppose, I disagree",
+              "Stress on problems: disadvantages, flaws, weaknesses"
             ]}
           />
 
           <Rule 
-            title="3. Actitud neutral/objetiva"
-            description="El autor presenta información sin mostrar preferencia personal."
+            title="3. Neutral / objective stance"
+            description="Information presented without clear personal preference."
             examples={[
-              "Lenguaje factual: statistics show, research indicates",
-              "Presentación equilibrada: on one hand... on the other hand",
-              "Ausencia de adjetivos evaluativos",
-              "Uso de voz pasiva para distanciarse"
+              "Factual wording: statistics show, research indicates",
+              "Balanced presentation: on one hand... on the other hand",
+              "Few evaluative adjectives",
+              "Passive voice to create distance"
             ]}
           />
         </div>
       </TheorySection>
 
-      <TheorySection title="Estrategias Avanzadas" icon="⚡">
+      <TheorySection title="Advanced points" icon="⚡">
         <div style={{ display: 'grid', gap: '1rem' }}>
           <Rule 
-            title="1. Ironía y sarcasmo"
-            description="Cuando el autor dice lo contrario de lo que realmente piensa."
+            title="1. Irony and sarcasm"
+            description="When the author means the opposite of the surface wording."
             examples={[
-              "Contraste entre palabras y contexto",
-              "Exageración obvia: 'What a brilliant idea!' (cuando es terrible)",
-              "Comillas sarcásticas: 'expert' opinion",
-              "Tono que no coincide con el contenido"
+              "Mismatch between words and context",
+              "Obvious exaggeration: 'What a brilliant idea!' (when it is awful)",
+              "Sarcastic scare quotes: 'expert' opinion",
+              "Tone that does not match content"
             ]}
           />
 
           <Rule 
-            title="2. Sesgo implícito"
-            description="Preferencias del autor mostradas indirectamente."
+            title="2. Implicit bias"
+            description="Preferences shown indirectly."
             examples={[
-              "Selección de información presentada",
-              "Orden de presentación (lo positivo primero/último)",
-              "Cantidad de espacio dedicado a cada perspectiva",
-              "Fuentes citadas y su credibilidad"
+              "Which information is selected",
+              "Order of presentation (positive first or last)",
+              "Space given to each side",
+              "Sources cited and how credible they seem"
             ]}
           />
 
           <Rule 
-            title="3. Cambios de actitud"
-            description="La actitud del autor puede evolucionar durante el texto."
+            title="3. Shifts in attitude"
+            description="The author's stance may change through the text."
             examples={[
-              "Inicialmente neutral, luego crítico",
-              "Optimista al principio, pesimista al final",
-              "Conectores que indican cambio: however, but, unfortunately",
-              "Progresión gradual de la argumentación"
+              "Starts neutral, becomes critical",
+              "Optimistic at first, darker by the end",
+              "Connectors signalling change: however, but, unfortunately",
+              "Gradual build of argument"
             ]}
           />
         </div>
@@ -138,20 +138,20 @@ const OpinionAndAttitudePage = () => {
   const exercises = [
     <MultipleChoiceExercise
       key="1"
-      question="¿Cuál es la diferencia entre opinion y attitude?"
+      question="What is the difference between opinion and attitude?"
       options={[
-        "No hay diferencia, son sinónimos",
-        "Opinion es el punto de vista, attitude es la postura emocional",
-        "Opinion es formal, attitude es informal",
-        "Opinion es para hechos, attitude es para sentimientos"
+        "None—they are synonyms",
+        "Opinion is a viewpoint; attitude is emotional stance",
+        "Opinion is formal; attitude is informal",
+        "Opinion is for facts; attitude is for feelings"
       ]}
       correctAnswer={1}
-      explanation="Opinion es el punto de vista o creencia del autor, mientras attitude es su postura emocional (positiva, negativa, neutral) hacia el tema."
+      explanation="Opinion is what the author thinks; attitude is how they feel (positive, negative, neutral) toward the topic."
     />,
 
     <MultipleChoiceExercise
       key="2"
-      question="¿Cuál de estas frases indica claramente una opinión personal?"
+      question="Which phrase clearly signals a personal opinion?"
       options={[
         "Statistics show that...",
         "Research indicates that...",
@@ -159,80 +159,80 @@ const OpinionAndAttitudePage = () => {
         "The data demonstrates that..."
       ]}
       correctAnswer={2}
-      explanation="'I firmly believe that...' indica claramente una opinión personal del autor, mientras las otras presentan información más objetiva."
+      explanation="'I firmly believe that...' is clearly subjective; the others sound more neutral."
     />,
 
     <TrueFalseExercise
       key="3"
       statements={[
         {
-          text: "Los adjetivos evaluativos como 'excellent' o 'terrible' revelan la actitud del autor.",
+          text: "Evaluative adjectives like 'excellent' or 'terrible' reveal attitude.",
           isTrue: true,
-          explanation: "Correcto. Los adjetivos evaluativos muestran claramente si el autor tiene una actitud positiva o negativa."
+          explanation: "Correct. They show positive or negative judgement."
         },
         {
-          text: "Un texto objetivo nunca contiene opiniones del autor.",
+          text: "An objective text never contains author opinion.",
           isTrue: false,
-          explanation: "Incorrecto. Incluso textos aparentemente objetivos pueden contener sesgos sutiles o selección tendenciosa de información."
+          explanation: "Incorrect. Even 'neutral' texts can hide bias in selection or emphasis."
         },
         {
-          text: "La ironía y el sarcasmo pueden hacer que el autor diga lo contrario de lo que piensa.",
+          text: "Irony and sarcasm can mean the opposite of the literal words.",
           isTrue: true,
-          explanation: "Correcto. En la ironía y sarcasmo, el significado real es opuesto a las palabras literales usadas."
+          explanation: "Correct. The real meaning can reverse the surface wording."
         }
       ]}
     />,
 
     <MultipleChoiceExercise
       key="4"
-      question="Si un autor escribe 'What a brilliant solution!' sobre algo claramente problemático, ¿qué actitud muestra?"
+      question="If an author writes 'What a brilliant solution!' about something clearly bad, what attitude is shown?"
       options={[
-        "Positiva y entusiasta",
-        "Neutral y objetiva",
-        "Negativa y sarcástica",
-        "Confundida e incierta"
+        "Positive and enthusiastic",
+        "Neutral and objective",
+        "Negative and sarcastic",
+        "Confused and unsure"
       ]}
       correctAnswer={2}
-      explanation="Es sarcasmo: usar 'brilliant' para algo problemático muestra una actitud negativa expresada irónicamente."
+      explanation="Calling something 'brilliant' when it is problematic is sarcasm—negative attitude."
     />,
 
     <MultipleChoiceExercise
       key="5"
-      question="¿Qué indica si un autor dedica mucho más espacio a los aspectos negativos que a los positivos de un tema?"
+      question="What does it suggest if an author gives far more space to negatives than positives?"
       options={[
-        "Que es completamente objetivo",
-        "Que tiene una actitud negativa o sesgo crítico",
-        "Que no entiende el tema",
-        "Que está siendo neutral"
+        "Complete objectivity",
+        "A negative stance or critical bias",
+        "Poor understanding of the topic",
+        "Neutrality"
       ]}
       correctAnswer={1}
-      explanation="La desproporción en el espacio dedicado a aspectos negativos vs positivos indica sesgo y actitud negativa del autor."
+      explanation="Heavy focus on negatives versus positives often signals criticism or negative bias."
     />,
 
     <TrueFalseExercise
       key="6"
       statements={[
         {
-          text: "Las palabras como 'claim' y 'assert' son más neutrales que 'prove' y 'demonstrate'.",
+          text: "Words like 'claim' and 'assert' are more neutral than 'prove' and 'demonstrate'.",
           isTrue: true,
-          explanation: "Correcto. 'Claim' y 'assert' sugieren opinión, mientras 'prove' y 'demonstrate' implican evidencia objetiva."
+          explanation: "Correct. 'Claim' suggests a position; 'prove' suggests settled evidence."
         },
         {
-          text: "La actitud del autor siempre permanece constante a lo largo de todo el texto.",
+          text: "Author attitude never changes through a text.",
           isTrue: false,
-          explanation: "Incorrecto. La actitud puede evolucionar o cambiar durante el texto, especialmente en argumentaciones complejas."
+          explanation: "Incorrect. Stance can shift, especially in complex argument."
         },
         {
-          text: "El uso de comillas puede indicar distanciamiento o sarcasmo del autor.",
+          text: "Quotation marks can signal distance or sarcasm.",
           isTrue: true,
-          explanation: "Correcto. Las comillas pueden mostrar que el autor no está de acuerdo con el término o lo usa irónicamente."
+          explanation: "Correct. Quotes may show the author rejects or doubts a label."
         }
       ]}
     />,
 
     <MultipleChoiceExercise
       key="7"
-      question="¿Cuál de estas estructuras sugiere una presentación más equilibrada?"
+      question="Which structure suggests a more balanced presentation?"
       options={[
         "Only supporters believe...",
         "On one hand... on the other hand...",
@@ -240,56 +240,56 @@ const OpinionAndAttitudePage = () => {
         "It's obvious that..."
       ]}
       correctAnswer={1}
-      explanation="'On one hand... on the other hand...' presenta múltiples perspectivas, sugiriendo una aproximación más equilibrada."
+      explanation="'On one hand... on the other hand...' presents multiple sides—more balanced."
     />,
 
     <MultipleChoiceExercise
       key="8"
-      question="Si un autor usa principalmente voz pasiva y evita pronombres personales, ¿qué actitud sugiere?"
+      question="If an author uses mostly passive voice and avoids first-person pronouns, what stance is suggested?"
       options={[
-        "Muy emocional y personal",
-        "Objetiva y distanciada",
-        "Confundida y incierta",
-        "Agresiva y confrontacional"
+        "Very emotional and personal",
+        "Objective and detached",
+        "Confused and unsure",
+        "Aggressive and confrontational"
       ]}
       correctAnswer={1}
-      explanation="La voz pasiva y evitar pronombres personales sugiere un intento de mantener objetividad y distanciamiento."
+      explanation="Passive voice and no 'I' often aim for objectivity and distance."
     />,
 
     <TrueFalseExercise
       key="9"
       statements={[
         {
-          text: "Los conectores como 'however' y 'unfortunately' pueden indicar cambios en la actitud del autor.",
+          text: "Connectors like 'however' and 'unfortunately' can signal a shift in attitude.",
           isTrue: true,
-          explanation: "Correcto. Estos conectores a menudo señalan un cambio hacia una perspectiva más negativa o crítica."
+          explanation: "Correct. They often mark a turn toward something more negative or critical."
         },
         {
-          text: "Solo las opiniones explícitas (con 'I think', 'I believe') cuentan como opiniones del autor.",
+          text: "Only explicit opinions (with 'I think', 'I believe') count as author opinion.",
           isTrue: false,
-          explanation: "Incorrecto. Las opiniones pueden expresarse implícitamente a través de selección de información, adjetivos evaluativos, etc."
+          explanation: "Incorrect. Opinion can be implicit through word choice, selection, and emphasis."
         }
       ]}
     />,
 
     <MultipleChoiceExercise
       key="10"
-      question="¿Cuál es la mejor estrategia para identificar la actitud general del autor en un texto largo?"
+      question="What is the best way to identify overall author attitude in a long text?"
       options={[
-        "Leer solo la introducción",
-        "Contar palabras positivas vs negativas",
-        "Analizar el patrón general de lenguaje evaluativo y selección de información",
-        "Buscar solo las frases con 'I think'"
+        "Read only the introduction",
+        "Count positive vs negative words",
+        "Track evaluative language and patterns of emphasis",
+        "Search only for 'I think'"
       ]}
       correctAnswer={2}
-      explanation="Debes analizar el patrón general: lenguaje evaluativo, selección de información, énfasis, y cómo se desarrolla la argumentación."
+      explanation="Look at the overall pattern: evaluative language, information chosen, emphasis, and how the argument develops."
     />
   ];
 
   return (
     <TheoryLayout
       title="Opinion and Attitude"
-      description="Domina la identificación de opiniones y actitudes del autor. Aprende a reconocer puntos de vista, sesgos, ironía y posturas emocionales en textos complejos."
+      description="Master spotting author opinion and attitude. Learn to recognise viewpoint, bias, irony, and emotional stance in complex texts."
       level="B1-B2-C1-C2"
       theoryContent={theoryContent}
       exercises={exercises}

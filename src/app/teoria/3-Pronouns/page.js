@@ -18,10 +18,10 @@ import {
 const PronounsPage = () => {
   const theoryContent = (
     <div>
-      <TheorySection title="¿Qué son los Pronouns?" icon="👥">
+      <TheorySection title="What are Pronouns?" icon="👥">
         <p style={{ fontSize: '1.1rem', lineHeight: 1.6, color: '#4a5568', marginBottom: '1rem' }}>
-          Los <strong>pronouns</strong> (pronombres) son palabras que reemplazan a los sustantivos para evitar repetir las mismas palabras. 
-          Son fundamentales para hablar de manera natural y fluida en inglés.
+          <strong>Pronouns</strong> are words that replace nouns to avoid repeating the same words. 
+          They are essential for speaking naturally and fluently in English.
         </p>
         
         <QuickReference items={[
@@ -33,18 +33,18 @@ const PronounsPage = () => {
         ]} />
       </TheorySection>
 
-      <TheorySection title="Personal Pronouns (Pronombres Personales)" icon="👤">
+      <TheorySection title="Personal Pronouns" icon="👤">
         <p style={{ fontSize: '1rem', lineHeight: 1.6, color: '#4a5568', marginBottom: '1rem' }}>
-          Los pronombres personales reemplazan a las personas o cosas de las que hablamos.
+          Personal pronouns replace the people or things we are talking about.
         </p>
 
         <GrammarTable
-          caption="Pronombres Personales"
-          headers={["Persona", "Singular", "Plural", "Significado"]}
+          caption="Personal Pronouns"
+          headers={["Person", "Singular", "Plural", "Meaning"]}
           rows={[
-            ["1ª persona", "I", "we", "Yo / Nosotros"],
-            ["2ª persona", "you", "you", "Tú / Ustedes"],
-            ["3ª persona", "he/she/it", "they", "Él/Ella/Eso / Ellos"]
+            ["1st person", "I", "we", "I / We"],
+            ["2nd person", "you", "you", "You"],
+            ["3rd person", "he/she/it", "they", "He/She/It / They"]
           ]}
         />
 
@@ -52,48 +52,48 @@ const PronounsPage = () => {
           <Example 
             spanish="Yo soy estudiante"
             english="I am a student"
-            translation="Yo soy estudiante"
+            translation="I am a student"
           />
           <Example 
             spanish="Ella es doctora"
             english="She is a doctor"
-            translation="Ella es doctora"
+            translation="She is a doctor"
           />
           <Example 
             spanish="Nosotros vivimos aquí"
             english="We live here"
-            translation="Nosotros vivimos aquí"
+            translation="We live here"
           />
         </div>
 
         <Tip type="info">
-          <strong>Nota:</strong> En inglés no hay diferencia entre "tú" y "usted" - ambos se dicen "you". 
-          El contexto y el tono indican el nivel de formalidad.
+          <strong>Note:</strong> In English there is no difference between informal "tú" and formal "usted" — both are "you". 
+          Context and tone indicate the level of formality.
         </Tip>
       </TheorySection>
 
-      <TheorySection title="Possessive Pronouns (Pronombres Posesivos)" icon="🏠">
+      <TheorySection title="Possessive Pronouns" icon="🏠">
         <p style={{ fontSize: '1rem', lineHeight: 1.6, color: '#4a5568', marginBottom: '1rem' }}>
-          Los pronombres posesivos muestran a quién pertenece algo. Hay dos tipos: determinantes posesivos y pronombres posesivos.
+          Possessive pronouns show who something belongs to. There are two types: possessive determiners and possessive pronouns.
         </p>
 
         <GrammarTable
-          caption="Determinantes Posesivos (van antes del sustantivo)"
-          headers={["Persona", "Singular", "Plural"]}
+          caption="Possessive Determiners (go before the noun)"
+          headers={["Person", "Singular", "Plural"]}
           rows={[
-            ["1ª persona", "my", "our"],
-            ["2ª persona", "your", "your"],
-            ["3ª persona", "his/her/its", "their"]
+            ["1st person", "my", "our"],
+            ["2nd person", "your", "your"],
+            ["3rd person", "his/her/its", "their"]
           ]}
         />
 
         <GrammarTable
-          caption="Pronombres Posesivos (reemplazan al sustantivo)"
-          headers={["Persona", "Singular", "Plural"]}
+          caption="Possessive Pronouns (replace the noun)"
+          headers={["Person", "Singular", "Plural"]}
           rows={[
-            ["1ª persona", "mine", "ours"],
-            ["2ª persona", "yours", "yours"],
-            ["3ª persona", "his/hers/its", "theirs"]
+            ["1st person", "mine", "ours"],
+            ["2nd person", "yours", "yours"],
+            ["3rd person", "his/hers/its", "theirs"]
           ]}
         />
 
@@ -101,38 +101,38 @@ const PronounsPage = () => {
           <Example 
             spanish="Mi libro es azul"
             english="My book is blue"
-            translation="Mi libro es azul"
+            translation="My book is blue"
           />
           <Example 
             spanish="Este libro es mío"
             english="This book is mine"
-            translation="Este libro es mío"
+            translation="This book is mine"
           />
           <Example 
             spanish="Su casa es grande"
             english="Her house is big"
-            translation="Su casa es grande (de ella)"
+            translation="Her house is big"
           />
         </div>
 
         <Tip type="warning">
-          <strong>¡Cuidado!</strong> No confundas "its" (posesivo) con "it's" (contracción de "it is"). 
-          "Its" no lleva apóstrofe cuando es posesivo.
+          <strong>Watch out!</strong> Do not confuse "its" (possessive) with "it's" (contraction of "it is"). 
+          "Its" does not take an apostrophe when it is possessive.
         </Tip>
       </TheorySection>
 
-      <TheorySection title="Object Pronouns (Pronombres de Objeto)" icon="🎯">
+      <TheorySection title="Object Pronouns" icon="🎯">
         <p style={{ fontSize: '1rem', lineHeight: 1.6, color: '#4a5568', marginBottom: '1rem' }}>
-          Los pronombres de objeto se usan cuando la persona o cosa es el objeto de la acción (recibe la acción).
+          Object pronouns are used when the person or thing receives the action.
         </p>
 
         <GrammarTable
-          caption="Pronombres de Objeto"
-          headers={["Persona", "Singular", "Plural"]}
+          caption="Object Pronouns"
+          headers={["Person", "Singular", "Plural"]}
           rows={[
-            ["1ª persona", "me", "us"],
-            ["2ª persona", "you", "you"],
-            ["3ª persona", "him/her/it", "them"]
+            ["1st person", "me", "us"],
+            ["2nd person", "you", "you"],
+            ["3rd person", "him/her/it", "them"]
           ]}
         />
 
@@ -140,37 +140,37 @@ const PronounsPage = () => {
           <Example 
             spanish="Ella me ve"
             english="She sees me"
-            translation="Ella me ve"
+            translation="She sees me"
           />
           <Example 
             spanish="Yo los conozco"
             english="I know them"
-            translation="Yo los conozco"
+            translation="I know them"
           />
           <Example 
             spanish="El libro me gusta"
             english="I like the book"
-            translation="Me gusta el libro (literalmente: El libro me gusta)"
+            translation="I like the book"
           />
         </div>
 
         <Tip type="success">
-          <strong>Consejo:</strong> Los pronombres de objeto van después del verbo o después de preposiciones.
+          <strong>Tip:</strong> Object pronouns go after the verb or after prepositions.
         </Tip>
       </TheorySection>
 
-      <TheorySection title="Reflexive Pronouns (Pronombres Reflexivos)" icon="🔄">
+      <TheorySection title="Reflexive Pronouns" icon="🔄">
         <p style={{ fontSize: '1rem', lineHeight: 1.6, color: '#4a5568', marginBottom: '1rem' }}>
-          Los pronombres reflexivos se usan cuando el sujeto y el objeto son la misma persona o cosa.
+          Reflexive pronouns are used when the subject and object are the same person or thing.
         </p>
 
         <GrammarTable
-          caption="Pronombres Reflexivos"
-          headers={["Persona", "Singular", "Plural"]}
+          caption="Reflexive Pronouns"
+          headers={["Person", "Singular", "Plural"]}
           rows={[
-            ["1ª persona", "myself", "ourselves"],
-            ["2ª persona", "yourself", "yourselves"],
-            ["3ª persona", "himself/herself/itself", "themselves"]
+            ["1st person", "myself", "ourselves"],
+            ["2nd person", "yourself", "yourselves"],
+            ["3rd person", "himself/herself/itself", "themselves"]
           ]}
         />
 
@@ -178,36 +178,36 @@ const PronounsPage = () => {
           <Example 
             spanish="Yo me lavo las manos"
             english="I wash my hands"
-            translation="Yo me lavo las manos"
+            translation="I wash my hands"
           />
           <Example 
             spanish="Ella se peina"
             english="She combs her hair"
-            translation="Ella se peina"
+            translation="She combs her hair"
           />
           <Example 
             spanish="Nosotros nos divertimos"
             english="We enjoy ourselves"
-            translation="Nosotros nos divertimos"
+            translation="We enjoy ourselves"
           />
         </div>
 
         <Tip type="info">
-          <strong>Uso común:</strong> Los pronombres reflexivos también se usan para enfatizar: "I myself did it" (Yo mismo lo hice).
+          <strong>Common use:</strong> Reflexive pronouns are also used for emphasis: "I myself did it".
         </Tip>
       </TheorySection>
 
-      <TheorySection title="Demonstrative Pronouns (Pronombres Demostrativos)" icon="👉">
+      <TheorySection title="Demonstrative Pronouns" icon="👉">
         <p style={{ fontSize: '1rem', lineHeight: 1.6, color: '#4a5568', marginBottom: '1rem' }}>
-          Los pronombres demostrativos señalan o indican personas o cosas específicas.
+          Demonstrative pronouns point to or indicate specific people or things.
         </p>
 
         <GrammarTable
-          caption="Pronombres Demostrativos"
-          headers={["Distancia", "Singular", "Plural", "Significado"]}
+          caption="Demonstrative Pronouns"
+          headers={["Distance", "Singular", "Plural", "Meaning"]}
           rows={[
-            ["Cerca", "this", "these", "Este/Esta / Estos/Estas"],
-            ["Lejos", "that", "those", "Ese/Esa / Esos/Esas"]
+            ["Near", "this", "these", "This / These"],
+            ["Far", "that", "those", "That / Those"]
           ]}
         />
 
@@ -215,80 +215,80 @@ const PronounsPage = () => {
           <Example 
             spanish="Este es mi libro"
             english="This is my book"
-            translation="Este es mi libro"
+            translation="This is my book"
           />
           <Example 
             spanish="Esos son mis zapatos"
             english="Those are my shoes"
-            translation="Esos son mis zapatos"
+            translation="Those are my shoes"
           />
           <Example 
             spanish="¿Qué es esto?"
             english="What is this?"
-            translation="¿Qué es esto?"
+            translation="What is this?"
           />
         </div>
 
         <Tip type="warning">
-          <strong>Diferencia:</strong> "This/these" para cosas cercanas, "that/those" para cosas lejanas. 
-          También se usan para referirse a tiempo: "this week" (esta semana), "that year" (ese año).
+          <strong>Difference:</strong> "This/these" for things nearby, "that/those" for things farther away. 
+          They are also used for time: "this week", "that year".
         </Tip>
       </TheorySection>
 
-      <TheorySection title="Errores Comunes" icon="⚠️">
+      <TheorySection title="Common Mistakes" icon="⚠️">
         <div style={{ display: 'grid', gap: '1rem' }}>
           <Tip type="error">
             <strong>Error:</strong> "Me and him are friends" ❌<br/>
-            <strong>Correcto:</strong> "He and I are friends" ✅<br/>
-            <em>En sujeto usamos pronombres personales, no de objeto</em>
+            <strong>Correct:</strong> "He and I are friends" ✅<br/>
+            <em>As subject we use personal pronouns, not object pronouns</em>
           </Tip>
 
           <Tip type="error">
             <strong>Error:</strong> "This book is her" ❌<br/>
-            <strong>Correcto:</strong> "This book is hers" ✅<br/>
-            <em>Después de "is" usamos pronombre posesivo, no determinante</em>
+            <strong>Correct:</strong> "This book is hers" ✅<br/>
+            <em>After "is" we use a possessive pronoun, not a determiner</em>
           </Tip>
 
           <Tip type="error">
             <strong>Error:</strong> "I hurt me" ❌<br/>
-            <strong>Correcto:</strong> "I hurt myself" ✅<br/>
-            <em>Para acciones reflexivas usamos pronombres reflexivos</em>
+            <strong>Correct:</strong> "I hurt myself" ✅<br/>
+            <em>For reflexive actions we use reflexive pronouns</em>
           </Tip>
 
           <Tip type="error">
             <strong>Error:</strong> "Its a beautiful day" ❌<br/>
-            <strong>Correcto:</strong> "It's a beautiful day" ✅<br/>
-            <em>"It's" = "it is", "its" = posesivo</em>
+            <strong>Correct:</strong> "It's a beautiful day" ✅<br/>
+            <em>"It's" = "it is", "its" = possessive</em>
           </Tip>
         </div>
       </TheorySection>
 
-      <TheorySection title="Reglas Importantes" icon="⚡">
+      <TheorySection title="Important Rules" icon="⚡">
         <div style={{ display: 'grid', gap: '1rem' }}>
           <Rule 
-            title="1. Orden de cortesía"
-            description="Cuando hablamos de nosotros y otra persona, siempre ponemos a la otra persona primero."
+            title="1. Order of politeness"
+            description="When we talk about ourselves and another person, we always put the other person first."
             examples={[
-              "You and I are friends (Tú y yo somos amigos)",
-              "He and she are married (Él y ella están casados)"
+              "You and I are friends",
+              "He and she are married"
             ]}
           />
 
           <Rule 
-            title="2. Pronombres después de preposiciones"
-            description="Después de preposiciones siempre usamos pronombres de objeto."
+            title="2. Pronouns after prepositions"
+            description="After prepositions we always use object pronouns."
             examples={[
-              "This is for you (Esto es para ti)",
-              "Come with me (Ven conmigo)"
+              "This is for you",
+              "Come with me"
             ]}
           />
 
           <Rule 
-            title="3. Pronombres posesivos vs determinantes"
-            description="Determinantes van antes del sustantivo, pronombres reemplazan al sustantivo."
+            title="3. Possessive pronouns vs determiners"
+            description="Determiners go before the noun; pronouns replace the noun."
             examples={[
-              "My book (mi libro) vs This is mine (esto es mío)",
-              "Her car (su coche) vs The car is hers (el coche es suyo)"
+              "My book vs This is mine",
+              "Her car vs The car is hers"
             ]}
           />
         </div>
@@ -307,12 +307,12 @@ const PronounsPage = () => {
         "Me, Mine"
       ]}
       correctAnswer={0}
-      explanation="Como sujeto usamos 'I' y como determinante posesivo usamos 'My'."
+      explanation="As subject we use 'I' and as possessive determiner we use 'My'."
     />,
 
     <MultipleChoiceExercise
       key="2"
-      question="¿Cuál es la forma correcta para completar: 'This book is ___'?"
+      question="Which is the correct form to complete: 'This book is ___'?"
       options={[
         "my",
         "mine",
@@ -320,7 +320,7 @@ const PronounsPage = () => {
         "myself"
       ]}
       correctAnswer={1}
-      explanation="Después de 'is' necesitamos un pronombre posesivo que reemplace al sustantivo. 'Mine' significa 'mío'."
+      explanation="After 'is' we need a possessive pronoun that replaces the noun. 'Mine' means 'belonging to me'."
     />,
 
     <TrueFalseExercise
@@ -329,29 +329,29 @@ const PronounsPage = () => {
         {
           text: "'Me and him went to the store' is correct.",
           isTrue: false,
-          explanation: "Incorrecto. En sujeto usamos pronombres personales: 'He and I went to the store'."
+          explanation: "Incorrect. As subject we use personal pronouns: 'He and I went to the store'."
         },
         {
           text: "'This is my book' and 'This book is mine' are both correct.",
           isTrue: true,
-          explanation: "Correcto. 'My' es determinante posesivo, 'mine' es pronombre posesivo."
+          explanation: "Correct. 'My' is a possessive determiner, 'mine' is a possessive pronoun."
         },
         {
           text: "'Its' and 'it's' mean the same thing.",
           isTrue: false,
-          explanation: "Incorrecto. 'Its' es posesivo (su/suyo), 'it's' es contracción de 'it is'."
+          explanation: "Incorrect. 'Its' is possessive, 'it's' is a contraction of 'it is'."
         },
         {
           text: "'I hurt myself' is correct for reflexive actions.",
           isTrue: true,
-          explanation: "Correcto. Para acciones reflexivas usamos pronombres reflexivos."
+          explanation: "Correct. For reflexive actions we use reflexive pronouns."
         }
       ]}
     />,
 
     <MultipleChoiceExercise
       key="4"
-      question="¿Cuál es la forma correcta para completar: 'She gave the book to ___'?"
+      question="Which is the correct form to complete: 'She gave the book to ___'?"
       options={[
         "I",
         "me",
@@ -359,12 +359,12 @@ const PronounsPage = () => {
         "mine"
       ]}
       correctAnswer={1}
-      explanation="Después de la preposición 'to' usamos pronombres de objeto. 'Me' es el pronombre de objeto para 'I'."
+      explanation="After the preposition 'to' we use object pronouns. 'Me' is the object pronoun for 'I'."
     />,
 
     <MultipleChoiceExercise
       key="5"
-      question="¿Cuál es la forma correcta para completar: '___ and ___ are going to the party'?"
+      question="Which is the correct form to complete: '___ and ___ are going to the party'?"
       options={[
         "Me, him",
         "I, he",
@@ -372,7 +372,7 @@ const PronounsPage = () => {
         "Mine, his"
       ]}
       correctAnswer={1}
-      explanation="En sujeto usamos pronombres personales: 'I' y 'he'. Además, seguimos el orden de cortesía poniendo 'I' al final."
+      explanation="As subject we use personal pronouns: 'I' and 'he'. We also follow the order of politeness by putting 'I' last."
     />,
 
     <MultipleChoiceExercise
@@ -385,12 +385,12 @@ const PronounsPage = () => {
         "she"
       ]}
       correctAnswer={1}
-      explanation="Para acciones reflexivas usamos pronombres reflexivos: 'herself'."
+      explanation="For reflexive actions we use reflexive pronouns: 'herself'."
     />,
 
     <MultipleChoiceExercise
       key="7"
-      question="¿Cuál es correcto?"
+      question="Which is correct?"
       options={[
         "This car is her",
         "This car is hers",
@@ -398,7 +398,7 @@ const PronounsPage = () => {
         "This car is herself"
       ]}
       correctAnswer={1}
-      explanation="'Hers' es el pronombre posesivo que reemplaza al sustantivo. 'Her' sería determinante: 'her car'."
+      explanation="'Hers' is the possessive pronoun that replaces the noun. 'Her' would be a determiner: 'her car'."
     />,
 
     <MultipleChoiceExercise
@@ -411,7 +411,7 @@ const PronounsPage = () => {
         "mine"
       ]}
       correctAnswer={1}
-      explanation="Después de preposiciones como 'between' usamos pronombres de objeto: 'me'."
+      explanation="After prepositions like 'between' we use object pronouns: 'me'."
     />,
 
     <MultipleChoiceExercise
@@ -424,12 +424,12 @@ const PronounsPage = () => {
         "Theirs, our"
       ]}
       correctAnswer={0}
-      explanation="'Their house' (determinante) y 'ours' (pronombre posesivo que reemplaza 'our house')."
+      explanation="'Their house' (determiner) and 'ours' (possessive pronoun that replaces 'our house')."
     />,
 
     <MultipleChoiceExercise
       key="10"
-      question="¿Cuál es la forma correcta?"
+      question="Which is the correct form?"
       options={[
         "Who's book is this?",
         "Whose book is this?",
@@ -437,43 +437,21 @@ const PronounsPage = () => {
         "Whos book is this?"
       ]}
       correctAnswer={1}
-      explanation="'Whose' es el pronombre interrogativo posesivo. 'Who's' = 'who is'."
+      explanation="'Whose' is the interrogative possessive pronoun. 'Who's' = 'who is'."
     />
   ];
 
   return (
     <TheoryLayout
       title="Pronouns"
-      description="Domina todos los tipos de pronombres en inglés: personales, posesivos, de objeto, reflexivos y demostrativos. Esencial para hablar con fluidez."
+      description="Master all types of pronouns in English: personal, possessive, object, reflexive, and demonstrative. Essential for speaking fluently."
       level="A1-A2-B1-B2-C1-C2"
       theoryContent={theoryContent}
       exercises={exercises}
-      prerequisites={["Verb to be", "Nociones básicas de sustantivos"]}
+      prerequisites={["Verb to be", "Basic understanding of nouns"]}
       estimatedTime="50 min"
     />
   );
 };
 
 export default PronounsPage;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

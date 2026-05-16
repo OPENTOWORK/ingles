@@ -6,152 +6,152 @@ import { MultipleChoiceExercise, TrueFalseExercise } from '@/components/theory/E
 const OpenClozePage = () => {
   const theoryContent = (
     <div>
-      <TheorySection title="¿Qué es Open Cloze?" icon="📝">
+      <TheorySection title="What is Open Cloze?" icon="📝">
         <p>
-          <strong>Open Cloze</strong> es la Parte 2 del examen Use of English en First Certificate (B2) y Advanced (C1). 
-          Debes completar 8 espacios en blanco en un texto sin opciones múltiples, usando solo UNA palabra por espacio. 
-          Este ejercicio evalúa gramática, vocabulario funcional y comprensión contextual.
+          <strong>Open Cloze</strong> is Part 2 of the Use of English paper in First Certificate (B2) and Advanced (C1). 
+          You must complete 8 blanks in a text with no multiple-choice options, using only ONE word per gap. 
+          This task tests grammar, functional vocabulary, and contextual understanding.
         </p>
         
         <Example 
-          title="Ejemplo de Open Cloze"
+          title="Open Cloze example"
           content="The weather was terrible yesterday. It _____ raining all day and the wind was very strong. People had to _____ inside their houses because _____ was dangerous to go out."
-          explanation="Respuestas: was, stay, it. Debes usar contexto y gramática para encontrar las palabras correctas."
+          explanation="Answers: was, stay, it. You must use context and grammar to find the correct words."
         />
       </TheorySection>
 
-      <TheorySection title="Estrategias Principales" icon="🎯">
+      <TheorySection title="Main strategies" icon="🎯">
         <div style={{ display: 'grid', gap: '1rem' }}>
           <Rule 
-            title="1. Lee todo el texto primero"
-            description="Entiende el tema general antes de completar los espacios."
+            title="1. Read the whole text first"
+            description="Grasp the general topic before filling the gaps."
             examples={[
-              "Identifica si es formal o informal",
-              "Reconoce el tema principal",
-              "Nota el tiempo verbal predominante",
-              "Observa el estilo del texto"
+              "Identify whether the tone is formal or informal",
+              "Recognise the main theme",
+              "Note the dominant tense",
+              "Observe the style of the text"
             ]}
           />
 
           <Rule 
-            title="2. Analiza el contexto inmediato"
-            description="Mira las palabras antes y después del espacio."
+            title="2. Analyse the immediate context"
+            description="Look at the words before and after the gap."
             examples={[
-              "Preposiciones que requieren palabras específicas",
-              "Artículos que indican sustantivos",
-              "Auxiliares que indican verbos principales",
-              "Conectores que unen ideas"
+              "Prepositions that require specific words",
+              "Articles that signal nouns",
+              "Auxiliaries that signal main verbs",
+              "Connectors that link ideas"
             ]}
           />
 
           <Rule 
-            title="3. Considera la gramática"
-            description="Piensa en qué tipo de palabra necesitas."
+            title="3. Consider grammar"
+            description="Think about what type of word you need."
             examples={[
-              "¿Necesitas un sustantivo, verbo, adjetivo?",
-              "¿Qué tiempo verbal es apropiado?",
-              "¿Singular o plural?",
-              "¿Forma positiva o negativa?"
+              "Do you need a noun, verb, or adjective?",
+              "Which tense fits best?",
+              "Singular or plural?",
+              "Positive or negative form?"
             ]}
           />
         </div>
       </TheorySection>
 
-      <TheorySection title="Tipos comunes de palabras en certificación B2" icon="🔍">
+      <TheorySection title="Common word types at B2 certification level" icon="🔍">
         <div style={{ display: 'grid', gap: '1rem' }}>
           <Rule 
-            title="1. Palabras funcionales (70% del examen)"
-            description="Las más frecuentes en ejercicios tipo Open Cloze."
+            title="1. Function words (about 70% of the task)"
+            description="The most frequent type in Open Cloze exercises."
             examples={[
-              "Artículos: a, an, the (especialmente 'the' con superlativos)",
-              "Preposiciones: in, on, at, for, with, by, of, from",
-              "Pronombres: it, they, them, this, that, which, who",
-              "Auxiliares: do, does, did, will, would, have, has, had"
+              "Articles: a, an, the (especially 'the' with superlatives)",
+              "Prepositions: in, on, at, for, with, by, of, from",
+              "Pronouns: it, they, them, this, that, which, who",
+              "Auxiliaries: do, does, did, will, would, have, has, had"
             ]}
           />
 
           <Rule 
-            title="2. Conectores y transiciones"
-            description="Palabras que unen ideas y párrafos."
+            title="2. Connectors and transitions"
+            description="Words that join ideas and paragraphs."
             examples={[
-              "Contraste: but, however, although",
-              "Adición: and, also, furthermore",
-              "Resultado: so, therefore, consequently",
-              "Tiempo: when, while, after, before"
+              "Contrast: but, however, although",
+              "Addition: and, also, furthermore",
+              "Result: so, therefore, consequently",
+              "Time: when, while, after, before"
             ]}
           />
 
           <Rule 
-            title="3. Palabras de contenido"
-            description="Sustantivos, verbos, adjetivos comunes."
+            title="3. Content words"
+            description="Common nouns, verbs, and adjectives."
             examples={[
-              "Verbos frecuentes: make, take, get, go",
-              "Sustantivos comunes: time, way, people, work",
-              "Adjetivos básicos: good, bad, big, small",
-              "Adverbios: very, really, quite, rather"
+              "Frequent verbs: make, take, get, go",
+              "Common nouns: time, way, people, work",
+              "Basic adjectives: good, bad, big, small",
+              "Adverbs: very, really, quite, rather"
             ]}
           />
         </div>
       </TheorySection>
 
-      <TheorySection title="Reglas Importantes" icon="⚡">
+      <TheorySection title="Important rules" icon="⚡">
         <div style={{ display: 'grid', gap: '1rem' }}>
           <Rule 
-            title="1. Una palabra por espacio"
-            description="Generalmente solo necesitas una palabra por espacio."
+            title="1. One word per gap"
+            description="You usually need only one word per gap."
             examples={[
-              "No uses contracciones (don't → do not)",
-              "Evita frases largas",
-              "Piensa en la palabra más simple",
-              "Considera palabras de alta frecuencia"
+              "Do not use contractions (don't → do not)",
+              "Avoid long phrases",
+              "Think of the simplest word that fits",
+              "Consider high-frequency words"
             ]}
           />
 
           <Rule 
-            title="2. Consistencia textual"
-            description="Mantén consistencia con el resto del texto."
+            title="2. Textual consistency"
+            description="Stay consistent with the rest of the text."
             examples={[
-              "Mismo registro (formal/informal)",
-              "Mismo tiempo verbal cuando sea apropiado",
-              "Mismo estilo de vocabulario",
-              "Coherencia temática"
+              "Same register (formal/informal)",
+              "Same tense where appropriate",
+              "Same style of vocabulary",
+              "Thematic coherence"
             ]}
           />
 
           <Rule 
-            title="3. Verificación final"
-            description="Siempre revisa tus respuestas en contexto."
+            title="3. Final check"
+            description="Always review your answers in context."
             examples={[
-              "Lee la oración completa con tu respuesta",
-              "Verifica que tenga sentido gramaticalmente",
-              "Confirma que el significado sea lógico",
-              "Revisa la ortografía"
+              "Read the full sentence with your answer",
+              "Check it is grammatically sound",
+              "Confirm the meaning is logical",
+              "Check spelling"
             ]}
           />
         </div>
       </TheorySection>
 
-      <TheorySection title="Estrategias específicas para el examen" icon="🎯">
+      <TheorySection title="Exam-specific strategies" icon="🎯">
         <div style={{ display: 'grid', gap: '1rem' }}>
           <Rule 
-            title="Gestión del tiempo (10-12 minutos)"
-            description="Distribución recomendada para Open Cloze en el examen."
+            title="Time management (10–12 minutes)"
+            description="Suggested timing for Open Cloze in the exam."
             examples={[
-              "2-3 minutos: Lectura inicial completa del texto",
-              "5-6 minutos: Completar los 8 espacios",
-              "2-3 minutos: Revisión y verificación final",
-              "No gastes más de 1 minuto por respuesta"
+              "2–3 minutes: full first read of the text",
+              "5–6 minutes: complete all 8 gaps",
+              "2–3 minutes: final review and checking",
+              "Do not spend more than about 1 minute per answer"
             ]}
           />
 
           <Rule 
-            title="Patrones frecuentes en el examen"
-            description="Estructuras que aparecen regularmente en los exámenes."
+            title="Frequent exam patterns"
+            description="Structures that often appear in papers."
             examples={[
               "Phrasal verbs: look forward TO, depend ON",
-              "Expresiones fijas: in spite OF, as well AS",
-              "Estructuras comparativas: as... as, more... than",
-              "Condicionales: if, unless, provided THAT"
+              "Fixed expressions: in spite OF, as well AS",
+              "Comparative structures: as... as, more... than",
+              "Conditionals: if, unless, provided THAT"
             ]}
           />
         </div>
@@ -162,47 +162,47 @@ const OpenClozePage = () => {
   const exercises = [
     <MultipleChoiceExercise
       key="1"
-      question="En Open Cloze, ¿cuántas palabras debes usar generalmente por espacio?"
+      question="In Open Cloze, how many words should you generally use per gap?"
       options={[
-        "Tantas como necesites",
-        "Una palabra",
-        "Dos o tres palabras",
-        "Depende del contexto"
+        "As many as you need",
+        "One word",
+        "Two or three words",
+        "It depends on the context"
       ]}
       correctAnswer={1}
-      explanation="En Open Cloze generalmente debes usar solo una palabra por espacio, evitando contracciones y frases largas."
+      explanation="In Open Cloze you generally use only one word per gap, avoiding contractions and long phrases."
     />,
 
     <MultipleChoiceExercise
       key="2"
-      question="¿Cuál es la primera estrategia recomendada para Open Cloze?"
+      question="What is the first recommended strategy for Open Cloze?"
       options={[
-        "Completar los espacios inmediatamente",
-        "Leer todo el texto primero",
-        "Contar los espacios en blanco",
-        "Buscar palabras difíciles"
+        "Fill the gaps immediately",
+        "Read the whole text first",
+        "Count the blanks",
+        "Look for difficult words"
       ]}
       correctAnswer={1}
-      explanation="Debes leer todo el texto primero para entender el contexto general antes de completar los espacios."
+      explanation="You should read the whole text first to understand the general context before filling the gaps."
     />,
 
     <TrueFalseExercise
       key="3"
       statements={[
         {
-          text: "En Open Cloze puedes usar contracciones como 'don't' o 'can't'.",
+          text: "In Open Cloze you can use contractions like 'don't' or 'can't'.",
           isTrue: false,
-          explanation: "Incorrecto. En Open Cloze generalmente debes evitar contracciones y usar formas completas."
+          explanation: "Incorrect. In Open Cloze you should generally avoid contractions and use full forms."
         },
         {
-          text: "El contexto inmediato es importante para elegir la palabra correcta.",
+          text: "The immediate context is important for choosing the right word.",
           isTrue: true,
-          explanation: "Correcto. Las palabras antes y después del espacio te dan pistas importantes sobre qué palabra necesitas."
+          explanation: "Correct. The words before and after the gap give important clues about which word you need."
         },
         {
-          text: "Solo necesitas considerar la gramática, no el significado.",
+          text: "You only need to consider grammar, not meaning.",
           isTrue: false,
-          explanation: "Incorrecto. Debes considerar tanto la gramática como el significado y el contexto del texto."
+          explanation: "Incorrect. You must consider grammar, meaning, and the context of the whole text."
         }
       ]}
     />,
@@ -217,39 +217,39 @@ const OpenClozePage = () => {
         "from"
       ]}
       correctAnswer={1}
-      explanation="'For' se usa con períodos de tiempo (five years). 'Since' se usa con puntos específicos en el tiempo."
+      explanation="'For' is used with periods of time (five years). 'Since' is used with specific points in time."
     />,
 
     <MultipleChoiceExercise
       key="5"
-      question="¿Qué tipo de palabras son más comunes en Open Cloze?"
+      question="What type of words are most common in Open Cloze?"
       options={[
-        "Palabras técnicas especializadas",
-        "Palabras funcionales y conectores",
-        "Nombres propios",
-        "Palabras muy largas"
+        "Highly technical words",
+        "Function words and connectors",
+        "Proper nouns",
+        "Very long words"
       ]}
       correctAnswer={1}
-      explanation="Las palabras funcionales (artículos, preposiciones, auxiliares) y conectores son las más comunes en Open Cloze."
+      explanation="Function words (articles, prepositions, auxiliaries) and connectors are the most common in Open Cloze."
     />,
 
     <TrueFalseExercise
       key="6"
       statements={[
         {
-          text: "Debes mantener consistencia con el registro del texto.",
+          text: "You should keep to the register of the text.",
           isTrue: true,
-          explanation: "Correcto. Si el texto es formal, tus respuestas deben ser formales; si es informal, deben ser informales."
+          explanation: "Correct. If the text is formal, your answers should be formal; if informal, they should be informal."
         },
         {
-          text: "No importa el tiempo verbal del resto del texto.",
+          text: "The tense used elsewhere in the text does not matter.",
           isTrue: false,
-          explanation: "Incorrecto. Debes mantener consistencia con el tiempo verbal predominante cuando sea apropiado."
+          explanation: "Incorrect. You should stay consistent with the dominant tense where appropriate."
         },
         {
-          text: "Siempre debes revisar tus respuestas en contexto.",
+          text: "You should always check your answers in context.",
           isTrue: true,
-          explanation: "Correcto. Es importante leer la oración completa con tu respuesta para verificar que tenga sentido."
+          explanation: "Correct. It is important to read the full sentence with your answer to check it makes sense."
         }
       ]}
     />,
@@ -264,34 +264,34 @@ const OpenClozePage = () => {
         "by"
       ]}
       correctAnswer={1}
-      explanation="'On' se usa con días específicos: 'on Monday morning'. 'In' se usa con meses/años, 'at' con horas específicas."
+      explanation="'On' is used with specific days: 'on Monday morning'. 'In' is used with months/years, 'at' with specific times."
     />,
 
     <MultipleChoiceExercise
       key="8"
-      question="¿Cuál es la mejor estrategia cuando no estás seguro de una respuesta?"
+      question="What is the best strategy when you are not sure of an answer?"
       options={[
-        "Dejar el espacio en blanco",
-        "Escribir cualquier palabra",
-        "Analizar el contexto y la gramática cuidadosamente",
-        "Copiar una palabra del texto"
+        "Leave the gap blank",
+        "Write any word",
+        "Analyse context and grammar carefully",
+        "Copy a word from the text"
       ]}
       correctAnswer={2}
-      explanation="Debes analizar cuidadosamente el contexto y la gramática para hacer la mejor estimación posible."
+      explanation="You should analyse context and grammar carefully to make the best possible guess."
     />,
 
     <TrueFalseExercise
       key="9"
       statements={[
         {
-          text: "Los conectores como 'however' y 'therefore' son comunes en Open Cloze.",
+          text: "Connectors like 'however' and 'therefore' are common in Open Cloze.",
           isTrue: true,
-          explanation: "Correcto. Los conectores que unen ideas son muy frecuentes en este tipo de ejercicio."
+          explanation: "Correct. Connectors that link ideas are very common in this type of task."
         },
         {
-          text: "Debes usar siempre la palabra más compleja que conozcas.",
+          text: "You should always use the most complex word you know.",
           isTrue: false,
-          explanation: "Incorrecto. Es mejor usar palabras simples y de alta frecuencia que encajen perfectamente en el contexto."
+          explanation: "Incorrect. It is better to use simple, high-frequency words that fit the context perfectly."
         }
       ]}
     />,
@@ -306,14 +306,14 @@ const OpenClozePage = () => {
         "although"
       ]}
       correctAnswer={0}
-      explanation="'If' es correcto para esta estructura condicional de tercer tipo: 'would have + past participle' + 'if' + 'had + past participle'."
+      explanation="'If' is correct for this third conditional pattern: 'would have + past participle' + 'if' + 'had + past participle'."
     />
   ];
 
   return (
     <TheoryLayout
       title="Open Cloze"
-      description="Domina los ejercicios de Open Cloze. Aprende estrategias para completar espacios en blanco usando contexto, gramática y vocabulario apropiado."
+      description="Master Open Cloze tasks. Learn strategies for completing blanks using context, grammar, and appropriate vocabulary."
       level="B2-C1-C2"
       theoryContent={theoryContent}
       exercises={exercises}

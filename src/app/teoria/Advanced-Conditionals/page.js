@@ -18,35 +18,35 @@ import {
 const AdvancedConditionalsPage = () => {
   const theoryContent = (
     <div>
-      <TheorySection title="Condicionales Avanzados" icon="🎭">
+      <TheorySection title="Advanced Conditionals" icon="🎭">
         <p style={{ fontSize: '1.1rem', lineHeight: 1.6, color: '#4a5568', marginBottom: '1rem' }}>
-          Los <strong>condicionales avanzados</strong> van más allá de las estructuras básicas (if + will, if + would). 
-          Incluyen condicionales mixtos, inversión, y estructuras alternativas que expresan matices más sofisticados 
-          de posibilidad, probabilidad y arrepentimiento.
+          <strong>Advanced conditionals</strong> go beyond basic structures (if + will, if + would). 
+          They include mixed conditionals, inversion, and alternative structures that express more sophisticated 
+          nuances of possibility, probability, and regret.
         </p>
         
         <QuickReference items={[
-          "Condicionales mixtos: combinan diferentes tiempos",
-          "Inversión: estructuras formales sin 'if'",
-          "Alternativas: unless, provided that, supposing",
-          "Expresan matices complejos de significado",
-          "Esenciales para niveles C1-C2"
+          "Mixed conditionals: combine different tenses",
+          "Inversion: formal structures without 'if'",
+          "Alternatives: unless, provided that, supposing",
+          "Express complex shades of meaning",
+          "Essential for C1–C2 levels"
         ]} />
       </TheorySection>
 
-      <TheorySection title="Condicionales Mixtos" icon="🔄">
+      <TheorySection title="Mixed Conditionals" icon="🔄">
         <p style={{ fontSize: '1rem', lineHeight: 1.6, color: '#4a5568', marginBottom: '1rem' }}>
-          Los condicionales mixtos combinan diferentes períodos de tiempo para expresar relaciones complejas entre causa y efecto.
+          Mixed conditionals combine different time frames to express complex relationships between cause and effect.
         </p>
 
         <GrammarTable
-          caption="Tipos de Condicionales Mixtos"
-          headers={["Tipo", "Estructura", "Uso", "Ejemplo"]}
+          caption="Types of Mixed Conditionals"
+          headers={["Type", "Structure", "Use", "Example"]}
           rows={[
-            ["Pasado → Presente", "If + past perfect, would + infinitive", "Causa pasada, efecto presente", "If I had studied medicine, I would be a doctor now"],
-            ["Presente → Pasado", "If + past simple, would have + past participle", "Causa presente/general, efecto pasado", "If I were more careful, I wouldn't have broken it"],
-            ["Pasado → Futuro", "If + past perfect, would + infinitive", "Causa pasada, efecto futuro", "If I had saved money, I would travel next year"],
-            ["Presente → Futuro", "If + past simple, will + infinitive", "Causa presente, efecto futuro probable", "If you are late, you will miss the train"]
+            ["Past → Present", "If + past perfect, would + infinitive", "Past cause, present effect", "If I had studied medicine, I would be a doctor now"],
+            ["Present → Past", "If + past simple, would have + past participle", "Present/general cause, past effect", "If I were more careful, I wouldn't have broken it"],
+            ["Past → Future", "If + past perfect, would + infinitive", "Past cause, future effect", "If I had saved money, I would travel next year"],
+            ["Present → Future", "If + past simple, will + infinitive", "Present cause, probable future effect", "If you are late, you will miss the train"]
           ]}
         />
 
@@ -54,30 +54,30 @@ const AdvancedConditionalsPage = () => {
           <Example 
             spanish="Si hubiera nacido en Francia, hablaría francés perfectamente ahora."
             english="If I had been born in France, I would speak French perfectly now."
-            translation="Causa pasada (nacer en Francia) → Efecto presente (hablar francés)"
+            translation="Past cause (being born in France) → present effect (speaking French)"
           />
           
           <Example 
             spanish="Si fuera más organizado, no habría perdido las llaves ayer."
             english="If I were more organized, I wouldn't have lost my keys yesterday."
-            translation="Causa presente/general (ser organizado) → Efecto pasado (perder llaves)"
+            translation="Present/general cause (being organized) → past effect (losing keys)"
           />
         </div>
 
         <Tip type="info">
-          <strong>Clave:</strong> Los condicionales mixtos reflejan cómo las acciones de diferentes tiempos 
-          se relacionan en la vida real.
+          <strong>Key point:</strong> Mixed conditionals reflect how actions in different time frames 
+          relate to each other in real life.
         </Tip>
       </TheorySection>
 
-      <TheorySection title="Inversión en Condicionales" icon="🔄">
+      <TheorySection title="Inversion in Conditionals" icon="🔄">
         <p style={{ fontSize: '1rem', lineHeight: 1.6, color: '#4a5568', marginBottom: '1rem' }}>
-          En inglés formal, podemos omitir 'if' e invertir el sujeto y el auxiliar. Esto es común en escritura académica y formal.
+          In formal English, we can omit 'if' and invert the subject and auxiliary. This is common in academic and formal writing.
         </p>
 
         <GrammarTable
-          caption="Estructuras de Inversión"
-          headers={["Condicional Normal", "Con Inversión", "Auxiliar Usado"]}
+          caption="Inversion Structures"
+          headers={["Normal Conditional", "With Inversion", "Auxiliary Used"]}
           rows={[
             ["If I were you...", "Were I you...", "were"],
             ["If I had known...", "Had I known...", "had"],
@@ -91,37 +91,37 @@ const AdvancedConditionalsPage = () => {
           <Example 
             spanish="Si hubiera sabido sobre el problema..."
             english="Had I known about the problem, I would have acted differently."
-            translation="Estructura formal equivalente a 'If I had known...'"
+            translation="Formal structure equivalent to 'If I had known...'"
           />
           
           <Example 
             spanish="Si necesitaras ayuda..."
             english="Should you need any assistance, please don't hesitate to contact us."
-            translation="Estructura formal para ofertas educadas"
+            translation="Formal structure for polite offers"
           />
         </div>
 
         <Tip type="success">
-          <strong>Registro:</strong> La inversión es muy formal. Úsala en escritura académica, cartas formales, 
-          y presentaciones profesionales.
+          <strong>Register:</strong> Inversion is very formal. Use it in academic writing, formal letters, 
+          and professional presentations.
         </Tip>
       </TheorySection>
 
-      <TheorySection title="Alternativas a 'If'" icon="🚪">
+      <TheorySection title="Alternatives to 'If'" icon="🚪">
         <p style={{ fontSize: '1rem', lineHeight: 1.6, color: '#4a5568', marginBottom: '1rem' }}>
-          Existen muchas alternativas a 'if' que añaden matices específicos al significado condicional.
+          There are many alternatives to 'if' that add specific nuances to conditional meaning.
         </p>
 
         <GrammarTable
-          caption="Conectores Condicionales Alternativos"
-          headers={["Conector", "Significado", "Ejemplo", "Registro"]}
+          caption="Alternative Conditional Connectors"
+          headers={["Connector", "Meaning", "Example", "Register"]}
           rows={[
-            ["unless", "if not / excepto si", "Unless it rains, we'll go out", "Neutral"],
-            ["provided (that)", "con la condición de que", "I'll help, provided you pay me", "Formal"],
-            ["as long as", "mientras que / con tal de que", "You can stay as long as you're quiet", "Informal"],
-            ["supposing", "suponiendo que", "Supposing he doesn't come, what then?", "Neutral"],
-            ["on condition that", "con la condición de que", "I'll agree on condition that you sign", "Formal"],
-            ["in case", "por si acaso", "Take an umbrella in case it rains", "Neutral"]
+            ["unless", "if not / except if", "Unless it rains, we'll go out", "Neutral"],
+            ["provided (that)", "on condition that", "I'll help, provided you pay me", "Formal"],
+            ["as long as", "while / on condition that", "You can stay as long as you're quiet", "Informal"],
+            ["supposing", "supposing that", "Supposing he doesn't come, what then?", "Neutral"],
+            ["on condition that", "on condition that", "I'll agree on condition that you sign", "Formal"],
+            ["in case", "in case / just in case", "Take an umbrella in case it rains", "Neutral"]
           ]}
         />
 
@@ -129,36 +129,36 @@ const AdvancedConditionalsPage = () => {
           <Example 
             spanish="No iré a menos que me invites."
             english="I won't go unless you invite me."
-            translation="'Unless' = 'if not' (si no me invitas)"
+            translation="'Unless' = 'if not' (if you don't invite me)"
           />
           
           <Example 
             spanish="Puedes quedarte con tal de que ayudes."
             english="You can stay as long as you help out."
-            translation="'As long as' expresa condición con matiz de duración"
+            translation="'As long as' expresses a condition with a sense of duration"
           />
         </div>
 
         <Tip type="warning">
-          <strong>¡Cuidado!</strong> 'Unless' ya significa 'if not', así que no uses negación doble: 
+          <strong>Watch out!</strong> 'Unless' already means 'if not', so don't use double negation: 
           "Unless you don't study" ❌ → "Unless you study" ✅
         </Tip>
       </TheorySection>
 
-      <TheorySection title="Condicionales Implícitos" icon="🎭">
+      <TheorySection title="Implicit Conditionals" icon="🎭">
         <p style={{ fontSize: '1rem', lineHeight: 1.6, color: '#4a5568', marginBottom: '1rem' }}>
-          A veces expresamos condiciones sin usar estructuras condicionales explícitas.
+          Sometimes we express conditions without using explicit conditional structures.
         </p>
 
         <Rule 
-          title="Formas de expresar condiciones implícitas"
-          description="Estructuras que implican condición sin 'if':"
+          title="Ways to express implicit conditions"
+          description="Structures that imply a condition without 'if':"
           examples={[
             "Otherwise / Or else: 'Hurry up, otherwise you'll be late'",
             "But for: 'But for your help, I would have failed'",
             "With/Without: 'With more practice, you'd improve'",
-            "Gerundios: 'Studying harder, you would pass'",
-            "Participios: 'Given more time, I could finish'"
+            "Gerunds: 'Studying harder, you would pass'",
+            "Participles: 'Given more time, I could finish'"
           ]}
         />
 
@@ -166,68 +166,68 @@ const AdvancedConditionalsPage = () => {
           <Example 
             spanish="Sin tu ayuda, habría fracasado."
             english="But for your help, I would have failed."
-            translation="'But for' = 'If it weren't for' (si no fuera por)"
+            translation="'But for' = 'If it weren't for'"
           />
           
           <Example 
             spanish="Con más tiempo, podría terminarlo."
             english="Given more time, I could finish it."
-            translation="Participio que implica condición"
+            translation="Participle that implies a condition"
           />
         </div>
       </TheorySection>
 
-      <TheorySection title="Condicionales en Contexto Académico" icon="🎓">
+      <TheorySection title="Conditionals in Academic Context" icon="🎓">
         <p style={{ fontSize: '1rem', lineHeight: 1.6, color: '#4a5568', marginBottom: '1rem' }}>
-          En escritura académica, los condicionales expresan hipótesis, posibilidades y argumentos complejos.
+          In academic writing, conditionals express hypotheses, possibilities, and complex arguments.
         </p>
 
         <GrammarTable
-          caption="Funciones Académicas de Condicionales"
-          headers={["Función", "Estructura", "Ejemplo Académico"]}
+          caption="Academic Functions of Conditionals"
+          headers={["Function", "Structure", "Academic Example"]}
           rows={[
-            ["Hipótesis", "If + were to", "If we were to increase funding, research would improve"],
-            ["Especulación", "Should + happen to", "Should the experiment fail, we would need new data"],
-            ["Contraste", "If... whereas if", "If theory A is correct, then X. Whereas if theory B applies, then Y"],
-            ["Recomendación", "If I were you", "If I were the researcher, I would replicate the study"],
-            ["Consecuencia", "Unless... will", "Unless we address this issue, the problem will persist"]
+            ["Hypothesis", "If + were to", "If we were to increase funding, research would improve"],
+            ["Speculation", "Should + happen to", "Should the experiment fail, we would need new data"],
+            ["Contrast", "If... whereas if", "If theory A is correct, then X. Whereas if theory B applies, then Y"],
+            ["Recommendation", "If I were you", "If I were the researcher, I would replicate the study"],
+            ["Consequence", "Unless... will", "Unless we address this issue, the problem will persist"]
           ]}
         />
 
         <Tip type="success">
-          <strong>Escritura académica:</strong> Usa condicionales para explorar diferentes escenarios, 
-          presentar hipótesis y discutir implicaciones teóricas.
+          <strong>Academic writing:</strong> Use conditionals to explore different scenarios, 
+          present hypotheses, and discuss theoretical implications.
         </Tip>
       </TheorySection>
 
-      <TheorySection title="Errores Comunes Avanzados" icon="⚠️">
+      <TheorySection title="Common Advanced Mistakes" icon="⚠️">
         <div style={{ display: 'grid', gap: '1rem' }}>
           <Tip type="error">
             <strong>Error:</strong> "If I would have known..." ❌<br/>
-            <strong>Correcto:</strong> "If I had known..." o "Had I known..." ✅<br/>
-            <em>No uses 'would' en la cláusula condicional</em>
+            <strong>Correct:</strong> "If I had known..." or "Had I known..." ✅<br/>
+            <em>Don't use 'would' in the if-clause</em>
           </Tip>
 
           <Tip type="error">
             <strong>Error:</strong> "Unless you won't come..." ❌<br/>
-            <strong>Correcto:</strong> "Unless you come..." ✅<br/>
-            <em>'Unless' ya implica negación</em>
+            <strong>Correct:</strong> "Unless you come..." ✅<br/>
+            <em>'Unless' already implies negation</em>
           </Tip>
 
           <Tip type="error">
-            <strong>Error:</strong> Mezclar tiempos incorrectamente en condicionales mixtos ❌<br/>
-            <strong>Correcto:</strong> Asegurar lógica temporal clara ✅<br/>
-            <em>La relación tiempo debe tener sentido</em>
+            <strong>Error:</strong> Mixing tenses incorrectly in mixed conditionals ❌<br/>
+            <strong>Correct:</strong> Ensure clear temporal logic ✅<br/>
+            <em>The time relationship must make sense</em>
           </Tip>
 
           <Tip type="error">
-            <strong>Error:</strong> Usar inversión en contexto informal ❌<br/>
-            <strong>Correcto:</strong> Reservar inversión para escritura formal ✅<br/>
-            <em>Conoce el registro apropiado</em>
+            <strong>Error:</strong> Using inversion in informal context ❌<br/>
+            <strong>Correct:</strong> Reserve inversion for formal writing ✅<br/>
+            <em>Know the appropriate register</em>
           </Tip>
         </div>
       </TheorySection>
-    </div>
+    </motion.div>
   );
 
   const exercises = [
@@ -241,7 +241,7 @@ const AdvancedConditionalsPage = () => {
         "Should"
       ]}
       correctAnswer={1}
-      explanation="'Had I been born' es la inversión formal de 'If I had been born' en condicionales mixtos."
+      explanation="'Had I been born' is the formal inversion of 'If I had been born' in mixed conditionals."
     />,
 
     <MultipleChoiceExercise
@@ -254,7 +254,7 @@ const AdvancedConditionalsPage = () => {
         "If I study harder, I will pass the exam."
       ]}
       correctAnswer={1}
-      explanation="Esta estructura combina una causa pasada (had studied) con un efecto presente (would pass now)."
+      explanation="This structure combines a past cause (had studied) with a present effect (would pass now)."
     />,
 
     <MultipleChoiceExercise
@@ -267,7 +267,7 @@ const AdvancedConditionalsPage = () => {
         "Were you to have questions"
       ]}
       correctAnswer={0}
-      explanation="'Should you have' es la inversión formal correcta de 'If you should have'."
+      explanation="'Should you have' is the correct formal inversion of 'If you should have'."
     />,
 
     <TrueFalseExercise
@@ -276,22 +276,22 @@ const AdvancedConditionalsPage = () => {
         {
           text: "'Unless' means the same as 'if not'.",
           isTrue: true,
-          explanation: "Correcto. 'Unless' es equivalente a 'if not'."
+          explanation: "Correct. 'Unless' is equivalent to 'if not'."
         },
         {
           text: "Mixed conditionals can combine different time periods.",
           isTrue: true,
-          explanation: "Correcto. Los condicionales mixtos relacionan diferentes tiempos."
+          explanation: "Correct. Mixed conditionals relate different time frames."
         },
         {
           text: "Inversion in conditionals is commonly used in informal speech.",
           isTrue: false,
-          explanation: "Falso. La inversión es una estructura formal, no informal."
+          explanation: "False. Inversion is a formal structure, not informal."
         },
         {
           text: "'But for' can be used to express implicit conditions.",
           isTrue: true,
-          explanation: "Correcto. 'But for' expresa condiciones implícitas."
+          explanation: "Correct. 'But for' expresses implicit conditions."
         }
       ]}
     />,
@@ -306,7 +306,7 @@ const AdvancedConditionalsPage = () => {
         "supposing"
       ]}
       correctAnswer={1}
-      explanation="'Provided that' expresa una condición específica que debe cumplirse."
+      explanation="'Provided that' expresses a specific condition that must be met."
     />,
 
     <MultipleChoiceExercise
@@ -319,7 +319,7 @@ const AdvancedConditionalsPage = () => {
         "Should"
       ]}
       correctAnswer={1}
-      explanation="'Were it not for' es la inversión formal de 'If it were not for'."
+      explanation="'Were it not for' is the formal inversion of 'If it were not for'."
     />,
 
     <MultipleChoiceExercise
@@ -332,7 +332,7 @@ const AdvancedConditionalsPage = () => {
         "If I were more careful, I wouldn't break it."
       ]}
       correctAnswer={0}
-      explanation="Presente (were more careful) → Pasado (wouldn't have broken) es un condicional mixto."
+      explanation="Present (were more careful) → past (wouldn't have broken) is a mixed conditional."
     />,
 
     <MultipleChoiceExercise
@@ -345,7 +345,7 @@ const AdvancedConditionalsPage = () => {
         "Should"
       ]}
       correctAnswer={1}
-      explanation="'Had the circumstances been different' es inversión formal de 'If the circumstances had been different'."
+      explanation="'Had the circumstances been different' is the formal inversion of 'If the circumstances had been different'."
     />,
 
     <MultipleChoiceExercise
@@ -358,7 +358,7 @@ const AdvancedConditionalsPage = () => {
         "will have"
       ]}
       correctAnswer={1}
-      explanation="'I'd rather you had told me' expresa preferencia sobre algo que no ocurrió en el pasado."
+      explanation="'I'd rather you had told me' expresses a preference about something that didn't happen in the past."
     />,
 
     <MultipleChoiceExercise
@@ -371,22 +371,21 @@ const AdvancedConditionalsPage = () => {
         "Unless you will study, you'll fail."
       ]}
       correctAnswer={2}
-      explanation="'Unless' ya implica negación, así que no necesitas 'don't' o 'won't'."
+      explanation="'Unless' already implies negation, so you don't need 'don't' or 'won't'."
     />
   ];
 
   return (
     <TheoryLayout
       title="Advanced Conditionals"
-      description="Domina las estructuras condicionales avanzadas: condicionales mixtos, inversión, alternativas a 'if' y condicionales implícitos para expresar ideas complejas."
+      description="Master advanced conditional structures: mixed conditionals, inversion, alternatives to 'if', and implicit conditionals to express complex ideas."
       level="B2-C1-C2"
       theoryContent={theoryContent}
       exercises={exercises}
-      prerequisites={["Condicionales básicos", "Tiempos verbales avanzados", "Subjuntivo"]}
+      prerequisites={["Basic conditionals", "Advanced verb tenses", "Subjunctive"]}
       estimatedTime="60 min"
     />
   );
 };
 
 export default AdvancedConditionalsPage;
-

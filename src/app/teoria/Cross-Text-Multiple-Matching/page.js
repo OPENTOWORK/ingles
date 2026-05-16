@@ -6,126 +6,126 @@ import { MultipleChoiceExercise, TrueFalseExercise } from '@/components/theory/E
 const CrossTextMultipleMatchingPage = () => {
   const theoryContent = (
     <div>
-      <TheorySection title="¿Qué es Cross-text Multiple Matching?" icon="🔄">
+      <TheorySection title="What is Cross-text Multiple Matching?" icon="🔄">
         <p>
-          <strong>Cross-text Multiple Matching</strong> es un ejercicio avanzado donde debes relacionar información 
-          entre múltiples textos diferentes. Comparas, contrastas y conectas ideas, opiniones o información 
-          específica que aparece en varios textos sobre temas relacionados.
+          <strong>Cross-text Multiple Matching</strong> is an advanced task where you relate information 
+          across several different texts. You compare, contrast, and connect ideas, opinions, or specific 
+          details that appear in multiple texts on related topics.
         </p>
         
         <Example 
-          title="Ejemplo de Cross-text Multiple Matching"
-          content="Tienes 4 textos sobre cambio climático de diferentes autores. Las preguntas pueden ser: '¿Qué textos mencionan soluciones tecnológicas?', '¿Cuáles expresan optimismo sobre el futuro?', '¿Qué autores están de acuerdo sobre las causas principales?'"
-          explanation="Debes analizar múltiples textos simultáneamente para encontrar conexiones, similitudes y diferencias entre ellos."
+          title="Cross-text Multiple Matching example"
+          content="You have 4 texts on climate change by different authors. Questions might be: 'Which texts mention technological solutions?', 'Which express optimism about the future?', 'Which authors agree on the main causes?'"
+          explanation="You must read several texts together to spot connections, similarities, and differences."
         />
       </TheorySection>
 
-      <TheorySection title="Tipos de Conexiones" icon="🎯">
+      <TheorySection title="Types of links" icon="🎯">
         <div style={{ display: 'grid', gap: '1rem' }}>
           <Tip 
-            title="1. Similitudes de contenido"
-            description="Textos que comparten información, ideas o enfoques similares."
+            title="1. Similarities of content"
+            description="Texts that share information, ideas, or approaches."
             examples={[
-              "Mismas causas mencionadas en diferentes textos",
-              "Soluciones similares propuestas por varios autores",
-              "Ejemplos parecidos usados en múltiples textos",
-              "Datos o estadísticas coincidentes"
+              "Same causes mentioned in different texts",
+              "Similar solutions proposed by several authors",
+              "Parallel examples used in more than one text",
+              "Matching data or statistics"
             ]}
           />
 
           <Tip 
-            title="2. Contrastes y diferencias"
-            description="Textos que presentan puntos de vista opuestos o información contradictoria."
+            title="2. Contrasts and differences"
+            description="Texts with opposing views or conflicting information."
             examples={[
-              "Opiniones opuestas sobre el mismo tema",
-              "Diferentes interpretaciones de los mismos datos",
-              "Enfoques contrastantes para resolver problemas",
-              "Conclusiones contradictorias"
+              "Opposite opinions on the same issue",
+              "Different readings of the same data",
+              "Contrasting ways to solve a problem",
+              "Contradictory conclusions"
             ]}
           />
 
           <Tip 
-            title="3. Actitudes y tonos"
-            description="Comparación de las posturas emocionales de diferentes autores."
+            title="3. Attitudes and tone"
+            description="Comparing the emotional stance of different authors."
             examples={[
-              "Optimismo vs pesimismo sobre el futuro",
-              "Crítica vs apoyo hacia políticas específicas",
-              "Confianza vs escepticismo hacia soluciones",
-              "Urgencia vs calma en el tratamiento del tema"
+              "Optimism vs pessimism about the future",
+              "Criticism vs support for particular policies",
+              "Confidence vs scepticism about solutions",
+              "Urgency vs calm in how the topic is handled"
             ]}
           />
         </div>
       </TheorySection>
 
-      <TheorySection title="Estrategias Avanzadas" icon="🔍">
+      <TheorySection title="Advanced strategies" icon="🔍">
         <div style={{ display: 'grid', gap: '1rem' }}>
           <Rule 
-            title="1. Mapeo conceptual"
-            description="Crea un mapa mental de ideas principales de cada texto."
+            title="1. Concept mapping"
+            description="Build a mental map of each text's main ideas."
             examples={[
-              "Identifica el tema central de cada texto",
-              "Lista los puntos principales de cada autor",
-              "Nota las evidencias o ejemplos únicos",
-              "Marca las conclusiones de cada texto"
+              "Identify the central theme of each text",
+              "List each author's main points",
+              "Note unique evidence or examples",
+              "Mark each text's conclusion"
             ]}
           />
 
           <Rule 
-            title="2. Análisis comparativo"
-            description="Compara sistemáticamente elementos entre textos."
+            title="2. Comparative analysis"
+            description="Compare elements across texts systematically."
             examples={[
-              "¿Qué textos mencionan las mismas causas?",
-              "¿Cuáles proponen soluciones similares?",
-              "¿Qué autores comparten la misma actitud?",
-              "¿Dónde hay acuerdo o desacuerdo explícito?"
+              "Which texts mention the same causes?",
+              "Which propose similar solutions?",
+              "Which authors share the same attitude?",
+              "Where is there clear agreement or disagreement?"
             ]}
           />
 
           <Rule 
-            title="3. Síntesis de información"
-            description="Combina información de múltiples fuentes para responder."
+            title="3. Synthesising information"
+            description="Combine material from several sources to answer."
             examples={[
-              "Conecta ideas complementarias de diferentes textos",
-              "Identifica patrones que emergen entre textos",
-              "Reconoce cuando múltiples textos apoyan la misma idea",
-              "Nota cuando un texto contradice a otros"
+              "Link complementary ideas from different texts",
+              "Spot patterns that appear across texts",
+              "See when several texts support the same idea",
+              "Notice when one text contradicts others"
             ]}
           />
         </div>
       </TheorySection>
 
-      <TheorySection title="Reglas Importantes" icon="⚡">
+      <TheorySection title="Important rules" icon="⚡">
         <div style={{ display: 'grid', gap: '1rem' }}>
           <Rule 
-            title="1. Precisión en las conexiones"
-            description="Las conexiones deben ser exactas, no aproximadas."
+            title="1. Precision in links"
+            description="Connections must be exact, not vague."
             examples={[
-              "Verifica que las ideas sean realmente similares, no solo relacionadas",
-              "Distingue entre acuerdo parcial y acuerdo total",
-              "No asumas conexiones que no están explícitas",
-              "Cuidado con similitudes superficiales"
+              "Check ideas are really similar, not just related",
+              "Distinguish partial agreement from full agreement",
+              "Do not assume unstated connections",
+              "Beware of superficial similarities"
             ]}
           />
 
           <Rule 
-            title="2. Múltiples respuestas posibles"
-            description="Algunas preguntas pueden tener múltiples textos como respuesta."
+            title="2. Multiple correct texts"
+            description="Some questions may have more than one text as an answer."
             examples={[
-              "Una pregunta puede aplicar a 2-3 textos diferentes",
-              "Algunos textos pueden no ser respuesta a ninguna pregunta",
-              "Lee cuidadosamente si pide 'uno', 'algunos' o 'todos'",
-              "Verifica todas las posibilidades antes de decidir"
+              "One question may apply to 2–3 texts",
+              "Some texts may answer no question",
+              "Read carefully if it asks for 'one', 'some', or 'all'",
+              "Consider every possibility before deciding"
             ]}
           />
 
           <Rule 
-            title="3. Niveles de análisis"
-            description="Analiza tanto contenido explícito como implícito."
+            title="3. Levels of analysis"
+            description="Analyse both explicit and implicit meaning."
             examples={[
-              "Información directamente declarada en los textos",
-              "Actitudes y opiniones implícitas de los autores",
-              "Suposiciones subyacentes en cada texto",
-              "Implicaciones de las conclusiones presentadas"
+              "Information stated directly",
+              "Implicit attitudes and opinions",
+              "Underlying assumptions in each text",
+              "Implications of the conclusions"
             ]}
           />
         </div>
@@ -136,158 +136,158 @@ const CrossTextMultipleMatchingPage = () => {
   const exercises = [
     <MultipleChoiceExercise
       key="1"
-      question="¿Qué caracteriza principalmente a Cross-text Multiple Matching?"
+      question="What best characterises Cross-text Multiple Matching?"
       options={[
-        "Analizar un solo texto muy detalladamente",
-        "Relacionar información entre múltiples textos diferentes",
-        "Traducir textos de un idioma a otro",
-        "Memorizar contenido de varios textos"
+        "Analysing one text in great detail",
+        "Relating information across several different texts",
+        "Translating between languages",
+        "Memorising content from several texts"
       ]}
       correctAnswer={1}
-      explanation="Cross-text Multiple Matching se caracteriza por relacionar, comparar y contrastar información entre múltiples textos diferentes."
+      explanation="Cross-text Multiple Matching is about linking, comparing, and contrasting information across different texts."
     />,
 
     <MultipleChoiceExercise
       key="2"
-      question="¿Cuál es la mejor estrategia inicial para este tipo de ejercicio?"
+      question="What is the best first step for this task type?"
       options={[
-        "Leer todos los textos sin tomar notas",
-        "Crear un mapa mental de ideas principales de cada texto",
-        "Memorizar el primer texto completamente",
-        "Leer solo las primeras oraciones de cada texto"
+        "Read all the texts without notes",
+        "Create a mental map of each text's main ideas",
+        "Memorise the first text completely",
+        "Read only the first sentence of each text"
       ]}
       correctAnswer={1}
-      explanation="Crear un mapa mental te ayuda a organizar y comparar sistemáticamente las ideas principales de cada texto."
+      explanation="A mental map helps you organise and systematically compare each text's main ideas."
     />,
 
     <TrueFalseExercise
       key="3"
       statements={[
         {
-          text: "En Cross-text Multiple Matching, algunos textos pueden no ser respuesta a ninguna pregunta.",
+          text: "In Cross-text Multiple Matching, some texts may not answer any question.",
           isTrue: true,
-          explanation: "Correcto. No todos los textos necesariamente serán respuesta a las preguntas planteadas."
+          explanation: "Correct. Not every text has to be used for the questions given."
         },
         {
-          text: "Solo debes buscar información explícitamente declarada en los textos.",
+          text: "You should only look for information that is explicitly stated.",
           isTrue: false,
-          explanation: "Incorrecto. También debes analizar actitudes implícitas, tonos y suposiciones subyacentes."
+          explanation: "Incorrect. You should also analyse implicit attitudes, tone, and underlying assumptions."
         },
         {
-          text: "Una pregunta puede tener múltiples textos como respuesta correcta.",
+          text: "One question may have several texts as correct answers.",
           isTrue: true,
-          explanation: "Correcto. Algunas preguntas pueden aplicar a varios textos que comparten características similares."
+          explanation: "Correct. Several texts may share the feature the question asks about."
         }
       ]}
     />,
 
     <MultipleChoiceExercise
       key="4"
-      question="¿Qué tipo de conexión buscas cuando la pregunta es 'Which texts express optimism about the future?'"
+      question="When the question is 'Which texts express optimism about the future?', what kind of link are you looking for?"
       options={[
-        "Similitudes de contenido",
-        "Contrastes y diferencias",
-        "Actitudes y tonos",
-        "Información específica"
+        "Content similarities",
+        "Contrasts and differences",
+        "Attitudes and tone",
+        "Specific factual information"
       ]}
       correctAnswer={2}
-      explanation="Buscas actitudes y tonos, específicamente cuáles textos muestran una postura emocional optimista hacia el futuro."
+      explanation="You are comparing attitudes and tone—specifically which texts show an optimistic stance."
     />,
 
     <MultipleChoiceExercise
       key="5"
-      question="¿Cómo debes abordar las similitudes entre textos?"
+      question="How should you treat similarities between texts?"
       options={[
-        "Asumir que ideas relacionadas son similares",
-        "Verificar que las ideas sean realmente similares, no solo relacionadas",
-        "Considerar solo las palabras exactas usadas",
-        "Ignorar las diferencias sutiles"
+        "Assume related ideas are the same",
+        "Check that ideas are truly similar, not just related",
+        "Focus only on identical wording",
+        "Ignore subtle differences"
       ]}
       correctAnswer={1}
-      explanation="Debes verificar que las ideas sean genuinamente similares, no solo relacionadas o superficialmente parecidas."
+      explanation="Verify that ideas are genuinely similar, not merely related or superficially alike."
     />,
 
     <TrueFalseExercise
       key="6"
       statements={[
         {
-          text: "Debes distinguir entre acuerdo parcial y acuerdo total entre textos.",
+          text: "You should distinguish partial agreement from full agreement between texts.",
           isTrue: true,
-          explanation: "Correcto. Es importante ser preciso sobre el grado de similitud o acuerdo entre los textos."
+          explanation: "Correct. Be precise about how far the texts really agree."
         },
         {
-          text: "Las conexiones superficiales son suficientes para establecer similitudes.",
+          text: "Superficial similarities are enough to claim texts align.",
           isTrue: false,
-          explanation: "Incorrecto. Debes buscar conexiones genuinas y sustanciales, no similitudes superficiales."
+          explanation: "Incorrect. Look for substantive links, not surface-level matches."
         },
         {
-          text: "Puedes asumir conexiones que no están explícitas si parecen lógicas.",
+          text: "You may assume logical connections that the texts never state.",
           isTrue: false,
-          explanation: "Incorrecto. Las conexiones deben estar basadas en evidencia clara de los textos, no en suposiciones."
+          explanation: "Incorrect. Links must rest on clear evidence from the texts, not on guesswork."
         }
       ]}
     />,
 
     <MultipleChoiceExercise
       key="7"
-      question="¿Qué debes hacer cuando encuentras información contradictoria entre textos?"
+      question="What should you do when texts contradict each other?"
       options={[
-        "Ignorar las contradicciones",
-        "Elegir el texto que prefieras",
-        "Notar y analizar las diferencias como posibles respuestas",
-        "Buscar un punto medio entre ambos"
+        "Ignore the contradictions",
+        "Choose the text you prefer",
+        "Note and analyse the differences as possible answers",
+        "Aim for a compromise between them"
       ]}
       correctAnswer={2}
-      explanation="Las contradicciones son importantes y pueden ser la respuesta a preguntas sobre contrastes o diferencias de opinión."
+      explanation="Contradictions matter and may be the answer to questions about contrast or differing views."
     />,
 
     <MultipleChoiceExercise
       key="8"
-      question="¿Cuál es un error común en Cross-text Multiple Matching?"
+      question="What is a common mistake in Cross-text Multiple Matching?"
       options={[
-        "Leer todos los textos cuidadosamente",
-        "Confundir similitudes superficiales con conexiones reales",
-        "Tomar notas mientras lees",
-        "Verificar las respuestas dos veces"
+        "Reading all texts carefully",
+        "Confusing surface similarity with a real connection",
+        "Taking notes while reading",
+        "Checking answers twice"
       ]}
       correctAnswer={1}
-      explanation="Un error común es confundir similitudes superficiales (palabras parecidas, temas relacionados) con conexiones genuinas."
+      explanation="A common error is mixing up superficial similarity (similar words, related topics) with a real substantive link."
     />,
 
     <TrueFalseExercise
       key="9"
       statements={[
         {
-          text: "Debes analizar tanto el contenido explícito como las implicaciones de cada texto.",
+          text: "You should analyse both explicit content and implications in each text.",
           isTrue: true,
-          explanation: "Correcto. Cross-text matching requiere análisis profundo de contenido explícito e implícito."
+          explanation: "Correct. Cross-text matching needs both surface meaning and deeper implication."
         },
         {
-          text: "Todos los textos deben ser usados como respuesta al menos una vez.",
+          text: "Every text must be used as an answer at least once.",
           isTrue: false,
-          explanation: "Incorrecto. Algunos textos pueden no ser relevantes para ninguna de las preguntas planteadas."
+          explanation: "Incorrect. Some texts may not match any of the questions."
         }
       ]}
     />,
 
     <MultipleChoiceExercise
       key="10"
-      question="¿Cuál es la habilidad más importante para Cross-text Multiple Matching?"
+      question="What is the most important skill for Cross-text Multiple Matching?"
       options={[
-        "Velocidad de lectura",
-        "Memoria fotográfica",
-        "Capacidad de síntesis y análisis comparativo",
-        "Conocimiento de vocabulario avanzado"
+        "Reading speed",
+        "Photographic memory",
+        "Synthesis and comparative analysis",
+        "Advanced vocabulary alone"
       ]}
       correctAnswer={2}
-      explanation="La capacidad de síntesis y análisis comparativo es crucial para conectar y contrastar información entre múltiples textos."
+      explanation="Synthesis and comparative analysis are essential to connect and contrast information across texts."
     />
   ];
 
   return (
     <TheoryLayout
       title="Cross-text Multiple Matching"
-      description="Domina el análisis comparativo entre múltiples textos. Aprende a identificar conexiones, contrastes y patrones de información entre diferentes fuentes sobre temas relacionados."
+      description="Master comparative reading across texts. Learn to spot links, contrasts, and patterns between different sources on related topics."
       level="C2"
       theoryContent={theoryContent}
       exercises={exercises}

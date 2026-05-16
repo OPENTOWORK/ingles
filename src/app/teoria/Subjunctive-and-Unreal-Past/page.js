@@ -18,36 +18,36 @@ import {
 const SubjunctivePage = () => {
   const theoryContent = (
     <div>
-      <TheorySection title="Subjuntivo y Pasado Irreal" icon="🎭">
+      <TheorySection title="Subjunctive and Unreal Past" icon="🎭">
         <p style={{ fontSize: '1.1rem', lineHeight: 1.6, color: '#4a5568', marginBottom: '1rem' }}>
-          El <strong>subjuntivo</strong> y las estructuras de <strong>pasado irreal</strong> en inglés expresan 
-          situaciones hipotéticas, deseos, recomendaciones y situaciones contrarias a la realidad. 
-          Son esenciales para comunicación sofisticada en niveles avanzados.
+          The <strong>subjunctive</strong> and <strong>unreal past</strong> structures in English express 
+          hypothetical situations, wishes, recommendations, and situations contrary to reality. 
+          They are essential for sophisticated communication at advanced levels.
         </p>
         
         <QuickReference items={[
-          "Subjuntivo: situaciones hipotéticas y formales",
-          "Pasado irreal: 'were' para todas las personas",
-          "Expresiones de deseo: wish, if only, would rather",
-          "Recomendaciones: suggest, recommend, insist",
-          "Estructuras formales y académicas"
+          "Subjunctive: hypothetical and formal situations",
+          "Unreal past: 'were' for all persons",
+          "Wish expressions: wish, if only, would rather",
+          "Recommendations: suggest, recommend, insist",
+          "Formal and academic structures"
         ]} />
       </TheorySection>
 
-      <TheorySection title="El Subjuntivo en Inglés" icon="👑">
+      <TheorySection title="The Subjunctive in English" icon="👑">
         <p style={{ fontSize: '1rem', lineHeight: 1.6, color: '#4a5568', marginBottom: '1rem' }}>
-          Aunque menos común que en español, el inglés mantiene formas subjuntivas en contextos específicos.
+          Although less common than in Spanish, English retains subjunctive forms in specific contexts.
         </p>
 
         <GrammarTable
-          caption="Usos del Subjuntivo"
-          headers={["Contexto", "Estructura", "Ejemplo", "Registro"]}
+          caption="Uses of the Subjunctive"
+          headers={["Context", "Structure", "Example", "Register"]}
           rows={[
-            ["Recomendaciones", "suggest/recommend + (that) + base form", "I suggest that he study harder", "Formal"],
-            ["Necesidad", "it's important/necessary + (that) + base form", "It's vital that she be present", "Muy formal"],
-            ["Deseos formales", "wish + past subjunctive", "I wish I were taller", "Neutral"],
-            ["Condiciones irreales", "if + were (todas las personas)", "If I were you, I would go", "Neutral"],
-            ["Expresiones fijas", "God save the Queen, Long live...", "God save the Queen", "Ceremonial"]
+            ["Recommendations", "suggest/recommend + (that) + base form", "I suggest that he study harder", "Formal"],
+            ["Necessity", "it's important/necessary + (that) + base form", "It's vital that she be present", "Very formal"],
+            ["Formal wishes", "wish + past subjunctive", "I wish I were taller", "Neutral"],
+            ["Unreal conditions", "if + were (all persons)", "If I were you, I would go", "Neutral"],
+            ["Fixed expressions", "God save the Queen, Long live...", "God save the Queen", "Ceremonial"]
           ]}
         />
 
@@ -55,71 +55,71 @@ const SubjunctivePage = () => {
           <Example 
             spanish="Es importante que él esté presente."
             english="It's important that he be present."
-            translation="Subjuntivo formal: 'be' en lugar de 'is'"
+            translation="Formal subjunctive: 'be' instead of 'is'"
           />
           
           <Example 
             spanish="Sugiero que estudies más."
             english="I suggest that you study more."
-            translation="Base form después de 'suggest'"
+            translation="Base form after 'suggest'"
           />
-        </div>
+        </motion.div>
 
         <Tip type="info">
-          <strong>Nota:</strong> En inglés moderno, muchas formas subjuntivas se reemplazan por 'should' + infinitivo: 
-          "I suggest that he should study" es más común que "I suggest that he study".
+          <strong>Note:</strong> In modern English, many subjunctive forms are replaced by 'should' + infinitive: 
+          "I suggest that he should study" is more common than "I suggest that he study".
         </Tip>
       </TheorySection>
 
-      <TheorySection title="Pasado Irreal con 'Were'" icon="🌟">
+      <TheorySection title="Unreal Past with 'Were'" icon="🌟">
         <p style={{ fontSize: '1rem', lineHeight: 1.6, color: '#4a5568', marginBottom: '1rem' }}>
-          'Were' se usa para todas las personas en situaciones hipotéticas, contrario a la gramática normal.
+          'Were' is used for all persons in hypothetical situations, contrary to normal grammar.
         </p>
 
         <Rule 
-          title="Cuándo usar 'Were' para todas las personas"
-          description="Usa 'were' (no 'was') en estas situaciones:"
+          title="When to use 'were' for all persons"
+          description="Use 'were' (not 'was') in these situations:"
           examples={[
-            "Condicionales irreales: 'If I were rich...'",
-            "Después de 'wish': 'I wish I were there'",
-            "Después de 'as if/as though': 'He acts as if he were the boss'",
-            "Después de 'suppose/imagine': 'Suppose you were famous'",
-            "En inversión formal: 'Were I to leave early...'"
+            "Unreal conditionals: 'If I were rich...'",
+            "After 'wish': 'I wish I were there'",
+            "After 'as if/as though': 'He acts as if he were the boss'",
+            "After 'suppose/imagine': 'Suppose you were famous'",
+            "In formal inversion: 'Were I to leave early...'"
           ]}
         />
 
         <GrammarTable
-          caption="Were vs Was en Contextos Irreales"
-          headers={["Situación", "Incorrecto", "Correcto", "Explicación"]}
+          caption="Were vs Was in Unreal Contexts"
+          headers={["Situation", "Incorrect", "Correct", "Explanation"]}
           rows={[
-            ["Condicional irreal", "If I was you", "If I were you", "'Were' en situaciones hipotéticas"],
-            ["Después de wish", "I wish I was taller", "I wish I were taller", "Expresa deseo irreal"],
-            ["As if/as though", "He acts as if he was rich", "He acts as if he were rich", "Comparación irreal"],
-            ["Suppose", "Suppose she was here", "Suppose she were here", "Situación imaginaria"]
+            ["Unreal conditional", "If I was you", "If I were you", "'Were' in hypothetical situations"],
+            ["After wish", "I wish I was taller", "I wish I were taller", "Expresses an unreal wish"],
+            ["As if/as though", "He acts as if he was rich", "He acts as if he were rich", "Unreal comparison"],
+            ["Suppose", "Suppose she was here", "Suppose she were here", "Imaginary situation"]
           ]}
         />
 
         <Tip type="success">
-          <strong>Truco:</strong> Si puedes reemplazar la situación con "imagine that..." entonces usa 'were'. 
+          <strong>Tip:</strong> If you can replace the situation with "imagine that..." then use 'were'. 
           "Imagine that I were rich" → "If I were rich".
         </Tip>
       </TheorySection>
 
-      <TheorySection title="Expresiones de Deseo" icon="⭐">
+      <TheorySection title="Wish Expressions" icon="⭐">
         <p style={{ fontSize: '1rem', lineHeight: 1.6, color: '#4a5568', marginBottom: '1rem' }}>
-          Varias estructuras expresan deseos sobre situaciones presentes, pasadas o futuras.
+          Several structures express wishes about present, past, or future situations.
         </p>
 
         <GrammarTable
-          caption="Estructuras de Deseo"
-          headers={["Estructura", "Tiempo", "Uso", "Ejemplo"]}
+          caption="Wish Structures"
+          headers={["Structure", "Time", "Use", "Example"]}
           rows={[
-            ["wish + past simple", "Presente", "Deseo sobre situación actual", "I wish I had more time"],
-            ["wish + past perfect", "Pasado", "Arrepentimiento sobre el pasado", "I wish I had studied harder"],
-            ["wish + would", "Futuro/Hábito", "Deseo de cambio futuro", "I wish you would listen to me"],
-            ["if only + past simple", "Presente", "Deseo fuerte sobre presente", "If only I were younger"],
-            ["if only + past perfect", "Pasado", "Arrepentimiento fuerte", "If only I had known"],
-            ["would rather + past", "Preferencia", "Preferencia sobre acciones de otros", "I'd rather you didn't smoke"]
+            ["wish + past simple", "Present", "Wish about a current situation", "I wish I had more time"],
+            ["wish + past perfect", "Past", "Regret about the past", "I wish I had studied harder"],
+            ["wish + would", "Future/Habit", "Wish for future change", "I wish you would listen to me"],
+            ["if only + past simple", "Present", "Strong wish about the present", "If only I were younger"],
+            ["if only + past perfect", "Past", "Strong regret", "If only I had known"],
+            ["would rather + past", "Preference", "Preference about others' actions", "I'd rather you didn't smoke"]
           ]}
         />
 
@@ -127,40 +127,40 @@ const SubjunctivePage = () => {
           <Example 
             spanish="Ojalá tuviera más dinero (ahora)."
             english="I wish I had more money."
-            translation="Deseo sobre situación presente"
+            translation="Wish about a present situation"
           />
           
           <Example 
             spanish="Ojalá hubiera estudiado más (en el pasado)."
             english="I wish I had studied more."
-            translation="Arrepentimiento sobre el pasado"
+            translation="Regret about the past"
           />
           
           <Example 
             spanish="Ojalá me escucharas (cambio futuro)."
             english="I wish you would listen to me."
-            translation="Deseo de cambio en comportamiento"
+            translation="Wish for a change in behaviour"
           />
         </div>
 
         <Tip type="warning">
-          <strong>¡Cuidado!</strong> No uses 'wish + would' para ti mismo: "I wish I would be rich" ❌ 
+          <strong>Watch out!</strong> Don't use 'wish + would' for yourself: "I wish I would be rich" ❌ 
           → "I wish I were rich" ✅
         </Tip>
       </TheorySection>
 
-      <TheorySection title="Would Rather - Preferencias" icon="🎯">
+      <TheorySection title="Would Rather - Preferences" icon="🎯">
         <p style={{ fontSize: '1rem', lineHeight: 1.6, color: '#4a5568', marginBottom: '1rem' }}>
-          'Would rather' expresa preferencias de manera educada y sofisticada.
+          'Would rather' expresses preferences politely and with sophistication.
         </p>
 
         <Rule 
-          title="Estructuras con Would Rather"
-          description="Diferentes formas de expresar preferencias:"
+          title="Structures with Would Rather"
+          description="Different ways to express preferences:"
           examples={[
             "Would rather + infinitive: 'I'd rather stay home'",
-            "Would rather + past simple (otros): 'I'd rather you came early'",
-            "Would rather + past perfect (pasado): 'I'd rather you had told me'",
+            "Would rather + past simple (others): 'I'd rather you came early'",
+            "Would rather + past perfect (past): 'I'd rather you had told me'",
             "Would rather... than: 'I'd rather walk than drive'"
           ]}
         />
@@ -169,59 +169,59 @@ const SubjunctivePage = () => {
           <Example 
             spanish="Prefiero quedarme en casa."
             english="I would rather stay home."
-            translation="Preferencia personal"
+            translation="Personal preference"
           />
           
           <Example 
             spanish="Prefiero que vengas temprano."
             english="I would rather you came early."
-            translation="Preferencia sobre acciones de otros (presente/futuro)"
+            translation="Preference about others' actions (present/future)"
           />
           
           <Example 
             spanish="Prefiero caminar que conducir."
             english="I would rather walk than drive."
-            translation="Comparación de preferencias"
+            translation="Comparing preferences"
           />
         </div>
       </TheorySection>
 
-      <TheorySection title="It's Time - Expresiones de Tiempo" icon="⏰">
+      <TheorySection title="It's Time - Time Expressions" icon="⏰">
         <p style={{ fontSize: '1rem', lineHeight: 1.6, color: '#4a5568', marginBottom: '1rem' }}>
-          Expresiones con 'time' que requieren estructuras especiales.
+          Expressions with 'time' that require special structures.
         </p>
 
         <GrammarTable
-          caption="Expresiones con 'Time'"
-          headers={["Expresión", "Estructura", "Significado", "Ejemplo"]}
+          caption="Expressions with 'Time'"
+          headers={["Expression", "Structure", "Meaning", "Example"]}
           rows={[
-            ["It's time", "It's time + past simple", "Es hora de hacer algo ahora", "It's time we left"],
-            ["It's about time", "It's about time + past simple", "Ya era hora (con impaciencia)", "It's about time you apologized"],
-            ["It's high time", "It's high time + past simple", "Ya es más que hora (urgencia)", "It's high time we made changes"],
-            ["It's time for", "It's time for + noun/gerund", "Es hora de (algo específico)", "It's time for dinner"]
+            ["It's time", "It's time + past simple", "It's time to do something now", "It's time we left"],
+            ["It's about time", "It's about time + past simple", "It's about time (with impatience)", "It's about time you apologized"],
+            ["It's high time", "It's high time + past simple", "It's high time (urgency)", "It's high time we made changes"],
+            ["It's time for", "It's time for + noun/gerund", "It's time for (something specific)", "It's time for dinner"]
           ]}
         />
 
         <Example 
           spanish="Ya es hora de que te vayas."
           english="It's time you left."
-          translation="'Left' (pasado) para expresar presente/futuro inmediato"
+          translation="'Left' (past) to express the immediate present/future"
         />
 
         <Tip type="info">
-          <strong>Matiz:</strong> "It's time to go" (infinitivo) es neutro, pero "It's time we went" (pasado) 
-          implica que ya deberíamos haber ido.
+          <strong>Nuance:</strong> "It's time to go" (infinitive) is neutral, but "It's time we went" (past) 
+          implies we should have left already.
         </Tip>
       </TheorySection>
 
-      <TheorySection title="Verbos de Recomendación" icon="💡">
+      <TheorySection title="Recommendation Verbs" icon="💡">
         <p style={{ fontSize: '1rem', lineHeight: 1.6, color: '#4a5568', marginBottom: '1rem' }}>
-          Ciertos verbos requieren subjuntivo o estructuras especiales en inglés formal.
+          Certain verbs require the subjunctive or special structures in formal English.
         </p>
 
         <GrammarTable
-          caption="Verbos que Requieren Subjuntivo"
-          headers={["Verbo", "Estructura Formal", "Estructura Informal", "Ejemplo"]}
+          caption="Verbs That Require the Subjunctive"
+          headers={["Verb", "Formal Structure", "Informal Structure", "Example"]}
           rows={[
             ["suggest", "suggest + (that) + base form", "suggest + -ing", "I suggest (that) he go / I suggest going"],
             ["recommend", "recommend + (that) + base form", "recommend + -ing", "We recommend (that) you be careful"],
@@ -232,39 +232,39 @@ const SubjunctivePage = () => {
         />
 
         <Tip type="success">
-          <strong>Consejo:</strong> En inglés americano, el subjuntivo es más común. En inglés británico, 
-          'should + infinitive' es más frecuente: "I suggest that he should go".
+          <strong>Tip:</strong> In American English, the subjunctive is more common. In British English, 
+          'should + infinitive' is more frequent: "I suggest that he should go".
         </Tip>
       </TheorySection>
 
-      <TheorySection title="Errores Comunes" icon="⚠️">
+      <TheorySection title="Common Mistakes" icon="⚠️">
         <div style={{ display: 'grid', gap: '1rem' }}>
           <Tip type="error">
             <strong>Error:</strong> "If I was you..." ❌<br/>
-            <strong>Correcto:</strong> "If I were you..." ✅<br/>
-            <em>Usa 'were' en condicionales irreales</em>
+            <strong>Correct:</strong> "If I were you..." ✅<br/>
+            <em>Use 'were' in unreal conditionals</em>
           </Tip>
 
           <Tip type="error">
             <strong>Error:</strong> "I wish I would have more money" ❌<br/>
-            <strong>Correcto:</strong> "I wish I had more money" ✅<br/>
-            <em>No uses 'would' con 'wish' para ti mismo en presente</em>
+            <strong>Correct:</strong> "I wish I had more money" ✅<br/>
+            <em>Don't use 'would' with 'wish' for yourself in the present</em>
           </Tip>
 
           <Tip type="error">
             <strong>Error:</strong> "I suggest that he goes" ❌<br/>
-            <strong>Correcto:</strong> "I suggest that he go" ✅<br/>
-            <em>Usa base form después de verbos de recomendación</em>
+            <strong>Correct:</strong> "I suggest that he go" ✅<br/>
+            <em>Use the base form after recommendation verbs</em>
           </Tip>
 
           <Tip type="error">
             <strong>Error:</strong> "I'd rather you will come" ❌<br/>
-            <strong>Correcto:</strong> "I'd rather you came" ✅<br/>
-            <em>Usa past simple después de 'would rather' para otros</em>
+            <strong>Correct:</strong> "I'd rather you came" ✅<br/>
+            <em>Use past simple after 'would rather' for others</em>
           </Tip>
-        </div>
+        </motion.div>
       </TheorySection>
-    </div>
+    </motion.div>
   );
 
   const exercises = [
@@ -278,7 +278,7 @@ const SubjunctivePage = () => {
         "will be"
       ]}
       correctAnswer={1}
-      explanation="En situaciones hipotéticas usamos 'were' para todas las personas: 'If I were you'."
+      explanation="In hypothetical situations we use 'were' for all persons: 'If I were you'."
     />,
 
     <MultipleChoiceExercise
@@ -291,7 +291,7 @@ const SubjunctivePage = () => {
         "I wish I am taller."
       ]}
       correctAnswer={2}
-      explanation="'I wish I were taller' usa correctamente el pasado irreal 'were' para expresar un deseo sobre el presente."
+      explanation="'I wish I were taller' correctly uses unreal past 'were' to express a wish about the present."
     />,
 
     <MultipleChoiceExercise
@@ -304,7 +304,7 @@ const SubjunctivePage = () => {
         "not"
       ]}
       correctAnswer={1}
-      explanation="Después de 'would rather' para acciones de otros, usamos past simple: 'didn't smoke'."
+      explanation="After 'would rather' for others' actions, we use past simple: 'didn't smoke'."
     />,
 
     <TrueFalseExercise
@@ -313,22 +313,22 @@ const SubjunctivePage = () => {
         {
           text: "In formal English, we say 'I suggest that he goes' after suggestion verbs.",
           isTrue: false,
-          explanation: "Falso. En inglés formal usamos base form: 'I suggest that he go'."
+          explanation: "False. In formal English we use the base form: 'I suggest that he go'."
         },
         {
           text: "'Were' is used for all persons in unreal situations.",
           isTrue: true,
-          explanation: "Correcto. 'Were' se usa para todas las personas en situaciones irreales."
+          explanation: "Correct. 'Were' is used for all persons in unreal situations."
         },
         {
           text: "'I wish you would listen' expresses a desire for future change.",
           isTrue: true,
-          explanation: "Correcto. 'Wish + would' expresa deseo de cambio futuro en otros."
+          explanation: "Correct. 'Wish + would' expresses a desire for future change in others."
         },
         {
           text: "'It's time we left' means we should leave now or soon.",
           isTrue: true,
-          explanation: "Correcto. Esta estructura indica que es momento de actuar."
+          explanation: "Correct. This structure indicates it's time to act."
         }
       ]}
     />,
@@ -343,7 +343,7 @@ const SubjunctivePage = () => {
         "It's high time we went."
       ]}
       correctAnswer={3}
-      explanation="'It's high time' expresa la mayor urgencia, indicando que algo debería haber pasado hace tiempo."
+      explanation="'It's high time' expresses the strongest urgency, indicating something should have happened long ago."
     />,
 
     <MultipleChoiceExercise
@@ -356,7 +356,7 @@ const SubjunctivePage = () => {
         "will have"
       ]}
       correctAnswer={1}
-      explanation="Para arrepentimientos sobre el pasado usamos 'wish + had + past participle'."
+      explanation="For regrets about the past we use 'wish + had + past participle'."
     />,
 
     <MultipleChoiceExercise
@@ -369,7 +369,7 @@ const SubjunctivePage = () => {
         "Both A and C are correct"
       ]}
       correctAnswer={3}
-      explanation="Ambas formas son correctas: subjuntivo (consult) o 'should + infinitive'."
+      explanation="Both forms are correct: subjunctive (consult) or 'should + infinitive'."
     />,
 
     <MultipleChoiceExercise
@@ -382,7 +382,7 @@ const SubjunctivePage = () => {
         "He acts as if he was the boss."
       ]}
       correctAnswer={2}
-      explanation="'If I were you' usa correctamente 'were' en situación hipotética."
+      explanation="'If I were you' correctly uses 'were' in a hypothetical situation."
     />,
 
     <MultipleChoiceExercise
@@ -395,7 +395,7 @@ const SubjunctivePage = () => {
         "will tell"
       ]}
       correctAnswer={1}
-      explanation="Después de 'it's vital that' usamos subjuntivo (base form): 'tell'."
+      explanation="After 'it's vital that' we use the subjunctive (base form): 'tell'."
     />,
 
     <MultipleChoiceExercise
@@ -408,22 +408,21 @@ const SubjunctivePage = () => {
         "I wish I have more money."
       ]}
       correctAnswer={2}
-      explanation="'I wish I had had more money' expresa arrepentimiento sobre el pasado."
+      explanation="'I wish I had had more money' expresses regret about the past."
     />
   ];
 
   return (
     <TheoryLayout
       title="Subjunctive and Unreal Past"
-      description="Domina el subjuntivo inglés y las estructuras de pasado irreal para expresar deseos, recomendaciones y situaciones hipotéticas con sofisticación."
+      description="Master the English subjunctive and unreal past structures to express wishes, recommendations, and hypothetical situations with sophistication."
       level="B2-C1-C2"
       theoryContent={theoryContent}
       exercises={exercises}
-      prerequisites={["Condicionales básicos", "Tiempos verbales", "Estructuras de deseo básicas"]}
+      prerequisites={["Basic conditionals", "Verb tenses", "Basic wish structures"]}
       estimatedTime="55 min"
     />
   );
 };
 
 export default SubjunctivePage;
-

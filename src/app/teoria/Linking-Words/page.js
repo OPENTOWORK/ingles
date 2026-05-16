@@ -18,39 +18,39 @@ import {
 const LinkingWordsPage = () => {
   const theoryContent = (
     <div>
-      <TheorySection title="¿Qué son los Linking Words?" icon="🔗">
-        <p style={{ fontSize: '1.1rem', lineHeight: 1.6, color: '#4a5568', marginBottom: '1rem' }}>
-          Los <strong>linking words</strong> (palabras de enlace) son palabras o frases que conectan ideas, oraciones y párrafos. 
-          Nos ayudan a crear textos coherentes y fluidos, especialmente en niveles intermedios y avanzados. Son esenciales 
-          para la escritura académica y profesional.
-        </p>
+      <TheorySection title="What Are Linking Words?" icon="🔗">
+        <div style={{ fontSize: '1.1rem', lineHeight: 1.6, color: '#4a5568', marginBottom: '1rem' }}>
+          <strong>Linking words</strong> are words or phrases that connect ideas, sentences, and paragraphs. 
+          They help us produce coherent, fluent texts, especially at intermediate and advanced levels. They are essential 
+          for academic and professional writing.
+        </div>
         
         <QuickReference items={[
-          "Conectan ideas y oraciones",
-          "Mejoran la fluidez del texto",
-          "Indican relaciones entre ideas",
-          "Esenciales para escritura académica",
-          "Ayudan a organizar argumentos"
+          "They connect ideas and sentences",
+          "They improve the flow of a text",
+          "They signal relationships between ideas",
+          "They are essential for academic writing",
+          "They help you organize arguments"
         ]} />
       </TheorySection>
 
-      <TheorySection title="Addition (Adición)" icon="➕">
-        <p style={{ fontSize: '1rem', lineHeight: 1.6, color: '#4a5568', marginBottom: '1rem' }}>
-          Estas palabras se usan para agregar información o ideas similares.
-        </p>
+      <TheorySection title="Addition" icon="➕">
+        <div style={{ fontSize: '1rem', lineHeight: 1.6, color: '#4a5568', marginBottom: '1rem' }}>
+          These words are used to add information or similar ideas.
+        </div>
 
         <GrammarTable
-          caption="Linking Words para Adición"
-          headers={["Palabra", "Uso", "Posición", "Ejemplo"]}
+          caption="Linking Words for Addition"
+          headers={["Word", "Use", "Position", "Example"]}
           rows={[
-            ["and", "adición simple", "entre elementos", "I like tea and coffee"],
-            ["also", "información adicional", "inicio/medio", "I also like green tea"],
-            ["too", "acuerdo/adición", "final de oración", "I like coffee too"],
-            ["as well", "información adicional", "final de oración", "I like coffee as well"],
-            ["furthermore", "adición formal", "inicio de oración", "Furthermore, we need more time"],
-            ["moreover", "adición formal", "inicio de oración", "Moreover, it is expensive"],
-            ["in addition", "adición formal", "inicio de oración", "In addition, we have other options"],
-            ["besides", "punto adicional", "inicio/medio", "Besides, it is more convenient"]
+            ["and", "simple addition", "between elements", "I like tea and coffee"],
+            ["also", "additional information", "beginning/middle", "I also like green tea"],
+            ["too", "agreement/addition", "end of sentence", "I like coffee too"],
+            ["as well", "additional information", "end of sentence", "I like coffee as well"],
+            ["furthermore", "formal addition", "beginning of sentence", "Furthermore, we need more time"],
+            ["moreover", "formal addition", "beginning of sentence", "Moreover, it is expensive"],
+            ["in addition", "formal addition", "beginning of sentence", "In addition, we have other options"],
+            ["besides", "additional point", "beginning/middle", "Besides, it is more convenient"]
           ]}
         />
 
@@ -58,53 +58,53 @@ const LinkingWordsPage = () => {
           <Example 
             spanish="Me gusta el té y el café"
             english="I like tea and coffee"
-            translation="Me gusta el té y el café"
+            translation="I like tea and coffee"
           />
           <Example 
             spanish="También me gusta el té verde"
             english="I also like green tea"
-            translation="También me gusta el té verde"
+            translation="I also like green tea"
           />
           <Example 
             spanish="Además, necesitamos más tiempo"
             english="Furthermore, we need more time"
-            translation="Además, necesitamos más tiempo"
+            translation="Furthermore, we need more time"
           />
         </div>
 
         <Rule 
-          title="Consejos para Adición"
-          description="Para agregar información efectivamente:"
+          title="Tips for Addition"
+          description="To add information effectively:"
           examples={[
-            "Usa 'and' para conexiones simples",
-            "Usa 'also' para información adicional",
-            "Usa 'furthermore' en contextos formales",
-            "Evita repetir la misma palabra de enlace"
+            "Use 'and' for simple connections",
+            "Use 'also' for extra information",
+            "Use 'furthermore' in formal contexts",
+            "Avoid repeating the same linking word"
           ]}
         />
 
         <Tip type="info">
-          <strong>Consejo:</strong> Las palabras de adición ayudan a construir argumentos sólidos paso a paso.
+          <strong>Tip:</strong> Addition words help you build strong arguments step by step.
         </Tip>
       </TheorySection>
 
-      <TheorySection title="Contrast (Contraste)" icon="⚖️">
-        <p style={{ fontSize: '1rem', lineHeight: 1.6, color: '#4a5568', marginBottom: '1rem' }}>
-          Estas palabras muestran diferencias o contrastes entre ideas.
-        </p>
+      <TheorySection title="Contrast" icon="⚖️">
+        <div style={{ fontSize: '1rem', lineHeight: 1.6, color: '#4a5568', marginBottom: '1rem' }}>
+          These words show differences or contrasts between ideas.
+        </div>
 
         <GrammarTable
-          caption="Linking Words para Contraste"
-          headers={["Palabra", "Uso", "Ejemplo"]}
+          caption="Linking Words for Contrast"
+          headers={["Word", "Use", "Example"]}
           rows={[
-            ["but", "contraste directo", "I like coffee, but I prefer tea"],
-            ["however", "contraste formal", "I like coffee. However, I prefer tea"],
-            ["although", "contraste (a pesar de)", "Although I like coffee, I prefer tea"],
-            ["though", "contraste informal", "I like coffee, though I prefer tea"],
-            ["even though", "contraste fuerte", "Even though it's expensive, I'll buy it"],
-            ["despite", "contraste (formal)", "Despite the rain, we went out"],
-            ["in spite of", "contraste (formal)", "In spite of the problems, we succeeded"],
-            ["on the other hand", "visión alternativa", "It's expensive. On the other hand, it's good quality"]
+            ["but", "direct contrast", "I like coffee, but I prefer tea"],
+            ["however", "formal contrast", "I like coffee. However, I prefer tea"],
+            ["although", "contrast (even though)", "Although I like coffee, I prefer tea"],
+            ["though", "informal contrast", "I like coffee, though I prefer tea"],
+            ["even though", "strong contrast", "Even though it's expensive, I'll buy it"],
+            ["despite", "contrast (formal)", "Despite the rain, we went out"],
+            ["in spite of", "contrast (formal)", "In spite of the problems, we succeeded"],
+            ["on the other hand", "alternative view", "It's expensive. On the other hand, it's good quality"]
           ]}
         />
 
@@ -112,42 +112,42 @@ const LinkingWordsPage = () => {
           <Example 
             spanish="Me gusta el café, pero prefiero el té"
             english="I like coffee, but I prefer tea"
-            translation="Me gusta el café, pero prefiero el té"
+            translation="I like coffee, but I prefer tea"
           />
           <Example 
             spanish="A pesar de la lluvia, salimos"
             english="Despite the rain, we went out"
-            translation="A pesar de la lluvia, salimos"
+            translation="Despite the rain, we went out"
           />
           <Example 
             spanish="Por otro lado, es de buena calidad"
             english="On the other hand, it's good quality"
-            translation="Por otro lado, es de buena calidad"
+            translation="On the other hand, it's good quality"
           />
         </div>
 
         <Tip type="warning">
-          <strong>¡Cuidado!</strong> 'However' va al inicio de la segunda oración, no al final de la primera.
+          <strong>Watch out!</strong> Put 'however' at the beginning of the second sentence, not at the end of the first.
         </Tip>
       </TheorySection>
 
-      <TheorySection title="Cause and Effect (Causa y Efecto)" icon="⚡">
-        <p style={{ fontSize: '1rem', lineHeight: 1.6, color: '#4a5568', marginBottom: '1rem' }}>
-          Estas palabras explican por qué algo sucede (causa) y cuáles son las consecuencias (efecto).
-        </p>
+      <TheorySection title="Cause and Effect" icon="⚡">
+        <div style={{ fontSize: '1rem', lineHeight: 1.6, color: '#4a5568', marginBottom: '1rem' }}>
+          These words explain why something happens (cause) and what follows from it (effect).
+        </div>
 
         <GrammarTable
-          caption="Linking Words para Causa y Efecto"
-          headers={["Tipo", "Palabra", "Ejemplo"]}
+          caption="Linking Words for Cause and Effect"
+          headers={["Type", "Word", "Example"]}
           rows={[
-            ["Causa", "because", "I stayed home because I was sick"],
-            ["Causa", "since", "Since it's raining, we'll stay inside"],
-            ["Causa", "as", "As it was late, we decided to leave"],
-            ["Causa", "due to", "Due to the weather, the flight was cancelled"],
-            ["Efecto", "so", "I was tired, so I went to bed"],
-            ["Efecto", "therefore", "It was raining. Therefore, we stayed inside"],
-            ["Efecto", "thus", "The roads were icy. Thus, driving was dangerous"],
-            ["Efecto", "consequently", "He didn't study. Consequently, he failed"]
+            ["Cause", "because", "I stayed home because I was sick"],
+            ["Cause", "since", "Since it's raining, we'll stay inside"],
+            ["Cause", "as", "As it was late, we decided to leave"],
+            ["Cause", "due to", "Due to the weather, the flight was cancelled"],
+            ["Effect", "so", "I was tired, so I went to bed"],
+            ["Effect", "therefore", "It was raining. Therefore, we stayed inside"],
+            ["Effect", "thus", "The roads were icy. Thus, driving was dangerous"],
+            ["Effect", "consequently", "He didn't study. Consequently, he failed"]
           ]}
         />
 
@@ -155,53 +155,53 @@ const LinkingWordsPage = () => {
           <Example 
             spanish="Me quedé en casa porque estaba enfermo"
             english="I stayed home because I was sick"
-            translation="Me quedé en casa porque estaba enfermo"
+            translation="I stayed home because I was sick"
           />
           <Example 
             spanish="Estaba cansado, así que me fui a la cama"
             english="I was tired, so I went to bed"
-            translation="Estaba cansado, así que me fui a la cama"
+            translation="I was tired, so I went to bed"
           />
           <Example 
             spanish="Por lo tanto, nos quedamos dentro"
             english="Therefore, we stayed inside"
-            translation="Por lo tanto, nos quedamos dentro"
+            translation="Therefore, we stayed inside"
           />
         </div>
 
         <Rule 
-          title="Consejos para Causa y Efecto"
-          description="Para explicar relaciones causales:"
+          title="Tips for Cause and Effect"
+          description="To explain causal relationships:"
           examples={[
-            "Usa 'because' para explicar razones",
-            "Usa 'so' para mostrar resultados",
-            "Usa 'therefore' en contextos formales",
-            "Sé claro sobre la relación causa-efecto"
+            "Use 'because' to give reasons",
+            "Use 'so' to show results",
+            "Use 'therefore' in formal contexts",
+            "Make the cause-and-effect relationship clear"
           ]}
         />
 
         <Tip type="success">
-          <strong>Consejo:</strong> Las palabras de causa y efecto ayudan a crear argumentos lógicos y persuasivos.
+          <strong>Tip:</strong> Cause-and-effect words help you build logical, persuasive arguments.
         </Tip>
       </TheorySection>
 
-      <TheorySection title="Sequence (Secuencia)" icon="📋">
-        <p style={{ fontSize: '1rem', lineHeight: 1.6, color: '#4a5568', marginBottom: '1rem' }}>
-          Estas palabras organizan ideas en orden cronológico o lógico.
-        </p>
+      <TheorySection title="Sequence" icon="📋">
+        <div style={{ fontSize: '1rem', lineHeight: 1.6, color: '#4a5568', marginBottom: '1rem' }}>
+          These words organize ideas in chronological or logical order.
+        </div>
 
         <GrammarTable
-          caption="Linking Words para Secuencia"
-          headers={["Palabra", "Uso", "Ejemplo"]}
+          caption="Linking Words for Sequence"
+          headers={["Word", "Use", "Example"]}
           rows={[
-            ["first", "comenzar", "First, we need to plan"],
-            ["second", "segundo paso", "Second, we should research"],
-            ["third", "tercer paso", "Third, we can start working"],
-            ["then", "siguiente paso", "First, plan. Then, execute"],
-            ["next", "paso siguiente", "Next, we need to evaluate"],
-            ["finally", "último paso", "Finally, we can present our results"],
-            ["lastly", "último paso", "Lastly, don't forget to follow up"],
-            ["eventually", "resultado final", "Eventually, we will succeed"]
+            ["first", "to begin", "First, we need to plan"],
+            ["second", "second step", "Second, we should research"],
+            ["third", "third step", "Third, we can start working"],
+            ["then", "next step", "First, plan. Then, execute"],
+            ["next", "following step", "Next, we need to evaluate"],
+            ["finally", "final step", "Finally, we can present our results"],
+            ["lastly", "final step", "Lastly, don't forget to follow up"],
+            ["eventually", "final outcome", "Eventually, we will succeed"]
           ]}
         />
 
@@ -209,40 +209,40 @@ const LinkingWordsPage = () => {
           <Example 
             spanish="Primero, necesitamos planificar"
             english="First, we need to plan"
-            translation="Primero, necesitamos planificar"
+            translation="First, we need to plan"
           />
           <Example 
             spanish="Luego, ejecutamos"
             english="Then, we execute"
-            translation="Luego, ejecutamos"
+            translation="Then, we execute"
           />
           <Example 
             spanish="Finalmente, presentamos los resultados"
             english="Finally, we present our results"
-            translation="Finalmente, presentamos los resultados"
+            translation="Finally, we present our results"
           />
         </div>
 
         <Tip type="info">
-          <strong>Consejo:</strong> Los marcadores de secuencia hacen que tus textos sean más fáciles de seguir.
+          <strong>Tip:</strong> Sequence markers make your texts easier to follow.
         </Tip>
       </TheorySection>
 
-      <TheorySection title="Examples (Ejemplos)" icon="💡">
-        <p style={{ fontSize: '1rem', lineHeight: 1.6, color: '#4a5568', marginBottom: '1rem' }}>
-          Estas palabras introducen ejemplos o ilustraciones para apoyar tus ideas.
-        </p>
+      <TheorySection title="Examples" icon="💡">
+        <div style={{ fontSize: '1rem', lineHeight: 1.6, color: '#4a5568', marginBottom: '1rem' }}>
+          These words introduce examples or illustrations to support your ideas.
+        </div>
 
         <GrammarTable
-          caption="Linking Words para Ejemplos"
-          headers={["Palabra", "Uso", "Ejemplo"]}
+          caption="Linking Words for Examples"
+          headers={["Word", "Use", "Example"]}
           rows={[
-            ["for example", "introducir ejemplo", "Many fruits are healthy. For example, apples and oranges"],
-            ["for instance", "introducir ejemplo", "Some sports are dangerous. For instance, boxing"],
-            ["such as", "dar ejemplos", "I like tropical fruits such as mangoes and pineapples"],
-            ["namely", "ejemplos específicos", "I have three hobbies, namely reading, swimming, and cooking"],
-            ["to illustrate", "ejemplo formal", "To illustrate this point, consider the following case"],
-            ["as an example", "ejemplo formal", "As an example, let's look at the sales figures"]
+            ["for example", "introduce an example", "Many fruits are healthy. For example, apples and oranges"],
+            ["for instance", "introduce an example", "Some sports are dangerous. For instance, boxing"],
+            ["such as", "list examples", "I like tropical fruits such as mangoes and pineapples"],
+            ["namely", "specific examples", "I have three hobbies, namely reading, swimming, and cooking"],
+            ["to illustrate", "formal example", "To illustrate this point, consider the following case"],
+            ["as an example", "formal example", "As an example, let's look at the sales figures"]
           ]}
         />
 
@@ -250,96 +250,96 @@ const LinkingWordsPage = () => {
           <Example 
             spanish="Muchas frutas son saludables. Por ejemplo, manzanas y naranjas"
             english="Many fruits are healthy. For example, apples and oranges"
-            translation="Muchas frutas son saludables. Por ejemplo, manzanas y naranjas"
+            translation="Many fruits are healthy. For example, apples and oranges"
           />
           <Example 
             spanish="Me gustan las frutas tropicales como mangos y piñas"
             english="I like tropical fruits such as mangoes and pineapples"
-            translation="Me gustan las frutas tropicales como mangos y piñas"
+            translation="I like tropical fruits such as mangoes and pineapples"
           />
           <Example 
             spanish="Tengo tres hobbies, a saber: leer, nadar y cocinar"
             english="I have three hobbies, namely reading, swimming, and cooking"
-            translation="Tengo tres hobbies, a saber: leer, nadar y cocinar"
+            translation="I have three hobbies, namely reading, swimming, and cooking"
           />
         </div>
 
         <Rule 
-          title="Consejos para Ejemplos"
-          description="Para usar ejemplos efectivamente:"
+          title="Tips for Examples"
+          description="To use examples effectively:"
           examples={[
-            "Usa ejemplos relevantes y claros",
-            "Varía las palabras de introducción",
-            "Asegúrate de que los ejemplos apoyen tu punto",
-            "No uses demasiados ejemplos"
+            "Choose relevant, clear examples",
+            "Vary your introductory phrases",
+            "Make sure examples support your point",
+            "Do not overload the text with examples"
           ]}
         />
 
         <Tip type="success">
-          <strong>Consejo:</strong> Los ejemplos concretos hacen que tus argumentos sean más convincentes.
+          <strong>Tip:</strong> Concrete examples make your arguments more convincing.
         </Tip>
       </TheorySection>
 
-      <TheorySection title="Errores Comunes" icon="⚠️">
+      <TheorySection title="Common Mistakes" icon="⚠️">
         <div style={{ display: 'grid', gap: '1rem' }}>
           <Tip type="error">
-            <strong>Error:</strong> Usar 'but' al inicio de una oración ❌<br/>
-            <strong>Correcto:</strong> Usar 'however' al inicio ✅<br/>
+            <strong>Mistake:</strong> Using 'but' at the start of a sentence ❌<br/>
+            <strong>Correct:</strong> Use 'however' at the beginning ✅<br/>
             <em>But: I like coffee. But I prefer tea. → However: I like coffee. However, I prefer tea.</em>
           </Tip>
 
           <Tip type="error">
-            <strong>Error:</strong> Usar 'and' para empezar una oración ❌<br/>
-            <strong>Correcto:</strong> Usar 'in addition' o 'furthermore' ✅<br/>
+            <strong>Mistake:</strong> Using 'and' to start a sentence ❌<br/>
+            <strong>Correct:</strong> Use 'in addition' or 'furthermore' ✅<br/>
             <em>And: And we also need to consider... → In addition: In addition, we also need to consider...</em>
           </Tip>
 
           <Tip type="error">
-            <strong>Error:</strong> Confundir 'because' y 'so' ❌<br/>
-            <strong>Correcto:</strong> Usar solo uno de los dos ✅<br/>
+            <strong>Mistake:</strong> Mixing up 'because' and 'so' ❌<br/>
+            <strong>Correct:</strong> Use only one of them ✅<br/>
             <em>Because I was tired, so I went to bed. → Because I was tired, I went to bed. / I was tired, so I went to bed.</em>
           </Tip>
 
           <Tip type="error">
-            <strong>Error:</strong> No variar las palabras de enlace ❌<br/>
-            <strong>Correcto:</strong> Usar variedad de conectores ✅<br/>
-            <em>Repetir siempre 'and' → Usar 'also', 'furthermore', 'in addition', etc.</em>
+            <strong>Mistake:</strong> Not varying linking words ❌<br/>
+            <strong>Correct:</strong> Use a variety of connectors ✅<br/>
+            <em>Always repeating 'and' → Use 'also', 'furthermore', 'in addition', etc.</em>
           </Tip>
         </div>
       </TheorySection>
 
-      <TheorySection title="Reglas Importantes" icon="⚡">
+      <TheorySection title="Important Rules" icon="⚡">
         <div style={{ display: 'grid', gap: '1rem' }}>
           <Rule 
-            title="1. Posición en la oración"
-            description="La posición de las palabras de enlace es importante."
+            title="1. Position in the sentence"
+            description="Where you place linking words matters."
             examples={[
-              "Algunas van al inicio (however, therefore)",
-              "Otras van en el medio (and, but)",
-              "Algunas van al final (too, as well)",
-              "Lee ejemplos para aprender la posición correcta"
+              "Some go at the beginning (however, therefore)",
+              "Others go in the middle (and, but)",
+              "Some go at the end (too, as well)",
+              "Read examples to learn the correct position"
             ]}
           />
 
           <Rule 
-            title="2. Formalidad"
-            description="Elige palabras apropiadas para el contexto."
+            title="2. Formality"
+            description="Choose words that fit the context."
             examples={[
               "Informal: but, so, and",
               "Formal: however, therefore, furthermore",
-              "Académico: moreover, consequently, nevertheless",
-              "Adapta tu elección al contexto"
+              "Academic: moreover, consequently, nevertheless",
+              "Adapt your choice to the context"
             ]}
           />
 
           <Rule 
-            title="3. Variedad"
-            description="Usa diferentes palabras de enlace para evitar repetición."
+            title="3. Variety"
+            description="Use different linking words to avoid repetition."
             examples={[
-              "No uses siempre la misma palabra",
-              "Aprende sinónimos y alternativas",
-              "Varía según el tipo de relación",
-              "Practica con diferentes contextos"
+              "Do not rely on the same word every time",
+              "Learn synonyms and alternatives",
+              "Vary them according to the type of relationship",
+              "Practice in different contexts"
             ]}
           />
         </div>
@@ -358,51 +358,51 @@ const LinkingWordsPage = () => {
         "So"
       ]}
       correctAnswer={1}
-      explanation="'However' introduce un contraste: me gusta el café, pero prefiero el té por la mañana."
+      explanation="'However' introduces a contrast: you like coffee, but you prefer tea in the morning."
     />,
 
     <MultipleChoiceExercise
       key="2"
-      question="¿Cuál es el beneficio principal de usar linking words?"
+      question="What is the main benefit of using linking words?"
       options={[
-        "Mejorar la pronunciación",
-        "Crear textos coherentes y fluidos",
-        "Aumentar la velocidad de escritura",
-        "Reducir el vocabulario necesario"
+        "Improving pronunciation",
+        "Creating coherent, fluent texts",
+        "Increasing writing speed",
+        "Reducing the vocabulary you need"
       ]}
       correctAnswer={1}
-      explanation="Los linking words conectan ideas y crean textos coherentes y fluidos, facilitando la comprensión del lector."
+      explanation="Linking words connect ideas and produce coherent, fluent texts, which makes them easier for the reader to understand."
     />,
 
     <TrueFalseExercise
       key="3"
       statements={[
         {
-          text: "Es correcto usar 'but' al inicio de una oración en inglés formal.",
+          text: "It is acceptable to use 'but' at the beginning of a sentence in formal English.",
           isTrue: false,
-          explanation: "En inglés formal, es mejor usar 'however' al inicio de la segunda oración para mostrar contraste."
+          explanation: "In formal English, it is better to use 'however' at the beginning of the second sentence to show contrast."
         },
         {
-          text: "Los linking words ayudan a organizar ideas de manera lógica.",
+          text: "Linking words help organize ideas logically.",
           isTrue: true,
-          explanation: "Correcto. Los linking words conectan ideas y ayudan a crear una estructura lógica en el texto."
+          explanation: "Correct. Linking words connect ideas and help create a logical structure in a text."
         },
         {
-          text: "Es importante variar las palabras de enlace para evitar repetición.",
+          text: "It is important to vary linking words to avoid repetition.",
           isTrue: true,
-          explanation: "Correcto. Usar variedad de linking words hace que el texto sea más interesante y profesional."
+          explanation: "Correct. Using a variety of linking words makes writing more engaging and professional."
         },
         {
-          text: "'Because' y 'so' se pueden usar juntos en la misma oración.",
+          text: "'Because' and 'so' can be used together in the same clause.",
           isTrue: false,
-          explanation: "Incorrecto. No se debe usar 'because' y 'so' juntos. Se usa uno u otro: 'Because I was tired, I went to bed' o 'I was tired, so I went to bed'."
+          explanation: "Incorrect. Do not use 'because' and 'so' together. Use one or the other: 'Because I was tired, I went to bed' or 'I was tired, so I went to bed'."
         }
       ]}
     />,
 
     <MultipleChoiceExercise
       key="4"
-      question="¿Cuál es la mejor opción para agregar información formalmente?"
+      question="Which option best adds information in a formal way?"
       options={[
         "and",
         "also",
@@ -410,12 +410,12 @@ const LinkingWordsPage = () => {
         "too"
       ]}
       correctAnswer={2}
-      explanation="'Furthermore' es la opción más formal para agregar información. 'And' es muy básico, 'also' es informal, y 'too' va al final."
+      explanation="'Furthermore' is the most formal choice for adding information. 'And' is very basic, 'also' is less formal, and 'too' goes at the end."
     />,
 
     <MultipleChoiceExercise
       key="5"
-      question="¿Qué palabra de enlace es mejor para mostrar contraste en un contexto académico?"
+      question="Which linking word is best for showing contrast in academic writing?"
       options={[
         "but",
         "however",
@@ -423,7 +423,7 @@ const LinkingWordsPage = () => {
         "and"
       ]}
       correctAnswer={1}
-      explanation="'However' es la opción más apropiada para contextos académicos y formales. 'But' es más informal, 'though' es casual, y 'and' no muestra contraste."
+      explanation="'However' is the best fit for academic and formal contexts. 'But' is more informal, 'though' is casual, and 'and' does not signal contrast."
     />,
 
     <TrueFalseExercise
@@ -432,17 +432,17 @@ const LinkingWordsPage = () => {
         {
           text: "'Although' and 'despite' can be used interchangeably in all contexts.",
           isTrue: false,
-          explanation: "Incorrecto. 'Although' va seguido de una cláusula completa, mientras que 'despite' va seguido de un sustantivo o gerundio."
+          explanation: "Incorrect. 'Although' is followed by a full clause, while 'despite' is followed by a noun or gerund."
         },
         {
           text: "Linking words help create logical flow in writing.",
           isTrue: true,
-          explanation: "Correcto. Los linking words conectan ideas y crean un flujo lógico que facilita la comprensión."
+          explanation: "Correct. Linking words connect ideas and create a logical flow that supports comprehension."
         },
         {
           text: "'Furthermore' and 'moreover' have similar meanings.",
           isTrue: true,
-          explanation: "Correcto. Ambos significan 'además' y se usan para agregar información que apoya la idea anterior."
+          explanation: "Correct. Both mean something like 'in addition' and add information that supports the previous idea."
         }
       ]}
     />,
@@ -457,12 +457,12 @@ const LinkingWordsPage = () => {
         "Therefore"
       ]}
       correctAnswer={1}
-      explanation="'Despite' + gerundio es correcto: 'Despite studying hard'. 'Although' necesitaría 'Although he studied hard'."
+      explanation="'Despite' + gerund is correct: 'Despite studying hard'. 'Although' would need something like 'Although he studied hard'."
     />,
 
     <MultipleChoiceExercise
       key="8"
-      question="¿Cuál linking word es mejor para agregar un ejemplo?"
+      question="Which linking expression is best for adding an example?"
       options={[
         "However",
         "For instance",
@@ -470,7 +470,7 @@ const LinkingWordsPage = () => {
         "Therefore"
       ]}
       correctAnswer={1}
-      explanation="'For instance' (por ejemplo) es específico para introducir ejemplos, junto con 'for example'."
+      explanation="'For instance' is specifically used to introduce examples, along with 'for example'."
     />,
 
     <TrueFalseExercise
@@ -479,12 +479,12 @@ const LinkingWordsPage = () => {
         {
           text: "You can start a sentence with 'And' in formal writing.",
           isTrue: false,
-          explanation: "Incorrecto. En escritura formal es mejor usar conectores como 'Furthermore', 'Moreover', o 'In addition'."
+          explanation: "Incorrect. In formal writing it is better to use connectors such as 'Furthermore', 'Moreover', or 'In addition'."
         },
         {
           text: "'On the other hand' is used to show contrast.",
           isTrue: true,
-          explanation: "Correcto. 'On the other hand' introduce una perspectiva contrastante o alternativa."
+          explanation: "Correct. 'On the other hand' introduces a contrasting or alternative perspective."
         }
       ]}
     />,
@@ -499,14 +499,14 @@ const LinkingWordsPage = () => {
         "Consequently"
       ]}
       correctAnswer={1}
-      explanation="'Nevertheless' (sin embargo/no obstante) muestra contraste: a pesar del mal tiempo, decidimos ir de excursión."
+      explanation="'Nevertheless' signals contrast: despite the bad weather, we decided to go hiking."
     />
   ];
 
   return (
     <TheoryLayout
       title="Linking Words"
-      description="Domina las palabras de enlace en inglés. Aprende a conectar ideas, mostrar contrastes, explicar causas y efectos, y crear textos coherentes y fluidos."
+      description="Master linking words in English. Learn how to connect ideas, show contrast, explain causes and effects, and produce coherent, fluent texts."
       level="B2-C1-C2"
       theoryContent={theoryContent}
       exercises={exercises}

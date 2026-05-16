@@ -18,35 +18,35 @@ import {
 const InfinitiveVsGerundPage = () => {
   const theoryContent = (
     <div>
-      <TheorySection title="¿Qué son Infinitive y Gerund?" icon="🔤">
+      <TheorySection title="What Are Infinitive and Gerund?" icon="🔤">
         <p style={{ fontSize: '1.1rem', lineHeight: 1.6, color: '#4a5568', marginBottom: '1rem' }}>
-          El <strong>infinitive</strong> (infinitivo) y el <strong>gerund</strong> (gerundio) son formas verbales que funcionan como sustantivos. 
-          Saber cuándo usar cada uno es crucial para hablar inglés correctamente, ya que algunos verbos requieren infinitivo, otros gerundio, y algunos ambos.
+          The <strong>infinitive</strong> and the <strong>gerund</strong> are verb forms that function as nouns. 
+          Knowing when to use each one is crucial for speaking English correctly, since some verbs require the infinitive, others the gerund, and some accept both.
         </p>
         
         <QuickReference items={[
-          "Infinitive: to + verbo base (to go, to eat, to study)",
-          "Gerund: verbo + ing (going, eating, studying)",
-          "Algunos verbos requieren solo infinitivo",
-          "Algunos verbos requieren solo gerundio",
-          "Algunos verbos aceptan ambos con diferente significado"
+          "Infinitive: to + base verb (to go, to eat, to study)",
+          "Gerund: verb + ing (going, eating, studying)",
+          "Some verbs require only the infinitive",
+          "Some verbs require only the gerund",
+          "Some verbs accept both with different meanings"
         ]} />
       </TheorySection>
 
-      <TheorySection title="Infinitive (Infinitivo)" icon="🎯">
+      <TheorySection title="Infinitive" icon="🎯">
         <p style={{ fontSize: '1rem', lineHeight: 1.6, color: '#4a5568', marginBottom: '1rem' }}>
-          El infinitivo es la forma base del verbo precedida por "to". Se usa en diversas estructuras gramaticales.
+          The infinitive is the base form of the verb preceded by &quot;to&quot;. It is used in various grammatical structures.
         </p>
 
         <GrammarTable
-          caption="Usos del Infinitivo"
-          headers={["Uso", "Estructura", "Ejemplo", "Significado"]}
+          caption="Uses of the Infinitive"
+          headers={["Use", "Structure", "Example", "Meaning"]}
           rows={[
-            ["Después de verbos específicos", "verbo + to + infinitivo", "I want to go", "Quiero ir"],
-            ["Después de adjetivos", "adjetivo + to + infinitivo", "It's easy to learn", "Es fácil aprender"],
-            ["Para expresar propósito", "to + infinitivo", "I study to pass", "Estudio para aprobar"],
-            ["Después de algunos sustantivos", "sustantivo + to + infinitivo", "time to go", "hora de ir"],
-            ["Con 'too' y 'enough'", "too/enough + to + infinitivo", "too tired to work", "muy cansado para trabajar"]
+            ["After specific verbs", "verb + to + infinitive", "I want to go", "I want to go"],
+            ["After adjectives", "adjective + to + infinitive", "It's easy to learn", "It's easy to learn"],
+            ["To express purpose", "to + infinitive", "I study to pass", "I study to pass"],
+            ["After some nouns", "noun + to + infinitive", "time to go", "time to go"],
+            ["With 'too' and 'enough'", "too/enough + to + infinitive", "too tired to work", "too tired to work"]
           ]}
         />
 
@@ -54,49 +54,49 @@ const InfinitiveVsGerundPage = () => {
           <Example 
             spanish="Quiero aprender inglés"
             english="I want to learn English"
-            translation="Quiero aprender inglés"
+            translation="I want to learn English"
           />
           <Example 
             spanish="Es importante estudiar"
             english="It's important to study"
-            translation="Es importante estudiar"
+            translation="It's important to study"
           />
           <Example 
             spanish="Voy a la tienda para comprar leche"
             english="I go to the store to buy milk"
-            translation="Voy a la tienda para comprar leche"
+            translation="I go to the store to buy milk"
           />
         </div>
 
         <Rule 
-          title="Verbos que requieren Infinitivo"
-          description="Estos verbos van seguidos de infinitivo:"
+          title="Verbs That Require the Infinitive"
+          description="These verbs are followed by the infinitive:"
           examples={[
             "Want, need, hope, decide, plan, promise",
             "Agree, refuse, offer, attempt, fail",
-            "Learn, teach, help (opcional), choose"
+            "Learn, teach, help (optional), choose"
           ]}
         />
 
         <Tip type="info">
-          <strong>Recuerda:</strong> Después de estos verbos siempre usamos "to + infinitivo", nunca gerundio.
+          <strong>Remember:</strong> After these verbs we always use &quot;to + infinitive&quot;, never the gerund.
         </Tip>
       </TheorySection>
 
-      <TheorySection title="Gerund (Gerundio)" icon="🔄">
+      <TheorySection title="Gerund" icon="🔄">
         <p style={{ fontSize: '1rem', lineHeight: 1.6, color: '#4a5568', marginBottom: '1rem' }}>
-          El gerundio es la forma "-ing" del verbo que funciona como sustantivo. Se usa en diversas estructuras.
+          The gerund is the &quot;-ing&quot; form of the verb that functions as a noun. It is used in various structures.
         </p>
 
         <GrammarTable
-          caption="Usos del Gerundio"
-          headers={["Uso", "Estructura", "Ejemplo", "Significado"]}
+          caption="Uses of the Gerund"
+          headers={["Use", "Structure", "Example", "Meaning"]}
           rows={[
-            ["Como sujeto", "gerundio + verbo", "Swimming is fun", "Nadar es divertido"],
-            ["Después de verbos específicos", "verbo + gerundio", "I enjoy reading", "Disfruto leyendo"],
-            ["Después de preposiciones", "preposición + gerundio", "good at singing", "bueno cantando"],
-            ["Después de algunas expresiones", "expresión + gerundio", "It's worth trying", "Vale la pena intentar"],
-            ["Como objeto directo", "verbo + gerundio", "I finished working", "Terminé de trabajar"]
+            ["As subject", "gerund + verb", "Swimming is fun", "Swimming is fun"],
+            ["After specific verbs", "verb + gerund", "I enjoy reading", "I enjoy reading"],
+            ["After prepositions", "preposition + gerund", "good at singing", "good at singing"],
+            ["After some expressions", "expression + gerund", "It's worth trying", "It's worth trying"],
+            ["As direct object", "verb + gerund", "I finished working", "I finished working"]
           ]}
         />
 
@@ -104,23 +104,23 @@ const InfinitiveVsGerundPage = () => {
           <Example 
             spanish="Nadar es bueno para la salud"
             english="Swimming is good for health"
-            translation="Nadar es bueno para la salud"
+            translation="Swimming is good for health"
           />
           <Example 
             spanish="Disfruto cocinando"
             english="I enjoy cooking"
-            translation="Disfruto cocinando"
+            translation="I enjoy cooking"
           />
           <Example 
             spanish="Soy bueno cantando"
             english="I am good at singing"
-            translation="Soy bueno cantando"
+            translation="I am good at singing"
           />
         </div>
 
         <Rule 
-          title="Verbos que requieren Gerundio"
-          description="Estos verbos van seguidos de gerundio:"
+          title="Verbs That Require the Gerund"
+          description="These verbs are followed by the gerund:"
           examples={[
             "Enjoy, like, love, hate, prefer",
             "Avoid, consider, suggest, recommend",
@@ -130,24 +130,24 @@ const InfinitiveVsGerundPage = () => {
         />
 
         <Tip type="warning">
-          <strong>¡Cuidado!</strong> Después de estos verbos usamos gerundio, no infinitivo.
+          <strong>Watch out!</strong> After these verbs we use the gerund, not the infinitive.
         </Tip>
       </TheorySection>
 
-      <TheorySection title="Verbos que Aceptan Ambos" icon="⚖️">
+      <TheorySection title="Verbs That Accept Both" icon="⚖️">
         <p style={{ fontSize: '1rem', lineHeight: 1.6, color: '#4a5568', marginBottom: '1rem' }}>
-          Algunos verbos pueden ir seguidos tanto de infinitivo como de gerundio, pero con significados diferentes.
+          Some verbs can be followed by both the infinitive and the gerund, but with different meanings.
         </p>
 
         <GrammarTable
-          caption="Verbos con Ambos Usos"
-          headers={["Verbo", "Con Infinitivo", "Con Gerundio", "Diferencia"]}
+          caption="Verbs with Both Uses"
+          headers={["Verb", "With Infinitive", "With Gerund", "Difference"]}
           rows={[
-            ["Remember", "remember to do (recordar hacer)", "remember doing (recordar haber hecho)", "Tiempo de la acción"],
-            ["Forget", "forget to do (olvidar hacer)", "forget doing (olvidar haber hecho)", "Tiempo de la acción"],
-            ["Try", "try to do (intentar hacer)", "try doing (probar hacer)", "Propósito vs experimento"],
-            ["Stop", "stop to do (parar para hacer)", "stop doing (dejar de hacer)", "Propósito vs cesar"],
-            ["Like", "like to do (preferir hacer)", "like doing (disfrutar haciendo)", "Preferencia vs disfrute"]
+            ["Remember", "remember to do (remember to do)", "remember doing (remember having done)", "Timing of the action"],
+            ["Forget", "forget to do (forget to do)", "forget doing (forget having done)", "Timing of the action"],
+            ["Try", "try to do (try to do)", "try doing (try doing)", "Purpose vs experiment"],
+            ["Stop", "stop to do (stop in order to do)", "stop doing (stop doing)", "Purpose vs cease"],
+            ["Like", "like to do (prefer to do)", "like doing (enjoy doing)", "Preference vs enjoyment"]
           ]}
         />
 
@@ -155,45 +155,45 @@ const InfinitiveVsGerundPage = () => {
           <Example 
             spanish="Recuerda cerrar la puerta"
             english="Remember to close the door"
-            translation="Recuerda cerrar la puerta"
+            translation="Remember to close the door"
           />
           <Example 
             spanish="Recuerdo haber cerrado la puerta"
             english="I remember closing the door"
-            translation="Recuerdo haber cerrado la puerta"
+            translation="I remember closing the door"
           />
           <Example 
             spanish="Intento aprender inglés"
             english="I try to learn English"
-            translation="Intento aprender inglés"
+            translation="I try to learn English"
           />
           <Example 
             spanish="Pruebo aprender inglés"
             english="I try learning English"
-            translation="Pruebo aprender inglés"
+            translation="I try learning English"
           />
         </div>
 
         <Tip type="success">
-          <strong>Consejo:</strong> La diferencia principal está en el tiempo: infinitivo = futuro, gerundio = pasado.
+          <strong>Tip:</strong> The main difference is timing: infinitive = future, gerund = past.
         </Tip>
       </TheorySection>
 
-      <TheorySection title="Expresiones Comunes" icon="💬">
+      <TheorySection title="Common Expressions" icon="💬">
         <p style={{ fontSize: '1rem', lineHeight: 1.6, color: '#4a5568', marginBottom: '1rem' }}>
-          Hay muchas expresiones que requieren infinitivo o gerundio específicamente.
+          Many expressions require the infinitive or gerund specifically.
         </p>
 
         <GrammarTable
-          caption="Expresiones con Infinitivo y Gerundio"
-          headers={["Expresión", "Forma", "Ejemplo", "Significado"]}
+          caption="Expressions with Infinitive and Gerund"
+          headers={["Expression", "Form", "Example", "Meaning"]}
           rows={[
-            ["It's + adjetivo", "to + infinitivo", "It's important to study", "Es importante estudiar"],
-            ["Too + adjetivo", "to + infinitivo", "too tired to work", "muy cansado para trabajar"],
-            ["Adjetivo + enough", "to + infinitivo", "old enough to drive", "suficientemente mayor para manejar"],
-            ["Be good/bad at", "gerundio", "good at swimming", "bueno nadando"],
-            ["Be interested in", "gerundio", "interested in learning", "interesado en aprender"],
-            ["Look forward to", "gerundio", "look forward to seeing", "tener ganas de ver"]
+            ["It's + adjective", "to + infinitive", "It's important to study", "It's important to study"],
+            ["Too + adjective", "to + infinitive", "too tired to work", "too tired to work"],
+            ["Adjective + enough", "to + infinitive", "old enough to drive", "old enough to drive"],
+            ["Be good/bad at", "gerund", "good at swimming", "good at swimming"],
+            ["Be interested in", "gerund", "interested in learning", "interested in learning"],
+            ["Look forward to", "gerund", "look forward to seeing", "look forward to seeing"]
           ]}
         />
 
@@ -201,67 +201,67 @@ const InfinitiveVsGerundPage = () => {
           <Example 
             spanish="Es fácil aprender inglés"
             english="It's easy to learn English"
-            translation="Es fácil aprender inglés"
+            translation="It's easy to learn English"
           />
           <Example 
             spanish="Soy bueno nadando"
             english="I am good at swimming"
-            translation="Soy bueno nadando"
+            translation="I am good at swimming"
           />
           <Example 
             spanish="Tengo ganas de verte"
             english="I look forward to seeing you"
-            translation="Tengo ganas de verte"
+            translation="I look forward to seeing you"
           />
         </div>
 
         <Tip type="info">
-          <strong>Nota:</strong> "Look forward to" va seguido de gerundio, aunque "to" parezca infinitivo.
+          <strong>Note:</strong> &quot;Look forward to&quot; is followed by a gerund, even though &quot;to&quot; looks like an infinitive marker.
         </Tip>
       </TheorySection>
 
-      <TheorySection title="Errores Comunes" icon="⚠️">
+      <TheorySection title="Common Mistakes" icon="⚠️">
         <div style={{ display: 'grid', gap: '1rem' }}>
           <Tip type="error">
-            <strong>Error:</strong> "I enjoy to read" ❌<br/>
-            <strong>Correcto:</strong> "I enjoy reading" ✅<br/>
-            <em>'Enjoy' va seguido de gerundio, no infinitivo</em>
+            <strong>Error:</strong> &quot;I enjoy to read&quot; ❌<br/>
+            <strong>Correct:</strong> &quot;I enjoy reading&quot; ✅<br/>
+            <em>&apos;Enjoy&apos; is followed by a gerund, not an infinitive</em>
           </Tip>
 
           <Tip type="error">
-            <strong>Error:</strong> "I want going home" ❌<br/>
-            <strong>Correcto:</strong> "I want to go home" ✅<br/>
-            <em>'Want' va seguido de infinitivo, no gerundio</em>
+            <strong>Error:</strong> &quot;I want going home&quot; ❌<br/>
+            <strong>Correct:</strong> &quot;I want to go home&quot; ✅<br/>
+            <em>&apos;Want&apos; is followed by an infinitive, not a gerund</em>
           </Tip>
 
           <Tip type="error">
-            <strong>Error:</strong> "I'm looking forward to see you" ❌<br/>
-            <strong>Correcto:</strong> "I'm looking forward to seeing you" ✅<br/>
-            <em>'Look forward to' va seguido de gerundio</em>
+            <strong>Error:</strong> &quot;I&apos;m looking forward to see you&quot; ❌<br/>
+            <strong>Correct:</strong> &quot;I&apos;m looking forward to seeing you&quot; ✅<br/>
+            <em>&apos;Look forward to&apos; is followed by a gerund</em>
           </Tip>
 
           <Tip type="error">
-            <strong>Error:</strong> "I stopped to smoke" (para dejar de fumar) ❌<br/>
-            <strong>Correcto:</strong> "I stopped smoking" ✅<br/>
-            <em>Para 'dejar de hacer' usamos gerundio</em>
+            <strong>Error:</strong> &quot;I stopped to smoke&quot; (to quit smoking) ❌<br/>
+            <strong>Correct:</strong> &quot;I stopped smoking&quot; ✅<br/>
+            <em>To express &apos;stop doing something&apos; we use the gerund</em>
           </Tip>
         </div>
       </TheorySection>
 
-      <TheorySection title="Reglas Importantes" icon="⚡">
+      <TheorySection title="Important Rules" icon="⚡">
         <div style={{ display: 'grid', gap: '1rem' }}>
           <Rule 
-            title="1. Verbos de preferencia"
-            description="Like, love, hate, prefer pueden usar ambos, pero con matices diferentes."
+            title="1. Preference verbs"
+            description="Like, love, hate, prefer can use both, but with different nuances."
             examples={[
-              "I like to swim (preferencia general)",
-              "I like swimming (disfruto la actividad)"
+              "I like to swim (general preference)",
+              "I like swimming (I enjoy the activity)"
             ]}
           />
 
           <Rule 
-            title="2. Después de preposiciones"
-            description="Siempre usamos gerundio después de preposiciones."
+            title="2. After prepositions"
+            description="We always use the gerund after prepositions."
             examples={[
               "Good at swimming",
               "Interested in learning",
@@ -270,11 +270,11 @@ const InfinitiveVsGerundPage = () => {
           />
 
           <Rule 
-            title="3. Como sujeto"
-            description="Tanto infinitivo como gerundio pueden ser sujeto, pero gerundio es más común."
+            title="3. As subject"
+            description="Both infinitive and gerund can be subjects, but the gerund is more common."
             examples={[
-              "Swimming is fun (más común)",
-              "To swim is fun (menos común)"
+              "Swimming is fun (more common)",
+              "To swim is fun (less common)"
             ]}
           />
         </div>
@@ -293,12 +293,12 @@ const InfinitiveVsGerundPage = () => {
         "learned"
       ]}
       correctAnswer={1}
-      explanation="Después de 'want' usamos infinitivo con 'to': 'want to learn'."
+      explanation="After 'want' we use the infinitive with 'to': 'want to learn'."
     />,
 
     <MultipleChoiceExercise
       key="2"
-      question="¿Cuál es la forma correcta para completar: 'I enjoy ___ books'?"
+      question="Which is the correct form to complete: 'I enjoy ___ books'?"
       options={[
         "to read",
         "reading",
@@ -306,7 +306,7 @@ const InfinitiveVsGerundPage = () => {
         "reads"
       ]}
       correctAnswer={1}
-      explanation="'Enjoy' va seguido de gerundio: 'I enjoy reading books'."
+      explanation="'Enjoy' is followed by a gerund: 'I enjoy reading books'."
     />,
 
     <TrueFalseExercise
@@ -315,29 +315,29 @@ const InfinitiveVsGerundPage = () => {
         {
           text: "'I want to go home' is correct.",
           isTrue: true,
-          explanation: "Correcto. 'Want' va seguido de infinitivo."
+          explanation: "Correct. 'Want' is followed by an infinitive."
         },
         {
           text: "'I enjoy to swim' is correct.",
           isTrue: false,
-          explanation: "Incorrecto. 'Enjoy' va seguido de gerundio: 'I enjoy swimming'."
+          explanation: "Incorrect. 'Enjoy' is followed by a gerund: 'I enjoy swimming'."
         },
         {
           text: "'I'm looking forward to seeing you' is correct.",
           isTrue: true,
-          explanation: "Correcto. 'Look forward to' va seguido de gerundio."
+          explanation: "Correct. 'Look forward to' is followed by a gerund."
         },
         {
           text: "'I stopped to smoke' means I quit smoking.",
           isTrue: false,
-          explanation: "Incorrecto. 'I stopped to smoke' means I stopped in order to smoke. 'I stopped smoking' means I quit smoking."
+          explanation: "Incorrect. 'I stopped to smoke' means I stopped in order to smoke. 'I stopped smoking' means I quit smoking."
         }
       ]}
     />,
 
     <MultipleChoiceExercise
       key="4"
-      question="¿Cuál es la forma correcta para completar: 'I remember ___ the door' (I remember that I closed it)?"
+      question="Which is the correct form to complete: 'I remember ___ the door' (I remember that I closed it)?"
       options={[
         "to close",
         "closing",
@@ -345,12 +345,12 @@ const InfinitiveVsGerundPage = () => {
         "closed"
       ]}
       correctAnswer={1}
-      explanation="Para recordar haber hecho algo usamos gerundio: 'I remember closing the door'."
+      explanation="To remember having done something we use the gerund: 'I remember closing the door'."
     />,
 
     <MultipleChoiceExercise
       key="5"
-      question="¿Cuál es la forma correcta para completar: 'It's easy ___ English'?"
+      question="Which is the correct form to complete: 'It's easy ___ English'?"
       options={[
         "learn",
         "learning",
@@ -358,7 +358,7 @@ const InfinitiveVsGerundPage = () => {
         "learns"
       ]}
       correctAnswer={2}
-      explanation="Después de 'It's + adjetivo' usamos infinitivo: 'It's easy to learn English'."
+      explanation="After 'It's + adjective' we use the infinitive: 'It's easy to learn English'."
     />,
 
     <TrueFalseExercise
@@ -367,17 +367,17 @@ const InfinitiveVsGerundPage = () => {
         {
           text: "'I enjoy to read books' is correct.",
           isTrue: false,
-          explanation: "Incorrecto. 'Enjoy' requiere gerundio: 'I enjoy reading books'."
+          explanation: "Incorrect. 'Enjoy' requires a gerund: 'I enjoy reading books'."
         },
         {
           text: "'She decided to study medicine' is correct.",
           isTrue: true,
-          explanation: "Correcto. 'Decide' requiere infinitivo: 'decided to study'."
+          explanation: "Correct. 'Decide' requires an infinitive: 'decided to study'."
         },
         {
           text: "'I'm looking forward to see you' is correct.",
           isTrue: false,
-          explanation: "Incorrecto. Después de 'to' como preposición usamos gerundio: 'looking forward to seeing you'."
+          explanation: "Incorrect. After 'to' as a preposition we use the gerund: 'looking forward to seeing you'."
         }
       ]}
     />,
@@ -392,12 +392,12 @@ const InfinitiveVsGerundPage = () => {
         "waited"
       ]}
       correctAnswer={1}
-      explanation="'Can't stand' requiere gerundio: 'I can't stand waiting'."
+      explanation="'Can't stand' requires a gerund: 'I can't stand waiting'."
     />,
 
     <MultipleChoiceExercise
       key="8"
-      question="¿Cuál es la forma correcta: 'I remember ___ her at the party'?"
+      question="Which is the correct form: 'I remember ___ her at the party'?"
       options={[
         "to meet",
         "meeting",
@@ -405,7 +405,7 @@ const InfinitiveVsGerundPage = () => {
         "met"
       ]}
       correctAnswer={1}
-      explanation="'Remember' + gerundio se refiere a recordar algo que ya pasó: 'I remember meeting her'."
+      explanation="'Remember' + gerund refers to remembering something that already happened: 'I remember meeting her'."
     />,
 
     <TrueFalseExercise
@@ -414,12 +414,12 @@ const InfinitiveVsGerundPage = () => {
         {
           text: "'Stop to smoke' and 'stop smoking' have the same meaning.",
           isTrue: false,
-          explanation: "Incorrecto. 'Stop to smoke' = parar para fumar; 'stop smoking' = dejar de fumar."
+          explanation: "Incorrect. 'Stop to smoke' = stop in order to smoke; 'stop smoking' = quit smoking."
         },
         {
           text: "After prepositions we use gerund.",
           isTrue: true,
-          explanation: "Correcto. Después de preposiciones usamos gerundio: 'interested in learning'."
+          explanation: "Correct. After prepositions we use the gerund: 'interested in learning'."
         }
       ]}
     />,
@@ -434,14 +434,14 @@ const InfinitiveVsGerundPage = () => {
         "locked"
       ]}
       correctAnswer={1}
-      explanation="'Forget' + infinitivo se refiere a olvidar hacer algo: 'forgot to lock' (olvidó cerrar con llave)."
+      explanation="'Forget' + infinitive refers to forgetting to do something: 'forgot to lock' (forgot to lock the door)."
     />
   ];
 
   return (
     <TheoryLayout
       title="Infinitive vs Gerund"
-      description="Domina el uso del infinitivo y gerundio en inglés. Aprende qué verbos requieren cada forma y cuándo usar cada una para expresarte correctamente."
+      description="Master the use of the infinitive and gerund in English. Learn which verbs require each form and when to use each one to express yourself correctly."
       level="B1-B2-C1-C2"
       theoryContent={theoryContent}
       exercises={exercises}
@@ -452,25 +452,3 @@ const InfinitiveVsGerundPage = () => {
 };
 
 export default InfinitiveVsGerundPage;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

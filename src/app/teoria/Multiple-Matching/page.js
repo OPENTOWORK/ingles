@@ -6,125 +6,125 @@ import { MultipleChoiceExercise, TrueFalseExercise } from '@/components/theory/E
 const MultipleMatchingPage = () => {
   const theoryContent = (
     <div>
-      <TheorySection title="¿Qué es Multiple Matching?" icon="🔗">
+      <TheorySection title="What is Multiple Matching?" icon="🔗">
         <p>
-          <strong>Multiple Matching</strong> es un ejercicio donde debes relacionar preguntas o declaraciones 
-          con diferentes textos o secciones. Cada texto puede usarse más de una vez, y algunas opciones pueden no usarse.
+          <strong>Multiple Matching</strong> is a task where you match questions or statements 
+          to different texts or sections. Each text may be used more than once, and some options may not be used.
         </p>
         
         <Example 
-          title="Ejemplo de Multiple Matching"
-          content="Tienes 4 textos sobre diferentes restaurantes (A, B, C, D) y 7 preguntas como: '¿Cuál menciona comida vegetariana?', '¿Cuál tiene el mejor servicio?', etc. Debes encontrar qué texto responde cada pregunta."
-          explanation="Cada texto puede ser la respuesta a múltiples preguntas, y algunas preguntas pueden tener la misma respuesta."
+          title="Multiple Matching example"
+          content="You have 4 texts about different restaurants (A, B, C, D) and 7 questions such as: 'Which mentions vegetarian food?', 'Which has the best service?' You find which text answers each question."
+          explanation="One text can answer several questions, and more than one question may share the same answer."
         />
       </TheorySection>
 
-      <TheorySection title="Estrategias Principales" icon="🎯">
+      <TheorySection title="Main strategies" icon="🎯">
         <div style={{ display: 'grid', gap: '1rem' }}>
           <Tip 
-            title="1. Lee las preguntas primero"
-            description="Antes de leer los textos, estudia todas las preguntas."
+            title="1. Read the questions first"
+            description="Before reading the texts, study all the questions."
             examples={[
-              "Identifica palabras clave en cada pregunta",
-              "Agrupa preguntas similares por tema",
-              "Nota qué tipo de información buscas",
-              "Predice qué vocabulario podrías encontrar"
+              "Identify keywords in each question",
+              "Group similar questions by topic",
+              "Note what kind of information you need",
+              "Predict vocabulary you might meet"
             ]}
           />
 
           <Tip 
-            title="2. Lectura estratégica de textos"
-            description="Lee cada texto buscando respuestas específicas."
+            title="2. Strategic reading of texts"
+            description="Read each text looking for specific answers."
             examples={[
-              "Subraya información relevante mientras lees",
-              "Marca posibles respuestas con números de pregunta",
-              "No te detengas en detalles irrelevantes",
-              "Busca sinónimos de las palabras clave"
+              "Underline relevant information as you read",
+              "Mark possible answers with question numbers",
+              "Do not get stuck on irrelevant detail",
+              "Look for synonyms of the keywords"
             ]}
           />
 
           <Tip 
-            title="3. Verifica y revisa"
-            description="Confirma tus respuestas y busca las que faltan."
+            title="3. Check and review"
+            description="Confirm your answers and find any you missed."
             examples={[
-              "¿Has usado todos los textos apropiadamente?",
-              "¿Algún texto responde múltiples preguntas?",
-              "¿Hay preguntas sin responder?",
-              "¿Tus respuestas son lógicas y consistentes?"
+              "Have you used texts appropriately?",
+              "Does one text answer several questions?",
+              "Are any questions unanswered?",
+              "Are your answers logical and consistent?"
             ]}
           />
         </div>
       </TheorySection>
 
-      <TheorySection title="Tipos Comunes de Preguntas" icon="🔍">
+      <TheorySection title="Common question types" icon="🔍">
         <div style={{ display: 'grid', gap: '1rem' }}>
           <Rule 
-            title="1. Información específica"
-            description="Preguntas sobre datos concretos y detalles."
+            title="1. Specific information"
+            description="Questions about concrete facts and details."
             examples={[
-              "¿Cuál menciona un precio específico?",
-              "¿Dónde se habla de horarios de apertura?",
-              "¿Qué texto incluye información de contacto?",
-              "¿Cuál describe una ubicación exacta?"
+              "Which mentions a specific price?",
+              "Where are opening hours discussed?",
+              "Which text includes contact details?",
+              "Which describes an exact location?"
             ]}
           />
 
           <Rule 
-            title="2. Opiniones y actitudes"
-            description="Preguntas sobre puntos de vista y sentimientos."
+            title="2. Opinions and attitudes"
+            description="Questions about viewpoints and feelings."
             examples={[
-              "¿Cuál expresa una opinión positiva?",
-              "¿Dónde se muestra desacuerdo?",
-              "¿Qué texto refleja entusiasmo?",
-              "¿Cuál indica decepción o crítica?"
+              "Which expresses a positive opinion?",
+              "Where is disagreement shown?",
+              "Which text sounds enthusiastic?",
+              "Which suggests disappointment or criticism?"
             ]}
           />
 
           <Rule 
-            title="3. Comparaciones y contrastes"
-            description="Preguntas que comparan diferentes aspectos."
+            title="3. Comparisons and contrasts"
+            description="Questions that compare different aspects."
             examples={[
-              "¿Cuál es el más caro/barato?",
-              "¿Qué opción es más conveniente?",
-              "¿Cuál ofrece mejor calidad?",
-              "¿Dónde hay más variedad de opciones?"
+              "Which is the most expensive/cheapest?",
+              "Which option is more convenient?",
+              "Which offers better quality?",
+              "Where is there the widest range?"
             ]}
           />
         </div>
       </TheorySection>
 
-      <TheorySection title="Reglas Importantes" icon="⚡">
+      <TheorySection title="Important rules" icon="⚡">
         <div style={{ display: 'grid', gap: '1rem' }}>
           <Rule 
-            title="1. Reutilización de textos"
-            description="Los textos pueden ser respuesta a múltiples preguntas."
+            title="1. Reusing texts"
+            description="Texts can answer more than one question."
             examples={[
-              "Un texto puede responder 2-3 preguntas diferentes",
-              "No descartes un texto después de usarlo una vez",
-              "Algunos textos pueden no ser respuesta a ninguna pregunta",
-              "Lee cada texto pensando en todas las preguntas"
+              "One text may answer 2–3 different questions",
+              "Do not discard a text after using it once",
+              "Some texts may answer no questions",
+              "Read each text with all questions in mind"
             ]}
           />
 
           <Rule 
-            title="2. Sinónimos y paráfrasis"
-            description="Las respuestas raramente usan las mismas palabras que las preguntas."
+            title="2. Synonyms and paraphrase"
+            description="Answers rarely repeat the exact words of the questions."
             examples={[
-              "'Expensive' en la pregunta → 'costly, pricey' en el texto",
-              "'Happy' en la pregunta → 'delighted, pleased' en el texto",
-              "'Difficult' en la pregunta → 'challenging, tough' en el texto",
-              "'Quick' en la pregunta → 'rapid, fast, speedy' en el texto"
+              "'Expensive' in the question → 'costly, pricey' in the text",
+              "'Happy' in the question → 'delighted, pleased' in the text",
+              "'Difficult' in the question → 'challenging, tough' in the text",
+              "'Quick' in the question → 'rapid, fast, speedy' in the text"
             ]}
           />
 
           <Rule 
-            title="3. Información implícita"
-            description="A veces la respuesta está implícita, no explícita."
+            title="3. Implicit information"
+            description="Sometimes the answer is implied, not stated outright."
             examples={[
-              "La pregunta sobre 'precio alto' puede responderse con 'luxury, premium'",
-              "'Suitable for families' puede indicarse con 'children's menu, playground'",
-              "'Popular' puede inferirse de 'always busy, book in advance'",
-              "'Experienced' puede sugerirse con 'established since 1950'"
+              "A question about 'high price' may be answered with 'luxury, premium'",
+              "'Suitable for families' may appear as 'children's menu, playground'",
+              "'Popular' may be implied by 'always busy, book in advance'",
+              "'Experienced' may be suggested by 'established since 1950'"
             ]}
           />
         </div>
@@ -135,158 +135,158 @@ const MultipleMatchingPage = () => {
   const exercises = [
     <MultipleChoiceExercise
       key="1"
-      question="En Multiple Matching, ¿pueden los textos ser respuesta a más de una pregunta?"
+      question="In Multiple Matching, can texts be the answer to more than one question?"
       options={[
-        "No, cada texto responde solo una pregunta",
-        "Sí, los textos pueden responder múltiples preguntas",
-        "Solo si son textos muy largos",
-        "Depende del número de preguntas"
+        "No—each text answers only one question",
+        "Yes—texts can answer several questions",
+        "Only if the texts are very long",
+        "It depends how many questions there are"
       ]}
       correctAnswer={1}
-      explanation="Sí, en Multiple Matching los textos pueden ser respuesta a múltiples preguntas diferentes."
+      explanation="Yes—in Multiple Matching a text can be the answer to several different questions."
     />,
 
     <MultipleChoiceExercise
       key="2"
-      question="¿Cuál es la mejor estrategia para empezar un ejercicio de Multiple Matching?"
+      question="What is the best way to start a Multiple Matching task?"
       options={[
-        "Leer todos los textos primero",
-        "Leer las preguntas primero",
-        "Contar cuántos textos hay",
-        "Empezar por el texto más largo"
+        "Read all the texts first",
+        "Read the questions first",
+        "Count how many texts there are",
+        "Start with the longest text"
       ]}
       correctAnswer={1}
-      explanation="Es mejor leer las preguntas primero para saber qué información buscar en los textos."
+      explanation="Read the questions first so you know what to look for in the texts."
     />,
 
     <TrueFalseExercise
       key="3"
       statements={[
         {
-          text: "Todos los textos deben ser usados como respuesta al menos una vez.",
+          text: "Every text must be used as an answer at least once.",
           isTrue: false,
-          explanation: "Incorrecto. Algunos textos pueden no ser respuesta a ninguna pregunta en Multiple Matching."
+          explanation: "Incorrect. Some texts may not answer any question in Multiple Matching."
         },
         {
-          text: "Las respuestas en los textos suelen usar sinónimos de las palabras en las preguntas.",
+          text: "Answers in the texts often use synonyms of words in the questions.",
           isTrue: true,
-          explanation: "Correcto. Raramente encontrarás las mismas palabras exactas; debes buscar sinónimos y paráfrasis."
+          explanation: "Correct. You rarely find identical wording; look for synonyms and paraphrase."
         },
         {
-          text: "Debes leer cada texto completamente antes de buscar respuestas.",
+          text: "You must read each text fully before you search for answers.",
           isTrue: false,
-          explanation: "Incorrecto. Es más eficiente leer estratégicamente buscando información específica relacionada con las preguntas."
+          explanation: "Incorrect. It is more efficient to read strategically for information tied to the questions."
         }
       ]}
     />,
 
     <MultipleChoiceExercise
       key="4"
-      question="Si una pregunta busca información sobre 'precio alto', ¿qué palabras podrías encontrar en el texto?"
+      question="If a question is about a 'high price', which words might you find in the text?"
       options={[
-        "Solo la palabra 'expensive'",
+        "Only the word 'expensive'",
         "Luxury, premium, costly, pricey",
-        "Únicamente números con símbolos de moneda",
-        "Solo la frase 'high price'"
+        "Only numbers with currency symbols",
+        "Only the phrase 'high price'"
       ]}
       correctAnswer={1}
-      explanation="Debes buscar sinónimos como 'luxury', 'premium', 'costly', 'pricey' que indican precio alto."
+      explanation="Look for synonyms such as 'luxury', 'premium', 'costly', and 'pricey' that signal high price."
     />,
 
     <MultipleChoiceExercise
       key="5"
-      question="¿Qué debes hacer mientras lees cada texto?"
+      question="What should you do while reading each text?"
       options={[
-        "Memorizar todo el contenido",
-        "Traducir cada palabra",
-        "Subrayar información relevante y marcar posibles respuestas",
-        "Leer en voz alta"
+        "Memorise everything",
+        "Translate every word",
+        "Underline relevant information and mark possible answers",
+        "Read aloud"
       ]}
       correctAnswer={2}
-      explanation="Debes subrayar información relevante y marcar con números de pregunta las posibles respuestas que encuentres."
+      explanation="Underline relevant information and mark question numbers where you find possible answers."
     />,
 
     <TrueFalseExercise
       key="6"
       statements={[
         {
-          text: "Si un texto ya ha sido respuesta a una pregunta, no puede ser respuesta a otra.",
+          text: "If a text has already answered one question, it cannot answer another.",
           isTrue: false,
-          explanation: "Incorrecto. Los textos pueden ser reutilizados como respuesta a múltiples preguntas diferentes."
+          explanation: "Incorrect. Texts can be reused as answers to several different questions."
         },
         {
-          text: "Debes buscar información tanto explícita como implícita en los textos.",
+          text: "You should look for both explicit and implicit information.",
           isTrue: true,
-          explanation: "Correcto. A veces la respuesta está implícita y debes inferirla del contexto."
+          explanation: "Correct. Sometimes the answer is implied and you must infer it from context."
         },
         {
-          text: "Es importante agrupar preguntas similares por tema antes de leer.",
+          text: "It helps to group similar questions by topic before reading.",
           isTrue: true,
-          explanation: "Correcto. Agrupar preguntas similares te ayuda a ser más eficiente al buscar respuestas relacionadas."
+          explanation: "Correct. Grouping similar questions makes it easier to find related answers."
         }
       ]}
     />,
 
     <MultipleChoiceExercise
       key="7"
-      question="¿Cómo puedes identificar que un restaurante es 'suitable for families' sin que lo diga explícitamente?"
+      question="How can you tell a restaurant is 'suitable for families' if it does not say so directly?"
       options={[
-        "Solo si dice 'family restaurant'",
-        "Buscando menciones de children's menu, playground, high chairs",
-        "Contando el número de mesas",
-        "Por el tipo de comida que sirve"
+        "Only if it says 'family restaurant'",
+        "By mentions of children's menu, playground, high chairs",
+        "By counting tables",
+        "By the type of food only"
       ]}
       correctAnswer={1}
-      explanation="Pistas como 'children's menu', 'playground', 'high chairs' indican implícitamente que es adecuado para familias."
+      explanation="Clues such as 'children's menu', 'playground', or 'high chairs' imply it is family-friendly."
     />,
 
     <MultipleChoiceExercise
       key="8"
-      question="¿Qué hacer si no encuentras respuesta para una pregunta después de leer todos los textos?"
+      question="What should you do if you still have no answer after reading all the texts?"
       options={[
-        "Dejar la pregunta sin responder",
-        "Elegir cualquier texto al azar",
-        "Releer los textos buscando información implícita",
-        "Cambiar la pregunta"
+        "Leave it blank",
+        "Pick a random text",
+        "Reread looking for implicit information or synonyms you missed",
+        "Change the question"
       ]}
       correctAnswer={2}
-      explanation="Debes releer buscando información implícita o sinónimos que podrías haber pasado por alto."
+      explanation="Reread for implied meaning or synonyms you may have overlooked."
     />,
 
     <TrueFalseExercise
       key="9"
       statements={[
         {
-          text: "En Multiple Matching siempre hay el mismo número de preguntas que de textos.",
+          text: "In Multiple Matching there are always as many questions as texts.",
           isTrue: false,
-          explanation: "Incorrecto. Generalmente hay más preguntas que textos, por eso algunos textos responden múltiples preguntas."
+          explanation: "Incorrect. There are usually more questions than texts, so some texts answer several questions."
         },
         {
-          text: "Debes verificar que tus respuestas sean lógicas y consistentes al final.",
+          text: "You should check that your answers are logical and consistent at the end.",
           isTrue: true,
-          explanation: "Correcto. Es importante revisar que todas tus respuestas tengan sentido y estén bien justificadas."
+          explanation: "Correct. Review that each answer makes sense and is well supported."
         }
       ]}
     />,
 
     <MultipleChoiceExercise
       key="10"
-      question="¿Cuál es la clave para el éxito en Multiple Matching?"
+      question="What is the key to success in Multiple Matching?"
       options={[
-        "Leer muy rápidamente",
-        "Memorizar todos los textos",
-        "Reconocer sinónimos y paráfrasis efectivamente",
-        "Usar solo las primeras respuestas que encuentres"
+        "Reading very fast",
+        "Memorising all the texts",
+        "Recognising synonyms and paraphrase effectively",
+        "Using only the first answers you find"
       ]}
       correctAnswer={2}
-      explanation="La clave es reconocer sinónimos y paráfrasis, ya que las respuestas raramente usan las mismas palabras que las preguntas."
+      explanation="The key is recognising synonyms and paraphrase, since answers rarely copy the question wording."
     />
   ];
 
   return (
     <TheoryLayout
       title="Multiple Matching"
-      description="Domina los ejercicios de Multiple Matching. Aprende a relacionar preguntas con textos, reconocer sinónimos y encontrar información específica eficientemente."
+      description="Master Multiple Matching tasks. Learn to match questions to texts, recognise synonyms, and find specific information efficiently."
       level="B2-C1-C2"
       theoryContent={theoryContent}
       exercises={exercises}

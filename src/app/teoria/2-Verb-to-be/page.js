@@ -18,144 +18,144 @@ import {
 const VerbToBePage = () => {
   const theoryContent = (
     <div>
-      <TheorySection title="¿Qué es el Verb to Be?" icon="🔗">
+      <TheorySection title="What is the Verb to Be?" icon="🔗">
         <p style={{ fontSize: '1.1rem', lineHeight: 1.6, color: '#4a5568', marginBottom: '1rem' }}>
-          El <strong>verb to be</strong> (ser/estar) es el verbo más importante en inglés. Se usa para describir estados, 
-          características, ubicaciones y mucho más. Es la base de muchas estructuras gramaticales.
+          The <strong>verb to be</strong> is the most important verb in English. It is used to describe states, 
+          characteristics, locations and much more. It is the foundation of many grammatical structures.
         </p>
         
         <QuickReference items={[
-          "Am: I am (Yo soy/estoy)",
-          "Is: He/She/It is (Él/Ella/Eso es/está)",
-          "Are: You/We/They are (Tú/Nosotros/Ellos son/están)",
-          "Se usa para describir, identificar y ubicar",
-          "Es irregular - no sigue las reglas normales"
+          "Am: I am",
+          "Is: He/She/It is",
+          "Are: You/We/They are",
+          "Used to describe, identify and locate",
+          "It is irregular - it does not follow normal rules"
         ]} />
       </TheorySection>
 
-      <TheorySection title="Formas del Verb to Be" icon="📝">
+      <TheorySection title="Forms of the Verb to Be" icon="📝">
         <GrammarTable
-          caption="Conjugación Completa del Verb to Be"
-          headers={["Pronombre", "Presente", "Pasado", "Significado"]}
+          caption="Full Conjugation of the Verb to Be"
+          headers={["Pronoun", "Present", "Past", "Meaning"]}
           rows={[
-            ["I", "am", "was", "Yo soy/estoy"],
-            ["You", "are", "were", "Tú eres/estás"],
-            ["He/She/It", "is", "was", "Él/Ella/Eso es/está"],
-            ["We", "are", "were", "Nosotros somos/estamos"],
-            ["You (plural)", "are", "were", "Ustedes son/están"],
-            ["They", "are", "were", "Ellos son/están"]
+            ["I", "am", "was", "I am"],
+            ["You", "are", "were", "You are"],
+            ["He/She/It", "is", "was", "He/She/It is"],
+            ["We", "are", "were", "We are"],
+            ["You (plural)", "are", "were", "You are (plural)"],
+            ["They", "are", "were", "They are"]
           ]}
         />
 
         <Tip type="info">
-          <strong>Recuerda:</strong> El verb to be es irregular. No sigue el patrón normal de verbos regulares como "play" → "played".
+          <strong>Remember:</strong> The verb to be is irregular. It does not follow the normal pattern of regular verbs like &quot;play&quot; → &quot;played&quot;.
         </Tip>
       </TheorySection>
 
-      <TheorySection title="Usos Principales" icon="🎯">
+      <TheorySection title="Main Uses" icon="🎯">
         <div style={{ display: 'grid', gap: '1.5rem' }}>
           <div>
-            <h4 style={{ color: '#667eea', marginBottom: '0.75rem' }}>1. 🏷️ Identificación (Ser)</h4>
+            <h4 style={{ color: '#667eea', marginBottom: '0.75rem' }}>1. 🏷️ Identification (Be)</h4>
             <p style={{ color: '#4a5568', marginBottom: '1rem' }}>
-              Para decir quién o qué es alguien o algo.
+              To say who or what someone or something is.
             </p>
             
             <Example 
               spanish="Yo soy María"
               english="I am María"
-              translation="Yo soy María"
+              translation="I am María"
             />
             <Example 
               spanish="Él es doctor"
               english="He is a doctor"
-              translation="Él es doctor"
+              translation="He is a doctor"
             />
             <Example 
               spanish="Esto es un libro"
               english="This is a book"
-              translation="Esto es un libro"
+              translation="This is a book"
             />
           </div>
 
           <div>
-            <h4 style={{ color: '#667eea', marginBottom: '0.75rem' }}>2. 📍 Ubicación (Estar)</h4>
+            <h4 style={{ color: '#667eea', marginBottom: '0.75rem' }}>2. 📍 Location (Be)</h4>
             <p style={{ color: '#4a5568', marginBottom: '1rem' }}>
-              Para decir dónde está alguien o algo.
+              To say where someone or something is.
             </p>
             
             <Example 
               spanish="Yo estoy en casa"
               english="I am at home"
-              translation="Yo estoy en casa"
+              translation="I am at home"
             />
             <Example 
               spanish="El libro está en la mesa"
               english="The book is on the table"
-              translation="El libro está en la mesa"
+              translation="The book is on the table"
             />
             <Example 
               spanish="Los niños están en el parque"
               english="The children are in the park"
-              translation="Los niños están en el parque"
+              translation="The children are in the park"
             />
           </div>
 
           <div>
-            <h4 style={{ color: '#667eea', marginBottom: '0.75rem' }}>3. 🎨 Descripción (Ser/Estar)</h4>
+            <h4 style={{ color: '#667eea', marginBottom: '0.75rem' }}>3. 🎨 Description (Be)</h4>
             <p style={{ color: '#4a5568', marginBottom: '1rem' }}>
-              Para describir características, estados o condiciones.
+              To describe characteristics, states, or conditions.
             </p>
             
             <Example 
               spanish="Ella es muy inteligente"
               english="She is very intelligent"
-              translation="Ella es muy inteligente"
+              translation="She is very intelligent"
             />
             <Example 
               spanish="Estoy cansado"
               english="I am tired"
-              translation="Estoy cansado"
+              translation="I am tired"
             />
             <Example 
               spanish="El clima está soleado"
               english="The weather is sunny"
-              translation="El clima está soleado"
+              translation="The weather is sunny"
             />
           </div>
 
           <div>
-            <h4 style={{ color: '#667eea', marginBottom: '0.75rem' }}>4. ⏰ Edad y Tiempo</h4>
+            <h4 style={{ color: '#667eea', marginBottom: '0.75rem' }}>4. ⏰ Age and Time</h4>
             <p style={{ color: '#4a5568', marginBottom: '1rem' }}>
-              Para hablar de edad, fechas y hora.
+              To talk about age, dates, and time.
             </p>
             
             <Example 
               spanish="Yo tengo 25 años"
               english="I am 25 years old"
-              translation="Yo tengo 25 años"
+              translation="I am 25 years old"
             />
             <Example 
               spanish="Hoy es lunes"
               english="Today is Monday"
-              translation="Hoy es lunes"
+              translation="Today is Monday"
             />
             <Example 
               spanish="Son las 3 de la tarde"
               english="It is 3 o'clock in the afternoon"
-              translation="Son las 3 de la tarde"
+              translation="It is 3 o'clock in the afternoon"
             />
           </div>
         </div>
       </TheorySection>
 
-      <TheorySection title="Formas Contractas (Contracciones)" icon="🔗">
+      <TheorySection title="Contractions" icon="🔗">
         <p style={{ fontSize: '1rem', lineHeight: 1.6, color: '#4a5568', marginBottom: '1rem' }}>
-          En inglés, es muy común usar contracciones (formas cortas) del verb to be, especialmente en conversaciones informales.
+          In English, it is very common to use contractions (short forms) of the verb to be, especially in informal conversation.
         </p>
 
         <GrammarTable
-          caption="Contracciones del Presente"
-          headers={["Forma Completa", "Contracción", "Pronunciación"]}
+          caption="Present Tense Contractions"
+          headers={["Full Form", "Contraction", "Pronunciation"]}
           rows={[
             ["I am", "I'm", "/aɪm/"],
             ["You are", "You're", "/jʊər/"],
@@ -168,64 +168,64 @@ const VerbToBePage = () => {
         />
 
         <Tip type="warning">
-          <strong>¡Cuidado!</strong> No uses contracciones en escritura formal o cuando quieres enfatizar algo.
+          <strong>Watch out!</strong> Do not use contractions in formal writing or when you want to emphasize something.
         </Tip>
 
         <div style={{ display: 'grid', gap: '1rem' }}>
           <Example 
             spanish="Yo soy estudiante"
             english="I'm a student"
-            translation="Yo soy estudiante (contracción informal)"
+            translation="I'm a student (informal contraction)"
           />
           <Example 
             spanish="Ellos están aquí"
             english="They're here"
-            translation="Ellos están aquí (contracción informal)"
+            translation="They're here (informal contraction)"
           />
         </div>
       </TheorySection>
 
-      <TheorySection title="Preguntas con Verb to Be" icon="❓">
+      <TheorySection title="Questions with Verb to Be" icon="❓">
         <p style={{ fontSize: '1rem', lineHeight: 1.6, color: '#4a5568', marginBottom: '1rem' }}>
-          Para hacer preguntas con verb to be, simplemente invertimos el orden: ponemos el verbo antes del sujeto.
+          To make questions with the verb to be, we simply invert the order: we put the verb before the subject.
         </p>
 
         <div style={{ display: 'grid', gap: '1rem' }}>
           <Example 
             spanish="¿Eres feliz?"
             english="Are you happy?"
-            translation="¿Eres feliz?"
+            translation="Are you happy?"
           />
           <Example 
             spanish="¿Es él doctor?"
             english="Is he a doctor?"
-            translation="¿Es él doctor?"
+            translation="Is he a doctor?"
           />
           <Example 
             spanish="¿Dónde está María?"
             english="Where is María?"
-            translation="¿Dónde está María?"
+            translation="Where is María?"
           />
           <Example 
             spanish="¿Cómo están ustedes?"
             english="How are you?"
-            translation="¿Cómo están ustedes?"
+            translation="How are you?"
           />
         </div>
 
         <Tip type="success">
-          <strong>Fácil:</strong> Las preguntas con verb to be son más fáciles que con otros verbos porque no necesitas "do" o "does".
+          <strong>Easy:</strong> Questions with the verb to be are easier than with other verbs because you do not need "do" or "does".
         </Tip>
       </TheorySection>
 
-      <TheorySection title="Negaciones con Verb to Be" icon="❌">
+      <TheorySection title="Negatives with Verb to Be" icon="❌">
         <p style={{ fontSize: '1rem', lineHeight: 1.6, color: '#4a5568', marginBottom: '1rem' }}>
-          Para hacer negaciones, agregamos "not" después del verb to be.
+          To make negatives, we add "not" after the verb to be.
         </p>
 
         <GrammarTable
-          caption="Formas Negativas"
-          headers={["Pronombre", "Forma Completa", "Contracción"]}
+          caption="Negative Forms"
+          headers={["Pronoun", "Full Form", "Contraction"]}
           rows={[
             ["I", "I am not", "I'm not"],
             ["You", "You are not", "You're not / You aren't"],
@@ -239,45 +239,45 @@ const VerbToBePage = () => {
           <Example 
             spanish="Yo no soy profesor"
             english="I am not a teacher"
-            translation="Yo no soy profesor"
+            translation="I am not a teacher"
           />
           <Example 
             spanish="No estoy en casa"
             english="I'm not at home"
-            translation="No estoy en casa (contracción)"
+            translation="I'm not at home (contraction)"
           />
           <Example 
             spanish="Ellos no están aquí"
             english="They aren't here"
-            translation="Ellos no están aquí (contracción)"
+            translation="They aren't here (contraction)"
           />
         </div>
       </TheorySection>
 
-      <TheorySection title="Errores Comunes" icon="⚠️">
+      <TheorySection title="Common Mistakes" icon="⚠️">
         <div style={{ display: 'grid', gap: '1rem' }}>
           <Tip type="error">
             <strong>Error:</strong> "I are happy" ❌<br/>
-            <strong>Correcto:</strong> "I am happy" ✅<br/>
-            <em>Recuerda: I → am, no are</em>
+            <strong>Correct:</strong> "I am happy" ✅<br/>
+            <em>Remember: I → am, not are</em>
           </Tip>
 
           <Tip type="error">
             <strong>Error:</strong> "He are tall" ❌<br/>
-            <strong>Correcto:</strong> "He is tall" ✅<br/>
-            <em>Recuerda: He/She/It → is</em>
+            <strong>Correct:</strong> "He is tall" ✅<br/>
+            <em>Remember: He/She/It → is</em>
           </Tip>
 
           <Tip type="error">
             <strong>Error:</strong> "Do you are happy?" ❌<br/>
-            <strong>Correcto:</strong> "Are you happy?" ✅<br/>
-            <em>Con verb to be no usamos "do" para preguntas</em>
+            <strong>Correct:</strong> "Are you happy?" ✅<br/>
+            <em>With the verb to be we do not use "do" for questions</em>
           </Tip>
 
           <Tip type="error">
             <strong>Error:</strong> "I not am tired" ❌<br/>
-            <strong>Correcto:</strong> "I am not tired" ✅<br/>
-            <em>"Not" va después del verb to be</em>
+            <strong>Correct:</strong> "I am not tired" ✅<br/>
+            <em>"Not" goes after the verb to be</em>
           </Tip>
         </div>
       </TheorySection>
@@ -295,12 +295,12 @@ const VerbToBePage = () => {
         "am, are"
       ]}
       correctAnswer={0}
-      explanation="Con 'I' usamos 'am' y con nombres propios (tercera persona singular) usamos 'is'."
+      explanation="With 'I' we use 'am', and with proper names (third person singular) we use 'is'."
     />,
 
     <MultipleChoiceExercise
       key="2"
-      question="¿Cuál es la forma correcta para completar: '___ you happy?'"
+      question="Which is the correct form to complete: '___ you happy?'"
       options={[
         "Is",
         "Are",
@@ -308,7 +308,7 @@ const VerbToBePage = () => {
         "Do"
       ]}
       correctAnswer={1}
-      explanation="Con 'you' usamos 'are'. Además, con verb to be no necesitamos 'do' para hacer preguntas."
+      explanation="With 'you' we use 'are'. Also, with the verb to be we do not need 'do' to make questions."
     />,
 
     <TrueFalseExercise
@@ -317,29 +317,29 @@ const VerbToBePage = () => {
         {
           text: "We can say 'I'm not' instead of 'I am not'.",
           isTrue: true,
-          explanation: "Correcto. 'I'm not' es la contracción de 'I am not' y es muy común en inglés."
+          explanation: "Correct. 'I'm not' is the contraction of 'I am not' and is very common in English."
         },
         {
           text: "The question 'Do you are happy?' is correct.",
           isTrue: false,
-          explanation: "Incorrecto. Con verb to be no usamos 'do' para preguntas. La forma correcta es 'Are you happy?'"
+          explanation: "Incorrect. With the verb to be we do not use 'do' for questions. The correct form is 'Are you happy?'"
         },
         {
           text: "We use 'is' with he, she, and it.",
           isTrue: true,
-          explanation: "Correcto. He/She/It siempre van con 'is' en presente."
+          explanation: "Correct. He/She/It always go with 'is' in the present tense."
         },
         {
           text: "'They're not' and 'They aren't' are both correct.",
           isTrue: true,
-          explanation: "Correcto. Ambas formas son válidas: 'They're not' y 'They aren't'."
+          explanation: "Correct. Both forms are valid: 'They're not' and 'They aren't'."
         }
       ]}
     />,
 
     <MultipleChoiceExercise
       key="4"
-      question="¿Cuál es la forma correcta para completar: 'Where ___ the books?'"
+      question="Which is the correct form to complete: 'Where ___ the books?'"
       options={[
         "is",
         "are",
@@ -347,12 +347,12 @@ const VerbToBePage = () => {
         "be"
       ]}
       correctAnswer={1}
-      explanation="'Books' es plural, por lo que usamos 'are'. La pregunta es 'Where are the books?' (¿Dónde están los libros?)"
+      explanation="'Books' is plural, so we use 'are'. The question is 'Where are the books?'"
     />,
 
     <MultipleChoiceExercise
       key="5"
-      question="¿Cuál es la forma negativa correcta de 'She is tall'?"
+      question="Which is the correct negative form of 'She is tall'?"
       options={[
         "She not is tall",
         "She is not tall",
@@ -360,7 +360,7 @@ const VerbToBePage = () => {
         "She isn't tall"
       ]}
       correctAnswer={1}
-      explanation="Las opciones correctas son 'She is not tall' o 'She isn't tall'. La opción 4 también es correcta, pero la 2 es la forma completa."
+      explanation="The correct options are 'She is not tall' or 'She isn't tall'. Option 4 is also correct, but option 2 is the full form."
     />,
 
     <TrueFalseExercise
@@ -369,17 +369,17 @@ const VerbToBePage = () => {
         {
           text: "We can use 'am' with 'you'.",
           isTrue: false,
-          explanation: "Incorrecto. 'Am' solo se usa con 'I'. Con 'you' usamos 'are'."
+          explanation: "Incorrect. 'Am' is only used with 'I'. With 'you' we use 'are'."
         },
         {
           text: "'It's' is the contraction of 'it is'.",
           isTrue: true,
-          explanation: "Correcto. 'It's' es la contracción de 'it is'."
+          explanation: "Correct. 'It's' is the contraction of 'it is'."
         },
         {
           text: "We can say 'I amn't' as a contraction.",
           isTrue: false,
-          explanation: "Incorrecto. 'I amn't' no existe. Solo podemos decir 'I'm not'."
+          explanation: "Incorrect. 'I amn't' does not exist. We can only say 'I'm not'."
         }
       ]}
     />,
@@ -394,12 +394,12 @@ const VerbToBePage = () => {
         "be"
       ]}
       correctAnswer={1}
-      explanation="'Parents' es plural, por lo que usamos 'are'. 'My parents are doctors' (Mis padres son doctores)."
+      explanation="'Parents' is plural, so we use 'are'. 'My parents are doctors'."
     />,
 
     <MultipleChoiceExercise
       key="8"
-      question="¿Cuál es la pregunta correcta para obtener la respuesta 'I am fine'?"
+      question="Which is the correct question to get the answer 'I am fine'?"
       options={[
         "How you are?",
         "How are you?",
@@ -407,7 +407,7 @@ const VerbToBePage = () => {
         "How do you are?"
       ]}
       correctAnswer={1}
-      explanation="La pregunta correcta es 'How are you?' Con verb to be, invertimos el orden: are + you."
+      explanation="The correct question is 'How are you?' With the verb to be, we invert the order: are + you."
     />,
 
     <TrueFalseExercise
@@ -416,12 +416,12 @@ const VerbToBePage = () => {
         {
           text: "The sentence 'The cat is in the garden' uses 'is' for location.",
           isTrue: true,
-          explanation: "Correcto. Usamos 'is' para indicar ubicación (estar): el gato está en el jardín."
+          explanation: "Correct. We use 'is' to indicate location: the cat is in the garden."
         },
         {
           text: "'We're' can mean both 'we are' and 'we were'.",
           isTrue: false,
-          explanation: "Incorrecto. 'We're' solo es contracción de 'we are' (presente). 'We were' no tiene contracción."
+          explanation: "Incorrect. 'We're' is only a contraction of 'we are' (present). 'We were' has no contraction."
         }
       ]}
     />,
@@ -436,18 +436,18 @@ const VerbToBePage = () => {
         "not is"
       ]}
       correctAnswer={0}
-      explanation="Con 'he' usamos 'is', por lo que la forma negativa es 'isn't' o 'is not'. 'No, he isn't' (No, él no está)."
+      explanation="With 'he' we use 'is', so the negative form is 'isn't' or 'is not'. 'No, he isn't'."
     />
   ];
 
   return (
     <TheoryLayout
       title="Verb to Be"
-      description="Domina el verbo más importante del inglés: to be (ser/estar). Aprende sus formas, usos, contracciones y cómo hacer preguntas y negaciones."
+      description="Master the most important verb in English: to be. Learn its forms, uses, contractions, and how to form questions and negatives."
       level="A1-A2-B1-B2-C1-C2"
       theoryContent={theoryContent}
       exercises={exercises}
-      prerequisites={["Nociones básicas de pronombres personales"]}
+      prerequisites={["Basic understanding of personal pronouns"]}
       estimatedTime="40 min"
     />
   );

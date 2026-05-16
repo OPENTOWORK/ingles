@@ -18,30 +18,30 @@ import {
 const ReportedSpeechPage = () => {
   const theoryContent = (
     <div>
-      <TheorySection title="¿Qué es el Reported Speech?" icon="💬">
+      <TheorySection title="What Is Reported Speech?" icon="💬">
         <p style={{ fontSize: '1.1rem', lineHeight: 1.6, color: '#4a5568', marginBottom: '1rem' }}>
-          El <strong>reported speech</strong> (discurso indirecto) se usa para reportar o repetir lo que otra persona 
-          dijo sin usar sus palabras exactas. Implica cambios en tiempos verbales, pronombres, adverbios de tiempo 
-          y lugar, y la estructura de la oración.
+          <strong>Reported speech</strong> (indirect speech) is used to report or repeat what someone else 
+          said without using their exact words. It involves changes to verb tenses, pronouns, time and place 
+          adverbs, and sentence structure.
         </p>
         
         <QuickReference items={[
-          "Reporta lo que otros dijeron",
-          "Cambia tiempos verbales",
-          "Cambia pronombres y adverbios",
-          "Usa reporting verbs",
-          "No usa comillas"
+          "Report what other people said",
+          "Change verb tenses",
+          "Change pronouns and adverbs",
+          "Use reporting verbs",
+          "Do not use quotation marks"
         ]} />
       </TheorySection>
 
-      <TheorySection title="Cambios de Tiempos Verbales" icon="⏰">
+      <TheorySection title="Verb Tense Changes" icon="⏰">
         <p style={{ fontSize: '1rem', lineHeight: 1.6, color: '#4a5568', marginBottom: '1rem' }}>
-          Los tiempos verbales cambian hacia el pasado cuando reportamos algo que se dijo en el pasado.
+          Verb tenses shift back when we report something that was said in the past.
         </p>
 
         <GrammarTable
-          caption="Cambios de Tiempos Verbales"
-          headers={["Direct Speech", "Reported Speech", "Ejemplo"]}
+          caption="Verb Tense Changes"
+          headers={["Direct Speech", "Reported Speech", "Example"]}
           rows={[
             ["Present Simple", "Past Simple", "I work → He said he worked"],
             ["Present Continuous", "Past Continuous", "I am working → He said he was working"],
@@ -58,51 +58,51 @@ const ReportedSpeechPage = () => {
           <Example 
             spanish="Dijo: 'Trabajo en una oficina' → Dijo que trabajaba en una oficina"
             english="'I work in an office' → He said he worked in an office"
-            translation="Dijo: 'Trabajo en una oficina' → Dijo que trabajaba en una oficina"
+            translation="He said: 'I work in an office' → He said he worked in an office"
           />
           <Example 
             spanish="Dijo: 'Estoy estudiando' → Dijo que estaba estudiando"
             english="'I am studying' → He said he was studying"
-            translation="Dijo: 'Estoy estudiando' → Dijo que estaba estudiando"
+            translation="He said: 'I'm studying' → He said he was studying"
           />
           <Example 
             spanish="Dijo: 'He terminado' → Dijo que había terminado"
             english="'I have finished' → He said he had finished"
-            translation="Dijo: 'He terminado' → Dijo que había terminado"
+            translation="He said: 'I've finished' → He said he had finished"
           />
         </div>
 
         <Rule 
-          title="Regla del 'Backshift'"
-          description="Los tiempos verbales se mueven hacia el pasado:"
+          title="The 'Backshift' Rule"
+          description="Verb tenses move further into the past:"
           examples={[
-            "Presente → Pasado",
-            "Pasado → Pasado Perfecto",
-            "Futuro → Condicional",
-            "Modales → Formas pasadas"
+            "Present → Past",
+            "Past → Past Perfect",
+            "Future → Conditional",
+            "Modals → Past forms"
           ]}
         />
 
         <Tip type="info">
-          <strong>Consejo:</strong> Si el reporting verb está en presente (says, tells), no cambies los tiempos verbales.
+          <strong>Tip:</strong> If the reporting verb is in the present (says, tells), do not change the verb tenses.
         </Tip>
       </TheorySection>
 
-      <TheorySection title="Cambios de Pronombres" icon="👤">
+      <TheorySection title="Pronoun Changes" icon="👤">
         <p style={{ fontSize: '1rem', lineHeight: 1.6, color: '#4a5568', marginBottom: '1rem' }}>
-          Los pronombres cambian para reflejar la perspectiva del que reporta.
+          Pronouns change to reflect the perspective of the person reporting.
         </p>
 
         <GrammarTable
-          caption="Cambios de Pronombres"
-          headers={["Direct Speech", "Reported Speech", "Explicación"]}
+          caption="Pronoun Changes"
+          headers={["Direct Speech", "Reported Speech", "Explanation"]}
           rows={[
-            ["I", "he/she", "Cambia según quien habló"],
-            ["you", "I/he/she/they", "Cambia según el contexto"],
-            ["my", "his/her", "Posesivo cambia con el pronombre"],
-            ["your", "my/his/her", "Posesivo cambia con el contexto"],
-            ["we", "they", "Grupo que habló"],
-            ["our", "their", "Posesivo del grupo"]
+            ["I", "he/she", "Changes depending on who spoke"],
+            ["you", "I/he/she/they", "Changes depending on context"],
+            ["my", "his/her", "Possessive changes with the pronoun"],
+            ["your", "my/his/her", "Possessive changes with context"],
+            ["we", "they", "The group that spoke"],
+            ["our", "their", "Group possessive"]
           ]}
         />
 
@@ -110,54 +110,54 @@ const ReportedSpeechPage = () => {
           <Example 
             spanish="Dijo: 'Mi coche está roto' → Dijo que su coche estaba roto"
             english="'My car is broken' → He said his car was broken"
-            translation="Dijo: 'Mi coche está roto' → Dijo que su coche estaba roto"
+            translation="He said: 'My car is broken' → He said his car was broken"
           />
           <Example 
             spanish="Dijo: '¿Puedes ayudarme?' → Preguntó si podía ayudarle"
             english="'Can you help me?' → He asked if I could help him"
-            translation="Dijo: '¿Puedes ayudarme?' → Preguntó si podía ayudarle"
+            translation="He said: 'Can you help me?' → He asked if I could help him"
           />
           <Example 
             spanish="Dijo: 'Nuestro proyecto está listo' → Dijo que su proyecto estaba listo"
             english="'Our project is ready' → He said their project was ready"
-            translation="Dijo: 'Nuestro proyecto está listo' → Dijo que su proyecto estaba listo"
+            translation="He said: 'Our project is ready' → He said their project was ready"
           />
         </div>
 
         <Rule 
-          title="Reglas para Pronombres"
-          description="Considera estas reglas:"
+          title="Rules for Pronouns"
+          description="Keep these rules in mind:"
           examples={[
-            "Cambia según quien habló originalmente",
-            "Considera el contexto de la conversación",
-            "Mantén la coherencia en todo el reporte",
-            "Si no está claro, mantén el pronombre original"
+            "Change pronouns based on who originally spoke",
+            "Consider the context of the conversation",
+            "Stay consistent throughout the report",
+            "If unclear, keep the original pronoun"
           ]}
         />
 
         <Tip type="warning">
-          <strong>¡Cuidado!</strong> Los pronombres pueden ser confusos. Siempre considera quién dijo qué a quién.
+          <strong>Watch out!</strong> Pronouns can be tricky. Always think about who said what to whom.
         </Tip>
       </TheorySection>
 
-      <TheorySection title="Cambios de Adverbios" icon="📍">
+      <TheorySection title="Adverb Changes" icon="📍">
         <p style={{ fontSize: '1rem', lineHeight: 1.6, color: '#4a5568', marginBottom: '1rem' }}>
-          Los adverbios de tiempo y lugar cambian para reflejar la nueva perspectiva temporal.
+          Time and place adverbs change to reflect the new time perspective.
         </p>
 
         <GrammarTable
-          caption="Cambios de Adverbios de Tiempo"
-          headers={["Direct Speech", "Reported Speech", "Explicación"]}
+          caption="Time Adverb Changes"
+          headers={["Direct Speech", "Reported Speech", "Explanation"]}
           rows={[
-            ["now", "then", "Momento actual → Momento pasado"],
-            ["today", "that day", "Día actual → Día específico"],
-            ["yesterday", "the day before", "Ayer → El día anterior"],
-            ["tomorrow", "the next day", "Mañana → El día siguiente"],
-            ["last week", "the week before", "Semana pasada → La semana anterior"],
-            ["next month", "the following month", "Próximo mes → El mes siguiente"],
-            ["here", "there", "Aquí → Allí"],
-            ["this", "that", "Este → Ese"],
-            ["these", "those", "Estos → Esos"]
+            ["now", "then", "Current moment → Past moment"],
+            ["today", "that day", "Current day → Specific day"],
+            ["yesterday", "the day before", "Yesterday → The previous day"],
+            ["tomorrow", "the next day", "Tomorrow → The following day"],
+            ["last week", "the week before", "Last week → The week before"],
+            ["next month", "the following month", "Next month → The following month"],
+            ["here", "there", "Here → There"],
+            ["this", "that", "This → That"],
+            ["these", "those", "These → Those"]
           ]}
         />
 
@@ -165,51 +165,51 @@ const ReportedSpeechPage = () => {
           <Example 
             spanish="Dijo: 'Voy ahora' → Dijo que iba entonces"
             english="'I'm going now' → He said he was going then"
-            translation="Dijo: 'Voy ahora' → Dijo que iba entonces"
+            translation="He said: 'I'm going now' → He said he was going then"
           />
           <Example 
             spanish="Dijo: 'Vine ayer' → Dijo que había venido el día anterior"
             english="'I came yesterday' → He said he had come the day before"
-            translation="Dijo: 'Vine ayer' → Dijo que había venido el día anterior"
+            translation="He said: 'I came yesterday' → He said he had come the day before"
           />
           <Example 
             spanish="Dijo: 'Estoy aquí' → Dijo que estaba allí"
             english="'I'm here' → He said he was there"
-            translation="Dijo: 'Estoy aquí' → Dijo que estaba allí"
+            translation="He said: 'I'm here' → He said he was there"
           />
         </div>
 
         <Rule 
-          title="Reglas para Adverbios"
-          description="Considera estas reglas:"
+          title="Rules for Adverbs"
+          description="Keep these rules in mind:"
           examples={[
-            "Cambia adverbios de tiempo hacia el pasado",
-            "Cambia adverbios de lugar según la perspectiva",
-            "Algunos adverbios no cambian (always, never)",
-            "El contexto determina si es necesario cambiar"
+            "Shift time adverbs toward the past",
+            "Change place adverbs to match perspective",
+            "Some adverbs do not change (always, never)",
+            "Context decides whether a change is needed"
           ]}
         />
 
         <Tip type="success">
-          <strong>Consejo:</strong> Si reportas inmediatamente después de que se dijo, algunos cambios pueden no ser necesarios.
+          <strong>Tip:</strong> If you report what was said immediately afterward, some changes may not be necessary.
         </Tip>
       </TheorySection>
 
       <TheorySection title="Reporting Verbs" icon="🗣️">
         <p style={{ fontSize: '1rem', lineHeight: 1.6, color: '#4a5568', marginBottom: '1rem' }}>
-          Diferentes verbos para reportar según el tipo de declaración.
+          Different verbs are used to report speech depending on the type of statement.
         </p>
 
         <GrammarTable
-          caption="Reporting Verbs Comunes"
-          headers={["Tipo", "Verbos", "Estructura", "Ejemplo"]}
+          caption="Common Reporting Verbs"
+          headers={["Type", "Verbs", "Structure", "Example"]}
           rows={[
-            ["Declaraciones", "say, tell, mention", "say/tell + that", "He said that he was tired"],
-            ["Preguntas", "ask, wonder, inquire", "ask + if/whether", "He asked if I was coming"],
-            ["Órdenes", "tell, order, command", "tell + to + infinitivo", "He told me to come"],
-            ["Consejos", "advise, recommend", "advise + to + infinitivo", "He advised me to study"],
-            ["Promesas", "promise, agree", "promise + to + infinitivo", "He promised to help"],
-            ["Negativas", "refuse, deny", "refuse + to + infinitivo", "He refused to go"]
+            ["Statements", "say, tell, mention", "say/tell + that", "He said that he was tired"],
+            ["Questions", "ask, wonder, inquire", "ask + if/whether", "He asked if I was coming"],
+            ["Orders", "tell, order, command", "tell + to + infinitive", "He told me to come"],
+            ["Advice", "advise, recommend", "advise + to + infinitive", "He advised me to study"],
+            ["Promises", "promise, agree", "promise + to + infinitive", "He promised to help"],
+            ["Refusals", "refuse, deny", "refuse + to + infinitive", "He refused to go"]
           ]}
         />
 
@@ -217,49 +217,49 @@ const ReportedSpeechPage = () => {
           <Example 
             spanish="Dijo que estaba cansado"
             english="He said he was tired"
-            translation="Dijo que estaba cansado"
+            translation="He said he was tired"
           />
           <Example 
             spanish="Preguntó si venía"
             english="He asked if I was coming"
-            translation="Preguntó si venía"
+            translation="He asked if I was coming"
           />
           <Example 
             spanish="Me dijo que viniera"
             english="He told me to come"
-            translation="Me dijo que viniera"
+            translation="He told me to come"
           />
           <Example 
             spanish="Me aconsejó estudiar"
             english="He advised me to study"
-            translation="Me aconsejó estudiar"
+            translation="He advised me to study"
           />
         </div>
 
         <Rule 
-          title="Estructuras con Reporting Verbs"
-          description="Diferentes estructuras según el verbo:"
+          title="Structures with Reporting Verbs"
+          description="Different structures depending on the verb:"
           examples={[
-            "say + that + oración",
-            "tell + persona + that + oración",
-            "ask + if/whether + oración",
-            "tell/ask + persona + to + infinitivo"
+            "say + that + clause",
+            "tell + person + that + clause",
+            "ask + if/whether + clause",
+            "tell/ask + person + to + infinitive"
           ]}
         />
 
         <Tip type="info">
-          <strong>Consejo:</strong> 'Tell' siempre necesita un objeto indirecto (tell me, tell him), pero 'say' no.
+          <strong>Tip:</strong> 'Tell' always needs an indirect object (tell me, tell him), but 'say' does not.
         </Tip>
       </TheorySection>
 
       <TheorySection title="Reported Questions" icon="❓">
         <p style={{ fontSize: '1rem', lineHeight: 1.6, color: '#4a5568', marginBottom: '1rem' }}>
-          Las preguntas reportadas cambian la estructura y usan 'if' o 'whether' para preguntas de sí/no.
+          Reported questions change the structure and use 'if' or 'whether' for yes/no questions.
         </p>
 
         <GrammarTable
-          caption="Tipos de Preguntas Reportadas"
-          headers={["Tipo", "Direct Speech", "Reported Speech"]}
+          caption="Types of Reported Questions"
+          headers={["Type", "Direct Speech", "Reported Speech"]}
           rows={[
             ["Yes/No", "'Are you coming?'", "He asked if I was coming"],
             ["Yes/No", "'Do you like coffee?'", "He asked whether I liked coffee"],
@@ -273,102 +273,102 @@ const ReportedSpeechPage = () => {
           <Example 
             spanish="Preguntó: '¿Vienes?' → Preguntó si venía"
             english="'Are you coming?' → He asked if I was coming"
-            translation="Preguntó: '¿Vienes?' → Preguntó si venía"
+            translation="He asked: 'Are you coming?' → He asked if I was coming"
           />
           <Example 
             spanish="Preguntó: '¿Dónde vives?' → Preguntó dónde vivía"
             english="'Where do you live?' → He asked where I lived"
-            translation="Preguntó: '¿Dónde vives?' → Preguntó dónde vivía"
+            translation="He asked: 'Where do you live?' → He asked where I lived"
           />
           <Example 
             spanish="Preguntó: '¿Cómo estás?' → Preguntó cómo estaba"
             english="'How are you?' → He asked how I was"
-            translation="Preguntó: '¿Cómo estás?' → Preguntó cómo estaba"
+            translation="He asked: 'How are you?' → He asked how I was"
           />
         </div>
 
         <Rule 
-          title="Reglas para Preguntas Reportadas"
-          description="Cambios importantes:"
+          title="Rules for Reported Questions"
+          description="Important changes:"
           examples={[
-            "No usa signos de interrogación",
-            "Usa 'if' o 'whether' para preguntas de sí/no",
-            "Mantiene palabras interrogativas (where, what, how)",
-            "Cambia a orden de oración afirmativa"
+            "Do not use question marks",
+            "Use 'if' or 'whether' for yes/no questions",
+            "Keep question words (where, what, how)",
+            "Switch to affirmative word order"
           ]}
         />
 
         <Tip type="warning">
-          <strong>¡Cuidado!</strong> Las preguntas reportadas no usan signos de interrogación ni auxiliares do/does/did.
+          <strong>Watch out!</strong> Reported questions do not use question marks or do/does/did auxiliaries.
         </Tip>
       </TheorySection>
 
-      <TheorySection title="Errores Comunes" icon="⚠️">
+      <TheorySection title="Common Mistakes" icon="⚠️">
         <div style={{ display: 'grid', gap: '1rem' }}>
           <Tip type="error">
-            <strong>Error:</strong> No cambiar tiempos verbales ❌<br/>
-            <strong>Correcto:</strong> Aplicar backshift ✅<br/>
+            <strong>Mistake:</strong> Not changing verb tenses ❌<br/>
+            <strong>Correct:</strong> Apply backshift ✅<br/>
             <em>He said he is tired. → He said he was tired.</em>
           </Tip>
 
           <Tip type="error">
-            <strong>Error:</strong> Usar comillas en reported speech ❌<br/>
-            <strong>Correcto:</strong> No usar comillas ✅<br/>
+            <strong>Mistake:</strong> Using quotation marks in reported speech ❌<br/>
+            <strong>Correct:</strong> Do not use quotation marks ✅<br/>
             <em>He said "I am tired". → He said he was tired.</em>
           </Tip>
 
           <Tip type="error">
-            <strong>Error:</strong> Confundir say y tell ❌<br/>
-            <strong>Correcto:</strong> Tell necesita objeto indirecto ✅<br/>
+            <strong>Mistake:</strong> Confusing say and tell ❌<br/>
+            <strong>Correct:</strong> Tell needs an indirect object ✅<br/>
             <em>He told he was tired. → He said he was tired. / He told me he was tired.</em>
           </Tip>
 
           <Tip type="error">
-            <strong>Error:</strong> Mantener signos de interrogación ❌<br/>
-            <strong>Correcto:</strong> Quitar signos de interrogación ✅<br/>
+            <strong>Mistake:</strong> Keeping question marks ❌<br/>
+            <strong>Correct:</strong> Remove question marks ✅<br/>
             <em>He asked if I was coming? → He asked if I was coming.</em>
           </Tip>
 
           <Tip type="error">
-            <strong>Error:</strong> No cambiar pronombres ❌<br/>
-            <strong>Correcto:</strong> Cambiar según la perspectiva ✅<br/>
+            <strong>Mistake:</strong> Not changing pronouns ❌<br/>
+            <strong>Correct:</strong> Change them to match perspective ✅<br/>
             <em>He said I am tired. → He said he was tired.</em>
           </Tip>
         </div>
       </TheorySection>
 
-      <TheorySection title="Reglas Importantes" icon="⚡">
+      <TheorySection title="Key Rules" icon="⚡">
         <div style={{ display: 'grid', gap: '1rem' }}>
           <Rule 
-            title="1. Backshift de tiempos"
-            description="Los tiempos verbales se mueven hacia el pasado:"
+            title="1. Tense backshift"
+            description="Verb tenses move further into the past:"
             examples={[
-              "Presente → Pasado",
-              "Pasado → Pasado Perfecto",
-              "Futuro → Condicional",
-              "Excepción: si el reporting verb está en presente"
+              "Present → Past",
+              "Past → Past Perfect",
+              "Future → Conditional",
+              "Exception: if the reporting verb is in the present"
             ]}
           />
 
           <Rule 
-            title="2. Cambios de perspectiva"
-            description="Cambia pronombres y adverbios:"
+            title="2. Perspective changes"
+            description="Change pronouns and adverbs:"
             examples={[
-              "Pronombres según quien habló",
-              "Adverbios de tiempo hacia el pasado",
-              "Adverbios de lugar según la perspectiva",
-              "Considera el contexto"
+              "Pronouns based on who spoke",
+              "Time adverbs shift toward the past",
+              "Place adverbs match perspective",
+              "Consider context"
             ]}
           />
 
           <Rule 
-            title="3. Estructura de preguntas"
-            description="Las preguntas reportadas cambian estructura:"
+            title="3. Question structure"
+            description="Reported questions change structure:"
             examples={[
-              "Usa 'if' o 'whether' para sí/no",
-              "Mantiene palabras interrogativas",
-              "Orden de oración afirmativa",
-              "Sin signos de interrogación"
+              "Use 'if' or 'whether' for yes/no",
+              "Keep question words",
+              "Affirmative word order",
+              "No question marks"
             ]}
           />
         </div>
@@ -387,7 +387,7 @@ const ReportedSpeechPage = () => {
         "has been"
       ]}
       correctAnswer={1}
-      explanation="En reported speech, 'am' cambia a 'was' cuando reportamos en pasado."
+      explanation="In reported speech, 'am' becomes 'was' when we report in the past."
     />,
 
     <MultipleChoiceExercise
@@ -461,17 +461,17 @@ const ReportedSpeechPage = () => {
         {
           text: "'Today' changes to 'that day' in reported speech.",
           isTrue: true,
-          explanation: "Correcto. Los adverbios de tiempo cambian: today → that day, yesterday → the day before."
+          explanation: "Correct. Time adverbs change: today → that day, yesterday → the day before."
         },
         {
           text: "We use 'if' or 'whether' for yes/no questions in reported speech.",
           isTrue: true,
-          explanation: "Correcto. 'Are you coming?' → 'He asked if/whether I was coming.'"
+          explanation: "Correct. 'Are you coming?' → 'He asked if/whether I was coming.'"
         },
         {
           text: "Modal verbs never change in reported speech.",
           isTrue: false,
-          explanation: "Incorrecto. Algunos modales cambian: will → would, can → could, may → might."
+          explanation: "Incorrect. Some modals change: will → would, can → could, may → might."
         }
       ]}
     />,
@@ -486,7 +486,7 @@ const ReportedSpeechPage = () => {
         "could"
       ]}
       correctAnswer={1}
-      explanation="'Will' cambia a 'would' en reported speech: 'He said he would help me.'"
+      explanation="'Will' becomes 'would' in reported speech: 'He said he would help me.'"
     />,
 
     <MultipleChoiceExercise
@@ -499,7 +499,7 @@ const ReportedSpeechPage = () => {
         "not be late"
       ]}
       correctAnswer={1}
-      explanation="Los imperativos negativos se reportan con 'told + object + not to + infinitive'."
+      explanation="Negative imperatives are reported with 'told + object + not to + infinitive'."
     />,
 
     <TrueFalseExercise
@@ -508,12 +508,12 @@ const ReportedSpeechPage = () => {
         {
           text: "'Here' changes to 'there' in reported speech.",
           isTrue: true,
-          explanation: "Correcto. Los adverbios de lugar cambian según la perspectiva: here → there."
+          explanation: "Correct. Place adverbs change with perspective: here → there."
         },
         {
           text: "Present Perfect changes to Past Perfect in reported speech.",
           isTrue: true,
-          explanation: "Correcto. 'I have finished' → 'He said he had finished.'"
+          explanation: "Correct. 'I have finished' → 'He said he had finished.'"
         }
       ]}
     />,
@@ -528,14 +528,14 @@ const ReportedSpeechPage = () => {
         "was I ready"
       ]}
       correctAnswer={1}
-      explanation="Las preguntas sí/no se reportan con 'if/whether' + orden afirmativo: 'if I was ready'."
+      explanation="Yes/no questions are reported with 'if/whether' + affirmative order: 'if I was ready'."
     />
   ];
 
   return (
     <TheoryLayout
       title="Reported Speech"
-      description="Domina el discurso indirecto en inglés. Aprende a reportar lo que otros dijeron, cambiar tiempos verbales y usar reporting verbs correctamente."
+      description="Master reported speech in English. Learn how to report what others said, shift verb tenses, and use reporting verbs correctly."
       level="B1-B2-C1-C2"
       theoryContent={theoryContent}
       exercises={exercises}

@@ -6,24 +6,24 @@ import { MultipleChoiceExercise, TrueFalseExercise } from '@/components/theory/E
 const VocabularyInContextPage = () => {
   const theoryContent = (
     <div>
-      <TheorySection title="¿Qué es Vocabulary in Context?" icon="🧩">
+      <TheorySection title="What is Vocabulary in Context?" icon="🧩">
         <p>
-          <strong>Vocabulary in Context</strong> es la habilidad de entender el significado de palabras desconocidas 
-          usando las pistas que proporciona el texto que las rodea. No necesitas un diccionario si puedes usar el contexto efectivamente.
+          <strong>Vocabulary in Context</strong> is the skill of learning the meaning of unfamiliar words 
+          from the surrounding text. You may not need a dictionary if you use context well.
         </p>
         
         <Example 
-          title="Ejemplo de Vocabulary in Context"
-          content="'The ancient artifact was so fragile that even a gentle touch could damage it permanently.' Aunque no sepas qué significa 'fragile', el contexto te dice que significa algo que se puede dañar fácilmente."
-          explanation="Las pistas 'gentle touch could damage it' te ayudan a inferir que 'fragile' significa delicado o que se rompe fácilmente."
+          title="Vocabulary in context example"
+          content="'The ancient artifact was so fragile that even a gentle touch could damage it permanently.' Even if you do not know 'fragile', the context shows it means something easily damaged."
+          explanation="Clues like 'gentle touch could damage it' help you infer that 'fragile' means easily broken or delicate."
         />
       </TheorySection>
 
-      <TheorySection title="Tipos de Pistas Contextuales" icon="🔍">
+      <TheorySection title="Types of context clues" icon="🔍">
         <div style={{ display: 'grid', gap: '1rem' }}>
           <Rule 
-            title="1. Definiciones directas"
-            description="El texto define la palabra directamente."
+            title="1. Direct definitions"
+            description="The text defines the word outright."
             examples={[
               "A pediatrician, a doctor who treats children, examined the patient.",
               "Photosynthesis - the process by which plants make food - is essential.",
@@ -33,8 +33,8 @@ const VocabularyInContextPage = () => {
           />
 
           <Rule 
-            title="2. Ejemplos y listas"
-            description="La palabra se explica a través de ejemplos."
+            title="2. Examples and lists"
+            description="The word is explained through examples."
             examples={[
               "Citrus fruits such as oranges, lemons, and limes are rich in vitamin C.",
               "Nocturnal animals like owls, bats, and raccoons are active at night.",
@@ -44,8 +44,8 @@ const VocabularyInContextPage = () => {
           />
 
           <Rule 
-            title="3. Contraste y oposición"
-            description="La palabra se contrasta con algo conocido."
+            title="3. Contrast and opposition"
+            description="The word is set against something known."
             examples={[
               "Unlike his gregarious brother, Tom was quite shy and reserved.",
               "While the first half was tedious, the second half was exciting.",
@@ -56,11 +56,11 @@ const VocabularyInContextPage = () => {
         </div>
       </TheorySection>
 
-      <TheorySection title="Estrategias Avanzadas" icon="🎯">
+      <TheorySection title="Advanced strategies" icon="🎯">
         <div style={{ display: 'grid', gap: '1rem' }}>
           <Rule 
-            title="1. Análisis de causa y efecto"
-            description="Usa relaciones de causa-efecto para inferir significado."
+            title="1. Cause and effect"
+            description="Use cause–effect links to guess meaning."
             examples={[
               "The drought caused the crops to wither and die.",
               "Due to his procrastination, he missed the deadline.",
@@ -70,19 +70,19 @@ const VocabularyInContextPage = () => {
           />
 
           <Rule 
-            title="2. Pistas gramaticales"
-            description="La función gramatical te da pistas sobre el significado."
+            title="2. Grammatical clues"
+            description="Word class hints at meaning."
             examples={[
-              "She walked cautiously (adverbio - manera de caminar)",
-              "The enormous building (adjetivo - describe tamaño)",
-              "He scrutinized the document (verbo - acción con documento)",
-              "Her benevolence was appreciated (sustantivo - cualidad personal)"
+              "She walked cautiously (adverb — manner of walking)",
+              "The enormous building (adjective — describes size)",
+              "He scrutinized the document (verb — action on a document)",
+              "Her benevolence was appreciated (noun — personal quality)"
             ]}
           />
 
           <Rule 
-            title="3. Conocimiento del mundo"
-            description="Usa tu conocimiento general para inferir significado."
+            title="3. World knowledge"
+            description="Use general knowledge to infer meaning."
             examples={[
               "The archaeologist excavated ancient ruins.",
               "The chef garnished the dish with herbs.",
@@ -93,38 +93,38 @@ const VocabularyInContextPage = () => {
         </div>
       </TheorySection>
 
-      <TheorySection title="Reglas Importantes" icon="⚡">
+      <TheorySection title="Important rules" icon="⚡">
         <div style={{ display: 'grid', gap: '1rem' }}>
           <Rule 
-            title="1. Lee más allá de la oración"
-            description="A veces las pistas están en oraciones anteriores o posteriores."
+            title="1. Read beyond the sentence"
+            description="Clues sometimes sit in neighbouring sentences."
             examples={[
-              "Mira el párrafo completo",
-              "Busca información en oraciones cercanas",
-              "Conecta ideas de diferentes partes",
-              "Usa el tema general del texto"
+              "Look at the whole paragraph",
+              "Search nearby sentences",
+              "Join ideas from different places",
+              "Use the overall topic"
             ]}
           />
 
           <Rule 
-            title="2. No te obsesiones con una palabra"
-            description="Si no puedes inferir el significado, continúa leyendo."
+            title="2. Do not fixate on one word"
+            description="If you cannot infer it, keep reading."
             examples={[
-              "Una palabra no arruina la comprensión total",
-              "El significado puede aclararse más adelante",
-              "Enfócate en palabras clave importantes",
-              "Usa el contexto general para compensar"
+              "One word does not ruin whole-text understanding",
+              "Meaning may clear up later",
+              "Focus on important keywords",
+              "Use general context to compensate"
             ]}
           />
 
           <Rule 
-            title="3. Verifica tu inferencia"
-            description="Confirma que tu interpretación tiene sentido en el contexto."
+            title="3. Check your guess"
+            description="Make sure your reading fits the text."
             examples={[
-              "¿Tu interpretación encaja lógicamente?",
-              "¿Es consistente con el resto del texto?",
-              "¿Tiene sentido gramaticalmente?",
-              "¿Apoya el mensaje general del texto?"
+              "Does your guess fit logically?",
+              "Is it consistent with the rest?",
+              "Is it grammatically sound?",
+              "Does it support the overall message?"
             ]}
           />
         </div>
@@ -135,158 +135,158 @@ const VocabularyInContextPage = () => {
   const exercises = [
     <MultipleChoiceExercise
       key="1"
-      question="¿Qué significa 'vocabulary in context'?"
+      question="What does 'vocabulary in context' mean?"
       options={[
-        "Memorizar listas de vocabulario",
-        "Usar el contexto para entender palabras desconocidas",
-        "Traducir todas las palabras",
-        "Buscar palabras en el diccionario"
+        "Memorising vocabulary lists",
+        "Using context to understand unknown words",
+        "Translating every word",
+        "Looking up every word"
       ]}
       correctAnswer={1}
-      explanation="Vocabulary in context significa usar las pistas del texto para entender el significado de palabras desconocidas."
+      explanation="It means using clues in the text to work out unknown words."
     />,
 
     <MultipleChoiceExercise
       key="2"
-      question="En la oración 'A pediatrician, a doctor who treats children, was called', ¿qué tipo de pista contextual se usa?"
+      question="In 'A pediatrician, a doctor who treats children, was called', what type of clue is used?"
       options={[
-        "Contraste",
-        "Ejemplo",
-        "Definición directa",
-        "Causa y efecto"
+        "Contrast",
+        "Example",
+        "Direct definition",
+        "Cause and effect"
       ]}
       correctAnswer={2}
-      explanation="Es una definición directa: 'a doctor who treats children' define exactamente qué es un pediatrician."
+      explanation="The phrasing 'a doctor who treats children' is a direct definition of 'pediatrician'."
     />,
 
     <TrueFalseExercise
       key="3"
       statements={[
         {
-          text: "Siempre necesitas un diccionario para entender palabras nuevas.",
+          text: "You always need a dictionary for new words.",
           isTrue: false,
-          explanation: "Incorrecto. El contexto a menudo proporciona suficientes pistas para entender palabras desconocidas."
+          explanation: "Incorrect. Context often gives enough clues without a dictionary."
         },
         {
-          text: "Las pistas contextuales pueden estar en oraciones diferentes a la que contiene la palabra desconocida.",
+          text: "Context clues may appear in sentences other than the one with the unknown word.",
           isTrue: true,
-          explanation: "Correcto. A veces necesitas leer oraciones anteriores o posteriores para encontrar las pistas."
+          explanation: "Correct. Sometimes you need earlier or later sentences for the clue."
         },
         {
-          text: "La función gramatical de una palabra no ayuda a entender su significado.",
+          text: "Grammar does not help you guess word meaning.",
           isTrue: false,
-          explanation: "Incorrecto. Saber si es sustantivo, verbo, adjetivo, etc. te da pistas importantes sobre su significado."
+          explanation: "Incorrect. Knowing noun, verb, adjective, etc. gives useful hints."
         }
       ]}
     />,
 
     <MultipleChoiceExercise
       key="4"
-      question="En 'Unlike his gregarious brother, Tom was shy', ¿qué significa probablemente 'gregarious'?"
+      question="In 'Unlike his gregarious brother, Tom was shy', what does 'gregarious' probably mean?"
       options={[
-        "Tímido",
+        "Shy",
         "Sociable",
-        "Inteligente",
-        "Alto"
+        "Intelligent",
+        "Tall"
       ]}
       correctAnswer={1}
-      explanation="'Unlike' indica contraste. Si Tom es tímido y es lo opuesto a su hermano gregarious, entonces gregarious significa sociable."
+      explanation="'Unlike' signals contrast. If Tom is shy, his brother is the opposite—sociable."
     />,
 
     <MultipleChoiceExercise
       key="5"
-      question="¿Cuál es la mejor estrategia cuando no puedes inferir el significado de una palabra?"
+      question="What is the best approach when you cannot infer a word?"
       options={[
-        "Parar de leer inmediatamente",
-        "Continuar leyendo, el significado puede aclararse",
-        "Traducir toda la oración",
-        "Saltarse todo el párrafo"
+        "Stop reading at once",
+        "Keep reading—meaning may become clear",
+        "Translate the whole sentence",
+        "Skip the whole paragraph"
       ]}
       correctAnswer={1}
-      explanation="Es mejor continuar leyendo porque el significado puede aclararse más adelante o puede no ser esencial para la comprensión."
+      explanation="Keep going; meaning may clarify later or the word may not be essential."
     />,
 
     <TrueFalseExercise
       key="6"
       statements={[
         {
-          text: "Los ejemplos en el texto pueden ayudar a entender palabras desconocidas.",
+          text: "Examples in the text can help you understand unknown words.",
           isTrue: true,
-          explanation: "Correcto. Listas de ejemplos como 'citrus fruits such as oranges, lemons...' ayudan a entender el término general."
+          explanation: "Correct. Lists such as 'citrus fruits such as oranges, lemons...' clarify the general term."
         },
         {
-          text: "Debes entender cada palabra para comprender un texto.",
+          text: "You must know every word to understand a text.",
           isTrue: false,
-          explanation: "Incorrecto. Puedes entender la idea general sin conocer cada palabra específica."
+          explanation: "Incorrect. You can grasp the main idea without every word."
         },
         {
-          text: "Tu conocimiento del mundo puede ayudar a inferir significados.",
+          text: "General knowledge can help you infer meanings.",
           isTrue: true,
-          explanation: "Correcto. Tu conocimiento sobre profesiones, situaciones, etc. te ayuda a inferir significados de palabras relacionadas."
+          explanation: "Correct. Knowledge of jobs, situations, etc. supports educated guesses."
         }
       ]}
     />,
 
     <MultipleChoiceExercise
       key="7"
-      question="En 'The drought caused the crops to wither', ¿qué significa probablemente 'wither'?"
+      question="In 'The drought caused the crops to wither', what does 'wither' probably mean?"
       options={[
-        "Crecer más",
-        "Secarse y morir",
-        "Cambiar de color",
-        "Producir frutos"
+        "Grow more",
+        "Dry up and die",
+        "Change colour",
+        "Bear fruit"
       ]}
       correctAnswer={1}
-      explanation="La sequía (drought) causaría que las plantas se sequen y mueran, no que crezcan o produzcan frutos."
+      explanation="Drought would make plants dry and die rather than grow or fruit."
     />,
 
     <MultipleChoiceExercise
       key="8"
-      question="¿Qué tipo de palabras suelen ser más fáciles de inferir por contexto?"
+      question="Which words are usually easiest to infer from context?"
       options={[
-        "Nombres propios",
-        "Palabras técnicas muy específicas",
-        "Palabras con significado concreto y visible",
-        "Abreviaciones"
+        "Proper nouns",
+        "Very narrow technical terms",
+        "Words with concrete, visible meaning",
+        "Abbreviations"
       ]}
       correctAnswer={2}
-      explanation="Palabras con significado concreto (objetos, acciones visibles) son más fáciles de inferir que conceptos abstractos."
+      explanation="Concrete words (objects, visible actions) are easier than very abstract ones."
     />,
 
     <TrueFalseExercise
       key="9"
       statements={[
         {
-          text: "Las palabras de contraste como 'unlike', 'however', 'but' son útiles para vocabulary in context.",
+          text: "Contrast words like 'unlike', 'however', and 'but' help with vocabulary in context.",
           isTrue: true,
-          explanation: "Correcto. Estas palabras indican que algo es opuesto, lo que te ayuda a inferir significado por contraste."
+          explanation: "Correct. They show opposition, which helps you guess by contrast."
         },
         {
-          text: "Solo debes usar el contexto inmediato de la oración donde aparece la palabra.",
+          text: "You should only use the sentence that contains the unknown word.",
           isTrue: false,
-          explanation: "Incorrecto. A veces necesitas usar el contexto del párrafo completo o incluso de todo el texto."
+          explanation: "Incorrect. You may need the whole paragraph or even wider context."
         }
       ]}
     />,
 
     <MultipleChoiceExercise
       key="10"
-      question="¿Cómo debes verificar si tu inferencia sobre una palabra es correcta?"
+      question="How should you check your guess about a word?"
       options={[
-        "Preguntarle a alguien más",
-        "Verificar que tenga sentido en el contexto total",
-        "Contar las letras de la palabra",
-        "Buscar palabras similares"
+        "Ask someone",
+        "Check it makes sense in the full context",
+        "Count the letters",
+        "Find similar-looking words"
       ]}
       correctAnswer={1}
-      explanation="Debes verificar que tu interpretación sea lógica y consistente con todo el contexto del texto."
+      explanation="Your guess should be logical and consistent with the whole text."
     />
   ];
 
   return (
     <TheoryLayout
       title="Vocabulary in Context"
-      description="Domina la habilidad de entender palabras desconocidas usando el contexto. Aprende a usar pistas textuales, definiciones, ejemplos y contrastes para inferir significados."
+      description="Master understanding unknown words from context. Learn to use definitions, examples, contrast, and grammar cues to infer meanings."
       level="A2-B1-B2-C1-C2"
       theoryContent={theoryContent}
       exercises={exercises}

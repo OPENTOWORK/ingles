@@ -18,361 +18,288 @@ import {
 const KeyResourcesToImprovePage = () => {
   const theoryContent = (
     <div>
-      <TheorySection title="¿Qué son Key Resources to Improve?" icon="📚">
+      <TheorySection title="What Are Key Resources to Improve?" icon="📚">
         <p style={{ fontSize: '1.1rem', lineHeight: 1.6, color: '#4a5568', marginBottom: '1rem' }}>
-          Los <strong>key resources to improve</strong> (recursos clave para mejorar) son herramientas, materiales y estrategias 
-          que te ayudan a desarrollar tus habilidades en inglés de manera efectiva y sostenida.
+          <strong>Key resources to improve</strong> are tools, materials, and strategies 
+          that help you build your English effectively and sustainably.
         </p>
         
         <QuickReference items={[
-          "Recursos digitales: aplicaciones, sitios web, podcasts",
-          "Materiales tradicionales: libros, diccionarios, gramáticas",
-          "Práctica activa: conversación, escritura, lectura",
-          "Estrategias de aprendizaje: técnicas de estudio, hábitos",
-          "Evaluación y seguimiento: tests, autoevaluación"
+          "Digital resources: apps, websites, podcasts",
+          "Traditional materials: books, dictionaries, grammar references",
+          "Active practice: speaking, writing, reading",
+          "Study strategies: techniques and habits",
+          "Assessment and tracking: tests and self-review"
         ]} />
       </TheorySection>
 
-      <TheorySection title="Recursos Digitales" icon="💻">
+      <TheorySection title="Digital Resources" icon="💻">
         <p style={{ fontSize: '1rem', lineHeight: 1.6, color: '#4a5568', marginBottom: '1rem' }}>
-          Los recursos digitales ofrecen acceso inmediato a contenido actualizado y herramientas interactivas.
+          Digital resources give immediate access to up-to-date content and interactive tools.
         </p>
 
         <GrammarTable
-          caption="Tipos de Recursos Digitales"
-          headers={["Tipo", "Ejemplos", "Beneficios", "Nivel"]}
+          caption="Types of Digital Resources"
+          headers={["Type", "Examples", "Benefits", "Level"]}
           rows={[
-            ["Apps de Idiomas", "Duolingo, Babbel, Rosetta Stone", "Gamificación, práctica diaria", "A1-C2"],
-            ["Podcasts", "BBC Learning English, ESL Pod", "Comprensión auditiva, vocabulario", "A2-C2"],
-            ["Videos Online", "YouTube channels, TED Talks", "Comprensión visual, pronunciación", "A1-C2"],
-            ["Cursos Online", "Coursera, edX, Khan Academy", "Estructura, certificación", "B1-C2"],
-            ["Herramientas de Escritura", "Grammarly, Hemingway Editor", "Corrección, mejora de estilo", "B1-C2"],
-            ["Diccionarios Online", "Oxford, Merriam-Webster, Collins", "Definiciones, pronunciación", "A1-C2"]
+            ["Language-learning apps", "Duolingo, Babbel, Rosetta Stone", "Gamification, daily practice", "A1–C2"],
+            ["Podcasts", "BBC Learning English, ESL Podcast", "Listening comprehension, vocabulary", "A2–C2"],
+            ["Online videos", "YouTube channels, TED Talks", "Visual input, pronunciation", "A1–C2"],
+            ["Online courses", "Coursera, edX, Khan Academy", "Structure, certification", "B1–C2"],
+            ["Writing tools", "Grammarly, Hemingway Editor", "Correction, clearer style", "B1–C2"],
+            ["Online dictionaries", "Oxford, Merriam-Webster, Collins", "Definitions, pronunciation", "A1–C2"]
           ]}
         />
 
         <div style={{ display: 'grid', gap: '1rem' }}>
-          <Example 
-            spanish="App de idiomas: 'Duolingo para práctica diaria'"
-            english="Language app: 'Duolingo for daily practice'"
-            translation="App de idiomas: 'Duolingo para práctica diaria'"
-          />
-          <Example 
-            spanish="Podcast: 'BBC Learning English para noticias'"
-            english="Podcast: 'BBC Learning English for news'"
-            translation="Podcast: 'BBC Learning English para noticias'"
-          />
-          <Example 
-            spanish="Herramienta de escritura: 'Grammarly para corrección'"
-            english="Writing tool: 'Grammarly for correction'"
-            translation="Herramienta de escritura: 'Grammarly para corrección'"
-          />
+          <Example english="Language app: 'Duolingo for daily bite-sized practice'" />
+          <Example english="Podcast: 'BBC Learning English for news-led lessons'" />
+          <Example english="Writing support: 'Grammarly to review drafts'" />
         </div>
 
         <Rule 
-          title="Uso Efectivo de Recursos Digitales"
-          description="Para maximizar beneficios:"
+          title="Using Digital Resources Effectively"
+          description="To get more from digital tools:"
           examples={[
-            "Establece una rutina diaria",
-            "Combina diferentes tipos de recursos",
-            "Usa recursos apropiados para tu nivel",
-            "Aprovecha las características interactivas"
+            "Build a daily routine",
+            "Mix different formats (audio, reading, quizzes)",
+            "Choose content suited to your level",
+            "Use interactive features when available"
           ]}
         />
 
         <Tip type="info">
-          <strong>Consejo:</strong> Los recursos digitales son más efectivos cuando los usas consistentemente.
+          <strong>Tip:</strong> Digital tools pay off most when you use them regularly, not occasionally.
         </Tip>
       </TheorySection>
 
-      <TheorySection title="Materiales Tradicionales" icon="📖">
+      <TheorySection title="Traditional Materials" icon="📖">
         <p style={{ fontSize: '1rem', lineHeight: 1.6, color: '#4a5568', marginBottom: '1rem' }}>
-          Los materiales tradicionales siguen siendo fundamentales para un aprendizaje sólido y profundo.
+          Printed and reference-based materials remain essential for thorough, structured learning.
         </p>
 
         <GrammarTable
-          caption="Materiales Tradicionales Esenciales"
-          headers={["Material", "Función", "Cuándo Usar", "Beneficios"]}
+          caption="Essential Traditional Materials"
+          headers={["Material", "Purpose", "When to Use", "Benefits"]}
           rows={[
-            ["Diccionarios", "Definiciones, pronunciación", "Al leer o escribir", "Precisión, comprensión"],
-            ["Gramáticas", "Reglas y estructuras", "Al estudiar gramática", "Fundamentos sólidos"],
-            ["Libros de Texto", "Estructura de aprendizaje", "Estudio sistemático", "Progresión ordenada"],
-            ["Novelas y Cuentos", "Lectura extensiva", "Tiempo libre", "Vocabulario, fluidez"],
-            ["Periódicos y Revistas", "Lectura de actualidad", "Día a día", "Vocabulario actual"],
-            ["Guías de Estilo", "Escritura formal", "Al escribir ensayos", "Registro apropiado"]
+            ["Dictionaries", "Definitions, pronunciation", "When reading or writing", "Accuracy, depth"],
+            ["Grammar references", "Rules and structures", "When studying grammar", "Solid foundations"],
+            ["Textbooks", "Structured learning paths", "Systematic courses", "Clear progression"],
+            ["Novels and short stories", "Extensive reading", "Free time", "Vocabulary, flow"],
+            ["Newspapers and magazines", "Current topics", "Day to day", "Up-to-date language"],
+            ["Style guides", "Formal writing", "When drafting essays", "Appropriate register"]
           ]}
         />
 
         <div style={{ display: 'grid', gap: '1rem' }}>
-          <Example 
-            spanish="Diccionario: 'Oxford Advanced Learner's Dictionary'"
-            english="Dictionary: 'Oxford Advanced Learner's Dictionary'"
-            translation="Diccionario: 'Oxford Advanced Learner's Dictionary'"
-          />
-          <Example 
-            spanish="Gramática: 'English Grammar in Use'"
-            english="Grammar: 'English Grammar in Use'"
-            translation="Gramática: 'English Grammar in Use'"
-          />
-          <Example 
-            spanish="Lectura: 'The New York Times para noticias'"
-            english="Reading: 'The New York Times for news'"
-            translation="Lectura: 'The New York Times para noticias'"
-          />
+          <Example english="Dictionary: Oxford Advanced Learner's Dictionary" />
+          <Example english="Grammar: English Grammar in Use" />
+          <Example english="Reading: The New York Times for daily news articles" />
         </div>
 
         <Tip type="success">
-          <strong>Consejo:</strong> Combina materiales tradicionales con recursos digitales para un aprendizaje completo.
+          <strong>Tip:</strong> Combine traditional materials with digital resources for well-rounded progress.
         </Tip>
       </TheorySection>
 
-      <TheorySection title="Práctica Activa" icon="🎯">
+      <TheorySection title="Active Practice" icon="🎯">
         <p style={{ fontSize: '1rem', lineHeight: 1.6, color: '#4a5568', marginBottom: '1rem' }}>
-          La práctica activa es esencial para desarrollar fluidez y confianza en el uso del inglés.
+          Active practice is key to gaining fluency and confidence in English.
         </p>
 
         <GrammarTable
-          caption="Tipos de Práctica Activa"
-          headers={["Habilidad", "Actividades", "Frecuencia", "Beneficios"]}
+          caption="Kinds of Active Practice"
+          headers={["Skill", "Activities", "How Often", "Benefits"]}
           rows={[
-            ["Speaking", "Conversación, presentaciones, debates", "Diaria", "Fluidez, pronunciación"],
-            ["Writing", "Diarios, ensayos, emails", "Regular", "Estructura, vocabulario"],
-            ["Reading", "Libros, artículos, noticias", "Diaria", "Vocabulario, comprensión"],
-            ["Listening", "Podcasts, música, películas", "Diaria", "Comprensión, pronunciación"],
-            ["Grammar", "Ejercicios, traducción", "Regular", "Precisión, estructura"]
+            ["Speaking", "Conversation, short talks, debates", "Daily if possible", "Fluency, pronunciation"],
+            ["Writing", "Journals, essays, emails", "Regularly", "Structure, vocabulary"],
+            ["Reading", "Books, articles, news", "Daily if possible", "Vocabulary, comprehension"],
+            ["Listening", "Podcasts, music, films", "Daily if possible", "Comprehension, pronunciation"],
+            ["Grammar", "Exercises, short translations", "Regularly", "Accuracy, structures"]
           ]}
         />
 
         <div style={{ display: 'grid', gap: '1rem' }}>
-          <Example 
-            spanish="Speaking: 'Conversación con hablantes nativos'"
-            english="Speaking: 'Conversation with native speakers'"
-            translation="Speaking: 'Conversación con hablantes nativos'"
-          />
-          <Example 
-            spanish="Writing: 'Mantener un diario en inglés'"
-            english="Writing: 'Keep a diary in English'"
-            translation="Writing: 'Mantener un diario en inglés'"
-          />
-          <Example 
-            spanish="Reading: 'Leer noticias en inglés diariamente'"
-            english="Reading: 'Read English news daily'"
-            translation="Reading: 'Leer noticias en inglés diariamente'"
-          />
+          <Example english="Speaking: Conversation with fluent or native speakers" />
+          <Example english="Writing: Keep a diary in English" />
+          <Example english="Reading: Read English news every day" />
         </div>
 
         <Rule 
-          title="Estrategias de Práctica Efectiva"
-          description="Para practicar efectivamente:"
+          title="Effective Practice Habits"
+          description="To practise effectively:"
           examples={[
-            "Establece objetivos específicos",
-            "Practica regularmente, no intensivamente",
-            "Combina diferentes habilidades",
-            "Busca feedback de otros",
-            "Reflexiona sobre tu progreso"
+            "Set specific goals",
+            "Study little and often rather than occasional marathons",
+            "Mix listening, speaking, reading, and writing",
+            "Seek feedback from others where you can",
+            "Reflect on your progress"
           ]}
         />
 
         <Tip type="warning">
-          <strong>¡Cuidado!</strong> La práctica sin reflexión puede no ser efectiva - analiza tus errores y progreso.
+          <strong>Watch out!</strong> Practice without reflection rarely fixes mistakes—notice patterns and adjust.
         </Tip>
       </TheorySection>
 
-      <TheorySection title="Estrategias de Aprendizaje" icon="🧠">
+      <TheorySection title="Learning Strategies" icon="🧠">
         <p style={{ fontSize: '1rem', lineHeight: 1.6, color: '#4a5568', marginBottom: '1rem' }}>
-          Las estrategias de aprendizaje te ayudan a estudiar de manera más eficiente y efectiva.
+          Learning strategies help you study more efficiently and remember more.
         </p>
 
         <GrammarTable
-          caption="Estrategias de Aprendizaje Efectivas"
-          headers={["Estrategia", "Descripción", "Cuándo Usar", "Beneficios"]}
+          caption="Effective Learning Strategies"
+          headers={["Strategy", "Description", "When to Use", "Benefits"]}
           rows={[
-            ["Spaced Repetition", "Repasar a intervalos crecientes", "Vocabulario, gramática", "Retención a largo plazo"],
-            ["Active Recall", "Intentar recordar sin mirar", "Repaso, memorización", "Fortalecimiento de memoria"],
-            ["Interleaving", "Mezclar diferentes temas", "Estudio general", "Transferencia de conocimiento"],
-            ["Elaboration", "Explicar conceptos en tus palabras", "Comprensión profunda", "Mejor entendimiento"],
-            ["Dual Coding", "Combinar palabras e imágenes", "Vocabulario, conceptos", "Múltiples vías de acceso"],
-            ["Metacognition", "Reflexionar sobre tu aprendizaje", "Evaluación continua", "Autoconocimiento"]
+            ["Spaced repetition", "Review at increasing intervals", "Vocabulary and grammar", "Better long-term memory"],
+            ["Active recall", "Try to remember without looking first", "Review sessions", "Stronger retrieval"],
+            ["Interleaving", "Alternate topics within a study session", "General study periods", "Helps transfer to new tasks"],
+            ["Elaboration", "Explain ideas in your own words", "When you want deep understanding", "Clearer mental models"],
+            ["Dual coding", "Combine words and images", "Vocabulary and concepts", "More ways to recall material"],
+            ["Metacognition", "Reflect on how you learn", "Ongoing reflection", "Self-awareness as a learner"]
           ]}
         />
 
         <div style={{ display: 'grid', gap: '1rem' }}>
-          <Example 
-            spanish="Spaced Repetition: 'Repasar vocabulario cada 1, 3, 7 días'"
-            english="Spaced Repetition: 'Review vocabulary every 1, 3, 7 days'"
-            translation="Spaced Repetition: 'Repasar vocabulario cada 1, 3, 7 días'"
-          />
-          <Example 
-            spanish="Active Recall: 'Intentar recordar sin mirar las notas'"
-            english="Active Recall: 'Try to remember without looking at notes'"
-            translation="Active Recall: 'Intentar recordar sin mirar las notas'"
-          />
-          <Example 
-            spanish="Metacognition: 'Reflexionar sobre qué estrategias funcionan'"
-            english="Metacognition: 'Reflect on which strategies work'"
-            translation="Metacognition: 'Reflexionar sobre qué estrategias funcionan'"
-          />
+          <Example english="Spaced repetition: review vocabulary on days 1, 3, and 7" />
+          <Example english="Active recall: try to recall yesterday's lesson before reopening notes" />
+          <Example english="Metacognition: note which strategies help you most each week" />
         </div>
 
         <Tip type="info">
-          <strong>Consejo:</strong> Experimenta con diferentes estrategias para encontrar las que funcionan mejor para ti.
+          <strong>Tip:</strong> Try several strategies and keep the ones that work best for you.
         </Tip>
       </TheorySection>
 
-      <TheorySection title="Evaluación y Seguimiento" icon="📊">
+      <TheorySection title="Assessment and Tracking" icon="📊">
         <p style={{ fontSize: '1rem', lineHeight: 1.6, color: '#4a5568', marginBottom: '1rem' }}>
-          La evaluación regular te ayuda a identificar fortalezas, debilidades y áreas de mejora.
+          Checking progress regularly highlights strengths, gaps, and next steps.
         </p>
 
         <GrammarTable
-          caption="Métodos de Evaluación"
-          headers={["Método", "Qué Evalúa", "Frecuencia", "Herramientas"]}
+          caption="Ways to Assess Progress"
+          headers={["Method", "Focus", "Frequency", "Tools"]}
           rows={[
-            ["Self-Assessment", "Progreso personal", "Semanal", "Diarios, listas de verificación"],
-            ["Practice Tests", "Conocimiento específico", "Mensual", "Tests online, libros"],
-            ["Peer Feedback", "Habilidades comunicativas", "Regular", "Grupos de estudio, intercambios"],
-            ["Teacher Feedback", "Aspectos técnicos", "Periódico", "Clases, tutorías"],
-            ["Performance Tasks", "Aplicación práctica", "Ocasional", "Presentaciones, proyectos"],
-            ["Portfolio Assessment", "Progreso general", "Trimestral", "Colección de trabajos"]
+            ["Self-assessment", "Your own progress over time", "Weekly", "Journals, checklists"],
+            ["Practice tests", "Specific skills or exam formats", "Monthly", "Online tests, workbooks"],
+            ["Peer feedback", "Speaking and writing in real communication", "Regularly", "Study groups, language exchanges"],
+            ["Teacher feedback", "Accuracy and explanations", "As available", "Classes, tutoring"],
+            ["Performance tasks", "Real-life use", "Occasionally", "Presentations, projects"],
+            ["Portfolio assessment", "Overall development", "Quarterly", "Collected pieces of writing or recordings"]
           ]}
         />
 
         <div style={{ display: 'grid', gap: '1rem' }}>
-          <Example 
-            spanish="Self-Assessment: 'Evaluar mi progreso semanalmente'"
-            english="Self-Assessment: 'Evaluate my progress weekly'"
-            translation="Self-Assessment: 'Evaluar mi progreso semanalmente'"
-          />
-          <Example 
-            spanish="Practice Tests: 'Hacer tests mensuales de nivel'"
-            english="Practice Tests: 'Take monthly level tests'"
-            translation="Practice Tests: 'Hacer tests mensuales de nivel'"
-          />
-          <Example 
-            spanish="Peer Feedback: 'Intercambiar trabajos con compañeros'"
-            english="Peer Feedback: 'Exchange work with classmates'"
-            translation="Peer Feedback: 'Intercambiar trabajos con compañeros'"
-          />
+          <Example english="Self-assessment: short weekly progress review in a notebook or app" />
+          <Example english="Practice tests: a monthly timed practice exam or section" />
+          <Example english="Peer feedback: swap short written or spoken tasks with a partner" />
         </div>
 
         <Rule 
-          title="Evaluación Efectiva"
-          description="Para evaluar efectivamente:"
+          title="Making Assessment Useful"
+          description="Assessment works best when you:"
           examples={[
-            "Establece criterios claros",
-            "Usa múltiples métodos",
-            "Evalúa regularmente",
-            "Reflexiona sobre los resultados",
-            "Ajusta tu plan de estudio"
+            "Use clear criteria (what ‘good’ looks like)",
+            "Use more than one type of evidence",
+            "Check in regularly, not once a year",
+            "Respond to results by adjusting your plan"
           ]}
         />
 
         <Tip type="success">
-          <strong>Consejo:</strong> La evaluación debe ser constructiva y orientada a la mejora, no a la crítica.
+          <strong>Tip:</strong> Treat assessment as guidance for improvement, not as punishment.
         </Tip>
       </TheorySection>
 
-      <TheorySection title="Creación de un Plan de Estudio" icon="📅">
+      <TheorySection title="Building a Study Plan" icon="📅">
         <p style={{ fontSize: '1rem', lineHeight: 1.6, color: '#4a5568', marginBottom: '1rem' }}>
-          Un plan de estudio bien estructurado te ayuda a mantener la consistencia y el progreso.
+          A clear study plan supports consistency and visible progress over time.
         </p>
 
         <GrammarTable
-          caption="Elementos de un Plan de Estudio"
-          headers={["Elemento", "Descripción", "Ejemplo", "Importancia"]}
+          caption="Parts of a Study Plan"
+          headers={["Element", "Description", "Example", "Why It Matters"]}
           rows={[
-            ["Objetivos", "Metas específicas y medibles", "Pasar de B1 a B2 en 6 meses", "Dirección clara"],
-            ["Horario", "Tiempo dedicado diariamente", "30 minutos diarios", "Consistencia"],
-            ["Actividades", "Tareas específicas", "Leer 1 artículo, escribir 1 párrafo", "Variedad"],
-            ["Recursos", "Materiales y herramientas", "App, libro, podcast", "Acceso a contenido"],
-            ["Evaluación", "Métodos de seguimiento", "Test mensual, autoevaluación", "Progreso"],
-            ["Ajustes", "Modificaciones según progreso", "Cambiar actividades si no funcionan", "Flexibilidad"]
+            ["Goals", "Specific aims you can track", "Move from B1 to B2 in six months", "Direction"],
+            ["Schedule", "Time set aside routinely", "30 minutes every day", "Habits"],
+            ["Activities", "Concrete tasks each week", "Read one article, write one paragraph", "Variety"],
+            ["Resources", "What you will use", "An app, a textbook, one podcast series", "Access to input"],
+            ["Review", "How you check progress", "Monthly test plus weekly self-review", "Course correction"],
+            ["Adjustments", "Changes when plans stall", "Swap an activity if it is not helping", "Realistic flexibility"]
           ]}
         />
 
         <div style={{ display: 'grid', gap: '1rem' }}>
-          <Example 
-            spanish="Objetivo: 'Mejorar mi writing de B1 a B2 en 6 meses'"
-            english="Goal: 'Improve my writing from B1 to B2 in 6 months'"
-            translation="Objetivo: 'Mejorar mi writing de B1 a B2 en 6 meses'"
-          />
-          <Example 
-            spanish="Horario: '30 minutos diarios: 15 min reading, 15 min writing'"
-            english="Schedule: '30 minutes daily: 15 min reading, 15 min writing'"
-            translation="Horario: '30 minutos diarios: 15 min reading, 15 min writing'"
-          />
-          <Example 
-            spanish="Evaluación: 'Test mensual y autoevaluación semanal'"
-            english="Assessment: 'Monthly test and weekly self-assessment'"
-            translation="Evaluación: 'Test mensual y autoevaluación semanal'"
-          />
+          <Example english="Goal: improve writing from B1 to B2 in six months" />
+          <Example english="Schedule: 30 minutes daily—15 reading, 15 writing" />
+          <Example english="Review: monthly test plus a short weekly self-check" />
         </div>
 
         <Tip type="warning">
-          <strong>¡Cuidado!</strong> Un plan demasiado ambicioso puede ser contraproducente - sé realista con tus objetivos.
+          <strong>Watch out!</strong> Overloading your plan causes burnout—set targets you can actually keep.
         </Tip>
       </TheorySection>
 
-      <TheorySection title="Errores Comunes" icon="⚠️">
+      <TheorySection title="Common Mistakes" icon="⚠️">
         <div style={{ display: 'grid', gap: '1rem' }}>
           <Tip type="error">
-            <strong>Error:</strong> Usar solo un tipo de recurso ❌<br/>
-            <strong>Correcto:</strong> Combinar diferentes tipos de recursos ✅<br/>
-            <em>La variedad de recursos mejora el aprendizaje</em>
+            <strong>Mistake:</strong> Using only one type of resource ❌<br/>
+            <strong>Better:</strong> Combine several kinds (digital + print, input + practice) ✅<br/>
+            <em>Variety supports balanced skills</em>
           </Tip>
 
           <Tip type="error">
-            <strong>Error:</strong> Estudiar intensivamente sin consistencia ❌<br/>
-            <strong>Correcto:</strong> Estudiar regularmente, aunque sea poco tiempo ✅<br/>
-            <em>La consistencia es más importante que la intensidad</em>
+            <strong>Mistake:</strong> Intense cramming with no steady routine ❌<br/>
+            <strong>Better:</strong> Short, regular sessions ✅<br/>
+            <em>Consistency usually beats occasional long marathons</em>
           </Tip>
 
           <Tip type="error">
-            <strong>Error:</strong> No evaluar el progreso ❌<br/>
-            <strong>Correcto:</strong> Evaluar regularmente y ajustar estrategias ✅<br/>
-            <em>La evaluación te ayuda a mejorar tu enfoque</em>
+            <strong>Mistake:</strong> Never reviewing progress ❌<br/>
+            <strong>Better:</strong> Check progress and tweak your methods ✅<br/>
+            <em>Review shows what to focus on next</em>
           </Tip>
 
           <Tip type="error">
-            <strong>Error:</strong> Usar recursos inapropiados para tu nivel ❌<br/>
-            <strong>Correcto:</strong> Elegir recursos apropiados para tu nivel ✅<br/>
-            <em>Los recursos deben coincidir con tu nivel actual</em>
+            <strong>Mistake:</strong> Choosing materials far above or below your level ❌<br/>
+            <strong>Better:</strong> Aim for texts and tasks suited to where you are now ✅<br/>
+            <em>Right-level input keeps motivation and growth balanced</em>
           </Tip>
         </div>
       </TheorySection>
 
-      <TheorySection title="Reglas Importantes" icon="⚡">
+      <TheorySection title="Key Principles" icon="⚡">
         <div style={{ display: 'grid', gap: '1rem' }}>
           <Rule 
-            title="1. Consistencia sobre intensidad"
-            description="Es mejor estudiar poco tiempo regularmente que mucho tiempo ocasionalmente."
+            title="1. Consistency over intensity"
+            description="Daily short sessions often beat rare long cram sessions."
             examples={[
-              "30 minutos diarios > 3 horas una vez por semana",
-              "La consistencia construye hábitos",
-              "El aprendizaje se consolida con la repetición",
-              "La intensidad puede causar fatiga"
+              "30 minutes a day beats one 3-hour block per week—when you sustain it",
+              "Regular study builds routines",
+              "Review helps learning stick",
+              "Very long cram sessions often lead to fatigue"
             ]}
           />
 
           <Rule 
-            title="2. Variedad de recursos"
-            description="Combina diferentes tipos de recursos para un aprendizaje completo."
+            title="2. Use a variety of resources"
+            description="Combine different tools for more complete development."
             examples={[
-              "Recursos digitales + materiales tradicionales",
-              "Práctica activa + estudio pasivo",
-              "Recursos formales + informales",
-              "Individual + grupal"
+              "Digital + printed materials",
+              "Active speaking/writing plus passive listening/reading where appropriate",
+              "Formal lessons + informal immersion",
+              "Solo practice + partner or group tasks"
             ]}
           />
 
           <Rule 
-            title="3. Evaluación continua"
-            description="Evalúa regularmente tu progreso y ajusta tu enfoque."
+            title="3. Keep evaluating"
+            description="Notice what is working and change what is not."
             examples={[
-              "Autoevaluación semanal",
-              "Tests mensuales de nivel",
-              "Feedback de otros",
-              "Reflexión sobre estrategias"
+              "Quick weekly reflection",
+              "Monthly level check or timed practice section",
+              "Feedback from partners or teachers",
+              "Adjust goals or activities when progress stalls"
             ]}
           />
         </div>
@@ -383,80 +310,80 @@ const KeyResourcesToImprovePage = () => {
   const exercises = [
     <MultipleChoiceExercise
       key="1"
-      question="¿Qué tipo de recursos ofrecen acceso inmediato?"
+      question="Which type of resources typically offers quick, on-demand access?"
       options={[
-        "Tradicionales",
-        "Digitales",
-        "Impresos",
-        "Manuscritos"
+        "Printed-only archives",
+        "Digital",
+        "Handwritten manuscripts only",
+        "Resources with no electronic version"
       ]}
       correctAnswer={1}
-      explanation="Los recursos digitales ofrecen acceso inmediato y flexibilidad para el aprendizaje en cualquier momento y lugar."
+      explanation="Digital resources are available almost anytime online or on devices, supporting flexible routines."
     />,
 
     <MultipleChoiceExercise
       key="2"
-      question="¿Cuál es el beneficio principal de la práctica consistente?"
+      question="What is the main benefit of consistent practice?"
       options={[
-        "Aprender más vocabulario",
-        "Desarrollar fluidez y confianza",
-        "Conocer más gramática",
-        "Leer más rápido"
+        "Memorizing more words in isolation",
+        "Developing fluency and confidence",
+        "Avoiding grammar study entirely",
+        "Reading unrelated material faster without understanding"
       ]}
       correctAnswer={1}
-      explanation="La práctica consistente desarrolla fluidez y confianza, que son fundamentales para el uso efectivo del idioma."
+      explanation="Steady practice builds fluency and confidence—what you rely on when you actually use the language."
     />,
 
     <TrueFalseExercise
       key="3"
       statements={[
         {
-          text: "Es mejor estudiar 3 horas una vez por semana que 30 minutos diarios.",
+          text: "Studying three hours once a week is usually better than 30 minutes every day.",
           isTrue: false,
-          explanation: "Incorrecto. La consistencia (30 minutos diarios) es más efectiva que la intensidad ocasional (3 horas una vez por semana)."
+          explanation: "Incorrect. Regular short sessions normally support retention and habits better than one long cram block per week."
         },
         {
-          text: "La variedad de recursos mejora el aprendizaje.",
+          text: "Using different kinds of resources supports learning.",
           isTrue: true,
-          explanation: "Correcto. Combinar diferentes tipos de recursos (digitales, tradicionales, activos, pasivos) proporciona un aprendizaje más completo."
+          explanation: "Correct. Mixing digital tools, printed texts, receptive and productive work gives a fuller training effect."
         },
         {
-          text: "La evaluación regular ayuda a ajustar estrategias de aprendizaje.",
+          text: "Periodic assessment helps you adjust how you study.",
           isTrue: true,
-          explanation: "Correcto. La evaluación regular identifica fortalezas y debilidades, permitiendo ajustar estrategias para mejorar el progreso."
+          explanation: "Correct. Checking progress shows strengths and gaps so you can change focus or methods."
         },
         {
-          text: "Los recursos deben ser apropiados para el nivel del estudiante.",
+          text: "Study materials should match the learner's approximate level.",
           isTrue: true,
-          explanation: "Correcto. Usar recursos demasiado fáciles o difíciles puede ser contraproducente. Los recursos deben coincidir con el nivel actual."
+          explanation: "Correct. Material that is too easy or unrealistically difficult makes progress harder to sustain."
         }
       ]}
     />,
 
     <MultipleChoiceExercise
       key="4"
-      question="¿Cuál es la estrategia de aprendizaje más efectiva para la retención a largo plazo?"
+      question="Which approach is strongest for remembering vocabulary over the long term?"
       options={[
-        "Memorizar intensivamente",
-        "Spaced Repetition (repetición espaciada)",
-        "Leer solo una vez",
-        "Estudiar solo en fin de semana"
+        "Cramming once with no review",
+        "Spaced repetition (reviews spread over time)",
+        "Reading a list once silently",
+        "Studying only on weekends with no weekdays"
       ]}
       correctAnswer={1}
-      explanation="Spaced Repetition (repetición espaciada) es más efectiva para la retención a largo plazo que la memorización intensiva."
+      explanation="Spaced repetition—coming back to items after gaps—typically beats one-off cramming for long-term memory."
     />,
 
     <MultipleChoiceExercise
       key="5"
-      question="¿Qué elemento es más importante en un plan de estudio?"
+      question="What matters most in a study plan?"
       options={[
-        "La intensidad del estudio",
-        "La consistencia del estudio",
-        "La cantidad de recursos",
-        "La complejidad de los materiales"
+        "How exhausting each session feels",
+        "How consistently you stick to your schedule",
+        "How many unused apps are installed",
+        "How difficult the hardest book you own looks on the shelf"
       ]}
       correctAnswer={1}
-      explanation="La consistencia del estudio es más importante que la intensidad. Es mejor estudiar regularmente poco tiempo que mucho tiempo ocasionalmente."
+      explanation="A plan you repeat beats a perfect-looking plan you abandon; consistency anchors improvement."
     />,
 
     <TrueFalseExercise
@@ -465,81 +392,81 @@ const KeyResourcesToImprovePage = () => {
         {
           text: "Free resources are always lower quality than paid resources.",
           isTrue: false,
-          explanation: "Incorrecto. Muchos recursos gratuitos (BBC Learning English, YouTube channels, podcasts) son de excelente calidad."
+          explanation: "Incorrect. Many free resources (BBC Learning English, podcasts, curated YouTube lessons) are high quality."
         },
         {
-          text: "Combining different types of resources improves learning outcomes.",
+          text: "Combining several types of resources often improves outcomes.",
           isTrue: true,
-          explanation: "Correcto. Combinar recursos digitales, tradicionales, formales e informales proporciona una experiencia de aprendizaje más completa."
+          explanation: "Correct. Digital, printed, formal, and informal resources each support different aspects of proficiency."
         },
         {
-          text: "You should only use resources designed for your exact level.",
+          text: "You should only use materials labelled exactly at your current level.",
           isTrue: false,
-          explanation: "Incorrecto. Es beneficioso usar recursos ligeramente por encima de tu nivel para desafiarte y crecer."
+          explanation: "Incorrect. Challenges slightly beyond your comfort zone—when scaffolded—can also help growth."
         }
       ]}
     />,
 
     <MultipleChoiceExercise
       key="7"
-      question="¿Cuál es el beneficio principal de los recursos interactivos?"
+      question="What is a typical advantage of interactive digital tools?"
       options={[
-        "Son más baratos",
-        "Proporcionan feedback inmediato",
-        "Requieren menos tiempo",
-        "Son más fáciles"
+        "They guarantee perfect scores instantly",
+        "They often provide quick feedback",
+        "They eliminate the need to speak or write",
+        "They replace dictionaries completely"
       ]}
       correctAnswer={1}
-      explanation="Los recursos interactivos proporcionan feedback inmediato, lo que permite corrección y aprendizaje en tiempo real."
+      explanation="Many interactive exercises give immediate feedback, which speeds up correction and learning."
     />,
 
     <MultipleChoiceExercise
       key="8"
-      question="¿Qué tipo de recurso es mejor para mejorar la pronunciación?"
+      question="Which resource tends to help pronunciation most?"
       options={[
-        "Solo libros de texto",
-        "Audio y video con hablantes nativos",
-        "Solo gramática escrita",
-        "Solo vocabulario"
+        "Grammar rules with no listening input",
+        "Audio and video with fluent or native speakers",
+        "Silent reading only",
+        "Word lists never heard aloud"
       ]}
       correctAnswer={1}
-      explanation="Audio y video con hablantes nativos son esenciales para mejorar la pronunciación, ya que proporcionan modelos auténticos."
+      explanation="Hearing authentic models in audio or video improves stress, rhythm, and individual sounds."
     />,
 
     <TrueFalseExercise
       key="9"
       statements={[
         {
-          text: "Self-assessment is an important part of language learning.",
+          text: "Self-assessment is a useful part of language learning.",
           isTrue: true,
-          explanation: "Correcto. La autoevaluación ayuda a identificar fortalezas, debilidades y áreas que necesitan más práctica."
+          explanation: "Correct. Reflecting on what you understood or produced helps prioritise weak areas."
         },
         {
-          text: "You should stick to one resource until you master it completely.",
+          text: "You should use exactly one textbook until nothing in it feels new.",
           isTrue: false,
-          explanation: "Incorrecto. Usar variedad de recursos expone a diferentes estilos de enseñanza y mantiene el interés."
+          explanation: "Incorrect. Exposure to varied formats and accents keeps motivation and skills broader."
         }
       ]}
     />,
 
     <MultipleChoiceExercise
       key="10"
-      question="¿Cuál es la mejor frecuencia para evaluar tu progreso?"
+      question="How often should you realistically review overall progress?"
       options={[
-        "Solo al final del año",
-        "Regularmente (semanal o mensualmente)",
-        "Solo cuando sientes que no progresas",
-        "Nunca, es innecesario"
+        "Only once a year informally",
+        "Regularly (for example weekly or monthly)",
+        "Only when you feel stuck for months",
+        "Never; progress checks are pointless"
       ]}
       correctAnswer={1}
-      explanation="La evaluación regular (semanal o mensualmente) permite ajustar estrategias y mantener la motivación al ver el progreso."
+      explanation="Short, recurring reviews catch problems early and help you celebrate improvements without long gaps."
     />
   ];
 
   return (
     <TheoryLayout
       title="Key Resources to Improve"
-      description="Descubre los recursos clave para mejorar tu inglés: digitales, tradicionales, práctica activa, estrategias de aprendizaje y evaluación. Crea un plan de estudio efectivo."
+      description="Discover key resources for English improvement: digital and traditional tools, active practice, study strategies, and progress checks—then outline a workable study plan."
       level="A1-A2-B1-B2-C1-C2"
       theoryContent={theoryContent}
       exercises={exercises}
@@ -550,25 +477,3 @@ const KeyResourcesToImprovePage = () => {
 };
 
 export default KeyResourcesToImprovePage;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

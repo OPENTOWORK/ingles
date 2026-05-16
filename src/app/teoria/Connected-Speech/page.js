@@ -18,382 +18,345 @@ import {
 const ConnectedSpeechPage = () => {
   const theoryContent = (
     <div>
-      <TheorySection title="¿Qué es Connected Speech?" icon="🔗">
+      <TheorySection title="What Is Connected Speech?" icon="🔗">
         <p style={{ fontSize: '1.1rem', lineHeight: 1.6, color: '#4a5568', marginBottom: '1rem' }}>
-          El <strong>connected speech</strong> (habla conectada) se refiere a cómo los sonidos se modifican y conectan 
-          cuando hablamos de forma natural y fluida. Es fundamental para entender el inglés hablado real.
+          <strong>Connected speech</strong> describes how neighbouring sounds tighten, reshape, or link when fluent speakers talk smoothly. Knowing these patterns anchors understanding of everyday English listening.
         </p>
         
         <QuickReference items={[
-          "Linking: conectar sonidos finales e iniciales",
-          "Elision: eliminar sonidos",
-          "Assimilation: sonidos se influyen mutuamente",
-          "Intrusion: agregar sonidos de transición",
-          "Weak forms: formas débiles de palabras"
+          "Linking: join final and initial sounds smoothly",
+          "Elision: drop sounds for ease or speed",
+          "Assimilation: neighbouring sounds influence each other",
+          "Intrusion: insert glide consonants between vowels",
+          "Weak forms: reduced pronunciations of function words"
         ]} />
       </TheorySection>
 
-      <TheorySection title="Linking (Conexión de Sonidos)" icon="🔗">
+      <TheorySection title="Linking" icon="🔗">
         <p style={{ fontSize: '1rem', lineHeight: 1.6, color: '#4a5568', marginBottom: '1rem' }}>
-          El linking ocurre cuando conectamos sonidos finales e iniciales para crear un flujo continuo en el habla.
+          Linking happens when syllable edges blur so fluent speech resembles one flowing phrase.
         </p>
 
         <GrammarTable
-          caption="Tipos de Linking"
-          headers={["Tipo", "Descripción", "Ejemplo", "Resultado"]}
+          caption="Kinds of Linking"
+          headers={["Type", "Description", "Example", "Heard Approximation"]}
           rows={[
-            ["Consonant + Vowel", "Consonante final + vocal inicial", "an apple", "anapple"],
-            ["Vowel + Vowel", "Vocal final + vocal inicial", "go out", "gowout"],
-            ["Consonant + Consonant", "Consonante final + consonante inicial", "red dress", "reddress"],
-            ["Same Consonant", "Misma consonante se une", "big girl", "biggirl"],
-            ["R Linking", "R se pronuncia entre vocales", "car is", "caris"]
+            ["Consonant + vowel", "Final consonant runs into opening vowel", "an apple", "anapple"],
+            ["Vowel + vowel", "Hiatus eased by intrusive glides", "go out", "gow-out flow"],
+            ["Consonant + consonant", "Clusters tighten across edges", "red dress", "reddress-feel"],
+            ["Same consonant twice", "One prolonged articulation spans words", "big girl", "bigirl-like"],
+            ["Linking /r/", "Historically vowel-/r/-/vowel chaining", "car is", "car…is smooth link"]
           ]}
         />
 
         <div style={{ display: 'grid', gap: '1rem' }}>
           <Example 
-            spanish="Consonant + Vowel: 'an apple' → 'anapple'"
-            english="Consonant + Vowel: 'an apple' → 'anapple'"
-            translation="Consonante + Vocal: 'una manzana' → 'anapple'"
+            english="Consonant + vowel: 'an apple' may sound fused as one chunk"
           />
           <Example 
-            spanish="Vowel + Vowel: 'go out' → 'gowout'"
-            english="Vowel + Vowel: 'go out' → 'gowout'"
-            translation="Vocal + Vocal: 'salir' → 'gowout'"
+            english="Vowel + vowel: 'go out' often slips in /w/: gow-out"
           />
           <Example 
-            spanish="R Linking: 'car is' → 'caris'"
-            english="R Linking: 'car is' → 'caris'"
-            translation="R Linking: 'el coche es' → 'caris'"
+            english="Linking /r/: 'far away' or 'car is' illustrate intervocal /r/"
           />
         </div>
 
         <Rule 
-          title="Reglas de Linking"
-          description="Para entender el linking:"
+          title="Listening for Linking"
+          description="What to anticipate:"
           examples={[
-            "Consonante final se conecta con vocal inicial",
-            "Vocales se unen con sonidos de transición",
-            "Consonantes idénticas se fusionan",
-            "R se pronuncia entre vocales en British English"
+            "Final consonants lean into vowel onsets next door",
+            "Adjacent vowels may recruit /j/, /w/, or consonantal linking /r/",
+            "Identical consonants may surface as single extended gesture",
+            "Many UK speakers link post-vocalic /r/ purely before another vowel"
           ]}
         />
 
         <Tip type="info">
-          <strong>Consejo:</strong> El linking hace que el inglés suene más fluido y natural.
+          <strong>Tip:</strong> Expect continuous melodic phrasing, not cleanly isolated classroom syllables.
         </Tip>
       </TheorySection>
 
-      <TheorySection title="Elision (Eliminación de Sonidos)" icon="✂️">
+      <TheorySection title="Elision" icon="✂️">
         <p style={{ fontSize: '1rem', lineHeight: 1.6, color: '#4a5568', marginBottom: '1rem' }}>
-          La elision ocurre cuando eliminamos sonidos para facilitar la pronunciación y acelerar el habla.
+          Speakers drop consonants or weak vowels whenever articulatory ease demands it.
         </p>
 
         <GrammarTable
-          caption="Tipos de Elision"
-          headers={["Tipo", "Sonido Eliminado", "Ejemplo", "Resultado"]}
+          caption="Typical Elision Sites"
+          headers={["Type", "What's Omitted", "Example", "Heard Sketch"]}
           rows={[
-            ["Consonant Clusters", "Consonante en grupos", "handbag", "hambag"],
-            ["Weak Syllables", "Sílabas débiles", "chocolate", "choclate"],
-            ["Final Consonants", "Consonantes finales", "and", "an'"],
-            ["Schwa Sounds", "Sonidos schwa", "camera", "camra"],
-            ["Contractions", "Contracciones", "don't", "don'"],
-            ["Function Words", "Palabras función", "of the", "o' the"]
+            ["Consonant clusters", "A weaker consonant inside the cluster may vanish", "handbag", "hambag-style"],
+            ["Weak syllables", "Unstressed vowels shorten or vanish", "chocolate", "choclit-style"],
+            ["Word-final consonants", "Especially before consonants starts", "and", "sometimes 'ən"],
+            ["Schwa reduction", "Unstressed nuclei erased", "camera", "camra-style"],
+            ["Informal contractions", "Final consonants shaved", "don't", "don'"],
+            ["Function bundles", "Prepositions squeezed", "of the", "/əv ðə/"]
           ]}
         />
 
         <div style={{ display: 'grid', gap: '1rem' }}>
           <Example 
-            spanish="Consonant Clusters: 'handbag' → 'hambag'"
-            english="Consonant Clusters: 'handbag' → 'hambag'"
-            translation="Grupos consonánticos: 'bolso de mano' → 'hambag'"
+            english="Clusters: handbag may foreground /m/ bridging hand + bag"
           />
           <Example 
-            spanish="Weak Syllables: 'chocolate' → 'choclate'"
-            english="Weak Syllables: 'chocolate' → 'choclate'"
-            translation="Sílabas débiles: 'chocolate' → 'choclate'"
+            english="Weak syllables: chocolate often trims to CHOClit rhythm"
           />
           <Example 
-            spanish="Final Consonants: 'and' → 'an''"
-            english="Final Consonants: 'and' → 'an''"
-            translation="Consonantes finales: 'y' → 'an''"
+            english="Function word: unstressed 'and' collapses toward /ən/"
           />
         </div>
 
         <Rule 
-          title="Cuándo ocurre la Elision"
-          description="La elision es más común:"
+          title="Where Elision Thrives"
+          description="Especially common:"
           examples={[
-            "En habla rápida e informal",
-            "En grupos consonánticos difíciles",
-            "En sílabas no acentuadas",
-            "En palabras función comunes"
+            "Fast conversational tempos",
+            "Awkward consonant piles",
+            "Unstressed middle syllables",
+            "Highly frequent grammatical words"
           ]}
         />
 
         <Tip type="warning">
-          <strong>¡Cuidado!</strong> La elision puede hacer que sea más difícil entender palabras individuales.
+          <strong>Watch out!</strong> Omissions reduce word-boundary salience—you track meaning spans not tokens.
         </Tip>
       </TheorySection>
 
-      <TheorySection title="Assimilation (Asimilación)" icon="🔄">
+      <TheorySection title="Assimilation" icon="🔄">
         <p style={{ fontSize: '1rem', lineHeight: 1.6, color: '#4a5568', marginBottom: '1rem' }}>
-          La asimilación ocurre cuando un sonido cambia para parecerse al sonido que le sigue.
+          A consonant adopts place manner or voicing cues from neighbours for smoother transitions.
         </p>
 
         <GrammarTable
-          caption="Tipos de Assimilation"
-          headers={["Tipo", "Cambio", "Ejemplo", "Resultado"]}
+          caption="Assimilation Types"
+          headers={["Type", "Adjustment", "Example", "Rough Result"]}
           rows={[
-            ["Alveolar Assimilation", "t/d → p/b antes de labiales", "that pen", "thap pen"],
-            ["Place Assimilation", "n → ŋ antes de velares", "ten cups", "teŋ cups"],
-            ["Voicing Assimilation", "s → z antes de sonoras", "this boy", "thiz boy"],
-            ["Nasal Assimilation", "n → m antes de labiales", "ten men", "tem men"],
-            ["Lateral Assimilation", "n → l antes de laterales", "ten lions", "tel lions"]
+            ["Place change", "/t/, /d/ → bilabials before bilabials", "that pen", "thap pen"],
+            ["Velar nasal", "/n/ → velar nasal before velars", "ten cups", "teŋ cups"],
+            ["Voicing spread", "/s/ may voice near voiced obstruents", "this boy", "thiz boy"],
+            ["Bilabial nasal", "/n/→/m/ before bilabials", "ten men", "tem men"],
+            ["Liquid shift", "/n/ may lean lateral before liquids (varieties)", "ten lions", "tellions-style"]
           ]}
         />
 
         <div style={{ display: 'grid', gap: '1rem' }}>
           <Example 
-            spanish="Alveolar Assimilation: 'that pen' → 'thap pen'"
-            english="Alveolar Assimilation: 'that pen' → 'thap pen'"
-            translation="Asimilación alveolar: 'esa pluma' → 'thap pen'"
+            english="Alveolar reassignment: 'that pen' leaning toward laminal /p/"
           />
           <Example 
-            spanish="Place Assimilation: 'ten cups' → 'teŋ cups'"
-            english="Place Assimilation: 'ten cups' → 'teŋ cups'"
-            translation="Asimilación de lugar: 'diez tazas' → 'teŋ cups'"
+            english="Nasal assimilation: 'ten cups' with velar nasal before /k/"
           />
           <Example 
-            spanish="Voicing Assimilation: 'this boy' → 'thiz boy'"
-            english="Voicing Assimilation: 'this boy' → 'thiz boy'"
-            translation="Asimilación de sonoridad: 'este chico' → 'thiz boy'"
+            english="Voicing assimilation: 'this boy' with voiced fricative onset"
           />
         </div>
 
         <Tip type="success">
-          <strong>Consejo:</strong> La asimilación hace que el habla sea más fluida y natural.
+          <strong>Tip:</strong> Assimilation smoothes consonant landings—you hear adjusted targets, not citation forms.
         </Tip>
       </TheorySection>
 
-      <TheorySection title="Intrusion (Intrusión)" icon="➕">
+      <TheorySection title="Intrusion" icon="➕">
         <p style={{ fontSize: '1rem', lineHeight: 1.6, color: '#4a5568', marginBottom: '1rem' }}>
-          La intrusión ocurre cuando agregamos sonidos para facilitar la transición entre otros sonidos.
+          Fluent speakers wedge transitional consonants chiefly between back-to-back vowels.
         </p>
 
         <GrammarTable
-          caption="Tipos de Intrusion"
-          headers={["Tipo", "Sonido Agregado", "Ejemplo", "Resultado"]}
+          caption="Intrusive Consonants"
+          headers={["Type", "Added Sound", "Example", "Heard Gesture"]}
           rows={[
-            ["J Intrusion", "/j/ entre vocales", "go out", "go(j)out"],
-            ["W Intrusion", "/w/ entre vocales", "do it", "do(w)it"],
-            ["R Intrusion", "/r/ entre vocales", "idea of", "idea(r)of"],
-            ["Glottal Stop", "/ʔ/ en pausas", "uh-oh", "uhʔoh"],
-            ["Linking R", "/r/ en British English", "car is", "car(r)is"]
+            ["J intrusion", "/j/", "see it", "/siːjɪt/"],
+            ["W intrusion", "/w/", "go out", "/ɡəʊwaʊt/"],
+            ["R intrusion", "/ɹ/", "idea of", "idear-of flow"],
+            ["Glottal reinforcement", "/ʔ/ between vowels pauses", "uh-oh", "ʔ hiatus"],
+            ["Linking r (non-rhotic)", "/ɹ/", "car is", "car-r-is"]
           ]}
         />
 
         <div style={{ display: 'grid', gap: '1rem' }}>
           <Example 
-            spanish="J Intrusion: 'go out' → 'go(j)out'"
-            english="J Intrusion: 'go out' → 'go(j)out'"
-            translation="Intrusión J: 'salir' → 'go(j)out'"
+            english="J glide: smoothing /i:/ into following vowels as in 'she asked'"
           />
           <Example 
-            spanish="W Intrusion: 'do it' → 'do(w)it'"
-            english="W Intrusion: 'do it' → 'do(w)it'"
-            translation="Intrusión W: 'hazlo' → 'do(w)it'"
+            english="W glide: bridging rounded vowels in 'go away'"
           />
           <Example 
-            spanish="R Intrusion: 'idea of' → 'idea(r)of'"
-            english="R Intrusion: 'idea of' → 'idea(r)of'"
-            translation="Intrusión R: 'idea de' → 'idea(r)of'"
+            english="Intrusive r: bridging schwa endings with vowel onsets ('law and order' → law-r-and)"
           />
         </div>
 
         <Rule 
-          title="Cuándo ocurre la Intrusión"
-          description="La intrusión es más común:"
+          title="Intrusion Listening Hints"
+          description="Especially likely when:"
           examples={[
-            "Entre vocales diferentes",
-            "En palabras que terminan en vocal",
-            "En palabras que empiezan con vocal",
-            "Para evitar hiatos vocálicos"
+            "Two vowels abut directly",
+            "First word closes on a lax vowel or schwa",
+            "Speaker accelerates conversational pace",
+            "Speaker avoids awkward hiatus"
           ]}
         />
 
         <Tip type="info">
-          <strong>Nota:</strong> La intrusión es más común en habla rápida e informal.
+          <strong>Note:</strong> Intrusions spike in spontaneous fast speech—they are normal, not mistakes.
         </Tip>
       </TheorySection>
 
-      <TheorySection title="Weak Forms (Formas Débiles)" icon="🔇">
+      <TheorySection title="Weak Forms" icon="🔇">
         <p style={{ fontSize: '1rem', lineHeight: 1.6, color: '#4a5568', marginBottom: '1rem' }}>
-          Las formas débiles son versiones reducidas de palabras función que se pronuncian de manera menos prominente.
+          Lexical stresses star; grammatical glue words shrink toward central vowels or vanish consonants.
         </p>
 
         <GrammarTable
-          caption="Palabras con Weak Forms"
-          headers={["Palabra", "Forma Fuerte", "Forma Débil", "Ejemplo"]}
+          caption="Common Weak Forms"
+          headers={["Word", "Strong Form", "Typical Weak", "Sample Phrase"]}
           rows={[
             ["and", "/ænd/", "/ənd/, /ən/, /n/", "bread and butter"],
-            ["of", "/ɒv/", "/əv/, /ə/", "cup of tea"],
-            ["to", "/tu:/", "/tə/, /tu/", "go to school"],
-            ["for", "/fɔ:/", "/fə/, /fər/", "wait for me"],
-            ["you", "/ju:/", "/jə/, /ju/", "thank you"],
-            ["are", "/ɑ:/", "/ə/, /ər/", "they are here"],
+            ["of", "/ɒv/", "/əv/", "cup of tea"],
+            ["to", "/tuː/", "/tə/", "go to school"],
+            ["for", "/fɔː/", "/fə/", "wait for me"],
+            ["you", "/juː/", "/jə/", "thank you"],
+            ["are", "/ɑː/", "/ə/", "they are here"],
             ["was", "/wɒz/", "/wəz/", "he was there"],
-            ["can", "/kæn/", "/kən/, /kn/", "I can go"]
+            ["can", "/kæn/", "/kn/, /kən/", "I can go"]
           ]}
         />
 
         <div style={{ display: 'grid', gap: '1rem' }}>
           <Example 
-            spanish="and: 'bread and butter' → 'bread ən butter'"
-            english="and: 'bread and butter' → 'bread ən butter'"
-            translation="and: 'pan y mantequilla' → 'bread ən butter'"
+            english="and: unstressed clauses often shorten /ænd/ to /ən/"
           />
           <Example 
-            spanish="of: 'cup of tea' → 'cup ə tea'"
-            english="of: 'cup of tea' → 'cup ə tea'"
-            translation="of: 'taza de té' → 'cup ə tea'"
+            english="of: between nouns collapses heavily: cup ə tea"
           />
           <Example 
-            spanish="to: 'go to school' → 'go tə school'"
-            english="to: 'go to school' → 'go tə school'"
-            translation="to: 'ir a la escuela' → 'go tə school'"
+            english="to: before consonants favors /tə/: go tə work"
           />
         </div>
 
         <Rule 
-          title="Cuándo usar Weak Forms"
-          description="Las formas débiles se usan:"
+          title="When Weak Forms Surface"
+          description="Hallmarks:"
           examples={[
-            "En palabras función (artículos, preposiciones, conjunciones)",
-            "Cuando la palabra no está acentuada",
-            "En habla rápida e informal",
-            "Para mantener el ritmo del habla"
+            "Most function words carrying low information load",
+            "When the lexical item avoids contrastive emphasis",
+            "During conversational tempi emphasizing content words",
+            "When rhythm favors alternating strong–weak pulses"
           ]}
         />
 
         <Tip type="warning">
-          <strong>¡Cuidado!</strong> Las formas débiles pueden hacer que sea más difícil reconocer palabras individuales.
+          <strong>Watch out!</strong> Weak syllables camouflage lexical edges—semantic stress elsewhere rescues gist.
         </Tip>
       </TheorySection>
 
-      <TheorySection title="Estrategias para Entender Connected Speech" icon="🎯">
+      <TheorySection title="Strategies for Connected Speech" icon="🎯">
         <p style={{ fontSize: '1rem', lineHeight: 1.6, color: '#4a5568', marginBottom: '1rem' }}>
-          Existen estrategias específicas para mejorar tu comprensión del habla conectada.
+          Conscious habits pair bottom-up acoustics with top-down pragmatic prediction.
         </p>
 
         <GrammarTable
-          caption="Estrategias de Comprensión"
-          headers={["Estrategia", "Descripción", "Cuándo Usar", "Beneficio"]}
+          caption="Comprehension Habits"
+          headers={["Strategy", "Focus", "When", "Payoff"]}
           rows={[
-            ["Contexto", "Usar contexto para entender", "Palabras conectadas", "Comprensión general"],
-            ["Predicción", "Predecir palabras basado en contexto", "Antes de escuchar", "Preparar la mente"],
-            ["Escucha Activa", "Enfocarse en palabras clave", "Durante el audio", "Captar información importante"],
-            ["Repetición", "Escuchar múltiples veces", "Después de la primera escucha", "Mejorar comprensión"],
-            ["Transcripción", "Leer mientras escuchas", "Práctica intensiva", "Conectar sonido y texto"],
-            ["Práctica Regular", "Exponerse regularmente", "Estudio diario", "Familiaridad con patrones"]
+            ["Prediction", "Anticipate collocations pragmatic goals", "Pre-listen skim", "Narrow hypothesis space"],
+            ["Chunking goals", "Mark idea units not dictionary tokens", "While listening", "Keep pace with blurred edges"],
+            ["Keyword spotting", "Content words outweigh glue fragments", "Any density", "Stability under reduction"],
+            ["Shadow replays", "Loop tough spans after transcript check", "Post-listen tutoring", "Map sound–spelling mismatches"],
+            ["Accent exposure breadth", "Generalize linkage rules across varieties", "Long-term drills", "Normalise variability"],
+            ["Context leverage", "Pragmatic scaffolding repairs missing phones", "Real-time comprehension", "Resilient guesses"]
           ]}
         />
 
         <div style={{ display: 'grid', gap: '1rem' }}>
           <Example 
-            spanish="Contexto: 'Usar el contexto para entender palabras conectadas'"
-            english="Context: 'Use context to understand connected words'"
-            translation="Contexto: 'Usar el contexto para entender palabras conectadas'"
+            english="Prediction: coffee shop primes milk sugar price collocations."
           />
           <Example 
-            spanish="Predicción: 'Predecir palabras basado en el contexto'"
-            english="Prediction: 'Predict words based on context'"
-            translation="Predicción: 'Predecir palabras basado en el contexto'"
+            english="Chunks: Hearing 'wouldja' recognises 'would you' politely fused."
           />
           <Example 
-            spanish="Escucha activa: 'Enfocarse en palabras clave'"
-            english="Active listening: 'Focus on key words'"
-            translation="Escucha activa: 'Enfocarse en palabras clave'"
+            english="Context: Reduced 'n' survives because noun phrases stay parallel."
           />
         </div>
 
         <Rule 
-          title="Consejos Prácticos"
-          description="Para mejorar tu comprensión:"
+          title="Practical Tips"
+          description="Sharpen authentic listening stamina:"
           examples={[
-            "Escucha habla natural, no habla artificial",
-            "Practica con diferentes acentos y velocidades",
-            "No te preocupes por entender cada palabra",
-            "Enfócate en el mensaje general",
-            "Usa subtítulos para conectar sonido y texto"
+            "Prioritise documentaries interviews podcasts—not only slow classroom audio",
+            "Rotate accents registers speaking rates",
+            "Release perfectionism about lexical boundaries",
+            "Anchor meso-level gist while micro-sounds reorganise temporarily",
+            "Pair captions carefully only after an honest naked listen"
           ]}
         />
 
         <Tip type="success">
-          <strong>Consejo:</strong> La comprensión del habla conectada mejora con la exposición regular.
+          <strong>Tip:</strong> Regular authentic exposure rewires expectancy for blurry boundaries.
         </Tip>
       </TheorySection>
 
-      <TheorySection title="Errores Comunes" icon="⚠️">
+      <TheorySection title="Common Mistakes" icon="⚠️">
         <div style={{ display: 'grid', gap: '1rem' }}>
           <Tip type="error">
-            <strong>Error:</strong> Esperar que cada palabra se pronuncie claramente ❌<br/>
-            <strong>Correcto:</strong> Esperar conexiones y modificaciones naturales ✅<br/>
-            <em>El habla natural no es clara palabra por palabra</em>
+            <strong>Mistake:</strong> Expect citation-style clarity ❌<br/>
+            <strong>Better:</strong> Model natural slurring linking reduction ✅<br/>
+            <em>Real discourse layers compression constantly</em>
           </Tip>
 
           <Tip type="error">
-            <strong>Error:</strong> No usar contexto para entender ❌<br/>
-            <strong>Correcto:</strong> Usar contexto para inferir significado ✅<br/>
-            <em>El contexto es clave para entender habla conectada</em>
+            <strong>Mistake:</strong> Ignore pragmatic scaffolding ❌<br/>
+            <strong>Better:</strong> Use topic partners to decode glue syllables ✅<br/>
+            <em>Semantics rescues brittle acoustic edges</em>
           </Tip>
 
           <Tip type="error">
-            <strong>Error:</strong> Preocuparse por cada sonido modificado ❌<br/>
-            <strong>Correcto:</strong> Enfocarse en el mensaje general ✅<br/>
-            <em>La comprensión general es más importante</em>
+            <strong>Mistake:</strong> Obsess every modified phone ❌<br/>
+            <strong>Better:</strong> Maintain macro-topic tracking ✅<br/>
+            <em>Global gist often suffices before lexical repair</em>
           </Tip>
 
           <Tip type="error">
-            <strong>Error:</strong> Evitar habla natural por ser difícil ❌<br/>
-            <strong>Correcto:</strong> Exponerse regularmente a habla natural ✅<br/>
-            <em>La exposición mejora la comprensión</em>
+            <strong>Mistake:</strong> Avoid natural-speed audio ❌<br/>
+            <strong>Better:</strong> Steadily widen exposure bands ✅<br/>
+            <em>Habituation rewires auditory expectations</em>
           </Tip>
         </div>
       </TheorySection>
 
-      <TheorySection title="Reglas Importantes" icon="⚡">
+      <TheorySection title="Key Rules" icon="⚡">
         <div style={{ display: 'grid', gap: '1rem' }}>
           <Rule 
-            title="1. El habla natural no es clara"
-            description="El habla conectada es normal en el inglés hablado."
+            title="1. Natural speech blends"
+            description="Linkage elision assimilation define fluency—they are systemic not sloppy."
             examples={[
-              "Los sonidos se modifican y conectan",
-              "Las palabras se unen para crear fluidez",
-              "Algunos sonidos se eliminan o cambian",
-              "Esto es natural, no un error"
+              "Adjacent segments negotiate place voicing continuancy",
+              "Lexical stresses tower while grammatical atoms shrink rhythmically",
+              "Listeners infer word edges partly from probabilistic cues",
+              "Teachers slow models help beginners only as stepping stones"
             ]}
           />
 
           <Rule 
-            title="2. Contexto es clave"
-            description="Usa el contexto para entender el significado."
+            title="2. Context heals ambiguity"
+            description="Reduced phones leave holes discourse expectations fill pragmatically."
             examples={[
-              "El contexto te ayuda a inferir palabras",
-              "Las palabras clave dan pistas importantes",
-              "El propósito de la conversación guía la comprensión",
-              "No necesitas entender cada palabra"
+              "Collocation ranges predict weakened function words nearby",
+              "Information structure highlights focus elements audibly louder",
+              "Turn-taking norms signal answerhood before detail clarity",
+              "World knowledge restricts unlikely homophone clashes"
             ]}
           />
 
           <Rule 
-            title="3. Exposición mejora comprensión"
-            description="Escucha habla natural regularmente."
+            title="3. Exposure drives ease"
+            description="Passive massive input plus pinpointed rehearsal accelerates perceptual fluency."
             examples={[
-              "Expón tu oído a diferentes acentos",
-              "Practica con habla rápida e informal",
-              "Usa recursos auténticos",
-              "La familiaridad mejora la comprensión"
+              "Weekly authentic minutes beat rare ultra-slow drills alone",
+              "Micro-loop challenging clusters after transcript peek solidifies contrasts",
+              "Shadowing aligns articulatory gestures with blurry streams",
+              "Genre familiarity reduces cognitive load reserving capacity for nuances"
             ]}
           />
         </div>
@@ -404,163 +367,163 @@ const ConnectedSpeechPage = () => {
   const exercises = [
     <MultipleChoiceExercise
       key="1"
-      question="En connected speech, ¿qué hacen los sonidos para crear fluidez?"
+      question="In connected speech, what happens to neighbouring sounds chiefly?"
       options={[
-        "Se separan claramente",
-        "Se conectan",
-        "Se eliminan completamente",
-        "Se pronuncian más lento"
+        "They remain fully separated every time",
+        "They knit together for rhythmic flow",
+        "They disappear completely without trace",
+        "They always lengthen dramatically"
       ]}
       correctAnswer={1}
-      explanation="En connected speech, los sonidos se conectan para crear fluidez natural en el habla, haciendo que las palabras fluyan juntas."
+      explanation="Fluent delivery smears syllable margins so consonants vowels reorganise perceptually—not isolated beads."
     />,
 
     <MultipleChoiceExercise
       key="2"
-      question="¿Qué es el linking en connected speech?"
+      question="What best defines linking?"
       options={[
-        "Eliminar sonidos",
-        "Conectar sonidos finales e iniciales",
-        "Agregar sonidos de transición",
-        "Cambiar la pronunciación de palabras"
+        "Removing every unstressed vowel",
+        "Joining syllable-final and syllable-initial gestures",
+        "Inserting vowels arbitrarily",
+        "Slowing consonants artificially"
       ]}
       correctAnswer={1}
-      explanation="El linking es la conexión de sonidos finales e iniciales para crear un flujo continuo en el habla, como 'an apple' → 'anapple'."
+      explanation="Linking co-articulates word edges so consonants glide into vowels or twin consonants merge."
     />,
 
     <TrueFalseExercise
       key="3"
       statements={[
         {
-          text: "El habla conectada es natural en el inglés hablado.",
+          text: "Connected speech phenomena are normal rather than careless errors.",
           isTrue: true,
-          explanation: "Correcto. El habla conectada es normal y natural en el inglés hablado, no es un error de pronunciación."
+          explanation: "Correct. Native fluency universally compresses and reshapes neighbouring phones."
         },
         {
-          text: "Las formas débiles se usan solo en palabras función.",
+          text: "Weak forms overwhelmingly target function vocabulary.",
           isTrue: true,
-          explanation: "Correcto. Las formas débiles se usan principalmente en palabras función como artículos, preposiciones y conjunciones."
+          explanation: "Correct. Grammatical satellites reduce while content lemmas stay relatively full."
         },
         {
-          text: "Es importante entender cada palabra individualmente en habla conectada.",
+          text: "You must decode each dictionary word cleanly before catching gist.",
           isTrue: false,
-          explanation: "Incorrecto. Es más importante entender el mensaje general que cada palabra individual."
+          explanation: "Incorrect. Meaning windows often stabilize before lexical edges crystallise acoustically."
         },
         {
-          text: "La exposición regular mejora la comprensión del habla conectada.",
+          text: "Steady authentic listening gradually eases blurred-boundary comprehension.",
           isTrue: true,
-          explanation: "Correcto. Escuchar habla natural regularmente mejora la comprensión del habla conectada."
+          explanation: "Correct. Statistical learning retunes perceptual expectations over months."
         }
       ]}
     />,
 
     <MultipleChoiceExercise
       key="4"
-      question="¿Cuál es el resultado del linking en 'go out'?"
+      question="Which blend best matches habitual treatment of frequent 'go out' sequences?"
       options={[
-        "go out",
-        "gowout",
-        "go-ut",
-        "gout"
+        "go out untouched",
+        "gow-out style glide bridging vowels",
+        "go hyphen ut fully paused",
+        "gout lexicalised anew"
       ]}
       correctAnswer={1}
-      explanation="El linking entre vocales resulta en 'gowout' donde las vocales se conectan con un sonido de transición."
+      explanation="Back vowel /əʊ/ into /aʊ/ frequently recruits intrusive /w/ smoothing the hiatus."
     />,
 
     <MultipleChoiceExercise
       key="5"
-      question="¿Qué estrategia es más efectiva para entender habla conectada?"
+      question="Most effective overarching tactic when phones blur aggressively?"
       options={[
-        "Escuchar solo habla artificial",
-        "Usar contexto para inferir significado",
-        "Evitar habla rápida",
-        "Memorizar todas las modificaciones"
+        "Listen only hyper-enunciated materials forever",
+        "Exploit pragmatic prediction plus chunk-level meaning",
+        "Avoid rapid native speech entirely",
+        "Memorise every assimilation tableau exhaustively beforehand"
       ]}
       correctAnswer={1}
-      explanation="Usar el contexto para inferir significado es la estrategia más efectiva, ya que te ayuda a entender el mensaje general incluso cuando no entiendes cada palabra."
+      explanation="Top-down scaffolding plus probabilistic lexical guessing sustains realtime comprehension."
     />,
 
     <TrueFalseExercise
       key="6"
       statements={[
         {
-          text: "Weak forms only occur with function words.",
+          text: "Weak pronunciation variants cluster around auxiliary preposition article words.",
           isTrue: true,
-          explanation: "Correcto. Las formas débiles ocurren principalmente con palabras funcionales como artículos, preposiciones y auxiliares."
+          explanation: "Correct. These carry grammar glue not novel referential content hence shrink rhythmically."
         },
         {
-          text: "Assimilation makes sounds more similar to neighboring sounds.",
+          text: "Assimilation adjusts consonants toward neighbouring place manner voicing cues.",
           isTrue: true,
-          explanation: "Correcto. La asimilación hace que los sonidos se parezcan más a los sonidos vecinos para facilitar la pronunciación."
+          explanation: "Correct. Gestures economise muscular effort aligning adjacent targets."
         },
         {
-          text: "Connected speech only happens in informal situations.",
+          text: "Connected speech confines itself exclusively to slang registers.",
           isTrue: false,
-          explanation: "Incorrecto. El habla conectada ocurre en todas las situaciones, tanto formales como informales."
+          explanation: "Incorrect. Even careful formal speech exhibits predictable linking assimilation reductions."
         }
       ]}
     />,
 
     <MultipleChoiceExercise
       key="7"
-      question="¿Qué ocurre en 'good day' con connected speech?"
+      question="What approximate surface often emerges from rapid 'good day'?"
       options={[
-        "No hay cambios",
-        "Se convierte en 'goo day'",
-        "Se convierte en 'good-day'",
-        "Se pronuncia más lento"
+        "No temporal compression",
+        "Consonant elision thinning final /d/",
+        "Extra vowels inserted mechanically",
+        "Uniform syllable stretching"
       ]}
       correctAnswer={1}
-      explanation="En 'good day', la 'd' final de 'good' se elide (se omite) resultando en 'goo day'."
+      explanation="Many speakers drop or weaken terminal /d/ before another consonant yielding goo-day-like contours."
     />,
 
     <MultipleChoiceExercise
       key="8"
-      question="¿Cuál es un ejemplo de intrusion?"
+      question="Which line illustrates intrusive /r/-style bridging for many non-rhotic speakers?"
       options={[
-        "I am → I'm",
-        "law and order → 'lawr and order'",
-        "good boy → 'goo boy'",
-        "ten boys → 'tem boys'"
+        "I am contracting to I'm",
+        "Law and order → law-r-and rhythm",
+        "Good boy assimilating consonants differently",
+        "Ten boys yielding bilabial nasal shift"
       ]}
       correctAnswer={1}
-      explanation="En 'law and order' se inserta un sonido /r/ entre 'law' y 'and' para facilitar la transición: 'lawr and order'."
+      explanation="'Law(r)and' style smoothing links schwa-derived finals with vowel-initial followers."
     />,
 
     <TrueFalseExercise
       key="9"
       statements={[
         {
-          text: "Elision always makes speech faster.",
+          text: "Typical casual elisions quicken rhythmic delivery packing ideas tighter.",
           isTrue: true,
-          explanation: "Correcto. La elisión (omisión de sonidos) hace que el habla sea más rápida y fluida."
+          explanation: "Correct. Dropping weaker segments accelerates conversational tempo conserving energy."
         },
         {
-          text: "Understanding connected speech requires knowing every sound change.",
+          text: "You must catalogue every microscopic rule change before comprehension begins.",
           isTrue: false,
-          explanation: "Incorrecto. No necesitas conocer cada cambio; el contexto y la práctica te ayudan a entender el significado general."
+          explanation: "Incorrect. Probabilistic chunk recognition plus gist tracking usually precedes fine-grained analysis."
         }
       ]}
     />,
 
     <MultipleChoiceExercise
       key="10"
-      question="¿Cuál es la mejor manera de mejorar la comprensión del habla conectada?"
+      question="Single best long-game improvement for decoding connected speech reliably?"
       options={[
-        "Estudiar solo gramática",
-        "Escuchar habla natural regularmente",
-        "Evitar hablantes nativos",
-        "Leer solo textos escritos"
+        "Grammar-only workbook drills",
+        "Regular authentic listening diversified by genre accent pace",
+        "Avoid interacting with native spontaneous speech entirely",
+        "Read silently without audio pairing"
       ]}
       correctAnswer={1}
-      explanation="Escuchar habla natural regularmente es la mejor manera de acostumbrarse a los patrones del habla conectada."
+      explanation="Statistical perceptual tuning requires varied naturalistic exposure cycles beyond abstract rule lists."
     />
   ];
 
   return (
     <TheoryLayout
       title="Pronunciation and Connected Speech"
-      description="Comprende el habla conectada en inglés: linking, elision, assimilation, intrusion y weak forms. Aprende estrategias para entender el inglés hablado natural."
+      description="Decode natural English rhythm: linking, elision, assimilation, intrusive consonants, and weak forms—with listening strategies you can practise immediately."
       level="A1-A2-B1-B2-C1-C2"
       theoryContent={theoryContent}
       exercises={exercises}
@@ -571,25 +534,3 @@ const ConnectedSpeechPage = () => {
 };
 
 export default ConnectedSpeechPage;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

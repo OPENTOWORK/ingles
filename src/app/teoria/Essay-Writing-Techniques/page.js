@@ -18,268 +18,256 @@ import {
 const EssayWritingPage = () => {
   const theoryContent = (
     <div>
-      <TheorySection title="Técnicas de Escritura de Essays" icon="✍️">
+      <TheorySection title="Essay Writing Techniques" icon="✍️">
         <p style={{ fontSize: '1.1rem', lineHeight: 1.6, color: '#4a5568', marginBottom: '1rem' }}>
-          En los exámenes certificados (B2 First, C1 Advanced, C2 Proficiency), el <strong>essay</strong> 
-          es una tarea obligatoria en Writing Paper. Debes escribir 140-190 palabras (B2), 220-260 palabras (C1), 
-          o 280-320 palabras (C2) en respuesta a una pregunta específica, demostrando capacidad argumentativa y estilo académico.
+          In Cambridge main-suite exams (B2 First, C1 Advanced, C2 Proficiency), the <strong>essay</strong> 
+          is a required task in the Writing paper. You write 140–190 words (B2), 220–260 words (C1), 
+          or 280–320 words (C2) in response to a set question, showing argument skills and an academic style.
         </p>
         
         <QuickReference items={[
-          "Estructura clara: introducción, desarrollo, conclusión",
-          "Tesis statement fuerte y específica",
-          "Párrafos con topic sentences claras",
-          "Evidencia y ejemplos de apoyo",
-          "Conectores para cohesión y fluidez"
+          "Clear structure: introduction, development, conclusion",
+          "Strong, specific thesis statement",
+          "Body paragraphs with clear topic sentences",
+          "Supporting evidence and examples",
+          "Connectors for cohesion and flow"
         ]} />
       </TheorySection>
 
-      <TheorySection title="Estructura del Essay" icon="🏗️">
+      <TheorySection title="Essay Structure" icon="🏗️">
         <p style={{ fontSize: '1rem', lineHeight: 1.6, color: '#4a5568', marginBottom: '1rem' }}>
-          Un essay bien estructurado sigue un patrón lógico que guía al lector a través de tu argumento.
+          A well-structured essay follows a logical pattern that guides the reader through your argument.
         </p>
 
         <GrammarTable
-          caption="Estructura Básica del Essay"
-          headers={["Sección", "Propósito", "Contenido Típico", "Extensión"]}
+          caption="Basic Essay Structure"
+          headers={["Section", "Purpose", "Typical content", "Length"]}
           rows={[
-            ["Introducción", "Presentar tema y tesis", "Hook, contexto, thesis statement", "10-15% del essay"],
-            ["Desarrollo", "Argumentar y evidenciar", "Topic sentences, evidencia, análisis", "70-80% del essay"],
-            ["Conclusión", "Resumir y cerrar", "Resumen, implicaciones, reflexión final", "10-15% del essay"]
+            ["Introduction", "Present topic and thesis", "Hook, context, thesis statement", "10–15% of the essay"],
+            ["Body", "Argue and support", "Topic sentences, evidence, analysis", "70–80% of the essay"],
+            ["Conclusion", "Summarise and close", "Summary, implications, final reflection", "10–15% of the essay"]
           ]}
         />
 
         <Rule 
-          title="Elementos de una Introducción Efectiva"
-          description="Cada introducción debe incluir estos componentes:"
+          title="Elements of an effective introduction"
+          description="Include these components:"
           examples={[
-            "Hook: Pregunta, estadística o cita que capture atención",
-            "Contexto: Información de fondo necesaria",
-            "Thesis Statement: Tu argumento principal específico",
-            "Preview: Breve mención de puntos principales (opcional)"
+            "Hook: question, statistic, or quote that grabs attention",
+            "Context: background the reader needs",
+            "Thesis statement: your main, specific claim",
+            "Preview: brief mention of main points (optional)"
           ]}
         />
 
         <Example 
-          spanish="Introducción sobre tecnología en educación:"
           english="In an era where digital devices dominate daily life, the integration of technology in classrooms has become inevitable. While some educators argue that traditional methods remain superior, evidence suggests that when properly implemented, educational technology significantly enhances student engagement and learning outcomes."
-          translation="Hook (era digital) → Contexto (debate) → Thesis (tecnología mejora aprendizaje)"
+          note="Hook (digital era) → context (debate) → thesis (technology can improve learning when used well)"
         />
       </TheorySection>
 
-      <TheorySection title="Thesis Statement Efectiva" icon="🎯">
+      <TheorySection title="An Effective Thesis Statement" icon="🎯">
         <p style={{ fontSize: '1rem', lineHeight: 1.6, color: '#4a5568', marginBottom: '1rem' }}>
-          El thesis statement es el corazón de tu essay. Debe ser específico, argumentable y claro.
+          The thesis statement is the heart of your essay. It should be specific, arguable, and clear.
         </p>
 
         <GrammarTable
-          caption="Características de un Buen Thesis Statement"
-          headers={["Característica", "Descripción", "Ejemplo Débil", "Ejemplo Fuerte"]}
+          caption="Features of a Strong Thesis Statement"
+          headers={["Feature", "Description", "Weak example", "Strong example"]}
           rows={[
-            ["Específico", "Evita generalidades vagas", "Social media is bad", "Social media addiction among teenagers leads to decreased face-to-face communication skills"],
-            ["Argumentable", "Permite debate y discusión", "London is in England", "London's congestion charge has effectively reduced traffic while improving air quality"],
-            ["Claro", "Fácil de entender", "Education has many aspects", "Standardized testing undermines creativity and critical thinking in primary education"],
-            ["Enfocado", "Un argumento principal", "Many things affect climate", "Deforestation in the Amazon is the primary driver of regional climate change"]
+            ["Specific", "Avoid vague generalisations", "Social media is bad", "Social media addiction among teenagers leads to weaker face-to-face communication skills"],
+            ["Arguable", "Allows debate", "London is in England", "London's congestion charge has effectively reduced traffic while improving air quality"],
+            ["Clear", "Easy to understand", "Education has many aspects", "Standardised testing undermines creativity and critical thinking in primary education"],
+            ["Focused", "One main claim", "Many things affect climate", "Deforestation in the Amazon is the primary driver of regional climate change"]
           ]}
         />
 
         <div style={{ display: 'grid', gap: '1rem' }}>
           <Example 
-            spanish="Thesis débil: 'Los videojuegos son populares.'"
-            english="Weak: 'Video games are popular.'"
-            translation="No es argumentable, es solo un hecho"
+            english="Weak thesis: 'Video games are popular.'"
+            note="Not really arguable—it reports a fact."
           />
           
           <Example 
-            spanish="Thesis fuerte: 'Los videojuegos educativos mejoran las habilidades de resolución de problemas en niños de 8-12 años.'"
-            english="Strong: 'Educational video games improve problem-solving skills in children aged 8-12.'"
-            translation="Específico, argumentable y medible"
+            english="Strong thesis: 'Educational video games improve problem-solving skills in children aged 8–12.'"
+            note="Specific, debatable, and testable."
           />
         </div>
 
         <Tip type="success">
-          <strong>Consejo:</strong> Escribe tu thesis statement al final. Después de investigar y planificar, 
-          tendrás una idea más clara de tu argumento principal.
+          <strong>Tip:</strong> Draft your thesis after planning. Once you know your evidence, your main claim will be clearer.
         </Tip>
       </TheorySection>
 
-      <TheorySection title="Párrafos de Desarrollo" icon="📝">
+      <TheorySection title="Body Paragraphs" icon="📝">
         <p style={{ fontSize: '1rem', lineHeight: 1.6, color: '#4a5568', marginBottom: '1rem' }}>
-          Cada párrafo de desarrollo debe seguir la estructura PEEL: Point, Evidence, Explanation, Link.
+          Each body paragraph should follow PEEL: Point, Evidence, Explanation, Link.
         </p>
 
         <Rule 
-          title="Estructura PEEL para Párrafos"
-          description="Organiza cada párrafo siguiendo este patrón:"
+          title="PEEL paragraph structure"
+          description="Organise each paragraph like this:"
           examples={[
-            "Point: Topic sentence que presenta la idea principal",
-            "Evidence: Datos, ejemplos, citas que apoyan el punto",
-            "Explanation: Análisis de cómo la evidencia apoya tu argumento",
-            "Link: Conexión con el thesis o transición al siguiente párrafo"
+            "Point: topic sentence stating the main idea",
+            "Evidence: facts, examples, or quotes that support the point",
+            "Explanation: show how the evidence supports your argument",
+            "Link: tie back to the thesis or transition to the next paragraph"
           ]}
         />
 
         <Example 
-          spanish="Párrafo PEEL sobre ejercicio y salud mental:"
-          english="[Point] Regular physical exercise significantly improves mental health outcomes. [Evidence] A 2019 study by Harvard Medical School found that individuals who exercised for 30 minutes daily showed 25% lower rates of depression and anxiety. [Explanation] This improvement occurs because exercise releases endorphins and reduces cortisol levels, creating natural mood stabilization. [Link] This biochemical evidence supports the broader argument that lifestyle changes can be as effective as medication for mental health treatment."
-          translation="Estructura clara: punto → evidencia → explicación → conexión"
+          english="[Point] Regular physical exercise significantly improves mental health outcomes. [Evidence] A 2019 study by Harvard Medical School found that individuals who exercised for 30 minutes daily showed 25% lower rates of depression and anxiety. [Explanation] This improvement occurs because exercise releases endorphins and reduces cortisol levels, creating natural mood stabilisation. [Link] This evidence supports the wider claim that lifestyle changes can be as effective as medication for some mental health issues."
+          note="Clear move: point → evidence → explanation → link."
         />
 
         <Tip type="info">
-          <strong>Longitud:</strong> Cada párrafo de desarrollo debe tener 100-150 palabras aproximadamente. 
-          Más corto parece superficial, más largo puede perder enfoque.
+          <strong>Length:</strong> Aim for roughly 100–150 words per body paragraph. Shorter can feel thin; longer can lose focus.
         </Tip>
       </TheorySection>
 
-      <TheorySection title="Conectores y Cohesión" icon="🔗">
+      <TheorySection title="Connectors and Cohesion" icon="🔗">
         <p style={{ fontSize: '1rem', lineHeight: 1.6, color: '#4a5568', marginBottom: '1rem' }}>
-          Los conectores crean fluidez y muestran las relaciones lógicas entre ideas.
+          Connectors improve flow and show logical relationships between ideas.
         </p>
 
         <GrammarTable
-          caption="Conectores por Función"
-          headers={["Función", "Conectores", "Ejemplo en Contexto"]}
+          caption="Connectors by Function"
+          headers={["Function", "Connectors", "Example in context"]}
           rows={[
-            ["Añadir información", "Furthermore, Moreover, Additionally, In addition", "Furthermore, recent studies confirm this trend"],
-            ["Contrastar", "However, Nevertheless, On the other hand, Conversely", "However, critics argue the opposite"],
-            ["Causa-efecto", "Therefore, Consequently, As a result, Thus", "Therefore, immediate action is necessary"],
-            ["Ejemplificar", "For instance, For example, Namely, Such as", "For instance, countries like Denmark have..."],
-            ["Secuencia", "Firstly, Subsequently, Finally, Meanwhile", "Firstly, we must consider the economic impact"],
-            ["Enfatizar", "Indeed, Certainly, Undoubtedly, Clearly", "Indeed, the evidence is overwhelming"]
+            ["Adding information", "Furthermore, Moreover, Additionally, In addition", "Furthermore, recent studies confirm this trend"],
+            ["Contrasting", "However, Nevertheless, On the other hand, Conversely", "However, critics argue the opposite"],
+            ["Cause and effect", "Therefore, Consequently, As a result, Thus", "Therefore, immediate action is necessary"],
+            ["Giving examples", "For instance, For example, Namely, Such as", "For instance, countries like Denmark have..."],
+            ["Sequencing", "Firstly, Subsequently, Finally, Meanwhile", "Firstly, we must consider the economic impact"],
+            ["Emphasising", "Indeed, Certainly, Undoubtedly, Clearly", "Indeed, the evidence is overwhelming"]
           ]}
         />
 
         <Tip type="warning">
-          <strong>¡Cuidado!</strong> No abuses de los conectores. Úsalos solo cuando realmente mejoren 
-          la claridad y fluidez del texto.
+          <strong>Watch out:</strong> Do not overuse connectors. Use them when they genuinely improve clarity and flow.
         </Tip>
       </TheorySection>
 
-      <TheorySection title="Tipos de Essays" icon="📚">
+      <TheorySection title="Types of Essays" icon="📚">
         <p style={{ fontSize: '1rem', lineHeight: 1.6, color: '#4a5568', marginBottom: '1rem' }}>
-          Diferentes tipos de essays requieren enfoques y estructuras específicas.
+          Different essay types call for different approaches and structures.
         </p>
 
         <GrammarTable
-          caption="Tipos Comunes de Essays"
-          headers={["Tipo", "Propósito", "Estructura Típica", "Ejemplo de Thesis"]}
+          caption="Common Essay Types"
+          headers={["Type", "Purpose", "Typical structure", "Sample thesis"]}
           rows={[
-            ["Argumentativo", "Persuadir con evidencia", "Introducción, argumentos a favor, refutación, conclusión", "Renewable energy is more cost-effective than fossil fuels"],
-            ["Comparativo", "Analizar similitudes/diferencias", "Introducción, punto por punto o bloque por bloque", "Online learning offers greater flexibility than traditional education"],
-            ["Causa-Efecto", "Explicar relaciones causales", "Introducción, causas, efectos, conclusión", "Social media has fundamentally changed interpersonal relationships"],
-            ["Problema-Solución", "Identificar y resolver problemas", "Problema, causas, soluciones, evaluación", "Urban pollution requires immediate government intervention"],
-            ["Descriptivo", "Explicar o informar", "Introducción, aspectos principales, conclusión", "Artificial intelligence is transforming modern healthcare"]
+            ["Argumentative", "Persuade with evidence", "Introduction, support, refutation, conclusion", "Renewable energy is more cost-effective than fossil fuels"],
+            ["Comparative", "Analyse similarities and differences", "Introduction, point-by-point or block", "Online learning offers greater flexibility than traditional education"],
+            ["Cause and effect", "Explain causal links", "Introduction, causes, effects, conclusion", "Social media has fundamentally changed interpersonal relationships"],
+            ["Problem–solution", "Identify and address problems", "Problem, causes, solutions, evaluation", "Urban pollution requires immediate government intervention"],
+            ["Descriptive / expository", "Explain or inform", "Introduction, main aspects, conclusion", "Artificial intelligence is transforming modern healthcare"]
           ]}
         />
 
         <Tip type="success">
-          <strong>Adaptación:</strong> Ajusta tu enfoque según el tipo de essay. Un argumentativo necesita 
-          más evidencia persuasiva, mientras que un descriptivo requiere más detalles explicativos.
+          <strong>Adaptation:</strong> Adjust your approach to the task. Argumentative essays need strong evidence; expository essays need clear explanation.
         </Tip>
       </TheorySection>
 
-      <TheorySection title="Estilo Académico" icon="🎓">
+      <TheorySection title="Academic Style" icon="🎓">
         <p style={{ fontSize: '1rem', lineHeight: 1.6, color: '#4a5568', marginBottom: '1rem' }}>
-          El estilo académico requiere formalidad, objetividad y precisión en el lenguaje.
+          Academic style requires formality, objectivity, and precision.
         </p>
 
         <GrammarTable
-          caption="Características del Estilo Académico"
-          headers={["Aspecto", "Evitar", "Usar en su lugar"]}
+          caption="Features of Academic Style"
+          headers={["Aspect", "Avoid", "Prefer"]}
           rows={[
-            ["Contracciones", "don't, can't, won't", "do not, cannot, will not"],
-            ["Lenguaje informal", "stuff, things, lots of", "matters, issues, numerous"],
-            ["Primera persona", "I think, I believe", "It can be argued, Evidence suggests"],
-            ["Emocional", "amazing, terrible, awful", "significant, problematic, concerning"],
-            ["Absolutos", "always, never, all", "generally, rarely, most"],
-            ["Preguntas retóricas", "Why should we care?", "This raises important questions"]
+            ["Contractions", "don't, can't, won't", "do not, cannot, will not"],
+            ["Informal words", "stuff, things, lots of", "matters, issues, numerous"],
+            ["Heavy first person", "I think, I believe (sometimes)", "It can be argued, Evidence suggests"],
+            ["Over-emotional", "amazing, terrible, awful", "significant, problematic, concerning"],
+            ["Absolutes", "always, never, all", "generally, rarely, most"],
+            ["Rhetorical questions", "Why should we care?", "This raises important questions"]
           ]}
         />
 
         <div style={{ display: 'grid', gap: '1rem' }}>
           <Example 
-            spanish="Informal: 'I think social media is really bad for kids because it's super addictive.'"
-            english="Formal: 'Research indicates that social media platforms may negatively impact adolescent development due to their potentially addictive design features.'"
-            translation="Más objetivo, específico y académico"
+            english="Informal: 'I think social media is really bad for kids because it's super addictive.'"
+            note="Formal rewrite: 'Research indicates that social media platforms may negatively affect adolescent development because of potentially addictive design features.'"
           />
         </div>
 
         <Tip type="info">
-          <strong>Voz pasiva:</strong> Úsala moderadamente para mantener objetividad: 
-          "Studies have been conducted" en lugar de "Researchers conducted studies".
+          <strong>Passive voice:</strong> Use it in moderation for objectivity, e.g. “Studies have been conducted” rather than “We conducted studies”.
         </Tip>
       </TheorySection>
 
-      <TheorySection title="Conclusiones Efectivas" icon="🏁">
+      <TheorySection title="Effective Conclusions" icon="🏁">
         <p style={{ fontSize: '1rem', lineHeight: 1.6, color: '#4a5568', marginBottom: '1rem' }}>
-          Una buena conclusión resume sin repetir y deja al lector con una impresión duradera.
+          A good conclusion summarises without simply repeating and leaves a strong final impression.
         </p>
 
         <Rule 
-          title="Elementos de una Conclusión Fuerte"
-          description="Incluye estos componentes en tu conclusión:"
+          title="Elements of a strong conclusion"
+          description="Include:"
           examples={[
-            "Restatement: Reformula tu thesis con palabras diferentes",
-            "Summary: Breve resumen de puntos principales",
-            "Implication: Qué significa esto en un contexto más amplio",
-            "Call to action o reflexión final (opcional)"
+            "Restatement: rephrase your thesis in new words",
+            "Summary: brief recap of main points",
+            "Implication: why it matters in a wider context",
+            "Call to action or closing reflection (optional)"
           ]}
         />
 
         <Example 
-          spanish="Conclusión sobre educación online:"
-          english="While online education presents certain challenges, the evidence clearly demonstrates its potential to democratize learning and provide flexible, personalized educational experiences. As technology continues to evolve, educational institutions must adapt their approaches to harness these benefits while addressing the limitations. The future of education lies not in choosing between traditional and digital methods, but in creating hybrid models that combine the best of both worlds."
-          translation="Reafirma tesis → resume beneficios → implicaciones futuras"
+          english="While online education presents challenges, the evidence shows its potential to widen access and offer flexible, personalised learning. As technology evolves, institutions must adapt to capture these benefits while addressing limitations. The future lies not in choosing between traditional and digital methods but in hybrid models that combine the best of both."
+          note="Restates position → sums up → looks ahead."
         />
 
         <Tip type="warning">
-          <strong>Evita:</strong> Introducir ideas completamente nuevas en la conclusión. 
-          Debe cerrar, no abrir nuevos debates.
+          <strong>Avoid:</strong> Brand-new arguments in the conclusion. Close the discussion, do not open a new one.
         </Tip>
       </TheorySection>
-      <TheorySection title="Tipos de essays en el examen" icon="📚">
+      <TheorySection title="Exam essay task types" icon="📚">
         <div style={{ display: 'grid', gap: '1rem' }}>
           <Rule 
-            title="1. Opinion Essay (Más común en B2/C1)"
-            description="Expresar y justificar tu opinión sobre un tema."
+            title="1. Opinion essay (common at B2/C1)"
+            description="State and justify your view on a topic."
             examples={[
-              "Pregunta típica: 'Some people think... Do you agree?'",
-              "Estructura: Introducción + 2 párrafos de desarrollo + Conclusión",
-              "Usa: In my opinion, I believe, I think, From my perspective",
-              "Incluye ejemplos personales o generales para apoyar tu opinión"
+              "Typical prompt: 'Some people think... Do you agree?'",
+              "Structure: introduction + two body paragraphs + conclusion",
+              "Useful phrases: In my opinion, I believe, From my perspective",
+              "Support your view with general or personal examples"
             ]}
           />
 
           <Rule 
-            title="2. For and Against Essay (B2/C1/C2)"
-            description="Presentar argumentos a favor y en contra de un tema."
+            title="2. For and against essay (B2/C1/C2)"
+            description="Present arguments on both sides."
             examples={[
-              "Pregunta típica: 'Discuss the advantages and disadvantages of...'",
-              "Estructura: Intro + Párrafo a favor + Párrafo en contra + Conclusión",
-              "Usa: On one hand/On the other hand, However, Nevertheless",
-              "Mantén equilibrio entre ambas perspectivas"
+              "Typical prompt: 'Discuss the advantages and disadvantages of...'",
+              "Structure: intro + paragraph for + paragraph against + conclusion",
+              "Useful phrases: On the one hand / On the other hand, However, Nevertheless",
+              "Keep a balance between the two sides"
             ]}
           />
 
           <Rule 
-            title="3. Discursive Essay (C1/C2)"
-            description="Analizar diferentes aspectos de un tema complejo."
+            title="3. Discursive essay (C1/C2)"
+            description="Analyse different angles of a complex topic."
             examples={[
-              "Pregunta típica: 'Evaluate the impact of... on modern society'",
-              "Estructura más flexible, análisis profundo",
-              "Usa: Furthermore, Moreover, In addition, Consequently",
-              "Requiere análisis crítico y perspectiva madura"
+              "Typical prompt: 'Evaluate the impact of... on modern society'",
+              "More flexible structure, deeper analysis",
+              "Useful phrases: Furthermore, Moreover, In addition, Consequently",
+              "Requires critical analysis and a mature tone"
             ]}
           />
 
           <Rule 
-            title="Criterios de evaluación del writing"
-            description="Cómo se evalúan los essays en los exámenes oficiales."
+            title="Writing assessment criteria"
+            description="How official exams typically mark writing."
             examples={[
-              "Content: Relevancia y desarrollo de ideas (25%)",
-              "Communicative Achievement: Propósito y audiencia (25%)",
-              "Organisation: Estructura y cohesión (25%)",
-              "Language: Gramática, vocabulario y precisión (25%)"
+              "Content: relevance and development of ideas (25%)",
+              "Communicative achievement: task purpose and audience (25%)",
+              "Organisation: structure and cohesion (25%)",
+              "Language: grammar, vocabulary, accuracy (25%)"
             ]}
           />
         </div>
@@ -294,11 +282,11 @@ const EssayWritingPage = () => {
       options={[
         "Social media is popular among young people.",
         "Social media has both positive and negative effects.",
-        "Social media platforms exploit user data to maximize advertising revenue at the expense of user privacy.",
+        "Social media platforms exploit user data to maximise advertising revenue at the expense of user privacy.",
         "Many people use social media every day."
       ]}
       correctAnswer={2}
-      explanation="Esta opción es específica, argumentable y presenta un punto de vista claro que puede ser defendido con evidencia."
+      explanation="This option is specific, arguable, and can be defended with evidence."
     />,
 
     <MultipleChoiceExercise
@@ -311,7 +299,7 @@ const EssayWritingPage = () => {
         "Explanations of your personal opinion"
       ]}
       correctAnswer={2}
-      explanation="Evidence incluye cualquier tipo de apoyo factual: datos, estadísticas, ejemplos, citas de expertos, etc."
+      explanation="Evidence includes any factual support: data, statistics, examples, expert views, etc."
     />,
 
     <TrueFalseExercise
@@ -320,22 +308,22 @@ const EssayWritingPage = () => {
         {
           text: "Academic writing should avoid contractions like 'don't' and 'can't'.",
           isTrue: true,
-          explanation: "Correcto. El estilo académico requiere formas completas: 'do not', 'cannot'."
+          explanation: "Correct. Full forms such as “do not” and “cannot” suit academic style."
         },
         {
           text: "It's acceptable to introduce completely new ideas in the conclusion.",
           isTrue: false,
-          explanation: "Falso. La conclusión debe cerrar el argumento, no introducir ideas nuevas."
+          explanation: "Incorrect. The conclusion should close the argument, not start a new one."
         },
         {
           text: "Each body paragraph should focus on one main point.",
           isTrue: true,
-          explanation: "Correcto. Cada párrafo debe tener una idea principal clara (topic sentence)."
+          explanation: "Correct. One clear topic sentence per paragraph."
         },
         {
           text: "Using first person (I, my, me) is always inappropriate in academic essays.",
           isTrue: false,
-          explanation: "Falso. Aunque se evita generalmente, en algunos contextos (reflexiones personales) puede ser apropiado."
+          explanation: "Incorrect. Some tasks allow a measured use of first person (e.g. reflective writing)."
         }
       ]}
     />,
@@ -350,7 +338,7 @@ const EssayWritingPage = () => {
         "Moreover"
       ]}
       correctAnswer={1}
-      explanation="'However' introduce una idea que contrasta con la anterior."
+      explanation="“However” signals contrast with the previous sentence."
     />,
 
     <MultipleChoiceExercise
@@ -363,7 +351,7 @@ const EssayWritingPage = () => {
         "In addition"
       ]}
       correctAnswer={2}
-      explanation="'Nevertheless' introduce una idea que contrasta con la anterior, mostrando una perspectiva diferente."
+      explanation="“Nevertheless” concedes a point but presents a contrasting view."
     />,
 
     <MultipleChoiceExercise
@@ -376,7 +364,7 @@ const EssayWritingPage = () => {
         "To connect to the next paragraph"
       ]}
       correctAnswer={1}
-      explanation="La topic sentence introduce la idea principal que se desarrollará en el párrafo."
+      explanation="The topic sentence introduces the paragraph's main idea."
     />,
 
     <MultipleChoiceExercise
@@ -389,7 +377,7 @@ const EssayWritingPage = () => {
         "I believe that..."
       ]}
       correctAnswer={2}
-      explanation="'It can be argued that...' es la forma más objetiva y formal de presentar una opinión."
+      explanation="“It can be argued that...” is relatively objective and formal."
     />,
 
     <MultipleChoiceExercise
@@ -402,7 +390,7 @@ const EssayWritingPage = () => {
         "Moreover"
       ]}
       correctAnswer={2}
-      explanation="'Firstly' es el conector de secuencia que introduce el primer punto."
+      explanation="“Firstly” introduces the first point in a sequence."
     />,
 
     <MultipleChoiceExercise
@@ -415,7 +403,7 @@ const EssayWritingPage = () => {
         "Clear thesis statements"
       ]}
       correctAnswer={1}
-      explanation="Las contracciones y el lenguaje informal deben evitarse en escritura académica."
+      explanation="Contractions and informal wording are usually avoided in academic writing."
     />,
 
     <MultipleChoiceExercise
@@ -428,22 +416,21 @@ const EssayWritingPage = () => {
         "Plan, Execute, Evaluate, Learn"
       ]}
       correctAnswer={0}
-      explanation="PEEL significa Point, Evidence, Explanation, Link - la estructura ideal para párrafos de desarrollo."
+      explanation="PEEL stands for Point, Evidence, Explanation, Link—a strong model for body paragraphs."
     />
   ];
 
   return (
     <TheoryLayout
       title="Essay Writing Techniques"
-      description="Domina las técnicas esenciales para escribir essays académicos efectivos: estructura, argumentación, estilo formal y cohesión textual."
+      description="Master essential techniques for effective academic essays: structure, argumentation, formal style, and cohesion."
       level="B2-C1-C2"
       theoryContent={theoryContent}
       exercises={exercises}
-      prerequisites={["Gramática intermedia-avanzada", "Vocabulario académico", "Conectores básicos"]}
+      prerequisites={["Intermediate–advanced grammar", "Academic vocabulary", "Basic connectors"]}
       estimatedTime="70 min"
     />
   );
 };
 
 export default EssayWritingPage;
-

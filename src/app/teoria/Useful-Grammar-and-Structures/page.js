@@ -18,359 +18,341 @@ import {
 const UsefulGrammarAndStructuresPage = () => {
   const theoryContent = (
     <div>
-      <TheorySection title="¿Qué son Useful Grammar and Structures?" icon="🔧">
+      <TheorySection title="What Are Useful Grammar and Structures?" icon="🔧">
         <p style={{ fontSize: '1.1rem', lineHeight: 1.6, color: '#4a5568', marginBottom: '1rem' }}>
-          Las <strong>useful grammar and structures</strong> (estructuras gramaticales útiles) son patrones y construcciones 
-          que te permiten expresarte de manera más natural, precisa y efectiva en inglés escrito.
+          <strong>Useful grammar and structures</strong> are patterns and constructions that help you express yourself 
+          more naturally, precisely, and effectively in written English.
         </p>
         
         <QuickReference items={[
-          "Estructuras avanzadas para escritura formal",
-          "Patrones para expresar opiniones y argumentos",
-          "Conectores complejos y transiciones",
-          "Formas de hacer comparaciones y contrastes",
-          "Estructuras para introducir y concluir ideas"
+          "Advanced structures for formal writing",
+          "Patterns for stating opinions and arguments",
+          "Complex connectors and transitions",
+          "Ways to compare and contrast",
+          "Structures for introducing and concluding ideas"
         ]} />
       </TheorySection>
 
-      <TheorySection title="Estructuras para Introducir Ideas" icon="🚪">
+      <TheorySection title="Structures for Introducing Ideas" icon="🚪">
         <p style={{ fontSize: '1rem', lineHeight: 1.6, color: '#4a5568', marginBottom: '1rem' }}>
-          Estas estructuras te ayudan a presentar ideas de manera profesional y clara.
+          These structures help you present ideas clearly and professionally.
         </p>
 
         <GrammarTable
-          caption="Estructuras para Introducir Ideas"
-          headers={["Estructura", "Uso", "Ejemplo", "Traducción"]}
+          caption="Structures for Introducing Ideas"
+          headers={["Structure", "Use", "Example", "Gloss"]}
           rows={[
-            ["It is widely believed that...", "Opinión general", "It is widely believed that technology improves life", "Se cree ampliamente que..."],
-            ["There is growing evidence that...", "Evidencia creciente", "There is growing evidence that climate change is real", "Hay evidencia creciente de que..."],
-            ["It cannot be denied that...", "Hecho indiscutible", "It cannot be denied that education is important", "No se puede negar que..."],
-            ["One of the most significant...", "Importancia", "One of the most significant issues is poverty", "Uno de los más significativos..."],
-            ["In recent years, there has been...", "Tendencia reciente", "In recent years, there has been an increase in...", "En años recientes, ha habido..."]
+            ["It is widely believed that...", "General opinion", "It is widely believed that technology improves life", "Widely held view..."],
+            ["There is growing evidence that...", "Growing evidence", "There is growing evidence that climate change is real", "Increasing evidence that..."],
+            ["It cannot be denied that...", "Undisputed fact", "It cannot be denied that education is important", "It is undeniable that..."],
+            ["One of the most significant...", "Emphasising importance", "One of the most significant issues is poverty", "One of the most significant..."],
+            ["In recent years, there has been...", "Recent trend", "In recent years, there has been an increase in...", "In recent years there has been..."]
           ]}
         />
 
         <div style={{ display: 'grid', gap: '1rem' }}>
           <Example 
-            spanish="Se cree ampliamente que la tecnología mejora la vida"
             english="It is widely believed that technology improves life"
-            translation="Se cree ampliamente que la tecnología mejora la vida"
+            note="Opens with a shared, general belief."
           />
           <Example 
-            spanish="Hay evidencia creciente de que el cambio climático es real"
             english="There is growing evidence that climate change is real"
-            translation="Hay evidencia creciente de que el cambio climático es real"
+            note="Signals accumulating proof."
           />
           <Example 
-            spanish="No se puede negar que la educación es importante"
             english="It cannot be denied that education is important"
-            translation="No se puede negar que la educación es importante"
+            note="Frames the point as hard to dispute."
           />
         </div>
 
         <Rule 
-          title="Cuándo usar cada estructura"
-          description="Elige según el contexto:"
+          title="When to use each structure"
+          description="Choose according to context:"
           examples={[
-            "It is widely believed: para opiniones generales",
-            "There is growing evidence: para evidencia científica",
-            "It cannot be denied: para hechos indiscutibles",
-            "One of the most significant: para destacar importancia"
+            "It is widely believed: general opinions",
+            "There is growing evidence: scientific or research-based claims",
+            "It cannot be denied: facts that are difficult to contest",
+            "One of the most significant: highlighting importance"
           ]}
         />
 
         <Tip type="info">
-          <strong>Consejo:</strong> Estas estructuras dan autoridad y credibilidad a tus argumentos.
+          <strong>Tip:</strong> These structures add authority and credibility to your arguments.
         </Tip>
       </TheorySection>
 
-      <TheorySection title="Estructuras para Desarrollar Argumentos" icon="💭">
+      <TheorySection title="Structures for Developing Arguments" icon="💭">
         <p style={{ fontSize: '1rem', lineHeight: 1.6, color: '#4a5568', marginBottom: '1rem' }}>
-          Estas estructuras te permiten desarrollar y explicar tus argumentos de manera convincente.
+          These patterns help you develop and explain your arguments convincingly.
         </p>
 
         <GrammarTable
-          caption="Estructuras para Desarrollar Argumentos"
-          headers={["Estructura", "Función", "Ejemplo", "Traducción"]}
+          caption="Structures for Developing Arguments"
+          headers={["Structure", "Function", "Example", "Gloss"]}
           rows={[
-            ["This is due to the fact that...", "Explicar causa", "This is due to the fact that people work more", "Esto se debe al hecho de que..."],
-            ["What is more important is...", "Enfatizar punto", "What is more important is the long-term effects", "Lo que es más importante es..."],
-            ["It should be noted that...", "Llamar atención", "It should be noted that not everyone agrees", "Debe notarse que..."],
-            ["This raises the question of...", "Introducir problema", "This raises the question of responsibility", "Esto plantea la pregunta de..."],
-            ["Furthermore, it is essential to...", "Agregar punto importante", "Furthermore, it is essential to consider costs", "Además, es esencial..."],
-            ["In contrast to this...", "Mostrar contraste", "In contrast to this, some believe...", "En contraste con esto..."]
+            ["This is due to the fact that...", "Explain cause", "This is due to the fact that people work more", "This is because..."],
+            ["What is more important is...", "Emphasise a point", "What is more important is the long-term effects", "What matters more is..."],
+            ["It should be noted that...", "Draw attention", "It should be noted that not everyone agrees", "It is worth noting that..."],
+            ["This raises the question of...", "Introduce an issue", "This raises the question of responsibility", "This leads one to ask..."],
+            ["Furthermore, it is essential to...", "Add an important point", "Furthermore, it is essential to consider costs", "Moreover, it is essential..."],
+            ["In contrast to this...", "Show contrast", "In contrast to this, some believe...", "By contrast..."]
           ]}
         />
 
         <div style={{ display: 'grid', gap: '1rem' }}>
           <Example 
-            spanish="Esto se debe al hecho de que la gente trabaja más"
             english="This is due to the fact that people work more"
-            translation="Esto se debe al hecho de que la gente trabaja más"
+            note="Formal way to give a reason."
           />
           <Example 
-            spanish="Lo que es más importante son los efectos a largo plazo"
             english="What is more important is the long-term effects"
-            translation="Lo que es más importante son los efectos a largo plazo"
+            note="Highlights priority among points."
           />
           <Example 
-            spanish="Debe notarse que no todos están de acuerdo"
             english="It should be noted that not everyone agrees"
-            translation="Debe notarse que no todos están de acuerdo"
+            note="Flags an important caveat."
           />
         </div>
 
         <Tip type="success">
-          <strong>Consejo:</strong> Usa estas estructuras para hacer tus argumentos más persuasivos y profesionales.
+          <strong>Tip:</strong> Use these structures to make arguments more persuasive and professional.
         </Tip>
       </TheorySection>
 
-      <TheorySection title="Estructuras para Comparaciones y Contrastes" icon="⚖️">
+      <TheorySection title="Structures for Comparison and Contrast" icon="⚖️">
         <p style={{ fontSize: '1rem', lineHeight: 1.6, color: '#4a5568', marginBottom: '1rem' }}>
-          Estas estructuras te permiten hacer comparaciones sofisticadas y mostrar contrastes efectivamente.
+          These help you compare ideas and present contrasts effectively.
         </p>
 
         <GrammarTable
-          caption="Estructuras para Comparaciones y Contrastes"
-          headers={["Estructura", "Uso", "Ejemplo", "Traducción"]}
+          caption="Structures for Comparison and Contrast"
+          headers={["Structure", "Use", "Example", "Gloss"]}
           rows={[
-            ["Similarly to...", "Similitud", "Similarly to the previous case, this shows...", "Similarmente a..."],
-            ["Unlike the previous example...", "Contraste", "Unlike the previous example, this method is...", "A diferencia del ejemplo anterior..."],
-            ["In comparison with...", "Comparación formal", "In comparison with traditional methods...", "En comparación con..."],
-            ["Whereas the former...", "Contraste formal", "Whereas the former is expensive, the latter is...", "Mientras que el primero..."],
-            ["Both... and... share the characteristic of...", "Similitud", "Both approaches share the characteristic of...", "Tanto... como... comparten..."],
-            ["The fundamental difference lies in...", "Diferencias clave", "The fundamental difference lies in approach", "La diferencia fundamental radica en..."]
+            ["Similarly to...", "Similarity", "Similarly to the previous case, this shows...", "In a similar way to..."],
+            ["Unlike the previous example...", "Contrast", "Unlike the previous example, this method is...", "As opposed to the previous example..."],
+            ["In comparison with...", "Formal comparison", "In comparison with traditional methods...", "Compared with..."],
+            ["Whereas the former...", "Formal contrast", "Whereas the former is expensive, the latter is...", "While the first..."],
+            ["Both... and... share the characteristic of...", "Similarity", "Both approaches share the characteristic of...", "Both X and Y share..."],
+            ["The fundamental difference lies in...", "Key difference", "The fundamental difference lies in approach", "The essential difference is..."]
           ]}
         />
 
         <div style={{ display: 'grid', gap: '1rem' }}>
           <Example 
-            spanish="Similarmente al caso anterior, esto muestra..."
             english="Similarly to the previous case, this shows..."
-            translation="Similarmente al caso anterior, esto muestra..."
+            note="Links to something already mentioned."
           />
           <Example 
-            spanish="En comparación con los métodos tradicionales..."
             english="In comparison with traditional methods..."
-            translation="En comparación con los métodos tradicionales..."
+            note="Sets up a formal comparison."
           />
           <Example 
-            spanish="Mientras que el primero es caro, el segundo es..."
             english="Whereas the former is expensive, the latter is..."
-            translation="Mientras que el primero es caro, el segundo es..."
+            note="“Former” / “latter” refer to two items already named."
           />
         </div>
 
         <Rule 
-          title="Estructuras de Comparación Avanzadas"
-          description="Para comparaciones sofisticadas:"
+          title="Advanced comparison structures"
+          description="For sophisticated comparisons:"
           examples={[
-            "Similarly to / Unlike: para similitudes y diferencias",
-            "In comparison with: para comparaciones formales",
-            "Whereas: para contrastes elegantes",
-            "Both... and...: para similitudes"
+            "Similarly to / Unlike: similarities and differences",
+            "In comparison with: formal comparison",
+            "Whereas: elegant contrast",
+            "Both... and...: shared features"
           ]}
         />
 
         <Tip type="warning">
-          <strong>¡Cuidado!</strong> Usa "former" para el primero de dos elementos mencionados y "latter" para el segundo.
+          <strong>Watch out:</strong> Use “former” for the first of two items mentioned and “latter” for the second.
         </Tip>
       </TheorySection>
 
-      <TheorySection title="Estructuras para Expresar Opiniones" icon="💬">
+      <TheorySection title="Structures for Expressing Opinions" icon="💬">
         <p style={{ fontSize: '1rem', lineHeight: 1.6, color: '#4a5568', marginBottom: '1rem' }}>
-          Estas estructuras te permiten expresar opiniones de manera académica y persuasiva.
+          These patterns help you state opinions in an academic, persuasive way.
         </p>
 
         <GrammarTable
-          caption="Estructuras para Expresar Opiniones"
-          headers={["Estructura", "Nivel de Certeza", "Ejemplo", "Traducción"]}
+          caption="Structures for Expressing Opinions"
+          headers={["Structure", "Certainty level", "Example", "Gloss"]}
           rows={[
-            ["I firmly believe that...", "Muy seguro", "I firmly believe that education is key", "Creo firmemente que..."],
-            ["It seems to me that...", "Moderado", "It seems to me that this approach works", "Me parece que..."],
-            ["I would argue that...", "Argumentativo", "I would argue that technology helps", "Yo argumentaría que..."],
-            ["There is reason to believe that...", "Cauteloso", "There is reason to believe that change is needed", "Hay razones para creer que..."],
-            ["It is my contention that...", "Formal", "It is my contention that this is wrong", "Mi argumento es que..."],
-            ["I am convinced that...", "Seguro", "I am convinced that this is the best solution", "Estoy convencido de que..."]
+            ["I firmly believe that...", "Very confident", "I firmly believe that education is key", "I strongly believe..."],
+            ["It seems to me that...", "Moderate", "It seems to me that this approach works", "In my view..."],
+            ["I would argue that...", "Argumentative", "I would argue that technology helps", "I would contend that..."],
+            ["There is reason to believe that...", "Cautious", "There is reason to believe that change is needed", "One may reasonably believe..."],
+            ["It is my contention that...", "Formal", "It is my contention that this is wrong", "My view is that..."],
+            ["I am convinced that...", "Confident", "I am convinced that this is the best solution", "I am sure that..."]
           ]}
         />
 
         <div style={{ display: 'grid', gap: '1rem' }}>
           <Example 
-            spanish="Creo firmemente que la educación es clave"
             english="I firmly believe that education is key"
-            translation="Creo firmemente que la educación es clave"
+            note="Strong personal stance."
           />
           <Example 
-            spanish="Me parece que este enfoque funciona"
             english="It seems to me that this approach works"
-            translation="Me parece que este enfoque funciona"
+            note="Softer, reflective tone."
           />
           <Example 
-            spanish="Yo argumentaría que la tecnología ayuda"
             english="I would argue that technology helps"
-            translation="Yo argumentaría que la tecnología ayuda"
+            note="Positions the claim as reasoned argument."
           />
         </div>
 
         <Tip type="info">
-          <strong>Consejo:</strong> Varía las estructuras según qué tan seguro estés de tu opinión.
+          <strong>Tip:</strong> Vary structures according to how certain you are about your claim.
         </Tip>
       </TheorySection>
 
-      <TheorySection title="Estructuras para Concluir" icon="🎯">
+      <TheorySection title="Structures for Concluding" icon="🎯">
         <p style={{ fontSize: '1rem', lineHeight: 1.6, color: '#4a5568', marginBottom: '1rem' }}>
-          Estas estructuras te ayudan a concluir tus argumentos de manera efectiva.
+          These help you close your arguments effectively.
         </p>
 
         <GrammarTable
-          caption="Estructuras para Concluir"
-          headers={["Estructura", "Uso", "Ejemplo", "Traducción"]}
+          caption="Structures for Concluding"
+          headers={["Structure", "Use", "Example", "Gloss"]}
           rows={[
-            ["In conclusion, it can be said that...", "Conclusión general", "In conclusion, it can be said that technology is beneficial", "En conclusión, puede decirse que..."],
-            ["To sum up, the evidence suggests...", "Resumen", "To sum up, the evidence suggests that change is needed", "Para resumir, la evidencia sugiere..."],
-            ["All things considered...", "Consideración completa", "All things considered, this is the best option", "Considerando todo..."],
-            ["It is therefore clear that...", "Conclusión lógica", "It is therefore clear that action is required", "Por lo tanto, es claro que..."],
-            ["The implications of this are...", "Implicaciones", "The implications of this are far-reaching", "Las implicaciones de esto son..."],
-            ["This leads to the conclusion that...", "Conclusión lógica", "This leads to the conclusion that we must act", "Esto lleva a la conclusión de que..."]
+            ["In conclusion, it can be said that...", "General conclusion", "In conclusion, it can be said that technology is beneficial", "To conclude, one can say..."],
+            ["To sum up, the evidence suggests...", "Summary", "To sum up, the evidence suggests that change is needed", "In summary, the evidence suggests..."],
+            ["All things considered...", "Taking everything into account", "All things considered, this is the best option", "Taking everything into account..."],
+            ["It is therefore clear that...", "Logical conclusion", "It is therefore clear that action is required", "Thus it is clear that..."],
+            ["The implications of this are...", "Implications", "The implications of this are far-reaching", "This implies that..."],
+            ["This leads to the conclusion that...", "Logical close", "This leads to the conclusion that we must act", "From this we may conclude..."]
           ]}
         />
 
         <div style={{ display: 'grid', gap: '1rem' }}>
           <Example 
-            spanish="En conclusión, puede decirse que la tecnología es beneficiosa"
             english="In conclusion, it can be said that technology is beneficial"
-            translation="En conclusión, puede decirse que la tecnología es beneficiosa"
+            note="Classic academic closing move."
           />
           <Example 
-            spanish="Para resumir, la evidencia sugiere que se necesita cambio"
             english="To sum up, the evidence suggests that change is needed"
-            translation="Para resumir, la evidencia sugiere que se necesita cambio"
+            note="Summarises what the evidence shows."
           />
           <Example 
-            spanish="Considerando todo, esta es la mejor opción"
             english="All things considered, this is the best option"
-            translation="Considerando todo, esta es la mejor opción"
+            note="Weighs pros and cons before the verdict."
           />
         </div>
 
         <Rule 
-          title="Efectividad de las Conclusiones"
-          description="Una buena conclusión debe:"
+          title="Effective conclusions"
+          description="A strong conclusion should:"
           examples={[
-            "Resumir los puntos principales",
-            "Reafirmar tu posición",
-            "Dejar una impresión duradera",
-            "Proporcionar cierre al argumento"
+            "Summarise the main points",
+            "Reaffirm your position",
+            "Leave a lasting impression",
+            "Provide closure for the argument"
           ]}
         />
 
         <Tip type="success">
-          <strong>Consejo:</strong> Las conclusiones fuertes refuerzan tu argumento y convencen al lector.
+          <strong>Tip:</strong> Strong conclusions reinforce your argument and persuade the reader.
         </Tip>
       </TheorySection>
 
-      <TheorySection title="Estructuras Condicionales Avanzadas" icon="🔀">
+      <TheorySection title="Advanced Conditional Structures" icon="🔀">
         <p style={{ fontSize: '1rem', lineHeight: 1.6, color: '#4a5568', marginBottom: '1rem' }}>
-          Estas estructuras condicionales te permiten expresar hipótesis y condiciones de manera sofisticada.
+          These conditionals let you express hypotheses and conditions in a formal, precise way.
         </p>
 
         <GrammarTable
-          caption="Estructuras Condicionales Avanzadas"
-          headers={["Estructura", "Uso", "Ejemplo", "Traducción"]}
+          caption="Advanced Conditional Structures"
+          headers={["Structure", "Use", "Example", "Gloss"]}
           rows={[
-            ["Were it not for...", "Sin algo específico", "Were it not for technology, we would be lost", "Si no fuera por..."],
-            ["Had it not been for...", "Sin algo pasado", "Had it not been for the rain, we would have gone", "Si no hubiera sido por..."],
-            ["Should this be the case...", "Si esto fuera cierto", "Should this be the case, we must act", "Si este fuera el caso..."],
-            ["In the event that...", "En caso de que", "In the event that this happens, we are ready", "En caso de que esto pase..."],
-            ["Provided that...", "Siempre que", "Provided that the conditions are met", "Siempre que se cumplan las condiciones"],
-            ["Unless otherwise stated...", "A menos que se diga", "Unless otherwise stated, this applies to all", "A menos que se indique lo contrario..."]
+            ["Were it not for...", "Without a specific thing", "Were it not for technology, we would be lost", "If it were not for..."],
+            ["Had it not been for...", "Without something in the past", "Had it not been for the rain, we would have gone", "If it had not been for..."],
+            ["Should this be the case...", "If this were true", "Should this be the case, we must act", "If this turns out to be so..."],
+            ["In the event that...", "If something happens", "In the event that this happens, we are ready", "Should this occur..."],
+            ["Provided that...", "As long as", "Provided that the conditions are met", "On condition that..."],
+            ["Unless otherwise stated...", "Except if specified", "Unless otherwise stated, this applies to all", "If not stated differently..."]
           ]}
         />
 
         <div style={{ display: 'grid', gap: '1rem' }}>
           <Example 
-            spanish="Si no fuera por la tecnología, estaríamos perdidos"
             english="Were it not for technology, we would be lost"
-            translation="Si no fuera por la tecnología, estaríamos perdidos"
+            note="Formal inverted conditional."
           />
           <Example 
-            spanish="Si no hubiera sido por la lluvia, habríamos ido"
             english="Had it not been for the rain, we would have gone"
-            translation="Si no hubiera sido por la lluvia, habríamos ido"
+            note="Past counterfactual without “if”."
           />
           <Example 
-            spanish="Siempre que se cumplan las condiciones"
             english="Provided that the conditions are met"
-            translation="Siempre que se cumplan las condiciones"
+            note="Specifies a requirement for the result."
           />
         </div>
 
         <Tip type="warning">
-          <strong>¡Cuidado!</strong> Estas estructuras son formales y se usan principalmente en escritura académica.
+          <strong>Watch out:</strong> These forms are formal and most common in academic writing.
         </Tip>
       </TheorySection>
 
-      <TheorySection title="Errores Comunes" icon="⚠️">
+      <TheorySection title="Common Mistakes" icon="⚠️">
         <div style={{ display: 'grid', gap: '1rem' }}>
           <Tip type="error">
-            <strong>Error:</strong> "It's important to mention that..." (repetitivo) ❌<br/>
-            <strong>Correcto:</strong> "It should be noted that..." ✅<br/>
-            <em>Varía las estructuras para evitar repetición</em>
+            <strong>Mistake:</strong> “It's important to mention that...” (overused) ❌<br/>
+            <strong>Better:</strong> “It should be noted that...” ✅<br/>
+            <em>Vary your openings to avoid repetition</em>
           </Tip>
 
           <Tip type="error">
-            <strong>Error:</strong> "In my opinion, I think that..." ❌<br/>
-            <strong>Correcto:</strong> "I believe that..." o "It is my contention that..." ✅<br/>
-            <em>Evita redundancia en expresiones de opinión</em>
+            <strong>Mistake:</strong> “In my opinion, I think that...” ❌<br/>
+            <strong>Better:</strong> “I believe that...” or “It is my contention that...” ✅<br/>
+            <em>Avoid doubling opinion markers</em>
           </Tip>
 
           <Tip type="error">
-            <strong>Error:</strong> "The former and the latter" sin contexto ❌<br/>
-            <strong>Correcto:</strong> "The former (mencionar) and the latter (mencionar)" ✅<br/>
-            <em>Asegúrate de que el contexto sea claro</em>
+            <strong>Mistake:</strong> “The former and the latter” with no clear referents ❌<br/>
+            <strong>Better:</strong> Ensure two items are clearly named first ✅<br/>
+            <em>Readers must know what “former” and “latter” point to</em>
           </Tip>
 
           <Tip type="error">
-            <strong>Error:</strong> Usar estructuras formales en contexto informal ❌<br/>
-            <strong>Correcto:</strong> Adaptar el registro al contexto ✅<br/>
-            <em>Usa estructuras apropiadas para el tipo de texto</em>
+            <strong>Mistake:</strong> Very formal structures in informal contexts ❌<br/>
+            <strong>Better:</strong> Match register to the situation ✅<br/>
+            <em>Choose structures suited to the text type</em>
           </Tip>
         </div>
       </TheorySection>
 
-      <TheorySection title="Reglas Importantes" icon="⚡">
+      <TheorySection title="Key Rules" icon="⚡">
         <div style={{ display: 'grid', gap: '1rem' }}>
           <Rule 
-            title="1. Variedad en estructuras"
-            description="Usa diferentes estructuras para evitar repetición."
+            title="1. Variety in structures"
+            description="Use different patterns to avoid repetition."
             examples={[
-              "Alterna entre estructuras formales e informales",
-              "Varía las formas de introducir ideas",
-              "Cambia las estructuras de conclusión",
-              "Usa sinónimos y variaciones"
+              "Alternate formal and informal structures where appropriate",
+              "Vary how you introduce ideas",
+              "Change how you conclude",
+              "Use synonyms and parallel wording"
             ]}
           />
 
           <Rule 
-            title="2. Coherencia en el registro"
-            description="Mantén el mismo nivel de formalidad."
+            title="2. Consistent register"
+            description="Keep a stable level of formality."
             examples={[
-              "Formal: para ensayos académicos",
-              "Neutral: para informes profesionales",
-              "Informal: para emails personales",
-              "Consistencia en todo el texto"
+              "Formal: academic essays",
+              "Neutral: professional reports",
+              "Informal: personal emails",
+              "Stay consistent within the same text"
             ]}
           />
 
           <Rule 
-            title="3. Claridad en la expresión"
-            description="Las estructuras deben mejorar la claridad."
+            title="3. Clarity first"
+            description="Structures should improve clarity."
             examples={[
-              "Elige estructuras que sean apropiadas",
-              "Evita estructuras demasiado complejas",
-              "Asegúrate de que el significado sea claro",
-              "Prioriza la comunicación efectiva"
+              "Choose patterns that fit the point",
+              "Avoid needlessly complex wording",
+              "Make sure meaning is clear",
+              "Prioritise effective communication"
             ]}
           />
         </div>
@@ -389,12 +371,12 @@ const UsefulGrammarAndStructuresPage = () => {
         "Maybe"
       ]}
       correctAnswer={1}
-      explanation="'It is widely believed' es una estructura formal para expresar una opinión general o ampliamente aceptada."
+      explanation="“It is widely believed” is a formal structure for a widely shared or accepted view."
     />,
 
     <MultipleChoiceExercise
       key="2"
-      question="¿Cuál es la estructura más apropiada para expresar una opinión firme?"
+      question="Which structure best expresses a firm opinion?"
       options={[
         "It seems to me that...",
         "I firmly believe that...",
@@ -402,38 +384,38 @@ const UsefulGrammarAndStructuresPage = () => {
         "It should be noted that..."
       ]}
       correctAnswer={1}
-      explanation="'I firmly believe that...' expresa una opinión muy segura y firme, mientras que las otras expresan diferentes niveles de certeza."
+      explanation="“I firmly believe that...” shows strong conviction; the others signal weaker or different stances."
     />,
 
     <TrueFalseExercise
       key="3"
       statements={[
         {
-          text: "'Former' se refiere al primer elemento mencionado y 'latter' al segundo.",
+          text: "'Former' refers to the first item mentioned and 'latter' to the second.",
           isTrue: true,
-          explanation: "Correcto. 'Former' = primero, 'latter' = segundo de dos elementos mencionados previamente."
+          explanation: "Correct. Former = first; latter = second of two items already introduced."
         },
         {
-          text: "Las estructuras formales pueden usarse en cualquier contexto.",
+          text: "Formal structures are appropriate in every context.",
           isTrue: false,
-          explanation: "Incorrecto. Las estructuras formales deben usarse en contextos apropiados como ensayos académicos."
+          explanation: "Incorrect. Use formal patterns in suitable contexts such as academic essays."
         },
         {
-          text: "'Were it not for...' es una estructura condicional avanzada.",
+          text: "'Were it not for...' is an advanced conditional structure.",
           isTrue: true,
-          explanation: "Correcto. Es una forma formal de expresar condiciones hipotéticas."
+          explanation: "Correct. It is a formal, inverted way to express a hypothetical condition."
         },
         {
-          text: "Es mejor usar siempre las mismas estructuras para mantener consistencia.",
+          text: "You should always use the same structures for consistency.",
           isTrue: false,
-          explanation: "Incorrecto. Es mejor variar las estructuras para evitar repetición y hacer el texto más interesante."
+          explanation: "Incorrect. Vary structures to reduce repetition and keep the reader engaged."
         }
       ]}
     />,
 
     <MultipleChoiceExercise
       key="4"
-      question="¿Cuál es la estructura más apropiada para una conclusión?"
+      question="Which structure is most appropriate for a conclusion?"
       options={[
         "To begin with...",
         "In conclusion, it can be said that...",
@@ -441,12 +423,12 @@ const UsefulGrammarAndStructuresPage = () => {
         "This is due to the fact that..."
       ]}
       correctAnswer={1}
-      explanation="'In conclusion, it can be said that...' es una estructura típica para introducir conclusiones."
+      explanation="“In conclusion, it can be said that...” is a typical way to open a concluding section."
     />,
 
     <MultipleChoiceExercise
       key="5"
-      question="¿Qué estructura usarías para mostrar contraste de manera formal?"
+      question="Which structure would you use to show contrast formally?"
       options={[
         "Unlike the previous example...",
         "And also...",
@@ -454,7 +436,7 @@ const UsefulGrammarAndStructuresPage = () => {
         "It is widely believed that..."
       ]}
       correctAnswer={0}
-      explanation="'Unlike the previous example...' es una estructura formal para mostrar contraste entre ejemplos."
+      explanation="“Unlike the previous example...” signals contrast between two examples."
     />,
 
     <TrueFalseExercise
@@ -463,17 +445,17 @@ const UsefulGrammarAndStructuresPage = () => {
         {
           text: "Passive voice is more formal than active voice.",
           isTrue: true,
-          explanation: "Correcto. La voz pasiva es más formal y común en textos académicos y profesionales."
+          explanation: "Correct. Passive voice is common in academic and professional writing."
         },
         {
           text: "'It is important to note that' is a useful academic phrase.",
           isTrue: true,
-          explanation: "Correcto. Esta estructura es muy útil para introducir puntos importantes en textos académicos."
+          explanation: "Correct. It helps introduce important points in academic texts."
         },
         {
           text: "Complex sentences always sound better than simple ones.",
           isTrue: false,
-          explanation: "Incorrecto. La claridad es más importante que la complejidad; usa estructuras apropiadas para el contexto."
+          explanation: "Incorrect. Clarity matters more than complexity; match structure to context."
         }
       ]}
     />,
@@ -488,12 +470,12 @@ const UsefulGrammarAndStructuresPage = () => {
         "Thanks to"
       ]}
       correctAnswer={0}
-      explanation="'Despite' introduce un contraste: a pesar de los beneficios, también hay desventajas."
+      explanation="“Despite” introduces concession: even with the benefits, there are downsides."
     />,
 
     <MultipleChoiceExercise
       key="8"
-      question="¿Qué estructura es mejor para hacer sugerencias formales?"
+      question="Which structure is best for formal suggestions?"
       options={[
         "You should",
         "I suggest that you",
@@ -501,21 +483,21 @@ const UsefulGrammarAndStructuresPage = () => {
         "Maybe you can"
       ]}
       correctAnswer={1}
-      explanation="'I suggest that you' es la estructura más formal y apropiada para hacer sugerencias en contextos profesionales."
+      explanation="“I suggest that you” is appropriate for polite, formal suggestions at work."
     />,
 
     <TrueFalseExercise
       key="9"
       statements={[
         {
-          text: "'It is worth noting that' is useful for emphasizing important points.",
+          text: "'It is worth noting that' is useful for emphasising important points.",
           isTrue: true,
-          explanation: "Correcto. Esta estructura enfatiza puntos importantes de manera formal y académica."
+          explanation: "Correct. It highlights key points in a formal, academic tone."
         },
         {
           text: "Conditional structures are only used for hypothetical situations.",
           isTrue: false,
-          explanation: "Incorrecto. Los condicionales también se usan para situaciones reales, cortesía y sugerencias."
+          explanation: "Incorrect. Conditionals also express real conditions, politeness, and suggestions."
         }
       ]}
     />,
@@ -530,14 +512,14 @@ const UsefulGrammarAndStructuresPage = () => {
         "Recenting"
       ]}
       correctAnswer={0}
-      explanation="'Recent research' es correcto. 'Recent' es adjetivo que modifica 'research'."
+      explanation="“Recent research” is correct: “recent” is an adjective modifying “research”."
     />
   ];
 
   return (
     <TheoryLayout
       title="Useful Grammar and Structures"
-      description="Domina las estructuras gramaticales avanzadas para escritura en inglés. Aprende patrones sofisticados para introducir ideas, desarrollar argumentos y concluir efectivamente."
+      description="Master advanced grammatical structures for writing in English. Learn sophisticated patterns for introducing ideas, developing arguments, and concluding effectively."
       level="A2-B1-B2-C1-C2"
       theoryContent={theoryContent}
       exercises={exercises}
@@ -548,25 +530,3 @@ const UsefulGrammarAndStructuresPage = () => {
 };
 
 export default UsefulGrammarAndStructuresPage;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

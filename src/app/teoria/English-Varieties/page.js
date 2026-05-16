@@ -18,335 +18,299 @@ import {
 const EnglishVarietiesPage = () => {
   const theoryContent = (
     <div>
-      <TheorySection title="¿Qué son las English Varieties?" icon="🌍">
+      <TheorySection title="What Are English Varieties?" icon="🌍">
         <p style={{ fontSize: '1.1rem', lineHeight: 1.6, color: '#4a5568', marginBottom: '1rem' }}>
-          Las <strong>English varieties</strong> (variedades del inglés) son las diferentes formas en que se habla el inglés 
-          en diferentes países y regiones del mundo. Cada variedad tiene sus propias características de pronunciación, vocabulario y gramática.
+          <strong>English varieties</strong> are the different ways English is spoken 
+          across countries and regions worldwide. Each has its own tendencies in pronunciation, vocabulary, and grammar.
         </p>
         
         <QuickReference items={[
-          "British English: Reino Unido, Irlanda, Australia, Nueva Zelanda",
-          "American English: Estados Unidos, Canadá",
-          "Diferencias en pronunciación, vocabulario y ortografía",
-          "Todas las variedades son correctas y válidas",
-          "Importante para comprensión auditiva y cultural"
+          "British English: UK, Ireland, Australia, New Zealand",
+          "American English: United States, Canada",
+          "Differences in pronunciation, spelling, and word choice",
+          "Every major variety is valid and correct",
+          "Crucial for listening comprehension and cultural awareness"
         ]} />
       </TheorySection>
 
       <TheorySection title="British English vs American English" icon="🇬🇧🇺🇸">
         <p style={{ fontSize: '1rem', lineHeight: 1.6, color: '#4a5568', marginBottom: '1rem' }}>
-          Las dos variedades más importantes son el inglés británico y el inglés americano, cada una con características distintivas.
+          The two heavyweight varieties—British and American English—carry clear, teachable contrasts.
         </p>
 
         <GrammarTable
-          caption="Principales Diferencias entre British y American English"
-          headers={["Aspecto", "British English", "American English", "Ejemplo"]}
+          caption="Major Differences between British and American English"
+          headers={["Area", "British English", "American English", "Example"]}
           rows={[
-            ["Pronunciación /r/", "No se pronuncia al final", "Se pronuncia siempre", "car /kɑː/ vs /kɑr/"],
-            ["Vocabulario", "lift, lorry, trousers", "elevator, truck, pants", "lift vs elevator"],
-            ["Ortografía", "colour, centre, realise", "color, center, realize", "colour vs color"],
-            ["Gramática", "have got, at the weekend", "have, on the weekend", "at vs on weekend"],
-            ["Pronunciación /a/", "/ɑː/ en bath, dance", "/æ/ en bath, dance", "/bɑːθ/ vs /bæθ/"],
-            ["Verbos irregulares", "learnt, burnt, dreamt", "learned, burned, dreamed", "learnt vs learned"]
+            ["/r/ pronunciation", "Often silent at the end of a syllable", "Usually pronounced", "car /kɑː/ vs /kɑr/"],
+            ["Vocabulary", "lift, lorry, trousers", "elevator, truck, pants", "lift vs elevator"],
+            ["Spelling", "colour, centre, realise", "color, center, realize", "colour vs color"],
+            ["Grammar", "have got; at the weekend", "have; on the weekend", "at vs on + weekend"],
+            ["/æ/ vs /ɑː/", "/ɑː/ in bath, dance", "/æ/ in bath, dance", "/bɑːθ/ vs /bæθ/"],
+            ["Irregular past forms", "learnt, burnt, dreamt", "learned, burned, dreamed", "learnt vs learned"]
           ]}
         />
 
         <div style={{ display: 'grid', gap: '1rem' }}>
           <Example 
-            spanish="British: 'I'll take the lift to the first floor'"
-            english="British: 'I'll take the lift to the first floor'"
-            translation="British: 'Tomaré el ascensor al primer piso'"
+            english="British: \"I'll take the lift to the first floor\""
           />
           <Example 
-            spanish="American: 'I'll take the elevator to the second floor'"
-            english="American: 'I'll take the elevator to the second floor'"
-            translation="American: 'Tomaré el elevador al segundo piso'"
+            english="American: \"I'll take the elevator to the second floor\""
           />
           <Example 
-            spanish="British: 'What colour is your car?'"
-            english="British: 'What colour is your car?'"
-            translation="British: '¿De qué color es tu coche?'"
+            english="British: \"What colour is your car?\""
           />
           <Example 
-            spanish="American: 'What color is your car?'"
-            english="American: 'What color is your car?'"
-            translation="American: '¿De qué color es tu coche?'"
+            english="American: \"What color is your car?\""
           />
         </div>
 
         <Rule 
-          title="Características de Pronunciación"
-          description="Diferencias principales en pronunciación:"
+          title="Pronunciation Highlights"
+          description="Key pronunciation contrasts:"
           examples={[
-            "British: /r/ silenciosa al final de sílabas",
-            "American: /r/ pronunciada siempre",
-            "British: /ɑː/ en palabras como 'bath', 'dance'",
-            "American: /æ/ en las mismas palabras"
+            "British: non-rhotic /r/ in many accents",
+            "American: rhotic /r/ more consistently",
+            "British: /ɑː/ in words like 'bath' and 'dance' (many accents)",
+            "American: /æ/ commonly in those same lexical sets"
           ]}
         />
 
         <Tip type="info">
-          <strong>Consejo:</strong> Ambas variedades son correctas - elige una y sé consistente, pero entiende ambas.
+          <strong>Tip:</strong> Both varieties are correct—pick one and stay consistent while remaining receptive to both.
         </Tip>
       </TheorySection>
 
-      <TheorySection title="Otras Variedades Importantes" icon="🌏">
+      <TheorySection title="Other Influential Varieties" icon="🌏">
         <p style={{ fontSize: '1rem', lineHeight: 1.6, color: '#4a5568', marginBottom: '1rem' }}>
-          Además del británico y americano, existen otras variedades importantes del inglés.
+          Beyond British and American norms, notable Englishes shape global communication daily.
         </p>
 
         <GrammarTable
-          caption="Otras Variedades del Inglés"
-          headers={["Variedad", "Países/Regiones", "Características", "Ejemplo"]}
+          caption="Further English Varieties"
+          headers={["Variety", "Countries/regions", "Notes", "Sample items"]}
           rows={[
-            ["Australian English", "Australia", "Influencia británica, vocabulario único", "arvo (afternoon), barbie (barbecue)"],
-            ["Canadian English", "Canadá", "Mezcla de británico y americano", "eh? (partícula), tuque (hat)"],
-            ["New Zealand English", "Nueva Zelanda", "Influencia maorí, acento distintivo", "jandals (flip-flops), dairy (convenience store)"],
-            ["South African English", "Sudáfrica", "Influencia africana, vocabulario local", "robot (traffic light), braai (barbecue)"],
-            ["Indian English", "India", "Influencia de lenguas locales", "prepone (opposite of postpone), cousin-brother"],
-            ["Singapore English", "Singapur", "Mezcla de variedades, Singlish", "lah (particle), can (yes)"]
+            ["Australian English", "Australia", "British legacy plus local lexis", "arvo (afternoon), barbie (barbecue)"],
+            ["Canadian English", "Canada", "Blend of British and American features", "eh? (tag), tuque (winter hat)"],
+            ["New Zealand English", "New Zealand", "Māori influence, characteristic rhythm", "jandals (flip-flops), dairy (corner shop)"],
+            ["South African English", "South Africa", "Local multilingual backdrop", "robot (traffic light), braai (barbecue)"],
+            ["Indian English", "India", "Contact with regional languages", "prepone (schedule earlier), cousin-brother"],
+            ["Singapore English", "Singapore", "Mix of lects; informal Singlish", "lah (particle), can (‘yes / possible’)"]
           ]}
         />
 
         <div style={{ display: 'grid', gap: '1rem' }}>
           <Example 
-            spanish="Australian: 'Let's have a barbie this arvo'"
-            english="Australian: 'Let's have a barbie this arvo'"
-            translation="Australian: 'Hagamos una barbacoa esta tarde'"
+            english="Australian: \"Let's have a barbie this arvo\""
           />
           <Example 
-            spanish="Canadian: 'It's cold, eh? Don't forget your tuque'"
-            english="Canadian: 'It's cold, eh? Don't forget your tuque'"
-            translation="Canadian: 'Hace frío, ¿eh? No olvides tu gorro'"
+            english="Canadian: \"It's cold, eh? Don't forget your tuque\""
           />
           <Example 
-            spanish="Indian: 'I'll prepone the meeting'"
-            english="Indian: 'I'll prepone the meeting'"
-            translation="Indian: 'Adelantaré la reunión'"
+            english="Indian: \"I'll prepone the meeting\""
           />
         </div>
 
         <Tip type="success">
-          <strong>Consejo:</strong> Familiarízate con estas variedades para mejorar tu comprensión auditiva global.
+          <strong>Tip:</strong> Exposure to multiple varieties strengthens worldwide listening stamina.
         </Tip>
       </TheorySection>
 
-      <TheorySection title="Diferencias en Vocabulario" icon="📚">
+      <TheorySection title="Vocabulary Differences" icon="📚">
         <p style={{ fontSize: '1rem', lineHeight: 1.6, color: '#4a5568', marginBottom: '1rem' }}>
-          Las diferencias en vocabulario son una de las características más notables entre las variedades del inglés.
+          Lexical divergence is usually the quickest giveaway between Englishes.
         </p>
 
         <GrammarTable
-          caption="Vocabulario Diferente por Variedad"
-          headers={["Categoría", "British English", "American English", "Significado"]}
+          caption="Vocabulary Across Varieties"
+          headers={["Domain", "British English", "American English", "Gloss"]}
           rows={[
-            ["Transporte", "lorry, underground, petrol", "truck, subway, gas", "camión, metro, gasolina"],
-            ["Ropa", "trousers, jumper, trainers", "pants, sweater, sneakers", "pantalones, jersey, zapatillas"],
-            ["Comida", "biscuit, chips, aubergine", "cookie, fries, eggplant", "galleta, patatas, berenjena"],
-            ["Casa", "flat, tap, rubbish", "apartment, faucet, garbage", "apartamento, grifo, basura"],
-            ["Educación", "university, mark, rubber", "college, grade, eraser", "universidad, nota, goma"],
-            ["Tiempo", "autumn, holiday", "fall, vacation", "otoño, vacaciones"]
+            ["Transport", "lorry, underground, petrol", "truck, subway, gas", "Road vehicle, metro, fuel"],
+            ["Clothing", "trousers, jumper, trainers", "pants, sweater, sneakers", "Long pants; knit top; sporty shoes"],
+            ["Food", "biscuit, chips, aubergine", "cookie, fries, eggplant", "Sweet biscuit; crisps/aubergine senses"],
+            ["Home", "flat, tap, rubbish", "apartment, faucet, garbage", "Dwelling unit; valve; refuse"],
+            ["Education", "university mark, rubber (eraser)", "college contexts, grade, eraser", "Uni vs Am. ‘college’ nuance differs"],
+            ["Season/time", "autumn, holiday", "fall, vacation", "Fall season; leisure break"]
           ]}
         />
 
         <div style={{ display: 'grid', gap: '1rem' }}>
           <Example 
-            spanish="British: 'I'll take the underground to buy some biscuits'"
-            english="British: 'I'll take the underground to buy some biscuits'"
-            translation="British: 'Tomaré el metro para comprar galletas'"
+            english="British: \"I'll take the underground to buy some biscuits\""
           />
           <Example 
-            spanish="American: 'I'll take the subway to buy some cookies'"
-            english="American: 'I'll take the subway to buy some cookies'"
-            translation="American: 'Tomaré el metro para comprar galletas'"
+            english="American: \"I'll take the subway to buy some cookies\""
           />
           <Example 
-            spanish="British: 'I live in a flat and wear trainers'"
-            english="British: 'I live in a flat and wear trainers'"
-            translation="British: 'Vivo en un apartamento y uso zapatillas'"
+            english="British: \"I live in a flat and wear trainers\""
           />
           <Example 
-            spanish="American: 'I live in an apartment and wear sneakers'"
-            english="American: 'I live in an apartment and wear sneakers'"
-            translation="American: 'Vivo en un apartamento y uso zapatillas'"
+            english="American: \"I live in an apartment and wear sneakers\""
           />
         </div>
 
         <Rule 
-          title="Consejos para Vocabulario"
-          description="Para manejar diferencias de vocabulario:"
+          title="Managing Lexical Variety"
+          description="Coping tactics:"
           examples={[
-            "Aprende ambas versiones de palabras comunes",
-            "Usa contexto para entender palabras desconocidas",
-            "No te preocupes si no conoces todas las variantes",
-            "Pregunta si no entiendes algo específico"
+            "Learn parallel labels for frequent words",
+            "Let context disambiguate puzzling nouns",
+            "You do not need every regional variant memorised upfront",
+            "Ask politely when meaning is ambiguous"
           ]}
         />
 
         <Tip type="warning">
-          <strong>¡Cuidado!</strong> Algunas palabras pueden tener significados diferentes o incluso ofensivos en otras variedades.
+          <strong>Watch out!</strong> A few cognates diverge sharply—or even clash—between communities.
         </Tip>
       </TheorySection>
 
-      <TheorySection title="Diferencias en Gramática" icon="📝">
+      <TheorySection title="Grammar Contrasts (Light Touch)" icon="📝">
         <p style={{ fontSize: '1rem', lineHeight: 1.6, color: '#4a5568', marginBottom: '1rem' }}>
-          Aunque las diferencias gramaticales son menores, existen algunas variaciones importantes entre las variedades.
+          Morphosyntax differs less dramatically than pronunciation or lexis but still warrants awareness.
         </p>
 
         <GrammarTable
-          caption="Diferencias Gramaticales Principales"
-          headers={["Aspecto", "British English", "American English", "Ejemplo"]}
+          caption="Chief Grammatical Differences"
+          headers={["Feature", "British English tendency", "American English tendency", "Example"]}
           rows={[
-            ["Present Perfect", "Se usa más frecuentemente", "Se usa menos", "I've just eaten vs I just ate"],
-            ["Preposiciones", "at the weekend", "on the weekend", "at vs on weekend"],
-            ["Verbos colectivos", "The team are", "The team is", "plural vs singular"],
-            ["Have vs Have got", "Have got (más común)", "Have (más común)", "I've got vs I have"],
-            ["Shall", "Se usa frecuentemente", "Raramente se usa", "Shall we go? vs Should we go?"],
-            ["Verbos irregulares", "burnt, dreamt, learnt", "burned, dreamed, learned", "t vs ed endings"]
+            ["Present Perfect", "More frequent with recent events", "Simple past often substitutes", "I've just eaten vs I just ate"],
+            ["Weekend prep", "at the weekend", "on the weekend", "at vs on + weekend"],
+            ["Collective nouns", "The team are… (common)", "The team is… (usual)", "plural vs singular concord"],
+            ["Have vs Have got", "Have got commonplace", "'Have' often preferred lexically", "I've got vs I have"],
+            ["Shall", "Still polite offers/questions", "Rarer in casual speech", "Shall we go? vs Should we go?"],
+            ["Irregular past", "dreamt / learnt endings", "-ed favoured", "'t vs -ed endings"]
           ]}
         />
 
         <div style={{ display: 'grid', gap: '1rem' }}>
           <Example 
-            spanish="British: 'I've just finished my homework'"
-            english="British: 'I've just finished my homework'"
-            translation="British: 'Acabo de terminar mi tarea'"
+            english="British: \"I've just finished my homework\""
           />
           <Example 
-            spanish="American: 'I just finished my homework'"
-            english="American: 'I just finished my homework'"
-            translation="American: 'Acabo de terminar mi tarea'"
+            english="American: \"I just finished my homework\""
           />
           <Example 
-            spanish="British: 'The team are playing well'"
-            english="British: 'The team are playing well'"
-            translation="British: 'El equipo está jugando bien'"
+            english="British: \"The team are playing well\""
           />
           <Example 
-            spanish="American: 'The team is playing well'"
-            english="American: 'The team is playing well'"
-            translation="American: 'El equipo está jugando bien'"
+            english="American: \"The team is playing well\""
           />
         </div>
 
         <Tip type="info">
-          <strong>Nota:</strong> Las diferencias gramaticales son sutiles y no afectan la comprensión general.                                           
+          <strong>Note:</strong> These contrasts are nuanced and rarely block basic mutual understanding.                                           
         </Tip>
       </TheorySection>
 
-      <TheorySection title="Estrategias para Entender Diferentes Variedades" icon="🎯">
+      <TheorySection title="Understanding Different Accents Strategically" icon="🎯">
         <p style={{ fontSize: '1rem', lineHeight: 1.6, color: '#4a5568', marginBottom: '1rem' }}>
-          Existen estrategias específicas para mejorar tu comprensión de diferentes variedades del inglés.
+          Dedicated habits speed up perceptual adaptation across Englishes.
         </p>
 
         <GrammarTable
-          caption="Estrategias de Comprensión"
-          headers={["Estrategia", "Descripción", "Cuándo Usar", "Beneficios"]}
+          caption="Listening Strategies"
+          headers={["Strategy", "Description", "When", "Upside"]}
           rows={[
-            ["Exposición Variada", "Escuchar diferentes acentos", "Estudio regular", "Familiaridad con variedades"],
-            ["Contexto", "Usar contexto para entender", "Palabras desconocidas", "Comprensión general"],
-            ["Preguntar", "Pedir aclaraciones", "Confusión específica", "Comprensión precisa"],
-            ["Práctica Activa", "Hablar con nativos de diferentes países", "Conversación", "Fluidez y comprensión"],
-            ["Recursos Específicos", "Usar materiales de diferentes variedades", "Estudio", "Conocimiento cultural"],
-            ["Paciencia", "No preocuparse por entender todo", "Siempre", "Reducción de ansiedad"]
+            ["Wide exposure", "Rotate countries and genres", "Ongoing routine", "Familiar vowels/consonants per region"],
+            ["Context leveraging", "Guess unknown items from context", "New vocabulary surfaces", "Global gist intact"],
+            ["Clarifying questions", "Recast or confirm politely", "You feel lost on one token", "Pinpoint comprehension"],
+            ["Active interaction", "Talk with nationals from varied places", "Face-to-face or online oral work", "Fluency + perception"],
+            ["Targeted media", "Curate playlists by variety", "Study blocks", "Cultural scaffolding"],
+            ["Patience stance", "Let partial understanding be enough first pass", "Always", "Cuts anxiety spikes"]
           ]}
         />
 
         <div style={{ display: 'grid', gap: '1rem' }}>
           <Example 
-            spanish="Exposición: 'Escuchar podcasts de diferentes países'"
-            english="Exposure: 'Listen to podcasts from different countries'"
-            translation="Exposición: 'Escuchar podcasts de diferentes países'"
+            english="Exposure: 'Listen to podcasts from several continents'"
           />
           <Example 
-            spanish="Contexto: 'Usar el contexto para entender palabras nuevas'"
-            english="Context: 'Use context to understand new words'"
-            translation="Contexto: 'Usar el contexto para entender palabras nuevas'"
+            english="Context: 'Use surrounding sentences to gloss novel words'"
           />
           <Example 
-            spanish="Práctica: 'Conversar con nativos de diferentes países'"
-            english="Practice: 'Converse with natives from different countries'"
-            translation="Práctica: 'Conversar con nativos de diferentes países'"
+            english="Practice: 'Speak with natives from contrasting regions'"
           />
         </div>
 
         <Rule 
-          title="Consejos Prácticos"
-          description="Para mejorar tu comprensión:"
+          title="Practical Listening Habits"
+          description="To raise comprehension reliably:"
           examples={[
-            "Escucha noticias de diferentes países",
-            "Ve películas y series de diferentes regiones",
-            "Practica con hablantes nativos de diferentes países",
-            "No te preocupes por entender cada palabra",
-            "Enfócate en el mensaje general"
+            "Sample news desks from varied countries",
+            "Watch film and television from differing regions",
+            "Schedule conversation partners dispersed geographically",
+            "Do not require per-word fidelity on first exposure",
+            "Keep your eye on the macro message first"
           ]}
         />
 
         <Tip type="success">
-          <strong>Consejo:</strong> La comprensión mejora con la exposición - cuanto más escuches, mejor entenderás.
+          <strong>Tip:</strong> Exposure volume correlates tightly with perceptual agility—prioritise hours in the earphones.
         </Tip>
       </TheorySection>
 
-      <TheorySection title="Errores Comunes" icon="⚠️">
+      <TheorySection title="Common Mistakes" icon="⚠️">
         <div style={{ display: 'grid', gap: '1rem' }}>
           <Tip type="error">
-            <strong>Error:</strong> Pensar que una variedad es mejor que otra ❌<br/>
-            <strong>Correcto:</strong> Todas las variedades son válidas ✅<br/>
-            <em>No hay una variedad 'correcta' - todas son legítimas</em>
+            <strong>Mistake:</strong> Ranking one dialect as objectively superior ❌<br/>
+            <strong>Better:</strong> Treat every established variety as legitimate ✅<br/>
+            <em>No single “authorised” worldwide standard</em>
           </Tip>
 
           <Tip type="error">
-            <strong>Error:</strong> Mezclar variedades inconsistentemente ❌<br/>
-            <strong>Correcto:</strong> Ser consistente con una variedad ✅<br/>
-            <em>Elige una variedad y sé consistente</em>
+            <strong>Mistake:</strong> Mixing contradictory conventions blindly ❌<br/>
+            <strong>Better:</strong> Harmonise spelling and lexis consciously ✅<br/>
+            <em>Pick rails and publish within them unless context demands code-switch</em>
           </Tip>
 
           <Tip type="error">
-            <strong>Error:</strong> Preocuparse por entender cada palabra ❌<br/>
-            <strong>Correcto:</strong> Enfocarse en el mensaje general ✅<br/>
-            <em>La comprensión general es más importante</em>
+            <strong>Mistake:</strong> Obsessing over every unknown token ❌<br/>
+            <strong>Better:</strong> Aim for gist before polish ✅<br/>
+            <em>Macro-understanding outweighs obsessive micro-tracking early on</em>
           </Tip>
 
           <Tip type="error">
-            <strong>Error:</strong> Evitar hablar con nativos de otras variedades ❌<br/>
-            <strong>Correcto:</strong> Practicar con diferentes variedades ✅<br/>
-            <em>La exposición mejora la comprensión</em>
+            <strong>Mistake:</strong> Avoiding unfamiliar accents entirely ❌<br/>
+            <strong>Better:</strong> Deliberately vary your auditory diet ✅<br/>
+            <em>Breadth pays compounding comprehension dividends</em>
           </Tip>
         </div>
       </TheorySection>
 
-      <TheorySection title="Reglas Importantes" icon="⚡">
+      <TheorySection title="Key Principles" icon="⚡">
         <div style={{ display: 'grid', gap: '1rem' }}>
           <Rule 
-            title="1. Todas las variedades son correctas"
-            description="No hay una variedad 'mejor' o 'correcta'."
+            title="1. Mutual legitimacy"
+            description="Neither British nor American (nor others) earns default supremacy."
             examples={[
-              "British English es tan válido como American English",
-              "Las variedades reflejan diferencias culturales",
-              "La elección depende del contexto y audiencia",
-              "Lo importante es la comunicación efectiva"
+              "British and American norms stand on equal footing",
+              "Regional Englishes encode cultural histories",
+              "Audience and setting steer your choice—politeness trumps pedigree",
+              "Communication success is the real metric"
             ]}
           />
 
           <Rule 
-            title="2. Consistencia es clave"
-            description="Sé consistente con la variedad que elijas."
+            title="2. Consistency earns clarity"
+            description="Maintain harmonised norms within any one deliverable unless genre forces switch."
             examples={[
-              "Elige una variedad y manténla",
-              "No mezcles características de diferentes variedades",
-              "Adapta según el contexto si es necesario",
-              "La consistencia mejora la claridad"
+              "Lock spelling + lex register per document style guide",
+              "Avoid random hybrid unless topic demands contrast",
+              "Adjust registers when relocating professionally",
+              "Predictable norms reduce reader friction"
             ]}
           />
 
           <Rule 
-            title="3. Exposición mejora comprensión"
-            description="Escucha diferentes variedades para mejorar tu comprensión."
+            title="3. Breadth strengthens ears"
+            description="Cycle through diverse accents to future-proof audition."
             examples={[
-              "Expón tu oído a diferentes acentos",
-              "Practica con hablantes de diferentes países",
-              "Usa recursos de diferentes variedades",
-              "No te preocupes por entender todo perfectamente"
+              "Expose ears beyond your favourite broadcaster",
+              "Shadow speakers from disparate locales",
+              "Blend textbook audio with grassroots YouTube",
+              "Relax about catching every consonant instantly"
             ]}
           />
         </div>
@@ -357,7 +321,7 @@ const EnglishVarietiesPage = () => {
   const exercises = [
     <MultipleChoiceExercise
       key="1"
-      question="En British English, ¿qué significa 'lift'?"
+      question="In British English, what does 'lift' mean?"
       options={[
         "Truck",
         "Elevator",
@@ -365,155 +329,155 @@ const EnglishVarietiesPage = () => {
         "Bus"
       ]}
       correctAnswer={1}
-      explanation="En British English, 'lift' significa 'elevator' (ascensor), mientras que en American English se usa directamente 'elevator'."
+      explanation="'Lift' parallels American 'elevator'—vertical transport inside buildings."
     />,
 
     <MultipleChoiceExercise
       key="2"
-      question="¿Cuál es la diferencia principal en pronunciación entre British y American English?"
+      question="Which contrast is MOST iconic between mainstream British and General American pronunciation?"
       options={[
-        "La pronunciación de la letra 'a'",
-        "La pronunciación de la letra 'r' al final de sílabas",
-        "La pronunciación de la letra 't'",
-        "La pronunciación de la letra 'h'"
+        "Treatment of unstressed vowel schwa",
+        "Realisation or suppression of syllable-final /r/",
+        "Aspiration strength of voiceless stops",
+        "Whether /h/ is dropped"
       ]}
       correctAnswer={1}
-      explanation="La diferencia principal es la pronunciación de 'r' al final de sílabas: British English no la pronuncia, American English sí."
+      explanation="Non-rhotic vs rotic environments form the quintessential classroom contrast."
     />,
 
     <TrueFalseExercise
       key="3"
       statements={[
         {
-          text: "American English es mejor que British English.",
+          text: "American English intrinsically outranks British English.",
           isTrue: false,
-          explanation: "Incorrecto. Todas las variedades del inglés son correctas y válidas. No hay una 'mejor' que otra."
+          explanation: "Incorrect. Established varieties coexist with equal legitimacy; register and audience—not geography—matter."
         },
         {
-          text: "Es importante ser consistente con la variedad de inglés que elijas.",
+          text: "Sticking deliberately to one variety across a text improves coherence.",
           isTrue: true,
-          explanation: "Correcto. La consistencia mejora la claridad y evita confusión. Mezclar variedades puede ser confuso."
+          explanation: "Correct. Predictable orthography/vocabulary lowers cognitive strain for readers."
         },
         {
-          text: "Las diferencias entre variedades solo afectan la pronunciación.",
+          text: "Differences only operate at the phoneme level.",
           isTrue: false,
-          explanation: "Incorrecto. Las diferencias incluyen pronunciación, vocabulario, ortografía y algunas diferencias gramaticales."
+          explanation: "Incorrect. Spelling, lexis, and light grammar distinctions all matter communally."
         },
         {
-          text: "Exponerse a diferentes variedades mejora la comprensión auditiva.",
+          text: "Rotating dialect exposure sharpens listening stamina.",
           isTrue: true,
-          explanation: "Correcto. La exposición a diferentes variedades familiariza tu oído con diferentes acentos y vocabulario."
+          explanation: "Correct. Diverse auditory diet familiarises vowel shifts and local coinages alike."
         }
       ]}
     />,
 
     <MultipleChoiceExercise
       key="4"
-      question="¿Cuál es la palabra americana para 'biscuit' en British English?"
+      question="Which American item matches British 'biscuit' when meaning a sweet baked snack?"
       options={[
         "cookie",
         "cracker",
-        "bread",
-        "cake"
+        "bread roll",
+        "layer cake"
       ]}
       correctAnswer={0}
-      explanation="'Cookie' es la palabra americana para 'biscuit' en British English. Ambas se refieren a galletas dulces."
+      explanation="American speakers usually say ‘cookie’ for the sweet biscuit sense of UK English."
     />,
 
     <MultipleChoiceExercise
       key="5"
-      question="¿Qué estrategia es más efectiva para entender diferentes variedades del inglés?"
+      question="Which tactic most reliably widens receptive accuracy across dialects?"
       options={[
-        "Evitar hablar con nativos de otras variedades",
-        "Exponerse a diferentes variedades regularmente",
-        "Solo escuchar una variedad específica",
-        "Memorizar todas las diferencias de vocabulario"
+        "Avoid non-native-accent media entirely",
+        "Schedule recurring listening from multiple countries",
+        "Restrict training to exactly one broadcaster",
+        "Memorise every lexical replacement table once"
       ]}
       correctAnswer={1}
-      explanation="Exponerse regularmente a diferentes variedades mejora la comprensión auditiva y familiariza tu oído con diferentes acentos y vocabulario."
+      explanation="Distributed exposure trains flexible decoding faster than monoculture cramming."
     />,
 
     <TrueFalseExercise
       key="6"
       statements={[
         {
-          text: "Australian English has unique vocabulary and expressions.",
+          text: "Australian English has unique vocabulary items and idioms.",
           isTrue: true,
-          explanation: "Correcto. El inglés australiano tiene vocabulario único como 'arvo' (afternoon), 'barbie' (barbecue), y 'mate' (friend)."
+          explanation: "Correct—think arvo, barbie, mateship culture, etc."
         },
         {
-          text: "All English varieties use the same spelling system.",
+          text: "All major Englishes share identical spelling rules.",
           isTrue: false,
-          explanation: "Incorrecto. British English usa 'colour', 'centre'; American English usa 'color', 'center'."
+          explanation: "Incorrect—witness colour/color, traveller/traveler, etc."
         },
         {
-          text: "Understanding different varieties improves global communication.",
+          text: "Global citizens benefit from receptive flexibility across dialects.",
           isTrue: true,
-          explanation: "Correcto. Conocer diferentes variedades del inglés mejora la comunicación con hablantes de todo el mundo."
+          explanation: "Correct—you reduce miscommunication friction across borders."
         }
       ]}
     />,
 
     <MultipleChoiceExercise
       key="7"
-      question="In American English, what do you call the 'boot' of a car?"
+      question="In American English, what is the compartment called that British speakers label the car 'boot'?"
       options={[
         "Hood",
         "Trunk",
         "Bonnet",
-        "Bumper"
+        "Fender"
       ]}
       correctAnswer={1}
-      explanation="En American English, el 'boot' (British) se llama 'trunk'. 'Hood' es el capó, 'bonnet' es British para capó."
+      explanation="'Trunk' = AmE cargo hatch; bonnet vs hood distinguishes forward panels."
     />,
 
     <MultipleChoiceExercise
       key="8"
-      question="¿Cuál es una característica del inglés canadiense?"
+      question="Which statement best captures Canadian English?"
       options={[
-        "Es idéntico al americano",
-        "Combina elementos británicos y americanos",
-        "Solo usa vocabulario francés",
-        "No tiene características propias"
+        "Pixel-identical clone of General American",
+        "Selective fusion of British and American strands",
+        "Primarily borrowing from metropolitan French phonology wholesale",
+        "Lacks distinguishing traits"
       ]}
       correctAnswer={1}
-      explanation="El inglés canadiense combina elementos británicos (spelling: 'colour') y americanos (pronunciation), con algunas características únicas."
+      explanation="CAN English layers British spelling instincts with broadly North American consonants plus local particles."
     />,
 
     <TrueFalseExercise
       key="9"
       statements={[
         {
-          text: "Indian English is considered a legitimate variety of English.",
+          text: "Indian English qualifies as an established institutionalised variety.",
           isTrue: true,
-          explanation: "Correcto. El inglés indio es una variedad legítima con sus propias características fonológicas, léxicas y gramaticales."
+          explanation: "Correct—with robust phonological, lexical, and grammatical conventions."
         },
         {
-          text: "You should avoid learning about different English accents.",
+          text: "You should avoid encountering unfamiliar English accents deliberately.",
           isTrue: false,
-          explanation: "Incorrecto. Exponerse a diferentes acentos mejora la comprensión auditiva y prepara para la comunicación internacional."
+          explanation: "Incorrect—strategic novelty accelerates perceptual widening."
         }
       ]}
     />,
 
     <MultipleChoiceExercise
       key="10"
-      question="Complete: In South African English, 'now now' means:"
+      question="Choose the best gloss: In many South African Englishes, informal 'now now' often means ____."
       options={[
-        "Right now",
-        "Very soon",
+        "Exactly this instant",
+        "Quite soon—but not instantaneous",
         "Never",
-        "Sometimes"
+        "Randomly intermittent"
       ]}
       correctAnswer={1}
-      explanation="En South African English, 'now now' significa 'very soon' (muy pronto), no 'right now' (ahora mismo)."
+      explanation="'Now now' typically signals imminent-but-not-clock-precise arrival—distinct from blunt 'now'."
     />
   ];
 
   return (
     <TheoryLayout
       title="English Varieties"
-      description="Comprende las diferentes variedades del inglés: British, American y otras. Aprende sobre diferencias en pronunciación, vocabulario y gramática, y estrategias para entenderlas."
+      description="Understand Englishes around the globe—British, American, and beyond—with pronunciation, lexis, grammar touchpoints, and listening strategies tailored to multilingual learners."
       level="B2-C1-C2"
       theoryContent={theoryContent}
       exercises={exercises}
@@ -524,4 +488,3 @@ const EnglishVarietiesPage = () => {
 };
 
 export default EnglishVarietiesPage;
-

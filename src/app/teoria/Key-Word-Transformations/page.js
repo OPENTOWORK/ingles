@@ -6,38 +6,38 @@ import { MultipleChoiceExercise, TrueFalseExercise } from '@/components/theory/E
 const KeyWordTransformationsPage = () => {
   const theoryContent = (
     <div>
-      <TheorySection title="¿Qué son Key Word Transformations?" icon="🔄">
+      <TheorySection title="What are Key Word Transformations?" icon="🔄">
         <p>
-          <strong>Key Word Transformations</strong> es la Parte 4 del Use of English en First Certificate (B2) y Advanced (C1). 
-          Debes completar 6 transformaciones usando una palabra clave dada, manteniendo el significado exacto. 
-          Puedes usar 2-5 palabras (B2) o 3-6 palabras (C1) incluyendo la palabra clave sin cambiarla.
+          <strong>Key Word Transformations</strong> is Part 4 of Use of English in First Certificate (B2) and Advanced (C1). 
+          You must complete six transformations using a given key word, keeping the meaning exactly the same. 
+          You may use 2–5 words (B2) or 3–6 words (C1) including the key word, which you must not change.
         </p>
         
         <Example 
-          title="Ejemplo de Key Word Transformation"
+          title="Key Word Transformation example"
           content="1. 'I haven't seen him for ages.' KEY WORD: since
           2. 'It's ages _____ him.' 
-          Respuesta: 'It's ages since I saw him.'"
-          explanation="Transformas la estructura manteniendo el significado, usando la palabra clave 'since'."
+          Answer: 'It's ages since I saw him.'"
+          explanation="You change the structure while keeping the meaning, using the key word 'since'."
         />
       </TheorySection>
 
-      <TheorySection title="Tipos Comunes de Transformaciones" icon="🎯">
+      <TheorySection title="Common transformation types" icon="🎯">
         <div style={{ display: 'grid', gap: '1rem' }}>
           <Tip 
-            title="1. Cambios de tiempo verbal"
-            description="Transformar entre diferentes tiempos verbales."
+            title="1. Tense changes"
+            description="Switch between different verb tenses."
             examples={[
-              "Present Perfect → Past Simple con 'ago'",
-              "Past Simple → Present Perfect con 'since/for'",
-              "Future → Present con 'about to'",
-              "Conditional → Past con 'wish'"
+              "Present Perfect → Past Simple with 'ago'",
+              "Past Simple → Present Perfect with 'since/for'",
+              "Future → Present with 'about to'",
+              "Conditional → Past with 'wish'"
             ]}
           />
 
           <Tip 
-            title="2. Voz activa/pasiva"
-            description="Cambiar entre voz activa y pasiva."
+            title="2. Active and passive voice"
+            description="Change between active and passive."
             examples={[
               "They built the house → The house was built",
               "Someone stole my bike → My bike was stolen",
@@ -47,8 +47,8 @@ const KeyWordTransformationsPage = () => {
           />
 
           <Tip 
-            title="3. Estructuras con verbos modales"
-            description="Transformaciones con can, could, must, should, etc."
+            title="3. Structures with modal verbs"
+            description="Transformations with can, could, must, should, etc."
             examples={[
               "It's possible → might/could/may",
               "It's necessary → must/have to",
@@ -59,11 +59,11 @@ const KeyWordTransformationsPage = () => {
         </div>
       </TheorySection>
 
-      <TheorySection title="Patrones Frecuentes" icon="🔍">
+      <TheorySection title="Frequent patterns" icon="🔍">
         <div style={{ display: 'grid', gap: '1rem' }}>
           <Rule 
-            title="1. Expresiones con 'make' y 'let'"
-            description="Transformaciones con causativos."
+            title="1. Expressions with 'make' and 'let'"
+            description="Transformations with causative structures."
             examples={[
               "He forced me to go → made me go",
               "She allowed me to leave → let me leave",
@@ -73,8 +73,8 @@ const KeyWordTransformationsPage = () => {
           />
 
           <Rule 
-            title="2. Condicionales y 'wish'"
-            description="Estructuras hipotéticas y deseos."
+            title="2. Conditionals and 'wish'"
+            description="Hypothetical structures and wishes."
             examples={[
               "I regret not studying → wish I had studied",
               "It's a pity you can't come → wish you could come",
@@ -84,8 +84,8 @@ const KeyWordTransformationsPage = () => {
           />
 
           <Rule 
-            title="3. Comparaciones y superlativos"
-            description="Diferentes formas de expresar comparaciones."
+            title="3. Comparisons and superlatives"
+            description="Different ways to express comparisons."
             examples={[
               "No one is taller → the tallest person",
               "Nothing is more important → the most important thing",
@@ -96,48 +96,48 @@ const KeyWordTransformationsPage = () => {
         </div>
       </TheorySection>
 
-      <TheorySection title="Estrategias de Resolución" icon="⚡">
+      <TheorySection title="Problem-solving strategies" icon="⚡">
         <div style={{ display: 'grid', gap: '1rem' }}>
           <Rule 
-            title="1. Analiza el significado"
-            description="Entiende exactamente qué significa la primera oración."
+            title="1. Analyse the meaning"
+            description="Understand exactly what the first sentence means."
             examples={[
-              "Identifica el sujeto y el objeto",
-              "Reconoce el tiempo verbal",
-              "Nota el registro (formal/informal)",
-              "Observa negaciones o énfasis"
+              "Identify subject and object",
+              "Recognise the tense",
+              "Note register (formal/informal)",
+              "Watch for negation or emphasis"
             ]}
           />
 
           <Rule 
-            title="2. Identifica la transformación necesaria"
-            description="Determina qué tipo de cambio estructural necesitas."
+            title="2. Identify the transformation needed"
+            description="Decide what kind of structural change you need."
             examples={[
-              "¿Cambio de tiempo verbal?",
-              "¿Activa a pasiva o viceversa?",
-              "¿Diferente estructura gramatical?",
-              "¿Expresión idiomática equivalente?"
+              "Tense shift?",
+              "Active to passive or the reverse?",
+              "A different grammatical pattern?",
+              "An equivalent idiomatic expression?"
             ]}
           />
 
           <Rule 
-            title="3. Construye alrededor de la palabra clave"
-            description="Usa la palabra clave como centro de tu respuesta."
+            title="3. Build around the key word"
+            description="Use the key word as the centre of your answer."
             examples={[
-              "¿Qué estructura requiere esta palabra?",
-              "¿Qué preposiciones van con ella?",
-              "¿Qué tiempo verbal necesita?",
-              "¿Cómo encaja en el contexto?"
+              "What pattern does this word require?",
+              "Which prepositions go with it?",
+              "Which tense does it need?",
+              "How does it fit the gap?"
             ]}
           />
         </div>
       </TheorySection>
 
-      <TheorySection title="Patrones frecuentes en el examen" icon="📋">
+      <TheorySection title="Frequent exam patterns" icon="📋">
         <div style={{ display: 'grid', gap: '1rem' }}>
           <Rule 
-            title="Transformaciones más comunes (B2/C1)"
-            description="Estructuras que aparecen regularmente en los exámenes."
+            title="Most common transformations (B2/C1)"
+            description="Structures that appear regularly in exams."
             examples={[
               "Wish + past perfect: 'I regret...' → 'I wish I had...'",
               "So/such + that: 'very tired' → 'so tired that'",
@@ -147,24 +147,24 @@ const KeyWordTransformationsPage = () => {
           />
 
           <Rule 
-            title="Palabras clave frecuentes"
-            description="Palabras que aparecen a menudo como key words."
+            title="Frequent key words"
+            description="Words that often appear as key words."
             examples={[
-              "WISH (arrepentimiento, situaciones hipotéticas)",
-              "RATHER (preferencias: would rather, rather than)",
+              "WISH (regret, hypothetical situations)",
+              "RATHER (preferences: would rather, rather than)",
               "POINT (there's no point, what's the point)",
               "SOONER (no sooner, would sooner)"
             ]}
           />
 
           <Rule 
-            title="Gestión del tiempo (15-20 minutos)"
-            description="Estrategia de tiempo para esta sección."
+            title="Time management (15–20 minutes)"
+            description="Timing strategy for this section."
             examples={[
-              "2-3 minutos por transformación máximo",
-              "Si no sabes una, pasa a la siguiente",
-              "Deja 3-4 minutos para revisar al final",
-              "Escribe algo aunque no estés seguro"
+              "Spend at most 2–3 minutes per transformation",
+              "If you are stuck, move on",
+              "Leave 3–4 minutes for a final check",
+              "Write something even if you are not sure"
             ]}
           />
         </div>
@@ -175,15 +175,15 @@ const KeyWordTransformationsPage = () => {
   const exercises = [
     <MultipleChoiceExercise
       key="1"
-      question="En Key Word Transformations, ¿cuántas palabras debes usar generalmente?"
+      question="In Key Word Transformations, how many words should you generally use?"
       options={[
-        "Exactamente 3 palabras",
-        "Entre 2-5 palabras incluyendo la palabra clave",
-        "Tantas como necesites",
-        "Solo la palabra clave"
+        "Exactly 3 words",
+        "Between 2–5 words including the key word",
+        "As many as you need",
+        "Only the key word"
       ]}
       correctAnswer={1}
-      explanation="Debes usar entre 2-5 palabras incluyendo la palabra clave dada, manteniendo el mismo significado."
+      explanation="You must use between 2–5 words including the given key word, keeping the same meaning."
     />,
 
     <MultipleChoiceExercise
@@ -196,26 +196,26 @@ const KeyWordTransformationsPage = () => {
         "since going"
       ]}
       correctAnswer={0}
-      explanation="'Since' requiere un punto específico en el tiempo, por lo que necesitas Past Simple: 'since I went'."
+      explanation="'Since' needs a specific point in time, so you need Past Simple: 'since I went'."
     />,
 
     <TrueFalseExercise
       key="3"
       statements={[
         {
-          text: "En Key Word Transformations debes mantener exactamente el mismo significado.",
+          text: "In Key Word Transformations you must keep exactly the same meaning.",
           isTrue: true,
-          explanation: "Correcto. La segunda oración debe tener exactamente el mismo significado que la primera."
+          explanation: "Correct. The second sentence must mean exactly the same as the first."
         },
         {
-          text: "Puedes cambiar la palabra clave dada.",
+          text: "You may change the given key word.",
           isTrue: false,
-          explanation: "Incorrecto. Debes usar la palabra clave exactamente como se da, sin cambiarla."
+          explanation: "Incorrect. You must use the key word exactly as given, without changing it."
         },
         {
-          text: "Las contracciones cuentan como una palabra.",
+          text: "Contractions count as one word.",
           isTrue: true,
-          explanation: "Correcto. Contracciones como 'don't', 'I'll', 'we've' cuentan como una sola palabra."
+          explanation: "Correct. Contractions such as 'don't', 'I'll', 'we've' count as a single word."
         }
       ]}
     />,
@@ -230,7 +230,7 @@ const KeyWordTransformationsPage = () => {
         "was forcing to"
       ]}
       correctAnswer={0}
-      explanation="'Force' en voz pasiva requiere 'was forced to + infinitive': 'I was forced to wait'."
+      explanation="Passive 'force' needs 'was forced to + infinitive': 'I was forced to wait'."
     />,
 
     <MultipleChoiceExercise
@@ -243,26 +243,26 @@ const KeyWordTransformationsPage = () => {
         "might have"
       ]}
       correctAnswer={2}
-      explanation="'Might' expresa posibilidad y va seguido directamente del verbo base: 'It might rain'."
+      explanation="'Might' expresses possibility and is followed directly by the base verb: 'It might rain'."
     />,
 
     <TrueFalseExercise
       key="6"
       statements={[
         {
-          text: "Siempre debes usar exactamente 5 palabras en tu respuesta.",
+          text: "You must always use exactly five words in your answer.",
           isTrue: false,
-          explanation: "Incorrecto. Puedes usar entre 2-5 palabras, no necesariamente 5 exactas."
+          explanation: "Incorrect. You may use between 2–5 words; it does not have to be exactly five."
         },
         {
-          text: "La palabra clave siempre va al principio de tu respuesta.",
+          text: "The key word must always come at the start of your answer.",
           isTrue: false,
-          explanation: "Incorrecto. La palabra clave puede ir en cualquier posición dentro de tu respuesta."
+          explanation: "Incorrect. The key word can appear anywhere in your answer."
         },
         {
-          text: "Debes considerar el tiempo verbal de la oración original.",
+          text: "You should consider the tense of the original sentence.",
           isTrue: true,
-          explanation: "Correcto. El tiempo verbal puede cambiar en la transformación, pero debes mantener el significado temporal."
+          explanation: "Correct. The tense may change in the transformation, but the time meaning must stay the same."
         }
       ]}
     />,
@@ -277,7 +277,7 @@ const KeyWordTransformationsPage = () => {
         "wish to have"
       ]}
       correctAnswer={1}
-      explanation="Para expresar arrepentimiento sobre el pasado usamos 'wish + past perfect': 'I wish I had studied'."
+      explanation="To express regret about the past we use 'wish + past perfect': 'I wish I had studied'."
     />,
 
     <MultipleChoiceExercise
@@ -290,21 +290,21 @@ const KeyWordTransformationsPage = () => {
         "is the taller"
       ]}
       correctAnswer={0}
-      explanation="Para superlativo necesitas el artículo 'the': 'John is the tallest in the class'."
+      explanation="For a superlative you need the article 'the': 'John is the tallest in the class'."
     />,
 
     <TrueFalseExercise
       key="9"
       statements={[
         {
-          text: "Puedes cambiar el sujeto de la oración en las transformaciones.",
+          text: "You may change the subject of the sentence in transformations.",
           isTrue: true,
-          explanation: "Correcto. A menudo cambias de voz activa a pasiva, lo que cambia el sujeto de la oración."
+          explanation: "Correct. You often switch from active to passive, which changes the grammatical subject."
         },
         {
-          text: "Las transformaciones siempre mantienen la misma estructura gramatical.",
+          text: "Transformations always keep the same grammatical structure.",
           isTrue: false,
-          explanation: "Incorrecto. Las transformaciones frecuentemente cambian la estructura gramatical manteniendo el significado."
+          explanation: "Incorrect. Transformations often change structure while keeping the meaning."
         }
       ]}
     />,
@@ -319,14 +319,14 @@ const KeyWordTransformationsPage = () => {
         "wasn't allowing to go"
       ]}
       correctAnswer={0}
-      explanation="'Allow' en voz pasiva requiere 'wasn't allowed to + infinitive': 'I wasn't allowed to go'."
+      explanation="Passive 'allow' needs 'wasn't allowed to + infinitive': 'I wasn't allowed to go'."
     />
   ];
 
   return (
     <TheoryLayout
       title="Key Word Transformations"
-      description="Domina las transformaciones de palabras clave. Aprende a cambiar estructuras gramaticales manteniendo el significado usando palabras clave específicas."
+      description="Master key word transformations. Learn to rewrite grammatical structures while keeping the same meaning, using specific key words."
       level="B2-C1-C2"
       theoryContent={theoryContent}
       exercises={exercises}

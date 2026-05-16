@@ -6,128 +6,128 @@ import { MultipleChoiceExercise, TrueFalseExercise } from '@/components/theory/E
 const MultipleChoiceQuestionsPage = () => {
   const theoryContent = (
     <div>
-      <TheorySection title="¿Qué son Multiple Choice Questions?" icon="✅">
+      <TheorySection title="What are Multiple Choice Questions?" icon="✅">
         <p>
-          <strong>Multiple Choice Questions</strong> son preguntas con varias opciones de respuesta donde debes elegir 
-          la correcta. En exámenes de inglés, evalúan comprensión lectora, gramática, vocabulario y uso del idioma 
-          a través de textos seguidos de preguntas con 3-4 opciones.
+          <strong>Multiple Choice Questions</strong> are questions with several answer options where you must choose 
+          the correct one. In English exams they assess reading comprehension, grammar, vocabulary, and language use 
+          through texts followed by questions with 3–4 options.
         </p>
         
         <Example 
-          title="Ejemplo de Multiple Choice Question"
-          content="Texto: 'The company's profits increased dramatically last year due to innovative marketing strategies.'
-          Pregunta: What was the main reason for the company's success?
+          title="Multiple choice example"
+          content="Text: 'The company's profits increased dramatically last year due to innovative marketing strategies.'
+          Question: What was the main reason for the company's success?
           A) Better employees  B) Innovative marketing  C) Lower prices  D) New location"
-          explanation="Debes identificar la información específica del texto que responde directamente a la pregunta."
+          explanation="You must identify the specific information in the text that directly answers the question."
         />
       </TheorySection>
 
-      <TheorySection title="Tipos de Preguntas" icon="🎯">
+      <TheorySection title="Types of questions" icon="🎯">
         <div style={{ display: 'grid', gap: '1rem' }}>
           <Tip 
-            title="1. Información específica"
-            description="Preguntas sobre detalles concretos mencionados en el texto."
+            title="1. Specific information"
+            description="Questions about concrete details mentioned in the text."
             examples={[
-              "¿Cuándo ocurrió el evento?",
-              "¿Quién hizo qué acción?",
-              "¿Dónde tuvo lugar la situación?",
-              "¿Qué cantidad o número se menciona?"
+              "When did the event happen?",
+              "Who did what?",
+              "Where did the situation take place?",
+              "What quantity or number is mentioned?"
             ]}
           />
 
           <Tip 
-            title="2. Idea principal"
-            description="Preguntas sobre el tema central o propósito del texto."
+            title="2. Main idea"
+            description="Questions about the central topic or purpose of the text."
             examples={[
-              "¿Cuál es el tema principal del párrafo?",
-              "¿Cuál es el propósito del autor?",
-              "¿Qué resume mejor el texto?",
-              "¿Cuál es el mensaje central?"
+              "What is the main topic of the paragraph?",
+              "What is the author's purpose?",
+              "Which option best summarises the text?",
+              "What is the central message?"
             ]}
           />
 
           <Tip 
-            title="3. Inferencia y actitud"
-            description="Preguntas sobre información implícita y opiniones del autor."
+            title="3. Inference and attitude"
+            description="Questions about implied information and the author's views."
             examples={[
-              "¿Qué se puede inferir sobre...?",
-              "¿Cuál es la actitud del autor hacia...?",
-              "¿Qué sugiere el texto sobre...?",
-              "¿Cómo se siente el personaje?"
+              "What can be inferred about...?",
+              "What is the author's attitude towards...?",
+              "What does the text suggest about...?",
+              "How does the character feel?"
             ]}
           />
         </div>
       </TheorySection>
 
-      <TheorySection title="Estrategias de Resolución" icon="🔍">
+      <TheorySection title="Answering strategies" icon="🔍">
         <div style={{ display: 'grid', gap: '1rem' }}>
           <Rule 
-            title="1. Lee la pregunta primero"
-            description="Antes de leer el texto, lee la pregunta para saber qué buscar."
+            title="1. Read the question first"
+            description="Before reading the text, read the question so you know what to look for."
             examples={[
-              "Identifica palabras clave en la pregunta",
-              "Determina qué tipo de información necesitas",
-              "Predice dónde podría estar la respuesta",
-              "Nota si busca información específica o general"
+              "Identify keywords in the question",
+              "Decide what kind of information you need",
+              "Predict where the answer might be",
+              "Note whether it asks for specific or general information"
             ]}
           />
 
           <Rule 
-            title="2. Elimina opciones incorrectas"
-            description="Usa el proceso de eliminación para reducir opciones."
+            title="2. Eliminate wrong options"
+            description="Use elimination to narrow down choices."
             examples={[
-              "Descarta opciones que contradicen el texto",
-              "Elimina opciones demasiado extremas",
-              "Quita opciones que no se mencionan",
-              "Evita opciones que son parcialmente correctas"
+              "Reject options that contradict the text",
+              "Remove options that are too extreme",
+              "Drop options that are not mentioned",
+              "Avoid options that are only partly right"
             ]}
           />
 
           <Rule 
-            title="3. Busca evidencia textual"
-            description="La respuesta correcta debe estar apoyada por el texto."
+            title="3. Find textual evidence"
+            description="The correct answer should be supported by the text."
             examples={[
-              "Encuentra la parte específica que apoya tu respuesta",
-              "Verifica que la opción refleje exactamente lo que dice el texto",
-              "Cuidado con sinónimos y paráfrasis",
-              "No uses conocimiento externo, solo el texto"
+              "Find the exact place that supports your answer",
+              "Check that the option matches what the text says",
+              "Watch for synonyms and paraphrase",
+              "Do not use outside knowledge—only the text"
             ]}
           />
         </div>
       </TheorySection>
 
-      <TheorySection title="Trampas Comunes" icon="⚠️">
+      <TheorySection title="Common traps" icon="⚠️">
         <div style={{ display: 'grid', gap: '1rem' }}>
           <Rule 
-            title="1. Distractores obvios"
-            description="Opciones diseñadas para confundir con información parcial."
+            title="1. Obvious distractors"
+            description="Options designed to confuse you with partial information."
             examples={[
-              "Opciones que usan palabras del texto pero en contexto incorrecto",
-              "Información verdadera pero que no responde la pregunta",
-              "Detalles mencionados pero no relevantes para la pregunta",
-              "Generalizaciones excesivas de información específica"
+              "Options that reuse words from the text in the wrong context",
+              "Information that is true but does not answer the question",
+              "Details that appear but are not relevant to the question",
+              "Overgeneralisations from specific information"
             ]}
           />
 
           <Rule 
-            title="2. Información no mencionada"
-            description="Opciones que parecen lógicas pero no están en el texto."
+            title="2. Information not stated"
+            description="Options that sound logical but are not in the text."
             examples={[
-              "Suposiciones basadas en conocimiento general",
-              "Conclusiones lógicas pero no declaradas",
-              "Información que 'debería' estar pero no está",
-              "Extrapolaciones más allá de lo que dice el texto"
+              "Assumptions from general knowledge",
+              "Logical conclusions that are never stated",
+              "Information that 'should' be there but is not",
+              "Inferences that go beyond the text"
             ]}
           />
 
           <Rule 
-            title="3. Opciones extremas"
-            description="Respuestas con palabras absolutas que raramente son correctas."
+            title="3. Extreme options"
+            description="Answers with absolute wording that are rarely correct."
             examples={[
-              "Palabras como 'always', 'never', 'all', 'none'",
-              "Superlativos extremos sin justificación",
-              "Afirmaciones categóricas sin matices",
-              "Generalizaciones absolutas"
+              "Words like 'always', 'never', 'all', 'none'",
+              "Extreme superlatives without support",
+              "Categorical claims with no nuance",
+              "Absolute generalisations"
             ]}
           />
         </div>
@@ -138,158 +138,158 @@ const MultipleChoiceQuestionsPage = () => {
   const exercises = [
     <MultipleChoiceExercise
       key="1"
-      question="¿Cuál es la mejor estrategia para abordar Multiple Choice Questions?"
+      question="What is the best way to approach multiple choice reading questions?"
       options={[
-        "Leer todas las opciones antes que el texto",
-        "Leer la pregunta primero, luego el texto buscando la respuesta",
-        "Leer el texto completo sin mirar las preguntas",
-        "Elegir la opción más larga"
+        "Read all the options before the text",
+        "Read the question first, then the text looking for the answer",
+        "Read the whole text without looking at the questions",
+        "Choose the longest option"
       ]}
       correctAnswer={1}
-      explanation="Es mejor leer la pregunta primero para saber qué información específica buscar en el texto."
+      explanation="Reading the question first tells you what specific information to look for in the text."
     />,
 
     <MultipleChoiceExercise
       key="2"
-      question="¿Qué debes hacer cuando no estás seguro entre dos opciones?"
+      question="What should you do when you are unsure between two options?"
       options={[
-        "Elegir al azar",
-        "Elegir la primera que viste",
-        "Buscar evidencia específica en el texto para cada opción",
-        "Elegir la más corta"
+        "Guess at random",
+        "Pick the first one you saw",
+        "Look for specific evidence in the text for each option",
+        "Pick the shortest one"
       ]}
       correctAnswer={2}
-      explanation="Debes buscar evidencia textual específica que apoye cada opción y elegir la que tenga mejor respaldo."
+      explanation="Search for textual evidence supporting each option and choose the one with the strongest support."
     />,
 
     <TrueFalseExercise
       key="3"
       statements={[
         {
-          text: "Las opciones con palabras como 'always' o 'never' suelen ser incorrectas.",
+          text: "Options with words like 'always' or 'never' are often incorrect.",
           isTrue: true,
-          explanation: "Correcto. Las opciones con términos absolutos raramente son correctas porque la realidad suele tener matices."
+          explanation: "Correct. Absolute wording is often wrong because reality usually allows exceptions."
         },
         {
-          text: "Puedes usar tu conocimiento general para responder aunque no esté en el texto.",
+          text: "You can use general knowledge even if it is not in the text.",
           isTrue: false,
-          explanation: "Incorrecto. Solo debes usar la información proporcionada en el texto, no conocimiento externo."
+          explanation: "Incorrect. You should use only the information given in the text, not outside knowledge."
         },
         {
-          text: "El proceso de eliminación es una estrategia útil en multiple choice.",
+          text: "Elimination is a useful strategy in multiple choice.",
           isTrue: true,
-          explanation: "Correcto. Eliminar opciones claramente incorrectas aumenta tus posibilidades de elegir la respuesta correcta."
+          explanation: "Correct. Ruling out clearly wrong options improves your chance of picking the right answer."
         }
       ]}
     />,
 
     <MultipleChoiceExercise
       key="4"
-      question="¿Qué tipo de pregunta es esta? 'What can be inferred about the author's opinion?'"
+      question="What type of question is this? 'What can be inferred about the author's opinion?'"
       options={[
-        "Información específica",
-        "Idea principal",
-        "Inferencia y actitud",
-        "Vocabulario en contexto"
+        "Specific information",
+        "Main idea",
+        "Inference and attitude",
+        "Vocabulary in context"
       ]}
       correctAnswer={2}
-      explanation="Es una pregunta de inferencia y actitud porque pide que deduzcas la opinión del autor basándote en pistas implícitas."
+      explanation="It asks about inference and attitude because you must infer the author's opinion from implicit clues."
     />,
 
     <MultipleChoiceExercise
       key="5"
-      question="¿Cuál es una trampa común en las opciones incorrectas?"
+      question="Which is a common trap in wrong options?"
       options={[
-        "Usar sinónimos del texto",
-        "Ser demasiado específicas",
-        "Usar palabras del texto en contexto incorrecto",
-        "Ser muy cortas"
+        "Using synonyms from the text",
+        "Being too specific",
+        "Using words from the text in the wrong context",
+        "Being very short"
       ]}
       correctAnswer={2}
-      explanation="Una trampa común es usar palabras que aparecen en el texto pero en un contexto diferente al de la pregunta."
+      explanation="A common trap is recycling words from the text in a context different from what the question asks."
     />,
 
     <TrueFalseExercise
       key="6"
       statements={[
         {
-          text: "Debes leer todo el texto antes de mirar cualquier pregunta.",
+          text: "You must read the whole text before looking at any question.",
           isTrue: false,
-          explanation: "Incorrecto. Es más eficiente leer las preguntas primero para saber qué información buscar."
+          explanation: "Incorrect. It is usually more efficient to read the questions first so you know what to find."
         },
         {
-          text: "La respuesta correcta siempre debe tener apoyo directo en el texto.",
+          text: "The correct answer should always have direct support in the text.",
           isTrue: true,
-          explanation: "Correcto. Cada respuesta debe estar respaldada por evidencia específica encontrada en el texto."
+          explanation: "Correct. Each answer should be backed by specific evidence from the text."
         },
         {
-          text: "Las opciones más largas suelen ser las correctas.",
+          text: "Longer options are usually correct.",
           isTrue: false,
-          explanation: "Incorrecto. La longitud de la opción no indica si es correcta; debes basarte en el contenido y la evidencia textual."
+          explanation: "Incorrect. Length does not show correctness; base your choice on content and evidence."
         }
       ]}
     />,
 
     <MultipleChoiceExercise
       key="7"
-      question="¿Qué debes hacer si una opción es parcialmente correcta pero no responde completamente la pregunta?"
+      question="What should you do if an option is partly true but does not fully answer the question?"
       options={[
-        "Elegirla porque tiene algo correcto",
-        "Descartarla y buscar una respuesta más completa",
-        "Combinarla mentalmente con otra opción",
-        "Preguntar al examinador"
+        "Choose it because something in it is right",
+        "Reject it and look for a more complete answer",
+        "Mentally merge it with another option",
+        "Ask the examiner"
       ]}
       correctAnswer={1}
-      explanation="Debes descartarla. La respuesta correcta debe responder completamente la pregunta, no solo parcialmente."
+      explanation="Reject it. The correct answer must fully answer the question, not only partly."
     />,
 
     <MultipleChoiceExercise
       key="8"
-      question="¿Cuándo es apropiado usar inferencia en multiple choice questions?"
+      question="When is it appropriate to use inference in multiple choice questions?"
       options={[
-        "Nunca, solo información explícita",
-        "Solo cuando la pregunta específicamente pide inferir algo",
-        "Siempre que no encuentres respuesta directa",
-        "Cuando todas las opciones parecen incorrectas"
+        "Never—only explicit information",
+        "Only when the question explicitly asks you to infer",
+        "Whenever you cannot find a direct answer",
+        "When every option looks wrong"
       ]}
       correctAnswer={1}
-      explanation="Solo debes inferir cuando la pregunta específicamente lo pide (ej: 'What can be inferred...', 'The author suggests...')."
+      explanation="Infer only when the question clearly asks for it (e.g. 'What can be inferred…', 'The author suggests…')."
     />,
 
     <TrueFalseExercise
       key="9"
       statements={[
         {
-          text: "Si dos opciones parecen correctas, probablemente una es una trampa.",
+          text: "If two options seem correct, one is probably a distractor.",
           isTrue: true,
-          explanation: "Correcto. Los examinadores diseñan distractores que parecen correctos pero tienen diferencias sutiles con la respuesta real."
+          explanation: "Correct. Examiners often include distractors that look right but differ subtly from the best answer."
         },
         {
-          text: "Debes cambiar tu primera respuesta si tienes dudas.",
+          text: "You should change your first answer whenever you feel unsure.",
           isTrue: false,
-          explanation: "Incorrecto. Generalmente tu primera impresión es correcta, solo cambia si encuentras evidencia clara de error."
+          explanation: "Incorrect. Your first choice is often right; change it only if you find clear evidence you were wrong."
         }
       ]}
     />,
 
     <MultipleChoiceExercise
       key="10"
-      question="¿Cuál es la clave del éxito en Multiple Choice Questions?"
+      question="What is the key to success in multiple choice questions?"
       options={[
-        "Memorizar muchas palabras de vocabulario",
-        "Leer muy rápidamente",
-        "Encontrar evidencia textual específica para cada respuesta",
-        "Confiar en la intuición"
+        "Memorise lots of vocabulary",
+        "Read very fast",
+        "Find specific textual evidence for each answer",
+        "Rely on intuition"
       ]}
       correctAnswer={2}
-      explanation="La clave es encontrar evidencia textual específica que apoye tu respuesta y verificar que responde exactamente lo que pregunta."
+      explanation="The key is to find specific textual evidence and check that it answers exactly what is asked."
     />
   ];
 
   return (
     <TheoryLayout
       title="Multiple Choice Questions"
-      description="Domina las preguntas de opción múltiple. Aprende estrategias para identificar respuestas correctas, evitar trampas comunes y usar evidencia textual efectivamente."
+      description="Master multiple choice questions. Learn how to pick correct answers, avoid common traps, and use textual evidence effectively."
       level="B2-C1-C2"
       theoryContent={theoryContent}
       exercises={exercises}

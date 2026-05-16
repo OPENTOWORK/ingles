@@ -6,125 +6,125 @@ import { MultipleChoiceExercise, TrueFalseExercise } from '@/components/theory/E
 const GappedTextPage = () => {
   const theoryContent = (
     <div>
-      <TheorySection title="¿Qué es Gapped Text?" icon="🧩">
+      <TheorySection title="What is Gapped Text?" icon="🧩">
         <p>
-          <strong>Gapped Text</strong> es un ejercicio donde se han eliminado párrafos o oraciones de un texto, 
-          y debes elegir de una lista cuáles encajan en cada espacio. Debes entender la coherencia y cohesión del texto.
+          <strong>Gapped Text</strong> is a task where paragraphs or sentences have been removed from a text 
+          and you must choose from a list which ones fit each gap. You need to understand cohesion and coherence.
         </p>
         
         <Example 
-          title="Ejemplo de Gapped Text"
-          content="Tienes un artículo sobre cambio climático con 6 espacios vacíos y 8 párrafos opcionales (A-H). Debes decidir qué párrafo va en cada espacio basándote en el flujo lógico y las conexiones textuales."
-          explanation="Debes analizar el contenido antes y después de cada espacio para encontrar la opción que mejor conecte las ideas."
+          title="Gapped Text example"
+          content="You have an article on climate change with 6 gaps and 8 optional paragraphs (A–H). You decide which paragraph goes in each gap based on logical flow and textual links."
+          explanation="Analyse the content before and after each gap to find the option that best connects the ideas."
         />
       </TheorySection>
 
-      <TheorySection title="Estrategias Principales" icon="🎯">
+      <TheorySection title="Main strategies" icon="🎯">
         <div style={{ display: 'grid', gap: '1rem' }}>
           <Tip 
-            title="1. Lee el texto completo primero"
-            description="Entiende el tema general y la estructura antes de llenar espacios."
+            title="1. Read the whole text first"
+            description="Grasp the topic and structure before filling gaps."
             examples={[
-              "Identifica el tema principal del texto",
-              "Reconoce el tipo de texto (artículo, ensayo, historia)",
-              "Nota el tono y estilo del autor",
-              "Observa la progresión lógica de ideas"
+              "Identify the main theme",
+              "Recognise the text type (article, essay, story)",
+              "Note the author's tone and style",
+              "Observe the logical progression of ideas"
             ]}
           />
 
           <Tip 
-            title="2. Analiza el contexto de cada espacio"
-            description="Examina cuidadosamente lo que viene antes y después."
+            title="2. Analyse the context of each gap"
+            description="Look carefully at what comes before and after."
             examples={[
-              "¿Qué idea se desarrolla antes del espacio?",
-              "¿Cómo continúa la idea después del espacio?",
-              "¿Hay palabras que necesitan referencia?",
-              "¿Qué tipo de información falta lógicamente?"
+              "Which idea is developed before the gap?",
+              "How does the idea continue after the gap?",
+              "Are there words that need a clear referent?",
+              "What kind of information is logically missing?"
             ]}
           />
 
           <Tip 
-            title="3. Busca pistas de cohesión"
-            description="Identifica conectores, referencias y vínculos textuales."
+            title="3. Look for cohesion clues"
+            description="Spot connectors, references, and textual links."
             examples={[
-              "Pronombres que necesitan antecedentes",
-              "Conectores que indican relación (however, therefore)",
-              "Repetición de palabras clave",
-              "Referencias temporales (then, later, previously)"
+              "Pronouns that need antecedents",
+              "Connectors that show relations (however, therefore)",
+              "Repetition of key words",
+              "Time references (then, later, previously)"
             ]}
           />
         </div>
       </TheorySection>
 
-      <TheorySection title="Elementos de Cohesión" icon="🔗">
+      <TheorySection title="Cohesion devices" icon="🔗">
         <div style={{ display: 'grid', gap: '1rem' }}>
           <Rule 
-            title="1. Referencias pronominales"
-            description="Pronombres que se refieren a información anterior."
+            title="1. Pronoun reference"
+            description="Pronouns that point back to earlier information."
             examples={[
-              "This, that, these, those → ¿A qué se refieren?",
-              "It, they, he, she → ¿Quién o qué es el antecedente?",
-              "Such, one, ones → ¿Qué sustituyen?",
-              "The former, the latter → ¿Cuáles son las dos opciones?"
+              "This, that, these, those → what do they refer to?",
+              "It, they, he, she → who or what is the antecedent?",
+              "Such, one, ones → what do they replace?",
+              "The former, the latter → which two items?"
             ]}
           />
 
           <Rule 
-            title="2. Conectores lógicos"
-            description="Palabras que muestran relaciones entre ideas."
+            title="2. Logical connectors"
+            description="Words that show relations between ideas."
             examples={[
-              "Contraste: However, Nevertheless, On the other hand",
-              "Adición: Furthermore, Moreover, In addition",
-              "Resultado: Therefore, Consequently, As a result",
-              "Ejemplo: For instance, Such as, Namely"
+              "Contrast: However, Nevertheless, On the other hand",
+              "Addition: Furthermore, Moreover, In addition",
+              "Result: Therefore, Consequently, As a result",
+              "Example: For instance, Such as, Namely"
             ]}
           />
 
           <Rule 
-            title="3. Repetición lexical"
-            description="Repetición de palabras clave o sinónimos."
+            title="3. Lexical repetition"
+            description="Repetition of key words or synonyms."
             examples={[
-              "Repetición exacta de términos importantes",
-              "Sinónimos que mantienen el tema",
-              "Palabras del mismo campo semántico",
-              "Definiciones o explicaciones de términos"
+              "Exact repetition of important terms",
+              "Synonyms that keep the topic",
+              "Words from the same semantic field",
+              "Definitions or explanations of terms"
             ]}
           />
         </div>
       </TheorySection>
 
-      <TheorySection title="Reglas Importantes" icon="⚡">
+      <TheorySection title="Important rules" icon="⚡">
         <div style={{ display: 'grid', gap: '1rem' }}>
           <Rule 
-            title="1. Flujo lógico de ideas"
-            description="El párrafo debe encajar lógicamente en la progresión del texto."
+            title="1. Logical flow of ideas"
+            description="The paragraph must fit the progression of the text."
             examples={[
-              "¿Sigue la secuencia cronológica?",
-              "¿Desarrolla la idea anterior?",
-              "¿Introduce información en el momento apropiado?",
-              "¿Mantiene el nivel de detalle consistente?"
+              "Does it follow chronological order?",
+              "Does it develop the previous idea?",
+              "Does it introduce information at the right point?",
+              "Does it keep a consistent level of detail?"
             ]}
           />
 
           <Rule 
-            title="2. Consistencia de estilo"
-            description="El párrafo debe mantener el mismo tono y registro."
+            title="2. Consistency of style"
+            description="The paragraph should match tone and register."
             examples={[
-              "Mismo nivel de formalidad",
-              "Consistencia en el punto de vista (1ª, 2ª, 3ª persona)",
-              "Mismo tiempo verbal predominante",
-              "Vocabulario apropiado para el contexto"
+              "Same level of formality",
+              "Consistent point of view (1st, 2nd, 3rd person)",
+              "Same dominant tense where appropriate",
+              "Vocabulary suited to the context"
             ]}
           />
 
           <Rule 
-            title="3. Eliminación por descarte"
-            description="Usa el proceso de eliminación para opciones difíciles."
+            title="3. Elimination"
+            description="Use elimination for difficult options."
             examples={[
-              "¿Qué opciones claramente no encajan?",
-              "¿Cuáles contradicen información del texto?",
-              "¿Qué párrafos no tienen conexión lógica?",
-              "¿Cuáles ya has usado en otros espacios?"
+              "Which options clearly do not fit?",
+              "Which contradict the text?",
+              "Which lack a logical link?",
+              "Which have you already used elsewhere?"
             ]}
           />
         </div>
@@ -135,158 +135,158 @@ const GappedTextPage = () => {
   const exercises = [
     <MultipleChoiceExercise
       key="1"
-      question="¿Cuál es el objetivo principal del ejercicio Gapped Text?"
+      question="What is the main aim of a Gapped Text task?"
       options={[
-        "Completar palabras faltantes",
-        "Elegir párrafos que encajen lógicamente en espacios vacíos",
-        "Traducir el texto completo",
-        "Identificar errores gramaticales"
+        "Fill in missing words",
+        "Choose paragraphs that fit logically in the gaps",
+        "Translate the whole text",
+        "Find grammar mistakes"
       ]}
       correctAnswer={1}
-      explanation="En Gapped Text debes elegir párrafos completos que encajen lógicamente en los espacios vacíos del texto."
+      explanation="In Gapped Text you choose whole paragraphs that fit logically into the gaps in the text."
     />,
 
     <MultipleChoiceExercise
       key="2"
-      question="¿Qué debes hacer antes de empezar a llenar los espacios?"
+      question="What should you do before you start filling the gaps?"
       options={[
-        "Leer solo las opciones disponibles",
-        "Contar cuántos espacios hay",
-        "Leer todo el texto para entender el tema general",
-        "Empezar inmediatamente con el primer espacio"
+        "Read only the list of options",
+        "Count how many gaps there are",
+        "Read the whole text to understand the general topic",
+        "Start immediately with the first gap"
       ]}
       correctAnswer={2}
-      explanation="Debes leer todo el texto primero para entender el tema general, estructura y flujo de ideas."
+      explanation="Read the whole text first to understand topic, structure, and flow of ideas."
     />,
 
     <TrueFalseExercise
       key="3"
       statements={[
         {
-          text: "Los pronombres como 'this', 'that', 'it' son pistas importantes para la cohesión.",
+          text: "Pronouns like 'this', 'that', and 'it' are important clues for cohesion.",
           isTrue: true,
-          explanation: "Correcto. Los pronombres deben referirse a algo mencionado anteriormente, lo que te ayuda a encontrar conexiones."
+          explanation: "Correct. Pronouns must refer to something mentioned earlier, which helps you find links."
         },
         {
-          text: "Puedes usar cada párrafo opcional más de una vez.",
+          text: "You can use each optional paragraph more than once.",
           isTrue: false,
-          explanation: "Incorrecto. Cada párrafo opcional se usa solo una vez, y algunos pueden no usarse."
+          explanation: "Incorrect. Each paragraph from the list is used only once, and some may not be used at all."
         },
         {
-          text: "El párrafo elegido debe mantener el mismo estilo y tono que el resto del texto.",
+          text: "The chosen paragraph should match the style and tone of the rest of the text.",
           isTrue: true,
-          explanation: "Correcto. La consistencia de estilo, tono y registro es esencial para la cohesión textual."
+          explanation: "Correct. Consistency of style, tone, and register is essential for textual cohesion."
         }
       ]}
     />,
 
     <MultipleChoiceExercise
       key="4"
-      question="Si encuentras 'However' al inicio de un párrafo opcional, ¿qué indica?"
+      question="If an optional paragraph starts with 'However', what does that suggest?"
       options={[
-        "Que es el primer párrafo del texto",
-        "Que contrasta con la idea anterior",
-        "Que es una conclusión",
-        "Que introduce un ejemplo"
+        "It is the first paragraph of the text",
+        "It contrasts with the previous idea",
+        "It is a conclusion",
+        "It introduces an example"
       ]}
       correctAnswer={1}
-      explanation="'However' indica contraste, por lo que el párrafo debe ir después de una idea que contraste o contradiga."
+      explanation="'However' signals contrast, so the paragraph should follow an idea it contrasts with or qualifies."
     />,
 
     <MultipleChoiceExercise
       key="5"
-      question="¿Qué tipo de palabras te ayudan a identificar secuencias temporales?"
+      question="Which words help you spot time order?"
       options={[
-        "Adjetivos descriptivos",
+        "Descriptive adjectives",
         "Then, later, previously, afterwards",
-        "Nombres propios",
-        "Números ordinales únicamente"
+        "Proper nouns",
+        "Ordinal numbers only"
       ]}
       correctAnswer={1}
-      explanation="Conectores temporales como 'then', 'later', 'previously' indican secuencias y te ayudan a ordenar eventos."
+      explanation="Time connectors like 'then', 'later', and 'previously' show sequence and help you order events."
     />,
 
     <TrueFalseExercise
       key="6"
       statements={[
         {
-          text: "Debes analizar tanto lo que viene antes como después de cada espacio.",
+          text: "You should analyse both what comes before and what comes after each gap.",
           isTrue: true,
-          explanation: "Correcto. El contexto completo (antes y después) es crucial para elegir el párrafo correcto."
+          explanation: "Correct. Full context (before and after) is crucial for choosing the right paragraph."
         },
         {
-          text: "La repetición de palabras clave no es importante en Gapped Text.",
+          text: "Lexical repetition is not important in Gapped Text.",
           isTrue: false,
-          explanation: "Incorrecto. La repetición lexical y los sinónimos son pistas importantes para la cohesión textual."
+          explanation: "Incorrect. Lexical repetition and synonyms are important clues for cohesion."
         },
         {
-          text: "Todos los párrafos opcionales deben ser utilizados en el ejercicio.",
+          text: "Every optional paragraph must be used in the task.",
           isTrue: false,
-          explanation: "Incorrecto. Generalmente hay más opciones que espacios, por lo que algunos párrafos no se usan."
+          explanation: "Incorrect. There are usually more options than gaps, so some paragraphs are not used."
         }
       ]}
     />,
 
     <MultipleChoiceExercise
       key="7"
-      question="¿Qué significa 'the former' en un texto?"
+      question="What does 'the former' mean in a text?"
       options={[
-        "El primero de dos elementos mencionados anteriormente",
-        "Una persona famosa",
-        "El párrafo anterior",
-        "El autor del texto"
+        "The first of two things mentioned earlier",
+        "A famous person",
+        "The previous paragraph",
+        "The author"
       ]}
       correctAnswer={0}
-      explanation="'The former' se refiere al primero de dos elementos mencionados anteriormente, mientras 'the latter' se refiere al segundo."
+      explanation="'The former' refers to the first of two items mentioned earlier; 'the latter' refers to the second."
     />,
 
     <MultipleChoiceExercise
       key="8"
-      question="¿Cuál es una buena estrategia cuando no estás seguro entre dos opciones?"
+      question="What is a good strategy when you are unsure between two options?"
       options={[
-        "Elegir la más larga",
-        "Usar eliminación por descarte y analizar las conexiones más cuidadosamente",
-        "Elegir al azar",
-        "Saltarse esa pregunta"
+        "Pick the longer one",
+        "Use elimination and analyse links more carefully",
+        "Guess randomly",
+        "Skip the question"
       ]}
       correctAnswer={1}
-      explanation="Debes usar eliminación por descarte y analizar más cuidadosamente las conexiones lógicas y de cohesión."
+      explanation="Use elimination and look more closely at logical and cohesive links."
     />,
 
     <TrueFalseExercise
       key="9"
       statements={[
         {
-          text: "El párrafo correcto debe desarrollar lógicamente la idea que viene antes.",
+          text: "The correct paragraph should develop logically from what comes before.",
           isTrue: true,
-          explanation: "Correcto. Debe haber una progresión lógica y coherente de ideas en todo el texto."
+          explanation: "Correct. Ideas should progress in a logical, coherent way through the text."
         },
         {
-          text: "Puedes ignorar los conectores como 'therefore' y 'furthermore' al elegir párrafos.",
+          text: "You can ignore connectors like 'therefore' and 'furthermore' when choosing paragraphs.",
           isTrue: false,
-          explanation: "Incorrecto. Los conectores son pistas cruciales que indican las relaciones lógicas entre ideas."
+          explanation: "Incorrect. Connectors are vital clues to logical relations between ideas."
         }
       ]}
     />,
 
     <MultipleChoiceExercise
       key="10"
-      question="¿Qué aspecto es MÁS importante para el éxito en Gapped Text?"
+      question="Which factor matters MOST for success in Gapped Text?"
       options={[
-        "Velocidad de lectura",
-        "Vocabulario extenso",
-        "Comprensión de cohesión y coherencia textual",
-        "Conocimiento de gramática avanzada"
+        "Reading speed",
+        "Large vocabulary",
+        "Understanding textual cohesion and coherence",
+        "Advanced grammar knowledge"
       ]}
       correctAnswer={2}
-      explanation="La comprensión de cómo las ideas se conectan y fluyen lógicamente (cohesión y coherencia) es lo más importante."
+      explanation="Understanding how ideas connect and flow (cohesion and coherence) matters most."
     />
   ];
 
   return (
     <TheoryLayout
       title="Gapped Text"
-      description="Domina los ejercicios de texto con espacios. Aprende a identificar cohesión, coherencia y flujo lógico para elegir párrafos que encajen perfectamente."
+      description="Master gapped text tasks. Learn to spot cohesion, coherence, and logical flow so you can choose paragraphs that fit perfectly."
       level="B2-C1-C2"
       theoryContent={theoryContent}
       exercises={exercises}

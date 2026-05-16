@@ -18,39 +18,39 @@ import {
 const RelativeClausesPage = () => {
   const theoryContent = (
     <div>
-      <TheorySection title="Cláusulas Relativas (Relative Clauses)" icon="🔗">
+      <TheorySection title="Relative Clauses" icon="🔗">
         <p style={{ fontSize: '1.1rem', lineHeight: 1.6, color: '#4a5568', marginBottom: '1rem' }}>
-          Las <strong>cláusulas relativas</strong> son oraciones subordinadas que proporcionan información adicional 
-          sobre un sustantivo. Nos permiten combinar oraciones y crear textos más sofisticados y fluidos, 
-          esenciales para niveles B1 y superiores.
+          <strong>Relative clauses</strong> are subordinate clauses that provide extra information 
+          about a noun. They let us combine sentences and create more sophisticated, fluent text — 
+          essential from B1 level upward.
         </p>
         
         <QuickReference items={[
-          "Defining clauses: información esencial (sin comas)",
-          "Non-defining clauses: información extra (con comas)",
+          "Defining clauses: essential information (no commas)",
+          "Non-defining clauses: extra information (with commas)",
           "Relative pronouns: who, which, that, whose, where, when",
-          "Se pueden omitir en ciertos casos",
-          "Preposiciones pueden ir al final o antes del pronombre"
+          "Can be omitted in certain cases",
+          "Prepositions can go at the end or before the pronoun"
         ]} />
       </TheorySection>
 
-      <TheorySection title="Pronombres Relativos" icon="👥">
+      <TheorySection title="Relative Pronouns" icon="👥">
         <p style={{ fontSize: '1rem', lineHeight: 1.6, color: '#4a5568', marginBottom: '1rem' }}>
-          Los pronombres relativos conectan la cláusula relativa con el sustantivo que modifican.
+          Relative pronouns connect the relative clause to the noun they modify.
         </p>
 
         <GrammarTable
-          caption="Pronombres Relativos y sus Usos"
-          headers={["Pronombre", "Se refiere a", "Función", "Ejemplo"]}
+          caption="Relative Pronouns and Their Uses"
+          headers={["Pronoun", "Refers to", "Function", "Example"]}
           rows={[
-            ["who", "Personas", "Sujeto u objeto", "The man who lives next door"],
-            ["whom", "Personas (formal)", "Objeto", "The person whom I met"],
-            ["which", "Cosas/animales", "Sujeto u objeto", "The book which I read"],
-            ["that", "Personas/cosas", "Sujeto u objeto", "The car that I bought"],
-            ["whose", "Posesión", "Posesivo", "The woman whose car broke down"],
-            ["where", "Lugares", "Adverbial", "The place where we met"],
-            ["when", "Tiempo", "Adverbial", "The day when it happened"],
-            ["why", "Razón", "Adverbial", "The reason why I left"]
+            ["who", "People", "Subject or object", "The man who lives next door"],
+            ["whom", "People (formal)", "Object", "The person whom I met"],
+            ["which", "Things/animals", "Subject or object", "The book which I read"],
+            ["that", "People/things", "Subject or object", "The car that I bought"],
+            ["whose", "Possession", "Possessive", "The woman whose car broke down"],
+            ["where", "Places", "Adverbial", "The place where we met"],
+            ["when", "Time", "Adverbial", "The day when it happened"],
+            ["why", "Reason", "Adverbial", "The reason why I left"]
           ]}
         />
 
@@ -58,47 +58,47 @@ const RelativeClausesPage = () => {
           <Example 
             spanish="El hombre que vive al lado es médico."
             english="The man who lives next door is a doctor."
-            translation="'Who' se refiere a persona (sujeto)"
+            translation="'Who' refers to a person (subject)"
           />
           
           <Example 
             spanish="El libro que leí era interesante."
             english="The book that/which I read was interesting."
-            translation="'That/which' se refiere a cosa (objeto)"
+            translation="'That/which' refers to a thing (object)"
           />
         </div>
 
         <Tip type="info">
-          <strong>Diferencia:</strong> 'Who' para personas, 'which' para cosas, 'that' para ambos (más informal).
+          <strong>Remember:</strong> Use 'who' for people, 'which' for things, and 'that' for both (more informal).
         </Tip>
       </TheorySection>
 
       <TheorySection title="Defining vs Non-defining Clauses" icon="🎯">
         <p style={{ fontSize: '1rem', lineHeight: 1.6, color: '#4a5568', marginBottom: '1rem' }}>
-          La diferencia entre cláusulas defining y non-defining afecta el significado y la puntuación.
+          The difference between defining and non-defining clauses affects meaning and punctuation.
         </p>
 
         <GrammarTable
-          caption="Tipos de Cláusulas Relativas"
-          headers={["Tipo", "Función", "Puntuación", "Ejemplo"]}
+          caption="Types of Relative Clauses"
+          headers={["Type", "Function", "Punctuation", "Example"]}
           rows={[
-            ["Defining", "Información esencial para identificar", "Sin comas", "The students who study hard pass exams"],
-            ["Non-defining", "Información extra, no esencial", "Con comas", "My brother, who lives in London, is a doctor"],
-            ["Defining", "Especifica cuál exactamente", "Sin comas", "The car that I bought is red"],
-            ["Non-defining", "Añade información adicional", "Con comas", "This car, which cost £20,000, is very reliable"]
+            ["Defining", "Essential information to identify", "No commas", "The students who study hard pass exams"],
+            ["Non-defining", "Extra, non-essential information", "With commas", "My brother, who lives in London, is a doctor"],
+            ["Defining", "Specifies which one exactly", "No commas", "The car that I bought is red"],
+            ["Non-defining", "Adds extra information", "With commas", "This car, which cost £20,000, is very reliable"]
           ]}
         />
 
         <Rule 
-          title="Reglas importantes para Defining vs Non-defining"
-          description="Diferencias clave entre ambos tipos:"
+          title="Important rules for defining vs non-defining"
+          description="Key differences between both types:"
           examples={[
-            "Defining: NO uses comas, información necesaria",
-            "Non-defining: SÍ uses comas, información opcional",
-            "Defining: Puedes usar 'that'",
-            "Non-defining: NO puedes usar 'that', solo who/which",
-            "Defining: Puedes omitir el pronombre (objeto)",
-            "Non-defining: NUNCA omitas el pronombre"
+            "Defining: do NOT use commas — information is necessary",
+            "Non-defining: DO use commas — information is optional",
+            "Defining: you can use 'that'",
+            "Non-defining: you cannot use 'that', only who/which",
+            "Defining: you can omit the pronoun (when object)",
+            "Non-defining: NEVER omit the pronoun"
           ]}
         />
 
@@ -106,25 +106,25 @@ const RelativeClausesPage = () => {
           <Example 
             spanish="Los estudiantes que estudian mucho aprueban. (defining - especifica qué estudiantes)"
             english="The students who study hard pass."
-            translation="Sin comas - información esencial"
+            translation="No commas — essential information"
           />
           
           <Example 
             spanish="Los estudiantes, que estudian mucho, aprueban. (non-defining - todos los estudiantes)"
             english="The students, who study hard, pass."
-            translation="Con comas - información adicional"
+            translation="With commas — additional information"
           />
         </div>
       </TheorySection>
 
-      <TheorySection title="Omisión de Pronombres Relativos" icon="👻">
+      <TheorySection title="Omitting Relative Pronouns" icon="👻">
         <p style={{ fontSize: '1rem', lineHeight: 1.6, color: '#4a5568', marginBottom: '1rem' }}>
-          En cláusulas defining, a veces podemos omitir el pronombre relativo para un inglés más natural.
+          In defining clauses, we can sometimes omit the relative pronoun for more natural English.
         </p>
 
         <Rule 
-          title="Cuándo omitir pronombres relativos"
-          description="Solo en cláusulas defining cuando el pronombre es objeto:"
+          title="When to omit relative pronouns"
+          description="Only in defining clauses when the pronoun is the object:"
           examples={[
             "The book (that/which) I read → The book I read",
             "The person (who/that) I met → The person I met",
@@ -133,35 +133,35 @@ const RelativeClausesPage = () => {
         />
 
         <GrammarTable
-          caption="Omisión de Pronombres"
-          headers={["Función", "Se puede omitir", "Ejemplo con pronombre", "Ejemplo sin pronombre"]}
+          caption="Omitting Pronouns"
+          headers={["Function", "Can be omitted", "With pronoun", "Without pronoun"]}
           rows={[
-            ["Objeto", "✅ Sí", "The book that I read", "The book I read"],
-            ["Sujeto", "❌ No", "The man who called", "❌ The man called"],
-            ["Con preposición", "✅ Sí (informal)", "The house that I live in", "The house I live in"],
-            ["Posesivo (whose)", "❌ No", "The woman whose car...", "❌ The woman car..."]
+            ["Object", "✅ Yes", "The book that I read", "The book I read"],
+            ["Subject", "❌ No", "The man who called", "❌ The man called"],
+            ["With preposition", "✅ Yes (informal)", "The house that I live in", "The house I live in"],
+            ["Possessive (whose)", "❌ No", "The woman whose car...", "❌ The woman car..."]
           ]}
         />
 
         <Tip type="success">
-          <strong>Consejo:</strong> Si puedes quitar el pronombre y la oración sigue teniendo sentido, 
-          entonces era objeto y se puede omitir.
+          <strong>Tip:</strong> If you can remove the pronoun and the sentence still makes sense, 
+          it was the object and can be omitted.
         </Tip>
       </TheorySection>
 
-      <TheorySection title="Preposiciones en Cláusulas Relativas" icon="🌉">
+      <TheorySection title="Prepositions in Relative Clauses" icon="🌉">
         <p style={{ fontSize: '1rem', lineHeight: 1.6, color: '#4a5568', marginBottom: '1rem' }}>
-          Las preposiciones pueden ir al final de la cláusula (informal) o antes del pronombre (formal).
+          Prepositions can go at the end of the clause (informal) or before the pronoun (formal).
         </p>
 
         <GrammarTable
-          caption="Posición de Preposiciones"
-          headers={["Estilo", "Estructura", "Ejemplo", "Registro"]}
+          caption="Position of Prepositions"
+          headers={["Style", "Structure", "Example", "Register"]}
           rows={[
-            ["Informal", "Preposición al final", "The house (that) I live in", "Conversacional"],
-            ["Formal", "Preposición + whom/which", "The house in which I live", "Académico/escrito"],
-            ["Informal", "Preposición al final", "The person (who) I talked to", "Conversacional"],
-            ["Formal", "Preposición + whom", "The person to whom I talked", "Académico/escrito"]
+            ["Informal", "Preposition at the end", "The house (that) I live in", "Conversational"],
+            ["Formal", "Preposition + whom/which", "The house in which I live", "Academic/written"],
+            ["Informal", "Preposition at the end", "The person (who) I talked to", "Conversational"],
+            ["Formal", "Preposition + whom", "The person to whom I talked", "Academic/written"]
           ]}
         />
 
@@ -169,30 +169,30 @@ const RelativeClausesPage = () => {
           <Example 
             spanish="La casa en la que vivo es antigua. (informal)"
             english="The house I live in is old."
-            translation="Preposición al final, pronombre omitido"
+            translation="Preposition at the end, pronoun omitted"
           />
           
           <Example 
             spanish="La casa en la que vivo es antigua. (formal)"
             english="The house in which I live is old."
-            translation="Preposición antes del pronombre"
+            translation="Preposition before the pronoun"
           />
         </div>
 
         <Tip type="warning">
-          <strong>¡Cuidado!</strong> Con preposiciones al inicio, usa 'whom' (personas) o 'which' (cosas), 
-          nunca 'who' o 'that'.
+          <strong>Watch out!</strong> With prepositions at the start, use 'whom' (people) or 'which' (things), 
+          never 'who' or 'that'.
         </Tip>
       </TheorySection>
 
-      <TheorySection title="Cláusulas con Where, When, Why" icon="📍⏰❓">
+      <TheorySection title="Clauses with Where, When, Why" icon="📍⏰❓">
         <p style={{ fontSize: '1rem', lineHeight: 1.6, color: '#4a5568', marginBottom: '1rem' }}>
-          Estos pronombres relativos se refieren a lugar, tiempo y razón respectivamente.
+          These relative pronouns refer to place, time, and reason respectively.
         </p>
 
         <GrammarTable
-          caption="Where, When, Why en Cláusulas Relativas"
-          headers={["Pronombre", "Reemplaza", "Ejemplo", "Alternativa formal"]}
+          caption="Where, When, Why in Relative Clauses"
+          headers={["Pronoun", "Replaces", "Example", "Formal alternative"]}
           rows={[
             ["where", "in/at/on + which", "The place where we met", "The place at which we met"],
             ["when", "in/on/at + which", "The day when it happened", "The day on which it happened"],
@@ -222,30 +222,30 @@ const RelativeClausesPage = () => {
         </div>
       </TheorySection>
 
-      <TheorySection title="Errores Comunes" icon="⚠️">
+      <TheorySection title="Common Mistakes" icon="⚠️">
         <div style={{ display: 'grid', gap: '1rem' }}>
           <Tip type="error">
             <strong>Error:</strong> "The man, that lives next door, is nice" ❌<br/>
-            <strong>Correcto:</strong> "The man, who lives next door, is nice" ✅<br/>
-            <em>En non-defining clauses no uses 'that'</em>
+            <strong>Correct:</strong> "The man, who lives next door, is nice" ✅<br/>
+            <em>Do not use 'that' in non-defining clauses</em>
           </Tip>
 
           <Tip type="error">
             <strong>Error:</strong> "The book what I read" ❌<br/>
-            <strong>Correcto:</strong> "The book that/which I read" ✅<br/>
-            <em>'What' no es pronombre relativo en este contexto</em>
+            <strong>Correct:</strong> "The book that/which I read" ✅<br/>
+            <em>'What' is not a relative pronoun in this context</em>
           </Tip>
 
           <Tip type="error">
             <strong>Error:</strong> "The woman whose I met" ❌<br/>
-            <strong>Correcto:</strong> "The woman who I met" o "The woman whose husband I met" ✅<br/>
-            <em>'Whose' es solo para posesión</em>
+            <strong>Correct:</strong> "The woman who I met" or "The woman whose husband I met" ✅<br/>
+            <em>'Whose' is only for possession</em>
           </Tip>
 
           <Tip type="error">
             <strong>Error:</strong> "The place where I went to" ❌<br/>
-            <strong>Correcto:</strong> "The place where I went" o "The place I went to" ✅<br/>
-            <em>No uses preposición extra con 'where'</em>
+            <strong>Correct:</strong> "The place where I went" or "The place I went to" ✅<br/>
+            <em>Do not use an extra preposition with 'where'</em>
           </Tip>
         </div>
       </TheorySection>
@@ -263,7 +263,7 @@ const RelativeClausesPage = () => {
         "whose"
       ]}
       correctAnswer={0}
-      explanation="Para personas como sujeto usamos 'who': 'The woman who lives next door'."
+      explanation="For people as subject we use 'who': 'The woman who lives next door'."
     />,
 
     <MultipleChoiceExercise
@@ -276,7 +276,7 @@ const RelativeClausesPage = () => {
         "Both B and C are correct."
       ]}
       correctAnswer={3}
-      explanation="B es non-defining (información extra), C es defining (información esencial). Ambas son correctas pero tienen significados diferentes."
+      explanation="B is non-defining (extra information), C is defining (essential information). Both are correct but have different meanings."
     />,
 
     <MultipleChoiceExercise
@@ -289,7 +289,7 @@ const RelativeClausesPage = () => {
         "The students who study hard succeed."
       ]}
       correctAnswer={1}
-      explanation="En 'The book that I bought', 'that' es objeto y se puede omitir: 'The book I bought'."
+      explanation="In 'The book that I bought', 'that' is the object and can be omitted: 'The book I bought'."
     />,
 
     <TrueFalseExercise
@@ -298,22 +298,22 @@ const RelativeClausesPage = () => {
         {
           text: "You can use 'that' in non-defining relative clauses.",
           isTrue: false,
-          explanation: "Falso. En non-defining clauses solo puedes usar who, which, whose, etc., pero no 'that'."
+          explanation: "False. In non-defining clauses you can only use who, which, whose, etc., but not 'that'."
         },
         {
           text: "You can omit relative pronouns when they are the subject of the clause.",
           isTrue: false,
-          explanation: "Falso. Solo puedes omitir pronombres relativos cuando son objeto, no sujeto."
+          explanation: "False. You can only omit relative pronouns when they are the object, not the subject."
         },
         {
           text: "'Where' can replace 'in which', 'at which', or 'on which'.",
           isTrue: true,
-          explanation: "Correcto. 'Where' es una forma más simple de expresar lugar."
+          explanation: "Correct. 'Where' is a simpler way to express place."
         },
         {
           text: "Non-defining relative clauses are always separated by commas.",
           isTrue: true,
-          explanation: "Correcto. Las non-defining clauses siempre van entre comas."
+          explanation: "Correct. Non-defining clauses are always set off with commas."
         }
       ]}
     />,
@@ -328,7 +328,7 @@ const RelativeClausesPage = () => {
         "The person to that I was talking"
       ]}
       correctAnswer={1}
-      explanation="En estilo formal, la preposición va antes del pronombre: 'to whom' (para personas)."
+      explanation="In formal style, the preposition goes before the pronoun: 'to whom' (for people)."
     />,
 
     <MultipleChoiceExercise
@@ -341,7 +341,7 @@ const RelativeClausesPage = () => {
         "where"
       ]}
       correctAnswer={2}
-      explanation="Para expresar posesión usamos 'whose': 'The girl whose mother is a doctor'."
+      explanation="To express possession we use 'whose': 'The girl whose mother is a doctor'."
     />,
 
     <MultipleChoiceExercise
@@ -354,7 +354,7 @@ const RelativeClausesPage = () => {
         "Both A and B are correct"
       ]}
       correctAnswer={1}
-      explanation="Para cosas usamos 'which' o 'that'. En este caso 'which' es la mejor opción."
+      explanation="For things we use 'which' or 'that'. In this case 'which' is the best option."
     />,
 
     <MultipleChoiceExercise
@@ -367,7 +367,7 @@ const RelativeClausesPage = () => {
         "The car which I bought is red."
       ]}
       correctAnswer={1}
-      explanation="'My brother, who lives in London, is a doctor' necesita comas (non-defining clause)."
+      explanation="'My brother, who lives in London, is a doctor' needs commas (non-defining clause)."
     />,
 
     <MultipleChoiceExercise
@@ -380,7 +380,7 @@ const RelativeClausesPage = () => {
         "who"
       ]}
       correctAnswer={1}
-      explanation="Para lugares usamos 'where': 'the restaurant where we had dinner'."
+      explanation="For places we use 'where': 'the restaurant where we had dinner'."
     />,
 
     <MultipleChoiceExercise
@@ -393,22 +393,21 @@ const RelativeClausesPage = () => {
         "The company where I work"
       ]}
       correctAnswer={1}
-      explanation="'The company for which I work' es la forma más formal con preposición al inicio."
+      explanation="'The company for which I work' is the most formal form with the preposition at the beginning."
     />
   ];
 
   return (
     <TheoryLayout
       title="Relative Clauses"
-      description="Domina las cláusulas relativas para crear oraciones más sofisticadas. Aprende sobre pronombres relativos, defining vs non-defining clauses y cuándo omitir pronombres."
+      description="Master relative clauses to build more sophisticated sentences. Learn relative pronouns, defining vs non-defining clauses, and when to omit pronouns."
       level="B1-B2-C1-C2"
       theoryContent={theoryContent}
       exercises={exercises}
-      prerequisites={["Pronombres", "Estructura básica de oraciones", "Tiempos verbales"]}
+      prerequisites={["Pronouns", "Basic sentence structure", "Verb tenses"]}
       estimatedTime="55 min"
     />
   );
 };
 
 export default RelativeClausesPage;
-

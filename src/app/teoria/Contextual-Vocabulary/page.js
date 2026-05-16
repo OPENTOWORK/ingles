@@ -18,364 +18,327 @@ import {
 const ContextualVocabularyPage = () => {
   const theoryContent = (
     <div>
-      <TheorySection title="¿Qué es Contextual Vocabulary?" icon="📚">
+      <TheorySection title="What Is Contextual Vocabulary?" icon="📚">
         <p style={{ fontSize: '1.1rem', lineHeight: 1.6, color: '#4a5568', marginBottom: '1rem' }}>
-          El <strong>contextual vocabulary</strong> (vocabulario contextual) se refiere a palabras y expresiones que adquieren 
-          significado específico según el contexto en el que se usan. Es fundamental para la comprensión auditiva efectiva.
+          <strong>Contextual vocabulary</strong> refers to words and phrases whose interpretation depends heavily on surrounding situation—and it is indispensable for realistic listening comprehension.
         </p>
         
         <QuickReference items={[
-          "Palabras que cambian significado según contexto",
-          "Expresiones idiomáticas y coloquiales",
-          "Vocabulario específico por tema o situación",
-          "Palabras con múltiples significados",
-          "Importante para comprensión auditiva real"
+          "Meanings shift with discourse context",
+          "Idioms and informal chunks",
+          "Topic- or scenario-specific wording",
+          "Polysemous lexical items",
+          "Crucial for authentic listening clips"
         ]} />
       </TheorySection>
 
-      <TheorySection title="Tipos de Vocabulario Contextual" icon="🗂️">
+      <TheorySection title="Kinds of Contextual Vocabulary" icon="🗂️">
         <p style={{ fontSize: '1rem', lineHeight: 1.6, color: '#4a5568', marginBottom: '1rem' }}>
-          El vocabulario contextual puede clasificarse en diferentes tipos según cómo se comporta en diferentes contextos.
+          Researchers group context-sensitive language into several recognizable patterns.
         </p>
 
         <GrammarTable
-          caption="Tipos de Vocabulario Contextual"
-          headers={["Tipo", "Descripción", "Ejemplo", "Significado"]}
+          caption="Types of Contextual Vocabulary"
+          headers={["Type", "Description", "Example", "Takeaway"]}
           rows={[
-            ["Polisemia", "Palabras con múltiples significados", "bank (banco/river bank)", "Depende del contexto"],
-            ["Idiomas", "Expresiones con significado fijo", "break the ice", "Significado no literal"],
-            ["Coloquialismos", "Expresiones informales", "hang out", "Usar en contexto informal"],
-            ["Técnico", "Vocabulario específico por área", "CPU (informática)", "Específico del campo"],
-            ["Situacional", "Palabras específicas por situación", "boarding pass (aeropuerto)", "Específico del contexto"],
-            ["Cultural", "Expresiones culturalmente específicas", "the big apple (Nueva York)", "Referencia cultural"]
+            ["Polysemy", "One form, several meanings", "bank (finance / riverbank)", "Meaning hinges on scenario"],
+            ["Idioms", "Fixed figurative wording", "break the ice", "Non-compositional meaning"],
+            ["Colloquialisms", "Casual conversational items", "hang out", "Register matters"],
+            ["Technical lexis", "Domain-specific jargon", "CPU (computing)", "Tied to field"],
+            ["Situational items", "Setting-bound labels", "boarding pass", "Anchored to scene"],
+            ["Cultural references", "Locally loaded expressions", "the Big Apple → NYC", "Culture supplies sense"]
           ]}
         />
 
         <div style={{ display: 'grid', gap: '1rem' }}>
           <Example 
-            spanish="Polisemia: 'bank' puede ser banco (institución) o orilla (río)"
-            english="Polysemy: 'bank' can be bank (institution) or river bank"
-            translation="Polisemia: 'bank' puede ser banco (institución) o orilla (río)"
+            english="Polysemy: 'bank' → financial institution versus river shore"
           />
           <Example 
-            spanish="Idioma: 'break the ice' significa romper el hielo (social)"
-            english="Idiom: 'break the ice' means to start a conversation"
-            translation="Idioma: 'break the ice' significa romper el hielo (social)"
+            english="Idiom: 'break the ice' means to open up conversation"
           />
           <Example 
-            spanish="Técnico: 'CPU' en contexto de computadoras"
-            english="Technical: 'CPU' in computer context"
-            translation="Técnico: 'CPU' en contexto de computadoras"
+            english="Technical: 'CPU' inside a hardware discussion"
           />
         </div>
 
         <Rule 
-          title="Importancia del Vocabulario Contextual"
-          description="Por qué es crucial para listening:"
+          title="Why Contextual Vocabulary Matters"
+          description="Listening impact:"
           examples={[
-            "Permite entender el significado real en contexto",
-            "Ayuda a distinguir entre diferentes significados",
-            "Mejora la comprensión de expresiones idiomáticas",
-            "Facilita la comprensión de vocabulario técnico"
+            "It reveals intended sense beyond dictionary gloss",
+            "It distinguishes competing readings",
+            "It unlocks figurative wording",
+            "It makes jargon tractable inside domain frames"
           ]}
         />
 
         <Tip type="info">
-          <strong>Consejo:</strong> El vocabulario contextual es la diferencia entre comprensión literal y comprensión real.
+          <strong>Tip:</strong> Handling context distinguishes literal decoding from workable understanding.
         </Tip>
       </TheorySection>
 
-      <TheorySection title="Estrategias para Vocabulario Contextual" icon="🎯">
+      <TheorySection title="Strategies for Contextual Vocabulary" icon="🎯">
         <p style={{ fontSize: '1rem', lineHeight: 1.6, color: '#4a5568', marginBottom: '1rem' }}>
-          Existen estrategias específicas para manejar el vocabulario contextual en listening.
+          You can systematically coach your ear toward context-first interpretation.
         </p>
 
         <GrammarTable
-          caption="Estrategias para Vocabulario Contextual"
-          headers={["Estrategia", "Descripción", "Cuándo Usar", "Ejemplo"]}
+          caption="Handling Context-Bound Meaning"
+          headers={["Strategy", "Description", "When", "Illustration"]}
           rows={[
-            ["Inferencia Contextual", "Usar contexto para inferir significado", "Palabras desconocidas", "Contexto: hospital → 'surgery' probablemente cirugía"],
-            ["Claves Semánticas", "Usar palabras relacionadas", "Vocabulario técnico", "Palabras relacionadas indican significado"],
-            ["Claves Gramaticales", "Usar estructura gramatical", "Palabras ambiguas", "Posición en oración indica función"],
-            ["Claves Culturales", "Usar conocimiento cultural", "Expresiones culturales", "Conocimiento cultural ayuda comprensión"],
-            ["Claves Situacionales", "Usar contexto de la situación", "Vocabulario situacional", "Situación determina significado"],
-            ["Claves Fonéticas", "Usar pronunciación y acento", "Palabras homófonas", "Acento y pronunciación distinguen significados"]
+            ["Contextual inference", "Let surrounding wording narrow sense", "Unknown tokens", "Hospital setting → surgery leans surgical"],
+            ["Semantic clusters", "Use related co-occurring nouns verbs", "Specialty talk", "Cluster cues signal field"],
+            ["Grammatical cues", "Let syntax disambiguate", "Ambiguous lemmas", "'the bank' noun vs verb 'bank'"],
+            ["Cultural knowledge", "Apply shared background", "Allusions references", "Holidays, brands, locales"],
+            ["Situational framing", "Use scene stereotypes", "Service encounters", "Check-in desks imply travel jargon"],
+            ["Phonetic clues", "Hear distinctions homophony cannot show in text alone", "Homophones variants", "Stress or vowel clues disambiguate"]
           ]}
         />
 
         <div style={{ display: 'grid', gap: '1rem' }}>
           <Example 
-            spanish="Inferencia: 'En hospital, escucho surgery → probablemente cirugía'"
-            english="Inference: 'In hospital, I hear surgery → probably surgery'"
-            translation="Inferencia: 'En hospital, escucho surgery → probablemente cirugía'"
+            english="Inference: Hearing surgery inside a surgical ward primes the medical meaning."
           />
           <Example 
-            spanish="Claves semánticas: 'computer, software, hardware → tecnología'"
-            english="Semantic clues: 'computer, software, hardware → technology'"
-            translation="Claves semánticas: 'computer, software, hardware → tecnología'"
+            english="Semantic field: Computer, software, hardware → tech frame"
           />
           <Example 
-            spanish="Claves gramaticales: 'the bank' vs 'to bank' → diferente función"
-            english="Grammatical clues: 'the bank' vs 'to bank' → different function"
-            translation="Claves gramaticales: 'the bank' vs 'to bank' → diferente función"
+            english="Grammar: Determiner + noun 'the bank' versus infinitival 'to bank'"
           />
         </div>
 
         <Tip type="success">
-          <strong>Consejo:</strong> Combina múltiples estrategias para inferir significado de manera más precisa.                                        
+          <strong>Tip:</strong> Blend multiple cues—few items hinge on only one hint.
         </Tip>
       </TheorySection>
 
-      <TheorySection title="Vocabulario por Contexto Específico" icon="🏢">
+      <TheorySection title="Vocabulary in Specific Domains" icon="🏢">
         <p style={{ fontSize: '1rem', lineHeight: 1.6, color: '#4a5568', marginBottom: '1rem' }}>
-          Diferentes contextos tienen vocabulario específico que debes reconocer.
+          Routine situations ship with predictable lexical packages.
         </p>
 
         <GrammarTable
-          caption="Vocabulario por Contexto"
-          headers={["Contexto", "Vocabulario Específico", "Significado", "Ejemplo de Uso"]}
+          caption="Domains and Typical Items"
+          headers={["Setting", "Core Lexis", "Gloss / Plain English", "Sample Line"]}
           rows={[
-            ["Hospital", "surgery, diagnosis, treatment", "Cirugía, diagnóstico, tratamiento", "The surgery was successful"],
-            ["Aeropuerto", "boarding pass, gate, departure", "Tarjeta de embarque, puerta, salida", "Gate 15 for departure"],
-            ["Restaurante", "appetizer, entrée, dessert", "Entrada, plato principal, postre", "I'll have the entrée"],
-            ["Oficina", "deadline, meeting, presentation", "Fecha límite, reunión, presentación", "The deadline is Friday"],
-            ["Escuela", "assignment, exam, grade", "Tarea, examen, nota", "The exam is tomorrow"],
-            ["Tienda", "sale, discount, receipt", "Venta, descuento, recibo", "There's a 20% discount"]
+            ["Hospital / clinic", "surgery, diagnosis, treatment", "Procedures outcomes care", "The surgery was successful"],
+            ["Airport", "boarding pass, gate, departure", "Travel logistics", "Gate 15 for departure"],
+            ["Restaurant", "appetizer, entrée, dessert", "Courses of a meal", "I'll have the entrée"],
+            ["Office workplace", "deadline, meeting, presentation", "Work scheduling deliverables", "The deadline is Friday"],
+            ["School", "assignment, exam, grade", "Academic chores marks", "The exam is tomorrow"],
+            ["Retail", "sale, discount, receipt", "Pricing checkout", "There's a 20% discount"]
           ]}
         />
 
         <div style={{ display: 'grid', gap: '1rem' }}>
           <Example 
-            spanish="Hospital: 'The surgery was successful' (cirugía exitosa)"
-            english="Hospital: 'The surgery was successful' (successful surgery)"
-            translation="Hospital: 'The surgery was successful' (cirugía exitosa)"
+            english="Hospital: 'The surgery was successful' — outcome update"
           />
           <Example 
-            spanish="Aeropuerto: 'Gate 15 for departure' (puerta 15 para salida)"
-            english="Airport: 'Gate 15 for departure' (gate 15 for departure)"
-            translation="Aeropuerto: 'Gate 15 for departure' (puerta 15 para salida)"
+            english="Airport: 'Gate 15 for departure' — paging announcement"
           />
           <Example 
-            spanish="Oficina: 'The deadline is Friday' (la fecha límite es viernes)"
-            english="Office: 'The deadline is Friday' (deadline is Friday)"
-            translation="Oficina: 'The deadline is Friday' (la fecha límite es viernes)"
+            english="Office: 'The deadline is Friday' — schedule pressure"
           />
         </div>
 
         <Tip type="info">
-          <strong>Consejo:</strong> Familiarízate con el vocabulario específico de contextos comunes para mejorar tu comprensión.
+          <strong>Tip:</strong> Pre-load domain packs you meet often to shrink reaction time.
         </Tip>
       </TheorySection>
 
-      <TheorySection title="Expresiones Idiomáticas Comunes" icon="💬">
+      <TheorySection title="Everyday Idioms" icon="💬">
         <p style={{ fontSize: '1rem', lineHeight: 1.6, color: '#4a5568', marginBottom: '1rem' }}>
-          Las expresiones idiomáticas son una parte importante del vocabulario contextual.
+          Figurative chunks are pervasive in informal listening tracks.
         </p>
 
         <GrammarTable
-          caption="Expresiones Idiomáticas Comunes"
-          headers={["Expresión", "Significado Literal", "Significado Real", "Ejemplo"]}
+          caption="Sample Idioms"
+          headers={["Expression", "Surface Image", "Intended Meaning", "Line"]}
           rows={[
-            ["Break the ice", "Romper el hielo", "Iniciar conversación", "Let's break the ice with introductions"],
-            ["Hit the nail on the head", "Golpear el clavo en la cabeza", "Dar en el clavo", "You hit the nail on the head"],
-            ["Spill the beans", "Derramar los frijoles", "Revelar secreto", "Don't spill the beans about the surprise"],
-            ["Piece of cake", "Pedazo de pastel", "Muy fácil", "This test is a piece of cake"],
-            ["Break a leg", "Romper una pierna", "Buena suerte", "Break a leg in your presentation"],
-            ["Cost an arm and a leg", "Costar un brazo y una pierna", "Muy caro", "This car costs an arm and a leg"]
+            ["Break the ice", "Breaking frozen water", "Start social contact", "Let's break the ice with introductions"],
+            ["Hit the nail on the head", "Hammer metaphor", "Be exactly right", "You hit the nail on the head"],
+            ["Spill the beans", "Pour legumes", "Reveal a secret", "Don't spill the beans about the surprise"],
+            ["Piece of cake", "Dessert image", "Very easy", "This test is a piece of cake"],
+            ["Break a leg", "Injury image", "Good luck theatrically", "Break a leg in your presentation"],
+            ["Cost an arm and a leg", "Body-price joke", "Extremely expensive", "This car costs an arm and a leg"]
           ]}
         />
 
         <div style={{ display: 'grid', gap: '1rem' }}>
           <Example 
-            spanish="Break the ice: 'Vamos a romper el hielo con presentaciones'"
-            english="Break the ice: 'Let's break the ice with introductions'"
-            translation="Break the ice: 'Vamos a romper el hielo con presentaciones'"
+            english="Break the ice: 'Let's open with quick introductions'"
           />
           <Example 
-            spanish="Piece of cake: 'Este examen es muy fácil'"
-            english="Piece of cake: 'This test is a piece of cake'"
-            translation="Piece of cake: 'Este examen es muy fácil'"
+            english="Piece of cake: 'This test is effortless'"
           />
           <Example 
-            spanish="Break a leg: 'Buena suerte en tu presentación'"
-            english="Break a leg: 'Break a leg in your presentation'"
-            translation="Break a leg: 'Buena suerte en tu presentación'"
+            english="Break a leg: 'Best wishes before you go on stage'"
           />
         </div>
 
         <Rule 
-          title="Consejos para Expresiones Idiomáticas"
-          description="Para entender expresiones idiomáticas:"
+          title="Listening to Idioms"
+          description="Dos and don&apos;ts:"
           examples={[
-            "No tomes el significado literal",
-            "Usa el contexto para inferir el significado",
-            "Aprende expresiones comunes por contexto",
-            "Practica con ejemplos reales"
+            "Reject literal images",
+            "Let prosody humor partner lines signal non-literal readings",
+            "Collect recurring bundles by conversational niche",
+            "Study short authentic clips—not isolated flash lists only"
           ]}
         />
 
         <Tip type="warning">
-          <strong>¡Cuidado!</strong> Las expresiones idiomáticas no se pueden traducir literalmente.
+          <strong>Watch out!</strong> Idioms seldom map word-for-word into another tongue.
         </Tip>
       </TheorySection>
 
-      <TheorySection title="Palabras con Múltiples Significados" icon="🔄">
+      <TheorySection title="Words With Multiple Meanings" icon="🔄">
         <p style={{ fontSize: '1rem', lineHeight: 1.6, color: '#4a5568', marginBottom: '1rem' }}>
-          Muchas palabras en inglés tienen múltiples significados que dependen del contexto.
+          Polysemy is normal; context performs disambiguation.
         </p>
 
         <GrammarTable
-          caption="Palabras con Múltiples Significados"
-          headers={["Palabra", "Significado 1", "Significado 2", "Contexto"]}
+          caption="Polysemous Sight Words"
+          headers={["Word", "Sense A", "Sense B", "Disambiguator"]}
           rows={[
-            ["Bank", "Banco (institución)", "Orilla (río)", "Financial vs geographical"],
-            ["Bat", "Murciélago", "Bate (deportes)", "Animal vs sports equipment"],
-            ["Bear", "Oso", "Soportar/tener", "Animal vs verb"],
-            ["Fair", "Justo", "Feria", "Justice vs event"],
-            ["Light", "Luz", "Ligero", "Illumination vs weight"],
-            ["Right", "Correcto", "Derecha", "Correct vs direction"],
-            ["Spring", "Primavera", "Resorte", "Season vs mechanical"],
-            ["Wave", "Ola", "Saludar", "Water vs gesture"]
+            ["Bank", "Financial institution", "River edge", "Domain collocations"],
+            ["Bat", "Flying mammal", "Sports club", "Environment cues"],
+            ["Bear", "Large mammal", "Tolerate carry", "POS and syntax"],
+            ["Fair", "Just equitable", "Carnival market", "Adjective noun split"],
+            ["Light", "Illumination", "Low weight pale", "Complement patterns"],
+            ["Right", "Correct / fair", "Direction (vs. left)", "Collocation companions"],
+            ["Spring", "Season", "Metal coil Verb leap", "Time vs mechanics"],
+            ["Wave", "Ocean swell", "Hand greeting", "Sensory modality"]
           ]}
         />
 
         <div style={{ display: 'grid', gap: '1rem' }}>
           <Example 
-            spanish="Bank: 'I go to the bank' (institución) vs 'The river bank' (orilla)"
-            english="Bank: 'I go to the bank' (institution) vs 'The river bank' (shore)"
-            translation="Bank: 'Voy al banco' (institución) vs 'La orilla del río' (orilla)"
+            english="'I go to the bank' versus 'along the river bank'"
           />
           <Example 
-            spanish="Bear: 'I saw a bear' (oso) vs 'I can't bear it' (soportar)"
-            english="Bear: 'I saw a bear' (animal) vs 'I can't bear it' (tolerate)"
-            translation="Bear: 'Vi un oso' (oso) vs 'No puedo soportarlo' (soportar)"
+            english="'I saw a bear' versus 'I can't bear this noise'"
           />
           <Example 
-            spanish="Light: 'Turn on the light' (luz) vs 'This bag is light' (ligero)"
-            english="Light: 'Turn on the light' (illumination) vs 'This bag is light' (not heavy)"
-            translation="Light: 'Enciende la luz' (luz) vs 'Esta bolsa es ligera' (ligero)"
+            english="'Turn on the light' versus 'This suitcase is light'"
           />
         </div>
 
         <Tip type="info">
-          <strong>Consejo:</strong> El contexto gramatical y semántico te ayuda a distinguir entre diferentes significados.
+          <strong>Tip:</strong> Grammar companions (articles objects complements) cue which lemma fired.
         </Tip>
       </TheorySection>
 
-      <TheorySection title="Estrategias de Inferencia" icon="🧠">
+      <TheorySection title="Inference Tactics" icon="🧠">
         <p style={{ fontSize: '1rem', lineHeight: 1.6, color: '#4a5568', marginBottom: '1rem' }}>
-          La inferencia es la habilidad clave para entender vocabulario contextual.
+          Inference stitches partial evidence into stable interpretations.
         </p>
 
         <GrammarTable
-          caption="Estrategias de Inferencia"
-          headers={["Estrategia", "Descripción", "Ejemplo", "Cuándo Usar"]}
+          caption="Listening Inference Moves"
+          headers={["Move", "Description", "Mini Example", "Best Moment"]}
           rows={[
-            ["Contexto Inmediato", "Usar palabras circundantes", "The doctor performed surgery", "Palabras relacionadas"],
-            ["Contexto Amplio", "Usar tema general", "Hospital conversation → medical terms", "Tema conocido"],
-            ["Claves Gramaticales", "Usar función gramatical", "The bank vs to bank", "Función diferente"],
-            ["Conocimiento Previo", "Usar conocimiento existente", "Computer context → technical terms", "Área familiar"],
-            ["Claves Fonéticas", "Usar pronunciación", "read (present) vs read (past)", "Tiempo verbal"],
-            ["Claves Culturales", "Usar conocimiento cultural", "Thanksgiving → turkey", "Referencia cultural"]
+            ["Local cotext", "Immediate neighbors constrain sense", "'The doctor performed surgery'", "Unknown mid-clause noun"],
+            ["Global scenario", "Topic steers jargon class", "Hospital bedside chat", "When register flips specialized"],
+            ["Morphosyntax slots", "'the bank' DP vs verbal 'bank'", "When homographs collide"],
+            ["Prior schematic knowledge", "If topic is GPUs expect silicon lexis", "STEM business arts frames"],
+            ["Phonic disambiguation", "read /riːd/ versus /rɛd/ tense", "When spelling hides"],
+            ["Cultural frame", "Holiday foods sports icons anchor sense", "Thanksgiving discourse"]
           ]}
         />
 
         <div style={{ display: 'grid', gap: '1rem' }}>
           <Example 
-            spanish="Contexto inmediato: 'El doctor realizó cirugía' → surgery = cirugía"
-            english="Immediate context: 'The doctor performed surgery' → surgery = surgery"
-            translation="Contexto inmediato: 'El doctor realizó cirugía' → surgery = cirugía"
+            english="Immediate context: professional + performed + surgery ⇒ medical surgery"
           />
           <Example 
-            spanish="Contexto amplio: 'Conversación de hospital' → términos médicos"
-            english="Broad context: 'Hospital conversation' → medical terms"
-            translation="Contexto amplio: 'Conversación de hospital' → términos médicos"
+            english="Broad frame: admitting desk dialogue ⇒ intake vocabulary cluster"
           />
           <Example 
-            spanish="Claves gramaticales: 'the bank' (sustantivo) vs 'to bank' (verbo)"
-            english="Grammatical clues: 'the bank' (noun) vs 'to bank' (verb)"
-            translation="Claves gramaticales: 'the bank' (sustantivo) vs 'to bank' (verbo)"
+            english="Syntax: noun phrase 'the bank' vs auxiliary chain around verb 'bank'"
           />
         </div>
 
         <Rule 
-          title="Proceso de Inferencia"
-          description="Sigue este proceso para inferir significado:"
+          title="Inference Routine"
+          description="A workable sequence:"
           examples={[
-            "1. Identifica la palabra desconocida",
-            "2. Observa el contexto inmediato",
-            "3. Considera el contexto amplio",
-            "4. Usa claves gramaticales",
-            "5. Aplica conocimiento previo",
-            "6. Haz una inferencia educada"
+            "1. Spot the troublesome word",
+            "2. Replay micro-window around it mentally",
+            "3. Expand to discourse topic",
+            "4. Deploy grammar cues",
+            "5. Mobilize encyclopedic guesses",
+            "6. Commit to best-fit hypothesis verify downstream lines"
           ]}
         />
 
         <Tip type="success">
-          <strong>Consejo:</strong> La inferencia mejora con la práctica - no te preocupes si no siempre aciertas.
+          <strong>Tip:</strong> Inference warms up with repetition—expect early misses.
         </Tip>
       </TheorySection>
 
-      <TheorySection title="Errores Comunes" icon="⚠️">
+      <TheorySection title="Common Mistakes" icon="⚠️">
         <div style={{ display: 'grid', gap: '1rem' }}>
           <Tip type="error">
-            <strong>Error:</strong> Tomar significado literal de expresiones idiomáticas ❌<br/>
-            <strong>Correcto:</strong> Usar contexto para entender significado real ✅<br/>
-            <em>Las expresiones idiomáticas tienen significado no literal</em>
+            <strong>Mistake:</strong> Forcing idioms literally ❌<br/>
+            <strong>Better:</strong> Use cotext irony tone for figurative meanings ✅<br/>
+            <em>Figuration resists verbatim glossing</em>
           </Tip>
 
           <Tip type="error">
-            <strong>Error:</strong> Asumir un solo significado para palabras ❌<br/>
-            <strong>Correcto:</strong> Considerar múltiples significados según contexto ✅<br/>
-            <em>Muchas palabras tienen múltiples significados</em>
+            <strong>Mistake:</strong> Assuming one lemma one sense ❌<br/>
+            <strong>Better:</strong> Hold rival readings until cotext adjudicates ✅<br/>
+            <em>English polysemy is pervasive</em>
           </Tip>
 
           <Tip type="error">
-            <strong>Error:</strong> Ignorar el contexto al inferir significado ❌<br/>
-            <strong>Correcto:</strong> Usar contexto como guía principal ✅<br/>
-            <em>El contexto es la clave para entender vocabulario</em>
+            <strong>Mistake:</strong> Ignoring cotext cues ❌<br/>
+            <strong>Better:</strong> Anchor guesses to evidence nearby ✅<br/>
+            <em>Context outweighs brute guessing</em>
           </Tip>
 
           <Tip type="error">
-            <strong>Error:</strong> No practicar inferencia ❌<br/>
-            <strong>Correcto:</strong> Practicar inferencia regularmente ✅<br/>
-            <em>La inferencia mejora con la práctica</em>
+            <strong>Mistake:</strong> Skipping deliberate inference drills ❌<br/>
+            <strong>Better:</strong> Cycle short clips guessing then verifying ✅<br/>
+            <em>Confidence grows rehearsal by rehearsal</em>
           </Tip>
         </div>
       </TheorySection>
 
-      <TheorySection title="Reglas Importantes" icon="⚡">
+      <TheorySection title="Key Rules" icon="⚡">
         <div style={{ display: 'grid', gap: '1rem' }}>
           <Rule 
-            title="1. Contexto es clave"
-            description="El contexto determina el significado del vocabulario."
+            title="1. Cotext adjudicates meaning"
+            description="Neither spelling nor pronunciation alone settles polysemy."
             examples={[
-              "Usa contexto inmediato y amplio",
-              "Considera el tema de la conversación",
-              "Observa la función gramatical",
-              "Aplica conocimiento previo"
+              "Combine micro and macro windows",
+              "Track evolving topic line",
+              "Watch syntactic scaffolding",
+              "Mobilize world knowledge ethically"
             ]}
           />
 
           <Rule 
-            title="2. Inferencia es habilidad"
-            description="La inferencia se desarrolla con la práctica."
+            title="2. Inference trains like a muscle"
+            description="Productive guessing improves with calibrated feedback loops."
             examples={[
-              "Practica con diferentes contextos",
-              "No te preocupes por errores",
-              "Combina múltiples estrategias",
-              "Confía en tu conocimiento previo"
+              "Rotate diverse themed inputs",
+              "Log surprises revise mental lexicon",
+              "Stack heuristic clues rather than leaning on one trick",
+              "Trust existing schemas when acoustics waver"
             ]}
           />
 
           <Rule 
-            title="3. Vocabulario es dinámico"
-            description="El vocabulario cambia según el contexto."
+            title="3. Lexicon is dynamic"
+            description="Bundles slip registers topics and eras."
             examples={[
-              "Una palabra puede tener múltiples significados",
-              "Las expresiones idiomáticas son comunes",
-              "El vocabulario técnico es específico",
-              "La cultura influye en el significado"
+              "Single lemmas split along sense lines",
+              "Idiom density spikes informal peer talk",
+              "Technical terms regiment inside communities of practice",
+              "Culture rewires associative links"
             ]}
           />
         </div>
@@ -386,106 +349,105 @@ const ContextualVocabularyPage = () => {
   const exercises = [
     <MultipleChoiceExercise
       key="1"
-      question="¿Según qué cambia significado el vocabulario contextual?"
+      question="Meaning variation in contextual vocabulary is chiefly guided by:"
       options={[
-        "Pronunciación",
-        "Contexto",
-        "Gramática",
-        "Ortografía"
+        "Accent alone",
+        "Context",
+        "Spelling quirks",
+        "Word length"
       ]}
       correctAnswer={1}
-      explanation="El vocabulario contextual cambia significado según el contexto en el que se usa, siendo crucial entender la situación para interpretar correctamente."
+      explanation="Surrounding discourse—not isolated form—settles plausible readings."
     />,
 
     <MultipleChoiceExercise
       key="2"
-      question="¿Qué es más importante para entender vocabulario contextual?"
+      question="What single factor most powerfully unlocks contextual vocabulary?"
       options={[
-        "La pronunciación",
-        "El contexto",
-        "La ortografía",
-        "La longitud de la palabra"
+        "Exact phoneme match",
+        "Context",
+        "Dictionary order",
+        "Letter count"
       ]}
       correctAnswer={1}
-      explanation="El contexto es lo más importante para entender vocabulario contextual, ya que determina el significado de palabras con múltiples significados y expresiones idiomáticas."
+      explanation="Context disambiguates polysemy, idioms, and jargon alike."
     />,
-
     <TrueFalseExercise
       key="3"
       statements={[
         {
-          text: "Las expresiones idiomáticas se pueden traducir literalmente.",
+          text: "Idioms can always be translated word for word faithfully.",
           isTrue: false,
-          explanation: "Incorrecto. Las expresiones idiomáticas tienen significado no literal y no se pueden traducir palabra por palabra."
+          explanation: "Incorrect. Non-compositional figurative meanings resist literal mapping."
         },
         {
-          text: "Muchas palabras en inglés tienen múltiples significados.",
+          text: "Many English lemmas carry more than one major sense.",
           isTrue: true,
-          explanation: "Correcto. Muchas palabras como 'bank', 'bear', 'light' tienen múltiples significados que dependen del contexto."
+          explanation: "Correct. Words such as bank, bear, or light shift with frame."
         },
         {
-          text: "La inferencia es una habilidad que se puede desarrollar con la práctica.",
+          text: "Inference improves with purposeful practice loops.",
           isTrue: true,
-          explanation: "Correcto. La inferencia de significado a partir del contexto es una habilidad que mejora con la práctica y experiencia."
+          explanation: "Correct. Predict verify revise cycles consolidate skill."
         },
         {
-          text: "El vocabulario técnico es igual en todos los contextos.",
+          text: "Technical vocabulary is interchangeable across specialties.",
           isTrue: false,
-          explanation: "Incorrecto. El vocabulario técnico es específico de cada área o contexto, como medicina, tecnología, deportes, etc."
+          explanation: "Incorrect. Technical words are anchored to specific fields (medicine, IT, sport, etc.)."
         }
       ]}
     />,
 
     <MultipleChoiceExercise
       key="4"
-      question="¿Cuál es la mejor estrategia para entender la palabra 'bank' en contexto?"
+      question="Best stance toward the lemma bank?"
       options={[
-        "Siempre significa institución financiera",
-        "Usar el contexto para determinar el significado",
-        "Siempre significa orilla de río",
-        "Ignorar el contexto"
+        "Assume finance always",
+        "Let cotext adjudicate riverside versus treasury readings",
+        "Assume geography always",
+        "Ignore cotext outright"
       ]}
       correctAnswer={1}
-      explanation="Usar el contexto es la mejor estrategia, ya que 'bank' puede significar institución financiera o orilla de río dependiendo del contexto."
+      explanation="Financial collocations oppose riverbank collocations; cotext settles the intended sense quickly."
     />,
 
     <MultipleChoiceExercise
       key="5"
-      question="¿Qué significa 'break the ice' en contexto social?"
+      question="What does break the ice mean socially?"
       options={[
-        "Romper hielo literalmente",
-        "Iniciar una conversación",
-        "Hacer frío",
-        "Golpear algo"
+        "Physically smash frozen water",
+        "Begin conversation warmly",
+        "Signal cold weather only",
+        "Strike an object blindly"
       ]}
       correctAnswer={1}
-      explanation="'Break the ice' en contexto social significa iniciar una conversación o hacer que las personas se sientan más cómodas, no tiene significado literal."
+      explanation="Colloquially it initiates rapport not literal destruction."
     />,
 
     <TrueFalseExercise
       key="6"
       statements={[
         {
-          text: "Context clues help understand unknown vocabulary.",
+          text: "Context clues scaffold unknown lexical items.",
           isTrue: true,
-          explanation: "Correcto. Las pistas del contexto (palabras cercanas, situación, tema) ayudan a inferir significados de palabras desconocidas."
+          explanation: "Correct. Nearby synonyms, opposites, and gloss clauses scaffold unknown words."
         },
         {
-          text: "All words have only one meaning regardless of context.",
+          text: "All words exhibit exactly one invariant gloss.",
           isTrue: false,
-          explanation: "Incorrecto. Muchas palabras tienen múltiples significados que cambian según el contexto: 'bank' (banco financiero vs orilla del río)."
+          explanation: "Incorrect. Many words (bank, fair, spring, …) vary widely by frame."
         },
         {
-          text: "Cultural knowledge helps understand contextual vocabulary.",
+          text: "Cultural literacy assists contextual interpreting.",
           isTrue: true,
-          explanation: "Correcto. El conocimiento cultural es crucial para entender referencias, expresiones idiomáticas y vocabulario específico de una cultura."
+          explanation: "Correct. Holidays, geography, and institutions color implied meanings."
         }
       ]}
     />,
 
     <MultipleChoiceExercise
       key="7"
-      question="In 'The company will launch a new product', what does 'launch' mean?"
+      question="In 'The company will launch a new product', what does launch mean?"
       options={[
         "To throw something",
         "To start or introduce",
@@ -493,20 +455,20 @@ const ContextualVocabularyPage = () => {
         "To travel by boat"
       ]}
       correctAnswer={1}
-      explanation="En contexto empresarial, 'launch' significa 'start or introduce' (lanzar/introducir un producto al mercado)."
+      explanation="In business English, launch means introducing or releasing a product to the market."
     />,
 
     <MultipleChoiceExercise
       key="8"
-      question="¿Qué tipo de contexto es más útil para inferir significado?"
+      question="What kind of context is most helpful for inferring word meaning?"
       options={[
-        "Solo la oración anterior",
-        "Solo la palabra siguiente",
-        "El contexto completo del párrafo o conversación",
-        "Solo el diccionario"
+        "Only the previous sentence",
+        "Only the word after the gap",
+        "The fuller paragraph or conversation frame",
+        "Only a dictionary headline"
       ]}
       correctAnswer={2}
-      explanation="El contexto completo del párrafo o conversación proporciona más información para inferir significado correctamente."
+      explanation="A wider conversational or paragraph-level frame delivers more decisive constraints."
     />,
 
     <TrueFalseExercise
@@ -515,12 +477,12 @@ const ContextualVocabularyPage = () => {
         {
           text: "Formal and informal contexts use different vocabulary.",
           isTrue: true,
-          explanation: "Correcto. El vocabulario formal ('commence') vs informal ('start') cambia según el contexto social y situacional."
+          explanation: "Correct. Register shifts items such as commence versus start depending on situation."
         },
         {
-          text: "You should always stop reading when you find an unknown word.",
+          text: "You should always stop whenever you encounter an unknown word.",
           isTrue: false,
-          explanation: "Incorrecto. Es mejor continuar leyendo para obtener más contexto que ayude a inferir el significado."
+          explanation: "Incorrect. Continuing often supplies additional clues that stabilize your guess."
         }
       ]}
     />,
@@ -535,14 +497,14 @@ const ContextualVocabularyPage = () => {
         "perfect"
       ]}
       correctAnswer={1}
-      explanation="Dado el contexto de 'winter storm warning', 'severe' (severas) es la opción más lógica para describir las condiciones climáticas."
+      explanation="Given a storm warning frame, severe is the logically congruent modifier."
     />
   ];
 
   return (
     <TheoryLayout
       title="Contextual Vocabulary"
-      description="Domina el vocabulario contextual en inglés. Aprende a inferir significado a partir del contexto, entender expresiones idiomáticas y manejar palabras con múltiples significados."
+      description="Learn how English words shift with context—from idioms to polysemy—and practise inference tactics for realistic listening tasks."
       level="A1-A2-B1-B2-C1-C2"
       theoryContent={theoryContent}
       exercises={exercises}
@@ -553,4 +515,3 @@ const ContextualVocabularyPage = () => {
 };
 
 export default ContextualVocabularyPage;
-

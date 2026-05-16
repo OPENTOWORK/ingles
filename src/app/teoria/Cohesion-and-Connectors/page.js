@@ -18,347 +18,329 @@ import {
 const CohesionAndConnectorsPage = () => {
   const theoryContent = (
     <div>
-      <TheorySection title="¿Qué son Cohesion and Connectors?" icon="🔗">
+      <TheorySection title="What Are Cohesion and Connectors?" icon="🔗">
         <p style={{ fontSize: '1.1rem', lineHeight: 1.6, color: '#4a5568', marginBottom: '1rem' }}>
-          La <strong>cohesion</strong> (cohesión) y los <strong>connectors</strong> (conectores) son elementos fundamentales para crear textos coherentes y fáciles de seguir. 
-          Ayudan a conectar ideas, crear transiciones suaves y mantener la fluidez en tu escritura.
+          <strong>Cohesion</strong> and <strong>connectors</strong> are essential for building texts that are coherent and easy to follow. 
+          They help link ideas, create smooth transitions, and keep your writing fluent.
         </p>
         
         <QuickReference items={[
-          "Cohesión: unión lógica entre ideas",
-          "Conectores: palabras que unen oraciones y párrafos",
-          "Referencias: pronombres y artículos",
-          "Transiciones: cambios suaves entre ideas",
-          "Repetición: palabras clave para mantener el tema"
+          "Cohesion: logical linking between ideas",
+          "Connectors: words that join sentences and paragraphs",
+          "Reference: pronouns and articles",
+          "Transitions: smooth shifts between ideas",
+          "Repetition: key words to keep the topic clear"
         ]} />
       </TheorySection>
 
-      <TheorySection title="Tipos de Conectores" icon="🔧">
+      <TheorySection title="Types of Connectors" icon="🔧">
         <p style={{ fontSize: '1rem', lineHeight: 1.6, color: '#4a5568', marginBottom: '1rem' }}>
-          Los conectores se clasifican según la relación que establecen entre las ideas.
+          Connectors are classified by the relationship they create between ideas.
         </p>
 
         <GrammarTable
-          caption="Clasificación de Conectores por Función"
-          headers={["Función", "Conectores", "Ejemplo", "Significado"]}
+          caption="Connectors Classified by Function"
+          headers={["Function", "Connectors", "Example", "Meaning"]}
           rows={[
-            ["Adición", "Furthermore, Moreover, In addition, Also", "Furthermore, technology improves education", "Además"],
-            ["Contraste", "However, Nevertheless, On the other hand, Yet", "However, there are disadvantages", "Sin embargo"],
-            ["Causa", "Because, Since, Due to, As a result of", "Due to technology, life is easier", "Debido a"],
-            ["Resultado", "Therefore, Consequently, Thus, Hence", "Therefore, we should use technology", "Por lo tanto"],
-            ["Secuencia", "First, Then, Next, Finally, Subsequently", "First, I will discuss benefits", "Primero"],
-            ["Ejemplo", "For example, For instance, Such as, Namely", "For example, smartphones are useful", "Por ejemplo"]
+            ["Addition", "Furthermore, Moreover, In addition, Also", "Furthermore, technology improves education", "Besides / In addition"],
+            ["Contrast", "However, Nevertheless, On the other hand, Yet", "However, there are disadvantages", "However"],
+            ["Cause", "Because, Since, Due to, As a result of", "Due to technology, life is easier", "Because of / Due to"],
+            ["Result", "Therefore, Consequently, Thus, Hence", "Therefore, we should use technology", "Therefore"],
+            ["Sequence", "First, Then, Next, Finally, Subsequently", "First, I will discuss benefits", "First"],
+            ["Example", "For example, For instance, Such as, Namely", "For example, smartphones are useful", "For example"]
           ]}
         />
 
         <div style={{ display: 'grid', gap: '1rem' }}>
           <Example 
-            spanish="Además, la tecnología mejora la educación"
             english="Furthermore, technology improves education"
-            translation="Además, la tecnología mejora la educación"
+            note="Addition: builds on the previous point."
           />
           <Example 
-            spanish="Sin embargo, hay desventajas"
             english="However, there are disadvantages"
-            translation="Sin embargo, hay desventajas"
+            note="Contrast: signals a shift or limitation."
           />
           <Example 
-            spanish="Por lo tanto, deberíamos usar la tecnología"
             english="Therefore, we should use technology"
-            translation="Por lo tanto, deberíamos usar la tecnología"
+            note="Result: shows a consequence or conclusion."
           />
         </div>
 
         <Rule 
-          title="Uso de Conectores"
-          description="Los conectores ayudan a:"
+          title="Using Connectors"
+          description="Connectors help you:"
           examples={[
-            "Crear transiciones suaves entre ideas",
-            "Mostrar relaciones lógicas",
-            "Mejorar la fluidez del texto",
-            "Hacer el texto más profesional"
+            "Create smooth transitions between ideas",
+            "Show logical relationships",
+            "Improve text flow",
+            "Make your writing sound more professional"
           ]}
         />
 
         <Tip type="info">
-          <strong>Consejo:</strong> Usa conectores variados para evitar repetición y hacer tu texto más interesante.
+          <strong>Tip:</strong> Use a variety of connectors to avoid repetition and keep your text engaging.
         </Tip>
       </TheorySection>
 
-      <TheorySection title="Conectores de Adición" icon="➕">
+      <TheorySection title="Connectors of Addition" icon="➕">
         <p style={{ fontSize: '1rem', lineHeight: 1.6, color: '#4a5568', marginBottom: '1rem' }}>
-          Se usan para agregar información, ideas o argumentos adicionales.
+          These add information, ideas, or supporting arguments.
         </p>
 
         <GrammarTable
-          caption="Conectores de Adición por Nivel de Formalidad"
-          headers={["Formal", "Neutral", "Informal", "Uso"]}
+          caption="Connectors of Addition by Formality"
+          headers={["Formal", "Neutral", "Informal", "Use"]}
           rows={[
-            ["Furthermore, Moreover", "In addition, Also", "And, Plus", "Agregar información importante"],
-            ["Additionally, Besides", "What's more", "Another thing", "Añadir punto adicional"],
-            ["Not only...but also", "As well as", "Along with", "Mostrar que hay más opciones"]
+            ["Furthermore, Moreover", "In addition, Also", "And, Plus", "Add important information"],
+            ["Additionally, Besides", "What's more", "Another thing", "Add an extra point"],
+            ["Not only...but also", "As well as", "Along with", "Show that there is more than one option"]
           ]}
         />
 
         <div style={{ display: 'grid', gap: '1rem' }}>
           <Example 
-            spanish="Además, la tecnología es muy útil"
             english="Furthermore, technology is very useful"
-            translation="Además, la tecnología es muy útil"
+            note="Formal addition."
           />
           <Example 
-            spanish="También, es importante estudiar"
             english="In addition, it's important to study"
-            translation="También, es importante estudiar"
+            note="Neutral addition."
           />
           <Example 
-            spanish="No solo es útil, sino también necesaria"
             english="Not only is it useful, but also necessary"
-            translation="No solo es útil, sino también necesaria"
+            note="Emphasizes two related points."
           />
         </div>
 
         <Tip type="success">
-          <strong>Recuerda:</strong> "Furthermore" y "Moreover" son más formales que "also" y "and".
+          <strong>Remember:</strong> “Furthermore” and “Moreover” are more formal than “also” and “and”.
         </Tip>
       </TheorySection>
 
-      <TheorySection title="Conectores de Contraste" icon="⚖️">
+      <TheorySection title="Connectors of Contrast" icon="⚖️">
         <p style={{ fontSize: '1rem', lineHeight: 1.6, color: '#4a5568', marginBottom: '1rem' }}>
-          Se usan para mostrar diferencias, contrastes u oposiciones entre ideas.
+          These show differences, contrasts, or opposition between ideas.
         </p>
 
         <GrammarTable
-          caption="Conectores de Contraste"
-          headers={["Conector", "Uso", "Posición", "Ejemplo"]}
+          caption="Connectors of Contrast"
+          headers={["Connector", "Use", "Position", "Example"]}
           rows={[
-            ["However", "Contraste fuerte", "Inicio de oración", "However, there are problems"],
-            ["Nevertheless", "Contraste formal", "Inicio de oración", "Nevertheless, we continue"],
-            ["On the other hand", "Mostrar alternativa", "Inicio de oración", "On the other hand, it's expensive"],
-            ["Yet", "Contraste en la misma oración", "Medio de oración", "It's difficult, yet possible"],
-            ["Although/Though", "Contraste con subordinada", "Inicio", "Although it's hard, it's worth it"]
+            ["However", "Strong contrast", "Start of sentence", "However, there are problems"],
+            ["Nevertheless", "Formal contrast", "Start of sentence", "Nevertheless, we continue"],
+            ["On the other hand", "Present an alternative", "Start of sentence", "On the other hand, it's expensive"],
+            ["Yet", "Contrast in the same sentence", "Middle of sentence", "It's difficult, yet possible"],
+            ["Although/Though", "Contrast with a subordinate clause", "Start", "Although it's hard, it's worth it"]
           ]}
         />
 
         <div style={{ display: 'grid', gap: '1rem' }}>
           <Example 
-            spanish="Sin embargo, hay problemas"
             english="However, there are problems"
-            translation="Sin embargo, hay problemas"
+            note="Common contrast opener."
           />
           <Example 
-            spanish="Por otro lado, es caro"
             english="On the other hand, it's expensive"
-            translation="Por otro lado, es caro"
+            note="Introduces an alternative view."
           />
           <Example 
-            spanish="Es difícil, pero posible"
             english="It's difficult, yet possible"
-            translation="Es difícil, pero posible"
+            note="“Yet” inside the sentence."
           />
         </div>
 
         <Rule 
-          title="Uso de Conectores de Contraste"
-          description="Úsalos para:"
+          title="Using Contrast Connectors"
+          description="Use them to:"
           examples={[
-            "Mostrar dos puntos de vista diferentes",
-            "Introducir contraargumentos",
-            "Comparar ventajas y desventajas",
-            "Expresar concesiones"
+            "Present two different viewpoints",
+            "Introduce counterarguments",
+            "Compare advantages and disadvantages",
+            "Express concessions"
           ]}
         />
 
         <Tip type="warning">
-          <strong>¡Cuidado!</strong> "But" es informal, usa "However" en textos formales.
+          <strong>Watch out:</strong> “But” is informal; use “However” in formal writing.
         </Tip>
       </TheorySection>
 
-      <TheorySection title="Conectores de Causa y Resultado" icon="🎯">
+      <TheorySection title="Cause and Result Connectors" icon="🎯">
         <p style={{ fontSize: '1rem', lineHeight: 1.6, color: '#4a5568', marginBottom: '1rem' }}>
-          Establecen relaciones de causa-efecto entre ideas.
+          These express cause-and-effect relationships between ideas.
         </p>
 
         <GrammarTable
-          caption="Conectores de Causa y Resultado"
-          headers={["Tipo", "Conectores", "Ejemplo", "Significado"]}
+          caption="Cause and Result Connectors"
+          headers={["Type", "Connectors", "Example", "Meaning"]}
           rows={[
-            ["Causa", "Because, Since, Due to", "Due to rain, we stayed home", "Debido a"],
-            ["Resultado", "Therefore, Consequently, Thus", "It rained, therefore we stayed home", "Por lo tanto"],
-            ["Causa formal", "Owing to, As a result of", "Owing to bad weather", "Debido a"],
-            ["Resultado formal", "Hence, Accordingly", "Hence, we must act", "Por consiguiente"]
+            ["Cause", "Because, Since, Due to", "Due to rain, we stayed home", "Because of"],
+            ["Result", "Therefore, Consequently, Thus", "It rained, therefore we stayed home", "Therefore"],
+            ["Formal cause", "Owing to, As a result of", "Owing to bad weather", "Because of"],
+            ["Formal result", "Hence, Accordingly", "Hence, we must act", "As a result / Accordingly"]
           ]}
         />
 
         <div style={{ display: 'grid', gap: '1rem' }}>
           <Example 
-            spanish="Debido a la lluvia, nos quedamos en casa"
             english="Due to rain, we stayed home"
-            translation="Debido a la lluvia, nos quedamos en casa"
+            note="Cause introduced with a prepositional phrase."
           />
           <Example 
-            spanish="Llovió, por lo tanto nos quedamos en casa"
             english="It rained, therefore we stayed home"
-            translation="Llovió, por lo tanto nos quedamos en casa"
+            note="Result follows cause."
           />
           <Example 
-            spanish="Estudiaste mucho, así que aprobaste"
             english="You studied hard, so you passed"
-            translation="Estudiaste mucho, así que aprobaste"
+            note="“So” is more informal than “therefore”."
           />
         </div>
 
         <Tip type="info">
-          <strong>Nota:</strong> "So" es informal, usa "Therefore" o "Consequently" en contextos formales.
+          <strong>Note:</strong> “So” is informal; prefer “Therefore” or “Consequently” in formal contexts.
         </Tip>
       </TheorySection>
 
-      <TheorySection title="Conectores de Secuencia y Tiempo" icon="⏰">
+      <TheorySection title="Sequence and Time Connectors" icon="⏰">
         <p style={{ fontSize: '1rem', lineHeight: 1.6, color: '#4a5568', marginBottom: '1rem' }}>
-          Organizan ideas en orden temporal o secuencial.
+          These organise ideas in time or in sequence.
         </p>
 
         <GrammarTable
-          caption="Conectores de Secuencia"
-          headers={["Posición", "Conectores", "Ejemplo", "Uso"]}
+          caption="Sequence Connectors"
+          headers={["Position", "Connectors", "Example", "Use"]}
           rows={[
-            ["Inicio", "First, Initially, To begin with", "First, I will discuss...", "Primer punto"],
-            ["Continuación", "Then, Next, Subsequently", "Then, we will see...", "Siguiente punto"],
-            ["Adición", "Furthermore, Moreover", "Furthermore, it's important...", "Punto adicional"],
-            ["Final", "Finally, Lastly, In conclusion", "Finally, we can say...", "Último punto"]
+            ["Opening", "First, Initially, To begin with", "First, I will discuss...", "First point"],
+            ["Continuation", "Then, Next, Subsequently", "Then, we will see...", "Next point"],
+            ["Addition", "Furthermore, Moreover", "Furthermore, it's important...", "Extra point"],
+            ["Closing", "Finally, Lastly, In conclusion", "Finally, we can say...", "Last point"]
           ]}
         />
 
         <div style={{ display: 'grid', gap: '1rem' }}>
           <Example 
-            spanish="Primero, discutiré los beneficios"
             english="First, I will discuss the benefits"
-            translation="Primero, discutiré los beneficios"
+            note="Opens the sequence."
           />
           <Example 
-            spanish="Luego, veremos las desventajas"
             english="Then, we will see the disadvantages"
-            translation="Luego, veremos las desventajas"
+            note="Moves to the next step."
           />
           <Example 
-            spanish="Finalmente, llegaremos a una conclusión"
             english="Finally, we will reach a conclusion"
-            translation="Finalmente, llegaremos a una conclusión"
+            note="Signals the end of the line of argument."
           />
         </div>
 
         <Rule 
-          title="Uso de Conectores de Secuencia"
-          description="Úsalos para:"
+          title="Using Sequence Connectors"
+          description="Use them to:"
           examples={[
-            "Organizar argumentos en orden lógico",
-            "Presentar pasos en un proceso",
-            "Estructurar párrafos de desarrollo",
-            "Crear un flujo lógico en el texto"
+            "Order arguments logically",
+            "Present steps in a process",
+            "Structure body paragraphs",
+            "Create a clear flow in your text"
           ]}
         />
 
         <Tip type="success">
-          <strong>Consejo:</strong> Los conectores de secuencia hacen que tu texto sea más fácil de seguir.
+          <strong>Tip:</strong> Sequence connectors make your text easier to follow.
         </Tip>
       </TheorySection>
 
-      <TheorySection title="Elementos de Cohesión" icon="🧩">
+      <TheorySection title="Cohesion Devices" icon="🧩">
         <p style={{ fontSize: '1rem', lineHeight: 1.6, color: '#4a5568', marginBottom: '1rem' }}>
-          Además de los conectores, hay otros elementos que crean cohesión en un texto.
+          Besides connectors, other devices create cohesion in a text.
         </p>
 
         <GrammarTable
-          caption="Elementos de Cohesión"
-          headers={["Elemento", "Función", "Ejemplo", "Efecto"]}
+          caption="Cohesion Devices"
+          headers={["Device", "Function", "Example", "Effect"]}
           rows={[
-            ["Referencias", "Evitar repetición", "The technology... It is useful", "Flujo natural"],
-            ["Repetición", "Enfocar ideas clave", "Technology... technological...", "Énfasis"],
-            ["Sinónimos", "Variar vocabulario", "Important... significant...", "Riqueza léxica"],
-            ["Elipsis", "Evitar redundancia", "Some people like it, others don't", "Concisión"]
+            ["Reference", "Avoid unnecessary repetition", "The technology... It is useful", "Natural flow"],
+            ["Repetition", "Highlight key ideas", "Technology... technological...", "Emphasis"],
+            ["Synonyms", "Vary vocabulary", "Important... significant...", "Lexical variety"],
+            ["Ellipsis", "Avoid redundancy", "Some people like it, others don't", "Concision"]
           ]}
         />
 
         <div style={{ display: 'grid', gap: '1rem' }}>
           <Example 
-            spanish="La tecnología es útil. Es importante para la sociedad"
             english="Technology is useful. It is important for society"
-            translation="La tecnología es útil. Es importante para la sociedad"
+            note="Pronoun “it” refers back to “technology.”"
           />
           <Example 
-            spanish="Es importante. También es significativo"
             english="It is important. It is also significant"
-            translation="Es importante. También es significativo"
+            note="Synonyms vary the wording while staying on topic."
           />
           <Example 
-            spanish="Algunas personas lo usan, otras no"
             english="Some people use it, others don't"
-            translation="Algunas personas lo usan, otras no"
+            note="Ellipsis: “don't” stands for “don't use it.”"
           />
         </div>
 
         <Tip type="info">
-          <strong>Consejo:</strong> Combina diferentes elementos de cohesión para crear textos fluidos y naturales.
+          <strong>Tip:</strong> Combine different cohesion devices for fluent, natural writing.
         </Tip>
       </TheorySection>
 
-      <TheorySection title="Errores Comunes" icon="⚠️">
+      <TheorySection title="Common Mistakes" icon="⚠️">
         <div style={{ display: 'grid', gap: '1rem' }}>
           <Tip type="error">
-            <strong>Error:</strong> "But however" ❌<br/>
-            <strong>Correcto:</strong> "However" o "But" ✅<br/>
-            <em>No uses dos conectores de contraste juntos</em>
+            <strong>Mistake:</strong> “But however” ❌<br/>
+            <strong>Correct:</strong> “However” or “But” ✅<br/>
+            <em>Do not use two contrast connectors together</em>
           </Tip>
 
           <Tip type="error">
-            <strong>Error:</strong> "Because therefore" ❌<br/>
-            <strong>Correcto:</strong> "Because" o "Therefore" ✅<br/>
-            <em>No uses conectores de causa y resultado juntos</em>
+            <strong>Mistake:</strong> “Because therefore” ❌<br/>
+            <strong>Correct:</strong> “Because” or “Therefore” ✅<br/>
+            <em>Do not stack cause and result connectors redundantly</em>
           </Tip>
 
           <Tip type="error">
-            <strong>Error:</strong> Usar "and" repetidamente ❌<br/>
-            <strong>Correcto:</strong> Variar conectores ✅<br/>
-            <em>Usa "furthermore", "moreover", "in addition"</em>
+            <strong>Mistake:</strong> Repeating “and” over and over ❌<br/>
+            <strong>Correct:</strong> Vary connectors ✅<br/>
+            <em>Use “furthermore”, “moreover”, “in addition”</em>
           </Tip>
 
           <Tip type="error">
-            <strong>Error:</strong> No usar conectores entre párrafos ❌<br/>
-            <strong>Correcto:</strong> Crear transiciones suaves ✅<br/>
-            <em>Los conectores mejoran la fluidez</em>
+            <strong>Mistake:</strong> No connectors between paragraphs ❌<br/>
+            <strong>Correct:</strong> Create clear transitions ✅<br/>
+            <em>Connectors improve flow between paragraphs</em>
           </Tip>
         </div>
       </TheorySection>
 
-      <TheorySection title="Reglas Importantes" icon="⚡">
+      <TheorySection title="Key Rules" icon="⚡">
         <div style={{ display: 'grid', gap: '1rem' }}>
           <Rule 
-            title="1. Variedad en conectores"
-            description="Usa diferentes conectores para evitar repetición."
+            title="1. Variety in connectors"
+            description="Use different connectors to avoid repetition."
             examples={[
-              "No uses 'and' repetidamente",
-              "Alterna entre conectores formales e informales",
-              "Elige conectores apropiados para el contexto"
+              "Do not rely on “and” alone",
+              "Alternate formal and informal connectors where appropriate",
+              "Choose connectors that fit the context"
             ]}
           />
 
           <Rule 
-            title="2. Posición de conectores"
-            description="La mayoría van al inicio de la oración."
+            title="2. Connector position"
+            description="Most go at the start of the sentence."
             examples={[
               "However, Nevertheless, Therefore",
               "Furthermore, Moreover, Consequently",
-              "Algunos van en medio: yet, so"
+              "Some go in the middle: yet, so"
             ]}
           />
 
           <Rule 
-            title="3. Cohesión sin conectores"
-            description="Usa referencias, repetición y sinónimos."
+            title="3. Cohesion without connectors"
+            description="Use reference, repetition, and synonyms."
             examples={[
-              "Pronombres: it, they, this, that",
-              "Repetición de palabras clave",
-              "Sinónimos para variar vocabulario"
+              "Pronouns: it, they, this, that",
+              "Repetition of key words",
+              "Synonyms to vary vocabulary"
             ]}
           />
         </div>
@@ -377,12 +359,12 @@ const CohesionAndConnectorsPage = () => {
         "Although"
       ]}
       correctAnswer={1}
-      explanation="'Furthermore' añade información adicional que apoya la idea anterior."
+      explanation="“Furthermore” adds supporting information that builds on the previous idea."
     />,
 
     <MultipleChoiceExercise
       key="2"
-      question="¿Cuál es el conector más apropiado para agregar información importante?"
+      question="Which connector is most appropriate for adding important information?"
       options={[
         "However",
         "Furthermore",
@@ -390,38 +372,38 @@ const CohesionAndConnectorsPage = () => {
         "Yet"
       ]}
       correctAnswer={1}
-      explanation="'Furthermore' se usa para agregar información importante, mientras que los otros son para contraste."
+      explanation="“Furthermore” adds important supporting information; the others are mainly for contrast."
     />,
 
     <TrueFalseExercise
       key="3"
       statements={[
         {
-          text: "'However' y 'but' pueden usarse juntos en la misma oración.",
+          text: "'However' and 'but' may be used together in the same sentence.",
           isTrue: false,
-          explanation: "Incorrecto. No se deben usar dos conectores de contraste juntos. Usa solo uno."
+          explanation: "Incorrect. Do not use two contrast connectors together. Use one."
         },
         {
-          text: "'Furthermore' es más formal que 'and'.",
+          text: "'Furthermore' is more formal than 'and'.",
           isTrue: true,
-          explanation: "Correcto. 'Furthermore' es formal, 'and' es más informal y simple."
+          explanation: "Correct. “Furthermore” is formal; “and” is simpler and more neutral."
         },
         {
-          text: "Los conectores siempre van al inicio de la oración.",
+          text: "Connectors always come at the start of the sentence.",
           isTrue: false,
-          explanation: "Incorrecto. La mayoría van al inicio, pero algunos como 'yet' y 'so' pueden ir en medio."
+          explanation: "Incorrect. Many do, but some such as “yet” and “so” often appear mid-sentence."
         },
         {
-          text: "Usar variedad de conectores mejora la calidad del texto.",
+          text: "Using a range of connectors improves the quality of a text.",
           isTrue: true,
-          explanation: "Correcto. La variedad evita repetición y hace el texto más interesante."
+          explanation: "Correct. Variety avoids repetition and keeps the reader engaged."
         }
       ]}
     />,
 
     <MultipleChoiceExercise
       key="4"
-      question="¿Cuál es el conector más apropiado para mostrar resultado?"
+      question="Which connector is most appropriate to show result?"
       options={[
         "Because",
         "However",
@@ -429,20 +411,20 @@ const CohesionAndConnectorsPage = () => {
         "Furthermore"
       ]}
       correctAnswer={2}
-      explanation="'Therefore' muestra resultado o consecuencia, mientras que 'because' muestra causa."
+      explanation="“Therefore” shows result or consequence; “because” shows cause."
     />,
 
     <MultipleChoiceExercise
       key="5"
-      question="¿Cuál es el error en esta oración: 'But however, there are problems'?"
+      question="What is wrong with this sentence: 'But however, there are problems'?"
       options={[
-        "Falta un conector",
-        "Usa dos conectores de contraste juntos",
-        "El conector está mal posicionado",
-        "Falta puntuación"
+        "A connector is missing",
+        "It uses two contrast connectors together",
+        "The connector is in the wrong place",
+        "Punctuation is missing"
       ]}
       correctAnswer={1}
-      explanation="El error es usar 'But' y 'However' juntos, ambos son conectores de contraste. Debe ser solo uno."
+      explanation="The problem is using “But” and “However” together—both signal contrast. Use only one."
     />,
 
     <TrueFalseExercise
@@ -451,17 +433,17 @@ const CohesionAndConnectorsPage = () => {
         {
           text: "'However' and 'but' can be used interchangeably in all contexts.",
           isTrue: false,
-          explanation: "Incorrecto. 'However' es más formal y va al inicio de oración con coma, mientras que 'but' conecta cláusulas directamente."
+          explanation: "Incorrect. “However” is more formal and often starts a sentence with a comma; “but” links clauses more directly."
         },
         {
           text: "Cohesion can be achieved without using connectors.",
           isTrue: true,
-          explanation: "Correcto. La cohesión también se logra con pronombres, repetición, sinónimos y referencias."
+          explanation: "Correct. Cohesion also comes from pronouns, repetition, synonyms, and reference."
         },
         {
-          text: "'Therefore' shows cause and effect relationship.",
+          text: "'Therefore' shows a cause-and-effect relationship.",
           isTrue: true,
-          explanation: "Correcto. 'Therefore' indica resultado o consecuencia: 'It's raining, therefore I'll stay home'."
+          explanation: "Correct. “Therefore” signals result or consequence (e.g. “It's raining, therefore I'll stay home”)."
         }
       ]}
     />,
@@ -476,12 +458,12 @@ const CohesionAndConnectorsPage = () => {
         "Nevertheless"
       ]}
       correctAnswer={2}
-      explanation="'Therefore' muestra resultado: estudié mucho, por lo tanto aprobé el examen."
+      explanation="“Therefore” shows result: you studied hard, so you passed."
     />,
 
     <MultipleChoiceExercise
       key="8"
-      question="¿Cuál conector es mejor para agregar un punto importante?"
+      question="Which connector works best to add an important point?"
       options={[
         "However",
         "Moreover",
@@ -489,7 +471,7 @@ const CohesionAndConnectorsPage = () => {
         "Although"
       ]}
       correctAnswer={1}
-      explanation="'Moreover' se usa para agregar información importante que refuerza el argumento anterior."
+      explanation="“Moreover” adds important information that strengthens the previous argument."
     />,
 
     <TrueFalseExercise
@@ -498,12 +480,12 @@ const CohesionAndConnectorsPage = () => {
         {
           text: "'In addition' and 'furthermore' have similar functions.",
           isTrue: true,
-          explanation: "Correcto. Ambos conectores agregan información adicional que apoya la idea anterior."
+          explanation: "Correct. Both add information that supports the previous idea."
         },
         {
           text: "Connectors should be used in every sentence for good cohesion.",
           isTrue: false,
-          explanation: "Incorrecto. El uso excesivo de conectores puede hacer el texto repetitivo. La cohesión también se logra con otros recursos."
+          explanation: "Incorrect. Overusing connectors sounds repetitive. Cohesion also uses other devices."
         }
       ]}
     />,
@@ -518,14 +500,14 @@ const CohesionAndConnectorsPage = () => {
         "Furthermore"
       ]}
       correctAnswer={1}
-      explanation="'Despite' muestra contraste: a pesar de la lluvia, fuimos al parque."
+      explanation="“Despite” shows contrast: in spite of the rain, we still went."
     />
   ];
 
   return (
     <TheoryLayout
       title="Cohesion and Connectors"
-      description="Domina la cohesión y conectores en inglés. Aprende a unir ideas, crear transiciones suaves y mejorar la fluidez de tus textos escritos."
+      description="Master cohesion and connectors in English. Learn to link ideas, create smooth transitions, and improve the flow of your writing."
       level="A2-B1-B2-C1-C2"
       theoryContent={theoryContent}
       exercises={exercises}
@@ -536,25 +518,3 @@ const CohesionAndConnectorsPage = () => {
 };
 
 export default CohesionAndConnectorsPage;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

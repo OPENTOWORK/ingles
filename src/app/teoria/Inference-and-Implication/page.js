@@ -6,128 +6,128 @@ import { MultipleChoiceExercise, TrueFalseExercise } from '@/components/theory/E
 const InferenceAndImplicationPage = () => {
   const theoryContent = (
     <div>
-      <TheorySection title="¿Qué son Inference e Implication?" icon="🔍">
+      <TheorySection title="What are Inference and Implication?" icon="🔍">
         <p>
-          <strong>Inference</strong> es la habilidad de entender información que no está explícitamente declarada en el texto. 
-          <strong>Implication</strong> es lo que el autor sugiere o da a entender sin decirlo directamente. 
-          Es "leer entre líneas" para captar significados ocultos.
+          <strong>Inference</strong> is understanding information that is not directly stated. 
+          <strong>Implication</strong> is what the author suggests without saying it outright. 
+          Together they mean "reading between the lines" to catch unstated meaning.
         </p>
         
         <Example 
-          title="Ejemplo de Inference e Implication"
-          content="Texto: 'Sarah looked at her watch for the third time and tapped her foot impatiently.' 
-          Inference: Sarah está esperando a alguien que llega tarde.
-          Implication: El autor sugiere que Sarah está frustrada o ansiosa."
-          explanation="Aunque no dice directamente que está esperando o frustrada, puedes inferirlo de las acciones descritas."
+          title="Inference and implication example"
+          content="Text: 'Sarah looked at her watch for the third time and tapped her foot impatiently.' 
+          Inference: Sarah is waiting for someone who is late.
+          Implication: The author suggests Sarah is frustrated or anxious."
+          explanation="The text never says she is waiting or upset, but you can infer it from the actions."
         />
       </TheorySection>
 
-      <TheorySection title="Tipos de Inferencias" icon="🎯">
+      <TheorySection title="Types of inference" icon="🎯">
         <div style={{ display: 'grid', gap: '1rem' }}>
           <Tip 
-            title="1. Inferencias sobre emociones y actitudes"
-            description="Deducir cómo se sienten los personajes o el autor."
+            title="1. Inferences about emotions and attitudes"
+            description="Work out how characters or the author feel."
             examples={[
-              "Acciones que indican emociones: 'slammed the door' = enojo",
-              "Elección de palabras: 'magnificent' vs 'adequate' = diferentes actitudes",
-              "Lenguaje corporal descrito: 'crossed arms' = defensivo",
-              "Tono implícito: sarcasmo, ironía, entusiasmo"
+              "Actions that signal mood: 'slammed the door' suggests anger",
+              "Word choice: 'magnificent' vs 'adequate' shows different attitudes",
+              "Described body language: 'crossed arms' suggests defensiveness",
+              "Implicit tone: sarcasm, irony, enthusiasm"
             ]}
           />
 
           <Tip 
-            title="2. Inferencias sobre relaciones"
-            description="Deducir conexiones entre personas, eventos o ideas."
+            title="2. Inferences about relationships"
+            description="Deduce links between people, events, or ideas."
             examples={[
-              "Relaciones familiares no declaradas explícitamente",
-              "Jerarquías profesionales o sociales",
-              "Causa y efecto implícitos",
-              "Secuencias temporales sugeridas"
+              "Family ties not spelled out",
+              "Professional or social hierarchy",
+              "Implied cause and effect",
+              "Suggested time order"
             ]}
           />
 
           <Tip 
-            title="3. Inferencias sobre contexto"
-            description="Deducir información sobre tiempo, lugar o situación."
+            title="3. Inferences about setting"
+            description="Deduce time, place, or situation."
             examples={[
-              "Época histórica por pistas contextuales",
-              "Ubicación geográfica por descripciones",
-              "Clase social por detalles del estilo de vida",
-              "Profesión por vocabulario especializado usado"
+              "Historical period from context clues",
+              "Location from descriptions",
+              "Social class from lifestyle details",
+              "Job from specialised vocabulary"
             ]}
           />
         </div>
       </TheorySection>
 
-      <TheorySection title="Estrategias para Hacer Inferencias" icon="🔍">
+      <TheorySection title="How to infer well" icon="🔍">
         <div style={{ display: 'grid', gap: '1rem' }}>
           <Rule 
-            title="1. Analiza la elección de palabras"
-            description="Las palabras específicas que elige el autor revelan actitudes."
+            title="1. Study word choice"
+            description="Specific words reveal attitude."
             examples={[
-              "Palabras positivas vs negativas: 'determined' vs 'stubborn'",
-              "Nivel de formalidad: indica relación entre personajes",
-              "Intensidad: 'whispered' vs 'shouted' indica emociones",
-              "Connotaciones: 'home' vs 'house' sugiere diferentes sentimientos"
+              "Positive vs negative words: 'determined' vs 'stubborn'",
+              "Formality level: can show relationships between people",
+              "Intensity: 'whispered' vs 'shouted' signals emotion",
+              "Connotation: 'home' vs 'house' carries different feeling"
             ]}
           />
 
           <Rule 
-            title="2. Observa lo que NO se dice"
-            description="A veces lo importante es lo que el autor omite."
+            title="2. Notice what is NOT said"
+            description="Sometimes omissions matter most."
             examples={[
-              "Información deliberadamente omitida",
-              "Preguntas que quedan sin responder",
-              "Detalles evitados o minimizados",
-              "Silencios significativos en diálogos"
+              "Information deliberately left out",
+              "Questions left hanging",
+              "Details downplayed or avoided",
+              "Meaningful silence in dialogue"
             ]}
           />
 
           <Rule 
-            title="3. Conecta pistas dispersas"
-            description="Combina información de diferentes partes del texto."
+            title="3. Join scattered clues"
+            description="Combine information from different places."
             examples={[
-              "Detalles mencionados en párrafos separados",
-              "Patrones de comportamiento repetidos",
-              "Contrastes entre lo que se dice y se hace",
-              "Cambios graduales en tono o actitud"
+              "Details in separate paragraphs",
+              "Repeated patterns of behaviour",
+              "Gaps between words and actions",
+              "Gradual shifts in tone or stance"
             ]}
           />
         </div>
       </TheorySection>
 
-      <TheorySection title="Reglas Importantes" icon="⚡">
+      <TheorySection title="Important rules" icon="⚡">
         <div style={{ display: 'grid', gap: '1rem' }}>
           <Rule 
-            title="1. Basa tus inferencias en evidencia textual"
-            description="Tus conclusiones deben estar apoyadas por el texto."
+            title="1. Ground inferences in evidence"
+            description="Conclusions must be supported by the text."
             examples={[
-              "¿Qué evidencia específica apoya tu inferencia?",
-              "¿Hay múltiples pistas que apuntan a la misma conclusión?",
-              "¿Tu inferencia es consistente con el resto del texto?",
-              "¿Estás proyectando tus propias ideas o siguiendo las del autor?"
+              "What exact evidence backs your inference?",
+              "Do several clues point the same way?",
+              "Is your inference consistent with the rest?",
+              "Are you importing your own ideas?"
             ]}
           />
 
           <Rule 
-            title="2. Considera el contexto cultural y social"
-            description="Las implicaciones pueden depender del contexto."
+            title="2. Consider cultural and social context"
+            description="Implications may depend on background norms."
             examples={[
-              "Normas sociales de la época descrita",
-              "Convenciones culturales relevantes",
-              "Expectativas de género, clase o edad",
-              "Códigos de comportamiento implícitos"
+              "Social norms of the period described",
+              "Relevant cultural conventions",
+              "Expectations about gender, class, or age",
+              "Implicit rules of behaviour"
             ]}
           />
 
           <Rule 
-            title="3. Distingue entre inferencia y especulación"
-            description="Las inferencias válidas están basadas en evidencia textual."
+            title="3. Tell inference from speculation"
+            description="Valid inferences rest on textual evidence."
             examples={[
-              "Inferencia válida: apoyada por pistas textuales claras",
-              "Especulación: va más allá de lo que el texto sugiere",
-              "¿Otro lector razonable llegaría a la misma conclusión?",
-              "¿Tu interpretación es la más probable dada la evidencia?"
+              "Valid inference: clearly supported by clues",
+              "Speculation: goes beyond what the text implies",
+              "Would another reasonable reader agree?",
+              "Is your reading the most likely from the evidence?"
             ]}
           />
         </div>
@@ -138,158 +138,158 @@ const InferenceAndImplicationPage = () => {
   const exercises = [
     <MultipleChoiceExercise
       key="1"
-      question="¿Qué es una inferencia en lectura?"
+      question="What is an inference in reading?"
       options={[
-        "Información explícitamente declarada en el texto",
-        "Información que deduces aunque no esté explícitamente declarada",
-        "El título del texto",
-        "Las palabras que no entiendes"
+        "Information stated directly",
+        "Information you work out though it is not directly stated",
+        "The title of the text",
+        "Words you do not know"
       ]}
       correctAnswer={1}
-      explanation="Una inferencia es información que deduces o concluyes basándote en pistas del texto, aunque no esté explícitamente declarada."
+      explanation="Inference is what you conclude from clues without direct statement."
     />,
 
     <MultipleChoiceExercise
       key="2"
-      question="Si un texto dice 'John slammed the door and stormed out', ¿qué puedes inferir?"
+      question="If a text says 'John slammed the door and stormed out', what can you infer?"
       options={[
-        "John está contento",
-        "John está enojado o frustrado",
-        "John tiene prisa por llegar a algún lugar",
-        "John no sabe cómo cerrar puertas suavemente"
+        "John is happy",
+        "John is angry or upset",
+        "John is in a hurry to get somewhere",
+        "John does not know how to close doors gently"
       ]}
       correctAnswer={1}
-      explanation="Las acciones 'slammed' y 'stormed out' indican enojo o frustración, aunque no se diga explícitamente."
+      explanation="'Slammed' and 'stormed out' suggest anger or strong frustration without naming it."
     />,
 
     <TrueFalseExercise
       key="3"
       statements={[
         {
-          text: "Las inferencias deben estar basadas en evidencia del texto.",
+          text: "Inferences should be based on evidence from the text.",
           isTrue: true,
-          explanation: "Correcto. Las inferencias válidas deben tener apoyo en pistas y evidencia específica del texto."
+          explanation: "Correct. Sound inferences need support from specific clues."
         },
         {
-          text: "Puedes hacer cualquier inferencia que se te ocurra al leer.",
+          text: "You may infer anything that comes to mind.",
           isTrue: false,
-          explanation: "Incorrecto. Las inferencias deben estar justificadas por evidencia textual, no ser especulaciones libres."
+          explanation: "Incorrect. Inferences must be justified by the text, not free speculation."
         },
         {
-          text: "La elección de palabras del autor puede revelar actitudes implícitas.",
+          text: "The author's word choice can reveal unstated attitudes.",
           isTrue: true,
-          explanation: "Correcto. Las palabras específicas que elige el autor a menudo revelan actitudes y emociones no declaradas."
+          explanation: "Correct. Word choice often signals views that are never stated outright."
         }
       ]}
     />,
 
     <MultipleChoiceExercise
       key="4"
-      question="¿Cuál es la diferencia entre 'He's determined' y 'He's stubborn'?"
+      question="What is the difference between 'He's determined' and 'He's stubborn'?"
       options={[
-        "No hay diferencia, significan lo mismo",
-        "'Determined' es positivo, 'stubborn' es más negativo",
-        "'Stubborn' es más formal que 'determined'",
-        "Solo se diferencian en la pronunciación"
+        "No difference—they mean the same",
+        "'Determined' is more positive; 'stubborn' more negative",
+        "'Stubborn' is more formal",
+        "They differ only in pronunciation"
       ]}
       correctAnswer={1}
-      explanation="'Determined' tiene connotación positiva (perseverante), mientras 'stubborn' es más negativo (terco, inflexible)."
+      explanation="'Determined' is positive (persistent); 'stubborn' is negative (unreasonably inflexible)."
     />,
 
     <MultipleChoiceExercise
       key="5"
-      question="Si un personaje 'whispers' en lugar de 'speaks', ¿qué puedes inferir?"
+      question="If a character 'whispers' instead of 'speaks', what might you infer?"
       options={[
-        "Que tiene problemas de voz",
-        "Que la situación requiere secreto o discreción",
-        "Que no sabe hablar fuerte",
-        "Que está leyendo"
+        "They have voice problems",
+        "The situation needs secrecy or discretion",
+        "They cannot speak loudly",
+        "They are reading aloud"
       ]}
       correctAnswer={1}
-      explanation="'Whisper' implica secreto, confidencialidad o la necesidad de no ser escuchado por otros."
+      explanation="'Whisper' suggests secrecy, confidentiality, or not wanting to be overheard."
     />,
 
     <TrueFalseExercise
       key="6"
       statements={[
         {
-          text: "A veces lo que el autor NO dice es tan importante como lo que sí dice.",
+          text: "Sometimes what the author does NOT say matters as much as what they do.",
           isTrue: true,
-          explanation: "Correcto. Las omisiones deliberadas y los silencios pueden ser muy significativos para la interpretación."
+          explanation: "Correct. Deliberate gaps and silence can be highly meaningful."
         },
         {
-          text: "Las inferencias sobre emociones solo se pueden hacer si el texto las menciona directamente.",
+          text: "You can only infer emotions if the text names them.",
           isTrue: false,
-          explanation: "Incorrecto. Puedes inferir emociones a través de acciones, diálogos, lenguaje corporal y elección de palabras."
+          explanation: "Incorrect. You infer emotion from actions, dialogue, body language, and wording."
         },
         {
-          text: "El contexto cultural puede afectar las implicaciones de un texto.",
+          text: "Cultural context can change how you read implications.",
           isTrue: true,
-          explanation: "Correcto. Las normas culturales y sociales influyen en cómo interpretamos comportamientos y situaciones."
+          explanation: "Correct. Cultural norms shape how we interpret behaviour."
         }
       ]}
     />,
 
     <MultipleChoiceExercise
       key="7"
-      question="¿Qué estrategia es más efectiva para hacer inferencias válidas?"
+      question="Which strategy best supports valid inferences?"
       options={[
-        "Usar solo tu imaginación",
-        "Combinar múltiples pistas del texto",
-        "Basarte en tu experiencia personal únicamente",
-        "Ignorar los detalles pequeños"
+        "Imagination alone",
+        "Combining several clues from the text",
+        "Personal experience only",
+        "Ignoring small details"
       ]}
       correctAnswer={1}
-      explanation="Combinar múltiples pistas del texto te da una base más sólida para hacer inferencias válidas y bien fundamentadas."
+      explanation="Several supporting clues from the text make an inference stronger."
     />,
 
     <MultipleChoiceExercise
       key="8"
-      question="Si un texto describe una casa con 'peeling paint, broken windows, and overgrown garden', ¿qué puedes inferir?"
+      question="If a text describes a house with 'peeling paint, broken windows, and overgrown garden', what can you infer?"
       options={[
-        "Que es una casa nueva",
-        "Que está abandonada o mal cuidada",
-        "Que es muy cara",
-        "Que tiene buen mantenimiento"
+        "It is a new house",
+        "It is neglected or poorly maintained",
+        "It is very expensive",
+        "It is well maintained"
       ]}
       correctAnswer={1}
-      explanation="Los detalles 'peeling paint', 'broken windows', 'overgrown garden' sugieren abandono o falta de mantenimiento."
+      explanation="Those details suggest neglect or lack of upkeep."
     />,
 
     <TrueFalseExercise
       key="9"
       statements={[
         {
-          text: "Una buena inferencia es aquella que cualquier lector razonable podría hacer basándose en la misma evidencia.",
+          text: "A sound inference is one another reasonable reader could make from the same evidence.",
           isTrue: true,
-          explanation: "Correcto. Las inferencias válidas deben ser razonables y estar basadas en evidencia clara del texto."
+          explanation: "Correct. Valid inferences should be reasonable and evidence-based."
         },
         {
-          text: "Debes hacer inferencias sobre cada detalle del texto.",
+          text: "You must infer something about every detail.",
           isTrue: false,
-          explanation: "Incorrecto. Solo debes hacer inferencias cuando hay suficiente evidencia y cuando es relevante para la comprensión."
+          explanation: "Incorrect. Infer only when there is enough evidence and it matters for understanding."
         }
       ]}
     />,
 
     <MultipleChoiceExercise
       key="10"
-      question="¿Cuál es la clave para distinguir entre inferencia válida y especulación?"
+      question="What separates valid inference from speculation?"
       options={[
-        "La longitud de tu conclusión",
-        "La cantidad de evidencia textual que la apoya",
-        "Si te gusta o no la conclusión",
-        "Si otros están de acuerdo contigo"
+        "How long your conclusion is",
+        "How much textual evidence supports it",
+        "Whether you like the conclusion",
+        "Whether others agree with you"
       ]}
       correctAnswer={1}
-      explanation="Una inferencia válida debe estar apoyada por evidencia textual clara, mientras que la especulación va más allá de lo que el texto sugiere."
+      explanation="Strong textual support marks inference; speculation goes beyond what the text implies."
     />
   ];
 
   return (
     <TheoryLayout
       title="Inference and Implication"
-      description="Domina la habilidad de leer entre líneas. Aprende a hacer inferencias válidas y entender implicaciones basándote en evidencia textual y pistas contextuales."
+      description="Master reading between the lines. Learn to draw justified inferences and spot implications from textual evidence and context."
       level="B1-B2-C1-C2"
       theoryContent={theoryContent}
       exercises={exercises}

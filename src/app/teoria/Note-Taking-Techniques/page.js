@@ -18,362 +18,289 @@ import {
 const NoteTakingTechniquesPage = () => {
   const theoryContent = (
     <div>
-      <TheorySection title="¿Qué son las Note-Taking Techniques?" icon="📝">
+      <TheorySection title="What Are Note-Taking Techniques?" icon="📝">
         <p style={{ fontSize: '1.1rem', lineHeight: 1.6, color: '#4a5568', marginBottom: '1rem' }}>
-          Las <strong>note-taking techniques</strong> (técnicas de toma de notas) son métodos sistemáticos para capturar 
-          información importante durante el listening. Son esenciales para retener y procesar información en exámenes largos.
+          <strong>Note-taking techniques</strong> are systematic ways to capture important information while you listen. They are essential in longer exams and recordings.
         </p>
         
         <QuickReference items={[
-          "Métodos para capturar información clave",
-          "Sistemas de organización y estructura",
-          "Abreviaciones y símbolos eficientes",
-          "Estrategias para diferentes tipos de listening",
-          "Técnicas de revisión y verificación"
+          "Ways to capture key information",
+          "Systems for organizing notes",
+          "Efficient abbreviations and symbols",
+          "Strategies by listening task type",
+          "Review and checking techniques"
         ]} />
       </TheorySection>
 
-      <TheorySection title="Importancia de la Toma de Notas" icon="🎯">
+      <TheorySection title="Why Note-Taking Matters" icon="🎯">
         <p style={{ fontSize: '1rem', lineHeight: 1.6, color: '#4a5568', marginBottom: '1rem' }}>
-          La toma de notas es crucial para el éxito en exámenes de listening, especialmente en audios largos.
+          Notes are crucial for listening success, especially on long audio.
         </p>
 
         <GrammarTable
-          caption="Beneficios de la Toma de Notas"
-          headers={["Beneficio", "Descripción", "Cuándo Ayuda", "Ejemplo"]}
+          caption="Benefits of Note-Taking"
+          headers={["Benefit", "Description", "When It Helps", "Example"]}
           rows={[
-            ["Retención", "Ayuda a recordar información", "Audios largos", "Recordar detalles después de 5 minutos"],
-            ["Organización", "Estructura la información", "Información compleja", "Organizar por temas o hablantes"],
-            ["Enfoque", "Mantiene la concentración", "Audios aburridos", "Enfocarse en información relevante"],
-            ["Verificación", "Permite revisar respuestas", "Después del audio", "Confirmar información antes de responder"],
-            ["Comprensión", "Mejora el procesamiento", "Información difícil", "Procesar información compleja"],
-            ["Confianza", "Reduce la ansiedad", "Exámenes importantes", "Sentirse preparado para responder"]
+            ["Retention", "Helps you remember", "Long recordings", "Recall detail after 5 minutes"],
+            ["Organization", "Structures information", "Complex content", "Group by topic or speaker"],
+            ["Focus", "Keeps attention on task", "Dry or dense audio", "Track what questions need"],
+            ["Verification", "Lets you check answers", "After the audio", "Confirm before you choose"],
+            ["Processing", "Supports deeper processing", "Difficult input", "Work through complex ideas"],
+            ["Confidence", "Reduces anxiety", "High-stakes tests", "Feel ready to answer"]
           ]}
         />
 
         <div style={{ display: 'grid', gap: '1rem' }}>
-          <Example 
-            spanish="Retención: 'Recordar detalles después de audio de 5 minutos'"
-            english="Retention: 'Remember details after 5-minute audio'"
-            translation="Retención: 'Recordar detalles después de audio de 5 minutos'"
-          />
-          <Example 
-            spanish="Organización: 'Organizar información por temas'"
-            english="Organization: 'Organize information by topics'"
-            translation="Organización: 'Organizar información por temas'"
-          />
-          <Example 
-            spanish="Verificación: 'Confirmar información antes de responder'"
-            english="Verification: 'Confirm information before answering'"
-            translation="Verificación: 'Confirmar información antes de responder'"
-          />
+          <Example english="Retention: 'Remember details after a 5-minute recording'" />
+          <Example english="Organization: 'Sort information by topic'" />
+          <Example english="Verification: 'Check facts before answering'" />
         </div>
 
         <Rule 
-          title="Cuándo Tomar Notas"
-          description="Toma notas cuando:"
+          title="When to Take Notes"
+          description="Take notes when:"
           examples={[
-            "El audio es largo (más de 2 minutos)",
-            "Hay mucha información específica",
-            "Hay múltiples hablantes",
-            "Hay números, fechas, nombres importantes",
-            "El audio es complejo o técnico"
+            "The recording is long (over about 2 minutes)",
+            "There is a lot of specific information",
+            "There are several speakers",
+            "Numbers, dates, or names matter",
+            "The content is complex or technical"
           ]}
         />
 
         <Tip type="info">
-          <strong>Consejo:</strong> La toma de notas es especialmente importante en monólogos y conversaciones largas.
+          <strong>Tip:</strong> Notes matter most in monologues and long conversations.
         </Tip>
       </TheorySection>
 
-      <TheorySection title="Sistemas de Organización" icon="📋">
+      <TheorySection title="Organization Systems" icon="📋">
         <p style={{ fontSize: '1rem', lineHeight: 1.6, color: '#4a5568', marginBottom: '1rem' }}>
-          Existen diferentes sistemas para organizar las notas de manera efectiva.
+          Different systems help you structure notes effectively.
         </p>
 
         <GrammarTable
-          caption="Sistemas de Organización de Notas"
-          headers={["Sistema", "Descripción", "Cuándo Usar", "Ventaja"]}
+          caption="Note Organization Systems"
+          headers={["System", "Description", "When to Use", "Advantage"]}
           rows={[
-            ["Lineal", "Notas en líneas secuenciales", "Información cronológica", "Fácil seguimiento temporal"],
-            ["Por Temas", "Organizar por temas principales", "Múltiples temas", "Fácil referencia por tema"],
-            ["Por Hablantes", "Separar por persona que habla", "Múltiples hablantes", "Seguir quién dice qué"],
-            ["Cornell", "Dividir página en secciones", "Información compleja", "Estructura clara"],
-            ["Mapa Mental", "Organizar visualmente", "Conceptos interrelacionados", "Ver relaciones"],
-            ["Tabla", "Organizar en columnas", "Información comparativa", "Fácil comparación"]
+            ["Linear", "Sequential lines", "Chronological flow", "Easy time order"],
+            ["By topic", "Grouped by main theme", "Several topics", "Quick topic lookup"],
+            ["By speaker", "Separated by who speaks", "Multiple speakers", "Track who said what"],
+            ["Cornell-style", "Page split into zones", "Dense content", "Clear layout"],
+            ["Mind map", "Visual branches", "Linked concepts", "See relationships"],
+            ["Table", "Columns", "Comparison", "Easy side-by-side"]
           ]}
         />
 
         <div style={{ display: 'grid', gap: '1rem' }}>
-          <Example 
-            spanish="Lineal: '1. Introducción, 2. Desarrollo, 3. Conclusión'"
-            english="Linear: '1. Introduction, 2. Development, 3. Conclusion'"
-            translation="Lineal: '1. Introducción, 2. Desarrollo, 3. Conclusión'"
-          />
-          <Example 
-            spanish="Por temas: 'Tema A: Beneficios, Tema B: Desafíos, Tema C: Soluciones'"
-            english="By topics: 'Topic A: Benefits, Topic B: Challenges, Topic C: Solutions'"
-            translation="Por temas: 'Tema A: Beneficios, Tema B: Desafíos, Tema C: Soluciones'"
-          />
-          <Example 
-            spanish="Por hablantes: 'Manager: decisiones, Designer: propuestas, Developer: preocupaciones'"
-            english="By speakers: 'Manager: decisions, Designer: proposals, Developer: concerns'"
-            translation="Por hablantes: 'Manager: decisiones, Designer: propuestas, Developer: preocupaciones'"
-          />
+          <Example english="Linear: '1. Introduction, 2. Body, 3. Conclusion'" />
+          <Example english="By topic: 'Topic A: Benefits; Topic B: Challenges; Topic C: Solutions'" />
+          <Example english="By speaker: 'Manager: decisions; Designer: proposals; Developer: concerns'" />
         </div>
 
         <Tip type="success">
-          <strong>Consejo:</strong> Elige el sistema que mejor se adapte al tipo de información y estructura del audio.
+          <strong>Tip:</strong> Pick the system that fits the audio structure and question focus.
         </Tip>
       </TheorySection>
 
-      <TheorySection title="Abreviaciones y Símbolos" icon="⚡">
+      <TheorySection title="Abbreviations and Symbols" icon="⚡">
         <p style={{ fontSize: '1rem', lineHeight: 1.6, color: '#4a5568', marginBottom: '1rem' }}>
-          Las abreviaciones y símbolos son herramientas esenciales para tomar notas rápidamente.
+          Abbreviations and symbols let you write faster.
         </p>
 
         <GrammarTable
-          caption="Abreviaciones y Símbolos Comunes"
-          headers={["Categoría", "Ejemplo", "Significado", "Cuándo Usar"]}
+          caption="Common Abbreviations and Symbols"
+          headers={["Category", "Example", "Meaning", "When to Use"]}
           rows={[
-            ["Palabras Comunes", "w/ (with), w/o (without)", "Con, sin", "Frecuentemente"],
-            ["Tiempo", "AM, PM, Mon, Tue", "Tiempo, días", "Fechas y horarios"],
-            ["Números", "1st, 2nd, 3rd", "Primero, segundo, tercero", "Listas y secuencias"],
-            ["Símbolos", "→ (leads to), ↑ (increase)", "Conectores, cambios", "Relaciones y cambios"],
-            ["Profesiones", "Dr. (doctor), Prof. (professor)", "Títulos profesionales", "Identificar personas"],
-            ["Lugares", "US, UK, NY", "Países, ciudades", "Ubicaciones geográficas"]
+            ["Common words", "w/ (with), w/o (without)", "With / without", "Very often"],
+            ["Time", "AM, PM, Mon, Tue", "Time slots, days", "Schedules and dates"],
+            ["Order", "1st, 2nd, 3rd", "Sequence", "Lists and order"],
+            ["Symbols", "→ (leads to), ↑ (increase)", "Links, change", "Relations and trends"],
+            ["Titles", "Dr., Prof.", "Professional roles", "Identifying people"],
+            ["Places", "US, UK, NY", "Countries, cities", "Locations"]
           ]}
         />
 
         <div style={{ display: 'grid', gap: '1rem' }}>
-          <Example 
-            spanish="Palabras comunes: 'w/ (con), w/o (sin)'"
-            english="Common words: 'w/ (with), w/o (without)'"
-            translation="Palabras comunes: 'w/ (con), w/o (sin)'"
-          />
-          <Example 
-            spanish="Símbolos: '→ (lleva a), ↑ (aumenta)'"
-            english="Symbols: '→ (leads to), ↑ (increases)'"
-            translation="Símbolos: '→ (lleva a), ↑ (aumenta)'"
-          />
-          <Example 
-            spanish="Tiempo: 'AM, PM, Mon, Tue'"
-            english="Time: 'AM, PM, Mon, Tue'"
-            translation="Tiempo: 'AM, PM, Mon, Tue'"
-          />
+          <Example english="Common words: 'w/ (with), w/o (without)'" />
+          <Example english="Symbols: '→ (leads to), ↑ (increase)'" />
+          <Example english="Time: 'AM, PM, Mon, Tue'" />
         </div>
 
         <Rule 
-          title="Consejos para Abreviaciones"
-          description="Para usar abreviaciones efectivamente:"
+          title="Abbreviation Tips"
+          description="To use abbreviations well:"
           examples={[
-            "Desarrolla tu propio sistema consistente",
-            "Usa abreviaciones que puedas entender después",
-            "Practica hasta que sean automáticas",
-            "No uses abreviaciones demasiado complejas"
+            "Build a consistent personal set",
+            "Use forms you will recognize later",
+            "Practice until they are automatic",
+            "Avoid overly cryptic codes"
           ]}
         />
 
         <Tip type="warning">
-          <strong>¡Cuidado!</strong> Asegúrate de poder entender tus propias abreviaciones después.
+          <strong>Watch out!</strong> Make sure you can read your own abbreviations afterward.
         </Tip>
       </TheorySection>
 
-      <TheorySection title="Técnicas por Tipo de Listening" icon="🎧">
+      <TheorySection title="Techniques by Listening Type" icon="🎧">
         <p style={{ fontSize: '1rem', lineHeight: 1.6, color: '#4a5568', marginBottom: '1rem' }}>
-          Diferentes tipos de listening requieren diferentes técnicas de toma de notas.
+          Different tasks call for different note-taking approaches.
         </p>
 
         <GrammarTable
-          caption="Técnicas por Tipo de Listening"
-          headers={["Tipo", "Técnica", "Enfoque", "Ejemplo"]}
+          caption="Techniques by Listening Type"
+          headers={["Type", "Technique", "Focus", "Example"]}
           rows={[
-            ["Short Dialogues", "Notas mínimas", "Información específica", "Precio: $25, Tiempo: 3 PM"],
-            ["Monologues", "Notas estructuradas", "Estructura y detalles", "Intro: tema, Desarrollo: 3 puntos"],
-            ["Long Conversations", "Notas por hablante", "Quién dice qué", "A: opción 1, B: opción 2"],
-            ["Multi-speaker", "Mapa de voces", "Identificación sistemática", "Voz 1: manager, Voz 2: designer"],
-            ["Lectures", "Notas académicas", "Conceptos y ejemplos", "Concepto: definición, Ejemplo: caso"],
-            ["Interviews", "Q&A format", "Preguntas y respuestas", "P: experiencia, R: 5 años"]
+            ["Short dialogues", "Minimal notes", "Specific fact", "Price: $25; Time: 3 PM"],
+            ["Monologues", "Structured notes", "Structure and detail", "Intro: topic; Body: 3 points"],
+            ["Long conversations", "Per-speaker notes", "Who said what", "A: option 1; B: option 2"],
+            ["Multi-speaker", "Voice map", "Systematic ID", "Voice 1: manager; Voice 2: designer"],
+            ["Lectures", "Academic style", "Concepts and examples", "Concept: definition; Example: case"],
+            ["Interviews", "Q&A layout", "Questions and answers", "Q: experience; A: 5 years"]
           ]}
         />
 
         <div style={{ display: 'grid', gap: '1rem' }}>
-          <Example 
-            spanish="Short Dialogues: 'Precio: $25, Tiempo: 3 PM'"
-            english="Short Dialogues: 'Price: $25, Time: 3 PM'"
-            translation="Short Dialogues: 'Precio: $25, Tiempo: 3 PM'"
-          />
-          <Example 
-            spanish="Monologues: 'Intro: tema, Desarrollo: 3 puntos'"
-            english="Monologues: 'Intro: topic, Development: 3 points'"
-            translation="Monologues: 'Intro: tema, Desarrollo: 3 puntos'"
-          />
-          <Example 
-            spanish="Multi-speaker: 'Voz 1: manager, Voz 2: designer'"
-            english="Multi-speaker: 'Voice 1: manager, Voice 2: designer'"
-            translation="Multi-speaker: 'Voz 1: manager, Voz 2: designer'"
-          />
+          <Example english="Short dialogues: 'Price: $25; Time: 3 PM'" />
+          <Example english="Monologues: 'Intro: topic; Body: 3 points'" />
+          <Example english="Multi-speaker: 'Voice 1: manager; Voice 2: designer'" />
         </div>
 
         <Tip type="info">
-          <strong>Consejo:</strong> Adapta tu técnica de toma de notas al tipo de listening para maximizar la efectividad.
+          <strong>Tip:</strong> Adapt your style to the listening type for best results.
         </Tip>
       </TheorySection>
 
-      <TheorySection title="Estrategias de Escritura Rápida" icon="⚡">
+      <TheorySection title="Fast Writing Strategies" icon="⚡">
         <p style={{ fontSize: '1rem', lineHeight: 1.6, color: '#4a5568', marginBottom: '1rem' }}>
-          La escritura rápida es esencial para no perder información importante.
+          Writing fast helps you avoid missing important content.
         </p>
 
         <GrammarTable
-          caption="Estrategias de Escritura Rápida"
-          headers={["Estrategia", "Descripción", "Cuándo Usar", "Beneficio"]}
+          caption="Fast Writing Strategies"
+          headers={["Strategy", "Description", "When to Use", "Benefit"]}
           rows={[
-            ["Palabras Clave", "Escribir solo palabras importantes", "Información específica", "Velocidad"],
-            ["Omitir Artículos", "Eliminar a, an, the", "Oraciones completas", "Espacio y tiempo"],
-            ["Usar Símbolos", "Símbolos en lugar de palabras", "Conceptos comunes", "Velocidad"],
-            ["Escribir Fónicamente", "Como suena, no como se escribe", "Palabras desconocidas", "No perder tiempo"],
-            ["Usar Flechas", "Conectar ideas con flechas", "Relaciones entre conceptos", "Claridad visual"],
-            ["Espacios en Blanco", "Dejar espacios para completar", "Información incompleta", "Flexibilidad"]
+            ["Keywords", "Only important words", "Specific targets", "Speed"],
+            ["Drop articles", "Skip a, an, the", "When echoing phrases", "Saves space and time"],
+            ["Symbols", "Replace frequent words", "Common ideas", "Speed"],
+            ["Phonetic jot", "Spell as it sounds", "Unknown words", "No slowdown from spelling"],
+            ["Arrows", "Link ideas visually", "Relations", "Quick clarity"],
+            ["Blank space", "Leave gaps", "Incomplete points", "Fill in later"]
           ]}
         />
 
         <div style={{ display: 'grid', gap: '1rem' }}>
-          <Example 
-            spanish="Palabras clave: 'beneficios tecnología comunicación'"
-            english="Keywords: 'benefits technology communication'"
-            translation="Palabras clave: 'beneficios tecnología comunicación'"
-          />
-          <Example 
-            spanish="Símbolos: '↑ beneficios, ↓ costos'"
-            english="Symbols: '↑ benefits, ↓ costs'"
-            translation="Símbolos: '↑ beneficios, ↓ costos'"
-          />
-          <Example 
-            spanish="Fonético: 'teknoloji' (technology)"
-            english="Phonetic: 'teknoloji' (technology)"
-            translation="Fonético: 'teknoloji' (technology)"
-          />
+          <Example english="Keywords: 'benefits technology communication'" />
+          <Example english="Symbols: '↑ benefits; ↓ costs'" />
+          <Example english="Phonetic jot: 'teknoloji' (technology)" />
         </div>
 
         <Rule 
-          title="Consejos para Escritura Rápida"
-          description="Para escribir rápidamente:"
+          title="Fast Writing Tips"
+          description="To write quickly:"
           examples={[
-            "Prioriza velocidad sobre perfección",
-            "Usa abreviaciones consistentes",
-            "Escribe solo información esencial",
-            "No te preocupes por la ortografía perfecta",
-            "Usa símbolos cuando sea posible"
+            "Prioritize speed over neatness",
+            "Use consistent short forms",
+            "Write only essential information",
+            "Do not chase perfect spelling",
+            "Prefer symbols where they help"
           ]}
         />
 
         <Tip type="success">
-          <strong>Consejo:</strong> La velocidad es más importante que la perfección en la toma de notas.
+          <strong>Tip:</strong> In exams, speed usually beats perfect form in raw notes.
         </Tip>
       </TheorySection>
 
-      <TheorySection title="Revisión y Verificación" icon="🔍">
+      <TheorySection title="Review and Checking" icon="🔍">
         <p style={{ fontSize: '1rem', lineHeight: 1.6, color: '#4a5568', marginBottom: '1rem' }}>
-          Revisar y verificar las notas es crucial para asegurar la precisión.
+          Reviewing notes helps ensure accuracy.
         </p>
 
         <GrammarTable
-          caption="Estrategias de Revisión"
-          headers={["Estrategia", "Descripción", "Cuándo Usar", "Beneficio"]}
+          caption="Review Strategies"
+          headers={["Strategy", "Description", "When to Use", "Benefit"]}
           rows={[
-            ["Revisión Inmediata", "Revisar notas justo después", "Después del audio", "Completar información faltante"],
-            ["Verificación Cruzada", "Comparar con preguntas", "Antes de responder", "Asegurar precisión"],
-            ["Completar Espacios", "Llenar información faltante", "Durante revisión", "Completar notas"],
-            ["Clarificar Abreviaciones", "Asegurar comprensión", "Durante revisión", "Evitar malentendidos"],
-            ["Organizar Información", "Reorganizar si es necesario", "Durante revisión", "Mejorar claridad"],
-            ["Marcar Prioridades", "Identificar información clave", "Durante revisión", "Enfocar en lo importante"]
+            ["Immediate review", "Skim notes right after", "After the audio", "Fill gaps"],
+            ["Cross-check", "Match to questions", "Before answering", "Reduce errors"],
+            ["Fill blanks", "Complete missing bits", "During review", "Round out notes"],
+            ["Decode abbreviations", "Confirm what you meant", "During review", "Avoid misreads"],
+            ["Re-order", "Tidy layout if needed", "During review", "Clearer picture"],
+            ["Mark priorities", "Highlight key facts", "During review", "Focus answers"]
           ]}
         />
 
         <div style={{ display: 'grid', gap: '1rem' }}>
-          <Example 
-            spanish="Revisión inmediata: 'Completar información faltante'"
-            english="Immediate review: 'Complete missing information'"
-            translation="Revisión inmediata: 'Completar información faltante'"
-          />
-          <Example 
-            spanish="Verificación cruzada: 'Comparar con preguntas'"
-            english="Cross-verification: 'Compare with questions'"
-            translation="Verificación cruzada: 'Comparar con preguntas'"
-          />
-          <Example 
-            spanish="Completar espacios: 'Llenar información faltante'"
-            english="Fill gaps: 'Complete missing information'"
-            translation="Completar espacios: 'Llenar información faltante'"
-          />
+          <Example english="Immediate review: 'Fill in missing information'" />
+          <Example english="Cross-check: 'Compare with the questions'" />
+          <Example english="Fill gaps: 'Add what you almost missed'" />
         </div>
 
         <Tip type="warning">
-          <strong>¡Cuidado!</strong> No dediques demasiado tiempo a revisar - asegúrate de tener tiempo para responder las preguntas.
+          <strong>Watch out!</strong> Do not spend so long reviewing that you run out of time to answer.
         </Tip>
       </TheorySection>
 
-      <TheorySection title="Errores Comunes" icon="⚠️">
+      <TheorySection title="Common Mistakes" icon="⚠️">
         <div style={{ display: 'grid', gap: '1rem' }}>
           <Tip type="error">
-            <strong>Error:</strong> Intentar escribir todo ❌<br/>
-            <strong>Correcto:</strong> Escribir solo información clave ✅<br/>
-            <em>Escribir todo te hace perder información importante</em>
+            <strong>Mistake:</strong> Trying to write everything ❌<br/>
+            <strong>Better:</strong> Write only key points ✅<br/>
+            <em>Full transcription makes you miss later content</em>
           </Tip>
 
           <Tip type="error">
-            <strong>Error:</strong> Usar abreviaciones incomprensibles ❌<br/>
-            <strong>Correcto:</strong> Usar abreviaciones claras ✅<br/>
-            <em>Asegúrate de poder entender tus propias abreviaciones</em>
+            <strong>Mistake:</strong> Unclear abbreviations ❌<br/>
+            <strong>Better:</strong> Use clear, consistent short forms ✅<br/>
+            <em>You must recognize your own notes later</em>
           </Tip>
 
           <Tip type="error">
-            <strong>Error:</strong> No revisar las notas ❌<br/>
-            <strong>Correcto:</strong> Revisar y verificar notas ✅<br/>
-            <em>La revisión asegura precisión y completitud</em>
+            <strong>Mistake:</strong> Never reviewing notes ❌<br/>
+            <strong>Better:</strong> Brief review and check ✅<br/>
+            <em>Review catches gaps and errors</em>
           </Tip>
 
           <Tip type="error">
-            <strong>Error:</strong> Usar el mismo sistema para todo ❌<br/>
-            <strong>Correcto:</strong> Adaptar sistema al tipo de listening ✅<br/>
-            <em>Diferentes tipos requieren diferentes enfoques</em>
+            <strong>Mistake:</strong> One rigid system for every task ❌<br/>
+            <strong>Better:</strong> Match system to task type ✅<br/>
+            <em>Different formats need different approaches</em>
           </Tip>
         </div>
       </TheorySection>
 
-      <TheorySection title="Reglas Importantes" icon="⚡">
+      <TheorySection title="Important Rules" icon="⚡">
         <div style={{ display: 'grid', gap: '1rem' }}>
           <Rule 
-            title="1. Velocidad sobre perfección"
-            description="Prioriza la velocidad en la toma de notas."
+            title="1. Speed over perfection"
+            description="Prioritize capturing content."
             examples={[
-              "Escribe solo información esencial",
-              "Usa abreviaciones y símbolos",
-              "No te preocupes por la ortografía perfecta",
-              "Prioriza capturar información sobre formato"
+              "Write only essential points",
+              "Use abbreviations and symbols",
+              "Do not slow down for perfect spelling",
+              "Capture information before layout beauty"
             ]}
           />
 
           <Rule 
-            title="2. Sistema consistente"
-            description="Desarrolla y mantén un sistema consistente."
+            title="2. Consistent system"
+            description="Keep a stable personal code."
             examples={[
-              "Usa las mismas abreviaciones siempre",
-              "Mantén la misma estructura organizacional",
-              "Practica hasta que sea automático",
-              "No cambies el sistema durante el examen"
+              "Reuse the same abbreviations",
+              "Keep a familiar layout",
+              "Practice until it feels automatic",
+              "Avoid changing systems mid-test"
             ]}
           />
 
           <Rule 
-            title="3. Adaptación al contexto"
-            description="Adapta tu técnica al tipo de listening."
+            title="3. Adapt to context"
+            description="Match technique to listening type."
             examples={[
-              "Short dialogues: notas mínimas",
-              "Monologues: estructura clara",
-              "Multi-speaker: identificación de voces",
-              "Lectures: conceptos y ejemplos"
+              "Short dialogues: light notes",
+              "Monologues: clear structure",
+              "Multi-speaker: voice labels",
+              "Lectures: concepts plus examples"
             ]}
           />
         </div>
@@ -384,80 +311,80 @@ const NoteTakingTechniquesPage = () => {
   const exercises = [
     <MultipleChoiceExercise
       key="1"
-      question="¿Qué ayudan a hacer las técnicas de toma de notas?"
+      question="What do note-taking techniques help you do?"
       options={[
-        "Organizar información",
-        "Retener información",
-        "Escribir más rápido",
+        "Organize information",
+        "Retain information",
+        "Write more efficiently",
         "All of the above"
       ]}
       correctAnswer={3}
-      explanation="Las técnicas de toma de notas ayudan con todos estos aspectos: organizar, retener información y escribir más eficientemente."
+      explanation="They support organizing, retaining, and writing more efficiently during listening."
     />,
 
     <MultipleChoiceExercise
       key="2"
-      question="¿Cuál es el beneficio principal de la toma de notas en listening?"
+      question="What is the main benefit of note-taking in listening?"
       options={[
-        "Mejorar la pronunciación",
-        "Retener información importante",
-        "Aumentar la velocidad de escritura",
-        "Mejorar la ortografía"
+        "Improve pronunciation",
+        "Retain important information",
+        "Increase handwriting speed",
+        "Improve spelling"
       ]}
       correctAnswer={1}
-      explanation="El beneficio principal es retener información importante, especialmente en audios largos donde es fácil olvidar detalles específicos."
+      explanation="The main benefit is retaining key information, especially on long audio where details slip easily."
     />,
 
     <TrueFalseExercise
       key="3"
       statements={[
         {
-          text: "Es mejor intentar escribir todo lo que se dice en un audio.",
+          text: "You should try to write down everything you hear.",
           isTrue: false,
-          explanation: "Incorrecto. Es mejor escribir solo información clave, ya que intentar escribir todo te hace perder información importante."
+          explanation: "Incorrect. Note only key information; trying to write everything makes you miss what follows."
         },
         {
-          text: "Las abreviaciones deben ser comprensibles para el que las escribe.",
+          text: "Abbreviations must be clear to the person who writes them.",
           isTrue: true,
-          explanation: "Correcto. Las abreviaciones deben ser claras para quien las escribe, para poder entenderlas después."
+          explanation: "Correct. Your short forms must be readable by you later."
         },
         {
-          text: "Diferentes tipos de listening requieren diferentes técnicas de toma de notas.",
+          text: "Different listening types need different note-taking approaches.",
           isTrue: true,
-          explanation: "Correcto. Short dialogues requieren notas mínimas, mientras que monólogos requieren estructura clara."
+          explanation: "Correct. Short dialogues need light notes; monologues need clearer structure."
         },
         {
-          text: "La velocidad es más importante que la perfección en la toma de notas.",
+          text: "Speed matters more than perfect form in note-taking.",
           isTrue: true,
-          explanation: "Correcto. Priorizar la velocidad sobre la perfección permite capturar más información importante."
+          explanation: "Correct. Prioritizing speed helps you capture more of what matters."
         }
       ]}
     />,
 
     <MultipleChoiceExercise
       key="4"
-      question="¿Cuál es la mejor estrategia para escribir rápidamente?"
+      question="What is the best strategy for writing quickly?"
       options={[
-        "Escribir palabras completas",
-        "Usar abreviaciones y símbolos",
-        "Escribir en letra cursiva",
-        "Usar solo mayúsculas"
+        "Full words only",
+        "Abbreviations and symbols",
+        "Cursive only",
+        "All capitals"
       ]}
       correctAnswer={1}
-      explanation="Usar abreviaciones y símbolos es la mejor estrategia para escribir rápidamente sin perder información importante."
+      explanation="Abbreviations and symbols are the fastest way to keep up without losing meaning."
     />,
 
     <MultipleChoiceExercise
       key="5"
-      question="¿Cuándo es más importante tomar notas?"
+      question="When is note-taking most important?"
       options={[
-        "En audios cortos",
-        "En audios largos con mucha información",
-        "Solo en monólogos",
-        "Nunca es importante"
+        "Short clips only",
+        "Long audio with lots of information",
+        "Only in monologues",
+        "Never"
       ]}
       correctAnswer={1}
-      explanation="Es más importante tomar notas en audios largos con mucha información, ya que es fácil olvidar detalles específicos."
+      explanation="Long, information-rich audio is where notes matter most to hold specifics."
     />,
 
     <TrueFalseExercise
@@ -466,24 +393,24 @@ const NoteTakingTechniquesPage = () => {
         {
           text: "You should write complete sentences when taking notes during listening.",
           isTrue: false,
-          explanation: "Incorrecto. Es mejor usar palabras clave, frases cortas y abreviaciones para no perder información importante."
+          explanation: "Incorrect. Keywords, short phrases, and abbreviations work better under time pressure."
         },
         {
           text: "Symbols like arrows and abbreviations speed up note-taking.",
           isTrue: true,
-          explanation: "Correcto. Los símbolos (→, ↑, &, etc.) y abreviaciones (w/ = with, b/c = because) aceleran significativamente la toma de notas."
+          explanation: "Correct. Symbols (→, ↑, &) and abbreviations (w/, b/c) speed up writing."
         },
         {
-          text: "Your notes should be perfectly organized during listening.",
+          text: "Your notes must be perfectly organized while you listen.",
           isTrue: false,
-          explanation: "Incorrecto. Durante la escucha, prioriza capturar información; puedes organizar después."
+          explanation: "Incorrect. While listening, prioritize capture; you can tidy afterward."
         }
       ]}
     />,
 
     <MultipleChoiceExercise
       key="7"
-      question="¿Cuál es la mejor abreviación para 'information'?"
+      question="Which abbreviation is best for 'information'?"
       options={[
         "information",
         "info",
@@ -491,20 +418,20 @@ const NoteTakingTechniquesPage = () => {
         "infm"
       ]}
       correctAnswer={1}
-      explanation="'Info' es una abreviación estándar y reconocible para 'information'."
+      explanation="'Info' is a standard, recognizable short form for 'information'."
     />,
 
     <MultipleChoiceExercise
       key="8"
-      question="¿Qué técnica es más útil para monólogos largos?"
+      question="Which technique is most useful for long monologues?"
       options={[
-        "Escribir todo literalmente",
-        "Usar estructura jerárquica con puntos principales y detalles",
-        "Solo tomar notas al final",
-        "No usar ninguna organización"
+        "Literal transcription",
+        "Hierarchical structure: main points and detail",
+        "Notes only at the end",
+        "No organization"
       ]}
       correctAnswer={1}
-      explanation="La estructura jerárquica (puntos principales → detalles → ejemplos) es ideal para monólogos largos."
+      explanation="A hierarchy (main points → details → examples) fits extended single-speaker input."
     />,
 
     <TrueFalseExercise
@@ -513,34 +440,34 @@ const NoteTakingTechniquesPage = () => {
         {
           text: "Mind mapping is useful for brainstorming but not for listening.",
           isTrue: false,
-          explanation: "Incorrecto. Los mapas mentales pueden ser muy útiles para tomar notas durante presentaciones con múltiples temas relacionados."
+          explanation: "Incorrect. Mind maps can help with multi-topic talks if you use them quickly."
         },
         {
-          text: "You should develop your own consistent system of abbreviations.",
+          text: "You should develop your own consistent abbreviation system.",
           isTrue: true,
-          explanation: "Correcto. Un sistema personal y consistente de abreviaciones mejora la velocidad y eficiencia."
+          explanation: "Correct. A personal, stable system boosts speed and clarity."
         }
       ]}
     />,
 
     <MultipleChoiceExercise
       key="10"
-      question="¿Cuándo debes revisar y organizar tus notas?"
+      question="When should you review and tidy your notes?"
       options={[
-        "Durante la escucha",
-        "Inmediatamente después del audio",
-        "Una semana después",
-        "Nunca"
+        "Only while the audio plays",
+        "Right after the audio ends",
+        "A week later",
+        "Never"
       ]}
       correctAnswer={1}
-      explanation="Revisar y organizar las notas inmediatamente después del audio ayuda a clarificar y completar la información mientras está fresca en la memoria."
+      explanation="A quick review right after listening clarifies and completes notes while memory is fresh."
     />
   ];
 
   return (
     <TheoryLayout
       title="Note-Taking Techniques"
-      description="Domina las técnicas de toma de notas para listening en inglés. Aprende sistemas de organización, abreviaciones, estrategias de escritura rápida y verificación."
+      description="Master note-taking for English listening. Learn organization systems, abbreviations, fast-writing tactics, and checking strategies."
       level="B1-B2-C1-C2"
       theoryContent={theoryContent}
       exercises={exercises}
@@ -551,25 +478,3 @@ const NoteTakingTechniquesPage = () => {
 };
 
 export default NoteTakingTechniquesPage;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

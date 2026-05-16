@@ -18,35 +18,35 @@ import {
 const PassiveVoicePage = () => {
   const theoryContent = (
     <div>
-      <TheorySection title="¿Qué es la Passive Voice?" icon="🔄">
+      <TheorySection title="What Is the Passive Voice?" icon="🔄">
         <p style={{ fontSize: '1.1rem', lineHeight: 1.6, color: '#4a5568', marginBottom: '1rem' }}>
-          La <strong>passive voice</strong> (voz pasiva) es una estructura gramatical donde el objeto de la acción 
-          se convierte en el sujeto de la oración. Se usa cuando el agente (quien realiza la acción) es desconocido, 
-          irrelevante o cuando queremos enfatizar la acción en lugar de quién la realiza.
+          The <strong>passive voice</strong> is a grammatical structure where the object of the action 
+          becomes the subject of the sentence. It is used when the agent (who performs the action) is unknown, 
+          unimportant, or when we want to emphasise the action rather than who performs it.
         </p>
         
         <QuickReference items={[
-          "Cambia el foco de la oración",
-          "Objeto se convierte en sujeto",
-          "Usa 'be' + participio pasado",
-          "Agente opcional con 'by'",
-          "Común en textos académicos"
+          "Shifts the focus of the sentence",
+          "Object becomes the subject",
+          "Uses 'be' + past participle",
+          "Optional agent with 'by'",
+          "Common in academic texts"
         ]} />
       </TheorySection>
 
-      <TheorySection title="Estructura Básica" icon="🔧">
+      <TheorySection title="Basic Structure" icon="🔧">
         <p style={{ fontSize: '1rem', lineHeight: 1.6, color: '#4a5568', marginBottom: '1rem' }}>
-          La voz pasiva se forma con el verbo 'be' + participio pasado del verbo principal.
+          The passive voice is formed with the verb 'be' + past participle of the main verb.
         </p>
 
         <GrammarTable
-          caption="Estructura de la Voz Pasiva"
-          headers={["Elemento", "Función", "Ejemplo"]}
+          caption="Passive Voice Structure"
+          headers={["Element", "Function", "Example"]}
           rows={[
-            ["Sujeto", "Objeto de la acción activa", "The book"],
-            ["Verbo 'be'", "Concuerda con el tiempo", "is/was/will be"],
-            ["Participio pasado", "Verbo principal", "written"],
-            ["Agente (opcional)", "Quien realiza la acción", "by the author"]
+            ["Subject", "Object of the active action", "The book"],
+            ["Verb 'be'", "Matches the tense", "is/was/will be"],
+            ["Past participle", "Main verb", "written"],
+            ["Agent (optional)", "Who performs the action", "by the author"]
           ]}
         />
 
@@ -54,52 +54,52 @@ const PassiveVoicePage = () => {
           <Example 
             spanish="El libro fue escrito por el autor"
             english="The book was written by the author"
-            translation="El libro fue escrito por el autor"
+            translation="The book was written by the author"
           />
           <Example 
             spanish="La casa es construida por los trabajadores"
             english="The house is being built by the workers"
-            translation="La casa es construida por los trabajadores"
+            translation="The house is being built by the workers"
           />
           <Example 
             spanish="El proyecto será terminado mañana"
             english="The project will be finished tomorrow"
-            translation="El proyecto será terminado mañana"
+            translation="The project will be finished tomorrow"
           />
         </div>
 
         <Rule 
-          title="Formación Básica"
-          description="Para formar la voz pasiva:"
+          title="Basic Formation"
+          description="To form the passive voice:"
           examples={[
-            "Identifica el objeto de la oración activa",
-            "Conviértelo en sujeto de la pasiva",
-            "Usa 'be' en el tiempo apropiado",
-            "Añade el participio pasado del verbo"
+            "Identify the object of the active sentence",
+            "Turn it into the subject of the passive",
+            "Use 'be' in the appropriate tense",
+            "Add the past participle of the verb"
           ]}
         />
 
         <Tip type="info">
-          <strong>Consejo:</strong> El agente (quien realiza la acción) es opcional en la voz pasiva.
+          <strong>Tip:</strong> The agent (who performs the action) is optional in the passive voice.
         </Tip>
       </TheorySection>
 
-      <TheorySection title="Voz Pasiva en Diferentes Tiempos" icon="⏰">
+      <TheorySection title="Passive Voice in Different Tenses" icon="⏰">
         <p style={{ fontSize: '1rem', lineHeight: 1.6, color: '#4a5568', marginBottom: '1rem' }}>
-          La voz pasiva se puede usar en todos los tiempos verbales.
+          The passive voice can be used in all verb tenses.
         </p>
 
         <GrammarTable
-          caption="Voz Pasiva en Diferentes Tiempos"
-          headers={["Tiempo", "Estructura", "Ejemplo"]}
+          caption="Passive Voice in Different Tenses"
+          headers={["Tense", "Structure", "Example"]}
           rows={[
-            ["Presente Simple", "am/is/are + participio", "The letter is written"],
-            ["Pasado Simple", "was/were + participio", "The letter was written"],
-            ["Futuro Simple", "will be + participio", "The letter will be written"],
-            ["Presente Perfecto", "have/has been + participio", "The letter has been written"],
-            ["Pasado Perfecto", "had been + participio", "The letter had been written"],
-            ["Presente Continuo", "am/is/are being + participio", "The letter is being written"],
-            ["Pasado Continuo", "was/were being + participio", "The letter was being written"]
+            ["Present Simple", "am/is/are + participle", "The letter is written"],
+            ["Past Simple", "was/were + participle", "The letter was written"],
+            ["Future Simple", "will be + participle", "The letter will be written"],
+            ["Present Perfect", "have/has been + participle", "The letter has been written"],
+            ["Past Perfect", "had been + participle", "The letter had been written"],
+            ["Present Continuous", "am/is/are being + participle", "The letter is being written"],
+            ["Past Continuous", "was/were being + participle", "The letter was being written"]
           ]}
         />
 
@@ -107,56 +107,56 @@ const PassiveVoicePage = () => {
           <Example 
             spanish="La carta es escrita (presente)"
             english="The letter is written"
-            translation="La carta es escrita"
+            translation="The letter is written (present)"
           />
           <Example 
             spanish="La carta fue escrita ayer (pasado)"
             english="The letter was written yesterday"
-            translation="La carta fue escrita ayer"
+            translation="The letter was written yesterday (past)"
           />
           <Example 
             spanish="La carta será escrita mañana (futuro)"
             english="The letter will be written tomorrow"
-            translation="La carta será escrita mañana"
+            translation="The letter will be written tomorrow (future)"
           />
           <Example 
             spanish="La carta ha sido escrita (perfecto)"
             english="The letter has been written"
-            translation="La carta ha sido escrita"
+            translation="The letter has been written (perfect)"
           />
         </div>
 
         <Rule 
-          title="Concordancia del Verbo 'Be'"
-          description="El verbo 'be' debe concordar con:"
+          title="Agreement of the Verb 'Be'"
+          description="The verb 'be' must agree with:"
           examples={[
-            "El sujeto (singular/plural)",
-            "El tiempo verbal",
-            "La persona (1ª, 2ª, 3ª)",
-            "El aspecto (simple, continuo, perfecto)"
+            "The subject (singular/plural)",
+            "The verb tense",
+            "The person (1st, 2nd, 3rd)",
+            "The aspect (simple, continuous, perfect)"
           ]}
         />
 
         <Tip type="success">
-          <strong>Consejo:</strong> Practica la voz pasiva en diferentes tiempos para dominarla completamente.
+          <strong>Tip:</strong> Practise the passive voice in different tenses to master it fully.
         </Tip>
       </TheorySection>
 
-      <TheorySection title="Cuándo Usar la Voz Pasiva" icon="🎯">
+      <TheorySection title="When to Use the Passive Voice" icon="🎯">
         <p style={{ fontSize: '1rem', lineHeight: 1.6, color: '#4a5568', marginBottom: '1rem' }}>
-          Hay situaciones específicas donde la voz pasiva es más apropiada que la activa.
+          There are specific situations where the passive voice is more appropriate than the active voice.
         </p>
 
         <GrammarTable
-          caption="Situaciones para Usar Voz Pasiva"
-          headers={["Situación", "Razón", "Ejemplo"]}
+          caption="Situations for Using the Passive Voice"
+          headers={["Situation", "Reason", "Example"]}
           rows={[
-            ["Agente desconocido", "No sabemos quién hizo la acción", "My car was stolen"],
-            ["Agente irrelevante", "Quién lo hizo no importa", "English is spoken here"],
-            ["Enfoque en la acción", "La acción es más importante", "The building was destroyed"],
-            ["Evitar responsabilidad", "No queremos mencionar quién", "Mistakes were made"],
-            ["Textos académicos", "Estilo formal e impersonal", "The data was analyzed"],
-            ["Procesos generales", "Descripción de procesos", "Coffee is grown in Brazil"]
+            ["Unknown agent", "We don't know who did the action", "My car was stolen"],
+            ["Irrelevant agent", "Who did it doesn't matter", "English is spoken here"],
+            ["Focus on the action", "The action is more important", "The building was destroyed"],
+            ["Avoid responsibility", "We don't want to mention who", "Mistakes were made"],
+            ["Academic texts", "Formal, impersonal style", "The data was analyzed"],
+            ["General processes", "Describing processes", "Coffee is grown in Brazil"]
           ]}
         />
 
@@ -164,44 +164,44 @@ const PassiveVoicePage = () => {
           <Example 
             spanish="Mi coche fue robado (no sabemos quién)"
             english="My car was stolen"
-            translation="Mi coche fue robado"
+            translation="My car was stolen (we don't know who)"
           />
           <Example 
             spanish="Se habla inglés aquí (no importa quién)"
             english="English is spoken here"
-            translation="Se habla inglés aquí"
+            translation="English is spoken here (who doesn't matter)"
           />
           <Example 
             spanish="El edificio fue destruido (enfoque en la acción)"
             english="The building was destroyed"
-            translation="El edificio fue destruido"
+            translation="The building was destroyed (focus on the action)"
           />
         </div>
 
         <Rule 
-          title="Ventajas de la Voz Pasiva"
-          description="La voz pasiva es útil para:"
+          title="Advantages of the Passive Voice"
+          description="The passive voice is useful for:"
           examples={[
-            "Crear un tono más formal",
-            "Enfocarse en el resultado",
-            "Evitar mencionar el agente",
-            "Escribir textos académicos"
+            "Creating a more formal tone",
+            "Focusing on the result",
+            "Avoiding mentioning the agent",
+            "Writing academic texts"
           ]}
         />
 
         <Tip type="info">
-          <strong>Consejo:</strong> En textos académicos y científicos, la voz pasiva es muy común porque suena más objetiva.
+          <strong>Tip:</strong> In academic and scientific writing, the passive voice is very common because it sounds more objective.
         </Tip>
       </TheorySection>
 
-      <TheorySection title="Voz Pasiva con Dos Objetos" icon="📦">
+      <TheorySection title="Passive Voice with Two Objects" icon="📦">
         <p style={{ fontSize: '1rem', lineHeight: 1.6, color: '#4a5568', marginBottom: '1rem' }}>
-          Algunos verbos pueden tener dos objetos (directo e indirecto). En la voz pasiva, cualquiera puede ser el sujeto.
+          Some verbs can have two objects (direct and indirect). In the passive voice, either can be the subject.
         </p>
 
         <GrammarTable
-          caption="Verbos con Dos Objetos"
-          headers={["Verbo", "Oración Activa", "Voz Pasiva 1", "Voz Pasiva 2"]}
+          caption="Verbs with Two Objects"
+          headers={["Verb", "Active Sentence", "Passive 1", "Passive 2"]}
           rows={[
             ["give", "He gave me a book", "I was given a book", "A book was given to me"],
             ["send", "She sent him an email", "He was sent an email", "An email was sent to him"],
@@ -214,53 +214,53 @@ const PassiveVoicePage = () => {
           <Example 
             spanish="Me dieron un libro"
             english="I was given a book"
-            translation="Me dieron un libro"
+            translation="I was given a book"
           />
           <Example 
             spanish="Un libro me fue dado"
             english="A book was given to me"
-            translation="Un libro me fue dado"
+            translation="A book was given to me"
           />
           <Example 
             spanish="Nos mostraron las fotos"
             english="We were shown the photos"
-            translation="Nos mostraron las fotos"
+            translation="We were shown the photos"
           />
         </div>
 
         <Rule 
-          title="Elección del Sujeto"
-          description="Para elegir qué objeto usar como sujeto:"
+          title="Choosing the Subject"
+          description="To choose which object to use as the subject:"
           examples={[
-            "Objeto indirecto: más natural en conversación",
-            "Objeto directo: más formal",
-            "Considera el contexto",
-            "Mantén la coherencia del texto"
+            "Indirect object: more natural in conversation",
+            "Direct object: more formal",
+            "Consider the context",
+            "Keep consistency throughout the text"
           ]}
         />
 
         <Tip type="warning">
-          <strong>¡Cuidado!</strong> Cuando usas el objeto directo como sujeto, añade 'to' o 'for' antes del objeto indirecto.
+          <strong>Watch out!</strong> When you use the direct object as the subject, add 'to' or 'for' before the indirect object.
         </Tip>
       </TheorySection>
 
-      <TheorySection title="Voz Pasiva con Modales" icon="⚡">
+      <TheorySection title="Passive Voice with Modals" icon="⚡">
         <p style={{ fontSize: '1rem', lineHeight: 1.6, color: '#4a5568', marginBottom: '1rem' }}>
-          Los verbos modales también pueden usarse en voz pasiva.
+          Modal verbs can also be used in the passive voice.
         </p>
 
         <GrammarTable
-          caption="Voz Pasiva con Modales"
-          headers={["Modal", "Estructura", "Ejemplo"]}
+          caption="Passive Voice with Modals"
+          headers={["Modal", "Structure", "Example"]}
           rows={[
-            ["can", "can be + participio", "This can be done"],
-            ["could", "could be + participio", "This could be done"],
-            ["must", "must be + participio", "This must be done"],
-            ["should", "should be + participio", "This should be done"],
-            ["may", "may be + participio", "This may be done"],
-            ["might", "might be + participio", "This might be done"],
-            ["have to", "have to be + participio", "This has to be done"],
-            ["be going to", "be going to be + participio", "This is going to be done"]
+            ["can", "can be + participle", "This can be done"],
+            ["could", "could be + participle", "This could be done"],
+            ["must", "must be + participle", "This must be done"],
+            ["should", "should be + participle", "This should be done"],
+            ["may", "may be + participle", "This may be done"],
+            ["might", "might be + participle", "This might be done"],
+            ["have to", "have to be + participle", "This has to be done"],
+            ["be going to", "be going to be + participle", "This is going to be done"]
           ]}
         />
 
@@ -268,102 +268,102 @@ const PassiveVoicePage = () => {
           <Example 
             spanish="Esto puede ser hecho"
             english="This can be done"
-            translation="Esto puede ser hecho"
+            translation="This can be done"
           />
           <Example 
             spanish="Esto debe ser terminado"
             english="This must be finished"
-            translation="Esto debe ser terminado"
+            translation="This must be finished"
           />
           <Example 
             spanish="Esto debería ser considerado"
             english="This should be considered"
-            translation="Esto debería ser considerado"
+            translation="This should be considered"
           />
         </div>
 
         <Rule 
-          title="Estructura con Modales"
-          description="Para formar la voz pasiva con modales:"
+          title="Structure with Modals"
+          description="To form the passive voice with modals:"
           examples={[
-            "Modal + be + participio pasado",
-            "No cambia según la persona",
-            "Mantiene el significado del modal",
-            "Agente opcional con 'by'"
+            "Modal + be + past participle",
+            "Does not change according to person",
+            "Keeps the meaning of the modal",
+            "Optional agent with 'by'"
           ]}
         />
 
         <Tip type="success">
-          <strong>Consejo:</strong> La voz pasiva con modales es muy útil para expresar obligaciones, posibilidades y consejos.
+          <strong>Tip:</strong> Passive voice with modals is very useful for expressing obligations, possibilities, and advice.
         </Tip>
       </TheorySection>
 
-      <TheorySection title="Errores Comunes" icon="⚠️">
+      <TheorySection title="Common Mistakes" icon="⚠️">
         <div style={{ display: 'grid', gap: '1rem' }}>
           <Tip type="error">
-            <strong>Error:</strong> Olvidar el verbo 'be' ❌<br/>
-            <strong>Correcto:</strong> Incluir 'be' en el tiempo apropiado ✅<br/>
+            <strong>Error:</strong> Forgetting the verb 'be' ❌<br/>
+            <strong>Correct:</strong> Include 'be' in the appropriate tense ✅<br/>
             <em>The house built yesterday. → The house was built yesterday.</em>
           </Tip>
 
           <Tip type="error">
-            <strong>Error:</strong> Usar forma incorrecta del participio ❌<br/>
-            <strong>Correcto:</strong> Usar participio pasado correcto ✅<br/>
+            <strong>Error:</strong> Using the wrong participle form ❌<br/>
+            <strong>Correct:</strong> Use the correct past participle ✅<br/>
             <em>The letter was write. → The letter was written.</em>
           </Tip>
 
           <Tip type="error">
-            <strong>Error:</strong> Concordancia incorrecta de 'be' ❌<br/>
-            <strong>Correcto:</strong> 'Be' debe concordar con el sujeto ✅<br/>
+            <strong>Error:</strong> Incorrect agreement of 'be' ❌<br/>
+            <strong>Correct:</strong> 'Be' must agree with the subject ✅<br/>
             <em>The letters was sent. → The letters were sent.</em>
           </Tip>
 
           <Tip type="error">
-            <strong>Error:</strong> Usar voz pasiva innecesariamente ❌<br/>
-            <strong>Correcto:</strong> Usar voz activa cuando es más clara ✅<br/>
+            <strong>Error:</strong> Using passive voice unnecessarily ❌<br/>
+            <strong>Correct:</strong> Use active voice when it is clearer ✅<br/>
             <em>The teacher was hit by the student. → The student hit the teacher.</em>
           </Tip>
 
           <Tip type="error">
-            <strong>Error:</strong> Confundir 'by' y 'with' ❌<br/>
-            <strong>Correcto:</strong> 'By' para agente, 'with' para instrumento ✅<br/>
+            <strong>Error:</strong> Confusing 'by' and 'with' ❌<br/>
+            <strong>Correct:</strong> 'By' for agent, 'with' for instrument ✅<br/>
             <em>The door was opened with a key by John. → The door was opened by John with a key.</em>
           </Tip>
         </div>
       </TheorySection>
 
-      <TheorySection title="Reglas Importantes" icon="⚡">
+      <TheorySection title="Important Rules" icon="⚡">
         <div style={{ display: 'grid', gap: '1rem' }}>
           <Rule 
-            title="1. Estructura básica"
-            description="La voz pasiva siempre incluye:"
+            title="1. Basic structure"
+            description="The passive voice always includes:"
             examples={[
-              "Sujeto (objeto de la acción activa)",
-              "Verbo 'be' en tiempo apropiado",
-              "Participio pasado del verbo principal",
-              "Agente opcional con 'by'"
+              "Subject (object of the active action)",
+              "Verb 'be' in the appropriate tense",
+              "Past participle of the main verb",
+              "Optional agent with 'by'"
             ]}
           />
 
           <Rule 
-            title="2. Concordancia"
-            description="El verbo 'be' debe concordar:"
+            title="2. Agreement"
+            description="The verb 'be' must agree:"
             examples={[
-              "Con el sujeto (singular/plural)",
-              "Con el tiempo verbal",
-              "Con la persona",
-              "Con el aspecto (simple, continuo, perfecto)"
+              "With the subject (singular/plural)",
+              "With the verb tense",
+              "With the person",
+              "With the aspect (simple, continuous, perfect)"
             ]}
           />
 
           <Rule 
-            title="3. Cuándo usar"
-            description="Usa voz pasiva cuando:"
+            title="3. When to use it"
+            description="Use the passive voice when:"
             examples={[
-              "El agente es desconocido",
-              "El agente es irrelevante",
-              "Quieres enfocarte en la acción",
-              "Escribes textos académicos"
+              "The agent is unknown",
+              "The agent is irrelevant",
+              "You want to focus on the action",
+              "You are writing academic texts"
             ]}
           />
         </div>
@@ -382,7 +382,7 @@ const PassiveVoicePage = () => {
         "has built"
       ]}
       correctAnswer={1}
-      explanation="'Was built' es la forma correcta de voz pasiva en pasado simple para 'build'."
+      explanation="'Was built' is the correct past simple passive form of 'build'."
     />,
 
     <MultipleChoiceExercise
@@ -460,12 +460,12 @@ const PassiveVoicePage = () => {
         "has designed"
       ]}
       correctAnswer={1}
-      explanation="Para una acción completada en el pasado usamos Past Simple passive: 'was designed'."
+      explanation="For a completed action in the past we use past simple passive: 'was designed'."
     />,
 
     <MultipleChoiceExercise
       key="7"
-      question="¿Cuál es correcto?"
+      question="Which is correct?"
       options={[
         "The letter was written by me",
         "The letter was wrote by me",
@@ -473,7 +473,7 @@ const PassiveVoicePage = () => {
         "The letter is wrote by me"
       ]}
       correctAnswer={0}
-      explanation="La voz pasiva usa 'be' + participio pasado: 'was written' (no 'wrote')."
+      explanation="The passive voice uses 'be' + past participle: 'was written' (not 'wrote')."
     />,
 
     <MultipleChoiceExercise
@@ -486,20 +486,20 @@ const PassiveVoicePage = () => {
         "has spoken"
       ]}
       correctAnswer={2}
-      explanation="Para hechos generales en voz pasiva usamos Present Simple: 'is spoken'."
+      explanation="For general facts in the passive voice we use present simple: 'is spoken'."
     />,
 
     <MultipleChoiceExercise
       key="9"
-      question="¿Cuándo NO usamos 'by' en voz pasiva?"
+      question="When do we NOT use 'by' in the passive voice?"
       options={[
-        "Cuando el agente es obvio",
-        "Cuando el agente es desconocido",
-        "Cuando no es importante quién hizo la acción",
+        "When the agent is obvious",
+        "When the agent is unknown",
+        "When it doesn't matter who did the action",
         "All of the above"
       ]}
       correctAnswer={3}
-      explanation="Omitimos 'by' cuando el agente es obvio, desconocido o no importante."
+      explanation="We omit 'by' when the agent is obvious, unknown, or unimportant."
     />,
 
     <MultipleChoiceExercise
@@ -512,14 +512,14 @@ const PassiveVoicePage = () => {
         "repairs"
       ]}
       correctAnswer={1}
-      explanation="Para acciones en progreso en voz pasiva usamos 'is being' + participio pasado."
+      explanation="For actions in progress in the passive voice we use 'is being' + past participle."
     />
   ];
 
   return (
     <TheoryLayout
       title="Passive Voice"
-      description="Domina la voz pasiva en inglés. Aprende a cambiar el foco de la oración, expresar acciones sin agente y usar la voz pasiva en todos los tiempos."
+      description="Master the passive voice in English. Learn to shift the focus of a sentence, express actions without an agent, and use the passive in all tenses."
       level="B1-B2-C1-C2"
       theoryContent={theoryContent}
       exercises={exercises}

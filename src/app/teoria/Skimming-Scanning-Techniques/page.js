@@ -18,71 +18,71 @@ import {
 const SkimmingScanningPage = () => {
   const theoryContent = (
     <div>
-      <TheorySection title="¿Qué son Skimming y Scanning?" icon="👀">
+      <TheorySection title="What are Skimming and Scanning?" icon="👀">
         <p style={{ fontSize: '1.1rem', lineHeight: 1.6, color: '#4a5568', marginBottom: '1rem' }}>
-          <strong>Skimming</strong> y <strong>Scanning</strong> son dos técnicas de lectura rápida esenciales para 
-          los exámenes de inglés. Te permiten encontrar información específica y comprender ideas principales 
-          sin leer cada palabra del texto.
+          <strong>Skimming</strong> and <strong>Scanning</strong> are two essential fast-reading techniques for 
+          English exams. They help you find specific information and understand main ideas 
+          without reading every word.
         </p>
         
         <QuickReference items={[
-          "Skimming: lectura rápida para idea general",
-          "Scanning: búsqueda de información específica",
-          "Ambas técnicas ahorran tiempo valioso",
-          "Esenciales para exámenes con tiempo limitado",
-          "Se complementan con lectura detallada"
+          "Skimming: fast read for general idea",
+          "Scanning: search for specific information",
+          "Both save valuable time",
+          "Essential for timed exams",
+          "They work alongside detailed reading"
         ]} />
       </TheorySection>
 
-      <TheorySection title="Skimming - Lectura para Idea General" icon="🌊">
+      <TheorySection title="Skimming — reading for the main idea" icon="🌊">
         <p style={{ fontSize: '1rem', lineHeight: 1.6, color: '#4a5568', marginBottom: '1rem' }}>
-          El skimming te ayuda a obtener una comprensión general del texto en poco tiempo.
+          Skimming helps you get a general sense of a text in a short time.
         </p>
 
         <Rule 
-          title="Cómo hacer Skimming efectivo"
-          description="Sigue estos pasos para una lectura rápida eficaz:"
+          title="How to skim effectively"
+          description="Follow these steps for efficient fast reading:"
           examples={[
-            "Lee el título y subtítulos",
-            "Lee la primera y última oración de cada párrafo",
-            "Busca palabras clave y frases destacadas",
-            "Ignora detalles específicos y ejemplos",
-            "Enfócate en conectores y palabras de transición"
+            "Read the title and subheadings",
+            "Read the first and last sentence of each paragraph",
+            "Look for key words and highlighted phrases",
+            "Ignore specific detail and examples",
+            "Focus on connectors and transition words"
           ]}
         />
 
         <GrammarTable
-          caption="Elementos clave para Skimming"
-          headers={["Elemento", "Por qué es importante", "Ejemplo"]}
+          caption="Key elements for skimming"
+          headers={["Element", "Why it matters", "Example"]}
           rows={[
-            ["Título", "Resume el tema principal", "'Climate Change Effects'"],
-            ["Primera oración", "Introduce la idea del párrafo", "'Recent studies show that...'"],
-            ["Última oración", "Concluye o conecta ideas", "'This leads us to consider...'"],
-            ["Palabras clave", "Indican temas importantes", "'however, therefore, importantly'"],
-            ["Números y fechas", "Datos específicos relevantes", "'In 2020, 75% of...'"]
+            ["Title", "Summarises the main topic", "'Climate Change Effects'"],
+            ["First sentence", "Introduces the paragraph idea", "'Recent studies show that...'"],
+            ["Last sentence", "Concludes or links ideas", "'This leads us to consider...'"],
+            ["Key words", "Signal important themes", "'however, therefore, importantly'"],
+            ["Numbers and dates", "Relevant concrete data", "'In 2020, 75% of...'"]
           ]}
         />
 
         <Tip type="success">
-          <strong>Consejo:</strong> Practica skimming con periódicos online. Lee solo títulos y primeras oraciones 
-          para captar las noticias principales en 5 minutos.
+          <strong>Tip:</strong> Practise skimming with online newspapers. Read only titles and opening sentences 
+          to catch the main stories in five minutes.
         </Tip>
       </TheorySection>
 
-      <TheorySection title="Scanning - Búsqueda Específica" icon="🔍">
+      <TheorySection title="Scanning — searching for specifics" icon="🔍">
         <p style={{ fontSize: '1rem', lineHeight: 1.6, color: '#4a5568', marginBottom: '1rem' }}>
-          El scanning te permite encontrar información específica rápidamente, como nombres, fechas, números o palabras clave.
+          Scanning lets you find specific information quickly—names, dates, numbers, or keywords.
         </p>
 
         <Rule 
-          title="Técnica de Scanning efectiva"
-          description="Pasos para encontrar información específica:"
+          title="Effective scanning"
+          description="Steps to locate specific information:"
           examples={[
-            "Identifica exactamente qué buscas",
-            "Mueve los ojos rápidamente por el texto",
-            "Busca palabras clave o sinónimos",
-            "Detente solo cuando encuentres la información",
-            "Lee el contexto inmediato para confirmar"
+            "Identify exactly what you need",
+            "Move your eyes quickly over the text",
+            "Look for keywords or synonyms",
+            "Stop only when you find the target",
+            "Read the immediate context to confirm"
           ]}
         />
 
@@ -90,50 +90,49 @@ const SkimmingScanningPage = () => {
           <Example 
             spanish="Pregunta: ¿Cuándo fue fundada la empresa?"
             english="Scanning target: dates, numbers, 'founded', 'established', 'created'"
-            translation="Busca: fechas, números, palabras como 'fundada', 'establecida', 'creada'"
+            translation="Look for: dates, numbers, and words like 'founded', 'established', 'created'"
           />
           
           <Example 
             spanish="Pregunta: ¿Quién es el director de marketing?"
             english="Scanning target: names, titles, 'director', 'manager', 'marketing'"
-            translation="Busca: nombres propios, títulos, 'director', 'gerente', 'marketing'"
+            translation="Look for: proper names, job titles, 'director', 'manager', 'marketing'"
           />
         </div>
 
         <Tip type="info">
-          <strong>Recuerda:</strong> En scanning, no necesitas entender todo el texto. Solo busca la información 
-          específica que necesitas.
+          <strong>Remember:</strong> In scanning you do not need to understand the whole text—only the specific fact you need.
         </Tip>
       </TheorySection>
 
-      <TheorySection title="Diferencias Clave" icon="⚖️">
+      <TheorySection title="Key differences" icon="⚖️">
         <GrammarTable
-          caption="Skimming vs Scanning"
-          headers={["Aspecto", "Skimming", "Scanning"]}
+          caption="Skimming vs scanning"
+          headers={["Aspect", "Skimming", "Scanning"]}
           rows={[
-            ["Objetivo", "Idea general del texto", "Información específica"],
-            ["Velocidad", "Rápida pero comprensiva", "Muy rápida y selectiva"],
-            ["Enfoque", "Estructura y temas principales", "Datos concretos"],
-            ["Movimiento ocular", "Lineal, saltando detalles", "Errático, buscando objetivos"],
-            ["Resultado", "Comprensión general", "Datos específicos encontrados"],
-            ["Cuándo usar", "Primera lectura del texto", "Responder preguntas específicas"]
+            ["Goal", "General idea of the text", "Specific information"],
+            ["Speed", "Fast but broad", "Very fast and selective"],
+            ["Focus", "Structure and main themes", "Concrete data"],
+            ["Eye movement", "Linear, skipping detail", "Irregular, hunting targets"],
+            ["Outcome", "Overall understanding", "Specific facts found"],
+            ["When to use", "First pass through a text", "Answering detail questions"]
           ]}
         />
 
         <Tip type="warning">
-          <strong>¡Cuidado!</strong> No confundas las técnicas. Skimming es para el panorama general, 
-          scanning es para detalles específicos.
+          <strong>Watch out!</strong> Do not mix them up. Skimming is for the big picture; 
+          scanning is for specific details.
         </Tip>
       </TheorySection>
 
-      <TheorySection title="Aplicación en Exámenes" icon="📝">
+      <TheorySection title="Using them in exams" icon="📝">
         <Rule 
-          title="Estrategia de 3 pasos para exámenes"
-          description="Combina ambas técnicas para máxima eficiencia:"
+          title="A three-step exam strategy"
+          description="Combine both techniques for maximum efficiency:"
           examples={[
-            "1. SKIMMING: Lee rápidamente todo el texto (2-3 minutos)",
-            "2. LEE las preguntas y identifica qué buscar",
-            "3. SCANNING: Busca respuestas específicas en el texto"
+            "1. SKIMMING: read the whole text quickly (2–3 minutes)",
+            "2. READ the questions and decide what to find",
+            "3. SCANNING: hunt for specific answers in the text"
           ]}
         />
 
@@ -141,66 +140,65 @@ const SkimmingScanningPage = () => {
           <Example 
             spanish="Paso 1: Skimming del artículo sobre energía renovable"
             english="Result: 'The article discusses solar and wind energy benefits and challenges'"
-            translation="Resultado: 'El artículo habla de beneficios y desafíos de energía solar y eólica'"
+            translation="Result: 'The article covers benefits and challenges of solar and wind energy'"
           />
           
           <Example 
             spanish="Paso 2: Pregunta - '¿Qué porcentaje de energía solar se usa en España?'"
             english="Scanning target: 'Spain', 'Spanish', percentages, numbers, 'solar'"
-            translation="Objetivo de scanning: 'España', 'español', porcentajes, números, 'solar'"
+            translation="Scanning target: 'Spain', 'Spanish', percentages, numbers, 'solar'"
           />
         </div>
 
         <Tip type="success">
-          <strong>Consejo de tiempo:</strong> Dedica máximo 3 minutos al skimming inicial. Te ahorrará tiempo 
-          después al hacer scanning dirigido.
+          <strong>Time tip:</strong> Spend no more than about three minutes on the first skim. It saves time later when you scan with purpose.
         </Tip>
       </TheorySection>
 
-      <TheorySection title="Palabras Señal Importantes" icon="🚦">
+      <TheorySection title="Important signal words" icon="🚦">
         <p style={{ fontSize: '1rem', lineHeight: 1.6, color: '#4a5568', marginBottom: '1rem' }}>
-          Ciertas palabras te ayudan a navegar rápidamente por los textos.
+          Certain words help you move through texts quickly.
         </p>
 
         <GrammarTable
-          caption="Palabras Señal por Función"
-          headers={["Función", "Palabras Clave", "Qué Indican"]}
+          caption="Signal words by function"
+          headers={["Function", "Key words", "What they show"]}
           rows={[
-            ["Contraste", "however, but, although, despite", "Cambio de dirección en el argumento"],
-            ["Causa-Efecto", "because, therefore, as a result", "Relaciones causales"],
-            ["Secuencia", "first, then, finally, meanwhile", "Orden temporal o lógico"],
-            ["Énfasis", "importantly, significantly, notably", "Información clave"],
-            ["Ejemplos", "for instance, such as, including", "Detalles de apoyo"],
-            ["Conclusión", "in conclusion, overall, to summarize", "Ideas finales"]
+            ["Contrast", "however, but, although, despite", "A turn in the argument"],
+            ["Cause-effect", "because, therefore, as a result", "Causal relations"],
+            ["Sequence", "first, then, finally, meanwhile", "Time or logical order"],
+            ["Emphasis", "importantly, significantly, notably", "Key information"],
+            ["Examples", "for instance, such as, including", "Supporting detail"],
+            ["Conclusion", "in conclusion, overall, to summarize", "Final ideas"]
           ]}
         />
 
         <Tip type="info">
-          <strong>Práctica:</strong> Cuando hagas skimming, presta especial atención a estas palabras señal. 
-          Te guiarán hacia la información más importante.
+          <strong>Practice:</strong> When you skim, pay special attention to signal words. 
+          They guide you to the most important information.
         </Tip>
       </TheorySection>
 
-      <TheorySection title="Errores Comunes" icon="⚠️">
+      <TheorySection title="Common mistakes" icon="⚠️">
         <div style={{ display: 'grid', gap: '1rem' }}>
           <Tip type="error">
-            <strong>Error:</strong> Leer cada palabra durante el skimming<br/>
-            <strong>Solución:</strong> Entrena tu ojo para saltar y captar solo lo esencial
+            <strong>Mistake:</strong> Reading every word while skimming<br/>
+            <strong>Fix:</strong> Train your eye to skip and catch only essentials
           </Tip>
 
           <Tip type="error">
-            <strong>Error:</strong> Hacer scanning sin saber qué buscar<br/>
-            <strong>Solución:</strong> Lee la pregunta primero y identifica palabras clave
+            <strong>Mistake:</strong> Scanning without knowing your target<br/>
+            <strong>Fix:</strong> Read the question first and note keywords
           </Tip>
 
           <Tip type="error">
-            <strong>Error:</strong> Detenerse en palabras desconocidas<br/>
-            <strong>Solución:</strong> Continúa leyendo, el contexto te ayudará
+            <strong>Mistake:</strong> Stopping on unknown words<br/>
+            <strong>Fix:</strong> Keep going—context will often help
           </Tip>
 
           <Tip type="error">
-            <strong>Error:</strong> No practicar estas técnicas regularmente<br/>
-            <strong>Solución:</strong> Practica diariamente con artículos de noticias
+            <strong>Mistake:</strong> Not practising these techniques regularly<br/>
+            <strong>Fix:</strong> Practise daily with news articles
           </Tip>
         </div>
       </TheorySection>
@@ -214,22 +212,22 @@ const SkimmingScanningPage = () => {
         {
           text: "Skimming involves reading every word of the text carefully.",
           isTrue: false,
-          explanation: "Falso. Skimming es lectura rápida para captar la idea general, no cada palabra."
+          explanation: "False. Skimming is a fast read for the general idea, not every word."
         },
         {
           text: "Scanning is used to find specific information quickly.",
           isTrue: true,
-          explanation: "Correcto. Scanning se usa para encontrar información específica rápidamente."
+          explanation: "Correct. Scanning is for locating specific information fast."
         },
         {
           text: "You should always do scanning before skimming.",
           isTrue: false,
-          explanation: "Falso. Generalmente se hace skimming primero para entender el contexto general."
+          explanation: "False. You usually skim first to get overall context."
         },
         {
           text: "Signal words like 'however' and 'therefore' are important for skimming.",
           isTrue: true,
-          explanation: "Correcto. Las palabras señal ayudan a entender la estructura y relaciones en el texto."
+          explanation: "Correct. Signal words reveal structure and relations in the text."
         }
       ]}
     />,
@@ -244,7 +242,7 @@ const SkimmingScanningPage = () => {
         "Only the examples"
       ]}
       correctAnswer={2}
-      explanation="Las primeras y últimas oraciones de cada párrafo suelen contener las ideas principales."
+      explanation="The first and last sentences of paragraphs usually carry the main ideas."
     />,
 
     <MultipleChoiceExercise
@@ -257,7 +255,7 @@ const SkimmingScanningPage = () => {
         "Read only the first paragraph"
       ]}
       correctAnswer={1}
-      explanation="Para scanning de información específica (número de teléfono), busca directamente números y información de contacto."
+      explanation="For scanning a specific fact like a phone number, look for numbers and contact details."
     />,
 
     <MultipleChoiceExercise
@@ -270,7 +268,7 @@ const SkimmingScanningPage = () => {
         "Reading backwards"
       ]}
       correctAnswer={1}
-      explanation="Skimming es ideal para captar el argumento principal sin leer cada detalle."
+      explanation="Skimming is ideal for the main argument without reading every detail."
     />,
 
     <MultipleChoiceExercise
@@ -283,7 +281,7 @@ const SkimmingScanningPage = () => {
         "Checking spelling"
       ]}
       correctAnswer={1}
-      explanation="Las palabras señal ayudan a entender la estructura y flujo de ideas durante el skimming."
+      explanation="Signal words show structure and flow of ideas during skimming."
     />,
 
     <MultipleChoiceExercise
@@ -296,7 +294,7 @@ const SkimmingScanningPage = () => {
         "The middle of each paragraph"
       ]}
       correctAnswer={2}
-      explanation="Las primeras y últimas oraciones de los párrafos contienen las ideas principales."
+      explanation="First and last sentences of paragraphs contain the main ideas."
     />,
 
     <MultipleChoiceExercise
@@ -309,7 +307,7 @@ const SkimmingScanningPage = () => {
         "Stopping only when you find the target information"
       ]}
       correctAnswer={2}
-      explanation="Scanning requiere movimiento rápido, no lectura cuidadosa de cada oración."
+      explanation="Scanning needs fast movement, not careful reading of every sentence."
     />,
 
     <MultipleChoiceExercise
@@ -322,7 +320,7 @@ const SkimmingScanningPage = () => {
         "Memorize the text structure"
       ]}
       correctAnswer={1}
-      explanation="Antes de hacer scanning, debes saber exactamente qué información buscas."
+      explanation="Before scanning, know precisely what information you need."
     />,
 
     <MultipleChoiceExercise
@@ -335,7 +333,7 @@ const SkimmingScanningPage = () => {
         "Guessing without reading"
       ]}
       correctAnswer={1}
-      explanation="Combinar skimming inicial con scanning dirigido es la estrategia más eficiente."
+      explanation="Skimming first plus targeted scanning is the most efficient approach."
     />,
 
     <MultipleChoiceExercise
@@ -348,22 +346,21 @@ const SkimmingScanningPage = () => {
         "Only the first paragraph"
       ]}
       correctAnswer={2}
-      explanation="Las fechas pueden expresarse con números, nombres de meses y expresiones temporales."
+      explanation="Dates can appear as numbers, month names, and time phrases."
     />
   ];
 
   return (
     <TheoryLayout
       title="Skimming and Scanning Techniques"
-      description="Domina las técnicas de lectura rápida esenciales para los exámenes. Aprende cuándo y cómo usar skimming y scanning para maximizar tu eficiencia."
+      description="Master essential speed-reading techniques for exams. Learn when and how to use skimming and scanning to work efficiently."
       level="A2-B1-B2-C1-C2"
       theoryContent={theoryContent}
       exercises={exercises}
-      prerequisites={["Vocabulario básico de lectura", "Comprensión de estructura textual"]}
+      prerequisites={["Basic reading vocabulary", "Understanding of text structure"]}
       estimatedTime="45 min"
     />
   );
 };
 
 export default SkimmingScanningPage;
-

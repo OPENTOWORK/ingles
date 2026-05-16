@@ -18,372 +18,335 @@ import {
 const ActiveGrammarAndUsefulStructuresPage = () => {
   const theoryContent = (
     <div>
-      <TheorySection title="¿Qué es Active Grammar and Useful Structures?" icon="⚡">
+      <TheorySection title="What Is Active Grammar and Useful Structures?" icon="⚡">
         <p style={{ fontSize: '1.1rem', lineHeight: 1.6, color: '#4a5568', marginBottom: '1rem' }}>
-          <strong>Active Grammar and Useful Structures</strong> (gramática activa y estructuras útiles) se refiere a 
-          patrones gramaticales y estructuras que se usan activamente en el habla para expresar ideas de manera fluida y natural.
+          <strong>Active grammar and useful structures</strong> refers to grammatical patterns and structures used actively in speech to express ideas fluently and naturally.
         </p>
         
         <QuickReference items={[
-          "Estructuras gramaticales para uso activo en conversación",
-          "Patrones que permiten expresar ideas complejas",
-          "Estructuras para diferentes funciones comunicativas",
-          "Gramática práctica para hablar con fluidez",
-          "Herramientas para comunicación efectiva y natural"
+          "Grammatical structures for active use in conversation",
+          "Patterns that let you express complex ideas",
+          "Structures for different communicative functions",
+          "Practical grammar for fluent speaking",
+          "Tools for effective, natural communication"
         ]} />
       </TheorySection>
 
-      <TheorySection title="Estructuras para Expresar Opiniones" icon="💭">
+      <TheorySection title="Structures for Expressing Opinions" icon="💭">
         <p style={{ fontSize: '1rem', lineHeight: 1.6, color: '#4a5568', marginBottom: '1rem' }}>
-          Estas estructuras te permiten expresar opiniones de manera clara y convincente en conversaciones.
+          These structures help you express opinions clearly and convincingly in conversation.
         </p>
 
         <GrammarTable
-          caption="Estructuras para Expresar Opiniones"
-          headers={["Estructura", "Uso", "Nivel de Certeza", "Ejemplo"]}
+          caption="Structures for Expressing Opinions"
+          headers={["Structure", "Use", "Level of Certainty", "Example"]}
           rows={[
-            ["I think that...", "Opinión personal", "Moderado", "I think that technology is beneficial"],
-            ["In my opinion...", "Opinión personal formal", "Moderado", "In my opinion, education is important"],
-            ["I believe that...", "Creencia fuerte", "Firme", "I believe that we should act now"],
-            ["I feel that...", "Sentimiento personal", "Emocional", "I feel that this is wrong"],
-            ["It seems to me that...", "Opinión cautelosa", "Inseguro", "It seems to me that this might work"],
-            ["I would argue that...", "Argumento", "Persuasivo", "I would argue that we need change"],
-            ["From my perspective...", "Punto de vista personal", "Formal", "From my perspective, this is beneficial"],
-            ["I'm convinced that...", "Convicción fuerte", "Muy firme", "I'm convinced that this is the right approach"]
+            ["I think that...", "Personal opinion", "Moderate", "I think that technology is beneficial"],
+            ["In my opinion...", "Formal personal opinion", "Moderate", "In my opinion, education is important"],
+            ["I believe that...", "Strong belief", "Strong", "I believe that we should act now"],
+            ["I feel that...", "Personal feeling", "Emotional", "I feel that this is wrong"],
+            ["It seems to me that...", "Careful opinion", "Tentative", "It seems to me that this might work"],
+            ["I would argue that...", "Making an argument", "Persuasive", "I would argue that we need change"],
+            ["From my perspective...", "Personal point of view", "Formal", "From my perspective, this is beneficial"],
+            ["I'm convinced that...", "Strong conviction", "Very strong", "I'm convinced that this is the right approach"]
           ]}
         />
 
         <div style={{ display: 'grid', gap: '1rem' }}>
           <Example 
-            spanish="Moderado: 'Creo que la tecnología es beneficiosa'"
             english="Moderate: 'I think that technology is beneficial'"
-            translation="Moderado: 'Creo que la tecnología es beneficiosa'"
           />
           <Example 
-            spanish="Firme: 'Creo que debemos actuar ahora'"
             english="Strong: 'I believe that we should act now'"
-            translation="Firme: 'Creo que debemos actuar ahora'"
           />
           <Example 
-            spanish="Persuasivo: 'Yo argumentaría que necesitamos cambio'"
             english="Persuasive: 'I would argue that we need change'"
-            translation="Persuasivo: 'Yo argumentaría que necesitamos cambio'"
           />
         </div>
 
         <Rule 
-          title="Uso de Estructuras de Opinión"
-          description="Para usar efectivamente:"
+          title="Using Opinion Structures"
+          description="To use them effectively:"
           examples={[
-            "Elige estructuras apropiadas para tu nivel de certeza",
-            "Varía las estructuras para evitar repetición",
-            "Considera el contexto y nivel de formalidad",
-            "Usa estructuras que reflejen tu verdadero sentimiento"
+            "Choose structures that match how certain you sound",
+            "Vary structures to avoid repetition",
+            "Consider context and register",
+            "Use structures that match how you genuinely feel"
           ]}
         />
 
         <Tip type="info">
-          <strong>Consejo:</strong> Las estructuras de opinión te permiten expresar tu perspectiva de manera clara y convincente.
+          <strong>Tip:</strong> Opinion structures let you state your viewpoint clearly and persuasively.
         </Tip>
       </TheorySection>
 
-      <TheorySection title="Estructuras para Dar Ejemplos" icon="💡">
+      <TheorySection title="Structures for Giving Examples" icon="💡">
         <p style={{ fontSize: '1rem', lineHeight: 1.6, color: '#4a5568', marginBottom: '1rem' }}>
-          Estas estructuras te ayudan a ilustrar tus ideas con ejemplos específicos y convincentes.
+          These structures help you support your ideas with specific, convincing examples.
         </p>
 
         <GrammarTable
-          caption="Estructuras para Dar Ejemplos"
-          headers={["Estructura", "Uso", "Posición", "Ejemplo"]}
+          caption="Structures for Giving Examples"
+          headers={["Structure", "Use", "Position", "Example"]}
           rows={[
-            ["For example...", "Ejemplo específico", "Inicio de oración", "For example, smartphones have changed communication"],
-            ["For instance...", "Ejemplo específico", "Inicio de oración", "For instance, social media connects people"],
-            ["Such as...", "Lista de ejemplos", "Medio de oración", "Technology such as AI and robotics is advancing"],
-            ["Like...", "Ejemplo informal", "Medio de oración", "Apps like WhatsApp are very popular"],
-            ["Take... for example", "Ejemplo específico", "Inicio de oración", "Take smartphones for example"],
-            ["A good example is...", "Ejemplo destacado", "Inicio de oración", "A good example is the internet"],
-            ["Consider...", "Ejemplo para reflexión", "Inicio de oración", "Consider how email changed communication"],
-            ["Let's say...", "Ejemplo hipotético", "Inicio de oración", "Let's say you want to learn a language"]
+            ["For example...", "Specific example", "Sentence opening", "For example, smartphones have changed communication"],
+            ["For instance...", "Specific example", "Sentence opening", "For instance, social media connects people"],
+            ["Such as...", "List of examples", "Middle of sentence", "Technology such as AI and robotics is advancing"],
+            ["Like...", "Informal example", "Middle of sentence", "Apps like WhatsApp are very popular"],
+            ["Take... for example", "Specific example", "Sentence opening", "Take smartphones for example"],
+            ["A good example is...", "Highlighted example", "Sentence opening", "A good example is the internet"],
+            ["Consider...", "Example for reflection", "Sentence opening", "Consider how email changed communication"],
+            ["Let's say...", "Hypothetical example", "Sentence opening", "Let's say you want to learn a language"]
           ]}
         />
 
         <div style={{ display: 'grid', gap: '1rem' }}>
           <Example 
-            spanish="Específico: 'Por ejemplo, los smartphones han cambiado la comunicación'"
             english="Specific: 'For example, smartphones have changed communication'"
-            translation="Específico: 'Por ejemplo, los smartphones han cambiado la comunicación'"
           />
           <Example 
-            spanish="Lista: 'Tecnología como IA y robótica está avanzando'"
             english="List: 'Technology such as AI and robotics is advancing'"
-            translation="Lista: 'Tecnología como IA y robótica está avanzando'"
           />
           <Example 
-            spanish="Destacado: 'Un buen ejemplo es internet'"
             english="Highlighted: 'A good example is the internet'"
-            translation="Destacado: 'Un buen ejemplo es internet'"
           />
         </div>
 
         <Tip type="success">
-          <strong>Consejo:</strong> Los ejemplos hacen que tus argumentos sean más convincentes y fáciles de entender.                                   
+          <strong>Tip:</strong> Examples make your arguments easier to understand and more persuasive.
         </Tip>
       </TheorySection>
 
-      <TheorySection title="Estructuras para Comparar y Contrastar" icon="⚖️">
+      <TheorySection title="Structures for Comparing and Contrasting" icon="⚖️">
         <p style={{ fontSize: '1rem', lineHeight: 1.6, color: '#4a5568', marginBottom: '1rem' }}>
-          Estas estructuras te permiten hacer comparaciones y contrastes efectivos en tus conversaciones.
+          These structures help you draw effective comparisons and contrasts in conversation.
         </p>
 
         <GrammarTable
-          caption="Estructuras para Comparar y Contrastar"
-          headers={["Estructura", "Uso", "Función", "Ejemplo"]}
+          caption="Structures for Comparing and Contrasting"
+          headers={["Structure", "Use", "Function", "Example"]}
           rows={[
-            ["Similarly...", "Mostrar similitud", "Comparación", "Similarly, both methods are effective"],
-            ["In contrast...", "Mostrar diferencia", "Contraste", "In contrast, this approach is different"],
-            ["On the other hand...", "Mostrar alternativa", "Contraste", "On the other hand, we could try this"],
-            ["Unlike...", "Mostrar diferencia", "Contraste", "Unlike the previous method, this is faster"],
-            ["Whereas...", "Mostrar contraste", "Contraste formal", "Whereas A is expensive, B is cheap"],
-            ["Compared to...", "Hacer comparación", "Comparación", "Compared to last year, sales are higher"],
-            ["In comparison with...", "Comparación formal", "Comparación", "In comparison with other options, this is better"],
-            ["Both... and...", "Mostrar similitud", "Similitud", "Both methods are effective"]
+            ["Similarly...", "Show similarity", "Comparison", "Similarly, both methods are effective"],
+            ["In contrast...", "Show difference", "Contrast", "In contrast, this approach is different"],
+            ["On the other hand...", "Show an alternative", "Contrast", "On the other hand, we could try this"],
+            ["Unlike...", "Show difference", "Contrast", "Unlike the previous method, this is faster"],
+            ["Whereas...", "Show contrast", "Formal contrast", "Whereas A is expensive, B is cheap"],
+            ["Compared to...", "Make a comparison", "Comparison", "Compared to last year, sales are higher"],
+            ["In comparison with...", "Formal comparison", "Comparison", "In comparison with other options, this is better"],
+            ["Both... and...", "Show similarity", "Similarity", "Both methods are effective"]
           ]}
         />
 
         <div style={{ display: 'grid', gap: '1rem' }}>
           <Example 
-            spanish="Similitud: 'Similarmente, ambos métodos son efectivos'"
             english="Similarity: 'Similarly, both methods are effective'"
-            translation="Similitud: 'Similarmente, ambos métodos son efectivos'"
           />
           <Example 
-            spanish="Contraste: 'En contraste, este enfoque es diferente'"
             english="Contrast: 'In contrast, this approach is different'"
-            translation="Contraste: 'En contraste, este enfoque es diferente'"
           />
           <Example 
-            spanish="Comparación: 'Comparado con el año pasado, las ventas son mayores'"
             english="Comparison: 'Compared to last year, sales are higher'"
-            translation="Comparación: 'Comparado con el año pasado, las ventas son mayores'"
           />
         </div>
 
         <Rule 
-          title="Uso de Estructuras de Comparación"
-          description="Para usar efectivamente:"
+          title="Using Comparison Structures"
+          description="To use them effectively:"
           examples={[
-            "Usa estructuras apropiadas para el tipo de comparación",
-            "Asegúrate de que la comparación sea clara",
-            "Varía las estructuras para evitar repetición",
-            "Considera el nivel de formalidad del contexto"
+            "Pick structures that fit the kind of comparison you mean",
+            "Make sure the comparison is clear",
+            "Vary structures to avoid repetition",
+            "Consider how formal or informal the context is"
           ]}
         />
 
         <Tip type="warning">
-          <strong>¡Cuidado!</strong> Asegúrate de que las comparaciones sean relevantes y claras para tu audiencia.
+          <strong>Watch out!</strong> Make sure comparisons stay relevant and clear for your audience.
         </Tip>
       </TheorySection>
 
-      <TheorySection title="Estructuras para Causa y Efecto" icon="🎯">
+      <TheorySection title="Structures for Cause and Effect" icon="🎯">
         <p style={{ fontSize: '1rem', lineHeight: 1.6, color: '#4a5568', marginBottom: '1rem' }}>
-          Estas estructuras te permiten explicar relaciones de causa y efecto de manera clara y lógica.
+          These structures help you explain cause-and-effect relationships clearly and logically.
         </p>
 
         <GrammarTable
-          caption="Estructuras para Causa y Efecto"
-          headers={["Estructura", "Uso", "Función", "Ejemplo"]}
+          caption="Structures for Cause and Effect"
+          headers={["Structure", "Use", "Function", "Example"]}
           rows={[
-            ["Because...", "Explicar causa", "Causa directa", "Because technology is advancing, life is easier"],
-            ["Since...", "Explicar causa", "Causa formal", "Since we have the internet, communication is faster"],
-            ["As a result...", "Mostrar resultado", "Efecto", "Technology advanced. As a result, productivity increased"],
-            ["Therefore...", "Mostrar consecuencia", "Efecto formal", "We need change. Therefore, we must act"],
-            ["Due to...", "Explicar causa formal", "Causa formal", "Due to technology, work is more efficient"],
-            ["Owing to...", "Explicar causa formal", "Causa muy formal", "Owing to advances, we can do more"],
-            ["Consequently...", "Mostrar consecuencia", "Efecto formal", "Technology improved. Consequently, life is better"],
-            ["This is why...", "Explicar razón", "Explicación", "Technology is important. This is why we invest in it"]
+            ["Because...", "Explain cause", "Direct cause", "Because technology is advancing, life is easier"],
+            ["Since...", "Explain cause", "Formal cause", "Since we have the internet, communication is faster"],
+            ["As a result...", "Show outcome", "Effect", "Technology advanced. As a result, productivity increased"],
+            ["Therefore...", "Show consequence", "Formal effect", "We need change. Therefore, we must act"],
+            ["Due to...", "Explain cause (formal)", "Formal cause", "Due to technology, work is more efficient"],
+            ["Owing to...", "Explain cause (formal)", "Very formal cause", "Owing to advances, we can do more"],
+            ["Consequently...", "Show consequence", "Formal effect", "Technology improved. Consequently, life is better"],
+            ["This is why...", "Explain reasoning", "Explanation", "Technology is important. This is why we invest in it"]
           ]}
         />
 
         <div style={{ display: 'grid', gap: '1rem' }}>
           <Example 
-            spanish="Causa directa: 'Porque la tecnología avanza, la vida es más fácil'"
             english="Direct cause: 'Because technology is advancing, life is easier'"
-            translation="Causa directa: 'Porque la tecnología avanza, la vida es más fácil'"
           />
           <Example 
-            spanish="Efecto: 'La tecnología avanzó. Como resultado, la productividad aumentó'"
             english="Effect: 'Technology advanced. As a result, productivity increased'"
-            translation="Efecto: 'La tecnología avanzó. Como resultado, la productividad aumentó'"
           />
           <Example 
-            spanish="Causa formal: 'Debido a la tecnología, el trabajo es más eficiente'"
             english="Formal cause: 'Due to technology, work is more efficient'"
-            translation="Causa formal: 'Debido a la tecnología, el trabajo es más eficiente'"
           />
         </div>
 
         <Tip type="info">
-          <strong>Consejo:</strong> Las estructuras de causa y efecto hacen que tus argumentos sean más lógicos y convincentes.
+          <strong>Tip:</strong> Cause-and-effect structures make your arguments sound more logical and persuasive.
         </Tip>
       </TheorySection>
 
-      <TheorySection title="Estructuras Condicionales Avanzadas" icon="🔀">
+      <TheorySection title="Advanced Conditional Structures" icon="🔀">
         <p style={{ fontSize: '1rem', lineHeight: 1.6, color: '#4a5568', marginBottom: '1rem' }}>
-          Estas estructuras condicionales te permiten expresar hipótesis y condiciones de manera sofisticada.
+          These conditional structures let you express hypotheses and conditions in a more sophisticated way.
         </p>
 
         <GrammarTable
-          caption="Estructuras Condicionales Avanzadas"
-          headers={["Estructura", "Uso", "Condición", "Ejemplo"]}
+          caption="Advanced Conditional Structures"
+          headers={["Structure", "Use", "Condition", "Example"]}
           rows={[
-            ["If... then...", "Condición general", "Cualquier condición", "If we work hard, then we will succeed"],
-            ["Provided that...", "Condición específica", "Condición formal", "Provided that we have resources, we can proceed"],
-            ["As long as...", "Condición de duración", "Condición continua", "As long as we work together, we can achieve our goals"],
-            ["Unless...", "Condición negativa", "A menos que", "Unless we act now, we will lose the opportunity"],
-            ["In case...", "Preparación para posibilidad", "Precaución", "In case of problems, we have a backup plan"],
-            ["Suppose...", "Hipótesis", "Situación hipotética", "Suppose we had more time, what would we do?"],
-            ["Imagine if...", "Hipótesis creativa", "Imaginación", "Imagine if we could solve this problem easily"],
-            ["What if...", "Pregunta hipotética", "Exploración", "What if we tried a different approach?"]
+            ["If... then...", "General condition", "Any condition", "If we work hard, then we will succeed"],
+            ["Provided that...", "Specific condition", "Formal condition", "Provided that we have resources, we can proceed"],
+            ["As long as...", "Ongoing condition", "Continuous condition", "As long as we work together, we can achieve our goals"],
+            ["Unless...", "Negative condition", "Unless / except if", "Unless we act now, we will lose the opportunity"],
+            ["In case...", "Preparing for a possibility", "Precaution", "In case of problems, we have a backup plan"],
+            ["Suppose...", "Hypothesis", "Hypothetical situation", "Suppose we had more time, what would we do?"],
+            ["Imagine if...", "Creative hypothesis", "Imagination", "Imagine if we could solve this problem easily"],
+            ["What if...", "Hypothetical question", "Exploration", "What if we tried a different approach?"]
           ]}
         />
 
         <div style={{ display: 'grid', gap: '1rem' }}>
           <Example 
-            spanish="Condición general: 'Si trabajamos duro, entonces tendremos éxito'"
             english="General condition: 'If we work hard, then we will succeed'"
-            translation="Condición general: 'Si trabajamos duro, entonces tendremos éxito'"
           />
           <Example 
-            spanish="Condición específica: 'Siempre que tengamos recursos, podemos proceder'"
             english="Specific condition: 'Provided that we have resources, we can proceed'"
-            translation="Condición específica: 'Siempre que tengamos recursos, podemos proceder'"
           />
           <Example 
-            spanish="Condición negativa: 'A menos que actuemos ahora, perderemos la oportunidad'"
             english="Negative condition: 'Unless we act now, we will lose the opportunity'"
-            translation="Condición negativa: 'A menos que actuemos ahora, perderemos la oportunidad'"
           />
         </div>
 
         <Rule 
-          title="Uso de Estructuras Condicionales"
-          description="Para usar efectivamente:"
+          title="Using Conditional Structures"
+          description="To use them effectively:"
           examples={[
-            "Elige estructuras apropiadas para el tipo de condición",
-            "Considera el nivel de formalidad del contexto",
-            "Usa estructuras que reflejen la probabilidad de la condición",
-            "Varía las estructuras para evitar repetición"
+            "Choose structures that match the type of condition you mean",
+            "Consider how formal or informal the context is",
+            "Use structures that reflect how likely the condition is",
+            "Vary structures to avoid repetition"
           ]}
         />
 
         <Tip type="success">
-          <strong>Consejo:</strong> Las estructuras condicionales te permiten explorar posibilidades y hipótesis de manera sofisticada.
+          <strong>Tip:</strong> Conditional structures let you explore possibilities and hypotheses in a nuanced way.
         </Tip>
       </TheorySection>
 
-      <TheorySection title="Estructuras para Concluir" icon="🎯">
+      <TheorySection title="Structures for Concluding" icon="🎯">
         <p style={{ fontSize: '1rem', lineHeight: 1.6, color: '#4a5568', marginBottom: '1rem' }}>
-          Estas estructuras te ayudan a concluir tus argumentos de manera efectiva y convincente.
+          These structures help you wrap up your arguments effectively and convincingly.
         </p>
 
         <GrammarTable
-          caption="Estructuras para Concluir"
-          headers={["Estructura", "Uso", "Función", "Ejemplo"]}
+          caption="Structures for Concluding"
+          headers={["Structure", "Use", "Function", "Example"]}
           rows={[
-            ["In conclusion...", "Conclusión formal", "Cierre formal", "In conclusion, technology is beneficial"],
-            ["To sum up...", "Resumen", "Síntesis", "To sum up, we need to act now"],
-            ["All in all...", "Conclusión general", "Evaluación general", "All in all, this is a good solution"],
-            ["Overall...", "Evaluación general", "Perspectiva general", "Overall, the results are positive"],
-            ["In summary...", "Resumen formal", "Síntesis formal", "In summary, we have three main points"],
-            ["To conclude...", "Conclusión formal", "Cierre formal", "To conclude, we must take action"],
-            ["Finally...", "Punto final", "Último punto", "Finally, I want to emphasize the importance"],
-            ["In the end...", "Conclusión final", "Resultado final", "In the end, what matters is the result"]
+            ["In conclusion...", "Formal conclusion", "Formal close", "In conclusion, technology is beneficial"],
+            ["To sum up...", "Summary", "Synthesis", "To sum up, we need to act now"],
+            ["All in all...", "Overall conclusion", "General assessment", "All in all, this is a good solution"],
+            ["Overall...", "General assessment", "Big-picture view", "Overall, the results are positive"],
+            ["In summary...", "Formal summary", "Formal synthesis", "In summary, we have three main points"],
+            ["To conclude...", "Formal conclusion", "Formal close", "To conclude, we must take action"],
+            ["Finally...", "Final point", "Last emphasis", "Finally, I want to emphasize the importance"],
+            ["In the end...", "Final conclusion", "End result", "In the end, what matters is the result"]
           ]}
         />
 
         <div style={{ display: 'grid', gap: '1rem' }}>
           <Example 
-            spanish="Conclusión formal: 'En conclusión, la tecnología es beneficiosa'"
             english="Formal conclusion: 'In conclusion, technology is beneficial'"
-            translation="Conclusión formal: 'En conclusión, la tecnología es beneficiosa'"
           />
           <Example 
-            spanish="Resumen: 'Para resumir, necesitamos actuar ahora'"
             english="Summary: 'To sum up, we need to act now'"
-            translation="Resumen: 'Para resumir, necesitamos actuar ahora'"
           />
           <Example 
-            spanish="Evaluación general: 'En general, los resultados son positivos'"
             english="General evaluation: 'Overall, the results are positive'"
-            translation="Evaluación general: 'En general, los resultados son positivos'"
           />
         </div>
 
         <Tip type="info">
-          <strong>Consejo:</strong> Las conclusiones fuertes refuerzan tu argumento y dejan una impresión duradera.
+          <strong>Tip:</strong> Strong conclusions reinforce your argument and leave a lasting impression.
         </Tip>
       </TheorySection>
 
-      <TheorySection title="Errores Comunes" icon="⚠️">
+      <TheorySection title="Common Mistakes" icon="⚠️">
         <div style={{ display: 'grid', gap: '1rem' }}>
           <Tip type="error">
-            <strong>Error:</strong> Usar siempre las mismas estructuras ❌<br/>
-            <strong>Correcto:</strong> Variar las estructuras para evitar repetición ✅<br/>
-            <em>La variedad hace que tu habla sea más interesante y natural</em>
+            <strong>Error:</strong> Always using the same structures ❌<br/>
+            <strong>Correct:</strong> Vary structures to avoid repetition ✅<br/>
+            <em>Variety makes your speech more interesting and natural</em>
           </Tip>
 
           <Tip type="error">
-            <strong>Error:</strong> Usar estructuras formales en contextos informales ❌<br/>
-            <strong>Correcto:</strong> Adaptar estructuras al contexto ✅<br/>
-            <em>El contexto determina el nivel de formalidad apropiado</em>
+            <strong>Error:</strong> Using formal structures in informal settings ❌<br/>
+            <strong>Correct:</strong> Adapt structures to the context ✅<br/>
+            <em>Context decides what register fits best</em>
           </Tip>
 
           <Tip type="error">
-            <strong>Error:</strong> No considerar el nivel de certeza ❌<br/>
-            <strong>Correcto:</strong> Elegir estructuras apropiadas para tu nivel de certeza ✅<br/>
-            <em>Tu nivel de certeza debe reflejarse en la estructura que elijas</em>
+            <strong>Error:</strong> Ignoring how certain you sound ❌<br/>
+            <strong>Correct:</strong> Pick structures that match your level of certainty ✅<br/>
+            <em>How sure you are should show up in the structure you choose</em>
           </Tip>
 
           <Tip type="error">
-            <strong>Error:</strong> No practicar las estructuras ❌<br/>
-            <strong>Correcto:</strong> Practicar estructuras en contextos reales ✅<br/>
-            <em>La práctica desarrolla fluidez y naturalidad</em>
+            <strong>Error:</strong> Not practising the structures ❌<br/>
+            <strong>Correct:</strong> Practise structures in real contexts ✅<br/>
+            <em>Practice builds fluency and naturalness</em>
           </Tip>
         </div>
       </TheorySection>
 
-      <TheorySection title="Reglas Importantes" icon="⚡">
+      <TheorySection title="Important Rules" icon="⚡">
         <div style={{ display: 'grid', gap: '1rem' }}>
           <Rule 
-            title="1. Variedad y flexibilidad"
-            description="Desarrolla variedad en el uso de estructuras."
+            title="1. Variety and flexibility"
+            description="Develop variety in how you use structures."
             examples={[
-              "Aprende diferentes formas de expresar la misma idea",
-              "Practica diferentes niveles de formalidad",
-              "Desarrolla estructuras para diferentes funciones",
-              "Usa variedad para evitar repetición"
+              "Learn different ways to express the same idea",
+              "Practise different levels of formality",
+              "Build structures for different functions",
+              "Use variety to avoid repetition"
             ]}
           />
 
           <Rule 
-            title="2. Contexto apropiado"
-            description="Adapta las estructuras al contexto."
+            title="2. Appropriate context"
+            description="Match structures to the situation."
             examples={[
-              "Considera el nivel de formalidad del contexto",
-              "Adapta según la relación con la persona",
-              "Usa estructuras apropiadas para la situación",
-              "Observa cómo otros usan estructuras en el contexto"
+              "Consider how formal the context is",
+              "Adapt depending on your relationship with the person",
+              "Use structures suited to the situation",
+              "Notice how others use structures in that context"
             ]}
           />
 
           <Rule 
-            title="3. Práctica activa"
-            description="Practica las estructuras activamente."
+            title="3. Active practice"
+            description="Use structures actively, not passively."
             examples={[
-              "Usa estructuras en conversaciones reales",
-              "Practica en diferentes contextos",
-              "Recibe feedback sobre tu uso",
-              "Ajusta según el contexto y retroalimentación"
+              "Use structures in real conversations",
+              "Practise in different contexts",
+              "Get feedback on how you use them",
+              "Adjust based on context and feedback"
             ]}
           />
         </div>
@@ -394,59 +357,59 @@ const ActiveGrammarAndUsefulStructuresPage = () => {
   const exercises = [
     <MultipleChoiceExercise
       key="1"
-      question="¿Qué tipo de estructuras se usan para hablar con fluidez?"
+      question="What kinds of structures are used to speak fluently?"
       options={[
-        "Pasivas",
-        "Activas",
-        "Complejas",
-        "Simples"
+        "Passive",
+        "Active",
+        "Complex",
+        "Simple"
       ]}
       correctAnswer={1}
-      explanation="Las estructuras activas se usan para hablar con fluidez, ya que son más directas y naturales en la conversación."
+      explanation="Active structures support fluent speech because they tend to sound more direct and natural in conversation."
     />,
 
     <MultipleChoiceExercise
       key="2"
-      question="¿Cuál es el beneficio principal de usar estructuras gramaticales activas?"
+      question="What is the main benefit of using active grammatical structures?"
       options={[
-        "Mejorar la pronunciación",
-        "Hablar con fluidez y naturalidad",
-        "Aumentar la velocidad de habla",
-        "Reducir el vocabulario necesario"
+        "Improving pronunciation",
+        "Speaking fluently and naturally",
+        "Speaking faster",
+        "Needing less vocabulary"
       ]}
       correctAnswer={1}
-      explanation="El beneficio principal es hablar con fluidez y naturalidad, ya que las estructuras activas te permiten expresar ideas complejas de manera efectiva."
+      explanation="The main benefit is speaking fluently and naturally: active structures help you express complex ideas effectively."
     />,
 
     <TrueFalseExercise
       key="3"
       statements={[
         {
-          text: "Es importante variar las estructuras para evitar repetición.",
+          text: "It is important to vary structures to avoid repetition.",
           isTrue: true,
-          explanation: "Correcto. La variedad en estructuras hace que tu habla sea más interesante y natural, evitando la repetición monótona."
+          explanation: "Correct. Varying structures keeps your speech more interesting and natural, and avoids monotone repetition."
         },
         {
-          text: "Las estructuras formales son apropiadas en todos los contextos.",
+          text: "Formal structures are appropriate in every context.",
           isTrue: false,
-          explanation: "Incorrecto. Debes adaptar las estructuras al contexto. Las estructuras formales no son apropiadas en contextos informales."
+          explanation: "Incorrect. Structures should suit the context. Formal ones are often a poor fit in informal situations."
         },
         {
-          text: "La práctica activa desarrolla fluidez en el uso de estructuras.",
+          text: "Active practice builds fluency in using structures.",
           isTrue: true,
-          explanation: "Correcto. La práctica activa en contextos reales es la mejor manera de desarrollar fluidez y naturalidad en el uso de estructuras."
+          explanation: "Correct. Active practice in real contexts is one of the best ways to gain fluency and naturalness."
         },
         {
-          text: "El contexto no influye en la elección de estructuras.",
+          text: "Context does not influence which structures you choose.",
           isTrue: false,
-          explanation: "Incorrecto. El contexto determina qué estructuras usar. Diferentes contextos requieren diferentes niveles de formalidad."
+          explanation: "Incorrect. Context shapes which structures fit. Different situations call for different levels of formality."
         }
       ]}
     />,
 
     <MultipleChoiceExercise
       key="4"
-      question="¿Cuál es la mejor estructura para expresar una opinión con certeza moderada?"
+      question="Which structure best expresses an opinion with moderate certainty?"
       options={[
         "I'm absolutely sure that...",
         "I think that...",
@@ -454,12 +417,12 @@ const ActiveGrammarAndUsefulStructuresPage = () => {
         "It might be..."
       ]}
       correctAnswer={1}
-      explanation="'I think that...' expresa una opinión con certeza moderada, mientras que las otras expresan certeza absoluta, incertidumbre total o posibilidad."
+      explanation="'I think that...' signals moderate certainty, while the others lean toward certainty, uncertainty, or possibility."
     />,
 
     <MultipleChoiceExercise
       key="5"
-      question="¿Qué estructura es más apropiada para una conclusión formal?"
+      question="Which structure fits a formal conclusion best?"
       options={[
         "All in all...",
         "In conclusion...",
@@ -467,14 +430,14 @@ const ActiveGrammarAndUsefulStructuresPage = () => {
         "What if..."
       ]}
       correctAnswer={1}
-      explanation="'In conclusion...' es la estructura más apropiada para una conclusión formal, mientras que las otras son más informales o para otros propósitos."
+      explanation="'In conclusion...' is the best fit for a formal conclusion here; the other options suit informal wrapping-up or different purposes."
     />
   ];
 
   return (
     <TheoryLayout
       title="Active Grammar and Useful Structures"
-      description="Domina la gramática activa y estructuras útiles en inglés. Aprende patrones gramaticales para expresar opiniones, dar ejemplos, comparar, explicar causa-efecto y concluir efectivamente."
+      description="Master active grammar and useful structures in English. Learn grammatical patterns for stating opinions, giving examples, comparing, explaining cause and effect, and concluding effectively."
       level="A2-B1-B2-C1-C2"
       theoryContent={theoryContent}
       exercises={exercises}
@@ -485,4 +448,3 @@ const ActiveGrammarAndUsefulStructuresPage = () => {
 };
 
 export default ActiveGrammarAndUsefulStructuresPage;
-

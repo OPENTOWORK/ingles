@@ -18,34 +18,34 @@ import {
 const ConditionalsPage = () => {
   const theoryContent = (
     <div>
-      <TheorySection title="¿Qué son los Conditionals?" icon="🔀">
+      <TheorySection title="What Are Conditionals?" icon="🔀">
         <p style={{ fontSize: '1.1rem', lineHeight: 1.6, color: '#4a5568', marginBottom: '1rem' }}>
-          Los <strong>conditionals</strong> (condicionales) son estructuras gramaticales que expresan situaciones 
-          hipotéticas, posibilidades y sus resultados. Se componen de una cláusula condicional (if) y una cláusula 
-          principal que expresa el resultado.
+          <strong>Conditionals</strong> are grammatical structures that express hypothetical situations, 
+          possibilities, and their outcomes. They consist of a conditional clause (if) and a main clause 
+          that expresses the result.
         </p>
         
         <QuickReference items={[
-          "Expresan situaciones hipotéticas",
-          "Tienen cláusula 'if' y resultado",
-          "Diferentes tipos según probabilidad",
+          "Express hypothetical situations",
+          "Have an ‘if’ clause and a result",
+          "Different types depending on likelihood",
           "Zero, First, Second, Third, Mixed",
-          "Esenciales para expresar posibilidades"
+          "Essential for expressing possibilities"
         ]} />
       </TheorySection>
 
       <TheorySection title="Zero Conditional" icon="🌍">
         <p style={{ fontSize: '1rem', lineHeight: 1.6, color: '#4a5568', marginBottom: '1rem' }}>
-          Se usa para hechos generales, verdades universales y situaciones que siempre son verdaderas.
+          Used for general facts, universal truths, and situations that always hold true.
         </p>
 
         <GrammarTable
-          caption="Zero Conditional - Estructura"
-          headers={["Estructura", "Ejemplo", "Significado"]}
+          caption="Zero Conditional — Structure"
+          headers={["Structure", "Example", "Meaning"]}
           rows={[
-            ["If + presente simple, presente simple", "If you heat water, it boils", "Si calientas agua, hierve"],
-            ["Presente simple + if + presente simple", "Water boils if you heat it", "El agua hierve si la calientas"],
-            ["When/Whenever + presente simple, presente simple", "When it rains, the ground gets wet", "Cuando llueve, el suelo se moja"]
+            ["If + present simple, present simple", "If you heat water, it boils", "If you heat water, it boils"],
+            ["Present simple + if + present simple", "Water boils if you heat it", "Water boils if you heat it"],
+            ["When/whenever + present simple, present simple", "When it rains, the ground gets wet", "When it rains, the ground gets wet"]
           ]}
         />
 
@@ -53,48 +53,48 @@ const ConditionalsPage = () => {
           <Example 
             spanish="Si no comes, tienes hambre"
             english="If you don't eat, you get hungry"
-            translation="Si no comes, tienes hambre"
+            translation="If you don't eat, you get hungry"
           />
           <Example 
             spanish="Cuando hace frío, uso abrigo"
             english="When it's cold, I wear a coat"
-            translation="Cuando hace frío, uso abrigo"
+            translation="When it's cold, I wear a coat"
           />
           <Example 
             spanish="Si estudias, aprendes"
             english="If you study, you learn"
-            translation="Si estudias, aprendes"
+            translation="If you study, you learn"
           />
         </div>
 
         <Rule 
-          title="Usos del Zero Conditional"
-          description="Se usa para:"
+          title="Uses of the Zero Conditional"
+          description="It is used for:"
           examples={[
-            "Hechos científicos y naturales",
-            "Rutinas y hábitos",
-            "Instrucciones y reglas",
-            "Causa y efecto general"
+            "Scientific and natural facts",
+            "Routines and habits",
+            "Instructions and rules",
+            "General cause and effect"
           ]}
         />
 
         <Tip type="info">
-          <strong>Consejo:</strong> El Zero Conditional expresa situaciones que siempre son verdaderas, no hipotéticas.
+          <strong>Tip:</strong> Zero Conditional expresses situations that are always true, not hypothetical ones.
         </Tip>
       </TheorySection>
 
       <TheorySection title="First Conditional" icon="🎯">
         <p style={{ fontSize: '1rem', lineHeight: 1.6, color: '#4a5568', marginBottom: '1rem' }}>
-          Se usa para situaciones reales y posibles en el futuro. Expresa condiciones que pueden cumplirse.
+          Used for real, possible situations in the future. It expresses conditions that may be fulfilled.
         </p>
 
         <GrammarTable
-          caption="First Conditional - Estructura"
-          headers={["Estructura", "Ejemplo", "Significado"]}
+          caption="First Conditional — Structure"
+          headers={["Structure", "Example", "Meaning"]}
           rows={[
-            ["If + presente simple, will + infinitivo", "If it rains, I will stay home", "Si llueve, me quedaré en casa"],
-            ["If + presente simple, be going to + infinitivo", "If you study, you are going to pass", "Si estudias, vas a aprobar"],
-            ["If + presente simple, modal + infinitivo", "If you hurry, you can catch the bus", "Si te apuras, puedes tomar el autobús"]
+            ["If + present simple, will + infinitive", "If it rains, I will stay home", "If it rains, I’ll stay home"],
+            ["If + present simple, be going to + infinitive", "If you study, you are going to pass", "If you study, you’re going to pass"],
+            ["If + present simple, modal + infinitive", "If you hurry, you can catch the bus", "If you hurry, you can catch the bus"]
           ]}
         />
 
@@ -102,48 +102,48 @@ const ConditionalsPage = () => {
           <Example 
             spanish="Si tengo tiempo, te llamaré"
             english="If I have time, I will call you"
-            translation="Si tengo tiempo, te llamaré"
+            translation="If I have time, I will call you"
           />
           <Example 
             spanish="Si estudias mucho, aprobarás"
             english="If you study hard, you will pass"
-            translation="Si estudias mucho, aprobarás"
+            translation="If you study hard, you’ll pass"
           />
           <Example 
             spanish="Si viene temprano, podremos almorzar juntos"
             english="If he comes early, we can have lunch together"
-            translation="Si viene temprano, podremos almorzar juntos"
+            translation="If he comes early, we can have lunch together"
           />
         </div>
 
         <Rule 
-          title="Características del First Conditional"
-          description="Elementos importantes:"
+          title="Features of the First Conditional"
+          description="Key points:"
           examples={[
-            "Condición posible y real",
-            "Resultado probable en el futuro",
-            "Puede usar will, be going to, o modales",
-            "Expresa planes y predicciones realistas"
+            "Possible, real condition",
+            "Likely result in the future",
+            "Can use will, be going to, or modals",
+            "Expresses realistic plans and predictions"
           ]}
         />
 
         <Tip type="success">
-          <strong>Consejo:</strong> El First Conditional es el más común para hablar de planes futuros realistas.
+          <strong>Tip:</strong> First Conditional is the most common structure for realistic future plans.
         </Tip>
       </TheorySection>
 
       <TheorySection title="Second Conditional" icon="🌙">
         <p style={{ fontSize: '1rem', lineHeight: 1.6, color: '#4a5568', marginBottom: '1rem' }}>
-          Se usa para situaciones hipotéticas, irreales o improbables en el presente o futuro.
+          Used for hypothetical, unreal, or unlikely situations in the present or future.
         </p>
 
         <GrammarTable
-          caption="Second Conditional - Estructura"
-          headers={["Estructura", "Ejemplo", "Significado"]}
+          caption="Second Conditional — Structure"
+          headers={["Structure", "Example", "Meaning"]}
           rows={[
-            ["If + pasado simple, would + infinitivo", "If I won the lottery, I would travel", "Si ganara la lotería, viajaría"],
-            ["If + pasado simple, could + infinitivo", "If I had time, I could help you", "Si tuviera tiempo, podría ayudarte"],
-            ["If + pasado simple, might + infinitivo", "If it rained, we might stay inside", "Si lloviera, podríamos quedarnos dentro"]
+            ["If + past simple, would + infinitive", "If I won the lottery, I would travel", "If I won the lottery, I would travel"],
+            ["If + past simple, could + infinitive", "If I had time, I could help you", "If I had time, I could help you"],
+            ["If + past simple, might + infinitive", "If it rained, we might stay inside", "If it rained, we might stay inside"]
           ]}
         />
 
@@ -151,48 +151,48 @@ const ConditionalsPage = () => {
           <Example 
             spanish="Si fuera rico, compraría una casa grande"
             english="If I were rich, I would buy a big house"
-            translation="Si fuera rico, compraría una casa grande"
+            translation="If I were rich, I would buy a big house"
           />
           <Example 
             spanish="Si tuviera alas, podría volar"
             english="If I had wings, I could fly"
-            translation="Si tuviera alas, podría volar"
+            translation="If I had wings, I could fly"
           />
           <Example 
             spanish="Si fuera más joven, haría más deporte"
             english="If I were younger, I would do more sport"
-            translation="Si fuera más joven, haría más deporte"
+            translation="If I were younger, I would do more exercise"
           />
         </div>
 
         <Rule 
-          title="Usos del Second Conditional"
-          description="Se usa para:"
+          title="Uses of the Second Conditional"
+          description="It is used for:"
           examples={[
-            "Situaciones hipotéticas irreales",
-            "Sueños y fantasías",
-            "Consejos indirectos",
-            "Situaciones improbables"
+            "Unreal hypothetical situations",
+            "Dreams and fantasies",
+            "Indirect advice",
+            "Unlikely situations"
           ]}
         />
 
         <Tip type="warning">
-          <strong>¡Cuidado!</strong> Con 'be', usa 'were' para todas las personas: If I were, If you were, If he were.
+          <strong>Watch out!</strong> With ‘be’, use ‘were’ for every person: If I were, If you were, If he were.
         </Tip>
       </TheorySection>
 
       <TheorySection title="Third Conditional" icon="⏰">
         <p style={{ fontSize: '1rem', lineHeight: 1.6, color: '#4a5568', marginBottom: '1rem' }}>
-          Se usa para situaciones hipotéticas en el pasado que no se pueden cambiar. Expresa arrepentimiento o especulación sobre el pasado.
+          Used for hypothetical situations in the past that cannot be changed. It expresses regret or speculation about the past.
         </p>
 
         <GrammarTable
-          caption="Third Conditional - Estructura"
-          headers={["Estructura", "Ejemplo", "Significado"]}
+          caption="Third Conditional — Structure"
+          headers={["Structure", "Example", "Meaning"]}
           rows={[
-            ["If + pasado perfecto, would have + participio", "If I had studied, I would have passed", "Si hubiera estudiado, habría aprobado"],
-            ["If + pasado perfecto, could have + participio", "If you had called, I could have helped", "Si hubieras llamado, habría podido ayudar"],
-            ["If + pasado perfecto, might have + participio", "If it had rained, we might have stayed", "Si hubiera llovido, nos habríamos quedado"]
+            ["If + past perfect, would have + past participle", "If I had studied, I would have passed", "If I had studied, I would have passed"],
+            ["If + past perfect, could have + past participle", "If you had called, I could have helped", "If you had called, I could have helped"],
+            ["If + past perfect, might have + past participle", "If it had rained, we might have stayed", "If it had rained, we might have stayed"]
           ]}
         />
 
@@ -200,48 +200,48 @@ const ConditionalsPage = () => {
           <Example 
             spanish="Si hubiera sabido, habría venido antes"
             english="If I had known, I would have come earlier"
-            translation="Si hubiera sabido, habría venido antes"
+            translation="If I had known, I would have come earlier"
           />
           <Example 
             spanish="Si no hubiera llovido, habríamos ido al parque"
             english="If it hadn't rained, we would have gone to the park"
-            translation="Si no hubiera llovido, habríamos ido al parque"
+            translation="If it hadn’t rained, we would have gone to the park"
           />
           <Example 
             spanish="Si hubiera tenido dinero, habría comprado el coche"
             english="If I had had money, I would have bought the car"
-            translation="Si hubiera tenido dinero, habría comprado el coche"
+            translation="If I had had money, I would have bought the car"
           />
         </div>
 
         <Rule 
-          title="Características del Third Conditional"
-          description="Elementos importantes:"
+          title="Features of the Third Conditional"
+          description="Key points:"
           examples={[
-            "Situación en el pasado que no ocurrió",
-            "Resultado también en el pasado",
-            "Expresa arrepentimiento o especulación",
-            "No se puede cambiar el resultado"
+            "Past situation that did not happen",
+            "Result also in the past",
+            "Expresses regret or speculation",
+            "The outcome cannot be changed"
           ]}
         />
 
         <Tip type="info">
-          <strong>Consejo:</strong> El Third Conditional es perfecto para expresar 'qué habría pasado si...' sobre el pasado.
+          <strong>Tip:</strong> Third Conditional is ideal for expressing “what would have happened if…” about the past.
         </Tip>
       </TheorySection>
 
       <TheorySection title="Mixed Conditionals" icon="🔄">
         <p style={{ fontSize: '1rem', lineHeight: 1.6, color: '#4a5568', marginBottom: '1rem' }}>
-          Combinan diferentes tiempos para expresar situaciones donde la condición y el resultado están en diferentes momentos temporales.
+          They combine different tenses when the condition and the result lie at different points in time.
         </p>
 
         <GrammarTable
-          caption="Mixed Conditionals - Tipos"
-          headers={["Tipo", "Estructura", "Ejemplo"]}
+          caption="Mixed Conditionals — Types"
+          headers={["Type", "Structure", "Example"]}
           rows={[
-            ["Tipo 1", "If + pasado perfecto, would + infinitivo", "If I had studied, I would be smarter now"],
-            ["Tipo 2", "If + pasado simple, would have + participio", "If I were taller, I would have played basketball"],
-            ["Tipo 3", "If + presente perfecto, would + infinitivo", "If I have finished, I will leave early"]
+            ["Type 1", "If + past perfect, would + infinitive", "If I had studied, I would be smarter now"],
+            ["Type 2", "If + past simple, would have + past participle", "If I were taller, I would have played basketball"],
+            ["Type 3", "If + present perfect, would + infinitive", "If I have finished, I will leave early"]
           ]}
         />
 
@@ -249,50 +249,50 @@ const ConditionalsPage = () => {
           <Example 
             spanish="Si hubiera estudiado medicina, sería doctor ahora"
             english="If I had studied medicine, I would be a doctor now"
-            translation="Si hubiera estudiado medicina, sería doctor ahora"
+            translation="If I had studied medicine, I would be a doctor now"
           />
           <Example 
             spanish="Si fuera más valiente, habría viajado solo"
             english="If I were braver, I would have traveled alone"
-            translation="Si fuera más valiente, habría viajado solo"
+            translation="If I were braver, I would have traveled alone"
           />
           <Example 
             spanish="Si tengo tiempo mañana, habré terminado el proyecto"
             english="If I have time tomorrow, I will have finished the project"
-            translation="Si tengo tiempo mañana, habré terminado el proyecto"
+            translation="If I have time tomorrow, I’ll have finished the project"
           />
         </div>
 
         <Rule 
-          title="Usos de Mixed Conditionals"
-          description="Se usan para:"
+          title="Uses of Mixed Conditionals"
+          description="They are used to:"
           examples={[
-            "Conectar pasado con presente",
-            "Conectar presente con pasado",
-            "Expresar resultados complejos",
-            "Mostrar relaciones temporales"
+            "Link the past with the present",
+            "Link the present with the past",
+            "Express complex results",
+            "Show relationships across time"
           ]}
         />
 
         <Tip type="success">
-          <strong>Consejo:</strong> Los Mixed Conditionals son avanzados pero muy útiles para expresar situaciones complejas.
+          <strong>Tip:</strong> Mixed Conditionals are advanced but very useful for complex situations.
         </Tip>
       </TheorySection>
 
       <TheorySection title="Unless, Provided that, As long as" icon="🔧">
         <p style={{ fontSize: '1rem', lineHeight: 1.6, color: '#4a5568', marginBottom: '1rem' }}>
-          Otras palabras que pueden introducir condiciones con significados específicos.
+          Other words can introduce conditions with more specific meanings.
         </p>
 
         <GrammarTable
-          caption="Otras Palabras Condicionales"
-          headers={["Palabra", "Significado", "Ejemplo"]}
+          caption="Other Conditional Expressions"
+          headers={["Word", "Meaning", "Example"]}
           rows={[
-            ["unless", "si no, a menos que", "Unless you study, you won't pass"],
-            ["provided that", "siempre que, con tal de que", "I'll help provided that you ask nicely"],
-            ["as long as", "siempre que, mientras que", "As long as you're happy, I'm happy"],
-            ["in case", "por si acaso", "Take an umbrella in case it rains"],
-            ["suppose/supposing", "supongamos que", "Supposing it rains, what will we do?"]
+            ["unless", "except if / if … not", "Unless you study, you won't pass"],
+            ["provided that", "provided that / as long as", "I'll help provided that you ask nicely"],
+            ["as long as", "as long as / while", "As long as you're happy, I'm happy"],
+            ["in case", "in case / just in case", "Take an umbrella in case it rains"],
+            ["suppose/supposing", "suppose / let’s suppose", "Supposing it rains, what will we do?"]
           ]}
         />
 
@@ -300,102 +300,102 @@ const ConditionalsPage = () => {
           <Example 
             spanish="No aprobarás a menos que estudies"
             english="You won't pass unless you study"
-            translation="No aprobarás a menos que estudies"
+            translation="You won’t pass unless you study"
           />
           <Example 
             spanish="Te ayudaré siempre que me lo pidas bien"
             english="I'll help you provided that you ask nicely"
-            translation="Te ayudaré siempre que me lo pidas bien"
+            translation="I'll help you as long as you ask nicely"
           />
           <Example 
             spanish="Lleva paraguas por si llueve"
             english="Take an umbrella in case it rains"
-            translation="Lleva paraguas por si llueve"
+            translation="Take an umbrella in case it rains"
           />
         </div>
 
         <Rule 
-          title="Diferencias Importantes"
-          description="Usa la palabra correcta:"
+          title="Important Differences"
+          description="Pick the right word:"
           examples={[
-            "Unless = if not (negativo)",
-            "Provided that = condición específica",
-            "As long as = condición continua",
-            "In case = precaución"
+            "Unless = if not (negative)",
+            "Provided that = a specific condition",
+            "As long as = ongoing condition",
+            "In case = precaution"
           ]}
         />
 
         <Tip type="warning">
-          <strong>¡Cuidado!</strong> 'Unless' ya incluye el negativo, no uses 'not' después: Unless you don't study ❌ → Unless you study ✅
+          <strong>Watch out!</strong> ‘Unless’ already includes negation—do not add ‘not’ after it: Unless you don't study ❌ → Unless you study ✅
         </Tip>
       </TheorySection>
 
-      <TheorySection title="Errores Comunes" icon="⚠️">
+      <TheorySection title="Common Mistakes" icon="⚠️">
         <div style={{ display: 'grid', gap: '1rem' }}>
           <Tip type="error">
-            <strong>Error:</strong> Mezclar tiempos incorrectamente ❌<br/>
-            <strong>Correcto:</strong> Usar tiempos consistentes ✅<br/>
+            <strong>Mistake:</strong> Mixing up tenses inconsistently ❌<br/>
+            <strong>Correct:</strong> Use consistent tenses ✅<br/>
             <em>If I will have time, I would help. → If I have time, I will help.</em>
           </Tip>
 
           <Tip type="error">
-            <strong>Error:</strong> Usar 'was' en lugar de 'were' ❌<br/>
-            <strong>Correcto:</strong> Usar 'were' para todas las personas ✅<br/>
+            <strong>Mistake:</strong> Using ‘was’ instead of ‘were’ ❌<br/>
+            <strong>Correct:</strong> Use ‘were’ for every person ✅<br/>
             <em>If I was rich... → If I were rich...</em>
           </Tip>
 
           <Tip type="error">
-            <strong>Error:</strong> Olvidar 'have' en Third Conditional ❌<br/>
-            <strong>Correcto:</strong> Incluir 'have' en el resultado ✅<br/>
+            <strong>Mistake:</strong> Omitting ‘have’ in Third Conditional ❌<br/>
+            <strong>Correct:</strong> Include ‘have’ in the result ✅<br/>
             <em>If I had known, I would come. → If I had known, I would have come.</em>
           </Tip>
 
           <Tip type="error">
-            <strong>Error:</strong> Usar 'unless' con 'not' ❌<br/>
-            <strong>Correcto:</strong> 'Unless' ya incluye el negativo ✅<br/>
+            <strong>Mistake:</strong> Using ‘unless’ together with ‘not’ ❌<br/>
+            <strong>Correct:</strong> ‘Unless’ already conveys negation ✅<br/>
             <em>Unless you don't study... → Unless you study...</em>
           </Tip>
 
           <Tip type="error">
-            <strong>Error:</strong> Confundir Zero y First Conditional ❌<br/>
-            <strong>Correcto:</strong> Entender la diferencia de probabilidad ✅<br/>
+            <strong>Mistake:</strong> Confusing Zero and First Conditional ❌<br/>
+            <strong>Correct:</strong> Understand the difference in likelihood ✅<br/>
             <em>If water boils (Zero) vs If it rains (First)</em>
           </Tip>
         </div>
       </TheorySection>
 
-      <TheorySection title="Reglas Importantes" icon="⚡">
+      <TheorySection title="Key Rules" icon="⚡">
         <div style={{ display: 'grid', gap: '1rem' }}>
           <Rule 
-            title="1. Tiempos verbales"
-            description="Cada tipo de conditional usa tiempos específicos."
+            title="1. Verb tenses"
+            description="Each conditional type uses specific tenses."
             examples={[
-              "Zero: presente + presente",
-              "First: presente + futuro",
-              "Second: pasado + would + infinitivo",
-              "Third: pasado perfecto + would have + participio"
+              "Zero: present + present",
+              "First: present + future",
+              "Second: past + would + infinitive",
+              "Third: past perfect + would have + past participle"
             ]}
           />
 
           <Rule 
-            title="2. Probabilidad"
-            description="Los conditionals expresan diferentes grados de probabilidad."
+            title="2. Probability"
+            description="Conditionals express different degrees of likelihood."
             examples={[
-              "Zero: siempre verdadero (100%)",
-              "First: posible (50-90%)",
-              "Second: improbable (10-30%)",
-              "Third: imposible (0%)"
+              "Zero: always true (100%)",
+              "First: possible (50–90%)",
+              "Second: unlikely (10–30%)",
+              "Third: impossible (0%)"
             ]}
           />
 
           <Rule 
-            title="3. Estructura flexible"
-            description="Puedes cambiar el orden de las cláusulas."
+            title="3. Flexible word order"
+            description="You can change the order of the clauses."
             examples={[
               "If clause + comma + main clause",
-              "Main clause + if clause (sin coma)",
-              "Ambos órdenes son correctos",
-              "Elige según el énfasis"
+              "Main clause + if clause (no comma)",
+              "Both orders are correct",
+              "Choose based on emphasis"
             ]}
           />
         </div>
@@ -414,7 +414,7 @@ const ConditionalsPage = () => {
         "had, would call"
       ]}
       correctAnswer={1}
-      explanation="En first conditional usamos: If + present simple, will + infinitive."
+      explanation="In the first conditional we use: If + present simple, will + infinitive."
     />,
 
     <MultipleChoiceExercise
@@ -488,17 +488,17 @@ const ConditionalsPage = () => {
         {
           text: "Third Conditional is used for impossible past situations.",
           isTrue: true,
-          explanation: "Correcto. Third Conditional expresa situaciones pasadas que no pueden cambiar: 'If I had studied, I would have passed.'"
+          explanation: "Correct. Third Conditional describes past situations that cannot be changed: 'If I had studied, I would have passed.'"
         },
         {
           text: "'Unless' means the same as 'if'.",
           isTrue: false,
-          explanation: "Incorrecto. 'Unless' significa 'if not': 'Unless you study' = 'If you don't study'."
+          explanation: "Incorrect. 'Unless' means 'if not': 'Unless you study' = 'If you don't study.'"
         },
         {
           text: "Zero Conditional uses present tense in both clauses.",
           isTrue: true,
-          explanation: "Correcto. Zero Conditional usa presente en ambas partes para hechos generales: 'If you heat water, it boils.'"
+          explanation: "Correct. Zero Conditional uses present tense in both parts for general facts: 'If you heat water, it boils.'"
         }
       ]}
     />,
@@ -513,7 +513,7 @@ const ConditionalsPage = () => {
         "will be"
       ]}
       correctAnswer={2}
-      explanation="En Second Conditional con 'be', usamos 'were' para todas las personas: 'If I were you'."
+      explanation="With ‘be’ in Second Conditional we use ‘were’ for every person: ‘If I were you.’"
     />,
 
     <MultipleChoiceExercise
@@ -526,7 +526,7 @@ const ConditionalsPage = () => {
         "would leave"
       ]}
       correctAnswer={1}
-      explanation="Third Conditional usa 'had + past participle' en la cláusula if: 'If she had left earlier'."
+      explanation="Third Conditional uses 'had + past participle' in the if-clause: 'If she had left earlier.'"
     />,
 
     <TrueFalseExercise
@@ -535,12 +535,12 @@ const ConditionalsPage = () => {
         {
           text: "First Conditional expresses real possibilities in the future.",
           isTrue: true,
-          explanation: "Correcto. First Conditional expresa posibilidades reales: 'If it rains, I will stay home.'"
+          explanation: "Correct. First Conditional expresses real possibilities: 'If it rains, I will stay home.'"
         },
         {
           text: "We can start a conditional sentence with the main clause.",
           isTrue: true,
-          explanation: "Correcto. Podemos decir 'I will help you if you ask me' (sin coma cuando la cláusula if va al final)."
+          explanation: "Correct. You can say 'I will help you if you ask me' (no comma when the if-clause comes last)."
         }
       ]}
     />,
@@ -555,14 +555,14 @@ const ConditionalsPage = () => {
         "Because"
       ]}
       correctAnswer={0}
-      explanation="'If you don't study' es correcto. 'Unless' ya incluye el negativo, sería 'Unless you study'."
+      explanation="'If you don't study' is correct. 'Unless' already includes negation—you would say 'Unless you study.'"
     />
   ];
 
   return (
     <TheoryLayout
       title="Conditionals"
-      description="Domina los condicionales en inglés. Aprende a expresar situaciones hipotéticas, posibilidades reales e imposibles con if, unless, provided that."
+      description="Master conditionals in English. Learn how to express hypothetical situations and real versus impossible possibilities with if, unless, and provided that."
       level="B1-B2-C1-C2"
       theoryContent={theoryContent}
       exercises={exercises}

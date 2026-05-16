@@ -18,361 +18,324 @@ import {
 const MonologuesPage = () => {
   const theoryContent = (
     <div>
-      <TheorySection title="¿Qué son los Monologues?" icon="🎤">
+      <TheorySection title="What Are Monologues?" icon="🎤">
         <p style={{ fontSize: '1.1rem', lineHeight: 1.6, color: '#4a5568', marginBottom: '1rem' }}>
-          Los <strong>monologues</strong> (monólogos) son discursos hablados por una sola persona que aparecen frecuentemente 
-          en exámenes de listening. Son más largos que los diálogos y requieren diferentes estrategias de comprensión.
+          <strong>Monologues</strong> are single-speaker talks that appear often in listening exams. They are longer than dialogues and need different comprehension strategies.
         </p>
         
         <QuickReference items={[
-          "Duración: 2-5 minutos",
-          "Una sola persona hablando",
-          "Contextos: presentaciones, conferencias, narraciones",
-          "Objetivo: información detallada y específica",
-          "Nivel: A2-B1 (elemental a intermedio)"
+          "Duration: 2–5 minutes",
+          "One speaker only",
+          "Contexts: presentations, lectures, narratives",
+          "Goal: detailed, specific information",
+          "Level: A2–B1 (elementary to intermediate)"
         ]} />
       </TheorySection>
 
-      <TheorySection title="Características de los Monologues" icon="📋">
+      <TheorySection title="Features of Monologues" icon="📋">
         <p style={{ fontSize: '1rem', lineHeight: 1.6, color: '#4a5568', marginBottom: '1rem' }}>
-          Los monólogos tienen características específicas que los distinguen de otros tipos de listening.
+          Monologues have specific features that set them apart from other listening tasks.
         </p>
 
         <GrammarTable
-          caption="Características de Monologues"
-          headers={["Característica", "Descripción", "Beneficio", "Ejemplo"]}
+          caption="Features of Monologues"
+          headers={["Feature", "Description", "Benefit", "Example"]}
           rows={[
-            ["Duración Larga", "2-5 minutos continuos", "Información detallada", "Presentación completa"],
-            ["Una Voz", "Solo una persona hablando", "Enfoque en un punto de vista", "Conferencia o charla"],
-            ["Estructura Clara", "Introducción, desarrollo, conclusión", "Fácil seguimiento", "Presentación estructurada"],
-            ["Vocabulario Específico", "Términos del tema", "Aprendizaje de vocabulario", "Términos técnicos"],
-            ["Objetivo Específico", "Información sobre un tema", "Comprensión profunda", "Explicación detallada"],
-            ["Velocidad Moderada", "Habla clara y pausada", "Tiempo para procesar", "Ritmo de presentación"]
+            ["Long duration", "2–5 continuous minutes", "Rich detail", "Full presentation"],
+            ["Single voice", "Only one speaker", "Single point of view", "Lecture or talk"],
+            ["Clear structure", "Introduction, body, conclusion", "Easier to follow", "Structured presentation"],
+            ["Specific vocabulary", "Topic terms", "Vocabulary building", "Technical terms"],
+            ["Specific purpose", "Information on one topic", "Deeper understanding", "Detailed explanation"],
+            ["Moderate pace", "Clear, measured speech", "Time to process", "Presentation rhythm"]
           ]}
         />
 
         <div style={{ display: 'grid', gap: '1rem' }}>
           <Example 
-            spanish="Contexto: Presentación sobre tecnología"
             english="Context: Presentation about technology"
-            translation="Contexto: Presentación sobre tecnología"
           />
           <Example 
-            spanish="Duración: 4 minutos"
             english="Duration: 4 minutes"
-            translation="Duración: 4 minutos"
           />
           <Example 
-            spanish="Objetivo: Explicar beneficios de la tecnología"
-            english="Objective: Explain benefits of technology"
-            translation="Objetivo: Explicar beneficios de la tecnología"
+            english="Objective: Explain the benefits of technology"
           />
         </div>
 
         <Rule 
-          title="Ventajas de los Monologues"
-          description="Por qué son útiles para el aprendizaje:"
+          title="Why Monologues Help Learning"
+          description="Why they are useful for learning:"
           examples={[
-            "Proporcionan información detallada sobre un tema",
-            "Permiten escuchar vocabulario específico en contexto",
-            "Desarrollan habilidades de escucha prolongada",
-            "Mejoran la comprensión de estructuras de presentación"
+            "They give detailed information on one topic",
+            "You hear topic-specific vocabulary in context",
+            "They build extended listening stamina",
+            "They improve understanding of presentation structure"
           ]}
         />
 
         <Tip type="info">
-          <strong>Consejo:</strong> Los monólogos son excelentes para desarrollar resistencia auditiva y vocabulario específico.
+          <strong>Tip:</strong> Monologues are excellent for building listening endurance and topic vocabulary.
         </Tip>
       </TheorySection>
 
-      <TheorySection title="Tipos de Monologues" icon="🗂️">
+      <TheorySection title="Types of Monologues" icon="🗂️">
         <p style={{ fontSize: '1rem', lineHeight: 1.6, color: '#4a5568', marginBottom: '1rem' }}>
-          Los monólogos pueden ser de diferentes tipos según su propósito y contexto.
+          Monologues vary by purpose and context.
         </p>
 
         <GrammarTable
-          caption="Tipos de Monologues"
-          headers={["Tipo", "Contexto", "Estructura", "Información Clave"]}
+          caption="Types of Monologues"
+          headers={["Type", "Context", "Structure", "Key Information"]}
           rows={[
-            ["Presentación", "Conferencia, charla", "Introducción, puntos principales, conclusión", "Ideas, argumentos, conclusiones"],
-            ["Narración", "Historia, experiencia personal", "Inicio, desarrollo, final", "Eventos, personas, lugares, tiempo"],
-            ["Explicación", "Instrucciones, proceso", "Problema, solución, pasos", "Pasos, procedimientos, resultados"],
-            ["Descripción", "Lugar, persona, objeto", "Características, detalles", "Apariencia, características, ubicación"],
-            ["Opinión", "Análisis, evaluación", "Tesis, argumentos, conclusión", "Opiniones, razones, ejemplos"],
-            ["Información", "Noticias, reporte", "Hechos, datos, análisis", "Datos, estadísticas, conclusiones"]
+            ["Presentation", "Lecture, talk", "Introduction, main points, conclusion", "Ideas, arguments, conclusions"],
+            ["Narrative", "Story, personal experience", "Beginning, middle, end", "Events, people, places, time"],
+            ["Explanation", "Instructions, process", "Problem, solution, steps", "Steps, procedures, results"],
+            ["Description", "Place, person, object", "Features, details", "Appearance, traits, location"],
+            ["Opinion", "Analysis, evaluation", "Thesis, arguments, conclusion", "Opinions, reasons, examples"],
+            ["Information", "News, report", "Facts, data, analysis", "Data, statistics, conclusions"]
           ]}
         />
 
         <div style={{ display: 'grid', gap: '1rem' }}>
           <Example 
-            spanish="Presentación: 'Los beneficios de la tecnología en la educación'"
-            english="Presentation: 'Benefits of technology in education'"
-            translation="Presentación: 'Los beneficios de la tecnología en la educación'"
+            english="Presentation: 'The benefits of technology in education'"
           />
           <Example 
-            spanish="Narración: 'Mi experiencia estudiando en el extranjero'"
             english="Narration: 'My experience studying abroad'"
-            translation="Narración: 'Mi experiencia estudiando en el extranjero'"
           />
           <Example 
-            spanish="Explicación: 'Cómo funciona el sistema de transporte público'"
             english="Explanation: 'How the public transport system works'"
-            translation="Explicación: 'Cómo funciona el sistema de transporte público'"
           />
         </div>
 
         <Tip type="success">
-          <strong>Consejo:</strong> Identifica el tipo de monólogo para saber qué información buscar.
+          <strong>Tip:</strong> Identify the monologue type so you know what information to listen for.
         </Tip>
       </TheorySection>
 
-      <TheorySection title="Estrategias para Monologues" icon="🎯">
+      <TheorySection title="Strategies for Monologues" icon="🎯">
         <p style={{ fontSize: '1rem', lineHeight: 1.6, color: '#4a5568', marginBottom: '1rem' }}>
-          Los monólogos requieren estrategias específicas debido a su duración y complejidad.
+          Monologues need specific strategies because of their length and complexity.
         </p>
 
         <GrammarTable
-          caption="Estrategias Específicas para Monologues"
-          headers={["Estrategia", "Descripción", "Cuándo Usar", "Beneficio"]}
+          caption="Strategies for Monologues"
+          headers={["Strategy", "Description", "When to Use", "Benefit"]}
           rows={[
-            ["Pre-lectura Extendida", "Leer todas las preguntas cuidadosamente", "Antes del audio", "Saber qué información buscar"],
-            ["Predicción Avanzada", "Predecir contenido basado en preguntas", "Antes del audio", "Preparar la mente"],
-            ["Escucha Activa", "Concentrarse en información específica", "Durante el audio", "Captar detalles importantes"],
-            ["Toma de Notas", "Anotar información clave", "Durante el audio", "Retener información"],
-            ["Seguimiento de Estructura", "Identificar introducción, desarrollo, conclusión", "Durante el audio", "Mantener orientación"],
-            ["Verificación Completa", "Confirmar respuestas después", "Después del audio", "Asegurar precisión"]
+            ["Extended pre-reading", "Read every question carefully", "Before the audio", "Know what to listen for"],
+            ["Advanced prediction", "Predict content from the questions", "Before the audio", "Prime your attention"],
+            ["Active listening", "Focus on specific information", "During the audio", "Catch important details"],
+            ["Note-taking", "Write down key information", "During the audio", "Retain information"],
+            ["Track structure", "Spot introduction, body, conclusion", "During the audio", "Stay oriented"],
+            ["Full verification", "Check answers afterward", "After the audio", "Improve accuracy"]
           ]}
         />
 
         <div style={{ display: 'grid', gap: '1rem' }}>
           <Example 
-            spanish="Pre-lectura: 'Leer todas las preguntas para identificar temas'"
-            english="Pre-reading: 'Read all questions to identify topics'"
-            translation="Pre-lectura: 'Leer todas las preguntas para identificar temas'"
+            english="Pre-reading: 'Read all questions to spot topics'"
           />
           <Example 
-            spanish="Predicción: 'Basado en las preguntas, predecir contenido'"
-            english="Prediction: 'Based on questions, predict content'"
-            translation="Predicción: 'Basado en las preguntas, predecir contenido'"
+            english="Prediction: 'From the questions, predict content'"
           />
           <Example 
-            spanish="Toma de notas: 'Anotar fechas, nombres, números importantes'"
-            english="Note-taking: 'Write down dates, names, important numbers'"
-            translation="Toma de notas: 'Anotar fechas, nombres, números importantes'"
+            english="Note-taking: 'Jot dates, names, important numbers'"
           />
         </div>
 
         <Rule 
-          title="Proceso Paso a Paso"
-          description="Sigue este proceso para monólogos:"
+          title="Step-by-Step Process"
+          description="Follow this process for monologues:"
           examples={[
-            "1. Lee todas las preguntas cuidadosamente",
-            "2. Predice el contenido del monólogo",
-            "3. Escucha la introducción para confirmar el tema",
-            "4. Toma notas durante el desarrollo",
-            "5. Presta atención a la conclusión",
-            "6. Verifica todas tus respuestas"
+            "1. Read every question carefully",
+            "2. Predict what the monologue will cover",
+            "3. Listen to the introduction to confirm the topic",
+            "4. Take notes during the main section",
+            "5. Listen closely to the conclusion",
+            "6. Check all your answers"
           ]}
         />
 
         <Tip type="warning">
-          <strong>¡Cuidado!</strong> No te pierdas en detalles menores - mantén el enfoque en la información que necesitas.
+          <strong>Watch out!</strong> Do not get lost in minor details—stay focused on the information you need.
         </Tip>
       </TheorySection>
 
-      <TheorySection title="Estructura de Monologues" icon="🏗️">
+      <TheorySection title="Structure of Monologues" icon="🏗️">
         <p style={{ fontSize: '1rem', lineHeight: 1.6, color: '#4a5568', marginBottom: '1rem' }}>
-          Entender la estructura típica de un monólogo te ayuda a seguir el contenido más efectivamente.
+          Knowing the typical structure helps you follow the content more effectively.
         </p>
 
         <GrammarTable
-          caption="Estructura Típica de Monologues"
-          headers={["Parte", "Función", "Contenido", "Duración"]}
+          caption="Typical Monologue Structure"
+          headers={["Part", "Function", "Content", "Duration"]}
           rows={[
-            ["Introducción", "Presentar el tema", "Título, objetivo, resumen", "10-15% del total"],
-            ["Desarrollo", "Explicar el contenido", "Puntos principales, ejemplos, detalles", "70-80% del total"],
-            ["Conclusión", "Resumir y cerrar", "Resumen, opinión final, recomendación", "10-15% del total"],
-            ["Transiciones", "Conectar ideas", "Conectores, frases de enlace", "A lo largo del monólogo"],
-            ["Pausas", "Permitir procesamiento", "Silencios, cambios de ritmo", "Estratégicamente colocadas"]
+            ["Introduction", "Introduce the topic", "Title, aim, overview", "10–15% of total"],
+            ["Body", "Develop the content", "Main points, examples, details", "70–80% of total"],
+            ["Conclusion", "Summarize and close", "Summary, final view, recommendation", "10–15% of total"],
+            ["Transitions", "Link ideas", "Connectors, linking phrases", "Throughout"],
+            ["Pauses", "Allow processing", "Silence, rhythm changes", "Strategically placed"]
           ]}
         />
 
         <div style={{ display: 'grid', gap: '1rem' }}>
           <Example 
-            spanish="Introducción: 'Hoy voy a hablar sobre los beneficios de la tecnología'"
             english="Introduction: 'Today I'm going to talk about the benefits of technology'"
-            translation="Introducción: 'Hoy voy a hablar sobre los beneficios de la tecnología'"
           />
           <Example 
-            spanish="Desarrollo: 'En primer lugar, mejora la comunicación...'"
-            english="Development: 'First of all, it improves communication...'"
-            translation="Desarrollo: 'En primer lugar, mejora la comunicación...'"
+            english="Body: 'First of all, it improves communication...'"
           />
           <Example 
-            spanish="Conclusión: 'En resumen, la tecnología es muy beneficiosa'"
             english="Conclusion: 'In summary, technology is very beneficial'"
-            translation="Conclusión: 'En resumen, la tecnología es muy beneficiosa'"
           />
         </div>
 
         <Tip type="info">
-          <strong>Consejo:</strong> La estructura te ayuda a anticipar qué tipo de información viene a continuación.
+          <strong>Tip:</strong> Structure helps you anticipate what kind of information comes next.
         </Tip>
       </TheorySection>
 
-      <TheorySection title="Tipos de Preguntas en Monologues" icon="❓">
+      <TheorySection title="Question Types in Monologues" icon="❓">
         <p style={{ fontSize: '1rem', lineHeight: 1.6, color: '#4a5568', marginBottom: '1rem' }}>
-          Los monólogos suelen tener tipos específicos de preguntas que requieren diferentes estrategias.
+          Monologues often use specific question types that need different strategies.
         </p>
 
         <GrammarTable
-          caption="Tipos de Preguntas en Monologues"
-          headers={["Tipo", "Pregunta Típica", "Qué Buscar", "Estrategia"]}
+          caption="Question Types in Monologues"
+          headers={["Type", "Typical Question", "What to Listen For", "Strategy"]}
           rows={[
-            ["Información Específica", "What is the main topic?", "Tema principal, objetivo", "Escuchar introducción"],
-            ["Detalles", "What are the three benefits?", "Lista, enumeración", "Identificar números y listas"],
-            ["Opinión", "What does the speaker think?", "Opiniones, evaluaciones", "Palabras de opinión"],
-            ["Hechos", "What happened in 2020?", "Fechas, eventos, datos", "Números, fechas, nombres"],
-            ["Causa y Efecto", "Why did this happen?", "Razones, explicaciones", "Palabras causales"],
-            ["Resumen", "What is the conclusion?", "Resumen final, recomendación", "Escuchar conclusión"]
+            ["Specific information", "What is the main topic?", "Main topic, purpose", "Listen to the introduction"],
+            ["Details", "What are the three benefits?", "Lists, enumeration", "Catch numbers and lists"],
+            ["Opinion", "What does the speaker think?", "Opinions, evaluations", "Opinion language"],
+            ["Facts", "What happened in 2020?", "Dates, events, data", "Numbers, dates, names"],
+            ["Cause and effect", "Why did this happen?", "Reasons, explanations", "Causal language"],
+            ["Summary", "What is the conclusion?", "Final summary, recommendation", "Listen to the conclusion"]
           ]}
         />
 
         <div style={{ display: 'grid', gap: '1rem' }}>
           <Example 
-            spanish="Información específica: '¿Cuál es el tema principal?'"
             english="Specific information: 'What is the main topic?'"
-            translation="Información específica: '¿Cuál es el tema principal?'"
           />
           <Example 
-            spanish="Detalles: '¿Cuáles son los tres beneficios?'"
             english="Details: 'What are the three benefits?'"
-            translation="Detalles: '¿Cuáles son los tres beneficios?'"
           />
           <Example 
-            spanish="Opinión: '¿Qué piensa el hablante?'"
             english="Opinion: 'What does the speaker think?'"
-            translation="Opinión: '¿Qué piensa el hablante?'"
           />
         </div>
 
         <Rule 
-          title="Estrategias por Tipo de Pregunta"
-          description="Para cada tipo de pregunta:"
+          title="Strategies by Question Type"
+          description="For each question type:"
           examples={[
-            "Información específica: escuchar introducción",
-            "Detalles: identificar listas y enumeraciones",
-            "Opinión: buscar palabras de evaluación",
-            "Hechos: prestar atención a números y fechas"
+            "Specific information: listen to the introduction",
+            "Details: notice lists and enumeration",
+            "Opinion: listen for evaluative language",
+            "Facts: watch for numbers and dates"
           ]}
         />
 
         <Tip type="success">
-          <strong>Consejo:</strong> Identifica el tipo de pregunta para saber dónde buscar la información.
+          <strong>Tip:</strong> Spot the question type so you know where to find the answer.
         </Tip>
       </TheorySection>
 
-      <TheorySection title="Toma de Notas Efectiva" icon="📝">
+      <TheorySection title="Effective Note-Taking" icon="📝">
         <p style={{ fontSize: '1rem', lineHeight: 1.6, color: '#4a5568', marginBottom: '1rem' }}>
-          La toma de notas es crucial para monólogos largos donde necesitas retener mucha información.
+          Note-taking is crucial for long monologues when you must retain a lot of information.
         </p>
 
         <GrammarTable
-          caption="Técnicas de Toma de Notas"
-          headers={["Técnica", "Descripción", "Cuándo Usar", "Beneficio"]}
+          caption="Note-Taking Techniques"
+          headers={["Technique", "Description", "When to Use", "Benefit"]}
           rows={[
-            ["Abreviaciones", "Usar símbolos y abreviaciones", "Información repetitiva", "Velocidad de escritura"],
-            ["Palabras Clave", "Anotar solo palabras importantes", "Conceptos principales", "Enfoque en lo esencial"],
-            ["Números y Fechas", "Escribir números claramente", "Datos específicos", "Precisión en información"],
-            ["Estructura", "Organizar notas por secciones", "Monólogos largos", "Fácil referencia posterior"],
-            ["Símbolos", "Usar símbolos para relaciones", "Causa-efecto, listas", "Claridad visual"],
-            ["Espacios", "Dejar espacios para agregar", "Información adicional", "Flexibilidad"]
+            ["Abbreviations", "Use symbols and short forms", "Repeated ideas", "Faster writing"],
+            ["Keywords", "Write only important words", "Main concepts", "Stay on essentials"],
+            ["Numbers and dates", "Write figures clearly", "Specific data", "Accurate recall"],
+            ["Structure", "Section your notes", "Long monologues", "Easier review"],
+            ["Symbols", "Mark relationships visually", "Cause-effect, lists", "Clear at a glance"],
+            ["White space", "Leave gaps to add more", "Extra details later", "Flexibility"]
           ]}
         />
 
         <div style={{ display: 'grid', gap: '1rem' }}>
           <Example 
-            spanish="Abreviaciones: 'tecnología → tech, comunicación → comm'"
             english="Abbreviations: 'technology → tech, communication → comm'"
-            translation="Abreviaciones: 'tecnología → tech, comunicación → comm'"
           />
           <Example 
-            spanish="Palabras clave: 'beneficios, comunicación, educación, trabajo'"
             english="Keywords: 'benefits, communication, education, work'"
-            translation="Palabras clave: 'beneficios, comunicación, educación, trabajo'"
           />
           <Example 
-            spanish="Números: '2020, 75%, 3 beneficios, 10 años'"
             english="Numbers: '2020, 75%, 3 benefits, 10 years'"
-            translation="Números: '2020, 75%, 3 beneficios, 10 años'"
           />
         </div>
 
         <Tip type="warning">
-          <strong>¡Cuidado!</strong> No trates de escribir todo - enfócate en la información que necesitas para responder las preguntas.
+          <strong>Watch out!</strong> Do not try to write everything—focus on what you need for the questions.
         </Tip>
       </TheorySection>
 
-      <TheorySection title="Errores Comunes" icon="⚠️">
+      <TheorySection title="Common Mistakes" icon="⚠️">
         <div style={{ display: 'grid', gap: '1rem' }}>
           <Tip type="error">
-            <strong>Error:</strong> No leer todas las preguntas antes del audio ❌<br/>
-            <strong>Correcto:</strong> Leer todas las preguntas primero ✅<br/>
-            <em>Saber qué buscar es crucial para monólogos largos</em>
+            <strong>Mistake:</strong> Not reading all questions before the audio ❌<br/>
+            <strong>Better:</strong> Read every question first ✅<br/>
+            <em>Knowing what to listen for is crucial on long monologues</em>
           </Tip>
 
           <Tip type="error">
-            <strong>Error:</strong> Intentar entender cada palabra ❌<br/>
-            <strong>Correcto:</strong> Enfocarse en información específica ✅<br/>
-            <em>Los monólogos contienen mucha información - selecciona lo relevante</em>
+            <strong>Mistake:</strong> Trying to understand every word ❌<br/>
+            <strong>Better:</strong> Focus on the specific information you need ✅<br/>
+            <em>Monologues carry a lot of information—select what matters</em>
           </Tip>
 
           <Tip type="error">
-            <strong>Error:</strong> No tomar notas ❌<br/>
-            <strong>Correcto:</strong> Tomar notas de información clave ✅<br/>
-            <em>Las notas son esenciales para monólogos largos</em>
+            <strong>Mistake:</strong> Taking no notes ❌<br/>
+            <strong>Better:</strong> Note key information ✅<br/>
+            <em>Notes are essential on longer monologues</em>
           </Tip>
 
           <Tip type="error">
-            <strong>Error:</strong> Perder la concentración ❌<br/>
-            <strong>Correcto:</strong> Mantener el enfoque durante todo el monólogo ✅<br/>
-            <em>La concentración sostenida es clave para monólogos</em>
+            <strong>Mistake:</strong> Losing focus ❌<br/>
+            <strong>Better:</strong> Stay attentive for the whole monologue ✅<br/>
+            <em>Sustained attention is key</em>
           </Tip>
         </div>
       </TheorySection>
 
-      <TheorySection title="Reglas Importantes" icon="⚡">
+      <TheorySection title="Important Rules" icon="⚡">
         <div style={{ display: 'grid', gap: '1rem' }}>
           <Rule 
-            title="1. Preparación exhaustiva"
-            description="Prepara bien antes de escuchar el monólogo."
+            title="1. Thorough preparation"
+            description="Prepare well before you listen."
             examples={[
-              "Lee todas las preguntas cuidadosamente",
-              "Identifica qué información necesitas",
-              "Predice el contenido del monólogo",
-              "Prepara tu sistema de toma de notas"
+              "Read every question carefully",
+              "Identify what information you need",
+              "Predict the content of the monologue",
+              "Set up your note-taking system"
             ]}
           />
 
           <Rule 
-            title="2. Concentración sostenida"
-            description="Mantén tu atención durante todo el monólogo."
+            title="2. Sustained concentration"
+            description="Keep your attention through the whole monologue."
             examples={[
-              "No te distraigas con pensamientos internos",
-              "Enfócate en la información que necesitas",
-              "Usa la estructura para mantener orientación",
-              "Toma descansos mentales en las pausas"
+              "Do not drift into unrelated thoughts",
+              "Focus on the information you need",
+              "Use structure to stay oriented",
+              "Use natural pauses for brief mental resets"
             ]}
           />
 
           <Rule 
-            title="3. Toma de notas estratégica"
-            description="Toma notas de manera eficiente y efectiva."
+            title="3. Strategic note-taking"
+            description="Take notes efficiently and purposefully."
             examples={[
-              "Usa abreviaciones y símbolos",
-              "Enfócate en información específica",
-              "Organiza tus notas por secciones",
-              "No trates de escribir todo"
+              "Use abbreviations and symbols",
+              "Focus on task-relevant information",
+              "Organize notes by section",
+              "Do not try to transcribe everything"
             ]}
           />
         </div>
@@ -383,80 +346,80 @@ const MonologuesPage = () => {
   const exercises = [
     <MultipleChoiceExercise
       key="1"
-      question="¿Cuánto duran típicamente los monólogos?"
+      question="How long do monologues typically last?"
       options={[
-        "30 segundos-2 minutos",
-        "2-5 minutos",
-        "5-10 minutos",
-        "Más de 10 minutos"
+        "30 seconds–2 minutes",
+        "2–5 minutes",
+        "5–10 minutes",
+        "More than 10 minutes"
       ]}
       correctAnswer={1}
-      explanation="Los monólogos duran entre 2-5 minutos, permitiendo el desarrollo completo de un tema con una sola voz."
+      explanation="Monologues usually last 2–5 minutes, which allows a full treatment of one topic with a single speaker."
     />,
 
     <MultipleChoiceExercise
       key="2"
-      question="¿Cuál es la mejor estrategia para monólogos?"
+      question="What is the best strategy for monologues?"
       options={[
-        "Escuchar sin preparación",
-        "Leer todas las preguntas antes del audio",
-        "Tomar notas de todo lo que se dice",
-        "No preocuparse por la estructura"
+        "Listen with no preparation",
+        "Read all questions before the audio",
+        "Note everything that is said",
+        "Ignore structure"
       ]}
       correctAnswer={1}
-      explanation="Leer todas las preguntas antes del audio es crucial para monólogos, ya que te ayuda a saber qué información buscar en un audio largo."
+      explanation="Reading all questions first is crucial for monologues so you know what to listen for in a longer recording."
     />,
 
     <TrueFalseExercise
       key="3"
       statements={[
         {
-          text: "Los monólogos requieren concentración sostenida durante toda la duración.",
+          text: "Monologues require sustained concentration for the whole recording.",
           isTrue: true,
-          explanation: "Correcto. Los monólogos son largos y requieren mantener la concentración durante toda la duración para captar toda la información necesaria."
+          explanation: "Correct. Monologues are long; you need to stay focused to catch all necessary information."
         },
         {
-          text: "Es mejor tomar notas de todo lo que se dice en un monólogo.",
+          text: "You should note everything said in a monologue.",
           isTrue: false,
-          explanation: "Incorrecto. Es mejor tomar notas solo de la información relevante para las preguntas, no de todo lo que se dice."
+          explanation: "Incorrect. Note only information relevant to the questions, not every word."
         },
         {
-          text: "Entender la estructura del monólogo ayuda a anticipar el contenido.",
+          text: "Understanding monologue structure helps you anticipate content.",
           isTrue: true,
-          explanation: "Correcto. La estructura típica (introducción, desarrollo, conclusión) te ayuda a saber qué tipo de información viene a continuación."
+          explanation: "Correct. A typical introduction–body–conclusion pattern tells you what kind of detail comes next."
         },
         {
-          text: "Los monólogos son más fáciles que los diálogos porque solo hay una voz.",
+          text: "Monologues are easier than dialogues because there is only one voice.",
           isTrue: false,
-          explanation: "Incorrecto. Los monólogos pueden ser más difíciles porque son más largos y contienen más información que procesar."
+          explanation: "Incorrect. They can be harder because they are longer and denser with information to process."
         }
       ]}
     />,
 
     <MultipleChoiceExercise
       key="4"
-      question="¿Qué parte del monólogo contiene la información más detallada?"
+      question="Which part of the monologue usually has the most detail?"
       options={[
-        "Introducción",
-        "Desarrollo",
-        "Conclusión",
-        "Transiciones"
+        "Introduction",
+        "Body",
+        "Conclusion",
+        "Transitions"
       ]}
       correctAnswer={1}
-      explanation="El desarrollo contiene la información más detallada (70-80% del monólogo), mientras que la introducción y conclusión son más cortas."
+      explanation="The body carries most of the detail (about 70–80%); introduction and conclusion are shorter."
     />,
 
     <MultipleChoiceExercise
       key="5"
-      question="¿Cuál es la técnica de toma de notas más efectiva para monólogos?"
+      question="What is the most effective note-taking approach for monologues?"
       options={[
-        "Escribir todo lo que se dice",
-        "Usar abreviaciones y palabras clave",
-        "No tomar notas",
-        "Escribir solo al final"
+        "Write down everything",
+        "Use abbreviations and keywords",
+        "Take no notes",
+        "Write only at the end"
       ]}
       correctAnswer={1}
-      explanation="Usar abreviaciones y palabras clave es la técnica más efectiva, ya que te permite captar información importante sin perder tiempo escribiendo todo."
+      explanation="Abbreviations and keywords let you capture important information without wasting time on full sentences."
     />,
 
     <TrueFalseExercise
@@ -465,45 +428,45 @@ const MonologuesPage = () => {
         {
           text: "Monologues are easier than dialogues because there's only one speaker.",
           isTrue: false,
-          explanation: "Incorrecto. Los monólogos pueden ser más difíciles porque requieren concentración sostenida sin la variedad de múltiples voces."
+          explanation: "Incorrect. Monologues can be harder because they require sustained focus without different voices breaking up the input."
         },
         {
           text: "Predicting content before listening helps with monologue comprehension.",
           isTrue: true,
-          explanation: "Correcto. Predecir el contenido basándose en el título o contexto ayuda a preparar la mente para el tema."
+          explanation: "Correct. Prediction from title or questions primes you for the topic."
         },
         {
           text: "You should write down everything the speaker says in a monologue.",
           isTrue: false,
-          explanation: "Incorrecto. Es mejor tomar notas estratégicas enfocándose en información clave y estructura."
+          explanation: "Incorrect. Strategic notes on key points and structure work better than full transcription."
         }
       ]}
     />,
 
     <MultipleChoiceExercise
       key="7"
-      question="¿Qué elemento es más importante para seguir un monólogo académico?"
+      question="What matters most for following an academic monologue?"
       options={[
-        "La personalidad del hablante",
-        "La estructura y organización del contenido",
-        "El acento del hablante",
-        "La velocidad del habla"
+        "The speaker’s personality",
+        "Content structure and organization",
+        "The speaker’s accent",
+        "Speech rate"
       ]}
       correctAnswer={1}
-      explanation="La estructura y organización del contenido es lo más importante para seguir un monólogo académico efectivamente."
+      explanation="Structure and organization matter most for following academic monologues effectively."
     />,
 
     <MultipleChoiceExercise
       key="8"
-      question="¿Cuándo es más probable que pierdas la concentración en un monólogo?"
+      question="When are you most likely to lose concentration in a monologue?"
       options={[
-        "Al principio",
-        "En la mitad del monólogo",
-        "Al final",
-        "Nunca"
+        "At the start",
+        "In the middle",
+        "At the end",
+        "Never"
       ]}
       correctAnswer={1}
-      explanation="Es más probable perder concentración en la mitad, cuando la novedad inicial se desvanece pero aún queda mucho contenido."
+      explanation="You often dip in the middle, after the novelty fades but before the end."
     />,
 
     <TrueFalseExercise
@@ -512,34 +475,34 @@ const MonologuesPage = () => {
         {
           text: "Signposting language is more important in monologues than in dialogues.",
           isTrue: true,
-          explanation: "Correcto. El lenguaje de señalización es crucial en monólogos para guiar al oyente a través de la estructura."
+          explanation: "Correct. Signposting guides the listener through a single long turn."
         },
         {
-          text: "Mental breaks during natural pauses can help maintain focus.",
+          text: "Brief mental breaks during natural pauses can help maintain focus.",
           isTrue: true,
-          explanation: "Correcto. Usar pausas naturales para descansos mentales breves ayuda a mantener la concentración."
+          explanation: "Correct. Using pauses can help you reset attention without missing key content."
         }
       ]}
     />,
 
     <MultipleChoiceExercise
       key="10"
-      question="¿Qué tipo de monólogo requiere más atención a detalles específicos?"
+      question="Which monologue type needs the closest attention to specific details?"
       options={[
-        "Narrativa personal",
-        "Presentación académica con datos",
-        "Descripción general",
-        "Opinión personal"
+        "Personal narrative",
+        "Academic presentation with data",
+        "General description",
+        "Personal opinion"
       ]}
       correctAnswer={1}
-      explanation="Las presentaciones académicas con datos requieren más atención a detalles específicos como números, fechas y estadísticas."
+      explanation="Academic talks with data require close tracking of numbers, dates, and statistics."
     />
   ];
 
   return (
     <TheoryLayout
       title="Monologues"
-      description="Domina la comprensión de monólogos en inglés. Aprende estrategias para entender discursos largos de una sola persona en presentaciones, conferencias y narraciones."
+      description="Master understanding monologues in English. Learn strategies for longer single-speaker recordings: presentations, lectures, and narratives."
       level="A2-B1-B2-C1-C2"
       theoryContent={theoryContent}
       exercises={exercises}
@@ -550,25 +513,3 @@ const MonologuesPage = () => {
 };
 
 export default MonologuesPage;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

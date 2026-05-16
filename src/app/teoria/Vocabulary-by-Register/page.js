@@ -18,330 +18,314 @@ import {
 const VocabularyByRegisterPage = () => {
   const theoryContent = (
     <div>
-      <TheorySection title="¿Qué es Vocabulary by Register?" icon="📚">
+      <TheorySection title="What Is Vocabulary by Register?" icon="📚">
         <p style={{ fontSize: '1.1rem', lineHeight: 1.6, color: '#4a5568', marginBottom: '1rem' }}>
-          El <strong>vocabulary by register</strong> (vocabulario por registro) se refiere a la elección apropiada de palabras 
-          según el contexto, la audiencia y el propósito de tu escritura. Usar el registro correcto es esencial para la comunicación efectiva.
+          <strong>Vocabulary by register</strong> means choosing words that fit the context, audience, and purpose of your writing. 
+          Using the right register is essential for effective communication.
         </p>
         
         <QuickReference items={[
-          "Registro Formal: académico, profesional, oficial",
-          "Registro Neutral: periodístico, informativo, general",
-          "Registro Informal: personal, conversacional, casual",
-          "Contexto determina el registro apropiado",
-          "Audiencia y propósito influyen en la elección"
+          "Formal register: academic, professional, official",
+          "Neutral register: journalistic, informative, general",
+          "Informal register: personal, conversational, casual",
+          "Context determines the appropriate register",
+          "Audience and purpose shape your word choices"
         ]} />
       </TheorySection>
 
-      <TheorySection title="Registro Formal" icon="🎩">
+      <TheorySection title="Formal Register" icon="🎩">
         <p style={{ fontSize: '1rem', lineHeight: 1.6, color: '#4a5568', marginBottom: '1rem' }}>
-          El registro formal se usa en contextos académicos, profesionales y oficiales. Requiere vocabulario preciso y estructuras complejas.
+          Formal register is used in academic, professional, and official contexts. It calls for precise vocabulary and often more complex structures.
         </p>
 
         <GrammarTable
-          caption="Características del Registro Formal"
-          headers={["Aspecto", "Formal", "Informal", "Ejemplo Formal"]}
+          caption="Features of Formal Register"
+          headers={["Aspect", "Formal", "Informal", "Formal example"]}
           rows={[
-            ["Vocabulario", "Palabras complejas y precisas", "Palabras simples y coloquiales", "commence (start), utilize (use)"],
-            ["Contracciones", "No se usan", "Se usan", "I will not (won't), do not (don't)"],
-            ["Pronombres", "Evita 'I', 'you' directos", "Usa 'I', 'you' libremente", "One should consider (You should)"],
-            ["Estructura", "Oraciones complejas", "Oraciones simples", "Despite the fact that (Although)"],
-            ["Conectores", "Sin embargo, además", "Pero, también", "Nevertheless, Furthermore"]
+            ["Vocabulary", "More precise, often Latinate", "Simple, colloquial words", "commence (start), utilize (use)"],
+            ["Contractions", "Avoided", "Common", "I will not (won't), do not (don't)"],
+            ["Pronouns", "Limit direct “I” / “you”", "Frequent “I”, “you”", "One should consider (instead of “You should”)"],
+            ["Structure", "Longer, complex sentences", "Short, simple sentences", "Despite the fact that (Although)"],
+            ["Connectors", "Nevertheless, furthermore", "But, also", "Nevertheless, Furthermore"]
           ]}
         />
 
         <div style={{ display: 'grid', gap: '1rem' }}>
           <Example 
-            spanish="Formal: 'The investigation commenced in January'"
             english="Formal: 'The investigation commenced in January'"
-            translation="Formal: 'La investigación comenzó en enero'"
+            note="More formal verb choice for “started”."
           />
           <Example 
-            spanish="Informal: 'The investigation started in January'"
             english="Informal: 'The investigation started in January'"
-            translation="Informal: 'La investigación empezó en enero'"
+            note="Neutral everyday wording."
           />
           <Example 
-            spanish="Formal: 'One should consider all options'"
             english="Formal: 'One should consider all options'"
-            translation="Formal: 'Uno debe considerar todas las opciones'"
+            note="Impersonal “one” instead of “you”."
           />
           <Example 
-            spanish="Informal: 'You should consider all options'"
             english="Informal: 'You should consider all options'"
-            translation="Informal: 'Deberías considerar todas las opciones'"
+            note="Direct address to the reader."
           />
         </div>
 
         <Rule 
-          title="Cuándo usar Registro Formal"
-          description="Usa registro formal para:"
+          title="When to use formal register"
+          description="Use formal English for:"
           examples={[
-            "Ensayos académicos y tesis",
-            "Informes profesionales y empresariales",
-            "Correspondencia oficial",
-            "Presentaciones formales"
+            "Academic essays and dissertations",
+            "Professional and business reports",
+            "Official correspondence",
+            "Formal presentations"
           ]}
         />
 
         <Tip type="info">
-          <strong>Consejo:</strong> El registro formal da autoridad y credibilidad a tu escritura.
+          <strong>Tip:</strong> Formal register can strengthen authority and credibility.
         </Tip>
       </TheorySection>
 
-      <TheorySection title="Registro Neutral" icon="⚖️">
+      <TheorySection title="Neutral Register" icon="⚖️">
         <p style={{ fontSize: '1rem', lineHeight: 1.6, color: '#4a5568', marginBottom: '1rem' }}>
-          El registro neutral se usa en contextos informativos, periodísticos y de comunicación general. Es claro y directo.
+          Neutral register appears in news, general information, and many workplace texts. It is clear and direct.
         </p>
 
         <GrammarTable
-          caption="Características del Registro Neutral"
-          headers={["Aspecto", "Neutral", "Ejemplo", "Contexto"]}
+          caption="Features of Neutral Register"
+          headers={["Aspect", "Neutral", "Example", "Context"]}
           rows={[
-            ["Vocabulario", "Palabras estándar y claras", "begin, use, help", "Noticias, informes"],
-            ["Contracciones", "Ocasionalmente", "I'll, don't (en diálogos)", "Artículos informativos"],
-            ["Pronombres", "Balance entre formal e informal", "We, they, it", "Documentación técnica"],
-            ["Estructura", "Oraciones moderadamente complejas", "Balanced sentence length", "Informes profesionales"],
-            ["Tono", "Objetivo e informativo", "Factual, clear", "Comunicación empresarial"]
+            ["Vocabulary", "Standard, clear words", "begin, use, help", "News, reports"],
+            ["Contractions", "Occasional", "I'll, don't (in dialogue)", "Informative articles"],
+            ["Pronouns", "Balance between formal and informal", "We, they, it", "Technical documentation"],
+            ["Structure", "Moderately complex sentences", "Balanced sentence length", "Professional reports"],
+            ["Tone", "Objective and informative", "Factual, clear", "Business communication"]
           ]}
         />
 
         <div style={{ display: 'grid', gap: '1rem' }}>
           <Example 
-            spanish="Neutral: 'The company will begin production next month'"
             english="Neutral: 'The company will begin production next month'"
-            translation="Neutral: 'La empresa comenzará la producción el próximo mes'"
+            note="Clear, professional, not overly stiff."
           />
           <Example 
-            spanish="Neutral: 'We need to consider the implications'"
             english="Neutral: 'We need to consider the implications'"
-            translation="Neutral: 'Necesitamos considerar las implicaciones'"
+            note="Typical workplace register."
           />
           <Example 
-            spanish="Neutral: 'The results show significant improvement'"
             english="Neutral: 'The results show significant improvement'"
-            translation="Neutral: 'Los resultados muestran una mejora significativa'"
+            note="Objective reporting of outcomes."
           />
         </div>
 
         <Rule 
-          title="Cuándo usar Registro Neutral"
-          description="Usa registro neutral para:"
+          title="When to use neutral register"
+          description="Use neutral English for:"
           examples={[
-            "Artículos de noticias",
-            "Informes técnicos",
-            "Documentación empresarial",
-            "Comunicación profesional"
+            "News articles",
+            "Technical reports",
+            "Business documentation",
+            "General professional communication"
           ]}
         />
 
         <Tip type="success">
-          <strong>Consejo:</strong> El registro neutral es versátil y apropiado para la mayoría de contextos profesionales.
+          <strong>Tip:</strong> Neutral register is versatile and fits many professional settings.
         </Tip>
       </TheorySection>
 
-      <TheorySection title="Registro Informal" icon="😊">
+      <TheorySection title="Informal Register" icon="😊">
         <p style={{ fontSize: '1rem', lineHeight: 1.6, color: '#4a5568', marginBottom: '1rem' }}>
-          El registro informal se usa en contextos personales, conversacionales y casuales. Es relajado y amigable.
+          Informal register suits personal, conversational, and casual contexts. It feels relaxed and friendly.
         </p>
 
         <GrammarTable
-          caption="Características del Registro Informal"
-          headers={["Aspecto", "Informal", "Formal", "Ejemplo Informal"]}
+          caption="Features of Informal Register"
+          headers={["Aspect", "Informal", "Formal", "Informal example"]}
           rows={[
-            ["Vocabulario", "Palabras cotidianas y coloquiales", "Palabras complejas", "start (commence), get (obtain)"],
-            ["Contracciones", "Se usan frecuentemente", "No se usan", "I'm, you're, don't, can't"],
-            ["Pronombres", "I, you directos y frecuentes", "Evita pronombres directos", "I think, you know"],
-            ["Estructura", "Oraciones simples y cortas", "Oraciones complejas", "Short, clear sentences"],
-            ["Expresiones", "Frases coloquiales", "Expresiones formales", "by the way, you know"]
+            ["Vocabulary", "Everyday, colloquial words", "More formal lexis", "start (commence), get (obtain)"],
+            ["Contractions", "Very common", "Usually avoided", "I'm, you're, don't, can't"],
+            ["Pronouns", "Frequent “I”, “you”", "More impersonal forms", "I think, you know"],
+            ["Structure", "Short, simple sentences", "Longer, complex sentences", "Short, clear sentences"],
+            ["Expressions", "Colloquial phrases", "Formal phrasing", "by the way, you know"]
           ]}
         />
 
         <div style={{ display: 'grid', gap: '1rem' }}>
           <Example 
-            spanish="Informal: 'I think we should start the project'"
             english="Informal: 'I think we should start the project'"
-            translation="Informal: 'Creo que deberíamos empezar el proyecto'"
+            note="Direct and conversational."
           />
           <Example 
-            spanish="Formal: 'It is recommended that we commence the project'"
             english="Formal: 'It is recommended that we commence the project'"
-            translation="Formal: 'Se recomienda que comencemos el proyecto'"
+            note="Impersonal recommendation."
           />
           <Example 
-            spanish="Informal: 'By the way, did you get my email?'"
             english="Informal: 'By the way, did you get my email?'"
-            translation="Informal: 'Por cierto, ¿recibiste mi email?'"
+            note="Casual opener."
           />
         </div>
 
         <Rule 
-          title="Cuándo usar Registro Informal"
-          description="Usa registro informal para:"
+          title="When to use informal register"
+          description="Use informal English for:"
           examples={[
-            "Emails personales",
-            "Mensajes de texto",
-            "Blogs personales",
-            "Conversaciones casuales"
+            "Personal emails",
+            "Text messages",
+            "Personal blogs",
+            "Casual conversation"
           ]}
         />
 
         <Tip type="warning">
-          <strong>¡Cuidado!</strong> El registro informal puede no ser apropiado en contextos profesionales o académicos.
+          <strong>Watch out:</strong> Informal register may be unsuitable in academic or professional situations.
         </Tip>
       </TheorySection>
 
-      <TheorySection title="Vocabulario por Contexto Específico" icon="🎯">
+      <TheorySection title="Vocabulary for Specific Contexts" icon="🎯">
         <p style={{ fontSize: '1rem', lineHeight: 1.6, color: '#4a5568', marginBottom: '1rem' }}>
-          Diferentes contextos requieren vocabulario específico y apropiado.
+          Different fields expect specific, appropriate vocabulary.
         </p>
 
         <GrammarTable
-          caption="Vocabulario por Contexto"
-          headers={["Contexto", "Vocabulario Apropiado", "Ejemplo", "Registro"]}
+          caption="Vocabulary by Context"
+          headers={["Context", "Typical vocabulary", "Example", "Register"]}
           rows={[
-            ["Académico", "Análisis, investigación, metodología", "The research methodology demonstrates", "Formal"],
-            ["Empresarial", "Estrategia, implementación, objetivos", "We need to implement this strategy", "Neutral-Formal"],
-            ["Técnico", "Especificaciones, parámetros, protocolos", "The system parameters indicate", "Neutral"],
-            ["Médico", "Diagnóstico, tratamiento, síntomas", "The patient exhibits symptoms", "Formal"],
-            ["Legal", "Jurisdicción, precedente, cláusula", "According to legal precedent", "Formal"],
-            ["Personal", "Sentimientos, experiencias, opiniones", "I feel that this is important", "Informal"]
+            ["Academic", "Analysis, research, methodology", "The research methodology demonstrates", "Formal"],
+            ["Business", "Strategy, implementation, objectives", "We need to implement this strategy", "Neutral–formal"],
+            ["Technical", "Specifications, parameters, protocols", "The system parameters indicate", "Neutral"],
+            ["Medical", "Diagnosis, treatment, symptoms", "The patient exhibits symptoms", "Formal"],
+            ["Legal", "Jurisdiction, precedent, clause", "According to legal precedent", "Formal"],
+            ["Personal", "Feelings, experiences, opinions", "I feel that this is important", "Informal"]
           ]}
         />
 
         <div style={{ display: 'grid', gap: '1rem' }}>
           <Example 
-            spanish="Académico: 'La metodología de investigación demuestra'"
             english="Academic: 'The research methodology demonstrates'"
-            translation="Académico: 'La metodología de investigación demuestra'"
+            note="Field-specific nouns and verbs."
           />
           <Example 
-            spanish="Empresarial: 'Necesitamos implementar esta estrategia'"
             english="Business: 'We need to implement this strategy'"
-            translation="Empresarial: 'Necesitamos implementar esta estrategia'"
+            note="Typical management vocabulary."
           />
           <Example 
-            spanish="Personal: 'Siento que esto es importante'"
             english="Personal: 'I feel that this is important'"
-            translation="Personal: 'Siento que esto es importante'"
+            note="Subjective, informal tone."
           />
         </div>
 
         <Tip type="info">
-          <strong>Consejo:</strong> Familiarízate con el vocabulario específico de tu campo o área de interés.
+          <strong>Tip:</strong> Learn the specialised vocabulary of your subject or industry.
         </Tip>
       </TheorySection>
 
-      <TheorySection title="Transiciones entre Registros" icon="🔄">
+      <TheorySection title="Shifting Between Registers" icon="🔄">
         <p style={{ fontSize: '1rem', lineHeight: 1.6, color: '#4a5568', marginBottom: '1rem' }}>
-          A veces necesitas cambiar de registro dentro del mismo texto para diferentes secciones o propósitos.
+          You sometimes shift register within one text for different sections or purposes.
         </p>
 
         <GrammarTable
-          caption="Estrategias para Cambiar de Registro"
-          headers={["Transición", "De", "A", "Ejemplo"]}
+          caption="Strategies for Shifting Register"
+          headers={["Transition", "From", "To", "Example"]}
           rows={[
-            ["Introducción formal", "Título informal", "Cuerpo formal", "Let me explain formally..."],
-            ["Conclusión personal", "Análisis formal", "Opinión informal", "Personally, I believe..."],
-            ["Ejemplo casual", "Teoría formal", "Ilustración informal", "For example, imagine..."],
-            ["Resumen técnico", "Explicación informal", "Síntesis formal", "In summary, the data indicates..."]
+            ["Formal introduction", "Informal title", "Formal body", "Let me explain formally..."],
+            ["Personal conclusion", "Formal analysis", "Informal opinion", "Personally, I believe..."],
+            ["Casual example", "Formal theory", "Informal illustration", "For example, imagine..."],
+            ["Technical summary", "Informal explanation", "Formal synthesis", "In summary, the data indicates..."]
           ]}
         />
 
         <div style={{ display: 'grid', gap: '1rem' }}>
           <Example 
-            spanish="Transición: 'Déjame explicar formalmente...'"
             english="Transition: 'Let me explain formally...'"
-            translation="Transición: 'Déjame explicar formalmente...'"
+            note="Signals a deliberate shift to formal explanation."
           />
           <Example 
-            spanish="Transición: 'Personalmente, creo...'"
             english="Transition: 'Personally, I believe...'"
-            translation="Transición: 'Personalmente, creo...'"
+            note="Marks a move to a personal stance."
           />
           <Example 
-            spanish="Transición: 'En resumen, los datos indican...'"
             english="Transition: 'In summary, the data indicates...'"
-            translation="Transición: 'En resumen, los datos indican...'"
+            note="Returns to objective, formal wrap-up."
           />
         </div>
 
         <Rule 
-          title="Consejos para Transiciones"
-          description="Para cambiar de registro efectivamente:"
+          title="Tips for shifting register"
+          description="To shift register effectively:"
           examples={[
-            "Usa frases de transición claras",
-            "Mantén la coherencia general",
-            "Justifica el cambio de registro",
-            "Asegúrate de que el cambio sea apropiado"
+            "Use clear transition phrases",
+            "Keep overall coherence",
+            "Justify a register shift when it matters",
+            "Make sure the shift suits the situation"
           ]}
         />
 
         <Tip type="warning">
-          <strong>¡Cuidado!</strong> Los cambios de registro deben ser intencionales y justificados, no accidentales.                                    
+          <strong>Watch out:</strong> Register shifts should be intentional and justified, not accidental.                                    
         </Tip>
       </TheorySection>
 
-      <TheorySection title="Errores Comunes" icon="⚠️">
+      <TheorySection title="Common Mistakes" icon="⚠️">
         <div style={{ display: 'grid', gap: '1rem' }}>
           <Tip type="error">
-            <strong>Error:</strong> Usar registro informal en ensayo académico ❌<br/>
-            <strong>Correcto:</strong> Usar registro formal apropiado ✅<br/>
-            <em>El contexto determina el registro apropiado</em>
+            <strong>Mistake:</strong> Informal register in an academic essay ❌<br/>
+            <strong>Better:</strong> Appropriate formal register ✅<br/>
+            <em>Context determines register</em>
           </Tip>
 
           <Tip type="error">
-            <strong>Error:</strong> Mezclar registros sin transición ❌<br/>
-            <strong>Correcto:</strong> Cambiar de registro con transiciones claras ✅<br/>
-            <em>Los cambios deben ser intencionales y justificados</em>
+            <strong>Mistake:</strong> Mixing registers without signalling the shift ❌<br/>
+            <strong>Better:</strong> Signal register shifts with clear transitions ✅<br/>
+            <em>Changes should be deliberate</em>
           </Tip>
 
           <Tip type="error">
-            <strong>Error:</strong> Usar vocabulario demasiado formal para la audiencia ❌<br/>
-            <strong>Correcto:</strong> Adaptar el vocabulario a la audiencia ✅<br/>
-            <em>Considera quién va a leer tu texto</em>
+            <strong>Mistake:</strong> Overly formal vocabulary for your audience ❌<br/>
+            <strong>Better:</strong> Match vocabulary to the reader ✅<br/>
+            <em>Consider who will read the text</em>
           </Tip>
 
           <Tip type="error">
-            <strong>Error:</strong> Ignorar el propósito del texto ❌<br/>
-            <strong>Correcto:</strong> Elegir registro según el propósito ✅<br/>
-            <em>El propósito determina el registro apropiado</em>
+            <strong>Mistake:</strong> Ignoring the purpose of the text ❌<br/>
+            <strong>Better:</strong> Choose register to match your aim ✅<br/>
+            <em>Purpose shapes appropriate register</em>
           </Tip>
         </div>
       </TheorySection>
 
-      <TheorySection title="Reglas Importantes" icon="⚡">
+      <TheorySection title="Key Rules" icon="⚡">
         <div style={{ display: 'grid', gap: '1rem' }}>
           <Rule 
-            title="1. Contexto determina registro"
-            description="Siempre considera el contexto antes de elegir vocabulario."
+            title="1. Context determines register"
+            description="Always consider context before choosing vocabulary."
             examples={[
-              "Académico → Formal",
-              "Empresarial → Neutral-Formal",
+              "Academic → Formal",
+              "Business → Neutral–formal",
               "Personal → Informal",
-              "Técnico → Neutral"
+              "Technical → Neutral"
             ]}
           />
 
           <Rule 
-            title="2. Audiencia influye en la elección"
-            description="Adapta tu vocabulario a tu audiencia."
+            title="2. Audience shapes word choice"
+            description="Adapt vocabulary to your readers."
             examples={[
-              "Expertos → Vocabulario técnico",
-              "General → Vocabulario accesible",
-              "Académicos → Registro formal",
-              "Amigos → Registro informal"
+              "Experts → Technical terms",
+              "General audience → Accessible wording",
+              "Academic readers → Formal register",
+              "Friends → Informal register"
             ]}
           />
 
           <Rule 
-            title="3. Consistencia es clave"
-            description="Mantén el registro consistente a menos que haya una razón para cambiarlo."
+            title="3. Consistency matters"
+            description="Maintain one dominant register unless you have a reason to change."
             examples={[
-              "Elige un registro principal",
-              "Mantén la consistencia",
-              "Cambia solo cuando sea necesario",
-              "Justifica los cambios"
+              "Pick a main register for the text",
+              "Stay consistent within sections",
+              "Change register only when needed",
+              "Explain or signal major shifts"
             ]}
           />
         </div>
@@ -352,80 +336,80 @@ const VocabularyByRegisterPage = () => {
   const exercises = [
     <MultipleChoiceExercise
       key="1"
-      question="¿Qué registro debo usar en un ensayo académico?"
+      question="Which register should you use in an academic essay?"
       options={[
         "Informal",
         "Formal",
         "Neutral",
-        "Coloquial"
+        "Colloquial"
       ]}
       correctAnswer={1}
-      explanation="En ensayos académicos siempre se debe usar registro formal con vocabulario preciso y estructuras complejas."
+      explanation="Academic essays typically require formal register: precise vocabulary and full forms (no contractions)."
     />,
 
     <MultipleChoiceExercise
       key="2"
-      question="¿Cuál es el registro más apropiado para un ensayo académico?"
+      question="Which register is most appropriate for an academic essay?"
       options={[
-        "Informal con contracciones",
-        "Formal sin contracciones",
-        "Neutral con algunas contracciones",
-        "Mixto según la sección"
+        "Informal with contractions",
+        "Formal without contractions",
+        "Neutral with occasional contractions",
+        "Mixed by section without signalling"
       ]}
       correctAnswer={1}
-      explanation="Los ensayos académicos requieren registro formal, sin contracciones, con vocabulario preciso y estructuras complejas."
+      explanation="Academic essays usually avoid contractions and use precise, formal language."
     />,
 
     <TrueFalseExercise
       key="3"
       statements={[
         {
-          text: "El registro formal siempre es mejor que el informal.",
+          text: "Formal register is always better than informal register.",
           isTrue: false,
-          explanation: "Incorrecto. El registro apropiado depende del contexto, audiencia y propósito. No hay uno mejor que otro."
+          explanation: "Incorrect. The best register depends on context, audience, and purpose."
         },
         {
-          text: "Las contracciones son apropiadas en registro informal.",
+          text: "Contractions are appropriate in informal register.",
           isTrue: true,
-          explanation: "Correcto. Las contracciones como 'don't', 'won't', 'I'm' son comunes y apropiadas en registro informal."
+          explanation: "Correct. Contractions such as “don't”, “won't”, “I'm” are normal in informal English."
         },
         {
-          text: "El contexto determina el registro apropiado.",
+          text: "Context determines the appropriate register.",
           isTrue: true,
-          explanation: "Correcto. El contexto (académico, empresarial, personal) es el factor principal para elegir el registro."
+          explanation: "Correct. Setting (academic, business, personal) is the main guide."
         },
         {
-          text: "Es mejor usar siempre el mismo registro en todo el texto.",
+          text: "You should always use the same register throughout any text.",
           isTrue: false,
-          explanation: "Incorrecto. Aunque la consistencia es importante, a veces es necesario cambiar de registro con transiciones apropiadas."
+          explanation: "Incorrect. Consistency matters, but controlled register shifts with transitions are sometimes needed."
         }
       ]}
     />,
 
     <MultipleChoiceExercise
       key="4"
-      question="¿Cuál es la mejor manera de cambiar de registro formal a informal en un texto?"
+      question="What is the best way to move from formal to informal within one text?"
       options={[
-        "Cambiar abruptamente sin transición",
-        "Usar una frase de transición clara",
-        "Mezclar ambos registros en la misma oración",
-        "No cambiar nunca de registro"
+        "Change abruptly with no transition",
+        "Use a clear transition phrase",
+        "Mix registers in the same sentence",
+        "Never change register"
       ]}
       correctAnswer={1}
-      explanation="Los cambios de registro deben hacerse con transiciones claras como 'Let me explain informally...' o 'Personally, I believe...'"
+      explanation="Signal shifts with phrases like “Let me put this informally...” or “Personally, I believe...”"
     />,
 
     <MultipleChoiceExercise
       key="5"
-      question="¿Qué factor es más importante al elegir el registro apropiado?"
+      question="What matters most when choosing register?"
       options={[
-        "Tu preferencia personal",
-        "El contexto y la audiencia",
-        "La longitud del texto",
-        "El tema del texto"
+        "Your personal preference",
+        "Context and audience",
+        "Text length",
+        "Topic alone"
       ]}
       correctAnswer={1}
-      explanation="El contexto (donde se usa el texto) y la audiencia (quién lo va a leer) son los factores más importantes para elegir el registro apropiado."
+      explanation="Context (where the text is used) and audience (who reads it) matter most."
     />,
 
     <TrueFalseExercise
@@ -434,45 +418,45 @@ const VocabularyByRegisterPage = () => {
         {
           text: "Academic vocabulary is more precise than everyday vocabulary.",
           isTrue: true,
-          explanation: "Correcto. El vocabulario académico tiende a ser más específico y preciso para expresar conceptos complejos."
+          explanation: "Correct. Academic English often uses more specific terms for complex ideas."
         },
         {
           text: "You should always use the most formal word available.",
           isTrue: false,
-          explanation: "Incorrecto. Debes usar el registro apropiado para el contexto; demasiada formalidad puede sonar artificial."
+          explanation: "Incorrect. Match register to context; excessive formality can sound unnatural."
         },
         {
           text: "Register consistency is important throughout a text.",
           isTrue: true,
-          explanation: "Correcto. Mantener el mismo registro a lo largo del texto crea coherencia y profesionalismo."
+          explanation: "Correct. A steady register supports coherence and professionalism."
         }
       ]}
     />,
 
     <MultipleChoiceExercise
       key="7"
-      question="¿Cuál es la versión formal de 'help'?"
+      question="Which option lists more formal alternatives to 'help'?"
       options={[
         "aid",
         "assist",
         "support",
-        "todas las anteriores"
+        "All of the above"
       ]}
       correctAnswer={3}
-      explanation="'Aid', 'assist' y 'support' son todas versiones más formales de 'help', cada una con matices ligeramente diferentes."
+      explanation="“Aid”, “assist”, and “support” can all be more formal than “help”, with slightly different nuances."
     />,
 
     <MultipleChoiceExercise
       key="8"
-      question="¿En qué contexto usarías 'purchase' en lugar de 'buy'?"
+      question="In which context would you prefer 'purchase' over 'buy'?"
       options={[
-        "Conversación casual",
-        "Documentos legales o comerciales",
-        "Mensajes de texto",
-        "Conversaciones familiares"
+        "Casual chat",
+        "Legal or business documents",
+        "Text messages",
+        "Family conversation"
       ]}
       correctAnswer={1}
-      explanation="'Purchase' es más formal y se usa en documentos legales, comerciales o contextos profesionales."
+      explanation="“Purchase” is more formal and common in legal, commercial, or professional contexts."
     />,
 
     <TrueFalseExercise
@@ -481,34 +465,34 @@ const VocabularyByRegisterPage = () => {
         {
           text: "Colloquial expressions are appropriate in academic writing.",
           isTrue: false,
-          explanation: "Incorrecto. Las expresiones coloquiales no son apropiadas en escritura académica formal."
+          explanation: "Incorrect. Colloquial language is usually out of place in formal academic writing."
         },
         {
-          text: "The same idea can be expressed with different levels of formality.",
+          text: "The same idea can be expressed at different levels of formality.",
           isTrue: true,
-          explanation: "Correcto. Una misma idea puede expresarse de manera informal ('big problem') o formal ('significant issue')."
+          explanation: "Correct. One idea can be informal (“big problem”) or formal (“significant issue”)."
         }
       ]}
     />,
 
     <MultipleChoiceExercise
       key="10"
-      question="¿Cuál es la diferencia entre 'get' y 'obtain'?"
+      question="What is the difference between 'get' and 'obtain'?"
       options={[
-        "'Get' es más formal",
-        "'Obtain' es más formal",
-        "No hay diferencia",
-        "Ambas son coloquiales"
+        "'Get' is more formal",
+        "'Obtain' is more formal",
+        "There is no difference",
+        "Both are colloquial"
       ]}
       correctAnswer={1}
-      explanation="'Obtain' es más formal y se usa en contextos académicos o profesionales, mientras que 'get' es informal y cotidiano."
+      explanation="“Obtain” is more formal and common in academic or professional contexts; “get” is everyday and neutral–informal."
     />
   ];
 
   return (
     <TheoryLayout
       title="Vocabulary by Register"
-      description="Domina el vocabulario por registro en inglés: formal, neutral e informal. Aprende a elegir el vocabulario apropiado según el contexto y la audiencia."
+      description="Master vocabulary by register in English: formal, neutral, and informal. Learn to choose appropriate words for context and audience."
       level="B1-B2-C1-C2"
       theoryContent={theoryContent}
       exercises={exercises}
@@ -519,4 +503,3 @@ const VocabularyByRegisterPage = () => {
 };
 
 export default VocabularyByRegisterPage;
-

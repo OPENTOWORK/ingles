@@ -18,39 +18,39 @@ import {
 const ModalVerbsPage = () => {
   const theoryContent = (
     <div>
-      <TheorySection title="¿Qué son los Modal Verbs?" icon="⚡">
+      <TheorySection title="What Are Modal Verbs?" icon="⚡">
         <p style={{ fontSize: '1.1rem', lineHeight: 1.6, color: '#4a5568', marginBottom: '1rem' }}>
-          Los <strong>modal verbs</strong> (verbos modales) son verbos auxiliares que expresan actitud, posibilidad, 
-          obligación, permiso, habilidad o consejo. No tienen infinitivo, gerundio ni participio pasado, y se usan 
-          con el verbo principal en infinitivo sin 'to'.
+          <strong>Modal verbs</strong> are auxiliary verbs that express attitude, possibility, 
+          obligation, permission, ability, or advice. They have no infinitive, gerund, or past participle forms, and they are used 
+          with the main verb in the bare infinitive (without <em>to</em>).
         </p>
         
         <QuickReference items={[
-          "Expresan actitud y opinión",
-          "No tienen formas de tiempo",
-          "Van seguidos de infinitivo sin 'to'",
-          "No necesitan auxiliares do/does/did",
+          "Express attitude and opinion",
+          "Do not have tense forms",
+          "Are followed by the bare infinitive (without 'to')",
+          "Do not need auxiliaries do/does/did",
           "Can, could, may, might, must, should, will, would"
         ]} />
       </TheorySection>
 
-      <TheorySection title="Modal Verbs Básicos" icon="🎯">
+      <TheorySection title="Basic Modal Verbs" icon="🎯">
         <p style={{ fontSize: '1rem', lineHeight: 1.6, color: '#4a5568', marginBottom: '1rem' }}>
-          Los modal verbs principales y sus usos más comunes.
+          The main modal verbs and their most common uses.
         </p>
 
         <GrammarTable
-          caption="Modal Verbs Principales"
-          headers={["Modal", "Uso Principal", "Ejemplo", "Significado"]}
+          caption="Main Modal Verbs"
+          headers={["Modal", "Main Use", "Example", "Meaning"]}
           rows={[
-            ["can", "habilidad, permiso", "I can swim", "Puedo nadar"],
-            ["could", "habilidad pasada, posibilidad", "I could help you", "Podría ayudarte"],
-            ["may", "permiso formal, posibilidad", "May I go?", "¿Puedo ir?"],
-            ["might", "posibilidad débil", "It might rain", "Podría llover"],
-            ["must", "obligación fuerte", "You must study", "Debes estudiar"],
-            ["should", "consejo, obligación débil", "You should rest", "Deberías descansar"],
-            ["will", "futuro, voluntad", "I will help you", "Te ayudaré"],
-            ["would", "condicional, cortesía", "I would like coffee", "Me gustaría café"]
+            ["can", "ability, permission", "I can swim", "I can swim"],
+            ["could", "past ability, possibility", "I could help you", "I could help you"],
+            ["may", "formal permission, possibility", "May I go?", "May I go?"],
+            ["might", "weak possibility", "It might rain", "It might rain"],
+            ["must", "strong obligation", "You must study", "You must study"],
+            ["should", "advice, weak obligation", "You should rest", "You should rest"],
+            ["will", "future, willingness", "I will help you", "I will help you"],
+            ["would", "conditional, politeness", "I would like coffee", "I would like coffee"]
           ]}
         />
 
@@ -58,49 +58,49 @@ const ModalVerbsPage = () => {
           <Example 
             spanish="Puedo hablar inglés"
             english="I can speak English"
-            translation="Puedo hablar inglés"
+            translation="I can speak English"
           />
           <Example 
             spanish="Debes hacer tu tarea"
             english="You must do your homework"
-            translation="Debes hacer tu tarea"
+            translation="You must do your homework"
           />
           <Example 
             spanish="¿Puedo usar tu teléfono?"
             english="May I use your phone?"
-            translation="¿Puedo usar tu teléfono?"
+            translation="May I use your phone?"
           />
         </div>
 
         <Rule 
-          title="Reglas Básicas"
-          description="Todos los modal verbs siguen estas reglas:"
+          title="Basic Rules"
+          description="All modal verbs follow these rules:"
           examples={[
-            "Van seguidos de infinitivo sin 'to'",
-            "No añaden -s en tercera persona",
-            "No usan do/does/did en negativas e interrogativas",
-            "Se colocan antes del verbo principal"
+            "They are followed by the bare infinitive (without 'to')",
+            "They do not take -s in the third person",
+            "They do not use do/does/did in negatives and questions",
+            "They come before the main verb"
           ]}
         />
 
         <Tip type="info">
-          <strong>Consejo:</strong> Los modal verbs no cambian según la persona. Siempre mantienen la misma forma.
+          <strong>Tip:</strong> Modal verbs do not change according to the person. They always keep the same form.
         </Tip>
       </TheorySection>
 
-      <TheorySection title="Ability (Habilidad)" icon="💪">
+      <TheorySection title="Ability" icon="💪">
         <p style={{ fontSize: '1rem', lineHeight: 1.6, color: '#4a5568', marginBottom: '1rem' }}>
-          Para expresar habilidad física o mental, capacidad o posibilidad.
+          To express physical or mental ability, capacity, or possibility.
         </p>
 
         <GrammarTable
-          caption="Modal Verbs para Habilidad"
-          headers={["Modal", "Tiempo", "Uso", "Ejemplo"]}
+          caption="Modal Verbs for Ability"
+          headers={["Modal", "Tense", "Use", "Example"]}
           rows={[
-            ["can", "presente", "habilidad actual", "I can drive"],
-            ["could", "pasado", "habilidad pasada", "I could swim when I was 5"],
-            ["be able to", "todos", "habilidad específica", "I was able to finish the project"],
-            ["cannot/can't", "presente", "falta de habilidad", "I can't speak French"]
+            ["can", "present", "current ability", "I can drive"],
+            ["could", "past", "past ability", "I could swim when I was 5"],
+            ["be able to", "all tenses", "specific ability", "I was able to finish the project"],
+            ["cannot/can't", "present", "lack of ability", "I can't speak French"]
           ]}
         />
 
@@ -108,39 +108,39 @@ const ModalVerbsPage = () => {
           <Example 
             spanish="Puedo tocar el piano"
             english="I can play the piano"
-            translation="Puedo tocar el piano"
+            translation="I can play the piano"
           />
           <Example 
             spanish="Cuando era niño, podía correr muy rápido"
             english="When I was a child, I could run very fast"
-            translation="Cuando era niño, podía correr muy rápido"
+            translation="When I was a child, I could run very fast"
           />
           <Example 
             spanish="No pude terminar el trabajo a tiempo"
             english="I wasn't able to finish the work on time"
-            translation="No pude terminar el trabajo a tiempo"
+            translation="I wasn't able to finish the work on time"
           />
         </div>
 
         <Tip type="success">
-          <strong>Consejo:</strong> Usa 'be able to' cuando necesites formas específicas de tiempo que 'can' no puede expresar.
+          <strong>Tip:</strong> Use <em>be able to</em> when you need specific tense forms that <em>can</em> cannot express.
         </Tip>
       </TheorySection>
 
-      <TheorySection title="Permission (Permiso)" icon="🖐️">
+      <TheorySection title="Permission" icon="🖐️">
         <p style={{ fontSize: '1rem', lineHeight: 1.6, color: '#4a5568', marginBottom: '1rem' }}>
-          Para pedir, dar o negar permiso de manera formal o informal.
+          To ask for, give, or deny permission in formal or informal situations.
         </p>
 
         <GrammarTable
-          caption="Modal Verbs para Permiso"
-          headers={["Modal", "Formalidad", "Uso", "Ejemplo"]}
+          caption="Modal Verbs for Permission"
+          headers={["Modal", "Formality", "Use", "Example"]}
           rows={[
-            ["can", "informal", "permiso cotidiano", "Can I go to the bathroom?"],
-            ["may", "formal", "permiso formal", "May I leave early?"],
-            ["could", "cortés", "pedir permiso cortésmente", "Could I borrow your pen?"],
-            ["cannot/can't", "informal", "negar permiso", "You can't smoke here"],
-            ["may not", "formal", "negar permiso formal", "You may not enter"]
+            ["can", "informal", "everyday permission", "Can I go to the bathroom?"],
+            ["may", "formal", "formal permission", "May I leave early?"],
+            ["could", "polite", "asking politely", "Could I borrow your pen?"],
+            ["cannot/can't", "informal", "denying permission", "You can't smoke here"],
+            ["may not", "formal", "formal denial", "You may not enter"]
           ]}
         />
 
@@ -148,50 +148,50 @@ const ModalVerbsPage = () => {
           <Example 
             spanish="¿Puedo salir temprano?"
             english="May I leave early?"
-            translation="¿Puedo salir temprano?"
+            translation="May I leave early?"
           />
           <Example 
             spanish="¿Podrías prestarme tu libro?"
             english="Could you lend me your book?"
-            translation="¿Podrías prestarme tu libro?"
+            translation="Could you lend me your book?"
           />
           <Example 
             spanish="No puedes usar tu teléfono aquí"
             english="You cannot use your phone here"
-            translation="No puedes usar tu teléfono aquí"
+            translation="You cannot use your phone here"
           />
         </div>
 
         <Rule 
-          title="Niveles de Formalidad"
-          description="Orden de formalidad para pedir permiso:"
+          title="Levels of Formality"
+          description="Order of formality when asking for permission:"
           examples={[
-            "Más formal: May I...?",
-            "Cortés: Could I...?",
+            "Most formal: May I...?",
+            "Polite: Could I...?",
             "Informal: Can I...?",
-            "Elige según el contexto"
+            "Choose according to context"
           ]}
         />
 
         <Tip type="warning">
-          <strong>¡Cuidado!</strong> 'May' es más formal que 'can'. En contextos académicos o profesionales, usa 'may'.
+          <strong>Watch out!</strong> <em>May</em> is more formal than <em>can</em>. In academic or professional contexts, use <em>may</em>.
         </Tip>
       </TheorySection>
 
-      <TheorySection title="Possibility (Posibilidad)" icon="🎲">
+      <TheorySection title="Possibility" icon="🎲">
         <p style={{ fontSize: '1rem', lineHeight: 1.6, color: '#4a5568', marginBottom: '1rem' }}>
-          Para expresar diferentes grados de posibilidad o probabilidad.
+          To express different degrees of possibility or probability.
         </p>
 
         <GrammarTable
-          caption="Modal Verbs para Posibilidad"
-          headers={["Modal", "Grado", "Uso", "Ejemplo"]}
+          caption="Modal Verbs for Possibility"
+          headers={["Modal", "Degree", "Use", "Example"]}
           rows={[
-            ["must", "muy alto (90%)", "deducción lógica", "You must be tired"],
-            ["may", "medio (50%)", "posibilidad real", "It may rain tomorrow"],
-            ["might", "bajo (30%)", "posibilidad débil", "I might come to the party"],
-            ["could", "posible", "posibilidad teórica", "It could be true"],
-            ["can't", "imposible", "imposibilidad", "That can't be right"]
+            ["must", "very high (90%)", "logical deduction", "You must be tired"],
+            ["may", "medium (50%)", "real possibility", "It may rain tomorrow"],
+            ["might", "low (30%)", "weak possibility", "I might come to the party"],
+            ["could", "possible", "theoretical possibility", "It could be true"],
+            ["can't", "impossible", "impossibility", "That can't be right"]
           ]}
         />
 
@@ -199,51 +199,51 @@ const ModalVerbsPage = () => {
           <Example 
             spanish="Debe estar cansado (muy probable)"
             english="He must be tired"
-            translation="Debe estar cansado"
+            translation="He must be tired (very likely)"
           />
           <Example 
             spanish="Puede que llueva mañana"
             english="It may rain tomorrow"
-            translation="Puede que llueva mañana"
+            translation="It may rain tomorrow"
           />
           <Example 
             spanish="Podría venir a la fiesta"
             english="I might come to the party"
-            translation="Podría venir a la fiesta"
+            translation="I might come to the party"
           />
         </div>
 
         <Rule 
-          title="Grados de Posibilidad"
-          description="Orden de probabilidad (de mayor a menor):"
+          title="Degrees of Possibility"
+          description="Order of probability (from highest to lowest):"
           examples={[
-            "must (casi seguro)",
-            "may (posible)",
-            "might (menos probable)",
-            "could (teóricamente posible)"
+            "must (almost certain)",
+            "may (possible)",
+            "might (less likely)",
+            "could (theoretically possible)"
           ]}
         />
 
         <Tip type="info">
-          <strong>Consejo:</strong> Usa 'must' para deducciones lógicas basadas en evidencia, no para obligación en este contexto.
+          <strong>Tip:</strong> Use <em>must</em> for logical deductions based on evidence, not for obligation in this context.
         </Tip>
       </TheorySection>
 
-      <TheorySection title="Obligation (Obligación)" icon="⚖️">
+      <TheorySection title="Obligation" icon="⚖️">
         <p style={{ fontSize: '1rem', lineHeight: 1.6, color: '#4a5568', marginBottom: '1rem' }}>
-          Para expresar diferentes tipos y grados de obligación.
+          To express different types and degrees of obligation.
         </p>
 
         <GrammarTable
-          caption="Modal Verbs para Obligación"
-          headers={["Modal", "Tipo", "Grado", "Ejemplo"]}
+          caption="Modal Verbs for Obligation"
+          headers={["Modal", "Type", "Degree", "Example"]}
           rows={[
-            ["must", "obligación personal", "fuerte", "I must finish this today"],
-            ["have to", "obligación externa", "fuerte", "I have to work tomorrow"],
-            ["should", "consejo/recomendación", "débil", "You should exercise more"],
-            ["ought to", "consejo moral", "débil", "You ought to apologize"],
-            ["don't have to", "no obligación", "ninguna", "You don't have to come"],
-            ["mustn't", "prohibición", "fuerte", "You mustn't smoke here"]
+            ["must", "personal obligation", "strong", "I must finish this today"],
+            ["have to", "external obligation", "strong", "I have to work tomorrow"],
+            ["should", "advice/recommendation", "weak", "You should exercise more"],
+            ["ought to", "moral advice", "weak", "You ought to apologize"],
+            ["don't have to", "no obligation", "none", "You don't have to come"],
+            ["mustn't", "prohibition", "strong", "You mustn't smoke here"]
           ]}
         />
 
@@ -251,50 +251,50 @@ const ModalVerbsPage = () => {
           <Example 
             spanish="Debo terminar este trabajo hoy"
             english="I must finish this work today"
-            translation="Debo terminar este trabajo hoy"
+            translation="I must finish this work today"
           />
           <Example 
             spanish="Tengo que trabajar mañana"
             english="I have to work tomorrow"
-            translation="Tengo que trabajar mañana"
+            translation="I have to work tomorrow"
           />
           <Example 
             spanish="Deberías hacer más ejercicio"
             english="You should exercise more"
-            translation="Deberías hacer más ejercicio"
+            translation="You should exercise more"
           />
         </div>
 
         <Rule 
           title="Must vs Have to"
-          description="Diferencias importantes:"
+          description="Important differences:"
           examples={[
-            "Must: obligación personal, interna",
-            "Have to: obligación externa, reglas",
-            "Must: más subjetivo",
-            "Have to: más objetivo"
+            "Must: personal, internal obligation",
+            "Have to: external obligation, rules",
+            "Must: more subjective",
+            "Have to: more objective"
           ]}
         />
 
         <Tip type="success">
-          <strong>Consejo:</strong> 'Must' expresa obligación personal, mientras que 'have to' expresa obligación externa o reglas.
+          <strong>Tip:</strong> <em>Must</em> expresses personal obligation, while <em>have to</em> expresses external obligation or rules.
         </Tip>
       </TheorySection>
 
-      <TheorySection title="Advice (Consejo)" icon="💡">
+      <TheorySection title="Advice" icon="💡">
         <p style={{ fontSize: '1rem', lineHeight: 1.6, color: '#4a5568', marginBottom: '1rem' }}>
-          Para dar consejos, sugerencias y recomendaciones.
+          To give advice, suggestions, and recommendations.
         </p>
 
         <GrammarTable
-          caption="Modal Verbs para Consejo"
-          headers={["Modal", "Intensidad", "Uso", "Ejemplo"]}
+          caption="Modal Verbs for Advice"
+          headers={["Modal", "Strength", "Use", "Example"]}
           rows={[
-            ["should", "recomendación", "consejo general", "You should see a doctor"],
-            ["ought to", "moral", "consejo moral", "You ought to help them"],
-            ["had better", "urgente", "consejo fuerte", "You'd better hurry"],
-            ["could", "sugerencia", "opción suave", "You could try yoga"],
-            ["might want to", "sugerencia", "opción muy suave", "You might want to call her"]
+            ["should", "recommendation", "general advice", "You should see a doctor"],
+            ["ought to", "moral", "moral advice", "You ought to help them"],
+            ["had better", "urgent", "strong advice", "You'd better hurry"],
+            ["could", "suggestion", "soft option", "You could try yoga"],
+            ["might want to", "suggestion", "very soft option", "You might want to call her"]
           ]}
         />
 
@@ -302,91 +302,91 @@ const ModalVerbsPage = () => {
           <Example 
             spanish="Deberías ver a un doctor"
             english="You should see a doctor"
-            translation="Deberías ver a un doctor"
+            translation="You should see a doctor"
           />
           <Example 
             spanish="Deberías ayudarlos"
             english="You ought to help them"
-            translation="Deberías ayudarlos"
+            translation="You ought to help them"
           />
           <Example 
             spanish="Mejor te apuras"
             english="You'd better hurry"
-            translation="Mejor te apuras"
+            translation="You'd better hurry"
           />
         </div>
 
         <Tip type="warning">
-          <strong>¡Cuidado!</strong> 'Had better' implica advertencia. Se usa para consejos urgentes o con consecuencias.
+          <strong>Watch out!</strong> <em>Had better</em> implies a warning. It is used for urgent advice or when there are consequences.
         </Tip>
       </TheorySection>
 
-      <TheorySection title="Errores Comunes" icon="⚠️">
+      <TheorySection title="Common Mistakes" icon="⚠️">
         <div style={{ display: 'grid', gap: '1rem' }}>
           <Tip type="error">
-            <strong>Error:</strong> Usar 'to' después de modales ❌<br/>
-            <strong>Correcto:</strong> Infinitivo sin 'to' ✅<br/>
+            <strong>Error:</strong> Using <em>to</em> after modals ❌<br/>
+            <strong>Correct:</strong> Bare infinitive without <em>to</em> ✅<br/>
             <em>I can to swim. → I can swim.</em>
           </Tip>
 
           <Tip type="error">
-            <strong>Error:</strong> Añadir -s en tercera persona ❌<br/>
-            <strong>Correcto:</strong> Los modales no cambian ✅<br/>
+            <strong>Error:</strong> Adding -s in the third person ❌<br/>
+            <strong>Correct:</strong> Modals do not change ✅<br/>
             <em>He cans swim. → He can swim.</em>
           </Tip>
 
           <Tip type="error">
-            <strong>Error:</strong> Usar do/does en negativas ❌<br/>
-            <strong>Correcto:</strong> Añadir 'not' directamente ✅<br/>
+            <strong>Error:</strong> Using do/does in negatives ❌<br/>
+            <strong>Correct:</strong> Add <em>not</em> directly ✅<br/>
             <em>I don't can swim. → I can't swim.</em>
           </Tip>
 
           <Tip type="error">
-            <strong>Error:</strong> Confundir must y have to ❌<br/>
-            <strong>Correcto:</strong> Entender la diferencia ✅<br/>
-            <em>I must work (personal) vs I have to work (regla externa)</em>
+            <strong>Error:</strong> Confusing <em>must</em> and <em>have to</em> ❌<br/>
+            <strong>Correct:</strong> Understand the difference ✅<br/>
+            <em>I must work (personal) vs I have to work (external rule)</em>
           </Tip>
 
           <Tip type="error">
-            <strong>Error:</strong> Usar may en contextos informales ❌<br/>
-            <strong>Correcto:</strong> Usar can en contextos informales ✅<br/>
+            <strong>Error:</strong> Using <em>may</em> in informal contexts ❌<br/>
+            <strong>Correct:</strong> Use <em>can</em> in informal contexts ✅<br/>
             <em>May I go? (formal) vs Can I go? (informal)</em>
           </Tip>
         </div>
       </TheorySection>
 
-      <TheorySection title="Reglas Importantes" icon="⚡">
+      <TheorySection title="Important Rules" icon="⚡">
         <div style={{ display: 'grid', gap: '1rem' }}>
           <Rule 
-            title="1. Estructura básica"
-            description="Los modal verbs siguen una estructura específica."
+            title="1. Basic structure"
+            description="Modal verbs follow a specific structure."
             examples={[
-              "Sujeto + modal + infinitivo (sin 'to')",
-              "No cambian según la persona",
-              "No usan auxiliares do/does/did",
-              "La negativa se forma con 'not'"
+              "Subject + modal + bare infinitive (without 'to')",
+              "They do not change according to the person",
+              "They do not use auxiliaries do/does/did",
+              "The negative is formed with 'not'"
             ]}
           />
 
           <Rule 
-            title="2. No tienen formas de tiempo"
-            description="Los modales no tienen pasado, presente o futuro."
+            title="2. No tense forms"
+            description="Modals do not have past, present, or future forms."
             examples={[
-              "Usa 'could' para pasado de 'can'",
-              "Usa 'would' para pasado de 'will'",
-              "Para otros tiempos, usa 'be able to'",
-              "O usa perífrasis verbales"
+              "Use 'could' for the past of 'can'",
+              "Use 'would' for the past of 'will'",
+              "For other tenses, use 'be able to'",
+              "Or use periphrastic verb forms"
             ]}
           />
 
           <Rule 
-            title="3. Contexto y formalidad"
-            description="Elige el modal según el contexto."
+            title="3. Context and formality"
+            description="Choose the modal according to context."
             examples={[
               "Formal: may, ought to",
               "Informal: can, should",
-              "Cortés: could, might",
-              "Considera la situación"
+              "Polite: could, might",
+              "Consider the situation"
             ]}
           />
         </div>
@@ -405,7 +405,7 @@ const ModalVerbsPage = () => {
         "might"
       ]}
       correctAnswer={1}
-      explanation="'Should' expresa consejo o recomendación, lo más apropiado en este contexto."
+      explanation="'Should' expresses advice or a recommendation, which fits best in this context."
     />,
 
     <MultipleChoiceExercise
@@ -483,12 +483,12 @@ const ModalVerbsPage = () => {
         "can't"
       ]}
       correctAnswer={0}
-      explanation="'Mustn't' expresa prohibición fuerte. Es una regla que no se puede romper."
+      explanation="'Mustn't' expresses a strong prohibition. It is a rule that cannot be broken."
     />,
 
     <MultipleChoiceExercise
       key="7"
-      question="¿Cuál expresa posibilidad en el pasado?"
+      question="Which expresses possibility in the past?"
       options={[
         "He can be at home",
         "He could be at home",
@@ -496,7 +496,7 @@ const ModalVerbsPage = () => {
         "He must be at home"
       ]}
       correctAnswer={2}
-      explanation="'Might have been' expresa posibilidad sobre algo que ocurrió en el pasado."
+      explanation="'Might have been' expresses possibility about something that happened in the past."
     />,
 
     <MultipleChoiceExercise
@@ -509,12 +509,12 @@ const ModalVerbsPage = () => {
         "Both B and C"
       ]}
       correctAnswer={3}
-      explanation="Para habilidades generales en el pasado, tanto 'could' como 'was able to' son correctos."
+      explanation="For general abilities in the past, both 'could' and 'was able to' are correct."
     />,
 
     <MultipleChoiceExercise
       key="9"
-      question="¿Cuál es más educado?"
+      question="Which is more polite?"
       options={[
         "Can you help me?",
         "Could you help me?",
@@ -522,7 +522,7 @@ const ModalVerbsPage = () => {
         "Do you help me?"
       ]}
       correctAnswer={1}
-      explanation="'Could you...?' es más educado y formal que 'Can you...?'"
+      explanation="'Could you...?' is more polite and formal than 'Can you...?'"
     />,
 
     <MultipleChoiceExercise
@@ -535,14 +535,14 @@ const ModalVerbsPage = () => {
         "All of the above"
       ]}
       correctAnswer={3}
-      explanation="'Can', 'could' y 'may' pueden expresar posibilidad presente. 'Could' y 'may' son más formales."
+      explanation="'Can', 'could', and 'may' can all express present possibility. 'Could' and 'may' are more formal."
     />
   ];
 
   return (
     <TheoryLayout
       title="Modal Verbs"
-      description="Domina los verbos modales en inglés. Aprende a expresar habilidad, posibilidad, obligación, permiso y consejos con can, could, must, should, may, might."
+      description="Master modal verbs in English. Learn to express ability, possibility, obligation, permission, and advice with can, could, must, should, may, and might."
       level="A2-B1-B2-C1-C2"
       theoryContent={theoryContent}
       exercises={exercises}

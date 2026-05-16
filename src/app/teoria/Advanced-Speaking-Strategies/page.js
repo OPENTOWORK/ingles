@@ -18,241 +18,233 @@ import {
 const AdvancedSpeakingPage = () => {
   const theoryContent = (
     <div>
-      <TheorySection title="Estrategias Avanzadas de Speaking" icon="🎤">
+      <TheorySection title="Advanced Speaking Strategies" icon="🎤">
         <p style={{ fontSize: '1.1rem', lineHeight: 1.6, color: '#4a5568', marginBottom: '1rem' }}>
-          Las <strong>estrategias avanzadas de speaking</strong> van más allá del vocabulario y la gramática. 
-          Incluyen técnicas de fluidez, manejo de pausas, estructuración del discurso y adaptación al 
-          contexto para comunicarse con naturalidad y sofisticación.
+          Advanced <strong>speaking strategies</strong> go beyond vocabulary and grammar. 
+          They include fluency techniques, pause management, discourse structuring and adaptation to 
+          context so you can communicate with naturalness and sophistication.
         </p>
         
         <QuickReference items={[
-          "Fluidez: técnicas para hablar sin interrupciones",
-          "Fillers y conectores naturales",
-          "Estructuración clara del discurso",
-          "Adaptación al registro y contexto",
-          "Estrategias para ganar tiempo"
+          "Fluency: techniques for speaking without long breaks",
+          "Natural fillers and connectors",
+          "Clear discourse structuring",
+          "Adaptation to register and context",
+          "Strategies to buy time"
         ]} />
       </TheorySection>
 
-      <TheorySection title="Técnicas de Fluidez" icon="🌊">
+      <TheorySection title="Fluency Techniques" icon="🌊">
         <p style={{ fontSize: '1rem', lineHeight: 1.6, color: '#4a5568', marginBottom: '1rem' }}>
-          La fluidez no significa hablar rápido, sino mantener el flujo natural del discurso sin pausas largas o vacilaciones.
+          Fluency does not mean speaking fast; it means keeping natural flow without long pauses or hesitation.
         </p>
 
         <Rule 
-          title="Estrategias para mantener fluidez"
-          description="Técnicas para hablar de manera continua y natural:"
+          title="Strategies to maintain fluency"
+          description="Techniques for speaking in a steady, natural way:"
           examples={[
-            "Usa fillers apropiados: 'Well', 'You know', 'Actually'",
-            "Parafrasea cuando no encuentres la palabra exacta",
-            "Usa aproximaciones: 'kind of', 'sort of', 'something like'",
-            "Conecta ideas con linking words naturales",
-            "Practica chunking (grupos de palabras como unidades)"
+            "Use appropriate fillers: 'Well', 'You know', 'Actually'",
+            "Paraphrase when you cannot find the exact word",
+            "Use hedges: 'kind of', 'sort of', 'something like'",
+            "Link ideas with natural linking words",
+            "Practice chunking (groups of words as units)"
           ]}
         />
 
         <GrammarTable
-          caption="Fillers por Registro"
-          headers={["Contexto", "Fillers Apropiados", "Ejemplo de Uso"]}
+          caption="Fillers by Register"
+          headers={["Context", "Appropriate fillers", "Example of use"]}
           rows={[
             ["Informal", "Um, er, like, you know, I mean", "'Like, I was thinking, you know, maybe we could...'"],
             ["Neutral", "Well, actually, basically, obviously", "'Well, actually, that's a good point'"],
             ["Formal", "Let me think, I would say, In fact", "'Let me think about that for a moment'"],
-            ["Académico", "Indeed, Furthermore, As I was saying", "'Indeed, this raises an interesting question'"],
-            ["Presentaciones", "Now, Moving on, As you can see", "'Now, let's consider the implications'"]
+            ["Academic", "Indeed, Furthermore, As I was saying", "'Indeed, this raises an interesting question'"],
+            ["Presentations", "Now, Moving on, As you can see", "'Now, let's consider the implications'"]
           ]}
         />
 
         <Tip type="success">
-          <strong>Práctica:</strong> Grábate hablando durante 2 minutos sobre cualquier tema. 
-          Cuenta las pausas largas ({'>'}3 segundos) y trabaja en reducirlas.
+          <strong>Practice:</strong> Record yourself speaking for two minutes on any topic. 
+          Count long pauses ({'>'}3 seconds) and work on reducing them.
         </Tip>
       </TheorySection>
 
-      <TheorySection title="Estructuración del Discurso" icon="🏗️">
+      <TheorySection title="Discourse Structuring" icon="🏗️">
         <p style={{ fontSize: '1rem', lineHeight: 1.6, color: '#4a5568', marginBottom: '1rem' }}>
-          Un discurso bien estructurado es más fácil de seguir y demuestra pensamiento organizado.
+          Well-structured discourse is easier to follow and shows organized thinking.
         </p>
 
         <GrammarTable
-          caption="Frases para Estructurar el Discurso"
-          headers={["Función", "Frases Útiles", "Contexto"]}
+          caption="Phrases for Structuring Discourse"
+          headers={["Function", "Useful phrases", "Context"]}
           rows={[
-            ["Introducir tema", "I'd like to talk about..., Let me start by saying...", "Inicio de respuesta"],
-            ["Añadir puntos", "Another point is..., What's more..., On top of that...", "Desarrollo"],
-            ["Dar ejemplos", "For instance..., Take... for example, A case in point is...", "Apoyo con evidencia"],
-            ["Contrastar", "On the other hand..., Having said that..., Then again...", "Mostrar diferentes perspectivas"],
-            ["Concluir", "To sum up..., All in all..., At the end of the day...", "Cierre de respuesta"],
-            ["Cambiar tema", "Moving on to..., That brings me to..., Speaking of...", "Transiciones"]
+            ["Introduce topic", "I'd like to talk about..., Let me start by saying...", "Start of answer"],
+            ["Add points", "Another point is..., What's more..., On top of that...", "Developing the answer"],
+            ["Give examples", "For instance..., Take... for example, A case in point is...", "Supporting with evidence"],
+            ["Contrast", "On the other hand..., Having said that..., Then again...", "Show different perspectives"],
+            ["Conclude", "To sum up..., All in all..., At the end of the day...", "Closing the answer"],
+            ["Change topic", "Moving on to..., That brings me to..., Speaking of...", "Transitions"]
           ]}
         />
 
         <Example 
-          spanish="Estructura para hablar sobre ventajas y desventajas:"
-          english="'Well, there are definitely both pros and cons to consider. On the positive side, [advantage 1]. What's more, [advantage 2]. Having said that, we can't ignore the downsides. For instance, [disadvantage 1]. On top of that, [disadvantage 2]. All in all, I think the benefits outweigh the drawbacks.'"
-          translation="Estructura clara: introducción → ventajas → desventajas → conclusión"
-        />
+            english="'Well, there are definitely both pros and cons to consider. On the positive side, [advantage 1]. What's more, [advantage 2]. Having said that, we can't ignore the downsides. For instance, [disadvantage 1]. On top of that, [disadvantage 2]. All in all, I think the benefits outweigh the drawbacks.'"
+          />
       </TheorySection>
 
-      <TheorySection title="Estrategias para Ganar Tiempo" icon="⏰">
+      <TheorySection title="Strategies to Buy Time" icon="⏰">
         <p style={{ fontSize: '1rem', lineHeight: 1.6, color: '#4a5568', marginBottom: '1rem' }}>
-          Cuando necesitas tiempo para pensar, usa estas estrategias en lugar de quedarte en silencio.
+          When you need time to think, use these strategies instead of staying silent.
         </p>
 
         <GrammarTable
-          caption="Técnicas para Ganar Tiempo"
-          headers={["Estrategia", "Frases", "Cuándo Usar"]}
+          caption="Techniques for Buying Time"
+          headers={["Strategy", "Phrases", "When to use"]}
           rows={[
-            ["Repetir pregunta", "'So you're asking about...', 'When you say...'", "Preguntas complejas"],
-            ["Clarificar", "'Could you be more specific?', 'Do you mean...?'", "Preguntas ambiguas"],
-            ["Reflexionar", "'That's an interesting question', 'Let me think about that'", "Preguntas difíciles"],
-            ["Reformular", "'In other words...', 'What I'm trying to say is...'", "Cuando te trabas"],
-            ["Generalizar", "'Generally speaking...', 'As a rule...'", "Cuando no tienes ejemplos específicos"],
-            ["Personalizar", "'In my experience...', 'From my point of view...'", "Hacer la respuesta más personal"]
+            ["Repeat the question", "'So you're asking about...', 'When you say...'", "Complex questions"],
+            ["Clarify", "'Could you be more specific?', 'Do you mean...?'", "Ambiguous questions"],
+            ["Reflect", "'That's an interesting question', 'Let me think about that'", "Difficult questions"],
+            ["Rephrase", "'In other words...', 'What I'm trying to say is...'", "When you get stuck"],
+            ["Generalise", "'Generally speaking...', 'As a rule...'", "When you lack specific examples"],
+            ["Personalise", "'In my experience...', 'From my point of view...'", "Make the answer more personal"]
           ]}
         />
 
         <Tip type="info">
-          <strong>Técnica del espejo:</strong> Repite parte de la pregunta para ganar tiempo: 
+          <strong>Mirror technique:</strong> Repeat part of the question to buy time: 
           "What do I think about social media? Well, social media is definitely..."
         </Tip>
       </TheorySection>
 
-      <TheorySection title="Adaptación al Registro" icon="🎭">
+      <TheorySection title="Adapting to Register" icon="🎭">
         <p style={{ fontSize: '1rem', lineHeight: 1.6, color: '#4a5568', marginBottom: '1rem' }}>
-          Adaptar tu forma de hablar al contexto y audiencia demuestra competencia comunicativa avanzada.
+          Adapting how you speak to context and audience shows advanced communicative competence.
         </p>
 
         <GrammarTable
-          caption="Adaptación por Contexto"
-          headers={["Contexto", "Características", "Ejemplo"]}
+          caption="Adaptation by Context"
+          headers={["Context", "Features", "Example"]}
           rows={[
-            ["Conversación casual", "Contracciones, slang moderado, tono relajado", "'I'd say it's pretty cool, you know?'"],
-            ["Entrevista de trabajo", "Formal pero personal, ejemplos concretos", "'I believe my experience demonstrates...'"],
-            ["Presentación académica", "Vocabulario técnico, estructura clara", "'The data suggests that...'"],
-            ["Debate/Discusión", "Argumentos sólidos, reconocer otros puntos", "'While I understand your point, I would argue...'"],
-            ["Situación social", "Amigable, inclusivo, empático", "'That must have been really difficult for you'"]
+            ["Casual conversation", "Contractions, moderate slang, relaxed tone", "'I'd say it's pretty cool, you know?'"],
+            ["Job interview", "Formal yet personal, concrete examples", "'I believe my experience demonstrates...'"],
+            ["Academic presentation", "Technical vocabulary, clear structure", "'The data suggests that...'"],
+            ["Debate / discussion", "Solid arguments, acknowledge other views", "'While I understand your point, I would argue...'"],
+            ["Social situation", "Friendly, inclusive, empathic", "'That must have been really difficult for you'"]
           ]}
         />
 
         <Rule 
-          title="Señales para ajustar registro"
-          description="Observa estas pistas para adaptar tu forma de hablar:"
+          title="Signals for adjusting register"
+          description="Notice these cues to adapt how you speak:"
           examples={[
-            "Edad y posición de tu interlocutor",
-            "Formalidad del entorno (oficina vs café)",
-            "Propósito de la conversación (social vs profesional)",
-            "Cómo te hablan a ti (formal vs informal)",
-            "Tema de conversación (personal vs técnico)"
+            "Your interlocutor's age and role",
+            "Formality of the setting (office vs café)",
+            "Purpose of the conversation (social vs professional)",
+            "How others address you (formal vs informal)",
+            "Topic of conversation (personal vs technical)"
           ]}
         />
       </TheorySection>
 
-      <TheorySection title="Manejo de Interrupciones y Turnos" icon="🔄">
+      <TheorySection title="Managing Interruptions and Turn-Taking" icon="🔄">
         <p style={{ fontSize: '1rem', lineHeight: 1.6, color: '#4a5568', marginBottom: '1rem' }}>
-          En conversaciones naturales, saber cuándo y cómo tomar turnos es crucial para la comunicación efectiva.
+          In natural conversation, knowing when and how to take turns is crucial for effective communication.
         </p>
 
         <GrammarTable
-          caption="Gestión de Turnos en Conversación"
-          headers={["Situación", "Frases Útiles", "Tono"]}
+          caption="Turn-Taking in Conversation"
+          headers={["Situation", "Useful phrases", "Tone"]}
           rows={[
-            ["Interrumpir educadamente", "'Sorry to interrupt, but...', 'Can I just say...'", "Disculpa + contribución"],
-            ["Mantener tu turno", "'Let me just finish...', 'I was about to say...'", "Firme pero educado"],
-            ["Ceder el turno", "'What do you think?', 'How do you see it?'", "Inclusivo"],
-            ["Retomar el tema", "'Going back to what you said...', 'As I was saying...'", "Organizativo"],
-            ["Cambiar de tema", "'That reminds me...', 'Speaking of which...'", "Natural y fluido"]
+            ["Interrupt politely", "'Sorry to interrupt, but...', 'Can I just say...'", "Apology + contribution"],
+            ["Hold your turn", "'Let me just finish...', 'I was about to say...'", "Firm yet polite"],
+            ["Yield the turn", "'What do you think?', 'How do you see it?'", "Inclusive"],
+            ["Return to topic", "'Going back to what you said...', 'As I was saying...'", "Organising"],
+            ["Change topic", "'That reminds me...', 'Speaking of which...'", "Natural and fluent"]
           ]}
         />
 
         <Tip type="warning">
-          <strong>Cuidado cultural:</strong> Las normas de interrupción varían entre culturas. 
-          En contextos formales angloparlantes, espera pausas naturales antes de hablar.
+          <strong>Cultural note:</strong> Norms for interrupting vary across cultures. 
+          In formal English-speaking settings, wait for natural pauses before speaking.
         </Tip>
       </TheorySection>
 
-      <TheorySection title="Expresión de Opiniones Matizadas" icon="🎨">
+      <TheorySection title="Expressing Nuanced Opinions" icon="🎨">
         <p style={{ fontSize: '1rem', lineHeight: 1.6, color: '#4a5568', marginBottom: '1rem' }}>
-          Las opiniones sofisticadas no son blanco o negro. Aprende a expresar matices y grados de certeza.
+          Sophisticated opinions are rarely black-and-white. Learn to express nuances and degrees of certainty.
         </p>
 
         <GrammarTable
-          caption="Grados de Certeza y Opinión"
-          headers={["Nivel", "Expresiones", "Ejemplo"]}
+          caption="Degrees of Certainty and Opinion"
+          headers={["Level", "Expressions", "Example"]}
           rows={[
-            ["Certeza total", "I'm absolutely certain, Without a doubt", "'I'm absolutely certain this is the right approach'"],
-            ["Muy probable", "I'm pretty sure, Most likely, I'd say", "'I'm pretty sure that's not going to work'"],
+            ["Full certainty", "I'm absolutely certain, Without a doubt", "'I'm absolutely certain this is the right approach'"],
+            ["Very likely", "I'm pretty sure, Most likely, I'd say", "'I'm pretty sure that's not going to work'"],
             ["Probable", "I think, I believe, It seems to me", "'It seems to me that we need more data'"],
-            ["Posible", "I suppose, Maybe, It's possible that", "'I suppose we could try that approach'"],
-            ["Dudoso", "I doubt, I'm not sure, It's unlikely", "'I doubt that's the real reason'"],
+            ["Possible", "I suppose, Maybe, It's possible that", "'I suppose we could try that approach'"],
+            ["Doubtful", "I doubt, I'm not sure, It's unlikely", "'I doubt that's the real reason'"],
             ["Neutral", "It depends, That's debatable, I see both sides", "'It depends on how you look at it'"]
           ]}
         />
 
         <Example 
-          spanish="Opinión matizada sobre trabajo remoto:"
-          english="'While I can see the benefits of remote work, I'm not entirely convinced it works for everyone. It seems to me that it depends largely on the individual's personality and the nature of their job. Having said that, I do think most companies could be more flexible than they currently are.'"
-          translation="Reconoce beneficios → expresa dudas → añade matices → concluye con posición equilibrada"
-        />
+            english="'While I can see the benefits of remote work, I'm not entirely convinced it works for everyone. It seems to me that it depends largely on the individual's personality and the nature of their job. Having said that, I do think most companies could be more flexible than they currently are.'"
+          />
       </TheorySection>
 
-      <TheorySection title="Técnicas de Autocorrección" icon="🔧">
+      <TheorySection title="Self-Correction Techniques" icon="🔧">
         <p style={{ fontSize: '1rem', lineHeight: 1.6, color: '#4a5568', marginBottom: '1rem' }}>
-          Saber corregirte de manera natural demuestra autoconciencia lingüística y mantiene la fluidez.
+          Correcting yourself in a natural way shows linguistic awareness and keeps fluency.
         </p>
 
         <Rule 
-          title="Estrategias de autocorrección natural"
-          description="Corrige errores sin interrumpir el flujo:"
+          title="Natural self-correction strategies"
+          description="Correct errors without breaking the flow:"
           examples={[
-            "Reformulación inmediata: 'I mean...' + versión corregida",
-            "Aclaración: 'What I meant to say was...'",
-            "Aproximación: 'Or rather...' + versión más precisa",
-            "Continuación: Ignora errores menores y continúa",
-            "Paráfrasis: 'In other words...' + explicación alternativa"
+            "Immediate rephrase: 'I mean...' + corrected version",
+            "Clarify: 'What I meant to say was...'",
+            "Refine: 'Or rather...' + a more precise version",
+            "Continue: ignore minor slips and carry on",
+            "Paraphrase: 'In other words...' + alternative explanation"
           ]}
         />
 
         <div style={{ display: 'grid', gap: '1rem' }}>
           <Example 
-            spanish="Error de vocabulario:"
             english="'The weather was very... I mean, extremely hot yesterday.'"
-            translation="Autocorrección natural con 'I mean'"
           />
           
           <Example 
-            spanish="Error gramatical:"
             english="'I have been there yesterday... well, I went there yesterday.'"
-            translation="Reformulación completa con 'well'"
           />
         </div>
 
         <Tip type="success">
-          <strong>Práctica:</strong> No te detengas por errores menores. Los hablantes nativos también 
-          cometen errores y se autocorrigen naturalmente.
+          <strong>Practice:</strong> Do not stop for minor errors. Native speakers also 
+          make mistakes and self-correct naturally.
         </Tip>
       </TheorySection>
 
-      <TheorySection title="Errores Comunes en Speaking Avanzado" icon="⚠️">
+      <TheorySection title="Common Mistakes in Advanced Speaking" icon="⚠️">
         <div style={{ display: 'grid', gap: '1rem' }}>
           <Tip type="error">
-            <strong>Error:</strong> Usar demasiados fillers formales en conversación casual<br/>
-            <strong>Solución:</strong> Adapta el registro: 'Well' en lugar de 'Furthermore' en contexto informal
+            <strong>Mistake:</strong> Using too many formal fillers in casual conversation<br/>
+            <strong>Solution:</strong> Adapt register: use 'Well' instead of 'Furthermore' in informal settings
           </Tip>
 
           <Tip type="error">
-            <strong>Error:</strong> Pausas largas sin comunicar que estás pensando<br/>
-            <strong>Solución:</strong> Usa 'Let me think about that' o 'That's a good question'
+            <strong>Mistake:</strong> Long silences without signalling that you are thinking<br/>
+            <strong>Solution:</strong> Use 'Let me think about that' or 'That's a good question'
           </Tip>
 
           <Tip type="error">
-            <strong>Error:</strong> Opiniones demasiado absolutas sin matices<br/>
-            <strong>Solución:</strong> Usa 'I tend to think' o 'In my experience' para suavizar
+            <strong>Mistake:</strong> Overly absolute opinions without nuance<br/>
+            <strong>Solution:</strong> Use 'I tend to think' or 'In my experience' to soften
           </Tip>
 
           <Tip type="error">
-            <strong>Error:</strong> No estructurar respuestas largas<br/>
-            <strong>Solución:</strong> Usa 'Firstly... Secondly... Finally...' para organizar ideas
+            <strong>Mistake:</strong> Failing to structure long answers<br/>
+            <strong>Solution:</strong> Use 'Firstly... Secondly... Lastly...' to organise ideas
           </Tip>
         </div>
       </TheorySection>
@@ -270,7 +262,7 @@ const AdvancedSpeakingPage = () => {
         "I mean, like..."
       ]}
       correctAnswer={2}
-      explanation="'Let me think about that' es profesional y muestra reflexión, apropiado para entrevistas."
+      explanation="'Let me think about that' sounds professional and shows reflection; it fits interviews well."
     />,
 
     <MultipleChoiceExercise
@@ -283,7 +275,7 @@ const AdvancedSpeakingPage = () => {
         "Everyone knows that..."
       ]}
       correctAnswer={1}
-      explanation="'It seems to me that...' expresa opinión personal sin ser demasiado absoluto, perfecto para temas controversiales."
+      explanation="'It seems to me that...' states a personal view without sounding too absolute, which suits controversial topics."
     />,
 
     <TrueFalseExercise
@@ -292,22 +284,22 @@ const AdvancedSpeakingPage = () => {
         {
           text: "Using fillers like 'um' and 'er' should always be avoided in formal speaking.",
           isTrue: false,
-          explanation: "Falso. Algunos fillers son naturales incluso en contextos formales, pero deben usarse moderadamente."
+          explanation: "False. Some fillers are natural even in formal settings, but use them sparingly."
         },
         {
           text: "Self-correction during speaking shows linguistic awareness and is generally positive.",
           isTrue: true,
-          explanation: "Correcto. La autocorrección natural demuestra conciencia lingüística y es vista positivamente."
+          explanation: "Correct. Natural self-correction shows linguistic awareness and is viewed positively."
         },
         {
           text: "In formal presentations, you should avoid using personal examples.",
           isTrue: false,
-          explanation: "Falso. Los ejemplos personales pueden ser efectivos incluso en contextos formales si son relevantes."
+          explanation: "False. Personal examples can work in formal settings when they are relevant."
         },
         {
           text: "Adapting your register to match your audience shows advanced communication skills.",
           isTrue: true,
-          explanation: "Correcto. La adaptación al registro demuestra competencia comunicativa avanzada."
+          explanation: "Correct. Adapting register shows advanced communicative competence."
         }
       ]}
     />,
@@ -322,7 +314,7 @@ const AdvancedSpeakingPage = () => {
         "Change the topic immediately"
       ]}
       correctAnswer={2}
-      explanation="Esta respuesta gana tiempo de manera profesional y muestra que estás considerando la pregunta seriamente."
+      explanation="That response buys time professionally and shows you are taking the question seriously."
     />,
 
     <MultipleChoiceExercise
@@ -335,7 +327,7 @@ const AdvancedSpeakingPage = () => {
         "I'm not done yet!"
       ]}
       correctAnswer={1}
-      explanation="'Let me just finish this point...' es educado pero firme, manteniendo tu turno sin ser agresivo."
+      explanation="'Let me just finish this point...' is polite but firm, holding your turn without sounding aggressive."
     />,
 
     <MultipleChoiceExercise
@@ -348,7 +340,7 @@ const AdvancedSpeakingPage = () => {
         "Can you repeat the question?"
       ]}
       correctAnswer={1}
-      explanation="Esta frase gana tiempo de manera profesional mientras muestras que estás considerando la pregunta."
+      explanation="That phrase buys time professionally while showing you are considering the question."
     />,
 
     <MultipleChoiceExercise
@@ -361,7 +353,7 @@ const AdvancedSpeakingPage = () => {
         "I'm always wrong"
       ]}
       correctAnswer={1}
-      explanation="'What I meant to say was...' es una forma natural y profesional de autocorregirse."
+      explanation="'What I meant to say was...' is a natural, professional way to self-correct."
     />,
 
     <MultipleChoiceExercise
@@ -374,7 +366,7 @@ const AdvancedSpeakingPage = () => {
         "I mean, like..."
       ]}
       correctAnswer={2}
-      explanation="'Now, let's consider...' es formal y apropiado para contextos académicos."
+      explanation="'Now, let's consider...' is formal and appropriate for academic contexts."
     />,
 
     <MultipleChoiceExercise
@@ -387,7 +379,7 @@ const AdvancedSpeakingPage = () => {
         "That's impossible to know"
       ]}
       correctAnswer={1}
-      explanation="'I'm not sure, but I believe...' muestra honestidad mientras ofreces tu mejor estimación."
+      explanation="'I'm not sure, but I believe...' is honest while still offering your best estimate."
     />,
 
     <MultipleChoiceExercise
@@ -400,22 +392,21 @@ const AdvancedSpeakingPage = () => {
         "Let's talk about something else"
       ]}
       correctAnswer={1}
-      explanation="'That reminds me of...' es una transición natural que conecta temas de manera fluida."
+      explanation="'That reminds me of...' is a natural transition that links topics smoothly."
     />
   ];
 
   return (
     <TheoryLayout
       title="Advanced Speaking Strategies"
-      description="Desarrolla estrategias sofisticadas de speaking: fluidez, estructuración del discurso, adaptación al registro y manejo natural de conversaciones."
+      description="Build sophisticated speaking strategies: fluency, discourse structuring, register adaptation and natural conversation management."
       level="B2-C1-C2"
       theoryContent={theoryContent}
       exercises={exercises}
-      prerequisites={["Speaking básico", "Conectores", "Vocabulario por registro"]}
+      prerequisites={["Basic speaking", "Connectors", "Vocabulary by register"]}
       estimatedTime="60 min"
     />
   );
 };
 
 export default AdvancedSpeakingPage;
-

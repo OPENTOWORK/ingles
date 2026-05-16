@@ -10,376 +10,340 @@ import {
   QuickReference 
 } from '@/components/theory/TheoryContent';
 import { 
-  MultipleChoiceExercise, 
-  FillBlanksExercise, 
-  TrueFalseExercise 
+  MultipleChoiceExercise,
+  FillBlanksExercise,
+  TrueFalseExercise
 } from '@/components/theory/ExerciseComponents';
 
 const FunctionalAndThematicVocabularyPage = () => {
   const theoryContent = (
     <div>
-      <TheorySection title="¿Qué es Functional and Thematic Vocabulary?" icon="🗣️">
+      <TheorySection title="What Is Functional and Thematic Vocabulary?" icon="🗣️">
         <p style={{ fontSize: '1.1rem', lineHeight: 1.6, color: '#4a5568', marginBottom: '1rem' }}>
-          El <strong>functional and thematic vocabulary</strong> (vocabulario funcional y temático) se refiere a palabras 
-          y expresiones organizadas por función comunicativa y temas específicos. Es esencial para hablar de manera efectiva en diferentes situaciones.
+          <strong>Functional and thematic vocabulary</strong> means words and expressions organized by communicative function 
+          and specific topics. It is essential for speaking effectively in different situations.
         </p>
         
         <QuickReference items={[
-          "Vocabulario organizado por función comunicativa",
-          "Palabras agrupadas por temas específicos",
-          "Expresiones para diferentes situaciones",
-          "Vocabulario contextual y situacional",
-          "Herramientas para comunicación efectiva"
+          "Vocabulary organized by communicative function",
+          "Words grouped by specific topics",
+          "Expressions for different situations",
+          "Contextual and situational vocabulary",
+          "Tools for effective communication"
         ]} />
       </TheorySection>
 
-      <TheorySection title="Vocabulario Funcional" icon="⚙️">
+      <TheorySection title="Functional Vocabulary" icon="⚙️">
         <p style={{ fontSize: '1rem', lineHeight: 1.6, color: '#4a5568', marginBottom: '1rem' }}>
-          El vocabulario funcional se organiza según la función comunicativa que cumple en la conversación.
+          Functional vocabulary is organized according to the communicative role it plays in conversation.
         </p>
 
         <GrammarTable
-          caption="Categorías de Vocabulario Funcional"
-          headers={["Función", "Propósito", "Ejemplos", "Cuándo Usar"]}
+          caption="Functional Vocabulary Categories"
+          headers={["Function", "Purpose", "Examples", "When to Use"]}
           rows={[
-            ["Saludar", "Iniciar conversación", "Hello, Hi, Good morning", "Al encontrarse con alguien"],
-            ["Despedirse", "Terminar conversación", "Goodbye, See you later, Take care", "Al finalizar encuentro"],
-            ["Pedir Información", "Obtener datos", "Could you tell me...?, What time...?", "Cuando necesitas información"],
-            ["Dar Información", "Proporcionar datos", "It's..., The time is..., According to...", "Cuando respondes preguntas"],
-            ["Expresar Opinión", "Compartir puntos de vista", "I think..., In my opinion..., I believe...", "Al dar tu perspectiva"],
-            ["Acordar/Discrepar", "Mostrar acuerdo o desacuerdo", "I agree..., I disagree..., That's true", "Al responder opiniones"],
-            ["Sugerir", "Proponer ideas", "How about...?, Why don't we...?, I suggest...", "Al proponer acciones"],
-            ["Agradecer", "Mostrar gratitud", "Thank you, Thanks, I appreciate...", "Cuando recibes ayuda"]
+            ["Greeting", "Start a conversation", "Hello, Hi, Good morning", "When you meet someone"],
+            ["Saying goodbye", "End a conversation", "Goodbye, See you later, Take care", "When you end an encounter"],
+            ["Asking for information", "Get information", "Could you tell me...?, What time...?", "When you need information"],
+            ["Giving information", "Provide information", "It's..., The time is..., According to...", "When you answer questions"],
+            ["Expressing an opinion", "Share viewpoints", "I think..., In my opinion..., I believe...", "When you give your perspective"],
+            ["Agreeing / disagreeing", "Show agreement or disagreement", "I agree..., I disagree..., That's true", "When you respond to opinions"],
+            ["Suggesting", "Propose ideas", "How about...?, Why don't we...?, I suggest...", "When you propose actions"],
+            ["Thanking", "Show gratitude", "Thank you, Thanks, I appreciate...", "When you receive help"]
           ]}
         />
 
         <div style={{ display: 'grid', gap: '1rem' }}>
           <Example 
-            spanish="Saludar: 'Hello, how are you?'"
             english="Greeting: 'Hello, how are you?'"
-            translation="Saludar: 'Hola, ¿cómo estás?'"
           />
           <Example 
-            spanish="Pedir información: 'Could you tell me the time?'"
             english="Asking for information: 'Could you tell me the time?'"
-            translation="Pedir información: '¿Podrías decirme la hora?'"
           />
           <Example 
-            spanish="Expresar opinión: 'I think it's a good idea'"
             english="Expressing opinion: 'I think it's a good idea'"
-            translation="Expresar opinión: 'Creo que es una buena idea'"
           />
         </div>
 
         <Rule 
-          title="Uso del Vocabulario Funcional"
-          description="Para usar efectivamente:"
+          title="Using Functional Vocabulary"
+          description="To use it effectively:"
           examples={[
-            "Elige expresiones apropiadas para la situación",
-            "Considera el nivel de formalidad",
-            "Adapta según la relación con la persona",
-            "Usa variedad para evitar repetición"
+            "Choose expressions that fit the situation",
+            "Consider the level of formality",
+            "Adapt to your relationship with the other person",
+            "Use variety to avoid repetition"
           ]}
         />
 
         <Tip type="info">
-          <strong>Consejo:</strong> El vocabulario funcional te permite navegar diferentes situaciones comunicativas con confianza.
+          <strong>Tip:</strong> Functional vocabulary helps you move through different communicative situations with confidence.
         </Tip>
       </TheorySection>
 
-      <TheorySection title="Vocabulario Temático" icon="📚">
+      <TheorySection title="Thematic Vocabulary" icon="📚">
         <p style={{ fontSize: '1rem', lineHeight: 1.6, color: '#4a5568', marginBottom: '1rem' }}>
-          El vocabulario temático se organiza por temas específicos que aparecen frecuentemente en conversaciones.
+          Thematic vocabulary is organized by specific topics that often come up in conversation.
         </p>
 
         <GrammarTable
-          caption="Temas Comunes de Vocabulario"
-          headers={["Tema", "Vocabulario Clave", "Situaciones", "Ejemplo"]}
+          caption="Common Thematic Vocabulary Topics"
+          headers={["Topic", "Key Vocabulary", "Situations", "Example"]}
           rows={[
-            ["Trabajo", "job, career, salary, meeting", "Entrevistas, reuniones", "I have a meeting at 3 PM"],
-            ["Educación", "school, university, exam, study", "Conversaciones académicas", "The exam is next week"],
-            ["Viajes", "trip, vacation, hotel, flight", "Planificación de viajes", "My flight leaves at 6 AM"],
-            ["Salud", "doctor, hospital, medicine, symptoms", "Consultas médicas", "I have a headache"],
-            ["Comida", "restaurant, menu, delicious, hungry", "Cenas, restaurantes", "This food is delicious"],
-            ["Tecnología", "computer, internet, software, app", "Discusiones técnicas", "I use this app daily"],
-            ["Deportes", "football, basketball, team, score", "Conversaciones deportivas", "The team won the game"],
-            ["Música", "concert, band, song, instrument", "Discusiones musicales", "I love this song"]
+            ["Work", "job, career, salary, meeting", "Interviews, meetings", "I have a meeting at 3 PM"],
+            ["Education", "school, university, exam, study", "Academic conversations", "The exam is next week"],
+            ["Travel", "trip, vacation, hotel, flight", "Trip planning", "My flight leaves at 6 AM"],
+            ["Health", "doctor, hospital, medicine, symptoms", "Medical appointments", "I have a headache"],
+            ["Food", "restaurant, menu, delicious, hungry", "Dining out, restaurants", "This food is delicious"],
+            ["Technology", "computer, internet, software, app", "Technical discussions", "I use this app daily"],
+            ["Sports", "football, basketball, team, score", "Sports conversations", "The team won the game"],
+            ["Music", "concert, band, song, instrument", "Music discussions", "I love this song"]
           ]}
         />
 
         <div style={{ display: 'grid', gap: '1rem' }}>
           <Example 
-            spanish="Trabajo: 'Tengo una reunión a las 3 PM'"
             english="Work: 'I have a meeting at 3 PM'"
-            translation="Trabajo: 'Tengo una reunión a las 3 PM'"
           />
           <Example 
-            spanish="Viajes: 'Mi vuelo sale a las 6 AM'"
             english="Travel: 'My flight leaves at 6 AM'"
-            translation="Viajes: 'Mi vuelo sale a las 6 AM'"
           />
           <Example 
-            spanish="Tecnología: 'Uso esta aplicación diariamente'"
             english="Technology: 'I use this app daily'"
-            translation="Tecnología: 'Uso esta aplicación diariamente'"
           />
         </div>
 
         <Tip type="success">
-          <strong>Consejo:</strong> Familiarízate con el vocabulario de temas que te interesan o que aparecen frecuentemente en tu vida.
+          <strong>Tip:</strong> Get comfortable with vocabulary for topics you care about or that come up often in your life.
         </Tip>
       </TheorySection>
 
-      <TheorySection title="Expresiones por Situación" icon="🏢">
+      <TheorySection title="Expressions by Situation" icon="🏢">
         <p style={{ fontSize: '1rem', lineHeight: 1.6, color: '#4a5568', marginBottom: '1rem' }}>
-          Diferentes situaciones requieren vocabulario y expresiones específicas.
+          Different situations call for specific vocabulary and expressions.
         </p>
 
         <GrammarTable
-          caption="Vocabulario por Situación"
-          headers={["Situación", "Vocabulario Específico", "Expresiones Clave", "Ejemplo"]}
+          caption="Vocabulary by Situation"
+          headers={["Situation", "Specific Vocabulary", "Key Expressions", "Example"]}
           rows={[
-            ["Entrevista de Trabajo", "experience, skills, qualifications", "Tell me about yourself", "I have 5 years of experience"],
-            ["Consulta Médica", "symptoms, pain, medication", "How are you feeling?", "I have a headache"],
-            ["Reservación en Restaurante", "table, reservation, menu", "Table for two, please", "We have a reservation"],
-            ["Compras en Tienda", "price, size, color, discount", "How much does it cost?", "This shirt costs $25"],
-            ["Información en Aeropuerto", "flight, gate, departure, arrival", "Where is gate 15?", "Gate 15 is on the left"],
-            ["Conversación en Fiesta", "party, fun, music, dance", "Are you having fun?", "This party is great"],
-            ["Reunión de Trabajo", "agenda, discussion, decision", "Let's discuss this", "I agree with your proposal"],
-            ["Conversación con Amigos", "casual, relaxed, informal", "What's up?", "Nothing much, you?"]                                                  
+            ["Job interview", "experience, skills, qualifications", "Tell me about yourself", "I have 5 years of experience"],
+            ["Doctor's appointment", "symptoms, pain, medication", "How are you feeling?", "I have a headache"],
+            ["Restaurant reservation", "table, reservation, menu", "Table for two, please", "We have a reservation"],
+            ["Shopping in a store", "price, size, color, discount", "How much does it cost?", "This shirt costs $25"],
+            ["At the airport", "flight, gate, departure, arrival", "Where is gate 15?", "Gate 15 is on the left"],
+            ["At a party", "party, fun, music, dance", "Are you having fun?", "This party is great"],
+            ["Work meeting", "agenda, discussion, decision", "Let's discuss this", "I agree with your proposal"],
+            ["Chatting with friends", "casual, relaxed, informal", "What's up?", "Nothing much, you?"]                                                  
           ]}
         />
 
         <div style={{ display: 'grid', gap: '1rem' }}>
           <Example 
-            spanish="Entrevista: 'Tengo 5 años de experiencia'"
             english="Interview: 'I have 5 years of experience'"
-            translation="Entrevista: 'Tengo 5 años de experiencia'"
           />
           <Example 
-            spanish="Consulta médica: 'Tengo dolor de cabeza'"
             english="Medical consultation: 'I have a headache'"
-            translation="Consulta médica: 'Tengo dolor de cabeza'"
           />
           <Example 
-            spanish="Restaurante: 'Mesa para dos, por favor'"
             english="Restaurant: 'Table for two, please'"
-            translation="Restaurante: 'Mesa para dos, por favor'"
           />
         </div>
 
         <Rule 
-          title="Adaptación a Situaciones"
-          description="Para adaptarte a diferentes situaciones:"
+          title="Adapting to Situations"
+          description="To adapt to different situations:"
           examples={[
-            "Identifica el contexto y nivel de formalidad",
-            "Usa vocabulario apropiado para la situación",
-            "Considera la relación con la persona",
-            "Adapta tu tono y estilo de comunicación"
+            "Identify the context and level of formality",
+            "Use vocabulary appropriate to the situation",
+            "Consider your relationship with the other person",
+            "Adapt your tone and communication style"
           ]}
         />
 
         <Tip type="warning">
-          <strong>¡Cuidado!</strong> Usar vocabulario inapropiado para la situación puede crear malentendidos.
+          <strong>Watch out!</strong> Using vocabulary that does not fit the situation can cause misunderstandings.
         </Tip>
       </TheorySection>
 
-      <TheorySection title="Niveles de Formalidad" icon="🎭">
+      <TheorySection title="Levels of Formality" icon="🎭">
         <p style={{ fontSize: '1rem', lineHeight: 1.6, color: '#4a5568', marginBottom: '1rem' }}>
-          El nivel de formalidad determina qué vocabulario y expresiones usar en diferentes contextos.
+          Formality level determines which vocabulary and expressions to use in different contexts.
         </p>
 
         <GrammarTable
-          caption="Niveles de Formalidad"
-          headers={["Nivel", "Contexto", "Vocabulario", "Ejemplo"]}
+          caption="Levels of Formality"
+          headers={["Level", "Context", "Vocabulary", "Example"]}
           rows={[
-            ["Muy Formal", "Presentaciones, discursos", "distinguished, esteemed", "Distinguished guests, thank you"],
-            ["Formal", "Trabajo, negocios", "please, thank you, sir/madam", "Please send me the report"],
-            ["Neutral", "Conocidos, colegas", "standard vocabulary", "Could you help me with this?"],
-            ["Informal", "Amigos, familia", "casual expressions", "Can you help me with this?"],
-            ["Muy Informal", "Amigos cercanos", "slang, contractions", "Hey, can ya help me with this?"],
-            ["Coloquial", "Conversación casual", "everyday expressions", "What's up? How's it going?"]
+            ["Very formal", "Presentations, speeches", "distinguished, esteemed", "Distinguished guests, thank you"],
+            ["Formal", "Work, business", "please, thank you, sir/madam", "Please send me the report"],
+            ["Neutral", "Acquaintances, colleagues", "standard vocabulary", "Could you help me with this?"],
+            ["Informal", "Friends, family", "casual expressions", "Can you help me with this?"],
+            ["Very informal", "Close friends", "slang, contractions", "Hey, can ya help me with this?"],
+            ["Colloquial", "Casual conversation", "everyday expressions", "What's up? How's it going?"]
           ]}
         />
 
         <div style={{ display: 'grid', gap: '1rem' }}>
           <Example 
-            spanish="Muy formal: 'Distinguidos invitados, gracias'"
             english="Very formal: 'Distinguished guests, thank you'"
-            translation="Muy formal: 'Distinguidos invitados, gracias'"
           />
           <Example 
-            spanish="Formal: 'Por favor, envíeme el informe'"
             english="Formal: 'Please send me the report'"
-            translation="Formal: 'Por favor, envíeme el informe'"
           />
           <Example 
-            spanish="Informal: '¿Puedes ayudarme con esto?'"
             english="Informal: 'Can you help me with this?'"
-            translation="Informal: '¿Puedes ayudarme con esto?'"
           />
         </div>
 
         <Tip type="info">
-          <strong>Consejo:</strong> Observa cómo hablan otros en diferentes contextos para aprender los niveles apropiados.
+          <strong>Tip:</strong> Notice how others speak in different settings to learn appropriate levels of formality.
         </Tip>
       </TheorySection>
 
-      <TheorySection title="Expresiones Coloquiales" icon="💬">
+      <TheorySection title="Colloquial Expressions" icon="💬">
         <p style={{ fontSize: '1rem', lineHeight: 1.6, color: '#4a5568', marginBottom: '1rem' }}>
-          Las expresiones coloquiales son parte importante del vocabulario funcional para conversaciones naturales.
+          Colloquial expressions are an important part of functional vocabulary for natural conversation.
         </p>
 
         <GrammarTable
-          caption="Expresiones Coloquiales Comunes"
-          headers={["Expresión", "Significado", "Uso", "Ejemplo"]}
+          caption="Common Colloquial Expressions"
+          headers={["Expression", "Meaning", "Use", "Example"]}
           rows={[
-            ["What's up?", "¿Qué tal?", "Saludo informal", "Hey, what's up?"],
-            ["How's it going?", "¿Cómo va todo?", "Pregunta sobre estado", "How's it going with your job?"],
-            ["That's cool", "Eso está genial", "Aprobación casual", "That's cool, I like it"],
-            ["No way!", "¡No puede ser!", "Sorpresa", "No way! Really?"],
-            ["I'm in", "Estoy dentro", "Aceptar propuesta", "Count me in, I'm in"],
-            ["That sucks", "Eso apesta", "Desaprobación", "That sucks, I'm sorry"],
-            ["I'm down", "Estoy dispuesto", "Aceptar idea", "I'm down for pizza"],
-            ["That rocks", "Eso está genial", "Aprobación entusiasta", "That rocks, let's do it"]
+            ["What's up?", "How are things? / What's new?", "Informal greeting", "Hey, what's up?"],
+            ["How's it going?", "How is everything going?", "Asking how someone is", "How's it going with your job?"],
+            ["That's cool", "That's great / I like that", "Casual approval", "That's cool, I like it"],
+            ["No way!", "I can't believe it!", "Surprise", "No way! Really?"],
+            ["I'm in", "I'm on board / Count me in", "Accepting a proposal", "Count me in, I'm in"],
+            ["That sucks", "That's bad / That's a shame", "Disapproval", "That sucks, I'm sorry"],
+            ["I'm down", "I'm willing / I'm up for it", "Accepting an idea", "I'm down for pizza"],
+            ["That rocks", "That's awesome", "Enthusiastic approval", "That rocks, let's do it"]
           ]}
         />
 
         <div style={{ display: 'grid', gap: '1rem' }}>
           <Example 
-            spanish="Saludo: 'Oye, ¿qué tal?'"
             english="Greeting: 'Hey, what's up?'"
-            translation="Saludo: 'Oye, ¿qué tal?'"
           />
           <Example 
-            spanish="Aprobación: 'Eso está genial, me gusta'"
             english="Approval: 'That's cool, I like it'"
-            translation="Aprobación: 'Eso está genial, me gusta'"
           />
           <Example 
-            spanish="Aceptar: 'Cuenta conmigo, estoy dentro'"
             english="Accepting: 'Count me in, I'm in'"
-            translation="Aceptar: 'Cuenta conmigo, estoy dentro'"
           />
         </div>
 
         <Rule 
-          title="Uso de Expresiones Coloquiales"
-          description="Para usar efectivamente:"
+          title="Using Colloquial Expressions"
+          description="To use them effectively:"
           examples={[
-            "Úsalas solo en contextos apropiados",
-            "Considera la relación con la persona",
-            "No las uses en situaciones formales",
-            "Aprende el contexto cultural apropiado"
+            "Use them only in appropriate contexts",
+            "Consider your relationship with the other person",
+            "Do not use them in formal situations",
+            "Learn the appropriate cultural context"
           ]}
         />
 
         <Tip type="warning">
-          <strong>¡Cuidado!</strong> Las expresiones coloquiales pueden no ser apropiadas en contextos formales o profesionales.
+          <strong>Watch out!</strong> Colloquial expressions may not be appropriate in formal or professional contexts.
         </Tip>
       </TheorySection>
 
-      <TheorySection title="Estrategias de Aprendizaje" icon="🎯">
+      <TheorySection title="Learning Strategies" icon="🎯">
         <p style={{ fontSize: '1rem', lineHeight: 1.6, color: '#4a5568', marginBottom: '1rem' }}>
-          Existen estrategias específicas para aprender y usar vocabulario funcional y temático efectivamente.
+          There are specific strategies for learning and using functional and thematic vocabulary effectively.
         </p>
 
         <GrammarTable
-          caption="Estrategias de Aprendizaje"
-          headers={["Estrategia", "Descripción", "Cuándo Usar", "Beneficio"]}
+          caption="Learning Strategies"
+          headers={["Strategy", "Description", "When to Use", "Benefit"]}
           rows={[
-            ["Aprendizaje por Contexto", "Aprender vocabulario en contexto", "Estudio diario", "Mejor retención"],
-            ["Práctica Situacional", "Practicar en situaciones específicas", "Preparación para situaciones", "Confianza en contexto real"],
-            ["Agrupación Temática", "Agrupar vocabulario por temas", "Estudio organizado", "Mejor organización mental"],
-            ["Uso Activo", "Usar vocabulario en conversaciones", "Práctica regular", "Fluidez natural"],
-            ["Variación de Registro", "Practicar diferentes niveles", "Adaptación a contextos", "Versatilidad comunicativa"],
-            ["Retroalimentación", "Recibir feedback sobre uso", "Mejora continua", "Corrección y mejora"]
+            ["Context-based learning", "Learn vocabulary in context", "Daily study", "Better retention"],
+            ["Situational practice", "Practice in specific situations", "Preparing for real situations", "Confidence in real contexts"],
+            ["Thematic grouping", "Group vocabulary by topic", "Organized study", "Clearer mental organization"],
+            ["Active use", "Use vocabulary in conversation", "Regular practice", "Natural fluency"],
+            ["Register variation", "Practice different formality levels", "Adapting to context", "Communicative flexibility"],
+            ["Feedback loop", "Get feedback on how you use words", "Ongoing improvement", "Correction and progress"]
           ]}
         />
 
         <div style={{ display: 'grid', gap: '1rem' }}>
           <Example 
-            spanish="Aprendizaje por contexto: 'Aprender vocabulario en contexto'"
-            english="Contextual learning: 'Learn vocabulary in context'"
-            translation="Aprendizaje por contexto: 'Aprender vocabulario en contexto'"
+            english="Context-based learning: 'Learn vocabulary in context'"
           />
           <Example 
-            spanish="Práctica situacional: 'Practicar en situaciones específicas'"
             english="Situational practice: 'Practice in specific situations'"
-            translation="Práctica situacional: 'Practicar en situaciones específicas'"
           />
           <Example 
-            spanish="Uso activo: 'Usar vocabulario en conversaciones'"
             english="Active use: 'Use vocabulary in conversations'"
-            translation="Uso activo: 'Usar vocabulario en conversaciones'"
           />
         </div>
 
         <Tip type="success">
-          <strong>Consejo:</strong> La práctica activa en contextos reales es la mejor manera de desarrollar vocabulario funcional.
+          <strong>Tip:</strong> Active practice in real contexts is the best way to build functional vocabulary.
         </Tip>
       </TheorySection>
 
-      <TheorySection title="Errores Comunes" icon="⚠️">
+      <TheorySection title="Common Mistakes" icon="⚠️">
         <div style={{ display: 'grid', gap: '1rem' }}>
           <Tip type="error">
-            <strong>Error:</strong> Usar vocabulario formal en contextos informales ❌<br/>
-            <strong>Correcto:</strong> Adaptar vocabulario al contexto ✅<br/>
-            <em>El contexto determina el nivel apropiado de formalidad</em>
+            <strong>Error:</strong> Using formal vocabulary in informal contexts ❌<br/>
+            <strong>Correct:</strong> Match vocabulary to the context ✅<br/>
+            <em>Context determines the appropriate level of formality</em>
           </Tip>
 
           <Tip type="error">
-            <strong>Error:</strong> Usar expresiones coloquiales en contextos formales ❌<br/>
-            <strong>Correcto:</strong> Usar expresiones apropiadas para la situación ✅<br/>
-            <em>Las expresiones coloquiales no son apropiadas en contextos formales</em>
+            <strong>Error:</strong> Using colloquial expressions in formal contexts ❌<br/>
+            <strong>Correct:</strong> Use expressions that fit the situation ✅<br/>
+            <em>Colloquial expressions are not appropriate in formal settings</em>
           </Tip>
 
           <Tip type="error">
-            <strong>Error:</strong> No considerar la relación con la persona ❌<br/>
-            <strong>Correcto:</strong> Adaptar vocabulario según la relación ✅<br/>
-            <em>La relación determina el nivel de formalidad apropiado</em>
+            <strong>Error:</strong> Ignoring your relationship with the other person ❌<br/>
+            <strong>Correct:</strong> Adapt vocabulary to the relationship ✅<br/>
+            <em>The relationship helps determine the right level of formality</em>
           </Tip>
 
           <Tip type="error">
-            <strong>Error:</strong> No practicar en contextos reales ❌<br/>
-            <strong>Correcto:</strong> Practicar en situaciones reales ✅<br/>
-            <em>La práctica en contexto real desarrolla fluidez natural</em>
+            <strong>Error:</strong> Not practicing in real contexts ❌<br/>
+            <strong>Correct:</strong> Practice in real-life situations ✅<br/>
+            <em>Practice in context builds natural fluency</em>
           </Tip>
         </div>
       </TheorySection>
 
-      <TheorySection title="Reglas Importantes" icon="⚡">
+      <TheorySection title="Important Rules" icon="⚡">
         <div style={{ display: 'grid', gap: '1rem' }}>
           <Rule 
-            title="1. Contexto determina uso"
-            description="El contexto determina qué vocabulario usar."
+            title="1. Context determines usage"
+            description="Context tells you which vocabulary to use."
             examples={[
-              "Identifica el contexto y nivel de formalidad",
-              "Considera la relación con la persona",
-              "Adapta tu vocabulario apropiadamente",
-              "Observa cómo hablan otros en el contexto"
+              "Identify the context and level of formality",
+              "Consider your relationship with the other person",
+              "Adapt your vocabulary appropriately",
+              "Notice how others speak in that context"
             ]}
           />
 
           <Rule 
-            title="2. Variedad y flexibilidad"
-            description="Desarrolla variedad en tu vocabulario."
+            title="2. Variety and flexibility"
+            description="Develop variety in your vocabulary."
             examples={[
-              "Aprende diferentes formas de expresar la misma idea",
-              "Practica diferentes niveles de formalidad",
-              "Desarrolla vocabulario para diferentes temas",
-              "Usa variedad para evitar repetición"
+              "Learn different ways to express the same idea",
+              "Practice different levels of formality",
+              "Build vocabulary for different topics",
+              "Use variety to avoid repetition"
             ]}
           />
 
           <Rule 
-            title="3. Práctica activa"
-            description="Practica activamente en contextos reales."
+            title="3. Active practice"
+            description="Practice actively in real contexts."
             examples={[
-              "Usa vocabulario en conversaciones reales",
-              "Practica en diferentes situaciones",
-              "Recibe feedback sobre tu uso",
-              "Ajusta según el contexto y retroalimentación"
+              "Use vocabulary in real conversations",
+              "Practice in different situations",
+              "Get feedback on your usage",
+              "Adjust based on context and feedback"
             ]}
           />
         </div>
@@ -390,72 +354,72 @@ const FunctionalAndThematicVocabularyPage = () => {
   const exercises = [
     <MultipleChoiceExercise
       key="1"
-      question="¿Cómo se organiza el vocabulario funcional?"
+      question="How is functional vocabulary organized?"
       options={[
-        "Por temas",
-        "Por función comunicativa",
-        "Por nivel",
-        "Por frecuencia"
+        "By topic",
+        "By communicative function",
+        "By level",
+        "By frequency"
       ]}
       correctAnswer={1}
-      explanation="El vocabulario funcional se organiza por función comunicativa, agrupando palabras según su propósito en la comunicación."
+      explanation="Functional vocabulary is organized by communicative function, grouping words according to their role in communication."
     />,
 
     <MultipleChoiceExercise
       key="2"
-      question="¿Qué determina principalmente qué vocabulario funcional usar?"
+      question="What mainly determines which functional vocabulary to use?"
       options={[
-        "La longitud de la conversación",
-        "El contexto y nivel de formalidad",
-        "La velocidad de habla",
-        "El acento de la persona"
+        "How long the conversation is",
+        "Context and level of formality",
+        "How fast people speak",
+        "The other person's accent"
       ]}
       correctAnswer={1}
-      explanation="El contexto y nivel de formalidad determinan qué vocabulario funcional usar. Diferentes situaciones requieren diferentes niveles de formalidad."
+      explanation="Context and formality determine which functional vocabulary to use. Different situations require different levels of formality."
     />,
 
     <TrueFalseExercise
       key="3"
       statements={[
         {
-          text: "Las expresiones coloquiales son apropiadas en contextos formales.",
+          text: "Colloquial expressions are appropriate in formal contexts.",
           isTrue: false,
-          explanation: "Incorrecto. Las expresiones coloquiales no son apropiadas en contextos formales. Deben usarse solo en situaciones informales."
+          explanation: "Incorrect. Colloquial expressions are not appropriate in formal contexts. Use them only in informal situations."
         },
         {
-          text: "El vocabulario temático se organiza por temas específicos.",
+          text: "Thematic vocabulary is organized by specific topics.",
           isTrue: true,
-          explanation: "Correcto. El vocabulario temático se agrupa por temas como trabajo, educación, viajes, salud, etc."
+          explanation: "Correct. Thematic vocabulary is grouped by topics such as work, education, travel, health, and so on."
         },
         {
-          text: "La práctica activa en contextos reales es importante para desarrollar vocabulario funcional.",
+          text: "Active practice in real contexts is important for building functional vocabulary.",
           isTrue: true,
-          explanation: "Correcto. La práctica activa en contextos reales es la mejor manera de desarrollar fluidez en el uso de vocabulario funcional."
+          explanation: "Correct. Active practice in real contexts is the best way to build fluency with functional vocabulary."
         },
         {
-          text: "Es mejor usar siempre el mismo nivel de formalidad en todas las situaciones.",
+          text: "You should always use the same level of formality in every situation.",
           isTrue: false,
-          explanation: "Incorrecto. Es importante adaptar el nivel de formalidad según el contexto y la relación con la persona."
+          explanation: "Incorrect. You should adapt your level of formality to the context and your relationship with the other person."
         }
       ]}
     />,
 
     <MultipleChoiceExercise
       key="4"
-      question="¿Cuál es la mejor estrategia para aprender vocabulario funcional?"
+      question="What is the best strategy for learning functional vocabulary?"
       options={[
-        "Memorizar listas de palabras",
-        "Practicar en contextos reales",
-        "Solo leer sobre el vocabulario",
-        "Usar siempre el mismo nivel de formalidad"
+        "Memorize long word lists",
+        "Practice in real contexts",
+        "Only read about vocabulary",
+        "Always use the same level of formality"
       ]}
       correctAnswer={1}
-      explanation="Practicar en contextos reales es la mejor estrategia, ya que permite desarrollar fluidez natural y adaptación a diferentes situaciones."
+      explanation="Practicing in real contexts is the best strategy because it builds natural fluency and helps you adapt to different situations."
     />,
 
     <MultipleChoiceExercise
       key="5"
-      question="¿Qué expresión es más apropiada para una conversación informal con amigos?"
+      question="Which expression is most appropriate for an informal conversation with friends?"
       options={[
         "Distinguished guests, thank you",
         "Please send me the report",
@@ -463,7 +427,7 @@ const FunctionalAndThematicVocabularyPage = () => {
         "I respectfully disagree"
       ]}
       correctAnswer={2}
-      explanation="'What's up? How's it going?' es apropiada para conversaciones informales con amigos, mientras que las otras son más formales."
+      explanation="'What's up? How's it going?' fits informal conversations with friends; the other options are much more formal."
     />,
 
     <TrueFalseExercise
@@ -472,17 +436,17 @@ const FunctionalAndThematicVocabularyPage = () => {
         {
           text: "Functional vocabulary focuses on what you can do with language.",
           isTrue: true,
-          explanation: "Correcto. El vocabulario funcional se enfoca en las funciones comunicativas: pedir, sugerir, acordar, etc."
+          explanation: "Correct. Functional vocabulary focuses on communicative functions: asking, suggesting, agreeing, and so on."
         },
         {
           text: "Thematic vocabulary is organized by topics or subjects.",
           isTrue: true,
-          explanation: "Correcto. El vocabulario temático se organiza por temas como salud, trabajo, viajes, etc."
+          explanation: "Correct. Thematic vocabulary is organized by topics such as health, work, travel, and so on."
         },
         {
           text: "You should learn vocabulary in isolation without context.",
           isTrue: false,
-          explanation: "Incorrecto. Es mejor aprender vocabulario en contexto para entender su uso apropiado."
+          explanation: "Incorrect. It is better to learn vocabulary in context so you understand how to use it appropriately."
         }
       ]}
     />,
@@ -497,12 +461,12 @@ const FunctionalAndThematicVocabularyPage = () => {
         "force"
       ]}
       correctAnswer={1}
-      explanation="'Recommend' es apropiado para sugerir. 'Order' y 'demand' son muy directos, 'force' es coercitivo."
+      explanation="'Recommend' is appropriate for suggesting. 'Order' and 'demand' are too forceful; 'force' is coercive."
     />,
 
     <MultipleChoiceExercise
       key="8"
-      question="¿Qué vocabulario temático necesitas para hablar de medio ambiente?"
+      question="Which thematic vocabulary do you need to talk about the environment?"
       options={[
         "Cooking terms",
         "Pollution, recycling, climate change",
@@ -510,7 +474,7 @@ const FunctionalAndThematicVocabularyPage = () => {
         "Fashion vocabulary"
       ]}
       correctAnswer={1}
-      explanation="Para medio ambiente necesitas vocabulario como 'pollution', 'recycling', 'climate change', 'sustainability'."
+      explanation="For the environment you need vocabulary such as 'pollution', 'recycling', 'climate change', and 'sustainability'."
     />,
 
     <TrueFalseExercise
@@ -519,12 +483,12 @@ const FunctionalAndThematicVocabularyPage = () => {
         {
           text: "Functional vocabulary changes depending on the level of formality.",
           isTrue: true,
-          explanation: "Correcto. 'Could you please...' (formal) vs 'Can you...' (informal) para la misma función de pedir."
+          explanation: "Correct. For example, 'Could you please...' (formal) versus 'Can you...' (informal) for the same function of asking."
         },
         {
           text: "Thematic vocabulary is the same in all languages.",
           isTrue: false,
-          explanation: "Incorrecto. Cada idioma tiene su propio vocabulario temático específico y expresiones culturales."
+          explanation: "Incorrect. Each language has its own thematic vocabulary and culturally specific expressions."
         }
       ]}
     />,
@@ -539,14 +503,14 @@ const FunctionalAndThematicVocabularyPage = () => {
         "battle"
       ]}
       correctAnswer={1}
-      explanation="'Disagree' es la forma educada de expresar desacuerdo. Las otras opciones son demasiado agresivas."
+      explanation="'Disagree' is a polite way to express disagreement. The other options sound too aggressive."
     />
   ];
 
   return (
     <TheoryLayout
       title="Functional and Thematic Vocabulary"
-      description="Domina el vocabulario funcional y temático en inglés. Aprende vocabulario organizado por función comunicativa y temas específicos para hablar efectivamente en diferentes situaciones."
+      description="Master functional and thematic vocabulary in English. Learn words organized by communicative function and by topic so you can communicate effectively in different situations."
       level="A2-B1-B2-C1-C2"
       theoryContent={theoryContent}
       exercises={exercises}
@@ -557,4 +521,3 @@ const FunctionalAndThematicVocabularyPage = () => {
 };
 
 export default FunctionalAndThematicVocabularyPage;
-

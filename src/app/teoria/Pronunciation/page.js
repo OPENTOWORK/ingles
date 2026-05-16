@@ -18,142 +18,142 @@ import {
 const PronunciationPage = () => {
   const theoryContent = (
     <div>
-      <TheorySection title="¿Qué es la Pronunciation?" icon="🗣️">
+      <TheorySection title="What Is Pronunciation?" icon="🗣️">
         <p style={{ fontSize: '1.1rem', lineHeight: 1.6, color: '#4a5568', marginBottom: '1rem' }}>
-          La <strong>pronunciation</strong> (pronunciación) es la forma correcta de producir los sonidos del inglés. 
-          Una buena pronunciación es esencial para la comunicación efectiva y la comprensión mutua.
+          <strong>Pronunciation</strong> is the correct way to produce English sounds. 
+          Good pronunciation is essential for effective communication and mutual understanding.
         </p>
         
         <QuickReference items={[
-          "Fonemas: sonidos individuales del inglés",
-          "Acentos: énfasis en sílabas específicas",
-          "Entonación: subida y bajada de la voz",
-          "Ritmo: velocidad y pausas al hablar",
-          "Práctica regular para mejorar"
+          "Phonemes: individual sounds of English",
+          "Stress: emphasis on specific syllables",
+          "Intonation: rise and fall of the voice",
+          "Rhythm: speed and pauses when speaking",
+          "Regular practice to improve"
         ]} />
       </TheorySection>
 
-      <TheorySection title="Fonemas y Sonidos Básicos" icon="🔊">
+      <TheorySection title="Phonemes and Basic Sounds" icon="🔊">
         <p style={{ fontSize: '1rem', lineHeight: 1.6, color: '#4a5568', marginBottom: '1rem' }}>
-          El inglés tiene sonidos que pueden no existir en tu idioma nativo. Es importante aprender a distinguirlos y producirlos correctamente.
+          English has sounds that may not exist in your native language. Learn to distinguish and produce them correctly.
         </p>
 
         <GrammarTable
-          caption="Sonidos Problemáticos Comunes"
-          headers={["Sonido", "Símbolo IPA", "Palabra Ejemplo", "Diferencia"]}
+          caption="Common Problem Sounds"
+          headers={["Sound", "IPA Symbol", "Example Word", "How to Produce It"]}
           rows={[
-            ["/θ/ (th suave)", "θ", "think, thank", "Pon la lengua entre los dientes"],
-            ["/ð/ (th fuerte)", "ð", "this, that", "Vibración en la garganta"],
-            ["/r/", "r", "red, right", "Lengua hacia atrás, no toca el paladar"],
-            ["/l/", "l", "light, like", "Lengua toca el paladar"],
-            ["/v/", "v", "very, voice", "Labio inferior contra los dientes superiores"],
-            ["/w/", "w", "water, work", "Labios redondeados, como una 'u'"]
+            ["/θ/ (voiceless th)", "θ", "think, thank", "Place your tongue between your teeth"],
+            ["/ð/ (voiced th)", "ð", "this, that", "Vibration in the throat"],
+            ["/r/", "r", "red, right", "Tongue curled back, does not touch the palate"],
+            ["/l/", "l", "light, like", "Tongue touches the palate"],
+            ["/v/", "v", "very, voice", "Lower lip against upper teeth"],
+            ["/w/", "w", "water, work", "Rounded lips, like a 'u' sound"]
           ]}
         />
 
         <div style={{ display: 'grid', gap: '1rem' }}>
           <Example 
-            spanish="Think /θɪŋk/ - Piensa"
+            spanish="Think /θɪŋk/ - Think"
             english="Think /θɪŋk/ - Think"
-            translation="Think /θɪŋk/ - Piensa"
+            translation="Think /θɪŋk/ - Think"
           />
           <Example 
-            spanish="This /ðɪs/ - Esto"
+            spanish="This /ðɪs/ - This"
             english="This /ðɪs/ - This"
-            translation="This /ðɪs/ - Esto"
+            translation="This /ðɪs/ - This"
           />
           <Example 
-            spanish="Red /red/ - Rojo"
+            spanish="Red /red/ - Red"
             english="Red /red/ - Red"
-            translation="Red /red/ - Rojo"
+            translation="Red /red/ - Red"
           />
           <Example 
-            spanish="Light /laɪt/ - Luz"
+            spanish="Light /laɪt/ - Light"
             english="Light /laɪt/ - Light"
-            translation="Light /laɪt/ - Luz"
+            translation="Light /laɪt/ - Light"
           />
         </div>
 
         <Rule 
-          title="Consejos para Mejorar los Sonidos"
-          description="Para pronunciar mejor:"
+          title="Tips to Improve Your Sounds"
+          description="To pronounce better:"
           examples={[
-            "Practica frente al espejo para ver la posición de la boca",
-            "Grabate y compara con hablantes nativos",
-            "Practica con palabras mínimas (minimal pairs)",
-            "Usa aplicaciones de pronunciación"
+            "Practice in front of a mirror to see mouth position",
+            "Record yourself and compare with native speakers",
+            "Practice with minimal pairs",
+            "Uis pronouncedtion apps"
           ]}
         />
 
         <Tip type="info">
-          <strong>Consejo:</strong> No te preocupes por la perfección - la claridad es más importante que el acento perfecto.
+          <strong>Tip:</strong> Don't worry about perfection — clarity matters more than a perfect accent.
         </Tip>
       </TheorySection>
 
-      <TheorySection title="Word Stress (Acento en Palabras)" icon="⚡">
+      <TheorySection title="Word Stress" icon="⚡">
         <p style={{ fontSize: '1rem', lineHeight: 1.6, color: '#4a5568', marginBottom: '1rem' }}>
-          El acento en palabras es fundamental en inglés. Una sílaba acentuada incorrectamente puede cambiar completamente el significado.
+          Word stress is fundamental in English. Stressing the wrong syllable can completely change the meaning.
         </p>
 
         <GrammarTable
-          caption="Reglas de Acento en Palabras"
-          headers={["Tipo de Palabra", "Regla", "Ejemplo", "Acento"]}
+          caption="Word Stress Rules"
+          headers={["Word Type", "Rule", "Example", "Stress"]}
           rows={[
-            ["Sustantivos de 2 sílabas", "Primera sílaba", "PHOtograph, COMputer", "PHO-to-graph"],
-            ["Verbos de 2 sílabas", "Segunda sílaba", "reCORD, preSENT", "re-CORD"],
-            ["Palabras con prefijos", "Sílabas después del prefijo", "unHAPPY, rePEAT", "un-HAP-py"],
-            ["Sufijos -tion, -sion", "Antes del sufijo", "inforMAtion, deciSION", "in-for-MA-tion"],
-            ["Sufijos -ic, -ical", "Antes del sufijo", "eLECtric, hisTORical", "e-LEC-tric"]
+            ["Two-syllable nouns", "First syllable", "PHOtograph, COMputer", "PHO-to-graph"],
+            ["Two-syllable verbs", "Second syllable", "reCORD, preSENT", "re-CORD"],
+            ["Words with prefixes", "Syllable after the prefix", "unHAPPY, rePEAT", "un-HAP-py"],
+            ["Sufijos -tion, -sion", "Before the suffix", "inforMAtion, deciSION", "in-for-MA-tion"],
+            ["Sufijos -ic, -ical", "Before the suffix", "eLECtric, hisTORical", "e-LEC-tric"]
           ]}
         />
 
         <div style={{ display: 'grid', gap: '1rem' }}>
           <Example 
-            spanish="PHOtograph (sustantivo) vs phoTOgraphy (verbo)"
+            spanish="PHOtograph (noun) vs phoTOgraphy (verb)"
             english="PHOtograph (noun) vs phoTOgraphy (verb)"
-            translation="PHOtograph (sustantivo) vs phoTOgraphy (verbo)"
+            translation="PHOtograph (noun) vs phoTOgraphy (verb)"
           />
           <Example 
-            spanish="REcord (registro) vs reCORD (grabar)"
+            spanish="REcord (register) vs reCORD (record (verb))"
             english="REcord (noun) vs reCORD (verb)"
-            translation="REcord (registro) vs reCORD (grabar)"
+            translation="REcord (register) vs reCORD (record (verb))"
           />
           <Example 
-            spanish="COMputer (computadora)"
+            spanish="COMputer (computer)"
             english="COMputer (computer)"
-            translation="COMputer (computadora)"
+            translation="COMputer (computer)"
           />
         </div>
 
         <Rule 
-          title="Importancia del Acento"
-          description="El acento correcto:"
+          title="Importance of Stress"
+          description="Correct stress:"
           examples={[
-            "Ayuda a la comprensión",
-            "Evita malentendidos",
-            "Hace que suenes más natural",
-            "Es más importante que los sonidos individuales"
+            "Helps comprehension",
+            "Avoids misunderstandings",
+            "Makes you sound more natural",
+            "Matters more than individual sounds"
           ]}
         />
 
         <Tip type="warning">
-          <strong>¡Cuidado!</strong> El acento incorrecto puede hacer que no te entiendan, incluso si pronuncias bien los sonidos.
+          <strong>Watch out!</strong> Incorrect stress can make you hard to understand, even if individual sounds are clear.
         </Tip>
       </TheorySection>
 
-      <TheorySection title="Sentence Stress (Acento en Oraciones)" icon="📢">
+      <TheorySection title="Sentence Stress" icon="📢">
         <p style={{ fontSize: '1rem', lineHeight: 1.6, color: '#4a5568', marginBottom: '1rem' }}>
-          En las oraciones, algunas palabras se acentúan más que otras para transmitir el significado y la emoción.
+          In sentences, some words are stressed more than others to convey meaning and emotion.
         </p>
 
         <GrammarTable
-          caption="Palabras que se Acentúan en Oraciones"
-          headers={["Tipo de Palabra", "Se Acentúa", "Ejemplo", "Razón"]}
+          caption="Words Stressed in Sentences"
+          headers={["Word Type", "Stressed?", "Example", "Reason"]}
           rows={[
-            ["Content Words", "Sí", "nouns, verbs, adjectives, adverbs", "Contienen el significado principal"],
-            ["Function Words", "No", "articles, prepositions, pronouns", "Son gramaticales, no semánticas"],
-            ["Palabras importantes", "Sí", "nueva información, énfasis", "Información clave del mensaje"],
-            ["Palabras ya mencionadas", "No", "información conocida", "No aportan información nueva"]
+            ["Content Words", "Yes", "nouns, verbs, adjectives, adverbs", "Carry the main meaning"],
+            ["Function Words", "No", "articles, prepositions, pronouns", "Are grammatical, not semantic"],
+            ["Important words", "Yes", "new information, emphasis", "Key information in the message"],
+            ["Already-mentioned words", "No", "known information", "Do not add new information"]
           ]}
         />
 
@@ -161,198 +161,198 @@ const PronunciationPage = () => {
           <Example 
             spanish="I BOUGHT a NEW CAR yesterday"
             english="I BOUGHT a NEW CAR yesterday"
-            translation="COMPRÉ un COCHE NUEVO ayer"
+            translation="I BOUGHT a NEW CAR yesterday (stressed words)"
           />
           <Example 
             spanish="The BOOK is on the TABLE"
             english="The BOOK is on the TABLE"
-            translation="El LIBRO está en la MESA"
+            translation="The BOOK is on the TABLE (stressed words)"
           />
           <Example 
             spanish="I LOVE this MUSIC"
             english="I LOVE this MUSIC"
-            translation="ME ENCANTA esta MÚSICA"
+            translation="I LOVE this MUSIC (stressed words)"
           />
         </div>
 
         <Rule 
-          title="Reglas de Acento en Oraciones"
-          description="Generalmente se acentúan:"
+          title="Sentence Stress Rules"
+          description="Generally stressed:"
           examples={[
-            "Sustantivos: book, car, house",
-            "Verbos principales: go, come, see",
-            "Adjetivos: big, small, beautiful",
-            "Adverbios: quickly, slowly, well"
+            "Nouns: book, car, house",
+            "Main verbs: go, come, see",
+            "Adjectives: big, small, beautiful",
+            "Adverbs: quickly, slowly, well"
           ]}
         />
 
         <Tip type="success">
-          <strong>Consejo:</strong> Las palabras de contenido (content words) llevan el ritmo de la oración.
+          <strong>Tip:</strong> Content words carry the rhythm of the sentence.
         </Tip>
       </TheorySection>
 
-      <TheorySection title="Intonation (Entonación)" icon="🎵">
+      <TheorySection title="Intonation (Intonation)" icon="🎵">
         <p style={{ fontSize: '1rem', lineHeight: 1.6, color: '#4a5568', marginBottom: '1rem' }}>
-          La entonación es la subida y bajada de la voz que transmite emociones y significado.
+          Intonation is the rise and fall of your voice that conveys emotion and meaning.
         </p>
 
         <GrammarTable
-          caption="Patrones de Entonación"
-          headers={["Patrón", "Dirección", "Uso", "Ejemplo"]}
+          caption="Intonation Patterns"
+          headers={["Pattern", "Direction", "Use", "Example"]}
           rows={[
-            ["Falling", "Bajada al final", "Declaraciones, órdenes", "I like it. ↘"],
-            ["Rising", "Subida al final", "Preguntas sí/no", "Do you like it? ↗"],
-            ["Rise-Fall", "Subida y bajada", "Preguntas con wh-", "What do you want? ↗↘"],
-            ["Fall-Rise", "Bajada y subida", "Incertidumbre, cortesía", "Maybe. ↘↗"],
-            ["Flat", "Sin cambio", "Enumeración, neutral", "One, two, three. →"]
+            ["Falling", "Falling at the end", "Statements, commands", "I like it. ↘"],
+            ["Rising", "Rising at the end", "Yes/no questions", "Do you like it? ↗"],
+            ["Rise-Fall", "Rise and fall", "Wh- questions", "What do you want? ↗↘"],
+            ["Fall-Rise", "Fall and rise", "Uncertainty, politeness", "Maybe. ↘↗"],
+            ["Flat", "No change", "Listing, neutral tone", "One, two, three. →"]
           ]}
         />
 
         <div style={{ display: 'grid', gap: '1rem' }}>
           <Example 
-            spanish="Declaración: 'I like it.' (bajada al final)"
+            spanish="Statement: 'I like it.' (falling at the end)"
             english="Statement: 'I like it.' (falling at the end)"
-            translation="Declaración: 'Me gusta.' (bajada al final)"
+            translation="Statement: 'I like it.' (falling at the end)"
           />
           <Example 
-            spanish="Pregunta sí/no: 'Do you like it?' (subida al final)"
+            spanish="Yes/no question: 'Do you like it?' (rising at the end)"
             english="Yes/No question: 'Do you like it?' (rising at the end)"
-            translation="Pregunta sí/no: '¿Te gusta?' (subida al final)"
+            translation="Yes/no question: 'Do you like it?' (rising at the end)"
           />
           <Example 
-            spanish="Pregunta wh-: 'What do you want?' (subida y bajada)"
+            spanish="Wh- question: 'What do you want?' (rise and fall)"
             english="Wh- question: 'What do you want?' (rise-fall)"
-            translation="Pregunta wh-: '¿Qué quieres?' (subida y bajada)"
+            translation="Wh- question: 'What do you want?' (rise and fall)"
           />
         </div>
 
         <Rule 
-          title="Función de la Entonación"
-          description="La entonación ayuda a:"
+          title="Function of Intonation"
+          description="Intonation helps you:"
           examples={[
-            "Distinguir entre declaraciones y preguntas",
-            "Expresar emociones y actitudes",
-            "Mostrar cortesía o firmeza",
-            "Indicar si estás seguro o inseguro"
+            "Distinguish statements from questions",
+            "Express emotions and attitudes",
+            "Show politeness or firmness",
+            "Show whether you are sure or unsure"
           ]}
         />
 
         <Tip type="info">
-          <strong>Nota:</strong> La entonación puede cambiar completamente el significado de una frase.
+          <strong>Note:</strong> Intonation can completely change the meaning of a sentence.
         </Tip>
       </TheorySection>
 
       <TheorySection title="Connected Speech (Habla Conectada)" icon="🔗">
         <p style={{ fontSize: '1rem', lineHeight: 1.6, color: '#4a5568', marginBottom: '1rem' }}>
-          En el habla natural, los sonidos se conectan y modifican entre sí, creando un flujo continuo.
+          In natural speech, sounds link and change, creating a continuous flow.
         </p>
 
         <GrammarTable
-          caption="Fenómenos de Habla Conectada"
-          headers={["Fenómeno", "Descripción", "Ejemplo", "Resultado"]}
+          caption="Connected Speech Phenomena"
+          headers={["Phenomenon", "Description", "Example", "Result"]}
           rows={[
-            ["Linking", "Conectar sonidos finales e iniciales", "an apple → anapple", "Flujo continuo"],
-            ["Elision", "Eliminar sonidos", "don't → don", "Habla más rápida"],
-            ["Assimilation", "Sonidos se influyen mutuamente", "handbag → hambag", "Facilidad de pronunciación"],
-            ["Intrusion", "Agregar sonidos", "go on → go won", "Transición suave"],
-            ["Weak forms", "Formas débiles de palabras", "and → 'n'", "Ritmo natural"]
+            ["Linking", "Link final and initial sounds", "an apple → anapple", "Continuous flow"],
+            ["Elision", "Drop sounds", "don't → don", "Faster speech"],
+            ["Assimilation", "Sounds se influyen mutuamente", "handbag → hambag", "Easier pronunciation"],
+            ["Intrusion", "Add sounds", "go on → go won", "Smooth transition"],
+            ["Weak forms", "Weak forms of words", "and → 'n'", "Natural rhythm"]
           ]}
         />
 
         <div style={{ display: 'grid', gap: '1rem' }}>
           <Example 
-            spanish="'an apple' se pronuncia 'anapple'"
+            spanish="'an apple' is pronounced 'anapple'"
             english="'an apple' is pronounced 'anapple'"
-            translation="'an apple' se pronuncia 'anapple'"
+            translation="'an apple' is pronounced 'anapple'"
           />
           <Example 
-            spanish="'don't' se pronuncia 'don'"
+            spanish="'don't' is pronounced 'don'"
             english="'don't' is pronounced 'don'"
-            translation="'don't' se pronuncia 'don'"
+            translation="'don't' is pronounced 'don'"
           />
           <Example 
-            spanish="'go on' se pronuncia 'go won'"
+            spanish="'go on' is pronounced 'go won'"
             english="'go on' is pronounced 'go won'"
-            translation="'go on' se pronuncia 'go won'"
+            translation="'go on' is pronounced 'go won'"
           />
         </div>
 
         <Rule 
-          title="Consejos para Habla Conectada"
-          description="Para sonar más natural:"
+          title="Tips for Habla Conectada"
+          description="To sound more natural:"
           examples={[
-            "Practica frases completas, no palabras aisladas",
-            "Escucha hablantes nativos en conversación",
-            "Imita el ritmo y la fluidez",
-            "No te preocupes por pronunciar cada sonido perfectamente"
+            "Practice full phrases, not isolated words",
+            "Listen to native speakers in conversation",
+            "Copy the rhythm and flow",
+            "Don't worry about pronouncing every sound perfectly"
           ]}
         />
 
         <Tip type="warning">
-          <strong>¡Cuidado!</strong> El habla conectada puede hacer que sea más difícil entender, pero es natural en el inglés hablado.
+          <strong>Watch out!</strong> Connected speech can be harder to understand, but it is natural in spoken English.
         </Tip>
       </TheorySection>
 
-      <TheorySection title="Errores Comunes" icon="⚠️">
+      <TheorySection title="Common Mistakes" icon="⚠️">
         <div style={{ display: 'grid', gap: '1rem' }}>
           <Tip type="error">
-            <strong>Error:</strong> Pronunciar cada palabra por separado ❌<br/>
-            <strong>Correcto:</strong> Conectar palabras naturalmente ✅<br/>
-            <em>El inglés fluye, no se habla palabra por palabra</em>
+            <strong>Error:</strong> Pronouncing every word separately ❌<br/>
+            <strong>Correct:</strong> Linking words naturally ✅<br/>
+            <em>English flows; we do not speak word by word</em>
           </Tip>
 
           <Tip type="error">
-            <strong>Error:</strong> Acentuar todas las palabras igual ❌<br/>
-            <strong>Correcto:</strong> Acentuar palabras de contenido ✅<br/>
-            <em>El acento da ritmo y significado</em>
+            <strong>Error:</strong> Stressing every word equally ❌<br/>
+            <strong>Correct:</strong> Stressing content words ✅<br/>
+            <em>Stress gives rhythm and meaning</em>
           </Tip>
 
           <Tip type="error">
-            <strong>Error:</strong> Usar entonación plana ❌<br/>
-            <strong>Correcto:</strong> Variar la entonación según el contexto ✅<br/>
-            <em>La entonación transmite emociones y significado</em>
+            <strong>Error:</strong> Using flat intonation ❌<br/>
+            <strong>Correct:</strong> Varying intonation according to context ✅<br/>
+            <em>Intonation conveys emotion and meaning</em>
           </Tip>
 
           <Tip type="error">
-            <strong>Error:</strong> Ignorar los sonidos difíciles ❌<br/>
-            <strong>Correcto:</strong> Practicar sonidos problemáticos ✅<br/>
-            <em>Los sonidos correctos mejoran la comprensión</em>
+            <strong>Error:</strong> Ignoring difficult sounds ❌<br/>
+            <strong>Correct:</strong> Practicing problem sounds ✅<br/>
+            <em>Correct sounds improve comprehension</em>
           </Tip>
         </div>
       </TheorySection>
 
-      <TheorySection title="Reglas Importantes" icon="⚡">
+      <TheorySection title="Important Rules" icon="⚡">
         <div style={{ display: 'grid', gap: '1rem' }}>
           <Rule 
-            title="1. Práctica regular"
-            description="La pronunciación mejora con la práctica constante."
+            title="1. Regular practice"
+            description="Pronunciation improves with consistent practice."
             examples={[
-              "Practica diariamente, aunque sea 10 minutos",
-              "Grabate y escucha tu pronunciación",
-              "Imita hablantes nativos",
-              "Usa aplicaciones de pronunciación"
+              "Practice daily, even if only for 10 minutes",
+              "Record yourself and listen to your pronunciation",
+              "Imitate native speakers",
+              "Uis pronouncedtion apps"
             ]}
           />
 
           <Rule 
-            title="2. Escucha activa"
-            description="Escucha inglés auténtico para desarrollar tu oído."
+            title="2. Active listening"
+            description="Listen to authentic English to train your ear."
             examples={[
-              "Peliculas, series, podcasts en inglés",
-              "Presta atención a la pronunciación",
-              "Repite frases que escuches",
-              "Imita el ritmo y entonación"
+              "Films, series, and podcasts in English",
+              "Pay attention to pronunciation",
+              "Repeat phrases you hear",
+              "Copy rhythm and intonation"
             ]}
           />
 
           <Rule 
-            title="3. No busques perfección"
-            description="La claridad es más importante que el acento perfecto."
+            title="3. Don't aim for perfection"
+            description="Clarity matters more than a perfect accent."
             examples={[
-              "Enfócate en ser entendido",
-              "No te preocupes por sonar nativo",
-              "Mejora gradualmente",
-              "Celebra tus progresos"
+              "Focus on being understood",
+              "Don't worry about sounding native",
+              "Improve gradually",
+              "Celebrate your progress"
             ]}
           />
         </div>
@@ -363,20 +363,20 @@ const PronunciationPage = () => {
   const exercises = [
     <MultipleChoiceExercise
       key="1"
-      question="Para pronunciar /θ/ como en 'think', ¿qué debo hacer?"
+      question="To pronounce /θ/ as in 'think', what should I do?"
       options={[
-        "Poner los labios juntos",
-        "Poner la lengua entre los dientes",
-        "Cerrar la boca completamente",
-        "Abrir mucho la boca"
+        "Put your lips together",
+        "Put your tongue between your teeth",
+        "Close your mouth completely",
+        "Open your mouth wide"
       ]}
       correctAnswer={1}
-      explanation="Para el sonido /θ/, la lengua debe ir entre los dientes superiores e inferiores."
+      explanation="For the /θ/ sound, your tongue goes between your upper and lower teeth."
     />,
 
     <MultipleChoiceExercise
       key="2"
-      question="¿Cuál es la pronunciación correcta del acento en la palabra 'computer'?"
+      question="What is the correct word stress in 'computer'?"
       options={[
         "comPUter",
         "COMputer",
@@ -384,59 +384,59 @@ const PronunciationPage = () => {
         "com-put-er"
       ]}
       correctAnswer={1}
-      explanation="'Computer' es un sustantivo de 3 sílabas, y el acento está en la segunda sílaba: COM-put-er."
+      explanation="'Computer' is a three-syllable noun with stress on the second syllable: COM-put-er."
     />,
 
     <TrueFalseExercise
       key="3"
       statements={[
         {
-          text: "El acento en las palabras es menos importante que los sonidos individuales.",
+          text: "Word stress is less important than individual sounds.",
           isTrue: false,
-          explanation: "Incorrecto. El acento es muy importante y puede cambiar el significado de las palabras."
+          explanation: "Incorrect. Stress is very important and can change word meaning."
         },
         {
-          text: "En las oraciones, las palabras de contenido (nouns, verbs) se acentúan más.",
+          text: "In sentences, content words (nouns, verbs) are stressed more.",
           isTrue: true,
-          explanation: "Correcto. Las content words (sustantivos, verbos, adjetivos, adverbios) se acentúan más que las function words."
+          explanation: "Correct. Content words (nouns, verbs, adjectives, adverbs) are stressed more than function words."
         },
         {
-          text: "La entonación ascendente se usa en preguntas de sí/no.",
+          text: "Rising intonation is used in yes/no questions.",
           isTrue: true,
-          explanation: "Correcto. Las preguntas de sí/no generalmente terminan con entonación ascendente."
+          explanation: "Correct. Yes/no questions usually end with rising intonation."
         },
         {
-          text: "En habla conectada, todas las palabras se pronuncian claramente por separado.",
+          text: "In connected speech, every word is pronounced clearly and separately.",
           isTrue: false,
-          explanation: "Incorrecto. En habla conectada, los sonidos se conectan y modifican para crear un flujo natural."
+          explanation: "Incorrect. In connected speech, sounds link and change to create a natural flow."
         }
       ]}
     />,
 
     <MultipleChoiceExercise
       key="4"
-      question="¿Cuál es la diferencia entre /θ/ y /ð/?"
+      question="What is the difference between /θ/ and /ð/?"
       options={[
-        "No hay diferencia",
-        "/θ/ es sonoro y /ð/ es sordo",
-        "/θ/ es sordo y /ð/ es sonoro",
-        "Son el mismo sonido"
+        "There is no difference",
+        "/θ/ is voiced and /ð/ is voiceless",
+        "/θ/ is voiceless and /ð/ is voiced",
+        "They are the same sound"
       ]}
       correctAnswer={2}
-      explanation="/θ/ (como en 'think') es sordo (sin vibración), mientras que /ð/ (como en 'this') es sonoro (con vibración)."
+      explanation="/θ/ (as in 'think') is voiceless (no vibration), while /ð/ (as in 'this') is voiced (with vibration)."
     />,
 
     <MultipleChoiceExercise
       key="5"
-      question="¿Qué tipo de entonación se usa generalmente en declaraciones?"
+      question="What type of intonation is generally used in statements?"
       options={[
-        "Ascendente",
-        "Descendente",
-        "Plana",
-        "Ascendente-descendente"
+        "Rising",
+        "Falling",
+        "Flat",
+        "Rise-fall"
       ]}
       correctAnswer={1}
-      explanation="Las declaraciones generalmente terminan con entonación descendente, indicando que la información está completa."
+      explanation="Statements usually end with falling intonation, showing that the information is complete."
     />,
 
     <TrueFalseExercise
@@ -445,24 +445,24 @@ const PronunciationPage = () => {
         {
           text: "The /r/ sound in English is the same as the Spanish 'rr'.",
           isTrue: false,
-          explanation: "Incorrecto. El sonido /r/ en inglés es más suave y se produce con la lengua curvada hacia atrás."
+          explanation: "Incorrect. The /r/ sound in English is softer and is produced with the tongue curled back."
         },
         {
           text: "Word stress can change the meaning of a word in English.",
           isTrue: true,
-          explanation: "Correcto. Por ejemplo: 'REcord' (sustantivo) vs 'reCORD' (verbo)."
+          explanation: "Correct. For example: 'REcord' (noun) vs 'reCORD' (verb)."
         },
         {
           text: "Silent letters in English words should always be pronounced.",
           isTrue: false,
-          explanation: "Incorrecto. Las letras mudas no se pronuncian: 'knife' /naɪf/, 'lamb' /læm/."
+          explanation: "Incorrect. Silent letters are not pronounced: 'knife' /naɪf/, 'lamb' /læm/."
         }
       ]}
     />,
 
     <MultipleChoiceExercise
       key="7"
-      question="¿Cómo se pronuncia la 'ed' en 'walked'?"
+      question="How is the '-ed' in 'walked' pronounced?"
       options={[
         "/ed/",
         "/d/",
@@ -470,20 +470,20 @@ const PronunciationPage = () => {
         "/ɪd/"
       ]}
       correctAnswer={2}
-      explanation="Después de consonantes sordas como /k/, la terminación -ed se pronuncia /t/: walked /wɔːkt/."
+      explanation="After voiceless consonants like /k/, the -ed ending is pronounced /t/: walked /wɔːkt/."
     />,
 
     <MultipleChoiceExercise
       key="8"
-      question="¿Cuál es la diferencia entre /b/ y /v/ en inglés?"
+      question="What is the difference between /b/ and /v/ in English?"
       options={[
-        "No hay diferencia",
-        "/b/ usa ambos labios, /v/ usa dientes y labio inferior",
-        "/v/ es más fuerte",
-        "/b/ es más largo"
+        "There is no difference",
+        "/b/ uses both lips, /v/ uses teeth and lower lip",
+        "/v/ is stronger",
+        "/b/ is longer"
       ]}
       correctAnswer={1}
-      explanation="/b/ se produce con ambos labios juntos, /v/ se produce con los dientes superiores tocando el labio inferior."
+      explanation="/b/ is made with both lips together, /v/ is made with upper teeth on the lower lip."
     />,
 
     <TrueFalseExercise
@@ -492,34 +492,34 @@ const PronunciationPage = () => {
         {
           text: "Intonation is more important than individual sounds for communication.",
           isTrue: true,
-          explanation: "Correcto. La entonación ayuda a transmitir emociones, actitudes y significado, siendo crucial para la comunicación efectiva."
+          explanation: "Correct. Intonation helps convey emotions, attitudes and meaning, which is crucial for effective communication."
         },
         {
           text: "All English vowels are pronounced the same length.",
           isTrue: false,
-          explanation: "Incorrecto. Las vocales en inglés tienen diferentes longitudes: /i:/ es larga, /ɪ/ es corta."
+          explanation: "Incorrect. English vowels have different lengths: /i:/ is long, /ɪ/ is short."
         }
       ]}
     />,
 
     <MultipleChoiceExercise
       key="10"
-      question="¿Cuál es el patrón de acento más común en palabras de 2 sílabas?"
+      question="What is the most common stress pattern in two-syllable words?"
       options={[
-        "Siempre en la primera sílaba",
-        "Sustantivos: primera sílaba, Verbos: segunda sílaba",
-        "Siempre en la segunda sílaba",
-        "No hay patrón"
+        "Always on the first syllable",
+        "Nouns: first syllable, Verbs: second syllable",
+        "Always on the second syllable",
+        "There is no pattern"
       ]}
       correctAnswer={1}
-      explanation="En palabras de 2 sílabas, los sustantivos tienden a acentuarse en la primera sílaba ('TAble') y los verbos en la segunda ('reLAX')."
+      explanation="In two-syllable words, nouns tend to be stressed on the first syllable ('TAble') and verbs on the second ('reLAX')."
     />
   ];
 
   return (
     <TheoryLayout
       title="Pronunciation"
-      description="Domina la pronunciación en inglés: fonemas, acentos, entonación y habla conectada. Esencial para comunicarte efectivamente en inglés."
+      description="Master English pronunciation: phonemes, stress, intonation, and connected speech. Essential for communicating effectively in English."
       level="A1-A2-B1-B2-C1-C2"
       theoryContent={theoryContent}
       exercises={exercises}

@@ -18,372 +18,335 @@ import {
 const InteractionAndConversationalStrategiesPage = () => {
   const theoryContent = (
     <div>
-      <TheorySection title="¿Qué son Interaction and Conversational Strategies?" icon="🤝">
+      <TheorySection title="What Are Interaction and Conversational Strategies?" icon="🤝">
         <p style={{ fontSize: '1.1rem', lineHeight: 1.6, color: '#4a5568', marginBottom: '1rem' }}>
-          Las <strong>interaction and conversational strategies</strong> (estrategias de interacción y conversación) son 
-          técnicas específicas que te permiten participar efectivamente en conversaciones, mantener el flujo comunicativo y crear interacciones exitosas.
+          <strong>Interaction and conversational strategies</strong> are specific techniques that help you take part effectively in conversations, keep communication flowing, and build successful interactions.
         </p>
         
         <QuickReference items={[
-          "Técnicas para iniciar y mantener conversaciones",
-          "Estrategias para manejar turnos de habla",
-          "Técnicas para mostrar interés y participación",
-          "Estrategias para manejar interrupciones y cambios de tema",
-          "Herramientas para crear interacciones exitosas"
+          "Techniques for starting and sustaining conversations",
+          "Strategies for managing turn-taking",
+          "Techniques for showing interest and engagement",
+          "Strategies for handling interruptions and topic changes",
+          "Tools for building successful interactions"
         ]} />
       </TheorySection>
 
-      <TheorySection title="Iniciar Conversaciones" icon="🚀">
+      <TheorySection title="Starting Conversations" icon="🚀">
         <p style={{ fontSize: '1rem', lineHeight: 1.6, color: '#4a5568', marginBottom: '1rem' }}>
-          Iniciar conversaciones de manera efectiva es crucial para crear interacciones exitosas.
+          Starting conversations effectively is essential for successful interactions.
         </p>
 
         <GrammarTable
-          caption="Estrategias para Iniciar Conversaciones"
-          headers={["Estrategia", "Descripción", "Contexto", "Ejemplo"]}
+          caption="Strategies for Starting Conversations"
+          headers={["Strategy", "Description", "Context", "Example"]}
           rows={[
-            ["Saludo Directo", "Saludar directamente", "Situaciones formales", "Good morning, how are you?"],
-            ["Comentario sobre Situación", "Comentar la situación actual", "Contexto compartido", "It's a beautiful day, isn't it?"],
-            ["Pregunta Abierta", "Hacer pregunta que invite respuesta", "Conversación general", "What brings you here today?"],
-            ["Observación Personal", "Compartir observación personal", "Contexto informal", "I love this place, don't you?"],
-            ["Pregunta sobre Interés", "Preguntar sobre intereses", "Contexto social", "What do you do for fun?"],
-            ["Comentario sobre Evento", "Comentar evento actual", "Contexto de evento", "Great presentation, wasn't it?"],
-            ["Pregunta de Ayuda", "Pedir ayuda o información", "Contexto de necesidad", "Excuse me, could you help me?"],
-            ["Comentario Positivo", "Hacer comentario positivo", "Contexto general", "I really like your presentation"]
+            ["Direct greeting", "Greet directly", "Formal situations", "Good morning, how are you?"],
+            ["Comment on the situation", "Comment on what is happening around you", "Shared context", "It's a beautiful day, isn't it?"],
+            ["Open question", "Ask a question that invites a full answer", "General conversation", "What brings you here today?"],
+            ["Personal observation", "Share a personal observation", "Informal settings", "I love this place, don't you?"],
+            ["Interest question", "Ask about the other person's interests", "Social settings", "What do you do for fun?"],
+            ["Comment on an event", "Comment on something relevant happening now", "At an event", "Great presentation, wasn't it?"],
+            ["Request for help", "Ask for help or information", "When you need something", "Excuse me, could you help me?"],
+            ["Positive comment", "Make a positive remark", "General use", "I really like your presentation"]
           ]}
         />
 
         <div style={{ display: 'grid', gap: '1rem' }}>
           <Example 
-            spanish="Saludo directo: 'Buenos días, ¿cómo estás?'"
             english="Direct greeting: 'Good morning, how are you?'"
-            translation="Saludo directo: 'Buenos días, ¿cómo estás?'"
           />
           <Example 
-            spanish="Comentario sobre situación: 'Es un día hermoso, ¿no?'"
             english="Situation comment: 'It's a beautiful day, isn't it?'"
-            translation="Comentario sobre situación: 'Es un día hermoso, ¿no?'"
           />
           <Example 
-            spanish="Pregunta abierta: '¿Qué te trae aquí hoy?'"
             english="Open question: 'What brings you here today?'"
-            translation="Pregunta abierta: '¿Qué te trae aquí hoy?'"
           />
         </div>
 
         <Rule 
-          title="Consejos para Iniciar Conversaciones"
-          description="Para iniciar efectivamente:"
+          title="Tips for Starting Conversations"
+          description="To start effectively:"
           examples={[
-            "Elige estrategias apropiadas para el contexto",
-            "Considera la relación con la persona",
-            "Usa lenguaje apropiado para el nivel de formalidad",
-            "Sé genuino y auténtico en tu enfoque"
+            "Choose strategies that fit the situation",
+            "Consider your relationship with the person",
+            "Use language that matches the level of formality",
+            "Be genuine and authentic in your approach"
           ]}
         />
 
         <Tip type="info">
-          <strong>Consejo:</strong> Iniciar conversaciones de manera efectiva establece el tono para toda la interacción.
+          <strong>Tip:</strong> How you open a conversation sets the tone for the whole interaction.
         </Tip>
       </TheorySection>
 
-      <TheorySection title="Manejo de Turnos de Habla" icon="🔄">
+      <TheorySection title="Managing Turn-Taking" icon="🔄">
         <p style={{ fontSize: '1rem', lineHeight: 1.6, color: '#4a5568', marginBottom: '1rem' }}>
-          Manejar turnos de habla efectivamente es esencial para mantener conversaciones fluidas.
+          Managing speaking turns well is essential for smooth, natural conversations.
         </p>
 
         <GrammarTable
-          caption="Estrategias para Manejo de Turnos"
-          headers={["Estrategia", "Descripción", "Cuándo Usar", "Ejemplo"]}
+          caption="Strategies for Managing Turns"
+          headers={["Strategy", "Description", "When to Use", "Example"]}
           rows={[
-            ["Tomar Turno", "Iniciar tu turno de habla", "Cuando quieres hablar", "Can I add something here?"],
-            ["Ceder Turno", "Permitir que otros hablen", "Cuando terminas tu punto", "What do you think about this?"],
-            ["Mantener Turno", "Continuar tu turno", "Cuando no has terminado", "Let me finish this point first"],
-            ["Interrumpir Educadamente", "Interrumpir de manera educada", "Cuando necesitas intervenir", "Sorry to interrupt, but..."],
-            ["Pedir Clarificación", "Pedir aclaración antes de responder", "Cuando no entiendes", "Could you clarify what you mean?"],
-            ["Confirmar Comprensión", "Confirmar que entiendes", "Antes de responder", "So you're saying that..."],
-            ["Dar Tiempo para Pensar", "Permitir tiempo para procesar", "Cuando la persona necesita tiempo", "Take your time, no rush"],
-            ["Cambiar de Tema", "Cambiar de tema suavemente", "Cuando el tema se agota", "That reminds me of something else"]
+            ["Taking a turn", "Begin your speaking turn", "When you want to contribute", "Can I add something here?"],
+            ["Yielding the turn", "Let someone else speak", "When you have finished your point", "What do you think about this?"],
+            ["Holding the turn", "Continue your turn", "When you are not done yet", "Let me finish this point first"],
+            ["Interrupting politely", "Break in politely", "When you need to step in", "Sorry to interrupt, but..."],
+            ["Asking for clarification", "Ask for clarification before you answer", "When something is unclear", "Could you clarify what you mean?"],
+            ["Checking understanding", "Show you have understood", "Before you respond", "So you're saying that..."],
+            ["Allowing thinking time", "Give space to process", "When someone needs a moment", "Take your time, no rush"],
+            ["Changing the topic", "Shift topic smoothly", "When the topic has run its course", "That reminds me of something else"]
           ]}
         />
 
         <div style={{ display: 'grid', gap: '1rem' }}>
           <Example 
-            spanish="Tomar turno: '¿Puedo agregar algo aquí?'"
             english="Taking turn: 'Can I add something here?'"
-            translation="Tomar turno: '¿Puedo agregar algo aquí?'"
           />
           <Example 
-            spanish="Ceder turno: '¿Qué piensas sobre esto?'"
             english="Yielding turn: 'What do you think about this?'"
-            translation="Ceder turno: '¿Qué piensas sobre esto?'"
           />
           <Example 
-            spanish="Interrumpir educadamente: 'Disculpa interrumpir, pero...'"
             english="Polite interruption: 'Sorry to interrupt, but...'"
-            translation="Interrumpir educadamente: 'Disculpa interrumpir, pero...'"
           />
         </div>
 
         <Tip type="success">
-          <strong>Consejo:</strong> El manejo efectivo de turnos mantiene la conversación equilibrada y participativa.
+          <strong>Tip:</strong> Balanced turn-taking keeps the conversation engaging for everyone.
         </Tip>
       </TheorySection>
 
-      <TheorySection title="Mostrar Interés y Participación" icon="😊">
+      <TheorySection title="Showing Interest and Engagement" icon="😊">
         <p style={{ fontSize: '1rem', lineHeight: 1.6, color: '#4a5568', marginBottom: '1rem' }}>
-          Mostrar interés genuino y participación activa es crucial para mantener conversaciones exitosas.
+          Showing genuine interest and active engagement is key to successful conversations.
         </p>
 
         <GrammarTable
-          caption="Estrategias para Mostrar Interés"
-          headers={["Estrategia", "Descripción", "Función", "Ejemplo"]}
+          caption="Strategies for Showing Interest"
+          headers={["Strategy", "Description", "Function", "Example"]}
           rows={[
-            ["Respuestas de Escucha", "Mostrar que estás escuchando", "Confirmar atención", "Really? That's interesting!"],
-            ["Preguntas de Seguimiento", "Hacer preguntas relacionadas", "Profundizar en el tema", "How did that make you feel?"],
-            ["Comentarios de Apoyo", "Comentar de manera positiva", "Mostrar apoyo", "That sounds amazing!"],
-            ["Expresiones de Empatía", "Mostrar comprensión emocional", "Conectar emocionalmente", "I can understand how you feel"],
-            ["Compartir Experiencias", "Compartir experiencias similares", "Crear conexión", "That happened to me too"],
-            ["Validar Opiniones", "Validar puntos de vista", "Mostrar respeto", "That's a valid point"],
-            ["Expresar Curiosidad", "Mostrar curiosidad genuina", "Mantener interés", "Tell me more about that"],
-            ["Reflexionar", "Reflexionar sobre lo dicho", "Mostrar comprensión", "So what you're saying is..."]
+            ["Backchannel responses", "Show you are listening", "Signal attention", "Really? That's interesting!"],
+            ["Follow-up questions", "Ask related questions", "Go deeper into the topic", "How did that make you feel?"],
+            ["Supportive comments", "Respond in an encouraging way", "Show support", "That sounds amazing!"],
+            ["Empathy phrases", "Show emotional understanding", "Connect emotionally", "I can understand how you feel"],
+            ["Sharing experiences", "Share similar experiences", "Build rapport", "That happened to me too"],
+            ["Validating opinions", "Acknowledge their perspective", "Show respect", "That's a valid point"],
+            ["Expressing curiosity", "Show real curiosity", "Keep the conversation alive", "Tell me more about that"],
+            ["Reflecting", "Paraphrase what was said", "Show understanding", "So what you're saying is..."]
           ]}
         />
 
         <div style={{ display: 'grid', gap: '1rem' }}>
           <Example 
-            spanish="Respuesta de escucha: '¿En serio? ¡Eso es interesante!'"
             english="Listening response: 'Really? That's interesting!'"
-            translation="Respuesta de escucha: '¿En serio? ¡Eso es interesante!'"
           />
           <Example 
-            spanish="Pregunta de seguimiento: '¿Cómo te hizo sentir eso?'"
             english="Follow-up question: 'How did that make you feel?'"
-            translation="Pregunta de seguimiento: '¿Cómo te hizo sentir eso?'"
           />
           <Example 
-            spanish="Comentario de apoyo: '¡Eso suena increíble!'"
             english="Supportive comment: 'That sounds amazing!'"
-            translation="Comentario de apoyo: '¡Eso suena increíble!'"
           />
         </div>
 
         <Rule 
-          title="Consejos para Mostrar Interés"
-          description="Para mostrar interés genuino:"
+          title="Tips for Showing Interest"
+          description="To show genuine interest:"
           examples={[
-            "Escucha activamente sin distracciones",
-            "Haz preguntas relevantes y genuinas",
-            "Comparte experiencias cuando sea apropiado",
-            "Mantén contacto visual y lenguaje corporal positivo"
+            "Listen actively without distractions",
+            "Ask relevant, sincere questions",
+            "Share your own experiences when it fits",
+            "Keep eye contact and open, positive body language"
           ]}
         />
 
         <Tip type="warning">
-          <strong>¡Cuidado!</strong> No exageres el interés - sé genuino y auténtico en tu participación.
+          <strong>Watch out!</strong> Do not fake interest—stay genuine and authentic in how you take part.
         </Tip>
       </TheorySection>
 
-      <TheorySection title="Manejo de Interrupciones" icon="⚡">
+      <TheorySection title="Handling Interruptions" icon="⚡">
         <p style={{ fontSize: '1rem', lineHeight: 1.6, color: '#4a5568', marginBottom: '1rem' }}>
-          Manejar interrupciones de manera efectiva es importante para mantener el flujo de la conversación.
+          Handling interruptions well helps you keep the conversation on track.
         </p>
 
         <GrammarTable
-          caption="Estrategias para Manejar Interrupciones"
-          headers={["Situación", "Estrategia", "Respuesta", "Ejemplo"]}
+          caption="Strategies for Handling Interruptions"
+          headers={["Situation", "Strategy", "Response", "Example"]}
           rows={[
-            ["Interrupción Legítima", "Reconocer y permitir", "Aceptar la interrupción", "You're right, let me hear your point"],
-            ["Interrupción Inapropiada", "Mantener tu turno", "Continuar educadamente", "Let me finish this point first"],
-            ["Interrupción por Clarificación", "Clarificar y continuar", "Responder y continuar", "Good question, let me explain"],
-            ["Interrupción por Urgencia", "Manejar la urgencia", "Abordar la urgencia", "That's important, let's address it"],
-            ["Interrupción por Desacuerdo", "Manejar el desacuerdo", "Reconocer y continuar", "I understand your concern, but..."],
-            ["Interrupción por Distracción", "Redirigir la atención", "Volver al tema", "That's interesting, but let's focus on..."],
-            ["Interrupción por Cambio de Tema", "Manejar el cambio", "Decidir si cambiar", "That's a good point, but first..."],
-            ["Interrupción por Tiempo", "Manejar limitaciones de tiempo", "Resumir y continuar", "We're running out of time, so..."]
+            ["Legitimate interruption", "Acknowledge and allow it", "Accept the interruption", "You're right, let me hear your point"],
+            ["Inappropriate interruption", "Hold your turn", "Continue politely", "Let me finish this point first"],
+            ["Interruption for clarification", "Clarify and continue", "Answer and move on", "Good question, let me explain"],
+            ["Urgent interruption", "Address the urgency", "Deal with the urgent matter", "That's important, let's address it"],
+            ["Interruption due to disagreement", "Handle the disagreement", "Acknowledge and proceed", "I understand your concern, but..."],
+            ["Interruption due to distraction", "Redirect attention", "Return to the topic", "That's interesting, but let's focus on..."],
+            ["Interruption to change topic", "Manage the shift", "Decide whether to change", "That's a good point, but first..."],
+            ["Time-limited interruption", "Handle time pressure", "Summarize and continue", "We're running out of time, so..."]
           ]}
         />
 
         <div style={{ display: 'grid', gap: '1rem' }}>
           <Example 
-            spanish="Interrupción legítima: 'Tienes razón, déjame escuchar tu punto'"
             english="Legitimate interruption: 'You're right, let me hear your point'"
-            translation="Interrupción legítima: 'Tienes razón, déjame escuchar tu punto'"
           />
           <Example 
-            spanish="Interrupción inapropiada: 'Déjame terminar este punto primero'"
             english="Inappropriate interruption: 'Let me finish this point first'"
-            translation="Interrupción inapropiada: 'Déjame terminar este punto primero'"
           />
           <Example 
-            spanish="Interrupción por clarificación: 'Buena pregunta, déjame explicar'"
             english="Clarification interruption: 'Good question, let me explain'"
-            translation="Interrupción por clarificación: 'Buena pregunta, déjame explicar'"
           />
         </div>
 
         <Tip type="info">
-          <strong>Consejo:</strong> Manejar interrupciones efectivamente mantiene el control y el respeto en la conversación.
+          <strong>Tip:</strong> Skillful handling of interruptions keeps both control and respect in the conversation.
         </Tip>
       </TheorySection>
 
-      <TheorySection title="Cambio de Tema" icon="🔄">
+      <TheorySection title="Changing the Topic" icon="🔄">
         <p style={{ fontSize: '1rem', lineHeight: 1.6, color: '#4a5568', marginBottom: '1rem' }}>
-          Cambiar de tema de manera natural y educada es una habilidad importante en conversaciones.
+          Moving to a new topic in a natural, polite way is an important conversation skill.
         </p>
 
         <GrammarTable
-          caption="Estrategias para Cambio de Tema"
-          headers={["Estrategia", "Descripción", "Cuándo Usar", "Ejemplo"]}
+          caption="Strategies for Changing the Topic"
+          headers={["Strategy", "Description", "When to Use", "Example"]}
           rows={[
-            ["Transición Suave", "Cambiar gradualmente", "Cuando el tema se agota", "That reminds me of something else"],
-            ["Transición Directa", "Cambiar directamente", "Cuando necesitas cambiar", "Let's talk about something else"],
-            ["Transición por Conexión", "Conectar temas", "Cuando hay relación", "Speaking of that, what about...?"],
-            ["Transición por Pregunta", "Cambiar con pregunta", "Cuando quieres involucrar", "What do you think about...?"],
-            ["Transición por Comentario", "Cambiar con comentario", "Cuando quieres compartir", "That's interesting, but I also want to mention"],
-            ["Transición por Tiempo", "Cambiar por tiempo", "Cuando hay limitaciones", "We're running out of time, so let's discuss"],
-            ["Transición por Prioridad", "Cambiar por importancia", "Cuando hay urgencia", "That's important, but first let's address"],
-            ["Transición por Consenso", "Cambiar con acuerdo", "Cuando hay consenso", "We agree on that, so now let's talk about"]
+            ["Smooth transition", "Shift gradually", "When the topic has run its course", "That reminds me of something else"],
+            ["Direct transition", "Shift more openly", "When you need to move on", "Let's talk about something else"],
+            ["Linked transition", "Bridge between topics", "When there is a connection", "Speaking of that, what about...?"],
+            ["Question transition", "Move on with a question", "When you want to involve the other person", "What do you think about...?"],
+            ["Comment transition", "Move on with a comment", "When you want to add something new", "That's interesting, but I also want to mention"],
+            ["Time-based transition", "Shift because of time limits", "When time is short", "We're running out of time, so let's discuss"],
+            ["Priority transition", "Shift because something matters more", "When something is more urgent", "That's important, but first let's address"],
+            ["Consensus transition", "Shift once there is agreement", "When everyone is aligned", "We agree on that, so now let's talk about"]
           ]}
         />
 
         <div style={{ display: 'grid', gap: '1rem' }}>
           <Example 
-            spanish="Transición suave: 'Eso me recuerda algo más'"
             english="Smooth transition: 'That reminds me of something else'"
-            translation="Transición suave: 'Eso me recuerda algo más'"
           />
           <Example 
-            spanish="Transición por conexión: 'Hablando de eso, ¿qué tal...?'"
             english="Connection transition: 'Speaking of that, what about...?'"
-            translation="Transición por conexión: 'Hablando de eso, ¿qué tal...?'"
           />
           <Example 
-            spanish="Transición por pregunta: '¿Qué piensas sobre...?'"
             english="Question transition: 'What do you think about...?'"
-            translation="Transición por pregunta: '¿Qué piensas sobre...?'"
           />
         </div>
 
         <Rule 
-          title="Consejos para Cambio de Tema"
-          description="Para cambiar de tema efectivamente:"
+          title="Tips for Changing the Topic"
+          description="To change topic effectively:"
           examples={[
-            "Usa transiciones apropiadas para el contexto",
-            "Asegúrate de que el cambio sea relevante",
-            "Considera si es el momento apropiado",
-            "Mantén el interés y la participación"
+            "Use transitions that fit the context",
+            "Make sure the new topic connects or makes sense",
+            "Consider whether the timing is right",
+            "Keep people interested and involved"
           ]}
         />
 
         <Tip type="success">
-          <strong>Consejo:</strong> Los cambios de tema efectivos mantienen la conversación interesante y dinámica.
+          <strong>Tip:</strong> Effective topic shifts keep the conversation lively and dynamic.
         </Tip>
       </TheorySection>
 
-      <TheorySection title="Manejo de Conflictos" icon="⚔️">
+      <TheorySection title="Managing Conflict" icon="⚔️">
         <p style={{ fontSize: '1rem', lineHeight: 1.6, color: '#4a5568', marginBottom: '1rem' }}>
-          Manejar conflictos de manera constructiva es crucial para mantener conversaciones productivas.
+          Handling disagreement constructively is essential for productive conversations.
         </p>
 
         <GrammarTable
-          caption="Estrategias para Manejo de Conflictos"
-          headers={["Situación", "Estrategia", "Enfoque", "Ejemplo"]}
+          caption="Strategies for Managing Conflict"
+          headers={["Situation", "Strategy", "Approach", "Example"]}
           rows={[
-            ["Desacuerdo Menor", "Reconocer y continuar", "Mantener respeto", "I see your point, but I think differently"],
-            ["Desacuerdo Mayor", "Abordar directamente", "Buscar entendimiento", "I understand your concern, let's discuss this"],
-            ["Malentendido", "Clarificar y explicar", "Resolver confusión", "I think there might be a misunderstanding"],
-            ["Conflicto de Opiniones", "Validar y explorar", "Buscar consenso", "Both viewpoints have merit, let's explore"],
-            ["Conflicto de Intereses", "Reconocer y negociar", "Buscar solución", "I understand your needs, let's find a solution"],
-            ["Conflicto Emocional", "Manejar emociones", "Reducir tensión", "I can see this is important to you"],
-            ["Conflicto por Tiempo", "Manejar limitaciones", "Priorizar y organizar", "We have limited time, let's focus on priorities"],
-            ["Conflicto por Autoridad", "Reconocer jerarquía", "Mantener respeto", "I respect your position, but I'd like to suggest"]
+            ["Minor disagreement", "Acknowledge and continue", "Keep respect", "I see your point, but I think differently"],
+            ["Major disagreement", "Address it directly", "Seek understanding", "I understand your concern, let's discuss this"],
+            ["Misunderstanding", "Clarify and explain", "Clear up confusion", "I think there might be a misunderstanding"],
+            ["Clash of opinions", "Validate and explore", "Look for common ground", "Both viewpoints have merit, let's explore"],
+            ["Clash of interests", "Acknowledge and negotiate", "Work toward a solution", "I understand your needs, let's find a solution"],
+            ["Emotional tension", "Address feelings", "Reduce tension", "I can see this is important to you"],
+            ["Time pressure conflict", "Handle limits", "Prioritize and organize", "We have limited time, let's focus on priorities"],
+            ["Authority conflict", "Recognize roles", "Stay respectful", "I respect your position, but I'd like to suggest"]
           ]}
         />
 
         <div style={{ display: 'grid', gap: '1rem' }}>
           <Example 
-            spanish="Desacuerdo menor: 'Veo tu punto, pero pienso diferente'"
             english="Minor disagreement: 'I see your point, but I think differently'"
-            translation="Desacuerdo menor: 'Veo tu punto, pero pienso diferente'"
           />
           <Example 
-            spanish="Malentendido: 'Creo que puede haber un malentendido'"
             english="Misunderstanding: 'I think there might be a misunderstanding'"
-            translation="Malentendido: 'Creo que puede haber un malentendido'"
           />
           <Example 
-            spanish="Conflicto emocional: 'Puedo ver que esto es importante para ti'"
-            english="Emotional conflict: 'I can see this is important to you'"
-            translation="Conflicto emocional: 'Puedo ver que esto es importante para ti'"
+            english="Emotional tension: 'I can see this is important to you'"
           />
         </div>
 
         <Tip type="warning">
-          <strong>¡Cuidado!</strong> Los conflictos mal manejados pueden dañar las relaciones - enfócate en soluciones constructivas.
+          <strong>Watch out!</strong> Poorly handled conflict can harm relationships—focus on constructive solutions.
         </Tip>
       </TheorySection>
 
-      <TheorySection title="Errores Comunes" icon="⚠️">
+      <TheorySection title="Common Mistakes" icon="⚠️">
         <div style={{ display: 'grid', gap: '1rem' }}>
           <Tip type="error">
-            <strong>Error:</strong> No mostrar interés en la conversación ❌<br/>
-            <strong>Correcto:</strong> Participar activamente y mostrar interés genuino ✅<br/>
-            <em>La participación activa mantiene la conversación viva</em>
+            <strong>Error:</strong> Showing no interest in the conversation ❌<br/>
+            <strong>Correct:</strong> Take part actively and show genuine interest ✅<br/>
+            <em>Active engagement keeps the conversation alive</em>
           </Tip>
 
           <Tip type="error">
-            <strong>Error:</strong> Interrumpir constantemente ❌<br/>
-            <strong>Correcto:</strong> Manejar turnos de manera equilibrada ✅<br/>
-            <em>El equilibrio en turnos mantiene la conversación fluida</em>
+            <strong>Error:</strong> Interrupting constantly ❌<br/>
+            <strong>Correct:</strong> Balance turns fairly ✅<br/>
+            <em>Balanced turn-taking keeps the flow smooth</em>
           </Tip>
 
           <Tip type="error">
-            <strong>Error:</strong> Cambiar de tema abruptamente ❌<br/>
-            <strong>Correcto:</strong> Usar transiciones apropiadas ✅<br/>
-            <em>Las transiciones suaves mantienen la coherencia</em>
+            <strong>Error:</strong> Changing the topic abruptly ❌<br/>
+            <strong>Correct:</strong> Use appropriate transitions ✅<br/>
+            <em>Smooth transitions preserve coherence</em>
           </Tip>
 
           <Tip type="error">
-            <strong>Error:</strong> No manejar conflictos constructivamente ❌<br/>
-            <strong>Correcto:</strong> Abordar conflictos con respeto ✅<br/>
-            <em>El manejo constructivo de conflictos mantiene relaciones</em>
+            <strong>Error:</strong> Not handling conflict constructively ❌<br/>
+            <strong>Correct:</strong> Address conflict with respect ✅<br/>
+            <em>Constructive conflict management protects relationships</em>
           </Tip>
         </div>
       </TheorySection>
 
-      <TheorySection title="Reglas Importantes" icon="⚡">
+      <TheorySection title="Important Rules" icon="⚡">
         <div style={{ display: 'grid', gap: '1rem' }}>
           <Rule 
-            title="1. Participación equilibrada"
-            description="Mantén un equilibrio en la participación."
+            title="1. Balanced participation"
+            description="Keep participation balanced."
             examples={[
-              "Escucha tanto como hablas",
-              "Maneja turnos de manera justa",
-              "Muestra interés genuino en otros",
-              "Permite que todos participen"
+              "Listen as much as you speak",
+              "Share turns fairly",
+              "Show genuine interest in others",
+              "Make room for everyone to contribute"
             ]}
           />
 
           <Rule 
-            title="2. Respeto y consideración"
-            description="Mantén respeto y consideración en todas las interacciones."
+            title="2. Respect and consideration"
+            description="Treat everyone with respect in every interaction."
             examples={[
-              "Escucha sin interrumpir inapropiadamente",
-              "Maneja conflictos con respeto",
-              "Considera los sentimientos de otros",
-              "Mantén un tono positivo y constructivo"
+              "Listen without interrupting inappropriately",
+              "Handle disagreement respectfully",
+              "Consider other people's feelings",
+              "Keep a positive, constructive tone"
             ]}
           />
 
           <Rule 
-            title="3. Flexibilidad y adaptación"
-            description="Sé flexible y adapta tu estilo según la situación."
+            title="3. Flexibility and adaptation"
+            description="Stay flexible and adapt your style to the situation."
             examples={[
-              "Adapta tu estilo al contexto",
-              "Ajusta según la personalidad de otros",
-              "Maneja diferentes tipos de interacciones",
-              "Sé flexible en tu enfoque"
+              "Adjust your style to the context",
+              "Adapt to different personalities",
+              "Handle different types of interaction",
+              "Stay open in your approach"
             ]}
           />
         </div>
@@ -394,80 +357,80 @@ const InteractionAndConversationalStrategiesPage = () => {
   const exercises = [
     <MultipleChoiceExercise
       key="1"
-      question="¿Qué te permiten las estrategias de interacción?"
+      question="What do interaction strategies help you do?"
       options={[
-        "Evitar conversaciones",
-        "Participar efectivamente",
-        "Hablar más rápido",
-        "Interrumpir constantemente"
+        "Avoid conversations",
+        "Take part effectively",
+        "Speak faster",
+        "Interrupt constantly"
       ]}
       correctAnswer={1}
-      explanation="Las estrategias de interacción te permiten participar efectivamente en conversaciones, manteniendo un flujo natural y productivo."
+      explanation="Interaction strategies help you take part effectively in conversations while keeping the flow natural and productive."
     />,
 
     <MultipleChoiceExercise
       key="2"
-      question="¿Cuál es el beneficio principal de las estrategias de interacción?"
+      question="What is the main benefit of interaction strategies?"
       options={[
-        "Mejorar la pronunciación",
-        "Participar efectivamente en conversaciones",
-        "Aumentar la velocidad de habla",
-        "Reducir el vocabulario necesario"
+        "Improve pronunciation",
+        "Take part effectively in conversations",
+        "Increase speaking speed",
+        "Reduce the vocabulary you need"
       ]}
       correctAnswer={1}
-      explanation="El beneficio principal es participar efectivamente en conversaciones, ya que estas estrategias te permiten manejar turnos, mostrar interés y mantener interacciones exitosas."
+      explanation="The main benefit is taking part effectively in conversations, because these strategies help you manage turns, show interest, and sustain successful interactions."
     />,
 
     <TrueFalseExercise
       key="3"
       statements={[
         {
-          text: "Mostrar interés genuino es importante para mantener conversaciones exitosas.",
+          text: "Showing genuine interest is important for successful conversations.",
           isTrue: true,
-          explanation: "Correcto. Mostrar interés genuino a través de respuestas de escucha, preguntas de seguimiento y comentarios de apoyo mantiene la conversación viva y participativa."
+          explanation: "Correct. Genuine interest—through backchannels, follow-up questions, and supportive comments—keeps the conversation lively and engaging."
         },
         {
-          text: "Es mejor interrumpir constantemente para mantener el control de la conversación.",
+          text: "It is better to interrupt constantly to control the conversation.",
           isTrue: false,
-          explanation: "Incorrecto. Interrumpir constantemente es contraproducente. Es mejor manejar turnos de manera equilibrada y respetuosa."
+          explanation: "Incorrect. Constant interruption backfires. It is better to manage turns in a balanced, respectful way."
         },
         {
-          text: "Las transiciones suaves son mejores que los cambios abruptos de tema.",
+          text: "Smooth transitions are better than abrupt topic changes.",
           isTrue: true,
-          explanation: "Correcto. Las transiciones suaves mantienen la coherencia y fluidez de la conversación, mientras que los cambios abruptos pueden ser desconcertantes."
+          explanation: "Correct. Smooth transitions preserve coherence and flow; abrupt shifts can confuse people."
         },
         {
-          text: "Los conflictos siempre deben evitarse en las conversaciones.",
+          text: "Conflict should always be avoided in conversation.",
           isTrue: false,
-          explanation: "Incorrecto. Los conflictos son normales y pueden manejarse constructivamente. Lo importante es abordarlos con respeto y buscar soluciones."
+          explanation: "Incorrect. Disagreement is normal and can be handled constructively. What matters is addressing it with respect and working toward solutions."
         }
       ]}
     />,
 
     <MultipleChoiceExercise
       key="4"
-      question="¿Cuál es la mejor estrategia para manejar una interrupción inapropiada?"
+      question="What is the best approach to an inappropriate interruption?"
       options={[
-        "Interrumpir de vuelta",
-        "Mantener tu turno educadamente",
-        "Ignorar la interrupción",
-        "Terminar la conversación"
+        "Interrupt back",
+        "Hold your turn politely",
+        "Ignore the interruption",
+        "End the conversation"
       ]}
       correctAnswer={1}
-      explanation="Mantener tu turno educadamente es la mejor estrategia, ya que te permite continuar tu punto mientras mantienes el respeto y la cortesía."
+      explanation="Holding your turn politely is usually best: you can finish your point while staying courteous."
     />,
 
     <MultipleChoiceExercise
       key="5"
-      question="¿Qué estrategia es más efectiva para mostrar interés en una conversación?"
+      question="Which strategy is most effective for showing interest in a conversation?"
       options={[
-        "Hablar más que la otra persona",
-        "Hacer preguntas de seguimiento relevantes",
-        "Cambiar de tema frecuentemente",
-        "Interrumpir con tus propias historias"
+        "Talking more than the other person",
+        "Asking relevant follow-up questions",
+        "Changing the topic often",
+        "Interrupting with your own stories"
       ]}
       correctAnswer={1}
-      explanation="Hacer preguntas de seguimiento relevantes es la estrategia más efectiva, ya que demuestra que estás escuchando activamente y quieres profundizar en el tema."
+      explanation="Relevant follow-up questions show you are listening and want to explore the topic further."
     />,
 
     <TrueFalseExercise
@@ -476,17 +439,17 @@ const InteractionAndConversationalStrategiesPage = () => {
         {
           text: "Active listening involves only hearing the words someone says.",
           isTrue: false,
-          explanation: "Incorrecto. La escucha activa incluye entender el mensaje, las emociones y responder apropiadamente."
+          explanation: "Incorrect. Active listening includes understanding the message and emotions and responding appropriately."
         },
         {
           text: "Turn-taking is important for smooth conversations.",
           isTrue: true,
-          explanation: "Correcto. El manejo de turnos permite que todos participen y mantiene el flujo natural de la conversación."
+          explanation: "Correct. Turn-taking lets everyone contribute and keeps the conversation flowing naturally."
         },
         {
           text: "You should avoid asking clarifying questions during conversations.",
           isTrue: false,
-          explanation: "Incorrecto. Las preguntas de clarificación muestran interés y ayudan a entender mejor."
+          explanation: "Incorrect. Clarifying questions show engagement and improve understanding."
         }
       ]}
     />,
@@ -501,20 +464,20 @@ const InteractionAndConversationalStrategiesPage = () => {
         "because"
       ]}
       correctAnswer={1}
-      explanation="'But' introduce una perspectiva diferente de manera educada después de reconocer el punto de vista del otro."
+      explanation="'But' politely introduces a different angle after acknowledging the other person's view."
     />,
 
     <MultipleChoiceExercise
       key="8"
-      question="¿Cuál es la mejor manera de manejar un desacuerdo en conversación?"
+      question="What is the best way to handle disagreement in conversation?"
       options={[
-        "Evitar el tema completamente",
-        "Reconocer el punto de vista y expresar el tuyo respetuosamente",
-        "Insistir hasta que la otra persona cambie de opinión",
-        "Cambiar de tema inmediatamente"
+        "Avoid the topic completely",
+        "Acknowledge their view and state yours respectfully",
+        "Insist until they change their mind",
+        "Change the topic immediately"
       ]}
       correctAnswer={1}
-      explanation="Reconocer el punto de vista del otro y expresar el tuyo respetuosamente mantiene la conversación constructiva."
+      explanation="Acknowledging the other person's perspective and stating yours respectfully keeps the exchange constructive."
     />,
 
     <TrueFalseExercise
@@ -523,12 +486,12 @@ const InteractionAndConversationalStrategiesPage = () => {
         {
           text: "Interrupting is always rude in conversations.",
           isTrue: false,
-          explanation: "Incorrecto. Interrupciones cooperativas (para mostrar entendimiento o hacer preguntas relevantes) pueden ser apropiadas."
+          explanation: "Incorrect. Cooperative interruptions—for understanding or a relevant question—can be appropriate."
         },
         {
           text: "Body language is important in face-to-face interactions.",
           isTrue: true,
-          explanation: "Correcto. El lenguaje corporal comunica interés, atención y actitudes, siendo crucial en interacciones cara a cara."
+          explanation: "Correct. Body language signals interest, attention, and attitude and matters a great deal in person."
         }
       ]}
     />,
@@ -543,14 +506,14 @@ const InteractionAndConversationalStrategiesPage = () => {
         "skip"
       ]}
       correctAnswer={0}
-      explanation="'Expand' es apropiado para pedir más información o clarificación sobre un punto específico."
+      explanation="'Expand' is natural here when you want more detail or clarification on a specific point."
     />
   ];
 
   return (
     <TheoryLayout
       title="Interaction and Conversational Strategies"
-      description="Domina las estrategias de interacción y conversación en inglés. Aprende técnicas para iniciar conversaciones, manejar turnos, mostrar interés, manejar interrupciones y conflictos."
+      description="Master interaction and conversational strategies in English. Learn techniques for starting conversations, managing turns, showing interest, and handling interruptions and conflict."
       level="B1-B2-C1-C2"
       theoryContent={theoryContent}
       exercises={exercises}
@@ -561,24 +524,4 @@ const InteractionAndConversationalStrategiesPage = () => {
 };
 
 export default InteractionAndConversationalStrategiesPage;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 

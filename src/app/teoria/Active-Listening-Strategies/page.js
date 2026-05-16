@@ -18,361 +18,288 @@ import {
 const ActiveListeningStrategiesPage = () => {
   const theoryContent = (
     <div>
-      <TheorySection title="¿Qué son las Active Listening Strategies?" icon="🎧">
+      <TheorySection title="What Are Active Listening Strategies?" icon="🎧">
         <p style={{ fontSize: '1.1rem', lineHeight: 1.6, color: '#4a5568', marginBottom: '1rem' }}>
-          Las <strong>active listening strategies</strong> (estrategias de escucha activa) son técnicas específicas que 
-          te permiten participar activamente en el proceso de comprensión auditiva, mejorando significativamente tu capacidad de entender.
+          <strong>Active listening strategies</strong> are techniques that engage you in understanding what you hear. They significantly improve comprehension.
         </p>
         
         <QuickReference items={[
-          "Técnicas para participar activamente en el listening",
-          "Estrategias de predicción y anticipación",
-          "Métodos de verificación y confirmación",
-          "Técnicas de inferencia y deducción",
-          "Estrategias de gestión de atención y concentración"
+          "Ways to engage actively with listening",
+          "Prediction and anticipation tactics",
+          "Checking and confirming understanding",
+          "Inference and reasoning skills",
+          "Managing attention and focus"
         ]} />
       </TheorySection>
 
-      <TheorySection title="Diferencias entre Escucha Pasiva y Activa" icon="⚖️">
+      <TheorySection title="Passive vs Active Listening" icon="⚖️">
         <p style={{ fontSize: '1rem', lineHeight: 1.6, color: '#4a5568', marginBottom: '1rem' }}>
-          Entender la diferencia entre escucha pasiva y activa es fundamental para mejorar tu comprensión auditiva.
+          Knowing the difference is key to improving listening.
         </p>
 
         <GrammarTable
-          caption="Escucha Pasiva vs Activa"
-          headers={["Aspecto", "Escucha Pasiva", "Escucha Activa", "Resultado"]}
+          caption="Passive vs Active Listening"
+          headers={["Aspect", "Passive", "Active", "Outcome"]}
           rows={[
-            ["Participación", "Recibe información", "Participa en el proceso", "Mayor comprensión"],
-            ["Atención", "Atención limitada", "Atención total", "Mejor retención"],
-            ["Predicción", "No anticipa", "Predice contenido", "Mejor preparación"],
-            ["Verificación", "No verifica", "Verifica comprensión", "Mayor precisión"],
-            ["Inferencia", "Comprensión literal", "Inferencia activa", "Comprensión profunda"],
-            ["Gestión", "Sin estrategias", "Usa estrategias", "Control del proceso"]
+            ["Engagement", "Receives input only", "Takes part mentally", "Stronger understanding"],
+            ["Attention", "Limited focus", "Full focus", "Better recall"],
+            ["Prediction", "Does not anticipate", "Predicts content", "Better readiness"],
+            ["Checking", "Does not verify", "Checks understanding", "Greater accuracy"],
+            ["Inference", "Literal only", "Active inference", "Deeper meaning"],
+            ["Management", "No plan", "Uses strategies", "More control"]
           ]}
         />
 
         <div style={{ display: 'grid', gap: '1rem' }}>
-          <Example 
-            spanish="Escucha pasiva: 'Solo escucha sin participar'"
-            english="Passive listening: 'Just listens without participating'"
-            translation="Escucha pasiva: 'Solo escucha sin participar'"
-          />
-          <Example 
-            spanish="Escucha activa: 'Predice, verifica, infiere'"
-            english="Active listening: 'Predicts, verifies, infers'"
-            translation="Escucha activa: 'Predice, verifica, infiere'"
-          />
-          <Example 
-            spanish="Resultado: 'Mayor comprensión y retención'"
-            english="Result: 'Better comprehension and retention'"
-            translation="Resultado: 'Mayor comprensión y retención'"
-          />
+          <Example english="Passive: 'Just hearing without engaging'" />
+          <Example english="Active: 'Predict, check, infer'" />
+          <Example english="Result: 'Better comprehension and memory'" />
         </div>
 
         <Rule 
-          title="Características de la Escucha Activa"
-          description="La escucha activa incluye:"
+          title="Traits of Active Listening"
+          description="Active listening includes:"
           examples={[
-            "Predicción del contenido",
-            "Verificación continua de comprensión",
-            "Inferencia de significado",
-            "Gestión de la atención",
-            "Uso de estrategias específicas"
+            "Predicting content",
+            "Checking understanding as you go",
+            "Inferring implied meaning",
+            "Managing attention",
+            "Applying task-specific strategies"
           ]}
         />
 
         <Tip type="info">
-          <strong>Consejo:</strong> La escucha activa transforma el listening de un proceso pasivo a uno activo y controlado.
+          <strong>Tip:</strong> Active listening turns listening from a passive into a controlled process.
         </Tip>
       </TheorySection>
 
-      <TheorySection title="Estrategias de Predicción" icon="🔮">
+      <TheorySection title="Prediction Strategies" icon="🔮">
         <p style={{ fontSize: '1rem', lineHeight: 1.6, color: '#4a5568', marginBottom: '1rem' }}>
-          La predicción te prepara mentalmente para lo que vas a escuchar y mejora tu comprensión.
+          Prediction mentally primes you for what comes next.
         </p>
 
         <GrammarTable
-          caption="Estrategias de Predicción"
-          headers={["Estrategia", "Descripción", "Cuándo Usar", "Ejemplo"]}
+          caption="Prediction Strategies"
+          headers={["Strategy", "Description", "When to Use", "Example"]}
           rows={[
-            ["Predicción por Preguntas", "Predecir basado en preguntas", "Antes del audio", "Pregunta sobre precio → buscar números"],
-            ["Predicción por Contexto", "Predecir basado en situación", "Antes del audio", "Aeropuerto → buscar horarios, puertas"],
-            ["Predicción por Título", "Predecir basado en título", "Antes del audio", "Título sobre tecnología → buscar términos técnicos"],
-            ["Predicción por Imágenes", "Predecir basado en imágenes", "Antes del audio", "Imagen de restaurante → buscar comida, precios"],
-            ["Predicción por Vocabulario", "Predecir basado en palabras clave", "Durante el audio", "Escuchar 'beneficios' → buscar ventajas"],
-            ["Predicción por Estructura", "Predecir basado en estructura", "Durante el audio", "Escuchar 'primero' → buscar lista"]
+            ["From questions", "Guess from prompts", "Before audio", "Price question → expect numbers"],
+            ["From context", "Guess from situation", "Before audio", "Airport → times, gates"],
+            ["From title", "Guess from heading", "Before audio", "Tech topic → technical words"],
+            ["From visuals", "Guess from pictures", "Before audio", "Restaurant scene → food, prices"],
+            ["From vocabulary", "Guess from key words", "During audio", "Hear 'benefits' → listen for advantages"],
+            ["From structure", "Guess from markers", "During audio", "Hear 'first' → expect a list"]
           ]}
         />
 
         <div style={{ display: 'grid', gap: '1rem' }}>
-          <Example 
-            spanish="Predicción por preguntas: 'Pregunta sobre precio → buscar números'"
-            english="Prediction by questions: 'Question about price → look for numbers'"
-            translation="Predicción por preguntas: 'Pregunta sobre precio → buscar números'"
-          />
-          <Example 
-            spanish="Predicción por contexto: 'Aeropuerto → buscar horarios, puertas'"
-            english="Prediction by context: 'Airport → look for times, gates'"
-            translation="Predicción por contexto: 'Aeropuerto → buscar horarios, puertas'"
-          />
-          <Example 
-            spanish="Predicción por vocabulario: 'Escuchar beneficios → buscar ventajas'"
-            english="Prediction by vocabulary: 'Hear benefits → look for advantages'"
-            translation="Predicción por vocabulario: 'Escuchar beneficios → buscar ventajas'"
-          />
+          <Example english="From questions: 'Question about price → look for numbers'" />
+          <Example english="From context: 'Airport → times, gates'" />
+          <Example english="From vocabulary: 'Hear benefits → listen for advantages'" />
         </div>
 
         <Tip type="success">
-          <strong>Consejo:</strong> La predicción prepara tu mente para procesar información específica.                                                 
+          <strong>Tip:</strong> Prediction primes your mind for specific information.
         </Tip>
       </TheorySection>
 
-      <TheorySection title="Estrategias de Verificación" icon="✅">
+      <TheorySection title="Checking Strategies" icon="✅">
         <p style={{ fontSize: '1rem', lineHeight: 1.6, color: '#4a5568', marginBottom: '1rem' }}>
-          La verificación continua te ayuda a confirmar tu comprensión y corregir malentendidos.
+          Ongoing checking confirms understanding and fixes mistakes early.
         </p>
 
         <GrammarTable
-          caption="Estrategias de Verificación"
-          headers={["Estrategia", "Descripción", "Cuándo Usar", "Beneficio"]}
+          caption="Checking Strategies"
+          headers={["Strategy", "Description", "When to Use", "Benefit"]}
           rows={[
-            ["Verificación Inmediata", "Confirmar comprensión inmediatamente", "Durante el audio", "Corregir errores temprano"],
-            ["Verificación Cruzada", "Comparar con información previa", "Durante el audio", "Consistencia de comprensión"],
-            ["Verificación por Contexto", "Usar contexto para confirmar", "Durante el audio", "Validar interpretación"],
-            ["Verificación por Coherencia", "Verificar lógica interna", "Durante el audio", "Detectar inconsistencias"],
-            ["Verificación por Preguntas", "Confirmar con preguntas específicas", "Después del audio", "Validar respuestas"],
-            ["Verificación por Predicción", "Comparar con predicciones", "Después del audio", "Evaluar precisión"]
+            ["Immediate check", "Confirm right away", "During audio", "Fix errors early"],
+            ["Cross-check", "Compare with earlier info", "During audio", "Stay consistent"],
+            ["Context check", "Use setting to confirm", "During audio", "Validate guesses"],
+            ["Coherence check", "Test internal logic", "During audio", "Spot contradictions"],
+            ["Question check", "Match to items", "After audio", "Validate answers"],
+            ["Prediction check", "Compare to guesses", "After audio", "Gauge accuracy"]
           ]}
         />
 
         <div style={{ display: 'grid', gap: '1rem' }}>
-          <Example 
-            spanish="Verificación inmediata: 'Confirmar comprensión durante el audio'"
-            english="Immediate verification: 'Confirm understanding during audio'"
-            translation="Verificación inmediata: 'Confirmar comprensión durante el audio'"
-          />
-          <Example 
-            spanish="Verificación cruzada: 'Comparar con información previa'"
-            english="Cross-verification: 'Compare with previous information'"
-            translation="Verificación cruzada: 'Comparar con información previa'"
-          />
-          <Example 
-            spanish="Verificación por contexto: 'Usar contexto para confirmar'"
-            english="Context verification: 'Use context to confirm'"
-            translation="Verificación por contexto: 'Usar contexto para confirmar'"
-          />
+          <Example english="Immediate check: 'Confirm understanding while listening'" />
+          <Example english="Cross-check: 'Compare with earlier information'" />
+          <Example english="Context check: 'Use context to confirm meaning'" />
         </div>
 
         <Rule 
-          title="Consejos para Verificación"
-          description="Para verificar efectivamente:"
+          title="Checking Tips"
+          description="To check effectively:"
           examples={[
-            "Verifica continuamente durante el audio",
-            "Usa múltiples fuentes de verificación",
-            "No dudes en revisar tu comprensión",
-            "Corrige errores tan pronto como los detectes"
+            "Monitor understanding throughout",
+            "Use more than one check when possible",
+            "Be willing to revise your interpretation",
+            "Correct misunderstandings as soon as you spot them"
           ]}
         />
 
         <Tip type="warning">
-          <strong>¡Cuidado!</strong> La verificación excesiva puede distraerte - encuentra el equilibrio.
+          <strong>Watch out!</strong> Over-checking can distract you—balance monitoring with following the flow.
         </Tip>
       </TheorySection>
 
-      <TheorySection title="Estrategias de Inferencia" icon="🧠">
+      <TheorySection title="Inference Strategies" icon="🧠">
         <p style={{ fontSize: '1rem', lineHeight: 1.6, color: '#4a5568', marginBottom: '1rem' }}>
-          La inferencia te permite entender información implícita y llenar vacíos en tu comprensión.
+          Inference helps with implied meaning and gaps in what you hear.
         </p>
 
         <GrammarTable
-          caption="Estrategias de Inferencia"
-          headers={["Tipo", "Descripción", "Ejemplo", "Cuándo Usar"]}
+          caption="Inference Strategies"
+          headers={["Type", "Description", "Example", "When to Use"]}
           rows={[
-            ["Inferencia Contextual", "Inferir basado en contexto", "Hospital → surgery probablemente cirugía", "Palabras desconocidas"],
-            ["Inferencia Lógica", "Inferir basado en lógica", "Lluvia → cancelación de evento", "Información implícita"],
-            ["Inferencia Cultural", "Inferir basado en cultura", "Thanksgiving → turkey", "Referencias culturales"],
-            ["Inferencia Temporal", "Inferir basado en tiempo", "Mañana → evento futuro", "Relaciones temporales"],
-            ["Inferencia Causal", "Inferir causa y efecto", "Accidente → tráfico", "Relaciones causales"],
-            ["Inferencia Emocional", "Inferir emociones", "Tono triste → malas noticias", "Información emocional"]
+            ["Contextual", "Infer from setting", "Hospital → surgery likely means operation", "Unknown words"],
+            ["Logical", "Infer by reasoning", "Rain → event may be cancelled", "Implicit information"],
+            ["Cultural", "Infer from background", "Thanksgiving → turkey", "Cultural references"],
+            ["Temporal", "Infer from time cues", "Tomorrow → future event", "Time relations"],
+            ["Causal", "Infer cause-effect", "Accident → traffic", "Cause and effect"],
+            ["Emotional", "Infer feeling", "Sad tone → bad news", "Attitude and mood"]
           ]}
         />
 
         <div style={{ display: 'grid', gap: '1rem' }}>
-          <Example 
-            spanish="Inferencia contextual: 'Hospital → surgery probablemente cirugía'"
-            english="Contextual inference: 'Hospital → surgery probably surgery'"
-            translation="Inferencia contextual: 'Hospital → surgery probablemente cirugía'"
-          />
-          <Example 
-            spanish="Inferencia lógica: 'Lluvia → cancelación de evento'"
-            english="Logical inference: 'Rain → event cancellation'"
-            translation="Inferencia lógica: 'Lluvia → cancelación de evento'"
-          />
-          <Example 
-            spanish="Inferencia cultural: 'Thanksgiving → turkey'"
-            english="Cultural inference: 'Thanksgiving → turkey'"
-            translation="Inferencia cultural: 'Thanksgiving → turkey'"
-          />
+          <Example english="Contextual: 'Hospital → surgery may mean an operation'" />
+          <Example english="Logical: 'Rain → event may be cancelled'" />
+          <Example english="Cultural: 'Thanksgiving → turkey'" />
         </div>
 
         <Tip type="info">
-          <strong>Consejo:</strong> La inferencia te permite entender más de lo que se dice explícitamente.
+          <strong>Tip:</strong> Inference lets you understand more than the exact words spoken.
         </Tip>
       </TheorySection>
 
-      <TheorySection title="Gestión de Atención y Concentración" icon="🎯">
+      <TheorySection title="Attention and Focus Management" icon="🎯">
         <p style={{ fontSize: '1rem', lineHeight: 1.6, color: '#4a5568', marginBottom: '1rem' }}>
-          Gestionar tu atención y concentración es crucial para mantener la escucha activa.
+          Managing attention supports active listening throughout.
         </p>
 
         <GrammarTable
-          caption="Estrategias de Gestión de Atención"
-          headers={["Estrategia", "Descripción", "Cuándo Usar", "Beneficio"]}
+          caption="Attention Management"
+          headers={["Strategy", "Description", "When to Use", "Benefit"]}
           rows={[
-            ["Enfoque Selectivo", "Enfocarse en información relevante", "Durante todo el audio", "Evitar distracciones"],
-            ["Gestión de Fatiga", "Manejar cansancio mental", "Audios largos", "Mantener rendimiento"],
-            ["Recuperación de Atención", "Recuperar atención perdida", "Cuando te distraes", "No perder información"],
-            ["Anticipación de Distracciones", "Prepararse para distracciones", "Antes del audio", "Minimizar interrupciones"],
-            ["Técnicas de Relajación", "Mantener calma y concentración", "Antes del audio", "Reducir ansiedad"],
-            ["Gestión de Tiempo", "Usar tiempo efectivamente", "Durante el audio", "Maximizar eficiencia"]
+            ["Selective focus", "Target relevant information", "Whole recording", "Reduce distraction"],
+            ["Fatigue control", "Handle mental tiredness", "Long audio", "Sustain performance"],
+            ["Recovery", "Regain lost focus", "When you drift", "Miss less content"],
+            ["Distractor prep", "Expect interruptions", "Before audio", "Reduce impact"],
+            ["Relaxation", "Stay calm", "Before audio", "Lower anxiety"],
+            ["Time use", "Use moments well", "During audio", "Maximize efficiency"]
           ]}
         />
 
         <div style={{ display: 'grid', gap: '1rem' }}>
-          <Example 
-            spanish="Enfoque selectivo: 'Enfocarse en información relevante'"
-            english="Selective focus: 'Focus on relevant information'"
-            translation="Enfoque selectivo: 'Enfocarse en información relevante'"
-          />
-          <Example 
-            spanish="Gestión de fatiga: 'Manejar cansancio mental'"
-            english="Fatigue management: 'Manage mental tiredness'"
-            translation="Gestión de fatiga: 'Manejar cansancio mental'"
-          />
-          <Example 
-            spanish="Recuperación: 'Recuperar atención perdida'"
-            english="Recovery: 'Recover lost attention'"
-            translation="Recuperación: 'Recuperar atención perdida'"
-          />
+          <Example english="Selective focus: 'Lock onto relevant information'" />
+          <Example english="Fatigue control: 'Manage mental tiredness'" />
+          <Example english="Recovery: 'Bring attention back when it slips'" />
         </div>
 
         <Rule 
-          title="Consejos para Gestión de Atención"
-          description="Para gestionar tu atención:"
+          title="Attention Tips"
+          description="To manage attention:"
           examples={[
-            "Identifica y minimiza distracciones",
-            "Usa técnicas de respiración para relajarte",
-            "Toma descansos mentales cuando sea posible",
-            "Mantén una actitud positiva y confiada"
+            "Reduce avoidable distractions",
+            "Use breathing to steady yourself",
+            "Take brief mental resets when possible",
+            "Stay constructive and confident"
           ]}
         />
 
         <Tip type="success">
-          <strong>Consejo:</strong> La gestión de atención es una habilidad que se puede desarrollar con la práctica.
+          <strong>Tip:</strong> Attention control improves with practice.
         </Tip>
       </TheorySection>
 
-      <TheorySection title="Estrategias de Procesamiento" icon="⚙️">
+      <TheorySection title="Processing Strategies" icon="⚙️">
         <p style={{ fontSize: '1rem', lineHeight: 1.6, color: '#4a5568', marginBottom: '1rem' }}>
-          El procesamiento activo de información mejora significativamente tu comprensión.
+          Active processing turns sound into meaningful understanding.
         </p>
 
         <GrammarTable
-          caption="Estrategias de Procesamiento"
-          headers={["Estrategia", "Descripción", "Ejemplo", "Beneficio"]}
+          caption="Processing Strategies"
+          headers={["Strategy", "Description", "Example", "Benefit"]}
           rows={[
-            ["Procesamiento Paralelo", "Procesar múltiples elementos", "Escuchar + tomar notas + inferir", "Eficiencia máxima"],
-            ["Procesamiento Secuencial", "Procesar paso a paso", "Escuchar → entender → recordar", "Comprensión profunda"],
-            ["Procesamiento por Chunks", "Procesar en grupos", "Agrupar información relacionada", "Mejor organización"],
-            ["Procesamiento por Prioridad", "Priorizar información", "Información clave primero", "Enfoque en lo importante"],
-            ["Procesamiento por Patrones", "Reconocer patrones", "Identificar estructuras comunes", "Anticipación"],
-            ["Procesamiento por Conexiones", "Conectar información", "Relacionar ideas", "Comprensión integral"]
+            ["Parallel", "Handle several subtasks", "Listen + note + infer", "High efficiency"],
+            ["Sequential", "Step by step", "Listen → grasp → recall", "Deep clarity"],
+            ["Chunking", "Group related bits", "Cluster related facts", "Better structure"],
+            ["Priority", "Rank importance", "Key points first", "Stay on target"],
+            ["Pattern", "Spot familiar shapes", "Common layouts", "Anticipation"],
+            ["Connection", "Link ideas", "Relate points", "Holistic view"]
           ]}
         />
 
         <div style={{ display: 'grid', gap: '1rem' }}>
-          <Example 
-            spanish="Procesamiento paralelo: 'Escuchar + tomar notas + inferir'"
-            english="Parallel processing: 'Listen + take notes + infer'"
-            translation="Procesamiento paralelo: 'Escuchar + tomar notas + inferir'"
-          />
-          <Example 
-            spanish="Procesamiento por chunks: 'Agrupar información relacionada'"
-            english="Chunk processing: 'Group related information'"
-            translation="Procesamiento por chunks: 'Agrupar información relacionada'"
-          />
-          <Example 
-            spanish="Procesamiento por prioridad: 'Información clave primero'"
-            english="Priority processing: 'Key information first'"
-            translation="Procesamiento por prioridad: 'Información clave primero'"
-          />
+          <Example english="Parallel: 'Listen + take notes + infer'" />
+          <Example english="Chunking: 'Group related information'" />
+          <Example english="Priority: 'Key information first'" />
         </div>
 
         <Tip type="info">
-          <strong>Consejo:</strong> El procesamiento activo transforma la información auditiva en comprensión significativa.
+          <strong>Tip:</strong> Active processing turns raw audio into meaningful understanding.
         </Tip>
       </TheorySection>
 
-      <TheorySection title="Errores Comunes" icon="⚠️">
+      <TheorySection title="Common Mistakes" icon="⚠️">
         <div style={{ display: 'grid', gap: '1rem' }}>
           <Tip type="error">
-            <strong>Error:</strong> Escuchar pasivamente sin participar ❌<br/>
-            <strong>Correcto:</strong> Participar activamente en el proceso ✅<br/>
-            <em>La escucha activa mejora significativamente la comprensión</em>
+            <strong>Mistake:</strong> Listening passively ❌<br/>
+            <strong>Better:</strong> Engage mentally ✅<br/>
+            <em>Active engagement improves comprehension</em>
           </Tip>
 
           <Tip type="error">
-            <strong>Error:</strong> No predecir contenido ❌<br/>
-            <strong>Correcto:</strong> Predecir basado en contexto ✅<br/>
-            <em>La predicción prepara tu mente para procesar información</em>
+            <strong>Mistake:</strong> No prediction ❌<br/>
+            <strong>Better:</strong> Predict from context ✅<br/>
+            <em>Prediction prepares your processing</em>
           </Tip>
 
           <Tip type="error">
-            <strong>Error:</strong> No verificar comprensión ❌<br/>
-            <strong>Correcto:</strong> Verificar continuamente ✅<br/>
-            <em>La verificación asegura precisión en la comprensión</em>
+            <strong>Mistake:</strong> Never checking understanding ❌<br/>
+            <strong>Better:</strong> Monitor as you go ✅<br/>
+            <em>Checking improves accuracy</em>
           </Tip>
 
           <Tip type="error">
-            <strong>Error:</strong> No inferir información implícita ❌<br/>
-            <strong>Correcto:</strong> Usar inferencia para entender más ✅<br/>
-            <em>La inferencia te permite entender información no explícita</em>
+            <strong>Mistake:</strong> Ignoring implied meaning ❌<br/>
+            <strong>Better:</strong> Use inference ✅<br/>
+            <em>Inference fills what is not spelled out</em>
           </Tip>
         </div>
       </TheorySection>
 
-      <TheorySection title="Reglas Importantes" icon="⚡">
+      <TheorySection title="Important Rules" icon="⚡">
         <div style={{ display: 'grid', gap: '1rem' }}>
           <Rule 
-            title="1. Participación activa"
-            description="Participa activamente en el proceso de listening."
+            title="1. Active participation"
+            description="Take an active role in listening."
             examples={[
-              "Predice contenido antes de escuchar",
-              "Verifica comprensión continuamente",
-              "Infiere información implícita",
-              "Gestiona tu atención y concentración"
+              "Predict before and during listening",
+              "Check understanding continuously",
+              "Infer implied information",
+              "Manage attention and focus"
             ]}
           />
 
           <Rule 
-            title="2. Uso de múltiples estrategias"
-            description="Combina diferentes estrategias para máxima efectividad."
+            title="2. Combine strategies"
+            description="Layer strategies for best effect."
             examples={[
-              "Predicción + verificación + inferencia",
-              "Gestión de atención + procesamiento activo",
-              "Estrategias específicas por tipo de listening",
-              "Adaptación según el contexto"
+              "Prediction + checking + inference",
+              "Attention control + active processing",
+              "Match tactics to task type",
+              "Adjust to context"
             ]}
           />
 
           <Rule 
-            title="3. Práctica regular"
-            description="Practica las estrategias regularmente para desarrollarlas."
+            title="3. Regular practice"
+            description="Practice strategies until they feel natural."
             examples={[
-              "Practica con diferentes tipos de audio",
-              "Desarrolla habilidades gradualmente",
-              "Reflexiona sobre tu progreso",
-              "Ajusta estrategias según necesidades"
+              "Use varied audio types",
+              "Build skills step by step",
+              "Reflect on progress",
+              "Refine what you use"
             ]}
           />
         </div>
@@ -383,80 +310,80 @@ const ActiveListeningStrategiesPage = () => {
   const exercises = [
     <MultipleChoiceExercise
       key="1"
-      question="¿Qué tipo de escucha mejora más la comprensión?"
+      question="Which type of listening most improves comprehension?"
       options={[
-        "Escucha pasiva",
-        "Escucha activa",
-        "Escucha rápida",
-        "Escucha silenciosa"
+        "Passive listening",
+        "Active listening",
+        "Fast listening",
+        "Silent listening"
       ]}
       correctAnswer={1}
-      explanation="La escucha activa implica participación mental y mejora significativamente la comprensión."
+      explanation="Active listening involves mental engagement and usually boosts comprehension most."
     />,
 
     <MultipleChoiceExercise
       key="2"
-      question="¿Cuál es la diferencia principal entre escucha pasiva y activa?"
+      question="What is the main difference between passive and active listening?"
       options={[
-        "La velocidad de escucha",
-        "La participación en el proceso",
-        "El volumen del audio",
-        "La duración del audio"
+        "Speed of hearing",
+        "Level of participation in the process",
+        "Volume of the recording",
+        "Length of the recording"
       ]}
       correctAnswer={1}
-      explanation="La diferencia principal es la participación en el proceso. La escucha activa involucra predicción, verificación e inferencia, mientras que la pasiva solo recibe información."
+      explanation="The key difference is participation: active listening adds prediction, checking, and inference."
     />,
 
     <TrueFalseExercise
       key="3"
       statements={[
         {
-          text: "La predicción prepara la mente para procesar información específica.",
+          text: "Prediction prepares your mind to process specific information.",
           isTrue: true,
-          explanation: "Correcto. La predicción basada en preguntas, contexto o vocabulario prepara tu mente para buscar y procesar información específica."
+          explanation: "Correct. Prediction from questions, context, or vocabulary aims your attention."
         },
         {
-          text: "La verificación continua puede distraer de la comprensión.",
+          text: "Continuous checking always harms comprehension.",
           isTrue: false,
-          explanation: "Incorrecto. La verificación continua mejora la comprensión al permitir corregir errores y confirmar interpretaciones."
+          explanation: "Incorrect. Light, ongoing checking usually helps by catching errors early."
         },
         {
-          text: "La inferencia permite entender información no explícita.",
+          text: "Inference helps with information that is not stated directly.",
           isTrue: true,
-          explanation: "Correcto. La inferencia contextual, lógica y cultural te permite entender información implícita y llenar vacíos en la comprensión."
+          explanation: "Correct. Contextual, logical, and cultural clues fill implied meaning."
         },
         {
-          text: "La gestión de atención no es importante para la escucha activa.",
+          text: "Attention management is unimportant for active listening.",
           isTrue: false,
-          explanation: "Incorrecto. La gestión de atención es crucial para mantener la escucha activa y evitar distracciones."
+          explanation: "Incorrect. Managing focus is central to staying active and avoiding drift."
         }
       ]}
     />,
 
     <MultipleChoiceExercise
       key="4"
-      question="¿Cuál es el beneficio principal de la inferencia en listening?"
+      question="What is the main benefit of inference in listening?"
       options={[
-        "Mejorar la pronunciación",
-        "Entender información implícita",
-        "Aumentar la velocidad de escucha",
-        "Reducir el vocabulario necesario"
+        "Better pronunciation",
+        "Understanding implied information",
+        "Faster playback",
+        "Needing less vocabulary"
       ]}
       correctAnswer={1}
-      explanation="El beneficio principal de la inferencia es entender información implícita que no se dice explícitamente, mejorando la comprensión profunda."
+      explanation="Inference mainly helps with meaning that is suggested rather than stated word for word."
     />,
 
     <MultipleChoiceExercise
       key="5"
-      question="¿Qué estrategia es más importante para mantener la concentración en audios largos?"
+      question="Which strategy matters most for long recordings?"
       options={[
-        "Escuchar más rápido",
-        "Gestión de atención y concentración",
-        "Tomar más notas",
-        "Ignorar las distracciones"
+        "Listening faster",
+        "Attention and focus management",
+        "Writing more notes",
+        "Ignoring distractions without a plan"
       ]}
       correctAnswer={1}
-      explanation="La gestión de atención y concentración es más importante, ya que incluye técnicas para manejar fatiga, recuperar atención perdida y mantener el enfoque."
+      explanation="Managing attention—including fatigue and recovery—supports endurance on long input."
     />,
 
     <TrueFalseExercise
@@ -465,45 +392,45 @@ const ActiveListeningStrategiesPage = () => {
         {
           text: "Taking notes while listening improves comprehension.",
           isTrue: true,
-          explanation: "Correcto. Tomar notas ayuda a mantener la concentración y retener información importante."
+          explanation: "Correct. Notes can sustain focus and accuracy."
         },
         {
-          text: "You should understand every word to be a good listener.",
+          text: "You must understand every word to be a good listener.",
           isTrue: false,
-          explanation: "Incorrecto. Un buen oyente se enfoca en el mensaje general y usa el contexto para inferir significado."
+          explanation: "Incorrect. Good listeners track the message and use context and inference."
         },
         {
-          text: "Predicting content before listening is a useful strategy.",
+          text: "Predicting content before listening is useful.",
           isTrue: true,
-          explanation: "Correcto. Predecir el contenido activa conocimientos previos y mejora la comprensión."
+          explanation: "Correct. Prediction activates prior knowledge and supports understanding."
         }
       ]}
     />,
 
     <MultipleChoiceExercise
       key="7"
-      question="¿Qué debes hacer cuando no entiendes una palabra importante?"
+      question="What should you do when you miss an important word?"
       options={[
-        "Parar de escuchar",
-        "Usar el contexto para inferir el significado",
-        "Preguntar inmediatamente",
-        "Ignorar completamente el audio"
+        "Stop listening",
+        "Use context to infer meaning",
+        "Ask the recording a question",
+        "Ignore the rest"
       ]}
       correctAnswer={1}
-      explanation="Usar el contexto para inferir significado es la mejor estrategia, ya que mantiene el flujo de comprensión."
+      explanation="Contextual inference keeps the flow going better than stopping."
     />,
 
     <MultipleChoiceExercise
       key="8"
-      question="¿Cuál es el beneficio principal de la escucha activa?"
+      question="What is the main benefit of active listening?"
       options={[
-        "Memorizar todo el vocabulario",
-        "Mejorar la comprensión y retención",
-        "Hablar más rápido",
-        "Evitar errores gramaticales"
+        "Memorize all vocabulary",
+        "Improve comprehension and retention",
+        "Speak faster",
+        "Avoid grammar mistakes"
       ]}
       correctAnswer={1}
-      explanation="La escucha activa mejora significativamente la comprensión y retención al involucrar procesos mentales conscientes."
+      explanation="Active listening improves how much you grasp and remember by engaging mental processes."
     />,
 
     <TrueFalseExercise
@@ -512,34 +439,34 @@ const ActiveListeningStrategiesPage = () => {
         {
           text: "Background knowledge helps with listening comprehension.",
           isTrue: true,
-          explanation: "Correcto. El conocimiento previo sobre el tema facilita la comprensión y predicción del contenido."
+          explanation: "Correct. Topic knowledge supports prediction and understanding."
         },
         {
-          text: "Listening to different accents is not important for language learning.",
+          text: "Exposure to different accents is unimportant for learning.",
           isTrue: false,
-          explanation: "Incorrecto. Exponerse a diferentes acentos mejora la comprensión auditiva general y prepara para situaciones reales."
+          explanation: "Incorrect. Varied accents build flexible real-world listening."
         }
       ]}
     />,
 
     <MultipleChoiceExercise
       key="10"
-      question="¿Cuál es la mejor manera de desarrollar estrategias de escucha?"
+      question="What is the best way to build listening strategies?"
       options={[
-        "Escuchar solo música",
-        "Práctica regular con diferentes tipos de audio",
-        "Leer solo textos escritos",
-        "Evitar audio difícil"
+        "Only music",
+        "Regular practice with varied audio",
+        "Only reading",
+        "Avoid difficult audio"
       ]}
       correctAnswer={1}
-      explanation="La práctica regular con diferentes tipos de audio (conversaciones, noticias, podcasts) desarrolla estrategias versátiles de escucha."
+      explanation="Regular practice across talk types (conversations, news, podcasts) builds flexible strategies."
     />
   ];
 
   return (
     <TheoryLayout
       title="Active Listening Strategies"
-      description="Domina las estrategias de escucha activa en inglés. Aprende técnicas de predicción, verificación, inferencia y gestión de atención para mejorar tu comprensión auditiva."
+      description="Master active listening in English. Learn prediction, checking, inference, and attention strategies to improve comprehension."
       level="B1-B2-C1-C2"
       theoryContent={theoryContent}
       exercises={exercises}
@@ -550,4 +477,3 @@ const ActiveListeningStrategiesPage = () => {
 };
 
 export default ActiveListeningStrategiesPage;
-

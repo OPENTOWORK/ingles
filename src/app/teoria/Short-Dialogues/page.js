@@ -18,216 +18,191 @@ import {
 const ShortDialoguesPage = () => {
   const theoryContent = (
     <div>
-      <TheorySection title="¿Qué son los Short Dialogues?" icon="💬">
+      <TheorySection title="What Are Short Dialogues?" icon="💬">
         <p style={{ fontSize: '1.1rem', lineHeight: 1.6, color: '#4a5568', marginBottom: '1rem' }}>
-          Los <strong>short dialogues</strong> (diálogos cortos) son conversaciones breves entre dos o más personas que 
-          aparecen frecuentemente en exámenes de listening. Son ideales para practicar comprensión auditiva básica.
+          <strong>Short dialogues</strong> are brief exchanges between two or more people common on listening exams. They are ideal for building basic listening comprehension.
         </p>
         
         <QuickReference items={[
-          "Duración: 30 segundos a 2 minutos",
-          "Participantes: 2-3 personas máximo",
-          "Contextos: situaciones cotidianas",
-          "Objetivo: información específica",
-          "Nivel: A1-A2 (principiante a elemental)"
+          "Length: roughly 30 seconds to 2 minutes",
+          "Speakers: two or three at most",
+          "Contexts: everyday situations",
+          "Goal: a specific piece of information",
+          "Level: beginner to elementary"
         ]} />
       </TheorySection>
 
-      <TheorySection title="Características de los Short Dialogues" icon="📋">
+      <TheorySection title="Features of Short Dialogues" icon="📋">
         <p style={{ fontSize: '1rem', lineHeight: 1.6, color: '#4a5568', marginBottom: '1rem' }}>
-          Los diálogos cortos tienen características específicas que los hacen ideales para principiantes.
+          Short exchanges share traits that make them friendly for newcomers.
         </p>
 
         <GrammarTable
-          caption="Características de Short Dialogues"
-          headers={["Característica", "Descripción", "Beneficio", "Ejemplo"]}
+          caption="Features of Short Dialogues"
+          headers={["Feature", "Description", "Benefit", "Example"]}
           rows={[
-            ["Duración Corta", "30 segundos a 2 minutos", "Mantiene la atención", "Conversación rápida"],
-            ["Vocabulario Simple", "Palabras comunes y cotidianas", "Fácil comprensión", "Hello, how are you?"],
-            ["Estructura Clara", "Inicio, desarrollo, final", "Fácil seguimiento", "Greeting → Question → Answer"],
-            ["Contexto Familiar", "Situaciones cotidianas", "Comprensión intuitiva", "Shop, restaurant, street"],
-            ["Objetivo Específico", "Una información principal", "Enfoque claro", "Price, time, location"],
-            ["Velocidad Moderada", "Habla clara y pausada", "Tiempo para procesar", "No demasiado rápido"]
+            ["Short length", "About 30 seconds to 2 minutes", "Keeps attention", "A quick interaction"],
+            ["Simple vocabulary", "Common everyday words", "Easier processing", "Hello, how are you?"],
+            ["Clear shape", "Opening, body, closing", "Easy to follow", "Greeting → Question → Answer"],
+            ["Familiar setting", "Everyday scenarios", "Intuitive guesses", "Shop, restaurant, street"],
+            ["Single focus", "One main fact to locate", "Clear target", "Price, time, location"],
+            ["Moderate pace", "Clear, slightly deliberate speech", "Time to process", "Not overly fast"]
           ]}
         />
 
         <div style={{ display: 'grid', gap: '1rem' }}>
           <Example 
-            spanish="Contexto: Tienda - Cliente preguntando precio"
-            english="Context: Shop - Customer asking for price"
-            translation="Contexto: Tienda - Cliente preguntando precio"
+            english="Context: shop—customer asks the price"
           />
           <Example 
-            spanish="Duración: 45 segundos"
             english="Duration: 45 seconds"
-            translation="Duración: 45 segundos"
           />
           <Example 
-            spanish="Objetivo: Encontrar el precio del producto"
-            english="Objective: Find the product price"
-            translation="Objetivo: Encontrar el precio del producto"
+            english="Goal: identify the price of an item"
           />
         </div>
 
         <Rule 
-          title="Ventajas de los Short Dialogues"
-          description="Por qué son ideales para principiantes:"
+          title="Why Short Dialogues Help Beginners"
+          description="Strengths at early levels:"
           examples={[
-            "No abruman con información excesiva",
-            "Permiten practicar habilidades básicas",
-            "Son fáciles de repetir y revisar",
-            "Proporcionan éxito temprano en el aprendizaje"
+            "They rarely overload memory",
+            "They train core listening habits",
+            "They are easy to replay",
+            "They build early wins"
           ]}
         />
 
         <Tip type="info">
-          <strong>Consejo:</strong> Los diálogos cortos son perfectos para desarrollar confianza en listening.
+          <strong>Tip:</strong> Short clips are ideal for growing confidence with listening tasks.
         </Tip>
       </TheorySection>
 
-      <TheorySection title="Tipos de Short Dialogues" icon="🗂️">
+      <TheorySection title="Kinds of Short Dialogues" icon="🗂️">
         <p style={{ fontSize: '1rem', lineHeight: 1.6, color: '#4a5568', marginBottom: '1rem' }}>
-          Los diálogos cortos cubren una variedad de situaciones cotidianas comunes.
+          Listening tasks often recycle a small set of everyday situations.
         </p>
 
         <GrammarTable
-          caption="Tipos Comunes de Short Dialogues"
-          headers={["Tipo", "Situación", "Información Clave", "Preguntas Típicas"]}
+          caption="Common Short-Dialogue Types"
+          headers={["Type", "Situation", "Key Information", "Typical Questions"]}
           rows={[
-            ["Shopping", "Compras en tienda", "Precio, talla, disponibilidad", "How much? What size?"],
-            ["Restaurant", "Pedir comida", "Platos, precios, tiempo", "What do you recommend?"],
-            ["Directions", "Pedir direcciones", "Ubicación, distancia, tiempo", "How do I get to...?"],
-            ["Transport", "Información de transporte", "Horarios, precios, destinos", "What time? How much?"],
-            ["Accommodation", "Hotel/hospedaje", "Disponibilidad, precios, servicios", "Do you have rooms?"],
-            ["Personal Info", "Información personal", "Nombre, edad, profesión", "What's your name?"]
+            ["Shopping", "Buying in a store", "Price, size, availability", "How much? What size?"],
+            ["Restaurant", "Ordering food", "Dishes, prices, timing", "What do you recommend?"],
+            ["Directions", "Asking how to go somewhere", "Place, distance, time", "How do I get to...?"],
+            ["Transport", "Travel information", "Schedules, prices, destinations", "What time? How much?"],
+            ["Accommodation", "Hotel or lodging", "Availability, rates, services", "Do you have rooms?"],
+            ["Personal info", "Small talk basics", "Name, age, job", "What's your name?"]
           ]}
         />
 
         <div style={{ display: 'grid', gap: '1rem' }}>
           <Example 
-            spanish="Shopping: 'How much does this shirt cost?'"
             english="Shopping: 'How much does this shirt cost?'"
-            translation="Compras: '¿Cuánto cuesta esta camisa?'"
           />
           <Example 
-            spanish="Restaurant: 'I'd like to order the pasta, please'"
             english="Restaurant: 'I'd like to order the pasta, please'"
-            translation="Restaurante: 'Me gustaría pedir la pasta, por favor'"
           />
           <Example 
-            spanish="Directions: 'Excuse me, where is the bank?'"
             english="Directions: 'Excuse me, where is the bank?'"
-            translation="Direcciones: 'Disculpe, ¿dónde está el banco?'"
           />
         </div>
 
         <Tip type="success">
-          <strong>Consejo:</strong> Familiarízate con estos contextos comunes para mejorar tu comprensión.
+          <strong>Tip:</strong> Get comfortable with these settings to speed recognition.
         </Tip>
       </TheorySection>
 
-      <TheorySection title="Estrategias para Short Dialogues" icon="🎯">
+      <TheorySection title="Strategies for Short Dialogues" icon="🎯">
         <p style={{ fontSize: '1rem', lineHeight: 1.6, color: '#4a5568', marginBottom: '1rem' }}>
-          Existen estrategias específicas para maximizar tu comprensión de diálogos cortos.
+          Dedicated tactics sharpen performance on brief exchanges.
         </p>
 
         <GrammarTable
-          caption="Estrategias Efectivas"
-          headers={["Estrategia", "Descripción", "Cuándo Usar", "Beneficio"]}
+          caption="Effective Strategies"
+          headers={["Strategy", "Description", "When to Use", "Benefit"]}
           rows={[
-            ["Pre-lectura", "Leer preguntas antes del audio", "Antes del diálogo", "Saber qué buscar"],
-            ["Predicción", "Predecir contenido basado en contexto", "Antes del audio", "Preparar la mente"],
-            ["Escucha Activa", "Concentrarse en información clave", "Durante el audio", "Captar detalles importantes"],
-            ["Toma de Notas", "Anotar información clave", "Durante el audio", "Retener información"],
-            ["Verificación", "Confirmar respuestas después", "Después del audio", "Asegurar precisión"]
+            ["Pre-reading", "Read questions ahead of audio", "Before the clip", "Know your target"],
+            ["Prediction", "Guess content from context", "Before play", "Prime attention"],
+            ["Active listening", "Lock onto key facts", "While listening", "Catch critical detail"],
+            ["Note-taking", "Jot cues quickly", "While listening", "Hold numbers and names"],
+            ["Checking", "Verify after listening", "When time allows", "Boost accuracy"]
           ]}
         />
 
         <div style={{ display: 'grid', gap: '1rem' }}>
           <Example 
-            spanish="Pre-lectura: 'Leer: What is the price of the shirt?'"
-            english="Pre-reading: 'Read: What is the price of the shirt?'"
-            translation="Pre-lectura: 'Leer: ¿Cuál es el precio de la camisa?'"
+            english="Pre-reading: 'Read the prompt: What is the price of the shirt?'"
           />
           <Example 
-            spanish="Predicción: 'Contexto: tienda → buscar precios'"
-            english="Prediction: 'Context: shop → look for prices'"
-            translation="Predicción: 'Contexto: tienda → buscar precios'"
+            english="Prediction: 'Context is a shop → expect prices'"
           />
           <Example 
-            spanish="Escucha activa: 'Enfocarse en números y precios'"
-            english="Active listening: 'Focus on numbers and prices'"
-            translation="Escucha activa: 'Enfocarse en números y precios'"
+            english="Active listening: 'Tune in to numbers and prices'"
           />
         </div>
 
         <Rule 
-          title="Proceso Paso a Paso"
-          description="Sigue este proceso para diálogos cortos:"
+          title="Step-by-Step Routine"
+          description="A simple workflow for short clips:"
           examples={[
-            "1. Lee las preguntas rápidamente",
-            "2. Predice el contenido del diálogo",
-            "3. Escucha atentamente la primera vez",
-            "4. Toma notas de información clave",
-            "5. Escucha una segunda vez si es necesario",
-            "6. Verifica tus respuestas"
+            "1. Skim the questions quickly",
+            "2. Predict possible content",
+            "3. Listen carefully the first time",
+            "4. Note key phrases or figures",
+            "5. Replay only if permitted",
+            "6. Double-check responses"
           ]}
         />
 
         <Tip type="warning">
-          <strong>¡Cuidado!</strong> No te distraigas con palabras que no conoces - enfócate en la información que necesitas.
+          <strong>Watch out!</strong> Do not fixate on unknown words—prioritize what the items ask for.
         </Tip>
       </TheorySection>
 
-      <TheorySection title="Tipos de Preguntas Comunes" icon="❓">
+      <TheorySection title="Common Question Types" icon="❓">
         <p style={{ fontSize: '1rem', lineHeight: 1.6, color: '#4a5568', marginBottom: '1rem' }}>
-          Los diálogos cortos suelen tener tipos específicos de preguntas que debes reconocer.
+          Exams recycle predictable question stems—learn to classify them quickly.
         </p>
 
         <GrammarTable
-          caption="Tipos de Preguntas en Short Dialogues"
-          headers={["Tipo", "Pregunta Típica", "Qué Buscar", "Ejemplo"]}
+          caption="Question Types in Short Dialogues"
+          headers={["Type", "Typical Question", "What to Listen For", "Example"]}
           rows={[
-            ["Información Específica", "What is the price?", "Números, cantidades", "€25, $50, 10 items"],
-            ["Ubicación", "Where does this take place?", "Lugares, contextos", "shop, restaurant, street"],
-            ["Tiempo", "What time does it start?", "Horarios, fechas", "3 PM, Monday, tomorrow"],
-            ["Personas", "Who is speaking?", "Identidad, roles", "customer, waiter, teacher"],
-            ["Acción", "What does the man want?", "Objetivos, acciones", "buy, order, find"],
-            ["Sentimiento", "How does she feel?", "Emociones, actitudes", "happy, worried, excited"]
+            ["Specific fact", "What is the price?", "Numbers or amounts", "€25, $50, 10 items"],
+            ["Location", "Where does this take place?", "Places, setting", "shop, restaurant, street"],
+            ["Time", "What time does it start?", "Schedules or dates", "3 PM, Monday, tomorrow"],
+            ["People", "Who is speaking?", "Roles or identities", "customer, waiter, teacher"],
+            ["Action / intent", "What does the man want?", "Goals or verbs", "buy, order, find"],
+            ["Feeling", "How does she feel?", "Attitude or emotion", "happy, worried, excited"]
           ]}
         />
 
         <div style={{ display: 'grid', gap: '1rem' }}>
           <Example 
-            spanish="Información específica: '¿Cuánto cuesta el libro?'"
             english="Specific information: 'How much does the book cost?'"
-            translation="Información específica: '¿Cuánto cuesta el libro?'"
           />
           <Example 
-            spanish="Ubicación: '¿Dónde tiene lugar esta conversación?'"
             english="Location: 'Where does this conversation take place?'"
-            translation="Ubicación: '¿Dónde tiene lugar esta conversación?'"
           />
           <Example 
-            spanish="Tiempo: '¿A qué hora abre la tienda?'"
             english="Time: 'What time does the shop open?'"
-            translation="Tiempo: '¿A qué hora abre la tienda?'"
           />
         </div>
 
         <Tip type="info">
-          <strong>Consejo:</strong> Identifica el tipo de pregunta para saber qué información buscar.
+          <strong>Tip:</strong> Naming the question type tells you what signal to chase.
         </Tip>
       </TheorySection>
 
-      <TheorySection title="Vocabulario Clave por Contexto" icon="🔑">
+      <TheorySection title="Key Vocabulary by Context" icon="🔑">
         <p style={{ fontSize: '1rem', lineHeight: 1.6, color: '#4a5568', marginBottom: '1rem' }}>
-          Cada contexto tiene vocabulario específico que debes reconocer.
+          Each scenario carries recurring lexical bundles worth recognizing fast.
         </p>
 
         <GrammarTable
-          caption="Vocabulario Clave por Contexto"
-          headers={["Contexto", "Vocabulario Clave", "Números Importantes", "Frases Comunes"]}
+          caption="Keyword Sets by Scenario"
+          headers={["Context", "Keywords", "Typical Figures", "Handy Lines"]}
           rows={[
             ["Shopping", "price, size, color, buy", "€, $, pounds, sizes", "How much? What size?"],
             ["Restaurant", "menu, order, food, drink", "€, $, time", "I'd like... What do you recommend?"],
@@ -240,99 +215,93 @@ const ShortDialoguesPage = () => {
 
         <div style={{ display: 'grid', gap: '1rem' }}>
           <Example 
-            spanish="Shopping: 'price, size, color, buy'"
-            english="Shopping: 'price, size, color, buy'"
-            translation="Compras: 'precio, talla, color, comprar'"
+            english="Shopping cluster: price, size, color, buy"
           />
           <Example 
-            spanish="Restaurant: 'menu, order, food, drink'"
-            english="Restaurant: 'menu, order, food, drink'"
-            translation="Restaurante: 'menú, pedir, comida, bebida'"
+            english="Restaurant cluster: menu, order, food, drink"
           />
           <Example 
-            spanish="Transport: 'ticket, time, destination'"
-            english="Transport: 'ticket, time, destination'"
-            translation="Transporte: 'boleto, tiempo, destino'"
+            english="Transport cluster: ticket, time, destination"
           />
         </div>
 
         <Rule 
-          title="Consejos para Vocabulario"
-          description="Para manejar el vocabulario:"
+          title="Vocabulary Tips"
+          description="Managing words under time pressure:"
           examples={[
-            "Aprende vocabulario por contexto",
-            "Practica números y precios",
-            "Familiarízate con frases comunes",
-            "No te preocupes por palabras desconocidas",
-            "Usa contexto para entender significado"
+            "Learn lexical sets by scenario",
+            "Drill prices and clock times aloud",
+            "Memorize high-frequency formulas",
+            "Let unknown tokens go if gist is intact",
+            "Use situation to guess meaning"
           ]}
         />
 
         <Tip type="success">
-          <strong>Consejo:</strong> El vocabulario contextual es más importante que palabras aisladas.
+          <strong>Tip:</strong> Contextual bundles beat isolated memorization for listening tasks.
         </Tip>
       </TheorySection>
 
-      <TheorySection title="Errores Comunes" icon="⚠️">
+      <TheorySection title="Common Mistakes" icon="⚠️">
         <div style={{ display: 'grid', gap: '1rem' }}>
           <Tip type="error">
-            <strong>Error:</strong> No leer las preguntas antes del audio ❌<br/>
-            <strong>Correcto:</strong> Siempre leer preguntas primero ✅<br/>
-            <em>Saber qué buscar mejora la comprensión</em>
+            <strong>Mistake:</strong> Skipping questions until after audio ❌<br/>
+            <strong>Better:</strong> Read prompts first ✅<br/>
+            <em>Knowing the target boosts accuracy</em>
           </Tip>
 
           <Tip type="error">
-            <strong>Error:</strong> Intentar entender cada palabra ❌<br/>
-            <strong>Correcto:</strong> Enfocarse en información clave ✅<br/>
-            <em>La comprensión general es más importante</em>
+            <strong>Mistake:</strong> Demanding word-for-word coverage ❌<br/>
+            <strong>Better:</strong> Lock onto decisive facts ✅<br/>
+            <em>Overall gist plus task focus wins</em>
           </Tip>
 
           <Tip type="error">
-            <strong>Error:</strong> No tomar notas ❌<br/>
-            <strong>Correcto:</strong> Anotar información importante ✅<br/>
-            <em>Las notas ayudan a recordar detalles</em>
+            <strong>Mistake:</strong> Writing nothing down ❌<br/>
+            <strong>Better:</strong> Scribble shorthand cues ✅<br/>
+            <em>Notes stabilize fragile memory</em>
           </Tip>
 
           <Tip type="error">
-            <strong>Error:</strong> Preocuparse por el acento ❌<br/>
-            <strong>Correcto:</strong> Enfocarse en el mensaje ✅<br/>
-            <em>El acento no afecta la comprensión del mensaje</em>
+            <strong>Mistake:</strong> Worrying too much about accent ❌<br/>
+            <strong>Better:</strong> Chase semantic content ✅<br/>
+            <em>Different accents still carry the message</em>
           </Tip>
         </div>
       </TheorySection>
 
-      <TheorySection title="Reglas Importantes" icon="⚡">
+      <TheorySection title="Key Rules" icon="⚡">
         <div style={{ display: 'grid', gap: '1rem' }}>
           <Rule 
-            title="1. Preparación es clave"
-            description="Siempre prepárate antes de escuchar."
+            title="1. Preparation matters"
+            description="Brief planning multiplies payoff."
             examples={[
-              "Lee las preguntas cuidadosamente",
-              "Predice el contenido del diálogo",
-              "Identifica qué información necesitas",
-              "Prepara tu mente para escuchar"
+              "Study each question wording",
+              "Predict topic and probable answers",
+              "Decide exactly what datum you need",
+              "Reset attention before playback"
             ]}
           />
 
           <Rule 
-            title="2. Enfoque en información clave"
-            description="No te distraigas con detalles irrelevantes."
+            title="2. Focus on decisive cues"
+            description="Tune out fluff that distracts."
             examples={[
-              "Identifica palabras clave en las preguntas",
-              "Escucha números, precios, horarios",
-              "Presta atención a nombres y lugares",
-              "Ignora palabras que no conoces"
+              "Underline keywords inside stems",
+              "Listen for quantities, clocks, sums",
+              "Notice names or locations cited",
+              "Release unknown lexical noise"
             ]}
           />
 
           <Rule 
-            title="3. Usa el contexto"
-            description="El contexto te ayuda a entender."
+            title="3. Leverage scenario"
+            description="Situation primes expectations."
             examples={[
-              "Identifica la situación del diálogo",
-              "Usa vocabulario conocido para inferir",
-              "Considera el propósito de la conversación",
-              "Relaciona con experiencias similares"
+              "Label the backdrop (shop, clinic, transit)",
+              "Infer missing words via collocations",
+              "Remember each exchange has a pragmatic goal",
+              "Link audio to comparable real-life chats"
             ]}
           />
         </div>
@@ -343,80 +312,80 @@ const ShortDialoguesPage = () => {
   const exercises = [
     <MultipleChoiceExercise
       key="1"
-      question="En short dialogues, ¿qué debo hacer antes del audio?"
+      question="Before listening to a short dialogue, what should you do?"
       options={[
-        "Escribir las respuestas",
-        "Leer las preguntas",
-        "Tomar notas extensas",
-        "Cerrar los ojos"
+        "Write random answers first",
+        "Read the questions",
+        "Draft long summaries",
+        "Close your eyes"
       ]}
       correctAnswer={1}
-      explanation="Es esencial leer las preguntas antes del audio para saber qué información buscar durante la escucha."
+      explanation="Reading questions beforehand tells your ear what proof to hunt for."
     />,
 
     <MultipleChoiceExercise
       key="2"
-      question="¿Cuál es la mejor estrategia para short dialogues?"
+      question="Which habit best supports short dialogues?"
       options={[
-        "Escuchar sin preparación",
-        "Leer las preguntas antes del audio",
-        "Intentar entender cada palabra",
-        "No tomar notas"
+        "Listening with zero preview",
+        "Reading questions ahead of playback",
+        "Parsing each token exhaustively",
+        "Avoiding all notes"
       ]}
       correctAnswer={1}
-      explanation="Leer las preguntas antes del audio te ayuda a saber qué información buscar, mejorando significativamente la comprensión."
+      explanation="Previewing prompts channels attention toward decisive evidence."
     />,
 
     <TrueFalseExercise
       key="3"
       statements={[
         {
-          text: "Los short dialogues duran entre 30 segundos y 2 minutos.",
+          text: "Short dialogues often last between 30 seconds and 2 minutes.",
           isTrue: true,
-          explanation: "Correcto. Los diálogos cortos son breves, típicamente entre 30 segundos y 2 minutos."
+          explanation: "Correct. They are purposely brief clips in that typical window."
         },
         {
-          text: "Es importante entender cada palabra en un diálogo corto.",
+          text: "You must grasp every lexical item in order to succeed.",
           isTrue: false,
-          explanation: "Incorrecto. Es más importante entender la información clave que entender cada palabra individual."
+          explanation: "Incorrect. Anchoring facts that questions target matters more than full lexicon mastery."
         },
         {
-          text: "Tomar notas ayuda a recordar información importante.",
+          text: "Jotting quick notes helps retention of numbers and names.",
           isTrue: true,
-          explanation: "Correcto. Las notas te ayudan a retener información específica como precios, horarios y nombres."
+          explanation: "Correct. Light notes preserve fragile detail under exam pressure."
         },
         {
-          text: "El contexto del diálogo no es importante para la comprensión.",
+          text: "Context (store, diner, taxi, etc.) is irrelevant.",
           isTrue: false,
-          explanation: "Incorrecto. El contexto (tienda, restaurante, etc.) es muy importante para entender el propósito del diálogo."
+          explanation: "Incorrect. Setting drives likely vocabulary and pragmatic goals."
         }
       ]}
     />,
 
     <MultipleChoiceExercise
       key="4"
-      question="¿Qué tipo de información es más común en short dialogues?"
+      question="What kind of answer do short-dialogue items usually expect?"
       options={[
-        "Información compleja y abstracta",
-        "Información específica y concreta",
-        "Información histórica",
-        "Información científica"
+        "Abstract theory",
+        "Concrete, specific facts",
+        "Historical background",
+        "Scientific jargon"
       ]}
       correctAnswer={1}
-      explanation="Los short dialogues típicamente contienen información específica y concreta como precios, horarios, ubicaciones y nombres."
+      explanation="They overwhelmingly test pragmatic detail such as fares, clocks, venues, roles."
     />,
 
     <MultipleChoiceExercise
       key="5"
-      question="¿Cuál es el nivel típico de short dialogues?"
+      question="What level band do many exam short dialogues target?"
       options={[
-        "C1-C2 (avanzado)",
-        "B1-B2 (intermedio)",
-        "A1-A2 (principiante-elemental)",
-        "Nativo"
+        "Advanced (C1–C2)",
+        "Intermediate (B1–B2)",
+        "Beginner to elementary",
+        "Native only"
       ]}
       correctAnswer={2}
-      explanation="Los short dialogues están diseñados para niveles A1-A2 (principiante a elemental) con vocabulario simple y situaciones cotidianas."
+      explanation="They favor accessible lexis tied to survival or daily-life English."
     />,
 
     <TrueFalseExercise
@@ -425,81 +394,81 @@ const ShortDialoguesPage = () => {
         {
           text: "Short dialogues usually have complex vocabulary.",
           isTrue: false,
-          explanation: "Incorrecto. Los diálogos cortos suelen usar vocabulario cotidiano y situaciones familiares."
+          explanation: "Incorrect. Everyday lexis dominates these clips."
         },
         {
-          text: "Context clues are very important in short dialogues.",
+          text: "Context clues strongly shape interpretation.",
           isTrue: true,
-          explanation: "Correcto. Las pistas de contexto (lugar, situación, relación entre hablantes) son cruciales para la comprensión."
+          explanation: "Correct. Setting and relationships between speakers constrain meaning."
         },
         {
-          text: "You should listen to short dialogues multiple times during the exam.",
+          text: "In many real exams you replay each dialogue several times freely.",
           isTrue: false,
-          explanation: "Incorrecto. En exámenes reales, los diálogos cortos se escuchan solo una vez, por eso la preparación es importante."
+          explanation: "Incorrect. Formal tests often permit a single playback, so preview strategies matter."
         }
       ]}
     />,
 
     <MultipleChoiceExercise
       key="7"
-      question="¿Qué información es menos común en short dialogues?"
+      question="Which detail is comparatively rare inside short exchanges?"
       options={[
-        "Precios y horarios",
-        "Teorías académicas complejas",
-        "Ubicaciones",
-        "Planes inmediatos"
+        "Prices or appointment times",
+        "Dense academic theory",
+        "Locations",
+        "Immediate plans"
       ]}
       correctAnswer={1}
-      explanation="Las teorías académicas complejas son menos comunes; los diálogos cortos se enfocan en situaciones cotidianas prácticas."
+      explanation="High-level exposition is uncommon; pragmatic micro-facts prevail."
     />,
 
     <MultipleChoiceExercise
       key="8"
-      question="¿Cuál es la mejor estrategia cuando no entiendes una palabra clave?"
+      question="Best move when you momentarily miss one word?"
       options={[
-        "Parar de escuchar",
-        "Usar el contexto y continuar escuchando",
-        "Preocuparse por la palabra perdida",
-        "Cambiar todas las respuestas"
+        "Stop mentally engaging",
+        "Use broader context and keep listening",
+        "Obsess over the slip",
+        "Erase every prior answer blindly"
       ]}
       correctAnswer={1}
-      explanation="Usar el contexto y continuar escuchando es la mejor estrategia; a menudo puedes inferir el significado o encontrar la respuesta de otra manera."
+      explanation="Context inference plus forward listening usually recovers what you need."
     />,
 
     <TrueFalseExercise
       key="9"
       statements={[
         {
-          text: "Predicting possible answers before listening is helpful.",
+          text: "Guessing plausible answers before audio can sharpen focus.",
           isTrue: true,
-          explanation: "Correcto. Predecir posibles respuestas basándose en las preguntas ayuda a enfocar la atención durante la escucha."
+          explanation: "Correct. Mental models channel attention efficiently."
         },
         {
-          text: "Short dialogues always end with a clear conclusion.",
+          text: "Short dialogues must always conclude with an explicit recap.",
           isTrue: false,
-          explanation: "Incorrecto. Algunos diálogos cortos pueden terminar abruptamente o con información implícita."
+          explanation: "Incorrect. Natural speech may stop abruptly or leave detail implied."
         }
       ]}
     />,
 
     <MultipleChoiceExercise
       key="10"
-      question="¿Qué debes hacer inmediatamente después de escuchar un short dialogue?"
+      question="Right after a short dialogue finishes, what is sound practice?"
       options={[
-        "Esperar al siguiente audio",
-        "Responder rápidamente mientras la información está fresca",
-        "Revisar todas las respuestas anteriores",
-        "Tomar un descanso"
+        "Wait silently for unrelated audio",
+        "Answer promptly while cues are fresh",
+        "Re-score everything from earlier sections",
+        "Take an extended pause"
       ]}
       correctAnswer={1}
-      explanation="Responder rápidamente mientras la información está fresca en la memoria es la mejor estrategia para diálogos cortos."
+      explanation="Select answers while auditory memory peaks; review later only if pacing allows."
     />
   ];
 
   return (
     <TheoryLayout
       title="Short Dialogues"
-      description="Domina la comprensión de diálogos cortos en inglés. Aprende estrategias para entender conversaciones breves en situaciones cotidianas como tiendas, restaurantes y transporte."
+      description="Understand brief English exchanges with confidence—strategies for shops, eateries, transit, lodging, and other everyday setups."
       level="A1-A2-B1-B2-C1-C2"
       theoryContent={theoryContent}
       exercises={exercises}
@@ -510,25 +479,3 @@ const ShortDialoguesPage = () => {
 };
 
 export default ShortDialoguesPage;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

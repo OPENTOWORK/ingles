@@ -6,126 +6,126 @@ import { MultipleChoiceExercise, TrueFalseExercise } from '@/components/theory/E
 const ReadingForGistPage = () => {
   const theoryContent = (
     <div>
-      <TheorySection title="¿Qué es Reading for Gist?" icon="👁️">
+      <TheorySection title="What is Reading for Gist?" icon="👁️">
         <p>
-          <strong>Reading for Gist</strong> significa leer para obtener la idea general o el tema principal de un texto, 
-          sin preocuparse por entender cada palabra o detalle específico. Es como obtener una "fotografía general" del contenido.
+          <strong>Reading for Gist</strong> means reading to get the general idea or main topic of a text 
+          without trying to understand every word or small detail. It is like taking a wide-angle picture of the content.
         </p>
         
         <Example 
-          title="Ejemplo de Reading for Gist"
-          content="Al leer un artículo de periódico, primero identificas: ¿Es sobre política, deportes, tecnología? ¿Cuál es el mensaje principal? ¿Qué está pasando en general?"
-          explanation="No necesitas entender cada palabra, solo la idea central y el propósito del texto."
+          title="Reading for gist example"
+          content="When you read a newspaper article, you first work out: Is it about politics, sport, technology? What is the main message? What is going on in general?"
+          explanation="You do not need every word—only the central idea and the purpose of the text."
         />
       </TheorySection>
 
-      <TheorySection title="Estrategias Principales" icon="🎯">
+      <TheorySection title="Main strategies" icon="🎯">
         <div style={{ display: 'grid', gap: '1rem' }}>
           <Rule 
-            title="1. Lectura rápida inicial"
-            description="Lee el texto completo rápidamente sin detenerte."
+            title="1. Fast first read"
+            description="Skim the whole text without stopping."
             examples={[
-              "No uses diccionario en la primera lectura",
-              "No te preocupes por palabras desconocidas",
-              "Mantén un ritmo constante de lectura",
-              "Enfócate en palabras que reconoces"
+              "Do not use a dictionary on the first read",
+              "Do not worry about unknown words",
+              "Keep a steady reading pace",
+              "Focus on words you recognise"
             ]}
           />
 
           <Rule 
-            title="2. Identifica elementos clave"
-            description="Busca pistas que te den la idea general."
+            title="2. Spot key features"
+            description="Look for clues that give the general idea."
             examples={[
-              "Título y subtítulos",
-              "Primera y última oración de párrafos",
-              "Palabras repetidas frecuentemente",
-              "Nombres propios y fechas importantes"
+              "Title and subheadings",
+              "First and last sentence of paragraphs",
+              "Words that repeat often",
+              "Important proper names and dates"
             ]}
           />
 
           <Rule 
-            title="3. Pregúntate sobre el propósito"
-            description="¿Para qué fue escrito este texto?"
+            title="3. Ask about purpose"
+            description="Why was this text written?"
             examples={[
-              "¿Informar sobre algo?",
-              "¿Persuadir o convencer?",
-              "¿Entretener al lector?",
-              "¿Explicar un proceso?"
+              "To inform about something?",
+              "To persuade?",
+              "To entertain?",
+              "To explain a process?"
             ]}
           />
         </div>
       </TheorySection>
 
-      <TheorySection title="Técnicas Específicas" icon="🔍">
+      <TheorySection title="Specific techniques" icon="🔍">
         <div style={{ display: 'grid', gap: '1rem' }}>
           <Rule 
-            title="1. Técnica del título expandido"
-            description="Usa el título como guía para predecir el contenido."
+            title="1. Expanded title technique"
+            description="Use the title to predict content."
             examples={[
-              "¿Qué esperas encontrar basándote en el título?",
-              "¿Qué preguntas podría responder el texto?",
-              "¿Qué vocabulario relacionado podrías encontrar?",
-              "¿Qué tipo de información será relevante?"
+              "What do you expect to find from the title?",
+              "What questions might the text answer?",
+              "What related vocabulary might appear?",
+              "What kind of information will matter?"
             ]}
           />
 
           <Rule 
-            title="2. Mapeo mental rápido"
-            description="Crea un mapa mental de las ideas principales."
+            title="2. Quick mental map"
+            description="Sketch the main ideas in your mind."
             examples={[
-              "Tema central en el medio",
-              "Ideas principales como ramas",
-              "Conecta conceptos relacionados",
-              "Ignora detalles específicos por ahora"
+              "Central topic in the middle",
+              "Main ideas as branches",
+              "Link related concepts",
+              "Ignore specific detail for now"
             ]}
           />
 
           <Rule 
-            title="3. Técnica de las 5 W"
-            description="Busca respuestas básicas: Who, What, When, Where, Why."
+            title="3. The 5 Ws"
+            description="Look for basic answers: Who, What, When, Where, Why."
             examples={[
-              "Who: ¿Quién está involucrado?",
-              "What: ¿Qué está pasando?",
-              "When: ¿Cuándo ocurre?",
-              "Where: ¿Dónde sucede?",
-              "Why: ¿Por qué es importante?"
+              "Who: Who is involved?",
+              "What: What is happening?",
+              "When: When does it occur?",
+              "Where: Where does it happen?",
+              "Why: Why does it matter?"
             ]}
           />
         </div>
       </TheorySection>
 
-      <TheorySection title="Reglas Importantes" icon="⚡">
+      <TheorySection title="Important rules" icon="⚡">
         <div style={{ display: 'grid', gap: '1rem' }}>
           <Rule 
-            title="1. Velocidad sobre precisión"
-            description="En gist reading, la velocidad es más importante que entender cada detalle."
+            title="1. Speed over fine detail"
+            description="In gist reading, speed matters more than every small detail."
             examples={[
-              "Lee 2-3 veces más rápido que normalmente",
-              "No te detengas en palabras desconocidas",
-              "Salta secciones muy técnicas en la primera lectura",
-              "Confía en tu comprensión general"
+              "Read 2–3 times faster than usual",
+              "Do not stop on unknown words",
+              "Skip very technical sections on the first pass",
+              "Trust your overall understanding"
             ]}
           />
 
           <Rule 
-            title="2. Contexto sobre vocabulario"
-            description="Usa el contexto para inferir significados generales."
+            title="2. Context over vocabulary"
+            description="Use context to infer general meanings."
             examples={[
-              "Una palabra desconocida no arruina la comprensión",
-              "El 80% de comprensión es suficiente para gist",
-              "Las palabras clave se repiten en el texto",
-              "El contexto te da pistas sobre el significado"
+              "One unknown word does not destroy understanding",
+              "About 80% understanding is enough for gist",
+              "Key words often repeat",
+              "Context gives clues to meaning"
             ]}
           />
 
           <Rule 
-            title="3. Estructura del texto"
-            description="Reconoce patrones comunes de organización textual."
+            title="3. Text structure"
+            description="Recognise common patterns of organisation."
             examples={[
-              "Introducción → Desarrollo → Conclusión",
-              "Problema → Solución",
-              "Causa → Efecto",
-              "Comparación → Contraste"
+              "Introduction → Body → Conclusion",
+              "Problem → Solution",
+              "Cause → Effect",
+              "Comparison → Contrast"
             ]}
           />
         </div>
@@ -136,158 +136,158 @@ const ReadingForGistPage = () => {
   const exercises = [
     <MultipleChoiceExercise
       key="1"
-      question="¿Cuál es el objetivo principal de reading for gist?"
+      question="What is the main goal of reading for gist?"
       options={[
-        "Entender cada palabra del texto",
-        "Obtener la idea general del texto",
-        "Memorizar detalles específicos",
-        "Traducir el texto completo"
+        "Understand every word",
+        "Get the general idea of the text",
+        "Memorise specific details",
+        "Translate the whole text"
       ]}
       correctAnswer={1}
-      explanation="Reading for gist se enfoca en obtener la idea general o tema principal, no en entender cada detalle."
+      explanation="Reading for gist focuses on the general idea or topic, not every detail."
     />,
 
     <MultipleChoiceExercise
       key="2"
-      question="¿Qué debes hacer cuando encuentras una palabra desconocida en gist reading?"
+      question="What should you do when you meet an unknown word in gist reading?"
       options={[
-        "Parar y buscarla en el diccionario",
-        "Continuar leyendo sin detenerte",
-        "Preguntarle a alguien su significado",
-        "Dejar de leer el texto"
+        "Stop and look it up",
+        "Keep reading without stopping",
+        "Ask someone what it means",
+        "Stop reading the text"
       ]}
       correctAnswer={1}
-      explanation="En gist reading debes continuar sin detenerte en palabras desconocidas, enfocándote en la comprensión general."
+      explanation="In gist reading, keep going and focus on overall meaning rather than every unknown word."
     />,
 
     <TrueFalseExercise
       key="3"
       statements={[
         {
-          text: "En gist reading necesitas entender el 100% del vocabulario.",
+          text: "In gist reading you need to understand 100% of the vocabulary.",
           isTrue: false,
-          explanation: "Incorrecto. Con 70-80% de comprensión es suficiente para obtener la idea general del texto."
+          explanation: "Incorrect. About 70–80% understanding is often enough to get the general idea."
         },
         {
-          text: "El título del texto es una pista importante para gist reading.",
+          text: "The title is an important clue in gist reading.",
           isTrue: true,
-          explanation: "Correcto. El título te da una idea del tema principal y te ayuda a predecir el contenido."
+          explanation: "Correct. The title hints at the main topic and helps you predict content."
         },
         {
-          text: "Debes leer más lentamente para hacer gist reading efectivo.",
+          text: "You should read more slowly for effective gist reading.",
           isTrue: false,
-          explanation: "Incorrecto. En gist reading debes leer más rápidamente, enfocándote en ideas generales."
+          explanation: "Incorrect. Gist reading means reading faster and focusing on general ideas."
         }
       ]}
     />,
 
     <MultipleChoiceExercise
       key="4"
-      question="¿Cuál es la mejor técnica para identificar la idea principal?"
+      question="Which technique best helps you find the main idea?"
       options={[
-        "Leer solo la primera oración",
-        "Leer el texto completo rápidamente",
-        "Contar las palabras del texto",
-        "Leer solo las palabras en negrita"
+        "Read only the first sentence",
+        "Read the whole text quickly",
+        "Count the words",
+        "Read only bold words"
       ]}
       correctAnswer={1}
-      explanation="Leer todo el texto rápidamente te da una visión completa y te permite identificar la idea principal."
+      explanation="A quick read of the whole text gives an overview and helps you see the main idea."
     />,
 
     <MultipleChoiceExercise
       key="5"
-      question="¿Qué elementos del texto son más importantes para gist reading?"
+      question="Which parts of the text matter most for gist reading?"
       options={[
-        "Cada adjetivo y adverbio",
-        "Título, primera y última oración de párrafos",
-        "Solo las palabras más largas",
-        "Únicamente los números y fechas"
+        "Every adjective and adverb",
+        "Title, first and last sentences of paragraphs",
+        "Only the longest words",
+        "Only numbers and dates"
       ]}
       correctAnswer={1}
-      explanation="El título y las primeras/últimas oraciones de párrafos contienen las ideas principales del texto."
+      explanation="Titles and first/last sentences of paragraphs usually carry the main ideas."
     />,
 
     <TrueFalseExercise
       key="6"
       statements={[
         {
-          text: "Las palabras repetidas frecuentemente suelen ser importantes para el tema.",
+          text: "Words that repeat often are usually important to the topic.",
           isTrue: true,
-          explanation: "Correcto. Las palabras que se repiten a menudo están relacionadas con el tema principal del texto."
+          explanation: "Correct. Frequent words often relate to the central theme."
         },
         {
-          text: "Gist reading es útil solo para textos muy cortos.",
+          text: "Gist reading is only useful for very short texts.",
           isTrue: false,
-          explanation: "Incorrecto. Gist reading es especialmente útil para textos largos donde necesitas la idea general rápidamente."
+          explanation: "Incorrect. Gist reading is especially helpful for long texts when you need the big picture quickly."
         },
         {
-          text: "Debes hacer gist reading antes de leer para detalles específicos.",
+          text: "You should use gist reading before reading for specific detail.",
           isTrue: true,
-          explanation: "Correcto. Gist reading te da el contexto general que facilita la comprensión detallada posterior."
+          explanation: "Correct. Gist reading gives background that makes detailed reading easier."
         }
       ]}
     />,
 
     <MultipleChoiceExercise
       key="7"
-      question="¿Cuál es el porcentaje mínimo de comprensión necesario para gist reading efectivo?"
+      question="What is the minimum level of understanding needed for effective gist reading?"
       options={[
         "100%",
-        "90-95%",
-        "70-80%",
-        "50-60%"
+        "90–95%",
+        "70–80%",
+        "50–60%"
       ]}
       correctAnswer={2}
-      explanation="Con 70-80% de comprensión puedes obtener la idea general efectivamente sin entender cada detalle."
+      explanation="With about 70–80% understanding you can usually grasp the general idea without every detail."
     />,
 
     <MultipleChoiceExercise
       key="8"
-      question="¿Qué preguntas son más útiles durante gist reading?"
+      question="Which questions are most useful during gist reading?"
       options={[
-        "¿Cuántas palabras tiene cada oración?",
-        "¿Quién, qué, cuándo, dónde, por qué?",
-        "¿Cuáles son todos los adjetivos?",
-        "¿Qué palabras no entiendo?"
+        "How many words are in each sentence?",
+        "Who, what, when, where, why?",
+        "What are all the adjectives?",
+        "Which words do I not know?"
       ]}
       correctAnswer={1}
-      explanation="Las preguntas básicas (5 W) te ayudan a identificar la información esencial para la comprensión general."
+      explanation="Basic 5W questions help you pick out essential information for general understanding."
     />,
 
     <TrueFalseExercise
       key="9"
       statements={[
         {
-          text: "Gist reading es una habilidad útil para exámenes con tiempo limitado.",
+          text: "Gist reading is useful in timed exams.",
           isTrue: true,
-          explanation: "Correcto. Te permite obtener información esencial rápidamente cuando el tiempo es limitado."
+          explanation: "Correct. It helps you get essential information quickly when time is short."
         },
         {
-          text: "No debes usar gist reading si el texto tiene vocabulario técnico.",
+          text: "You should avoid gist reading if the text has technical vocabulary.",
           isTrue: false,
-          explanation: "Incorrecto. Gist reading es especialmente útil con textos técnicos para obtener la idea general primero."
+          explanation: "Incorrect. Gist reading is especially useful with technical texts to get the overview first."
         }
       ]}
     />,
 
     <MultipleChoiceExercise
       key="10"
-      question="¿Cuál es la mejor velocidad para gist reading comparada con lectura normal?"
+      question="How fast should gist reading be compared with normal reading?"
       options={[
-        "La misma velocidad",
-        "Más lenta que la lectura normal",
-        "2-3 veces más rápida",
-        "Solo leer una palabra por minuto"
+        "The same speed",
+        "Slower than normal",
+        "2–3 times faster",
+        "One word per minute"
       ]}
       correctAnswer={2}
-      explanation="En gist reading debes leer 2-3 veces más rápido que la lectura normal para obtener la visión general."
+      explanation="For gist reading, read about 2–3 times faster than normal to get the overall picture."
     />
   ];
 
   return (
     <TheoryLayout
       title="Reading for Gist"
-      description="Domina la técnica de lectura para obtener ideas generales. Aprende a identificar temas principales y propósitos de textos rápidamente sin perderte en detalles."
+      description="Master reading for general ideas. Learn to identify main topics and purposes quickly without getting lost in detail."
       level="A1-A2-B1-B2-C1-C2"
       theoryContent={theoryContent}
       exercises={exercises}

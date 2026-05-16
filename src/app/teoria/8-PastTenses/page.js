@@ -18,33 +18,33 @@ import {
 const PastTensesPage = () => {
   const theoryContent = (
     <div>
-      <TheorySection title="¿Qué son los Past Tenses?" icon="⏰">
+      <TheorySection title="What Are Past Tenses?" icon="⏰">
         <p style={{ fontSize: '1.1rem', lineHeight: 1.6, color: '#4a5568', marginBottom: '1rem' }}>
-          Los <strong>past tenses</strong> (tiempos pasados) son formas verbales que se usan para hablar de acciones, 
-          estados y situaciones que ocurrieron en el pasado. Hay varios tiempos pasados en inglés, cada uno con usos específicos.
+          <strong>Past tenses</strong> are verb forms used to talk about actions, 
+          states, and situations that occurred in the past. There are several past tenses in English, each with specific uses.
         </p>
         
         <QuickReference items={[
-          "Past Simple: acciones completadas en el pasado",
-          "Past Continuous: acciones en progreso en el pasado",
-          "Past Perfect: acciones que ocurrieron antes que otra",
-          "Past Perfect Continuous: duración antes de otra acción",
-          "La elección del tiempo depende del contexto"
+          "Past Simple: completed actions in the past",
+          "Past Continuous: actions in progress in the past",
+          "Past Perfect: actions that happened before another",
+          "Past Perfect Continuous: duration before another action",
+          "The choice of tense depends on context"
         ]} />
       </TheorySection>
 
-      <TheorySection title="Past Simple (Pasado Simple)" icon="📅">
+      <TheorySection title="Past Simple" icon="📅">
         <p style={{ fontSize: '1rem', lineHeight: 1.6, color: '#4a5568', marginBottom: '1rem' }}>
-          Se usa para hablar de acciones completadas en un tiempo específico del pasado.
+          Used to talk about actions completed at a specific time in the past.
         </p>
 
         <GrammarTable
-          caption="Estructura del Past Simple"
-          headers={["Tipo", "Estructura", "Ejemplo"]}
+          caption="Past Simple Structure"
+          headers={["Type", "Structure", "Example"]}
           rows={[
-            ["Afirmativa", "Sujeto + verbo en pasado", "I worked yesterday"],
-            ["Negativa", "Sujeto + didn't + verbo infinitivo", "I didn't work yesterday"],
-            ["Interrogativa", "Did + sujeto + verbo infinitivo", "Did you work yesterday?"]
+            ["Affirmative", "Subject + past tense verb", "I worked yesterday"],
+            ["Negative", "Subject + didn't + base verb", "I didn't work yesterday"],
+            ["Interrogative", "Did + subject + base verb", "Did you work yesterday?"]
           ]}
         />
 
@@ -52,45 +52,45 @@ const PastTensesPage = () => {
           <Example 
             spanish="Ayer trabajé hasta tarde"
             english="Yesterday I worked until late"
-            translation="Ayer trabajé hasta tarde"
+            translation="Yesterday I worked until late"
           />
           <Example 
             spanish="Ella no fue a la fiesta"
             english="She didn't go to the party"
-            translation="Ella no fue a la fiesta"
+            translation="She didn't go to the party"
           />
           <Example 
             spanish="¿Viste la película?"
             english="Did you see the movie?"
-            translation="¿Viste la película?"
+            translation="Did you see the movie?"
           />
         </div>
 
         <Rule 
-          title="Usos del Past Simple"
-          description="Cuándo usar el Past Simple:"
+          title="Uses of Past Simple"
+          description="When to use Past Simple:"
           examples={[
-            "Acciones completadas: I finished my homework",
-            "Eventos específicos: She was born in 1990",
-            "Secuencia de eventos: I woke up, had breakfast, and left",
-            "Con tiempo específico: I saw him last week"
+            "Completed actions: I finished my homework",
+            "Specific events: She was born in 1990",
+            "Sequence of events: I woke up, had breakfast, and left",
+            "With specific time: I saw him last week"
           ]}
         />
 
         <Tip type="info">
-          <strong>Verbos irregulares:</strong> Muchos verbos en inglés son irregulares en pasado (go → went, see → saw, be → was/were). 
-          Es importante memorizarlos.
+          <strong>Irregular verbs:</strong> Many English verbs are irregular in the past (go → went, see → saw, be → was/were). 
+          It is important to memorize them.
         </Tip>
       </TheorySection>
 
-      <TheorySection title="Past Continuous (Pasado Continuo)" icon="🔄">
+      <TheorySection title="Past Continuous" icon="🔄">
         <p style={{ fontSize: '1rem', lineHeight: 1.6, color: '#4a5568', marginBottom: '1rem' }}>
-          Se usa para hablar de acciones que estaban en progreso en un momento específico del pasado.
+          Used to talk about actions that were in progress at a specific moment in the past.
         </p>
 
         <GrammarTable
-          caption="Estructura del Past Continuous"
-          headers={["Persona", "Afirmativa", "Negativa", "Interrogativa"]}
+          caption="Past Continuous Structure"
+          headers={["Person", "Affirmative", "Negative", "Interrogative"]}
           rows={[
             ["I/He/She/It", "was working", "wasn't working", "Was I working?"],
             ["You/We/They", "were working", "weren't working", "Were you working?"]
@@ -101,48 +101,48 @@ const PastTensesPage = () => {
           <Example 
             spanish="A las 8 PM estaba estudiando"
             english="At 8 PM I was studying"
-            translation="A las 8 PM estaba estudiando"
+            translation="At 8 PM I was studying"
           />
           <Example 
             spanish="Los niños estaban jugando cuando llegué"
             english="The children were playing when I arrived"
-            translation="Los niños estaban jugando cuando llegué"
+            translation="The children were playing when I arrived"
           />
           <Example 
             spanish="¿Qué estabas haciendo ayer?"
             english="What were you doing yesterday?"
-            translation="¿Qué estabas haciendo ayer?"
+            translation="What were you doing yesterday?"
           />
         </div>
 
         <Rule 
-          title="Usos del Past Continuous"
-          description="Cuándo usar el Past Continuous:"
+          title="Uses of Past Continuous"
+          description="When to use Past Continuous:"
           examples={[
-            "Acciones en progreso: I was reading when you called",
-            "Contexto para otra acción: While I was cooking, the phone rang",
-            "Descripción de escenas: The sun was shining, birds were singing",
-            "Acciones interrumpidas: I was sleeping when the alarm went off"
+            "Actions in progress: I was reading when you called",
+            "Context for another action: While I was cooking, the phone rang",
+            "Scene description: The sun was shining, birds were singing",
+            "Interrupted actions: I was sleeping when the alarm went off"
           ]}
         />
 
         <Tip type="success">
-          <strong>Conectores comunes:</strong> "while", "when", "as", "at that time", "at that moment".
+          <strong>Common connectors:</strong> "while", "when", "as", "at that time", "at that moment".
         </Tip>
       </TheorySection>
 
-      <TheorySection title="Past Perfect (Pasado Perfecto)" icon="✅">
+      <TheorySection title="Past Perfect" icon="✅">
         <p style={{ fontSize: '1rem', lineHeight: 1.6, color: '#4a5568', marginBottom: '1rem' }}>
-          Se usa para hablar de acciones que ocurrieron antes que otra acción en el pasado.
+          Used to talk about actions that happened before another action in the past.
         </p>
 
         <GrammarTable
-          caption="Estructura del Past Perfect"
-          headers={["Tipo", "Estructura", "Ejemplo"]}
+          caption="Past Perfect Structure"
+          headers={["Type", "Structure", "Example"]}
           rows={[
-            ["Afirmativa", "Sujeto + had + participio pasado", "I had finished my work"],
-            ["Negativa", "Sujeto + hadn't + participio pasado", "I hadn't finished my work"],
-            ["Interrogativa", "Had + sujeto + participio pasado", "Had you finished your work?"]
+            ["Affirmative", "Subject + had + past participle", "I had finished my work"],
+            ["Negative", "Subject + hadn't + past participle", "I hadn't finished my work"],
+            ["Interrogative", "Had + subject + past participle", "Had you finished your work?"]
           ]}
         />
 
@@ -150,44 +150,44 @@ const PastTensesPage = () => {
           <Example 
             spanish="Ya había terminado cuando llegaste"
             english="I had already finished when you arrived"
-            translation="Ya había terminado cuando llegaste"
+            translation="I had already finished when you arrived"
           />
           <Example 
             spanish="No había visto esa película antes"
             english="I hadn't seen that movie before"
-            translation="No había visto esa película antes"
+            translation="I hadn't seen that movie before"
           />
           <Example 
             spanish="¿Habías estado en París antes?"
             english="Had you been to Paris before?"
-            translation="¿Habías estado en París antes?"
+            translation="Had you been to Paris before?"
           />
         </div>
 
         <Rule 
-          title="Usos del Past Perfect"
-          description="Cuándo usar el Past Perfect:"
+          title="Uses of Past Perfect"
+          description="When to use Past Perfect:"
           examples={[
-            "Acción anterior: I had eaten before I went to the party",
-            "Experiencias previas: She had never seen snow before",
-            "Resultado en el pasado: I was tired because I had worked all day",
-            "Con 'by the time': By the time we arrived, they had left"
+            "Earlier action: I had eaten before I went to the party",
+            "Previous experiences: She had never seen snow before",
+            "Past result: I was tired because I had worked all day",
+            "With 'by the time': By the time we arrived, they had left"
           ]}
         />
 
         <Tip type="warning">
-          <strong>Orden de eventos:</strong> Past Perfect = acción más antigua, Past Simple = acción más reciente.
+          <strong>Order of events:</strong> Past Perfect = earlier action, Past Simple = more recent action.
         </Tip>
       </TheorySection>
 
-      <TheorySection title="Comparación de Tiempos Pasados" icon="⚖️">
+      <TheorySection title="Comparing Past Tenses" icon="⚖️">
         <GrammarTable
-          caption="Cuándo usar cada tiempo pasado"
-          headers={["Tiempo", "Cuándo usarlo", "Ejemplo"]}
+          caption="When to Use Each Past Tense"
+          headers={["Tense", "When to Use", "Example"]}
           rows={[
-            ["Past Simple", "Acciones completadas", "I worked yesterday"],
-            ["Past Continuous", "Acciones en progreso", "I was working at 3 PM"],
-            ["Past Perfect", "Acción anterior a otra", "I had worked before I left"]
+            ["Past Simple", "Completed actions", "I worked yesterday"],
+            ["Past Continuous", "Actions in progress", "I was working at 3 PM"],
+            ["Past Perfect", "Action before another", "I had worked before I left"]
           ]}
         />
 
@@ -195,73 +195,73 @@ const PastTensesPage = () => {
           <Example 
             spanish="Llegué a casa a las 6 PM (acción completada)"
             english="I arrived home at 6 PM"
-            translation="Llegué a casa a las 6 PM"
+            translation="I arrived home at 6 PM"
           />
           <Example 
             spanish="Estaba cocinando cuando llegaste (acción en progreso)"
             english="I was cooking when you arrived"
-            translation="Estaba cocinando cuando llegaste"
+            translation="I was cooking when you arrived"
           />
           <Example 
             spanish="Ya había cocinado cuando llegaste (acción anterior)"
             english="I had already cooked when you arrived"
-            translation="Ya había cocinado cuando llegaste"
+            translation="I had already cooked when you arrived"
           />
         </div>
       </TheorySection>
 
-      <TheorySection title="Verbos Irregulares Importantes" icon="📚">
+      <TheorySection title="Important Irregular Verbs" icon="📚">
         <GrammarTable
-          caption="Verbos Irregulares Comunes"
-          headers={["Infinitivo", "Pasado Simple", "Participio Pasado", "Significado"]}
+          caption="Common Irregular Verbs"
+          headers={["Infinitive", "Past Simple", "Past Participle", "Meaning"]}
           rows={[
-            ["be", "was/were", "been", "ser/estar"],
-            ["have", "had", "had", "tener"],
-            ["do", "did", "done", "hacer"],
-            ["go", "went", "gone", "ir"],
-            ["see", "saw", "seen", "ver"],
-            ["take", "took", "taken", "tomar"],
-            ["come", "came", "come", "venir"],
-            ["get", "got", "gotten", "obtener"],
-            ["make", "made", "made", "hacer"],
-            ["know", "knew", "known", "saber"]
+            ["be", "was/were", "been", "to be"],
+            ["have", "had", "had", "to have"],
+            ["do", "did", "done", "to do"],
+            ["go", "went", "gone", "to go"],
+            ["see", "saw", "seen", "to see"],
+            ["take", "took", "taken", "to take"],
+            ["come", "came", "come", "to come"],
+            ["get", "got", "gotten", "to get"],
+            ["make", "made", "made", "to make"],
+            ["know", "knew", "known", "to know"]
           ]}
         />
 
         <Tip type="info">
-          <strong>Consejo:</strong> Los verbos irregulares son fundamentales. Practica los más comunes hasta memorizarlos completamente.
+          <strong>Tip:</strong> Irregular verbs are essential. Practice the most common ones until you know them completely.
         </Tip>
       </TheorySection>
 
-      <TheorySection title="Errores Comunes" icon="⚠️">
+      <TheorySection title="Common Mistakes" icon="⚠️">
         <div style={{ display: 'grid', gap: '1rem' }}>
           <Tip type="error">
             <strong>Error:</strong> "I did went to school" ❌<br/>
-            <strong>Correcto:</strong> "I went to school" ✅<br/>
-            <em>Con 'did' usamos el infinitivo, no el pasado</em>
+            <strong>Correct:</strong> "I went to school" ✅<br/>
+            <em>With 'did' we use the base form, not the past tense</em>
           </Tip>
 
           <Tip type="error">
             <strong>Error:</strong> "I was go to the store" ❌<br/>
-            <strong>Correcto:</strong> "I was going to the store" ✅<br/>
-            <em>Past Continuous usa 'was/were + ing'</em>
+            <strong>Correct:</strong> "I was going to the store" ✅<br/>
+            <em>Past Continuous uses 'was/were + ing'</em>
           </Tip>
 
           <Tip type="error">
             <strong>Error:</strong> "I had went to Paris" ❌<br/>
-            <strong>Correcto:</strong> "I had gone to Paris" ✅<br/>
-            <em>Past Perfect usa 'had + participio pasado'</em>
+            <strong>Correct:</strong> "I had gone to Paris" ✅<br/>
+            <em>Past Perfect uses 'had + past participle'</em>
           </Tip>
 
           <Tip type="error">
             <strong>Error:</strong> "Yesterday I have seen him" ❌<br/>
-            <strong>Correcto:</strong> "Yesterday I saw him" ✅<br/>
-            <em>Con tiempo específico del pasado usamos Past Simple</em>
+            <strong>Correct:</strong> "Yesterday I saw him" ✅<br/>
+            <em>With a specific past time we use Past Simple</em>
           </Tip>
         </div>
       </TheorySection>
 
-      <TheorySection title="Palabras Clave" icon="🔑">
+      <TheorySection title="Key Words" icon="🔑">
         <div style={{ display: 'grid', gap: '1rem' }}>
           <div>
             <h4 style={{ color: '#667eea', marginBottom: '0.5rem' }}>Past Simple:</h4>
@@ -299,12 +299,12 @@ const PastTensesPage = () => {
         "have gone"
       ]}
       correctAnswer={1}
-      explanation="'Went' es la forma correcta del pasado simple de 'go' para acciones completadas en el pasado."
+      explanation="'Went' is the correct Past Simple form of 'go' for completed actions in the past."
     />,
 
     <MultipleChoiceExercise
       key="2"
-      question="¿Cuál es la forma correcta para completar: 'I ___ my homework when you called'?"
+      question="Which is the correct form to complete: 'I ___ my homework when you called'?"
       options={[
         "did",
         "was doing",
@@ -312,7 +312,7 @@ const PastTensesPage = () => {
         "have done"
       ]}
       correctAnswer={1}
-      explanation="Para acciones en progreso en el pasado usamos Past Continuous: 'I was doing my homework when you called'."
+      explanation="For actions in progress in the past we use Past Continuous: 'I was doing my homework when you called'."
     />,
 
     <TrueFalseExercise
@@ -321,29 +321,29 @@ const PastTensesPage = () => {
         {
           text: "'I did went to school' is correct.",
           isTrue: false,
-          explanation: "Incorrecto. Con 'did' usamos el infinitivo: 'I went to school' o 'I did go to school' (para énfasis)."
+          explanation: "Incorrect. With 'did' we use the base form: 'I went to school' or 'I did go to school' (for emphasis)."
         },
         {
           text: "'I had already eaten when she arrived' shows the correct order of events.",
           isTrue: true,
-          explanation: "Correcto. Past Perfect muestra la acción más antigua (had eaten), Past Simple la más reciente (arrived)."
+          explanation: "Correct. Past Perfect shows the earlier action (had eaten), Past Simple the more recent one (arrived)."
         },
         {
           text: "'I was working yesterday' is correct for a completed action.",
           isTrue: false,
-          explanation: "Incorrecto. Para acciones completadas usamos Past Simple: 'I worked yesterday'. Past Continuous es para acciones en progreso."
+          explanation: "Incorrect. For completed actions we use Past Simple: 'I worked yesterday'. Past Continuous is for actions in progress."
         },
         {
           text: "'While I was cooking, the phone rang' is correct.",
           isTrue: true,
-          explanation: "Correcto. 'While' introduce una acción en progreso (Past Continuous), la otra acción es puntual (Past Simple)."
+          explanation: "Correct. 'While' introduces an action in progress (Past Continuous); the other action is punctual (Past Simple)."
         }
       ]}
     />,
 
     <MultipleChoiceExercise
       key="4"
-      question="¿Cuál es la forma correcta para completar: 'She ___ never ___ to Japan before last year'?"
+      question="Which is the correct form to complete: 'She ___ never ___ to Japan before last year'?"
       options={[
         "was, gone",
         "had, been",
@@ -351,12 +351,12 @@ const PastTensesPage = () => {
         "has, been"
       ]}
       correctAnswer={1}
-      explanation="Para experiencias que ocurrieron antes de otra acción en el pasado usamos Past Perfect: 'She had never been to Japan before last year'."
+      explanation="For experiences that happened before another past action we use Past Perfect: 'She had never been to Japan before last year'."
     />,
 
     <MultipleChoiceExercise
       key="5"
-      question="¿Cuál es la forma correcta para completar: 'By the time we arrived, the movie ___'?"
+      question="Which is the correct form to complete: 'By the time we arrived, the movie ___'?"
       options={[
         "started",
         "was starting",
@@ -364,7 +364,7 @@ const PastTensesPage = () => {
         "has started"
       ]}
       correctAnswer={2}
-      explanation="'By the time' indica que una acción ocurrió antes que otra en el pasado, por lo que usamos Past Perfect: 'had started'."
+      explanation="'By the time' indicates that one action happened before another in the past, so we use Past Perfect: 'had started'."
     />,
 
     <MultipleChoiceExercise
@@ -377,12 +377,12 @@ const PastTensesPage = () => {
         "watched, was ringing"
       ]}
       correctAnswer={1}
-      explanation="Una acción en progreso (was watching) fue interrumpida por otra acción (rang)."
+      explanation="An action in progress (was watching) was interrupted by another action (rang)."
     />,
 
     <MultipleChoiceExercise
       key="7"
-      question="¿Cuál es correcto?"
+      question="Which is correct?"
       options={[
         "I have seen him yesterday",
         "I saw him yesterday",
@@ -390,7 +390,7 @@ const PastTensesPage = () => {
         "I was seeing him yesterday"
       ]}
       correctAnswer={1}
-      explanation="Con 'yesterday' (tiempo específico pasado) usamos Past Simple, no Present Perfect."
+      explanation="With 'yesterday' (specific past time) we use Past Simple, not Present Perfect."
     />,
 
     <MultipleChoiceExercise
@@ -403,12 +403,12 @@ const PastTensesPage = () => {
         "did, see"
       ]}
       correctAnswer={1}
-      explanation="En reported speech, Present Perfect se convierte en Past Perfect: 'had never seen'."
+      explanation="In reported speech, Present Perfect becomes Past Perfect: 'had never seen'."
     />,
 
     <MultipleChoiceExercise
       key="9"
-      question="¿Cuál expresa una acción habitual en el pasado?"
+      question="Which expresses a habitual action in the past?"
       options={[
         "I went to school every day",
         "I used to go to school every day",
@@ -416,7 +416,7 @@ const PastTensesPage = () => {
         "All of the above"
       ]}
       correctAnswer={3}
-      explanation="Las tres formas pueden expresar hábitos pasados, con diferentes matices."
+      explanation="All three forms can express past habits, with different nuances."
     />,
 
     <MultipleChoiceExercise
@@ -429,14 +429,14 @@ const PastTensesPage = () => {
         "have been studying"
       ]}
       correctAnswer={2}
-      explanation="'For two hours' + acción interrumpida requiere Past Perfect Continuous."
+      explanation="'For two hours' + interrupted action requires Past Perfect Continuous."
     />
   ];
 
   return (
     <TheoryLayout
       title="Past Tenses"
-      description="Domina todos los tiempos pasados del inglés: Simple, Continuous y Perfect. Aprende cuándo usar cada uno y practica con verbos irregulares."
+      description="Master all English past tenses: Simple, Continuous, and Perfect. Learn when to use each one and practice irregular verbs."
       level="A2-B1-B2-C1-C2"
       theoryContent={theoryContent}
       exercises={exercises}
@@ -447,4 +447,3 @@ const PastTensesPage = () => {
 };
 
 export default PastTensesPage;
-

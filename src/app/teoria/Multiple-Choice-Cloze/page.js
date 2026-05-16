@@ -18,70 +18,70 @@ import {
 const MultipleChoiceClozePage = () => {
   const theoryContent = (
     <div>
-      <TheorySection title="¿Qué es Multiple Choice Cloze?" icon="🎯">
+      <TheorySection title="What is Multiple Choice Cloze?" icon="🎯">
         <p style={{ fontSize: '1.1rem', lineHeight: 1.6, color: '#4a5568', marginBottom: '1rem' }}>
-          El <strong>Multiple Choice Cloze</strong> es una parte del examen de Use of English donde debes completar 
-          un texto eligiendo la palabra correcta de entre cuatro opciones. Se enfoca en vocabulario, colocaciones, 
-          expresiones idiomáticas y estructuras gramaticales.
+          <strong>Multiple Choice Cloze</strong> is a Use of English exam task where you complete a text by choosing 
+          the correct word from four options. It focuses on vocabulary, collocations, idiomatic expressions, and 
+          grammatical structures.
         </p>
         
         <QuickReference items={[
-          "8 preguntas con 4 opciones cada una",
-          "Se evalúa vocabulario y colocaciones",
-          "Enfoque en expresiones idiomáticas",
-          "Contexto es clave para la respuesta",
-          "Tiempo recomendado: 10-12 minutos"
+          "8 questions with 4 options each",
+          "Tests vocabulary and collocations",
+          "Focus on idiomatic expressions",
+          "Context is key to the answer",
+          "Recommended time: 10-12 minutes"
         ]} />
       </TheorySection>
 
-      <TheorySection title="Estrategias Clave" icon="🧠">
+      <TheorySection title="Key Strategies" icon="🧠">
         <Rule 
-          title="1. Lee todo el texto primero"
-          description="Antes de intentar completar los espacios, lee todo el texto para entender el contexto general."
+          title="1. Read the whole text first"
+          description="Before trying to fill the gaps, read the entire text to understand the general context."
           examples={[
-            "Identifica el tema principal",
-            "Comprende el tono del texto",
-            "Nota las conexiones entre párrafos"
+            "Identify the main topic",
+            "Understand the tone of the text",
+            "Notice connections between paragraphs"
           ]}
         />
 
         <Rule 
-          title="2. Analiza las opciones cuidadosamente"
-          description="Las cuatro opciones suelen ser palabras similares o relacionadas."
+          title="2. Analyse the options carefully"
+          description="The four options are usually similar or related words."
           examples={[
-            "Busca diferencias sutiles en significado",
-            "Considera el registro (formal/informal)",
-            "Piensa en colocaciones comunes"
+            "Look for subtle differences in meaning",
+            "Consider register (formal/informal)",
+            "Think about common collocations"
           ]}
         />
 
         <Rule 
-          title="3. Considera el contexto inmediato"
-          description="Mira las palabras antes y después del espacio en blanco."
+          title="3. Consider the immediate context"
+          description="Look at the words before and after the blank."
           examples={[
-            "Preposiciones que siguen al verbo",
-            "Artículos y determinantes",
-            "Conectores lógicos"
+            "Prepositions that follow the verb",
+            "Articles and determiners",
+            "Logical connectors"
           ]}
         />
 
         <Example 
           spanish="The company decided to _____ its operations to Asia."
           english="Options: A) extend B) expand C) increase D) develop"
-          translation="Respuesta: B) expand (expandir operaciones es una colocación común)"
+          translation="Answer: B) expand ('expand operations' is a common collocation)"
         />
       </TheorySection>
 
-      <TheorySection title="Tipos de Preguntas Comunes" icon="📋">
+      <TheorySection title="Common Question Types" icon="📋">
         <GrammarTable
-          caption="Categorías de Multiple Choice Cloze"
-          headers={["Tipo", "Descripción", "Ejemplo"]}
+          caption="Multiple Choice Cloze Categories"
+          headers={["Type", "Description", "Example"]}
           rows={[
-            ["Colocaciones", "Combinaciones naturales de palabras", "make a decision / take a break"],
-            ["Phrasal Verbs", "Verbos con preposiciones/adverbios", "look after / put up with"],
-            ["Expresiones Idiomáticas", "Frases con significado especial", "break the ice / hit the road"],
-            ["Conectores", "Palabras que unen ideas", "however / therefore / moreover"],
-            ["Vocabulario Preciso", "Sinónimos con matices diferentes", "big / large / huge / enormous"]
+            ["Collocations", "Natural word combinations", "make a decision / take a break"],
+            ["Phrasal Verbs", "Verbs with prepositions/adverbs", "look after / put up with"],
+            ["Idiomatic Expressions", "Phrases with a special meaning", "break the ice / hit the road"],
+            ["Connectors", "Words that link ideas", "however / therefore / moreover"],
+            ["Precise Vocabulary", "Synonyms with different nuances", "big / large / huge / enormous"]
           ]}
         />
 
@@ -89,25 +89,25 @@ const MultipleChoiceClozePage = () => {
           <Example 
             spanish="She couldn't _____ the temptation to buy the dress."
             english="A) refuse B) resist C) reject D) deny"
-            translation="Respuesta: B) resist (resist temptation es la colocación correcta)"
+            translation="Answer: B) resist ('resist temptation' is the correct collocation)"
           />
           
           <Example 
             spanish="The meeting was _____ until next week."
             english="A) delayed B) postponed C) suspended D) cancelled"
-            translation="Respuesta: B) postponed (postpone a meeting es más preciso que delay)"
+            translation="Answer: B) postponed ('postpone a meeting' is more precise than delay)"
           />
         </div>
       </TheorySection>
 
-      <TheorySection title="Colocaciones Importantes" icon="🔗">
+      <TheorySection title="Important Collocations" icon="🔗">
         <p style={{ fontSize: '1rem', lineHeight: 1.6, color: '#4a5568', marginBottom: '1.5rem' }}>
-          Las colocaciones son combinaciones de palabras que suenan naturales para los hablantes nativos.
+          Collocations are word combinations that sound natural to native speakers.
         </p>
 
         <GrammarTable
-          caption="Colocaciones Comunes en Exámenes"
-          headers={["Verbo", "Sustantivo", "Ejemplo"]}
+          caption="Common Collocations in Exams"
+          headers={["Verb", "Noun", "Example"]}
           rows={[
             ["make", "decision, mistake, progress, effort", "make a decision"],
             ["take", "action, advantage, responsibility", "take action"],
@@ -119,56 +119,56 @@ const MultipleChoiceClozePage = () => {
         />
 
         <Tip type="success">
-          <strong>Consejo:</strong> Lee mucho en inglés para familiarizarte con las colocaciones naturales. 
-          Los diccionarios de colocaciones también son muy útiles.
+          <strong>Tip:</strong> Read extensively in English to get used to natural collocations. 
+          Collocation dictionaries are also very helpful.
         </Tip>
       </TheorySection>
 
-      <TheorySection title="Errores Comunes" icon="⚠️">
+      <TheorySection title="Common Mistakes" icon="⚠️">
         <div style={{ display: 'grid', gap: '1rem' }}>
           <Tip type="error">
-            <strong>Error:</strong> Elegir la primera opción que parece correcta<br/>
-            <strong>Solución:</strong> Lee todas las opciones y considera el contexto completo
+            <strong>Mistake:</strong> Choosing the first option that seems correct<br/>
+            <strong>Solution:</strong> Read all the options and consider the full context
           </Tip>
 
           <Tip type="error">
-            <strong>Error:</strong> Ignorar las palabras que siguen al espacio<br/>
-            <strong>Solución:</strong> Mira qué preposiciones o estructuras vienen después
+            <strong>Mistake:</strong> Ignoring the words after the gap<br/>
+            <strong>Solution:</strong> Check which prepositions or structures follow
           </Tip>
 
           <Tip type="error">
-            <strong>Error:</strong> No considerar el registro del texto<br/>
-            <strong>Solución:</strong> Decide si el texto es formal, informal o neutro
+            <strong>Mistake:</strong> Not considering the register of the text<br/>
+            <strong>Solution:</strong> Decide whether the text is formal, informal, or neutral
           </Tip>
 
           <Tip type="error">
-            <strong>Error:</strong> Traducir literalmente del español<br/>
-            <strong>Solución:</strong> Piensa en expresiones naturales en inglés
+            <strong>Mistake:</strong> Translating literally from your first language<br/>
+            <strong>Solution:</strong> Think in natural English expressions
           </Tip>
         </div>
       </TheorySection>
 
-      <TheorySection title="Técnica de Eliminación" icon="❌">
+      <TheorySection title="Elimination Technique" icon="❌">
         <Rule 
-          title="Proceso de eliminación sistemática"
-          description="Cuando no estés seguro, usa este proceso:"
+          title="Systematic elimination process"
+          description="When you are not sure, use this process:"
           examples={[
-            "1. Elimina opciones obviamente incorrectas",
-            "2. Considera el significado en contexto",
-            "3. Piensa en colocaciones comunes",
-            "4. Elige la opción más natural"
+            "1. Eliminate obviously incorrect options",
+            "2. Consider the meaning in context",
+            "3. Think about common collocations",
+            "4. Choose the most natural option"
           ]}
         />
 
         <Example 
           spanish="The new policy will _____ effect next month."
           english="A) take B) make C) have D) get"
-          translation="Proceso: 'make effect' ❌, 'have effect' ❌, 'get effect' ❌, 'take effect' ✅"
+          translation="Process: 'make effect' ❌, 'have effect' ❌, 'get effect' ❌, 'take effect' ✅"
         />
 
         <Tip type="info">
-          <strong>Recuerda:</strong> En este tipo de ejercicio, siempre hay una respuesta claramente correcta. 
-          Si dudas entre dos opciones, busca pistas adicionales en el contexto.
+          <strong>Remember:</strong> In this type of exercise, there is always one clearly correct answer. 
+          If you are unsure between two options, look for extra clues in the context.
         </Tip>
       </TheorySection>
     </div>
@@ -185,7 +185,7 @@ const MultipleChoiceClozePage = () => {
         "cut"
       ]}
       correctAnswer={0}
-      explanation="'Reduce workforce' es la colocación más común y natural en contextos empresariales."
+      explanation="'Reduce workforce' is the most common and natural collocation in business contexts."
     />,
 
     <MultipleChoiceExercise
@@ -198,7 +198,7 @@ const MultipleChoiceClozePage = () => {
         "suppress"
       ]}
       correctAnswer={1}
-      explanation="'Contain curiosity' es la expresión correcta. Aunque 'control' también es posible, 'contain' es más preciso en este contexto."
+      explanation="'Contain curiosity' is the correct expression. Although 'control' is also possible, 'contain' is more precise in this context."
     />,
 
     <TrueFalseExercise
@@ -207,22 +207,22 @@ const MultipleChoiceClozePage = () => {
         {
           text: "In Multiple Choice Cloze, you should always read the whole text before attempting to fill the gaps.",
           isTrue: true,
-          explanation: "Correcto. Leer todo el texto primero te ayuda a entender el contexto general."
+          explanation: "Correct. Reading the whole text first helps you understand the general context."
         },
         {
           text: "All four options in Multiple Choice Cloze are usually completely different in meaning.",
           isTrue: false,
-          explanation: "Falso. Las opciones suelen ser palabras relacionadas o sinónimos con matices diferentes."
+          explanation: "False. The options are usually related words or synonyms with different nuances."
         },
         {
           text: "Collocations are not important in Multiple Choice Cloze exercises.",
           isTrue: false,
-          explanation: "Falso. Las colocaciones son fundamentales en este tipo de ejercicio."
+          explanation: "False. Collocations are fundamental in this type of exercise."
         },
         {
           text: "You should consider the words that come both before and after the gap.",
           isTrue: true,
-          explanation: "Correcto. El contexto inmediato es crucial para elegir la respuesta correcta."
+          explanation: "Correct. The immediate context is crucial for choosing the right answer."
         }
       ]}
     />,
@@ -237,7 +237,7 @@ const MultipleChoiceClozePage = () => {
         "cancelled"
       ]}
       correctAnswer={1}
-      explanation="'Postponed until further notice' es la expresión correcta. 'Postpone' implica una nueva fecha específica."
+      explanation="'Postponed until further notice' is the correct expression. 'Postpone' implies a new date will be set."
     />,
 
     <MultipleChoiceExercise
@@ -250,7 +250,7 @@ const MultipleChoiceClozePage = () => {
         "have"
       ]}
       correctAnswer={1}
-      explanation="'Take advantage' es la colocación correcta. Es una expresión fija en inglés."
+      explanation="'Take advantage' is the correct collocation. It is a fixed expression in English."
     />,
 
     <MultipleChoiceExercise
@@ -263,7 +263,7 @@ const MultipleChoiceClozePage = () => {
         "get"
       ]}
       correctAnswer={0}
-      explanation="'Take effect' es la colocación correcta para cuando algo entra en vigor."
+      explanation="'Take effect' is the correct collocation when something comes into force."
     />,
 
     <MultipleChoiceExercise
@@ -276,7 +276,7 @@ const MultipleChoiceClozePage = () => {
         "ability"
       ]}
       correctAnswer={2}
-      explanation="'Natural gift' es la expresión más común para habilidades innatas."
+      explanation="'Natural gift' is the most common expression for innate abilities."
     />,
 
     <MultipleChoiceExercise
@@ -289,7 +289,7 @@ const MultipleChoiceClozePage = () => {
         "prior to"
       ]}
       correctAnswer={0}
-      explanation="'Ahead of schedule' es la expresión fija para algo terminado antes de tiempo."
+      explanation="'Ahead of schedule' is the fixed expression for finishing early."
     />,
 
     <MultipleChoiceExercise
@@ -302,7 +302,7 @@ const MultipleChoiceClozePage = () => {
         "take"
       ]}
       correctAnswer={1}
-      explanation="'Pay attention' es la colocación correcta con 'attention'."
+      explanation="'Pay attention' is the correct collocation with 'attention'."
     />,
 
     <MultipleChoiceExercise
@@ -315,22 +315,21 @@ const MultipleChoiceClozePage = () => {
         "anticipates"
       ]}
       correctAnswer={0}
-      explanation="'Predicts' es el verbo más apropiado para pronósticos meteorológicos."
+      explanation="'Predicts' is the most appropriate verb for weather forecasts."
     />
   ];
 
   return (
     <TheoryLayout
       title="Multiple Choice Cloze"
-      description="Domina las estrategias para completar textos con opciones múltiples. Aprende sobre colocaciones, vocabulario en contexto y técnicas de eliminación."
+      description="Master strategies for completing texts with multiple-choice options. Learn about collocations, vocabulary in context, and elimination techniques."
       level="B2-C1-C2"
       theoryContent={theoryContent}
       exercises={exercises}
-      prerequisites={["Vocabulario intermedio-avanzado", "Colocaciones básicas"]}
+      prerequisites={["Intermediate-advanced vocabulary", "Basic collocations"]}
       estimatedTime="50 min"
     />
   );
 };
 
 export default MultipleChoiceClozePage;
-

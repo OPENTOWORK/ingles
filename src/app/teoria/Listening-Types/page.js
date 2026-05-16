@@ -18,58 +18,51 @@ import {
 const ListeningTypesPage = () => {
   const theoryContent = (
     <div>
-      <TheorySection title="¿Qué son los Types of Understanding?" icon="👂">
+      <TheorySection title="What Are Types of Understanding?" icon="👂">
         <p style={{ fontSize: '1.1rem', lineHeight: 1.6, color: '#4a5568', marginBottom: '1rem' }}>
-          Los <strong>types of understanding</strong> (tipos de comprensión) en listening se refieren a las diferentes habilidades 
-          que necesitas desarrollar para entender completamente lo que escuchas. Cada tipo requiere estrategias específicas.
+          <strong>Types of understanding</strong> in listening are the different skills you need to fully understand what you hear. Each type calls for specific strategies.
         </p>
         
         <QuickReference items={[
-          "Main Idea: entender el tema principal",
-          "Details: captar información específica",
-          "Contrast: identificar diferencias y oposiciones",
-          "Tone: reconocer el tono y actitud del hablante",
-          "Estrategias específicas para cada tipo"
+          "Main idea: grasp the central topic",
+          "Details: catch specific information",
+          "Contrast: spot differences and oppositions",
+          "Tone: recognize the speaker’s tone and attitude",
+          "Specific strategies for each type"
         ]} />
       </TheorySection>
 
-      <TheorySection title="Main Idea (Idea Principal)" icon="🎯">
+      <TheorySection title="Main Idea" icon="🎯">
         <p style={{ fontSize: '1rem', lineHeight: 1.6, color: '#4a5568', marginBottom: '1rem' }}>
-          La idea principal es el tema central o mensaje más importante de lo que escuchas.
+          The main idea is the central theme or most important message of what you hear.
         </p>
 
         <GrammarTable
-          caption="Estrategias para Identificar la Idea Principal"
-          headers={["Estrategia", "Descripción", "Ejemplo", "Cuándo Usar"]}
+          caption="Strategies for Identifying the Main Idea"
+          headers={["Strategy", "Description", "Example", "When to Use"]}
           rows={[
-            ["Escuchar palabras clave", "Identificar términos repetidos", "Tecnología, innovación, futuro", "Al inicio del audio"],
-            ["Prestar atención al inicio", "La idea principal suele estar al comienzo", "Today I'll talk about...", "Primeros 30 segundos"],
-            ["Identificar el tema general", "¿De qué se habla en general?", "Salud, educación, trabajo", "Durante todo el audio"],
-            ["Ignorar detalles específicos", "No te enfoques en números o fechas", "Concentrarse en el mensaje general", "Mantener enfoque general"]
+            ["Listen for keywords", "Spot repeated terms", "Technology, innovation, future", "Early in the audio"],
+            ["Focus on the opening", "The main idea often comes at the start", "Today I'll talk about...", "First 30 seconds"],
+            ["Identify the general topic", "What is the talk about overall?", "Health, education, work", "Throughout the clip"],
+            ["Ignore specific detail", "Do not fixate on numbers or dates", "Stay with the overall message", "To keep a global focus"]
           ]}
         />
 
         <div style={{ display: 'grid', gap: '1rem' }}>
           <Example 
-            spanish="Pregunta: '¿Cuál es el tema principal del audio?'"
             english="Question: 'What is the main topic of the audio?'"
-            translation="Pregunta: '¿Cuál es el tema principal del audio?'"
           />
           <Example 
-            spanish="Respuesta: 'El audio habla sobre los beneficios de la tecnología'"
             english="Answer: 'The audio discusses the benefits of technology'"
-            translation="Respuesta: 'El audio habla sobre los beneficios de la tecnología'"
           />
           <Example 
-            spanish="Claves: 'tecnología', 'beneficios', 'mejora', 'futuro'"
             english="Keywords: 'technology', 'benefits', 'improves', 'future'"
-            translation="Claves: 'tecnología', 'beneficios', 'mejora', 'futuro'"
           />
         </div>
 
         <Rule 
-          title="Preguntas Típicas de Idea Principal"
-          description="Estas preguntas buscan el tema general:"
+          title="Typical Main-Idea Questions"
+          description="These questions ask for the general theme:"
           examples={[
             "What is the main topic?",
             "What is the speaker talking about?",
@@ -79,267 +72,241 @@ const ListeningTypesPage = () => {
         />
 
         <Tip type="info">
-          <strong>Consejo:</strong> La idea principal es como el título de un artículo - resume todo el contenido.
+          <strong>Tip:</strong> The main idea is like the headline of an article—it sums up the whole piece.
         </Tip>
       </TheorySection>
 
-      <TheorySection title="Details (Detalles)" icon="🔍">
+      <TheorySection title="Details" icon="🔍">
         <p style={{ fontSize: '1rem', lineHeight: 1.6, color: '#4a5568', marginBottom: '1rem' }}>
-          Los detalles son información específica como nombres, fechas, números, lugares y hechos concretos.
+          Details are specific information such as names, dates, numbers, places, and concrete facts.
         </p>
 
         <GrammarTable
-          caption="Tipos de Detalles y Cómo Captarlos"
-          headers={["Tipo de Detalle", "Qué Escuchar", "Estrategia", "Ejemplo"]}
+          caption="Types of Detail and How to Catch Them"
+          headers={["Type of Detail", "What to Listen For", "Strategy", "Example"]}
           rows={[
-            ["Nombres propios", "Personas, lugares, organizaciones", "Escuchar mayúsculas implícitas", "John Smith, London, UNESCO"],
-            ["Números", "Fechas, cantidades, precios", "Escuchar cuidadosamente", "2023, 50 students, $100"],
-            ["Adjetivos descriptivos", "Características específicas", "Prestar atención a descripciones", "Big, expensive, beautiful"],
-            ["Verbos de acción", "Qué se hace específicamente", "Escuchar acciones concretas", "Buy, sell, travel, study"]
+            ["Proper nouns", "People, places, organizations", "Listen for “capital-letter” cues", "John Smith, London, UNESCO"],
+            ["Numbers", "Dates, quantities, prices", "Listen carefully", "2023, 50 students, $100"],
+            ["Descriptive adjectives", "Specific characteristics", "Notice descriptions", "Big, expensive, beautiful"],
+            ["Action verbs", "What is done specifically", "Listen for concrete actions", "Buy, sell, travel, study"]
           ]}
         />
 
         <div style={{ display: 'grid', gap: '1rem' }}>
           <Example 
-            spanish="Pregunta: '¿Cuántos estudiantes hay en la clase?'"
             english="Question: 'How many students are in the class?'"
-            translation="Pregunta: '¿Cuántos estudiantes hay en la clase?'"
           />
           <Example 
-            spanish="Respuesta: 'Hay 25 estudiantes'"
             english="Answer: 'There are 25 students'"
-            translation="Respuesta: 'Hay 25 estudiantes'"
           />
           <Example 
-            spanish="Pregunta: '¿Dónde se realizó la conferencia?'"
             english="Question: 'Where was the conference held?'"
-            translation="Pregunta: '¿Dónde se realizó la conferencia?'"
           />
           <Example 
-            spanish="Respuesta: 'En el centro de convenciones'"
             english="Answer: 'At the convention center'"
-            translation="Respuesta: 'En el centro de convenciones'"
           />
         </div>
 
         <Rule 
-          title="Estrategias para Captar Detalles"
-          description="Para entender detalles específicos:"
+          title="Strategies for Catching Details"
+          description="To understand specific detail:"
           examples={[
-            "Lee las preguntas antes de escuchar",
-            "Identifica qué tipo de información necesitas",
-            "Escucha palabras clave relacionadas con la pregunta",
-            "No te distraigas con información irrelevante"
+            "Read the questions before you listen",
+            "Identify what kind of information you need",
+            "Listen for keywords tied to the question",
+            "Do not get sidetracked by irrelevant information"
           ]}
         />
 
         <Tip type="warning">
-          <strong>¡Cuidado!</strong> Los detalles pueden ser distractores - asegúrate de que coincidan con la pregunta.
+          <strong>Watch out!</strong> Details can be distractors—make sure they match the question.
         </Tip>
       </TheorySection>
 
-      <TheorySection title="Contrast (Contraste)" icon="⚖️">
+      <TheorySection title="Contrast" icon="⚖️">
         <p style={{ fontSize: '1rem', lineHeight: 1.6, color: '#4a5568', marginBottom: '1rem' }}>
-          El contraste se refiere a identificar diferencias, oposiciones o comparaciones entre ideas, personas o situaciones.
+          Contrast means noticing differences, oppositions, or comparisons between ideas, people, or situations.
         </p>
 
         <GrammarTable
-          caption="Palabras Clave para Identificar Contrastes"
-          headers={["Palabra/Expresión", "Significado", "Ejemplo", "Estrategia"]}
+          caption="Keywords for Spotting Contrast"
+          headers={["Word / Expression", "Role", "Example", "Strategy"]}
           rows={[
-            ["However", "Sin embargo", "It's expensive, however it's worth it", "Escuchar después de 'however'"],
-            ["But", "Pero", "I like it, but it's too expensive", "Identificar la oposición"],
-            ["On the other hand", "Por otro lado", "On the other hand, it's difficult", "Buscar la alternativa"],
-            ["Unlike", "A diferencia de", "Unlike cars, bikes are eco-friendly", "Comparar diferencias"],
-            ["While", "Mientras que", "While some like it, others don't", "Contraste simultáneo"]
+            ["However", "Introduces opposition", "It's expensive, however it's worth it", "Listen for what follows 'however'"],
+            ["But", "Shows contrast", "I like it, but it's too expensive", "Identify the clash"],
+            ["On the other hand", "Offers an alternative", "On the other hand, it's difficult", "Catch the second side"],
+            ["Unlike", "Highlights difference", "Unlike cars, bikes are eco-friendly", "Compare contrasts"],
+            ["While", "Simultaneous contrast", "While some like it, others don't", "Two views at once"]
           ]}
         />
 
         <div style={{ display: 'grid', gap: '1rem' }}>
           <Example 
-            spanish="Pregunta: '¿Cuál es la diferencia entre A y B?'"
             english="Question: 'What's the difference between A and B?'"
-            translation="Pregunta: '¿Cuál es la diferencia entre A y B?'"
           />
           <Example 
-            spanish="Audio: 'A es rápido, pero B es más lento'"
             english="Audio: 'A is fast, but B is slower'"
-            translation="Audio: 'A es rápido, pero B es más lento'"
           />
           <Example 
-            spanish="Respuesta: 'A es más rápido que B'"
             english="Answer: 'A is faster than B'"
-            translation="Respuesta: 'A es más rápido que B'"
           />
         </div>
 
         <Rule 
-          title="Estrategias para Identificar Contrastes"
-          description="Para reconocer contrastes:"
+          title="Strategies for Identifying Contrast"
+          description="To recognize contrast:"
           examples={[
-            "Escucha palabras de contraste (but, however, unlike)",
-            "Identifica dos ideas opuestas",
-            "Compara las características mencionadas",
-            "Presta atención a comparaciones"
+            "Listen for contrast markers (but, however, unlike)",
+            "Identify two opposing ideas",
+            "Compare the features mentioned",
+            "Pay attention to comparisons"
           ]}
         />
 
         <Tip type="success">
-          <strong>Consejo:</strong> Los contrastes suelen presentarse en pares - identifica ambas partes.
+          <strong>Tip:</strong> Contrasts often come in pairs—identify both sides.
         </Tip>
       </TheorySection>
 
-      <TheorySection title="Tone (Tono)" icon="🎭">
+      <TheorySection title="Tone" icon="🎭">
         <p style={{ fontSize: '1rem', lineHeight: 1.6, color: '#4a5568', marginBottom: '1rem' }}>
-          El tono es la actitud o emoción que transmite el hablante a través de su voz y elección de palabras.
+          Tone is the attitude or emotion the speaker conveys through voice and word choice.
         </p>
 
         <GrammarTable
-          caption="Tipos de Tono y Cómo Identificarlos"
-          headers={["Tono", "Características", "Palabras Clave", "Ejemplo"]}
+          caption="Types of Tone and How to Spot Them"
+          headers={["Tone", "Characteristics", "Keywords", "Example"]}
           rows={[
-            ["Optimista", "Voz alegre, palabras positivas", "Great, wonderful, amazing", "This is amazing!"],
-            ["Pesimista", "Voz triste, palabras negativas", "Terrible, awful, disappointing", "This is terrible"],
-            ["Neutral", "Voz equilibrada, hechos", "According to, it seems", "According to statistics"],
-            ["Crítico", "Voz firme, palabras de juicio", "Wrong, incorrect, mistake", "This is wrong"],
-            ["Entusiasta", "Voz emocionada, énfasis", "Fantastic, incredible, love", "I love this!"]
+            ["Optimistic", "Upbeat voice, positive words", "Great, wonderful, amazing", "This is amazing!"],
+            ["Pessimistic", "Low energy, negative words", "Terrible, awful, disappointing", "This is terrible"],
+            ["Neutral", "Even delivery, factual", "According to, it seems", "According to statistics"],
+            ["Critical", "Firm tone, judgment words", "Wrong, incorrect, mistake", "This is wrong"],
+            ["Enthusiastic", "Excited delivery, emphasis", "Fantastic, incredible, love", "I love this!"]
           ]}
         />
 
         <div style={{ display: 'grid', gap: '1rem' }}>
           <Example 
-            spanish="Pregunta: '¿Cuál es el tono del hablante?'"
             english="Question: 'What is the speaker's tone?'"
-            translation="Pregunta: '¿Cuál es el tono del hablante?'"
           />
           <Example 
-            spanish="Audio: '¡Esto es fantástico! Me encanta esta idea'"
             english="Audio: 'This is fantastic! I love this idea'"
-            translation="Audio: '¡Esto es fantástico! Me encanta esta idea'"
           />
           <Example 
-            spanish="Respuesta: 'Entusiasta y positivo'"
             english="Answer: 'Enthusiastic and positive'"
-            translation="Respuesta: 'Entusiasta y positivo'"
           />
         </div>
 
         <Rule 
-          title="Estrategias para Identificar el Tono"
-          description="Para reconocer el tono:"
+          title="Strategies for Identifying Tone"
+          description="To recognize tone:"
           examples={[
-            "Escucha la entonación y ritmo de la voz",
-            "Identifica palabras que expresan emociones",
-            "Presta atención a exclamaciones o preguntas",
-            "Observa el uso de adjetivos descriptivos"
+            "Listen to intonation and rhythm",
+            "Notice words that express emotion",
+            "Pay attention to exclamations or questions",
+            "Watch descriptive adjectives"
           ]}
         />
 
         <Tip type="info">
-          <strong>Nota:</strong> El tono puede cambiar durante el audio - presta atención a los cambios.
+          <strong>Note:</strong> Tone can shift during a clip—notice changes as you listen.
         </Tip>
       </TheorySection>
 
-      <TheorySection title="Estrategias Generales" icon="🎯">
+      <TheorySection title="General Strategies" icon="🎯">
         <p style={{ fontSize: '1rem', lineHeight: 1.6, color: '#4a5568', marginBottom: '1rem' }}>
-          Estrategias que funcionan para todos los tipos de comprensión.
+          Strategies that work across all listening comprehension types.
         </p>
 
         <GrammarTable
-          caption="Estrategias Universales de Listening"
-          headers={["Estrategia", "Descripción", "Cuándo Usar", "Beneficio"]}
+          caption="Universal Listening Strategies"
+          headers={["Strategy", "Description", "When to Use", "Benefit"]}
           rows={[
-            ["Pre-lectura", "Leer preguntas antes de escuchar", "Siempre", "Saber qué buscar"],
-            ["Predicción", "Predecir contenido basado en contexto", "Antes del audio", "Preparar la mente"],
-            ["Toma de notas", "Anotar información clave", "Durante el audio", "Retener información"],
-            ["Inferencia", "Deducir información implícita", "Cuando no se escucha claramente", "Completar información"],
-            ["Verificación", "Confirmar respuestas después", "Después del audio", "Asegurar precisión"]
+            ["Pre-reading", "Read questions before listening", "Always", "Know what to listen for"],
+            ["Prediction", "Guess content from context", "Before the audio", "Prime your mind"],
+            ["Note-taking", "Jot down key points", "While listening", "Retain information"],
+            ["Inference", "Fill in unstated meaning", "When audio is unclear", "Complete the picture"],
+            ["Checking", "Verify answers afterward", "After the clip", "Improve accuracy"]
           ]}
         />
 
         <div style={{ display: 'grid', gap: '1rem' }}>
           <Example 
-            spanish="Antes: Leer preguntas y predecir contenido"
             english="Before: Read questions and predict content"
-            translation="Antes: Leer preguntas y predecir contenido"
           />
           <Example 
-            spanish="Durante: Tomar notas de información clave"
-            english="During: Take notes of key information"
-            translation="Durante: Tomar notas de información clave"
+            english="During: Take notes on key information"
           />
           <Example 
-            spanish="Después: Verificar respuestas y inferir información"
-            english="After: Verify answers and infer information"
-            translation="Después: Verificar respuestas y inferir información"
+            english="After: Check answers and infer where needed"
           />
         </div>
 
         <Tip type="success">
-          <strong>Consejo:</strong> Combina estas estrategias según el tipo de pregunta que necesites responder.
+          <strong>Tip:</strong> Combine these tactics depending on the question type you need to answer.
         </Tip>
       </TheorySection>
 
-      <TheorySection title="Errores Comunes" icon="⚠️">
+      <TheorySection title="Common Mistakes" icon="⚠️">
         <div style={{ display: 'grid', gap: '1rem' }}>
           <Tip type="error">
-            <strong>Error:</strong> Enfocarse solo en palabras que conoces ❌<br/>
-            <strong>Correcto:</strong> Escuchar el mensaje general ✅<br/>
-            <em>No te pierdas en palabras desconocidas</em>
+            <strong>Mistake:</strong> Focusing only on words you know ❌<br/>
+            <strong>Better:</strong> Listen for the overall message ✅<br/>
+            <em>Do not get lost in unknown vocabulary</em>
           </Tip>
 
           <Tip type="error">
-            <strong>Error:</strong> No leer las preguntas antes ❌<br/>
-            <strong>Correcto:</strong> Leer preguntas primero ✅<br/>
-            <em>Saber qué buscar te ayuda a enfocarte</em>
+            <strong>Mistake:</strong> Skipping questions before listening ❌<br/>
+            <strong>Better:</strong> Read the questions first ✅<br/>
+            <em>Knowing what to hunt for sharpens focus</em>
           </Tip>
 
           <Tip type="error">
-            <strong>Error:</strong> Intentar entender cada palabra ❌<br/>
-            <strong>Correcto:</strong> Entender la idea general ✅<br/>
-            <em>El objetivo es comprensión, no traducción palabra por palabra</em>
+            <strong>Mistake:</strong> Trying to understand every word ❌<br/>
+            <strong>Better:</strong> Aim for gist and needed detail ✅<br/>
+            <em>The goal is comprehension, not word-for-word translation</em>
           </Tip>
 
           <Tip type="error">
-            <strong>Error:</strong> No tomar notas ❌<br/>
-            <strong>Correcto:</strong> Anotar información clave ✅<br/>
-            <em>Las notas te ayudan a recordar detalles importantes</em>
+            <strong>Mistake:</strong> Taking no notes ❌<br/>
+            <strong>Better:</strong> Note key facts ✅<br/>
+            <em>Notes anchor important details</em>
           </Tip>
         </div>
       </TheorySection>
 
-      <TheorySection title="Reglas Importantes" icon="⚡">
+      <TheorySection title="Key Rules" icon="⚡">
         <div style={{ display: 'grid', gap: '1rem' }}>
           <Rule 
-            title="1. Preparación previa"
-            description="Siempre prepárate antes de escuchar."
+            title="1. Prepare first"
+            description="Always set yourself up before you listen."
             examples={[
-              "Lee las preguntas cuidadosamente",
-              "Predice el contenido del audio",
-              "Identifica qué tipo de información necesitas",
-              "Prepara tu mente para escuchar"
+              "Read questions carefully",
+              "Predict audio content",
+              "Decide what type of information you need",
+              "Get ready to attend"
             ]}
           />
 
           <Rule 
-            title="2. Escucha activa"
-            description="Mantén tu atención enfocada."
+            title="2. Listen actively"
+            description="Stay focused throughout."
             examples={[
-              "No te distraigas con pensamientos internos",
-              "Escucha palabras clave y frases importantes",
-              "Toma notas de información relevante",
-              "Mantén la concentración durante todo el audio"
+              "Do not drift into unrelated thoughts",
+              "Catch keywords and important phrases",
+              "Take notes on relevant points",
+              "Hold concentration for the whole clip"
             ]}
           />
 
           <Rule 
-            title="3. Estrategias específicas"
-            description="Usa estrategias diferentes según el tipo de pregunta."
+            title="3. Match strategy to question type"
+            description="Adjust approach to the task."
             examples={[
-              "Idea principal: enfócate en el tema general",
-              "Detalles: busca información específica",
-              "Contraste: identifica diferencias y oposiciones",
-              "Tono: presta atención a la actitud del hablante"
+              "Main idea: stay with global theme",
+              "Details: target specific facts",
+              "Contrast: spot differences and oppositions",
+              "Tone: attend to speaker attitude"
             ]}
           />
         </div>
@@ -350,59 +317,59 @@ const ListeningTypesPage = () => {
   const exercises = [
     <MultipleChoiceExercise
       key="1"
-      question="Para identificar la idea principal, ¿qué debo escuchar?"
+      question="To identify the main idea, what should I listen for most?"
       options={[
-        "Todos los detalles",
-        "Las palabras clave",
-        "Solo los números",
-        "Los nombres propios"
+        "Every small detail",
+        "Keywords",
+        "Only numbers",
+        "Proper nouns only"
       ]}
       correctAnswer={1}
-      explanation="Para identificar la idea principal, es esencial escuchar las palabras clave que resumen el tema central del audio."
+      explanation="Keywords that summarize the central topic are central to spotting the main idea."
     />,
 
     <MultipleChoiceExercise
       key="2"
-      question="¿Cuál es la mejor estrategia para identificar la idea principal?"
+      question="Which approach best supports identifying the main idea?"
       options={[
-        "Escuchar cada palabra cuidadosamente",
-        "Enfocarse en palabras clave y el tema general",
-        "Tomar notas de todos los detalles",
-        "Buscar solo números y fechas"
+        "Hearing each word equally",
+        "Focusing on keywords and the overall theme",
+        "Writing down every detail",
+        "Searching only for numbers and dates"
       ]}
       correctAnswer={1}
-      explanation="Para la idea principal, es mejor enfocarse en palabras clave y el tema general, no en detalles específicos."
+      explanation="Main-idea tasks reward focus on keywords and theme, not every specific fact."
     />,
 
     <TrueFalseExercise
       key="3"
       statements={[
         {
-          text: "Debo leer las preguntas antes de escuchar el audio.",
+          text: "You should read the questions before listening to the audio.",
           isTrue: true,
-          explanation: "Correcto. Leer las preguntas primero te ayuda a saber qué información buscar."
+          explanation: "Correct. Reading questions first tells you what information to listen for."
         },
         {
-          text: "Para identificar detalles, debo escuchar solo palabras que conozco.",
+          text: "For details you should listen only for words you already know.",
           isTrue: false,
-          explanation: "Incorrecto. Para detalles, debes escuchar información específica como números, nombres y fechas, aunque no conozcas todas las palabras."
+          explanation: "Incorrect. Detail questions target specific facts—numbers, names, dates—even when other words are new."
         },
         {
-          text: "El tono se identifica prestando atención a la entonación y palabras emocionales.",
+          text: "Tone is picked up partly through intonation and emotional wording.",
           isTrue: true,
-          explanation: "Correcto. El tono se reconoce por la entonación, ritmo y palabras que expresan emociones."
+          explanation: "Correct. Intonation, pace, and emotion words reveal tone."
         },
         {
-          text: "Para contraste, debo buscar palabras como 'however', 'but', 'unlike'.",
+          text: "For contrast items, listen for words like however, but, unlike.",
           isTrue: true,
-          explanation: "Correcto. Estas palabras indican contrastes y diferencias entre ideas."
+          explanation: "Correct. Those markers signal contrast between ideas."
         }
       ]}
     />,
 
     <MultipleChoiceExercise
       key="4"
-      question="¿Qué tipo de información busco si la pregunta es 'What is the speaker's attitude'?"
+      question="What are you chiefly answering if the question is 'What is the speaker's attitude'?"
       options={[
         "Main idea",
         "Details",
@@ -410,20 +377,20 @@ const ListeningTypesPage = () => {
         "Tone"
       ]}
       correctAnswer={3}
-      explanation="La pregunta sobre la actitud del hablante se refiere al tono, no a la idea principal, detalles o contraste."
+      explanation="Attitude questions aim at tone, not gist, granular detail, or contrast alone."
     />,
 
     <MultipleChoiceExercise
       key="5"
-      question="¿Cuál es el error más común en listening comprehension?"
+      question="What is a very common listening mistake?"
       options={[
-        "Leer las preguntas antes",
-        "Intentar entender cada palabra",
-        "Tomar notas durante el audio",
-        "Predecir el contenido"
+        "Reading questions beforehand",
+        "Trying to decode every word",
+        "Taking notes while listening",
+        "Predicting content"
       ]}
       correctAnswer={1}
-      explanation="Intentar entender cada palabra es un error común. Es mejor enfocarse en la comprensión general y la información específica que necesitas."
+      explanation="Trying to grasp every token is common but unhelpful; prioritize overall meaning and what the items ask."
     />,
 
     <TrueFalseExercise
@@ -432,24 +399,24 @@ const ListeningTypesPage = () => {
         {
           text: "Listening for gist means understanding every single word.",
           isTrue: false,
-          explanation: "Incorrecto. Listening for gist significa entender la idea general, no cada palabra individual."
+          explanation: "Incorrect. Gist means the general idea, not every word."
         },
         {
           text: "Scanning for specific information requires focused attention on particular details.",
           isTrue: true,
-          explanation: "Correcto. Scanning requiere atención enfocada para encontrar información específica como nombres, fechas, números."
+          explanation: "Correct. Scanning means targeting names, dates, figures, and similar cues."
         },
         {
           text: "Inferential listening involves understanding implied meanings.",
           isTrue: true,
-          explanation: "Correcto. Inferential listening requiere entender significados implícitos, actitudes y emociones no expresadas directamente."
+          explanation: "Correct. Inference covers attitudes and ideas not stated outright."
         }
       ]}
     />,
 
     <MultipleChoiceExercise
       key="7"
-      question="¿Qué tipo de listening usarías para encontrar la hora de una cita en una conversación?"
+      question="Which listening mode fits finding an appointment time in a conversation?"
       options={[
         "Listening for gist",
         "Scanning for specific information",
@@ -457,20 +424,20 @@ const ListeningTypesPage = () => {
         "Critical listening"
       ]}
       correctAnswer={1}
-      explanation="Scanning for specific information es apropiado para encontrar detalles específicos como horas, fechas o números."
+      explanation="Scanning fits hunting a concrete detail such as time, date, or number."
     />,
 
     <MultipleChoiceExercise
       key="8"
-      question="¿Cuál es la característica principal del critical listening?"
+      question="What best describes critical listening?"
       options={[
-        "Entender cada palabra",
-        "Evaluar y analizar la información",
-        "Solo escuchar la idea general",
-        "Buscar información específica"
+        "Hearing each word distinctly",
+        "Evaluating and analyzing the message",
+        "Only noticing the gist",
+        "Searching for isolated facts only"
       ]}
       correctAnswer={1}
-      explanation="Critical listening implica evaluar y analizar la información, juzgar su validez, detectar sesgos y formar opiniones."
+      explanation="Critical listening means judging credibility, spotting bias, and weighing arguments."
     />,
 
     <TrueFalseExercise
@@ -479,19 +446,19 @@ const ListeningTypesPage = () => {
         {
           text: "You should use the same listening strategy for all types of audio.",
           isTrue: false,
-          explanation: "Incorrecto. Diferentes tipos de audio requieren diferentes estrategias de listening según el propósito."
+          explanation: "Incorrect. Purpose and task shape which strategy fits best."
         },
         {
           text: "Predictive listening involves using context to anticipate content.",
           isTrue: true,
-          explanation: "Correcto. Predictive listening usa el contexto, conocimiento previo y pistas para anticipar el contenido."
+          explanation: "Correct. Prediction draws on topic, visuals, prior knowledge, and cues."
         }
       ]}
     />,
 
     <MultipleChoiceExercise
       key="10"
-      question="¿Qué estrategia es más útil para entender el estado de ánimo del hablante?"
+      question="Which strategy best helps grasp the speaker’s mood?"
       options={[
         "Scanning for details",
         "Listening for gist",
@@ -499,14 +466,14 @@ const ListeningTypesPage = () => {
         "Note-taking"
       ]}
       correctAnswer={2}
-      explanation="Inferential listening es más útil para entender emociones, actitudes y estados de ánimo que no se expresan directamente."
+      explanation="Mood is often implied; inferential listening links tone and attitude to content."
     />
   ];
 
   return (
     <TheoryLayout
       title="Types of Understanding: Main Idea, Details, Contrast, Tone"
-      description="Domina los diferentes tipos de comprensión auditiva: idea principal, detalles, contraste y tono. Aprende estrategias específicas para cada tipo."
+      description="Master different listening comprehension types: main idea, details, contrast, and tone—with targeted strategies for each."
       level="A1-A2-B1-B2-C1-C2"
       theoryContent={theoryContent}
       exercises={exercises}
@@ -517,25 +484,3 @@ const ListeningTypesPage = () => {
 };
 
 export default ListeningTypesPage;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

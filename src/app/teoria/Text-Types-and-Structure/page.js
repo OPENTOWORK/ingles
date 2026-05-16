@@ -18,328 +18,264 @@ import {
 const TextTypesAndStructurePage = () => {
   const theoryContent = (
     <div>
-      <TheorySection title="¿Qué son los Text Types and Structure?" icon="📝">
+      <TheorySection title="What Are Text Types and Structure?" icon="📝">
         <p style={{ fontSize: '1.1rem', lineHeight: 1.6, color: '#4a5568', marginBottom: '1rem' }}>
-          Los <strong>text types</strong> (tipos de texto) y <strong>structure</strong> (estructura) son fundamentales para escribir bien en inglés. 
-          Cada tipo de texto tiene su propia estructura, propósito y convenciones que debes seguir para comunicarte efectivamente.
+          <strong>Text types</strong> and <strong>structure</strong> are essential for writing well in English. 
+          Each type has its own structure, purpose, and conventions—you need them to communicate clearly.
         </p>
         
         <QuickReference items={[
-          "Formal vs Informal: tono y registro apropiado",
-          "Estructura: introducción, desarrollo, conclusión",
-          "Párrafos: una idea principal por párrafo",
-          "Cohesión: conectores y transiciones",
-          "Propósito: informar, persuadir, narrar, describir"
+          "Formal vs informal: tone and register",
+          "Structure: introduction, body, conclusion",
+          "Paragraphs: one main idea per paragraph",
+          "Cohesion: linking words and transitions",
+          "Purpose: inform, persuade, narrate, describe"
         ]} />
       </TheorySection>
 
-      <TheorySection title="Tipos de Texto Principales" icon="📚">
+      <TheorySection title="Main Text Types" icon="📚">
         <p style={{ fontSize: '1rem', lineHeight: 1.6, color: '#4a5568', marginBottom: '1rem' }}>
-          Existen diferentes tipos de texto, cada uno con características específicas y propósitos distintos.
+          Texts differ by purpose, features, and what readers expect.
         </p>
 
         <GrammarTable
-          caption="Tipos de Texto y sus Características"
-          headers={["Tipo", "Propósito", "Estructura", "Ejemplo"]}
+          caption="Text Types and Their Features"
+          headers={["Type", "Purpose", "Structure", "Example"]}
           rows={[
-            ["Descriptivo", "Describir personas, lugares, objetos", "Introducción + detalles + conclusión", "Descripción de una ciudad"],
-            ["Narrativo", "Contar una historia o evento", "Inicio + desarrollo + final", "Relato de vacaciones"],
-            ["Expositivo", "Explicar o informar", "Tesis + argumentos + conclusión", "Ensayo sobre medio ambiente"],
-            ["Argumentativo", "Persuadir o convencer", "Tesis + contraargumentos + conclusión", "Opinión sobre tecnología"],
-            ["Instructivo", "Dar instrucciones", "Objetivo + pasos + resultado", "Receta de cocina"],
-            ["Correspondencia", "Comunicarse con alguien", "Saludo + cuerpo + despedida", "Email formal/informal"]
+            ["Descriptive", "Describe people, places, objects", "Introduction + details + closing", "A description of a city"],
+            ["Narrative", "Tell a story or sequence of events", "Beginning + middle + ending", "A holiday story"],
+            ["Expository", "Explain or inform", "Thesis + supporting points + conclusion", "Essay about the environment"],
+            ["Argumentative", "Persuade or convince", "Thesis + counterarguments + conclusion", "Opinion on technology"],
+            ["Instructional", "Give directions or steps", "Goal + steps + result", "A recipe"],
+            ["Correspondence", "Communicate with someone directly", "Greeting + body + closing", "Formal/informal email"]
           ]}
         />
 
         <div style={{ display: 'grid', gap: '1rem' }}>
-          <Example 
-            spanish="Descripción: 'Mi ciudad natal es un lugar hermoso...'"
-            english="Description: 'My hometown is a beautiful place...'"
-            translation="Descripción: 'Mi ciudad natal es un lugar hermoso...'"
-          />
-          <Example 
-            spanish="Narrativo: 'El verano pasado fui a...'"
-            english="Narrative: 'Last summer I went to...'"
-            translation="Narrativo: 'El verano pasado fui a...'"
-          />
-          <Example 
-            spanish="Argumentativo: 'Creo que la tecnología es...'"
-            english="Argumentative: 'I believe technology is...'"
-            translation="Argumentativo: 'Creo que la tecnología es...'"
-          />
+          <Example english="Description: \"My hometown is a beautiful place…\"" />
+          <Example english="Narrative: \"Last summer I went to…\"" />
+          <Example english="Argumentative: \"I believe technology is…\"" />
         </div>
 
         <Rule 
-          title="Selección del Tipo de Texto"
-          description="Elige el tipo de texto según:"
+          title="Choosing a Text Type"
+          description="Choose according to:"
           examples={[
-            "El propósito de tu escritura",
-            "Tu audiencia objetivo",
-            "El contexto formal o informal",
-            "Los requisitos específicos"
+            "The purpose of your writing",
+            "Your target audience",
+            "Whether the context is formal or informal",
+            "Any specific assignment requirements"
           ]}
         />
 
         <Tip type="info">
-          <strong>Consejo:</strong> Siempre identifica el tipo de texto antes de empezar a escribir.
+          <strong>Tip:</strong> Identify the text type before you start drafting.
         </Tip>
       </TheorySection>
 
-      <TheorySection title="Estructura General de Textos" icon="🏗️">
+      <TheorySection title="General Structure of Texts" icon="🏗️">
         <p style={{ fontSize: '1rem', lineHeight: 1.6, color: '#4a5568', marginBottom: '1rem' }}>
-          La mayoría de textos en inglés siguen una estructura básica de tres partes.
+          Most English texts follow a basic three-part structure.
         </p>
 
         <GrammarTable
-          caption="Estructura de Tres Partes"
-          headers={["Parte", "Función", "Contenido", "Longitud"]}
+          caption="Three-part Structure"
+          headers={["Part", "Role", "Content", "Length"]}
           rows={[
-            ["Introducción", "Presentar el tema", "Tesis, contexto, objetivo", "10-15% del texto"],
-            ["Desarrollo", "Desarrollar ideas", "Párrafos con argumentos/ejemplos", "70-80% del texto"],
-            ["Conclusión", "Resumir y cerrar", "Resumen, opinión final, recomendación", "10-15% del texto"]
+            ["Introduction", "Present the topic", "Thesis, background, aims", "About 10–15% of the text"],
+            ["Body / development", "Develop your ideas", "Paragraphs with arguments or examples", "About 70–80%"],
+            ["Conclusion", "Summarize and close", "Summary, final view, suggestion", "About 10–15%"]
           ]}
         />
 
         <div style={{ display: 'grid', gap: '1rem' }}>
-          <Example 
-            spanish="Introducción: 'En este ensayo analizaré los beneficios de la tecnología...'"
-            english="Introduction: 'In this essay, I will analyze the benefits of technology...'"
-            translation="Introducción: 'En este ensayo analizaré los beneficios de la tecnología...'"
-          />
-          <Example 
-            spanish="Desarrollo: 'En primer lugar, la tecnología mejora la comunicación...'"
-            english="Development: 'First of all, technology improves communication...'"
-            translation="Desarrollo: 'En primer lugar, la tecnología mejora la comunicación...'"
-          />
-          <Example 
-            spanish="Conclusión: 'En conclusión, la tecnología es beneficiosa...'"
-            english="Conclusion: 'In conclusion, technology is beneficial...'"
-            translation="Conclusión: 'En conclusión, la tecnología es beneficiosa...'"
-          />
+          <Example english="Introduction: \"In this essay I will analyse the benefits of technology…\"" />
+          <Example english="Body: \"First, technology improves communication…\"" />
+          <Example english="Conclusion: \"In conclusion, technology is beneficial…\"" />
         </div>
 
         <Rule 
-          title="Características de cada Parte"
-          description="Cada parte tiene funciones específicas:"
+          title="What Each Part Does"
+          description="Each section has typical jobs:"
           examples={[
-            "Introducción: captar atención, presentar tema",
-            "Desarrollo: argumentar, ejemplificar, explicar",
-            "Conclusión: resumir, dar opinión final"
+            "Introduction: engage the reader, present the topic",
+            "Body: argue, illustrate, explain",
+            "Conclusion: summarise, express a final viewpoint"
           ]}
         />
 
         <Tip type="success">
-          <strong>Recuerda:</strong> La estructura debe ser clara y lógica para el lector.
+          <strong>Remember:</strong> Clear, logical structure makes reading easier for your audience.
         </Tip>
       </TheorySection>
 
-      <TheorySection title="Párrafos: Estructura y Desarrollo" icon="📄">
+      <TheorySection title="Paragraphs: Structure and Development" icon="📄">
         <p style={{ fontSize: '1rem', lineHeight: 1.6, color: '#4a5568', marginBottom: '1rem' }}>
-          Los párrafos son la unidad básica de organización en un texto. Cada párrafo debe desarrollar una idea principal.
+          Paragraphs are the basic organising unit—each paragraph should develop one controlling idea.
         </p>
 
         <GrammarTable
-          caption="Estructura de Párrafos"
-          headers={["Parte", "Función", "Ejemplo"]}
+          caption="Paragraph Structure"
+          headers={["Part", "Role", "Example"]}
           rows={[
-            ["Oración temática", "Presentar la idea principal", "Technology has revolutionized communication."],
-            ["Oraciones de apoyo", "Desarrollar la idea", "First, it allows instant messaging..."],
-            ["Ejemplos/Evidencia", "Ilustrar el punto", "For example, social media platforms..."],
-            ["Conclusión del párrafo", "Cerrar la idea", "Therefore, communication is now faster."]
+            ["Topic sentence", "Introduce the main idea", "Technology has revolutionized communication."],
+            ["Supporting sentences", "Explain and expand the idea", "First, it allows instant messaging…"],
+            ["Examples / evidence", "Illustrate the point", "For example, social media platforms…"],
+            ["Closing sentence", "Round off the paragraph", "Therefore, communication is now faster."]
           ]}
         />
 
         <div style={{ display: 'grid', gap: '1rem' }}>
-          <Example 
-            spanish="Oración temática: 'La tecnología ha revolucionado la comunicación.'"
-            english="Topic sentence: 'Technology has revolutionized communication.'"
-            translation="Oración temática: 'La tecnología ha revolucionado la comunicación.'"
-          />
-          <Example 
-            spanish="Desarrollo: 'En primer lugar, permite mensajería instantánea...'"
-            english="Development: 'First of all, it allows instant messaging...'"
-            translation="Desarrollo: 'En primer lugar, permite mensajería instantánea...'"
-          />
-          <Example 
-            spanish="Ejemplo: 'Por ejemplo, las plataformas de redes sociales...'"
-            english="Example: 'For example, social media platforms...'"
-            translation="Ejemplo: 'Por ejemplo, las plataformas de redes sociales...'"
-          />
+          <Example english='Topic sentence: "Technology has revolutionized communication."' />
+          <Example english='Development: "First of all, it allows instant messaging…"' />
+          <Example english='Example: "For example, social media platforms…"' />
         </div>
 
         <Rule 
-          title="Reglas para Párrafos"
-          description="Cada párrafo debe:"
+          title="Paragraph Rules"
+          description="Every paragraph should:"
           examples={[
-            "Tener una sola idea principal",
-            "Ser coherente y cohesionado",
-            "Tener una longitud apropiada (3-7 oraciones)",
-            "Conectar con el párrafo anterior y siguiente"
+            "Express one central idea",
+            "Stay coherent and linked together",
+            "Be an appropriate length (often about 3–7 sentences)",
+            "Connect to the paragraph before and after"
           ]}
         />
 
         <Tip type="warning">
-          <strong>¡Cuidado!</strong> No mezcles ideas diferentes en el mismo párrafo.
+          <strong>Watch out!</strong> Do not mix unrelated ideas in the same paragraph.
         </Tip>
       </TheorySection>
 
-      <TheorySection title="Registro Formal vs Informal" icon="🎭">
+      <TheorySection title="Formal vs Informal Register" icon="🎭">
         <p style={{ fontSize: '1rem', lineHeight: 1.6, color: '#4a5568', marginBottom: '1rem' }}>
-          El registro determina el tono y estilo de tu escritura. Debe ser apropiado para la situación y audiencia.
+          Register sets the tone—it should suit the situation and who will read your text.
         </p>
 
         <GrammarTable
-          caption="Diferencias entre Registro Formal e Informal"
-          headers={["Aspecto", "Formal", "Informal"]}
+          caption="Formal and Informal Register Compared"
+          headers={["Feature", "Formal", "Informal"]}
           rows={[
-            ["Vocabulario", "Palabras complejas y precisas", "Palabras simples y coloquiales"],
-            ["Contracciones", "No se usan (I will, do not)", "Se usan (I'll, don't)"],
-            ["Estructura", "Oraciones complejas", "Oraciones simples"],
-            ["Pronombres", "Evita 'I', 'you' directos", "Usa 'I', 'you' libremente"],
-            ["Conectores", "Sin embargo, además", "Pero, también"]
+            ["Vocabulary", "More precise or formal wording", "Simpler, everyday wording"],
+            ["Contractions", "Avoid them (e.g. I will, do not)", "Often use them (I'll, don't)"],
+            ["Sentence patterns", "Longer or more complex sentences", "Often shorter sentences"],
+            ["Pronouns", "Sometimes limit direct I/you", "I and you are common"],
+            ["Connectors", "However, moreover", "But, plus, too"]
           ]}
         />
 
         <div style={{ display: 'grid', gap: '1rem' }}>
-          <Example 
-            spanish="Formal: 'I would like to express my gratitude...'"
-            english="Formal: 'I would like to express my gratitude...'"
-            translation="Formal: 'Me gustaría expresar mi gratitud...'"
-          />
-          <Example 
-            spanish="Informal: 'Thanks a lot for everything!'"
-            english="Informal: 'Thanks a lot for everything!'"
-            translation="Informal: '¡Muchas gracias por todo!'"
-          />
-          <Example 
-            spanish="Formal: 'Furthermore, it is important to note...'"
-            english="Formal: 'Furthermore, it is important to note...'"
-            translation="Formal: 'Además, es importante notar...'"
-          />
-          <Example 
-            spanish="Informal: 'Also, you should know...'"
-            english="Informal: 'Also, you should know...'"
-            translation="Informal: 'También, deberías saber...'"
-          />
+          <Example english="Formal: \"I would like to express my gratitude…\"" />
+          <Example english="Informal: \"Thanks a lot for everything!\"" />
+          <Example english="Formal: \"Furthermore, it is important to note…\"" />
+          <Example english="Informal: \"Also, you should know…\"" />
         </div>
 
         <Rule 
-          title="Cuándo usar cada Registro"
-          description="Elige el registro según:"
+          title="When to Use Each Register"
+          description="Adapt to:"
           examples={[
-            "Formal: ensayos académicos, cartas de trabajo, informes",
-            "Informal: emails personales, blogs, mensajes",
-            "Contexto: profesional vs personal",
-            "Audiencia: superior vs iguales"
+            "Formal: academic essays, job letters, formal reports",
+            "Informal: personal emails to friends, informal blogs, messages",
+            "Context: workplace vs social setting",
+            "Audience: for example supervisors vs peers"
           ]}
         />
 
         <Tip type="info">
-          <strong>Consejo:</strong> Siempre adapta tu registro al contexto y audiencia.
+          <strong>Tip:</strong> Match register to context and readers throughout the text.
         </Tip>
       </TheorySection>
 
-      <TheorySection title="Conectores y Transiciones" icon="🔗">
+      <TheorySection title="Linkers and Transitions" icon="🔗">
         <p style={{ fontSize: '1rem', lineHeight: 1.6, color: '#4a5568', marginBottom: '1rem' }}>
-          Los conectores y transiciones ayudan a crear textos coherentes y fáciles de seguir.
+          Linking words help readers follow your argument smoothly.
         </p>
 
         <GrammarTable
-          caption="Tipos de Conectores"
-          headers={["Función", "Conectores", "Ejemplo"]}
+          caption="Common Linkers"
+          headers={["Function", "Linkers", "Example"]}
           rows={[
-            ["Adición", "Furthermore, Moreover, In addition", "Furthermore, technology improves education."],
-            ["Contraste", "However, Nevertheless, On the other hand", "However, there are some disadvantages."],
-            ["Causa", "Because, Due to, As a result of", "Due to technology, communication is faster."],
-            ["Resultado", "Therefore, Consequently, Thus", "Therefore, we should embrace technology."],
-            ["Tiempo", "First, Then, Finally, Meanwhile", "First, I will discuss the benefits."],
-            ["Ejemplo", "For example, For instance, Such as", "For example, smartphones are very useful."]
+            ["Adding ideas", "Furthermore, moreover, in addition", "Furthermore, technology improves education."],
+            ["Contrast", "However, nevertheless, on the other hand", "However, there are disadvantages too."],
+            ["Cause", "Because, due to, as a result of", "Because of technology, communication is faster."],
+            ["Result", "Therefore, consequently, thus", "Therefore, we should use it wisely."],
+            ["Sequence / time", "First, then, finally, meanwhile", "First, I will discuss the advantages."],
+            ["Example", "For example, for instance, such as", "For example, smartphones are very useful."]
           ]}
         />
 
         <div style={{ display: 'grid', gap: '1rem' }}>
-          <Example 
-            spanish="Adición: 'Además, la tecnología mejora la educación.'"
-            english="Addition: 'Furthermore, technology improves education.'"
-            translation="Adición: 'Además, la tecnología mejora la educación.'"
-          />
-          <Example 
-            spanish="Contraste: 'Sin embargo, hay algunas desventajas.'"
-            english="Contrast: 'However, there are some disadvantages.'"
-            translation="Contraste: 'Sin embargo, hay algunas desventajas.'"
-          />
-          <Example 
-            spanish="Resultado: 'Por lo tanto, deberíamos abrazar la tecnología.'"
-            english="Result: 'Therefore, we should embrace technology.'"
-            translation="Resultado: 'Por lo tanto, deberíamos abrazar la tecnología.'"
-          />
+          <Example english='Addition: "Furthermore, technology improves education."' />
+          <Example english='Contrast: "However, there are some disadvantages."' />
+          <Example english='Result: "Therefore, we should use technology thoughtfully."' />
         </div>
 
         <Tip type="success">
-          <strong>Consejo:</strong> Los conectores hacen que tu texto sea más profesional y fácil de seguir.
+          <strong>Tip:</strong> Good linkers make your writing clearer and sound more polished.
         </Tip>
       </TheorySection>
 
-      <TheorySection title="Errores Comunes" icon="⚠️">
+      <TheorySection title="Common Mistakes" icon="⚠️">
         <div style={{ display: 'grid', gap: '1rem' }}>
           <Tip type="error">
-            <strong>Error:</strong> Mezclar ideas diferentes en un párrafo ❌<br/>
-            <strong>Correcto:</strong> Una idea principal por párrafo ✅<br/>
-            <em>Cada párrafo debe tener un foco claro</em>
+            <strong>Mistake:</strong> Mixing several unrelated ideas in one paragraph ❌<br/>
+            <strong>Better:</strong> One main idea per paragraph ✅<br/>
+            <em>Each paragraph needs a clear focus</em>
           </Tip>
 
           <Tip type="error">
-            <strong>Error:</strong> No usar conectores entre párrafos ❌<br/>
-            <strong>Correcto:</strong> Usar transiciones apropiadas ✅<br/>
-            <em>Los conectores mejoran la fluidez</em>
+            <strong>Mistake:</strong> No links between paragraphs ❌<br/>
+            <strong>Better:</strong> Use transitions where needed ✅<br/>
+            <em>Transitions improve flow between ideas</em>
           </Tip>
 
           <Tip type="error">
-            <strong>Error:</strong> Registro inapropiado para la situación ❌<br/>
-            <strong>Correcto:</strong> Adaptar el tono al contexto ✅<br/>
-            <em>Formal para ensayos, informal para emails personales</em>
+            <strong>Mistake:</strong> Wrong tone for the task ❌<br/>
+            <strong>Better:</strong> Adapt register to situation ✅<br/>
+            <em>Formal essays need formal language; chats with friends can be informal</em>
           </Tip>
 
           <Tip type="error">
-            <strong>Error:</strong> Falta de estructura clara ❌<br/>
-            <strong>Correcto:</strong> Introducción, desarrollo, conclusión ✅<br/>
-            <em>La estructura ayuda al lector a seguir tu argumento</em>
+            <strong>Mistake:</strong> Weak overall structure ❌<br/>
+            <strong>Better:</strong> Clear introduction, body, conclusion ✅<br/>
+            <em>Structure helps readers follow your line of thought</em>
           </Tip>
         </div>
       </TheorySection>
 
-      <TheorySection title="Reglas Importantes" icon="⚡">
+      <TheorySection title="Key Principles" icon="⚡">
         <div style={{ display: 'grid', gap: '1rem' }}>
           <Rule 
-            title="1. Planificación antes de escribir"
-            description="Siempre planifica tu texto antes de empezar a escribir."
+            title="1. Plan before you write"
+            description="Spend time organising ideas before drafting."
             examples={[
-              "Identifica el tipo de texto",
-              "Define tu audiencia",
-              "Organiza tus ideas",
-              "Decide la estructura"
+              "Identify text type",
+              "Define your readers",
+              "Order your main points",
+              "Decide overall structure"
             ]}
           />
 
           <Rule 
-            title="2. Una idea por párrafo"
-            description="Cada párrafo debe desarrollar una sola idea principal."
+            title="2. One idea per paragraph"
+            description="Each paragraph should unpack a single controlling idea."
             examples={[
-              "Oración temática clara",
-              "Oraciones de apoyo",
-              "Ejemplos o evidencia",
-              "Conclusión del párrafo"
+              "Clear topic sentence",
+              "Supporting explanation",
+              "Examples or proof",
+              "Short closing tie-back"
             ]}
           />
 
           <Rule 
-            title="3. Cohesión y coherencia"
-            description="Tu texto debe ser fácil de seguir y entender."
+            title="3. Cohesion and coherence"
+            description="Readers should understand how ideas fit together."
             examples={[
-              "Usa conectores apropiados",
-              "Mantén la coherencia temática",
-              "Estructura lógica",
-              "Transiciones suaves"
+              "Choose appropriate linkers",
+              "Keep to one thread per paragraph",
+              "Use a sensible order overall",
+              "Smooth transitions between sections"
             ]}
           />
         </div>
@@ -358,155 +294,155 @@ const TextTypesAndStructurePage = () => {
         "However"
       ]}
       correctAnswer={1}
-      explanation="'Furthermore' añade información adicional que apoya la idea anterior sobre los beneficios de la tecnología."
+      explanation="'Furthermore' adds supporting information related to benefits already introduced."
     />,
 
     <MultipleChoiceExercise
       key="2"
-      question="¿Cuál es la estructura correcta de un párrafo?"
+      question="Which structure describes a paragraph best?"
       options={[
-        "Oración temática + ejemplos + conclusión",
-        "Introducción + desarrollo + conclusión",
-        "Oración temática + oraciones de apoyo + conclusión",
-        "Ejemplos + argumentos + opinión"
+        "Topic sentence + examples + concluding sentence tied to one idea",
+        "Introduction + body + conclusion of the whole composition",
+        "Topic sentence + supporting sentences + closing sentence",
+        "Examples only, with no controlling sentence"
       ]}
       correctAnswer={2}
-      explanation="Un párrafo debe tener: oración temática (idea principal) + oraciones de apoyo (desarrollo) + conclusión del párrafo."
+      explanation="A paragraph usually opens with the main idea, develops it, then wraps up within the same paragraph."
     />,
 
     <TrueFalseExercise
       key="3"
       statements={[
         {
-          text: "En un texto formal, puedes usar contracciones como 'I'll' y 'don't'.",
+          text: "In formal writing you can freely use contractions like 'I'll' and 'don't'.",
           isTrue: false,
-          explanation: "Incorrecto. En textos formales se evitan las contracciones. Se usa 'I will' y 'do not'."
+          explanation: "Incorrect. Formal writing usually avoids contractions; prefer 'I will' and 'do not' unless quoting speech."
         },
         {
-          text: "Cada párrafo debe tener una sola idea principal.",
+          text: "Each paragraph should mainly develop one controlling idea.",
           isTrue: true,
-          explanation: "Correcto. Cada párrafo debe desarrollar una sola idea principal para mantener la claridad."
+          explanation: "Correct—that keeps paragraphs clear and readable."
         },
         {
-          text: "Los conectores como 'however' y 'furthermore' mejoran la fluidez del texto.",
+          text: "Words like 'however' and 'furthermore' help make a text smoother.",
           isTrue: true,
-          explanation: "Correcto. Los conectores ayudan a crear transiciones suaves entre ideas."
+          explanation: "Correct—they signal relationships between ideas across sentences and paragraphs."
         },
         {
-          text: "La introducción debe ser el 70% del texto.",
+          text: "The introduction should normally be roughly 70% of the essay length.",
           isTrue: false,
-          explanation: "Incorrecto. La introducción debe ser solo el 10-15% del texto. El desarrollo debe ser el 70-80%."
+          explanation: "Incorrect—the introduction is often about 10–15%; the bulk is the body paragraphs."
         }
       ]}
     />,
 
     <MultipleChoiceExercise
       key="4"
-      question="¿Cuál es el registro más apropiado para un ensayo académico?"
+      question="Which register best fits a typical university essay?"
       options={[
-        "Informal con contracciones",
-        "Formal sin contracciones",
-        "Mixto según la situación",
-        "Coloquial y directo"
+        "Very informal tone with slang",
+        "Formal style without contractions",
+        "Mixed informally sentence by sentence with no warning",
+        "Only very short slang sentences"
       ]}
       correctAnswer={1}
-      explanation="Los ensayos académicos requieren registro formal, sin contracciones, con vocabulario preciso y estructura compleja."
+      explanation="Academic essays usually expect precise vocabulary and full forms instead of contractions."
     />,
 
     <MultipleChoiceExercise
       key="5"
-      question="¿Cuál es la función principal de la conclusión en un texto?"
+      question="What is the conclusion mainly for?"
       options={[
-        "Introducir nuevas ideas",
-        "Desarrollar argumentos",
-        "Resumir y cerrar el tema",
-        "Dar ejemplos específicos"
+        "Introducing brand-new points not mentioned earlier",
+        "Building the longest body section possible",
+        "Summarising and closing your points",
+        "Listing random examples unrelated to earlier claims"
       ]}
       correctAnswer={2}
-      explanation="La conclusión debe resumir las ideas principales, dar una opinión final y cerrar el tema de manera efectiva."
+      explanation="A conclusion gathers the thread of the discussion and closes—without dumping major new topics."
     />,
 
     <TrueFalseExercise
       key="6"
       statements={[
         {
-          text: "Narrative texts should be written in chronological order.",
+          text: "Narratives are often clearer when events follow chronological order.",
           isTrue: true,
-          explanation: "Correcto. Los textos narrativos generalmente siguen un orden cronológico para mantener la coherencia temporal."
+          explanation: "Correct—it helps listeners or readers reconstruct the timeline."
         },
         {
-          text: "Descriptive texts focus on explaining how something works.",
+          text: "Descriptive texts mainly explain mechanisms step-by-step.",
           isTrue: false,
-          explanation: "Incorrecto. Los textos descriptivos se enfocan en características y cualidades, no en procesos o funcionamiento."
+          explanation: "Incorrect—that role fits procedural or explanatory texts better; descriptive writing highlights qualities."
         },
         {
-          text: "Each paragraph should have only one main idea.",
+          text: "A healthy paragraph sticks to one main idea.",
           isTrue: true,
-          explanation: "Correcto. Cada párrafo debe desarrollar una sola idea principal para mantener la claridad y organización."
+          explanation: "Correct—it prevents rambling mixes of unrelated points."
         }
       ]}
     />,
 
     <MultipleChoiceExercise
       key="7"
-      question="¿Qué tipo de texto usarías para explicar las ventajas y desventajas de la tecnología?"
+      question="Which text type balances pros and cons of technology most naturally?"
       options={[
-        "Narrative",
-        "Argumentative",
-        "Descriptive",
-        "Instructional"
+        "Pure narrative folklore only",
+        "Argumentative exposition",
+        "Short weather forecast",
+        "Instruction manual for assembling furniture"
       ]}
       correctAnswer={1}
-      explanation="Un texto argumentativo es ideal para presentar y analizar ventajas y desventajas, desarrollando argumentos balanceados."
+      explanation="Argumentative writing weighs evidence and viewpoints on opposing sides."
     />,
 
     <MultipleChoiceExercise
       key="8"
-      question="¿Cuál es la función principal de la conclusión en un ensayo?"
+      question="In an essay, a conclusion primarily should _____."
       options={[
-        "Introducir nuevas ideas",
-        "Resumir puntos principales y dar cierre",
-        "Dar ejemplos detallados",
-        "Hacer preguntas al lector"
+        "Launch fresh arguments never outlined before",
+        "Summarise key points and provide closure",
+        "Insert long raw data dumps",
+        "Duplicate the introduction word-for-word automatically"
       ]}
       correctAnswer={1}
-      explanation="La conclusión debe resumir los puntos principales y dar un cierre efectivo, no introducir ideas nuevas."
+      explanation="The conclusion reinforces what was argued—without pretending to reopen the thesis from scratch."
     />,
 
     <TrueFalseExercise
       key="9"
       statements={[
         {
-          text: "Formal texts should avoid contractions like 'don't' and 'can't'.",
+          text: "Formal English usually avoids contractions like 'don't'.",
           isTrue: true,
-          explanation: "Correcto. En textos formales se evitan las contracciones; se usa 'do not' y 'cannot'."
+          explanation: "Correct—you expand to 'do not' or 'cannot' unless context allows contractions."
         },
         {
-          text: "The introduction should be 50% of your essay.",
+          text: "The introduction ought to swallow half your total word budget.",
           isTrue: false,
-          explanation: "Incorrecto. La introducción debe ser solo 10-15% del ensayo; el desarrollo debe ser 70-80%."
+          explanation: "Incorrect—you normally invest most words in developmental paragraphs supporting the thesis."
         }
       ]}
     />,
 
     <MultipleChoiceExercise
       key="10"
-      question="¿Qué estructura es más apropiada para un texto expositivo?"
+      question="Which overall structure suits expository texts well?"
       options={[
-        "Problema → Solución",
-        "Introducción → Desarrollo → Conclusión",
-        "Causa → Efecto",
-        "Comparación → Contraste"
+        "Problem → stray poem verse",
+        "Introduction → Body → Conclusion",
+        "Bullet list disconnected from headings",
+        "Only comparison adjectives stacked without thesis"
       ]}
       correctAnswer={1}
-      explanation="La estructura Introducción → Desarrollo → Conclusión es la más versátil y apropiada para textos expositivos."
+      explanation="A three-move arc flexibly accommodates explanation: set context, elaborate, summarise."
     />
   ];
 
   return (
     <TheoryLayout
       title="Text Types and Structure"
-      description="Domina los tipos de texto y estructura en inglés. Aprende a organizar ideas, usar registros apropiados y crear textos coherentes y efectivos."
+      description="Understand text types and structure in English. Organise paragraphs, manage register, link ideas smoothly, and build texts readers can follow."
       level="A1-A2-B1-B2-C1-C2"
       theoryContent={theoryContent}
       exercises={exercises}
@@ -517,25 +453,3 @@ const TextTypesAndStructurePage = () => {
 };
 
 export default TextTypesAndStructurePage;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
