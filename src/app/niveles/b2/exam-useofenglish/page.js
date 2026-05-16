@@ -2,6 +2,7 @@
 import { Suspense, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import LevelsCategoryTimer from '@/components/levels/LevelsCategoryTimer';
 import LevelsPartScorePanel from '@/components/levels/LevelsPartScorePanel';
+import LevelsPartFinishBanner from '@/components/levels/LevelsPartFinishBanner';
 import LevelsAnswerJustification from '@/components/levels/LevelsAnswerJustification';
 import { useLevelsCategoryTimer } from '@/hooks/useLevelsCategoryTimer';
 import { computeLevelsPartScore } from '@/utils/levelsPaperScoreMetrics';
@@ -13,9 +14,18 @@ import { resolveB2ExamenId, fetchB2PreguntasByExamen } from '@/utils/b2ResolveEx
 import { formatLevelsPartDisplayName } from '@/utils/formatLevelsPartDisplayName';
 import { useUserRole } from '@/context/UserRoleContext';
 import { getSessionUserId, mergeLevelsEstadisticas } from '@/utils/levelsEstadisticas';
+import {
+  computeUoePartProgressFromState,
+  saveUoePartPuntuacionIfComplete,
+} from '@/utils/recordLevelsUoePartScore';
+import { getUoePartScoring } from '@/utils/levelsUoePartScoring';
 import { getOpenAnswerMap, inferOpenQuestionNumbersFromPrompt, normalizeText } from '@/utils/b2ExamPaperShared';
 import { useB2ExamPracticeSlot } from '@/hooks/useB2ExamPracticeSlot';
-import { B2ExamSlotPicker } from '@/components/b2/B2ExamSlotPicker';
+import {
+  fetchUseOfEnglishPuntuacionesProgress,
+  resolveB2ExamenIdsBySlot,
+} from '@/utils/levelsPuntuacionesProgress';
+import { B2ExamSlotProgressPicker } from '@/components/b2/B2ExamSlotProgressPicker';
 
 function UseOfEnglishExamsPageInner() {
   const { userRole } = useUserRole();
@@ -32,8 +42,16 @@ function UseOfEnglishExamsPageInner() {
   /** @type {Record<string, { loading?: boolean, error?: string | null, text?: string | null }>} */
   const [aiHintsByKey, setAiHintsByKey] = useState({});
   const [canSeeRefreshControls, setCanSeeRefreshControls] = useState(false);
+  const [b2LevelId, setB2LevelId] = useState(null);
+  const [examenIdBySlot, setExamenIdBySlot] = useState({});
+  const [progressBySlot, setProgressBySlot] = useState({});
+  const [examPracticeOpen, setExamPracticeOpen] = useState(false);
+  const [currentExamenId, setCurrentExamenId] = useState(null);
+  const [partFinishNotice, setPartFinishNotice] = useState(null);
 
   const mountedRef = useRef(true);
+  const lastSavedPartSigRef = useRef('');
+  const currentExamenIdRef = useRef(null);
   const { label: timerLabel } = useLevelsCategoryTimer();
 
   const loadUseOfEnglishData = useCallback(async () => {
@@ -44,6 +62,7 @@ function UseOfEnglishExamsPageInner() {
     setOpenInputs({});
     setOpenChecks({});
     setAiHintsByKey({});
+    setPartFinishNotice(null);
 
     try {
       const { data: levelData, error: levelError } = await supabase
@@ -55,6 +74,12 @@ function UseOfEnglishExamsPageInner() {
 
       if (levelError || !levelData) {
         throw new Error('No se pudo obtener el nivel B2 desde la base de datos.');
+      }
+
+      if (mountedRef.current) {
+        setB2LevelId(levelData.id);
+        const idsBySlot = await resolveB2ExamenIdsBySlot(supabase, levelData.id);
+        setExamenIdBySlot(idsBySlot);
       }
 
       const { examenId, error: examResolveError } = await resolveB2ExamenId(supabase, levelData.id, {
@@ -70,6 +95,11 @@ function UseOfEnglishExamsPageInner() {
             ? `No se pudo obtener el examen de B2. (${detail})`
             : 'No se pudo obtener el examen de B2.',
         );
+      }
+
+      if (mountedRef.current) {
+        setCurrentExamenId(examenId);
+        currentExamenIdRef.current = examenId;
       }
 
       const { data: questionsData, error: questionsError } = await fetchB2PreguntasByExamen(supabase, {
@@ -205,6 +235,20 @@ function UseOfEnglishExamsPageInner() {
     setCanSeeRefreshControls(userRole === 'admin' || userRole === 'administrador');
   }, [userRole]);
 
+  const refreshPuntuacionesProgress = useCallback(async () => {
+    const uid = await getSessionUserId();
+    if (!uid || !Object.keys(examenIdBySlot).length) return;
+    const { bySlot } = await fetchUseOfEnglishPuntuacionesProgress(supabase, {
+      userId: uid,
+      examenIdBySlot,
+    });
+    if (mountedRef.current) setProgressBySlot(bySlot);
+  }, [examenIdBySlot]);
+
+  useEffect(() => {
+    void refreshPuntuacionesProgress();
+  }, [refreshPuntuacionesProgress, checkedQuestions, openChecks]);
+
   const selectedPart = useMemo(
     () => partsData.find((part) => part.id === selectedPartId),
     [partsData, selectedPartId],
@@ -237,15 +281,6 @@ function UseOfEnglishExamsPageInner() {
     })();
 
     return undefined;
-  }, [selectedQuestion?.preguntaId, selectedPart?.id]);
-
-  /** Huecos abiertos / test: al cambiar de parte o de ejercicio, el estado local debe reiniciarse (no es un fallo de Supabase). */
-  useEffect(() => {
-    setOpenInputs({});
-    setOpenChecks({});
-    setSelectedOptions({});
-    setCheckedQuestions({});
-    setAiHintsByKey({});
   }, [selectedQuestion?.preguntaId, selectedPart?.id]);
 
   const partNumberUoe = useMemo(
@@ -515,6 +550,106 @@ function UseOfEnglishExamsPageInner() {
     ],
   );
 
+  const uoePartScoring = getUoePartScoring(partNumberUoe);
+
+  useEffect(() => {
+    lastSavedPartSigRef.current = '';
+    const saved = progressBySlot[examSlot]?.parts?.[partNumberUoe];
+    const cfg = getUoePartScoring(partNumberUoe);
+    if (saved?.total && cfg) {
+      setPartFinishNotice({
+        passed: saved.passed,
+        correct: saved.correct,
+        total: saved.total,
+        passing: cfg.passing,
+      });
+    } else {
+      setPartFinishNotice(null);
+    }
+  }, [examSlot, selectedPart?.id, partNumberUoe, progressBySlot]);
+
+  const trySavePartAfterAnswer = useCallback(
+    async (stateOverride = {}) => {
+      if (!examPracticeOpen || !partNumberUoe || !selectedPart?.id || !selectedQuestion?.preguntaId) {
+        return;
+      }
+
+      const examenId = currentExamenIdRef.current || currentExamenId || examenIdBySlot[examSlot];
+      if (!examenId) {
+        console.warn('levels parte/puntuacion: falta examen_id');
+        return;
+      }
+
+      const progress = computeUoePartProgressFromState({
+        partNumber: partNumberUoe,
+        useOpenInputUi: isOpenClozePart,
+        openQuestionNumbers,
+        openChecks: stateOverride.openChecks ?? openChecks,
+        groupedAnswers: groupedAnswersForUiAndScore,
+        checkedQuestions: stateOverride.checkedQuestions ?? checkedQuestions,
+        selectedOptions: stateOverride.selectedOptions ?? selectedOptions,
+        getQuestionKey,
+        partId: selectedPart.id,
+      });
+
+      if (!progress.complete) return;
+
+      const sig = `${examSlot}:${partNumberUoe}:${progress.correct}`;
+      if (lastSavedPartSigRef.current === sig) return;
+
+      const uid = await getSessionUserId();
+      if (!uid) {
+        setPartFinishNotice({
+          error: 'Inicia sesión para guardar tu puntuación.',
+        });
+        return;
+      }
+
+      const result = await saveUoePartPuntuacionIfComplete({
+        userId: uid,
+        preguntaId: selectedQuestion.preguntaId,
+        parteId: selectedPart.id,
+        examenId,
+        partNumber: partNumberUoe,
+        progress,
+      });
+
+      if (result.error) {
+        const msg = result.error?.message || String(result.error);
+        console.warn('levels parte/puntuacion:', msg);
+        setPartFinishNotice({ error: msg });
+        return;
+      }
+
+      if (result.saved) {
+        lastSavedPartSigRef.current = sig;
+        setPartFinishNotice({
+          passed: progress.passed,
+          correct: progress.correct,
+          total: progress.total,
+          passing: progress.passing,
+        });
+        void refreshPuntuacionesProgress();
+      }
+    },
+    [
+      examPracticeOpen,
+      examSlot,
+      currentExamenId,
+      examenIdBySlot,
+      partNumberUoe,
+      selectedPart?.id,
+      selectedQuestion?.preguntaId,
+      isOpenClozePart,
+      openQuestionNumbers,
+      openChecks,
+      groupedAnswersForUiAndScore,
+      checkedQuestions,
+      selectedOptions,
+      refreshPuntuacionesProgress,
+    ],
+  );
+
   const buttonStyle = {
     backgroundColor: '#c1f2cd',
     padding: '0.75rem 1.25rem',
@@ -528,10 +663,58 @@ function UseOfEnglishExamsPageInner() {
     textAlign: 'center',
   };
 
+  const currentExamProgress = progressBySlot[examSlot] || {};
+  const getPartSavedScoreLabel = (part) => {
+    const partNumber = Number(part.nombre.match(/\d+/)?.[0] || 0);
+    const saved = currentExamProgress.parts?.[partNumber];
+    if (!saved?.total) return null;
+    const passed = saved.passed ? ' ✓' : '';
+    return `${saved.correct}/${saved.total}${passed}`;
+  };
+
+  const handleSelectExam = (n) => {
+    selectExamSlot(n);
+    setExamPracticeOpen(true);
+    void (async () => {
+      await import('@/utils/ensureAppUserProfile').then((m) => m.ensureAppUserProfile());
+    })();
+  };
+
+  useEffect(() => {
+    if (!examPracticeOpen) return;
+    void (async () => {
+      const { ensureAppUserProfile } = await import('@/utils/ensureAppUserProfile');
+      await ensureAppUserProfile();
+      void refreshPuntuacionesProgress();
+    })();
+  }, [examPracticeOpen, refreshPuntuacionesProgress]);
+
   return (
-    <main style={{ padding: '2rem', fontFamily: 'Segoe UI, sans-serif' }}>
+    <main
+      style={{
+        padding: '2rem',
+        fontFamily: 'Segoe UI, sans-serif',
+        ...(!examPracticeOpen
+          ? {
+              minHeight: 'calc(100vh - 4rem)',
+              display: 'flex',
+              flexDirection: 'column',
+              justifyContent: 'center',
+              alignItems: 'center',
+              width: '100%',
+              boxSizing: 'border-box',
+            }
+          : {}),
+      }}
+    >
+      <B2ExamSlotProgressPicker
+        value={examSlot}
+        onSelect={handleSelectExam}
+        progressBySlot={progressBySlot}
+      />
+      {!examPracticeOpen ? null : (
+        <>
       <h1 style={{ textAlign: 'center' }}>B2 Use of English Practice</h1>
-      <B2ExamSlotPicker value={examSlot} onSelect={selectExamSlot} />
       <p style={{ textAlign: 'center', margin: '0.35rem 0 0', color: '#4a5568', fontSize: '1rem' }}>
         Partes 1 a 4
       </p>
@@ -562,9 +745,26 @@ function UseOfEnglishExamsPageInner() {
       <LevelsCategoryTimer categoryLabel="Sesión: B2 Use of English (partes 1–4)" timeLabel={timerLabel} />
       <LevelsPartScorePanel
         correctCount={partScoreMetrics.correctCount}
-        totalSlots={partScoreMetrics.totalSlots}
-        passingCount={partScoreMetrics.passingCount}
+        totalSlots={uoePartScoring?.total ?? partScoreMetrics.totalSlots}
+        passingCount={uoePartScoring?.passing ?? partScoreMetrics.passingCount}
       />
+      {partFinishNotice && !partFinishNotice.error && (
+        <LevelsPartFinishBanner
+          passed={partFinishNotice.passed}
+          correct={partFinishNotice.correct}
+          total={partFinishNotice.total}
+          passing={partFinishNotice.passing}
+        />
+      )}
+      {partFinishNotice?.error && (
+        <LevelsPartFinishBanner
+          passed={false}
+          correct={0}
+          total={0}
+          passing={0}
+          error={partFinishNotice.error}
+        />
+      )}
 
       <section style={{ maxWidth: '800px', margin: '1.5rem auto', lineHeight: '1.6', color: '#333', textAlign: 'center' }}>
       </section>
@@ -587,7 +787,9 @@ function UseOfEnglishExamsPageInner() {
                 marginBottom: '1.5rem',
               }}
             >
-              {partsData.map((part) => (
+              {partsData.map((part) => {
+                const savedScore = getPartSavedScoreLabel(part);
+                return (
                 <button
                   key={part.id}
                   type="button"
@@ -600,27 +802,33 @@ function UseOfEnglishExamsPageInner() {
                   }}
                   onClick={() => {
                     setSelectedPartId(part.id);
-                    if (part.questions.length > 1) {
-                      const currentSelected = selectedQuestionByPart[part.id];
-                      const available = part.questions.filter((q) => q.preguntaId !== currentSelected);
-                      const pool = available.length > 0 ? available : part.questions;
-                      const randomIndex = Math.floor(Math.random() * pool.length);
-                      const nextQuestion = pool[randomIndex];
-                      setSelectedQuestionByPart((prev) => ({
-                        ...prev,
-                        [part.id]: nextQuestion.preguntaId,
-                      }));
-                    } else if (part.questions.length === 1) {
-                      setSelectedQuestionByPart((prev) => ({
-                        ...prev,
-                        [part.id]: part.questions[0].preguntaId,
-                      }));
-                    }
+                    if (selectedQuestionByPart[part.id]) return;
+                    if (part.questions.length === 0) return;
+                    const randomIndex = Math.floor(Math.random() * part.questions.length);
+                    const nextQuestion = part.questions[randomIndex];
+                    setSelectedQuestionByPart((prev) => ({
+                      ...prev,
+                      [part.id]: nextQuestion.preguntaId,
+                    }));
                   }}
                 >
-                  {part.nombre}
+                  <span>{part.nombre}</span>
+                  {savedScore ? (
+                    <span
+                      style={{
+                        display: 'block',
+                        marginTop: '0.3rem',
+                        fontSize: '0.82rem',
+                        fontWeight: 600,
+                        color: '#2f855a',
+                      }}
+                    >
+                      Guardado: {savedScore}
+                    </span>
+                  ) : null}
                 </button>
-              ))}
+              );
+              })}
             </div>
 
             {selectedPart && selectedQuestion && (
@@ -721,6 +929,7 @@ function UseOfEnglishExamsPageInner() {
                         const questionKey = getQuestionKey(selectedPart.id, questionNumber, 'open');
                         const currentValue = openInputs[questionKey] || '';
                         const checkResult = openChecks[questionKey];
+                        const isAnswerLocked = typeof checkResult === 'boolean';
                         return (
                           <div
                             key={`open-${selectedQuestion.preguntaId}-${questionNumber}`}
@@ -738,10 +947,11 @@ function UseOfEnglishExamsPageInner() {
                               <input
                                 type="text"
                                 value={currentValue}
+                                readOnly={isAnswerLocked}
                                 onChange={(e) => {
+                                  if (isAnswerLocked) return;
                                   const value = e.target.value;
                                   setOpenInputs((prev) => ({ ...prev, [questionKey]: value }));
-                                  setOpenChecks((prev) => ({ ...prev, [questionKey]: undefined }));
                                 }}
                                 placeholder="Escribe una palabra"
                                 style={{
@@ -749,16 +959,20 @@ function UseOfEnglishExamsPageInner() {
                                   borderRadius: '8px',
                                   border: '1px solid #cbd5e0',
                                   padding: '0.65rem 0.75rem',
+                                  background: isAnswerLocked ? '#f7fafc' : '#fff',
+                                  cursor: isAnswerLocked ? 'not-allowed' : 'text',
                                 }}
                               />
+                              {!isAnswerLocked ? (
                               <button
                                 type="button"
                                 onClick={() => {
+                                  if (typeof openChecks[questionKey] === 'boolean') return;
                                   const expectedAnswers = openAnswerMap.get(questionNumber) || new Set();
                                   const isCorrect = expectedAnswers.has(normalizeText(currentValue));
-                                  const prevResult = openChecks[questionKey];
-                                  setOpenChecks((prev) => ({ ...prev, [questionKey]: isCorrect }));
-                                  if (typeof prevResult !== 'boolean') {
+                                  const nextOpenChecks = { ...openChecks, [questionKey]: isCorrect };
+                                  setOpenChecks(nextOpenChecks);
+                                  {
                                     const correctChoiceText =
                                       [...expectedAnswers].slice(0, 4).join(' · ') || 'respuesta modelo';
                                     const answersFromDatabase = [...expectedAnswers].join(' · ');
@@ -783,9 +997,12 @@ function UseOfEnglishExamsPageInner() {
                                         deltaCorrectas: isCorrect ? 1 : 0,
                                         deltaIncorrectas: isCorrect ? 0 : 1,
                                       });
-                                      if (error) console.warn('levels_estadisticas (eval):', error.message || error);
+                                      if (error) {
+                                        console.warn('levels_estadisticas (eval):', error.message || error);
+                                      }
                                     })();
                                   }
+                                  void trySavePartAfterAnswer({ openChecks: nextOpenChecks });
                                 }}
                                 style={{
                                   borderRadius: '8px',
@@ -798,6 +1015,7 @@ function UseOfEnglishExamsPageInner() {
                               >
                                 Comprobar
                               </button>
+                              ) : null}
                             </div>
                             {typeof checkResult === 'boolean' && (
                               <>
@@ -865,11 +1083,14 @@ function UseOfEnglishExamsPageInner() {
                               <button
                                 key={option.id}
                                 type="button"
+                                disabled={isChecked}
                                 onClick={() => {
-                                  const wasChecked = checkedQuestions[questionKey];
-                                  setSelectedOptions((prev) => ({ ...prev, [questionKey]: option.id }));
-                                  setCheckedQuestions((prev) => ({ ...prev, [questionKey]: true }));
-                                  if (!wasChecked) {
+                                  if (checkedQuestions[questionKey]) return;
+                                  const nextChecked = { ...checkedQuestions, [questionKey]: true };
+                                  const nextSelected = { ...selectedOptions, [questionKey]: option.id };
+                                  setSelectedOptions(nextSelected);
+                                  setCheckedQuestions(nextChecked);
+                                  {
                                     const correctOpt = group.options.find((o) => o.correcta);
                                     const answersFromDatabase = group.options
                                       .map((o) => (o.formattedText || o.respuesta || '').trim())
@@ -899,9 +1120,15 @@ function UseOfEnglishExamsPageInner() {
                                         deltaCorrectas: option.correcta ? 1 : 0,
                                         deltaIncorrectas: option.correcta ? 0 : 1,
                                       });
-                                      if (error) console.warn('levels_estadisticas (eval):', error.message || error);
+                                      if (error) {
+                                        console.warn('levels_estadisticas (eval):', error.message || error);
+                                      }
                                     })();
                                   }
+                                  void trySavePartAfterAnswer({
+                                    checkedQuestions: nextChecked,
+                                    selectedOptions: nextSelected,
+                                  });
                                 }}
                                 style={{
                                   textAlign: 'left',
@@ -921,7 +1148,8 @@ function UseOfEnglishExamsPageInner() {
                                       : isSelected
                                         ? '#ebf8ff'
                                         : '#fff',
-                                  cursor: 'pointer',
+                                  cursor: isChecked ? 'not-allowed' : 'pointer',
+                                  opacity: isChecked && !isSelected ? 0.72 : 1,
                                 }}
                               >
                                 {option.formattedText || option.respuesta}
@@ -989,6 +1217,8 @@ function UseOfEnglishExamsPageInner() {
           </div>
         </Link>
       </div>
+        </>
+      )}
     </main>
   );
 }

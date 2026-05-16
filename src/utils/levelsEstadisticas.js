@@ -1,4 +1,6 @@
 import { supabase } from '@/utils/supabaseClient';
+import { ensureAppUserProfile } from '@/utils/ensureAppUserProfile';
+import { insertLevelsPuntuacion } from '@/utils/levelsPuntuaciones';
 
 /**
  * Actualiza métricas agregadas en public.levels_estadisticas (RLS: solo el propio usuario).
@@ -16,6 +18,11 @@ export async function mergeLevelsEstadisticas({
   _retry = false,
 }) {
   if (!userId || !preguntaId) return { error: null };
+
+  if (deltaAccesos > 0 || deltaEvaluadas > 0 || deltaIntentos > 0) {
+    const profile = await ensureAppUserProfile();
+    if (!profile.ok) return { error: null };
+  }
 
   try {
     const { data: row, error: selErr } = await supabase
@@ -111,6 +118,52 @@ export async function mergeLevelsEstadisticas({
   } catch (e) {
     return { error: e };
   }
+}
+
+/**
+ * Tras comprobar un ítem: actualiza levels_estadisticas y guarda fila en levels_puntuaciones.
+ */
+export async function recordLevelsAnswerEvaluation({
+  userId,
+  preguntaId,
+  parteId = null,
+  isCorrect = false,
+  slotLabel = '',
+  userAnswerText = '',
+}) {
+  const profile = await ensureAppUserProfile();
+  if (!profile.ok) {
+    return {
+      error: new Error(
+        profile.reason === 'no_session'
+          ? 'Inicia sesión para guardar tu puntuación.'
+          : 'No se pudo sincronizar tu perfil de usuario.',
+      ),
+    };
+  }
+
+  const puntuacion = isCorrect ? 100 : 0;
+  const parts = [String(slotLabel || '').trim(), String(userAnswerText || '').trim()].filter(Boolean);
+  const descripcion = parts.join(' · ').slice(0, 2000);
+
+  const [statsRes, puntRes] = await Promise.all([
+    mergeLevelsEstadisticas({
+      userId,
+      preguntaId,
+      parteId,
+      deltaEvaluadas: 1,
+      deltaCorrectas: isCorrect ? 1 : 0,
+      deltaIncorrectas: isCorrect ? 0 : 1,
+    }),
+    insertLevelsPuntuacion({
+      userId,
+      preguntaId,
+      puntuacion,
+      descripcion: descripcion || (isCorrect ? 'Correcto' : 'Incorrecto'),
+    }),
+  ]);
+
+  return { error: statsRes.error || puntRes.error || null };
 }
 
 export async function getSessionUserId() {

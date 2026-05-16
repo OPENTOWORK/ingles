@@ -31,7 +31,11 @@ import {
   isStandaloneAudioLine,
   isUsableQuestionAudioUrl,
 } from '@/utils/b2ExamPaperShared';
-import { getSessionUserId, mergeLevelsEstadisticas } from '@/utils/levelsEstadisticas';
+import {
+  getSessionUserId,
+  mergeLevelsEstadisticas,
+  recordLevelsAnswerEvaluation,
+} from '@/utils/levelsEstadisticas';
 import { resolveB2ExamenId, fetchB2PreguntasByExamen } from '@/utils/b2ResolveExam';
 import { formatLevelsPartDisplayName } from '@/utils/formatLevelsPartDisplayName';
 import B2WritingLongFormAiPanel from '@/components/b2/B2WritingLongFormAiPanel';
@@ -1219,15 +1223,17 @@ function B2ExamPaperPracticePageInner({
                                         const pid = selectedQuestion?.preguntaId;
                                         const parteId = selectedPart?.id;
                                         if (!uid || !pid || !parteId) return;
-                                        const { error } = await mergeLevelsEstadisticas({
+                                        const { error } = await recordLevelsAnswerEvaluation({
                                           userId: uid,
                                           preguntaId: pid,
                                           parteId,
-                                          deltaEvaluadas: 1,
-                                          deltaCorrectas: isCorrect ? 1 : 0,
-                                          deltaIncorrectas: isCorrect ? 0 : 1,
+                                          isCorrect,
+                                          slotLabel: `Pregunta ${qn}`,
+                                          userAnswerText: currentValue,
                                         });
-                                        if (error) console.warn('levels_estadisticas (eval):', error.message || error);
+                                        if (error) {
+                                          console.warn('levels eval/puntuacion:', error.message || error);
+                                        }
                                       })();
                                     }
                                   }}
@@ -1385,15 +1391,19 @@ function B2ExamPaperPracticePageInner({
                                           const pid = selectedQuestion?.preguntaId;
                                           const parteId = selectedPart?.id;
                                           if (!uid || !pid || !parteId) return;
-                                          const { error } = await mergeLevelsEstadisticas({
+                                          const { error } = await recordLevelsAnswerEvaluation({
                                             userId: uid,
                                             preguntaId: pid,
                                             parteId,
-                                            deltaEvaluadas: 1,
-                                            deltaCorrectas: option.correcta ? 1 : 0,
-                                            deltaIncorrectas: option.correcta ? 0 : 1,
+                                            isCorrect: !!option.correcta,
+                                            slotLabel: group.questionNumber
+                                              ? `Pregunta ${group.questionNumber}`
+                                              : 'Ítem',
+                                            userAnswerText: option.formattedText || option.respuesta || '',
                                           });
-                                          if (error) console.warn('levels_estadisticas (eval):', error.message || error);
+                                          if (error) {
+                                            console.warn('levels eval/puntuacion:', error.message || error);
+                                          }
                                         })();
                                       }
                                     }}
@@ -1601,15 +1611,17 @@ function B2ExamPaperPracticePageInner({
                                       const pid = selectedQuestion?.preguntaId;
                                       const parteId = selectedPart?.id;
                                       if (!uid || !pid || !parteId) return;
-                                      const { error } = await mergeLevelsEstadisticas({
+                                      const { error } = await recordLevelsAnswerEvaluation({
                                         userId: uid,
                                         preguntaId: pid,
                                         parteId,
-                                        deltaEvaluadas: 1,
-                                        deltaCorrectas: isCorrect ? 1 : 0,
-                                        deltaIncorrectas: isCorrect ? 0 : 1,
+                                        isCorrect,
+                                        slotLabel: `Pregunta ${questionNumber}`,
+                                        userAnswerText: currentValue,
                                       });
-                                      if (error) console.warn('levels_estadisticas (eval):', error.message || error);
+                                      if (error) {
+                                        console.warn('levels eval/puntuacion:', error.message || error);
+                                      }
                                     })();
                                   }
                                 }}
@@ -1723,15 +1735,19 @@ function B2ExamPaperPracticePageInner({
                                         const pid = selectedQuestion?.preguntaId;
                                         const parteId = selectedPart?.id;
                                         if (!uid || !pid || !parteId) return;
-                                        const { error } = await mergeLevelsEstadisticas({
+                                        const { error } = await recordLevelsAnswerEvaluation({
                                           userId: uid,
                                           preguntaId: pid,
                                           parteId,
-                                          deltaEvaluadas: 1,
-                                          deltaCorrectas: option.correcta ? 1 : 0,
-                                          deltaIncorrectas: option.correcta ? 0 : 1,
+                                          isCorrect: !!option.correcta,
+                                          slotLabel: group.questionNumber
+                                            ? `Pregunta ${group.questionNumber}`
+                                            : 'Ítem',
+                                          userAnswerText: option.formattedText || option.respuesta || '',
                                         });
-                                        if (error) console.warn('levels_estadisticas (eval):', error.message || error);
+                                        if (error) {
+                                          console.warn('levels eval/puntuacion:', error.message || error);
+                                        }
                                       })();
                                     }
                                   }}

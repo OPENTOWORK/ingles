@@ -15,16 +15,17 @@ export default function LoginPage() {
 
   const router = useRouter();
 
-  // ✅ Paso 9: redirigir si ya hay sesión
   useEffect(() => {
-    const checkSession = async () => {
+    let cancelled = false;
+    (async () => {
       const { data: { session } } = await supabase.auth.getSession();
-      if (session) {
-        const { data: { user } } = await supabase.auth.getUser();
-        router.push(await getRedirectPathByUserId(user?.id, user?.email));
-      }
+      if (cancelled || !session?.user) return;
+      const path = await getRedirectPathByUserId(session.user.id, session.user.email);
+      if (!cancelled) router.replace(path);
+    })();
+    return () => {
+      cancelled = true;
     };
-    checkSession();
   }, [router]);
 
   useEffect(() => {
@@ -56,7 +57,7 @@ export default function LoginPage() {
     setLoading(true);
     const loadingToast = toast.loading("Iniciando sesión...");
 
-    const { error } = await supabase.auth.signInWithPassword({ email, password });
+    const { data: signInData, error } = await supabase.auth.signInWithPassword({ email, password });
 
     toast.dismiss(loadingToast);
     setLoading(false);
@@ -87,8 +88,18 @@ export default function LoginPage() {
       toast.success("Inicio de sesión exitoso");
       setFailedAttempts(0);
 
-      const { data: { user } } = await supabase.auth.getUser();
-      router.push(await getRedirectPathByUserId(user?.id, user?.email));
+      const user = signInData?.user ?? signInData?.session?.user;
+      if (user?.id) {
+        try {
+          const { ensureAppUserProfile } = await import('@/utils/ensureAppUserProfile');
+          await ensureAppUserProfile();
+        } catch {
+          /* no bloquear login */
+        }
+        router.replace(await getRedirectPathByUserId(user.id, user.email));
+      } else {
+        router.replace('/perfil');
+      }
     }
   };
 

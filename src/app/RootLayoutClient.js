@@ -24,6 +24,7 @@ export default function RootLayoutClient({ children }) {
   const router = useRouter();
   const pathname = usePathname();
   const roleFetchedForUserIdRef = useRef(null);
+  const lastAccessTokenRef = useRef(null);
 
   const publicRoutes = [
     '/',
@@ -46,33 +47,41 @@ export default function RootLayoutClient({ children }) {
 
     const hydrateAuth = async (newSession) => {
       if (cancelled) return;
+
+      const accessToken = newSession?.access_token ?? null;
+      const uid = newSession?.user?.id ?? null;
+      const sameSession =
+        accessToken &&
+        accessToken === lastAccessTokenRef.current &&
+        uid &&
+        roleFetchedForUserIdRef.current === uid;
+
+      lastAccessTokenRef.current = accessToken;
       setSession(newSession);
-      if (!newSession?.user?.id) {
+
+      if (!uid) {
         roleFetchedForUserIdRef.current = null;
         setUserRole('student');
-        if (!cancelled) setLoading(false);
+        setLoading(false);
         return;
       }
-      const uid = newSession.user.id;
-      if (roleFetchedForUserIdRef.current === uid) {
-        if (!cancelled) setLoading(false);
-        return;
-      }
+
+      setLoading(false);
+
+      if (sameSession) return;
+
       const roleName = await getRoleNameByUserId(uid, newSession.user.email);
       if (cancelled) return;
       roleFetchedForUserIdRef.current = uid;
       setUserRole(normalizeRoleName(roleName));
-      setLoading(false);
     };
-    (async () => {
-      const { data } = await supabase.auth.getSession();
-      if (cancelled) return;
-      await hydrateAuth(data.session);
-    })();
 
-    const { data: sub } = supabase.auth.onAuthStateChange(async (_event, newSession) => {
-      if (cancelled) return;
-      await hydrateAuth(newSession);
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      if (!cancelled) void hydrateAuth(session);
+    });
+
+    const { data: sub } = supabase.auth.onAuthStateChange((_event, newSession) => {
+      void hydrateAuth(newSession);
     });
     return () => {
       cancelled = true;

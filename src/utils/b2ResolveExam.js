@@ -12,7 +12,7 @@ export function clampB2ExamSlot(value) {
 }
 
 /** Orden estable: número en `nombre` ("Examen 3"), luego por id. */
-function sortLevelsExamenesRows(rows) {
+export function sortLevelsExamenesRows(rows) {
   return [...(rows || [])].sort((a, b) => {
     const na = parseInt(String(a?.nombre ?? '').match(/\d+/)?.[0] || '0', 10);
     const nb = parseInt(String(b?.nombre ?? '').match(/\d+/)?.[0] || '0', 10);
