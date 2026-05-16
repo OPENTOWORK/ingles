@@ -1,5 +1,6 @@
 'use client';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { TheorySectionProvider } from '@/components/theory/TheoryContent';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { supabase } from '@/utils/supabaseClient';
@@ -19,6 +20,10 @@ const TheoryLayout = ({
   const [activeTab, setActiveTab] = useState('theory');
   const [completedExercises, setCompletedExercises] = useState(new Set());
   const [userProgress, setUserProgress] = useState(null);
+
+  useEffect(() => {
+    setActiveTab('theory');
+  }, [title]);
 
   const handleExerciseComplete = async (exerciseId, score) => {
     try {
@@ -65,7 +70,7 @@ const TheoryLayout = ({
             color: '#666'
           }}>
             <Link href="/teoria" style={{ color: '#667eea', textDecoration: 'none' }}>
-              📚 Teoría
+              📚 Theory
             </Link>
             <span>›</span>
             <span>{title}</span>
@@ -106,7 +111,7 @@ const TheoryLayout = ({
                 fontSize: '0.9rem',
                 fontWeight: '500'
               }}>
-                Nivel {level}
+                Level {level}
               </span>
               <span style={{
                 background: '#f7fafc',
@@ -127,7 +132,7 @@ const TheoryLayout = ({
                   fontSize: '0.9rem',
                   border: '1px solid #fed7d7'
                 }}>
-                  📋 Requiere: {prerequisites.join(', ')}
+                  📋 Requires: {prerequisites.join(', ')}
                 </span>
               )}
             </div>
@@ -142,7 +147,7 @@ const TheoryLayout = ({
               marginBottom: '0.5rem'
             }}>
               <span style={{ fontWeight: '500', color: '#4a5568' }}>
-                Progreso del Tema
+                Topic Progress
               </span>
               <span style={{ fontSize: '0.9rem', color: '#667eea' }}>
                 {getProgressPercentage()}%
@@ -183,7 +188,7 @@ const TheoryLayout = ({
                 transition: 'all 0.2s'
               }}
             >
-              📖 Teoría
+              📖 Theory
             </button>
             <button
               onClick={() => setActiveTab('exercises')}
@@ -199,7 +204,7 @@ const TheoryLayout = ({
                 position: 'relative'
               }}
             >
-              🎯 Ejercicios
+              🎯 Exercises
               {exercises.length > 0 && (
                 <span style={{
                   position: 'absolute',
@@ -237,9 +242,9 @@ const TheoryLayout = ({
           minHeight: '600px'
         }}>
           {activeTab === 'theory' && (
-            <div>
-              {theoryContent}
-            </div>
+            <TheorySectionProvider key={title}>
+              <div>{theoryContent}</div>
+            </TheorySectionProvider>
           )}
           
           {activeTab === 'exercises' && (
@@ -253,7 +258,7 @@ const TheoryLayout = ({
                 alignItems: 'center',
                 gap: '0.5rem'
               }}>
-                🎯 Ejercicios Prácticos
+                🎯 Practice Exercises
               </h2>
               
               {exercises.length === 0 ? (
@@ -263,8 +268,8 @@ const TheoryLayout = ({
                   color: '#666'
                 }}>
                   <div style={{ fontSize: '3rem', marginBottom: '1rem' }}>🎯</div>
-                  <p>No hay ejercicios disponibles para este tema aún.</p>
-                  <p>¡Pronto agregaremos ejercicios interactivos!</p>
+                  <p>No exercises are available for this topic yet.</p>
+                  <p>Interactive exercises coming soon!</p>
                 </div>
               ) : (
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
@@ -305,7 +310,7 @@ const TheoryLayout = ({
             transition: 'all 0.2s'
           }}
         >
-          ← Volver a Teoría
+          ← Back to Theory
         </Link>
         
         {activeTab === 'theory' && exercises.length > 0 && (
@@ -326,7 +331,7 @@ const TheoryLayout = ({
               boxShadow: '0 4px 12px rgba(102, 126, 234, 0.3)'
             }}
           >
-            Ir a Ejercicios →
+            Go to Exercises →
           </button>
         )}
       </div>

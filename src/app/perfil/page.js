@@ -84,7 +84,7 @@ export default function ProfilePage() {
       ]);
 
       // Cargar datos adaptativos
-      const adaptiveData = await progressTracker.getUserSkillProgress(userId, 'A1', 'listening', 'basico');
+      const adaptiveData = await progressTracker.getUserSkillProgress(userId, 'A2', 'listening', 'basico');
 
       setIntegratedStats({
         progressData,
@@ -746,7 +746,6 @@ export default function ProfilePage() {
 
   // Datos para gráfico de distribución por niveles
   const levelDistribution = stats ? [
-    { name: 'A1', value: stats.stats.levelCounts?.A1 || 0, color: '#8884d8' },
     { name: 'A2', value: stats.stats.levelCounts?.A2 || 0, color: '#82ca9d' },
     { name: 'B1', value: stats.stats.levelCounts?.B1 || 0, color: '#ffc658' },
     { name: 'B2', value: stats.stats.levelCounts?.B2 || 0, color: '#ff7300' },

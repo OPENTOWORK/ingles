@@ -1,36 +1,90 @@
 'use client';
 
-// Theory Section Component
-export const TheorySection = ({ title, children, icon = "📚" }) => {
+import { createContext, useId, useRef, useState } from 'react';
+
+const TheorySectionIndexContext = createContext(null);
+
+export function TheorySectionProvider({ children }) {
+  const counterRef = useRef(0);
+  const apiRef = useRef({
+    next: () => counterRef.current++,
+    reset: () => {
+      counterRef.current = 0;
+    },
+  });
+
   return (
-    <div style={{
-      marginBottom: '2rem',
-      border: '1px solid #e2e8f0',
-      borderRadius: '16px',
-      overflow: 'hidden',
-      background: 'white',
-      boxShadow: '0 4px 12px rgba(0,0,0,0.05)'
-    }}>
-      <div style={{
-        background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-        color: 'white',
-        padding: '1rem 1.5rem',
-        display: 'flex',
-        alignItems: 'center',
-        gap: '0.75rem'
-      }}>
-        <span style={{ fontSize: '1.5rem' }}>{icon}</span>
-        <h3 style={{
-          margin: 0,
-          fontSize: '1.3rem',
-          fontWeight: '600'
-        }}>
+    <TheorySectionIndexContext.Provider value={apiRef.current}>
+      {children}
+    </TheorySectionIndexContext.Provider>
+  );
+}
+
+// Theory Section Component (collapsible toggle)
+export const TheorySection = ({ title, children, icon = '📚', defaultOpen = true }) => {
+  const [open, setOpen] = useState(defaultOpen);
+  const panelId = useId();
+
+  const toggle = () => setOpen((v) => !v);
+  const onKeyDown = (e) => {
+    if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault();
+      toggle();
+    }
+  };
+
+  return (
+    <div
+      style={{
+        marginBottom: '2rem',
+        border: '1px solid #e2e8f0',
+        borderRadius: '16px',
+        overflow: 'hidden',
+        background: 'white',
+        boxShadow: '0 4px 12px rgba(0, 0, 0, 0.05)',
+      }}
+    >
+      <div
+        role="button"
+        tabIndex={0}
+        className="theory-section__header"
+        onClick={toggle}
+        onKeyDown={onKeyDown}
+        aria-expanded={open}
+        aria-controls={panelId}
+        style={{
+          background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+          color: '#fff',
+          padding: '1rem 1.5rem',
+          display: 'flex',
+          alignItems: 'center',
+          gap: '0.75rem',
+          cursor: 'pointer',
+          userSelect: 'none',
+        }}
+      >
+        <span className="theory-section__header-icon" aria-hidden>
+          {icon}
+        </span>
+        <h3
+          style={{
+            margin: 0,
+            padding: 0,
+            fontSize: '1.3rem',
+            fontWeight: 600,
+            lineHeight: 1.25,
+            color: '#fff',
+            flex: 1,
+          }}
+        >
           {title}
         </h3>
       </div>
-      <div style={{ padding: '1.5rem' }}>
-        {children}
-      </div>
+      {open ? (
+        <div id={panelId} style={{ padding: '1.5rem' }}>
+          {children}
+        </div>
+      ) : null}
     </div>
   );
 };
@@ -48,19 +102,19 @@ export const Example = ({ spanish, english, translation, note }) => {
       <div style={{ display: 'grid', gap: '0.5rem' }}>
         {spanish && (
           <div>
-            <strong style={{ color: '#667eea' }}>🇪🇸 Español:</strong>
+            <strong style={{ color: '#667eea' }}>🇪🇸 Spanish:</strong>
             <p style={{ margin: '0.25rem 0 0 0', color: '#4a5568' }}>{spanish}</p>
           </div>
         )}
         {english && (
           <div>
-            <strong style={{ color: '#38a169' }}>🇬🇧 Inglés:</strong>
+            <strong style={{ color: '#38a169' }}>🇬🇧 English:</strong>
             <p style={{ margin: '0.25rem 0 0 0', color: '#4a5568' }}>{english}</p>
           </div>
         )}
         {translation && (
           <div>
-            <strong style={{ color: '#e53e3e' }}>📝 Traducción:</strong>
+            <strong style={{ color: '#e53e3e' }}>📝 Translation:</strong>
             <p style={{ margin: '0.25rem 0 0 0', color: '#4a5568' }}>{translation}</p>
           </div>
         )}
@@ -72,7 +126,7 @@ export const Example = ({ spanish, english, translation, note }) => {
             padding: '0.75rem',
             marginTop: '0.5rem'
           }}>
-            <strong style={{ color: '#e53e3e' }}>💡 Nota:</strong>
+            <strong style={{ color: '#e53e3e' }}>💡 Note:</strong>
             <p style={{ margin: '0.25rem 0 0 0', color: '#4a5568', fontSize: '0.9rem' }}>
               {note}
             </p>
@@ -110,7 +164,7 @@ export const Rule = ({ title, description, examples = [] }) => {
       </p>
       {examples.length > 0 && (
         <div>
-          <strong style={{ color: '#667eea', fontSize: '0.9rem' }}>Ejemplos:</strong>
+          <strong style={{ color: '#667eea', fontSize: '0.9rem' }}>Examples:</strong>
           <ul style={{ margin: '0.5rem 0 0 0', paddingLeft: '1.5rem' }}>
             {examples.map((example, index) => (
               <li key={index} style={{ 
@@ -252,10 +306,10 @@ export const ProgressIndicator = ({ current, total, label }) => {
         marginBottom: '0.5rem'
       }}>
         <span style={{ fontWeight: '500', color: '#4a5568' }}>
-          {label || 'Progreso'}
+          {label || 'Progress'}
         </span>
         <span style={{ fontSize: '0.9rem', color: '#667eea' }}>
-          {current} de {total}
+          {current} of {total}
         </span>
       </div>
       <div style={{
@@ -280,22 +334,22 @@ export const ProgressIndicator = ({ current, total, label }) => {
 export const QuickReference = ({ items }) => {
   return (
     <div style={{
-      background: '#fff5f5',
-      border: '2px solid #fed7d7',
+      background: '#fffbeb',
+      border: '2px solid #fde68a',
       borderRadius: '12px',
       padding: '1.25rem',
       marginBottom: '1.5rem'
     }}>
       <h4 style={{
         margin: '0 0 1rem 0',
-        color: '#e53e3e',
+        color: '#b45309',
         fontSize: '1.1rem',
         fontWeight: '600',
         display: 'flex',
         alignItems: 'center',
         gap: '0.5rem'
       }}>
-        📋 Referencia Rápida
+        📋 Quick Reference
       </h4>
       <div style={{
         display: 'grid',
@@ -309,11 +363,11 @@ export const QuickReference = ({ items }) => {
             padding: '0.5rem',
             background: 'white',
             borderRadius: '8px',
-            border: '1px solid #fed7d7'
+            border: '1px solid #fde68a'
           }}>
             <span style={{
-              background: '#e53e3e',
-              color: 'white',
+              background: '#eab308',
+              color: '#422006',
               borderRadius: '50%',
               width: '24px',
               height: '24px',

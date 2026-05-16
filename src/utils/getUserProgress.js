@@ -94,5 +94,5 @@ function estimateLevel(score) {
   if (score > 60) return 'B2';
   if (score > 40) return 'B1';
   if (score > 20) return 'A2';
-  return 'A1';
+  return 'A2';
 }

@@ -18,38 +18,38 @@ import {
 const WordFormationPage = () => {
   const theoryContent = (
     <div>
-      <TheorySection title="¿Qué es Word Formation?" icon="🔤">
+      <TheorySection title="What is Word Formation?" icon="🔤">
         <p style={{ fontSize: '1.1rem', lineHeight: 1.6, color: '#4a5568', marginBottom: '1rem' }}>
-          La <strong>word formation</strong> (formación de palabras) es el proceso de crear nuevas palabras a partir de palabras existentes 
-          usando prefijos, sufijos y otros métodos. Es fundamental para expandir tu vocabulario y entender el significado de palabras desconocidas.
+          <strong>Word formation</strong> is the process of creating new words from existing words 
+          using prefixes, suffixes, and other methods. It is essential for expanding your vocabulary and understanding the meaning of unknown words.
         </p>
         
         <QuickReference items={[
-          "Prefijos: cambian el significado (un-, re-, pre-)",
-          "Sufijos: cambian la categoría gramatical (-ly, -tion, -ful)",
-          "Compuestos: unir dos palabras (toothbrush, bedroom)",
-          "Conversión: cambiar categoría sin modificar (walk → walk)",
-          "Abreviaciones: acortar palabras (ad → advertisement)"
+          "Prefixes: change meaning (un-, re-, pre-)",
+          "Suffixes: change grammatical category (-ly, -tion, -ful)",
+          "Compounds: join two words (toothbrush, bedroom)",
+          "Conversion: change category without modifying form (walk → walk)",
+          "Abbreviations: shorten words (ad → advertisement)"
         ]} />
       </TheorySection>
 
-      <TheorySection title="Prefixes (Prefijos)" icon="🔝">
+      <TheorySection title="Prefixes" icon="🔝">
         <p style={{ fontSize: '1rem', lineHeight: 1.6, color: '#4a5568', marginBottom: '1rem' }}>
-          Los prefijos se agregan al inicio de una palabra para cambiar su significado.
+          Prefixes are added to the beginning of a word to change its meaning.
         </p>
 
         <GrammarTable
-          caption="Prefijos Comunes y sus Significados"
-          headers={["Prefijo", "Significado", "Ejemplo", "Palabra Original"]}
+          caption="Common Prefixes and Their Meanings"
+          headers={["Prefix", "Meaning", "Example", "Base Word"]}
           rows={[
-            ["un-", "Negativo", "unhappy", "happy"],
-            ["re-", "De nuevo", "rewrite", "write"],
-            ["pre-", "Antes", "preview", "view"],
-            ["dis-", "Negativo", "disagree", "agree"],
-            ["mis-", "Mal", "misunderstand", "understand"],
-            ["over-", "Exceso", "overcook", "cook"],
-            ["under-", "Debajo", "underestimate", "estimate"],
-            ["non-", "No", "non-smoker", "smoker"]
+            ["un-", "Negative", "unhappy", "happy"],
+            ["re-", "Again", "rewrite", "write"],
+            ["pre-", "Before", "preview", "view"],
+            ["dis-", "Negative", "disagree", "agree"],
+            ["mis-", "Wrongly", "misunderstand", "understand"],
+            ["over-", "Excess", "overcook", "cook"],
+            ["under-", "Below", "underestimate", "estimate"],
+            ["non-", "Not", "non-smoker", "smoker"]
           ]}
         />
 
@@ -57,23 +57,23 @@ const WordFormationPage = () => {
           <Example 
             spanish="Estoy infeliz con el resultado"
             english="I am unhappy with the result"
-            translation="Estoy infeliz con el resultado"
+            translation="I am unhappy with the result"
           />
           <Example 
             spanish="Necesito reescribir este ensayo"
             english="I need to rewrite this essay"
-            translation="Necesito reescribir este ensayo"
+            translation="I need to rewrite this essay"
           />
           <Example 
             spanish="Malentendí tus instrucciones"
             english="I misunderstood your instructions"
-            translation="Malentendí tus instrucciones"
+            translation="I misunderstood your instructions"
           />
         </div>
 
         <Rule 
-          title="Uso de Prefijos"
-          description="Los prefijos no cambian la categoría gramatical de la palabra:"
+          title="Using Prefixes"
+          description="Prefixes do not change the grammatical category of the word:"
           examples={[
             "Happy (adj) → Unhappy (adj)",
             "Write (verb) → Rewrite (verb)",
@@ -82,27 +82,27 @@ const WordFormationPage = () => {
         />
 
         <Tip type="info">
-          <strong>Recuerda:</strong> Los prefijos se escriben unidos a la palabra base, sin guión.
+          <strong>Remember:</strong> Prefixes are written attached to the base word, without a hyphen.
         </Tip>
       </TheorySection>
 
-      <TheorySection title="Suffixes (Sufijos)" icon="🔚">
+      <TheorySection title="Suffixes" icon="🔚">
         <p style={{ fontSize: '1rem', lineHeight: 1.6, color: '#4a5568', marginBottom: '1rem' }}>
-          Los sufijos se agregan al final de una palabra para cambiar su categoría gramatical o significado.
+          Suffixes are added to the end of a word to change its grammatical category or meaning.
         </p>
 
         <GrammarTable
-          caption="Sufijos Comunes para Diferentes Categorías"
-          headers={["Sufijo", "Categoría", "Ejemplo", "Palabra Original"]}
+          caption="Common Suffixes for Different Categories"
+          headers={["Suffix", "Category", "Example", "Base Word"]}
           rows={[
-            ["-ly", "Adverbio", "quickly", "quick"],
-            ["-tion/-sion", "Sustantivo", "education", "educate"],
-            ["-ful", "Adjetivo", "beautiful", "beauty"],
-            ["-less", "Adjetivo", "hopeless", "hope"],
-            ["-er/-or", "Sustantivo", "teacher", "teach"],
-            ["-ness", "Sustantivo", "happiness", "happy"],
-            ["-able/-ible", "Adjetivo", "comfortable", "comfort"],
-            ["-ment", "Sustantivo", "development", "develop"]
+            ["-ly", "Adverb", "quickly", "quick"],
+            ["-tion/-sion", "Noun", "education", "educate"],
+            ["-ful", "Adjective", "beautiful", "beauty"],
+            ["-less", "Adjective", "hopeless", "hope"],
+            ["-er/-or", "Noun", "teacher", "teach"],
+            ["-ness", "Noun", "happiness", "happy"],
+            ["-able/-ible", "Adjective", "comfortable", "comfort"],
+            ["-ment", "Noun", "development", "develop"]
           ]}
         />
 
@@ -110,23 +110,23 @@ const WordFormationPage = () => {
           <Example 
             spanish="Corre rápidamente"
             english="He runs quickly"
-            translation="Corre rápidamente"
+            translation="He runs quickly"
           />
           <Example 
             spanish="La educación es importante"
             english="Education is important"
-            translation="La educación es importante"
+            translation="Education is important"
           />
           <Example 
             spanish="Es una situación sin esperanza"
             english="It's a hopeless situation"
-            translation="Es una situación sin esperanza"
+            translation="It's a hopeless situation"
           />
         </div>
 
         <Rule 
-          title="Cambios de Categoría con Sufijos"
-          description="Los sufijos pueden cambiar la categoría gramatical:"
+          title="Category Changes with Suffixes"
+          description="Suffixes can change the grammatical category:"
           examples={[
             "Quick (adj) → Quickly (adv)",
             "Educate (verb) → Education (noun)",
@@ -135,24 +135,24 @@ const WordFormationPage = () => {
         />
 
         <Tip type="warning">
-          <strong>Ortografía:</strong> Algunos sufijos requieren cambios ortográficos en la palabra base.
+          <strong>Spelling:</strong> Some suffixes require spelling changes in the base word.
         </Tip>
       </TheorySection>
 
-      <TheorySection title="Compound Words (Palabras Compuestas)" icon="🔗">
+      <TheorySection title="Compound Words" icon="🔗">
         <p style={{ fontSize: '1rem', lineHeight: 1.6, color: '#4a5568', marginBottom: '1rem' }}>
-          Las palabras compuestas se forman uniendo dos o más palabras para crear una nueva palabra con un significado específico.
+          Compound words are formed by joining two or more words to create a new word with a specific meaning.
         </p>
 
         <GrammarTable
-          caption="Tipos de Palabras Compuestas"
-          headers={["Tipo", "Forma", "Ejemplo", "Significado"]}
+          caption="Types of Compound Words"
+          headers={["Type", "Form", "Example", "Meaning"]}
           rows={[
-            ["Sustantivo + Sustantivo", "toothbrush", "tooth + brush", "cepillo de dientes"],
-            ["Adjetivo + Sustantivo", "blackboard", "black + board", "pizarra"],
-            ["Verbo + Sustantivo", "swimming pool", "swimming + pool", "piscina"],
-            ["Sustantivo + Verbo", "sunrise", "sun + rise", "amanecer"],
-            ["Adjetivo + Adjetivo", "red-hot", "red + hot", "al rojo vivo"]
+            ["Noun + Noun", "toothbrush", "tooth + brush", "toothbrush"],
+            ["Adjective + Noun", "blackboard", "black + board", "blackboard"],
+            ["Verb + Noun", "swimming pool", "swimming + pool", "swimming pool"],
+            ["Noun + Verb", "sunrise", "sun + rise", "sunrise"],
+            ["Adjective + Adjective", "red-hot", "red + hot", "red-hot"]
           ]}
         />
 
@@ -160,49 +160,49 @@ const WordFormationPage = () => {
           <Example 
             spanish="Uso un cepillo de dientes todas las mañanas"
             english="I use a toothbrush every morning"
-            translation="Uso un cepillo de dientes todas las mañanas"
+            translation="I use a toothbrush every morning"
           />
           <Example 
             spanish="El profesor escribe en la pizarra"
             english="The teacher writes on the blackboard"
-            translation="El profesor escribe en la pizarra"
+            translation="The teacher writes on the blackboard"
           />
           <Example 
             spanish="Vamos a nadar a la piscina"
             english="We go swimming at the swimming pool"
-            translation="Vamos a nadar a la piscina"
+            translation="We go swimming at the swimming pool"
           />
         </div>
 
         <Rule 
-          title="Formación de Compuestos"
-          description="Las palabras compuestas pueden escribirse:"
+          title="Forming Compounds"
+          description="Compound words can be written:"
           examples={[
-            "Juntas: toothbrush, bedroom, notebook",
-            "Con guión: mother-in-law, state-of-the-art",
-            "Separadas: swimming pool, ice cream"
+            "Together: toothbrush, bedroom, notebook",
+            "With a hyphen: mother-in-law, state-of-the-art",
+            "Separate: swimming pool, ice cream"
           ]}
         />
 
         <Tip type="success">
-          <strong>Consejo:</strong> El significado de una palabra compuesta no siempre es la suma de sus partes.
+          <strong>Tip:</strong> The meaning of a compound word is not always the sum of its parts.
         </Tip>
       </TheorySection>
 
-      <TheorySection title="Conversion (Conversión)" icon="🔄">
+      <TheorySection title="Conversion" icon="🔄">
         <p style={{ fontSize: '1rem', lineHeight: 1.6, color: '#4a5568', marginBottom: '1rem' }}>
-          La conversión es cambiar la categoría gramatical de una palabra sin modificar su forma.
+          Conversion is changing the grammatical category of a word without modifying its form.
         </p>
 
         <GrammarTable
-          caption="Ejemplos de Conversión"
-          headers={["Palabra Original", "Nueva Categoría", "Ejemplo", "Significado"]}
+          caption="Examples of Conversion"
+          headers={["Original Word", "New Category", "Example", "Meaning"]}
           rows={[
-            ["walk (verb)", "noun", "go for a walk", "dar un paseo"],
-            ["email (noun)", "verb", "email me", "enviarme un email"],
-            ["green (adj)", "noun", "the greens", "los verdes (vegetales)"],
-            ["water (noun)", "verb", "water the plants", "regar las plantas"],
-            ["clean (adj)", "verb", "clean the room", "limpiar la habitación"]
+            ["walk (verb)", "noun", "go for a walk", "go for a walk"],
+            ["email (noun)", "verb", "email me", "email me"],
+            ["green (adj)", "noun", "the greens", "the greens (vegetables)"],
+            ["water (noun)", "verb", "water the plants", "water the plants"],
+            ["clean (adj)", "verb", "clean the room", "clean the room"]
           ]}
         />
 
@@ -210,39 +210,39 @@ const WordFormationPage = () => {
           <Example 
             spanish="Voy a dar un paseo"
             english="I'm going for a walk"
-            translation="Voy a dar un paseo"
+            translation="I'm going for a walk"
           />
           <Example 
             spanish="Envíame un email"
             english="Email me"
-            translation="Envíame un email"
+            translation="Email me"
           />
           <Example 
             spanish="Riega las plantas"
             english="Water the plants"
-            translation="Riega las plantas"
+            translation="Water the plants"
           />
         </div>
 
         <Tip type="info">
-          <strong>Nota:</strong> La conversión es muy común en inglés, especialmente para crear verbos a partir de sustantivos.
+          <strong>Note:</strong> Conversion is very common in English, especially for creating verbs from nouns.
         </Tip>
       </TheorySection>
 
       <TheorySection title="Abbreviations and Acronyms" icon="📝">
         <p style={{ fontSize: '1rem', lineHeight: 1.6, color: '#4a5568', marginBottom: '1rem' }}>
-          Las abreviaciones y acrónimos son formas cortas de palabras o frases largas.
+          Abbreviations and acronyms are short forms of long words or phrases.
         </p>
 
         <GrammarTable
-          caption="Tipos de Abreviaciones"
-          headers={["Tipo", "Ejemplo", "Forma Completa", "Significado"]}
+          caption="Types of Abbreviations"
+          headers={["Type", "Example", "Full Form", "Meaning"]}
           rows={[
-            ["Abreviación", "ad", "advertisement", "anuncio"],
-            ["Abreviación", "info", "information", "información"],
-            ["Acrónimo", "NASA", "National Aeronautics and Space Administration", "Administración Nacional de Aeronáutica y Espacio"],
-            ["Acrónimo", "UNESCO", "United Nations Educational, Scientific and Cultural Organization", "Organización de las Naciones Unidas para la Educación"],
-            ["Acrónimo", "ATM", "Automated Teller Machine", "cajero automático"]
+            ["Abbreviation", "ad", "advertisement", "advertisement"],
+            ["Abbreviation", "info", "information", "information"],
+            ["Acronym", "NASA", "National Aeronautics and Space Administration", "NASA"],
+            ["Acronym", "UNESCO", "United Nations Educational, Scientific and Cultural Organization", "UNESCO"],
+            ["Acronym", "ATM", "Automated Teller Machine", "ATM"]
           ]}
         />
 
@@ -250,58 +250,58 @@ const WordFormationPage = () => {
           <Example 
             spanish="Vi un anuncio en el periódico"
             english="I saw an ad in the newspaper"
-            translation="Vi un anuncio en el periódico"
+            translation="I saw an ad in the newspaper"
           />
           <Example 
             spanish="Necesito más información"
             english="I need more info"
-            translation="Necesito más información"
+            translation="I need more info"
           />
           <Example 
             spanish="NASA envió una nave espacial"
             english="NASA sent a spacecraft"
-            translation="NASA envió una nave espacial"
+            translation="NASA sent a spacecraft"
           />
         </div>
 
         <Tip type="warning">
-          <strong>Uso:</strong> Las abreviaciones son más comunes en contextos informales, los acrónimos se usan tanto formal como informalmente.        
+          <strong>Usage:</strong> Abbreviations are more common in informal contexts; acronyms are used in both formal and informal settings.        
         </Tip>
       </TheorySection>
 
-      <TheorySection title="Errores Comunes" icon="⚠️">
+      <TheorySection title="Common Mistakes" icon="⚠️">
         <div style={{ display: 'grid', gap: '1rem' }}>
           <Tip type="error">
             <strong>Error:</strong> "un-happy" ❌<br/>
-            <strong>Correcto:</strong> "unhappy" ✅<br/>
-            <em>Los prefijos se escriben unidos a la palabra base</em>
+            <strong>Correct:</strong> "unhappy" ✅<br/>
+            <em>Prefixes are written attached to the base word</em>
           </Tip>
 
           <Tip type="error">
             <strong>Error:</strong> "quicklyly" ❌<br/>
-            <strong>Correcto:</strong> "quickly" ✅<br/>
-            <em>No agregues sufijos a palabras que ya los tienen</em>
+            <strong>Correct:</strong> "quickly" ✅<br/>
+            <em>Do not add suffixes to words that already have them</em>
           </Tip>
 
           <Tip type="error">
             <strong>Error:</strong> "tooth brush" ❌<br/>
-            <strong>Correcto:</strong> "toothbrush" ✅<br/>
-            <em>Las palabras compuestas se escriben juntas</em>
+            <strong>Correct:</strong> "toothbrush" ✅<br/>
+            <em>Compound words are written together</em>
           </Tip>
 
           <Tip type="error">
             <strong>Error:</strong> "I will email to you" ❌<br/>
-            <strong>Correcto:</strong> "I will email you" ✅<br/>
-            <em>Cuando 'email' es verbo, no necesita 'to'</em>
+            <strong>Correct:</strong> "I will email you" ✅<br/>
+            <em>When &apos;email&apos; is a verb, it does not need &apos;to&apos;</em>
           </Tip>
         </div>
       </TheorySection>
 
-      <TheorySection title="Reglas Importantes" icon="⚡">
+      <TheorySection title="Important Rules" icon="⚡">
         <div style={{ display: 'grid', gap: '1rem' }}>
           <Rule 
-            title="1. Prefijos y ortografía"
-            description="Los prefijos no cambian la ortografía de la palabra base."
+            title="1. Prefixes and spelling"
+            description="Prefixes do not change the spelling of the base word."
             examples={[
               "Happy → Unhappy (no 'un-happy')",
               "Write → Rewrite (no 're-write')"
@@ -309,21 +309,21 @@ const WordFormationPage = () => {
           />
 
           <Rule 
-            title="2. Sufijos y cambios ortográficos"
-            description="Algunos sufijos requieren cambios en la palabra base."
+            title="2. Suffixes and spelling changes"
+            description="Some suffixes require changes in the base word."
             examples={[
               "Happy → Happiness (y → i)",
-              "Run → Running (doble n)",
-              "Love → Lovable (e se elimina)"
+              "Run → Running (double n)",
+              "Love → Lovable (e is dropped)"
             ]}
           />
 
           <Rule 
-            title="3. Palabras compuestas"
-            description="El significado puede ser diferente a la suma de las partes."
+            title="3. Compound words"
+            description="The meaning may differ from the sum of the parts."
             examples={[
-              "Blackboard (pizarra, no 'tabla negra')",
-              "Hot dog (perrito caliente, no 'perro caliente')"
+              "Blackboard (blackboard, not 'black board')",
+              "Hot dog (hot dog, not 'hot dog' literally)"
             ]}
           />
         </div>
@@ -342,12 +342,12 @@ const WordFormationPage = () => {
         "beautify"
       ]}
       correctAnswer={1}
-      explanation="Para describir personas usamos el adjetivo 'beautiful' (beauty → beautiful)."
+      explanation="To describe people we use the adjective 'beautiful' (beauty → beautiful)."
     />,
 
     <MultipleChoiceExercise
       key="2"
-      question="¿Cuál es la forma correcta para completar: 'I need to ___ this letter'?"
+      question="Which is the correct form to complete: 'I need to ___ this letter'?"
       options={[
         "rewrite",
         "re-write",
@@ -355,7 +355,7 @@ const WordFormationPage = () => {
         "rewrite again"
       ]}
       correctAnswer={0}
-      explanation="Los prefijos se escriben unidos a la palabra base: 'rewrite'."
+      explanation="Prefixes are written attached to the base word: 'rewrite'."
     />,
 
     <TrueFalseExercise
@@ -364,29 +364,29 @@ const WordFormationPage = () => {
         {
           text: "'Un-happy' is the correct spelling.",
           isTrue: false,
-          explanation: "Incorrecto. Los prefijos se escriben unidos: 'unhappy'."
+          explanation: "Incorrect. Prefixes are written attached: 'unhappy'."
         },
         {
           text: "'Toothbrush' is a compound word.",
           isTrue: true,
-          explanation: "Correcto. 'Toothbrush' está formado por 'tooth' + 'brush'."
+          explanation: "Correct. 'Toothbrush' is formed by 'tooth' + 'brush'."
         },
         {
           text: "'Email' can be both a noun and a verb.",
           isTrue: true,
-          explanation: "Correcto. 'Email' es conversión: puede ser sustantivo o verbo."
+          explanation: "Correct. 'Email' is conversion: it can be a noun or a verb."
         },
         {
           text: "'Beautifully' is formed by adding a suffix to 'beautiful'.",
           isTrue: false,
-          explanation: "Incorrecto. 'Beautifully' se forma de 'beautiful' + '-ly', pero 'beautiful' ya tiene el sufijo '-ful'."
+          explanation: "Incorrect. 'Beautifully' is formed from 'beautiful' + '-ly', but 'beautiful' already has the suffix '-ful'."
         }
       ]}
     />,
 
     <MultipleChoiceExercise
       key="4"
-      question="¿Cuál es la forma correcta para completar: 'The ___ of this project is important'?"
+      question="Which is the correct form to complete: 'The ___ of this project is important'?"
       options={[
         "develop",
         "development",
@@ -394,12 +394,12 @@ const WordFormationPage = () => {
         "developed"
       ]}
       correctAnswer={1}
-      explanation="Necesitamos un sustantivo. 'Development' se forma agregando '-ment' al verbo 'develop'."
+      explanation="We need a noun. 'Development' is formed by adding '-ment' to the verb 'develop'."
     />,
 
     <MultipleChoiceExercise
       key="5"
-      question="¿Cuál es la forma correcta para completar: 'I will ___ you the information'?"
+      question="Which is the correct form to complete: 'I will ___ you the information'?"
       options={[
         "email to",
         "email",
@@ -407,7 +407,7 @@ const WordFormationPage = () => {
         "email with"
       ]}
       correctAnswer={1}
-      explanation="Cuando 'email' es verbo, no necesita preposición: 'I will email you'."
+      explanation="When 'email' is a verb, it does not need a preposition: 'I will email you'."
     />,
 
     <TrueFalseExercise
@@ -416,17 +416,17 @@ const WordFormationPage = () => {
         {
           text: "'Impossible' is formed with the prefix 'im-'.",
           isTrue: true,
-          explanation: "Correcto. 'Impossible' = 'im-' (not) + 'possible'."
+          explanation: "Correct. 'Impossible' = 'im-' (not) + 'possible'."
         },
         {
           text: "'Friendship' is formed with the suffix '-ship'.",
           isTrue: true,
-          explanation: "Correcto. 'Friendship' = 'friend' + '-ship' (estado o condición)."
+          explanation: "Correct. 'Friendship' = 'friend' + '-ship' (state or condition)."
         },
         {
           text: "All compound words are written as one word.",
           isTrue: false,
-          explanation: "Incorrecto. Algunos se escriben separados (ice cream), otros con guión (mother-in-law)."
+          explanation: "Incorrect. Some are written separately (ice cream), others with a hyphen (mother-in-law)."
         }
       ]}
     />,
@@ -441,12 +441,12 @@ const WordFormationPage = () => {
         "constructing"
       ]}
       correctAnswer={1}
-      explanation="Necesitamos un sustantivo. 'Construction' se forma agregando '-tion' al verbo 'construct'."
+      explanation="We need a noun. 'Construction' is formed by adding '-tion' to the verb 'construct'."
     />,
 
     <MultipleChoiceExercise
       key="8"
-      question="¿Cuál es el antónimo de 'legal' usando prefijos?"
+      question="What is the antonym of 'legal' using prefixes?"
       options={[
         "unlegal",
         "illegal",
@@ -454,7 +454,7 @@ const WordFormationPage = () => {
         "dislegal"
       ]}
       correctAnswer={1}
-      explanation="'Illegal' es correcto. Usamos 'il-' antes de palabras que empiezan con 'l'."
+      explanation="'Illegal' is correct. We use 'il-' before words that start with 'l'."
     />,
 
     <TrueFalseExercise
@@ -463,12 +463,12 @@ const WordFormationPage = () => {
         {
           text: "'Homeless' means 'without a home'.",
           isTrue: true,
-          explanation: "Correcto. El sufijo '-less' significa 'sin' o 'without'."
+          explanation: "Correct. The suffix '-less' means 'without'."
         },
         {
           text: "'Childhood' refers to the time when someone is a child.",
           isTrue: true,
-          explanation: "Correcto. El sufijo '-hood' indica un período o estado."
+          explanation: "Correct. The suffix '-hood' indicates a period or state."
         }
       ]}
     />,
@@ -483,14 +483,14 @@ const WordFormationPage = () => {
         "taught"
       ]}
       correctAnswer={2}
-      explanation="Para formar el sustantivo de persona agregamos '-er' a 'teach': 'teacher'."
+      explanation="To form the person noun we add '-er' to 'teach': 'teacher'."
     />
   ];
 
   return (
     <TheoryLayout
       title="Word Formation"
-      description="Domina la formación de palabras en inglés: prefijos, sufijos, palabras compuestas, conversión y abreviaciones. Esencial para expandir tu vocabulario."
+      description="Master word formation in English: prefixes, suffixes, compound words, conversion, and abbreviations. Essential for expanding your vocabulary."
       level="B2-C1-C2"
       theoryContent={theoryContent}
       exercises={exercises}

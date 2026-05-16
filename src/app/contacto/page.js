@@ -8,13 +8,13 @@ import {
   TICKET_STATUS,
   USER_TYPES,
 } from '@/utils/contactModuleConfig';
-import SiteMascot from '@/components/SiteMascot';
+import PageHero from '@/components/PageHero';
+import InternalMessagesSection from '@/components/contact/InternalMessagesSection';
 
 export default function ContactPage() {
   const [session, setSession] = useState(null);
   const [pageLoading, setPageLoading] = useState(true);
   const [ticketLoading, setTicketLoading] = useState(false);
-  const [messageLoading, setMessageLoading] = useState(false);
   const [myTickets, setMyTickets] = useState([]);
   const [faqList, setFaqList] = useState([]);
   const [ticketForm, setTicketForm] = useState({
@@ -25,11 +25,6 @@ export default function ContactPage() {
     userType: USER_TYPES.POTENTIAL,
     status: TICKET_STATUS.UNANSWERED,
     topic: 'uso de la plataforma',
-  });
-  const [internalForm, setInternalForm] = useState({
-    toProfile: 'Alumno /profesor',
-    subject: '',
-    message: '',
   });
 
   useEffect(() => {
@@ -85,10 +80,6 @@ export default function ContactPage() {
     setTicketForm((prev) => ({ ...prev, [e.target.name]: e.target.value }));
   };
 
-  const handleInternalChange = (e) => {
-    setInternalForm((prev) => ({ ...prev, [e.target.name]: e.target.value }));
-  };
-
   const handleTicketSubmit = async (e) => {
     e.preventDefault();
     setTicketLoading(true);
@@ -122,32 +113,6 @@ export default function ContactPage() {
     await loadMyTickets(session?.user?.id);
   };
 
-  const handleInternalSubmit = async (e) => {
-    e.preventDefault();
-
-    if (!session?.user?.id) {
-      toast.error('Debes iniciar sesión para usar mensajes internos.');
-      return;
-    }
-
-    setMessageLoading(true);
-    const { error } = await supabase.from('internal_messages').insert({
-      from_user_id: session.user.id,
-      to_profile: internalForm.toProfile,
-      subject: internalForm.subject,
-      message: internalForm.message,
-    });
-    setMessageLoading(false);
-
-    if (error) {
-      toast.error('No se pudo enviar el mensaje interno.');
-      return;
-    }
-
-    toast.success('Mensaje interno enviado.');
-    setInternalForm((prev) => ({ ...prev, subject: '', message: '' }));
-  };
-
   const getActiveTicketTime = (ticket) => {
     const start = ticket?.created_at ? new Date(ticket.created_at) : null;
     if (!start) return 'N/A';
@@ -167,65 +132,20 @@ export default function ContactPage() {
 
   return (
     <main className="shell contacto-page">
-      <header className="header header--mascot">
-        <div className="header__copy">
-          <h1>Contacto</h1>
-          <p>Area de comunicacion dentro de la plataforma que permite la interaccion entre usuarios, profesores y soporte para resolver dudas, incidencias o consultas.</p>
-        </div>
-        <div className="header__mascot" aria-hidden>
-          <SiteMascot variant={8} width={140} alt="" />
-        </div>
-      </header>
+      <PageHero
+        eyebrow="Support & messaging"
+        title="Contact"
+        description="Get in touch with support, send internal messages, or open a ticket — we're here to help with questions, issues, and platform guidance."
+        mascotVariant={8}
+        mascotWidth={140}
+        accent="rose"
+        stats={[
+          { value: '24/7', label: 'Ticket system' },
+          { value: 'FAQ', label: 'Self-service' },
+        ]}
+      />
 
-      <section className="contact-section">
-        <h2>Mensajes internos</h2>
-        <p>Sistema de mensajeria privada integrado en la plataforma para facilitar la comunicacion entre los distintos perfiles.</p>
-        <ul className="inline-list">
-          <li>Alumno /profesor</li>
-          <li>Alumno/soporte</li>
-          <li>Profesor/soporte</li>
-        </ul>
-        <form onSubmit={handleInternalSubmit} className="contact-form">
-          <div className="form-group">
-            <label>Tipo de comunicacion</label>
-            <select
-              name="toProfile"
-              value={internalForm.toProfile}
-              onChange={handleInternalChange}
-              className="form-input"
-            >
-              <option>Alumno /profesor</option>
-              <option>Alumno/soporte</option>
-              <option>Profesor/soporte</option>
-            </select>
-          </div>
-          <div className="form-group">
-            <input
-              type="text"
-              name="subject"
-              placeholder="Asunto del mensaje interno"
-              value={internalForm.subject}
-              onChange={handleInternalChange}
-              required
-              className="form-input"
-            />
-          </div>
-          <div className="form-group">
-            <textarea
-              name="message"
-              placeholder="Mensaje"
-              value={internalForm.message}
-              onChange={handleInternalChange}
-              required
-              rows={6}
-              className="form-textarea"
-            />
-          </div>
-          <button type="submit" disabled={messageLoading} className="submit-btn">
-            {messageLoading ? 'Enviando...' : 'Enviar mensaje interno'}
-          </button>
-        </form>
-      </section>
+      <InternalMessagesSection session={session} />
 
       <section className="contact-section">
         <h2>Soporte</h2>

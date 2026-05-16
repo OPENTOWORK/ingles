@@ -227,7 +227,7 @@ const AdvancedConditionalsPage = () => {
           </Tip>
         </div>
       </TheorySection>
-    </motion.div>
+    </div>
   );
 
   const exercises = [

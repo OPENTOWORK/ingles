@@ -288,7 +288,7 @@ const ReadingForGistPage = () => {
     <TheoryLayout
       title="Reading for Gist"
       description="Master reading for general ideas. Learn to identify main topics and purposes quickly without getting lost in detail."
-      level="A1-A2-B1-B2-C1-C2"
+      level="A2-B1-B2-C1-C2"
       theoryContent={theoryContent}
       exercises={exercises}
       prerequisites={["Basic reading skills", "Basic vocabulary"]}

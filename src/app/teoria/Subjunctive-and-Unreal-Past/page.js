@@ -63,7 +63,7 @@ const SubjunctivePage = () => {
             english="I suggest that you study more."
             translation="Base form after 'suggest'"
           />
-        </motion.div>
+        </div>
 
         <Tip type="info">
           <strong>Note:</strong> In modern English, many subjunctive forms are replaced by 'should' + infinitive: 
@@ -262,9 +262,9 @@ const SubjunctivePage = () => {
             <strong>Correct:</strong> "I'd rather you came" ✅<br/>
             <em>Use past simple after 'would rather' for others</em>
           </Tip>
-        </motion.div>
+        </div>
       </TheorySection>
-    </motion.div>
+    </div>
   );
 
   const exercises = [

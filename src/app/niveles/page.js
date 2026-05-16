@@ -1,69 +1,69 @@
 'use client';
+
 import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import Link from "next/link";
+import Link from 'next/link';
 import { useUserRole } from '@/context/UserRoleContext';
-import SiteMascot from '@/components/SiteMascot';
+import PageHero from '@/components/PageHero';
+import { TeoriaGlobalStyles } from '@/components/theory/TeoriaStyles';
 
-// ====== Datos ======
 const NIVELES = [
-  { 
-    nivel: "A1", 
-    nombre: "Acceso", 
-    descripcion: "Principiante - Expresiones cotidianas básicas",
-    color: "#7bed9f",
-    habilidades: "Presentarse, información personal, necesidades inmediatas",
-    duracion: "90 minutos",
-    partes: "Reading & Writing (70 min), Listening (20 min), Speaking (8-10 min)"
+  {
+    nivel: 'A2',
+    nombre: 'Elementary',
+    descripcion: 'Elemental — simple, direct communication for routine tasks and everyday situations.',
+    color: '#58cc02',
+    duracion: '100 min exam',
   },
-  { 
-    nivel: "A2", 
-    nombre: "Plataforma", 
-    descripcion: "Elemental - Comunicación simple y directa",
-    color: "#58cc02",
-    habilidades: "Tareas rutinarias, intercambio de información, descripción del entorno",
-    duracion: "100 minutos",
-    partes: "Reading & Writing (70 min), Listening (30 min), Speaking (8-10 min)"
+  {
+    nivel: 'B1',
+    nombre: 'Intermediate',
+    descripcion: 'Intermediate — familiar topics, travel, experiences, and justified opinions.',
+    color: '#ff9900',
+    duracion: '140 min exam',
   },
-  { 
-    nivel: "B1", 
-    nombre: "Umbral", 
-    descripcion: "Intermedio - Temas familiares y situaciones cotidianas",
-    color: "#ff9900",
-    habilidades: "Viajes, experiencias, planes, opiniones justificadas",
-    duracion: "140 minutos",
-    partes: "Reading (45 min), Writing (45 min), Listening (30 min), Speaking (14 min)"
+  {
+    nivel: 'B2',
+    nombre: 'Upper-Intermediate',
+    descripcion: 'Upper intermediate — complex texts, fluent interaction, and clear argumentation.',
+    color: '#1cb0f6',
+    duracion: '209 min exam',
   },
-  { 
-    nivel: "B2", 
-    nombre: "Avanzado", 
-    descripcion: "Intermedio Alto - Textos complejos y fluidez",
-    color: "#1cb0f6",
-    habilidades: "Interacción fluida, textos detallados, argumentación",
-    duracion: "209 minutos",
-    partes: "Reading & Use of English (75 min), Writing (80 min), Listening (40 min), Speaking (14 min)"
+  {
+    nivel: 'C1',
+    nombre: 'Advanced',
+    descripcion: 'Advanced — long texts, implied meaning, and flexible, precise language use.',
+    color: '#8e44ad',
+    duracion: '236 min exam',
   },
-  { 
-    nivel: "C1", 
-    nombre: "Dominio Operativo", 
-    descripcion: "Avanzado - Textos extensos y sentidos implícitos",
-    color: "#8e44ad",
-    habilidades: "Expresión fluida, uso flexible del idioma, textos complejos",
-    duracion: "236 minutos",
-    partes: "Reading & Use of English (90 min), Writing (90 min), Listening (40 min), Speaking (16 min)"
+  {
+    nivel: 'C2',
+    nombre: 'Mastery',
+    descripcion: 'Proficiency — full comprehension, spontaneous expression, and subtle nuance.',
+    color: '#e74c3c',
+    duracion: '230 min exam',
   },
-  { 
-    nivel: "C2", 
-    nombre: "Maestría", 
-    descripcion: "Experto - Comprensión total y expresión precisa",
-    color: "#e74c3c",
-    habilidades: "Comprensión total, expresión espontánea, matices de significado",
-    duracion: "230 minutos",
-    partes: "Reading & Use of English (90 min), Writing (90 min), Listening (40 min), Speaking (16 min)"
-  }
 ];
 
-// ====== Página ======
+function LevelCardContent({ nivelData }) {
+  return (
+    <>
+      <div className="area-card__head">
+        <span
+          className="area-card__icon"
+          style={{ background: nivelData.color }}
+          aria-hidden
+        >
+          {nivelData.nivel}
+        </span>
+        <span className="area-card__title">{nivelData.nombre}</span>
+      </div>
+      <span className="area-card__desc">{nivelData.descripcion}</span>
+      <span className="area-card__meta">{nivelData.duracion} →</span>
+    </>
+  );
+}
+
 export default function Niveles() {
   const router = useRouter();
   const { userRole, session } = useUserRole();
@@ -77,7 +77,9 @@ export default function Niveles() {
   if (!session) {
     return (
       <main className="shell niveles-page center">
-        <div className="loader" aria-label="Cargando" />
+        <div className="loader" aria-label="Loading" />
+        <NivelesPageStyles />
+        <TeoriaGlobalStyles />
       </main>
     );
   }
@@ -86,63 +88,48 @@ export default function Niveles() {
 
   return (
     <main className="shell niveles-page">
-      <header className="header header--mascot">
-        <div className="header__copy">
-          <h1>Choose your level</h1>
-          <p>Selecciona tu nivel de inglés para acceder a los ejercicios correspondientes.</p>
-        </div>
-        <div className="header__mascot" aria-hidden>
-          <SiteMascot variant={1} width={168} alt="" />
-        </div>
-      </header>
+      <PageHero
+        eyebrow="CEFR pathway"
+        title="Choose your level"
+        description="Pick your English level and access tailored practice — reading, listening, writing, speaking, and full exam simulations."
+        mascotVariant={1}
+        mascotWidth={168}
+        accent="ocean"
+        stats={[
+          { value: String(NIVELES.length), label: 'Levels' },
+          { value: 'A2–C2', label: 'CEFR range' },
+        ]}
+      />
 
-      {/* Contenido */}
       <div className="sections">
         <section className="section">
           <div className="section__head">
-            <h2>Niveles disponibles</h2>
+            <h2>Available levels</h2>
             <span className="count">{NIVELES.length}</span>
           </div>
-          <ul className="grid">
+          <ul className="area-grid niveles-grid">
             {NIVELES.map((nivelData) => {
               const isLockedForStudent = isStudent && nivelData.nivel !== 'B2';
-              const cardContent = (
-                <>
-                  <div className="card__header" style={{ backgroundColor: nivelData.color }}>
-                    <div className="card__title">{nivelData.nivel} – {nivelData.nombre}</div>
-                  </div>
-                  <div className="card__content">
-                    <div className="card__description">{nivelData.descripcion}</div>
-                    <div className="card__skills">
-                      <strong>Habilidades:</strong> {nivelData.habilidades}
-                    </div>
-                    <div className="card__exam-info">
-                      <div className="exam-detail">
-                        <span className="exam-label">⏱️ Duración:</span>
-                        <span>{nivelData.duracion}</span>
-                      </div>
-                      <div className="exam-detail">
-                        <span className="exam-label">📋 Partes:</span>
-                        <span>{nivelData.partes}</span>
-                      </div>
-                    </div>
-                  </div>
-                </>
-              );
 
               return (
-                <li key={nivelData.nivel} className={isLockedForStudent ? 'card-wrap is-locked' : 'card-wrap'}>
+                <li
+                  key={nivelData.nivel}
+                  className={isLockedForStudent ? 'level-item is-locked' : 'level-item'}
+                >
                   {isLockedForStudent ? (
-                    <div className="card card-disabled" style={{ borderColor: nivelData.color }} aria-disabled="true">
-                      {cardContent}
+                    <div className="area-card area-card--disabled" aria-disabled="true">
+                      <LevelCardContent nivelData={nivelData} />
                     </div>
                   ) : (
-                    <Link href={`/niveles/${nivelData.nivel.toLowerCase()}`} className="card" style={{ borderColor: nivelData.color }}>
-                      {cardContent}
+                    <Link
+                      href={`/niveles/${nivelData.nivel.toLowerCase()}`}
+                      className="area-card"
+                    >
+                      <LevelCardContent nivelData={nivelData} />
                     </Link>
                   )}
                   {isLockedForStudent && (
-                    <div className="locked-overlay">Proximamente disponible</div>
+                    <div className="level-item__lock">Coming soon</div>
                   )}
                 </li>
               );
@@ -151,13 +138,13 @@ export default function Niveles() {
         </section>
       </div>
 
-      <GlobalStyles />
+      <NivelesPageStyles />
+      <TeoriaGlobalStyles />
     </main>
   );
 }
 
-// ====== Estilos (styled-jsx global + locales) ======
-function GlobalStyles() {
+function NivelesPageStyles() {
   return (
     <style jsx global>{`
       .niveles-page {
@@ -165,51 +152,121 @@ function GlobalStyles() {
         color: var(--text);
         min-height: 100vh;
       }
-      .shell{min-height:100svh;max-width:1100px;margin:0 auto;padding:32px 20px}
-      .center{display:grid;place-items:center}
-      .header h1{font-size:44px;margin:0 0 6px;color:var(--text)}
-      .header p{margin:0;color:#666}
-      .header--mascot{display:flex;flex-wrap:wrap;align-items:center;gap:20px 32px;margin-bottom:8px}
-      .header__copy{flex:1 1 240px;min-width:0}
-      .header__mascot{flex:0 0 auto;line-height:0;filter:drop-shadow(0 8px 20px rgba(102,126,234,.25))}
-      .sections{display:flex;flex-direction:column;gap:28px}
-      .section{padding:6px}
-      .section__head{display:flex;align-items:center;gap:8px;margin-bottom:10px}
-      .section__head h2{margin:0;font-size:22px;color:var(--text)}
-      .count{display:inline-grid;place-items:center;width:28px;height:28px;border-radius:9999px;border:1px solid #eaeaea;background:var(--card);font-size:12px;color:#666}
-      .grid{list-style:none;margin:0;padding:0;display:grid;gap:12px;grid-template-columns:repeat(1,minmax(0,1fr))}
-      @media (min-width:640px){ .grid{grid-template-columns:repeat(2,minmax(0,1fr));} }
-      @media (min-width:980px){ .grid{grid-template-columns:repeat(3,minmax(0,1fr));} }
-      .card-wrap{position:relative}
-      .card{display:block;height:100%;border:2px solid #eaeaea;border-radius:18px;background:var(--card);padding:0;transition:transform .2s, box-shadow .2s, border-color .2s;overflow:hidden}
-      .card:hover{transform:translateY(-2px);box-shadow:0 18px 40px rgba(0,0,0,.15)}
-      .card:focus{outline:none;box-shadow:0 0 0 6px rgba(0,112,243,.35)}
-      .card-disabled{cursor:not-allowed;filter:grayscale(.15)}
-      .locked-overlay{
-        position:absolute;
-        inset:0;
-        display:grid;
-        place-items:center;
-        border-radius:18px;
-        background:rgba(0,0,0,.45);
-        color:#fff;
-        font-weight:700;
-        text-transform:uppercase;
-        letter-spacing:.03em;
-        pointer-events:none;
+      .niveles-page .shell,
+      .niveles-page.shell {
+        min-height: 100svh;
+        max-width: 1100px;
+        margin: 0 auto;
+        padding: clamp(20px, 4vw, 32px) clamp(14px, 3vw, 20px);
       }
-      .card__header{color:white;padding:16px 18px;font-weight:600}
-      .card__title{font-size:16px;font-weight:600;line-height:1.25;color:white;margin:0}
-      .card__content{padding:18px}
-      .card__description{margin:0 0 12px;color:#666;font-size:14px;line-height:1.4}
-      .card__skills{margin:0 0 16px;font-size:13px;color:#4a5568;line-height:1.4}
-      .card__skills strong{color:#2d3748}
-      .card__exam-info{display:flex;flex-direction:column;gap:8px}
-      .exam-detail{display:flex;align-items:flex-start;gap:8px;font-size:12px}
-      .exam-label{font-weight:600;color:#667eea;min-width:80px;flex-shrink:0}
-      .exam-detail span:last-child{color:#4a5568;line-height:1.3}
-      .loader{width:48px;height:48px;border-radius:50%;border:3px solid rgba(0,112,243,.2);border-top-color:#0070f3;animation:spin 1s linear infinite}
-      @keyframes spin{to{transform:rotate(360deg)}}
+      .niveles-page.center {
+        display: grid;
+        place-items: center;
+      }
+      .niveles-page .sections {
+        display: flex;
+        flex-direction: column;
+        gap: 28px;
+      }
+      .niveles-page .section {
+        padding: 6px;
+      }
+      .niveles-page .section__head {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        margin-bottom: 10px;
+      }
+      .niveles-page .section__head h2 {
+        margin: 0;
+        font-size: 22px;
+        color: var(--text);
+      }
+      .niveles-page .count {
+        display: inline-grid;
+        place-items: center;
+        width: 28px;
+        height: 28px;
+        border-radius: 9999px;
+        border: 1px solid #eaeaea;
+        background: var(--card);
+        font-size: 12px;
+        color: #666;
+      }
+      .niveles-page .area-card {
+        margin-right: 0;
+      }
+      .niveles-page .area-card__icon {
+        font-size: 13px;
+        letter-spacing: 0.02em;
+      }
+      .niveles-page .area-card:hover .area-card__title {
+        font-size: 22px;
+        transform: none;
+      }
+      .niveles-page .area-card:hover .area-card__icon {
+        transform: scale(1.28);
+      }
+      .level-item {
+        position: relative;
+        list-style: none;
+      }
+      .area-card--disabled {
+        cursor: not-allowed;
+        filter: grayscale(0.2);
+        opacity: 0.85;
+        pointer-events: none;
+      }
+      .level-item__lock {
+        position: absolute;
+        inset: 0;
+        display: grid;
+        place-items: center;
+        border-radius: 20px;
+        background: rgba(0, 0, 0, 0.45);
+        color: #fff;
+        font-weight: 700;
+        font-size: 0.85rem;
+        text-transform: uppercase;
+        letter-spacing: 0.04em;
+        pointer-events: none;
+      }
+      @media (min-width: 640px) {
+        .niveles-page .niveles-grid > .level-item:nth-child(5) {
+          grid-column: 1 / -1;
+          width: calc(50% - 8px);
+          justify-self: center;
+        }
+      }
+      @media (min-width: 980px) {
+        .niveles-page .niveles-grid {
+          grid-template-columns: repeat(6, minmax(0, 1fr));
+        }
+        .niveles-page .niveles-grid > .level-item {
+          grid-column: span 2;
+        }
+        .niveles-page .niveles-grid > .level-item:nth-child(4) {
+          grid-column: 2 / span 2;
+        }
+        .niveles-page .niveles-grid > .level-item:nth-child(5) {
+          grid-column: 4 / span 2;
+          width: auto;
+          justify-self: stretch;
+        }
+      }
+      .niveles-page .loader {
+        width: 48px;
+        height: 48px;
+        border-radius: 50%;
+        border: 3px solid rgba(0, 112, 243, 0.2);
+        border-top-color: #0070f3;
+        animation: niveles-spin 1s linear infinite;
+      }
+      @keyframes niveles-spin {
+        to {
+          transform: rotate(360deg);
+        }
+      }
     `}</style>
   );
 }

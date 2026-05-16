@@ -19,7 +19,7 @@ export const translations = {
     welcomeSubtitle: "Prepare for the smart and interactive way to learn English.",
     quote: "The best preparation for tomorrow is doing your best today.",
     quoteAuthor: "– Your time is now",
-    startPracticing: "Start Practicing",
+    startPracticing: "Start Practising",
 
     // Buttons and actions with icons
     theoryButton: "📚 Theory",

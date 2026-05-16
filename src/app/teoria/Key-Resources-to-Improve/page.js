@@ -42,12 +42,12 @@ const KeyResourcesToImprovePage = () => {
           caption="Types of Digital Resources"
           headers={["Type", "Examples", "Benefits", "Level"]}
           rows={[
-            ["Language-learning apps", "Duolingo, Babbel, Rosetta Stone", "Gamification, daily practice", "A1–C2"],
+            ["Language-learning apps", "Duolingo, Babbel, Rosetta Stone", "Gamification, daily practice", "A2–C2"],
             ["Podcasts", "BBC Learning English, ESL Podcast", "Listening comprehension, vocabulary", "A2–C2"],
-            ["Online videos", "YouTube channels, TED Talks", "Visual input, pronunciation", "A1–C2"],
+            ["Online videos", "YouTube channels, TED Talks", "Visual input, pronunciation", "A2–C2"],
             ["Online courses", "Coursera, edX, Khan Academy", "Structure, certification", "B1–C2"],
             ["Writing tools", "Grammarly, Hemingway Editor", "Correction, clearer style", "B1–C2"],
-            ["Online dictionaries", "Oxford, Merriam-Webster, Collins", "Definitions, pronunciation", "A1–C2"]
+            ["Online dictionaries", "Oxford, Merriam-Webster, Collins", "Definitions, pronunciation", "A2–C2"]
           ]}
         />
 
@@ -467,7 +467,7 @@ const KeyResourcesToImprovePage = () => {
     <TheoryLayout
       title="Key Resources to Improve"
       description="Discover key resources for English improvement: digital and traditional tools, active practice, study strategies, and progress checks—then outline a workable study plan."
-      level="A1-A2-B1-B2-C1-C2"
+      level="A2-B1-B2-C1-C2"
       theoryContent={theoryContent}
       exercises={exercises}
       prerequisites={["Basic English skills", "Motivation to improve"]}

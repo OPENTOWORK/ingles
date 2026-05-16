@@ -443,7 +443,7 @@ const TextTypesAndStructurePage = () => {
     <TheoryLayout
       title="Text Types and Structure"
       description="Understand text types and structure in English. Organise paragraphs, manage register, link ideas smoothly, and build texts readers can follow."
-      level="A1-A2-B1-B2-C1-C2"
+      level="A2-B1-B2-C1-C2"
       theoryContent={theoryContent}
       exercises={exercises}
       prerequisites={["Basic grammar", "Understanding of sentence structure"]}

@@ -310,12 +310,12 @@ export class AdaptiveLearningSystem {
     if (overallStats.averageScore >= 70) return 'B2';
     if (overallStats.averageScore >= 60) return 'B1';
     if (overallStats.averageScore >= 50) return 'A2';
-    return 'A1';
+    return 'A2';
   }
 
   // Get next level
   getNextLevel(currentLevel) {
-    const levelProgression = ['A1', 'A2', 'B1', 'B2', 'C1', 'C2'];
+    const levelProgression = ['A2', 'B1', 'B2', 'C1', 'C2'];
     const currentIndex = levelProgression.indexOf(currentLevel);
     return currentIndex < levelProgression.length - 1 ? levelProgression[currentIndex + 1] : null;
   }
@@ -333,15 +333,14 @@ export class AdaptiveLearningSystem {
   // Get level requirements
   getLevelRequirements(level) {
     const requirements = {
-      'A1': { minScore: 0, minExercises: 0, skills: ['basic_vocabulary', 'simple_phrases'] },
-      'A2': { minScore: 50, minExercises: 20, skills: ['basic_grammar', 'simple_conversations'] },
+      'A2': { minScore: 0, minExercises: 0, skills: ['basic_grammar', 'simple_conversations'] },
       'B1': { minScore: 60, minExercises: 50, skills: ['intermediate_grammar', 'reading_comprehension'] },
       'B2': { minScore: 70, minExercises: 100, skills: ['advanced_grammar', 'complex_texts'] },
       'C1': { minScore: 80, minExercises: 200, skills: ['advanced_vocabulary', 'complex_structures'] },
       'C2': { minScore: 90, minExercises: 300, skills: ['native_level', 'all_skills'] }
     };
     
-    return requirements[level] || requirements['A1'];
+    return requirements[level] || requirements['A2'];
   }
 
   // Get initial recommendations for new users
@@ -364,16 +363,16 @@ export class AdaptiveLearningSystem {
           type: 'welcome',
           priority: 'high',
           message: 'Welcome! Start with basic exercises to establish your level',
-          action: 'Begin with A1 level exercises',
+          action: 'Begin with A2 level exercises',
           exercises: { skill: 'all', level: 'basic' }
         }
       ],
       nextLevel: {
         ready: false,
-        currentLevel: 'A1',
+        currentLevel: 'A2',
         nextLevel: null,
         readinessScore: 0,
-        requirements: this.getLevelRequirements('A1')
+        requirements: this.getLevelRequirements('A2')
       },
       difficultyAdjustments: {}
     };

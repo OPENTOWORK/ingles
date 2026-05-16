@@ -52,26 +52,10 @@ const PronunciationPage = () => {
         />
 
         <div style={{ display: 'grid', gap: '1rem' }}>
-          <Example 
-            spanish="Think /θɪŋk/ - Think"
-            english="Think /θɪŋk/ - Think"
-            translation="Think /θɪŋk/ - Think"
-          />
-          <Example 
-            spanish="This /ðɪs/ - This"
-            english="This /ðɪs/ - This"
-            translation="This /ðɪs/ - This"
-          />
-          <Example 
-            spanish="Red /red/ - Red"
-            english="Red /red/ - Red"
-            translation="Red /red/ - Red"
-          />
-          <Example 
-            spanish="Light /laɪt/ - Light"
-            english="Light /laɪt/ - Light"
-            translation="Light /laɪt/ - Light"
-          />
+          <Example english="Think /θɪŋk/" />
+          <Example english="This /ðɪs/" />
+          <Example english="Red /red/" />
+          <Example english="Light /laɪt/" />
         </div>
 
         <Rule 
@@ -81,7 +65,7 @@ const PronunciationPage = () => {
             "Practice in front of a mirror to see mouth position",
             "Record yourself and compare with native speakers",
             "Practice with minimal pairs",
-            "Uis pronouncedtion apps"
+            "Use pronunciation apps"
           ]}
         />
 
@@ -102,27 +86,15 @@ const PronunciationPage = () => {
             ["Two-syllable nouns", "First syllable", "PHOtograph, COMputer", "PHO-to-graph"],
             ["Two-syllable verbs", "Second syllable", "reCORD, preSENT", "re-CORD"],
             ["Words with prefixes", "Syllable after the prefix", "unHAPPY, rePEAT", "un-HAP-py"],
-            ["Sufijos -tion, -sion", "Before the suffix", "inforMAtion, deciSION", "in-for-MA-tion"],
-            ["Sufijos -ic, -ical", "Before the suffix", "eLECtric, hisTORical", "e-LEC-tric"]
+            ["Suffixes -tion, -sion", "Before the suffix", "inforMAtion, deciSION", "in-for-MA-tion"],
+            ["Suffixes -ic, -ical", "Before the suffix", "eLECtric, hisTORical", "e-LEC-tric"]
           ]}
         />
 
         <div style={{ display: 'grid', gap: '1rem' }}>
-          <Example 
-            spanish="PHOtograph (noun) vs phoTOgraphy (verb)"
-            english="PHOtograph (noun) vs phoTOgraphy (verb)"
-            translation="PHOtograph (noun) vs phoTOgraphy (verb)"
-          />
-          <Example 
-            spanish="REcord (register) vs reCORD (record (verb))"
-            english="REcord (noun) vs reCORD (verb)"
-            translation="REcord (register) vs reCORD (record (verb))"
-          />
-          <Example 
-            spanish="COMputer (computer)"
-            english="COMputer (computer)"
-            translation="COMputer (computer)"
-          />
+          <Example english="PHOtograph (noun) vs phoTOgraphy (noun)" />
+          <Example english="REcord (noun) vs reCORD (verb)" />
+          <Example english="COMputer" />
         </div>
 
         <Rule 
@@ -158,21 +130,9 @@ const PronunciationPage = () => {
         />
 
         <div style={{ display: 'grid', gap: '1rem' }}>
-          <Example 
-            spanish="I BOUGHT a NEW CAR yesterday"
-            english="I BOUGHT a NEW CAR yesterday"
-            translation="I BOUGHT a NEW CAR yesterday (stressed words)"
-          />
-          <Example 
-            spanish="The BOOK is on the TABLE"
-            english="The BOOK is on the TABLE"
-            translation="The BOOK is on the TABLE (stressed words)"
-          />
-          <Example 
-            spanish="I LOVE this MUSIC"
-            english="I LOVE this MUSIC"
-            translation="I LOVE this MUSIC (stressed words)"
-          />
+          <Example english="I BOUGHT a NEW CAR yesterday (stressed words)" />
+          <Example english="The BOOK is on the TABLE (stressed words)" />
+          <Example english="I LOVE this MUSIC (stressed words)" />
         </div>
 
         <Rule 
@@ -191,7 +151,7 @@ const PronunciationPage = () => {
         </Tip>
       </TheorySection>
 
-      <TheorySection title="Intonation (Intonation)" icon="🎵">
+      <TheorySection title="Intonation" icon="🎵">
         <p style={{ fontSize: '1rem', lineHeight: 1.6, color: '#4a5568', marginBottom: '1rem' }}>
           Intonation is the rise and fall of your voice that conveys emotion and meaning.
         </p>
@@ -209,21 +169,9 @@ const PronunciationPage = () => {
         />
 
         <div style={{ display: 'grid', gap: '1rem' }}>
-          <Example 
-            spanish="Statement: 'I like it.' (falling at the end)"
-            english="Statement: 'I like it.' (falling at the end)"
-            translation="Statement: 'I like it.' (falling at the end)"
-          />
-          <Example 
-            spanish="Yes/no question: 'Do you like it?' (rising at the end)"
-            english="Yes/No question: 'Do you like it?' (rising at the end)"
-            translation="Yes/no question: 'Do you like it?' (rising at the end)"
-          />
-          <Example 
-            spanish="Wh- question: 'What do you want?' (rise and fall)"
-            english="Wh- question: 'What do you want?' (rise-fall)"
-            translation="Wh- question: 'What do you want?' (rise and fall)"
-          />
+          <Example english="Statement: 'I like it.' (falling at the end)" />
+          <Example english="Yes/no question: 'Do you like it?' (rising at the end)" />
+          <Example english="Wh- question: 'What do you want?' (rise-fall)" />
         </div>
 
         <Rule 
@@ -242,7 +190,7 @@ const PronunciationPage = () => {
         </Tip>
       </TheorySection>
 
-      <TheorySection title="Connected Speech (Habla Conectada)" icon="🔗">
+      <TheorySection title="Connected Speech" icon="🔗">
         <p style={{ fontSize: '1rem', lineHeight: 1.6, color: '#4a5568', marginBottom: '1rem' }}>
           In natural speech, sounds link and change, creating a continuous flow.
         </p>
@@ -253,32 +201,20 @@ const PronunciationPage = () => {
           rows={[
             ["Linking", "Link final and initial sounds", "an apple → anapple", "Continuous flow"],
             ["Elision", "Drop sounds", "don't → don", "Faster speech"],
-            ["Assimilation", "Sounds se influyen mutuamente", "handbag → hambag", "Easier pronunciation"],
+            ["Assimilation", "Sounds influence each other", "handbag → hambag", "Easier pronunciation"],
             ["Intrusion", "Add sounds", "go on → go won", "Smooth transition"],
             ["Weak forms", "Weak forms of words", "and → 'n'", "Natural rhythm"]
           ]}
         />
 
         <div style={{ display: 'grid', gap: '1rem' }}>
-          <Example 
-            spanish="'an apple' is pronounced 'anapple'"
-            english="'an apple' is pronounced 'anapple'"
-            translation="'an apple' is pronounced 'anapple'"
-          />
-          <Example 
-            spanish="'don't' is pronounced 'don'"
-            english="'don't' is pronounced 'don'"
-            translation="'don't' is pronounced 'don'"
-          />
-          <Example 
-            spanish="'go on' is pronounced 'go won'"
-            english="'go on' is pronounced 'go won'"
-            translation="'go on' is pronounced 'go won'"
-          />
+          <Example english="'an apple' is pronounced 'anapple'" />
+          <Example english="'don't' is pronounced 'don'" />
+          <Example english="'go on' is pronounced 'go won'" />
         </div>
 
         <Rule 
-          title="Tips for Habla Conectada"
+          title="Tips for Connected Speech"
           description="To sound more natural:"
           examples={[
             "Practice full phrases, not isolated words",
@@ -330,7 +266,7 @@ const PronunciationPage = () => {
               "Practice daily, even if only for 10 minutes",
               "Record yourself and listen to your pronunciation",
               "Imitate native speakers",
-              "Uis pronouncedtion apps"
+              "Use pronunciation apps"
             ]}
           />
 
@@ -520,7 +456,7 @@ const PronunciationPage = () => {
     <TheoryLayout
       title="Pronunciation"
       description="Master English pronunciation: phonemes, stress, intonation, and connected speech. Essential for communicating effectively in English."
-      level="A1-A2-B1-B2-C1-C2"
+      level="A2-B1-B2-C1-C2"
       theoryContent={theoryContent}
       exercises={exercises}
       prerequisites={["Basic English sounds", "Understanding of IPA symbols"]}

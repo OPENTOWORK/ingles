@@ -18,34 +18,34 @@ import {
 const SentenceStructuresPage = () => {
   const theoryContent = (
     <div>
-      <TheorySection title="¿Qué son las Sentence Structures?" icon="🏗️">
+      <TheorySection title="What Are Sentence Structures?" icon="🏗️">
         <p style={{ fontSize: '1.1rem', lineHeight: 1.6, color: '#4a5568', marginBottom: '1rem' }}>
-          Las <strong>sentence structures</strong> (estructuras de oraciones) son los diferentes tipos de oraciones que puedes formar en inglés. 
-          Conocer estas estructuras te permite crear oraciones más complejas y expresivas, combinando ideas de manera efectiva.
+          <strong>Sentence structures</strong> are the different types of sentences you can form in English. 
+          Knowing these structures lets you build more complex, expressive sentences and combine ideas effectively.
         </p>
         
         <QuickReference items={[
-          "Simple: una idea principal (S + V + O)",
-          "Compound: dos ideas unidas (oración + and/but/or + oración)",
-          "Complex: idea principal + idea dependiente (oración + because/when/if + oración)",
-          "Compound-Complex: combina compound y complex",
-          "Usar conectores para unir ideas"
+          "Simple: one main idea (S + V + O)",
+          "Compound: two ideas joined (clause + and/but/or + clause)",
+          "Complex: main idea + dependent idea (clause + because/when/if + clause)",
+          "Compound-Complex: combines compound and complex",
+          "Use connectors to link ideas"
         ]} />
       </TheorySection>
 
-      <TheorySection title="Simple Sentences (Oraciones Simples)" icon="📝">
+      <TheorySection title="Simple Sentences" icon="📝">
         <p style={{ fontSize: '1rem', lineHeight: 1.6, color: '#4a5568', marginBottom: '1rem' }}>
-          Una oración simple contiene una sola idea principal con un sujeto y un predicado.
+          A simple sentence contains a single main idea with a subject and a predicate.
         </p>
 
         <GrammarTable
-          caption="Estructura de Oraciones Simples"
-          headers={["Tipo", "Estructura", "Ejemplo", "Componentes"]}
+          caption="Simple Sentence Structure"
+          headers={["Type", "Structure", "Example", "Components"]}
           rows={[
-            ["Sujeto + Verbo", "S + V", "Birds fly", "Sujeto: Birds, Verbo: fly"],
-            ["Sujeto + Verbo + Objeto", "S + V + O", "I eat pizza", "S: I, V: eat, O: pizza"],
-            ["Sujeto + Verbo + Complemento", "S + V + C", "She is happy", "S: She, V: is, C: happy"],
-            ["Sujeto + Verbo + Objeto + Complemento", "S + V + O + C", "I find it easy", "S: I, V: find, O: it, C: easy"]
+            ["Subject + Verb", "S + V", "Birds fly", "Subject: Birds, Verb: fly"],
+            ["Subject + Verb + Object", "S + V + O", "I eat pizza", "S: I, V: eat, O: pizza"],
+            ["Subject + Verb + Complement", "S + V + C", "She is happy", "S: She, V: is, C: happy"],
+            ["Subject + Verb + Object + Complement", "S + V + O + C", "I find it easy", "S: I, V: find, O: it, C: easy"]
           ]}
         />
 
@@ -53,52 +53,52 @@ const SentenceStructuresPage = () => {
           <Example 
             spanish="Los pájaros vuelan"
             english="Birds fly"
-            translation="Los pájaros vuelan"
+            translation="Birds fly"
           />
           <Example 
             spanish="Ella lee libros"
             english="She reads books"
-            translation="Ella lee libros"
+            translation="She reads books"
           />
           <Example 
             spanish="Estoy cansado"
             english="I am tired"
-            translation="Estoy cansado"
+            translation="I am tired"
           />
         </div>
 
         <Rule 
-          title="Características de Oraciones Simples"
-          description="Una oración simple:"
+          title="Characteristics of Simple Sentences"
+          description="A simple sentence:"
           examples={[
-            "Tiene un solo sujeto y un solo predicado",
-            "Expresa una idea completa",
-            "Puede ser corta o larga",
-            "Es independiente (no depende de otra oración)"
+            "Has one subject and one predicate",
+            "Expresses one complete idea",
+            "Can be short or long",
+            "Is independent (does not depend on another sentence)"
           ]}
         />
 
         <Tip type="info">
-          <strong>Recuerda:</strong> Una oración simple puede tener múltiples palabras, pero solo una idea principal.
+          <strong>Remember:</strong> A simple sentence can have many words, but only one main idea.
         </Tip>
       </TheorySection>
 
-      <TheorySection title="Compound Sentences (Oraciones Compuestas)" icon="🔗">
+      <TheorySection title="Compound Sentences" icon="🔗">
         <p style={{ fontSize: '1rem', lineHeight: 1.6, color: '#4a5568', marginBottom: '1rem' }}>
-          Una oración compuesta une dos o más oraciones simples usando conectores coordinantes.
+          A compound sentence joins two or more simple sentences using coordinating connectors.
         </p>
 
         <GrammarTable
-          caption="Conectores Coordinantes (FANBOYS)"
-          headers={["Conector", "Función", "Ejemplo", "Significado"]}
+          caption="Coordinating Connectors (FANBOYS)"
+          headers={["Connector", "Function", "Example", "Meaning"]}
           rows={[
-            ["For", "Razón", "I study hard, for I want to pass", "porque"],
-            ["And", "Adición", "I like coffee and tea", "y"],
-            ["Nor", "Negación", "I don't like coffee, nor do I like tea", "ni"],
-            ["But", "Contraste", "I like coffee, but I don't like tea", "pero"],
-            ["Or", "Alternativa", "I can have coffee or tea", "o"],
-            ["Yet", "Contraste", "I'm tired, yet I can't sleep", "sin embargo"],
-            ["So", "Resultado", "I'm tired, so I'll go to bed", "así que"]
+            ["For", "Reason", "I study hard, for I want to pass", "because"],
+            ["And", "Addition", "I like coffee and tea", "and"],
+            ["Nor", "Negative addition", "I don't like coffee, nor do I like tea", "nor"],
+            ["But", "Contrast", "I like coffee, but I don't like tea", "but"],
+            ["Or", "Alternative", "I can have coffee or tea", "or"],
+            ["Yet", "Contrast", "I'm tired, yet I can't sleep", "yet / however"],
+            ["So", "Result", "I'm tired, so I'll go to bed", "so"]
           ]}
         />
 
@@ -106,49 +106,49 @@ const SentenceStructuresPage = () => {
           <Example 
             spanish="Me gusta el café y el té"
             english="I like coffee and tea"
-            translation="Me gusta el café y el té"
+            translation="I like coffee and tea"
           />
           <Example 
             spanish="Estoy cansado, así que me voy a la cama"
             english="I'm tired, so I'll go to bed"
-            translation="Estoy cansado, así que me voy a la cama"
+            translation="I'm tired, so I'll go to bed"
           />
           <Example 
             spanish="Me gusta el café, pero no el té"
             english="I like coffee, but I don't like tea"
-            translation="Me gusta el café, pero no el té"
+            translation="I like coffee, but I don't like tea"
           />
         </div>
 
         <Rule 
-          title="Formación de Oraciones Compuestas"
-          description="Para formar oraciones compuestas:"
+          title="Forming Compound Sentences"
+          description="To form compound sentences:"
           examples={[
-            "Oración simple + , + conector + oración simple",
-            "Oración simple + conector + oración simple (sin coma)",
-            "Cada parte debe poder ser una oración independiente"
+            "Simple sentence + , + connector + simple sentence",
+            "Simple sentence + connector + simple sentence (no comma)",
+            "Each part must be able to stand alone as a sentence"
           ]}
         />
 
         <Tip type="warning">
-          <strong>¡Cuidado!</strong> Usa coma antes de conectores coordinantes cuando unes dos oraciones completas.
+          <strong>Watch out!</strong> Use a comma before coordinating connectors when you join two complete sentences.
         </Tip>
       </TheorySection>
 
-      <TheorySection title="Complex Sentences (Oraciones Complejas)" icon="🧩">
+      <TheorySection title="Complex Sentences" icon="🧩">
         <p style={{ fontSize: '1rem', lineHeight: 1.6, color: '#4a5568', marginBottom: '1rem' }}>
-          Una oración compleja tiene una oración principal (independiente) y una o más oraciones subordinadas (dependientes).
+          A complex sentence has a main (independent) clause and one or more subordinate (dependent) clauses.
         </p>
 
         <GrammarTable
-          caption="Tipos de Oraciones Subordinadas"
-          headers={["Tipo", "Conectores", "Ejemplo", "Función"]}
+          caption="Types of Subordinate Clauses"
+          headers={["Type", "Connectors", "Example", "Function"]}
           rows={[
-            ["Tiempo", "when, while, before, after", "I eat when I'm hungry", "Cuándo ocurre"],
-            ["Causa", "because, since, as", "I study because I want to pass", "Por qué ocurre"],
-            ["Condición", "if, unless, provided that", "I'll go if it doesn't rain", "Bajo qué condición"],
-            ["Contraste", "although, though, even though", "I go although it's raining", "Contraste de ideas"],
-            ["Propósito", "so that, in order to", "I study so that I can pass", "Para qué propósito"]
+            ["Time", "when, while, before, after", "I eat when I'm hungry", "When something happens"],
+            ["Cause", "because, since, as", "I study because I want to pass", "Why something happens"],
+            ["Condition", "if, unless, provided that", "I'll go if it doesn't rain", "Under what condition"],
+            ["Contrast", "although, though, even though", "I go although it's raining", "Contrasting ideas"],
+            ["Purpose", "so that, in order to", "I study so that I can pass", "For what purpose"]
           ]}
         />
 
@@ -156,88 +156,88 @@ const SentenceStructuresPage = () => {
           <Example 
             spanish="Como cuando tengo hambre"
             english="I eat when I'm hungry"
-            translation="Como cuando tengo hambre"
+            translation="I eat when I'm hungry"
           />
           <Example 
             spanish="Estudio porque quiero aprobar"
             english="I study because I want to pass"
-            translation="Estudio porque quiero aprobar"
+            translation="I study because I want to pass"
           />
           <Example 
             spanish="Iré si no llueve"
             english="I'll go if it doesn't rain"
-            translation="Iré si no llueve"
+            translation="I'll go if it doesn't rain"
           />
         </div>
 
         <Rule 
-          title="Estructura de Oraciones Complejas"
-          description="Pueden organizarse de dos maneras:"
+          title="Structure of Complex Sentences"
+          description="They can be organized in two ways:"
           examples={[
-            "Oración principal + oración subordinada",
-            "Oración subordinada + , + oración principal",
-            "La oración subordinada no puede existir sola"
+            "Main clause + subordinate clause",
+            "Subordinate clause + , + main clause",
+            "A subordinate clause cannot stand alone"
           ]}
         />
 
         <Tip type="success">
-          <strong>Consejo:</strong> La oración principal tiene sentido completo por sí sola, la subordinada no.
+          <strong>Tip:</strong> The main clause makes complete sense on its own; the subordinate clause does not.
         </Tip>
       </TheorySection>
 
       <TheorySection title="Compound-Complex Sentences" icon="🏗️">
         <p style={{ fontSize: '1rem', lineHeight: 1.6, color: '#4a5568', marginBottom: '1rem' }}>
-          Una oración compound-complex combina oraciones compuestas y complejas. Tiene al menos dos oraciones principales y una o más subordinadas.
+          A compound-complex sentence combines compound and complex structures. It has at least two main clauses and one or more subordinate clauses.
         </p>
 
         <div style={{ display: 'grid', gap: '1rem' }}>
           <Example 
             spanish="Estudio duro porque quiero aprobar, pero a veces me siento cansado"
             english="I study hard because I want to pass, but sometimes I feel tired"
-            translation="Estudio duro porque quiero aprobar, pero a veces me siento cansado"
+            translation="I study hard because I want to pass, but sometimes I feel tired"
           />
           <Example 
             spanish="Cuando llueve, me quedo en casa y leo libros"
             english="When it rains, I stay home and read books"
-            translation="Cuando llueve, me quedo en casa y leo libros"
+            translation="When it rains, I stay home and read books"
           />
           <Example 
             spanish="Si tengo tiempo, iré al cine, pero si no, me quedaré en casa"
             english="If I have time, I'll go to the cinema, but if not, I'll stay home"
-            translation="Si tengo tiempo, iré al cine, pero si no, me quedaré en casa"
+            translation="If I have time, I'll go to the cinema, but if not, I'll stay home"
           />
         </div>
 
         <Rule 
-          title="Características de Compound-Complex"
-          description="Este tipo de oración:"
+          title="Characteristics of Compound-Complex Sentences"
+          description="This sentence type:"
           examples={[
-            "Tiene al menos dos oraciones principales",
-            "Tiene al menos una oración subordinada",
-            "Combina las características de compound y complex",
-            "Es la estructura más avanzada"
+            "Has at least two main clauses",
+            "Has at least one subordinate clause",
+            "Combines features of compound and complex sentences",
+            "Is the most advanced structure"
           ]}
         />
 
         <Tip type="info">
-          <strong>Uso:</strong> Las oraciones compound-complex son útiles para expresar ideas complejas de manera clara.
+          <strong>Usage:</strong> Compound-complex sentences are useful for expressing complex ideas clearly.
         </Tip>
       </TheorySection>
 
-      <TheorySection title="Conectores Avanzados" icon="🔗">
+      <TheorySection title="Advanced Connectors" icon="🔗">
         <p style={{ fontSize: '1rem', lineHeight: 1.6, color: '#4a5568', marginBottom: '1rem' }}>
-          Además de los conectores básicos, hay muchos conectores que te ayudan a crear oraciones más sofisticadas.
+          Beyond basic connectors, many linking words help you create more sophisticated sentences.
         </p>
 
         <GrammarTable
-          caption="Conectores por Función"
-          headers={["Función", "Conectores", "Ejemplo", "Significado"]}
+          caption="Connectors by Function"
+          headers={["Function", "Connectors", "Example", "Meaning"]}
           rows={[
-            ["Adición", "furthermore, moreover, in addition", "I study hard. Furthermore, I practice daily", "además"],
-            ["Contraste", "however, nevertheless, on the other hand", "It's expensive. However, it's worth it", "sin embargo"],
-            ["Causa", "due to, owing to, as a result of", "Due to the rain, we stayed home", "debido a"],
-            ["Resultado", "consequently, therefore, thus", "I studied hard. Therefore, I passed", "por lo tanto"],
-            ["Tiempo", "meanwhile, subsequently, eventually", "I studied. Meanwhile, my friend played", "mientras tanto"]
+            ["Addition", "furthermore, moreover, in addition", "I study hard. Furthermore, I practice daily", "in addition"],
+            ["Contrast", "however, nevertheless, on the other hand", "It's expensive. However, it's worth it", "however"],
+            ["Cause", "due to, owing to, as a result of", "Due to the rain, we stayed home", "due to"],
+            ["Result", "consequently, therefore, thus", "I studied hard. Therefore, I passed", "therefore"],
+            ["Time", "meanwhile, subsequently, eventually", "I studied. Meanwhile, my friend played", "meanwhile"]
           ]}
         />
 
@@ -245,58 +245,58 @@ const SentenceStructuresPage = () => {
           <Example 
             spanish="Estudio duro. Además, practico diariamente"
             english="I study hard. Furthermore, I practice daily"
-            translation="Estudio duro. Además, practico diariamente"
+            translation="I study hard. Furthermore, I practice daily"
           />
           <Example 
             spanish="Es caro. Sin embargo, vale la pena"
             english="It's expensive. However, it's worth it"
-            translation="Es caro. Sin embargo, vale la pena"
+            translation="It's expensive. However, it's worth it"
           />
           <Example 
             spanish="Debido a la lluvia, nos quedamos en casa"
             english="Due to the rain, we stayed home"
-            translation="Debido a la lluvia, nos quedamos en casa"
+            translation="Due to the rain, we stayed home"
           />
         </div>
 
         <Tip type="warning">
-          <strong>Puntuación:</strong> Los conectores avanzados suelen ir al inicio de la oración, seguidos de coma.
+          <strong>Punctuation:</strong> Advanced connectors usually go at the start of the sentence, followed by a comma.
         </Tip>
       </TheorySection>
 
-      <TheorySection title="Errores Comunes" icon="⚠️">
+      <TheorySection title="Common Mistakes" icon="⚠️">
         <div style={{ display: 'grid', gap: '1rem' }}>
           <Tip type="error">
             <strong>Error:</strong> "I like coffee, I like tea" ❌<br/>
-            <strong>Correcto:</strong> "I like coffee and tea" o "I like coffee, and I like tea" ✅<br/>
-            <em>Necesitas un conector para unir oraciones</em>
+            <strong>Correct:</strong> "I like coffee and tea" or "I like coffee, and I like tea" ✅<br/>
+            <em>You need a connector to join sentences</em>
           </Tip>
 
           <Tip type="error">
             <strong>Error:</strong> "Because I'm tired, so I'll sleep" ❌<br/>
-            <strong>Correcto:</strong> "Because I'm tired, I'll sleep" o "I'm tired, so I'll sleep" ✅<br/>
-            <em>No uses 'because' y 'so' juntos</em>
+            <strong>Correct:</strong> "Because I'm tired, I'll sleep" or "I'm tired, so I'll sleep" ✅<br/>
+            <em>Do not use 'because' and 'so' together</em>
           </Tip>
 
           <Tip type="error">
             <strong>Error:</strong> "I study hard, but I don't pass" ❌<br/>
-            <strong>Correcto:</strong> "I study hard, but I don't pass" ✅<br/>
-            <em>Esta oración está bien, pero asegúrate de que las ideas contrasten</em>
+            <strong>Correct:</strong> "I study hard, but I don't pass" ✅<br/>
+            <em>This sentence is fine, but make sure the ideas contrast</em>
           </Tip>
 
           <Tip type="error">
-            <strong>Error:</strong> "If I have time, I will go" (sin coma) ❌<br/>
-            <strong>Correcto:</strong> "If I have time, I will go" ✅<br/>
-            <em>Usa coma cuando la oración subordinada va al inicio</em>
+            <strong>Error:</strong> "If I have time, I will go" (no comma) ❌<br/>
+            <strong>Correct:</strong> "If I have time, I will go" ✅<br/>
+            <em>Use a comma when the subordinate clause comes first</em>
           </Tip>
         </div>
       </TheorySection>
 
-      <TheorySection title="Reglas Importantes" icon="⚡">
+      <TheorySection title="Important Rules" icon="⚡">
         <div style={{ display: 'grid', gap: '1rem' }}>
           <Rule 
-            title="1. Puntuación con conectores"
-            description="Usa coma antes de conectores coordinantes cuando unes oraciones completas."
+            title="1. Punctuation with connectors"
+            description="Use a comma before coordinating connectors when joining complete sentences."
             examples={[
               "I like coffee, and I like tea",
               "I'm tired, so I'll sleep"
@@ -304,8 +304,8 @@ const SentenceStructuresPage = () => {
           />
 
           <Rule 
-            title="2. Oraciones subordinadas"
-            description="Si la oración subordinada va al inicio, usa coma después."
+            title="2. Subordinate clauses"
+            description="If the subordinate clause comes first, use a comma after it."
             examples={[
               "When I'm tired, I sleep",
               "Because it's raining, I stay home"
@@ -313,8 +313,8 @@ const SentenceStructuresPage = () => {
           />
 
           <Rule 
-            title="3. Evitar repetición"
-            description="No uses conectores redundantes."
+            title="3. Avoid repetition"
+            description="Do not use redundant connectors."
             examples={[
               "Because I'm tired, so I'll sleep ❌",
               "I'm tired, so I'll sleep ✅"
@@ -336,12 +336,12 @@ const SentenceStructuresPage = () => {
         "so"
       ]}
       correctAnswer={1}
-      explanation="'But' expresa contraste entre dos ideas opuestas: me gusta el café pero no me gusta el té."
+      explanation="'But' expresses contrast between two opposing ideas: I like coffee but I don't like tea."
     />,
 
     <MultipleChoiceExercise
       key="2"
-      question="¿Cuál es la forma correcta para completar: 'I like coffee, ___ I don't like tea'?"
+      question="Which is the correct form to complete: 'I like coffee, ___ I don't like tea'?"
       options={[
         "and",
         "but",
@@ -349,7 +349,7 @@ const SentenceStructuresPage = () => {
         "so"
       ]}
       correctAnswer={1}
-      explanation="Para mostrar contraste entre dos ideas usamos 'but': 'I like coffee, but I don't like tea'."
+      explanation="To show contrast between two ideas we use 'but': 'I like coffee, but I don't like tea'."
     />,
 
     <TrueFalseExercise
@@ -358,29 +358,29 @@ const SentenceStructuresPage = () => {
         {
           text: "'I like coffee, I like tea' is a correct compound sentence.",
           isTrue: false,
-          explanation: "Incorrecto. Necesitas un conector para unir las oraciones: 'I like coffee and tea' o 'I like coffee, and I like tea'."
+          explanation: "Incorrect. You need a connector to join the sentences: 'I like coffee and tea' or 'I like coffee, and I like tea'."
         },
         {
           text: "'Because I'm tired, I'll sleep' is a correct complex sentence.",
           isTrue: true,
-          explanation: "Correcto. Es una oración compleja con oración subordinada al inicio."
+          explanation: "Correct. It is a complex sentence with a subordinate clause at the beginning."
         },
         {
           text: "'I study hard, so I want to pass' is correct.",
           isTrue: true,
-          explanation: "Correcto. Es una oración compuesta con 'so' mostrando resultado."
+          explanation: "Correct. It is a compound sentence with 'so' showing result."
         },
         {
           text: "'If I have time, I will go' needs a comma.",
           isTrue: true,
-          explanation: "Correcto. Cuando la oración subordinada va al inicio, se usa coma después."
+          explanation: "Correct. When the subordinate clause comes first, use a comma after it."
         }
       ]}
     />,
 
     <MultipleChoiceExercise
       key="4"
-      question="¿Cuál es la forma correcta para completar: '___ it's raining, I stay home'?"
+      question="Which is the correct form to complete: '___ it's raining, I stay home'?"
       options={[
         "Because",
         "So",
@@ -388,12 +388,12 @@ const SentenceStructuresPage = () => {
         "And"
       ]}
       correctAnswer={0}
-      explanation="Para mostrar causa usamos 'Because': 'Because it's raining, I stay home'."
+      explanation="To show cause we use 'Because': 'Because it's raining, I stay home'."
     />,
 
     <MultipleChoiceExercise
       key="5"
-      question="¿Cuál es la forma correcta para completar: 'I study hard, ___ I want to pass'?"
+      question="Which is the correct form to complete: 'I study hard, ___ I want to pass'?"
       options={[
         "because",
         "so",
@@ -401,7 +401,7 @@ const SentenceStructuresPage = () => {
         "and"
       ]}
       correctAnswer={0}
-      explanation="Para mostrar razón usamos 'because': 'I study hard, because I want to pass'."
+      explanation="To show reason we use 'because': 'I study hard, because I want to pass'."
     />,
 
     <TrueFalseExercise
@@ -410,17 +410,17 @@ const SentenceStructuresPage = () => {
         {
           text: "'Although it's raining, I will go out' is a complex sentence.",
           isTrue: true,
-          explanation: "Correcto. Es una oración compleja con una cláusula subordinada de concesión."
+          explanation: "Correct. It is a complex sentence with a concessive subordinate clause."
         },
         {
           text: "'I like pizza and pasta' is a compound sentence.",
           isTrue: false,
-          explanation: "Incorrecto. Es una oración simple con sujeto compuesto. Una oración compuesta tiene dos cláusulas independientes."
+          explanation: "Incorrect. It is a simple sentence with a compound subject. A compound sentence has two independent clauses."
         },
         {
           text: "A comma is needed after 'If I have time' in 'If I have time I will call you'.",
           isTrue: true,
-          explanation: "Correcto. Cuando la cláusula subordinada va al inicio, necesita coma: 'If I have time, I will call you'."
+          explanation: "Correct. When the subordinate clause comes first, it needs a comma: 'If I have time, I will call you'."
         }
       ]}
     />,
@@ -435,12 +435,12 @@ const SentenceStructuresPage = () => {
         "And"
       ]}
       correctAnswer={1}
-      explanation="'Although' muestra contraste: 'Although I was tired, I finished my homework' (Aunque estaba cansado, terminé mi tarea)."
+      explanation="'Although' shows contrast: 'Although I was tired, I finished my homework'."
     />,
 
     <MultipleChoiceExercise
       key="8"
-      question="¿Cuál es la estructura correcta para una oración compuesta?"
+      question="What is the correct structure for a compound sentence?"
       options={[
         "Independent clause + dependent clause",
         "Independent clause + conjunction + independent clause",
@@ -448,7 +448,7 @@ const SentenceStructuresPage = () => {
         "Subject + verb + object"
       ]}
       correctAnswer={1}
-      explanation="Una oración compuesta tiene: cláusula independiente + conjunción + cláusula independiente."
+      explanation="A compound sentence has: independent clause + conjunction + independent clause."
     />,
 
     <TrueFalseExercise
@@ -457,12 +457,12 @@ const SentenceStructuresPage = () => {
         {
           text: "'When I arrive, I will call you' has the dependent clause first.",
           isTrue: true,
-          explanation: "Correcto. 'When I arrive' es la cláusula dependiente que va primero."
+          explanation: "Correct. 'When I arrive' is the dependent clause that comes first."
         },
         {
           text: "'I went to the store, I bought milk' is correctly punctuated.",
           isTrue: false,
-          explanation: "Incorrecto. Necesita una conjunción: 'I went to the store, and I bought milk' o usar punto y coma."
+          explanation: "Incorrect. It needs a conjunction: 'I went to the store, and I bought milk' or a semicolon."
         }
       ]}
     />,
@@ -477,15 +477,15 @@ const SentenceStructuresPage = () => {
         "but"
       ]}
       correctAnswer={1}
-      explanation="'If' introduce una condición: 'I will go to the party if you come with me' (Iré a la fiesta si vienes conmigo)."
+      explanation="'If' introduces a condition: 'I will go to the party if you come with me'."
     />
   ];
 
   return (
     <TheoryLayout
       title="Sentence Structures"
-      description="Domina las estructuras de oraciones en inglés: simples, compuestas, complejas y compound-complex. Aprende a usar conectores para crear oraciones más sofisticadas."
-      level="A1-A2-B1-B2-C1-C2"
+      description="Master English sentence structures: simple, compound, complex, and compound-complex. Learn to use connectors to build more sophisticated sentences."
+      level="A2-B1-B2-C1-C2"
       theoryContent={theoryContent}
       exercises={exercises}
       prerequisites={["Basic grammar", "Understanding of subjects and verbs", "Basic vocabulary"]}
@@ -495,4 +495,3 @@ const SentenceStructuresPage = () => {
 };
 
 export default SentenceStructuresPage;
-

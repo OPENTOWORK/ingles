@@ -14,7 +14,6 @@ import { useUserRole } from '@/context/UserRoleContext';
 import SiteMascot from '@/components/SiteMascot';
 
 const sortedLevels = [
-  { level: "A1", color: "#7bed9f", emoji: "😁" },
   { level: "B1", color: "#ff9900", emoji: "😄" },
   { level: "C1", color: "#8e44ad", emoji: "😌" },
   { level: "A2", color: "#58cc02", emoji: "☺️" },

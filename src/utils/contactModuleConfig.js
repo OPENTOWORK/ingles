@@ -52,3 +52,24 @@ export const USER_TYPES = {
 };
 
 export const FAQ_TOPICS = ['cuenta', 'pagos', 'uso de la plataforma', 'otros'];
+
+export const INTERNAL_MESSAGE_CHANNELS = [
+  {
+    value: 'Alumno /profesor',
+    label: 'Student ↔ Teacher',
+    description: 'Questions about lessons, feedback, or class-related topics.',
+    icon: '🎓',
+  },
+  {
+    value: 'Alumno/soporte',
+    label: 'Student ↔ Support',
+    description: 'Help with the platform, access, or technical issues.',
+    icon: '🛟',
+  },
+  {
+    value: 'Profesor/soporte',
+    label: 'Teacher ↔ Support',
+    description: 'Administrative or platform support for teaching staff.',
+    icon: '💼',
+  },
+];

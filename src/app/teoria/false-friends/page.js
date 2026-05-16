@@ -18,30 +18,30 @@ import {
 const FalseFriendsPage = () => {
   const theoryContent = (
     <div>
-      <TheorySection title="¿Qué son los False Friends?" icon="👥">
+      <TheorySection title="What Are False Friends?" icon="👥">
         <p style={{ fontSize: '1.1rem', lineHeight: 1.6, color: '#4a5568', marginBottom: '1rem' }}>
-          Los <strong>false friends</strong> (falsos amigos) son palabras que se parecen mucho en inglés y español 
-          pero tienen significados completamente diferentes. Son una de las fuentes más comunes de errores para 
-          hispanohablantes, ya que pueden parecer familiares pero en realidad significan algo distinto.
+          <strong>False friends</strong> are words that look very similar in English and Spanish 
+          but have completely different meanings. They are one of the most common sources of errors for 
+          Spanish speakers, because they may seem familiar but actually mean something different.
         </p>
         
         <QuickReference items={[
-          "Palabras que se parecen pero significan diferente",
-          "Fuente común de errores",
-          "Pueden confundir a los hispanohablantes",
-          "Es importante memorizar las diferencias",
-          "Contexto ayuda a identificar el significado"
+          "Words that look alike but mean different things",
+          "A common source of mistakes",
+          "They can confuse Spanish speakers",
+          "It's important to memorise the differences",
+          "Context helps identify the meaning"
         ]} />
       </TheorySection>
 
-      <TheorySection title="False Friends Comunes - Parte 1" icon="📚">
+      <TheorySection title="Common False Friends – Part 1" icon="📚">
         <p style={{ fontSize: '1rem', lineHeight: 1.6, color: '#4a5568', marginBottom: '1rem' }}>
-          Algunos de los false friends más comunes y confusos.
+          Some of the most common and confusing false friends.
         </p>
 
         <GrammarTable
-          caption="False Friends Comunes"
-          headers={["Palabra Inglés", "Significado Inglés", "Palabra Español", "Significado Español"]}
+          caption="Common False Friends"
+          headers={["English Word", "English Meaning", "Spanish Word", "Spanish Meaning"]}
           rows={[
             ["actual", "real, current", "actual", "current, present"],
             ["actually", "really, in fact", "actualmente", "currently, now"],
@@ -58,44 +58,44 @@ const FalseFriendsPage = () => {
           <Example 
             spanish="La situación actual es difícil"
             english="The actual situation is difficult"
-            translation="La situación real es difícil"
+            translation="The real situation is difficult"
           />
           <Example 
             spanish="Actualmente estoy trabajando"
             english="I'm actually working"
-            translation="Realmente estoy trabajando"
+            translation="I'm actually working"
           />
           <Example 
             spanish="Voy a asistir a la reunión"
             english="I'm going to attend the meeting"
-            translation="Voy a asistir a la reunión"
+            translation="I'm going to attend the meeting"
           />
         </div>
 
         <Rule 
-          title="Consejos para Identificar False Friends"
-          description="Para evitar confusiones:"
+          title="Tips for Identifying False Friends"
+          description="To avoid confusion:"
           examples={[
-            "No asumas que significan lo mismo",
-            "Verifica siempre el contexto",
-            "Usa diccionarios bilingües",
-            "Aprende los pares más comunes"
+            "Don't assume they mean the same thing",
+            "Always check the context",
+            "Use bilingual dictionaries",
+            "Learn the most common pairs"
           ]}
         />
 
         <Tip type="warning">
-          <strong>¡Cuidado!</strong> 'Actual' en inglés significa 'real', no 'actual' (current). Usa 'current' para 'actual'.
+          <strong>Watch out!</strong> 'Actual' in English means 'real', not 'current'. Use 'current' for 'actual'.
         </Tip>
       </TheorySection>
 
-      <TheorySection title="False Friends Comunes - Parte 2" icon="📖">
+      <TheorySection title="Common False Friends – Part 2" icon="📖">
         <p style={{ fontSize: '1rem', lineHeight: 1.6, color: '#4a5568', marginBottom: '1rem' }}>
-          Más false friends que pueden causar confusión.
+          More false friends that can cause confusion.
         </p>
 
         <GrammarTable
-          caption="Más False Friends"
-          headers={["Palabra Inglés", "Significado Inglés", "Palabra Español", "Significado Español"]}
+          caption="More False Friends"
+          headers={["English Word", "English Meaning", "Spanish Word", "Spanish Meaning"]}
           rows={[
             ["deceive", "trick, mislead", "decepcionar", "disappoint"],
             ["disappoint", "let down", "desapuntar", "remove from target"],
@@ -112,33 +112,33 @@ const FalseFriendsPage = () => {
           <Example 
             spanish="Estoy decepcionado con los resultados"
             english="I'm disappointed with the results"
-            translation="Estoy decepcionado con los resultados"
+            translation="I'm disappointed with the results"
           />
           <Example 
             spanish="Estoy embarazada (pregnant)"
             english="I'm pregnant"
-            translation="Estoy embarazada"
+            translation="I'm pregnant"
           />
           <Example 
             spanish="El éxito de la película fue grande"
             english="The movie's success was great"
-            translation="El éxito de la película fue grande"
+            translation="The movie was a great success"
           />
         </div>
 
         <Tip type="error">
-          <strong>Error común:</strong> 'Embarrassed' no significa 'embarazada'. Significa 'avergonzado' o 'con vergüenza'.
+          <strong>Common mistake:</strong> 'Embarrassed' does not mean 'embarazada'. It means 'ashamed' or 'feeling embarrassed'.
         </Tip>
       </TheorySection>
 
-      <TheorySection title="False Friends Comunes - Parte 3" icon="📝">
+      <TheorySection title="Common False Friends – Part 3" icon="📝">
         <p style={{ fontSize: '1rem', lineHeight: 1.6, color: '#4a5568', marginBottom: '1rem' }}>
-          Más pares de false friends para completar tu conocimiento.
+          More false friend pairs to complete your knowledge.
         </p>
 
         <GrammarTable
-          caption="False Friends Adicionales"
-          headers={["Palabra Inglés", "Significado Inglés", "Palabra Español", "Significado Español"]}
+          caption="Additional False Friends"
+          headers={["English Word", "English Meaning", "Spanish Word", "Spanish Meaning"]}
           rows={[
             ["nervous", "anxious, worried", "nervioso", "anxious, worried"],
             ["notice", "observe, see", "noticia", "news"],
@@ -155,47 +155,47 @@ const FalseFriendsPage = () => {
           <Example 
             spanish="Me di cuenta de mi error"
             english="I realized my mistake"
-            translation="Me di cuenta de mi error"
+            translation="I realised my mistake"
           />
           <Example 
             spanish="Recordé la cita"
             english="I remembered the appointment"
-            translation="Recordé la cita"
+            translation="I remembered the appointment"
           />
           <Example 
             spanish="Es una persona sensible"
             english="He's a sensitive person"
-            translation="Es una persona sensible"
+            translation="He's a sensitive person"
           />
         </div>
 
         <Rule 
-          title="Estrategias para Recordar"
-          description="Técnicas útiles:"
+          title="Strategies to Remember"
+          description="Useful techniques:"
           examples={[
-            "Crea asociaciones mentales",
-            "Practica con oraciones",
-            "Usa tarjetas de memoria",
-            "Lee en contexto"
+            "Create mental associations",
+            "Practise with sentences",
+            "Use flashcards",
+            "Read in context"
           ]}
         />
 
         <Tip type="success">
-          <strong>Consejo:</strong> 'Realize' significa 'darse cuenta', no 'realizar'. Para 'realizar' usa 'carry out' o 'do'.
+          <strong>Tip:</strong> 'Realize' means 'to become aware of', not 'to carry out'. For 'realizar' use 'carry out' or 'do'.
         </Tip>
       </TheorySection>
 
-      <TheorySection title="False Friends con Pronunciación Similar" icon="🔊">
+      <TheorySection title="False Friends with Similar Pronunciation" icon="🔊">
         <p style={{ fontSize: '1rem', lineHeight: 1.6, color: '#4a5568', marginBottom: '1rem' }}>
-          Palabras que suenan parecido pero significan cosas diferentes.
+          Words that sound similar but mean different things.
         </p>
 
         <GrammarTable
-          caption="False Friends por Pronunciación"
-          headers={["Palabra Inglés", "Pronunciación", "Significado", "Confusión con"]}
+          caption="False Friends by Pronunciation"
+          headers={["English Word", "Pronunciation", "Meaning", "Confused with"]}
           rows={[
-            ["dessert", "/dɪˈzɜːrt/", "sweet food after meal", "desert (desierto)"],
-            ["dessert", "/ˈdezərt/", "dry, sandy area", "dessert (postre)"],
+            ["dessert", "/dɪˈzɜːrt/", "sweet food after meal", "desert (desert)"],
+            ["desert", "/ˈdezərt/", "dry, sandy area", "dessert (dessert)"],
             ["loose", "/luːs/", "not tight", "lose (perder)"],
             ["lose", "/luːz/", "not win, misplace", "loose (suelto)"],
             ["advice", "/ədˈvaɪs/", "recommendation", "advise (aconsejar)"],
@@ -209,43 +209,43 @@ const FalseFriendsPage = () => {
           <Example 
             spanish="Me gusta el postre"
             english="I like dessert"
-            translation="Me gusta el postre"
+            translation="I like dessert"
           />
           <Example 
             spanish="El desierto es muy seco"
             english="The desert is very dry"
-            translation="El desierto es muy seco"
+            translation="The desert is very dry"
           />
           <Example 
             spanish="Necesito consejo"
             english="I need advice"
-            translation="Necesito consejo"
+            translation="I need advice"
           />
           <Example 
             spanish="Te aconsejo estudiar"
             english="I advise you to study"
-            translation="Te aconsejo estudiar"
+            translation="I advise you to study"
           />
         </div>
 
         <Tip type="info">
-          <strong>Consejo:</strong> 'Advice' es sustantivo (consejo), 'advise' es verbo (aconsejar). La diferencia está en la 's' y la 'c'.
+          <strong>Tip:</strong> 'Advice' is a noun; 'advise' is a verb. The difference is in the 's' and 'c'.
         </Tip>
       </TheorySection>
 
-      <TheorySection title="Contexto y Uso" icon="🎯">
+      <TheorySection title="Context and Usage" icon="🎯">
         <p style={{ fontSize: '1rem', lineHeight: 1.6, color: '#4a5568', marginBottom: '1rem' }}>
-          El contexto es clave para identificar y usar correctamente las palabras.
+          Context is key to identifying and using words correctly.
         </p>
 
         <GrammarTable
-          caption="Estrategias de Contexto"
-          headers={["Estrategia", "Ejemplo", "Explicación"]}
+          caption="Context Strategies"
+          headers={["Strategy", "Example", "Explanation"]}
           rows={[
-            ["Leer la oración completa", "The actual problem is...", "Contexto ayuda a entender 'real'"],
-            ["Buscar palabras relacionadas", "Library books are...", "Libros indica lugar de lectura"],
-            ["Considerar el tema", "Fabric production...", "Producción indica industria textil"],
-            ["Verificar con diccionario", "When in doubt, check", "Siempre verificar significado"]
+            ["Read the full sentence", "The actual problem is...", "Context helps you understand 'real'"],
+            ["Look for related words", "Library books are...", "Books indicate a place for reading"],
+            ["Consider the topic", "Fabric production...", "Production indicates the textile industry"],
+            ["Check the dictionary", "When in doubt, check", "Always verify the meaning"]
           ]}
         />
 
@@ -253,97 +253,97 @@ const FalseFriendsPage = () => {
           <Example 
             spanish="El problema actual es la inflación"
             english="The current problem is inflation"
-            translation="El problema actual es la inflación"
+            translation="The current problem is inflation"
           />
           <Example 
             spanish="Voy a la biblioteca para estudiar"
             english="I go to the library to study"
-            translation="Voy a la biblioteca para estudiar"
+            translation="I go to the library to study"
           />
           <Example 
             spanish="Esta fábrica produce telas"
             english="This factory produces fabrics"
-            translation="Esta fábrica produce telas"
+            translation="This factory produces fabric"
           />
         </div>
 
         <Rule 
-          title="Reglas de Contexto"
-          description="Para usar el contexto efectivamente:"
+          title="Context Rules"
+          description="To use context effectively:"
           examples={[
-            "Lee toda la oración",
-            "Considera las palabras circundantes",
-            "Piensa en el tema general",
-            "Si no estás seguro, verifica"
+            "Read the whole sentence",
+            "Consider surrounding words",
+            "Think about the general topic",
+            "If unsure, verify"
           ]}
         />
 
         <Tip type="success">
-          <strong>Consejo:</strong> El contexto es tu mejor amigo para evitar errores con false friends.
+          <strong>Tip:</strong> Context is your best friend for avoiding false friend mistakes.
         </Tip>
       </TheorySection>
 
-      <TheorySection title="Errores Comunes" icon="⚠️">
+      <TheorySection title="Common Mistakes" icon="⚠️">
         <div style={{ display: 'grid', gap: '1rem' }}>
           <Tip type="error">
-            <strong>Error:</strong> Usar 'actual' para 'current' ❌<br/>
-            <strong>Correcto:</strong> 'Actual' = real, 'Current' = actual ✅<br/>
+            <strong>Error:</strong> Using 'actual' for 'current' ❌<br/>
+            <strong>Correct:</strong> 'Actual' = real, 'Current' = present ✅<br/>
             <em>My actual job → My current job</em>
           </Tip>
 
           <Tip type="error">
-            <strong>Error:</strong> Usar 'library' para 'bookstore' ❌<br/>
-            <strong>Correcto:</strong> 'Library' = biblioteca, 'Bookstore' = librería ✅<br/>
+            <strong>Error:</strong> Using 'library' for 'bookstore' ❌<br/>
+            <strong>Correct:</strong> 'Library' = library (borrow books), 'Bookstore' = bookshop ✅<br/>
             <em>I buy books at the library → I buy books at the bookstore</em>
           </Tip>
 
           <Tip type="error">
-            <strong>Error:</strong> Usar 'realize' para 'carry out' ❌<br/>
-            <strong>Correcto:</strong> 'Realize' = darse cuenta, 'Carry out' = realizar ✅<br/>
+            <strong>Error:</strong> Using 'realize' for 'carry out' ❌<br/>
+            <strong>Correct:</strong> 'Realize' = become aware of, 'Carry out' = do/execute ✅<br/>
             <em>I realized the project → I carried out the project</em>
           </Tip>
 
           <Tip type="error">
-            <strong>Error:</strong> Usar 'embarrassed' para 'pregnant' ❌<br/>
-            <strong>Correcto:</strong> 'Embarrassed' = avergonzado, 'Pregnant' = embarazada ✅<br/>
+            <strong>Error:</strong> Using 'embarrassed' for 'pregnant' ❌<br/>
+            <strong>Correct:</strong> 'Embarrassed' = ashamed, 'Pregnant' = pregnant ✅<br/>
             <em>She is embarrassed → She is pregnant</em>
           </Tip>
 
           <Tip type="error">
-            <strong>Error:</strong> Usar 'exit' para 'success' ❌<br/>
-            <strong>Correcto:</strong> 'Exit' = salida, 'Success' = éxito ✅<br/>
+            <strong>Error:</strong> Using 'exit' for 'success' ❌<br/>
+            <strong>Correct:</strong> 'Exit' = way out, 'Success' = success ✅<br/>
             <em>The exit of the movie → The success of the movie</em>
           </Tip>
         </div>
       </TheorySection>
 
-      <TheorySection title="Reglas Importantes" icon="⚡">
+      <TheorySection title="Important Rules" icon="⚡">
         <div style={{ display: 'grid', gap: '1rem' }}>
           <Rule 
-            title="1. No asumas similitudes"
-            description="Las palabras que se parecen pueden significar cosas muy diferentes."
+            title="1. Don't assume similarity"
+            description="Words that look alike can mean very different things."
             examples={[
-              "Verifica siempre el significado",
-              "No traduzcas literalmente",
-              "Usa diccionarios confiables",
-              "Practica en contexto"
+              "Always verify the meaning",
+              "Don't translate literally",
+              "Use reliable dictionaries",
+              "Practise in context"
             ]}
           />
 
           <Rule 
-            title="2. Contexto es clave"
-            description="El contexto te ayuda a entender el significado correcto."
+            title="2. Context is key"
+            description="Context helps you understand the correct meaning."
             examples={[
-              "Lee oraciones completas",
-              "Considera el tema general",
-              "Busca palabras relacionadas",
-              "Piensa lógicamente"
+              "Read full sentences",
+              "Consider the general topic",
+              "Look for related words",
+              "Think logically"
             ]}
           />
 
           <Rule 
-            title="3. Aprende los pares más comunes"
-            description="Memoriza los false friends más frecuentes."
+            title="3. Learn the most common pairs"
+            description="Memorise the most frequent false friends."
             examples={[
               "Actual vs Current",
               "Library vs Bookstore",
@@ -360,7 +360,7 @@ const FalseFriendsPage = () => {
   const exercises = [
     <MultipleChoiceExercise
       key="1"
-      question="Complete: 'The _____ situation is difficult.' (presente/actual)"
+      question="Complete: 'The _____ situation is difficult.' (present/current)"
       options={[
         "actual",
         "current",
@@ -368,7 +368,7 @@ const FalseFriendsPage = () => {
         "true"
       ]}
       correctAnswer={1}
-      explanation="'Current' significa actual/presente. 'Actual' en inglés significa real/verdadero."
+      explanation="'Current' means present. 'Actual' in English means real or true."
     />,
 
     <MultipleChoiceExercise
@@ -442,17 +442,17 @@ const FalseFriendsPage = () => {
         {
           text: "'Success' in English means the same as 'suceso' in Spanish.",
           isTrue: false,
-          explanation: "Incorrecto. 'Success' significa éxito, mientras que 'suceso' significa event o occurrence."
+          explanation: "Incorrect. 'Success' means success, while 'suceso' means event or occurrence."
         },
         {
           text: "'Fabric' in English refers to cloth or textile material.",
           isTrue: true,
-          explanation: "Correcto. 'Fabric' significa tela o material textil, no fábrica (factory)."
+          explanation: "Correct. 'Fabric' means cloth or textile material, not factory (fábrica)."
         },
         {
           text: "'Sensible' in English means the same as 'sensible' in Spanish.",
           isTrue: false,
-          explanation: "Incorrecto. 'Sensible' en inglés significa practical/reasonable, no sensitive (sensible en español)."
+          explanation: "Incorrect. 'Sensible' in English means practical/reasonable, not sensitive (sensible in Spanish)."
         }
       ]}
     />,
@@ -467,7 +467,7 @@ const FalseFriendsPage = () => {
         "sense"
       ]}
       correctAnswer={1}
-      explanation="'Sensitive' significa sensible (que se ofende fácilmente). 'Sensible' significa practical/reasonable."
+      explanation="'Sensitive' means easily offended or emotionally responsive. 'Sensible' means practical or reasonable."
     />,
 
     <MultipleChoiceExercise
@@ -480,7 +480,7 @@ const FalseFriendsPage = () => {
         "failure"
       ]}
       correctAnswer={1}
-      explanation="'Exit' significa salida (way out). 'Éxito' en español es 'success' en inglés."
+      explanation="'Exit' means way out. 'Éxito' in Spanish is 'success' in English."
     />,
 
     <TrueFalseExercise
@@ -489,19 +489,19 @@ const FalseFriendsPage = () => {
         {
           text: "'Attend' in English means to be present at an event.",
           isTrue: true,
-          explanation: "Correcto. 'Attend' significa asistir a un evento, no atender (serve/help)."
+          explanation: "Correct. 'Attend' means to be present at an event, not to serve or help (atender)."
         },
         {
           text: "'Carpet' and 'carpeta' refer to the same object.",
           isTrue: false,
-          explanation: "Incorrecto. 'Carpet' es alfombra, 'carpeta' es folder en inglés."
+          explanation: "Incorrect. 'Carpet' is a floor covering; 'carpeta' is a folder in English."
         }
       ]}
     />,
 
     <MultipleChoiceExercise
       key="10"
-      question="Complete: 'I need to _____ the meeting tomorrow.' (asistir)"
+      question="Complete: 'I need to _____ the meeting tomorrow.' (attend)"
       options={[
         "assist",
         "attend",
@@ -509,14 +509,14 @@ const FalseFriendsPage = () => {
         "support"
       ]}
       correctAnswer={1}
-      explanation="'Attend' significa asistir a un evento. 'Assist' significa ayudar."
+      explanation="'Attend' means to be present at an event. 'Assist' means to help."
     />
   ];
 
   return (
     <TheoryLayout
       title="False Friends"
-      description="Domina los falsos amigos entre inglés y español. Aprende a evitar confusiones comunes y usar las palabras correctas para cada contexto."
+      description="Master false friends between English and Spanish. Learn to avoid common confusions and use the right word for each context."
       level="B1-B2-C1-C2"
       theoryContent={theoryContent}
       exercises={exercises}

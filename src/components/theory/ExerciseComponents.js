@@ -63,7 +63,7 @@ export const MultipleChoiceExercise = ({
             fontSize: '0.8rem',
             fontWeight: '500'
           }}>
-            ✅ Completado
+            ✅ Completed
           </span>
         )}
       </div>
@@ -124,7 +124,7 @@ export const MultipleChoiceExercise = ({
             color: score > 0 ? '#38a169' : '#e53e3e',
             marginBottom: '0.5rem'
           }}>
-            {score > 0 ? '🎉 ¡Correcto!' : '😔 Incorrecto'}
+            {score > 0 ? '🎉 Correct!' : '😔 Incorrect'}
           </div>
           <p style={{ margin: 0, color: '#4a5568', lineHeight: 1.5 }}>
             {explanation}
@@ -148,7 +148,7 @@ export const MultipleChoiceExercise = ({
               transition: 'all 0.2s'
             }}
           >
-            Verificar Respuesta
+            Check Answer
           </button>
         ) : (
           <button
@@ -164,7 +164,7 @@ export const MultipleChoiceExercise = ({
               transition: 'all 0.2s'
             }}
           >
-            Intentar de Nuevo
+            Try Again
           </button>
         )}
       </div>
@@ -276,7 +276,7 @@ export const FillBlanksExercise = ({
           margin: 0,
           flex: 1
         }}>
-          Completa los espacios en blanco
+          Fill in the blanks
         </h3>
         {isCompleted && (
           <span style={{
@@ -287,7 +287,7 @@ export const FillBlanksExercise = ({
             fontSize: '0.8rem',
             fontWeight: '500'
           }}>
-            ✅ Completado
+            ✅ Completed
           </span>
         )}
       </div>
@@ -318,10 +318,10 @@ export const FillBlanksExercise = ({
             color: score >= 70 ? '#38a169' : '#e53e3e',
             marginBottom: '0.5rem'
           }}>
-            {score >= 70 ? '🎉 ¡Bien hecho!' : '😔 Necesitas mejorar'}
+            {score >= 70 ? '🎉 Well done!' : '😔 Keep practicing'}
           </div>
           <p style={{ margin: 0, color: '#4a5568' }}>
-            Puntuación: {score}% ({Math.round(score / 100 * blanks.length)} de {blanks.length} correctas)
+            Score: {score}% ({Math.round(score / 100 * blanks.length)} of {blanks.length} correct)
           </p>
         </div>
       )}
@@ -342,7 +342,7 @@ export const FillBlanksExercise = ({
               transition: 'all 0.2s'
             }}
           >
-            Verificar Respuestas
+            Check Answers
           </button>
         ) : (
           <button
@@ -358,7 +358,7 @@ export const FillBlanksExercise = ({
               transition: 'all 0.2s'
             }}
           >
-            Intentar de Nuevo
+            Try Again
           </button>
         )}
       </div>
@@ -419,7 +419,7 @@ export const TrueFalseExercise = ({
           margin: 0,
           flex: 1
         }}>
-          Verdadero o Falso
+          True or False
         </h3>
         {isCompleted && (
           <span style={{
@@ -430,7 +430,7 @@ export const TrueFalseExercise = ({
             fontSize: '0.8rem',
             fontWeight: '500'
           }}>
-            ✅ Completado
+            ✅ Completed
           </span>
         )}
       </div>
@@ -469,7 +469,7 @@ export const TrueFalseExercise = ({
                     : '#4a5568',
                   fontWeight: showResult && answers[index] === true ? '600' : '400'
                 }}>
-                  Verdadero
+                  True
                 </span>
               </label>
               
@@ -487,7 +487,7 @@ export const TrueFalseExercise = ({
                     : '#4a5568',
                   fontWeight: showResult && answers[index] === false ? '600' : '400'
                 }}>
-                  Falso
+                  False
                 </span>
               </label>
               
@@ -512,7 +512,7 @@ export const TrueFalseExercise = ({
                   color: '#4a5568',
                   lineHeight: 1.4
                 }}>
-                  <strong>Explicación:</strong> {statement.explanation}
+                  <strong>Explanation:</strong> {statement.explanation}
                 </p>
               </div>
             )}
@@ -533,10 +533,10 @@ export const TrueFalseExercise = ({
             color: score >= 70 ? '#38a169' : '#e53e3e',
             marginBottom: '0.5rem'
           }}>
-            {score >= 70 ? '🎉 ¡Excelente!' : '😔 Necesitas repasar más'}
+            {score >= 70 ? '🎉 Excellent!' : '😔 Review and try again'}
           </div>
           <p style={{ margin: 0, color: '#4a5568' }}>
-            Puntuación: {score}% ({Math.round(score / 100 * statements.length)} de {statements.length} correctas)
+            Score: {score}% ({Math.round(score / 100 * statements.length)} of {statements.length} correct)
           </p>
         </div>
       )}
@@ -557,7 +557,7 @@ export const TrueFalseExercise = ({
               transition: 'all 0.2s'
             }}
           >
-            Verificar Respuestas
+            Check Answers
           </button>
         ) : (
           <button
@@ -573,7 +573,7 @@ export const TrueFalseExercise = ({
               transition: 'all 0.2s'
             }}
           >
-            Intentar de Nuevo
+            Try Again
           </button>
         )}
       </div>

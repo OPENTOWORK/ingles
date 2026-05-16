@@ -26,7 +26,6 @@ export default function SiteMascot({
       src={sitePublicPath(`/mascot/${v}.png`)}
       alt={alt ?? 'Dralo, mascota de English Practice'}
       width={w}
-      height={w}
       draggable={false}
       loading={priority ? 'eager' : 'lazy'}
       fetchPriority={priority ? 'high' : undefined}
@@ -36,6 +35,7 @@ export default function SiteMascot({
         height: 'auto',
         maxWidth: '100%',
         verticalAlign: 'middle',
+        objectFit: 'contain',
         ...style,
       }}
     />

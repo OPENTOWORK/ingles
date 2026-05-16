@@ -413,7 +413,7 @@ const PresentTensesPage = () => {
     <TheoryLayout
       title="Present Tenses"
       description="Master the three English present tenses: Simple, Continuous, and Perfect. Learn when to use each one and avoid common mistakes."
-      level="A1-A2-B1-B2-C1-C2"
+      level="A2-B1-B2-C1-C2"
       theoryContent={theoryContent}
       exercises={exercises}
       prerequisites={["Verb to be", "Pronouns", "Basic vocabulary"]}

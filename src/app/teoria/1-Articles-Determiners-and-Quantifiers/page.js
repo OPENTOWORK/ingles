@@ -360,7 +360,7 @@ const ArticlesPage = () => {
     <TheoryLayout
       title="Articles, Determiners and Quantifiers"
       description="Learn to use articles (a, an, the), determiners (this, that, my, your) and quantifiers (some, any, many, much) correctly in English."
-      level="A1-A2-B1-B2-C1-C2"
+      level="A2-B1-B2-C1-C2"
       theoryContent={theoryContent}
       exercises={exercises}
       prerequisites={["Basic understanding of nouns"]}

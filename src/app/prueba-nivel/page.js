@@ -301,16 +301,24 @@ export default function PlacementTestPage() {
                 {renderQuestion(current)}
               </div>
 
-              {submitted && answers[current.id] !== current.answer && (
-                <p className="mt-4 text-sm text-red-600">Correcta: <strong>{String(current.answer)}</strong> {current.explanation ? `— ${current.explanation}` : ''}</p>
-              )}
+              {submitted &&
+                String(answers[current.id] ?? '').trim() !== String(current.answer ?? '').trim() && (
+                  <p className="mt-4 text-sm text-red-600">
+                    Correcta: <strong>{String(current.answer)}</strong>{' '}
+                    {current.explanation ? `— ${current.explanation}` : ''}
+                  </p>
+                )}
 
               {/* Navegación */}
               <div className="mt-6 flex items-center justify-between">
                 <button type="button" onClick={() => goto(index - 1)} disabled={index === 0} className="btn disabled:opacity-40">Anterior</button>
                 <div className="flex items-center gap-2">
                   {/* (Eliminado) Saltar a sin responder */}
-                  <button type="button" onClick={() => goto(index + 1)} disabled={index === total - 1} className="btn disabled:opacity-40">Siguiente</button>
+                  {index === total - 1 && !submitted ? (
+                    <button type="button" onClick={() => setConfirmOpen(true)} className="btn btn-primary">Enviar</button>
+                  ) : (
+                    <button type="button" onClick={() => goto(index + 1)} disabled={index === total - 1 || submitted} className="btn disabled:opacity-40">Siguiente</button>
+                  )}
                 </div>
               </div>
             </div>
@@ -318,17 +326,37 @@ export default function PlacementTestPage() {
             {/* Rejilla de navegación rápida */}
             <div className="rounded-3xl border bg-white p-4 shadow-sm">
               <div className="flex flex-wrap gap-2">
-                {questions.map((q, i) => (
+                {questions.map((q, i) => {
+                  const isActive = i === index;
+                  const userAns = String(answers[q.id] ?? '').trim();
+                  const correctAns = String(q.answer ?? '').trim();
+                  const isCorrect = userAns === correctAns;
+
+                  let bubbleModifier = '';
+                  if (submitted) {
+                    if (isCorrect) bubbleModifier = 'bubble--correct';
+                    else if (userAns) bubbleModifier = 'bubble--wrong';
+                    else bubbleModifier = 'bubble--skipped';
+                  } else if (answers[q.id]) {
+                    bubbleModifier = 'bubble--done';
+                  }
+
+                  const activeModifier = isActive
+                    ? (submitted ? 'bubble--active-ring' : 'bubble--active')
+                    : '';
+
+                  return (
                   <button
                     key={q.id}
                     type="button"
                     onClick={() => setIndex(i)}
-                    className={`bubble ${i === index ? 'bubble--active' : answers[q.id] ? 'bubble--done' : ''}`}
+                    className={`bubble ${bubbleModifier} ${activeModifier}`.trim()}
                     title={`Ir a la pregunta ${i + 1}`}
                   >
                     {i + 1}
                   </button>
-                ))}
+                  );
+                })}
               </div>
             </div>
 
@@ -429,9 +457,13 @@ const styleGlobal = (
   .opt.correct{border-color:#86efac;background:#f0fdf4}
   .opt.wrong{border-color:#fecaca;background:#fef2f2}
   .opt.selected{border-color:#93c5fd;background:#eff6ff;box-shadow:inset 0 0 0 3px rgba(59,130,246,.25)}
-  .bubble{width:2.25rem;height:2.25rem;border-radius:9999px;border:1px solid #e2e8f0;background:#fff;display:grid;place-items:center}
+  .bubble{width:2.25rem;height:2.25rem;border-radius:9999px;border:1px solid #e2e8f0;background:#fff;display:grid;place-items:center;font-weight:600;font-size:.8rem}
   .bubble--active{background:#2563eb;border-color:#2563eb;color:#fff}
-  .bubble--done{background:#f0fdf4;border-color:#86efac}
+  .bubble--done{background:#f0fdf4;border-color:#86efac;color:#14532d}
+  .bubble--correct{background:#dcfce7;border-color:#22c55e;color:#14532d}
+  .bubble--wrong{background:#fee2e2;border-color:#ef4444;color:#991b1b}
+  .bubble--skipped{background:#f1f5f9;border-color:#cbd5e1;color:#64748b}
+  .bubble--active-ring{box-shadow:0 0 0 3px #2563eb,0 0 0 5px rgba(37,99,235,.25)}
   input[type="text"]{padding:.5rem .75rem;border:1px solid #e2e8f0;border-radius:.6rem;outline:none}
   input[type="text"]:focus{box-shadow:0 0 0 4px rgba(37,99,235,.15);border-color:#93c5fd}
   `}</style>

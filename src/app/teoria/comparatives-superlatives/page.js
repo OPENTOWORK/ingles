@@ -18,34 +18,34 @@ import {
 const ComparativesSuperlativesPage = () => {
   const theoryContent = (
     <div>
-      <TheorySection title="¿Qué son los Comparatives y Superlatives?" icon="📊">
+      <TheorySection title="What Are Comparatives and Superlatives?" icon="📊">
         <p style={{ fontSize: '1.1rem', lineHeight: 1.6, color: '#4a5568', marginBottom: '1rem' }}>
-          Los <strong>comparatives</strong> (comparativos) y <strong>superlatives</strong> (superlativos) se usan para comparar personas, cosas o situaciones. 
-          Los comparativos se usan para comparar dos elementos, mientras que los superlativos se usan para comparar tres o más elementos.
+          <strong>Comparatives</strong> and <strong>superlatives</strong> are used to compare people, things, or situations. 
+          Comparatives compare two items; superlatives compare three or more.
         </p>
         
         <QuickReference items={[
-          "Comparativos: comparan dos cosas",
-          "Superlativos: comparan tres o más cosas",
-          "Adjetivos cortos: -er, -est",
-          "Adjetivos largos: more, most",
-          "Formas irregulares especiales"
+          "Comparatives: compare two things",
+          "Superlatives: compare three or more things",
+          "Short adjectives: -er, -est",
+          "Long adjectives: more, most",
+          "Special irregular forms"
         ]} />
       </TheorySection>
 
-      <TheorySection title="Formación de Comparativos y Superlativos" icon="🔧">
+      <TheorySection title="Forming Comparatives and Superlatives" icon="🔧">
         <p style={{ fontSize: '1rem', lineHeight: 1.6, color: '#4a5568', marginBottom: '1rem' }}>
-          La formación depende de la longitud del adjetivo y algunas reglas especiales.
+          Formation depends on adjective length and a few special rules.
         </p>
 
         <GrammarTable
-          caption="Reglas de Formación"
-          headers={["Tipo de Adjetivo", "Comparativo", "Superlativo", "Ejemplo"]}
+          caption="Formation Rules"
+          headers={["Adjective Type", "Comparative", "Superlative", "Example"]}
           rows={[
-            ["Adjetivos cortos (1-2 sílabas)", "adjetivo + -er", "adjetivo + -est", "tall → taller → tallest"],
-            ["Adjetivos largos (3+ sílabas)", "more + adjetivo", "most + adjetivo", "beautiful → more beautiful → most beautiful"],
-            ["Adjetivos irregulares", "forma especial", "forma especial", "good → better → best"],
-            ["Adjetivos de 2 sílabas", "ambas reglas", "ambas reglas", "happy → happier → happiest"]
+            ["Short (1–2 syllables)", "adjective + -er", "adjective + -est", "tall → taller → tallest"],
+            ["Long (3+ syllables)", "more + adjective", "most + adjective", "beautiful → more beautiful → most beautiful"],
+            ["Irregular", "special form", "special form", "good → better → best"],
+            ["Two-syllable", "both rules", "both rules", "happy → happier → happiest"]
           ]}
         />
 
@@ -53,43 +53,43 @@ const ComparativesSuperlativesPage = () => {
           <Example 
             spanish="Este coche es más rápido que ese"
             english="This car is faster than that one"
-            translation="Este coche es más rápido que ese"
+            translation="This car is faster than that one"
           />
           <Example 
             spanish="Esta es la película más interesante"
             english="This is the most interesting movie"
-            translation="Esta es la película más interesante"
+            translation="This is the most interesting movie"
           />
           <Example 
             spanish="Ella es la más alta de su familia"
             english="She is the tallest in her family"
-            translation="Ella es la más alta de su familia"
+            translation="She is the tallest in her family"
           />
         </div>
 
         <Rule 
-          title="Reglas de Escritura"
-          description="Para adjetivos cortos:"
+          title="Spelling Rules"
+          description="For short adjectives:"
           examples={[
-            "Doble consonante final: big → bigger → biggest",
-            "Cambio de 'y' a 'i': happy → happier → happiest",
-            "Agregar 'e' si termina en 'e': nice → nicer → nicest"
+            "Double final consonant: big → bigger → biggest",
+            "Change 'y' to 'i': happy → happier → happiest",
+            "Add 'e' if ending in 'e': nice → nicer → nicest"
           ]}
         />
 
         <Tip type="info">
-          <strong>Consejo:</strong> Los adjetivos de 2 sílabas pueden seguir ambas reglas. Generalmente, los que terminan en -y, -ow, -er, -le usan -er/-est.
+          <strong>Tip:</strong> Two-syllable adjectives can follow either rule. Those ending in -y, -ow, -er, -le usually take -er/-est.
         </Tip>
       </TheorySection>
 
-      <TheorySection title="Adjetivos Irregulares" icon="⚠️">
+      <TheorySection title="Irregular Adjectives" icon="⚠️">
         <p style={{ fontSize: '1rem', lineHeight: 1.6, color: '#4a5568', marginBottom: '1rem' }}>
-          Algunos adjetivos tienen formas irregulares que debes memorizar.
+          Some adjectives have irregular forms you need to memorise.
         </p>
 
         <GrammarTable
-          caption="Adjetivos Irregulares"
-          headers={["Adjetivo", "Comparativo", "Superlativo", "Ejemplo"]}
+          caption="Irregular Adjectives"
+          headers={["Adjective", "Comparative", "Superlative", "Example"]}
           rows={[
             ["good", "better", "best", "This is better than that"],
             ["bad", "worse", "worst", "This is the worst movie"],
@@ -105,38 +105,38 @@ const ComparativesSuperlativesPage = () => {
           <Example 
             spanish="Esta es una mejor solución"
             english="This is a better solution"
-            translation="Esta es una mejor solución"
+            translation="This is a better solution"
           />
           <Example 
             spanish="Esta es la peor película que he visto"
             english="This is the worst movie I've ever seen"
-            translation="Esta es la peor película que he visto"
+            translation="This is the worst movie I've ever seen"
           />
           <Example 
             spanish="Tengo más libros que tú"
             english="I have more books than you"
-            translation="Tengo más libros que tú"
+            translation="I have more books than you"
           />
         </div>
 
         <Tip type="warning">
-          <strong>Nota especial:</strong> 'Farther' se usa para distancia física, 'further' para distancia abstracta. 'Elder' se usa solo para familia (my elder brother).
+          <strong>Special note:</strong> 'Farther' is used for physical distance, 'further' for abstract distance. 'Elder' is used only for family (my elder brother).
         </Tip>
       </TheorySection>
 
-      <TheorySection title="Estructuras de Comparación" icon="🔗">
+      <TheorySection title="Comparison Structures" icon="🔗">
         <p style={{ fontSize: '1rem', lineHeight: 1.6, color: '#4a5568', marginBottom: '1rem' }}>
-          Diferentes formas de estructurar las comparaciones en inglés.
+          Different ways to structure comparisons in English.
         </p>
 
         <GrammarTable
-          caption="Estructuras de Comparación"
-          headers={["Tipo", "Estructura", "Ejemplo"]}
+          caption="Comparison Structures"
+          headers={["Type", "Structure", "Example"]}
           rows={[
-            ["Comparativo básico", "Sujeto + be + comparativo + than + objeto", "This car is faster than that one"],
-            ["Superlativo básico", "Sujeto + be + the + superlativo + (in/of + grupo)", "This is the tallest building in the city"],
-            ["Igualdad", "Sujeto + be + as + adjetivo + as + objeto", "This book is as interesting as that one"],
-            ["Diferencia", "Sujeto + be + not as + adjetivo + as + objeto", "This is not as expensive as that"]
+            ["Basic comparative", "Subject + be + comparative + than + object", "This car is faster than that one"],
+            ["Basic superlative", "Subject + be + the + superlative + (in/of + group)", "This is the tallest building in the city"],
+            ["Equality", "Subject + be + as + adjective + as + object", "This book is as interesting as that one"],
+            ["Difference", "Subject + be + not as + adjective + as + object", "This is not as expensive as that"]
           ]}
         />
 
@@ -144,52 +144,52 @@ const ComparativesSuperlativesPage = () => {
           <Example 
             spanish="Este coche es más rápido que ese"
             english="This car is faster than that one"
-            translation="Este coche es más rápido que ese"
+            translation="This car is faster than that one"
           />
           <Example 
             spanish="Este es el edificio más alto de la ciudad"
             english="This is the tallest building in the city"
-            translation="Este es el edificio más alto de la ciudad"
+            translation="This is the tallest building in the city"
           />
           <Example 
             spanish="Este libro es tan interesante como ese"
             english="This book is as interesting as that one"
-            translation="Este libro es tan interesante como ese"
+            translation="This book is as interesting as that one"
           />
         </div>
 
         <Rule 
-          title="Consejos para Estructuras"
-          description="Para usar las estructuras correctamente:"
+          title="Structure Tips"
+          description="To use structures correctly:"
           examples={[
-            "Usa 'than' con comparativos, no con superlativos",
-            "Usa 'the' con superlativos (excepto predicativos)",
-            "Usa 'as...as' para igualdad",
-            "Usa 'not as...as' para diferencia"
+            "Use 'than' with comparatives, not with superlatives",
+            "Use 'the' with superlatives (except predicatives)",
+            "Use 'as...as' for equality",
+            "Use 'not as...as' for difference"
           ]}
         />
 
         <Tip type="success">
-          <strong>Consejo:</strong> Las estructuras de comparación hacen que tus descripciones sean más precisas y expresivas.
+          <strong>Tip:</strong> Comparison structures make your descriptions more precise and expressive.
         </Tip>
       </TheorySection>
 
-      <TheorySection title="Modificadores de Grado" icon="📈">
+      <TheorySection title="Degree Modifiers" icon="📈">
         <p style={{ fontSize: '1rem', lineHeight: 1.6, color: '#4a5568', marginBottom: '1rem' }}>
-          Palabras que modifican el grado de comparación para enfatizar diferencias.
+          Words that modify the degree of comparison to emphasise differences.
         </p>
 
         <GrammarTable
-          caption="Modificadores de Grado"
-          headers={["Modificador", "Uso", "Ejemplo"]}
+          caption="Degree Modifiers"
+          headers={["Modifier", "Use", "Example"]}
           rows={[
-            ["much", "enfatizar diferencia grande", "This is much better than that"],
-            ["far", "enfatizar diferencia grande", "This is far more expensive"],
-            ["a lot", "enfatizar diferencia grande", "This is a lot cheaper"],
-            ["a little", "diferencia pequeña", "This is a little more difficult"],
-            ["a bit", "diferencia pequeña", "This is a bit longer"],
-            ["slightly", "diferencia pequeña", "This is slightly warmer"],
-            ["no", "negación", "This is no better than that"]
+            ["much", "emphasise a large difference", "This is much better than that"],
+            ["far", "emphasise a large difference", "This is far more expensive"],
+            ["a lot", "emphasise a large difference", "This is a lot cheaper"],
+            ["a little", "small difference", "This is a little more difficult"],
+            ["a bit", "small difference", "This is a bit longer"],
+            ["slightly", "small difference", "This is slightly warmer"],
+            ["no", "negation", "This is no better than that"]
           ]}
         />
 
@@ -197,38 +197,38 @@ const ComparativesSuperlativesPage = () => {
           <Example 
             spanish="Esto es mucho mejor que eso"
             english="This is much better than that"
-            translation="Esto es mucho mejor que eso"
+            translation="This is much better than that"
           />
           <Example 
             spanish="Esto es un poco más difícil"
             english="This is a little more difficult"
-            translation="Esto es un poco más difícil"
+            translation="This is a little more difficult"
           />
           <Example 
             spanish="Esto es ligeramente más cálido"
             english="This is slightly warmer"
-            translation="Esto es ligeramente más cálido"
+            translation="This is slightly warmer"
           />
         </div>
 
         <Tip type="info">
-          <strong>Consejo:</strong> Los modificadores de grado ayudan a expresar matices en las comparaciones y hacer el lenguaje más natural.
+          <strong>Tip:</strong> Degree modifiers help express nuance in comparisons and make language more natural.
         </Tip>
       </TheorySection>
 
-      <TheorySection title="Comparativos Progresivos" icon="🔄">
+      <TheorySection title="Double Comparatives" icon="🔄">
         <p style={{ fontSize: '1rem', lineHeight: 1.6, color: '#4a5568', marginBottom: '1rem' }}>
-          Estructuras especiales para mostrar progresión en las comparaciones.
+          Special structures to show progression in comparisons.
         </p>
 
         <GrammarTable
-          caption="Comparativos Progresivos"
-          headers={["Estructura", "Uso", "Ejemplo"]}
+          caption="Double Comparatives"
+          headers={["Structure", "Use", "Example"]}
           rows={[
-            ["The more..., the more...", "progresión positiva", "The more you study, the more you learn"],
-            ["The better..., the better...", "progresión positiva", "The better the weather, the better the trip"],
-            ["The sooner..., the better...", "progresión temporal", "The sooner we start, the better it will be"],
-            ["The less..., the less...", "progresión negativa", "The less you worry, the less stress you have"]
+            ["The more..., the more...", "positive progression", "The more you study, the more you learn"],
+            ["The better..., the better...", "positive progression", "The better the weather, the better the trip"],
+            ["The sooner..., the better...", "time progression", "The sooner we start, the better it will be"],
+            ["The less..., the less...", "negative progression", "The less you worry, the less stress you have"]
           ]}
         />
 
@@ -236,97 +236,97 @@ const ComparativesSuperlativesPage = () => {
           <Example 
             spanish="Mientras más estudias, más aprendes"
             english="The more you study, the more you learn"
-            translation="Mientras más estudias, más aprendes"
+            translation="The more you study, the more you learn"
           />
           <Example 
             spanish="Mientras más trabajes, más exitoso te vuelves"
             english="The harder you work, the more successful you become"
-            translation="Mientras más trabajes, más exitoso te vuelves"
+            translation="The harder you work, the more successful you become"
           />
           <Example 
             spanish="Mientras antes empecemos, mejor"
             english="The sooner we start, the better"
-            translation="Mientras antes empecemos, mejor"
+            translation="The sooner we start, the better"
           />
         </div>
 
         <Rule 
-          title="Uso de Comparativos Progresivos"
-          description="Para usar comparativos progresivos:"
+          title="Using Double Comparatives"
+          description="To use double comparatives:"
           examples={[
-            "Usa 'the' antes de cada comparativo",
-            "La estructura es: The + comparativo + ..., the + comparativo + ...",
-            "Expresa relaciones de causa y efecto",
-            "Es útil para dar consejos y expresar resultados"
+            "Use 'the' before each comparative",
+            "Structure: The + comparative + ..., the + comparative + ...",
+            "Express cause-and-effect relationships",
+            "Useful for giving advice and expressing results"
           ]}
         />
 
         <Tip type="success">
-          <strong>Consejo:</strong> Los comparativos progresivos son muy útiles para expresar relaciones causales y dar consejos efectivos.
+          <strong>Tip:</strong> Double comparatives are very useful for expressing causal relationships and giving effective advice.
         </Tip>
       </TheorySection>
 
-      <TheorySection title="Errores Comunes" icon="⚠️">
+      <TheorySection title="Common Mistakes" icon="⚠️">
         <div style={{ display: 'grid', gap: '1rem' }}>
           <Tip type="error">
-            <strong>Error:</strong> Usar 'more' con adjetivos cortos ❌<br/>
-            <strong>Correcto:</strong> Usar -er con adjetivos cortos ✅<br/>
+            <strong>Error:</strong> Using 'more' with short adjectives ❌<br/>
+            <strong>Correct:</strong> Use -er with short adjectives ✅<br/>
             <em>This is more big than that. → This is bigger than that.</em>
           </Tip>
 
           <Tip type="error">
-            <strong>Error:</strong> Olvidar 'the' con superlativos ❌<br/>
-            <strong>Correcto:</strong> Usar 'the' con superlativos ✅<br/>
+            <strong>Error:</strong> Forgetting 'the' with superlatives ❌<br/>
+            <strong>Correct:</strong> Use 'the' with superlatives ✅<br/>
             <em>This is most beautiful flower. → This is the most beautiful flower.</em>
           </Tip>
 
           <Tip type="error">
-            <strong>Error:</strong> Usar 'than' con superlativos ❌<br/>
-            <strong>Correcto:</strong> Usar 'of' o 'in' con superlativos ✅<br/>
+            <strong>Error:</strong> Using 'than' with superlatives ❌<br/>
+            <strong>Correct:</strong> Use 'of' or 'in' with superlatives ✅<br/>
             <em>This is the tallest than all buildings. → This is the tallest of all buildings.</em>
           </Tip>
 
           <Tip type="error">
-            <strong>Error:</strong> Doble comparación ❌<br/>
-            <strong>Correcto:</strong> Una sola forma de comparación ✅<br/>
+            <strong>Error:</strong> Double comparison ❌<br/>
+            <strong>Correct:</strong> One comparison form only ✅<br/>
             <em>This is more better than that. → This is better than that.</em>
           </Tip>
 
           <Tip type="error">
-            <strong>Error:</strong> Formas irregulares incorrectas ❌<br/>
-            <strong>Correcto:</strong> Memorizar formas irregulares ✅<br/>
+            <strong>Error:</strong> Incorrect irregular forms ❌<br/>
+            <strong>Correct:</strong> Memorise irregular forms ✅<br/>
             <em>This is the goodest solution. → This is the best solution.</em>
           </Tip>
         </div>
       </TheorySection>
 
-      <TheorySection title="Reglas Importantes" icon="⚡">
+      <TheorySection title="Important Rules" icon="⚡">
         <div style={{ display: 'grid', gap: '1rem' }}>
           <Rule 
-            title="1. Longitud del adjetivo"
-            description="La longitud determina la forma de comparación."
+            title="1. Adjective length"
+            description="Length determines the comparison form."
             examples={[
-              "Adjetivos cortos (1-2 sílabas): usar -er, -est",
-              "Adjetivos largos (3+ sílabas): usar more, most",
-              "Adjetivos de 2 sílabas: pueden usar ambas reglas",
-              "Verificar la pronunciación para determinar la longitud"
+              "Short adjectives (1–2 syllables): use -er, -est",
+              "Long adjectives (3+ syllables): use more, most",
+              "Two-syllable adjectives: can use either rule",
+              "Check pronunciation to determine length"
             ]}
           />
 
           <Rule 
-            title="2. Posición y artículos"
-            description="Usa los artículos y preposiciones correctas."
+            title="2. Position and articles"
+            description="Use the correct articles and prepositions."
             examples={[
-              "Superlativos necesitan 'the' antes del adjetivo",
-              "Usa 'than' con comparativos, no con superlativos",
-              "Usa 'in' para lugares, 'of' para grupos",
-              "No uses 'the' con superlativos predicativos"
+              "Superlatives need 'the' before the adjective",
+              "Use 'than' with comparatives, not superlatives",
+              "Use 'in' for places, 'of' for groups",
+              "Don't use 'the' with predicative superlatives"
             ]}
           />
 
           <Rule 
-            title="3. Formas irregulares"
-            description="Memoriza las formas irregulares más comunes."
+            title="3. Irregular forms"
+            description="Memorise the most common irregular forms."
             examples={[
               "good → better → best",
               "bad → worse → worst",
@@ -351,7 +351,7 @@ const ComparativesSuperlativesPage = () => {
         "more good"
       ]}
       correctAnswer={2}
-      explanation="'Best' es la forma superlativa irregular de 'good'."
+      explanation="'Best' is the irregular superlative form of 'good'."
     />,
 
     <MultipleChoiceExercise
@@ -425,17 +425,17 @@ const ComparativesSuperlativesPage = () => {
         {
           text: "'Less' is the opposite of 'more' in comparisons.",
           isTrue: true,
-          explanation: "Correcto. 'Less' se usa para comparativos negativos: 'less expensive' = 'cheaper'."
+          explanation: "Correct. 'Less' is used for negative comparatives: 'less expensive' = 'cheaper'."
         },
         {
           text: "We can use 'much' to emphasize comparatives.",
           isTrue: true,
-          explanation: "Correcto. 'Much better', 'much more expensive', 'much taller' enfatizan la diferencia."
+          explanation: "Correct. 'Much better', 'much more expensive', 'much taller' emphasise the difference."
         },
         {
           text: "All two-syllable adjectives use 'more' and 'most'.",
           isTrue: false,
-          explanation: "Incorrecto. Algunos adjetivos de dos sílabas pueden usar -er/-est: 'simpler', 'cleverer'."
+          explanation: "Incorrect. Some two-syllable adjectives can use -er/-est: 'simpler', 'cleverer'."
         }
       ]}
     />,
@@ -450,7 +450,7 @@ const ComparativesSuperlativesPage = () => {
         "more kind"
       ]}
       correctAnswer={0}
-      explanation="'Kind' es un adjetivo corto, usa -est para superlativo: 'the kindest'."
+      explanation="'Kind' is a short adjective; use -est for superlative: 'the kindest'."
     />,
 
     <MultipleChoiceExercise
@@ -463,7 +463,7 @@ const ComparativesSuperlativesPage = () => {
         "most hot"
       ]}
       correctAnswer={1}
-      explanation="'Hot' duplica la consonante final y añade -er para comparativo: 'hotter'."
+      explanation="'Hot' doubles the final consonant and adds -er for comparative: 'hotter'."
     />,
 
     <TrueFalseExercise
@@ -472,12 +472,12 @@ const ComparativesSuperlativesPage = () => {
         {
           text: "'Elder' and 'older' can both be used for age.",
           isTrue: true,
-          explanation: "Correcto. 'Older' es más común, pero 'elder' se usa especialmente para familia: 'my elder brother'."
+          explanation: "Correct. 'Older' is more common, but 'elder' is used especially for family: 'my elder brother'."
         },
         {
           text: "We need 'than' after superlatives.",
           isTrue: false,
-          explanation: "Incorrecto. Los superlativos usan 'of' o 'in', no 'than': 'the tallest in the class'."
+          explanation: "Incorrect. Superlatives use 'of' or 'in', not 'than': 'the tallest in the class'."
         }
       ]}
     />,
@@ -492,14 +492,14 @@ const ComparativesSuperlativesPage = () => {
         "more... than"
       ]}
       correctAnswer={1}
-      explanation="Para igualdad usamos 'as... as': 'This exercise is as difficult as the previous one'."
+      explanation="For equality we use 'as... as': 'This exercise is as difficult as the previous one'."
     />
   ];
 
   return (
     <TheoryLayout
       title="Comparatives and Superlatives"
-      description="Domina los comparativos y superlativos en inglés. Aprende a comparar personas, cosas y situaciones usando -er, -est, more, most y estructuras especiales."
+      description="Master comparatives and superlatives in English. Learn to compare people, things, and situations using -er, -est, more, most, and special structures."
       level="A2-B1-B2-C1-C2"
       theoryContent={theoryContent}
       exercises={exercises}

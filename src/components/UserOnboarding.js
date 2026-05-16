@@ -7,7 +7,7 @@ const UserOnboarding = ({ userId, onComplete }) => {
   const [currentStep, setCurrentStep] = useState(0);
   const [userData, setUserData] = useState({
     name: '',
-    currentLevel: 'A1',
+    currentLevel: 'A2',
     learningGoals: [],
     availableTime: 30,
     preferredSkills: [],
@@ -68,7 +68,6 @@ const UserOnboarding = ({ userId, onComplete }) => {
   ];
 
   const levels = [
-    { id: 'A1', name: 'Beginner', description: 'Basic everyday expressions and simple phrases' },
     { id: 'A2', name: 'Elementary', description: 'Simple conversations about familiar topics' },
     { id: 'B1', name: 'Intermediate', description: 'Clear speech on familiar matters regularly encountered' },
     { id: 'B2', name: 'Upper Intermediate', description: 'Complex text on concrete and abstract topics' },
@@ -133,7 +132,7 @@ const UserOnboarding = ({ userId, onComplete }) => {
       // Try to save user preferences to database
       const preferencesData = {
         user_id: userId,
-        estilo_aprendizaje: userData.currentLevel || 'A1',
+        estilo_aprendizaje: userData.currentLevel || 'A2',
         notificaciones: true,
         recordatorios: true
       };
@@ -159,7 +158,7 @@ const UserOnboarding = ({ userId, onComplete }) => {
       try {
         const preferencesData = {
           user_id: userId,
-          estilo_aprendizaje: userData.currentLevel || 'A1',
+          estilo_aprendizaje: userData.currentLevel || 'A2',
           notificaciones: true,
           recordatorios: true,
           updated_at: new Date().toISOString()

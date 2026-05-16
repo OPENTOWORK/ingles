@@ -444,7 +444,7 @@ const VerbToBePage = () => {
     <TheoryLayout
       title="Verb to Be"
       description="Master the most important verb in English: to be. Learn its forms, uses, contractions, and how to form questions and negatives."
-      level="A1-A2-B1-B2-C1-C2"
+      level="A2-B1-B2-C1-C2"
       theoryContent={theoryContent}
       exercises={exercises}
       prerequisites={["Basic understanding of personal pronouns"]}

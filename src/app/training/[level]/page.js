@@ -21,10 +21,14 @@ export default function LevelPage({ params }) {
   const { userRole, session } = useUserRole();
 
   useEffect(() => {
+    if (level?.toLowerCase() === 'a1') {
+      router.replace('/training/a2');
+      return;
+    }
     if (!session) {
       router.push('/login');
     }
-  }, [session, router]);
+  }, [session, router, level]);
 
   if (!session) {
     return <p style={{ textAlign: 'center', marginTop: '2rem' }}>Cargando...</p>;

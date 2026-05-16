@@ -1,6 +1,7 @@
 'use client';
 import Link from 'next/link';
 import { useUserRole } from '@/context/UserRoleContext';
+import PageHero from '@/components/PageHero';
 
 // ====== Datos ======
 const SECTIONS = {
@@ -50,12 +51,29 @@ export default function B2Page() {
   const isAdmin = roleName === 'admin' || roleName === 'administrador';
   const isStudent = !isAdmin;
 
+  const topicCount = Object.values(SECTIONS).reduce((n, topics) => n + topics.length, 0);
+
   return (
     <main className="shell b2-page">
-      <header className="header">
-        <h1>B2 Tips and Exams</h1>
-        <p>This is an upper-intermediate level qualification that proves you can use everyday written and spoken English for work or study.</p>
-      </header>
+      <PageHero
+        breadcrumb={
+          <nav className="breadcrumb" aria-label="Breadcrumb">
+            <Link href="/niveles">Levels</Link>
+            <span aria-hidden="true">/</span>
+            <span>B2</span>
+          </nav>
+        }
+        eyebrow="Upper-Intermediate · B2 First"
+        title="Tips and Exams"
+        description="This is an upper-intermediate level qualification that proves you can use everyday written and spoken English for work or study."
+        mascotVariant={4}
+        mascotWidth={146}
+        accent="ocean"
+        stats={[
+          { value: String(topicCount), label: 'Practice topics' },
+          { value: String(EXAM_LINKS.length), label: 'Exam modes' },
+        ]}
+      />
 
       {/* Contenido */}
       <div className="sections">
@@ -132,9 +150,10 @@ function GlobalStyles() {
         min-height: 100vh;
       }
       .shell{min-height:100svh;max-width:1100px;margin:0 auto;padding:32px 20px}
-      .header h1{font-size:44px;margin:0 0 6px;color:var(--text)}
-      .header p{margin:0;color:#666;max-width:700px;margin:0 auto;text-align:center;font-size:1.1rem}
-      .sections{display:flex;flex-direction:column;gap:28px}
+      .breadcrumb{display:flex;align-items:center;gap:0.5rem;font-size:0.875rem;color:#64748b}
+      .breadcrumb a{color:#0ea5e9;text-decoration:none;font-weight:600}
+      .breadcrumb a:hover{text-decoration:underline}
+      .sections{display:flex;flex-direction:column;gap:28px;margin-top:0.5rem}
       .section{padding:6px}
       .section__head{display:flex;align-items:center;gap:8px;margin-bottom:10px;flex-wrap:wrap}
       .section__head h2{margin:0;font-size:22px;color:var(--text)}

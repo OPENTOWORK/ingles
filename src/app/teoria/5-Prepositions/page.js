@@ -18,38 +18,38 @@ import {
 const PrepositionsPage = () => {
   const theoryContent = (
     <div>
-      <TheorySection title="¿Qué son las Prepositions?" icon="📍">
+      <TheorySection title="What are Prepositions?" icon="📍">
         <p style={{ fontSize: '1.1rem', lineHeight: 1.6, color: '#4a5568', marginBottom: '1rem' }}>
-          Las <strong>prepositions</strong> (preposiciones) son palabras que muestran la relación entre un sustantivo o pronombre 
-          y otras palabras en la oración. Indican ubicación, tiempo, dirección, causa y otras relaciones.
+          <strong>Prepositions</strong> are words that show the relationship between a noun or pronoun 
+          and other words in the sentence. They indicate location, time, direction, cause, and other relationships.
         </p>
         
         <QuickReference items={[
-          "Lugar: in, on, at, under, over, between",
-          "Tiempo: in, on, at, for, since, during",
-          "Dirección: to, from, into, out of, through",
-          "Causa: because of, due to, thanks to",
-          "Siempre van seguidas de sustantivos/pronombres"
+          "Place: in, on, at, under, over, between",
+          "Time: in, on, at, for, since, during",
+          "Direction: to, from, into, out of, through",
+          "Cause: because of, due to, thanks to",
+          "They are always followed by nouns/pronouns"
         ]} />
       </TheorySection>
 
-      <TheorySection title="Prepositions of Place (Preposiciones de Lugar)" icon="🏠">
+      <TheorySection title="Prepositions of Place" icon="🏠">
         <p style={{ fontSize: '1rem', lineHeight: 1.6, color: '#4a5568', marginBottom: '1rem' }}>
-          Indican dónde está algo o alguien en relación con otro objeto o lugar.
+          They show where something or someone is in relation to another object or place.
         </p>
 
         <GrammarTable
-          caption="Preposiciones de Lugar Principales"
-          headers={["Preposición", "Uso", "Ejemplo", "Significado"]}
+          caption="Main Prepositions of Place"
+          headers={["Preposition", "Use", "Example", "Meaning"]}
           rows={[
-            ["in", "Dentro de espacios cerrados", "in the room", "en la habitación"],
-            ["on", "Sobre superficies", "on the table", "sobre la mesa"],
-            ["at", "Punto específico", "at the station", "en la estación"],
-            ["under", "Debajo de", "under the bed", "debajo de la cama"],
-            ["over", "Sobre (sin tocar)", "over the bridge", "sobre el puente"],
-            ["between", "Entre dos cosas", "between the cars", "entre los coches"],
-            ["next to", "Al lado de", "next to the park", "al lado del parque"],
-            ["behind", "Detrás de", "behind the house", "detrás de la casa"]
+            ["in", "Inside enclosed spaces", "in the room", "in the room"],
+            ["on", "On surfaces", "on the table", "on the table"],
+            ["at", "Specific point", "at the station", "at the station"],
+            ["under", "Below", "under the bed", "under the bed"],
+            ["over", "Above (without touching)", "over the bridge", "over the bridge"],
+            ["between", "Between two things", "between the cars", "between the cars"],
+            ["next to", "Next to", "next to the park", "next to the park"],
+            ["behind", "Behind", "behind the house", "behind the house"]
           ]}
         />
 
@@ -57,51 +57,51 @@ const PrepositionsPage = () => {
           <Example 
             spanish="El libro está en la mesa"
             english="The book is on the table"
-            translation="El libro está en la mesa"
+            translation="The book is on the table"
           />
           <Example 
             spanish="Estoy en la cocina"
             english="I am in the kitchen"
-            translation="Estoy en la cocina"
+            translation="I am in the kitchen"
           />
           <Example 
             spanish="El gato está debajo de la silla"
             english="The cat is under the chair"
-            translation="El gato está debajo de la silla"
+            translation="The cat is under the chair"
           />
         </div>
 
         <Rule 
-          title="Uso de In, On, At para Lugar"
-          description="Cuándo usar cada una:"
+          title="Using In, On, At for Place"
+          description="When to use each one:"
           examples={[
-            "In: espacios cerrados (in the car, in the room)",
-            "On: superficies (on the table, on the wall)",
-            "At: puntos específicos (at home, at school, at work)"
+            "In: enclosed spaces (in the car, in the room)",
+            "On: surfaces (on the table, on the wall)",
+            "At: specific points (at home, at school, at work)"
           ]}
         />
 
         <Tip type="info">
-          <strong>Recuerda:</strong> "At home" es una excepción - usamos "at" aunque sea un espacio cerrado.
+          <strong>Remember:</strong> &quot;At home&quot; is an exception — we use &quot;at&quot; even though it is an enclosed space.
         </Tip>
       </TheorySection>
 
-      <TheorySection title="Prepositions of Time (Preposiciones de Tiempo)" icon="⏰">
+      <TheorySection title="Prepositions of Time" icon="⏰">
         <p style={{ fontSize: '1rem', lineHeight: 1.6, color: '#4a5568', marginBottom: '1rem' }}>
-          Indican cuándo ocurre algo en relación con el tiempo.
+          They show when something happens in relation to time.
         </p>
 
         <GrammarTable
-          caption="Preposiciones de Tiempo Principales"
-          headers={["Preposición", "Uso", "Ejemplo", "Significado"]}
+          caption="Main Prepositions of Time"
+          headers={["Preposition", "Use", "Example", "Meaning"]}
           rows={[
-            ["in", "Meses, años, estaciones", "in January, in 2023", "en enero, en 2023"],
-            ["on", "Días específicos, fechas", "on Monday, on July 4th", "el lunes, el 4 de julio"],
-            ["at", "Horas específicas", "at 3 PM, at night", "a las 3 PM, por la noche"],
-            ["for", "Duración", "for 2 hours, for a week", "durante 2 horas, durante una semana"],
-            ["since", "Desde un punto específico", "since Monday, since 2020", "desde el lunes, desde 2020"],
-            ["during", "Durante un período", "during the summer", "durante el verano"],
-            ["until", "Hasta un momento", "until 5 PM", "hasta las 5 PM"]
+            ["in", "Months, years, seasons", "in January, in 2023", "in January, in 2023"],
+            ["on", "Specific days, dates", "on Monday, on July 4th", "on Monday, on July 4th"],
+            ["at", "Specific times", "at 3 PM, at night", "at 3 PM, at night"],
+            ["for", "Duration", "for 2 hours, for a week", "for 2 hours, for a week"],
+            ["since", "From a specific point", "since Monday, since 2020", "since Monday, since 2020"],
+            ["during", "During a period", "during the summer", "during the summer"],
+            ["until", "Until a moment", "until 5 PM", "until 5 PM"]
           ]}
         />
 
@@ -109,52 +109,52 @@ const PrepositionsPage = () => {
           <Example 
             spanish="Voy al trabajo los lunes"
             english="I go to work on Mondays"
-            translation="Voy al trabajo los lunes"
+            translation="I go to work on Mondays"
           />
           <Example 
             spanish="Nací en 1990"
             english="I was born in 1990"
-            translation="Nací en 1990"
+            translation="I was born in 1990"
           />
           <Example 
             spanish="La reunión es a las 3 PM"
             english="The meeting is at 3 PM"
-            translation="La reunión es a las 3 PM"
+            translation="The meeting is at 3 PM"
           />
         </div>
 
         <Rule 
-          title="Uso de In, On, At para Tiempo"
-          description="Cuándo usar cada una:"
+          title="Using In, On, At for Time"
+          description="When to use each one:"
           examples={[
-            "In: períodos largos (in January, in the morning)",
-            "On: días específicos (on Monday, on Christmas Day)",
-            "At: momentos específicos (at 3 PM, at midnight)"
+            "In: longer periods (in January, in the morning)",
+            "On: specific days (on Monday, on Christmas Day)",
+            "At: specific moments (at 3 PM, at midnight)"
           ]}
         />
 
         <Tip type="warning">
-          <strong>Excepciones:</strong> "At night", "at the weekend", "in the morning/afternoon/evening".
+          <strong>Exceptions:</strong> &quot;At night&quot;, &quot;at the weekend&quot;, &quot;in the morning/afternoon/evening&quot;.
         </Tip>
       </TheorySection>
 
-      <TheorySection title="Prepositions of Direction (Preposiciones de Dirección)" icon="➡️">
+      <TheorySection title="Prepositions of Direction" icon="➡️">
         <p style={{ fontSize: '1rem', lineHeight: 1.6, color: '#4a5568', marginBottom: '1rem' }}>
-          Indican hacia dónde se mueve algo o alguien.
+          They show where something or someone is moving to or from.
         </p>
 
         <GrammarTable
-          caption="Preposiciones de Dirección"
-          headers={["Preposición", "Uso", "Ejemplo", "Significado"]}
+          caption="Prepositions of Direction"
+          headers={["Preposition", "Use", "Example", "Meaning"]}
           rows={[
-            ["to", "Hacia un lugar", "go to school", "ir a la escuela"],
-            ["from", "Desde un lugar", "come from Spain", "venir de España"],
-            ["into", "Entrar a un lugar", "walk into the room", "entrar a la habitación"],
-            ["out of", "Salir de un lugar", "get out of the car", "salir del coche"],
-            ["through", "A través de", "walk through the park", "caminar por el parque"],
-            ["across", "Cruzando", "walk across the street", "cruzar la calle"],
-            ["up", "Hacia arriba", "go up the stairs", "subir las escaleras"],
-            ["down", "Hacia abajo", "go down the hill", "bajar la colina"]
+            ["to", "Toward a place", "go to school", "go to school"],
+            ["from", "From a place", "come from Spain", "come from Spain"],
+            ["into", "Enter a place", "walk into the room", "walk into the room"],
+            ["out of", "Leave a place", "get out of the car", "get out of the car"],
+            ["through", "Through", "walk through the park", "walk through the park"],
+            ["across", "Across", "walk across the street", "walk across the street"],
+            ["up", "Upward", "go up the stairs", "go up the stairs"],
+            ["down", "Downward", "go down the hill", "go down the hill"]
           ]}
         />
 
@@ -162,42 +162,42 @@ const PrepositionsPage = () => {
           <Example 
             spanish="Voy a la tienda"
             english="I go to the store"
-            translation="Voy a la tienda"
+            translation="I go to the store"
           />
           <Example 
             spanish="Vengo de la oficina"
             english="I come from the office"
-            translation="Vengo de la oficina"
+            translation="I come from the office"
           />
           <Example 
             spanish="Camino por el parque"
             english="I walk through the park"
-            translation="Camino por el parque"
+            translation="I walk through the park"
           />
         </div>
 
         <Tip type="success">
-          <strong>Consejo:</strong> "To" indica movimiento hacia un lugar, "from" indica movimiento desde un lugar.
+          <strong>Tip:</strong> &quot;To&quot; shows movement toward a place; &quot;from&quot; shows movement away from a place.
         </Tip>
       </TheorySection>
 
-      <TheorySection title="Prepositions with Verbs (Preposiciones con Verbos)" icon="🔗">
+      <TheorySection title="Prepositions with Verbs" icon="🔗">
         <p style={{ fontSize: '1rem', lineHeight: 1.6, color: '#4a5568', marginBottom: '1rem' }}>
-          Algunos verbos siempre van seguidos de preposiciones específicas.
+          Some verbs are always followed by specific prepositions.
         </p>
 
         <GrammarTable
-          caption="Verbos con Preposiciones Comunes"
-          headers={["Verbo", "Preposición", "Ejemplo", "Significado"]}
+          caption="Common Verbs with Prepositions"
+          headers={["Verb", "Preposition", "Example", "Meaning"]}
           rows={[
-            ["listen", "to", "listen to music", "escuchar música"],
-            ["look", "at", "look at the picture", "mirar la imagen"],
-            ["wait", "for", "wait for the bus", "esperar el autobús"],
-            ["depend", "on", "depend on you", "depender de ti"],
-            ["believe", "in", "believe in God", "creer en Dios"],
-            ["think", "about", "think about it", "pensar en ello"],
-            ["talk", "to/with", "talk to my friend", "hablar con mi amigo"],
-            ["arrive", "at/in", "arrive at the station", "llegar a la estación"]
+            ["listen", "to", "listen to music", "listen to music"],
+            ["look", "at", "look at the picture", "look at the picture"],
+            ["wait", "for", "wait for the bus", "wait for the bus"],
+            ["depend", "on", "depend on you", "depend on you"],
+            ["believe", "in", "believe in God", "believe in God"],
+            ["think", "about", "think about it", "think about it"],
+            ["talk", "to/with", "talk to my friend", "talk to my friend"],
+            ["arrive", "at/in", "arrive at the station", "arrive at the station"]
           ]}
         />
 
@@ -205,83 +205,83 @@ const PrepositionsPage = () => {
           <Example 
             spanish="Escucho música todos los días"
             english="I listen to music every day"
-            translation="Escucho música todos los días"
+            translation="I listen to music every day"
           />
           <Example 
             spanish="Espero el autobús"
             english="I wait for the bus"
-            translation="Espero el autobús"
+            translation="I wait for the bus"
           />
           <Example 
             spanish="Pienso en mi familia"
             english="I think about my family"
-            translation="Pienso en mi familia"
+            translation="I think about my family"
           />
         </div>
 
         <Tip type="warning">
-          <strong>¡Importante!</strong> Estas combinaciones son fijas. No puedes cambiar la preposición.
+          <strong>Important!</strong> These combinations are fixed. You cannot change the preposition.
         </Tip>
       </TheorySection>
 
-      <TheorySection title="Errores Comunes" icon="⚠️">
+      <TheorySection title="Common Mistakes" icon="⚠️">
         <div style={{ display: 'grid', gap: '1rem' }}>
           <Tip type="error">
             <strong>Error:</strong> "I am in Monday" ❌<br/>
-            <strong>Correcto:</strong> "I am on Monday" ✅<br/>
-            <em>Para días específicos usamos 'on'</em>
+            <strong>Correct:</strong> "I am on Monday" ✅<br/>
+            <em>For specific days we use &apos;on&apos;</em>
           </Tip>
 
           <Tip type="error">
             <strong>Error:</strong> "I listen music" ❌<br/>
-            <strong>Correcto:</strong> "I listen to music" ✅<br/>
-            <em>El verbo 'listen' siempre va con 'to'</em>
+            <strong>Correct:</strong> "I listen to music" ✅<br/>
+            <em>The verb &apos;listen&apos; always goes with &apos;to&apos;</em>
           </Tip>
 
           <Tip type="error">
             <strong>Error:</strong> "I go to home" ❌<br/>
-            <strong>Correcto:</strong> "I go home" ✅<br/>
-            <em>Con 'home' no usamos 'to'</em>
+            <strong>Correct:</strong> "I go home" ✅<br/>
+            <em>With &apos;home&apos; we do not use &apos;to&apos;</em>
           </Tip>
 
           <Tip type="error">
             <strong>Error:</strong> "I am at the bed" ❌<br/>
-            <strong>Correcto:</strong> "I am in bed" ✅<br/>
-            <em>Para estar en la cama usamos 'in'</em>
+            <strong>Correct:</strong> "I am in bed" ✅<br/>
+            <em>To be in bed we use &apos;in&apos;</em>
           </Tip>
         </div>
       </TheorySection>
 
-      <TheorySection title="Reglas Importantes" icon="⚡">
+      <TheorySection title="Important Rules" icon="⚡">
         <div style={{ display: 'grid', gap: '1rem' }}>
           <Rule 
-            title="1. Preposiciones fijas"
-            description="Algunas combinaciones verbo-preposición son fijas."
+            title="1. Fixed prepositions"
+            description="Some verb-preposition combinations are fixed."
             examples={[
-              "Listen to (escuchar)",
-              "Wait for (esperar)",
-              "Believe in (creer en)"
+              "Listen to (listen)",
+              "Wait for (wait)",
+              "Believe in (believe in)"
             ]}
           />
 
           <Rule 
-            title="2. Sin preposición"
-            description="Algunos verbos no necesitan preposición."
+            title="2. No preposition"
+            description="Some verbs do not need a preposition."
             examples={[
-              "Go home (ir a casa)",
-              "Arrive here (llegar aquí)",
-              "Enter the room (entrar a la habitación)"
+              "Go home (go home)",
+              "Arrive here (arrive here)",
+              "Enter the room (enter the room)"
             ]}
           />
 
           <Rule 
-            title="3. Diferencia entre 'in' y 'at'"
-            description="'In' para espacios cerrados, 'at' para puntos específicos."
+            title="3. Difference between 'in' and 'at'"
+            description="'In' for enclosed spaces, 'at' for specific points."
             examples={[
-              "In the car (en el coche)",
-              "At the car (junto al coche)",
-              "In the hospital (en el hospital como paciente)",
-              "At the hospital (en el hospital como visitante)"
+              "In the car (in the car)",
+              "At the car (by the car)",
+              "In the hospital (in the hospital as a patient)",
+              "At the hospital (at the hospital as a visitor)"
             ]}
           />
         </div>
@@ -300,12 +300,12 @@ const PrepositionsPage = () => {
         "on, since"
       ]}
       correctAnswer={1}
-      explanation="Usamos 'in' para países y 'since' para un punto específico en el tiempo."
+      explanation="We use 'in' for countries and 'since' for a specific point in time."
     />,
 
     <MultipleChoiceExercise
       key="2"
-      question="¿Cuál es la forma correcta para completar: 'I listen ___ music every day'?"
+      question="Which is the correct form to complete: 'I listen ___ music every day'?"
       options={[
         "at",
         "to",
@@ -313,7 +313,7 @@ const PrepositionsPage = () => {
         "on"
       ]}
       correctAnswer={1}
-      explanation="El verbo 'listen' siempre va seguido de 'to': 'I listen to music every day'."
+      explanation="The verb 'listen' is always followed by 'to': 'I listen to music every day'."
     />,
 
     <TrueFalseExercise
@@ -322,29 +322,29 @@ const PrepositionsPage = () => {
         {
           text: "'I am at the bed' is correct.",
           isTrue: false,
-          explanation: "Incorrecto. Para estar en la cama usamos 'in': 'I am in bed'."
+          explanation: "Incorrect. To be in bed we use 'in': 'I am in bed'."
         },
         {
           text: "'I go to home' is correct.",
           isTrue: false,
-          explanation: "Incorrecto. Con 'home' no usamos 'to': 'I go home'."
+          explanation: "Incorrect. With 'home' we do not use 'to': 'I go home'."
         },
         {
           text: "'The meeting is on Monday' is correct.",
           isTrue: true,
-          explanation: "Correcto. Para días específicos usamos 'on'."
+          explanation: "Correct. For specific days we use 'on'."
         },
         {
           text: "'I wait for the bus' is correct.",
           isTrue: true,
-          explanation: "Correcto. El verbo 'wait' va con 'for'."
+          explanation: "Correct. The verb 'wait' goes with 'for'."
         }
       ]}
     />,
 
     <MultipleChoiceExercise
       key="4"
-      question="¿Cuál es la forma correcta para completar: 'I was born ___ 1990'?"
+      question="Which is the correct form to complete: 'I was born ___ 1990'?"
       options={[
         "on",
         "at",
@@ -352,12 +352,12 @@ const PrepositionsPage = () => {
         "for"
       ]}
       correctAnswer={2}
-      explanation="Para años usamos 'in': 'I was born in 1990'."
+      explanation="For years we use 'in': 'I was born in 1990'."
     />,
 
     <MultipleChoiceExercise
       key="5"
-      question="¿Cuál es la forma correcta para completar: 'The book is ___ the table'?"
+      question="Which is the correct form to complete: 'The book is ___ the table'?"
       options={[
         "in",
         "on",
@@ -365,7 +365,7 @@ const PrepositionsPage = () => {
         "under"
       ]}
       correctAnswer={1}
-      explanation="Para superficies usamos 'on': 'The book is on the table'."
+      explanation="For surfaces we use 'on': 'The book is on the table'."
     />,
 
     <TrueFalseExercise
@@ -374,17 +374,17 @@ const PrepositionsPage = () => {
         {
           text: "We use 'in' for months and years.",
           isTrue: true,
-          explanation: "Correcto. Usamos 'in' para meses (in January) y años (in 2023)."
+          explanation: "Correct. We use 'in' for months (in January) and years (in 2023)."
         },
         {
           text: "We say 'at night' but 'in the morning'.",
           isTrue: true,
-          explanation: "Correcto. Decimos 'at night' pero 'in the morning/afternoon/evening'."
+          explanation: "Correct. We say 'at night' but 'in the morning/afternoon/evening'."
         },
         {
           text: "'I'm interested about music' is correct.",
           isTrue: false,
-          explanation: "Incorrecto. Decimos 'interested IN music', no 'about'."
+          explanation: "Incorrect. We say 'interested IN music', not 'about'."
         }
       ]}
     />,
@@ -399,12 +399,12 @@ const PrepositionsPage = () => {
         "on / in"
       ]}
       correctAnswer={1}
-      explanation="Usamos 'on' para días (on Friday) y 'at' para horas específicas (at 3 PM)."
+      explanation="We use 'on' for days (on Friday) and 'at' for specific times (at 3 PM)."
     />,
 
     <MultipleChoiceExercise
       key="8"
-      question="¿Cuál es la preposición correcta: 'She is good ___ mathematics'?"
+      question="Which is the correct preposition: 'She is good ___ mathematics'?"
       options={[
         "in",
         "at",
@@ -412,7 +412,7 @@ const PrepositionsPage = () => {
         "with"
       ]}
       correctAnswer={1}
-      explanation="Decimos 'good AT' algo: 'She is good at mathematics'."
+      explanation="We say 'good AT' something: 'She is good at mathematics'."
     />,
 
     <TrueFalseExercise
@@ -421,12 +421,12 @@ const PrepositionsPage = () => {
         {
           text: "'I go to work by car' means I drive to work.",
           isTrue: true,
-          explanation: "Correcto. 'By car' indica el medio de transporte utilizado."
+          explanation: "Correct. 'By car' indicates the means of transport used."
         },
         {
           text: "We can say 'I live in London' and 'I live at London'.",
           isTrue: false,
-          explanation: "Incorrecto. Para ciudades usamos 'in': 'I live IN London'. 'At' se usa para direcciones específicas."
+          explanation: "Incorrect. For cities we use 'in': 'I live IN London'. 'At' is used for specific addresses."
         }
       ]}
     />,
@@ -441,15 +441,15 @@ const PrepositionsPage = () => {
         "at"
       ]}
       correctAnswer={2}
-      explanation="'Under' significa debajo de: 'The cat is hiding under the bed' (El gato se esconde debajo de la cama)."
+      explanation="'Under' means below: 'The cat is hiding under the bed'."
     />
   ];
 
   return (
     <TheoryLayout
       title="Prepositions"
-      description="Domina las preposiciones en inglés: lugar, tiempo, dirección y verbos con preposiciones. Esencial para expresar relaciones espaciales y temporales."
-      level="A1-A2-B1-B2-C1-C2"
+      description="Master prepositions in English: place, time, direction, and verbs with prepositions. Essential for expressing spatial and temporal relationships."
+      level="A2-B1-B2-C1-C2"
       theoryContent={theoryContent}
       exercises={exercises}
       prerequisites={["Basic vocabulary", "Understanding of nouns and verbs"]}

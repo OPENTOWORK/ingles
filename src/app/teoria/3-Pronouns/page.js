@@ -445,7 +445,7 @@ const PronounsPage = () => {
     <TheoryLayout
       title="Pronouns"
       description="Master all types of pronouns in English: personal, possessive, object, reflexive, and demonstrative. Essential for speaking fluently."
-      level="A1-A2-B1-B2-C1-C2"
+      level="A2-B1-B2-C1-C2"
       theoryContent={theoryContent}
       exercises={exercises}
       prerequisites={["Verb to be", "Basic understanding of nouns"]}

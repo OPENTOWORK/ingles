@@ -1,267 +1,68 @@
 'use client';
 
-import Link from "next/link";
-import SiteMascot from "@/components/SiteMascot";
+import Link from 'next/link';
+import SiteMascot from '@/components/SiteMascot';
 
-const cardStyle = {
-  background: "linear-gradient(135deg, #667eea 0%, #764ba2 60%, #ffffff 100%)",
-  padding: "1.5rem",
-  borderRadius: "16px",
-  color: "white",
-  textDecoration: "none",
-  fontWeight: "600",
-  textAlign: "center",
-  transition: "all 0.3s ease",
-  boxShadow: "0 8px 32px rgba(102, 126, 234, 0.3)",
-  backdropFilter: "blur(10px)",
-  border: "1px solid rgba(255, 255, 255, 0.1)",
-  minWidth: "160px",
-  fontSize: "1rem",
-};
+const NAV_CARDS = [
+  { href: '/teoria', icon: '📖', label: 'Theory' },
+  { href: '/niveles', icon: '📚', label: 'Levels' },
+  { href: '/prueba-nivel', icon: '🧪', label: 'Placement Test' },
+  { href: '/training', icon: '🎮', label: 'Training' },
+  { href: '/login', icon: '🔐', label: 'Login' },
+];
+
+const FEATURES = ['Interactive', 'Automatic correction', 'Free to use'];
 
 export default function Home() {
   return (
-    <main
-      style={{
-        padding: "2rem",
-        fontFamily: '"Inter", "Segoe UI", Tahoma, Geneva, Verdana, sans-serif',
-        textAlign: "center",
-        minHeight: "100vh",
-        background: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
-        backgroundAttachment: "fixed",
-        color: "#fff",
-        position: "relative",
-        display: "flex",
-        flexDirection: "column",
-        justifyContent: "space-between",
-      }}
-    >
-      <div
-        style={{
-          display: "flex",
-          flexWrap: "wrap",
-          alignItems: "center",
-          justifyContent: "center",
-          gap: "clamp(1rem, 4vw, 3rem)",
-          marginBottom: "0.5rem",
-        }}
-      >
-        <div style={{ flex: "1 1 260px", maxWidth: "640px" }}>
-        <h1 
-          style={{
-            fontSize: "3.5rem",
-            fontWeight: "800",
-            marginBottom: "1rem",
-            background: "linear-gradient(135deg, #ffffff 0%, #f0f9ff 100%)",
-            WebkitBackgroundClip: "text",
-            WebkitTextFillColor: "transparent",
-            backgroundClip: "text",
-            letterSpacing: "-0.025em",
-            textShadow: "0 4px 20px rgba(0, 0, 0, 0.1)",
-          }}
-        >
-          Welcome to Dralo
-        </h1>
-        <p 
-          style={{ 
-            fontSize: "1.3rem", 
-            marginTop: "1rem",
-            color: "rgba(255, 255, 255, 0.9)",
-            fontWeight: "400",
-            letterSpacing: "0.025em",
-          }}
-        >
-          Prepare for the smart and interactive way to learn English.
-        </p>
-        </div>
-        <div
-          style={{
-            flex: "0 0 auto",
-            filter: "drop-shadow(0 12px 28px rgba(0, 0, 0, 0.2))",
-            lineHeight: 0,
-          }}
-        >
-          <SiteMascot variant={10} width={240} priority alt="Dralo mascot" />
-        </div>
-      </div>
-      <div>
+    <main className="home-page">
+      <div className="home-page__inner">
+        <section className="home-hero" aria-labelledby="home-title">
+          <div className="home-hero__copy">
+            <h1 id="home-title" className="home-page__title">
+              Welcome to Dralo
+            </h1>
+            <p className="home-hero__subtitle">
+              Prepare for the smart and interactive way to learn English.
+            </p>
+            <ul className="home-page__features" aria-label="Platform highlights">
+              {FEATURES.map((item) => (
+                <li key={item} className="home-feature">
+                  <span aria-hidden>✓</span> {item}
+                </li>
+              ))}
+            </ul>
+          </div>
 
-        <blockquote
-          style={{
-            marginTop: "3rem",
-            fontStyle: "italic",
-            fontSize: "1.2rem",
-            color: "rgba(255, 255, 255, 0.95)",
-            background: "rgba(255, 255, 255, 0.1)",
-            backdropFilter: "blur(10px)",
-            padding: "2rem",
-            borderLeft: "4px solid rgba(255, 255, 255, 0.3)",
-            borderRadius: "12px",
-            maxWidth: "700px",
-            marginLeft: "auto",
-            marginRight: "auto",
-            boxShadow: "0 8px 32px rgba(0, 0, 0, 0.1)",
-            border: "1px solid rgba(255, 255, 255, 0.1)",
-          }}
-        >
-          "The best preparation for tomorrow is doing your best today."
-          <br />
-          <span style={{ fontWeight: "600", marginTop: "0.5rem", display: "block" }}>
-            – Your time is now
-          </span>
+          <div className="home-hero__mascot">
+            <SiteMascot variant={10} width={220} priority alt="Dralo mascot" />
+          </div>
+        </section>
+
+        <blockquote className="home-quote">
+          <p>&ldquo;The best preparation for tomorrow is doing your best today.&rdquo;</p>
+          <footer>— Your time is now</footer>
         </blockquote>
 
-        <div style={{ marginTop: "3rem" }}>
-          <Link
-            href="/niveles"
-            style={{
-              display: "inline-block",
-              padding: "1rem 2rem",
-              background: "rgba(255, 255, 255, 0.2)",
-              color: "#fff",
-              borderRadius: "12px",
-              textDecoration: "none",
-              fontWeight: "600",
-              fontSize: "1.1rem",
-              transition: "all 0.3s ease",
-              border: "2px solid rgba(255, 255, 255, 0.3)",
-              backdropFilter: "blur(10px)",
-              boxShadow: "0 8px 32px rgba(0, 0, 0, 0.1)",
-            }}
-            onMouseEnter={(e) => {
-              e.target.style.background = "rgba(255, 255, 255, 0.3)";
-              e.target.style.transform = "translateY(-2px)";
-              e.target.style.boxShadow = "0 12px 40px rgba(0, 0, 0, 0.2)";
-            }}
-            onMouseLeave={(e) => {
-              e.target.style.background = "rgba(255, 255, 255, 0.2)";
-              e.target.style.transform = "translateY(0)";
-              e.target.style.boxShadow = "0 8px 32px rgba(0, 0, 0, 0.1)";
-            }}
-          >
-            Start Practicing
+        <div className="home-cta">
+          <Link href="/niveles" className="home-cta__btn">
+            Start Practising
           </Link>
         </div>
 
-        {/* Nuevo diseño horizontal con Flexbox */}
-        <div
-          style={{
-            marginTop: "4rem",
-            display: "flex",
-            flexWrap: "wrap",
-            gap: "1.5rem",
-            justifyContent: "center",
-            maxWidth: "1000px",
-            marginInline: "auto",
-          }}
-        >
-          <Link 
-            href="/teoria" 
-            style={cardStyle}
-            onMouseEnter={(e) => {
-              e.target.style.transform = "translateY(-4px) scale(1.02)";
-              e.target.style.boxShadow = "0 12px 40px rgba(102, 126, 234, 0.4)";
-            }}
-            onMouseLeave={(e) => {
-              e.target.style.transform = "translateY(0) scale(1)";
-              e.target.style.boxShadow = "0 8px 32px rgba(102, 126, 234, 0.3)";
-            }}
-          >
-            📖 Theory
-          </Link>
-          <Link 
-            href="/niveles" 
-            style={cardStyle}
-            onMouseEnter={(e) => {
-              e.target.style.transform = "translateY(-4px) scale(1.02)";
-              e.target.style.boxShadow = "0 12px 40px rgba(102, 126, 234, 0.4)";
-            }}
-            onMouseLeave={(e) => {
-              e.target.style.transform = "translateY(0) scale(1)";
-              e.target.style.boxShadow = "0 8px 32px rgba(102, 126, 234, 0.3)";
-            }}
-          >
-            📚 Levels
-          </Link>
-          <Link 
-            href="/prueba-nivel" 
-            style={cardStyle}
-            onMouseEnter={(e) => {
-              e.target.style.transform = "translateY(-4px) scale(1.02)";
-              e.target.style.boxShadow = "0 12px 40px rgba(102, 126, 234, 0.4)";
-            }}
-            onMouseLeave={(e) => {
-              e.target.style.transform = "translateY(0) scale(1)";
-              e.target.style.boxShadow = "0 8px 32px rgba(102, 126, 234, 0.3)";
-            }}
-          >
-            🧪 Placement Test
-          </Link>
-          <Link 
-            href="/training" 
-            style={cardStyle}
-            onMouseEnter={(e) => {
-              e.target.style.transform = "translateY(-4px) scale(1.02)";
-              e.target.style.boxShadow = "0 12px 40px rgba(102, 126, 234, 0.4)";
-            }}
-            onMouseLeave={(e) => {
-              e.target.style.transform = "translateY(0) scale(1)";
-              e.target.style.boxShadow = "0 8px 32px rgba(102, 126, 234, 0.3)";
-            }}
-          >
-            🎮 Training
-          </Link>
-          <Link 
-            href="/login" 
-            style={cardStyle}
-            onMouseEnter={(e) => {
-              e.target.style.transform = "translateY(-4px) scale(1.02)";
-              e.target.style.boxShadow = "0 12px 40px rgba(102, 126, 234, 0.4)";
-            }}
-            onMouseLeave={(e) => {
-              e.target.style.transform = "translateY(0) scale(1)";
-              e.target.style.boxShadow = "0 8px 32px rgba(102, 126, 234, 0.3)";
-            }}
-          >
-            🔐 Login
-          </Link>
-        </div>
-      </div>
-
-      <div
-        style={{
-          position: "absolute",
-          bottom: "4rem",
-          left: "2rem",
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "flex-start",
-          gap: "0.75rem",
-          background: "rgba(255, 255, 255, 0.1)",
-          backdropFilter: "blur(10px)",
-          padding: "1.5rem",
-          borderRadius: "12px",
-          fontSize: "0.95rem",
-          maxWidth: "280px",
-          border: "1px solid rgba(255, 255, 255, 0.1)",
-          boxShadow: "0 8px 32px rgba(0, 0, 0, 0.1)",
-        }}
-      >
-        {[
-          "✅ Interactive",
-          "✅ Automatic correction",
-          "✅ Free to use",
-        ].map((item, i) => (
-          <div 
-            key={i} 
-            style={{
-              color: "rgba(255, 255, 255, 0.95)",
-              fontWeight: "500",
-            }}
-          >
-            {item}
+        <section className="home-nav" aria-label="Quick links">
+          <h2 className="home-nav__heading">Explore</h2>
+          <div className="home-page__cards">
+            {NAV_CARDS.map((card) => (
+              <Link key={card.href} href={card.href} className="home-page__card">
+                <span className="home-page__card-icon" aria-hidden>
+                  {card.icon}
+                </span>
+                <span className="home-page__card-label">{card.label}</span>
+              </Link>
+            ))}
           </div>
-        ))}
+        </section>
       </div>
     </main>
   );

@@ -524,7 +524,7 @@ const ConnectedSpeechPage = () => {
     <TheoryLayout
       title="Pronunciation and Connected Speech"
       description="Decode natural English rhythm: linking, elision, assimilation, intrusive consonants, and weak forms—with listening strategies you can practise immediately."
-      level="A1-A2-B1-B2-C1-C2"
+      level="A2-B1-B2-C1-C2"
       theoryContent={theoryContent}
       exercises={exercises}
       prerequisites={["Basic pronunciation", "Understanding of English sounds"]}

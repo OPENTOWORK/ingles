@@ -106,8 +106,9 @@ function ChatBubble({ message }) {
       borderBottomRightRadius: '4px',
     },
     ai: {
-      background: 'var(--color-background-secondary, #f5f5f5)',
-      color: 'var(--color-text-primary, #111)',
+      background: '#eef2f6',
+      color: '#111827',
+      border: '1px solid #e2e8f0',
       alignSelf: 'flex-start',
       borderBottomLeftRadius: '4px',
     },
@@ -282,14 +283,20 @@ export default function SpeakingPage() {
   const [practiceReportLoading, setPracticeReportLoading] = useState(false);
   const [practiceRestartKey, setPracticeRestartKey] = useState(0);
 
-  const chatEndRef = useRef(null);
+  const chatScrollRef = useRef(null);
   const mediaRecorderRef = useRef(null);
   const mediaStreamRef = useRef(null);
   const audioChunksRef = useRef([]);
 
-  // Scroll to bottom when new messages arrive
+  // Scroll only inside the chat column — scrollIntoView was scrolling the whole window
+  // and hid the site header + pushed the conversation out of view.
   useEffect(() => {
-    chatEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+    const el = chatScrollRef.current;
+    if (!el) return;
+    const run = () => {
+      el.scrollTo({ top: el.scrollHeight, behavior: 'smooth' });
+    };
+    requestAnimationFrame(run);
   }, [messages]);
 
   // Get a random topic for the current level
@@ -844,7 +851,8 @@ export default function SpeakingPage() {
   return (
     <div style={{
       fontFamily: "'DM Sans', -apple-system, sans-serif",
-      minHeight: '100vh',
+      width: '100%',
+      maxWidth: '100%',
       background: 'var(--color-background-primary, #fff)',
       display: 'flex',
       flexDirection: 'column',
@@ -940,22 +948,8 @@ export default function SpeakingPage() {
         </div>
       </header>
 
-      {mode !== 'exam' ? (
-        <div style={{ padding: '12px 24px', borderBottom: '0.5px solid #e0e0e0', background: 'var(--color-background-secondary, #f5f5f5)' }}>
-          <div style={{ fontSize: '12px', color: '#666', marginBottom: '8px' }}>Presentation video (Dralo)</div>
-          <video
-            controls
-            preload="metadata"
-            style={{ width: '100%', maxHeight: '220px', borderRadius: '10px', background: '#111' }}
-          >
-            <source src="/dralo-presentation.mp4" type="video/mp4" />
-            Your browser does not support the video tag.
-          </video>
-        </div>
-      ) : null}
-
-      {/* Mode tabs */}
-      <div style={{ padding: '12px 24px', borderBottom: '0.5px solid #e0e0e0', display: 'flex', gap: '8px' }}>
+      {/* Mode tabs — justo bajo la barra (el vídeo va al final para no tapar la práctica) */}
+      <div style={{ padding: '12px 24px', borderBottom: '0.5px solid #e0e0e0', display: 'flex', gap: '8px', flexShrink: 0, background: '#fff' }}>
         {MODES.map(m => (
           <button
             key={m.id}
@@ -1093,13 +1087,16 @@ export default function SpeakingPage() {
           ) : null}
         </div>
       ) : (
-      <div style={{
-        display: 'grid',
-        gridTemplateColumns: '300px 1fr',
-        flex: 1,
-        overflow: 'hidden',
-        maxHeight: 'calc(100vh - 130px)',
-      }}>
+      <div
+        style={{
+          display: 'grid',
+          gridTemplateColumns: 'minmax(260px, 300px) minmax(0, 1fr)',
+          alignItems: 'stretch',
+          width: '100%',
+          flexShrink: 0,
+          borderTop: '0.5px solid #e0e0e0',
+        }}
+      >
         {/* Left panel — Avatar + controls */}
         <div style={{
           borderRight: '0.5px solid #e0e0e0',
@@ -1364,21 +1361,29 @@ export default function SpeakingPage() {
           ) : null}
         </div>
 
-        {/* Right panel — Chat */}
+        {/* Right panel — Chat (altura mínima para que no “desaparezca” con flex del padre) */}
         <div style={{
           display: 'flex',
           flexDirection: 'column',
-          overflow: 'hidden',
+          minWidth: 0,
+          background: '#fff',
         }}>
           {/* Chat messages */}
-          <div style={{
-            flex: 1,
+          <div
+            ref={chatScrollRef}
+            style={{
+            minHeight: 300,
+            maxHeight: 560,
             overflowY: 'auto',
+            overflowX: 'hidden',
             padding: '20px 24px',
             display: 'flex',
             flexDirection: 'column',
             gap: '10px',
-          }}>
+            WebkitOverflowScrolling: 'touch',
+            borderLeft: '0.5px solid #f0f0f0',
+          }}
+          >
             {messages.map((msg, i) => (
               <ChatBubble key={i} message={msg} />
             ))}
@@ -1433,11 +1438,41 @@ export default function SpeakingPage() {
               </div>
             )}
 
-            <div ref={chatEndRef} />
           </div>
         </div>
       </div>
       )}
+
+      {/* Vídeo de presentación al final: antes ocupaba todo el hueco visual y la práctica quedaba fuera de vista */}
+      {mode !== 'exam' ? (
+        <div
+          style={{
+            flexShrink: 0,
+            padding: '12px 24px 20px',
+            borderTop: '0.5px solid #e0e0e0',
+            background: 'var(--color-background-secondary, #f5f5f5)',
+          }}
+        >
+          <div style={{ fontSize: '12px', color: '#666', marginBottom: '8px' }}>
+            Presentation video (optional)
+          </div>
+          <video
+            controls
+            preload="metadata"
+            playsInline
+            style={{
+              width: '100%',
+              maxHeight: '200px',
+              height: 'auto',
+              borderRadius: '10px',
+              background: '#111',
+            }}
+          >
+            <source src="/dralo-presentation.mp4" type="video/mp4" />
+            Your browser does not support the video tag.
+          </video>
+        </div>
+      ) : null}
 
       <style>{`
         @keyframes btnPulse { 0%,100% { opacity:1; } 50% { opacity:0.85; } }

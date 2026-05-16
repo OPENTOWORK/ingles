@@ -18,37 +18,37 @@ import {
 const QuestionFormationPage = () => {
   const theoryContent = (
     <div>
-      <TheorySection title="Formación de Preguntas en Inglés" icon="❓">
+      <TheorySection title="Question Formation in English" icon="❓">
         <p style={{ fontSize: '1.1rem', lineHeight: 1.6, color: '#4a5568', marginBottom: '1rem' }}>
-          La <strong>formación de preguntas</strong> en inglés sigue patrones específicos que varían según el tipo 
-          de pregunta y el tiempo verbal. Dominar estas estructuras es esencial para la comunicación efectiva 
-          y los exámenes de inglés.
+          <strong>Question formation</strong> in English follows specific patterns that vary depending on the type 
+          of question and the verb tense. Mastering these structures is essential for effective communication 
+          and English exams.
         </p>
         
         <QuickReference items={[
-          "Yes/No questions: auxiliar + sujeto + verbo principal",
-          "Wh-questions: palabra interrogativa + auxiliar + sujeto + verbo",
-          "Subject questions: no necesitan auxiliar",
-          "Question tags: confirmar información",
-          "Indirect questions: más formales y educadas"
+          "Yes/No questions: auxiliary + subject + main verb",
+          "Wh-questions: question word + auxiliary + subject + verb",
+          "Subject questions: no auxiliary needed",
+          "Question tags: confirm information",
+          "Indirect questions: more formal and polite"
         ]} />
       </TheorySection>
 
       <TheorySection title="Yes/No Questions" icon="✅❌">
         <p style={{ fontSize: '1rem', lineHeight: 1.6, color: '#4a5568', marginBottom: '1rem' }}>
-          Las preguntas de sí/no requieren un auxiliar y se responden con yes o no.
+          Yes/no questions require an auxiliary and are answered with yes or no.
         </p>
 
         <GrammarTable
-          caption="Estructura de Yes/No Questions"
-          headers={["Tiempo Verbal", "Estructura", "Ejemplo", "Respuesta"]}
+          caption="Yes/No Question Structure"
+          headers={["Tense", "Structure", "Example", "Answer"]}
           rows={[
-            ["Present Simple", "Do/Does + sujeto + verbo base", "Do you like coffee?", "Yes, I do / No, I don't"],
-            ["Past Simple", "Did + sujeto + verbo base", "Did she call you?", "Yes, she did / No, she didn't"],
-            ["Present Continuous", "Am/Is/Are + sujeto + verb-ing", "Are you working?", "Yes, I am / No, I'm not"],
-            ["Present Perfect", "Have/Has + sujeto + past participle", "Have you finished?", "Yes, I have / No, I haven't"],
-            ["Future Simple", "Will + sujeto + verbo base", "Will they come?", "Yes, they will / No, they won't"],
-            ["Modal Verbs", "Modal + sujeto + verbo base", "Can you swim?", "Yes, I can / No, I can't"]
+            ["Present Simple", "Do/Does + subject + base verb", "Do you like coffee?", "Yes, I do / No, I don't"],
+            ["Past Simple", "Did + subject + base verb", "Did she call you?", "Yes, she did / No, she didn't"],
+            ["Present Continuous", "Am/Is/Are + subject + verb-ing", "Are you working?", "Yes, I am / No, I'm not"],
+            ["Present Perfect", "Have/Has + subject + past participle", "Have you finished?", "Yes, I have / No, I haven't"],
+            ["Future Simple", "Will + subject + base verb", "Will they come?", "Yes, they will / No, they won't"],
+            ["Modal Verbs", "Modal + subject + base verb", "Can you swim?", "Yes, I can / No, I can't"]
           ]}
         />
 
@@ -56,71 +56,71 @@ const QuestionFormationPage = () => {
           <Example 
             spanish="¿Hablas español?"
             english="Do you speak Spanish?"
-            translation="Auxiliar 'do' + sujeto + verbo base"
+            translation="Do you speak Spanish?"
           />
           
           <Example 
             spanish="¿Está lloviendo?"
             english="Is it raining?"
-            translation="Auxiliar 'is' + sujeto + gerundio"
+            translation="Is it raining?"
           />
         </div>
 
         <Tip type="info">
-          <strong>Recuerda:</strong> Con el verbo 'to be' no necesitas auxiliar: "Are you happy?" (no "Do you are happy?")
+          <strong>Remember:</strong> With the verb &apos;to be&apos; you do not need an auxiliary: &quot;Are you happy?&quot; (not &quot;Do you are happy?&quot;)
         </Tip>
       </TheorySection>
 
       <TheorySection title="Wh-Questions" icon="🔍">
         <p style={{ fontSize: '1rem', lineHeight: 1.6, color: '#4a5568', marginBottom: '1rem' }}>
-          Las preguntas con palabras interrogativas (wh-words) piden información específica.
+          Questions with wh-words ask for specific information.
         </p>
 
         <GrammarTable
-          caption="Palabras Interrogativas"
-          headers={["Wh-word", "Pregunta sobre", "Ejemplo", "Respuesta típica"]}
+          caption="Question Words"
+          headers={["Wh-word", "Asks about", "Example", "Typical answer"]}
           rows={[
-            ["What", "Cosas, acciones", "What do you do?", "I'm a teacher"],
-            ["Where", "Lugar", "Where do you live?", "In Madrid"],
-            ["When", "Tiempo", "When did you arrive?", "Yesterday"],
-            ["Who", "Personas (sujeto)", "Who called you?", "My mother"],
-            ["Whom", "Personas (objeto, formal)", "Whom did you see?", "The manager"],
-            ["Why", "Razón", "Why are you late?", "Traffic was bad"],
-            ["How", "Manera, método", "How do you cook this?", "In the oven"],
-            ["Which", "Elección entre opciones", "Which car is yours?", "The blue one"]
+            ["What", "Things, actions", "What do you do?", "I'm a teacher"],
+            ["Where", "Place", "Where do you live?", "In Madrid"],
+            ["When", "Time", "When did you arrive?", "Yesterday"],
+            ["Who", "People (subject)", "Who called you?", "My mother"],
+            ["Whom", "People (object, formal)", "Whom did you see?", "The manager"],
+            ["Why", "Reason", "Why are you late?", "Traffic was bad"],
+            ["How", "Manner, method", "How do you cook this?", "In the oven"],
+            ["Which", "Choice between options", "Which car is yours?", "The blue one"]
           ]}
         />
 
         <Rule 
-          title="Estructura de Wh-Questions"
-          description="Patrón general: Wh-word + auxiliar + sujeto + verbo principal"
+          title="Wh-Question Structure"
+          description="General pattern: Wh-word + auxiliary + subject + main verb"
           examples={[
-            "What do you want? (¿Qué quieres?)",
-            "Where did she go? (¿Dónde fue?)",
-            "When will they arrive? (¿Cuándo llegarán?)",
-            "How are you feeling? (¿Cómo te sientes?)"
+            "What do you want?",
+            "Where did she go?",
+            "When will they arrive?",
+            "How are you feeling?"
           ]}
         />
 
         <Tip type="warning">
-          <strong>¡Cuidado!</strong> Cuando 'who' es el sujeto, no uses auxiliar: 
-          "Who lives here?" ✅ (no "Who does live here?" ❌)
+          <strong>Watch out!</strong> When &apos;who&apos; is the subject, do not use an auxiliary: 
+          &quot;Who lives here?&quot; ✅ (not &quot;Who does live here?&quot; ❌)
         </Tip>
       </TheorySection>
 
       <TheorySection title="Subject vs Object Questions" icon="🎯">
         <p style={{ fontSize: '1rem', lineHeight: 1.6, color: '#4a5568', marginBottom: '1rem' }}>
-          La diferencia entre preguntas sobre el sujeto y el objeto afecta la estructura gramatical.
+          The difference between subject and object questions affects grammatical structure.
         </p>
 
         <GrammarTable
           caption="Subject vs Object Questions"
-          headers={["Tipo", "Estructura", "Ejemplo", "Explicación"]}
+          headers={["Type", "Structure", "Example", "Explanation"]}
           rows={[
-            ["Subject Question", "Who/What + verbo + objeto", "Who broke the window?", "Pregunta sobre quién hizo la acción"],
-            ["Object Question", "Who/What + auxiliar + sujeto + verbo", "Who did you see?", "Pregunta sobre el receptor de la acción"],
-            ["Subject Question", "What + verbo + objeto", "What happened?", "Pregunta sobre qué ocurrió"],
-            ["Object Question", "What + auxiliar + sujeto + verbo", "What did you buy?", "Pregunta sobre qué compraste"]
+            ["Subject Question", "Who/What + verb + object", "Who broke the window?", "Asks who performed the action"],
+            ["Object Question", "Who/What + auxiliary + subject + verb", "Who did you see?", "Asks about the receiver of the action"],
+            ["Subject Question", "What + verb + object", "What happened?", "Asks what occurred"],
+            ["Object Question", "What + auxiliary + subject + verb", "What did you buy?", "Asks what you bought"]
           ]}
         />
 
@@ -128,37 +128,37 @@ const QuestionFormationPage = () => {
           <Example 
             spanish="¿Quién rompió la ventana? (sujeto)"
             english="Who broke the window?"
-            translation="No auxiliar - 'who' es el sujeto"
+            translation="Who broke the window?"
           />
           
           <Example 
             spanish="¿A quién viste? (objeto)"
             english="Who did you see?"
-            translation="Con auxiliar - 'who' es el objeto"
+            translation="Who did you see?"
           />
         </div>
       </TheorySection>
 
       <TheorySection title="Question Tags" icon="🏷️">
         <p style={{ fontSize: '1rem', lineHeight: 1.6, color: '#4a5568', marginBottom: '1rem' }}>
-          Los question tags se añaden al final de las oraciones para confirmar información o pedir acuerdo.
+          Question tags are added at the end of sentences to confirm information or seek agreement.
         </p>
 
         <Rule 
-          title="Reglas para Question Tags"
-          description="Patrones básicos para formar question tags:"
+          title="Rules for Question Tags"
+          description="Basic patterns for forming question tags:"
           examples={[
-            "Oración positiva → tag negativo: 'You like coffee, don't you?'",
-            "Oración negativa → tag positivo: 'You don't smoke, do you?'",
-            "Usa el mismo auxiliar de la oración principal",
-            "Si no hay auxiliar, usa do/does/did",
-            "Con 'I am' → 'aren't I?' (excepción)"
+            "Positive sentence → negative tag: 'You like coffee, don't you?'",
+            "Negative sentence → positive tag: 'You don't smoke, do you?'",
+            "Use the same auxiliary as in the main sentence",
+            "If there is no auxiliary, use do/does/did",
+            "With 'I am' → 'aren't I?' (exception)"
           ]}
         />
 
         <GrammarTable
-          caption="Question Tags Comunes"
-          headers={["Oración Principal", "Question Tag", "Ejemplo Completo"]}
+          caption="Common Question Tags"
+          headers={["Main Sentence", "Question Tag", "Full Example"]}
           rows={[
             ["You are tired", "aren't you?", "You are tired, aren't you?"],
             ["She doesn't live here", "does she?", "She doesn't live here, does she?"],
@@ -170,19 +170,19 @@ const QuestionFormationPage = () => {
         />
 
         <Tip type="success">
-          <strong>Entonación:</strong> Si esperas confirmación, usa entonación descendente. 
-          Si realmente no sabes, usa entonación ascendente.
+          <strong>Intonation:</strong> If you expect confirmation, use falling intonation. 
+          If you genuinely do not know, use rising intonation.
         </Tip>
       </TheorySection>
 
       <TheorySection title="Indirect Questions" icon="🎭">
         <p style={{ fontSize: '1rem', lineHeight: 1.6, color: '#4a5568', marginBottom: '1rem' }}>
-          Las preguntas indirectas son más educadas y formales, especialmente útiles en situaciones profesionales.
+          Indirect questions are more polite and formal, especially useful in professional situations.
         </p>
 
         <GrammarTable
-          caption="Estructuras para Preguntas Indirectas"
-          headers={["Frase Introductoria", "Estructura", "Ejemplo"]}
+          caption="Structures for Indirect Questions"
+          headers={["Introductory Phrase", "Structure", "Example"]}
           rows={[
             ["Could you tell me", "...where the station is?", "Could you tell me where the station is?"],
             ["Do you know", "...what time it is?", "Do you know what time it is?"],
@@ -196,46 +196,46 @@ const QuestionFormationPage = () => {
           <Example 
             spanish="Pregunta directa: ¿Dónde está el banco?"
             english="Direct: Where is the bank?"
-            translation="Más informal y directa"
+            translation="Direct: Where is the bank?"
           />
           
           <Example 
             spanish="Pregunta indirecta: ¿Podrías decirme dónde está el banco?"
             english="Indirect: Could you tell me where the bank is?"
-            translation="Más educada y formal"
+            translation="Indirect: Could you tell me where the bank is?"
           />
         </div>
 
         <Tip type="info">
-          <strong>Orden de palabras:</strong> En preguntas indirectas, usa orden de oración afirmativa después 
-          de la palabra interrogativa: "where the bank is" (no "where is the bank").
+          <strong>Word order:</strong> In indirect questions, use affirmative word order after 
+          the question word: &quot;where the bank is&quot; (not &quot;where is the bank&quot;).
         </Tip>
       </TheorySection>
 
-      <TheorySection title="Errores Comunes" icon="⚠️">
+      <TheorySection title="Common Mistakes" icon="⚠️">
         <div style={{ display: 'grid', gap: '1rem' }}>
           <Tip type="error">
-            <strong>Error:</strong> "Do you are happy?" ❌<br/>
-            <strong>Correcto:</strong> "Are you happy?" ✅<br/>
-            <em>Con 'to be' no uses auxiliar 'do'</em>
+            <strong>Error:</strong> &quot;Do you are happy?&quot; ❌<br/>
+            <strong>Correct:</strong> &quot;Are you happy?&quot; ✅<br/>
+            <em>With &apos;to be&apos; do not use the auxiliary &apos;do&apos;</em>
           </Tip>
 
           <Tip type="error">
-            <strong>Error:</strong> "Who does live here?" ❌<br/>
-            <strong>Correcto:</strong> "Who lives here?" ✅<br/>
-            <em>En subject questions no uses auxiliar</em>
+            <strong>Error:</strong> &quot;Who does live here?&quot; ❌<br/>
+            <strong>Correct:</strong> &quot;Who lives here?&quot; ✅<br/>
+            <em>In subject questions do not use an auxiliary</em>
           </Tip>
 
           <Tip type="error">
-            <strong>Error:</strong> "Where do you come from?" vs "Where are you from?" <br/>
-            <strong>Ambas correctas:</strong> Pero "Where are you from?" es más común ✅<br/>
-            <em>Algunas preguntas tienen formas alternativas</em>
+            <strong>Error:</strong> &quot;Where do you come from?&quot; vs &quot;Where are you from?&quot; <br/>
+            <strong>Both correct:</strong> But &quot;Where are you from?&quot; is more common ✅<br/>
+            <em>Some questions have alternative forms</em>
           </Tip>
 
           <Tip type="error">
-            <strong>Error:</strong> "Could you tell me where is the bank?" ❌<br/>
-            <strong>Correcto:</strong> "Could you tell me where the bank is?" ✅<br/>
-            <em>En preguntas indirectas usa orden afirmativo</em>
+            <strong>Error:</strong> &quot;Could you tell me where is the bank?&quot; ❌<br/>
+            <strong>Correct:</strong> &quot;Could you tell me where the bank is?&quot; ✅<br/>
+            <em>In indirect questions use affirmative word order</em>
           </Tip>
         </div>
       </TheorySection>
@@ -253,7 +253,7 @@ const QuestionFormationPage = () => {
         "Is"
       ]}
       correctAnswer={0}
-      explanation="Con 'you' y el verbo principal 'speak' usamos el auxiliar 'Do' para hacer preguntas."
+      explanation="With 'you' and the main verb 'speak' we use the auxiliary 'Do' to form questions."
     />,
 
     <MultipleChoiceExercise
@@ -266,7 +266,7 @@ const QuestionFormationPage = () => {
         "Who is live in that house?"
       ]}
       correctAnswer={1}
-      explanation="En subject questions con 'who', no usamos auxiliar. 'Who lives...' es correcto."
+      explanation="In subject questions with 'who', we do not use an auxiliary. 'Who lives...' is correct."
     />,
 
     <MultipleChoiceExercise
@@ -279,7 +279,7 @@ const QuestionFormationPage = () => {
         "is she?"
       ]}
       correctAnswer={1}
-      explanation="Oración negativa necesita question tag positivo: 'does she?'"
+      explanation="A negative sentence needs a positive question tag: 'does she?'"
     />,
 
     <TrueFalseExercise
@@ -288,22 +288,22 @@ const QuestionFormationPage = () => {
         {
           text: "In indirect questions, we use the same word order as in statements.",
           isTrue: true,
-          explanation: "Correcto. Las preguntas indirectas usan orden de oración afirmativa."
+          explanation: "Correct. Indirect questions use affirmative sentence word order."
         },
         {
           text: "Question tags always use the same auxiliary as the main sentence.",
           isTrue: true,
-          explanation: "Correcto. El question tag debe usar el mismo auxiliar que la oración principal."
+          explanation: "Correct. The question tag must use the same auxiliary as the main sentence."
         },
         {
           text: "We always need an auxiliary verb in wh-questions.",
           isTrue: false,
-          explanation: "Falso. Las subject questions no necesitan auxiliar: 'Who called?'"
+          explanation: "False. Subject questions do not need an auxiliary: 'Who called?'"
         },
         {
           text: "'Do you are tired?' is correct English.",
           isTrue: false,
-          explanation: "Falso. Con 'to be' no usamos auxiliar 'do': 'Are you tired?'"
+          explanation: "False. With 'to be' we do not use the auxiliary 'do': 'Are you tired?'"
         }
       ]}
     />,
@@ -318,7 +318,7 @@ const QuestionFormationPage = () => {
         "Where's the station at?"
       ]}
       correctAnswer={2}
-      explanation="'Could you tell me...' es la forma más educada de hacer una pregunta indirecta."
+      explanation="'Could you tell me...' is the most polite way to ask an indirect question."
     />,
 
     <MultipleChoiceExercise
@@ -331,7 +331,7 @@ const QuestionFormationPage = () => {
         "When"
       ]}
       correctAnswer={1}
-      explanation="Para preguntar sobre edad usamos 'How old are you?'"
+      explanation="To ask about age we use 'How old are you?'"
     />,
 
     <MultipleChoiceExercise
@@ -344,7 +344,7 @@ const QuestionFormationPage = () => {
         "What"
       ]}
       correctAnswer={0}
-      explanation="'Who' es correcto para preguntar sobre personas en contexto informal."
+      explanation="'Who' is correct for asking about people in informal contexts."
     />,
 
     <MultipleChoiceExercise
@@ -357,7 +357,7 @@ const QuestionFormationPage = () => {
         "don't I?"
       ]}
       correctAnswer={1}
-      explanation="Con 'I am', el question tag es 'aren't I?' (forma especial)."
+      explanation="With 'I am', the question tag is 'aren't I?' (special form)."
     />,
 
     <MultipleChoiceExercise
@@ -370,7 +370,7 @@ const QuestionFormationPage = () => {
         "Do"
       ]}
       correctAnswer={1}
-      explanation="'Could you help me?' es la forma más educada de pedir ayuda."
+      explanation="'Could you help me?' is the most polite way to ask for help."
     />,
 
     <MultipleChoiceExercise
@@ -383,22 +383,21 @@ const QuestionFormationPage = () => {
         "Do you know she works where?"
       ]}
       correctAnswer={1}
-      explanation="En preguntas indirectas usamos orden afirmativo: 'where she works'."
+      explanation="In indirect questions we use affirmative word order: 'where she works'."
     />
   ];
 
   return (
     <TheoryLayout
       title="Question Formation"
-      description="Domina la formación de preguntas en inglés: yes/no questions, wh-questions, question tags y preguntas indirectas para comunicarte con precisión."
-      level="A1-A2-B1-B2-C1-C2"
+      description="Master question formation in English: yes/no questions, wh-questions, question tags, and indirect questions for precise communication."
+      level="A2-B1-B2-C1-C2"
       theoryContent={theoryContent}
       exercises={exercises}
-      prerequisites={["Tiempos verbales básicos", "Auxiliares", "Pronombres"]}
+      prerequisites={["Basic verb tenses", "Auxiliaries", "Pronouns"]}
       estimatedTime="50 min"
     />
   );
 };
 
 export default QuestionFormationPage;
-

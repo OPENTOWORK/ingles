@@ -96,7 +96,7 @@ export class OfflineFirstDatabase {
     this.localData.exercises = [
       {
         id: 1,
-        level: 'A1',
+        level: 'A2',
         skill: 'listening',
         sublevel: 'basico',
         exercise_level: 'level1',
@@ -116,7 +116,7 @@ export class OfflineFirstDatabase {
       },
       {
         id: 2,
-        level: 'A1',
+        level: 'A2',
         skill: 'listening',
         sublevel: 'basico',
         exercise_level: 'level1',
@@ -136,7 +136,7 @@ export class OfflineFirstDatabase {
       },
       {
         id: 3,
-        level: 'A1',
+        level: 'A2',
         skill: 'listening',
         sublevel: 'basico',
         exercise_level: 'level1',
@@ -446,7 +446,7 @@ export class OfflineFirstDatabase {
           const normalized = {
             ...data,
             name: '',
-            current_level: data.estilo_aprendizaje || 'A1',
+            current_level: data.estilo_aprendizaje || 'A2',
             notifications: {
               email: Boolean(data.notificaciones),
               push: Boolean(data.recordatorios)
