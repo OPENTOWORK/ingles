@@ -32,10 +32,7 @@ export function useB2ExamPracticeSlot() {
       }
     }
     setExamSlotState(next);
-    if ((q === null || q === '') && next !== 1) {
-      router.replace(`${pathname}?examen=${next}`, { scroll: false });
-    }
-  }, [pathname, queryString, router]);
+  }, [queryString]);
 
   const selectExamSlot = useCallback(
     (n) => {

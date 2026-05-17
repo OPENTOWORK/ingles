@@ -1,10 +1,12 @@
 'use client';
 
+import dynamic from 'next/dynamic';
 import { Suspense, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useB2ExamPracticeSlot } from '@/hooks/useB2ExamPracticeSlot';
-import { B2ExamSlotPicker } from '@/components/b2/B2ExamSlotPicker';
-import LevelsCategoryTimer from '@/components/levels/LevelsCategoryTimer';
-import LevelsPartScorePanel from '@/components/levels/LevelsPartScorePanel';
+import { B2ExamPracticeChrome, B2ExamPracticeLayout } from '@/components/b2/B2ExamPracticeChrome';
+import { useB2ExamScoringSession } from '@/hooks/useB2ExamScoringSession';
+import { computeB2PartProgressFromState } from '@/utils/recordLevelsB2PartScore';
+import { getB2PartScoring } from '@/utils/levelsB2PartScoring';
 import LevelsAnswerJustification from '@/components/levels/LevelsAnswerJustification';
 import { useLevelsCategoryTimer } from '@/hooks/useLevelsCategoryTimer';
 import { computeLevelsPartScore } from '@/utils/levelsPaperScoreMetrics';
@@ -38,7 +40,12 @@ import {
 } from '@/utils/levelsEstadisticas';
 import { resolveB2ExamenId, fetchB2PreguntasByExamen } from '@/utils/b2ResolveExam';
 import { formatLevelsPartDisplayName } from '@/utils/formatLevelsPartDisplayName';
-import B2WritingLongFormAiPanel from '@/components/b2/B2WritingLongFormAiPanel';
+import { getCachedB2Level } from '@/utils/b2LevelCache';
+
+const B2WritingLongFormAiPanel = dynamic(
+  () => import('@/components/b2/B2WritingLongFormAiPanel'),
+  { ssr: false, loading: () => <p className="loading">Cargando corrección…</p> },
+);
 
 /** @param {string} url */
 function resolvePublicOrSiteAudioSrc(url) {
@@ -119,6 +126,7 @@ function B2ExamPaperPracticePageInner({
   writingWordMax = 190,
 }) {
   const { examSlot, selectExamSlot } = useB2ExamPracticeSlot();
+  const scoring = useB2ExamScoringSession({ partMin, partMax });
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [partsData, setPartsData] = useState([]);
@@ -132,8 +140,12 @@ function B2ExamPaperPracticePageInner({
   const [aiHintsByKey, setAiHintsByKey] = useState({});
   /** Mensaje si la consulta a `levels_preguntas_audios` falla (p. ej. RLS). */
   const [preguntaAudiosError, setPreguntaAudiosError] = useState('');
+  const [writingLiveCorrect, setWritingLiveCorrect] = useState(null);
 
   const mountedRef = useRef(true);
+  const loadedPartsRangeRef = useRef('');
+  /** Estructura de partes (sin preguntas) para reutilizar al cambiar de examen. */
+  const partsShellRef = useRef([]);
   const { label: timerLabel } = useLevelsCategoryTimer();
 
   const loadData = useCallback(async () => {
@@ -147,51 +159,71 @@ function B2ExamPaperPracticePageInner({
     setPreguntaAudiosError('');
 
     const partDescription = (row) => row?.['Descripción'] ?? row?.Descripción ?? '';
+    const partsRangeKey = `${partMin}-${partMax}`;
+    const reusePartsShell =
+      loadedPartsRangeRef.current === partsRangeKey && partsShellRef.current.length > 0;
 
     try {
-      const { data: levelData, error: levelError } = await supabase
-        .from('levels')
-        .select('id, nombre')
-        .ilike('nombre', 'b2')
-        .limit(1)
-        .single();
+      const { data: levelData, error: levelError } = await getCachedB2Level(supabase);
 
       if (levelError || !levelData) throw new Error('No se pudo obtener el nivel B2.');
 
-      // 1) Cargamos SIEMPRE las partes (con su `Descripción`) desde Supabase,
-      //    así los enunciados se muestran aunque todavía no haya preguntas.
       const partNames = Array.from(
         { length: Math.max(0, partMax - partMin + 1) },
         (_, i) => `Parte ${partMin + i} B2`,
       );
 
-      const { data: partsTableData, error: partsError } = await supabase
-        .from('levels_partes')
-        .select('*')
-        .in('nombre_parte', partNames);
+      /** @type {Record<string, object>} */
+      let partsById = {};
+      /** @type {Array<{ id: string, nombre: string, descripcion: string, questions: unknown[] }>} */
+      let baseParts;
 
-      if (partsError) throw new Error('No se pudieron obtener las partes.');
-
-      const partsByName = (partsTableData || []).reduce((acc, part) => {
-        acc[part.nombre_parte] = part;
-        return acc;
-      }, {});
-
-      const partsById = (partsTableData || []).reduce((acc, part) => {
-        acc[part.id] = part;
-        return acc;
-      }, {});
-
-      // Partes en el rango, ordenadas, con `questions: []` por defecto.
-      const baseParts = partNames
-        .map((name) => partsByName[name])
-        .filter(Boolean)
-        .map((part) => ({
+      if (reusePartsShell) {
+        baseParts = partsShellRef.current.map((part) => ({
           id: part.id,
-          nombre: formatLevelsPartDisplayName(part?.nombre_parte || 'Parte sin nombre'),
-          descripcion: partDescription(part),
+          nombre: part.nombre,
+          descripcion: part.descripcion,
           questions: [],
         }));
+        partsById = baseParts.reduce((acc, part) => {
+          acc[part.id] = { id: part.id, nombre_parte: part.nombre };
+          return acc;
+        }, {});
+      } else {
+        const { data: partsTableData, error: partsError } = await supabase
+          .from('levels_partes')
+          .select('*')
+          .in('nombre_parte', partNames);
+
+        if (partsError) throw new Error('No se pudieron obtener las partes.');
+
+        const partsByName = (partsTableData || []).reduce((acc, part) => {
+          acc[part.nombre_parte] = part;
+          return acc;
+        }, {});
+
+        partsById = (partsTableData || []).reduce((acc, part) => {
+          acc[part.id] = part;
+          return acc;
+        }, {});
+
+        baseParts = partNames
+          .map((name) => partsByName[name])
+          .filter(Boolean)
+          .map((part) => ({
+            id: part.id,
+            nombre: formatLevelsPartDisplayName(part?.nombre_parte || 'Parte sin nombre'),
+            descripcion: partDescription(part),
+            questions: [],
+          }));
+
+        loadedPartsRangeRef.current = partsRangeKey;
+        partsShellRef.current = baseParts.map(({ id, nombre, descripcion }) => ({
+          id,
+          nombre,
+          descripcion,
+        }));
+      }
 
       // 2) Intentamos cargar preguntas + respuestas. Si falla, seguimos con
       //    las partes "vacías" para mostrar al menos los enunciados.
@@ -211,6 +243,10 @@ function B2ExamPaperPracticePageInner({
           );
         }
 
+        if (mountedRef.current) {
+          scoring.setExamenContext(examenId);
+        }
+
         const { data: rawQuestions, error: questionsError } = await fetchB2PreguntasByExamen(supabase, {
           examenId,
           levelId: levelData.id,
@@ -222,29 +258,42 @@ function B2ExamPaperPracticePageInner({
         if (questionsData.length > 0) {
           const questionIds = questionsData.map((q) => q.id);
 
-          let audioRows = null;
-          let audioError = null;
-          const maxAudioAttempts = 5;
-          for (let attempt = 1; attempt <= maxAudioAttempts; attempt++) {
-            const res = await supabase
-              .from('levels_preguntas_audios')
-              .select('id, pregunta_id, audio_url, orden, titulo')
-              .in('pregunta_id', questionIds);
-            audioRows = res.data;
-            audioError = res.error;
-            if (!audioError) break;
-            const errText = `${audioError.message || ''} ${audioError.details || ''}`;
-            if (!/schema cache|pgrst205/i.test(errText) || attempt === maxAudioAttempts) break;
-            await new Promise((r) => setTimeout(r, 400 * attempt));
-          }
+          const fetchAudiosWithRetry = async () => {
+            const maxAudioAttempts = 3;
+            for (let attempt = 1; attempt <= maxAudioAttempts; attempt += 1) {
+              const res = await supabase
+                .from('levels_preguntas_audios')
+                .select('id, pregunta_id, audio_url, orden, titulo')
+                .in('pregunta_id', questionIds);
+              if (!res.error) return res;
+              const errText = `${res.error.message || ''} ${res.error.details || ''}`;
+              if (!/schema cache|pgrst205/i.test(errText) || attempt === maxAudioAttempts) {
+                return res;
+              }
+              await new Promise((r) => setTimeout(r, 250 * attempt));
+            }
+            return { data: null, error: null };
+          };
 
-          if (audioError) {
-            const msg = audioError.message || audioError.details || String(audioError);
-            console.warn('No se pudieron obtener audios (levels_preguntas_audios):', audioError);
-            setPreguntaAudiosError(msg);
-          } else {
+          const [audioRes, answersRes, openAnswersRes] = await Promise.all([
+            fetchAudiosWithRetry(),
+            supabase
+              .from('levels_respuestas')
+              .select('id, pregunta_id, respuesta, correcta')
+              .in('pregunta_id', questionIds),
+            supabase
+              .from('levels_respuestas_abiertas')
+              .select('id, pregunta_id_abierta, respuesta_texto')
+              .in('pregunta_id_abierta', questionIds),
+          ]);
+
+          if (audioRes.error) {
+            const msg = audioRes.error.message || audioRes.error.details || String(audioRes.error);
+            console.warn('No se pudieron obtener audios (levels_preguntas_audios):', audioRes.error);
+            if (mountedRef.current) setPreguntaAudiosError(msg);
+          } else if (mountedRef.current) {
             setPreguntaAudiosError('');
-            const sorted = [...(audioRows || [])].sort((a, b) => {
+            const sorted = [...(audioRes.data || [])].sort((a, b) => {
               if (a.pregunta_id !== b.pregunta_id) {
                 return String(a.pregunta_id).localeCompare(String(b.pregunta_id));
               }
@@ -268,28 +317,19 @@ function B2ExamPaperPracticePageInner({
             }
           }
 
-          const { data: answersData, error: answersError } = await supabase
-            .from('levels_respuestas')
-            .select('id, pregunta_id, respuesta, correcta')
-            .in('pregunta_id', questionIds);
-          if (answersError) throw answersError;
+          if (answersRes.error) throw answersRes.error;
 
-          const { data: openAnswersData, error: openAnswersError } = await supabase
-            .from('levels_respuestas_abiertas')
-            .select('id, pregunta_id_abierta, respuesta_texto')
-            .in('pregunta_id_abierta', questionIds);
-
-          if (openAnswersError) {
-            console.warn('No se pudieron obtener respuestas abiertas:', openAnswersError);
+          if (openAnswersRes.error) {
+            console.warn('No se pudieron obtener respuestas abiertas:', openAnswersRes.error);
           }
 
-          answersByQuestion = (answersData || []).reduce((acc, a) => {
+          answersByQuestion = (answersRes.data || []).reduce((acc, a) => {
             if (!acc[a.pregunta_id]) acc[a.pregunta_id] = [];
             acc[a.pregunta_id].push(a);
             return acc;
           }, {});
 
-          openAnswersByQuestion = (openAnswersData || []).reduce((acc, a) => {
+          openAnswersByQuestion = (openAnswersRes.data || []).reduce((acc, a) => {
             if (!acc[a.pregunta_id_abierta]) acc[a.pregunta_id_abierta] = [];
             acc[a.pregunta_id_abierta].push(a);
             return acc;
@@ -410,6 +450,13 @@ function B2ExamPaperPracticePageInner({
     () => Number(selectedPart?.nombre.match(/\d+/)?.[0] || 0),
     [selectedPart?.nombre],
   );
+
+  const b2PartCfg = getB2PartScoring(partNumber);
+
+  useEffect(() => {
+    if (!scoring.examPracticeOpen) return;
+    scoring.resetPartNoticeOnPartChange(examSlot, partNumber, scoring.progressBySlot);
+  }, [examSlot, partNumber, selectedPart?.id, scoring.examPracticeOpen]);
 
   /** Partes 8+ suelen llevar pasajes largos (writing / listening / speaking). */
   const shouldStickEnunciado = partNumber >= 8 && partNumber <= 17;
@@ -704,48 +751,129 @@ function B2ExamPaperPracticePageInner({
 
   const sectionMaxWidth = showLongWritingWithAi ? 'min(960px, 100%)' : '700px';
 
+  const trySavePartAfterAnswer = useCallback(
+    (stateOverride = {}) => {
+      if (!scoring.examPracticeOpen || !selectedPart?.id || !selectedQuestion?.preguntaId || showLongWritingWithAi) {
+        return;
+      }
+      const progress = computeB2PartProgressFromState({
+        partNumber,
+        useOpenInputUi: hasOpenAnswerSlots,
+        openQuestionNumbers,
+        openChecks: stateOverride.openChecks ?? openChecks,
+        groupedAnswers,
+        checkedQuestions: stateOverride.checkedQuestions ?? checkedQuestions,
+        selectedOptions: stateOverride.selectedOptions ?? selectedOptions,
+        getQuestionKey,
+        partId: selectedPart.id,
+      });
+      if (!progress.complete) return;
+      void scoring.trySavePartProgress({
+        examSlot,
+        partNumber,
+        preguntaId: selectedQuestion.preguntaId,
+        parteId: selectedPart.id,
+        progress,
+      });
+    },
+    [
+      scoring,
+      examSlot,
+      partNumber,
+      selectedPart?.id,
+      selectedQuestion?.preguntaId,
+      showLongWritingWithAi,
+      hasOpenAnswerSlots,
+      openQuestionNumbers,
+      openChecks,
+      groupedAnswers,
+      checkedQuestions,
+      selectedOptions,
+    ],
+  );
+
+  useEffect(() => {
+    setWritingLiveCorrect(null);
+  }, [selectedPart?.id, selectedQuestion?.preguntaId]);
+
+  const savedPartScore = scoring.progressBySlot[examSlot]?.parts?.[partNumber];
+  const scorePanelProps = showLongWritingWithAi
+    ? {
+        correctCount: writingLiveCorrect ?? savedPartScore?.correct ?? 0,
+        totalSlots: b2PartCfg?.total ?? 20,
+        passingCount: b2PartCfg?.passing ?? 12,
+      }
+    : {
+        correctCount: partScoreMetrics.correctCount,
+        totalSlots: b2PartCfg?.total ?? partScoreMetrics.totalSlots,
+        passingCount: b2PartCfg?.passing ?? partScoreMetrics.passingCount,
+      };
+
+  const handleWritingScoresReady = useCallback(
+    (scores) => {
+      if (!scores || typeof scores.total !== 'number') return;
+      setWritingLiveCorrect(scores.total);
+      if (!scoring.examPracticeOpen || !selectedPart?.id) return;
+      const preguntaId =
+        selectedQuestion?.preguntaId ||
+        selectedPart.questions?.[0]?.preguntaId ||
+        selectedPart.id;
+      void scoring.saveWritingOrSpeakingScore({
+        examSlot,
+        partNumber,
+        preguntaId,
+        parteId: selectedPart.id,
+        correct: scores.total,
+        total: b2PartCfg?.total ?? 20,
+        passed: Boolean(scores.passed),
+      });
+    },
+    [
+      scoring,
+      examSlot,
+      partNumber,
+      selectedPart,
+      selectedQuestion?.preguntaId,
+      b2PartCfg,
+    ],
+  );
+
+  const handleSelectPart = (part) => {
+    setSelectedPartId(part.id);
+    if (part.questions.length > 1) {
+      const currentSelected = selectedQuestionByPart[part.id];
+      const available = part.questions.filter((q) => q.preguntaId !== currentSelected);
+      const pool = available.length > 0 ? available : part.questions;
+      const nextQuestion = pool[Math.floor(Math.random() * pool.length)];
+      setSelectedQuestionByPart((prev) => ({ ...prev, [part.id]: nextQuestion.preguntaId }));
+    } else if (part.questions.length === 1) {
+      setSelectedQuestionByPart((prev) => ({ ...prev, [part.id]: part.questions[0].preguntaId }));
+    }
+  };
+
   return (
-    <main style={{ padding: '2rem', fontFamily: 'Segoe UI, sans-serif' }}>
-      <h1 style={{ textAlign: 'center' }}>{title}</h1>
-      <B2ExamSlotPicker value={examSlot} onSelect={selectExamSlot} />
-      {subtitle ? (
-        <p style={{ textAlign: 'center', margin: '0.35rem 0 0', color: '#4a5568', fontSize: '1rem' }}>
-          {subtitle}
-        </p>
-      ) : null}
-
-      <div style={{ textAlign: 'center', marginTop: '1rem' }}>
-        <button
-          type="button"
-          onClick={() => loadData()}
-          disabled={loading}
-          style={{
-            padding: '0.55rem 1.1rem',
-            borderRadius: '8px',
-            border: '1px solid #2f855a',
-            background: loading ? '#e2e8f0' : '#f0fff4',
-            color: '#1a202c',
-            fontWeight: 600,
-            cursor: loading ? 'not-allowed' : 'pointer',
-          }}
-        >
-          {loading ? 'Actualizando…' : refreshLabel}
-        </button>
-        <p style={{ margin: '0.45rem 0 0', fontSize: '0.85rem', color: '#718096' }}>
-          Vuelve a cargar partes, textos y respuestas desde el servidor y limpia tus selecciones.
-        </p>
-      </div>
-
-      <LevelsCategoryTimer categoryLabel={`Sesión: ${title}`} timeLabel={timerLabel} />
-      {!showLongWritingWithAi ? (
-        <LevelsPartScorePanel
-          correctCount={partScoreMetrics.correctCount}
-          totalSlots={partScoreMetrics.totalSlots}
-          passingCount={partScoreMetrics.passingCount}
-        />
-      ) : null}
-
-      <section style={{ maxWidth: sectionMaxWidth, margin: '2rem auto' }}>
+    <B2ExamPracticeLayout examPracticeOpen={scoring.examPracticeOpen}>
+      <B2ExamPracticeChrome
+        examSlot={examSlot}
+        onSelectExam={(n) => scoring.handleSelectExam(selectExamSlot, n)}
+        progressBySlot={scoring.progressBySlot}
+        partsInPaper={scoring.partsInPaper}
+        examPracticeOpen={scoring.examPracticeOpen}
+        title={title}
+        subtitle={subtitle}
+        timerLabel={timerLabel}
+        refreshLabel={refreshLabel}
+        loading={loading}
+        onRefresh={() => loadData()}
+        partScoreMetrics={scorePanelProps}
+        hideScorePanel={false}
+        partFinishNotice={scoring.partFinishNotice}
+        partsData={!loading && !error ? partsData : []}
+        selectedPartId={selectedPartId}
+        onSelectPart={handleSelectPart}
+        getPartSavedScoreLabel={(part) => scoring.getPartSavedScoreLabel(part, examSlot)}
+      >
+      <section style={{ maxWidth: sectionMaxWidth, margin: '0 auto' }}>
         {loading && <p style={{ textAlign: 'center' }}>{loadingLabel}</p>}
         {!loading && error && (
           <p style={{ textAlign: 'center', color: '#c53030', fontWeight: 600 }}>{error}</p>
@@ -753,51 +881,6 @@ function B2ExamPaperPracticePageInner({
 
         {!loading && !error && (
           <>
-            <div
-              style={{
-                display: 'grid',
-                gridTemplateColumns: 'repeat(auto-fit, minmax(140px, 1fr))',
-                gap: '1rem',
-                justifyItems: 'center',
-                marginBottom: '1.5rem',
-              }}
-            >
-              {partsData.map((part) => (
-                <button
-                  key={part.id}
-                  type="button"
-                  style={{
-                    ...buttonStyle,
-                    border: selectedPartId === part.id ? '2px solid #1f6f43' : '2px solid transparent',
-                    width: '100%',
-                    cursor: 'pointer',
-                    transform: selectedPartId === part.id ? 'scale(1.02)' : 'scale(1)',
-                  }}
-                  onClick={() => {
-                    setSelectedPartId(part.id);
-                    if (part.questions.length > 1) {
-                      const currentSelected = selectedQuestionByPart[part.id];
-                      const available = part.questions.filter((q) => q.preguntaId !== currentSelected);
-                      const pool = available.length > 0 ? available : part.questions;
-                      const randomIndex = Math.floor(Math.random() * pool.length);
-                      const nextQuestion = pool[randomIndex];
-                      setSelectedQuestionByPart((prev) => ({
-                        ...prev,
-                        [part.id]: nextQuestion.preguntaId,
-                      }));
-                    } else if (part.questions.length === 1) {
-                      setSelectedQuestionByPart((prev) => ({
-                        ...prev,
-                        [part.id]: part.questions[0].preguntaId,
-                      }));
-                    }
-                  }}
-                >
-                  {part.nombre}
-                </button>
-              ))}
-            </div>
-
             {selectedPart && !selectedQuestion && (
               <div
                 style={{
@@ -1367,8 +1450,10 @@ function B2ExamPaperPracticePageInner({
                                     type="button"
                                     onClick={() => {
                                       const wasChecked = checkedQuestions[questionKey];
+                                      const nextChecked = { ...checkedQuestions, [questionKey]: true };
                                       setSelectedOptions((prev) => ({ ...prev, [questionKey]: option.id }));
-                                      setCheckedQuestions((prev) => ({ ...prev, [questionKey]: true }));
+                                      setCheckedQuestions(nextChecked);
+                                      trySavePartAfterAnswer({ checkedQuestions: nextChecked });
                                       if (!wasChecked) {
                                         const correctOpt = group.options.find((o) => o.correcta);
                                         const answersFromDatabase = group.options
@@ -1545,6 +1630,7 @@ function B2ExamPaperPracticePageInner({
                       partDescription={selectedPart.descripcion || ''}
                       taskInstructions={selectedPartContent.enunciado || ''}
                       taskInputText={selectedPartContent.texto || ''}
+                      onScoresReady={handleWritingScoresReady}
                     />
                   ) : null}
 
@@ -1593,7 +1679,9 @@ function B2ExamPaperPracticePageInner({
                                   const expectedAnswers = openAnswerMap.get(questionNumber) || new Set();
                                   const isCorrect = expectedAnswers.has(normalizeText(currentValue));
                                   const prevResult = openChecks[questionKey];
-                                  setOpenChecks((prev) => ({ ...prev, [questionKey]: isCorrect }));
+                                  const nextOpenChecks = { ...openChecks, [questionKey]: isCorrect };
+                                  setOpenChecks(nextOpenChecks);
+                                  trySavePartAfterAnswer({ openChecks: nextOpenChecks });
                                   if (typeof prevResult !== 'boolean') {
                                     const correctChoiceText =
                                       [...expectedAnswers].slice(0, 4).join(' · ') || 'respuesta modelo';
@@ -1709,8 +1797,10 @@ function B2ExamPaperPracticePageInner({
                                   type="button"
                                   onClick={() => {
                                     const wasChecked = checkedQuestions[questionKey];
+                                    const nextChecked = { ...checkedQuestions, [questionKey]: true };
                                     setSelectedOptions((prev) => ({ ...prev, [questionKey]: option.id }));
-                                    setCheckedQuestions((prev) => ({ ...prev, [questionKey]: true }));
+                                    setCheckedQuestions(nextChecked);
+                                    trySavePartAfterAnswer({ checkedQuestions: nextChecked });
                                     if (!wasChecked) {
                                       const correctOpt = group.options.find((o) => o.correcta);
                                       const answersFromDatabase = group.options
@@ -1807,7 +1897,21 @@ function B2ExamPaperPracticePageInner({
         )}
       </section>
 
-      <div style={{ textAlign: 'center', marginTop: '2rem' }}>
+      <div style={{ textAlign: 'center', marginTop: '2rem', display: 'flex', flexWrap: 'wrap', gap: '0.75rem', justifyContent: 'center' }}>
+        <Link
+          href={`/niveles/b2/exam-1?examen=${examSlot}`}
+          style={{
+            textDecoration: 'none',
+            color: '#047857',
+            fontWeight: 'bold',
+            display: 'inline-block',
+            padding: '0.75rem 1.25rem',
+            border: '2px solid #059669',
+            borderRadius: '6px',
+          }}
+        >
+          ← Full Exam
+        </Link>
         <Link href="/niveles/b2">
           <div
             style={{
@@ -1818,7 +1922,6 @@ function B2ExamPaperPracticePageInner({
               padding: '0.75rem 1.25rem',
               border: '2px solid #0070f3',
               borderRadius: '6px',
-              marginTop: '2rem',
               transition: 'background 0.3s, color 0.3s',
             }}
             onMouseOver={(e) => {
@@ -1834,7 +1937,8 @@ function B2ExamPaperPracticePageInner({
           </div>
         </Link>
       </div>
-    </main>
+      </B2ExamPracticeChrome>
+    </B2ExamPracticeLayout>
   );
 }
 

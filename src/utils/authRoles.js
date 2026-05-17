@@ -41,6 +41,11 @@ const roleFetchInflight = new Map();
 const ROLE_CACHE_PREFIX = 'dralo_user_role_v1_';
 const ROLE_CACHE_TTL_MS = 10 * 60 * 1000;
 
+/** Rol en sessionStorage (sin red) para pintar la UI antes del fetch. */
+export function peekCachedRoleName(userId) {
+  return readCachedRole(userId);
+}
+
 function readCachedRole(userId) {
   if (typeof window === 'undefined' || !userId) return null;
   try {

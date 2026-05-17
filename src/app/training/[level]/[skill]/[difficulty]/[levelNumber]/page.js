@@ -5,6 +5,7 @@ import AudioPlayer from '@/components/AudioPlayer';
 import { getExercisesByLevel } from '@/data/trainingExercises';
 import { saveExerciseResult, getUserProgress, progressTracker } from '@/utils/progressTracker';
 import { supabase } from '@/utils/supabaseClient';
+import { TRAINING_LEVEL_COUNT } from '@/constants/trainingLevels';
 
 export default function ExercisePage({ params }) {
   const { level, skill, difficulty, levelNumber } = params;
@@ -224,7 +225,7 @@ export default function ExercisePage({ params }) {
   // Función para obtener el siguiente nivel
   const getNextLevel = () => {
     const currentLevelNum = parseInt(levelNumber.replace('level-', ''));
-    if (currentLevelNum < 12) {
+    if (currentLevelNum < TRAINING_LEVEL_COUNT) {
       return `level-${currentLevelNum + 1}`;
     }
     return null;

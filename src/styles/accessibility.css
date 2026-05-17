@@ -1,0 +1,202 @@
+/* Accessibility modes (loaded once globally; was styled-jsx per render) */
+
+.large-text {
+  font-size: 1.2rem !important;
+}
+
+.large-text h1 { font-size: 2.5rem !important; }
+.large-text h2 { font-size: 2rem !important; }
+.large-text h3 { font-size: 1.75rem !important; }
+.large-text h4 { font-size: 1.5rem !important; }
+.large-text p { font-size: 1.2rem !important; }
+.large-text button { font-size: 1.1rem !important; padding: 1rem 1.5rem !important; }
+.large-text input { font-size: 1.1rem !important; padding: 0.75rem !important; }
+
+.reduced-motion *,
+.reduced-motion *::before,
+.reduced-motion *::after {
+  animation-duration: 0.01ms !important;
+  animation-iteration-count: 1 !important;
+  transition-duration: 0.01ms !important;
+  scroll-behavior: auto !important;
+}
+
+.dark-mode {
+  --primary-color: #3b82f6;
+  --secondary-color: #1f2937;
+  --background-color: #111827;
+  --text-color: #f9fafb;
+  --border-color: #374151;
+  --card-background: #1f2937;
+}
+
+.dark-mode body {
+  background-color: var(--background-color);
+  color: var(--text-color);
+}
+
+.dark-mode .card,
+.dark-mode .exercise-card,
+.dark-mode .dashboard-card {
+  background-color: var(--card-background);
+  border-color: var(--border-color);
+}
+
+.focus-indicators *:focus {
+  outline: 3px solid #3b82f6 !important;
+  outline-offset: 2px !important;
+}
+
+.focus-indicators button:focus,
+.focus-indicators input:focus,
+.focus-indicators select:focus,
+.focus-indicators textarea:focus,
+.focus-indicators a:focus {
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.5) !important;
+}
+
+.simplified-ui {
+  --border-radius: 4px;
+  --box-shadow: none;
+  --gradient: none;
+}
+
+.simplified-ui * {
+  border-radius: var(--border-radius) !important;
+  box-shadow: var(--box-shadow) !important;
+  background: var(--background-color) !important;
+}
+
+.simplified-ui .gradient-bg {
+  background: var(--background-color) !important;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.skip-link {
+  position: absolute;
+  top: -40px;
+  left: 6px;
+  background: #000;
+  color: #fff;
+  padding: 8px;
+  text-decoration: none;
+  border-radius: 4px;
+  z-index: 1000;
+  transition: top 0.3s;
+}
+
+.skip-link:focus {
+  top: 6px;
+}
+
+.keyboard-nav button,
+.keyboard-nav input,
+.keyboard-nav select,
+.keyboard-nav textarea,
+.keyboard-nav a {
+  position: relative;
+}
+
+.keyboard-nav button:focus::after,
+.keyboard-nav input:focus::after,
+.keyboard-nav select:focus::after,
+.keyboard-nav textarea:focus::after,
+.keyboard-nav a:focus::after {
+  content: '';
+  position: absolute;
+  top: -2px;
+  left: -2px;
+  right: -2px;
+  bottom: -2px;
+  border: 2px solid #3b82f6;
+  border-radius: 4px;
+  pointer-events: none;
+}
+
+.audio-description {
+  position: absolute;
+  left: -10000px;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+}
+
+.extended-time {
+  position: relative;
+}
+
+.extended-time::before {
+  content: '⏰ Extended time available';
+  position: absolute;
+  top: -25px;
+  right: 0;
+  background: #f59e0b;
+  color: white;
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-size: 0.8rem;
+  z-index: 10;
+}
+
+.tts-controls {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background: rgba(0, 0, 0, 0.8);
+  color: white;
+  padding: 1rem;
+  border-radius: 8px;
+  z-index: 1000;
+}
+
+.tts-controls button {
+  background: #3b82f6;
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  margin: 0.25rem;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.tts-controls button:hover {
+  background: #2563eb;
+}
+
+@media (max-width: 768px) {
+  .large-text {
+    font-size: 1.1rem !important;
+  }
+
+  .large-text h1 { font-size: 2rem !important; }
+  .large-text h2 { font-size: 1.75rem !important; }
+  .large-text button {
+    font-size: 1rem !important;
+    padding: 0.875rem 1.25rem !important;
+    min-height: 44px;
+  }
+}
+
+@media print {
+  .high-contrast,
+  .dark-mode {
+    --background-color: #ffffff !important;
+    --text-color: #000000 !important;
+  }
+
+  .skip-link,
+  .tts-controls {
+    display: none !important;
+  }
+}

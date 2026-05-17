@@ -27,18 +27,7 @@ export default function QuickNavigation({
       setFlaggedQuestions(new Set(JSON.parse(savedFlags)));
     }
     if (savedMinimized) {
-      const minimized = JSON.parse(savedMinimized);
-      setIsMinimized(minimized);
-      
-      // Aplicar margen correcto al cargar
-      const shell = document.querySelector('.shell');
-      if (shell) {
-        if (minimized) {
-          shell.style.marginRight = '220px';
-        } else {
-          shell.style.marginRight = '320px';
-        }
-      }
+      setIsMinimized(JSON.parse(savedMinimized));
     }
   }, [sectionName]);
 
@@ -56,16 +45,6 @@ export default function QuickNavigation({
     const newMinimized = !isMinimized;
     setIsMinimized(newMinimized);
     localStorage.setItem(`navMinimized_${sectionName}`, JSON.stringify(newMinimized));
-    
-    // Actualizar el margen del shell dinámicamente
-    const shell = document.querySelector('.shell');
-    if (shell) {
-      if (newMinimized) {
-        shell.style.marginRight = '220px'; // Espacio para navegación minimizada
-      } else {
-        shell.style.marginRight = '320px'; // Espacio para navegación completa
-      }
-    }
   };
 
   // Toggle bookmark

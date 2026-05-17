@@ -166,6 +166,11 @@ export function TeoriaGlobalStyles() {
         flex-wrap: wrap;
         gap: 8px;
       }
+      .chips--sections {
+        margin-top: 10px;
+        padding-top: 10px;
+        border-top: 1px dashed #e2e8f0;
+      }
       .chip {
         padding: 8px 12px;
         border-radius: 9999px;
@@ -313,6 +318,15 @@ export function TeoriaGlobalStyles() {
       .card:focus {
         outline: none;
         box-shadow: 0 0 0 6px rgba(0, 112, 243, 0.35);
+      }
+      .card__section {
+        display: inline-block;
+        font-size: 11px;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.04em;
+        color: #64748b;
+        margin-bottom: 6px;
       }
       .card__title {
         font-size: 16px;

@@ -1,5 +1,5 @@
 import { supabase } from '@/utils/supabaseClient';
-import { isUoePartPassed } from '@/utils/levelsUoePartScoring';
+import { isB2PartPassed } from '@/utils/levelsB2PartScoring';
 
 const META_PREFIX = 'uoe_meta:';
 
@@ -161,7 +161,7 @@ export async function upsertLevelsPartPuntuacion({
 
   const correct = Math.max(0, Number(correctas) || 0);
   const total = Math.max(1, Number(totalPreguntas) || 1);
-  const aprobado = isUoePartPassed(correct, parteNumero);
+  const aprobado = isB2PartPassed(correct, parteNumero);
   const puntuacion = aprobado ? 100 : Math.round((100 * correct) / total);
   const descripcion = buildUoePartDescripcion({
     examenId,

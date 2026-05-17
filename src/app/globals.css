@@ -1,15 +1,28 @@
+@import '../styles/accessibility.css';
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 /* Reset básico */
-html, body {
+html {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  overflow-x: clip;
+  max-width: 100%;
+}
+
+body {
   height: 100%;
   margin: 0;
   padding: 0;
   font-family: 'Segoe UI', sans-serif;
   color: #333;
   background-color: #e6f0ff;
+  overflow-x: clip;
+  max-width: 100%;
+  width: 100%;
 }
 
 /* Enlaces */
@@ -32,6 +45,37 @@ a:hover {
 
 .page-content {
   flex: 1;
+  width: 100%;
+  max-width: 100%;
+  overflow-x: clip;
+  box-sizing: border-box;
+}
+
+.route-loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 12rem;
+  padding: 2rem;
+}
+
+.route-loading--niveles {
+  min-height: 18rem;
+}
+
+.route-loading__spinner {
+  width: 2.25rem;
+  height: 2.25rem;
+  border: 3px solid rgba(0, 112, 243, 0.2);
+  border-top-color: #0070f3;
+  border-radius: 50%;
+  animation: route-loading-spin 0.65s linear infinite;
+}
+
+@keyframes route-loading-spin {
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 /* Cabecera */
@@ -691,12 +735,181 @@ body.nav-open {
   overflow: hidden;
 }
 
+/* ——— Home: menú lateral derecho desplegable (blanco) ——— */
+.app-side-menu {
+  display: none;
+}
+
+@media (min-width: 1100px) {
+  .app-side-menu {
+    display: flex;
+    flex-direction: row;
+    align-items: stretch;
+    position: fixed;
+    top: calc(env(safe-area-inset-top, 0px) + 68px);
+    right: 0;
+    bottom: max(12px, env(safe-area-inset-bottom, 0px));
+    z-index: 45;
+    max-height: calc(100dvh - 80px);
+    pointer-events: none;
+  }
+
+  .app-side-menu__tab,
+  .app-side-menu__panel {
+    pointer-events: auto;
+  }
+
+  .app-side-menu__tab {
+    align-self: center;
+    flex-shrink: 0;
+    writing-mode: vertical-rl;
+    text-orientation: mixed;
+    transform: rotate(180deg);
+    border: none;
+    border-radius: 10px 0 0 10px;
+    padding: 1rem 0.55rem;
+    background: #fff;
+    color: #4f46e5;
+    font-weight: 700;
+    font-size: 0.9rem;
+    cursor: pointer;
+    box-shadow: -4px 0 16px rgba(15, 23, 42, 0.12);
+    font-family: inherit;
+  }
+
+  .app-side-menu__tab:hover {
+    background: #f8fafc;
+  }
+
+  .app-side-menu__panel {
+    width: min(280px, 22vw);
+    background: #fff;
+    color: #1e293b;
+    border-radius: 14px 0 0 14px;
+    box-shadow: -8px 0 32px rgba(15, 23, 42, 0.14);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    transition:
+      transform 0.28s cubic-bezier(0.4, 0, 0.2, 1),
+      opacity 0.28s ease,
+      width 0.28s ease;
+  }
+
+  .app-side-menu--collapsed .app-side-menu__panel {
+    transform: translateX(100%);
+    opacity: 0;
+    width: 0;
+    overflow: hidden;
+    pointer-events: none;
+  }
+
+  .app-side-menu--open .app-side-menu__panel {
+    transform: translateX(0);
+    opacity: 1;
+  }
+
+  .app-side-menu__head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1rem 1.1rem;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: #fff;
+    flex-shrink: 0;
+  }
+
+  .app-side-menu__title {
+    font-weight: 700;
+    font-size: 1.1rem;
+  }
+
+  .app-side-menu__close {
+    width: 40px;
+    height: 40px;
+    border: none;
+    border-radius: 10px;
+    background: rgba(255, 255, 255, 0.15);
+    color: #fff;
+    font-size: 1.1rem;
+    cursor: pointer;
+  }
+
+  .app-side-menu__nav {
+    flex: 1;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    padding: 0.35rem 0 1rem;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .app-side-menu__link {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    text-align: left;
+    color: #334155;
+    font-size: 1rem;
+    font-weight: 500;
+    padding: 0.85rem 1.25rem;
+    text-decoration: none;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    font-family: inherit;
+    box-sizing: border-box;
+    min-height: 48px;
+  }
+
+  .app-side-menu__link:hover {
+    background: #f1f5f9;
+    color: #4f46e5;
+    text-decoration: none;
+  }
+
+  .app-side-menu__sub {
+    background: #f8fafc;
+    border-bottom: 1px solid #e2e8f0;
+    padding: 0.2rem 0 0.45rem;
+  }
+
+  .app-side-menu__sub .app-side-menu__link {
+    padding-left: 2rem;
+    font-size: 0.95rem;
+    min-height: 44px;
+  }
+
+  .app-side-menu__logout {
+    margin: 0.75rem 1.25rem 0.5rem;
+    padding: 0.75rem 1rem;
+    border: none;
+    border-radius: 10px;
+    text-align: center;
+    font-weight: 700;
+    font-size: 1rem;
+    color: #fff;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    cursor: pointer;
+    text-decoration: none;
+    display: block;
+    font-family: inherit;
+  }
+
+  .app-side-menu__logout--link:hover {
+    opacity: 0.95;
+    color: #fff;
+    text-decoration: none;
+  }
+}
+
 /* ——— Home page ——— */
 .home-page {
   min-height: calc(100dvh - 64px);
   padding: clamp(1.5rem, 4vw, 2.5rem) clamp(1rem, 3vw, 1.5rem) clamp(2.5rem, 6vw, 3.5rem);
   background: linear-gradient(160deg, #667eea 0%, #764ba2 55%, #5b4bb7 100%);
-  background-attachment: fixed;
+  background-attachment: scroll;
   color: #fff;
   box-sizing: border-box;
 }

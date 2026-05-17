@@ -1,9 +1,10 @@
 'use client';
 import { Suspense, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useB2ExamPracticeSlot } from '@/hooks/useB2ExamPracticeSlot';
-import { B2ExamSlotPicker } from '@/components/b2/B2ExamSlotPicker';
-import LevelsCategoryTimer from '@/components/levels/LevelsCategoryTimer';
-import LevelsPartScorePanel from '@/components/levels/LevelsPartScorePanel';
+import { B2ExamPracticeChrome, B2ExamPracticeLayout } from '@/components/b2/B2ExamPracticeChrome';
+import { useB2ExamScoringSession } from '@/hooks/useB2ExamScoringSession';
+import { computeB2PartProgressFromState } from '@/utils/recordLevelsB2PartScore';
+import { getB2PartScoring } from '@/utils/levelsB2PartScoring';
 import LevelsAnswerJustification from '@/components/levels/LevelsAnswerJustification';
 import { useLevelsCategoryTimer } from '@/hooks/useLevelsCategoryTimer';
 import { computeLevelsPartScore } from '@/utils/levelsPaperScoreMetrics';
@@ -22,6 +23,7 @@ import {
   parseReadingPart6SentencePool,
 } from '@/utils/b2ExamTextBlocks';
 import { resolveB2ExamenId, fetchB2PreguntasByExamen } from '@/utils/b2ResolveExam';
+import { getCachedB2Level } from '@/utils/b2LevelCache';
 import { formatLevelsPartDisplayName } from '@/utils/formatLevelsPartDisplayName';
 import {
   getSessionUserId,
@@ -62,6 +64,7 @@ function getFormattedEnunciado(rawText = '') {
 
 function B2ReadingExamsPageInner() {
   const { examSlot, selectExamSlot } = useB2ExamPracticeSlot();
+  const scoring = useB2ExamScoringSession({ partMin: 5, partMax: 7 });
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [partsData, setPartsData] = useState([]);
@@ -83,12 +86,7 @@ function B2ReadingExamsPageInner() {
     setAiHintsByKey({});
 
     try {
-      const { data: levelData, error: levelError } = await supabase
-        .from('levels')
-        .select('id, nombre')
-        .ilike('nombre', 'b2')
-        .limit(1)
-        .single();
+      const { data: levelData, error: levelError } = await getCachedB2Level(supabase);
 
       if (levelError || !levelData) throw new Error('No se pudo obtener el nivel B2.');
 
@@ -105,6 +103,10 @@ function B2ReadingExamsPageInner() {
         );
       }
 
+      if (mountedRef.current) {
+        scoring.setExamenContext(examenId);
+      }
+
       const { data: questionsData, error: questionsError } = await fetchB2PreguntasByExamen(supabase, {
         examenId,
         levelId: levelData.id,
@@ -117,16 +119,18 @@ function B2ReadingExamsPageInner() {
       const partIds = [...new Set(questionsData.map((q) => q.parte_id).filter(Boolean))];
       const questionIds = questionsData.map((q) => q.id);
 
-      const { data: partsTableData, error: partsError } = await supabase
-        .from('levels_partes')
-        .select('*')
-        .in('id', partIds);
-      if (partsError) throw new Error('No se pudieron obtener las partes.');
+      const [partsRes, answersRes] = await Promise.all([
+        supabase.from('levels_partes').select('*').in('id', partIds),
+        supabase
+          .from('levels_respuestas')
+          .select('id, pregunta_id, respuesta, correcta')
+          .in('pregunta_id', questionIds),
+      ]);
 
-      const { data: answersData, error: answersError } = await supabase
-        .from('levels_respuestas')
-        .select('id, pregunta_id, respuesta, correcta')
-        .in('pregunta_id', questionIds);
+      const { data: partsTableData, error: partsError } = partsRes;
+      const { data: answersData, error: answersError } = answersRes;
+
+      if (partsError) throw new Error('No se pudieron obtener las partes.');
       if (answersError) throw new Error('No se pudieron obtener las respuestas.');
 
       const answersByQuestion = (answersData || []).reduce((acc, a) => {
@@ -492,6 +496,67 @@ function B2ReadingExamsPageInner() {
     ],
   );
 
+  const b2PartCfg = getB2PartScoring(partNumberReading);
+
+  useEffect(() => {
+    if (!scoring.examPracticeOpen) return;
+    scoring.resetPartNoticeOnPartChange(examSlot, partNumberReading, scoring.progressBySlot);
+  }, [examSlot, partNumberReading, selectedPart?.id, scoring.examPracticeOpen]);
+
+  const trySavePartAfterAnswer = useCallback(
+    (stateOverride = {}) => {
+      if (!scoring.examPracticeOpen || !selectedPart?.id || !selectedQuestion?.preguntaId) return;
+      const progress = computeB2PartProgressFromState({
+        partNumber: partNumberReading,
+        useOpenInputUi: false,
+        openQuestionNumbers: [],
+        openChecks: {},
+        groupedAnswers: groupedAnswersForUiAndScore,
+        checkedQuestions: stateOverride.checkedQuestions ?? checkedQuestions,
+        selectedOptions: stateOverride.selectedOptions ?? selectedOptions,
+        getQuestionKey,
+        partId: selectedPart.id,
+      });
+      if (!progress.complete) return;
+      void scoring.trySavePartProgress({
+        examSlot,
+        partNumber: partNumberReading,
+        preguntaId: selectedQuestion.preguntaId,
+        parteId: selectedPart.id,
+        progress,
+      });
+    },
+    [
+      scoring,
+      examSlot,
+      partNumberReading,
+      selectedPart?.id,
+      selectedQuestion?.preguntaId,
+      groupedAnswersForUiAndScore,
+      checkedQuestions,
+      selectedOptions,
+    ],
+  );
+
+  const scorePanelProps = {
+    correctCount: partScoreMetrics.correctCount,
+    totalSlots: b2PartCfg?.total ?? partScoreMetrics.totalSlots,
+    passingCount: b2PartCfg?.passing ?? partScoreMetrics.passingCount,
+  };
+
+  const handleSelectPart = (part) => {
+    setSelectedPartId(part.id);
+    if (part.questions.length > 1) {
+      const currentSelected = selectedQuestionByPart[part.id];
+      const available = part.questions.filter((q) => q.preguntaId !== currentSelected);
+      const pool = available.length > 0 ? available : part.questions;
+      const nextQuestion = pool[Math.floor(Math.random() * pool.length)];
+      setSelectedQuestionByPart((prev) => ({ ...prev, [part.id]: nextQuestion.preguntaId }));
+    } else if (part.questions.length === 1) {
+      setSelectedQuestionByPart((prev) => ({ ...prev, [part.id]: part.questions[0].preguntaId }));
+    }
+  };
+
   const buttonStyle = {
     backgroundColor: '#c1f2cd',
     padding: '0.75rem 1.25rem',
@@ -506,95 +571,32 @@ function B2ReadingExamsPageInner() {
   };
 
   return (
-    <main style={{ padding: '2rem', fontFamily: 'Segoe UI, sans-serif' }}>
-      <h1 style={{ textAlign: 'center' }}>B2 Reading Practice</h1>
-      <B2ExamSlotPicker value={examSlot} onSelect={selectExamSlot} />
-      <p style={{ textAlign: 'center', margin: '0.35rem 0 0', fontSize: '0.8rem', color: '#718096' }}>
-        El mismo selector se puede cambiar después de cargar; los datos salen del examen marcado arriba.
-      </p>
-      <p style={{ textAlign: 'center', margin: '0.35rem 0 0', color: '#4a5568', fontSize: '1rem' }}>
-        Partes 5 a 7
-      </p>
-      <div style={{ textAlign: 'center', marginTop: '1rem' }}>
-        <button
-          type="button"
-          onClick={() => loadReadingData()}
-          disabled={loading}
-          style={{
-            padding: '0.55rem 1.1rem',
-            borderRadius: '8px',
-            border: '1px solid #2f855a',
-            background: loading ? '#e2e8f0' : '#f0fff4',
-            color: '#1a202c',
-            fontWeight: 600,
-            cursor: loading ? 'not-allowed' : 'pointer',
-          }}
-        >
-          {loading ? 'Actualizando…' : 'Refrescar Reading (5-7)'}
-        </button>
-        <p style={{ margin: '0.45rem 0 0', fontSize: '0.85rem', color: '#718096' }}>
-          Vuelve a cargar partes, textos y respuestas desde el servidor y limpia tus selecciones (solo lectura).
-        </p>
-      </div>
-
-      <LevelsCategoryTimer categoryLabel="Sesión: B2 Reading (partes 5–7)" timeLabel={timerLabel} />
-      <LevelsPartScorePanel
-        correctCount={partScoreMetrics.correctCount}
-        totalSlots={partScoreMetrics.totalSlots}
-        passingCount={partScoreMetrics.passingCount}
-      />
-
-      <section style={{ maxWidth: '700px', margin: '2rem auto' }}>
+    <B2ExamPracticeLayout examPracticeOpen={scoring.examPracticeOpen}>
+      <B2ExamPracticeChrome
+        examSlot={examSlot}
+        onSelectExam={(n) => scoring.handleSelectExam(selectExamSlot, n)}
+        progressBySlot={scoring.progressBySlot}
+        partsInPaper={scoring.partsInPaper}
+        examPracticeOpen={scoring.examPracticeOpen}
+        title="B2 Reading Practice"
+        subtitle="Partes 5 a 7"
+        timerLabel={timerLabel}
+        refreshLabel="Refrescar Reading (5-7)"
+        loading={loading}
+        onRefresh={() => loadReadingData()}
+        partScoreMetrics={scorePanelProps}
+        partFinishNotice={scoring.partFinishNotice}
+        partsData={!loading && !error ? partsData : []}
+        selectedPartId={selectedPartId}
+        onSelectPart={handleSelectPart}
+        getPartSavedScoreLabel={(part) => scoring.getPartSavedScoreLabel(part, examSlot)}
+      >
+      <section style={{ maxWidth: '700px', margin: '0 auto' }}>
         {loading && <p style={{ textAlign: 'center' }}>Cargando Reading (Partes 5 a 7)...</p>}
         {!loading && error && <p style={{ textAlign: 'center', color: '#c53030', fontWeight: 600 }}>{error}</p>}
 
         {!loading && !error && (
           <>
-            <div
-              style={{
-                display: 'grid',
-                gridTemplateColumns: 'repeat(auto-fit, minmax(140px, 1fr))',
-                gap: '1rem',
-                justifyItems: 'center',
-                marginBottom: '1.5rem',
-              }}
-            >
-              {partsData.map((part) => (
-                <button
-                  key={part.id}
-                  type="button"
-                  style={{
-                    ...buttonStyle,
-                    border: selectedPartId === part.id ? '2px solid #1f6f43' : '2px solid transparent',
-                    width: '100%',
-                    cursor: 'pointer',
-                    transform: selectedPartId === part.id ? 'scale(1.02)' : 'scale(1)',
-                  }}
-                  onClick={() => {
-                    setSelectedPartId(part.id);
-                    if (part.questions.length > 1) {
-                      const currentSelected = selectedQuestionByPart[part.id];
-                      const available = part.questions.filter((q) => q.preguntaId !== currentSelected);
-                      const pool = available.length > 0 ? available : part.questions;
-                      const randomIndex = Math.floor(Math.random() * pool.length);
-                      const nextQuestion = pool[randomIndex];
-                      setSelectedQuestionByPart((prev) => ({
-                        ...prev,
-                        [part.id]: nextQuestion.preguntaId,
-                      }));
-                    } else if (part.questions.length === 1) {
-                      setSelectedQuestionByPart((prev) => ({
-                        ...prev,
-                        [part.id]: part.questions[0].preguntaId,
-                      }));
-                    }
-                  }}
-                >
-                  {part.nombre}
-                </button>
-              ))}
-            </div>
-
             {selectedPart && selectedQuestion && (
               <div
                 style={{
@@ -742,8 +744,10 @@ function B2ReadingExamsPageInner() {
                                 type="button"
                                 onClick={() => {
                                   const wasChecked = checkedQuestions[questionKey];
+                                  const nextChecked = { ...checkedQuestions, [questionKey]: true };
                                   setSelectedOptions((prev) => ({ ...prev, [questionKey]: option.id }));
-                                  setCheckedQuestions((prev) => ({ ...prev, [questionKey]: true }));
+                                  setCheckedQuestions(nextChecked);
+                                  trySavePartAfterAnswer({ checkedQuestions: nextChecked });
                                   if (!wasChecked) {
                                     const correctOpt = group.options.find((o) => o.correcta);
                                     const answersFromDatabase = group.options
@@ -838,7 +842,21 @@ function B2ReadingExamsPageInner() {
         )}
       </section>
 
-      <div style={{ textAlign: 'center', marginTop: '2rem' }}>
+      <div style={{ textAlign: 'center', marginTop: '2rem', display: 'flex', flexWrap: 'wrap', gap: '0.75rem', justifyContent: 'center' }}>
+        <Link
+          href={`/niveles/b2/exam-1?examen=${examSlot}`}
+          style={{
+            textDecoration: 'none',
+            color: '#047857',
+            fontWeight: 'bold',
+            display: 'inline-block',
+            padding: '0.75rem 1.25rem',
+            border: '2px solid #059669',
+            borderRadius: '6px',
+          }}
+        >
+          ← Full Exam
+        </Link>
         <Link href="/niveles/b2">
           <div
             style={{
@@ -849,7 +867,6 @@ function B2ReadingExamsPageInner() {
               padding: '0.75rem 1.25rem',
               border: '2px solid #0070f3',
               borderRadius: '6px',
-              marginTop: '2rem',
               transition: 'background 0.3s, color 0.3s',
             }}
             onMouseOver={(e) => {
@@ -865,7 +882,8 @@ function B2ReadingExamsPageInner() {
           </div>
         </Link>
       </div>
-    </main>
+      </B2ExamPracticeChrome>
+    </B2ExamPracticeLayout>
   );
 }
 

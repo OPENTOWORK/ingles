@@ -1,5 +1,7 @@
+import { TRAINING_LEVEL_COUNT } from '@/constants/trainingLevels';
+
 export function generateStaticParams() {
-  return Array.from({ length: 12 }, (_, i) => ({
+  return Array.from({ length: TRAINING_LEVEL_COUNT }, (_, i) => ({
     levelNumber: `level-${i + 1}`,
   }));
 }

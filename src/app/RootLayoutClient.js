@@ -1,14 +1,18 @@
 'use client';
 
+import dynamic from 'next/dynamic';
 import { useEffect, useRef, useState } from 'react';
 import { useRouter, usePathname } from 'next/navigation';
 import { supabase } from '@/utils/supabaseClient';
-import { normalizeRoleName, getRoleNameByUserId } from '@/utils/authRoles';
+import { normalizeRoleName, getRoleNameByUserId, peekCachedRoleName } from '@/utils/authRoles';
 import Link from 'next/link';
 import { Toaster } from 'react-hot-toast';
 import { UserRoleProvider } from '../context/UserRoleContext';
 import ExamNavigationGuard from '../components/ExamNavigationGuard';
 import AppNav from '@/components/layout/AppNav';
+const AppSideMenuPanel = dynamic(() => import('@/components/layout/AppSideMenuPanel'), {
+  ssr: false,
+});
 
 export default function RootLayoutClient({ children }) {
   const [loading, setLoading] = useState(true);
@@ -64,6 +68,11 @@ export default function RootLayoutClient({ children }) {
         setUserRole('student');
         setLoading(false);
         return;
+      }
+
+      const cachedRole = peekCachedRoleName(uid);
+      if (cachedRole) {
+        setUserRole(normalizeRoleName(cachedRole));
       }
 
       setLoading(false);
@@ -125,8 +134,28 @@ export default function RootLayoutClient({ children }) {
     }
   }, [loading, allowWithoutAuth, session, router]);
 
-  // Mientras resolvemos sesión o estamos redirigiendo, no pintes nada (excepto públicas y niveles)
-  if (!allowWithoutAuth && (loading || !session)) return null;
+  if (!allowWithoutAuth && loading) {
+    return (
+      <>
+        <Toaster position="top-center" reverseOrder={false} />
+        <header className="site-header">
+          <div className="site-header__bar">
+            <Link href="/" className="site-header__logo">
+              <img src="/uk-flag.png" alt="UK Flag" className="site-header__flag bandera" />
+              <span>Dralo</span>
+            </Link>
+          </div>
+        </header>
+        <main className="page-content">
+          <div className="route-loading" role="status" aria-label="Cargando">
+            <span className="route-loading__spinner" aria-hidden="true" />
+          </div>
+        </main>
+      </>
+    );
+  }
+
+  if (!allowWithoutAuth && !session) return null;
 
   const handleLogout = async () => {
     await supabase.auth.signOut();
@@ -190,6 +219,7 @@ export default function RootLayoutClient({ children }) {
           <ExamNavigationGuard>
             {children}
           </ExamNavigationGuard>
+          <AppSideMenuPanel defaultOpen={pathname === '/'} />
         </UserRoleProvider>
       </main>
 

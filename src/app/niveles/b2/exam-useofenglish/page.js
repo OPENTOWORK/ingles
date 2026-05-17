@@ -21,10 +21,8 @@ import {
 import { getUoePartScoring } from '@/utils/levelsUoePartScoring';
 import { getOpenAnswerMap, inferOpenQuestionNumbersFromPrompt, normalizeText } from '@/utils/b2ExamPaperShared';
 import { useB2ExamPracticeSlot } from '@/hooks/useB2ExamPracticeSlot';
-import {
-  fetchUseOfEnglishPuntuacionesProgress,
-  resolveB2ExamenIdsBySlot,
-} from '@/utils/levelsPuntuacionesProgress';
+import { fetchUseOfEnglishPuntuacionesProgress } from '@/utils/levelsPuntuacionesProgress';
+import { getCachedB2Level, getCachedB2ExamenIdsBySlot } from '@/utils/b2LevelCache';
 import { B2ExamSlotProgressPicker } from '@/components/b2/B2ExamSlotProgressPicker';
 
 function UseOfEnglishExamsPageInner() {
@@ -65,12 +63,7 @@ function UseOfEnglishExamsPageInner() {
     setPartFinishNotice(null);
 
     try {
-      const { data: levelData, error: levelError } = await supabase
-        .from('levels')
-        .select('id, nombre')
-        .ilike('nombre', 'b2')
-        .limit(1)
-        .single();
+      const { data: levelData, error: levelError } = await getCachedB2Level(supabase);
 
       if (levelError || !levelData) {
         throw new Error('No se pudo obtener el nivel B2 desde la base de datos.');
@@ -78,7 +71,7 @@ function UseOfEnglishExamsPageInner() {
 
       if (mountedRef.current) {
         setB2LevelId(levelData.id);
-        const idsBySlot = await resolveB2ExamenIdsBySlot(supabase, levelData.id);
+        const idsBySlot = await getCachedB2ExamenIdsBySlot(supabase, levelData.id);
         setExamenIdBySlot(idsBySlot);
       }
 
@@ -114,28 +107,29 @@ function UseOfEnglishExamsPageInner() {
       const partIds = [...new Set(questionsData.map((question) => question.parte_id).filter(Boolean))];
       const questionIds = questionsData.map((question) => question.id);
 
-      const { data: partsTableData, error: partsError } = await supabase
-        .from('levels_partes')
-        .select('*')
-        .in('id', partIds);
+      const [partsRes, answersRes, openAnswersRes] = await Promise.all([
+        supabase.from('levels_partes').select('*').in('id', partIds),
+        supabase
+          .from('levels_respuestas')
+          .select('id, pregunta_id, respuesta, correcta')
+          .in('pregunta_id', questionIds),
+        supabase
+          .from('levels_respuestas_abiertas')
+          .select('id, pregunta_id_abierta, respuesta_texto')
+          .in('pregunta_id_abierta', questionIds),
+      ]);
+
+      const { data: partsTableData, error: partsError } = partsRes;
+      const { data: answersData, error: answersError } = answersRes;
+      const { data: openAnswersData, error: openAnswersError } = openAnswersRes;
 
       if (partsError) {
         throw new Error('No se pudieron obtener las partes del examen.');
       }
 
-      const { data: answersData, error: answersError } = await supabase
-        .from('levels_respuestas')
-        .select('id, pregunta_id, respuesta, correcta')
-        .in('pregunta_id', questionIds);
-
       if (answersError) {
         throw new Error('No se pudieron obtener las respuestas del examen.');
       }
-
-      const { data: openAnswersData, error: openAnswersError } = await supabase
-        .from('levels_respuestas_abiertas')
-        .select('id, pregunta_id_abierta, respuesta_texto')
-        .in('pregunta_id_abierta', questionIds);
 
       if (openAnswersError) {
         // Fallback no destructivo: mantener funcionamiento previo con levels_respuestas.
@@ -246,7 +240,10 @@ function UseOfEnglishExamsPageInner() {
   }, [examenIdBySlot]);
 
   useEffect(() => {
-    void refreshPuntuacionesProgress();
+    const timer = setTimeout(() => {
+      void refreshPuntuacionesProgress();
+    }, 450);
+    return () => clearTimeout(timer);
   }, [refreshPuntuacionesProgress, checkedQuestions, openChecks]);
 
   const selectedPart = useMemo(
@@ -1190,7 +1187,21 @@ function UseOfEnglishExamsPageInner() {
         )}
       </section>
 
-      <div style={{ textAlign: 'center', marginTop: '2rem' }}>
+      <div style={{ textAlign: 'center', marginTop: '2rem', display: 'flex', flexWrap: 'wrap', gap: '0.75rem', justifyContent: 'center' }}>
+        <Link
+          href={`/niveles/b2/exam-1?examen=${examSlot}`}
+          style={{
+            textDecoration: 'none',
+            color: '#047857',
+            fontWeight: 'bold',
+            display: 'inline-block',
+            padding: '0.75rem 1.25rem',
+            border: '2px solid #059669',
+            borderRadius: '6px',
+          }}
+        >
+          ← Full Exam
+        </Link>
         <Link href="/niveles/b2">
           <div
             style={{
@@ -1201,7 +1212,6 @@ function UseOfEnglishExamsPageInner() {
               padding: '0.75rem 1.25rem',
               border: '2px solid #0070f3',
               borderRadius: '6px',
-              marginTop: '2rem',
               transition: 'background 0.3s, color 0.3s',
             }}
             onMouseOver={(e) => {

@@ -3,9 +3,11 @@
 import { Suspense, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import Link from 'next/link';
 import { useB2ExamPracticeSlot } from '@/hooks/useB2ExamPracticeSlot';
-import { B2ExamSlotPicker } from '@/components/b2/B2ExamSlotPicker';
-import LevelsCategoryTimer from '@/components/levels/LevelsCategoryTimer';
+import { B2ExamPracticeChrome, B2ExamPracticeLayout } from '@/components/b2/B2ExamPracticeChrome';
+import { useB2ExamScoringSession } from '@/hooks/useB2ExamScoringSession';
 import { useLevelsCategoryTimer } from '@/hooks/useLevelsCategoryTimer';
+import { getB2PartScoring } from '@/utils/levelsB2PartScoring';
+import { resolveB2ExamenId } from '@/utils/b2ResolveExam';
 import { supabase } from '@/utils/supabaseClient';
 import { formatLevelsPartDisplayName } from '@/utils/formatLevelsPartDisplayName';
 import { withBasePath } from '@/lib/base-path';
@@ -63,6 +65,10 @@ function resolveLongTurnPhotos(taskContext, examSlot) {
  */
 function B2SpeakingExamPracticeInner({ title, subtitle, loadingLabel, refreshLabel }) {
   const { examSlot, selectExamSlot } = useB2ExamPracticeSlot();
+  const scoring = useB2ExamScoringSession({
+    partMin: B2_SPEAKING_PART_MIN,
+    partMax: B2_SPEAKING_PART_MAX,
+  });
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [partsData, setPartsData] = useState([]);
@@ -118,93 +124,101 @@ function B2SpeakingExamPracticeInner({ title, subtitle, loadingLabel, refreshLab
     [partsData, selectedPartId],
   );
 
+  const partNumber = selectedPart?.partNumber ?? 0;
+  const b2PartCfg = getB2PartScoring(partNumber);
+  const savedPartScore = scoring.progressBySlot[examSlot]?.parts?.[partNumber];
+
+  useEffect(() => {
+    if (!scoring.examPracticeOpen || !scoring.b2LevelId) return;
+    void (async () => {
+      const { examenId } = await resolveB2ExamenId(supabase, scoring.b2LevelId, { slot: examSlot });
+      if (examenId) scoring.setExamenContext(examenId);
+    })();
+  }, [examSlot, scoring.examPracticeOpen, scoring.b2LevelId]);
+
+  useEffect(() => {
+    if (!scoring.examPracticeOpen) return;
+    scoring.resetPartNoticeOnPartChange(examSlot, partNumber, scoring.progressBySlot);
+  }, [examSlot, partNumber, selectedPart?.id, scoring.examPracticeOpen]);
+
+  const scorePanelProps = {
+    correctCount: savedPartScore?.correct ?? 0,
+    totalSlots: b2PartCfg?.total ?? 5,
+    passingCount: b2PartCfg?.passing ?? 3,
+  };
+
+  const handleSaveSpeakingPart = useCallback(
+    ({ correct, total, passed }) => {
+      if (!selectedPart?.id || !scoring.examPracticeOpen) return;
+      void scoring.saveWritingOrSpeakingScore({
+        examSlot,
+        partNumber: selectedPart.partNumber,
+        preguntaId: selectedPart.id,
+        parteId: selectedPart.id,
+        correct,
+        total,
+        passed,
+      });
+    },
+    [scoring, examSlot, selectedPart],
+  );
+
   return (
-    <main style={{ padding: '2rem', fontFamily: 'Segoe UI, sans-serif' }}>
-      <h1 style={{ textAlign: 'center' }}>{title}</h1>
-      <B2ExamSlotPicker value={examSlot} onSelect={selectExamSlot} />
-      {subtitle ? (
-        <p style={{ textAlign: 'center', margin: '0.35rem 0 0', color: '#4a5568', fontSize: '1rem' }}>
-          {subtitle}
-        </p>
-      ) : null}
-
-      <div style={{ textAlign: 'center', marginTop: '1rem' }}>
-        <button
-          type="button"
-          onClick={() => loadParts()}
-          disabled={loading}
-          style={{
-            padding: '0.55rem 1.1rem',
-            borderRadius: '8px',
-            border: '1px solid #2f855a',
-            background: loading ? '#e2e8f0' : '#f0fff4',
-            color: '#1a202c',
-            fontWeight: 600,
-            cursor: loading ? 'not-allowed' : 'pointer',
-          }}
-        >
-          {loading ? 'Actualizando…' : refreshLabel}
-        </button>
-      </div>
-
-      <LevelsCategoryTimer categoryLabel={`Sesión: ${title}`} timeLabel={timerLabel} />
-
-      <section style={{ maxWidth: '820px', margin: '2rem auto' }}>
+    <B2ExamPracticeLayout examPracticeOpen={scoring.examPracticeOpen}>
+      <B2ExamPracticeChrome
+        examSlot={examSlot}
+        onSelectExam={(n) => scoring.handleSelectExam(selectExamSlot, n)}
+        progressBySlot={scoring.progressBySlot}
+        partsInPaper={scoring.partsInPaper}
+        examPracticeOpen={scoring.examPracticeOpen}
+        title={title}
+        subtitle={subtitle}
+        timerLabel={timerLabel}
+        refreshLabel={refreshLabel}
+        loading={loading}
+        onRefresh={() => loadParts()}
+        partScoreMetrics={scorePanelProps}
+        partFinishNotice={scoring.partFinishNotice}
+        partsData={!loading && !error ? partsData : []}
+        selectedPartId={selectedPartId}
+        onSelectPart={(part) => setSelectedPartId(part.id)}
+        getPartSavedScoreLabel={(part) => scoring.getPartSavedScoreLabel(part, examSlot)}
+      >
+      <section style={{ maxWidth: '820px', margin: '0 auto' }}>
         {loading && <p style={{ textAlign: 'center' }}>{loadingLabel}</p>}
         {!loading && error && (
           <p style={{ textAlign: 'center', color: '#c53030', fontWeight: 600 }}>{error}</p>
         )}
 
-        {!loading && !error && (
-          <>
-            <div
-              style={{
-                display: 'grid',
-                gridTemplateColumns: 'repeat(auto-fit, minmax(140px, 1fr))',
-                gap: '1rem',
-                marginBottom: '1.5rem',
-              }}
-            >
-              {partsData.map((part) => (
-                <button
-                  key={part.id}
-                  type="button"
-                  style={{
-                    ...buttonStyle,
-                    border:
-                      selectedPartId === part.id ? '2px solid #1f6f43' : '2px solid transparent',
-                    width: '100%',
-                    cursor: 'pointer',
-                  }}
-                  onClick={() => setSelectedPartId(part.id)}
-                >
-                  {part.nombre}
-                </button>
-              ))}
-            </div>
-
-            {selectedPart ? (
-              <B2SpeakingPartSession
-                key={`${selectedPart.id}-${examSlot}`}
-                part={selectedPart}
-                examSlot={examSlot}
-              />
-            ) : null}
-          </>
-        )}
+        {!loading && !error && selectedPart ? (
+          <B2SpeakingPartSession
+            key={`${selectedPart.id}-${examSlot}`}
+            part={selectedPart}
+            examSlot={examSlot}
+            onSavePartScore={handleSaveSpeakingPart}
+            partScoring={b2PartCfg}
+          />
+        ) : null}
       </section>
 
-      <div style={{ textAlign: 'center', marginTop: '2rem' }}>
+      <div style={{ textAlign: 'center', marginTop: '2rem', display: 'flex', flexWrap: 'wrap', gap: '0.75rem', justifyContent: 'center' }}>
+        <Link
+          href={`/niveles/b2/exam-1?examen=${examSlot}`}
+          style={{ color: '#047857', fontWeight: 'bold', textDecoration: 'none' }}
+        >
+          ← Full Exam
+        </Link>
         <Link href="/niveles/b2" style={{ color: '#0070f3', fontWeight: 'bold' }}>
           ← Back to B2 Overview
         </Link>
       </div>
-    </main>
+      </B2ExamPracticeChrome>
+    </B2ExamPracticeLayout>
   );
 }
 
-/** @param {{ part: { id: string, nombre: string, descripcion: string, partNumber: number }, examSlot: number }} props */
-function B2SpeakingPartSession({ part, examSlot }) {
+/** @param {{ part: { id: string, nombre: string, descripcion: string, partNumber: number }, examSlot: number, onSavePartScore?: (p: { correct: number, total: number, passed: boolean }) => void, partScoring?: { total: number, passing: number } | null }} props */
+function B2SpeakingPartSession({ part, examSlot, onSavePartScore, partScoring }) {
   const partConfig = getB2SpeakingPartConfig(part.partNumber);
   const cambridgeKey = String(part.partNumber - 13);
   const staticInfo = b2SpeakingPartInfo[cambridgeKey];
@@ -465,6 +479,18 @@ function B2SpeakingPartSession({ part, examSlot }) {
   };
 
   const userLines = lines.filter((l) => l.role === 'user');
+  const speakingTotal = partScoring?.total ?? 5;
+  const speakingPassing = partScoring?.passing ?? 3;
+
+  const saveSpeakingScore = () => {
+    if (!onSavePartScore || userLines.length === 0) return;
+    const correct = Math.min(speakingTotal, userLines.length);
+    onSavePartScore({
+      correct,
+      total: speakingTotal,
+      passed: correct >= speakingPassing,
+    });
+  };
 
   return (
     <div
@@ -668,6 +694,30 @@ function B2SpeakingPartSession({ part, examSlot }) {
       {apiError ? (
         <p style={{ color: '#c53030', marginTop: '0.5rem', fontSize: '0.88rem' }}>{apiError}</p>
       ) : null}
+
+      {onSavePartScore && userLines.length > 0 ? (
+        <div style={{ marginTop: '1.25rem', textAlign: 'center' }}>
+          <button
+            type="button"
+            onClick={saveSpeakingScore}
+            style={{
+              padding: '0.65rem 1.2rem',
+              borderRadius: '8px',
+              border: '1px solid #2f855a',
+              background: '#f0fff4',
+              color: '#1a202c',
+              fontWeight: 700,
+              cursor: 'pointer',
+            }}
+          >
+            Guardar puntuación de esta parte ({Math.min(speakingTotal, userLines.length)}/{speakingTotal})
+          </button>
+          <p style={{ margin: '0.45rem 0 0', fontSize: '0.85rem', color: '#64748b' }}>
+            Necesitas al menos {speakingPassing} interacciones completadas para aprobar (máx. {speakingTotal}).
+          </p>
+        </div>
+      ) : null}
+
       {!process.env.NEXT_PUBLIC_OPENAI_HINT && (
         <p style={{ marginTop: '0.75rem', fontSize: '0.8rem', color: '#94a3b8' }}>
           La voz del examinador usa OpenAI en el servidor (OPENAI_API_KEY). Sin clave, se usa la voz del

@@ -2,9 +2,22 @@
 
 /* Layout principal */
 .part-page {
+  --quick-nav-width: 280px;
+  --quick-nav-width-min: 200px;
   background-color: var(--bg);
   color: var(--text);
   min-height: 100vh;
+  box-sizing: border-box;
+  overflow-x: clip;
+}
+
+/* Reserva hueco para la barra lateral sin desbordar el viewport */
+.part-page:has(.quick-navigation) {
+  padding-right: var(--quick-nav-width);
+}
+
+.part-page:has(.quick-navigation.quick-navigation--minimized) {
+  padding-right: var(--quick-nav-width-min);
 }
 
 .shell {
@@ -12,7 +25,8 @@
   max-width: 1100px;
   margin: 0 auto;
   padding: 32px 20px;
-  margin-right: 320px; /* Espacio para la navegación fija */
+  box-sizing: border-box;
+  width: 100%;
   background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
   border-radius: 20px;
   box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
@@ -1778,27 +1792,34 @@
   }
 }
 
-/* Quick Navigation Styles */
+/* Quick Navigation — barra lateral derecha (exámenes C1, etc.) */
 .quick-navigation {
   background-color: var(--card);
-  border-radius: 12px;
-  padding: 1.5rem;
-  margin: 1rem 0;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  border-radius: 16px 0 0 16px;
+  padding: 1.25rem 1rem 1.5rem;
+  margin: 0;
+  box-shadow: -4px 0 24px rgba(15, 23, 42, 0.12);
+  border: 1px solid rgba(0, 0, 0, 0.06);
+  border-right: none;
   position: fixed;
-  top: 20px;
-  right: 20px;
-  width: 280px;
-  max-height: calc(100vh - 40px);
+  top: calc(env(safe-area-inset-top, 0px) + 56px);
+  right: 0;
+  bottom: 0;
+  width: var(--quick-nav-width);
+  max-height: none;
+  height: auto;
   overflow-y: auto;
-  z-index: 1000;
-  transition: all 0.3s ease;
+  overflow-x: hidden;
+  z-index: 900;
+  transition: width 0.28s ease, padding 0.28s ease;
+  box-sizing: border-box;
+  -webkit-overflow-scrolling: touch;
 }
 
 /* Estado minimizado */
 .quick-navigation--minimized {
-  width: 200px;
-  padding: 0.75rem;
+  width: var(--quick-nav-width-min);
+  padding: 0.75rem 0.65rem;
 }
 
 .quick-navigation--minimized .nav-header-content {
@@ -2083,41 +2104,47 @@
 }
 
 @media (max-width: 1024px) {
-  .shell {
-    margin-right: 300px; /* Reducir espacio para tablets */
+  .part-page:has(.quick-navigation) {
+    padding-right: 260px;
   }
-  
+
+  .part-page:has(.quick-navigation.quick-navigation--minimized) {
+    padding-right: 180px;
+  }
+
   .quick-navigation {
     width: 260px;
   }
-  
+
   .quick-navigation--minimized {
     width: 180px;
-  }
-  
-  .shell:has(.quick-navigation--minimized) {
-    margin-right: 200px;
   }
 }
 
 @media (max-width: 768px) {
-  .shell {
-    margin-right: 20px; /* Restaurar margen normal en móviles */
+  .part-page:has(.quick-navigation),
+  .part-page:has(.quick-navigation.quick-navigation--minimized) {
+    padding-right: 0;
+    padding-bottom: 0;
   }
-  
+
   .quick-navigation {
-    position: fixed;
-    top: 10px;
-    right: 10px;
-    left: 10px;
+    top: auto;
+    bottom: calc(env(safe-area-inset-bottom, 0px) + 12px);
+    left: calc(env(safe-area-inset-left, 0px) + 10px);
+    right: calc(env(safe-area-inset-right, 0px) + 10px);
     width: auto;
-    max-height: calc(100vh - 20px);
+    height: auto;
+    max-height: min(58dvh, 440px);
+    border-radius: 14px;
+    border: 1px solid rgba(0, 0, 0, 0.08);
+    box-shadow: 0 8px 32px rgba(15, 23, 42, 0.18);
   }
-  
+
   .quick-navigation--minimized {
     width: auto;
-    left: 10px;
-    right: 10px;
+    max-height: 76px;
+    overflow: hidden;
   }
   
   .nav-header {

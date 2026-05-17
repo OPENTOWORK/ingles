@@ -1,6 +1,6 @@
 import { B2_EXAM_SLOT_MAX, sortLevelsExamenesRows } from '@/utils/b2ResolveExam';
 import { parseUoePartDescripcion } from '@/utils/levelsPuntuaciones';
-import { starsFromApprovedPartsCount } from '@/utils/levelsUoePartScoring';
+import { starsFromApprovedPartsCount } from '@/utils/levelsB2PartScoring';
 
 function emptySlotProgress() {
   return { stars: 0, correct: 0, total: 0, approvedParts: 0, parts: {} };
@@ -12,9 +12,13 @@ function isSchemaCacheColumnError(error) {
 }
 
 /**
- * Progreso Use of English por examen 1…5 desde filas de parte en levels_puntuaciones.
+ * Progreso por examen (partes partMin–partMax) desde levels_puntuaciones.
  */
-export async function fetchUseOfEnglishPuntuacionesProgress(supabase, { userId, examenIdBySlot }) {
+export async function fetchB2PuntuacionesProgress(
+  supabase,
+  { userId, examenIdBySlot, partMin = 1, partMax = 4, partsInPaper },
+) {
+  const partsCount = partsInPaper ?? partMax - partMin + 1;
   const empty = () => ({
     bySlot: Object.fromEntries(
       Array.from({ length: B2_EXAM_SLOT_MAX }, (_, i) => [i + 1, emptySlotProgress()]),
@@ -86,7 +90,7 @@ export async function fetchUseOfEnglishPuntuacionesProgress(supabase, { userId, 
     }
 
     const slot = examenIdToSlot[examenId];
-    if (!slot || partNumber < 1 || partNumber > 4) continue;
+    if (!slot || partNumber < partMin || partNumber > partMax) continue;
     const key = `${slot}:${partNumber}`;
     if (!latestBySlotPart.has(key)) latestBySlotPart.set(key, row);
   }
@@ -112,10 +116,15 @@ export async function fetchUseOfEnglishPuntuacionesProgress(supabase, { userId, 
   }
 
   for (let slot = 1; slot <= B2_EXAM_SLOT_MAX; slot += 1) {
-    bySlot[slot].stars = starsFromApprovedPartsCount(bySlot[slot].approvedParts);
+    bySlot[slot].stars = starsFromApprovedPartsCount(bySlot[slot].approvedParts, partsCount);
   }
 
   return { bySlot };
+}
+
+/** @deprecated Usar fetchB2PuntuacionesProgress con partMin=1, partMax=4 */
+export async function fetchUseOfEnglishPuntuacionesProgress(supabase, opts) {
+  return fetchB2PuntuacionesProgress(supabase, { ...opts, partMin: 1, partMax: 4, partsInPaper: 4 });
 }
 
 /** Mapa slot (1–5) → examen_id para un nivel B2. */

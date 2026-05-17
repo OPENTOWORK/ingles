@@ -38,22 +38,7 @@ export const clearCorruptedExamData = () => {
       localStorage.removeItem('theory_progress_data');
     }
 
-    // Limpiar cualquier clave que contenga 'exam' y esté corrupta
-    Object.keys(localStorage).forEach(key => {
-      if (key.includes('exam') || key.includes('theory')) {
-        try {
-          const data = localStorage.getItem(key);
-          if (data) {
-            JSON.parse(data);
-          }
-        } catch (error) {
-          console.warn(`Removing corrupted ${key} from localStorage:`, error.message);
-          localStorage.removeItem(key);
-        }
-      }
-    });
-
-    console.log('✅ Corrupted exam data cleared');
+    /* Escaneo completo de localStorage solo bajo demanda (muy costoso en cada carga). */
   } catch (error) {
     console.error('Error clearing corrupted data:', error);
   }
@@ -83,7 +68,6 @@ export const initializeExamData = () => {
     console.warn('Error initializing exam timers:', error);
   }
 
-  console.log('✅ Exam data initialized');
 };
 
 

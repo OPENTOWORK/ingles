@@ -153,10 +153,19 @@ export const AccessibilityProvider = ({ children }) => {
     announcement.textContent = message;
     
     document.body.appendChild(announcement);
-    
-    setTimeout(() => {
-      document.body.removeChild(announcement);
+
+    const timer = setTimeout(() => {
+      if (announcement.isConnected) {
+        announcement.remove();
+      }
     }, 1000);
+
+    return () => {
+      clearTimeout(timer);
+      if (announcement.isConnected) {
+        announcement.remove();
+      }
+    };
   };
 
   const value = {
@@ -172,7 +181,6 @@ export const AccessibilityProvider = ({ children }) => {
   return (
     <AccessibilityContext.Provider value={value}>
       {children}
-      <AccessibilityStyles />
     </AccessibilityContext.Provider>
   );
 };
@@ -184,232 +192,6 @@ export const useAccessibility = () => {
     throw new Error('useAccessibility must be used within an AccessibilityProvider');
   }
   return context;
-};
-
-// Accessibility Styles Component
-const AccessibilityStyles = () => {
-  return (
-    <style jsx global>{`
-      /* High Contrast Mode - Disabled by default, no visual changes */
-      .high-contrast {
-        /* No changes applied - feature disabled */
-      }
-      
-      /* Large Text Mode */
-      .large-text {
-        font-size: 1.2rem !important;
-      }
-      
-      .large-text h1 { font-size: 2.5rem !important; }
-      .large-text h2 { font-size: 2rem !important; }
-      .large-text h3 { font-size: 1.75rem !important; }
-      .large-text h4 { font-size: 1.5rem !important; }
-      .large-text p { font-size: 1.2rem !important; }
-      .large-text button { font-size: 1.1rem !important; padding: 1rem 1.5rem !important; }
-      .large-text input { font-size: 1.1rem !important; padding: 0.75rem !important; }
-      
-      /* Reduced Motion */
-      .reduced-motion *,
-      .reduced-motion *::before,
-      .reduced-motion *::after {
-        animation-duration: 0.01ms !important;
-        animation-iteration-count: 1 !important;
-        transition-duration: 0.01ms !important;
-        scroll-behavior: auto !important;
-      }
-      
-      /* Dark Mode */
-      .dark-mode {
-        --primary-color: #3b82f6;
-        --secondary-color: #1f2937;
-        --background-color: #111827;
-        --text-color: #f9fafb;
-        --border-color: #374151;
-        --card-background: #1f2937;
-      }
-      
-      .dark-mode body {
-        background-color: var(--background-color);
-        color: var(--text-color);
-      }
-      
-      .dark-mode .card,
-      .dark-mode .exercise-card,
-      .dark-mode .dashboard-card {
-        background-color: var(--card-background);
-        border-color: var(--border-color);
-      }
-      
-      /* Focus Indicators */
-      .focus-indicators *:focus {
-        outline: 3px solid #3b82f6 !important;
-        outline-offset: 2px !important;
-      }
-      
-      .focus-indicators button:focus,
-      .focus-indicators input:focus,
-      .focus-indicators select:focus,
-      .focus-indicators textarea:focus,
-      .focus-indicators a:focus {
-        box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.5) !important;
-      }
-      
-      /* Simplified UI */
-      .simplified-ui {
-        --border-radius: 4px;
-        --box-shadow: none;
-        --gradient: none;
-      }
-      
-      .simplified-ui * {
-        border-radius: var(--border-radius) !important;
-        box-shadow: var(--box-shadow) !important;
-        background: var(--background-color) !important;
-      }
-      
-      .simplified-ui .gradient-bg {
-        background: var(--background-color) !important;
-      }
-      
-      /* Screen Reader Only */
-      .sr-only {
-        position: absolute;
-        width: 1px;
-        height: 1px;
-        padding: 0;
-        margin: -1px;
-        overflow: hidden;
-        clip: rect(0, 0, 0, 0);
-        white-space: nowrap;
-        border: 0;
-      }
-      
-      /* Skip Links */
-      .skip-link {
-        position: absolute;
-        top: -40px;
-        left: 6px;
-        background: #000;
-        color: #fff;
-        padding: 8px;
-        text-decoration: none;
-        border-radius: 4px;
-        z-index: 1000;
-        transition: top 0.3s;
-      }
-      
-      .skip-link:focus {
-        top: 6px;
-      }
-      
-      /* Keyboard Navigation */
-      .keyboard-nav button,
-      .keyboard-nav input,
-      .keyboard-nav select,
-      .keyboard-nav textarea,
-      .keyboard-nav a {
-        position: relative;
-      }
-      
-      .keyboard-nav button:focus::after,
-      .keyboard-nav input:focus::after,
-      .keyboard-nav select:focus::after,
-      .keyboard-nav textarea:focus::after,
-      .keyboard-nav a:focus::after {
-        content: '';
-        position: absolute;
-        top: -2px;
-        left: -2px;
-        right: -2px;
-        bottom: -2px;
-        border: 2px solid #3b82f6;
-        border-radius: 4px;
-        pointer-events: none;
-      }
-      
-      /* Audio Descriptions */
-      .audio-description {
-        position: absolute;
-        left: -10000px;
-        width: 1px;
-        height: 1px;
-        overflow: hidden;
-      }
-      
-      /* Extended Time Indicators */
-      .extended-time {
-        position: relative;
-      }
-      
-      .extended-time::before {
-        content: '⏰ Extended time available';
-        position: absolute;
-        top: -25px;
-        right: 0;
-        background: #f59e0b;
-        color: white;
-        padding: 2px 8px;
-        border-radius: 4px;
-        font-size: 0.8rem;
-        z-index: 10;
-      }
-      
-      /* Text to Speech Controls */
-      .tts-controls {
-        position: fixed;
-        bottom: 20px;
-        right: 20px;
-        background: rgba(0, 0, 0, 0.8);
-        color: white;
-        padding: 1rem;
-        border-radius: 8px;
-        z-index: 1000;
-      }
-      
-      .tts-controls button {
-        background: #3b82f6;
-        color: white;
-        border: none;
-        padding: 0.5rem 1rem;
-        margin: 0.25rem;
-        border-radius: 4px;
-        cursor: pointer;
-      }
-      
-      .tts-controls button:hover {
-        background: #2563eb;
-      }
-      
-      /* Responsive adjustments for accessibility */
-      @media (max-width: 768px) {
-        .large-text {
-          font-size: 1.1rem !important;
-        }
-        
-        .large-text h1 { font-size: 2rem !important; }
-        .large-text h2 { font-size: 1.75rem !important; }
-        .large-text button { 
-          font-size: 1rem !important; 
-          padding: 0.875rem 1.25rem !important; 
-          min-height: 44px; /* Touch target size */
-        }
-      }
-      
-      /* Print styles */
-      @media print {
-        .high-contrast,
-        .dark-mode {
-          --background-color: #ffffff !important;
-          --text-color: #000000 !important;
-        }
-        
-        .skip-link,
-        .tts-controls {
-          display: none !important;
-        }
-      }
-    `}</style>
-  );
 };
 
 // Accessibility Panel Component
@@ -434,17 +216,17 @@ export const AccessibilityPanel = () => {
         onClick={() => setIsOpen(!isOpen)}
         style={{
           position: 'fixed',
-          bottom: '20px',
-          left: '20px',
+          bottom: 'max(16px, env(safe-area-inset-bottom, 0px))',
+          left: 'max(16px, env(safe-area-inset-left, 0px))',
           backgroundColor: '#3b82f6',
           color: 'white',
           border: 'none',
           borderRadius: '50%',
-          width: '60px',
-          height: '60px',
-          fontSize: '24px',
+          width: '52px',
+          height: '52px',
+          fontSize: '22px',
           cursor: 'pointer',
-          zIndex: 1000,
+          zIndex: 850,
           boxShadow: '0 4px 12px rgba(0,0,0,0.15)',
           transition: 'transform 0.2s ease'
         }}
@@ -460,17 +242,18 @@ export const AccessibilityPanel = () => {
         <div
           style={{
             position: 'fixed',
-            bottom: '90px',
-            left: '20px',
+            bottom: 'max(76px, calc(env(safe-area-inset-bottom, 0px) + 60px))',
+            left: 'max(16px, env(safe-area-inset-left, 0px))',
             backgroundColor: 'white',
             border: '1px solid #e2e8f0',
             borderRadius: '12px',
             padding: '1.5rem',
             boxShadow: '0 8px 32px rgba(0,0,0,0.15)',
-            zIndex: 1000,
-            maxWidth: '300px',
-            maxHeight: '80vh',
-            overflowY: 'auto'
+            zIndex: 850,
+            maxWidth: 'min(300px, calc(100vw - 32px))',
+            maxHeight: 'min(80vh, calc(100dvh - 100px))',
+            overflowY: 'auto',
+            boxSizing: 'border-box',
           }}
           role="dialog"
           aria-label="Accessibility settings"

@@ -177,3 +177,39 @@ export function filterTopics(topics, { selectedLevels = [], query = '' }) {
   if (q) items = items.filter((t) => t.text.toLowerCase().includes(q));
   return items;
 }
+
+/** Todos los temas con su área (hub Theory). */
+export function buildAllTopicsFlat() {
+  return SECTION_CATALOG.flatMap((area) =>
+    (SECTIONS[area.key] || []).map((topic) => ({
+      ...topic,
+      sectionKey: area.key,
+      sectionSlug: area.slug,
+    })),
+  );
+}
+
+/** Filtro global: nivel CEFR, área y texto (título o nombre de área). */
+export function filterTopicsGlobal(
+  topics,
+  { selectedLevels = [], selectedSections = [], query = '' } = {},
+) {
+  const q = query.trim().toLowerCase();
+  let items = topics;
+  if (selectedSections.length) {
+    items = items.filter((t) => selectedSections.includes(t.sectionKey));
+  }
+  if (selectedLevels.length) {
+    items = items.filter((t) => t.levels.some((l) => selectedLevels.includes(l)));
+  }
+  if (q) {
+    items = items.filter(
+      (t) =>
+        t.text.toLowerCase().includes(q) ||
+        String(t.sectionKey || '')
+          .toLowerCase()
+          .includes(q),
+    );
+  }
+  return items;
+}

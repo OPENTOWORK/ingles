@@ -79,9 +79,17 @@ function StarRow({ filled = 0, max = 3 }) {
  *   value: number,
  *   onSelect: (n: number) => void,
  *   progressBySlot?: Record<number, { stars?: number, correct?: number, total?: number, approvedParts?: number }>,
+ *   partsInPaper?: number,
+ *   examLabelsBySlot?: Record<number, string>,
  * }} props
  */
-export function B2ExamSlotProgressPicker({ value, onSelect, progressBySlot = {} }) {
+export function B2ExamSlotProgressPicker({
+  value,
+  onSelect,
+  progressBySlot = {},
+  partsInPaper = 4,
+  examLabelsBySlot = {},
+}) {
   return (
     <section
       aria-label="Elegir examen y ver progreso"
@@ -155,7 +163,7 @@ export function B2ExamSlotProgressPicker({ value, onSelect, progressBySlot = {} 
                 minHeight: '88px',
               }}
             >
-              <span>Examen {n}</span>
+              <span>{examLabelsBySlot[n] || `Examen ${n}`}</span>
               <StarRow filled={stars} />
               {hasScore ? (
                 <span
@@ -166,7 +174,7 @@ export function B2ExamSlotProgressPicker({ value, onSelect, progressBySlot = {} 
                     opacity: active ? 0.95 : 0.85,
                   }}
                 >
-                  {approvedParts}/4 partes
+                  {approvedParts}/{partsInPaper} partes
                 </span>
               ) : (
                 <span

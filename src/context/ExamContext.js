@@ -7,8 +7,13 @@ import { initializeExamData } from "@/utils/clearCorruptedData";
 const ExamContext = createContext();
 export const useExam = () => useContext(ExamContext);
 
+/** Rutas que usan localStorage legacy del ExamContext (evita trabajo en B2 moderno, home, etc.). */
+const LEGACY_EXAM_STORAGE_ROUTE =
+  /\/niveles\/(a2|b1|b2|c1|c2)\/exam-1(\/|$)|\/niveles\/c1\/exam-1\/part-/;
+
 export const ExamProvider = ({ children }) => {
   const pathname = usePathname();
+  const usesLegacyExamStorage = LEGACY_EXAM_STORAGE_ROUTE.test(pathname || '');
   const lastSavedRef = useRef(null);
 
   const [answers, setAnswers] = useState({});
@@ -22,11 +27,10 @@ export const ExamProvider = ({ children }) => {
   const [lastSaved, setLastSaved] = useState(null);
   const [isSaving, setIsSaving] = useState(false);
 
-  // ✅ Cargar datos desde localStorage solo en el cliente
+  // ✅ Cargar datos desde localStorage solo en rutas de examen legacy
   useEffect(() => {
-    if (typeof window === "undefined") return;
+    if (typeof window === "undefined" || !usesLegacyExamStorage) return;
 
-    // Inicializar y limpiar datos corruptos
     initializeExamData();
 
     try {
@@ -67,11 +71,11 @@ export const ExamProvider = ({ children }) => {
       console.warn('Error parsing exam timers from localStorage:', error);
       localStorage.removeItem("examSectionTimers");
     }
-  }, []);
+  }, [usesLegacyExamStorage]);
 
   // 💾 Guardar cambios en localStorage con debounce para evitar bucles
   useEffect(() => {
-    if (typeof window === "undefined") return;
+    if (typeof window === "undefined" || !usesLegacyExamStorage) return;
     
     // Evitar guardar si answers está vacío
     if (!answers || typeof answers !== 'object' || Object.keys(answers).length === 0) {
@@ -100,10 +104,10 @@ export const ExamProvider = ({ children }) => {
     }, 300); // Debounce de 300ms
 
     return () => clearTimeout(timeoutId);
-  }, [answers]);
+  }, [answers, usesLegacyExamStorage]);
 
   useEffect(() => {
-    if (typeof window === "undefined") return;
+    if (typeof window === "undefined" || !usesLegacyExamStorage) return;
     
     if (!globalStart) {
       // Si no hay globalStart, limpiar el localStorage
@@ -135,16 +139,16 @@ export const ExamProvider = ({ children }) => {
       console.error("Error saving global start time:", error);
       localStorage.removeItem("examGlobalStart");
     }
-  }, [globalStart]);
+  }, [globalStart, usesLegacyExamStorage]);
 
   useEffect(() => {
-    if (typeof window === "undefined") return;
+    if (typeof window === "undefined" || !usesLegacyExamStorage) return;
     localStorage.setItem("examSectionTimers", JSON.stringify(sectionTimers));
-  }, [sectionTimers]);
+  }, [sectionTimers, usesLegacyExamStorage]);
 
   // ⏱ Temporizador para cada sección
   useEffect(() => {
-    if (!globalStart) return;
+    if (!usesLegacyExamStorage || !globalStart) return;
     
     const interval = setInterval(() => {
       const now = new Date();
@@ -168,7 +172,7 @@ export const ExamProvider = ({ children }) => {
     }, 1000);
 
     return () => clearInterval(interval);
-  }, [pathname, globalStart]);
+  }, [pathname, globalStart, usesLegacyExamStorage]);
 
   // ⛔ Prevención antes de cerrar
   useEffect(() => {

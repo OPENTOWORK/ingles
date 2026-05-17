@@ -23,6 +23,7 @@ function countWords(text) {
  * @param {string} [props.taskInputText] — textos de apoyo, bullet points, etc.
  * @param {string} [props.partLabel] — nombre de la parte (p. ej. Part 8)
  * @param {string} [props.partDescription] — descripción fija de la parte si existe
+ * @param {(scores: { content: number, communication: number, organisation: number, language: number, total: number, passed: boolean, required: number }) => void} [props.onScoresReady]
  */
 export default function B2WritingLongFormAiPanel({
   storageKey,
@@ -33,6 +34,7 @@ export default function B2WritingLongFormAiPanel({
   taskInputText = '',
   partLabel = '',
   partDescription = '',
+  onScoresReady,
 }) {
   const [essay, setEssay] = useState('');
   const [aiFeedback, setAiFeedback] = useState('');
@@ -100,6 +102,9 @@ export default function B2WritingLongFormAiPanel({
 
       if (res.ok) {
         setAiFeedback(data.feedback || '');
+        if (data.scores && typeof onScoresReady === 'function') {
+          onScoresReady(data.scores);
+        }
       } else {
         const hint =
           !externalBaseConfigured && (res.status === 404 || res.status === 405)

@@ -2,8 +2,8 @@
 
 import Link from 'next/link';
 import SiteMascot from '@/components/SiteMascot';
-
 const NAV_CARDS = [
+  { href: '/dralo-ai', icon: '✨', label: 'Dralo AI' },
   { href: '/teoria', icon: '📖', label: 'Theory' },
   { href: '/niveles', icon: '📚', label: 'Levels' },
   { href: '/prueba-nivel', icon: '🧪', label: 'Placement Test' },

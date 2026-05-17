@@ -12,9 +12,9 @@ const SECTIONS = {
     { text: "Part 4: Key word transformations", href: "/niveles/b2/reading-and-use-of-english/part-4" },
   ],
   "Reading": [
-    { text: "Part 5: Multiple-choice (reading)", href: "/niveles/b2/reading-and-use-of-english/part-5" },
-    { text: "Part 6: Gapped text", href: "/niveles/b2/reading-and-use-of-english/part-6" },
-    { text: "Part 7: Multiple matching", href: "/niveles/b2/reading-and-use-of-english/part-7" },
+    { text: "Part 1: Multiple-choice (reading)", href: "/niveles/b2/reading-and-use-of-english/part-5" },
+    { text: "Part 2: Gapped text", href: "/niveles/b2/reading-and-use-of-english/part-6" },
+    { text: "Part 3: Multiple matching", href: "/niveles/b2/reading-and-use-of-english/part-7" },
   ],
   "Writing": [
     { text: "Part 1: Compulsory essay (140-190 words)", href: "/niveles/b2/writing/part-1" },
@@ -36,7 +36,7 @@ const SECTIONS = {
 };
 
 const EXAM_LINKS = [
-  { text: "📝 Full Exam", href: "/niveles/b2/exam-1", enabledForStudents: false },
+  { text: "📝 Full Exam", href: "/niveles/b2/exam-1", enabledForStudents: true },
   { text: "📘 Use of English", href: "/niveles/b2/exam-useofenglish", enabledForStudents: true },
   { text: "📖 Reading", href: "/niveles/b2/exam-reading", enabledForStudents: true },
   { text: "✍️ Writing", href: "/niveles/b2/exam-writing", enabledForStudents: true },
@@ -107,11 +107,6 @@ export default function B2Page() {
           })}
         </div>
       </section>
-
-      {/* Nota */}
-      <div className="note">
-        <p>Interactive examples and exam simulations coming soon.</p>
-      </div>
 
       <GlobalStyles />
     </main>

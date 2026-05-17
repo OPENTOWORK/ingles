@@ -4,23 +4,11 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { ROLE_ROUTE_MAP } from '@/utils/authRoles';
-
-const DRALO_MENU_ITEMS = [
-  { label: 'Use of English', href: '/dralo-ai/use-of-english' },
-  { label: 'Reading', href: '/dralo-ai/reading' },
-  { label: 'Writing', href: '/dralo-ai/writing' },
-  { label: 'Listening', href: '/dralo-ai/listening' },
-  { label: 'Speaking', href: '/speaking' },
-];
-
-const MAIN_LINKS = [
-  { href: '/', label: 'Home' },
-  { href: '/teoria', label: 'Theory' },
-  { href: '/niveles', label: 'Levels' },
-  { href: '/prueba-nivel', label: 'Placement Test' },
-  { href: '/training', label: 'Training' },
-  { href: '/contacto', label: 'Contact' },
-];
+import {
+  DRALO_MENU_ITEMS,
+  NAV_LINK_CONTACT,
+  NAV_LINKS_BEFORE_DRALO,
+} from '@/config/appNavMenu';
 
 const ROLE_LABELS = {
   admin: 'Admin',
@@ -99,7 +87,7 @@ export default function AppNav({ session, userRole, onLogout }) {
       </button>
 
       <nav className="app-nav app-nav--desktop" aria-label="Main navigation">
-        {MAIN_LINKS.map((item) => (
+        {NAV_LINKS_BEFORE_DRALO.map((item) => (
           <Link key={item.href} href={item.href} className="app-nav__link">
             {item.label}
           </Link>
@@ -130,6 +118,10 @@ export default function AppNav({ session, userRole, onLogout }) {
             </div>
           ) : null}
         </div>
+
+        <Link href={NAV_LINK_CONTACT.href} className="app-nav__link">
+          {NAV_LINK_CONTACT.label}
+        </Link>
 
         {session ? (
           <>
@@ -173,7 +165,7 @@ export default function AppNav({ session, userRole, onLogout }) {
         </div>
 
         <nav className="app-nav__drawer-nav" aria-label="Mobile navigation">
-          {MAIN_LINKS.map((item) => (
+          {NAV_LINKS_BEFORE_DRALO.map((item) => (
             <Link key={item.href} href={item.href} className={mobileLinkClass} onClick={closeMobile}>
               {item.label}
             </Link>
@@ -197,6 +189,10 @@ export default function AppNav({ session, userRole, onLogout }) {
               ))}
             </div>
           ) : null}
+
+          <Link href={NAV_LINK_CONTACT.href} className={mobileLinkClass} onClick={closeMobile}>
+            {NAV_LINK_CONTACT.label}
+          </Link>
 
           {session ? (
             <>
