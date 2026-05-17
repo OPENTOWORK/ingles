@@ -5,6 +5,22 @@ import { hasDatabaseUrl } from '@/lib/prisma';
 import { getExamBlueprint } from '../../domain/exam-blueprints';
 import type { ExamStateJson } from '../../domain/types';
 
+function createLocalSpeakingSession(params: {
+  userId: string | null;
+  mode: SpeakingMode;
+  cefr: CefrLevel;
+  exam: CambridgeExam;
+}) {
+  return {
+    id: `local_${Date.now()}`,
+    userId: params.userId,
+    mode: params.mode,
+    cefr: params.cefr,
+    exam: params.exam,
+    persisted: false as const,
+  };
+}
+
 export async function createSpeakingSession(params: {
   userId: string | null;
   mode: SpeakingMode;
@@ -12,37 +28,35 @@ export async function createSpeakingSession(params: {
   exam?: CambridgeExam;
 }) {
   const exam = params.exam ?? getExamBlueprint(params.cefr).exam;
+
   if (!hasDatabaseUrl()) {
-    return {
-      id: `local_${Date.now()}`,
-      userId: params.userId,
-      mode: params.mode,
-      cefr: params.cefr,
-      exam,
-      persisted: false as const,
-    };
+    return createLocalSpeakingSession({ ...params, exam });
   }
 
-  const bp = getExamBlueprint(params.cefr);
-  const session = await prisma.speakingSession.create({
-    data: {
-      userId: params.userId ?? undefined,
-      mode: params.mode,
-      cefr: params.cefr,
-      exam,
-      examBlueprintVersion: '1',
-      examState:
-        params.mode === 'EXAM'
-          ? ({
-              currentPartIndex: 0,
-              phase: 'intro',
-              questionIndex: 0,
-              partStartedAtIso: new Date().toISOString(),
-            } satisfies ExamStateJson)
-          : undefined,
-    },
-  });
-  return { ...session, persisted: true as const };
+  try {
+    const session = await prisma.speakingSession.create({
+      data: {
+        userId: params.userId ?? undefined,
+        mode: params.mode,
+        cefr: params.cefr,
+        exam,
+        examBlueprintVersion: '1',
+        examState:
+          params.mode === 'EXAM'
+            ? ({
+                currentPartIndex: 0,
+                phase: 'intro',
+                questionIndex: 0,
+                partStartedAtIso: new Date().toISOString(),
+              } satisfies ExamStateJson)
+            : undefined,
+      },
+    });
+    return { ...session, persisted: true as const };
+  } catch (e) {
+    console.error('[speaking] Persist session failed; using in-memory session', e);
+    return createLocalSpeakingSession({ ...params, exam });
+  }
 }
 
 export async function saveTurn(params: {
