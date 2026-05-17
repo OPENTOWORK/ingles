@@ -84,33 +84,35 @@ export default function ContactPage() {
       return;
     }
 
-    const descripcion = [
-      `Nombre: ${ticketForm.name}`,
-      `Email: ${ticketForm.email}`,
-      `Tipo de usuario: ${ticketForm.userType}`,
-      '',
-      ticketForm.message,
-    ].join('\n');
-
-    const payload = {
-      user_id: session.user.id,
-      asunto: ticketForm.subject,
-      descripcion,
-      estado: ticketForm.status,
-      tipo_problema: ticketForm.topic,
-      prioridad: 'normal',
-      resuelto: false,
-    };
-
-    const { error } = await supabase.from('contacto_soporte').insert(payload);
-    setTicketLoading(false);
-
-    if (error) {
-      toast.error('No se pudo crear el ticket de soporte.');
+    const accessToken = session.access_token;
+    if (!accessToken) {
+      setTicketLoading(false);
+      toast.error('Sesión expirada. Vuelve a iniciar sesión.');
       return;
     }
 
-    toast.success('Ticket enviado correctamente.');
+    const res = await fetch('/api/contact/tickets', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${accessToken}`,
+      },
+      body: JSON.stringify(ticketForm),
+    });
+
+    const data = await res.json().catch(() => ({}));
+    setTicketLoading(false);
+
+    if (!res.ok) {
+      toast.error(data.error || 'No se pudo crear el ticket de soporte.');
+      return;
+    }
+
+    if (data.emailSent === false) {
+      toast.success('Ticket guardado. El aviso por correo no se pudo enviar.');
+    } else {
+      toast.success('Ticket enviado correctamente.');
+    }
     setTicketForm((prev) => ({
       ...prev,
       subject: '',
