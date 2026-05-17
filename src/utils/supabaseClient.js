@@ -47,6 +47,8 @@ const TABLE_NAME_MAP = {
   adaptive_learning_data: 'perfil_recomendaciones',
   exercises: 'training_ejercicios',
   achievements: 'perfil_objetivos',
+  contact_tickets: 'contacto_soporte',
+  internal_messages: 'contacto_mensajes',
 };
 
 const originalFrom = supabase.from.bind(supabase);

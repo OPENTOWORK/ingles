@@ -55,10 +55,10 @@ export default function ContactPage() {
     }
 
     const { data, error } = await supabase
-      .from('contact_tickets')
-      .select('id, subject, status, created_at, first_response_at, closed_at')
-      .eq('created_by', userId)
-      .order('created_at', { ascending: false })
+      .from('contacto_soporte')
+      .select('id, asunto, estado, creado_en, cerrado_en, ultimo_mensaje_en')
+      .eq('user_id', userId)
+      .order('creado_en', { ascending: false })
       .limit(20);
 
     if (!error) {
@@ -67,13 +67,7 @@ export default function ContactPage() {
   };
 
   const loadFaq = async () => {
-    const { data } = await supabase
-      .from('contact_faq')
-      .select('id, question, answer, topic, quick_link')
-      .order('topic', { ascending: true })
-      .limit(50);
-
-    setFaqList(data || []);
+    setFaqList([]);
   };
 
   const handleTicketChange = (e) => {
@@ -84,18 +78,31 @@ export default function ContactPage() {
     e.preventDefault();
     setTicketLoading(true);
 
+    if (!session?.user?.id) {
+      setTicketLoading(false);
+      toast.error('Inicia sesión para crear un ticket de soporte.');
+      return;
+    }
+
+    const descripcion = [
+      `Nombre: ${ticketForm.name}`,
+      `Email: ${ticketForm.email}`,
+      `Tipo de usuario: ${ticketForm.userType}`,
+      '',
+      ticketForm.message,
+    ].join('\n');
+
     const payload = {
-      created_by: session?.user?.id || null,
-      requester_name: ticketForm.name,
-      requester_email: ticketForm.email,
-      requester_type: ticketForm.userType,
-      subject: ticketForm.subject,
-      message: ticketForm.message,
-      status: ticketForm.status,
-      topic: ticketForm.topic,
+      user_id: session.user.id,
+      asunto: ticketForm.subject,
+      descripcion,
+      estado: ticketForm.status,
+      tipo_problema: ticketForm.topic,
+      prioridad: 'normal',
+      resuelto: false,
     };
 
-    const { error } = await supabase.from('contact_tickets').insert(payload);
+    const { error } = await supabase.from('contacto_soporte').insert(payload);
     setTicketLoading(false);
 
     if (error) {
@@ -114,10 +121,10 @@ export default function ContactPage() {
   };
 
   const getActiveTicketTime = (ticket) => {
-    const start = ticket?.created_at ? new Date(ticket.created_at) : null;
+    const start = ticket?.creado_en ? new Date(ticket.creado_en) : null;
     if (!start) return 'N/A';
 
-    const end = ticket?.closed_at ? new Date(ticket.closed_at) : new Date();
+    const end = ticket?.cerrado_en ? new Date(ticket.cerrado_en) : new Date();
     const diffHours = Math.max(0, Math.round((end - start) / (1000 * 60 * 60)));
     return `${diffHours} h`;
   };
@@ -222,10 +229,10 @@ export default function ContactPage() {
                 ) : (
                   myTickets.map((ticket) => (
                     <tr key={ticket.id}>
-                      <td>{ticket.subject}</td>
-                      <td>{ticket.status}</td>
+                      <td>{ticket.asunto}</td>
+                      <td>{ticket.estado}</td>
                       <td>{getActiveTicketTime(ticket)}</td>
-                      <td>{new Date(ticket.created_at).toLocaleString('es-ES')}</td>
+                      <td>{new Date(ticket.creado_en).toLocaleString('es-ES')}</td>
                     </tr>
                   ))
                 )}
