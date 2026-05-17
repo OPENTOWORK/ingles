@@ -1,8 +1,7 @@
 import { NextResponse } from 'next/server';
-import { Resend } from 'resend';
 import { createClient } from '@supabase/supabase-js';
 import { SUPPORT_TICKET_INBOX_EMAIL } from '@/config/support';
-import SupportTicketEmail from '@/components/SupportTicketEmail';
+import { sendSupportTicketEmail } from '@/lib/sendSupportTicketEmail';
 import { TICKET_STATUS, USER_TYPES } from '@/utils/contactModuleConfig';
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
@@ -98,38 +97,29 @@ export async function POST(req) {
       );
     }
 
-    let emailSent = false;
-    if (process.env.RESEND_API_KEY?.trim()) {
-      const resend = new Resend(process.env.RESEND_API_KEY);
-      const { error: sendError } = await resend.emails.send({
-        from: process.env.RESEND_FROM_EMAIL || 'onboarding@resend.dev',
-        to: [SUPPORT_TICKET_INBOX_EMAIL],
-        replyTo: email,
-        subject: `[Soporte] ${subject}`,
-        react: SupportTicketEmail({
-          name,
-          email,
-          userType,
-          subject,
-          message,
-          status,
-          topic,
-        }),
-      });
+    const mail = await sendSupportTicketEmail({
+      name,
+      email,
+      userType,
+      subject,
+      message,
+      status,
+      topic,
+    });
 
-      if (sendError) {
-        console.error('[contact/tickets] email failed', sendError);
-      } else {
-        emailSent = true;
-      }
-    } else {
-      console.warn('[contact/tickets] RESEND_API_KEY missing; ticket saved without email');
+    if (!mail.sent) {
+      console.error('[contact/tickets] email failed', mail.error);
+    } else if (mail.usedFallback) {
+      console.warn('[contact/tickets] email sent via Resend test fallback', mail.deliveredTo);
     }
 
     return NextResponse.json({
       success: true,
       ticketId: ticket?.id ?? null,
-      emailSent,
+      emailSent: mail.sent,
+      emailUsedFallback: mail.usedFallback ?? false,
+      deliveredTo: mail.deliveredTo ?? null,
+      emailWarning: mail.error ?? null,
       inbox: SUPPORT_TICKET_INBOX_EMAIL,
     });
   } catch (err) {

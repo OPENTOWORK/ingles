@@ -108,10 +108,17 @@ export default function ContactPage() {
       return;
     }
 
-    if (data.emailSent === false) {
-      toast.success('Ticket guardado. El aviso por correo no se pudo enviar.');
+    if (!data.emailSent) {
+      toast.success('Ticket guardado en la plataforma.');
+      toast.error(data.emailWarning || 'No se pudo enviar el aviso por correo.');
+    } else if (data.emailUsedFallback) {
+      toast.success(`Ticket guardado. Aviso enviado a ${data.deliveredTo} (modo prueba Resend).`);
+      toast(
+        `Para recibir en draloenglish@gmail.com verifica un dominio en resend.com/domains y configura RESEND_FROM_EMAIL.`,
+        { duration: 8000 },
+      );
     } else {
-      toast.success('Ticket enviado correctamente.');
+      toast.success('Ticket enviado correctamente. Revisa draloenglish@gmail.com.');
     }
     setTicketForm((prev) => ({
       ...prev,
