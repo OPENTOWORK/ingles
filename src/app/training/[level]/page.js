@@ -3,6 +3,11 @@ import Link from "next/link";
 import { useEffect } from "react";
 import { useRouter } from 'next/navigation';
 import { useUserRole } from '@/context/UserRoleContext';
+import TrainingCardProgressStats from '@/components/training/TrainingCardProgressStats';
+import {
+  getMaxStarsForSkill,
+  useTrainingSkillStarProgressMap,
+} from '@/hooks/useTrainingCefrStarProgress';
 
 const skills = [
   { id: "use-of-english", label: "Use of English", emoji: "📘" },
@@ -19,6 +24,8 @@ export default function LevelPage({ params }) {
   const { level } = params;
   const router = useRouter();
   const { userRole, session } = useUserRole();
+  const skillProgressMap = useTrainingSkillStarProgressMap(level);
+  const maxStarsPerSkill = getMaxStarsForSkill();
 
   useEffect(() => {
     if (level?.toLowerCase() === 'a1') {
@@ -73,7 +80,7 @@ export default function LevelPage({ params }) {
       </main>
     );
   }
-  
+
   return (
     <main
       style={{
@@ -96,32 +103,46 @@ export default function LevelPage({ params }) {
           margin: "0 auto",
         }}
       >
-        {skills.map((skill) => (
-          <Link
-            key={skill.id}
-            href={`/training/${level}/${skill.id}`}
-            style={{
-              padding: "2rem 1rem",
-              backgroundColor: "#d6eaff",
-              borderRadius: "16px",
-              textDecoration: "none",
-              fontWeight: "bold",
-              color: "#003366",
-              display: "flex",
-              flexDirection: "column",
-              alignItems: "center",
-              justifyContent: "center",
-              fontSize: "1.2rem",
-              boxShadow: "0 4px 10px rgba(0,0,0,0.1)",
-              transition: "transform 0.2s ease",
-            }}
-            onMouseEnter={(e) => (e.currentTarget.style.transform = "scale(1.05)")}
-            onMouseLeave={(e) => (e.currentTarget.style.transform = "scale(1)")}
-          >
-            <div style={{ fontSize: "2.5rem", marginBottom: "0.5rem" }}>{skill.emoji}</div>
-            {skill.label}
-          </Link>
-        ))}
+        {skills.map((skill) => {
+          const progress = skillProgressMap[skill.id] ?? {
+            earned: 0,
+            max: maxStarsPerSkill,
+            percent: 0,
+          };
+
+          return (
+            <Link
+              key={skill.id}
+              href={`/training/${level}/${skill.id}`}
+              style={{
+                padding: "1.5rem 1rem 1.25rem",
+                backgroundColor: "#d6eaff",
+                borderRadius: "16px",
+                textDecoration: "none",
+                fontWeight: "bold",
+                color: "#003366",
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+                justifyContent: "center",
+                fontSize: "1.2rem",
+                boxShadow: "0 4px 10px rgba(0,0,0,0.1)",
+                transition: "transform 0.2s ease",
+              }}
+              onMouseEnter={(e) => (e.currentTarget.style.transform = "scale(1.05)")}
+              onMouseLeave={(e) => (e.currentTarget.style.transform = "scale(1)")}
+            >
+              <div style={{ fontSize: "2.5rem", marginBottom: "0.5rem" }}>{skill.emoji}</div>
+              {skill.label}
+              <TrainingCardProgressStats
+                earned={progress.earned}
+                max={progress.max}
+                percent={progress.percent}
+                variant="light"
+              />
+            </Link>
+          );
+        })}
       </div>
     </main>
   );

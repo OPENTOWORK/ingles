@@ -6,6 +6,7 @@ import { getExercisesByLevel } from '@/data/trainingExercises';
 import { saveExerciseResult, getUserProgress, progressTracker } from '@/utils/progressTracker';
 import { supabase } from '@/utils/supabaseClient';
 import { TRAINING_LEVEL_COUNT } from '@/constants/trainingLevels';
+import { notifyTrainingStarsUpdated } from '@/utils/trainingStarsProgress';
 
 export default function ExercisePage({ params }) {
   const { level, skill, difficulty, levelNumber } = params;
@@ -29,6 +30,26 @@ export default function ExercisePage({ params }) {
   const [completedExercises, setCompletedExercises] = useState([]); // Ejercicios completados
 
   const exercise = exercises[currentExercise];
+
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    if (!showResult || exercises.length === 0) return;
+    if (currentExercise !== exercises.length - 1) return;
+
+    try {
+      const storageKey = `stars_${level}_${skill}_${difficulty}`;
+      const savedStars = JSON.parse(localStorage.getItem(storageKey) || '{}');
+      const previous = Number(savedStars[levelNumber]) || 0;
+
+      if (previous >= stars) return;
+
+      savedStars[levelNumber] = stars;
+      localStorage.setItem(storageKey, JSON.stringify(savedStars));
+      notifyTrainingStarsUpdated();
+    } catch (error) {
+      console.warn('Could not save stars:', error);
+    }
+  }, [showResult, currentExercise, exercises.length, level, skill, difficulty, levelNumber, stars]);
   
   // Cargar ejercicios solo una vez al inicio
   useEffect(() => {
@@ -545,25 +566,6 @@ export default function ExercisePage({ params }) {
                 </button>
               ) : (
                 <div style={{ marginTop: "1rem" }}>
-                  {/* Guardar estrellas en localStorage al completar */}
-                  {(() => {
-                    if (typeof window !== 'undefined') {
-                      try {
-                        const storageKey = `stars_${level}_${skill}_${difficulty}`;
-                        const savedStars = JSON.parse(localStorage.getItem(storageKey) || '{}');
-                        
-                        // Solo actualizar si las nuevas estrellas son mejores
-                        if (!savedStars[levelNumber] || savedStars[levelNumber] < stars) {
-                          savedStars[levelNumber] = stars;
-                          localStorage.setItem(storageKey, JSON.stringify(savedStars));
-                        }
-                      } catch (error) {
-                        console.warn('Could not save stars:', error);
-                      }
-                    }
-                    return null;
-                  })()}
-                  
                   <p style={{ fontWeight: "bold", marginBottom: "1rem" }}>
                     🎉 Congratulations! You completed Level {levelNumber.replace('level-', '')}!
                   </p>

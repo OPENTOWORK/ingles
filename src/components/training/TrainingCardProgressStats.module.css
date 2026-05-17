@@ -1,0 +1,71 @@
+.stats {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.2rem;
+  width: 100%;
+  margin-top: 0.65rem;
+  padding: 0.45rem 0.55rem;
+  border-radius: 10px;
+}
+
+.light {
+  background: rgba(0, 51, 102, 0.1);
+}
+
+.dark {
+  background: rgba(0, 0, 0, 0.06);
+}
+
+.stars {
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}
+
+.light .stars,
+.light .percent {
+  color: #003366;
+}
+
+.dark .stars,
+.dark .percent {
+  color: #1e293b;
+}
+
+.percent {
+  font-size: 0.88rem;
+  font-weight: 800;
+}
+
+.progressTrack {
+  width: 92%;
+  height: 4px;
+  border-radius: 999px;
+  overflow: hidden;
+  margin-top: 0.15rem;
+}
+
+.light .progressTrack {
+  background: rgba(0, 51, 102, 0.15);
+}
+
+.dark .progressTrack {
+  background: rgba(0, 0, 0, 0.1);
+}
+
+.progressFill {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  transition: width 0.35s ease;
+  min-width: 0;
+}
+
+.light .progressFill {
+  background: #1cb0f6;
+}
+
+.dark .progressFill {
+  background: #3b82f6;
+}
