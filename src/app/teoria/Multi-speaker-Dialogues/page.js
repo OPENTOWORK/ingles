@@ -224,7 +224,7 @@ const MultiSpeakerDialoguesPage = () => {
             english="Interruption: 'The manager cuts off the Designer'"
           />
           <Example 
-            english="Returning: \"Going back to what the Designer was saying…\""
+            english={'Returning: "Going back to what the Designer was saying…"'}
           />
         </div>
 

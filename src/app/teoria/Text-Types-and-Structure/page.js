@@ -89,9 +89,9 @@ const TextTypesAndStructurePage = () => {
         />
 
         <div style={{ display: 'grid', gap: '1rem' }}>
-          <Example english='Introduction: "In this essay I will analyse the benefits of technology…"' />
-          <Example english='Body: "First, technology improves communication…"' />
-          <Example english='Conclusion: "In conclusion, technology is beneficial…"' />
+          <Example english={'Introduction: "In this essay I will analyse the benefits of technology…"'} />
+          <Example english={'Body: "First, technology improves communication…"'} />
+          <Example english={'Conclusion: "In conclusion, technology is beneficial…"'} />
         </div>
 
         <Rule 
@@ -126,9 +126,9 @@ const TextTypesAndStructurePage = () => {
         />
 
         <div style={{ display: 'grid', gap: '1rem' }}>
-          <Example english='Topic sentence: "Technology has revolutionized communication."' />
-          <Example english='Development: "First of all, it allows instant messaging…"' />
-          <Example english='Example: "For example, social media platforms…"' />
+          <Example english={'Topic sentence: "Technology has revolutionized communication."'} />
+          <Example english={'Development: "First of all, it allows instant messaging…"'} />
+          <Example english={'Example: "For example, social media platforms…"'} />
         </div>
 
         <Rule 
@@ -165,10 +165,10 @@ const TextTypesAndStructurePage = () => {
         />
 
         <div style={{ display: 'grid', gap: '1rem' }}>
-          <Example english='Formal: "I would like to express my gratitude…"' />
-          <Example english='Informal: "Thanks a lot for everything!"' />
-          <Example english='Formal: "Furthermore, it is important to note…"' />
-          <Example english='Informal: "Also, you should know…"' />
+          <Example english={'Formal: "I would like to express my gratitude…"'} />
+          <Example english={'Informal: "Thanks a lot for everything!"'} />
+          <Example english={'Formal: "Furthermore, it is important to note…"'} />
+          <Example english={'Informal: "Also, you should know…"'} />
         </div>
 
         <Rule 
@@ -206,9 +206,9 @@ const TextTypesAndStructurePage = () => {
         />
 
         <div style={{ display: 'grid', gap: '1rem' }}>
-          <Example english='Addition: "Furthermore, technology improves education."' />
-          <Example english='Contrast: "However, there are some disadvantages."' />
-          <Example english='Result: "Therefore, we should use technology thoughtfully."' />
+          <Example english={'Addition: "Furthermore, technology improves education."'} />
+          <Example english={'Contrast: "However, there are some disadvantages."'} />
+          <Example english={'Result: "Therefore, we should use technology thoughtfully."'} />
         </div>
 
         <Tip type="success">

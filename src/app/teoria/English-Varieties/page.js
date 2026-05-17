@@ -53,16 +53,16 @@ const EnglishVarietiesPage = () => {
 
         <div style={{ display: 'grid', gap: '1rem' }}>
           <Example 
-            english="British: \"I'll take the lift to the first floor\""
+            english={`British: "I'll take the lift to the first floor"`}
           />
           <Example 
-            english="American: \"I'll take the elevator to the second floor\""
+            english={`American: "I'll take the elevator to the second floor"`}
           />
           <Example 
-            english="British: \"What colour is your car?\""
+            english={'British: "What colour is your car?"'}
           />
           <Example 
-            english="American: \"What color is your car?\""
+            english={'American: "What color is your car?"'}
           />
         </div>
 
@@ -102,13 +102,13 @@ const EnglishVarietiesPage = () => {
 
         <div style={{ display: 'grid', gap: '1rem' }}>
           <Example 
-            english="Australian: \"Let's have a barbie this arvo\""
+            english={`Australian: "Let's have a barbie this arvo"`}
           />
           <Example 
-            english="Canadian: \"It's cold, eh? Don't forget your tuque\""
+            english={`Canadian: "It's cold, eh? Don't forget your tuque"`}
           />
           <Example 
-            english="Indian: \"I'll prepone the meeting\""
+            english={`Indian: "I'll prepone the meeting"`}
           />
         </div>
 
@@ -137,16 +137,16 @@ const EnglishVarietiesPage = () => {
 
         <div style={{ display: 'grid', gap: '1rem' }}>
           <Example 
-            english="British: \"I'll take the underground to buy some biscuits\""
+            english={`British: "I'll take the underground to buy some biscuits"`}
           />
           <Example 
-            english="American: \"I'll take the subway to buy some cookies\""
+            english={`American: "I'll take the subway to buy some cookies"`}
           />
           <Example 
-            english="British: \"I live in a flat and wear trainers\""
+            english={'British: "I live in a flat and wear trainers"'}
           />
           <Example 
-            english="American: \"I live in an apartment and wear sneakers\""
+            english={'American: "I live in an apartment and wear sneakers"'}
           />
         </div>
 
@@ -186,16 +186,16 @@ const EnglishVarietiesPage = () => {
 
         <div style={{ display: 'grid', gap: '1rem' }}>
           <Example 
-            english="British: \"I've just finished my homework\""
+            english={`British: "I've just finished my homework"`}
           />
           <Example 
-            english="American: \"I just finished my homework\""
+            english={'American: "I just finished my homework"'}
           />
           <Example 
-            english="British: \"The team are playing well\""
+            english={'British: "The team are playing well"'}
           />
           <Example 
-            english="American: \"The team is playing well\""
+            english={'American: "The team is playing well"'}
           />
         </div>
 
