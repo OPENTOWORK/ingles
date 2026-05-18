@@ -1,12 +1,17 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 import { supabase } from '@/utils/supabaseClient';
+import { getRoleNameByUserId, normalizeRoleName } from '@/utils/authRoles';
 import { INTERNAL_MESSAGE_CHANNELS } from '@/utils/contactModuleConfig';
+
+const STUDENT_ROLES = new Set(['student', 'alumno']);
 
 export default function InternalMessagesSection({ session }) {
   const [messageLoading, setMessageLoading] = useState(false);
+  const [roleLoading, setRoleLoading] = useState(true);
+  const [isStudent, setIsStudent] = useState(false);
   const [form, setForm] = useState({
     toProfile: INTERNAL_MESSAGE_CHANNELS[0].value,
     subject: '',
@@ -14,6 +19,26 @@ export default function InternalMessagesSection({ session }) {
   });
 
   const isLoggedIn = Boolean(session?.user?.id);
+
+  useEffect(() => {
+    if (!session?.user?.id) {
+      setIsStudent(false);
+      setRoleLoading(false);
+      return;
+    }
+
+    let cancelled = false;
+    getRoleNameByUserId(session.user.id, session.user.email).then((role) => {
+      if (!cancelled) {
+        setIsStudent(STUDENT_ROLES.has(normalizeRoleName(role)));
+        setRoleLoading(false);
+      }
+    });
+
+    return () => {
+      cancelled = true;
+    };
+  }, [session?.user?.id, session?.user?.email]);
 
   const handleChange = (e) => {
     setForm((prev) => ({ ...prev, [e.target.name]: e.target.value }));
@@ -67,6 +92,18 @@ export default function InternalMessagesSection({ session }) {
         </div>
       ) : null}
 
+      {isLoggedIn && !roleLoading && isStudent ? (
+        <div className="internal-messages__coming-soon" role="status">
+          <span className="internal-messages__coming-soon-badge">Coming soon</span>
+          <p>
+            Internal messaging for students will be available soon. For now, use{' '}
+            <strong>Support</strong> below to open a ticket.
+          </p>
+        </div>
+      ) : null}
+
+      {isLoggedIn && (roleLoading || isStudent) ? null : (
+        <>
       <div className="internal-channels" role="radiogroup" aria-label="Message channel">
         {INTERNAL_MESSAGE_CHANNELS.map((channel) => {
           const selected = form.toProfile === channel.value;
@@ -133,6 +170,8 @@ export default function InternalMessagesSection({ session }) {
           </button>
         </div>
       </form>
+        </>
+      )}
 
       <style jsx global>{`
         .contact-section--internal {
@@ -184,6 +223,35 @@ export default function InternalMessagesSection({ session }) {
           margin: 0;
           font-size: 0.9rem;
           color: #be123c;
+        }
+        .internal-messages__coming-soon {
+          margin-bottom: 0;
+          padding: 2rem 1.5rem;
+          border-radius: 16px;
+          background: #fff;
+          border: 1px dashed #f9a8d4;
+          text-align: center;
+        }
+        .internal-messages__coming-soon-badge {
+          display: inline-block;
+          margin-bottom: 0.75rem;
+          padding: 0.35rem 1rem;
+          border-radius: 999px;
+          background: linear-gradient(135deg, #fce7f3 0%, #fbcfe8 100%);
+          color: #9d174d;
+          font-size: 0.95rem;
+          font-weight: 700;
+          letter-spacing: 0.04em;
+          text-transform: uppercase;
+        }
+        .internal-messages__coming-soon p {
+          margin: 0;
+          max-width: 36rem;
+          margin-left: auto;
+          margin-right: auto;
+          color: #64748b;
+          line-height: 1.55;
+          font-size: 0.95rem;
         }
         .internal-channels {
           display: grid;

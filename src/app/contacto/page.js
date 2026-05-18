@@ -4,10 +4,11 @@ import { useState, useEffect } from 'react';
 import toast from 'react-hot-toast';
 import { supabase } from '@/utils/supabaseClient';
 import {
-  FAQ_TOPICS,
-  TICKET_STATUS,
-  USER_TYPES,
-} from '@/utils/contactModuleConfig';
+  formatActiveDuration,
+  formatTicketDateTime,
+  formatTicketNumber,
+} from '@/lib/supportTicketParse';
+import { FAQ_TOPICS } from '@/utils/contactModuleConfig';
 import PageHero from '@/components/PageHero';
 import InternalMessagesSection from '@/components/contact/InternalMessagesSection';
 
@@ -22,8 +23,6 @@ export default function ContactPage() {
     email: '',
     subject: '',
     message: '',
-    userType: USER_TYPES.POTENTIAL,
-    status: TICKET_STATUS.UNANSWERED,
     topic: 'uso de la plataforma',
   });
 
@@ -37,7 +36,6 @@ export default function ContactPage() {
           ...prev,
           name: currentSession.user.user_metadata?.name || prev.name,
           email: currentSession.user.email || prev.email,
-          userType: USER_TYPES.CONFIRMED,
         }));
       }
 
@@ -110,32 +108,31 @@ export default function ContactPage() {
 
     if (!data.emailSent) {
       toast.success('Ticket guardado en la plataforma.');
-      toast.error(data.emailWarning || 'No se pudo enviar el aviso por correo.');
-    } else if (data.emailUsedFallback) {
-      toast.success(`Ticket guardado. Aviso enviado a ${data.deliveredTo} (modo prueba Resend).`);
-      toast(
-        `Para recibir en draloenglish@gmail.com verifica un dominio en resend.com/domains y configura RESEND_FROM_EMAIL.`,
-        { duration: 8000 },
+      toast.error(
+        (t) => (
+          <span>
+            {data.emailWarning || 'Correo no enviado a draloenglish@gmail.com.'}{' '}
+            <a href="/contacto/configurar-correo" style={{ color: '#fff', textDecoration: 'underline' }}>
+              Configurar correo
+            </a>
+          </span>
+        ),
+        { duration: 12000 },
+      );
+    } else if (data.ackEmailSent) {
+      toast.success(
+        'Te hemos enviado un correo de confirmación. Responderemos en un plazo máximo de 48 horas.',
+        { duration: 6000 },
       );
     } else {
-      toast.success('Ticket enviado correctamente. Revisa draloenglish@gmail.com.');
+      toast.success('Tu ticket se ha registrado correctamente.');
     }
     setTicketForm((prev) => ({
       ...prev,
       subject: '',
       message: '',
-      status: TICKET_STATUS.UNANSWERED,
     }));
     await loadMyTickets(session?.user?.id);
-  };
-
-  const getActiveTicketTime = (ticket) => {
-    const start = ticket?.creado_en ? new Date(ticket.creado_en) : null;
-    if (!start) return 'N/A';
-
-    const end = ticket?.cerrado_en ? new Date(ticket.cerrado_en) : new Date();
-    const diffHours = Math.max(0, Math.round((end - start) / (1000 * 60 * 60)));
-    return `${diffHours} h`;
   };
 
   if (pageLoading) {
@@ -179,25 +176,6 @@ export default function ContactPage() {
             </div>
           </div>
 
-          <div className="two-cols">
-            <div className="form-group">
-              <label>Tipos de usuario</label>
-              <select className="form-input" name="userType" value={ticketForm.userType} onChange={handleTicketChange}>
-                <option>{USER_TYPES.POTENTIAL}</option>
-                <option>{USER_TYPES.CONFIRMED}</option>
-              </select>
-            </div>
-            <div className="form-group">
-              <label>Estado</label>
-              <select className="form-input" name="status" value={ticketForm.status} onChange={handleTicketChange}>
-                <option>{TICKET_STATUS.OPEN}</option>
-                <option>{TICKET_STATUS.UNANSWERED}</option>
-                <option>{TICKET_STATUS.ANSWERED}</option>
-                <option>{TICKET_STATUS.CLOSED}</option>
-              </select>
-            </div>
-          </div>
-
           <div className="form-group">
             <label>Organizacion por temas</label>
             <select className="form-input" name="topic" value={ticketForm.topic} onChange={handleTicketChange}>
@@ -224,6 +202,7 @@ export default function ContactPage() {
             <table className="tickets-table">
               <thead>
                 <tr>
+                  <th className="tickets-table__col-id">Nº ticket</th>
                   <th>Asunto</th>
                   <th>Estado</th>
                   <th>Tiempo del ticket en activo</th>
@@ -233,15 +212,20 @@ export default function ContactPage() {
               <tbody>
                 {myTickets.length === 0 ? (
                   <tr>
-                    <td colSpan={4}>Sin tickets registrados.</td>
+                    <td colSpan={5}>Sin tickets registrados.</td>
                   </tr>
                 ) : (
                   myTickets.map((ticket) => (
                     <tr key={ticket.id}>
+                      <td className="tickets-table__col-id">
+                        <span className="tickets-table__ticket-ref" title={ticket.id}>
+                          {formatTicketNumber(ticket.id)}
+                        </span>
+                      </td>
                       <td>{ticket.asunto}</td>
                       <td>{ticket.estado}</td>
-                      <td>{getActiveTicketTime(ticket)}</td>
-                      <td>{new Date(ticket.creado_en).toLocaleString('es-ES')}</td>
+                      <td>{formatActiveDuration(ticket.creado_en, ticket.cerrado_en)}</td>
+                      <td>{formatTicketDateTime(ticket.creado_en)}</td>
                     </tr>
                   ))
                 )}
@@ -310,8 +294,10 @@ function GlobalStyles() {
       .form-textarea{resize:vertical;min-height:120px;font-family:inherit}
       .tickets-table-wrap{margin-top:18px}
       .tickets-table{width:100%;border-collapse:collapse}
-      .tickets-table th,.tickets-table td{border:1px solid #eaeaea;padding:10px;text-align:left;font-size:14px}
-      .tickets-table th{background:#fafafa}
+      .tickets-table th,.tickets-table td{border:1px solid #eaeaea;padding:10px;text-align:left;font-size:14px;vertical-align:middle}
+      .tickets-table th{background:#fafafa;font-weight:600}
+      .tickets-table__col-id{width:1%;white-space:nowrap}
+      .tickets-table__ticket-ref{display:inline-block;padding:4px 10px;border-radius:8px;background:#f1f5f9;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:12px;font-weight:600;letter-spacing:0.04em;color:#334155}
       .faq-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:12px;margin-top:12px}
       .faq-card{border:1px solid #eaeaea;border-radius:12px;padding:12px;background:#fff;display:grid;gap:6px}
       .faq-card p{margin:0;color:#333}

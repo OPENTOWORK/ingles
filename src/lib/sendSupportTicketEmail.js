@@ -1,8 +1,9 @@
 import { Resend } from 'resend';
 import { SUPPORT_TICKET_INBOX_EMAIL } from '@/config/support';
-
-const RESEND_TEST_MODE_HINT =
-  'You can only send testing emails to your own email address';
+import { isResendDomainReady } from '@/lib/resendDomainReady';
+import { isSupportSmtpReady } from '@/lib/supportSmtpCredentials';
+import { sendSupportTicketViaSmtp } from '@/lib/sendSupportTicketViaSmtp';
+import { sendSupportTicketViaWeb3forms } from '@/lib/sendSupportTicketViaWeb3forms';
 
 function buildPlainText({ name, email, userType, subject, message, status, topic }) {
   return [
@@ -20,80 +21,71 @@ function buildPlainText({ name, email, userType, subject, message, status, topic
   ].join('\n');
 }
 
-function isResendTestModeError(error) {
-  const msg = String(error?.message || '');
-  return error?.statusCode === 403 && msg.includes(RESEND_TEST_MODE_HINT);
-}
-
 /**
  * @param {import('@/components/SupportTicketEmail').SupportTicketEmailProps} ticket
- * @returns {Promise<{ sent: boolean, usedFallback: boolean, error?: string, deliveredTo?: string }>}
  */
 export async function sendSupportTicketEmail(ticket) {
-  const apiKey = process.env.RESEND_API_KEY?.trim();
-  if (!apiKey) {
-    return {
-      sent: false,
-      usedFallback: false,
-      error: 'RESEND_API_KEY no configurada en el servidor.',
-    };
-  }
-
-  const resend = new Resend(apiKey);
-  const from = process.env.RESEND_FROM_EMAIL || 'onboarding@resend.dev';
+  const inbox = SUPPORT_TICKET_INBOX_EMAIL;
   const text = buildPlainText(ticket);
   const subject = `[Soporte] ${ticket.subject}`;
-  const payload = {
-    from,
-    replyTo: ticket.email,
-    subject,
-    text,
-  };
 
-  const primary = await resend.emails.send({
-    ...payload,
-    to: [SUPPORT_TICKET_INBOX_EMAIL],
-  });
+  const trySmtp = () =>
+    sendSupportTicketViaSmtp({
+      to: inbox,
+      subject,
+      text,
+      replyTo: ticket.email,
+    });
 
-  if (!primary.error) {
-    return { sent: true, usedFallback: false, deliveredTo: SUPPORT_TICKET_INBOX_EMAIL };
+  // 0) Web3Forms (sin Gmail): WEB3FORMS_ACCESS_KEY en .env.local
+  const web3 = await sendSupportTicketViaWeb3forms(ticket, text, subject);
+  if (web3.sent) {
+    return { sent: true, usedFallback: false, deliveredTo: inbox, channel: 'web3forms' };
   }
 
-  if (!isResendTestModeError(primary.error)) {
+  // 1) Gmail SMTP
+  if (isSupportSmtpReady()) {
+    const smtp = await trySmtp();
+    if (smtp.sent) {
+      return { sent: true, usedFallback: false, deliveredTo: inbox, channel: 'smtp' };
+    }
     return {
       sent: false,
       usedFallback: false,
-      error: primary.error.message || 'Error al enviar el correo.',
+      deliveredTo: null,
+      error: smtp.error || 'Error al enviar por SMTP.',
     };
   }
 
-  const fallbackTo =
-    process.env.RESEND_DEV_FALLBACK_TO?.trim() || 'carlos.garcia.cano87@gmail.com';
-
-  const fallback = await resend.emails.send({
-    ...payload,
-    to: [fallbackTo],
-    subject: `[Soporte → ${SUPPORT_TICKET_INBOX_EMAIL}] ${ticket.subject}`,
-    text: [
-      `Este aviso iba a ${SUPPORT_TICKET_INBOX_EMAIL}, pero Resend exige verificar un dominio propio.`,
-      'Verifica un dominio en https://resend.com/domains y configura RESEND_FROM_EMAIL (ej. soporte@dralo.es).',
-      '',
+  // 2) Resend con dralo.es verificado
+  const apiKey = process.env.RESEND_API_KEY?.trim();
+  if (apiKey && (await isResendDomainReady())) {
+    const resend = new Resend(apiKey);
+    const from =
+      process.env.RESEND_FROM_EMAIL?.trim() || 'soporte@dralo.es';
+    const { error } = await resend.emails.send({
+      from,
+      to: [inbox],
+      replyTo: ticket.email,
+      subject,
       text,
-    ].join('\n'),
-  });
-
-  if (fallback.error) {
+    });
+    if (!error) {
+      return { sent: true, usedFallback: false, deliveredTo: inbox, channel: 'resend' };
+    }
     return {
       sent: false,
-      usedFallback: true,
-      error: fallback.error.message || 'Error al enviar el correo de respaldo.',
+      usedFallback: false,
+      deliveredTo: null,
+      error: error.message || 'Error Resend.',
     };
   }
 
   return {
-    sent: true,
-    usedFallback: true,
-    deliveredTo: fallbackTo,
-    error: `Resend en modo prueba: el aviso se envió a ${fallbackTo}. Para recibir en ${SUPPORT_TICKET_INBOX_EMAIL} verifica un dominio en Resend.`,
+    sent: false,
+    usedFallback: false,
+    deliveredTo: null,
+    error:
+      'Correo no configurado. Abre /contacto/configurar-correo y pega la contraseña de aplicación de Gmail.',
   };
 }

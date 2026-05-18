@@ -30,9 +30,25 @@ export function getSupabaseAnonKey() {
 }
 
 export function getSupabaseServiceRoleKey() {
-  return (
+  const fromEnv =
     process.env.SUPABASE_SERVICE_ROLE_KEY?.trim() ||
     process.env.SUPABASE_SECRET_KEY?.trim() ||
-    ''
-  );
+    '';
+  if (fromEnv) return fromEnv;
+
+  if (typeof window !== 'undefined') return '';
+
+  try {
+    const fs = require('fs');
+    const path = require('path');
+    const file = path.join(process.cwd(), 'secrets', 'supabase-service-role.txt');
+    if (fs.existsSync(file)) {
+      const raw = fs.readFileSync(file, 'utf8').trim();
+      if (raw) return raw;
+    }
+  } catch {
+    /* ignore */
+  }
+
+  return '';
 }

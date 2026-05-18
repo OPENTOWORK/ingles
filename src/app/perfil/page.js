@@ -10,6 +10,7 @@ import AdaptiveLearningDashboard from '@/components/AdaptiveLearningDashboard';
 import AchievementNotification from '@/components/AchievementNotification';
 import ExamStatistics from '@/components/ExamStatistics';
 import LevelsEstadisticasPanel from '@/components/LevelsEstadisticasPanel';
+import ProfileComingSoon from '@/components/perfil/ProfileComingSoon';
 import SiteMascot from '@/components/SiteMascot';
 import { offlineFirstDatabase } from '@/utils/offlineFirstDatabase';
 import { progressTracker } from '@/utils/progressTracker';
@@ -18,6 +19,26 @@ import {
   PieChart, Pie, Cell, RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis, Radar,
   BarChart, Bar, AreaChart, Area
 } from 'recharts';
+
+const PROFILE_TABS = [
+  { id: 'overview', label: '📊 Resumen', studentAllowed: true },
+  { id: 'progress', label: '📈 Progreso' },
+  { id: 'achievements', label: '🏆 Logros' },
+  { id: 'goals', label: '🎯 Objetivos' },
+  { id: 'integrated', label: '🔗 Estadísticas Integradas' },
+  { id: 'settings', label: '⚙️ Configuración' },
+  { id: 'study-tools', label: '🛠️ Herramientas' },
+  { id: 'social', label: '👥 Social' },
+  { id: 'analytics', label: '📊 Analytics' },
+  { id: 'ai-tools', label: '🤖 IA Tools' },
+  { id: 'study-planner', label: '📅 Planificador' },
+  { id: 'gamification', label: '🎮 Gamificación' },
+  { id: 'community', label: '🌐 Comunidad' },
+];
+
+const PROFILE_TAB_LABELS = Object.fromEntries(
+  PROFILE_TABS.map((t) => [t.id, t.label.replace(/^[^\s]+\s/, '')]),
+);
 
 export default function ProfilePage() {
   const [user, setUser] = useState(null);
@@ -109,7 +130,8 @@ export default function ProfilePage() {
   const [studyChallenges, setStudyChallenges] = useState([]);
   const [studyLeaderboard, setStudyLeaderboard] = useState([]);
   const router = useRouter();
-  const { session: layoutSession } = useUserRole();
+  const { userRole, session: layoutSession } = useUserRole();
+  const isStudent = userRole === 'student' || userRole === 'alumno';
 
   useEffect(() => {
     const fetchData = async () => {
@@ -778,87 +800,26 @@ export default function ProfilePage() {
       {/* Tabs de navegación */}
       <div className="tabs-container">
         <div className="tabs">
-          <button 
-            className={`tab ${activeTab === 'overview' ? 'tab--active' : ''}`}
-            onClick={() => setActiveTab('overview')}
-          >
-            📊 Resumen
-          </button>
-          <button 
-            className={`tab ${activeTab === 'progress' ? 'tab--active' : ''}`}
-            onClick={() => setActiveTab('progress')}
-          >
-            📈 Progreso
-          </button>
-          <button 
-            className={`tab ${activeTab === 'achievements' ? 'tab--active' : ''}`}
-            onClick={() => setActiveTab('achievements')}
-          >
-            🏆 Logros
-          </button>
-          <button 
-            className={`tab ${activeTab === 'goals' ? 'tab--active' : ''}`}
-            onClick={() => setActiveTab('goals')}
-          >
-            🎯 Objetivos
-          </button>
-          <button 
-            className={`tab ${activeTab === 'integrated' ? 'tab--active' : ''}`}
-            onClick={() => setActiveTab('integrated')}
-          >
-            🔗 Estadísticas Integradas
-          </button>
-          <button 
-            className={`tab ${activeTab === 'settings' ? 'tab--active' : ''}`}
-            onClick={() => setActiveTab('settings')}
-          >
-            ⚙️ Configuración
-          </button>
-          <button 
-            className={`tab ${activeTab === 'study-tools' ? 'tab--active' : ''}`}
-            onClick={() => setActiveTab('study-tools')}
-          >
-            🛠️ Herramientas
-          </button>
-          <button 
-            className={`tab ${activeTab === 'social' ? 'tab--active' : ''}`}
-            onClick={() => setActiveTab('social')}
-          >
-            👥 Social
-          </button>
-          <button 
-            className={`tab ${activeTab === 'analytics' ? 'tab--active' : ''}`}
-            onClick={() => setActiveTab('analytics')}
-          >
-            📊 Analytics
-          </button>
-          <button 
-            className={`tab ${activeTab === 'ai-tools' ? 'tab--active' : ''}`}
-            onClick={() => setActiveTab('ai-tools')}
-          >
-            🤖 IA Tools
-          </button>
-          <button 
-            className={`tab ${activeTab === 'study-planner' ? 'tab--active' : ''}`}
-            onClick={() => setActiveTab('study-planner')}
-          >
-            📅 Planificador
-          </button>
-          <button 
-            className={`tab ${activeTab === 'gamification' ? 'tab--active' : ''}`}
-            onClick={() => setActiveTab('gamification')}
-          >
-            🎮 Gamificación
-          </button>
-          <button 
-            className={`tab ${activeTab === 'community' ? 'tab--active' : ''}`}
-            onClick={() => setActiveTab('community')}
-          >
-            🌐 Comunidad
-          </button>
+          {PROFILE_TABS.map((tab) => {
+            const locked = isStudent && !tab.studentAllowed;
+            return (
+              <button
+                key={tab.id}
+                type="button"
+                className={`tab${activeTab === tab.id ? ' tab--active' : ''}${locked ? ' tab--locked' : ''}`}
+                onClick={() => setActiveTab(tab.id)}
+              >
+                {tab.label}
+              </button>
+            );
+          })}
         </div>
       </div>
 
+      {isStudent && activeTab !== 'overview' ? (
+        <ProfileComingSoon section={PROFILE_TAB_LABELS[activeTab]} />
+      ) : (
+        <>
       {/* Tab: Resumen */}
       {activeTab === 'overview' && (
         <>
@@ -2205,6 +2166,8 @@ export default function ProfilePage() {
           </section>
         </>
       )}
+        </>
+      )}
 
       <GlobalStyles />
     </main>
@@ -2234,6 +2197,14 @@ function GlobalStyles() {
       .tab{padding:12px 20px;border-radius:12px;border:1px solid #eaeaea;background:white;color:var(--text);cursor:pointer;transition:.2s;font-weight:500}
       .tab:hover{transform:translateY(-1px);border-color:#0070f3;background:#b0d6fa}
       .tab--active{background:#0070f3;border-color:transparent;color:white;box-shadow:0 8px 20px rgba(0,112,243,.35)}
+      .tab--locked{opacity:.8}
+      .tab--locked:not(.tab--active){background:#f8fafc;border-color:#e2e8f0;color:#64748b}
+      .tab--locked.tab--active{background:#64748b;border-color:transparent;color:#fff;box-shadow:0 6px 16px rgba(100,116,139,.35)}
+
+      .profile-coming-soon{margin:22px 0;padding:48px 28px;border:1px dashed #c7d2fe;border-radius:16px;background:linear-gradient(180deg,#fff 0%,#f8fafc 100%);text-align:center}
+      .profile-coming-soon__badge{display:inline-block;margin-bottom:12px;padding:6px 14px;border-radius:999px;background:linear-gradient(135deg,#e0e7ff 0%,#c7d2fe 100%);color:#3730a3;font-size:13px;font-weight:700;letter-spacing:.06em;text-transform:uppercase}
+      .profile-coming-soon__title{margin:0 0 10px;font-size:22px;color:var(--text)}
+      .profile-coming-soon__text{margin:0 auto;max-width:32rem;color:#64748b;line-height:1.55;font-size:15px}
       
       .profile-section{margin:22px 0;padding:24px;border:1px solid #eaeaea;border-radius:16px;background:var(--card);box-shadow:0 2px 6px rgba(0,0,0,0.1)}
       .section-head{display:flex;align-items:center;gap:8px;margin-bottom:20px}

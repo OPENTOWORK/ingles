@@ -1,11 +1,13 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import * as XLSX from 'xlsx';
 import { supabase } from '@/utils/supabaseClient';
+import { formatSessionDuration } from '@/lib/userActivity';
 import { userHasRole, normalizeRoleName } from '@/utils/authRoles';
+import AdminAnalyticsPanels from '@/components/admin/AdminAnalyticsPanels';
 
 const PERIOD_OPTIONS = ['dias', 'semanas', 'meses', 'anios'];
 
@@ -55,6 +57,20 @@ export default function AdminDashboard() {
       tasaExito: 0,
     },
   });
+  const [userActivityByUser, setUserActivityByUser] = useState({});
+  const [sessionChart, setSessionChart] = useState([]);
+  const [chartPeriod, setChartPeriod] = useState('meses');
+  const [chartStartDate, setChartStartDate] = useState('');
+  const [chartEndDate, setChartEndDate] = useState('');
+  const [connectionAnalytics, setConnectionAnalytics] = useState({
+    totalSessionLabel: '0 s',
+    sessionCount: 0,
+    activeUsers: 0,
+    avgPerUserLabel: '0 s',
+    horaPico: '-',
+    diaPico: '-',
+    heatmap: [],
+  });
   const router = useRouter();
 
   useEffect(() => {
@@ -77,7 +93,7 @@ export default function AdminDashboard() {
 
       setUser(currentUser);
       await Promise.all([loadRoles(), loadUsers()]);
-      await loadAnalytics();
+      await Promise.all([loadAnalytics(), loadUserActivity(currentUser)]);
     } catch (error) {
       console.error('Error checking user:', error);
       router.push('/login');
@@ -250,7 +266,58 @@ export default function AdminDashboard() {
   useEffect(() => {
     if (!user) return;
     loadAnalytics();
-  }, [period, startDate, endDate]);
+  }, [period, startDate, endDate, user]);
+
+  const loadUserActivity = useCallback(
+    async (adminUser = user) => {
+      if (!adminUser) return;
+      try {
+        const { data: sessionData } = await supabase.auth.getSession();
+        const accessToken = sessionData?.session?.access_token;
+        if (!accessToken) return;
+
+        const params = new URLSearchParams({ period: chartPeriod });
+        if (chartStartDate) params.set('startDate', chartStartDate);
+        if (chartEndDate) params.set('endDate', chartEndDate);
+
+        const res = await fetch(`/api/admin/user-activity?${params}`, {
+          headers: { Authorization: `Bearer ${accessToken}` },
+        });
+        const data = await res.json().catch(() => ({}));
+        if (!res.ok) {
+          console.error('[admin] user-activity', data.error);
+          return;
+        }
+        setUserActivityByUser(data.byUser || {});
+        setSessionChart(data.chart || []);
+        setConnectionAnalytics(
+          data.connection || {
+            totalSessionLabel: '0 s',
+            sessionCount: 0,
+            activeUsers: 0,
+            avgPerUserLabel: '0 s',
+            horaPico: '-',
+            diaPico: '-',
+            heatmap: [],
+          },
+        );
+      } catch (error) {
+        console.error('Error loading user activity:', error);
+      }
+    },
+    [user, chartPeriod, chartStartDate, chartEndDate],
+  );
+
+  useEffect(() => {
+    if (!user) return;
+    loadUserActivity(user);
+  }, [chartPeriod, chartStartDate, chartEndDate, user, loadUserActivity]);
+
+  useEffect(() => {
+    if (!user) return undefined;
+    const interval = setInterval(() => loadUserActivity(user), 45_000);
+    return () => clearInterval(interval);
+  }, [user, loadUserActivity]);
 
   const getRoleNameById = (roleId) => {
     const role = roles.find((item) => item.id === roleId);
@@ -382,7 +449,8 @@ export default function AdminDashboard() {
       email: item.email || '',
       rol: getRoleNameById(item.rol_id),
       acepta_comercial: item.marketingAccepted ? 'Si' : 'No',
-      estado: item.activo === false ? 'Pausada' : 'Activa',
+      conectado: userActivityByUser[item.id]?.online ? 'Si' : 'No',
+      tiempo_sesion: userActivityByUser[item.id]?.totalSessionLabel || '0 s',
       creado_en: item.creado_en || '',
     }));
     const worksheet = XLSX.utils.json_to_sheet(rows);
@@ -402,7 +470,8 @@ export default function AdminDashboard() {
       email: item.email || '',
       rol: getRoleNameById(item.rol_id),
       acepta_comercial: item.marketingAccepted ? 'Si' : 'No',
-      estado: item.activo === false ? 'Pausada' : 'Activa',
+      conectado: userActivityByUser[item.id]?.online ? 'Si' : 'No',
+      tiempo_sesion: userActivityByUser[item.id]?.totalSessionLabel || '0 s',
       creado_en: item.creado_en || '',
     }));
     const worksheet = XLSX.utils.json_to_sheet(rows);
@@ -603,106 +672,6 @@ export default function AdminDashboard() {
 
         <div className="bg-white rounded-lg shadow mb-8">
           <div className="px-6 py-4 border-b border-gray-200">
-            <h2 className="text-lg font-medium text-gray-900">Analiticas</h2>
-          </div>
-          <div className="p-6">
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
-              <div>
-                <label className="block text-sm font-medium text-gray-600 mb-1">Periodo</label>
-                <select
-                  value={period}
-                  onChange={(e) => setPeriod(e.target.value)}
-                  className="w-full border rounded px-3 py-2 text-sm"
-                >
-                  {PERIOD_OPTIONS.map((option) => (
-                    <option key={option} value={option}>
-                      {option}
-                    </option>
-                  ))}
-                </select>
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-600 mb-1">Fecha inicio</label>
-                <input
-                  type="date"
-                  value={startDate}
-                  onChange={(e) => setStartDate(e.target.value)}
-                  className="w-full border rounded px-3 py-2 text-sm"
-                />
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-600 mb-1">Fecha fin</label>
-                <input
-                  type="date"
-                  value={endDate}
-                  onChange={(e) => setEndDate(e.target.value)}
-                  className="w-full border rounded px-3 py-2 text-sm"
-                />
-              </div>
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
-              <div className="p-4 rounded border bg-gray-50">
-                <p className="text-sm text-gray-600">Numero de incorporaciones</p>
-                <p className="text-2xl font-semibold text-gray-900">
-                  {analytics.incorporaciones.reduce((acc, row) => acc + row.total, 0)}
-                </p>
-              </div>
-              <div className="p-4 rounded border bg-gray-50">
-                <p className="text-sm text-gray-600">Numero de abandonos</p>
-                <p className="text-2xl font-semibold text-gray-900">{analytics.abandonos}</p>
-              </div>
-              <div className="p-4 rounded border bg-gray-50">
-                <p className="text-sm text-gray-600">Tasa de exito en accesos</p>
-                <p className="text-2xl font-semibold text-gray-900">{analytics.patrones.tasaExito}%</p>
-              </div>
-            </div>
-
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-              <div className="rounded border p-4">
-                <h3 className="text-md font-semibold mb-3">Evolucion de incorporaciones</h3>
-                <div className="space-y-2 text-sm">
-                  {analytics.incorporaciones.length === 0 && <p className="text-gray-500">Sin datos en el rango seleccionado.</p>}
-                  {analytics.incorporaciones.map((row) => (
-                    <div key={row.bucket} className="flex justify-between">
-                      <span>{row.bucket}</span>
-                      <span className="font-semibold">{row.total}</span>
-                    </div>
-                  ))}
-                </div>
-              </div>
-
-              <div className="rounded border p-4">
-                <h3 className="text-md font-semibold mb-3">Identificar patrones</h3>
-                <p className="text-sm text-gray-700">Hora pico de actividad: <strong>{analytics.patrones.horaPico}</strong></p>
-                <p className="text-sm text-gray-700">Dia pico de actividad: <strong>{analytics.patrones.diaPico}</strong></p>
-                <h4 className="text-sm font-semibold mt-4 mb-2">Puntos de calor (top)</h4>
-                <div className="space-y-1 text-sm">
-                  {analytics.heatmap.length === 0 && <p className="text-gray-500">Sin datos.</p>}
-                  {analytics.heatmap.map((item) => (
-                    <p key={item.slot}>{item.slot}: {item.total}</p>
-                  ))}
-                </div>
-              </div>
-            </div>
-
-            <div className="rounded border p-4 mt-6">
-              <h3 className="text-md font-semibold mb-3">Usuarios por nivel</h3>
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-3 text-sm">
-                {analytics.usuariosPorNivel.length === 0 && <p className="text-gray-500">Sin datos de niveles asignados.</p>}
-                {analytics.usuariosPorNivel.map((row) => (
-                  <div key={row.nivel} className="p-3 rounded bg-gray-50 border">
-                    <p className="text-gray-600">{row.nivel}</p>
-                    <p className="text-lg font-semibold">{row.total}</p>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div className="bg-white rounded-lg shadow mb-8">
-          <div className="px-6 py-4 border-b border-gray-200">
             <h2 className="text-lg font-medium text-gray-900">Gestion de usuarios y roles</h2>
           </div>
           <div className="p-6">
@@ -849,7 +818,8 @@ export default function AdminDashboard() {
                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Email</th>
                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Rol actual</th>
                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Cambiar rol</th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Estado</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Conexión</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Tiempo sesión</th>
                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Comercial</th>
                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Acciones</th>
                   </tr>
@@ -885,8 +855,22 @@ export default function AdminDashboard() {
                           ))}
                         </select>
                       </td>
-                      <td className="px-6 py-4 text-sm text-gray-900">
-                        {item.activo === false ? 'Pausada' : 'Activa'}
+                      <td className="px-6 py-4 text-sm">
+                        {userActivityByUser[item.id]?.online ? (
+                          <span className="inline-flex items-center gap-2 text-green-700 font-medium">
+                            <span className="w-2.5 h-2.5 rounded-full bg-green-500 animate-pulse" aria-hidden />
+                            Conectado
+                          </span>
+                        ) : (
+                          <span className="inline-flex items-center gap-2 text-gray-500">
+                            <span className="w-2.5 h-2.5 rounded-full bg-gray-300" aria-hidden />
+                            Desconectado
+                          </span>
+                        )}
+                      </td>
+                      <td className="px-6 py-4 text-sm text-gray-900 whitespace-nowrap">
+                        {userActivityByUser[item.id]?.totalSessionLabel ||
+                          formatSessionDuration(0)}
                       </td>
                       <td className="px-6 py-4 text-sm">
                         {item.marketingAccepted ? (
@@ -928,7 +912,7 @@ export default function AdminDashboard() {
                   ))}
                   {filteredUsers.length === 0 && (
                     <tr>
-                      <td colSpan={9} className="px-6 py-6 text-center text-sm text-gray-500">
+                      <td colSpan={10} className="px-6 py-6 text-center text-sm text-gray-500">
                         No hay usuarios que coincidan con los filtros.
                       </td>
                     </tr>
@@ -938,6 +922,24 @@ export default function AdminDashboard() {
             </div>
           </div>
         </div>
+
+        <AdminAnalyticsPanels
+          period={period}
+          setPeriod={setPeriod}
+          startDate={startDate}
+          setStartDate={setStartDate}
+          endDate={endDate}
+          setEndDate={setEndDate}
+          analytics={analytics}
+          chartPeriod={chartPeriod}
+          setChartPeriod={setChartPeriod}
+          chartStartDate={chartStartDate}
+          setChartStartDate={setChartStartDate}
+          chartEndDate={chartEndDate}
+          setEndDate={setChartEndDate}
+          sessionChart={sessionChart}
+          connectionAnalytics={connectionAnalytics}
+        />
       </div>
     </div>
   );

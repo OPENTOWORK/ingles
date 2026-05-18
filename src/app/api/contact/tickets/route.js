@@ -2,12 +2,18 @@ import { NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
 import { SUPPORT_TICKET_INBOX_EMAIL } from '@/config/support';
 import { sendSupportTicketEmail } from '@/lib/sendSupportTicketEmail';
+import { sendSupportTicketAckEmail } from '@/lib/sendSupportTicketAckEmail';
+import { getUserRoleNameServer, isStudentRole } from '@/lib/userRoleServer';
+import {
+  getSupabaseAnonKey,
+  getSupabaseServiceRoleKey,
+  getSupabaseUrl,
+} from '@/lib/supabaseEnv';
 import { TICKET_STATUS, USER_TYPES } from '@/utils/contactModuleConfig';
 
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
-const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
-const supabaseServiceRoleKey =
-  process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.SUPABASE_SECRET_KEY;
+const supabaseUrl = getSupabaseUrl();
+const supabaseAnonKey = getSupabaseAnonKey();
+const supabaseServiceRoleKey = getSupabaseServiceRoleKey();
 
 const VALID_STATUSES = new Set(Object.values(TICKET_STATUS));
 const VALID_USER_TYPES = new Set(Object.values(USER_TYPES));
@@ -18,13 +24,6 @@ function isValidEmail(value) {
 
 export async function POST(req) {
   try {
-    if (!supabaseUrl || !supabaseAnonKey) {
-      return NextResponse.json(
-        { error: 'Faltan variables de entorno de Supabase.' },
-        { status: 500 },
-      );
-    }
-
     const authHeader = req.headers.get('authorization') || '';
     const token = authHeader.startsWith('Bearer ') ? authHeader.slice(7) : null;
     if (!token) {
@@ -67,7 +66,7 @@ export async function POST(req) {
       message,
     ].join('\n');
 
-    const row = {
+    const baseRow = {
       user_id: authData.user.id,
       asunto: subject,
       descripcion,
@@ -83,16 +82,32 @@ export async function POST(req) {
           global: { headers: { Authorization: `Bearer ${token}` } },
         });
 
-    const { data: ticket, error: insertError } = await dbClient
-      .from('contacto_soporte')
-      .insert(row)
-      .select('id')
-      .single();
+    const insertTicket = async (row) =>
+      dbClient.from('contacto_soporte').insert(row).select('id').single();
+
+    let { data: ticket, error: insertError } = await insertTicket({
+      ...baseRow,
+      solicitante_email: email,
+      solicitante_nombre: name,
+    });
+
+    const missingSolicitanteColumn =
+      insertError?.code === 'PGRST204' &&
+      /solicitante_(email|nombre)/i.test(insertError?.message || '');
+
+    if (missingSolicitanteColumn) {
+      ({ data: ticket, error: insertError } = await insertTicket(baseRow));
+    }
 
     if (insertError) {
       console.error('[contact/tickets] insert failed', insertError);
+      const detail =
+        process.env.NODE_ENV === 'development' ? insertError.message : undefined;
       return NextResponse.json(
-        { error: 'No se pudo guardar el ticket de soporte.' },
+        {
+          error: 'No se pudo guardar el ticket de soporte.',
+          ...(detail ? { detail } : {}),
+        },
         { status: 500 },
       );
     }
@@ -107,19 +122,36 @@ export async function POST(req) {
       topic,
     });
 
-    if (!mail.sent) {
-      console.error('[contact/tickets] email failed', mail.error);
-    } else if (mail.usedFallback) {
-      console.warn('[contact/tickets] email sent via Resend test fallback', mail.deliveredTo);
+    const inboxDelivered =
+      mail.sent && mail.deliveredTo === SUPPORT_TICKET_INBOX_EMAIL;
+
+    if (!inboxDelivered) {
+      console.error('[contact/tickets] email not delivered to inbox', mail.error);
+    }
+
+    let ackEmailSent = false;
+    let ackEmailWarning = null;
+
+    const roleName = await getUserRoleNameServer(authData.user.id, dbClient);
+    if (isStudentRole(roleName)) {
+      const ack = await sendSupportTicketAckEmail({ to: email, name, subject });
+      ackEmailSent = ack.sent;
+      if (!ack.sent) {
+        ackEmailWarning = ack.error || 'No se pudo enviar el correo de confirmación.';
+        console.error('[contact/tickets] student ack email failed', ack.error);
+      }
     }
 
     return NextResponse.json({
       success: true,
       ticketId: ticket?.id ?? null,
-      emailSent: mail.sent,
+      emailSent: inboxDelivered,
       emailUsedFallback: mail.usedFallback ?? false,
       deliveredTo: mail.deliveredTo ?? null,
-      emailWarning: mail.error ?? null,
+      channel: mail.channel ?? null,
+      emailWarning: inboxDelivered ? null : mail.error ?? null,
+      ackEmailSent,
+      ackEmailWarning,
       inbox: SUPPORT_TICKET_INBOX_EMAIL,
     });
   } catch (err) {

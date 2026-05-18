@@ -26,7 +26,10 @@
     "test": "echo 'Tests no implementados aún'",
     "type-check": "tsc --noEmit",
     "postinstall": "node setup.js",
-    "supabase:auth-disable-email-confirm": "node scripts/supabase-patch-auth-mailer-autoconfirm.mjs"
+    "supabase:auth-disable-email-confirm": "node scripts/supabase-patch-auth-mailer-autoconfirm.mjs",
+    "support:email-setup": "node scripts/support-email-setup.mjs",
+    "supabase:service-role-setup": "node scripts/supabase-service-role-setup.mjs",
+    "supabase:sync-service-role": "node scripts/sync-supabase-service-role.mjs"
   },
   "dependencies": {
     "@prisma/client": "^6.16.0",
@@ -35,6 +38,7 @@
     "autoprefixer": "^10.4.20",
     "lucide-react": "^1.14.0",
     "next": "^14.0.0",
+    "nodemailer": "^8.0.7",
     "openai": "^4.0.0",
     "postcss": "^8.4.49",
     "react": "^18.0.0",

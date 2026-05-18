@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { supabase } from '@/utils/supabaseClient';
 import { userHasRole } from '@/utils/authRoles';
+import SupportTicketsPanel from '@/components/support/SupportTicketsPanel';
 
 export default function SoportePage() {
   const [loading, setLoading] = useState(true);
@@ -31,11 +32,8 @@ export default function SoportePage() {
   if (loading) return null;
 
   return (
-    <main className="max-w-4xl mx-auto p-8">
-      <h1 className="text-3xl font-bold mb-4">Panel de Soporte</h1>
-      <p className="text-gray-700">
-        Espacio para gestionar incidencias, tickets y mensajes con usuarios.
-      </p>
+    <main className="max-w-6xl mx-auto p-4 md:p-8">
+      <SupportTicketsPanel />
     </main>
   );
 }

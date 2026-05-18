@@ -10,6 +10,7 @@ import { Toaster } from 'react-hot-toast';
 import { UserRoleProvider } from '../context/UserRoleContext';
 import ExamNavigationGuard from '../components/ExamNavigationGuard';
 import AppNav from '@/components/layout/AppNav';
+import { useActivityHeartbeat } from '@/hooks/useActivityHeartbeat';
 const AppSideMenuPanel = dynamic(() => import('@/components/layout/AppSideMenuPanel'), {
   ssr: false,
 });
@@ -29,6 +30,8 @@ export default function RootLayoutClient({ children }) {
   const pathname = usePathname();
   const roleFetchedForUserIdRef = useRef(null);
   const lastAccessTokenRef = useRef(null);
+
+  useActivityHeartbeat(session);
 
   const publicRoutes = [
     '/',
