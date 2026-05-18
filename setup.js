@@ -3,6 +3,11 @@
 const fs = require('fs');
 const path = require('path');
 
+// En Vercel no hace falta el setup local (acelera install y evita ruido en logs).
+if (process.env.VERCEL === '1') {
+  process.exit(0);
+}
+
 console.log('🚀 Configurando English Practice...\n');
 
 // Verificar Node.js

@@ -25,7 +25,7 @@
     "analyze": "ANALYZE=true npm run build",
     "test": "echo 'Tests no implementados aún'",
     "type-check": "tsc --noEmit",
-    "postinstall": "node setup.js",
+    "postinstall": "prisma generate && node setup.js",
     "supabase:auth-disable-email-confirm": "node scripts/supabase-patch-auth-mailer-autoconfirm.mjs",
     "support:email-setup": "node scripts/support-email-setup.mjs",
     "supabase:service-role-setup": "node scripts/supabase-service-role-setup.mjs",
