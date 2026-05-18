@@ -1,10 +1,14 @@
 import { NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
+import {
+  getSupabaseAnonKey,
+  getSupabaseServiceRoleKey,
+  getSupabaseUrl,
+} from '@/lib/supabaseEnv';
 
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
-const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
-const supabaseServiceRoleKey =
-  process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.SUPABASE_SECRET_KEY;
+const supabaseUrl = getSupabaseUrl();
+const supabaseAnonKey = getSupabaseAnonKey();
+const supabaseServiceRoleKey = getSupabaseServiceRoleKey();
 
 async function resolveStudentRoleId(adminClient) {
   const candidates = ['Alumno', 'alumno', 'student', 'Student', 'Alumno/a'];

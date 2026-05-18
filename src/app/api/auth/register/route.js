@@ -1,9 +1,9 @@
 import { NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
+import { getSupabaseServiceRoleKey, getSupabaseUrl } from '@/lib/supabaseEnv';
 
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
-const supabaseServiceRoleKey =
-  process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.SUPABASE_SECRET_KEY;
+const supabaseUrl = getSupabaseUrl();
+const supabaseServiceRoleKey = getSupabaseServiceRoleKey();
 
 const WINDOW_MS = 60 * 60 * 1000;
 const MAX_PER_IP = 8;

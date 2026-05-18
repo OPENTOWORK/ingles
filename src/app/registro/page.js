@@ -147,7 +147,32 @@ export default function RegistroPage() {
       return { data, error };
     };
 
-    const isDev = process.env.NODE_ENV === 'development';
+    const completeClientSignUp = async () => {
+      const { data, error } = await tryClientSignUp();
+      if (error) {
+        toast.error(mapSignupErrorMessage(error.message));
+        return false;
+      }
+      await persistMarketingConsent(data?.user?.id, normalizedEmail, acceptedMarketing);
+      if (data?.session?.access_token) {
+        try {
+          await fetch('/api/auth/ensure-profile', {
+            method: 'POST',
+            headers: { Authorization: `Bearer ${data.session.access_token}` },
+          });
+        } catch {
+          /* perfil se puede completar en el primer login */
+        }
+      }
+      const needsConfirm = !data?.session;
+      toast.success(
+        needsConfirm
+          ? 'Cuenta creada. Revisa tu correo (y la carpeta de spam) para confirmar antes de iniciar sesión.'
+          : '¡Registro exitoso! Ya puedes iniciar sesión.',
+      );
+      router.push('/login');
+      return true;
+    };
 
     try {
       const server = await tryServerRegister();
@@ -159,29 +184,21 @@ export default function RegistroPage() {
       }
 
       if (server.useFallback) {
-        if (isDev) {
-          const { data, error } = await tryClientSignUp();
-          if (error) {
-            toast.error(mapSignupErrorMessage(error.message));
-            return;
-          }
-          await persistMarketingConsent(data?.user?.id, normalizedEmail, acceptedMarketing);
-          const needsConfirm = !data?.session;
-          toast.success(
-            needsConfirm
-              ? 'Revisa tu correo para confirmar la cuenta antes de iniciar sesión.'
-              : '¡Registro exitoso! Ya puedes iniciar sesión.'
-          );
-          router.push('/login');
-          return;
-        }
         const isMissingServiceRole =
           server.res?.status === 503 && server.data?.code === 'NO_SERVICE_ROLE';
-        toast.error(
-          isMissingServiceRole
-            ? 'Registro sin confirmación por email: añade SUPABASE_SERVICE_ROLE_KEY en el hosting (Variables de entorno). Ver .env.example.'
-            : 'Registro solo disponible con la API del servidor (no export estático sin /api). Añade SUPABASE_SERVICE_ROLE_KEY o usa despliegue con Node.'
-        );
+
+        if (isMissingServiceRole) {
+          console.warn(
+            '[registro] SUPABASE_SERVICE_ROLE_KEY no configurada; usando registro por cliente.',
+          );
+        }
+
+        const completed = await completeClientSignUp();
+        if (!completed && isMissingServiceRole) {
+          toast.error(
+            'No se pudo completar el registro. Si no recibes el email de confirmación, contacta con soporte.',
+          );
+        }
         return;
       }
 
