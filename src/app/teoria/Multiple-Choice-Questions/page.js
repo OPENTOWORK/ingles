@@ -1,11 +1,12 @@
 'use client';
+import { buildMultipleChoiceQuestionsExercises } from './multipleChoiceQuestionsExercises';
 import TheoryLayout from '@/components/theory/TheoryLayout';
 import { TheorySection, Example, Rule, Tip, QuickReference } from '@/components/theory/TheoryContent';
-import { MultipleChoiceExercise, TrueFalseExercise } from '@/components/theory/ExerciseComponents';
+
 
 const MultipleChoiceQuestionsPage = () => {
   const theoryContent = (
-    <div>
+    <>
       <TheorySection title="What are Multiple Choice Questions?" icon="✅">
         <p>
           <strong>Multiple Choice Questions</strong> are questions with several answer options where you must choose 
@@ -132,167 +133,16 @@ const MultipleChoiceQuestionsPage = () => {
           />
         </div>
       </TheorySection>
-    </div>
+    </>
   );
 
-  const exercises = [
-    <MultipleChoiceExercise
-      key="1"
-      question="What is the best way to approach multiple choice reading questions?"
-      options={[
-        "Read all the options before the text",
-        "Read the question first, then the text looking for the answer",
-        "Read the whole text without looking at the questions",
-        "Choose the longest option"
-      ]}
-      correctAnswer={1}
-      explanation="Reading the question first tells you what specific information to look for in the text."
-    />,
-
-    <MultipleChoiceExercise
-      key="2"
-      question="What should you do when you are unsure between two options?"
-      options={[
-        "Guess at random",
-        "Pick the first one you saw",
-        "Look for specific evidence in the text for each option",
-        "Pick the shortest one"
-      ]}
-      correctAnswer={2}
-      explanation="Search for textual evidence supporting each option and choose the one with the strongest support."
-    />,
-
-    <TrueFalseExercise
-      key="3"
-      statements={[
-        {
-          text: "Options with words like 'always' or 'never' are often incorrect.",
-          isTrue: true,
-          explanation: "Correct. Absolute wording is often wrong because reality usually allows exceptions."
-        },
-        {
-          text: "You can use general knowledge even if it is not in the text.",
-          isTrue: false,
-          explanation: "Incorrect. You should use only the information given in the text, not outside knowledge."
-        },
-        {
-          text: "Elimination is a useful strategy in multiple choice.",
-          isTrue: true,
-          explanation: "Correct. Ruling out clearly wrong options improves your chance of picking the right answer."
-        }
-      ]}
-    />,
-
-    <MultipleChoiceExercise
-      key="4"
-      question="What type of question is this? 'What can be inferred about the author's opinion?'"
-      options={[
-        "Specific information",
-        "Main idea",
-        "Inference and attitude",
-        "Vocabulary in context"
-      ]}
-      correctAnswer={2}
-      explanation="It asks about inference and attitude because you must infer the author's opinion from implicit clues."
-    />,
-
-    <MultipleChoiceExercise
-      key="5"
-      question="Which is a common trap in wrong options?"
-      options={[
-        "Using synonyms from the text",
-        "Being too specific",
-        "Using words from the text in the wrong context",
-        "Being very short"
-      ]}
-      correctAnswer={2}
-      explanation="A common trap is recycling words from the text in a context different from what the question asks."
-    />,
-
-    <TrueFalseExercise
-      key="6"
-      statements={[
-        {
-          text: "You must read the whole text before looking at any question.",
-          isTrue: false,
-          explanation: "Incorrect. It is usually more efficient to read the questions first so you know what to find."
-        },
-        {
-          text: "The correct answer should always have direct support in the text.",
-          isTrue: true,
-          explanation: "Correct. Each answer should be backed by specific evidence from the text."
-        },
-        {
-          text: "Longer options are usually correct.",
-          isTrue: false,
-          explanation: "Incorrect. Length does not show correctness; base your choice on content and evidence."
-        }
-      ]}
-    />,
-
-    <MultipleChoiceExercise
-      key="7"
-      question="What should you do if an option is partly true but does not fully answer the question?"
-      options={[
-        "Choose it because something in it is right",
-        "Reject it and look for a more complete answer",
-        "Mentally merge it with another option",
-        "Ask the examiner"
-      ]}
-      correctAnswer={1}
-      explanation="Reject it. The correct answer must fully answer the question, not only partly."
-    />,
-
-    <MultipleChoiceExercise
-      key="8"
-      question="When is it appropriate to use inference in multiple choice questions?"
-      options={[
-        "Never—only explicit information",
-        "Only when the question explicitly asks you to infer",
-        "Whenever you cannot find a direct answer",
-        "When every option looks wrong"
-      ]}
-      correctAnswer={1}
-      explanation="Infer only when the question clearly asks for it (e.g. 'What can be inferred…', 'The author suggests…')."
-    />,
-
-    <TrueFalseExercise
-      key="9"
-      statements={[
-        {
-          text: "If two options seem correct, one is probably a distractor.",
-          isTrue: true,
-          explanation: "Correct. Examiners often include distractors that look right but differ subtly from the best answer."
-        },
-        {
-          text: "You should change your first answer whenever you feel unsure.",
-          isTrue: false,
-          explanation: "Incorrect. Your first choice is often right; change it only if you find clear evidence you were wrong."
-        }
-      ]}
-    />,
-
-    <MultipleChoiceExercise
-      key="10"
-      question="What is the key to success in multiple choice questions?"
-      options={[
-        "Memorise lots of vocabulary",
-        "Read very fast",
-        "Find specific textual evidence for each answer",
-        "Rely on intuition"
-      ]}
-      correctAnswer={2}
-      explanation="The key is to find specific textual evidence and check that it answers exactly what is asked."
-    />
-  ];
-
-  return (
+    return (
     <TheoryLayout
       title="Multiple Choice Questions"
       description="Master multiple choice questions. Learn how to pick correct answers, avoid common traps, and use textual evidence effectively."
       level="B2-C1-C2"
       theoryContent={theoryContent}
-      exercises={exercises}
+      getExercises={buildMultipleChoiceQuestionsExercises}
       prerequisites={["Reading comprehension", "Critical thinking", "Text analysis skills"]}
       estimatedTime="75 min"
     />

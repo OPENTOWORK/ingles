@@ -1,4 +1,5 @@
 'use client';
+import { buildShortDialoguesExercises } from './shortDialoguesExercises';
 import React from 'react';
 import TheoryLayout from '@/components/theory/TheoryLayout';
 import { 
@@ -9,15 +10,11 @@ import {
   GrammarTable, 
   QuickReference 
 } from '@/components/theory/TheoryContent';
-import { 
-  MultipleChoiceExercise, 
-  FillBlanksExercise, 
-  TrueFalseExercise 
-} from '@/components/theory/ExerciseComponents';
+
 
 const ShortDialoguesPage = () => {
   const theoryContent = (
-    <div>
+    <>
       <TheorySection title="What Are Short Dialogues?" icon="💬">
         <p style={{ fontSize: '1.1rem', lineHeight: 1.6, color: '#4a5568', marginBottom: '1rem' }}>
           <strong>Short dialogues</strong> are brief exchanges between two or more people common on listening exams. They are ideal for building basic listening comprehension.
@@ -306,172 +303,16 @@ const ShortDialoguesPage = () => {
           />
         </div>
       </TheorySection>
-    </div>
+    </>
   );
 
-  const exercises = [
-    <MultipleChoiceExercise
-      key="1"
-      question="Before listening to a short dialogue, what should you do?"
-      options={[
-        "Write random answers first",
-        "Read the questions",
-        "Draft long summaries",
-        "Close your eyes"
-      ]}
-      correctAnswer={1}
-      explanation="Reading questions beforehand tells your ear what proof to hunt for."
-    />,
-
-    <MultipleChoiceExercise
-      key="2"
-      question="Which habit best supports short dialogues?"
-      options={[
-        "Listening with zero preview",
-        "Reading questions ahead of playback",
-        "Parsing each token exhaustively",
-        "Avoiding all notes"
-      ]}
-      correctAnswer={1}
-      explanation="Previewing prompts channels attention toward decisive evidence."
-    />,
-
-    <TrueFalseExercise
-      key="3"
-      statements={[
-        {
-          text: "Short dialogues often last between 30 seconds and 2 minutes.",
-          isTrue: true,
-          explanation: "Correct. They are purposely brief clips in that typical window."
-        },
-        {
-          text: "You must grasp every lexical item in order to succeed.",
-          isTrue: false,
-          explanation: "Incorrect. Anchoring facts that questions target matters more than full lexicon mastery."
-        },
-        {
-          text: "Jotting quick notes helps retention of numbers and names.",
-          isTrue: true,
-          explanation: "Correct. Light notes preserve fragile detail under exam pressure."
-        },
-        {
-          text: "Context (store, diner, taxi, etc.) is irrelevant.",
-          isTrue: false,
-          explanation: "Incorrect. Setting drives likely vocabulary and pragmatic goals."
-        }
-      ]}
-    />,
-
-    <MultipleChoiceExercise
-      key="4"
-      question="What kind of answer do short-dialogue items usually expect?"
-      options={[
-        "Abstract theory",
-        "Concrete, specific facts",
-        "Historical background",
-        "Scientific jargon"
-      ]}
-      correctAnswer={1}
-      explanation="They overwhelmingly test pragmatic detail such as fares, clocks, venues, roles."
-    />,
-
-    <MultipleChoiceExercise
-      key="5"
-      question="What level band do many exam short dialogues target?"
-      options={[
-        "Advanced (C1–C2)",
-        "Intermediate (B1–B2)",
-        "Beginner to elementary",
-        "Native only"
-      ]}
-      correctAnswer={2}
-      explanation="They favor accessible lexis tied to survival or daily-life English."
-    />,
-
-    <TrueFalseExercise
-      key="6"
-      statements={[
-        {
-          text: "Short dialogues usually have complex vocabulary.",
-          isTrue: false,
-          explanation: "Incorrect. Everyday lexis dominates these clips."
-        },
-        {
-          text: "Context clues strongly shape interpretation.",
-          isTrue: true,
-          explanation: "Correct. Setting and relationships between speakers constrain meaning."
-        },
-        {
-          text: "In many real exams you replay each dialogue several times freely.",
-          isTrue: false,
-          explanation: "Incorrect. Formal tests often permit a single playback, so preview strategies matter."
-        }
-      ]}
-    />,
-
-    <MultipleChoiceExercise
-      key="7"
-      question="Which detail is comparatively rare inside short exchanges?"
-      options={[
-        "Prices or appointment times",
-        "Dense academic theory",
-        "Locations",
-        "Immediate plans"
-      ]}
-      correctAnswer={1}
-      explanation="High-level exposition is uncommon; pragmatic micro-facts prevail."
-    />,
-
-    <MultipleChoiceExercise
-      key="8"
-      question="Best move when you momentarily miss one word?"
-      options={[
-        "Stop mentally engaging",
-        "Use broader context and keep listening",
-        "Obsess over the slip",
-        "Erase every prior answer blindly"
-      ]}
-      correctAnswer={1}
-      explanation="Context inference plus forward listening usually recovers what you need."
-    />,
-
-    <TrueFalseExercise
-      key="9"
-      statements={[
-        {
-          text: "Guessing plausible answers before audio can sharpen focus.",
-          isTrue: true,
-          explanation: "Correct. Mental models channel attention efficiently."
-        },
-        {
-          text: "Short dialogues must always conclude with an explicit recap.",
-          isTrue: false,
-          explanation: "Incorrect. Natural speech may stop abruptly or leave detail implied."
-        }
-      ]}
-    />,
-
-    <MultipleChoiceExercise
-      key="10"
-      question="Right after a short dialogue finishes, what is sound practice?"
-      options={[
-        "Wait silently for unrelated audio",
-        "Answer promptly while cues are fresh",
-        "Re-score everything from earlier sections",
-        "Take an extended pause"
-      ]}
-      correctAnswer={1}
-      explanation="Select answers while auditory memory peaks; review later only if pacing allows."
-    />
-  ];
-
-  return (
+    return (
     <TheoryLayout
       title="Short Dialogues"
       description="Understand brief English exchanges with confidence—strategies for shops, eateries, transit, lodging, and other everyday setups."
       level="A2-B1-B2-C1-C2"
       theoryContent={theoryContent}
-      exercises={exercises}
+      getExercises={buildShortDialoguesExercises}
       prerequisites={["Basic listening skills", "Basic vocabulary"]}
       estimatedTime="60 min"
     />

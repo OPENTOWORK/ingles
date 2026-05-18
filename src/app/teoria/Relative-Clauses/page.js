@@ -1,4 +1,5 @@
 'use client';
+import { buildRelativeClausesExercises } from './relativeClausesExercises';
 import React from 'react';
 import TheoryLayout from '@/components/theory/TheoryLayout';
 import { 
@@ -9,15 +10,11 @@ import {
   GrammarTable, 
   QuickReference 
 } from '@/components/theory/TheoryContent';
-import { 
-  MultipleChoiceExercise, 
-  FillBlanksExercise, 
-  TrueFalseExercise 
-} from '@/components/theory/ExerciseComponents';
+
 
 const RelativeClausesPage = () => {
   const theoryContent = (
-    <div>
+    <>
       <TheorySection title="Relative Clauses" icon="🔗">
         <p style={{ fontSize: '1.1rem', lineHeight: 1.6, color: '#4a5568', marginBottom: '1rem' }}>
           <strong>Relative clauses</strong> are subordinate clauses that provide extra information 
@@ -58,13 +55,11 @@ const RelativeClausesPage = () => {
           <Example 
             spanish="El hombre que vive al lado es médico."
             english="The man who lives next door is a doctor."
-            translation="'Who' refers to a person (subject)"
           />
           
           <Example 
             spanish="El libro que leí era interesante."
             english="The book that/which I read was interesting."
-            translation="'That/which' refers to a thing (object)"
           />
         </div>
 
@@ -106,13 +101,11 @@ const RelativeClausesPage = () => {
           <Example 
             spanish="Los estudiantes que estudian mucho aprueban. (defining - especifica qué estudiantes)"
             english="The students who study hard pass."
-            translation="No commas — essential information"
           />
           
           <Example 
             spanish="Los estudiantes, que estudian mucho, aprueban. (non-defining - todos los estudiantes)"
             english="The students, who study hard, pass."
-            translation="With commas — additional information"
           />
         </div>
       </TheorySection>
@@ -169,13 +162,11 @@ const RelativeClausesPage = () => {
           <Example 
             spanish="La casa en la que vivo es antigua. (informal)"
             english="The house I live in is old."
-            translation="Preposition at the end, pronoun omitted"
           />
           
           <Example 
             spanish="La casa en la que vivo es antigua. (formal)"
             english="The house in which I live is old."
-            translation="Preposition before the pronoun"
           />
         </div>
 
@@ -205,19 +196,16 @@ const RelativeClausesPage = () => {
           <Example 
             spanish="Esta es la ciudad donde nací."
             english="This is the city where I was born."
-            translation="'Where' = in which"
           />
           
           <Example 
             spanish="¿Recuerdas el día cuando nos conocimos?"
             english="Do you remember the day when we met?"
-            translation="'When' = on which"
           />
           
           <Example 
             spanish="No entiendo la razón por la que se fue."
             english="I don't understand the reason why he left."
-            translation="'Why' = for which"
           />
         </div>
       </TheorySection>
@@ -249,161 +237,16 @@ const RelativeClausesPage = () => {
           </Tip>
         </div>
       </TheorySection>
-    </div>
+    </>
   );
 
-  const exercises = [
-    <MultipleChoiceExercise
-      key="1"
-      question="Complete: 'The woman _____ lives next door is a teacher.'"
-      options={[
-        "who",
-        "which",
-        "where",
-        "whose"
-      ]}
-      correctAnswer={0}
-      explanation="For people as subject we use 'who': 'The woman who lives next door'."
-    />,
-
-    <MultipleChoiceExercise
-      key="2"
-      question="Which sentence is correct?"
-      options={[
-        "The students, that study hard, pass exams.",
-        "The students, who study hard, pass exams.",
-        "The students who study hard pass exams.",
-        "Both B and C are correct."
-      ]}
-      correctAnswer={3}
-      explanation="B is non-defining (extra information), C is defining (essential information). Both are correct but have different meanings."
-    />,
-
-    <MultipleChoiceExercise
-      key="3"
-      question="In which sentence can you omit the relative pronoun?"
-      options={[
-        "The man who called you is here.",
-        "The book that I bought is expensive.",
-        "The woman whose car broke down needs help.",
-        "The students who study hard succeed."
-      ]}
-      correctAnswer={1}
-      explanation="In 'The book that I bought', 'that' is the object and can be omitted: 'The book I bought'."
-    />,
-
-    <TrueFalseExercise
-      key="4"
-      statements={[
-        {
-          text: "You can use 'that' in non-defining relative clauses.",
-          isTrue: false,
-          explanation: "False. In non-defining clauses you can only use who, which, whose, etc., but not 'that'."
-        },
-        {
-          text: "You can omit relative pronouns when they are the subject of the clause.",
-          isTrue: false,
-          explanation: "False. You can only omit relative pronouns when they are the object, not the subject."
-        },
-        {
-          text: "'Where' can replace 'in which', 'at which', or 'on which'.",
-          isTrue: true,
-          explanation: "Correct. 'Where' is a simpler way to express place."
-        },
-        {
-          text: "Non-defining relative clauses are always separated by commas.",
-          isTrue: true,
-          explanation: "Correct. Non-defining clauses are always set off with commas."
-        }
-      ]}
-    />,
-
-    <MultipleChoiceExercise
-      key="5"
-      question="What's the formal way to say: 'The person I was talking to'?"
-      options={[
-        "The person to who I was talking",
-        "The person to whom I was talking",
-        "The person to which I was talking",
-        "The person to that I was talking"
-      ]}
-      correctAnswer={1}
-      explanation="In formal style, the preposition goes before the pronoun: 'to whom' (for people)."
-    />,
-
-    <MultipleChoiceExercise
-      key="6"
-      question="Complete: 'The girl _____ mother is a doctor studies medicine.'"
-      options={[
-        "who",
-        "which",
-        "whose",
-        "where"
-      ]}
-      correctAnswer={2}
-      explanation="To express possession we use 'whose': 'The girl whose mother is a doctor'."
-    />,
-
-    <MultipleChoiceExercise
-      key="7"
-      question="Complete: 'The movie _____ we watched last night was boring.'"
-      options={[
-        "who",
-        "which",
-        "where",
-        "Both A and B are correct"
-      ]}
-      correctAnswer={1}
-      explanation="For things we use 'which' or 'that'. In this case 'which' is the best option."
-    />,
-
-    <MultipleChoiceExercise
-      key="8"
-      question="Which sentence needs commas?"
-      options={[
-        "The students who study hard will pass.",
-        "My brother who lives in London is a doctor.",
-        "The book that you lent me was interesting.",
-        "The car which I bought is red."
-      ]}
-      correctAnswer={1}
-      explanation="'My brother, who lives in London, is a doctor' needs commas (non-defining clause)."
-    />,
-
-    <MultipleChoiceExercise
-      key="9"
-      question="Complete: 'This is the restaurant _____ we had dinner.'"
-      options={[
-        "which",
-        "where",
-        "that",
-        "who"
-      ]}
-      correctAnswer={1}
-      explanation="For places we use 'where': 'the restaurant where we had dinner'."
-    />,
-
-    <MultipleChoiceExercise
-      key="10"
-      question="Which is the most formal way to say: 'The company I work for'?"
-      options={[
-        "The company I work for",
-        "The company for which I work",
-        "The company that I work for",
-        "The company where I work"
-      ]}
-      correctAnswer={1}
-      explanation="'The company for which I work' is the most formal form with the preposition at the beginning."
-    />
-  ];
-
-  return (
+    return (
     <TheoryLayout
       title="Relative Clauses"
       description="Master relative clauses to build more sophisticated sentences. Learn relative pronouns, defining vs non-defining clauses, and when to omit pronouns."
       level="B1-B2-C1-C2"
       theoryContent={theoryContent}
-      exercises={exercises}
+      getExercises={buildRelativeClausesExercises}
       prerequisites={["Pronouns", "Basic sentence structure", "Verb tenses"]}
       estimatedTime="55 min"
     />

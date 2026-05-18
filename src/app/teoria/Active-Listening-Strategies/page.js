@@ -1,4 +1,5 @@
 'use client';
+import { buildActiveListeningStrategiesExercises } from './activeListeningStrategiesExercises';
 import React from 'react';
 import TheoryLayout from '@/components/theory/TheoryLayout';
 import { 
@@ -9,15 +10,11 @@ import {
   GrammarTable, 
   QuickReference 
 } from '@/components/theory/TheoryContent';
-import { 
-  MultipleChoiceExercise, 
-  FillBlanksExercise, 
-  TrueFalseExercise 
-} from '@/components/theory/ExerciseComponents';
+
 
 const ActiveListeningStrategiesPage = () => {
   const theoryContent = (
-    <div>
+    <>
       <TheorySection title="What Are Active Listening Strategies?" icon="🎧">
         <p style={{ fontSize: '1.1rem', lineHeight: 1.6, color: '#4a5568', marginBottom: '1rem' }}>
           <strong>Active listening strategies</strong> are techniques that engage you in understanding what you hear. They significantly improve comprehension.
@@ -304,172 +301,16 @@ const ActiveListeningStrategiesPage = () => {
           />
         </div>
       </TheorySection>
-    </div>
+    </>
   );
 
-  const exercises = [
-    <MultipleChoiceExercise
-      key="1"
-      question="Which type of listening most improves comprehension?"
-      options={[
-        "Passive listening",
-        "Active listening",
-        "Fast listening",
-        "Silent listening"
-      ]}
-      correctAnswer={1}
-      explanation="Active listening involves mental engagement and usually boosts comprehension most."
-    />,
-
-    <MultipleChoiceExercise
-      key="2"
-      question="What is the main difference between passive and active listening?"
-      options={[
-        "Speed of hearing",
-        "Level of participation in the process",
-        "Volume of the recording",
-        "Length of the recording"
-      ]}
-      correctAnswer={1}
-      explanation="The key difference is participation: active listening adds prediction, checking, and inference."
-    />,
-
-    <TrueFalseExercise
-      key="3"
-      statements={[
-        {
-          text: "Prediction prepares your mind to process specific information.",
-          isTrue: true,
-          explanation: "Correct. Prediction from questions, context, or vocabulary aims your attention."
-        },
-        {
-          text: "Continuous checking always harms comprehension.",
-          isTrue: false,
-          explanation: "Incorrect. Light, ongoing checking usually helps by catching errors early."
-        },
-        {
-          text: "Inference helps with information that is not stated directly.",
-          isTrue: true,
-          explanation: "Correct. Contextual, logical, and cultural clues fill implied meaning."
-        },
-        {
-          text: "Attention management is unimportant for active listening.",
-          isTrue: false,
-          explanation: "Incorrect. Managing focus is central to staying active and avoiding drift."
-        }
-      ]}
-    />,
-
-    <MultipleChoiceExercise
-      key="4"
-      question="What is the main benefit of inference in listening?"
-      options={[
-        "Better pronunciation",
-        "Understanding implied information",
-        "Faster playback",
-        "Needing less vocabulary"
-      ]}
-      correctAnswer={1}
-      explanation="Inference mainly helps with meaning that is suggested rather than stated word for word."
-    />,
-
-    <MultipleChoiceExercise
-      key="5"
-      question="Which strategy matters most for long recordings?"
-      options={[
-        "Listening faster",
-        "Attention and focus management",
-        "Writing more notes",
-        "Ignoring distractions without a plan"
-      ]}
-      correctAnswer={1}
-      explanation="Managing attention—including fatigue and recovery—supports endurance on long input."
-    />,
-
-    <TrueFalseExercise
-      key="6"
-      statements={[
-        {
-          text: "Taking notes while listening improves comprehension.",
-          isTrue: true,
-          explanation: "Correct. Notes can sustain focus and accuracy."
-        },
-        {
-          text: "You must understand every word to be a good listener.",
-          isTrue: false,
-          explanation: "Incorrect. Good listeners track the message and use context and inference."
-        },
-        {
-          text: "Predicting content before listening is useful.",
-          isTrue: true,
-          explanation: "Correct. Prediction activates prior knowledge and supports understanding."
-        }
-      ]}
-    />,
-
-    <MultipleChoiceExercise
-      key="7"
-      question="What should you do when you miss an important word?"
-      options={[
-        "Stop listening",
-        "Use context to infer meaning",
-        "Ask the recording a question",
-        "Ignore the rest"
-      ]}
-      correctAnswer={1}
-      explanation="Contextual inference keeps the flow going better than stopping."
-    />,
-
-    <MultipleChoiceExercise
-      key="8"
-      question="What is the main benefit of active listening?"
-      options={[
-        "Memorize all vocabulary",
-        "Improve comprehension and retention",
-        "Speak faster",
-        "Avoid grammar mistakes"
-      ]}
-      correctAnswer={1}
-      explanation="Active listening improves how much you grasp and remember by engaging mental processes."
-    />,
-
-    <TrueFalseExercise
-      key="9"
-      statements={[
-        {
-          text: "Background knowledge helps with listening comprehension.",
-          isTrue: true,
-          explanation: "Correct. Topic knowledge supports prediction and understanding."
-        },
-        {
-          text: "Exposure to different accents is unimportant for learning.",
-          isTrue: false,
-          explanation: "Incorrect. Varied accents build flexible real-world listening."
-        }
-      ]}
-    />,
-
-    <MultipleChoiceExercise
-      key="10"
-      question="What is the best way to build listening strategies?"
-      options={[
-        "Only music",
-        "Regular practice with varied audio",
-        "Only reading",
-        "Avoid difficult audio"
-      ]}
-      correctAnswer={1}
-      explanation="Regular practice across talk types (conversations, news, podcasts) builds flexible strategies."
-    />
-  ];
-
-  return (
+    return (
     <TheoryLayout
       title="Active Listening Strategies"
       description="Master active listening in English. Learn prediction, checking, inference, and attention strategies to improve comprehension."
       level="B1-B2-C1-C2"
       theoryContent={theoryContent}
-      exercises={exercises}
+      getExercises={buildActiveListeningStrategiesExercises}
       prerequisites={["Basic listening skills", "Understanding of listening process"]}
       estimatedTime="80 min"
     />

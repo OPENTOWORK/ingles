@@ -3,7 +3,8 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useEffect, useState } from 'react';
-import { ROLE_ROUTE_MAP } from '@/utils/authRoles';
+import { isAdminRole, ROLE_ROUTE_MAP } from '@/utils/authRoles';
+import AdminPanelsNav from '@/components/layout/AdminPanelsNav';
 import {
   DRALO_MENU_ITEMS,
   NAV_LINK_CONTACT,
@@ -50,8 +51,12 @@ export default function AppNav({ session, userRole, onLogout }) {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [draloOpen, setDraloOpen] = useState(false);
   const [draloDesktopOpen, setDraloDesktopOpen] = useState(false);
+  const [adminPanelsOpen, setAdminPanelsOpen] = useState(false);
+  const [adminPanelsMobileOpen, setAdminPanelsMobileOpen] = useState(false);
 
   const staffLink = getRoleLink(userRole);
+  const showAdminDropdown = Boolean(session && isAdminRole(userRole));
+  const showStaffLink = Boolean(staffLink && !showAdminDropdown);
 
   useEffect(() => {
     document.body.classList.toggle('nav-open', mobileOpen);
@@ -62,6 +67,8 @@ export default function AppNav({ session, userRole, onLogout }) {
     setMobileOpen(false);
     setDraloOpen(false);
     setDraloDesktopOpen(false);
+    setAdminPanelsOpen(false);
+    setAdminPanelsMobileOpen(false);
   }, [pathname]);
 
   const closeMobile = () => {
@@ -125,7 +132,15 @@ export default function AppNav({ session, userRole, onLogout }) {
 
         {session ? (
           <>
-            {staffLink ? (
+            {showAdminDropdown ? (
+              <AdminPanelsNav
+                variant="desktop"
+                open={adminPanelsOpen}
+                onToggle={() => setAdminPanelsOpen((v) => !v)}
+                onClose={() => setAdminPanelsOpen(false)}
+              />
+            ) : null}
+            {showStaffLink ? (
               <Link href={staffLink.href} className="app-nav__link">
                 {staffLink.label}
               </Link>
@@ -196,7 +211,16 @@ export default function AppNav({ session, userRole, onLogout }) {
 
           {session ? (
             <>
-              {staffLink ? (
+              {showAdminDropdown ? (
+                <AdminPanelsNav
+                  variant="mobile"
+                  open={adminPanelsMobileOpen}
+                  onToggle={() => setAdminPanelsMobileOpen((v) => !v)}
+                  onClose={closeMobile}
+                  linkClassName={mobileLinkClass}
+                />
+              ) : null}
+              {showStaffLink ? (
                 <Link href={staffLink.href} className={mobileLinkClass} onClick={closeMobile}>
                   {staffLink.label}
                 </Link>

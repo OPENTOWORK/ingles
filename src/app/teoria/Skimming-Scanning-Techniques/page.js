@@ -1,4 +1,5 @@
 'use client';
+import { buildSkimmingScanningTechniquesExercises } from './skimmingScanningTechniquesExercises';
 import React from 'react';
 import TheoryLayout from '@/components/theory/TheoryLayout';
 import { 
@@ -9,15 +10,11 @@ import {
   GrammarTable, 
   QuickReference 
 } from '@/components/theory/TheoryContent';
-import { 
-  MultipleChoiceExercise, 
-  FillBlanksExercise, 
-  TrueFalseExercise 
-} from '@/components/theory/ExerciseComponents';
+
 
 const SkimmingScanningPage = () => {
   const theoryContent = (
-    <div>
+    <>
       <TheorySection title="What are Skimming and Scanning?" icon="👀">
         <p style={{ fontSize: '1.1rem', lineHeight: 1.6, color: '#4a5568', marginBottom: '1rem' }}>
           <strong>Skimming</strong> and <strong>Scanning</strong> are two essential fast-reading techniques for 
@@ -90,13 +87,11 @@ const SkimmingScanningPage = () => {
           <Example 
             spanish="Pregunta: ¿Cuándo fue fundada la empresa?"
             english="Scanning target: dates, numbers, 'founded', 'established', 'created'"
-            translation="Look for: dates, numbers, and words like 'founded', 'established', 'created'"
           />
           
           <Example 
             spanish="Pregunta: ¿Quién es el director de marketing?"
             english="Scanning target: names, titles, 'director', 'manager', 'marketing'"
-            translation="Look for: proper names, job titles, 'director', 'manager', 'marketing'"
           />
         </div>
 
@@ -140,13 +135,11 @@ const SkimmingScanningPage = () => {
           <Example 
             spanish="Paso 1: Skimming del artículo sobre energía renovable"
             english="Result: 'The article discusses solar and wind energy benefits and challenges'"
-            translation="Result: 'The article covers benefits and challenges of solar and wind energy'"
           />
           
           <Example 
             spanish="Paso 2: Pregunta - '¿Qué porcentaje de energía solar se usa en España?'"
             english="Scanning target: 'Spain', 'Spanish', percentages, numbers, 'solar'"
-            translation="Scanning target: 'Spain', 'Spanish', percentages, numbers, 'solar'"
           />
         </div>
 
@@ -202,161 +195,16 @@ const SkimmingScanningPage = () => {
           </Tip>
         </div>
       </TheorySection>
-    </div>
+    </>
   );
 
-  const exercises = [
-    <TrueFalseExercise
-      key="1"
-      statements={[
-        {
-          text: "Skimming involves reading every word of the text carefully.",
-          isTrue: false,
-          explanation: "False. Skimming is a fast read for the general idea, not every word."
-        },
-        {
-          text: "Scanning is used to find specific information quickly.",
-          isTrue: true,
-          explanation: "Correct. Scanning is for locating specific information fast."
-        },
-        {
-          text: "You should always do scanning before skimming.",
-          isTrue: false,
-          explanation: "False. You usually skim first to get overall context."
-        },
-        {
-          text: "Signal words like 'however' and 'therefore' are important for skimming.",
-          isTrue: true,
-          explanation: "Correct. Signal words reveal structure and relations in the text."
-        }
-      ]}
-    />,
-
-    <MultipleChoiceExercise
-      key="2"
-      question="When doing skimming, which part of a paragraph is MOST important to read?"
-      options={[
-        "The middle sentences",
-        "Every single word",
-        "The first and last sentences",
-        "Only the examples"
-      ]}
-      correctAnswer={2}
-      explanation="The first and last sentences of paragraphs usually carry the main ideas."
-    />,
-
-    <MultipleChoiceExercise
-      key="3"
-      question="What should you do FIRST when you need to find someone's phone number in a text?"
-      options={[
-        "Read the entire text carefully",
-        "Look for numbers and contact information",
-        "Understand the main idea of the text",
-        "Read only the first paragraph"
-      ]}
-      correctAnswer={1}
-      explanation="For scanning a specific fact like a phone number, look for numbers and contact details."
-    />,
-
-    <MultipleChoiceExercise
-      key="4"
-      question="Which technique would be BEST for answering 'What is the main argument of this article?'"
-      options={[
-        "Scanning",
-        "Skimming",
-        "Detailed reading",
-        "Reading backwards"
-      ]}
-      correctAnswer={1}
-      explanation="Skimming is ideal for the main argument without reading every detail."
-    />,
-
-    <MultipleChoiceExercise
-      key="5"
-      question="Signal words like 'however', 'therefore', and 'in conclusion' are most useful for:"
-      options={[
-        "Scanning for specific facts",
-        "Understanding text structure during skimming",
-        "Memorizing vocabulary",
-        "Checking spelling"
-      ]}
-      correctAnswer={1}
-      explanation="Signal words show structure and flow of ideas during skimming."
-    />,
-
-    <MultipleChoiceExercise
-      key="6"
-      question="When skimming, you should pay most attention to:"
-      options={[
-        "Every single word",
-        "Only the conclusion",
-        "First and last sentences of paragraphs",
-        "The middle of each paragraph"
-      ]}
-      correctAnswer={2}
-      explanation="First and last sentences of paragraphs contain the main ideas."
-    />,
-
-    <MultipleChoiceExercise
-      key="7"
-      question="Which is NOT a good strategy for scanning?"
-      options={[
-        "Moving your eyes quickly across the text",
-        "Looking for keywords and synonyms",
-        "Reading every sentence carefully",
-        "Stopping only when you find the target information"
-      ]}
-      correctAnswer={2}
-      explanation="Scanning needs fast movement, not careful reading of every sentence."
-    />,
-
-    <MultipleChoiceExercise
-      key="8"
-      question="What should you do BEFORE scanning for specific information?"
-      options={[
-        "Read the entire text",
-        "Identify exactly what you're looking for",
-        "Take detailed notes",
-        "Memorize the text structure"
-      ]}
-      correctAnswer={1}
-      explanation="Before scanning, know precisely what information you need."
-    />,
-
-    <MultipleChoiceExercise
-      key="9"
-      question="Which technique is better for exam time management?"
-      options={[
-        "Reading everything in detail first",
-        "Skimming first, then scanning for answers",
-        "Only using detailed reading",
-        "Guessing without reading"
-      ]}
-      correctAnswer={1}
-      explanation="Skimming first plus targeted scanning is the most efficient approach."
-    />,
-
-    <MultipleChoiceExercise
-      key="10"
-      question="When scanning for a date, you should look for:"
-      options={[
-        "Only numbers",
-        "Only words",
-        "Numbers, months, and time expressions",
-        "Only the first paragraph"
-      ]}
-      correctAnswer={2}
-      explanation="Dates can appear as numbers, month names, and time phrases."
-    />
-  ];
-
-  return (
+    return (
     <TheoryLayout
       title="Skimming and Scanning Techniques"
       description="Master essential speed-reading techniques for exams. Learn when and how to use skimming and scanning to work efficiently."
       level="A2-B1-B2-C1-C2"
       theoryContent={theoryContent}
-      exercises={exercises}
+      getExercises={buildSkimmingScanningTechniquesExercises}
       prerequisites={["Basic reading vocabulary", "Understanding of text structure"]}
       estimatedTime="45 min"
     />

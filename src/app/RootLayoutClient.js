@@ -5,6 +5,7 @@ import { useEffect, useRef, useState } from 'react';
 import { useRouter, usePathname } from 'next/navigation';
 import { supabase } from '@/utils/supabaseClient';
 import { normalizeRoleName, getRoleNameByUserId, peekCachedRoleName } from '@/utils/authRoles';
+import { isPublicPath } from '@/utils/publicRoutes';
 import Link from 'next/link';
 import { Toaster } from 'react-hot-toast';
 import { UserRoleProvider } from '../context/UserRoleContext';
@@ -16,7 +17,10 @@ const AppSideMenuPanel = dynamic(() => import('@/components/layout/AppSideMenuPa
 });
 
 export default function RootLayoutClient({ children }) {
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(() => {
+    if (typeof window === 'undefined') return true;
+    return !isPublicPath(window.location.pathname);
+  });
   const [session, setSession] = useState(null);
   const [userRole, setUserRole] = useState('student');
   const [cookieConsent, setCookieConsent] = useState(null);
@@ -33,21 +37,14 @@ export default function RootLayoutClient({ children }) {
 
   useActivityHeartbeat(session);
 
-  const publicRoutes = [
-    '/',
-    '/login',
-    '/auth/callback',
-    '/registro',
-    '/reset-password',
-    '/contacto',
-    '/speaking',
-    '/teoria',
-    '/politica-privacidad',
-    '/politica-cookies',
-    '/terminos-condiciones',
-    '/proteccion-datos',
-  ];
-  
+  const isPublic = isPublicPath(pathname);
+  const isNivelesRoute =
+    pathname === '/niveles' || (pathname && pathname.startsWith('/niveles/'));
+  const allowWithoutAuth = isPublic || isNivelesRoute;
+
+  useEffect(() => {
+    if (allowWithoutAuth) setLoading(false);
+  }, [allowWithoutAuth]);
 
   useEffect(() => {
     let cancelled = false;
@@ -76,16 +73,19 @@ export default function RootLayoutClient({ children }) {
       const cachedRole = peekCachedRoleName(uid);
       if (cachedRole) {
         setUserRole(normalizeRoleName(cachedRole));
+        if (!allowWithoutAuth) setLoading(false);
       }
 
-      setLoading(false);
-
-      if (sameSession) return;
+      if (sameSession) {
+        if (!allowWithoutAuth && !cachedRole) setLoading(false);
+        return;
+      }
 
       const roleName = await getRoleNameByUserId(uid, newSession.user.email);
       if (cancelled) return;
       roleFetchedForUserIdRef.current = uid;
       setUserRole(normalizeRoleName(roleName));
+      if (!allowWithoutAuth) setLoading(false);
     };
 
     supabase.auth.getSession().then(({ data: { session } }) => {
@@ -99,7 +99,7 @@ export default function RootLayoutClient({ children }) {
       cancelled = true;
       sub?.subscription?.unsubscribe?.();
     };
-  }, []);
+  }, [allowWithoutAuth]);
 
   useEffect(() => {
     try {
@@ -118,17 +118,6 @@ export default function RootLayoutClient({ children }) {
       setCookieConsent(null);
     }
   }, []);
-
-  // incluye subrutas (p.ej. /reset-password/xyz)
-  const isPublic = publicRoutes.some(
-    (route) => pathname === route || pathname.startsWith(`${route}/`)
-  );
-
-  /** Contenido Cambridge / niveles: debe verse sin login (cabecera sigue mostrando login si no hay sesión). */
-  const isNivelesRoute =
-    pathname === '/niveles' || (pathname && pathname.startsWith('/niveles/'));
-
-  const allowWithoutAuth = isPublic || isNivelesRoute;
 
   // ⚠️ Redirige DESPUÉS del render (no aplica a rutas públicas ni /niveles/*)
   useEffect(() => {

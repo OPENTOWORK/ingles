@@ -1,11 +1,12 @@
 'use client';
+import { buildVocabularyInContextExercises } from './vocabularyInContextExercises';
 import TheoryLayout from '@/components/theory/TheoryLayout';
 import { TheorySection, Example, Rule, Tip, QuickReference } from '@/components/theory/TheoryContent';
-import { MultipleChoiceExercise, TrueFalseExercise } from '@/components/theory/ExerciseComponents';
+
 
 const VocabularyInContextPage = () => {
   const theoryContent = (
-    <div>
+    <>
       <TheorySection title="What is Vocabulary in Context?" icon="🧩">
         <p>
           <strong>Vocabulary in Context</strong> is the skill of learning the meaning of unfamiliar words 
@@ -129,167 +130,16 @@ const VocabularyInContextPage = () => {
           />
         </div>
       </TheorySection>
-    </div>
+    </>
   );
 
-  const exercises = [
-    <MultipleChoiceExercise
-      key="1"
-      question="What does 'vocabulary in context' mean?"
-      options={[
-        "Memorising vocabulary lists",
-        "Using context to understand unknown words",
-        "Translating every word",
-        "Looking up every word"
-      ]}
-      correctAnswer={1}
-      explanation="It means using clues in the text to work out unknown words."
-    />,
-
-    <MultipleChoiceExercise
-      key="2"
-      question="In 'A pediatrician, a doctor who treats children, was called', what type of clue is used?"
-      options={[
-        "Contrast",
-        "Example",
-        "Direct definition",
-        "Cause and effect"
-      ]}
-      correctAnswer={2}
-      explanation="The phrasing 'a doctor who treats children' is a direct definition of 'pediatrician'."
-    />,
-
-    <TrueFalseExercise
-      key="3"
-      statements={[
-        {
-          text: "You always need a dictionary for new words.",
-          isTrue: false,
-          explanation: "Incorrect. Context often gives enough clues without a dictionary."
-        },
-        {
-          text: "Context clues may appear in sentences other than the one with the unknown word.",
-          isTrue: true,
-          explanation: "Correct. Sometimes you need earlier or later sentences for the clue."
-        },
-        {
-          text: "Grammar does not help you guess word meaning.",
-          isTrue: false,
-          explanation: "Incorrect. Knowing noun, verb, adjective, etc. gives useful hints."
-        }
-      ]}
-    />,
-
-    <MultipleChoiceExercise
-      key="4"
-      question="In 'Unlike his gregarious brother, Tom was shy', what does 'gregarious' probably mean?"
-      options={[
-        "Shy",
-        "Sociable",
-        "Intelligent",
-        "Tall"
-      ]}
-      correctAnswer={1}
-      explanation="'Unlike' signals contrast. If Tom is shy, his brother is the opposite—sociable."
-    />,
-
-    <MultipleChoiceExercise
-      key="5"
-      question="What is the best approach when you cannot infer a word?"
-      options={[
-        "Stop reading at once",
-        "Keep reading—meaning may become clear",
-        "Translate the whole sentence",
-        "Skip the whole paragraph"
-      ]}
-      correctAnswer={1}
-      explanation="Keep going; meaning may clarify later or the word may not be essential."
-    />,
-
-    <TrueFalseExercise
-      key="6"
-      statements={[
-        {
-          text: "Examples in the text can help you understand unknown words.",
-          isTrue: true,
-          explanation: "Correct. Lists such as 'citrus fruits such as oranges, lemons...' clarify the general term."
-        },
-        {
-          text: "You must know every word to understand a text.",
-          isTrue: false,
-          explanation: "Incorrect. You can grasp the main idea without every word."
-        },
-        {
-          text: "General knowledge can help you infer meanings.",
-          isTrue: true,
-          explanation: "Correct. Knowledge of jobs, situations, etc. supports educated guesses."
-        }
-      ]}
-    />,
-
-    <MultipleChoiceExercise
-      key="7"
-      question="In 'The drought caused the crops to wither', what does 'wither' probably mean?"
-      options={[
-        "Grow more",
-        "Dry up and die",
-        "Change colour",
-        "Bear fruit"
-      ]}
-      correctAnswer={1}
-      explanation="Drought would make plants dry and die rather than grow or fruit."
-    />,
-
-    <MultipleChoiceExercise
-      key="8"
-      question="Which words are usually easiest to infer from context?"
-      options={[
-        "Proper nouns",
-        "Very narrow technical terms",
-        "Words with concrete, visible meaning",
-        "Abbreviations"
-      ]}
-      correctAnswer={2}
-      explanation="Concrete words (objects, visible actions) are easier than very abstract ones."
-    />,
-
-    <TrueFalseExercise
-      key="9"
-      statements={[
-        {
-          text: "Contrast words like 'unlike', 'however', and 'but' help with vocabulary in context.",
-          isTrue: true,
-          explanation: "Correct. They show opposition, which helps you guess by contrast."
-        },
-        {
-          text: "You should only use the sentence that contains the unknown word.",
-          isTrue: false,
-          explanation: "Incorrect. You may need the whole paragraph or even wider context."
-        }
-      ]}
-    />,
-
-    <MultipleChoiceExercise
-      key="10"
-      question="How should you check your guess about a word?"
-      options={[
-        "Ask someone",
-        "Check it makes sense in the full context",
-        "Count the letters",
-        "Find similar-looking words"
-      ]}
-      correctAnswer={1}
-      explanation="Your guess should be logical and consistent with the whole text."
-    />
-  ];
-
-  return (
+    return (
     <TheoryLayout
       title="Vocabulary in Context"
       description="Master understanding unknown words from context. Learn to use definitions, examples, contrast, and grammar cues to infer meanings."
       level="A2-B1-B2-C1-C2"
       theoryContent={theoryContent}
-      exercises={exercises}
+      getExercises={buildVocabularyInContextExercises}
       prerequisites={["Basic reading skills", "Understanding of sentence structure"]}
       estimatedTime="75 min"
     />

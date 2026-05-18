@@ -1,6 +1,26 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import './ExamStatistics.css';
+
+const SECTION_META = {
+  reading: { label: 'Reading', color: '#2563eb' },
+  writing: { label: 'Writing', color: '#7c3aed' },
+  listening: { label: 'Listening', color: '#0891b2' },
+  speaking: { label: 'Speaking', color: '#ea580c' },
+};
+
+const PERFORMANCE_LEVELS = [
+  { min: 90, label: 'Excelente', bg: '#dcfce7', text: '#166534' },
+  { min: 80, label: 'Muy bueno', bg: '#e0f2fe', text: '#0369a1' },
+  { min: 70, label: 'Bueno', bg: '#fef9c3', text: '#a16207' },
+  { min: 60, label: 'Regular', bg: '#ffedd5', text: '#c2410c' },
+  { min: 0, label: 'En progreso', bg: '#fee2e2', text: '#b91c1c' },
+];
+
+function getPerformance(percentage) {
+  return PERFORMANCE_LEVELS.find((l) => percentage >= l.min) || PERFORMANCE_LEVELS.at(-1);
+}
 
 export default function ExamStatistics({ userId = 'default' }) {
   const [statistics, setStatistics] = useState({
@@ -13,22 +33,21 @@ export default function ExamStatistics({ userId = 'default' }) {
       reading: { attempts: 0, averageScore: 0, bestScore: 0, totalTime: 0 },
       writing: { attempts: 0, averageScore: 0, bestScore: 0, totalTime: 0 },
       listening: { attempts: 0, averageScore: 0, bestScore: 0, totalTime: 0 },
-      speaking: { attempts: 0, averageScore: 0, bestScore: 0, totalTime: 0 }
+      speaking: { attempts: 0, averageScore: 0, bestScore: 0, totalTime: 0 },
     },
     recentAttempts: [],
     strengths: [],
     weaknesses: [],
-    improvementAreas: []
+    improvementAreas: [],
   });
 
-  const [timeRange, setTimeRange] = useState('all'); // 'week', 'month', 'all'
+  const [timeRange, setTimeRange] = useState('all');
 
   useEffect(() => {
     loadStatistics();
   }, [userId, timeRange]);
 
   const loadStatistics = () => {
-    // Cargar estadísticas desde localStorage
     const stats = calculateStatisticsFromLocalStorage();
     setStatistics(stats);
   };
@@ -44,53 +63,51 @@ export default function ExamStatistics({ userId = 'default' }) {
         reading: { attempts: 0, averageScore: 0, bestScore: 0, totalTime: 0 },
         writing: { attempts: 0, averageScore: 0, bestScore: 0, totalTime: 0 },
         listening: { attempts: 0, averageScore: 0, bestScore: 0, totalTime: 0 },
-        speaking: { attempts: 0, averageScore: 0, bestScore: 0, totalTime: 0 }
+        speaking: { attempts: 0, averageScore: 0, bestScore: 0, totalTime: 0 },
       },
       recentAttempts: [],
       strengths: [],
       weaknesses: [],
-      improvementAreas: []
+      improvementAreas: [],
     };
 
-    // Analizar datos de todos los exámenes
     for (let i = 1; i <= 12; i++) {
       const examId = `exam-${i}`;
       const examData = loadExamData(examId);
-      
+
       if (examData && Object.keys(examData.answers || {}).length > 0) {
         stats.totalExams++;
-        
+
         const examStats = calculateExamStats(examData);
         stats.completedExams += examStats.isCompleted ? 1 : 0;
         stats.totalTime += examStats.totalTime;
-        
+
         if (examStats.score > stats.bestScore) {
-          stats.bestScore = examStats.score;
+          stats.bestScore = examStats.percentage;
         }
 
-        // Actualizar estadísticas por sección
         updateSectionStats(stats, examStats);
-        
-        // Agregar a intentos recientes
+
         stats.recentAttempts.push({
           examId,
           score: examStats.score,
           totalQuestions: examStats.totalQuestions,
           percentage: examStats.percentage,
           date: examData.date || new Date(),
-          timeSpent: examStats.totalTime
+          timeSpent: examStats.totalTime,
         });
       }
     }
 
-    // Calcular promedios
-    if (stats.totalExams > 0) {
-      stats.averageScore = stats.recentAttempts.reduce((sum, attempt) => sum + attempt.percentage, 0) / stats.recentAttempts.length;
+    if (stats.recentAttempts.length > 0) {
+      stats.averageScore =
+        stats.recentAttempts.reduce((sum, attempt) => sum + attempt.percentage, 0) /
+        stats.recentAttempts.length;
+      const bestFromAttempts = Math.max(...stats.recentAttempts.map((a) => a.percentage));
+      if (bestFromAttempts > stats.bestScore) stats.bestScore = bestFromAttempts;
     }
 
-    // Analizar fortalezas y debilidades
     analyzeStrengthsAndWeaknesses(stats);
-
     return stats;
   };
 
@@ -99,13 +116,13 @@ export default function ExamStatistics({ userId = 'default' }) {
       const answers = localStorage.getItem(`examAnswers_${examId}`);
       const globalStart = localStorage.getItem(`examGlobalStart_${examId}`);
       const sectionTimers = localStorage.getItem(`examSectionTimers_${examId}`);
-      
+
       if (answers || globalStart || sectionTimers) {
         return {
           answers: answers ? JSON.parse(answers) : {},
           globalStart: globalStart ? JSON.parse(globalStart) : null,
           sectionTimers: sectionTimers ? JSON.parse(sectionTimers) : {},
-          date: globalStart ? new Date(JSON.parse(globalStart)) : new Date()
+          date: globalStart ? new Date(JSON.parse(globalStart)) : new Date(),
         };
       }
     } catch (error) {
@@ -118,26 +135,24 @@ export default function ExamStatistics({ userId = 'default' }) {
     const answers = examData.answers || {};
     let totalQuestions = 0;
     let correctAnswers = 0;
-    
-    // Contar preguntas y respuestas correctas
-    Object.values(answers).forEach(partAnswers => {
+
+    Object.values(answers).forEach((partAnswers) => {
       if (partAnswers && typeof partAnswers === 'object') {
         totalQuestions += Object.keys(partAnswers).length;
-        // Asumir que todas las respuestas son correctas por ahora
-        // En un sistema real, esto vendría de la base de datos
         correctAnswers += Object.keys(partAnswers).length;
       }
     });
 
-    const percentage = totalQuestions > 0 ? Math.round((correctAnswers / totalQuestions) * 100) : 0;
-    const isCompleted = totalQuestions >= 17; // Asumiendo 17 preguntas por examen
+    const percentage =
+      totalQuestions > 0 ? Math.round((correctAnswers / totalQuestions) * 100) : 0;
+    const isCompleted = totalQuestions >= 17;
 
     return {
       score: correctAnswers,
       totalQuestions,
       percentage,
       isCompleted,
-      totalTime: calculateTotalTime(examData.sectionTimers)
+      totalTime: calculateTotalTime(examData.sectionTimers),
     };
   };
 
@@ -147,246 +162,283 @@ export default function ExamStatistics({ userId = 'default' }) {
   };
 
   const updateSectionStats = (stats, examStats) => {
-    // Actualizar estadísticas por sección
-    // Por simplicidad, asumimos que cada examen tiene todas las secciones
     const sections = ['reading', 'writing', 'listening', 'speaking'];
-    sections.forEach(section => {
-      stats.sections[section].attempts++;
-      stats.sections[section].averageScore = 
-        (stats.sections[section].averageScore * (stats.sections[section].attempts - 1) + examStats.percentage) / 
-        stats.sections[section].attempts;
-      
-      if (examStats.percentage > stats.sections[section].bestScore) {
-        stats.sections[section].bestScore = examStats.percentage;
-      }
+    sections.forEach((section) => {
+      const prev = stats.sections[section];
+      const attempts = prev.attempts + 1;
+      stats.sections[section] = {
+        ...prev,
+        attempts,
+        averageScore: (prev.averageScore * prev.attempts + examStats.percentage) / attempts,
+        bestScore: Math.max(prev.bestScore, examStats.percentage),
+      };
     });
   };
 
   const analyzeStrengthsAndWeaknesses = (stats) => {
     const sections = Object.entries(stats.sections);
-    
-    // Ordenar por puntuación promedio
     const sortedSections = sections.sort((a, b) => b[1].averageScore - a[1].averageScore);
-    
-    stats.strengths = sortedSections.slice(0, 2).map(([section]) => section);
-    stats.weaknesses = sortedSections.slice(-2).map(([section]) => section);
-    
-    // Áreas de mejora
+
+    stats.strengths = sortedSections
+      .filter(([, s]) => s.attempts > 0)
+      .slice(0, 2)
+      .map(([section]) => section);
+
+    stats.weaknesses = sortedSections
+      .filter(([, s]) => s.attempts > 0)
+      .slice(-2)
+      .map(([section]) => section);
+
     stats.improvementAreas = [
       'Practica más ejercicios de gramática',
-      'Mejora tu vocabulario académico',
-      'Entrena la comprensión auditiva',
-      'Desarrolla técnicas de escritura'
+      'Amplía tu vocabulario académico',
+      'Refuerza la comprensión auditiva',
+      'Desarrolla técnicas de escritura',
     ];
   };
 
   const formatTime = (seconds) => {
     const hours = Math.floor(seconds / 3600);
     const minutes = Math.floor((seconds % 3600) / 60);
-    if (hours > 0) {
-      return `${hours}h ${minutes}m`;
-    }
+    if (hours > 0) return `${hours}h ${minutes}m`;
     return `${minutes}m`;
   };
 
-  const getPerformanceLevel = (percentage) => {
-    if (percentage >= 90) return { level: 'Excelente', color: '#28a745' };
-    if (percentage >= 80) return { level: 'Muy Bueno', color: '#17a2b8' };
-    if (percentage >= 70) return { level: 'Bueno', color: '#ffc107' };
-    if (percentage >= 60) return { level: 'Regular', color: '#fd7e14' };
-    return { level: 'Necesita Mejorar', color: '#dc3545' };
-  };
+  const hasData = statistics.totalExams > 0;
+  const recent = statistics.recentAttempts.slice(0, 5);
+
+  const kpis = [
+    {
+      key: 'started',
+      icon: '📚',
+      value: statistics.totalExams,
+      label: 'Exámenes iniciados',
+      tone: 'blue',
+    },
+    {
+      key: 'completed',
+      icon: '✅',
+      value: statistics.completedExams,
+      label: 'Completados',
+      tone: 'green',
+    },
+    {
+      key: 'average',
+      icon: '🎯',
+      value: `${Math.round(statistics.averageScore)}%`,
+      label: 'Puntuación media',
+      tone: 'violet',
+    },
+    {
+      key: 'best',
+      icon: '🏆',
+      value: `${Math.round(statistics.bestScore)}%`,
+      label: 'Mejor puntuación',
+      tone: 'amber',
+    },
+  ];
 
   return (
-    <div className="exam-statistics">
-      <div className="statistics-header">
-        <h2>📊 Estadísticas de Exámenes</h2>
-        <div className="time-range-selector">
-          <select 
-            value={timeRange} 
+    <section className="exam-stats" aria-labelledby="exam-stats-title">
+      <header className="exam-stats__header">
+        <div className="exam-stats__title-wrap">
+          <h2 id="exam-stats-title">Estadísticas de exámenes</h2>
+          <p className="exam-stats__subtitle">
+            Resumen de tu actividad en exámenes de práctica (datos guardados en este dispositivo).
+          </p>
+        </div>
+        <div className="exam-stats__filter">
+          <label htmlFor="exam-stats-range">Periodo</label>
+          <select
+            id="exam-stats-range"
+            value={timeRange}
             onChange={(e) => setTimeRange(e.target.value)}
-            className="time-range-select"
+            className="exam-stats__select"
           >
             <option value="week">Esta semana</option>
             <option value="month">Este mes</option>
             <option value="all">Todo el tiempo</option>
           </select>
         </div>
-      </div>
+      </header>
 
-      {/* Estadísticas principales */}
-      <div className="main-stats">
-        <div className="stat-card stat-card--primary">
-          <div className="stat-icon">📚</div>
-          <div className="stat-number">{statistics.totalExams}</div>
-          <div className="stat-label">Exámenes Iniciados</div>
-        </div>
-        
-        <div className="stat-card stat-card--success">
-          <div className="stat-icon">✅</div>
-          <div className="stat-number">{statistics.completedExams}</div>
-          <div className="stat-label">Completados</div>
-        </div>
-        
-        <div className="stat-card stat-card--info">
-          <div className="stat-icon">🎯</div>
-          <div className="stat-number">{Math.round(statistics.averageScore)}%</div>
-          <div className="stat-label">Puntuación Promedio</div>
-        </div>
-        
-        <div className="stat-card stat-card--warning">
-          <div className="stat-icon">🏆</div>
-          <div className="stat-number">{Math.round(statistics.bestScore)}%</div>
-          <div className="stat-label">Mejor Puntuación</div>
-        </div>
-      </div>
-
-      {/* Estadísticas por sección */}
-      <div className="section-stats">
-        <h3>📈 Rendimiento por Sección</h3>
-        <div className="section-grid">
-          {Object.entries(statistics.sections).map(([section, stats]) => {
-            const performance = getPerformanceLevel(stats.averageScore);
-            return (
-              <div key={section} className="section-card">
-                <div className="section-header">
-                  <h4>{section.charAt(0).toUpperCase() + section.slice(1)}</h4>
-                  <span 
-                    className="performance-level"
-                    style={{ color: performance.color }}
-                  >
-                    {performance.level}
-                  </span>
-                </div>
-                <div className="section-metrics">
-                  <div className="metric">
-                    <span className="metric-label">Intentos:</span>
-                    <span className="metric-value">{stats.attempts}</span>
-                  </div>
-                  <div className="metric">
-                    <span className="metric-label">Promedio:</span>
-                    <span className="metric-value">{Math.round(stats.averageScore)}%</span>
-                  </div>
-                  <div className="metric">
-                    <span className="metric-label">Mejor:</span>
-                    <span className="metric-value">{Math.round(stats.bestScore)}%</span>
-                  </div>
-                </div>
-                <div className="section-progress">
-                  <div className="progress-bar">
-                    <div 
-                      className="progress-fill"
-                      style={{ 
-                        width: `${stats.averageScore}%`,
-                        backgroundColor: performance.color
-                      }}
-                    />
-                  </div>
-                </div>
-              </div>
-            );
-          })}
-        </div>
-      </div>
-
-      {/* Intentos recientes */}
-      <div className="recent-attempts">
-        <h3>🕒 Intentos Recientes</h3>
-        <div className="attempts-list">
-          {statistics.recentAttempts.slice(0, 5).map((attempt, index) => {
-            const performance = getPerformanceLevel(attempt.percentage);
-            return (
-              <div key={index} className="attempt-item">
-                <div className="attempt-info">
-                  <div className="attempt-exam">{attempt.examId.replace('exam-', 'Examen ')}</div>
-                  <div className="attempt-date">{attempt.date.toLocaleDateString()}</div>
-                </div>
-                <div className="attempt-score">
-                  <span 
-                    className="score-percentage"
-                    style={{ color: performance.color }}
-                  >
-                    {attempt.percentage}%
-                  </span>
-                  <div className="score-details">
-                    {attempt.score}/{attempt.totalQuestions}
-                  </div>
-                </div>
-                <div className="attempt-time">
-                  {formatTime(attempt.timeSpent)}
-                </div>
-              </div>
-            );
-          })}
-        </div>
-      </div>
-
-      {/* Análisis de rendimiento */}
-      <div className="performance-analysis">
-        <div className="analysis-section">
-          <h3>💪 Fortalezas</h3>
-          <div className="strengths-list">
-            {statistics.strengths.map((strength, index) => (
-              <div key={index} className="strength-item">
-                <span className="strength-icon">✅</span>
-                <span className="strength-text">{strength.charAt(0).toUpperCase() + strength.slice(1)}</span>
-              </div>
-            ))}
-          </div>
-        </div>
-
-        <div className="analysis-section">
-          <h3>🎯 Áreas de Mejora</h3>
-          <div className="improvement-list">
-            {statistics.improvementAreas.map((area, index) => (
-              <div key={index} className="improvement-item">
-                <span className="improvement-icon">📈</span>
-                <span className="improvement-text">{area}</span>
-              </div>
-            ))}
-          </div>
-        </div>
-      </div>
-
-      {/* Resumen de tiempo */}
-      <div className="time-summary">
-        <h3>⏱️ Resumen de Tiempo</h3>
-        <div className="time-stats">
-          <div className="time-stat">
-            <span className="time-label">Tiempo Total:</span>
-            <span className="time-value">{formatTime(statistics.totalTime)}</span>
-          </div>
-          <div className="time-stat">
-            <span className="time-label">Tiempo Promedio por Examen:</span>
-            <span className="time-value">
-              {statistics.completedExams > 0 
-                ? formatTime(statistics.totalTime / statistics.completedExams)
-                : '0m'
-              }
+      <div className="exam-stats__kpis">
+        {kpis.map((kpi) => (
+          <article
+            key={kpi.key}
+            className={`exam-stats__kpi exam-stats__kpi--${kpi.tone}`}
+          >
+            <span className="exam-stats__kpi-icon" aria-hidden>
+              {kpi.icon}
             </span>
+            <div className="exam-stats__kpi-body">
+              <span className="exam-stats__kpi-value">{kpi.value}</span>
+              <span className="exam-stats__kpi-label">{kpi.label}</span>
+            </div>
+          </article>
+        ))}
+      </div>
+
+      <div className="exam-stats__sections">
+        <h3 className="exam-stats__block-title">Rendimiento por sección</h3>
+        <div className="exam-stats__section-grid">
+          {Object.entries(statistics.sections).map(([section, sectionStats]) => {
+            const meta = SECTION_META[section] || { label: section, color: '#64748b' };
+            const performance = getPerformance(sectionStats.averageScore);
+            const pct = Math.min(100, Math.round(sectionStats.averageScore));
+
+            return (
+              <article key={section} className="exam-stats__section-card">
+                <div className="exam-stats__section-top">
+                  <h4 className="exam-stats__section-name">
+                    <span
+                      className="exam-stats__section-dot"
+                      style={{ backgroundColor: meta.color }}
+                    />
+                    {meta.label}
+                  </h4>
+                  <span
+                    className="exam-stats__badge"
+                    style={{
+                      backgroundColor: performance.bg,
+                      color: performance.text,
+                    }}
+                  >
+                    {performance.label}
+                  </span>
+                </div>
+                <div className="exam-stats__metrics">
+                  <div className="exam-stats__metric">
+                    <span className="exam-stats__metric-value">{sectionStats.attempts}</span>
+                    <span className="exam-stats__metric-label">Intentos</span>
+                  </div>
+                  <div className="exam-stats__metric">
+                    <span className="exam-stats__metric-value">{pct}%</span>
+                    <span className="exam-stats__metric-label">Media</span>
+                  </div>
+                  <div className="exam-stats__metric">
+                    <span className="exam-stats__metric-value">
+                      {Math.round(sectionStats.bestScore)}%
+                    </span>
+                    <span className="exam-stats__metric-label">Mejor</span>
+                  </div>
+                </div>
+                <div className="exam-stats__progress" role="progressbar" aria-valuenow={pct} aria-valuemin={0} aria-valuemax={100}>
+                  <div
+                    className="exam-stats__progress-fill"
+                    style={{
+                      width: `${pct}%`,
+                      backgroundColor: meta.color,
+                    }}
+                  />
+                </div>
+              </article>
+            );
+          })}
+        </div>
+      </div>
+
+      <div className="exam-stats__two-col">
+        <div className="exam-stats__panel">
+          <h3>Intentos recientes</h3>
+          {recent.length > 0 ? (
+            <div className="exam-stats__attempts">
+              {recent.map((attempt, index) => {
+                const performance = getPerformance(attempt.percentage);
+                return (
+                  <div key={index} className="exam-stats__attempt">
+                    <div>
+                      <div className="exam-stats__attempt-name">
+                        {attempt.examId.replace('exam-', 'Examen ')}
+                      </div>
+                      <div className="exam-stats__attempt-date">
+                        {attempt.date.toLocaleDateString('es-ES', {
+                          day: 'numeric',
+                          month: 'short',
+                          year: 'numeric',
+                        })}
+                      </div>
+                    </div>
+                    <div>
+                      <div
+                        className="exam-stats__attempt-score"
+                        style={{ color: performance.text }}
+                      >
+                        {attempt.percentage}%
+                      </div>
+                      <div className="exam-stats__attempt-detail">
+                        {attempt.score}/{attempt.totalQuestions}
+                      </div>
+                    </div>
+                    <div className="exam-stats__attempt-time">{formatTime(attempt.timeSpent)}</div>
+                  </div>
+                );
+              })}
+            </div>
+          ) : (
+            <p className="exam-stats__empty">
+              {hasData
+                ? 'No hay intentos recientes en este periodo.'
+                : (
+                  <>
+                    Aún no has realizado exámenes de práctica. Empieza en{' '}
+                    <a href="/niveles">Niveles</a>.
+                  </>
+                )}
+            </p>
+          )}
+        </div>
+
+        <div className="exam-stats__panel">
+          <h3>Análisis de rendimiento</h3>
+          <div className="exam-stats__insights">
+            <div className="exam-stats__insight-card exam-stats__insight-card--strength">
+              <h4>Fortalezas</h4>
+              {statistics.strengths.length > 0 ? (
+                <ul className="exam-stats__chip-list">
+                  {statistics.strengths.map((strength) => (
+                    <li key={strength}>
+                      <span className="exam-stats__chip exam-stats__chip--strength">
+                        {SECTION_META[strength]?.label ||
+                          strength.charAt(0).toUpperCase() + strength.slice(1)}
+                      </span>
+                    </li>
+                  ))}
+                </ul>
+              ) : (
+                <p className="exam-stats__empty" style={{ padding: '12px', margin: 0 }}>
+                  Completa exámenes para identificar tus puntos fuertes.
+                </p>
+              )}
+            </div>
+            <div className="exam-stats__insight-card exam-stats__insight-card--improve">
+              <h4>Áreas de mejora</h4>
+              <ul className="exam-stats__tip-list">
+                {statistics.improvementAreas.map((area, index) => (
+                  <li key={index} className="exam-stats__tip">
+                    {area}
+                  </li>
+                ))}
+              </ul>
+            </div>
           </div>
         </div>
       </div>
-    </div>
+
+      <div className="exam-stats__time-bar">
+        <div className="exam-stats__time-item">
+          <span className="exam-stats__time-label">Tiempo total</span>
+          <span className="exam-stats__time-value">{formatTime(statistics.totalTime)}</span>
+        </div>
+        <div className="exam-stats__time-item">
+          <span className="exam-stats__time-label">Media por examen</span>
+          <span className="exam-stats__time-value">
+            {statistics.completedExams > 0
+              ? formatTime(statistics.totalTime / statistics.completedExams)
+              : '0m'}
+          </span>
+        </div>
+      </div>
+    </section>
   );
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

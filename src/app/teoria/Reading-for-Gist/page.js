@@ -1,11 +1,12 @@
 'use client';
+import { buildReadingForGistExercises } from './readingForGistExercises';
 import TheoryLayout from '@/components/theory/TheoryLayout';
 import { TheorySection, Example, Rule, Tip, QuickReference } from '@/components/theory/TheoryContent';
-import { MultipleChoiceExercise, TrueFalseExercise } from '@/components/theory/ExerciseComponents';
+
 
 const ReadingForGistPage = () => {
   const theoryContent = (
-    <div>
+    <>
       <TheorySection title="What is Reading for Gist?" icon="👁️">
         <p>
           <strong>Reading for Gist</strong> means reading to get the general idea or main topic of a text 
@@ -130,167 +131,16 @@ const ReadingForGistPage = () => {
           />
         </div>
       </TheorySection>
-    </div>
+    </>
   );
 
-  const exercises = [
-    <MultipleChoiceExercise
-      key="1"
-      question="What is the main goal of reading for gist?"
-      options={[
-        "Understand every word",
-        "Get the general idea of the text",
-        "Memorise specific details",
-        "Translate the whole text"
-      ]}
-      correctAnswer={1}
-      explanation="Reading for gist focuses on the general idea or topic, not every detail."
-    />,
-
-    <MultipleChoiceExercise
-      key="2"
-      question="What should you do when you meet an unknown word in gist reading?"
-      options={[
-        "Stop and look it up",
-        "Keep reading without stopping",
-        "Ask someone what it means",
-        "Stop reading the text"
-      ]}
-      correctAnswer={1}
-      explanation="In gist reading, keep going and focus on overall meaning rather than every unknown word."
-    />,
-
-    <TrueFalseExercise
-      key="3"
-      statements={[
-        {
-          text: "In gist reading you need to understand 100% of the vocabulary.",
-          isTrue: false,
-          explanation: "Incorrect. About 70–80% understanding is often enough to get the general idea."
-        },
-        {
-          text: "The title is an important clue in gist reading.",
-          isTrue: true,
-          explanation: "Correct. The title hints at the main topic and helps you predict content."
-        },
-        {
-          text: "You should read more slowly for effective gist reading.",
-          isTrue: false,
-          explanation: "Incorrect. Gist reading means reading faster and focusing on general ideas."
-        }
-      ]}
-    />,
-
-    <MultipleChoiceExercise
-      key="4"
-      question="Which technique best helps you find the main idea?"
-      options={[
-        "Read only the first sentence",
-        "Read the whole text quickly",
-        "Count the words",
-        "Read only bold words"
-      ]}
-      correctAnswer={1}
-      explanation="A quick read of the whole text gives an overview and helps you see the main idea."
-    />,
-
-    <MultipleChoiceExercise
-      key="5"
-      question="Which parts of the text matter most for gist reading?"
-      options={[
-        "Every adjective and adverb",
-        "Title, first and last sentences of paragraphs",
-        "Only the longest words",
-        "Only numbers and dates"
-      ]}
-      correctAnswer={1}
-      explanation="Titles and first/last sentences of paragraphs usually carry the main ideas."
-    />,
-
-    <TrueFalseExercise
-      key="6"
-      statements={[
-        {
-          text: "Words that repeat often are usually important to the topic.",
-          isTrue: true,
-          explanation: "Correct. Frequent words often relate to the central theme."
-        },
-        {
-          text: "Gist reading is only useful for very short texts.",
-          isTrue: false,
-          explanation: "Incorrect. Gist reading is especially helpful for long texts when you need the big picture quickly."
-        },
-        {
-          text: "You should use gist reading before reading for specific detail.",
-          isTrue: true,
-          explanation: "Correct. Gist reading gives background that makes detailed reading easier."
-        }
-      ]}
-    />,
-
-    <MultipleChoiceExercise
-      key="7"
-      question="What is the minimum level of understanding needed for effective gist reading?"
-      options={[
-        "100%",
-        "90–95%",
-        "70–80%",
-        "50–60%"
-      ]}
-      correctAnswer={2}
-      explanation="With about 70–80% understanding you can usually grasp the general idea without every detail."
-    />,
-
-    <MultipleChoiceExercise
-      key="8"
-      question="Which questions are most useful during gist reading?"
-      options={[
-        "How many words are in each sentence?",
-        "Who, what, when, where, why?",
-        "What are all the adjectives?",
-        "Which words do I not know?"
-      ]}
-      correctAnswer={1}
-      explanation="Basic 5W questions help you pick out essential information for general understanding."
-    />,
-
-    <TrueFalseExercise
-      key="9"
-      statements={[
-        {
-          text: "Gist reading is useful in timed exams.",
-          isTrue: true,
-          explanation: "Correct. It helps you get essential information quickly when time is short."
-        },
-        {
-          text: "You should avoid gist reading if the text has technical vocabulary.",
-          isTrue: false,
-          explanation: "Incorrect. Gist reading is especially useful with technical texts to get the overview first."
-        }
-      ]}
-    />,
-
-    <MultipleChoiceExercise
-      key="10"
-      question="How fast should gist reading be compared with normal reading?"
-      options={[
-        "The same speed",
-        "Slower than normal",
-        "2–3 times faster",
-        "One word per minute"
-      ]}
-      correctAnswer={2}
-      explanation="For gist reading, read about 2–3 times faster than normal to get the overall picture."
-    />
-  ];
-
-  return (
+    return (
     <TheoryLayout
       title="Reading for Gist"
       description="Master reading for general ideas. Learn to identify main topics and purposes quickly without getting lost in detail."
       level="A2-B1-B2-C1-C2"
       theoryContent={theoryContent}
-      exercises={exercises}
+      getExercises={buildReadingForGistExercises}
       prerequisites={["Basic reading skills", "Basic vocabulary"]}
       estimatedTime="70 min"
     />

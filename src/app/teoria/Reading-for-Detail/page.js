@@ -1,11 +1,12 @@
 'use client';
+import { buildReadingForDetailExercises } from './readingForDetailExercises';
 import TheoryLayout from '@/components/theory/TheoryLayout';
 import { TheorySection, Example, Rule, Tip, QuickReference } from '@/components/theory/TheoryContent';
-import { MultipleChoiceExercise, TrueFalseExercise } from '@/components/theory/ExerciseComponents';
+
 
 const ReadingForDetailPage = () => {
   const theoryContent = (
-    <div>
+    <>
       <TheorySection title="What is Reading for Detail?" icon="🔍">
         <p>
           <strong>Reading for Detail</strong> means reading carefully to find specific information, 
@@ -129,167 +130,16 @@ const ReadingForDetailPage = () => {
           />
         </div>
       </TheorySection>
-    </div>
+    </>
   );
 
-  const exercises = [
-    <MultipleChoiceExercise
-      key="1"
-      question="What is the main goal of reading for detail?"
-      options={[
-        "Read as fast as possible",
-        "Find specific, exact information",
-        "Understand only the general idea",
-        "Memorise every word"
-      ]}
-      correctAnswer={1}
-      explanation="Reading for detail targets specific facts, exact data, and particular points."
-    />,
-
-    <MultipleChoiceExercise
-      key="2"
-      question="What should you do before you read for detail?"
-      options={[
-        "Read the whole text first",
-        "State exactly what information you need",
-        "Count the pages",
-        "Look up every unknown word"
-      ]}
-      correctAnswer={1}
-      explanation="First define clearly what specific information you are searching for."
-    />,
-
-    <TrueFalseExercise
-      key="3"
-      statements={[
-        {
-          text: "In reading for detail, every word can matter.",
-          isTrue: true,
-          explanation: "Correct. Modifiers, negation, and small words can completely change meaning."
-        },
-        {
-          text: "You should read at the same speed as for gist.",
-          isTrue: false,
-          explanation: "Incorrect. Detail reading is slower and more careful than gist reading."
-        },
-        {
-          text: "Scanning helps you find the right section.",
-          isTrue: true,
-          explanation: "Correct. Scanning locates the parts that likely contain your answer."
-        }
-      ]}
-    />,
-
-    <MultipleChoiceExercise
-      key="4"
-      question="What is the difference between 'most students' and 'all students'?"
-      options={[
-        "There is no difference",
-        "'Most' means a majority; 'all' means everyone",
-        "'Most' is more formal than 'all'",
-        "They mean exactly the same"
-      ]}
-      correctAnswer={1}
-      explanation="'Most' means a majority (more than half but not everyone); 'all' means 100% with no exceptions."
-    />,
-
-    <MultipleChoiceExercise
-      key="5"
-      question="Which words help you find information about causes?"
-      options={[
-        "Numbers and dates",
-        "Because, since, due to",
-        "First, second, third",
-        "Always, never, sometimes"
-      ]}
-      correctAnswer={1}
-      explanation="Words like 'because', 'since', and 'due to' signal cause and help you find why something happens."
-    />,
-
-    <TrueFalseExercise
-      key="6"
-      statements={[
-        {
-          text: "You should read only the sentence that holds your answer.",
-          isTrue: false,
-          explanation: "Incorrect. Read the surrounding sentences too for full meaning."
-        },
-        {
-          text: "Pronouns can refer to information in earlier sentences.",
-          isTrue: true,
-          explanation: "Correct. Pronouns like 'it', 'they', and 'this' often refer back to earlier content."
-        },
-        {
-          text: "You do not need to check consistency when reading for detail.",
-          isTrue: false,
-          explanation: "Incorrect. Check that information is consistent across the text."
-        }
-      ]}
-    />,
-
-    <MultipleChoiceExercise
-      key="7"
-      question="What is the best strategy for information about time order?"
-      options={[
-        "Look only for numbers",
-        "Look for time connectors like 'first', 'then', 'finally'",
-        "Read only the first paragraph",
-        "Ignore dates"
-      ]}
-      correctAnswer={1}
-      explanation="Time connectors show the order of events and processes."
-    />,
-
-    <MultipleChoiceExercise
-      key="8"
-      question="Why note words like 'not', 'never', and 'hardly'?"
-      options={[
-        "They are very common",
-        "They can completely change sentence meaning",
-        "They are hard to pronounce",
-        "They always appear in exams"
-      ]}
-      correctAnswer={1}
-      explanation="Negation such as 'not', 'never', and 'hardly' is crucial for exact understanding."
-    />,
-
-    <TrueFalseExercise
-      key="9"
-      statements={[
-        {
-          text: "Reading for detail helps when you must follow precise instructions.",
-          isTrue: true,
-          explanation: "Correct. Instructions require exact understanding of each step."
-        },
-        {
-          text: "You should use reading for detail for every text you read.",
-          isTrue: false,
-          explanation: "Incorrect. Use it when you need specifics; use gist reading for the overview."
-        }
-      ]}
-    />,
-
-    <MultipleChoiceExercise
-      key="10"
-      question="What is the best way to check you found the right information?"
-      options={[
-        "Read once more only",
-        "Check consistency with other parts of the text",
-        "Translate into Spanish",
-        "Count the words in the answer"
-      ]}
-      correctAnswer={1}
-      explanation="Cross-checking with the rest of the text helps confirm your interpretation."
-    />
-  ];
-
-  return (
+    return (
     <TheoryLayout
       title="Reading for Detail"
       description="Master careful reading for specifics. Learn how to locate exact facts, sequences, and cause–effect links in texts."
       level="A2-B1-B2-C1-C2"
       theoryContent={theoryContent}
-      exercises={exercises}
+      getExercises={buildReadingForDetailExercises}
       prerequisites={["Reading for gist skills", "Basic vocabulary", "Grammar awareness"]}
       estimatedTime="75 min"
     />

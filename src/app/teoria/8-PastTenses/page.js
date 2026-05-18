@@ -1,4 +1,5 @@
 'use client';
+import { build8PastTensesExercises } from './pasttensesExercises';
 import React from 'react';
 import TheoryLayout from '@/components/theory/TheoryLayout';
 import { 
@@ -9,15 +10,11 @@ import {
   GrammarTable, 
   QuickReference 
 } from '@/components/theory/TheoryContent';
-import { 
-  MultipleChoiceExercise, 
-  FillBlanksExercise, 
-  TrueFalseExercise 
-} from '@/components/theory/ExerciseComponents';
+
 
 const PastTensesPage = () => {
   const theoryContent = (
-    <div>
+    <>
       <TheorySection title="What Are Past Tenses?" icon="⏰">
         <p style={{ fontSize: '1.1rem', lineHeight: 1.6, color: '#4a5568', marginBottom: '1rem' }}>
           <strong>Past tenses</strong> are verb forms used to talk about actions, 
@@ -52,17 +49,14 @@ const PastTensesPage = () => {
           <Example 
             spanish="Ayer trabajé hasta tarde"
             english="Yesterday I worked until late"
-            translation="Yesterday I worked until late"
           />
           <Example 
             spanish="Ella no fue a la fiesta"
             english="She didn't go to the party"
-            translation="She didn't go to the party"
           />
           <Example 
             spanish="¿Viste la película?"
             english="Did you see the movie?"
-            translation="Did you see the movie?"
           />
         </div>
 
@@ -101,17 +95,14 @@ const PastTensesPage = () => {
           <Example 
             spanish="A las 8 PM estaba estudiando"
             english="At 8 PM I was studying"
-            translation="At 8 PM I was studying"
           />
           <Example 
             spanish="Los niños estaban jugando cuando llegué"
             english="The children were playing when I arrived"
-            translation="The children were playing when I arrived"
           />
           <Example 
             spanish="¿Qué estabas haciendo ayer?"
             english="What were you doing yesterday?"
-            translation="What were you doing yesterday?"
           />
         </div>
 
@@ -150,17 +141,14 @@ const PastTensesPage = () => {
           <Example 
             spanish="Ya había terminado cuando llegaste"
             english="I had already finished when you arrived"
-            translation="I had already finished when you arrived"
           />
           <Example 
             spanish="No había visto esa película antes"
             english="I hadn't seen that movie before"
-            translation="I hadn't seen that movie before"
           />
           <Example 
             spanish="¿Habías estado en París antes?"
             english="Had you been to Paris before?"
-            translation="Had you been to Paris before?"
           />
         </div>
 
@@ -195,17 +183,14 @@ const PastTensesPage = () => {
           <Example 
             spanish="Llegué a casa a las 6 PM (acción completada)"
             english="I arrived home at 6 PM"
-            translation="I arrived home at 6 PM"
           />
           <Example 
             spanish="Estaba cocinando cuando llegaste (acción en progreso)"
             english="I was cooking when you arrived"
-            translation="I was cooking when you arrived"
           />
           <Example 
             spanish="Ya había cocinado cuando llegaste (acción anterior)"
             english="I had already cooked when you arrived"
-            translation="I had already cooked when you arrived"
           />
         </div>
       </TheorySection>
@@ -285,161 +270,16 @@ const PastTensesPage = () => {
           </div>
         </div>
       </TheorySection>
-    </div>
+    </>
   );
 
-  const exercises = [
-    <MultipleChoiceExercise
-      key="1"
-      question="Complete: 'Yesterday I ___ to the store.'"
-      options={[
-        "go",
-        "went",
-        "was going",
-        "have gone"
-      ]}
-      correctAnswer={1}
-      explanation="'Went' is the correct Past Simple form of 'go' for completed actions in the past."
-    />,
-
-    <MultipleChoiceExercise
-      key="2"
-      question="Which is the correct form to complete: 'I ___ my homework when you called'?"
-      options={[
-        "did",
-        "was doing",
-        "had done",
-        "have done"
-      ]}
-      correctAnswer={1}
-      explanation="For actions in progress in the past we use Past Continuous: 'I was doing my homework when you called'."
-    />,
-
-    <TrueFalseExercise
-      key="3"
-      statements={[
-        {
-          text: "'I did went to school' is correct.",
-          isTrue: false,
-          explanation: "Incorrect. With 'did' we use the base form: 'I went to school' or 'I did go to school' (for emphasis)."
-        },
-        {
-          text: "'I had already eaten when she arrived' shows the correct order of events.",
-          isTrue: true,
-          explanation: "Correct. Past Perfect shows the earlier action (had eaten), Past Simple the more recent one (arrived)."
-        },
-        {
-          text: "'I was working yesterday' is correct for a completed action.",
-          isTrue: false,
-          explanation: "Incorrect. For completed actions we use Past Simple: 'I worked yesterday'. Past Continuous is for actions in progress."
-        },
-        {
-          text: "'While I was cooking, the phone rang' is correct.",
-          isTrue: true,
-          explanation: "Correct. 'While' introduces an action in progress (Past Continuous); the other action is punctual (Past Simple)."
-        }
-      ]}
-    />,
-
-    <MultipleChoiceExercise
-      key="4"
-      question="Which is the correct form to complete: 'She ___ never ___ to Japan before last year'?"
-      options={[
-        "was, gone",
-        "had, been",
-        "did, go",
-        "has, been"
-      ]}
-      correctAnswer={1}
-      explanation="For experiences that happened before another past action we use Past Perfect: 'She had never been to Japan before last year'."
-    />,
-
-    <MultipleChoiceExercise
-      key="5"
-      question="Which is the correct form to complete: 'By the time we arrived, the movie ___'?"
-      options={[
-        "started",
-        "was starting",
-        "had started",
-        "has started"
-      ]}
-      correctAnswer={2}
-      explanation="'By the time' indicates that one action happened before another in the past, so we use Past Perfect: 'had started'."
-    />,
-
-    <MultipleChoiceExercise
-      key="6"
-      question="Complete: 'While I ___ TV, the phone ___'"
-      options={[
-        "watched, rang",
-        "was watching, rang",
-        "was watching, was ringing",
-        "watched, was ringing"
-      ]}
-      correctAnswer={1}
-      explanation="An action in progress (was watching) was interrupted by another action (rang)."
-    />,
-
-    <MultipleChoiceExercise
-      key="7"
-      question="Which is correct?"
-      options={[
-        "I have seen him yesterday",
-        "I saw him yesterday",
-        "I had seen him yesterday",
-        "I was seeing him yesterday"
-      ]}
-      correctAnswer={1}
-      explanation="With 'yesterday' (specific past time) we use Past Simple, not Present Perfect."
-    />,
-
-    <MultipleChoiceExercise
-      key="8"
-      question="Complete: 'She told me she ___ never ___ such a beautiful place.'"
-      options={[
-        "has, seen",
-        "had, seen",
-        "was, seeing",
-        "did, see"
-      ]}
-      correctAnswer={1}
-      explanation="In reported speech, Present Perfect becomes Past Perfect: 'had never seen'."
-    />,
-
-    <MultipleChoiceExercise
-      key="9"
-      question="Which expresses a habitual action in the past?"
-      options={[
-        "I went to school every day",
-        "I used to go to school every day",
-        "I would go to school every day",
-        "All of the above"
-      ]}
-      correctAnswer={3}
-      explanation="All three forms can express past habits, with different nuances."
-    />,
-
-    <MultipleChoiceExercise
-      key="10"
-      question="Complete: 'I ___ for two hours when you called.'"
-      options={[
-        "studied",
-        "was studying",
-        "had been studying",
-        "have been studying"
-      ]}
-      correctAnswer={2}
-      explanation="'For two hours' + interrupted action requires Past Perfect Continuous."
-    />
-  ];
-
-  return (
+    return (
     <TheoryLayout
       title="Past Tenses"
       description="Master all English past tenses: Simple, Continuous, and Perfect. Learn when to use each one and practice irregular verbs."
       level="A2-B1-B2-C1-C2"
       theoryContent={theoryContent}
-      exercises={exercises}
+      getExercises={build8PastTensesExercises}
       prerequisites={["Present Tenses", "Verb to be", "Basic vocabulary"]}
       estimatedTime="70 min"
     />

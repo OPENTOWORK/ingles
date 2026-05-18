@@ -1,11 +1,12 @@
 'use client';
+import { buildMultipleMatchingExercises } from './multipleMatchingExercises';
 import TheoryLayout from '@/components/theory/TheoryLayout';
 import { TheorySection, Example, Rule, Tip, QuickReference } from '@/components/theory/TheoryContent';
-import { MultipleChoiceExercise, TrueFalseExercise } from '@/components/theory/ExerciseComponents';
+
 
 const MultipleMatchingPage = () => {
   const theoryContent = (
-    <div>
+    <>
       <TheorySection title="What is Multiple Matching?" icon="🔗">
         <p>
           <strong>Multiple Matching</strong> is a task where you match questions or statements 
@@ -129,167 +130,16 @@ const MultipleMatchingPage = () => {
           />
         </div>
       </TheorySection>
-    </div>
+    </>
   );
 
-  const exercises = [
-    <MultipleChoiceExercise
-      key="1"
-      question="In Multiple Matching, can texts be the answer to more than one question?"
-      options={[
-        "No—each text answers only one question",
-        "Yes—texts can answer several questions",
-        "Only if the texts are very long",
-        "It depends how many questions there are"
-      ]}
-      correctAnswer={1}
-      explanation="Yes—in Multiple Matching a text can be the answer to several different questions."
-    />,
-
-    <MultipleChoiceExercise
-      key="2"
-      question="What is the best way to start a Multiple Matching task?"
-      options={[
-        "Read all the texts first",
-        "Read the questions first",
-        "Count how many texts there are",
-        "Start with the longest text"
-      ]}
-      correctAnswer={1}
-      explanation="Read the questions first so you know what to look for in the texts."
-    />,
-
-    <TrueFalseExercise
-      key="3"
-      statements={[
-        {
-          text: "Every text must be used as an answer at least once.",
-          isTrue: false,
-          explanation: "Incorrect. Some texts may not answer any question in Multiple Matching."
-        },
-        {
-          text: "Answers in the texts often use synonyms of words in the questions.",
-          isTrue: true,
-          explanation: "Correct. You rarely find identical wording; look for synonyms and paraphrase."
-        },
-        {
-          text: "You must read each text fully before you search for answers.",
-          isTrue: false,
-          explanation: "Incorrect. It is more efficient to read strategically for information tied to the questions."
-        }
-      ]}
-    />,
-
-    <MultipleChoiceExercise
-      key="4"
-      question="If a question is about a 'high price', which words might you find in the text?"
-      options={[
-        "Only the word 'expensive'",
-        "Luxury, premium, costly, pricey",
-        "Only numbers with currency symbols",
-        "Only the phrase 'high price'"
-      ]}
-      correctAnswer={1}
-      explanation="Look for synonyms such as 'luxury', 'premium', 'costly', and 'pricey' that signal high price."
-    />,
-
-    <MultipleChoiceExercise
-      key="5"
-      question="What should you do while reading each text?"
-      options={[
-        "Memorise everything",
-        "Translate every word",
-        "Underline relevant information and mark possible answers",
-        "Read aloud"
-      ]}
-      correctAnswer={2}
-      explanation="Underline relevant information and mark question numbers where you find possible answers."
-    />,
-
-    <TrueFalseExercise
-      key="6"
-      statements={[
-        {
-          text: "If a text has already answered one question, it cannot answer another.",
-          isTrue: false,
-          explanation: "Incorrect. Texts can be reused as answers to several different questions."
-        },
-        {
-          text: "You should look for both explicit and implicit information.",
-          isTrue: true,
-          explanation: "Correct. Sometimes the answer is implied and you must infer it from context."
-        },
-        {
-          text: "It helps to group similar questions by topic before reading.",
-          isTrue: true,
-          explanation: "Correct. Grouping similar questions makes it easier to find related answers."
-        }
-      ]}
-    />,
-
-    <MultipleChoiceExercise
-      key="7"
-      question="How can you tell a restaurant is 'suitable for families' if it does not say so directly?"
-      options={[
-        "Only if it says 'family restaurant'",
-        "By mentions of children's menu, playground, high chairs",
-        "By counting tables",
-        "By the type of food only"
-      ]}
-      correctAnswer={1}
-      explanation="Clues such as 'children's menu', 'playground', or 'high chairs' imply it is family-friendly."
-    />,
-
-    <MultipleChoiceExercise
-      key="8"
-      question="What should you do if you still have no answer after reading all the texts?"
-      options={[
-        "Leave it blank",
-        "Pick a random text",
-        "Reread looking for implicit information or synonyms you missed",
-        "Change the question"
-      ]}
-      correctAnswer={2}
-      explanation="Reread for implied meaning or synonyms you may have overlooked."
-    />,
-
-    <TrueFalseExercise
-      key="9"
-      statements={[
-        {
-          text: "In Multiple Matching there are always as many questions as texts.",
-          isTrue: false,
-          explanation: "Incorrect. There are usually more questions than texts, so some texts answer several questions."
-        },
-        {
-          text: "You should check that your answers are logical and consistent at the end.",
-          isTrue: true,
-          explanation: "Correct. Review that each answer makes sense and is well supported."
-        }
-      ]}
-    />,
-
-    <MultipleChoiceExercise
-      key="10"
-      question="What is the key to success in Multiple Matching?"
-      options={[
-        "Reading very fast",
-        "Memorising all the texts",
-        "Recognising synonyms and paraphrase effectively",
-        "Using only the first answers you find"
-      ]}
-      correctAnswer={2}
-      explanation="The key is recognising synonyms and paraphrase, since answers rarely copy the question wording."
-    />
-  ];
-
-  return (
+    return (
     <TheoryLayout
       title="Multiple Matching"
       description="Master Multiple Matching tasks. Learn to match questions to texts, recognise synonyms, and find specific information efficiently."
       level="B2-C1-C2"
       theoryContent={theoryContent}
-      exercises={exercises}
+      getExercises={buildMultipleMatchingExercises}
       prerequisites={["Advanced reading skills", "Vocabulary recognition", "Inference abilities"]}
       estimatedTime="80 min"
     />

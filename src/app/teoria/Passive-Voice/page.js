@@ -1,4 +1,5 @@
 'use client';
+import { buildPassiveVoiceExercises } from './passiveVoiceExercises';
 import React from 'react';
 import TheoryLayout from '@/components/theory/TheoryLayout';
 import { 
@@ -9,15 +10,11 @@ import {
   GrammarTable, 
   QuickReference 
 } from '@/components/theory/TheoryContent';
-import { 
-  MultipleChoiceExercise, 
-  FillBlanksExercise, 
-  TrueFalseExercise 
-} from '@/components/theory/ExerciseComponents';
+
 
 const PassiveVoicePage = () => {
   const theoryContent = (
-    <div>
+    <>
       <TheorySection title="What Is the Passive Voice?" icon="🔄">
         <p style={{ fontSize: '1.1rem', lineHeight: 1.6, color: '#4a5568', marginBottom: '1rem' }}>
           The <strong>passive voice</strong> is a grammatical structure where the object of the action 
@@ -54,17 +51,14 @@ const PassiveVoicePage = () => {
           <Example 
             spanish="El libro fue escrito por el autor"
             english="The book was written by the author"
-            translation="The book was written by the author"
           />
           <Example 
             spanish="La casa es construida por los trabajadores"
             english="The house is being built by the workers"
-            translation="The house is being built by the workers"
           />
           <Example 
             spanish="El proyecto será terminado mañana"
             english="The project will be finished tomorrow"
-            translation="The project will be finished tomorrow"
           />
         </div>
 
@@ -107,22 +101,18 @@ const PassiveVoicePage = () => {
           <Example 
             spanish="La carta es escrita (presente)"
             english="The letter is written"
-            translation="The letter is written (present)"
           />
           <Example 
             spanish="La carta fue escrita ayer (pasado)"
             english="The letter was written yesterday"
-            translation="The letter was written yesterday (past)"
           />
           <Example 
             spanish="La carta será escrita mañana (futuro)"
             english="The letter will be written tomorrow"
-            translation="The letter will be written tomorrow (future)"
           />
           <Example 
             spanish="La carta ha sido escrita (perfecto)"
             english="The letter has been written"
-            translation="The letter has been written (perfect)"
           />
         </div>
 
@@ -164,17 +154,14 @@ const PassiveVoicePage = () => {
           <Example 
             spanish="Mi coche fue robado (no sabemos quién)"
             english="My car was stolen"
-            translation="My car was stolen (we don't know who)"
           />
           <Example 
             spanish="Se habla inglés aquí (no importa quién)"
             english="English is spoken here"
-            translation="English is spoken here (who doesn't matter)"
           />
           <Example 
             spanish="El edificio fue destruido (enfoque en la acción)"
             english="The building was destroyed"
-            translation="The building was destroyed (focus on the action)"
           />
         </div>
 
@@ -214,17 +201,14 @@ const PassiveVoicePage = () => {
           <Example 
             spanish="Me dieron un libro"
             english="I was given a book"
-            translation="I was given a book"
           />
           <Example 
             spanish="Un libro me fue dado"
             english="A book was given to me"
-            translation="A book was given to me"
           />
           <Example 
             spanish="Nos mostraron las fotos"
             english="We were shown the photos"
-            translation="We were shown the photos"
           />
         </div>
 
@@ -268,17 +252,14 @@ const PassiveVoicePage = () => {
           <Example 
             spanish="Esto puede ser hecho"
             english="This can be done"
-            translation="This can be done"
           />
           <Example 
             spanish="Esto debe ser terminado"
             english="This must be finished"
-            translation="This must be finished"
           />
           <Example 
             spanish="Esto debería ser considerado"
             english="This should be considered"
-            translation="This should be considered"
           />
         </div>
 
@@ -368,161 +349,16 @@ const PassiveVoicePage = () => {
           />
         </div>
       </TheorySection>
-    </div>
+    </>
   );
 
-  const exercises = [
-    <MultipleChoiceExercise
-      key="1"
-      question="Complete: 'The house ___ last year.'"
-      options={[
-        "built",
-        "was built",
-        "was building",
-        "has built"
-      ]}
-      correctAnswer={1}
-      explanation="'Was built' is the correct past simple passive form of 'build'."
-    />,
-
-    <MultipleChoiceExercise
-      key="2"
-      question="What is the passive voice structure?"
-      options={[
-        "Subject + verb + object",
-        "Subject + be + past participle",
-        "Object + verb + subject",
-        "Be + past participle + subject"
-      ]}
-      correctAnswer={1}
-      explanation="The passive voice structure is: Subject + be (in appropriate tense) + past participle + (by + agent)."
-    />,
-
-    <TrueFalseExercise
-      key="3"
-      statements={[
-        {
-          text: "The passive voice is used when the agent (who does the action) is unknown or unimportant.",
-          isTrue: true,
-          explanation: "Correct. Passive voice is commonly used when we don't know who performed the action or when it's not important."
-        },
-        {
-          text: "In passive voice, the verb 'be' must agree with the subject in number and tense.",
-          isTrue: true,
-          explanation: "Correct. The verb 'be' must agree with the subject (singular/plural) and be in the appropriate tense."
-        },
-        {
-          text: "You can only use the direct object as the subject in passive voice.",
-          isTrue: false,
-          explanation: "Incorrect. With verbs that have two objects (direct and indirect), either can become the subject of the passive sentence."
-        },
-        {
-          text: "The agent is always required in passive voice sentences.",
-          isTrue: false,
-          explanation: "Incorrect. The agent (with 'by') is optional in passive voice. It's only included when it's relevant or known."
-        }
-      ]}
-    />,
-
-    <MultipleChoiceExercise
-      key="4"
-      question="Which sentence is in passive voice?"
-      options={[
-        "The teacher gave the students homework.",
-        "The students were given homework by the teacher.",
-        "The students gave homework to the teacher.",
-        "The teacher is giving homework to students."
-      ]}
-      correctAnswer={1}
-      explanation="'The students were given homework by the teacher' is passive voice because the object (students) becomes the subject, and it uses 'were given' (be + past participle)."
-    />,
-
-    <MultipleChoiceExercise
-      key="5"
-      question="What is the correct passive form of 'They will finish the project tomorrow'?"
-      options={[
-        "The project will be finish tomorrow.",
-        "The project will be finished tomorrow.",
-        "The project will finish tomorrow.",
-        "The project will have been finished tomorrow."
-      ]}
-      correctAnswer={1}
-      explanation="The correct passive form is 'The project will be finished tomorrow' using 'will be' + past participle 'finished'."
-    />,
-
-    <MultipleChoiceExercise
-      key="6"
-      question="Complete: 'The house ___ by a famous architect.'"
-      options={[
-        "designed",
-        "was designed",
-        "is designed",
-        "has designed"
-      ]}
-      correctAnswer={1}
-      explanation="For a completed action in the past we use past simple passive: 'was designed'."
-    />,
-
-    <MultipleChoiceExercise
-      key="7"
-      question="Which is correct?"
-      options={[
-        "The letter was written by me",
-        "The letter was wrote by me",
-        "The letter written by me",
-        "The letter is wrote by me"
-      ]}
-      correctAnswer={0}
-      explanation="The passive voice uses 'be' + past participle: 'was written' (not 'wrote')."
-    />,
-
-    <MultipleChoiceExercise
-      key="8"
-      question="Complete: 'English ___ all over the world.'"
-      options={[
-        "speaks",
-        "is speaking",
-        "is spoken",
-        "has spoken"
-      ]}
-      correctAnswer={2}
-      explanation="For general facts in the passive voice we use present simple: 'is spoken'."
-    />,
-
-    <MultipleChoiceExercise
-      key="9"
-      question="When do we NOT use 'by' in the passive voice?"
-      options={[
-        "When the agent is obvious",
-        "When the agent is unknown",
-        "When it doesn't matter who did the action",
-        "All of the above"
-      ]}
-      correctAnswer={3}
-      explanation="We omit 'by' when the agent is obvious, unknown, or unimportant."
-    />,
-
-    <MultipleChoiceExercise
-      key="10"
-      question="Complete: 'The car ___ right now.'"
-      options={[
-        "is repairing",
-        "is being repaired",
-        "is repaired",
-        "repairs"
-      ]}
-      correctAnswer={1}
-      explanation="For actions in progress in the passive voice we use 'is being' + past participle."
-    />
-  ];
-
-  return (
+    return (
     <TheoryLayout
       title="Passive Voice"
       description="Master the passive voice in English. Learn to shift the focus of a sentence, express actions without an agent, and use the passive in all tenses."
       level="B1-B2-C1-C2"
       theoryContent={theoryContent}
-      exercises={exercises}
+      getExercises={buildPassiveVoiceExercises}
       prerequisites={["All verb tenses", "Past participles", "Modal verbs"]}
       estimatedTime="80 min"
     />

@@ -1,4 +1,5 @@
 'use client';
+import { buildListeningTypesExercises } from './listeningTypesExercises';
 import React from 'react';
 import TheoryLayout from '@/components/theory/TheoryLayout';
 import { 
@@ -9,15 +10,11 @@ import {
   GrammarTable, 
   QuickReference 
 } from '@/components/theory/TheoryContent';
-import { 
-  MultipleChoiceExercise, 
-  FillBlanksExercise, 
-  TrueFalseExercise 
-} from '@/components/theory/ExerciseComponents';
+
 
 const ListeningTypesPage = () => {
   const theoryContent = (
-    <div>
+    <>
       <TheorySection title="What Are Types of Understanding?" icon="👂">
         <p style={{ fontSize: '1.1rem', lineHeight: 1.6, color: '#4a5568', marginBottom: '1rem' }}>
           <strong>Types of understanding</strong> in listening are the different skills you need to fully understand what you hear. Each type calls for specific strategies.
@@ -311,172 +308,16 @@ const ListeningTypesPage = () => {
           />
         </div>
       </TheorySection>
-    </div>
+    </>
   );
 
-  const exercises = [
-    <MultipleChoiceExercise
-      key="1"
-      question="To identify the main idea, what should I listen for most?"
-      options={[
-        "Every small detail",
-        "Keywords",
-        "Only numbers",
-        "Proper nouns only"
-      ]}
-      correctAnswer={1}
-      explanation="Keywords that summarize the central topic are central to spotting the main idea."
-    />,
-
-    <MultipleChoiceExercise
-      key="2"
-      question="Which approach best supports identifying the main idea?"
-      options={[
-        "Hearing each word equally",
-        "Focusing on keywords and the overall theme",
-        "Writing down every detail",
-        "Searching only for numbers and dates"
-      ]}
-      correctAnswer={1}
-      explanation="Main-idea tasks reward focus on keywords and theme, not every specific fact."
-    />,
-
-    <TrueFalseExercise
-      key="3"
-      statements={[
-        {
-          text: "You should read the questions before listening to the audio.",
-          isTrue: true,
-          explanation: "Correct. Reading questions first tells you what information to listen for."
-        },
-        {
-          text: "For details you should listen only for words you already know.",
-          isTrue: false,
-          explanation: "Incorrect. Detail questions target specific facts—numbers, names, dates—even when other words are new."
-        },
-        {
-          text: "Tone is picked up partly through intonation and emotional wording.",
-          isTrue: true,
-          explanation: "Correct. Intonation, pace, and emotion words reveal tone."
-        },
-        {
-          text: "For contrast items, listen for words like however, but, unlike.",
-          isTrue: true,
-          explanation: "Correct. Those markers signal contrast between ideas."
-        }
-      ]}
-    />,
-
-    <MultipleChoiceExercise
-      key="4"
-      question="What are you chiefly answering if the question is 'What is the speaker's attitude'?"
-      options={[
-        "Main idea",
-        "Details",
-        "Contrast",
-        "Tone"
-      ]}
-      correctAnswer={3}
-      explanation="Attitude questions aim at tone, not gist, granular detail, or contrast alone."
-    />,
-
-    <MultipleChoiceExercise
-      key="5"
-      question="What is a very common listening mistake?"
-      options={[
-        "Reading questions beforehand",
-        "Trying to decode every word",
-        "Taking notes while listening",
-        "Predicting content"
-      ]}
-      correctAnswer={1}
-      explanation="Trying to grasp every token is common but unhelpful; prioritize overall meaning and what the items ask."
-    />,
-
-    <TrueFalseExercise
-      key="6"
-      statements={[
-        {
-          text: "Listening for gist means understanding every single word.",
-          isTrue: false,
-          explanation: "Incorrect. Gist means the general idea, not every word."
-        },
-        {
-          text: "Scanning for specific information requires focused attention on particular details.",
-          isTrue: true,
-          explanation: "Correct. Scanning means targeting names, dates, figures, and similar cues."
-        },
-        {
-          text: "Inferential listening involves understanding implied meanings.",
-          isTrue: true,
-          explanation: "Correct. Inference covers attitudes and ideas not stated outright."
-        }
-      ]}
-    />,
-
-    <MultipleChoiceExercise
-      key="7"
-      question="Which listening mode fits finding an appointment time in a conversation?"
-      options={[
-        "Listening for gist",
-        "Scanning for specific information",
-        "Inferential listening",
-        "Critical listening"
-      ]}
-      correctAnswer={1}
-      explanation="Scanning fits hunting a concrete detail such as time, date, or number."
-    />,
-
-    <MultipleChoiceExercise
-      key="8"
-      question="What best describes critical listening?"
-      options={[
-        "Hearing each word distinctly",
-        "Evaluating and analyzing the message",
-        "Only noticing the gist",
-        "Searching for isolated facts only"
-      ]}
-      correctAnswer={1}
-      explanation="Critical listening means judging credibility, spotting bias, and weighing arguments."
-    />,
-
-    <TrueFalseExercise
-      key="9"
-      statements={[
-        {
-          text: "You should use the same listening strategy for all types of audio.",
-          isTrue: false,
-          explanation: "Incorrect. Purpose and task shape which strategy fits best."
-        },
-        {
-          text: "Predictive listening involves using context to anticipate content.",
-          isTrue: true,
-          explanation: "Correct. Prediction draws on topic, visuals, prior knowledge, and cues."
-        }
-      ]}
-    />,
-
-    <MultipleChoiceExercise
-      key="10"
-      question="Which strategy best helps grasp the speaker’s mood?"
-      options={[
-        "Scanning for details",
-        "Listening for gist",
-        "Inferential listening",
-        "Note-taking"
-      ]}
-      correctAnswer={2}
-      explanation="Mood is often implied; inferential listening links tone and attitude to content."
-    />
-  ];
-
-  return (
+    return (
     <TheoryLayout
       title="Types of Understanding: Main Idea, Details, Contrast, Tone"
       description="Master different listening comprehension types: main idea, details, contrast, and tone—with targeted strategies for each."
       level="A2-B1-B2-C1-C2"
       theoryContent={theoryContent}
-      exercises={exercises}
+      getExercises={buildListeningTypesExercises}
       prerequisites={["Basic listening skills", "Understanding of question types"]}
       estimatedTime="70 min"
     />

@@ -1,4 +1,5 @@
 'use client';
+import { build6WordFormationExercises } from './wordFormationExercises';
 import React from 'react';
 import TheoryLayout from '@/components/theory/TheoryLayout';
 import { 
@@ -9,15 +10,11 @@ import {
   GrammarTable, 
   QuickReference 
 } from '@/components/theory/TheoryContent';
-import { 
-  MultipleChoiceExercise, 
-  FillBlanksExercise, 
-  TrueFalseExercise 
-} from '@/components/theory/ExerciseComponents';
+
 
 const WordFormationPage = () => {
   const theoryContent = (
-    <div>
+    <>
       <TheorySection title="What is Word Formation?" icon="🔤">
         <p style={{ fontSize: '1.1rem', lineHeight: 1.6, color: '#4a5568', marginBottom: '1rem' }}>
           <strong>Word formation</strong> is the process of creating new words from existing words 
@@ -57,17 +54,14 @@ const WordFormationPage = () => {
           <Example 
             spanish="Estoy infeliz con el resultado"
             english="I am unhappy with the result"
-            translation="I am unhappy with the result"
           />
           <Example 
             spanish="Necesito reescribir este ensayo"
             english="I need to rewrite this essay"
-            translation="I need to rewrite this essay"
           />
           <Example 
             spanish="Malentendí tus instrucciones"
             english="I misunderstood your instructions"
-            translation="I misunderstood your instructions"
           />
         </div>
 
@@ -110,17 +104,14 @@ const WordFormationPage = () => {
           <Example 
             spanish="Corre rápidamente"
             english="He runs quickly"
-            translation="He runs quickly"
           />
           <Example 
             spanish="La educación es importante"
             english="Education is important"
-            translation="Education is important"
           />
           <Example 
             spanish="Es una situación sin esperanza"
             english="It's a hopeless situation"
-            translation="It's a hopeless situation"
           />
         </div>
 
@@ -160,17 +151,14 @@ const WordFormationPage = () => {
           <Example 
             spanish="Uso un cepillo de dientes todas las mañanas"
             english="I use a toothbrush every morning"
-            translation="I use a toothbrush every morning"
           />
           <Example 
             spanish="El profesor escribe en la pizarra"
             english="The teacher writes on the blackboard"
-            translation="The teacher writes on the blackboard"
           />
           <Example 
             spanish="Vamos a nadar a la piscina"
             english="We go swimming at the swimming pool"
-            translation="We go swimming at the swimming pool"
           />
         </div>
 
@@ -210,17 +198,14 @@ const WordFormationPage = () => {
           <Example 
             spanish="Voy a dar un paseo"
             english="I'm going for a walk"
-            translation="I'm going for a walk"
           />
           <Example 
             spanish="Envíame un email"
             english="Email me"
-            translation="Email me"
           />
           <Example 
             spanish="Riega las plantas"
             english="Water the plants"
-            translation="Water the plants"
           />
         </div>
 
@@ -250,17 +235,14 @@ const WordFormationPage = () => {
           <Example 
             spanish="Vi un anuncio en el periódico"
             english="I saw an ad in the newspaper"
-            translation="I saw an ad in the newspaper"
           />
           <Example 
             spanish="Necesito más información"
             english="I need more info"
-            translation="I need more info"
           />
           <Example 
             spanish="NASA envió una nave espacial"
             english="NASA sent a spacecraft"
-            translation="NASA sent a spacecraft"
           />
         </div>
 
@@ -328,172 +310,16 @@ const WordFormationPage = () => {
           />
         </div>
       </TheorySection>
-    </div>
+    </>
   );
 
-  const exercises = [
-    <MultipleChoiceExercise
-      key="1"
-      question="Complete: 'She is a very _____ person.' (beauty → adjective)"
-      options={[
-        "beauty",
-        "beautiful",
-        "beautifully",
-        "beautify"
-      ]}
-      correctAnswer={1}
-      explanation="To describe people we use the adjective 'beautiful' (beauty → beautiful)."
-    />,
-
-    <MultipleChoiceExercise
-      key="2"
-      question="Which is the correct form to complete: 'I need to ___ this letter'?"
-      options={[
-        "rewrite",
-        "re-write",
-        "write again",
-        "rewrite again"
-      ]}
-      correctAnswer={0}
-      explanation="Prefixes are written attached to the base word: 'rewrite'."
-    />,
-
-    <TrueFalseExercise
-      key="3"
-      statements={[
-        {
-          text: "'Un-happy' is the correct spelling.",
-          isTrue: false,
-          explanation: "Incorrect. Prefixes are written attached: 'unhappy'."
-        },
-        {
-          text: "'Toothbrush' is a compound word.",
-          isTrue: true,
-          explanation: "Correct. 'Toothbrush' is formed by 'tooth' + 'brush'."
-        },
-        {
-          text: "'Email' can be both a noun and a verb.",
-          isTrue: true,
-          explanation: "Correct. 'Email' is conversion: it can be a noun or a verb."
-        },
-        {
-          text: "'Beautifully' is formed by adding a suffix to 'beautiful'.",
-          isTrue: false,
-          explanation: "Incorrect. 'Beautifully' is formed from 'beautiful' + '-ly', but 'beautiful' already has the suffix '-ful'."
-        }
-      ]}
-    />,
-
-    <MultipleChoiceExercise
-      key="4"
-      question="Which is the correct form to complete: 'The ___ of this project is important'?"
-      options={[
-        "develop",
-        "development",
-        "developing",
-        "developed"
-      ]}
-      correctAnswer={1}
-      explanation="We need a noun. 'Development' is formed by adding '-ment' to the verb 'develop'."
-    />,
-
-    <MultipleChoiceExercise
-      key="5"
-      question="Which is the correct form to complete: 'I will ___ you the information'?"
-      options={[
-        "email to",
-        "email",
-        "email for",
-        "email with"
-      ]}
-      correctAnswer={1}
-      explanation="When 'email' is a verb, it does not need a preposition: 'I will email you'."
-    />,
-
-    <TrueFalseExercise
-      key="6"
-      statements={[
-        {
-          text: "'Impossible' is formed with the prefix 'im-'.",
-          isTrue: true,
-          explanation: "Correct. 'Impossible' = 'im-' (not) + 'possible'."
-        },
-        {
-          text: "'Friendship' is formed with the suffix '-ship'.",
-          isTrue: true,
-          explanation: "Correct. 'Friendship' = 'friend' + '-ship' (state or condition)."
-        },
-        {
-          text: "All compound words are written as one word.",
-          isTrue: false,
-          explanation: "Incorrect. Some are written separately (ice cream), others with a hyphen (mother-in-law)."
-        }
-      ]}
-    />,
-
-    <MultipleChoiceExercise
-      key="7"
-      question="Complete: 'The ___ of the building took two years.'"
-      options={[
-        "construct",
-        "construction",
-        "constructive",
-        "constructing"
-      ]}
-      correctAnswer={1}
-      explanation="We need a noun. 'Construction' is formed by adding '-tion' to the verb 'construct'."
-    />,
-
-    <MultipleChoiceExercise
-      key="8"
-      question="What is the antonym of 'legal' using prefixes?"
-      options={[
-        "unlegal",
-        "illegal",
-        "inlegal",
-        "dislegal"
-      ]}
-      correctAnswer={1}
-      explanation="'Illegal' is correct. We use 'il-' before words that start with 'l'."
-    />,
-
-    <TrueFalseExercise
-      key="9"
-      statements={[
-        {
-          text: "'Homeless' means 'without a home'.",
-          isTrue: true,
-          explanation: "Correct. The suffix '-less' means 'without'."
-        },
-        {
-          text: "'Childhood' refers to the time when someone is a child.",
-          isTrue: true,
-          explanation: "Correct. The suffix '-hood' indicates a period or state."
-        }
-      ]}
-    />,
-
-    <MultipleChoiceExercise
-      key="10"
-      question="Complete: 'She works as a ___.' (person who teaches)"
-      options={[
-        "teach",
-        "teaching",
-        "teacher",
-        "taught"
-      ]}
-      correctAnswer={2}
-      explanation="To form the person noun we add '-er' to 'teach': 'teacher'."
-    />
-  ];
-
-  return (
+    return (
     <TheoryLayout
       title="Word Formation"
       description="Master word formation in English: prefixes, suffixes, compound words, conversion, and abbreviations. Essential for expanding your vocabulary."
       level="B2-C1-C2"
       theoryContent={theoryContent}
-      exercises={exercises}
+      getExercises={build6WordFormationExercises}
       prerequisites={["Advanced vocabulary", "Understanding of word categories"]}
       estimatedTime="70 min"
     />

@@ -1,4 +1,5 @@
 'use client';
+import { buildVocabularyByRegisterExercises } from './vocabularyByRegisterExercises';
 import React from 'react';
 import TheoryLayout from '@/components/theory/TheoryLayout';
 import { 
@@ -9,15 +10,11 @@ import {
   GrammarTable, 
   QuickReference 
 } from '@/components/theory/TheoryContent';
-import { 
-  MultipleChoiceExercise, 
-  FillBlanksExercise, 
-  TrueFalseExercise 
-} from '@/components/theory/ExerciseComponents';
+
 
 const VocabularyByRegisterPage = () => {
   const theoryContent = (
-    <div>
+    <>
       <TheorySection title="What Is Vocabulary by Register?" icon="📚">
         <p style={{ fontSize: '1.1rem', lineHeight: 1.6, color: '#4a5568', marginBottom: '1rem' }}>
           <strong>Vocabulary by register</strong> means choosing words that fit the context, audience, and purpose of your writing. 
@@ -330,172 +327,16 @@ const VocabularyByRegisterPage = () => {
           />
         </div>
       </TheorySection>
-    </div>
+    </>
   );
 
-  const exercises = [
-    <MultipleChoiceExercise
-      key="1"
-      question="Which register should you use in an academic essay?"
-      options={[
-        "Informal",
-        "Formal",
-        "Neutral",
-        "Colloquial"
-      ]}
-      correctAnswer={1}
-      explanation="Academic essays typically require formal register: precise vocabulary and full forms (no contractions)."
-    />,
-
-    <MultipleChoiceExercise
-      key="2"
-      question="Which register is most appropriate for an academic essay?"
-      options={[
-        "Informal with contractions",
-        "Formal without contractions",
-        "Neutral with occasional contractions",
-        "Mixed by section without signalling"
-      ]}
-      correctAnswer={1}
-      explanation="Academic essays usually avoid contractions and use precise, formal language."
-    />,
-
-    <TrueFalseExercise
-      key="3"
-      statements={[
-        {
-          text: "Formal register is always better than informal register.",
-          isTrue: false,
-          explanation: "Incorrect. The best register depends on context, audience, and purpose."
-        },
-        {
-          text: "Contractions are appropriate in informal register.",
-          isTrue: true,
-          explanation: "Correct. Contractions such as “don't”, “won't”, “I'm” are normal in informal English."
-        },
-        {
-          text: "Context determines the appropriate register.",
-          isTrue: true,
-          explanation: "Correct. Setting (academic, business, personal) is the main guide."
-        },
-        {
-          text: "You should always use the same register throughout any text.",
-          isTrue: false,
-          explanation: "Incorrect. Consistency matters, but controlled register shifts with transitions are sometimes needed."
-        }
-      ]}
-    />,
-
-    <MultipleChoiceExercise
-      key="4"
-      question="What is the best way to move from formal to informal within one text?"
-      options={[
-        "Change abruptly with no transition",
-        "Use a clear transition phrase",
-        "Mix registers in the same sentence",
-        "Never change register"
-      ]}
-      correctAnswer={1}
-      explanation="Signal shifts with phrases like “Let me put this informally...” or “Personally, I believe...”"
-    />,
-
-    <MultipleChoiceExercise
-      key="5"
-      question="What matters most when choosing register?"
-      options={[
-        "Your personal preference",
-        "Context and audience",
-        "Text length",
-        "Topic alone"
-      ]}
-      correctAnswer={1}
-      explanation="Context (where the text is used) and audience (who reads it) matter most."
-    />,
-
-    <TrueFalseExercise
-      key="6"
-      statements={[
-        {
-          text: "Academic vocabulary is more precise than everyday vocabulary.",
-          isTrue: true,
-          explanation: "Correct. Academic English often uses more specific terms for complex ideas."
-        },
-        {
-          text: "You should always use the most formal word available.",
-          isTrue: false,
-          explanation: "Incorrect. Match register to context; excessive formality can sound unnatural."
-        },
-        {
-          text: "Register consistency is important throughout a text.",
-          isTrue: true,
-          explanation: "Correct. A steady register supports coherence and professionalism."
-        }
-      ]}
-    />,
-
-    <MultipleChoiceExercise
-      key="7"
-      question="Which option lists more formal alternatives to 'help'?"
-      options={[
-        "aid",
-        "assist",
-        "support",
-        "All of the above"
-      ]}
-      correctAnswer={3}
-      explanation="“Aid”, “assist”, and “support” can all be more formal than “help”, with slightly different nuances."
-    />,
-
-    <MultipleChoiceExercise
-      key="8"
-      question="In which context would you prefer 'purchase' over 'buy'?"
-      options={[
-        "Casual chat",
-        "Legal or business documents",
-        "Text messages",
-        "Family conversation"
-      ]}
-      correctAnswer={1}
-      explanation="“Purchase” is more formal and common in legal, commercial, or professional contexts."
-    />,
-
-    <TrueFalseExercise
-      key="9"
-      statements={[
-        {
-          text: "Colloquial expressions are appropriate in academic writing.",
-          isTrue: false,
-          explanation: "Incorrect. Colloquial language is usually out of place in formal academic writing."
-        },
-        {
-          text: "The same idea can be expressed at different levels of formality.",
-          isTrue: true,
-          explanation: "Correct. One idea can be informal (“big problem”) or formal (“significant issue”)."
-        }
-      ]}
-    />,
-
-    <MultipleChoiceExercise
-      key="10"
-      question="What is the difference between 'get' and 'obtain'?"
-      options={[
-        "'Get' is more formal",
-        "'Obtain' is more formal",
-        "There is no difference",
-        "Both are colloquial"
-      ]}
-      correctAnswer={1}
-      explanation="“Obtain” is more formal and common in academic or professional contexts; “get” is everyday and neutral–informal."
-    />
-  ];
-
-  return (
+    return (
     <TheoryLayout
       title="Vocabulary by Register"
       description="Master vocabulary by register in English: formal, neutral, and informal. Learn to choose appropriate words for context and audience."
       level="B1-B2-C1-C2"
       theoryContent={theoryContent}
-      exercises={exercises}
+      getExercises={buildVocabularyByRegisterExercises}
       prerequisites={["Basic vocabulary", "Understanding of formal vs informal language"]}
       estimatedTime="70 min"
     />

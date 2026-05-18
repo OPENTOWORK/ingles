@@ -4,8 +4,9 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { useUserRole } from '@/context/UserRoleContext';
-import { ROLE_ROUTE_MAP } from '@/utils/authRoles';
+import { isAdminRole, ROLE_ROUTE_MAP } from '@/utils/authRoles';
 import {
+  ADMIN_PANEL_MENU_ITEMS,
   DRALO_MENU_ITEMS,
   NAV_LINK_CONTACT,
   NAV_LINKS_BEFORE_DRALO,
@@ -54,11 +55,15 @@ export default function AppSideMenuPanel({ defaultOpen = true }) {
   const { userRole, session } = useUserRole();
   const [open, setOpen] = useState(defaultOpen);
   const [draloOpen, setDraloOpen] = useState(false);
+  const [adminPanelsOpen, setAdminPanelsOpen] = useState(false);
   const staffLink = getRoleLink(userRole);
+  const showAdminDropdown = Boolean(session && isAdminRole(userRole));
+  const showStaffLink = Boolean(staffLink && !showAdminDropdown);
   const linkClass = 'app-side-menu__link';
 
   useEffect(() => {
     setDraloOpen(false);
+    setAdminPanelsOpen(false);
   }, [pathname]);
 
   const handleLogout = async () => {
@@ -131,7 +136,29 @@ export default function AppSideMenuPanel({ defaultOpen = true }) {
 
           {session ? (
             <>
-              {staffLink ? (
+              {showAdminDropdown ? (
+                <>
+                  <button
+                    type="button"
+                    className={`${linkClass} app-side-menu__accordion${adminPanelsOpen ? ' is-open' : ''}`}
+                    onClick={() => setAdminPanelsOpen((v) => !v)}
+                    aria-expanded={adminPanelsOpen}
+                  >
+                    Admin
+                    <span aria-hidden>{adminPanelsOpen ? '▲' : '▼'}</span>
+                  </button>
+                  {adminPanelsOpen ? (
+                    <div className="app-side-menu__sub">
+                      {ADMIN_PANEL_MENU_ITEMS.map((item) => (
+                        <Link key={item.href} href={item.href} className={linkClass}>
+                          {item.label}
+                        </Link>
+                      ))}
+                    </div>
+                  ) : null}
+                </>
+              ) : null}
+              {showStaffLink ? (
                 <Link href={staffLink.href} className={linkClass}>
                   {staffLink.label}
                 </Link>

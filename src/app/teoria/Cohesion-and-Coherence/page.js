@@ -1,11 +1,12 @@
 'use client';
+import { buildCohesionAndCoherenceExercises } from './cohesionAndCoherenceExercises';
 import TheoryLayout from '@/components/theory/TheoryLayout';
 import { TheorySection, Example, Rule, Tip, QuickReference } from '@/components/theory/TheoryContent';
-import { MultipleChoiceExercise, TrueFalseExercise } from '@/components/theory/ExerciseComponents';
+
 
 const CohesionAndCoherencePage = () => {
   const theoryContent = (
-    <div>
+    <>
       <TheorySection title="What are Cohesion and Coherence?" icon="🔗">
         <p>
           <strong>Cohesion</strong> is the grammatical and lexical linking between sentences and paragraphs. 
@@ -131,167 +132,16 @@ const CohesionAndCoherencePage = () => {
           />
         </div>
       </TheorySection>
-    </div>
+    </>
   );
 
-  const exercises = [
-    <MultipleChoiceExercise
-      key="1"
-      question="What is the main difference between cohesion and coherence?"
-      options={[
-        "None—they are synonyms",
-        "Cohesion is grammatical linking; coherence is logical unity",
-        "Cohesion is for long texts only",
-        "Cohesion matters more than coherence"
-      ]}
-      correctAnswer={1}
-      explanation="Cohesion is surface linking; coherence is whether the whole text makes unified sense."
-    />,
-
-    <MultipleChoiceExercise
-      key="2"
-      question="In 'Mary bought a dress. It was beautiful.', what cohesive device is used?"
-      options={[
-        "Explicit connector",
-        "Lexical substitution",
-        "Pronoun reference",
-        "Repetition"
-      ]}
-      correctAnswer={2}
-      explanation="'It' refers to 'dress'—pronoun reference creates cohesion."
-    />,
-
-    <TrueFalseExercise
-      key="3"
-      statements={[
-        {
-          text: "A text can have strong cohesion but weak coherence.",
-          isTrue: true,
-          explanation: "Correct. Sentences may link grammatically while the overall argument stays disjointed."
-        },
-        {
-          text: "Connectors like 'however' and 'therefore' add cohesion.",
-          isTrue: true,
-          explanation: "Correct. Explicit connectors are major cohesive devices."
-        },
-        {
-          text: "Coherence depends only on correct pronouns.",
-          isTrue: false,
-          explanation: "Incorrect. Coherence needs topic unity, logical order, and consistent stance—not only pronouns."
-        }
-      ]}
-    />,
-
-    <MultipleChoiceExercise
-      key="4"
-      question="What cohesion problem appears in: 'John told Peter he was wrong.'?"
-      options={[
-        "Missing connectors",
-        "Ambiguous pronoun reference",
-        "Wrong tense",
-        "Inappropriate vocabulary"
-      ]}
-      correctAnswer={1}
-      explanation="'He' could mean John or Peter, which confuses the reader."
-    />,
-
-    <MultipleChoiceExercise
-      key="5"
-      question="What strategy reduces clumsy repetition?"
-      options={[
-        "Use only pronouns",
-        "Remove all reference words",
-        "Use synonyms and appropriate pro-forms",
-        "Repeat the same word always"
-      ]}
-      correctAnswer={2}
-      explanation="Synonyms, hypernyms, and pro-forms like 'such' and 'one' vary wording while staying cohesive."
-    />,
-
-    <TrueFalseExercise
-      key="6"
-      statements={[
-        {
-          text: "Each paragraph should support the main topic for coherence.",
-          isTrue: true,
-          explanation: "Correct. Thematic unity needs every paragraph to serve the overall aim."
-        },
-        {
-          text: "Switching from first to third person for no reason is fine.",
-          isTrue: false,
-          explanation: "Incorrect. Random viewpoint shifts harm coherence."
-        },
-        {
-          text: "Demonstratives like 'this' and 'that' can create cohesion.",
-          isTrue: true,
-          explanation: "Correct. They point back to ideas mentioned earlier."
-        }
-      ]}
-    />,
-
-    <MultipleChoiceExercise
-      key="7"
-      question="Which best connects these ideas? 'It was raining. We decided to stay home.'"
-      options={[
-        "It was raining. We decided to stay home.",
-        "It was raining, so we decided to stay home.",
-        "It was raining. However, we decided to stay home.",
-        "It was raining. Furthermore, we decided to stay home."
-      ]}
-      correctAnswer={1}
-      explanation="'So' shows cause and effect: rain led to staying home."
-    />,
-
-    <MultipleChoiceExercise
-      key="8"
-      question="Which does NOT directly support coherence?"
-      options={[
-        "Thematic unity",
-        "Logical progression of ideas",
-        "Correct use of articles",
-        "Consistent register"
-      ]}
-      correctAnswer={2}
-      explanation="Articles matter for grammar but do not by themselves fix global coherence."
-    />,
-
-    <TrueFalseExercise
-      key="9"
-      statements={[
-        {
-          text: "Coherent texts must always use chronological order.",
-          isTrue: false,
-          explanation: "Incorrect. Many patterns can produce coherence—not only time order."
-        },
-        {
-          text: "Transition words support both cohesion and coherence.",
-          isTrue: true,
-          explanation: "Correct. They link sentences (cohesion) and show logic (coherence)."
-        }
-      ]}
-    />,
-
-    <MultipleChoiceExercise
-      key="10"
-      question="What is the key to strong cohesion AND coherence?"
-      options={[
-        "Using many pronouns",
-        "Writing very long sentences",
-        "Planning a clear structure and appropriate linking devices",
-        "Repeating the same words often"
-      ]}
-      correctAnswer={2}
-      explanation="Clear planning plus the right connectors guides the reader smoothly."
-    />
-  ];
-
-  return (
+    return (
     <TheoryLayout
       title="Cohesion and Coherence"
       description="Master textual cohesion and coherence. Learn to connect ideas effectively and keep a unified logical thread in complex texts."
       level="B2-C1-C2"
       theoryContent={theoryContent}
-      exercises={exercises}
+      getExercises={buildCohesionAndCoherenceExercises}
       prerequisites={["Advanced writing skills", "Understanding of text structure", "Knowledge of connectors"]}
       estimatedTime="80 min"
     />

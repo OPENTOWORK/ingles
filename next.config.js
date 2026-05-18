@@ -10,6 +10,9 @@ const isStaticExport = process.env.NEXT_STATIC_EXPORT === 'true';
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   ...(isStaticExport ? { output: 'export' } : {}),
+  experimental: {
+    optimizePackageImports: ['lucide-react', 'recharts'],
+  },
   images: {
     unoptimized: true,
   },

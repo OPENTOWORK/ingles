@@ -1,4 +1,5 @@
 'use client';
+import { buildCollocationsPhrasalVerbsExercises } from './collocationsPhrasalVerbsExercises';
 import React from 'react';
 import TheoryLayout from '@/components/theory/TheoryLayout';
 import { 
@@ -9,15 +10,11 @@ import {
   GrammarTable, 
   QuickReference 
 } from '@/components/theory/TheoryContent';
-import { 
-  MultipleChoiceExercise, 
-  FillBlanksExercise, 
-  TrueFalseExercise 
-} from '@/components/theory/ExerciseComponents';
+
 
 const CollocationsPhrasalVerbsPage = () => {
   const theoryContent = (
-    <div>
+    <>
       <TheorySection title="What Are Collocations and Phrasal Verbs?" icon="🔗">
         <p style={{ fontSize: '1.1rem', lineHeight: 1.6, color: '#4a5568', marginBottom: '1rem' }}>
           <strong>Collocations</strong> are natural word combinations that sound right to native speakers. 
@@ -55,17 +52,14 @@ const CollocationsPhrasalVerbsPage = () => {
           <Example 
             spanish="Tomar una decisión (no 'hacer una decisión')"
             english="make a decision (not 'do a decision')"
-            translation="Make a decision"
           />
           <Example 
             spanish="Lluvia fuerte (no 'lluvia fuerte')"
             english="heavy rain (not 'strong rain')"
-            translation="Heavy rain"
           />
           <Example 
             spanish="Trabajar duro"
             english="work hard"
-            translation="Work hard"
           />
         </div>
 
@@ -104,17 +98,14 @@ const CollocationsPhrasalVerbsPage = () => {
           <Example 
             spanish="Me despierto a las 7 AM"
             english="I wake up at 7 AM"
-            translation="I wake up at 7 AM"
           />
           <Example 
             spanish="Enciende la luz / Enciende la luz"
             english="Turn on the light / Turn the light on"
-            translation="Turn on the light"
           />
           <Example 
             spanish="Cuido a mis hijos"
             english="I look after my children"
-            translation="I look after my children"
           />
         </div>
 
@@ -158,17 +149,14 @@ const CollocationsPhrasalVerbsPage = () => {
           <Example 
             spanish="Me levanto a las 7 AM todos los días"
             english="I get up at 7 AM every day"
-            translation="I get up at 7 AM every day"
           />
           <Example 
             spanish="Me llevo bien con mis colegas"
             english="I get along well with my colleagues"
-            translation="I get along well with my colleagues"
           />
           <Example 
             spanish="Te contactaré mañana"
             english="I'll get back to you tomorrow"
-            translation="I'll get back to you tomorrow"
           />
         </div>
 
@@ -216,17 +204,14 @@ const CollocationsPhrasalVerbsPage = () => {
           <Example 
             spanish="Ponte tu abrigo. Enciende la música"
             english="Put on your coat. Put on the music"
-            translation="Put on your coat. Put on the music"
           />
           <Example 
             spanish="No pospongas para mañana lo que puedes hacer hoy"
             english="Don't put off until tomorrow what you can do today"
-            translation="Don't put off until tomorrow what you can do today"
           />
           <Example 
             spanish="No puedo tolerar este ruido más"
             english="I can't put up with this noise anymore"
-            translation="I can't put up with this noise anymore"
           />
         </div>
 
@@ -268,17 +253,14 @@ const CollocationsPhrasalVerbsPage = () => {
           <Example 
             spanish="Lluvia fuerte, tráfico pesado"
             english="heavy rain, heavy traffic"
-            translation="Heavy rain, heavy traffic"
           />
           <Example 
             spanish="Café fuerte, viento fuerte"
             english="strong coffee, strong wind"
-            translation="Strong coffee, strong wind"
           />
           <Example 
             spanish="Decisión rápida, comida rápida"
             english="quick decision, fast food"
-            translation="Quick decision, fast food"
           />
         </div>
 
@@ -368,172 +350,16 @@ const CollocationsPhrasalVerbsPage = () => {
           />
         </div>
       </TheorySection>
-    </div>
+    </>
   );
 
-  const exercises = [
-    <MultipleChoiceExercise
-      key="1"
-      question="Complete: 'Please ___ the lights.'"
-      options={[
-        "turn off",
-        "turn on",
-        "turn up",
-        "turn down"
-      ]}
-      correctAnswer={1}
-      explanation="'Turn on' means to switch something on, such as lights, TV, radio, etc."
-    />,
-
-    <MultipleChoiceExercise
-      key="2"
-      question="Choose the correct collocation: I need to ___ a decision about my future."
-      options={[
-        "do",
-        "make",
-        "take",
-        "give"
-      ]}
-      correctAnswer={1}
-      explanation="The correct collocation is 'make a decision' - we use 'make' for creating or producing something."
-    />,
-
-    <TrueFalseExercise
-      key="3"
-      statements={[
-        {
-          text: "With separable phrasal verbs, the object can always go between the verb and the particle.",
-          isTrue: false,
-          explanation: "False. With separable phrasal verbs, the object can go between the verb and particle OR after the particle, but if the object is a pronoun, it MUST go between the verb and particle."
-        },
-        {
-          text: "Collocations are natural word combinations that sound natural to native speakers.",
-          isTrue: true,
-          explanation: "Correct. Collocations are natural combinations of words that native speakers use instinctively."
-        },
-        {
-          text: "Phrasal verbs always have the same meaning regardless of context.",
-          isTrue: false,
-          explanation: "False. Many phrasal verbs have multiple meanings depending on context, like 'break down' (stop working vs. lose emotional control)."
-        },
-        {
-          text: "It's okay to translate collocations literally from your native language.",
-          isTrue: false,
-          explanation: "False. Collocations should be learned as complete units, not translated literally, as they often don't translate directly."
-        }
-      ]}
-    />,
-
-    <MultipleChoiceExercise
-      key="4"
-      question="What is the correct collocation for 'coffee' when describing its intensity?"
-      options={[
-        "strong coffee",
-        "heavy coffee",
-        "powerful coffee",
-        "big coffee"
-      ]}
-      correctAnswer={0}
-      explanation="The correct collocation is 'strong coffee' when describing the intensity or flavor of coffee."
-    />,
-
-    <MultipleChoiceExercise
-      key="5"
-      question="Which sentence correctly uses a separable phrasal verb?"
-      options={[
-        "Turn on it.",
-        "Turn it on.",
-        "Look after it.",
-        "Get over it."
-      ]}
-      correctAnswer={1}
-      explanation="'Turn it on' is correct because 'turn on' is separable, so the pronoun 'it' goes between the verb and particle."
-    />,
-
-    <TrueFalseExercise
-      key="6"
-      statements={[
-        {
-          text: "'Put off' means to postpone something.",
-          isTrue: true,
-          explanation: "Correct. 'Put off' means to postpone or delay something: 'I put off the meeting'."
-        },
-        {
-          text: "'Look after' and 'look for' have the same meaning.",
-          isTrue: false,
-          explanation: "Incorrect. 'Look after' means to take care of; 'look for' means to search for."
-        },
-        {
-          text: "We say 'take a photo' not 'make a photo'.",
-          isTrue: true,
-          explanation: "Correct. In English we say 'take a photo/picture', not 'make'."
-        }
-      ]}
-    />,
-
-    <MultipleChoiceExercise
-      key="7"
-      question="Complete: 'She ___ her job last month.'"
-      options={[
-        "gave up",
-        "gave in",
-        "gave out",
-        "gave away"
-      ]}
-      correctAnswer={0}
-      explanation="'Give up' means to quit or abandon something: 'She gave up her job'."
-    />,
-
-    <MultipleChoiceExercise
-      key="8"
-      question="Choose the correct collocation: 'Can you ___ me a favor?'"
-      options={[
-        "make",
-        "do",
-        "take",
-        "give"
-      ]}
-      correctAnswer={1}
-      explanation="'Do someone a favor' is the correct collocation for asking for a favor."
-    />,
-
-    <TrueFalseExercise
-      key="9"
-      statements={[
-        {
-          text: "'Break down' can mean both 'to stop working' and 'to become emotional'.",
-          isTrue: true,
-          explanation: "Correct. 'Break down' has multiple meanings: a machine stops working or a person becomes emotional."
-        },
-        {
-          text: "'Run into' means to exercise by running.",
-          isTrue: false,
-          explanation: "Incorrect. 'Run into' means to meet someone by chance or to collide with something."
-        }
-      ]}
-    />,
-
-    <MultipleChoiceExercise
-      key="10"
-      question="Complete: 'I ___ my old friend at the supermarket yesterday.'"
-      options={[
-        "ran into",
-        "ran out of",
-        "ran away",
-        "ran over"
-      ]}
-      correctAnswer={0}
-      explanation="'Run into' means to meet someone by chance: 'I ran into my old friend'."
-    />
-  ];
-
-  return (
+    return (
     <TheoryLayout
       title="Collocations and Phrasal Verbs"
       description="Master collocations and phrasal verbs in English. Learn natural word combinations and verbs with particles to sound more natural and improve your fluency."
       level="B2-C1-C2"
       theoryContent={theoryContent}
-      exercises={exercises}
+      getExercises={buildCollocationsPhrasalVerbsExercises}
       prerequisites={["Intermediate vocabulary", "Understanding of verb patterns"]}
       estimatedTime="90 min"
     />

@@ -1,4 +1,5 @@
 'use client';
+import { build11SentenceStructuresExercises } from './sentenceStructuresExercises';
 import React from 'react';
 import TheoryLayout from '@/components/theory/TheoryLayout';
 import { 
@@ -9,15 +10,11 @@ import {
   GrammarTable, 
   QuickReference 
 } from '@/components/theory/TheoryContent';
-import { 
-  MultipleChoiceExercise, 
-  FillBlanksExercise, 
-  TrueFalseExercise 
-} from '@/components/theory/ExerciseComponents';
+
 
 const SentenceStructuresPage = () => {
   const theoryContent = (
-    <div>
+    <>
       <TheorySection title="What Are Sentence Structures?" icon="🏗️">
         <p style={{ fontSize: '1.1rem', lineHeight: 1.6, color: '#4a5568', marginBottom: '1rem' }}>
           <strong>Sentence structures</strong> are the different types of sentences you can form in English. 
@@ -53,17 +50,14 @@ const SentenceStructuresPage = () => {
           <Example 
             spanish="Los pájaros vuelan"
             english="Birds fly"
-            translation="Birds fly"
           />
           <Example 
             spanish="Ella lee libros"
             english="She reads books"
-            translation="She reads books"
           />
           <Example 
             spanish="Estoy cansado"
             english="I am tired"
-            translation="I am tired"
           />
         </div>
 
@@ -106,17 +100,14 @@ const SentenceStructuresPage = () => {
           <Example 
             spanish="Me gusta el café y el té"
             english="I like coffee and tea"
-            translation="I like coffee and tea"
           />
           <Example 
             spanish="Estoy cansado, así que me voy a la cama"
             english="I'm tired, so I'll go to bed"
-            translation="I'm tired, so I'll go to bed"
           />
           <Example 
             spanish="Me gusta el café, pero no el té"
             english="I like coffee, but I don't like tea"
-            translation="I like coffee, but I don't like tea"
           />
         </div>
 
@@ -156,17 +147,14 @@ const SentenceStructuresPage = () => {
           <Example 
             spanish="Como cuando tengo hambre"
             english="I eat when I'm hungry"
-            translation="I eat when I'm hungry"
           />
           <Example 
             spanish="Estudio porque quiero aprobar"
             english="I study because I want to pass"
-            translation="I study because I want to pass"
           />
           <Example 
             spanish="Iré si no llueve"
             english="I'll go if it doesn't rain"
-            translation="I'll go if it doesn't rain"
           />
         </div>
 
@@ -194,17 +182,14 @@ const SentenceStructuresPage = () => {
           <Example 
             spanish="Estudio duro porque quiero aprobar, pero a veces me siento cansado"
             english="I study hard because I want to pass, but sometimes I feel tired"
-            translation="I study hard because I want to pass, but sometimes I feel tired"
           />
           <Example 
             spanish="Cuando llueve, me quedo en casa y leo libros"
             english="When it rains, I stay home and read books"
-            translation="When it rains, I stay home and read books"
           />
           <Example 
             spanish="Si tengo tiempo, iré al cine, pero si no, me quedaré en casa"
             english="If I have time, I'll go to the cinema, but if not, I'll stay home"
-            translation="If I have time, I'll go to the cinema, but if not, I'll stay home"
           />
         </div>
 
@@ -245,17 +230,14 @@ const SentenceStructuresPage = () => {
           <Example 
             spanish="Estudio duro. Además, practico diariamente"
             english="I study hard. Furthermore, I practice daily"
-            translation="I study hard. Furthermore, I practice daily"
           />
           <Example 
             spanish="Es caro. Sin embargo, vale la pena"
             english="It's expensive. However, it's worth it"
-            translation="It's expensive. However, it's worth it"
           />
           <Example 
             spanish="Debido a la lluvia, nos quedamos en casa"
             english="Due to the rain, we stayed home"
-            translation="Due to the rain, we stayed home"
           />
         </div>
 
@@ -322,172 +304,16 @@ const SentenceStructuresPage = () => {
           />
         </div>
       </TheorySection>
-    </div>
+    </>
   );
 
-  const exercises = [
-    <MultipleChoiceExercise
-      key="1"
-      question="Complete: 'I like coffee _____ I don't like tea.'"
-      options={[
-        "and",
-        "but",
-        "because",
-        "so"
-      ]}
-      correctAnswer={1}
-      explanation="'But' expresses contrast between two opposing ideas: I like coffee but I don't like tea."
-    />,
-
-    <MultipleChoiceExercise
-      key="2"
-      question="Which is the correct form to complete: 'I like coffee, ___ I don't like tea'?"
-      options={[
-        "and",
-        "but",
-        "or",
-        "so"
-      ]}
-      correctAnswer={1}
-      explanation="To show contrast between two ideas we use 'but': 'I like coffee, but I don't like tea'."
-    />,
-
-    <TrueFalseExercise
-      key="3"
-      statements={[
-        {
-          text: "'I like coffee, I like tea' is a correct compound sentence.",
-          isTrue: false,
-          explanation: "Incorrect. You need a connector to join the sentences: 'I like coffee and tea' or 'I like coffee, and I like tea'."
-        },
-        {
-          text: "'Because I'm tired, I'll sleep' is a correct complex sentence.",
-          isTrue: true,
-          explanation: "Correct. It is a complex sentence with a subordinate clause at the beginning."
-        },
-        {
-          text: "'I study hard, so I want to pass' is correct.",
-          isTrue: true,
-          explanation: "Correct. It is a compound sentence with 'so' showing result."
-        },
-        {
-          text: "'If I have time, I will go' needs a comma.",
-          isTrue: true,
-          explanation: "Correct. When the subordinate clause comes first, use a comma after it."
-        }
-      ]}
-    />,
-
-    <MultipleChoiceExercise
-      key="4"
-      question="Which is the correct form to complete: '___ it's raining, I stay home'?"
-      options={[
-        "Because",
-        "So",
-        "But",
-        "And"
-      ]}
-      correctAnswer={0}
-      explanation="To show cause we use 'Because': 'Because it's raining, I stay home'."
-    />,
-
-    <MultipleChoiceExercise
-      key="5"
-      question="Which is the correct form to complete: 'I study hard, ___ I want to pass'?"
-      options={[
-        "because",
-        "so",
-        "but",
-        "and"
-      ]}
-      correctAnswer={0}
-      explanation="To show reason we use 'because': 'I study hard, because I want to pass'."
-    />,
-
-    <TrueFalseExercise
-      key="6"
-      statements={[
-        {
-          text: "'Although it's raining, I will go out' is a complex sentence.",
-          isTrue: true,
-          explanation: "Correct. It is a complex sentence with a concessive subordinate clause."
-        },
-        {
-          text: "'I like pizza and pasta' is a compound sentence.",
-          isTrue: false,
-          explanation: "Incorrect. It is a simple sentence with a compound subject. A compound sentence has two independent clauses."
-        },
-        {
-          text: "A comma is needed after 'If I have time' in 'If I have time I will call you'.",
-          isTrue: true,
-          explanation: "Correct. When the subordinate clause comes first, it needs a comma: 'If I have time, I will call you'."
-        }
-      ]}
-    />,
-
-    <MultipleChoiceExercise
-      key="7"
-      question="Complete: '___ I was tired, I finished my homework.'"
-      options={[
-        "Because",
-        "Although",
-        "So",
-        "And"
-      ]}
-      correctAnswer={1}
-      explanation="'Although' shows contrast: 'Although I was tired, I finished my homework'."
-    />,
-
-    <MultipleChoiceExercise
-      key="8"
-      question="What is the correct structure for a compound sentence?"
-      options={[
-        "Independent clause + dependent clause",
-        "Independent clause + conjunction + independent clause",
-        "Dependent clause + independent clause",
-        "Subject + verb + object"
-      ]}
-      correctAnswer={1}
-      explanation="A compound sentence has: independent clause + conjunction + independent clause."
-    />,
-
-    <TrueFalseExercise
-      key="9"
-      statements={[
-        {
-          text: "'When I arrive, I will call you' has the dependent clause first.",
-          isTrue: true,
-          explanation: "Correct. 'When I arrive' is the dependent clause that comes first."
-        },
-        {
-          text: "'I went to the store, I bought milk' is correctly punctuated.",
-          isTrue: false,
-          explanation: "Incorrect. It needs a conjunction: 'I went to the store, and I bought milk' or a semicolon."
-        }
-      ]}
-    />,
-
-    <MultipleChoiceExercise
-      key="10"
-      question="Complete: 'I will go to the party ___ you come with me.'"
-      options={[
-        "because",
-        "if",
-        "so",
-        "but"
-      ]}
-      correctAnswer={1}
-      explanation="'If' introduces a condition: 'I will go to the party if you come with me'."
-    />
-  ];
-
-  return (
+    return (
     <TheoryLayout
       title="Sentence Structures"
       description="Master English sentence structures: simple, compound, complex, and compound-complex. Learn to use connectors to build more sophisticated sentences."
       level="A2-B1-B2-C1-C2"
       theoryContent={theoryContent}
-      exercises={exercises}
+      getExercises={build11SentenceStructuresExercises}
       prerequisites={["Basic grammar", "Understanding of subjects and verbs", "Basic vocabulary"]}
       estimatedTime="75 min"
     />

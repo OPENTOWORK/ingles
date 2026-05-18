@@ -21,7 +21,7 @@ export function TheorySectionProvider({ children }) {
 }
 
 // Theory Section Component (collapsible toggle)
-export const TheorySection = ({ title, children, icon = '📚', defaultOpen = true }) => {
+export const TheorySection = ({ title, children, icon = '📚', defaultOpen = false }) => {
   const [open, setOpen] = useState(defaultOpen);
   const panelId = useId();
 
@@ -35,13 +35,17 @@ export const TheorySection = ({ title, children, icon = '📚', defaultOpen = tr
 
   return (
     <div
+      className={`theory-section${open ? ' theory-section--open' : ''}`}
       style={{
-        marginBottom: '2rem',
-        border: '1px solid #e2e8f0',
-        borderRadius: '16px',
+        marginBottom: open ? '1rem' : '0.65rem',
+        border: '1px solid #c7d2fe',
+        borderRadius: '14px',
         overflow: 'hidden',
         background: 'white',
-        boxShadow: '0 4px 12px rgba(0, 0, 0, 0.05)',
+        boxShadow: open
+          ? '0 6px 20px rgba(102, 126, 234, 0.15)'
+          : '0 2px 8px rgba(102, 126, 234, 0.08)',
+        transition: 'margin-bottom 0.2s ease, box-shadow 0.2s ease',
       }}
     >
       <div
@@ -53,9 +57,9 @@ export const TheorySection = ({ title, children, icon = '📚', defaultOpen = tr
         aria-expanded={open}
         aria-controls={panelId}
         style={{
-          background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+          background: 'linear-gradient(135deg, #667eea 0%, #5b6fd6 45%, #764ba2 100%)',
           color: '#fff',
-          padding: '1rem 1.5rem',
+          padding: '1rem 1.25rem',
           display: 'flex',
           alignItems: 'center',
           gap: '0.75rem',
@@ -63,25 +67,37 @@ export const TheorySection = ({ title, children, icon = '📚', defaultOpen = tr
           userSelect: 'none',
         }}
       >
-        <span className="theory-section__header-icon" aria-hidden>
+        <span className="theory-section__header-icon" aria-hidden style={{ fontSize: '1.25rem' }}>
           {icon}
         </span>
         <h3
           style={{
             margin: 0,
             padding: 0,
-            fontSize: '1.3rem',
+            fontSize: '1.05rem',
             fontWeight: 600,
             lineHeight: 1.25,
             color: '#fff',
             flex: 1,
+            textAlign: 'left',
           }}
         >
           {title}
         </h3>
+        <span
+          aria-hidden
+          style={{
+            fontSize: '0.85rem',
+            opacity: 0.9,
+            transform: open ? 'rotate(180deg)' : 'rotate(0deg)',
+            transition: 'transform 0.25s ease',
+          }}
+        >
+          ▼
+        </span>
       </div>
       {open ? (
-        <div id={panelId} style={{ padding: '1.5rem' }}>
+        <div id={panelId} style={{ padding: '1.5rem', borderTop: '1px solid #e2e8f0' }}>
           {children}
         </div>
       ) : null}
@@ -90,34 +106,79 @@ export const TheorySection = ({ title, children, icon = '📚', defaultOpen = tr
 };
 
 // Example Component
-export const Example = ({ spanish, english, translation, note }) => {
+export const Example = ({
+  spanish,
+  english,
+  note,
+  useTag,
+  why,
+  whyLabel = 'Why?',
+  title,
+  content,
+  explanation,
+}) => {
+  const displayTag = useTag || title;
+  const displayEnglish = english || content;
+  const displayWhy = why || explanation;
+
   return (
     <div style={{
       background: '#f8fafc',
       border: '1px solid #e2e8f0',
       borderRadius: '12px',
       padding: '1rem',
-      marginBottom: '1rem'
-    }}>
+      marginBottom: '1rem',
+    }}
+    >
+      {displayTag ? (
+        <span
+          style={{
+            display: 'inline-block',
+            marginBottom: '0.75rem',
+            padding: '0.2rem 0.65rem',
+            borderRadius: '999px',
+            background: '#ecfdf5',
+            border: '1px solid #a7f3d0',
+            color: '#047857',
+            fontSize: '0.75rem',
+            fontWeight: 700,
+            letterSpacing: '0.03em',
+            textTransform: 'uppercase',
+          }}
+        >
+          {displayTag}
+        </span>
+      ) : null}
       <div style={{ display: 'grid', gap: '0.5rem' }}>
+        {displayEnglish && (
+          <div>
+            <strong style={{ color: '#38a169' }}>🇬🇧 English:</strong>
+            <p style={{ margin: '0.25rem 0 0 0', color: '#4a5568' }}>{displayEnglish}</p>
+          </div>
+        )}
         {spanish && (
           <div>
             <strong style={{ color: '#667eea' }}>🇪🇸 Spanish:</strong>
             <p style={{ margin: '0.25rem 0 0 0', color: '#4a5568' }}>{spanish}</p>
           </div>
         )}
-        {english && (
-          <div>
-            <strong style={{ color: '#38a169' }}>🇬🇧 English:</strong>
-            <p style={{ margin: '0.25rem 0 0 0', color: '#4a5568' }}>{english}</p>
-          </div>
-        )}
-        {translation && (
-          <div>
-            <strong style={{ color: '#e53e3e' }}>📝 Translation:</strong>
-            <p style={{ margin: '0.25rem 0 0 0', color: '#4a5568' }}>{translation}</p>
-          </div>
-        )}
+        {displayWhy ? (
+          <p
+            style={{
+              margin: '0.35rem 0 0 0',
+              padding: '0.75rem 0.85rem',
+              borderRadius: '8px',
+              background: '#f0f9ff',
+              border: '1px solid #bae6fd',
+              color: '#334155',
+              fontSize: '0.9rem',
+              lineHeight: 1.55,
+            }}
+          >
+            <strong style={{ color: '#0369a1' }}>{whyLabel} </strong>
+            {displayWhy}
+          </p>
+        ) : null}
         {note && (
           <div style={{
             background: '#fff5f5',
@@ -188,7 +249,7 @@ export const Tip = ({ children, type = "info" }) => {
     info: { bg: '#ebf8ff', border: '#bee3f8', text: '#2b6cb0' },
     warning: { bg: '#fffbeb', border: '#fed7aa', text: '#d97706' },
     success: { bg: '#f0fff4', border: '#9ae6b4', text: '#2f855a' },
-    error: { bg: '#fed7d7', border: '#feb2b2', text: '#e53e3e' }
+    error: { bg: '#fefce8', border: '#fde68a', text: '#92400e' }
   };
 
   const icons = {
@@ -331,60 +392,151 @@ export const ProgressIndicator = ({ current, total, label }) => {
 };
 
 // Quick Reference Component
-export const QuickReference = ({ items }) => {
+const QUICK_REFERENCE_THEMES = {
+  amber: {
+    panelBg: '#fffbeb',
+    panelBorder: '#fde68a',
+    titleColor: '#b45309',
+    cardBorder: '#fde68a',
+    badgeBg: '#eab308',
+    badgeColor: '#422006',
+  },
+  green: {
+    panelBg: '#ecfdf5',
+    panelBorder: '#a7f3d0',
+    titleColor: '#047857',
+    cardBorder: '#bbf7d0',
+    badgeBg: '#34d399',
+    badgeColor: '#064e3b',
+  },
+};
+
+function normalizeQuickReferenceItem(item) {
+  if (typeof item === 'string') {
+    const colon = item.indexOf(':');
+    if (colon > 0 && colon < 100) {
+      return {
+        title: item.slice(0, colon).trim(),
+        description: item.slice(colon + 1).trim(),
+      };
+    }
+    return { title: item.trim(), description: '' };
+  }
+  return item;
+}
+
+export const QuickReference = ({ items, variant = 'green' }) => {
+  const theme = QUICK_REFERENCE_THEMES[variant] || QUICK_REFERENCE_THEMES.green;
+  const normalizedItems = items.map(normalizeQuickReferenceItem);
+
   return (
-    <div style={{
-      background: '#fffbeb',
-      border: '2px solid #fde68a',
-      borderRadius: '12px',
-      padding: '1.25rem',
-      marginBottom: '1.5rem'
-    }}>
-      <h4 style={{
-        margin: '0 0 1rem 0',
-        color: '#b45309',
-        fontSize: '1.1rem',
-        fontWeight: '600',
-        display: 'flex',
-        alignItems: 'center',
-        gap: '0.5rem'
-      }}>
+    <div
+      style={{
+        background: theme.panelBg,
+        border: `2px solid ${theme.panelBorder}`,
+        borderRadius: '12px',
+        padding: '1.25rem',
+        marginBottom: '1.5rem',
+      }}
+    >
+      <h4
+        style={{
+          margin: '0 0 1rem 0',
+          color: theme.titleColor,
+          fontSize: '1.1rem',
+          fontWeight: '600',
+          display: 'flex',
+          alignItems: 'center',
+          gap: '0.5rem',
+        }}
+      >
         📋 Quick Reference
       </h4>
-      <div style={{
-        display: 'grid',
-        gap: '0.5rem'
-      }}>
-        {items.map((item, index) => (
-          <div key={index} style={{
-            display: 'flex',
-            alignItems: 'center',
-            gap: '0.75rem',
-            padding: '0.5rem',
-            background: 'white',
-            borderRadius: '8px',
-            border: '1px solid #fde68a'
-          }}>
-            <span style={{
-              background: '#eab308',
-              color: '#422006',
-              borderRadius: '50%',
-              width: '24px',
-              height: '24px',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              fontSize: '0.8rem',
-              fontWeight: '600',
-              flexShrink: 0
-            }}>
-              {index + 1}
-            </span>
-            <span style={{ color: '#4a5568', lineHeight: 1.4 }}>
-              {item}
-            </span>
-          </div>
-        ))}
+      <div style={{ display: 'grid', gap: '0.65rem' }}>
+        {normalizedItems.map((item, index) => {
+          const isRich = item && typeof item === 'object' && 'title' in item;
+
+          return (
+            <div
+              key={index}
+              style={{
+                display: 'flex',
+                alignItems: 'flex-start',
+                gap: '0.75rem',
+                padding: '0.85rem 1rem',
+                background: 'white',
+                borderRadius: '10px',
+                border: `1px solid ${theme.cardBorder}`,
+              }}
+            >
+              <span
+                style={{
+                  background: theme.badgeBg,
+                  color: theme.badgeColor,
+                  borderRadius: '50%',
+                  width: '26px',
+                  height: '26px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  fontSize: '0.8rem',
+                  fontWeight: '700',
+                  flexShrink: 0,
+                  marginTop: '0.1rem',
+                }}
+              >
+                {index + 1}
+              </span>
+              <div style={{ flex: 1, minWidth: 0 }}>
+                {isRich ? (
+                  <>
+                    <div
+                      style={{
+                        fontWeight: 700,
+                        color: '#1e293b',
+                        fontSize: '0.95rem',
+                        marginBottom: '0.35rem',
+                        lineHeight: 1.35,
+                      }}
+                    >
+                      {item.title}
+                    </div>
+                    {item.description ? (
+                      <p
+                        style={{
+                          margin: '0 0 0.4rem 0',
+                          color: '#475569',
+                          fontSize: '0.9rem',
+                          lineHeight: 1.5,
+                        }}
+                      >
+                        {item.description}
+                      </p>
+                    ) : null}
+                    {item.example ? (
+                      <p
+                        style={{
+                          margin: 0,
+                          color: '#64748b',
+                          fontSize: '0.875rem',
+                          lineHeight: 1.45,
+                          fontStyle: 'italic',
+                        }}
+                      >
+                        <span style={{ fontStyle: 'normal', marginRight: '0.35rem' }}>•</span>
+                        {item.example}
+                      </p>
+                    ) : null}
+                  </>
+                ) : (
+                  <span style={{ color: '#4a5568', lineHeight: 1.45, fontSize: '0.95rem' }}>
+                    {item}
+                  </span>
+                )}
+              </div>
+            </div>
+          );
+        })}
       </div>
     </div>
   );

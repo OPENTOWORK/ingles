@@ -1,4 +1,5 @@
 'use client';
+import { buildConnectedSpeechExercises } from './connectedSpeechExercises';
 import React from 'react';
 import TheoryLayout from '@/components/theory/TheoryLayout';
 import { 
@@ -9,15 +10,11 @@ import {
   GrammarTable, 
   QuickReference 
 } from '@/components/theory/TheoryContent';
-import { 
-  MultipleChoiceExercise, 
-  FillBlanksExercise, 
-  TrueFalseExercise 
-} from '@/components/theory/ExerciseComponents';
+
 
 const ConnectedSpeechPage = () => {
   const theoryContent = (
-    <div>
+    <>
       <TheorySection title="What Is Connected Speech?" icon="🔗">
         <p style={{ fontSize: '1.1rem', lineHeight: 1.6, color: '#4a5568', marginBottom: '1rem' }}>
           <strong>Connected speech</strong> describes how neighbouring sounds tighten, reshape, or link when fluent speakers talk smoothly. Knowing these patterns anchors understanding of everyday English listening.
@@ -361,172 +358,16 @@ const ConnectedSpeechPage = () => {
           />
         </div>
       </TheorySection>
-    </div>
+    </>
   );
 
-  const exercises = [
-    <MultipleChoiceExercise
-      key="1"
-      question="In connected speech, what happens to neighbouring sounds chiefly?"
-      options={[
-        "They remain fully separated every time",
-        "They knit together for rhythmic flow",
-        "They disappear completely without trace",
-        "They always lengthen dramatically"
-      ]}
-      correctAnswer={1}
-      explanation="Fluent delivery smears syllable margins so consonants vowels reorganise perceptually—not isolated beads."
-    />,
-
-    <MultipleChoiceExercise
-      key="2"
-      question="What best defines linking?"
-      options={[
-        "Removing every unstressed vowel",
-        "Joining syllable-final and syllable-initial gestures",
-        "Inserting vowels arbitrarily",
-        "Slowing consonants artificially"
-      ]}
-      correctAnswer={1}
-      explanation="Linking co-articulates word edges so consonants glide into vowels or twin consonants merge."
-    />,
-
-    <TrueFalseExercise
-      key="3"
-      statements={[
-        {
-          text: "Connected speech phenomena are normal rather than careless errors.",
-          isTrue: true,
-          explanation: "Correct. Native fluency universally compresses and reshapes neighbouring phones."
-        },
-        {
-          text: "Weak forms overwhelmingly target function vocabulary.",
-          isTrue: true,
-          explanation: "Correct. Grammatical satellites reduce while content lemmas stay relatively full."
-        },
-        {
-          text: "You must decode each dictionary word cleanly before catching gist.",
-          isTrue: false,
-          explanation: "Incorrect. Meaning windows often stabilize before lexical edges crystallise acoustically."
-        },
-        {
-          text: "Steady authentic listening gradually eases blurred-boundary comprehension.",
-          isTrue: true,
-          explanation: "Correct. Statistical learning retunes perceptual expectations over months."
-        }
-      ]}
-    />,
-
-    <MultipleChoiceExercise
-      key="4"
-      question="Which blend best matches habitual treatment of frequent 'go out' sequences?"
-      options={[
-        "go out untouched",
-        "gow-out style glide bridging vowels",
-        "go hyphen ut fully paused",
-        "gout lexicalised anew"
-      ]}
-      correctAnswer={1}
-      explanation="Back vowel /əʊ/ into /aʊ/ frequently recruits intrusive /w/ smoothing the hiatus."
-    />,
-
-    <MultipleChoiceExercise
-      key="5"
-      question="Most effective overarching tactic when phones blur aggressively?"
-      options={[
-        "Listen only hyper-enunciated materials forever",
-        "Exploit pragmatic prediction plus chunk-level meaning",
-        "Avoid rapid native speech entirely",
-        "Memorise every assimilation tableau exhaustively beforehand"
-      ]}
-      correctAnswer={1}
-      explanation="Top-down scaffolding plus probabilistic lexical guessing sustains realtime comprehension."
-    />,
-
-    <TrueFalseExercise
-      key="6"
-      statements={[
-        {
-          text: "Weak pronunciation variants cluster around auxiliary preposition article words.",
-          isTrue: true,
-          explanation: "Correct. These carry grammar glue not novel referential content hence shrink rhythmically."
-        },
-        {
-          text: "Assimilation adjusts consonants toward neighbouring place manner voicing cues.",
-          isTrue: true,
-          explanation: "Correct. Gestures economise muscular effort aligning adjacent targets."
-        },
-        {
-          text: "Connected speech confines itself exclusively to slang registers.",
-          isTrue: false,
-          explanation: "Incorrect. Even careful formal speech exhibits predictable linking assimilation reductions."
-        }
-      ]}
-    />,
-
-    <MultipleChoiceExercise
-      key="7"
-      question="What approximate surface often emerges from rapid 'good day'?"
-      options={[
-        "No temporal compression",
-        "Consonant elision thinning final /d/",
-        "Extra vowels inserted mechanically",
-        "Uniform syllable stretching"
-      ]}
-      correctAnswer={1}
-      explanation="Many speakers drop or weaken terminal /d/ before another consonant yielding goo-day-like contours."
-    />,
-
-    <MultipleChoiceExercise
-      key="8"
-      question="Which line illustrates intrusive /r/-style bridging for many non-rhotic speakers?"
-      options={[
-        "I am contracting to I'm",
-        "Law and order → law-r-and rhythm",
-        "Good boy assimilating consonants differently",
-        "Ten boys yielding bilabial nasal shift"
-      ]}
-      correctAnswer={1}
-      explanation="'Law(r)and' style smoothing links schwa-derived finals with vowel-initial followers."
-    />,
-
-    <TrueFalseExercise
-      key="9"
-      statements={[
-        {
-          text: "Typical casual elisions quicken rhythmic delivery packing ideas tighter.",
-          isTrue: true,
-          explanation: "Correct. Dropping weaker segments accelerates conversational tempo conserving energy."
-        },
-        {
-          text: "You must catalogue every microscopic rule change before comprehension begins.",
-          isTrue: false,
-          explanation: "Incorrect. Probabilistic chunk recognition plus gist tracking usually precedes fine-grained analysis."
-        }
-      ]}
-    />,
-
-    <MultipleChoiceExercise
-      key="10"
-      question="Single best long-game improvement for decoding connected speech reliably?"
-      options={[
-        "Grammar-only workbook drills",
-        "Regular authentic listening diversified by genre accent pace",
-        "Avoid interacting with native spontaneous speech entirely",
-        "Read silently without audio pairing"
-      ]}
-      correctAnswer={1}
-      explanation="Statistical perceptual tuning requires varied naturalistic exposure cycles beyond abstract rule lists."
-    />
-  ];
-
-  return (
+    return (
     <TheoryLayout
       title="Pronunciation and Connected Speech"
       description="Decode natural English rhythm: linking, elision, assimilation, intrusive consonants, and weak forms—with listening strategies you can practise immediately."
       level="A2-B1-B2-C1-C2"
       theoryContent={theoryContent}
-      exercises={exercises}
+      getExercises={buildConnectedSpeechExercises}
       prerequisites={["Basic pronunciation", "Understanding of English sounds"]}
       estimatedTime="75 min"
     />

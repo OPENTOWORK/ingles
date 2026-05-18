@@ -1,4 +1,5 @@
 'use client';
+import { buildPronunciationExercises } from './pronunciationExercises';
 import React from 'react';
 import TheoryLayout from '@/components/theory/TheoryLayout';
 import { 
@@ -9,15 +10,11 @@ import {
   GrammarTable, 
   QuickReference 
 } from '@/components/theory/TheoryContent';
-import { 
-  MultipleChoiceExercise, 
-  FillBlanksExercise, 
-  TrueFalseExercise 
-} from '@/components/theory/ExerciseComponents';
+
 
 const PronunciationPage = () => {
   const theoryContent = (
-    <div>
+    <>
       <TheorySection title="What Is Pronunciation?" icon="🗣️">
         <p style={{ fontSize: '1.1rem', lineHeight: 1.6, color: '#4a5568', marginBottom: '1rem' }}>
           <strong>Pronunciation</strong> is the correct way to produce English sounds. 
@@ -293,172 +290,16 @@ const PronunciationPage = () => {
           />
         </div>
       </TheorySection>
-    </div>
+    </>
   );
 
-  const exercises = [
-    <MultipleChoiceExercise
-      key="1"
-      question="To pronounce /θ/ as in 'think', what should I do?"
-      options={[
-        "Put your lips together",
-        "Put your tongue between your teeth",
-        "Close your mouth completely",
-        "Open your mouth wide"
-      ]}
-      correctAnswer={1}
-      explanation="For the /θ/ sound, your tongue goes between your upper and lower teeth."
-    />,
-
-    <MultipleChoiceExercise
-      key="2"
-      question="What is the correct word stress in 'computer'?"
-      options={[
-        "comPUter",
-        "COMputer",
-        "compuTER",
-        "com-put-er"
-      ]}
-      correctAnswer={1}
-      explanation="'Computer' is a three-syllable noun with stress on the second syllable: COM-put-er."
-    />,
-
-    <TrueFalseExercise
-      key="3"
-      statements={[
-        {
-          text: "Word stress is less important than individual sounds.",
-          isTrue: false,
-          explanation: "Incorrect. Stress is very important and can change word meaning."
-        },
-        {
-          text: "In sentences, content words (nouns, verbs) are stressed more.",
-          isTrue: true,
-          explanation: "Correct. Content words (nouns, verbs, adjectives, adverbs) are stressed more than function words."
-        },
-        {
-          text: "Rising intonation is used in yes/no questions.",
-          isTrue: true,
-          explanation: "Correct. Yes/no questions usually end with rising intonation."
-        },
-        {
-          text: "In connected speech, every word is pronounced clearly and separately.",
-          isTrue: false,
-          explanation: "Incorrect. In connected speech, sounds link and change to create a natural flow."
-        }
-      ]}
-    />,
-
-    <MultipleChoiceExercise
-      key="4"
-      question="What is the difference between /θ/ and /ð/?"
-      options={[
-        "There is no difference",
-        "/θ/ is voiced and /ð/ is voiceless",
-        "/θ/ is voiceless and /ð/ is voiced",
-        "They are the same sound"
-      ]}
-      correctAnswer={2}
-      explanation="/θ/ (as in 'think') is voiceless (no vibration), while /ð/ (as in 'this') is voiced (with vibration)."
-    />,
-
-    <MultipleChoiceExercise
-      key="5"
-      question="What type of intonation is generally used in statements?"
-      options={[
-        "Rising",
-        "Falling",
-        "Flat",
-        "Rise-fall"
-      ]}
-      correctAnswer={1}
-      explanation="Statements usually end with falling intonation, showing that the information is complete."
-    />,
-
-    <TrueFalseExercise
-      key="6"
-      statements={[
-        {
-          text: "The /r/ sound in English is the same as the Spanish 'rr'.",
-          isTrue: false,
-          explanation: "Incorrect. The /r/ sound in English is softer and is produced with the tongue curled back."
-        },
-        {
-          text: "Word stress can change the meaning of a word in English.",
-          isTrue: true,
-          explanation: "Correct. For example: 'REcord' (noun) vs 'reCORD' (verb)."
-        },
-        {
-          text: "Silent letters in English words should always be pronounced.",
-          isTrue: false,
-          explanation: "Incorrect. Silent letters are not pronounced: 'knife' /naɪf/, 'lamb' /læm/."
-        }
-      ]}
-    />,
-
-    <MultipleChoiceExercise
-      key="7"
-      question="How is the '-ed' in 'walked' pronounced?"
-      options={[
-        "/ed/",
-        "/d/",
-        "/t/",
-        "/ɪd/"
-      ]}
-      correctAnswer={2}
-      explanation="After voiceless consonants like /k/, the -ed ending is pronounced /t/: walked /wɔːkt/."
-    />,
-
-    <MultipleChoiceExercise
-      key="8"
-      question="What is the difference between /b/ and /v/ in English?"
-      options={[
-        "There is no difference",
-        "/b/ uses both lips, /v/ uses teeth and lower lip",
-        "/v/ is stronger",
-        "/b/ is longer"
-      ]}
-      correctAnswer={1}
-      explanation="/b/ is made with both lips together, /v/ is made with upper teeth on the lower lip."
-    />,
-
-    <TrueFalseExercise
-      key="9"
-      statements={[
-        {
-          text: "Intonation is more important than individual sounds for communication.",
-          isTrue: true,
-          explanation: "Correct. Intonation helps convey emotions, attitudes and meaning, which is crucial for effective communication."
-        },
-        {
-          text: "All English vowels are pronounced the same length.",
-          isTrue: false,
-          explanation: "Incorrect. English vowels have different lengths: /i:/ is long, /ɪ/ is short."
-        }
-      ]}
-    />,
-
-    <MultipleChoiceExercise
-      key="10"
-      question="What is the most common stress pattern in two-syllable words?"
-      options={[
-        "Always on the first syllable",
-        "Nouns: first syllable, Verbs: second syllable",
-        "Always on the second syllable",
-        "There is no pattern"
-      ]}
-      correctAnswer={1}
-      explanation="In two-syllable words, nouns tend to be stressed on the first syllable ('TAble') and verbs on the second ('reLAX')."
-    />
-  ];
-
-  return (
+    return (
     <TheoryLayout
       title="Pronunciation"
       description="Master English pronunciation: phonemes, stress, intonation, and connected speech. Essential for communicating effectively in English."
       level="A2-B1-B2-C1-C2"
       theoryContent={theoryContent}
-      exercises={exercises}
+      getExercises={buildPronunciationExercises}
       prerequisites={["Basic English sounds", "Understanding of IPA symbols"]}
       estimatedTime="80 min"
     />

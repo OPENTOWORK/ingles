@@ -1,4 +1,5 @@
 'use client';
+import { buildEnglishVarietiesExercises } from './englishVarietiesExercises';
 import React from 'react';
 import TheoryLayout from '@/components/theory/TheoryLayout';
 import { 
@@ -9,15 +10,11 @@ import {
   GrammarTable, 
   QuickReference 
 } from '@/components/theory/TheoryContent';
-import { 
-  MultipleChoiceExercise, 
-  FillBlanksExercise, 
-  TrueFalseExercise 
-} from '@/components/theory/ExerciseComponents';
+
 
 const EnglishVarietiesPage = () => {
   const theoryContent = (
-    <div>
+    <>
       <TheorySection title="What Are English Varieties?" icon="🌍">
         <p style={{ fontSize: '1.1rem', lineHeight: 1.6, color: '#4a5568', marginBottom: '1rem' }}>
           <strong>English varieties</strong> are the different ways English is spoken 
@@ -315,172 +312,16 @@ const EnglishVarietiesPage = () => {
           />
         </div>
       </TheorySection>
-    </div>
+    </>
   );
 
-  const exercises = [
-    <MultipleChoiceExercise
-      key="1"
-      question="In British English, what does 'lift' mean?"
-      options={[
-        "Truck",
-        "Elevator",
-        "Car",
-        "Bus"
-      ]}
-      correctAnswer={1}
-      explanation="'Lift' parallels American 'elevator'—vertical transport inside buildings."
-    />,
-
-    <MultipleChoiceExercise
-      key="2"
-      question="Which contrast is MOST iconic between mainstream British and General American pronunciation?"
-      options={[
-        "Treatment of unstressed vowel schwa",
-        "Realisation or suppression of syllable-final /r/",
-        "Aspiration strength of voiceless stops",
-        "Whether /h/ is dropped"
-      ]}
-      correctAnswer={1}
-      explanation="Non-rhotic vs rotic environments form the quintessential classroom contrast."
-    />,
-
-    <TrueFalseExercise
-      key="3"
-      statements={[
-        {
-          text: "American English intrinsically outranks British English.",
-          isTrue: false,
-          explanation: "Incorrect. Established varieties coexist with equal legitimacy; register and audience—not geography—matter."
-        },
-        {
-          text: "Sticking deliberately to one variety across a text improves coherence.",
-          isTrue: true,
-          explanation: "Correct. Predictable orthography/vocabulary lowers cognitive strain for readers."
-        },
-        {
-          text: "Differences only operate at the phoneme level.",
-          isTrue: false,
-          explanation: "Incorrect. Spelling, lexis, and light grammar distinctions all matter communally."
-        },
-        {
-          text: "Rotating dialect exposure sharpens listening stamina.",
-          isTrue: true,
-          explanation: "Correct. Diverse auditory diet familiarises vowel shifts and local coinages alike."
-        }
-      ]}
-    />,
-
-    <MultipleChoiceExercise
-      key="4"
-      question="Which American item matches British 'biscuit' when meaning a sweet baked snack?"
-      options={[
-        "cookie",
-        "cracker",
-        "bread roll",
-        "layer cake"
-      ]}
-      correctAnswer={0}
-      explanation="American speakers usually say ‘cookie’ for the sweet biscuit sense of UK English."
-    />,
-
-    <MultipleChoiceExercise
-      key="5"
-      question="Which tactic most reliably widens receptive accuracy across dialects?"
-      options={[
-        "Avoid non-native-accent media entirely",
-        "Schedule recurring listening from multiple countries",
-        "Restrict training to exactly one broadcaster",
-        "Memorise every lexical replacement table once"
-      ]}
-      correctAnswer={1}
-      explanation="Distributed exposure trains flexible decoding faster than monoculture cramming."
-    />,
-
-    <TrueFalseExercise
-      key="6"
-      statements={[
-        {
-          text: "Australian English has unique vocabulary items and idioms.",
-          isTrue: true,
-          explanation: "Correct—think arvo, barbie, mateship culture, etc."
-        },
-        {
-          text: "All major Englishes share identical spelling rules.",
-          isTrue: false,
-          explanation: "Incorrect—witness colour/color, traveller/traveler, etc."
-        },
-        {
-          text: "Global citizens benefit from receptive flexibility across dialects.",
-          isTrue: true,
-          explanation: "Correct—you reduce miscommunication friction across borders."
-        }
-      ]}
-    />,
-
-    <MultipleChoiceExercise
-      key="7"
-      question="In American English, what is the compartment called that British speakers label the car 'boot'?"
-      options={[
-        "Hood",
-        "Trunk",
-        "Bonnet",
-        "Fender"
-      ]}
-      correctAnswer={1}
-      explanation="'Trunk' = AmE cargo hatch; bonnet vs hood distinguishes forward panels."
-    />,
-
-    <MultipleChoiceExercise
-      key="8"
-      question="Which statement best captures Canadian English?"
-      options={[
-        "Pixel-identical clone of General American",
-        "Selective fusion of British and American strands",
-        "Primarily borrowing from metropolitan French phonology wholesale",
-        "Lacks distinguishing traits"
-      ]}
-      correctAnswer={1}
-      explanation="CAN English layers British spelling instincts with broadly North American consonants plus local particles."
-    />,
-
-    <TrueFalseExercise
-      key="9"
-      statements={[
-        {
-          text: "Indian English qualifies as an established institutionalised variety.",
-          isTrue: true,
-          explanation: "Correct—with robust phonological, lexical, and grammatical conventions."
-        },
-        {
-          text: "You should avoid encountering unfamiliar English accents deliberately.",
-          isTrue: false,
-          explanation: "Incorrect—strategic novelty accelerates perceptual widening."
-        }
-      ]}
-    />,
-
-    <MultipleChoiceExercise
-      key="10"
-      question="Choose the best gloss: In many South African Englishes, informal 'now now' often means ____."
-      options={[
-        "Exactly this instant",
-        "Quite soon—but not instantaneous",
-        "Never",
-        "Randomly intermittent"
-      ]}
-      correctAnswer={1}
-      explanation="'Now now' typically signals imminent-but-not-clock-precise arrival—distinct from blunt 'now'."
-    />
-  ];
-
-  return (
+    return (
     <TheoryLayout
       title="English Varieties"
       description="Understand Englishes around the globe—British, American, and beyond—with pronunciation, lexis, grammar touchpoints, and listening strategies tailored to multilingual learners."
       level="B2-C1-C2"
       theoryContent={theoryContent}
-      exercises={exercises}
+      getExercises={buildEnglishVarietiesExercises}
       prerequisites={["Intermediate listening skills", "Basic understanding of English varieties"]}
       estimatedTime="70 min"
     />

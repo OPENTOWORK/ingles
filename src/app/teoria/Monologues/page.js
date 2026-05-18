@@ -1,4 +1,5 @@
 'use client';
+import { buildMonologuesExercises } from './monologuesExercises';
 import React from 'react';
 import TheoryLayout from '@/components/theory/TheoryLayout';
 import { 
@@ -9,15 +10,11 @@ import {
   GrammarTable, 
   QuickReference 
 } from '@/components/theory/TheoryContent';
-import { 
-  MultipleChoiceExercise, 
-  FillBlanksExercise, 
-  TrueFalseExercise 
-} from '@/components/theory/ExerciseComponents';
+
 
 const MonologuesPage = () => {
   const theoryContent = (
-    <div>
+    <>
       <TheorySection title="What Are Monologues?" icon="🎤">
         <p style={{ fontSize: '1.1rem', lineHeight: 1.6, color: '#4a5568', marginBottom: '1rem' }}>
           <strong>Monologues</strong> are single-speaker talks that appear often in listening exams. They are longer than dialogues and need different comprehension strategies.
@@ -340,172 +337,16 @@ const MonologuesPage = () => {
           />
         </div>
       </TheorySection>
-    </div>
+    </>
   );
 
-  const exercises = [
-    <MultipleChoiceExercise
-      key="1"
-      question="How long do monologues typically last?"
-      options={[
-        "30 seconds–2 minutes",
-        "2–5 minutes",
-        "5–10 minutes",
-        "More than 10 minutes"
-      ]}
-      correctAnswer={1}
-      explanation="Monologues usually last 2–5 minutes, which allows a full treatment of one topic with a single speaker."
-    />,
-
-    <MultipleChoiceExercise
-      key="2"
-      question="What is the best strategy for monologues?"
-      options={[
-        "Listen with no preparation",
-        "Read all questions before the audio",
-        "Note everything that is said",
-        "Ignore structure"
-      ]}
-      correctAnswer={1}
-      explanation="Reading all questions first is crucial for monologues so you know what to listen for in a longer recording."
-    />,
-
-    <TrueFalseExercise
-      key="3"
-      statements={[
-        {
-          text: "Monologues require sustained concentration for the whole recording.",
-          isTrue: true,
-          explanation: "Correct. Monologues are long; you need to stay focused to catch all necessary information."
-        },
-        {
-          text: "You should note everything said in a monologue.",
-          isTrue: false,
-          explanation: "Incorrect. Note only information relevant to the questions, not every word."
-        },
-        {
-          text: "Understanding monologue structure helps you anticipate content.",
-          isTrue: true,
-          explanation: "Correct. A typical introduction–body–conclusion pattern tells you what kind of detail comes next."
-        },
-        {
-          text: "Monologues are easier than dialogues because there is only one voice.",
-          isTrue: false,
-          explanation: "Incorrect. They can be harder because they are longer and denser with information to process."
-        }
-      ]}
-    />,
-
-    <MultipleChoiceExercise
-      key="4"
-      question="Which part of the monologue usually has the most detail?"
-      options={[
-        "Introduction",
-        "Body",
-        "Conclusion",
-        "Transitions"
-      ]}
-      correctAnswer={1}
-      explanation="The body carries most of the detail (about 70–80%); introduction and conclusion are shorter."
-    />,
-
-    <MultipleChoiceExercise
-      key="5"
-      question="What is the most effective note-taking approach for monologues?"
-      options={[
-        "Write down everything",
-        "Use abbreviations and keywords",
-        "Take no notes",
-        "Write only at the end"
-      ]}
-      correctAnswer={1}
-      explanation="Abbreviations and keywords let you capture important information without wasting time on full sentences."
-    />,
-
-    <TrueFalseExercise
-      key="6"
-      statements={[
-        {
-          text: "Monologues are easier than dialogues because there's only one speaker.",
-          isTrue: false,
-          explanation: "Incorrect. Monologues can be harder because they require sustained focus without different voices breaking up the input."
-        },
-        {
-          text: "Predicting content before listening helps with monologue comprehension.",
-          isTrue: true,
-          explanation: "Correct. Prediction from title or questions primes you for the topic."
-        },
-        {
-          text: "You should write down everything the speaker says in a monologue.",
-          isTrue: false,
-          explanation: "Incorrect. Strategic notes on key points and structure work better than full transcription."
-        }
-      ]}
-    />,
-
-    <MultipleChoiceExercise
-      key="7"
-      question="What matters most for following an academic monologue?"
-      options={[
-        "The speaker’s personality",
-        "Content structure and organization",
-        "The speaker’s accent",
-        "Speech rate"
-      ]}
-      correctAnswer={1}
-      explanation="Structure and organization matter most for following academic monologues effectively."
-    />,
-
-    <MultipleChoiceExercise
-      key="8"
-      question="When are you most likely to lose concentration in a monologue?"
-      options={[
-        "At the start",
-        "In the middle",
-        "At the end",
-        "Never"
-      ]}
-      correctAnswer={1}
-      explanation="You often dip in the middle, after the novelty fades but before the end."
-    />,
-
-    <TrueFalseExercise
-      key="9"
-      statements={[
-        {
-          text: "Signposting language is more important in monologues than in dialogues.",
-          isTrue: true,
-          explanation: "Correct. Signposting guides the listener through a single long turn."
-        },
-        {
-          text: "Brief mental breaks during natural pauses can help maintain focus.",
-          isTrue: true,
-          explanation: "Correct. Using pauses can help you reset attention without missing key content."
-        }
-      ]}
-    />,
-
-    <MultipleChoiceExercise
-      key="10"
-      question="Which monologue type needs the closest attention to specific details?"
-      options={[
-        "Personal narrative",
-        "Academic presentation with data",
-        "General description",
-        "Personal opinion"
-      ]}
-      correctAnswer={1}
-      explanation="Academic talks with data require close tracking of numbers, dates, and statistics."
-    />
-  ];
-
-  return (
+    return (
     <TheoryLayout
       title="Monologues"
       description="Master understanding monologues in English. Learn strategies for longer single-speaker recordings: presentations, lectures, and narratives."
       level="A2-B1-B2-C1-C2"
       theoryContent={theoryContent}
-      exercises={exercises}
+      getExercises={buildMonologuesExercises}
       prerequisites={["Basic listening skills", "Experience with short dialogues"]}
       estimatedTime="75 min"
     />

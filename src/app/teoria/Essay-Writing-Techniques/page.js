@@ -1,4 +1,5 @@
 'use client';
+import { buildEssayWritingTechniquesExercises } from './essayWritingTechniquesExercises';
 import React from 'react';
 import TheoryLayout from '@/components/theory/TheoryLayout';
 import { 
@@ -9,15 +10,11 @@ import {
   GrammarTable, 
   QuickReference 
 } from '@/components/theory/TheoryContent';
-import { 
-  MultipleChoiceExercise, 
-  FillBlanksExercise, 
-  TrueFalseExercise 
-} from '@/components/theory/ExerciseComponents';
+
 
 const EssayWritingPage = () => {
   const theoryContent = (
-    <div>
+    <>
       <TheorySection title="Essay Writing Techniques" icon="✍️">
         <p style={{ fontSize: '1.1rem', lineHeight: 1.6, color: '#4a5568', marginBottom: '1rem' }}>
           In Cambridge main-suite exams (B2 First, C1 Advanced, C2 Proficiency), the <strong>essay</strong> 
@@ -272,161 +269,16 @@ const EssayWritingPage = () => {
           />
         </div>
       </TheorySection>
-    </div>
+    </>
   );
 
-  const exercises = [
-    <MultipleChoiceExercise
-      key="1"
-      question="Which of the following is the strongest thesis statement?"
-      options={[
-        "Social media is popular among young people.",
-        "Social media has both positive and negative effects.",
-        "Social media platforms exploit user data to maximise advertising revenue at the expense of user privacy.",
-        "Many people use social media every day."
-      ]}
-      correctAnswer={2}
-      explanation="This option is specific, arguable, and can be defended with evidence."
-    />,
-
-    <MultipleChoiceExercise
-      key="2"
-      question="In the PEEL structure, what does the 'E' in 'Evidence' refer to?"
-      options={[
-        "Examples only",
-        "Emotional appeals",
-        "Facts, data, examples, or quotes that support your point",
-        "Explanations of your personal opinion"
-      ]}
-      correctAnswer={2}
-      explanation="Evidence includes any factual support: data, statistics, examples, expert views, etc."
-    />,
-
-    <TrueFalseExercise
-      key="3"
-      statements={[
-        {
-          text: "Academic writing should avoid contractions like 'don't' and 'can't'.",
-          isTrue: true,
-          explanation: "Correct. Full forms such as “do not” and “cannot” suit academic style."
-        },
-        {
-          text: "It's acceptable to introduce completely new ideas in the conclusion.",
-          isTrue: false,
-          explanation: "Incorrect. The conclusion should close the argument, not start a new one."
-        },
-        {
-          text: "Each body paragraph should focus on one main point.",
-          isTrue: true,
-          explanation: "Correct. One clear topic sentence per paragraph."
-        },
-        {
-          text: "Using first person (I, my, me) is always inappropriate in academic essays.",
-          isTrue: false,
-          explanation: "Incorrect. Some tasks allow a measured use of first person (e.g. reflective writing)."
-        }
-      ]}
-    />,
-
-    <MultipleChoiceExercise
-      key="4"
-      question="Which connector introduces a contrasting idea: '_____, some educators argue that traditional methods remain superior.'"
-      options={[
-        "Furthermore",
-        "However",
-        "Therefore",
-        "Moreover"
-      ]}
-      correctAnswer={1}
-      explanation="“However” signals contrast with the previous sentence."
-    />,
-
-    <MultipleChoiceExercise
-      key="5"
-      question="Which connector would be most appropriate to introduce a contrasting viewpoint?"
-      options={[
-        "Furthermore",
-        "Consequently", 
-        "Nevertheless",
-        "In addition"
-      ]}
-      correctAnswer={2}
-      explanation="“Nevertheless” concedes a point but presents a contrasting view."
-    />,
-
-    <MultipleChoiceExercise
-      key="6"
-      question="What is the main purpose of a topic sentence?"
-      options={[
-        "To conclude the paragraph",
-        "To introduce the main idea of the paragraph",
-        "To provide evidence",
-        "To connect to the next paragraph"
-      ]}
-      correctAnswer={1}
-      explanation="The topic sentence introduces the paragraph's main idea."
-    />,
-
-    <MultipleChoiceExercise
-      key="7"
-      question="Which is the most formal way to express opinion?"
-      options={[
-        "I think that...",
-        "In my opinion...",
-        "It can be argued that...",
-        "I believe that..."
-      ]}
-      correctAnswer={2}
-      explanation="“It can be argued that...” is relatively objective and formal."
-    />,
-
-    <MultipleChoiceExercise
-      key="8"
-      question="Which sequencing word comes first: '_____, the introduction should capture the reader's attention.'"
-      options={[
-        "Finally",
-        "Secondly",
-        "Firstly",
-        "Moreover"
-      ]}
-      correctAnswer={2}
-      explanation="“Firstly” introduces the first point in a sequence."
-    />,
-
-    <MultipleChoiceExercise
-      key="9"
-      question="What should you avoid in academic writing?"
-      options={[
-        "Complex sentences",
-        "Contractions and informal language",
-        "Evidence and examples",
-        "Clear thesis statements"
-      ]}
-      correctAnswer={1}
-      explanation="Contractions and informal wording are usually avoided in academic writing."
-    />,
-
-    <MultipleChoiceExercise
-      key="10"
-      question="Which best describes the PEEL structure?"
-      options={[
-        "Point, Evidence, Explanation, Link",
-        "Problem, Example, Evaluation, Logic",
-        "Purpose, Evidence, Emphasis, Length",
-        "Plan, Execute, Evaluate, Learn"
-      ]}
-      correctAnswer={0}
-      explanation="PEEL stands for Point, Evidence, Explanation, Link—a strong model for body paragraphs."
-    />
-  ];
-
-  return (
+    return (
     <TheoryLayout
       title="Essay Writing Techniques"
       description="Master essential techniques for effective academic essays: structure, argumentation, formal style, and cohesion."
       level="B2-C1-C2"
       theoryContent={theoryContent}
-      exercises={exercises}
+      getExercises={buildEssayWritingTechniquesExercises}
       prerequisites={["Intermediate–advanced grammar", "Academic vocabulary", "Basic connectors"]}
       estimatedTime="70 min"
     />

@@ -1,4 +1,5 @@
 'use client';
+import { build1ArticlesDeterminersAndQuantifiersExercises } from './articlesDeterminersAndQuantifiersExercises';
 import React from 'react';
 import TheoryLayout from '@/components/theory/TheoryLayout';
 import { 
@@ -9,15 +10,11 @@ import {
   GrammarTable, 
   QuickReference 
 } from '@/components/theory/TheoryContent';
-import { 
-  MultipleChoiceExercise, 
-  FillBlanksExercise, 
-  TrueFalseExercise 
-} from '@/components/theory/ExerciseComponents';
+
 
 const ArticlesPage = () => {
   const theoryContent = (
-    <div>
+    <>
       <TheorySection title="What are Articles, Determiners and Quantifiers?" icon="📝">
         <p style={{ fontSize: '1.1rem', lineHeight: 1.6, color: '#4a5568', marginBottom: '1rem' }}>
           <strong>Articles</strong>, <strong>determiners</strong> and <strong>quantifiers</strong> are small but very important words in English. 
@@ -53,12 +50,10 @@ const ArticlesPage = () => {
             <Example 
               spanish="Un perro está en el jardín"
               english="A dog is in the garden"
-              translation="A dog is in the garden"
             />
             <Example 
               spanish="Una manzana es roja"
               english="An apple is red"
-              translation="An apple is red"
             />
             
             <Tip type="warning">
@@ -76,12 +71,10 @@ const ArticlesPage = () => {
             <Example 
               spanish="El perro que vimos ayer está aquí"
               english="The dog we saw yesterday is here"
-              translation="The dog we saw yesterday is here"
             />
             <Example 
               spanish="El sol brilla"
               english="The sun is shining"
-              translation="The sun is shining"
             />
             
             <Tip type="info">
@@ -111,12 +104,10 @@ const ArticlesPage = () => {
           <Example 
             spanish="Este libro es mío"
             english="This book is mine"
-            translation="This book is mine"
           />
           <Example 
             spanish="¿Cuál es tu nombre?"
             english="What is your name?"
-            translation="What is your name?"
           />
         </div>
       </TheorySection>
@@ -149,12 +140,10 @@ const ArticlesPage = () => {
           <Example 
             spanish="Hay muchos libros en la biblioteca"
             english="There are many books in the library"
-            translation="There are many books in the library"
           />
           <Example 
             spanish="No hay mucha agua"
             english="There isn't much water"
-            translation="There isn't much water"
           />
         </div>
       </TheorySection>
@@ -208,161 +197,16 @@ const ArticlesPage = () => {
           </Tip>
         </div>
       </TheorySection>
-    </div>
+    </>
   );
 
-  const exercises = [
-    <MultipleChoiceExercise
-      key="1"
-      question="Which is the correct form?"
-      options={[
-        "I have a money",
-        "I have some money",
-        "I have many money",
-        "I have much money"
-      ]}
-      correctAnswer={1}
-      explanation="'Money' is uncountable, so we use 'some' or no quantifier. 'Much' is also correct, but 'some' is more natural in this context."
-    />,
-
-    <MultipleChoiceExercise
-      key="2"
-      question="Complete: 'I need ___ book for school.'"
-      options={[
-        "the",
-        "a",
-        "an",
-        "some"
-      ]}
-      correctAnswer={1}
-      explanation="'A' is used with singular countable nouns when we talk about something for the first time or in general."
-    />,
-
-    <TrueFalseExercise
-      key="3"
-      statements={[
-        {
-          text: "We use 'a' before words that start with a vowel sound.",
-          isTrue: false,
-          explanation: "We use 'an' before words that start with a vowel sound, not 'a'."
-        },
-        {
-          text: "'Much' can be used with countable nouns.",
-          isTrue: false,
-          explanation: "'Much' is only used with uncountable nouns. For countables we use 'many'."
-        },
-        {
-          text: "'The' can be used with both singular and plural nouns.",
-          isTrue: true,
-          explanation: "Correct. 'The' can be used with singular and plural nouns."
-        },
-        {
-          text: "We don't use articles with plural nouns when speaking generally.",
-          isTrue: true,
-          explanation: "Correct. We don't use articles with plural nouns when speaking in a general way."
-        }
-      ]}
-    />,
-
-    <MultipleChoiceExercise
-      key="4"
-      question="Which is the correct form to complete this sentence: '___ students in my class are very intelligent'?"
-      options={[
-        "The",
-        "A",
-        "An",
-        "No article needed"
-      ]}
-      correctAnswer={3}
-      explanation="When we talk about students in general (plural), we don't need an article. If we said 'the students in my class', we would be referring to specific students."
-    />,
-
-    <MultipleChoiceExercise
-      key="5"
-      question="Which quantifier is correct for 'time'?"
-      options={[
-        "many",
-        "much",
-        "few",
-        "little (with 'a')"
-      ]}
-      correctAnswer={1}
-      explanation="'Time' is uncountable, so we use 'much'. We could also use 'a little' to mean 'a small amount of time'."
-    />,
-
-    <MultipleChoiceExercise
-      key="6"
-      question="Complete: 'There are ___ students in the classroom.'"
-      options={[
-        "a",
-        "an",
-        "some",
-        "much"
-      ]}
-      correctAnswer={2}
-      explanation="'Students' is a plural countable noun, so we use 'some' in affirmative sentences."
-    />,
-
-    <MultipleChoiceExercise
-      key="7"
-      question="Which is correct?"
-      options={[
-        "I need an advice",
-        "I need some advice",
-        "I need many advice",
-        "I need few advice"
-      ]}
-      correctAnswer={1}
-      explanation="'Advice' is uncountable, so we use 'some' and it doesn't take an indefinite article."
-    />,
-
-    <MultipleChoiceExercise
-      key="8"
-      question="Complete: 'Do you have ___ money?'"
-      options={[
-        "some",
-        "any",
-        "many",
-        "few"
-      ]}
-      correctAnswer={1}
-      explanation="In questions we use 'any' with uncountable nouns like 'money'."
-    />,
-
-    <MultipleChoiceExercise
-      key="9"
-      question="Which article is correct: '___ university'?"
-      options={[
-        "a",
-        "an",
-        "the",
-        "no article"
-      ]}
-      correctAnswer={0}
-      explanation="'University' starts with a consonant sound /j/, so we use 'a'."
-    />,
-
-    <MultipleChoiceExercise
-      key="10"
-      question="Complete: 'There isn't ___ water left.'"
-      options={[
-        "some",
-        "any",
-        "many",
-        "few"
-      ]}
-      correctAnswer={1}
-      explanation="In negative sentences we use 'any' with uncountable nouns like 'water'."
-    />
-  ];
-
-  return (
+    return (
     <TheoryLayout
       title="Articles, Determiners and Quantifiers"
       description="Learn to use articles (a, an, the), determiners (this, that, my, your) and quantifiers (some, any, many, much) correctly in English."
       level="A2-B1-B2-C1-C2"
       theoryContent={theoryContent}
-      exercises={exercises}
+      getExercises={build1ArticlesDeterminersAndQuantifiersExercises}
       prerequisites={["Basic understanding of nouns"]}
       estimatedTime="45 min"
     />

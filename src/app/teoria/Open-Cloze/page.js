@@ -1,11 +1,12 @@
 'use client';
+import { buildOpenClozeExercises } from './openClozeExercises';
 import TheoryLayout from '@/components/theory/TheoryLayout';
 import { TheorySection, Example, Rule, Tip, QuickReference } from '@/components/theory/TheoryContent';
-import { MultipleChoiceExercise, TrueFalseExercise } from '@/components/theory/ExerciseComponents';
+
 
 const OpenClozePage = () => {
   const theoryContent = (
-    <div>
+    <>
       <TheorySection title="What is Open Cloze?" icon="📝">
         <p>
           <strong>Open Cloze</strong> is Part 2 of the Use of English paper in First Certificate (B2) and Advanced (C1). 
@@ -156,167 +157,16 @@ const OpenClozePage = () => {
           />
         </div>
       </TheorySection>
-    </div>
+    </>
   );
 
-  const exercises = [
-    <MultipleChoiceExercise
-      key="1"
-      question="In Open Cloze, how many words should you generally use per gap?"
-      options={[
-        "As many as you need",
-        "One word",
-        "Two or three words",
-        "It depends on the context"
-      ]}
-      correctAnswer={1}
-      explanation="In Open Cloze you generally use only one word per gap, avoiding contractions and long phrases."
-    />,
-
-    <MultipleChoiceExercise
-      key="2"
-      question="What is the first recommended strategy for Open Cloze?"
-      options={[
-        "Fill the gaps immediately",
-        "Read the whole text first",
-        "Count the blanks",
-        "Look for difficult words"
-      ]}
-      correctAnswer={1}
-      explanation="You should read the whole text first to understand the general context before filling the gaps."
-    />,
-
-    <TrueFalseExercise
-      key="3"
-      statements={[
-        {
-          text: "In Open Cloze you can use contractions like 'don't' or 'can't'.",
-          isTrue: false,
-          explanation: "Incorrect. In Open Cloze you should generally avoid contractions and use full forms."
-        },
-        {
-          text: "The immediate context is important for choosing the right word.",
-          isTrue: true,
-          explanation: "Correct. The words before and after the gap give important clues about which word you need."
-        },
-        {
-          text: "You only need to consider grammar, not meaning.",
-          isTrue: false,
-          explanation: "Incorrect. You must consider grammar, meaning, and the context of the whole text."
-        }
-      ]}
-    />,
-
-    <MultipleChoiceExercise
-      key="4"
-      question="Complete: 'She has been living in London _____ five years.'"
-      options={[
-        "since",
-        "for",
-        "during",
-        "from"
-      ]}
-      correctAnswer={1}
-      explanation="'For' is used with periods of time (five years). 'Since' is used with specific points in time."
-    />,
-
-    <MultipleChoiceExercise
-      key="5"
-      question="What type of words are most common in Open Cloze?"
-      options={[
-        "Highly technical words",
-        "Function words and connectors",
-        "Proper nouns",
-        "Very long words"
-      ]}
-      correctAnswer={1}
-      explanation="Function words (articles, prepositions, auxiliaries) and connectors are the most common in Open Cloze."
-    />,
-
-    <TrueFalseExercise
-      key="6"
-      statements={[
-        {
-          text: "You should keep to the register of the text.",
-          isTrue: true,
-          explanation: "Correct. If the text is formal, your answers should be formal; if informal, they should be informal."
-        },
-        {
-          text: "The tense used elsewhere in the text does not matter.",
-          isTrue: false,
-          explanation: "Incorrect. You should stay consistent with the dominant tense where appropriate."
-        },
-        {
-          text: "You should always check your answers in context.",
-          isTrue: true,
-          explanation: "Correct. It is important to read the full sentence with your answer to check it makes sense."
-        }
-      ]}
-    />,
-
-    <MultipleChoiceExercise
-      key="7"
-      question="Complete: 'The meeting will take place _____ Monday morning.'"
-      options={[
-        "in",
-        "on",
-        "at",
-        "by"
-      ]}
-      correctAnswer={1}
-      explanation="'On' is used with specific days: 'on Monday morning'. 'In' is used with months/years, 'at' with specific times."
-    />,
-
-    <MultipleChoiceExercise
-      key="8"
-      question="What is the best strategy when you are not sure of an answer?"
-      options={[
-        "Leave the gap blank",
-        "Write any word",
-        "Analyse context and grammar carefully",
-        "Copy a word from the text"
-      ]}
-      correctAnswer={2}
-      explanation="You should analyse context and grammar carefully to make the best possible guess."
-    />,
-
-    <TrueFalseExercise
-      key="9"
-      statements={[
-        {
-          text: "Connectors like 'however' and 'therefore' are common in Open Cloze.",
-          isTrue: true,
-          explanation: "Correct. Connectors that link ideas are very common in this type of task."
-        },
-        {
-          text: "You should always use the most complex word you know.",
-          isTrue: false,
-          explanation: "Incorrect. It is better to use simple, high-frequency words that fit the context perfectly."
-        }
-      ]}
-    />,
-
-    <MultipleChoiceExercise
-      key="10"
-      question="Complete: 'I would have called you _____ I had known you were coming.'"
-      options={[
-        "if",
-        "when",
-        "because",
-        "although"
-      ]}
-      correctAnswer={0}
-      explanation="'If' is correct for this third conditional pattern: 'would have + past participle' + 'if' + 'had + past participle'."
-    />
-  ];
-
-  return (
+    return (
     <TheoryLayout
       title="Open Cloze"
       description="Master Open Cloze tasks. Learn strategies for completing blanks using context, grammar, and appropriate vocabulary."
       level="B2-C1-C2"
       theoryContent={theoryContent}
-      exercises={exercises}
+      getExercises={buildOpenClozeExercises}
       prerequisites={["Advanced grammar", "Strong vocabulary", "Reading comprehension"]}
       estimatedTime="80 min"
     />

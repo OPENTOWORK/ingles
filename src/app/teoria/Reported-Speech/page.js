@@ -1,4 +1,5 @@
 'use client';
+import { buildReportedSpeechExercises } from './reportedSpeechExercises';
 import React from 'react';
 import TheoryLayout from '@/components/theory/TheoryLayout';
 import { 
@@ -9,15 +10,11 @@ import {
   GrammarTable, 
   QuickReference 
 } from '@/components/theory/TheoryContent';
-import { 
-  MultipleChoiceExercise, 
-  FillBlanksExercise, 
-  TrueFalseExercise 
-} from '@/components/theory/ExerciseComponents';
+
 
 const ReportedSpeechPage = () => {
   const theoryContent = (
-    <div>
+    <>
       <TheorySection title="What Is Reported Speech?" icon="💬">
         <p style={{ fontSize: '1.1rem', lineHeight: 1.6, color: '#4a5568', marginBottom: '1rem' }}>
           <strong>Reported speech</strong> (indirect speech) is used to report or repeat what someone else 
@@ -58,17 +55,14 @@ const ReportedSpeechPage = () => {
           <Example 
             spanish="Dijo: 'Trabajo en una oficina' → Dijo que trabajaba en una oficina"
             english="'I work in an office' → He said he worked in an office"
-            translation="He said: 'I work in an office' → He said he worked in an office"
           />
           <Example 
             spanish="Dijo: 'Estoy estudiando' → Dijo que estaba estudiando"
             english="'I am studying' → He said he was studying"
-            translation="He said: 'I'm studying' → He said he was studying"
           />
           <Example 
             spanish="Dijo: 'He terminado' → Dijo que había terminado"
             english="'I have finished' → He said he had finished"
-            translation="He said: 'I've finished' → He said he had finished"
           />
         </div>
 
@@ -110,17 +104,14 @@ const ReportedSpeechPage = () => {
           <Example 
             spanish="Dijo: 'Mi coche está roto' → Dijo que su coche estaba roto"
             english="'My car is broken' → He said his car was broken"
-            translation="He said: 'My car is broken' → He said his car was broken"
           />
           <Example 
             spanish="Dijo: '¿Puedes ayudarme?' → Preguntó si podía ayudarle"
             english="'Can you help me?' → He asked if I could help him"
-            translation="He said: 'Can you help me?' → He asked if I could help him"
           />
           <Example 
             spanish="Dijo: 'Nuestro proyecto está listo' → Dijo que su proyecto estaba listo"
             english="'Our project is ready' → He said their project was ready"
-            translation="He said: 'Our project is ready' → He said their project was ready"
           />
         </div>
 
@@ -165,17 +156,14 @@ const ReportedSpeechPage = () => {
           <Example 
             spanish="Dijo: 'Voy ahora' → Dijo que iba entonces"
             english="'I'm going now' → He said he was going then"
-            translation="He said: 'I'm going now' → He said he was going then"
           />
           <Example 
             spanish="Dijo: 'Vine ayer' → Dijo que había venido el día anterior"
             english="'I came yesterday' → He said he had come the day before"
-            translation="He said: 'I came yesterday' → He said he had come the day before"
           />
           <Example 
             spanish="Dijo: 'Estoy aquí' → Dijo que estaba allí"
             english="'I'm here' → He said he was there"
-            translation="He said: 'I'm here' → He said he was there"
           />
         </div>
 
@@ -217,22 +205,18 @@ const ReportedSpeechPage = () => {
           <Example 
             spanish="Dijo que estaba cansado"
             english="He said he was tired"
-            translation="He said he was tired"
           />
           <Example 
             spanish="Preguntó si venía"
             english="He asked if I was coming"
-            translation="He asked if I was coming"
           />
           <Example 
             spanish="Me dijo que viniera"
             english="He told me to come"
-            translation="He told me to come"
           />
           <Example 
             spanish="Me aconsejó estudiar"
             english="He advised me to study"
-            translation="He advised me to study"
           />
         </div>
 
@@ -273,17 +257,14 @@ const ReportedSpeechPage = () => {
           <Example 
             spanish="Preguntó: '¿Vienes?' → Preguntó si venía"
             english="'Are you coming?' → He asked if I was coming"
-            translation="He asked: 'Are you coming?' → He asked if I was coming"
           />
           <Example 
             spanish="Preguntó: '¿Dónde vives?' → Preguntó dónde vivía"
             english="'Where do you live?' → He asked where I lived"
-            translation="He asked: 'Where do you live?' → He asked where I lived"
           />
           <Example 
             spanish="Preguntó: '¿Cómo estás?' → Preguntó cómo estaba"
             english="'How are you?' → He asked how I was"
-            translation="He asked: 'How are you?' → He asked how I was"
           />
         </div>
 
@@ -373,172 +354,16 @@ const ReportedSpeechPage = () => {
           />
         </div>
       </TheorySection>
-    </div>
+    </>
   );
 
-  const exercises = [
-    <MultipleChoiceExercise
-      key="1"
-      question="Complete the reported speech: He said: 'I am tired' → He said he _____ tired."
-      options={[
-        "is",
-        "was",
-        "will be",
-        "has been"
-      ]}
-      correctAnswer={1}
-      explanation="In reported speech, 'am' becomes 'was' when we report in the past."
-    />,
-
-    <MultipleChoiceExercise
-      key="2"
-      question="What is the reported speech of 'I will come tomorrow'?"
-      options={[
-        "He said he will come tomorrow.",
-        "He said he would come the next day.",
-        "He said he would come tomorrow.",
-        "He said he comes tomorrow."
-      ]}
-      correctAnswer={1}
-      explanation="The correct reported speech changes 'will' to 'would' and 'tomorrow' to 'the next day': 'He said he would come the next day.'"
-    />,
-
-    <TrueFalseExercise
-      key="3"
-      statements={[
-        {
-          text: "In reported speech, you should use quotation marks to show the exact words.",
-          isTrue: false,
-          explanation: "Incorrect. Reported speech does not use quotation marks because you are not quoting the exact words, but reporting what was said."
-        },
-        {
-          text: "When reporting questions, you should keep the question mark.",
-          isTrue: false,
-          explanation: "Incorrect. Reported questions do not use question marks because they become statements in reported speech."
-        },
-        {
-          text: "The verb 'tell' requires an indirect object, but 'say' does not.",
-          isTrue: true,
-          explanation: "Correct. 'Tell' always needs an indirect object (tell me, tell him), while 'say' can be used without one."
-        },
-        {
-          text: "If the reporting verb is in present tense, you don't need to change the verb tenses in reported speech.",
-          isTrue: true,
-          explanation: "Correct. When the reporting verb is in present tense (says, tells), the verb tenses in reported speech usually remain the same."
-        }
-      ]}
-    />,
-
-    <MultipleChoiceExercise
-      key="4"
-      question="What is the correct reported speech of 'Where do you live?'"
-      options={[
-        "He asked where do I live?",
-        "He asked where I lived.",
-        "He asked where did I live?",
-        "He asked where I live."
-      ]}
-      correctAnswer={1}
-      explanation="The correct reported speech is 'He asked where I lived' - it uses the word order of a statement and changes the tense to past."
-    />,
-
-    <MultipleChoiceExercise
-      key="5"
-      question="Which sentence correctly reports 'I can't come to the party'?"
-      options={[
-        "He said he can't come to the party.",
-        "He said he couldn't come to the party.",
-        "He said he won't come to the party.",
-        "He said he doesn't come to the party."
-      ]}
-      correctAnswer={1}
-      explanation="The correct reported speech changes 'can't' to 'couldn't': 'He said he couldn't come to the party.'"
-    />,
-
-    <TrueFalseExercise
-      key="6"
-      statements={[
-        {
-          text: "'Today' changes to 'that day' in reported speech.",
-          isTrue: true,
-          explanation: "Correct. Time adverbs change: today → that day, yesterday → the day before."
-        },
-        {
-          text: "We use 'if' or 'whether' for yes/no questions in reported speech.",
-          isTrue: true,
-          explanation: "Correct. 'Are you coming?' → 'He asked if/whether I was coming.'"
-        },
-        {
-          text: "Modal verbs never change in reported speech.",
-          isTrue: false,
-          explanation: "Incorrect. Some modals change: will → would, can → could, may → might."
-        }
-      ]}
-    />,
-
-    <MultipleChoiceExercise
-      key="7"
-      question="Complete: 'I will help you' → He said he _____ help me."
-      options={[
-        "will",
-        "would",
-        "can",
-        "could"
-      ]}
-      correctAnswer={1}
-      explanation="'Will' becomes 'would' in reported speech: 'He said he would help me.'"
-    />,
-
-    <MultipleChoiceExercise
-      key="8"
-      question="Transform: 'Don't be late!' → She told me ______."
-      options={[
-        "don't be late",
-        "not to be late",
-        "to not be late",
-        "not be late"
-      ]}
-      correctAnswer={1}
-      explanation="Negative imperatives are reported with 'told + object + not to + infinitive'."
-    />,
-
-    <TrueFalseExercise
-      key="9"
-      statements={[
-        {
-          text: "'Here' changes to 'there' in reported speech.",
-          isTrue: true,
-          explanation: "Correct. Place adverbs change with perspective: here → there."
-        },
-        {
-          text: "Present Perfect changes to Past Perfect in reported speech.",
-          isTrue: true,
-          explanation: "Correct. 'I have finished' → 'He said he had finished.'"
-        }
-      ]}
-    />,
-
-    <MultipleChoiceExercise
-      key="10"
-      question="Complete: 'Are you ready?' → She asked me ______."
-      options={[
-        "am I ready",
-        "if I was ready",
-        "if am I ready",
-        "was I ready"
-      ]}
-      correctAnswer={1}
-      explanation="Yes/no questions are reported with 'if/whether' + affirmative order: 'if I was ready'."
-    />
-  ];
-
-  return (
+    return (
     <TheoryLayout
       title="Reported Speech"
       description="Master reported speech in English. Learn how to report what others said, shift verb tenses, and use reporting verbs correctly."
       level="B1-B2-C1-C2"
       theoryContent={theoryContent}
-      exercises={exercises}
+      getExercises={buildReportedSpeechExercises}
       prerequisites={["All verb tenses", "Question forms", "Modal verbs"]}
       estimatedTime="85 min"
     />

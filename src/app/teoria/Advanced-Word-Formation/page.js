@@ -1,11 +1,12 @@
 'use client';
+import { buildAdvancedWordFormationExercises } from './advancedWordFormationExercises';
 import TheoryLayout from '@/components/theory/TheoryLayout';
 import { TheorySection, Example, Rule, Tip, QuickReference } from '@/components/theory/TheoryContent';
-import { MultipleChoiceExercise, TrueFalseExercise } from '@/components/theory/ExerciseComponents';
+
 
 const AdvancedWordFormationPage = () => {
   const theoryContent = (
-    <div>
+    <>
       <TheorySection title="What is Advanced Word Formation?" icon="🔧">
         <p>
           <strong>Advanced Word Formation</strong> is the skill of creating new words using prefixes, suffixes, and 
@@ -135,167 +136,16 @@ const AdvancedWordFormationPage = () => {
           />
         </div>
       </TheorySection>
-    </div>
+    </>
   );
 
-  const exercises = [
-    <MultipleChoiceExercise
-      key="1"
-      question="What is the correct noun form of 'manage'?"
-      options={[
-        "manageness",
-        "management",
-        "managation",
-        "manageity"
-      ]}
-      correctAnswer={1}
-      explanation="'Management' is the correct noun from 'manage' using the '-ment' suffix."
-    />,
-
-    <MultipleChoiceExercise
-      key="2"
-      question="Which prefix makes 'possible' mean the opposite?"
-      options={[
-        "un-",
-        "dis-",
-        "im-",
-        "non-"
-      ]}
-      correctAnswer={2}
-      explanation="'Impossible' uses the prefix 'im-' (a form of 'in-') before words beginning with 'p'."
-    />,
-
-    <TrueFalseExercise
-      key="3"
-      statements={[
-        {
-          text: "The suffix '-ful' generally creates adjectives with a positive meaning.",
-          isTrue: true,
-          explanation: "Correct. '-ful' means 'full of' and often creates positive adjectives like 'helpful', 'useful'."
-        },
-        {
-          text: "You can add any prefix to any word.",
-          isTrue: false,
-          explanation: "Incorrect. Prefixes follow specific rules and cannot all combine with every word."
-        },
-        {
-          text: "Some words change their spelling when suffixes are added.",
-          isTrue: true,
-          explanation: "Correct. For example, 'happy' → 'happiness' (y to i), 'create' → 'creation' (drop e)."
-        }
-      ]}
-    />,
-
-    <MultipleChoiceExercise
-      key="4"
-      question="What is the correct adjective form of 'access'?"
-      options={[
-        "accessful",
-        "accessible",
-        "accessable",
-        "accessitive"
-      ]}
-      correctAnswer={1}
-      explanation="'Accessible' is correct with the '-ible' suffix (not '-able' here)."
-    />,
-
-    <MultipleChoiceExercise
-      key="5"
-      question="What does the prefix 'over-' mean in 'overconfident'?"
-      options={[
-        "Lack of confidence",
-        "Normal confidence",
-        "Too much confidence",
-        "Past confidence"
-      ]}
-      correctAnswer={2}
-      explanation="'Over-' indicates excess, so 'overconfident' means excessively confident."
-    />,
-
-    <TrueFalseExercise
-      key="6"
-      statements={[
-        {
-          text: "The suffix '-less' always creates words with a negative meaning.",
-          isTrue: true,
-          explanation: "Correct. '-less' means 'without' or 'lacking', producing negative meanings like 'careless', 'helpless'."
-        },
-        {
-          text: "Formed words always keep exactly the same spelling of the root.",
-          isTrue: false,
-          explanation: "Incorrect. Spelling often changes—for example doubling consonants or y → i."
-        },
-        {
-          text: "'-ize' and '-ise' are suffixes that turn words into verbs.",
-          isTrue: true,
-          explanation: "Correct. Both suffixes (US and UK variants) turn nouns/adjectives into verbs."
-        }
-      ]}
-    />,
-
-    <MultipleChoiceExercise
-      key="7"
-      question="What is the correct negative form of 'legal'?"
-      options={[
-        "unlegal",
-        "dislegal",
-        "illegal",
-        "nonlegal"
-      ]}
-      correctAnswer={2}
-      explanation="'Illegal' uses 'il-' (a form of 'in-') before words beginning with 'l'."
-    />,
-
-    <MultipleChoiceExercise
-      key="8"
-      question="Which suffix turns 'real' into a noun?"
-      options={[
-        "-ness",
-        "-ity",
-        "-ment",
-        "-tion"
-      ]}
-      correctAnswer={1}
-      explanation="'Reality' uses '-ity' to turn the adjective 'real' into a noun."
-    />,
-
-    <TrueFalseExercise
-      key="9"
-      statements={[
-        {
-          text: "The prefix 're-' always means 'do again'.",
-          isTrue: true,
-          explanation: "Correct. 're-' indicates repetition: 'rewrite', 'reconsider'."
-        },
-        {
-          text: "All words ending in '-tion' are nouns.",
-          isTrue: true,
-          explanation: "Correct. The '-tion' suffix always forms nouns such as 'creation', 'information', 'education'."
-        }
-      ]}
-    />,
-
-    <MultipleChoiceExercise
-      key="10"
-      question="What is the best strategy for word formation in exams?"
-      options={[
-        "Memorise every possible word",
-        "Understand prefix and suffix patterns",
-        "Guess at random",
-        "Use only simple words"
-      ]}
-      correctAnswer={1}
-      explanation="Understanding patterns and rules for prefixes and suffixes helps you form words systematically."
-    />
-  ];
-
-  return (
+    return (
     <TheoryLayout
       title="Advanced Word Formation"
       description="Master advanced word formation. Learn prefixes, suffixes, and spelling changes to produce appropriate words in complex contexts."
       level="B2-C1-C2"
       theoryContent={theoryContent}
-      exercises={exercises}
+      getExercises={buildAdvancedWordFormationExercises}
       prerequisites={["Strong vocabulary base", "Understanding of word classes", "Basic morphology knowledge"]}
       estimatedTime="85 min"
     />

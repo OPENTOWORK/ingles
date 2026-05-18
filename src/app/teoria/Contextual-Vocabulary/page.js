@@ -1,4 +1,5 @@
 'use client';
+import { buildContextualVocabularyExercises } from './contextualVocabularyExercises';
 import React from 'react';
 import TheoryLayout from '@/components/theory/TheoryLayout';
 import { 
@@ -9,15 +10,11 @@ import {
   GrammarTable, 
   QuickReference 
 } from '@/components/theory/TheoryContent';
-import { 
-  MultipleChoiceExercise, 
-  FillBlanksExercise, 
-  TrueFalseExercise 
-} from '@/components/theory/ExerciseComponents';
+
 
 const ContextualVocabularyPage = () => {
   const theoryContent = (
-    <div>
+    <>
       <TheorySection title="What Is Contextual Vocabulary?" icon="📚">
         <p style={{ fontSize: '1.1rem', lineHeight: 1.6, color: '#4a5568', marginBottom: '1rem' }}>
           <strong>Contextual vocabulary</strong> refers to words and phrases whose interpretation depends heavily on surrounding situation—and it is indispensable for realistic listening comprehension.
@@ -343,171 +340,16 @@ const ContextualVocabularyPage = () => {
           />
         </div>
       </TheorySection>
-    </div>
+    </>
   );
 
-  const exercises = [
-    <MultipleChoiceExercise
-      key="1"
-      question="Meaning variation in contextual vocabulary is chiefly guided by:"
-      options={[
-        "Accent alone",
-        "Context",
-        "Spelling quirks",
-        "Word length"
-      ]}
-      correctAnswer={1}
-      explanation="Surrounding discourse—not isolated form—settles plausible readings."
-    />,
-
-    <MultipleChoiceExercise
-      key="2"
-      question="What single factor most powerfully unlocks contextual vocabulary?"
-      options={[
-        "Exact phoneme match",
-        "Context",
-        "Dictionary order",
-        "Letter count"
-      ]}
-      correctAnswer={1}
-      explanation="Context disambiguates polysemy, idioms, and jargon alike."
-    />,
-    <TrueFalseExercise
-      key="3"
-      statements={[
-        {
-          text: "Idioms can always be translated word for word faithfully.",
-          isTrue: false,
-          explanation: "Incorrect. Non-compositional figurative meanings resist literal mapping."
-        },
-        {
-          text: "Many English lemmas carry more than one major sense.",
-          isTrue: true,
-          explanation: "Correct. Words such as bank, bear, or light shift with frame."
-        },
-        {
-          text: "Inference improves with purposeful practice loops.",
-          isTrue: true,
-          explanation: "Correct. Predict verify revise cycles consolidate skill."
-        },
-        {
-          text: "Technical vocabulary is interchangeable across specialties.",
-          isTrue: false,
-          explanation: "Incorrect. Technical words are anchored to specific fields (medicine, IT, sport, etc.)."
-        }
-      ]}
-    />,
-
-    <MultipleChoiceExercise
-      key="4"
-      question="Best stance toward the lemma bank?"
-      options={[
-        "Assume finance always",
-        "Let cotext adjudicate riverside versus treasury readings",
-        "Assume geography always",
-        "Ignore cotext outright"
-      ]}
-      correctAnswer={1}
-      explanation="Financial collocations oppose riverbank collocations; cotext settles the intended sense quickly."
-    />,
-
-    <MultipleChoiceExercise
-      key="5"
-      question="What does break the ice mean socially?"
-      options={[
-        "Physically smash frozen water",
-        "Begin conversation warmly",
-        "Signal cold weather only",
-        "Strike an object blindly"
-      ]}
-      correctAnswer={1}
-      explanation="Colloquially it initiates rapport not literal destruction."
-    />,
-
-    <TrueFalseExercise
-      key="6"
-      statements={[
-        {
-          text: "Context clues scaffold unknown lexical items.",
-          isTrue: true,
-          explanation: "Correct. Nearby synonyms, opposites, and gloss clauses scaffold unknown words."
-        },
-        {
-          text: "All words exhibit exactly one invariant gloss.",
-          isTrue: false,
-          explanation: "Incorrect. Many words (bank, fair, spring, …) vary widely by frame."
-        },
-        {
-          text: "Cultural literacy assists contextual interpreting.",
-          isTrue: true,
-          explanation: "Correct. Holidays, geography, and institutions color implied meanings."
-        }
-      ]}
-    />,
-
-    <MultipleChoiceExercise
-      key="7"
-      question="In 'The company will launch a new product', what does launch mean?"
-      options={[
-        "To throw something",
-        "To start or introduce",
-        "To eat lunch",
-        "To travel by boat"
-      ]}
-      correctAnswer={1}
-      explanation="In business English, launch means introducing or releasing a product to the market."
-    />,
-
-    <MultipleChoiceExercise
-      key="8"
-      question="What kind of context is most helpful for inferring word meaning?"
-      options={[
-        "Only the previous sentence",
-        "Only the word after the gap",
-        "The fuller paragraph or conversation frame",
-        "Only a dictionary headline"
-      ]}
-      correctAnswer={2}
-      explanation="A wider conversational or paragraph-level frame delivers more decisive constraints."
-    />,
-
-    <TrueFalseExercise
-      key="9"
-      statements={[
-        {
-          text: "Formal and informal contexts use different vocabulary.",
-          isTrue: true,
-          explanation: "Correct. Register shifts items such as commence versus start depending on situation."
-        },
-        {
-          text: "You should always stop whenever you encounter an unknown word.",
-          isTrue: false,
-          explanation: "Incorrect. Continuing often supplies additional clues that stabilize your guess."
-        }
-      ]}
-    />,
-
-    <MultipleChoiceExercise
-      key="10"
-      question="Complete: 'The weather forecast predicts _____ conditions.' (context: winter storm warning)"
-      options={[
-        "pleasant",
-        "severe",
-        "mild",
-        "perfect"
-      ]}
-      correctAnswer={1}
-      explanation="Given a storm warning frame, severe is the logically congruent modifier."
-    />
-  ];
-
-  return (
+    return (
     <TheoryLayout
       title="Contextual Vocabulary"
       description="Learn how English words shift with context—from idioms to polysemy—and practise inference tactics for realistic listening tasks."
       level="A2-B1-B2-C1-C2"
       theoryContent={theoryContent}
-      exercises={exercises}
+      getExercises={buildContextualVocabularyExercises}
       prerequisites={["Basic vocabulary", "Understanding of context"]}
       estimatedTime="70 min"
     />

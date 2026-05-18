@@ -1,4 +1,5 @@
 'use client';
+import { buildQuestionFormationExercises } from './questionFormationExercises';
 import React from 'react';
 import TheoryLayout from '@/components/theory/TheoryLayout';
 import { 
@@ -9,15 +10,11 @@ import {
   GrammarTable, 
   QuickReference 
 } from '@/components/theory/TheoryContent';
-import { 
-  MultipleChoiceExercise, 
-  FillBlanksExercise, 
-  TrueFalseExercise 
-} from '@/components/theory/ExerciseComponents';
+
 
 const QuestionFormationPage = () => {
   const theoryContent = (
-    <div>
+    <>
       <TheorySection title="Question Formation in English" icon="❓">
         <p style={{ fontSize: '1.1rem', lineHeight: 1.6, color: '#4a5568', marginBottom: '1rem' }}>
           <strong>Question formation</strong> in English follows specific patterns that vary depending on the type 
@@ -56,13 +53,11 @@ const QuestionFormationPage = () => {
           <Example 
             spanish="¿Hablas español?"
             english="Do you speak Spanish?"
-            translation="Do you speak Spanish?"
           />
           
           <Example 
             spanish="¿Está lloviendo?"
             english="Is it raining?"
-            translation="Is it raining?"
           />
         </div>
 
@@ -128,13 +123,11 @@ const QuestionFormationPage = () => {
           <Example 
             spanish="¿Quién rompió la ventana? (sujeto)"
             english="Who broke the window?"
-            translation="Who broke the window?"
           />
           
           <Example 
             spanish="¿A quién viste? (objeto)"
             english="Who did you see?"
-            translation="Who did you see?"
           />
         </div>
       </TheorySection>
@@ -196,13 +189,11 @@ const QuestionFormationPage = () => {
           <Example 
             spanish="Pregunta directa: ¿Dónde está el banco?"
             english="Direct: Where is the bank?"
-            translation="Direct: Where is the bank?"
           />
           
           <Example 
             spanish="Pregunta indirecta: ¿Podrías decirme dónde está el banco?"
             english="Indirect: Could you tell me where the bank is?"
-            translation="Indirect: Could you tell me where the bank is?"
           />
         </div>
 
@@ -239,161 +230,16 @@ const QuestionFormationPage = () => {
           </Tip>
         </div>
       </TheorySection>
-    </div>
+    </>
   );
 
-  const exercises = [
-    <MultipleChoiceExercise
-      key="1"
-      question="Complete: '_____ you speak French?'"
-      options={[
-        "Do",
-        "Does",
-        "Are",
-        "Is"
-      ]}
-      correctAnswer={0}
-      explanation="With 'you' and the main verb 'speak' we use the auxiliary 'Do' to form questions."
-    />,
-
-    <MultipleChoiceExercise
-      key="2"
-      question="Which question is grammatically correct?"
-      options={[
-        "Who does live in that house?",
-        "Who lives in that house?",
-        "Who do live in that house?",
-        "Who is live in that house?"
-      ]}
-      correctAnswer={1}
-      explanation="In subject questions with 'who', we do not use an auxiliary. 'Who lives...' is correct."
-    />,
-
-    <MultipleChoiceExercise
-      key="3"
-      question="What's the correct question tag for: 'She doesn't like coffee'?"
-      options={[
-        "doesn't she?",
-        "does she?",
-        "isn't she?",
-        "is she?"
-      ]}
-      correctAnswer={1}
-      explanation="A negative sentence needs a positive question tag: 'does she?'"
-    />,
-
-    <TrueFalseExercise
-      key="4"
-      statements={[
-        {
-          text: "In indirect questions, we use the same word order as in statements.",
-          isTrue: true,
-          explanation: "Correct. Indirect questions use affirmative sentence word order."
-        },
-        {
-          text: "Question tags always use the same auxiliary as the main sentence.",
-          isTrue: true,
-          explanation: "Correct. The question tag must use the same auxiliary as the main sentence."
-        },
-        {
-          text: "We always need an auxiliary verb in wh-questions.",
-          isTrue: false,
-          explanation: "False. Subject questions do not need an auxiliary: 'Who called?'"
-        },
-        {
-          text: "'Do you are tired?' is correct English.",
-          isTrue: false,
-          explanation: "False. With 'to be' we do not use the auxiliary 'do': 'Are you tired?'"
-        }
-      ]}
-    />,
-
-    <MultipleChoiceExercise
-      key="5"
-      question="Which is the most polite way to ask for directions?"
-      options={[
-        "Where is the station?",
-        "Tell me where the station is.",
-        "Could you tell me where the station is?",
-        "Where's the station at?"
-      ]}
-      correctAnswer={2}
-      explanation="'Could you tell me...' is the most polite way to ask an indirect question."
-    />,
-
-    <MultipleChoiceExercise
-      key="6"
-      question="Complete: '_____ old are you?'"
-      options={[
-        "What",
-        "How",
-        "Where",
-        "When"
-      ]}
-      correctAnswer={1}
-      explanation="To ask about age we use 'How old are you?'"
-    />,
-
-    <MultipleChoiceExercise
-      key="7"
-      question="Complete: '_____ did you see at the party?'"
-      options={[
-        "Who",
-        "Whom", 
-        "Which",
-        "What"
-      ]}
-      correctAnswer={0}
-      explanation="'Who' is correct for asking about people in informal contexts."
-    />,
-
-    <MultipleChoiceExercise
-      key="8"
-      question="What's the correct question tag for: 'I am late'?"
-      options={[
-        "am I?",
-        "aren't I?",
-        "isn't I?",
-        "don't I?"
-      ]}
-      correctAnswer={1}
-      explanation="With 'I am', the question tag is 'aren't I?' (special form)."
-    />,
-
-    <MultipleChoiceExercise
-      key="9"
-      question="Complete: '_____ you help me?' (most polite)"
-      options={[
-        "Can",
-        "Could",
-        "Will",
-        "Do"
-      ]}
-      correctAnswer={1}
-      explanation="'Could you help me?' is the most polite way to ask for help."
-    />,
-
-    <MultipleChoiceExercise
-      key="10"
-      question="Which is the correct indirect question form of 'Where does she work?'"
-      options={[
-        "Do you know where does she work?",
-        "Do you know where she works?",
-        "Do you know where works she?",
-        "Do you know she works where?"
-      ]}
-      correctAnswer={1}
-      explanation="In indirect questions we use affirmative word order: 'where she works'."
-    />
-  ];
-
-  return (
+    return (
     <TheoryLayout
       title="Question Formation"
       description="Master question formation in English: yes/no questions, wh-questions, question tags, and indirect questions for precise communication."
       level="A2-B1-B2-C1-C2"
       theoryContent={theoryContent}
-      exercises={exercises}
+      getExercises={buildQuestionFormationExercises}
       prerequisites={["Basic verb tenses", "Auxiliaries", "Pronouns"]}
       estimatedTime="50 min"
     />

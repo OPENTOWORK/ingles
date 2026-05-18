@@ -1,10 +1,9 @@
 'use client';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { TheorySectionProvider } from '@/components/theory/TheoryContent';
+import { TheoryPageShell } from '@/components/theory/TheoryPageShell';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { supabase } from '@/utils/supabaseClient';
-// import { progressTracker } from '@/utils/progressTracker';
 
 const TheoryLayout = ({ 
   title, 
@@ -12,18 +11,64 @@ const TheoryLayout = ({
   level, 
   children, 
   theoryContent, 
-  exercises = [], 
+  exercises = [],
+  getExercises,
   prerequisites = [],
-  estimatedTime = "30 min"
+  estimatedTime = "30 min",
+  enableInlinePractice = true,
 }) => {
   const router = useRouter();
   const [activeTab, setActiveTab] = useState('theory');
   const [completedExercises, setCompletedExercises] = useState(new Set());
-  const [userProgress, setUserProgress] = useState(null);
+  const [loadedExercises, setLoadedExercises] = useState(null);
+  const [exercisesLoading, setExercisesLoading] = useState(false);
+
+  const exerciseCount = useMemo(() => {
+    if (Array.isArray(exercises) && exercises.length > 0) return exercises.length;
+    if (getExercises) return 20;
+    return 0;
+  }, [exercises, getExercises]);
 
   useEffect(() => {
     setActiveTab('theory');
+    setLoadedExercises(null);
+    setExercisesLoading(false);
   }, [title]);
+
+  const resolveExercises = useCallback(() => {
+    if (typeof getExercises === 'function') return getExercises();
+    return exercises;
+  }, [getExercises, exercises]);
+
+  useEffect(() => {
+    if (activeTab !== 'exercises' || loadedExercises) return undefined;
+
+    let cancelled = false;
+    setExercisesLoading(true);
+
+    const run = () => {
+      if (cancelled) return;
+      try {
+        setLoadedExercises(resolveExercises());
+      } finally {
+        if (!cancelled) setExercisesLoading(false);
+      }
+    };
+
+    if (typeof window !== 'undefined' && 'requestIdleCallback' in window) {
+      const id = window.requestIdleCallback(run, { timeout: 800 });
+      return () => {
+        cancelled = true;
+        window.cancelIdleCallback(id);
+      };
+    }
+
+    const t = setTimeout(run, 0);
+    return () => {
+      cancelled = true;
+      clearTimeout(t);
+    };
+  }, [activeTab, loadedExercises, resolveExercises]);
 
   const handleExerciseComplete = async (exerciseId, score) => {
     try {
@@ -36,9 +81,11 @@ const TheoryLayout = ({
   };
 
   const getProgressPercentage = () => {
-    if (exercises.length === 0) return 100;
-    return Math.round((completedExercises.size / exercises.length) * 100);
+    if (exerciseCount === 0) return 100;
+    return Math.round((completedExercises.size / exerciseCount) * 100);
   };
+
+  const displayExercises = loadedExercises ?? (Array.isArray(exercises) ? exercises : []);
 
   return (
     <div style={{
@@ -125,12 +172,12 @@ const TheoryLayout = ({
               </span>
               {prerequisites.length > 0 && (
                 <span style={{
-                  background: '#fff5f5',
-                  color: '#e53e3e',
+                  background: '#eef2ff',
+                  color: '#4338ca',
                   padding: '0.25rem 0.75rem',
                   borderRadius: '20px',
                   fontSize: '0.9rem',
-                  border: '1px solid #fed7d7'
+                  border: '1px solid #c7d2fe'
                 }}>
                   📋 Requires: {prerequisites.join(', ')}
                 </span>
@@ -170,61 +217,93 @@ const TheoryLayout = ({
           </div>
 
           {/* Tabs */}
-          <div style={{
-            display: 'flex',
-            gap: '0.5rem',
-            borderBottom: '2px solid #e2e8f0'
-          }}>
+          <div className="theory-tabs">
             <button
+              type="button"
               onClick={() => setActiveTab('theory')}
-              style={{
-                padding: '0.75rem 1.5rem',
-                border: 'none',
-                background: activeTab === 'theory' ? '#667eea' : 'transparent',
-                color: activeTab === 'theory' ? 'white' : '#4a5568',
-                borderRadius: '8px 8px 0 0',
-                cursor: 'pointer',
-                fontWeight: '500',
-                transition: 'all 0.2s'
-              }}
+              className={`theory-tab-btn${activeTab === 'theory' ? ' theory-tab-btn--active' : ''}`}
             >
-              📖 Theory
+              <span className="theory-tab-btn__icon" aria-hidden>📖</span>
+              <span>Theory</span>
             </button>
             <button
+              type="button"
               onClick={() => setActiveTab('exercises')}
-              style={{
-                padding: '0.75rem 1.5rem',
-                border: 'none',
-                background: activeTab === 'exercises' ? '#667eea' : 'transparent',
-                color: activeTab === 'exercises' ? 'white' : '#4a5568',
-                borderRadius: '8px 8px 0 0',
-                cursor: 'pointer',
-                fontWeight: '500',
-                transition: 'all 0.2s',
-                position: 'relative'
-              }}
+              className={`theory-tab-btn${activeTab === 'exercises' ? ' theory-tab-btn--active' : ''}`}
             >
-              🎯 Exercises
-              {exercises.length > 0 && (
-                <span style={{
-                  position: 'absolute',
-                  top: '-8px',
-                  right: '-8px',
-                  background: '#e53e3e',
-                  color: 'white',
-                  borderRadius: '50%',
-                  width: '20px',
-                  height: '20px',
-                  fontSize: '0.7rem',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center'
-                }}>
-                  {exercises.length}
+              <span className="theory-tab-btn__icon" aria-hidden>🎯</span>
+              <span>Exercises</span>
+              {exerciseCount > 0 && (
+                <span className="theory-tab-btn__count" aria-label={`${exerciseCount} exercises`}>
+                  {exerciseCount}
                 </span>
               )}
             </button>
           </div>
+          <style jsx>{`
+            .theory-tabs {
+              display: inline-flex;
+              gap: 6px;
+              padding: 6px;
+              background: linear-gradient(180deg, #f8fafc 0%, #eef2ff 100%);
+              border: 1px solid #e2e8f0;
+              border-radius: 14px;
+              box-shadow: inset 0 1px 2px rgba(15, 23, 42, 0.05);
+            }
+            .theory-tab-btn {
+              display: inline-flex;
+              align-items: center;
+              gap: 8px;
+              padding: 11px 22px;
+              border: none;
+              border-radius: 10px;
+              cursor: pointer;
+              font-size: 0.95rem;
+              font-weight: 600;
+              letter-spacing: 0.01em;
+              color: #475569;
+              background: transparent;
+              transition: background 0.22s ease, color 0.22s ease, box-shadow 0.22s ease,
+                transform 0.18s ease;
+            }
+            .theory-tab-btn:hover:not(.theory-tab-btn--active) {
+              background: rgba(255, 255, 255, 0.9);
+              color: #4338ca;
+              box-shadow: 0 2px 8px rgba(99, 102, 241, 0.12);
+            }
+            .theory-tab-btn--active {
+              color: #fff;
+              background: linear-gradient(135deg, #667eea 0%, #5b6fd6 50%, #764ba2 100%);
+              box-shadow: 0 4px 16px rgba(102, 126, 234, 0.45), 0 1px 0 rgba(255, 255, 255, 0.2) inset;
+            }
+            .theory-tab-btn--active:hover {
+              transform: translateY(-1px);
+              box-shadow: 0 6px 20px rgba(102, 126, 234, 0.5), 0 1px 0 rgba(255, 255, 255, 0.2) inset;
+            }
+            .theory-tab-btn__icon {
+              font-size: 1.05rem;
+              line-height: 1;
+            }
+            .theory-tab-btn__count {
+              min-width: 22px;
+              height: 22px;
+              padding: 0 7px;
+              display: inline-flex;
+              align-items: center;
+              justify-content: center;
+              border-radius: 999px;
+              font-size: 0.75rem;
+              font-weight: 700;
+              line-height: 1;
+              background: linear-gradient(135deg, #667eea, #764ba2);
+              color: #fff;
+              box-shadow: 0 2px 6px rgba(102, 126, 234, 0.35);
+            }
+            .theory-tab-btn--active .theory-tab-btn__count {
+              background: rgba(255, 255, 255, 0.28);
+              box-shadow: none;
+            }
+          `}</style>
         </div>
       </div>
 
@@ -243,7 +322,9 @@ const TheoryLayout = ({
         }}>
           {activeTab === 'theory' && (
             <TheorySectionProvider key={title}>
-              <div>{theoryContent}</div>
+              <TheoryPageShell topicTitle={title} enableInlinePractice={enableInlinePractice}>
+                {theoryContent}
+              </TheoryPageShell>
             </TheorySectionProvider>
           )}
           
@@ -261,7 +342,12 @@ const TheoryLayout = ({
                 🎯 Practice Exercises
               </h2>
               
-              {exercises.length === 0 ? (
+              {exercisesLoading ? (
+                <div style={{ textAlign: 'center', padding: '3rem', color: '#64748b' }} role="status">
+                  <span className="route-loading__spinner" aria-hidden="true" style={{ display: 'inline-block', marginBottom: '1rem' }} />
+                  <p style={{ margin: 0 }}>Loading exercises…</p>
+                </div>
+              ) : displayExercises.length === 0 ? (
                 <div style={{
                   textAlign: 'center',
                   padding: '3rem',
@@ -273,7 +359,7 @@ const TheoryLayout = ({
                 </div>
               ) : (
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
-                  {exercises.map((exercise, index) => (
+                  {displayExercises.map((exercise, index) => (
                     <div key={exercise.key || index}>
                       {exercise}
                     </div>
@@ -313,7 +399,7 @@ const TheoryLayout = ({
           ← Back to Theory
         </Link>
         
-        {activeTab === 'theory' && exercises.length > 0 && (
+        {activeTab === 'theory' && exerciseCount > 0 && (
           <button
             onClick={() => setActiveTab('exercises')}
             style={{

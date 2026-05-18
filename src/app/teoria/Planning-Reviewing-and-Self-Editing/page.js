@@ -1,4 +1,5 @@
 'use client';
+import { buildPlanningReviewingAndSelfEditingExercises } from './planningReviewingAndSelfEditingExercises';
 import React from 'react';
 import TheoryLayout from '@/components/theory/TheoryLayout';
 import { 
@@ -9,15 +10,11 @@ import {
   GrammarTable, 
   QuickReference 
 } from '@/components/theory/TheoryContent';
-import { 
-  MultipleChoiceExercise, 
-  FillBlanksExercise, 
-  TrueFalseExercise 
-} from '@/components/theory/ExerciseComponents';
+
 
 const PlanningReviewingAndSelfEditingPage = () => {
   const theoryContent = (
-    <div>
+    <>
       <TheorySection title="What Are Planning, Reviewing, and Self-Editing?" icon="📋">
         <p style={{ fontSize: '1.1rem', lineHeight: 1.6, color: '#4a5568', marginBottom: '1rem' }}>
           <strong>Planning</strong>, <strong>reviewing</strong>, and <strong>self-editing</strong> are essential stages for producing high-quality texts. 
@@ -329,172 +326,16 @@ const PlanningReviewingAndSelfEditingPage = () => {
           />
         </div>
       </TheorySection>
-    </div>
+    </>
   );
 
-  const exercises = [
-    <MultipleChoiceExercise
-      key="1"
-      question="What should you do before you start writing?"
-      options={[
-        "Review only",
-        "Planning",
-        "Self-editing",
-        "Publishing"
-      ]}
-      correctAnswer={1}
-      explanation="Plan first to organise ideas and structure the piece effectively."
-    />,
-
-    <MultipleChoiceExercise
-      key="2"
-      question="What is the usual order of the writing process?"
-      options={[
-        "Write → Plan → Review → Revise",
-        "Plan → Write → Review → Revise",
-        "Review → Plan → Write → Revise",
-        "Revise → Plan → Write → Review"
-      ]}
-      correctAnswer={1}
-      explanation="Typical order: plan → draft → review → revise. Planning comes first."
-    />,
-
-    <TrueFalseExercise
-      key="3"
-      statements={[
-        {
-          text: "Planning should take roughly 20% of total writing time.",
-          isTrue: true,
-          explanation: "Correct. A useful split is roughly 20% planning, 50% drafting, 30% review and editing."
-        },
-        {
-          text: "It is better to fix every type of error in a single pass.",
-          isTrue: false,
-          explanation: "Incorrect. Focus on one editing level at a time: macro, meso, micro, then proofreading."
-        },
-        {
-          text: "Reading aloud helps spot problems with flow.",
-          isTrue: true,
-          explanation: "Correct. Reading aloud reveals rhythm, awkward phrasing, and gaps in logic."
-        },
-        {
-          text: "Automated checkers catch every error in a text.",
-          isTrue: false,
-          explanation: "Incorrect. They miss register, style, coherence, and wrong-word errors."
-        }
-      ]}
-    />,
-
-    <MultipleChoiceExercise
-      key="4"
-      question="What do you focus on at the macro-editing stage?"
-      options={[
-        "Spelling only",
-        "Overall structure and organisation",
-        "Specific grammar mistakes in isolation",
-        "Capital letters only"
-      ]}
-      correctAnswer={1}
-      explanation="Macro-editing deals with overall structure, order, and flow—not tiny mechanical details."
-    />,
-
-    <MultipleChoiceExercise
-      key="5"
-      question="Which technique helps most with catching spelling mistakes?"
-      options={[
-        "Reading aloud only",
-        "Reading backwards",
-        "Using only spell check",
-        "Reading through once quickly"
-      ]}
-      correctAnswer={1}
-      explanation="Reading backwards (sentence by sentence from the end) helps you focus on individual words."
-    />,
-
-    <TrueFalseExercise
-      key="6"
-      statements={[
-        {
-          text: "Self-editing should tackle all error types at the same time.",
-          isTrue: false,
-          explanation: "Incorrect. Use several passes, each with a different focus: content, organisation, grammar, vocabulary."
-        },
-        {
-          text: "Reading your text aloud helps identify flow and rhythm problems.",
-          isTrue: true,
-          explanation: "Correct. Reading aloud reveals fluency issues and errors you might skip when reading silently."
-        },
-        {
-          text: "Planning is less important than writing in timed essays.",
-          isTrue: false,
-          explanation: "Incorrect. Even under time pressure, a short plan reduces disorganisation and wasted time."
-        }
-      ]}
-    />,
-
-    <MultipleChoiceExercise
-      key="7"
-      question="What is the first step when reviewing a draft?"
-      options={[
-        "Fix grammar mistakes immediately",
-        "Review overall content and structure",
-        "Check spelling only",
-        "Count words only"
-      ]}
-      correctAnswer={1}
-      explanation="Start with big-picture content and structure (macro) before fine details."
-    />,
-
-    <MultipleChoiceExercise
-      key="8"
-      question="Which tool is most useful when planning essays?"
-      options={[
-        "Memory alone",
-        "Outlines and mind maps",
-        "Writing with no plan",
-        "A dictionary only"
-      ]}
-      correctAnswer={1}
-      explanation="Outlines and mind maps help organise ideas and ensure coherence before drafting."
-    />,
-
-    <TrueFalseExercise
-      key="9"
-      statements={[
-        {
-          text: "Spell checkers catch every kind of writing error.",
-          isTrue: false,
-          explanation: "Incorrect. They often miss wrong words, style, register, and coherence problems."
-        },
-        {
-          text: "Taking a break between drafting and reviewing improves editing.",
-          isTrue: true,
-          explanation: "Correct. A short break gives you a fresh eye for errors and weak spots."
-        }
-      ]}
-    />,
-
-    <MultipleChoiceExercise
-      key="10"
-      question="What is the difference between reviewing and editing?"
-      options={[
-        "No difference",
-        "Review focuses on content; editing on specific errors and wording",
-        "Editing is always more important",
-        "You only ever do one of them"
-      ]}
-      correctAnswer={1}
-      explanation="Reviewing targets meaning, structure, and fit to the task; editing targets grammar, vocabulary, and mechanics."
-    />
-  ];
-
-  return (
+    return (
     <TheoryLayout
       title="Planning, Reviewing, and Self-Editing"
       description="Master planning, reviewing, and self-editing to produce high-quality writing. Learn practical strategies and tools for each stage."
       level="B2-C1-C2"
       theoryContent={theoryContent}
-      exercises={exercises}
+      getExercises={buildPlanningReviewingAndSelfEditingExercises}
       prerequisites={["Basic writing skills", "Understanding of text structure"]}
       estimatedTime="80 min"
     />

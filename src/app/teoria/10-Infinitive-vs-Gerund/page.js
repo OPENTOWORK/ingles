@@ -1,4 +1,5 @@
 'use client';
+import { build10InfinitiveVsGerundExercises } from './infinitiveVsGerundExercises';
 import React from 'react';
 import TheoryLayout from '@/components/theory/TheoryLayout';
 import { 
@@ -9,15 +10,11 @@ import {
   GrammarTable, 
   QuickReference 
 } from '@/components/theory/TheoryContent';
-import { 
-  MultipleChoiceExercise, 
-  FillBlanksExercise, 
-  TrueFalseExercise 
-} from '@/components/theory/ExerciseComponents';
+
 
 const InfinitiveVsGerundPage = () => {
   const theoryContent = (
-    <div>
+    <>
       <TheorySection title="What Are Infinitive and Gerund?" icon="🔤">
         <p style={{ fontSize: '1.1rem', lineHeight: 1.6, color: '#4a5568', marginBottom: '1rem' }}>
           The <strong>infinitive</strong> and the <strong>gerund</strong> are verb forms that function as nouns. 
@@ -54,17 +51,14 @@ const InfinitiveVsGerundPage = () => {
           <Example 
             spanish="Quiero aprender inglés"
             english="I want to learn English"
-            translation="I want to learn English"
           />
           <Example 
             spanish="Es importante estudiar"
             english="It's important to study"
-            translation="It's important to study"
           />
           <Example 
             spanish="Voy a la tienda para comprar leche"
             english="I go to the store to buy milk"
-            translation="I go to the store to buy milk"
           />
         </div>
 
@@ -104,17 +98,14 @@ const InfinitiveVsGerundPage = () => {
           <Example 
             spanish="Nadar es bueno para la salud"
             english="Swimming is good for health"
-            translation="Swimming is good for health"
           />
           <Example 
             spanish="Disfruto cocinando"
             english="I enjoy cooking"
-            translation="I enjoy cooking"
           />
           <Example 
             spanish="Soy bueno cantando"
             english="I am good at singing"
-            translation="I am good at singing"
           />
         </div>
 
@@ -155,22 +146,18 @@ const InfinitiveVsGerundPage = () => {
           <Example 
             spanish="Recuerda cerrar la puerta"
             english="Remember to close the door"
-            translation="Remember to close the door"
           />
           <Example 
             spanish="Recuerdo haber cerrado la puerta"
             english="I remember closing the door"
-            translation="I remember closing the door"
           />
           <Example 
             spanish="Intento aprender inglés"
             english="I try to learn English"
-            translation="I try to learn English"
           />
           <Example 
             spanish="Pruebo aprender inglés"
             english="I try learning English"
-            translation="I try learning English"
           />
         </div>
 
@@ -201,17 +188,14 @@ const InfinitiveVsGerundPage = () => {
           <Example 
             spanish="Es fácil aprender inglés"
             english="It's easy to learn English"
-            translation="It's easy to learn English"
           />
           <Example 
             spanish="Soy bueno nadando"
             english="I am good at swimming"
-            translation="I am good at swimming"
           />
           <Example 
             spanish="Tengo ganas de verte"
             english="I look forward to seeing you"
-            translation="I look forward to seeing you"
           />
         </div>
 
@@ -279,172 +263,16 @@ const InfinitiveVsGerundPage = () => {
           />
         </div>
       </TheorySection>
-    </div>
+    </>
   );
 
-  const exercises = [
-    <MultipleChoiceExercise
-      key="1"
-      question="Complete: 'I want _____ English.'"
-      options={[
-        "learn",
-        "to learn",
-        "learning",
-        "learned"
-      ]}
-      correctAnswer={1}
-      explanation="After 'want' we use the infinitive with 'to': 'want to learn'."
-    />,
-
-    <MultipleChoiceExercise
-      key="2"
-      question="Which is the correct form to complete: 'I enjoy ___ books'?"
-      options={[
-        "to read",
-        "reading",
-        "read",
-        "reads"
-      ]}
-      correctAnswer={1}
-      explanation="'Enjoy' is followed by a gerund: 'I enjoy reading books'."
-    />,
-
-    <TrueFalseExercise
-      key="3"
-      statements={[
-        {
-          text: "'I want to go home' is correct.",
-          isTrue: true,
-          explanation: "Correct. 'Want' is followed by an infinitive."
-        },
-        {
-          text: "'I enjoy to swim' is correct.",
-          isTrue: false,
-          explanation: "Incorrect. 'Enjoy' is followed by a gerund: 'I enjoy swimming'."
-        },
-        {
-          text: "'I'm looking forward to seeing you' is correct.",
-          isTrue: true,
-          explanation: "Correct. 'Look forward to' is followed by a gerund."
-        },
-        {
-          text: "'I stopped to smoke' means I quit smoking.",
-          isTrue: false,
-          explanation: "Incorrect. 'I stopped to smoke' means I stopped in order to smoke. 'I stopped smoking' means I quit smoking."
-        }
-      ]}
-    />,
-
-    <MultipleChoiceExercise
-      key="4"
-      question="Which is the correct form to complete: 'I remember ___ the door' (I remember that I closed it)?"
-      options={[
-        "to close",
-        "closing",
-        "close",
-        "closed"
-      ]}
-      correctAnswer={1}
-      explanation="To remember having done something we use the gerund: 'I remember closing the door'."
-    />,
-
-    <MultipleChoiceExercise
-      key="5"
-      question="Which is the correct form to complete: 'It's easy ___ English'?"
-      options={[
-        "learn",
-        "learning",
-        "to learn",
-        "learns"
-      ]}
-      correctAnswer={2}
-      explanation="After 'It's + adjective' we use the infinitive: 'It's easy to learn English'."
-    />,
-
-    <TrueFalseExercise
-      key="6"
-      statements={[
-        {
-          text: "'I enjoy to read books' is correct.",
-          isTrue: false,
-          explanation: "Incorrect. 'Enjoy' requires a gerund: 'I enjoy reading books'."
-        },
-        {
-          text: "'She decided to study medicine' is correct.",
-          isTrue: true,
-          explanation: "Correct. 'Decide' requires an infinitive: 'decided to study'."
-        },
-        {
-          text: "'I'm looking forward to see you' is correct.",
-          isTrue: false,
-          explanation: "Incorrect. After 'to' as a preposition we use the gerund: 'looking forward to seeing you'."
-        }
-      ]}
-    />,
-
-    <MultipleChoiceExercise
-      key="7"
-      question="Complete: 'I can't stand ___ in long queues.'"
-      options={[
-        "to wait",
-        "waiting",
-        "wait",
-        "waited"
-      ]}
-      correctAnswer={1}
-      explanation="'Can't stand' requires a gerund: 'I can't stand waiting'."
-    />,
-
-    <MultipleChoiceExercise
-      key="8"
-      question="Which is the correct form: 'I remember ___ her at the party'?"
-      options={[
-        "to meet",
-        "meeting",
-        "meet",
-        "met"
-      ]}
-      correctAnswer={1}
-      explanation="'Remember' + gerund refers to remembering something that already happened: 'I remember meeting her'."
-    />,
-
-    <TrueFalseExercise
-      key="9"
-      statements={[
-        {
-          text: "'Stop to smoke' and 'stop smoking' have the same meaning.",
-          isTrue: false,
-          explanation: "Incorrect. 'Stop to smoke' = stop in order to smoke; 'stop smoking' = quit smoking."
-        },
-        {
-          text: "After prepositions we use gerund.",
-          isTrue: true,
-          explanation: "Correct. After prepositions we use the gerund: 'interested in learning'."
-        }
-      ]}
-    />,
-
-    <MultipleChoiceExercise
-      key="10"
-      question="Complete: 'She forgot ___ the door before leaving.'"
-      options={[
-        "locking",
-        "to lock",
-        "lock",
-        "locked"
-      ]}
-      correctAnswer={1}
-      explanation="'Forget' + infinitive refers to forgetting to do something: 'forgot to lock' (forgot to lock the door)."
-    />
-  ];
-
-  return (
+    return (
     <TheoryLayout
       title="Infinitive vs Gerund"
       description="Master the use of the infinitive and gerund in English. Learn which verbs require each form and when to use each one to express yourself correctly."
       level="B1-B2-C1-C2"
       theoryContent={theoryContent}
-      exercises={exercises}
+      getExercises={build10InfinitiveVsGerundExercises}
       prerequisites={["Present Tenses", "Basic vocabulary", "Understanding of verb forms"]}
       estimatedTime="65 min"
     />

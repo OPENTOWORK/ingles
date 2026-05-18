@@ -9,28 +9,77 @@ import {
   GrammarTable, 
   QuickReference 
 } from '@/components/theory/TheoryContent';
-import { 
-  MultipleChoiceExercise, 
-  FillBlanksExercise, 
-  TrueFalseExercise 
-} from '@/components/theory/ExerciseComponents';
+import { buildPresentTensesExercises } from './presentTensesExercises';
+import {
+  PresentTensesPracticeHub,
+  PresentTensesFillPractice,
+  PresentTensesKeywordPractice,
+} from '@/components/theory/present-tenses/PresentTensesInteractive';
 
 const PresentTensesPage = () => {
   const theoryContent = (
-    <div>
-      <TheorySection title="What Are Present Tenses?" icon="⏰">
+    <>
+      <TheorySection title="What Are Present Tenses?" icon="🎯">
         <p style={{ fontSize: '1.1rem', lineHeight: 1.6, color: '#4a5568', marginBottom: '1rem' }}>
           <strong>Present tenses</strong> are verb forms used to talk about actions, 
           states, and situations that occur in the present. There are three main present tenses in English.
         </p>
         
-        <QuickReference items={[
-          "Present Simple: routines, general facts",
-          "Present Continuous: actions in progress",
-          "Present Perfect: experiences, completed actions",
-          "Each tense has specific uses",
-          "The choice of tense depends on context"
-        ]} />
+        <QuickReference
+          variant="green"
+          items={[
+            {
+              title: 'Present Simple: routines, general facts',
+              description:
+                'Used for habits, daily routines, and things that are always true.',
+              example: (
+                <>
+                  I <strong>go</strong> to work every day.
+                </>
+              ),
+            },
+            {
+              title: 'Present Continuous: actions in progress',
+              description: 'Used for actions happening now or around now.',
+              example: (
+                <>
+                  I <strong>am studying</strong> right now.
+                </>
+              ),
+            },
+            {
+              title: 'Present Perfect: experiences, completed actions',
+              description:
+                'Used for past actions with a result in the present or life experiences.',
+              example: (
+                <>
+                  I <strong>have visited</strong> Paris.
+                </>
+              ),
+            },
+            {
+              title: 'Each tense has specific uses',
+              description: 'Knowing when and how to use each tense helps your communication.',
+              example: (
+                <>
+                  Use the right tense to be <strong>clear</strong> and <strong>natural</strong>.
+                </>
+              ),
+            },
+            {
+              title: 'The choice of tense depends on context',
+              description: 'Time expressions and the situation help you decide.',
+              example: (
+                <>
+                  Think about <strong>when the action happens</strong> and its{' '}
+                  <strong>connection to now</strong>.
+                </>
+              ),
+            },
+          ]}
+        />
+
+        <PresentTensesPracticeHub embedded />
       </TheorySection>
 
       <TheorySection title="Present Simple" icon="📅">
@@ -48,31 +97,38 @@ const PresentTensesPage = () => {
         />
 
         <div style={{ display: 'grid', gap: '1rem' }}>
-          <Example 
-            spanish="Yo trabajo todos los días"
+          <Example
+            useTag="Daily routine"
             english="I work every day"
-            translation="I work every day"
+            spanish="Yo trabajo todos los días"
+            why="The action repeats on a regular schedule. It is part of your everyday life, not something happening only at this moment."
+            whyLabel="Why Present Simple?"
           />
-          <Example 
-            spanish="El sol sale por el este"
+          <Example
+            useTag="General fact"
             english="The sun rises in the east"
-            translation="The sun rises in the east"
+            spanish="El sol sale por el este"
+            why="Present Simple expresses truths that are always true — scientific facts and laws of nature do not change with time."
+            whyLabel="Why Present Simple?"
           />
-          <Example 
-            spanish="Ella no vive aquí"
+          <Example
+            useTag="Permanent situation"
             english="She doesn't live here"
-            translation="She doesn't live here"
+            spanish="Ella no vive aquí"
+            why="We describe a stable state that stays true over a long period. Where someone lives is a long-term situation, not a temporary action in progress."
+            whyLabel="Why Present Simple?"
           />
         </div>
 
-        <Rule 
+        <Rule
           title="Uses of Present Simple"
-          description="When to use Present Simple:"
+          description="When to use Present Simple (each use links to the examples above):"
           examples={[
-            "Daily routines: I wake up at 7 AM",
-            "General facts: Water boils at 100°C",
-            "Habits: She always drinks coffee",
-            "Schedules: The train leaves at 8 PM"
+            'Daily routines → "I work every day" — repeated actions in your normal week',
+            'General facts → "The sun rises in the east" — truths that are always valid',
+            'Permanent situations → "She doesn\'t live here" — states that continue over time',
+            'Habits: She always drinks coffee — repeated behaviour with always / usually / often',
+            'Schedules: The train leaves at 8 PM — fixed timetables and programmes',
           ]}
         />
 
@@ -97,31 +153,39 @@ const PresentTensesPage = () => {
         />
 
         <div style={{ display: 'grid', gap: '1rem' }}>
-          <Example 
-            spanish="Estoy escribiendo una carta"
+          <Example
+            useTag="Action in progress"
             english="I am writing a letter"
-            translation="I am writing a letter"
+            spanish="Estoy escribiendo una carta"
+            why="Am/is/are + -ing shows the action is unfinished and happening around now — at the moment of speaking."
+            whyLabel="Why Present Continuous?"
           />
-          <Example 
-            spanish="Los niños están jugando"
+          <Example
+            useTag="Happening now"
             english="The children are playing"
-            translation="The children are playing"
+            spanish="Los niños están jugando"
+            why="We focus on the activity as it unfolds right now, not on a habit or a finished event."
+            whyLabel="Why Present Continuous?"
           />
-          <Example 
-            spanish="¿Qué estás haciendo?"
+          <Example
+            useTag="Question about now"
             english="What are you doing?"
-            translation="What are you doing?"
+            spanish="¿Qué estás haciendo?"
+            why="Questions with am/is/are + -ing ask about someone's current activity, not their routine or past experience."
+            whyLabel="Why Present Continuous?"
           />
         </div>
 
         <Rule 
           title="Uses of Present Continuous"
-          description="When to use Present Continuous:"
+          description="When to use Present Continuous (linked to the examples above):"
           examples={[
-            "Actions now: I'm reading a book",
-            "Temporary actions: I'm living in London this year",
-            "Future plans: We're meeting tomorrow",
-            "Changes in progress: The weather is getting colder"
+            'Action in progress → "I am writing a letter" — the action is ongoing now',
+            'Happening now → "The children are playing" — activity at this moment',
+            'Questions about now → "What are you doing?" — asking about the current activity',
+            "Temporary situations: I'm living in London this year — not permanent",
+            "Future arrangements: We're meeting tomorrow — planned near future",
+            "Changing situations: The weather is getting colder — development in progress",
           ]}
         />
 
@@ -146,31 +210,37 @@ const PresentTensesPage = () => {
         />
 
         <div style={{ display: 'grid', gap: '1rem' }}>
-          <Example 
-            spanish="He visitado París"
+          <Example
+            useTag="Life experience"
             english="I have visited Paris"
-            translation="I have visited Paris"
+            spanish="He visitado París"
+            why="Have/has + past participle can describe something you have done at some point in your life — the exact time is not important."
+            whyLabel="Why Present Perfect?"
           />
-          <Example 
-            spanish="Ella ha vivido aquí por 5 años"
+          <Example
+            useTag="Duration until now"
             english="She has lived here for 5 years"
-            translation="She has lived here for 5 years"
+            spanish="Ella ha vivido aquí por 5 años"
+            why="With for or since, Present Perfect connects a past start time to the present — the situation still continues now."
+            whyLabel="Why Present Perfect?"
           />
-          <Example 
-            spanish="¿Has terminado tu tarea?"
+          <Example
+            useTag="Recent result"
             english="Have you finished your homework?"
-            translation="Have you finished your homework?"
+            spanish="¿Has terminado tu tarea?"
+            why="We often use Present Perfect for actions completed recently when the result matters now — e.g. whether the homework is done."
+            whyLabel="Why Present Perfect?"
           />
         </div>
 
         <Rule 
           title="Uses of Present Perfect"
-          description="When to use Present Perfect:"
+          description="When to use Present Perfect (linked to the examples above):"
           examples={[
-            "Experiences: I have been to Japan",
-            "Recent actions: I have just finished eating",
-            "Duration until now: I have lived here since 2020",
-            "Present result: I have lost my keys"
+            'Life experience → "I have visited Paris" — when the time is unspecified',
+            'Duration until now → "She has lived here for 5 years" — past start, still true now',
+            'Recent result → "Have you finished your homework?" — completed action with present relevance',
+            "Present result: I have lost my keys — you cannot find them now",
           ]}
         />
 
@@ -191,21 +261,31 @@ const PresentTensesPage = () => {
         />
 
         <div style={{ display: 'grid', gap: '1rem' }}>
-          <Example 
-            spanish="Yo trabajo en una oficina (hecho general)"
+          <Example
+            useTag="Present Simple"
             english="I work in an office"
-            translation="I work in an office"
+            spanish="Yo trabajo en una oficina"
+            why="This is your normal job — a general fact about your life, not an action in progress at this second."
+            whyLabel="Why Present Simple?"
           />
-          <Example 
-            spanish="Estoy trabajando en un proyecto (ahora mismo)"
+          <Example
+            useTag="Present Continuous"
             english="I am working on a project"
-            translation="I am working on a project"
+            spanish="Estoy trabajando en un proyecto"
+            why="The -ing form shows a temporary focus: you are busy with this project around now, even if your job in general is the same."
+            whyLabel="Why Present Continuous?"
           />
-          <Example 
-            spanish="He trabajado aquí por 3 años (experiencia)"
+          <Example
+            useTag="Present Perfect"
             english="I have worked here for 3 years"
-            translation="I have worked here for 3 years"
+            spanish="He trabajado aquí por 3 años"
+            why="Have + past participle + for links past time to the present: you started before and you are still here — the period includes now."
+            whyLabel="Why Present Perfect?"
           />
+        </div>
+
+        <div className="pt-section-practice">
+          <PresentTensesFillPractice />
         </div>
       </TheorySection>
 
@@ -238,184 +318,42 @@ const PresentTensesPage = () => {
       </TheorySection>
 
       <TheorySection title="Key Words" icon="🔑">
-        <div style={{ display: 'grid', gap: '1rem' }}>
-          <div>
-            <h4 style={{ color: '#667eea', marginBottom: '0.5rem' }}>Present Simple:</h4>
-            <p style={{ color: '#4a5568', marginBottom: '0.5rem' }}>
+        <p style={{ color: '#64748b', fontSize: '0.95rem', marginBottom: '1rem', lineHeight: 1.5 }}>
+          Study the lists below, then practise matching keywords to the correct tense.
+        </p>
+        <div style={{ display: 'grid', gap: '1rem', marginBottom: '1.25rem' }}>
+          <div style={{ padding: '0.85rem 1rem', borderRadius: 10, background: '#eef2ff', border: '1px solid #c7d2fe' }}>
+            <h4 style={{ color: '#4338ca', margin: '0 0 0.35rem', fontSize: '0.95rem' }}>Present Simple</h4>
+            <p style={{ color: '#475569', margin: 0, fontSize: '0.9rem' }}>
               always, usually, often, sometimes, rarely, never, every day, on Mondays
             </p>
           </div>
-
-          <div>
-            <h4 style={{ color: '#667eea', marginBottom: '0.5rem' }}>Present Continuous:</h4>
-            <p style={{ color: '#4a5568', marginBottom: '0.5rem' }}>
+          <div style={{ padding: '0.85rem 1rem', borderRadius: 10, background: '#ecfeff', border: '1px solid #a5f3fc' }}>
+            <h4 style={{ color: '#0e7490', margin: '0 0 0.35rem', fontSize: '0.95rem' }}>Present Continuous</h4>
+            <p style={{ color: '#475569', margin: 0, fontSize: '0.9rem' }}>
               now, at the moment, currently, right now, today, this week
             </p>
           </div>
-
-          <div>
-            <h4 style={{ color: '#667eea', marginBottom: '0.5rem' }}>Present Perfect:</h4>
-            <p style={{ color: '#4a5568', marginBottom: '0.5rem' }}>
+          <div style={{ padding: '0.85rem 1rem', borderRadius: 10, background: '#f5f3ff', border: '1px solid #ddd6fe' }}>
+            <h4 style={{ color: '#6d28d9', margin: '0 0 0.35rem', fontSize: '0.95rem' }}>Present Perfect</h4>
+            <p style={{ color: '#475569', margin: 0, fontSize: '0.9rem' }}>
               already, just, yet, ever, never, since, for, recently, lately
             </p>
           </div>
         </div>
+        <PresentTensesKeywordPractice />
       </TheorySection>
-    </div>
+    </>
   );
-
-  const exercises = [
-    <MultipleChoiceExercise
-      key="1"
-      question="Complete: 'I ___ in a hospital.'"
-      options={[
-        "am working",
-        "work",
-        "worked",
-        "have worked"
-      ]}
-      correctAnswer={1}
-      explanation="'Work' is Present Simple for a general fact or habitual routine."
-    />,
-
-    <MultipleChoiceExercise
-      key="2"
-      question="Which is the correct form to complete: 'She ___ to school every day'?"
-      options={[
-        "is going",
-        "goes",
-        "has gone",
-        "go"
-      ]}
-      correctAnswer={1}
-      explanation="For daily routines we use Present Simple. With 'she' we add -s to the verb: 'goes'."
-    />,
-
-    <TrueFalseExercise
-      key="3"
-      statements={[
-        {
-          text: "'I am liking this movie' is correct.",
-          isTrue: false,
-          explanation: "Incorrect. 'Like' is a stative verb; we do not use Present Continuous. Correct: 'I like this movie'."
-        },
-        {
-          text: "'I have been to Paris' means I visited Paris at some point in my life.",
-          isTrue: true,
-          explanation: "Correct. Present Perfect is used for life experiences without a specific time."
-        },
-        {
-          text: "'I work here since 2020' is correct.",
-          isTrue: false,
-          explanation: "Incorrect. With 'since' we use Present Perfect: 'I have worked here since 2020'."
-        },
-        {
-          text: "'What are you doing now?' is correct.",
-          isTrue: true,
-          explanation: "Correct. For actions in progress now we use Present Continuous."
-        }
-      ]}
-    />,
-
-    <MultipleChoiceExercise
-      key="4"
-      question="Which is the correct form to complete: 'I ___ this book for two hours'?"
-      options={[
-        "am reading",
-        "read",
-        "have been reading",
-        "have read"
-      ]}
-      correctAnswer={2}
-      explanation="For actions that started in the past and continue in the present we use Present Perfect Continuous: 'have been reading'."
-    />,
-
-    <MultipleChoiceExercise
-      key="5"
-      question="Which is the correct form to complete: 'She ___ never ___ to Japan'?"
-      options={[
-        "is, been",
-        "has, been",
-        "have, been",
-        "was, been"
-      ]}
-      correctAnswer={1}
-      explanation="With 'never' and life experiences we use Present Perfect: 'She has never been to Japan'."
-    />,
-
-    <MultipleChoiceExercise
-      key="6"
-      question="Complete: 'I ___ my homework right now.'"
-      options={[
-        "do",
-        "am doing",
-        "have done",
-        "did"
-      ]}
-      correctAnswer={1}
-      explanation="'Right now' indicates an action in progress at this moment, so we use Present Continuous."
-    />,
-
-    <MultipleChoiceExercise
-      key="7"
-      question="Which is correct?"
-      options={[
-        "He is having a car",
-        "He has a car",
-        "He is have a car",
-        "He having a car"
-      ]}
-      correctAnswer={1}
-      explanation="'Have' for possession is not used in the continuous. We use Present Simple: 'He has a car'."
-    />,
-
-    <MultipleChoiceExercise
-      key="8"
-      question="Complete: 'How long ___ you ___ English?'"
-      options={[
-        "do, study",
-        "are, studying",
-        "have, studied",
-        "did, study"
-      ]}
-      correctAnswer={2}
-      explanation="'How long' with an action that started in the past and continues requires Present Perfect."
-    />,
-
-    <MultipleChoiceExercise
-      key="9"
-      question="Which is the correct form?"
-      options={[
-        "She always is complaining",
-        "She is always complaining",
-        "She always complains",
-        "Both B and C are correct"
-      ]}
-      correctAnswer={3}
-      explanation="Both are correct: 'always complains' (habit) and 'is always complaining' (annoyance)."
-    />,
-
-    <MultipleChoiceExercise
-      key="10"
-      question="Complete: 'I ___ three cups of coffee today.'"
-      options={[
-        "drink",
-        "am drinking",
-        "have drunk",
-        "drank"
-      ]}
-      correctAnswer={2}
-      explanation="'Today' is a period that has not finished yet, so we use Present Perfect."
-    />
-  ];
 
   return (
     <TheoryLayout
+      enableInlinePractice={false}
       title="Present Tenses"
       description="Master the three English present tenses: Simple, Continuous, and Perfect. Learn when to use each one and avoid common mistakes."
       level="A2-B1-B2-C1-C2"
       theoryContent={theoryContent}
-      exercises={exercises}
+      getExercises={buildPresentTensesExercises}
       prerequisites={["Verb to be", "Pronouns", "Basic vocabulary"]}
       estimatedTime="60 min"
     />

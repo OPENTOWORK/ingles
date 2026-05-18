@@ -1,4 +1,5 @@
 'use client';
+import { build9FutureTensesExercises } from './futureTensesExercises';
 import React from 'react';
 import TheoryLayout from '@/components/theory/TheoryLayout';
 import { 
@@ -9,15 +10,11 @@ import {
   GrammarTable, 
   QuickReference 
 } from '@/components/theory/TheoryContent';
-import { 
-  MultipleChoiceExercise, 
-  FillBlanksExercise, 
-  TrueFalseExercise 
-} from '@/components/theory/ExerciseComponents';
+
 
 const FutureTensesPage = () => {
   const theoryContent = (
-    <div>
+    <>
       <TheorySection title="What Are Future Tenses?" icon="🔮">
         <p style={{ fontSize: '1.1rem', lineHeight: 1.6, color: '#4a5568', marginBottom: '1rem' }}>
           <strong>Future tenses</strong> are verb forms used to talk about actions, 
@@ -52,17 +49,14 @@ const FutureTensesPage = () => {
           <Example 
             spanish="Te ayudaré con tu tarea"
             english="I will help you with your homework"
-            translation="I will help you with your homework"
           />
           <Example 
             spanish="Creo que lloverá mañana"
             english="I think it will rain tomorrow"
-            translation="I think it will rain tomorrow"
           />
           <Example 
             spanish="¿Vendrás a la fiesta?"
             english="Will you come to the party?"
-            translation="Will you come to the party?"
           />
         </div>
 
@@ -101,17 +95,14 @@ const FutureTensesPage = () => {
           <Example 
             spanish="Voy a estudiar medicina"
             english="I am going to study medicine"
-            translation="I am going to study medicine"
           />
           <Example 
             spanish="Mira esas nubes, va a llover"
             english="Look at those clouds, it's going to rain"
-            translation="Look at those clouds, it's going to rain"
           />
           <Example 
             spanish="¿Vas a venir a la reunión?"
             english="Are you going to come to the meeting?"
-            translation="Are you going to come to the meeting?"
           />
         </div>
 
@@ -150,17 +141,14 @@ const FutureTensesPage = () => {
           <Example 
             spanish="Mañana me reúno con el jefe"
             english="Tomorrow I am meeting with my boss"
-            translation="Tomorrow I am meeting with my boss"
           />
           <Example 
             spanish="Nos vamos de vacaciones el viernes"
             english="We are going on vacation on Friday"
-            translation="We are going on vacation on Friday"
           />
           <Example 
             spanish="¿Cuándo te vas?"
             english="When are you leaving?"
-            translation="When are you leaving?"
           />
         </div>
 
@@ -189,17 +177,14 @@ const FutureTensesPage = () => {
           <Example 
             spanish="El tren sale a las 6 PM"
             english="The train leaves at 6 PM"
-            translation="The train leaves at 6 PM"
           />
           <Example 
             spanish="Las clases empiezan en septiembre"
             english="Classes start in September"
-            translation="Classes start in September"
           />
           <Example 
             spanish="¿A qué hora llega el avión?"
             english="What time does the plane arrive?"
-            translation="What time does the plane arrive?"
           />
         </div>
 
@@ -238,17 +223,14 @@ const FutureTensesPage = () => {
           <Example 
             spanish="A las 8 PM estaré trabajando"
             english="At 8 PM I will be working"
-            translation="At 8 PM I will be working"
           />
           <Example 
             spanish="¿Estarás estudiando esta noche?"
             english="Will you be studying tonight?"
-            translation="Will you be studying tonight?"
           />
           <Example 
             spanish="No estaré durmiendo a esa hora"
             english="I won't be sleeping at that time"
-            translation="I won't be sleeping at that time"
           />
         </div>
 
@@ -285,17 +267,14 @@ const FutureTensesPage = () => {
           <Example 
             spanish="Te ayudo (decisión espontánea)"
             english="I'll help you"
-            translation="I'll help you"
           />
           <Example 
             spanish="Voy a ayudarte (plan previo)"
             english="I'm going to help you"
-            translation="I'm going to help you"
           />
           <Example 
             spanish="Me reúno contigo mañana (arreglo fijo)"
             english="I'm meeting with you tomorrow"
-            translation="I'm meeting with you tomorrow"
           />
         </div>
       </TheorySection>
@@ -359,172 +338,16 @@ const FutureTensesPage = () => {
           </div>
         </div>
       </TheorySection>
-    </div>
+    </>
   );
 
-  const exercises = [
-    <MultipleChoiceExercise
-      key="1"
-      question="Complete: 'Tomorrow I _____ my friend at 3 PM.' (arranged plan)"
-      options={[
-        "will meet",
-        "am going to meet",
-        "am meeting",
-        "meet"
-      ]}
-      correctAnswer={2}
-      explanation="For appointments and arranged plans we use Present Continuous: 'am meeting'."
-    />,
-
-    <MultipleChoiceExercise
-      key="2"
-      question="Which is the correct form to complete: 'I ___ help you with that' (spontaneous decision)?"
-      options={[
-        "am going to",
-        "will",
-        "am helping",
-        "help"
-      ]}
-      correctAnswer={1}
-      explanation="For spontaneous decisions we use 'will': 'I will help you with that'."
-    />,
-
-    <TrueFalseExercise
-      key="3"
-      statements={[
-        {
-          text: "'I'm going to study tomorrow' shows a plan or intention.",
-          isTrue: true,
-          explanation: "Correct. 'Going to' is used for plans and intentions."
-        },
-        {
-          text: "'The train will leave at 6 PM' is correct for a fixed schedule.",
-          isTrue: false,
-          explanation: "Incorrect. For fixed schedules we use Present Simple: 'The train leaves at 6 PM'."
-        },
-        {
-          text: "'I'll be working at 3 PM' means I will be in the middle of working at 3 PM.",
-          isTrue: true,
-          explanation: "Correct. Future Continuous shows actions in progress at a specific moment in the future."
-        },
-        {
-          text: "'I am meeting him tomorrow' is correct for a fixed arrangement.",
-          isTrue: true,
-          explanation: "Correct. Present Continuous is used for fixed future arrangements."
-        }
-      ]}
-    />,
-
-    <MultipleChoiceExercise
-      key="4"
-      question="Which is the correct form to complete: 'Look at those clouds! It ___ rain'?"
-      options={[
-        "will",
-        "is going to",
-        "is raining",
-        "rains"
-      ]}
-      correctAnswer={1}
-      explanation="For predictions based on present evidence we use 'going to': 'It's going to rain'."
-    />,
-
-    <MultipleChoiceExercise
-      key="5"
-      question="Which is the correct form to complete: 'At this time tomorrow, I ___ on the beach'?"
-      options={[
-        "will lie",
-        "will be lying",
-        "am going to lie",
-        "lie"
-      ]}
-      correctAnswer={1}
-      explanation="For actions in progress at a specific moment in the future we use Future Continuous: 'I will be lying'."
-    />,
-
-    <TrueFalseExercise
-      key="6"
-      statements={[
-        {
-          text: "'I will call you later' shows a spontaneous decision.",
-          isTrue: true,
-          explanation: "Correct. 'Will' is used for spontaneous decisions made at the moment of speaking."
-        },
-        {
-          text: "'She is meeting her boss at 2 PM' refers to a scheduled appointment.",
-          isTrue: true,
-          explanation: "Correct. Present Continuous is used for appointments and arranged plans."
-        },
-        {
-          text: "'The movie starts at 7 PM' uses Present Simple for timetables.",
-          isTrue: true,
-          explanation: "Correct. Present Simple is used for fixed schedules and timetables."
-        }
-      ]}
-    />,
-
-    <MultipleChoiceExercise
-      key="7"
-      question="Complete: 'The train ___ at 8:30 AM' (fixed schedule)?"
-      options={[
-        "will leave",
-        "is going to leave", 
-        "leaves",
-        "is leaving"
-      ]}
-      correctAnswer={2}
-      explanation="For fixed schedules we use Present Simple: 'The train leaves at 8:30 AM'."
-    />,
-
-    <MultipleChoiceExercise
-      key="8"
-      question="What is the difference between 'I'll help you' and 'I'm going to help you'?"
-      options={[
-        "There is no difference",
-        "'I'll help' is a spontaneous decision, 'going to help' is a prior plan",
-        "'I'll help' is more formal",
-        "'Going to help' is more polite"
-      ]}
-      correctAnswer={1}
-      explanation="'I'll help' is a spontaneous decision, while 'I'm going to help' indicates a prior plan or intention."
-    />,
-
-    <TrueFalseExercise
-      key="9"
-      statements={[
-        {
-          text: "'Will' can be used for promises and offers.",
-          isTrue: true,
-          explanation: "Correct. 'Will' is used for promises ('I will be there') and offers ('I will help you')."
-        },
-        {
-          text: "'I'm working tomorrow' means I have a scheduled work day.",
-          isTrue: true,
-          explanation: "Correct. Present Continuous indicates a plan already arranged for the future."
-        }
-      ]}
-    />,
-
-    <MultipleChoiceExercise
-      key="10"
-      question="Complete the dialogue: 'The phone is ringing.' - 'I ___ get it.'"
-      options={[
-        "am going to",
-        "will",
-        "am getting",
-        "get"
-      ]}
-      correctAnswer={1}
-      explanation="For a spontaneous decision (deciding to answer the phone at that moment) we use 'will': 'I will get it'."
-    />
-  ];
-
-  return (
+    return (
     <TheoryLayout
       title="Future Tenses"
       description="Master all ways to express the future in English: will, going to, Present Continuous, Present Simple, and Future Continuous. Learn when to use each one."
       level="A2-B1-B2-C1-C2"
       theoryContent={theoryContent}
-      exercises={exercises}
+      getExercises={build9FutureTensesExercises}
       prerequisites={["Present Tenses", "Past Tenses", "Verb to be"]}
       estimatedTime="65 min"
     />

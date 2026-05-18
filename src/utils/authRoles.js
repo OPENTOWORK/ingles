@@ -35,6 +35,11 @@ export const getRedirectPathByRoleName = (roleName = '') => {
   return ROLE_ROUTE_MAP[normalized] || '/perfil';
 };
 
+export function isAdminRole(roleName = '') {
+  const normalized = normalizeRoleName(roleName);
+  return normalized === 'admin' || normalized === 'administrador';
+}
+
 /** Evita múltiples lecturas en paralelo para el mismo usuario (mismo resultado). */
 const roleFetchInflight = new Map();
 

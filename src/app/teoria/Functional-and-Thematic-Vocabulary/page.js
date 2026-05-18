@@ -1,4 +1,5 @@
 'use client';
+import { buildFunctionalAndThematicVocabularyExercises } from './functionalAndThematicVocabularyExercises';
 import React from 'react';
 import TheoryLayout from '@/components/theory/TheoryLayout';
 import { 
@@ -9,15 +10,11 @@ import {
   GrammarTable, 
   QuickReference 
 } from '@/components/theory/TheoryContent';
-import { 
-  MultipleChoiceExercise,
-  FillBlanksExercise,
-  TrueFalseExercise
-} from '@/components/theory/ExerciseComponents';
+
 
 const FunctionalAndThematicVocabularyPage = () => {
   const theoryContent = (
-    <div>
+    <>
       <TheorySection title="What Is Functional and Thematic Vocabulary?" icon="🗣️">
         <p style={{ fontSize: '1.1rem', lineHeight: 1.6, color: '#4a5568', marginBottom: '1rem' }}>
           <strong>Functional and thematic vocabulary</strong> means words and expressions organized by communicative function 
@@ -348,172 +345,16 @@ const FunctionalAndThematicVocabularyPage = () => {
           />
         </div>
       </TheorySection>
-    </div>
+    </>
   );
 
-  const exercises = [
-    <MultipleChoiceExercise
-      key="1"
-      question="How is functional vocabulary organized?"
-      options={[
-        "By topic",
-        "By communicative function",
-        "By level",
-        "By frequency"
-      ]}
-      correctAnswer={1}
-      explanation="Functional vocabulary is organized by communicative function, grouping words according to their role in communication."
-    />,
-
-    <MultipleChoiceExercise
-      key="2"
-      question="What mainly determines which functional vocabulary to use?"
-      options={[
-        "How long the conversation is",
-        "Context and level of formality",
-        "How fast people speak",
-        "The other person's accent"
-      ]}
-      correctAnswer={1}
-      explanation="Context and formality determine which functional vocabulary to use. Different situations require different levels of formality."
-    />,
-
-    <TrueFalseExercise
-      key="3"
-      statements={[
-        {
-          text: "Colloquial expressions are appropriate in formal contexts.",
-          isTrue: false,
-          explanation: "Incorrect. Colloquial expressions are not appropriate in formal contexts. Use them only in informal situations."
-        },
-        {
-          text: "Thematic vocabulary is organized by specific topics.",
-          isTrue: true,
-          explanation: "Correct. Thematic vocabulary is grouped by topics such as work, education, travel, health, and so on."
-        },
-        {
-          text: "Active practice in real contexts is important for building functional vocabulary.",
-          isTrue: true,
-          explanation: "Correct. Active practice in real contexts is the best way to build fluency with functional vocabulary."
-        },
-        {
-          text: "You should always use the same level of formality in every situation.",
-          isTrue: false,
-          explanation: "Incorrect. You should adapt your level of formality to the context and your relationship with the other person."
-        }
-      ]}
-    />,
-
-    <MultipleChoiceExercise
-      key="4"
-      question="What is the best strategy for learning functional vocabulary?"
-      options={[
-        "Memorize long word lists",
-        "Practice in real contexts",
-        "Only read about vocabulary",
-        "Always use the same level of formality"
-      ]}
-      correctAnswer={1}
-      explanation="Practicing in real contexts is the best strategy because it builds natural fluency and helps you adapt to different situations."
-    />,
-
-    <MultipleChoiceExercise
-      key="5"
-      question="Which expression is most appropriate for an informal conversation with friends?"
-      options={[
-        "Distinguished guests, thank you",
-        "Please send me the report",
-        "What's up? How's it going?",
-        "I respectfully disagree"
-      ]}
-      correctAnswer={2}
-      explanation="'What's up? How's it going?' fits informal conversations with friends; the other options are much more formal."
-    />,
-
-    <TrueFalseExercise
-      key="6"
-      statements={[
-        {
-          text: "Functional vocabulary focuses on what you can do with language.",
-          isTrue: true,
-          explanation: "Correct. Functional vocabulary focuses on communicative functions: asking, suggesting, agreeing, and so on."
-        },
-        {
-          text: "Thematic vocabulary is organized by topics or subjects.",
-          isTrue: true,
-          explanation: "Correct. Thematic vocabulary is organized by topics such as health, work, travel, and so on."
-        },
-        {
-          text: "You should learn vocabulary in isolation without context.",
-          isTrue: false,
-          explanation: "Incorrect. It is better to learn vocabulary in context so you understand how to use it appropriately."
-        }
-      ]}
-    />,
-
-    <MultipleChoiceExercise
-      key="7"
-      question="Complete: 'I _____ you to consider this option.' (suggesting)"
-      options={[
-        "order",
-        "recommend",
-        "demand",
-        "force"
-      ]}
-      correctAnswer={1}
-      explanation="'Recommend' is appropriate for suggesting. 'Order' and 'demand' are too forceful; 'force' is coercive."
-    />,
-
-    <MultipleChoiceExercise
-      key="8"
-      question="Which thematic vocabulary do you need to talk about the environment?"
-      options={[
-        "Cooking terms",
-        "Pollution, recycling, climate change",
-        "Sports equipment",
-        "Fashion vocabulary"
-      ]}
-      correctAnswer={1}
-      explanation="For the environment you need vocabulary such as 'pollution', 'recycling', 'climate change', and 'sustainability'."
-    />,
-
-    <TrueFalseExercise
-      key="9"
-      statements={[
-        {
-          text: "Functional vocabulary changes depending on the level of formality.",
-          isTrue: true,
-          explanation: "Correct. For example, 'Could you please...' (formal) versus 'Can you...' (informal) for the same function of asking."
-        },
-        {
-          text: "Thematic vocabulary is the same in all languages.",
-          isTrue: false,
-          explanation: "Incorrect. Each language has its own thematic vocabulary and culturally specific expressions."
-        }
-      ]}
-    />,
-
-    <MultipleChoiceExercise
-      key="10"
-      question="Complete: 'I'm afraid I have to _____ with you on this.' (disagreeing politely)"
-      options={[
-        "fight",
-        "disagree",
-        "argue",
-        "battle"
-      ]}
-      correctAnswer={1}
-      explanation="'Disagree' is a polite way to express disagreement. The other options sound too aggressive."
-    />
-  ];
-
-  return (
+    return (
     <TheoryLayout
       title="Functional and Thematic Vocabulary"
       description="Master functional and thematic vocabulary in English. Learn words organized by communicative function and by topic so you can communicate effectively in different situations."
       level="A2-B1-B2-C1-C2"
       theoryContent={theoryContent}
-      exercises={exercises}
+      getExercises={buildFunctionalAndThematicVocabularyExercises}
       prerequisites={["Basic vocabulary", "Understanding of formal vs informal language"]}
       estimatedTime="75 min"
     />

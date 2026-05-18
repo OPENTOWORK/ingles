@@ -55,6 +55,8 @@ export default function ProfilePage() {
   const [deletingAccount, setDeletingAccount] = useState(false);
   const [sendingDeleteCode, setSendingDeleteCode] = useState(false);
   const [saving, setSaving] = useState(false);
+  const [nameSaveMessage, setNameSaveMessage] = useState('');
+  const [nameSaveError, setNameSaveError] = useState('');
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState('overview');
   const [goals, setGoals] = useState({ weekly: 5, monthly: 20 });
@@ -432,18 +434,58 @@ export default function ProfilePage() {
     }
   };
 
-  const handleProfileUpdate = async () => {
+  const handleSaveProfileName = async () => {
+    const trimmed = (fullName || '').trim();
+    if (!trimmed) {
+      setNameSaveError('Introduce un nombre para tu perfil.');
+      setNameSaveMessage('');
+      return false;
+    }
+    if (!user?.id) return false;
+
     setSaving(true);
-    await supabase.from('user_profiles').upsert({
-      id: user.id,
-      nombre: fullName,
-      email: user.email
-    });
-    await supabase.from('profiles').upsert({
+    setNameSaveError('');
+    setNameSaveMessage('');
+
+    const { error } = await supabase.from('user_profiles').upsert(
+      { id: user.id, nombre: trimmed, email: user.email },
+      { onConflict: 'id' },
+    );
+
+    if (error) {
+      console.error('Error saving profile name:', error);
+      setNameSaveError('No se pudo guardar el nombre. Inténtalo de nuevo.');
+      setSaving(false);
+      return false;
+    }
+
+    try {
+      await supabase.auth.updateUser({ data: { name: trimmed } });
+    } catch (authError) {
+      console.warn('Could not sync auth metadata name:', authError);
+    }
+
+    setFullName(trimmed);
+    setNameSaveMessage('Nombre actualizado correctamente.');
+    setSaving(false);
+    return true;
+  };
+
+  const handleProfileUpdate = async () => {
+    const nameOk = await handleSaveProfileName();
+    if (!nameOk) return;
+
+    setSaving(true);
+    const { error } = await supabase.from('profiles').upsert({
       user_id: user.id,
-      fecha_nacimiento: birthDate || null
+      fecha_nacimiento: birthDate || null,
     });
     setSaving(false);
+
+    if (error) {
+      console.error('Error saving profile details:', error);
+      setNameSaveError('El nombre se guardó, pero hubo un error al guardar la fecha de nacimiento.');
+    }
   };
 
   const handlePasswordChange = async () => {
@@ -785,11 +827,22 @@ export default function ProfilePage() {
 
   if (!user || !stats) return null;
 
+  const displayName =
+    (fullName || '').trim() ||
+    user?.user_metadata?.name?.trim() ||
+    user?.email?.split('@')[0] ||
+    '';
+
   return (
     <main className="shell perfil-page">
       <header className="header header--mascot">
         <div className="header__copy">
-          <h1>👤 Mi Perfil</h1>
+          <h1>
+            👤 Mi Perfil
+            {displayName ? (
+              <span className="profile-header__display-name"> — {displayName}</span>
+            ) : null}
+          </h1>
           <p>Gestiona tu información personal y revisa tu progreso de aprendizaje.</p>
         </div>
         <div className="header__mascot" aria-hidden>
@@ -826,9 +879,46 @@ export default function ProfilePage() {
           {/* Información del usuario */}
           <section className="profile-section">
             <div className="section-header">
-              <h2>👋 Bienvenido, {fullName || user.email}</h2>
+              <h2>👋 Bienvenido, {displayName || user.email}</h2>
               <button onClick={handleLogout} className="logout-btn">🚪 Cerrar Sesión</button>
             </div>
+          </section>
+
+          <section className="profile-section profile-name-section">
+            <div className="section-head">
+              <h2>✏️ Nombre de perfil</h2>
+            </div>
+            <p className="section-desc">
+              Este nombre aparece en tu perfil y en el panel de administración.
+            </p>
+            <div className="form-group">
+              <label className="form-label" htmlFor="profile-display-name">
+                Nombre visible
+              </label>
+              <input
+                id="profile-display-name"
+                value={fullName}
+                onChange={(e) => {
+                  setFullName(e.target.value);
+                  setNameSaveMessage('');
+                  setNameSaveError('');
+                }}
+                className="form-input"
+                placeholder="Tu nombre"
+                maxLength={80}
+                autoComplete="name"
+              />
+            </div>
+            {nameSaveError ? <p className="form-hint form-hint--error">{nameSaveError}</p> : null}
+            {nameSaveMessage ? <p className="form-hint form-hint--success">{nameSaveMessage}</p> : null}
+            <button
+              type="button"
+              onClick={handleSaveProfileName}
+              className="action-btn"
+              disabled={saving}
+            >
+              {saving ? 'Guardando...' : '💾 Guardar nombre'}
+            </button>
           </section>
 
           {/* Estadísticas principales */}
@@ -2186,7 +2276,12 @@ function GlobalStyles() {
       .shell{min-height:100svh;max-width:1100px;margin:0 auto;padding:32px 20px}
       .center{display:grid;place-items:center}
       .header h1{font-size:44px;margin:0 0 6px;color:var(--text)}
+      .profile-header__display-name{font-weight:600;color:#0070f3}
       .header p{margin:0;color:#666}
+      .section-desc{margin:-8px 0 16px;color:#64748b;font-size:15px;line-height:1.5}
+      .form-hint{margin:0 0 12px;font-size:14px}
+      .form-hint--error{color:#dc2626}
+      .form-hint--success{color:#16a34a}
       .header--mascot{display:flex;flex-wrap:wrap;align-items:center;gap:20px 32px;margin-bottom:8px}
       .header__copy{flex:1 1 240px;min-width:0}
       .header__mascot{flex:0 0 auto;line-height:0;filter:drop-shadow(0 8px 18px rgba(0,0,0,.12))}

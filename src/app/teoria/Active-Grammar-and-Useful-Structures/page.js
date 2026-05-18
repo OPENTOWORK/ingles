@@ -1,4 +1,5 @@
 'use client';
+import { buildActiveGrammarAndUsefulStructuresExercises } from './activeGrammarAndUsefulStructuresExercises';
 import React from 'react';
 import TheoryLayout from '@/components/theory/TheoryLayout';
 import { 
@@ -9,15 +10,11 @@ import {
   GrammarTable, 
   QuickReference 
 } from '@/components/theory/TheoryContent';
-import { 
-  MultipleChoiceExercise, 
-  FillBlanksExercise, 
-  TrueFalseExercise 
-} from '@/components/theory/ExerciseComponents';
+
 
 const ActiveGrammarAndUsefulStructuresPage = () => {
   const theoryContent = (
-    <div>
+    <>
       <TheorySection title="What Is Active Grammar and Useful Structures?" icon="⚡">
         <p style={{ fontSize: '1.1rem', lineHeight: 1.6, color: '#4a5568', marginBottom: '1rem' }}>
           <strong>Active grammar and useful structures</strong> refers to grammatical patterns and structures used actively in speech to express ideas fluently and naturally.
@@ -351,96 +348,16 @@ const ActiveGrammarAndUsefulStructuresPage = () => {
           />
         </div>
       </TheorySection>
-    </div>
+    </>
   );
 
-  const exercises = [
-    <MultipleChoiceExercise
-      key="1"
-      question="What kinds of structures are used to speak fluently?"
-      options={[
-        "Passive",
-        "Active",
-        "Complex",
-        "Simple"
-      ]}
-      correctAnswer={1}
-      explanation="Active structures support fluent speech because they tend to sound more direct and natural in conversation."
-    />,
-
-    <MultipleChoiceExercise
-      key="2"
-      question="What is the main benefit of using active grammatical structures?"
-      options={[
-        "Improving pronunciation",
-        "Speaking fluently and naturally",
-        "Speaking faster",
-        "Needing less vocabulary"
-      ]}
-      correctAnswer={1}
-      explanation="The main benefit is speaking fluently and naturally: active structures help you express complex ideas effectively."
-    />,
-
-    <TrueFalseExercise
-      key="3"
-      statements={[
-        {
-          text: "It is important to vary structures to avoid repetition.",
-          isTrue: true,
-          explanation: "Correct. Varying structures keeps your speech more interesting and natural, and avoids monotone repetition."
-        },
-        {
-          text: "Formal structures are appropriate in every context.",
-          isTrue: false,
-          explanation: "Incorrect. Structures should suit the context. Formal ones are often a poor fit in informal situations."
-        },
-        {
-          text: "Active practice builds fluency in using structures.",
-          isTrue: true,
-          explanation: "Correct. Active practice in real contexts is one of the best ways to gain fluency and naturalness."
-        },
-        {
-          text: "Context does not influence which structures you choose.",
-          isTrue: false,
-          explanation: "Incorrect. Context shapes which structures fit. Different situations call for different levels of formality."
-        }
-      ]}
-    />,
-
-    <MultipleChoiceExercise
-      key="4"
-      question="Which structure best expresses an opinion with moderate certainty?"
-      options={[
-        "I'm absolutely sure that...",
-        "I think that...",
-        "I have no idea...",
-        "It might be..."
-      ]}
-      correctAnswer={1}
-      explanation="'I think that...' signals moderate certainty, while the others lean toward certainty, uncertainty, or possibility."
-    />,
-
-    <MultipleChoiceExercise
-      key="5"
-      question="Which structure fits a formal conclusion best?"
-      options={[
-        "All in all...",
-        "In conclusion...",
-        "Finally...",
-        "What if..."
-      ]}
-      correctAnswer={1}
-      explanation="'In conclusion...' is the best fit for a formal conclusion here; the other options suit informal wrapping-up or different purposes."
-    />
-  ];
-
-  return (
+    return (
     <TheoryLayout
       title="Active Grammar and Useful Structures"
       description="Master active grammar and useful structures in English. Learn grammatical patterns for stating opinions, giving examples, comparing, explaining cause and effect, and concluding effectively."
       level="A2-B1-B2-C1-C2"
       theoryContent={theoryContent}
-      exercises={exercises}
+      getExercises={buildActiveGrammarAndUsefulStructuresExercises}
       prerequisites={["Basic grammar knowledge", "Understanding of sentence structures"]}
       estimatedTime="80 min"
     />

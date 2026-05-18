@@ -1,11 +1,12 @@
 'use client';
+import { buildInferenceAndImplicationExercises } from './inferenceAndImplicationExercises';
 import TheoryLayout from '@/components/theory/TheoryLayout';
 import { TheorySection, Example, Rule, Tip, QuickReference } from '@/components/theory/TheoryContent';
-import { MultipleChoiceExercise, TrueFalseExercise } from '@/components/theory/ExerciseComponents';
+
 
 const InferenceAndImplicationPage = () => {
   const theoryContent = (
-    <div>
+    <>
       <TheorySection title="What are Inference and Implication?" icon="🔍">
         <p>
           <strong>Inference</strong> is understanding information that is not directly stated. 
@@ -132,167 +133,16 @@ const InferenceAndImplicationPage = () => {
           />
         </div>
       </TheorySection>
-    </div>
+    </>
   );
 
-  const exercises = [
-    <MultipleChoiceExercise
-      key="1"
-      question="What is an inference in reading?"
-      options={[
-        "Information stated directly",
-        "Information you work out though it is not directly stated",
-        "The title of the text",
-        "Words you do not know"
-      ]}
-      correctAnswer={1}
-      explanation="Inference is what you conclude from clues without direct statement."
-    />,
-
-    <MultipleChoiceExercise
-      key="2"
-      question="If a text says 'John slammed the door and stormed out', what can you infer?"
-      options={[
-        "John is happy",
-        "John is angry or upset",
-        "John is in a hurry to get somewhere",
-        "John does not know how to close doors gently"
-      ]}
-      correctAnswer={1}
-      explanation="'Slammed' and 'stormed out' suggest anger or strong frustration without naming it."
-    />,
-
-    <TrueFalseExercise
-      key="3"
-      statements={[
-        {
-          text: "Inferences should be based on evidence from the text.",
-          isTrue: true,
-          explanation: "Correct. Sound inferences need support from specific clues."
-        },
-        {
-          text: "You may infer anything that comes to mind.",
-          isTrue: false,
-          explanation: "Incorrect. Inferences must be justified by the text, not free speculation."
-        },
-        {
-          text: "The author's word choice can reveal unstated attitudes.",
-          isTrue: true,
-          explanation: "Correct. Word choice often signals views that are never stated outright."
-        }
-      ]}
-    />,
-
-    <MultipleChoiceExercise
-      key="4"
-      question="What is the difference between 'He's determined' and 'He's stubborn'?"
-      options={[
-        "No difference—they mean the same",
-        "'Determined' is more positive; 'stubborn' more negative",
-        "'Stubborn' is more formal",
-        "They differ only in pronunciation"
-      ]}
-      correctAnswer={1}
-      explanation="'Determined' is positive (persistent); 'stubborn' is negative (unreasonably inflexible)."
-    />,
-
-    <MultipleChoiceExercise
-      key="5"
-      question="If a character 'whispers' instead of 'speaks', what might you infer?"
-      options={[
-        "They have voice problems",
-        "The situation needs secrecy or discretion",
-        "They cannot speak loudly",
-        "They are reading aloud"
-      ]}
-      correctAnswer={1}
-      explanation="'Whisper' suggests secrecy, confidentiality, or not wanting to be overheard."
-    />,
-
-    <TrueFalseExercise
-      key="6"
-      statements={[
-        {
-          text: "Sometimes what the author does NOT say matters as much as what they do.",
-          isTrue: true,
-          explanation: "Correct. Deliberate gaps and silence can be highly meaningful."
-        },
-        {
-          text: "You can only infer emotions if the text names them.",
-          isTrue: false,
-          explanation: "Incorrect. You infer emotion from actions, dialogue, body language, and wording."
-        },
-        {
-          text: "Cultural context can change how you read implications.",
-          isTrue: true,
-          explanation: "Correct. Cultural norms shape how we interpret behaviour."
-        }
-      ]}
-    />,
-
-    <MultipleChoiceExercise
-      key="7"
-      question="Which strategy best supports valid inferences?"
-      options={[
-        "Imagination alone",
-        "Combining several clues from the text",
-        "Personal experience only",
-        "Ignoring small details"
-      ]}
-      correctAnswer={1}
-      explanation="Several supporting clues from the text make an inference stronger."
-    />,
-
-    <MultipleChoiceExercise
-      key="8"
-      question="If a text describes a house with 'peeling paint, broken windows, and overgrown garden', what can you infer?"
-      options={[
-        "It is a new house",
-        "It is neglected or poorly maintained",
-        "It is very expensive",
-        "It is well maintained"
-      ]}
-      correctAnswer={1}
-      explanation="Those details suggest neglect or lack of upkeep."
-    />,
-
-    <TrueFalseExercise
-      key="9"
-      statements={[
-        {
-          text: "A sound inference is one another reasonable reader could make from the same evidence.",
-          isTrue: true,
-          explanation: "Correct. Valid inferences should be reasonable and evidence-based."
-        },
-        {
-          text: "You must infer something about every detail.",
-          isTrue: false,
-          explanation: "Incorrect. Infer only when there is enough evidence and it matters for understanding."
-        }
-      ]}
-    />,
-
-    <MultipleChoiceExercise
-      key="10"
-      question="What separates valid inference from speculation?"
-      options={[
-        "How long your conclusion is",
-        "How much textual evidence supports it",
-        "Whether you like the conclusion",
-        "Whether others agree with you"
-      ]}
-      correctAnswer={1}
-      explanation="Strong textual support marks inference; speculation goes beyond what the text implies."
-    />
-  ];
-
-  return (
+    return (
     <TheoryLayout
       title="Inference and Implication"
       description="Master reading between the lines. Learn to draw justified inferences and spot implications from textual evidence and context."
       level="B1-B2-C1-C2"
       theoryContent={theoryContent}
-      exercises={exercises}
+      getExercises={buildInferenceAndImplicationExercises}
       prerequisites={["Advanced reading comprehension", "Critical thinking skills", "Cultural awareness"]}
       estimatedTime="80 min"
     />

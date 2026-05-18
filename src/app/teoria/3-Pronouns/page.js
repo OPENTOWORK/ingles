@@ -1,4 +1,5 @@
 'use client';
+import { build3PronounsExercises } from './pronounsExercises';
 import React from 'react';
 import TheoryLayout from '@/components/theory/TheoryLayout';
 import { 
@@ -9,15 +10,11 @@ import {
   GrammarTable, 
   QuickReference 
 } from '@/components/theory/TheoryContent';
-import { 
-  MultipleChoiceExercise, 
-  FillBlanksExercise, 
-  TrueFalseExercise 
-} from '@/components/theory/ExerciseComponents';
+
 
 const PronounsPage = () => {
   const theoryContent = (
-    <div>
+    <>
       <TheorySection title="What are Pronouns?" icon="👥">
         <p style={{ fontSize: '1.1rem', lineHeight: 1.6, color: '#4a5568', marginBottom: '1rem' }}>
           <strong>Pronouns</strong> are words that replace nouns to avoid repeating the same words. 
@@ -52,17 +49,14 @@ const PronounsPage = () => {
           <Example 
             spanish="Yo soy estudiante"
             english="I am a student"
-            translation="I am a student"
           />
           <Example 
             spanish="Ella es doctora"
             english="She is a doctor"
-            translation="She is a doctor"
           />
           <Example 
             spanish="Nosotros vivimos aquí"
             english="We live here"
-            translation="We live here"
           />
         </div>
 
@@ -101,17 +95,14 @@ const PronounsPage = () => {
           <Example 
             spanish="Mi libro es azul"
             english="My book is blue"
-            translation="My book is blue"
           />
           <Example 
             spanish="Este libro es mío"
             english="This book is mine"
-            translation="This book is mine"
           />
           <Example 
             spanish="Su casa es grande"
             english="Her house is big"
-            translation="Her house is big"
           />
         </div>
 
@@ -140,17 +131,14 @@ const PronounsPage = () => {
           <Example 
             spanish="Ella me ve"
             english="She sees me"
-            translation="She sees me"
           />
           <Example 
             spanish="Yo los conozco"
             english="I know them"
-            translation="I know them"
           />
           <Example 
             spanish="El libro me gusta"
             english="I like the book"
-            translation="I like the book"
           />
         </div>
 
@@ -178,17 +166,14 @@ const PronounsPage = () => {
           <Example 
             spanish="Yo me lavo las manos"
             english="I wash my hands"
-            translation="I wash my hands"
           />
           <Example 
             spanish="Ella se peina"
             english="She combs her hair"
-            translation="She combs her hair"
           />
           <Example 
             spanish="Nosotros nos divertimos"
             english="We enjoy ourselves"
-            translation="We enjoy ourselves"
           />
         </div>
 
@@ -215,17 +200,14 @@ const PronounsPage = () => {
           <Example 
             spanish="Este es mi libro"
             english="This is my book"
-            translation="This is my book"
           />
           <Example 
             spanish="Esos son mis zapatos"
             english="Those are my shoes"
-            translation="Those are my shoes"
           />
           <Example 
             spanish="¿Qué es esto?"
             english="What is this?"
-            translation="What is this?"
           />
         </div>
 
@@ -293,161 +275,16 @@ const PronounsPage = () => {
           />
         </div>
       </TheorySection>
-    </div>
+    </>
   );
 
-  const exercises = [
-    <MultipleChoiceExercise
-      key="1"
-      question="Complete: '_____ am a teacher. _____ name is Sarah.'"
-      options={[
-        "I, My",
-        "Me, My",
-        "I, Mine",
-        "Me, Mine"
-      ]}
-      correctAnswer={0}
-      explanation="As subject we use 'I' and as possessive determiner we use 'My'."
-    />,
-
-    <MultipleChoiceExercise
-      key="2"
-      question="Which is the correct form to complete: 'This book is ___'?"
-      options={[
-        "my",
-        "mine",
-        "me",
-        "myself"
-      ]}
-      correctAnswer={1}
-      explanation="After 'is' we need a possessive pronoun that replaces the noun. 'Mine' means 'belonging to me'."
-    />,
-
-    <TrueFalseExercise
-      key="3"
-      statements={[
-        {
-          text: "'Me and him went to the store' is correct.",
-          isTrue: false,
-          explanation: "Incorrect. As subject we use personal pronouns: 'He and I went to the store'."
-        },
-        {
-          text: "'This is my book' and 'This book is mine' are both correct.",
-          isTrue: true,
-          explanation: "Correct. 'My' is a possessive determiner, 'mine' is a possessive pronoun."
-        },
-        {
-          text: "'Its' and 'it's' mean the same thing.",
-          isTrue: false,
-          explanation: "Incorrect. 'Its' is possessive, 'it's' is a contraction of 'it is'."
-        },
-        {
-          text: "'I hurt myself' is correct for reflexive actions.",
-          isTrue: true,
-          explanation: "Correct. For reflexive actions we use reflexive pronouns."
-        }
-      ]}
-    />,
-
-    <MultipleChoiceExercise
-      key="4"
-      question="Which is the correct form to complete: 'She gave the book to ___'?"
-      options={[
-        "I",
-        "me",
-        "myself",
-        "mine"
-      ]}
-      correctAnswer={1}
-      explanation="After the preposition 'to' we use object pronouns. 'Me' is the object pronoun for 'I'."
-    />,
-
-    <MultipleChoiceExercise
-      key="5"
-      question="Which is the correct form to complete: '___ and ___ are going to the party'?"
-      options={[
-        "Me, him",
-        "I, he",
-        "Myself, himself",
-        "Mine, his"
-      ]}
-      correctAnswer={1}
-      explanation="As subject we use personal pronouns: 'I' and 'he'. We also follow the order of politeness by putting 'I' last."
-    />,
-
-    <MultipleChoiceExercise
-      key="6"
-      question="Complete: 'She hurt _____ while playing tennis.'"
-      options={[
-        "her",
-        "herself",
-        "hers",
-        "she"
-      ]}
-      correctAnswer={1}
-      explanation="For reflexive actions we use reflexive pronouns: 'herself'."
-    />,
-
-    <MultipleChoiceExercise
-      key="7"
-      question="Which is correct?"
-      options={[
-        "This car is her",
-        "This car is hers",
-        "This car is she",
-        "This car is herself"
-      ]}
-      correctAnswer={1}
-      explanation="'Hers' is the possessive pronoun that replaces the noun. 'Her' would be a determiner: 'her car'."
-    />,
-
-    <MultipleChoiceExercise
-      key="8"
-      question="Complete: 'Between you and ___, I think he's wrong.'"
-      options={[
-        "I",
-        "me",
-        "my",
-        "mine"
-      ]}
-      correctAnswer={1}
-      explanation="After prepositions like 'between' we use object pronouns: 'me'."
-    />,
-
-    <MultipleChoiceExercise
-      key="9"
-      question="Complete: '_____ house is bigger than _____.' (comparing two houses)"
-      options={[
-        "Their, ours",
-        "They, us",
-        "Them, we",
-        "Theirs, our"
-      ]}
-      correctAnswer={0}
-      explanation="'Their house' (determiner) and 'ours' (possessive pronoun that replaces 'our house')."
-    />,
-
-    <MultipleChoiceExercise
-      key="10"
-      question="Which is the correct form?"
-      options={[
-        "Who's book is this?",
-        "Whose book is this?",
-        "Who book is this?",
-        "Whos book is this?"
-      ]}
-      correctAnswer={1}
-      explanation="'Whose' is the interrogative possessive pronoun. 'Who's' = 'who is'."
-    />
-  ];
-
-  return (
+    return (
     <TheoryLayout
       title="Pronouns"
       description="Master all types of pronouns in English: personal, possessive, object, reflexive, and demonstrative. Essential for speaking fluently."
       level="A2-B1-B2-C1-C2"
       theoryContent={theoryContent}
-      exercises={exercises}
+      getExercises={build3PronounsExercises}
       prerequisites={["Verb to be", "Basic understanding of nouns"]}
       estimatedTime="50 min"
     />

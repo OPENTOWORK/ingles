@@ -1,4 +1,5 @@
 'use client';
+import { buildMultiSpeakerDialoguesExercises } from './multiSpeakerDialoguesExercises';
 import React from 'react';
 import TheoryLayout from '@/components/theory/TheoryLayout';
 import { 
@@ -9,15 +10,11 @@ import {
   GrammarTable, 
   QuickReference 
 } from '@/components/theory/TheoryContent';
-import { 
-  MultipleChoiceExercise, 
-  FillBlanksExercise, 
-  TrueFalseExercise 
-} from '@/components/theory/ExerciseComponents';
+
 
 const MultiSpeakerDialoguesPage = () => {
   const theoryContent = (
-    <div>
+    <>
       <TheorySection title="What Are Multi-speaker Dialogues?" icon="👥">
         <p style={{ fontSize: '1.1rem', lineHeight: 1.6, color: '#4a5568', marginBottom: '1rem' }}>
           <strong>Multi-speaker dialogues</strong> are conversations among three or more people 
@@ -344,172 +341,16 @@ const MultiSpeakerDialoguesPage = () => {
           />
         </div>
       </TheorySection>
-    </div>
+    </>
   );
 
-  const exercises = [
-    <MultipleChoiceExercise
-      key="1"
-      question="How many people take part in a multi-speaker dialogue?"
-      options={[
-        "2 participants",
-        "3 or more participants",
-        "Just 1 participant",
-        "At most 2 participants"
-      ]}
-      correctAnswer={1}
-      explanation="Multi-speaker dialogues are defined by having three or more participants, making them denser than two-person exchanges."
-    />,
-
-    <MultipleChoiceExercise
-      key="2"
-      question="Which strategy matters most for multi-speaker dialogues?"
-      options={[
-        "Take no notes",
-        "Draw a mental map of voices right away",
-        "Only listen at the end",
-        "Ignore interruptions"
-      ]}
-      correctAnswer={1}
-      explanation="Mapping voices immediately helps you tell speakers apart in a repeatable way—the foundation for everything else."
-    />,
-
-    <TrueFalseExercise
-      key="3"
-      statements={[
-        {
-          text: "Multi-speaker dialogues require systematic identification of voices.",
-          isTrue: true,
-          explanation: "Correct. You need an identification system that mixes vocal and behavioural cues."
-        },
-        {
-          text: "You should attempt to monitor every detail simultaneously.",
-          isTrue: false,
-          explanation: "Incorrect. Prioritise task-relevant information and use synthesis to manage load."
-        },
-        {
-          text: "Interruptions are normal in multi-speaker dialogue.",
-          isTrue: true,
-          explanation: "Correct. Cut-ins and overlap are frequent in groups and merit specific coping tactics."
-        },
-        {
-          text: "Cross-speaker synthesis is unimportant.",
-          isTrue: false,
-          explanation: "Incorrect. Combining information from multiple speakers is essential for the full scenario."
-        }
-      ]}
-    />,
-
-    <MultipleChoiceExercise
-      key="4"
-      question="Which factor best helps you recognise individual speakers?"
-      options={[
-        "Pitch alone",
-        "Vocabulary alone",
-        "A bundle of cues together",
-        "Their functional role alone"
-      ]}
-      correctAnswer={2}
-      explanation="Layering pitch, wording, behaviour, and role yields the most stable speaker identification."
-    />,
-
-    <MultipleChoiceExercise
-      key="5"
-      question="What is the strongest tactic when interruptions multiply?"
-      options={[
-        "Ignore them outright",
-        "Use context to preserve meaning",
-        "Listen only to the dominant voice",
-        "Write down every utterance verbatim"
-      ]}
-      correctAnswer={1}
-      explanation="Context keeps the thread coherent; interruptions remain normal in natural group talk."
-    />,
-
-    <TrueFalseExercise
-      key="6"
-      statements={[
-        {
-          text: "Multi-speaker dialogues are always more difficult than two-person conversations.",
-          isTrue: true,
-          explanation: "Correct. Several voices and competing threads raise cognitive load consistently."
-        },
-        {
-          text: "You should concentrate on only one speaker.",
-          isTrue: false,
-          explanation: "Incorrect. Tracking several voices is essential for viewpoints and conclusions."
-        },
-        {
-          text: "Interruptions are more frequent when more speakers are involved.",
-          isTrue: true,
-          explanation: "Correct. More participants usually means more overlaps and interruptions."
-        }
-      ]}
-    />,
-
-    <MultipleChoiceExercise
-      key="7"
-      question="What is usually hardest to track in multi-speaker audio?"
-      options={[
-        "Vocabulary complexity",
-        "Rapid shifts of speaker and perspective",
-        "Raw speech rate",
-        "Speaker accent"
-      ]}
-      correctAnswer={1}
-      explanation="Rapid alternating perspectives taxes working memory hardest."
-    />,
-
-    <MultipleChoiceExercise
-      key="8"
-      question="Which technique identifies speakers best in chaotic dialogue?"
-      options={[
-        "Rely solely on proper names when given",
-        "Blend vocal cues, roles, and substantive content",
-        "Listen only to overall pitch",
-        "Ignore individual differences completely"
-      ]}
-      correctAnswer={1}
-      explanation="Vocal signals plus role plus message content beats any single cue."
-    />,
-
-    <TrueFalseExercise
-      key="9"
-      statements={[
-        {
-          text: "Consensus and disagreement patterns matter in multi-speaker dialogue.",
-          isTrue: true,
-          explanation: "Correct. Watching alignment helps you infer outcomes."
-        },
-        {
-          text: "Note-taking matters less here than for monologue listening.",
-          isTrue: false,
-          explanation: "Incorrect. Jotting who said what remains vital for juggling perspectives."
-        }
-      ]}
-    />,
-
-    <MultipleChoiceExercise
-      key="10"
-      question="When two voices overlap strongly, what should you do?"
-      options={[
-        "Stop engaging",
-        "Anchor on the clearest speaker and scaffold with context",
-        "Demand perfect verbatim capture",
-        "Mentally change topic"
-      ]}
-      correctAnswer={1}
-      explanation="The dominant line plus pragmatic context resolves most overlaps."
-    />
-  ];
-
-  return (
+    return (
     <TheoryLayout
       title="Multi-speaker Dialogues"
       description="Master multi-speaker listening in English. Learn tactics for juggling voices, interruptions, and complex synthesis tasks."
       level="B2-C1-C2"
       theoryContent={theoryContent}
-      exercises={exercises}
+      getExercises={buildMultiSpeakerDialoguesExercises}
       prerequisites={["Experience with long conversations", "Advanced listening skills"]}
       estimatedTime="85 min"
     />

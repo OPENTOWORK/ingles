@@ -1,4 +1,5 @@
 'use client';
+import { buildComparativesAndSuperlativesExercises } from './comparativesAndSuperlativesExercises';
 import React from 'react';
 import TheoryLayout from '@/components/theory/TheoryLayout';
 import { 
@@ -9,15 +10,11 @@ import {
   GrammarTable, 
   QuickReference 
 } from '@/components/theory/TheoryContent';
-import { 
-  MultipleChoiceExercise, 
-  FillBlanksExercise, 
-  TrueFalseExercise 
-} from '@/components/theory/ExerciseComponents';
+
 
 const ComparativesandSuperlativesPage = () => {
   const theoryContent = (
-    <div>
+    <>
       <TheorySection title="What Are Comparatives and Superlatives?" icon="📊">
         <p style={{ fontSize: '1.1rem', lineHeight: 1.6, color: '#4a5568', marginBottom: '1rem' }}>
           <strong>Comparatives</strong> and <strong>superlatives</strong> are used to compare people, things, or situations. 
@@ -277,133 +274,16 @@ const ComparativesandSuperlativesPage = () => {
           />
         </div>
       </TheorySection>
-    </div>
+    </>
   );
 
-  const exercises = [
-    <MultipleChoiceExercise
-      key="1"
-      question="Complete: 'This is the ___ movie I've ever seen.'"
-      options={["gooder", "better", "best", "more good"]}
-      correctAnswer={2}
-      explanation="'Best' is the irregular superlative form of 'good'."
-    />,
-    <MultipleChoiceExercise
-      key="2"
-      question="Choose the correct comparative: This book is ___ than the other one."
-      options={["interesting", "more interesting", "most interesting", "interestinger"]}
-      correctAnswer={1}
-      explanation="'Interesting' has three or more syllables, so we use 'more' for the comparative."
-    />,
-    <TrueFalseExercise
-      key="3"
-      statements={[
-        {
-          text: "We always use 'the' before superlative adjectives.",
-          isTrue: false,
-          explanation: "We do not use 'the' when the superlative is predicative or means 'very' rather than 'most'."
-        },
-        {
-          text: "Short adjectives use -er and -est for comparatives and superlatives.",
-          isTrue: true,
-          explanation: "Correct. Short adjectives (1–2 syllables) generally use -er and -est."
-        },
-        {
-          text: "'Good' has regular comparative and superlative forms.",
-          isTrue: false,
-          explanation: "False. 'Good' is irregular: good → better → best."
-        },
-        {
-          text: "We use 'than' with superlatives to show comparison.",
-          isTrue: false,
-          explanation: "False. We use 'than' with comparatives. With superlatives we use 'of' or 'in'."
-        }
-      ]}
-    />,
-    <MultipleChoiceExercise
-      key="4"
-      question="What is the superlative form of 'far'?"
-      options={["farther", "farthest", "furthest", "both b and c"]}
-      correctAnswer={3}
-      explanation="'Far' has two superlative forms: 'farthest' (physical distance) and 'furthest' (abstract distance)."
-    />,
-    <MultipleChoiceExercise
-      key="5"
-      question="Which sentence is correct?"
-      options={[
-        "This is the most tallest building.",
-        "This is the tallest building.",
-        "This is more tall building.",
-        "This is tallest building."
-      ]}
-      correctAnswer={1}
-      explanation="'Tall' is a short adjective, so we use -est for the superlative and need 'the' before it."
-    />,
-    <TrueFalseExercise
-      key="6"
-      statements={[
-        {
-          text: "'Less' is the opposite of 'more' in comparisons.",
-          isTrue: true,
-          explanation: "Correct. 'Less' is used in negative comparatives: 'less expensive'."
-        },
-        {
-          text: "We can use 'much' to emphasize comparatives.",
-          isTrue: true,
-          explanation: "Correct. 'Much better', 'much more expensive', and 'much taller' emphasize the difference."
-        },
-        {
-          text: "All two-syllable adjectives use 'more' and 'most'.",
-          isTrue: false,
-          explanation: "Incorrect. Some two-syllable adjectives use -er/-est: 'simpler', 'cleverer'."
-        }
-      ]}
-    />,
-    <MultipleChoiceExercise
-      key="7"
-      question="Complete: 'She is ___ person I know.'"
-      options={["the kindest", "the most kind", "kinder", "more kind"]}
-      correctAnswer={0}
-      explanation="'Kind' is a short adjective; the superlative is 'the kindest'."
-    />,
-    <MultipleChoiceExercise
-      key="8"
-      question="Complete: 'Today is ___ than yesterday.'"
-      options={["more hot", "hotter", "hottest", "most hot"]}
-      correctAnswer={1}
-      explanation="'Hot' doubles the final consonant and adds -er: 'hotter'."
-    />,
-    <TrueFalseExercise
-      key="9"
-      statements={[
-        {
-          text: "'Elder' and 'older' can both be used for age.",
-          isTrue: true,
-          explanation: "Correct. 'Older' is more common, but 'elder' is often used for family: 'my elder brother'."
-        },
-        {
-          text: "We need 'than' after superlatives.",
-          isTrue: false,
-          explanation: "Incorrect. Superlatives use 'of' or 'in', not 'than': 'the tallest in the class'."
-        }
-      ]}
-    />,
-    <MultipleChoiceExercise
-      key="10"
-      question="Complete: 'This exercise is ___ difficult ___ the previous one.'"
-      options={["as... than", "as... as", "so... as", "more... than"]}
-      correctAnswer={1}
-      explanation="For equality we use 'as... as': 'This exercise is as difficult as the previous one'."
-    />
-  ];
-
-  return (
+    return (
     <TheoryLayout
       title="Comparatives and Superlatives"
       description="Master comparatives and superlatives in English. Learn to compare people, things, and situations using -er, -est, more, most, and special structures."
       level="A2-B1-B2-C1-C2"
       theoryContent={theoryContent}
-      exercises={exercises}
+      getExercises={buildComparativesAndSuperlativesExercises}
       prerequisites={["Basic adjectives", "Understanding of sentence structure"]}
       estimatedTime="70 min"
     />

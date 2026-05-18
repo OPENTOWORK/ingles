@@ -1,4 +1,5 @@
 'use client';
+import { buildTextTypesAndStructureExercises } from './textTypesAndStructureExercises';
 import React from 'react';
 import TheoryLayout from '@/components/theory/TheoryLayout';
 import { 
@@ -9,15 +10,11 @@ import {
   GrammarTable, 
   QuickReference 
 } from '@/components/theory/TheoryContent';
-import { 
-  MultipleChoiceExercise, 
-  FillBlanksExercise, 
-  TrueFalseExercise 
-} from '@/components/theory/ExerciseComponents';
+
 
 const TextTypesAndStructurePage = () => {
   const theoryContent = (
-    <div>
+    <>
       <TheorySection title="What Are Text Types and Structure?" icon="📝">
         <p style={{ fontSize: '1.1rem', lineHeight: 1.6, color: '#4a5568', marginBottom: '1rem' }}>
           <strong>Text types</strong> and <strong>structure</strong> are essential for writing well in English. 
@@ -280,172 +277,16 @@ const TextTypesAndStructurePage = () => {
           />
         </div>
       </TheorySection>
-    </div>
+    </>
   );
 
-  const exercises = [
-    <MultipleChoiceExercise
-      key="1"
-      question="Complete: '_____, technology has many benefits.'"
-      options={[
-        "But",
-        "Furthermore",
-        "Finally",
-        "However"
-      ]}
-      correctAnswer={1}
-      explanation="'Furthermore' adds supporting information related to benefits already introduced."
-    />,
-
-    <MultipleChoiceExercise
-      key="2"
-      question="Which structure describes a paragraph best?"
-      options={[
-        "Topic sentence + examples + concluding sentence tied to one idea",
-        "Introduction + body + conclusion of the whole composition",
-        "Topic sentence + supporting sentences + closing sentence",
-        "Examples only, with no controlling sentence"
-      ]}
-      correctAnswer={2}
-      explanation="A paragraph usually opens with the main idea, develops it, then wraps up within the same paragraph."
-    />,
-
-    <TrueFalseExercise
-      key="3"
-      statements={[
-        {
-          text: "In formal writing you can freely use contractions like 'I'll' and 'don't'.",
-          isTrue: false,
-          explanation: "Incorrect. Formal writing usually avoids contractions; prefer 'I will' and 'do not' unless quoting speech."
-        },
-        {
-          text: "Each paragraph should mainly develop one controlling idea.",
-          isTrue: true,
-          explanation: "Correct—that keeps paragraphs clear and readable."
-        },
-        {
-          text: "Words like 'however' and 'furthermore' help make a text smoother.",
-          isTrue: true,
-          explanation: "Correct—they signal relationships between ideas across sentences and paragraphs."
-        },
-        {
-          text: "The introduction should normally be roughly 70% of the essay length.",
-          isTrue: false,
-          explanation: "Incorrect—the introduction is often about 10–15%; the bulk is the body paragraphs."
-        }
-      ]}
-    />,
-
-    <MultipleChoiceExercise
-      key="4"
-      question="Which register best fits a typical university essay?"
-      options={[
-        "Very informal tone with slang",
-        "Formal style without contractions",
-        "Mixed informally sentence by sentence with no warning",
-        "Only very short slang sentences"
-      ]}
-      correctAnswer={1}
-      explanation="Academic essays usually expect precise vocabulary and full forms instead of contractions."
-    />,
-
-    <MultipleChoiceExercise
-      key="5"
-      question="What is the conclusion mainly for?"
-      options={[
-        "Introducing brand-new points not mentioned earlier",
-        "Building the longest body section possible",
-        "Summarising and closing your points",
-        "Listing random examples unrelated to earlier claims"
-      ]}
-      correctAnswer={2}
-      explanation="A conclusion gathers the thread of the discussion and closes—without dumping major new topics."
-    />,
-
-    <TrueFalseExercise
-      key="6"
-      statements={[
-        {
-          text: "Narratives are often clearer when events follow chronological order.",
-          isTrue: true,
-          explanation: "Correct—it helps listeners or readers reconstruct the timeline."
-        },
-        {
-          text: "Descriptive texts mainly explain mechanisms step-by-step.",
-          isTrue: false,
-          explanation: "Incorrect—that role fits procedural or explanatory texts better; descriptive writing highlights qualities."
-        },
-        {
-          text: "A healthy paragraph sticks to one main idea.",
-          isTrue: true,
-          explanation: "Correct—it prevents rambling mixes of unrelated points."
-        }
-      ]}
-    />,
-
-    <MultipleChoiceExercise
-      key="7"
-      question="Which text type balances pros and cons of technology most naturally?"
-      options={[
-        "Pure narrative folklore only",
-        "Argumentative exposition",
-        "Short weather forecast",
-        "Instruction manual for assembling furniture"
-      ]}
-      correctAnswer={1}
-      explanation="Argumentative writing weighs evidence and viewpoints on opposing sides."
-    />,
-
-    <MultipleChoiceExercise
-      key="8"
-      question="In an essay, a conclusion primarily should _____."
-      options={[
-        "Launch fresh arguments never outlined before",
-        "Summarise key points and provide closure",
-        "Insert long raw data dumps",
-        "Duplicate the introduction word-for-word automatically"
-      ]}
-      correctAnswer={1}
-      explanation="The conclusion reinforces what was argued—without pretending to reopen the thesis from scratch."
-    />,
-
-    <TrueFalseExercise
-      key="9"
-      statements={[
-        {
-          text: "Formal English usually avoids contractions like 'don't'.",
-          isTrue: true,
-          explanation: "Correct—you expand to 'do not' or 'cannot' unless context allows contractions."
-        },
-        {
-          text: "The introduction ought to swallow half your total word budget.",
-          isTrue: false,
-          explanation: "Incorrect—you normally invest most words in developmental paragraphs supporting the thesis."
-        }
-      ]}
-    />,
-
-    <MultipleChoiceExercise
-      key="10"
-      question="Which overall structure suits expository texts well?"
-      options={[
-        "Problem → stray poem verse",
-        "Introduction → Body → Conclusion",
-        "Bullet list disconnected from headings",
-        "Only comparison adjectives stacked without thesis"
-      ]}
-      correctAnswer={1}
-      explanation="A three-move arc flexibly accommodates explanation: set context, elaborate, summarise."
-    />
-  ];
-
-  return (
+    return (
     <TheoryLayout
       title="Text Types and Structure"
       description="Understand text types and structure in English. Organise paragraphs, manage register, link ideas smoothly, and build texts readers can follow."
       level="A2-B1-B2-C1-C2"
       theoryContent={theoryContent}
-      exercises={exercises}
+      getExercises={buildTextTypesAndStructureExercises}
       prerequisites={["Basic grammar", "Understanding of sentence structure"]}
       estimatedTime="60 min"
     />

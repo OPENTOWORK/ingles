@@ -1,11 +1,12 @@
 'use client';
+import { buildGappedTextExercises } from './gappedTextExercises';
 import TheoryLayout from '@/components/theory/TheoryLayout';
 import { TheorySection, Example, Rule, Tip, QuickReference } from '@/components/theory/TheoryContent';
-import { MultipleChoiceExercise, TrueFalseExercise } from '@/components/theory/ExerciseComponents';
+
 
 const GappedTextPage = () => {
   const theoryContent = (
-    <div>
+    <>
       <TheorySection title="What is Gapped Text?" icon="🧩">
         <p>
           <strong>Gapped Text</strong> is a task where paragraphs or sentences have been removed from a text 
@@ -129,167 +130,16 @@ const GappedTextPage = () => {
           />
         </div>
       </TheorySection>
-    </div>
+    </>
   );
 
-  const exercises = [
-    <MultipleChoiceExercise
-      key="1"
-      question="What is the main aim of a Gapped Text task?"
-      options={[
-        "Fill in missing words",
-        "Choose paragraphs that fit logically in the gaps",
-        "Translate the whole text",
-        "Find grammar mistakes"
-      ]}
-      correctAnswer={1}
-      explanation="In Gapped Text you choose whole paragraphs that fit logically into the gaps in the text."
-    />,
-
-    <MultipleChoiceExercise
-      key="2"
-      question="What should you do before you start filling the gaps?"
-      options={[
-        "Read only the list of options",
-        "Count how many gaps there are",
-        "Read the whole text to understand the general topic",
-        "Start immediately with the first gap"
-      ]}
-      correctAnswer={2}
-      explanation="Read the whole text first to understand topic, structure, and flow of ideas."
-    />,
-
-    <TrueFalseExercise
-      key="3"
-      statements={[
-        {
-          text: "Pronouns like 'this', 'that', and 'it' are important clues for cohesion.",
-          isTrue: true,
-          explanation: "Correct. Pronouns must refer to something mentioned earlier, which helps you find links."
-        },
-        {
-          text: "You can use each optional paragraph more than once.",
-          isTrue: false,
-          explanation: "Incorrect. Each paragraph from the list is used only once, and some may not be used at all."
-        },
-        {
-          text: "The chosen paragraph should match the style and tone of the rest of the text.",
-          isTrue: true,
-          explanation: "Correct. Consistency of style, tone, and register is essential for textual cohesion."
-        }
-      ]}
-    />,
-
-    <MultipleChoiceExercise
-      key="4"
-      question="If an optional paragraph starts with 'However', what does that suggest?"
-      options={[
-        "It is the first paragraph of the text",
-        "It contrasts with the previous idea",
-        "It is a conclusion",
-        "It introduces an example"
-      ]}
-      correctAnswer={1}
-      explanation="'However' signals contrast, so the paragraph should follow an idea it contrasts with or qualifies."
-    />,
-
-    <MultipleChoiceExercise
-      key="5"
-      question="Which words help you spot time order?"
-      options={[
-        "Descriptive adjectives",
-        "Then, later, previously, afterwards",
-        "Proper nouns",
-        "Ordinal numbers only"
-      ]}
-      correctAnswer={1}
-      explanation="Time connectors like 'then', 'later', and 'previously' show sequence and help you order events."
-    />,
-
-    <TrueFalseExercise
-      key="6"
-      statements={[
-        {
-          text: "You should analyse both what comes before and what comes after each gap.",
-          isTrue: true,
-          explanation: "Correct. Full context (before and after) is crucial for choosing the right paragraph."
-        },
-        {
-          text: "Lexical repetition is not important in Gapped Text.",
-          isTrue: false,
-          explanation: "Incorrect. Lexical repetition and synonyms are important clues for cohesion."
-        },
-        {
-          text: "Every optional paragraph must be used in the task.",
-          isTrue: false,
-          explanation: "Incorrect. There are usually more options than gaps, so some paragraphs are not used."
-        }
-      ]}
-    />,
-
-    <MultipleChoiceExercise
-      key="7"
-      question="What does 'the former' mean in a text?"
-      options={[
-        "The first of two things mentioned earlier",
-        "A famous person",
-        "The previous paragraph",
-        "The author"
-      ]}
-      correctAnswer={0}
-      explanation="'The former' refers to the first of two items mentioned earlier; 'the latter' refers to the second."
-    />,
-
-    <MultipleChoiceExercise
-      key="8"
-      question="What is a good strategy when you are unsure between two options?"
-      options={[
-        "Pick the longer one",
-        "Use elimination and analyse links more carefully",
-        "Guess randomly",
-        "Skip the question"
-      ]}
-      correctAnswer={1}
-      explanation="Use elimination and look more closely at logical and cohesive links."
-    />,
-
-    <TrueFalseExercise
-      key="9"
-      statements={[
-        {
-          text: "The correct paragraph should develop logically from what comes before.",
-          isTrue: true,
-          explanation: "Correct. Ideas should progress in a logical, coherent way through the text."
-        },
-        {
-          text: "You can ignore connectors like 'therefore' and 'furthermore' when choosing paragraphs.",
-          isTrue: false,
-          explanation: "Incorrect. Connectors are vital clues to logical relations between ideas."
-        }
-      ]}
-    />,
-
-    <MultipleChoiceExercise
-      key="10"
-      question="Which factor matters MOST for success in Gapped Text?"
-      options={[
-        "Reading speed",
-        "Large vocabulary",
-        "Understanding textual cohesion and coherence",
-        "Advanced grammar knowledge"
-      ]}
-      correctAnswer={2}
-      explanation="Understanding how ideas connect and flow (cohesion and coherence) matters most."
-    />
-  ];
-
-  return (
+    return (
     <TheoryLayout
       title="Gapped Text"
       description="Master gapped text tasks. Learn to spot cohesion, coherence, and logical flow so you can choose paragraphs that fit perfectly."
       level="B2-C1-C2"
       theoryContent={theoryContent}
-      exercises={exercises}
+      getExercises={buildGappedTextExercises}
       prerequisites={["Advanced reading skills", "Understanding of text structure", "Knowledge of connectors"]}
       estimatedTime="85 min"
     />

@@ -1,4 +1,5 @@
 'use client';
+import { buildFalseFriendsExercises } from './falseFriendsExercises';
 import React from 'react';
 import TheoryLayout from '@/components/theory/TheoryLayout';
 import { 
@@ -9,15 +10,11 @@ import {
   GrammarTable, 
   QuickReference 
 } from '@/components/theory/TheoryContent';
-import { 
-  MultipleChoiceExercise, 
-  FillBlanksExercise, 
-  TrueFalseExercise 
-} from '@/components/theory/ExerciseComponents';
+
 
 const FalseFriendsPage = () => {
   const theoryContent = (
-    <div>
+    <>
       <TheorySection title="What Are False Friends?" icon="👥">
         <p style={{ fontSize: '1.1rem', lineHeight: 1.6, color: '#4a5568', marginBottom: '1rem' }}>
           <strong>False friends</strong> are words that look very similar in English and Spanish 
@@ -58,17 +55,14 @@ const FalseFriendsPage = () => {
           <Example 
             spanish="La situación actual es difícil"
             english="The actual situation is difficult"
-            translation="The real situation is difficult"
           />
           <Example 
             spanish="Actualmente estoy trabajando"
             english="I'm actually working"
-            translation="I'm actually working"
           />
           <Example 
             spanish="Voy a asistir a la reunión"
             english="I'm going to attend the meeting"
-            translation="I'm going to attend the meeting"
           />
         </div>
 
@@ -112,17 +106,14 @@ const FalseFriendsPage = () => {
           <Example 
             spanish="Estoy decepcionado con los resultados"
             english="I'm disappointed with the results"
-            translation="I'm disappointed with the results"
           />
           <Example 
             spanish="Estoy embarazada (pregnant)"
             english="I'm pregnant"
-            translation="I'm pregnant"
           />
           <Example 
             spanish="El éxito de la película fue grande"
             english="The movie's success was great"
-            translation="The movie was a great success"
           />
         </div>
 
@@ -155,17 +146,14 @@ const FalseFriendsPage = () => {
           <Example 
             spanish="Me di cuenta de mi error"
             english="I realized my mistake"
-            translation="I realised my mistake"
           />
           <Example 
             spanish="Recordé la cita"
             english="I remembered the appointment"
-            translation="I remembered the appointment"
           />
           <Example 
             spanish="Es una persona sensible"
             english="He's a sensitive person"
-            translation="He's a sensitive person"
           />
         </div>
 
@@ -209,22 +197,18 @@ const FalseFriendsPage = () => {
           <Example 
             spanish="Me gusta el postre"
             english="I like dessert"
-            translation="I like dessert"
           />
           <Example 
             spanish="El desierto es muy seco"
             english="The desert is very dry"
-            translation="The desert is very dry"
           />
           <Example 
             spanish="Necesito consejo"
             english="I need advice"
-            translation="I need advice"
           />
           <Example 
             spanish="Te aconsejo estudiar"
             english="I advise you to study"
-            translation="I advise you to study"
           />
         </div>
 
@@ -253,17 +237,14 @@ const FalseFriendsPage = () => {
           <Example 
             spanish="El problema actual es la inflación"
             english="The current problem is inflation"
-            translation="The current problem is inflation"
           />
           <Example 
             spanish="Voy a la biblioteca para estudiar"
             english="I go to the library to study"
-            translation="I go to the library to study"
           />
           <Example 
             spanish="Esta fábrica produce telas"
             english="This factory produces fabrics"
-            translation="This factory produces fabric"
           />
         </div>
 
@@ -354,172 +335,16 @@ const FalseFriendsPage = () => {
           />
         </div>
       </TheorySection>
-    </div>
+    </>
   );
 
-  const exercises = [
-    <MultipleChoiceExercise
-      key="1"
-      question="Complete: 'The _____ situation is difficult.' (present/current)"
-      options={[
-        "actual",
-        "current",
-        "real",
-        "true"
-      ]}
-      correctAnswer={1}
-      explanation="'Current' means present. 'Actual' in English means real or true."
-    />,
-
-    <MultipleChoiceExercise
-      key="2"
-      question="What does 'actual' mean in English?"
-      options={[
-        "current",
-        "real, existing",
-        "present",
-        "modern"
-      ]}
-      correctAnswer={1}
-      explanation="'Actual' in English means 'real' or 'existing', not 'current'. For 'current' or 'present', use 'current'."
-    />,
-
-    <TrueFalseExercise
-      key="3"
-      statements={[
-        {
-          text: "'Library' in English means the same as 'librería' in Spanish.",
-          isTrue: false,
-          explanation: "Incorrect. 'Library' in English means 'biblioteca' (place with books to borrow), while 'librería' means 'bookstore' (place to buy books)."
-        },
-        {
-          text: "'Realize' means 'to become aware of something' in English.",
-          isTrue: true,
-          explanation: "Correct. 'Realize' means 'to become aware of' or 'to understand'. It does not mean 'to carry out' (realizar)."
-        },
-        {
-          text: "'Embarrassed' means 'pregnant' in English.",
-          isTrue: false,
-          explanation: "Incorrect. 'Embarrassed' means 'ashamed' or 'feeling shame'. 'Pregnant' means 'embarazada'."
-        },
-        {
-          text: "False friends are words that look similar but have different meanings.",
-          isTrue: true,
-          explanation: "Correct. False friends are words that appear similar in two languages but have different meanings."
-        }
-      ]}
-    />,
-
-    <MultipleChoiceExercise
-      key="4"
-      question="Which word means 'to carry out' or 'to do' in English?"
-      options={[
-        "realize",
-        "carry out",
-        "actual",
-        "library"
-      ]}
-      correctAnswer={1}
-      explanation="'Carry out' means 'to do' or 'to execute'. 'Realize' means 'to become aware of', 'actual' means 'real', and 'library' means 'biblioteca'."
-    />,
-
-    <MultipleChoiceExercise
-      key="5"
-      question="What is the correct English word for 'éxito' (success)?"
-      options={[
-        "exit",
-        "success",
-        "access",
-        "excess"
-      ]}
-      correctAnswer={1}
-      explanation="The correct English word for 'éxito' (success) is 'success'. 'Exit' means 'salida' (way out)."
-    />,
-
-    <TrueFalseExercise
-      key="6"
-      statements={[
-        {
-          text: "'Success' in English means the same as 'suceso' in Spanish.",
-          isTrue: false,
-          explanation: "Incorrect. 'Success' means success, while 'suceso' means event or occurrence."
-        },
-        {
-          text: "'Fabric' in English refers to cloth or textile material.",
-          isTrue: true,
-          explanation: "Correct. 'Fabric' means cloth or textile material, not factory (fábrica)."
-        },
-        {
-          text: "'Sensible' in English means the same as 'sensible' in Spanish.",
-          isTrue: false,
-          explanation: "Incorrect. 'Sensible' in English means practical/reasonable, not sensitive (sensible in Spanish)."
-        }
-      ]}
-    />,
-
-    <MultipleChoiceExercise
-      key="7"
-      question="Complete: 'She is very _____ about her appearance.' (sensitive)"
-      options={[
-        "sensible",
-        "sensitive",
-        "sensual",
-        "sense"
-      ]}
-      correctAnswer={1}
-      explanation="'Sensitive' means easily offended or emotionally responsive. 'Sensible' means practical or reasonable."
-    />,
-
-    <MultipleChoiceExercise
-      key="8"
-      question="What does 'exit' mean in English?"
-      options={[
-        "success",
-        "way out",
-        "entrance",
-        "failure"
-      ]}
-      correctAnswer={1}
-      explanation="'Exit' means way out. 'Éxito' in Spanish is 'success' in English."
-    />,
-
-    <TrueFalseExercise
-      key="9"
-      statements={[
-        {
-          text: "'Attend' in English means to be present at an event.",
-          isTrue: true,
-          explanation: "Correct. 'Attend' means to be present at an event, not to serve or help (atender)."
-        },
-        {
-          text: "'Carpet' and 'carpeta' refer to the same object.",
-          isTrue: false,
-          explanation: "Incorrect. 'Carpet' is a floor covering; 'carpeta' is a folder in English."
-        }
-      ]}
-    />,
-
-    <MultipleChoiceExercise
-      key="10"
-      question="Complete: 'I need to _____ the meeting tomorrow.' (attend)"
-      options={[
-        "assist",
-        "attend",
-        "help",
-        "support"
-      ]}
-      correctAnswer={1}
-      explanation="'Attend' means to be present at an event. 'Assist' means to help."
-    />
-  ];
-
-  return (
+    return (
     <TheoryLayout
       title="False Friends"
       description="Master false friends between English and Spanish. Learn to avoid common confusions and use the right word for each context."
       level="B1-B2-C1-C2"
       theoryContent={theoryContent}
-      exercises={exercises}
+      getExercises={buildFalseFriendsExercises}
       prerequisites={["Basic vocabulary", "Understanding of word formation"]}
       estimatedTime="75 min"
     />

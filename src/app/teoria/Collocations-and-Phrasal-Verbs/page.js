@@ -1,4 +1,5 @@
 'use client';
+import { buildCollocationsAndPhrasalVerbsExercises } from './collocationsAndPhrasalVerbsExercises';
 import React from 'react';
 import TheoryLayout from '@/components/theory/TheoryLayout';
 import { 
@@ -9,15 +10,11 @@ import {
   GrammarTable, 
   QuickReference 
 } from '@/components/theory/TheoryContent';
-import { 
-  MultipleChoiceExercise, 
-  FillBlanksExercise, 
-  TrueFalseExercise 
-} from '@/components/theory/ExerciseComponents';
+
 
 const CollocationsandPhrasalVerbsPage = () => {
   const theoryContent = (
-    <div>
+    <>
       <TheorySection title="What Are Collocations and Phrasal Verbs?" icon="🔗">
         <p style={{ fontSize: '1.1rem', lineHeight: 1.6, color: '#4a5568', marginBottom: '1rem' }}>
           <strong>Collocations</strong> are natural word combinations that sound right to native speakers. 
@@ -302,128 +299,16 @@ const CollocationsandPhrasalVerbsPage = () => {
           />
         </div>
       </TheorySection>
-    </div>
+    </>
   );
 
-  const exercises = [
-    <MultipleChoiceExercise
-      key="1"
-      question="Complete: 'Please ___ the lights.'"
-      options={["turn off", "turn on", "turn up", "turn down"]}
-      correctAnswer={1}
-      explanation="'Turn on' means to switch something on, such as lights, TV, or radio."
-    />,
-    <MultipleChoiceExercise
-      key="2"
-      question="Choose the correct collocation: I need to ___ a decision about my future."
-      options={["do", "make", "take", "give"]}
-      correctAnswer={1}
-      explanation="The correct collocation is 'make a decision' — we use 'make' when creating or producing something."
-    />,
-    <TrueFalseExercise
-      key="3"
-      statements={[
-        {
-          text: "With separable phrasal verbs, the object can always go between the verb and the particle.",
-          isTrue: false,
-          explanation: "False. The object can go between the verb and particle OR after it, but pronouns must go between the verb and particle."
-        },
-        {
-          text: "Collocations are natural word combinations that sound natural to native speakers.",
-          isTrue: true,
-          explanation: "Correct. Collocations are combinations native speakers use instinctively."
-        },
-        {
-          text: "Phrasal verbs always have the same meaning regardless of context.",
-          isTrue: false,
-          explanation: "False. Many phrasal verbs have multiple meanings depending on context."
-        },
-        {
-          text: "It's okay to translate collocations literally from your native language.",
-          isTrue: false,
-          explanation: "False. Learn collocations as complete units; they often do not translate directly."
-        }
-      ]}
-    />,
-    <MultipleChoiceExercise
-      key="4"
-      question="What is the correct collocation for 'coffee' when describing its intensity?"
-      options={["strong coffee", "heavy coffee", "powerful coffee", "big coffee"]}
-      correctAnswer={0}
-      explanation="The correct collocation is 'strong coffee' when describing intensity or flavor."
-    />,
-    <MultipleChoiceExercise
-      key="5"
-      question="Which sentence correctly uses a separable phrasal verb?"
-      options={["Turn on it.", "Turn it on.", "Look after it.", "Get over it."]}
-      correctAnswer={1}
-      explanation="'Turn it on' is correct because 'turn on' is separable, so the pronoun goes between the verb and particle."
-    />,
-    <TrueFalseExercise
-      key="6"
-      statements={[
-        {
-          text: "'Put off' means to postpone something.",
-          isTrue: true,
-          explanation: "Correct. 'Put off' means to postpone or delay something."
-        },
-        {
-          text: "'Look after' and 'look for' have the same meaning.",
-          isTrue: false,
-          explanation: "Incorrect. 'Look after' means take care of; 'look for' means search for."
-        },
-        {
-          text: "We say 'take a photo' not 'make a photo'.",
-          isTrue: true,
-          explanation: "Correct. In English we say 'take a photo/picture'."
-        }
-      ]}
-    />,
-    <MultipleChoiceExercise
-      key="7"
-      question="Complete: 'She ___ her job last month.'"
-      options={["gave up", "gave in", "gave out", "gave away"]}
-      correctAnswer={0}
-      explanation="'Give up' means to quit or stop doing something: 'She gave up her job'."
-    />,
-    <MultipleChoiceExercise
-      key="8"
-      question="Choose the correct collocation: 'Can you ___ me a favor?'"
-      options={["make", "do", "take", "give"]}
-      correctAnswer={1}
-      explanation="'Do someone a favor' is the correct collocation."
-    />,
-    <TrueFalseExercise
-      key="9"
-      statements={[
-        {
-          text: "'Break down' can mean both 'to stop working' and 'to become emotional'.",
-          isTrue: true,
-          explanation: "Correct. 'Break down' can describe a machine failing or someone becoming upset."
-        },
-        {
-          text: "'Run into' means to exercise by running.",
-          isTrue: false,
-          explanation: "Incorrect. 'Run into' means to meet someone by chance or collide with something."
-        }
-      ]}
-    />,
-    <MultipleChoiceExercise
-      key="10"
-      question="Complete: 'I need to ___ early tomorrow for my flight.'"
-      options={["get up", "get on", "get off", "get over"]}
-      correctAnswer={0}
-      explanation="'Get up' means to get out of bed: 'I need to get up early'."
-    />
-  ];
-
-  return (
+    return (
     <TheoryLayout
       title="Collocations and Phrasal Verbs"
       description="Master collocations and phrasal verbs in English. Learn natural word combinations and verb–particle patterns to sound more fluent."
       level="B2-C1-C2"
       theoryContent={theoryContent}
-      exercises={exercises}
+      getExercises={buildCollocationsAndPhrasalVerbsExercises}
       prerequisites={["Intermediate vocabulary", "Understanding of verb patterns"]}
       estimatedTime="90 min"
     />

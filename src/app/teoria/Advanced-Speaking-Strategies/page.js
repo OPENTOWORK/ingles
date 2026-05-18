@@ -1,4 +1,5 @@
 'use client';
+import { buildAdvancedSpeakingStrategiesExercises } from './advancedSpeakingStrategiesExercises';
 import React from 'react';
 import TheoryLayout from '@/components/theory/TheoryLayout';
 import { 
@@ -9,15 +10,11 @@ import {
   GrammarTable, 
   QuickReference 
 } from '@/components/theory/TheoryContent';
-import { 
-  MultipleChoiceExercise, 
-  FillBlanksExercise, 
-  TrueFalseExercise 
-} from '@/components/theory/ExerciseComponents';
+
 
 const AdvancedSpeakingPage = () => {
   const theoryContent = (
-    <div>
+    <>
       <TheorySection title="Advanced Speaking Strategies" icon="🎤">
         <p style={{ fontSize: '1.1rem', lineHeight: 1.6, color: '#4a5568', marginBottom: '1rem' }}>
           Advanced <strong>speaking strategies</strong> go beyond vocabulary and grammar. 
@@ -248,161 +245,16 @@ const AdvancedSpeakingPage = () => {
           </Tip>
         </div>
       </TheorySection>
-    </div>
+    </>
   );
 
-  const exercises = [
-    <MultipleChoiceExercise
-      key="1"
-      question="Which filler is most appropriate for a job interview?"
-      options={[
-        "Like, you know...",
-        "Um, er...",
-        "Let me think about that...",
-        "I mean, like..."
-      ]}
-      correctAnswer={2}
-      explanation="'Let me think about that' sounds professional and shows reflection; it fits interviews well."
-    />,
-
-    <MultipleChoiceExercise
-      key="2"
-      question="What's the best way to express a moderate opinion about a controversial topic?"
-      options={[
-        "I'm absolutely certain that...",
-        "It seems to me that...",
-        "Without a doubt...",
-        "Everyone knows that..."
-      ]}
-      correctAnswer={1}
-      explanation="'It seems to me that...' states a personal view without sounding too absolute, which suits controversial topics."
-    />,
-
-    <TrueFalseExercise
-      key="3"
-      statements={[
-        {
-          text: "Using fillers like 'um' and 'er' should always be avoided in formal speaking.",
-          isTrue: false,
-          explanation: "False. Some fillers are natural even in formal settings, but use them sparingly."
-        },
-        {
-          text: "Self-correction during speaking shows linguistic awareness and is generally positive.",
-          isTrue: true,
-          explanation: "Correct. Natural self-correction shows linguistic awareness and is viewed positively."
-        },
-        {
-          text: "In formal presentations, you should avoid using personal examples.",
-          isTrue: false,
-          explanation: "False. Personal examples can work in formal settings when they are relevant."
-        },
-        {
-          text: "Adapting your register to match your audience shows advanced communication skills.",
-          isTrue: true,
-          explanation: "Correct. Adapting register shows advanced communicative competence."
-        }
-      ]}
-    />,
-
-    <MultipleChoiceExercise
-      key="4"
-      question="How should you handle a question you don't immediately know how to answer?"
-      options={[
-        "Stay silent until you think of something",
-        "Say 'I don't know' and stop talking",
-        "Say 'That's an interesting question, let me think about that'",
-        "Change the topic immediately"
-      ]}
-      correctAnswer={2}
-      explanation="That response buys time professionally and shows you are taking the question seriously."
-    />,
-
-    <MultipleChoiceExercise
-      key="5"
-      question="Which phrase best helps you maintain your speaking turn when someone tries to interrupt?"
-      options={[
-        "Stop interrupting me!",
-        "Let me just finish this point...",
-        "You're wrong!",
-        "I'm not done yet!"
-      ]}
-      correctAnswer={1}
-      explanation="'Let me just finish this point...' is polite but firm, holding your turn without sounding aggressive."
-    />,
-
-    <MultipleChoiceExercise
-      key="6"
-      question="Which is the best way to buy time when you need to think?"
-      options={[
-        "Stay silent for 30 seconds",
-        "That's an interesting question, let me consider that",
-        "I don't know",
-        "Can you repeat the question?"
-      ]}
-      correctAnswer={1}
-      explanation="That phrase buys time professionally while showing you are considering the question."
-    />,
-
-    <MultipleChoiceExercise
-      key="7"
-      question="What's the most appropriate way to self-correct in formal speaking?"
-      options={[
-        "Sorry, I'm stupid",
-        "What I meant to say was...",
-        "Forget what I said",
-        "I'm always wrong"
-      ]}
-      correctAnswer={1}
-      explanation="'What I meant to say was...' is a natural, professional way to self-correct."
-    />,
-
-    <MultipleChoiceExercise
-      key="8"
-      question="Which filler is most appropriate for academic presentations?"
-      options={[
-        "Like, um...",
-        "You know...",
-        "Now, let's consider...",
-        "I mean, like..."
-      ]}
-      correctAnswer={2}
-      explanation="'Now, let's consider...' is formal and appropriate for academic contexts."
-    />,
-
-    <MultipleChoiceExercise
-      key="9"
-      question="How should you express uncertainty in a professional context?"
-      options={[
-        "I have no idea",
-        "I'm not sure, but I believe...",
-        "I don't know anything",
-        "That's impossible to know"
-      ]}
-      correctAnswer={1}
-      explanation="'I'm not sure, but I believe...' is honest while still offering your best estimate."
-    />,
-
-    <MultipleChoiceExercise
-      key="10"
-      question="What's the best way to change topics smoothly in conversation?"
-      options={[
-        "Stop talking about that",
-        "That reminds me of...",
-        "I'm bored with this topic",
-        "Let's talk about something else"
-      ]}
-      correctAnswer={1}
-      explanation="'That reminds me of...' is a natural transition that links topics smoothly."
-    />
-  ];
-
-  return (
+    return (
     <TheoryLayout
       title="Advanced Speaking Strategies"
       description="Build sophisticated speaking strategies: fluency, discourse structuring, register adaptation and natural conversation management."
       level="B2-C1-C2"
       theoryContent={theoryContent}
-      exercises={exercises}
+      getExercises={buildAdvancedSpeakingStrategiesExercises}
       prerequisites={["Basic speaking", "Connectors", "Vocabulary by register"]}
       estimatedTime="60 min"
     />

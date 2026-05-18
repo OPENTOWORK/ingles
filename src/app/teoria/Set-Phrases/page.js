@@ -1,4 +1,5 @@
 'use client';
+import { buildSetPhrasesExercises } from './setPhrasesExercises';
 import React from 'react';
 import TheoryLayout from '@/components/theory/TheoryLayout';
 import { 
@@ -9,15 +10,11 @@ import {
   GrammarTable, 
   QuickReference 
 } from '@/components/theory/TheoryContent';
-import {
-  MultipleChoiceExercise,
-  FillBlanksExercise,
-  TrueFalseExercise
-} from '@/components/theory/ExerciseComponents';
+
 
 const SetPhrasesPage = () => {
   const theoryContent = (
-    <div>
+    <>
       <TheorySection title="What Are Set Phrases?" icon="💬">
         <p style={{ fontSize: '1.1rem', lineHeight: 1.6, color: '#4a5568', marginBottom: '1rem' }}>
           <strong>Set phrases</strong> (idiomatic expressions) are fixed expressions commonly used in spoken English. 
@@ -138,11 +135,9 @@ const SetPhrasesPage = () => {
         <div style={{ display: 'grid', gap: '1rem' }}>
           <Example 
             english="Very sure: 'I'm absolutely sure it's true'"
-            translation="Sounds confident; use when the evidence is strong."
           />
           <Example 
             english="Moderate: 'I think that's a good idea'"
-            translation="Softens the claim; typical in discussion."
           />
           <Example 
             english="Uncertain: 'I'm not sure, but it might work'"
@@ -187,15 +182,12 @@ const SetPhrasesPage = () => {
         <div style={{ display: 'grid', gap: '1rem' }}>
           <Example 
             english="Full agreement: 'I completely agree with you'"
-            translation="Use with peers when you want to be emphatic but polite."
           />
           <Example 
             english="Moderate agreement: 'I agree with you on this'"
-            translation="Narrows agreement to one point; useful in debates."
           />
           <Example 
             english="Soft disagreement: 'I'm not sure I agree with that'"
-            translation="Hedges disagreement; keeps rapport."
           />
         </div>
 
@@ -232,7 +224,6 @@ const SetPhrasesPage = () => {
           />
           <Example 
             english="Reminder: 'That reminds me, I need to call...'"
-            translation="Links the new point to what was just said."
           />
         </div>
 
@@ -352,172 +343,16 @@ const SetPhrasesPage = () => {
           />
         </div>
       </TheorySection>
-    </div>
+    </>
   );
 
-  const exercises = [
-    <MultipleChoiceExercise
-      key="1"
-      question="What is the most informal greeting?"
-      options={[
-        "Good morning",
-        "Hi there!",
-        "How do you do?",
-        "Good evening"
-      ]}
-      correctAnswer={1}
-      explanation="'Hi there!' is a very informal, friendly greeting, ideal for casual situations."
-    />,
-
-    <MultipleChoiceExercise
-      key="2"
-      question="What is the most appropriate response to 'Thanks a lot!'?"
-      options={[
-        "You're welcome!",
-        "Thank you!",
-        "I'm sorry",
-        "Excuse me"
-      ]}
-      correctAnswer={0}
-      explanation="'You're welcome!' is the most natural reply to 'Thanks a lot!' when you want to say helping was no trouble."
-    />,
-
-    <TrueFalseExercise
-      key="3"
-      statements={[
-        {
-          text: "Set phrases are fixed expressions used as a single unit.",
-          isTrue: true,
-          explanation: "Correct. Set phrases are fixed word combinations with a specific meaning, used as one unit."
-        },
-        {
-          text: "It is appropriate to use very informal expressions in formal contexts.",
-          isTrue: false,
-          explanation: "Incorrect. Match formality to the context. Very informal expressions are not appropriate in formal settings."
-        },
-        {
-          text: "Showing genuine interest makes the conversation more pleasant.",
-          isTrue: true,
-          explanation: "Correct. Genuine interest with phrases like 'That's interesting!' or 'Really?' makes conversation nicer for everyone."
-        },
-        {
-          text: "It does not matter how you reply to courtesy phrases.",
-          isTrue: false,
-          explanation: "Incorrect. Responding well to courtesy phrases keeps the flow going and shows respect."
-        }
-      ]}
-    />,
-
-    <MultipleChoiceExercise
-      key="4"
-      question="What phrase best expresses soft disagreement?"
-      options={[
-        "I completely disagree",
-        "I'm not sure I agree",
-        "I totally agree",
-        "That's amazing!"
-      ]}
-      correctAnswer={1}
-      explanation="'I'm not sure I agree' softens disagreement. The others express strong disagreement, full agreement, or amazement."
-    />,
-
-    <MultipleChoiceExercise
-      key="5"
-      question="What phrase best changes the topic in a casual way?"
-      options={[
-        "On a different note",
-        "By the way",
-        "Incidentally",
-        "Speaking of which"
-      ]}
-      correctAnswer={1}
-      explanation="'By the way' is the most casual way to shift topic; the others tend to be more formal or tied to the previous subject."
-    />,
-
-    <TrueFalseExercise
-      key="6"
-      statements={[
-        {
-          text: "Set phrases can be translated literally from Spanish to English.",
-          isTrue: false,
-          explanation: "Incorrect. Set phrases are language-specific and are rarely translated word for word."
-        },
-        {
-          text: "'How are you?' is a set phrase used for greeting.",
-          isTrue: true,
-          explanation: "Correct. 'How are you?' is a common fixed greeting in English."
-        },
-        {
-          text: "Set phrases make speech sound more natural and fluent.",
-          isTrue: true,
-          explanation: "Correct. Set phrases help you sound more natural and fluent, closer to a native speaker."
-        }
-      ]}
-    />,
-
-    <MultipleChoiceExercise
-      key="7"
-      question="Complete: 'I'm sorry, I didn't _____ that.'"
-      options={[
-        "listen",
-        "catch",
-        "hear",
-        "understand"
-      ]}
-      correctAnswer={1}
-      explanation="'I didn't catch that' is a common polite way to ask someone to repeat what they said."
-    />,
-
-    <MultipleChoiceExercise
-      key="8"
-      question="What is the most natural reply to 'How's it going?'?"
-      options={[
-        "It's going to the store",
-        "Not bad, thanks",
-        "Yes, it is",
-        "I don't know where"
-      ]}
-      correctAnswer={1}
-      explanation="'Not bad, thanks' is a natural, common reply to 'How's it going?'."
-    />,
-
-    <TrueFalseExercise
-      key="9"
-      statements={[
-        {
-          text: "'Break a leg' literally means to injure your leg.",
-          isTrue: false,
-          explanation: "Incorrect. 'Break a leg' is an idiom meaning 'good luck,' especially in theater, not literal injury."
-        },
-        {
-          text: "Set phrases are more common in spoken English than written English.",
-          isTrue: true,
-          explanation: "Correct. Set phrases are especially common in informal spoken conversation."
-        }
-      ]}
-    />,
-
-    <MultipleChoiceExercise
-      key="10"
-      question="Complete: 'I'm _____ forward to seeing you.'"
-      options={[
-        "going",
-        "looking",
-        "moving",
-        "coming"
-      ]}
-      correctAnswer={1}
-      explanation="'Look forward to' is a set phrase meaning you are eager to see someone or something."
-    />
-  ];
-
-  return (
+    return (
     <TheoryLayout
       title="Set Phrases"
       description="Master fixed expressions in English: greetings, goodbyes, courtesy, opinions, agreement and disagreement, and changing the topic. Learn to sound more natural in conversation."
       level="A2-B1-B2-C1-C2"
       theoryContent={theoryContent}
-      exercises={exercises}
+      getExercises={buildSetPhrasesExercises}
       prerequisites={["Basic speaking skills", "Understanding of formal vs informal language"]}
       estimatedTime="65 min"
     />

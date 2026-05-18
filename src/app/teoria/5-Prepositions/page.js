@@ -1,4 +1,5 @@
 'use client';
+import { build5PrepositionsExercises } from './prepositionsExercises';
 import React from 'react';
 import TheoryLayout from '@/components/theory/TheoryLayout';
 import { 
@@ -9,15 +10,11 @@ import {
   GrammarTable, 
   QuickReference 
 } from '@/components/theory/TheoryContent';
-import { 
-  MultipleChoiceExercise, 
-  FillBlanksExercise, 
-  TrueFalseExercise 
-} from '@/components/theory/ExerciseComponents';
+
 
 const PrepositionsPage = () => {
   const theoryContent = (
-    <div>
+    <>
       <TheorySection title="What are Prepositions?" icon="📍">
         <p style={{ fontSize: '1.1rem', lineHeight: 1.6, color: '#4a5568', marginBottom: '1rem' }}>
           <strong>Prepositions</strong> are words that show the relationship between a noun or pronoun 
@@ -57,17 +54,14 @@ const PrepositionsPage = () => {
           <Example 
             spanish="El libro está en la mesa"
             english="The book is on the table"
-            translation="The book is on the table"
           />
           <Example 
             spanish="Estoy en la cocina"
             english="I am in the kitchen"
-            translation="I am in the kitchen"
           />
           <Example 
             spanish="El gato está debajo de la silla"
             english="The cat is under the chair"
-            translation="The cat is under the chair"
           />
         </div>
 
@@ -109,17 +103,14 @@ const PrepositionsPage = () => {
           <Example 
             spanish="Voy al trabajo los lunes"
             english="I go to work on Mondays"
-            translation="I go to work on Mondays"
           />
           <Example 
             spanish="Nací en 1990"
             english="I was born in 1990"
-            translation="I was born in 1990"
           />
           <Example 
             spanish="La reunión es a las 3 PM"
             english="The meeting is at 3 PM"
-            translation="The meeting is at 3 PM"
           />
         </div>
 
@@ -162,17 +153,14 @@ const PrepositionsPage = () => {
           <Example 
             spanish="Voy a la tienda"
             english="I go to the store"
-            translation="I go to the store"
           />
           <Example 
             spanish="Vengo de la oficina"
             english="I come from the office"
-            translation="I come from the office"
           />
           <Example 
             spanish="Camino por el parque"
             english="I walk through the park"
-            translation="I walk through the park"
           />
         </div>
 
@@ -205,17 +193,14 @@ const PrepositionsPage = () => {
           <Example 
             spanish="Escucho música todos los días"
             english="I listen to music every day"
-            translation="I listen to music every day"
           />
           <Example 
             spanish="Espero el autobús"
             english="I wait for the bus"
-            translation="I wait for the bus"
           />
           <Example 
             spanish="Pienso en mi familia"
             english="I think about my family"
-            translation="I think about my family"
           />
         </div>
 
@@ -286,172 +271,16 @@ const PrepositionsPage = () => {
           />
         </div>
       </TheorySection>
-    </div>
+    </>
   );
 
-  const exercises = [
-    <MultipleChoiceExercise
-      key="1"
-      question="Complete: 'I live _____ Spain _____ 2020.'"
-      options={[
-        "in, from",
-        "in, since",
-        "at, from",
-        "on, since"
-      ]}
-      correctAnswer={1}
-      explanation="We use 'in' for countries and 'since' for a specific point in time."
-    />,
-
-    <MultipleChoiceExercise
-      key="2"
-      question="Which is the correct form to complete: 'I listen ___ music every day'?"
-      options={[
-        "at",
-        "to",
-        "in",
-        "on"
-      ]}
-      correctAnswer={1}
-      explanation="The verb 'listen' is always followed by 'to': 'I listen to music every day'."
-    />,
-
-    <TrueFalseExercise
-      key="3"
-      statements={[
-        {
-          text: "'I am at the bed' is correct.",
-          isTrue: false,
-          explanation: "Incorrect. To be in bed we use 'in': 'I am in bed'."
-        },
-        {
-          text: "'I go to home' is correct.",
-          isTrue: false,
-          explanation: "Incorrect. With 'home' we do not use 'to': 'I go home'."
-        },
-        {
-          text: "'The meeting is on Monday' is correct.",
-          isTrue: true,
-          explanation: "Correct. For specific days we use 'on'."
-        },
-        {
-          text: "'I wait for the bus' is correct.",
-          isTrue: true,
-          explanation: "Correct. The verb 'wait' goes with 'for'."
-        }
-      ]}
-    />,
-
-    <MultipleChoiceExercise
-      key="4"
-      question="Which is the correct form to complete: 'I was born ___ 1990'?"
-      options={[
-        "on",
-        "at",
-        "in",
-        "for"
-      ]}
-      correctAnswer={2}
-      explanation="For years we use 'in': 'I was born in 1990'."
-    />,
-
-    <MultipleChoiceExercise
-      key="5"
-      question="Which is the correct form to complete: 'The book is ___ the table'?"
-      options={[
-        "in",
-        "on",
-        "at",
-        "under"
-      ]}
-      correctAnswer={1}
-      explanation="For surfaces we use 'on': 'The book is on the table'."
-    />,
-
-    <TrueFalseExercise
-      key="6"
-      statements={[
-        {
-          text: "We use 'in' for months and years.",
-          isTrue: true,
-          explanation: "Correct. We use 'in' for months (in January) and years (in 2023)."
-        },
-        {
-          text: "We say 'at night' but 'in the morning'.",
-          isTrue: true,
-          explanation: "Correct. We say 'at night' but 'in the morning/afternoon/evening'."
-        },
-        {
-          text: "'I'm interested about music' is correct.",
-          isTrue: false,
-          explanation: "Incorrect. We say 'interested IN music', not 'about'."
-        }
-      ]}
-    />,
-
-    <MultipleChoiceExercise
-      key="7"
-      question="Complete: 'I'll see you ___ Friday ___ 3 PM.'"
-      options={[
-        "in / at",
-        "on / at",
-        "at / in",
-        "on / in"
-      ]}
-      correctAnswer={1}
-      explanation="We use 'on' for days (on Friday) and 'at' for specific times (at 3 PM)."
-    />,
-
-    <MultipleChoiceExercise
-      key="8"
-      question="Which is the correct preposition: 'She is good ___ mathematics'?"
-      options={[
-        "in",
-        "at",
-        "on",
-        "with"
-      ]}
-      correctAnswer={1}
-      explanation="We say 'good AT' something: 'She is good at mathematics'."
-    />,
-
-    <TrueFalseExercise
-      key="9"
-      statements={[
-        {
-          text: "'I go to work by car' means I drive to work.",
-          isTrue: true,
-          explanation: "Correct. 'By car' indicates the means of transport used."
-        },
-        {
-          text: "We can say 'I live in London' and 'I live at London'.",
-          isTrue: false,
-          explanation: "Incorrect. For cities we use 'in': 'I live IN London'. 'At' is used for specific addresses."
-        }
-      ]}
-    />,
-
-    <MultipleChoiceExercise
-      key="10"
-      question="Complete: 'The cat is hiding ___ the bed.'"
-      options={[
-        "on",
-        "in",
-        "under",
-        "at"
-      ]}
-      correctAnswer={2}
-      explanation="'Under' means below: 'The cat is hiding under the bed'."
-    />
-  ];
-
-  return (
+    return (
     <TheoryLayout
       title="Prepositions"
       description="Master prepositions in English: place, time, direction, and verbs with prepositions. Essential for expressing spatial and temporal relationships."
       level="A2-B1-B2-C1-C2"
       theoryContent={theoryContent}
-      exercises={exercises}
+      getExercises={build5PrepositionsExercises}
       prerequisites={["Basic vocabulary", "Understanding of nouns and verbs"]}
       estimatedTime="60 min"
     />

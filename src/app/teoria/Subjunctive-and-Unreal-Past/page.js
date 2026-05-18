@@ -1,4 +1,5 @@
 'use client';
+import { buildSubjunctiveAndUnrealPastExercises } from './subjunctiveAndUnrealPastExercises';
 import React from 'react';
 import TheoryLayout from '@/components/theory/TheoryLayout';
 import { 
@@ -9,15 +10,11 @@ import {
   GrammarTable, 
   QuickReference 
 } from '@/components/theory/TheoryContent';
-import { 
-  MultipleChoiceExercise, 
-  FillBlanksExercise, 
-  TrueFalseExercise 
-} from '@/components/theory/ExerciseComponents';
+
 
 const SubjunctivePage = () => {
   const theoryContent = (
-    <div>
+    <>
       <TheorySection title="Subjunctive and Unreal Past" icon="🎭">
         <p style={{ fontSize: '1.1rem', lineHeight: 1.6, color: '#4a5568', marginBottom: '1rem' }}>
           The <strong>subjunctive</strong> and <strong>unreal past</strong> structures in English express 
@@ -55,13 +52,11 @@ const SubjunctivePage = () => {
           <Example 
             spanish="Es importante que él esté presente."
             english="It's important that he be present."
-            translation="Formal subjunctive: 'be' instead of 'is'"
           />
           
           <Example 
             spanish="Sugiero que estudies más."
             english="I suggest that you study more."
-            translation="Base form after 'suggest'"
           />
         </div>
 
@@ -127,19 +122,16 @@ const SubjunctivePage = () => {
           <Example 
             spanish="Ojalá tuviera más dinero (ahora)."
             english="I wish I had more money."
-            translation="Wish about a present situation"
           />
           
           <Example 
             spanish="Ojalá hubiera estudiado más (en el pasado)."
             english="I wish I had studied more."
-            translation="Regret about the past"
           />
           
           <Example 
             spanish="Ojalá me escucharas (cambio futuro)."
             english="I wish you would listen to me."
-            translation="Wish for a change in behaviour"
           />
         </div>
 
@@ -169,19 +161,16 @@ const SubjunctivePage = () => {
           <Example 
             spanish="Prefiero quedarme en casa."
             english="I would rather stay home."
-            translation="Personal preference"
           />
           
           <Example 
             spanish="Prefiero que vengas temprano."
             english="I would rather you came early."
-            translation="Preference about others' actions (present/future)"
           />
           
           <Example 
             spanish="Prefiero caminar que conducir."
             english="I would rather walk than drive."
-            translation="Comparing preferences"
           />
         </div>
       </TheorySection>
@@ -205,7 +194,6 @@ const SubjunctivePage = () => {
         <Example 
           spanish="Ya es hora de que te vayas."
           english="It's time you left."
-          translation="'Left' (past) to express the immediate present/future"
         />
 
         <Tip type="info">
@@ -264,161 +252,16 @@ const SubjunctivePage = () => {
           </Tip>
         </div>
       </TheorySection>
-    </div>
+    </>
   );
 
-  const exercises = [
-    <MultipleChoiceExercise
-      key="1"
-      question="Complete: 'If I _____ you, I would take that job.'"
-      options={[
-        "was",
-        "were",
-        "am",
-        "will be"
-      ]}
-      correctAnswer={1}
-      explanation="In hypothetical situations we use 'were' for all persons: 'If I were you'."
-    />,
-
-    <MultipleChoiceExercise
-      key="2"
-      question="Which sentence is grammatically correct?"
-      options={[
-        "I wish I would be taller.",
-        "I wish I was taller.",
-        "I wish I were taller.",
-        "I wish I am taller."
-      ]}
-      correctAnswer={2}
-      explanation="'I wish I were taller' correctly uses unreal past 'were' to express a wish about the present."
-    />,
-
-    <MultipleChoiceExercise
-      key="3"
-      question="Complete: 'I'd rather you _____ smoking in the house.'"
-      options={[
-        "don't",
-        "didn't",
-        "wouldn't",
-        "not"
-      ]}
-      correctAnswer={1}
-      explanation="After 'would rather' for others' actions, we use past simple: 'didn't smoke'."
-    />,
-
-    <TrueFalseExercise
-      key="4"
-      statements={[
-        {
-          text: "In formal English, we say 'I suggest that he goes' after suggestion verbs.",
-          isTrue: false,
-          explanation: "False. In formal English we use the base form: 'I suggest that he go'."
-        },
-        {
-          text: "'Were' is used for all persons in unreal situations.",
-          isTrue: true,
-          explanation: "Correct. 'Were' is used for all persons in unreal situations."
-        },
-        {
-          text: "'I wish you would listen' expresses a desire for future change.",
-          isTrue: true,
-          explanation: "Correct. 'Wish + would' expresses a desire for future change in others."
-        },
-        {
-          text: "'It's time we left' means we should leave now or soon.",
-          isTrue: true,
-          explanation: "Correct. This structure indicates it's time to act."
-        }
-      ]}
-    />,
-
-    <MultipleChoiceExercise
-      key="5"
-      question="Which expresses the strongest urgency?"
-      options={[
-        "It's time to go.",
-        "It's time we went.",
-        "It's about time we went.",
-        "It's high time we went."
-      ]}
-      correctAnswer={3}
-      explanation="'It's high time' expresses the strongest urgency, indicating something should have happened long ago."
-    />,
-
-    <MultipleChoiceExercise
-      key="6"
-      question="Complete: 'I wish I _____ studied harder when I was younger.'"
-      options={[
-        "have",
-        "had",
-        "would have",
-        "will have"
-      ]}
-      correctAnswer={1}
-      explanation="For regrets about the past we use 'wish + had + past participle'."
-    />,
-
-    <MultipleChoiceExercise
-      key="7"
-      question="Complete: 'I recommend that you _____ a lawyer.'"
-      options={[
-        "consult",
-        "consults",
-        "should consult",
-        "Both A and C are correct"
-      ]}
-      correctAnswer={3}
-      explanation="Both forms are correct: subjunctive (consult) or 'should + infinitive'."
-    />,
-
-    <MultipleChoiceExercise
-      key="8"
-      question="Which sentence uses 'were' correctly?"
-      options={[
-        "If I was rich, I would travel.",
-        "I wish I was younger.",
-        "If I were you, I would go.",
-        "He acts as if he was the boss."
-      ]}
-      correctAnswer={2}
-      explanation="'If I were you' correctly uses 'were' in a hypothetical situation."
-    />,
-
-    <MultipleChoiceExercise
-      key="9"
-      question="Complete: 'It's vital that he _____ the truth.'"
-      options={[
-        "tells",
-        "tell",
-        "told",
-        "will tell"
-      ]}
-      correctAnswer={1}
-      explanation="After 'it's vital that' we use the subjunctive (base form): 'tell'."
-    />,
-
-    <MultipleChoiceExercise
-      key="10"
-      question="Which expresses regret about the past?"
-      options={[
-        "I wish I had more money.",
-        "I wish I would have more money.",
-        "I wish I had had more money.",
-        "I wish I have more money."
-      ]}
-      correctAnswer={2}
-      explanation="'I wish I had had more money' expresses regret about the past."
-    />
-  ];
-
-  return (
+    return (
     <TheoryLayout
       title="Subjunctive and Unreal Past"
       description="Master the English subjunctive and unreal past structures to express wishes, recommendations, and hypothetical situations with sophistication."
       level="B2-C1-C2"
       theoryContent={theoryContent}
-      exercises={exercises}
+      getExercises={buildSubjunctiveAndUnrealPastExercises}
       prerequisites={["Basic conditionals", "Verb tenses", "Basic wish structures"]}
       estimatedTime="55 min"
     />

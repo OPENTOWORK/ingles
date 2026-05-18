@@ -1,4 +1,5 @@
 'use client';
+import { buildKeyResourcesToImproveExercises } from './keyResourcesToImproveExercises';
 import React from 'react';
 import TheoryLayout from '@/components/theory/TheoryLayout';
 import { 
@@ -9,15 +10,11 @@ import {
   GrammarTable, 
   QuickReference 
 } from '@/components/theory/TheoryContent';
-import { 
-  MultipleChoiceExercise, 
-  FillBlanksExercise, 
-  TrueFalseExercise 
-} from '@/components/theory/ExerciseComponents';
+
 
 const KeyResourcesToImprovePage = () => {
   const theoryContent = (
-    <div>
+    <>
       <TheorySection title="What Are Key Resources to Improve?" icon="📚">
         <p style={{ fontSize: '1.1rem', lineHeight: 1.6, color: '#4a5568', marginBottom: '1rem' }}>
           <strong>Key resources to improve</strong> are tools, materials, and strategies 
@@ -304,172 +301,16 @@ const KeyResourcesToImprovePage = () => {
           />
         </div>
       </TheorySection>
-    </div>
+    </>
   );
 
-  const exercises = [
-    <MultipleChoiceExercise
-      key="1"
-      question="Which type of resources typically offers quick, on-demand access?"
-      options={[
-        "Printed-only archives",
-        "Digital",
-        "Handwritten manuscripts only",
-        "Resources with no electronic version"
-      ]}
-      correctAnswer={1}
-      explanation="Digital resources are available almost anytime online or on devices, supporting flexible routines."
-    />,
-
-    <MultipleChoiceExercise
-      key="2"
-      question="What is the main benefit of consistent practice?"
-      options={[
-        "Memorizing more words in isolation",
-        "Developing fluency and confidence",
-        "Avoiding grammar study entirely",
-        "Reading unrelated material faster without understanding"
-      ]}
-      correctAnswer={1}
-      explanation="Steady practice builds fluency and confidence—what you rely on when you actually use the language."
-    />,
-
-    <TrueFalseExercise
-      key="3"
-      statements={[
-        {
-          text: "Studying three hours once a week is usually better than 30 minutes every day.",
-          isTrue: false,
-          explanation: "Incorrect. Regular short sessions normally support retention and habits better than one long cram block per week."
-        },
-        {
-          text: "Using different kinds of resources supports learning.",
-          isTrue: true,
-          explanation: "Correct. Mixing digital tools, printed texts, receptive and productive work gives a fuller training effect."
-        },
-        {
-          text: "Periodic assessment helps you adjust how you study.",
-          isTrue: true,
-          explanation: "Correct. Checking progress shows strengths and gaps so you can change focus or methods."
-        },
-        {
-          text: "Study materials should match the learner's approximate level.",
-          isTrue: true,
-          explanation: "Correct. Material that is too easy or unrealistically difficult makes progress harder to sustain."
-        }
-      ]}
-    />,
-
-    <MultipleChoiceExercise
-      key="4"
-      question="Which approach is strongest for remembering vocabulary over the long term?"
-      options={[
-        "Cramming once with no review",
-        "Spaced repetition (reviews spread over time)",
-        "Reading a list once silently",
-        "Studying only on weekends with no weekdays"
-      ]}
-      correctAnswer={1}
-      explanation="Spaced repetition—coming back to items after gaps—typically beats one-off cramming for long-term memory."
-    />,
-
-    <MultipleChoiceExercise
-      key="5"
-      question="What matters most in a study plan?"
-      options={[
-        "How exhausting each session feels",
-        "How consistently you stick to your schedule",
-        "How many unused apps are installed",
-        "How difficult the hardest book you own looks on the shelf"
-      ]}
-      correctAnswer={1}
-      explanation="A plan you repeat beats a perfect-looking plan you abandon; consistency anchors improvement."
-    />,
-
-    <TrueFalseExercise
-      key="6"
-      statements={[
-        {
-          text: "Free resources are always lower quality than paid resources.",
-          isTrue: false,
-          explanation: "Incorrect. Many free resources (BBC Learning English, podcasts, curated YouTube lessons) are high quality."
-        },
-        {
-          text: "Combining several types of resources often improves outcomes.",
-          isTrue: true,
-          explanation: "Correct. Digital, printed, formal, and informal resources each support different aspects of proficiency."
-        },
-        {
-          text: "You should only use materials labelled exactly at your current level.",
-          isTrue: false,
-          explanation: "Incorrect. Challenges slightly beyond your comfort zone—when scaffolded—can also help growth."
-        }
-      ]}
-    />,
-
-    <MultipleChoiceExercise
-      key="7"
-      question="What is a typical advantage of interactive digital tools?"
-      options={[
-        "They guarantee perfect scores instantly",
-        "They often provide quick feedback",
-        "They eliminate the need to speak or write",
-        "They replace dictionaries completely"
-      ]}
-      correctAnswer={1}
-      explanation="Many interactive exercises give immediate feedback, which speeds up correction and learning."
-    />,
-
-    <MultipleChoiceExercise
-      key="8"
-      question="Which resource tends to help pronunciation most?"
-      options={[
-        "Grammar rules with no listening input",
-        "Audio and video with fluent or native speakers",
-        "Silent reading only",
-        "Word lists never heard aloud"
-      ]}
-      correctAnswer={1}
-      explanation="Hearing authentic models in audio or video improves stress, rhythm, and individual sounds."
-    />,
-
-    <TrueFalseExercise
-      key="9"
-      statements={[
-        {
-          text: "Self-assessment is a useful part of language learning.",
-          isTrue: true,
-          explanation: "Correct. Reflecting on what you understood or produced helps prioritise weak areas."
-        },
-        {
-          text: "You should use exactly one textbook until nothing in it feels new.",
-          isTrue: false,
-          explanation: "Incorrect. Exposure to varied formats and accents keeps motivation and skills broader."
-        }
-      ]}
-    />,
-
-    <MultipleChoiceExercise
-      key="10"
-      question="How often should you realistically review overall progress?"
-      options={[
-        "Only once a year informally",
-        "Regularly (for example weekly or monthly)",
-        "Only when you feel stuck for months",
-        "Never; progress checks are pointless"
-      ]}
-      correctAnswer={1}
-      explanation="Short, recurring reviews catch problems early and help you celebrate improvements without long gaps."
-    />
-  ];
-
-  return (
+    return (
     <TheoryLayout
       title="Key Resources to Improve"
       description="Discover key resources for English improvement: digital and traditional tools, active practice, study strategies, and progress checks—then outline a workable study plan."
       level="A2-B1-B2-C1-C2"
       theoryContent={theoryContent}
-      exercises={exercises}
+      getExercises={buildKeyResourcesToImproveExercises}
       prerequisites={["Basic English skills", "Motivation to improve"]}
       estimatedTime="75 min"
     />

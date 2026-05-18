@@ -16,3 +16,10 @@ export const DRALO_MENU_ITEMS = [
   { label: 'Listening', href: '/dralo-ai/listening' },
   { label: 'Speaking', href: '/speaking' },
 ];
+
+/** Desplegable «Admin» solo para rol administrador. */
+export const ADMIN_PANEL_MENU_ITEMS = [
+  { href: '/admin', label: 'Panel de administración' },
+  { href: '/soporte', label: 'Panel de soporte' },
+  { href: '/informatico', label: 'Panel informático' },
+];

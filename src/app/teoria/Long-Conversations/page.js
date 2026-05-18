@@ -1,4 +1,5 @@
 'use client';
+import { buildLongConversationsExercises } from './longConversationsExercises';
 import React from 'react';
 import TheoryLayout from '@/components/theory/TheoryLayout';
 import { 
@@ -9,15 +10,11 @@ import {
   GrammarTable, 
   QuickReference 
 } from '@/components/theory/TheoryContent';
-import { 
-  MultipleChoiceExercise, 
-  FillBlanksExercise, 
-  TrueFalseExercise 
-} from '@/components/theory/ExerciseComponents';
+
 
 const LongConversationsPage = () => {
   const theoryContent = (
-    <div>
+    <>
       <TheorySection title="What Are Long Conversations?" icon="💬">
         <p style={{ fontSize: '1.1rem', lineHeight: 1.6, color: '#4a5568', marginBottom: '1rem' }}>
           <strong>Long conversations</strong> are extended dialogues between two or more people in listening exams. They require advanced comprehension and tracking skills.
@@ -305,172 +302,16 @@ const LongConversationsPage = () => {
           />
         </div>
       </TheorySection>
-    </div>
+    </>
   );
 
-  const exercises = [
-    <MultipleChoiceExercise
-      key="1"
-      question="How long do long conversations typically last?"
-      options={[
-        "1–3 minutes",
-        "3–8 minutes",
-        "30 seconds–2 minutes",
-        "More than 10 minutes"
-      ]}
-      correctAnswer={1}
-      explanation="Long conversations usually run 3–8 minutes—longer than short dialogues but often shorter than full lectures."
-    />,
-
-    <MultipleChoiceExercise
-      key="2"
-      question="What is the most important strategy for long conversations?"
-      options={[
-        "Avoid taking notes",
-        "Identify speakers from the beginning",
-        "Only listen at the end",
-        "Ignore transitions"
-      ]}
-      correctAnswer={1}
-      explanation="Identifying speakers early lets you follow who says what for the whole recording."
-    />,
-
-    <TrueFalseExercise
-      key="3"
-      statements={[
-        {
-          text: "Long conversations require speaker identification.",
-          isTrue: true,
-          explanation: "Correct. You must distinguish speakers to know who contributes what."
-        },
-        {
-          text: "It is better not to take notes in long conversations to avoid distraction.",
-          isTrue: false,
-          explanation: "Incorrect. Structured notes help you manage the amount and complexity of information."
-        },
-        {
-          text: "Following transitions helps you stay oriented in the conversation.",
-          isTrue: true,
-          explanation: "Correct. Transitions signal topic shifts and support orientation."
-        },
-        {
-          text: "Long conversations are easier than monologues because there are more voices.",
-          isTrue: false,
-          explanation: "Incorrect. They can be harder because you must track several speakers and threads at once."
-        }
-      ]}
-    />,
-
-    <MultipleChoiceExercise
-      key="4"
-      question="What does a transition usually signal?"
-      options={[
-        "A change of speaker",
-        "A change of topic",
-        "A silence",
-        "A pronunciation error"
-      ]}
-      correctAnswer={1}
-      explanation="A transition usually marks a topic shift—not necessarily a different speaker—and helps you follow structure."
-    />,
-
-    <MultipleChoiceExercise
-      key="5"
-      question="What is the most effective note-taking approach for long conversations?"
-      options={[
-        "Write down everything",
-        "Organize notes by speaker and topic",
-        "Take no notes",
-        "Write only at the end"
-      ]}
-      correctAnswer={1}
-      explanation="Notes by speaker and topic handle multiple voices and several subjects efficiently."
-    />,
-
-    <TrueFalseExercise
-      key="6"
-      statements={[
-        {
-          text: "Long conversations typically involve multiple topic changes.",
-          isTrue: true,
-          explanation: "Correct. Longer talks often move through several topics with natural transitions."
-        },
-        {
-          text: "You should try to understand every single word in long conversations.",
-          isTrue: false,
-          explanation: "Incorrect. Focus on main ideas and task-relevant detail instead of every word."
-        },
-        {
-          text: "Taking notes helps maintain focus during long conversations.",
-          isTrue: true,
-          explanation: "Correct. Notes support focus and organize complex information."
-        }
-      ]}
-    />,
-
-    <MultipleChoiceExercise
-      key="7"
-      question="What should you do if you lose the thread in a long conversation?"
-      options={[
-        "Stop listening altogether",
-        "Use context to get back on track",
-        "Worry about what you missed",
-        "Switch to a different note system mid-way"
-      ]}
-      correctAnswer={1}
-      explanation="Using context is the best way to recover without losing the rest of the recording."
-    />,
-
-    <MultipleChoiceExercise
-      key="8"
-      question="What is typical of transitions in long conversations?"
-      options={[
-        "They are always obvious",
-        "They can be subtle and gradual",
-        "They never happen",
-        "They only occur at the end"
-      ]}
-      correctAnswer={1}
-      explanation="Transitions are often subtle and gradual, so you need attentive listening."
-    />,
-
-    <TrueFalseExercise
-      key="9"
-      statements={[
-        {
-          text: "Speaker identification becomes more important in longer conversations.",
-          isTrue: true,
-          explanation: "Correct. Longer talks require you to sustain who is speaking across many turns."
-        },
-        {
-          text: "Long conversations always follow a strict structure.",
-          isTrue: false,
-          explanation: "Incorrect. They can be more natural and less rigid than formal monologues."
-        }
-      ]}
-    />,
-
-    <MultipleChoiceExercise
-      key="10"
-      question="What kind of information matters most in long conversations?"
-      options={[
-        "Only specific details",
-        "Only main ideas",
-        "Both main ideas and relevant details",
-        "Only the conclusion"
-      ]}
-      correctAnswer={2}
-      explanation="You usually need main ideas plus relevant supporting detail for a full picture."
-    />
-  ];
-
-  return (
+    return (
     <TheoryLayout
       title="Long Conversations"
       description="Master long conversations in English. Learn to follow multiple speakers, topic shifts, and complex interaction in extended dialogues."
       level="B1-B2-C1-C2"
       theoryContent={theoryContent}
-      exercises={exercises}
+      getExercises={buildLongConversationsExercises}
       prerequisites={["Experience with short dialogues and monologues", "Basic note-taking skills"]}
       estimatedTime="80 min"
     />

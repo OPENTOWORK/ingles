@@ -1,4 +1,5 @@
 'use client';
+import { buildInteractionAndConversationalStrategiesExercises } from './interactionAndConversationalStrategiesExercises';
 import React from 'react';
 import TheoryLayout from '@/components/theory/TheoryLayout';
 import { 
@@ -9,15 +10,11 @@ import {
   GrammarTable, 
   QuickReference 
 } from '@/components/theory/TheoryContent';
-import { 
-  MultipleChoiceExercise, 
-  FillBlanksExercise, 
-  TrueFalseExercise 
-} from '@/components/theory/ExerciseComponents';
+
 
 const InteractionAndConversationalStrategiesPage = () => {
   const theoryContent = (
-    <div>
+    <>
       <TheorySection title="What Are Interaction and Conversational Strategies?" icon="🤝">
         <p style={{ fontSize: '1.1rem', lineHeight: 1.6, color: '#4a5568', marginBottom: '1rem' }}>
           <strong>Interaction and conversational strategies</strong> are specific techniques that help you take part effectively in conversations, keep communication flowing, and build successful interactions.
@@ -351,172 +348,16 @@ const InteractionAndConversationalStrategiesPage = () => {
           />
         </div>
       </TheorySection>
-    </div>
+    </>
   );
 
-  const exercises = [
-    <MultipleChoiceExercise
-      key="1"
-      question="What do interaction strategies help you do?"
-      options={[
-        "Avoid conversations",
-        "Take part effectively",
-        "Speak faster",
-        "Interrupt constantly"
-      ]}
-      correctAnswer={1}
-      explanation="Interaction strategies help you take part effectively in conversations while keeping the flow natural and productive."
-    />,
-
-    <MultipleChoiceExercise
-      key="2"
-      question="What is the main benefit of interaction strategies?"
-      options={[
-        "Improve pronunciation",
-        "Take part effectively in conversations",
-        "Increase speaking speed",
-        "Reduce the vocabulary you need"
-      ]}
-      correctAnswer={1}
-      explanation="The main benefit is taking part effectively in conversations, because these strategies help you manage turns, show interest, and sustain successful interactions."
-    />,
-
-    <TrueFalseExercise
-      key="3"
-      statements={[
-        {
-          text: "Showing genuine interest is important for successful conversations.",
-          isTrue: true,
-          explanation: "Correct. Genuine interest—through backchannels, follow-up questions, and supportive comments—keeps the conversation lively and engaging."
-        },
-        {
-          text: "It is better to interrupt constantly to control the conversation.",
-          isTrue: false,
-          explanation: "Incorrect. Constant interruption backfires. It is better to manage turns in a balanced, respectful way."
-        },
-        {
-          text: "Smooth transitions are better than abrupt topic changes.",
-          isTrue: true,
-          explanation: "Correct. Smooth transitions preserve coherence and flow; abrupt shifts can confuse people."
-        },
-        {
-          text: "Conflict should always be avoided in conversation.",
-          isTrue: false,
-          explanation: "Incorrect. Disagreement is normal and can be handled constructively. What matters is addressing it with respect and working toward solutions."
-        }
-      ]}
-    />,
-
-    <MultipleChoiceExercise
-      key="4"
-      question="What is the best approach to an inappropriate interruption?"
-      options={[
-        "Interrupt back",
-        "Hold your turn politely",
-        "Ignore the interruption",
-        "End the conversation"
-      ]}
-      correctAnswer={1}
-      explanation="Holding your turn politely is usually best: you can finish your point while staying courteous."
-    />,
-
-    <MultipleChoiceExercise
-      key="5"
-      question="Which strategy is most effective for showing interest in a conversation?"
-      options={[
-        "Talking more than the other person",
-        "Asking relevant follow-up questions",
-        "Changing the topic often",
-        "Interrupting with your own stories"
-      ]}
-      correctAnswer={1}
-      explanation="Relevant follow-up questions show you are listening and want to explore the topic further."
-    />,
-
-    <TrueFalseExercise
-      key="6"
-      statements={[
-        {
-          text: "Active listening involves only hearing the words someone says.",
-          isTrue: false,
-          explanation: "Incorrect. Active listening includes understanding the message and emotions and responding appropriately."
-        },
-        {
-          text: "Turn-taking is important for smooth conversations.",
-          isTrue: true,
-          explanation: "Correct. Turn-taking lets everyone contribute and keeps the conversation flowing naturally."
-        },
-        {
-          text: "You should avoid asking clarifying questions during conversations.",
-          isTrue: false,
-          explanation: "Incorrect. Clarifying questions show engagement and improve understanding."
-        }
-      ]}
-    />,
-
-    <MultipleChoiceExercise
-      key="7"
-      question="Complete: 'I see what you mean, _____ I think there's another perspective.'"
-      options={[
-        "and",
-        "but",
-        "so",
-        "because"
-      ]}
-      correctAnswer={1}
-      explanation="'But' politely introduces a different angle after acknowledging the other person's view."
-    />,
-
-    <MultipleChoiceExercise
-      key="8"
-      question="What is the best way to handle disagreement in conversation?"
-      options={[
-        "Avoid the topic completely",
-        "Acknowledge their view and state yours respectfully",
-        "Insist until they change their mind",
-        "Change the topic immediately"
-      ]}
-      correctAnswer={1}
-      explanation="Acknowledging the other person's perspective and stating yours respectfully keeps the exchange constructive."
-    />,
-
-    <TrueFalseExercise
-      key="9"
-      statements={[
-        {
-          text: "Interrupting is always rude in conversations.",
-          isTrue: false,
-          explanation: "Incorrect. Cooperative interruptions—for understanding or a relevant question—can be appropriate."
-        },
-        {
-          text: "Body language is important in face-to-face interactions.",
-          isTrue: true,
-          explanation: "Correct. Body language signals interest, attention, and attitude and matters a great deal in person."
-        }
-      ]}
-    />,
-
-    <MultipleChoiceExercise
-      key="10"
-      question="Complete: 'Could you _____ on that point? I'd like to understand better.'"
-      options={[
-        "expand",
-        "reduce",
-        "avoid",
-        "skip"
-      ]}
-      correctAnswer={0}
-      explanation="'Expand' is natural here when you want more detail or clarification on a specific point."
-    />
-  ];
-
-  return (
+    return (
     <TheoryLayout
       title="Interaction and Conversational Strategies"
       description="Master interaction and conversational strategies in English. Learn techniques for starting conversations, managing turns, showing interest, and handling interruptions and conflict."
       level="B1-B2-C1-C2"
       theoryContent={theoryContent}
-      exercises={exercises}
+      getExercises={buildInteractionAndConversationalStrategiesExercises}
       prerequisites={["Basic speaking skills", "Understanding of conversation dynamics"]}
       estimatedTime="85 min"
     />

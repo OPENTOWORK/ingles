@@ -1,4 +1,5 @@
 'use client';
+import { buildMultipleChoiceClozeExercises } from './multipleChoiceClozeExercises';
 import React from 'react';
 import TheoryLayout from '@/components/theory/TheoryLayout';
 import { 
@@ -9,15 +10,11 @@ import {
   GrammarTable, 
   QuickReference 
 } from '@/components/theory/TheoryContent';
-import { 
-  MultipleChoiceExercise, 
-  FillBlanksExercise, 
-  TrueFalseExercise 
-} from '@/components/theory/ExerciseComponents';
+
 
 const MultipleChoiceClozePage = () => {
   const theoryContent = (
-    <div>
+    <>
       <TheorySection title="What is Multiple Choice Cloze?" icon="🎯">
         <p style={{ fontSize: '1.1rem', lineHeight: 1.6, color: '#4a5568', marginBottom: '1rem' }}>
           <strong>Multiple Choice Cloze</strong> is a Use of English exam task where you complete a text by choosing 
@@ -68,7 +65,6 @@ const MultipleChoiceClozePage = () => {
         <Example 
           spanish="The company decided to _____ its operations to Asia."
           english="Options: A) extend B) expand C) increase D) develop"
-          translation="Answer: B) expand ('expand operations' is a common collocation)"
         />
       </TheorySection>
 
@@ -89,13 +85,11 @@ const MultipleChoiceClozePage = () => {
           <Example 
             spanish="She couldn't _____ the temptation to buy the dress."
             english="A) refuse B) resist C) reject D) deny"
-            translation="Answer: B) resist ('resist temptation' is the correct collocation)"
           />
           
           <Example 
             spanish="The meeting was _____ until next week."
             english="A) delayed B) postponed C) suspended D) cancelled"
-            translation="Answer: B) postponed ('postpone a meeting' is more precise than delay)"
           />
         </div>
       </TheorySection>
@@ -163,7 +157,6 @@ const MultipleChoiceClozePage = () => {
         <Example 
           spanish="The new policy will _____ effect next month."
           english="A) take B) make C) have D) get"
-          translation="Process: 'make effect' ❌, 'have effect' ❌, 'get effect' ❌, 'take effect' ✅"
         />
 
         <Tip type="info">
@@ -171,161 +164,16 @@ const MultipleChoiceClozePage = () => {
           If you are unsure between two options, look for extra clues in the context.
         </Tip>
       </TheorySection>
-    </div>
+    </>
   );
 
-  const exercises = [
-    <MultipleChoiceExercise
-      key="1"
-      question="The company decided to _____ its workforce due to financial difficulties."
-      options={[
-        "reduce",
-        "decrease",
-        "lower",
-        "cut"
-      ]}
-      correctAnswer={0}
-      explanation="'Reduce workforce' is the most common and natural collocation in business contexts."
-    />,
-
-    <MultipleChoiceExercise
-      key="2"
-      question="She couldn't _____ her curiosity and opened the letter."
-      options={[
-        "control",
-        "contain",
-        "restrain",
-        "suppress"
-      ]}
-      correctAnswer={1}
-      explanation="'Contain curiosity' is the correct expression. Although 'control' is also possible, 'contain' is more precise in this context."
-    />,
-
-    <TrueFalseExercise
-      key="3"
-      statements={[
-        {
-          text: "In Multiple Choice Cloze, you should always read the whole text before attempting to fill the gaps.",
-          isTrue: true,
-          explanation: "Correct. Reading the whole text first helps you understand the general context."
-        },
-        {
-          text: "All four options in Multiple Choice Cloze are usually completely different in meaning.",
-          isTrue: false,
-          explanation: "False. The options are usually related words or synonyms with different nuances."
-        },
-        {
-          text: "Collocations are not important in Multiple Choice Cloze exercises.",
-          isTrue: false,
-          explanation: "False. Collocations are fundamental in this type of exercise."
-        },
-        {
-          text: "You should consider the words that come both before and after the gap.",
-          isTrue: true,
-          explanation: "Correct. The immediate context is crucial for choosing the right answer."
-        }
-      ]}
-    />,
-
-    <MultipleChoiceExercise
-      key="4"
-      question="The meeting has been _____ until further notice."
-      options={[
-        "delayed",
-        "postponed", 
-        "suspended",
-        "cancelled"
-      ]}
-      correctAnswer={1}
-      explanation="'Postponed until further notice' is the correct expression. 'Postpone' implies a new date will be set."
-    />,
-
-    <MultipleChoiceExercise
-      key="5"
-      question="You should _____ advantage of this opportunity while you can."
-      options={[
-        "make",
-        "take",
-        "get",
-        "have"
-      ]}
-      correctAnswer={1}
-      explanation="'Take advantage' is the correct collocation. It is a fixed expression in English."
-    />,
-
-    <MultipleChoiceExercise
-      key="6"
-      question="The new policy will _____ effect next month."
-      options={[
-        "take",
-        "make",
-        "have",
-        "get"
-      ]}
-      correctAnswer={0}
-      explanation="'Take effect' is the correct collocation when something comes into force."
-    />,
-
-    <MultipleChoiceExercise
-      key="7"
-      question="She has a natural _____ for languages."
-      options={[
-        "skill",
-        "talent",
-        "gift",
-        "ability"
-      ]}
-      correctAnswer={2}
-      explanation="'Natural gift' is the most common expression for innate abilities."
-    />,
-
-    <MultipleChoiceExercise
-      key="8"
-      question="The project was completed _____ schedule."
-      options={[
-        "ahead of",
-        "before",
-        "in front of",
-        "prior to"
-      ]}
-      correctAnswer={0}
-      explanation="'Ahead of schedule' is the fixed expression for finishing early."
-    />,
-
-    <MultipleChoiceExercise
-      key="9"
-      question="Please _____ attention to the safety instructions."
-      options={[
-        "give",
-        "pay",
-        "make",
-        "take"
-      ]}
-      correctAnswer={1}
-      explanation="'Pay attention' is the correct collocation with 'attention'."
-    />,
-
-    <MultipleChoiceExercise
-      key="10"
-      question="The weather forecast _____ rain for tomorrow."
-      options={[
-        "predicts",
-        "expects",
-        "awaits",
-        "anticipates"
-      ]}
-      correctAnswer={0}
-      explanation="'Predicts' is the most appropriate verb for weather forecasts."
-    />
-  ];
-
-  return (
+    return (
     <TheoryLayout
       title="Multiple Choice Cloze"
       description="Master strategies for completing texts with multiple-choice options. Learn about collocations, vocabulary in context, and elimination techniques."
       level="B2-C1-C2"
       theoryContent={theoryContent}
-      exercises={exercises}
+      getExercises={buildMultipleChoiceClozeExercises}
       prerequisites={["Intermediate-advanced vocabulary", "Basic collocations"]}
       estimatedTime="50 min"
     />

@@ -1,4 +1,5 @@
 'use client';
+import { buildLinkingWordsExercises } from './linkingWordsExercises';
 import React from 'react';
 import TheoryLayout from '@/components/theory/TheoryLayout';
 import { 
@@ -9,15 +10,11 @@ import {
   GrammarTable, 
   QuickReference 
 } from '@/components/theory/TheoryContent';
-import { 
-  MultipleChoiceExercise, 
-  FillBlanksExercise, 
-  TrueFalseExercise 
-} from '@/components/theory/ExerciseComponents';
+
 
 const LinkingWordsPage = () => {
   const theoryContent = (
-    <div>
+    <>
       <TheorySection title="What Are Linking Words?" icon="🔗">
         <div style={{ fontSize: '1.1rem', lineHeight: 1.6, color: '#4a5568', marginBottom: '1rem' }}>
           <strong>Linking words</strong> are words or phrases that connect ideas, sentences, and paragraphs. 
@@ -58,17 +55,14 @@ const LinkingWordsPage = () => {
           <Example 
             spanish="Me gusta el té y el café"
             english="I like tea and coffee"
-            translation="I like tea and coffee"
           />
           <Example 
             spanish="También me gusta el té verde"
             english="I also like green tea"
-            translation="I also like green tea"
           />
           <Example 
             spanish="Además, necesitamos más tiempo"
             english="Furthermore, we need more time"
-            translation="Furthermore, we need more time"
           />
         </div>
 
@@ -112,17 +106,14 @@ const LinkingWordsPage = () => {
           <Example 
             spanish="Me gusta el café, pero prefiero el té"
             english="I like coffee, but I prefer tea"
-            translation="I like coffee, but I prefer tea"
           />
           <Example 
             spanish="A pesar de la lluvia, salimos"
             english="Despite the rain, we went out"
-            translation="Despite the rain, we went out"
           />
           <Example 
             spanish="Por otro lado, es de buena calidad"
             english="On the other hand, it's good quality"
-            translation="On the other hand, it's good quality"
           />
         </div>
 
@@ -155,17 +146,14 @@ const LinkingWordsPage = () => {
           <Example 
             spanish="Me quedé en casa porque estaba enfermo"
             english="I stayed home because I was sick"
-            translation="I stayed home because I was sick"
           />
           <Example 
             spanish="Estaba cansado, así que me fui a la cama"
             english="I was tired, so I went to bed"
-            translation="I was tired, so I went to bed"
           />
           <Example 
             spanish="Por lo tanto, nos quedamos dentro"
             english="Therefore, we stayed inside"
-            translation="Therefore, we stayed inside"
           />
         </div>
 
@@ -209,17 +197,14 @@ const LinkingWordsPage = () => {
           <Example 
             spanish="Primero, necesitamos planificar"
             english="First, we need to plan"
-            translation="First, we need to plan"
           />
           <Example 
             spanish="Luego, ejecutamos"
             english="Then, we execute"
-            translation="Then, we execute"
           />
           <Example 
             spanish="Finalmente, presentamos los resultados"
             english="Finally, we present our results"
-            translation="Finally, we present our results"
           />
         </div>
 
@@ -250,17 +235,14 @@ const LinkingWordsPage = () => {
           <Example 
             spanish="Muchas frutas son saludables. Por ejemplo, manzanas y naranjas"
             english="Many fruits are healthy. For example, apples and oranges"
-            translation="Many fruits are healthy. For example, apples and oranges"
           />
           <Example 
             spanish="Me gustan las frutas tropicales como mangos y piñas"
             english="I like tropical fruits such as mangoes and pineapples"
-            translation="I like tropical fruits such as mangoes and pineapples"
           />
           <Example 
             spanish="Tengo tres hobbies, a saber: leer, nadar y cocinar"
             english="I have three hobbies, namely reading, swimming, and cooking"
-            translation="I have three hobbies, namely reading, swimming, and cooking"
           />
         </div>
 
@@ -344,172 +326,16 @@ const LinkingWordsPage = () => {
           />
         </div>
       </TheorySection>
-    </div>
+    </>
   );
 
-  const exercises = [
-    <MultipleChoiceExercise
-      key="1"
-      question="Complete: 'I like coffee. _____, I prefer tea in the morning.'"
-      options={[
-        "Therefore",
-        "However",
-        "Because",
-        "So"
-      ]}
-      correctAnswer={1}
-      explanation="'However' introduces a contrast: you like coffee, but you prefer tea in the morning."
-    />,
-
-    <MultipleChoiceExercise
-      key="2"
-      question="What is the main benefit of using linking words?"
-      options={[
-        "Improving pronunciation",
-        "Creating coherent, fluent texts",
-        "Increasing writing speed",
-        "Reducing the vocabulary you need"
-      ]}
-      correctAnswer={1}
-      explanation="Linking words connect ideas and produce coherent, fluent texts, which makes them easier for the reader to understand."
-    />,
-
-    <TrueFalseExercise
-      key="3"
-      statements={[
-        {
-          text: "It is acceptable to use 'but' at the beginning of a sentence in formal English.",
-          isTrue: false,
-          explanation: "In formal English, it is better to use 'however' at the beginning of the second sentence to show contrast."
-        },
-        {
-          text: "Linking words help organize ideas logically.",
-          isTrue: true,
-          explanation: "Correct. Linking words connect ideas and help create a logical structure in a text."
-        },
-        {
-          text: "It is important to vary linking words to avoid repetition.",
-          isTrue: true,
-          explanation: "Correct. Using a variety of linking words makes writing more engaging and professional."
-        },
-        {
-          text: "'Because' and 'so' can be used together in the same clause.",
-          isTrue: false,
-          explanation: "Incorrect. Do not use 'because' and 'so' together. Use one or the other: 'Because I was tired, I went to bed' or 'I was tired, so I went to bed'."
-        }
-      ]}
-    />,
-
-    <MultipleChoiceExercise
-      key="4"
-      question="Which option best adds information in a formal way?"
-      options={[
-        "and",
-        "also",
-        "furthermore",
-        "too"
-      ]}
-      correctAnswer={2}
-      explanation="'Furthermore' is the most formal choice for adding information. 'And' is very basic, 'also' is less formal, and 'too' goes at the end."
-    />,
-
-    <MultipleChoiceExercise
-      key="5"
-      question="Which linking word is best for showing contrast in academic writing?"
-      options={[
-        "but",
-        "however",
-        "though",
-        "and"
-      ]}
-      correctAnswer={1}
-      explanation="'However' is the best fit for academic and formal contexts. 'But' is more informal, 'though' is casual, and 'and' does not signal contrast."
-    />,
-
-    <TrueFalseExercise
-      key="6"
-      statements={[
-        {
-          text: "'Although' and 'despite' can be used interchangeably in all contexts.",
-          isTrue: false,
-          explanation: "Incorrect. 'Although' is followed by a full clause, while 'despite' is followed by a noun or gerund."
-        },
-        {
-          text: "Linking words help create logical flow in writing.",
-          isTrue: true,
-          explanation: "Correct. Linking words connect ideas and create a logical flow that supports comprehension."
-        },
-        {
-          text: "'Furthermore' and 'moreover' have similar meanings.",
-          isTrue: true,
-          explanation: "Correct. Both mean something like 'in addition' and add information that supports the previous idea."
-        }
-      ]}
-    />,
-
-    <MultipleChoiceExercise
-      key="7"
-      question="Complete: '_____ studying hard, he failed the exam.'"
-      options={[
-        "Although",
-        "Despite",
-        "Because",
-        "Therefore"
-      ]}
-      correctAnswer={1}
-      explanation="'Despite' + gerund is correct: 'Despite studying hard'. 'Although' would need something like 'Although he studied hard'."
-    />,
-
-    <MultipleChoiceExercise
-      key="8"
-      question="Which linking expression is best for adding an example?"
-      options={[
-        "However",
-        "For instance",
-        "Nevertheless",
-        "Therefore"
-      ]}
-      correctAnswer={1}
-      explanation="'For instance' is specifically used to introduce examples, along with 'for example'."
-    />,
-
-    <TrueFalseExercise
-      key="9"
-      statements={[
-        {
-          text: "You can start a sentence with 'And' in formal writing.",
-          isTrue: false,
-          explanation: "Incorrect. In formal writing it is better to use connectors such as 'Furthermore', 'Moreover', or 'In addition'."
-        },
-        {
-          text: "'On the other hand' is used to show contrast.",
-          isTrue: true,
-          explanation: "Correct. 'On the other hand' introduces a contrasting or alternative perspective."
-        }
-      ]}
-    />,
-
-    <MultipleChoiceExercise
-      key="10"
-      question="Complete: 'The weather was terrible. _____, we decided to go hiking.'"
-      options={[
-        "Therefore",
-        "Nevertheless",
-        "Furthermore",
-        "Consequently"
-      ]}
-      correctAnswer={1}
-      explanation="'Nevertheless' signals contrast: despite the bad weather, we decided to go hiking."
-    />
-  ];
-
-  return (
+    return (
     <TheoryLayout
       title="Linking Words"
       description="Master linking words in English. Learn how to connect ideas, show contrast, explain causes and effects, and produce coherent, fluent texts."
       level="B2-C1-C2"
       theoryContent={theoryContent}
-      exercises={exercises}
+      getExercises={buildLinkingWordsExercises}
       prerequisites={["Basic sentence structure", "Understanding of text organization"]}
       estimatedTime="90 min"
     />

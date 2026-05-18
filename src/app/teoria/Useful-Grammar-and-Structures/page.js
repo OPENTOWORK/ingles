@@ -1,4 +1,5 @@
 'use client';
+import { buildUsefulGrammarAndStructuresExercises } from './usefulGrammarAndStructuresExercises';
 import React from 'react';
 import TheoryLayout from '@/components/theory/TheoryLayout';
 import { 
@@ -9,15 +10,11 @@ import {
   GrammarTable, 
   QuickReference 
 } from '@/components/theory/TheoryContent';
-import { 
-  MultipleChoiceExercise, 
-  FillBlanksExercise, 
-  TrueFalseExercise 
-} from '@/components/theory/ExerciseComponents';
+
 
 const UsefulGrammarAndStructuresPage = () => {
   const theoryContent = (
-    <div>
+    <>
       <TheorySection title="What Are Useful Grammar and Structures?" icon="🔧">
         <p style={{ fontSize: '1.1rem', lineHeight: 1.6, color: '#4a5568', marginBottom: '1rem' }}>
           <strong>Useful grammar and structures</strong> are patterns and constructions that help you express yourself 
@@ -357,172 +354,16 @@ const UsefulGrammarAndStructuresPage = () => {
           />
         </div>
       </TheorySection>
-    </div>
+    </>
   );
 
-  const exercises = [
-    <MultipleChoiceExercise
-      key="1"
-      question="Complete: '_____ that technology improves life.'"
-      options={[
-        "It seems to me",
-        "It is widely believed",
-        "I think",
-        "Maybe"
-      ]}
-      correctAnswer={1}
-      explanation="“It is widely believed” is a formal structure for a widely shared or accepted view."
-    />,
-
-    <MultipleChoiceExercise
-      key="2"
-      question="Which structure best expresses a firm opinion?"
-      options={[
-        "It seems to me that...",
-        "I firmly believe that...",
-        "There is reason to believe that...",
-        "It should be noted that..."
-      ]}
-      correctAnswer={1}
-      explanation="“I firmly believe that...” shows strong conviction; the others signal weaker or different stances."
-    />,
-
-    <TrueFalseExercise
-      key="3"
-      statements={[
-        {
-          text: "'Former' refers to the first item mentioned and 'latter' to the second.",
-          isTrue: true,
-          explanation: "Correct. Former = first; latter = second of two items already introduced."
-        },
-        {
-          text: "Formal structures are appropriate in every context.",
-          isTrue: false,
-          explanation: "Incorrect. Use formal patterns in suitable contexts such as academic essays."
-        },
-        {
-          text: "'Were it not for...' is an advanced conditional structure.",
-          isTrue: true,
-          explanation: "Correct. It is a formal, inverted way to express a hypothetical condition."
-        },
-        {
-          text: "You should always use the same structures for consistency.",
-          isTrue: false,
-          explanation: "Incorrect. Vary structures to reduce repetition and keep the reader engaged."
-        }
-      ]}
-    />,
-
-    <MultipleChoiceExercise
-      key="4"
-      question="Which structure is most appropriate for a conclusion?"
-      options={[
-        "To begin with...",
-        "In conclusion, it can be said that...",
-        "Furthermore, it is essential...",
-        "This is due to the fact that..."
-      ]}
-      correctAnswer={1}
-      explanation="“In conclusion, it can be said that...” is a typical way to open a concluding section."
-    />,
-
-    <MultipleChoiceExercise
-      key="5"
-      question="Which structure would you use to show contrast formally?"
-      options={[
-        "Unlike the previous example...",
-        "And also...",
-        "What is more important is...",
-        "It is widely believed that..."
-      ]}
-      correctAnswer={0}
-      explanation="“Unlike the previous example...” signals contrast between two examples."
-    />,
-
-    <TrueFalseExercise
-      key="6"
-      statements={[
-        {
-          text: "Passive voice is more formal than active voice.",
-          isTrue: true,
-          explanation: "Correct. Passive voice is common in academic and professional writing."
-        },
-        {
-          text: "'It is important to note that' is a useful academic phrase.",
-          isTrue: true,
-          explanation: "Correct. It helps introduce important points in academic texts."
-        },
-        {
-          text: "Complex sentences always sound better than simple ones.",
-          isTrue: false,
-          explanation: "Incorrect. Clarity matters more than complexity; match structure to context."
-        }
-      ]}
-    />,
-
-    <MultipleChoiceExercise
-      key="7"
-      question="Complete: '_____ the benefits, there are also disadvantages.'"
-      options={[
-        "Despite",
-        "Because of",
-        "Due to",
-        "Thanks to"
-      ]}
-      correctAnswer={0}
-      explanation="“Despite” introduces concession: even with the benefits, there are downsides."
-    />,
-
-    <MultipleChoiceExercise
-      key="8"
-      question="Which structure is best for formal suggestions?"
-      options={[
-        "You should",
-        "I suggest that you",
-        "Why don't you",
-        "Maybe you can"
-      ]}
-      correctAnswer={1}
-      explanation="“I suggest that you” is appropriate for polite, formal suggestions at work."
-    />,
-
-    <TrueFalseExercise
-      key="9"
-      statements={[
-        {
-          text: "'It is worth noting that' is useful for emphasising important points.",
-          isTrue: true,
-          explanation: "Correct. It highlights key points in a formal, academic tone."
-        },
-        {
-          text: "Conditional structures are only used for hypothetical situations.",
-          isTrue: false,
-          explanation: "Incorrect. Conditionals also express real conditions, politeness, and suggestions."
-        }
-      ]}
-    />,
-
-    <MultipleChoiceExercise
-      key="10"
-      question="Complete: '_____ research shows that exercise improves health.'"
-      options={[
-        "Recent",
-        "Recently",
-        "Recents",
-        "Recenting"
-      ]}
-      correctAnswer={0}
-      explanation="“Recent research” is correct: “recent” is an adjective modifying “research”."
-    />
-  ];
-
-  return (
+    return (
     <TheoryLayout
       title="Useful Grammar and Structures"
       description="Master advanced grammatical structures for writing in English. Learn sophisticated patterns for introducing ideas, developing arguments, and concluding effectively."
       level="A2-B1-B2-C1-C2"
       theoryContent={theoryContent}
-      exercises={exercises}
+      getExercises={buildUsefulGrammarAndStructuresExercises}
       prerequisites={["Basic grammar", "Understanding of formal writing"]}
       estimatedTime="75 min"
     />

@@ -1,4 +1,5 @@
 'use client';
+import { buildSpeakingConnectorsExercises } from './speakingConnectorsExercises';
 import React from 'react';
 import TheoryLayout from '@/components/theory/TheoryLayout';
 import { 
@@ -9,15 +10,11 @@ import {
   GrammarTable, 
   QuickReference 
 } from '@/components/theory/TheoryContent';
-import { 
-  MultipleChoiceExercise, 
-  FillBlanksExercise, 
-  TrueFalseExercise 
-} from '@/components/theory/ExerciseComponents';
+
 
 const SpeakingConnectorsPage = () => {
   const theoryContent = (
-    <div>
+    <>
       <TheorySection title="What Are Speaking Connectors?" icon="🗣️">
         <p style={{ fontSize: '1.1rem', lineHeight: 1.6, color: '#4a5568', marginBottom: '1rem' }}>
           <strong>Speaking connectors</strong> are words and phrases that help you link 
@@ -340,172 +337,16 @@ const SpeakingConnectorsPage = () => {
           />
         </div>
       </TheorySection>
-    </div>
+    </>
   );
 
-  const exercises = [
-    <MultipleChoiceExercise
-      key="1"
-      question="Which connector do you use to organize ideas first?"
-      options={[
-        "However",
-        "First",
-        "But",
-        "Although"
-      ]}
-      correctAnswer={1}
-      explanation="'First' is used to introduce the first point in a sequence of ideas."
-    />,
-
-    <MultipleChoiceExercise
-      key="2"
-      question="Which connector is most appropriate to start a list of ideas?"
-      options={[
-        "But",
-        "First",
-        "However",
-        "Also"
-      ]}
-      correctAnswer={1}
-      explanation="'First' is the most appropriate connector to start a list of ideas; the others have different functions."
-    />,
-
-    <TrueFalseExercise
-      key="3"
-      statements={[
-        {
-          text: "It is important to keep consistency in the formality level of connectors.",
-          isTrue: true,
-          explanation: "Correct. Keeping formality consistent improves clarity and professionalism."
-        },
-        {
-          text: "I can use 'but' and 'however' together in the same sentence.",
-          isTrue: false,
-          explanation: "Incorrect. 'But' and 'however' are redundant — use only one."
-        },
-        {
-          text: "Example connectors like 'for example' and 'such as' have different uses.",
-          isTrue: true,
-          explanation: "Correct. 'For example' goes at the start of a sentence; 'such as' goes in the middle."
-        },
-        {
-          text: "It is better to always use the same connector to avoid confusion.",
-          isTrue: false,
-          explanation: "Incorrect. It is better to vary connectors to keep speech interesting."
-        }
-      ]}
-    />,
-
-    <MultipleChoiceExercise
-      key="4"
-      question="What is the difference between 'I think' and 'I believe'?"
-      options={[
-        "There is no difference",
-        "'I think' is stronger than 'I believe'",
-        "'I believe' is stronger than 'I think'",
-        "One is formal and the other is informal"
-      ]}
-      correctAnswer={2}
-      explanation="'I believe' expresses a firmer belief, while 'I think' is more moderate."
-    />,
-
-    <MultipleChoiceExercise
-      key="5"
-      question="What is the error in this sentence: 'But however, I disagree'?"
-      options={[
-        "A connector is missing",
-        "Uses two contrast connectors together",
-        "The connector is in the wrong position",
-        "Punctuation is missing"
-      ]}
-      correctAnswer={1}
-      explanation="The error is using 'But' and 'However' together — both are contrast connectors. Use only one: 'But I disagree' or 'However, I disagree'."
-    />,
-
-    <TrueFalseExercise
-      key="6"
-      statements={[
-        {
-          text: "Speaking connectors should be used in every sentence.",
-          isTrue: false,
-          explanation: "Incorrect. Connectors should be used strategically to create fluency without overloading your speech."
-        },
-        {
-          text: "'On the other hand' is used to introduce a contrasting point.",
-          isTrue: true,
-          explanation: "Correct. 'On the other hand' introduces a contrasting or alternative perspective."
-        },
-        {
-          text: "Formal connectors are always better than informal ones.",
-          isTrue: false,
-          explanation: "Incorrect. The choice depends on context; in casual conversations, informal connectors are more appropriate."
-        }
-      ]}
-    />,
-
-    <MultipleChoiceExercise
-      key="7"
-      question="Complete: 'I like coffee. _____, I prefer tea in the morning.'"
-      options={[
-        "Therefore",
-        "However",
-        "Furthermore",
-        "First"
-      ]}
-      correctAnswer={1}
-      explanation="'However' introduces a contrast: I like coffee, but I prefer tea in the morning."
-    />,
-
-    <MultipleChoiceExercise
-      key="8"
-      question="Which connector would you use to give a specific example?"
-      options={[
-        "However",
-        "For instance",
-        "Therefore",
-        "Nevertheless"
-      ]}
-      correctAnswer={1}
-      explanation="'For instance' is used specifically to introduce concrete examples that illustrate a point."
-    />,
-
-    <TrueFalseExercise
-      key="9"
-      statements={[
-        {
-          text: "'Moreover' and 'furthermore' have similar functions.",
-          isTrue: true,
-          explanation: "Correct. Both connectors add extra information that supports or reinforces the previous idea."
-        },
-        {
-          text: "You should pause after using speaking connectors.",
-          isTrue: true,
-          explanation: "Correct. A brief pause after connectors helps the listener process the transition."
-        }
-      ]}
-    />,
-
-    <MultipleChoiceExercise
-      key="10"
-      question="Complete: 'The weather was terrible. _____, we had a great time.'"
-      options={[
-        "Therefore",
-        "Nevertheless",
-        "Furthermore",
-        "Moreover"
-      ]}
-      correctAnswer={1}
-      explanation="'Nevertheless' shows contrast: despite the bad weather, we had a great time."
-    />
-  ];
-
-  return (
+    return (
     <TheoryLayout
       title="Speaking Connectors"
       description="Master speaking connectors in English: organization, addition, contrast, examples, and opinion. Learn to make your speech more fluent and coherent."
       level="A2-B1-B2-C1-C2"
       theoryContent={theoryContent}
-      exercises={exercises}
+      getExercises={buildSpeakingConnectorsExercises}
       prerequisites={["Basic speaking skills", "Understanding of sentence structure"]}
       estimatedTime="70 min"
     />

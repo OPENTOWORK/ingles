@@ -1,4 +1,5 @@
 'use client';
+import { buildAdvancedConditionalsExercises } from './advancedConditionalsExercises';
 import React from 'react';
 import TheoryLayout from '@/components/theory/TheoryLayout';
 import { 
@@ -9,15 +10,11 @@ import {
   GrammarTable, 
   QuickReference 
 } from '@/components/theory/TheoryContent';
-import { 
-  MultipleChoiceExercise, 
-  FillBlanksExercise, 
-  TrueFalseExercise 
-} from '@/components/theory/ExerciseComponents';
+
 
 const AdvancedConditionalsPage = () => {
   const theoryContent = (
-    <div>
+    <>
       <TheorySection title="Advanced Conditionals" icon="🎭">
         <p style={{ fontSize: '1.1rem', lineHeight: 1.6, color: '#4a5568', marginBottom: '1rem' }}>
           <strong>Advanced conditionals</strong> go beyond basic structures (if + will, if + would). 
@@ -54,13 +51,11 @@ const AdvancedConditionalsPage = () => {
           <Example 
             spanish="Si hubiera nacido en Francia, hablaría francés perfectamente ahora."
             english="If I had been born in France, I would speak French perfectly now."
-            translation="Past cause (being born in France) → present effect (speaking French)"
           />
           
           <Example 
             spanish="Si fuera más organizado, no habría perdido las llaves ayer."
             english="If I were more organized, I wouldn't have lost my keys yesterday."
-            translation="Present/general cause (being organized) → past effect (losing keys)"
           />
         </div>
 
@@ -91,13 +86,11 @@ const AdvancedConditionalsPage = () => {
           <Example 
             spanish="Si hubiera sabido sobre el problema..."
             english="Had I known about the problem, I would have acted differently."
-            translation="Formal structure equivalent to 'If I had known...'"
           />
           
           <Example 
             spanish="Si necesitaras ayuda..."
             english="Should you need any assistance, please don't hesitate to contact us."
-            translation="Formal structure for polite offers"
           />
         </div>
 
@@ -129,13 +122,11 @@ const AdvancedConditionalsPage = () => {
           <Example 
             spanish="No iré a menos que me invites."
             english="I won't go unless you invite me."
-            translation="'Unless' = 'if not' (if you don't invite me)"
           />
           
           <Example 
             spanish="Puedes quedarte con tal de que ayudes."
             english="You can stay as long as you help out."
-            translation="'As long as' expresses a condition with a sense of duration"
           />
         </div>
 
@@ -166,13 +157,11 @@ const AdvancedConditionalsPage = () => {
           <Example 
             spanish="Sin tu ayuda, habría fracasado."
             english="But for your help, I would have failed."
-            translation="'But for' = 'If it weren't for'"
           />
           
           <Example 
             spanish="Con más tiempo, podría terminarlo."
             english="Given more time, I could finish it."
-            translation="Participle that implies a condition"
           />
         </div>
       </TheorySection>
@@ -227,161 +216,16 @@ const AdvancedConditionalsPage = () => {
           </Tip>
         </div>
       </TheorySection>
-    </div>
+    </>
   );
 
-  const exercises = [
-    <MultipleChoiceExercise
-      key="1"
-      question="Complete: '_____ I been born in a different era, I would be living differently now.'"
-      options={[
-        "If",
-        "Had",
-        "Were",
-        "Should"
-      ]}
-      correctAnswer={1}
-      explanation="'Had I been born' is the formal inversion of 'If I had been born' in mixed conditionals."
-    />,
-
-    <MultipleChoiceExercise
-      key="2"
-      question="Which sentence correctly expresses a mixed conditional (past cause, present effect)?"
-      options={[
-        "If I studied harder, I would have passed the exam.",
-        "If I had studied harder, I would pass all my exams now.",
-        "If I had studied harder, I would have passed the exam.",
-        "If I study harder, I will pass the exam."
-      ]}
-      correctAnswer={1}
-      explanation="This structure combines a past cause (had studied) with a present effect (would pass now)."
-    />,
-
-    <MultipleChoiceExercise
-      key="3"
-      question="What is the formal inversion equivalent of 'If you should have any questions'?"
-      options={[
-        "Should you have any questions",
-        "Would you have any questions", 
-        "Had you any questions",
-        "Were you to have questions"
-      ]}
-      correctAnswer={0}
-      explanation="'Should you have' is the correct formal inversion of 'If you should have'."
-    />,
-
-    <TrueFalseExercise
-      key="4"
-      statements={[
-        {
-          text: "'Unless' means the same as 'if not'.",
-          isTrue: true,
-          explanation: "Correct. 'Unless' is equivalent to 'if not'."
-        },
-        {
-          text: "Mixed conditionals can combine different time periods.",
-          isTrue: true,
-          explanation: "Correct. Mixed conditionals relate different time frames."
-        },
-        {
-          text: "Inversion in conditionals is commonly used in informal speech.",
-          isTrue: false,
-          explanation: "False. Inversion is a formal structure, not informal."
-        },
-        {
-          text: "'But for' can be used to express implicit conditions.",
-          isTrue: true,
-          explanation: "Correct. 'But for' expresses implicit conditions."
-        }
-      ]}
-    />,
-
-    <MultipleChoiceExercise
-      key="5"
-      question="Complete: 'I'll lend you the money _____ you promise to pay me back next week.'"
-      options={[
-        "unless",
-        "provided that",
-        "in case",
-        "supposing"
-      ]}
-      correctAnswer={1}
-      explanation="'Provided that' expresses a specific condition that must be met."
-    />,
-
-    <MultipleChoiceExercise
-      key="6"
-      question="Complete: '_____ it not for the rain, we would go to the beach.'"
-      options={[
-        "If",
-        "Were",
-        "Had",
-        "Should"
-      ]}
-      correctAnswer={1}
-      explanation="'Were it not for' is the formal inversion of 'If it were not for'."
-    />,
-
-    <MultipleChoiceExercise
-      key="7"
-      question="Which expresses a present cause with a past effect?"
-      options={[
-        "If I were more careful, I wouldn't have broken it.",
-        "If I had been more careful, I wouldn't break things.",
-        "If I am more careful, I won't break it.",
-        "If I were more careful, I wouldn't break it."
-      ]}
-      correctAnswer={0}
-      explanation="Present (were more careful) → past (wouldn't have broken) is a mixed conditional."
-    />,
-
-    <MultipleChoiceExercise
-      key="8"
-      question="Complete: '_____ the circumstances been different, the outcome would have changed.'"
-      options={[
-        "If",
-        "Had",
-        "Were",
-        "Should"
-      ]}
-      correctAnswer={1}
-      explanation="'Had the circumstances been different' is the formal inversion of 'If the circumstances had been different'."
-    />,
-
-    <MultipleChoiceExercise
-      key="9"
-      question="Complete: 'I'd rather you _____ told me earlier.'"
-      options={[
-        "have",
-        "had",
-        "would have",
-        "will have"
-      ]}
-      correctAnswer={1}
-      explanation="'I'd rather you had told me' expresses a preference about something that didn't happen in the past."
-    />,
-
-    <MultipleChoiceExercise
-      key="10"
-      question="Which sentence uses 'unless' correctly?"
-      options={[
-        "Unless you won't study, you'll fail.",
-        "Unless you don't study, you'll pass.",
-        "Unless you study, you'll fail.",
-        "Unless you will study, you'll fail."
-      ]}
-      correctAnswer={2}
-      explanation="'Unless' already implies negation, so you don't need 'don't' or 'won't'."
-    />
-  ];
-
-  return (
+    return (
     <TheoryLayout
       title="Advanced Conditionals"
       description="Master advanced conditional structures: mixed conditionals, inversion, alternatives to 'if', and implicit conditionals to express complex ideas."
       level="B2-C1-C2"
       theoryContent={theoryContent}
-      exercises={exercises}
+      getExercises={buildAdvancedConditionalsExercises}
       prerequisites={["Basic conditionals", "Advanced verb tenses", "Subjunctive"]}
       estimatedTime="60 min"
     />

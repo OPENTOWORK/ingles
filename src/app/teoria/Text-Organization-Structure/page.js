@@ -1,11 +1,12 @@
 'use client';
+import { buildTextOrganizationStructureExercises } from './textOrganizationStructureExercises';
 import TheoryLayout from '@/components/theory/TheoryLayout';
 import { TheorySection, Example, Rule, Tip, QuickReference } from '@/components/theory/TheoryContent';
-import { MultipleChoiceExercise, TrueFalseExercise } from '@/components/theory/ExerciseComponents';
+
 
 const TextOrganizationStructurePage = () => {
   const theoryContent = (
-    <div>
+    <>
       <TheorySection title="What is Text Organization and Structure?" icon="🏗️">
         <p>
           <strong>Text Organization and Structure</strong> is how a text is arranged: 
@@ -130,167 +131,16 @@ const TextOrganizationStructurePage = () => {
           />
         </div>
       </TheorySection>
-    </div>
+    </>
   );
 
-  const exercises = [
-    <MultipleChoiceExercise
-      key="1"
-      question="What is the main purpose of text organisation?"
-      options={[
-        "Make the text longer",
-        "Create a clear, effective message",
-        "Use complex vocabulary",
-        "Impress the reader"
-      ]}
-      correctAnswer={1}
-      explanation="Organisation guides the reader logically toward a coherent message."
-    />,
-
-    <MultipleChoiceExercise
-      key="2"
-      question="Which pattern fits best for explaining how to follow a recipe?"
-      options={[
-        "Problem–solution",
-        "Cause–effect",
-        "Chronological / sequential",
-        "Comparison–contrast"
-      ]}
-      correctAnswer={2}
-      explanation="Recipes follow steps in order, so a chronological / sequential pattern fits."
-    />,
-
-    <TrueFalseExercise
-      key="3"
-      statements={[
-        {
-          text: "Each paragraph should have one clear main idea.",
-          isTrue: true,
-          explanation: "Correct. Each paragraph should focus on one central point that supports the whole."
-        },
-        {
-          text: "Connectors are only used at paragraph openings.",
-          isTrue: false,
-          explanation: "Incorrect. Connectors appear within and between sentences for flow."
-        },
-        {
-          text: "The introduction should state the text's purpose.",
-          isTrue: true,
-          explanation: "Correct. It orientates the reader about what to expect."
-        }
-      ]}
-    />,
-
-    <MultipleChoiceExercise
-      key="4"
-      question="Which transition best introduces a counterargument?"
-      options={[
-        "Furthermore",
-        "However",
-        "Therefore",
-        "In addition"
-      ]}
-      correctAnswer={1}
-      explanation="'However' signals contrast—ideal before an opposing point."
-    />,
-
-    <MultipleChoiceExercise
-      key="5"
-      question="In a problem–solution text, what typically follows stating the problem?"
-      options={[
-        "The conclusion",
-        "More unrelated problems",
-        "Causes of the problem or possible solutions",
-        "A new introduction"
-      ]}
-      correctAnswer={2}
-      explanation="After the problem, texts often explore causes or present solutions."
-    />,
-
-    <TrueFalseExercise
-      key="6"
-      statements={[
-        {
-          text: "A good paragraph may contain several unrelated main ideas.",
-          isTrue: false,
-          explanation: "Incorrect. One main idea per paragraph works best, with supporting detail."
-        },
-        {
-          text: "The conclusion should introduce completely new ideas.",
-          isTrue: false,
-          explanation: "Incorrect. The conclusion should wrap up what was already discussed."
-        },
-        {
-          text: "Connectors help readers follow logical flow.",
-          isTrue: true,
-          explanation: "Correct. They show how ideas relate."
-        }
-      ]}
-    />,
-
-    <MultipleChoiceExercise
-      key="7"
-      question="Which is NOT typical of a strong introduction?"
-      options={[
-        "A hook to gain attention",
-        "Topic context",
-        "Specific conclusion details",
-        "Presentation of the thesis"
-      ]}
-      correctAnswer={2}
-      explanation="Conclusion-level detail belongs at the end, not in the introduction."
-    />,
-
-    <MultipleChoiceExercise
-      key="8"
-      question="What does 'Meanwhile' do in a text?"
-      options={[
-        "Signal contrast",
-        "Show cause–effect",
-        "Show simultaneous events",
-        "Open a conclusion"
-      ]}
-      correctAnswer={2}
-      explanation="'Meanwhile' shows something happening at the same time as something else."
-    />,
-
-    <TrueFalseExercise
-      key="9"
-      statements={[
-        {
-          text: "Cause–effect organisation helps analyse complex phenomena.",
-          isTrue: true,
-          explanation: "Correct. It explains why things happen and what follows."
-        },
-        {
-          text: "Every text must follow the same organisational pattern.",
-          isTrue: false,
-          explanation: "Incorrect. Purpose and audience shape which pattern to use."
-        }
-      ]}
-    />,
-
-    <MultipleChoiceExercise
-      key="10"
-      question="What is the key to strong organisation?"
-      options={[
-        "Using many complex connectors",
-        "Writing very long paragraphs",
-        "Building a logical sequence for the reader",
-        "Repeating the same idea in every paragraph"
-      ]}
-      correctAnswer={2}
-      explanation="A clear, logical order carries the reader naturally to the main message."
-    />
-  ];
-
-  return (
+    return (
     <TheoryLayout
       title="Text Organization and Structure"
       description="Master how texts are built. Learn common patterns, structural parts, and effective connectors for coherent writing and reading."
       level="B2-C1-C2"
       theoryContent={theoryContent}
-      exercises={exercises}
+      getExercises={buildTextOrganizationStructureExercises}
       prerequisites={["Advanced writing skills", "Understanding of text types", "Knowledge of connectors"]}
       estimatedTime="80 min"
     />

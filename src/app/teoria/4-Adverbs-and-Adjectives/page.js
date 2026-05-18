@@ -1,4 +1,5 @@
 'use client';
+import { build4AdverbsAndAdjectivesExercises } from './adverbsAndAdjectivesExercises';
 import React from 'react';
 import TheoryLayout from '@/components/theory/TheoryLayout';
 import { 
@@ -9,15 +10,11 @@ import {
   GrammarTable, 
   QuickReference 
 } from '@/components/theory/TheoryContent';
-import { 
-  MultipleChoiceExercise, 
-  FillBlanksExercise, 
-  TrueFalseExercise 
-} from '@/components/theory/ExerciseComponents';
+
 
 const AdverbsAndAdjectivesPage = () => {
   const theoryContent = (
-    <div>
+    <>
       <TheorySection title="What are Adverbs and Adjectives?" icon="📝">
         <p style={{ fontSize: '1.1rem', lineHeight: 1.6, color: '#4a5568', marginBottom: '1rem' }}>
           <strong>Adjectives</strong> describe nouns, while <strong>adverbs</strong> modify verbs, adjectives, or other adverbs. 
@@ -54,17 +51,14 @@ const AdverbsAndAdjectivesPage = () => {
           <Example 
             spanish="Tengo un coche grande y rojo"
             english="I have a big red car"
-            translation="I have a big red car"
           />
           <Example 
             spanish="Ella es muy inteligente"
             english="She is very intelligent"
-            translation="She is very intelligent"
           />
           <Example 
             spanish="Los estudiantes están contentos"
             english="The students are happy"
-            translation="The students are happy"
           />
         </div>
 
@@ -104,17 +98,14 @@ const AdverbsAndAdjectivesPage = () => {
           <Example 
             spanish="Corre rápidamente"
             english="He runs quickly"
-            translation="He runs quickly"
           />
           <Example 
             spanish="Siempre estudio por la noche"
             english="I always study at night"
-            translation="I always study at night"
           />
           <Example 
             spanish="Ella es muy hermosa"
             english="She is very beautiful"
-            translation="She is very beautiful"
           />
         </div>
 
@@ -153,17 +144,14 @@ const AdverbsAndAdjectivesPage = () => {
           <Example 
             spanish="Mi hermano es más alto que yo"
             english="My brother is taller than me"
-            translation="My brother is taller than me"
           />
           <Example 
             spanish="Esta película es más interesante"
             english="This movie is more interesting"
-            translation="This movie is more interesting"
           />
           <Example 
             spanish="Es el estudiante más inteligente"
             english="He is the most intelligent student"
-            translation="He is the most intelligent student"
           />
         </div>
 
@@ -205,17 +193,14 @@ const AdverbsAndAdjectivesPage = () => {
           <Example 
             spanish="Siempre desayuno en casa"
             english="I always have breakfast at home"
-            translation="I always have breakfast at home"
           />
           <Example 
             spanish="A veces voy al cine"
             english="I sometimes go to the cinema"
-            translation="I sometimes go to the cinema"
           />
           <Example 
             spanish="Nunca llego tarde"
             english="I never arrive late"
-            translation="I never arrive late"
           />
         </div>
 
@@ -282,172 +267,16 @@ const AdverbsAndAdjectivesPage = () => {
           />
         </div>
       </TheorySection>
-    </div>
+    </>
   );
 
-  const exercises = [
-    <MultipleChoiceExercise
-      key="1"
-      question="Complete: 'She is a _____ girl who sings _____.' (beautiful)"
-      options={[
-        "beautiful, beautiful",
-        "beautifully, beautifully", 
-        "beautiful, beautifully",
-        "beautifully, beautiful"
-      ]}
-      correctAnswer={2}
-      explanation="'Beautiful' (adjective) describes nouns; 'beautifully' (adverb) describes verbs."
-    />,
-
-    <MultipleChoiceExercise
-      key="2"
-      question="Which is the correct form to complete: 'She runs ___'?"
-      options={[
-        "quick",
-        "quickly",
-        "quicklyly",
-        "quicklyer"
-      ]}
-      correctAnswer={1}
-      explanation="To describe how she runs (verb), we use the adverb 'quickly'."
-    />,
-
-    <TrueFalseExercise
-      key="3"
-      statements={[
-        {
-          text: "'I am very tiredly' is correct.",
-          isTrue: false,
-          explanation: "Incorrect. After 'be' we use adjectives: 'I am very tired'."
-        },
-        {
-          text: "'She sings beautifully' is correct.",
-          isTrue: true,
-          explanation: "Correct. To describe how she sings we use the adverb 'beautifully'."
-        },
-        {
-          text: "'This car is more expensive than that one' is correct.",
-          isTrue: true,
-          explanation: "Correct. For long adjectives we use 'more + adjective + than'."
-        },
-        {
-          text: "'I always am happy' is correct.",
-          isTrue: false,
-          explanation: "Incorrect. With 'be', the adverb goes after: 'I am always happy'."
-        }
-      ]}
-    />,
-
-    <MultipleChoiceExercise
-      key="4"
-      question="Which is the correct form to complete: 'He is ___ student in the class'?"
-      options={[
-        "the most intelligent",
-        "the intelligentest",
-        "the more intelligent",
-        "the intelligenter"
-      ]}
-      correctAnswer={0}
-      explanation="For superlatives of long adjectives we use 'the most + adjective': 'the most intelligent'."
-    />,
-
-    <MultipleChoiceExercise
-      key="5"
-      question="Which is the correct form to complete: 'I am ___ at mathematics'?"
-      options={[
-        "good",
-        "well",
-        "goodly",
-        "goods"
-      ]}
-      correctAnswer={0}
-      explanation="After 'be' we use adjectives. 'Good' is the correct adjective here."
-    />,
-
-    <TrueFalseExercise
-      key="6"
-      statements={[
-        {
-          text: "Adverbs usually end in -ly.",
-          isTrue: true,
-          explanation: "Correct. Most adverbs end in -ly: quickly, slowly, carefully."
-        },
-        {
-          text: "We can say 'She sings beautiful'.",
-          isTrue: false,
-          explanation: "Incorrect. We need the adverb 'beautifully' to modify the verb: 'She sings beautifully'."
-        },
-        {
-          text: "Adjectives describe nouns.",
-          isTrue: true,
-          explanation: "Correct. Adjectives describe or modify nouns: 'beautiful flower', 'tall building'."
-        }
-      ]}
-    />,
-
-    <MultipleChoiceExercise
-      key="7"
-      question="Complete: 'She drives very _____.'"
-      options={[
-        "careful",
-        "carefully",
-        "care",
-        "caring"
-      ]}
-      correctAnswer={1}
-      explanation="To modify a verb we need an adverb: 'carefully'. 'She drives very carefully'."
-    />,
-
-    <MultipleChoiceExercise
-      key="8"
-      question="What is the superlative of 'bad'?"
-      options={[
-        "baddest",
-        "most bad",
-        "worst",
-        "worse"
-      ]}
-      correctAnswer={2}
-      explanation="'Bad' is irregular: bad → worse → worst. 'Worst' is the superlative."
-    />,
-
-    <TrueFalseExercise
-      key="9"
-      statements={[
-        {
-          text: "'Fast' can be both an adjective and an adverb.",
-          isTrue: true,
-          explanation: "Correct. 'Fast' works as an adjective ('a fast car') and as an adverb ('he runs fast')."
-        },
-        {
-          text: "We say 'more better' for emphasis.",
-          isTrue: false,
-          explanation: "Incorrect. 'Better' is already comparative. We cannot say 'more better', only 'better'."
-        }
-      ]}
-    />,
-
-    <MultipleChoiceExercise
-      key="10"
-      question="Complete: 'This is the ___ book I've ever read.'"
-      options={[
-        "more interesting",
-        "most interesting",
-        "interestinger",
-        "interestingest"
-      ]}
-      correctAnswer={1}
-      explanation="For superlatives of long adjectives we use 'the most + adjective': 'the most interesting'."
-    />
-  ];
-
-  return (
+    return (
     <TheoryLayout
       title="Adverbs and Adjectives"
       description="Master adjectives and adverbs in English. Learn their uses, positions, comparatives, and superlatives to express yourself with precision."
       level="A2-B1-B2-C1-C2"
       theoryContent={theoryContent}
-      exercises={exercises}
+      getExercises={build4AdverbsAndAdjectivesExercises}
       prerequisites={["Basic vocabulary", "Understanding of nouns and verbs"]}
       estimatedTime="55 min"
     />

@@ -1,4 +1,5 @@
 'use client';
+import { buildCohesionAndConnectorsExercises } from './cohesionAndConnectorsExercises';
 import React from 'react';
 import TheoryLayout from '@/components/theory/TheoryLayout';
 import { 
@@ -9,15 +10,11 @@ import {
   GrammarTable, 
   QuickReference 
 } from '@/components/theory/TheoryContent';
-import { 
-  MultipleChoiceExercise, 
-  FillBlanksExercise, 
-  TrueFalseExercise 
-} from '@/components/theory/ExerciseComponents';
+
 
 const CohesionAndConnectorsPage = () => {
   const theoryContent = (
-    <div>
+    <>
       <TheorySection title="What Are Cohesion and Connectors?" icon="🔗">
         <p style={{ fontSize: '1.1rem', lineHeight: 1.6, color: '#4a5568', marginBottom: '1rem' }}>
           <strong>Cohesion</strong> and <strong>connectors</strong> are essential for building texts that are coherent and easy to follow. 
@@ -345,172 +342,16 @@ const CohesionAndConnectorsPage = () => {
           />
         </div>
       </TheorySection>
-    </div>
+    </>
   );
 
-  const exercises = [
-    <MultipleChoiceExercise
-      key="1"
-      question="Complete: 'Technology has many benefits. _____, it improves communication.'"
-      options={[
-        "However",
-        "Furthermore",
-        "But",
-        "Although"
-      ]}
-      correctAnswer={1}
-      explanation="“Furthermore” adds supporting information that builds on the previous idea."
-    />,
-
-    <MultipleChoiceExercise
-      key="2"
-      question="Which connector is most appropriate for adding important information?"
-      options={[
-        "However",
-        "Furthermore",
-        "Nevertheless",
-        "Yet"
-      ]}
-      correctAnswer={1}
-      explanation="“Furthermore” adds important supporting information; the others are mainly for contrast."
-    />,
-
-    <TrueFalseExercise
-      key="3"
-      statements={[
-        {
-          text: "'However' and 'but' may be used together in the same sentence.",
-          isTrue: false,
-          explanation: "Incorrect. Do not use two contrast connectors together. Use one."
-        },
-        {
-          text: "'Furthermore' is more formal than 'and'.",
-          isTrue: true,
-          explanation: "Correct. “Furthermore” is formal; “and” is simpler and more neutral."
-        },
-        {
-          text: "Connectors always come at the start of the sentence.",
-          isTrue: false,
-          explanation: "Incorrect. Many do, but some such as “yet” and “so” often appear mid-sentence."
-        },
-        {
-          text: "Using a range of connectors improves the quality of a text.",
-          isTrue: true,
-          explanation: "Correct. Variety avoids repetition and keeps the reader engaged."
-        }
-      ]}
-    />,
-
-    <MultipleChoiceExercise
-      key="4"
-      question="Which connector is most appropriate to show result?"
-      options={[
-        "Because",
-        "However",
-        "Therefore",
-        "Furthermore"
-      ]}
-      correctAnswer={2}
-      explanation="“Therefore” shows result or consequence; “because” shows cause."
-    />,
-
-    <MultipleChoiceExercise
-      key="5"
-      question="What is wrong with this sentence: 'But however, there are problems'?"
-      options={[
-        "A connector is missing",
-        "It uses two contrast connectors together",
-        "The connector is in the wrong place",
-        "Punctuation is missing"
-      ]}
-      correctAnswer={1}
-      explanation="The problem is using “But” and “However” together—both signal contrast. Use only one."
-    />,
-
-    <TrueFalseExercise
-      key="6"
-      statements={[
-        {
-          text: "'However' and 'but' can be used interchangeably in all contexts.",
-          isTrue: false,
-          explanation: "Incorrect. “However” is more formal and often starts a sentence with a comma; “but” links clauses more directly."
-        },
-        {
-          text: "Cohesion can be achieved without using connectors.",
-          isTrue: true,
-          explanation: "Correct. Cohesion also comes from pronouns, repetition, synonyms, and reference."
-        },
-        {
-          text: "'Therefore' shows a cause-and-effect relationship.",
-          isTrue: true,
-          explanation: "Correct. “Therefore” signals result or consequence (e.g. “It's raining, therefore I'll stay home”)."
-        }
-      ]}
-    />,
-
-    <MultipleChoiceExercise
-      key="7"
-      question="Complete: 'I studied hard. _____, I passed the exam.'"
-      options={[
-        "However",
-        "Although",
-        "Therefore",
-        "Nevertheless"
-      ]}
-      correctAnswer={2}
-      explanation="“Therefore” shows result: you studied hard, so you passed."
-    />,
-
-    <MultipleChoiceExercise
-      key="8"
-      question="Which connector works best to add an important point?"
-      options={[
-        "However",
-        "Moreover",
-        "Nevertheless",
-        "Although"
-      ]}
-      correctAnswer={1}
-      explanation="“Moreover” adds important information that strengthens the previous argument."
-    />,
-
-    <TrueFalseExercise
-      key="9"
-      statements={[
-        {
-          text: "'In addition' and 'furthermore' have similar functions.",
-          isTrue: true,
-          explanation: "Correct. Both add information that supports the previous idea."
-        },
-        {
-          text: "Connectors should be used in every sentence for good cohesion.",
-          isTrue: false,
-          explanation: "Incorrect. Overusing connectors sounds repetitive. Cohesion also uses other devices."
-        }
-      ]}
-    />,
-
-    <MultipleChoiceExercise
-      key="10"
-      question="Complete: '_____ the rain, we went to the park.'"
-      options={[
-        "Because",
-        "Despite",
-        "Therefore",
-        "Furthermore"
-      ]}
-      correctAnswer={1}
-      explanation="“Despite” shows contrast: in spite of the rain, we still went."
-    />
-  ];
-
-  return (
+    return (
     <TheoryLayout
       title="Cohesion and Connectors"
       description="Master cohesion and connectors in English. Learn to link ideas, create smooth transitions, and improve the flow of your writing."
       level="A2-B1-B2-C1-C2"
       theoryContent={theoryContent}
-      exercises={exercises}
+      getExercises={buildCohesionAndConnectorsExercises}
       prerequisites={["Basic writing skills", "Understanding of sentence structure"]}
       estimatedTime="65 min"
     />

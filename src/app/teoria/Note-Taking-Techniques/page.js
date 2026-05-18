@@ -1,4 +1,5 @@
 'use client';
+import { buildNoteTakingTechniquesExercises } from './noteTakingTechniquesExercises';
 import React from 'react';
 import TheoryLayout from '@/components/theory/TheoryLayout';
 import { 
@@ -9,15 +10,11 @@ import {
   GrammarTable, 
   QuickReference 
 } from '@/components/theory/TheoryContent';
-import { 
-  MultipleChoiceExercise, 
-  FillBlanksExercise, 
-  TrueFalseExercise 
-} from '@/components/theory/ExerciseComponents';
+
 
 const NoteTakingTechniquesPage = () => {
   const theoryContent = (
-    <div>
+    <>
       <TheorySection title="What Are Note-Taking Techniques?" icon="📝">
         <p style={{ fontSize: '1.1rem', lineHeight: 1.6, color: '#4a5568', marginBottom: '1rem' }}>
           <strong>Note-taking techniques</strong> are systematic ways to capture important information while you listen. They are essential in longer exams and recordings.
@@ -305,172 +302,16 @@ const NoteTakingTechniquesPage = () => {
           />
         </div>
       </TheorySection>
-    </div>
+    </>
   );
 
-  const exercises = [
-    <MultipleChoiceExercise
-      key="1"
-      question="What do note-taking techniques help you do?"
-      options={[
-        "Organize information",
-        "Retain information",
-        "Write more efficiently",
-        "All of the above"
-      ]}
-      correctAnswer={3}
-      explanation="They support organizing, retaining, and writing more efficiently during listening."
-    />,
-
-    <MultipleChoiceExercise
-      key="2"
-      question="What is the main benefit of note-taking in listening?"
-      options={[
-        "Improve pronunciation",
-        "Retain important information",
-        "Increase handwriting speed",
-        "Improve spelling"
-      ]}
-      correctAnswer={1}
-      explanation="The main benefit is retaining key information, especially on long audio where details slip easily."
-    />,
-
-    <TrueFalseExercise
-      key="3"
-      statements={[
-        {
-          text: "You should try to write down everything you hear.",
-          isTrue: false,
-          explanation: "Incorrect. Note only key information; trying to write everything makes you miss what follows."
-        },
-        {
-          text: "Abbreviations must be clear to the person who writes them.",
-          isTrue: true,
-          explanation: "Correct. Your short forms must be readable by you later."
-        },
-        {
-          text: "Different listening types need different note-taking approaches.",
-          isTrue: true,
-          explanation: "Correct. Short dialogues need light notes; monologues need clearer structure."
-        },
-        {
-          text: "Speed matters more than perfect form in note-taking.",
-          isTrue: true,
-          explanation: "Correct. Prioritizing speed helps you capture more of what matters."
-        }
-      ]}
-    />,
-
-    <MultipleChoiceExercise
-      key="4"
-      question="What is the best strategy for writing quickly?"
-      options={[
-        "Full words only",
-        "Abbreviations and symbols",
-        "Cursive only",
-        "All capitals"
-      ]}
-      correctAnswer={1}
-      explanation="Abbreviations and symbols are the fastest way to keep up without losing meaning."
-    />,
-
-    <MultipleChoiceExercise
-      key="5"
-      question="When is note-taking most important?"
-      options={[
-        "Short clips only",
-        "Long audio with lots of information",
-        "Only in monologues",
-        "Never"
-      ]}
-      correctAnswer={1}
-      explanation="Long, information-rich audio is where notes matter most to hold specifics."
-    />,
-
-    <TrueFalseExercise
-      key="6"
-      statements={[
-        {
-          text: "You should write complete sentences when taking notes during listening.",
-          isTrue: false,
-          explanation: "Incorrect. Keywords, short phrases, and abbreviations work better under time pressure."
-        },
-        {
-          text: "Symbols like arrows and abbreviations speed up note-taking.",
-          isTrue: true,
-          explanation: "Correct. Symbols (→, ↑, &) and abbreviations (w/, b/c) speed up writing."
-        },
-        {
-          text: "Your notes must be perfectly organized while you listen.",
-          isTrue: false,
-          explanation: "Incorrect. While listening, prioritize capture; you can tidy afterward."
-        }
-      ]}
-    />,
-
-    <MultipleChoiceExercise
-      key="7"
-      question="Which abbreviation is best for 'information'?"
-      options={[
-        "information",
-        "info",
-        "inform",
-        "infm"
-      ]}
-      correctAnswer={1}
-      explanation="'Info' is a standard, recognizable short form for 'information'."
-    />,
-
-    <MultipleChoiceExercise
-      key="8"
-      question="Which technique is most useful for long monologues?"
-      options={[
-        "Literal transcription",
-        "Hierarchical structure: main points and detail",
-        "Notes only at the end",
-        "No organization"
-      ]}
-      correctAnswer={1}
-      explanation="A hierarchy (main points → details → examples) fits extended single-speaker input."
-    />,
-
-    <TrueFalseExercise
-      key="9"
-      statements={[
-        {
-          text: "Mind mapping is useful for brainstorming but not for listening.",
-          isTrue: false,
-          explanation: "Incorrect. Mind maps can help with multi-topic talks if you use them quickly."
-        },
-        {
-          text: "You should develop your own consistent abbreviation system.",
-          isTrue: true,
-          explanation: "Correct. A personal, stable system boosts speed and clarity."
-        }
-      ]}
-    />,
-
-    <MultipleChoiceExercise
-      key="10"
-      question="When should you review and tidy your notes?"
-      options={[
-        "Only while the audio plays",
-        "Right after the audio ends",
-        "A week later",
-        "Never"
-      ]}
-      correctAnswer={1}
-      explanation="A quick review right after listening clarifies and completes notes while memory is fresh."
-    />
-  ];
-
-  return (
+    return (
     <TheoryLayout
       title="Note-Taking Techniques"
       description="Master note-taking for English listening. Learn organization systems, abbreviations, fast-writing tactics, and checking strategies."
       level="B1-B2-C1-C2"
       theoryContent={theoryContent}
-      exercises={exercises}
+      getExercises={buildNoteTakingTechniquesExercises}
       prerequisites={["Basic listening skills", "Understanding of different listening types"]}
       estimatedTime="75 min"
     />
