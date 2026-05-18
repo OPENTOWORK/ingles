@@ -936,7 +936,7 @@ export default function AdminDashboard() {
           chartStartDate={chartStartDate}
           setChartStartDate={setChartStartDate}
           chartEndDate={chartEndDate}
-          setEndDate={setChartEndDate}
+          setChartEndDate={setChartEndDate}
           sessionChart={sessionChart}
           connectionAnalytics={connectionAnalytics}
         />
