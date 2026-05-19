@@ -3,7 +3,6 @@
 import { useCallback, useMemo, useState } from 'react';
 import Link from 'next/link';
 import PageHero from '@/components/PageHero';
-import SiteMascot from '@/components/SiteMascot';
 import TeoriaFilterToolbar from '@/components/theory/TeoriaFilterToolbar';
 import { TeoriaGlobalStyles } from '@/components/theory/TeoriaStyles';
 import { SECTION_CATALOG, filterTopics } from '@/data/teoriaSections';
@@ -90,9 +89,6 @@ export default function TeoriaTopicList({ sectionTitle, topics }) {
 function EmptyState({ onReset }) {
   return (
     <div className="empty">
-      <div className="empty__mascot">
-        <SiteMascot variant={6} width={128} alt="" />
-      </div>
       <h3>No results</h3>
       <p>Try removing filters or searching for another term.</p>
       <button type="button" className="btn" onClick={onReset}>

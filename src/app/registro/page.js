@@ -6,6 +6,7 @@ import { supabase } from '../../utils/supabaseClient';
 import { normalizeEmail } from '@/utils/authRoles';
 import { mapSignupErrorMessage } from '@/utils/authSignupErrors';
 import SiteMascot from '@/components/SiteMascot';
+import { FORM_LEGAL_SNIPPETS } from '@/lib/legal/legalDocuments';
 
 export default function RegistroPage() {
   const [email, setEmail] = useState('');
@@ -264,9 +265,13 @@ export default function RegistroPage() {
               required
             />
             <span>
-              Acepto los{' '}
+              Al crear una cuenta, acepto los{' '}
               <a href="/terminos-condiciones" style={linkStyle}>
-                Terminos y condiciones
+                Términos y condiciones
+              </a>{' '}
+              y confirmo haber leído la{' '}
+              <a href="/politica-privacidad" style={linkStyle}>
+                Política de privacidad
               </a>
               .
             </span>
@@ -280,9 +285,9 @@ export default function RegistroPage() {
               required
             />
             <span>
-              Acepto la politica de{' '}
+              Acepto la{' '}
               <a href="/proteccion-datos" style={linkStyle}>
-                Proteccion de datos
+                Política de protección de datos
               </a>
               .
             </span>
@@ -294,7 +299,10 @@ export default function RegistroPage() {
               checked={acceptedMarketing}
               onChange={(e) => setAcceptedMarketing(e.target.checked)}
             />
-            <span>Deseo recibir actualizaciones de mejoras en Dralo y ofertas comerciales.</span>
+            <span>
+              {FORM_LEGAL_SNIPPETS.marketing ||
+                'Deseo recibir comunicaciones comerciales, novedades y recursos de Dralo.'}
+            </span>
           </label>
         </div>
 

@@ -4,7 +4,8 @@ import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { useUserRole } from '@/context/UserRoleContext';
 import SiteMascot from '@/components/SiteMascot';
-import { placementQuestions as rawQuestions, levelFromScore, levelRecommendations } from '@/data/placementTest';
+import { levelFromScore, levelRecommendations } from '@/data/placementTest';
+import { shuffleQuestionOptions } from '@/lib/placementSupabase';
 
 /**
  * Versión con nivel CEFR, progreso legible y mejoras de UX.
@@ -15,17 +16,14 @@ import { placementQuestions as rawQuestions, levelFromScore, levelRecommendation
  *  - Sin redirección automática al terminar
  */
 
-const LOCAL_KEY = 'placement.v3';
-const AUTO_REDIRECT_MS = 3500; // (ya no se usa para redirigir)
+const LOCAL_KEY = 'placement.v5';
 
-const shuffle = (arr) => {
-  const a = [...arr];
-  for (let i = a.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [a[i], a[j]] = [a[j], a[i]];
-  }
-  return a;
-};
+function countWords(text) {
+  return String(text || '')
+    .trim()
+    .split(/\s+/)
+    .filter(Boolean).length;
+}
 
 export default function PlacementTestPage() {
   const router = useRouter();
@@ -39,8 +37,20 @@ export default function PlacementTestPage() {
   const [confirmOpen, setConfirmOpen] = useState(false);
   const [index, setIndex] = useState(0); // índice de pregunta activa
   const [cancelAuto, setCancelAuto] = useState(false); // (se queda por compatibilidad)
+  const [questions, setQuestions] = useState([]);
+  const [loadingQuestions, setLoadingQuestions] = useState(true);
+  const [loadError, setLoadError] = useState('');
+  const [writingTopics, setWritingTopics] = useState({});
+  const [writingEval, setWritingEval] = useState(null);
+  const [writingEvalError, setWritingEvalError] = useState('');
+  const [evaluatingWriting, setEvaluatingWriting] = useState(false);
 
   const topRef = useRef(null);
+  const writingQuestion = useMemo(
+    () => questions.find((q) => q.type === 'writing') || null,
+    [questions],
+  );
+  const loadStartedRef = useRef(false);
 
   useEffect(() => {
     if (!session) {
@@ -48,53 +58,98 @@ export default function PlacementTestPage() {
     }
   }, [session, router]);
 
-  // Dataset preparado: barajado y con tipo por defecto
-  const questions = useMemo(() => {
-    const normalized = rawQuestions.map((q, i) => ({
-      id: q.id ?? i + 1,
-      type: q.type || 'mcq',
-      text: q.text,
-      options: q.options || (q.type === 'tf' ? ['True', 'False'] : []),
-      answer: q.answer,
-      explanation: q.explanation,
-      media: q.media,
-    }));
-    return shuffle(normalized).map((q) =>
-      q.type === 'mcq' && Array.isArray(q.options)
-        ? { ...q, options: shuffle(q.options) }
-        : q
-    );
-  }, []);
-
   const total = questions.length;
 
-  // Cargar estado persistido
-  useEffect(() => {
-    try {
-      const raw = localStorage.getItem(LOCAL_KEY);
-      if (!raw) return;
-      const saved = JSON.parse(raw);
-      if (saved?.v === 3 && saved.total === total) {
-        setAnswers(saved.answers || {});
-        setSubmitted(!!saved.submitted);
-        setSeconds(saved.seconds || 0);
-        setIndex(Math.min(saved.index ?? 0, total - 1));
-      }
-    } catch {}
-  }, [total]);
+  const fetchQuestions = useCallback(async ({ forceNew = false } = {}) => {
+    if (!session?.access_token) return;
 
-  // Guardar estado
+    setLoadingQuestions(true);
+    setLoadError('');
+
+    try {
+      if (!forceNew) {
+        try {
+          const raw = localStorage.getItem(LOCAL_KEY);
+          if (raw) {
+            const saved = JSON.parse(raw);
+            if (
+              (saved?.v === 4 || saved?.v === 5) &&
+              Array.isArray(saved.questions) &&
+              saved.questions.length > 0
+            ) {
+              setQuestions(shuffleQuestionOptions(saved.questions));
+              setAnswers(saved.answers || {});
+              setWritingTopics(saved.writingTopics || {});
+              setWritingEval(saved.writingEval || null);
+              setSubmitted(!!saved.submitted);
+              setSeconds(saved.seconds || 0);
+              setIndex(Math.min(saved.index ?? 0, saved.questions.length - 1));
+              setLoadingQuestions(false);
+              return;
+            }
+          }
+        } catch {
+          /* ignorar caché corrupta */
+        }
+      }
+
+      const res = await fetch('/api/placement/questions', {
+        headers: { Authorization: `Bearer ${session.access_token}` },
+      });
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) {
+        throw new Error(data.error || 'No se pudieron cargar las preguntas.');
+      }
+
+      const qs = shuffleQuestionOptions(data.questions || []);
+      if (!qs.length) {
+        throw new Error('El banco de preguntas está vacío.');
+      }
+
+      setQuestions(qs);
+      setAnswers({});
+      setWritingTopics({});
+      setWritingEval(null);
+      setWritingEvalError('');
+      setSubmitted(false);
+      setSeconds(0);
+      setIsPaused(false);
+      setIndex(0);
+    } catch (err) {
+      setLoadError(err.message || 'Error al cargar el test.');
+      setQuestions([]);
+    } finally {
+      setLoadingQuestions(false);
+    }
+  }, [session?.access_token]);
+
   useEffect(() => {
-    const payload = JSON.stringify({ v: 3, total, answers, submitted, seconds, index });
+    if (!session?.access_token || loadStartedRef.current) return;
+    loadStartedRef.current = true;
+    void fetchQuestions();
+  }, [session?.access_token, fetchQuestions]);
+
+  // Guardar progreso + orden de preguntas (sin repetir en la misma sesión)
+  useEffect(() => {
+    if (!questions.length) return;
+    const payload = JSON.stringify({
+      v: 4,
+      total,
+      questions,
+      answers,
+      submitted,
+      seconds,
+      index,
+    });
     localStorage.setItem(LOCAL_KEY, payload);
-  }, [answers, submitted, seconds, index, total]);
+  }, [questions, answers, writingTopics, writingEval, submitted, seconds, index, total]);
 
   // Temporizador
   useEffect(() => {
-    if (submitted || isPaused) return;
+    if (submitted || isPaused || loadingQuestions || total === 0) return;
     const id = setInterval(() => setSeconds((s) => s + 1), 1000);
     return () => clearInterval(id);
-  }, [submitted, isPaused]);
+  }, [submitted, isPaused, loadingQuestions, total]);
 
   useEffect(() => {
     const onVisibility = () => { if (document.hidden) setIsPaused(true); };
@@ -110,9 +165,17 @@ export default function PlacementTestPage() {
 
   // Respuestas
   const current = questions[index];
-  const answeredCount = useMemo(() => Object.keys(answers).length, [answers]);
-  const progress = Math.round((answeredCount / total) * 100);
-  const progressLabel = `${answeredCount} de ${total}`;
+  const answeredCount = useMemo(() => {
+    return questions.filter((q) => {
+      if (q.type === 'writing') {
+        const essay = String(answers[q.id] ?? '').trim();
+        return essay.length >= 20 && Boolean(writingTopics[q.id]);
+      }
+      return String(answers[q.id] ?? '').trim() !== '';
+    }).length;
+  }, [answers, questions, writingTopics]);
+  const progress = total > 0 ? Math.round((answeredCount / total) * 100) : 0;
+  const progressLabel = total > 0 ? `${answeredCount} de ${total}` : '—';
 
   const handleChange = useCallback((qid, value) => {
     setAnswers((prev) => ({ ...prev, [qid]: value }));
@@ -120,37 +183,154 @@ export default function PlacementTestPage() {
 
   const goto = (next) => setIndex((i) => Math.min(Math.max(next, 0), total - 1));
 
-  const submitNow = (e) => {
+  const submitNow = async (e) => {
     e?.preventDefault?.();
     setSubmitted(true);
     setIsPaused(true);
     setConfirmOpen(false);
     setCancelAuto(false);
+    setWritingEval(null);
+    setWritingEvalError('');
+
+    const wq = writingQuestion;
+    if (wq && session?.access_token) {
+      const essay = String(answers[wq.id] ?? '').trim();
+      const topic = writingTopics[wq.id];
+      if (essay.length >= 20 && topic) {
+        setEvaluatingWriting(true);
+        try {
+          const res = await fetch('/api/placement/evaluate-writing', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              Authorization: `Bearer ${session.access_token}`,
+            },
+            body: JSON.stringify({
+              taskPrompt: wq.text,
+              selectedTopic: topic,
+              essay,
+              wordMin: wq.wordMin ?? 150,
+              wordMax: wq.wordMax ?? 200,
+            }),
+          });
+          const data = await res.json().catch(() => ({}));
+          if (!res.ok) {
+            throw new Error(data.error || 'No se pudo corregir el writing.');
+          }
+          setWritingEval(data);
+        } catch (err) {
+          setWritingEvalError(err.message || 'Error al corregir el writing.');
+        } finally {
+          setEvaluatingWriting(false);
+        }
+      }
+    }
+
     setTimeout(() => topRef.current?.focus?.(), 0);
   };
 
   const handleReset = () => {
-    setAnswers({});
-    setSubmitted(false);
-    setSeconds(0);
-    setIsPaused(false);
-    setIndex(0);
     localStorage.removeItem(LOCAL_KEY);
+    void fetchQuestions({ forceNew: true });
   };
 
   // Puntuación
   const score = useMemo(() => {
     if (!submitted) return 0;
-    return questions.reduce(
-      (acc, q) =>
-        acc + (String(answers[q.id] ?? '').trim() === String(q.answer).trim() ? 1 : 0),
-      0
-    );
-  }, [submitted, answers, questions]);
+    let s = 0;
+    for (const q of questions) {
+      if (q.type === 'writing') continue;
+      if (String(answers[q.id] ?? '').trim() === String(q.answer).trim()) {
+        s += 1;
+      }
+    }
+    if (writingEval?.countsAsCorrect) s += 1;
+    return s;
+  }, [submitted, answers, questions, writingEval]);
 
   // Renderizador de pregunta por tipo (mcq, tf, cloze)
   const renderQuestion = (q) => {
     if (!q) return null;
+
+    if (q.type === 'writing') {
+      const essay = String(answers[q.id] ?? '');
+      const words = countWords(essay);
+      const topic = writingTopics[q.id] || '';
+      const topics = Array.isArray(q.topicOptions) && q.topicOptions.length > 0
+        ? q.topicOptions
+        : ['Option A', 'Option B', 'Option C', 'Option D', 'Option E'];
+
+      return (
+        <div className="space-y-4">
+          <div className="rounded-xl bg-slate-50 border border-slate-200 p-4 text-sm whitespace-pre-line max-h-72 overflow-y-auto">
+            {q.text}
+          </div>
+          <p className="text-sm text-slate-600">
+            Elige un tema y escribe entre {q.wordMin ?? 150} y {q.wordMax ?? 200} palabras en inglés.
+          </p>
+          <fieldset className="space-y-2" disabled={submitted}>
+            <legend className="text-sm font-medium text-slate-800 mb-2">Tema elegido</legend>
+            {topics.map((opt, i) => (
+              <label key={opt} className={`opt block ${topic === opt ? 'selected' : ''}`}>
+                <input
+                  type="radio"
+                  name={`writing-topic-${q.id}`}
+                  value={opt}
+                  checked={topic === opt}
+                  onChange={() =>
+                    setWritingTopics((prev) => ({ ...prev, [q.id]: opt }))
+                  }
+                  className="mr-2"
+                  disabled={submitted}
+                />
+                <span>
+                  <strong className="mr-1">Opción {String.fromCharCode(65 + i)}:</strong>
+                  {opt}
+                </span>
+              </label>
+            ))}
+          </fieldset>
+          <div>
+            <label htmlFor={`writing-${q.id}`} className="text-sm font-medium text-slate-800">
+              Tu texto en inglés
+            </label>
+            <textarea
+              id={`writing-${q.id}`}
+              className="mt-2 w-full min-h-[220px] rounded-xl border border-slate-200 p-3 text-base leading-relaxed focus:outline-none focus:ring-2 focus:ring-blue-200"
+              value={essay}
+              onChange={(e) => handleChange(q.id, e.target.value)}
+              disabled={submitted}
+              placeholder="Write your answer here…"
+              maxLength={12000}
+            />
+            <p className={`mt-1 text-sm ${words >= (q.wordMin ?? 150) ? 'text-green-700' : 'text-slate-500'}`}>
+              Palabras: {words} / objetivo {q.wordMin ?? 150}–{q.wordMax ?? 200}
+            </p>
+          </div>
+          {submitted && evaluatingWriting && (
+            <p className="text-sm text-indigo-600">Corrigiendo tu writing con IA…</p>
+          )}
+          {submitted && writingEvalError && (
+            <p className="text-sm text-red-600">{writingEvalError}</p>
+          )}
+          {submitted && writingEval && (
+            <div className="rounded-xl border border-indigo-100 bg-indigo-50/80 p-4 text-sm space-y-2">
+              <p>
+                <strong>Corrección IA:</strong> {writingEval.scorePercent}% —{' '}
+                {writingEval.countsAsCorrect ? 'suma 1 punto al placement' : 'no suma punto'}
+              </p>
+              <p>{writingEval.feedback}</p>
+              {writingEval.strengths?.length > 0 && (
+                <p><strong>Fortalezas:</strong> {writingEval.strengths.join(' · ')}</p>
+              )}
+              {writingEval.improvements?.length > 0 && (
+                <p><strong>A mejorar:</strong> {writingEval.improvements.join(' · ')}</p>
+              )}
+            </div>
+          )}
+        </div>
+      );
+    }
 
     if (q.type === 'tf') {
       const opts = q.options?.length ? q.options : ['True', 'False'];
@@ -234,7 +414,10 @@ export default function PlacementTestPage() {
   };
 
   // Nivel y recomendación
-  const level = useMemo(() => (submitted ? levelFromScore(score) : null), [submitted, score]);
+  const level = useMemo(
+    () => (submitted ? levelFromScore(score, total) : null),
+    [submitted, score, total],
+  );
   const recommendation = useMemo(() => (level ? levelRecommendations[level] : null), [level]);
 
   // >>> Redirección automática DESACTIVADA a petición <<<
@@ -283,25 +466,39 @@ export default function PlacementTestPage() {
           </div>
         </div>
 
-        {!session ? (
-          <p className="text-center">Cargando…</p>
+        {!session || loadingQuestions ? (
+          <p className="text-center">Cargando preguntas…</p>
+        ) : loadError ? (
+          <div className="text-center space-y-4 rounded-2xl border bg-white p-6">
+            <p className="text-red-600">{loadError}</p>
+            <button type="button" className="btn btn-primary" onClick={() => fetchQuestions({ forceNew: true })}>
+              Reintentar
+            </button>
+          </div>
+        ) : total === 0 ? (
+          <p className="text-center">No hay preguntas disponibles.</p>
         ) : (
           <div className="space-y-6">
             {/* Tarjeta de pregunta actual */}
             <div className="rounded-3xl border bg-white shadow-sm p-6">
               <div className="flex items-start justify-between gap-4">
                 <h2 className="text-lg font-semibold">Pregunta {index + 1} de {total}</h2>
-                {!submitted && (
+                {!submitted && current?.type === 'writing' ? (
+                  <span className="pill">Writing · 150–200 palabras</span>
+                ) : !submitted ? (
                   <span className="pill">Opcional</span>
-                )}
+                ) : null}
               </div>
-              <div className="mt-2 text-xl leading-relaxed">{current.text}</div>
+              {current?.type !== 'writing' && (
+                <div className="mt-2 text-xl leading-relaxed">{current.text}</div>
+              )}
 
               <div className="mt-5">
                 {renderQuestion(current)}
               </div>
 
               {submitted &&
+                current?.type !== 'writing' &&
                 String(answers[current.id] ?? '').trim() !== String(current.answer ?? '').trim() && (
                   <p className="mt-4 text-sm text-red-600">
                     Correcta: <strong>{String(current.answer)}</strong>{' '}
@@ -330,14 +527,22 @@ export default function PlacementTestPage() {
                   const isActive = i === index;
                   const userAns = String(answers[q.id] ?? '').trim();
                   const correctAns = String(q.answer ?? '').trim();
-                  const isCorrect = userAns === correctAns;
+                  const isWriting = q.type === 'writing';
+                  const isCorrect = isWriting
+                    ? Boolean(writingEval?.countsAsCorrect)
+                    : userAns === correctAns;
 
                   let bubbleModifier = '';
                   if (submitted) {
-                    if (isCorrect) bubbleModifier = 'bubble--correct';
+                    if (isWriting) {
+                      if (evaluatingWriting) bubbleModifier = '';
+                      else if (writingEval?.countsAsCorrect) bubbleModifier = 'bubble--correct';
+                      else if (userAns) bubbleModifier = 'bubble--wrong';
+                      else bubbleModifier = 'bubble--skipped';
+                    } else if (isCorrect) bubbleModifier = 'bubble--correct';
                     else if (userAns) bubbleModifier = 'bubble--wrong';
                     else bubbleModifier = 'bubble--skipped';
-                  } else if (answers[q.id]) {
+                  } else if (isWriting ? userAns && writingTopics[q.id] : answers[q.id]) {
                     bubbleModifier = 'bubble--done';
                   }
 
@@ -370,6 +575,9 @@ export default function PlacementTestPage() {
                   <div className="min-w-0 text-center sm:text-left">
                 <h3 className="text-xl font-semibold">Resultados</h3>
                 <p className="mt-1">Aciertos: <span className="font-semibold">{score}</span> / {total}</p>
+                {evaluatingWriting && (
+                  <p className="text-sm text-indigo-600 mt-1">Corrigiendo writing con IA…</p>
+                )}
                   </div>
                 </div>
 
@@ -389,12 +597,25 @@ export default function PlacementTestPage() {
                 <details className="mt-4">
                   <summary className="cursor-pointer select-none">Ver preguntas incorrectas</summary>
                   <ul className="list-disc pl-6 mt-2 space-y-1">
-                    {questions.filter((q) => answers[q.id] && String(answers[q.id]) !== String(q.answer)).map((q) => (
+                    {questions.filter((q) => {
+                      if (q.type === 'writing') {
+                        return submitted && writingEval && !writingEval.countsAsCorrect;
+                      }
+                      return answers[q.id] && String(answers[q.id]) !== String(q.answer);
+                    }).map((q) => (
                       <li key={`wrong-${q.id}`}>
                         <button type="button" className="text-blue-700 underline decoration-dotted" onClick={() => setIndex(questions.findIndex((x) => x.id === q.id))}>
                           Ir a la {questions.findIndex((x) => x.id === q.id) + 1}
                         </button>
-                        {' '}— Tu respuesta: <span className="line-through">{String(answers[q.id])}</span> · Correcta: <strong>{String(q.answer)}</strong> {q.explanation ? `— ${q.explanation}` : ''}
+                        {' '}
+                        {q.type === 'writing' ? (
+                          <>— Revisa la corrección IA en la pregunta {questions.findIndex((x) => x.id === q.id) + 1}</>
+                        ) : (
+                          <>
+                            — Tu respuesta: <span className="line-through">{String(answers[q.id])}</span> · Correcta:{' '}
+                            <strong>{String(q.answer)}</strong> {q.explanation ? `— ${q.explanation}` : ''}
+                          </>
+                        )}
                       </li>
                     ))}
                   </ul>

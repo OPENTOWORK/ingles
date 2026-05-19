@@ -12,10 +12,7 @@ import ExamNavigationGuard from '../components/ExamNavigationGuard';
 import { useActivityHeartbeat } from '@/hooks/useActivityHeartbeat';
 import DeferredSiteAssistant from '@/components/chat/DeferredSiteAssistant';
 import DeferredAppSideMenu from '@/components/layout/DeferredAppSideMenu';
-import SiteMascotBackdrop from '@/components/SiteMascotBackdrop';
 import RouteLoadingMascot from '@/components/RouteLoadingMascot';
-import SiteMascot from '@/components/SiteMascot';
-import { MASCOT_LOGO_VARIANT } from '@/config/mascotAssets';
 
 const Toaster = dynamic(
   () => import('react-hot-toast').then((mod) => ({ default: mod.Toaster })),
@@ -209,8 +206,6 @@ export default function RootLayoutClient({ children }) {
         </div>
       </header>
 
-      <SiteMascotBackdrop />
-
       <main className="page-content">
         <UserRoleProvider userRole={userRole} session={session}>
           <ExamNavigationGuard>
@@ -313,19 +308,13 @@ export default function RootLayoutClient({ children }) {
             <h3>Privacidad</h3>
             <ul>
               <li>
-                <Link href="/politica-privacidad">Politica de privacidad</Link>
+                <Link href="/politica-privacidad">Política de privacidad</Link>
               </li>
               <li>
-                <Link href="/politica-cookies">Politica de cookies</Link>
+                <Link href="/politica-cookies">Política de cookies</Link>
               </li>
               <li>
-                <Link href="/terminos-condiciones">Terminos y condiciones</Link>
-              </li>
-              <li>
-                <Link href="/proteccion-datos">Proteccion de datos</Link>
-              </li>
-              <li>
-                <Link href="/contacto">Contacta con nosotros</Link>
+                <Link href="/proteccion-datos">Protección de datos</Link>
               </li>
             </ul>
             <button
@@ -336,13 +325,30 @@ export default function RootLayoutClient({ children }) {
               Ajustes de cookies
             </button>
           </div>
+          <div className="legal-footer-column">
+            <h3>Legal</h3>
+            <ul>
+              <li>
+                <Link href="/terminos-condiciones">Términos y condiciones</Link>
+              </li>
+              <li>
+                <Link href="/aviso-legal">Aviso legal</Link>
+              </li>
+              <li>
+                <Link href="/politica-reembolsos">Política de reembolsos</Link>
+              </li>
+              <li>
+                <Link href="/normas-comunidad">Normas de comunidad</Link>
+              </li>
+              <li>
+                <Link href="/contacto">Contacta con nosotros</Link>
+              </li>
+            </ul>
+          </div>
         </div>
         <p className="legal-footer-copy">
           Ejercicios disenados para practicar tus habilidades en ingles.
         </p>
-        <div className="legal-footer-mascot" aria-hidden>
-          <SiteMascot variant={MASCOT_LOGO_VARIANT} width={72} alt="" />
-        </div>
         <p className="legal-footer-copy">
           © {new Date().getFullYear()} Dralo
         </p>

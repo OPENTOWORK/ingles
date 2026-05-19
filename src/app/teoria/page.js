@@ -3,7 +3,6 @@
 import { useCallback, useMemo, useState } from 'react';
 import Link from 'next/link';
 import PageHero from '@/components/PageHero';
-import SiteMascot from '@/components/SiteMascot';
 import TeoriaFilterToolbar from '@/components/theory/TeoriaFilterToolbar';
 import { TeoriaGlobalStyles } from '@/components/theory/TeoriaStyles';
 import {
@@ -62,6 +61,7 @@ export default function TeoriaPage() {
         eyebrow="Study hub"
         title="Theory"
         description="Explore grammar, exam skills, and communication topics — organised by skill area and CEFR level."
+        showMascot={true}
         mascotVariant={4}
         mascotWidth={156}
         accent="violet"
@@ -145,9 +145,6 @@ export default function TeoriaPage() {
 function TeoriaEmptyState({ onReset }) {
   return (
     <div className="empty">
-      <div className="empty__mascot">
-        <SiteMascot variant={6} width={128} alt="" />
-      </div>
       <h3>No results</h3>
       <p>Try removing filters or searching for another term.</p>
       <button type="button" className="btn" onClick={onReset}>

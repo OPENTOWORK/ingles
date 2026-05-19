@@ -12,6 +12,9 @@ export const PUBLIC_ROUTE_PREFIXES = [
   '/politica-cookies',
   '/terminos-condiciones',
   '/proteccion-datos',
+  '/aviso-legal',
+  '/normas-comunidad',
+  '/politica-reembolsos',
 ];
 
 export function isPublicPath(pathname = '') {

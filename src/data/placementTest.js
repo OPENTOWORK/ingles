@@ -45,14 +45,17 @@ export const placementQuestions = [
   { id: 30, difficulty: "C2", text: "Only by working together _____ the crisis.", options: ["we can overcome", "can we overcome", "could we overcame", "we overcame"], answer: "can we overcome" },
 ];
 
-export function levelFromScore(score) {
-  // For 30 questions: 0-6 A1, 7-12 A2, 13-18 B1, 19-24 B2, 25-28 C1, 29-30 C2
-  if (score <= 6) return "A1";
-  if (score <= 12) return "A2";
-  if (score <= 18) return "B1";
-  if (score <= 24) return "B2";
-  if (score <= 28) return "C1";
-  return "C2";
+export function levelFromScore(score, total = 30) {
+  const t = Math.max(1, Number(total) || 30);
+  const s = Number(score) || 0;
+  const pct = s / t;
+  // Mismos umbrales proporcionales que el test de 30 preguntas
+  if (pct <= 6 / 30) return 'A1';
+  if (pct <= 12 / 30) return 'A2';
+  if (pct <= 18 / 30) return 'B1';
+  if (pct <= 24 / 30) return 'B2';
+  if (pct <= 28 / 30) return 'C1';
+  return 'C2';
 }
 
 export const levelRecommendations = {

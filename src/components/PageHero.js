@@ -34,6 +34,7 @@ export default function PageHero({
   eyebrow,
   title,
   description,
+  showMascot = false,
   mascotVariant = 4,
   mascotWidth = 148,
   accent = 'violet',
@@ -73,15 +74,17 @@ export default function PageHero({
             ) : null}
           </div>
 
-          <div className="page-hero__mascot" aria-hidden>
-            <SiteMascot
-              variant={mascotVariant}
-              width={mascotWidth}
-              alt=""
-              className="page-hero__mascot-img"
-              style={{ maxWidth: mascotWidth, maxHeight: Math.round(mascotWidth * 1.15) }}
-            />
-          </div>
+          {showMascot ? (
+            <div className="page-hero__mascot" aria-hidden>
+              <SiteMascot
+                variant={mascotVariant}
+                width={mascotWidth}
+                alt=""
+                className="page-hero__mascot-img"
+                style={{ maxWidth: mascotWidth, maxHeight: Math.round(mascotWidth * 1.15) }}
+              />
+            </div>
+          ) : null}
         </div>
       </header>
 

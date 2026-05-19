@@ -1,0 +1,58 @@
+.article {
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+.header {
+  margin-bottom: 1.25rem;
+}
+
+.header h1 {
+  margin: 0 0 0.35rem;
+}
+
+.updated {
+  margin: 0;
+  font-size: 0.9rem;
+  color: #5a6b7d;
+}
+
+.lead {
+  line-height: 1.65;
+  color: #2a3544;
+  margin-bottom: 1rem;
+}
+
+.section {
+  margin-top: 1.4rem;
+  background: #ffffff;
+  border: 1px solid #e5e9f0;
+  border-radius: 12px;
+  padding: 1rem 1.2rem;
+}
+
+.section h2 {
+  margin: 0 0 0.75rem;
+  font-size: 1.1rem;
+}
+
+.section p {
+  line-height: 1.65;
+  margin: 0 0 0.75rem;
+}
+
+.section p:last-child {
+  margin-bottom: 0;
+}
+
+.footer {
+  margin-top: 2rem;
+  padding-top: 1rem;
+  border-top: 1px solid #e5e9f0;
+  font-size: 0.95rem;
+}
+
+.footer a {
+  color: #1cb0f6;
+  font-weight: 600;
+}
