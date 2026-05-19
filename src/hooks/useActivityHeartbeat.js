@@ -2,7 +2,7 @@
 
 import { useEffect, useRef } from 'react';
 import { supabase } from '@/utils/supabaseClient';
-import { HEARTBEAT_INTERVAL_MS } from '@/lib/userActivity';
+import { HEARTBEAT_INTERVAL_MS, HEARTBEAT_INITIAL_DELAY_MS } from '@/lib/userActivity';
 
 export function useActivityHeartbeat(session) {
   const lastPingRef = useRef(Date.now());
@@ -10,7 +10,12 @@ export function useActivityHeartbeat(session) {
   useEffect(() => {
     if (!session?.access_token) return undefined;
 
+    let intervalId = null;
+    let cancelled = false;
+
     const sendHeartbeat = async () => {
+      if (cancelled || document.visibilityState === 'hidden') return;
+
       const now = Date.now();
       const deltaSeconds = Math.min(
         120,
@@ -33,19 +38,33 @@ export function useActivityHeartbeat(session) {
       }
     };
 
-    void sendHeartbeat();
-    const interval = setInterval(sendHeartbeat, HEARTBEAT_INTERVAL_MS);
+    const startInterval = () => {
+      if (intervalId) return;
+      intervalId = setInterval(() => {
+        if (document.visibilityState === 'visible') {
+          void sendHeartbeat();
+        }
+      }, HEARTBEAT_INTERVAL_MS);
+    };
 
-    const onHide = () => {
+    const initialTimer = window.setTimeout(() => {
+      if (cancelled) return;
+      void sendHeartbeat();
+      startInterval();
+    }, HEARTBEAT_INITIAL_DELAY_MS);
+
+    const onVisibility = () => {
       if (document.visibilityState === 'hidden') {
         void sendHeartbeat();
       }
     };
-    document.addEventListener('visibilitychange', onHide);
+    document.addEventListener('visibilitychange', onVisibility);
 
     return () => {
-      clearInterval(interval);
-      document.removeEventListener('visibilitychange', onHide);
+      cancelled = true;
+      window.clearTimeout(initialTimer);
+      if (intervalId) clearInterval(intervalId);
+      document.removeEventListener('visibilitychange', onVisibility);
       void sendHeartbeat();
     };
   }, [session?.access_token]);

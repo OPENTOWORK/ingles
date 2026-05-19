@@ -1,6 +1,6 @@
 'use client';
 
-import Link from 'next/link';
+import NavLink from '@/components/layout/NavLink';
 import { usePathname } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { useUserRole } from '@/context/UserRoleContext';
@@ -106,9 +106,9 @@ export default function AppSideMenuPanel({ defaultOpen = true }) {
 
         <nav className="app-side-menu__nav">
           {NAV_LINKS_BEFORE_DRALO.map((item) => (
-            <Link key={item.href} href={item.href} className={linkClass}>
+            <NavLink key={item.href} href={item.href} className={linkClass}>
               {item.label}
-            </Link>
+            </NavLink>
           ))}
 
           <button
@@ -123,16 +123,16 @@ export default function AppSideMenuPanel({ defaultOpen = true }) {
           {draloOpen ? (
             <div className="app-side-menu__sub">
               {DRALO_MENU_ITEMS.map((item) => (
-                <Link key={item.href} href={item.href} className={linkClass}>
+                <NavLink key={item.href} href={item.href} className={linkClass}>
                   {item.label}
-                </Link>
+                </NavLink>
               ))}
             </div>
           ) : null}
 
-          <Link href={NAV_LINK_CONTACT.href} className={linkClass}>
+          <NavLink href={NAV_LINK_CONTACT.href} className={linkClass}>
             {NAV_LINK_CONTACT.label}
-          </Link>
+          </NavLink>
 
           {session ? (
             <>
@@ -150,30 +150,30 @@ export default function AppSideMenuPanel({ defaultOpen = true }) {
                   {adminPanelsOpen ? (
                     <div className="app-side-menu__sub">
                       {ADMIN_PANEL_MENU_ITEMS.map((item) => (
-                        <Link key={item.href} href={item.href} className={linkClass}>
+                        <NavLink key={item.href} href={item.href} className={linkClass}>
                           {item.label}
-                        </Link>
+                        </NavLink>
                       ))}
                     </div>
                   ) : null}
                 </>
               ) : null}
               {showStaffLink ? (
-                <Link href={staffLink.href} className={linkClass}>
+                <NavLink href={staffLink.href} className={linkClass}>
                   {staffLink.label}
-                </Link>
+                </NavLink>
               ) : null}
-              <Link href="/perfil" className={linkClass}>
+              <NavLink href="/perfil" className={linkClass}>
                 Profile
-              </Link>
+              </NavLink>
               <button type="button" className="app-side-menu__logout" onClick={() => void handleLogout()}>
                 Logout
               </button>
             </>
           ) : (
-            <Link href="/login" className="app-side-menu__logout app-side-menu__logout--link">
+            <NavLink href="/login" className="app-side-menu__logout app-side-menu__logout--link">
               Login
-            </Link>
+            </NavLink>
           )}
         </nav>
       </div>

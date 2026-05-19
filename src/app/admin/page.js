@@ -1,12 +1,23 @@
 'use client';
 
 import { useState, useEffect, useCallback } from 'react';
+import dynamic from 'next/dynamic';
 import { useRouter } from 'next/navigation';
-import * as XLSX from 'xlsx';
 import { supabase } from '@/utils/supabaseClient';
 import { formatSessionDuration } from '@/lib/userActivity';
 import { userHasRole, normalizeRoleName } from '@/utils/authRoles';
-import AdminAnalyticsPanels from '@/components/admin/AdminAnalyticsPanels';
+
+const AdminAnalyticsPanels = dynamic(
+  () => import('@/components/admin/AdminAnalyticsPanels'),
+  {
+    ssr: false,
+    loading: () => (
+      <div className="admin-analytics-loading" role="status" aria-label="Cargando analíticas">
+        Cargando gráficos…
+      </div>
+    ),
+  },
+);
 
 const PERIOD_OPTIONS = ['dias', 'semanas', 'meses', 'anios'];
 
@@ -442,7 +453,8 @@ export default function AdminDashboard() {
     });
   };
 
-  const exportUsersToCSV = () => {
+  const exportUsersToCSV = async () => {
+    const XLSX = await import('xlsx');
     const rows = filteredUsers.map((item) => ({
       nombre: item.nombre || '',
       email: item.email || '',
@@ -463,7 +475,8 @@ export default function AdminDashboard() {
     URL.revokeObjectURL(url);
   };
 
-  const exportUsersToExcel = () => {
+  const exportUsersToExcel = async () => {
+    const XLSX = await import('xlsx');
     const rows = filteredUsers.map((item) => ({
       nombre: item.nombre || '',
       email: item.email || '',

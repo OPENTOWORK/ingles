@@ -3,7 +3,7 @@
 export const DRALO_AI_HUB = {
   title: 'Dralo AI',
   description:
-    'Practica cada habilidad del examen con ejercicios generados al momento y feedback de ChatGPT.',
+    'Practica cada habilidad del examen con ejercicios generados al momento y feedback inmediato.',
   items: [
     {
       id: 'use-of-english',

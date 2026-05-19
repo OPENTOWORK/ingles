@@ -1,6 +1,6 @@
 'use client';
 
-import Link from 'next/link';
+import NavLink from '@/components/layout/NavLink';
 import { usePathname } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { isAdminRole, ROLE_ROUTE_MAP } from '@/utils/authRoles';
@@ -95,9 +95,9 @@ export default function AppNav({ session, userRole, onLogout }) {
 
       <nav className="app-nav app-nav--desktop" aria-label="Main navigation">
         {NAV_LINKS_BEFORE_DRALO.map((item) => (
-          <Link key={item.href} href={item.href} className="app-nav__link">
+          <NavLink key={item.href} href={item.href} className="app-nav__link">
             {item.label}
-          </Link>
+          </NavLink>
         ))}
 
         <div className="app-nav__dropdown-wrap">
@@ -112,7 +112,7 @@ export default function AppNav({ session, userRole, onLogout }) {
           {draloDesktopOpen ? (
             <div className="app-nav__dropdown" role="menu">
               {DRALO_MENU_ITEMS.map((item) => (
-                <Link
+                <NavLink
                   key={item.href}
                   href={item.href}
                   role="menuitem"
@@ -120,15 +120,15 @@ export default function AppNav({ session, userRole, onLogout }) {
                   onClick={() => setDraloDesktopOpen(false)}
                 >
                   {item.label}
-                </Link>
+                </NavLink>
               ))}
             </div>
           ) : null}
         </div>
 
-        <Link href={NAV_LINK_CONTACT.href} className="app-nav__link">
+        <NavLink href={NAV_LINK_CONTACT.href} className="app-nav__link">
           {NAV_LINK_CONTACT.label}
-        </Link>
+        </NavLink>
 
         {session ? (
           <>
@@ -141,21 +141,21 @@ export default function AppNav({ session, userRole, onLogout }) {
               />
             ) : null}
             {showStaffLink ? (
-              <Link href={staffLink.href} className="app-nav__link">
+              <NavLink href={staffLink.href} className="app-nav__link">
                 {staffLink.label}
-              </Link>
+              </NavLink>
             ) : null}
-            <Link href="/perfil" className="app-nav__link">
+            <NavLink href="/perfil" className="app-nav__link">
               Profile
-            </Link>
+            </NavLink>
             <button type="button" className="app-nav__btn" onClick={onLogout}>
               Logout
             </button>
           </>
         ) : (
-          <Link href="/login" className="app-nav__btn app-nav__btn--ghost">
+          <NavLink href="/login" className="app-nav__btn app-nav__btn--ghost">
             Login
-          </Link>
+          </NavLink>
         )}
       </nav>
 
@@ -181,9 +181,9 @@ export default function AppNav({ session, userRole, onLogout }) {
 
         <nav className="app-nav__drawer-nav" aria-label="Mobile navigation">
           {NAV_LINKS_BEFORE_DRALO.map((item) => (
-            <Link key={item.href} href={item.href} className={mobileLinkClass} onClick={closeMobile}>
+            <NavLink key={item.href} href={item.href} className={mobileLinkClass} onClick={closeMobile}>
               {item.label}
-            </Link>
+            </NavLink>
           ))}
 
           <button
@@ -198,16 +198,16 @@ export default function AppNav({ session, userRole, onLogout }) {
           {draloOpen ? (
             <div className="app-nav__sub">
               {DRALO_MENU_ITEMS.map((item) => (
-                <Link key={item.href} href={item.href} className={mobileLinkClass} onClick={closeMobile}>
+                <NavLink key={item.href} href={item.href} className={mobileLinkClass} onClick={closeMobile}>
                   {item.label}
-                </Link>
+                </NavLink>
               ))}
             </div>
           ) : null}
 
-          <Link href={NAV_LINK_CONTACT.href} className={mobileLinkClass} onClick={closeMobile}>
+          <NavLink href={NAV_LINK_CONTACT.href} className={mobileLinkClass} onClick={closeMobile}>
             {NAV_LINK_CONTACT.label}
-          </Link>
+          </NavLink>
 
           {session ? (
             <>
@@ -221,13 +221,13 @@ export default function AppNav({ session, userRole, onLogout }) {
                 />
               ) : null}
               {showStaffLink ? (
-                <Link href={staffLink.href} className={mobileLinkClass} onClick={closeMobile}>
+                <NavLink href={staffLink.href} className={mobileLinkClass} onClick={closeMobile}>
                   {staffLink.label}
-                </Link>
+                </NavLink>
               ) : null}
-              <Link href="/perfil" className={mobileLinkClass} onClick={closeMobile}>
+              <NavLink href="/perfil" className={mobileLinkClass} onClick={closeMobile}>
                 Profile
-              </Link>
+              </NavLink>
               <button
                 type="button"
                 className="app-nav__btn app-nav__btn--mobile"
@@ -240,9 +240,9 @@ export default function AppNav({ session, userRole, onLogout }) {
               </button>
             </>
           ) : (
-            <Link href="/login" className="app-nav__btn app-nav__btn--mobile" onClick={closeMobile}>
+            <NavLink href="/login" className="app-nav__btn app-nav__btn--mobile" onClick={closeMobile}>
               Login
-            </Link>
+            </NavLink>
           )}
         </nav>
       </aside>

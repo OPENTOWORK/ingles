@@ -2,7 +2,14 @@ import { createClient } from '@supabase/supabase-js';
 import { getSupabaseAnonKey, getSupabaseServiceRoleKey, getSupabaseUrl } from '@/lib/supabaseEnv';
 import { normalizeRoleName } from '@/utils/authRoles';
 
-const SUPPORT_ROLES = new Set(['soporte', 'admin', 'administrador', 'support']);
+const SUPPORT_ROLES = new Set([
+  'soporte',
+  'admin',
+  'administrador',
+  'support',
+  'informatico',
+  'it',
+]);
 
 export async function getAuthUserFromRequest(req) {
   const authHeader = req.headers.get('authorization') || '';

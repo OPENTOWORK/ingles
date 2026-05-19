@@ -405,7 +405,7 @@ export default function DraloAiStudio({ config }) {
         accent={config.accent}
         mascotVariant={config.mascotVariant}
         stats={[
-          { value: 'ChatGPT', label: 'Motor IA' },
+          { value: 'Dralo', label: 'Asistente IA' },
           { value: level, label: 'Nivel' },
           { value: String(config.activities.length), label: 'Modos' },
         ]}
@@ -424,9 +424,6 @@ export default function DraloAiStudio({ config }) {
               ))}
             </select>
           </label>
-          <div className="dralo-ai-powered">
-            Powered by <strong>OpenAI / ChatGPT</strong>
-          </div>
         </div>
 
         <div className="dralo-ai-activities" role="tablist" aria-label="Actividades">
@@ -460,7 +457,7 @@ export default function DraloAiStudio({ config }) {
 
             {!exercise && !loading ? (
               <div className="dralo-ai-empty">
-                <p>Pulsa «Nuevo ejercicio» y Dralo creará una tarea nueva con ChatGPT.</p>
+                <p>Pulsa «Nuevo ejercicio» y Dralo generará una tarea nueva al instante.</p>
                 <button
                   type="button"
                   className="dralo-ai-btn dralo-ai-btn--primary"

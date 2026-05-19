@@ -40,6 +40,24 @@ export function isAdminRole(roleName = '') {
   return normalized === 'admin' || normalized === 'administrador';
 }
 
+export function isTeacherRole(roleName = '') {
+  const normalized = normalizeRoleName(roleName);
+  return normalized === 'teacher' || normalized === 'profesor';
+}
+
+export function canAccessTeacherPanel(roleName = '') {
+  return isAdminRole(roleName) || isTeacherRole(roleName);
+}
+
+export function isItRole(roleName = '') {
+  const n = normalizeRoleName(roleName);
+  return n === 'informatico' || n === 'it';
+}
+
+export function canAccessItPanel(roleName = '') {
+  return isAdminRole(roleName) || isItRole(roleName);
+}
+
 /** Evita múltiples lecturas en paralelo para el mismo usuario (mismo resultado). */
 const roleFetchInflight = new Map();
 

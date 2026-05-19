@@ -7,17 +7,21 @@ import { supabase } from '@/utils/supabaseClient';
 import { normalizeRoleName, getRoleNameByUserId, peekCachedRoleName } from '@/utils/authRoles';
 import { isPublicPath } from '@/utils/publicRoutes';
 import Link from 'next/link';
-import { Toaster } from 'react-hot-toast';
 import { UserRoleProvider } from '../context/UserRoleContext';
 import ExamNavigationGuard from '../components/ExamNavigationGuard';
-import AppNav from '@/components/layout/AppNav';
 import { useActivityHeartbeat } from '@/hooks/useActivityHeartbeat';
-const AppSideMenuPanel = dynamic(() => import('@/components/layout/AppSideMenuPanel'), {
-  ssr: false,
-});
+import DeferredSiteAssistant from '@/components/chat/DeferredSiteAssistant';
+import DeferredAppSideMenu from '@/components/layout/DeferredAppSideMenu';
+
+const Toaster = dynamic(
+  () => import('react-hot-toast').then((mod) => ({ default: mod.Toaster })),
+  { ssr: false },
+);
+const AppNav = dynamic(() => import('@/components/layout/AppNav'), { ssr: false });
 
 export default function RootLayoutClient({ children }) {
-  const [loading, setLoading] = useState(() => {
+  /** Solo bloquea hasta conocer la sesión; el rol se resuelve en segundo plano. */
+  const [authPending, setAuthPending] = useState(() => {
     if (typeof window === 'undefined') return true;
     return !isPublicPath(window.location.pathname);
   });
@@ -43,7 +47,7 @@ export default function RootLayoutClient({ children }) {
   const allowWithoutAuth = isPublic || isNivelesRoute;
 
   useEffect(() => {
-    if (allowWithoutAuth) setLoading(false);
+    if (allowWithoutAuth) setAuthPending(false);
   }, [allowWithoutAuth]);
 
   useEffect(() => {
@@ -63,29 +67,26 @@ export default function RootLayoutClient({ children }) {
       lastAccessTokenRef.current = accessToken;
       setSession(newSession);
 
+      if (!allowWithoutAuth) setAuthPending(false);
+
       if (!uid) {
         roleFetchedForUserIdRef.current = null;
         setUserRole('student');
-        setLoading(false);
         return;
       }
 
       const cachedRole = peekCachedRoleName(uid);
       if (cachedRole) {
         setUserRole(normalizeRoleName(cachedRole));
-        if (!allowWithoutAuth) setLoading(false);
       }
 
-      if (sameSession) {
-        if (!allowWithoutAuth && !cachedRole) setLoading(false);
-        return;
-      }
+      if (sameSession) return;
 
-      const roleName = await getRoleNameByUserId(uid, newSession.user.email);
-      if (cancelled) return;
-      roleFetchedForUserIdRef.current = uid;
-      setUserRole(normalizeRoleName(roleName));
-      if (!allowWithoutAuth) setLoading(false);
+      void getRoleNameByUserId(uid, newSession.user.email).then((roleName) => {
+        if (cancelled) return;
+        roleFetchedForUserIdRef.current = uid;
+        setUserRole(normalizeRoleName(roleName));
+      });
     };
 
     supabase.auth.getSession().then(({ data: { session } }) => {
@@ -121,12 +122,12 @@ export default function RootLayoutClient({ children }) {
 
   // ⚠️ Redirige DESPUÉS del render (no aplica a rutas públicas ni /niveles/*)
   useEffect(() => {
-    if (!loading && !allowWithoutAuth && !session) {
+    if (!authPending && !allowWithoutAuth && !session) {
       router.replace('/login');
     }
-  }, [loading, allowWithoutAuth, session, router]);
+  }, [authPending, allowWithoutAuth, session, router]);
 
-  if (!allowWithoutAuth && loading) {
+  if (!allowWithoutAuth && authPending) {
     return (
       <>
         <Toaster position="top-center" reverseOrder={false} />
@@ -211,9 +212,11 @@ export default function RootLayoutClient({ children }) {
           <ExamNavigationGuard>
             {children}
           </ExamNavigationGuard>
-          <AppSideMenuPanel defaultOpen={pathname === '/'} />
+          <DeferredAppSideMenu defaultOpen={pathname === '/'} />
         </UserRoleProvider>
       </main>
+
+      <DeferredSiteAssistant />
 
       {!cookieConsent && (
         <div className="cookie-banner" role="dialog" aria-label="Configuracion de cookies">

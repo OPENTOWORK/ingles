@@ -23,7 +23,7 @@ export default function DraloAiHubPage() {
         mascotVariant={10}
         stats={[
           { value: '5', label: 'Habilidades' },
-          { value: 'ChatGPT', label: 'OpenAI' },
+          { value: 'IA', label: 'Dralo' },
           { value: 'B1–C1', label: 'Niveles' },
         ]}
       />
@@ -48,10 +48,6 @@ export default function DraloAiHubPage() {
         ))}
       </section>
 
-      <p className="dralo-ai-powered" style={{ justifyContent: 'center' }}>
-        Powered by <strong>OpenAI (ChatGPT)</strong> · Necesitas{' '}
-        <code style={{ fontSize: 11 }}>OPENAI_API_KEY</code> en el servidor
-      </p>
     </main>
   );
 }

@@ -11,7 +11,10 @@ const isStaticExport = process.env.NEXT_STATIC_EXPORT === 'true';
 const nextConfig = {
   ...(isStaticExport ? { output: 'export' } : {}),
   experimental: {
-    optimizePackageImports: ['lucide-react', 'recharts'],
+    optimizePackageImports: ['lucide-react', 'recharts', 'react-hot-toast'],
+  },
+  compiler: {
+    removeConsole: process.env.NODE_ENV === 'production' ? { exclude: ['error', 'warn'] } : false,
   },
   images: {
     unoptimized: true,

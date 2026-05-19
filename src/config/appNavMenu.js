@@ -20,6 +20,11 @@ export const DRALO_MENU_ITEMS = [
 /** Desplegable «Admin» solo para rol administrador. */
 export const ADMIN_PANEL_MENU_ITEMS = [
   { href: '/admin', label: 'Panel de administración' },
+  { href: '/admin/profesor', label: 'Panel de profesor' },
   { href: '/soporte', label: 'Panel de soporte' },
   { href: '/informatico', label: 'Panel informático' },
+];
+
+export const TEACHER_PANEL_MENU_ITEMS = [
+  { href: '/teacher', label: 'Panel de profesor' },
 ];

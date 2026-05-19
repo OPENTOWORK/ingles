@@ -7,6 +7,9 @@ export const SESSION_GAP_MS = 5 * 60 * 1000;
 /** Intervalo de heartbeat en cliente (ms). */
 export const HEARTBEAT_INTERVAL_MS = 30 * 1000;
 
+/** Retraso del primer ping para no ralentizar la carga inicial. */
+export const HEARTBEAT_INITIAL_DELAY_MS = 12 * 1000;
+
 export function parseDbTimestamp(value) {
   if (value == null || value === '') return null;
   const raw = String(value).trim();
