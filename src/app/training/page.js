@@ -1,18 +1,32 @@
 'use client';
+import dynamic from 'next/dynamic';
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { supabase } from '@/utils/supabaseClient';
-import ProgressDashboard from '@/components/ProgressDashboard';
-import AdaptiveLearningDashboard from '@/components/AdaptiveLearningDashboard';
 import SkipLinks from '@/components/SkipLinks';
 import DatabaseSetup from '@/components/DatabaseSetup';
 import UserOnboarding from '@/components/UserOnboarding';
-import { checkDatabaseHealth } from '@/utils/databaseInitializer';
+import { checkDatabaseHealthCached } from '@/utils/databaseHealthCache';
 import { useUserRole } from '@/context/UserRoleContext';
 import SiteMascot from '@/components/SiteMascot';
 import TrainingCefrLevelCard from '@/components/training/TrainingCefrLevelCard';
 import { useTrainingCefrStarProgressMap } from '@/hooks/useTrainingCefrStarProgress';
 import { getMaxStarsForCefrLevel } from '@/utils/trainingStarsProgress';
+import DeferredBelowFold from '@/components/DeferredBelowFold';
+import DashboardSectionPlaceholder from '@/components/DashboardSectionPlaceholder';
+
+const ProgressDashboard = dynamic(() => import('@/components/ProgressDashboard'), {
+  ssr: false,
+  loading: () => <DashboardSectionPlaceholder label="Cargando progreso…" />,
+});
+
+const AdaptiveLearningDashboard = dynamic(
+  () => import('@/components/AdaptiveLearningDashboard'),
+  {
+    ssr: false,
+    loading: () => <DashboardSectionPlaceholder label="Cargando recomendaciones…" />,
+  },
+);
 
 const sortedLevels = [
   { level: 'B1', color: '#ff9900', emoji: '😄' },
@@ -33,21 +47,21 @@ export default function TrainingHome() {
   const defaultMaxStars = getMaxStarsForCefrLevel();
 
   useEffect(() => {
-    const checkSession = async () => {
-      if (!session) {
-        router.push('/login');
-        return;
+    if (!session) {
+      router.push('/login');
+      return;
+    }
+
+    setUser(session.user);
+    setLoading(false);
+
+    void (async () => {
+      const health = await checkDatabaseHealthCached();
+      if (!health?.healthy) {
+        setShowDatabaseSetup(true);
       }
-      setUser(session.user);
-
-      const health = await checkDatabaseHealth();
-      setShowDatabaseSetup(!health.healthy);
-
       await checkOnboardingStatus(session.user.id);
-
-      setLoading(false);
-    };
-    checkSession();
+    })();
   }, [router, session]);
 
   const checkOnboardingStatus = async (userId) => {
@@ -56,11 +70,11 @@ export default function TrainingHome() {
         .from('user_preferences')
         .select('id')
         .eq('user_id', userId)
-        .single();
+        .maybeSingle();
 
       if (data?.id) return;
-    } catch (error) {
-      console.warn('Database check failed, trying localStorage:', error);
+    } catch {
+      /* offline o tabla ausente */
     }
 
     try {
@@ -71,8 +85,8 @@ export default function TrainingHome() {
           return;
         }
       }
-    } catch (error) {
-      console.warn('localStorage check failed:', error);
+    } catch {
+      /* ignore */
     }
 
     setShowOnboarding(true);
@@ -133,24 +147,13 @@ export default function TrainingHome() {
         </div>
 
         <div
-          id="progress-dashboard"
-          style={{ marginBottom: '3rem', maxWidth: '1000px', margin: '0 auto 3rem auto' }}
-        >
-          <ProgressDashboard userId={user?.id} />
-        </div>
-
-        <div style={{ marginBottom: '3rem', maxWidth: '1200px', margin: '0 auto 3rem auto' }}>
-          <AdaptiveLearningDashboard userId={user?.id} />
-        </div>
-
-        <div
           id="level-selection"
           style={{
             display: 'grid',
             gridTemplateColumns: 'repeat(3, 1fr)',
             gap: '1.5rem',
             maxWidth: '900px',
-            margin: '0 auto',
+            margin: '0 auto 2.5rem',
           }}
         >
           {sortedLevels.map(({ level, color, emoji }) => {
@@ -176,6 +179,30 @@ export default function TrainingHome() {
             );
           })}
         </div>
+
+        <DeferredBelowFold
+          delayMs={800}
+          fallback={
+            <>
+              <div style={{ marginBottom: '1.5rem', maxWidth: '1000px', margin: '0 auto 1.5rem' }}>
+                <DashboardSectionPlaceholder label="Cargando progreso…" />
+              </div>
+              <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
+                <DashboardSectionPlaceholder label="Cargando recomendaciones…" />
+              </div>
+            </>
+          }
+        >
+          <div
+            id="progress-dashboard"
+            style={{ marginBottom: '2rem', maxWidth: '1000px', margin: '0 auto 2rem' }}
+          >
+            <ProgressDashboard userId={user?.id} />
+          </div>
+          <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
+            <AdaptiveLearningDashboard userId={user?.id} />
+          </div>
+        </DeferredBelowFold>
       </main>
     </>
   );

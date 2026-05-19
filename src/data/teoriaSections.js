@@ -62,6 +62,28 @@ export const SECTIONS = {
     { text: 'Collocations and Phrasal Verbs', levels: ['B2', 'C1', 'C2'], href: '/teoria/collocations-phrasal-verbs' },
     { text: 'False Friends', levels: ['B1', 'B2', 'C1', 'C2'], href: '/teoria/false-friends' },
   ],
+  Vocabulary: [
+    { text: 'Synonyms and Antonyms', levels: ['A2', 'B1', 'B2', 'C1', 'C2'], href: '/teoria/Synonyms-and-Antonyms' },
+    { text: 'Word Families and Prefixes', levels: ['A2', 'B1', 'B2', 'C1', 'C2'], href: '/teoria/Word-Families-and-Prefixes' },
+    { text: 'Phrasal Verbs Essentials', levels: ['B1', 'B2', 'C1', 'C2'], href: '/teoria/Phrasal-Verbs-Essentials' },
+    { text: 'Vocabulary in Context', levels: ['A2', 'B1', 'B2', 'C1', 'C2'], href: '/teoria/Vocabulary-in-Context' },
+    { text: 'Academic Vocabulary', levels: ['B1', 'B2', 'C1', 'C2'], href: '/teoria/Academic-Vocabulary' },
+    { text: 'Topic Lexis: Education and Work', levels: ['A2', 'B1', 'B2', 'C1', 'C2'], href: '/teoria/Topic-Lexis-Education-Work' },
+    { text: 'Topic Lexis: Health and Lifestyle', levels: ['A2', 'B1', 'B2', 'C1', 'C2'], href: '/teoria/Topic-Lexis-Health-Lifestyle' },
+    { text: 'Topic Lexis: Technology and Media', levels: ['B1', 'B2', 'C1', 'C2'], href: '/teoria/Topic-Lexis-Technology-Media' },
+    { text: 'Topic Lexis: Environment and Society', levels: ['B1', 'B2', 'C1', 'C2'], href: '/teoria/Topic-Lexis-Environment-Society' },
+    { text: 'Idioms and Expressions', levels: ['B1', 'B2', 'C1', 'C2'], href: '/teoria/Idioms-and-Expressions' },
+    { text: 'Vocabulary by Register', levels: ['B1', 'B2', 'C1', 'C2'], href: '/teoria/Vocabulary-by-Register' },
+    { text: 'Confusing Word Pairs', levels: ['B1', 'B2', 'C1', 'C2'], href: '/teoria/Confusing-Word-Pairs' },
+    { text: 'Emotions and Personality', levels: ['A2', 'B1', 'B2', 'C1', 'C2'], href: '/teoria/Emotions-and-Personality' },
+  ],
+  Pronunciation: [
+    { text: 'Pronunciation', levels: ['A2', 'B1', 'B2', 'C1', 'C2'], href: '/teoria/Pronunciation' },
+    { text: 'Pronunciation and Connected Speech', levels: ['A2', 'B1', 'B2', 'C1', 'C2'], href: '/teoria/Connected-Speech' },
+    { text: 'Stress, Rhythm and Intonation', levels: ['A2', 'B1', 'B2', 'C1', 'C2'], href: '/teoria/Stress-Rhythm-and-Intonation' },
+    { text: 'English Varieties and Accents', levels: ['B2', 'C1', 'C2'], href: '/teoria/English-Varieties' },
+    { text: 'Minimal Pairs and Problem Sounds', levels: ['A2', 'B1', 'B2', 'C1', 'C2'], href: '/teoria/Minimal-Pairs-and-Problem-Sounds' },
+  ],
   'Use of English': [
     { text: 'Multiple Choice Cloze', levels: ['B2', 'C1', 'C2'], href: '/teoria/Multiple-Choice-Cloze' },
     { text: 'Open Cloze', levels: ['B2', 'C1', 'C2'], href: '/teoria/Open-Cloze' },
@@ -104,7 +126,6 @@ export const SECTIONS = {
     { text: 'Planning, Reviewing, and Self-Editing', levels: ['B2', 'C1', 'C2'], href: '/teoria/Planning-Reviewing-and-Self-Editing' },
   ],
   Speaking: [
-    { text: 'Pronunciation', levels: ['A2', 'B1', 'B2', 'C1', 'C2'], href: '/teoria/Pronunciation' },
     { text: 'Connectors', levels: ['A2', 'B1', 'B2', 'C1', 'C2'], href: '/teoria/Speaking-Connectors' },
     { text: 'Set Phrases', levels: ['A2', 'B1', 'B2', 'C1', 'C2'], href: '/teoria/Set-Phrases' },
     { text: 'Functional and Thematic Vocabulary', levels: ['A2', 'B1', 'B2', 'C1', 'C2'], href: '/teoria/Functional-and-Thematic-Vocabulary' },
@@ -114,14 +135,7 @@ export const SECTIONS = {
   ],
 };
 
-export const SECTION_CATALOG = [
-  {
-    key: 'Grammar',
-    slug: 'grammar',
-    description: 'Grammar structures, verb tenses, and sentence formation.',
-    accent: '#2563eb',
-    heroAccent: 'violet',
-  },
+const EXAM_SECTION_META = [
   {
     key: 'Use of English',
     slug: 'use-of-english',
@@ -159,6 +173,39 @@ export const SECTION_CATALOG = [
   },
 ];
 
+const THEORY_SECTION_META = [
+  {
+    key: 'Grammar',
+    slug: 'grammar',
+    description: 'Grammar structures, verb tenses, and sentence formation.',
+    accent: '#2563eb',
+    heroAccent: 'violet',
+  },
+  {
+    key: 'Vocabulary',
+    slug: 'vocabulary',
+    description: 'Word building, topic lexis, idioms, and exam-ready vocabulary.',
+    accent: '#0d9488',
+    heroAccent: 'emerald',
+  },
+  {
+    key: 'Pronunciation',
+    slug: 'pronunciation',
+    description: 'Sounds, stress, connected speech, rhythm, and intelligibility.',
+    accent: '#ea580c',
+    heroAccent: 'amber',
+  },
+];
+
+/** Apartados en /teoria (solo Grammar y Vocabulary). */
+export const THEORY_SECTION_CATALOG = THEORY_SECTION_META;
+
+/** Apartados en /niveles → Exam theory (5 skills de examen). */
+export const EXAM_THEORY_CATALOG = EXAM_SECTION_META;
+
+/** Todos los apartados (teoría de examen + hub de temas). */
+export const SECTION_CATALOG = [...THEORY_SECTION_META, ...EXAM_SECTION_META];
+
 const slugToKey = Object.fromEntries(SECTION_CATALOG.map((s) => [s.slug, s.key]));
 
 export function getSectionBySlug(slug) {
@@ -178,7 +225,18 @@ export function filterTopics(topics, { selectedLevels = [], query = '' }) {
   return items;
 }
 
-/** Todos los temas con su área (hub Theory). */
+/** Temas del hub Theory (Grammar + Vocabulary). */
+export function buildTheoryTopicsFlat() {
+  return THEORY_SECTION_CATALOG.flatMap((area) =>
+    (SECTIONS[area.key] || []).map((topic) => ({
+      ...topic,
+      sectionKey: area.key,
+      sectionSlug: area.slug,
+    })),
+  );
+}
+
+/** Todos los temas (incluye exam skills). */
 export function buildAllTopicsFlat() {
   return SECTION_CATALOG.flatMap((area) =>
     (SECTIONS[area.key] || []).map((topic) => ({

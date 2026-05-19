@@ -211,11 +211,11 @@ export default function RootLayoutClient({ children }) {
           <ExamNavigationGuard>
             {children}
           </ExamNavigationGuard>
-          <DeferredAppSideMenu defaultOpen={pathname === '/'} />
+          {pathname === '/' && <DeferredAppSideMenu defaultOpen />}
         </UserRoleProvider>
       </main>
 
-      <DeferredSiteAssistant />
+      <DeferredSiteAssistant enabled={Boolean(session)} />
 
       {!cookieConsent && (
         <div className="cookie-banner" role="dialog" aria-label="Configuracion de cookies">

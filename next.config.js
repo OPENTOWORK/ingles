@@ -11,11 +11,22 @@ const isStaticExport = process.env.NEXT_STATIC_EXPORT === 'true';
 const nextConfig = {
   ...(isStaticExport ? { output: 'export' } : {}),
   experimental: {
-    optimizePackageImports: ['lucide-react', 'recharts', 'react-hot-toast'],
+    optimizePackageImports: [
+      'lucide-react',
+      'recharts',
+      'react-hot-toast',
+      '@supabase/supabase-js',
+      '@supabase/ssr',
+    ],
   },
-  compiler: {
-    removeConsole: process.env.NODE_ENV === 'production' ? { exclude: ['error', 'warn'] } : false,
-  },
+  // Solo en build de producción: Turbopack (`next dev --turbo`) no admite compiler.removeConsole.
+  ...(process.env.NODE_ENV === 'production'
+    ? {
+        compiler: {
+          removeConsole: { exclude: ['error', 'warn'] },
+        },
+      }
+    : {}),
   images: {
     unoptimized: true,
   },

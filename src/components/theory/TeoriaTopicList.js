@@ -33,7 +33,9 @@ export default function TeoriaTopicList({ sectionTitle, topics }) {
       <PageHero
         breadcrumb={
           <nav className="breadcrumb" aria-label="Breadcrumb">
-            <Link href="/teoria">Theory</Link>
+            <Link href={sectionMeta?.slug && ['use-of-english', 'reading', 'listening', 'writing', 'speaking'].includes(sectionMeta.slug) ? '/niveles#exam-theory' : '/teoria'}>
+              {['use-of-english', 'reading', 'listening', 'writing', 'speaking'].includes(sectionMeta?.slug) ? 'Exam theory' : 'Theory'}
+            </Link>
             <span aria-hidden>›</span>
             <span>{sectionTitle}</span>
           </nav>

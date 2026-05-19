@@ -47,7 +47,7 @@ export default function TrainingCefrLevelCard({
         <div className={styles.card} style={{ backgroundColor: color }} aria-disabled="true">
           {content}
         </div>
-        <div className={styles.lockedOverlay}>Próximamente</div>
+        <div className={styles.lockedOverlay}>Coming soon</div>
       </div>
     );
   }

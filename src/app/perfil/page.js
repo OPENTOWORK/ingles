@@ -1,15 +1,25 @@
 'use client';
+import dynamic from 'next/dynamic';
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { supabase } from '@/utils/supabaseClient';
 import { useUserRole } from '@/context/UserRoleContext';
 import { getUserProgress } from '@/utils/getUserProgress';
-import ProgressDashboard from '@/components/ProgressDashboard';
-import AdaptiveLearningDashboard from '@/components/AdaptiveLearningDashboard';
 import AchievementNotification from '@/components/AchievementNotification';
-import ExamStatistics from '@/components/ExamStatistics';
-import LevelsEstadisticasPanel from '@/components/LevelsEstadisticasPanel';
+
+const ProgressDashboard = dynamic(() => import('@/components/ProgressDashboard'), {
+  ssr: false,
+});
+const AdaptiveLearningDashboard = dynamic(
+  () => import('@/components/AdaptiveLearningDashboard'),
+  { ssr: false },
+);
+const ExamStatistics = dynamic(() => import('@/components/ExamStatistics'), { ssr: false });
+const LevelsEstadisticasPanel = dynamic(
+  () => import('@/components/LevelsEstadisticasPanel'),
+  { ssr: false },
+);
 import ProfileComingSoon from '@/components/perfil/ProfileComingSoon';
 import SiteMascot from '@/components/SiteMascot';
 import { offlineFirstDatabase } from '@/utils/offlineFirstDatabase';

@@ -3,7 +3,36 @@ import { useCallback, useEffect, useMemo, useState } from 'react';
 import { TheorySectionProvider } from '@/components/theory/TheoryContent';
 import { TheoryPageShell } from '@/components/theory/TheoryPageShell';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
+import { useUserRole } from '@/context/UserRoleContext';
+import { saveExamTheoryTopicProgress } from '@/lib/saveExamTheoryTopicProgress';
+import { saveTeoriaTopicProgress } from '@/lib/saveTeoriaTopicProgress';
+import { findTheoryApartadoForTopicHref } from '@/lib/teoriaProgress';
+import {
+  getExamTheoryUnlockInfo,
+  getExamUnitSlugFromPathname,
+  isExamTheorySectionSlug,
+  isExamTheorySlugLocked,
+} from '@/lib/examTheoryUnlock';
+import {
+  getExamTopicUnlockInfo,
+  getSectionKeyBySlug,
+  isExamTopicHrefLocked,
+} from '@/lib/examTheoryTopicUnlock';
+import {
+  getTeoriaApartadoUnlockInfo,
+  getTheorySectionKeyBySlug,
+  isTeoriaApartadoLocked,
+  isTheorySectionSlug,
+} from '@/lib/teoriaUnlock';
+import {
+  getTeoriaTopicUnlockInfo,
+  isTeoriaTopicHrefLocked,
+} from '@/lib/teoriaTopicUnlock';
+import { useExamTheoryProgress } from '@/hooks/useExamTheoryProgress';
+import { useTeoriaProgress } from '@/hooks/useTeoriaProgress';
+import ExamTheoryLockedNotice from '@/components/niveles/ExamTheoryLockedNotice';
+import { saveTheoryProgress } from '@/utils/theoryProgress';
 
 const TheoryLayout = ({ 
   title, 
@@ -18,6 +47,79 @@ const TheoryLayout = ({
   enableInlinePractice = true,
 }) => {
   const router = useRouter();
+  const pathname = usePathname();
+  const { session, userRole } = useUserRole();
+  const isStudent = userRole === 'student' || userRole === 'alumno';
+  const { units, topicProgressByHref: examTopicProgressByHref } = useExamTheoryProgress(
+    session?.user?.id,
+    session?.access_token,
+  );
+  const { units: teoriaUnits, topicProgressByHref: teoriaTopicProgressByHref } =
+    useTeoriaProgress(session?.user?.id, session?.access_token);
+  const examUnitSlug = getExamUnitSlugFromPathname(pathname);
+  const sectionKey = examUnitSlug ? getSectionKeyBySlug(examUnitSlug) : null;
+  const examUnitLocked =
+    isStudent &&
+    examUnitSlug &&
+    isExamTheorySlugLocked(examUnitSlug, units, true);
+  const examUnitLockInfo = examUnitLocked
+    ? getExamTheoryUnlockInfo(examUnitSlug, units, true)
+    : null;
+  const pathSegment = pathname?.replace(/^\/teoria\//, '').split('/')[0];
+  const isSectionHub =
+    pathSegment &&
+    (isExamTheorySectionSlug(pathSegment) || isTheorySectionSlug(pathSegment));
+  const topicHrefForLock =
+    pathname?.startsWith('/teoria/') && !isSectionHub ? pathname : null;
+  const examTopicLocked =
+    isStudent &&
+    sectionKey &&
+    topicHrefForLock &&
+    isExamTopicHrefLocked(
+      topicHrefForLock,
+      sectionKey,
+      examTopicProgressByHref,
+      true,
+    );
+  const examTopicLockInfo = examTopicLocked
+    ? getExamTopicUnlockInfo(
+        topicHrefForLock,
+        sectionKey,
+        examTopicProgressByHref,
+        true,
+      )
+    : null;
+  const theoryApartado = findTheoryApartadoForTopicHref(pathname);
+  const theorySectionKey = theoryApartado
+    ? getTheorySectionKeyBySlug(theoryApartado)
+    : null;
+  const theoryApartadoLocked =
+    isStudent &&
+    theoryApartado &&
+    isTeoriaApartadoLocked(theoryApartado, teoriaUnits, true);
+  const theoryApartadoLockInfo = theoryApartadoLocked
+    ? getTeoriaApartadoUnlockInfo(theoryApartado, teoriaUnits, true)
+    : null;
+  const theoryTopicLocked =
+    isStudent &&
+    theorySectionKey &&
+    topicHrefForLock &&
+    isTeoriaTopicHrefLocked(
+      topicHrefForLock,
+      theorySectionKey,
+      teoriaTopicProgressByHref,
+      true,
+    );
+  const theoryTopicLockInfo = theoryTopicLocked
+    ? getTeoriaTopicUnlockInfo(
+        topicHrefForLock,
+        theorySectionKey,
+        teoriaTopicProgressByHref,
+        true,
+      )
+    : null;
+  const topicHref =
+    pathname && pathname.startsWith('/teoria/') ? pathname : null;
   const [activeTab, setActiveTab] = useState('theory');
   const [completedExercises, setCompletedExercises] = useState(new Set());
   const [loadedExercises, setLoadedExercises] = useState(null);
@@ -85,7 +187,77 @@ const TheoryLayout = ({
     return Math.round((completedExercises.size / exerciseCount) * 100);
   };
 
+  const progressPercent = getProgressPercentage();
+
+  useEffect(() => {
+    const userId = session?.user?.id;
+    if (!userId || !topicHref) return;
+
+    const topicId = topicHref.replace(/^\/teoria\//, '');
+    saveTheoryProgress(userId, topicHref, progressPercent);
+    saveTheoryProgress(userId, topicId, progressPercent);
+
+    saveExamTheoryTopicProgress({
+      userId,
+      accessToken: session?.access_token,
+      topicHref,
+      progresoPct: progressPercent,
+    });
+    saveTeoriaTopicProgress({
+      userId,
+      accessToken: session?.access_token,
+      topicHref,
+      progresoPct: progressPercent,
+    });
+  }, [progressPercent, session, topicHref]);
+
   const displayExercises = loadedExercises ?? (Array.isArray(exercises) ? exercises : []);
+
+  if (examUnitLocked) {
+    return (
+      <ExamTheoryLockedNotice
+        requiredPartName={examUnitLockInfo?.requiredPrevious}
+        partNumber={examUnitLockInfo?.partNumber}
+      />
+    );
+  }
+
+  if (examTopicLocked) {
+    return (
+      <ExamTheoryLockedNotice
+        variant="topic"
+        requiredPartName={examTopicLockInfo?.requiredPrevious}
+        backHref={examUnitSlug ? `/teoria/${examUnitSlug}` : '/niveles#exam-theory'}
+        backLabel={
+          sectionKey ? `Back to ${sectionKey}` : 'Back to Exam theory'
+        }
+      />
+    );
+  }
+
+  if (theoryApartadoLocked) {
+    return (
+      <ExamTheoryLockedNotice
+        requiredPartName={theoryApartadoLockInfo?.requiredPrevious}
+        partNumber={theoryApartadoLockInfo?.partNumber}
+        backHref="/teoria"
+        backLabel="Back to Theory"
+      />
+    );
+  }
+
+  if (theoryTopicLocked) {
+    return (
+      <ExamTheoryLockedNotice
+        variant="topic"
+        requiredPartName={theoryTopicLockInfo?.requiredPrevious}
+        backHref={theoryApartado ? `/teoria/${theoryApartado}` : '/teoria'}
+        backLabel={
+          theorySectionKey ? `Back to ${theorySectionKey}` : 'Back to Theory'
+        }
+      />
+    );
+  }
 
   return (
     <div style={{
@@ -197,7 +369,7 @@ const TheoryLayout = ({
                 Topic Progress
               </span>
               <span style={{ fontSize: '0.9rem', color: '#667eea' }}>
-                {getProgressPercentage()}%
+                {progressPercent}%
               </span>
             </div>
             <div style={{
@@ -208,7 +380,7 @@ const TheoryLayout = ({
               overflow: 'hidden'
             }}>
               <div style={{
-                width: `${getProgressPercentage()}%`,
+                width: `${progressPercent}%`,
                 height: '100%',
                 background: 'linear-gradient(90deg, #667eea, #764ba2)',
                 transition: 'width 0.3s ease'

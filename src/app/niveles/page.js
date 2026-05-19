@@ -6,6 +6,7 @@ import Link from 'next/link';
 import { useUserRole } from '@/context/UserRoleContext';
 import PageHero from '@/components/PageHero';
 import { TeoriaGlobalStyles } from '@/components/theory/TeoriaStyles';
+import ExamTheorySection from '@/components/niveles/ExamTheorySection';
 
 const NIVELES = [
   {
@@ -136,6 +137,12 @@ export default function Niveles() {
             })}
           </ul>
         </section>
+
+        <ExamTheorySection
+          userId={session.user.id}
+          accessToken={session.access_token}
+          isStudent={isStudent}
+        />
       </div>
 
       <NivelesPageStyles />
@@ -266,6 +273,67 @@ function NivelesPageStyles() {
         to {
           transform: rotate(360deg);
         }
+      }
+      .niveles-page .exam-theory-section {
+        margin-top: 8px;
+      }
+      .niveles-page .exam-theory-intro {
+        margin: 0 0 14px;
+        color: #5a6b7d;
+        font-size: 0.95rem;
+        line-height: 1.5;
+        max-width: 640px;
+      }
+      .niveles-page .exam-theory-grid {
+        grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+      }
+      @media (min-width: 900px) {
+        .niveles-page .exam-theory-grid {
+          grid-template-columns: repeat(5, minmax(0, 1fr));
+        }
+      }
+      .niveles-page .exam-theory-card {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+      }
+      .niveles-page .exam-theory-global-progress {
+        margin-top: 18px;
+        padding: 16px 18px;
+        border-radius: 16px;
+        background: linear-gradient(180deg, #f0f9ff 0%, #ecfdf5 100%);
+        border: 1px solid rgba(28, 176, 246, 0.2);
+      }
+      .niveles-page .exam-theory-global-hint {
+        margin: 8px 0 0;
+        font-size: 0.82rem;
+        color: #5a6b7d;
+        line-height: 1.4;
+      }
+      .niveles-page .exam-theory-item {
+        position: relative;
+        list-style: none;
+      }
+      .niveles-page .exam-theory-item__lock {
+        position: absolute;
+        inset: 0;
+        display: grid;
+        place-items: center;
+        border-radius: 20px;
+        background: rgba(0, 0, 0, 0.45);
+        color: #fff;
+        font-weight: 700;
+        font-size: 0.85rem;
+        text-transform: uppercase;
+        letter-spacing: 0.04em;
+        pointer-events: none;
+      }
+      .niveles-page .exam-theory-card__lock-hint {
+        margin: 0;
+        font-size: 0.78rem;
+        color: #94a3b8;
+        text-align: center;
+        line-height: 1.35;
       }
     `}</style>
   );
