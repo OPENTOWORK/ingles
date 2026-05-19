@@ -5,6 +5,8 @@ import { useRouter } from 'next/navigation';
 import { supabase } from '@/utils/supabaseClient';
 import { canAccessTeacherPanel, getRoleNameByUserId } from '@/utils/authRoles';
 import TeacherActivityCharts from '@/components/teacher/TeacherActivityCharts';
+import PanelPageHeader from '@/components/PanelPageHeader';
+import RouteLoadingMascot from '@/components/RouteLoadingMascot';
 
 const TABS = [
   { id: 'resumen', label: 'Resumen' },
@@ -313,10 +315,7 @@ export default function TeacherPanel({ title = 'Panel de Profesor' }) {
   if (loading) {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-600 mx-auto" />
-          <p className="mt-4 text-gray-600">Cargando panel de profesor...</p>
-        </div>
+        <RouteLoadingMascot label="Cargando panel de profesor…" variant={4} width={130} />
       </div>
     );
   }
@@ -331,12 +330,9 @@ export default function TeacherPanel({ title = 'Panel de Profesor' }) {
     <div className="min-h-screen bg-gray-50">
       <header className="bg-white shadow-sm border-b">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex flex-wrap justify-between items-center gap-3">
-          <div>
-            <h1 className="text-2xl font-bold text-gray-900">{title}</h1>
-          </div>
-          <div className="flex items-center gap-3 text-sm text-gray-600">
-            <span>{user?.email}</span>
-          </div>
+          <PanelPageHeader title={title} mascotVariant={4} mascotWidth={92}>
+            <span className="text-sm text-gray-600">{user?.email}</span>
+          </PanelPageHeader>
         </div>
       </header>
 

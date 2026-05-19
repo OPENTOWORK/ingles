@@ -12,6 +12,10 @@ import ExamNavigationGuard from '../components/ExamNavigationGuard';
 import { useActivityHeartbeat } from '@/hooks/useActivityHeartbeat';
 import DeferredSiteAssistant from '@/components/chat/DeferredSiteAssistant';
 import DeferredAppSideMenu from '@/components/layout/DeferredAppSideMenu';
+import SiteMascotBackdrop from '@/components/SiteMascotBackdrop';
+import RouteLoadingMascot from '@/components/RouteLoadingMascot';
+import SiteMascot from '@/components/SiteMascot';
+import { MASCOT_LOGO_VARIANT } from '@/config/mascotAssets';
 
 const Toaster = dynamic(
   () => import('react-hot-toast').then((mod) => ({ default: mod.Toaster })),
@@ -134,15 +138,14 @@ export default function RootLayoutClient({ children }) {
         <header className="site-header">
           <div className="site-header__bar">
             <Link href="/" className="site-header__logo">
+              <SiteMascot variant={MASCOT_LOGO_VARIANT} width={36} alt="" className="site-header__mascot-mini" />
               <img src="/uk-flag.png" alt="UK Flag" className="site-header__flag bandera" />
               <span>Dralo</span>
             </Link>
           </div>
         </header>
         <main className="page-content">
-          <div className="route-loading" role="status" aria-label="Cargando">
-            <span className="route-loading__spinner" aria-hidden="true" />
-          </div>
+          <RouteLoadingMascot label="Cargando" variant={3} />
         </main>
       </>
     );
@@ -199,6 +202,7 @@ export default function RootLayoutClient({ children }) {
       <header className="site-header">
         <div className="site-header__bar">
           <Link href="/" className="site-header__logo">
+            <SiteMascot variant={MASCOT_LOGO_VARIANT} width={36} alt="" className="site-header__mascot-mini" />
             <img src="/uk-flag.png" alt="UK Flag" className="site-header__flag bandera" />
             <span>Dralo</span>
           </Link>
@@ -206,6 +210,8 @@ export default function RootLayoutClient({ children }) {
           <AppNav session={session} userRole={userRole} onLogout={handleLogout} />
         </div>
       </header>
+
+      <SiteMascotBackdrop />
 
       <main className="page-content">
         <UserRoleProvider userRole={userRole} session={session}>
@@ -336,6 +342,9 @@ export default function RootLayoutClient({ children }) {
         <p className="legal-footer-copy">
           Ejercicios disenados para practicar tus habilidades en ingles.
         </p>
+        <div className="legal-footer-mascot" aria-hidden>
+          <SiteMascot variant={MASCOT_LOGO_VARIANT} width={72} alt="" />
+        </div>
         <p className="legal-footer-copy">
           © {new Date().getFullYear()} Dralo
         </p>

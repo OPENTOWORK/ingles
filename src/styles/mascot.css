@@ -1,0 +1,172 @@
+/* Mascota Dralo — decoración y estados de carga */
+
+.route-loading--mascot {
+  flex-direction: column;
+  gap: 0.75rem;
+  min-height: 14rem;
+}
+
+.route-loading__mascot {
+  filter: drop-shadow(0 10px 22px rgba(99, 102, 241, 0.22));
+  animation: mascot-float 2.8s ease-in-out infinite;
+}
+
+.route-loading__label {
+  margin: 0;
+  font-size: 0.9rem;
+  color: #64748b;
+  font-weight: 500;
+}
+
+@keyframes mascot-float {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-6px);
+  }
+}
+
+.site-mascot-backdrop {
+  pointer-events: none;
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+}
+
+.site-mascot-backdrop__tl,
+.site-mascot-backdrop__br {
+  position: absolute;
+  opacity: 0.14;
+  filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.06));
+}
+
+.site-mascot-backdrop__tl {
+  top: 5.5rem;
+  left: max(0.5rem, 2vw);
+}
+
+.site-mascot-backdrop__br {
+  bottom: 6rem;
+  right: max(0.5rem, 2vw);
+}
+
+.page-content {
+  position: relative;
+  z-index: 1;
+}
+
+.panel-page-header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem 1.25rem;
+  width: 100%;
+}
+
+.panel-page-header__brand {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+  min-width: 0;
+}
+
+.panel-page-header__mascot {
+  flex-shrink: 0;
+  filter: drop-shadow(0 6px 14px rgba(99, 102, 241, 0.2));
+}
+
+.panel-page-header__title {
+  margin: 0;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #111827;
+  line-height: 1.2;
+}
+
+.panel-page-header__subtitle {
+  margin: 0.2rem 0 0;
+  font-size: 0.875rem;
+  color: #64748b;
+}
+
+.panel-page-header__actions {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.home-page__card {
+  position: relative;
+  overflow: hidden;
+}
+
+.home-page__card-mascot {
+  position: absolute;
+  right: 0.35rem;
+  bottom: 0.15rem;
+  opacity: 0.92;
+  pointer-events: none;
+  filter: drop-shadow(0 4px 10px rgba(0, 0, 0, 0.08));
+}
+
+.home-hero__logo-mascot {
+  margin-bottom: 0.5rem;
+  filter: drop-shadow(0 8px 18px rgba(99, 102, 241, 0.25));
+}
+
+.site-header__mascot-mini {
+  height: 36px;
+  width: auto;
+  margin-right: 0.35rem;
+  vertical-align: middle;
+  filter: drop-shadow(0 2px 6px rgba(0, 0, 0, 0.12));
+}
+
+.site-assistant-header__mascot {
+  flex-shrink: 0;
+  filter: drop-shadow(0 4px 10px rgba(99, 102, 241, 0.25));
+}
+
+.site-assistant-fab__mascot {
+  width: 44px;
+  height: auto;
+}
+
+.site-assistant-header {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+}
+
+.site-mascot--logo {
+  filter: drop-shadow(0 4px 12px rgba(99, 102, 241, 0.2));
+}
+
+@media (max-width: 768px) {
+  .site-mascot-backdrop {
+    display: none;
+  }
+
+  .home-page__card-mascot {
+    width: 52px !important;
+    opacity: 0.75;
+  }
+}
+
+.legal-footer-mascot {
+  display: flex;
+  justify-content: center;
+  margin: 1rem 0 0.5rem;
+  opacity: 0.95;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .route-loading__mascot {
+    animation: none;
+  }
+}

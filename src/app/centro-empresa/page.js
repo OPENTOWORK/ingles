@@ -4,6 +4,8 @@ import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { supabase } from '@/utils/supabaseClient';
 import { userHasRole } from '@/utils/authRoles';
+import PageHero from '@/components/PageHero';
+import RouteLoadingMascot from '@/components/RouteLoadingMascot';
 
 export default function CentroEmpresaPage() {
   const [loading, setLoading] = useState(true);
@@ -28,14 +30,24 @@ export default function CentroEmpresaPage() {
     checkAccess();
   }, [router]);
 
-  if (loading) return null;
+  if (loading) {
+    return (
+      <main className="max-w-4xl mx-auto p-8">
+        <RouteLoadingMascot label="Cargando…" variant={5} />
+      </main>
+    );
+  }
 
   return (
     <main className="max-w-4xl mx-auto p-8">
-      <h1 className="text-3xl font-bold mb-4">Panel Centro/Empresa</h1>
-      <p className="text-gray-700">
-        Espacio para la gestion de usuarios agrupados por centro educativo o empresa.
-      </p>
+      <PageHero
+        eyebrow="Organización"
+        title="Panel Centro/Empresa"
+        description="Espacio para la gestión de usuarios agrupados por centro educativo o empresa."
+        mascotVariant={5}
+        mascotWidth={140}
+        accent="amber"
+      />
     </main>
   );
 }

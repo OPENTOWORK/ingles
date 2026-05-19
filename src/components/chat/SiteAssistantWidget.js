@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
+import SiteMascot from '@/components/SiteMascot';
 import './site-assistant.css';
 
 const WELCOME =
@@ -86,8 +87,11 @@ export default function SiteAssistantWidget() {
           aria-label="Asistente de ayuda Dralo"
         >
           <div className="site-assistant-header">
-            <h2>Asistente Dralo</h2>
-            <p>Ayuda sobre la web</p>
+            <SiteMascot variant={3} width={48} alt="" className="site-assistant-header__mascot" />
+            <div>
+              <h2>Asistente Dralo</h2>
+              <p>Ayuda sobre la web</p>
+            </div>
           </div>
           <div ref={listRef} className="site-assistant-messages">
             {messages.map((msg, i) => (
@@ -168,14 +172,7 @@ export default function SiteAssistantWidget() {
             />
           </svg>
         ) : (
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden>
-            <path
-              d="M12 3c5 0 9 3.6 9 8 0 2.2-1.1 4.2-2.9 5.5L19 21l-7-3.5L5 21l.9-4.5C4.1 15.2 3 13.2 3 11c0-4.4 4-8 9-8z"
-              stroke="currentColor"
-              strokeWidth="1.8"
-              strokeLinejoin="round"
-            />
-          </svg>
+          <SiteMascot variant={3} width={44} alt="" className="site-assistant-fab__mascot" />
         )}
       </button>
     </>

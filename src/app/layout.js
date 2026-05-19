@@ -1,5 +1,6 @@
 // src/app/layout.js
 import './globals.css';
+import '@/styles/mascot.css';
 import RootLayoutClient from './RootLayoutClient';
 import { ExamProvider } from '@/context/ExamContext';
 import { AccessibilityProvider } from '@/components/AccessibilityProvider';

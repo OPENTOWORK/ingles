@@ -26,6 +26,15 @@
   background: #475569;
 }
 
+.site-assistant-fab:not(.is-open) {
+  background: transparent;
+  box-shadow: 0 8px 22px rgba(99, 102, 241, 0.35);
+  width: auto;
+  height: auto;
+  min-width: 3.5rem;
+  min-height: 3.5rem;
+}
+
 .site-assistant-panel {
   position: fixed;
   right: 1.25rem;

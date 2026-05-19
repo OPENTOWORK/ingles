@@ -7,6 +7,8 @@ import { supabase } from '@/utils/supabaseClient';
 import { canAccessItPanel, getRoleNameByUserId, isAdminRole } from '@/utils/authRoles';
 import TeacherActivityCharts from '@/components/teacher/TeacherActivityCharts';
 import SupportTicketsPanel from '@/components/support/SupportTicketsPanel';
+import PanelPageHeader from '@/components/PanelPageHeader';
+import RouteLoadingMascot from '@/components/RouteLoadingMascot';
 
 const TABS = [
   { id: 'resumen', label: 'Resumen' },
@@ -182,10 +184,7 @@ export default function ItPanel() {
   if (loading) {
     return (
       <div className="min-h-screen bg-slate-50 flex items-center justify-center">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-slate-700 mx-auto" />
-          <p className="mt-4 text-gray-600">Cargando panel informático...</p>
-        </div>
+        <RouteLoadingMascot label="Cargando panel informático…" variant={6} width={130} />
       </div>
     );
   }
@@ -195,14 +194,15 @@ export default function ItPanel() {
   return (
     <div className="min-h-screen bg-slate-50">
       <header className="bg-white shadow-sm border-b border-slate-200">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex flex-wrap justify-between items-center gap-3">
-          <div>
-            <h1 className="text-2xl font-bold text-slate-900">Panel informático</h1>
-            <p className="text-sm text-slate-600 mt-0.5">
-              Mantenimiento, infraestructura y monitorización
-            </p>
-          </div>
-          <span className="text-sm text-slate-500">{user?.email}</span>
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+          <PanelPageHeader
+            title="Panel informático"
+            subtitle="Mantenimiento, infraestructura y monitorización"
+            mascotVariant={6}
+            mascotWidth={92}
+          >
+            <span className="text-sm text-slate-500">{user?.email}</span>
+          </PanelPageHeader>
         </div>
       </header>
 

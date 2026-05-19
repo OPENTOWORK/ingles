@@ -2,6 +2,7 @@
 
 import Link from 'next/link';
 import SiteMascot from '@/components/SiteMascot';
+import { HOME_NAV_MASCOTS, MASCOT_LOGO_VARIANT } from '@/config/mascotAssets';
 const NAV_CARDS = [
   { href: '/dralo-ai', icon: '✨', label: 'Dralo AI' },
   { href: '/teoria', icon: '📖', label: 'Theory' },
@@ -19,6 +20,9 @@ export default function Home() {
       <div className="home-page__inner">
         <section className="home-hero" aria-labelledby="home-title">
           <div className="home-hero__copy">
+            <div className="home-hero__logo-mascot">
+              <SiteMascot variant={MASCOT_LOGO_VARIANT} width={140} priority alt="Dralo" />
+            </div>
             <h1 id="home-title" className="home-page__title">
               Welcome to Dralo
             </h1>
@@ -59,6 +63,12 @@ export default function Home() {
                   {card.icon}
                 </span>
                 <span className="home-page__card-label">{card.label}</span>
+                <SiteMascot
+                  variant={HOME_NAV_MASCOTS[card.href] ?? 6}
+                  width={64}
+                  alt=""
+                  className="home-page__card-mascot"
+                />
               </Link>
             ))}
           </div>

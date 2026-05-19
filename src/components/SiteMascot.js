@@ -1,12 +1,13 @@
 'use client';
 
 import { sitePublicPath } from '@/utils/sitePublicPath';
+import { MASCOT_LOGO_VARIANT, MASCOT_VARIANTS } from '@/config/mascotAssets';
 
-const VALID = new Set([1, 2, 3, 4, 5, 6, 7, 8, 10]);
+const VALID = new Set(MASCOT_VARIANTS);
 
 /**
  * Mascota Dralo (PNG sin fondo en /public/mascot/).
- * @param {1|2|3|4|5|6|7|8|10} variant
+ * @param {number} variant 1–8, 10 o 11 (logo)
  * @param {number} [width] ancho mostrado en px
  */
 export default function SiteMascot({
@@ -17,14 +18,16 @@ export default function SiteMascot({
   alt,
   priority = false,
 }) {
-  const v = VALID.has(Number(variant)) ? Number(variant) : 6;
+  const n = Number(variant);
+  const v = VALID.has(n) ? n : 6;
   const w = typeof width === 'number' && width > 0 ? width : 200;
+  const isLogo = v === MASCOT_LOGO_VARIANT;
 
   return (
     <img
-      className={className}
+      className={`site-mascot${isLogo ? ' site-mascot--logo' : ''} ${className}`.trim()}
       src={sitePublicPath(`/mascot/${v}.png`)}
-      alt={alt ?? 'Dralo, mascota de English Practice'}
+      alt={alt ?? (isLogo ? 'Dralo' : 'Dralo, mascota de English Practice')}
       width={w}
       draggable={false}
       loading={priority ? 'eager' : 'lazy'}

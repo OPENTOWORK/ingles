@@ -1,6 +1,7 @@
 'use client';
 import { useState } from 'react';
 import { supabase } from '../../utils/supabaseClient';
+import SiteMascot from '@/components/SiteMascot';
 
 export default function ResetPasswordPage() {
   const [email, setEmail] = useState('');
@@ -36,6 +37,9 @@ export default function ResetPasswordPage() {
         fontFamily: "Segoe UI, sans-serif",
       }}
     >
+      <div style={{ textAlign: 'center', marginBottom: '1rem', lineHeight: 0 }}>
+        <SiteMascot variant={8} width={120} alt="" />
+      </div>
       <h2 style={{ textAlign: "center", marginBottom: "1.5rem" }}>Recuperar Contraseña</h2>
 
       {!sent ? (

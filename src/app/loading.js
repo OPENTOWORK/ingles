@@ -1,12 +1,5 @@
+import RouteLoadingMascot from '@/components/RouteLoadingMascot';
+
 export default function RootLoading() {
-  return (
-    <div
-      className="route-loading"
-      role="status"
-      aria-live="polite"
-      aria-label="Cargando página"
-    >
-      <span className="route-loading__spinner" aria-hidden="true" />
-    </div>
-  );
+  return <RouteLoadingMascot label="Cargando página" variant={6} />;
 }

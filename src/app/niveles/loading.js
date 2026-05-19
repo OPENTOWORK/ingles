@@ -1,12 +1,11 @@
+import RouteLoadingMascot from '@/components/RouteLoadingMascot';
+
 export default function NivelesLoading() {
   return (
-    <div
-      className="route-loading route-loading--niveles"
-      role="status"
-      aria-live="polite"
-      aria-label="Cargando ejercicios"
-    >
-      <span className="route-loading__spinner" aria-hidden="true" />
-    </div>
+    <RouteLoadingMascot
+      label="Cargando ejercicios"
+      variant={1}
+      className="route-loading--niveles"
+    />
   );
 }
