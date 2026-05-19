@@ -100,31 +100,9 @@
   flex-wrap: wrap;
 }
 
-.home-page__card {
-  position: relative;
-  overflow: hidden;
-}
-
-.home-page__card-mascot {
-  position: absolute;
-  right: 0.35rem;
-  bottom: 0.15rem;
-  opacity: 0.92;
-  pointer-events: none;
-  filter: drop-shadow(0 4px 10px rgba(0, 0, 0, 0.08));
-}
-
 .home-hero__logo-mascot {
   margin-bottom: 0.5rem;
   filter: drop-shadow(0 8px 18px rgba(99, 102, 241, 0.25));
-}
-
-.site-header__mascot-mini {
-  height: 36px;
-  width: auto;
-  margin-right: 0.35rem;
-  vertical-align: middle;
-  filter: drop-shadow(0 2px 6px rgba(0, 0, 0, 0.12));
 }
 
 .site-assistant-header__mascot {
@@ -150,11 +128,6 @@
 @media (max-width: 768px) {
   .site-mascot-backdrop {
     display: none;
-  }
-
-  .home-page__card-mascot {
-    width: 52px !important;
-    opacity: 0.75;
   }
 }
 

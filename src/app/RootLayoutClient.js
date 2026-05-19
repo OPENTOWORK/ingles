@@ -138,7 +138,6 @@ export default function RootLayoutClient({ children }) {
         <header className="site-header">
           <div className="site-header__bar">
             <Link href="/" className="site-header__logo">
-              <SiteMascot variant={MASCOT_LOGO_VARIANT} width={36} alt="" className="site-header__mascot-mini" />
               <img src="/uk-flag.png" alt="UK Flag" className="site-header__flag bandera" />
               <span>Dralo</span>
             </Link>
@@ -202,7 +201,6 @@ export default function RootLayoutClient({ children }) {
       <header className="site-header">
         <div className="site-header__bar">
           <Link href="/" className="site-header__logo">
-            <SiteMascot variant={MASCOT_LOGO_VARIANT} width={36} alt="" className="site-header__mascot-mini" />
             <img src="/uk-flag.png" alt="UK Flag" className="site-header__flag bandera" />
             <span>Dralo</span>
           </Link>

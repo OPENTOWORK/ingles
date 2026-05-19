@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import SiteMascot from '@/components/SiteMascot';
-import { HOME_NAV_MASCOTS, MASCOT_LOGO_VARIANT } from '@/config/mascotAssets';
+import { MASCOT_LOGO_VARIANT } from '@/config/mascotAssets';
 const NAV_CARDS = [
   { href: '/dralo-ai', icon: '✨', label: 'Dralo AI' },
   { href: '/teoria', icon: '📖', label: 'Theory' },
@@ -63,12 +63,6 @@ export default function Home() {
                   {card.icon}
                 </span>
                 <span className="home-page__card-label">{card.label}</span>
-                <SiteMascot
-                  variant={HOME_NAV_MASCOTS[card.href] ?? 6}
-                  width={64}
-                  alt=""
-                  className="home-page__card-mascot"
-                />
               </Link>
             ))}
           </div>
