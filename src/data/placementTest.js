@@ -45,11 +45,11 @@ export const placementQuestions = [
   { id: 30, difficulty: "C2", text: "Only by working together _____ the crisis.", options: ["we can overcome", "can we overcome", "could we overcame", "we overcame"], answer: "can we overcome" },
 ];
 
+/** Legacy demo test (30 items) — proportional bands. */
 export function levelFromScore(score, total = 30) {
   const t = Math.max(1, Number(total) || 30);
   const s = Number(score) || 0;
   const pct = s / t;
-  // Mismos umbrales proporcionales que el test de 30 preguntas
   if (pct <= 6 / 30) return 'A1';
   if (pct <= 12 / 30) return 'A2';
   if (pct <= 18 / 30) return 'B1';
@@ -58,29 +58,42 @@ export function levelFromScore(score, total = 30) {
   return 'C2';
 }
 
+/** Outcomes-style level from any total (uses 50-item grammar scale when total ≈ 50+). */
+export function levelFromScoreOutcomes(score, total = 50) {
+  const t = Math.max(1, Number(total) || 50);
+  const s = Number(score) || 0;
+  const equivalent = t === 50 ? s : Math.round((s / t) * 50);
+  if (equivalent <= 18) return 'A1';
+  if (equivalent <= 25) return 'A2';
+  if (equivalent <= 32) return 'B1';
+  if (equivalent <= 39) return 'B2';
+  if (equivalent <= 46) return 'C1';
+  return 'C2';
+}
+
 export const levelRecommendations = {
   A1: {
-    title: "Nivel A1 (Principiante)",
+    title: "Level A1 (Beginner)",
     link: "/training/a1",
   },
   A2: {
-    title: "Nivel A2 (Elemental)",
+    title: "Level A2 (Elementary)",
     link: "/training/a2",
   },
   B1: {
-    title: "Nivel B1 (Intermedio)",
+    title: "Level B1 (Intermediate)",
     link: "/training/b1",
   },
   B2: {
-    title: "Nivel B2 (Intermedio Alto)",
+    title: "Level B2 (Upper Intermediate)",
     link: "/training/b2",
   },
   C1: {
-    title: "Nivel C1 (Avanzado)",
+    title: "Level C1 (Advanced)",
     link: "/training/c1",
   },
   C2: {
-    title: "Nivel C2 (Maestría)",
+    title: "Level C2 (Proficiency)",
     link: "/training/c2",
   },
 };

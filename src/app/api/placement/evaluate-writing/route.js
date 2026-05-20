@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
 import OpenAI from 'openai';
 import { getSupabaseAnonKey, getSupabaseUrl } from '@/lib/supabaseEnv';
+import { writingPercentToOutcomesScore } from '@/lib/placementOutcomesScoring';
 
 const OPENAI_CHAT_MODEL = process.env.OPENAI_MODEL || 'gpt-4o-mini';
 
@@ -65,9 +66,11 @@ export async function POST(req) {
 
     const words = countWords(essay);
 
-    const system = `You are an experienced English placement test examiner (CEFR B1–C1).
-Evaluate the candidate's writing for a placement test. Be fair, constructive, and concise.
-Respond ONLY with valid JSON (no markdown fences).`;
+    const system = `You are an experienced Outcomes Placement Test examiner.
+Score writing using the official 0–10 scale (Writing Assessment Guidelines):
+0–1 Elementary, 2–3 Pre-Intermediate, 4–5 Intermediate, 6–7 Upper Intermediate,
+8–9 Advanced, 10 Higher level.
+Be fair, constructive, and concise. Respond ONLY with valid JSON (no markdown fences).`;
 
     const user = `TASK PROMPT (full instructions shown to the student):
 ${taskPrompt}
@@ -81,13 +84,14 @@ ${essay}
 
 Return JSON:
 {
-  "scorePercent": <0-100 overall quality for placement>,
-  "countsAsCorrect": <true if scorePercent >= 55 — counts as 1 point in placement>,
+  "writingScore10": <integer 0-10 per Outcomes Writing Placement Test>,
+  "scorePercent": <0-100 overall quality, should align with writingScore10 * 10>,
+  "countsAsCorrect": <true if writingScore10 >= 4>,
   "wordCount": ${words},
   "withinWordLimit": <true if word count is between ${Math.max(80, wordMin - 30)} and ${wordMax + 40}>,
-  "feedback": "<3-5 sentences in Spanish explaining level and main issues>",
-  "strengths": ["<strength 1 in Spanish>", "<strength 2>"],
-  "improvements": ["<improvement 1 in Spanish>", "<improvement 2>"]
+  "feedback": "<3-5 sentences in English explaining level and main issues>",
+  "strengths": ["<strength 1>", "<strength 2>"],
+  "improvements": ["<improvement 1>", "<improvement 2>"]
 }`;
 
     const completion = await openai.chat.completions.create({
@@ -111,10 +115,18 @@ Return JSON:
     }
 
     const scorePercent = Math.min(100, Math.max(0, Number(parsed.scorePercent) || 0));
+    let writingScore10 = Math.min(
+      10,
+      Math.max(0, Math.round(Number(parsed.writingScore10))),
+    );
+    if (Number.isNaN(writingScore10)) {
+      writingScore10 = writingPercentToOutcomesScore(scorePercent);
+    }
     const countsAsCorrect =
-      parsed.countsAsCorrect === true || scorePercent >= 55;
+      parsed.countsAsCorrect === true || writingScore10 >= 4;
 
     return NextResponse.json({
+      writingScore10,
       scorePercent,
       countsAsCorrect,
       wordCount: words,

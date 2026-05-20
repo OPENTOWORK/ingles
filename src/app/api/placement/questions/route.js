@@ -1,66 +1,99 @@
 import { NextResponse } from 'next/server';
-import { createClient } from '@supabase/supabase-js';
-import { buildPlacementQuestionSet } from '@/lib/placementSupabase';
-import { getSupabaseAnonKey, getSupabaseServiceRoleKey, getSupabaseUrl } from '@/lib/supabaseEnv';
-
-const SELECT_QUERY = `
-  id,
-  pregunta,
-  explicacion,
-  test_id,
-  partes_id,
-  placement_tests ( dificultad ),
-  placement_partes ( nombre_parte ),
-  placement_respuestas (
-    id,
-    respuesta,
-    correcta
-  )
-`;
+import {
+  buildPlacementQuestionSet,
+  detectStructuredQuestionBase,
+  isStructuredPlacementBatchMode,
+  mapPlacementRowToQuestion,
+  PLACEMENT_EXAM2_EXPECTED_QUESTIONS,
+  resolvePlacementMeta,
+} from '@/lib/placementSupabase';
+import { getSupabaseServiceRoleKey } from '@/lib/supabaseEnv';
+import {
+  createPlacementDb,
+  fetchPlacementRowsWithRespuestas,
+  getPlacementAuthToken,
+  verifyPlacementToken,
+} from '@/lib/placementDb';
 
 export async function GET(req) {
   try {
-    const authHeader = req.headers.get('authorization') || '';
-    const token = authHeader.startsWith('Bearer ') ? authHeader.slice(7) : null;
+    const token = getPlacementAuthToken(req);
     if (!token) {
       return NextResponse.json({ error: 'No autenticado.' }, { status: 401 });
     }
 
-    const supabaseUrl = getSupabaseUrl();
-    const supabaseAnonKey = getSupabaseAnonKey();
-    const authClient = createClient(supabaseUrl, supabaseAnonKey);
-    const { data: authData, error: authError } = await authClient.auth.getUser(token);
-    if (authError || !authData?.user) {
+    const user = await verifyPlacementToken(token);
+    if (!user) {
       return NextResponse.json({ error: 'Sesión no válida.' }, { status: 401 });
     }
 
-    const serviceKey = getSupabaseServiceRoleKey()?.trim();
-    const db = serviceKey
-      ? createClient(supabaseUrl, serviceKey, {
-          auth: { autoRefreshToken: false, persistSession: false },
-        })
-      : createClient(supabaseUrl, supabaseAnonKey, {
-          global: { headers: { Authorization: `Bearer ${token}` } },
-        });
-
-    const { data: rows, error } = await db
-      .from('placement_preguntas')
-      .select(SELECT_QUERY)
-      .order('id', { ascending: true });
-
-    if (error) {
-      console.error('[placement/questions]', error);
+    const testId = req.nextUrl.searchParams.get('testId')?.trim() || null;
+    if (!testId) {
       return NextResponse.json(
-        { error: error.message || 'No se pudieron cargar las preguntas.' },
-        { status: 500 },
+        { error: 'Indica qué examen quieres cargar (testId).' },
+        { status: 400 },
       );
     }
 
-    const questions = buildPlacementQuestionSet(rows || []);
+    if (!getSupabaseServiceRoleKey()) {
+      console.warn(
+        '[placement/questions] Sin SUPABASE_SERVICE_ROLE_KEY: RLS puede ocultar respuestas.',
+      );
+    }
+
+    const db = createPlacementDb(token);
+    const rows = await fetchPlacementRowsWithRespuestas(db, { testId });
+
+    const { data: testRow } = await db
+      .from('placement_tests')
+      .select('*')
+      .eq('id', testId)
+      .maybeSingle();
+
+    const questions = buildPlacementQuestionSet(rows, { test: testRow });
+    const isExam2 = isStructuredPlacementBatchMode(rows, testRow);
+    const exam2Base = isExam2 ? detectStructuredQuestionBase(rows, testRow) : 1;
+
+    const skipped = [];
+    for (const row of rows) {
+      const mapped = mapPlacementRowToQuestion(row);
+      if (!mapped) {
+        const meta = resolvePlacementMeta(row, {
+          exam2BaseOffset: exam2Base,
+          test: testRow,
+          forceStructured: isExam2,
+        });
+        const respCount = Array.isArray(row.placement_respuestas)
+          ? row.placement_respuestas.length
+          : 0;
+        skipped.push({
+          id: row.id,
+          explicacion: row.explicacion,
+          part: meta.part,
+          respuestas: respCount,
+        });
+      }
+    }
+
+    if (
+      isExam2 &&
+      questions.length > 0 &&
+      questions.length < PLACEMENT_EXAM2_EXPECTED_QUESTIONS
+    ) {
+      console.warn(
+        `[placement/questions] Examen 2: ${questions.length}/${PLACEMENT_EXAM2_EXPECTED_QUESTIONS} cargadas; ${skipped.length} filas omitidas.`,
+      );
+    }
 
     if (questions.length === 0) {
       return NextResponse.json(
-        { error: 'No hay preguntas de placement configuradas en Supabase.' },
+        {
+          error: 'Este examen no tiene preguntas válidas (revisa respuestas y opciones correctas).',
+          testId,
+          poolSize: rows.length,
+          skippedCount: skipped.length,
+          skipped: skipped.slice(0, 20),
+        },
         { status: 404 },
       );
     }
@@ -73,10 +106,25 @@ export async function GET(req) {
 
     const sessionQuestions = questions.slice(0, max);
 
+    const partCounts = {
+      1: sessionQuestions.filter((q) => q.part === 1).length,
+      2: sessionQuestions.filter((q) => q.part === 2).length,
+      3: sessionQuestions.filter((q) => q.part === 3).length,
+    };
+
     return NextResponse.json({
+      testId,
       questions: sessionQuestions,
       total: sessionQuestions.length,
-      poolSize: questions.length,
+      poolSize: rows.length,
+      loadedFromDb: rows.length,
+      skippedCount: skipped.length,
+      partCounts,
+      exam2: isExam2,
+      expectedTotal: isExam2 ? PLACEMENT_EXAM2_EXPECTED_QUESTIONS : null,
+      complete: isExam2
+        ? sessionQuestions.length >= PLACEMENT_EXAM2_EXPECTED_QUESTIONS
+        : sessionQuestions.length > 0,
     });
   } catch (err) {
     console.error('[placement/questions]', err);
