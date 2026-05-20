@@ -51,7 +51,7 @@ function AuthCallbackInner() {
 
         if (cancelled) return;
         toast.success('Sesión iniciada correctamente');
-        router.replace(redirectPath || '/perfil');
+        window.location.replace(redirectPath || '/perfil');
       } catch (err) {
         console.error('Error en /auth/callback:', err);
         if (cancelled) return;

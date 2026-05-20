@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { EXAM_THEORY_CATALOG, SECTIONS } from '@/data/teoriaSections';
 import { useExamTheoryProgress } from '@/hooks/useExamTheoryProgress';
 import { getExamTheoryUnlockStates } from '@/lib/examTheoryUnlock';
+import { SEQUENTIAL_LOCK_FOR_STUDENTS } from '@/lib/theoryLockConfig';
 import ExamTheoryProgressBar from '@/components/niveles/ExamTheoryProgressBar';
 
 function ExamTheoryCardContent({ area, initial, percent, unitProgress, count }) {
@@ -43,7 +44,7 @@ export default function ExamTheorySection({ userId, accessToken, isStudent = fal
       </div>
       <p className="exam-theory-intro">
         Theory for exam skills — reading, writing, listening, speaking, and Use of English.
-        {isStudent ? (
+        {isStudent && SEQUENTIAL_LOCK_FOR_STUDENTS ? (
           <>
             {' '}
             Complete each part at 100% to unlock the next (students only).

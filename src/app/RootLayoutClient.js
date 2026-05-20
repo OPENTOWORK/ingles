@@ -5,6 +5,7 @@ import { useEffect, useRef, useState } from 'react';
 import { useRouter, usePathname } from 'next/navigation';
 import { supabase } from '@/utils/supabaseClient';
 import { normalizeRoleName, getRoleNameByUserId, peekCachedRoleName } from '@/utils/authRoles';
+import { performLogout } from '@/utils/logout';
 import { isPublicPath } from '@/utils/publicRoutes';
 import Link from 'next/link';
 import { UserRoleProvider } from '../context/UserRoleContext';
@@ -40,12 +41,23 @@ export default function RootLayoutClient({ children }) {
   const roleFetchedForUserIdRef = useRef(null);
   const lastAccessTokenRef = useRef(null);
 
-  useActivityHeartbeat(session);
-
   const isPublic = isPublicPath(pathname);
   const isNivelesRoute =
     pathname === '/niveles' || (pathname && pathname.startsWith('/niveles/'));
   const allowWithoutAuth = isPublic || isNivelesRoute;
+  const heartbeatEnabled = Boolean(session) && !allowWithoutAuth;
+
+  useActivityHeartbeat(session, heartbeatEnabled);
+
+  useEffect(() => {
+    if (authPending || allowWithoutAuth || session) return undefined;
+    const timer = window.setTimeout(() => {
+      void supabase.auth.getSession().then(({ data: { session: latest } }) => {
+        if (!latest) router.replace('/login');
+      });
+    }, 800);
+    return () => window.clearTimeout(timer);
+  }, [authPending, allowWithoutAuth, session, router, pathname]);
 
   useEffect(() => {
     if (allowWithoutAuth) setAuthPending(false);
@@ -68,13 +80,14 @@ export default function RootLayoutClient({ children }) {
       lastAccessTokenRef.current = accessToken;
       setSession(newSession);
 
-      if (!allowWithoutAuth) setAuthPending(false);
-
       if (!uid) {
         roleFetchedForUserIdRef.current = null;
         setUserRole('student');
+        if (!allowWithoutAuth) setAuthPending(false);
         return;
       }
+
+      if (!allowWithoutAuth) setAuthPending(false);
 
       const cachedRole = peekCachedRoleName(uid);
       if (cachedRole) {
@@ -94,7 +107,40 @@ export default function RootLayoutClient({ children }) {
       if (!cancelled) void hydrateAuth(session);
     });
 
-    const { data: sub } = supabase.auth.onAuthStateChange((_event, newSession) => {
+    const { data: sub } = supabase.auth.onAuthStateChange((event, newSession) => {
+      if (event === 'SIGNED_IN' && newSession) {
+        if (cancelled) return;
+        lastAccessTokenRef.current = newSession.access_token ?? null;
+        roleFetchedForUserIdRef.current = null;
+        setSession(newSession);
+        setAuthPending(false);
+        const uid = newSession.user?.id;
+        if (uid) {
+          const cachedRole = peekCachedRoleName(uid);
+          if (cachedRole) setUserRole(normalizeRoleName(cachedRole));
+          void getRoleNameByUserId(uid, newSession.user.email).then((roleName) => {
+            if (cancelled) return;
+            roleFetchedForUserIdRef.current = uid;
+            setUserRole(normalizeRoleName(roleName));
+          });
+        }
+        return;
+      }
+      if (event === 'SIGNED_OUT') {
+        if (cancelled) return;
+        lastAccessTokenRef.current = null;
+        roleFetchedForUserIdRef.current = null;
+        setSession(null);
+        setUserRole('student');
+        if (!allowWithoutAuth) setAuthPending(false);
+        return;
+      }
+      if (event === 'TOKEN_REFRESHED') {
+        if (cancelled) return;
+        lastAccessTokenRef.current = newSession?.access_token ?? null;
+        setSession(newSession);
+        return;
+      }
       void hydrateAuth(newSession);
     });
     return () => {
@@ -121,13 +167,6 @@ export default function RootLayoutClient({ children }) {
     }
   }, []);
 
-  // ⚠️ Redirige DESPUÉS del render (no aplica a rutas públicas ni /niveles/*)
-  useEffect(() => {
-    if (!authPending && !allowWithoutAuth && !session) {
-      router.replace('/login');
-    }
-  }, [authPending, allowWithoutAuth, session, router]);
-
   if (!allowWithoutAuth && authPending) {
     return (
       <>
@@ -147,11 +186,31 @@ export default function RootLayoutClient({ children }) {
     );
   }
 
-  if (!allowWithoutAuth && !session) return null;
+  if (!allowWithoutAuth && !session) {
+    return (
+      <>
+        <Toaster position="top-center" reverseOrder={false} />
+        <header className="site-header">
+          <div className="site-header__bar">
+            <Link href="/" className="site-header__logo">
+              <img src="/uk-flag.png" alt="UK Flag" className="site-header__flag bandera" />
+              <span>Dralo</span>
+            </Link>
+          </div>
+        </header>
+        <main className="page-content">
+          <RouteLoadingMascot label="Redirigiendo al login" variant={3} />
+        </main>
+      </>
+    );
+  }
 
-  const handleLogout = async () => {
-    await supabase.auth.signOut();
-    router.push('/login');
+  const handleLogout = () => {
+    lastAccessTokenRef.current = null;
+    roleFetchedForUserIdRef.current = null;
+    setSession(null);
+    setUserRole('student');
+    void performLogout();
   };
 
   const saveCookieConsent = (preferences, mode) => {

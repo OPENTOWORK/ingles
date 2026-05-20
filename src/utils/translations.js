@@ -45,7 +45,7 @@ export const translations = {
     // Levels page
     levelsTitle: "English Levels",
     levelsSubtitle: "Choose your level and start practicing",
-    availableLevels: "Available levels",
+    availableLevels: "Available tests and tips",
     loading: "Loading",
     
     // Level names
@@ -753,7 +753,7 @@ export const translations = {
     // Levels page
     levelsTitle: "Niveles de Inglés",
     levelsSubtitle: "Elige tu nivel y comienza a practicar",
-    availableLevels: "Niveles disponibles",
+    availableLevels: "Pruebas y consejos disponibles",
     loading: "Cargando",
     
     // Level names

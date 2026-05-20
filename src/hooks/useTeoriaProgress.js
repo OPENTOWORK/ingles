@@ -14,10 +14,15 @@ export function useTeoriaProgress(userId, accessToken) {
 
   useEffect(() => {
     refresh();
-    const onUpdate = () => refresh();
+    let debounceId = null;
+    const onUpdate = () => {
+      if (debounceId) clearTimeout(debounceId);
+      debounceId = setTimeout(() => refresh(), 350);
+    };
     window.addEventListener('storage', onUpdate);
     window.addEventListener(TEORIA_PROGRESS_EVENT, onUpdate);
     return () => {
+      if (debounceId) clearTimeout(debounceId);
       window.removeEventListener('storage', onUpdate);
       window.removeEventListener(TEORIA_PROGRESS_EVENT, onUpdate);
     };

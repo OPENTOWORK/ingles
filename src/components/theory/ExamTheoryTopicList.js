@@ -14,6 +14,7 @@ import {
   getSectionProgressSummary,
 } from '@/lib/examTheoryTopicUnlock';
 import { filterTopics } from '@/data/teoriaSections';
+import { SEQUENTIAL_LOCK_FOR_STUDENTS } from '@/lib/theoryLockConfig';
 
 export default function ExamTheoryTopicList({
   sectionSlug,
@@ -102,7 +103,9 @@ export default function ExamTheoryTopicList({
         <p className="exam-theory-section-progress__hint">
           {sectionSummary.completedTopics}/{sectionSummary.topicsTotal} temas completados · media
           de todas las secciones del apartado
-          {isStudent ? ' · completa cada tema al 100% para desbloquear el siguiente' : ''}
+          {isStudent && SEQUENTIAL_LOCK_FOR_STUDENTS
+            ? ' · completa cada tema al 100% para desbloquear el siguiente'
+            : ''}
         </p>
       </div>
 

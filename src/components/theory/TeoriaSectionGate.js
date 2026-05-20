@@ -23,8 +23,16 @@ import TeoriaTopicList from '@/components/theory/TeoriaTopicList';
 export default function TeoriaSectionGate({ sectionSlug, sectionTitle, topics }) {
   const { userRole, session } = useUserRole();
   const isStudent = userRole === 'student' || userRole === 'alumno';
-  const examProgress = useExamTheoryProgress(session?.user?.id, session?.access_token);
-  const teoriaProgress = useTeoriaProgress(session?.user?.id, session?.access_token);
+  const isExam = isExamTheorySectionSlug(sectionSlug);
+  const isTheory = isTheorySectionSlug(sectionSlug);
+  const examProgress = useExamTheoryProgress(
+    isExam ? session?.user?.id : null,
+    isExam ? session?.access_token : null,
+  );
+  const teoriaProgress = useTeoriaProgress(
+    isTheory ? session?.user?.id : null,
+    isTheory ? session?.access_token : null,
+  );
 
   const examMeta = useMemo(
     () => EXAM_THEORY_CATALOG.find((area) => area.slug === sectionSlug),
@@ -34,9 +42,6 @@ export default function TeoriaSectionGate({ sectionSlug, sectionTitle, topics })
     () => THEORY_SECTION_CATALOG.find((area) => area.slug === sectionSlug),
     [sectionSlug],
   );
-
-  const isExam = isExamTheorySectionSlug(sectionSlug);
-  const isTheory = isTheorySectionSlug(sectionSlug);
 
   if (isExam) {
     const unitLocked =

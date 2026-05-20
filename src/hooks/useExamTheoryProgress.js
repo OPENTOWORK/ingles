@@ -15,10 +15,15 @@ export function useExamTheoryProgress(userId, accessToken) {
 
   useEffect(() => {
     refresh();
-    const onUpdate = () => refresh();
+    let debounceId = null;
+    const onUpdate = () => {
+      if (debounceId) clearTimeout(debounceId);
+      debounceId = setTimeout(() => refresh(), 350);
+    };
     window.addEventListener('storage', onUpdate);
     window.addEventListener(EXAM_THEORY_PROGRESS_EVENT, onUpdate);
     return () => {
+      if (debounceId) clearTimeout(debounceId);
       window.removeEventListener('storage', onUpdate);
       window.removeEventListener(EXAM_THEORY_PROGRESS_EVENT, onUpdate);
     };

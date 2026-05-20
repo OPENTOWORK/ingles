@@ -13,6 +13,7 @@ import {
   getTeoriaSectionProgressSummary,
   getTeoriaSectionTopicUnlockStates,
 } from '@/lib/teoriaTopicUnlock';
+import { SEQUENTIAL_LOCK_FOR_STUDENTS } from '@/lib/theoryLockConfig';
 
 export default function TheoryTopicList({
   sectionSlug,
@@ -96,7 +97,9 @@ export default function TheoryTopicList({
         <p className="theory-section-progress__hint">
           {sectionSummary.completedTopics}/{sectionSummary.topicsTotal} temas completados · media
           del apartado
-          {isStudent ? ' · completa cada tema al 100% para desbloquear el siguiente' : ''}
+          {isStudent && SEQUENTIAL_LOCK_FOR_STUDENTS
+            ? ' · completa cada tema al 100% para desbloquear el siguiente'
+            : ''}
         </p>
       </div>
 

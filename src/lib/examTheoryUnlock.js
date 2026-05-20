@@ -1,5 +1,6 @@
 import { EXAM_THEORY_CATALOG } from '@/data/teoriaSections';
 import { findExamUnitSlugForTopicHref } from '@/lib/examTheoryProgress';
+import { shouldApplySequentialLock } from '@/lib/theoryLockConfig';
 
 const COMPLETE_PERCENT = 100;
 
@@ -26,9 +27,10 @@ function unitsBySlug(units = []) {
 /** Estado de bloqueo por unidad (solo aplica lógica si isStudent). */
 export function getExamTheoryUnlockStates(units = [], isStudent = false) {
   const bySlug = unitsBySlug(units);
+  const lockActive = shouldApplySequentialLock(isStudent);
 
   return EXAM_THEORY_CATALOG.map((area, index) => {
-    if (!isStudent) {
+    if (!lockActive) {
       return {
         slug: area.slug,
         key: area.key,
@@ -63,7 +65,7 @@ export function getExamTheoryUnlockStates(units = [], isStudent = false) {
 }
 
 export function isExamTheorySlugLocked(slug, units = [], isStudent = false) {
-  if (!isStudent || !isExamTheorySectionSlug(slug)) return false;
+  if (!shouldApplySequentialLock(isStudent) || !isExamTheorySectionSlug(slug)) return false;
   const state = getExamTheoryUnlockStates(units, true).find((item) => item.slug === slug);
   return state?.locked ?? false;
 }

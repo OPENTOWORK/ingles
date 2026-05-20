@@ -4,11 +4,11 @@ import { useEffect, useRef } from 'react';
 import { supabase } from '@/utils/supabaseClient';
 import { HEARTBEAT_INTERVAL_MS, HEARTBEAT_INITIAL_DELAY_MS } from '@/lib/userActivity';
 
-export function useActivityHeartbeat(session) {
+export function useActivityHeartbeat(session, enabled = true) {
   const lastPingRef = useRef(Date.now());
 
   useEffect(() => {
-    if (!session?.access_token) return undefined;
+    if (!enabled || !session?.access_token) return undefined;
 
     let intervalId = null;
     let cancelled = false;
@@ -67,5 +67,5 @@ export function useActivityHeartbeat(session) {
       document.removeEventListener('visibilitychange', onVisibility);
       void sendHeartbeat();
     };
-  }, [session?.access_token]);
+  }, [enabled, session?.access_token]);
 }

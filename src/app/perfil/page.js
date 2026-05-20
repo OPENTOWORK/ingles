@@ -4,6 +4,8 @@ import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { supabase } from '@/utils/supabaseClient';
+import { getClientAuth } from '@/utils/getClientAuth';
+import { performLogout } from '@/utils/logout';
 import { useUserRole } from '@/context/UserRoleContext';
 import { getUserProgress } from '@/utils/getUserProgress';
 import AchievementNotification from '@/components/AchievementNotification';
@@ -147,15 +149,15 @@ export default function ProfilePage() {
 
   useEffect(() => {
     const fetchData = async () => {
-      const { data: { session } } = await supabase.auth.getSession();
-      if (!session) {
-        router.push('/login');
+      const { user: authUser } = await getClientAuth();
+      if (!authUser) {
+        router.replace('/login');
         return;
       }
 
-      setUser(session.user);
+      setUser(authUser);
 
-      const userId = session.user.id;
+      const userId = authUser.id;
       const [{ data: userRow }, { data: profileRow }, { data: preferencesRow }] = await Promise.all([
         supabase.from('user_profiles').select('nombre, email').eq('id', userId).single(),
         supabase
@@ -167,13 +169,13 @@ export default function ProfilePage() {
       ]);
 
       const localSettings = typeof window !== 'undefined'
-        ? JSON.parse(localStorage.getItem(`profile_settings_${session.user.id}`) || '{}')
+        ? JSON.parse(localStorage.getItem(`profile_settings_${authUser.id}`) || '{}')
         : {};
       const localGoals = typeof window !== 'undefined'
-        ? JSON.parse(localStorage.getItem(`profile_goals_${session.user.id}`) || '{}')
+        ? JSON.parse(localStorage.getItem(`profile_goals_${authUser.id}`) || '{}')
         : {};
 
-      setFullName(userRow?.nombre || session.user?.user_metadata?.name || '');
+      setFullName(userRow?.nombre || authUser?.user_metadata?.name || '');
       setBirthDate(profileRow?.fecha_nacimiento || '');
       setGoals(localGoals?.weekly ? localGoals : { weekly: 5, monthly: 20 });
       setNotifications({
@@ -185,10 +187,10 @@ export default function ProfilePage() {
       setTotalStudyTime(0);
 
       await Promise.all([
-        getUserProgress(session.user.id).then((userProgress) => {
+        getUserProgress(authUser.id).then((userProgress) => {
           setStats(userProgress);
         }),
-        loadIntegratedStats(session.user.id),
+        loadIntegratedStats(authUser.id),
       ]);
 
       // Simular datos adicionales (en una app real vendrían de la BD)
@@ -435,13 +437,8 @@ export default function ProfilePage() {
     fetchData();
   }, [router]);
 
-  const handleLogout = async () => {
-    const { error } = await supabase.auth.signOut();
-    if (!error) {
-      router.push('/login');
-    } else {
-      console.error('Logout error:', error.message);
-    }
+  const handleLogout = () => {
+    void performLogout();
   };
 
   const handleSaveProfileName = async () => {

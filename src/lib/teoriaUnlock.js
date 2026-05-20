@@ -1,4 +1,5 @@
 import { THEORY_SECTION_CATALOG } from '@/data/teoriaSections';
+import { shouldApplySequentialLock } from '@/lib/theoryLockConfig';
 
 const COMPLETE_PERCENT = 100;
 
@@ -24,9 +25,10 @@ function unitsBySlug(units = []) {
 
 export function getTeoriaApartadoUnlockStates(units = [], isStudent = false) {
   const bySlug = unitsBySlug(units);
+  const lockActive = shouldApplySequentialLock(isStudent);
 
   return THEORY_SECTION_CATALOG.map((area, index) => {
-    if (!isStudent) {
+    if (!lockActive) {
       return {
         slug: area.slug,
         key: area.key,
@@ -60,7 +62,7 @@ export function getTeoriaApartadoUnlockStates(units = [], isStudent = false) {
 }
 
 export function isTeoriaApartadoLocked(slug, units = [], isStudent = false) {
-  if (!isStudent || !isTheorySectionSlug(slug)) return false;
+  if (!shouldApplySequentialLock(isStudent) || !isTheorySectionSlug(slug)) return false;
   const state = getTeoriaApartadoUnlockStates(units, true).find((item) => item.slug === slug);
   return state?.locked ?? false;
 }

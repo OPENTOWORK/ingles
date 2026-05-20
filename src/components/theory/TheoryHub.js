@@ -16,6 +16,7 @@ import {
 } from '@/data/teoriaSections';
 import { getTeoriaApartadoUnlockStates } from '@/lib/teoriaUnlock';
 import { buildAllTeoriaTopicUnlockMap } from '@/lib/teoriaTopicUnlock';
+import { SEQUENTIAL_LOCK_FOR_STUDENTS } from '@/lib/theoryLockConfig';
 
 const ALL_TOPICS = buildTheoryTopicsFlat();
 const TOPIC_COUNT = ALL_TOPICS.length;
@@ -105,7 +106,9 @@ export default function TheoryHub() {
         />
         <p className="theory-hub-global-progress__hint">
           Media de Grammar, Vocabulary y Pronunciation
-          {isStudent ? ' · completa cada apartado al 100% para desbloquear el siguiente' : ''}
+          {isStudent && SEQUENTIAL_LOCK_FOR_STUDENTS
+            ? ' · completa cada apartado al 100% para desbloquear el siguiente'
+            : ''}
         </p>
       </div>
 

@@ -105,7 +105,7 @@ export default function Niveles() {
       <div className="sections">
         <section className="section">
           <div className="section__head">
-            <h2>Available levels</h2>
+            <h2>Available tests and tips</h2>
             <span className="count">{NIVELES.length}</span>
           </div>
           <ul className="area-grid niveles-grid">

@@ -97,6 +97,21 @@ function writeCachedRole(userId, role) {
   }
 }
 
+/** Limpia la caché de rol (p. ej. al cerrar sesión). */
+export function clearAllRoleCaches() {
+  if (typeof window === 'undefined') return;
+  try {
+    const keys = [];
+    for (let i = 0; i < sessionStorage.length; i += 1) {
+      const key = sessionStorage.key(i);
+      if (key?.startsWith(ROLE_CACHE_PREFIX)) keys.push(key);
+    }
+    keys.forEach((key) => sessionStorage.removeItem(key));
+  } catch {
+    /* private mode */
+  }
+}
+
 async function fetchRoleNameFromDb(userId) {
   const { data, error } = await supabase
     .from('user_profiles')

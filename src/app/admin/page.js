@@ -4,6 +4,7 @@ import { useState, useEffect, useCallback } from 'react';
 import dynamic from 'next/dynamic';
 import { useRouter } from 'next/navigation';
 import { supabase } from '@/utils/supabaseClient';
+import { getClientAuth } from '@/utils/getClientAuth';
 import { formatSessionDuration } from '@/lib/userActivity';
 import { userHasRole, normalizeRoleName } from '@/utils/authRoles';
 import PanelPageHeader from '@/components/PanelPageHeader';
@@ -22,6 +23,17 @@ const AdminAnalyticsPanels = dynamic(
 );
 
 const PERIOD_OPTIONS = ['dias', 'semanas', 'meses', 'anios'];
+
+function formatRegistrationDate(value) {
+  if (!value) return '—';
+  const date = new Date(value);
+  if (Number.isNaN(date.getTime())) return '—';
+  return date.toLocaleDateString('es-ES', {
+    day: '2-digit',
+    month: '2-digit',
+    year: 'numeric',
+  });
+}
 
 const formatDateByPeriod = (dateValue, period) => {
   const date = new Date(dateValue);
@@ -43,6 +55,7 @@ export default function AdminDashboard() {
   const [loading, setLoading] = useState(true);
   const [roles, setRoles] = useState([]);
   const [users, setUsers] = useState([]);
+  const [placementByUser, setPlacementByUser] = useState({});
   const [savingByUser, setSavingByUser] = useState({});
   const [searchTerm, setSearchTerm] = useState('');
   const [roleFilter, setRoleFilter] = useState('all');
@@ -91,8 +104,8 @@ export default function AdminDashboard() {
 
   const initAdminData = async () => {
     try {
-      const { data: { user: currentUser }, error: userError } = await supabase.auth.getUser();
-      if (userError || !currentUser) {
+      const { user: currentUser } = await getClientAuth();
+      if (!currentUser) {
         router.push('/login');
         return;
       }
@@ -104,7 +117,7 @@ export default function AdminDashboard() {
       }
 
       setUser(currentUser);
-      await Promise.all([loadRoles(), loadUsers()]);
+      await Promise.all([loadRoles(), loadUsers(), loadPlacementByUser()]);
       await Promise.all([loadAnalytics(), loadUserActivity(currentUser)]);
     } catch (error) {
       console.error('Error checking user:', error);
@@ -173,6 +186,31 @@ export default function AdminDashboard() {
     });
 
     setUsers(normalizedUsers);
+  };
+
+  const loadPlacementByUser = async () => {
+    try {
+      const { data, error } = await supabase
+        .from('placement_results')
+        .select('user_id, nivel_asignado, fecha')
+        .order('fecha', { ascending: false });
+
+      if (error) throw error;
+
+      const map = {};
+      for (const row of data || []) {
+        if (!row.user_id || map[row.user_id]) continue;
+        map[row.user_id] = {
+          done: true,
+          level: row.nivel_asignado || '—',
+          date: row.fecha || null,
+        };
+      }
+      setPlacementByUser(map);
+    } catch (error) {
+      console.error('Error loading placement results:', error);
+      setPlacementByUser({});
+    }
   };
 
   const withinClosedDates = (dateValue) => {
@@ -345,7 +383,7 @@ export default function AdminDashboard() {
         .eq('id', targetUserId);
 
       if (error) throw error;
-      await loadUsers();
+      await Promise.all([loadUsers(), loadPlacementByUser()]);
     } catch (error) {
       console.error('Error changing user role:', error);
       alert('No se pudo cambiar el rol. Revisa permisos RLS del admin.');
@@ -363,7 +401,7 @@ export default function AdminDashboard() {
         .eq('id', targetUser.id);
 
       if (error) throw error;
-      await Promise.all([loadUsers(), loadAnalytics()]);
+      await Promise.all([loadUsers(), loadPlacementByUser(), loadAnalytics()]);
     } catch (error) {
       console.error('Error toggling user active state:', error);
       alert('No se pudo cambiar el estado de la cuenta.');
@@ -389,7 +427,7 @@ export default function AdminDashboard() {
         .eq('id', targetUser.id);
 
       if (error) throw error;
-      await Promise.all([loadUsers(), loadAnalytics()]);
+      await Promise.all([loadUsers(), loadPlacementByUser(), loadAnalytics()]);
     } catch (error) {
       console.error('Error deleting user account:', error);
       alert('No se pudo eliminar la cuenta.');
@@ -454,15 +492,21 @@ export default function AdminDashboard() {
 
   const exportUsersToCSV = async () => {
     const XLSX = await import('xlsx');
-    const rows = filteredUsers.map((item) => ({
-      nombre: item.nombre || '',
-      email: item.email || '',
-      rol: getRoleNameById(item.rol_id),
-      acepta_comercial: item.marketingAccepted ? 'Si' : 'No',
-      conectado: userActivityByUser[item.id]?.online ? 'Si' : 'No',
-      tiempo_sesion: userActivityByUser[item.id]?.totalSessionLabel || '0 s',
-      creado_en: item.creado_en || '',
-    }));
+    const rows = filteredUsers.map((item) => {
+      const placement = placementByUser[item.id];
+      return {
+        nombre: item.nombre || '',
+        email: item.email || '',
+        fecha_registro: formatRegistrationDate(item.creado_en),
+        placement_test: placement?.done ? 'Si' : 'No',
+        nivel_placement: placement?.level || '—',
+        rol: getRoleNameById(item.rol_id),
+        acepta_comercial: item.marketingAccepted ? 'Si' : 'No',
+        conectado: userActivityByUser[item.id]?.online ? 'Si' : 'No',
+        tiempo_sesion: userActivityByUser[item.id]?.totalSessionLabel || '0 s',
+        creado_en: item.creado_en || '',
+      };
+    });
     const worksheet = XLSX.utils.json_to_sheet(rows);
     const csv = XLSX.utils.sheet_to_csv(worksheet);
     const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
@@ -476,15 +520,21 @@ export default function AdminDashboard() {
 
   const exportUsersToExcel = async () => {
     const XLSX = await import('xlsx');
-    const rows = filteredUsers.map((item) => ({
-      nombre: item.nombre || '',
-      email: item.email || '',
-      rol: getRoleNameById(item.rol_id),
-      acepta_comercial: item.marketingAccepted ? 'Si' : 'No',
-      conectado: userActivityByUser[item.id]?.online ? 'Si' : 'No',
-      tiempo_sesion: userActivityByUser[item.id]?.totalSessionLabel || '0 s',
-      creado_en: item.creado_en || '',
-    }));
+    const rows = filteredUsers.map((item) => {
+      const placement = placementByUser[item.id];
+      return {
+        nombre: item.nombre || '',
+        email: item.email || '',
+        fecha_registro: formatRegistrationDate(item.creado_en),
+        placement_test: placement?.done ? 'Si' : 'No',
+        nivel_placement: placement?.level || '—',
+        rol: getRoleNameById(item.rol_id),
+        acepta_comercial: item.marketingAccepted ? 'Si' : 'No',
+        conectado: userActivityByUser[item.id]?.online ? 'Si' : 'No',
+        tiempo_sesion: userActivityByUser[item.id]?.totalSessionLabel || '0 s',
+        creado_en: item.creado_en || '',
+      };
+    });
     const worksheet = XLSX.utils.json_to_sheet(rows);
     const workbook = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(workbook, worksheet, 'Usuarios');
@@ -629,7 +679,7 @@ export default function AdminDashboard() {
       setNewUserEmail('');
       setNewUserName('');
       setNewUserRoleId('');
-      await Promise.all([loadUsers(), loadAnalytics()]);
+      await Promise.all([loadUsers(), loadPlacementByUser(), loadAnalytics()]);
     } catch (error) {
       console.error('Error creating user:', error);
       alert(error.message || 'Error creando usuario.');
@@ -818,6 +868,9 @@ export default function AdminDashboard() {
                     </th>
                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Usuario</th>
                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Email</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Fecha registro</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Placement test</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Nivel placement</th>
                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Rol actual</th>
                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Cambiar rol</th>
                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Conexión</th>
@@ -827,7 +880,9 @@ export default function AdminDashboard() {
                   </tr>
                 </thead>
                 <tbody className="bg-white divide-y divide-gray-200">
-                  {filteredUsers.map((item) => (
+                  {filteredUsers.map((item) => {
+                    const placement = placementByUser[item.id];
+                    return (
                     <tr key={item.id}>
                       <td className="px-6 py-4 text-sm text-gray-900">
                         <input
@@ -839,6 +894,29 @@ export default function AdminDashboard() {
                       </td>
                       <td className="px-6 py-4 text-sm text-gray-900">{item.nombre || 'Sin nombre'}</td>
                       <td className="px-6 py-4 text-sm text-gray-600">{item.email}</td>
+                      <td className="px-6 py-4 text-sm text-gray-900 whitespace-nowrap">
+                        {formatRegistrationDate(item.creado_en)}
+                      </td>
+                      <td className="px-6 py-4 text-sm">
+                        {placement?.done ? (
+                          <span className="inline-flex items-center justify-center w-7 h-7 rounded-full bg-green-100 text-green-700 font-bold">
+                            Sí
+                          </span>
+                        ) : (
+                          <span className="inline-flex items-center justify-center w-7 h-7 rounded-full bg-gray-100 text-gray-600 font-bold">
+                            No
+                          </span>
+                        )}
+                      </td>
+                      <td className="px-6 py-4 text-sm text-gray-900 whitespace-nowrap">
+                        {placement?.done ? (
+                          <span className="inline-flex items-center rounded-full bg-indigo-50 px-2.5 py-0.5 font-semibold text-indigo-800">
+                            {placement.level}
+                          </span>
+                        ) : (
+                          <span className="text-gray-400">—</span>
+                        )}
+                      </td>
                       <td className="px-6 py-4 text-sm text-gray-900">{getRoleNameById(item.rol_id)}</td>
                       <td className="px-6 py-4 text-sm text-gray-900">
                         <select
@@ -911,10 +989,11 @@ export default function AdminDashboard() {
                         </div>
                       </td>
                     </tr>
-                  ))}
+                  );
+                  })}
                   {filteredUsers.length === 0 && (
                     <tr>
-                      <td colSpan={10} className="px-6 py-6 text-center text-sm text-gray-500">
+                      <td colSpan={13} className="px-6 py-6 text-center text-sm text-gray-500">
                         No hay usuarios que coincidan con los filtros.
                       </td>
                     </tr>

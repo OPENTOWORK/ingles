@@ -1,5 +1,6 @@
 import { SECTIONS, THEORY_SECTION_CATALOG } from '@/data/teoriaSections';
 import { computeSectionPercent } from '@/lib/teoriaProgress';
+import { shouldApplySequentialLock } from '@/lib/theoryLockConfig';
 
 const COMPLETE_PERCENT = 100;
 
@@ -8,10 +9,12 @@ export function getTeoriaSectionTopicUnlockStates(
   progressByHref = {},
   isStudent = false,
 ) {
+  const lockActive = shouldApplySequentialLock(isStudent);
+
   return topics.map((topic, index) => {
     const percent = progressByHref[topic.href] ?? 0;
 
-    if (!isStudent) {
+    if (!lockActive) {
       return {
         href: topic.href,
         text: topic.text,
@@ -53,7 +56,7 @@ export function isTeoriaTopicHrefLocked(
   progressByHref = {},
   isStudent = false,
 ) {
-  if (!isStudent || !sectionKey || !topicHref) return false;
+  if (!shouldApplySequentialLock(isStudent) || !sectionKey || !topicHref) return false;
   const topics = SECTIONS[sectionKey] || [];
   const state = getTeoriaSectionTopicUnlockStates(topics, progressByHref, true).find(
     (item) => item.href === topicHref,

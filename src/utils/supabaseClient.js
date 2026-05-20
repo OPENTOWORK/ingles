@@ -1,4 +1,4 @@
-import { createClient } from '@supabase/supabase-js';
+import { createBrowserClient } from '@supabase/ssr';
 
 const DEFAULT_SUPABASE_URL = 'https://qnazrzvwvkwhkfbqsbmr.supabase.co';
 const DEFAULT_SUPABASE_ANON_KEY =
@@ -29,7 +29,7 @@ const supabaseAnonKey = !isPlaceholder(envSupabaseAnonKey)
   ? envSupabaseAnonKey
   : DEFAULT_SUPABASE_ANON_KEY;
 
-export const supabase = createClient(supabaseUrl, supabaseAnonKey);
+export const supabase = createBrowserClient(supabaseUrl, supabaseAnonKey);
 
 // Compatibility layer: maps legacy frontend table names to current Supabase names.
 const TABLE_NAME_MAP = {

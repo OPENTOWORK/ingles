@@ -3,6 +3,9 @@ import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { supabase } from '@/utils/supabaseClient';
 import { getRedirectPathByUserId } from '@/utils/authRoles';
+import { completeSignIn } from '@/utils/completeSignIn';
+import { getClientAuth } from '@/utils/getClientAuth';
+import { clearLogoutPending } from '@/utils/logout';
 import toast from 'react-hot-toast';
 import SiteMascot from '@/components/SiteMascot';
 
@@ -18,9 +21,10 @@ export default function LoginPage() {
   useEffect(() => {
     let cancelled = false;
     (async () => {
-      const { data: { session } } = await supabase.auth.getSession();
-      if (cancelled || !session?.user) return;
-      const path = await getRedirectPathByUserId(session.user.id, session.user.email);
+      clearLogoutPending();
+      const { user } = await getClientAuth();
+      if (cancelled || !user) return;
+      const path = await getRedirectPathByUserId(user.id, user.email);
       if (!cancelled) router.replace(path);
     })();
     return () => {
@@ -56,13 +60,13 @@ export default function LoginPage() {
 
     setLoading(true);
     const loadingToast = toast.loading("Iniciando sesión...");
+    clearLogoutPending();
 
     const { data: signInData, error } = await supabase.auth.signInWithPassword({ email, password });
 
-    toast.dismiss(loadingToast);
-    setLoading(false);
-
     if (error) {
+      toast.dismiss(loadingToast);
+      setLoading(false);
       const message = error.message.toLowerCase();
 
       setFailedAttempts((prev) => {
@@ -84,23 +88,32 @@ export default function LoginPage() {
         console.error("Error desconocido de Supabase:", error);
         toast.error("Ha ocurrido un error inesperado. Intenta más tarde.");
       }
-    } else {
-      toast.success("Inicio de sesión exitoso");
-      setFailedAttempts(0);
-
-      const user = signInData?.user ?? signInData?.session?.user;
-      if (user?.id) {
-        try {
-          const { ensureAppUserProfile } = await import('@/utils/ensureAppUserProfile');
-          await ensureAppUserProfile();
-        } catch {
-          /* no bloquear login */
-        }
-        router.replace(await getRedirectPathByUserId(user.id, user.email));
-      } else {
-        router.replace('/perfil');
-      }
+      return;
     }
+
+    const result = await completeSignIn(signInData);
+
+    toast.dismiss(loadingToast);
+    setLoading(false);
+
+    if (!result.ok) {
+      console.error('completeSignIn failed:', result.reason, result.error);
+      toast.error('No se pudo guardar la sesión. Inténtalo de nuevo.');
+      return;
+    }
+
+    toast.success("Inicio de sesión exitoso");
+    setFailedAttempts(0);
+
+    try {
+      const { ensureAppUserProfile } = await import('@/utils/ensureAppUserProfile');
+      await ensureAppUserProfile();
+    } catch {
+      /* no bloquear login */
+    }
+
+    const path = await getRedirectPathByUserId(result.user.id, result.user.email);
+    window.location.href = path;
   };
 
   const handleOAuthLogin = async (provider) => {

@@ -32,6 +32,7 @@ import {
 import { useExamTheoryProgress } from '@/hooks/useExamTheoryProgress';
 import { useTeoriaProgress } from '@/hooks/useTeoriaProgress';
 import ExamTheoryLockedNotice from '@/components/niveles/ExamTheoryLockedNotice';
+import { shouldApplySequentialLock } from '@/lib/theoryLockConfig';
 import { saveTheoryProgress } from '@/utils/theoryProgress';
 
 const TheoryLayout = ({ 
@@ -48,18 +49,38 @@ const TheoryLayout = ({
 }) => {
   const router = useRouter();
   const pathname = usePathname();
+  const theoryApartadoEarly = findTheoryApartadoForTopicHref(pathname);
+  const examSlugEarly = getExamUnitSlugFromPathname(pathname);
+  const pathSegmentEarly = pathname?.replace(/^\/teoria\//, '').split('/')[0] ?? '';
+  const needsTeoriaProgress =
+    Boolean(theoryApartadoEarly) ||
+    Boolean(pathSegmentEarly && isTheorySectionSlug(pathSegmentEarly));
+  const needsExamProgress =
+    Boolean(examSlugEarly) ||
+    Boolean(pathSegmentEarly && isExamTheorySectionSlug(pathSegmentEarly));
+  const needsBothProgress =
+    Boolean(pathname?.startsWith('/teoria/')) && !needsTeoriaProgress && !needsExamProgress;
+
   const { session, userRole } = useUserRole();
   const isStudent = userRole === 'student' || userRole === 'alumno';
+  const examProgressUserId =
+    needsExamProgress || needsBothProgress ? session?.user?.id : null;
+  const teoriaProgressUserId =
+    needsTeoriaProgress || needsBothProgress ? session?.user?.id : null;
   const { units, topicProgressByHref: examTopicProgressByHref } = useExamTheoryProgress(
-    session?.user?.id,
-    session?.access_token,
+    examProgressUserId,
+    examProgressUserId ? session?.access_token : null,
   );
   const { units: teoriaUnits, topicProgressByHref: teoriaTopicProgressByHref } =
-    useTeoriaProgress(session?.user?.id, session?.access_token);
-  const examUnitSlug = getExamUnitSlugFromPathname(pathname);
+    useTeoriaProgress(
+      teoriaProgressUserId,
+      teoriaProgressUserId ? session?.access_token : null,
+    );
+  const examUnitSlug = examSlugEarly ?? getExamUnitSlugFromPathname(pathname);
   const sectionKey = examUnitSlug ? getSectionKeyBySlug(examUnitSlug) : null;
+  const lockActive = shouldApplySequentialLock(isStudent);
   const examUnitLocked =
-    isStudent &&
+    lockActive &&
     examUnitSlug &&
     isExamTheorySlugLocked(examUnitSlug, units, true);
   const examUnitLockInfo = examUnitLocked
@@ -72,7 +93,7 @@ const TheoryLayout = ({
   const topicHrefForLock =
     pathname?.startsWith('/teoria/') && !isSectionHub ? pathname : null;
   const examTopicLocked =
-    isStudent &&
+    lockActive &&
     sectionKey &&
     topicHrefForLock &&
     isExamTopicHrefLocked(
@@ -94,14 +115,14 @@ const TheoryLayout = ({
     ? getTheorySectionKeyBySlug(theoryApartado)
     : null;
   const theoryApartadoLocked =
-    isStudent &&
+    lockActive &&
     theoryApartado &&
     isTeoriaApartadoLocked(theoryApartado, teoriaUnits, true);
   const theoryApartadoLockInfo = theoryApartadoLocked
     ? getTeoriaApartadoUnlockInfo(theoryApartado, teoriaUnits, true)
     : null;
   const theoryTopicLocked =
-    isStudent &&
+    lockActive &&
     theorySectionKey &&
     topicHrefForLock &&
     isTeoriaTopicHrefLocked(

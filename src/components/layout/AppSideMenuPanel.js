@@ -11,6 +11,7 @@ import {
   NAV_LINK_CONTACT,
   NAV_LINKS_BEFORE_DRALO,
 } from '@/config/appNavMenu';
+import { performLogout } from '@/utils/logout';
 
 const ROLE_LABELS = {
   admin: 'Admin',
@@ -66,10 +67,8 @@ export default function AppSideMenuPanel({ defaultOpen = true }) {
     setAdminPanelsOpen(false);
   }, [pathname]);
 
-  const handleLogout = async () => {
-    const { supabase } = await import('@/utils/supabaseClient');
-    await supabase.auth.signOut();
-    window.location.href = '/login';
+  const handleLogout = () => {
+    void performLogout();
   };
 
   return (
