@@ -9,6 +9,19 @@ export const PLACEMENT_WRITING_PARTES_ID = '294a6f65-f5db-4210-b23c-f7ea4c59b3eb
 export const PLACEMENT_EXAM2_TEST_ID = 'd3db83c5-85a4-460a-9dcf-34431f3e04d4';
 export const PLACEMENT_EXAM2_EXPECTED_QUESTIONS = 61;
 
+/** Sesión única: preguntas aleatorias mezcladas de todos los placement_tests. */
+export const PLACEMENT_MIXED_TEST_ID = 'mixed-placement-all-tests';
+export const PLACEMENT_MIXED_TARGETS = { 1: 50, 2: 10, 3: 1 };
+export const PLACEMENT_MIXED_TOTAL = 61;
+
+export function isPlacementMixedTestId(testId) {
+  return (
+    testId === PLACEMENT_MIXED_TEST_ID ||
+    testId === 'mixed' ||
+    testId === 'random'
+  );
+}
+
 /** Mínimo de filas con etiqueta ExamenNparte… para activar modo estructurado. */
 export const PLACEMENT_STRUCTURED_MIN_TAGGED_ROWS = 5;
 
@@ -1223,4 +1236,134 @@ export function buildPlacementQuestionSet(rows, { test } = {}) {
 export function getPlacementPartStartIndex(questions, partId) {
   const idx = questions.findIndex((q) => q.part === partId);
   return idx >= 0 ? idx : 0;
+}
+
+function sampleWithoutReplacement(pool, count) {
+  return shuffleArray(pool).slice(0, Math.min(count, pool.length));
+}
+
+/**
+ * Agrupa todas las preguntas válidas por parte (1–3) desde varios exámenes.
+ */
+function collectPlacementQuestionPools(rows, tests) {
+  const testById = new Map((tests || []).map((t) => [t.id, t]));
+  const pools = { 1: [], 2: [], 3: [] };
+  const usedIds = new Set();
+
+  const addRow = (row, { forceRelaxed = false } = {}) => {
+    const test = testById.get(row.test_id) || null;
+    const scopedRows = test?.id
+      ? (rows || []).filter((r) => r.test_id === test.id)
+      : [row];
+    const isExam2Batch = isStructuredPlacementBatchMode(scopedRows, test);
+    const exam2Base = isExam2Batch
+      ? detectStructuredQuestionBase(scopedRows, test)
+      : 1;
+
+    const meta = resolvePlacementMeta(row, {
+      exam2BaseOffset: exam2Base,
+      forceExam2: isExam2Batch,
+      forceStructured: isExam2Batch,
+      test,
+    });
+    let mapped = mapPlacementRowToQuestion(row);
+    if (!mapped && (isExam2Batch || forceRelaxed)) {
+      mapped = mapPlacementRowRelaxed(row, meta);
+    }
+    if (!mapped || usedIds.has(row.id)) return;
+    if (!meta.part || meta.part < 1 || meta.part > 3) return;
+
+    if (meta.part === 2) {
+      const fullText = getPlacementReadingRowText(row);
+      if (fullText) {
+        mapped = {
+          ...mapped,
+          text: normalizeGapText(fullText),
+          readingPassageSource: fullText,
+        };
+      }
+    }
+
+    usedIds.add(row.id);
+    pools[meta.part].push({
+      ...mapped,
+      placementNumber: meta.placementNumber,
+      part: meta.part,
+      exam2: !!(meta.exam2 || isExam2Batch),
+      sourceTestId: row.test_id,
+    });
+  };
+
+  for (const row of rows || []) {
+    addRow(row);
+  }
+
+  for (const row of rows || []) {
+    const test = testById.get(row.test_id) || null;
+    const scopedRows = test?.id
+      ? (rows || []).filter((r) => r.test_id === test.id)
+      : [row];
+    if (!isStructuredPlacementBatchMode(scopedRows, test)) continue;
+    const meta = resolvePlacementMeta(row, {
+      exam2BaseOffset: detectStructuredQuestionBase(scopedRows, test),
+      forceExam2: true,
+      forceStructured: true,
+      test,
+    });
+    if (meta.part === 2 && pools[2].length < 60 && !usedIds.has(row.id)) {
+      addRow(row, { forceRelaxed: true });
+    }
+    if (meta.part === 3 && pools[3].length < 10 && !usedIds.has(row.id)) {
+      addRow(row, { forceRelaxed: true });
+    }
+  }
+
+  return pools;
+}
+
+/**
+ * Construye un test de 61 preguntas: muestra aleatoria sin repetir id entre los 5 exámenes.
+ */
+export function buildMixedPlacementQuestionSet(rows, { tests } = {}) {
+  const pools = collectPlacementQuestionPools(rows, tests);
+
+  const grammar = sampleWithoutReplacement(pools[1], PLACEMENT_MIXED_TARGETS[1]);
+  const readingSample = sampleWithoutReplacement(pools[2], PLACEMENT_MIXED_TARGETS[2]);
+  const writingSample = sampleWithoutReplacement(pools[3], PLACEMENT_MIXED_TARGETS[3]);
+  const writing = writingSample[0] || null;
+
+  const grammarOrdered = sortPlacementQuestionSet(grammar).map((q, i) => ({
+    ...q,
+    part: 1,
+    placementNumber: i,
+    exam2: true,
+    displayNumber: i + 1,
+  }));
+
+  const readingRenumbered = readingSample.map((q, i) => ({
+    ...q,
+    part: 2,
+    placementNumber: 50 + i,
+    exam2: true,
+    displayNumber: 51 + i,
+  }));
+  const reading = attachReadingPassagesForPart2(
+    sortPlacementQuestionSet(readingRenumbered),
+  );
+
+  const writingFinal = writing
+    ? {
+        ...writing,
+        part: 3,
+        placementNumber: 60,
+        exam2: true,
+        displayNumber: 61,
+      }
+    : null;
+
+  const ordered = writingFinal
+    ? [...grammarOrdered, ...reading, writingFinal]
+    : [...grammarOrdered, ...reading];
+
+  return sortPlacementQuestionSet(shuffleQuestionOptions(ordered));
 }

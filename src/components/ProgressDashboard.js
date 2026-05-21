@@ -2,6 +2,7 @@
 import { useState, useEffect } from 'react';
 import { supabase } from '@/utils/supabaseClient';
 import { progressTracker } from '@/utils/progressTracker';
+import panel from '@/components/training/dashboard-panel.module.css';
 
 const ProgressDashboard = ({ userId }) => {
   const [progress, setProgress] = useState(null);
@@ -80,52 +81,24 @@ const ProgressDashboard = ({ userId }) => {
   };
 
   if (loading) {
-    return (
-      <div style={{
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        height: '200px',
-        fontSize: '1.1rem',
-        color: '#64748b'
-      }}>
-        Loading your progress...
-      </div>
-    );
+    return <div className={panel.loading}>Loading your progress…</div>;
   }
 
   if (!progress || progress.total === 0) {
     return (
-      <div style={{
-        textAlign: 'center',
-        padding: '2rem',
-        backgroundColor: '#f8fafc',
-        borderRadius: '12px',
-        border: '1px solid #e2e8f0'
-      }}>
-        <h3 style={{ color: '#64748b', marginBottom: '1rem' }}>📊 Your Progress Dashboard</h3>
-        <p style={{ color: '#64748b' }}>Start completing exercises to see your progress here!</p>
-      </div>
+      <section className={panel.panel}>
+        <h2 className={panel.panelTitle}>Your progress</h2>
+        <div className={panel.empty}>
+          <p className={panel.emptyTitle}>No activity yet</p>
+          <p className={panel.emptyText}>Complete training exercises to see scores, skills, and achievements here.</p>
+        </div>
+      </section>
     );
   }
 
   return (
-    <div style={{
-      backgroundColor: '#fff',
-      borderRadius: '16px',
-      padding: '2rem',
-      boxShadow: '0 8px 32px rgba(0,0,0,0.1)',
-      border: '1px solid #e2e8f0'
-    }}>
-      <h2 style={{
-        fontSize: '1.5rem',
-        fontWeight: 'bold',
-        color: '#1e293b',
-        marginBottom: '1.5rem',
-        textAlign: 'center'
-      }}>
-        📊 Your Progress Dashboard
-      </h2>
+    <div className={panel.panel}>
+      <h2 className={panel.panelTitle}>Your progress</h2>
 
       {/* Overall Stats */}
       <div style={{

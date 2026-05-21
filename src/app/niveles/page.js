@@ -4,6 +4,7 @@ import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { useUserRole } from '@/context/UserRoleContext';
+import { usePlacementAccess } from '@/context/PlacementAccessContext';
 import PageHero from '@/components/PageHero';
 import { TeoriaGlobalStyles } from '@/components/theory/TeoriaStyles';
 import ExamTheorySection from '@/components/niveles/ExamTheorySection';
@@ -68,6 +69,11 @@ function LevelCardContent({ nivelData }) {
 export default function Niveles() {
   const router = useRouter();
   const { userRole, session } = useUserRole();
+  const {
+    loading: placementLoading,
+    isLevelLocked,
+    hasPlacementResult,
+  } = usePlacementAccess();
 
   useEffect(() => {
     if (!session) {
@@ -86,6 +92,13 @@ export default function Niveles() {
   }
 
   const isStudent = userRole === 'student' || userRole === 'alumno';
+
+  const getLockLabel = (nivel) => {
+    if (!isStudent || !isLevelLocked(nivel)) return null;
+    if (placementLoading) return 'Comprobando…';
+    if (!hasPlacementResult) return 'Placement test requerido';
+    return 'Level blocked';
+  };
 
   return (
     <main className="shell niveles-page">
@@ -110,7 +123,9 @@ export default function Niveles() {
           </div>
           <ul className="area-grid niveles-grid">
             {NIVELES.map((nivelData) => {
-              const isLockedForStudent = isStudent && nivelData.nivel !== 'B2';
+              const isLockedForStudent =
+                isStudent && (placementLoading || isLevelLocked(nivelData.nivel));
+              const lockLabel = getLockLabel(nivelData.nivel);
 
               return (
                 <li
@@ -129,8 +144,8 @@ export default function Niveles() {
                       <LevelCardContent nivelData={nivelData} />
                     </Link>
                   )}
-                  {isLockedForStudent && (
-                    <div className="level-item__lock">Coming soon</div>
+                  {isLockedForStudent && lockLabel && (
+                    <div className="level-item__lock">{lockLabel}</div>
                   )}
                 </li>
               );

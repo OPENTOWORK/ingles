@@ -1,11 +1,11 @@
-export default function DashboardSectionPlaceholder({ label = 'Cargando panel…' }) {
+export default function DashboardSectionPlaceholder({ label = 'Loading…' }) {
   return (
     <div
       style={{
         minHeight: 120,
         borderRadius: 12,
-        border: '1px solid #e5e9f0',
-        background: 'linear-gradient(90deg, #f4f7fb 25%, #eef2f8 50%, #f4f7fb 75%)',
+        border: '1px solid #e2e8f0',
+        background: 'linear-gradient(90deg, #f8fafc 25%, #f1f5f9 50%, #f8fafc 75%)',
         backgroundSize: '200% 100%',
         animation: 'dralo-shimmer 1.2s ease-in-out infinite',
         display: 'grid',

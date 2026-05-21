@@ -50,6 +50,7 @@ export function B2ExamPracticeChrome({
   onSelectExam,
   progressBySlot,
   partsInPaper,
+  examLabelsBySlot = {},
   examPracticeOpen,
   title,
   subtitle,
@@ -74,6 +75,7 @@ export function B2ExamPracticeChrome({
         onSelect={onSelectExam}
         progressBySlot={progressBySlot}
         partsInPaper={partsInPaper}
+        examLabelsBySlot={examLabelsBySlot}
       />
 
       {!examPracticeOpen ? null : (

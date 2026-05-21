@@ -3,6 +3,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { useUserRole } from '@/context/UserRoleContext';
+import { usePlacementAccess } from '@/context/PlacementAccessContext';
 import SiteMascot from '@/components/SiteMascot';
 import { levelRecommendations } from '@/data/placementTest';
 import {
@@ -12,13 +13,15 @@ import {
 import {
   PLACEMENT_ESTIMATED_MINUTES,
   PLACEMENT_EXAM2_EXPECTED_QUESTIONS,
-  PLACEMENT_EXAM2_TEST_ID,
+  PLACEMENT_MIXED_TEST_ID,
+  PLACEMENT_MIXED_TOTAL,
   PLACEMENT_PARTS,
   finalizePlacementQuestions,
   getPlacementPartDefsFromQuestions,
   getPlacementPartStartIndex,
   getPlacementStorageKey,
   getSharedReadingPassageForPart2,
+  isPlacementMixedTestId,
   summarizePlacementParts,
 } from '@/lib/placementSupabase';
 
@@ -31,7 +34,7 @@ import {
  *  - Sin redirección automática al terminar
  */
 
-const STORAGE_VERSION = 22;
+const STORAGE_VERSION = 24;
 
 function clearStalePlacementCache(testId) {
   if (typeof window === 'undefined' || !testId) return;
@@ -64,6 +67,9 @@ function isStructuredPlacementTestLabel(label) {
 
 function shouldIgnorePlacementCache(saved, testId) {
   if (!saved?.questions?.length) return true;
+  if (isPlacementMixedTestId(testId)) {
+    return !saved.mixed;
+  }
   if (
     testId === PLACEMENT_EXAM2_TEST_ID ||
     isStructuredPlacementTestLabel(saved.examLabel)
@@ -93,6 +99,8 @@ function countWords(text) {
 export default function PlacementTestPage() {
   const router = useRouter();
   const { session } = useUserRole();
+  const { refreshPlacementAccess, hasPlacementResult, loading: placementAccessLoading } =
+    usePlacementAccess();
 
   // Estado principal
   const [answers, setAnswers] = useState({}); // { [qid]: value }
@@ -102,10 +110,7 @@ export default function PlacementTestPage() {
   const [confirmOpen, setConfirmOpen] = useState(false);
   const [index, setIndex] = useState(0); // índice de pregunta activa
   const [cancelAuto, setCancelAuto] = useState(false); // (se queda por compatibilidad)
-  const [exams, setExams] = useState([]);
-  const [selectedTestId, setSelectedTestId] = useState(null);
-  const [loadingExams, setLoadingExams] = useState(true);
-  const [examsError, setExamsError] = useState('');
+  const [selectedTestId, setSelectedTestId] = useState(PLACEMENT_MIXED_TEST_ID);
   const [questions, setQuestions] = useState([]);
   const [loadingQuestions, setLoadingQuestions] = useState(false);
   const [loadError, setLoadError] = useState('');
@@ -116,13 +121,24 @@ export default function PlacementTestPage() {
   const [examStarted, setExamStarted] = useState(false);
 
   const topRef = useRef(null);
+  const placementSaveAttemptedRef = useRef(false);
+  const [placementSaved, setPlacementSaved] = useState(false);
+  const [placementSaveError, setPlacementSaveError] = useState('');
+  const [savingPlacement, setSavingPlacement] = useState(false);
+  const [saveRetryTick, setSaveRetryTick] = useState(0);
   const writingQuestion = useMemo(
     () => questions.find((q) => q.type === 'writing') || null,
     [questions],
   );
-  const selectedExam = useMemo(
-    () => exams.find((exam) => exam.id === selectedTestId) ?? null,
-    [exams, selectedTestId],
+  const mixedExamMeta = useMemo(
+    () => ({
+      id: PLACEMENT_MIXED_TEST_ID,
+      label: 'Placement Test',
+      totalQuestions: PLACEMENT_MIXED_TOTAL,
+      estimatedMinutes: PLACEMENT_ESTIMATED_MINUTES,
+      parts: PLACEMENT_PARTS,
+    }),
+    [],
   );
 
   useEffect(() => {
@@ -137,64 +153,21 @@ export default function PlacementTestPage() {
     if (questions.length > 0) {
       return summarizePlacementParts(questions);
     }
-    if (selectedExam?.parts?.length) {
-      if (/test\s*[23]|examen\s*[23]/i.test(selectedExam.label || '')) {
-        const defs = getPlacementPartDefsFromQuestions([{ exam2: true }]);
-        return defs.map((meta) => {
-          const fromExam = selectedExam.parts.find((p) => p.part === meta.part);
-          return {
-            ...meta,
-            questionCount: fromExam?.questionCount ?? meta.questionCount,
-            estimatedMinutes: fromExam?.estimatedMinutes ?? meta.estimatedMinutes,
-          };
-        });
-      }
-      return selectedExam.parts;
-    }
     return PLACEMENT_PARTS;
-  }, [questions, selectedExam]);
+  }, [questions]);
 
-  const introTotalQuestions = selectedExam?.totalQuestions ?? total;
+  const introTotalQuestions =
+    questions.length > 0 ? total : mixedExamMeta.totalQuestions;
   const introTotalMinutes = useMemo(
     () =>
       introParts.reduce((sum, p) => sum + p.estimatedMinutes, 0) ||
-      selectedExam?.estimatedMinutes ||
       PLACEMENT_ESTIMATED_MINUTES,
-    [introParts, selectedExam],
+    [introParts],
   );
 
-  const fetchExams = useCallback(async () => {
-    if (!session?.access_token) return;
-
-    setLoadingExams(true);
-    setExamsError('');
-
-    try {
-      const res = await fetch('/api/placement/exams/', {
-        headers: { Authorization: `Bearer ${session.access_token}` },
-      });
-      const data = await res.json().catch(() => ({}));
-      if (!res.ok) {
-        throw new Error(data.error || 'Could not load exams.');
-      }
-
-      const list = Array.isArray(data.exams) ? data.exams : [];
-      if (!list.length) {
-        throw new Error('No placement exams available.');
-      }
-
-      setExams(list);
-    } catch (err) {
-      setExamsError(err.message || 'Error loading exams.');
-      setExams([]);
-    } finally {
-      setLoadingExams(false);
-    }
-  }, [session?.access_token]);
-
   const fetchQuestions = useCallback(
-    async ({ testId, forceNew = false } = {}) => {
-      if (!session?.access_token || !testId) return;
+    async ({ testId, forceNew = false, restoreOnly = false } = {}) => {
+      if (!session?.access_token || !testId) return [];
 
       setLoadingQuestions(true);
       setLoadError('');
@@ -223,7 +196,8 @@ export default function PlacementTestPage() {
                   (saved.seconds ?? 0) > 0 ||
                   Object.keys(savedAnswers).length > 0;
 
-                setQuestions(finalizePlacementQuestions(saved.questions));
+                const restored = finalizePlacementQuestions(saved.questions);
+                setQuestions(restored);
                 setAnswers(savedAnswers);
                 setWritingTopics(saved.writingTopics || {});
                 setWritingEval(saved.writingEval || null);
@@ -232,12 +206,17 @@ export default function PlacementTestPage() {
                 setIndex(Math.min(saved.index ?? 0, saved.questions.length - 1));
                 setExamStarted(hasProgress);
                 setLoadingQuestions(false);
-                return;
+                return restored;
               }
             }
           } catch {
             /* ignorar caché corrupta */
           }
+        }
+
+        if (restoreOnly) {
+          setLoadingQuestions(false);
+          return [];
         }
 
         const res = await fetch(
@@ -254,14 +233,10 @@ export default function PlacementTestPage() {
           throw new Error('This exam has no questions available.');
         }
 
-        if (
-          testId === PLACEMENT_EXAM2_TEST_ID &&
-          qs.length < PLACEMENT_EXAM2_EXPECTED_QUESTIONS
-        ) {
+        if (isPlacementMixedTestId(testId) && qs.length < PLACEMENT_MIXED_TOTAL) {
           console.warn(
-            `[placement] Exam 2 incomplete: ${qs.length}/${PLACEMENT_EXAM2_EXPECTED_QUESTIONS}.`,
+            `[placement] Mixed session incomplete: ${qs.length}/${PLACEMENT_MIXED_TOTAL}.`,
             data.partCounts,
-            data.skippedCount,
           );
         }
 
@@ -275,9 +250,11 @@ export default function PlacementTestPage() {
         setIsPaused(false);
         setIndex(0);
         setExamStarted(false);
+        return qs;
       } catch (err) {
         setLoadError(err.message || 'Error loading the test.');
         setQuestions([]);
+        return [];
       } finally {
         setLoadingQuestions(false);
       }
@@ -287,43 +264,13 @@ export default function PlacementTestPage() {
 
   useEffect(() => {
     if (!session?.access_token) return;
-    void fetchExams();
-  }, [session?.access_token, fetchExams]);
-
-  useEffect(() => {
-    if (exams.length === 1 && !selectedTestId) {
-      setSelectedTestId(exams[0].id);
-    }
-  }, [exams, selectedTestId]);
-
-  useEffect(() => {
-    if (!session?.access_token || !selectedTestId) return;
-    const examLabel = exams.find((e) => e.id === selectedTestId)?.label || '';
-    const forceNew =
-      selectedTestId === PLACEMENT_EXAM2_TEST_ID ||
-      isStructuredPlacementTestLabel(examLabel);
-    void fetchQuestions({ testId: selectedTestId, forceNew });
-  }, [session?.access_token, selectedTestId, fetchQuestions, exams]);
-
-  const handleSelectExam = (testId) => {
-    if (testId === selectedTestId) return;
-    clearStalePlacementCache(testId);
-    setSelectedTestId(testId);
-    setExamStarted(false);
-    setSubmitted(false);
-    setConfirmOpen(false);
-    setIndex(0);
-    setSeconds(0);
-    setQuestions([]);
-    setAnswers({});
-    setWritingTopics({});
-    setWritingEval(null);
-    setWritingEvalError('');
-    setLoadError('');
-    if (session?.access_token) {
-      void fetchQuestions({ testId, forceNew: true });
-    }
-  };
+    setSelectedTestId(PLACEMENT_MIXED_TEST_ID);
+    void fetchQuestions({
+      testId: PLACEMENT_MIXED_TEST_ID,
+      forceNew: false,
+      restoreOnly: true,
+    });
+  }, [session?.access_token, fetchQuestions]);
 
   // Guardar progreso por examen (testId)
   useEffect(() => {
@@ -331,7 +278,8 @@ export default function PlacementTestPage() {
     const payload = JSON.stringify({
       v: STORAGE_VERSION,
       testId: selectedTestId,
-      examLabel: selectedExam?.label || '',
+      examLabel: mixedExamMeta.label,
+      mixed: true,
       total,
       questions,
       answers,
@@ -371,7 +319,25 @@ export default function PlacementTestPage() {
     return () => document.removeEventListener('visibilitychange', onVisibility);
   }, [examStarted]);
 
-  const handleStartExam = () => {
+  const handleStartExam = async () => {
+    if (!session?.access_token) return;
+
+    let qs = questions;
+    if (!qs.length) {
+      qs =
+        (await fetchQuestions({
+          testId: PLACEMENT_MIXED_TEST_ID,
+          forceNew: true,
+        })) || [];
+    }
+
+    if (!qs.length) {
+      setLoadError(
+        loadError || 'No se pudieron cargar las preguntas. Inténtalo de nuevo.',
+      );
+      return;
+    }
+
     setExamStarted(true);
     setIsPaused(false);
     setSubmitted(false);
@@ -452,6 +418,9 @@ export default function PlacementTestPage() {
 
   const submitNow = async (e) => {
     e?.preventDefault?.();
+    placementSaveAttemptedRef.current = false;
+    setPlacementSaved(false);
+    setPlacementSaveError('');
     setSubmitted(true);
     setIsPaused(true);
     setConfirmOpen(false);
@@ -500,6 +469,10 @@ export default function PlacementTestPage() {
     if (selectedTestId) {
       localStorage.removeItem(getPlacementStorageKey(selectedTestId));
     }
+    placementSaveAttemptedRef.current = false;
+    setPlacementSaved(false);
+    setPlacementSaveError('');
+    setSavingPlacement(false);
     setExamStarted(false);
     setSubmitted(false);
     setIndex(0);
@@ -517,6 +490,77 @@ export default function PlacementTestPage() {
       writingEval,
     });
   }, [submitted, questions, answers, writingEval]);
+
+  useEffect(() => {
+    if (!submitted || !placementResults || !session?.user?.id || !session?.access_token) {
+      return;
+    }
+    if (placementAccessLoading) return;
+    if (hasPlacementResult) return;
+    if (evaluatingWriting) return;
+
+    const essayAwaitingEval =
+      writingQuestion &&
+      String(answers[writingQuestion.id] ?? '').trim().length >= 20 &&
+      Boolean(writingTopics[writingQuestion.id]);
+    if (essayAwaitingEval && !writingEval && !writingEvalError) return;
+
+    if (placementSaveAttemptedRef.current) return;
+
+    placementSaveAttemptedRef.current = true;
+    setSavingPlacement(true);
+    setPlacementSaveError('');
+
+    void (async () => {
+      try {
+        const res = await fetch('/api/placement/save-result/', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${session.access_token}`,
+          },
+          body: JSON.stringify({
+            testId: selectedTestId,
+            placementResults,
+          }),
+        });
+        const data = await res.json().catch(() => ({}));
+        if (!res.ok) {
+          throw new Error(data.error || 'No se pudo guardar el resultado del placement.');
+        }
+        setPlacementSaved(true);
+        await refreshPlacementAccess();
+      } catch (err) {
+        console.error('[placement] Error saving result:', err);
+        setPlacementSaveError(err.message || 'Error al guardar el resultado.');
+        placementSaveAttemptedRef.current = false;
+      } finally {
+        setSavingPlacement(false);
+      }
+    })();
+  }, [
+    submitted,
+    placementResults,
+    session?.user?.id,
+    session?.access_token,
+    placementAccessLoading,
+    hasPlacementResult,
+    evaluatingWriting,
+    writingQuestion,
+    writingEval,
+    writingEvalError,
+    answers,
+    writingTopics,
+    selectedTestId,
+    refreshPlacementAccess,
+    saveRetryTick,
+  ]);
+
+  const retrySavePlacement = () => {
+    placementSaveAttemptedRef.current = false;
+    setPlacementSaveError('');
+    setSaveRetryTick((t) => t + 1);
+  };
 
   const score = placementResults?.totalCorrect ?? 0;
 
@@ -726,81 +770,36 @@ export default function PlacementTestPage() {
           <div>
             <h1 className="text-4xl font-semibold tracking-tight">Placement Test</h1>
             <p className="mt-2 text-slate-600">
-              {exams.length > 1
-                ? 'Choose an exam and complete all three parts of the test.'
-                : 'Three parts: Grammar & vocabulary, Reading, and Writing.'}
+              Three parts: Grammar & vocabulary, Reading, and Writing. Questions are
+              drawn at random from all placement exams.
             </p>
           </div>
         </header>
 
-        {!session || loadingExams ? (
-          <p className="text-center">Loading exams…</p>
-        ) : examsError ? (
-          <div className="text-center space-y-4 rounded-2xl border bg-white p-6">
-            <p className="text-red-600">{examsError}</p>
-            <button type="button" className="btn btn-primary" onClick={() => fetchExams()}>
-              Retry
-            </button>
-          </div>
-        ) : !selectedTestId ? (
-          <section className="placement-intro">
-            <div className="placement-intro__hero">
-              <p className="placement-intro__eyebrow">Placement Test</p>
-              <h2 className="placement-intro__title">Choose your exam</h2>
-              <p className="placement-intro__desc">
-                {exams.length} exams available. Select one to see the details and start when you
-                are ready.
-              </p>
-            </div>
-            <div className="placement-exam-grid" role="list">
-              {exams.map((exam) => (
-                <button
-                  key={exam.id}
-                  type="button"
-                  role="listitem"
-                  className="placement-exam-pick"
-                  onClick={() => handleSelectExam(exam.id)}
-                >
-                  <span className="placement-exam-pick__badge">Exam</span>
-                  <h3 className="placement-exam-pick__title">{exam.label}</h3>
-                  {exam.description ? (
-                    <p className="placement-exam-pick__desc">{exam.description}</p>
-                  ) : null}
-                  <div className="placement-exam-pick__stats">
-                    <span>
-                      <strong>{exam.totalQuestions}</strong> questions
-                    </span>
-                    <span>
-                      <strong>~{exam.estimatedMinutes}</strong> min
-                    </span>
-                  </div>
-                </button>
-              ))}
-            </div>
-          </section>
-        ) : loadingQuestions ? (
-          <p className="text-center">Loading exam…</p>
-        ) : loadError ? (
+        {!session ? (
+          <p className="text-center">Loading…</p>
+        ) : loadError && !examStarted ? (
           <div className="text-center space-y-4 rounded-2xl border bg-white p-6">
             <p className="text-red-600">{loadError}</p>
             <button
               type="button"
               className="btn btn-primary"
-              onClick={() => fetchQuestions({ testId: selectedTestId, forceNew: true })}
+              onClick={() =>
+                fetchQuestions({ testId: PLACEMENT_MIXED_TEST_ID, forceNew: true })
+              }
             >
               Retry
             </button>
           </div>
-        ) : total === 0 ? (
-          <p className="text-center">No questions available.</p>
         ) : !examStarted ? (
           <section className="placement-intro">
             <div className="placement-intro__hero">
               <p className="placement-intro__eyebrow">Placement Test</p>
               <h2 className="placement-intro__title">Ready to start?</h2>
               <p className="placement-intro__desc">
-                Exam: <strong>{selectedExam?.label}</strong>. The timer starts when you press the
-                button. You can pause and continue later; your progress is saved on this device.
+                The timer starts when you press the button. Each session uses random questions
+                from all placement exams without repeats. You can pause and continue later; your
+                progress is saved on this device.
               </p>
               <div className="placement-intro__stats">
                 <span className="placement-intro__stat">
@@ -812,24 +811,6 @@ export default function PlacementTestPage() {
                 </span>
               </div>
             </div>
-
-            {exams.length > 1 ? (
-              <div className="placement-exam-switch">
-                <p className="placement-exam-switch__label">Change exam</p>
-                <div className="placement-exam-switch__grid">
-                  {exams.map((exam) => (
-                    <button
-                      key={exam.id}
-                      type="button"
-                      className={`placement-exam-chip${exam.id === selectedTestId ? ' placement-exam-chip--active' : ''}`}
-                      onClick={() => handleSelectExam(exam.id)}
-                    >
-                      {exam.label}
-                    </button>
-                  ))}
-                </div>
-              </div>
-            ) : null}
 
             <div className="placement-intro__grid">
               {introParts.map((meta) => (
@@ -862,18 +843,28 @@ export default function PlacementTestPage() {
               type="button"
               className="btn btn-primary placement-intro__start"
               onClick={handleStartExam}
-              disabled={loadingQuestions || total === 0}
+              disabled={loadingQuestions}
             >
-              Start exam
+              {loadingQuestions ? 'Preparing exam…' : 'Start exam'}
             </button>
           </section>
+        ) : loadingQuestions && total === 0 ? (
+          <p className="text-center">Loading exam…</p>
+        ) : total === 0 ? (
+          <div className="text-center space-y-4 rounded-2xl border bg-white p-6">
+            <p className="text-red-600">No questions available.</p>
+            <button
+              type="button"
+              className="btn btn-primary"
+              onClick={() =>
+                fetchQuestions({ testId: PLACEMENT_MIXED_TEST_ID, forceNew: true })
+              }
+            >
+              Retry
+            </button>
+          </div>
         ) : (
           <div className="space-y-6">
-            {selectedExam ? (
-              <p className="text-sm text-slate-600 text-center">
-                Exam: <span className="font-semibold text-slate-800">{selectedExam.label}</span>
-              </p>
-            ) : null}
             {/* Barra superior */}
             <div className="sticky top-4 z-20 bg-white/80 backdrop-blur rounded-2xl border p-4 shadow-sm">
               <div className="flex flex-wrap items-center justify-between gap-4 text-sm">
@@ -1073,6 +1064,30 @@ export default function PlacementTestPage() {
                 {evaluatingWriting && (
                   <p className="text-sm text-indigo-600 mt-1">Evaluating writing with AI…</p>
                 )}
+                {savingPlacement && (
+                  <p className="text-sm text-indigo-600 mt-1">Guardando tu nivel en la plataforma…</p>
+                )}
+                {placementSaved && !savingPlacement && (
+                  <p className="text-sm text-green-700 mt-1 font-medium">
+                    Nivel registrado. Ya puedes acceder a los niveles desbloqueados en Levels.
+                  </p>
+                )}
+                {placementSaveError && (
+                  <p className="text-sm text-red-600 mt-1">{placementSaveError}</p>
+                )}
+                {submitted &&
+                  !placementSaved &&
+                  !savingPlacement &&
+                  !hasPlacementResult &&
+                  !evaluatingWriting && (
+                    <button
+                      type="button"
+                      className="btn btn-secondary mt-2"
+                      onClick={retrySavePlacement}
+                    >
+                      Reintentar guardar nivel
+                    </button>
+                  )}
                   </div>
                 </div>
 

@@ -1,71 +1,79 @@
 .stats {
   display: flex;
   flex-direction: column;
-  align-items: center;
-  gap: 0.2rem;
+  gap: 0.4rem;
   width: 100%;
-  margin-top: 0.65rem;
-  padding: 0.45rem 0.55rem;
-  border-radius: 10px;
 }
 
-.light {
-  background: rgba(0, 51, 102, 0.1);
-}
-
-.dark {
-  background: rgba(0, 0, 0, 0.06);
+.row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: #64748b;
 }
 
 .stars {
-  font-size: 0.78rem;
-  font-weight: 700;
-  letter-spacing: 0.02em;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  color: #475569;
 }
 
-.light .stars,
-.light .percent {
-  color: #003366;
-}
-
-.dark .stars,
-.dark .percent {
-  color: #1e293b;
+.starIcon {
+  color: #f59e0b;
+  flex-shrink: 0;
 }
 
 .percent {
-  font-size: 0.88rem;
-  font-weight: 800;
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: #0f172a;
+  font-variant-numeric: tabular-nums;
 }
 
 .progressTrack {
-  width: 92%;
-  height: 4px;
+  width: 100%;
+  height: 6px;
   border-radius: 999px;
   overflow: hidden;
-  margin-top: 0.15rem;
-}
-
-.light .progressTrack {
-  background: rgba(0, 51, 102, 0.15);
-}
-
-.dark .progressTrack {
-  background: rgba(0, 0, 0, 0.1);
+  background: #e2e8f0;
 }
 
 .progressFill {
   display: block;
   height: 100%;
   border-radius: inherit;
+  background: linear-gradient(90deg, #2563eb, #3b82f6);
   transition: width 0.35s ease;
   min-width: 0;
 }
 
-.light .progressFill {
-  background: #1cb0f6;
+/* Legacy variants for any remaining callers */
+.light .progressTrack,
+.dark .progressTrack,
+.card .progressTrack {
+  background: #e2e8f0;
 }
 
-.dark .progressFill {
-  background: #3b82f6;
+.light .progressFill,
+.dark .progressFill,
+.card .progressFill {
+  background: linear-gradient(90deg, #2563eb, #3b82f6);
+}
+
+.light,
+.dark {
+  padding: 0.5rem 0.55rem;
+  border-radius: 8px;
+}
+
+.light {
+  background: rgba(0, 51, 102, 0.06);
+}
+
+.dark {
+  background: #f8fafc;
 }

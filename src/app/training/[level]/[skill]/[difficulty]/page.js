@@ -1,9 +1,19 @@
 'use client';
 
+import dynamic from 'next/dynamic';
 import Link from 'next/link';
 import { useState, useEffect } from 'react';
-import TrainingLevelPathMap from '@/components/training/TrainingLevelPathMap';
 import styles from './page.module.css';
+
+const TrainingLevelPathMap = dynamic(
+  () => import('@/components/training/TrainingLevelPathMap'),
+  {
+    ssr: false,
+    loading: () => (
+      <p style={{ textAlign: 'center', color: '#64748b', padding: '2rem 0' }}>Loading path…</p>
+    ),
+  },
+);
 
 function formatSkillTitle(skill) {
   return skill.charAt(0).toUpperCase() + skill.slice(1).replace(/-/g, ' ');
@@ -11,9 +21,9 @@ function formatSkillTitle(skill) {
 
 function formatDifficultyTitle(difficulty) {
   const map = {
-    basico: 'Básico',
-    intermedio: 'Intermedio',
-    avanzado: 'Avanzado',
+    basico: 'Basic',
+    intermedio: 'Intermediate',
+    avanzado: 'Advanced',
   };
   return map[difficulty] || difficulty.charAt(0).toUpperCase() + difficulty.slice(1);
 }
@@ -43,7 +53,7 @@ export default function DifficultyPage({ params }) {
         <h1 className={styles.title}>
           {skillTitle} — {difficultyTitle}
         </h1>
-        <p className={styles.subtitle}>Selecciona un nivel del recorrido</p>
+        <p className={styles.subtitle}>Choose a level on the path</p>
       </header>
 
       <TrainingLevelPathMap

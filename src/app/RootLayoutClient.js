@@ -9,6 +9,7 @@ import { performLogout } from '@/utils/logout';
 import { isPublicPath } from '@/utils/publicRoutes';
 import Link from 'next/link';
 import { UserRoleProvider } from '../context/UserRoleContext';
+import { PlacementAccessProvider } from '../context/PlacementAccessContext';
 import ExamNavigationGuard from '../components/ExamNavigationGuard';
 import { useActivityHeartbeat } from '@/hooks/useActivityHeartbeat';
 import DeferredSiteAssistant from '@/components/chat/DeferredSiteAssistant';
@@ -267,10 +268,12 @@ export default function RootLayoutClient({ children }) {
 
       <main className="page-content">
         <UserRoleProvider userRole={userRole} session={session}>
-          <ExamNavigationGuard>
-            {children}
-          </ExamNavigationGuard>
-          {pathname === '/' && <DeferredAppSideMenu defaultOpen />}
+          <PlacementAccessProvider session={session} userRole={userRole}>
+            <ExamNavigationGuard>
+              {children}
+            </ExamNavigationGuard>
+            {pathname === '/' && <DeferredAppSideMenu defaultOpen />}
+          </PlacementAccessProvider>
         </UserRoleProvider>
       </main>
 

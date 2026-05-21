@@ -1,6 +1,7 @@
 'use client';
 import { useState, useEffect } from 'react';
 import { analyzeUserPerformance, generateStudyPlan } from '@/utils/adaptiveLearning';
+import panel from '@/components/training/dashboard-panel.module.css';
 
 const AdaptiveLearningDashboard = ({ userId, onStudyPlanGenerated }) => {
   const [analysis, setAnalysis] = useState(null);
@@ -79,80 +80,41 @@ const AdaptiveLearningDashboard = ({ userId, onStudyPlanGenerated }) => {
   };
 
   if (loading) {
-    return (
-      <div style={{
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        height: '300px',
-        fontSize: '1.1rem',
-        color: '#64748b'
-      }}>
-        Analyzing your learning patterns...
-      </div>
-    );
+    return <div className={panel.loading}>Analyzing your learning patterns…</div>;
   }
 
   if (!analysis) {
     return (
-      <div style={{
-        textAlign: 'center',
-        padding: '2rem',
-        backgroundColor: '#f8fafc',
-        borderRadius: '12px',
-        border: '1px solid #e2e8f0'
-      }}>
-        <h3 style={{ color: '#64748b', marginBottom: '1rem' }}>🧠 Adaptive Learning</h3>
-        <p style={{ color: '#64748b' }}>Complete some exercises to see personalized recommendations!</p>
-      </div>
+      <section className={panel.panel}>
+        <h2 className={panel.panelTitle}>Learning assistant</h2>
+        <div className={panel.empty}>
+          <p className={panel.emptyTitle}>Not enough data yet</p>
+          <p className={panel.emptyText}>
+            Complete a few training sessions to unlock personalised recommendations and study plans.
+          </p>
+        </div>
+      </section>
     );
   }
 
-  return (
-    <div style={{
-      backgroundColor: '#fff',
-      borderRadius: '16px',
-      padding: '2rem',
-      boxShadow: '0 8px 32px rgba(0,0,0,0.1)',
-      border: '1px solid #e2e8f0'
-    }}>
-      <h2 style={{
-        fontSize: '1.5rem',
-        fontWeight: 'bold',
-        color: '#1e293b',
-        marginBottom: '1.5rem',
-        textAlign: 'center'
-      }}>
-        🧠 Your Personal Learning Assistant
-      </h2>
+  const tabs = [
+    { id: 'overview', label: 'Overview' },
+    { id: 'recommendations', label: 'Recommendations' },
+    { id: 'study-plan', label: 'Study plan' },
+    { id: 'progress', label: 'Progress' },
+  ];
 
-      {/* Tab Navigation */}
-      <div style={{
-        display: 'flex',
-        gap: '0.5rem',
-        marginBottom: '2rem',
-        borderBottom: '1px solid #e2e8f0'
-      }}>
-        {[
-          { id: 'overview', label: '📊 Overview', icon: '📊' },
-          { id: 'recommendations', label: '💡 Recommendations', icon: '💡' },
-          { id: 'study-plan', label: '📅 Study Plan', icon: '📅' },
-          { id: 'progress', label: '📈 Progress', icon: '📈' }
-        ].map(tab => (
+  return (
+    <div className={panel.panel}>
+      <h2 className={panel.panelTitle}>Learning assistant</h2>
+
+      <div className={panel.tabs}>
+        {tabs.map((tab) => (
           <button
             key={tab.id}
+            type="button"
             onClick={() => setActiveTab(tab.id)}
-            style={{
-              padding: '0.75rem 1rem',
-              border: 'none',
-              backgroundColor: activeTab === tab.id ? '#3b82f6' : 'transparent',
-              color: activeTab === tab.id ? 'white' : '#64748b',
-              borderRadius: '8px 8px 0 0',
-              cursor: 'pointer',
-              fontSize: '0.9rem',
-              fontWeight: '500',
-              transition: 'all 0.2s ease'
-            }}
+            className={activeTab === tab.id ? panel.tabActive : panel.tab}
           >
             {tab.label}
           </button>
@@ -162,128 +124,47 @@ const AdaptiveLearningDashboard = ({ userId, onStudyPlanGenerated }) => {
       {/* Tab Content */}
       {activeTab === 'overview' && (
         <div>
-          <h3 style={{
-            fontSize: '1.2rem',
-            fontWeight: 'bold',
-            color: '#1e293b',
-            marginBottom: '1rem'
-          }}>
-            📊 Learning Overview
-          </h3>
-          
-          {/* Overall Stats */}
-          <div style={{
-            display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(150px, 1fr))',
-            gap: '1rem',
-            marginBottom: '2rem'
-          }}>
-            <div style={{
-              backgroundColor: '#f0f9ff',
-              padding: '1rem',
-              borderRadius: '8px',
-              textAlign: 'center',
-              border: '1px solid #bae6fd'
-            }}>
-              <div style={{ fontSize: '2rem', marginBottom: '0.5rem' }}>📚</div>
-              <div style={{ fontWeight: 'bold', color: '#0369a1' }}>
-                {analysis.overallStats.totalExercises}
-              </div>
-              <div style={{ fontSize: '0.9rem', color: '#64748b' }}>Exercises</div>
-            </div>
+          <h3 className={panel.sectionTitle}>Learning overview</h3>
 
-            <div style={{
-              backgroundColor: '#f0fdf4',
-              padding: '1rem',
-              borderRadius: '8px',
-              textAlign: 'center',
-              border: '1px solid #bbf7d0'
-            }}>
-              <div style={{ fontSize: '2rem', marginBottom: '0.5rem' }}>🎯</div>
-              <div style={{ fontWeight: 'bold', color: '#059669' }}>
-                {Math.round(analysis.overallStats.averageScore)}%
-              </div>
-              <div style={{ fontSize: '0.9rem', color: '#64748b' }}>Average Score</div>
+          <div className={panel.metricGrid}>
+            <div className={panel.metricCard}>
+              <div className={panel.metricValue}>{analysis.overallStats.totalExercises}</div>
+              <div className={panel.metricLabel}>Exercises</div>
             </div>
-
-            <div style={{
-              backgroundColor: '#fef3c7',
-              padding: '1rem',
-              borderRadius: '8px',
-              textAlign: 'center',
-              border: '1px solid #fde68a'
-            }}>
-              <div style={{ fontSize: '2rem', marginBottom: '0.5rem' }}>⚡</div>
-              <div style={{ fontWeight: 'bold', color: '#d97706' }}>
-                {analysis.overallStats.learningVelocity}
-              </div>
-              <div style={{ fontSize: '0.9rem', color: '#64748b' }}>Exercises/Session</div>
+            <div className={panel.metricCard}>
+              <div className={panel.metricValue}>{Math.round(analysis.overallStats.averageScore)}%</div>
+              <div className={panel.metricLabel}>Average score</div>
             </div>
-
-            <div style={{
-              backgroundColor: '#f3e8ff',
-              padding: '1rem',
-              borderRadius: '8px',
-              textAlign: 'center',
-              border: '1px solid #d8b4fe'
-            }}>
-              <div style={{ fontSize: '2rem', marginBottom: '0.5rem' }}>🧠</div>
-              <div style={{ fontWeight: 'bold', color: '#7c3aed' }}>
-                {analysis.overallStats.retentionRate}%
-              </div>
-              <div style={{ fontSize: '0.9rem', color: '#64748b' }}>Retention Rate</div>
+            <div className={panel.metricCard}>
+              <div className={panel.metricValue}>{analysis.overallStats.learningVelocity}</div>
+              <div className={panel.metricLabel}>Per session</div>
+            </div>
+            <div className={panel.metricCard}>
+              <div className={panel.metricValue}>{analysis.overallStats.retentionRate}%</div>
+              <div className={panel.metricLabel}>Retention</div>
             </div>
           </div>
 
-          {/* Next Level Status */}
-          <div style={{
-            backgroundColor: analysis.nextLevel.ready ? '#f0fdf4' : '#fef3c7',
-            padding: '1rem',
-            borderRadius: '8px',
-            border: `1px solid ${analysis.nextLevel.ready ? '#bbf7d0' : '#fde68a'}`,
-            marginBottom: '1rem'
-          }}>
-            <div style={{
-              display: 'flex',
-              alignItems: 'center',
-              gap: '0.5rem',
-              marginBottom: '0.5rem'
-            }}>
-              <span style={{ fontSize: '1.5rem' }}>
-                {analysis.nextLevel.ready ? '🚀' : '📚'}
-              </span>
-              <h4 style={{
-                margin: 0,
-                fontSize: '1.1rem',
-                fontWeight: 'bold',
-                color: '#1e293b'
-              }}>
-                {analysis.nextLevel.ready ? 'Ready for Next Level!' : 'Keep Practicing'}
-              </h4>
-            </div>
-            <p style={{
-              margin: 0,
-              fontSize: '0.9rem',
-              color: '#64748b'
-            }}>
-              Current Level: <strong>{analysis.nextLevel.currentLevel}</strong>
+          <div className={analysis.nextLevel.ready ? panel.calloutReady : panel.calloutPending}>
+            <h4 className={panel.calloutTitle}>
+              {analysis.nextLevel.ready ? 'Ready for the next level' : 'Keep practising'}
+            </h4>
+            <p className={panel.calloutText}>
+              Current level: <strong>{analysis.nextLevel.currentLevel}</strong>
               {analysis.nextLevel.ready && (
                 <> → Next: <strong>{analysis.nextLevel.nextLevel}</strong></>
               )}
             </p>
-            <div style={{
-              marginTop: '0.5rem',
-              height: '6px',
-              backgroundColor: '#e2e8f0',
-              borderRadius: '3px',
-              overflow: 'hidden'
-            }}>
-              <div style={{
-                width: `${analysis.nextLevel.readinessScore}%`,
-                height: '100%',
-                backgroundColor: analysis.nextLevel.ready ? '#10b981' : '#f59e0b',
-                transition: 'width 0.3s ease'
-              }} />
+            <div className={panel.progressTrack}>
+              <div
+                className={panel.progressFill}
+                style={{
+                  width: `${analysis.nextLevel.readinessScore}%`,
+                  background: analysis.nextLevel.ready
+                    ? 'linear-gradient(90deg, #059669, #10b981)'
+                    : 'linear-gradient(90deg, #d97706, #f59e0b)',
+                }}
+              />
             </div>
           </div>
         </div>

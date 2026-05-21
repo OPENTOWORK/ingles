@@ -74,7 +74,7 @@ export async function fetchPlacementRowsWithRespuestas(db, { testId } = {}) {
     .from('placement_preguntas')
     .select(PREGUNTAS_WITH_RESPUESTAS_SELECT)
     .order('id', { ascending: true })
-    .limit(500);
+    .limit(testId ? 500 : 1200);
   if (testId) {
     query = query.eq('test_id', testId);
   }
@@ -94,7 +94,7 @@ export async function fetchPlacementRowsWithRespuestas(db, { testId } = {}) {
     .from('placement_preguntas')
     .select(PREGUNTAS_SELECT)
     .order('id', { ascending: true })
-    .limit(500);
+    .limit(testId ? 500 : 1200);
   if (testId) {
     flatQuery = flatQuery.eq('test_id', testId);
   }

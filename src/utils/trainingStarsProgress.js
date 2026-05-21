@@ -26,13 +26,43 @@ function sumStarsFromStorageData(data) {
   return earned;
 }
 
+/** @type {Map<string, number> | null} */
+let starsStorageIndex = null;
+
+export function invalidateTrainingStarsCache() {
+  starsStorageIndex = null;
+}
+
+function buildStarsStorageIndex() {
+  if (starsStorageIndex) return starsStorageIndex;
+  starsStorageIndex = new Map();
+  if (typeof window === 'undefined') return starsStorageIndex;
+
+  for (let i = 0; i < localStorage.length; i++) {
+    const key = localStorage.key(i);
+    if (!key?.startsWith('stars_')) continue;
+    try {
+      const raw = localStorage.getItem(key);
+      starsStorageIndex.set(key, raw ? sumStarsFromStorageData(JSON.parse(raw)) : 0);
+    } catch {
+      starsStorageIndex.set(key, 0);
+    }
+  }
+  return starsStorageIndex;
+}
+
 function readEarnedFromStorageKey(storageKey) {
   if (typeof window === 'undefined') return 0;
+  const index = buildStarsStorageIndex();
+  if (index.has(storageKey)) return index.get(storageKey);
+
   try {
     const raw = localStorage.getItem(storageKey);
-    if (!raw) return 0;
-    return sumStarsFromStorageData(JSON.parse(raw));
+    const earned = raw ? sumStarsFromStorageData(JSON.parse(raw)) : 0;
+    index.set(storageKey, earned);
+    return earned;
   } catch {
+    index.set(storageKey, 0);
     return 0;
   }
 }
@@ -66,6 +96,16 @@ export function getMaxStarsForDifficulty() {
  * @param {string} cefrLevel
  * @returns {{ earned: number, max: number, percent: number }}
  */
+function earnedForLevelFromIndex(index, levelKey) {
+  let earned = 0;
+  for (const skill of TRAINING_SKILL_IDS) {
+    for (const difficulty of TRAINING_DIFFICULTY_IDS) {
+      earned += index.get(`stars_${levelKey}_${skill}_${difficulty}`) ?? 0;
+    }
+  }
+  return earned;
+}
+
 export function computeCefrStarProgress(cefrLevel) {
   const max = getMaxStarsForCefrLevel();
   const levelKey = (cefrLevel || 'a2').toLowerCase();
@@ -74,14 +114,8 @@ export function computeCefrStarProgress(cefrLevel) {
     return { earned: 0, max, percent: 0 };
   }
 
-  let earned = 0;
-
-  for (const skill of TRAINING_SKILL_IDS) {
-    for (const difficulty of TRAINING_DIFFICULTY_IDS) {
-      earned += readEarnedFromStorageKey(`stars_${levelKey}_${skill}_${difficulty}`);
-    }
-  }
-
+  const index = buildStarsStorageIndex();
+  const earned = earnedForLevelFromIndex(index, levelKey);
   return { earned, max, percent: toPercent(earned, max) };
 }
 
@@ -97,17 +131,34 @@ export function computeSkillStarProgress(cefrLevel, skillId) {
     return { earned: 0, max, percent: 0 };
   }
 
+  const index = buildStarsStorageIndex();
   let earned = 0;
   for (const difficulty of TRAINING_DIFFICULTY_IDS) {
-    earned += readEarnedFromStorageKey(`stars_${levelKey}_${skill}_${difficulty}`);
+    earned += index.get(`stars_${levelKey}_${skill}_${difficulty}`) ?? 0;
   }
 
   return { earned, max, percent: toPercent(earned, max) };
 }
 
 export function computeAllSkillStarProgress(cefrLevel) {
+  const levelKey = (cefrLevel || 'a2').toLowerCase();
+  const index = buildStarsStorageIndex();
+  const max = getMaxStarsForSkill();
+
+  if (typeof window === 'undefined') {
+    return Object.fromEntries(
+      TRAINING_SKILL_IDS.map((skill) => [skill, { earned: 0, max, percent: 0 }]),
+    );
+  }
+
   return Object.fromEntries(
-    TRAINING_SKILL_IDS.map((skill) => [skill, computeSkillStarProgress(cefrLevel, skill)])
+    TRAINING_SKILL_IDS.map((skill) => {
+      let earned = 0;
+      for (const difficulty of TRAINING_DIFFICULTY_IDS) {
+        earned += index.get(`stars_${levelKey}_${skill}_${difficulty}`) ?? 0;
+      }
+      return [skill, { earned, max, percent: toPercent(earned, max) }];
+    }),
   );
 }
 
@@ -129,24 +180,63 @@ export function computeDifficultyStarProgress(cefrLevel, skillId, difficultyId) 
 }
 
 export function computeAllDifficultyStarProgress(cefrLevel, skillId) {
+  const levelKey = (cefrLevel || 'a2').toLowerCase();
+  const skill = skillId || TRAINING_SKILL_IDS[0];
+  const max = getMaxStarsForDifficulty();
+
+  if (typeof window === 'undefined') {
+    return Object.fromEntries(
+      TRAINING_DIFFICULTY_IDS.map((difficulty) => [difficulty, { earned: 0, max, percent: 0 }]),
+    );
+  }
+
+  const index = buildStarsStorageIndex();
   return Object.fromEntries(
-    TRAINING_DIFFICULTY_IDS.map((difficulty) => [
-      difficulty,
-      computeDifficultyStarProgress(cefrLevel, skillId, difficulty),
-    ])
+    TRAINING_DIFFICULTY_IDS.map((difficulty) => {
+      const earned = index.get(`stars_${levelKey}_${skill}_${difficulty}`) ?? 0;
+      return [difficulty, { earned, max, percent: toPercent(earned, max) }];
+    }),
   );
 }
 
 export function computeAllCefrStarProgress() {
+  const max = getMaxStarsForCefrLevel();
+
+  if (typeof window === 'undefined') {
+    return Object.fromEntries(
+      TRAINING_CEFR_LEVELS.map((level) => [level, { earned: 0, max, percent: 0 }]),
+    );
+  }
+
+  const index = buildStarsStorageIndex();
   return Object.fromEntries(
-    TRAINING_CEFR_LEVELS.map((level) => [level, computeCefrStarProgress(level)])
+    TRAINING_CEFR_LEVELS.map((level) => {
+      const levelKey = level.toLowerCase();
+      const earned = earnedForLevelFromIndex(index, levelKey);
+      return [level, { earned, max, percent: toPercent(earned, max) }];
+    }),
   );
 }
 
 export const TRAINING_STARS_UPDATED_EVENT = 'training-stars-updated';
 
-export function notifyTrainingStarsUpdated() {
-  if (typeof window !== 'undefined') {
-    window.dispatchEvent(new CustomEvent(TRAINING_STARS_UPDATED_EVENT));
+/** @param {string} [updatedStorageKey] When set, refresh only that key in the index. */
+export function notifyTrainingStarsUpdated(updatedStorageKey) {
+  if (typeof window === 'undefined') return;
+
+  if (updatedStorageKey && starsStorageIndex) {
+    try {
+      const raw = localStorage.getItem(updatedStorageKey);
+      starsStorageIndex.set(
+        updatedStorageKey,
+        raw ? sumStarsFromStorageData(JSON.parse(raw)) : 0,
+      );
+    } catch {
+      invalidateTrainingStarsCache();
+    }
+  } else {
+    invalidateTrainingStarsCache();
   }
+
+  window.dispatchEvent(new CustomEvent(TRAINING_STARS_UPDATED_EVENT));
 }

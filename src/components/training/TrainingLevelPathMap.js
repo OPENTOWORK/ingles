@@ -3,11 +3,8 @@
 import Link from 'next/link';
 import { useId, useMemo } from 'react';
 import { TRAINING_LEVEL_COUNT, TRAINING_PATH_COLS } from '@/constants/trainingLevels';
-import {
-  getTrainingPathCurriculum,
-  getSectionForLevel,
-  getLevelTopic,
-} from '@/data/trainingPathCurriculum';
+import { getTrainingPathCurriculum, getLevelTopic } from '@/data/trainingPathCurriculum';
+import { getCefrLevelColor } from '@/constants/cefrLevelColors';
 import styles from './TrainingLevelPathMap.module.css';
 
 const PAD_X = 14;
@@ -131,6 +128,42 @@ export default function TrainingLevelPathMap({
     lastCompleted > 0 ? NODES.findIndex((node) => node.n === lastCompleted) : -1;
   const pathFillPct =
     lastCompletedIndex >= 0 ? Math.round(((lastCompletedIndex + 1) / total) * 100) : 0;
+  const levelAccent = getCefrLevelColor(cefrLevel);
+
+  const pathNodes = useMemo(
+    () =>
+      NODES.map(({ n, x, y }, index) => {
+        const entry = curriculum.levelMap[n];
+        const section = entry?.section ?? curriculum.sections[0];
+        const topic = entry?.topic ?? `Level ${n}`;
+        const stars = levelStars[`level-${n}`] || 0;
+        const isCompleted = stars > 0;
+        const isCurrent = n === currentLevel && !isCompleted;
+        const isUpcoming = n > currentLevel && !isCompleted;
+        const stateClass = isCompleted
+          ? styles.nodeCompleted
+          : isCurrent
+            ? styles.nodeCurrent
+            : isUpcoming
+              ? styles.nodeUpcoming
+              : '';
+
+        return {
+          n,
+          x,
+          y,
+          index,
+          section,
+          topic,
+          stars,
+          href: `${baseHref}/level-${n}`,
+          stateClass,
+          isCompleted,
+          isCurrent,
+        };
+      }),
+    [curriculum, levelStars, baseHref, currentLevel],
+  );
 
   const sectionBands = useMemo(
     () =>
@@ -156,7 +189,7 @@ export default function TrainingLevelPathMap({
     <section className={styles.stage} aria-label="Level path">
       <div className={styles.metaRow}>
         <span className={styles.metaBadge}>{curriculum.progressionLabel}</span>
-        <span className={styles.metaTrail}>Progresión {curriculum.tier + 1} / 18</span>
+        <span className={styles.metaTrail}>Progression {curriculum.tier + 1} / 18</span>
       </div>
 
       <div className={styles.progressBar} role="progressbar" aria-valuenow={progressPct} aria-valuemin={0} aria-valuemax={100}>
@@ -165,15 +198,15 @@ export default function TrainingLevelPathMap({
             className={styles.progressBarFill}
             style={{
               width: `${progressPct}%`,
-              background: `linear-gradient(90deg, ${curriculum.sections[0].color}, ${curriculum.sections[3].color})`,
+              background: levelAccent,
             }}
           />
         </div>
         <p className={styles.progressHint}>
-          Nivel <strong>{currentLevel}</strong> de {total} · {currentTopic}
+          Level <strong>{currentLevel}</strong> of {total} · {currentTopic}
           {completedCount > 0
-            ? ` · ${completedCount} completado${completedCount !== 1 ? 's' : ''}`
-            : ' · Empieza aquí'}
+            ? ` · ${completedCount} completed`
+            : ' · Start here'}
         </p>
       </div>
 
@@ -229,48 +262,28 @@ export default function TrainingLevelPathMap({
           return <SectionLabel key={section.id} section={section} anchorNode={anchor} />;
         })}
 
-        {NODES.map(({ n, x, y }, index) => {
-          const key = `level-${n}`;
-          const stars = levelStars[key] || 0;
-          const href = `${baseHref}/level-${n}`;
-          const section = getSectionForLevel(n, curriculum);
-          const topic = getLevelTopic(n, curriculum);
-          const isCompleted = stars > 0;
-          const isCurrent = n === currentLevel && !isCompleted;
-          const isUpcoming = n > currentLevel && !isCompleted;
-
-          const stateClass = isCompleted
-            ? styles.nodeCompleted
-            : isCurrent
-              ? styles.nodeCurrent
-              : isUpcoming
-                ? styles.nodeUpcoming
-                : '';
-
-          return (
-            <Link
-              key={n}
-              href={href}
-              prefetch={false}
-              className={`${styles.node} ${styles.nodeEnter} ${stateClass}`}
+        {pathNodes.map(({ n, x, y, index, section, topic, stars, href, stateClass, isCompleted, isCurrent }) => (
+          <Link
+            key={n}
+            href={href}
+            prefetch={false}
+              className={`${styles.node} ${stateClass}`}
               style={{
                 left: `${x}%`,
                 top: `${y}%`,
-                animationDelay: `${Math.min(index * 0.02, 0.4)}s`,
-                '--section-color': section.color,
-                '--section-color-light': section.colorLight,
-              }}
-              aria-label={`${topic}, nivel ${n}${isCompleted ? `, ${stars} estrellas` : isCurrent ? ', siguiente' : ''}`}
-              {...(isCurrent ? { 'aria-current': 'step' } : {})}
-            >
-              <span className={styles.card}>
-                <span className={styles.badge}>{String(n).padStart(2, '0')}</span>
-                <span className={styles.topic}>{topic}</span>
-                <StarRow count={stars} />
-              </span>
-            </Link>
-          );
-        })}
+              '--section-color': section.color,
+              '--section-color-light': section.colorLight,
+            }}
+            aria-label={`${topic}, level ${n}${isCompleted ? `, ${stars} stars` : isCurrent ? ', up next' : ''}`}
+            {...(isCurrent ? { 'aria-current': 'step' } : {})}
+          >
+            <span className={styles.card}>
+              <span className={styles.badge}>{String(n).padStart(2, '0')}</span>
+              <span className={styles.topic}>{topic}</span>
+              <StarRow count={stars} />
+            </span>
+          </Link>
+        ))}
       </div>
     </section>
   );

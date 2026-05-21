@@ -1,6 +1,6 @@
 'use client';
 
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import {
   TRAINING_CEFR_LEVELS,
   TRAINING_DIFFICULTY_IDS,
@@ -14,25 +14,44 @@ import {
   computeSkillStarProgress,
 } from '@/utils/trainingStarsProgress';
 
-function useStarProgressMap(compute) {
-  const [progressMap, setProgressMap] = useState(() => {
-    if (typeof window === 'undefined') return {};
-    return compute();
-  });
+function scheduleIdleWork(fn, timeout = 800) {
+  if (typeof window === 'undefined') return () => {};
+  if ('requestIdleCallback' in window) {
+    const id = window.requestIdleCallback(fn, { timeout });
+    return () => window.cancelIdleCallback(id);
+  }
+  const t = window.setTimeout(fn, 0);
+  return () => window.clearTimeout(t);
+}
 
-  const refresh = useCallback(() => {
-    setProgressMap(compute());
-  }, [compute]);
+function useStarProgressMap(compute) {
+  const [progressMap, setProgressMap] = useState({});
+  const computeRef = useRef(compute);
+  computeRef.current = compute;
+
+  const runCompute = useCallback(() => {
+    setProgressMap(computeRef.current());
+  }, []);
 
   useEffect(() => {
-    refresh();
+    return scheduleIdleWork(runCompute, 600);
+  }, [runCompute]);
+
+  useEffect(() => {
+    let debounceId = null;
+    const refresh = () => {
+      if (debounceId) window.clearTimeout(debounceId);
+      debounceId = window.setTimeout(runCompute, 80);
+    };
+
     window.addEventListener('storage', refresh);
     window.addEventListener(TRAINING_STARS_UPDATED_EVENT, refresh);
     return () => {
+      if (debounceId) window.clearTimeout(debounceId);
       window.removeEventListener('storage', refresh);
       window.removeEventListener(TRAINING_STARS_UPDATED_EVENT, refresh);
     };
-  }, [refresh]);
+  }, [runCompute]);
 
   return progressMap;
 }
@@ -58,7 +77,7 @@ export function useTrainingDifficultyStarProgressMap(cefrLevel, skillId) {
   const skill = skillId || TRAINING_SKILL_IDS[0];
   const compute = useCallback(
     () => computeAllDifficultyStarProgress(levelKey, skill),
-    [levelKey, skill]
+    [levelKey, skill],
   );
   return useStarProgressMap(compute);
 }
@@ -78,4 +97,3 @@ export {
   getMaxStarsForDifficulty,
   getMaxStarsForSkill,
 } from '@/utils/trainingStarsProgress';
-

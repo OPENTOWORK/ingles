@@ -1,10 +1,14 @@
 import { NextResponse } from 'next/server';
 import {
+  buildMixedPlacementQuestionSet,
   buildPlacementQuestionSet,
   detectStructuredQuestionBase,
+  isPlacementMixedTestId,
   isStructuredPlacementBatchMode,
   mapPlacementRowToQuestion,
   PLACEMENT_EXAM2_EXPECTED_QUESTIONS,
+  PLACEMENT_MIXED_TARGETS,
+  PLACEMENT_MIXED_TOTAL,
   resolvePlacementMeta,
 } from '@/lib/placementSupabase';
 import { getSupabaseServiceRoleKey } from '@/lib/supabaseEnv';
@@ -28,7 +32,11 @@ export async function GET(req) {
     }
 
     const testId = req.nextUrl.searchParams.get('testId')?.trim() || null;
-    if (!testId) {
+    const modeMixed =
+      isPlacementMixedTestId(testId) ||
+      req.nextUrl.searchParams.get('mode') === 'mixed';
+
+    if (!testId && !modeMixed) {
       return NextResponse.json(
         { error: 'Indica qué examen quieres cargar (testId).' },
         { status: 400 },
@@ -42,6 +50,64 @@ export async function GET(req) {
     }
 
     const db = createPlacementDb(token);
+
+    if (modeMixed) {
+      const { data: tests, error: testsError } = await db
+        .from('placement_tests')
+        .select('*')
+        .order('id', { ascending: true });
+
+      if (testsError) {
+        return NextResponse.json(
+          { error: testsError.message || 'No se pudieron cargar los exámenes.' },
+          { status: 500 },
+        );
+      }
+
+      const rows = await fetchPlacementRowsWithRespuestas(db);
+      const questions = buildMixedPlacementQuestionSet(rows, { tests: tests || [] });
+
+      const partCounts = {
+        1: questions.filter((q) => q.part === 1).length,
+        2: questions.filter((q) => q.part === 2).length,
+        3: questions.filter((q) => q.part === 3).length,
+      };
+
+      if (questions.length < PLACEMENT_MIXED_TOTAL) {
+        console.warn(
+          `[placement/questions] Mixto incompleto: ${questions.length}/${PLACEMENT_MIXED_TOTAL}`,
+          partCounts,
+          'pool',
+          rows.length,
+        );
+      }
+
+      if (questions.length === 0) {
+        return NextResponse.json(
+          {
+            error:
+              'No hay suficientes preguntas en los exámenes para generar un test mixto.',
+            poolSize: rows.length,
+          },
+          { status: 404 },
+        );
+      }
+
+      return NextResponse.json({
+        testId: testId || 'mixed',
+        mixed: true,
+        questions,
+        total: questions.length,
+        poolSize: rows.length,
+        loadedFromDb: rows.length,
+        partCounts,
+        targets: PLACEMENT_MIXED_TARGETS,
+        expectedTotal: PLACEMENT_MIXED_TOTAL,
+        complete: questions.length >= PLACEMENT_MIXED_TOTAL,
+        sourceTests: (tests || []).length,
+      });
+    }
+
     const rows = await fetchPlacementRowsWithRespuestas(db, { testId });
 
     const { data: testRow } = await db

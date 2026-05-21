@@ -73,6 +73,8 @@
   min-height: 740px;
   max-height: 1120px;
   margin: 0 auto;
+  content-visibility: auto;
+  contain-intrinsic-size: 800px 740px;
   border-radius: 20px;
   background: linear-gradient(165deg, #f8fafc 0%, #f1f5f9 48%, #eef2ff 100%);
   border: 1px solid #e2e8f0;
@@ -179,7 +181,7 @@
 }
 
 .nodeEnter {
-  animation: nodeFadeIn 0.38s ease-out both;
+  animation: nodeFadeIn 0.2s ease-out both;
 }
 
 @keyframes nodeFadeIn {

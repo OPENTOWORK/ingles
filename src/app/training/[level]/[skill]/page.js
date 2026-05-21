@@ -1,46 +1,46 @@
-"use client";
-import Link from "next/link";
-import TrainingCardProgressStats from '@/components/training/TrainingCardProgressStats';
+'use client';
+
+import Link from 'next/link';
+import TrainingDifficultyCard from '@/components/training/TrainingDifficultyCard';
 import {
   getMaxStarsForDifficulty,
   useTrainingDifficultyStarProgressMap,
 } from '@/hooks/useTrainingCefrStarProgress';
+import { getCefrLevelColor } from '@/constants/cefrLevelColors';
+import ui from '@/components/training/training-ui.module.css';
 
-const levels = [
-  { id: "basico", label: "🟢 Basic", description: "Basic phrases and vocabulary" },
-  { id: "intermedio", label: "🟡 Intermediate", description: "Simple sentence structures" },
-  { id: "avanzado", label: "🔵 Advanced", description: "Comprehension challenges" },
+const difficulties = [
+  { id: 'basico', title: 'Basic', description: 'Core phrases and everyday vocabulary' },
+  { id: 'intermedio', title: 'Intermediate', description: 'Clear sentence structures and common patterns' },
+  { id: 'avanzado', title: 'Advanced', description: 'Longer texts and more demanding tasks' },
 ];
+
+function formatSkillTitle(skill) {
+  return skill
+    .split('-')
+    .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
+    .join(' ');
+}
 
 export default function SkillPage({ params }) {
   const { level, skill } = params;
   const difficultyProgressMap = useTrainingDifficultyStarProgressMap(level, skill);
   const maxStarsPerDifficulty = getMaxStarsForDifficulty();
+  const skillTitle = formatSkillTitle(skill);
+  const levelAccent = getCefrLevelColor(level);
 
   return (
-    <main
-      style={{
-        padding: "2rem",
-        fontFamily: "Segoe UI, sans-serif",
-        background: "linear-gradient(to right, #f0f8ff, #e6f0ff)",
-        minHeight: "100vh",
-        textAlign: "center",
-      }}
-    >
-      <h1 style={{ fontSize: "2rem", marginBottom: "0.5rem" }}>🎓 Level {level.toUpperCase()}</h1>
-      <p style={{ marginBottom: "2rem", color: "#555" }}>Choose a set of exercises</p>
+    <main className={ui.pageNarrow}>
+      <header className={ui.header}>
+        <p className={ui.eyebrow} style={{ color: levelAccent }}>
+          Level {level.toUpperCase()} · {skillTitle}
+        </p>
+        <h1 className={ui.title}>Choose difficulty</h1>
+        <p className={ui.subtitle}>Work through 24 levels on the path. Start with Basic if you are unsure.</p>
+      </header>
 
-      <div
-        style={{
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-          gap: "2rem",
-          maxWidth: "500px",
-          margin: "0 auto",
-        }}
-      >
-        {levels.map(({ id, label, description }) => {
+      <div className={ui.difficultyList}>
+        {difficulties.map(({ id, title, description }) => {
           const progress = difficultyProgressMap[id] ?? {
             earned: 0,
             max: maxStarsPerDifficulty,
@@ -48,39 +48,25 @@ export default function SkillPage({ params }) {
           };
 
           return (
-            <Link
+            <TrainingDifficultyCard
               key={id}
               href={`/training/${level}/${skill}/${id}`}
-              style={{
-                backgroundColor: "#fff",
-                padding: "1.5rem",
-                borderRadius: "12px",
-                width: "100%",
-                boxShadow: "0 4px 12px rgba(0,0,0,0.1)",
-                textDecoration: "none",
-                color: "#333",
-                fontWeight: "bold",
-                transition: "transform 0.2s",
-                display: "flex",
-                flexDirection: "column",
-                alignItems: "center",
-              }}
-              onMouseEnter={(e) => (e.currentTarget.style.transform = "scale(1.03)")}
-              onMouseLeave={(e) => (e.currentTarget.style.transform = "scale(1)")}
-            >
-              <div style={{ fontSize: "1.5rem" }}>{label}</div>
-              <div style={{ fontSize: "0.9rem", marginTop: "0.5rem", fontWeight: "normal" }}>
-                {description}
-              </div>
-              <TrainingCardProgressStats
-                earned={progress.earned}
-                max={progress.max}
-                percent={progress.percent}
-                variant="dark"
-              />
-            </Link>
+              id={id}
+              title={title}
+              description={description}
+              earned={progress.earned}
+              max={progress.max}
+              percent={progress.percent}
+              accentColor={levelAccent}
+            />
           );
         })}
+      </div>
+
+      <div style={{ textAlign: 'center' }}>
+        <Link href={`/training/${level}`} className={ui.backLink}>
+          ← Back to skills
+        </Link>
       </div>
     </main>
   );

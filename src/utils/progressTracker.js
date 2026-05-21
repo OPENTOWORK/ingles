@@ -342,6 +342,27 @@ export const getUserProgress = async (userId, exerciseId) => {
   return await progressTracker.getExerciseProgress(userId, exerciseId);
 };
 
+/** One fetch for all progress rows, then filter by exercise ids (training level screen). */
+export async function getUserProgressForExercises(userId, exerciseIds) {
+  if (!userId || !exerciseIds?.length) return {};
+
+  const idSet = new Set(exerciseIds);
+  const progress = {};
+
+  try {
+    const rows = await offlineFirstDatabase.getUserProgress(userId);
+    for (const row of rows) {
+      const exerciseId = row.exercise_id ?? row.id;
+      if (idSet.has(exerciseId)) {
+        progress[exerciseId] = row;
+      }
+    }
+    return progress;
+  } catch {
+    return progress;
+  }
+}
+
 export const getSkillProgress = async (userId, level, skill, sublevel) => {
   return await progressTracker.getUserSkillProgress(userId, level, skill, sublevel);
 };

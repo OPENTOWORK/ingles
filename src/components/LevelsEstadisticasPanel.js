@@ -1,24 +1,53 @@
 'use client';
 
 import { useEffect, useMemo, useState } from 'react';
+import dynamic from 'next/dynamic';
 import { supabase } from '@/utils/supabaseClient';
 import { formatLevelsPartDisplayName } from '@/utils/formatLevelsPartDisplayName';
+import {
+  aggregateLevelsStatsByPart,
+  buildPreguntaMetaMap,
+} from '@/lib/aggregateLevelsStatsByPart';
 
-function formatDate(iso) {
-  if (!iso) return '—';
-  try {
-    return new Date(iso).toLocaleString('es-ES', {
-      dateStyle: 'short',
-      timeStyle: 'short',
-    });
-  } catch {
-    return '—';
+const LevelsStatsChartsCarousel = dynamic(
+  () => import('@/components/perfil/LevelsStatsChartsCarousel'),
+  { ssr: false, loading: () => <p style={{ color: '#666', padding: '0.5rem 0' }}>Cargando gráficas…</p> },
+);
+
+async function fetchPreguntaMeta(preguntaIds) {
+  if (!preguntaIds.length) return {};
+
+  const chunkSize = 80;
+  const preguntas = [];
+
+  for (let i = 0; i < preguntaIds.length; i += chunkSize) {
+    const chunk = preguntaIds.slice(i, i + chunkSize);
+    const { data, error } = await supabase
+      .from('levels_preguntas')
+      .select('id, level_id, parte_id')
+      .in('id', chunk);
+    if (error) throw error;
+    if (data?.length) preguntas.push(...data);
   }
+
+  const levelIds = [...new Set(preguntas.map((p) => p.level_id).filter(Boolean))];
+  let levels = [];
+  if (levelIds.length) {
+    const { data: levelRows, error: levelErr } = await supabase
+      .from('levels')
+      .select('id, nombre')
+      .in('id', levelIds);
+    if (levelErr) throw levelErr;
+    levels = levelRows || [];
+  }
+
+  return buildPreguntaMetaMap(preguntas, levels);
 }
 
 export default function LevelsEstadisticasPanel({ userId, displayName = '' }) {
   const [rows, setRows] = useState([]);
   const [partNames, setPartNames] = useState({});
+  const [preguntaMeta, setPreguntaMeta] = useState({});
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
 
@@ -26,6 +55,7 @@ export default function LevelsEstadisticasPanel({ userId, displayName = '' }) {
     if (!userId) {
       setRows([]);
       setPartNames({});
+      setPreguntaMeta({});
       setLoading(false);
       setError('');
       return undefined;
@@ -37,58 +67,75 @@ export default function LevelsEstadisticasPanel({ userId, displayName = '' }) {
       setLoading(true);
       setError('');
 
-      const { data, error: qErr } = await supabase
-        .from('levels_estadisticas')
-        .select(
-          'id, parte_id, pregunta_id, accesos, intentos_completados, respuestas_evaluadas, respuestas_correctas, respuestas_incorrectas, mejor_porcentaje, ultimo_porcentaje, ultima_interaccion',
-        )
-        .eq('usuario_id', userId)
-        .order('ultima_interaccion', { ascending: false });
+      try {
+        const { data, error: qErr } = await supabase
+          .from('levels_estadisticas')
+          .select(
+            'id, parte_id, pregunta_id, accesos, intentos_completados, respuestas_evaluadas, respuestas_correctas, respuestas_incorrectas, mejor_porcentaje, ultimo_porcentaje, ultima_interaccion',
+          )
+          .eq('usuario_id', userId)
+          .order('ultima_interaccion', { ascending: false });
 
-      if (cancelled) return;
+        if (cancelled) return;
 
-      if (qErr) {
-        setError(qErr.message || 'No se pudieron cargar las estadísticas.');
-        setRows([]);
-        setPartNames({});
-        setLoading(false);
-        return;
+        if (qErr) {
+          setError(qErr.message || 'No se pudieron cargar las estadísticas.');
+          setRows([]);
+          setPartNames({});
+          setPreguntaMeta({});
+          setLoading(false);
+          return;
+        }
+
+        const list = data || [];
+        setRows(list);
+
+        const partIds = [...new Set(list.map((r) => r.parte_id).filter(Boolean))];
+        const preguntaIds = [...new Set(list.map((r) => r.pregunta_id).filter(Boolean))];
+
+        const [partsResult, meta] = await Promise.all([
+          partIds.length
+            ? supabase.from('levels_partes').select('id, nombre_parte').in('id', partIds)
+            : Promise.resolve({ data: [], error: null }),
+          fetchPreguntaMeta(preguntaIds),
+        ]);
+
+        if (cancelled) return;
+
+        if (partsResult.error) {
+          setPartNames({});
+        } else if (partsResult.data?.length) {
+          const map = {};
+          partsResult.data.forEach((p) => {
+            map[p.id] = formatLevelsPartDisplayName(p.nombre_parte) || p.id;
+          });
+          setPartNames(map);
+        } else {
+          setPartNames({});
+        }
+
+        setPreguntaMeta(meta);
+      } catch (err) {
+        if (!cancelled) {
+          setError(err?.message || 'No se pudieron cargar las estadísticas.');
+          setRows([]);
+          setPartNames({});
+          setPreguntaMeta({});
+        }
+      } finally {
+        if (!cancelled) setLoading(false);
       }
-
-      const list = data || [];
-      setRows(list);
-
-      const partIds = [...new Set(list.map((r) => r.parte_id).filter(Boolean))];
-      if (partIds.length === 0) {
-        setPartNames({});
-        setLoading(false);
-        return;
-      }
-
-      const { data: parts, error: pErr } = await supabase
-        .from('levels_partes')
-        .select('id, nombre_parte')
-        .in('id', partIds);
-
-      if (cancelled) return;
-
-      if (!pErr && parts?.length) {
-        const map = {};
-        parts.forEach((p) => {
-          map[p.id] = formatLevelsPartDisplayName(p.nombre_parte) || p.id;
-        });
-        setPartNames(map);
-      } else {
-        setPartNames({});
-      }
-
-      setLoading(false);
     })();
 
     return () => {
       cancelled = true;
     };
   }, [userId]);
+
+  const chartsByLevel = useMemo(
+    () => aggregateLevelsStatsByPart(rows, { partNames, preguntaMeta }),
+    [rows, partNames, preguntaMeta],
+  );
 
   const totals = useMemo(() => {
     return rows.reduce(
@@ -110,11 +157,9 @@ export default function LevelsEstadisticasPanel({ userId, displayName = '' }) {
   return (
     <section className="profile-section">
       <div className="section-head">
-        <h2>📘 Levels (B2) — tu práctica{displayName ? ` (${displayName})` : ''}</h2>
+        <h2>📘 Levels — tu práctica{displayName ? ` (${displayName})` : ''}</h2>
         <p style={{ margin: '0.35rem 0 0', fontSize: '0.9rem', color: '#555', maxWidth: '52rem' }}>
-          Resumen de accesos, aciertos y fallos en ejercicios B2 (Reading y Use of English). Solo tú
-          ves esta información: en la base de datos solo se devuelven tus filas cuando estás
-          identificado (mismo id que en tu cuenta).
+          Resumen por nivel (A2, B1, B2…) y por parte del examen. Solo tú ves esta información.
         </p>
       </div>
 
@@ -125,12 +170,8 @@ export default function LevelsEstadisticasPanel({ userId, displayName = '' }) {
       ) : rows.length === 0 ? (
         <p style={{ color: '#666', padding: '0.75rem 0' }}>
           Aún no hay datos. Practica en{' '}
-          <a href="/niveles/b2/exam-reading" style={{ color: '#0070f3' }}>
-            B2 Reading
-          </a>{' '}
-          o{' '}
-          <a href="/niveles/b2/exam-useofenglish" style={{ color: '#0070f3' }}>
-            B2 Use of English
+          <a href="/niveles" style={{ color: '#0070f3' }}>
+            Levels
           </a>{' '}
           para que aparezcan aquí tus aciertos y fallos.
         </p>
@@ -167,62 +208,7 @@ export default function LevelsEstadisticasPanel({ userId, displayName = '' }) {
             </div>
           </div>
 
-          <div
-            style={{
-              overflowX: 'auto',
-              border: '1px solid #eaeaea',
-              borderRadius: 12,
-              background: '#fff',
-            }}
-          >
-            <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '0.875rem' }}>
-              <thead>
-                <tr style={{ background: '#f8f9fa', textAlign: 'left' }}>
-                  <th style={{ padding: '10px 12px', fontWeight: 600 }}>Parte</th>
-                  <th style={{ padding: '10px 12px', fontWeight: 600 }}>Ejercicio</th>
-                  <th style={{ padding: '10px 12px', fontWeight: 600 }}>Accesos</th>
-                  <th style={{ padding: '10px 12px', fontWeight: 600 }}>Eval.</th>
-                  <th style={{ padding: '10px 12px', fontWeight: 600 }}>✓</th>
-                  <th style={{ padding: '10px 12px', fontWeight: 600 }}>✗</th>
-                  <th style={{ padding: '10px 12px', fontWeight: 600 }}>Último %</th>
-                  <th style={{ padding: '10px 12px', fontWeight: 600 }}>Mejor %</th>
-                  <th style={{ padding: '10px 12px', fontWeight: 600 }}>Última actividad</th>
-                </tr>
-              </thead>
-              <tbody>
-                {rows.map((r) => {
-                  const partLabel = r.parte_id ? partNames[r.parte_id] || '—' : '—';
-                  const pid = r.pregunta_id || '';
-                  const ejShort = pid.length > 10 ? `${pid.slice(0, 8)}…` : pid || '—';
-                  return (
-                    <tr key={r.id} style={{ borderTop: '1px solid #eaeaea' }}>
-                      <td style={{ padding: '10px 12px', verticalAlign: 'top' }}>{partLabel}</td>
-                      <td style={{ padding: '10px 12px', verticalAlign: 'top', fontFamily: 'monospace' }}>
-                        {ejShort}
-                      </td>
-                      <td style={{ padding: '10px 12px' }}>{r.accesos ?? 0}</td>
-                      <td style={{ padding: '10px 12px' }}>{r.respuestas_evaluadas ?? 0}</td>
-                      <td style={{ padding: '10px 12px', color: '#15803d' }}>
-                        {r.respuestas_correctas ?? 0}
-                      </td>
-                      <td style={{ padding: '10px 12px', color: '#b91c1c' }}>
-                        {r.respuestas_incorrectas ?? 0}
-                      </td>
-                      <td style={{ padding: '10px 12px' }}>
-                        {r.ultimo_porcentaje != null ? `${Number(r.ultimo_porcentaje).toFixed(0)}%` : '—'}
-                      </td>
-                      <td style={{ padding: '10px 12px' }}>
-                        {r.mejor_porcentaje != null ? `${Number(r.mejor_porcentaje).toFixed(0)}%` : '—'}
-                      </td>
-                      <td style={{ padding: '10px 12px', whiteSpace: 'nowrap' }}>
-                        {formatDate(r.ultima_interaccion)}
-                      </td>
-                    </tr>
-                  );
-                })}
-              </tbody>
-            </table>
-          </div>
+          <LevelsStatsChartsCarousel charts={chartsByLevel} />
         </>
       )}
     </section>

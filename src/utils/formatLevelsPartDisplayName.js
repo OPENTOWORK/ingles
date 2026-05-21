@@ -7,6 +7,6 @@
 export function formatLevelsPartDisplayName(raw) {
   const s = String(raw ?? '').trim();
   if (!s) return '';
-  const trimmed = s.replace(/\s+b2\s*$/i, '').trim();
+  const trimmed = s.replace(/\s+(a1|a2|b1|b2|c1|c2)\s*$/i, '').trim();
   return trimmed.length ? trimmed : s;
 }

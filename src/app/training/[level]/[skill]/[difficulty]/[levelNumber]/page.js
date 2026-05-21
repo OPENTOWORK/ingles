@@ -1,12 +1,28 @@
 "use client";
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import Link from 'next/link';
 import AudioPlayer from '@/components/AudioPlayer';
-import { getExercisesByLevel } from '@/data/trainingExercises';
-import { saveExerciseResult, getUserProgress, progressTracker } from '@/utils/progressTracker';
+import { getTrainingPathCurriculum, getLevelTopic } from '@/data/trainingPathCurriculum';
+import { saveExerciseResult, getUserProgressForExercises, progressTracker } from '@/utils/progressTracker';
 import { supabase } from '@/utils/supabaseClient';
 import { TRAINING_LEVEL_COUNT } from '@/constants/trainingLevels';
 import { notifyTrainingStarsUpdated } from '@/utils/trainingStarsProgress';
+import styles from './page.module.css';
+
+const SKILL_LABELS = {
+  'use-of-english': 'Grammar & vocabulary',
+  vocabulary: 'Vocabulary',
+  reading: 'Reading',
+  listening: 'Listening',
+  speaking: 'Speaking',
+  writing: 'Writing',
+};
+
+const DIFFICULTY_LABELS = {
+  basico: 'Basic',
+  intermedio: 'Intermediate',
+  avanzado: 'Advanced',
+};
 
 export default function ExercisePage({ params }) {
   const { level, skill, difficulty, levelNumber } = params;
@@ -26,10 +42,21 @@ export default function ExercisePage({ params }) {
   const [exerciseStartTime, setExerciseStartTime] = useState(Date.now());
   const [userProgress, setUserProgress] = useState({});
   const [loading, setLoading] = useState(true);
+  const [exercisesReady, setExercisesReady] = useState(false);
   const [stars, setStars] = useState(0); // Sistema de estrellas
   const [completedExercises, setCompletedExercises] = useState([]); // Ejercicios completados
 
   const exercise = exercises[currentExercise];
+  const levelNumInt = parseInt(levelNumber.replace('level-', ''), 10) || 1;
+  const curriculum = useMemo(
+    () => getTrainingPathCurriculum(level, difficulty, skill),
+    [level, difficulty, skill],
+  );
+  const topicLabel = getLevelTopic(levelNumInt, curriculum);
+  const skillLabel = SKILL_LABELS[skill] || skill.replace(/-/g, ' ');
+  const progressPct = exercises.length
+    ? Math.round(((currentExercise + 1) / exercises.length) * 100)
+    : 0;
 
   useEffect(() => {
     if (typeof window === 'undefined') return;
@@ -45,56 +72,65 @@ export default function ExercisePage({ params }) {
 
       savedStars[levelNumber] = stars;
       localStorage.setItem(storageKey, JSON.stringify(savedStars));
-      notifyTrainingStarsUpdated();
+      notifyTrainingStarsUpdated(storageKey);
     } catch (error) {
       console.warn('Could not save stars:', error);
     }
   }, [showResult, currentExercise, exercises.length, level, skill, difficulty, levelNumber, stars]);
   
-  // Cargar ejercicios solo una vez al inicio
   useEffect(() => {
-    const loadedExercises = getExercisesByLevel(level.toLowerCase(), skill, difficulty, levelKey);
-    setExercises(loadedExercises);
-  }, [level, skill, difficulty, levelKey]);
+    let cancelled = false;
+    setExercisesReady(false);
+    setLoading(true);
 
-  useEffect(() => {
-    const getUser = async () => {
+    (async () => {
       try {
-        const { data: { user } } = await supabase.auth.getUser();
-        setUser(user);
-        if (user && exercises.length > 0) {
-          // Load existing progress
-          const progress = {};
-          for (let i = 0; i < exercises.length; i++) {
-            try {
-              const exProgress = await getUserProgress(user.id, exercises[i].id);
-              if (exProgress) {
-                progress[exercises[i].id] = exProgress;
-              }
-            } catch (progressError) {
-              // Silently handle individual progress loading errors
-            }
-          }
-          setUserProgress(progress);
-        }
-      } catch (error) {
-        // Silently handle auth errors
-      } finally {
+        const { loadExercisesByLevel } = await import('@/data/trainingExercises');
+        const loadedExercises = await loadExercisesByLevel(
+          level.toLowerCase(),
+          skill,
+          difficulty,
+          levelKey,
+        );
+        if (cancelled) return;
+        setExercises(loadedExercises);
+        setExercisesReady(true);
         setLoading(false);
+
+        void (async () => {
+          try {
+            const { data: { user: authUser } } = await supabase.auth.getUser();
+            if (cancelled) return;
+            setUser(authUser);
+
+            if (authUser && loadedExercises.length > 0) {
+              const ids = loadedExercises.map((ex) => ex.id);
+              const progress = await getUserProgressForExercises(authUser.id, ids);
+              if (!cancelled) setUserProgress(progress);
+            }
+          } catch {
+            /* progress is optional — exercises already visible */
+          }
+        })();
+      } catch {
+        if (!cancelled) {
+          setExercises([]);
+          setExercisesReady(true);
+          setLoading(false);
+        }
       }
+    })();
+
+    return () => {
+      cancelled = true;
     };
-    
-    if (exercises.length > 0) {
-      getUser();
-    }
-  }, [exercises]);
+  }, [level, skill, difficulty, levelKey]);
 
   useEffect(() => {
     setExerciseStartTime(Date.now());
   }, [currentExercise]);
 
-  // Verificar que hay ejercicios disponibles
-  if (!exercises || exercises.length === 0) {
+  if (exercisesReady && (!exercises || exercises.length === 0)) {
     return (
       <div style={{
         display: 'flex',
@@ -133,7 +169,7 @@ export default function ExercisePage({ params }) {
               display: "inline-block"
             }}
           >
-            ← Back to {difficulty.charAt(0).toUpperCase() + difficulty.slice(1)} Levels
+            ← Back to {DIFFICULTY_LABELS[difficulty] || difficulty} levels
           </Link>
         </div>
       </div>
@@ -198,20 +234,14 @@ export default function ExercisePage({ params }) {
         }
       }));
 
-      // Check for achievements
-      try {
-        const achievements = await progressTracker.checkAchievements(user.id, {
-          exerciseId: exercise.id,
-          score: exerciseScore,
-          timeSpent: exerciseTime
-        });
-
-        if (achievements.length > 0) {
-          // Show achievements notification
-          console.log('New achievements:', achievements);
-        }
-      } catch (achievementError) {
-        // Silently handle achievement errors
+      if (currentExercise === exercises.length - 1) {
+        void progressTracker
+          .checkAchievements(user.id, {
+            exerciseId: exercise.id,
+            score: exerciseScore,
+            timeSpent: exerciseTime,
+          })
+          .catch(() => {});
       }
     } catch (error) {
       // Solo mostrar error si es crítico, no para problemas de conexión menores
@@ -252,7 +282,7 @@ export default function ExercisePage({ params }) {
     return null;
   };
 
-  if (loading) {
+  if (loading || !exercisesReady) {
     return (
       <div style={{
         display: 'flex',
@@ -261,7 +291,7 @@ export default function ExercisePage({ params }) {
         height: '100vh',
         fontSize: '1.2rem'
       }}>
-        Loading exercises...
+        Loading…
       </div>
     );
   }
@@ -306,60 +336,37 @@ export default function ExercisePage({ params }) {
               display: "inline-block"
             }}
           >
-            ← Back to {difficulty.charAt(0).toUpperCase() + difficulty.slice(1)} Levels
+            ← Back to {DIFFICULTY_LABELS[difficulty] || difficulty} levels
           </Link>
         </div>
       </div>
     );
   }
 
-  return (
-    <main style={{
-      padding: "2rem",
-      fontFamily: "Segoe UI, sans-serif",
-      background: "linear-gradient(to right, #f0f8ff, #e6f0ff)",
-      minHeight: "100vh",
-      textAlign: "center"
-    }}>
-      <div style={{
-        maxWidth: "600px",
-        margin: "0 auto",
-        backgroundColor: "#fff",
-        borderRadius: "16px",
-        padding: "2rem",
-        boxShadow: "0 8px 32px rgba(0,0,0,0.1)"
-      }}>
-        <div style={{ marginBottom: "2rem" }}>
-          <h1 style={{ color: "#2563eb", marginBottom: "0.5rem" }}>
-            🎧 {skill.charAt(0).toUpperCase() + skill.slice(1).replace(/-/g, ' ')} - Level {levelNumber.replace('level-', '')}
-          </h1>
-          <p style={{ color: "#64748b" }}>Exercise {currentExercise + 1} of {exercises.length}</p>
-          <div style={{
-            width: "100%",
-            height: "8px",
-            backgroundColor: "#e2e8f0",
-            borderRadius: "4px",
-            marginTop: "1rem"
-          }}>
-            <div style={{
-              width: `${((currentExercise + 1) / exercises.length) * 100}%`,
-              height: "100%",
-              backgroundColor: "#3b82f6",
-              borderRadius: "4px",
-              transition: "width 0.3s ease"
-            }}></div>
-          </div>
-        </div>
+  const isCorrectAnswer =
+    exercise.type === 'write' || exercise.type === 'transformation'
+      ? writtenAnswer.trim().toLowerCase() === String(exercise.correct || '').toLowerCase()
+      : selectedOption === exercise.correct;
 
-        <div style={{
-          backgroundColor: "#f8fafc",
-          borderRadius: "12px",
-          padding: "2rem",
-          marginBottom: "2rem"
-        }}>
-          <h2 style={{ marginBottom: "1rem", color: "#1e293b" }}>Exercise {exercise.id}</h2>
-          
-          <div style={{ marginBottom: "1.5rem" }}>
+  return (
+    <main className={styles.page}>
+      <div className={styles.shell}>
+        <div className={styles.card}>
+          <header className={styles.header}>
+            <p className={styles.eyebrow}>
+              {level.toUpperCase()} · {DIFFICULTY_LABELS[difficulty] || difficulty} · {topicLabel}
+            </p>
+            <h1 className={styles.title}>{skillLabel}</h1>
+            <p className={styles.subtitle}>
+              Level {levelNumInt} · Question {currentExercise + 1} of {exercises.length}
+            </p>
+            <div className={styles.progressTrack}>
+              <div className={styles.progressFill} style={{ width: `${progressPct}%` }} />
+            </div>
+          </header>
+
+          <div className={styles.body}>
+          <div style={{ marginBottom: "1.25rem" }}>
             {/* Mostrar AudioPlayer solo para listening */}
             {skill === 'listening' && exercise.audioUrl && (
               <AudioPlayer
@@ -389,36 +396,11 @@ export default function ExercisePage({ params }) {
             
             {/* Mostrar texto con blank para use-of-english */}
             {skill === 'use-of-english' && exercise.text && (
-              <div style={{
-                padding: '1rem',
-                backgroundColor: '#fef3c7',
-                borderRadius: '8px',
-                border: '2px solid #fbbf24',
-                marginBottom: '1rem',
-                fontSize: '1.2rem',
-                fontWeight: 'bold',
-                color: '#78350f',
-                textAlign: 'center'
-              }}>
-                {exercise.text}
-              </div>
+              <div className={styles.context}>{exercise.text}</div>
             )}
-            
-            {/* Mostrar palabra para vocabulary */}
+
             {skill === 'vocabulary' && exercise.word && (
-              <div style={{
-                padding: '1.5rem',
-                backgroundColor: '#ede9fe',
-                borderRadius: '8px',
-                border: '2px solid #a78bfa',
-                marginBottom: '1rem',
-                fontSize: '2rem',
-                fontWeight: 'bold',
-                color: '#5b21b6',
-                textAlign: 'center'
-              }}>
-                {exercise.word}
-              </div>
+              <div className={styles.contextVocab}>{exercise.word}</div>
             )}
             
             {/* Mostrar situación para speaking */}
@@ -466,47 +448,29 @@ export default function ExercisePage({ params }) {
             )}
           </div>
 
-          <p style={{ marginBottom: "1rem", fontWeight: "bold", color: "#1e293b" }}>{exercise.question}</p>
-          
-          {/* Ejercicio de tipo escribir */}
-          {(exercise.type === 'write' || exercise.type === 'transformation' || exercise.type === 'error_detection' || exercise.type === 'word_formation') ? (
-            <div style={{ marginBottom: "1rem" }}>
-              <input
-                type="text"
-                value={writtenAnswer}
-                onChange={(e) => setWrittenAnswer(e.target.value)}
-                placeholder="Type your answer here..."
-                disabled={showResult}
-                style={{
-                  width: "100%",
-                  padding: "1rem",
-                  fontSize: "16px",
-                  border: "2px solid #e2e8f0",
-                  borderRadius: "8px",
-                  outline: "none",
-                  transition: "border-color 0.2s ease"
-                }}
-                onFocus={(e) => e.target.style.borderColor = "#3b82f6"}
-                onBlur={(e) => e.target.style.borderColor = "#e2e8f0"}
-              />
-            </div>
+          <p className={styles.question}>{exercise.question}</p>
+
+          {(exercise.type === 'write' ||
+            exercise.type === 'transformation' ||
+            exercise.type === 'error_detection' ||
+            exercise.type === 'word_formation') ? (
+            <input
+              type="text"
+              className={styles.input}
+              value={writtenAnswer}
+              onChange={(e) => setWrittenAnswer(e.target.value)}
+              placeholder="Type your answer…"
+              disabled={showResult}
+            />
           ) : (
-            /* Ejercicio de opción múltiple */
-            <div style={{ display: "grid", gap: "0.5rem" }}>
+            <div className={styles.options}>
               {exercise.options.map((option, index) => (
                 <button
                   key={index}
+                  type="button"
                   onClick={() => setSelectedOption(option)}
                   disabled={showResult}
-                  style={{
-                    padding: "1rem",
-                    backgroundColor: selectedOption === option ? "#dbeafe" : "#fff",
-                    border: selectedOption === option ? "2px solid #3b82f6" : "2px solid #e2e8f0",
-                    borderRadius: "8px",
-                    cursor: showResult ? "default" : "pointer",
-                    transition: "all 0.2s ease",
-                    fontSize: "16px"
-                  }}
+                  className={`${styles.option}${selectedOption === option ? ` ${styles.optionSelected}` : ''}`}
                 >
                   {option}
                 </button>
@@ -516,189 +480,81 @@ export default function ExercisePage({ params }) {
 
           {!showResult && (
             <button
+              type="button"
+              className={styles.primaryBtn}
               onClick={checkAnswer}
-              disabled={exercise.type === 'write' ? !writtenAnswer.trim() : !selectedOption}
-              style={{
-                backgroundColor: "#10b981",
-                color: "white",
-                border: "none",
-                borderRadius: "8px",
-                padding: "1rem 2rem",
-                fontSize: "16px",
-                fontWeight: "bold",
-                cursor: "pointer",
-                marginTop: "1rem",
-                opacity: (exercise.type === 'write' ? !writtenAnswer.trim() : !selectedOption) ? 0.5 : 1
-              }}
+              disabled={
+                exercise.type === 'write' || exercise.type === 'transformation'
+                  ? !writtenAnswer.trim()
+                  : !selectedOption
+              }
             >
-              Check Answer
+              Check answer
             </button>
           )}
 
           {showResult && (
-            <div style={{
-              marginTop: "1rem",
-              padding: "1rem",
-              backgroundColor: "#f0f9ff",
-              borderRadius: "8px",
-              border: "1px solid #0ea5e9"
-            }}>
-              <p style={{ fontWeight: "bold", marginBottom: "0.5rem" }}>
-                {selectedOption === exercise.correct ? "✅ Correct!" : "❌ Incorrect"}
+            <div className={styles.feedback}>
+              <p className={styles.feedbackTitle}>
+                {isCorrectAnswer ? '✓ Correct' : '✗ Not quite'}
               </p>
-              <p style={{ fontSize: "14px", color: "#64748b" }}>{exercise.explanation}</p>
+              <p className={styles.feedbackText}>{exercise.explanation}</p>
               {currentExercise < exercises.length - 1 ? (
-                <button
-                  onClick={nextExercise}
-                  style={{
-                    backgroundColor: "#3b82f6",
-                    color: "white",
-                    border: "none",
-                    borderRadius: "8px",
-                    padding: "0.75rem 1.5rem",
-                    fontSize: "14px",
-                    fontWeight: "bold",
-                    cursor: "pointer",
-                    marginTop: "1rem"
-                  }}
-                >
-                  Next Exercise
-                </button>
+                <div className={styles.actions}>
+                  <button type="button" className={styles.btnNext} onClick={nextExercise}>
+                    Next question →
+                  </button>
+                </div>
               ) : (
-                <div style={{ marginTop: "1rem" }}>
-                  <p style={{ fontWeight: "bold", marginBottom: "1rem" }}>
-                    🎉 Congratulations! You completed Level {levelNumber.replace('level-', '')}!
+                <div style={{ marginTop: '1rem' }}>
+                  <p className={styles.feedbackTitle}>
+                    Level {levelNumInt} complete — {topicLabel}
                   </p>
-                  
-                  {/* Mostrar estrellas obtenidas */}
-                  <div style={{ marginBottom: "1rem", display: "flex", justifyContent: "center", gap: "0.5rem" }}>
+                  <div className={styles.stars}>
                     {[1, 2, 3].map((star) => (
                       <span
                         key={star}
-                        style={{
-                          fontSize: "2.5rem",
-                          color: star <= stars ? "#ffd700" : "#d1d5db",
-                          opacity: star <= stars ? 1 : 0.3,
-                          transition: "color 0.3s ease"
-                        }}
+                        className={star <= stars ? styles.starOn : styles.starOff}
                       >
-                        ⭐
+                        ★
                       </span>
                     ))}
                   </div>
-                  
-                  <p style={{ marginBottom: "1rem" }}>Score: {score}/{exercises.length} ({(score/exercises.length*100).toFixed(0)}%)</p>
-                  <p style={{ marginBottom: "1rem", fontSize: "0.9rem", color: "#64748b" }}>
-                    Time spent: {Math.round((Date.now() - startTime) / 1000)} seconds
+                  <p className={styles.feedbackText}>
+                    Score: {score}/{exercises.length} (
+                    {exercises.length ? ((score / exercises.length) * 100).toFixed(0) : 0}%)
                   </p>
-                  
-                  {/* Mensaje de rendimiento */}
-                  {stars === 3 && (
-                    <p style={{ marginBottom: "1rem", color: "#059669", fontWeight: "bold", fontSize: "1.1rem" }}>
-                      🌟 Perfect! You got 100% correct! All 3 stars earned!
-                    </p>
-                  )}
-                  {stars === 2 && (
-                    <p style={{ marginBottom: "1rem", color: "#d97706", fontWeight: "bold", fontSize: "1.1rem" }}>
-                      ⭐⭐ Great job! 80-99% correct - 2 stars earned!
-                    </p>
-                  )}
-                  {stars === 1 && (
-                    <p style={{ marginBottom: "1rem", color: "#ea580c", fontWeight: "bold", fontSize: "1.1rem" }}>
-                      ⭐ Good effort! 60-79% correct - 1 star earned!
-                    </p>
-                  )}
-                  {stars === 0 && (
-                    <p style={{ marginBottom: "1rem", color: "#6b7280", fontWeight: "bold", fontSize: "1.1rem" }}>
-                      💪 Keep practicing! You need 60% or more to earn stars!
-                    </p>
-                  )}
-                  
-                  {/* Achievement notifications */}
-                  <div style={{ marginBottom: "1rem" }}>
-                    <p style={{ fontSize: "0.9rem", color: "#059669" }}>
-                      ✅ Progress saved automatically
-                    </p>
-                  </div>
-                  
-                  <div style={{ display: "flex", gap: "1rem", flexWrap: "wrap" }}>
-                    <button
-                      onClick={resetExercise}
-                      style={{
-                        backgroundColor: "#8b5cf6",
-                        color: "white",
-                        border: "none",
-                        borderRadius: "8px",
-                        padding: "0.75rem 1.5rem",
-                        fontSize: "14px",
-                        fontWeight: "bold",
-                        cursor: "pointer"
-                      }}
-                    >
-                      Try Again
+                  <div className={styles.actions}>
+                    <button type="button" className={styles.btnRetry} onClick={resetExercise}>
+                      Try again
                     </button>
                     {getNextLevel() && (
                       <Link
                         href={`/training/${level}/${skill}/${difficulty}/${getNextLevel()}`}
-                        style={{
-                          backgroundColor: "#10b981",
-                          color: "white",
-                          border: "none",
-                          borderRadius: "8px",
-                          padding: "0.75rem 1.5rem",
-                          fontSize: "14px",
-                          fontWeight: "bold",
-                          cursor: "pointer",
-                          textDecoration: "none",
-                          display: "inline-block"
-                        }}
+                        className={styles.btnNext}
                       >
-                        Next Level
+                        Next level →
                       </Link>
                     )}
                     <Link
                       href={`/training/${level}/${skill}/${difficulty}`}
-                      style={{
-                        backgroundColor: "#6b7280",
-                        color: "white",
-                        border: "none",
-                        borderRadius: "8px",
-                        padding: "0.75rem 1.5rem",
-                        fontSize: "14px",
-                        fontWeight: "bold",
-                        cursor: "pointer",
-                        textDecoration: "none",
-                        display: "inline-block"
-                      }}
+                      className={styles.btnBack}
                     >
-                      Back to {difficulty.charAt(0).toUpperCase() + difficulty.slice(1)}
+                      Back to map
                     </Link>
                   </div>
                 </div>
               )}
             </div>
           )}
+          </div>
         </div>
 
-        <div style={{ marginTop: "2rem" }}>
-          <Link
-            href={`/training/${level}/${skill}/${difficulty}`}
-            style={{
-              backgroundColor: "#6b7280",
-              color: "white",
-              border: "none",
-              borderRadius: "8px",
-              padding: "0.75rem 1.5rem",
-              fontSize: "14px",
-              fontWeight: "bold",
-              cursor: "pointer",
-              textDecoration: "none",
-              display: "inline-block"
-            }}
-          >
-            ← Back to {difficulty.charAt(0).toUpperCase() + difficulty.slice(1)} Levels
+        <footer className={styles.footer}>
+          <Link href={`/training/${level}/${skill}/${difficulty}`} className={styles.btnBack}>
+            ← Back to levels
           </Link>
-        </div>
+        </footer>
       </div>
     </main>
   );

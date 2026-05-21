@@ -665,31 +665,6 @@ export default function ProfilePage() {
     }
   };
 
-  const exportData = () => {
-    const data = {
-      user: { name: fullName, email: user.email },
-      stats: stats,
-      goals: goals,
-      badges: badges.filter(b => b.earned),
-      difficultWords: difficultWords,
-      skillAnalysis: skillAnalysis,
-      exportDate: new Date().toISOString()
-    };
-    
-    const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = `english-practice-progress-${new Date().toISOString().split('T')[0]}.json`;
-    a.click();
-    URL.revokeObjectURL(url);
-  };
-
-  const generatePDFReport = () => {
-    // Simulación de generación de PDF
-    alert('Generando reporte PDF... (En una implementación real, usarías una librería como jsPDF)');
-  };
-
   // Funciones del temporizador
   const startTimer = () => {
     setStudyTimer(prev => ({ ...prev, isRunning: true }));
@@ -1538,21 +1513,6 @@ export default function ProfilePage() {
               {invitingFriend ? 'Enviando invitación...' : 'Enviar invitación'}
             </button>
           </section>
-
-          {/* Exportación */}
-          <section className="profile-section">
-            <div className="section-head">
-              <h2>📤 Exportar Datos</h2>
-            </div>
-            <div className="export-actions">
-              <button onClick={exportData} className="export-btn">
-                📄 Exportar JSON
-              </button>
-              <button onClick={generatePDFReport} className="export-btn">
-                📋 Generar PDF
-              </button>
-      </div>
-          </section>
         </>
       )}
 
@@ -2400,11 +2360,6 @@ function GlobalStyles() {
       .setting-label{display:flex;align-items:center;gap:8px;cursor:pointer;font-weight:500}
       .setting-label input{margin:0}
       
-      /* Exportación */
-      .export-actions{display:flex;gap:12px;flex-wrap:wrap}
-      .export-btn{padding:12px 20px;background:#28a745;color:white;border:none;border-radius:12px;cursor:pointer;font-weight:600;transition:transform .2s,box-shadow .2s}
-      .export-btn:hover{transform:translateY(-2px);box-shadow:0 8px 20px rgba(40,167,69,.4)}
-      
       /* Acciones rápidas */
       .quick-actions{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px}
       .quick-action-btn{display:block;padding:16px 20px;text-align:center;text-decoration:none;border:1px solid #eaeaea;border-radius:12px;background:white;color:var(--text);transition:transform .2s,box-shadow .2s,border-color .2s;font-weight:600}
@@ -2543,7 +2498,6 @@ function GlobalStyles() {
         .skills-grid{grid-template-columns:repeat(auto-fit,minmax(120px,1fr))}
         .badges-grid{grid-template-columns:repeat(auto-fit,minmax(150px,1fr))}
         .goals-container{grid-template-columns:1fr}
-        .export-actions{flex-direction:column}
         .timer-controls{flex-direction:column}
         .notes-grid{grid-template-columns:1fr}
         .favorites-grid{grid-template-columns:1fr}

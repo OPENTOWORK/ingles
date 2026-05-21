@@ -1,13 +1,14 @@
 'use client';
 
 import Link from 'next/link';
+import TrainingCardProgressStats from '@/components/training/TrainingCardProgressStats';
+import { getCefrLevelLabel } from '@/constants/cefrLevelColors';
 import styles from './TrainingCefrLevelCard.module.css';
 
 /**
  * @param {{
  *   level: string,
- *   color: string,
- *   emoji: string,
+ *   accent: string,
  *   earned: number,
  *   max: number,
  *   percent: number,
@@ -17,36 +18,41 @@ import styles from './TrainingCefrLevelCard.module.css';
  */
 export default function TrainingCefrLevelCard({
   level,
-  color,
-  emoji,
+  accent,
   earned,
   max,
   percent,
   locked = false,
   href,
 }) {
+  const sublabel = getCefrLevelLabel(level);
+
   const content = (
-    <>
-      <div className={styles.emoji}>{emoji}</div>
-      <div className={styles.title}>Level {level}</div>
-      <div className={styles.stats}>
-        <span className={styles.stars}>
-          ⭐ {earned}/{max} estrellas
+    <div className={styles.card}>
+      <div className={styles.accent} style={{ backgroundColor: accent }} aria-hidden />
+      <div className={styles.body}>
+        <span className={styles.badge} style={{ backgroundColor: accent }}>
+          {level}
         </span>
-        <span className={styles.percent}>{percent}/100%</span>
+        <span className={styles.sublabel}>{sublabel}</span>
+        <span className={styles.title}>Training path</span>
+        <div className={styles.stats}>
+          <TrainingCardProgressStats
+            earned={earned}
+            max={max}
+            percent={percent}
+            variant="card"
+            accentColor={accent}
+          />
+        </div>
       </div>
-      <div className={styles.progressTrack} aria-hidden>
-        <span className={styles.progressFill} style={{ width: `${percent}%` }} />
-      </div>
-    </>
+    </div>
   );
 
   if (locked) {
     return (
       <div className={styles.wrap}>
-        <div className={styles.card} style={{ backgroundColor: color }} aria-disabled="true">
-          {content}
-        </div>
+        {content}
         <div className={styles.lockedOverlay}>Coming soon</div>
       </div>
     );
@@ -54,9 +60,7 @@ export default function TrainingCefrLevelCard({
 
   return (
     <Link href={href} className={styles.cardLink}>
-      <div className={styles.card} style={{ backgroundColor: color }}>
-        {content}
-      </div>
+      {content}
     </Link>
   );
 }
