@@ -12,6 +12,7 @@ import { UserRoleProvider } from '../context/UserRoleContext';
 import { PlacementAccessProvider } from '../context/PlacementAccessContext';
 import ExamNavigationGuard from '../components/ExamNavigationGuard';
 import { useActivityHeartbeat } from '@/hooks/useActivityHeartbeat';
+import { usePageViewTracker } from '@/hooks/usePageViewTracker';
 import DeferredSiteAssistant from '@/components/chat/DeferredSiteAssistant';
 import DeferredAppSideMenu from '@/components/layout/DeferredAppSideMenu';
 import RouteLoadingMascot from '@/components/RouteLoadingMascot';
@@ -49,6 +50,7 @@ export default function RootLayoutClient({ children }) {
   const heartbeatEnabled = Boolean(session) && !allowWithoutAuth;
 
   useActivityHeartbeat(session, heartbeatEnabled);
+  usePageViewTracker(session, heartbeatEnabled);
 
   useEffect(() => {
     if (authPending || allowWithoutAuth || session) return undefined;

@@ -3,6 +3,9 @@ import { canAccessTeacherPanel, isAdminRole } from '@/utils/authRoles';
 /** Niveles CEFR disponibles en /niveles (orden ascendente). */
 export const NIVELES_CEFR_ORDER = ['A2', 'B1', 'B2', 'C1', 'C2'];
 
+/** Temporal: todos los niveles de Levels accesibles sin placement. */
+export const UNLOCK_ALL_NIVELES_LEVELS = true;
+
 const CEFR_SLUG_PATTERN = /^(a2|b1|b2|c1|c2)$/i;
 
 /**
@@ -49,6 +52,7 @@ export function isNivelesLevelLocked({
   assignedLevel,
   targetLevel,
 }) {
+  if (UNLOCK_ALL_NIVELES_LEVELS) return false;
   if (!isStudent) return false;
 
   const target = parseAssignedCefrLevel(targetLevel) || cefrSlugToLevel(targetLevel);

@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useCallback } from 'react';
 import dynamic from 'next/dynamic';
+import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { supabase } from '@/utils/supabaseClient';
 import { getClientAuth } from '@/utils/getClientAuth';
@@ -892,7 +893,14 @@ export default function AdminDashboard() {
                           aria-label={`Seleccionar ${item.email}`}
                         />
                       </td>
-                      <td className="px-6 py-4 text-sm text-gray-900">{item.nombre || 'Sin nombre'}</td>
+                      <td className="px-6 py-4 text-sm">
+                        <Link
+                          href={`/admin/usuarios/${item.id}`}
+                          className="font-medium text-indigo-700 hover:text-indigo-900 hover:underline"
+                        >
+                          {item.nombre || 'Sin nombre'}
+                        </Link>
+                      </td>
                       <td className="px-6 py-4 text-sm text-gray-600">{item.email}</td>
                       <td className="px-6 py-4 text-sm text-gray-900 whitespace-nowrap">
                         {formatRegistrationDate(item.creado_en)}

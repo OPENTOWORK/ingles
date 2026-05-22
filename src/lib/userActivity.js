@@ -126,6 +126,55 @@ export function buildConnectionAnalytics(sessions, startDate, endDate) {
   };
 }
 
+/** Agrupa sesiones por día calendario (locale es-ES) para la ficha de alumno. */
+export function groupSessionsByDate(sessions) {
+  /** @type {Map<string, { date: string, totalSeconds: number, sessions: object[] }>} */
+  const byDate = new Map();
+
+  for (const row of sessions || []) {
+    const started = parseDbTimestamp(row.started_at);
+    if (!started) continue;
+    const dateKey = started.toLocaleDateString('es-ES', {
+      day: '2-digit',
+      month: '2-digit',
+      year: 'numeric',
+    });
+    const sec = Number(row.duration_seconds) || 0;
+    if (!byDate.has(dateKey)) {
+      byDate.set(dateKey, { date: dateKey, totalSeconds: 0, sessions: [] });
+    }
+    const bucket = byDate.get(dateKey);
+    bucket.totalSeconds += sec;
+    bucket.sessions.push({
+      id: row.id,
+      startedAt: row.started_at,
+      endedAt: row.ended_at || null,
+      durationSeconds: sec,
+      durationLabel: formatSessionDuration(sec),
+      startedLabel: started.toLocaleString('es-ES', {
+        hour: '2-digit',
+        minute: '2-digit',
+      }),
+    });
+  }
+
+  return Array.from(byDate.values())
+    .map((bucket) => ({
+      ...bucket,
+      totalLabel: formatSessionDuration(bucket.totalSeconds),
+      sessions: bucket.sessions.sort((a, b) => {
+        const ta = parseDbTimestamp(a.startedAt)?.getTime() || 0;
+        const tb = parseDbTimestamp(b.startedAt)?.getTime() || 0;
+        return tb - ta;
+      }),
+    }))
+    .sort((a, b) => {
+      const [da, ma, ya] = a.date.split('/').map(Number);
+      const [db, mb, yb] = b.date.split('/').map(Number);
+      return new Date(yb, mb - 1, db) - new Date(ya, ma - 1, da);
+    });
+}
+
 export function buildSessionChartSeries(sessions, period, startDate, endDate) {
   /** @type {Map<string, Map<string, number>>} */
   const bucketUserSeconds = new Map();
