@@ -22,11 +22,17 @@ export async function POST(req) {
     const input = raw.slice(0, MAX_CHARS);
     const client = new OpenAI({ apiKey: key });
 
+    let speed = Number(body?.speed);
+    if (!Number.isFinite(speed)) {
+      speed = Number(process.env.OPENAI_TTS_SPEED || 1.08);
+    }
+    speed = Math.min(2, Math.max(0.5, speed));
+
     const mp3 = await client.audio.speech.create({
       model: process.env.OPENAI_TTS_MODEL || 'tts-1',
       voice: process.env.OPENAI_TTS_VOICE || 'shimmer',
       input,
-      speed: Number(process.env.OPENAI_TTS_SPEED || 1.08),
+      speed,
     });
 
     const buf = Buffer.from(await mp3.arrayBuffer());

@@ -15,6 +15,7 @@ export const DRALO_MENU_ITEMS = [
   { label: 'Writing', href: '/dralo-ai/writing' },
   { label: 'Listening', href: '/dralo-ai/listening' },
   { label: 'Speaking', href: '/speaking' },
+  { label: 'Dictionary', href: '/dralo-ai/dictionary' },
 ];
 
 /** Desplegable «Admin» solo para rol administrador. */

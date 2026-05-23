@@ -22,7 +22,7 @@ export default function DraloAiHubPage() {
         accent="violet"
         mascotVariant={10}
         stats={[
-          { value: '5', label: 'Habilidades' },
+          { value: '6', label: 'Herramientas' },
           { value: 'IA', label: 'Dralo' },
           { value: 'B1–C1', label: 'Niveles' },
         ]}

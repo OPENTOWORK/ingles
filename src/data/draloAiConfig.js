@@ -46,6 +46,14 @@ export const DRALO_AI_HUB = {
       accent: 'rose',
       external: true,
     },
+    {
+      id: 'dictionary',
+      href: '/dralo-ai/dictionary',
+      label: 'Dictionary',
+      icon: '📕',
+      tagline: 'Significados, pronunciación y traducción al español',
+      accent: 'violet',
+    },
   ],
 };
 
