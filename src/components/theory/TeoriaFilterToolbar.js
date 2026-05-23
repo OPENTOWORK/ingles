@@ -1,13 +1,9 @@
 'use client';
 
-import { LEVELS } from '@/data/teoriaSections';
-
 /**
- * Barra de filtros CEFR + búsqueda (compartida en Theory hub y cada apartado).
+ * Barra de búsqueda y filtros por apartado (Theory hub y listados de temas).
  */
 export default function TeoriaFilterToolbar({
-  selectedLevels = [],
-  onToggleLevel,
   query = '',
   onQueryChange,
   onClear,
@@ -19,36 +15,12 @@ export default function TeoriaFilterToolbar({
   onToggleSection,
 }) {
   const showSections = sections.length > 0 && onToggleSection;
+  const canClear =
+    Boolean(onClear) &&
+    (query.trim().length > 0 || (showSections && selectedSections.length > 0));
 
   return (
     <section className="toolbar" aria-label="Filter and search topics">
-      <div className="chips" role="group" aria-label="CEFR levels">
-        {LEVELS.map((level) => {
-          const active = selectedLevels.includes(level.code);
-          return (
-            <button
-              key={level.code}
-              type="button"
-              className={`chip ${active ? 'chip--active' : ''}`}
-              onClick={() => onToggleLevel(level.code)}
-              aria-pressed={active}
-              title={`${level.name}: ${level.description}`}
-              style={{
-                borderColor: active ? level.color : '#eaeaea',
-                background: active ? level.color : 'var(--card)',
-                color: active ? 'white' : 'var(--text)',
-                boxShadow: active ? `0 8px 20px ${level.color}35` : 'none',
-              }}
-            >
-              {level.code}
-            </button>
-          );
-        })}
-        <button type="button" className="chip chip--ghost" onClick={onClear}>
-          Clear
-        </button>
-      </div>
-
       {showSections ? (
         <div className="chips chips--sections" role="group" aria-label="Skill areas">
           {sections.map((area) => {
@@ -90,29 +62,12 @@ export default function TeoriaFilterToolbar({
       <div className="meta">
         Showing <strong>{filteredCount}</strong> of <strong>{totalCount}</strong> topic
         {totalCount === 1 ? '' : 's'}
+        {canClear ? (
+          <button type="button" className="toolbar__clear" onClick={onClear}>
+            Clear
+          </button>
+        ) : null}
       </div>
-
-      {selectedLevels.length > 0 ? (
-        <div className="level-info">
-          <h4>Selected levels:</h4>
-          <div className="level-cards">
-            {LEVELS.filter((level) => selectedLevels.includes(level.code)).map((level) => (
-              <div key={level.code} className="level-card" style={{ borderColor: level.color }}>
-                <div className="level-header" style={{ backgroundColor: level.color }}>
-                  <span className="level-code">{level.code}</span>
-                  <span className="level-name">{level.name}</span>
-                </div>
-                <div className="level-content">
-                  <p className="level-description">{level.description}</p>
-                  <p className="level-skills">
-                    <strong>Skills:</strong> {level.skills}
-                  </p>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      ) : null}
     </section>
   );
 }

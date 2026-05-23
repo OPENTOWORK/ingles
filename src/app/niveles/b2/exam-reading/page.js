@@ -25,6 +25,7 @@ import {
 import { resolveB2ExamenId, fetchB2PreguntasByExamen } from '@/utils/b2ResolveExam';
 import { getCachedB2Level } from '@/utils/b2LevelCache';
 import { formatLevelsPartDisplayName } from '@/utils/formatLevelsPartDisplayName';
+import { B2ExamPracticeContent, B2ExamQuestionItem } from '@/components/b2/B2ExamPracticeContent';
 import {
   getSessionUserId,
   mergeLevelsEstadisticas,
@@ -178,7 +179,7 @@ function B2ReadingExamsPageInner() {
 
       if (!normalizedParts.length) {
         throw new Error(
-          'No hay ejercicios de Reading (Partes 5 a 7) para este examen. Comprueba que existan preguntas enlazadas a esas partes.',
+          'No Reading exercises (Parts 5 to 7) for this exam. Check that questions are linked to those parts.',
         );
       }
 
@@ -570,6 +571,11 @@ function B2ReadingExamsPageInner() {
     textAlign: 'center',
   };
 
+  const getPartTitle = (part) => {
+    const n = Number(part?.nombre.match(/\d+/)?.[0] || 0);
+    return n ? `Part ${n}` : part?.nombre || '';
+  };
+
   return (
     <B2ExamPracticeLayout examPracticeOpen={scoring.examPracticeOpen}>
       <B2ExamPracticeChrome
@@ -579,9 +585,10 @@ function B2ReadingExamsPageInner() {
         partsInPaper={scoring.partsInPaper}
         examPracticeOpen={scoring.examPracticeOpen}
         title="B2 Reading Practice"
-        subtitle="Partes 5 a 7"
+        subtitle="Parts 5 to 7"
         timerLabel={timerLabel}
-        refreshLabel="Refrescar Reading (5-7)"
+        refreshLabel="Refresh Reading (5–7)"
+        lang="en"
         loading={loading}
         onRefresh={() => loadReadingData()}
         partScoreMetrics={scorePanelProps}
@@ -591,131 +598,30 @@ function B2ReadingExamsPageInner() {
         onSelectPart={handleSelectPart}
         getPartSavedScoreLabel={(part) => scoring.getPartSavedScoreLabel(part, examSlot)}
       >
-      <section style={{ maxWidth: '700px', margin: '0 auto' }}>
-        {loading && <p style={{ textAlign: 'center' }}>Cargando Reading (Partes 5 a 7)...</p>}
+      <section style={{ margin: '0 auto', width: '100%' }}>
+        {loading && <p style={{ textAlign: 'center' }}>Loading Reading (Parts 5 to 7)…</p>}
         {!loading && error && <p style={{ textAlign: 'center', color: '#c53030', fontWeight: 600 }}>{error}</p>}
 
         {!loading && !error && (
           <>
             {selectedPart && selectedQuestion && (
-              <div
-                style={{
-                  background: '#fff',
-                  borderRadius: '12px',
-                  padding: '1.25rem',
-                  boxShadow: '0 4px 12px rgba(0, 0, 0, 0.08)',
-                }}
-              >
-                <h2 style={{ marginTop: 0 }}>{selectedPart.nombre}</h2>
-
-                <div style={{ color: '#2d3748', marginTop: '0.6rem' }}>
-                  <strong>Pregunta:</strong>
-                  <div
-                    style={{
-                      marginTop: '0.6rem',
-                      background: '#f8fafc',
-                      border: '1px solid #e2e8f0',
-                      borderRadius: '10px',
-                      padding: '0.95rem 1rem',
-                    }}
-                  >
-                    <p style={{ margin: '0 0 0.65rem', fontWeight: 700, color: '#1a365d' }}>Enunciado</p>
-                    {getFormattedEnunciado(selectedPartContent.enunciado).map((block, index) => {
-                      if (block.type === 'label') {
-                        return (
-                          <p
-                            key={`enunciado-${block.type}-${index}`}
-                            style={{ margin: '0.7rem 0 0.45rem', fontWeight: 700, color: '#1a365d' }}
-                          >
-                            {block.text}
-                          </p>
-                        );
-                      }
-                      if (block.type === 'answer') {
-                        return (
-                          <p
-                            key={`enunciado-${block.type}-${index}`}
-                            style={{
-                              margin: '0.45rem 0',
-                              padding: '0.45rem 0.6rem',
-                              background: '#ebf8ff',
-                              borderRadius: '8px',
-                              fontWeight: 600,
-                            }}
-                          >
-                            {block.text}
-                          </p>
-                        );
-                      }
-                      if (block.type === 'number') {
-                        return (
-                          <p key={`enunciado-${block.type}-${index}`} style={{ margin: '0.35rem 0', fontWeight: 700, color: '#2d3748' }}>
-                            {block.text}
-                          </p>
-                        );
-                      }
-                      if (block.type === 'option') {
-                        return (
-                          <p key={`enunciado-${block.type}-${index}`} style={{ margin: '0.2rem 0', paddingLeft: '0.35rem', color: '#334155' }}>
-                            {block.text}
-                          </p>
-                        );
-                      }
-                      return (
-                        <p key={`enunciado-${block.type}-${index}`} style={{ margin: '0.45rem 0', lineHeight: 1.7, color: '#1f2937' }}>
-                          {block.text}
-                        </p>
-                      );
-                    })}
-                  </div>
-
-                </div>
-
-                {selectedPartContent.texto ? (
-                  <div
-                    style={{
-                      marginTop: '0.7rem',
-                      background: '#f8fafc',
-                      border: '1px solid #e2e8f0',
-                      borderRadius: '10px',
-                      padding: '0.95rem 1rem',
-                      position: shouldStickEnunciado ? 'sticky' : 'static',
-                      top: shouldStickEnunciado ? '0.75rem' : 'auto',
-                      zIndex: shouldStickEnunciado ? 30 : 'auto',
-                      maxHeight: shouldStickEnunciado ? '40vh' : 'none',
-                      overflowY: shouldStickEnunciado ? 'auto' : 'visible',
-                      boxShadow: shouldStickEnunciado ? '0 2px 8px rgba(15, 23, 42, 0.08)' : 'none',
-                    }}
-                  >
-                    <p style={{ margin: '0 0 0.65rem', fontWeight: 700, color: '#1a365d' }}>Texto</p>
-                    {selectedPartContent.texto
-                      .split('\n')
-                      .map((line) => line.trim())
-                      .filter(Boolean)
-                      .map((line, idx) => (
-                        <p key={`texto-${idx}`} style={{ margin: '0.45rem 0', lineHeight: 1.7 }}>
-                          {line}
-                        </p>
-                      ))}
-                  </div>
-                ) : null}
-
-                <div style={{ marginTop: '1.25rem' }}>
-                  <h3 style={{ margin: '0 0 0.75rem', color: '#1a202c' }}>Preguntas</h3>
-                  <div style={{ display: 'grid', gap: '1rem' }}>
+              <B2ExamPracticeContent
+                title={getPartTitle(selectedPart)}
+                directionsText={selectedPartContent.enunciado}
+                directionsLabel="Directions"
+                textLabel="Text"
+                questionsLabel="Questions"
+                passageText={selectedPartContent.texto}
+                split="auto"
+                questions={
+                  <>
                     {groupedAnswersForUiAndScore.map((group, groupIndex) => (
-                      <div
+                      <B2ExamQuestionItem
                         key={`group-${selectedQuestion.preguntaId}-${group.questionNumber ?? 'extra'}-${groupIndex}`}
-                        style={{
-                          border: '1px solid #e2e8f0',
-                          borderRadius: '10px',
-                          padding: '0.85rem',
-                          background: '#ffffff',
-                        }}
                       >
                         <p style={{ margin: '0 0 0.65rem', fontWeight: 700, color: '#2d3748' }}>
                           {!group.questionNumber
-                            ? 'Opciones'
+                            ? 'Options'
                             : group.questionStem
                               ? (
                                   <>
@@ -723,7 +629,7 @@ function B2ReadingExamsPageInner() {
                                     <span style={{ fontWeight: 600 }}>{group.questionStem}</span>
                                   </>
                                 )
-                              : `Pregunta ${group.questionNumber}`}
+                              : `Question ${group.questionNumber}`}
                         </p>
                         <div style={{ display: 'grid', gap: '0.6rem' }}>
                           {group.options.map((option) => {
@@ -832,11 +738,11 @@ function B2ReadingExamsPageInner() {
                             </>
                           );
                         })()}
-                      </div>
+                      </B2ExamQuestionItem>
                     ))}
-                  </div>
-                </div>
-              </div>
+                  </>
+                }
+              />
             )}
           </>
         )}
@@ -890,7 +796,7 @@ function B2ReadingExamsPageInner() {
 export default function B2ReadingExamsPage() {
   return (
     <Suspense
-      fallback={<main style={{ padding: '2rem', textAlign: 'center', fontFamily: 'Segoe UI, sans-serif' }}>Cargando práctica…</main>}
+      fallback={<main style={{ padding: '2rem', textAlign: 'center', fontFamily: 'Segoe UI, sans-serif' }}>Loading practice…</main>}
     >
       <B2ReadingExamsPageInner />
     </Suspense>

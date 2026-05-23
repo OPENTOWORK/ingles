@@ -1,7 +1,6 @@
 'use client';
 
 import { useState, useEffect, useCallback } from 'react';
-import '@/styles/exam-styles.css';
 import { buildClientApiUrl, getStaticApiHint } from '@/utils/clientApiUrl';
 
 function countWords(text) {
@@ -12,24 +11,24 @@ function countWords(text) {
 }
 
 /**
- * Cuadro de texto largo + corrección Dralo (mismo patrón visual que C1 exam-1 part-8: exam-styles.css).
+ * Long-form writing area + Dralo AI feedback (B2 First style).
  *
  * @param {object} props
- * @param {string} props.storageKey — clave localStorage por tarea (p. ej. pregunta_id)
+ * @param {string} props.storageKey — localStorage key per task (e.g. pregunta_id)
  * @param {number} [props.wordMin]
  * @param {number} [props.wordMax]
- * @param {string} [props.heading] — título sobre el área de escritura
- * @param {string} [props.taskInstructions] — enunciado / consigna (desde Supabase)
- * @param {string} [props.taskInputText] — textos de apoyo, bullet points, etc.
- * @param {string} [props.partLabel] — nombre de la parte (p. ej. Part 8)
- * @param {string} [props.partDescription] — descripción fija de la parte si existe
+ * @param {string} [props.heading] — title above the writing area
+ * @param {string} [props.taskInstructions] — task prompt (from Supabase)
+ * @param {string} [props.taskInputText] — supporting text, bullet points, etc.
+ * @param {string} [props.partLabel] — part name (e.g. Part 8)
+ * @param {string} [props.partDescription] — fixed part description if any
  * @param {(scores: { content: number, communication: number, organisation: number, language: number, total: number, passed: boolean, required: number }) => void} [props.onScoresReady]
  */
 export default function B2WritingLongFormAiPanel({
   storageKey,
   wordMin = 140,
   wordMax = 190,
-  heading = 'Tu respuesta',
+  heading = 'Your answer',
   taskInstructions = '',
   taskInputText = '',
   partLabel = '',
@@ -110,84 +109,74 @@ export default function B2WritingLongFormAiPanel({
           !externalBaseConfigured && (res.status === 404 || res.status === 405)
             ? ` ${getStaticApiHint()}`
             : '';
-        setLastError((data.error || 'Error desconocido.') + hint);
+        setLastError((data.error || 'Unknown error.') + hint);
       }
     } catch {
-      setLastError('No se pudo conectar con Dralo para la corrección.');
+      setLastError('Could not connect to Dralo for feedback.');
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div className="questions-container" style={{ maxWidth: '100%' }}>
-      <div className="questions-section-header">
-        <h2>{heading}</h2>
-      </div>
+    <div className="levels-b2-writing-panel">
+      <p className="levels-exam-split__section-title">{heading}</p>
 
-      <div className="question">
-        <div className="question-content">
-          <div className="word-limit-info" style={{ flexWrap: 'wrap', gap: '0.5rem' }}>
-            <p style={{ margin: 0 }}>
-              <strong>Extensión recomendada (B2 First):</strong> {wordMin}–{wordMax} palabras
-            </p>
-            <p style={{ margin: 0 }}>
-              <strong>Palabras:</strong> {wordCount}
-            </p>
-            {wordCount > 0 && !meetsWordRange ? (
-              <p style={{ margin: 0, color: '#dc2626', fontWeight: 600 }}>
-                Aún no entra en el rango {wordMin}–{wordMax} palabras (sigue siendo útil enviar a Dralo).
-              </p>
-            ) : null}
-            {wordCount > 0 && meetsWordRange ? (
-              <p style={{ margin: 0, color: '#15803d', fontWeight: 600 }}>Rango de extensión alcanzado.</p>
-            ) : null}
-          </div>
-
-          <textarea
-            className="writing-textarea"
-            rows={18}
-            placeholder="Escribe aquí tu texto completo (ensayo, email, review, etc.)…"
-            value={essay}
-            onChange={(e) => setEssay(e.target.value)}
-            spellCheck
-            aria-label="Área de escritura B2"
-          />
-        </div>
-
-        {essay.trim().length > 0 ? (
-          <div className="question-feedback">
-            <div className="feedback-actions">
-              <button
-                type="button"
-                className="btn btn-primary"
-                onClick={() => void evaluateEssay()}
-                disabled={loading}
-              >
-                {loading ? 'Enviando a Dralo para corrección…' : 'Enviar a Dralo para corrección'}
-              </button>
-            </div>
-          </div>
+      <div className="levels-b2-writing-panel__meta">
+        <span>
+          Recommended length (B2 First): <strong>{wordMin}–{wordMax} words</strong>
+        </span>
+        <span>
+          Words: <strong>{wordCount}</strong>
+        </span>
+        {wordCount > 0 && !meetsWordRange ? (
+          <span className="levels-b2-writing-panel__meta-note levels-b2-writing-panel__meta-note--warn">
+            Not yet within {wordMin}–{wordMax} words (you can still submit for feedback).
+          </span>
+        ) : null}
+        {wordCount > 0 && meetsWordRange ? (
+          <span className="levels-b2-writing-panel__meta-note levels-b2-writing-panel__meta-note--ok">
+            Word count within range.
+          </span>
         ) : null}
       </div>
 
-      {lastError ? (
-        <div className="validation-warning" style={{ marginTop: '1rem' }}>
-          {lastError}
+      <textarea
+        className="levels-b2-writing-panel__textarea"
+        rows={18}
+        placeholder="Write your full text here (essay, email, review, etc.)…"
+        value={essay}
+        onChange={(e) => setEssay(e.target.value)}
+        spellCheck
+        aria-label="B2 writing area"
+      />
+
+      {essay.trim().length > 0 ? (
+        <div className="levels-b2-writing-panel__actions">
+          <button
+            type="button"
+            className="levels-b2-writing-panel__submit"
+            onClick={() => void evaluateEssay()}
+            disabled={loading}
+          >
+            {loading ? 'Submitting to Dralo…' : 'Submit to Dralo for feedback'}
+          </button>
         </div>
       ) : null}
 
+      {lastError ? (
+        <p className="levels-b2-writing-panel__error" role="alert">
+          {lastError}
+        </p>
+      ) : null}
+
       {aiFeedback ? (
-        <div
-          className="explanation"
-          style={{ marginTop: '2rem', backgroundColor: '#eef7ff', border: '1px solid #3b82f6' }}
-        >
-          <div className="explanation-header">
-            <h4>Corrección Dralo (B2 First)</h4>
-          </div>
-          <div className="explanation-content">
-            <div dangerouslySetInnerHTML={{ __html: String(aiFeedback).replace(/\n/g, '<br />') }} />
-          </div>
+        <div className="levels-b2-writing-panel__feedback">
+          <p className="levels-exam-split__section-title">Dralo feedback (B2 First)</p>
+          <div
+            className="levels-b2-writing-panel__feedback-body"
+            dangerouslySetInnerHTML={{ __html: String(aiFeedback).replace(/\n/g, '<br />') }}
+          />
         </div>
       ) : null}
     </div>

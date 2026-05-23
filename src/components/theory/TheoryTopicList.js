@@ -29,7 +29,6 @@ export default function TheoryTopicList({
     session?.access_token,
   );
 
-  const [selected, setSelected] = useState([]);
   const [query, setQuery] = useState('');
 
   const progressByHref = topicProgressByHref ?? {};
@@ -44,23 +43,11 @@ export default function TheoryTopicList({
     [topics, progressByHref],
   );
 
-  const toggle = useCallback(
-    (lvl) =>
-      setSelected((prev) =>
-        prev.includes(lvl) ? prev.filter((l) => l !== lvl) : [...prev, lvl],
-      ),
-    [],
-  );
-
   const clear = useCallback(() => {
-    setSelected([]);
     setQuery('');
   }, []);
 
-  const filtered = useMemo(
-    () => filterTopics(topics, { selectedLevels: selected, query }),
-    [topics, selected, query],
-  );
+  const filtered = useMemo(() => filterTopics(topics, { query }), [topics, query]);
 
   return (
     <main className="shell teoria-page theory-topics-page">
@@ -76,7 +63,7 @@ export default function TheoryTopicList({
         title={sectionTitle}
         description={
           sectionDescription ||
-          'Filter by level, search by title, and explore topics in this area.'
+          'Search by title and explore topics in this area.'
         }
         mascotVariant={4}
         mascotWidth={140}
@@ -104,8 +91,6 @@ export default function TheoryTopicList({
       </div>
 
       <TeoriaFilterToolbar
-        selectedLevels={selected}
-        onToggleLevel={toggle}
         query={query}
         onQueryChange={setQuery}
         onClear={clear}
@@ -169,13 +154,6 @@ function TopicCardBody({ topic, percent, accentColor }) {
         size="sm"
         accentColor={accentColor}
       />
-      <div className="card__levels">
-        {topic.levels.map((level) => (
-          <span key={level} className="pill" aria-label={`Level ${level}`}>
-            {level}
-          </span>
-        ))}
-      </div>
     </>
   );
 }

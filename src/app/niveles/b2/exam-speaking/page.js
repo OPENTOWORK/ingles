@@ -6,9 +6,10 @@ export default function B2SpeakingExamsPage() {
   return (
     <B2SpeakingExamPractice
       title="B2 Speaking Practice"
-      subtitle="Partes 14 a 17 — simulación con examinador por voz"
-      loadingLabel="Cargando Speaking (Partes 14 a 17)..."
-      refreshLabel="Refrescar Speaking (14-17)"
+      subtitle="Parts 14 to 17 — voice examiner simulation"
+      loadingLabel="Loading Speaking (Parts 14 to 17)…"
+      refreshLabel="Refresh Speaking (14–17)"
+      lang="en"
     />
   );
 }

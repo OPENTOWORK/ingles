@@ -24,6 +24,7 @@ import { useB2ExamPracticeSlot } from '@/hooks/useB2ExamPracticeSlot';
 import { fetchUseOfEnglishPuntuacionesProgress } from '@/utils/levelsPuntuacionesProgress';
 import { getCachedB2Level, getCachedB2ExamenIdsBySlot } from '@/utils/b2LevelCache';
 import { B2ExamSlotProgressPicker } from '@/components/b2/B2ExamSlotProgressPicker';
+import { B2ExamPracticeContent, B2ExamQuestionItem } from '@/components/b2/B2ExamPracticeContent';
 
 function UseOfEnglishExamsPageInner() {
   const { userRole } = useUserRole();
@@ -285,11 +286,9 @@ function UseOfEnglishExamsPageInner() {
     [selectedPart?.nombre],
   );
 
-  /** Mismo formato de panel de texto que Parte 1 para todas las partes de esta página (1–4). */
-  const shouldStickEnunciado = partNumberUoe >= 1 && partNumberUoe <= 4;
-
   const getQuestionKey = (partId, questionNumber, fallbackKey = 'extra') =>
     `${partId}::${selectedQuestion?.preguntaId || 'sin-pregunta'}::${questionNumber ?? fallbackKey}`;
+
   function splitEnunciadoAndText(rawText = '') {
     const normalized = rawText.replace(/\r\n/g, '\n').trim();
     if (!normalized) return { enunciado: '', texto: '' };
@@ -329,6 +328,22 @@ function UseOfEnglishExamsPageInner() {
       preguntasPart1Parse,
     };
   }, [selectedPart?.descripcion, selectedQuestion?.enunciado, partNumberUoe]);
+
+  const isUoePart1 = partNumberUoe === 1;
+  const uoeUiLang = 'en';
+
+  const getPartTabLabel = (part) => {
+    const n = Number(part.nombre.match(/\d+/)?.[0] || 0);
+    if (n) return `Part ${n}`;
+    return part.nombre;
+  };
+
+  const getSelectedPartTitle = () => {
+    const n = Number(selectedPart?.nombre.match(/\d+/)?.[0] || 0);
+    if (n) return `Part ${n}`;
+    return selectedPart?.nombre || '';
+  };
+
 
   /** Mapa pregunta → letra correcta desde `levels_respuestas` (p. ej. `1 C`, `2 B follow`).
    *  Solo se consideran filas con `correcta === true`; en caso contrario, al iterar todas las
@@ -395,7 +410,7 @@ function UseOfEnglishExamsPageInner() {
             [storageKey]: { loading: false, error: null, text: text || '—' },
           }));
         } catch (e) {
-          const msg = e?.message || 'No se pudo obtener la explicación.';
+          const msg = e?.message || 'Could not load the explanation.';
           setAiHintsByKey((prev) => ({
             ...prev,
             [storageKey]: { loading: false, error: msg, text: null },
@@ -406,24 +421,6 @@ function UseOfEnglishExamsPageInner() {
     [contextSnippetForAi],
   );
 
-  const getFormattedEnunciado = (rawText = '') => {
-    const normalized = rawText.replace(/\r\n/g, '\n').trim();
-    if (!normalized) return [];
-
-    return normalized
-      .split('\n')
-      .map((line) => line.trim())
-      .filter(Boolean)
-      .map((line) => {
-        const lower = line.toLowerCase();
-        if (lower.startsWith('example:')) return { type: 'label', text: line };
-        if (lower === 'text') return { type: 'label', text: line };
-        if (/^(answer:)/i.test(line)) return { type: 'answer', text: line };
-        if (/^\d+\s*$/.test(line)) return { type: 'number', text: line };
-        if (/^[a-d]\)\s+/i.test(line)) return { type: 'option', text: line };
-        return { type: 'paragraph', text: line };
-      });
-  };
   const getGroupedAnswers = (answers = []) => {
     const groupsMap = new Map();
     const ungrouped = [];
@@ -597,7 +594,7 @@ function UseOfEnglishExamsPageInner() {
       const uid = await getSessionUserId();
       if (!uid) {
         setPartFinishNotice({
-          error: 'Inicia sesión para guardar tu puntuación.',
+          error: 'Sign in to save your score.',
         });
         return;
       }
@@ -647,19 +644,6 @@ function UseOfEnglishExamsPageInner() {
     ],
   );
 
-  const buttonStyle = {
-    backgroundColor: '#c1f2cd',
-    padding: '0.75rem 1.25rem',
-    borderRadius: '8px',
-    textDecoration: 'none',
-    color: '#000',
-    fontWeight: 'bold',
-    boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
-    transition: 'transform 0.2s ease',
-    display: 'inline-block',
-    textAlign: 'center',
-  };
-
   const currentExamProgress = progressBySlot[examSlot] || {};
   const getPartSavedScoreLabel = (part) => {
     const partNumber = Number(part.nombre.match(/\d+/)?.[0] || 0);
@@ -708,49 +692,49 @@ function UseOfEnglishExamsPageInner() {
         value={examSlot}
         onSelect={handleSelectExam}
         progressBySlot={progressBySlot}
+        lang="en"
       />
       {!examPracticeOpen ? null : (
-        <>
-      <h1 style={{ textAlign: 'center' }}>B2 Use of English Practice</h1>
-      <p style={{ textAlign: 'center', margin: '0.35rem 0 0', color: '#4a5568', fontSize: '1rem' }}>
-        Partes 1 a 4
-      </p>
+        <div className="levels-b2-practice">
+      <header className="levels-b2-practice__header">
+        <h1 className="levels-b2-practice__title">B2 Use of English Practice</h1>
+        <p className="levels-b2-practice__subtitle">Parts 1 to 4</p>
       {canSeeRefreshControls && (
-        <div style={{ textAlign: 'center', marginTop: '1rem' }}>
+        <div className="levels-b2-practice__refresh">
           <button
             type="button"
             onClick={() => loadUseOfEnglishData()}
             disabled={loading}
-            style={{
-              padding: '0.55rem 1.1rem',
-              borderRadius: '8px',
-              border: '1px solid #2f855a',
-              background: loading ? '#e2e8f0' : '#f0fff4',
-              color: '#1a202c',
-              fontWeight: 600,
-              cursor: loading ? 'not-allowed' : 'pointer',
-            }}
+            className="levels-b2-practice__refresh-btn"
           >
-            {loading ? 'Actualizando…' : 'Refrescar Use of English (1-4)'}
+            {loading ? 'Updating…' : 'Refresh Use of English (1–4)'}
           </button>
-          <p style={{ margin: '0.45rem 0 0', fontSize: '0.85rem', color: '#718096' }}>
-            Vuelve a cargar partes, textos y respuestas desde el servidor y limpia tus selecciones (solo lectura).
+          <p className="levels-b2-practice__refresh-hint">
+            Reload parts, texts and answers from the server and clear your selections (read-only).
           </p>
         </div>
       )}
+      </header>
 
-      <LevelsCategoryTimer categoryLabel="Sesión: B2 Use of English (partes 1–4)" timeLabel={timerLabel} />
+      <div className="levels-b2-practice__status">
+      <LevelsCategoryTimer
+        categoryLabel="Session: B2 Use of English (parts 1–4)"
+        timeLabel={timerLabel}
+      />
       <LevelsPartScorePanel
         correctCount={partScoreMetrics.correctCount}
         totalSlots={uoePartScoring?.total ?? partScoreMetrics.totalSlots}
         passingCount={uoePartScoring?.passing ?? partScoreMetrics.passingCount}
+        lang={uoeUiLang}
       />
+      </div>
       {partFinishNotice && !partFinishNotice.error && (
         <LevelsPartFinishBanner
           passed={partFinishNotice.passed}
           correct={partFinishNotice.correct}
           total={partFinishNotice.total}
           passing={partFinishNotice.passing}
+          lang={uoeUiLang}
         />
       )}
       {partFinishNotice?.error && (
@@ -760,14 +744,15 @@ function UseOfEnglishExamsPageInner() {
           total={0}
           passing={0}
           error={partFinishNotice.error}
+          lang={uoeUiLang}
         />
       )}
 
       <section style={{ maxWidth: '800px', margin: '1.5rem auto', lineHeight: '1.6', color: '#333', textAlign: 'center' }}>
       </section>
 
-      <section style={{ maxWidth: '700px', margin: '2rem auto' }}>
-        {loading && <p style={{ textAlign: 'center' }}>Cargando Use of English (Partes 1 a 4)...</p>}
+      <section style={{ margin: '0 auto', width: '100%' }}>
+        {loading && <p style={{ textAlign: 'center' }}>Loading Use of English (Parts 1 to 4)…</p>}
 
         {!loading && error && (
           <p style={{ textAlign: 'center', color: '#c53030', fontWeight: 600 }}>{error}</p>
@@ -775,28 +760,17 @@ function UseOfEnglishExamsPageInner() {
 
         {!loading && !error && (
           <>
-            <div
-              style={{
-                display: 'grid',
-                gridTemplateColumns: 'repeat(auto-fit, minmax(140px, 1fr))',
-                gap: '1rem',
-                justifyItems: 'center',
-                marginBottom: '1.5rem',
-              }}
-            >
+            <div className="levels-b2-part-tabs" role="tablist">
               {partsData.map((part) => {
                 const savedScore = getPartSavedScoreLabel(part);
+                const active = selectedPartId === part.id;
                 return (
                 <button
                   key={part.id}
                   type="button"
-                  style={{
-                    ...buttonStyle,
-                    border: selectedPartId === part.id ? '2px solid #1f6f43' : '2px solid transparent',
-                    width: '100%',
-                    cursor: 'pointer',
-                    transform: selectedPartId === part.id ? 'scale(1.02)' : 'scale(1)',
-                  }}
+                  role="tab"
+                  aria-selected={active}
+                  className={`levels-b2-part-tab${active ? ' levels-b2-part-tab--active' : ''}`}
                   onClick={() => {
                     setSelectedPartId(part.id);
                     if (selectedQuestionByPart[part.id]) return;
@@ -809,18 +783,10 @@ function UseOfEnglishExamsPageInner() {
                     }));
                   }}
                 >
-                  <span>{part.nombre}</span>
+                  <span>{getPartTabLabel(part)}</span>
                   {savedScore ? (
-                    <span
-                      style={{
-                        display: 'block',
-                        marginTop: '0.3rem',
-                        fontSize: '0.82rem',
-                        fontWeight: 600,
-                        color: '#2f855a',
-                      }}
-                    >
-                      Guardado: {savedScore}
+                    <span className="levels-b2-part-tab__score">
+                      Saved: {savedScore}
                     </span>
                   ) : null}
                 </button>
@@ -829,98 +795,14 @@ function UseOfEnglishExamsPageInner() {
             </div>
 
             {selectedPart && selectedQuestion && (
-              <div
-                style={{
-                  background: '#fff',
-                  borderRadius: '12px',
-                  padding: '1.25rem',
-                  boxShadow: '0 4px 12px rgba(0, 0, 0, 0.08)',
-                }}
-              >
-                <h2 style={{ marginTop: 0 }}>{selectedPart.nombre}</h2>
-                <div style={{ color: '#2d3748', marginTop: '0.6rem' }}>
-                  <strong>Pregunta:</strong>
-                  <div
-                    style={{
-                      marginTop: '0.6rem',
-                      background: '#f8fafc',
-                      border: '1px solid #e2e8f0',
-                      borderRadius: '10px',
-                      padding: '0.95rem 1rem',
-                    }}
-                  >
-                    <p style={{ margin: '0 0 0.65rem', fontWeight: 700, color: '#1a365d' }}>
-                      Enunciado
-                    </p>
-                    {getFormattedEnunciado(selectedPartContent.enunciado).map((block, index) => {
-                      if (block.type === 'label') {
-                        return (
-                          <p key={`enunciado-${block.type}-${index}`} style={{ margin: '0.7rem 0 0.45rem', fontWeight: 700, color: '#1a365d' }}>
-                            {block.text}
-                          </p>
-                        );
-                      }
-                      if (block.type === 'answer') {
-                        return (
-                          <p key={`enunciado-${block.type}-${index}`} style={{ margin: '0.45rem 0', padding: '0.45rem 0.6rem', background: '#ebf8ff', borderRadius: '8px', fontWeight: 600 }}>
-                            {block.text}
-                          </p>
-                        );
-                      }
-                      if (block.type === 'number') {
-                        return (
-                          <p key={`enunciado-${block.type}-${index}`} style={{ margin: '0.35rem 0', fontWeight: 700, color: '#2d3748' }}>
-                            {block.text}
-                          </p>
-                        );
-                      }
-                      if (block.type === 'option') {
-                        return (
-                          <p key={`enunciado-${block.type}-${index}`} style={{ margin: '0.2rem 0', paddingLeft: '0.35rem', color: '#334155' }}>
-                            {block.text}
-                          </p>
-                        );
-                      }
-                      return (
-                        <p key={`enunciado-${block.type}-${index}`} style={{ margin: '0.45rem 0', lineHeight: 1.7, color: '#1f2937' }}>
-                          {block.text}
-                        </p>
-                      );
-                    })}
-                  </div>
-
-                  {selectedPartContent.texto ? (
-                    <div
-                      style={{
-                        marginTop: '0.7rem',
-                        background: '#f8fafc',
-                        border: '1px solid #e2e8f0',
-                        borderRadius: '10px',
-                        padding: '0.95rem 1rem',
-                        position: shouldStickEnunciado ? 'sticky' : 'static',
-                        top: shouldStickEnunciado ? '0.75rem' : 'auto',
-                        zIndex: shouldStickEnunciado ? 20 : 'auto',
-                        maxHeight: shouldStickEnunciado ? '34vh' : 'none',
-                        overflowY: shouldStickEnunciado ? 'auto' : 'visible',
-                      }}
-                    >
-                      <p style={{ margin: '0 0 0.65rem', fontWeight: 700, color: '#1a365d' }}>
-                        Texto
-                      </p>
-                      {selectedPartContent.texto
-                        .split('\n')
-                        .map((line) => line.trim())
-                        .filter(Boolean)
-                        .map((line, idx) => (
-                          <p key={`texto-${idx}`} style={{ margin: '0.45rem 0', lineHeight: 1.7 }}>
-                            {line}
-                          </p>
-                        ))}
-                    </div>
-                  ) : null}
-                <div style={{ marginTop: '1.25rem' }}>
-                  <h3 style={{ margin: '0 0 0.75rem', color: '#1a202c' }}>Preguntas</h3>
-                  <div style={{ display: 'grid', gap: '1rem' }}>
+              <B2ExamPracticeContent
+                title={getSelectedPartTitle()}
+                directionsText={selectedPartContent.enunciado}
+                directionsLabel={isUoePart1 ? 'Instructions' : 'Directions'}
+                passageText={selectedPartContent.texto}
+                split="auto"
+                questions={
+                  <>
                     {isOpenClozePart ? (
                       openQuestionNumbers.map((questionNumber) => {
                         const questionKey = getQuestionKey(selectedPart.id, questionNumber, 'open');
@@ -928,17 +810,9 @@ function UseOfEnglishExamsPageInner() {
                         const checkResult = openChecks[questionKey];
                         const isAnswerLocked = typeof checkResult === 'boolean';
                         return (
-                          <div
-                            key={`open-${selectedQuestion.preguntaId}-${questionNumber}`}
-                            style={{
-                              border: '1px solid #e2e8f0',
-                              borderRadius: '10px',
-                              padding: '0.85rem',
-                              background: '#ffffff',
-                            }}
-                          >
+                          <B2ExamQuestionItem key={`open-${selectedQuestion.preguntaId}-${questionNumber}`}>
                             <p style={{ margin: '0 0 0.65rem', fontWeight: 700, color: '#2d3748' }}>
-                              Pregunta {questionNumber}
+                              Question {questionNumber}
                             </p>
                             <div style={{ display: 'flex', gap: '0.6rem', alignItems: 'center', flexWrap: 'wrap' }}>
                               <input
@@ -950,7 +824,7 @@ function UseOfEnglishExamsPageInner() {
                                   const value = e.target.value;
                                   setOpenInputs((prev) => ({ ...prev, [questionKey]: value }));
                                 }}
-                                placeholder="Escribe una palabra"
+                                placeholder="Write one word"
                                 style={{
                                   minWidth: '240px',
                                   borderRadius: '8px',
@@ -971,11 +845,11 @@ function UseOfEnglishExamsPageInner() {
                                   setOpenChecks(nextOpenChecks);
                                   {
                                     const correctChoiceText =
-                                      [...expectedAnswers].slice(0, 4).join(' · ') || 'respuesta modelo';
+                                      [...expectedAnswers].slice(0, 4).join(' · ') || 'model answer';
                                     const answersFromDatabase = [...expectedAnswers].join(' · ');
                                     requestAiJustification(questionKey, {
                                       partLabel: selectedPart?.nombre || '',
-                                      questionLabel: `Pregunta ${questionNumber}`,
+                                      questionLabel: `Question ${questionNumber}`,
                                       userChoiceText: currentValue,
                                       correctChoiceText,
                                       isCorrect,
@@ -1010,7 +884,7 @@ function UseOfEnglishExamsPageInner() {
                                   cursor: 'pointer',
                                 }}
                               >
-                                Comprobar
+                                Check
                               </button>
                               ) : null}
                             </div>
@@ -1023,7 +897,7 @@ function UseOfEnglishExamsPageInner() {
                                     color: checkResult ? '#2f855a' : '#c53030',
                                   }}
                                 >
-                                  {checkResult ? 'Correcta' : 'Incorrecta'}
+                                  {checkResult ? 'Correct' : 'Incorrect'}
                                 </p>
                                 {(() => {
                                   const expected = openAnswerMap.get(questionNumber);
@@ -1039,27 +913,21 @@ function UseOfEnglishExamsPageInner() {
                               </>
                             )}
                             <LevelsAnswerJustification hint={aiHintsByKey[questionKey]} />
-                          </div>
+                          </B2ExamQuestionItem>
                         );
                       })
                     ) : (
                     groupedAnswersForUiAndScore.map((group, groupIndex) => (
-                      <div
+                      <B2ExamQuestionItem
                         key={`group-${selectedQuestion.preguntaId}-${group.questionNumber ?? 'extra'}-${groupIndex}`}
-                        style={{
-                          border: '1px solid #e2e8f0',
-                          borderRadius: '10px',
-                          padding: '0.85rem',
-                          background: '#ffffff',
-                        }}
                       >
                         {group.questionNumber ? (
                           <p style={{ margin: '0 0 0.65rem', fontWeight: 700, color: '#2d3748' }}>
-                            Pregunta {group.questionNumber}
+                            Question {group.questionNumber}
                           </p>
                         ) : (
                           <p style={{ margin: '0 0 0.65rem', fontWeight: 700, color: '#2d3748' }}>
-                            Opciones
+                            Options
                           </p>
                         )}
 
@@ -1094,10 +962,10 @@ function UseOfEnglishExamsPageInner() {
                                       .filter(Boolean)
                                       .join('\n');
                                     requestAiJustification(questionKey, {
-                                      partLabel: selectedPart?.nombre || '',
+                                      partLabel: getSelectedPartTitle(),
                                       questionLabel: group.questionNumber
-                                        ? `Pregunta ${group.questionNumber}`
-                                        : 'Ítem',
+                                        ? `Question ${group.questionNumber}`
+                                        : 'Item',
                                       userChoiceText: option.formattedText || option.respuesta || '',
                                       correctChoiceText:
                                         correctOpt?.formattedText || correctOpt?.respuesta || '',
@@ -1174,14 +1042,12 @@ function UseOfEnglishExamsPageInner() {
                             </>
                           );
                         })()}
-                      </div>
+                      </B2ExamQuestionItem>
                     ))
                     )}
-                  </div>
-                </div>
-                </div>
-
-              </div>
+                  </>
+                }
+              />
             )}
           </>
         )}
@@ -1227,7 +1093,7 @@ function UseOfEnglishExamsPageInner() {
           </div>
         </Link>
       </div>
-        </>
+        </div>
       )}
     </main>
   );
@@ -1238,7 +1104,7 @@ export default function UseOfEnglishExamsPage() {
     <Suspense
       fallback={
         <main style={{ padding: '2rem', textAlign: 'center', fontFamily: 'Segoe UI, sans-serif' }}>
-          Cargando práctica…
+          Loading practice…
         </main>
       }
     >

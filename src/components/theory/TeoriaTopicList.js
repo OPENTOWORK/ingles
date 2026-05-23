@@ -8,23 +8,13 @@ import { TeoriaGlobalStyles } from '@/components/theory/TeoriaStyles';
 import { SECTION_CATALOG, filterTopics } from '@/data/teoriaSections';
 
 export default function TeoriaTopicList({ sectionTitle, topics }) {
-  const [selected, setSelected] = useState([]);
   const [query, setQuery] = useState('');
 
-  const toggle = useCallback(
-    (lvl) => setSelected((prev) => (prev.includes(lvl) ? prev.filter((l) => l !== lvl) : [...prev, lvl])),
-    [],
-  );
-
   const clear = useCallback(() => {
-    setSelected([]);
     setQuery('');
   }, []);
 
-  const filtered = useMemo(
-    () => filterTopics(topics, { selectedLevels: selected, query }),
-    [topics, selected, query],
-  );
+  const filtered = useMemo(() => filterTopics(topics, { query }), [topics, query]);
 
   const sectionMeta = SECTION_CATALOG.find((s) => s.key === sectionTitle);
 
@@ -42,7 +32,7 @@ export default function TeoriaTopicList({ sectionTitle, topics }) {
         }
         eyebrow={sectionMeta?.key || 'Theory'}
         title={sectionTitle}
-        description={sectionMeta?.description || 'Filter by level, search by title, and explore topics in this area.'}
+        description={sectionMeta?.description || 'Search by title and explore topics in this area.'}
         mascotVariant={4}
         mascotWidth={140}
         accent={sectionMeta?.heroAccent || 'violet'}
@@ -53,8 +43,6 @@ export default function TeoriaTopicList({ sectionTitle, topics }) {
       />
 
       <TeoriaFilterToolbar
-        selectedLevels={selected}
-        onToggleLevel={toggle}
         query={query}
         onQueryChange={setQuery}
         onClear={clear}
@@ -70,13 +58,6 @@ export default function TeoriaTopicList({ sectionTitle, topics }) {
             <li key={`${t.href}-${i}`}>
               <Link href={t.href} className="card">
                 <div className="card__title">{t.text}</div>
-                <div className="card__levels">
-                  {t.levels.map((l) => (
-                    <span key={l} className="pill" aria-label={`Level ${l}`}>
-                      {l}
-                    </span>
-                  ))}
-                </div>
               </Link>
             </li>
           ))}

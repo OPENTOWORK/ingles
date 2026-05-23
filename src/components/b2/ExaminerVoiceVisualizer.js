@@ -148,10 +148,10 @@ export default function ExaminerVoiceVisualizer({ isLoading = false }) {
   }, [speaking.active, speaking.mode]);
 
   const statusLabel = speaking.active
-    ? 'El examinador está hablando…'
+    ? 'The examiner is speaking…'
     : isLoading
-      ? 'Preparando audio…'
-      : 'En espera — pulsa Hablar para responder';
+      ? 'Preparing audio…'
+      : 'Waiting — press Speak to respond';
 
   return (
     <div

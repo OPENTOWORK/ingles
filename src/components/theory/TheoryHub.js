@@ -29,7 +29,6 @@ export default function TheoryHub() {
     session?.access_token,
   );
 
-  const [selectedLevels, setSelectedLevels] = useState([]);
   const [selectedSections, setSelectedSections] = useState([]);
   const [query, setQuery] = useState('');
 
@@ -43,14 +42,6 @@ export default function TheoryHub() {
     [topicProgressByHref, isStudent],
   );
 
-  const toggleLevel = useCallback(
-    (code) =>
-      setSelectedLevels((prev) =>
-        prev.includes(code) ? prev.filter((l) => l !== code) : [...prev, code],
-      ),
-    [],
-  );
-
   const toggleSection = useCallback(
     (key) =>
       setSelectedSections((prev) =>
@@ -60,7 +51,6 @@ export default function TheoryHub() {
   );
 
   const clearFilters = useCallback(() => {
-    setSelectedLevels([]);
     setSelectedSections([]);
     setQuery('');
   }, []);
@@ -68,22 +58,20 @@ export default function TheoryHub() {
   const filteredTopics = useMemo(
     () =>
       filterTopicsGlobal(ALL_TOPICS, {
-        selectedLevels,
         selectedSections,
         query,
       }),
-    [selectedLevels, selectedSections, query],
+    [selectedSections, query],
   );
 
-  const hasActiveFilters =
-    selectedLevels.length > 0 || selectedSections.length > 0 || query.trim().length > 0;
+  const hasActiveFilters = selectedSections.length > 0 || query.trim().length > 0;
 
   return (
     <main className="shell teoria-page theory-hub-page">
       <PageHero
         eyebrow="Study hub"
         title="Theory"
-        description="Explore grammar, vocabulary, and pronunciation — organised by skill area and CEFR level."
+        description="Explore grammar, vocabulary, and pronunciation — organised by skill area."
         showMascot={true}
         mascotVariant={4}
         mascotWidth={156}
@@ -113,8 +101,6 @@ export default function TheoryHub() {
       </div>
 
       <TeoriaFilterToolbar
-        selectedLevels={selectedLevels}
-        onToggleLevel={toggleLevel}
         query={query}
         onQueryChange={setQuery}
         onClear={clearFilters}
@@ -153,13 +139,6 @@ export default function TheoryHub() {
                           size="sm"
                           accentColor={area?.accent ?? '#7c3aed'}
                         />
-                        <div className="card__levels">
-                          {topic.levels.map((l) => (
-                            <span key={l} className="pill">
-                              {l}
-                            </span>
-                          ))}
-                        </div>
                         {unlock?.requiredPrevious ? (
                           <p className="theory-topic-card__lock-hint">
                             Complete {unlock.requiredPrevious} first
@@ -178,13 +157,6 @@ export default function TheoryHub() {
                         size="sm"
                         accentColor={area?.accent ?? '#7c3aed'}
                       />
-                      <div className="card__levels">
-                        {topic.levels.map((l) => (
-                          <span key={l} className="pill">
-                            {l}
-                          </span>
-                        ))}
-                      </div>
                     </Link>
                   )}
                 </li>

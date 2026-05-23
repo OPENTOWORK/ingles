@@ -167,9 +167,9 @@ export function TeoriaGlobalStyles() {
         gap: 8px;
       }
       .chips--sections {
-        margin-top: 10px;
-        padding-top: 10px;
-        border-top: 1px dashed #e2e8f0;
+        margin-top: 0;
+        padding-top: 0;
+        border-top: none;
       }
       .chip {
         padding: 8px 12px;
@@ -223,6 +223,25 @@ export function TeoriaGlobalStyles() {
         margin-top: 10px;
         font-size: 12px;
         color: #666;
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 0.65rem 1rem;
+      }
+      .toolbar__clear {
+        margin-left: auto;
+        padding: 0;
+        border: none;
+        background: none;
+        color: #0070f3;
+        font-size: 12px;
+        font-weight: 600;
+        cursor: pointer;
+        text-decoration: underline;
+        text-underline-offset: 2px;
+      }
+      .toolbar__clear:hover {
+        color: #005bb5;
       }
       .level-info {
         margin-top: 16px;

@@ -63,7 +63,7 @@ function resolveLongTurnPhotos(taskContext, examSlot) {
  * @param {string} props.loadingLabel
  * @param {string} props.refreshLabel
  */
-function B2SpeakingExamPracticeInner({ title, subtitle, loadingLabel, refreshLabel }) {
+function B2SpeakingExamPracticeInner({ title, subtitle, loadingLabel, refreshLabel, lang = 'en' }) {
   const { examSlot, selectExamSlot } = useB2ExamPracticeSlot();
   const scoring = useB2ExamScoringSession({
     partMin: B2_SPEAKING_PART_MIN,
@@ -107,7 +107,7 @@ function B2SpeakingExamPracticeInner({ title, subtitle, loadingLabel, refreshLab
         return mapped[0]?.id ?? null;
       });
     } catch (e) {
-      setError(e?.message || 'No se pudieron cargar las partes de Speaking.');
+      setError(e?.message || 'Could not load Speaking parts.');
     } finally {
       setLoading(false);
     }
@@ -183,14 +183,21 @@ function B2SpeakingExamPracticeInner({ title, subtitle, loadingLabel, refreshLab
         selectedPartId={selectedPartId}
         onSelectPart={(part) => setSelectedPartId(part.id)}
         getPartSavedScoreLabel={(part) => scoring.getPartSavedScoreLabel(part, examSlot)}
+        lang={lang}
       >
-      <section style={{ maxWidth: '820px', margin: '0 auto' }}>
+      <section style={{ margin: '0 auto', width: '100%' }}>
         {loading && <p style={{ textAlign: 'center' }}>{loadingLabel}</p>}
         {!loading && error && (
           <p style={{ textAlign: 'center', color: '#c53030', fontWeight: 600 }}>{error}</p>
         )}
 
         {!loading && !error && selectedPart ? (
+          <div className="levels-exam-practice-page levels-exam-practice-page--narrow">
+            <div className="levels-exam-split-card">
+              <h2>
+                {selectedPart.partNumber ? `Part ${selectedPart.partNumber}` : selectedPart.nombre}
+              </h2>
+              <div className="levels-exam-split__body levels-exam-split__body--stacked">
           <B2SpeakingPartSession
             key={`${selectedPart.id}-${examSlot}`}
             part={selectedPart}
@@ -198,6 +205,9 @@ function B2SpeakingExamPracticeInner({ title, subtitle, loadingLabel, refreshLab
             onSavePartScore={handleSaveSpeakingPart}
             partScoring={b2PartCfg}
           />
+              </div>
+            </div>
+          </div>
         ) : null}
       </section>
 
@@ -493,24 +503,16 @@ function B2SpeakingPartSession({ part, examSlot, onSavePartScore, partScoring })
   };
 
   return (
-    <div
-      style={{
-        background: '#fff',
-        borderRadius: '12px',
-        padding: '1.25rem',
-        boxShadow: '0 4px 12px rgba(0,0,0,0.08)',
-      }}
-    >
-      <h2 style={{ marginTop: 0 }}>{part.nombre}</h2>
-      <p style={{ margin: '0 0 0.5rem', fontWeight: 700, color: '#1a365d' }}>
+    <div className="levels-b2-speaking-session">
+      <p className="levels-exam-split__section-title" style={{ marginTop: 0 }}>
         {partConfig?.title || 'Speaking'}
       </p>
-      <p style={{ color: '#4a5568', lineHeight: 1.65, fontSize: '0.95rem' }}>
+      <p style={{ color: '#4a5568', lineHeight: 1.65, fontSize: '0.95rem', margin: '0 0 0.5rem' }}>
         {part.descripcion || partConfig?.instructions}
       </p>
       {staticInfo?.tips ? (
         <p style={{ fontSize: '0.88rem', color: '#64748b', marginTop: '0.75rem' }}>
-          <strong>Consejo:</strong> {staticInfo.tips}
+          <strong>Tip:</strong> {staticInfo.tips}
         </p>
       ) : null}
 
@@ -609,7 +611,7 @@ function B2SpeakingPartSession({ part, examSlot, onSavePartScore, partScoring })
               cursor: 'pointer',
             }}
           >
-            Iniciar mi turno (1 min)
+            Start my turn (1 min)
           </button>
         ) : null}
         {partConfig?.uiMode === 'long_turn' && phase === 'long_turn' ? (
@@ -625,7 +627,7 @@ function B2SpeakingPartSession({ part, examSlot, onSavePartScore, partScoring })
               cursor: 'pointer',
             }}
           >
-            He terminado
+            I&apos;m finished
           </button>
         ) : null}
         {(partConfig?.uiMode !== 'long_turn' || phase === 'dialogue') && (
@@ -644,11 +646,11 @@ function B2SpeakingPartSession({ part, examSlot, onSavePartScore, partScoring })
               opacity: loading ? 0.6 : 1,
             }}
           >
-            {media.isRecording ? '■ Parar y enviar' : '🎤 Hablar'}
+            {media.isRecording ? '■ Stop and send' : '🎤 Speak'}
           </button>
         )}
         <span style={{ fontSize: '0.88rem', color: '#64748b' }}>
-          {loading ? 'Procesando…' : media.isRecording ? 'Grabando…' : 'Pulsa para responder'}
+          {loading ? 'Processing…' : media.isRecording ? 'Recording…' : 'Press to respond'}
         </span>
       </div>
 
@@ -658,7 +660,7 @@ function B2SpeakingPartSession({ part, examSlot, onSavePartScore, partScoring })
             type="text"
             value={typed}
             onChange={(e) => setTyped(e.target.value)}
-            placeholder="O escribe tu respuesta"
+            placeholder="Or type your answer"
             style={{
               flex: '1 1 200px',
               borderRadius: '8px',
@@ -683,7 +685,7 @@ function B2SpeakingPartSession({ part, examSlot, onSavePartScore, partScoring })
               cursor: 'pointer',
             }}
           >
-            Enviar texto
+            Send text
           </button>
         </div>
       )}
@@ -710,18 +712,17 @@ function B2SpeakingPartSession({ part, examSlot, onSavePartScore, partScoring })
               cursor: 'pointer',
             }}
           >
-            Guardar puntuación de esta parte ({Math.min(speakingTotal, userLines.length)}/{speakingTotal})
+            Save score for this part ({Math.min(speakingTotal, userLines.length)}/{speakingTotal})
           </button>
           <p style={{ margin: '0.45rem 0 0', fontSize: '0.85rem', color: '#64748b' }}>
-            Necesitas al menos {speakingPassing} interacciones completadas para aprobar (máx. {speakingTotal}).
+            You need at least {speakingPassing} completed interactions to pass (max. {speakingTotal}).
           </p>
         </div>
       ) : null}
 
       {!process.env.NEXT_PUBLIC_OPENAI_HINT && (
         <p style={{ marginTop: '0.75rem', fontSize: '0.8rem', color: '#94a3b8' }}>
-          La voz del examinador usa OpenAI en el servidor (OPENAI_API_KEY). Sin clave, se usa la voz del
-          navegador.
+          Examiner voice uses OpenAI on the server (OPENAI_API_KEY). Without a key, the browser voice is used.
         </p>
       )}
     </div>
@@ -733,7 +734,7 @@ export default function B2SpeakingExamPractice(props) {
     <Suspense
       fallback={
         <main style={{ padding: '2rem', textAlign: 'center', fontFamily: 'Segoe UI, sans-serif' }}>
-          Cargando práctica de speaking…
+          Loading speaking practice…
         </main>
       }
     >

@@ -44,7 +44,7 @@ import { getCachedB2Level } from '@/utils/b2LevelCache';
 
 const B2WritingLongFormAiPanel = dynamic(
   () => import('@/components/b2/B2WritingLongFormAiPanel'),
-  { ssr: false, loading: () => <p className="loading">Cargando corrección…</p> },
+  { ssr: false, loading: () => <p className="loading">Loading feedback…</p> },
 );
 
 /** @param {string} url */
@@ -110,6 +110,7 @@ const buttonStyle = {
  * @param {boolean} [props.longFormWritingWithAi] — partes 8–9: cuadro largo + IA (estilo C1 exam writing)
  * @param {number} [props.writingWordMin]
  * @param {number} [props.writingWordMax]
+ * @param {'en'|'es'} [props.lang]
  */
 function B2ExamPaperPracticePageInner({
   title,
@@ -124,6 +125,7 @@ function B2ExamPaperPracticePageInner({
   longFormWritingWithAi = false,
   writingWordMin = 140,
   writingWordMax = 190,
+  lang = 'en',
 }) {
   const { examSlot, selectExamSlot } = useB2ExamPracticeSlot();
   const scoring = useB2ExamScoringSession({ partMin, partMax });
@@ -749,7 +751,12 @@ function B2ExamPaperPracticePageInner({
     ? `b2-exam-writing-${selectedQuestion.preguntaId}`
     : '';
 
-  const sectionMaxWidth = showLongWritingWithAi ? 'min(960px, 100%)' : '700px';
+  const sectionMaxWidth = showLongWritingWithAi ? 'min(960px, 100%)' : '100%';
+
+  const getPartTitle = (part) => {
+    const n = Number(part?.nombre.match(/\d+/)?.[0] || 0);
+    return n ? `Part ${n}` : part?.nombre || '';
+  };
 
   const trySavePartAfterAnswer = useCallback(
     (stateOverride = {}) => {
@@ -872,8 +879,9 @@ function B2ExamPaperPracticePageInner({
         selectedPartId={selectedPartId}
         onSelectPart={handleSelectPart}
         getPartSavedScoreLabel={(part) => scoring.getPartSavedScoreLabel(part, examSlot)}
+        lang={lang}
       >
-      <section style={{ maxWidth: sectionMaxWidth, margin: '0 auto' }}>
+      <section style={{ maxWidth: sectionMaxWidth, margin: '0 auto', width: '100%' }}>
         {loading && <p style={{ textAlign: 'center' }}>{loadingLabel}</p>}
         {!loading && error && (
           <p style={{ textAlign: 'center', color: '#c53030', fontWeight: 600 }}>{error}</p>
@@ -985,28 +993,18 @@ function B2ExamPaperPracticePageInner({
 
             {selectedPart && selectedQuestion && (
               <div
-                style={{
-                  background: '#fff',
-                  borderRadius: '12px',
-                  padding: '1.25rem',
-                  boxShadow: '0 4px 12px rgba(0, 0, 0, 0.08)',
-                }}
+                className={`levels-exam-practice-page${
+                  useListeningItemLayout ? ' levels-exam-practice-page--narrow' : ''
+                }`}
               >
-                <h2 style={{ marginTop: 0 }}>{selectedPart.nombre}</h2>
+              <div className="levels-exam-split-card">
+                <h2>{getPartTitle(selectedPart)}</h2>
 
-                <div style={{ color: '#2d3748', marginTop: '0.6rem' }}>
-                  <strong>Pregunta:</strong>
-                  <div
-                    style={{
-                      marginTop: '0.6rem',
-                      background: '#f8fafc',
-                      border: '1px solid #e2e8f0',
-                      borderRadius: '10px',
-                      padding: '0.95rem 1rem',
-                    }}
-                  >
-                    <p style={{ margin: '0 0 0.65rem', fontWeight: 700, color: '#1a365d' }}>Enunciado</p>
-                    {getFormattedEnunciado(selectedPartContent.enunciado).map((block, index) => {
+                <div className="levels-exam-split__body levels-exam-split__body--stacked">
+                  {selectedPartContent.enunciado ? (
+                    <div className="levels-exam-split__enunciado">
+                      <p className="levels-exam-split__section-title">Directions</p>
+                      {getFormattedEnunciado(selectedPartContent.enunciado).map((block, index) => {
                       if (block.type === 'label') {
                         return (
                           <p
@@ -1062,8 +1060,8 @@ function B2ExamPaperPracticePageInner({
                         </p>
                       );
                     })}
-                  </div>
-                </div>
+                    </div>
+                  ) : null}
 
                 {showAudioFromEnunciado && preguntaAudiosError ? (
                   <p
@@ -1190,7 +1188,7 @@ function B2ExamPaperPracticePageInner({
                         }}
                       >
                         <p style={{ margin: '0 0 0.55rem', fontWeight: 700, color: '#1e293b' }}>
-                          Opciones A–H
+                          Options A–H
                         </p>
                         {listeningMatchingPool.map((line, pi) => (
                           <p key={`pool-${pi}`} style={{ margin: '0.35rem 0', lineHeight: 1.6, color: '#334155' }}>
@@ -1242,7 +1240,7 @@ function B2ExamPaperPracticePageInner({
                                   fontSize: '1.05rem',
                                 }}
                               >
-                                Ítem {qn}
+                                Item {qn}
                               </p>
                               {ctx?.contextLines?.length ? (
                                 <div
@@ -1273,7 +1271,7 @@ function B2ExamPaperPracticePageInner({
                                     setOpenInputs((prev) => ({ ...prev, [questionKey]: value }));
                                     setOpenChecks((prev) => ({ ...prev, [questionKey]: undefined }));
                                   }}
-                                  placeholder="Tu respuesta"
+                                  placeholder="Your answer"
                                   style={{
                                     minWidth: '240px',
                                     flex: '1 1 240px',
@@ -1295,7 +1293,7 @@ function B2ExamPaperPracticePageInner({
                                       const answersFromDatabase = [...expectedAnswers].join(' · ');
                                       requestAiJustification(questionKey, {
                                         partLabel: selectedPart?.nombre || '',
-                                        questionLabel: `Pregunta ${qn}`,
+                                        questionLabel: `Question ${qn}`,
                                         userChoiceText: currentValue,
                                         correctChoiceText,
                                         isCorrect,
@@ -1311,7 +1309,7 @@ function B2ExamPaperPracticePageInner({
                                           preguntaId: pid,
                                           parteId,
                                           isCorrect,
-                                          slotLabel: `Pregunta ${qn}`,
+                                          slotLabel: `Question ${qn}`,
                                           userAnswerText: currentValue,
                                         });
                                         if (error) {
@@ -1329,7 +1327,7 @@ function B2ExamPaperPracticePageInner({
                                     cursor: 'pointer',
                                   }}
                                 >
-                                  Comprobar
+                                  Check
                                 </button>
                               </div>
                               {typeof checkResult === 'boolean' ? (
@@ -1378,7 +1376,7 @@ function B2ExamPaperPracticePageInner({
                                 fontSize: '1.05rem',
                               }}
                             >
-                              Ítem {qn}
+                              Item {qn}
                             </p>
                             {clipSrc ? (
                               <div style={{ marginBottom: ctx?.contextLines?.length ? '0.85rem' : 0 }}>
@@ -1430,7 +1428,7 @@ function B2ExamPaperPracticePageInner({
                                 ))}
                               </div>
                             ) : null}
-                            <p style={{ margin: '0 0 0.55rem', fontWeight: 700, color: '#1e293b' }}>Opciones</p>
+                            <p style={{ margin: '0 0 0.55rem', fontWeight: 700, color: '#1e293b' }}>Options</p>
                             <div style={{ display: 'grid', gap: '0.6rem' }}>
                               {group.options.map((option) => {
                                 const questionKey = getQuestionKey(
@@ -1463,8 +1461,8 @@ function B2ExamPaperPracticePageInner({
                                         requestAiJustification(questionKey, {
                                           partLabel: selectedPart?.nombre || '',
                                           questionLabel: group.questionNumber
-                                            ? `Pregunta ${group.questionNumber}`
-                                            : 'Ítem',
+                                            ? `Question ${group.questionNumber}`
+                                            : 'Item',
                                           userChoiceText: option.formattedText || option.respuesta || '',
                                           correctChoiceText:
                                             correctOpt?.formattedText || correctOpt?.respuesta || '',
@@ -1482,8 +1480,8 @@ function B2ExamPaperPracticePageInner({
                                             parteId,
                                             isCorrect: !!option.correcta,
                                             slotLabel: group.questionNumber
-                                              ? `Pregunta ${group.questionNumber}`
-                                              : 'Ítem',
+                                              ? `Question ${group.questionNumber}`
+                                              : 'Item',
                                             userAnswerText: option.formattedText || option.respuesta || '',
                                           });
                                           if (error) {
@@ -1595,37 +1593,23 @@ function B2ExamPaperPracticePageInner({
                 ) : null}
 
                 {!useListeningItemLayout && textoLinesForDisplay.length > 0 ? (
-                  <div
-                    style={{
-                      marginTop: '0.7rem',
-                      background: '#f8fafc',
-                      border: '1px solid #e2e8f0',
-                      borderRadius: '10px',
-                      padding: '0.95rem 1rem',
-                      position: shouldStickEnunciado ? 'sticky' : 'static',
-                      top: shouldStickEnunciado ? '0.75rem' : 'auto',
-                      zIndex: shouldStickEnunciado ? 30 : 'auto',
-                      maxHeight: shouldStickEnunciado ? '40vh' : 'none',
-                      overflowY: shouldStickEnunciado ? 'auto' : 'visible',
-                      boxShadow: shouldStickEnunciado ? '0 2px 8px rgba(15, 23, 42, 0.08)' : 'none',
-                    }}
-                  >
-                    <p style={{ margin: '0 0 0.65rem', fontWeight: 700, color: '#1a365d' }}>Texto</p>
+                  <div className="levels-exam-split__passage-panel">
+                    <p className="levels-exam-split__section-title">Text</p>
                     {textoLinesForDisplay.map((line, idx) => (
-                      <p key={`texto-${idx}`} style={{ margin: '0.45rem 0', lineHeight: 1.7 }}>
+                      <p key={`texto-${idx}`} style={{ margin: '0.5rem 0', lineHeight: 1.78 }}>
                         {line}
                       </p>
                     ))}
                   </div>
                 ) : null}
 
-                <div style={{ marginTop: '1.25rem' }}>
+                <div className="levels-exam-split__questions levels-exam-split__questions--stacked">
                   {showLongWritingWithAi ? (
                     <B2WritingLongFormAiPanel
                       storageKey={longWritingStorageKey}
                       wordMin={writingWordMin}
                       wordMax={writingWordMax}
-                      heading={`Tu respuesta — ${selectedPart.nombre}`}
+                      heading={`Your answer — ${getPartTitle(selectedPart)}`}
                       partLabel={selectedPart.nombre}
                       partDescription={selectedPart.descripcion || ''}
                       taskInstructions={selectedPartContent.enunciado || ''}
@@ -1635,7 +1619,7 @@ function B2ExamPaperPracticePageInner({
                   ) : null}
 
                   {!showLongWritingWithAi && !useListeningItemLayout ? (
-                    <h3 style={{ margin: '0 0 0.75rem', color: '#1a202c' }}>Preguntas</h3>
+                    <h3 className="levels-exam-split__section-title">Questions</h3>
                   ) : null}
                   {!showLongWritingWithAi && useOpenInputUi && openQuestionNumbers.length > 0 ? (
                     <div style={{ display: 'grid', gap: '1rem' }}>
@@ -1654,7 +1638,7 @@ function B2ExamPaperPracticePageInner({
                             }}
                           >
                             <p style={{ margin: '0 0 0.65rem', fontWeight: 700, color: '#2d3748' }}>
-                              Pregunta {questionNumber}
+                              Question {questionNumber}
                             </p>
                             <div style={{ display: 'flex', gap: '0.6rem', alignItems: 'center', flexWrap: 'wrap' }}>
                               <input
@@ -1665,7 +1649,7 @@ function B2ExamPaperPracticePageInner({
                                   setOpenInputs((prev) => ({ ...prev, [questionKey]: value }));
                                   setOpenChecks((prev) => ({ ...prev, [questionKey]: undefined }));
                                 }}
-                                placeholder="Tu respuesta"
+                                placeholder="Your answer"
                                 style={{
                                   minWidth: '240px',
                                   borderRadius: '8px',
@@ -1688,7 +1672,7 @@ function B2ExamPaperPracticePageInner({
                                     const answersFromDatabase = [...expectedAnswers].join(' · ');
                                     requestAiJustification(questionKey, {
                                       partLabel: selectedPart?.nombre || '',
-                                      questionLabel: `Pregunta ${questionNumber}`,
+                                      questionLabel: `Question ${questionNumber}`,
                                       userChoiceText: currentValue,
                                       correctChoiceText,
                                       isCorrect,
@@ -1704,7 +1688,7 @@ function B2ExamPaperPracticePageInner({
                                         preguntaId: pid,
                                         parteId,
                                         isCorrect,
-                                        slotLabel: `Pregunta ${questionNumber}`,
+                                        slotLabel: `Question ${questionNumber}`,
                                         userAnswerText: currentValue,
                                       });
                                       if (error) {
@@ -1722,7 +1706,7 @@ function B2ExamPaperPracticePageInner({
                                   cursor: 'pointer',
                                 }}
                               >
-                                Comprobar
+                                Check
                               </button>
                             </div>
                             {typeof checkResult === 'boolean' && (
@@ -1776,7 +1760,7 @@ function B2ExamPaperPracticePageInner({
                           }}
                         >
                           <p style={{ margin: '0 0 0.65rem', fontWeight: 700, color: '#2d3748' }}>
-                            {group.questionNumber ? `Pregunta ${group.questionNumber}` : 'Opciones'}
+                            {group.questionNumber ? `Question ${group.questionNumber}` : 'Options'}
                           </p>
                           <div style={{ display: 'grid', gap: '0.6rem' }}>
                             {group.options.map((option) => {
@@ -1810,8 +1794,8 @@ function B2ExamPaperPracticePageInner({
                                       requestAiJustification(questionKey, {
                                         partLabel: selectedPart?.nombre || '',
                                         questionLabel: group.questionNumber
-                                          ? `Pregunta ${group.questionNumber}`
-                                          : 'Ítem',
+                                          ? `Question ${group.questionNumber}`
+                                          : 'Item',
                                         userChoiceText: option.formattedText || option.respuesta || '',
                                         correctChoiceText:
                                           correctOpt?.formattedText || correctOpt?.respuesta || '',
@@ -1831,8 +1815,8 @@ function B2ExamPaperPracticePageInner({
                                           parteId,
                                           isCorrect: !!option.correcta,
                                           slotLabel: group.questionNumber
-                                            ? `Pregunta ${group.questionNumber}`
-                                            : 'Ítem',
+                                            ? `Question ${group.questionNumber}`
+                                            : 'Item',
                                           userAnswerText: option.formattedText || option.respuesta || '',
                                         });
                                         if (error) {
@@ -1891,6 +1875,8 @@ function B2ExamPaperPracticePageInner({
                     </div>
                   ) : null}
                 </div>
+                </div>
+              </div>
               </div>
             )}
           </>
@@ -1947,7 +1933,7 @@ export default function B2ExamPaperPracticePage(props) {
     <Suspense
       fallback={
         <main style={{ padding: '2rem', textAlign: 'center', fontFamily: 'Segoe UI, sans-serif' }}>
-          Cargando práctica…
+          Loading practice…
         </main>
       }
     >
