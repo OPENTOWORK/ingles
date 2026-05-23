@@ -300,7 +300,7 @@ export default function TrainingLevelPathMap({
               : `${topic}, level ${n}${isCompleted ? `, ${stars} stars` : isCurrent ? ', up next' : ''}`;
 
             const card = (
-              <span className={styles.card}>
+              <span className={styles.nodeCard}>
                 {isLocked ? (
                   <span className={styles.lockIcon} aria-hidden>
                     <IconLock className={styles.lockSvg} />

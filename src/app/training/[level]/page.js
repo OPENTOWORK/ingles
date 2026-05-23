@@ -25,7 +25,7 @@ const skills = [
 export default function LevelPage({ params }) {
   const { level } = params;
   const router = useRouter();
-  const { userRole, session } = useUserRole();
+  const { session } = useUserRole();
   const skillProgressMap = useTrainingSkillStarProgressMap(level);
   const maxStarsPerSkill = getMaxStarsForSkill();
 
@@ -41,24 +41,6 @@ export default function LevelPage({ params }) {
 
   if (!session) {
     return <p className={ui.subtitle} style={{ textAlign: 'center', padding: '3rem' }}>Loading…</p>;
-  }
-
-  const isLockedForStudent = userRole === 'student' || userRole === 'alumno';
-
-  if (isLockedForStudent) {
-    return (
-      <main className={ui.page}>
-        <div className={ui.lockedPanel}>
-          <h1>Coming soon</h1>
-          <p>
-            Training is not available for students yet. You can keep practising from the Levels section.
-          </p>
-          <Link href="/niveles/b2" className={ui.primaryBtn}>
-            Go to Levels B2
-          </Link>
-        </div>
-      </main>
-    );
   }
 
   const levelAccent = getCefrLevelColor(level);

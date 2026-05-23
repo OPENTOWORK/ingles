@@ -73,8 +73,6 @@
   min-height: 740px;
   max-height: 1120px;
   margin: 0 auto;
-  content-visibility: auto;
-  contain-intrinsic-size: 800px 740px;
   border-radius: 20px;
   background: linear-gradient(165deg, #f8fafc 0%, #f1f5f9 48%, #eef2ff 100%);
   border: 1px solid #e2e8f0;
@@ -130,8 +128,10 @@
   position: absolute;
   z-index: 0;
   border-radius: 16px;
-  background: color-mix(in srgb, var(--band-light) 42%, transparent);
-  border: 1px solid color-mix(in srgb, var(--band-color) 12%, transparent);
+  background: var(--band-light, #e2e8f0);
+  background: color-mix(in srgb, var(--band-light, #e2e8f0) 42%, transparent);
+  border: 1px solid var(--band-color, #cbd5e1);
+  border: 1px solid color-mix(in srgb, var(--band-color, #cbd5e1) 12%, transparent);
   pointer-events: none;
   opacity: 0.55;
 }
@@ -194,7 +194,7 @@
   }
 }
 
-.card {
+.nodeCard {
   position: relative;
   display: flex;
   flex-direction: column;
@@ -216,14 +216,14 @@
     border-color 0.22s ease;
 }
 
-.node:hover .card,
-.node:focus-visible .card {
+.node:hover .nodeCard,
+.node:focus-visible .nodeCard {
   transform: translateY(-3px);
-  box-shadow: 0 10px 24px color-mix(in srgb, var(--section-color) 22%, transparent);
+  box-shadow: 0 10px 24px color-mix(in srgb, var(--section-color, #3b82f6) 22%, transparent);
 }
 
-.node:focus-visible .card {
-  outline: 2px solid var(--section-color);
+.node:focus-visible .nodeCard {
+  outline: 2px solid var(--section-color, #3b82f6);
   outline-offset: 2px;
 }
 
@@ -276,15 +276,19 @@
   color: #d97706;
 }
 
-.nodeCompleted .card {
-  background: linear-gradient(180deg, #fff 0%, color-mix(in srgb, var(--section-color-light) 40%, #fff) 100%);
+.nodeCompleted .nodeCard {
+  background: linear-gradient(
+    180deg,
+    #fff 0%,
+    color-mix(in srgb, var(--section-color-light, #e0f2fe) 40%, #fff) 100%
+  );
 }
 
-.nodeCurrent .card {
-  border-color: var(--section-color);
+.nodeCurrent .nodeCard {
+  border-color: var(--section-color, #3b82f6);
   box-shadow:
-    0 0 0 3px color-mix(in srgb, var(--section-color) 22%, transparent),
-    0 8px 20px color-mix(in srgb, var(--section-color) 28%, transparent);
+    0 0 0 3px color-mix(in srgb, var(--section-color, #3b82f6) 22%, transparent),
+    0 8px 20px color-mix(in srgb, var(--section-color, #3b82f6) 28%, transparent);
 }
 
 .nodeCurrent .topic {
@@ -295,7 +299,7 @@
   opacity: 0.88;
 }
 
-.nodeUpcoming .card {
+.nodeUpcoming .nodeCard {
   background: #fafbfc;
   border-color: #e8ecf1;
 }
@@ -309,7 +313,7 @@
   pointer-events: none;
 }
 
-.nodeLocked .card {
+.nodeLocked .nodeCard {
   background: #f1f5f9;
   border-color: #dbe1e8;
   border-top-color: #cbd5e1;
@@ -365,7 +369,7 @@
     max-height: none;
   }
 
-  .card {
+  .nodeCard {
     width: 4.65rem;
     min-height: 4.2rem;
   }

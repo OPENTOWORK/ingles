@@ -28,7 +28,7 @@ export default function TrainingCefrLevelCard({
   const sublabel = getCefrLevelLabel(level);
 
   const content = (
-    <div className={styles.card}>
+    <div className={styles.cefrCard}>
       <div className={styles.accent} style={{ backgroundColor: accent }} aria-hidden />
       <div className={styles.body}>
         <span className={styles.badge} style={{ backgroundColor: accent }}>

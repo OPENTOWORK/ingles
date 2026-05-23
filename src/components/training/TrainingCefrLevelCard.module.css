@@ -14,7 +14,7 @@
   box-shadow: 0 12px 28px rgba(15, 23, 42, 0.1);
 }
 
-.card {
+.cefrCard {
   display: flex;
   flex-direction: column;
   align-items: stretch;
@@ -28,7 +28,7 @@
   transition: border-color 0.2s ease;
 }
 
-.cardLink:hover .card {
+.cardLink:hover .cefrCard {
   border-color: #cbd5e1;
 }
 

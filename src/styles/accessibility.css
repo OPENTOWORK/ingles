@@ -35,7 +35,7 @@
   color: var(--text-color);
 }
 
-.dark-mode .card,
+.dark-mode .card:not([class*='cefrCard']):not([class*='nodeCard']),
 .dark-mode .exercise-card,
 .dark-mode .dashboard-card {
   background-color: var(--card-background);
@@ -61,10 +61,19 @@
   --gradient: none;
 }
 
-.simplified-ui * {
+.simplified-ui *:not([class*='cefrCard']):not([class*='nodeCard']):not([class*='dashboardStack']):not(
+    [class*='panel']
+  ) {
   border-radius: var(--border-radius) !important;
   box-shadow: var(--box-shadow) !important;
-  background: var(--background-color) !important;
+}
+
+.simplified-ui body,
+.simplified-ui main,
+.simplified-ui header,
+.simplified-ui nav,
+.simplified-ui section:not(:has([class*='nodeCard'])) {
+  background: var(--background-color, #f8fafc) !important;
 }
 
 .simplified-ui .gradient-bg {

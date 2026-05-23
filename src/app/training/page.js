@@ -40,7 +40,7 @@ const TrainingDashboardStack = dynamic(
 
 export default function TrainingHome() {
   const router = useRouter();
-  const { userRole, session } = useUserRole();
+  const { session } = useUserRole();
   const [loading, setLoading] = useState(true);
   const [user, setUser] = useState(null);
   const [showDatabaseSetup, setShowDatabaseSetup] = useState(false);
@@ -114,8 +114,6 @@ export default function TrainingHome() {
     return <UserOnboarding userId={user?.id} onComplete={() => setShowOnboarding(false)} />;
   }
 
-  const isStudent = userRole === 'student' || userRole === 'alumno';
-
   return (
     <>
       <SkipLinks />
@@ -147,7 +145,6 @@ export default function TrainingHome() {
                 earned={progress.earned}
                 max={progress.max}
                 percent={progress.percent}
-                locked={isStudent}
                 href={`/training/${levelKey}`}
               />
             );

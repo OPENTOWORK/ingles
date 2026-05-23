@@ -160,3 +160,18 @@
 .primaryBtn:hover {
   background: #1d4ed8;
 }
+
+/* Evita que .card global (globals.css) o modos de accesibilidad oscurezcan las tarjetas */
+:global(.dark-mode) .page :is(a, div)[class*='cefrCard'],
+:global(.dark-mode) .pageNarrow :is(a, div)[class*='cefrCard'],
+:global(.simplified-ui) .page :is(a, div)[class*='cefrCard'],
+:global(.simplified-ui) .pageNarrow :is(a, div)[class*='cefrCard'] {
+  background: #fff !important;
+  color: #0f172a !important;
+}
+
+:global(.dark-mode) .page [class*='nodeCard'],
+:global(.simplified-ui) .page [class*='nodeCard'] {
+  background: #fff !important;
+  color: #1e293b !important;
+}
