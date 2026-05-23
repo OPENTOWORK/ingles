@@ -1,10 +1,14 @@
+import { extendExercisesConfigWithGlobalKeys } from '@/data/exercises/extendExercisesConfig';
+
 // Ejercicios para B1 - writing
 // Total de ejercicios por part
 
-export const exercisesConfig = {
+const baseExercisesConfig = {
   "part-1": 12,
   "part-2": 12,
 };
+
+export const exercisesConfig = extendExercisesConfigWithGlobalKeys(baseExercisesConfig, 7);
 
 // Generador de ejercicios placeholder
 export function getExercise(part, number) {

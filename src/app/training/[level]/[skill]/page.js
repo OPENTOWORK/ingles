@@ -1,11 +1,12 @@
 'use client';
 
+import { useMemo } from 'react';
 import Link from 'next/link';
 import TrainingDifficultyCard from '@/components/training/TrainingDifficultyCard';
-import {
-  getMaxStarsForDifficulty,
-  useTrainingDifficultyStarProgressMap,
-} from '@/hooks/useTrainingCefrStarProgress';
+import TrainingRepasoCard from '@/components/training/TrainingRepasoCard';
+import { getTrainingPathLevelCount } from '@/data/trainingPathCurriculum';
+import { MAX_STARS_PER_PATH_LEVEL } from '@/utils/trainingStarsProgress';
+import { useTrainingDifficultyStarProgressMap } from '@/hooks/useTrainingCefrStarProgress';
 import { getCefrLevelColor } from '@/constants/cefrLevelColors';
 import ui from '@/components/training/training-ui.module.css';
 
@@ -25,7 +26,16 @@ function formatSkillTitle(skill) {
 export default function SkillPage({ params }) {
   const { level, skill } = params;
   const difficultyProgressMap = useTrainingDifficultyStarProgressMap(level, skill);
-  const maxStarsPerDifficulty = getMaxStarsForDifficulty();
+  const maxStarsByDifficulty = useMemo(
+    () =>
+      Object.fromEntries(
+        difficulties.map(({ id }) => [
+          id,
+          getTrainingPathLevelCount(level, id, skill) * MAX_STARS_PER_PATH_LEVEL,
+        ]),
+      ),
+    [level, skill],
+  );
   const skillTitle = formatSkillTitle(skill);
   const levelAccent = getCefrLevelColor(level);
 
@@ -36,14 +46,15 @@ export default function SkillPage({ params }) {
           Level {level.toUpperCase()} · {skillTitle}
         </p>
         <h1 className={ui.title}>Choose difficulty</h1>
-        <p className={ui.subtitle}>Work through 24 levels on the path. Start with Basic if you are unsure.</p>
+        <p className={ui.subtitle}>Work through the path levels. Start with Basic if you are unsure.</p>
       </header>
 
       <div className={ui.difficultyList}>
         {difficulties.map(({ id, title, description }) => {
+          const maxStars = maxStarsByDifficulty[id] ?? 72;
           const progress = difficultyProgressMap[id] ?? {
             earned: 0,
-            max: maxStarsPerDifficulty,
+            max: maxStars,
             percent: 0,
           };
 
@@ -62,6 +73,8 @@ export default function SkillPage({ params }) {
           );
         })}
       </div>
+
+      <TrainingRepasoCard href={`/training/${level}/${skill}/repaso`} pendingCount={0} />
 
       <div style={{ textAlign: 'center' }}>
         <Link href={`/training/${level}`} className={ui.backLink}>

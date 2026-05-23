@@ -13,6 +13,7 @@ import {
   getLevelExamSkillRoute,
   getNivelesLevelHub,
 } from '@/data/nivelesLevelHub';
+import { formatPartsLabel, getExamSkillPartRange } from '@/data/levelExamPartMap';
 import { supabase } from '@/utils/supabaseClient';
 import { getCachedLevelBySlug, getCachedExamenIdsBySlot } from '@/utils/levelsLevelCache';
 import { sortLevelsExamenesRows } from '@/utils/b2ResolveExam';
@@ -47,14 +48,12 @@ function LevelSkillPracticePageInner({ slug, skillRoute }) {
       });
   }, [config?.sections, routeMeta?.section]);
 
-  const partMin = useMemo(
-    () => (partRows.length ? Math.min(...partRows.map((p) => p.partNumber)) : 1),
-    [partRows],
+  const skillPartRange = useMemo(
+    () => getExamSkillPartRange(slug, skillRoute),
+    [slug, skillRoute],
   );
-  const partMax = useMemo(
-    () => (partRows.length ? Math.max(...partRows.map((p) => p.partNumber)) : 1),
-    [partRows],
-  );
+  const partMin = skillPartRange.partMin;
+  const partMax = skillPartRange.partMax;
 
   const scoring = useLevelExamScoringSession({ slug, partMin, partMax });
   const { label: timerLabel } = useLevelsCategoryTimer();
@@ -107,8 +106,7 @@ function LevelSkillPracticePageInner({ slug, skillRoute }) {
   }
 
   const title = `${config.cefr} ${routeMeta.practiceTitle}`;
-  const partsLabel =
-    partMin === partMax ? `Parte ${partMin}` : `Partes ${partMin} a ${partMax}`;
+  const partsLabel = formatPartsLabel(partMin, partMax);
   const selectedPart = partRows.find((p) => p.id === selectedPartId) || partRows[0];
   const passingCount = Math.max(1, Math.ceil(partRows.length * 0.6));
 

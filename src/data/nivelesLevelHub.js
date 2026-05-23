@@ -1,3 +1,8 @@
+import {
+  LEVEL_EXAM_SECTION_RANGES,
+  formatPartsLabel,
+} from '@/data/levelExamPartMap';
+
 /**
  * Configuración del hub de cada nivel CEFR (/niveles/{level}).
  * Cada examen Cambridge tiene sus propias partes y enlaces.
@@ -168,23 +173,22 @@ export function getLevelFullExamSections(slug) {
 
   return Object.entries(hub.sections).map(([title, topics]) => {
     const partTopics = topics.filter((t) => !String(t.text).toLowerCase().includes('speaking lab'));
+    const configured = LEVEL_EXAM_SECTION_RANGES[key]?.[title];
     const partNumbers = partTopics
       .map((t) => {
         const m = String(t.text).match(/Part\s*(\d+)/i);
         return m ? Number(m[1]) : null;
       })
       .filter((n) => n != null);
-    const partMin = partNumbers.length ? Math.min(...partNumbers) : 1;
-    const partMax = partNumbers.length ? Math.max(...partNumbers) : partTopics.length;
+    const partMin = configured?.partMin ?? (partNumbers.length ? Math.min(...partNumbers) : 1);
+    const partMax =
+      configured?.partMax ?? (partNumbers.length ? Math.max(...partNumbers) : partTopics.length);
 
     return {
       key: title.toLowerCase().replace(/\s+/g, '-'),
       title,
       emoji: SECTION_EMOJI[title] || '📋',
-      partsLabel:
-        partMin === partMax
-          ? `Parte ${partMin}`
-          : `Partes ${partMin}–${partMax}`,
+      partsLabel: formatPartsLabel(partMin, partMax),
       href: hrefMap[title] || `/niveles/${key}/exam-1`,
       partMin,
       partMax,
@@ -247,20 +251,20 @@ export const NIVELES_LEVEL_HUB = {
       ],
       Listening: [
         {
-          text: 'Part 1: Multiple choice (pictures)',
-          href: '/niveles/a2/listening/part-1',
+          text: 'Part 8: Multiple choice (pictures)',
+          href: '/niveles/a2/listening/part-8',
         },
         {
-          text: 'Part 2: Matching (information)',
-          href: '/niveles/a2/listening/part-2',
+          text: 'Part 9: Matching (information)',
+          href: '/niveles/a2/listening/part-9',
         },
         {
-          text: 'Part 3: Multiple choice (short dialogues)',
-          href: '/niveles/a2/listening/part-3',
+          text: 'Part 10: Multiple choice (short dialogues)',
+          href: '/niveles/a2/listening/part-10',
         },
         {
-          text: 'Part 4: Gap-fill (notes)',
-          href: '/niveles/a2/listening/part-4',
+          text: 'Part 11: Gap-fill (notes)',
+          href: '/niveles/a2/listening/part-11',
         },
       ],
       Speaking: [
@@ -269,12 +273,12 @@ export const NIVELES_LEVEL_HUB = {
           href: '/niveles/speaking-lab/a2/',
         },
         {
-          text: 'Part 1: Personal information interview',
-          href: '/niveles/a2/speaking/part-1',
+          text: 'Part 12: Personal information interview',
+          href: '/niveles/a2/speaking/part-12',
         },
         {
-          text: 'Part 2: Simulated situation task',
-          href: '/niveles/a2/speaking/part-2',
+          text: 'Part 13: Simulated situation task',
+          href: '/niveles/a2/speaking/part-13',
         },
       ],
     },
@@ -328,25 +332,25 @@ export const NIVELES_LEVEL_HUB = {
         },
       ],
       Writing: [
-        { text: 'Part 1: Email (about 100 words)', href: '/niveles/b1/writing/part-1' },
+        { text: 'Part 7: Email (about 100 words)', href: '/niveles/b1/writing/part-7' },
         {
-          text: 'Part 2: Article or story (about 100 words)',
-          href: '/niveles/b1/writing/part-2',
+          text: 'Part 8: Article or story (about 100 words)',
+          href: '/niveles/b1/writing/part-8',
         },
       ],
       Listening: [
         {
-          text: 'Part 1: Multiple choice (short texts)',
-          href: '/niveles/b1/listening/part-1',
+          text: 'Part 9: Multiple choice (short texts)',
+          href: '/niveles/b1/listening/part-9',
         },
         {
-          text: 'Part 2: Multiple choice (monologue)',
-          href: '/niveles/b1/listening/part-2',
+          text: 'Part 10: Multiple choice (monologue)',
+          href: '/niveles/b1/listening/part-10',
         },
-        { text: 'Part 3: Gap-fill (notes)', href: '/niveles/b1/listening/part-3' },
+        { text: 'Part 11: Gap-fill (notes)', href: '/niveles/b1/listening/part-11' },
         {
-          text: 'Part 4: Multiple choice (interview)',
-          href: '/niveles/b1/listening/part-4',
+          text: 'Part 12: Multiple choice (interview)',
+          href: '/niveles/b1/listening/part-12',
         },
       ],
       Speaking: [
@@ -354,10 +358,10 @@ export const NIVELES_LEVEL_HUB = {
           text: 'Speaking Lab (AI) — Practice / Exam',
           href: '/niveles/speaking-lab/b1/',
         },
-        { text: 'Part 1: Personal information', href: '/niveles/b1/speaking/part-1' },
-        { text: 'Part 2: Simulated situation', href: '/niveles/b1/speaking/part-2' },
-        { text: 'Part 3: Describe photograph', href: '/niveles/b1/speaking/part-3' },
-        { text: 'Part 4: General conversation', href: '/niveles/b1/speaking/part-4' },
+        { text: 'Part 13: Personal information', href: '/niveles/b1/speaking/part-13' },
+        { text: 'Part 14: Simulated situation', href: '/niveles/b1/speaking/part-14' },
+        { text: 'Part 15: Describe photograph', href: '/niveles/b1/speaking/part-15' },
+        { text: 'Part 16: General conversation', href: '/niveles/b1/speaking/part-16' },
       ],
     },
     examLinks: [
@@ -400,51 +404,51 @@ export const NIVELES_LEVEL_HUB = {
       ],
       Reading: [
         {
-          text: 'Part 1: Multiple-choice (reading)',
+          text: 'Part 5: Multiple-choice (reading)',
           href: '/niveles/b2/reading-and-use-of-english/part-5',
         },
         {
-          text: 'Part 2: Gapped text',
+          text: 'Part 6: Gapped text',
           href: '/niveles/b2/reading-and-use-of-english/part-6',
         },
         {
-          text: 'Part 3: Multiple matching',
+          text: 'Part 7: Multiple matching',
           href: '/niveles/b2/reading-and-use-of-english/part-7',
         },
       ],
       Writing: [
         {
-          text: 'Part 1: Compulsory essay (140-190 words)',
-          href: '/niveles/b2/writing/part-1',
+          text: 'Part 8: Compulsory essay (140-190 words)',
+          href: '/niveles/b2/writing/part-8',
         },
         {
-          text: 'Part 2: Article, letter, report or review (140-190 words)',
-          href: '/niveles/b2/writing/part-2',
+          text: 'Part 9: Article, letter, report or review (140-190 words)',
+          href: '/niveles/b2/writing/part-9',
         },
       ],
       Listening: [
         {
-          text: 'Part 1: Multiple choice (short extracts)',
-          href: '/niveles/b2/listening/part-1',
+          text: 'Part 10: Multiple choice (short extracts)',
+          href: '/niveles/b2/listening/part-10',
         },
         {
-          text: 'Part 2: Sentence completion (monologue)',
-          href: '/niveles/b2/listening/part-2',
+          text: 'Part 11: Sentence completion (monologue)',
+          href: '/niveles/b2/listening/part-11',
         },
         {
-          text: 'Part 3: Multiple choice (conversation)',
-          href: '/niveles/b2/listening/part-3',
+          text: 'Part 12: Multiple choice (conversation)',
+          href: '/niveles/b2/listening/part-12',
         },
         {
-          text: 'Part 4: Multiple matching (short monologues)',
-          href: '/niveles/b2/listening/part-4',
+          text: 'Part 13: Multiple matching (short monologues)',
+          href: '/niveles/b2/listening/part-13',
         },
       ],
       Speaking: [
-        { text: 'Part 1: Interview', href: '/niveles/b2/speaking/part-1' },
-        { text: 'Part 2: Long turn (photos)', href: '/niveles/b2/speaking/part-2' },
-        { text: 'Part 3: Collaborative task', href: '/niveles/b2/speaking/part-3' },
-        { text: 'Part 4: Discussion', href: '/niveles/b2/speaking/part-4' },
+        { text: 'Part 14: Interview', href: '/niveles/b2/speaking/part-14' },
+        { text: 'Part 15: Long turn (photos)', href: '/niveles/b2/speaking/part-15' },
+        { text: 'Part 16: Collaborative task', href: '/niveles/b2/speaking/part-16' },
+        { text: 'Part 17: Discussion', href: '/niveles/b2/speaking/part-17' },
       ],
     },
     examContentReady: { 1: true, 2: false, 3: false, 4: false, 5: false },
@@ -493,45 +497,45 @@ export const NIVELES_LEVEL_HUB = {
       ],
       Reading: [
         {
-          text: 'Part 1: Multiple choice (reading)',
+          text: 'Part 5: Multiple choice (reading)',
           href: '/niveles/c1/reading-and-use-of-english/part-5',
         },
         {
-          text: 'Part 2: Cross-text multiple matching',
+          text: 'Part 6: Cross-text multiple matching',
           href: '/niveles/c1/reading-and-use-of-english/part-6',
         },
         {
-          text: 'Part 3: Gapped text',
+          text: 'Part 7: Gapped text',
           href: '/niveles/c1/reading-and-use-of-english/part-7',
         },
         {
-          text: 'Part 4: Multiple matching',
+          text: 'Part 8: Multiple matching',
           href: '/niveles/c1/reading-and-use-of-english/part-8',
         },
       ],
       Writing: [
-        { text: 'Part 1: Compulsory essay', href: '/niveles/c1/writing/part-1' },
+        { text: 'Part 9: Compulsory essay', href: '/niveles/c1/writing/part-9' },
         {
-          text: 'Part 2: Choose from article, review, report, letter, etc.',
-          href: '/niveles/c1/writing/part-2',
+          text: 'Part 10: Choose from article, review, report, letter, etc.',
+          href: '/niveles/c1/writing/part-10',
         },
       ],
       Listening: [
         {
-          text: 'Part 1: Short extracts – multiple choice',
-          href: '/niveles/c1/listening/part-1',
+          text: 'Part 11: Short extracts – multiple choice',
+          href: '/niveles/c1/listening/part-11',
         },
         {
-          text: 'Part 2: Monologue – sentence completion',
-          href: '/niveles/c1/listening/part-2',
+          text: 'Part 12: Monologue – sentence completion',
+          href: '/niveles/c1/listening/part-12',
         },
         {
-          text: 'Part 3: Long conversation – multiple choice',
-          href: '/niveles/c1/listening/part-3',
+          text: 'Part 13: Long conversation – multiple choice',
+          href: '/niveles/c1/listening/part-13',
         },
         {
-          text: 'Part 4: Multiple speakers – matching task',
-          href: '/niveles/c1/listening/part-4',
+          text: 'Part 14: Multiple speakers – matching task',
+          href: '/niveles/c1/listening/part-14',
         },
       ],
       Speaking: [
@@ -539,13 +543,13 @@ export const NIVELES_LEVEL_HUB = {
           text: 'Speaking Lab (AI) — Practice / Exam',
           href: '/niveles/speaking-lab/c1/',
         },
-        { text: 'Part 1: General conversation', href: '/niveles/c1/speaking/part-1' },
+        { text: 'Part 15: General conversation', href: '/niveles/c1/speaking/part-15' },
         {
-          text: 'Part 2: Long turn (describe photos)',
-          href: '/niveles/c1/speaking/part-2',
+          text: 'Part 16: Long turn (describe photos)',
+          href: '/niveles/c1/speaking/part-16',
         },
-        { text: 'Part 3: Collaborative task', href: '/niveles/c1/speaking/part-3' },
-        { text: 'Part 4: Discussion', href: '/niveles/c1/speaking/part-4' },
+        { text: 'Part 17: Collaborative task', href: '/niveles/c1/speaking/part-17' },
+        { text: 'Part 18: Discussion', href: '/niveles/c1/speaking/part-18' },
       ],
     },
     examLinks: [
@@ -593,44 +597,44 @@ export const NIVELES_LEVEL_HUB = {
       ],
       Reading: [
         {
-          text: 'Part 1: Multiple-choice (reading)',
+          text: 'Part 5: Multiple-choice (reading)',
           href: '/niveles/c2/reading-and-use-of-english/part-5',
         },
         {
-          text: 'Part 2: Gapped text',
+          text: 'Part 6: Gapped text',
           href: '/niveles/c2/reading-and-use-of-english/part-6',
         },
         {
-          text: 'Part 3: Multiple matching',
+          text: 'Part 7: Multiple matching',
           href: '/niveles/c2/reading-and-use-of-english/part-7',
         },
       ],
       Writing: [
         {
-          text: 'Part 1: Compulsory task (240-280 words)',
-          href: '/niveles/c2/writing/part-1',
+          text: 'Part 8: Compulsory task (240-280 words)',
+          href: '/niveles/c2/writing/part-8',
         },
         {
-          text: 'Part 2: Essay, letter, proposal, report or review (280-320 words)',
-          href: '/niveles/c2/writing/part-2',
+          text: 'Part 9: Essay, letter, proposal, report or review (280-320 words)',
+          href: '/niveles/c2/writing/part-9',
         },
       ],
       Listening: [
         {
-          text: 'Part 1: Multiple choice (short extracts)',
-          href: '/niveles/c2/listening/part-1',
+          text: 'Part 10: Multiple choice (short extracts)',
+          href: '/niveles/c2/listening/part-10',
         },
         {
-          text: 'Part 2: Sentence completion (monologue)',
-          href: '/niveles/c2/listening/part-2',
+          text: 'Part 11: Sentence completion (monologue)',
+          href: '/niveles/c2/listening/part-11',
         },
         {
-          text: 'Part 3: Multiple choice (conversation)',
-          href: '/niveles/c2/listening/part-3',
+          text: 'Part 12: Multiple choice (conversation)',
+          href: '/niveles/c2/listening/part-12',
         },
         {
-          text: 'Part 4: Multiple matching (short monologues)',
-          href: '/niveles/c2/listening/part-4',
+          text: 'Part 13: Multiple matching (short monologues)',
+          href: '/niveles/c2/listening/part-13',
         },
       ],
       Speaking: [
@@ -638,11 +642,11 @@ export const NIVELES_LEVEL_HUB = {
           text: 'Speaking Lab (AI) — Practice / Exam',
           href: '/niveles/speaking-lab/c2/',
         },
-        { text: 'Part 1: Interview', href: '/niveles/c2/speaking/part-1' },
-        { text: 'Part 2: Long turn', href: '/niveles/c2/speaking/part-2' },
+        { text: 'Part 14: Interview', href: '/niveles/c2/speaking/part-14' },
+        { text: 'Part 15: Long turn', href: '/niveles/c2/speaking/part-15' },
         {
-          text: 'Part 3: Collaborative task and discussion',
-          href: '/niveles/c2/speaking/part-3',
+          text: 'Part 16: Collaborative task and discussion',
+          href: '/niveles/c2/speaking/part-16',
         },
       ],
     },

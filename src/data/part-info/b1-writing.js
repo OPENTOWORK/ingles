@@ -1,4 +1,6 @@
-export const partInfo = {
+import { extendPartInfoWithGlobalKeys } from '@/data/part-info/extendPartInfo';
+
+const localPartInfo = {
   "1": {
     "title": "Part 1: Email",
     "description": "You will write an email (about 100 words) responding to a given situation. The task will tell you what information to include and who you are writing to. This tests your ability to write appropriate emails for different purposes and audiences.",
@@ -12,3 +14,5 @@ export const partInfo = {
     "commonErrors": "Not planning your writing first, not using appropriate language for the type of text, not including interesting details, or making grammar and spelling mistakes"
   }
 };
+
+export const partInfo = extendPartInfoWithGlobalKeys(localPartInfo, 7);

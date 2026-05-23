@@ -1,0 +1,95 @@
+.section {
+  margin-top: 2rem;
+  padding-top: 1.75rem;
+  border-top: 1px solid #e2e8f0;
+}
+
+.sectionLabel {
+  margin: 0 0 0.85rem;
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #94a3b8;
+  text-align: center;
+}
+
+.link {
+  display: block;
+  width: 100%;
+  text-decoration: none;
+  background: linear-gradient(135deg, #faf5ff 0%, #f8fafc 55%, #fff 100%);
+  border: 1px dashed #c4b5fd;
+  border-radius: 14px;
+  padding: 1.35rem 1.4rem;
+  color: #0f172a;
+  box-shadow: 0 2px 8px rgba(124, 58, 237, 0.06);
+  transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+}
+
+.link:hover {
+  transform: translateY(-1px);
+  border-color: #a78bfa;
+  box-shadow: 0 8px 20px rgba(124, 58, 237, 0.12);
+}
+
+.row {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+}
+
+.iconWrap {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.25rem;
+  height: 2.25rem;
+  border-radius: 10px;
+  background: rgba(124, 58, 237, 0.12);
+  color: #7c3aed;
+  flex-shrink: 0;
+  margin-top: 0.1rem;
+}
+
+.icon {
+  width: 1.15rem;
+  height: 1.15rem;
+}
+
+.content {
+  flex: 1;
+  min-width: 0;
+}
+
+.title {
+  font-size: 1.05rem;
+  font-weight: 700;
+  margin: 0 0 0.25rem;
+}
+
+.description {
+  font-size: 0.875rem;
+  color: #64748b;
+  margin: 0 0 0.85rem;
+  line-height: 1.45;
+  font-weight: 400;
+}
+
+.meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  font-size: 0.8rem;
+  color: #6b7280;
+}
+
+.metaCount {
+  font-weight: 600;
+  color: #7c3aed;
+}
+
+.metaHint {
+  color: #94a3b8;
+}

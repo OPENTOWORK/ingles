@@ -1,4 +1,6 @@
-export const partInfo = {
+import { extendPartInfoWithGlobalKeys } from '@/data/part-info/extendPartInfo';
+
+const localPartInfo = {
   "1": {
     "title": "Part 1: Multiple choice (short extracts)",
     "description": "You will hear eight short extracts from different situations (conversations, announcements, interviews, etc.). For each extract, you need to choose the best answer from three options. This tests your ability to understand the main points, specific information, and speakers' attitudes in short listening texts.",
@@ -24,3 +26,5 @@ export const partInfo = {
     "commonErrors": "Not reading all the options first, matching too quickly based on word similarity, or not understanding the complete meaning of what each speaker says"
   }
 };
+
+export const partInfo = extendPartInfoWithGlobalKeys(localPartInfo, 10);

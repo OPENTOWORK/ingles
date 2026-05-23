@@ -22,5 +22,29 @@ export const partInfo = {
     "description": "You will hear a longer conversation and see a form or notes with gaps. You need to complete the gaps with specific information (names, numbers, times, etc.) mentioned in the conversation. This tests your ability to listen for detailed information.",
     "tips": "Read the form or notes carefully before listening. Listen for the specific type of information needed for each gap (names, numbers, times, places). Write clearly and check your spelling. Use capital letters for names and places.",
     "commonErrors": "Not reading the form first, writing information in the wrong gaps, misspelling names and places, or not using capital letters appropriately"
+  },
+  "8": {
+    "title": "Part 8: Multiple choice (pictures)",
+    "description": "You will hear five short conversations between a man and a woman. There are five pictures for each conversation, and you need to choose the correct picture. The conversations are about everyday topics like family, school, or activities.",
+    "tips": "Look at all five pictures for each question before listening. Listen for key words that describe the pictures. You will hear each conversation twice.",
+    "commonErrors": "Choosing the first picture that matches a word you hear, or not using the second listening to check your answers"
+  },
+  "9": {
+    "title": "Part 9: Matching (information)",
+    "description": "You will hear a longer conversation and see a list of items to match with options. You need to match each item to the correct option while listening.",
+    "tips": "Read all the items and options first before listening. Listen for specific information mentioned in the conversation. You will hear the conversation twice.",
+    "commonErrors": "Not reading the items and options first, or not using the second listening to verify your answers"
+  },
+  "10": {
+    "title": "Part 10: Multiple choice (short dialogues)",
+    "description": "You will hear five short conversations and answer one question about each conversation.",
+    "tips": "Read each question before the conversation starts. Listen for the specific information asked in the question. You will hear each conversation twice.",
+    "commonErrors": "Not reading the questions first, or choosing answers based on individual words rather than understanding"
+  },
+  "11": {
+    "title": "Part 11: Gap-fill (notes)",
+    "description": "You will hear a longer conversation and see a form or notes with gaps. You need to complete the gaps with specific information mentioned in the conversation.",
+    "tips": "Read the form or notes carefully before listening. Write clearly and check your spelling. Use capital letters for names and places.",
+    "commonErrors": "Not reading the form first, writing information in the wrong gaps, or misspelling names and places"
   }
 };

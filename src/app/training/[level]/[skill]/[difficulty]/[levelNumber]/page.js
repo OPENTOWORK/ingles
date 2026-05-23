@@ -1,11 +1,18 @@
 "use client";
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect, useMemo, useRef } from 'react';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import AudioPlayer from '@/components/AudioPlayer';
-import { getTrainingPathCurriculum, getLevelTopic } from '@/data/trainingPathCurriculum';
+import TrainingStarsCelebration from '@/components/training/TrainingStarsCelebration';
+import { useUserRole } from '@/context/UserRoleContext';
+import {
+  getTrainingPathCurriculum,
+  getTrainingPathLevelCount,
+  getLevelTopic,
+} from '@/data/trainingPathCurriculum';
+import { isTrainingLevelLocked } from '@/lib/trainingPathUnlock';
 import { saveExerciseResult, getUserProgressForExercises, progressTracker } from '@/utils/progressTracker';
 import { supabase } from '@/utils/supabaseClient';
-import { TRAINING_LEVEL_COUNT } from '@/constants/trainingLevels';
 import { notifyTrainingStarsUpdated } from '@/utils/trainingStarsProgress';
 import styles from './page.module.css';
 
@@ -26,6 +33,8 @@ const DIFFICULTY_LABELS = {
 
 export default function ExercisePage({ params }) {
   const { level, skill, difficulty, levelNumber } = params;
+  const router = useRouter();
+  const { userRole } = useUserRole();
   
   // Convertir level-1 a level1 para la función getExercisesByLevel
   const levelKey = levelNumber.replace('level-', 'level');
@@ -45,6 +54,8 @@ export default function ExercisePage({ params }) {
   const [exercisesReady, setExercisesReady] = useState(false);
   const [stars, setStars] = useState(0); // Sistema de estrellas
   const [completedExercises, setCompletedExercises] = useState([]); // Ejercicios completados
+  const [celebration, setCelebration] = useState(null);
+  const celebrationShownRef = useRef(false);
 
   const exercise = exercises[currentExercise];
   const levelNumInt = parseInt(levelNumber.replace('level-', ''), 10) || 1;
@@ -52,6 +63,7 @@ export default function ExercisePage({ params }) {
     () => getTrainingPathCurriculum(level, difficulty, skill),
     [level, difficulty, skill],
   );
+  const pathLevelCount = curriculum.totalLevels ?? getTrainingPathLevelCount(level, difficulty, skill);
   const topicLabel = getLevelTopic(levelNumInt, curriculum);
   const skillLabel = SKILL_LABELS[skill] || skill.replace(/-/g, ' ');
   const progressPct = exercises.length
@@ -60,8 +72,23 @@ export default function ExercisePage({ params }) {
 
   useEffect(() => {
     if (typeof window === 'undefined') return;
+    const levelNum = parseInt(levelNumber.replace('level-', ''), 10);
+    try {
+      const storageKey = `stars_${level}_${skill}_${difficulty}`;
+      const savedStars = JSON.parse(localStorage.getItem(storageKey) || '{}');
+      if (isTrainingLevelLocked(levelNum, savedStars, userRole, pathLevelCount)) {
+        router.replace(`/training/${level}/${skill}/${difficulty}`);
+      }
+    } catch {
+      /* ignore */
+    }
+  }, [level, skill, difficulty, levelNumber, userRole, router, pathLevelCount]);
+
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
     if (!showResult || exercises.length === 0) return;
     if (currentExercise !== exercises.length - 1) return;
+    if (celebrationShownRef.current) return;
 
     try {
       const storageKey = `stars_${level}_${skill}_${difficulty}`;
@@ -73,6 +100,12 @@ export default function ExercisePage({ params }) {
       savedStars[levelNumber] = stars;
       localStorage.setItem(storageKey, JSON.stringify(savedStars));
       notifyTrainingStarsUpdated(storageKey);
+      celebrationShownRef.current = true;
+      setCelebration({
+        stars,
+        levelNum: parseInt(levelNumber.replace('level-', ''), 10) || 1,
+        improved: stars > previous,
+      });
     } catch (error) {
       console.warn('Could not save stars:', error);
     }
@@ -271,12 +304,14 @@ export default function ExercisePage({ params }) {
     setStartTime(Date.now());
     setStars(0);
     setCompletedExercises([]);
+    setCelebration(null);
+    celebrationShownRef.current = false;
   };
 
   // Función para obtener el siguiente nivel
   const getNextLevel = () => {
     const currentLevelNum = parseInt(levelNumber.replace('level-', ''));
-    if (currentLevelNum < TRAINING_LEVEL_COUNT) {
+    if (currentLevelNum < pathLevelCount) {
       return `level-${currentLevelNum + 1}`;
     }
     return null;
@@ -350,6 +385,15 @@ export default function ExercisePage({ params }) {
 
   return (
     <main className={styles.page}>
+      {celebration ? (
+        <TrainingStarsCelebration
+          stars={celebration.stars}
+          levelNum={celebration.levelNum}
+          topicLabel={topicLabel}
+          improved={celebration.improved}
+          onClose={() => setCelebration(null)}
+        />
+      ) : null}
       <div className={styles.shell}>
         <div className={styles.card}>
           <header className={styles.header}>

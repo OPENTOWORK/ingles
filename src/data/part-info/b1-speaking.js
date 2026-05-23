@@ -1,4 +1,6 @@
-export const partInfo = {
+import { extendPartInfoWithGlobalKeys } from '@/data/part-info/extendPartInfo';
+
+const localPartInfo = {
   "1": {
     "title": "Part 1: Interview",
     "description": "The examiner will ask you questions about yourself, your interests, and your experiences. You should answer clearly and give some details about your life and opinions. This tests your ability to talk about personal topics and express your ideas clearly.",
@@ -24,3 +26,5 @@ export const partInfo = {
     "commonErrors": "Not giving detailed opinions, not responding to your partner's ideas, not using examples from your own experience, or not engaging with your partner in the discussion"
   }
 };
+
+export const partInfo = extendPartInfoWithGlobalKeys(localPartInfo, 13);

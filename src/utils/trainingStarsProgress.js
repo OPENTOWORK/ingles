@@ -1,4 +1,5 @@
 import { TRAINING_LEVEL_COUNT } from '@/constants/trainingLevels';
+import { getTrainingPathLevelCount } from '@/data/trainingPathCurriculum';
 
 export const TRAINING_CEFR_LEVELS = ['a2', 'b1', 'b2', 'c1', 'c2'];
 
@@ -19,8 +20,9 @@ export const MAX_STARS_PER_PATH_LEVEL = 3;
 
 function sumStarsFromStorageData(data) {
   let earned = 0;
-  for (let n = 1; n <= TRAINING_LEVEL_COUNT; n++) {
-    const stars = Number(data[`level-${n}`]) || 0;
+  for (const [key, value] of Object.entries(data || {})) {
+    if (!/^level-\d+$/.test(key)) continue;
+    const stars = Number(value) || 0;
     earned += Math.min(MAX_STARS_PER_PATH_LEVEL, Math.max(0, stars));
   }
   return earned;
@@ -86,9 +88,9 @@ export function getMaxStarsForSkill() {
   return TRAINING_DIFFICULTY_IDS.length * TRAINING_LEVEL_COUNT * MAX_STARS_PER_PATH_LEVEL;
 }
 
-/** Máximo por dificultad (24 niveles del camino). */
-export function getMaxStarsForDifficulty() {
-  return TRAINING_LEVEL_COUNT * MAX_STARS_PER_PATH_LEVEL;
+/** Máximo por dificultad (por defecto 24 niveles del camino). */
+export function getMaxStarsForDifficulty(levelCount = TRAINING_LEVEL_COUNT) {
+  return Math.max(1, levelCount) * MAX_STARS_PER_PATH_LEVEL;
 }
 
 /**
@@ -166,10 +168,10 @@ export function computeAllSkillStarProgress(cefrLevel) {
  * Progreso de una dificultad dentro de un skill y nivel CEFR.
  */
 export function computeDifficultyStarProgress(cefrLevel, skillId, difficultyId) {
-  const max = getMaxStarsForDifficulty();
   const levelKey = (cefrLevel || 'a2').toLowerCase();
   const skill = skillId || TRAINING_SKILL_IDS[0];
   const difficulty = difficultyId || TRAINING_DIFFICULTY_IDS[0];
+  const max = getMaxStarsForDifficulty(getTrainingPathLevelCount(levelKey, difficulty, skill));
 
   if (typeof window === 'undefined') {
     return { earned: 0, max, percent: 0 };
@@ -182,17 +184,24 @@ export function computeDifficultyStarProgress(cefrLevel, skillId, difficultyId) 
 export function computeAllDifficultyStarProgress(cefrLevel, skillId) {
   const levelKey = (cefrLevel || 'a2').toLowerCase();
   const skill = skillId || TRAINING_SKILL_IDS[0];
-  const max = getMaxStarsForDifficulty();
 
   if (typeof window === 'undefined') {
     return Object.fromEntries(
-      TRAINING_DIFFICULTY_IDS.map((difficulty) => [difficulty, { earned: 0, max, percent: 0 }]),
+      TRAINING_DIFFICULTY_IDS.map((difficulty) => {
+        const max = getMaxStarsForDifficulty(
+          getTrainingPathLevelCount(levelKey, difficulty, skill),
+        );
+        return [difficulty, { earned: 0, max, percent: 0 }];
+      }),
     );
   }
 
   const index = buildStarsStorageIndex();
   return Object.fromEntries(
     TRAINING_DIFFICULTY_IDS.map((difficulty) => {
+      const max = getMaxStarsForDifficulty(
+        getTrainingPathLevelCount(levelKey, difficulty, skill),
+      );
       const earned = index.get(`stars_${levelKey}_${skill}_${difficulty}`) ?? 0;
       return [difficulty, { earned, max, percent: toPercent(earned, max) }];
     }),

@@ -22,5 +22,17 @@ export const partInfo = {
     "description": "The examiner will give you a topic to talk about (like 'food' or 'hobbies'). You need to talk about this topic for about one minute. You should give your opinions and explain your ideas clearly. This tests your ability to speak at length about a topic.",
     "tips": "Think about the topic before you start speaking. Give your opinions and explain why you think that way. Use examples from your own experience. Speak clearly and don't worry about making small mistakes. Try to talk for about one minute.",
     "commonErrors": "Not thinking about the topic first, giving very short answers, not explaining your opinions, or stopping too early without trying to speak for the full minute"
+  },
+  "12": {
+    "title": "Part 12: Personal information interview",
+    "description": "The examiner will ask you questions about yourself, your family, your school, or your interests. You should answer clearly and give some details about your experiences and opinions.",
+    "tips": "Answer each question completely and give some details. Use simple, clear sentences. Talk about your real experiences and opinions.",
+    "commonErrors": "Giving very short answers without details, or not speaking clearly enough for the examiner to understand"
+  },
+  "13": {
+    "title": "Part 13: Simulated situation task",
+    "description": "You will be given a situation and asked to respond appropriately, for example making a request, offering help, or agreeing to plans. This tests your ability to handle everyday spoken interactions.",
+    "tips": "Listen carefully to what the examiner says. Respond politely and clearly. Use appropriate functional language for the situation.",
+    "commonErrors": "Not understanding the situation, giving answers that are too short, or using language that is too informal or too formal for the context"
   }
 };

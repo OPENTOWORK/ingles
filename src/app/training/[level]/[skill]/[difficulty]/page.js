@@ -2,7 +2,8 @@
 
 import dynamic from 'next/dynamic';
 import Link from 'next/link';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
+import { TRAINING_STARS_UPDATED_EVENT } from '@/utils/trainingStarsProgress';
 import styles from './page.module.css';
 
 const TrainingLevelPathMap = dynamic(
@@ -32,16 +33,25 @@ export default function DifficultyPage({ params }) {
   const { level, skill, difficulty } = params;
   const [levelStars, setLevelStars] = useState({});
 
-  useEffect(() => {
+  const loadLevelStars = useCallback(() => {
     try {
       const savedStars = localStorage.getItem(`stars_${level}_${skill}_${difficulty}`);
-      if (savedStars) {
-        setLevelStars(JSON.parse(savedStars));
-      }
+      setLevelStars(savedStars ? JSON.parse(savedStars) : {});
     } catch (error) {
       console.warn('Could not load stars:', error);
+      setLevelStars({});
     }
   }, [level, skill, difficulty]);
+
+  useEffect(() => {
+    loadLevelStars();
+  }, [loadLevelStars]);
+
+  useEffect(() => {
+    const onStarsUpdated = () => loadLevelStars();
+    window.addEventListener(TRAINING_STARS_UPDATED_EVENT, onStarsUpdated);
+    return () => window.removeEventListener(TRAINING_STARS_UPDATED_EVENT, onStarsUpdated);
+  }, [loadLevelStars]);
 
   const baseHref = `/training/${level}/${skill}/${difficulty}`;
   const skillTitle = formatSkillTitle(skill);

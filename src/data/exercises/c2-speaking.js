@@ -1,12 +1,16 @@
+import { extendExercisesConfigWithGlobalKeys } from '@/data/exercises/extendExercisesConfig';
+
 // Ejercicios para C2 - speaking
 // Total de ejercicios por part
 
-export const exercisesConfig = {
+const baseExercisesConfig = {
   "part-1": 12,
   "part-2": 12,
   "part-3": 12,
   "part-4": 12,
 };
+
+export const exercisesConfig = extendExercisesConfigWithGlobalKeys(baseExercisesConfig, 14);
 
 // Generador de ejercicios placeholder
 export function getExercise(part, number) {

@@ -5,6 +5,12 @@ import { useId, useMemo } from 'react';
 import { TRAINING_LEVEL_COUNT, TRAINING_PATH_COLS } from '@/constants/trainingLevels';
 import { getTrainingPathCurriculum, getLevelTopic } from '@/data/trainingPathCurriculum';
 import { getCefrLevelColor } from '@/constants/cefrLevelColors';
+import { useUserRole } from '@/context/UserRoleContext';
+import {
+  getTrainingCurrentLevelNumber,
+  isTrainingLevelLocked,
+  isTrainingPathStaffBypass,
+} from '@/lib/trainingPathUnlock';
 import styles from './TrainingLevelPathMap.module.css';
 
 const PAD_X = 14;
@@ -30,8 +36,6 @@ function buildUniformNodes(total = TRAINING_LEVEL_COUNT, cols = TRAINING_PATH_CO
   return nodes;
 }
 
-const NODES = buildUniformNodes();
-
 function buildPathD(points) {
   if (points.length < 2) return '';
   let d = `M ${points[0].x} ${points[0].y}`;
@@ -48,6 +52,20 @@ function buildPathD(points) {
   return d;
 }
 
+function IconLock({ className }) {
+  return (
+    <svg className={className} viewBox="0 0 24 24" fill="none" aria-hidden>
+      <path
+        d="M8 11V8a4 4 0 1 1 8 0v3M6 11h12v9H6V11z"
+        stroke="currentColor"
+        strokeWidth="2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  );
+}
+
 function StarRow({ count = 0 }) {
   return (
     <div className={styles.stars} aria-hidden>
@@ -60,22 +78,24 @@ function StarRow({ count = 0 }) {
   );
 }
 
-function SectionLabel({ section, anchorNode }) {
+function SectionLegend({ sections }) {
+  if (!sections?.length) return null;
+
   return (
-    <div
-      className={styles.sectionLabel}
-      style={{
-        left: `${anchorNode.x}%`,
-        top: `${Math.max(anchorNode.y - 10, 3)}%`,
-        '--section-color': section.color,
-        '--section-bg': section.colorLight,
-      }}
-    >
-      <span className={styles.sectionLabelPill}>{section.title}</span>
-      <span className={styles.sectionLabelTopics}>{section.topics}</span>
-      <span className={styles.sectionLabelRange}>
-        {String(section.from).padStart(2, '0')}–{String(section.to).padStart(2, '0')}
-      </span>
+    <div className={styles.sectionLegend} aria-label="Path sections">
+      {sections.map((section) => (
+        <div
+          key={section.id}
+          className={styles.legendItem}
+          style={{ '--legend-color': section.color }}
+        >
+          <span className={styles.legendDot} aria-hidden />
+          <span className={styles.legendTitle}>{section.title}</span>
+          <span className={styles.legendRange}>
+            {String(section.from).padStart(2, '0')}–{String(section.to).padStart(2, '0')}
+          </span>
+        </div>
+      ))}
     </div>
   );
 }
@@ -97,56 +117,64 @@ export default function TrainingLevelPathMap({
   skill = 'use-of-english',
 }) {
   const uid = useId().replace(/:/g, '');
+  const { userRole } = useUserRole();
+  const staffBypass = isTrainingPathStaffBypass(userRole);
 
   const curriculum = useMemo(
     () => getTrainingPathCurriculum(cefrLevel, difficulty, skill),
     [cefrLevel, difficulty, skill]
   );
 
+  const total = curriculum.totalLevels ?? TRAINING_LEVEL_COUNT;
+
+  const nodes = useMemo(() => buildUniformNodes(total), [total]);
+
   const sectionPaths = useMemo(
     () =>
       curriculum.sections
         .map((section) => {
-          const points = NODES.filter((node) => node.n >= section.from && node.n <= section.to);
+          const points = nodes.filter((node) => node.n >= section.from && node.n <= section.to);
           return { section, d: buildPathD(points) };
         })
         .filter((item) => item.d),
-    [curriculum]
+    [curriculum, nodes]
   );
 
-  const total = TRAINING_LEVEL_COUNT;
   const completedLevels = useMemo(
-    () => NODES.filter(({ n }) => (levelStars[`level-${n}`] || 0) > 0).map(({ n }) => n),
-    [levelStars]
+    () => nodes.filter(({ n }) => (levelStars[`level-${n}`] || 0) > 0).map(({ n }) => n),
+    [levelStars, nodes]
   );
   const completedCount = completedLevels.length;
-  const lastCompleted = completedCount > 0 ? Math.max(...completedLevels) : 0;
-  const currentLevel = lastCompleted < total ? lastCompleted + 1 : total;
+  const currentLevel = getTrainingCurrentLevelNumber(levelStars, total);
+  const lastCompleted = currentLevel > 1 ? currentLevel - 1 : 0;
   const currentTopic = getLevelTopic(currentLevel, curriculum);
   const progressPct = Math.round((completedCount / total) * 100);
   const lastCompletedIndex =
-    lastCompleted > 0 ? NODES.findIndex((node) => node.n === lastCompleted) : -1;
+    lastCompleted > 0 ? nodes.findIndex((node) => node.n === lastCompleted) : -1;
   const pathFillPct =
     lastCompletedIndex >= 0 ? Math.round(((lastCompletedIndex + 1) / total) * 100) : 0;
   const levelAccent = getCefrLevelColor(cefrLevel);
 
   const pathNodes = useMemo(
     () =>
-      NODES.map(({ n, x, y }, index) => {
+      nodes.map(({ n, x, y }, index) => {
         const entry = curriculum.levelMap[n];
         const section = entry?.section ?? curriculum.sections[0];
         const topic = entry?.topic ?? `Level ${n}`;
         const stars = levelStars[`level-${n}`] || 0;
         const isCompleted = stars > 0;
         const isCurrent = n === currentLevel && !isCompleted;
-        const isUpcoming = n > currentLevel && !isCompleted;
-        const stateClass = isCompleted
-          ? styles.nodeCompleted
-          : isCurrent
-            ? styles.nodeCurrent
-            : isUpcoming
-              ? styles.nodeUpcoming
-              : '';
+        const isLocked = isTrainingLevelLocked(n, levelStars, userRole, total);
+        const isUpcoming = !isLocked && n > currentLevel && !isCompleted;
+        const stateClass = isLocked
+          ? styles.nodeLocked
+          : isCompleted
+            ? styles.nodeCompleted
+            : isCurrent
+              ? styles.nodeCurrent
+              : isUpcoming
+                ? styles.nodeUpcoming
+                : '';
 
         return {
           n,
@@ -160,29 +188,30 @@ export default function TrainingLevelPathMap({
           stateClass,
           isCompleted,
           isCurrent,
+          isLocked,
         };
       }),
-    [curriculum, levelStars, baseHref, currentLevel],
+    [curriculum, levelStars, baseHref, currentLevel, userRole, nodes, total],
   );
 
   const sectionBands = useMemo(
     () =>
       curriculum.sections
         .map((section) => {
-          const nodes = NODES.filter((node) => node.n >= section.from && node.n <= section.to);
-          if (!nodes.length) return null;
-          const xs = nodes.map((node) => node.x);
-          const ys = nodes.map((node) => node.y);
+          const sectionNodes = nodes.filter((node) => node.n >= section.from && node.n <= section.to);
+          if (!sectionNodes.length) return null;
+          const xs = sectionNodes.map((node) => node.x);
+          const ys = sectionNodes.map((node) => node.y);
           return {
             section,
-            left: Math.min(...xs) - 9,
-            right: Math.max(...xs) + 9,
-            top: Math.min(...ys) - 13,
-            bottom: Math.max(...ys) + 10,
+            left: Math.min(...xs) - 8,
+            right: Math.max(...xs) + 8,
+            top: Math.min(...ys) - 6,
+            bottom: Math.max(...ys) + 6,
           };
         })
         .filter(Boolean),
-    [curriculum]
+    [curriculum, nodes]
   );
 
   return (
@@ -209,6 +238,8 @@ export default function TrainingLevelPathMap({
             : ' · Start here'}
         </p>
       </div>
+
+      <SectionLegend sections={curriculum.sections} />
 
       <div className={styles.canvas}>
         {sectionBands.map(({ section, left, right, top, bottom }) => (
@@ -246,7 +277,7 @@ export default function TrainingLevelPathMap({
             </g>
           ))}
           <path
-            d={buildPathD(NODES)}
+            d={buildPathD(nodes)}
             className={styles.pathProgress}
             pathLength={100}
             style={{
@@ -256,34 +287,63 @@ export default function TrainingLevelPathMap({
           />
         </svg>
 
-        {curriculum.sections.map((section) => {
-          const anchor = NODES.find((node) => node.n === section.from);
-          if (!anchor) return null;
-          return <SectionLabel key={section.id} section={section} anchorNode={anchor} />;
-        })}
-
-        {pathNodes.map(({ n, x, y, index, section, topic, stars, href, stateClass, isCompleted, isCurrent }) => (
-          <Link
-            key={n}
-            href={href}
-            prefetch={false}
-              className={`${styles.node} ${stateClass}`}
-              style={{
-                left: `${x}%`,
-                top: `${y}%`,
+        {pathNodes.map(
+          ({ n, x, y, section, topic, stars, href, stateClass, isCompleted, isCurrent, isLocked }) => {
+            const nodeStyle = {
+              left: `${x}%`,
+              top: `${y}%`,
               '--section-color': section.color,
               '--section-color-light': section.colorLight,
-            }}
-            aria-label={`${topic}, level ${n}${isCompleted ? `, ${stars} stars` : isCurrent ? ', up next' : ''}`}
-            {...(isCurrent ? { 'aria-current': 'step' } : {})}
-          >
-            <span className={styles.card}>
-              <span className={styles.badge}>{String(n).padStart(2, '0')}</span>
-              <span className={styles.topic}>{topic}</span>
-              <StarRow count={stars} />
-            </span>
-          </Link>
-        ))}
+            };
+            const ariaLabel = isLocked
+              ? `${topic}, level ${n}, locked — complete previous levels first`
+              : `${topic}, level ${n}${isCompleted ? `, ${stars} stars` : isCurrent ? ', up next' : ''}`;
+
+            const card = (
+              <span className={styles.card}>
+                {isLocked ? (
+                  <span className={styles.lockIcon} aria-hidden>
+                    <IconLock className={styles.lockSvg} />
+                  </span>
+                ) : null}
+                <span className={styles.badge}>{String(n).padStart(2, '0')}</span>
+                <span className={styles.topic}>{topic}</span>
+                <StarRow count={isLocked ? 0 : stars} />
+              </span>
+            );
+
+            if (isLocked) {
+              return (
+                <div
+                  key={n}
+                  className={`${styles.node} ${stateClass}`}
+                  style={nodeStyle}
+                  aria-label={ariaLabel}
+                  title="Complete the previous level to unlock"
+                >
+                  {card}
+                </div>
+              );
+            }
+
+            return (
+              <Link
+                key={n}
+                href={href}
+                prefetch={false}
+                className={`${styles.node} ${stateClass}`}
+                style={nodeStyle}
+                aria-label={ariaLabel}
+                {...(isCurrent ? { 'aria-current': 'step' } : {})}
+              >
+                {card}
+              </Link>
+            );
+          },
+        )}
+        {staffBypass ? (
+          <p className={styles.staffHint}>Preview mode: all levels unlocked for staff.</p>
+        ) : null}
       </div>
     </section>
   );

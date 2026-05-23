@@ -868,14 +868,14 @@ export default function AdminDashboard() {
                       />
                     </th>
                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Usuario</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Conexión</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Tiempo sesión</th>
                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Email</th>
                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Fecha registro</th>
                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Placement test</th>
                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Nivel placement</th>
                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Rol actual</th>
                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Cambiar rol</th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Conexión</th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Tiempo sesión</th>
                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Comercial</th>
                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Acciones</th>
                   </tr>
@@ -900,6 +900,23 @@ export default function AdminDashboard() {
                         >
                           {item.nombre || 'Sin nombre'}
                         </Link>
+                      </td>
+                      <td className="px-6 py-4 text-sm">
+                        {userActivityByUser[item.id]?.online ? (
+                          <span className="inline-flex items-center gap-2 text-green-700 font-medium">
+                            <span className="w-2.5 h-2.5 rounded-full bg-green-500 animate-pulse" aria-hidden />
+                            Conectado
+                          </span>
+                        ) : (
+                          <span className="inline-flex items-center gap-2 text-gray-500">
+                            <span className="w-2.5 h-2.5 rounded-full bg-gray-300" aria-hidden />
+                            Desconectado
+                          </span>
+                        )}
+                      </td>
+                      <td className="px-6 py-4 text-sm text-gray-900 whitespace-nowrap">
+                        {userActivityByUser[item.id]?.totalSessionLabel ||
+                          formatSessionDuration(0)}
                       </td>
                       <td className="px-6 py-4 text-sm text-gray-600">{item.email}</td>
                       <td className="px-6 py-4 text-sm text-gray-900 whitespace-nowrap">
@@ -942,23 +959,6 @@ export default function AdminDashboard() {
                             </option>
                           ))}
                         </select>
-                      </td>
-                      <td className="px-6 py-4 text-sm">
-                        {userActivityByUser[item.id]?.online ? (
-                          <span className="inline-flex items-center gap-2 text-green-700 font-medium">
-                            <span className="w-2.5 h-2.5 rounded-full bg-green-500 animate-pulse" aria-hidden />
-                            Conectado
-                          </span>
-                        ) : (
-                          <span className="inline-flex items-center gap-2 text-gray-500">
-                            <span className="w-2.5 h-2.5 rounded-full bg-gray-300" aria-hidden />
-                            Desconectado
-                          </span>
-                        )}
-                      </td>
-                      <td className="px-6 py-4 text-sm text-gray-900 whitespace-nowrap">
-                        {userActivityByUser[item.id]?.totalSessionLabel ||
-                          formatSessionDuration(0)}
                       </td>
                       <td className="px-6 py-4 text-sm">
                         {item.marketingAccepted ? (

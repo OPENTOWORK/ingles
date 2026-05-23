@@ -1,5 +1,6 @@
 import { TRAINING_LEVEL_COUNT } from '@/constants/trainingLevels';
 import { A2_BASICO_TOPICS } from '@/data/a2TrainingContent';
+import { B2_UOE_CURRICULUM } from '@/data/b2TrainingContent';
 
 const TRAINING_LEVELS_PER_SECTION = 6;
 
@@ -120,8 +121,49 @@ function sectionTitlesForTier(tier) {
 
 const curriculumCache = new Map();
 
+function buildCurriculumFromSectionDefs(sectionDefs, meta) {
+  let levelNum = 1;
+  const sections = sectionDefs.map((def, sectionIndex) => {
+    const palette = SECTION_PALETTE[sectionIndex % SECTION_PALETTE.length];
+    const from = levelNum;
+    const levels = def.topics.map((topic) => ({
+      n: levelNum++,
+      topic,
+    }));
+    const to = levelNum - 1;
+    const topicsSummary = levels
+      .map((l) => l.topic)
+      .slice(0, 3)
+      .join(' · ');
+
+    return {
+      ...palette,
+      title: def.title,
+      topics: topicsSummary,
+      from,
+      to,
+      levels,
+    };
+  });
+
+  const totalLevels = levelNum - 1;
+  const levelMap = Object.fromEntries(
+    sections.flatMap((s) => s.levels.map((l) => [l.n, { ...l, section: s }])),
+  );
+
+  return {
+    totalLevels,
+    tier: meta.tier,
+    cefrLabel: meta.cefrLabel,
+    diffLabel: meta.diffLabel,
+    sections,
+    levelMap,
+    progressionLabel: meta.progressionLabel,
+  };
+}
+
 /**
- * Full path curriculum: 4 sections × 6 levels, unique topic per level.
+ * Full path curriculum: sections with one box per topic (count varies by path).
  */
 export function getTrainingPathCurriculum(cefrLevel, difficulty, skill = 'use-of-english') {
   const cefr = normalizeKey(cefrLevel);
@@ -133,6 +175,17 @@ export function getTrainingPathCurriculum(cefrLevel, difficulty, skill = 'use-of
   }
 
   const tier = getTrainingTier(cefr, diff);
+
+  if (cefr === 'b2' && skillKey === 'use-of-english' && B2_UOE_CURRICULUM[diff]) {
+    const result = buildCurriculumFromSectionDefs(B2_UOE_CURRICULUM[diff], {
+      tier,
+      cefrLabel: CEFR_LABELS.b2,
+      diffLabel: DIFF_LABELS[diff] || diff,
+      progressionLabel: `B2 · ${DIFF_LABELS[diff] || diff}`,
+    });
+    curriculumCache.set(cacheKey, result);
+    return result;
+  }
 
   if (cefr === 'a2' && diff === 'basico') {
     const topics = A2_BASICO_TOPIC_LADDER.slice(0, TRAINING_LEVEL_COUNT);
@@ -169,7 +222,8 @@ export function getTrainingPathCurriculum(cefrLevel, difficulty, skill = 'use-of
       sections.flatMap((s) => s.levels.map((l) => [l.n, { ...l, section: s }])),
     );
 
-    return {
+    const result = {
+      totalLevels: TRAINING_LEVEL_COUNT,
       tier: 0,
       cefrLabel: CEFR_LABELS[cefr] || 'A2',
       diffLabel: DIFF_LABELS[diff] || 'Basic',
@@ -177,6 +231,8 @@ export function getTrainingPathCurriculum(cefrLevel, difficulty, skill = 'use-of
       levelMap,
       progressionLabel: 'A2 · Basic — elementary vocabulary',
     };
+    curriculumCache.set(cacheKey, result);
+    return result;
   }
 
   const ladder = SKILL_LADDERS[skill] || GENERIC_TOPIC_LADDER;
@@ -211,6 +267,7 @@ export function getTrainingPathCurriculum(cefrLevel, difficulty, skill = 'use-of
   );
 
   const result = {
+    totalLevels: TRAINING_LEVEL_COUNT,
     tier,
     cefrLabel: CEFR_LABELS[cefr] || cefr.toUpperCase(),
     diffLabel: DIFF_LABELS[diff] || diff,
@@ -220,6 +277,11 @@ export function getTrainingPathCurriculum(cefrLevel, difficulty, skill = 'use-of
   };
   curriculumCache.set(cacheKey, result);
   return result;
+}
+
+/** Número de cajas/niveles en el mapa para un camino concreto. */
+export function getTrainingPathLevelCount(cefrLevel, difficulty, skill = 'use-of-english') {
+  return getTrainingPathCurriculum(cefrLevel, difficulty, skill).totalLevels ?? TRAINING_LEVEL_COUNT;
 }
 
 export function getSectionForLevel(levelNumber, curriculum) {
