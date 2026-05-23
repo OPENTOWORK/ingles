@@ -53,7 +53,7 @@ export default function TrainingCefrLevelCard({
     return (
       <div className={styles.wrap}>
         {content}
-        <div className={styles.lockedOverlay}>Coming soon</div>
+        <div className={styles.lockedOverlay}>COMING SOON</div>
       </div>
     );
   }

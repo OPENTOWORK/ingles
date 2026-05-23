@@ -2,6 +2,9 @@
 
 import Link from 'next/link';
 import { useUserRole } from '@/context/UserRoleContext';
+import { isStaffRole } from '@/lib/placementLevelAccess';
+import { isNivelesLevelComingSoonForUser, isStudentRole } from '@/constants/studentFeatureAccess';
+import NivelesComingSoonNotice from '@/components/niveles/NivelesComingSoonNotice';
 import PageHero from '@/components/PageHero';
 
 /**
@@ -9,8 +12,11 @@ import PageHero from '@/components/PageHero';
  */
 export default function LevelHubPage({ config }) {
   const { userRole: roleName } = useUserRole();
-  const isAdmin = roleName === 'admin' || roleName === 'administrador';
-  const isStudent = !isAdmin;
+  const isStudent = isStudentRole(roleName) && !isStaffRole(roleName);
+
+  if (isNivelesLevelComingSoonForUser(roleName, config.cefr)) {
+    return <NivelesComingSoonNotice level={config.cefr} />;
+  }
 
   const topicCount = Object.values(config.sections).reduce(
     (n, topics) => n + topics.length,
@@ -67,7 +73,7 @@ export default function LevelHubPage({ config }) {
                   aria-disabled="true"
                 >
                   <span>{exam.text}</span>
-                  <small className="exam-card-badge">Coming soon</small>
+                  <small className="exam-card-badge">COMING SOON</small>
                 </div>
               );
             }

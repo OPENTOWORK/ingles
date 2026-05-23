@@ -1,5 +1,10 @@
 .wrap {
   position: relative;
+  cursor: not-allowed;
+}
+
+.wrap .cefrCard {
+  opacity: 0.92;
 }
 
 .cardLink {
@@ -93,9 +98,9 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 0.8rem;
-  font-weight: 700;
-  letter-spacing: 0.06em;
+  font-size: 0.85rem;
+  font-weight: 800;
+  letter-spacing: 0.12em;
   text-transform: uppercase;
   pointer-events: none;
 }

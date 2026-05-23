@@ -5,7 +5,9 @@ import RouteLoadingMascot from '@/components/RouteLoadingMascot';
 import { usePlacementAccess } from '@/context/PlacementAccessContext';
 import { useUserRole } from '@/context/UserRoleContext';
 import { cefrSlugFromNivelesPath, isStaffRole } from '@/lib/placementLevelAccess';
+import { isNivelesLevelComingSoonForUser } from '@/constants/studentFeatureAccess';
 import PlacementLevelLockedNotice from '@/components/niveles/PlacementLevelLockedNotice';
+import NivelesComingSoonNotice from '@/components/niveles/NivelesComingSoonNotice';
 
 /**
  * Bloquea rutas /niveles/{cefr}/… según placement_results (solo estudiantes).
@@ -25,6 +27,10 @@ export default function NivelesLevelRouteGate({ children }) {
 
   if (session && isStudent && !staff && loading) {
     return <RouteLoadingMascot label="Comprobando tu nivel" variant={3} />;
+  }
+
+  if (session && isStudent && !staff && isNivelesLevelComingSoonForUser(userRole, level)) {
+    return <NivelesComingSoonNotice level={level} />;
   }
 
   if (session && isStudent && !staff && isLevelLocked(level)) {

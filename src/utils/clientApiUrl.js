@@ -1,7 +1,12 @@
 function normalizePath(path) {
   const raw = String(path || '').trim();
   if (!raw) return '/';
-  return raw.startsWith('/') ? raw : `/${raw}`;
+  let normalized = raw.startsWith('/') ? raw : `/${raw}`;
+  // Next.js trailingSlash: true — POST to /api/foo redirects to /api/foo/ and drops the body.
+  if (normalized.startsWith('/api/') && !normalized.endsWith('/')) {
+    normalized = `${normalized}/`;
+  }
+  return normalized;
 }
 
 export function buildClientApiUrl(path) {

@@ -1631,6 +1631,11 @@ body.nav-open {
   margin-top: 1rem;
   display: flex;
   justify-content: flex-end;
+  position: sticky;
+  bottom: 0;
+  z-index: 2;
+  padding: 0.75rem 0 0.25rem;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, #ffffff 28%);
 }
 
 .levels-b2-writing-panel__submit {
@@ -1651,8 +1656,11 @@ body.nav-open {
 }
 
 .levels-b2-writing-panel__submit:disabled {
-  opacity: 0.65;
+  opacity: 0.55;
   cursor: not-allowed;
+  background: #f8fafc;
+  border-color: #cbd5e1;
+  color: #64748b;
 }
 
 .levels-b2-writing-panel__error {
@@ -1679,7 +1687,92 @@ body.nav-open {
   border-radius: 10px;
   font-size: 0.9375rem;
   line-height: 1.65;
-  color: #334155;
+  color: #1e293b;
+}
+
+.levels-b2-writing-panel__scores {
+  margin-top: 1.25rem;
+}
+
+.levels-b2-writing-panel__scores-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 0.65rem;
+  margin-top: 0.75rem;
+}
+
+.levels-b2-writing-panel__score-card {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  padding: 0.75rem 0.85rem;
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+}
+
+.levels-b2-writing-panel__score-label {
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  color: #64748b;
+  line-height: 1.35;
+}
+
+.levels-b2-writing-panel__score-value {
+  font-size: 1.125rem;
+  color: #0f172a;
+}
+
+.levels-b2-writing-panel__total {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  margin-top: 0.85rem;
+  padding: 0.85rem 1rem;
+  border-radius: 10px;
+  font-size: 0.9375rem;
+  font-weight: 600;
+}
+
+.levels-b2-writing-panel__total--pass {
+  background: #ecfdf5;
+  border: 1px solid #6ee7b7;
+  color: #065f46;
+}
+
+.levels-b2-writing-panel__total--fail {
+  background: #fff7ed;
+  border: 1px solid #fdba74;
+  color: #9a3412;
+}
+
+.levels-b2-writing-panel__feedback-heading {
+  margin: 1rem 0 0.45rem;
+  font-size: 0.9375rem;
+  font-weight: 700;
+  color: #0f172a;
+}
+
+.levels-b2-writing-panel__feedback-heading:first-child {
+  margin-top: 0;
+}
+
+.levels-b2-writing-panel__feedback-p,
+.levels-b2-writing-panel__feedback-li,
+.levels-b2-writing-panel__feedback-correction {
+  margin: 0.35rem 0;
+}
+
+.levels-b2-writing-panel__feedback-correction {
+  padding: 0.45rem 0.55rem;
+  background: #fffbeb;
+  border-left: 3px solid #f59e0b;
+  border-radius: 4px;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 0.875rem;
 }
 
 .levels-b2-speaking-session {

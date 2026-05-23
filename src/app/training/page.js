@@ -15,6 +15,7 @@ import { NIVELES_CEFR_ORDER } from '@/lib/placementLevelAccess';
 import { CEFR_LEVEL_COLORS } from '@/constants/cefrLevelColors';
 import DeferredBelowFold from '@/components/DeferredBelowFold';
 import DashboardSectionPlaceholder from '@/components/DashboardSectionPlaceholder';
+import { isTrainingLockedForStudent } from '@/constants/trainingAccess';
 import ui from '@/components/training/training-ui.module.css';
 
 const sortedLevels = NIVELES_CEFR_ORDER.map((level) => ({
@@ -40,7 +41,7 @@ const TrainingDashboardStack = dynamic(
 
 export default function TrainingHome() {
   const router = useRouter();
-  const { session } = useUserRole();
+  const { session, userRole } = useUserRole();
   const [loading, setLoading] = useState(true);
   const [user, setUser] = useState(null);
   const [showDatabaseSetup, setShowDatabaseSetup] = useState(false);
@@ -102,6 +103,8 @@ export default function TrainingHome() {
     setShowOnboarding(true);
   };
 
+  const trainingLocked = isTrainingLockedForStudent(userRole);
+
   if (loading) {
     return <p className={ui.subtitle} style={{ textAlign: 'center', padding: '3rem' }}>Loading…</p>;
   }
@@ -123,7 +126,9 @@ export default function TrainingHome() {
             <p className={ui.eyebrow}>Training</p>
             <h1 className={ui.title}>Choose your practice level</h1>
             <p className={ui.subtitle}>
-              Structured exercises aligned with CEFR levels. Track progress with stars as you complete each path.
+              {trainingLocked
+                ? 'Structured exercises aligned with CEFR levels. Training paths are coming soon for students.'
+                : 'Structured exercises aligned with CEFR levels. Track progress with stars as you complete each path.'}
             </p>
           </div>
         </header>
@@ -145,12 +150,14 @@ export default function TrainingHome() {
                 earned={progress.earned}
                 max={progress.max}
                 percent={progress.percent}
-                href={`/training/${levelKey}`}
+                locked={trainingLocked}
+                href={trainingLocked ? undefined : `/training/${levelKey}`}
               />
             );
           })}
         </div>
 
+        {!trainingLocked ? (
         <DeferredBelowFold
           delayMs={1200}
           fallback={
@@ -164,6 +171,7 @@ export default function TrainingHome() {
             <TrainingDashboardStack userId={user?.id} />
           </div>
         </DeferredBelowFold>
+        ) : null}
       </main>
     </>
   );

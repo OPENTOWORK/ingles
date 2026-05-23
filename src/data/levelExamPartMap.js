@@ -16,8 +16,7 @@ export const LEVEL_EXAM_SECTION_RANGES = {
     Speaking: { partMin: 13, partMax: 16 },
   },
   b2: {
-    'Use of English': { partMin: 1, partMax: 4 },
-    Reading: { partMin: 5, partMax: 7 },
+    'Reading and Use of English': { partMin: 1, partMax: 7 },
     Writing: { partMin: 8, partMax: 9 },
     Listening: { partMin: 10, partMax: 13 },
     Speaking: { partMin: 14, partMax: 17 },
@@ -55,8 +54,9 @@ const SKILL_ROUTE_SECTION = {
     'exam-useofenglish': 'Reading',
   },
   b2: {
-    'exam-useofenglish': 'Use of English',
-    'exam-reading': 'Reading',
+    'exam-reading-and-use-of-english': 'Reading and Use of English',
+    'exam-useofenglish': 'Reading and Use of English',
+    'exam-reading': 'Reading and Use of English',
     'exam-writing': 'Writing',
     'exam-listening': 'Listening',
     'exam-speaking': 'Speaking',
@@ -112,7 +112,7 @@ export const LEVEL_SKILL_FOLDER_SECTION = {
     listening: 'Listening',
     speaking: 'Speaking',
     writing: 'Writing',
-    'reading-and-use-of-english': null,
+    'reading-and-use-of-english': 'Reading and Use of English',
   },
   c1: {
     listening: 'Listening',
@@ -132,7 +132,7 @@ const SKILL_FOLDER_PRACTICE_ROUTE = {
   listening: 'exam-listening',
   speaking: 'exam-speaking',
   writing: 'exam-writing',
-  'reading-and-use-of-english': 'exam-reading',
+  'reading-and-use-of-english': 'exam-reading-and-use-of-english',
 };
 
 function resolvePartSectionAndPractice(slug, skillFolder, part) {
@@ -140,6 +140,9 @@ function resolvePartSectionAndPractice(slug, skillFolder, part) {
   const n = Number(part);
 
   if (skillFolder === 'reading-and-use-of-english' && (key === 'b2' || key === 'c1' || key === 'c2')) {
+    if (key === 'b2') {
+      return { sectionTitle: 'Reading and Use of English', practiceRoute: 'exam-reading-and-use-of-english' };
+    }
     if (n >= 1 && n <= 4) {
       return { sectionTitle: 'Use of English', practiceRoute: 'exam-useofenglish' };
     }

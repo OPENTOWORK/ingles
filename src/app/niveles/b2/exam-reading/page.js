@@ -1,5 +1,6 @@
 'use client';
 import { Suspense, useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { usePathname } from 'next/navigation';
 import { useB2ExamPracticeSlot } from '@/hooks/useB2ExamPracticeSlot';
 import { B2ExamPracticeChrome, B2ExamPracticeLayout } from '@/components/b2/B2ExamPracticeChrome';
 import { useB2ExamScoringSession } from '@/hooks/useB2ExamScoringSession';
@@ -64,8 +65,13 @@ function getFormattedEnunciado(rawText = '') {
 }
 
 function B2ReadingExamsPageInner() {
+  const pathname = usePathname();
+  const isCombinedPaper = pathname?.includes('/exam-reading-and-use-of-english');
+  const partMin = isCombinedPaper ? 1 : 5;
+  const partMax = isCombinedPaper ? 7 : 7;
+
   const { examSlot, selectExamSlot } = useB2ExamPracticeSlot();
-  const scoring = useB2ExamScoringSession({ partMin: 5, partMax: 7 });
+  const scoring = useB2ExamScoringSession({ partMin, partMax });
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [partsData, setPartsData] = useState([]);
@@ -151,7 +157,7 @@ function B2ReadingExamsPageInner() {
         const tablePart = partsById[question.parte_id];
         const partName = formatLevelsPartDisplayName(tablePart?.nombre_parte || 'Parte sin nombre');
         const partNumber = Number(partName.match(/\d+/)?.[0] || 0);
-        if (partNumber < 5 || partNumber > 7) return acc;
+        if (partNumber < partMin || partNumber > partMax) return acc;
 
         if (!acc[question.parte_id]) {
           acc[question.parte_id] = {
@@ -179,7 +185,9 @@ function B2ReadingExamsPageInner() {
 
       if (!normalizedParts.length) {
         throw new Error(
-          'No Reading exercises (Parts 5 to 7) for this exam. Check that questions are linked to those parts.',
+          isCombinedPaper
+            ? 'No Reading and Use of English exercises (Parts 1 to 7) for this exam.'
+            : 'No Reading exercises (Parts 5 to 7) for this exam. Check that questions are linked to those parts.',
         );
       }
 
@@ -199,7 +207,7 @@ function B2ReadingExamsPageInner() {
     } finally {
       if (mountedRef.current) setLoading(false);
     }
-  }, [examSlot]);
+  }, [examSlot, isCombinedPaper, partMin, partMax]);
 
   useEffect(() => {
     mountedRef.current = true;
@@ -584,10 +592,12 @@ function B2ReadingExamsPageInner() {
         progressBySlot={scoring.progressBySlot}
         partsInPaper={scoring.partsInPaper}
         examPracticeOpen={scoring.examPracticeOpen}
-        title="B2 Reading Practice"
-        subtitle="Parts 5 to 7"
+        title={isCombinedPaper ? 'B2 Reading and Use of English Practice' : 'B2 Reading Practice'}
+        subtitle={isCombinedPaper ? 'Parts 1 to 7' : 'Parts 5 to 7'}
         timerLabel={timerLabel}
-        refreshLabel="Refresh Reading (5–7)"
+        refreshLabel={
+          isCombinedPaper ? 'Refresh Reading and Use of English (1–7)' : 'Refresh Reading (5–7)'
+        }
         lang="en"
         loading={loading}
         onRefresh={() => loadReadingData()}
@@ -599,7 +609,13 @@ function B2ReadingExamsPageInner() {
         getPartSavedScoreLabel={(part) => scoring.getPartSavedScoreLabel(part, examSlot)}
       >
       <section style={{ margin: '0 auto', width: '100%' }}>
-        {loading && <p style={{ textAlign: 'center' }}>Loading Reading (Parts 5 to 7)…</p>}
+        {loading && (
+          <p style={{ textAlign: 'center' }}>
+            {isCombinedPaper
+              ? 'Loading Reading and Use of English (Parts 1 to 7)…'
+              : 'Loading Reading (Parts 5 to 7)…'}
+          </p>
+        )}
         {!loading && error && <p style={{ textAlign: 'center', color: '#c53030', fontWeight: 600 }}>{error}</p>}
 
         {!loading && !error && (

@@ -1,3 +1,5 @@
+import TrainingComingSoonGate from '@/components/training/TrainingComingSoonGate';
+
 const LEVELS = ['a2', 'b1', 'b2', 'c1', 'c2'];
 
 export function generateStaticParams() {
@@ -5,5 +7,5 @@ export function generateStaticParams() {
 }
 
 export default function TrainingLevelLayout({ children }) {
-  return children;
+  return <TrainingComingSoonGate>{children}</TrainingComingSoonGate>;
 }

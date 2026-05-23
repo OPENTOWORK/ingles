@@ -19,6 +19,7 @@ export const LEVEL_EXAM_VARIANTS = [
 
 const SKILL_UI = {
   'Use of English': { icon: '📝', accent: 'violet', minutesPerTopic: 8 },
+  'Reading and Use of English': { icon: '📘', accent: 'violet', minutesPerTopic: 8 },
   'Reading and Writing': { icon: '📖', accent: 'ocean', minutesPerTopic: 6 },
   Reading: { icon: '📖', accent: 'ocean', minutesPerTopic: 7 },
   Writing: { icon: '✍️', accent: 'emerald', minutesPerTopic: 18 },
@@ -89,8 +90,18 @@ export const LEVEL_EXAM_SKILL_ROUTES = {
     'exam-useofenglish': { section: 'Reading', practiceTitle: 'Use of English Practice' },
   },
   b2: {
-    'exam-useofenglish': { section: 'Use of English', practiceTitle: 'Use of English Practice' },
-    'exam-reading': { section: 'Reading', practiceTitle: 'Reading Practice' },
+    'exam-reading-and-use-of-english': {
+      section: 'Reading and Use of English',
+      practiceTitle: 'Reading and Use of English Practice',
+    },
+    'exam-useofenglish': {
+      section: 'Reading and Use of English',
+      practiceTitle: 'Reading and Use of English Practice',
+    },
+    'exam-reading': {
+      section: 'Reading and Use of English',
+      practiceTitle: 'Reading and Use of English Practice',
+    },
     'exam-writing': { section: 'Writing', practiceTitle: 'Writing Practice' },
     'exam-listening': { section: 'Listening', practiceTitle: 'Listening Practice' },
     'exam-speaking': { section: 'Speaking', practiceTitle: 'Speaking Practice' },
@@ -129,8 +140,7 @@ export const LEVEL_SECTION_PRACTICE_HREF = {
     Speaking: '/niveles/b1/exam-speaking',
   },
   b2: {
-    'Use of English': '/niveles/b2/exam-useofenglish',
-    Reading: '/niveles/b2/exam-reading',
+    'Reading and Use of English': '/niveles/b2/exam-reading-and-use-of-english',
     Writing: '/niveles/b2/exam-writing',
     Listening: '/niveles/b2/exam-listening',
     Speaking: '/niveles/b2/exam-speaking',
@@ -157,6 +167,7 @@ export function getSectionPracticeHref(slug, sectionTitle) {
 
 const SECTION_EMOJI = {
   'Use of English': '📘',
+  'Reading and Use of English': '📘',
   'Reading and Writing': '📖',
   Reading: '📖',
   Writing: '✍️',
@@ -384,7 +395,7 @@ export const NIVELES_LEVEL_HUB = {
     mascotVariant: 4,
     accent: 'ocean',
     sections: {
-      'Use of English': [
+      'Reading and Use of English': [
         {
           text: 'Part 1: Multiple-choice cloze',
           href: '/niveles/b2/reading-and-use-of-english/part-1',
@@ -401,8 +412,6 @@ export const NIVELES_LEVEL_HUB = {
           text: 'Part 4: Key word transformations',
           href: '/niveles/b2/reading-and-use-of-english/part-4',
         },
-      ],
-      Reading: [
         {
           text: 'Part 5: Multiple-choice (reading)',
           href: '/niveles/b2/reading-and-use-of-english/part-5',
@@ -455,11 +464,10 @@ export const NIVELES_LEVEL_HUB = {
     examLinks: [
       { text: '📝 Full Exam', href: '/niveles/b2/exam-1', enabledForStudents: true },
       {
-        text: '📘 Use of English',
-        href: '/niveles/b2/exam-useofenglish',
+        text: '📘 Reading and Use of English',
+        href: '/niveles/b2/exam-reading-and-use-of-english',
         enabledForStudents: true,
       },
-      { text: '📖 Reading', href: '/niveles/b2/exam-reading', enabledForStudents: true },
       { text: '✍️ Writing', href: '/niveles/b2/exam-writing', enabledForStudents: true },
       { text: '🎧 Listening', href: '/niveles/b2/exam-listening', enabledForStudents: true },
       { text: '🗣️ Speaking', href: '/niveles/b2/exam-speaking', enabledForStudents: true },

@@ -21,21 +21,12 @@ export const B2_FULL_EXAM_PARTS_COUNT = B2_FULL_EXAM_PART_MAX - B2_FULL_EXAM_PAR
 
 const FULL_EXAM_SECTIONS = [
   {
-    key: 'uoe',
-    title: 'Use of English',
+    key: 'reading-uoe',
+    title: 'Reading and Use of English',
     emoji: '📘',
-    partsLabel: 'Partes 1–4',
-    href: '/niveles/b2/exam-useofenglish',
+    partsLabel: 'Parts 1–7',
+    href: '/niveles/b2/exam-reading-and-use-of-english',
     partMin: 1,
-    partMax: 4,
-  },
-  {
-    key: 'reading',
-    title: 'Reading',
-    emoji: '📖',
-    partsLabel: 'Partes 5–7',
-    href: '/niveles/b2/exam-reading',
-    partMin: 5,
     partMax: 7,
   },
   {
@@ -178,7 +169,7 @@ function B2FullExamPracticeInner() {
         <div style={{ textAlign: 'center', maxWidth: '640px', margin: '1.5rem auto 0', color: '#4a5568' }}>
           <p style={{ margin: 0, lineHeight: 1.55 }}>
             Elige uno de los <strong>5 exámenes</strong> de Supabase. Cada examen incluye las{' '}
-            <strong>17 partes</strong> del B2 First (Use of English, Reading, Writing, Listening y Speaking).
+            <strong>17 parts</strong> of B2 First (Reading and Use of English, Writing, Listening and Speaking).
             Tu progreso se guarda automáticamente por parte y examen.
           </p>
         </div>

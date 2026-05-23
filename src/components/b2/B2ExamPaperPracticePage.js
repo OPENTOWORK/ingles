@@ -716,8 +716,23 @@ function B2ExamPaperPracticePageInner({
     return null;
   }, [partNumber, listeningReadyClips]);
 
+  /** Writing parts 8–9: long-form textarea + Dralo AI (overrides open-input UI). */
+  const isLongFormWritingPart = Boolean(
+    longFormWritingWithAi && partNumber >= 8 && partNumber <= 9 && selectedPart,
+  );
+
+  const showLongWritingWithAi = Boolean(
+    isLongFormWritingPart && (selectedQuestion?.preguntaId || selectedPart?.id),
+  );
+
+  const longWritingStorageKey = showLongWritingWithAi
+    ? `b2-exam-writing-${selectedQuestion?.preguntaId || selectedPart?.id || 'part'}`
+    : '';
+
   /** Writing: inputs abiertos; en Listening parte 11 van en el layout por ítems. */
-  const useOpenInputUi = Boolean(hasOpenAnswerSlots && !useListeningItemLayout);
+  const useOpenInputUi = Boolean(
+    hasOpenAnswerSlots && !useListeningItemLayout && !isLongFormWritingPart,
+  );
 
   const partScoreMetrics = useMemo(
     () =>
@@ -742,14 +757,6 @@ function B2ExamPaperPracticePageInner({
       selectedQuestion?.preguntaId,
     ],
   );
-
-  const showLongWritingWithAi = Boolean(
-    longFormWritingWithAi && partNumber >= 8 && partNumber <= 9 && selectedQuestion?.preguntaId,
-  );
-
-  const longWritingStorageKey = showLongWritingWithAi
-    ? `b2-exam-writing-${selectedQuestion.preguntaId}`
-    : '';
 
   const sectionMaxWidth = showLongWritingWithAi ? 'min(960px, 100%)' : '100%';
 
@@ -1615,6 +1622,7 @@ function B2ExamPaperPracticePageInner({
                       taskInstructions={selectedPartContent.enunciado || ''}
                       taskInputText={selectedPartContent.texto || ''}
                       onScoresReady={handleWritingScoresReady}
+                      lang={lang}
                     />
                   ) : null}
 

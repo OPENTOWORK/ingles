@@ -8,6 +8,7 @@ import { usePlacementAccess } from '@/context/PlacementAccessContext';
 import PageHero from '@/components/PageHero';
 import { TeoriaGlobalStyles } from '@/components/theory/TeoriaStyles';
 import ExamTheorySection from '@/components/niveles/ExamTheorySection';
+import { isNivelesLevelComingSoonForUser } from '@/constants/studentFeatureAccess';
 
 const NIVELES = [
   {
@@ -94,6 +95,7 @@ export default function Niveles() {
   const isStudent = userRole === 'student' || userRole === 'alumno';
 
   const getLockLabel = (nivel) => {
+    if (isNivelesLevelComingSoonForUser(userRole, nivel)) return 'COMING SOON';
     if (!isStudent || !isLevelLocked(nivel)) return null;
     if (placementLoading) return 'Comprobando…';
     if (!hasPlacementResult) return 'Placement test requerido';
@@ -123,8 +125,10 @@ export default function Niveles() {
           </div>
           <ul className="area-grid niveles-grid">
             {NIVELES.map((nivelData) => {
+              const isComingSoon = isNivelesLevelComingSoonForUser(userRole, nivelData.nivel);
               const isLockedForStudent =
-                isStudent && (placementLoading || isLevelLocked(nivelData.nivel));
+                isComingSoon ||
+                (isStudent && (placementLoading || isLevelLocked(nivelData.nivel)));
               const lockLabel = getLockLabel(nivelData.nivel);
 
               return (

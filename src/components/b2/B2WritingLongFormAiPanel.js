@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import { buildClientApiUrl, getStaticApiHint } from '@/utils/clientApiUrl';
 
 function countWords(text) {
@@ -10,19 +10,43 @@ function countWords(text) {
     .filter(Boolean).length;
 }
 
+/** Simple markdown-ish lines → HTML for Cambridge feedback (no external lib). */
+function formatCambridgeFeedbackHtml(text) {
+  const escaped = String(text || '')
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;');
+
+  return escaped
+    .split('\n')
+    .map((line) => {
+      const trimmed = line.trim();
+      if (!trimmed) return '<br />';
+      if (/^#{1,3}\s+/.test(trimmed)) {
+        const title = trimmed.replace(/^#{1,3}\s+/, '');
+        return `<h4 class="levels-b2-writing-panel__feedback-heading">${title}</h4>`;
+      }
+      if (/^[-*]\s+/.test(trimmed)) {
+        const item = trimmed.replace(/^[-*]\s+/, '');
+        return `<p class="levels-b2-writing-panel__feedback-li">• ${item}</p>`;
+      }
+      if (/^→/.test(trimmed) || /→/.test(trimmed)) {
+        return `<p class="levels-b2-writing-panel__feedback-correction">${trimmed}</p>`;
+      }
+      return `<p class="levels-b2-writing-panel__feedback-p">${trimmed}</p>`;
+    })
+    .join('');
+}
+
+const CRITERIA = [
+  { key: 'content', label: 'Content' },
+  { key: 'communication', label: 'Communicative Achievement' },
+  { key: 'organisation', label: 'Organisation' },
+  { key: 'language', label: 'Language' },
+];
+
 /**
- * Long-form writing area + Dralo AI feedback (B2 First style).
- *
- * @param {object} props
- * @param {string} props.storageKey — localStorage key per task (e.g. pregunta_id)
- * @param {number} [props.wordMin]
- * @param {number} [props.wordMax]
- * @param {string} [props.heading] — title above the writing area
- * @param {string} [props.taskInstructions] — task prompt (from Supabase)
- * @param {string} [props.taskInputText] — supporting text, bullet points, etc.
- * @param {string} [props.partLabel] — part name (e.g. Part 8)
- * @param {string} [props.partDescription] — fixed part description if any
- * @param {(scores: { content: number, communication: number, organisation: number, language: number, total: number, passed: boolean, required: number }) => void} [props.onScoresReady]
+ * Long-form writing area + Cambridge B2 First AI correction.
  */
 export default function B2WritingLongFormAiPanel({
   storageKey,
@@ -34,11 +58,15 @@ export default function B2WritingLongFormAiPanel({
   partLabel = '',
   partDescription = '',
   onScoresReady,
+  lang = 'en',
 }) {
+  const isEn = lang === 'en';
   const [essay, setEssay] = useState('');
   const [aiFeedback, setAiFeedback] = useState('');
+  const [scores, setScores] = useState(null);
   const [loading, setLoading] = useState(false);
   const [lastError, setLastError] = useState('');
+  const feedbackRef = useRef(null);
 
   useEffect(() => {
     if (typeof window === 'undefined' || !storageKey) return;
@@ -49,6 +77,7 @@ export default function B2WritingLongFormAiPanel({
       setEssay('');
     }
     setAiFeedback('');
+    setScores(null);
     setLastError('');
   }, [storageKey]);
 
@@ -73,9 +102,13 @@ export default function B2WritingLongFormAiPanel({
   const meetsWordRange = wordCount >= wordMin && wordCount <= wordMax;
 
   const evaluateEssay = async () => {
+    const text = essay.trim();
+    if (!text) return;
+
     setLastError('');
     setLoading(true);
     setAiFeedback('');
+    setScores(null);
 
     try {
       const externalBaseConfigured = Boolean(
@@ -85,7 +118,7 @@ export default function B2WritingLongFormAiPanel({
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          essay,
+          essay: text,
           level: 'b2',
           wordMin,
           wordMax,
@@ -97,22 +130,52 @@ export default function B2WritingLongFormAiPanel({
           },
         }),
       });
-      const data = await res.json();
 
-      if (res.ok) {
-        setAiFeedback(data.feedback || '');
-        if (data.scores && typeof onScoresReady === 'function') {
-          onScoresReady(data.scores);
-        }
-      } else {
+      const raw = await res.text();
+      let data = {};
+      try {
+        data = raw ? JSON.parse(raw) : {};
+      } catch {
+        throw new Error(
+          isEn
+            ? 'Invalid response from the correction service.'
+            : 'Respuesta inválida del servicio de corrección.',
+        );
+      }
+
+      if (!res.ok) {
         const hint =
           !externalBaseConfigured && (res.status === 404 || res.status === 405)
             ? ` ${getStaticApiHint()}`
             : '';
-        setLastError((data.error || 'Unknown error.') + hint);
+        throw new Error((data.error || `Error ${res.status}`) + hint);
       }
-    } catch {
-      setLastError('Could not connect to Dralo for feedback.');
+
+      const feedbackText = String(data.feedback || '').trim();
+      if (!feedbackText) {
+        throw new Error(
+          isEn
+            ? 'The examiner returned no feedback. Please try again.'
+            : 'El examinador no devolvió corrección. Inténtalo de nuevo.',
+        );
+      }
+
+      setAiFeedback(feedbackText);
+      if (data.scores && typeof data.scores === 'object') {
+        setScores(data.scores);
+        if (typeof onScoresReady === 'function') {
+          onScoresReady(data.scores);
+        }
+      }
+
+      requestAnimationFrame(() => {
+        feedbackRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      });
+    } catch (err) {
+      setLastError(
+        err?.message ||
+          (isEn ? 'Could not connect to Dralo for feedback.' : 'No se pudo conectar con Dralo para la corrección.'),
+      );
     } finally {
       setLoading(false);
     }
@@ -124,19 +187,24 @@ export default function B2WritingLongFormAiPanel({
 
       <div className="levels-b2-writing-panel__meta">
         <span>
-          Recommended length (B2 First): <strong>{wordMin}–{wordMax} words</strong>
+          {isEn ? 'Cambridge B2 First length' : 'Extensión B2 First'}:{' '}
+          <strong>
+            {wordMin}–{wordMax} {isEn ? 'words' : 'palabras'}
+          </strong>
         </span>
         <span>
-          Words: <strong>{wordCount}</strong>
+          {isEn ? 'Words' : 'Palabras'}: <strong>{wordCount}</strong>
         </span>
         {wordCount > 0 && !meetsWordRange ? (
           <span className="levels-b2-writing-panel__meta-note levels-b2-writing-panel__meta-note--warn">
-            Not yet within {wordMin}–{wordMax} words (you can still submit for feedback).
+            {isEn
+              ? `Outside ${wordMin}–${wordMax} words — you can still submit for Cambridge-style feedback.`
+              : `Fuera de ${wordMin}–${wordMax} palabras — puedes enviar igualmente para corrección.`}
           </span>
         ) : null}
         {wordCount > 0 && meetsWordRange ? (
           <span className="levels-b2-writing-panel__meta-note levels-b2-writing-panel__meta-note--ok">
-            Word count within range.
+            {isEn ? 'Word count within range.' : 'Extensión dentro del rango.'}
           </span>
         ) : null}
       </div>
@@ -144,25 +212,34 @@ export default function B2WritingLongFormAiPanel({
       <textarea
         className="levels-b2-writing-panel__textarea"
         rows={18}
-        placeholder="Write your full text here (essay, email, review, etc.)…"
+        placeholder={
+          isEn
+            ? 'Write your full text here (essay, email, review, etc.)…'
+            : 'Escribe aquí tu texto completo (essay, email, review, etc.)…'
+        }
         value={essay}
         onChange={(e) => setEssay(e.target.value)}
         spellCheck
         aria-label="B2 writing area"
       />
 
-      {essay.trim().length > 0 ? (
-        <div className="levels-b2-writing-panel__actions">
-          <button
-            type="button"
-            className="levels-b2-writing-panel__submit"
-            onClick={() => void evaluateEssay()}
-            disabled={loading}
-          >
-            {loading ? 'Submitting to Dralo…' : 'Submit to Dralo for feedback'}
-          </button>
-        </div>
-      ) : null}
+      <div className="levels-b2-writing-panel__actions">
+        <button
+          type="button"
+          className="levels-b2-writing-panel__submit"
+          onClick={() => void evaluateEssay()}
+          disabled={loading || !essay.trim()}
+          aria-disabled={loading || !essay.trim()}
+        >
+          {loading
+            ? isEn
+              ? 'Checking with Cambridge criteria…'
+              : 'Corrigiendo con criterios Cambridge…'
+            : isEn
+              ? 'Check with Dralo'
+              : 'Corregir con Dralo'}
+        </button>
+      </div>
 
       {lastError ? (
         <p className="levels-b2-writing-panel__error" role="alert">
@@ -170,12 +247,46 @@ export default function B2WritingLongFormAiPanel({
         </p>
       ) : null}
 
+      {scores ? (
+        <div className="levels-b2-writing-panel__scores" ref={feedbackRef}>
+          <p className="levels-exam-split__section-title">
+            {isEn ? 'Cambridge B2 First — Scores' : 'Cambridge B2 First — Puntuación'}
+          </p>
+          <div className="levels-b2-writing-panel__scores-grid">
+            {CRITERIA.map(({ key, label }) => (
+              <div key={key} className="levels-b2-writing-panel__score-card">
+                <span className="levels-b2-writing-panel__score-label">{label}</span>
+                <strong className="levels-b2-writing-panel__score-value">
+                  {scores[key] ?? 0}/5
+                </strong>
+              </div>
+            ))}
+          </div>
+          <div
+            className={`levels-b2-writing-panel__total ${
+              scores.passed
+                ? 'levels-b2-writing-panel__total--pass'
+                : 'levels-b2-writing-panel__total--fail'
+            }`}
+          >
+            <span>
+              {isEn ? 'Total' : 'Total'}: <strong>{scores.total ?? 0}/20</strong>
+              {' · '}
+              {isEn ? 'Pass' : 'Aprobado'}: {scores.required ?? 12}/20
+            </span>
+            <span>{scores.passed ? (isEn ? '✅ Pass' : '✅ Aprobado') : (isEn ? '❌ Not yet' : '❌ Aún no')}</span>
+          </div>
+        </div>
+      ) : null}
+
       {aiFeedback ? (
-        <div className="levels-b2-writing-panel__feedback">
-          <p className="levels-exam-split__section-title">Dralo feedback (B2 First)</p>
+        <div className="levels-b2-writing-panel__feedback" ref={scores ? undefined : feedbackRef}>
+          <p className="levels-exam-split__section-title">
+            {isEn ? 'Cambridge examiner feedback' : 'Corrección del examinador Cambridge'}
+          </p>
           <div
             className="levels-b2-writing-panel__feedback-body"
-            dangerouslySetInnerHTML={{ __html: String(aiFeedback).replace(/\n/g, '<br />') }}
+            dangerouslySetInnerHTML={{ __html: formatCambridgeFeedbackHtml(aiFeedback) }}
           />
         </div>
       ) : null}
