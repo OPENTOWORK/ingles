@@ -14,6 +14,7 @@ import ExamNavigationGuard from '../components/ExamNavigationGuard';
 import { useActivityHeartbeat } from '@/hooks/useActivityHeartbeat';
 import { usePageViewTracker } from '@/hooks/usePageViewTracker';
 import DeferredSiteAssistant from '@/components/chat/DeferredSiteAssistant';
+import { clearAssistantDismissed } from '@/components/chat/SiteAssistantWidget';
 import DeferredAppSideMenu from '@/components/layout/DeferredAppSideMenu';
 import RouteLoadingMascot from '@/components/RouteLoadingMascot';
 import PlacementTestNotice from '@/components/layout/PlacementTestNotice';
@@ -114,6 +115,7 @@ export default function RootLayoutClient({ children }) {
     const { data: sub } = supabase.auth.onAuthStateChange((event, newSession) => {
       if (event === 'SIGNED_IN' && newSession) {
         if (cancelled) return;
+        clearAssistantDismissed();
         lastAccessTokenRef.current = newSession.access_token ?? null;
         roleFetchedForUserIdRef.current = null;
         setSession(newSession);

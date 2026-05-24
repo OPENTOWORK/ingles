@@ -8,14 +8,43 @@ import './site-assistant.css';
 const WELCOME =
   '¡Hola! Soy el asistente de Dralo. Pregúntame cómo usar la web: dónde practicar, niveles, teoría, tu cuenta o soporte.';
 
+const DISMISS_STORAGE_KEY = 'dralo_assistant_dismissed';
+
+function isAssistantDismissed() {
+  if (typeof window === 'undefined') return false;
+  try {
+    return sessionStorage.getItem(DISMISS_STORAGE_KEY) === '1';
+  } catch {
+    return false;
+  }
+}
+
+function markAssistantDismissed() {
+  try {
+    sessionStorage.setItem(DISMISS_STORAGE_KEY, '1');
+  } catch {
+    /* ignore */
+  }
+}
+
+export function clearAssistantDismissed() {
+  try {
+    sessionStorage.removeItem(DISMISS_STORAGE_KEY);
+  } catch {
+    /* ignore */
+  }
+}
+
 const SUGGESTIONS = [
   '¿Cómo empiezo a practicar?',
   '¿Dónde está el test de nivel?',
   '¿Cómo contacto con soporte?',
 ];
 
-export default function SiteAssistantWidget() {
-  const [open, setOpen] = useState(false);
+export default function SiteAssistantWidget({ defaultOpen = true } = {}) {
+  const [open, setOpen] = useState(() =>
+    defaultOpen ? !isAssistantDismissed() : false,
+  );
   const [messages, setMessages] = useState([{ role: 'assistant', content: WELCOME }]);
   const [input, setInput] = useState('');
   const [loading, setLoading] = useState(false);
@@ -76,6 +105,16 @@ export default function SiteAssistantWidget() {
   const handleSubmit = (e) => {
     e.preventDefault();
     sendMessage(input);
+  };
+
+  const handleToggle = () => {
+    setOpen((value) => {
+      if (value) {
+        markAssistantDismissed();
+        return false;
+      }
+      return true;
+    });
   };
 
   return (
@@ -158,7 +197,7 @@ export default function SiteAssistantWidget() {
       <button
         type="button"
         className={`site-assistant-fab${open ? ' is-open' : ''}`}
-        onClick={() => setOpen((v) => !v)}
+        onClick={handleToggle}
         aria-expanded={open}
         aria-label={open ? 'Cerrar asistente' : 'Abrir asistente de ayuda'}
       >
