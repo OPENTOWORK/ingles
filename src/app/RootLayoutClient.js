@@ -16,6 +16,7 @@ import { usePageViewTracker } from '@/hooks/usePageViewTracker';
 import DeferredSiteAssistant from '@/components/chat/DeferredSiteAssistant';
 import DeferredAppSideMenu from '@/components/layout/DeferredAppSideMenu';
 import RouteLoadingMascot from '@/components/RouteLoadingMascot';
+import PlacementTestNotice from '@/components/layout/PlacementTestNotice';
 
 const Toaster = dynamic(
   () => import('react-hot-toast').then((mod) => ({ default: mod.Toaster })),
@@ -268,16 +269,17 @@ export default function RootLayoutClient({ children }) {
         </div>
       </header>
 
-      <main className="page-content">
-        <UserRoleProvider userRole={userRole} session={session}>
-          <PlacementAccessProvider session={session} userRole={userRole}>
+      <UserRoleProvider userRole={userRole} session={session}>
+        <PlacementAccessProvider session={session} userRole={userRole}>
+          <PlacementTestNotice />
+          <main className="page-content">
             <ExamNavigationGuard>
               {children}
             </ExamNavigationGuard>
             {pathname === '/' && <DeferredAppSideMenu defaultOpen />}
-          </PlacementAccessProvider>
-        </UserRoleProvider>
-      </main>
+          </main>
+        </PlacementAccessProvider>
+      </UserRoleProvider>
 
       <DeferredSiteAssistant enabled={Boolean(session)} />
 

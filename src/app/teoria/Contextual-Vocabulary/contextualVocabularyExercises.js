@@ -294,6 +294,6 @@ const config = {
   ]
 };
 
-export function buildContextualVocabularyExercises() {
-  return buildTheoryExercises('contextual-vocabulary', config);
+export function buildContextualVocabularyExercises(level = 'B2', primaryLevel = 'B2') {
+  return buildTheoryExercises('contextual-vocabulary', config, level, primaryLevel);
 }

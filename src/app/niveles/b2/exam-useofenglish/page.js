@@ -1,5 +1,6 @@
 'use client';
 import { Suspense, useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { useSearchParams } from 'next/navigation';
 import LevelsCategoryTimer from '@/components/levels/LevelsCategoryTimer';
 import LevelsPartScorePanel from '@/components/levels/LevelsPartScorePanel';
 import LevelsPartFinishBanner from '@/components/levels/LevelsPartFinishBanner';
@@ -7,10 +8,9 @@ import LevelsAnswerJustification from '@/components/levels/LevelsAnswerJustifica
 import { useLevelsCategoryTimer } from '@/hooks/useLevelsCategoryTimer';
 import { computeLevelsPartScore } from '@/utils/levelsPaperScoreMetrics';
 import { postLevelsAnswerJustification } from '@/utils/levelsJustifyClient';
-import Link from 'next/link';
 import { supabase } from '@/utils/supabaseClient';
 import { extractTextoBloque, splitPart1TextoYPreguntas, parsePart1QuestionOptions } from '@/utils/b2ExamTextBlocks';
-import { resolveB2ExamenId, fetchB2PreguntasByExamen } from '@/utils/b2ResolveExam';
+import { fetchB2PreguntasByExamen } from '@/utils/b2ResolveExam';
 import { formatLevelsPartDisplayName } from '@/utils/formatLevelsPartDisplayName';
 import { useUserRole } from '@/context/UserRoleContext';
 import { getSessionUserId, mergeLevelsEstadisticas } from '@/utils/levelsEstadisticas';
@@ -21,12 +21,17 @@ import {
 import { getUoePartScoring } from '@/utils/levelsUoePartScoring';
 import { getOpenAnswerMap, inferOpenQuestionNumbersFromPrompt, normalizeText } from '@/utils/b2ExamPaperShared';
 import { useB2ExamPracticeSlot } from '@/hooks/useB2ExamPracticeSlot';
+import { useB2AutoOpenExamFromUrl } from '@/hooks/useB2AutoOpenExamFromUrl';
 import { fetchUseOfEnglishPuntuacionesProgress } from '@/utils/levelsPuntuacionesProgress';
 import { getCachedB2Level, getCachedB2ExamenIdsBySlot } from '@/utils/b2LevelCache';
 import { B2ExamSlotProgressPicker } from '@/components/b2/B2ExamSlotProgressPicker';
 import { B2ExamPracticeContent, B2ExamQuestionItem } from '@/components/b2/B2ExamPracticeContent';
+import B2ExamPracticeModuleNav from '@/components/b2/B2ExamPracticeModuleNav';
+
+const UOE_PAGE_PART_MAX = 4;
 
 function UseOfEnglishExamsPageInner() {
+  const searchParams = useSearchParams();
   const { userRole } = useUserRole();
   const { examSlot, selectExamSlot } = useB2ExamPracticeSlot();
   const [loading, setLoading] = useState(true);
@@ -70,25 +75,18 @@ function UseOfEnglishExamsPageInner() {
         throw new Error('No se pudo obtener el nivel B2 desde la base de datos.');
       }
 
+      let idsBySlot = {};
       if (mountedRef.current) {
         setB2LevelId(levelData.id);
-        const idsBySlot = await getCachedB2ExamenIdsBySlot(supabase, levelData.id);
+        idsBySlot = await getCachedB2ExamenIdsBySlot(supabase, levelData.id);
         setExamenIdBySlot(idsBySlot);
+      } else {
+        idsBySlot = await getCachedB2ExamenIdsBySlot(supabase, levelData.id);
       }
 
-      const { examenId, error: examResolveError } = await resolveB2ExamenId(supabase, levelData.id, {
-        slot: examSlot,
-      });
-      if (examResolveError || !examenId) {
-        const detail =
-          typeof examResolveError?.message === 'string'
-            ? examResolveError.message
-            : examResolveError?.details || '';
-        throw new Error(
-          detail
-            ? `No se pudo obtener el examen de B2. (${detail})`
-            : 'No se pudo obtener el examen de B2.',
-        );
+      const examenId = idsBySlot[examSlot];
+      if (!examenId) {
+        throw new Error(`No se pudo obtener el examen ${examSlot} de B2.`);
       }
 
       if (mountedRef.current) {
@@ -227,6 +225,17 @@ function UseOfEnglishExamsPageInner() {
   }, [loadUseOfEnglishData]);
 
   useEffect(() => {
+    const qPart = searchParams.get('part');
+    if (!qPart || !partsData.length) return;
+    const targetNumber = Number(qPart);
+    if (!Number.isFinite(targetNumber)) return;
+    const target = partsData.find(
+      (p) => Number(p.nombre.match(/\d+/)?.[0] || 0) === targetNumber,
+    );
+    if (target) setSelectedPartId(target.id);
+  }, [searchParams, partsData]);
+
+  useEffect(() => {
     setCanSeeRefreshControls(userRole === 'admin' || userRole === 'administrador');
   }, [userRole]);
 
@@ -239,13 +248,6 @@ function UseOfEnglishExamsPageInner() {
     });
     if (mountedRef.current) setProgressBySlot(bySlot);
   }, [examenIdBySlot]);
-
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      void refreshPuntuacionesProgress();
-    }, 450);
-    return () => clearTimeout(timer);
-  }, [refreshPuntuacionesProgress, checkedQuestions, openChecks]);
 
   const selectedPart = useMemo(
     () => partsData.find((part) => part.id === selectedPartId),
@@ -661,6 +663,12 @@ function UseOfEnglishExamsPageInner() {
     })();
   };
 
+  useB2AutoOpenExamFromUrl({
+    examPracticeOpen,
+    handleSelectExam: (_selectExamSlot, n) => handleSelectExam(n),
+    selectExamSlot,
+  });
+
   useEffect(() => {
     if (!examPracticeOpen) return;
     void (async () => {
@@ -669,6 +677,20 @@ function UseOfEnglishExamsPageInner() {
       void refreshPuntuacionesProgress();
     })();
   }, [examPracticeOpen, refreshPuntuacionesProgress]);
+
+  const handleContinueInPage = useCallback(() => {
+    const sorted = [...partsData].sort((a, b) => {
+      const an = Number(a.nombre.match(/\d+/)?.[0] || 0);
+      const bn = Number(b.nombre.match(/\d+/)?.[0] || 0);
+      return an - bn;
+    });
+    const currentIdx = sorted.findIndex((p) => p.id === selectedPartId);
+    if (currentIdx < 0 || currentIdx >= sorted.length - 1) return;
+    setSelectedPartId(sorted[currentIdx + 1].id);
+    if (typeof window !== 'undefined') {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  }, [partsData, selectedPartId]);
 
   return (
     <main
@@ -1053,46 +1075,13 @@ function UseOfEnglishExamsPageInner() {
         )}
       </section>
 
-      <div style={{ textAlign: 'center', marginTop: '2rem', display: 'flex', flexWrap: 'wrap', gap: '0.75rem', justifyContent: 'center' }}>
-        <Link
-          href={`/niveles/b2/exam-1?examen=${examSlot}`}
-          style={{
-            textDecoration: 'none',
-            color: '#047857',
-            fontWeight: 'bold',
-            display: 'inline-block',
-            padding: '0.75rem 1.25rem',
-            border: '2px solid #059669',
-            borderRadius: '6px',
-          }}
-        >
-          ← Full Exam
-        </Link>
-        <Link href="/niveles/b2">
-          <div
-            style={{
-              textDecoration: 'none',
-              color: '#0070f3',
-              fontWeight: 'bold',
-              display: 'inline-block',
-              padding: '0.75rem 1.25rem',
-              border: '2px solid #0070f3',
-              borderRadius: '6px',
-              transition: 'background 0.3s, color 0.3s',
-            }}
-            onMouseOver={(e) => {
-              e.currentTarget.style.backgroundColor = '#0070f3';
-              e.currentTarget.style.color = '#fff';
-            }}
-            onMouseOut={(e) => {
-              e.currentTarget.style.backgroundColor = 'transparent';
-              e.currentTarget.style.color = '#0070f3';
-            }}
-          >
-            ← Back to B2 Overview
-          </div>
-        </Link>
-      </div>
+      <B2ExamPracticeModuleNav
+        partNumber={partNumberUoe}
+        pagePartMax={UOE_PAGE_PART_MAX}
+        examSlot={examSlot}
+        onContinueInPage={handleContinueInPage}
+        lang="en"
+      />
         </div>
       )}
     </main>

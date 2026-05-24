@@ -11,6 +11,8 @@ export function clampB2ExamSlot(value) {
   return Math.min(Math.max(Math.floor(n), 1), B2_EXAM_SLOT_MAX);
 }
 
+import { getCachedB2ExamenIdsBySlot } from '@/utils/b2LevelCache';
+
 /** Orden estable: número en `nombre` ("Examen 3"), luego por id. */
 export function sortLevelsExamenesRows(rows) {
   return [...(rows || [])].sort((a, b) => {
@@ -40,25 +42,16 @@ export async function resolveB2ExamenId(supabase, levelId, options = {}) {
   const slot = clampB2ExamSlot(options.slot ?? options.examSlot ?? 1);
   const firstRow = (res) => (Array.isArray(res.data) && res.data[0] ? res.data[0] : null);
 
-  const examList = await supabase
-    .from('levels_examenes')
-    .select('id, nombre')
-    .eq('level_id', levelId);
-
-  if (examList.error) {
-    return { examenId: null, error: examList.error };
+  const idsBySlot = await getCachedB2ExamenIdsBySlot(supabase, levelId);
+  const cachedId = idsBySlot[slot];
+  if (cachedId) {
+    return { examenId: cachedId, error: null };
   }
-
-  const ordered = sortLevelsExamenesRows(examList.data);
-  if (ordered.length > 0) {
-    const pick = ordered[slot - 1];
-    if (pick) {
-      return { examenId: pick.id, error: null };
-    }
+  if (Object.keys(idsBySlot).length > 0) {
     return {
       examenId: null,
       error: {
-        message: `No existe el examen ${slot} para B2 (hay ${ordered.length} en levels_examenes).`,
+        message: `No existe el examen ${slot} para B2 (hay ${Object.keys(idsBySlot).length} en levels_examenes).`,
       },
     };
   }

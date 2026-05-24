@@ -296,6 +296,6 @@ const config = {
   ]
 };
 
-export function buildListeningTypesExercises() {
-  return buildTheoryExercises('listening-types', config);
+export function buildListeningTypesExercises(level = 'B2', primaryLevel = 'B2') {
+  return buildTheoryExercises('listening-types', config, level, primaryLevel);
 }

@@ -296,6 +296,6 @@ const config = {
   ]
 };
 
-export function buildReadingForGistExercises() {
-  return buildTheoryExercises('reading-for-gist', config);
+export function buildReadingForGistExercises(level = 'B2', primaryLevel = 'B2') {
+  return buildTheoryExercises('reading-for-gist', config, level, primaryLevel);
 }

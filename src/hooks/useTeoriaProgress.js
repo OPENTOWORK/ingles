@@ -5,6 +5,7 @@ import {
   TEORIA_PROGRESS_EVENT,
   computeTeoriaProgressSummary,
 } from '@/lib/teoriaProgress';
+import { THEORY_EXERCISE_PROGRESS_EVENT } from '@/lib/theoryExerciseProgress';
 
 export function useTeoriaProgress(userId, accessToken) {
   const [dbRows, setDbRows] = useState([]);
@@ -21,10 +22,12 @@ export function useTeoriaProgress(userId, accessToken) {
     };
     window.addEventListener('storage', onUpdate);
     window.addEventListener(TEORIA_PROGRESS_EVENT, onUpdate);
+    window.addEventListener(THEORY_EXERCISE_PROGRESS_EVENT, onUpdate);
     return () => {
       if (debounceId) clearTimeout(debounceId);
       window.removeEventListener('storage', onUpdate);
       window.removeEventListener(TEORIA_PROGRESS_EVENT, onUpdate);
+    window.removeEventListener(THEORY_EXERCISE_PROGRESS_EVENT, onUpdate);
     };
   }, [refresh]);
 

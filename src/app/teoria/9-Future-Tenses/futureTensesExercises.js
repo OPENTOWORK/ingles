@@ -294,6 +294,6 @@ const config = {
   ]
 };
 
-export function build9FutureTensesExercises() {
-  return buildTheoryExercises('future-tenses', config);
+export function build9FutureTensesExercises(level = 'B2', primaryLevel = 'B2') {
+  return buildTheoryExercises('future-tenses', config, level, primaryLevel);
 }

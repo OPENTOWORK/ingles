@@ -294,6 +294,6 @@ const config = {
   ]
 };
 
-export function build11SentenceStructuresExercises() {
-  return buildTheoryExercises('sentence-structures', config);
+export function build11SentenceStructuresExercises(level = 'B2', primaryLevel = 'B2') {
+  return buildTheoryExercises('sentence-structures', config, level, primaryLevel);
 }

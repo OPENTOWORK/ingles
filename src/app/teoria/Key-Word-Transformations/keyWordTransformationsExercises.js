@@ -296,6 +296,6 @@ const config = {
   ]
 };
 
-export function buildKeyWordTransformationsExercises() {
-  return buildTheoryExercises('key-word-transformations', config);
+export function buildKeyWordTransformationsExercises(level = 'B2', primaryLevel = 'B2') {
+  return buildTheoryExercises('key-word-transformations', config, level, primaryLevel);
 }

@@ -296,6 +296,6 @@ const config = {
   ]
 };
 
-export function buildTextOrganizationStructureExercises() {
-  return buildTheoryExercises('text-organization-struct', config);
+export function buildTextOrganizationStructureExercises(level = 'B2', primaryLevel = 'B2') {
+  return buildTheoryExercises('text-organization-struct', config, level, primaryLevel);
 }

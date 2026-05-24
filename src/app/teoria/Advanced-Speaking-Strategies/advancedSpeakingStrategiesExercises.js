@@ -286,6 +286,6 @@ const config = {
   ]
 };
 
-export function buildAdvancedSpeakingStrategiesExercises() {
-  return buildTheoryExercises('advanced-speaking-strate', config);
+export function buildAdvancedSpeakingStrategiesExercises(level = 'B2', primaryLevel = 'B2') {
+  return buildTheoryExercises('advanced-speaking-strate', config, level, primaryLevel);
 }

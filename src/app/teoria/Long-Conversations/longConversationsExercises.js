@@ -294,6 +294,6 @@ const config = {
   ]
 };
 
-export function buildLongConversationsExercises() {
-  return buildTheoryExercises('long-conversations', config);
+export function buildLongConversationsExercises(level = 'B2', primaryLevel = 'B2') {
+  return buildTheoryExercises('long-conversations', config, level, primaryLevel);
 }

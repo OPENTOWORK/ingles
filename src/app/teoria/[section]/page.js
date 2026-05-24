@@ -1,9 +1,16 @@
 import { notFound } from 'next/navigation';
 import TeoriaSectionGate from '@/components/theory/TeoriaSectionGate';
-import { SECTION_CATALOG, getSectionBySlug } from '@/data/teoriaSections';
+import {
+  EXAM_SECTION_LEGACY_SLUGS,
+  SECTION_CATALOG,
+  getSectionBySlug,
+} from '@/data/teoriaSections';
 
 export function generateStaticParams() {
-  return SECTION_CATALOG.map((s) => ({ section: s.slug }));
+  return [
+    ...SECTION_CATALOG.map((s) => ({ section: s.slug })),
+    ...EXAM_SECTION_LEGACY_SLUGS.map((section) => ({ section })),
+  ];
 }
 
 export function generateMetadata({ params }) {

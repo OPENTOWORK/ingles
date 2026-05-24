@@ -284,6 +284,6 @@ const config = {
   ]
 };
 
-export function build3PronounsExercises() {
-  return buildTheoryExercises('pronouns', config);
+export function build3PronounsExercises(level = 'B2', primaryLevel = 'B2') {
+  return buildTheoryExercises('pronouns', config, level, primaryLevel);
 }

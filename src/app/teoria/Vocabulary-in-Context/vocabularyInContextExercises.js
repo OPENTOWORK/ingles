@@ -296,6 +296,6 @@ const config = {
   ]
 };
 
-export function buildVocabularyInContextExercises() {
-  return buildTheoryExercises('vocabulary-in-context', config);
+export function buildVocabularyInContextExercises(level = 'B2', primaryLevel = 'B2') {
+  return buildTheoryExercises('vocabulary-in-context', config, level, primaryLevel);
 }

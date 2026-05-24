@@ -296,6 +296,6 @@ const config = {
   ]
 };
 
-export function buildCohesionAndConnectorsExercises() {
-  return buildTheoryExercises('cohesion-and-connectors', config);
+export function buildCohesionAndConnectorsExercises(level = 'B2', primaryLevel = 'B2') {
+  return buildTheoryExercises('cohesion-and-connectors', config, level, primaryLevel);
 }

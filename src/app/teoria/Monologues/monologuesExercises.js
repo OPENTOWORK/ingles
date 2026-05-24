@@ -296,6 +296,6 @@ const config = {
   ]
 };
 
-export function buildMonologuesExercises() {
-  return buildTheoryExercises('monologues', config);
+export function buildMonologuesExercises(level = 'B2', primaryLevel = 'B2') {
+  return buildTheoryExercises('monologues', config, level, primaryLevel);
 }

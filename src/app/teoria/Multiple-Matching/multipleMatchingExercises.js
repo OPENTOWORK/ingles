@@ -296,6 +296,6 @@ const config = {
   ]
 };
 
-export function buildMultipleMatchingExercises() {
-  return buildTheoryExercises('multiple-matching', config);
+export function buildMultipleMatchingExercises(level = 'B2', primaryLevel = 'B2') {
+  return buildTheoryExercises('multiple-matching', config, level, primaryLevel);
 }

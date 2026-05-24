@@ -296,6 +296,6 @@ const config = {
   ]
 };
 
-export function buildPronunciationExercises() {
-  return buildTheoryExercises('pronunciation', config);
+export function buildPronunciationExercises(level = 'B2', primaryLevel = 'B2') {
+  return buildTheoryExercises('pronunciation', config, level, primaryLevel);
 }

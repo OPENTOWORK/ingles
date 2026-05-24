@@ -296,6 +296,6 @@ const config = {
   ]
 };
 
-export function buildKeyResourcesToImproveExercises() {
-  return buildTheoryExercises('key-resources-to-improve', config);
+export function buildKeyResourcesToImproveExercises(level = 'B2', primaryLevel = 'B2') {
+  return buildTheoryExercises('key-resources-to-improve', config, level, primaryLevel);
 }

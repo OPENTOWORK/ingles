@@ -23,6 +23,7 @@ const LevelsEstadisticasPanel = dynamic(
   { ssr: false },
 );
 import ProfileComingSoon from '@/components/perfil/ProfileComingSoon';
+import ProfileExamDatesPanel from '@/components/perfil/ProfileExamDatesPanel';
 import SiteMascot from '@/components/SiteMascot';
 import { offlineFirstDatabase } from '@/utils/offlineFirstDatabase';
 import { progressTracker } from '@/utils/progressTracker';
@@ -46,6 +47,7 @@ const PROFILE_TABS = [
   { id: 'study-planner', label: '📅 Planificador' },
   { id: 'gamification', label: '🎮 Gamificación' },
   { id: 'community', label: '🌐 Comunidad' },
+  { id: 'exam-dates', label: '📅 Fechas de examen', studentAllowed: true },
 ];
 
 const PROFILE_TAB_LABELS = Object.fromEntries(
@@ -809,6 +811,9 @@ export default function ProfilePage() {
 
   if (!user || !stats) return null;
 
+  const activeTabMeta = PROFILE_TABS.find((t) => t.id === activeTab);
+  const studentTabLocked = isStudent && activeTabMeta && !activeTabMeta.studentAllowed;
+
   const displayName =
     (fullName || '').trim() ||
     user?.user_metadata?.name?.trim() ||
@@ -851,7 +856,7 @@ export default function ProfilePage() {
         </div>
       </div>
 
-      {isStudent && activeTab !== 'overview' ? (
+      {studentTabLocked ? (
         <ProfileComingSoon section={PROFILE_TAB_LABELS[activeTab]} />
       ) : (
         <>
@@ -2113,6 +2118,16 @@ export default function ProfilePage() {
             </div>
           </section>
         </>
+      )}
+
+      {/* Tab: Fechas de examen */}
+      {activeTab === 'exam-dates' && (
+        <ProfileExamDatesPanel
+          levelEstimate={stats.stats.levelEstimate}
+          completedExams={stats.stats.completedExams}
+          studyStreak={studyStreak}
+          totalStudyMinutes={totalStudyTime}
+        />
       )}
 
       {/* Tab: Comunidad */}

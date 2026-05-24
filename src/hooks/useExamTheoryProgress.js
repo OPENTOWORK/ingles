@@ -6,6 +6,7 @@ import {
   buildTopicProgressByHref,
   computeExamTheoryProgressSummary,
 } from '@/lib/examTheoryProgress';
+import { THEORY_EXERCISE_PROGRESS_EVENT } from '@/lib/theoryExerciseProgress';
 
 export function useExamTheoryProgress(userId, accessToken) {
   const [dbRows, setDbRows] = useState([]);
@@ -22,10 +23,12 @@ export function useExamTheoryProgress(userId, accessToken) {
     };
     window.addEventListener('storage', onUpdate);
     window.addEventListener(EXAM_THEORY_PROGRESS_EVENT, onUpdate);
+    window.addEventListener(THEORY_EXERCISE_PROGRESS_EVENT, onUpdate);
     return () => {
       if (debounceId) clearTimeout(debounceId);
       window.removeEventListener('storage', onUpdate);
       window.removeEventListener(EXAM_THEORY_PROGRESS_EVENT, onUpdate);
+      window.removeEventListener(THEORY_EXERCISE_PROGRESS_EVENT, onUpdate);
     };
   }, [refresh]);
 

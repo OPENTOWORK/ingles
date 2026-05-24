@@ -43,7 +43,7 @@ export default function ExamTheorySection({ userId, accessToken, isStudent = fal
         <span className="count">{EXAM_THEORY_CATALOG.length}</span>
       </div>
       <p className="exam-theory-intro">
-        Theory for exam skills — reading, writing, listening, speaking, and Use of English.
+        Theory for exam skills — Reading and Use of English, writing, listening, and speaking.
         {isStudent && SEQUENTIAL_LOCK_FOR_STUDENTS ? (
           <>
             {' '}
@@ -111,7 +111,7 @@ export default function ExamTheorySection({ userId, accessToken, isStudent = fal
           accentColor="#1cb0f6"
         />
         <p className="exam-theory-global-hint">
-          Media de las 5 unidades según temas completados en teoría.
+          Media de las 4 unidades según temas completados en teoría.
         </p>
       </div>
     </section>

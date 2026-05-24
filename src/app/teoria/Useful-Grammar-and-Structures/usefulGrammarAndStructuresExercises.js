@@ -296,6 +296,6 @@ const config = {
   ]
 };
 
-export function buildUsefulGrammarAndStructuresExercises() {
-  return buildTheoryExercises('useful-grammar-and-struc', config);
+export function buildUsefulGrammarAndStructuresExercises(level = 'B2', primaryLevel = 'B2') {
+  return buildTheoryExercises('useful-grammar-and-struc', config, level, primaryLevel);
 }

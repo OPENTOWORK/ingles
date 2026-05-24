@@ -294,6 +294,6 @@ const config = {
   ]
 };
 
-export function buildSetPhrasesExercises() {
-  return buildTheoryExercises('set-phrases', config);
+export function buildSetPhrasesExercises(level = 'B2', primaryLevel = 'B2') {
+  return buildTheoryExercises('set-phrases', config, level, primaryLevel);
 }

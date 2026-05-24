@@ -1,7 +1,8 @@
 'use client';
 import { Suspense, useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { usePathname } from 'next/navigation';
+import { usePathname, useSearchParams } from 'next/navigation';
 import { useB2ExamPracticeSlot } from '@/hooks/useB2ExamPracticeSlot';
+import { useB2AutoOpenExamFromUrl } from '@/hooks/useB2AutoOpenExamFromUrl';
 import { B2ExamPracticeChrome, B2ExamPracticeLayout } from '@/components/b2/B2ExamPracticeChrome';
 import { useB2ExamScoringSession } from '@/hooks/useB2ExamScoringSession';
 import { computeB2PartProgressFromState } from '@/utils/recordLevelsB2PartScore';
@@ -10,7 +11,6 @@ import LevelsAnswerJustification from '@/components/levels/LevelsAnswerJustifica
 import { useLevelsCategoryTimer } from '@/hooks/useLevelsCategoryTimer';
 import { computeLevelsPartScore } from '@/utils/levelsPaperScoreMetrics';
 import { postLevelsAnswerJustification } from '@/utils/levelsJustifyClient';
-import Link from 'next/link';
 import { supabase } from '@/utils/supabaseClient';
 import {
   extractTextoBloque,
@@ -22,7 +22,14 @@ import {
   parsePart7PeopleProfiles,
   parseReadingAdMcqChunks,
   parseReadingPart6SentencePool,
+  splitPart1TextoYPreguntas,
+  parsePart1QuestionOptions,
 } from '@/utils/b2ExamTextBlocks';
+import {
+  getOpenAnswerMap,
+  inferOpenQuestionNumbersFromPrompt,
+  normalizeText,
+} from '@/utils/b2ExamPaperShared';
 import { resolveB2ExamenId, fetchB2PreguntasByExamen } from '@/utils/b2ResolveExam';
 import { getCachedB2Level } from '@/utils/b2LevelCache';
 import { formatLevelsPartDisplayName } from '@/utils/formatLevelsPartDisplayName';
@@ -32,6 +39,7 @@ import {
   mergeLevelsEstadisticas,
   recordLevelsAnswerEvaluation,
 } from '@/utils/levelsEstadisticas';
+import B2ExamPracticeModuleNav from '@/components/b2/B2ExamPracticeModuleNav';
 
 function splitEnunciadoAndTextFallback(rawText = '') {
   const normalized = rawText.replace(/\r\n/g, '\n').trim();
@@ -66,12 +74,18 @@ function getFormattedEnunciado(rawText = '') {
 
 function B2ReadingExamsPageInner() {
   const pathname = usePathname();
+  const searchParams = useSearchParams();
   const isCombinedPaper = pathname?.includes('/exam-reading-and-use-of-english');
   const partMin = isCombinedPaper ? 1 : 5;
   const partMax = isCombinedPaper ? 7 : 7;
 
   const { examSlot, selectExamSlot } = useB2ExamPracticeSlot();
   const scoring = useB2ExamScoringSession({ partMin, partMax });
+  useB2AutoOpenExamFromUrl({
+    examPracticeOpen: scoring.examPracticeOpen,
+    handleSelectExam: scoring.handleSelectExam,
+    selectExamSlot,
+  });
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [partsData, setPartsData] = useState([]);
@@ -79,6 +93,8 @@ function B2ReadingExamsPageInner() {
   const [selectedQuestionByPart, setSelectedQuestionByPart] = useState({});
   const [selectedOptions, setSelectedOptions] = useState({});
   const [checkedQuestions, setCheckedQuestions] = useState({});
+  const [openInputs, setOpenInputs] = useState({});
+  const [openChecks, setOpenChecks] = useState({});
   /** @type {Record<string, { loading?: boolean, error?: string | null, text?: string | null }>} */
   const [aiHintsByKey, setAiHintsByKey] = useState({});
 
@@ -90,6 +106,8 @@ function B2ReadingExamsPageInner() {
     setError('');
     setSelectedOptions({});
     setCheckedQuestions({});
+    setOpenInputs({});
+    setOpenChecks({});
     setAiHintsByKey({});
 
     try {
@@ -126,23 +144,37 @@ function B2ReadingExamsPageInner() {
       const partIds = [...new Set(questionsData.map((q) => q.parte_id).filter(Boolean))];
       const questionIds = questionsData.map((q) => q.id);
 
-      const [partsRes, answersRes] = await Promise.all([
+      const [partsRes, answersRes, openAnswersRes] = await Promise.all([
         supabase.from('levels_partes').select('*').in('id', partIds),
         supabase
           .from('levels_respuestas')
           .select('id, pregunta_id, respuesta, correcta')
           .in('pregunta_id', questionIds),
+        supabase
+          .from('levels_respuestas_abiertas')
+          .select('id, pregunta_id_abierta, respuesta_texto')
+          .in('pregunta_id_abierta', questionIds),
       ]);
 
       const { data: partsTableData, error: partsError } = partsRes;
       const { data: answersData, error: answersError } = answersRes;
+      const { data: openAnswersData, error: openAnswersError } = openAnswersRes;
 
       if (partsError) throw new Error('No se pudieron obtener las partes.');
       if (answersError) throw new Error('No se pudieron obtener las respuestas.');
+      if (openAnswersError) {
+        console.warn('No se pudieron obtener respuestas abiertas:', openAnswersError);
+      }
 
       const answersByQuestion = (answersData || []).reduce((acc, a) => {
         if (!acc[a.pregunta_id]) acc[a.pregunta_id] = [];
         acc[a.pregunta_id].push(a);
+        return acc;
+      }, {});
+
+      const openAnswersByQuestion = (openAnswersData || []).reduce((acc, a) => {
+        if (!acc[a.pregunta_id_abierta]) acc[a.pregunta_id_abierta] = [];
+        acc[a.pregunta_id_abierta].push(a);
         return acc;
       }, {});
 
@@ -172,6 +204,7 @@ function B2ReadingExamsPageInner() {
           preguntaId: question.id,
           enunciado: question.enunciado || 'Pregunta sin enunciado',
           respuestas: answersByQuestion[question.id] || [],
+          respuestasAbiertas: openAnswersByQuestion[question.id] || [],
         });
 
         return acc;
@@ -217,6 +250,17 @@ function B2ReadingExamsPageInner() {
     };
   }, [loadReadingData]);
 
+  useEffect(() => {
+    const qPart = searchParams.get('part');
+    if (!qPart || !partsData.length) return;
+    const targetNumber = Number(qPart);
+    if (!Number.isFinite(targetNumber)) return;
+    const target = partsData.find(
+      (p) => Number(p.nombre.match(/\d+/)?.[0] || 0) === targetNumber,
+    );
+    if (target) setSelectedPartId(target.id);
+  }, [searchParams, partsData]);
+
   const selectedPart = useMemo(
     () => partsData.find((part) => part.id === selectedPartId),
     [partsData, selectedPartId],
@@ -253,6 +297,8 @@ function B2ReadingExamsPageInner() {
   }, [selectedQuestion?.preguntaId, selectedPart?.id]);
 
   useEffect(() => {
+    setOpenInputs({});
+    setOpenChecks({});
     setSelectedOptions({});
     setCheckedQuestions({});
     setAiHintsByKey({});
@@ -263,6 +309,10 @@ function B2ReadingExamsPageInner() {
     [selectedPart?.nombre],
   );
 
+  const isUoePart = isCombinedPaper && partNumberReading >= 1 && partNumberReading <= 4;
+  const isOpenClozePart = isCombinedPaper && partNumberReading >= 2 && partNumberReading <= 4;
+  const isUoePart1 = isCombinedPaper && partNumberReading === 1;
+
   /** Mismo formato de panel de texto que Parte 1 (Use of English) para partes 5–7. */
   const shouldStickEnunciado = partNumberReading >= 5 && partNumberReading <= 7;
 
@@ -271,11 +321,19 @@ function B2ReadingExamsPageInner() {
     const desc = (selectedPart?.descripcion || '').replace(/\r\n/g, '\n').trim();
     const fallback = splitEnunciadoAndTextFallback(rawPregunta);
     const textoExtracted = extractTextoBloque(rawPregunta, partNumberReading);
+    let texto = (textoExtracted || fallback.texto || '').trim();
+    let preguntasPart1Parse = [];
+    if (isUoePart1 && texto) {
+      const split = splitPart1TextoYPreguntas(texto);
+      texto = split.texto.trim();
+      preguntasPart1Parse = parsePart1QuestionOptions(split.preguntas);
+    }
     return {
       enunciado: desc || fallback.enunciado,
-      texto: (textoExtracted || fallback.texto || '').trim(),
+      texto,
+      preguntasPart1Parse,
     };
-  }, [selectedPart?.descripcion, selectedQuestion?.enunciado, partNumberReading]);
+  }, [selectedPart?.descripcion, selectedQuestion?.enunciado, partNumberReading, isUoePart1]);
 
   const contextSnippetForAi = useMemo(() => {
     const pack = [selectedPartContent.enunciado, selectedPartContent.texto].filter(Boolean).join('\n\n');
@@ -374,6 +432,84 @@ function B2ReadingExamsPageInner() {
     () => getGroupedAnswers(selectedQuestion?.respuestas || []),
     [selectedQuestion?.respuestas],
   );
+
+  const part1CorrectLetterByQuestion = useMemo(() => {
+    const map = new Map();
+    if (!isUoePart1) return map;
+    for (const row of selectedQuestion?.respuestas || []) {
+      if (row?.correcta !== true) continue;
+      const t = String(row.respuesta || '').trim();
+      const m = t.match(/^(\d{1,2})\s+([A-D])\b/i);
+      if (m) map.set(Number(m[1]), m[2].toUpperCase());
+    }
+    return map;
+  }, [isUoePart1, selectedQuestion?.preguntaId, selectedQuestion?.respuestas]);
+
+  const part1McqGroups = useMemo(() => {
+    if (!isUoePart1) return null;
+    const parsed = selectedPartContent.preguntasPart1Parse || [];
+    if (!parsed.length || !selectedQuestion?.preguntaId) return null;
+    const pid = selectedQuestion.preguntaId;
+    const letters = ['A', 'B', 'C', 'D'];
+    return parsed
+      .map(({ questionNumber, options: byLetter }) => {
+        const correctL = part1CorrectLetterByQuestion.get(questionNumber);
+        const opts = letters
+          .map((L) => {
+            const word = byLetter[L];
+            if (!word || !String(word).trim()) return null;
+            return {
+              id: `part1-${pid}-q${questionNumber}-${L}`,
+              respuesta: `${questionNumber} ${L} ${word}`,
+              formattedText: `${L}) ${word}`,
+              correcta: correctL != null ? L === correctL : false,
+            };
+          })
+          .filter(Boolean);
+        if (opts.length < 2) return null;
+        return { questionNumber, options: opts };
+      })
+      .filter(Boolean);
+  }, [
+    part1CorrectLetterByQuestion,
+    isUoePart1,
+    selectedPartContent.preguntasPart1Parse,
+    selectedQuestion?.preguntaId,
+  ]);
+
+  const inferredOpenQuestionNumbers = useMemo(() => {
+    const promptBlob = [selectedQuestion?.enunciado, selectedPartContent.texto]
+      .filter(Boolean)
+      .join('\n');
+    return inferOpenQuestionNumbersFromPrompt(promptBlob, partNumberReading);
+  }, [selectedQuestion?.enunciado, selectedPartContent.texto, partNumberReading]);
+
+  const openAnswerMap = useMemo(
+    () =>
+      getOpenAnswerMap(
+        selectedQuestion?.respuestasAbiertas || [],
+        selectedQuestion?.respuestas || [],
+        inferredOpenQuestionNumbers,
+      ),
+    [
+      inferredOpenQuestionNumbers,
+      selectedQuestion?.respuestasAbiertas,
+      selectedQuestion?.respuestas,
+    ],
+  );
+
+  const openQuestionNumbers = useMemo(() => {
+    if (!isOpenClozePart) return [];
+    const fromAnswers = [...openAnswerMap.keys()].sort((a, b) => a - b);
+    const fromPrompt = inferredOpenQuestionNumbers;
+    if (fromPrompt.length > 0 && fromAnswers.length > 0) {
+      const promptSet = new Set(fromPrompt);
+      const intersection = fromAnswers.filter((n) => promptSet.has(n));
+      return intersection.length > 0 ? intersection : fromPrompt;
+    }
+    if (fromAnswers.length > 0) return fromAnswers;
+    return fromPrompt;
+  }, [isOpenClozePart, inferredOpenQuestionNumbers, openAnswerMap]);
 
   /** Clave sólo número + letra (BD Reading 5–7).
    *  Sólo se consideran filas con `correcta === true`; en caso contrario, al iterar las 4
@@ -482,14 +618,15 @@ function B2ReadingExamsPageInner() {
     selectedQuestion?.preguntaId,
   ]);
 
-  const groupedAnswersForUiAndScore = readingSyntheticMcqGroups || groupedAnswersSelected;
+  const groupedAnswersForUiAndScore =
+    readingSyntheticMcqGroups || part1McqGroups || groupedAnswersSelected;
 
   const partScoreMetrics = useMemo(
     () =>
       computeLevelsPartScore({
-        useOpenInputUi: false,
-        openQuestionNumbers: [],
-        openChecks: {},
+        useOpenInputUi: isOpenClozePart,
+        openQuestionNumbers,
+        openChecks,
         groupedAnswers: groupedAnswersForUiAndScore,
         checkedQuestions,
         selectedOptions,
@@ -497,6 +634,9 @@ function B2ReadingExamsPageInner() {
         partId: selectedPart?.id,
       }),
     [
+      isOpenClozePart,
+      openQuestionNumbers,
+      openChecks,
       groupedAnswersForUiAndScore,
       checkedQuestions,
       selectedOptions,
@@ -517,9 +657,9 @@ function B2ReadingExamsPageInner() {
       if (!scoring.examPracticeOpen || !selectedPart?.id || !selectedQuestion?.preguntaId) return;
       const progress = computeB2PartProgressFromState({
         partNumber: partNumberReading,
-        useOpenInputUi: false,
-        openQuestionNumbers: [],
-        openChecks: {},
+        useOpenInputUi: isOpenClozePart,
+        openQuestionNumbers,
+        openChecks: stateOverride.openChecks ?? openChecks,
         groupedAnswers: groupedAnswersForUiAndScore,
         checkedQuestions: stateOverride.checkedQuestions ?? checkedQuestions,
         selectedOptions: stateOverride.selectedOptions ?? selectedOptions,
@@ -544,6 +684,9 @@ function B2ReadingExamsPageInner() {
       groupedAnswersForUiAndScore,
       checkedQuestions,
       selectedOptions,
+      isOpenClozePart,
+      openQuestionNumbers,
+      openChecks,
     ],
   );
 
@@ -565,6 +708,20 @@ function B2ReadingExamsPageInner() {
       setSelectedQuestionByPart((prev) => ({ ...prev, [part.id]: part.questions[0].preguntaId }));
     }
   };
+
+  const handleContinueInPage = useCallback(() => {
+    const sorted = [...partsData].sort((a, b) => {
+      const an = Number(a.nombre.match(/\d+/)?.[0] || 0);
+      const bn = Number(b.nombre.match(/\d+/)?.[0] || 0);
+      return an - bn;
+    });
+    const currentIdx = sorted.findIndex((p) => p.id === selectedPartId);
+    if (currentIdx < 0 || currentIdx >= sorted.length - 1) return;
+    handleSelectPart(sorted[currentIdx + 1]);
+    if (typeof window !== 'undefined') {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  }, [partsData, selectedPartId, selectedQuestionByPart]);
 
   const buttonStyle = {
     backgroundColor: '#c1f2cd',
@@ -624,14 +781,124 @@ function B2ReadingExamsPageInner() {
               <B2ExamPracticeContent
                 title={getPartTitle(selectedPart)}
                 directionsText={selectedPartContent.enunciado}
-                directionsLabel="Directions"
+                directionsLabel={isUoePart1 ? 'Instructions' : 'Directions'}
                 textLabel="Text"
                 questionsLabel="Questions"
                 passageText={selectedPartContent.texto}
                 split="auto"
                 questions={
                   <>
-                    {groupedAnswersForUiAndScore.map((group, groupIndex) => (
+                    {isOpenClozePart
+                      ? openQuestionNumbers.map((questionNumber) => {
+                          const questionKey = getQuestionKey(selectedPart.id, questionNumber, 'open');
+                          const currentValue = openInputs[questionKey] || '';
+                          const checkResult = openChecks[questionKey];
+                          const isAnswerLocked = typeof checkResult === 'boolean';
+                          return (
+                            <B2ExamQuestionItem key={`open-${selectedQuestion.preguntaId}-${questionNumber}`}>
+                              <p style={{ margin: '0 0 0.65rem', fontWeight: 700, color: '#2d3748' }}>
+                                Question {questionNumber}
+                              </p>
+                              <div style={{ display: 'flex', gap: '0.6rem', alignItems: 'center', flexWrap: 'wrap' }}>
+                                <input
+                                  type="text"
+                                  value={currentValue}
+                                  readOnly={isAnswerLocked}
+                                  onChange={(e) => {
+                                    if (isAnswerLocked) return;
+                                    const value = e.target.value;
+                                    setOpenInputs((prev) => ({ ...prev, [questionKey]: value }));
+                                  }}
+                                  placeholder={partNumberReading === 4 ? 'Your answer' : 'Write one word'}
+                                  style={{
+                                    minWidth: '240px',
+                                    borderRadius: '8px',
+                                    border: '1px solid #cbd5e0',
+                                    padding: '0.65rem 0.75rem',
+                                    background: isAnswerLocked ? '#f7fafc' : '#fff',
+                                    cursor: isAnswerLocked ? 'not-allowed' : 'text',
+                                  }}
+                                />
+                                {!isAnswerLocked ? (
+                                  <button
+                                    type="button"
+                                    onClick={() => {
+                                      if (typeof openChecks[questionKey] === 'boolean') return;
+                                      const expectedAnswers = openAnswerMap.get(questionNumber) || new Set();
+                                      const isCorrect = expectedAnswers.has(normalizeText(currentValue));
+                                      const nextOpenChecks = { ...openChecks, [questionKey]: isCorrect };
+                                      setOpenChecks(nextOpenChecks);
+                                      const correctChoiceText =
+                                        [...expectedAnswers].slice(0, 4).join(' · ') || 'model answer';
+                                      const answersFromDatabase = [...expectedAnswers].join(' · ');
+                                      requestAiJustification(questionKey, {
+                                        partLabel: selectedPart?.nombre || '',
+                                        questionLabel: `Question ${questionNumber}`,
+                                        userChoiceText: currentValue,
+                                        correctChoiceText,
+                                        isCorrect,
+                                        answersFromDatabase: answersFromDatabase || undefined,
+                                      });
+                                      void (async () => {
+                                        const uid = await getSessionUserId();
+                                        const pid = selectedQuestion?.preguntaId;
+                                        const parteId = selectedPart?.id;
+                                        if (!uid || !pid || !parteId) return;
+                                        const { error } = await mergeLevelsEstadisticas({
+                                          userId: uid,
+                                          preguntaId: pid,
+                                          parteId,
+                                          deltaEvaluadas: 1,
+                                          deltaCorrectas: isCorrect ? 1 : 0,
+                                          deltaIncorrectas: isCorrect ? 0 : 1,
+                                        });
+                                        if (error) {
+                                          console.warn('levels_estadisticas (eval):', error.message || error);
+                                        }
+                                      })();
+                                      trySavePartAfterAnswer({ openChecks: nextOpenChecks });
+                                    }}
+                                    style={{
+                                      borderRadius: '8px',
+                                      border: '1px solid #2b6cb0',
+                                      background: '#ebf8ff',
+                                      color: '#1a365d',
+                                      padding: '0.6rem 0.9rem',
+                                      cursor: 'pointer',
+                                    }}
+                                  >
+                                    Check
+                                  </button>
+                                ) : null}
+                              </div>
+                              {typeof checkResult === 'boolean' && (
+                                <>
+                                  <p
+                                    style={{
+                                      margin: '0.7rem 0 0',
+                                      fontWeight: 700,
+                                      color: checkResult ? '#2f855a' : '#c53030',
+                                    }}
+                                  >
+                                    {checkResult ? 'Correct' : 'Incorrect'}
+                                  </p>
+                                  {(() => {
+                                    const expected = openAnswerMap.get(questionNumber);
+                                    const list = expected && expected.size > 0 ? [...expected] : [];
+                                    return (
+                                      <p style={{ margin: '0.4rem 0 0', fontWeight: 600, color: '#1f2937' }}>
+                                        Correct answer:{' '}
+                                        {list.length > 0 ? list.join(' · ') : 'Not available'}
+                                      </p>
+                                    );
+                                  })()}
+                                </>
+                              )}
+                              <LevelsAnswerJustification hint={aiHintsByKey[questionKey]} />
+                            </B2ExamQuestionItem>
+                          );
+                        })
+                      : groupedAnswersForUiAndScore.map((group, groupIndex) => (
                       <B2ExamQuestionItem
                         key={`group-${selectedQuestion.preguntaId}-${group.questionNumber ?? 'extra'}-${groupIndex}`}
                       >
@@ -764,46 +1031,13 @@ function B2ReadingExamsPageInner() {
         )}
       </section>
 
-      <div style={{ textAlign: 'center', marginTop: '2rem', display: 'flex', flexWrap: 'wrap', gap: '0.75rem', justifyContent: 'center' }}>
-        <Link
-          href={`/niveles/b2/exam-1?examen=${examSlot}`}
-          style={{
-            textDecoration: 'none',
-            color: '#047857',
-            fontWeight: 'bold',
-            display: 'inline-block',
-            padding: '0.75rem 1.25rem',
-            border: '2px solid #059669',
-            borderRadius: '6px',
-          }}
-        >
-          ← Full Exam
-        </Link>
-        <Link href="/niveles/b2">
-          <div
-            style={{
-              textDecoration: 'none',
-              color: '#0070f3',
-              fontWeight: 'bold',
-              display: 'inline-block',
-              padding: '0.75rem 1.25rem',
-              border: '2px solid #0070f3',
-              borderRadius: '6px',
-              transition: 'background 0.3s, color 0.3s',
-            }}
-            onMouseOver={(e) => {
-              e.currentTarget.style.backgroundColor = '#0070f3';
-              e.currentTarget.style.color = '#fff';
-            }}
-            onMouseOut={(e) => {
-              e.currentTarget.style.backgroundColor = 'transparent';
-              e.currentTarget.style.color = '#0070f3';
-            }}
-          >
-            ← Back to B2 Overview
-          </div>
-        </Link>
-      </div>
+      <B2ExamPracticeModuleNav
+        partNumber={partNumberReading}
+        pagePartMax={partMax}
+        examSlot={examSlot}
+        onContinueInPage={handleContinueInPage}
+        lang="en"
+      />
       </B2ExamPracticeChrome>
     </B2ExamPracticeLayout>
   );

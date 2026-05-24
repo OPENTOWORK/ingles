@@ -284,6 +284,6 @@ const config = {
   ]
 };
 
-export function buildModalVerbsExercises() {
-  return buildTheoryExercises('modal-verbs', config);
+export function buildModalVerbsExercises(level = 'B2', primaryLevel = 'B2') {
+  return buildTheoryExercises('modal-verbs', config, level, primaryLevel);
 }

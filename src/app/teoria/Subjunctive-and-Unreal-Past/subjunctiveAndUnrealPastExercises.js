@@ -284,6 +284,6 @@ const config = {
   ]
 };
 
-export function buildSubjunctiveAndUnrealPastExercises() {
-  return buildTheoryExercises('subjunctive-and-unreal-p', config);
+export function buildSubjunctiveAndUnrealPastExercises(level = 'B2', primaryLevel = 'B2') {
+  return buildTheoryExercises('subjunctive-and-unreal-p', config, level, primaryLevel);
 }

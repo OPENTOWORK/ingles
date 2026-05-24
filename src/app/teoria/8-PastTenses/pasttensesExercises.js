@@ -284,6 +284,6 @@ const config = {
   ]
 };
 
-export function build8PastTensesExercises() {
-  return buildTheoryExercises('pasttenses', config);
+export function build8PastTensesExercises(level = 'B2', primaryLevel = 'B2') {
+  return buildTheoryExercises('pasttenses', config, level, primaryLevel);
 }

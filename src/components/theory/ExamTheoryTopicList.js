@@ -11,6 +11,7 @@ import { useExamTheoryProgress } from '@/hooks/useExamTheoryProgress';
 import { buildTopicProgressByHref } from '@/lib/examTheoryProgress';
 import {
   getExamSectionTopicUnlockStates,
+  getSectionKeyBySlug,
   getSectionProgressSummary,
 } from '@/lib/examTheoryTopicUnlock';
 import { filterTopics } from '@/data/teoriaSections';
@@ -32,12 +33,15 @@ export default function ExamTheoryTopicList({
 
   const [query, setQuery] = useState('');
 
+  const sectionKey = useMemo(() => getSectionKeyBySlug(sectionSlug), [sectionSlug]);
+
   const progressByHref = useMemo(() => {
     if (!session?.user?.id) return {};
-    return globalTopicProgress && Object.keys(globalTopicProgress).length > 0
-      ? globalTopicProgress
-      : buildTopicProgressByHref({ userId: session.user.id, sectionKey: sectionTitle });
-  }, [globalTopicProgress, session?.user?.id, sectionTitle]);
+    if (globalTopicProgress && Object.keys(globalTopicProgress).length > 0) {
+      return globalTopicProgress;
+    }
+    return buildTopicProgressByHref({ userId: session.user.id, sectionKey });
+  }, [globalTopicProgress, session?.user?.id, sectionKey]);
 
   const unlockByHref = useMemo(() => {
     const states = getExamSectionTopicUnlockStates(topics, progressByHref, isStudent);

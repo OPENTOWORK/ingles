@@ -176,6 +176,6 @@ const config = {
   ],
 };
 
-export function buildPresentTensesExercises() {
-  return buildTheoryExercises('present-tenses', config);
+export function buildPresentTensesExercises(level = 'B2', primaryLevel = 'B2') {
+  return buildTheoryExercises('present-tenses', config, level, primaryLevel);
 }

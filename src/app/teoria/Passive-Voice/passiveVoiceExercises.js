@@ -284,6 +284,6 @@ const config = {
   ]
 };
 
-export function buildPassiveVoiceExercises() {
-  return buildTheoryExercises('passive-voice', config);
+export function buildPassiveVoiceExercises(level = 'B2', primaryLevel = 'B2') {
+  return buildTheoryExercises('passive-voice', config, level, primaryLevel);
 }

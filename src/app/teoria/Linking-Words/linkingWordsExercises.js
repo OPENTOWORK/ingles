@@ -294,6 +294,6 @@ const config = {
   ]
 };
 
-export function buildLinkingWordsExercises() {
-  return buildTheoryExercises('linking-words', config);
+export function buildLinkingWordsExercises(level = 'B2', primaryLevel = 'B2') {
+  return buildTheoryExercises('linking-words', config, level, primaryLevel);
 }

@@ -296,6 +296,6 @@ const config = {
   ]
 };
 
-export function buildCrossTextMultipleMatchingExercises() {
-  return buildTheoryExercises('cross-text-multiple-matc', config);
+export function buildCrossTextMultipleMatchingExercises(level = 'B2', primaryLevel = 'B2') {
+  return buildTheoryExercises('cross-text-multiple-matc', config, level, primaryLevel);
 }

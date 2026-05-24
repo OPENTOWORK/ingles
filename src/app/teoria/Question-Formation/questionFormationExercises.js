@@ -284,6 +284,6 @@ const config = {
   ]
 };
 
-export function buildQuestionFormationExercises() {
-  return buildTheoryExercises('question-formation', config);
+export function buildQuestionFormationExercises(level = 'B2', primaryLevel = 'B2') {
+  return buildTheoryExercises('question-formation', config, level, primaryLevel);
 }

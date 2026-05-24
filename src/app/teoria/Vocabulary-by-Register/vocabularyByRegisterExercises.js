@@ -296,6 +296,6 @@ const config = {
   ]
 };
 
-export function buildVocabularyByRegisterExercises() {
-  return buildTheoryExercises('vocabulary-by-register', config);
+export function buildVocabularyByRegisterExercises(level = 'B2', primaryLevel = 'B2') {
+  return buildTheoryExercises('vocabulary-by-register', config, level, primaryLevel);
 }

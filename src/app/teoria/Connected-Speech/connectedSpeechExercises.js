@@ -296,6 +296,6 @@ const config = {
   ]
 };
 
-export function buildConnectedSpeechExercises() {
-  return buildTheoryExercises('connected-speech', config);
+export function buildConnectedSpeechExercises(level = 'B2', primaryLevel = 'B2') {
+  return buildTheoryExercises('connected-speech', config, level, primaryLevel);
 }

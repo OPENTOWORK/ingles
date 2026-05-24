@@ -296,6 +296,6 @@ const config = {
   ]
 };
 
-export function buildSpeakingConnectorsExercises() {
-  return buildTheoryExercises('speaking-connectors', config);
+export function buildSpeakingConnectorsExercises(level = 'B2', primaryLevel = 'B2') {
+  return buildTheoryExercises('speaking-connectors', config, level, primaryLevel);
 }

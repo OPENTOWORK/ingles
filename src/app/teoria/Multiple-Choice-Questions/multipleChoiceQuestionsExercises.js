@@ -296,6 +296,6 @@ const config = {
   ]
 };
 
-export function buildMultipleChoiceQuestionsExercises() {
-  return buildTheoryExercises('multiple-choice-question', config);
+export function buildMultipleChoiceQuestionsExercises(level = 'B2', primaryLevel = 'B2') {
+  return buildTheoryExercises('multiple-choice-question', config, level, primaryLevel);
 }

@@ -294,6 +294,6 @@ const config = {
   ]
 };
 
-export function buildCollocationsAndPhrasalVerbsExercises() {
-  return buildTheoryExercises('collocations-and-phrasal', config);
+export function buildCollocationsAndPhrasalVerbsExercises(level = 'B2', primaryLevel = 'B2') {
+  return buildTheoryExercises('collocations-and-phrasal', config, level, primaryLevel);
 }

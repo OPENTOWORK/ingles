@@ -284,6 +284,6 @@ const config = {
   ]
 };
 
-export function build1ArticlesDeterminersAndQuantifiersExercises() {
-  return buildTheoryExercises('articles-determiners-and', config);
+export function build1ArticlesDeterminersAndQuantifiersExercises(level = 'B2', primaryLevel = 'B2') {
+  return buildTheoryExercises('articles-determiners-and', config, level, primaryLevel);
 }

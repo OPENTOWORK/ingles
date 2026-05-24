@@ -294,6 +294,6 @@ const config = {
   ]
 };
 
-export function buildFunctionalAndThematicVocabularyExercises() {
-  return buildTheoryExercises('functional-and-thematic-', config);
+export function buildFunctionalAndThematicVocabularyExercises(level = 'B2', primaryLevel = 'B2') {
+  return buildTheoryExercises('functional-and-thematic-', config, level, primaryLevel);
 }

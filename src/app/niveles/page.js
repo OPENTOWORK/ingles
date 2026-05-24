@@ -308,7 +308,7 @@ function NivelesPageStyles() {
       }
       @media (min-width: 900px) {
         .niveles-page .exam-theory-grid {
-          grid-template-columns: repeat(5, minmax(0, 1fr));
+          grid-template-columns: repeat(4, minmax(0, 1fr));
         }
       }
       .niveles-page .exam-theory-card {

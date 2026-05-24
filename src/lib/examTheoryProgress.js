@@ -1,7 +1,12 @@
+import { normalizeTopicHref } from '@/lib/normalizeTopicHref';
 import {
   EXAM_THEORY_CATALOG,
   SECTIONS,
 } from '@/data/teoriaSections';
+import {
+  computeTopicExerciseProgressPercent,
+  countPassedForTopic,
+} from '@/lib/theoryExerciseProgress';
 import { getAllTheoryProgress } from '@/utils/theoryProgress';
 
 export const EXAM_THEORY_PROGRESS_EVENT = 'exam-theory-progress-updated';
@@ -20,7 +25,8 @@ export function getExamTheoryTopicsFlat() {
 }
 
 export function findExamUnitSlugForTopicHref(topicHref) {
-  const topic = getExamTheoryTopicsFlat().find((t) => t.href === topicHref);
+  const href = normalizeTopicHref(topicHref);
+  const topic = getExamTheoryTopicsFlat().find((t) => t.href === href);
   return topic?.unidad ?? null;
 }
 
@@ -28,32 +34,62 @@ function topicIdFromHref(href) {
   return href.replace(/^\/teoria\//, '');
 }
 
-function resolveTopicPercent(href, { dbByHref, localLevels, theoryAll }) {
-  const legacyId = topicIdFromHref(href);
-  const fromDb = dbByHref[href];
-  const fromLocal = localLevels[href]?.progreso_pct;
+function findTopicMetaByHref(href) {
+  for (const topics of Object.values(SECTIONS)) {
+    const topic = topics.find((item) => item.href === href);
+    if (topic) return topic;
+  }
+  return null;
+}
+
+function topicLevelLabel(topic) {
+  if (!topic?.levels?.length) return null;
+  return topic.levels.join('-');
+}
+
+function exercisePercentForTopic(href, userId) {
+  if (!userId) return null;
+  const label = topicLevelLabel(findTopicMetaByHref(href));
+  if (!label) return null;
+  return computeTopicExerciseProgressPercent({
+    passedCount: countPassedForTopic(userId, href, label),
+    topicLevelLabel: label,
+  });
+}
+
+function bestPercent(...candidates) {
+  const values = candidates
+    .filter((value) => value != null && !Number.isNaN(Number(value)))
+    .map((value) => Math.min(100, Math.max(0, Math.round(Number(value)))));
+  return values.length ? Math.max(...values) : 0;
+}
+
+function resolveTopicPercent(href, { dbByHref, localLevels, theoryAll, userId }) {
+  const canonicalHref = normalizeTopicHref(href);
+  const legacyId = topicIdFromHref(canonicalHref);
+  const fromDb = dbByHref[canonicalHref];
+  const fromLocal = localLevels[canonicalHref]?.progreso_pct;
   const fromTheory =
-    theoryAll[href]?.progress ?? theoryAll[legacyId]?.progress ?? null;
+    theoryAll[canonicalHref]?.progress ??
+    theoryAll[`${canonicalHref}/`]?.progress ??
+    theoryAll[legacyId]?.progress ??
+    null;
+  const fromExercise = exercisePercentForTopic(canonicalHref, userId);
 
-  const value =
-    fromDb != null
-      ? Number(fromDb)
-      : fromLocal != null
-        ? Number(fromLocal)
-        : fromTheory != null
-          ? Number(fromTheory)
-          : 0;
-
-  return Math.min(100, Math.max(0, Math.round(value)));
+  return bestPercent(fromDb, fromLocal, fromTheory, fromExercise);
 }
 
 function progressContext(dbRows = [], userId = null) {
   return {
     dbByHref: Object.fromEntries(
-      (dbRows || []).map((row) => [row.topic_href, row.progreso_pct ?? 0]),
+      (dbRows || []).map((row) => [
+        normalizeTopicHref(row.topic_href),
+        row.progreso_pct ?? 0,
+      ]),
     ),
     localLevels: readLocalLevelsProgreso(userId),
     theoryAll: userId ? getAllTheoryProgress(userId) : {},
+    userId,
   };
 }
 
@@ -88,7 +124,21 @@ function readLocalLevelsProgreso(userId) {
   if (typeof window === 'undefined' || !userId) return {};
   try {
     const raw = localStorage.getItem(`${LOCAL_KEY_PREFIX}${userId}`);
-    return raw ? JSON.parse(raw) : {};
+    const parsed = raw ? JSON.parse(raw) : {};
+    const normalized = {};
+    for (const [key, value] of Object.entries(parsed)) {
+      const href = normalizeTopicHref(value?.topic_href ?? key);
+      const pct = Number(value?.progreso_pct ?? 0);
+      const existing = normalized[href]?.progreso_pct ?? 0;
+      if (!normalized[href] || existing < pct) {
+        normalized[href] = {
+          ...value,
+          topic_href: href,
+          progreso_pct: pct,
+        };
+      }
+    }
+    return normalized;
   } catch {
     return {};
   }
@@ -96,10 +146,11 @@ function readLocalLevelsProgreso(userId) {
 
 export function writeLocalLevelsProgreso(userId, topicHref, progresoPct) {
   if (typeof window === 'undefined' || !userId) return;
+  const href = normalizeTopicHref(topicHref);
   const all = readLocalLevelsProgreso(userId);
-  all[topicHref] = {
-    topic_href: topicHref,
-    unidad: findExamUnitSlugForTopicHref(topicHref),
+  all[href] = {
+    topic_href: href,
+    unidad: findExamUnitSlugForTopicHref(href),
     progreso_pct: Math.min(100, Math.max(0, Math.round(progresoPct))),
     updated_at: new Date().toISOString(),
   };

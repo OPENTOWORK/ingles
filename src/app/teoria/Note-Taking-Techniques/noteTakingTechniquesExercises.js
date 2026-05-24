@@ -296,6 +296,6 @@ const config = {
   ]
 };
 
-export function buildNoteTakingTechniquesExercises() {
-  return buildTheoryExercises('note-taking-techniques', config);
+export function buildNoteTakingTechniquesExercises(level = 'B2', primaryLevel = 'B2') {
+  return buildTheoryExercises('note-taking-techniques', config, level, primaryLevel);
 }

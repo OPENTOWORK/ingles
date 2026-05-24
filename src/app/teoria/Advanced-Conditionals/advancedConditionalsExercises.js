@@ -284,6 +284,6 @@ const config = {
   ]
 };
 
-export function buildAdvancedConditionalsExercises() {
-  return buildTheoryExercises('advanced-conditionals', config);
+export function buildAdvancedConditionalsExercises(level = 'B2', primaryLevel = 'B2') {
+  return buildTheoryExercises('advanced-conditionals', config, level, primaryLevel);
 }

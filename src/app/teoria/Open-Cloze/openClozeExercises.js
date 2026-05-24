@@ -296,6 +296,6 @@ const config = {
   ]
 };
 
-export function buildOpenClozeExercises() {
-  return buildTheoryExercises('open-cloze', config);
+export function buildOpenClozeExercises(level = 'B2', primaryLevel = 'B2') {
+  return buildTheoryExercises('open-cloze', config, level, primaryLevel);
 }

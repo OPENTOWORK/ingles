@@ -296,6 +296,6 @@ const config = {
   ]
 };
 
-export function buildInteractionAndConversationalStrategiesExercises() {
-  return buildTheoryExercises('interaction-and-conversa', config);
+export function buildInteractionAndConversationalStrategiesExercises(level = 'B2', primaryLevel = 'B2') {
+  return buildTheoryExercises('interaction-and-conversa', config, level, primaryLevel);
 }

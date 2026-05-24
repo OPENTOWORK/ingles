@@ -135,20 +135,23 @@ export const SECTIONS = {
   ],
 };
 
+SECTIONS['Reading and Use of English'] = (() => {
+  const seen = new Set();
+  return [...SECTIONS['Use of English'], ...SECTIONS['Reading']].filter((topic) => {
+    if (seen.has(topic.href)) return false;
+    seen.add(topic.href);
+    return true;
+  });
+})();
+
 const EXAM_SECTION_META = [
   {
-    key: 'Use of English',
-    slug: 'use-of-english',
-    description: 'Exam-style tasks: cloze, transformations, and matching.',
-    accent: '#7c3aed',
+    key: 'Reading and Use of English',
+    slug: 'reading-and-use-of-english',
+    description:
+      'Cloze, transformations, reading comprehension, inference, and text organisation.',
+    accent: '#2563eb',
     heroAccent: 'indigo',
-  },
-  {
-    key: 'Reading',
-    slug: 'reading',
-    description: 'Reading comprehension, inference, and text organisation.',
-    accent: '#059669',
-    heroAccent: 'emerald',
   },
   {
     key: 'Listening',
@@ -200,19 +203,32 @@ const THEORY_SECTION_META = [
 /** Apartados en /teoria (solo Grammar y Vocabulary). */
 export const THEORY_SECTION_CATALOG = THEORY_SECTION_META;
 
-/** Apartados en /niveles → Exam theory (5 skills de examen). */
+/** Apartados en /niveles → Exam theory (4 skills de examen). */
 export const EXAM_THEORY_CATALOG = EXAM_SECTION_META;
+
+/** Slugs antiguos que apuntan al bloque combinado Reading and Use of English. */
+export const EXAM_SECTION_SLUG_ALIASES = {
+  'use-of-english': 'reading-and-use-of-english',
+  reading: 'reading-and-use-of-english',
+};
+
+export const EXAM_SECTION_LEGACY_SLUGS = Object.keys(EXAM_SECTION_SLUG_ALIASES);
 
 /** Todos los apartados (teoría de examen + hub de temas). */
 export const SECTION_CATALOG = [...THEORY_SECTION_META, ...EXAM_SECTION_META];
 
 const slugToKey = Object.fromEntries(SECTION_CATALOG.map((s) => [s.slug, s.key]));
 
+export function resolveExamTheorySectionSlug(slug) {
+  return EXAM_SECTION_SLUG_ALIASES[slug] || slug;
+}
+
 export function getSectionBySlug(slug) {
-  const key = slugToKey[slug];
+  const resolvedSlug = resolveExamTheorySectionSlug(slug);
+  const key = slugToKey[resolvedSlug];
   if (!key) return null;
-  const meta = SECTION_CATALOG.find((s) => s.slug === slug);
-  return { ...meta, topics: SECTIONS[key] || [] };
+  const meta = SECTION_CATALOG.find((s) => s.slug === resolvedSlug);
+  return { ...meta, slug: resolvedSlug, topics: SECTIONS[key] || [] };
 }
 
 export function filterTopics(topics, { selectedLevels = [], query = '' }) {

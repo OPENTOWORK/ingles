@@ -1,5 +1,5 @@
 'use client';
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState, isValidElement, cloneElement } from 'react';
 import { TheorySectionProvider } from '@/components/theory/TheoryContent';
 import { TheoryPageShell } from '@/components/theory/TheoryPageShell';
 import Link from 'next/link';
@@ -34,6 +34,21 @@ import { useTeoriaProgress } from '@/hooks/useTeoriaProgress';
 import ExamTheoryLockedNotice from '@/components/niveles/ExamTheoryLockedNotice';
 import { shouldApplySequentialLock } from '@/lib/theoryLockConfig';
 import { saveTheoryProgress } from '@/utils/theoryProgress';
+import TheoryExerciseLevelFilter from '@/components/theory/TheoryExerciseLevelFilter';
+import {
+  defaultExerciseLevel,
+  getPrimaryHandcraftedLevel,
+  parseTopicLevels,
+} from '@/lib/theoryExerciseLevelConfig';
+import {
+  THEORY_EXERCISE_PROGRESS_EVENT,
+  computeTopicExerciseProgressPercent,
+  getPassedExerciseKeysForTopic,
+  shouldPersistExercisePass,
+  writeLocalPassedExercise,
+} from '@/lib/theoryExerciseProgress';
+import { saveTheoryExercisePass } from '@/lib/saveTheoryExerciseProgress';
+import { normalizeTopicHref } from '@/lib/normalizeTopicHref';
 
 const TheoryLayout = ({ 
   title, 
@@ -91,7 +106,7 @@ const TheoryLayout = ({
     pathSegment &&
     (isExamTheorySectionSlug(pathSegment) || isTheorySectionSlug(pathSegment));
   const topicHrefForLock =
-    pathname?.startsWith('/teoria/') && !isSectionHub ? pathname : null;
+    pathname?.startsWith('/teoria/') && !isSectionHub ? normalizeTopicHref(pathname) : null;
   const examTopicLocked =
     lockActive &&
     sectionKey &&
@@ -139,12 +154,21 @@ const TheoryLayout = ({
         true,
       )
     : null;
-  const topicHref =
-    pathname && pathname.startsWith('/teoria/') ? pathname : null;
+  const topicHref = useMemo(() => {
+    if (!pathname?.startsWith('/teoria/') || isSectionHub) return null;
+    return normalizeTopicHref(pathname);
+  }, [pathname, isSectionHub]);
+  const primaryHandcraftedLevel = useMemo(() => getPrimaryHandcraftedLevel(level), [level]);
+  const applicableLevels = useMemo(() => parseTopicLevels(level), [level]);
+  const [selectedExerciseLevel, setSelectedExerciseLevel] = useState(() =>
+    defaultExerciseLevel(level),
+  );
   const [activeTab, setActiveTab] = useState('theory');
-  const [completedExercises, setCompletedExercises] = useState(new Set());
+  const [passedExerciseKeys, setPassedExerciseKeys] = useState(new Set());
   const [loadedExercises, setLoadedExercises] = useState(null);
+  const [loadedExerciseLevel, setLoadedExerciseLevel] = useState(null);
   const [exercisesLoading, setExercisesLoading] = useState(false);
+  const [progressHydrated, setProgressHydrated] = useState(false);
 
   const exerciseCount = useMemo(() => {
     if (Array.isArray(exercises) && exercises.length > 0) return exercises.length;
@@ -155,16 +179,85 @@ const TheoryLayout = ({
   useEffect(() => {
     setActiveTab('theory');
     setLoadedExercises(null);
+    setLoadedExerciseLevel(null);
     setExercisesLoading(false);
-  }, [title]);
-
-  const resolveExercises = useCallback(() => {
-    if (typeof getExercises === 'function') return getExercises();
-    return exercises;
-  }, [getExercises, exercises]);
+    setSelectedExerciseLevel(defaultExerciseLevel(level));
+    setPassedExerciseKeys(new Set());
+    setProgressHydrated(false);
+  }, [title, level]);
 
   useEffect(() => {
-    if (activeTab !== 'exercises' || loadedExercises) return undefined;
+    const userId = session?.user?.id;
+    if (!userId || !topicHref) {
+      setProgressHydrated(true);
+      return undefined;
+    }
+
+    let cancelled = false;
+
+    const hydrateLocal = () => {
+      const localKeys = getPassedExerciseKeysForTopic(userId, topicHref, applicableLevels);
+      setPassedExerciseKeys(localKeys);
+    };
+
+    hydrateLocal();
+
+    (async () => {
+      if (!session?.access_token) {
+        if (!cancelled) setProgressHydrated(true);
+        return;
+      }
+      try {
+        const res = await fetch(
+          `/api/theory-exercise-progress?topic_href=${encodeURIComponent(topicHref)}`,
+          { headers: { Authorization: `Bearer ${session.access_token}` } },
+        );
+        if (!res.ok || cancelled) return;
+        const json = await res.json();
+        const remoteKeys = (json.passedKeys || []).map((storageKey) => {
+          const parts = String(storageKey).split('|');
+          return parts[parts.length - 1];
+        });
+        if (cancelled) return;
+        setPassedExerciseKeys((prev) => {
+          const merged = new Set(prev);
+          remoteKeys.forEach((key) => merged.add(key));
+          return merged;
+        });
+      } catch {
+        /* offline */
+      } finally {
+        if (!cancelled) setProgressHydrated(true);
+      }
+    })();
+
+    const onProgressUpdate = () => hydrateLocal();
+    window.addEventListener(THEORY_EXERCISE_PROGRESS_EVENT, onProgressUpdate);
+    window.addEventListener('storage', onProgressUpdate);
+
+    return () => {
+      cancelled = true;
+      window.removeEventListener(THEORY_EXERCISE_PROGRESS_EVENT, onProgressUpdate);
+      window.removeEventListener('storage', onProgressUpdate);
+    };
+  }, [session?.user?.id, session?.access_token, topicHref, applicableLevels, title]);
+
+  const resolveExercises = useCallback(
+    (exerciseLevel) => {
+      if (typeof getExercises === 'function') {
+        if (getExercises.length >= 2) {
+          return getExercises(exerciseLevel, primaryHandcraftedLevel);
+        }
+        return getExercises(exerciseLevel);
+      }
+      return exercises;
+    },
+    [getExercises, exercises, primaryHandcraftedLevel],
+  );
+
+  useEffect(() => {
+    if (activeTab !== 'exercises') return undefined;
+    if (loadedExercises && loadedExerciseLevel === selectedExerciseLevel) return undefined;
 
     let cancelled = false;
     setExercisesLoading(true);
@@ -172,7 +265,8 @@ const TheoryLayout = ({
     const run = () => {
       if (cancelled) return;
       try {
-        setLoadedExercises(resolveExercises());
+        setLoadedExercises(resolveExercises(selectedExerciseLevel));
+        setLoadedExerciseLevel(selectedExerciseLevel);
       } finally {
         if (!cancelled) setExercisesLoading(false);
       }
@@ -191,24 +285,62 @@ const TheoryLayout = ({
       cancelled = true;
       clearTimeout(t);
     };
-  }, [activeTab, loadedExercises, resolveExercises]);
+  }, [activeTab, loadedExercises, loadedExerciseLevel, resolveExercises, selectedExerciseLevel]);
 
-  const handleExerciseComplete = async (exerciseId, score) => {
-    try {
-      // Simplified progress tracking without progressTracker
-      setCompletedExercises(prev => new Set([...prev, exerciseId]));
-      console.log('Exercise completed:', exerciseId, 'Score:', score);
-    } catch (error) {
-      console.error('Error saving progress:', error);
-    }
-  };
+  const handleExerciseComplete = useCallback(
+    async (exerciseKey, score) => {
+      if (!shouldPersistExercisePass(score)) return;
 
-  const getProgressPercentage = () => {
-    if (exerciseCount === 0) return 100;
-    return Math.round((completedExercises.size / exerciseCount) * 100);
-  };
+      const userId = session?.user?.id;
+      if (!userId || !topicHref) return;
 
-  const progressPercent = getProgressPercentage();
+      setPassedExerciseKeys((prev) => {
+        if (prev.has(exerciseKey)) return prev;
+        const next = new Set(prev);
+        next.add(exerciseKey);
+        return next;
+      });
+
+      writeLocalPassedExercise(userId, topicHref, selectedExerciseLevel, exerciseKey);
+
+      await saveTheoryExercisePass({
+        userId,
+        accessToken: session?.access_token,
+        topicHref,
+        topicLevelLabel: level,
+        cefrLevel: selectedExerciseLevel,
+        exerciseKey,
+        score,
+      });
+    },
+    [session, topicHref, selectedExerciseLevel, level],
+  );
+
+  const progressPercent = useMemo(() => {
+    if (!topicHref) return 0;
+    return computeTopicExerciseProgressPercent({
+      passedCount: passedExerciseKeys.size,
+      topicLevelLabel: level,
+    });
+  }, [topicHref, level, passedExerciseKeys, progressHydrated]);
+
+  const isExercisePassed = useCallback(
+    (exerciseKey) => passedExerciseKeys.has(exerciseKey),
+    [passedExerciseKeys],
+  );
+
+  const wrapExerciseElement = useCallback(
+    (exercise, index) => {
+      if (!isValidElement(exercise)) return exercise;
+      const exerciseKey = String(exercise.key || `exercise-${index}`);
+      return cloneElement(exercise, {
+        key: exerciseKey,
+        isCompleted: isExercisePassed(exerciseKey),
+        onComplete: (score) => handleExerciseComplete(exerciseKey, score),
+      });
+    },
+    [handleExerciseComplete, isExercisePassed],
+  );
 
   useEffect(() => {
     const userId = session?.user?.id;
@@ -410,30 +542,49 @@ const TheoryLayout = ({
           </div>
 
           {/* Tabs */}
-          <div className="theory-tabs">
-            <button
-              type="button"
-              onClick={() => setActiveTab('theory')}
-              className={`theory-tab-btn${activeTab === 'theory' ? ' theory-tab-btn--active' : ''}`}
-            >
-              <span className="theory-tab-btn__icon" aria-hidden>📖</span>
-              <span>Theory</span>
-            </button>
-            <button
-              type="button"
-              onClick={() => setActiveTab('exercises')}
-              className={`theory-tab-btn${activeTab === 'exercises' ? ' theory-tab-btn--active' : ''}`}
-            >
-              <span className="theory-tab-btn__icon" aria-hidden>🎯</span>
-              <span>Exercises</span>
-              {exerciseCount > 0 && (
-                <span className="theory-tab-btn__count" aria-label={`${exerciseCount} exercises`}>
-                  {exerciseCount}
-                </span>
-              )}
-            </button>
+          <div className="theory-tabs-row">
+            <div className="theory-tabs">
+              <button
+                type="button"
+                onClick={() => setActiveTab('theory')}
+                className={`theory-tab-btn${activeTab === 'theory' ? ' theory-tab-btn--active' : ''}`}
+              >
+                <span className="theory-tab-btn__icon" aria-hidden>📖</span>
+                <span>Theory</span>
+              </button>
+              <button
+                type="button"
+                onClick={() => setActiveTab('exercises')}
+                className={`theory-tab-btn${activeTab === 'exercises' ? ' theory-tab-btn--active' : ''}`}
+              >
+                <span className="theory-tab-btn__icon" aria-hidden>🎯</span>
+                <span>Exercises</span>
+                {exerciseCount > 0 && (
+                  <span className="theory-tab-btn__count" aria-label={`${exerciseCount} exercises`}>
+                    {exerciseCount}
+                  </span>
+                )}
+              </button>
+            </div>
+
+            {exerciseCount > 0 ? (
+              <TheoryExerciseLevelFilter
+                selectedLevel={selectedExerciseLevel}
+                onChange={(nextLevel) => {
+                  setLoadedExercises(null);
+                  setLoadedExerciseLevel(null);
+                  setSelectedExerciseLevel(nextLevel);
+                }}
+              />
+            ) : null}
           </div>
           <style jsx>{`
+            .theory-tabs-row {
+              display: flex;
+              flex-wrap: wrap;
+              align-items: center;
+              gap: 12px;
+            }
             .theory-tabs {
               display: inline-flex;
               gap: 6px;
@@ -527,13 +678,20 @@ const TheoryLayout = ({
                 fontSize: '1.8rem',
                 fontWeight: 'bold',
                 color: '#2d3748',
-                marginBottom: '1.5rem',
+                marginBottom: '0.35rem',
                 display: 'flex',
                 alignItems: 'center',
                 gap: '0.5rem'
               }}>
                 🎯 Practice Exercises
               </h2>
+              <p style={{
+                margin: '0 0 1.5rem',
+                color: '#64748b',
+                fontSize: '0.92rem',
+              }}>
+                Nivel {selectedExerciseLevel} · 20 ejercicios
+              </p>
               
               {exercisesLoading ? (
                 <div style={{ textAlign: 'center', padding: '3rem', color: '#64748b' }} role="status">
@@ -554,7 +712,7 @@ const TheoryLayout = ({
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
                   {displayExercises.map((exercise, index) => (
                     <div key={exercise.key || index}>
-                      {exercise}
+                      {wrapExerciseElement(exercise, index)}
                     </div>
                   ))}
                 </div>

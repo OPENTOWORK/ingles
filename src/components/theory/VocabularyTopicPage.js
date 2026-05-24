@@ -10,6 +10,7 @@ import {
   QuickReference,
 } from '@/components/theory/TheoryContent';
 import { buildTheoryExercises } from '@/components/theory/buildTheoryExercises';
+import { defaultExerciseLevel } from '@/lib/theoryExerciseLevelConfig';
 
 export default function VocabularyTopicPage({ topicId }) {
   const [topic, setTopic] = useState(null);
@@ -58,7 +59,16 @@ export default function VocabularyTopicPage({ topicId }) {
     </>
   );
 
-  const getExercises = () => buildTheoryExercises(topicId, topic.exercises || {});
+  const getExercises = (
+    exerciseLevel = defaultExerciseLevel(topic.level || 'B1'),
+    primaryLevel = defaultExerciseLevel(topic.level || 'B1'),
+  ) =>
+    buildTheoryExercises(
+      topicId,
+      topic.exercises || {},
+      exerciseLevel,
+      primaryLevel,
+    );
 
   return (
     <TheoryLayout

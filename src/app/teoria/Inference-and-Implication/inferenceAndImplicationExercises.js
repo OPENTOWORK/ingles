@@ -296,6 +296,6 @@ const config = {
   ]
 };
 
-export function buildInferenceAndImplicationExercises() {
-  return buildTheoryExercises('inference-and-implicatio', config);
+export function buildInferenceAndImplicationExercises(level = 'B2', primaryLevel = 'B2') {
+  return buildTheoryExercises('inference-and-implicatio', config, level, primaryLevel);
 }

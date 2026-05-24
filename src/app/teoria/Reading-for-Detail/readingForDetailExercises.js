@@ -296,6 +296,6 @@ const config = {
   ]
 };
 
-export function buildReadingForDetailExercises() {
-  return buildTheoryExercises('reading-for-detail', config);
+export function buildReadingForDetailExercises(level = 'B2', primaryLevel = 'B2') {
+  return buildTheoryExercises('reading-for-detail', config, level, primaryLevel);
 }

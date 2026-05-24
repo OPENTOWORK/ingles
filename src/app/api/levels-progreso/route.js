@@ -1,6 +1,11 @@
 import { NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
+import { normalizeTopicHref } from '@/lib/normalizeTopicHref';
 import { findExamUnitSlugForTopicHref } from '@/lib/examTheoryProgress';
+import {
+  EXAM_THEORY_PROGRESS_TABLES,
+  queryFirstAvailableTable,
+} from '@/lib/resolveTheoryProgressTables';
 
 function getAdminClient() {
   const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
@@ -36,10 +41,15 @@ export async function GET(request) {
       return NextResponse.json({ rows: [] });
     }
 
-    const { data, error } = await admin
-      .from('levels_progreso')
-      .select('unidad, topic_href, progreso_pct, updated_at')
-      .eq('uuid_usuario', user.id);
+    const { data, error } = await queryFirstAvailableTable(
+      admin,
+      EXAM_THEORY_PROGRESS_TABLES,
+      (table) =>
+        admin
+          .from(table)
+          .select('unidad, topic_href, progreso_pct, updated_at')
+          .eq('uuid_usuario', user.id),
+    );
 
     if (error) {
       return NextResponse.json({ rows: [], warning: error.message });
@@ -62,7 +72,7 @@ export async function POST(request) {
     }
 
     const body = await request.json();
-    const topicHref = String(body.topic_href || '').trim();
+    const topicHref = normalizeTopicHref(String(body.topic_href || '').trim());
     const progresoPct = Math.min(
       100,
       Math.max(0, Math.round(Number(body.progreso_pct) || 0)),
@@ -93,11 +103,16 @@ export async function POST(request) {
       updated_at: new Date().toISOString(),
     };
 
-    const { data, error } = await admin
-      .from('levels_progreso')
-      .upsert(row, { onConflict: 'uuid_usuario,topic_href' })
-      .select('unidad, topic_href, progreso_pct, updated_at')
-      .single();
+    const { data, error } = await queryFirstAvailableTable(
+      admin,
+      EXAM_THEORY_PROGRESS_TABLES,
+      (table) =>
+        admin
+          .from(table)
+          .upsert(row, { onConflict: 'uuid_usuario,topic_href' })
+          .select('unidad, topic_href, progreso_pct, updated_at')
+          .single(),
+    );
 
     if (error) {
       return NextResponse.json({ error: error.message }, { status: 500 });

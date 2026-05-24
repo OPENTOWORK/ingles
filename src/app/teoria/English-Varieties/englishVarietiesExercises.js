@@ -296,6 +296,6 @@ const config = {
   ]
 };
 
-export function buildEnglishVarietiesExercises() {
-  return buildTheoryExercises('english-varieties', config);
+export function buildEnglishVarietiesExercises(level = 'B2', primaryLevel = 'B2') {
+  return buildTheoryExercises('english-varieties', config, level, primaryLevel);
 }

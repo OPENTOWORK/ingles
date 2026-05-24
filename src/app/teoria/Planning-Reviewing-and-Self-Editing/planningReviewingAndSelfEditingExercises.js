@@ -296,6 +296,6 @@ const config = {
   ]
 };
 
-export function buildPlanningReviewingAndSelfEditingExercises() {
-  return buildTheoryExercises('planning-reviewing-and-s', config);
+export function buildPlanningReviewingAndSelfEditingExercises(level = 'B2', primaryLevel = 'B2') {
+  return buildTheoryExercises('planning-reviewing-and-s', config, level, primaryLevel);
 }

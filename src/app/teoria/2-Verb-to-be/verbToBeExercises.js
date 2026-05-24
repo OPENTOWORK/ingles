@@ -294,6 +294,6 @@ const config = {
   ]
 };
 
-export function build2VerbToBeExercises() {
-  return buildTheoryExercises('verb-to-be', config);
+export function build2VerbToBeExercises(level = 'B2', primaryLevel = 'B2') {
+  return buildTheoryExercises('verb-to-be', config, level, primaryLevel);
 }

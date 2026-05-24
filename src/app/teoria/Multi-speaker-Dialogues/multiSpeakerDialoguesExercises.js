@@ -296,6 +296,6 @@ const config = {
   ]
 };
 
-export function buildMultiSpeakerDialoguesExercises() {
-  return buildTheoryExercises('multi-speaker-dialogues', config);
+export function buildMultiSpeakerDialoguesExercises(level = 'B2', primaryLevel = 'B2') {
+  return buildTheoryExercises('multi-speaker-dialogues', config, level, primaryLevel);
 }

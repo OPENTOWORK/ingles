@@ -294,6 +294,6 @@ const config = {
   ]
 };
 
-export function build10InfinitiveVsGerundExercises() {
-  return buildTheoryExercises('infinitive-vs-gerund', config);
+export function build10InfinitiveVsGerundExercises(level = 'B2', primaryLevel = 'B2') {
+  return buildTheoryExercises('infinitive-vs-gerund', config, level, primaryLevel);
 }

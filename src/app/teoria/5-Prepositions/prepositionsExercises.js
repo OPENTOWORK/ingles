@@ -294,6 +294,6 @@ const config = {
   ]
 };
 
-export function build5PrepositionsExercises() {
-  return buildTheoryExercises('prepositions', config);
+export function build5PrepositionsExercises(level = 'B2', primaryLevel = 'B2') {
+  return buildTheoryExercises('prepositions', config, level, primaryLevel);
 }

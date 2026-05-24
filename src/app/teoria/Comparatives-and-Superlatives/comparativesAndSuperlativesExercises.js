@@ -294,6 +294,6 @@ const config = {
   ]
 };
 
-export function buildComparativesAndSuperlativesExercises() {
-  return buildTheoryExercises('comparatives-and-superla', config);
+export function buildComparativesAndSuperlativesExercises(level = 'B2', primaryLevel = 'B2') {
+  return buildTheoryExercises('comparatives-and-superla', config, level, primaryLevel);
 }

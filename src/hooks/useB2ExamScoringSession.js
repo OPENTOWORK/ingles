@@ -46,32 +46,25 @@ export function useB2ExamScoringSession({ partMin, partMax }) {
   }, []);
 
   useEffect(() => {
-    if (!examPracticeOpen) return;
+    if (!examPracticeOpen || !Object.keys(examenIdBySlot).length) return;
     void (async () => {
       const { ensureAppUserProfile } = await import('@/utils/ensureAppUserProfile');
       await ensureAppUserProfile();
       void refreshPuntuacionesProgress();
     })();
-  }, [examPracticeOpen, refreshPuntuacionesProgress]);
+  }, [examPracticeOpen, examenIdBySlot, refreshPuntuacionesProgress]);
 
   const setExamenContext = useCallback((examenId) => {
     setCurrentExamenId(examenId);
     currentExamenIdRef.current = examenId;
   }, []);
 
-  const handleSelectExam = useCallback(
-    (selectExamSlot, slot) => {
-      selectExamSlot(slot);
-      setExamPracticeOpen(true);
-      setPartFinishNotice(null);
-      lastSavedPartSigRef.current = '';
-      void (async () => {
-        const { ensureAppUserProfile } = await import('@/utils/ensureAppUserProfile');
-        await ensureAppUserProfile();
-      })();
-    },
-    [],
-  );
+  const handleSelectExam = useCallback((selectExamSlot, slot) => {
+    selectExamSlot(slot);
+    setExamPracticeOpen(true);
+    setPartFinishNotice(null);
+    lastSavedPartSigRef.current = '';
+  }, []);
 
   const getPartSavedScoreLabel = useCallback(
     (part, examSlot) => {

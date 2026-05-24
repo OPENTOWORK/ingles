@@ -296,6 +296,6 @@ const config = {
   ]
 };
 
-export function buildOpinionAndAttitudeExercises() {
-  return buildTheoryExercises('opinion-and-attitude', config);
+export function buildOpinionAndAttitudeExercises(level = 'B2', primaryLevel = 'B2') {
+  return buildTheoryExercises('opinion-and-attitude', config, level, primaryLevel);
 }

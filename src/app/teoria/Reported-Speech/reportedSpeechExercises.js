@@ -294,6 +294,6 @@ const config = {
   ]
 };
 
-export function buildReportedSpeechExercises() {
-  return buildTheoryExercises('reported-speech', config);
+export function buildReportedSpeechExercises(level = 'B2', primaryLevel = 'B2') {
+  return buildTheoryExercises('reported-speech', config, level, primaryLevel);
 }

@@ -294,6 +294,6 @@ const config = {
   ]
 };
 
-export function buildFalseFriendsExercises() {
-  return buildTheoryExercises('false-friends', config);
+export function buildFalseFriendsExercises(level = 'B2', primaryLevel = 'B2') {
+  return buildTheoryExercises('false-friends', config, level, primaryLevel);
 }

@@ -1,4 +1,7 @@
-import { EXAM_THEORY_CATALOG } from '@/data/teoriaSections';
+import {
+  EXAM_THEORY_CATALOG,
+  resolveExamTheorySectionSlug,
+} from '@/data/teoriaSections';
 import { findExamUnitSlugForTopicHref } from '@/lib/examTheoryProgress';
 import { shouldApplySequentialLock } from '@/lib/theoryLockConfig';
 
@@ -7,7 +10,7 @@ const COMPLETE_PERCENT = 100;
 export const EXAM_THEORY_SLUGS = EXAM_THEORY_CATALOG.map((area) => area.slug);
 
 export function isExamTheorySectionSlug(slug) {
-  return EXAM_THEORY_SLUGS.includes(slug);
+  return EXAM_THEORY_SLUGS.includes(resolveExamTheorySectionSlug(slug));
 }
 
 /** Slug de unidad (use-of-english, reading, …) a partir de la ruta /teoria/… */
@@ -15,7 +18,7 @@ export function getExamUnitSlugFromPathname(pathname) {
   if (!pathname?.startsWith('/teoria/')) return null;
 
   const segment = pathname.replace(/^\/teoria\//, '').split('/')[0];
-  if (isExamTheorySectionSlug(segment)) return segment;
+  if (isExamTheorySectionSlug(segment)) return resolveExamTheorySectionSlug(segment);
 
   return findExamUnitSlugForTopicHref(pathname);
 }
@@ -65,11 +68,13 @@ export function getExamTheoryUnlockStates(units = [], isStudent = false) {
 }
 
 export function isExamTheorySlugLocked(slug, units = [], isStudent = false) {
-  if (!shouldApplySequentialLock(isStudent) || !isExamTheorySectionSlug(slug)) return false;
-  const state = getExamTheoryUnlockStates(units, true).find((item) => item.slug === slug);
+  const resolvedSlug = resolveExamTheorySectionSlug(slug);
+  if (!shouldApplySequentialLock(isStudent) || !isExamTheorySectionSlug(resolvedSlug)) return false;
+  const state = getExamTheoryUnlockStates(units, true).find((item) => item.slug === resolvedSlug);
   return state?.locked ?? false;
 }
 
 export function getExamTheoryUnlockInfo(slug, units = [], isStudent = false) {
-  return getExamTheoryUnlockStates(units, isStudent).find((item) => item.slug === slug) ?? null;
+  const resolvedSlug = resolveExamTheorySectionSlug(slug);
+  return getExamTheoryUnlockStates(units, isStudent).find((item) => item.slug === resolvedSlug) ?? null;
 }

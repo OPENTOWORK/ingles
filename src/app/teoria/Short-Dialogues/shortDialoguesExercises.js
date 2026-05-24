@@ -296,6 +296,6 @@ const config = {
   ]
 };
 
-export function buildShortDialoguesExercises() {
-  return buildTheoryExercises('short-dialogues', config);
+export function buildShortDialoguesExercises(level = 'B2', primaryLevel = 'B2') {
+  return buildTheoryExercises('short-dialogues', config, level, primaryLevel);
 }

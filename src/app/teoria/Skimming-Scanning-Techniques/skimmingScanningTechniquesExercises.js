@@ -286,6 +286,6 @@ const config = {
   ]
 };
 
-export function buildSkimmingScanningTechniquesExercises() {
-  return buildTheoryExercises('skimming-scanning-techni', config);
+export function buildSkimmingScanningTechniquesExercises(level = 'B2', primaryLevel = 'B2') {
+  return buildTheoryExercises('skimming-scanning-techni', config, level, primaryLevel);
 }

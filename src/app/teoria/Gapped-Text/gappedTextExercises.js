@@ -296,6 +296,6 @@ const config = {
   ]
 };
 
-export function buildGappedTextExercises() {
-  return buildTheoryExercises('gapped-text', config);
+export function buildGappedTextExercises(level = 'B2', primaryLevel = 'B2') {
+  return buildTheoryExercises('gapped-text', config, level, primaryLevel);
 }

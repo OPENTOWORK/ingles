@@ -284,6 +284,6 @@ const config = {
   ]
 };
 
-export function buildActiveGrammarAndUsefulStructuresExercises() {
-  return buildTheoryExercises('active-grammar-and-usefu', config);
+export function buildActiveGrammarAndUsefulStructuresExercises(level = 'B2', primaryLevel = 'B2') {
+  return buildTheoryExercises('active-grammar-and-usefu', config, level, primaryLevel);
 }

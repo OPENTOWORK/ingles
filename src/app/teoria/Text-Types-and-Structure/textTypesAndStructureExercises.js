@@ -296,6 +296,6 @@ const config = {
   ]
 };
 
-export function buildTextTypesAndStructureExercises() {
-  return buildTheoryExercises('text-types-and-structure', config);
+export function buildTextTypesAndStructureExercises(level = 'B2', primaryLevel = 'B2') {
+  return buildTheoryExercises('text-types-and-structure', config, level, primaryLevel);
 }

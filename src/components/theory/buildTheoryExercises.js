@@ -10,12 +10,18 @@ import {
   SelectAllExercise,
 } from '@/components/theory/ExtendedExerciseComponents';
 
+import {
+  resolveExerciseConfig,
+} from '@/lib/theoryExerciseLevelConfig';
+
 /**
  * Builds exactly 20 interactive exercises in a fixed order:
  * 5× MC → 3× Fill → 2× T/F → 2× Match → 3× Find error → 3× Order → 2× Select all
  */
-export function buildTheoryExercises(slug, config) {
-  const key = (n) => `${slug}-${n}`;
+export function buildTheoryExercises(slug, config, level = 'B2', primaryLevel = 'B2') {
+  const resolved = resolveExerciseConfig(config, level, slug, primaryLevel);
+  const levelSlug = String(level || 'B2').toLowerCase();
+  const key = (n) => `${slug}-${levelSlug}-${n}`;
   const {
     multipleChoice = [],
     fillBlanks = [],
@@ -24,7 +30,7 @@ export function buildTheoryExercises(slug, config) {
     findError = [],
     sentenceOrder = [],
     selectAll = [],
-  } = config;
+  } = resolved || {};
 
   const exercises = [];
   let n = 1;

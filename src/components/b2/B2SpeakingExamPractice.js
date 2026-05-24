@@ -1,13 +1,13 @@
 'use client';
 
 import { Suspense, useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import Link from 'next/link';
+import { useSearchParams } from 'next/navigation';
 import { useB2ExamPracticeSlot } from '@/hooks/useB2ExamPracticeSlot';
+import { useB2AutoOpenExamFromUrl } from '@/hooks/useB2AutoOpenExamFromUrl';
 import { B2ExamPracticeChrome, B2ExamPracticeLayout } from '@/components/b2/B2ExamPracticeChrome';
 import { useB2ExamScoringSession } from '@/hooks/useB2ExamScoringSession';
 import { useLevelsCategoryTimer } from '@/hooks/useLevelsCategoryTimer';
 import { getB2PartScoring } from '@/utils/levelsB2PartScoring';
-import { resolveB2ExamenId } from '@/utils/b2ResolveExam';
 import { supabase } from '@/utils/supabaseClient';
 import { formatLevelsPartDisplayName } from '@/utils/formatLevelsPartDisplayName';
 import { withBasePath } from '@/lib/base-path';
@@ -22,6 +22,7 @@ import {
 } from '@/features/speaking/domain/b2-speaking-exam-parts';
 import { useMediaRecorder } from '@/features/speaking/ui/hooks/useMediaRecorder';
 import { getB2LongTurnPhotoUrls } from '@/data/b2-speaking-long-turn-photos';
+import B2ExamPracticeModuleNav from '@/components/b2/B2ExamPracticeModuleNav';
 import { sitePublicPath } from '@/utils/sitePublicPath';
 
 const buttonStyle = {
@@ -64,10 +65,16 @@ function resolveLongTurnPhotos(taskContext, examSlot) {
  * @param {string} props.refreshLabel
  */
 function B2SpeakingExamPracticeInner({ title, subtitle, loadingLabel, refreshLabel, lang = 'en' }) {
+  const searchParams = useSearchParams();
   const { examSlot, selectExamSlot } = useB2ExamPracticeSlot();
   const scoring = useB2ExamScoringSession({
     partMin: B2_SPEAKING_PART_MIN,
     partMax: B2_SPEAKING_PART_MAX,
+  });
+  useB2AutoOpenExamFromUrl({
+    examPracticeOpen: scoring.examPracticeOpen,
+    handleSelectExam: scoring.handleSelectExam,
+    selectExamSlot,
   });
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
@@ -117,6 +124,15 @@ function B2SpeakingExamPracticeInner({ title, subtitle, loadingLabel, refreshLab
     void loadParts();
   }, [loadParts]);
 
+  useEffect(() => {
+    const qPart = searchParams.get('part');
+    if (!qPart || !partsData.length) return;
+    const targetNumber = Number(qPart);
+    if (!Number.isFinite(targetNumber)) return;
+    const target = partsData.find((p) => p.partNumber === targetNumber);
+    if (target) setSelectedPartId(target.id);
+  }, [searchParams, partsData]);
+
   useEffect(() => () => stopExaminerAudio(), []);
 
   const selectedPart = useMemo(
@@ -129,12 +145,10 @@ function B2SpeakingExamPracticeInner({ title, subtitle, loadingLabel, refreshLab
   const savedPartScore = scoring.progressBySlot[examSlot]?.parts?.[partNumber];
 
   useEffect(() => {
-    if (!scoring.examPracticeOpen || !scoring.b2LevelId) return;
-    void (async () => {
-      const { examenId } = await resolveB2ExamenId(supabase, scoring.b2LevelId, { slot: examSlot });
-      if (examenId) scoring.setExamenContext(examenId);
-    })();
-  }, [examSlot, scoring.examPracticeOpen, scoring.b2LevelId]);
+    if (!scoring.examPracticeOpen) return;
+    const examenId = scoring.examenIdBySlot[examSlot];
+    if (examenId) scoring.setExamenContext(examenId);
+  }, [examSlot, scoring.examPracticeOpen, scoring.examenIdBySlot, scoring.setExamenContext]);
 
   useEffect(() => {
     if (!scoring.examPracticeOpen) return;
@@ -162,6 +176,16 @@ function B2SpeakingExamPracticeInner({ title, subtitle, loadingLabel, refreshLab
     },
     [scoring, examSlot, selectedPart],
   );
+
+  const handleContinueInPage = useCallback(() => {
+    const sorted = [...partsData].sort((a, b) => a.partNumber - b.partNumber);
+    const currentIdx = sorted.findIndex((p) => p.id === selectedPartId);
+    if (currentIdx < 0 || currentIdx >= sorted.length - 1) return;
+    setSelectedPartId(sorted[currentIdx + 1].id);
+    if (typeof window !== 'undefined') {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  }, [partsData, selectedPartId]);
 
   return (
     <B2ExamPracticeLayout examPracticeOpen={scoring.examPracticeOpen}>
@@ -211,17 +235,13 @@ function B2SpeakingExamPracticeInner({ title, subtitle, loadingLabel, refreshLab
         ) : null}
       </section>
 
-      <div style={{ textAlign: 'center', marginTop: '2rem', display: 'flex', flexWrap: 'wrap', gap: '0.75rem', justifyContent: 'center' }}>
-        <Link
-          href={`/niveles/b2/exam-1?examen=${examSlot}`}
-          style={{ color: '#047857', fontWeight: 'bold', textDecoration: 'none' }}
-        >
-          ← Full Exam
-        </Link>
-        <Link href="/niveles/b2" style={{ color: '#0070f3', fontWeight: 'bold' }}>
-          ← Back to B2 Overview
-        </Link>
-      </div>
+      <B2ExamPracticeModuleNav
+        partNumber={partNumber}
+        pagePartMax={B2_SPEAKING_PART_MAX}
+        examSlot={examSlot}
+        onContinueInPage={handleContinueInPage}
+        lang={lang}
+      />
       </B2ExamPracticeChrome>
     </B2ExamPracticeLayout>
   );

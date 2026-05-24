@@ -286,6 +286,6 @@ const config = {
   ]
 };
 
-export function buildMultipleChoiceClozeExercises() {
-  return buildTheoryExercises('multiple-choice-cloze', config);
+export function buildMultipleChoiceClozeExercises(level = 'B2', primaryLevel = 'B2') {
+  return buildTheoryExercises('multiple-choice-cloze', config, level, primaryLevel);
 }

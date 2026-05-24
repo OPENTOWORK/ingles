@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
 import { findTheoryApartadoForTopicHref } from '@/lib/teoriaProgress';
+import { normalizeTopicHref } from '@/lib/normalizeTopicHref';
 
 function getAdminClient() {
   const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
@@ -62,7 +63,7 @@ export async function POST(request) {
     }
 
     const body = await request.json();
-    const topicHref = String(body.topic_href || '').trim();
+    const topicHref = normalizeTopicHref(String(body.topic_href || '').trim());
     const progresoPct = Math.min(
       100,
       Math.max(0, Math.round(Number(body.progreso_pct) || 0)),

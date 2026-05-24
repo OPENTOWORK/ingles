@@ -286,6 +286,6 @@ const config = {
   ]
 };
 
-export function buildEssayWritingTechniquesExercises() {
-  return buildTheoryExercises('essay-writing-techniques', config);
+export function buildEssayWritingTechniquesExercises(level = 'B2', primaryLevel = 'B2') {
+  return buildTheoryExercises('essay-writing-techniques', config, level, primaryLevel);
 }

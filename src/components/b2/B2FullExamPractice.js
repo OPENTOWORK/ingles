@@ -1,9 +1,9 @@
 'use client';
 
-import { Suspense, useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { Suspense, useCallback, useEffect, useMemo, useState } from 'react';
 import Link from 'next/link';
-import { useSearchParams } from 'next/navigation';
 import { useB2ExamPracticeSlot } from '@/hooks/useB2ExamPracticeSlot';
+import { useB2AutoOpenExamFromUrl } from '@/hooks/useB2AutoOpenExamFromUrl';
 import { useB2ExamScoringSession } from '@/hooks/useB2ExamScoringSession';
 import { B2ExamSlotProgressPicker } from '@/components/b2/B2ExamSlotProgressPicker';
 import { B2ExamPracticeLayout } from '@/components/b2/B2ExamPracticeChrome';
@@ -12,8 +12,7 @@ import LevelsPartScorePanel from '@/components/levels/LevelsPartScorePanel';
 import LevelsPartFinishBanner from '@/components/levels/LevelsPartFinishBanner';
 import { useLevelsCategoryTimer } from '@/hooks/useLevelsCategoryTimer';
 import { supabase } from '@/utils/supabaseClient';
-import { getCachedB2Level, getCachedB2ExamenIdsBySlot } from '@/utils/b2LevelCache';
-import { sortLevelsExamenesRows } from '@/utils/b2ResolveExam';
+import { getCachedB2Level, getCachedB2ExamNamesBySlot } from '@/utils/b2LevelCache';
 import { getB2PartScoring, starsFromApprovedPartsCount } from '@/utils/levelsB2PartScoring';
 export const B2_FULL_EXAM_PART_MIN = 1;
 export const B2_FULL_EXAM_PART_MAX = 17;
@@ -67,7 +66,6 @@ function countApprovedInRange(partsMap, partMin, partMax) {
 }
 
 function B2FullExamPracticeInner() {
-  const searchParams = useSearchParams();
   const { examSlot, selectExamSlot } = useB2ExamPracticeSlot();
   const scoring = useB2ExamScoringSession({
     partMin: B2_FULL_EXAM_PART_MIN,
@@ -76,7 +74,12 @@ function B2FullExamPracticeInner() {
   const { label: timerLabel } = useLevelsCategoryTimer();
   const [examNamesBySlot, setExamNamesBySlot] = useState({});
   const [catalogError, setCatalogError] = useState('');
-  const autoOpenedFromUrlRef = useRef(false);
+
+  useB2AutoOpenExamFromUrl({
+    examPracticeOpen: scoring.examPracticeOpen,
+    handleSelectExam: scoring.handleSelectExam,
+    selectExamSlot,
+  });
 
   const loadExamCatalog = useCallback(async () => {
     setCatalogError('');
@@ -85,18 +88,7 @@ function B2FullExamPracticeInner() {
       if (levelError || !levelData?.id) {
         throw new Error('No se pudo cargar el nivel B2.');
       }
-      const { data, error } = await supabase
-        .from('levels_examenes')
-        .select('id, nombre')
-        .eq('level_id', levelData.id);
-      if (error) throw error;
-      const ordered = sortLevelsExamenesRows(data);
-      const idsBySlot = await getCachedB2ExamenIdsBySlot(supabase, levelData.id);
-      const names = {};
-      Object.entries(idsBySlot).forEach(([slot, id]) => {
-        const row = ordered.find((r) => r.id === id);
-        names[Number(slot)] = row?.nombre?.trim() || `Examen ${slot}`;
-      });
+      const names = await getCachedB2ExamNamesBySlot(supabase, levelData.id);
       setExamNamesBySlot(names);
     } catch (e) {
       setCatalogError(e?.message || 'No se pudieron cargar los exámenes.');
@@ -106,20 +98,6 @@ function B2FullExamPracticeInner() {
   useEffect(() => {
     void loadExamCatalog();
   }, [loadExamCatalog]);
-
-  const { examPracticeOpen, handleSelectExam, refreshPuntuacionesProgress } = scoring;
-
-  useEffect(() => {
-    const q = searchParams.get('examen');
-    if (!q || autoOpenedFromUrlRef.current || examPracticeOpen) return;
-    autoOpenedFromUrlRef.current = true;
-    handleSelectExam(selectExamSlot, Number(q));
-  }, [searchParams, examPracticeOpen, handleSelectExam, selectExamSlot]);
-
-  useEffect(() => {
-    if (!examPracticeOpen) return;
-    void refreshPuntuacionesProgress();
-  }, [examPracticeOpen, examSlot, refreshPuntuacionesProgress]);
 
   const slotProgress = scoring.progressBySlot[examSlot] || {};
   const approvedParts = Number(slotProgress.approvedParts) || 0;

@@ -296,6 +296,6 @@ const config = {
   ]
 };
 
-export function buildCohesionAndCoherenceExercises() {
-  return buildTheoryExercises('cohesion-and-coherence', config);
+export function buildCohesionAndCoherenceExercises(level = 'B2', primaryLevel = 'B2') {
+  return buildTheoryExercises('cohesion-and-coherence', config, level, primaryLevel);
 }

@@ -296,6 +296,6 @@ const config = {
   ]
 };
 
-export function buildActiveListeningStrategiesExercises() {
-  return buildTheoryExercises('active-listening-strateg', config);
+export function buildActiveListeningStrategiesExercises(level = 'B2', primaryLevel = 'B2') {
+  return buildTheoryExercises('active-listening-strateg', config, level, primaryLevel);
 }

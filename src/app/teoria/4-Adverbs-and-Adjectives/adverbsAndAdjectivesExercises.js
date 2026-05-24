@@ -294,6 +294,6 @@ const config = {
   ]
 };
 
-export function build4AdverbsAndAdjectivesExercises() {
-  return buildTheoryExercises('adverbs-and-adjectives', config);
+export function build4AdverbsAndAdjectivesExercises(level = 'B2', primaryLevel = 'B2') {
+  return buildTheoryExercises('adverbs-and-adjectives', config, level, primaryLevel);
 }

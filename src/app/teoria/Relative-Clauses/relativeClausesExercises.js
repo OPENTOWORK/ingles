@@ -284,6 +284,6 @@ const config = {
   ]
 };
 
-export function buildRelativeClausesExercises() {
-  return buildTheoryExercises('relative-clauses', config);
+export function buildRelativeClausesExercises(level = 'B2', primaryLevel = 'B2') {
+  return buildTheoryExercises('relative-clauses', config, level, primaryLevel);
 }

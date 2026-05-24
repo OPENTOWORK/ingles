@@ -2,7 +2,9 @@
 
 import dynamic from 'next/dynamic';
 import { Suspense, useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { useSearchParams } from 'next/navigation';
 import { useB2ExamPracticeSlot } from '@/hooks/useB2ExamPracticeSlot';
+import { useB2AutoOpenExamFromUrl } from '@/hooks/useB2AutoOpenExamFromUrl';
 import { B2ExamPracticeChrome, B2ExamPracticeLayout } from '@/components/b2/B2ExamPracticeChrome';
 import { useB2ExamScoringSession } from '@/hooks/useB2ExamScoringSession';
 import { computeB2PartProgressFromState } from '@/utils/recordLevelsB2PartScore';
@@ -41,6 +43,7 @@ import {
 import { resolveB2ExamenId, fetchB2PreguntasByExamen } from '@/utils/b2ResolveExam';
 import { formatLevelsPartDisplayName } from '@/utils/formatLevelsPartDisplayName';
 import { getCachedB2Level } from '@/utils/b2LevelCache';
+import B2ExamPracticeModuleNav from '@/components/b2/B2ExamPracticeModuleNav';
 
 const B2WritingLongFormAiPanel = dynamic(
   () => import('@/components/b2/B2WritingLongFormAiPanel'),
@@ -127,8 +130,14 @@ function B2ExamPaperPracticePageInner({
   writingWordMax = 190,
   lang = 'en',
 }) {
+  const searchParams = useSearchParams();
   const { examSlot, selectExamSlot } = useB2ExamPracticeSlot();
   const scoring = useB2ExamScoringSession({ partMin, partMax });
+  useB2AutoOpenExamFromUrl({
+    examPracticeOpen: scoring.examPracticeOpen,
+    handleSelectExam: scoring.handleSelectExam,
+    selectExamSlot,
+  });
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [partsData, setPartsData] = useState([]);
@@ -404,6 +413,17 @@ function B2ExamPaperPracticePageInner({
       mountedRef.current = false;
     };
   }, [loadData]);
+
+  useEffect(() => {
+    const qPart = searchParams.get('part');
+    if (!qPart || !partsData.length) return;
+    const targetNumber = Number(qPart);
+    if (!Number.isFinite(targetNumber)) return;
+    const target = partsData.find(
+      (p) => Number(p.nombre.match(/\d+/)?.[0] || 0) === targetNumber,
+    );
+    if (target) setSelectedPartId(target.id);
+  }, [searchParams, partsData]);
 
   const selectedPart = useMemo(
     () => partsData.find((part) => part.id === selectedPartId),
@@ -864,6 +884,20 @@ function B2ExamPaperPracticePageInner({
       setSelectedQuestionByPart((prev) => ({ ...prev, [part.id]: part.questions[0].preguntaId }));
     }
   };
+
+  const handleContinueInPage = useCallback(() => {
+    const sorted = [...partsData].sort((a, b) => {
+      const an = Number(a.nombre.match(/\d+/)?.[0] || 0);
+      const bn = Number(b.nombre.match(/\d+/)?.[0] || 0);
+      return an - bn;
+    });
+    const currentIdx = sorted.findIndex((p) => p.id === selectedPartId);
+    if (currentIdx < 0 || currentIdx >= sorted.length - 1) return;
+    handleSelectPart(sorted[currentIdx + 1]);
+    if (typeof window !== 'undefined') {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  }, [partsData, selectedPartId]);
 
   return (
     <B2ExamPracticeLayout examPracticeOpen={scoring.examPracticeOpen}>
@@ -1891,46 +1925,13 @@ function B2ExamPaperPracticePageInner({
         )}
       </section>
 
-      <div style={{ textAlign: 'center', marginTop: '2rem', display: 'flex', flexWrap: 'wrap', gap: '0.75rem', justifyContent: 'center' }}>
-        <Link
-          href={`/niveles/b2/exam-1?examen=${examSlot}`}
-          style={{
-            textDecoration: 'none',
-            color: '#047857',
-            fontWeight: 'bold',
-            display: 'inline-block',
-            padding: '0.75rem 1.25rem',
-            border: '2px solid #059669',
-            borderRadius: '6px',
-          }}
-        >
-          ← Full Exam
-        </Link>
-        <Link href="/niveles/b2">
-          <div
-            style={{
-              textDecoration: 'none',
-              color: '#0070f3',
-              fontWeight: 'bold',
-              display: 'inline-block',
-              padding: '0.75rem 1.25rem',
-              border: '2px solid #0070f3',
-              borderRadius: '6px',
-              transition: 'background 0.3s, color 0.3s',
-            }}
-            onMouseOver={(e) => {
-              e.currentTarget.style.backgroundColor = '#0070f3';
-              e.currentTarget.style.color = '#fff';
-            }}
-            onMouseOut={(e) => {
-              e.currentTarget.style.backgroundColor = 'transparent';
-              e.currentTarget.style.color = '#0070f3';
-            }}
-          >
-            ← Back to B2 Overview
-          </div>
-        </Link>
-      </div>
+      <B2ExamPracticeModuleNav
+        partNumber={partNumber}
+        pagePartMax={partMax}
+        examSlot={examSlot}
+        onContinueInPage={handleContinueInPage}
+        lang={lang}
+      />
       </B2ExamPracticeChrome>
     </B2ExamPracticeLayout>
   );

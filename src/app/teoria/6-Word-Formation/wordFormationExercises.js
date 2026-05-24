@@ -294,6 +294,6 @@ const config = {
   ]
 };
 
-export function build6WordFormationExercises() {
-  return buildTheoryExercises('word-formation', config);
+export function build6WordFormationExercises(level = 'B2', primaryLevel = 'B2') {
+  return buildTheoryExercises('word-formation', config, level, primaryLevel);
 }
