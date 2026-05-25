@@ -1243,6 +1243,43 @@ function sampleWithoutReplacement(pool, count) {
 }
 
 /**
+ * Reading 51–60: elige un bloque completo de un solo placement_test (mismo pasaje).
+ * En cada intento del test mixto se sortea otro examen con reading completo.
+ */
+function sampleReadingFromSingleExam(pool, count = PLACEMENT_MIXED_TARGETS[2]) {
+  const byTest = new Map();
+  for (const q of pool || []) {
+    const tid = q.sourceTestId || '__unknown__';
+    if (!byTest.has(tid)) byTest.set(tid, []);
+    byTest.get(tid).push(q);
+  }
+
+  const completeSets = [];
+  let largestPartial = [];
+
+  for (const questions of byTest.values()) {
+    const isExam2 = questions.some((q) => q.exam2);
+    const deduped = dedupeByPlacementNumber(questions, { exam2: isExam2 });
+    const sorted = sortPlacementQuestionSet(deduped);
+    if (sorted.length >= count) {
+      completeSets.push(sorted.slice(0, count));
+    } else if (sorted.length > largestPartial.length) {
+      largestPartial = sorted;
+    }
+  }
+
+  if (completeSets.length > 0) {
+    return shuffleArray(completeSets)[0];
+  }
+
+  if (largestPartial.length > 0) {
+    return largestPartial.slice(0, Math.min(count, largestPartial.length));
+  }
+
+  return sampleWithoutReplacement(pool, count);
+}
+
+/**
  * Agrupa todas las preguntas válidas por parte (1–3) desde varios exámenes.
  */
 function collectPlacementQuestionPools(rows, tests) {
@@ -1328,7 +1365,7 @@ export function buildMixedPlacementQuestionSet(rows, { tests } = {}) {
   const pools = collectPlacementQuestionPools(rows, tests);
 
   const grammar = sampleWithoutReplacement(pools[1], PLACEMENT_MIXED_TARGETS[1]);
-  const readingSample = sampleWithoutReplacement(pools[2], PLACEMENT_MIXED_TARGETS[2]);
+  const readingSample = sampleReadingFromSingleExam(pools[2], PLACEMENT_MIXED_TARGETS[2]);
   const writingSample = sampleWithoutReplacement(pools[3], PLACEMENT_MIXED_TARGETS[3]);
   const writing = writingSample[0] || null;
 

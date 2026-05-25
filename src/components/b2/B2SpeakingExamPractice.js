@@ -23,6 +23,8 @@ import {
 import { useMediaRecorder } from '@/features/speaking/ui/hooks/useMediaRecorder';
 import { getB2LongTurnPhotoUrls } from '@/data/b2-speaking-long-turn-photos';
 import B2ExamPracticeModuleNav from '@/components/b2/B2ExamPracticeModuleNav';
+import ExamModeSectionBanner from '@/components/niveles/ExamModeSectionBanner';
+import { useExamModeStrict } from '@/hooks/useExamModeStrict';
 import { sitePublicPath } from '@/utils/sitePublicPath';
 
 const buttonStyle = {
@@ -71,6 +73,14 @@ function B2SpeakingExamPracticeInner({ title, subtitle, loadingLabel, refreshLab
     partMin: B2_SPEAKING_PART_MIN,
     partMax: B2_SPEAKING_PART_MAX,
   });
+  const examMode = useExamModeStrict({
+    slug: 'b2',
+    partMin: B2_SPEAKING_PART_MIN,
+    partMax: B2_SPEAKING_PART_MAX,
+    sectionTitle: 'Speaking',
+  });
+  const { examModeActive, reviewMode, section: examSection, handleFinishSection, setSectionRemaining } =
+    examMode;
   useB2AutoOpenExamFromUrl({
     examPracticeOpen: scoring.examPracticeOpen,
     handleSelectExam: scoring.handleSelectExam,
@@ -177,6 +187,13 @@ function B2SpeakingExamPracticeInner({ title, subtitle, loadingLabel, refreshLab
     [scoring, examSlot, selectedPart],
   );
 
+  const handleExamModeFinish = useCallback(() => {
+    handleFinishSection(
+      { speakingCompleted: true, partNumber },
+      { correct: 0, total: b2PartCfg?.total ?? 0, byPart: {} },
+    );
+  }, [handleFinishSection, partNumber, b2PartCfg?.total]);
+
   const handleContinueInPage = useCallback(() => {
     const sorted = [...partsData].sort((a, b) => a.partNumber - b.partNumber);
     const currentIdx = sorted.findIndex((p) => p.id === selectedPartId);
@@ -202,13 +219,25 @@ function B2SpeakingExamPracticeInner({ title, subtitle, loadingLabel, refreshLab
         loading={loading}
         onRefresh={() => loadParts()}
         partScoreMetrics={scorePanelProps}
-        partFinishNotice={scoring.partFinishNotice}
+        hideScorePanel={examModeActive && !reviewMode}
+        partFinishNotice={examModeActive && !reviewMode ? null : scoring.partFinishNotice}
         partsData={!loading && !error ? partsData : []}
         selectedPartId={selectedPartId}
         onSelectPart={(part) => setSelectedPartId(part.id)}
         getPartSavedScoreLabel={(part) => scoring.getPartSavedScoreLabel(part, examSlot)}
         lang={lang}
       >
+      {examModeActive && examSection ? (
+        <ExamModeSectionBanner
+          sectionTitle={examSection.title || 'Speaking'}
+          durationSeconds={examSection.durationSeconds}
+          initialRemainingSeconds={examSection.remainingSeconds}
+          active={!reviewMode}
+          onTick={(sec) => setSectionRemaining(examSection.key, sec)}
+          onFinish={handleExamModeFinish}
+          lang={lang}
+        />
+      ) : null}
       <section style={{ margin: '0 auto', width: '100%' }}>
         {loading && <p style={{ textAlign: 'center' }}>{loadingLabel}</p>}
         {!loading && error && (

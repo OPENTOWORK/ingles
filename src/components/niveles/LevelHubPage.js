@@ -6,6 +6,11 @@ import { isStaffRole } from '@/lib/placementLevelAccess';
 import { isNivelesLevelComingSoonForUser, isStudentRole } from '@/constants/studentFeatureAccess';
 import NivelesComingSoonNotice from '@/components/niveles/NivelesComingSoonNotice';
 import PageHero from '@/components/PageHero';
+import NivelesSectionHeader from '@/components/niveles/NivelesSectionHeader';
+import {
+  EXAM_PRACTICE_HEADER,
+  getLevelTopicSectionHeader,
+} from '@/data/levelHubSectionMeta';
 
 /**
  * Hub de nivel: PageHero + secciones de tips + enlaces Exam Practice (sin selector de tests).
@@ -45,6 +50,8 @@ export default function LevelHubPage({ config }) {
         stats={[{ value: String(topicCount), label: 'Practice topics' }]}
       />
 
+      <ExamPracticeSection examLinks={config.examLinks} isStudent={isStudent} />
+
       <div className="sections">
         {Object.entries(config.sections).map(([title, topics]) => (
           <LevelSection
@@ -57,50 +64,60 @@ export default function LevelHubPage({ config }) {
         ))}
       </div>
 
-      <section className="exam-section">
-        <div className="section__head">
-          <h2>Exam Practice</h2>
-          <span className="count">{(config.examLinks || []).length}</span>
-        </div>
-        <div className="exam-grid">
-          {(config.examLinks || []).map((exam) => {
-            const blockedForStudent = isStudent && !exam.enabledForStudents;
-            if (blockedForStudent) {
-              return (
-                <div
-                  key={exam.href}
-                  className="exam-card exam-card-disabled"
-                  aria-disabled="true"
-                >
-                  <span>{exam.text}</span>
-                  <small className="exam-card-badge">COMING SOON</small>
-                </div>
-              );
-            }
-            return (
-              <Link key={exam.href} href={exam.href} className="exam-card">
-                {exam.text}
-              </Link>
-            );
-          })}
-        </div>
-      </section>
-
       <LevelHubStyles />
     </main>
   );
 }
 
+function ExamPracticeSection({ examLinks = [], isStudent }) {
+  if (!examLinks.length) return null;
+
+  return (
+    <section className="exam-section">
+      <NivelesSectionHeader
+        eyebrow={EXAM_PRACTICE_HEADER.eyebrow}
+        title={EXAM_PRACTICE_HEADER.title}
+        count={examLinks.length}
+        description={EXAM_PRACTICE_HEADER.description}
+      />
+      <div className="exam-grid">
+        {examLinks.map((exam) => {
+          const blockedForStudent = isStudent && !exam.enabledForStudents;
+          if (blockedForStudent) {
+            return (
+              <div
+                key={exam.href}
+                className="exam-card exam-card-disabled"
+                aria-disabled="true"
+              >
+                <span>{exam.text}</span>
+                <small className="exam-card-badge">COMING SOON</small>
+              </div>
+            );
+          }
+          return (
+            <Link key={exam.href} href={exam.href} className="exam-card">
+              {exam.text}
+            </Link>
+          );
+        })}
+      </div>
+    </section>
+  );
+}
+
 function LevelSection({ title, topics, isStudent, levelEnabled }) {
   const showComingSoon = isStudent && !levelEnabled;
+  const header = getLevelTopicSectionHeader(title);
 
   return (
     <section className="section">
-      <div className="section__head">
-        <h2>{title}</h2>
-        <span className="count">{topics.length}</span>
-        <span className="section__subtitle">Description and interactive tips</span>
-      </div>
+      <NivelesSectionHeader
+        eyebrow={header.eyebrow}
+        title={header.title}
+        count={topics.length}
+        description={header.description}
+      />
       <ul className="grid">
         {topics.map((topic) =>
           showComingSoon ? (
@@ -161,34 +178,61 @@ function LevelHubStyles() {
       .niveles-level-page .section {
         padding: 6px;
       }
-      .niveles-level-page .section__head {
-        display: flex;
-        align-items: center;
-        gap: 8px;
-        margin-bottom: 10px;
-        flex-wrap: wrap;
+      .niveles-level-page .niveles-section-head {
+        margin-bottom: 18px;
+        padding: 18px 20px 16px;
+        border-radius: 16px;
+        background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
+        border: 1px solid rgba(226, 232, 240, 0.95);
+        box-shadow: 0 4px 20px rgba(15, 23, 42, 0.04);
       }
-      .niveles-level-page .section__head h2 {
+      .niveles-level-page .niveles-section-head__row {
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        gap: 16px;
+      }
+      .niveles-level-page .niveles-section-head__title-wrap {
+        min-width: 0;
+      }
+      .niveles-level-page .niveles-section-head__eyebrow {
+        display: block;
+        margin-bottom: 6px;
+        font-size: 0.72rem;
+        font-weight: 700;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        color: #2563eb;
+      }
+      .niveles-level-page .niveles-section-head__title {
         margin: 0;
-        font-size: 22px;
+        font-size: clamp(1.35rem, 2.8vw, 1.65rem);
+        font-weight: 800;
+        letter-spacing: -0.025em;
+        line-height: 1.15;
         color: var(--text);
       }
-      .niveles-level-page .count {
+      .niveles-level-page .niveles-section-head__count {
+        flex: 0 0 auto;
         display: inline-grid;
         place-items: center;
-        width: 28px;
-        height: 28px;
-        border-radius: 9999px;
-        border: 1px solid #eaeaea;
-        background: var(--card);
-        font-size: 12px;
-        color: #666;
+        min-width: 36px;
+        height: 36px;
+        padding: 0 10px;
+        border-radius: 999px;
+        background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%);
+        border: 1px solid rgba(37, 99, 235, 0.18);
+        font-size: 0.82rem;
+        font-weight: 800;
+        color: #1d4ed8;
+        box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.65);
       }
-      .niveles-level-page .section__subtitle {
-        font-size: 0.9rem;
-        color: #666;
-        font-style: italic;
-        margin-left: 4px;
+      .niveles-level-page .niveles-section-head__desc {
+        margin: 12px 0 0;
+        max-width: 680px;
+        font-size: 0.96rem;
+        line-height: 1.55;
+        color: #5a6b7d;
       }
       .niveles-level-page .grid {
         list-style: none;
@@ -254,7 +298,8 @@ function LevelHubStyles() {
         color: #64748b;
       }
       .niveles-level-page .exam-section {
-        margin-top: 2rem;
+        margin-top: 1.5rem;
+        margin-bottom: 0.5rem;
         padding: 6px;
       }
       .niveles-level-page .exam-grid {
@@ -262,7 +307,7 @@ function LevelHubStyles() {
         justify-content: center;
         gap: 1rem;
         flex-wrap: wrap;
-        margin-top: 1rem;
+        margin-top: 0;
       }
       .niveles-level-page .exam-card {
         background: #d1fae5;

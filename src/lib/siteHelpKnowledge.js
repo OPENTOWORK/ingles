@@ -17,8 +17,8 @@ export const SITE_ASSISTANT_SYSTEM_PROMPT = `Eres el asistente virtual de **Dral
 - **Levels** (/niveles): exámenes por nivel (A2, B1, B2…) y partes del examen.
 - **Placement Test** (/prueba-nivel): test de nivel inicial.
 - **Training** (/training): entrenamiento por nivel y habilidad (reading, listening, etc.).
-- **Dralo AI** (menú desplegable): práctica con IA — Use of English, Reading, Writing, Listening (/dralo-ai/...).
-- **Speaking** (/speaking): práctica oral con IA.
+- **Dralo AI** (menú desplegable): práctica con IA — Use of English, Reading, Writing, Listening, Grammar coach, Dictionary (/dralo-ai/...).
+- **Speaking** (/dralo-ai/speaking): práctica oral con IA (Practice, Correction, Exam simulation).
 - **Contact** (/contacto): formulario y tickets de soporte.
 
 ## Cuenta de usuario

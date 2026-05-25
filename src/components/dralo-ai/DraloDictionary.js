@@ -3,6 +3,8 @@
 import { useCallback, useRef, useState } from 'react';
 import PageHero from '@/components/PageHero';
 import Link from 'next/link';
+import { useUserRole } from '@/context/UserRoleContext';
+import DictionarySavedPanel, { useDictionarySavedWords } from '@/components/dralo-ai/DictionarySavedPanel';
 import {
   DEFAULT_DICTIONARY_LANGUAGE,
   DICTIONARY_TARGET_LANGUAGES,
@@ -97,6 +99,8 @@ function LanguageSelect({ value, onChange, id }) {
 }
 
 export default function DraloDictionary() {
+  const { session } = useUserRole();
+  const [activeTab, setActiveTab] = useState('search');
   const [targetLanguage, setTargetLanguage] = useState(DEFAULT_DICTIONARY_LANGUAGE);
   const [queryInput, setQueryInput] = useState('');
   const [resultMode, setResultMode] = useState(null);
@@ -111,7 +115,18 @@ export default function DraloDictionary() {
   const [askLoading, setAskLoading] = useState(false);
   const audioRef = useRef(null);
 
+  const {
+    savedWords,
+    loading: savedLoading,
+    tablesReady: savedTablesReady,
+    saveLoading,
+    isWordSaved,
+    toggleSaveWord,
+    removeWord,
+  } = useDictionarySavedWords(session);
+
   const langLabel = getDictionaryLanguageLabel(targetLanguage);
+  const currentWordSaved = entry?.word ? isWordSaved(entry.word) : false;
 
   const playPronunciation = useCallback(async (text, audioUrl, speedMode = 'normal') => {
     const w = String(text || '').trim();
@@ -208,6 +223,20 @@ export default function DraloDictionary() {
     }
   };
 
+  const handleToggleSave = async () => {
+    if (!entry?.word) return;
+    if (!session) {
+      setError('Sign in to save words to your list.');
+      return;
+    }
+
+    setError('');
+    const result = await toggleSaveWord(entry, targetLanguage);
+    if (!result.ok && result.error) {
+      setError(result.error);
+    }
+  };
+
   const submitAskDralo = async (e) => {
     e?.preventDefault();
     if (!askQuestion.trim()) return;
@@ -260,11 +289,36 @@ export default function DraloDictionary() {
 
       <div className="dralo-dict">
         <div className="dralo-dict__toolbar">
-          <LanguageSelect
-            id="dict-global-lang"
-            value={targetLanguage}
-            onChange={setTargetLanguage}
-          />
+          <div className="dralo-dict__tabs" role="tablist" aria-label="Dictionary sections">
+            <button
+              type="button"
+              role="tab"
+              aria-selected={activeTab === 'search'}
+              className={`dralo-dict__tab${activeTab === 'search' ? ' dralo-dict__tab--active' : ''}`}
+              onClick={() => setActiveTab('search')}
+            >
+              🔍 Search
+            </button>
+            <button
+              type="button"
+              role="tab"
+              aria-selected={activeTab === 'saved'}
+              className={`dralo-dict__tab${activeTab === 'saved' ? ' dralo-dict__tab--active' : ''}`}
+              onClick={() => setActiveTab('saved')}
+            >
+              ♥ Saved words
+              {savedWords.length ? (
+                <span className="dralo-dict__tab-count">{savedWords.length}</span>
+              ) : null}
+            </button>
+          </div>
+          {activeTab === 'search' ? (
+            <LanguageSelect
+              id="dict-global-lang"
+              value={targetLanguage}
+              onChange={setTargetLanguage}
+            />
+          ) : null}
         </div>
 
         {error ? (
@@ -274,6 +328,19 @@ export default function DraloDictionary() {
         ) : null}
 
         <section className="dralo-dict__panel">
+          {activeTab === 'saved' ? (
+            <DictionarySavedPanel
+              savedWords={savedWords}
+              loading={savedLoading}
+              tablesReady={savedTablesReady}
+              session={session}
+              targetLanguage={targetLanguage}
+              onRemove={removeWord}
+              onPlayAudio={playPronunciation}
+              audioLoading={audioLoading}
+            />
+          ) : (
+            <>
           <form className="dralo-dict__form dralo-dict__form--stack" onSubmit={handleSubmit}>
             <textarea
               className="dralo-ai-input dralo-dict__textarea"
@@ -307,6 +374,18 @@ export default function DraloDictionary() {
                     <span className="dralo-dict__speak-icon" aria-hidden>
                       {audioLoading ? '⏳' : '🔊'}
                     </span>
+                  </button>
+
+                  <button
+                    type="button"
+                    className={`dralo-dict__heart${currentWordSaved ? ' dralo-dict__heart--active' : ''}`}
+                    onClick={handleToggleSave}
+                    disabled={saveLoading}
+                    title={currentWordSaved ? 'Remove from saved words' : 'Save word'}
+                    aria-label={currentWordSaved ? 'Remove from saved words' : 'Save word'}
+                    aria-pressed={currentWordSaved}
+                  >
+                    {saveLoading ? '…' : currentWordSaved ? '♥' : '♡'}
                   </button>
 
                   {ai?.wordInTargetLanguage ? (
@@ -526,6 +605,8 @@ export default function DraloDictionary() {
               </div>
             </article>
           ) : null}
+            </>
+          )}
         </section>
 
         <p className="dralo-dict__back">

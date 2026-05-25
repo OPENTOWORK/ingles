@@ -24,6 +24,7 @@ const LevelsEstadisticasPanel = dynamic(
 );
 import ProfileComingSoon from '@/components/perfil/ProfileComingSoon';
 import ProfileExamDatesPanel from '@/components/perfil/ProfileExamDatesPanel';
+import ProfilePrivateTutorPanel from '@/components/perfil/ProfilePrivateTutorPanel';
 import SiteMascot from '@/components/SiteMascot';
 import { offlineFirstDatabase } from '@/utils/offlineFirstDatabase';
 import { progressTracker } from '@/utils/progressTracker';
@@ -47,7 +48,8 @@ const PROFILE_TABS = [
   { id: 'study-planner', label: '📅 Planificador' },
   { id: 'gamification', label: '🎮 Gamificación' },
   { id: 'community', label: '🌐 Comunidad' },
-  { id: 'exam-dates', label: '📅 Fechas de examen', studentAllowed: true },
+  { id: 'exam-dates', label: '📅 Fechas de examen' },
+  { id: 'private-tutor', label: '👨‍🏫 Consigue tu profesor particular' },
 ];
 
 const PROFILE_TAB_LABELS = Object.fromEntries(
@@ -848,6 +850,8 @@ export default function ProfilePage() {
                 type="button"
                 className={`tab${activeTab === tab.id ? ' tab--active' : ''}${locked ? ' tab--locked' : ''}`}
                 onClick={() => setActiveTab(tab.id)}
+                aria-disabled={locked || undefined}
+                title={locked ? 'Próximamente disponible' : undefined}
               >
                 {tab.label}
               </button>
@@ -2130,6 +2134,13 @@ export default function ProfilePage() {
         />
       )}
 
+      {activeTab === 'private-tutor' && (
+        <ProfilePrivateTutorPanel
+          userRole={userRole}
+          accessToken={layoutSession?.access_token}
+        />
+      )}
+
       {/* Tab: Comunidad */}
       {activeTab === 'community' && (
         <>
@@ -2274,9 +2285,10 @@ function GlobalStyles() {
       .tab{padding:12px 20px;border-radius:12px;border:1px solid #eaeaea;background:white;color:var(--text);cursor:pointer;transition:.2s;font-weight:500}
       .tab:hover{transform:translateY(-1px);border-color:#0070f3;background:#b0d6fa}
       .tab--active{background:#0070f3;border-color:transparent;color:white;box-shadow:0 8px 20px rgba(0,112,243,.35)}
-      .tab--locked{opacity:.8}
-      .tab--locked:not(.tab--active){background:#f8fafc;border-color:#e2e8f0;color:#64748b}
-      .tab--locked.tab--active{background:#64748b;border-color:transparent;color:#fff;box-shadow:0 6px 16px rgba(100,116,139,.35)}
+      .tab--locked{opacity:.85}
+      .tab--locked:not(.tab--active){background:#f8fafc;border-color:#e2e8f0;color:#64748b;cursor:not-allowed}
+      .tab--locked:not(.tab--active):hover{transform:none;border-color:#e2e8f0;background:#f8fafc}
+      .tab--locked.tab--active{background:#64748b;border-color:transparent;color:#fff;box-shadow:0 6px 16px rgba(100,116,139,.35);cursor:not-allowed}
 
       .profile-coming-soon{margin:22px 0;padding:48px 28px;border:1px dashed #c7d2fe;border-radius:16px;background:linear-gradient(180deg,#fff 0%,#f8fafc 100%);text-align:center}
       .profile-coming-soon__badge{display:inline-block;margin-bottom:12px;padding:6px 14px;border-radius:999px;background:linear-gradient(135deg,#e0e7ff 0%,#c7d2fe 100%);color:#3730a3;font-size:13px;font-weight:700;letter-spacing:.06em;text-transform:uppercase}

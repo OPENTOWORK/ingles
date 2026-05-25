@@ -1,7 +1,15 @@
 'use client';
 
-import SpeakingPage from '../../../dralo-speaking/pages/SpeakingPage';
+import { useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 
-export default function SpeakingRoutePage() {
-  return <SpeakingPage />;
+/** Redirige la ruta antigua al apartado Dralo AI con el mismo formato que Reading / UoE. */
+export default function SpeakingLegacyRedirect() {
+  const router = useRouter();
+
+  useEffect(() => {
+    router.replace('/dralo-ai/speaking');
+  }, [router]);
+
+  return null;
 }

@@ -6,6 +6,7 @@ import { useExamTheoryProgress } from '@/hooks/useExamTheoryProgress';
 import { getExamTheoryUnlockStates } from '@/lib/examTheoryUnlock';
 import { SEQUENTIAL_LOCK_FOR_STUDENTS } from '@/lib/theoryLockConfig';
 import ExamTheoryProgressBar from '@/components/niveles/ExamTheoryProgressBar';
+import NivelesSectionHeader from '@/components/niveles/NivelesSectionHeader';
 
 function ExamTheoryCardContent({ area, initial, percent, unitProgress, count }) {
   return (
@@ -36,21 +37,21 @@ export default function ExamTheorySection({ userId, accessToken, isStudent = fal
   const unlockStates = getExamTheoryUnlockStates(units, isStudent);
   const unlockBySlug = Object.fromEntries(unlockStates.map((state) => [state.slug, state]));
 
+  const introDescription =
+    `Theory for exam skills — Reading and Use of English, writing, listening, and speaking.${
+      isStudent && SEQUENTIAL_LOCK_FOR_STUDENTS
+        ? ' Complete each part at 100% to unlock the next (students only).'
+        : ''
+    }`;
+
   return (
     <section className="section exam-theory-section" id="exam-theory">
-      <div className="section__head">
-        <h2>Exam theory</h2>
-        <span className="count">{EXAM_THEORY_CATALOG.length}</span>
-      </div>
-      <p className="exam-theory-intro">
-        Theory for exam skills — Reading and Use of English, writing, listening, and speaking.
-        {isStudent && SEQUENTIAL_LOCK_FOR_STUDENTS ? (
-          <>
-            {' '}
-            Complete each part at 100% to unlock the next (students only).
-          </>
-        ) : null}
-      </p>
+      <NivelesSectionHeader
+        eyebrow="Exam preparation"
+        title="Exam theory"
+        count={EXAM_THEORY_CATALOG.length}
+        description={introDescription}
+      />
 
       <ul className="area-grid exam-theory-grid">
         {EXAM_THEORY_CATALOG.map((area) => {

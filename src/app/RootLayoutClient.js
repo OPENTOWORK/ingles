@@ -181,7 +181,7 @@ export default function RootLayoutClient({ children }) {
           <div className="site-header__bar">
             <Link href="/" className="site-header__logo">
               <img src="/uk-flag.png" alt="UK Flag" className="site-header__flag bandera" />
-              <span>Dralo</span>
+              <span>Dralo Academy</span>
             </Link>
           </div>
         </header>
@@ -200,7 +200,7 @@ export default function RootLayoutClient({ children }) {
           <div className="site-header__bar">
             <Link href="/" className="site-header__logo">
               <img src="/uk-flag.png" alt="UK Flag" className="site-header__flag bandera" />
-              <span>Dralo</span>
+              <span>Dralo Academy</span>
             </Link>
           </div>
         </header>
@@ -264,7 +264,7 @@ export default function RootLayoutClient({ children }) {
         <div className="site-header__bar">
           <Link href="/" className="site-header__logo">
             <img src="/uk-flag.png" alt="UK Flag" className="site-header__flag bandera" />
-            <span>Dralo</span>
+            <span>Dralo Academy</span>
           </Link>
 
           <AppNav session={session} userRole={userRole} onLogout={handleLogout} />
@@ -278,7 +278,7 @@ export default function RootLayoutClient({ children }) {
             <ExamNavigationGuard>
               {children}
             </ExamNavigationGuard>
-            {pathname === '/' && <DeferredAppSideMenu defaultOpen />}
+            {pathname === '/' && <DeferredAppSideMenu defaultOpen={false} />}
           </main>
         </PlacementAccessProvider>
       </UserRoleProvider>

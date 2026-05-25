@@ -44,6 +44,9 @@ import { resolveB2ExamenId, fetchB2PreguntasByExamen } from '@/utils/b2ResolveEx
 import { formatLevelsPartDisplayName } from '@/utils/formatLevelsPartDisplayName';
 import { getCachedB2Level } from '@/utils/b2LevelCache';
 import B2ExamPracticeModuleNav from '@/components/b2/B2ExamPracticeModuleNav';
+import ExamModeSectionBanner from '@/components/niveles/ExamModeSectionBanner';
+import { useExamModeStrict } from '@/hooks/useExamModeStrict';
+import { scoreExamModeDrafts } from '@/utils/examModeGradeAnswers';
 
 const B2WritingLongFormAiPanel = dynamic(
   () => import('@/components/b2/B2WritingLongFormAiPanel'),
@@ -133,6 +136,22 @@ function B2ExamPaperPracticePageInner({
   const searchParams = useSearchParams();
   const { examSlot, selectExamSlot } = useB2ExamPracticeSlot();
   const scoring = useB2ExamScoringSession({ partMin, partMax });
+  const examMode = useExamModeStrict({
+    slug: 'b2',
+    partMin,
+    partMax,
+    sectionTitle: title,
+  });
+  const {
+    examModeActive,
+    reviewMode,
+    hideFeedback,
+    section: examSection,
+    handleFinishSection,
+    setSectionRemaining,
+  } = examMode;
+  const examDraftRef = useRef({});
+  const prevExamPartRef = useRef(null);
   useB2AutoOpenExamFromUrl({
     examPracticeOpen: scoring.examPracticeOpen,
     handleSelectExam: scoring.handleSelectExam,
@@ -461,12 +480,43 @@ function B2ExamPaperPracticePageInner({
   }, [selectedQuestion?.preguntaId, selectedPart?.id]);
 
   useEffect(() => {
+    if (examModeActive && !reviewMode) {
+      const pn = Number(selectedPart?.nombre.match(/\d+/)?.[0] || 0);
+      if (prevExamPartRef.current != null && prevExamPartRef.current !== pn && selectedPart) {
+        examDraftRef.current[prevExamPartRef.current] = {
+          preguntaId: selectedQuestion?.preguntaId,
+          selectedOptions: { ...selectedOptions },
+          openInputs: { ...openInputs },
+          checkedQuestions: { ...checkedQuestions },
+        };
+      }
+      const draft = examDraftRef.current[pn];
+      if (draft) {
+        setSelectedOptions(draft.selectedOptions || {});
+        setOpenInputs(draft.openInputs || {});
+        setCheckedQuestions(draft.checkedQuestions || {});
+      } else {
+        setOpenInputs({});
+        setSelectedOptions({});
+        setCheckedQuestions({});
+      }
+      setOpenChecks({});
+      setAiHintsByKey({});
+      prevExamPartRef.current = pn;
+      return;
+    }
     setOpenInputs({});
     setOpenChecks({});
     setSelectedOptions({});
     setCheckedQuestions({});
     setAiHintsByKey({});
-  }, [selectedQuestion?.preguntaId, selectedPart?.id]);
+  }, [
+    selectedQuestion?.preguntaId,
+    selectedPart?.id,
+    selectedPart?.nombre,
+    examModeActive,
+    reviewMode,
+  ]);
 
   const partNumber = useMemo(
     () => Number(selectedPart?.nombre.match(/\d+/)?.[0] || 0),
@@ -787,6 +837,7 @@ function B2ExamPaperPracticePageInner({
 
   const trySavePartAfterAnswer = useCallback(
     (stateOverride = {}) => {
+      if (examModeActive && !reviewMode) return;
       if (!scoring.examPracticeOpen || !selectedPart?.id || !selectedQuestion?.preguntaId || showLongWritingWithAi) {
         return;
       }
@@ -823,8 +874,39 @@ function B2ExamPaperPracticePageInner({
       groupedAnswers,
       checkedQuestions,
       selectedOptions,
+      examModeActive,
+      reviewMode,
     ],
   );
+
+  const handleExamModeFinish = useCallback(() => {
+    const pn = Number(selectedPart?.nombre.match(/\d+/)?.[0] || 0);
+    if (pn && selectedPart) {
+      examDraftRef.current[pn] = {
+        preguntaId: selectedQuestion?.preguntaId,
+        selectedOptions: { ...selectedOptions },
+        openInputs: { ...openInputs },
+        checkedQuestions: { ...checkedQuestions },
+      };
+    }
+    const { scores } = scoreExamModeDrafts({
+      partMin,
+      partMax,
+      partsData,
+      draftByPart: examDraftRef.current,
+    });
+    handleFinishSection({ draftByPart: examDraftRef.current }, scores);
+  }, [
+    selectedPart,
+    selectedQuestion,
+    selectedOptions,
+    openInputs,
+    checkedQuestions,
+    partMin,
+    partMax,
+    partsData,
+    handleFinishSection,
+  ]);
 
   useEffect(() => {
     setWritingLiveCorrect(null);
@@ -914,14 +996,25 @@ function B2ExamPaperPracticePageInner({
         loading={loading}
         onRefresh={() => loadData()}
         partScoreMetrics={scorePanelProps}
-        hideScorePanel={false}
-        partFinishNotice={scoring.partFinishNotice}
+        hideScorePanel={examModeActive && !reviewMode}
+        partFinishNotice={examModeActive && !reviewMode ? null : scoring.partFinishNotice}
         partsData={!loading && !error ? partsData : []}
         selectedPartId={selectedPartId}
         onSelectPart={handleSelectPart}
         getPartSavedScoreLabel={(part) => scoring.getPartSavedScoreLabel(part, examSlot)}
         lang={lang}
       >
+      {examModeActive && examSection ? (
+        <ExamModeSectionBanner
+          sectionTitle={examSection.title || title}
+          durationSeconds={examSection.durationSeconds}
+          initialRemainingSeconds={examSection.remainingSeconds}
+          active={!reviewMode}
+          onTick={(sec) => setSectionRemaining(examSection.key, sec)}
+          onFinish={handleExamModeFinish}
+          lang={lang}
+        />
+      ) : null}
       <section style={{ maxWidth: sectionMaxWidth, margin: '0 auto', width: '100%' }}>
         {loading && <p style={{ textAlign: 'center' }}>{loadingLabel}</p>}
         {!loading && error && (
@@ -1321,6 +1414,7 @@ function B2ExamPaperPracticePageInner({
                                     padding: '0.65rem 0.75rem',
                                   }}
                                 />
+                                {!hideFeedback ? (
                                 <button
                                   type="button"
                                   onClick={() => {
@@ -1370,8 +1464,9 @@ function B2ExamPaperPracticePageInner({
                                 >
                                   Check
                                 </button>
+                                ) : null}
                               </div>
-                              {typeof checkResult === 'boolean' ? (
+                              {!hideFeedback && typeof checkResult === 'boolean' ? (
                                 <>
                                   <p
                                     style={{
@@ -1480,8 +1575,8 @@ function B2ExamPaperPracticePageInner({
                                 const isSelected = selectedOptions[questionKey] === option.id;
                                 const isChecked = checkedQuestions[questionKey];
                                 const isCorrect = !!option.correcta;
-                                const showCorrect = isChecked && isCorrect;
-                                const showIncorrect = isChecked && isSelected && !isCorrect;
+                                const showCorrect = !hideFeedback && isChecked && isCorrect;
+                                const showIncorrect = !hideFeedback && isChecked && isSelected && !isCorrect;
 
                                 return (
                                   <button
@@ -1493,7 +1588,7 @@ function B2ExamPaperPracticePageInner({
                                       setSelectedOptions((prev) => ({ ...prev, [questionKey]: option.id }));
                                       setCheckedQuestions(nextChecked);
                                       trySavePartAfterAnswer({ checkedQuestions: nextChecked });
-                                      if (!wasChecked) {
+                                      if (!wasChecked && !hideFeedback) {
                                         const correctOpt = group.options.find((o) => o.correcta);
                                         const answersFromDatabase = group.options
                                           .map((o) => (o.formattedText || o.respuesta || '').trim())
@@ -1564,7 +1659,7 @@ function B2ExamPaperPracticePageInner({
                                 `extra-${groupIndex}`,
                               );
                               const hasChecked = checkedQuestions[questionKey];
-                              if (!hasChecked) return null;
+                              if (!hasChecked || hideFeedback) return null;
                               const correct = group.options.find((o) => o.correcta);
                               return (
                                 <>
@@ -1699,6 +1794,7 @@ function B2ExamPaperPracticePageInner({
                                   padding: '0.65rem 0.75rem',
                                 }}
                               />
+                              {!hideFeedback ? (
                               <button
                                 type="button"
                                 onClick={() => {
@@ -1750,8 +1846,9 @@ function B2ExamPaperPracticePageInner({
                               >
                                 Check
                               </button>
+                              ) : null}
                             </div>
-                            {typeof checkResult === 'boolean' && (
+                            {!hideFeedback && typeof checkResult === 'boolean' && (
                               <>
                                 <p
                                   style={{
@@ -1814,8 +1911,8 @@ function B2ExamPaperPracticePageInner({
                               const isSelected = selectedOptions[questionKey] === option.id;
                               const isChecked = checkedQuestions[questionKey];
                               const isCorrect = !!option.correcta;
-                              const showCorrect = isChecked && isCorrect;
-                              const showIncorrect = isChecked && isSelected && !isCorrect;
+                              const showCorrect = !hideFeedback && isChecked && isCorrect;
+                              const showIncorrect = !hideFeedback && isChecked && isSelected && !isCorrect;
 
                               return (
                                 <button
@@ -1827,7 +1924,7 @@ function B2ExamPaperPracticePageInner({
                                     setSelectedOptions((prev) => ({ ...prev, [questionKey]: option.id }));
                                     setCheckedQuestions(nextChecked);
                                     trySavePartAfterAnswer({ checkedQuestions: nextChecked });
-                                    if (!wasChecked) {
+                                    if (!wasChecked && !hideFeedback) {
                                       const correctOpt = group.options.find((o) => o.correcta);
                                       const answersFromDatabase = group.options
                                         .map((o) => (o.formattedText || o.respuesta || '').trim())
@@ -1901,7 +1998,7 @@ function B2ExamPaperPracticePageInner({
                               `extra-${groupIndex}`,
                             );
                             const hasChecked = checkedQuestions[questionKey];
-                            if (!hasChecked) return null;
+                            if (!hasChecked || hideFeedback) return null;
                             const correct = group.options.find((o) => o.correcta);
                             return (
                               <>

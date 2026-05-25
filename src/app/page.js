@@ -3,14 +3,6 @@
 import Link from 'next/link';
 import SiteMascot from '@/components/SiteMascot';
 import { MASCOT_LOGO_VARIANT } from '@/config/mascotAssets';
-const NAV_CARDS = [
-  { href: '/dralo-ai', icon: '✨', label: 'Dralo AI' },
-  { href: '/teoria', icon: '📖', label: 'Theory' },
-  { href: '/niveles', icon: '📚', label: 'Levels' },
-  { href: '/prueba-nivel', icon: '🧪', label: 'Placement Test' },
-  { href: '/training', icon: '🎮', label: 'Training' },
-  { href: '/login', icon: '🔐', label: 'Login' },
-];
 
 const FEATURES = ['Interactive', 'Automatic correction', 'Free to use'];
 
@@ -53,20 +45,6 @@ export default function Home() {
             Start Practising
           </Link>
         </div>
-
-        <section className="home-nav" aria-label="Quick links">
-          <h2 className="home-nav__heading">Explore</h2>
-          <div className="home-page__cards">
-            {NAV_CARDS.map((card) => (
-              <Link key={card.href} href={card.href} className="home-page__card">
-                <span className="home-page__card-icon" aria-hidden>
-                  {card.icon}
-                </span>
-                <span className="home-page__card-label">{card.label}</span>
-              </Link>
-            ))}
-          </div>
-        </section>
       </div>
     </main>
   );

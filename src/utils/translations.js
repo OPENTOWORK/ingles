@@ -151,7 +151,7 @@ export const translations = {
     part2DescribePictures: "Part 2: Describe pictures",
     
     // Exam links
-    fullExam: "📝 Full Exam",
+    fullExam: "📝 Exam mode",
     useOfEnglishExam: "📝 Use of English",
     readingExam: "📖 Reading",
     writingExam: "✍️ Writing",
@@ -859,7 +859,7 @@ export const translations = {
     part2DescribePictures: "Parte 2: Describir imágenes",
     
     // Exam links
-    fullExam: "📝 Examen Completo",
+    fullExam: "📝 Modo examen",
     useOfEnglishExam: "📝 Uso del Inglés",
     readingExam: "📖 Lectura",
     writingExam: "✍️ Escritura",

@@ -27,6 +27,10 @@ const ACCENTS = {
     gradient: 'linear-gradient(135deg, #4338ca 0%, #6366f1 55%, #8b5cf6 100%)',
     glow: 'rgba(99, 102, 241, 0.42)',
   },
+  lime: {
+    gradient: 'linear-gradient(135deg, #65a30d 0%, #84cc16 48%, #22c55e 100%)',
+    glow: 'rgba(132, 204, 22, 0.4)',
+  },
 };
 
 export default function PageHero({

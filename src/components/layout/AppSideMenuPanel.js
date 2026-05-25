@@ -67,6 +67,11 @@ export default function AppSideMenuPanel({ defaultOpen = true }) {
     setAdminPanelsOpen(false);
   }, [pathname]);
 
+  useEffect(() => {
+    document.body.classList.add('has-home-side-menu');
+    return () => document.body.classList.remove('has-home-side-menu');
+  }, []);
+
   const handleLogout = () => {
     void performLogout();
   };

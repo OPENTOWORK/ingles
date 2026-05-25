@@ -14,7 +14,8 @@ export const DRALO_MENU_ITEMS = [
   { label: 'Reading', href: '/dralo-ai/reading' },
   { label: 'Writing', href: '/dralo-ai/writing' },
   { label: 'Listening', href: '/dralo-ai/listening' },
-  { label: 'Speaking', href: '/speaking' },
+  { label: 'Speaking', href: '/dralo-ai/speaking' },
+  { label: 'Grammar coach', href: '/dralo-ai/grammar-coach' },
   { label: 'Dictionary', href: '/dralo-ai/dictionary' },
 ];
 

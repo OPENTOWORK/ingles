@@ -243,9 +243,19 @@ function CorrectionPanel({ data, level }) {
 
 // ─── Main Component ────────────────────────────────────────────────────────────
 
-export default function SpeakingPage() {
-  const [level, setLevel] = useState('B1');
-  const [mode, setMode] = useState('practice');
+export default function SpeakingPage({
+  embedded = false,
+  level: levelProp,
+  onLevelChange,
+  mode: modeProp,
+  onModeChange,
+} = {}) {
+  const [levelInternal, setLevelInternal] = useState('B2');
+  const [modeInternal, setModeInternal] = useState('practice');
+  const level = embedded && levelProp !== undefined ? levelProp : levelInternal;
+  const setLevel = embedded && onLevelChange ? onLevelChange : setLevelInternal;
+  const mode = embedded && modeProp !== undefined ? modeProp : modeInternal;
+  const setMode = embedded && onModeChange ? onModeChange : setModeInternal;
   const [messages, setMessages] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [isSpeaking, setIsSpeaking] = useState(false);
@@ -848,141 +858,212 @@ export default function SpeakingPage() {
   const micIsActive = isRecording || isBrowserListening;
   const lastExamAssistant = [...examLines].reverse().find((l) => l.role === 'assistant');
 
-  return (
-    <div style={{
-      fontFamily: "'DM Sans', -apple-system, sans-serif",
-      width: '100%',
-      maxWidth: '100%',
-      background: 'var(--color-background-primary, #fff)',
+  const voiceToolbar = (
+    <div className={embedded ? 'dralo-ai-speaking-voice-bar' : ''} style={embedded ? undefined : {
       display: 'flex',
-      flexDirection: 'column',
+      alignItems: 'center',
+      justifyContent: 'flex-end',
+      gap: '8px',
+      padding: embedded ? undefined : '8px 24px',
+      borderBottom: embedded ? undefined : '0.5px solid #e0e0e0',
+      flexShrink: 0,
+      background: '#fff',
     }}>
-      {/* Header */}
-      <header style={{
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'space-between',
-        padding: '14px 24px',
-        borderBottom: '0.5px solid #e0e0e0',
-        position: 'sticky',
-        top: 0,
-        background: 'var(--color-background-primary, #fff)',
-        zIndex: 10,
-      }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-          <div style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#1D9E75' }} />
-          <span style={{ fontWeight: 700, fontSize: '18px' }}>Dralo</span>
-          <span style={{ color: '#999', fontSize: '14px' }}>/ Speaking</span>
-        </div>
-
-        {/* Level selector */}
-        <div style={{ display: 'flex', gap: '6px' }}>
-          {LEVELS.map(l => (
-            <button
-              key={l}
-              onClick={() => setLevel(l)}
-              style={{
-                padding: '5px 14px',
-                borderRadius: '20px',
-                border: l === level ? `1.5px solid ${LEVEL_COLORS[l].border}` : '0.5px solid #ddd',
-                background: l === level ? LEVEL_COLORS[l].bg : 'transparent',
-                color: l === level ? LEVEL_COLORS[l].text : '#666',
-                fontSize: '13px',
-                fontWeight: l === level ? 600 : 400,
-                cursor: 'pointer',
-                transition: 'all 0.15s',
-              }}
-            >
-              {l}
-            </button>
+      {voiceOptions.length > 0 && (
+        <select
+          value={selectedVoiceName}
+          onChange={(e) => {
+            const name = e.target.value;
+            setSelectedVoiceName(name);
+            setPreferredBritishVoice(name);
+          }}
+          className={embedded ? 'dralo-ai-speaking-voice-select' : undefined}
+          style={embedded ? undefined : {
+            maxWidth: '220px',
+            padding: '6px 8px',
+            borderRadius: '8px',
+            border: '0.5px solid #ddd',
+            background: 'white',
+            fontSize: '12px',
+            color: '#333',
+          }}
+          title="English voice selection"
+        >
+          {voiceOptions.map((v) => (
+            <option key={v.name} value={v.name}>
+              {v.recommended ? `UK ★ ${v.name}` : `${v.lang} ${v.name}`}
+            </option>
           ))}
-        </div>
+        </select>
+      )}
+      <button
+        type="button"
+        onClick={() => { setTtsEnabled(prev => !prev); stopSpeaking(); }}
+        className={embedded ? 'dralo-ai-speaking-voice-toggle' : undefined}
+        style={embedded ? undefined : {
+          display: 'flex',
+          alignItems: 'center',
+          gap: '6px',
+          padding: '6px 12px',
+          borderRadius: '8px',
+          border: '0.5px solid #ddd',
+          background: 'transparent',
+          cursor: 'pointer',
+          fontSize: '13px',
+          color: ttsEnabled ? '#1D9E75' : '#999',
+        }}
+        title={ttsEnabled ? 'Disable voice' : 'Enable voice'}
+      >
+        {ttsEnabled ? <Volume2 size={16} /> : <VolumeX size={16} />}
+        <span>{ttsEnabled ? 'Voice on' : 'Voice off'}</span>
+      </button>
+    </div>
+  );
 
-        {/* TTS toggle */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-          {voiceOptions.length > 0 && (
-            <select
-              value={selectedVoiceName}
-              onChange={(e) => {
-                const name = e.target.value;
-                setSelectedVoiceName(name);
-                setPreferredBritishVoice(name);
-              }}
-              style={{
-                maxWidth: '220px',
-                padding: '6px 8px',
-                borderRadius: '8px',
-                border: '0.5px solid #ddd',
-                background: 'white',
-                fontSize: '12px',
-                color: '#333',
-              }}
-              title="English voice selection"
-            >
-              {voiceOptions.map((v) => (
-                <option key={v.name} value={v.name}>
-                  {v.recommended ? `UK ★ ${v.name}` : `${v.lang} ${v.name}`}
-                </option>
+  return (
+    <div
+      className={embedded ? 'dralo-ai-speaking-embedded' : undefined}
+      style={embedded ? undefined : {
+        fontFamily: "'DM Sans', -apple-system, sans-serif",
+        width: '100%',
+        maxWidth: '100%',
+        background: 'var(--color-background-primary, #fff)',
+        display: 'flex',
+        flexDirection: 'column',
+      }}
+    >
+      {!embedded ? (
+        <>
+          <header style={{
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            padding: '14px 24px',
+            borderBottom: '0.5px solid #e0e0e0',
+            position: 'sticky',
+            top: 0,
+            background: 'var(--color-background-primary, #fff)',
+            zIndex: 10,
+          }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+              <div style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#1D9E75' }} />
+              <span style={{ fontWeight: 700, fontSize: '18px' }}>Dralo Academy</span>
+              <span style={{ color: '#999', fontSize: '14px' }}>/ Speaking</span>
+            </div>
+
+            <div style={{ display: 'flex', gap: '6px' }}>
+              {LEVELS.map(l => (
+                <button
+                  key={l}
+                  type="button"
+                  onClick={() => setLevel(l)}
+                  style={{
+                    padding: '5px 14px',
+                    borderRadius: '20px',
+                    border: l === level ? `1.5px solid ${LEVEL_COLORS[l].border}` : '0.5px solid #ddd',
+                    background: l === level ? LEVEL_COLORS[l].bg : 'transparent',
+                    color: l === level ? LEVEL_COLORS[l].text : '#666',
+                    fontSize: '13px',
+                    fontWeight: l === level ? 600 : 400,
+                    cursor: 'pointer',
+                    transition: 'all 0.15s',
+                  }}
+                >
+                  {l}
+                </button>
               ))}
-            </select>
-          )}
-          <button
-            onClick={() => { setTtsEnabled(prev => !prev); stopSpeaking(); }}
-            style={{
-              display: 'flex',
-              alignItems: 'center',
-              gap: '6px',
-              padding: '6px 12px',
-              borderRadius: '8px',
-              border: '0.5px solid #ddd',
-              background: 'transparent',
-              cursor: 'pointer',
-              fontSize: '13px',
-              color: ttsEnabled ? '#1D9E75' : '#999',
-            }}
-            title={ttsEnabled ? 'Disable voice' : 'Enable voice'}
-          >
-            {ttsEnabled ? <Volume2 size={16} /> : <VolumeX size={16} />}
-            <span>{ttsEnabled ? 'Voice on' : 'Voice off'}</span>
-          </button>
-        </div>
-      </header>
+            </div>
 
-      {/* Mode tabs — justo bajo la barra (el vídeo va al final para no tapar la práctica) */}
-      <div style={{ padding: '12px 24px', borderBottom: '0.5px solid #e0e0e0', display: 'flex', gap: '8px', flexShrink: 0, background: '#fff' }}>
-        {MODES.map(m => (
-          <button
-            key={m.id}
-            onClick={() => setMode(m.id)}
-            style={{
-              display: 'flex',
-              alignItems: 'center',
-              gap: '6px',
-              padding: '8px 16px',
-              borderRadius: '8px',
-              border: '0.5px solid',
-              borderColor: mode === m.id ? levelColors.border : '#ddd',
-              background: mode === m.id ? levelColors.bg : 'transparent',
-              color: mode === m.id ? levelColors.text : '#666',
-              cursor: 'pointer',
-              fontSize: '13px',
-              fontWeight: mode === m.id ? 500 : 400,
-              transition: 'all 0.15s',
-            }}
-          >
-            <m.icon size={14} />
-            {m.label}
-          </button>
-        ))}
-      </div>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+              {voiceOptions.length > 0 && (
+                <select
+                  value={selectedVoiceName}
+                  onChange={(e) => {
+                    const name = e.target.value;
+                    setSelectedVoiceName(name);
+                    setPreferredBritishVoice(name);
+                  }}
+                  style={{
+                    maxWidth: '220px',
+                    padding: '6px 8px',
+                    borderRadius: '8px',
+                    border: '0.5px solid #ddd',
+                    background: 'white',
+                    fontSize: '12px',
+                    color: '#333',
+                  }}
+                  title="English voice selection"
+                >
+                  {voiceOptions.map((v) => (
+                    <option key={v.name} value={v.name}>
+                      {v.recommended ? `UK ★ ${v.name}` : `${v.lang} ${v.name}`}
+                    </option>
+                  ))}
+                </select>
+              )}
+              <button
+                type="button"
+                onClick={() => { setTtsEnabled(prev => !prev); stopSpeaking(); }}
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '6px',
+                  padding: '6px 12px',
+                  borderRadius: '8px',
+                  border: '0.5px solid #ddd',
+                  background: 'transparent',
+                  cursor: 'pointer',
+                  fontSize: '13px',
+                  color: ttsEnabled ? '#1D9E75' : '#999',
+                }}
+                title={ttsEnabled ? 'Disable voice' : 'Enable voice'}
+              >
+                {ttsEnabled ? <Volume2 size={16} /> : <VolumeX size={16} />}
+                <span>{ttsEnabled ? 'Voice on' : 'Voice off'}</span>
+              </button>
+            </div>
+          </header>
+
+          <div style={{ padding: '12px 24px', borderBottom: '0.5px solid #e0e0e0', display: 'flex', gap: '8px', flexShrink: 0, background: '#fff' }}>
+            {MODES.map(m => (
+              <button
+                key={m.id}
+                type="button"
+                onClick={() => setMode(m.id)}
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '6px',
+                  padding: '8px 16px',
+                  borderRadius: '8px',
+                  border: '0.5px solid',
+                  borderColor: mode === m.id ? levelColors.border : '#ddd',
+                  background: mode === m.id ? levelColors.bg : 'transparent',
+                  color: mode === m.id ? levelColors.text : '#666',
+                  cursor: 'pointer',
+                  fontSize: '13px',
+                  fontWeight: mode === m.id ? 500 : 400,
+                  transition: 'all 0.15s',
+                }}
+              >
+                <m.icon size={14} />
+                {m.label}
+              </button>
+            ))}
+          </div>
+        </>
+      ) : null}
+
+      {embedded ? voiceToolbar : null}
 
       {mode === 'exam' ? (
         <div
+          className={embedded ? 'dralo-ai-speaking-exam' : undefined}
           style={{
             flex: 1,
             overflowY: 'auto',
-            padding: '20px 24px 28px',
-            maxHeight: 'calc(100vh - 140px)',
+            padding: embedded ? '16px 0 20px' : '20px 24px 28px',
+            maxHeight: embedded ? 'none' : 'calc(100vh - 140px)',
             background: 'var(--color-background-primary, #fff)',
           }}
         >
@@ -1088,7 +1169,8 @@ export default function SpeakingPage() {
         </div>
       ) : (
       <div
-        style={{
+        className={embedded ? 'dralo-ai-speaking-practice-grid' : undefined}
+        style={embedded ? undefined : {
           display: 'grid',
           gridTemplateColumns: 'minmax(260px, 300px) minmax(0, 1fr)',
           alignItems: 'stretch',

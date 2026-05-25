@@ -294,7 +294,7 @@ export const NIVELES_LEVEL_HUB = {
       ],
     },
     examLinks: [
-      { text: '📝 Full Exam', href: '/niveles/a2/exam-1', enabledForStudents: false },
+      { text: '📝 Exam mode', href: '/niveles/a2/exam-1', enabledForStudents: false },
       {
         text: '📖 Reading & Writing',
         href: '/niveles/a2/exam-reading',
@@ -376,7 +376,7 @@ export const NIVELES_LEVEL_HUB = {
       ],
     },
     examLinks: [
-      { text: '📝 Full Exam', href: '/niveles/b1/exam-1', enabledForStudents: false },
+      { text: '📝 Exam mode', href: '/niveles/b1/exam-1', enabledForStudents: false },
       { text: '📖 Reading', href: '/niveles/b1/exam-reading', enabledForStudents: false },
       { text: '✍️ Writing', href: '/niveles/b1/exam-writing', enabledForStudents: false },
       { text: '🎧 Listening', href: '/niveles/b1/exam-listening', enabledForStudents: false },
@@ -427,42 +427,42 @@ export const NIVELES_LEVEL_HUB = {
       ],
       Writing: [
         {
-          text: 'Part 8: Compulsory essay (140-190 words)',
-          href: '/niveles/b2/writing/part-8',
+          text: 'Part 1: Compulsory essay (140-190 words)',
+          href: '/niveles/b2/writing/part-1',
         },
         {
-          text: 'Part 9: Article, letter, report or review (140-190 words)',
-          href: '/niveles/b2/writing/part-9',
+          text: 'Part 2: Article, letter, report or review (140-190 words)',
+          href: '/niveles/b2/writing/part-2',
         },
       ],
       Listening: [
         {
-          text: 'Part 10: Multiple choice (short extracts)',
-          href: '/niveles/b2/listening/part-10',
+          text: 'Part 1: Multiple choice (short extracts)',
+          href: '/niveles/b2/listening/part-1',
         },
         {
-          text: 'Part 11: Sentence completion (monologue)',
-          href: '/niveles/b2/listening/part-11',
+          text: 'Part 2: Sentence completion (monologue)',
+          href: '/niveles/b2/listening/part-2',
         },
         {
-          text: 'Part 12: Multiple choice (conversation)',
-          href: '/niveles/b2/listening/part-12',
+          text: 'Part 3: Multiple choice (conversation)',
+          href: '/niveles/b2/listening/part-3',
         },
         {
-          text: 'Part 13: Multiple matching (short monologues)',
-          href: '/niveles/b2/listening/part-13',
+          text: 'Part 4: Multiple matching (short monologues)',
+          href: '/niveles/b2/listening/part-4',
         },
       ],
       Speaking: [
-        { text: 'Part 14: Interview', href: '/niveles/b2/speaking/part-14' },
-        { text: 'Part 15: Long turn (photos)', href: '/niveles/b2/speaking/part-15' },
-        { text: 'Part 16: Collaborative task', href: '/niveles/b2/speaking/part-16' },
-        { text: 'Part 17: Discussion', href: '/niveles/b2/speaking/part-17' },
+        { text: 'Part 1: Interview', href: '/niveles/b2/speaking/part-1' },
+        { text: 'Part 2: Long turn (photos)', href: '/niveles/b2/speaking/part-2' },
+        { text: 'Part 3: Collaborative task', href: '/niveles/b2/speaking/part-3' },
+        { text: 'Part 4: Discussion', href: '/niveles/b2/speaking/part-4' },
       ],
     },
     examContentReady: { 1: true, 2: false, 3: false, 4: false, 5: false },
     examLinks: [
-      { text: '📝 Full Exam', href: '/niveles/b2/exam-1', enabledForStudents: true },
+      { text: '📝 Exam mode', href: '/niveles/b2/exam-mode', enabledForStudents: true },
       {
         text: '📘 Reading and Use of English',
         href: '/niveles/b2/exam-reading-and-use-of-english',
@@ -561,7 +561,7 @@ export const NIVELES_LEVEL_HUB = {
       ],
     },
     examLinks: [
-      { text: '📝 Full Exam', href: '/niveles/c1/exam-1', enabledForStudents: false },
+      { text: '📝 Exam mode', href: '/niveles/c1/exam-1', enabledForStudents: false },
       {
         text: '📘 Use of English',
         href: '/niveles/c1/exam-useofenglish',
@@ -659,7 +659,7 @@ export const NIVELES_LEVEL_HUB = {
       ],
     },
     examLinks: [
-      { text: '📝 Full Exam', href: '/niveles/c2/exam-1', enabledForStudents: false },
+      { text: '📝 Exam mode', href: '/niveles/c2/exam-1', enabledForStudents: false },
       {
         text: '📘 Use of English',
         href: '/niveles/c2/exam-useofenglish',

@@ -8,6 +8,7 @@ import { usePlacementAccess } from '@/context/PlacementAccessContext';
 import PageHero from '@/components/PageHero';
 import { TeoriaGlobalStyles } from '@/components/theory/TeoriaStyles';
 import ExamTheorySection from '@/components/niveles/ExamTheorySection';
+import NivelesSectionHeader from '@/components/niveles/NivelesSectionHeader';
 import { isNivelesLevelComingSoonForUser } from '@/constants/studentFeatureAccess';
 
 const NIVELES = [
@@ -119,10 +120,12 @@ export default function Niveles() {
 
       <div className="sections">
         <section className="section">
-          <div className="section__head">
-            <h2>Available tests and tips</h2>
-            <span className="count">{NIVELES.length}</span>
-          </div>
+          <NivelesSectionHeader
+            eyebrow="CEFR levels"
+            title="Available tests and tips"
+            count={NIVELES.length}
+            description="Choose your level and access tailored mock exams, study tips, and guided practice — from elementary to mastery."
+          />
           <ul className="area-grid niveles-grid">
             {NIVELES.map((nivelData) => {
               const isComingSoon = isNivelesLevelComingSoonForUser(userRole, nivelData.nivel);
@@ -197,27 +200,61 @@ function NivelesPageStyles() {
       .niveles-page .section {
         padding: 6px;
       }
-      .niveles-page .section__head {
-        display: flex;
-        align-items: center;
-        gap: 8px;
-        margin-bottom: 10px;
+      .niveles-page .niveles-section-head {
+        margin-bottom: 18px;
+        padding: 18px 20px 16px;
+        border-radius: 16px;
+        background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
+        border: 1px solid rgba(226, 232, 240, 0.95);
+        box-shadow: 0 4px 20px rgba(15, 23, 42, 0.04);
       }
-      .niveles-page .section__head h2 {
+      .niveles-page .niveles-section-head__row {
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        gap: 16px;
+      }
+      .niveles-page .niveles-section-head__title-wrap {
+        min-width: 0;
+      }
+      .niveles-page .niveles-section-head__eyebrow {
+        display: block;
+        margin-bottom: 6px;
+        font-size: 0.72rem;
+        font-weight: 700;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        color: #2563eb;
+      }
+      .niveles-page .niveles-section-head__title {
         margin: 0;
-        font-size: 22px;
+        font-size: clamp(1.35rem, 2.8vw, 1.65rem);
+        font-weight: 800;
+        letter-spacing: -0.025em;
+        line-height: 1.15;
         color: var(--text);
       }
-      .niveles-page .count {
+      .niveles-page .niveles-section-head__count {
+        flex: 0 0 auto;
         display: inline-grid;
         place-items: center;
-        width: 28px;
-        height: 28px;
-        border-radius: 9999px;
-        border: 1px solid #eaeaea;
-        background: var(--card);
-        font-size: 12px;
-        color: #666;
+        min-width: 36px;
+        height: 36px;
+        padding: 0 10px;
+        border-radius: 999px;
+        background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%);
+        border: 1px solid rgba(37, 99, 235, 0.18);
+        font-size: 0.82rem;
+        font-weight: 800;
+        color: #1d4ed8;
+        box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.65);
+      }
+      .niveles-page .niveles-section-head__desc {
+        margin: 12px 0 0;
+        max-width: 680px;
+        font-size: 0.96rem;
+        line-height: 1.55;
+        color: #5a6b7d;
       }
       .niveles-page .area-card {
         margin-right: 0;
@@ -295,13 +332,6 @@ function NivelesPageStyles() {
       }
       .niveles-page .exam-theory-section {
         margin-top: 8px;
-      }
-      .niveles-page .exam-theory-intro {
-        margin: 0 0 14px;
-        color: #5a6b7d;
-        font-size: 0.95rem;
-        line-height: 1.5;
-        max-width: 640px;
       }
       .niveles-page .exam-theory-grid {
         grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));

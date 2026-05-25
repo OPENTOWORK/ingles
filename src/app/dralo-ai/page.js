@@ -10,21 +10,22 @@ const ACCENT_GRADIENT = {
   amber: 'linear-gradient(90deg, #d97706, #f59e0b)',
   emerald: 'linear-gradient(90deg, #059669, #14b8a6)',
   rose: 'linear-gradient(90deg, #e11d48, #db2777)',
+  lime: 'linear-gradient(90deg, #65a30d, #84cc16)',
 };
 
 export default function DraloAiHubPage() {
   return (
     <main className="dralo-ai-page">
       <PageHero
-        eyebrow="Inteligencia artificial"
+        eyebrow="Artificial intelligence"
         title={DRALO_AI_HUB.title}
         description={DRALO_AI_HUB.description}
         accent="violet"
         mascotVariant={10}
         stats={[
-          { value: '6', label: 'Herramientas' },
-          { value: 'IA', label: 'Dralo' },
-          { value: 'B1–C1', label: 'Niveles' },
+          { value: '7', label: 'Tools' },
+          { value: 'AI', label: 'Dralo' },
+          { value: 'A2–C2', label: 'Levels' },
         ]}
       />
 
@@ -42,7 +43,7 @@ export default function DraloAiHubPage() {
             <h2 className="dralo-ai-hub__label">{item.label}</h2>
             <p className="dralo-ai-hub__tagline">{item.tagline}</p>
             <span className="dralo-ai-hub__cta">
-              {item.external ? 'Abrir práctica oral →' : 'Entrar al estudio →'}
+              {item.external ? 'Open speaking practice →' : 'Open studio →'}
             </span>
           </Link>
         ))}

@@ -40,6 +40,9 @@ import {
   recordLevelsAnswerEvaluation,
 } from '@/utils/levelsEstadisticas';
 import B2ExamPracticeModuleNav from '@/components/b2/B2ExamPracticeModuleNav';
+import ExamModeSectionBanner from '@/components/niveles/ExamModeSectionBanner';
+import { useExamModeStrict } from '@/hooks/useExamModeStrict';
+import { scoreExamModeDrafts } from '@/utils/examModeGradeAnswers';
 
 function splitEnunciadoAndTextFallback(rawText = '') {
   const normalized = rawText.replace(/\r\n/g, '\n').trim();
@@ -81,6 +84,22 @@ function B2ReadingExamsPageInner() {
 
   const { examSlot, selectExamSlot } = useB2ExamPracticeSlot();
   const scoring = useB2ExamScoringSession({ partMin, partMax });
+  const examMode = useExamModeStrict({
+    slug: 'b2',
+    partMin,
+    partMax,
+    sectionTitle: isCombinedPaper ? 'Reading and Use of English' : 'Reading',
+  });
+  const {
+    examModeActive,
+    reviewMode,
+    hideFeedback,
+    section: examSection,
+    handleFinishSection,
+    setSectionRemaining,
+  } = examMode;
+  const examDraftRef = useRef({});
+  const prevExamPartRef = useRef(null);
   useB2AutoOpenExamFromUrl({
     examPracticeOpen: scoring.examPracticeOpen,
     handleSelectExam: scoring.handleSelectExam,
@@ -296,18 +315,43 @@ function B2ReadingExamsPageInner() {
     return undefined;
   }, [selectedQuestion?.preguntaId, selectedPart?.id]);
 
+  const partNumberReading = useMemo(
+    () => Number(selectedPart?.nombre.match(/\d+/)?.[0] || 0),
+    [selectedPart?.nombre],
+  );
+
   useEffect(() => {
+    if (examModeActive && !reviewMode) {
+      const pn = partNumberReading;
+      if (prevExamPartRef.current != null && prevExamPartRef.current !== pn && selectedPart) {
+        examDraftRef.current[prevExamPartRef.current] = {
+          preguntaId: selectedQuestion?.preguntaId,
+          selectedOptions: { ...selectedOptions },
+          openInputs: { ...openInputs },
+          checkedQuestions: { ...checkedQuestions },
+        };
+      }
+      const draft = examDraftRef.current[pn];
+      if (draft) {
+        setSelectedOptions(draft.selectedOptions || {});
+        setOpenInputs(draft.openInputs || {});
+        setCheckedQuestions(draft.checkedQuestions || {});
+      } else {
+        setOpenInputs({});
+        setSelectedOptions({});
+        setCheckedQuestions({});
+      }
+      setOpenChecks({});
+      setAiHintsByKey({});
+      prevExamPartRef.current = pn;
+      return;
+    }
     setOpenInputs({});
     setOpenChecks({});
     setSelectedOptions({});
     setCheckedQuestions({});
     setAiHintsByKey({});
-  }, [selectedQuestion?.preguntaId, selectedPart?.id]);
-
-  const partNumberReading = useMemo(
-    () => Number(selectedPart?.nombre.match(/\d+/)?.[0] || 0),
-    [selectedPart?.nombre],
-  );
+  }, [selectedQuestion?.preguntaId, selectedPart?.id, examModeActive, reviewMode, partNumberReading]);
 
   const isUoePart = isCombinedPaper && partNumberReading >= 1 && partNumberReading <= 4;
   const isOpenClozePart = isCombinedPaper && partNumberReading >= 2 && partNumberReading <= 4;
@@ -652,8 +696,38 @@ function B2ReadingExamsPageInner() {
     scoring.resetPartNoticeOnPartChange(examSlot, partNumberReading, scoring.progressBySlot);
   }, [examSlot, partNumberReading, selectedPart?.id, scoring.examPracticeOpen]);
 
+  const handleExamModeFinish = useCallback(() => {
+    if (partNumberReading && selectedPart) {
+      examDraftRef.current[partNumberReading] = {
+        preguntaId: selectedQuestion?.preguntaId,
+        selectedOptions: { ...selectedOptions },
+        openInputs: { ...openInputs },
+        checkedQuestions: { ...checkedQuestions },
+      };
+    }
+    const { scores } = scoreExamModeDrafts({
+      partMin,
+      partMax,
+      partsData,
+      draftByPart: examDraftRef.current,
+    });
+    handleFinishSection({ draftByPart: examDraftRef.current }, scores);
+  }, [
+    partNumberReading,
+    selectedPart,
+    selectedQuestion,
+    selectedOptions,
+    openInputs,
+    checkedQuestions,
+    partMin,
+    partMax,
+    partsData,
+    handleFinishSection,
+  ]);
+
   const trySavePartAfterAnswer = useCallback(
     (stateOverride = {}) => {
+      if (examModeActive && !reviewMode) return;
       if (!scoring.examPracticeOpen || !selectedPart?.id || !selectedQuestion?.preguntaId) return;
       const progress = computeB2PartProgressFromState({
         partNumber: partNumberReading,
@@ -759,12 +833,24 @@ function B2ReadingExamsPageInner() {
         loading={loading}
         onRefresh={() => loadReadingData()}
         partScoreMetrics={scorePanelProps}
-        partFinishNotice={scoring.partFinishNotice}
+        hideScorePanel={examModeActive && !reviewMode}
+        partFinishNotice={examModeActive && !reviewMode ? null : scoring.partFinishNotice}
         partsData={!loading && !error ? partsData : []}
         selectedPartId={selectedPartId}
         onSelectPart={handleSelectPart}
         getPartSavedScoreLabel={(part) => scoring.getPartSavedScoreLabel(part, examSlot)}
       >
+      {examModeActive && examSection ? (
+        <ExamModeSectionBanner
+          sectionTitle={examSection.title || (isCombinedPaper ? 'Reading and Use of English' : 'Reading')}
+          durationSeconds={examSection.durationSeconds}
+          initialRemainingSeconds={examSection.remainingSeconds}
+          active={!reviewMode}
+          onTick={(sec) => setSectionRemaining(examSection.key, sec)}
+          onFinish={handleExamModeFinish}
+          lang="en"
+        />
+      ) : null}
       <section style={{ margin: '0 auto', width: '100%' }}>
         {loading && (
           <p style={{ textAlign: 'center' }}>
@@ -793,7 +879,7 @@ function B2ReadingExamsPageInner() {
                           const questionKey = getQuestionKey(selectedPart.id, questionNumber, 'open');
                           const currentValue = openInputs[questionKey] || '';
                           const checkResult = openChecks[questionKey];
-                          const isAnswerLocked = typeof checkResult === 'boolean';
+                          const isAnswerLocked = !hideFeedback && typeof checkResult === 'boolean';
                           return (
                             <B2ExamQuestionItem key={`open-${selectedQuestion.preguntaId}-${questionNumber}`}>
                               <p style={{ margin: '0 0 0.65rem', fontWeight: 700, color: '#2d3748' }}>
@@ -819,7 +905,7 @@ function B2ReadingExamsPageInner() {
                                     cursor: isAnswerLocked ? 'not-allowed' : 'text',
                                   }}
                                 />
-                                {!isAnswerLocked ? (
+                                {!isAnswerLocked && !hideFeedback ? (
                                   <button
                                     type="button"
                                     onClick={() => {
@@ -871,7 +957,7 @@ function B2ReadingExamsPageInner() {
                                   </button>
                                 ) : null}
                               </div>
-                              {typeof checkResult === 'boolean' && (
+                              {!hideFeedback && typeof checkResult === 'boolean' && (
                                 <>
                                   <p
                                     style={{
@@ -924,8 +1010,8 @@ function B2ReadingExamsPageInner() {
                             const isSelected = selectedOptions[questionKey] === option.id;
                             const isChecked = checkedQuestions[questionKey];
                             const isCorrect = !!option.correcta;
-                            const showCorrect = isChecked && isCorrect;
-                            const showIncorrect = isChecked && isSelected && !isCorrect;
+                            const showCorrect = !hideFeedback && isChecked && isCorrect;
+                            const showIncorrect = !hideFeedback && isChecked && isSelected && !isCorrect;
 
                             return (
                               <button
@@ -937,7 +1023,7 @@ function B2ReadingExamsPageInner() {
                                   setSelectedOptions((prev) => ({ ...prev, [questionKey]: option.id }));
                                   setCheckedQuestions(nextChecked);
                                   trySavePartAfterAnswer({ checkedQuestions: nextChecked });
-                                  if (!wasChecked) {
+                                  if (!wasChecked && !hideFeedback) {
                                     const correctOpt = group.options.find((o) => o.correcta);
                                     const answersFromDatabase = group.options
                                       .map((o) => (o.formattedText || o.respuesta || '').trim())
@@ -1010,7 +1096,7 @@ function B2ReadingExamsPageInner() {
                             `extra-${groupIndex}`,
                           );
                           const hasChecked = checkedQuestions[questionKey];
-                          if (!hasChecked) return null;
+                          if (!hasChecked || hideFeedback) return null;
                           const correct = group.options.find((option) => option.correcta);
                           return (
                             <>
