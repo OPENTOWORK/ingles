@@ -87,7 +87,7 @@ function KpiIcon({ type }) {
   );
 }
 
-export default function LevelsEstadisticasPanel({ userId, displayName = '' }) {
+export default function LevelsEstadisticasPanel({ userId }) {
   const [rows, setRows] = useState([]);
   const [partNames, setPartNames] = useState({});
   const [preguntaMeta, setPreguntaMeta] = useState({});
@@ -238,12 +238,8 @@ export default function LevelsEstadisticasPanel({ userId, displayName = '' }) {
       <header className="lsp-header">
         <div className="lsp-header__copy">
           <h2 id="levels-stats-title" className="lsp-header__title">
-            Tu práctica{displayName ? ` · ${displayName}` : ''}
+            Tu práctica
           </h2>
-          <p className="lsp-header__subtitle">
-            Estadísticas de A2, B1, B2, C1 y C2 desde tu práctica en Levels (tabla
-            levels_estadisticas). Solo tú ves esta información.
-          </p>
         </div>
         {!loading && !error && rows.length > 0 && pctGlobal != null ? (
           <div

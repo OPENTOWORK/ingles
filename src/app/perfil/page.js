@@ -23,19 +23,64 @@ const LevelsEstadisticasPanel = dynamic(
   { ssr: false },
 );
 import ProfileComingSoon from '@/components/perfil/ProfileComingSoon';
-import ProfileExamDatesPanel from '@/components/perfil/ProfileExamDatesPanel';
 import ProfilePrivateTutorPanel from '@/components/perfil/ProfilePrivateTutorPanel';
+import ProfileTabsNav from '@/components/perfil/ProfileTabsNav';
+
+const ProfileExamDatesPanel = dynamic(
+  () => import('@/components/perfil/ProfileExamDatesPanel'),
+  {
+    ssr: false,
+    loading: () => (
+      <div className="profile-section">
+        <p className="section-desc">Cargando fechas de examen…</p>
+      </div>
+    ),
+  },
+);
+
+const StudyActivityHeatmap = dynamic(
+  () => import('@/components/perfil/StudyActivityHeatmap'),
+  {
+    ssr: false,
+    loading: () => (
+      <div className="profile-section">
+        <p className="section-desc">Cargando actividad de estudio…</p>
+      </div>
+    ),
+  },
+);
+
+const ProfileGeneralStats = dynamic(
+  () => import('@/components/perfil/ProfileGeneralStats'),
+  { ssr: false },
+);
+
+const ProfileSkillAnalysis = dynamic(
+  () => import('@/components/perfil/ProfileSkillAnalysis'),
+  { ssr: false },
+);
+
+const ProfileAchievementsCarousel = dynamic(
+  () => import('@/components/perfil/ProfileAchievementsCarousel'),
+  { ssr: false },
+);
+
+const ProfileGoalsPanel = dynamic(
+  () => import('@/components/perfil/ProfileGoalsPanel'),
+  { ssr: false },
+);
 import SiteMascot from '@/components/SiteMascot';
 import { offlineFirstDatabase } from '@/utils/offlineFirstDatabase';
 import { progressTracker } from '@/utils/progressTracker';
 import {
   LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, 
-  PieChart, Pie, Cell, RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis, Radar,
+  PieChart, Pie, Cell,
   BarChart, Bar, AreaChart, Area
 } from 'recharts';
 
 const PROFILE_TABS = [
   { id: 'overview', label: '📊 Resumen', studentAllowed: true },
+  { id: 'mis-datos', label: '👤 Mis datos', studentAllowed: true },
   { id: 'progress', label: '📈 Progreso' },
   { id: 'achievements', label: '🏆 Logros' },
   { id: 'goals', label: '🎯 Objetivos' },
@@ -75,13 +120,6 @@ export default function ProfilePage() {
   const [nameSaveError, setNameSaveError] = useState('');
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState('overview');
-  const [goals, setGoals] = useState({ weekly: 5, monthly: 20 });
-  const [difficultWords, setDifficultWords] = useState([]);
-  const [studyStreak, setStudyStreak] = useState(0);
-  const [totalStudyTime, setTotalStudyTime] = useState(0);
-  const [badges, setBadges] = useState([]);
-  const [activityData, setActivityData] = useState([]);
-  const [skillAnalysis, setSkillAnalysis] = useState({});
   const [showExportModal, setShowExportModal] = useState(false);
   const [notifications, setNotifications] = useState({ email: true, push: true });
   const [theme, setTheme] = useState('light');
@@ -175,20 +213,13 @@ export default function ProfilePage() {
       const localSettings = typeof window !== 'undefined'
         ? JSON.parse(localStorage.getItem(`profile_settings_${authUser.id}`) || '{}')
         : {};
-      const localGoals = typeof window !== 'undefined'
-        ? JSON.parse(localStorage.getItem(`profile_goals_${authUser.id}`) || '{}')
-        : {};
-
       setFullName(userRow?.nombre || authUser?.user_metadata?.name || '');
       setBirthDate(profileRow?.fecha_nacimiento || '');
-      setGoals(localGoals?.weekly ? localGoals : { weekly: 5, monthly: 20 });
       setNotifications({
         email: Boolean(preferencesRow?.notificaciones ?? true),
         push: Boolean(preferencesRow?.recordatorios ?? true),
       });
       setTheme(localSettings?.theme || 'light');
-      setStudyStreak(0);
-      setTotalStudyTime(0);
 
       await Promise.all([
         getUserProgress(authUser.id).then((userProgress) => {
@@ -198,46 +229,7 @@ export default function ProfilePage() {
       ]);
 
       // Simular datos adicionales (en una app real vendrían de la BD)
-      setDifficultWords([
-        { word: 'serendipity', difficulty: 'high', attempts: 3, lastSeen: '2024-01-15' },
-        { word: 'ubiquitous', difficulty: 'medium', attempts: 2, lastSeen: '2024-01-14' },
-        { word: 'ephemeral', difficulty: 'high', attempts: 4, lastSeen: '2024-01-13' },
-        { word: 'mellifluous', difficulty: 'high', attempts: 5, lastSeen: '2024-01-12' },
-        { word: 'perspicacious', difficulty: 'medium', attempts: 2, lastSeen: '2024-01-11' }
-      ]);
-
-      setBadges([
-        { id: 1, name: 'First Steps', description: 'Complete your first exam', icon: '🎯', earned: true, date: '2024-01-10' },
-        { id: 2, name: 'Streak Master', description: 'Study for 7 consecutive days', icon: '🔥', earned: true, date: '2024-01-15' },
-        { id: 3, name: 'Grammar Guru', description: 'Score 90%+ in grammar exercises', icon: '📚', earned: false, date: null },
-        { id: 4, name: 'Speed Demon', description: 'Complete an exam in under 30 minutes', icon: '⚡', earned: false, date: null },
-        { id: 5, name: 'Perfectionist', description: 'Get 100% on any exam', icon: '💎', earned: false, date: null }
-      ]);
-
-      // Generar datos de actividad para el heatmap (últimos 90 días)
-      const activityData = [];
-      for (let i = 89; i >= 0; i--) {
-        const date = new Date();
-        date.setDate(date.getDate() - i);
-        const dayActivity = Math.random() > 0.3 ? Math.floor(Math.random() * 4) : 0;
-        activityData.push({
-          date: date.toISOString().split('T')[0],
-          count: dayActivity,
-          level: dayActivity === 0 ? 0 : dayActivity === 1 ? 1 : dayActivity === 2 ? 2 : 3
-        });
-      }
-      setActivityData(activityData);
-
       // Análisis por habilidades
-      setSkillAnalysis({
-        reading: { score: 85, improvement: 12, exercises: 45 },
-        writing: { score: 78, improvement: 8, exercises: 32 },
-        listening: { score: 92, improvement: 15, exercises: 38 },
-        speaking: { score: 70, improvement: 5, exercises: 28 },
-        grammar: { score: 88, improvement: 10, exercises: 52 },
-        vocabulary: { score: 75, improvement: 7, exercises: 41 }
-      });
-
       // Notas de estudio
       setStudyNotes([
         { id: 1, title: 'Present Perfect vs Past Simple', content: 'Remember: Present Perfect for unfinished time, Past Simple for finished time', date: '2024-01-15', tags: ['grammar', 'tenses'] },
@@ -588,12 +580,6 @@ export default function ProfilePage() {
     }
   };
 
-  const handleGoalsUpdate = async () => {
-    setSaving(true);
-    localStorage.setItem(`profile_goals_${user.id}`, JSON.stringify(goals));
-    setSaving(false);
-  };
-
   const handleSettingsUpdate = async () => {
     setSaving(true);
     await supabase.from('user_preferences').upsert({
@@ -822,43 +808,30 @@ export default function ProfilePage() {
     user?.email?.split('@')[0] ||
     '';
 
+  const tabsProps = {
+    tabs: PROFILE_TABS,
+    activeTab,
+    onSelectTab: setActiveTab,
+    isStudent,
+  };
+
   return (
     <main className="shell perfil-page">
+      <ProfileTabsNav {...tabsProps} />
       <header className="header header--mascot">
-        <div className="header__copy">
-          <h1>
-            👤 Mi Perfil
-            {displayName ? (
-              <span className="profile-header__display-name"> — {displayName}</span>
-            ) : null}
-          </h1>
-          <p>Gestiona tu información personal y revisa tu progreso de aprendizaje.</p>
-        </div>
-        <div className="header__mascot" aria-hidden>
-          <SiteMascot variant={6} width={130} alt="" />
-        </div>
-      </header>
-
-      {/* Tabs de navegación */}
-      <div className="tabs-container">
-        <div className="tabs">
-          {PROFILE_TABS.map((tab) => {
-            const locked = isStudent && !tab.studentAllowed;
-            return (
-              <button
-                key={tab.id}
-                type="button"
-                className={`tab${activeTab === tab.id ? ' tab--active' : ''}${locked ? ' tab--locked' : ''}`}
-                onClick={() => setActiveTab(tab.id)}
-                aria-disabled={locked || undefined}
-                title={locked ? 'Próximamente disponible' : undefined}
-              >
-                {tab.label}
-              </button>
-            );
-          })}
-        </div>
-      </div>
+          <div className="header__copy">
+            <h1>
+              👤 Mi Perfil
+              {displayName ? (
+                <span className="profile-header__display-name"> — {displayName}</span>
+              ) : null}
+            </h1>
+            <p>Gestiona tu información personal y revisa tu progreso de aprendizaje.</p>
+          </div>
+          <div className="header__mascot" aria-hidden>
+            <SiteMascot variant={6} width={130} alt="" />
+          </div>
+        </header>
 
       {studentTabLocked ? (
         <ProfileComingSoon section={PROFILE_TAB_LABELS[activeTab]} />
@@ -867,135 +840,41 @@ export default function ProfilePage() {
       {/* Tab: Resumen */}
       {activeTab === 'overview' && (
         <>
-          {/* Información del usuario */}
-          <section className="profile-section">
-            <div className="section-header">
-              <h2>👋 Bienvenido, {displayName || user.email}</h2>
-              <button onClick={handleLogout} className="logout-btn">🚪 Cerrar Sesión</button>
-            </div>
-          </section>
-
-          <section className="profile-section profile-name-section">
-            <div className="section-head">
-              <h2>✏️ Nombre de perfil</h2>
-            </div>
-            <p className="section-desc">
-              Este nombre aparece en tu perfil y en el panel de administración.
-            </p>
-            <div className="form-group">
-              <label className="form-label" htmlFor="profile-display-name">
-                Nombre visible
-              </label>
-              <input
-                id="profile-display-name"
-                value={fullName}
-                onChange={(e) => {
-                  setFullName(e.target.value);
-                  setNameSaveMessage('');
-                  setNameSaveError('');
-                }}
-                className="form-input"
-                placeholder="Tu nombre"
-                maxLength={80}
-                autoComplete="name"
-              />
-            </div>
-            {nameSaveError ? <p className="form-hint form-hint--error">{nameSaveError}</p> : null}
-            {nameSaveMessage ? <p className="form-hint form-hint--success">{nameSaveMessage}</p> : null}
-            <button
-              type="button"
-              onClick={handleSaveProfileName}
-              className="action-btn"
-              disabled={saving}
-            >
-              {saving ? 'Guardando...' : '💾 Guardar nombre'}
-            </button>
-          </section>
-
-          {/* Estadísticas principales */}
+          {/* Estadísticas agregadas de todas las tablas *estadisticas* en Supabase */}
           <section className="profile-section">
             <div className="section-head">
               <h2>📊 Estadísticas Generales</h2>
             </div>
-            <div className="stats-grid">
-              <div className="stat-card">
-                <div className="stat-icon">📝</div>
-                <div className="stat-content">
-                  <div className="stat-number">{stats.stats.completedExams}</div>
-                  <div className="stat-label">Exámenes Completados</div>
-                </div>
-              </div>
-              <div className="stat-card">
-                <div className="stat-icon">✅</div>
-                <div className="stat-content">
-                  <div className="stat-number">{stats.stats.totalCorrect}</div>
-                  <div className="stat-label">Respuestas Correctas</div>
-                </div>
-              </div>
-              <div className="stat-card">
-                <div className="stat-icon">💪</div>
-                <div className="stat-content">
-                  <div className="stat-number">{stats.stats.trainingCount}</div>
-                  <div className="stat-label">Sesiones de Entrenamiento</div>
-                </div>
-              </div>
-              <div className="stat-card">
-                <div className="stat-icon">🎯</div>
-                <div className="stat-content">
-                  <div className="stat-number">{stats.stats.levelEstimate}</div>
-                  <div className="stat-label">Nivel Estimado</div>
-                </div>
-              </div>
-              <div className="stat-card">
-                <div className="stat-icon">🔥</div>
-                <div className="stat-content">
-                  <div className="stat-number">{studyStreak}</div>
-                  <div className="stat-label">Días Consecutivos</div>
-                </div>
-              </div>
-              <div className="stat-card">
-                <div className="stat-icon">⏱️</div>
-                <div className="stat-content">
-                  <div className="stat-number">{Math.floor(totalStudyTime / 60)}h</div>
-                  <div className="stat-label">Tiempo Total</div>
-                </div>
-              </div>
-            </div>
+            <ProfileGeneralStats
+              accessToken={layoutSession?.access_token}
+              onSummaryLoaded={(summary) => {
+                setStats((prev) => ({
+                  ...(prev || { exams: [], training: [], theory: [], stats: {} }),
+                  stats: {
+                    ...(prev?.stats || {}),
+                    ...summary,
+                  },
+                }));
+              }}
+            />
           </section>
 
           {/* Estadísticas de Exámenes */}
           <ExamStatistics userId={user?.id} />
 
           {/* Estadísticas Levels B2 (solo visibles para el propio usuario; RLS en Supabase) */}
-          <LevelsEstadisticasPanel userId={user?.id} displayName={fullName || user?.email || ''} />
+          <LevelsEstadisticasPanel userId={user?.id} />
 
-          {/* Heatmap de actividad */}
-          <section className="profile-section">
+          {/* Actividad de estudio (último año, datos reales) */}
+          <section className="profile-section study-activity-section">
             <div className="section-head">
               <h2>📅 Actividad de Estudio</h2>
+              <p className="section-desc">
+                Tu constancia durante el último año. Pasa el cursor sobre cada día para ver minutos y sesiones.
+              </p>
             </div>
-            <div className="heatmap-container">
-              <div className="heatmap">
-                {activityData.slice(-90).map((day, index) => (
-                  <div
-                    key={index}
-                    className={`heatmap-day level-${day.level}`}
-                    title={`${day.date}: ${day.count} ejercicios`}
-                  />
-                ))}
-              </div>
-              <div className="heatmap-legend">
-                <span>Menos</span>
-                <div className="legend-squares">
-                  <div className="legend-square level-0"></div>
-                  <div className="legend-square level-1"></div>
-                  <div className="legend-square level-2"></div>
-                  <div className="legend-square level-3"></div>
-                </div>
-                <span>Más</span>
-              </div>
-            </div>
-      </section>
+            <StudyActivityHeatmap accessToken={layoutSession?.access_token} />
+          </section>
 
           {/* Acciones rápidas */}
           <section className="profile-section">
@@ -1023,46 +902,7 @@ export default function ProfilePage() {
       {/* Tab: Progreso */}
       {activeTab === 'progress' && (
         <>
-          {/* Análisis por habilidades */}
-          <section className="profile-section">
-            <div className="section-head">
-              <h2>🎯 Análisis por Habilidades</h2>
-            </div>
-            <div className="skills-grid">
-              {Object.entries(skillAnalysis).map(([skill, data]) => (
-                <div key={skill} className="skill-card">
-                  <div className="skill-name">{skill.charAt(0).toUpperCase() + skill.slice(1)}</div>
-                  <div className="skill-score">{data.score}%</div>
-                  <div className="skill-improvement">+{data.improvement}%</div>
-                  <div className="skill-exercises">{data.exercises} ejercicios</div>
-                </div>
-              ))}
-            </div>
-      </section>
-
-          {/* Gráfico radar de habilidades */}
-          <section className="profile-section">
-            <div className="section-head">
-              <h2>📊 Radar de Habilidades</h2>
-            </div>
-            <ResponsiveContainer width="100%" height={400}>
-              <RadarChart data={[
-                { skill: 'Reading', A: skillAnalysis.reading.score, B: 100 },
-                { skill: 'Writing', A: skillAnalysis.writing.score, B: 100 },
-                { skill: 'Listening', A: skillAnalysis.listening.score, B: 100 },
-                { skill: 'Speaking', A: skillAnalysis.speaking.score, B: 100 },
-                { skill: 'Grammar', A: skillAnalysis.grammar.score, B: 100 },
-                { skill: 'Vocabulary', A: skillAnalysis.vocabulary.score, B: 100 }
-              ]}>
-                <PolarGrid />
-                <PolarAngleAxis dataKey="skill" />
-                <PolarRadiusAxis domain={[0, 100]} />
-                <Radar name="Tu nivel" dataKey="A" stroke="#0070f3" fill="#0070f3" fillOpacity={0.3} />
-                <Radar name="Objetivo" dataKey="B" stroke="#eaeaea" fill="transparent" />
-                <Tooltip />
-              </RadarChart>
-            </ResponsiveContainer>
-      </section>
+          <ProfileSkillAnalysis userId={user?.id} />
 
           {/* Gráficos de progreso */}
           <div className="charts-section">
@@ -1123,22 +963,6 @@ export default function ProfilePage() {
             </section>
           </div>
 
-          {/* Palabras difíciles */}
-          <section className="profile-section">
-            <div className="section-head">
-              <h2>📚 Palabras Difíciles</h2>
-            </div>
-            <div className="difficult-words">
-              {difficultWords.map((word, index) => (
-                <div key={index} className="word-card">
-                  <div className="word-text">{word.word}</div>
-                  <div className="word-difficulty">{word.difficulty}</div>
-                  <div className="word-attempts">{word.attempts} intentos</div>
-                  <div className="word-date">{word.lastSeen}</div>
-                </div>
-              ))}
-            </div>
-          </section>
         </>
       )}
 
@@ -1148,18 +972,7 @@ export default function ProfilePage() {
           <div className="section-head">
             <h2>🏆 Logros y Badges</h2>
           </div>
-          <div className="badges-grid">
-            {badges.map((badge) => (
-              <div key={badge.id} className={`badge-card ${badge.earned ? 'badge-earned' : 'badge-locked'}`}>
-                <div className="badge-icon">{badge.icon}</div>
-                <div className="badge-name">{badge.name}</div>
-                <div className="badge-description">{badge.description}</div>
-                {badge.earned && (
-                  <div className="badge-date">Obtenido: {badge.date}</div>
-                )}
-              </div>
-            ))}
-          </div>
+          <ProfileAchievementsCarousel userId={user?.id} />
         </section>
       )}
 
@@ -1169,56 +982,7 @@ export default function ProfilePage() {
           <div className="section-head">
             <h2>🎯 Mis Objetivos</h2>
           </div>
-          <div className="goals-container">
-            <div className="goal-card">
-              <div className="goal-header">
-                <h3>📅 Objetivo Semanal</h3>
-                <div className="goal-progress">
-                  <span>{stats.stats.completedExams}</span> / <span>{goals.weekly}</span>
-                </div>
-              </div>
-              <div className="goal-bar">
-                <div 
-                  className="goal-fill" 
-                  style={{ width: `${Math.min((stats.stats.completedExams / goals.weekly) * 100, 100)}%` }}
-                ></div>
-              </div>
-              <input
-                type="number"
-                value={goals.weekly}
-                onChange={(e) => setGoals({...goals, weekly: parseInt(e.target.value)})}
-                className="goal-input"
-                min="1"
-                max="50"
-              />
-            </div>
-            
-            <div className="goal-card">
-              <div className="goal-header">
-                <h3>📆 Objetivo Mensual</h3>
-                <div className="goal-progress">
-                  <span>{stats.stats.completedExams}</span> / <span>{goals.monthly}</span>
-                </div>
-              </div>
-              <div className="goal-bar">
-                <div 
-                  className="goal-fill" 
-                  style={{ width: `${Math.min((stats.stats.completedExams / goals.monthly) * 100, 100)}%` }}
-                ></div>
-              </div>
-              <input
-                type="number"
-                value={goals.monthly}
-                onChange={(e) => setGoals({...goals, monthly: parseInt(e.target.value)})}
-                className="goal-input"
-                min="1"
-                max="200"
-              />
-            </div>
-          </div>
-          <button onClick={handleGoalsUpdate} className="action-btn" disabled={saving}>
-            {saving ? 'Guardando...' : '💾 Guardar Objetivos'}
-          </button>
+          <ProfileGoalsPanel userId={user?.id} />
         </section>
       )}
 
@@ -1361,6 +1125,56 @@ export default function ProfilePage() {
               </div>
             </section>
           )}
+        </>
+      )}
+
+      {activeTab === 'mis-datos' && (
+        <>
+          <section className="profile-section">
+            <div className="section-header">
+              <h2>👋 Bienvenido, {displayName || user.email}</h2>
+              <button onClick={handleLogout} className="logout-btn">
+                🚪 Cerrar Sesión
+              </button>
+            </div>
+          </section>
+
+          <section className="profile-section profile-name-section">
+            <div className="section-head">
+              <h2>✏️ Nombre de perfil</h2>
+            </div>
+            <p className="section-desc">
+              Este nombre aparece en tu perfil y en el panel de administración.
+            </p>
+            <div className="form-group">
+              <label className="form-label" htmlFor="profile-display-name">
+                Nombre visible
+              </label>
+              <input
+                id="profile-display-name"
+                value={fullName}
+                onChange={(e) => {
+                  setFullName(e.target.value);
+                  setNameSaveMessage('');
+                  setNameSaveError('');
+                }}
+                className="form-input"
+                placeholder="Tu nombre"
+                maxLength={80}
+                autoComplete="name"
+              />
+            </div>
+            {nameSaveError ? <p className="form-hint form-hint--error">{nameSaveError}</p> : null}
+            {nameSaveMessage ? <p className="form-hint form-hint--success">{nameSaveMessage}</p> : null}
+            <button
+              type="button"
+              onClick={handleSaveProfileName}
+              className="action-btn"
+              disabled={saving}
+            >
+              {saving ? 'Guardando...' : '💾 Guardar nombre'}
+            </button>
+          </section>
         </>
       )}
 
@@ -2125,14 +1939,15 @@ export default function ProfilePage() {
       )}
 
       {/* Tab: Fechas de examen */}
-      {activeTab === 'exam-dates' && (
+      {activeTab === 'exam-dates' ? (
         <ProfileExamDatesPanel
-          levelEstimate={stats.stats.levelEstimate}
-          completedExams={stats.stats.completedExams}
-          studyStreak={studyStreak}
-          totalStudyMinutes={totalStudyTime}
+          key="exam-dates-panel"
+          levelEstimate={stats.stats?.levelEstimate ?? 'B1'}
+          completedExams={stats.stats?.completedExams ?? 0}
+          studyStreak={stats.stats?.studyStreak ?? 0}
+          totalStudyMinutes={stats.stats?.totalStudyMinutes ?? 0}
         />
-      )}
+      ) : null}
 
       {activeTab === 'private-tutor' && (
         <ProfilePrivateTutorPanel
@@ -2279,8 +2094,6 @@ function GlobalStyles() {
       .header__copy{flex:1 1 240px;min-width:0}
       .header__mascot{flex:0 0 auto;line-height:0;filter:drop-shadow(0 8px 18px rgba(0,0,0,.12))}
       
-      /* Tabs */
-      .tabs-container{margin:22px 0;position:sticky;top:16px;z-index:5;background:var(--card);border-radius:16px;box-shadow:0 2px 6px rgba(0,0,0,0.1)}
       .tabs{display:flex;flex-wrap:wrap;gap:8px;padding:16px}
       .tab{padding:12px 20px;border-radius:12px;border:1px solid #eaeaea;background:white;color:var(--text);cursor:pointer;transition:.2s;font-weight:500}
       .tab:hover{transform:translateY(-1px);border-color:#0070f3;background:#b0d6fa}
@@ -2321,20 +2134,7 @@ function GlobalStyles() {
       .stat-number{font-size:24px;font-weight:700;color:var(--text);margin-bottom:4px}
       .stat-label{font-size:14px;color:#666}
       
-      /* Heatmap */
-      .heatmap-container{padding:20px;background:white;border-radius:12px}
-      .heatmap{display:grid;grid-template-columns:repeat(13,1fr);gap:3px;margin-bottom:16px}
-      .heatmap-day{width:12px;height:12px;border-radius:2px;background:#ebedf0;transition:all .2s}
-      .heatmap-day.level-1{background:#c6e48b}
-      .heatmap-day.level-2{background:#7bc96f}
-      .heatmap-day.level-3{background:#239a3b}
-      .heatmap-legend{display:flex;align-items:center;gap:8px;font-size:12px;color:#666}
-      .legend-squares{display:flex;gap:3px}
-      .legend-square{width:10px;height:10px;border-radius:2px}
-      .legend-square.level-0{background:#ebedf0}
-      .legend-square.level-1{background:#c6e48b}
-      .legend-square.level-2{background:#7bc96f}
-      .legend-square.level-3{background:#239a3b}
+      .study-activity-section .section-desc{margin-top:4px}
       
       /* Habilidades */
       .skills-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:16px}
@@ -2350,15 +2150,6 @@ function GlobalStyles() {
       .chart-section{min-height:400px}
       .empty-chart{display:grid;place-items:center;text-align:center;padding:48px;border:1px dashed #eaeaea;border-radius:16px;background:white}
       .empty-icon{font-size:36px;margin-bottom:6px}
-      
-      /* Palabras difíciles */
-      .difficult-words{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px}
-      .word-card{padding:16px;border:1px solid #eaeaea;border-radius:12px;background:white;transition:transform .2s,box-shadow .2s}
-      .word-card:hover{transform:translateY(-2px);box-shadow:0 8px 20px rgba(0,0,0,.1)}
-      .word-text{font-weight:600;margin-bottom:8px;color:var(--text)}
-      .word-difficulty{font-size:12px;color:#666;margin-bottom:4px}
-      .word-attempts{font-size:12px;color:#e74c3c;margin-bottom:4px}
-      .word-date{font-size:12px;color:#666}
       
       /* Badges */
       .badges-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px}
@@ -2521,7 +2312,6 @@ function GlobalStyles() {
         .tab{text-align:center}
         .stats-grid{grid-template-columns:repeat(auto-fit,minmax(150px,1fr))}
         .charts-section{grid-template-columns:1fr}
-        .heatmap{grid-template-columns:repeat(7,1fr)}
         .skills-grid{grid-template-columns:repeat(auto-fit,minmax(120px,1fr))}
         .badges-grid{grid-template-columns:repeat(auto-fit,minmax(150px,1fr))}
         .goals-container{grid-template-columns:1fr}

@@ -6,6 +6,40 @@ import { getSupabaseAnonKey, getSupabaseServiceRoleKey, getSupabaseUrl } from '@
 const supabaseUrl = getSupabaseUrl();
 const supabaseAnonKey = getSupabaseAnonKey();
 
+async function upsertPerfilActividad(db, userId, deltaSeconds, startNewSession) {
+  const deltaMinutes = Math.max(0, Math.round(Number(deltaSeconds) / 60));
+  if (deltaMinutes <= 0) return;
+
+  const today = new Date().toISOString().slice(0, 10);
+  const { data: row, error: readError } = await db
+    .from('perfil_actividad')
+    .select('study_minutes, sessions_count')
+    .eq('user_id', userId)
+    .eq('activity_date', today)
+    .maybeSingle();
+
+  if (readError?.code === '42P01') return;
+
+  if (row) {
+    await db
+      .from('perfil_actividad')
+      .update({
+        study_minutes: (Number(row.study_minutes) || 0) + deltaMinutes,
+        sessions_count: (Number(row.sessions_count) || 0) + (startNewSession ? 1 : 0),
+        updated_at: new Date().toISOString(),
+      })
+      .eq('user_id', userId)
+      .eq('activity_date', today);
+  } else {
+    await db.from('perfil_actividad').insert({
+      user_id: userId,
+      activity_date: today,
+      study_minutes: deltaMinutes,
+      sessions_count: startNewSession ? 1 : 0,
+    });
+  }
+}
+
 export async function POST(req) {
   try {
     const authHeader = req.headers.get('authorization') || '';
@@ -124,6 +158,8 @@ export async function POST(req) {
       console.error('[activity/heartbeat] presence upsert', upsertError);
       return NextResponse.json({ error: 'No se pudo actualizar la presencia.' }, { status: 500 });
     }
+
+    await upsertPerfilActividad(db, userId, deltaSeconds, startNewSession);
 
     return NextResponse.json({ ok: true, totalSessionSeconds });
   } catch (err) {
