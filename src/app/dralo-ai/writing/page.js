@@ -1,8 +1,7 @@
 'use client';
 
-import DraloAiStudio from '@/components/dralo-ai/DraloAiStudio';
-import { DRALO_AI_MODES } from '@/data/draloAiConfig';
+import DraloAiSkillTrackHub from '@/components/dralo-ai/DraloAiSkillTrackHub';
 
-export default function DraloAiWritingPage() {
-  return <DraloAiStudio config={DRALO_AI_MODES.writing} />;
+export default function DraloAiWritingHubPage() {
+  return <DraloAiSkillTrackHub skillId="writing" />;
 }

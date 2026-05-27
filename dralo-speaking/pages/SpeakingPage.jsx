@@ -249,12 +249,20 @@ export default function SpeakingPage({
   onLevelChange,
   mode: modeProp,
   onModeChange,
+  /** Índice 0-based en el blueprint; si se define con singlePartMode, solo se practica esa parte */
+  fixedPartIndex,
+  singlePartMode = false,
 } = {}) {
   const [levelInternal, setLevelInternal] = useState('B2');
   const [modeInternal, setModeInternal] = useState('practice');
   const level = embedded && levelProp !== undefined ? levelProp : levelInternal;
   const setLevel = embedded && onLevelChange ? onLevelChange : setLevelInternal;
-  const mode = embedded && modeProp !== undefined ? modeProp : modeInternal;
+  const mode =
+    singlePartMode && fixedPartIndex !== undefined
+      ? 'exam'
+      : embedded && modeProp !== undefined
+        ? modeProp
+        : modeInternal;
   const setMode = embedded && onModeChange ? onModeChange : setModeInternal;
   const [messages, setMessages] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -348,7 +356,11 @@ export default function SpeakingPage({
     setExamHistory([]);
     setExamFinished(false);
     setExamReport(null);
-    setExamPartIndex(0);
+    const startIndex =
+      singlePartMode && typeof fixedPartIndex === 'number'
+        ? Math.max(0, Math.min(fixedPartIndex, examBlueprint.parts.length - 1))
+        : 0;
+    setExamPartIndex(startIndex);
     setExamTimerKey((k) => k + 1);
 
     let cancelled = false;
@@ -365,7 +377,7 @@ export default function SpeakingPage({
     return () => {
       cancelled = true;
     };
-  }, [mode, level, examRestartKey]);
+  }, [mode, level, examRestartKey, singlePartMode, fixedPartIndex, examBlueprint.parts.length]);
 
   useEffect(() => {
     if (mode !== 'practice') {
@@ -1067,12 +1079,20 @@ export default function SpeakingPage({
             background: 'var(--color-background-primary, #fff)',
           }}
         >
-          <p style={{ margin: '0 0 12px', fontSize: '13px', color: '#666' }}>
-            {level} — examiner role until the final report (same simulation as Speaking Lab → Exam).
-          </p>
+          {!singlePartMode ? (
+            <p style={{ margin: '0 0 12px', fontSize: '13px', color: '#666' }}>
+              {level} — examiner role until the final report (same simulation as Speaking Lab → Exam).
+            </p>
+          ) : null}
 
           <div className="mb-6 flex flex-wrap items-center justify-between gap-4">
-            <PartStepper parts={examBlueprint.parts} currentIndex={examPartIndex} />
+            {singlePartMode ? (
+              <p style={{ margin: 0, fontWeight: 700, fontSize: '15px', color: '#1e293b' }}>
+                {examCurrentPart?.name ?? 'Speaking part'}
+              </p>
+            ) : (
+              <PartStepper parts={examBlueprint.parts} currentIndex={examPartIndex} />
+            )}
             <ExamTimer
               key={`${examPartIndex}-${examTimerKey}`}
               seconds={examCurrentPart?.suggestedTimeSec ?? 120}
@@ -1121,17 +1141,19 @@ export default function SpeakingPage({
           </div>
 
           <div style={{ marginTop: '28px', display: 'flex', flexWrap: 'wrap', gap: '12px' }}>
-            <button
-              type="button"
-              disabled={examPartIndex >= examBlueprint.parts.length - 1 || examFinished}
-              onClick={() => {
-                setExamPartIndex((i) => Math.min(i + 1, examBlueprint.parts.length - 1));
-                setExamTimerKey((k) => k + 1);
-              }}
-              className="rounded-lg bg-slate-700 px-4 py-2 text-sm text-white hover:bg-slate-600 disabled:opacity-40"
-            >
-              Next part
-            </button>
+            {!singlePartMode ? (
+              <button
+                type="button"
+                disabled={examPartIndex >= examBlueprint.parts.length - 1 || examFinished}
+                onClick={() => {
+                  setExamPartIndex((i) => Math.min(i + 1, examBlueprint.parts.length - 1));
+                  setExamTimerKey((k) => k + 1);
+                }}
+                className="rounded-lg bg-slate-700 px-4 py-2 text-sm text-white hover:bg-slate-600 disabled:opacity-40"
+              >
+                Next part
+              </button>
+            ) : null}
             <button
               type="button"
               disabled={examLoading || examLines.length === 0 || examFinished}
@@ -1148,7 +1170,7 @@ export default function SpeakingPage({
                 opacity: examLoading || examLines.length === 0 || examFinished ? 0.45 : 1,
               }}
             >
-              End exam & get report
+              {singlePartMode ? 'Finish part & get feedback' : 'End exam & get report'}
             </button>
             {examFinished ? (
               <button
@@ -1156,7 +1178,7 @@ export default function SpeakingPage({
                 onClick={() => restartExamSimulation()}
                 className="rounded-lg border border-slate-600 bg-transparent px-4 py-2 text-sm text-slate-800 hover:bg-slate-100"
               >
-                New exam attempt
+                {singlePartMode ? 'Practise this part again' : 'New exam attempt'}
               </button>
             ) : null}
           </div>

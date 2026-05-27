@@ -17,6 +17,8 @@ import { formatPartsLabel, getExamSkillPartRange } from '@/data/levelExamPartMap
 import { supabase } from '@/utils/supabaseClient';
 import { getCachedLevelBySlug, getCachedExamenIdsBySlot } from '@/utils/levelsLevelCache';
 import { sortLevelsExamenesRows } from '@/utils/b2ResolveExam';
+import { useLevelsExamAdminFlow, reloadExamNamesBySlot } from '@/hooks/useLevelsExamAdminFlow';
+import A2ExamGenerationStatus from '@/components/niveles/A2ExamGenerationStatus';
 
 function parsePartNumber(text) {
   const m = String(text || '').match(/Part\s*(\d+)/i);
@@ -56,6 +58,11 @@ function LevelSkillPracticePageInner({ slug, skillRoute }) {
   const partMax = skillPartRange.partMax;
 
   const scoring = useLevelExamScoringSession({ slug, partMin, partMax });
+  const adminFlow = useLevelsExamAdminFlow({
+    slug,
+    examenIdBySlot: scoring.examenIdBySlot,
+    onCatalogUpdated: scoring.reloadExamCatalog,
+  });
   const { label: timerLabel } = useLevelsCategoryTimer();
 
   useEffect(() => {
@@ -117,10 +124,28 @@ function LevelSkillPracticePageInner({ slug, skillRoute }) {
   };
 
   return (
-    <B2ExamPracticeLayout examPracticeOpen={scoring.examPracticeOpen}>
+      <B2ExamPracticeLayout examPracticeOpen={scoring.examPracticeOpen}>
+      {slug === 'a2' && adminFlow.isAdmin ? (
+        <A2ExamGenerationStatus
+          generating={adminFlow.generating}
+          genError={adminFlow.genError}
+          genProgress={adminFlow.genProgress}
+          genStep={adminFlow.genStep}
+          genTotal={adminFlow.genTotal}
+          genEtaSeconds={adminFlow.genEtaSeconds}
+          genPartLabel={adminFlow.genPartLabel}
+          onDismissError={adminFlow.clearGenError}
+        />
+      ) : null}
       <B2ExamPracticeChrome
         examSlot={examSlot}
-        onSelectExam={(n) => scoring.handleSelectExam(selectExamSlot, n)}
+        onSelectExam={(n) => {
+          if (slug === 'a2' && adminFlow.isAdmin) {
+            void adminFlow.handleAdminExamSelect(n, (slot) => scoring.handleSelectExam(selectExamSlot, slot));
+            return;
+          }
+          scoring.handleSelectExam(selectExamSlot, n);
+        }}
         progressBySlot={scoring.progressBySlot}
         partsInPaper={partRows.length}
         examLabelsBySlot={examNamesBySlot}
@@ -186,7 +211,21 @@ function LevelSkillPracticePageInner({ slug, skillRoute }) {
                     Contenido en preparación. Puedes abrir la ficha de tips de la parte.
                   </p>
                 </div>
-                <div style={{ marginTop: '1.25rem', textAlign: 'center' }}>
+                <div style={{ marginTop: '1.25rem', textAlign: 'center', display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
+                  <Link
+                    href={`${routeMeta.href}?examen=${examSlot}`}
+                    style={{
+                      backgroundColor: '#2b6cb0',
+                      color: '#fff',
+                      padding: '0.75rem 1.25rem',
+                      borderRadius: '8px',
+                      textDecoration: 'none',
+                      fontWeight: 'bold',
+                      display: 'inline-block',
+                    }}
+                  >
+                    Abrir práctica del examen
+                  </Link>
                   <Link
                     href={applyExamSlotToHref(selectedPart.href, slug, examSlot)}
                     style={{

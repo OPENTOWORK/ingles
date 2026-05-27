@@ -444,6 +444,11 @@ export const translations = {
     a2ListeningPart4Description: "You will hear five short conversations. Each conversation tells you to color something in a picture. You need to color the correct object in the correct color. This tests your listening comprehension and ability to follow instructions.",
     a2ListeningPart4Tips: "Listen carefully to each conversation. Pay attention to the objects and colors mentioned. Color clearly and use the correct colors. Make sure you understand what to color.",
     a2ListeningPart4CommonErrors: "Not listening to the complete conversation, confusing similar-sounding words, or coloring the wrong objects",
+
+    a2ListeningPart5Title: "Part 5: Matching (long conversation)",
+    a2ListeningPart5Description: "You will hear an informal conversation (about 70 seconds). You match five people or items to eight options (A–H). Three options are not used. There is usually an example. This tests paraphrasing and dealing with distractors.",
+    a2ListeningPart5Tips: "Read the rubric and all eight options before listening. Options are in alphabetical order. Information follows the order of the questions. Expect different words from the options on the recording. You hear the audio twice.",
+    a2ListeningPart5CommonErrors: "Not reading all options first, choosing because you hear the same word (distractor), or reusing a letter",
     
     a2SpeakingPart1Title: "Part 1: Greetings and personal information",
     a2SpeakingPart1Description: "You will have a short conversation with the examiner. The examiner will ask you questions about yourself, your family, and your interests. This tests your ability to give basic personal information.",
@@ -1152,6 +1157,11 @@ export const translations = {
     a2ListeningPart4Description: "Escucharás cinco conversaciones cortas. Cada conversación te dice que colorees algo en una imagen. Necesitas colorear el objeto correcto con el color correcto. Esto evalúa tu comprensión auditiva y capacidad para seguir instrucciones.",
     a2ListeningPart4Tips: "Escucha cuidadosamente cada conversación. Presta atención a los objetos y colores mencionados. Colorea claramente y usa los colores correctos. Asegúrate de entender qué colorear.",
     a2ListeningPart4CommonErrors: "No escuchar la conversación completa, confundir palabras que suenan similares, o colorear los objetos incorrectos",
+
+    a2ListeningPart5Title: "Parte 5: Emparejar (conversación larga)",
+    a2ListeningPart5Description: "Escucharás una conversación informal (unos 70 segundos). Emparejas cinco personas o ítems con ocho opciones (A–H). Tres opciones no se usan. Suele haber un ejemplo. Evalúa parafraseo y distractores.",
+    a2ListeningPart5Tips: "Lee el enunciado y las ocho opciones antes de escuchar. Las opciones van en orden alfabético. La información sigue el orden de las preguntas. En el audio usarán palabras distintas a las opciones. Escucharás el audio dos veces.",
+    a2ListeningPart5CommonErrors: "No leer todas las opciones, elegir porque oyes la misma palabra (distractor), o repetir una letra",
     
     a2SpeakingPart1Title: "Parte 1: Saludos e información personal",
     a2SpeakingPart1Description: "Tendrás una conversación corta con el examinador. El examinador te hará preguntas sobre ti, tu familia y tus intereses. Esto evalúa tu capacidad para dar información personal básica.",

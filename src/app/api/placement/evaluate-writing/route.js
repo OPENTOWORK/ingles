@@ -1,16 +1,8 @@
 import { NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
-import OpenAI from 'openai';
+import { draloChatCompletion, isDraloOpenAIConfigured } from '@/lib/draloAiEngine';
 import { getSupabaseAnonKey, getSupabaseUrl } from '@/lib/supabaseEnv';
 import { writingPercentToOutcomesScore } from '@/lib/placementOutcomesScoring';
-
-const OPENAI_CHAT_MODEL = process.env.OPENAI_MODEL || 'gpt-4o-mini';
-
-function getOpenAI() {
-  const key = process.env.OPENAI_API_KEY?.trim();
-  if (!key) return null;
-  return new OpenAI({ apiKey: key });
-}
 
 function parseJsonFromModel(text) {
   const raw = String(text || '').trim();
@@ -56,10 +48,9 @@ export async function POST(req) {
       );
     }
 
-    const openai = getOpenAI();
-    if (!openai) {
+    if (!isDraloOpenAIConfigured()) {
       return NextResponse.json(
-        { error: 'OPENAI_API_KEY no configurada para corregir el writing.' },
+        { error: 'OPENAI_API_KEY no configurada para corregir el writing (motor DRALO AI GPT).' },
         { status: 503 },
       );
     }
@@ -94,16 +85,12 @@ Return JSON:
   "improvements": ["<improvement 1>", "<improvement 2>"]
 }`;
 
-    const completion = await openai.chat.completions.create({
-      model: OPENAI_CHAT_MODEL,
+    const { text: raw } = await draloChatCompletion({
+      system,
+      messages: [{ role: 'user', content: user }],
       temperature: 0.3,
-      messages: [
-        { role: 'system', content: system },
-        { role: 'user', content: user },
-      ],
+      response_format: { type: 'json_object' },
     });
-
-    const raw = completion.choices?.[0]?.message?.content || '';
     let parsed;
     try {
       parsed = parseJsonFromModel(raw);

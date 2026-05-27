@@ -263,19 +263,23 @@ export const NIVELES_LEVEL_HUB = {
       Listening: [
         {
           text: 'Part 8: Multiple choice (pictures)',
-          href: '/niveles/a2/listening/part-8',
+          href: '/niveles/a2/listening/8',
         },
         {
-          text: 'Part 9: Matching (information)',
-          href: '/niveles/a2/listening/part-9',
+          text: 'Part 9: Gap-fill (monologue)',
+          href: '/niveles/a2/listening/9',
         },
         {
-          text: 'Part 10: Multiple choice (short dialogues)',
-          href: '/niveles/a2/listening/part-10',
+          text: 'Part 10: Multiple choice (conversation)',
+          href: '/niveles/a2/listening/10',
         },
         {
-          text: 'Part 11: Gap-fill (notes)',
-          href: '/niveles/a2/listening/part-11',
+          text: 'Part 11: Multiple choice (short extracts)',
+          href: '/niveles/a2/listening/11',
+        },
+        {
+          text: 'Part 12: Matching (long conversation)',
+          href: '/niveles/a2/listening/12',
         },
       ],
       Speaking: [
@@ -284,12 +288,12 @@ export const NIVELES_LEVEL_HUB = {
           href: '/niveles/speaking-lab/a2/',
         },
         {
-          text: 'Part 12: Personal information interview',
-          href: '/niveles/a2/speaking/part-12',
+          text: 'Part 13: Personal information interview',
+          href: '/niveles/a2/speaking/13',
         },
         {
-          text: 'Part 13: Simulated situation task',
-          href: '/niveles/a2/speaking/part-13',
+          text: 'Part 14: Simulated situation task',
+          href: '/niveles/a2/speaking/14',
         },
       ],
     },

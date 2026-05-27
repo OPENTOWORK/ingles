@@ -1,12 +1,5 @@
-import OpenAI from 'openai';
-
-const OPENAI_CHAT_MODEL = process.env.OPENAI_MODEL || 'gpt-4o-mini';
-
-function getOpenAI() {
-  const key = process.env.OPENAI_API_KEY?.trim();
-  if (!key) return null;
-  return new OpenAI({ apiKey: key });
-}
+import { draloChatCompletion, isDraloOpenAIConfigured } from '@/lib/draloAiEngine';
+import { formatWritingFeedbackDisplay } from '@/lib/formatWritingFeedback';
 
 function extractScore(text, category) {
   const regex = new RegExp(`${category}:\\s*(\\d)\\s*/\\s*5`, 'i');
@@ -52,32 +45,32 @@ Use the Cambridge B2 First Writing Assessment Scale:
 - **Organisation**: Text well organised; coherent; uses a range of cohesive devices.
 - **Language**: Good range of vocabulary and simple/advanced grammar; errors do not impede communication.
 
-**Required response format (markdown, in English):**
+**Required response format (in English). Do NOT use markdown headers (#, ##, ###). Use these emoji section titles exactly:**
 
-## Cambridge B2 First — Writing assessment
+📝 Cambridge B2 First — Writing assessment
 
-### Task fulfilment
+📋 Task fulfilment
 - Text type detected: …
 - Required points covered: … (list each bullet/input point and ✓ or ✗)
 - Word count note: …
 
-### Language corrections
+✏️ Language corrections
 Quote **3–8 specific phrases** from the candidate's text and show a corrected version.
 Format each line exactly like:
 - "original phrase" → **corrected phrase** — brief reason
 
-### General feedback
+💬 General feedback
 2–4 sentences summarising performance against the task.
 
-### Strengths
+💪 Strengths
 - …
 - …
 
-### Areas for improvement
+🎯 Areas for improvement
 - …
 - …
 
-### Scores (Cambridge subscales)
+📊 Scores (Cambridge subscales)
 - Content: x/5
 - Communicative Achievement: x/5
 - Organisation: x/5
@@ -97,7 +90,7 @@ function buildGenericPrompt(essay) {
   return `
 You are an experienced Cambridge English writing examiner. Evaluate this text using four subscales (0–5 each).
 
-Return markdown with sections: General feedback, Strengths, Areas for improvement, Language corrections (quote → correction), and:
+Return plain text with emoji section titles (no # headers): 📝 title, then 💬 General feedback, 💪 Strengths, 🎯 Areas for improvement, ✏️ Language corrections (quote → correction), and:
 - Content: x/5
 - Communicative Achievement: x/5
 - Organisation: x/5
@@ -130,13 +123,12 @@ export async function evaluateCambridgeEssay({
     return { ok: false, status: 400, error: 'Essay too short or missing.' };
   }
 
-  const openai = getOpenAI();
-  if (!openai) {
+  if (!isDraloOpenAIConfigured()) {
     return {
       ok: false,
       status: 503,
       error:
-        'OPENAI_API_KEY is not configured on the server. Add it to .env.local to enable Cambridge writing correction.',
+        'OPENAI_API_KEY is not configured on the server. Add it to .env.local to enable Cambridge writing correction (DRALO AI GPT).',
     };
   }
 
@@ -151,23 +143,17 @@ export async function evaluateCambridgeEssay({
     : buildGenericPrompt(trimmed);
 
   try {
-    const completion = await openai.chat.completions.create({
-      model: OPENAI_CHAT_MODEL,
+    const { text: feedback } = await draloChatCompletion({
+      system:
+        'You are a Cambridge B2 First writing examiner. Be precise, constructive, and exam-focused. Use emoji section titles (📝 📋 ✏️ 💬 💪 🎯 📊) — never use # markdown headers.',
+      messages: [{ role: 'user', content: prompt }],
       temperature: 0.35,
-      messages: [
-        {
-          role: 'system',
-          content:
-            'You are a Cambridge B2 First writing examiner. Be precise, constructive, and exam-focused. Always follow the requested markdown structure and scoring lines exactly.',
-        },
-        { role: 'user', content: prompt },
-      ],
     });
-
-    const feedback = completion.choices?.[0]?.message?.content?.trim() || '';
     if (!feedback) {
       return { ok: false, status: 502, error: 'The examiner returned an empty response. Please try again.' };
     }
+
+    const formattedFeedback = formatWritingFeedbackDisplay(feedback);
 
     const content = extractScore(feedback, 'Content') ?? 0;
     const communication = extractScore(feedback, 'Communicative Achievement') ?? 0;
@@ -180,7 +166,7 @@ export async function evaluateCambridgeEssay({
     return {
       ok: true,
       status: 200,
-      feedback,
+      feedback: formattedFeedback,
       scores: {
         content,
         communication,

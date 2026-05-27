@@ -1,0 +1,17 @@
+.previewBanner {
+  background: #fef3c7;
+  border: 1px solid #fcd34d;
+  color: #92400e;
+  padding: 0.85rem 1rem;
+  border-radius: 0.75rem;
+  font-size: 0.9rem;
+  line-height: 1.5;
+  margin-bottom: 1.5rem;
+}
+
+.code {
+  font-size: 0.8rem;
+  background: rgba(0, 0, 0, 0.06);
+  padding: 0.1rem 0.35rem;
+  border-radius: 0.25rem;
+}

@@ -30,13 +30,20 @@
     "supabase:auth-disable-email-confirm": "node scripts/supabase-patch-auth-mailer-autoconfirm.mjs",
     "support:email-setup": "node scripts/support-email-setup.mjs",
     "supabase:service-role-setup": "node scripts/supabase-service-role-setup.mjs",
-    "supabase:sync-service-role": "node scripts/sync-supabase-service-role.mjs"
+    "supabase:sync-service-role": "node scripts/sync-supabase-service-role.mjs",
+    "regen:a2-exam": "node --loader ./scripts/alias-loader.mjs scripts/regen-a2-exam-parts.mjs",
+    "regen:a2-part": "node --loader ./scripts/alias-loader.mjs scripts/regen-a2-part.mjs",
+    "regen:b2-exam": "node --loader ./scripts/alias-loader.mjs scripts/regen-b2-exam.mjs",
+    "clone:b2-exam": "node --loader ./scripts/alias-loader.mjs scripts/clone-b2-exam-random.mjs",
+    "seed:b2-exam6": "node --loader ./scripts/alias-loader.mjs scripts/seed-b2-exam6-offline.mjs",
+    "synth:b2-exam6-audio": "node --loader ./scripts/alias-loader.mjs scripts/synth-b2-exam6-audio.mjs"
   },
   "dependencies": {
     "@prisma/client": "^6.16.0",
     "@supabase/ssr": "^0.5.2",
     "@supabase/supabase-js": "^2.38.0",
     "autoprefixer": "^10.4.20",
+    "edge-tts-universal": "^1.4.0",
     "lucide-react": "^1.14.0",
     "next": "^14.0.0",
     "nodemailer": "^8.0.7",

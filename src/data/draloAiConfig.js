@@ -209,22 +209,28 @@ export const DRALO_AI_MODES = {
     defaultLevel: 'B2',
     activities: [
       {
-        id: 'practice',
-        label: 'Practice',
+        id: 'part-1',
+        label: 'Part 1: Interview',
+        icon: '🗣️',
+        hint: 'Questions about yourself, your life and your opinions.',
+      },
+      {
+        id: 'part-2',
+        label: 'Part 2: Long turn',
+        icon: '🖼️',
+        hint: 'Compare photographs and answer a follow-up question.',
+      },
+      {
+        id: 'part-3',
+        label: 'Part 3: Collaborative task',
+        icon: '🤝',
+        hint: 'Discuss a situation with the examiner and reach a decision.',
+      },
+      {
+        id: 'part-4',
+        label: 'Part 4: Discussion',
         icon: '💬',
-        hint: 'Free conversation with your AI coach on Cambridge-style topics.',
-      },
-      {
-        id: 'correction',
-        label: 'Correction',
-        icon: '📋',
-        hint: 'Detailed feedback on grammar, vocabulary, discourse and fluency after each answer.',
-      },
-      {
-        id: 'exam',
-        label: 'Exam simulation',
-        icon: '🏆',
-        hint: 'Official-style speaking exam by parts, with timer and final band report.',
+        hint: 'Develop the topic from Part 3 with further questions.',
       },
     ],
   },

@@ -1,3 +1,6 @@
+import { LEVEL_EXAM_SECTION_RANGES } from '@/data/levelExamPartMap';
+import { LEVEL_SECTION_PRACTICE_HREF } from '@/data/nivelesLevelHub';
+
 /** B2 First exam practice modules in paper order (parts 1–17). */
 export const B2_EXAM_MODULES = [
   {
@@ -26,10 +29,27 @@ export const B2_EXAM_MODULES = [
   },
 ];
 
-function findModuleForPart(partNumber) {
-  return B2_EXAM_MODULES.find(
-    (m) => partNumber >= m.partMin && partNumber <= m.partMax,
-  );
+/** Módulos de práctica por nivel (orden del paper). */
+export function getLevelExamModules(slug = 'b2') {
+  const key = String(slug || 'b2').toLowerCase();
+  if (key === 'b2') return B2_EXAM_MODULES;
+
+  const ranges = LEVEL_EXAM_SECTION_RANGES[key];
+  const hrefs = LEVEL_SECTION_PRACTICE_HREF[key];
+  if (!ranges || !hrefs) return B2_EXAM_MODULES;
+
+  return Object.entries(ranges)
+    .map(([title, { partMin, partMax }]) => ({
+      partMin,
+      partMax,
+      href: hrefs[title] || `/niveles/${key}`,
+      title,
+    }))
+    .sort((a, b) => a.partMin - b.partMin);
+}
+
+function findModuleForPart(partNumber, modules = B2_EXAM_MODULES) {
+  return modules.find((m) => partNumber >= m.partMin && partNumber <= m.partMax);
 }
 
 /**
@@ -40,10 +60,12 @@ function findModuleForPart(partNumber) {
  * @param {number} params.pagePartMax — last part loaded on this page
  * @param {number} [params.examSlot]
  */
-export function getB2ExamPracticeNavState({ partNumber, pagePartMax, examSlot = 1 }) {
+export function getB2ExamPracticeNavState({ partNumber, pagePartMax, examSlot = 1, slug = 'b2' }) {
+  const levelSlug = String(slug || 'b2').toLowerCase();
+  const modules = getLevelExamModules(levelSlug);
   const n = Number(partNumber) || 0;
   const pageMax = Number(pagePartMax) || n;
-  const module = findModuleForPart(n);
+  const module = findModuleForPart(n, modules);
   const slotQuery = examSlot ? `?examen=${examSlot}` : '';
 
   const hasNextInPage = n > 0 && n < pageMax;
@@ -63,8 +85,8 @@ export function getB2ExamPracticeNavState({ partNumber, pagePartMax, examSlot = 
     continueHref = `${module.href}?examen=${examSlot}&part=${nextPartNumber}`;
     continueModuleTitle = module.title;
   } else if (module) {
-    const moduleIndex = B2_EXAM_MODULES.indexOf(module);
-    const nextModule = B2_EXAM_MODULES[moduleIndex + 1];
+    const moduleIndex = modules.indexOf(module);
+    const nextModule = modules[moduleIndex + 1];
     if (nextModule) {
       continueMode = 'link';
       continueHref = `${nextModule.href}${slotQuery}`;
@@ -73,7 +95,7 @@ export function getB2ExamPracticeNavState({ partNumber, pagePartMax, examSlot = 
   }
 
   return {
-    overviewHref: '/niveles/b2',
+    overviewHref: `/niveles/${levelSlug}`,
     hasNextInPage,
     nextPartNumber,
     continueMode,

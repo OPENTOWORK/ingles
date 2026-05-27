@@ -1,0 +1,92 @@
+.doc {
+  background: #fff;
+  border: 1px solid #e2e8f0;
+  border-radius: 1.25rem;
+  padding: 1.75rem 2rem;
+  box-shadow: 0 4px 24px rgba(15, 23, 42, 0.06);
+  max-width: 720px;
+}
+
+.docHeader {
+  border-bottom: 1px solid #e2e8f0;
+  padding-bottom: 1.25rem;
+  margin-bottom: 1.5rem;
+}
+
+.docTitle {
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: #0f172a;
+  margin: 0 0 0.5rem;
+}
+
+.meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 1rem;
+  font-size: 0.9rem;
+  color: #64748b;
+}
+
+.meta strong {
+  color: #334155;
+}
+
+.section {
+  margin-bottom: 1.75rem;
+}
+
+.sectionTitle {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #4338ca;
+  margin: 0 0 0.75rem;
+}
+
+.paragraph {
+  color: #334155;
+  line-height: 1.6;
+  margin: 0 0 0.5rem;
+}
+
+.list {
+  margin: 0;
+  padding-left: 1.25rem;
+  color: #334155;
+  line-height: 1.65;
+}
+
+.scheduleBlock {
+  background: #f8fafc;
+  border-radius: 0.75rem;
+  padding: 1rem 1.15rem;
+  margin-bottom: 0.65rem;
+}
+
+.scheduleDay {
+  font-weight: 700;
+  color: #1e293b;
+  margin-bottom: 0.35rem;
+}
+
+.milestone {
+  display: flex;
+  gap: 1rem;
+  padding: 0.75rem 0;
+  border-bottom: 1px dashed #e2e8f0;
+}
+
+.milestoneWeek {
+  flex-shrink: 0;
+  width: 4.5rem;
+  font-weight: 700;
+  color: #6366f1;
+  font-size: 0.85rem;
+}
+
+.actions {
+  margin-top: 1.5rem;
+  display: flex;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}

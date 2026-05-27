@@ -1,5 +1,6 @@
-/** Máximo slot de examen en la UI B2 (catálogo en levels_examenes). */
-export const B2_EXAM_SLOT_MAX = 5;
+import { B2_EXAM_SLOT_MAX } from '@/lib/b2ExamCatalog';
+
+export { B2_EXAM_SLOT_MAX };
 
 /**
  * @param {unknown} value

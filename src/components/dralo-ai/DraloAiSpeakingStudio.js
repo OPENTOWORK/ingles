@@ -1,10 +1,11 @@
 'use client';
 
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import Link from 'next/link';
 import PageHero from '@/components/PageHero';
-import SpeakingPage from '../../../dralo-speaking/pages/SpeakingPage';
 import { DRALO_AI_MODES } from '@/data/draloAiConfig';
+import { getSpeakingExamActivities } from '@/data/draloAiSpeakingExam';
+import DraloAiSpeakingExamPractice from '@/components/dralo-ai/DraloAiSpeakingExamPractice';
 import DraloAiLevelFilter from '@/components/dralo-ai/DraloAiLevelFilter';
 
 const ACCENT_SOLID = {
@@ -15,11 +16,20 @@ const config = DRALO_AI_MODES.speaking;
 
 export default function DraloAiSpeakingStudio() {
   const [level, setLevel] = useState(config.defaultLevel || 'B2');
-  const [mode, setMode] = useState(config.activities[0]?.id || 'practice');
+  const activities = useMemo(() => getSpeakingExamActivities(level), [level]);
+  const [activityId, setActivityId] = useState('');
+
+  useEffect(() => {
+    const first = activities[0]?.id || '';
+    setActivityId((prev) => {
+      if (prev && activities.some((a) => a.id === prev)) return prev;
+      return first;
+    });
+  }, [activities]);
 
   const activity = useMemo(
-    () => config.activities.find((a) => a.id === mode) || config.activities[0],
-    [mode],
+    () => activities.find((a) => a.id === activityId) || activities[0],
+    [activities, activityId],
   );
 
   const accentSolid = ACCENT_SOLID[config.accent] || ACCENT_SOLID.rose;
@@ -32,26 +42,30 @@ export default function DraloAiSpeakingStudio() {
           <span aria-hidden> / </span>
           <Link href="/dralo-ai">Dralo AI</Link>
           <span aria-hidden> / </span>
-          <span>{config.title}</span>
+          <Link href="/dralo-ai/speaking">{config.title}</Link>
+          <span aria-hidden> / </span>
+          <span>Preparación del examen</span>
         </nav>
       </div>
 
       <PageHero
-        eyebrow={config.eyebrow}
-        title={config.title}
-        description={config.description}
+        eyebrow="Dralo AI · Preparación del examen"
+        title={`${config.title} · Examen`}
+        description="Practica cada parte del Speaking con el examinador de Dralo: escucha el audio real y responde con el micrófono."
         accent={config.accent}
         mascotVariant={config.mascotVariant}
         stats={[
           { value: 'Dralo', label: 'Voice coach' },
           { value: level, label: 'Level' },
-          { value: String(config.activities.length), label: 'Modes' },
+          { value: String(activities.length), label: 'Parts' },
         ]}
       />
 
       <div className="dralo-ai-studio">
         <div className="dralo-ai-studio__toolbar">
-          <span className="dralo-ai-studio__badge">✨ Dralo AI</span>
+          <Link href="/dralo-ai/speaking" className="dralo-ai-back-link">
+            ← Elegir modo
+          </Link>
           <DraloAiLevelFilter
             levels={config.levels}
             selectedLevel={level}
@@ -59,17 +73,17 @@ export default function DraloAiSpeakingStudio() {
           />
         </div>
 
-        <div className="dralo-ai-activities" role="tablist" aria-label="Activities">
-          {config.activities.map((a) => (
+        <div className="dralo-ai-activities" role="tablist" aria-label="Speaking exam parts">
+          {activities.map((a) => (
             <button
               key={a.id}
               type="button"
               role="tab"
-              aria-selected={mode === a.id}
-              className={`dralo-ai-activity${mode === a.id ? ' is-active' : ''}`}
-              onClick={() => setMode(a.id)}
+              aria-selected={activityId === a.id}
+              className={`dralo-ai-activity${activityId === a.id ? ' is-active' : ''}`}
+              onClick={() => setActivityId(a.id)}
             >
-              <span aria-hidden>{a.icon}</span> {a.label}
+              <span aria-hidden>{a.icon}</span> {a.partTitle || a.label}
             </button>
           ))}
         </div>
@@ -77,18 +91,31 @@ export default function DraloAiSpeakingStudio() {
         <div className="dralo-ai-panel dralo-ai-panel--speaking">
           <div className="dralo-ai-panel__head">
             <h2>
-              {activity?.icon} {activity?.label}
+              {activity?.icon} {activity?.partTitle || activity?.label}
             </h2>
             <p>{activity?.hint}</p>
           </div>
           <div className="dralo-ai-panel__body dralo-ai-panel__body--speaking">
-            <SpeakingPage
-              embedded
-              level={level}
-              onLevelChange={setLevel}
-              mode={mode}
-              onModeChange={setMode}
-            />
+            {activity?.directions ? (
+              <div className="dralo-ai-directions">
+                <h3 className="dralo-ai-directions__title">{activity.partTitle}</h3>
+                <p className="dralo-ai-directions__text">{activity.directions}</p>
+              </div>
+            ) : null}
+            {activity?.tips ? (
+              <div className="dralo-ai-example">
+                <p className="dralo-ai-example__label">Tips for this part</p>
+                <p className="dralo-ai-example__hint">{activity.tips}</p>
+              </div>
+            ) : null}
+
+            {activity ? (
+              <DraloAiSpeakingExamPractice
+                key={`${level}-${activity.id}`}
+                level={level}
+                activity={activity}
+              />
+            ) : null}
           </div>
         </div>
       </div>

@@ -50,3 +50,8 @@ export async function getCachedExamenIdsBySlot(supabase, levelId) {
   examIdsByLevelId.set(levelId, { ids, at: Date.now() });
   return ids;
 }
+
+/** Tras generar un examen nuevo, vacía caché de slots. */
+export function invalidateLevelExamCache(levelId) {
+  if (levelId) examIdsByLevelId.delete(levelId);
+}

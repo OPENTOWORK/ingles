@@ -18,11 +18,17 @@ function truncateBeforeLine(text, regex) {
 /**
  * @param {string} raw - levels_preguntas.enunciado
  * @param {number} partNumber - 1–7 (First/FCE clásico); 8+ usa la misma heurística genérica sin reglas de Reading 5.
+ * @param {{ levelSlug?: string }} [options]
  */
-export function extractTextoBloque(raw, partNumber) {
+export function extractTextoBloque(raw, partNumber, options = {}) {
   if (!raw) return '';
   let t = raw.replace(/\r\n/g, '\n');
   t = stripAnswerKeyBlock(t);
+
+  const levelSlug = String(options.levelSlug || 'b2').toLowerCase();
+
+  // A2 Key Reading Part 1: cada ítem lleva su aviso en Questions (sin panel Text).
+  if (partNumber === 1 && levelSlug === 'a2') return '';
 
   const lines = t.split('\n');
   const textLineIdxs = lines
@@ -42,8 +48,27 @@ export function extractTextoBloque(raw, partNumber) {
     return t.trim();
   }
 
-  // Part 7: el panel muestra los perfiles A–D (bloque tras "Texts").
-  // Las preguntas "Which person…" se renderizan abajo junto a los botones.
+  // A2 Key Reading Part 2: perfiles A/B/C en Text; preguntas 7–13 aparte.
+  if (partNumber === 2) {
+    let body = truncateBeforeLine(joined, /^questions$/i);
+    const textIdx = body.search(/\nText\n/i);
+    if (textIdx >= 0) body = body.slice(textIdx + '\nText\n'.length);
+    const profileStart = body.search(/(?:^|\n)([A-C]\)\s+\w)/im);
+    if (profileStart >= 0) body = body.slice(profileStart).trim();
+    return body.trim();
+  }
+
+  // A2 Key Part 7: story prompt + picture lines in Text (until Questions).
+  if (partNumber === 7 && /Picture\s+1/i.test(joined)) {
+    let body = joined;
+    const textIdx = body.search(/\nText\n/i);
+    if (textIdx >= 0) body = body.slice(textIdx + '\nText\n'.length);
+    const qIdx = body.search(/\nQuestions\n/i);
+    if (qIdx >= 0) body = body.slice(0, qIdx);
+    return body.trim();
+  }
+
+  // B2 FCE Part 7: perfiles A–D (bloque tras "Texts").
   if (partNumber === 7) {
     const txMatch = joined.match(/(?:^|\n)\s*Texts\s*\n/im);
     if (txMatch) {
@@ -341,6 +366,11 @@ export function parsePart7PeopleProfiles(profilesBlock) {
 /** Partes B2 Listening con layout por ítems (10–13). */
 export function isB2ListeningItemLayoutPart(partNumber) {
   return partNumber >= 10 && partNumber <= 13;
+}
+
+/** A2 Key Listening (global parts 8–12). */
+export function isA2ListeningItemLayoutPart(partNumber) {
+  return partNumber >= 8 && partNumber <= 12;
 }
 
 export function trimListeningPart10DuplicateCycles(text = '') {

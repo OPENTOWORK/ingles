@@ -1,0 +1,177 @@
+.wrap {
+  max-width: 640px;
+  margin: 0 auto;
+}
+
+.progress {
+  height: 6px;
+  background: #e2e8f0;
+  border-radius: 999px;
+  overflow: hidden;
+  margin-bottom: 1.25rem;
+}
+
+.progressBar {
+  height: 100%;
+  background: linear-gradient(90deg, #6366f1, #8b5cf6);
+  border-radius: 999px;
+  transition: width 0.25s ease;
+}
+
+.card {
+  background: #fff;
+  border: 1px solid #e2e8f0;
+  border-radius: 1.25rem;
+  padding: 1.5rem 1.75rem;
+  box-shadow: 0 4px 24px rgba(15, 23, 42, 0.06);
+}
+
+.title {
+  font-size: 1.35rem;
+  font-weight: 700;
+  color: #0f172a;
+  margin: 0 0 0.35rem;
+}
+
+.desc {
+  color: #64748b;
+  font-size: 0.95rem;
+  margin: 0 0 1.25rem;
+  line-height: 1.5;
+}
+
+.options {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.option {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  padding: 0.85rem 1rem;
+  border: 2px solid #e2e8f0;
+  border-radius: 0.75rem;
+  cursor: pointer;
+  text-align: left;
+  background: #fff;
+  transition: border-color 0.15s, background 0.15s;
+}
+
+.option:hover {
+  border-color: #a5b4fc;
+}
+
+.optionSelected {
+  border-color: #6366f1;
+  background: #eef2ff;
+}
+
+.option input {
+  margin-top: 0.2rem;
+  accent-color: #6366f1;
+}
+
+.optionLabel {
+  font-weight: 600;
+  color: #1e293b;
+  display: block;
+}
+
+.optionHint {
+  font-size: 0.85rem;
+  color: #64748b;
+  display: block;
+  margin-top: 0.15rem;
+}
+
+.hoursGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+  gap: 0.5rem;
+}
+
+.hourBtn {
+  padding: 0.75rem;
+  border: 2px solid #e2e8f0;
+  border-radius: 0.75rem;
+  background: #fff;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.hourBtn:hover {
+  border-color: #a5b4fc;
+}
+
+.hourBtnActive {
+  border-color: #6366f1;
+  background: #eef2ff;
+  color: #4338ca;
+}
+
+.dateInput {
+  width: 100%;
+  max-width: 280px;
+  padding: 0.65rem 0.85rem;
+  border: 1px solid #cbd5e1;
+  border-radius: 0.5rem;
+  font-size: 1rem;
+}
+
+.textarea {
+  width: 100%;
+  min-height: 100px;
+  padding: 0.75rem;
+  border: 1px solid #cbd5e1;
+  border-radius: 0.5rem;
+  font-size: 0.95rem;
+  resize: vertical;
+}
+
+.actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  margin-top: 1.5rem;
+  flex-wrap: wrap;
+}
+
+.stepHint {
+  font-size: 0.85rem;
+  color: #94a3b8;
+}
+
+.btnPrimary {
+  padding: 0.65rem 1.35rem;
+  background: #4f46e5;
+  color: #fff;
+  border: none;
+  border-radius: 0.5rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.btnPrimary:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.btnSecondary {
+  padding: 0.65rem 1.1rem;
+  background: transparent;
+  color: #475569;
+  border: 1px solid #cbd5e1;
+  border-radius: 0.5rem;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.error {
+  color: #dc2626;
+  font-size: 0.9rem;
+  margin-top: 0.75rem;
+}

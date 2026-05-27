@@ -217,6 +217,56 @@
   white-space: pre-wrap;
 }
 
+.dralo-ai-directions {
+  padding: 16px 18px;
+  border-radius: 14px;
+  background: #eff6ff;
+  border: 1px solid #bfdbfe;
+}
+
+.dralo-ai-directions__title {
+  margin: 0 0 8px;
+  font-size: 1rem;
+  font-weight: 800;
+  color: #1e3a8a;
+}
+
+.dralo-ai-directions__text {
+  margin: 0;
+  font-size: 0.9rem;
+  line-height: 1.55;
+  color: #1e40af;
+  white-space: pre-wrap;
+}
+
+.dralo-ai-example {
+  padding: 14px 18px;
+  border-radius: 12px;
+  background: #fefce8;
+  border: 1px dashed #eab308;
+}
+
+.dralo-ai-example__label {
+  margin: 0 0 8px;
+  font-size: 0.75rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: #a16207;
+}
+
+.dralo-ai-example__answer {
+  margin: 8px 0 0;
+  font-size: 0.95rem;
+  color: #713f12;
+}
+
+.dralo-ai-example__hint {
+  margin: 6px 0 0;
+  font-size: 0.85rem;
+  color: #854d0e;
+}
+
 .dralo-ai-script-box {
   max-height: 220px;
   overflow-y: auto;
@@ -401,6 +451,15 @@
   font-size: 0.92rem;
   line-height: 1.6;
   color: #334155;
+}
+
+.dralo-ai-writing-feedback {
+  white-space: pre-wrap;
+}
+
+.dralo-ai-writing-feedback strong {
+  font-weight: 700;
+  color: #0f172a;
 }
 
 .dralo-ai-markdown h3,
@@ -665,6 +724,197 @@
 
 .dralo-ai-speaking-exam .hover\:bg-slate-600:hover {
   background: #334155 !important;
+}
+
+/* Speaking exam practice (audio-first, mismo estilo Dralo AI) */
+.dralo-ai-speaking-practice {
+  display: grid;
+  gap: 16px;
+  margin-top: 8px;
+}
+
+.dralo-ai-speaking-practice__toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+}
+
+.dralo-ai-speaking-practice__timer {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #64748b;
+}
+
+.dralo-ai-speaking-practice__photos-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.dralo-ai-speaking-practice__photos-theme {
+  margin: 0;
+  font-size: 0.9rem;
+  color: #64748b;
+}
+
+.dralo-ai-speaking-practice__shuffle-photos {
+  align-self: flex-start;
+  font-size: 0.85rem;
+}
+
+.dralo-ai-speaking-practice__photos {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.dralo-ai-speaking-practice__photo.is-loading {
+  animation: dralo-photo-pulse 1.4s ease-in-out infinite;
+}
+
+@keyframes dralo-photo-pulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.55;
+  }
+}
+
+.dralo-ai-speaking-practice__photo {
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  min-height: 140px;
+  background: #f8fafc;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #94a3b8;
+  font-weight: 600;
+}
+
+.dralo-ai-speaking-practice__photo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.dralo-ai-speaking-practice__transcript {
+  padding: 14px 16px;
+  border-radius: 12px;
+  font-size: 0.9rem;
+  line-height: 1.55;
+}
+
+.dralo-ai-speaking-practice__transcript--examiner {
+  background: #f1f5f9;
+  border: 1px solid #e2e8f0;
+  color: #475569;
+}
+
+.dralo-ai-speaking-practice__transcript--you {
+  background: #ecfdf5;
+  border: 1px solid #a7f3d0;
+  color: #065f46;
+}
+
+.dralo-ai-speaking-practice__transcript-label {
+  margin: 0 0 8px;
+  font-size: 0.75rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.dralo-ai-speaking-practice__transcript p {
+  margin: 4px 0;
+}
+
+.dralo-ai-speaking-practice__countdown {
+  margin: 0;
+  font-family: ui-monospace, monospace;
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--dralo-accent-solid, #e11d48);
+}
+
+.dralo-ai-speaking-practice__controls {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px;
+}
+
+.dralo-ai-speaking-practice__mic {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 22px;
+  border-radius: 999px;
+  border: none;
+  background: var(--dralo-accent-solid, #e11d48);
+  color: #fff;
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+  font-family: inherit;
+  transition: transform 0.15s, box-shadow 0.15s;
+}
+
+.dralo-ai-speaking-practice__mic:hover:not(:disabled) {
+  transform: scale(1.02);
+  box-shadow: 0 4px 14px rgba(225, 29, 72, 0.35);
+}
+
+.dralo-ai-speaking-practice__mic.is-recording {
+  background: #dc2626;
+  animation: dralo-mic-pulse 1.2s ease-in-out infinite;
+}
+
+@keyframes dralo-mic-pulse {
+  0%,
+  100% {
+    box-shadow: 0 0 0 0 rgba(220, 38, 38, 0.4);
+  }
+  50% {
+    box-shadow: 0 0 0 10px rgba(220, 38, 38, 0);
+  }
+}
+
+.dralo-ai-speaking-practice__mic:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.dralo-ai-speaking-practice__status {
+  font-size: 0.88rem;
+  color: #64748b;
+  font-weight: 600;
+}
+
+.dralo-ai-speaking-practice__type-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  align-items: stretch;
+}
+
+.dralo-ai-speaking-practice__type-row .dralo-ai-input {
+  flex: 1;
+  min-width: 200px;
+}
+
+.dralo-ai-speaking-practice__report {
+  margin-top: 8px;
+}
+
+.dralo-ai-panel--speaking .dralo-ai-speaking-practice [role='region'] {
+  background: linear-gradient(135deg, #fff1f2 0%, #fce7f3 45%, #fdf2f8 100%) !important;
+  border: 1px solid #fecdd3 !important;
+  box-shadow: 0 4px 20px rgba(225, 29, 72, 0.08);
 }
 
 /* ——— Dictionary ——— */
@@ -1406,4 +1656,221 @@
   background: #f8fafc;
   border-radius: 12px;
   border: 1px solid #e2e8f0;
+}
+
+/* Track hub: exam vs situational */
+.dralo-ai-track-hub {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 20px;
+  margin-top: 8px;
+}
+
+.dralo-ai-track-card {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 24px 22px;
+  border-radius: 20px;
+  border: 2px solid #e2e8f0;
+  background: #fff;
+  text-decoration: none;
+  color: inherit;
+  transition: transform 0.2s, box-shadow 0.2s, border-color 0.2s;
+}
+
+.dralo-ai-track-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 14px 36px rgba(15, 23, 42, 0.1);
+}
+
+.dralo-ai-track-card--exam:hover {
+  border-color: #6366f1;
+}
+
+.dralo-ai-track-card--situational:hover {
+  border-color: #10b981;
+}
+
+.dralo-ai-track-card__icon {
+  font-size: 2.2rem;
+  line-height: 1;
+}
+
+.dralo-ai-track-card__title {
+  margin: 0;
+  font-size: 1.35rem;
+  font-weight: 800;
+  color: #0f172a;
+}
+
+.dralo-ai-track-card__desc,
+.dralo-ai-track-card__hint {
+  margin: 0;
+  font-size: 0.92rem;
+  line-height: 1.5;
+  color: #64748b;
+}
+
+.dralo-ai-track-card__list {
+  margin: 8px 0 0;
+  padding: 0;
+  list-style: none;
+  font-size: 0.85rem;
+  color: #475569;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.dralo-ai-track-card__cta {
+  margin-top: auto;
+  font-weight: 700;
+  color: #4f46e5;
+  font-size: 0.9rem;
+}
+
+.dralo-ai-back-link {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #4f46e5;
+  text-decoration: none;
+  margin-right: auto;
+}
+
+.dralo-ai-back-link:hover {
+  text-decoration: underline;
+}
+
+/* Speaking role play */
+.dralo-ai-roleplay {
+  display: grid;
+  gap: 20px;
+}
+
+@media (min-width: 768px) {
+  .dralo-ai-roleplay {
+    grid-template-columns: 200px 1fr;
+    align-items: start;
+  }
+}
+
+.dralo-ai-roleplay__coach {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+
+.dralo-ai-roleplay__avatar {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  overflow: hidden;
+  border: 3px solid #e2e8f0;
+  transition: box-shadow 0.3s;
+}
+
+.dralo-ai-roleplay__avatar.is-speaking {
+  box-shadow: 0 0 0 4px rgba(225, 90, 48, 0.35);
+}
+
+.dralo-ai-roleplay__avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.dralo-ai-roleplay__status {
+  margin: 0;
+  font-size: 0.9rem;
+  color: #64748b;
+  font-weight: 600;
+}
+
+.dralo-ai-roleplay__chat {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  max-height: 360px;
+  overflow-y: auto;
+  padding: 16px;
+  background: #f8fafc;
+  border-radius: 16px;
+  border: 1px solid #e2e8f0;
+}
+
+.dralo-ai-roleplay__bubble {
+  max-width: 85%;
+  padding: 10px 14px;
+  border-radius: 14px;
+  font-size: 0.95rem;
+  line-height: 1.45;
+}
+
+.dralo-ai-roleplay__bubble--ai {
+  align-self: flex-start;
+  background: #fff;
+  border: 1px solid #e2e8f0;
+  color: #1e293b;
+}
+
+.dralo-ai-roleplay__bubble--user {
+  align-self: flex-end;
+  background: #dcf8c6;
+  color: #1e293b;
+}
+
+.dralo-ai-roleplay__controls {
+  grid-column: 1 / -1;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  align-items: center;
+}
+
+.dralo-ai-roleplay__controls .form-input {
+  flex: 1;
+  min-width: 200px;
+}
+
+.dralo-ai-error {
+  color: #dc2626;
+  font-size: 0.9rem;
+  margin: 0;
+}
+
+/* WhatsApp writing */
+.dralo-ai-whatsapp__screen {
+  background: #e5ddd5 url("data:image/svg+xml,%3Csvg width='60' height='60' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0 0h60v60H0z' fill='%23e5ddd5'/%3E%3C/svg%3E");
+  border-radius: 12px;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-height: 120px;
+}
+
+.dralo-ai-whatsapp__bubble {
+  max-width: 80%;
+  padding: 8px 12px;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  line-height: 1.4;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.08);
+}
+
+.dralo-ai-whatsapp__bubble--them {
+  align-self: flex-start;
+  background: #fff;
+}
+
+.dralo-ai-whatsapp__bubble--you {
+  align-self: flex-end;
+  background: #d9fdd3;
+}
+
+.dralo-ai-whatsapp__input {
+  font-family: system-ui, -apple-system, sans-serif;
 }

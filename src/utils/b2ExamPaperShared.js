@@ -22,6 +22,10 @@ export function getFormattedEnunciado(rawText = '') {
     .filter(Boolean)
     .map((line) => {
       const lower = line.toLowerCase();
+      const imageMatch = line.match(/^IMAGE:\s*(\S+)/i) || line.match(/^[A-G]\)\s*IMAGE:\s*(\S+)/i);
+      if (imageMatch) {
+        return { type: 'image', url: imageMatch[1], text: line };
+      }
       if (lower.startsWith('example:')) return { type: 'label', text: line };
       if (lower === 'text') return { type: 'label', text: line };
       if (/^(answer:)/i.test(line)) return { type: 'answer', text: line };
@@ -189,7 +193,9 @@ export function getOpenAnswerMap(
 export function inferOpenQuestionNumbersFromPrompt(rawText = '', partNumber = 0) {
   const text = String(rawText || '');
 
-  const gapMatches = [...text.matchAll(/\((\d{1,2})\)\s*_+/g)];
+  const gapMatches = [
+    ...text.matchAll(/\((\d{1,2})\)\s*(?:_+|\.{2,}|…{2,})/g),
+  ];
   const gapNums = [
     ...new Set(gapMatches.map((m) => Number(m[1])).filter((n) => Number.isFinite(n) && n > 0)),
   ].sort((a, b) => a - b);

@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect, useCallback, useRef } from 'react';
+import { formatWritingFeedbackDisplay, isWritingFeedbackHeadingLine } from '@/lib/formatWritingFeedback';
 import { buildClientApiUrl, getStaticApiHint } from '@/utils/clientApiUrl';
 
 function countWords(text) {
@@ -10,9 +11,10 @@ function countWords(text) {
     .filter(Boolean).length;
 }
 
-/** Simple markdown-ish lines → HTML for Cambridge feedback (no external lib). */
+/** Líneas de corrección → HTML (emojis en títulos, sin # markdown). */
 function formatCambridgeFeedbackHtml(text) {
-  const escaped = String(text || '')
+  const normalized = formatWritingFeedbackDisplay(text);
+  const escaped = normalized
     .replace(/&/g, '&amp;')
     .replace(/</g, '&lt;')
     .replace(/>/g, '&gt;');
@@ -22,8 +24,8 @@ function formatCambridgeFeedbackHtml(text) {
     .map((line) => {
       const trimmed = line.trim();
       if (!trimmed) return '<br />';
-      if (/^#{1,3}\s+/.test(trimmed)) {
-        const title = trimmed.replace(/^#{1,3}\s+/, '');
+      if (isWritingFeedbackHeadingLine(trimmed)) {
+        const title = trimmed.replace(/^#{1,6}\s+/, '');
         return `<h4 class="levels-b2-writing-panel__feedback-heading">${title}</h4>`;
       }
       if (/^[-*]\s+/.test(trimmed)) {

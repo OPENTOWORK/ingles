@@ -364,7 +364,7 @@ function B2ReadingExamsPageInner() {
     const rawPregunta = selectedQuestion?.enunciado || '';
     const desc = (selectedPart?.descripcion || '').replace(/\r\n/g, '\n').trim();
     const fallback = splitEnunciadoAndTextFallback(rawPregunta);
-    const textoExtracted = extractTextoBloque(rawPregunta, partNumberReading);
+    const textoExtracted = extractTextoBloque(rawPregunta, partNumberReading, { levelSlug: 'b2' });
     let texto = (textoExtracted || fallback.texto || '').trim();
     let preguntasPart1Parse = [];
     if (isUoePart1 && texto) {
@@ -1118,6 +1118,7 @@ function B2ReadingExamsPageInner() {
       </section>
 
       <B2ExamPracticeModuleNav
+        slug="b2"
         partNumber={partNumberReading}
         pagePartMax={partMax}
         examSlot={examSlot}

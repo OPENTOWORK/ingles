@@ -6,8 +6,8 @@
 export const LEVEL_EXAM_SECTION_RANGES = {
   a2: {
     'Reading and Writing': { partMin: 1, partMax: 7 },
-    Listening: { partMin: 8, partMax: 11 },
-    Speaking: { partMin: 12, partMax: 13 },
+    Listening: { partMin: 8, partMax: 12 },
+    Speaking: { partMin: 13, partMax: 14 },
   },
   b1: {
     Reading: { partMin: 1, partMax: 6 },

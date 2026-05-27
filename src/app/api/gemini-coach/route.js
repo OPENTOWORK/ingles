@@ -1,14 +1,6 @@
 import { NextResponse } from 'next/server';
-import OpenAI from 'openai';
+import { draloChatCompletion, isDraloOpenAIConfigured } from '@/lib/draloAiEngine';
 import { SYSTEM_PROMPTS } from '../../../../dralo-speaking/prompts/cambridge-prompts';
-
-const OPENAI_CHAT_MODEL = process.env.OPENAI_MODEL || 'gpt-4o-mini';
-
-function getOpenAI() {
-  const key = process.env.OPENAI_API_KEY;
-  if (!key) return null;
-  return new OpenAI({ apiKey: key });
-}
 
 function mapHistoryToOpenAIMessages(conversationHistory) {
   const out = [];
@@ -20,18 +12,6 @@ function mapHistoryToOpenAIMessages(conversationHistory) {
   return out;
 }
 
-async function callOpenAINoThrow(params) {
-  const client = getOpenAI();
-  if (!client) return '';
-  try {
-    const completion = await client.chat.completions.create(params);
-    return (completion.choices?.[0]?.message?.content || '').trim();
-  } catch (e) {
-    console.error('[gemini-coach] OpenAI error:', e?.message || e);
-    return '';
-  }
-}
-
 function coachMaxTokens(mode) {
   if (mode === 'correction') {
     return Number(process.env.COACH_CORRECTION_MAX_TOKENS || 900);
@@ -39,36 +19,48 @@ function coachMaxTokens(mode) {
   return Number(process.env.COACH_CHAT_MAX_TOKENS || 340);
 }
 
-async function callOpenAIDualMode({ systemPrompt, mode, conversationHistory, userMessage }) {
-  const systemContent =
+async function callDraloCoachDualMode({ systemPrompt, mode, conversationHistory, userMessage }) {
+  const taskSystem =
     mode === 'correction'
       ? `${systemPrompt}\n\nReturn only valid JSON, no markdown or code fences.`
       : systemPrompt;
 
-  const messages = [{ role: 'system', content: systemContent }];
-  messages.push(...mapHistoryToOpenAIMessages(conversationHistory));
+  const messages = mapHistoryToOpenAIMessages(conversationHistory);
   messages.push({ role: 'user', content: String(userMessage) });
 
-  const base = {
-    model: OPENAI_CHAT_MODEL,
-    messages,
-    temperature: mode === 'correction' ? 0.2 : 0.75,
-    max_tokens: coachMaxTokens(mode),
-    top_p: 0.9,
-  };
+  try {
+    if (mode === 'correction') {
+      const jsonResult = await draloChatCompletion({
+        system: taskSystem,
+        messages,
+        temperature: 0.2,
+        max_tokens: coachMaxTokens(mode),
+        top_p: 0.9,
+        response_format: { type: 'json_object' },
+      });
+      if (jsonResult.text) return jsonResult.text;
+      const plain = await draloChatCompletion({
+        system: taskSystem,
+        messages,
+        temperature: 0.2,
+        max_tokens: coachMaxTokens(mode),
+        top_p: 0.9,
+      });
+      return plain.text || '';
+    }
 
-  if (mode === 'correction') {
-    const jsonFirst = await callOpenAINoThrow({
-      ...base,
-      response_format: { type: 'json_object' },
+    const result = await draloChatCompletion({
+      system: taskSystem,
+      messages,
+      temperature: 0.75,
+      max_tokens: coachMaxTokens(mode),
+      top_p: 0.9,
     });
-    if (jsonFirst) return jsonFirst;
-    const plain = await callOpenAINoThrow(base);
-    if (plain) return plain;
+    return result.text || '';
+  } catch (e) {
+    console.error('[gemini-coach] DRALO AI (OpenAI) error:', e?.message || e);
     return '';
   }
-
-  return callOpenAINoThrow(base);
 }
 
 async function callGeminiNoThrow({
@@ -120,26 +112,45 @@ async function callGeminiNoThrow({
 export async function POST(req) {
   try {
     const body = await req.json();
-    const { userMessage, level, mode, conversationHistory = [] } = body || {};
+    const {
+      userMessage,
+      level,
+      mode,
+      conversationHistory = [],
+      scenarioPrompt,
+      customSituation,
+    } = body || {};
 
     if (!userMessage || !level || !mode) {
       return NextResponse.json({ error: 'Missing required fields.' }, { status: 400 });
     }
 
     const geminiKey = process.env.GEMINI_API_KEY || process.env.NEXT_PUBLIC_GEMINI_API_KEY;
-    const openAiAvailable = Boolean(process.env.OPENAI_API_KEY);
+    const openAiAvailable = isDraloOpenAIConfigured();
+    const allowGeminiFallback = process.env.DRALO_ALLOW_GEMINI_FALLBACK === 'true';
 
-    if (!geminiKey && !openAiAvailable) {
+    if (!openAiAvailable && !geminiKey) {
       return NextResponse.json(
         {
           error:
-            'No AI configured. Add OPENAI_API_KEY and/or GEMINI_API_KEY (or NEXT_PUBLIC_GEMINI_API_KEY) in .env.local.',
+            'No AI configured. Add OPENAI_API_KEY in .env.local (DRALO AI GPT engine). Optional fallback: GEMINI_API_KEY with DRALO_ALLOW_GEMINI_FALLBACK=true.',
         },
         { status: 500 },
       );
     }
 
-    const systemPrompt = SYSTEM_PROMPTS[level]?.[mode];
+    let systemPrompt = SYSTEM_PROMPTS[level]?.[mode];
+
+    if (mode === 'roleplay') {
+      if (scenarioPrompt?.trim()) {
+        systemPrompt = `${scenarioPrompt.trim()}\n\nStudent CEFR level: ${level}. Stay in character. Short replies (2–4 sentences). One question per turn.`;
+      } else if (customSituation?.trim()) {
+        systemPrompt = `You are a role-play partner for an English learner (${level} level). The student wants to practise this situation: "${customSituation.trim()}". Play the appropriate role (receptionist, officer, colleague, etc.). Stay in character. Short natural English. One question at a time. Start by setting the scene briefly.`;
+      } else {
+        return NextResponse.json({ error: 'Missing scenario for role play.' }, { status: 400 });
+      }
+    }
+
     if (!systemPrompt) {
       return NextResponse.json({ error: `No prompt found for level ${level}, mode ${mode}` }, { status: 400 });
     }
@@ -174,13 +185,13 @@ export async function POST(req) {
     let text = '';
     let source = '';
 
-    /** Prefer OpenAI first when configured (often more reliable than a quota-exhausted Gemini key). */
+    /** Motor principal: DRALO AI (OpenAI / GPT personalizado). */
     if (openAiAvailable) {
-      text = await callOpenAIDualMode(ctx);
-      if (text) source = 'openai';
+      text = await callDraloCoachDualMode(ctx);
+      if (text) source = 'dralo-ai';
     }
 
-    if (!text && geminiKey) {
+    if (!text && geminiKey && allowGeminiFallback) {
       const geminiText = await callGeminiNoThrow({
         apiKey: geminiKey,
         model,

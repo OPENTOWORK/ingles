@@ -1,9 +1,14 @@
 'use client';
 
 import { useCallback, useEffect, useRef, useState } from 'react';
+import { saveB2PartPuntuacionIfComplete } from '@/utils/recordLevelsB2PartScore';
 import { supabase } from '@/utils/supabaseClient';
 import { fetchB2PuntuacionesProgress } from '@/utils/levelsPuntuacionesProgress';
-import { getCachedLevelBySlug, getCachedExamenIdsBySlot } from '@/utils/levelsLevelCache';
+import {
+  getCachedLevelBySlug,
+  getCachedExamenIdsBySlot,
+  invalidateLevelExamCache,
+} from '@/utils/levelsLevelCache';
 import { getSessionUserId } from '@/utils/levelsEstadisticas';
 
 /**
@@ -15,6 +20,9 @@ export function useLevelExamScoringSession({ slug, partMin, partMax }) {
   const [progressBySlot, setProgressBySlot] = useState({});
   const [examPracticeOpen, setExamPracticeOpen] = useState(false);
   const [partFinishNotice, setPartFinishNotice] = useState(null);
+  const [currentExamenId, setCurrentExamenId] = useState(null);
+  const currentExamenIdRef = useRef(null);
+  const lastSavedPartSigRef = useRef('');
 
   const refreshPuntuacionesProgress = useCallback(async () => {
     const uid = await getSessionUserId();
@@ -29,14 +37,17 @@ export function useLevelExamScoringSession({ slug, partMin, partMax }) {
     setProgressBySlot(bySlot);
   }, [examenIdBySlot, partMin, partMax, partsInPaper]);
 
-  useEffect(() => {
-    void (async () => {
-      const { data: levelData } = await getCachedLevelBySlug(supabase, slug);
-      if (!levelData?.id) return;
-      const idsBySlot = await getCachedExamenIdsBySlot(supabase, levelData.id);
-      setExamenIdBySlot(idsBySlot);
-    })();
+  const reloadExamCatalog = useCallback(async () => {
+    const { data: levelData } = await getCachedLevelBySlug(supabase, slug);
+    if (!levelData?.id) return;
+    invalidateLevelExamCache(levelData.id);
+    const idsBySlot = await getCachedExamenIdsBySlot(supabase, levelData.id);
+    setExamenIdBySlot(idsBySlot);
   }, [slug]);
+
+  useEffect(() => {
+    void reloadExamCatalog();
+  }, [reloadExamCatalog]);
 
   useEffect(() => {
     if (!examPracticeOpen) return;
@@ -47,15 +58,60 @@ export function useLevelExamScoringSession({ slug, partMin, partMax }) {
     })();
   }, [examPracticeOpen, refreshPuntuacionesProgress]);
 
+  const setExamenContext = useCallback((examenId) => {
+    setCurrentExamenId(examenId);
+    currentExamenIdRef.current = examenId;
+  }, []);
+
   const handleSelectExam = useCallback((selectExamSlot, slot) => {
     selectExamSlot(slot);
     setExamPracticeOpen(true);
     setPartFinishNotice(null);
+    lastSavedPartSigRef.current = '';
     void (async () => {
       const { ensureAppUserProfile } = await import('@/utils/ensureAppUserProfile');
       await ensureAppUserProfile();
     })();
   }, []);
+
+  const resetPartNoticeOnPartChange = useCallback((examSlot, partNumber, progressBySlotLocal) => {
+    const saved = progressBySlotLocal?.[examSlot]?.parts?.[partNumber];
+    if (saved?.total) {
+      setPartFinishNotice({
+        type: 'saved',
+        text: `Última nota guardada: ${saved.correct}/${saved.total}`,
+      });
+    } else {
+      setPartFinishNotice(null);
+    }
+  }, []);
+
+  const trySavePartProgress = useCallback(
+    async ({ examSlot, partNumber, preguntaId, parteId, progress }) => {
+      if (!progress?.complete) return { saved: false };
+      const examenId = currentExamenIdRef.current;
+      const uid = await getSessionUserId();
+      if (!uid || !preguntaId || !examenId || !partNumber) return { saved: false };
+
+      const sig = `${examSlot}:${partNumber}:${progress.correct}`;
+      if (lastSavedPartSigRef.current === sig) return { saved: true, progress };
+
+      const result = await saveB2PartPuntuacionIfComplete({
+        userId: uid,
+        preguntaId,
+        parteId,
+        examenId,
+        partNumber,
+        progress,
+      });
+      if (result.saved) {
+        lastSavedPartSigRef.current = sig;
+        void refreshPuntuacionesProgress();
+      }
+      return result;
+    },
+    [refreshPuntuacionesProgress, slug],
+  );
 
   const getPartSavedScoreLabel = useCallback(
     (part, examSlot) => {
@@ -75,8 +131,13 @@ export function useLevelExamScoringSession({ slug, partMin, partMax }) {
     examPracticeOpen,
     partFinishNotice,
     setPartFinishNotice,
+    currentExamenId,
+    setExamenContext,
     handleSelectExam,
     refreshPuntuacionesProgress,
     getPartSavedScoreLabel,
+    resetPartNoticeOnPartChange,
+    trySavePartProgress,
+    reloadExamCatalog,
   };
 }

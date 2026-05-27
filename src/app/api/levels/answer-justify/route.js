@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import OpenAI from 'openai';
+import { draloChatCompletion, isDraloOpenAIConfigured } from '@/lib/draloAiEngine';
 
 const WINDOW_MS = 60 * 60 * 1000;
 const MAX_PER_IP = 40;
@@ -24,14 +24,6 @@ function tryConsumeRate(ip) {
   b.n += 1;
   return true;
 }
-
-function getOpenAI() {
-  const key = process.env.OPENAI_API_KEY;
-  if (!key) return null;
-  return new OpenAI({ apiKey: key });
-}
-
-const OPENAI_CHAT_MODEL = process.env.OPENAI_MODEL || 'gpt-4o-mini';
 
 const MAX_CONTEXT = 6000;
 
@@ -83,11 +75,11 @@ function stripRedundantKeyedSuffix(line, key) {
 }
 
 export async function POST(req) {
-  if (!process.env.OPENAI_API_KEY?.trim()) {
+  if (!isDraloOpenAIConfigured()) {
     return NextResponse.json(
       {
         error:
-          'Falta OPENAI_API_KEY en el servidor. Añádela en .env.local. Opcional: OPENAI_MODEL=gpt-4o-mini',
+          'Falta OPENAI_API_KEY en el servidor. Añádela en .env.local (motor DRALO AI GPT).',
       },
       { status: 503 },
     );
@@ -164,28 +156,13 @@ ${
     : `CLAVE_OFICIAL (official key from DB—use only for reasoning; do NOT paste this full string or "The correct answer is:" in your reply; the UI shows the key): ${correctChoiceText}`
 }`;
 
-  const openai = getOpenAI();
-  if (!openai) {
-    return NextResponse.json(
-      {
-        error:
-          'Falta OPENAI_API_KEY en el servidor. Añádela en .env.local. Opcional: OPENAI_MODEL=gpt-4o-mini',
-      },
-      { status: 503 },
-    );
-  }
-
   try {
-    const completion = await openai.chat.completions.create({
-      model: OPENAI_CHAT_MODEL,
+    const { text: raw } = await draloChatCompletion({
+      system,
+      messages: [{ role: 'user', content: user }],
       temperature: 0.35,
       max_tokens: isCorrect ? 200 : 280,
-      messages: [
-        { role: 'system', content: system },
-        { role: 'user', content: user },
-      ],
     });
-    const raw = completion.choices?.[0]?.message?.content?.trim() || '';
     let oneLine = raw.replace(/\s+/g, ' ').trim();
 
     if (!isCorrect && String(correctChoiceText || '').trim()) {

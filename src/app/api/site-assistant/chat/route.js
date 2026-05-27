@@ -1,12 +1,11 @@
 import { NextResponse } from 'next/server';
-import OpenAI from 'openai';
+import { draloChatCompletion, isDraloOpenAIConfigured } from '@/lib/draloAiEngine';
 import { SITE_ASSISTANT_SYSTEM_PROMPT } from '@/lib/siteHelpKnowledge';
 
 const WINDOW_MS = 60 * 60 * 1000;
 const MAX_PER_IP = 40;
 const MAX_USER_CHARS = 2000;
 const MAX_HISTORY = 14;
-const OPENAI_CHAT_MODEL = process.env.OPENAI_MODEL || 'gpt-4o-mini';
 
 /** @type {Map<string, { n: number; reset: number }>} */
 const ipBuckets = new Map();
@@ -42,11 +41,11 @@ function sanitizeMessages(raw) {
 }
 
 export async function POST(req) {
-  if (!process.env.OPENAI_API_KEY?.trim()) {
+  if (!isDraloOpenAIConfigured()) {
     return NextResponse.json(
       {
         error:
-          'El asistente no está configurado. Añade OPENAI_API_KEY en .env.local (misma clave que Dralo AI).',
+          'El asistente no está configurado. Añade OPENAI_API_KEY en .env.local (motor DRALO AI GPT).',
       },
       { status: 503 },
     );
@@ -73,17 +72,13 @@ export async function POST(req) {
     return NextResponse.json({ error: 'Escribe una pregunta.' }, { status: 400 });
   }
 
-  const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
-
   try {
-    const completion = await openai.chat.completions.create({
-      model: OPENAI_CHAT_MODEL,
+    const { text: reply } = await draloChatCompletion({
+      system: SITE_ASSISTANT_SYSTEM_PROMPT,
+      messages: history,
       temperature: 0.4,
       max_tokens: 700,
-      messages: [{ role: 'system', content: SITE_ASSISTANT_SYSTEM_PROMPT }, ...history],
     });
-
-    const reply = (completion.choices?.[0]?.message?.content || '').trim();
     if (!reply) {
       return NextResponse.json({ error: 'No hubo respuesta del asistente.' }, { status: 502 });
     }

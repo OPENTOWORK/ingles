@@ -16,6 +16,8 @@ import { getLevelFullExamSections, getNivelesLevelHub } from '@/data/nivelesLeve
 import { supabase } from '@/utils/supabaseClient';
 import { getCachedLevelBySlug, getCachedExamenIdsBySlot } from '@/utils/levelsLevelCache';
 import { sortLevelsExamenesRows } from '@/utils/b2ResolveExam';
+import { useLevelsExamAdminFlow, reloadExamNamesBySlot } from '@/hooks/useLevelsExamAdminFlow';
+import A2ExamGenerationStatus from '@/components/niveles/A2ExamGenerationStatus';
 
 function formatMinutes(m) {
   const h = Math.floor(m / 60);
@@ -30,7 +32,15 @@ function LevelExamModePracticeInner({ slug }) {
   const { examSlot, selectExamSlot } = useLevelExamPracticeSlot(slug);
   const { session, ready, repeatExam } = useExamModeSession(slug, examSlot);
   const [examNamesBySlot, setExamNamesBySlot] = useState({});
+  const [examenIdBySlot, setExamenIdBySlot] = useState({});
   const [pickedSlot, setPickedSlot] = useState(false);
+  const adminFlow = useLevelsExamAdminFlow({
+    slug,
+    examenIdBySlot,
+    onCatalogUpdated: async () => {
+      await loadExamCatalog();
+    },
+  });
   const autoOpenedRef = useRef(false);
 
   const sections = useMemo(() => getLevelFullExamSections(slug), [slug]);
@@ -50,6 +60,7 @@ function LevelExamModePracticeInner({ slug }) {
       const { data } = await supabase.from('levels_examenes').select('id, nombre').eq('level_id', levelData.id);
       const ordered = sortLevelsExamenesRows(data);
       const idsBySlot = await getCachedExamenIdsBySlot(supabase, levelData.id);
+      setExamenIdBySlot(idsBySlot);
       const names = {};
       Object.entries(idsBySlot).forEach(([slot, id]) => {
         const row = ordered.find((r) => r.id === id);
@@ -89,6 +100,19 @@ function LevelExamModePracticeInner({ slug }) {
 
   return (
     <B2ExamPracticeLayout examPracticeOpen={pickedSlot}>
+      {slug === 'a2' && adminFlow.isAdmin ? (
+        <A2ExamGenerationStatus
+          generating={adminFlow.generating}
+          genError={adminFlow.genError}
+          genProgress={adminFlow.genProgress}
+          genStep={adminFlow.genStep}
+          genTotal={adminFlow.genTotal}
+          genEtaSeconds={adminFlow.genEtaSeconds}
+          genPartLabel={adminFlow.genPartLabel}
+          onDismissError={adminFlow.clearGenError}
+        />
+      ) : null}
+
       <B2ExamSlotProgressPicker
         value={examSlot}
         onSelect={handlePickExam}

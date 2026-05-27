@@ -1,4 +1,5 @@
-import OpenAI from 'openai';
+import type OpenAI from 'openai';
+import { getDraloModel, getDraloOpenAI, mergeDraloSystem } from '@/lib/draloAiEngine';
 import type { CefrLevel, SpeakingMode } from '@prisma/client';
 import type { ExamPartDefinition } from '../../domain/types';
 import type { MicroFeedback } from '../../domain/types';
@@ -89,7 +90,7 @@ export class OpenAILLMAdapter extends MockLLMAdapter {
 
   override async practiceReply(p: PracticeTurnParams): Promise<string> {
     const messages: OpenAI.Chat.ChatCompletionMessageParam[] = [
-      { role: 'system', content: practiceSystem(p.cefr, p.prompt) },
+      { role: 'system', content: mergeDraloSystem(practiceSystem(p.cefr, p.prompt)) },
       ...p.history.map((h) => ({
         role: h.role,
         content: h.content,
@@ -97,7 +98,7 @@ export class OpenAILLMAdapter extends MockLLMAdapter {
       { role: 'user', content: p.transcript },
     ];
     const res = await this.client.chat.completions.create({
-      model: process.env.OPENAI_MODEL ?? 'gpt-4o-mini',
+      model: getDraloModel(),
       messages,
       temperature: 0.8,
       max_tokens: 300,
@@ -106,7 +107,7 @@ export class OpenAILLMAdapter extends MockLLMAdapter {
   }
 
   override async examReply(p: ExamTurnParams): Promise<string> {
-    const system = examinerSystem(p.cefr, p.examName, p.part, p.taskContext);
+    const system = mergeDraloSystem(examinerSystem(p.cefr, p.examName, p.part, p.taskContext));
     const messages: OpenAI.Chat.ChatCompletionMessageParam[] = [
       { role: 'system', content: system },
       ...p.history.map((h) => ({
@@ -124,7 +125,7 @@ export class OpenAILLMAdapter extends MockLLMAdapter {
       messages.push({ role: 'user', content: p.transcript });
     }
     const res = await this.client.chat.completions.create({
-      model: process.env.OPENAI_MODEL ?? 'gpt-4o-mini',
+      model: getDraloModel(),
       messages,
       temperature: 0.5,
       max_tokens: 220,
@@ -134,12 +135,13 @@ export class OpenAILLMAdapter extends MockLLMAdapter {
 
   override async microFeedback(p: { cefr: CefrLevel; userText: string }): Promise<MicroFeedback> {
     const res = await this.client.chat.completions.create({
-      model: process.env.OPENAI_MODEL ?? 'gpt-4o-mini',
+      model: getDraloModel(),
       messages: [
         {
           role: 'system',
-          content:
+          content: mergeDraloSystem(
             'Return a compact JSON object only with keys: grammarCorrection, vocabularyImprovement, naturalAlternative, estimatedCefrFit (string CEFR level), pronunciationNote (string).',
+          ),
         },
         {
           role: 'user',
@@ -166,9 +168,9 @@ export class OpenAILLMAdapter extends MockLLMAdapter {
 }
 
 export function createLlmAdapter(): MockLLMAdapter {
-  const key = process.env.OPENAI_API_KEY;
-  if (key) {
-    return new OpenAILLMAdapter(new OpenAI({ apiKey: key }));
+  const client = getDraloOpenAI();
+  if (client) {
+    return new OpenAILLMAdapter(client);
   }
   return new MockLLMAdapter();
 }

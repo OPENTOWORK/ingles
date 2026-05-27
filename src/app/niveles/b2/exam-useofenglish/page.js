@@ -315,7 +315,7 @@ function UseOfEnglishExamsPageInner() {
     const rawPregunta = selectedQuestion?.enunciado || '';
     const desc = (selectedPart?.descripcion || '').replace(/\r\n/g, '\n').trim();
     const fallback = splitEnunciadoAndText(rawPregunta);
-    const textoExtracted = extractTextoBloque(rawPregunta, partNumberUoe);
+    const textoExtracted = extractTextoBloque(rawPregunta, partNumberUoe, { levelSlug: 'b2' });
     let texto = (textoExtracted || fallback.texto || '').trim();
     /** Parte 1: el pasaje y el bloque Questions suelen ir juntos tras `Text`; mostramos solo el pasaje arriba. */
     let preguntasPart1Parse = [];
@@ -1076,6 +1076,7 @@ function UseOfEnglishExamsPageInner() {
       </section>
 
       <B2ExamPracticeModuleNav
+        slug="b2"
         partNumber={partNumberUoe}
         pagePartMax={UOE_PAGE_PART_MAX}
         examSlot={examSlot}

@@ -1,38 +1,20 @@
 export const partInfo = {
-  "1": {
-    "title": "Part 1: Find the differences",
-    "description": "You and the examiner will each have a picture. The pictures are similar but have some differences. You need to find and describe the differences between the two pictures. This tests your ability to describe pictures and compare information.",
-    "tips": "Look carefully at both pictures to find the differences. Describe what you see in your picture clearly. Use simple present tense and appropriate vocabulary. Don't worry if you can't find all the differences - just describe what you can see.",
-    "commonErrors": "Not looking carefully at both pictures, describing only one picture, using vocabulary that's too advanced, or not speaking clearly enough for the examiner to understand"
+  13: {
+    title: 'Part 1: Personal interview',
+    description:
+      'The examiner asks you and your partner questions about everyday topics (friends, home, hobbies, school). There are main questions, back-up prompts if you need help, and one extended answer per topic.',
+    tips:
+      'Listen to the whole question. Give short answers with a detail or example. If you do not understand, the examiner will use a simpler back-up question.',
+    commonErrors:
+      'One-word answers, answering the partner’s question, or stopping after the first sentence on extended tasks',
   },
-  "2": {
-    "title": "Part 2: Tell a story",
-    "description": "You will see four pictures that tell a story. The examiner will ask you to tell the story using the pictures. You should describe what happens in each picture and how they connect to tell a complete story.",
-    "tips": "Look at all four pictures first to understand the story sequence. Tell the story in order from the first picture to the last. Use simple past tense for stories. Describe the people, objects, and actions in each picture. Connect the pictures to make a complete story.",
-    "commonErrors": "Not looking at all the pictures first, telling the story out of order, using present tense instead of past tense, or not connecting the pictures to make a complete story"
+  14: {
+    title: 'Part 2: Collaborative task',
+    description:
+      'You discuss a task using picture prompts with your partner, then answer follow-up questions about opinions, preferences and comparison.',
+    tips:
+      'Look at all the pictures first. Take turns and respond to your partner. In Phase 2, explain your opinion and give a reason.',
+    commonErrors:
+      'Describing pictures without interacting, speaking only to the examiner, or giving very short opinions in Phase 2',
   },
-  "3": {
-    "title": "Part 3: Answer questions about yourself",
-    "description": "The examiner will ask you questions about yourself, your family, your school, or your interests. You should answer clearly and give some details about your experiences and opinions. This tests your ability to talk about personal topics.",
-    "tips": "Answer each question completely and give some details. Use simple, clear sentences. Talk about your real experiences and opinions. Don't worry about making small mistakes - the examiner wants to see that you can communicate your ideas.",
-    "commonErrors": "Giving very short answers without details, not speaking clearly, being too nervous to answer, or using vocabulary that's too advanced for your level"
-  },
-  "4": {
-    "title": "Part 4: Talk about a topic",
-    "description": "The examiner will give you a topic to talk about (like 'food' or 'hobbies'). You need to talk about this topic for about one minute. You should give your opinions and explain your ideas clearly. This tests your ability to speak at length about a topic.",
-    "tips": "Think about the topic before you start speaking. Give your opinions and explain why you think that way. Use examples from your own experience. Speak clearly and don't worry about making small mistakes. Try to talk for about one minute.",
-    "commonErrors": "Not thinking about the topic first, giving very short answers, not explaining your opinions, or stopping too early without trying to speak for the full minute"
-  },
-  "12": {
-    "title": "Part 12: Personal information interview",
-    "description": "The examiner will ask you questions about yourself, your family, your school, or your interests. You should answer clearly and give some details about your experiences and opinions.",
-    "tips": "Answer each question completely and give some details. Use simple, clear sentences. Talk about your real experiences and opinions.",
-    "commonErrors": "Giving very short answers without details, or not speaking clearly enough for the examiner to understand"
-  },
-  "13": {
-    "title": "Part 13: Simulated situation task",
-    "description": "You will be given a situation and asked to respond appropriately, for example making a request, offering help, or agreeing to plans. This tests your ability to handle everyday spoken interactions.",
-    "tips": "Listen carefully to what the examiner says. Respond politely and clearly. Use appropriate functional language for the situation.",
-    "commonErrors": "Not understanding the situation, giving answers that are too short, or using language that is too informal or too formal for the context"
-  }
 };

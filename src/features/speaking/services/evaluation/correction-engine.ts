@@ -1,4 +1,4 @@
-import OpenAI from 'openai';
+import { draloChatCompletion, isDraloOpenAIConfigured } from '@/lib/draloAiEngine';
 import type { CefrLevel } from '@prisma/client';
 import { correctionReportSchema, type CorrectionReportPayload } from '../../domain/schemas';
 
@@ -27,15 +27,12 @@ export async function runCorrectionEngine(params: {
     'If judging from text-only, set pronunciation.isEstimated to true.',
   ].join(' ');
 
-  const key = process.env.OPENAI_API_KEY;
   let raw = '';
 
-  if (key) {
-    const client = new OpenAI({ apiKey: key });
-    const res = await client.chat.completions.create({
-      model: process.env.OPENAI_MODEL ?? 'gpt-4o-mini',
+  if (isDraloOpenAIConfigured()) {
+    const { text } = await draloChatCompletion({
+      system: systemContent,
       messages: [
-        { role: 'system', content: systemContent },
         {
           role: 'user',
           content: buildCorrectionUserPrompt(params.cefr, params.text, params.taskPrompt),
@@ -44,7 +41,7 @@ export async function runCorrectionEngine(params: {
       response_format: { type: 'json_object' },
       temperature: 0.2,
     });
-    raw = res.choices[0]?.message?.content ?? '';
+    raw = text ?? '';
   } else {
     raw = JSON.stringify(mockReport(params.cefr, params.text));
   }

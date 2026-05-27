@@ -4,11 +4,14 @@ import dynamic from 'next/dynamic';
 import { Suspense, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { useB2ExamPracticeSlot } from '@/hooks/useB2ExamPracticeSlot';
+import { useLevelExamPracticeSlot } from '@/hooks/useLevelExamPracticeSlot';
 import { useB2AutoOpenExamFromUrl } from '@/hooks/useB2AutoOpenExamFromUrl';
 import { B2ExamPracticeChrome, B2ExamPracticeLayout } from '@/components/b2/B2ExamPracticeChrome';
+import { B2ExamPracticeContent, B2ExamQuestionItem } from '@/components/b2/B2ExamPracticeContent';
 import { useB2ExamScoringSession } from '@/hooks/useB2ExamScoringSession';
+import { useLevelExamScoringSession } from '@/hooks/useLevelExamScoringSession';
 import { computeB2PartProgressFromState } from '@/utils/recordLevelsB2PartScore';
-import { getB2PartScoring } from '@/utils/levelsB2PartScoring';
+import { getLevelsPartScoring } from '@/utils/levelsA2PartScoring';
 import LevelsAnswerJustification from '@/components/levels/LevelsAnswerJustification';
 import { useLevelsCategoryTimer } from '@/hooks/useLevelsCategoryTimer';
 import { computeLevelsPartScore } from '@/utils/levelsPaperScoreMetrics';
@@ -18,12 +21,33 @@ import { supabase } from '@/utils/supabaseClient';
 import {
   extractTextoBloque,
   extractListeningMatchingOptionPool,
+  isA2ListeningItemLayoutPart,
   isB2ListeningItemLayoutPart,
   splitListeningMcqContextByQuestion,
   splitListeningOpenGapContextByQuestion,
   splitListeningSpeakerContextByQuestion,
+  splitPart1TextoYPreguntas,
+  parsePart1QuestionOptions,
   trimListeningPart10DuplicateCycles,
 } from '@/utils/b2ExamTextBlocks';
+import {
+  buildMcqGroupsFromEnunciado,
+  describeA2PartDataGap,
+  mergeA2McqPrompts,
+  parseA2QuestionsFromEnunciado,
+  parseA2Part2ProfileNames,
+} from '@/utils/a2ExamMatching';
+import { mergeA2Part1Groups, parseA2Part1Pack } from '@/utils/a2Part1Parser';
+import { A2Part1ExamView } from '@/components/a2/A2Part1ExamView';
+import {
+  A2McqFeedback,
+  A2McqOptionButtons,
+  A2Part2MatchingGrid,
+  A2Part2ProfilesText,
+  A2Part3QuestionList,
+  A2Part4ClozeOptions,
+  A2ListeningPictureMcq,
+} from '@/components/a2/A2ExamReadingUi';
 import {
   getFormattedEnunciado,
   getGroupedAnswers,
@@ -41,9 +65,11 @@ import {
   recordLevelsAnswerEvaluation,
 } from '@/utils/levelsEstadisticas';
 import { resolveB2ExamenId, fetchB2PreguntasByExamen } from '@/utils/b2ResolveExam';
+import { getCachedLevelBySlug } from '@/utils/levelsLevelCache';
+import { useLevelsExamAdminFlow, reloadExamNamesBySlot } from '@/hooks/useLevelsExamAdminFlow';
 import { formatLevelsPartDisplayName } from '@/utils/formatLevelsPartDisplayName';
-import { getCachedB2Level } from '@/utils/b2LevelCache';
 import B2ExamPracticeModuleNav from '@/components/b2/B2ExamPracticeModuleNav';
+import A2ExamGenerationStatus from '@/components/niveles/A2ExamGenerationStatus';
 import ExamModeSectionBanner from '@/components/niveles/ExamModeSectionBanner';
 import { useExamModeStrict } from '@/hooks/useExamModeStrict';
 import { scoreExamModeDrafts } from '@/utils/examModeGradeAnswers';
@@ -54,13 +80,20 @@ const B2WritingLongFormAiPanel = dynamic(
 );
 
 /** @param {string} url */
-function resolvePublicOrSiteAudioSrc(url) {
+function resolvePublicOrSiteAudioSrc(url, cacheKey = '') {
   const u = String(url || '').trim();
   if (!u) return '';
-  if (/^https?:\/\//i.test(u)) return u;
-  const bp = (process.env.NEXT_PUBLIC_BASE_PATH || '').replace(/\/$/, '');
-  const path = u.startsWith('/') ? u : `/${u}`;
-  return `${bp}${path}`;
+  let out = u;
+  if (!/^https?:\/\//i.test(u)) {
+    const bp = (process.env.NEXT_PUBLIC_BASE_PATH || '').replace(/\/$/, '');
+    const path = u.startsWith('/') ? u : `/${u}`;
+    out = `${bp}${path}`;
+  }
+  if (cacheKey && /^https?:\/\//i.test(out)) {
+    const sep = out.includes('?') ? '&' : '?';
+    out = `${out}${sep}cb=${encodeURIComponent(String(cacheKey))}`;
+  }
+  return out;
 }
 
 /** @param {Array<{ orden?: unknown, url?: string, id?: string, titulo?: string }>} clips */
@@ -117,8 +150,10 @@ const buttonStyle = {
  * @param {number} [props.writingWordMin]
  * @param {number} [props.writingWordMax]
  * @param {'en'|'es'} [props.lang]
+ * @param {string} [props.slug] — a2, b2, …
  */
 function B2ExamPaperPracticePageInner({
+  slug = 'b2',
   title,
   partMin,
   partMax,
@@ -133,11 +168,20 @@ function B2ExamPaperPracticePageInner({
   writingWordMax = 190,
   lang = 'en',
 }) {
+  const levelSlug = String(slug || 'b2').toLowerCase();
+  const levelTag = levelSlug.toUpperCase();
   const searchParams = useSearchParams();
-  const { examSlot, selectExamSlot } = useB2ExamPracticeSlot();
-  const scoring = useB2ExamScoringSession({ partMin, partMax });
+  const b2Slot = useB2ExamPracticeSlot();
+  const levelSlot = useLevelExamPracticeSlot(levelSlug);
+  const examSlot = levelSlug === 'b2' ? b2Slot.examSlot : levelSlot.examSlot;
+  const selectExamSlot = levelSlug === 'b2' ? b2Slot.selectExamSlot : levelSlot.selectExamSlot;
+  const b2Scoring = useB2ExamScoringSession({ partMin, partMax });
+  const levelScoring = useLevelExamScoringSession({ slug: levelSlug, partMin, partMax });
+  const scoring = levelSlug === 'b2' ? b2Scoring : levelScoring;
+  const reloadExamCatalog =
+    levelSlug === 'b2' ? undefined : levelScoring.reloadExamCatalog;
   const examMode = useExamModeStrict({
-    slug: 'b2',
+    slug: levelSlug,
     partMin,
     partMax,
     sectionTitle: title,
@@ -171,6 +215,25 @@ function B2ExamPaperPracticePageInner({
   /** Mensaje si la consulta a `levels_preguntas_audios` falla (p. ej. RLS). */
   const [preguntaAudiosError, setPreguntaAudiosError] = useState('');
   const [writingLiveCorrect, setWritingLiveCorrect] = useState(null);
+  const [examLabelsBySlot, setExamLabelsBySlot] = useState({});
+
+  const adminFlow = useLevelsExamAdminFlow({
+    slug: levelSlug,
+    examenIdBySlot: scoring.examenIdBySlot,
+    onCatalogUpdated: () => {
+      if (levelSlug === 'a2') {
+        void scoring.reloadExamCatalog?.();
+        void loadData();
+      } else {
+        void reloadExamCatalog?.();
+      }
+      void reloadExamNamesBySlot(levelSlug).then(({ names }) => setExamLabelsBySlot(names));
+    },
+  });
+
+  useEffect(() => {
+    void reloadExamNamesBySlot(levelSlug).then(({ names }) => setExamLabelsBySlot(names));
+  }, [levelSlug, scoring.examenIdBySlot]);
 
   const mountedRef = useRef(true);
   const loadedPartsRangeRef = useRef('');
@@ -194,13 +257,15 @@ function B2ExamPaperPracticePageInner({
       loadedPartsRangeRef.current === partsRangeKey && partsShellRef.current.length > 0;
 
     try {
-      const { data: levelData, error: levelError } = await getCachedB2Level(supabase);
+      const { data: levelData, error: levelError } = await getCachedLevelBySlug(supabase, levelSlug);
 
-      if (levelError || !levelData) throw new Error('No se pudo obtener el nivel B2.');
+      if (levelError || !levelData) {
+        throw new Error(`No se pudo obtener el nivel ${levelTag}.`);
+      }
 
       const partNames = Array.from(
         { length: Math.max(0, partMax - partMin + 1) },
-        (_, i) => `Parte ${partMin + i} B2`,
+        (_, i) => `Parte ${partMin + i} ${levelTag}`,
       );
 
       /** @type {Record<string, object>} */
@@ -269,7 +334,9 @@ function B2ExamPaperPracticePageInner({
         });
         if (examResolveError || !examenId) {
           throw new Error(
-            examResolveError?.message || examResolveError?.details || 'Examen de B2 no resuelto.',
+            examResolveError?.message ||
+              examResolveError?.details ||
+              `Examen de ${levelTag} no resuelto. Si eres admin, genera el examen desde el selector.`,
           );
         }
 
@@ -411,10 +478,25 @@ function B2ExamPaperPracticePageInner({
 
       setPartsData(normalizedParts);
       setSelectedPartId(normalizedParts[0]?.id || null);
+      const pickBestQuestion = (questions) => {
+        if (!questions?.length) return null;
+        return questions.reduce((best, q) => {
+          const score =
+            (q.respuestas?.length || 0) +
+            (q.respuestasAbiertas?.length || 0) +
+            (String(q.enunciado || '').length > 80 ? 1 : 0);
+          const bestScore =
+            (best.respuestas?.length || 0) +
+            (best.respuestasAbiertas?.length || 0) +
+            (String(best.enunciado || '').length > 80 ? 1 : 0);
+          return score >= bestScore ? q : best;
+        });
+      };
+
       const initialQuestionSelection = normalizedParts.reduce((acc, part) => {
-        if (part.questions.length === 0) return acc;
-        const randomIndex = Math.floor(Math.random() * part.questions.length);
-        acc[part.id] = part.questions[randomIndex].preguntaId;
+        const best = pickBestQuestion(part.questions);
+        if (!best) return acc;
+        acc[part.id] = best.preguntaId;
         return acc;
       }, {});
       setSelectedQuestionByPart(initialQuestionSelection);
@@ -423,7 +505,7 @@ function B2ExamPaperPracticePageInner({
     } finally {
       if (mountedRef.current) setLoading(false);
     }
-  }, [emptyErrorMessage, examSlot, partMax, partMin]);
+  }, [emptyErrorMessage, examSlot, partMax, partMin, levelSlug, levelTag]);
 
   useEffect(() => {
     mountedRef.current = true;
@@ -450,13 +532,15 @@ function B2ExamPaperPracticePageInner({
   );
 
   const selectedQuestion = useMemo(() => {
-    if (!selectedPart) return null;
+    if (!selectedPart?.questions?.length) return null;
     const selectedQuestionId = selectedQuestionByPart[selectedPart.id];
-    return (
-      selectedPart.questions.find((q) => q.preguntaId === selectedQuestionId) ||
-      selectedPart.questions[0] ||
-      null
-    );
+    const byId = selectedPart.questions.find((q) => q.preguntaId === selectedQuestionId);
+    if (byId) return byId;
+    return selectedPart.questions.reduce((best, q) => {
+      const score = (q.respuestas?.length || 0) + (q.respuestasAbiertas?.length || 0);
+      const bestScore = (best.respuestas?.length || 0) + (best.respuestasAbiertas?.length || 0);
+      return score >= bestScore ? q : best;
+    });
   }, [selectedPart, selectedQuestionByPart]);
 
   useEffect(() => {
@@ -523,7 +607,7 @@ function B2ExamPaperPracticePageInner({
     [selectedPart?.nombre],
   );
 
-  const b2PartCfg = getB2PartScoring(partNumber);
+  const partScoringCfg = getLevelsPartScoring(levelSlug, partNumber);
 
   useEffect(() => {
     if (!scoring.examPracticeOpen) return;
@@ -537,16 +621,23 @@ function B2ExamPaperPracticePageInner({
     const rawPregunta = selectedQuestion?.enunciado || '';
     const desc = (selectedPart?.descripcion || '').replace(/\r\n/g, '\n').trim();
     const fallback = splitEnunciadoAndTextFallback(rawPregunta);
-    const textoExtracted = extractTextoBloque(rawPregunta, partNumber) || '';
+    const textoExtracted = extractTextoBloque(rawPregunta, partNumber, { levelSlug }) || '';
     let texto = (textoExtracted || fallback.texto || '').trim();
+    let preguntasPart1Parse = [];
+    if (levelSlug === 'b2' && partNumber === 1 && texto) {
+      const split = splitPart1TextoYPreguntas(texto);
+      texto = split.texto.trim();
+      preguntasPart1Parse = parsePart1QuestionOptions(split.preguntas);
+    }
     if (partNumber === 10) {
       texto = trimListeningPart10DuplicateCycles(texto);
     }
     return {
       enunciado: desc || fallback.enunciado,
       texto,
+      preguntasPart1Parse,
     };
-  }, [selectedPart?.descripcion, selectedQuestion?.enunciado, partNumber]);
+  }, [selectedPart?.descripcion, selectedQuestion?.enunciado, partNumber, levelSlug]);
 
   const contextSnippetForAi = useMemo(() => {
     const pack = [selectedPartContent.enunciado, selectedPartContent.texto].filter(Boolean).join('\n\n');
@@ -570,7 +661,7 @@ function B2ExamPaperPracticePageInner({
     if (!showAudioFromEnunciado) return [];
     return listeningReadyClips.map((c, idx) => ({
       key: String(c.id ?? `idx-${idx}`),
-      src: resolvePublicOrSiteAudioSrc(c.url),
+      src: resolvePublicOrSiteAudioSrc(c.url, c.id || `clip-${idx}`),
       label: c.titulo || `Audio ${idx + 1}`,
     }));
   }, [showAudioFromEnunciado, listeningReadyClips]);
@@ -660,13 +751,94 @@ function B2ExamPaperPracticePageInner({
     [selectedQuestion?.respuestas],
   );
 
+  const a2ParsedQuestions = useMemo(() => {
+    if (levelSlug !== 'a2' || partNumber > 12) return [];
+    return parseA2QuestionsFromEnunciado(selectedQuestion?.enunciado || '');
+  }, [levelSlug, partNumber, selectedQuestion?.enunciado]);
+
+  const part1CorrectLetterByQuestion = useMemo(() => {
+    const map = new Map();
+    if (levelSlug !== 'b2' || partNumber !== 1) return map;
+    for (const row of selectedQuestion?.respuestas || []) {
+      if (row?.correcta !== true) continue;
+      const t = String(row.respuesta || '').trim();
+      const m = t.match(/^(\d{1,2})\s+([A-D])\b/i);
+      if (m) map.set(Number(m[1]), m[2].toUpperCase());
+    }
+    return map;
+  }, [levelSlug, partNumber, selectedQuestion?.preguntaId, selectedQuestion?.respuestas]);
+
+  const b2Part1McqGroups = useMemo(() => {
+    if (levelSlug !== 'b2' || partNumber !== 1) return null;
+    const parsed = selectedPartContent.preguntasPart1Parse || [];
+    if (!parsed.length || !selectedQuestion?.preguntaId) return null;
+    const pid = selectedQuestion.preguntaId;
+    const letters = ['A', 'B', 'C', 'D'];
+    return parsed
+      .map(({ questionNumber, options: byLetter }) => {
+        const correctL = part1CorrectLetterByQuestion.get(questionNumber);
+        const opts = letters
+          .map((L) => {
+            const word = byLetter[L];
+            if (!word || !String(word).trim()) return null;
+            return {
+              id: `b2-p1-${pid}-q${questionNumber}-${L}`,
+              respuesta: `${questionNumber} ${L} ${word}`,
+              formattedText: `${L}) ${word}`,
+              correcta: correctL != null ? L === correctL : false,
+            };
+          })
+          .filter(Boolean);
+        if (opts.length < 2) return null;
+        return { questionNumber, options: opts };
+      })
+      .filter(Boolean);
+  }, [
+    levelSlug,
+    partNumber,
+    part1CorrectLetterByQuestion,
+    selectedPartContent.preguntasPart1Parse,
+    selectedQuestion?.preguntaId,
+  ]);
+
+  const effectiveMcqGroups = useMemo(() => {
+    if (b2Part1McqGroups?.length) return b2Part1McqGroups;
+
+    const base = groupedAnswers.filter((g) => g.questionNumber != null && g.options?.length >= 2);
+    if (levelSlug !== 'a2') return base.length ? base : groupedAnswers;
+
+    if (base.length >= 1) {
+      return a2ParsedQuestions.length
+        ? mergeA2McqPrompts(base, a2ParsedQuestions)
+        : base;
+    }
+
+    const fromEnunciado = buildMcqGroupsFromEnunciado(
+      selectedQuestion?.enunciado || '',
+      selectedQuestion?.respuestas || [],
+    );
+    if (fromEnunciado.length) return fromEnunciado;
+
+    return groupedAnswers;
+  }, [
+    b2Part1McqGroups,
+    groupedAnswers,
+    levelSlug,
+    a2ParsedQuestions,
+    selectedQuestion?.enunciado,
+    selectedQuestion?.respuestas,
+  ]);
+
   const hasMcqStyle = useMemo(
-    () => groupedAnswers.some((g) => g.questionNumber != null && g.options.length >= 2),
-    [groupedAnswers],
+    () => effectiveMcqGroups.some((g) => g.questionNumber != null && g.options.length >= 2),
+    [effectiveMcqGroups],
   );
 
+  const isA2ListeningGapPart = levelSlug === 'a2' && partNumber === 9;
+  const isListeningGapPart = partNumber === 11 || isA2ListeningGapPart;
+
   const listeningContextBlocks = useMemo(() => {
-    if (partNumber === 11) {
+    if (isListeningGapPart) {
       return splitListeningOpenGapContextByQuestion(selectedQuestion?.enunciado || '');
     }
     if (partNumber === 12) {
@@ -676,7 +848,7 @@ function B2ExamPaperPracticePageInner({
       return splitListeningSpeakerContextByQuestion(blob);
     }
     return splitListeningMcqContextByQuestion(textoLinesForDisplay);
-  }, [partNumber, textoLinesForDisplay, selectedQuestion?.enunciado]);
+  }, [isListeningGapPart, partNumber, textoLinesForDisplay, selectedQuestion?.enunciado]);
 
   const listeningMatchingPool = useMemo(() => {
     if (partNumber !== 12) return [];
@@ -736,13 +908,18 @@ function B2ExamPaperPracticePageInner({
   const hasOpenAnswerSlots = Boolean(
     !hasMcqStyle &&
       openQuestionNumbers.length > 0 &&
-      (preferOpenInputs || (showAudioFromEnunciado && partNumber === 11)),
+      (preferOpenInputs ||
+        (showAudioFromEnunciado && isListeningGapPart) ||
+        (levelSlug === 'a2' && partNumber === 5)),
   );
 
   const useListeningItemLayout = useMemo(() => {
-    if (!showAudioFromEnunciado || !isB2ListeningItemLayoutPart(partNumber)) return false;
+    if (!showAudioFromEnunciado) return false;
+    const itemPart =
+      levelSlug === 'a2' ? isA2ListeningItemLayoutPart(partNumber) : isB2ListeningItemLayoutPart(partNumber);
+    if (!itemPart) return false;
 
-    if (partNumber === 11) {
+    if (isListeningGapPart) {
       return openQuestionNumbers.length > 0;
     }
 
@@ -757,7 +934,9 @@ function B2ExamPaperPracticePageInner({
     return groupedAnswers.some((g) => g.questionNumber != null);
   }, [
     showAudioFromEnunciado,
+    levelSlug,
     partNumber,
+    isListeningGapPart,
     openQuestionNumbers.length,
     hasMcqStyle,
     groupedAnswers,
@@ -768,7 +947,7 @@ function B2ExamPaperPracticePageInner({
 
   const listeningQuestionNumbersOrdered = useMemo(() => {
     const s = new Set();
-    if (partNumber === 11) {
+    if (isListeningGapPart) {
       openQuestionNumbers.forEach((n) => s.add(n));
     }
     groupedAnswers.forEach((g) => {
@@ -776,19 +955,25 @@ function B2ExamPaperPracticePageInner({
     });
     listeningContextBlocks.forEach((b) => s.add(b.questionNumber));
     return [...s].sort((a, b) => a - b);
-  }, [groupedAnswers, listeningContextBlocks, partNumber, openQuestionNumbers]);
+  }, [groupedAnswers, listeningContextBlocks, isListeningGapPart, openQuestionNumbers]);
 
   /** Parte 11 y 13: un único audio por pregunta de examen (monólogo / entrevista). */
   const listeningMonologueClip = useMemo(() => {
     if (listeningReadyClips.length === 0) return null;
-    if (partNumber === 11) return listeningReadyClips[0];
+    if (isListeningGapPart) return listeningReadyClips[0];
     if (partNumber === 13 && listeningReadyClips.length === 1) return listeningReadyClips[0];
     return null;
-  }, [partNumber, listeningReadyClips]);
+  }, [isListeningGapPart, partNumber, listeningReadyClips]);
 
-  /** Writing parts 8–9: long-form textarea + Dralo AI (overrides open-input UI). */
+  const writingPartMin = levelSlug === 'a2' ? 6 : 8;
+  const writingPartMax = levelSlug === 'a2' ? 7 : 9;
+
+  /** Writing: long-form textarea + Dralo AI (A2 parts 6–7, B2 parts 8–9). */
   const isLongFormWritingPart = Boolean(
-    longFormWritingWithAi && partNumber >= 8 && partNumber <= 9 && selectedPart,
+    longFormWritingWithAi &&
+      partNumber >= writingPartMin &&
+      partNumber <= writingPartMax &&
+      selectedPart,
   );
 
   const showLongWritingWithAi = Boolean(
@@ -810,7 +995,7 @@ function B2ExamPaperPracticePageInner({
         useOpenInputUi: hasOpenAnswerSlots,
         openQuestionNumbers,
         openChecks,
-        groupedAnswers,
+        groupedAnswers: effectiveMcqGroups,
         checkedQuestions,
         selectedOptions,
         getQuestionKey,
@@ -820,7 +1005,7 @@ function B2ExamPaperPracticePageInner({
       hasOpenAnswerSlots,
       openQuestionNumbers,
       openChecks,
-      groupedAnswers,
+      effectiveMcqGroups,
       checkedQuestions,
       selectedOptions,
       selectedPart?.id,
@@ -829,6 +1014,11 @@ function B2ExamPaperPracticePageInner({
   );
 
   const sectionMaxWidth = showLongWritingWithAi ? 'min(960px, 100%)' : '100%';
+
+  const passageTextForPanel = useMemo(() => {
+    if (!selectedPartContent.texto?.trim()) return '';
+    return textoLinesForDisplay.join('\n');
+  }, [selectedPartContent.texto, textoLinesForDisplay]);
 
   const getPartTitle = (part) => {
     const n = Number(part?.nombre.match(/\d+/)?.[0] || 0);
@@ -846,7 +1036,7 @@ function B2ExamPaperPracticePageInner({
         useOpenInputUi: hasOpenAnswerSlots,
         openQuestionNumbers,
         openChecks: stateOverride.openChecks ?? openChecks,
-        groupedAnswers,
+        groupedAnswers: effectiveMcqGroups,
         checkedQuestions: stateOverride.checkedQuestions ?? checkedQuestions,
         selectedOptions: stateOverride.selectedOptions ?? selectedOptions,
         getQuestionKey,
@@ -876,6 +1066,131 @@ function B2ExamPaperPracticePageInner({
       selectedOptions,
       examModeActive,
       reviewMode,
+    ],
+  );
+
+  const useA2OfficialReadingUi = levelSlug === 'a2' && partNumber >= 1 && partNumber <= 4;
+  const useA2ListeningPictureUi = levelSlug === 'a2' && partNumber === 8;
+
+  const a2McqPartsExpectOptions = partNumber >= 1 && partNumber <= 4;
+
+  const a2EmptyPartHint = useMemo(() => {
+    if (levelSlug !== 'a2' || effectiveMcqGroups.length > 0) return '';
+    return describeA2PartDataGap({
+      partNumber,
+      enunciado: selectedQuestion?.enunciado,
+      respuestasCount: selectedQuestion?.respuestas?.length || 0,
+    });
+  }, [
+    levelSlug,
+    effectiveMcqGroups.length,
+    partNumber,
+    selectedQuestion?.enunciado,
+    selectedQuestion?.respuestas?.length,
+  ]);
+
+  const a2Part2ProfileNames = useMemo(() => {
+    if (partNumber !== 2) return [];
+    return parseA2Part2ProfileNames(passageTextForPanel);
+  }, [partNumber, passageTextForPanel]);
+
+  const a2Part1Pack = useMemo(() => {
+    if (levelSlug !== 'a2' || partNumber !== 1) return null;
+    return parseA2Part1Pack(selectedQuestion?.enunciado || '');
+  }, [levelSlug, partNumber, selectedQuestion?.enunciado]);
+
+  const a2Part1Groups = useMemo(() => {
+    if (!a2Part1Pack) return effectiveMcqGroups;
+    return mergeA2Part1Groups(effectiveMcqGroups, a2Part1Pack.items);
+  }, [a2Part1Pack, effectiveMcqGroups]);
+
+  const handleA2McqOptionSelect = useCallback(
+    ({ group, groupIndex, option, questionKey }) => {
+      const wasChecked = checkedQuestions[questionKey];
+      const nextChecked = { ...checkedQuestions, [questionKey]: true };
+      setSelectedOptions((prev) => ({ ...prev, [questionKey]: option.id }));
+      setCheckedQuestions(nextChecked);
+      trySavePartAfterAnswer({ checkedQuestions: nextChecked });
+      if (!wasChecked && !hideFeedback) {
+        const correctOpt = group.options.find((o) => o.correcta);
+        const answersFromDatabase = group.options
+          .map((o) => (o.formattedText || o.respuesta || '').trim())
+          .filter(Boolean)
+          .join('\n');
+        requestAiJustification(questionKey, {
+          partLabel: selectedPart?.nombre || '',
+          questionLabel: group.questionNumber ? `Question ${group.questionNumber}` : 'Item',
+          userChoiceText: option.formattedText || option.respuesta || '',
+          correctChoiceText: correctOpt?.formattedText || correctOpt?.respuesta || '',
+          isCorrect: !!option.correcta,
+          answersFromDatabase: answersFromDatabase || undefined,
+        });
+        void (async () => {
+          const uid = await getSessionUserId();
+          const pid = selectedQuestion?.preguntaId;
+          const parteId = selectedPart?.id;
+          if (!uid || !pid || !parteId) return;
+          const { error } = await recordLevelsAnswerEvaluation({
+            userId: uid,
+            preguntaId: pid,
+            parteId,
+            isCorrect: !!option.correcta,
+            slotLabel: group.questionNumber ? `Question ${group.questionNumber}` : 'Item',
+            userAnswerText: option.formattedText || option.respuesta || '',
+          });
+          if (error) console.warn('levels eval/puntuacion:', error.message || error);
+        })();
+      }
+    },
+    [
+      checkedQuestions,
+      hideFeedback,
+      requestAiJustification,
+      selectedPart?.id,
+      selectedPart?.nombre,
+      selectedQuestion?.preguntaId,
+      trySavePartAfterAnswer,
+    ],
+  );
+
+  const renderA2McqBlock = useCallback(
+    (group, groupIndex, layout) => {
+      const questionKey = getQuestionKey(
+        selectedPart.id,
+        group.questionNumber,
+        `extra-${groupIndex}`,
+      );
+      const isChecked = checkedQuestions[questionKey];
+      const correct = group.options.find((o) => o.correcta);
+      return (
+        <A2McqOptionButtons
+          group={group}
+          groupIndex={groupIndex}
+          layout={layout}
+          getQuestionKey={getQuestionKey}
+          selectedPart={selectedPart}
+          selectedOptions={selectedOptions}
+          checkedQuestions={checkedQuestions}
+          hideFeedback={hideFeedback}
+          onOptionSelect={handleA2McqOptionSelect}
+          afterOptions={
+            <A2McqFeedback
+              show={!hideFeedback && isChecked}
+              correctText={correct?.formattedText || correct?.respuesta}
+              hint={aiHintsByKey[questionKey]}
+            />
+          }
+        />
+      );
+    },
+    [
+      aiHintsByKey,
+      checkedQuestions,
+      getQuestionKey,
+      handleA2McqOptionSelect,
+      hideFeedback,
+      selectedOptions,
+      selectedPart,
     ],
   );
 
@@ -916,13 +1231,13 @@ function B2ExamPaperPracticePageInner({
   const scorePanelProps = showLongWritingWithAi
     ? {
         correctCount: writingLiveCorrect ?? savedPartScore?.correct ?? 0,
-        totalSlots: b2PartCfg?.total ?? 20,
-        passingCount: b2PartCfg?.passing ?? 12,
+        totalSlots: partScoringCfg?.total ?? 20,
+        passingCount: partScoringCfg?.passing ?? 12,
       }
     : {
         correctCount: partScoreMetrics.correctCount,
-        totalSlots: b2PartCfg?.total ?? partScoreMetrics.totalSlots,
-        passingCount: b2PartCfg?.passing ?? partScoreMetrics.passingCount,
+        totalSlots: partScoringCfg?.total ?? partScoreMetrics.totalSlots,
+        passingCount: partScoringCfg?.passing ?? partScoreMetrics.passingCount,
       };
 
   const handleWritingScoresReady = useCallback(
@@ -940,7 +1255,7 @@ function B2ExamPaperPracticePageInner({
         preguntaId,
         parteId: selectedPart.id,
         correct: scores.total,
-        total: b2PartCfg?.total ?? 20,
+        total: partScoringCfg?.total ?? 20,
         passed: Boolean(scores.passed),
       });
     },
@@ -950,7 +1265,7 @@ function B2ExamPaperPracticePageInner({
       partNumber,
       selectedPart,
       selectedQuestion?.preguntaId,
-      b2PartCfg,
+      partScoringCfg,
     ],
   );
 
@@ -983,11 +1298,34 @@ function B2ExamPaperPracticePageInner({
 
   return (
     <B2ExamPracticeLayout examPracticeOpen={scoring.examPracticeOpen}>
+      {levelSlug === 'a2' && adminFlow.isAdmin ? (
+        <A2ExamGenerationStatus
+          generating={adminFlow.generating}
+          genError={adminFlow.genError}
+          genProgress={adminFlow.genProgress}
+          genStep={adminFlow.genStep}
+          genTotal={adminFlow.genTotal}
+          genEtaSeconds={adminFlow.genEtaSeconds}
+          genPartLabel={adminFlow.genPartLabel}
+          onDismissError={adminFlow.clearGenError}
+        />
+      ) : null}
+
       <B2ExamPracticeChrome
         examSlot={examSlot}
-        onSelectExam={(n) => scoring.handleSelectExam(selectExamSlot, n)}
+        onSelectExam={(n) => {
+          if (levelSlug === 'a2' && adminFlow.isAdmin) {
+            void adminFlow.handleAdminExamSelect(n, (slot) => {
+              scoring.handleSelectExam(selectExamSlot, slot);
+              void loadData();
+            });
+            return;
+          }
+          scoring.handleSelectExam(selectExamSlot, n);
+        }}
         progressBySlot={scoring.progressBySlot}
         partsInPaper={scoring.partsInPaper}
+        examLabelsBySlot={examLabelsBySlot}
         examPracticeOpen={scoring.examPracticeOpen}
         title={title}
         subtitle={subtitle}
@@ -1024,113 +1362,40 @@ function B2ExamPaperPracticePageInner({
         {!loading && !error && (
           <>
             {selectedPart && !selectedQuestion && (
-              <div
-                style={{
-                  background: '#fff',
-                  borderRadius: '12px',
-                  padding: '1.25rem',
-                  boxShadow: '0 4px 12px rgba(0, 0, 0, 0.08)',
-                }}
-              >
-                <h2 style={{ marginTop: 0 }}>{selectedPart.nombre}</h2>
-
-                {selectedPart.descripcion ? (
-                  <div style={{ color: '#2d3748', marginTop: '0.6rem' }}>
-                    <strong>Pregunta:</strong>
-                    <div
-                      style={{
-                        marginTop: '0.6rem',
-                        background: '#f8fafc',
-                        border: '1px solid #e2e8f0',
-                        borderRadius: '10px',
-                        padding: '0.95rem 1rem',
-                      }}
-                    >
-                      <p style={{ margin: '0 0 0.65rem', fontWeight: 700, color: '#1a365d' }}>Enunciado</p>
-                      {getFormattedEnunciado(selectedPart.descripcion).map((block, index) => {
-                        if (block.type === 'label') {
-                          return (
-                            <p
-                              key={`preview-${block.type}-${index}`}
-                              style={{ margin: '0.7rem 0 0.45rem', fontWeight: 700, color: '#1a365d' }}
-                            >
-                              {block.text}
-                            </p>
-                          );
-                        }
-                        if (block.type === 'answer') {
-                          return (
-                            <p
-                              key={`preview-${block.type}-${index}`}
-                              style={{
-                                margin: '0.45rem 0',
-                                padding: '0.45rem 0.6rem',
-                                background: '#ebf8ff',
-                                borderRadius: '8px',
-                                fontWeight: 600,
-                              }}
-                            >
-                              {block.text}
-                            </p>
-                          );
-                        }
-                        if (block.type === 'number') {
-                          return (
-                            <p
-                              key={`preview-${block.type}-${index}`}
-                              style={{ margin: '0.35rem 0', fontWeight: 700, color: '#2d3748' }}
-                            >
-                              {block.text}
-                            </p>
-                          );
-                        }
-                        if (block.type === 'option') {
-                          return (
-                            <p
-                              key={`preview-${block.type}-${index}`}
-                              style={{ margin: '0.2rem 0', paddingLeft: '0.35rem', color: '#334155' }}
-                            >
-                              {block.text}
-                            </p>
-                          );
-                        }
-                        return (
-                          <p
-                            key={`preview-${block.type}-${index}`}
-                            style={{ margin: '0.45rem 0', lineHeight: 1.7, color: '#1f2937' }}
-                          >
-                            {block.text}
-                          </p>
-                        );
-                      })}
-                    </div>
+              <div className="levels-exam-split-page">
+                <div className="levels-exam-split-card">
+                  <h2>{getPartTitle(selectedPart)}</h2>
+                  <div className="levels-exam-split__body levels-exam-split__body--stacked">
+                    <p style={{ margin: '0 0 0.75rem', color: '#9b2c2c', fontWeight: 600 }}>
+                      No hay ejercicio guardado en Supabase para esta parte del examen {examSlot}.
+                    </p>
+                    {levelSlug === 'a2' && adminFlow.isAdmin ? (
+                      <p style={{ margin: '0 0 1rem', color: '#334155', lineHeight: 1.6 }}>
+                        Vuelve a elegir <strong>Examen {examSlot}</strong> arriba y confirma{' '}
+                        <strong>regenerar con DRALO AI</strong> (14 partes). Si ves «Sesión no válida»,
+                        cierra sesión e inicia de nuevo como administrador.
+                      </p>
+                    ) : (
+                      <p style={{ margin: '0 0 1rem', color: '#4a5568', lineHeight: 1.6 }}>
+                        Un administrador debe generar el contenido del examen antes de practicar.
+                      </p>
+                    )}
+                    {selectedPart.descripcion ? (
+                      <div className="levels-exam-split__enunciado">
+                        <p className="levels-exam-split__section-title">About this part</p>
+                        <p style={{ margin: 0, lineHeight: 1.65, color: '#1f2937' }}>
+                          {selectedPart.descripcion}
+                        </p>
+                      </div>
+                    ) : null}
                   </div>
-                ) : (
-                  <p style={{ margin: '0.6rem 0 0', color: '#4a5568' }}>
-                    Esta parte aún no tiene enunciado en la base de datos.
-                  </p>
-                )}
-
-                <p
-                  style={{
-                    marginTop: '1.25rem',
-                    margin: '1.25rem 0 0',
-                    color: '#4a5568',
-                    fontSize: '0.95rem',
-                    fontStyle: 'italic',
-                  }}
-                >
-                  Las preguntas para esta parte estarán disponibles próximamente.
-                </p>
+                </div>
               </div>
             )}
 
-            {selectedPart && selectedQuestion && (
-              <div
-                className={`levels-exam-practice-page${
-                  useListeningItemLayout ? ' levels-exam-practice-page--narrow' : ''
-                }`}
-              >
+            {selectedPart && selectedQuestion &&
+              (useListeningItemLayout ? (
+              <div className="levels-exam-split-page levels-exam-practice-page--narrow">
               <div className="levels-exam-split-card">
                 <h2>{getPartTitle(selectedPart)}</h2>
 
@@ -1183,6 +1448,22 @@ function B2ExamPaperPracticePageInner({
                           >
                             {block.text}
                           </p>
+                        );
+                      }
+                      if (block.type === 'image' && block.url) {
+                        return (
+                          <img
+                            key={`enunciado-image-${index}`}
+                            src={block.url}
+                            alt=""
+                            style={{
+                              maxWidth: '100%',
+                              height: 'auto',
+                              margin: '0.5rem 0',
+                              borderRadius: '8px',
+                              border: '1px solid #e2e8f0',
+                            }}
+                          />
                         );
                       }
                       return (
@@ -1282,7 +1563,10 @@ function B2ExamPaperPracticePageInner({
                         ) : null}
                         <audio
                           controls
-                          src={resolvePublicOrSiteAudioSrc(String(listeningMonologueClip.url))}
+                          src={resolvePublicOrSiteAudioSrc(
+                            String(listeningMonologueClip.url),
+                            listeningMonologueClip.id || 'mono',
+                          )}
                           style={{ width: '100%' }}
                         >
                           <track kind="captions" />
@@ -1333,7 +1617,7 @@ function B2ExamPaperPracticePageInner({
                     ) : null}
                     <div style={{ marginTop: '1rem', display: 'grid', gap: '1.25rem' }}>
                       {listeningQuestionNumbersOrdered.map((qn) => {
-                        const isOpenGapItem = partNumber === 11;
+                        const isOpenGapItem = isListeningGapPart;
                         const group = isOpenGapItem
                           ? null
                           : groupedAnswers.find((g) => g.questionNumber === qn);
@@ -1347,9 +1631,9 @@ function B2ExamPaperPracticePageInner({
                           : pickListeningClipForQuestion(listeningReadyClips, qn, partNumber);
                         const clipSrc =
                           !hidePerItemAudio && clip?.url
-                            ? resolvePublicOrSiteAudioSrc(String(clip.url))
+                            ? resolvePublicOrSiteAudioSrc(String(clip.url), clip.id || `p${partNumber}-q${qn}`)
                             : '';
-                        const clipLabel = String(clip?.titulo || '').trim();
+                        const clipLabel = '';
 
                         if (isOpenGapItem) {
                           const questionKey = getQuestionKey(selectedPart.id, qn, 'open');
@@ -1528,7 +1812,7 @@ function B2ExamPaperPracticePageInner({
                                     {clipLabel}
                                   </p>
                                 ) : null}
-                                <audio controls src={clipSrc} style={{ width: '100%' }}>
+                                <audio controls src={clipSrc} key={clipSrc} style={{ width: '100%' }}>
                                   <track kind="captions" />
                                 </audio>
                               </div>
@@ -1677,9 +1961,88 @@ function B2ExamPaperPracticePageInner({
                     </div>
                   </>
                 ) : null}
+                </div>
+              </div>
+              </div>
+              ) : (
+              <B2ExamPracticeContent
+                title={getPartTitle(selectedPart)}
+                directionsText={
+                  a2Part1Pack?.directions || selectedPartContent.enunciado
+                }
+                directionsLabel="Directions"
+                textLabel="Text"
+                questionsLabel="Questions"
+                passageText={passageTextForPanel}
+                passage={
+                  useA2OfficialReadingUi && partNumber === 2 ? (
+                    <A2Part2ProfilesText texto={passageTextForPanel} />
+                  ) : undefined
+                }
+                split={useA2OfficialReadingUi && partNumber === 1 ? false : 'auto'}
+                showDirections={!(useA2OfficialReadingUi && partNumber === 1)}
+                showQuestionsHeading={!showLongWritingWithAi && !(useA2OfficialReadingUi && partNumber === 1)}
+                beforeQuestions={
+                  <>
+                {showAudioFromEnunciado && preguntaAudiosError ? (
+                  <p
+                    style={{
+                      marginTop: '0.75rem',
+                      padding: '0.6rem 0.75rem',
+                      background: '#fff5f5',
+                      border: '1px solid #feb2b2',
+                      borderRadius: '8px',
+                      color: '#9b2c2c',
+                      fontSize: '0.9rem',
+                      lineHeight: 1.5,
+                    }}
+                  >
+                    {/could not find the table|does not exist|schema cache/i.test(preguntaAudiosError) ? (
+                      <>
+                        En este proyecto Supabase{' '}
+                        <strong>no existe la tabla</strong>{' '}
+                        <code style={{ fontSize: '0.85em' }}>public.levels_preguntas_audios</code> (o la clave
+                        pública de la app apunta a otro proyecto). En Supabase → SQL → pega y ejecuta{' '}
+                        <code style={{ fontSize: '0.85em' }}>scripts/setup-levels-preguntas-audios.sql</code> (todo
+                        en un solo archivo). Alternativa en dos pasos:{' '}
+                        <code style={{ fontSize: '0.85em' }}>scripts/create-levels-preguntas-audios.sql</code> y luego{' '}
+                        <code style={{ fontSize: '0.85em' }}>scripts/levels-preguntas-audios-rls.sql</code>.
+                        <br />
+                        <span style={{ opacity: 0.92 }}>Detalle: {preguntaAudiosError}</span>
+                      </>
+                    ) : (
+                      <>
+                        No se pudieron leer los audios desde{' '}
+                        <code style={{ fontSize: '0.85em' }}>levels_preguntas_audios</code>: {preguntaAudiosError}.
+                        Si es un problema de permisos, en Supabase añade una política RLS de SELECT para el rol{' '}
+                        <code style={{ fontSize: '0.85em' }}>anon</code> (ver{' '}
+                        <code style={{ fontSize: '0.85em' }}>scripts/levels-preguntas-audios-rls.sql</code>).
+                      </>
+                    )}
+                  </p>
+                ) : null}
 
-                {!useListeningItemLayout &&
-                (audioPlayersFromDb.length > 0 || showEnunciadoFallbackAudio) ? (
+                {showAudioFromEnunciado && hasDbClipsWithNoValidUrl ? (
+                  <p
+                    style={{
+                      marginTop: '0.75rem',
+                      padding: '0.6rem 0.75rem',
+                      background: '#fffbeb',
+                      border: '1px solid #fbd38d',
+                      borderRadius: '8px',
+                      color: '#744210',
+                      fontSize: '0.9rem',
+                      lineHeight: 1.5,
+                    }}
+                  >
+                    Hay filas en <code style={{ fontSize: '0.85em' }}>levels_preguntas_audios</code> para esta
+                    pregunta, pero ninguna <code style={{ fontSize: '0.85em' }}>audio_url</code> es válida (revisa
+                    URL pública o firmada hasta el fichero .mp3). Puedes tener varias filas por la misma{' '}
+                    <code style={{ fontSize: '0.85em' }}>pregunta_id</code> con distinto <code style={{ fontSize: '0.85em' }}>orden</code>.
+                  </p>
+                ) : null}
+
+                {(audioPlayersFromDb.length > 0 || showEnunciadoFallbackAudio) ? (
                   <div style={{ marginTop: '0.85rem' }}>
                     <p style={{ margin: '0 0 0.5rem', fontWeight: 700, color: '#1a365d' }}>Audio</p>
                     {audioPlayersFromDb.map((p) => (
@@ -1727,19 +2090,10 @@ function B2ExamPaperPracticePageInner({
                     ) : null}
                   </div>
                 ) : null}
-
-                {!useListeningItemLayout && textoLinesForDisplay.length > 0 ? (
-                  <div className="levels-exam-split__passage-panel">
-                    <p className="levels-exam-split__section-title">Text</p>
-                    {textoLinesForDisplay.map((line, idx) => (
-                      <p key={`texto-${idx}`} style={{ margin: '0.5rem 0', lineHeight: 1.78 }}>
-                        {line}
-                      </p>
-                    ))}
-                  </div>
-                ) : null}
-
-                <div className="levels-exam-split__questions levels-exam-split__questions--stacked">
+                  </>
+                }
+                questions={
+                  <>
                   {showLongWritingWithAi ? (
                     <B2WritingLongFormAiPanel
                       storageKey={longWritingStorageKey}
@@ -1755,24 +2109,14 @@ function B2ExamPaperPracticePageInner({
                     />
                   ) : null}
 
-                  {!showLongWritingWithAi && !useListeningItemLayout ? (
-                    <h3 className="levels-exam-split__section-title">Questions</h3>
-                  ) : null}
-                  {!showLongWritingWithAi && useOpenInputUi && openQuestionNumbers.length > 0 ? (
-                    <div style={{ display: 'grid', gap: '1rem' }}>
-                      {openQuestionNumbers.map((questionNumber) => {
+                  {!showLongWritingWithAi && useOpenInputUi && openQuestionNumbers.length > 0
+                    ? openQuestionNumbers.map((questionNumber) => {
                         const questionKey = getQuestionKey(selectedPart.id, questionNumber, 'open');
                         const currentValue = openInputs[questionKey] || '';
                         const checkResult = openChecks[questionKey];
                         return (
-                          <div
+                          <B2ExamQuestionItem
                             key={`open-${selectedQuestion.preguntaId}-${questionNumber}`}
-                            style={{
-                              border: '1px solid #e2e8f0',
-                              borderRadius: '10px',
-                              padding: '0.85rem',
-                              background: '#ffffff',
-                            }}
                           >
                             <p style={{ margin: '0 0 0.65rem', fontWeight: 700, color: '#2d3748' }}>
                               Question {questionNumber}
@@ -1873,34 +2217,97 @@ function B2ExamPaperPracticePageInner({
                               </>
                             )}
                             <LevelsAnswerJustification hint={aiHintsByKey[questionKey]} />
-                          </div>
+                          </B2ExamQuestionItem>
                         );
-                      })}
-                    </div>
-                  ) : null}
-                  {!showLongWritingWithAi &&
-                  !(useOpenInputUi && openQuestionNumbers.length > 0) &&
-                  !useListeningItemLayout ? (
+                      })
+                    : null}
+                  {!showLongWritingWithAi && !(useOpenInputUi && openQuestionNumbers.length > 0) ? (
                     <div style={{ display: 'grid', gap: '1rem' }}>
-                      {groupedAnswers.length === 0 ? (
-                        <p style={{ margin: 0, color: '#4a5568', fontSize: '0.95rem' }}>
-                          No hay opciones de respuesta en la base de datos para este ejercicio. Puedes practicar con el
-                          enunciado y el texto; las preguntas en Supabase se añadirán después.
+                      {effectiveMcqGroups.length === 0 &&
+                      !(useOpenInputUi && openQuestionNumbers.length > 0) ? (
+                        <p style={{ margin: 0, color: '#4a5568', fontSize: '0.95rem', lineHeight: 1.55 }}>
+                          {levelSlug === 'a2' && adminFlow.isAdmin && a2McqPartsExpectOptions ? (
+                            <>
+                              No se pueden mostrar las preguntas de esta parte: faltan opciones A/B/C en
+                              Supabase o el enunciado no tiene el formato nuevo.
+                              {a2EmptyPartHint ? (
+                                <>
+                                  <br />
+                                  <span style={{ opacity: 0.9 }}>{a2EmptyPartHint}</span>
+                                </>
+                              ) : null}
+                              <br />
+                              Regenera el examen completo desde el selector (admin) y recarga la página.
+                            </>
+                          ) : (
+                            'No hay opciones de respuesta para este ejercicio. Un administrador debe generar el examen con DRALO AI.'
+                          )}
                         </p>
                       ) : null}
-                      {groupedAnswers.map((group, groupIndex) => (
-                        <div
+                      {useA2OfficialReadingUi && partNumber === 1 ? (
+                        <A2Part1ExamView
+                          directions={a2Part1Pack?.directions || ''}
+                          example={a2Part1Pack?.example}
+                          groups={a2Part1Groups}
+                          getQuestionKey={getQuestionKey}
+                          selectedPart={selectedPart}
+                          selectedOptions={selectedOptions}
+                          checkedQuestions={checkedQuestions}
+                          hideFeedback={hideFeedback}
+                          onOptionSelect={handleA2McqOptionSelect}
+                          aiHintsByKey={aiHintsByKey}
+                        />
+                      ) : null}
+                      {useA2OfficialReadingUi && partNumber === 2 ? (
+                        <A2Part2MatchingGrid
+                          groups={effectiveMcqGroups}
+                          profileNames={a2Part2ProfileNames}
+                          getQuestionKey={getQuestionKey}
+                          selectedPart={selectedPart}
+                          selectedOptions={selectedOptions}
+                          checkedQuestions={checkedQuestions}
+                          hideFeedback={hideFeedback}
+                          onOptionSelect={handleA2McqOptionSelect}
+                          aiHintsByKey={aiHintsByKey}
+                        />
+                      ) : null}
+                      {useA2OfficialReadingUi && partNumber === 3 ? (
+                        <A2Part3QuestionList
+                          groups={effectiveMcqGroups}
+                          renderQuestionBlock={(group, groupIndex) =>
+                            renderA2McqBlock(group, groupIndex, 'stacked-abc')
+                          }
+                        />
+                      ) : null}
+                      {useA2OfficialReadingUi && partNumber === 4 ? (
+                        <A2Part4ClozeOptions
+                          groups={effectiveMcqGroups}
+                          renderQuestionBlock={(group, groupIndex) =>
+                            renderA2McqBlock(group, groupIndex, 'cloze-row')
+                          }
+                        />
+                      ) : null}
+                      {useA2ListeningPictureUi ? (
+                        <A2ListeningPictureMcq
+                          groups={effectiveMcqGroups}
+                          renderQuestionBlock={(group, groupIndex) =>
+                            renderA2McqBlock(group, groupIndex, 'listening-pictures')
+                          }
+                        />
+                      ) : null}
+                      {!useA2OfficialReadingUi && !useA2ListeningPictureUi
+                        ? effectiveMcqGroups.map((group, groupIndex) => (
+                        <B2ExamQuestionItem
                           key={`group-${selectedQuestion.preguntaId}-${group.questionNumber ?? 'extra'}-${groupIndex}`}
-                          style={{
-                            border: '1px solid #e2e8f0',
-                            borderRadius: '10px',
-                            padding: '0.85rem',
-                            background: '#ffffff',
-                          }}
                         >
-                          <p style={{ margin: '0 0 0.65rem', fontWeight: 700, color: '#2d3748' }}>
+                          <p style={{ margin: '0 0 0.35rem', fontWeight: 700, color: '#2d3748' }}>
                             {group.questionNumber ? `Question ${group.questionNumber}` : 'Options'}
                           </p>
+                          {group.prompt ? (
+                            <p style={{ margin: '0 0 0.65rem', lineHeight: 1.6, color: '#334155' }}>
+                              {group.prompt}
+                            </p>
+                          ) : null}
                           <div style={{ display: 'grid', gap: '0.6rem' }}>
                             {group.options.map((option) => {
                               const questionKey = getQuestionKey(
@@ -2009,20 +2416,21 @@ function B2ExamPaperPracticePageInner({
                               </>
                             );
                           })()}
-                        </div>
-                      ))}
+                        </B2ExamQuestionItem>
+                      ))
+                        : null}
                     </div>
                   ) : null}
-                </div>
-                </div>
-              </div>
-              </div>
-            )}
+                  </>
+                }
+              />
+              ))}
           </>
         )}
       </section>
 
       <B2ExamPracticeModuleNav
+        slug={levelSlug}
         partNumber={partNumber}
         pagePartMax={partMax}
         examSlot={examSlot}

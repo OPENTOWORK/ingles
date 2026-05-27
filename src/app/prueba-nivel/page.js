@@ -5,6 +5,8 @@ import Link from 'next/link';
 import { useUserRole } from '@/context/UserRoleContext';
 import { usePlacementAccess } from '@/context/PlacementAccessContext';
 import SiteMascot from '@/components/SiteMascot';
+import StudyPlanSurvey from '@/components/plan-objetivos/StudyPlanSurvey';
+import StudyPlanSurveyAnswers from '@/components/plan-objetivos/StudyPlanSurveyAnswers';
 import { levelRecommendations } from '@/data/placementTest';
 import {
   computeOutcomesPlacementResults,
@@ -126,6 +128,9 @@ export default function PlacementTestPage() {
   const [placementSaveError, setPlacementSaveError] = useState('');
   const [savingPlacement, setSavingPlacement] = useState(false);
   const [saveRetryTick, setSaveRetryTick] = useState(0);
+  const [studyPlan, setStudyPlan] = useState(null);
+  const [studyPlanChecked, setStudyPlanChecked] = useState(false);
+  const [showStudyPlanSurvey, setShowStudyPlanSurvey] = useState(false);
   const writingQuestion = useMemo(
     () => questions.find((q) => q.type === 'writing') || null,
     [questions],
@@ -561,6 +566,47 @@ export default function PlacementTestPage() {
     setPlacementSaveError('');
     setSaveRetryTick((t) => t + 1);
   };
+
+  const placementLevelForPlan = useMemo(() => {
+    if (!placementResults) return null;
+    return (
+      placementResults.recommended?.cefr ||
+      outcomesCefrForTraining(placementResults) ||
+      null
+    );
+  }, [placementResults]);
+
+  useEffect(() => {
+    if (!session?.access_token) return;
+    if (!submitted) return;
+    if (!placementSaved && !hasPlacementResult) return;
+
+    let cancelled = false;
+    void (async () => {
+      try {
+        const res = await fetch('/api/plan-objetivos', {
+          headers: { Authorization: `Bearer ${session.access_token}` },
+        });
+        const json = await res.json().catch(() => ({}));
+        if (!cancelled) {
+          setStudyPlan(json.plan || null);
+          setShowStudyPlanSurvey(!json.plan?.completed_at);
+          setStudyPlanChecked(true);
+        }
+      } catch {
+        if (!cancelled) setStudyPlanChecked(true);
+      }
+    })();
+
+    return () => {
+      cancelled = true;
+    };
+  }, [
+    session?.access_token,
+    submitted,
+    placementSaved,
+    hasPlacementResult,
+  ]);
 
   const score = placementResults?.totalCorrect ?? 0;
 
@@ -1159,6 +1205,54 @@ export default function PlacementTestPage() {
                         <button type="button" className="btn" onClick={() => router.push(recommendation.link)}>
                           Go now
                         </button>
+                      </div>
+                    )}
+                  </div>
+                )}
+
+                {studyPlanChecked &&
+                  (placementSaved || hasPlacementResult) &&
+                  session?.access_token && (
+                  <div className="mt-8 pt-6 border-t border-slate-200">
+                    <h4 className="text-lg font-semibold text-indigo-900 mb-1">
+                      Plan de objetivos
+                    </h4>
+                    <p className="text-sm text-slate-600 mb-4">
+                      Responde esta breve encuesta sobre tus objetivos y tiempo de estudio.
+                    </p>
+                    {showStudyPlanSurvey && !studyPlan?.completed_at ? (
+                      <StudyPlanSurvey
+                        compact
+                        placementLevel={placementLevelForPlan}
+                        placementBreakdown={placementResults}
+                        accessToken={session.access_token}
+                        onComplete={(plan) => {
+                          setStudyPlan(plan);
+                          setShowStudyPlanSurvey(false);
+                        }}
+                        onSkip={() => setShowStudyPlanSurvey(false)}
+                      />
+                    ) : studyPlan?.completed_at ? (
+                      <div>
+                        <StudyPlanDocument plan={studyPlan} showActions />
+                        <p className="mt-4 text-sm">
+                          <Link href="/plan-objetivos" className="text-indigo-600 font-medium underline">
+                            Ver plan completo en tu perfil de estudios →
+                          </Link>
+                        </p>
+                      </div>
+                    ) : (
+                      <div className="flex flex-wrap gap-2">
+                        <button
+                          type="button"
+                          className="btn btn-primary"
+                          onClick={() => setShowStudyPlanSurvey(true)}
+                        >
+                          Completar encuesta
+                        </button>
+                        <Link href="/plan-objetivos" className="btn">
+                          Ir a plan de objetivos
+                        </Link>
                       </div>
                     )}
                   </div>

@@ -8,7 +8,7 @@ export default function TheoryPage() {
   const info = partInfo[part] || {};
   
   const backLink = part === 1 ? '/niveles/a2' : `/niveles/a2/listening/part-${part - 1}`;
-  const nextLink = part === 4 ? '/niveles/a2' : `/niveles/a2/listening/part-${part + 1}`;
+  const nextLink = '/niveles/a2/listening/part-12';
   const homeLink = '/niveles/a2';
 
   return (

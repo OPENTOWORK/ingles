@@ -1,8 +1,7 @@
 'use client';
 
-import DraloAiStudio from '@/components/dralo-ai/DraloAiStudio';
-import { DRALO_AI_MODES } from '@/data/draloAiConfig';
+import DraloAiSkillTrackHub from '@/components/dralo-ai/DraloAiSkillTrackHub';
 
-export default function DraloAiUseOfEnglishPage() {
-  return <DraloAiStudio config={DRALO_AI_MODES['use-of-english']} />;
+export default function DraloAiUoeHubPage() {
+  return <DraloAiSkillTrackHub skillId="use-of-english" />;
 }

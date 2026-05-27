@@ -10,7 +10,14 @@
 import { SYSTEM_PROMPTS } from '../prompts/cambridge-prompts.js';
 
 // Main function: send message to Gemini and get response
-export async function sendToGemini({ userMessage, level, mode, conversationHistory = [] }) {
+export async function sendToGemini({
+  userMessage,
+  level,
+  mode,
+  conversationHistory = [],
+  scenarioPrompt,
+  customSituation,
+}) {
   const response = await fetch('/api/gemini-coach', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
@@ -19,6 +26,8 @@ export async function sendToGemini({ userMessage, level, mode, conversationHisto
       level,
       mode,
       conversationHistory,
+      scenarioPrompt,
+      customSituation,
     }),
   });
 

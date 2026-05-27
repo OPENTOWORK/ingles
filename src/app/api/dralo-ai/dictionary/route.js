@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import OpenAI from 'openai';
+import { draloChatCompletion, isDraloOpenAIConfigured } from '@/lib/draloAiEngine';
 import {
   buildAskDraloPrompt,
   buildTranslatePrompt,
@@ -11,7 +11,6 @@ import { DEFAULT_DICTIONARY_LANGUAGE } from '@/data/dictionaryLanguages';
 
 const WINDOW_MS = 60 * 60 * 1000;
 const MAX_PER_IP = 100;
-const OPENAI_MODEL = process.env.OPENAI_MODEL || 'gpt-4o-mini';
 const ENRICH_TIMEOUT_MS = 14_000;
 
 export const maxDuration = 60;
@@ -35,12 +34,6 @@ function tryConsumeRate(ip) {
   if (b.n >= MAX_PER_IP) return false;
   b.n += 1;
   return true;
-}
-
-function getOpenAI() {
-  const key = process.env.OPENAI_API_KEY;
-  if (!key) return null;
-  return new OpenAI({ apiKey: key });
 }
 
 function normalizeWord(raw) {
@@ -130,26 +123,20 @@ async function fetchBaseEntry(word) {
   return { entry: parsed };
 }
 
-async function enrichWordWithAi(openai, word, baseEntry, targetLang) {
-  const completion = await openai.chat.completions.create({
-    model: OPENAI_MODEL,
+async function enrichWordWithAi(word, baseEntry, targetLang) {
+  const { text } = await draloChatCompletion({
+    system:
+      'For this lookup only: act as a Cambridge English lexicographer. Return only JSON. Be accurate about CEFR, false friends for Spanish speakers, and grammar labels.',
+    messages: [{ role: 'user', content: buildWordEnrichPrompt(word, baseEntry, targetLang) }],
     temperature: 0.35,
     response_format: { type: 'json_object' },
-    messages: [
-      {
-        role: 'system',
-        content:
-          'You are Dralo, a Cambridge English lexicographer. Return only JSON. Be accurate about CEFR, false friends for Spanish speakers, and grammar labels.',
-      },
-      { role: 'user', content: buildWordEnrichPrompt(word, baseEntry, targetLang) },
-    ],
   });
-  return parseJsonFromModel(completion.choices?.[0]?.message?.content || '{}');
+  return parseJsonFromModel(text || '{}');
 }
 
-function enrichWithTimeout(openai, word, baseEntry, targetLang) {
+function enrichWithTimeout(word, baseEntry, targetLang) {
   return Promise.race([
-    enrichWordWithAi(openai, word, baseEntry, targetLang),
+    enrichWordWithAi(word, baseEntry, targetLang),
     new Promise((_, reject) => {
       setTimeout(() => reject(new Error('enrich_timeout')), ENRICH_TIMEOUT_MS);
     }),
@@ -160,8 +147,7 @@ async function lookupWord(word, targetLang) {
   const base = await fetchBaseEntry(word);
   if (base.error) return base;
 
-  const openai = getOpenAI();
-  if (!openai) {
+  if (!isDraloOpenAIConfigured()) {
     return {
       entry: {
         ...base.entry,
@@ -173,7 +159,7 @@ async function lookupWord(word, targetLang) {
   }
 
   try {
-    const ai = await enrichWithTimeout(openai, base.entry.word, base.entry, targetLang);
+    const ai = await enrichWithTimeout(base.entry.word, base.entry, targetLang);
     return {
       entry: {
         ...base.entry,
@@ -200,28 +186,21 @@ async function translatePhrase(text, targetLang) {
   if (!input) return { error: 'Escribe una frase en inglés.' };
   if (input.length > 2000) return { error: 'La frase es demasiado larga (máx. 2000 caracteres).' };
 
-  const openai = getOpenAI();
-  if (!openai) {
+  if (!isDraloOpenAIConfigured()) {
     return {
       error:
-        'La traducción avanzada requiere OPENAI_API_KEY en el servidor (misma clave que Dralo AI).',
+        'La traducción avanzada requiere OPENAI_API_KEY en el servidor (motor DRALO AI GPT).',
     };
   }
 
   try {
-    const completion = await openai.chat.completions.create({
-      model: OPENAI_MODEL,
+    const { text } = await draloChatCompletion({
+      system: `For this translation only: return only JSON. Target language: ${languageNameForPrompt(targetLang)}.`,
+      messages: [{ role: 'user', content: buildTranslatePrompt(input, targetLang) }],
       temperature: 0.35,
       response_format: { type: 'json_object' },
-      messages: [
-        {
-          role: 'system',
-          content: `You are Dralo. Return only JSON. Target language: ${languageNameForPrompt(targetLang)}.`,
-        },
-        { role: 'user', content: buildTranslatePrompt(input, targetLang) },
-      ],
     });
-    const analysis = parseJsonFromModel(completion.choices?.[0]?.message?.content || '{}');
+    const analysis = parseJsonFromModel(text || '{}');
     return {
       phrase: input,
       targetLanguage: targetLang,
@@ -239,25 +218,17 @@ async function askDralo(word, question, enrichment) {
   if (!w) return { error: 'No hay palabra en contexto.' };
   if (!q) return { error: 'Escribe una pregunta para Dralo.' };
 
-  const openai = getOpenAI();
-  if (!openai) {
-    return { error: 'Pregunta a Dralo requiere OPENAI_API_KEY en el servidor.' };
+  if (!isDraloOpenAIConfigured()) {
+    return { error: 'Pregunta a Dralo requiere OPENAI_API_KEY en el servidor (motor DRALO AI GPT).' };
   }
 
   try {
-    const completion = await openai.chat.completions.create({
-      model: OPENAI_MODEL,
+    const { text: answer } = await draloChatCompletion({
+      system:
+        'Answer vocabulary questions clearly. Reply in Spanish unless the student writes in English. Be concise, with examples.',
+      messages: [{ role: 'user', content: buildAskDraloPrompt(w, q, enrichment) }],
       temperature: 0.5,
-      messages: [
-        {
-          role: 'system',
-          content:
-            'You are Dralo, a friendly Cambridge English coach. Answer in Spanish unless the student writes in English. Be concise, with examples.',
-        },
-        { role: 'user', content: buildAskDraloPrompt(w, q, enrichment) },
-      ],
     });
-    const answer = completion.choices?.[0]?.message?.content?.trim();
     if (!answer) return { error: 'Dralo no devolvió respuesta.' };
     return { answer, word: w };
   } catch (e) {

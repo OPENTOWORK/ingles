@@ -265,6 +265,7 @@ function B2SpeakingExamPracticeInner({ title, subtitle, loadingLabel, refreshLab
       </section>
 
       <B2ExamPracticeModuleNav
+        slug="b2"
         partNumber={partNumber}
         pagePartMax={B2_SPEAKING_PART_MAX}
         examSlot={examSlot}

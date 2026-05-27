@@ -1,50 +1,52 @@
-export const partInfo = {
-  "1": {
-    "title": "Part 1: Multiple choice (pictures)",
-    "description": "You will hear five short conversations between a man and a woman. There are five pictures for each conversation, and you need to choose the correct picture. The conversations are about everyday topics like family, school, or activities. This tests your ability to understand spoken English and make visual connections.",
-    "tips": "Look at all five pictures for each question before listening. Listen for key words that describe the pictures. The correct answer will be clearly mentioned in the conversation. Don't choose based on just one word - listen to the whole conversation. You will hear each conversation twice.",
-    "commonErrors": "Choosing the first picture that matches a word you hear, not listening to the complete conversation, confusing similar-looking pictures, or not using the second listening to check your answers"
+import { extendPartInfoWithGlobalKeys } from '@/data/part-info/extendPartInfo';
+
+/** Partes locales 1–5 = Cambridge A2 Key Listening; globales 8–12 (partMin 8). */
+const localPartInfo = {
+  1: {
+    title: 'Part 1: Multiple choice (pictures)',
+    description:
+      'You will hear five short conversations. For each question there are three pictures (A, B and C). Choose the picture that best answers the question. This tests your ability to understand everyday spoken English and connect what you hear to visual information.',
+    tips:
+      'Look at all three pictures before each conversation starts. Listen for key words that describe the pictures, not just one word. The recording is played twice — use the second listen to check your answer.',
+    commonErrors:
+      'Choosing the first picture that matches a single word, not listening to the whole conversation, or confusing similar-looking pictures',
   },
-  "2": {
-    "title": "Part 2: Matching (information)",
-    "description": "You will hear a longer conversation and see a list of items to match with options. You need to match each item to the correct option while listening. This tests your ability to listen for specific information and follow longer conversations.",
-    "tips": "Read all the items and options first before listening. Listen for specific information mentioned in the conversation. Take notes if it helps you remember the information. You will hear the conversation twice, so use the second listening to check your answers.",
-    "commonErrors": "Not reading the items and options first, trying to remember everything without taking notes, or not using the second listening to verify your answers"
+  2: {
+    title: 'Part 2: Gap-fill (monologue)',
+    description:
+      'You will hear a monologue (one speaker), for example an announcement or message. You complete five gaps with one word or a number in each gap. This tests your ability to listen for specific factual information.',
+    tips:
+      'Read the notes or form before you listen. Predict what type of word fits each gap (name, place, number, time). Write clearly. You hear the recording twice.',
+    commonErrors:
+      'Not reading the gaps first, writing more than one word when only one is required, or putting answers in the wrong gap',
   },
-  "3": {
-    "title": "Part 3: Multiple choice (short dialogues)",
-    "description": "You will hear five short conversations and answer one question about each conversation. The questions test your understanding of the main points, opinions, or specific information in the conversations.",
-    "tips": "Read each question before the conversation starts. Listen for the specific information asked in the question. Don't choose answers based on just one word - understand the complete conversation. You will hear each conversation twice.",
-    "commonErrors": "Not reading the questions first, choosing answers based on individual words rather than understanding, or not listening to the complete conversation"
+  3: {
+    title: 'Part 3: Multiple choice (conversation)',
+    description:
+      'You will hear a longer conversation between two people. You answer five multiple-choice questions with three options (A, B and C) for each. This tests understanding of opinions, reasons and main points.',
+    tips:
+      'Read the questions before listening. Listen for attitudes and reasons, not only facts. Eliminate wrong options. Use the second listening to confirm.',
+    commonErrors:
+      'Reading questions too late, choosing an option because of one word only, or ignoring what the second speaker says',
   },
-  "4": {
-    "title": "Part 4: Gap-fill (notes)",
-    "description": "You will hear a longer conversation and see a form or notes with gaps. You need to complete the gaps with specific information (names, numbers, times, etc.) mentioned in the conversation. This tests your ability to listen for detailed information.",
-    "tips": "Read the form or notes carefully before listening. Listen for the specific type of information needed for each gap (names, numbers, times, places). Write clearly and check your spelling. Use capital letters for names and places.",
-    "commonErrors": "Not reading the form first, writing information in the wrong gaps, misspelling names and places, or not using capital letters appropriately"
+  4: {
+    title: 'Part 4: Multiple choice (short extracts)',
+    description:
+      'You will hear five short recordings (dialogues or monologues). There is one multiple-choice question per recording with three options. This tests understanding of gist and detail in short spoken texts.',
+    tips:
+      'Each extract is separate — focus on the current question only. Listen for the main idea and specific details asked in the question. You hear each extract twice.',
+    commonErrors:
+      'Confusing information from a previous extract, not reading the question first, or selecting an answer too quickly',
   },
-  "8": {
-    "title": "Part 8: Multiple choice (pictures)",
-    "description": "You will hear five short conversations between a man and a woman. There are five pictures for each conversation, and you need to choose the correct picture. The conversations are about everyday topics like family, school, or activities.",
-    "tips": "Look at all five pictures for each question before listening. Listen for key words that describe the pictures. You will hear each conversation twice.",
-    "commonErrors": "Choosing the first picture that matches a word you hear, or not using the second listening to check your answers"
+  5: {
+    title: 'Part 5: Matching (long conversation)',
+    description:
+      'You will hear an informal conversation between two people (about 70 seconds). You match five people or items from the left list (questions 21–25) to eight options (A–H) on the right. Three options are not used. There is usually an example at the start. This tests listening for paraphrased information and dealing with distractors.',
+    tips:
+      'Use the 15 seconds before the audio: read the rubric (topic and speakers), the question (e.g. “What will each person bring?”), and all eight options — they are in alphabetical order. Cross out the example letter. Information follows the order of questions 21–25. Expect paraphrasing (different words from the options). Cross out letters as you use them. The recording is played twice.',
+    commonErrors:
+      'Not reading all eight options first, choosing an option because you hear the same word (distractor), matching before the speaker gives the correct information, or reusing a letter',
   },
-  "9": {
-    "title": "Part 9: Matching (information)",
-    "description": "You will hear a longer conversation and see a list of items to match with options. You need to match each item to the correct option while listening.",
-    "tips": "Read all the items and options first before listening. Listen for specific information mentioned in the conversation. You will hear the conversation twice.",
-    "commonErrors": "Not reading the items and options first, or not using the second listening to verify your answers"
-  },
-  "10": {
-    "title": "Part 10: Multiple choice (short dialogues)",
-    "description": "You will hear five short conversations and answer one question about each conversation.",
-    "tips": "Read each question before the conversation starts. Listen for the specific information asked in the question. You will hear each conversation twice.",
-    "commonErrors": "Not reading the questions first, or choosing answers based on individual words rather than understanding"
-  },
-  "11": {
-    "title": "Part 11: Gap-fill (notes)",
-    "description": "You will hear a longer conversation and see a form or notes with gaps. You need to complete the gaps with specific information mentioned in the conversation.",
-    "tips": "Read the form or notes carefully before listening. Write clearly and check your spelling. Use capital letters for names and places.",
-    "commonErrors": "Not reading the form first, writing information in the wrong gaps, or misspelling names and places"
-  }
 };
+
+export const partInfo = extendPartInfoWithGlobalKeys(localPartInfo, 8);

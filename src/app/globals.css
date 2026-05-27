@@ -1517,6 +1517,17 @@ body.nav-open {
   background: #f8fafc;
 }
 
+.levels-b2-part-tabs--many {
+  max-width: min(1100px, 100%);
+}
+
+.levels-b2-part-tabs--many .levels-b2-part-tab {
+  flex: 1 1 0;
+  min-width: 5.5rem;
+  padding: 0.55rem 0.5rem;
+  font-size: 0.8125rem;
+}
+
 .levels-b2-part-tab {
   flex: 1 1 120px;
   min-width: 0;
@@ -2100,6 +2111,471 @@ body.nav-open {
     max-height: none;
     padding: 1rem;
   }
+}
+
+/* ——— A2 Key Reading Part 1: hoja de examen ——— */
+.a2-p1-paper {
+  max-width: 920px;
+  margin: 0 auto;
+  font-family: Arial, Helvetica, sans-serif;
+  color: #111;
+}
+
+.a2-p1-paper__header {
+  text-align: center;
+  margin-bottom: 1rem;
+}
+
+.a2-p1-paper__part-title {
+  margin: 0 0 0.5rem;
+  font-size: 1.35rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}
+
+.a2-p1-paper__directions p {
+  margin: 0.2rem 0;
+  font-size: 0.95rem;
+  text-align: left;
+}
+
+.a2-p1-paper__rule {
+  border: none;
+  border-top: 2px solid #1a202c;
+  margin: 1rem 0;
+}
+
+.a2-p1-paper__example-label {
+  margin: 0 0 0.5rem;
+  font-weight: 700;
+}
+
+.a2-p1-paper__example-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+  align-items: start;
+}
+
+.a2-p1-paper__example-text {
+  margin: 0;
+  padding: 0.75rem;
+  border: 2px solid #1a202c;
+  font-family: inherit;
+  font-size: 0.9rem;
+  line-height: 1.45;
+  white-space: pre-wrap;
+  background: #fff;
+}
+
+.a2-p1-paper__example-opt {
+  margin: 0.25rem 0;
+  font-size: 0.92rem;
+  line-height: 1.45;
+}
+
+.a2-p1-paper__example-ans {
+  margin: 0.5rem 0 0;
+}
+
+.a2-p1-paper__example-box {
+  display: inline-block;
+  min-width: 1.75rem;
+  padding: 0.15rem 0.45rem;
+  border: 2px solid #1a202c;
+  font-weight: 800;
+  text-align: center;
+}
+
+.a2-p1-paper__items {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.a2-p1-paper__item {
+  display: grid;
+  grid-template-columns: 2.25rem minmax(200px, 1fr) minmax(220px, 1fr);
+  gap: 0.75rem 1.25rem;
+  align-items: start;
+  padding: 1.1rem 0;
+  border-bottom: 1px solid #cbd5e0;
+}
+
+.a2-p1-paper__qnum {
+  font-weight: 800;
+  font-size: 1.05rem;
+  padding-top: 0.25rem;
+}
+
+.a2-p1-stimulus {
+  border: 2px solid #1a202c;
+  background: #fff;
+  padding: 0.5rem;
+  min-height: 5rem;
+}
+
+.a2-p1-stimulus__img-wrap {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: #fafafa;
+}
+
+.a2-p1-stimulus__img {
+  width: 100%;
+  max-width: 300px;
+  height: auto;
+  display: block;
+  object-fit: contain;
+}
+
+.a2-p1-stimulus__prompt {
+  margin: 0.65rem 0 0;
+  padding-top: 0.5rem;
+  border-top: 1px dashed #cbd5e0;
+  font-weight: 600;
+  font-size: 0.92rem;
+  line-height: 1.45;
+}
+
+.a2-p1-stimulus__text-fallback {
+  margin-top: 0.35rem;
+  font-size: 0.8rem;
+}
+
+.a2-p1-phone {
+  padding: 0.35rem;
+}
+
+.a2-p1-phone__screen {
+  border: 2px solid #1a202c;
+  border-radius: 12px;
+  padding: 0.65rem 0.75rem;
+  background: #f8fafc;
+}
+
+.a2-p1-phone__line {
+  margin: 0.2rem 0;
+  font-size: 0.88rem;
+  line-height: 1.4;
+}
+
+.a2-p1-phone__sender {
+  margin: 0.45rem 0 0;
+  font-weight: 700;
+  text-align: right;
+}
+
+.a2-p1-ad__title,
+.a2-p1-sign__title,
+.a2-p1-notice__title {
+  margin: 0 0 0.35rem;
+  font-weight: 800;
+  font-size: 1rem;
+}
+
+.a2-p1-ad__line,
+.a2-p1-sign__line,
+.a2-p1-notice__line {
+  margin: 0.15rem 0;
+  font-size: 0.88rem;
+  line-height: 1.4;
+}
+
+.a2-p1-sign {
+  padding: 0.35rem;
+}
+
+.a2-p1-sign__title {
+  font-size: 1.1rem;
+  letter-spacing: 0.04em;
+}
+
+.a2-p1-paper__choices {
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+  padding-top: 0.15rem;
+}
+
+.a2-p1-choice {
+  display: flex;
+  gap: 0.55rem;
+  align-items: flex-start;
+  width: 100%;
+  text-align: left;
+  padding: 0.5rem 0.55rem;
+  border: 1px solid transparent;
+  border-radius: 6px;
+  background: transparent;
+  cursor: pointer;
+  font: inherit;
+  line-height: 1.45;
+  color: #1f2937;
+  transition: background 0.12s, border-color 0.12s;
+}
+
+.a2-p1-choice:hover {
+  background: #f7fafc;
+}
+
+.a2-p1-choice--selected {
+  background: #ebf8ff;
+  border-color: #90cdf4;
+}
+
+.a2-p1-choice--correct {
+  background: #f0fff4;
+  border-color: #48bb78;
+}
+
+.a2-p1-choice--wrong {
+  background: #fff5f5;
+  border-color: #fc8181;
+}
+
+.a2-p1-choice__letter {
+  flex-shrink: 0;
+  font-weight: 800;
+  min-width: 1.25rem;
+}
+
+.a2-p1-choice__text {
+  flex: 1;
+}
+
+.a2-p1-paper__feedback {
+  grid-column: 2 / -1;
+  margin-top: -0.35rem;
+}
+
+@media (max-width: 768px) {
+  .a2-p1-paper__item,
+  .a2-p1-paper__example-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .a2-p1-paper__qnum {
+    grid-column: 1;
+  }
+}
+
+/* ——— A2 Key Reading: layout oficial partes 2–4 ——— */
+.a2-rw-part1 {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.a2-rw-part1__row {
+  display: grid;
+  grid-template-columns: 2.5rem 1fr 1fr;
+  gap: 0.85rem 1rem;
+  align-items: start;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.a2-rw-part1__num {
+  font-weight: 800;
+  font-size: 1.1rem;
+  color: #1a365d;
+  padding-top: 0.35rem;
+}
+
+.a2-rw-part1__notice {
+  border: 2px solid #1a202c;
+  border-radius: 4px;
+  padding: 0.85rem 1rem;
+  background: #fff;
+  min-height: 4.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.a2-rw-part1__notice-img {
+  width: 100%;
+  max-width: 280px;
+  height: auto;
+  display: block;
+  margin: 0 auto;
+  border-radius: 4px;
+}
+
+.a2-rw-part1__notice-prompt {
+  margin: 0.35rem 0 0;
+  font-weight: 600;
+  line-height: 1.5;
+  color: #1f2937;
+}
+
+.a2-rw-part1__notice-text {
+  margin: 0;
+  line-height: 1.55;
+  color: #1f2937;
+  white-space: pre-wrap;
+}
+
+.a2-rw-part1__option-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.a2-rw-part2-grid-wrap {
+  overflow-x: auto;
+}
+
+.a2-rw-part2-grid {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.95rem;
+}
+
+.a2-rw-part2-grid th,
+.a2-rw-part2-grid td {
+  border: 1px solid #cbd5e0;
+  padding: 0.55rem 0.65rem;
+  vertical-align: top;
+}
+
+.a2-rw-part2-grid__person {
+  text-align: center;
+  background: #f7fafc;
+}
+
+.a2-rw-part2-grid__person-name {
+  display: block;
+  font-weight: 700;
+}
+
+.a2-rw-part2-grid__person-letter {
+  display: block;
+  font-size: 1.1rem;
+  font-weight: 800;
+  color: #2b6cb0;
+}
+
+.a2-rw-part2-grid__prompt {
+  min-width: 12rem;
+}
+
+.a2-rw-part2-grid__qnum {
+  font-weight: 800;
+  margin-right: 0.35rem;
+}
+
+.a2-rw-part2-grid__cell {
+  text-align: center;
+  width: 3.5rem;
+}
+
+.a2-rw-part2-grid__letter-btn {
+  width: 2.25rem;
+  height: 2.25rem;
+  font-weight: 800;
+  font-size: 1rem;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.a2-rw-part2-profiles {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.a2-rw-part2-profile__name {
+  margin: 0 0 0.35rem;
+  font-weight: 800;
+  font-size: 1.05rem;
+}
+
+.a2-rw-part2-profile__text {
+  margin: 0;
+  line-height: 1.75;
+  color: #1f2937;
+}
+
+.a2-rw-part3__q {
+  margin: 0 0 0.65rem;
+  line-height: 1.6;
+}
+
+.a2-rw-part3__option-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+  padding-left: 1.5rem;
+}
+
+.a2-rw-part4-options {
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+  margin-top: 0.5rem;
+}
+
+.a2-rw-part4-options__row {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.a2-rw-part4-options__num {
+  font-weight: 800;
+  min-width: 1.75rem;
+}
+
+.a2-rw-part4-options__words {
+  display: flex;
+  flex: 1;
+  gap: 0.5rem;
+}
+
+.a2-rw-part4-options__word-btn {
+  flex: 1;
+  font-size: 0.92rem;
+}
+
+@media (max-width: 720px) {
+  .a2-rw-part1__row {
+    grid-template-columns: 2rem 1fr;
+  }
+
+  .a2-rw-part1__options {
+    grid-column: 2;
+  }
+}
+
+.a2-listening-pictures {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.a2-listening-pictures__stem {
+  margin: 0 0 0.65rem;
+  line-height: 1.6;
+  color: #334155;
+}
+
+.a2-listening-pictures__options {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  justify-content: flex-start;
+}
+
+.a2-listening-pictures__options button {
+  max-width: 200px;
+}
+
+.a2-listening-pictures__options img {
+  max-height: 140px;
+  object-fit: contain;
 }
 
 /* ——— Perfil: menú de pestañas ——— */

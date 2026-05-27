@@ -1,6 +1,6 @@
 'use client';
 
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import PageHero from '@/components/PageHero';
 import Link from 'next/link';
 import { buildClientApiUrl } from '@/utils/clientApiUrl';
@@ -13,6 +13,7 @@ import {
   rememberExerciseFingerprint,
 } from '@/lib/draloAiExerciseVariety';
 import DraloAiLevelFilter from '@/components/dralo-ai/DraloAiLevelFilter';
+import { formatWritingFeedbackDisplay } from '@/lib/formatWritingFeedback';
 
 const ACCENT_SOLID = {
   indigo: '#6366f1',
@@ -54,9 +55,18 @@ function LoadingDralo() {
   );
 }
 
-export default function DraloAiStudio({ config }) {
+export default function DraloAiStudio({
+  config,
+  track = 'exam',
+  activities: activitiesProp,
+  backHref,
+  pageTitle,
+  pageDescription,
+  breadcrumbTrail,
+}) {
+  const activities = activitiesProp || config.activities;
   const [level, setLevel] = useState(config.defaultLevel || 'B2');
-  const [activityId, setActivityId] = useState(config.activities[0]?.id || '');
+  const [activityId, setActivityId] = useState(activities[0]?.id || '');
   const [exercise, setExercise] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
@@ -69,9 +79,10 @@ export default function DraloAiStudio({ config }) {
   const [audioLoading, setAudioLoading] = useState(false);
 
   const activity = useMemo(
-    () => config.activities.find((a) => a.id === activityId) || config.activities[0],
-    [config.activities, activityId],
+    () => activities.find((a) => a.id === activityId) || activities[0],
+    [activities, activityId],
   );
+  const isSituational = track === 'situational';
 
   const accentSolid = ACCENT_SOLID[config.accent] || ACCENT_SOLID.indigo;
   const isWriting = config.id === 'writing';
@@ -82,7 +93,9 @@ export default function DraloAiStudio({ config }) {
   const wordMax = exercise?.wordMax ?? 190;
   const wordCount = countWords(essay);
 
-  const resetState = useCallback(() => {
+  const generateRequestRef = useRef(0);
+
+  const clearExerciseState = useCallback(() => {
     setExercise(null);
     setAnswers({});
     setFeedbackByQ({});
@@ -93,17 +106,17 @@ export default function DraloAiStudio({ config }) {
     setError('');
   }, []);
 
-  useEffect(() => {
-    resetState();
-  }, [activityId, level, resetState]);
+  const generateExercise = useCallback(async () => {
+    if (!activityId) return;
 
-  const generateExercise = async () => {
+    const requestId = ++generateRequestRef.current;
     setLoading(true);
     setError('');
-    resetState();
+    clearExerciseState();
+
     try {
       const varietySeed = Date.now() + Math.floor(Math.random() * 1e6);
-      const recentFingerprints = isUoe
+      const recentFingerprints = !isSituational
         ? getRecentFingerprints(config.id, activityId, level)
         : [];
       const data = await callDraloAi({
@@ -111,28 +124,44 @@ export default function DraloAiStudio({ config }) {
         mode: config.id,
         activity: activityId,
         level,
+        track: isSituational ? 'situational' : undefined,
         varietySeed,
-        recentFingerprints,
-        topic: isUoe ? pickRandomTopic(varietySeed) : undefined,
+        recentFingerprints: isSituational ? undefined : recentFingerprints,
+        topic: !isSituational ? pickRandomTopic(varietySeed) : undefined,
       });
+
+      if (requestId !== generateRequestRef.current) return;
+
       setExercise(data.exercise);
-      if (isUoe && data.exercise) {
-        rememberExerciseFingerprint(
-          config.id,
-          activityId,
-          level,
-          getUoeExerciseFingerprint(data.exercise, activityId),
-        );
+      if (!isSituational && data.exercise) {
+        const fp = isUoe
+          ? getUoeExerciseFingerprint(data.exercise, activityId)
+          : `${data.exercise.title || ''}|${String(data.exercise.passage || data.exercise.script || '').slice(0, 100)}`;
+        rememberExerciseFingerprint(config.id, activityId, level, fp);
       }
     } catch (e) {
+      if (requestId !== generateRequestRef.current) return;
       setError(e.message || 'Could not generate the exercise.');
     } finally {
-      setLoading(false);
+      if (requestId === generateRequestRef.current) {
+        setLoading(false);
+      }
     }
-  };
+  }, [
+    activityId,
+    level,
+    config.id,
+    isSituational,
+    isUoe,
+    clearExerciseState,
+  ]);
 
-  const checkUoe = async () => {
-    if (!exercise || !uoeAnswer.trim()) return;
+  useEffect(() => {
+    void generateExercise();
+  }, [generateExercise]);
+
+  const checkUoe = async (questionId, userAnswer) => {
+    if (!exercise || !String(userAnswer || '').trim()) return;
     setLoading(true);
     setError('');
     try {
@@ -142,9 +171,15 @@ export default function DraloAiStudio({ config }) {
         activity: activityId,
         level,
         exercise,
-        userAnswer: uoeAnswer,
+        userAnswer,
+        questionId,
       });
-      setUoeFeedback(normalizeUoeCheckResult(data.result, exercise));
+      const normalized = normalizeUoeCheckResult(data.result, exercise, questionId);
+      if (questionId) {
+        setFeedbackByQ((prev) => ({ ...prev, [questionId]: normalized }));
+      } else {
+        setUoeFeedback(normalized);
+      }
     } catch (e) {
       setError(e.message);
     } finally {
@@ -152,9 +187,9 @@ export default function DraloAiStudio({ config }) {
     }
   };
 
-  const checkQuestion = async (q) => {
-    const ans = answers[q.id];
-    if (!ans?.trim() || !exercise) return;
+  const checkQuestion = async (q, userAnswerOverride) => {
+    const ans = userAnswerOverride ?? answers[q.id];
+    if (!String(ans || '').trim() || !exercise) return;
     setLoading(true);
     setError('');
     try {
@@ -193,15 +228,21 @@ export default function DraloAiStudio({ config }) {
           wordMin: exercise.wordMin,
           wordMax: exercise.wordMax,
           taskContext: {
-            partLabel: exercise.taskTitle,
-            instructions: exercise.instructions,
-            inputText: exercise.inputNotes || '',
+            partLabel: exercise.taskTitle || exercise.title || activity?.label,
+            instructions:
+              exercise.instructions ||
+              exercise.situation ||
+              exercise.task ||
+              exercise.prompt ||
+              '',
+            inputText: exercise.inputNotes || exercise.context || '',
           },
         }),
       });
       const data = await res.json();
       if (!res.ok) throw new Error(data?.error || 'Could not get feedback.');
-      setEssayFeedback(data.feedback || data.text || JSON.stringify(data));
+      const raw = data.feedback || data.text || JSON.stringify(data);
+      setEssayFeedback(formatWritingFeedbackDisplay(raw));
     } catch (e) {
       setError(e.message);
     } finally {
@@ -250,8 +291,157 @@ export default function DraloAiStudio({ config }) {
     }
   };
 
+  const renderExamDirections = () => {
+    if (!exercise?.directions && !exercise?.partTitle) return null;
+    return (
+      <div className="dralo-ai-directions">
+        {exercise.partTitle ? (
+          <h3 className="dralo-ai-directions__title">{exercise.partTitle}</h3>
+        ) : null}
+        {exercise.directions ? (
+          <p className="dralo-ai-directions__text">{exercise.directions}</p>
+        ) : null}
+      </div>
+    );
+  };
+
+  const renderExamExample = () => {
+    const ex = exercise?.example;
+    if (!ex) return null;
+    return (
+      <div className="dralo-ai-example">
+        <p className="dralo-ai-example__label">Example</p>
+        {ex.sentence1 ? <p className="dralo-ai-sentence">{ex.sentence1}</p> : null}
+        {ex.sentence2Start ? (
+          <p className="dralo-ai-sentence">
+            {ex.sentence2Start}
+            {ex.keyword ? <span className="dralo-ai-keyword">{ex.keyword}</span> : null}
+          </p>
+        ) : null}
+        {ex.text ? <p className="dralo-ai-sentence">{ex.text}</p> : null}
+        {ex.answer != null ? (
+          <p className="dralo-ai-example__answer">
+            {ex.label || ex.number != null ? `${ex.label || ex.number} → ` : ''}
+            <strong>{ex.answer}</strong>
+          </p>
+        ) : null}
+        {ex.explanation ? (
+          <p className="dralo-ai-example__hint">{ex.explanation}</p>
+        ) : null}
+      </div>
+    );
+  };
+
+  const renderQuestionBlock = (q, checkFn) => {
+    const fb = feedbackByQ[q.id] || (q.id === 'legacy' ? uoeFeedback : null);
+    const opts = q.options || [];
+    const numLabel = q.number != null ? `${q.number}. ` : '';
+    return (
+      <div key={q.id} className="dralo-ai-question">
+        <h3>
+          {numLabel}
+          {q.prompt || q.sentence1 || `Question ${q.id}`}
+        </h3>
+        {q.sentence1 && activityId === 'key-word' ? (
+          <>
+            <p className="dralo-ai-sentence">{q.sentence1}</p>
+            <p className="dralo-ai-sentence">
+              {q.sentence2Start}
+              <span className="dralo-ai-keyword">{q.keyword}</span>
+              <span> ______</span>
+            </p>
+          </>
+        ) : null}
+        {opts.length > 0 ? (
+          <div className="dralo-ai-options">
+            {opts.map((opt) => {
+              const selected = answers[q.id] === opt;
+              let cls = 'dralo-ai-option';
+              if (selected) cls += ' is-selected';
+              if (fb) {
+                if (fb.correct && selected) cls += ' is-correct';
+                if (!fb.correct && selected) cls += ' is-wrong';
+              }
+              return (
+                <button
+                  key={opt}
+                  type="button"
+                  className={cls}
+                  disabled={!!fb}
+                  onClick={() => setAnswers((prev) => ({ ...prev, [q.id]: opt }))}
+                >
+                  {opt}
+                </button>
+              );
+            })}
+          </div>
+        ) : (
+          <input
+            className="dralo-ai-input"
+            value={answers[q.id] || ''}
+            onChange={(e) => setAnswers((prev) => ({ ...prev, [q.id]: e.target.value }))}
+            placeholder={
+              q.type === 'word-formation' || activityId === 'word-formation'
+                ? 'One word…'
+                : activityId === 'key-word'
+                  ? `Up to ${q.maxWords || 5} words…`
+                  : 'Your answer…'
+            }
+            disabled={!!fb}
+          />
+        )}
+        {!fb ? (
+          <div className="dralo-ai-actions">
+            <button
+              type="button"
+              className="dralo-ai-btn dralo-ai-btn--primary"
+              disabled={!answers[q.id]?.trim() || loading}
+              onClick={() => checkFn(q.id, answers[q.id])}
+            >
+              Check answer
+            </button>
+          </div>
+        ) : (
+          <div
+            className={`dralo-ai-feedback ${fb.correct ? 'dralo-ai-feedback--ok' : 'dralo-ai-feedback--bad'}`}
+          >
+            {fb.feedback}
+            {!fb.correct && (fb.correctAnswer || fb.modelAnswer) ? (
+              <p style={{ margin: '8px 0 0', fontWeight: 700 }}>
+                Correct answer: {fb.correctAnswer || fb.modelAnswer}
+              </p>
+            ) : null}
+          </div>
+        )}
+      </div>
+    );
+  };
+
+  const hasFullExam = Boolean(
+    exercise?.directions ||
+      exercise?.passage ||
+      (exercise?.questions?.length ?? 0) > 1,
+  );
+
   const renderUoe = () => {
     if (!exercise) return null;
+
+    if (hasFullExam || (exercise.questions?.length ?? 0) > 0) {
+      return (
+        <div className="dralo-ai-exercise">
+          {renderExamDirections()}
+          {renderExamExample()}
+          {exercise.title ? (
+            <h3 style={{ margin: '0 0 8px', fontWeight: 800 }}>{exercise.title}</h3>
+          ) : null}
+          {exercise.passage ? (
+            <div className="dralo-ai-passage">{exercise.passage}</div>
+          ) : null}
+          {(exercise.questions || []).map((q) => renderQuestionBlock(q, checkUoe))}
+        </div>
+      );
+    }
+
     if (activityId === 'multiple-choice-cloze') {
       const opts = exercise.options || [];
       return (
@@ -336,11 +526,36 @@ export default function DraloAiStudio({ config }) {
     if (!exercise) return null;
     return (
       <div className="dralo-ai-exercise">
+        {renderExamDirections()}
+        {renderExamExample()}
         {exercise.title ? <h3 style={{ margin: 0, fontWeight: 800 }}>{exercise.title}</h3> : null}
         {exercise.setting ? <p style={{ margin: 0, color: '#64748b' }}>{exercise.setting}</p> : null}
         {exercise.passage ? (
           <div className="dralo-ai-passage">{exercise.passage}</div>
         ) : null}
+        {exercise.sentencePool?.length ? (
+          <div className="dralo-ai-passage dralo-ai-sentence-pool">
+            <p style={{ fontWeight: 700, margin: '0 0 8px' }}>Sentences</p>
+            {exercise.sentencePool.map((s) => (
+              <p key={s} style={{ margin: '4px 0' }}>
+                {s}
+              </p>
+            ))}
+          </div>
+        ) : null}
+        {exercise.matchingIntro ? (
+          <p className="dralo-ai-sentence" style={{ fontWeight: 700 }}>
+            {exercise.matchingIntro}
+          </p>
+        ) : null}
+        {exercise.sections?.map((sec) => (
+          <div key={sec.letter} className="dralo-ai-passage" style={{ marginBottom: 12 }}>
+            <p style={{ fontWeight: 800, margin: '0 0 4px' }}>
+              {sec.letter} – {sec.name}
+            </p>
+            <p style={{ margin: 0 }}>{sec.text}</p>
+          </div>
+        ))}
         {isListening && exercise.script ? (
           <button
             type="button"
@@ -352,87 +567,79 @@ export default function DraloAiStudio({ config }) {
             {listenButtonLabel}
           </button>
         ) : null}
-        {(exercise.questions || []).map((q) => {
-          const fb = feedbackByQ[q.id];
-          const opts = q.options || [];
-          return (
-            <div key={q.id} className="dralo-ai-question">
-              <h3>{q.prompt}</h3>
-              {opts.length > 0 ? (
-                <div className="dralo-ai-options">
-                  {opts.map((opt) => {
-                    const selected = answers[q.id] === opt;
-                    let cls = 'dralo-ai-option';
-                    if (selected) cls += ' is-selected';
-                    if (fb) {
-                      if (fb.correct && selected) cls += ' is-correct';
-                      if (!fb.correct && selected) cls += ' is-wrong';
-                    }
-                    return (
-                      <button
-                        key={opt}
-                        type="button"
-                        className={cls}
-                        disabled={!!fb}
-                        onClick={() => {
-                          setAnswers((prev) => ({ ...prev, [q.id]: opt }));
-                        }}
-                      >
-                        {opt}
-                      </button>
-                    );
-                  })}
-                </div>
-              ) : (
-                <input
-                  className="dralo-ai-input"
-                  value={answers[q.id] || ''}
-                  onChange={(e) => setAnswers((prev) => ({ ...prev, [q.id]: e.target.value }))}
-                  disabled={!!fb}
-                />
-              )}
-              {!fb ? (
-                <div className="dralo-ai-actions">
-                  <button
-                    type="button"
-                    className="dralo-ai-btn dralo-ai-btn--primary"
-                    disabled={!answers[q.id] || loading}
-                    onClick={() => checkQuestion(q)}
-                  >
-                    Check answer
-                  </button>
-                </div>
-              ) : (
-                <div
-                  className={`dralo-ai-feedback ${fb.correct ? 'dralo-ai-feedback--ok' : 'dralo-ai-feedback--bad'}`}
-                >
-                  {fb.feedback}
-                  {!fb.correct && fb.correctAnswer ? (
-                    <p style={{ margin: '8px 0 0', fontWeight: 700 }}>
-                      Correct answer: {fb.correctAnswer}
-                    </p>
-                  ) : null}
-                </div>
-              )}
+        {(exercise.questions || []).map((q) =>
+          renderQuestionBlock(q, (qId, ans) => checkQuestion({ id: qId, ...q }, ans)),
+        )}
+      </div>
+    );
+  };
+
+  const renderWritingWhatsapp = () => {
+    if (!exercise) return null;
+    const thread = exercise.chatThread || [];
+    return (
+      <div className="dralo-ai-exercise dralo-ai-whatsapp">
+        <h3 style={{ margin: 0 }}>{exercise.title || 'WhatsApp chat'}</h3>
+        <p style={{ color: '#64748b', margin: '0 0 12px' }}>{exercise.context}</p>
+        <div className="dralo-ai-whatsapp__screen">
+          {thread.map((msg, i) => (
+            <div
+              key={i}
+              className={`dralo-ai-whatsapp__bubble dralo-ai-whatsapp__bubble--${msg.from === 'them' ? 'them' : 'you'}`}
+            >
+              {msg.text}
             </div>
-          );
-        })}
+          ))}
+        </div>
+        <p className="dralo-ai-sentence" style={{ marginTop: 12 }}>
+          <strong>Your task:</strong> {exercise.task}
+        </p>
+        {exercise.acronymHints?.length ? (
+          <p style={{ fontSize: 13, color: '#64748b' }}>
+            Try natural acronyms if they fit: {exercise.acronymHints.join(', ')}
+          </p>
+        ) : null}
+        <textarea
+          className="dralo-ai-input dralo-ai-textarea dralo-ai-whatsapp__input"
+          value={essay}
+          onChange={(e) => setEssay(e.target.value)}
+          placeholder="Type your WhatsApp reply (OMG, BTW, FYI…)…"
+          rows={4}
+        />
+        <p className="dralo-ai-word-count">
+          {wordCount} words (target: {exercise.wordMin || 20}–{exercise.wordMax || 80})
+        </p>
+        {essayFeedback ? (
+          <div className="dralo-ai-markdown dralo-ai-passage dralo-ai-writing-feedback">
+            {formatWritingFeedbackDisplay(essayFeedback)}
+          </div>
+        ) : null}
       </div>
     );
   };
 
   const renderWriting = () => {
     if (!exercise) return null;
+    if (exercise.format === 'whatsapp') return renderWritingWhatsapp();
+    const title = exercise.taskTitle || exercise.title;
+    const instructions = exercise.instructions || exercise.situation || exercise.prompt;
+    const wordMinLocal = exercise.wordMin ?? wordMin;
+    const wordMaxLocal = exercise.wordMax ?? wordMax;
     return (
       <div className="dralo-ai-exercise">
-        <h3 style={{ margin: 0 }}>{exercise.taskTitle}</h3>
+        {renderExamDirections()}
+        {renderExamExample()}
+        <h3 style={{ margin: 0 }}>{title}</h3>
         <div className="dralo-ai-passage" style={{ whiteSpace: 'pre-wrap' }}>
-          {exercise.instructions}
+          {instructions}
           {exercise.inputNotes ? `\n\n${exercise.inputNotes}` : ''}
+          {exercise.bulletPoints?.length
+            ? `\n\n${exercise.bulletPoints.map((b) => `• ${b}`).join('\n')}`
+            : ''}
         </div>
-        {exercise.checklist?.length ? (
+        {(exercise.checklist || exercise.bulletPoints)?.length ? (
           <ul style={{ margin: 0, paddingLeft: '1.2em', color: '#475569' }}>
-            {exercise.checklist.map((c) => (
+            {(exercise.checklist || exercise.bulletPoints).map((c) => (
               <li key={c}>{c}</li>
             ))}
           </ul>
@@ -447,10 +654,12 @@ export default function DraloAiStudio({ config }) {
         <p
           className={`dralo-ai-word-count ${wordCount >= wordMin && wordCount <= wordMax ? 'is-ok' : 'is-warn'}`}
         >
-          {wordCount} words (target: {wordMin}–{wordMax})
+          {wordCount} words (target: {wordMinLocal}–{wordMaxLocal})
         </p>
         {essayFeedback ? (
-          <div className="dralo-ai-markdown dralo-ai-passage">{essayFeedback}</div>
+          <div className="dralo-ai-markdown dralo-ai-passage dralo-ai-writing-feedback">
+            {formatWritingFeedbackDisplay(essayFeedback)}
+          </div>
         ) : null}
       </div>
     );
@@ -467,26 +676,38 @@ export default function DraloAiStudio({ config }) {
           <span aria-hidden> / </span>
           <Link href="/dralo-ai">Dralo AI</Link>
           <span aria-hidden> / </span>
-          <span>{config.title}</span>
+          <Link href={`/dralo-ai/${config.id}`}>{config.title}</Link>
+          {breadcrumbTrail ? (
+            <>
+              <span aria-hidden> / </span>
+              <span>{breadcrumbTrail}</span>
+            </>
+          ) : null}
         </nav>
       </div>
 
       <PageHero
-        eyebrow={config.eyebrow}
-        title={config.title}
-        description={config.description}
+        eyebrow={isSituational ? 'Dralo AI · Situaciones reales' : config.eyebrow}
+        title={pageTitle || config.title}
+        description={pageDescription || config.description}
         accent={config.accent}
         mascotVariant={config.mascotVariant}
         stats={[
           { value: 'Dralo', label: 'AI coach' },
           { value: level, label: 'Level' },
-          { value: String(config.activities.length), label: 'Modes' },
+          { value: String(activities.length), label: isSituational ? 'Scenarios' : 'Modes' },
         ]}
       />
 
       <div className="dralo-ai-studio">
         <div className="dralo-ai-studio__toolbar">
-          <span className="dralo-ai-studio__badge">✨ Dralo AI</span>
+          {backHref ? (
+            <Link href={backHref} className="dralo-ai-back-link">
+              ← Elegir modo
+            </Link>
+          ) : (
+            <span className="dralo-ai-studio__badge">✨ Dralo AI</span>
+          )}
           <DraloAiLevelFilter
             levels={config.levels}
             selectedLevel={level}
@@ -495,7 +716,7 @@ export default function DraloAiStudio({ config }) {
         </div>
 
         <div className="dralo-ai-activities" role="tablist" aria-label="Activities">
-          {config.activities.map((a) => (
+          {activities.map((a) => (
             <button
               key={a.id}
               type="button"
@@ -525,14 +746,20 @@ export default function DraloAiStudio({ config }) {
 
             {!exercise && !loading ? (
               <div className="dralo-ai-empty">
-                <p>Click &quot;New exercise&quot; and Dralo will generate a fresh task instantly.</p>
-                <button
-                  type="button"
-                  className="dralo-ai-btn dralo-ai-btn--primary"
-                  onClick={generateExercise}
-                >
-                  ✨ New exercise
-                </button>
+                <p>
+                  {error
+                    ? 'No se pudo generar el ejercicio.'
+                    : 'Selecciona una parte del examen para generar un ejercicio completo al instante.'}
+                </p>
+                {error ? (
+                  <button
+                    type="button"
+                    className="dralo-ai-btn dralo-ai-btn--primary"
+                    onClick={generateExercise}
+                  >
+                    Reintentar
+                  </button>
+                ) : null}
               </div>
             ) : null}
 
@@ -540,7 +767,7 @@ export default function DraloAiStudio({ config }) {
             {exercise && (config.id === 'reading' || isListening) ? renderReadingListening() : null}
             {exercise && isWriting ? renderWriting() : null}
 
-            {uoeFeedback ? (
+            {uoeFeedback && !hasFullExam ? (
               <div
                 className={`dralo-ai-feedback ${uoeFeedback.correct ? 'dralo-ai-feedback--ok' : 'dralo-ai-feedback--bad'}`}
               >
@@ -564,11 +791,11 @@ export default function DraloAiStudio({ config }) {
                 >
                   🔄 Another exercise
                 </button>
-                {isUoe && !uoeFeedback ? (
+                {isUoe && !hasFullExam && !uoeFeedback ? (
                   <button
                     type="button"
                     className="dralo-ai-btn dralo-ai-btn--primary"
-                    onClick={checkUoe}
+                    onClick={() => checkUoe(undefined, uoeAnswer)}
                     disabled={loading || !uoeAnswer.trim()}
                   >
                     Check with Dralo

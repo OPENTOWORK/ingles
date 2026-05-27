@@ -140,7 +140,10 @@ export function B2ExamPracticeChrome({
           ) : null}
 
           {partsData?.length > 0 ? (
-            <div className="levels-b2-part-tabs" role="tablist">
+            <div
+              className={`levels-b2-part-tabs${partsData.length >= 7 ? ' levels-b2-part-tabs--many' : ''}`}
+              role="tablist"
+            >
               {partsData.map((part) => {
                 const savedScore = getPartSavedScoreLabel?.(part, examSlot);
                 const active = selectedPartId === part.id;

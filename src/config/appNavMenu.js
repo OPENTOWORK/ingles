@@ -25,6 +25,7 @@ export const ADMIN_PANEL_MENU_ITEMS = [
   { href: '/admin/profesor', label: 'Panel de profesor' },
   { href: '/soporte', label: 'Panel de soporte' },
   { href: '/informatico', label: 'Panel informático' },
+  { href: '/admin/plan-objetivos', label: 'Plan de objetivos' },
 ];
 
 export const TEACHER_PANEL_MENU_ITEMS = [

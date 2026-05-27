@@ -106,6 +106,11 @@ export default function ProfilePage() {
   const [stats, setStats] = useState(null);
   const [fullName, setFullName] = useState('');
   const [birthDate, setBirthDate] = useState('');
+  const [preferredLanguage, setPreferredLanguage] = useState('es');
+  const [biography, setBiography] = useState('');
+  const [placementLevel, setPlacementLevel] = useState(null);
+  const [personalSaveMessage, setPersonalSaveMessage] = useState('');
+  const [personalSaveError, setPersonalSaveError] = useState('');
   const [newPassword, setNewPassword] = useState('');
   const [inviteEmail, setInviteEmail] = useState('');
   const [inviteMessage, setInviteMessage] = useState('');
@@ -200,7 +205,8 @@ export default function ProfilePage() {
       setUser(authUser);
 
       const userId = authUser.id;
-      const [{ data: userRow }, { data: profileRow }, { data: preferencesRow }] = await Promise.all([
+      const [{ data: userRow }, { data: profileRow }, { data: preferencesRow }, { data: placementRow }] =
+        await Promise.all([
         supabase.from('user_profiles').select('nombre, email').eq('id', userId).single(),
         supabase
           .from('profiles')
@@ -208,6 +214,13 @@ export default function ProfilePage() {
           .eq('user_id', userId)
           .single(),
         supabase.from('user_preferences').select('notificaciones, recordatorios').eq('user_id', userId).single(),
+        supabase
+          .from('placement_results')
+          .select('nivel_asignado')
+          .eq('user_id', userId)
+          .order('fecha', { ascending: false })
+          .limit(1)
+          .maybeSingle(),
       ]);
 
       const localSettings = typeof window !== 'undefined'
@@ -215,6 +228,9 @@ export default function ProfilePage() {
         : {};
       setFullName(userRow?.nombre || authUser?.user_metadata?.name || '');
       setBirthDate(profileRow?.fecha_nacimiento || '');
+      setPreferredLanguage(profileRow?.idioma_preferido || 'es');
+      setBiography(profileRow?.biografia || '');
+      setPlacementLevel(placementRow?.nivel_asignado || null);
       setNotifications({
         email: Boolean(preferencesRow?.notificaciones ?? true),
         push: Boolean(preferencesRow?.recordatorios ?? true),
@@ -474,21 +490,56 @@ export default function ProfilePage() {
     return true;
   };
 
-  const handleProfileUpdate = async () => {
-    const nameOk = await handleSaveProfileName();
-    if (!nameOk) return;
+  const handleSavePersonalData = async () => {
+    const trimmed = (fullName || '').trim();
+    if (!trimmed) {
+      setPersonalSaveError('Introduce un nombre para tu perfil.');
+      setPersonalSaveMessage('');
+      return;
+    }
+    if (!user?.id) return;
 
     setSaving(true);
-    const { error } = await supabase.from('profiles').upsert({
+    setPersonalSaveError('');
+    setPersonalSaveMessage('');
+    setNameSaveError('');
+    setNameSaveMessage('');
+
+    const { error: nameError } = await supabase.from('user_profiles').upsert(
+      { id: user.id, nombre: trimmed, email: user.email },
+      { onConflict: 'id' },
+    );
+
+    if (nameError) {
+      console.error('Error saving profile name:', nameError);
+      setPersonalSaveError('No se pudieron guardar los datos. Inténtalo de nuevo.');
+      setSaving(false);
+      return;
+    }
+
+    try {
+      await supabase.auth.updateUser({ data: { name: trimmed } });
+    } catch (authError) {
+      console.warn('Could not sync auth metadata name:', authError);
+    }
+
+    const { error: profileError } = await supabase.from('profiles').upsert({
       user_id: user.id,
       fecha_nacimiento: birthDate || null,
+      idioma_preferido: preferredLanguage || 'es',
+      biografia: (biography || '').trim() || null,
     });
+
     setSaving(false);
 
-    if (error) {
-      console.error('Error saving profile details:', error);
-      setNameSaveError('El nombre se guardó, pero hubo un error al guardar la fecha de nacimiento.');
+    if (profileError) {
+      console.error('Error saving profile details:', profileError);
+      setPersonalSaveError('El nombre se guardó, pero falló el resto de los datos personales.');
+      return;
     }
+
+    setFullName(trimmed);
+    setPersonalSaveMessage('Datos personales guardados correctamente.');
   };
 
   const handlePasswordChange = async () => {
@@ -986,7 +1037,6 @@ export default function ProfilePage() {
         </section>
       )}
 
-      {/* Tab: Configuración */}
       {activeTab === 'integrated' && (
         <>
           {/* Dashboard de Progreso Integrado */}
@@ -1139,24 +1189,62 @@ export default function ProfilePage() {
             </div>
           </section>
 
+          <section className="profile-section">
+            <div className="section-head">
+              <h2>📋 Tu cuenta</h2>
+            </div>
+            <dl className="mis-datos-facts">
+              <div className="mis-datos-fact">
+                <dt>Correo</dt>
+                <dd>{user.email}</dd>
+              </div>
+              <div className="mis-datos-fact">
+                <dt>Registro</dt>
+                <dd>
+                  {user.created_at
+                    ? new Date(user.created_at).toLocaleDateString('es-ES', {
+                        day: 'numeric',
+                        month: 'long',
+                        year: 'numeric',
+                      })
+                    : '—'}
+                </dd>
+              </div>
+              <div className="mis-datos-fact">
+                <dt>Nivel (placement)</dt>
+                <dd>{placementLevel || 'Sin placement test'}</dd>
+              </div>
+              {placementLevel && (
+                <div className="mis-datos-fact">
+                  <dt>Plan de objetivos</dt>
+                  <dd>
+                    <Link href="/plan-objetivos" className="mis-datos-link">
+                      Ver o completar encuesta →
+                    </Link>
+                  </dd>
+                </div>
+              )}
+            </dl>
+          </section>
+
           <section className="profile-section profile-name-section">
             <div className="section-head">
-              <h2>✏️ Nombre de perfil</h2>
+              <h2>📝 Datos personales</h2>
             </div>
             <p className="section-desc">
-              Este nombre aparece en tu perfil y en el panel de administración.
+              Información visible en tu perfil y para personalizar tu experiencia en Dralo.
             </p>
             <div className="form-group">
               <label className="form-label" htmlFor="profile-display-name">
-                Nombre visible
+                Nombre completo
               </label>
               <input
                 id="profile-display-name"
                 value={fullName}
                 onChange={(e) => {
                   setFullName(e.target.value);
-                  setNameSaveMessage('');
-                  setNameSaveError('');
+                  setPersonalSaveMessage('');
+                  setPersonalSaveError('');
                 }}
                 className="form-input"
                 placeholder="Tu nombre"
@@ -1164,15 +1252,71 @@ export default function ProfilePage() {
                 autoComplete="name"
               />
             </div>
-            {nameSaveError ? <p className="form-hint form-hint--error">{nameSaveError}</p> : null}
-            {nameSaveMessage ? <p className="form-hint form-hint--success">{nameSaveMessage}</p> : null}
+            <div className="form-group">
+              <label className="form-label" htmlFor="profile-birth-date">
+                Fecha de nacimiento
+              </label>
+              <input
+                id="profile-birth-date"
+                type="date"
+                value={birthDate}
+                onChange={(e) => {
+                  setBirthDate(e.target.value);
+                  setPersonalSaveMessage('');
+                  setPersonalSaveError('');
+                }}
+                className="form-input"
+              />
+            </div>
+            <div className="form-group">
+              <label className="form-label" htmlFor="profile-language">
+                Idioma de la interfaz
+              </label>
+              <select
+                id="profile-language"
+                value={preferredLanguage}
+                onChange={(e) => {
+                  setPreferredLanguage(e.target.value);
+                  setPersonalSaveMessage('');
+                  setPersonalSaveError('');
+                }}
+                className="form-input"
+              >
+                <option value="es">Español</option>
+                <option value="en">English</option>
+              </select>
+            </div>
+            <div className="form-group">
+              <label className="form-label" htmlFor="profile-bio">
+                Sobre ti (opcional)
+              </label>
+              <textarea
+                id="profile-bio"
+                value={biography}
+                onChange={(e) => {
+                  setBiography(e.target.value);
+                  setPersonalSaveMessage('');
+                  setPersonalSaveError('');
+                }}
+                className="form-input"
+                rows={3}
+                maxLength={500}
+                placeholder="Ej.: Preparo el B2 First en junio, me cuesta el listening…"
+              />
+            </div>
+            {personalSaveError ? (
+              <p className="form-hint form-hint--error">{personalSaveError}</p>
+            ) : null}
+            {personalSaveMessage ? (
+              <p className="form-hint form-hint--success">{personalSaveMessage}</p>
+            ) : null}
             <button
               type="button"
-              onClick={handleSaveProfileName}
+              onClick={handleSavePersonalData}
               className="action-btn"
               disabled={saving}
             >
-              {saving ? 'Guardando...' : '💾 Guardar nombre'}
+              {saving ? 'Guardando...' : '💾 Guardar datos personales'}
             </button>
           </section>
         </>
@@ -1180,50 +1324,21 @@ export default function ProfilePage() {
 
       {activeTab === 'settings' && (
         <>
-          {/* Información personal */}
-          <section className="profile-section">
-            <div className="section-head">
-              <h2>📝 Información Personal</h2>
-            </div>
-            <div className="form-group">
-              <label className="form-label">Nombre completo</label>
-              <input 
-                value={fullName} 
-                onChange={e => setFullName(e.target.value)} 
-                className="form-input"
-                placeholder="Tu nombre completo"
-              />
-            </div>
-            <div className="form-group">
-              <label className="form-label">Fecha de nacimiento</label>
-              <input 
-                type="date" 
-                value={birthDate} 
-                onChange={e => setBirthDate(e.target.value)} 
-                className="form-input"
-              />
-            </div>
-            <button onClick={handleProfileUpdate} className="action-btn" disabled={saving}>
-              {saving ? 'Guardando...' : '💾 Guardar Cambios'}
-            </button>
-          </section>
-
-          {/* Seguridad */}
           <section className="profile-section">
             <div className="section-head">
               <h2>🔐 Seguridad</h2>
             </div>
             <div className="form-group">
               <label className="form-label">Nueva contraseña</label>
-              <input 
-                type="password" 
-                value={newPassword} 
-                onChange={e => setNewPassword(e.target.value)} 
+              <input
+                type="password"
+                value={newPassword}
+                onChange={(e) => setNewPassword(e.target.value)}
                 className="form-input"
                 placeholder="Mínimo 6 caracteres"
               />
             </div>
-            <button onClick={handlePasswordChange} className="action-btn">
+            <button type="button" onClick={handlePasswordChange} className="action-btn">
               🔑 Actualizar Contraseña
             </button>
           </section>
@@ -1235,8 +1350,8 @@ export default function ProfilePage() {
             <p style={{ marginTop: 0, color: '#7f1d1d' }}>
               Esta accion es irreversible. Para confirmar, te enviaremos un codigo de 6 cifras al correo de tu cuenta.
             </p>
-
             <button
+              type="button"
               onClick={handleSendDeleteCode}
               className="action-btn"
               disabled={sendingDeleteCode || deletingAccount}
@@ -1244,7 +1359,6 @@ export default function ProfilePage() {
             >
               {sendingDeleteCode ? 'Enviando codigo...' : 'Enviar codigo de confirmacion'}
             </button>
-
             {deleteFlowActive && (
               <div className="form-group" style={{ marginTop: '1rem' }}>
                 <label className="form-label">Codigo de verificacion (6 cifras)</label>
@@ -1262,6 +1376,7 @@ export default function ProfilePage() {
                   Codigo enviado a {user?.email}. {deleteCodeSentAt ? 'Si caduca, solicita uno nuevo.' : ''}
                 </small>
                 <button
+                  type="button"
                   onClick={handleDeleteAccount}
                   className="action-btn"
                   disabled={deletingAccount}
@@ -1273,7 +1388,6 @@ export default function ProfilePage() {
             )}
           </section>
 
-          {/* Notificaciones */}
           <section className="profile-section">
             <div className="section-head">
               <h2>🔔 Notificaciones</h2>
@@ -1284,7 +1398,7 @@ export default function ProfilePage() {
                   <input
                     type="checkbox"
                     checked={notifications.email}
-                    onChange={(e) => setNotifications({...notifications, email: e.target.checked})}
+                    onChange={(e) => setNotifications({ ...notifications, email: e.target.checked })}
                   />
                   📧 Notificaciones por Email
                 </label>
@@ -1294,13 +1408,13 @@ export default function ProfilePage() {
                   <input
                     type="checkbox"
                     checked={notifications.push}
-                    onChange={(e) => setNotifications({...notifications, push: e.target.checked})}
+                    onChange={(e) => setNotifications({ ...notifications, push: e.target.checked })}
                   />
                   🔔 Notificaciones Push
                 </label>
               </div>
             </div>
-            <button onClick={handleSettingsUpdate} className="action-btn" disabled={saving}>
+            <button type="button" onClick={handleSettingsUpdate} className="action-btn" disabled={saving}>
               {saving ? 'Guardando...' : '💾 Guardar Configuración'}
             </button>
           </section>
@@ -1332,7 +1446,7 @@ export default function ProfilePage() {
                 placeholder="¡Hola! Te invito a practicar inglés conmigo en English Practice."
               />
             </div>
-            <button onClick={handleInviteFriend} className="action-btn" disabled={invitingFriend}>
+            <button type="button" onClick={handleInviteFriend} className="action-btn" disabled={invitingFriend}>
               {invitingFriend ? 'Enviando invitación...' : 'Enviar invitación'}
             </button>
           </section>
@@ -2090,6 +2204,11 @@ function GlobalStyles() {
       .form-hint{margin:0 0 12px;font-size:14px}
       .form-hint--error{color:#dc2626}
       .form-hint--success{color:#16a34a}
+      .mis-datos-facts{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px 24px;margin:0}
+      .mis-datos-fact dt{font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;color:#64748b;margin:0 0 4px}
+      .mis-datos-fact dd{margin:0;font-size:15px;color:var(--text);font-weight:500}
+      .mis-datos-link{color:#0070f3;font-weight:600;text-decoration:none}
+      .mis-datos-link:hover{text-decoration:underline}
       .header--mascot{display:flex;flex-wrap:wrap;align-items:center;gap:20px 32px;margin-bottom:8px}
       .header__copy{flex:1 1 240px;min-width:0}
       .header__mascot{flex:0 0 auto;line-height:0;filter:drop-shadow(0 8px 18px rgba(0,0,0,.12))}

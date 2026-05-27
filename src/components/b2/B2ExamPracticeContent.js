@@ -23,6 +23,22 @@ export function B2ExamFormattedEnunciado({ blocks, keyPrefix = 'enunciado' }) {
   if (!blocks?.length) return null;
 
   return blocks.map((block, index) => {
+    if (block.type === 'image' && block.url) {
+      return (
+        <img
+          key={`${keyPrefix}-image-${index}`}
+          src={block.url}
+          alt=""
+          style={{
+            maxWidth: '100%',
+            height: 'auto',
+            margin: '0.5rem 0',
+            borderRadius: '8px',
+            border: '1px solid #e2e8f0',
+          }}
+        />
+      );
+    }
     const style = blockStyles[block.type] || blockStyles.paragraph;
     return (
       <p key={`${keyPrefix}-${block.type}-${index}`} style={style}>
@@ -43,11 +59,30 @@ export function B2ExamPassageText({ text = '' }) {
 
   if (!lines.length) return null;
 
-  return lines.map((line, idx) => (
-    <p key={`passage-${idx}`} style={{ margin: '0.5rem 0', lineHeight: 1.78 }}>
-      {line}
-    </p>
-  ));
+  return lines.map((line, idx) => {
+    const img = line.match(/^IMAGE:\s*(\S+)/i);
+    if (img) {
+      return (
+        <img
+          key={`passage-img-${idx}`}
+          src={img[1]}
+          alt=""
+          style={{
+            maxWidth: '100%',
+            height: 'auto',
+            margin: '0.5rem 0',
+            borderRadius: '8px',
+            border: '1px solid #e2e8f0',
+          }}
+        />
+      );
+    }
+    return (
+      <p key={`passage-${idx}`} style={{ margin: '0.5rem 0', lineHeight: 1.78 }}>
+        {line}
+      </p>
+    );
+  });
 }
 
 /**

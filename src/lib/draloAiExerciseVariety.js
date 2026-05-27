@@ -20,6 +20,11 @@ export function pickRandomTopic(seed = Date.now()) {
 
 export function getUoeExerciseFingerprint(exercise, activity) {
   if (!exercise) return '';
+  if (exercise.passage || exercise.title) {
+    return `${exercise.title || ''}|${String(exercise.passage || '').slice(0, 120)}`
+      .toLowerCase()
+      .trim();
+  }
   if (activity === 'multiple-choice-cloze') {
     return `${exercise.textBefore || ''}|${exercise.textAfter || ''}|${(exercise.options || []).join(',')}`
       .toLowerCase()
@@ -80,10 +85,14 @@ export function normalizeRlCheckResult(result, exercise, questionId) {
   };
 }
 
-export function normalizeUoeCheckResult(result, exercise) {
+export function normalizeUoeCheckResult(result, exercise, questionId) {
   const correct = Boolean(result?.correct);
+  const modelAnswers = Array.isArray(exercise?.modelAnswers) ? exercise.modelAnswers : [];
   const modelAnswer = String(
-    result?.modelAnswer || exercise?.modelAnswer || '',
+    result?.modelAnswer ||
+      modelAnswers.find((m) => m.id === questionId)?.answer ||
+      exercise?.modelAnswer ||
+      '',
   ).trim();
   const tip = String(exercise?.briefTip || '').trim();
   let feedback = String(result?.feedback || '').trim();

@@ -1,12 +1,11 @@
 import { NextResponse } from 'next/server';
-import OpenAI from 'openai';
 import { buildGrammarCoachSystemPrompt } from '@/lib/grammarCoachPrompt';
+import { draloChatCompletion, isDraloOpenAIConfigured } from '@/lib/draloAiEngine';
 
 const WINDOW_MS = 60 * 60 * 1000;
 const MAX_PER_IP = 45;
 const MAX_USER_CHARS = 2000;
 const MAX_HISTORY = 16;
-const OPENAI_CHAT_MODEL = process.env.OPENAI_MODEL || 'gpt-4o-mini';
 
 /** @type {Map<string, { n: number; reset: number }>} */
 const ipBuckets = new Map();
@@ -42,11 +41,11 @@ function sanitizeMessages(raw) {
 }
 
 export async function POST(req) {
-  if (!process.env.OPENAI_API_KEY?.trim()) {
+  if (!isDraloOpenAIConfigured()) {
     return NextResponse.json(
       {
         error:
-          'Missing OPENAI_API_KEY in .env.local. Grammar Coach uses the same key as Dralo AI.',
+          'Missing OPENAI_API_KEY in .env.local. Grammar Coach uses the DRALO AI GPT engine.',
       },
       { status: 503 },
     );
@@ -77,20 +76,13 @@ export async function POST(req) {
   const validLevels = ['A2', 'B1', 'B2', 'C1', 'C2'];
   const cefr = validLevels.includes(level) ? level : 'B2';
 
-  const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
-
   try {
-    const completion = await openai.chat.completions.create({
-      model: OPENAI_CHAT_MODEL,
+    const { text: reply } = await draloChatCompletion({
+      system: buildGrammarCoachSystemPrompt(cefr),
+      messages: history,
       temperature: 0.45,
       max_tokens: 900,
-      messages: [
-        { role: 'system', content: buildGrammarCoachSystemPrompt(cefr) },
-        ...history,
-      ],
     });
-
-    const reply = (completion.choices?.[0]?.message?.content || '').trim();
     if (!reply) {
       return NextResponse.json({ error: 'No response from the coach.' }, { status: 502 });
     }
