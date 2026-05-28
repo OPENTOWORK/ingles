@@ -1,33 +1,15 @@
 import { NextResponse } from 'next/server';
-import { createClient } from '@supabase/supabase-js';
+import { authenticateAdminRequest } from '@/lib/adminAccess';
 import { deliverTransactionalEmail } from '@/lib/emailDelivery';
-import { getSupabaseAnonKey, getSupabaseUrl } from '@/lib/supabaseEnv';
-import { userHasRole } from '@/utils/authRoles';
 
 const isValidEmail = (value) =>
   /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(String(value || '').trim().toLowerCase());
 
 export async function POST(req) {
   try {
-    const authHeader = req.headers.get('authorization') || '';
-    const token = authHeader.startsWith('Bearer ') ? authHeader.slice(7) : null;
-    if (!token) {
-      return NextResponse.json({ error: 'No autenticado.' }, { status: 401 });
-    }
-
-    const authClient = createClient(getSupabaseUrl(), getSupabaseAnonKey());
-    const { data: authData, error: authError } = await authClient.auth.getUser(token);
-    if (authError || !authData?.user) {
-      return NextResponse.json({ error: 'Sesión no válida.' }, { status: 401 });
-    }
-
-    const isAdmin = await userHasRole(
-      authData.user.id,
-      ['admin', 'administrador'],
-      authData.user.email,
-    );
-    if (!isAdmin) {
-      return NextResponse.json({ error: 'Sin permiso.' }, { status: 403 });
+    const auth = await authenticateAdminRequest(req);
+    if (auth.error) {
+      return NextResponse.json({ error: auth.error }, { status: auth.status });
     }
 
     const body = await req.json();
@@ -48,8 +30,8 @@ export async function POST(req) {
     }
 
     const adminName =
-      authData.user.user_metadata?.name ||
-      authData.user.email?.split('@')[0] ||
+      auth.user.user_metadata?.name ||
+      auth.user.email?.split('@')[0] ||
       'Administración Dralo';
 
     const text = [

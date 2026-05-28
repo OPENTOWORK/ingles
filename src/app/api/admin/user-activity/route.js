@@ -1,38 +1,17 @@
 import { NextResponse } from 'next/server';
-import { createClient } from '@supabase/supabase-js';
 import {
   buildConnectionAnalytics,
   buildSessionChartSeries,
   isUserOnline,
   formatSessionDuration,
 } from '@/lib/userActivity';
-import { getSupabaseAnonKey, getSupabaseServiceRoleKey, getSupabaseUrl } from '@/lib/supabaseEnv';
-import { userHasRole } from '@/utils/authRoles';
-
-const supabaseUrl = getSupabaseUrl();
-const supabaseAnonKey = getSupabaseAnonKey();
+import { authenticateAdminRequest } from '@/lib/adminAccess';
 
 export async function GET(req) {
   try {
-    const authHeader = req.headers.get('authorization') || '';
-    const token = authHeader.startsWith('Bearer ') ? authHeader.slice(7) : null;
-    if (!token) {
-      return NextResponse.json({ error: 'No autenticado.' }, { status: 401 });
-    }
-
-    const authClient = createClient(supabaseUrl, supabaseAnonKey);
-    const { data: authData, error: authError } = await authClient.auth.getUser(token);
-    if (authError || !authData?.user) {
-      return NextResponse.json({ error: 'Sesión no válida.' }, { status: 401 });
-    }
-
-    const isAdmin = await userHasRole(
-      authData.user.id,
-      ['admin', 'administrador'],
-      authData.user.email,
-    );
-    if (!isAdmin) {
-      return NextResponse.json({ error: 'Sin permiso.' }, { status: 403 });
+    const auth = await authenticateAdminRequest(req);
+    if (auth.error) {
+      return NextResponse.json({ error: auth.error }, { status: auth.status });
     }
 
     const { searchParams } = new URL(req.url);
@@ -40,14 +19,7 @@ export async function GET(req) {
     const startDate = searchParams.get('startDate') || '';
     const endDate = searchParams.get('endDate') || '';
 
-    const serviceKey = getSupabaseServiceRoleKey()?.trim();
-    const db = serviceKey
-      ? createClient(supabaseUrl, serviceKey, {
-          auth: { autoRefreshToken: false, persistSession: false },
-        })
-      : createClient(supabaseUrl, supabaseAnonKey, {
-          global: { headers: { Authorization: `Bearer ${token}` } },
-        });
+    const db = auth.db;
 
     const [presenceRes, sessionsRes] = await Promise.all([
       db.from('usuario_presencia').select('user_id, last_seen_at, total_session_seconds'),

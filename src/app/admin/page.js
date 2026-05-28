@@ -25,6 +25,31 @@ const AdminAnalyticsPanels = dynamic(
 
 const PERIOD_OPTIONS = ['dias', 'semanas', 'meses', 'anios'];
 
+/** Cabeceras admin: JWT actualizado + cookies para APIs en producción. */
+async function getAdminFetchHeaders() {
+  const { data: userData, error: userError } = await supabase.auth.getUser();
+  if (userError || !userData?.user) {
+    throw new Error('Sesión no válida. Cierra sesión y vuelve a entrar.');
+  }
+
+  const { data: sessionData } = await supabase.auth.getSession();
+  let accessToken = sessionData?.session?.access_token || null;
+
+  if (!accessToken) {
+    const { data: refreshed, error: refreshError } = await supabase.auth.refreshSession();
+    if (refreshError) {
+      throw new Error('Sesión expirada. Vuelve a iniciar sesión.');
+    }
+    accessToken = refreshed?.session?.access_token || null;
+  }
+
+  const headers = { 'Content-Type': 'application/json' };
+  if (accessToken) {
+    headers.Authorization = `Bearer ${accessToken}`;
+  }
+  return headers;
+}
+
 function formatRegistrationDate(value) {
   if (!value) return '—';
   const date = new Date(value);
@@ -323,16 +348,15 @@ export default function AdminDashboard() {
     async (adminUser = user) => {
       if (!adminUser) return;
       try {
-        const { data: sessionData } = await supabase.auth.getSession();
-        const accessToken = sessionData?.session?.access_token;
-        if (!accessToken) return;
+        const headers = await getAdminFetchHeaders();
 
         const params = new URLSearchParams({ period: chartPeriod });
         if (chartStartDate) params.set('startDate', chartStartDate);
         if (chartEndDate) params.set('endDate', chartEndDate);
 
         const res = await fetch(`/api/admin/user-activity?${params}`, {
-          headers: { Authorization: `Bearer ${accessToken}` },
+          credentials: 'include',
+          headers,
         });
         const data = await res.json().catch(() => ({}));
         if (!res.ok) {
@@ -554,12 +578,6 @@ export default function AdminDashboard() {
 
     setMailing(true);
     try {
-      const { data: sessionData } = await supabase.auth.getSession();
-      const accessToken = sessionData?.session?.access_token;
-      if (!accessToken) {
-        throw new Error('No se pudo obtener sesión para enviar correos.');
-      }
-
       const mailUrl =
         (typeof process !== 'undefined' &&
           process.env.NEXT_PUBLIC_ADMIN_SEND_MAIL_URL?.trim()) ||
@@ -567,10 +585,8 @@ export default function AdminDashboard() {
 
       const res = await fetch(mailUrl, {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${accessToken}`,
-        },
+        credentials: 'include',
+        headers: await getAdminFetchHeaders(),
         body: JSON.stringify({
           to: emails,
           subject,
@@ -633,12 +649,6 @@ export default function AdminDashboard() {
 
     setCreatingUser(true);
     try {
-      const { data: sessionData } = await supabase.auth.getSession();
-      const accessToken = sessionData?.session?.access_token;
-      if (!accessToken) {
-        throw new Error('No se pudo obtener sesión para crear usuarios.');
-      }
-
       const tempPassword = generateTemporaryPassword();
       const createUserUrl =
         (typeof process !== 'undefined' &&
@@ -647,10 +657,8 @@ export default function AdminDashboard() {
 
       const res = await fetch(createUserUrl, {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${accessToken}`,
-        },
+        credentials: 'include',
+        headers: await getAdminFetchHeaders(),
         body: JSON.stringify({
           email,
           name: newUserName.trim() || null,

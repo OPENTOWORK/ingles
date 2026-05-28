@@ -1,39 +1,45 @@
 import { createClient } from '@supabase/supabase-js';
+import { ADMIN_EMAIL, normalizeEmail, normalizeRoleName } from '@/utils/authRoles';
+import { getSupabaseUserFromRequest } from '@/lib/getSupabaseUserFromRequest';
 import { getSupabaseAnonKey, getSupabaseServiceRoleKey, getSupabaseUrl } from '@/lib/supabaseEnv';
-import { userHasRole } from '@/utils/authRoles';
+import { getUserRoleNameServer } from '@/lib/userRoleServer';
+
+async function userIsAdmin(user, db) {
+  if (normalizeEmail(user.email) === normalizeEmail(ADMIN_EMAIL)) {
+    return true;
+  }
+  const roleName = await getUserRoleNameServer(user.id, db);
+  const normalized = normalizeRoleName(roleName);
+  return normalized === 'admin' || normalized === 'administrador';
+}
 
 export async function authenticateAdminRequest(req) {
-  const authHeader = req.headers.get('authorization') || '';
-  const token = authHeader.startsWith('Bearer ') ? authHeader.slice(7) : null;
-  if (!token) {
-    return { error: 'No autenticado.', status: 401 };
+  const auth = await getSupabaseUserFromRequest(req);
+  if (!auth?.user) {
+    return {
+      error: 'Sesión no válida. Cierra sesión y vuelve a entrar en www.dralo.es.',
+      status: 401,
+    };
   }
 
   const supabaseUrl = getSupabaseUrl();
-  const supabaseAnonKey = getSupabaseAnonKey();
-  const authClient = createClient(supabaseUrl, supabaseAnonKey);
-  const { data: authData, error: authError } = await authClient.auth.getUser(token);
-  if (authError || !authData?.user) {
-    return { error: 'Sesión no válida.', status: 401 };
-  }
-
-  const isAdmin = await userHasRole(
-    authData.user.id,
-    ['admin', 'administrador'],
-    authData.user.email,
-  );
-  if (!isAdmin) {
-    return { error: 'Sin permiso.', status: 403 };
-  }
-
   const serviceKey = getSupabaseServiceRoleKey()?.trim();
+  const supabaseAnonKey = getSupabaseAnonKey();
+  const token = auth.accessToken || '';
+
   const db = serviceKey
     ? createClient(supabaseUrl, serviceKey, {
         auth: { autoRefreshToken: false, persistSession: false },
       })
     : createClient(supabaseUrl, supabaseAnonKey, {
-        global: { headers: { Authorization: `Bearer ${token}` } },
+        global: token ? { headers: { Authorization: `Bearer ${token}` } } : {},
+        auth: { autoRefreshToken: false, persistSession: false },
       });
 
-  return { user: authData.user, token, db };
+  const isAdmin = await userIsAdmin(auth.user, db);
+  if (!isAdmin) {
+    return { error: 'Sin permiso.', status: 403 };
+  }
+
+  return { user: auth.user, token, db };
 }

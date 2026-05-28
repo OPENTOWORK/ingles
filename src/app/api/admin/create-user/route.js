@@ -1,12 +1,8 @@
 import { NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
+import { authenticateAdminRequest } from '@/lib/adminAccess';
 import { deliverTransactionalEmail } from '@/lib/emailDelivery';
-import {
-  getSupabaseAnonKey,
-  getSupabaseServiceRoleKey,
-  getSupabaseUrl,
-} from '@/lib/supabaseEnv';
-import { userHasRole } from '@/utils/authRoles';
+import { getSupabaseServiceRoleKey, getSupabaseUrl } from '@/lib/supabaseEnv';
 
 const isValidEmail = (value) =>
   /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(String(value || '').trim().toLowerCase());
@@ -33,30 +29,13 @@ async function sendWelcomeEmail({ email, name, temporaryPassword }) {
 
 export async function POST(req) {
   try {
+    const auth = await authenticateAdminRequest(req);
+    if (auth.error) {
+      return NextResponse.json({ error: auth.error }, { status: auth.status });
+    }
+
     const supabaseUrl = getSupabaseUrl();
-    const supabaseAnonKey = getSupabaseAnonKey();
     const supabaseServiceRoleKey = getSupabaseServiceRoleKey();
-
-    const authHeader = req.headers.get('authorization') || '';
-    const token = authHeader.startsWith('Bearer ') ? authHeader.slice(7) : null;
-    if (!token) {
-      return NextResponse.json({ error: 'No autenticado.' }, { status: 401 });
-    }
-
-    const authClient = createClient(supabaseUrl, supabaseAnonKey);
-    const { data: authData, error: authError } = await authClient.auth.getUser(token);
-    if (authError || !authData?.user) {
-      return NextResponse.json({ error: 'Sesión no válida.' }, { status: 401 });
-    }
-
-    const isAdmin = await userHasRole(
-      authData.user.id,
-      ['admin', 'administrador'],
-      authData.user.email,
-    );
-    if (!isAdmin) {
-      return NextResponse.json({ error: 'Sin permiso de administrador.' }, { status: 403 });
-    }
 
     const body = await req.json();
     const email = String(body?.email || '').trim().toLowerCase();
