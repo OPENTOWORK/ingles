@@ -107,7 +107,9 @@ export function B2ExamQuestionItem({ children, className = '' }) {
  *   questions?: import('react').ReactNode,
  *   split?: 'auto' | boolean,
  *   showDirections?: boolean,
+ *   showPassagePanel?: boolean,
  *   showQuestionsHeading?: boolean,
+ *   contentClassName?: string,
  *   footer?: import('react').ReactNode,
  * }} props
  */
@@ -123,17 +125,20 @@ export function B2ExamPracticeContent({
   questions = null,
   split = 'auto',
   showDirections = true,
+  showPassagePanel = true,
   showQuestionsHeading = true,
+  contentClassName = '',
   footer = null,
 }) {
-  const hasPassage = Boolean(passageText?.trim()) || Boolean(passage);
+  const hasPassage =
+    showPassagePanel && (Boolean(passageText?.trim()) || Boolean(passage));
   const useSplit = split === 'auto' ? hasPassage && Boolean(questions) : Boolean(split);
   const directionBlocks = getFormattedEnunciado(directionsText);
 
   return (
     <div className={useSplit ? 'levels-exam-split-page' : 'levels-exam-practice-page'}>
-      <div className="levels-exam-split-card">
-        <h2>{title}</h2>
+      <div className={`levels-exam-split-card${contentClassName ? ` ${contentClassName}` : ''}`}>
+        {title ? <h2>{title}</h2> : null}
 
         <div className={useSplit ? 'levels-exam-split__body' : 'levels-exam-split__body levels-exam-split__body--stacked'}>
           {showDirections && directionBlocks.length > 0 ? (

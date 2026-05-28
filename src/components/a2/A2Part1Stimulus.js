@@ -1,5 +1,23 @@
 'use client';
 
+import { sitePublicPath } from '@/utils/sitePublicPath';
+
+function resolveStimulusImageUrl(url) {
+  const raw = String(url || '').trim();
+  if (!raw) return '';
+  if (/^https?:\/\//i.test(raw)) return raw;
+  return sitePublicPath(raw.startsWith('/') ? raw : `/${raw}`);
+}
+
+const STIMULUS_ALT = {
+  classified_ad: 'Classified advertisement',
+  text_message: 'Text message on a phone',
+  shop_sign: 'Shop sign',
+  public_sign: 'Public notice sign',
+  email_note: 'Short email or note',
+  notice: 'Notice or sign',
+};
+
 /**
  * Estímulo visual Part 1 — réplica del estilo Cambridge (caja aviso / móvil / cartel).
  */
@@ -10,29 +28,35 @@ export function A2Part1Stimulus({ stimulusType, message, imageUrl, prompt }) {
     .map((l) => l.trim())
     .filter(Boolean);
 
-  const showImage = Boolean(imageUrl);
-  const showHtml = lines.length > 0;
+  const resolvedImageUrl = resolveStimulusImageUrl(imageUrl);
+  const showImage = Boolean(resolvedImageUrl);
+  const showHtml = lines.length > 0 && !showImage;
+  const alt = STIMULUS_ALT[type] || STIMULUS_ALT.notice;
 
   return (
-    <div className={`a2-p1-stimulus a2-p1-stimulus--${type}`}>
+    <figure className={`a2-p1-stimulus a2-p1-stimulus--${type}${showImage ? ' a2-p1-stimulus--has-image' : ''}`}>
       {showImage ? (
-        <div className="a2-p1-stimulus__img-wrap">
-          <img src={imageUrl} alt="" className="a2-p1-stimulus__img" />
+        <div className="a2-p1-stimulus__media">
+          <div className="a2-p1-stimulus__img-frame">
+            <img
+              src={resolvedImageUrl}
+              alt={alt}
+              className="a2-p1-stimulus__img"
+              loading="lazy"
+              decoding="async"
+            />
+          </div>
         </div>
       ) : null}
-      {showHtml && !showImage ? (
+      {showHtml ? (
         <div className="a2-p1-stimulus__html">
           <StimulusBody type={type} lines={lines} />
         </div>
       ) : null}
-      {showHtml && showImage ? (
-        <details className="a2-p1-stimulus__text-fallback">
-          <summary>Ver texto</summary>
-          <StimulusBody type={type} lines={lines} />
-        </details>
+      {prompt ? (
+        <figcaption className="a2-p1-stimulus__prompt">{prompt}</figcaption>
       ) : null}
-      {prompt ? <p className="a2-p1-stimulus__prompt">{prompt}</p> : null}
-    </div>
+    </figure>
   );
 }
 

@@ -1,7 +1,6 @@
 import { NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
-import { sendSupportTicketViaSmtp } from '@/lib/sendSupportTicketViaSmtp';
-import { isResendDomainReady } from '@/lib/resendDomainReady';
+import { deliverTransactionalEmail } from '@/lib/emailDelivery';
 import {
   getSupabaseAnonKey,
   getSupabaseServiceRoleKey,
@@ -28,19 +27,8 @@ async function sendWelcomeEmail({ email, name, temporaryPassword }) {
     .filter(Boolean)
     .join('\n');
 
-  const smtp = await sendSupportTicketViaSmtp({ to: email, subject, text });
-  if (smtp.sent) return { sent: true };
-
-  const apiKey = process.env.RESEND_API_KEY?.trim();
-  if (apiKey && (await isResendDomainReady())) {
-    const { Resend } = await import('resend');
-    const resend = new Resend(apiKey);
-    const from = process.env.RESEND_FROM_EMAIL?.trim() || 'soporte@dralo.es';
-    const { error } = await resend.emails.send({ from, to: [email], subject, text });
-    if (!error) return { sent: true };
-  }
-
-  return { sent: false };
+  const result = await deliverTransactionalEmail({ to: email, subject, text });
+  return { sent: Boolean(result.ok) };
 }
 
 export async function POST(req) {

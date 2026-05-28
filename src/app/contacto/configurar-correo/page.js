@@ -88,8 +88,35 @@ export default function ConfigurarCorreoPage() {
         </button>
       </form>
 
-      <p style={{ marginTop: 20, fontSize: 14, color: '#666', lineHeight: 1.5 }}>
-        Alternativa sin Gmail: en .env.local añade <code>WEB3FORMS_ACCESS_KEY</code> desde{' '}
+      <div
+        style={{
+          marginTop: 20,
+          padding: 14,
+          background: '#fff8e6',
+          border: '1px solid #f6e05e',
+          borderRadius: 6,
+          fontSize: 14,
+          lineHeight: 1.55,
+          color: '#744210',
+        }}
+      >
+        <strong>Producción (www.dralo.es):</strong> esta página solo funciona en local. En{' '}
+        <strong>Vercel → english-practice → Settings → Environment Variables</strong> añade al
+        menos:
+        <ul style={{ margin: '0.5rem 0 0', paddingLeft: 20 }}>
+          <li>
+            <code>RESEND_API_KEY</code> (desde resend.com) y verifica <code>dralo.es</code>, o
+          </li>
+          <li>
+            <code>SUPPORT_SMTP_USER</code> + <code>SUPPORT_SMTP_PASS</code> (contraseña de
+            aplicación Gmail, 16 caracteres)
+          </li>
+        </ul>
+        En local puedes ejecutar: <code>node scripts/sync-email-env-vercel.mjs</code>
+      </div>
+
+      <p style={{ marginTop: 16, fontSize: 14, color: '#666', lineHeight: 1.5 }}>
+        Alternativa sin Gmail: <code>WEB3FORMS_ACCESS_KEY</code> desde{' '}
         <a href="https://web3forms.com" target="_blank" rel="noreferrer">
           web3forms.com
         </a>{' '}

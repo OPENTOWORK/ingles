@@ -1,39 +1,11 @@
 import { NextResponse } from 'next/server';
-import { Resend } from 'resend';
 import { createClient } from '@supabase/supabase-js';
-import { isResendDomainReady } from '@/lib/resendDomainReady';
-import { sendSupportTicketViaSmtp } from '@/lib/sendSupportTicketViaSmtp';
-import { isSupportSmtpReady } from '@/lib/supportSmtpCredentials';
+import { deliverTransactionalEmail } from '@/lib/emailDelivery';
 import { getSupabaseAnonKey, getSupabaseUrl } from '@/lib/supabaseEnv';
 import { userHasRole } from '@/utils/authRoles';
 
 const isValidEmail = (value) =>
   /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(String(value || '').trim().toLowerCase());
-
-async function sendOneEmail({ to, subject, text }) {
-  if (isSupportSmtpReady()) {
-    const smtp = await sendSupportTicketViaSmtp({ to, subject, text });
-    if (smtp.sent) return { ok: true, channel: 'smtp' };
-    if (!smtp.skipped) {
-      return { ok: false, error: smtp.error || 'Error SMTP' };
-    }
-  }
-
-  const apiKey = process.env.RESEND_API_KEY?.trim();
-  if (apiKey && (await isResendDomainReady())) {
-    const resend = new Resend(apiKey);
-    const from = process.env.RESEND_FROM_EMAIL?.trim() || 'soporte@dralo.es';
-    const { error } = await resend.emails.send({ from, to: [to], subject, text });
-    if (!error) return { ok: true, channel: 'resend' };
-    return { ok: false, error: error.message || 'Error Resend' };
-  }
-
-  return {
-    ok: false,
-    error:
-      'Correo no configurado. Configura SMTP en /contacto/configurar-correo o RESEND_API_KEY.',
-  };
-}
 
 export async function POST(req) {
   try {
@@ -91,7 +63,7 @@ export async function POST(req) {
     const errors = [];
 
     for (const to of recipients) {
-      const result = await sendOneEmail({ to, subject, text });
+      const result = await deliverTransactionalEmail({ to, subject, text });
       if (result.ok) {
         sent += 1;
       } else {

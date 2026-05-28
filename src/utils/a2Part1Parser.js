@@ -139,6 +139,38 @@ function parseA2Part1Items(block) {
 }
 
 /**
+ * Construye grupos MCQ solo desde el bloque Questions del enunciado (sin filas en BD).
+ */
+export function buildPart1GroupsFromPackItems(items = [], respuestas = []) {
+  const correctByQ = new Map();
+  for (const row of respuestas || []) {
+    if (row?.correcta !== true) continue;
+    const t = String(row.respuesta || '').trim();
+    const m = t.match(/^(\d{1,2})\s+([A-C])\b/i);
+    if (m) correctByQ.set(Number(m[1]), m[2].toUpperCase());
+  }
+
+  return items.map((item) => {
+    const qn = item.questionNumber;
+    const correctLetter = correctByQ.get(qn) || '';
+    return {
+      questionNumber: qn,
+      stimulusType: item.stimulusType || '',
+      stimulusImageUrl: item.imageUrl || '',
+      message: item.message || '',
+      prompt: item.prompt || '',
+      questionStem: item.message || '',
+      options: (item.options || []).map((opt) => ({
+        id: `a2-p1-pack-${qn}-${opt.letter}`,
+        respuesta: `${qn} ${opt.letter}) ${opt.text}`.trim(),
+        formattedText: `${opt.letter}) ${opt.text}`,
+        correcta: opt.letter === correctLetter,
+      })),
+    };
+  });
+}
+
+/**
  * Fusiona items del enunciado con grupos MCQ de la BD.
  */
 export function mergeA2Part1Groups(mcqGroups = [], part1Items = []) {

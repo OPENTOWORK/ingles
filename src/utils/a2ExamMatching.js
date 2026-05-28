@@ -232,6 +232,33 @@ export function parseA2Part2ProfileNames(texto = '') {
   return parseA2Part2Profiles(texto).map((p) => p.name);
 }
 
+/** Título e intro del panel Text (líneas antes del primer perfil A/B/C). */
+export function parseA2Part2TextIntro(texto = '') {
+  const lines = String(texto || '')
+    .replace(/\r\n/g, '\n')
+    .split('\n')
+    .map((l) => l.trim())
+    .filter(Boolean);
+  const intro = [];
+  for (const line of lines) {
+    if (/^[A-C]\)\s+/i.test(line)) break;
+    intro.push(line);
+  }
+  return {
+    title: intro[0] || '',
+    subtitle: intro.length > 1 ? intro.slice(1).join(' ') : '',
+  };
+}
+
+/** Instrucciones oficiales (bloque antes de «Text» en el enunciado). */
+export function parseA2Part2Directions(rawEnunciado = '') {
+  const normalized = String(rawEnunciado || '').replace(/\r\n/g, '\n').trim();
+  const textIdx = normalized.search(/\nText\s*\n/i);
+  let block = textIdx >= 0 ? normalized.slice(0, textIdx).trim() : normalized;
+  block = block.replace(/^Part\s*2\s*\n?/i, '').trim();
+  return block;
+}
+
 export function mergeA2McqPrompts(groupedAnswers, parsed) {
   const byNum = new Map(parsed.map((p) => [p.questionNumber, p]));
   return groupedAnswers.map((g) => {

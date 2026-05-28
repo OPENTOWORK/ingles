@@ -29,6 +29,7 @@
     "postinstall": "prisma generate && node setup.js",
     "supabase:auth-disable-email-confirm": "node scripts/supabase-patch-auth-mailer-autoconfirm.mjs",
     "support:email-setup": "node scripts/support-email-setup.mjs",
+    "sync:email-vercel": "node scripts/sync-email-env-vercel.mjs",
     "supabase:service-role-setup": "node scripts/supabase-service-role-setup.mjs",
     "supabase:sync-service-role": "node scripts/sync-supabase-service-role.mjs",
     "regen:a2-exam": "node --loader ./scripts/alias-loader.mjs scripts/regen-a2-exam-parts.mjs",

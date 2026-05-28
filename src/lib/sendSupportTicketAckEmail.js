@@ -1,6 +1,4 @@
-import { Resend } from 'resend';
-import { isResendDomainReady } from '@/lib/resendDomainReady';
-import { sendSupportTicketViaSmtp } from '@/lib/sendSupportTicketViaSmtp';
+import { deliverTransactionalEmail } from '@/lib/emailDelivery';
 
 /**
  * Confirmación al estudiante: hemos recibido el ticket y responderemos en ≤48 h.
@@ -29,37 +27,18 @@ export async function sendSupportTicketAckEmail({ to, name, subject }) {
     .filter((line) => line !== null)
     .join('\n');
 
-  const smtp = await sendSupportTicketViaSmtp({
+  const result = await deliverTransactionalEmail({
     to,
     subject: mailSubject,
     text,
   });
 
-  if (smtp.sent) {
-    return { sent: true, channel: smtp.channel };
-  }
-
-  const apiKey = process.env.RESEND_API_KEY?.trim();
-  if (apiKey && (await isResendDomainReady())) {
-    const resend = new Resend(apiKey);
-    const from = process.env.RESEND_FROM_EMAIL?.trim() || 'soporte@dralo.es';
-    const { error } = await resend.emails.send({
-      from,
-      to: [to],
-      subject: mailSubject,
-      text,
-    });
-    if (!error) {
-      return { sent: true, channel: 'resend' };
-    }
-    return {
-      sent: false,
-      error: error.message || 'No se pudo enviar el correo de confirmación.',
-    };
+  if (result.ok) {
+    return { sent: true, channel: result.channel };
   }
 
   return {
     sent: false,
-    error: smtp.error || 'Correo de confirmación no configurado (SMTP / Resend).',
+    error: result.error || 'Correo de confirmación no configurado.',
   };
 }

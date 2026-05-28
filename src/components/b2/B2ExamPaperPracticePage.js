@@ -35,15 +35,19 @@ import {
   describeA2PartDataGap,
   mergeA2McqPrompts,
   parseA2QuestionsFromEnunciado,
+  parseA2Part2Directions,
   parseA2Part2ProfileNames,
 } from '@/utils/a2ExamMatching';
-import { mergeA2Part1Groups, parseA2Part1Pack } from '@/utils/a2Part1Parser';
+import {
+  buildPart1GroupsFromPackItems,
+  mergeA2Part1Groups,
+  parseA2Part1Pack,
+} from '@/utils/a2Part1Parser';
 import { A2Part1ExamView } from '@/components/a2/A2Part1ExamView';
+import { A2Part2ExamView } from '@/components/a2/A2Part2ExamView';
 import {
   A2McqFeedback,
   A2McqOptionButtons,
-  A2Part2MatchingGrid,
-  A2Part2ProfilesText,
   A2Part3QuestionList,
   A2Part4ClozeOptions,
   A2ListeningPictureMcq,
@@ -623,6 +627,10 @@ function B2ExamPaperPracticePageInner({
     const fallback = splitEnunciadoAndTextFallback(rawPregunta);
     const textoExtracted = extractTextoBloque(rawPregunta, partNumber, { levelSlug }) || '';
     let texto = (textoExtracted || fallback.texto || '').trim();
+    // A2 Reading Part 1: el estímulo va en cada ítem (A2Part1ExamView), no en el panel "Text".
+    if (levelSlug === 'a2' && partNumber === 1) {
+      texto = '';
+    }
     let preguntasPart1Parse = [];
     if (levelSlug === 'b2' && partNumber === 1 && texto) {
       const split = splitPart1TextoYPreguntas(texto);
@@ -1016,9 +1024,10 @@ function B2ExamPaperPracticePageInner({
   const sectionMaxWidth = showLongWritingWithAi ? 'min(960px, 100%)' : '100%';
 
   const passageTextForPanel = useMemo(() => {
+    if (levelSlug === 'a2' && partNumber === 1) return '';
     if (!selectedPartContent.texto?.trim()) return '';
     return textoLinesForDisplay.join('\n');
-  }, [selectedPartContent.texto, textoLinesForDisplay]);
+  }, [levelSlug, partNumber, selectedPartContent.texto, textoLinesForDisplay]);
 
   const getPartTitle = (part) => {
     const n = Number(part?.nombre.match(/\d+/)?.[0] || 0);
@@ -1100,9 +1109,22 @@ function B2ExamPaperPracticePageInner({
   }, [levelSlug, partNumber, selectedQuestion?.enunciado]);
 
   const a2Part1Groups = useMemo(() => {
-    if (!a2Part1Pack) return effectiveMcqGroups;
-    return mergeA2Part1Groups(effectiveMcqGroups, a2Part1Pack.items);
-  }, [a2Part1Pack, effectiveMcqGroups]);
+    if (levelSlug !== 'a2' || partNumber !== 1) return effectiveMcqGroups;
+    const items = a2Part1Pack?.items || [];
+    if (effectiveMcqGroups.length) {
+      return mergeA2Part1Groups(effectiveMcqGroups, items);
+    }
+    if (items.length) {
+      return buildPart1GroupsFromPackItems(items, selectedQuestion?.respuestas || []);
+    }
+    return effectiveMcqGroups;
+  }, [
+    levelSlug,
+    partNumber,
+    a2Part1Pack,
+    effectiveMcqGroups,
+    selectedQuestion?.respuestas,
+  ]);
 
   const handleA2McqOptionSelect = useCallback(
     ({ group, groupIndex, option, questionKey }) => {
@@ -1966,7 +1988,11 @@ function B2ExamPaperPracticePageInner({
               </div>
               ) : (
               <B2ExamPracticeContent
-                title={getPartTitle(selectedPart)}
+                title={
+                  useA2OfficialReadingUi && (partNumber === 1 || partNumber === 2)
+                    ? ''
+                    : getPartTitle(selectedPart)
+                }
                 directionsText={
                   a2Part1Pack?.directions || selectedPartContent.enunciado
                 }
@@ -1974,14 +2000,29 @@ function B2ExamPaperPracticePageInner({
                 textLabel="Text"
                 questionsLabel="Questions"
                 passageText={passageTextForPanel}
-                passage={
-                  useA2OfficialReadingUi && partNumber === 2 ? (
-                    <A2Part2ProfilesText texto={passageTextForPanel} />
-                  ) : undefined
+                passage={undefined}
+                split={
+                  useA2OfficialReadingUi && (partNumber === 1 || partNumber === 2)
+                    ? false
+                    : 'auto'
                 }
-                split={useA2OfficialReadingUi && partNumber === 1 ? false : 'auto'}
-                showDirections={!(useA2OfficialReadingUi && partNumber === 1)}
-                showQuestionsHeading={!showLongWritingWithAi && !(useA2OfficialReadingUi && partNumber === 1)}
+                showDirections={
+                  !(useA2OfficialReadingUi && (partNumber === 1 || partNumber === 2))
+                }
+                showPassagePanel={
+                  !(useA2OfficialReadingUi && (partNumber === 1 || partNumber === 2))
+                }
+                showQuestionsHeading={
+                  !showLongWritingWithAi &&
+                  !(useA2OfficialReadingUi && (partNumber === 1 || partNumber === 2))
+                }
+                contentClassName={
+                  useA2OfficialReadingUi && partNumber === 1
+                    ? 'levels-exam-a2-part1'
+                    : useA2OfficialReadingUi && partNumber === 2
+                      ? 'levels-exam-a2-part2'
+                      : ''
+                }
                 beforeQuestions={
                   <>
                 {showAudioFromEnunciado && preguntaAudiosError ? (
@@ -2246,7 +2287,11 @@ function B2ExamPaperPracticePageInner({
                       ) : null}
                       {useA2OfficialReadingUi && partNumber === 1 ? (
                         <A2Part1ExamView
-                          directions={a2Part1Pack?.directions || ''}
+                          directions={
+                            a2Part1Pack?.directions ||
+                            selectedPart?.descripcion ||
+                            ''
+                          }
                           example={a2Part1Pack?.example}
                           groups={a2Part1Groups}
                           getQuestionKey={getQuestionKey}
@@ -2259,9 +2304,15 @@ function B2ExamPaperPracticePageInner({
                         />
                       ) : null}
                       {useA2OfficialReadingUi && partNumber === 2 ? (
-                        <A2Part2MatchingGrid
-                          groups={effectiveMcqGroups}
+                        <A2Part2ExamView
+                          directions={
+                            parseA2Part2Directions(selectedQuestion?.enunciado || '') ||
+                            selectedPart?.descripcion ||
+                            ''
+                          }
+                          passageText={passageTextForPanel}
                           profileNames={a2Part2ProfileNames}
+                          groups={effectiveMcqGroups}
                           getQuestionKey={getQuestionKey}
                           selectedPart={selectedPart}
                           selectedOptions={selectedOptions}

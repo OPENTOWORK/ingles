@@ -36,7 +36,7 @@ export function A2Part1ExamView({
           <p className="a2-p1-paper__example-label">Example</p>
           <div className="a2-p1-paper__example-grid">
             <div className="a2-p1-paper__example-stimulus">
-              <pre className="a2-p1-paper__example-text">{example.body}</pre>
+              <div className="a2-p1-paper__example-text">{example.body}</div>
             </div>
             <div className="a2-p1-paper__example-options">
               {example.options?.map((opt) => (
@@ -55,6 +55,14 @@ export function A2Part1ExamView({
         </section>
       ) : null}
 
+      {groups.length > 0 ? (
+        <div className="a2-p1-paper__cols-head" aria-hidden="true">
+          <span className="a2-p1-paper__cols-head-num" />
+          <span className="a2-p1-paper__cols-head-stimulus">Text / notice</span>
+          <span className="a2-p1-paper__cols-head-choices">Options</span>
+        </div>
+      ) : null}
+
       <div className="a2-p1-paper__items">
         {groups.map((group, groupIndex) => {
           const questionKey = getQuestionKey(
@@ -66,10 +74,12 @@ export function A2Part1ExamView({
           const correct = group.options?.find((o) => o.correcta);
           const hint = aiHintsByKey[questionKey];
 
+          const hasImage = Boolean(group.stimulusImageUrl);
+
           return (
             <article
               key={`a2-p1-item-${group.questionNumber}-${groupIndex}`}
-              className="a2-p1-paper__item"
+              className={`a2-p1-paper__item${hasImage ? ' a2-p1-paper__item--has-image' : ''}`}
             >
               <span className="a2-p1-paper__qnum">{group.questionNumber}</span>
               <A2Part1Stimulus
@@ -78,7 +88,11 @@ export function A2Part1ExamView({
                 imageUrl={group.stimulusImageUrl}
                 prompt={group.prompt}
               />
-              <div className="a2-p1-paper__choices" role="group" aria-label={`Question ${group.questionNumber}`}>
+              <div
+                className="a2-p1-paper__choices"
+                role="group"
+                aria-label={`Question ${group.questionNumber} options`}
+              >
                 {group.options?.map((option) => {
                   const m = String(option.formattedText || option.respuesta || '').match(
                     /^([A-C])\)\s*(.*)$/i,
