@@ -3,8 +3,8 @@ import { cookies } from 'next/headers';
 import { getSupabaseAnonKey, getSupabaseUrl } from '@/lib/supabaseEnv';
 
 export async function createSupabaseServerClient() {
-  const url = getSupabaseUrl();
-  const key = getSupabaseAnonKey();
+  const url = getSupabaseUrl() || '';
+  const key = getSupabaseAnonKey() || '';
 
   const cookieStore = await cookies();
 

@@ -35,8 +35,14 @@ export async function getSupabaseUserFromRequest(req) {
         getAll() {
           return cookieStore.getAll();
         },
-        setAll() {
-          /* Route Handler: no-op si no puede escribir cookies */
+        setAll(cookiesToSet) {
+          try {
+            cookiesToSet.forEach(({ name, value, options }) =>
+              cookieStore.set(name, value, options),
+            );
+          } catch {
+            /* Route Handler: puede fallar al escribir cookies */
+          }
         },
       },
     });
