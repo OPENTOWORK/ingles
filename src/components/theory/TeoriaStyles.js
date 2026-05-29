@@ -171,6 +171,12 @@ export function TeoriaGlobalStyles() {
         padding-top: 0;
         border-top: none;
       }
+      .chips--sections .chip {
+        padding: 10px 16px;
+        font-size: 0.95rem;
+        font-weight: 700;
+        letter-spacing: 0.01em;
+      }
       .chip {
         padding: 8px 12px;
         border-radius: 9999px;
@@ -330,9 +336,10 @@ export function TeoriaGlobalStyles() {
       }
       .card:hover {
         transform: translateY(-2px);
-        box-shadow: 0 18px 40px rgba(0, 0, 0, 0.1);
-        border-color: #0070f3;
-        background: #b0d6fa;
+        box-shadow: 0 12px 28px rgba(0, 0, 0, 0.08);
+        border-color: #cbd5e1;
+        background: #f8fafc;
+        text-decoration: none;
       }
       .card:focus {
         outline: none;
@@ -352,6 +359,19 @@ export function TeoriaGlobalStyles() {
         font-weight: 600;
         line-height: 1.25;
         color: var(--text);
+        text-decoration: none;
+      }
+      .theory-topics-page .theory-topic-card {
+        text-decoration: none;
+        border-radius: 18px;
+      }
+      .theory-topics-page .theory-topic-card:hover {
+        border-color: color-mix(in srgb, var(--section-accent, #2563eb) 35%, #eaeaea);
+        background: color-mix(in srgb, var(--section-accent, #2563eb) 5%, #fff);
+      }
+      .theory-topics-page .theory-topic-card .card__title {
+        font-size: 1.05rem;
+        font-weight: 700;
       }
       .card__levels {
         margin-top: 12px;

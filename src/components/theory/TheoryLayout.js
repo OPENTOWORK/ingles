@@ -59,7 +59,6 @@ const TheoryLayout = ({
   exercises = [],
   getExercises,
   prerequisites = [],
-  estimatedTime = "30 min",
   enableInlinePractice = true,
 }) => {
   const router = useRouter();
@@ -485,16 +484,6 @@ const TheoryLayout = ({
               }}>
                 Level {level}
               </span>
-              <span style={{
-                background: '#f7fafc',
-                color: '#4a5568',
-                padding: '0.25rem 0.75rem',
-                borderRadius: '20px',
-                fontSize: '0.9rem',
-                border: '1px solid #e2e8f0'
-              }}>
-                ⏱️ {estimatedTime}
-              </span>
               {prerequisites.length > 0 && (
                 <span style={{
                   background: '#eef2ff',
@@ -589,10 +578,9 @@ const TheoryLayout = ({
               display: inline-flex;
               gap: 6px;
               padding: 6px;
-              background: linear-gradient(180deg, #f8fafc 0%, #eef2ff 100%);
+              background: #f8fafc;
               border: 1px solid #e2e8f0;
               border-radius: 14px;
-              box-shadow: inset 0 1px 2px rgba(15, 23, 42, 0.05);
             }
             .theory-tab-btn {
               display: inline-flex;
@@ -611,18 +599,16 @@ const TheoryLayout = ({
                 transform 0.18s ease;
             }
             .theory-tab-btn:hover:not(.theory-tab-btn--active) {
-              background: rgba(255, 255, 255, 0.9);
+              background: #fff;
               color: #4338ca;
-              box-shadow: 0 2px 8px rgba(99, 102, 241, 0.12);
             }
             .theory-tab-btn--active {
               color: #fff;
-              background: linear-gradient(135deg, #667eea 0%, #5b6fd6 50%, #764ba2 100%);
-              box-shadow: 0 4px 16px rgba(102, 126, 234, 0.45), 0 1px 0 rgba(255, 255, 255, 0.2) inset;
+              background: #6366f1;
+              box-shadow: none;
             }
             .theory-tab-btn--active:hover {
-              transform: translateY(-1px);
-              box-shadow: 0 6px 20px rgba(102, 126, 234, 0.5), 0 1px 0 rgba(255, 255, 255, 0.2) inset;
+              background: #4f46e5;
             }
             .theory-tab-btn__icon {
               font-size: 1.05rem;
@@ -639,13 +625,12 @@ const TheoryLayout = ({
               font-size: 0.75rem;
               font-weight: 700;
               line-height: 1;
-              background: linear-gradient(135deg, #667eea, #764ba2);
-              color: #fff;
-              box-shadow: 0 2px 6px rgba(102, 126, 234, 0.35);
+              background: #e0e7ff;
+              color: #4338ca;
             }
             .theory-tab-btn--active .theory-tab-btn__count {
-              background: rgba(255, 255, 255, 0.28);
-              box-shadow: none;
+              background: rgba(255, 255, 255, 0.25);
+              color: #fff;
             }
           `}</style>
         </div>

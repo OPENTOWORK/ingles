@@ -39,6 +39,13 @@ export function B2ExamFormattedEnunciado({ blocks, keyPrefix = 'enunciado' }) {
         />
       );
     }
+    if (block.type === 'partTitle') {
+      return (
+        <p key={`${keyPrefix}-partTitle-${index}`} className="levels-exam-enunciado__part-title">
+          {block.text}
+        </p>
+      );
+    }
     const style = blockStyles[block.type] || blockStyles.paragraph;
     return (
       <p key={`${keyPrefix}-${block.type}-${index}`} style={style}>

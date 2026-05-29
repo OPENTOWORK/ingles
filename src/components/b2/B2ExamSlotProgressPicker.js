@@ -84,7 +84,7 @@ export function B2ExamSlotProgressPicker({
   progressBySlot = {},
   partsInPaper = 4,
   examLabelsBySlot = {},
-  lang = 'es',
+  lang = 'en',
 }) {
   const en = lang === 'en';
 

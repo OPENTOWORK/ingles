@@ -71,7 +71,7 @@ export default function TheoryHub() {
       <PageHero
         eyebrow="Study hub"
         title="Theory"
-        description="Explore grammar, vocabulary, and pronunciation — organised by skill area."
+        description="Explore grammar, vocabulary and pronunciation."
         showMascot={true}
         mascotVariant={4}
         mascotWidth={156}
@@ -116,12 +116,13 @@ export default function TheoryHub() {
         filteredTopics.length === 0 ? (
           <TeoriaEmptyState onReset={clearFilters} />
         ) : (
-          <ul className="topic-grid theory-hub-topic-grid">
+          <ul className="topic-grid theory-hub-topic-grid theory-hub-topic-grid--search">
             {filteredTopics.map((topic, i) => {
               const unlock = topicUnlockByHref[topic.href];
               const isLocked = Boolean(unlock?.locked);
               const area = THEORY_SECTION_CATALOG.find((a) => a.key === topic.sectionKey);
               const percent = unlock?.percent ?? topicProgressByHref?.[topic.href] ?? 0;
+              const accent = area?.accent ?? '#7c3aed';
 
               return (
                 <li
@@ -130,14 +131,17 @@ export default function TheoryHub() {
                 >
                   {isLocked ? (
                     <>
-                      <div className="card theory-topic-card card--disabled" aria-disabled="true">
+                      <div
+                        className="card theory-topic-card card--disabled"
+                        aria-disabled="true"
+                        style={{ '--section-accent': accent }}
+                      >
                         <span className="card__section">{topic.sectionKey}</span>
                         <div className="card__title">{topic.text}</div>
                         <ExamTheoryProgressBar
                           percent={percent}
-                          label={topic.text}
                           size="sm"
-                          accentColor={area?.accent ?? '#7c3aed'}
+                          accentColor={accent}
                         />
                         {unlock?.requiredPrevious ? (
                           <p className="theory-topic-card__lock-hint">
@@ -148,14 +152,17 @@ export default function TheoryHub() {
                       <div className="theory-topic-item__lock">Blocked</div>
                     </>
                   ) : (
-                    <Link href={topic.href} className="card theory-topic-card">
+                    <Link
+                      href={topic.href}
+                      className="card theory-topic-card"
+                      style={{ '--section-accent': accent }}
+                    >
                       <span className="card__section">{topic.sectionKey}</span>
                       <div className="card__title">{topic.text}</div>
                       <ExamTheoryProgressBar
                         percent={percent}
-                        label={topic.text}
                         size="sm"
-                        accentColor={area?.accent ?? '#7c3aed'}
+                        accentColor={accent}
                       />
                     </Link>
                   )}
@@ -318,6 +325,32 @@ function TheoryHubStyles() {
         .theory-hub-page .theory-hub-area-grid {
           grid-template-columns: repeat(3, minmax(0, 1fr));
         }
+      }
+      .theory-hub-page .theory-hub-topic-grid--search .theory-topic-card {
+        text-decoration: none;
+        border-color: color-mix(in srgb, var(--section-accent, #7c3aed) 28%, #eaeaea);
+      }
+      .theory-hub-page .theory-hub-topic-grid--search .theory-topic-card:hover {
+        border-color: var(--section-accent, #7c3aed);
+        background: color-mix(in srgb, var(--section-accent, #7c3aed) 6%, #fff);
+        transform: translateY(-2px);
+      }
+      .theory-hub-page .theory-hub-topic-grid--search .card__section {
+        color: var(--section-accent, #64748b);
+        font-size: 0.72rem;
+        font-weight: 800;
+        letter-spacing: 0.06em;
+        text-decoration: none;
+      }
+      .theory-hub-page .theory-hub-topic-grid--search .card__title {
+        font-size: 1.125rem;
+        font-weight: 700;
+        line-height: 1.3;
+        text-decoration: none;
+      }
+      .theory-hub-page .theory-hub-topic-grid--search .card:hover .card__title,
+      .theory-hub-page .theory-hub-topic-grid--search .card:focus .card__title {
+        text-decoration: none;
       }
     `}</style>
   );

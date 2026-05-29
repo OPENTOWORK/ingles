@@ -117,6 +117,7 @@ export default function TheoryTopicList({
                     <div
                       className="card theory-topic-card card--disabled"
                       aria-disabled="true"
+                      style={{ '--section-accent': sectionAccent }}
                     >
                       <TopicCardBody topic={topic} percent={percent} accentColor={sectionAccent} />
                       {unlock?.requiredPrevious ? (
@@ -128,7 +129,11 @@ export default function TheoryTopicList({
                     <div className="theory-topic-item__lock">Blocked</div>
                   </>
                 ) : (
-                  <Link href={topic.href} className="card theory-topic-card">
+                  <Link
+                    href={topic.href}
+                    className="card theory-topic-card"
+                    style={{ '--section-accent': sectionAccent }}
+                  >
                     <TopicCardBody topic={topic} percent={percent} accentColor={sectionAccent} />
                   </Link>
                 )}
@@ -148,12 +153,7 @@ function TopicCardBody({ topic, percent, accentColor }) {
   return (
     <>
       <div className="card__title">{topic.text}</div>
-      <ExamTheoryProgressBar
-        percent={percent}
-        label={topic.text}
-        size="sm"
-        accentColor={accentColor}
-      />
+      <ExamTheoryProgressBar percent={percent} size="sm" accentColor={accentColor} />
     </>
   );
 }

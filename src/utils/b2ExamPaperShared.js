@@ -1,3 +1,5 @@
+import { parseB2KeyWordTransformItems } from '@/utils/b2ExamTextBlocks';
+
 /** @param {string} rawText */
 export function splitEnunciadoAndTextFallback(rawText = '') {
   const normalized = rawText.replace(/\r\n/g, '\n').trim();
@@ -25,6 +27,9 @@ export function getFormattedEnunciado(rawText = '') {
       const imageMatch = line.match(/^IMAGE:\s*(\S+)/i) || line.match(/^[A-G]\)\s*IMAGE:\s*(\S+)/i);
       if (imageMatch) {
         return { type: 'image', url: imageMatch[1], text: line };
+      }
+      if (/^(?:part|parte)\s+\d+\s*(?:[:–—-]|\s)/i.test(line)) {
+        return { type: 'partTitle', text: line };
       }
       if (lower.startsWith('example:')) return { type: 'label', text: line };
       if (lower === 'text') return { type: 'label', text: line };
@@ -200,6 +205,13 @@ export function inferOpenQuestionNumbersFromPrompt(rawText = '', partNumber = 0)
     ...new Set(gapMatches.map((m) => Number(m[1])).filter((n) => Number.isFinite(n) && n > 0)),
   ].sort((a, b) => a - b);
   if (gapNums.length > 0) return gapNums;
+
+  if (partNumber === 4) {
+    const fromKwt = parseB2KeyWordTransformItems(text)
+      .map((item) => item.questionNumber)
+      .filter((n) => Number.isFinite(n) && n > 0);
+    if (fromKwt.length > 0) return [...new Set(fromKwt)].sort((a, b) => a - b);
+  }
 
   const lineMatches = [...text.matchAll(/(?:^|\n)\s*(\d{1,2})\b/gm)];
   const lineNums = [

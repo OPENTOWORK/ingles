@@ -34,6 +34,8 @@ import { resolveB2ExamenId, fetchB2PreguntasByExamen } from '@/utils/b2ResolveEx
 import { getCachedB2Level } from '@/utils/b2LevelCache';
 import { formatLevelsPartDisplayName } from '@/utils/formatLevelsPartDisplayName';
 import { B2ExamPracticeContent, B2ExamQuestionItem } from '@/components/b2/B2ExamPracticeContent';
+import B2ExamInlineOpenClozePassage from '@/components/b2/B2ExamInlineOpenClozePassage';
+import B2ExamInlineKeyWordPassage from '@/components/b2/B2ExamInlineKeyWordPassage';
 import {
   getSessionUserId,
   mergeLevelsEstadisticas,
@@ -66,6 +68,9 @@ function getFormattedEnunciado(rawText = '') {
     .filter(Boolean)
     .map((line) => {
       const lower = line.toLowerCase();
+      if (/^(?:part|parte)\s+\d+\s*(?:[:–—-]|\s)/i.test(line)) {
+        return { type: 'partTitle', text: line };
+      }
       if (lower.startsWith('example:')) return { type: 'label', text: line };
       if (lower === 'text') return { type: 'label', text: line };
       if (/^(answer:)/i.test(line)) return { type: 'answer', text: line };
@@ -355,6 +360,8 @@ function B2ReadingExamsPageInner() {
 
   const isUoePart = isCombinedPaper && partNumberReading >= 1 && partNumberReading <= 4;
   const isOpenClozePart = isCombinedPaper && partNumberReading >= 2 && partNumberReading <= 4;
+  const isKeyWordPart = isCombinedPaper && partNumberReading === 4;
+  const isInlinePassagePart = isOpenClozePart;
   const isUoePart1 = isCombinedPaper && partNumberReading === 1;
 
   /** Mismo formato de panel de texto que Parte 1 (Use of English) para partes 5–7. */
@@ -764,6 +771,53 @@ function B2ReadingExamsPageInner() {
     ],
   );
 
+  const handleOpenGapCheck = useCallback(
+    (questionNumber, questionKey, currentValue) => {
+      if (typeof openChecks[questionKey] === 'boolean') return;
+      const expectedAnswers = openAnswerMap.get(questionNumber) || new Set();
+      const isCorrect = expectedAnswers.has(normalizeText(currentValue));
+      const nextOpenChecks = { ...openChecks, [questionKey]: isCorrect };
+      setOpenChecks(nextOpenChecks);
+      const correctChoiceText =
+        [...expectedAnswers].slice(0, 4).join(' · ') || 'model answer';
+      const answersFromDatabase = [...expectedAnswers].join(' · ');
+      requestAiJustification(questionKey, {
+        partLabel: selectedPart?.nombre || '',
+        questionLabel: `Question ${questionNumber}`,
+        userChoiceText: currentValue,
+        correctChoiceText,
+        isCorrect,
+        answersFromDatabase: answersFromDatabase || undefined,
+      });
+      void (async () => {
+        const uid = await getSessionUserId();
+        const pid = selectedQuestion?.preguntaId;
+        const parteId = selectedPart?.id;
+        if (!uid || !pid || !parteId) return;
+        const { error } = await mergeLevelsEstadisticas({
+          userId: uid,
+          preguntaId: pid,
+          parteId,
+          deltaEvaluadas: 1,
+          deltaCorrectas: isCorrect ? 1 : 0,
+          deltaIncorrectas: isCorrect ? 0 : 1,
+        });
+        if (error) {
+          console.warn('levels_estadisticas (eval):', error.message || error);
+        }
+      })();
+      trySavePartAfterAnswer({ openChecks: nextOpenChecks });
+    },
+    [
+      openChecks,
+      openAnswerMap,
+      requestAiJustification,
+      selectedQuestion?.preguntaId,
+      selectedPart?.id,
+      trySavePartAfterAnswer,
+    ],
+  );
+
   const scorePanelProps = {
     correctCount: partScoreMetrics.correctCount,
     totalSlots: b2PartCfg?.total ?? partScoreMetrics.totalSlots,
@@ -870,121 +924,52 @@ function B2ReadingExamsPageInner() {
                 directionsLabel={isUoePart1 ? 'Instructions' : 'Directions'}
                 textLabel="Text"
                 questionsLabel="Questions"
-                passageText={selectedPartContent.texto}
-                split="auto"
+                passageText={isInlinePassagePart ? '' : selectedPartContent.texto}
+                passage={
+                  isKeyWordPart ? (
+                    <B2ExamInlineKeyWordPassage
+                      text={selectedPartContent.texto || selectedQuestion?.enunciado || ''}
+                      activeQuestionNumbers={openQuestionNumbers}
+                      getQuestionKey={(questionNumber) =>
+                        getQuestionKey(selectedPart.id, questionNumber, 'open')
+                      }
+                      openInputs={openInputs}
+                      onInputChange={(questionKey, value) => {
+                        setOpenInputs((prev) => ({ ...prev, [questionKey]: value }));
+                      }}
+                      openChecks={openChecks}
+                      onCheckGap={handleOpenGapCheck}
+                      openAnswerMap={openAnswerMap}
+                      hideFeedback={hideFeedback}
+                      aiHintsByKey={aiHintsByKey}
+                    />
+                  ) : isInlinePassagePart ? (
+                    <B2ExamInlineOpenClozePassage
+                      text={selectedPartContent.texto}
+                      activeQuestionNumbers={openQuestionNumbers}
+                      getQuestionKey={(questionNumber) =>
+                        getQuestionKey(selectedPart.id, questionNumber, 'open')
+                      }
+                      openInputs={openInputs}
+                      onInputChange={(questionKey, value) => {
+                        setOpenInputs((prev) => ({ ...prev, [questionKey]: value }));
+                      }}
+                      openChecks={openChecks}
+                      onCheckGap={handleOpenGapCheck}
+                      openAnswerMap={openAnswerMap}
+                      hideFeedback={hideFeedback}
+                      inputPlaceholder="Write one word"
+                      aiHintsByKey={aiHintsByKey}
+                    />
+                  ) : null
+                }
+                split={isInlinePassagePart ? true : 'auto'}
+                contentClassName={isInlinePassagePart ? 'levels-exam-open-cloze-inline' : ''}
+                showQuestionsHeading={!isInlinePassagePart}
                 questions={
-                  <>
-                    {isOpenClozePart
-                      ? openQuestionNumbers.map((questionNumber) => {
-                          const questionKey = getQuestionKey(selectedPart.id, questionNumber, 'open');
-                          const currentValue = openInputs[questionKey] || '';
-                          const checkResult = openChecks[questionKey];
-                          const isAnswerLocked = !hideFeedback && typeof checkResult === 'boolean';
-                          return (
-                            <B2ExamQuestionItem key={`open-${selectedQuestion.preguntaId}-${questionNumber}`}>
-                              <p style={{ margin: '0 0 0.65rem', fontWeight: 700, color: '#2d3748' }}>
-                                Question {questionNumber}
-                              </p>
-                              <div style={{ display: 'flex', gap: '0.6rem', alignItems: 'center', flexWrap: 'wrap' }}>
-                                <input
-                                  type="text"
-                                  value={currentValue}
-                                  readOnly={isAnswerLocked}
-                                  onChange={(e) => {
-                                    if (isAnswerLocked) return;
-                                    const value = e.target.value;
-                                    setOpenInputs((prev) => ({ ...prev, [questionKey]: value }));
-                                  }}
-                                  placeholder={partNumberReading === 4 ? 'Your answer' : 'Write one word'}
-                                  style={{
-                                    minWidth: '240px',
-                                    borderRadius: '8px',
-                                    border: '1px solid #cbd5e0',
-                                    padding: '0.65rem 0.75rem',
-                                    background: isAnswerLocked ? '#f7fafc' : '#fff',
-                                    cursor: isAnswerLocked ? 'not-allowed' : 'text',
-                                  }}
-                                />
-                                {!isAnswerLocked && !hideFeedback ? (
-                                  <button
-                                    type="button"
-                                    onClick={() => {
-                                      if (typeof openChecks[questionKey] === 'boolean') return;
-                                      const expectedAnswers = openAnswerMap.get(questionNumber) || new Set();
-                                      const isCorrect = expectedAnswers.has(normalizeText(currentValue));
-                                      const nextOpenChecks = { ...openChecks, [questionKey]: isCorrect };
-                                      setOpenChecks(nextOpenChecks);
-                                      const correctChoiceText =
-                                        [...expectedAnswers].slice(0, 4).join(' · ') || 'model answer';
-                                      const answersFromDatabase = [...expectedAnswers].join(' · ');
-                                      requestAiJustification(questionKey, {
-                                        partLabel: selectedPart?.nombre || '',
-                                        questionLabel: `Question ${questionNumber}`,
-                                        userChoiceText: currentValue,
-                                        correctChoiceText,
-                                        isCorrect,
-                                        answersFromDatabase: answersFromDatabase || undefined,
-                                      });
-                                      void (async () => {
-                                        const uid = await getSessionUserId();
-                                        const pid = selectedQuestion?.preguntaId;
-                                        const parteId = selectedPart?.id;
-                                        if (!uid || !pid || !parteId) return;
-                                        const { error } = await mergeLevelsEstadisticas({
-                                          userId: uid,
-                                          preguntaId: pid,
-                                          parteId,
-                                          deltaEvaluadas: 1,
-                                          deltaCorrectas: isCorrect ? 1 : 0,
-                                          deltaIncorrectas: isCorrect ? 0 : 1,
-                                        });
-                                        if (error) {
-                                          console.warn('levels_estadisticas (eval):', error.message || error);
-                                        }
-                                      })();
-                                      trySavePartAfterAnswer({ openChecks: nextOpenChecks });
-                                    }}
-                                    style={{
-                                      borderRadius: '8px',
-                                      border: '1px solid #2b6cb0',
-                                      background: '#ebf8ff',
-                                      color: '#1a365d',
-                                      padding: '0.6rem 0.9rem',
-                                      cursor: 'pointer',
-                                    }}
-                                  >
-                                    Check
-                                  </button>
-                                ) : null}
-                              </div>
-                              {!hideFeedback && typeof checkResult === 'boolean' && (
-                                <>
-                                  <p
-                                    style={{
-                                      margin: '0.7rem 0 0',
-                                      fontWeight: 700,
-                                      color: checkResult ? '#2f855a' : '#c53030',
-                                    }}
-                                  >
-                                    {checkResult ? 'Correct' : 'Incorrect'}
-                                  </p>
-                                  {(() => {
-                                    const expected = openAnswerMap.get(questionNumber);
-                                    const list = expected && expected.size > 0 ? [...expected] : [];
-                                    return (
-                                      <p style={{ margin: '0.4rem 0 0', fontWeight: 600, color: '#1f2937' }}>
-                                        Correct answer:{' '}
-                                        {list.length > 0 ? list.join(' · ') : 'Not available'}
-                                      </p>
-                                    );
-                                  })()}
-                                </>
-                              )}
-                              <LevelsAnswerJustification hint={aiHintsByKey[questionKey]} />
-                            </B2ExamQuestionItem>
-                          );
-                        })
-                      : groupedAnswersForUiAndScore.map((group, groupIndex) => (
+                  isInlinePassagePart
+                    ? null
+                    : groupedAnswersForUiAndScore.map((group, groupIndex) => (
                       <B2ExamQuestionItem
                         key={`group-${selectedQuestion.preguntaId}-${group.questionNumber ?? 'extra'}-${groupIndex}`}
                       >
@@ -1108,8 +1093,7 @@ function B2ReadingExamsPageInner() {
                           );
                         })()}
                       </B2ExamQuestionItem>
-                    ))}
-                  </>
+                    ))
                 }
               />
             )}

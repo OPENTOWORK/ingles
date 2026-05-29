@@ -1426,6 +1426,16 @@ function B2ExamPaperPracticePageInner({
                     <div className="levels-exam-split__enunciado">
                       <p className="levels-exam-split__section-title">Directions</p>
                       {getFormattedEnunciado(selectedPartContent.enunciado).map((block, index) => {
+                      if (block.type === 'partTitle') {
+                        return (
+                          <p
+                            key={`enunciado-${block.type}-${index}`}
+                            className="levels-exam-enunciado__part-title"
+                          >
+                            {block.text}
+                          </p>
+                        );
+                      }
                       if (block.type === 'label') {
                         return (
                           <p

@@ -60,8 +60,8 @@ export default function TheoryExerciseLevelFilter({
 
         .theory-level-filter__btn--active {
           color: #fff;
-          background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-          box-shadow: 0 4px 12px rgba(102, 126, 234, 0.35);
+          background: #6366f1;
+          box-shadow: none;
         }
 
         .theory-level-filter__btn:focus-visible {

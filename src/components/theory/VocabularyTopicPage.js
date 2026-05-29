@@ -77,7 +77,6 @@ export default function VocabularyTopicPage({ topicId }) {
       level={topic.level || 'B1'}
       theoryContent={theoryContent}
       getExercises={getExercises}
-      estimatedTime="30 min"
     />
   );
 }

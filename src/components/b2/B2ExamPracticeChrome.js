@@ -1,5 +1,6 @@
 'use client';
 
+import SiteMascot from '@/components/SiteMascot';
 import { B2ExamSlotProgressPicker } from '@/components/b2/B2ExamSlotProgressPicker';
 import LevelsCategoryTimer from '@/components/levels/LevelsCategoryTimer';
 import LevelsPartScorePanel from '@/components/levels/LevelsPartScorePanel';
@@ -21,9 +22,10 @@ function getPartTabLabel(part, lang) {
 export function B2ExamPracticeLayout({ examPracticeOpen, children }) {
   return (
     <main
+      className="levels-exam-practice-root"
       style={{
         padding: '2rem',
-        fontFamily: 'Segoe UI, sans-serif',
+        fontFamily: 'Arial, Helvetica, sans-serif',
         ...(!examPracticeOpen
           ? {
               minHeight: 'calc(100vh - 4rem)',
@@ -89,6 +91,9 @@ export function B2ExamPracticeChrome({
         <div className="levels-b2-practice">
           <header className="levels-b2-practice__header">
             <h1 className="levels-b2-practice__title">{title}</h1>
+            <div className="levels-b2-practice__mascot" aria-hidden>
+              <SiteMascot variant={10} width={128} alt="" />
+            </div>
             {subtitle ? <p className="levels-b2-practice__subtitle">{subtitle}</p> : null}
 
             {showRefresh && onRefresh ? (

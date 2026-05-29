@@ -18,6 +18,8 @@ import { clearAssistantDismissed } from '@/components/chat/SiteAssistantWidget';
 import DeferredAppSideMenu from '@/components/layout/DeferredAppSideMenu';
 import RouteLoadingMascot from '@/components/RouteLoadingMascot';
 import PlacementTestNotice from '@/components/layout/PlacementTestNotice';
+import SiteMascot from '@/components/SiteMascot';
+import { MASCOT_LOGO_VARIANT } from '@/config/mascotAssets';
 
 const Toaster = dynamic(
   () => import('react-hot-toast').then((mod) => ({ default: mod.Toaster })),
@@ -182,6 +184,9 @@ export default function RootLayoutClient({ children }) {
             <Link href="/" className="site-header__logo">
               <img src="/uk-flag.png" alt="UK Flag" className="site-header__flag bandera" />
               <span>Dralo Academy</span>
+              <span className="site-header__brand-mascot" aria-hidden>
+                <SiteMascot variant={MASCOT_LOGO_VARIANT} width={40} />
+              </span>
             </Link>
           </div>
         </header>
@@ -201,6 +206,9 @@ export default function RootLayoutClient({ children }) {
             <Link href="/" className="site-header__logo">
               <img src="/uk-flag.png" alt="UK Flag" className="site-header__flag bandera" />
               <span>Dralo Academy</span>
+              <span className="site-header__brand-mascot" aria-hidden>
+                <SiteMascot variant={MASCOT_LOGO_VARIANT} width={40} />
+              </span>
             </Link>
           </div>
         </header>
@@ -265,6 +273,9 @@ export default function RootLayoutClient({ children }) {
           <Link href="/" className="site-header__logo">
             <img src="/uk-flag.png" alt="UK Flag" className="site-header__flag bandera" />
             <span>Dralo Academy</span>
+            <span className="site-header__brand-mascot" aria-hidden>
+              <SiteMascot variant={MASCOT_LOGO_VARIANT} width={40} />
+            </span>
           </Link>
 
           <AppNav session={session} userRole={userRole} onLogout={handleLogout} />
@@ -415,7 +426,7 @@ export default function RootLayoutClient({ children }) {
           </div>
         </div>
         <p className="legal-footer-copy">
-          Ejercicios disenados para practicar tus habilidades en ingles.
+          Ejercicios diseñados para practicar tus habilidades en inglés.
         </p>
         <p className="legal-footer-copy">
           © {new Date().getFullYear()} Dralo

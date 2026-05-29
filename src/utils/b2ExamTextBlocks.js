@@ -507,3 +507,99 @@ export function extractListeningMatchingOptionPool(linesOrText) {
   }
   return pool;
 }
+
+/** Hueco en segunda frase (Key Word Transformation): puntos o guiones bajos. */
+export const KEY_WORD_GAP_RE = /_{2,}|\.{4,}/;
+
+/**
+ * Parsea ítems de Parte 4 (Key Word Transformations) desde el bloque Questions del enunciado.
+ *
+ * @param {string} rawText
+ * @returns {Array<{
+ *   questionNumber: number,
+ *   sentence1: string,
+ *   keyword: string,
+ *   sentence2Before: string,
+ *   sentence2After: string,
+ *   isExample: boolean,
+ * }>}
+ */
+export function parseB2KeyWordTransformItems(rawText = '') {
+  const t = stripAnswerKeyBlock(String(rawText || '').replace(/\r\n/g, '\n').trim());
+  if (!t) return [];
+
+  const lines = t.split('\n').map((l) => l.trim()).filter(Boolean);
+  const qIdx = lines.findIndex((l) => /^questions$/i.test(l));
+  const scan = qIdx >= 0 ? lines.slice(qIdx + 1) : lines;
+
+  /** @type {ReturnType<typeof parseB2KeyWordTransformItems>} */
+  const items = [];
+
+  for (let i = 0; i < scan.length; i++) {
+    const line = scan[i];
+    if (/^answer\s*:/i.test(line) || /^answer key/i.test(line)) break;
+
+    const numOnly = line.match(/^(\d{1,2})$/);
+    if (numOnly) {
+      const questionNumber = Number(numOnly[1]);
+      const sentence1 = (scan[i + 1] || '').trim();
+      const keywordLine = (scan[i + 2] || '').trim();
+      const sentence2Line = (scan[i + 3] || '').trim();
+      if (!sentence1 || !sentence2Line || !KEY_WORD_GAP_RE.test(sentence2Line)) {
+        continue;
+      }
+      const gapMatch = sentence2Line.match(KEY_WORD_GAP_RE);
+      const gapStart = gapMatch?.index ?? 0;
+      const gapStr = gapMatch?.[0] ?? '';
+      items.push({
+        questionNumber,
+        sentence1,
+        keyword: keywordLine.replace(/^key\s*word\s*:\s*/i, '').trim() || keywordLine,
+        sentence2Before: sentence2Line.slice(0, gapStart),
+        sentence2After: sentence2Line.slice(gapStart + gapStr.length),
+        isExample: questionNumber === 0,
+      });
+      i += 3;
+      continue;
+    }
+
+    const glued = line.match(/^(\d{1,2})(.+)$/);
+    if (!glued) continue;
+
+    const questionNumber = Number(glued[1]);
+    const rest = glued[2].trim();
+    const sentence2Line = (scan[i + 1] || '').trim();
+    if (!sentence2Line || !KEY_WORD_GAP_RE.test(sentence2Line)) continue;
+
+    let sentence1 = rest;
+    let keyword = '';
+
+    const dotted = rest.match(/^(.+?)\.([A-Za-z]+)$/);
+    if (dotted) {
+      sentence1 = dotted[1].trim();
+      keyword = dotted[2];
+    } else {
+      const tail = rest.match(/([A-Za-z]+)$/);
+      if (tail) {
+        keyword = tail[1];
+        sentence1 = rest.slice(0, -keyword.length).trim();
+      }
+    }
+
+    const gapMatch = sentence2Line.match(KEY_WORD_GAP_RE);
+    const gapStart = gapMatch?.index ?? 0;
+    const gapStr = gapMatch?.[0] ?? '';
+
+    items.push({
+      questionNumber,
+      sentence1,
+      keyword,
+      sentence2Before: sentence2Line.slice(0, gapStart),
+      sentence2After: sentence2Line.slice(gapStart + gapStr.length),
+      isExample: questionNumber === 0,
+    });
+    i += 1;
+  }
+
+  return items;
+}

@@ -1,20 +1,24 @@
 /* Shared training layout & typography */
 .page {
   min-height: 100vh;
-  background: linear-gradient(180deg, #f8fafc 0%, #f1f5f9 100%);
-  padding: 2rem 1.25rem 3rem;
+  background: var(--bg, #f8fafc);
+  padding: clamp(20px, 4vw, 32px) clamp(14px, 3vw, 20px) 3rem;
   font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
   color: #0f172a;
+  max-width: 1100px;
+  margin: 0 auto;
+  box-sizing: border-box;
 }
 
 .pageNarrow {
   min-height: 100vh;
-  background: linear-gradient(180deg, #f8fafc 0%, #f1f5f9 100%);
-  padding: 2rem 1.25rem 3rem;
+  background: var(--bg, #f8fafc);
+  padding: clamp(20px, 4vw, 32px) clamp(14px, 3vw, 20px) 3rem;
   font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
   color: #0f172a;
   max-width: 720px;
   margin: 0 auto;
+  box-sizing: border-box;
 }
 
 .header {

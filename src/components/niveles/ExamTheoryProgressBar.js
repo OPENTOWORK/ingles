@@ -15,12 +15,10 @@ export default function ExamTheoryProgressBar({
 
   return (
     <div className={`${styles.wrap} ${styles[size]}`}>
-      {label ? (
-        <div className={styles.labelRow}>
-          <span className={styles.label}>{label}</span>
-          <span className={styles.value}>{safePercent}%</span>
-        </div>
-      ) : null}
+      <div className={styles.labelRow}>
+        {label ? <span className={styles.label}>{label}</span> : <span className={styles.label} aria-hidden />}
+        <span className={styles.value}>{safePercent}%</span>
+      </div>
       <div
         className={styles.track}
         role="progressbar"

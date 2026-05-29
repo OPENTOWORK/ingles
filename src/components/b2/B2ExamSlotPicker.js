@@ -3,13 +3,15 @@
 import { B2_EXAM_SLOT_MAX } from '@/utils/b2ResolveExam';
 
 /**
- * @param {{ value: number, onSelect: (n: number) => void }} props
+ * @param {{ value: number, onSelect: (n: number) => void, lang?: 'en' | 'es' }} props
  */
-export function B2ExamSlotPicker({ value, onSelect }) {
+export function B2ExamSlotPicker({ value, onSelect, lang = 'en' }) {
+  const en = lang === 'en';
+
   return (
     <div
       role="group"
-      aria-label="Elegir examen"
+      aria-label={en ? 'Choose exam' : 'Elegir examen'}
       style={{
         display: 'flex',
         flexWrap: 'wrap',
@@ -19,7 +21,9 @@ export function B2ExamSlotPicker({ value, onSelect }) {
         marginTop: '0.75rem',
       }}
     >
-      <span style={{ fontSize: '0.9rem', fontWeight: 600, color: '#374151' }}>Examen</span>
+      <span style={{ fontSize: '0.9rem', fontWeight: 600, color: '#374151' }}>
+        {en ? 'Exam' : 'Examen'}
+      </span>
       {Array.from({ length: B2_EXAM_SLOT_MAX }, (_, i) => i + 1).map((n) => {
         const active = value === n;
         return (
@@ -40,7 +44,7 @@ export function B2ExamSlotPicker({ value, onSelect }) {
               boxShadow: active ? '0 2px 8px rgba(4,120,87,.35)' : 'none',
             }}
           >
-            Examen {n}
+            {en ? `Exam ${n}` : `Examen ${n}`}
           </button>
         );
       })}
