@@ -46,7 +46,7 @@ function ChartTooltip({ active, payload }) {
       {d.scorePct != null ? (
         <p className="lsp-chart-tip__score">{d.scorePct}% de acierto</p>
       ) : (
-        <p className="lsp-chart-tip__empty">Sin práctica registrada aún</p>
+        <p className="lsp-chart-tip__empty">No practice logged yet</p>
       )}
       {d.evaluadas > 0 ? (
         <p>
@@ -118,7 +118,7 @@ export default function LevelsStatsChartsCarousel({ charts = [] }) {
     <div className="lsp-chart">
       <div className="lsp-chart__head">
         <div>
-          <h3 className="lsp-chart__title">Rendimiento por parte</h3>
+          <h3 className="lsp-chart__title">Performance by part</h3>
           <p className="lsp-chart__subtitle">
             {current.partMax || chartData.length} partes del examen {current.levelName}. Pasa el
             cursor sobre cada barra para ver el detalle.
@@ -130,7 +130,7 @@ export default function LevelsStatsChartsCarousel({ charts = [] }) {
             className="lsp-chart__nav-btn"
             onClick={() => go(-1)}
             disabled={slides.length <= 1}
-            aria-label="Nivel anterior"
+            aria-label="Previous level"
           >
             ‹
           </button>
@@ -205,7 +205,7 @@ export default function LevelsStatsChartsCarousel({ charts = [] }) {
       </div>
 
       {slides.length > 1 ? (
-        <div className="lsp-chart__tabs" role="tablist" aria-label="Niveles">
+        <div className="lsp-chart__tabs" role="tablist" aria-label="Levels">
           {slides.map((slide, i) => (
             <button
               key={slide.levelId || slide.levelSlug || slide.levelName}
@@ -224,8 +224,8 @@ export default function LevelsStatsChartsCarousel({ charts = [] }) {
 
       {!current.hasData ? (
         <p className="lsp-chart__no-data">
-          Todavía no hay práctica registrada en {current.levelName}. Cuando practiques en Levels,
-          tus aciertos aparecerán aquí automáticamente.
+          No practice logged in {current.levelName} yet. When you practise in Levels, your scores
+          will appear here automatically.
         </p>
       ) : null}
 
@@ -265,7 +265,7 @@ export default function LevelsStatsChartsCarousel({ charts = [] }) {
                 stroke="#94a3b8"
                 strokeDasharray="6 4"
                 label={{
-                  value: 'Objetivo 60%',
+                  value: 'Target 60%',
                   position: 'insideTopRight',
                   fill: '#64748b',
                   fontSize: 10,

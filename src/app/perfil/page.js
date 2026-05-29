@@ -1,6 +1,6 @@
 'use client';
 import dynamic from 'next/dynamic';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { supabase } from '@/utils/supabaseClient';
@@ -8,106 +8,87 @@ import { getClientAuth } from '@/utils/getClientAuth';
 import { performLogout } from '@/utils/logout';
 import { useUserRole } from '@/context/UserRoleContext';
 import { getUserProgress } from '@/utils/getUserProgress';
-import AchievementNotification from '@/components/AchievementNotification';
+const dynamicImport = (loader) =>
+  dynamic(() => loader().then((mod) => mod.default), { ssr: false });
 
-const ProgressDashboard = dynamic(() => import('@/components/ProgressDashboard'), {
-  ssr: false,
-});
-const AdaptiveLearningDashboard = dynamic(
+const ProgressDashboard = dynamicImport(() => import('@/components/ProgressDashboard'));
+const AdaptiveLearningDashboard = dynamicImport(
   () => import('@/components/AdaptiveLearningDashboard'),
-  { ssr: false },
 );
-const ExamStatistics = dynamic(() => import('@/components/ExamStatistics'), { ssr: false });
-const LevelsEstadisticasPanel = dynamic(
+import ExamStatistics from '@/components/ExamStatistics';
+const LevelsEstadisticasPanel = dynamicImport(
   () => import('@/components/LevelsEstadisticasPanel'),
-  { ssr: false },
 );
+const ProfilePrivateTutorPanel = dynamicImport(
+  () => import('@/components/perfil/ProfilePrivateTutorPanel'),
+);
+const ProfileProgressCharts = dynamicImport(
+  () => import('@/components/perfil/ProfileProgressCharts'),
+);
+import ProfileCollapsibleSection from '@/components/perfil/ProfileCollapsibleSection';
 import ProfileComingSoon from '@/components/perfil/ProfileComingSoon';
-import ProfilePrivateTutorPanel from '@/components/perfil/ProfilePrivateTutorPanel';
 import ProfileTabsNav from '@/components/perfil/ProfileTabsNav';
+import { PROFILE_TABS, PROFILE_TAB_LABELS } from '@/components/perfil/profileTabsConfig';
+import ProfileAvatarUpload from '@/components/perfil/ProfileAvatarUpload';
 
 const ProfileExamDatesPanel = dynamic(
-  () => import('@/components/perfil/ProfileExamDatesPanel'),
+  () => import('@/components/perfil/ProfileExamDatesPanel').then((mod) => mod.default),
   {
     ssr: false,
     loading: () => (
       <div className="profile-section">
-        <p className="section-desc">Cargando fechas de examen…</p>
+        <p className="section-desc">Loading exam dates…</p>
       </div>
     ),
   },
 );
 
 const StudyActivityHeatmap = dynamic(
-  () => import('@/components/perfil/StudyActivityHeatmap'),
+  () => import('@/components/perfil/StudyActivityHeatmap').then((mod) => mod.default),
   {
     ssr: false,
     loading: () => (
       <div className="profile-section">
-        <p className="section-desc">Cargando actividad de estudio…</p>
+        <p className="section-desc">Loading study activity…</p>
       </div>
     ),
   },
 );
 
-const ProfileGeneralStats = dynamic(
+const ProfileGeneralStats = dynamicImport(
   () => import('@/components/perfil/ProfileGeneralStats'),
-  { ssr: false },
 );
 
-const ProfileSkillAnalysis = dynamic(
+const ProfileSkillAnalysis = dynamicImport(
   () => import('@/components/perfil/ProfileSkillAnalysis'),
-  { ssr: false },
 );
 
-const ProfileAchievementsCarousel = dynamic(
+const ProfileAchievementsCarousel = dynamicImport(
   () => import('@/components/perfil/ProfileAchievementsCarousel'),
-  { ssr: false },
 );
 
-const ProfileGoalsPanel = dynamic(
+const ProfileGoalsPanel = dynamicImport(
   () => import('@/components/perfil/ProfileGoalsPanel'),
-  { ssr: false },
 );
 import SiteMascot from '@/components/SiteMascot';
-import { offlineFirstDatabase } from '@/utils/offlineFirstDatabase';
-import { progressTracker } from '@/utils/progressTracker';
 import {
-  LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, 
-  PieChart, Pie, Cell,
-  BarChart, Bar, AreaChart, Area
-} from 'recharts';
+  hydrateProfileMockData,
+  PROFILE_MOCK_TABS,
+} from '@/lib/profileMockHydration';
 
-const PROFILE_TABS = [
-  { id: 'overview', label: '📊 Resumen', studentAllowed: true },
-  { id: 'mis-datos', label: '👤 Mis datos', studentAllowed: true },
-  { id: 'progress', label: '📈 Progreso' },
-  { id: 'achievements', label: '🏆 Logros' },
-  { id: 'goals', label: '🎯 Objetivos' },
-  { id: 'integrated', label: '🔗 Estadísticas Integradas' },
-  { id: 'settings', label: '⚙️ Configuración' },
-  { id: 'study-tools', label: '🛠️ Herramientas' },
-  { id: 'social', label: '👥 Social' },
-  { id: 'analytics', label: '📊 Analytics' },
-  { id: 'ai-tools', label: '🤖 IA Tools' },
-  { id: 'study-planner', label: '📅 Planificador' },
-  { id: 'gamification', label: '🎮 Gamificación' },
-  { id: 'community', label: '🌐 Comunidad' },
-  { id: 'exam-dates', label: '📅 Fechas de examen' },
-  { id: 'private-tutor', label: '👨‍🏫 Consigue tu profesor particular' },
-];
-
-const PROFILE_TAB_LABELS = Object.fromEntries(
-  PROFILE_TABS.map((t) => [t.id, t.label.replace(/^[^\s]+\s/, '')]),
-);
+const EMPTY_PROGRESS = { exams: [], training: [], theory: [], stats: {} };
 
 export default function ProfilePage() {
   const [user, setUser] = useState(null);
-  const [stats, setStats] = useState(null);
+  const [stats, setStats] = useState(EMPTY_PROGRESS);
+  const [statsLoading, setStatsLoading] = useState(false);
   const [fullName, setFullName] = useState('');
   const [birthDate, setBirthDate] = useState('');
   const [preferredLanguage, setPreferredLanguage] = useState('es');
   const [biography, setBiography] = useState('');
+  const [avatarUrl, setAvatarUrl] = useState('');
+  const [avatarUploading, setAvatarUploading] = useState(false);
+  const [avatarError, setAvatarError] = useState('');
   const [placementLevel, setPlacementLevel] = useState(null);
   const [personalSaveMessage, setPersonalSaveMessage] = useState('');
   const [personalSaveError, setPersonalSaveError] = useState('');
@@ -155,30 +136,46 @@ export default function ProfilePage() {
     performanceMetrics: {}
   });
 
-  // Función para cargar estadísticas integradas
+  const integratedStatsLoadedRef = useRef(false);
+  const mockHydratedTabsRef = useRef(new Set());
+  const statsFetchedRef = useRef(false);
+
   const loadIntegratedStats = async (userId) => {
     try {
-      // Cargar datos del sistema offline-first
-      const [progressData, achievements, overallProgress] = await Promise.all([
-        offlineFirstDatabase.getUserProgress(userId),
-        offlineFirstDatabase.getUserAchievements(userId),
-        offlineFirstDatabase.getUserOverallProgress(userId)
+      const [{ offlineFirstDatabase }, { progressTracker }] = await Promise.all([
+        import('@/utils/offlineFirstDatabase'),
+        import('@/utils/progressTracker'),
       ]);
 
-      // Cargar datos adaptativos
-      const adaptiveData = await progressTracker.getUserSkillProgress(userId, 'A2', 'listening', 'basico');
+      const [progressData, achievements] = await Promise.all([
+        offlineFirstDatabase.getUserProgress(userId),
+        offlineFirstDatabase.getUserAchievements(userId),
+        offlineFirstDatabase.getUserOverallProgress(userId),
+      ]);
+
+      const adaptiveData = await progressTracker.getUserSkillProgress(
+        userId,
+        'A2',
+        'listening',
+        'basico',
+      );
 
       setIntegratedStats({
         progressData,
         adaptiveData,
         achievements,
-        audioHistory: [], // Se puede implementar después
+        audioHistory: [],
         performanceMetrics: {
           totalExercises: progressData?.length || 0,
           totalScore: progressData?.reduce((sum, p) => sum + p.score, 0) || 0,
-          averageScore: progressData?.length > 0 ? Math.round(progressData.reduce((sum, p) => sum + p.score, 0) / progressData.length) : 0,
-          totalTime: progressData?.reduce((sum, p) => sum + p.time_spent, 0) || 0
-        }
+          averageScore:
+            progressData?.length > 0
+              ? Math.round(
+                  progressData.reduce((sum, p) => sum + p.score, 0) / progressData.length,
+                )
+              : 0,
+          totalTime: progressData?.reduce((sum, p) => sum + p.time_spent, 0) || 0,
+        },
       });
     } catch (error) {
       console.warn('Error loading integrated stats:', error);
@@ -210,9 +207,9 @@ export default function ProfilePage() {
         supabase.from('user_profiles').select('nombre, email').eq('id', userId).single(),
         supabase
           .from('profiles')
-          .select('id, user_id, fecha_nacimiento, idioma_preferido, biografia')
+          .select('id, user_id, fecha_nacimiento, idioma_preferido, biografia, foto_url')
           .eq('user_id', userId)
-          .single(),
+          .maybeSingle(),
         supabase.from('user_preferences').select('notificaciones, recordatorios').eq('user_id', userId).single(),
         supabase
           .from('placement_results')
@@ -230,6 +227,12 @@ export default function ProfilePage() {
       setBirthDate(profileRow?.fecha_nacimiento || '');
       setPreferredLanguage(profileRow?.idioma_preferido || 'es');
       setBiography(profileRow?.biografia || '');
+      setAvatarUrl(
+        profileRow?.foto_url ||
+          authUser?.user_metadata?.avatar_url ||
+          authUser?.user_metadata?.foto_url ||
+          '',
+      );
       setPlacementLevel(placementRow?.nivel_asignado || null);
       setNotifications({
         email: Boolean(preferencesRow?.notificaciones ?? true),
@@ -237,217 +240,76 @@ export default function ProfilePage() {
       });
       setTheme(localSettings?.theme || 'light');
 
-      await Promise.all([
-        getUserProgress(authUser.id).then((userProgress) => {
-          setStats(userProgress);
-        }),
-        loadIntegratedStats(authUser.id),
-      ]);
-
-      // Simular datos adicionales (en una app real vendrían de la BD)
-      // Análisis por habilidades
-      // Notas de estudio
-      setStudyNotes([
-        { id: 1, title: 'Present Perfect vs Past Simple', content: 'Remember: Present Perfect for unfinished time, Past Simple for finished time', date: '2024-01-15', tags: ['grammar', 'tenses'] },
-        { id: 2, title: 'Phrasal Verbs List', content: 'Look up, look after, look forward to, look into', date: '2024-01-14', tags: ['vocabulary', 'phrasal-verbs'] },
-        { id: 3, title: 'Writing Structure', content: 'Introduction -> Body paragraphs -> Conclusion', date: '2024-01-13', tags: ['writing', 'structure'] }
-      ]);
-
-      // Historial de estudio
-      setStudyHistory([
-        { date: '2024-01-15', duration: 45, exercises: 12, score: 85, type: 'Grammar Practice' },
-        { date: '2024-01-14', duration: 30, exercises: 8, score: 92, type: 'Reading Comprehension' },
-        { date: '2024-01-13', duration: 60, exercises: 15, score: 78, type: 'Writing Practice' },
-        { date: '2024-01-12', duration: 25, exercises: 6, score: 88, type: 'Vocabulary Quiz' },
-        { date: '2024-01-11', duration: 40, exercises: 10, score: 90, type: 'Listening Test' }
-      ]);
-
-      // Desafíos semanales
-      setWeeklyChallenges([
-        { id: 1, title: 'Grammar Master', description: 'Complete 20 grammar exercises', progress: 15, target: 20, reward: 'Grammar Badge', deadline: '2024-01-21' },
-        { id: 2, title: 'Vocabulary Builder', description: 'Learn 50 new words', progress: 32, target: 50, reward: 'Vocabulary Badge', deadline: '2024-01-21' },
-        { id: 3, title: 'Speed Reader', description: 'Complete 5 reading exercises in under 30 minutes', progress: 3, target: 5, reward: 'Speed Badge', deadline: '2024-01-21' }
-      ]);
-
-      // Recomendaciones de estudio
-      setStudyRecommendations([
-        { type: 'weakness', skill: 'Speaking', message: 'Your speaking score is lower. Try more speaking exercises!', priority: 'high' },
-        { type: 'strength', skill: 'Listening', message: 'Great listening skills! Consider advanced listening materials.', priority: 'medium' },
-        { type: 'improvement', skill: 'Writing', message: 'Writing improved 8% this week. Keep practicing!', priority: 'low' }
-      ]);
-
-      // Calendario de estudio
-      const calendarData = [];
-      for (let i = 0; i < 30; i++) {
-        const date = new Date();
-        date.setDate(date.getDate() + i);
-        const hasEvent = Math.random() > 0.7;
-        if (hasEvent) {
-          calendarData.push({
-            date: date.toISOString().split('T')[0],
-            events: [
-              { title: 'Grammar Review', time: '10:00', type: 'study' },
-              { title: 'Vocabulary Quiz', time: '15:00', type: 'quiz' }
-            ]
-          });
-        }
-      }
-      setStudyCalendar(calendarData);
-
-      // Comparación de progreso
-      setProgressComparison({
-        userScore: 85,
-        averageScore: 72,
-        percentile: 78,
-        rank: 'Top 25%',
-        improvement: '+12%'
-      });
-
-      // Ejercicios favoritos
-      setFavoriteExercises([
-        { id: 1, title: 'Present Perfect Practice', type: 'Grammar', difficulty: 'Medium', lastUsed: '2024-01-15' },
-        { id: 2, title: 'Business Vocabulary', type: 'Vocabulary', difficulty: 'Hard', lastUsed: '2024-01-14' },
-        { id: 3, title: 'Listening Comprehension', type: 'Listening', difficulty: 'Easy', lastUsed: '2024-01-13' }
-      ]);
-
-      // Grupos de estudio
-      setStudyGroups([
-        { id: 1, name: 'Advanced English Learners', members: 24, level: 'B2-C1', lastActivity: '2 hours ago' },
-        { id: 2, name: 'Grammar Enthusiasts', members: 18, level: 'All Levels', lastActivity: '1 day ago' }
-      ]);
-
-      // Progreso de logros
-      setAchievementProgress({
-        'Grammar Guru': { current: 45, target: 50, description: 'Complete 50 grammar exercises' },
-        'Speed Demon': { current: 2, target: 5, description: 'Complete 5 exams under 30 minutes' },
-        'Perfectionist': { current: 0, target: 1, description: 'Get 100% on any exam' }
-      });
-
-      // Tarjetas de memoria (Flashcards)
-      setFlashcards([
-        { id: 1, front: 'Serendipity', back: 'The occurrence of events by chance in a happy way', category: 'Vocabulary', difficulty: 'Hard', reviewed: 3, correct: 2 },
-        { id: 2, front: 'Present Perfect', back: 'Used for actions that started in the past and continue to the present', category: 'Grammar', difficulty: 'Medium', reviewed: 5, correct: 4 },
-        { id: 3, front: 'Ubiquitous', back: 'Present, appearing, or found everywhere', category: 'Vocabulary', difficulty: 'Hard', reviewed: 2, correct: 1 },
-        { id: 4, front: 'Phrasal Verb: Look up', back: 'To search for information in a book or on a computer', category: 'Grammar', difficulty: 'Easy', reviewed: 7, correct: 6 }
-      ]);
-
-      // Plan de estudio inteligente
-      setStudyPlan({
-        dailyGoal: 60, // minutos
-        weeklyGoal: 420, // minutos
-        currentStreak: 7,
-        nextSession: 'Grammar Review',
-        estimatedTime: 25,
-        difficulty: 'Medium',
-        topics: ['Present Perfect', 'Vocabulary', 'Reading Comprehension']
-      });
-
-      // Música de estudio
-      setStudyMusic({
-        isPlaying: false,
-        currentTrack: null,
-        tracks: [
-          { id: 1, name: 'Focus Flow', artist: 'Study Beats', duration: '2:30:00', genre: 'Ambient' },
-          { id: 2, name: 'Concentration', artist: 'Brain Waves', duration: '1:45:00', genre: 'Classical' },
-          { id: 3, name: 'Deep Focus', artist: 'Study Music', duration: '3:00:00', genre: 'Electronic' }
-        ]
-      });
-
-      // Chat de grupos
-      setGroupChat([
-        { id: 1, user: 'Maria', message: 'Anyone up for a grammar challenge?', time: '2 min ago', group: 'Advanced English Learners' },
-        { id: 2, user: 'John', message: 'Great job on the vocabulary quiz!', time: '5 min ago', group: 'Grammar Enthusiasts' },
-        { id: 3, user: 'Sarah', message: 'Study session at 3 PM today?', time: '10 min ago', group: 'Advanced English Learners' }
-      ]);
-
-      // Rachas avanzadas
-      setStudyStreaks({
-        current: 7,
-        longest: 15,
-        weekly: 5,
-        monthly: 22,
-        total: 156
-      });
-
-      // Recompensas
-      setStudyRewards([
-        { id: 1, name: 'Coffee Break', description: 'Unlock after 30 minutes of study', earned: true, points: 50 },
-        { id: 2, name: 'Study Buddy', description: 'Invite a friend to study together', earned: false, points: 100 },
-        { id: 3, name: 'Night Owl', description: 'Study after 10 PM', earned: true, points: 75 },
-        { id: 4, name: 'Early Bird', description: 'Study before 7 AM', earned: false, points: 100 }
-      ]);
-
-      // Temas visuales
-      setStudyThemes({
-        current: 'default',
-        available: [
-          { id: 'default', name: 'Default', colors: { primary: '#0070f3', secondary: '#eaeaea' } },
-          { id: 'dark', name: 'Dark Mode', colors: { primary: '#00d4ff', secondary: '#1a1a1a' } },
-          { id: 'nature', name: 'Nature', colors: { primary: '#28a745', secondary: '#f8f9fa' } },
-          { id: 'sunset', name: 'Sunset', colors: { primary: '#ff6b35', secondary: '#fff5f5' } }
-        ]
-      });
-
-      // Insights de IA
-      setAiInsights([
-        { id: 1, type: 'performance', title: 'Peak Performance Time', description: 'You perform best between 10 AM - 12 PM', confidence: 85 },
-        { id: 2, type: 'weakness', title: 'Grammar Focus Needed', description: 'Spend 20% more time on grammar exercises', confidence: 92 },
-        { id: 3, type: 'strength', title: 'Vocabulary Master', description: 'Your vocabulary is improving 15% faster than average', confidence: 78 }
-      ]);
-
-      // Metas de estudio
-      setStudyGoals([
-        { id: 1, title: 'Complete B2 Level', description: 'Finish all B2 exercises', progress: 65, deadline: '2024-03-15', priority: 'high' },
-        { id: 2, title: 'Daily Study Habit', description: 'Study 30 minutes every day', progress: 80, deadline: '2024-02-28', priority: 'medium' },
-        { id: 3, title: 'Grammar Mastery', description: 'Achieve 90% in grammar tests', progress: 45, deadline: '2024-04-01', priority: 'high' }
-      ]);
-
-      // Hábitos de estudio
-      setStudyHabits([
-        { id: 1, name: 'Morning Review', frequency: 'Daily', streak: 12, difficulty: 'Easy' },
-        { id: 2, name: 'Vocabulary Practice', frequency: '3x/week', streak: 8, difficulty: 'Medium' },
-        { id: 3, name: 'Grammar Focus', frequency: '2x/week', streak: 5, difficulty: 'Hard' }
-      ]);
-
-      // Motivación
-      setStudyMotivation({
-        currentLevel: 85,
-        weeklyChange: 12,
-        motivationalQuote: 'Every expert was once a beginner. Every pro was once an amateur.',
-        nextMilestone: '100 hours of study',
-        progressToMilestone: 78
-      });
-
-      // Progreso detallado
-      setStudyProgress({
-        totalHours: 78,
-        averageSession: 42,
-        improvementRate: 15,
-        consistency: 85,
-        focusScore: 92
-      });
-
-      // Desafíos especiales
-      setStudyChallenges([
-        { id: 1, title: 'Speed Challenge', description: 'Complete 10 exercises in 15 minutes', reward: 'Speed Badge', difficulty: 'Hard' },
-        { id: 2, title: 'Accuracy Challenge', description: 'Get 95% accuracy in 5 consecutive tests', reward: 'Precision Badge', difficulty: 'Medium' },
-        { id: 3, title: 'Endurance Challenge', description: 'Study for 2 hours straight', reward: 'Marathon Badge', difficulty: 'Hard' }
-      ]);
-
-      // Tabla de clasificación
-      setStudyLeaderboard([
-        { rank: 1, name: 'Maria', score: 1250, level: 'C1', streak: 12 },
-        { rank: 2, name: 'John', score: 1180, level: 'B2', streak: 8 },
-        { rank: 3, name: 'Sarah', score: 1100, level: 'B2', streak: 15 },
-        { rank: 4, name: 'You', score: 950, level: 'B1', streak: 7 },
-        { rank: 5, name: 'Alex', score: 890, level: 'B1', streak: 5 }
-      ]);
-
       setLoading(false);
     };
 
     fetchData();
   }, [router]);
+
+  useEffect(() => {
+    if (!user?.id || loading) return;
+    if (activeTab !== 'progress' && activeTab !== 'exam-dates') return;
+    if (statsFetchedRef.current) return;
+
+    let cancelled = false;
+    statsFetchedRef.current = true;
+    setStatsLoading(true);
+
+    getUserProgress(user.id)
+      .then((userProgress) => {
+        if (!cancelled) setStats(userProgress);
+      })
+      .catch(() => {
+        if (!cancelled) statsFetchedRef.current = false;
+      })
+      .finally(() => {
+        if (!cancelled) setStatsLoading(false);
+      });
+
+    return () => {
+      cancelled = true;
+    };
+  }, [user?.id, activeTab, loading]);
+
+  useEffect(() => {
+    if (!user?.id || loading || activeTab !== 'integrated') return;
+    if (integratedStatsLoadedRef.current) return;
+    integratedStatsLoadedRef.current = true;
+    void loadIntegratedStats(user.id);
+  }, [user?.id, activeTab, loading]);
+
+  useEffect(() => {
+    if (!user || loading) return;
+    if (!PROFILE_MOCK_TABS.has(activeTab)) return;
+    if (mockHydratedTabsRef.current.has(activeTab)) return;
+    mockHydratedTabsRef.current.add(activeTab);
+
+    hydrateProfileMockData(activeTab, {
+      setStudyNotes,
+      setStudyHistory,
+      setWeeklyChallenges,
+      setStudyRecommendations,
+      setStudyCalendar,
+      setProgressComparison,
+      setFavoriteExercises,
+      setStudyGroups,
+      setAchievementProgress,
+      setFlashcards,
+      setStudyPlan,
+      setStudyMusic,
+      setGroupChat,
+      setStudyStreaks,
+      setStudyRewards,
+      setStudyThemes,
+      setAiInsights,
+      setStudyGoals,
+      setStudyHabits,
+      setStudyMotivation,
+      setStudyProgress,
+      setStudyChallenges,
+      setStudyLeaderboard,
+    });
+  }, [activeTab, user, loading]);
 
   const handleLogout = () => {
     void performLogout();
@@ -456,7 +318,7 @@ export default function ProfilePage() {
   const handleSaveProfileName = async () => {
     const trimmed = (fullName || '').trim();
     if (!trimmed) {
-      setNameSaveError('Introduce un nombre para tu perfil.');
+      setNameSaveError('Enter a name for your profile.');
       setNameSaveMessage('');
       return false;
     }
@@ -473,7 +335,7 @@ export default function ProfilePage() {
 
     if (error) {
       console.error('Error saving profile name:', error);
-      setNameSaveError('No se pudo guardar el nombre. Inténtalo de nuevo.');
+      setNameSaveError('Could not save your name. Please try again.');
       setSaving(false);
       return false;
     }
@@ -485,7 +347,7 @@ export default function ProfilePage() {
     }
 
     setFullName(trimmed);
-    setNameSaveMessage('Nombre actualizado correctamente.');
+    setNameSaveMessage('Name updated successfully.');
     setSaving(false);
     return true;
   };
@@ -493,7 +355,7 @@ export default function ProfilePage() {
   const handleSavePersonalData = async () => {
     const trimmed = (fullName || '').trim();
     if (!trimmed) {
-      setPersonalSaveError('Introduce un nombre para tu perfil.');
+      setPersonalSaveError('Enter a name for your profile.');
       setPersonalSaveMessage('');
       return;
     }
@@ -512,7 +374,7 @@ export default function ProfilePage() {
 
     if (nameError) {
       console.error('Error saving profile name:', nameError);
-      setPersonalSaveError('No se pudieron guardar los datos. Inténtalo de nuevo.');
+      setPersonalSaveError('Could not save your details. Please try again.');
       setSaving(false);
       return;
     }
@@ -528,18 +390,60 @@ export default function ProfilePage() {
       fecha_nacimiento: birthDate || null,
       idioma_preferido: preferredLanguage || 'es',
       biografia: (biography || '').trim() || null,
+      foto_url: avatarUrl || null,
     });
 
     setSaving(false);
 
     if (profileError) {
       console.error('Error saving profile details:', profileError);
-      setPersonalSaveError('El nombre se guardó, pero falló el resto de los datos personales.');
+      setPersonalSaveError('Name saved, but other personal details failed to save.');
       return;
     }
 
     setFullName(trimmed);
-    setPersonalSaveMessage('Datos personales guardados correctamente.');
+    setPersonalSaveMessage('Personal details saved successfully.');
+  };
+
+  const handleAvatarUpload = async (file) => {
+    if (!user?.id) return;
+    setAvatarUploading(true);
+    setAvatarError('');
+
+    try {
+      const { data: sessionData } = await supabase.auth.getSession();
+      const token = sessionData?.session?.access_token;
+      if (!token) {
+        setAvatarError('Session expired. Please sign in again.');
+        return;
+      }
+
+      const body = new FormData();
+      body.append('file', file);
+
+      const res = await fetch('/api/perfil/avatar', {
+        method: 'POST',
+        headers: { Authorization: `Bearer ${token}` },
+        body,
+      });
+
+      const payload = await res.json().catch(() => ({}));
+      if (!res.ok) {
+        setAvatarError(payload?.error || 'Could not upload photo.');
+        return;
+      }
+
+      if (payload?.avatarUrl) {
+        setAvatarUrl(payload.avatarUrl);
+        setPersonalSaveMessage('Profile photo updated.');
+        setPersonalSaveError('');
+      }
+    } catch (err) {
+      console.error('Avatar upload:', err);
+      setAvatarError('Network error while uploading photo.');
+    } finally {
+      setAvatarUploading(false);
+    }
   };
 
   const handlePasswordChange = async () => {
@@ -550,7 +454,7 @@ export default function ProfilePage() {
       /\d/.test(newPassword);
 
     if (!passwordIsStrong) {
-      alert('La contraseña debe tener al menos 8 caracteres, una mayúscula, una minúscula y un número.');
+      alert('Password must be at least 8 characters with one uppercase letter, one lowercase letter and one number.');
       return;
     }
     const { error } = await supabase.auth.updateUser({ password: newPassword });
@@ -560,7 +464,7 @@ export default function ProfilePage() {
 
   const handleSendDeleteCode = async () => {
     if (!user?.email) {
-      alert('No se pudo detectar tu email para enviar el codigo.');
+      alert('Could not detect your email to send the code.');
       return;
     }
 
@@ -579,10 +483,10 @@ export default function ProfilePage() {
 
       setDeleteFlowActive(true);
       setDeleteCodeSentAt(new Date().toISOString());
-      alert('Te hemos enviado un codigo de 6 cifras al correo para confirmar la eliminacion.');
+      alert('We sent a 6-digit code to your email to confirm deletion.');
     } catch (error) {
       console.error('Error sending delete code:', error);
-      alert(error.message || 'No se pudo enviar el codigo de verificacion.');
+      alert(error.message || 'Could not send verification code.');
     } finally {
       setSendingDeleteCode(false);
     }
@@ -590,11 +494,11 @@ export default function ProfilePage() {
 
   const handleDeleteAccount = async () => {
     if (!user?.email) {
-      alert('No se pudo identificar tu cuenta.');
+      alert('Could not identify your account.');
       return;
     }
     if (!deleteCode || deleteCode.length !== 6) {
-      alert('Introduce el codigo de 6 cifras recibido por email.');
+      alert('Enter the 6-digit code from your email.');
       return;
     }
 
@@ -625,7 +529,7 @@ export default function ProfilePage() {
       router.push('/registro');
     } catch (error) {
       console.error('Error deleting account:', error);
-      alert(error.message || 'No se pudo eliminar la cuenta.');
+      alert(error.message || 'Could not delete account.');
     } finally {
       setDeletingAccount(false);
     }
@@ -645,11 +549,11 @@ export default function ProfilePage() {
   const handleInviteFriend = async () => {
     const recipient = inviteEmail.trim().toLowerCase();
     if (!recipient || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(recipient)) {
-      alert('Introduce un email válido para la invitación.');
+      alert('Enter a valid email for the invitation.');
       return;
     }
     if (!user?.id) {
-      alert('No se pudo validar tu sesión para enviar la invitación.');
+      alert('Could not validate your session to send the invitation.');
       return;
     }
 
@@ -659,7 +563,7 @@ export default function ProfilePage() {
         layoutSession?.access_token ||
         (await supabase.auth.getSession()).data?.session?.access_token;
       if (!accessToken) {
-        throw new Error('No se pudo obtener sesión para enviar la invitación.');
+        throw new Error('Could not get session to send the invitation.');
       }
 
       const inviteUrl =
@@ -688,19 +592,19 @@ export default function ProfilePage() {
 
       if (response.status === 404 && !process.env.NEXT_PUBLIC_INVITE_SEND_MAIL_URL) {
         throw new Error(
-          'La invitación por email no está disponible en la versión estática. Despliega la API o define NEXT_PUBLIC_INVITE_SEND_MAIL_URL.'
+          'Email invitations are not available in the static build. Deploy the API or set NEXT_PUBLIC_INVITE_SEND_MAIL_URL.'
         );
       }
       if (!response.ok) {
-        throw new Error(payload?.error || 'No se pudo enviar la invitación.');
+        throw new Error(payload?.error || 'Could not send invitation.');
       }
 
-      alert('Invitación enviada correctamente.');
+      alert('Invitation sent successfully.');
       setInviteEmail('');
       setInviteMessage('');
     } catch (error) {
       console.error('Error inviting friend:', error);
-      alert(error.message || 'Error enviando invitación.');
+      alert(error.message || 'Error sending invitation.');
     } finally {
       setInvitingFriend(false);
     }
@@ -723,8 +627,8 @@ export default function ProfilePage() {
   const addStudyNote = () => {
     const newNote = {
       id: Date.now(),
-      title: 'Nueva Nota',
-      content: 'Escribe tu nota aquí...',
+      title: 'New note',
+      content: 'Write your note here...',
       date: new Date().toISOString().split('T')[0],
       tags: []
     };
@@ -760,7 +664,7 @@ export default function ProfilePage() {
     const newCard = {
       id: Date.now(),
       front: 'Nueva tarjeta',
-      back: 'Definición...',
+      back: 'Definition...',
       category: 'Vocabulary',
       difficulty: 'Medium',
       reviewed: 0,
@@ -814,7 +718,7 @@ export default function ProfilePage() {
 
   // Funciones de desafíos
   const startChallenge = (challengeId) => {
-    alert(`Iniciando desafío: ${studyChallenges.find(c => c.id === challengeId)?.title}`);
+    alert(`Starting challenge: ${studyChallenges.find(c => c.id === challengeId)?.title}`);
   };
 
   // Funciones de hábitos
@@ -831,24 +735,15 @@ export default function ProfilePage() {
     ));
   };
 
-  // Datos para gráfico de distribución por niveles
-  const levelDistribution = stats ? [
-    { name: 'A2', value: stats.stats.levelCounts?.A2 || 0, color: '#82ca9d' },
-    { name: 'B1', value: stats.stats.levelCounts?.B1 || 0, color: '#ffc658' },
-    { name: 'B2', value: stats.stats.levelCounts?.B2 || 0, color: '#ff7300' },
-    { name: 'C1', value: stats.stats.levelCounts?.C1 || 0, color: '#00ff00' },
-    { name: 'C2', value: stats.stats.levelCounts?.C2 || 0, color: '#ff0000' }
-  ] : [];
-
   if (loading) {
     return (
       <main className="shell perfil-page center">
-        <div className="loader" aria-label="Cargando" />
+        <div className="loader" aria-label="Loading" />
       </main>
     );
   }
 
-  if (!user || !stats) return null;
+  if (!user) return null;
 
   const activeTabMeta = PROFILE_TABS.find((t) => t.id === activeTab);
   const studentTabLocked = isStudent && activeTabMeta && !activeTabMeta.studentAllowed;
@@ -859,6 +754,9 @@ export default function ProfilePage() {
     user?.email?.split('@')[0] ||
     '';
 
+  const isPremiumSubscription =
+    String(user?.user_metadata?.subscription_plan || 'free').toLowerCase() === 'premium';
+
   const tabsProps = {
     tabs: PROFILE_TABS,
     activeTab,
@@ -867,17 +765,26 @@ export default function ProfilePage() {
   };
 
   return (
-    <main className="shell perfil-page">
+    <main className={`shell perfil-page${activeTab === 'mis-datos' ? ' perfil-page--mis-datos' : ''}`}>
       <ProfileTabsNav {...tabsProps} />
       <header className="header header--mascot">
+          <ProfileAvatarUpload
+            avatarUrl={avatarUrl}
+            displayName={displayName}
+            onSelectFile={handleAvatarUpload}
+            uploading={avatarUploading}
+            error={avatarError}
+            size={96}
+            className="header__avatar"
+          />
           <div className="header__copy">
             <h1>
-              👤 Mi Perfil
+              My Profile
               {displayName ? (
                 <span className="profile-header__display-name"> — {displayName}</span>
               ) : null}
             </h1>
-            <p>Gestiona tu información personal y revisa tu progreso de aprendizaje.</p>
+            <p>Manage your personal information and track your learning progress.</p>
           </div>
           <div className="header__mascot" aria-hidden>
             <SiteMascot variant={6} width={130} alt="" />
@@ -890,12 +797,8 @@ export default function ProfilePage() {
         <>
       {/* Tab: Resumen */}
       {activeTab === 'overview' && (
-        <>
-          {/* Estadísticas agregadas de todas las tablas *estadisticas* en Supabase */}
-          <section className="profile-section">
-            <div className="section-head">
-              <h2>📊 Estadísticas Generales</h2>
-            </div>
+        <div className="profile-tab-panels">
+          <ProfileCollapsibleSection title="📊 General statistics" defaultOpen>
             <ProfileGeneralStats
               accessToken={layoutSession?.access_token}
               onSummaryLoaded={(summary) => {
@@ -908,46 +811,43 @@ export default function ProfilePage() {
                 }));
               }}
             />
-          </section>
+          </ProfileCollapsibleSection>
 
-          {/* Estadísticas de Exámenes */}
-          <ExamStatistics userId={user?.id} />
+          <ProfileCollapsibleSection
+            title="📝 Exam statistics"
+            className="profile-section--nested-exam-stats"
+          >
+            <ExamStatistics userId={user?.id} />
+          </ProfileCollapsibleSection>
 
-          {/* Estadísticas Levels B2 (solo visibles para el propio usuario; RLS en Supabase) */}
-          <LevelsEstadisticasPanel userId={user?.id} />
+          <ProfileCollapsibleSection
+            title="📚 Your practice (Levels)"
+            className="profile-section--nested-levels"
+          >
+            <LevelsEstadisticasPanel userId={user?.id} />
+          </ProfileCollapsibleSection>
 
-          {/* Actividad de estudio (último año, datos reales) */}
-          <section className="profile-section study-activity-section">
-            <div className="section-head">
-              <h2>📅 Actividad de Estudio</h2>
-              <p className="section-desc">
-                Tu constancia durante el último año. Pasa el cursor sobre cada día para ver minutos y sesiones.
-              </p>
-            </div>
+          <ProfileCollapsibleSection title="📅 Study activity">
             <StudyActivityHeatmap accessToken={layoutSession?.access_token} />
-          </section>
+          </ProfileCollapsibleSection>
 
-          {/* Acciones rápidas */}
-          <section className="profile-section">
-            <div className="section-head">
-              <h2>🚀 Acciones Rápidas</h2>
-            </div>
+          <ProfileCollapsibleSection title="🚀 Quick actions">
             <div className="quick-actions">
               <Link href="/training" className="quick-action-btn primary">
-                💪 Entrenar
+                💪 Train
               </Link>
               <Link href="/niveles" className="quick-action-btn">
-                📚 Ver Niveles
+                📚 View levels
               </Link>
               <Link href="/teoria" className="quick-action-btn">
-                📖 Teoría
+                📖 Theory
               </Link>
               <Link href="/prueba-nivel" className="quick-action-btn">
-                🧪 Prueba de Nivel
+                🧪 Placement test
               </Link>
             </div>
-          </section>
-        </>
+          </ProfileCollapsibleSection>
+        </div>
       )}
 
       {/* Tab: Progreso */}
@@ -956,171 +856,86 @@ export default function ProfilePage() {
           <ProfileSkillAnalysis userId={user?.id} />
 
           {/* Gráficos de progreso */}
-          <div className="charts-section">
-            <section className="profile-section chart-section">
-              <div className="section-head">
-                <h2>📈 Evolución de Puntuaciones</h2>
-              </div>
-        {stats.exams.length > 0 ? (
-          <ResponsiveContainer width="100%" height={300}>
-                  <AreaChart data={stats.exams.map(e => ({
-              fecha: new Date(e.date).toLocaleDateString(),
-              puntuación: e.total_score,
-            }))}>
-                    <CartesianGrid stroke="#eaeaea" />
-              <XAxis dataKey="fecha" />
-              <YAxis domain={[0, 100]} />
-              <Tooltip />
-                    <Area type="monotone" dataKey="puntuación" stroke="#0070f3" fill="#0070f3" fillOpacity={0.3} />
-                  </AreaChart>
-          </ResponsiveContainer>
-        ) : (
-                <div className="empty-chart">
-                  <div className="empty-icon">📊</div>
-          <p>No hay datos suficientes para mostrar la gráfica.</p>
-                  <Link href="/training" className="btn">🚀 Comenzar Entrenamiento</Link>
-                </div>
-        )}
-      </section>
-
-            <section className="profile-section chart-section">
-              <div className="section-head">
-                <h2>🎯 Distribución por Niveles</h2>
-              </div>
-              {levelDistribution.some(item => item.value > 0) ? (
-                <ResponsiveContainer width="100%" height={300}>
-                  <PieChart>
-                    <Pie
-                      data={levelDistribution.filter(item => item.value > 0)}
-                      cx="50%"
-                      cy="50%"
-                      outerRadius={100}
-                      dataKey="value"
-                      label={({ name, value }) => `${name}: ${value}`}
-                    >
-                      {levelDistribution.map((entry, index) => (
-                        <Cell key={`cell-${index}`} fill={entry.color} />
-                      ))}
-                    </Pie>
-                    <Tooltip />
-                  </PieChart>
-                </ResponsiveContainer>
-              ) : (
-                <div className="empty-chart">
-                  <div className="empty-icon">🎯</div>
-                  <p>Completa algunos exámenes para ver la distribución por niveles.</p>
-                </div>
-              )}
-            </section>
-          </div>
+          <ProfileProgressCharts stats={stats} loading={statsLoading} />
 
         </>
       )}
 
       {/* Tab: Logros */}
       {activeTab === 'achievements' && (
-        <section className="profile-section">
-          <div className="section-head">
-            <h2>🏆 Logros y Badges</h2>
-          </div>
-          <ProfileAchievementsCarousel userId={user?.id} />
-        </section>
+        <ProfileCollapsibleSection title={"🏆 Achievements & badges"}>
+<ProfileAchievementsCarousel userId={user?.id} />
+</ProfileCollapsibleSection>
       )}
 
       {/* Tab: Objetivos */}
       {activeTab === 'goals' && (
-        <section className="profile-section">
-          <div className="section-head">
-            <h2>🎯 Mis Objetivos</h2>
-          </div>
-          <ProfileGoalsPanel userId={user?.id} />
-        </section>
+        <ProfileCollapsibleSection title={"🎯 My goals"}>
+<ProfileGoalsPanel userId={user?.id} />
+</ProfileCollapsibleSection>
       )}
 
       {activeTab === 'integrated' && (
         <>
           {/* Dashboard de Progreso Integrado */}
-          <section className="profile-section">
-            <div className="section-header">
-              <h2>📊 Dashboard de Progreso</h2>
-              <p>Estadísticas completas de tu aprendizaje</p>
-            </div>
-            <ProgressDashboard userId={user?.id} />
-          </section>
+          <ProfileCollapsibleSection title="📊 Progress dashboard">
+<ProgressDashboard userId={user?.id} />
+</ProfileCollapsibleSection>
 
           {/* Aprendizaje Adaptativo */}
-          <section className="profile-section">
-            <div className="section-header">
-              <h2>🤖 Aprendizaje Adaptativo</h2>
-              <p>Recomendaciones personalizadas basadas en IA</p>
-            </div>
-            <AdaptiveLearningDashboard userId={user?.id} />
-          </section>
+          <ProfileCollapsibleSection title="🤖 Adaptive learning">
+<AdaptiveLearningDashboard userId={user?.id} />
+</ProfileCollapsibleSection>
 
           {/* Métricas de Rendimiento */}
-          <section className="profile-section">
-            <div className="section-header">
-              <h2>⚡ Métricas de Rendimiento</h2>
-              <p>Análisis detallado de tu desempeño</p>
-            </div>
-            
-            <div className="metrics-grid">
+          <ProfileCollapsibleSection title="⚡ Performance metrics">
+<div className="metrics-grid">
               <div className="metric-card">
                 <div className="metric-icon">📚</div>
                 <div className="metric-value">{integratedStats.performanceMetrics.totalExercises || 0}</div>
-                <div className="metric-label">Ejercicios Completados</div>
+                <div className="metric-label">Exercises completed</div>
               </div>
               
               <div className="metric-card">
                 <div className="metric-icon">🎯</div>
                 <div className="metric-value">{integratedStats.performanceMetrics.averageScore || 0}%</div>
-                <div className="metric-label">Puntuación Promedio</div>
+                <div className="metric-label">Average score</div>
               </div>
               
               <div className="metric-card">
                 <div className="metric-icon">⏱️</div>
                 <div className="metric-value">{Math.round((integratedStats.performanceMetrics.totalTime || 0) / 60)}m</div>
-                <div className="metric-label">Tiempo Total</div>
+                <div className="metric-label">Total time</div>
               </div>
               
               <div className="metric-card">
                 <div className="metric-icon">🏆</div>
                 <div className="metric-value">{integratedStats.achievements?.length || 0}</div>
-                <div className="metric-label">Logros Desbloqueados</div>
+                <div className="metric-label">Achievements unlocked</div>
               </div>
             </div>
-          </section>
+</ProfileCollapsibleSection>
 
           {/* Logros Recientes */}
           {integratedStats.achievements && integratedStats.achievements.length > 0 && (
-            <section className="profile-section">
-              <div className="section-header">
-                <h2>🏆 Logros Recientes</h2>
-                <p>Tus logros más recientes</p>
-              </div>
-              
-              <div className="achievements-grid">
+            <ProfileCollapsibleSection title="🏆 Recent achievements">
+<div className="achievements-grid">
                 {integratedStats.achievements.slice(0, 6).map((achievement, index) => (
                   <div key={index} className="achievement-card">
                     <div className="achievement-icon">{achievement.icon || '🏆'}</div>
                     <div className="achievement-title">{achievement.title}</div>
                     <div className="achievement-description">{achievement.description}</div>
-                    <div className="achievement-points">+{achievement.points} puntos</div>
+                    <div className="achievement-points">+{achievement.points} points</div>
                   </div>
                 ))}
               </div>
-            </section>
+</ProfileCollapsibleSection>
           )}
 
           {/* Análisis de Habilidades */}
           {integratedStats.adaptiveData && (
-            <section className="profile-section">
-              <div className="section-header">
-                <h2>📈 Análisis de Habilidades</h2>
-                <p>Progreso detallado por habilidad</p>
-              </div>
-              
-              <div className="skill-analysis">
+            <ProfileCollapsibleSection title="📈 Skills analysis">
+<div className="skill-analysis">
                 <div className="skill-item">
                   <div className="skill-name">Listening</div>
                   <div className="skill-progress">
@@ -1173,36 +988,33 @@ export default function ProfilePage() {
                   </div>
                 </div>
               </div>
-            </section>
+</ProfileCollapsibleSection>
           )}
         </>
       )}
 
       {activeTab === 'mis-datos' && (
-        <>
-          <section className="profile-section">
+        <div className="mis-datos-panel">
+          <section className="profile-section profile-section--static">
             <div className="section-header">
-              <h2>👋 Bienvenido, {displayName || user.email}</h2>
+              <h2>👋 Welcome, {displayName || user.email}</h2>
               <button onClick={handleLogout} className="logout-btn">
-                🚪 Cerrar Sesión
+                🚪 Sign out
               </button>
             </div>
           </section>
 
-          <section className="profile-section">
-            <div className="section-head">
-              <h2>📋 Tu cuenta</h2>
-            </div>
+          <ProfileCollapsibleSection title="📋 Your account" defaultOpen>
             <dl className="mis-datos-facts">
               <div className="mis-datos-fact">
-                <dt>Correo</dt>
+                <dt>Email</dt>
                 <dd>{user.email}</dd>
               </div>
               <div className="mis-datos-fact">
-                <dt>Registro</dt>
+                <dt>Joined</dt>
                 <dd>
                   {user.created_at
-                    ? new Date(user.created_at).toLocaleDateString('es-ES', {
+                    ? new Date(user.created_at).toLocaleDateString('en-US', {
                         day: 'numeric',
                         month: 'long',
                         year: 'numeric',
@@ -1211,32 +1023,53 @@ export default function ProfilePage() {
                 </dd>
               </div>
               <div className="mis-datos-fact">
-                <dt>Nivel (placement)</dt>
-                <dd>{placementLevel || 'Sin placement test'}</dd>
+                <dt>Level (placement)</dt>
+                <dd>{placementLevel || 'No placement test yet'}</dd>
               </div>
               {placementLevel && (
                 <div className="mis-datos-fact">
-                  <dt>Plan de objetivos</dt>
+                  <dt>Goals plan</dt>
                   <dd>
                     <Link href="/plan-objetivos" className="mis-datos-link">
-                      Ver o completar encuesta →
+                      View or complete survey →
                     </Link>
                   </dd>
                 </div>
               )}
             </dl>
-          </section>
+          </ProfileCollapsibleSection>
 
-          <section className="profile-section profile-name-section">
-            <div className="section-head">
-              <h2>📝 Datos personales</h2>
+          <ProfileCollapsibleSection title="💳 My subscription">
+            <div className="mis-datos-subscription__card">
+              <div className="mis-datos-subscription__badge">
+                {isPremiumSubscription ? 'Premium' : 'Free'}
+              </div>
+              <div className="mis-datos-subscription__body">
+                <h3 className="mis-datos-subscription__plan">
+                  {isPremiumSubscription ? 'Premium plan' : 'Free plan'}
+                </h3>
+                <p className="mis-datos-subscription__text">
+                  {isPremiumSubscription
+                    ? 'You have full access to premium content and features.'
+                    : 'You have access to Levels, Theory, Training and your profile. Paid plans are coming soon.'}
+                </p>
+                <ul className="mis-datos-subscription__features">
+                  <li>Levels practice &amp; exams</li>
+                  <li>Theory &amp; Training</li>
+                  <li>Progress tracking</li>
+                </ul>
+              </div>
             </div>
-            <p className="section-desc">
-              Información visible en tu perfil y para personalizar tu experiencia en Dralo.
-            </p>
+          </ProfileCollapsibleSection>
+
+          <ProfileCollapsibleSection
+            title="📝 Personal details"
+            className="profile-name-section"
+          >
+            <div className="mis-datos-form">
             <div className="form-group">
               <label className="form-label" htmlFor="profile-display-name">
-                Nombre completo
+                Full name
               </label>
               <input
                 id="profile-display-name"
@@ -1247,14 +1080,14 @@ export default function ProfilePage() {
                   setPersonalSaveError('');
                 }}
                 className="form-input"
-                placeholder="Tu nombre"
+                placeholder="Your name"
                 maxLength={80}
                 autoComplete="name"
               />
             </div>
             <div className="form-group">
               <label className="form-label" htmlFor="profile-birth-date">
-                Fecha de nacimiento
+                Date of birth
               </label>
               <input
                 id="profile-birth-date"
@@ -1270,7 +1103,7 @@ export default function ProfilePage() {
             </div>
             <div className="form-group">
               <label className="form-label" htmlFor="profile-language">
-                Idioma de la interfaz
+                Interface language
               </label>
               <select
                 id="profile-language"
@@ -1288,7 +1121,7 @@ export default function ProfilePage() {
             </div>
             <div className="form-group">
               <label className="form-label" htmlFor="profile-bio">
-                Sobre ti (opcional)
+                About you (optional)
               </label>
               <textarea
                 id="profile-bio"
@@ -1299,10 +1132,11 @@ export default function ProfilePage() {
                   setPersonalSaveError('');
                 }}
                 className="form-input"
-                rows={3}
+                rows={4}
                 maxLength={500}
-                placeholder="Ej.: Preparo el B2 First en junio, me cuesta el listening…"
+                placeholder="E.g. Preparing for B2 First in June, listening is my weak point…"
               />
+            </div>
             </div>
             {personalSaveError ? (
               <p className="form-hint form-hint--error">{personalSaveError}</p>
@@ -1316,39 +1150,36 @@ export default function ProfilePage() {
               className="action-btn"
               disabled={saving}
             >
-              {saving ? 'Guardando...' : '💾 Guardar datos personales'}
+              {saving ? 'Saving...' : '💾 Save personal details'}
             </button>
-          </section>
-        </>
+          </ProfileCollapsibleSection>
+        </div>
       )}
 
       {activeTab === 'settings' && (
         <>
-          <section className="profile-section">
-            <div className="section-head">
-              <h2>🔐 Seguridad</h2>
-            </div>
-            <div className="form-group">
-              <label className="form-label">Nueva contraseña</label>
+          <ProfileCollapsibleSection title={"🔐 Security"}>
+<div className="form-group">
+              <label className="form-label">New password</label>
               <input
                 type="password"
                 value={newPassword}
                 onChange={(e) => setNewPassword(e.target.value)}
                 className="form-input"
-                placeholder="Mínimo 6 caracteres"
+                placeholder="At least 6 characters"
               />
             </div>
             <button type="button" onClick={handlePasswordChange} className="action-btn">
-              🔑 Actualizar Contraseña
+              🔑 Update password
             </button>
-          </section>
+</ProfileCollapsibleSection>
 
-          <section className="profile-section" style={{ border: '1px solid #fecaca', background: '#fff5f5' }}>
-            <div className="section-head">
-              <h2>🗑️ Eliminar cuenta</h2>
-            </div>
-            <p style={{ marginTop: 0, color: '#7f1d1d' }}>
-              Esta accion es irreversible. Para confirmar, te enviaremos un codigo de 6 cifras al correo de tu cuenta.
+          <ProfileCollapsibleSection
+            title="🗑️ Delete account"
+            style={{ border: '1px solid #fecaca', background: '#fff5f5' }}
+          >
+<p style={{ marginTop: 0, color: '#7f1d1d' }}>
+              This action cannot be undone. To confirm, we will send a 6-digit code to your account email.
             </p>
             <button
               type="button"
@@ -1357,11 +1188,11 @@ export default function ProfilePage() {
               disabled={sendingDeleteCode || deletingAccount}
               style={{ background: '#b91c1c' }}
             >
-              {sendingDeleteCode ? 'Enviando codigo...' : 'Enviar codigo de confirmacion'}
+              {sendingDeleteCode ? 'Sending code...' : 'Send confirmation code'}
             </button>
             {deleteFlowActive && (
               <div className="form-group" style={{ marginTop: '1rem' }}>
-                <label className="form-label">Codigo de verificacion (6 cifras)</label>
+                <label className="form-label">Verification code (6 digits)</label>
                 <input
                   type="text"
                   inputMode="numeric"
@@ -1373,7 +1204,7 @@ export default function ProfilePage() {
                   placeholder="123456"
                 />
                 <small style={{ color: '#7f1d1d', marginTop: '0.5rem' }}>
-                  Codigo enviado a {user?.email}. {deleteCodeSentAt ? 'Si caduca, solicita uno nuevo.' : ''}
+                  Code sent to {user?.email}. {deleteCodeSentAt ? 'If it expires, request a new one.' : ''}
                 </small>
                 <button
                   type="button"
@@ -1382,17 +1213,14 @@ export default function ProfilePage() {
                   disabled={deletingAccount}
                   style={{ marginTop: '0.8rem', background: '#991b1b' }}
                 >
-                  {deletingAccount ? 'Eliminando...' : 'Confirmar eliminacion de cuenta'}
+                  {deletingAccount ? 'Deleting...' : 'Confirm account deletion'}
                 </button>
               </div>
             )}
-          </section>
+</ProfileCollapsibleSection>
 
-          <section className="profile-section">
-            <div className="section-head">
-              <h2>🔔 Notificaciones</h2>
-            </div>
-            <div className="settings-grid">
+          <ProfileCollapsibleSection title={"🔔 Notifications"}>
+<div className="settings-grid">
               <div className="setting-item">
                 <label className="setting-label">
                   <input
@@ -1400,7 +1228,7 @@ export default function ProfilePage() {
                     checked={notifications.email}
                     onChange={(e) => setNotifications({ ...notifications, email: e.target.checked })}
                   />
-                  📧 Notificaciones por Email
+                  📧 Email notifications
                 </label>
               </div>
               <div className="setting-item">
@@ -1410,24 +1238,21 @@ export default function ProfilePage() {
                     checked={notifications.push}
                     onChange={(e) => setNotifications({ ...notifications, push: e.target.checked })}
                   />
-                  🔔 Notificaciones Push
+                  🔔 Notifications Push
                 </label>
               </div>
             </div>
             <button type="button" onClick={handleSettingsUpdate} className="action-btn" disabled={saving}>
-              {saving ? 'Guardando...' : '💾 Guardar Configuración'}
+              {saving ? 'Saving...' : '💾 Save settings'}
             </button>
-          </section>
+</ProfileCollapsibleSection>
 
-          <section className="profile-section">
-            <div className="section-head">
-              <h2>📨 Invitar amigos</h2>
-            </div>
-            <p style={{ marginTop: 0, color: '#334155' }}>
-              Envía una invitación por correo para que tus amigos se unan a practicar contigo.
+          <ProfileCollapsibleSection title={"📨 Invite friends"}>
+<p style={{ marginTop: 0, color: '#334155' }}>
+              Send an email invitation so friends can join you to practise.
             </p>
             <div className="form-group">
-              <label className="form-label">Email de tu amigo</label>
+              <label className="form-label">Friend's email</label>
               <input
                 type="email"
                 value={inviteEmail}
@@ -1437,19 +1262,19 @@ export default function ProfilePage() {
               />
             </div>
             <div className="form-group">
-              <label className="form-label">Mensaje personalizado (opcional)</label>
+              <label className="form-label">Custom message (optional)</label>
               <textarea
                 value={inviteMessage}
                 onChange={(e) => setInviteMessage(e.target.value)}
                 className="form-input"
                 rows={4}
-                placeholder="¡Hola! Te invito a practicar inglés conmigo en English Practice."
+                placeholder="Hi! Join me to practise English on English Practice."
               />
             </div>
             <button type="button" onClick={handleInviteFriend} className="action-btn" disabled={invitingFriend}>
-              {invitingFriend ? 'Enviando invitación...' : 'Enviar invitación'}
+              {invitingFriend ? 'Sending invitation...' : 'Send invitation'}
             </button>
-          </section>
+</ProfileCollapsibleSection>
         </>
       )}
 
@@ -1457,37 +1282,37 @@ export default function ProfilePage() {
       {activeTab === 'study-tools' && (
         <>
           {/* Temporizador de Estudio */}
-          <section className="profile-section">
-            <div className="section-head">
-              <h2>⏱️ Temporizador de Estudio</h2>
-            </div>
-            <div className="timer-container">
+          <ProfileCollapsibleSection title={"⏱️ Study timer"}>
+<div className="timer-container">
               <div className="timer-display">
                 <div className="timer-time">
                   {Math.floor(studyTimer.sessionTime / 60)}:{(studyTimer.sessionTime % 60).toString().padStart(2, '0')}
                 </div>
-                <div className="timer-label">Tiempo de Sesión</div>
+                <div className="timer-label">Session time</div>
               </div>
               <div className="timer-controls">
                 <button 
                   onClick={studyTimer.isRunning ? stopTimer : startTimer}
                   className={`timer-btn ${studyTimer.isRunning ? 'timer-stop' : 'timer-start'}`}
                 >
-                  {studyTimer.isRunning ? '⏸️ Pausar' : '▶️ Iniciar'}
+                  {studyTimer.isRunning ? '⏸️ Pause' : '▶️ Start'}
                 </button>
                 <button onClick={resetTimer} className="timer-btn timer-reset">
-                  🔄 Reiniciar
+                  🔄 Reset
                 </button>
               </div>
             </div>
-          </section>
+</ProfileCollapsibleSection>
 
           {/* Notas de Estudio */}
-          <section className="profile-section">
-            <div className="section-head">
-              <h2>📝 Mis Notas de Estudio</h2>
-              <button onClick={addStudyNote} className="add-note-btn">+ Nueva Nota</button>
-            </div>
+          <ProfileCollapsibleSection
+            title="📝 My study notes"
+            actions={
+              <button type="button" onClick={addStudyNote} className="add-note-btn">
+                + New note
+              </button>
+            }
+          >
             <div className="notes-grid">
               {studyNotes.map((note) => (
                 <div key={note.id} className="note-card">
@@ -1522,43 +1347,37 @@ export default function ProfilePage() {
                 </div>
               ))}
             </div>
-          </section>
+          </ProfileCollapsibleSection>
 
-          {/* Ejercicios Favoritos */}
-          <section className="profile-section">
-            <div className="section-head">
-              <h2>⭐ Ejercicios Favoritos</h2>
-            </div>
-            <div className="favorites-grid">
+          {/* Exercises Favoritos */}
+          <ProfileCollapsibleSection title={"⭐ Favourite exercises"}>
+<div className="favorites-grid">
               {favoriteExercises.map((exercise) => (
                 <div key={exercise.id} className="favorite-card">
                   <div className="favorite-title">{exercise.title}</div>
                   <div className="favorite-type">{exercise.type}</div>
                   <div className="favorite-difficulty">{exercise.difficulty}</div>
-                  <div className="favorite-last-used">Último uso: {exercise.lastUsed}</div>
+                  <div className="favorite-last-used">Last used: {exercise.lastUsed}</div>
                   <button 
                     onClick={() => toggleFavoriteExercise(exercise)}
                     className="remove-favorite-btn"
                   >
-                    ❌ Quitar de Favoritos
+                    ❌ Remove from favourites
                   </button>
                 </div>
               ))}
             </div>
-          </section>
+</ProfileCollapsibleSection>
 
           {/* Historial de Estudio */}
-          <section className="profile-section">
-            <div className="section-head">
-              <h2>📚 Historial de Estudio</h2>
-            </div>
-            <div className="history-table">
+          <ProfileCollapsibleSection title={"📚 Study history"}>
+<div className="history-table">
               <div className="history-header">
-                <div>Fecha</div>
-                <div>Duración</div>
-                <div>Ejercicios</div>
-                <div>Puntuación</div>
-                <div>Tipo</div>
+                <div>Date</div>
+                <div>Duration</div>
+                <div>Exercises</div>
+                <div>Score</div>
+                <div>Type</div>
               </div>
               {studyHistory.map((session, index) => (
                 <div key={index} className="history-row">
@@ -1572,7 +1391,7 @@ export default function ProfilePage() {
                 </div>
               ))}
             </div>
-          </section>
+</ProfileCollapsibleSection>
         </>
       )}
 
@@ -1580,21 +1399,18 @@ export default function ProfilePage() {
       {activeTab === 'social' && (
         <>
           {/* Comparación de Progreso */}
-          <section className="profile-section">
-            <div className="section-head">
-              <h2>📊 Comparación de Progreso</h2>
-            </div>
-            <div className="comparison-stats">
+          <ProfileCollapsibleSection title={"📊 Progress comparison"}>
+<div className="comparison-stats">
               <div className="comparison-card">
-                <div className="comparison-label">Tu Puntuación</div>
+                <div className="comparison-label">Tu Score</div>
                 <div className="comparison-value">{progressComparison.userScore}%</div>
               </div>
               <div className="comparison-card">
-                <div className="comparison-label">Promedio General</div>
+                <div className="comparison-label">Overall average</div>
                 <div className="comparison-value">{progressComparison.averageScore}%</div>
               </div>
               <div className="comparison-card">
-                <div className="comparison-label">Percentil</div>
+                <div className="comparison-label">Percentile</div>
                 <div className="comparison-value">{progressComparison.percentile}%</div>
               </div>
               <div className="comparison-card">
@@ -1602,32 +1418,26 @@ export default function ProfilePage() {
                 <div className="comparison-value">{progressComparison.rank}</div>
               </div>
             </div>
-          </section>
+</ProfileCollapsibleSection>
 
           {/* Grupos de Estudio */}
-          <section className="profile-section">
-            <div className="section-head">
-              <h2>👥 Grupos de Estudio</h2>
-            </div>
-            <div className="groups-grid">
+          <ProfileCollapsibleSection title={"👥 Study groups"}>
+<div className="groups-grid">
               {studyGroups.map((group) => (
                 <div key={group.id} className="group-card">
                   <div className="group-name">{group.name}</div>
-                  <div className="group-members">{group.members} miembros</div>
+                  <div className="group-members">{group.members} members</div>
                   <div className="group-level">{group.level}</div>
-                  <div className="group-activity">Última actividad: {group.lastActivity}</div>
-                  <button className="join-group-btn">Unirse</button>
+                  <div className="group-activity">Last activity: {group.lastActivity}</div>
+                  <button className="join-group-btn">Join</button>
                 </div>
               ))}
             </div>
-          </section>
+</ProfileCollapsibleSection>
 
           {/* Desafíos Semanales */}
-          <section className="profile-section">
-            <div className="section-head">
-              <h2>🏆 Desafíos Semanales</h2>
-            </div>
-            <div className="challenges-grid">
+          <ProfileCollapsibleSection title={"🏆 Weekly challenges"}>
+<div className="challenges-grid">
               {weeklyChallenges.map((challenge) => (
                 <div key={challenge.id} className="challenge-card">
                   <div className="challenge-title">{challenge.title}</div>
@@ -1641,12 +1451,12 @@ export default function ProfilePage() {
                     </div>
                     <div className="progress-text">{challenge.progress}/{challenge.target}</div>
                   </div>
-                  <div className="challenge-reward">Recompensa: {challenge.reward}</div>
-                  <div className="challenge-deadline">Fecha límite: {challenge.deadline}</div>
+                  <div className="challenge-reward">Reward: {challenge.reward}</div>
+                  <div className="challenge-deadline">Deadline: {challenge.deadline}</div>
                 </div>
               ))}
             </div>
-          </section>
+</ProfileCollapsibleSection>
         </>
       )}
 
@@ -1654,28 +1464,22 @@ export default function ProfilePage() {
       {activeTab === 'analytics' && (
         <>
           {/* Recomendaciones Inteligentes */}
-          <section className="profile-section">
-            <div className="section-head">
-              <h2>🤖 Recomendaciones Inteligentes</h2>
-            </div>
-            <div className="recommendations-grid">
+          <ProfileCollapsibleSection title={"🤖 Smart recommendations"}>
+<div className="recommendations-grid">
               {studyRecommendations.map((rec, index) => (
                 <div key={index} className={`recommendation-card priority-${rec.priority}`}>
                   <div className="recommendation-type">{rec.type}</div>
                   <div className="recommendation-skill">{rec.skill}</div>
                   <div className="recommendation-message">{rec.message}</div>
-                  <div className="recommendation-priority">Prioridad: {rec.priority}</div>
+                  <div className="recommendation-priority">Priority: {rec.priority}</div>
                 </div>
               ))}
             </div>
-          </section>
+</ProfileCollapsibleSection>
 
           {/* Progreso de Logros */}
-          <section className="profile-section">
-            <div className="section-head">
-              <h2>🎯 Progreso de Logros</h2>
-            </div>
-            <div className="achievement-progress-grid">
+          <ProfileCollapsibleSection title={"🎯 Achievement progress"}>
+<div className="achievement-progress-grid">
               {Object.entries(achievementProgress).map(([name, progress]) => (
                 <div key={name} className="achievement-progress-card">
                   <div className="achievement-name">{name}</div>
@@ -1692,21 +1496,138 @@ export default function ProfilePage() {
                 </div>
               ))}
             </div>
-          </section>
+</ProfileCollapsibleSection>
 
-          {/* Calendario de Estudio */}
-          <section className="profile-section">
-            <div className="section-head">
-              <h2>📅 Calendario de Estudio</h2>
+          {/* Estadísticas Avanzadas */}
+          <ProfileCollapsibleSection title={"📈 Advanced statistics"}>
+<div className="advanced-stats">
+              <div className="stat-item">
+                <div className="stat-label">Average time per session</div>
+                <div className="stat-value">42 minutes</div>
+              </div>
+              <div className="stat-item">
+                <div className="stat-label">Best streak</div>
+                <div className="stat-value">12 days</div>
+              </div>
+              <div className="stat-item">
+                <div className="stat-label">Exercises completed today</div>
+                <div className="stat-value">8</div>
+              </div>
+              <div className="stat-item">
+                <div className="stat-label">Weekly improvement</div>
+                <div className="stat-value">+15%</div>
+              </div>
             </div>
-            <div className="calendar-container">
+</ProfileCollapsibleSection>
+        </>
+      )}
+
+      {/* Tab: IA Tools */}
+      {activeTab === 'ai-tools' && (
+        <>
+          {/* Insights de IA */}
+          <ProfileCollapsibleSection title={"🤖 AI insights"}>
+<div className="ai-insights-grid">
+              {aiInsights.map((insight) => (
+                <div key={insight.id} className={`ai-insight-card ${insight.type}`}>
+                  <div className="insight-header">
+                    <div className="insight-title">{insight.title}</div>
+                    <div className="insight-confidence">{insight.confidence}% confidence</div>
+                  </div>
+                  <div className="insight-description">{insight.description}</div>
+                  <div className="insight-type-badge">{insight.type}</div>
+                </div>
+              ))}
+            </div>
+</ProfileCollapsibleSection>
+
+          {/* Planificador Inteligente */}
+          <ProfileCollapsibleSection title={"📅 Smart study plan"}>
+<div className="study-plan-container">
+              <div className="plan-overview">
+                <div className="plan-item">
+                  <div className="plan-label">Daily goal</div>
+                  <div className="plan-value">{studyPlan.dailyGoal} min</div>
+                </div>
+                <div className="plan-item">
+                  <div className="plan-label">Weekly goal</div>
+                  <div className="plan-value">{studyPlan.weeklyGoal} min</div>
+                </div>
+                <div className="plan-item">
+                  <div className="plan-label">Current streak</div>
+                  <div className="plan-value">{studyPlan.currentStreak} days</div>
+                </div>
+              </div>
+              <div className="next-session">
+                <h3>Next session</h3>
+                <div className="session-info">
+                  <div className="session-title">{studyPlan.nextSession}</div>
+                  <div className="session-details">
+                    <span>Estimated time: {studyPlan.estimatedTime} min</span>
+                    <span>Difficulty: {studyPlan.difficulty}</span>
+                  </div>
+                  <div className="session-topics">
+                    {studyPlan.topics.map((topic, index) => (
+                      <span key={index} className="topic-tag">{topic}</span>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            </div>
+</ProfileCollapsibleSection>
+
+          {/* Música de Estudio */}
+          <ProfileCollapsibleSection title={"🎵 Study music"}>
+<div className="music-player">
+              <div className="current-track">
+                {studyMusic.currentTrack ? (
+                  <div className="track-info">
+                    <div className="track-name">{studyMusic.currentTrack.name}</div>
+                    <div className="track-artist">{studyMusic.currentTrack.artist}</div>
+                    <div className="track-duration">{studyMusic.currentTrack.duration}</div>
+                  </div>
+                ) : (
+                  <div className="no-track">Select a track</div>
+                )}
+              </div>
+              <div className="music-controls">
+                <button 
+                  onClick={studyMusic.isPlaying ? pauseMusic : () => playMusic(studyMusic.tracks[0])}
+                  className="music-btn"
+                >
+                  {studyMusic.isPlaying ? '⏸️ Pause' : '▶️ Play'}
+                </button>
+              </div>
+              <div className="music-tracks">
+                {studyMusic.tracks.map((track) => (
+                  <div key={track.id} className="track-item">
+                    <div className="track-details">
+                      <div className="track-name">{track.name}</div>
+                      <div className="track-artist">{track.artist}</div>
+                      <div className="track-genre">{track.genre}</div>
+                    </div>
+                    <div className="track-duration">{track.duration}</div>
+                    <button onClick={() => playMusic(track)} className="play-track-btn">▶️</button>
+                  </div>
+                ))}
+              </div>
+            </div>
+</ProfileCollapsibleSection>
+        </>
+      )}
+
+      {/* Tab: Planificador */}
+      {activeTab === 'study-planner' && (
+        <>
+          <ProfileCollapsibleSection title={"📅 Study calendar"}>
+<div className="calendar-container">
               <div className="calendar-grid">
                 {Array.from({ length: 30 }, (_, i) => {
                   const date = new Date();
                   date.setDate(date.getDate() + i);
                   const dateStr = date.toISOString().split('T')[0];
                   const dayEvents = studyCalendar.find(day => day.date === dateStr);
-                  
+
                   return (
                     <div key={i} className={`calendar-day ${dayEvents ? 'has-events' : ''}`}>
                       <div className="day-number">{date.getDate()}</div>
@@ -1724,147 +1645,11 @@ export default function ProfilePage() {
                 })}
               </div>
             </div>
-          </section>
+</ProfileCollapsibleSection>
 
-          {/* Estadísticas Avanzadas */}
-          <section className="profile-section">
-            <div className="section-head">
-              <h2>📈 Estadísticas Avanzadas</h2>
-            </div>
-            <div className="advanced-stats">
-              <div className="stat-item">
-                <div className="stat-label">Tiempo Promedio por Sesión</div>
-                <div className="stat-value">42 minutos</div>
-              </div>
-              <div className="stat-item">
-                <div className="stat-label">Mejor Racha</div>
-                <div className="stat-value">12 días</div>
-              </div>
-              <div className="stat-item">
-                <div className="stat-label">Ejercicios Completados Hoy</div>
-                <div className="stat-value">8</div>
-              </div>
-              <div className="stat-item">
-                <div className="stat-label">Mejora Semanal</div>
-                <div className="stat-value">+15%</div>
-              </div>
-            </div>
-          </section>
-        </>
-      )}
-
-      {/* Tab: IA Tools */}
-      {activeTab === 'ai-tools' && (
-        <>
-          {/* Insights de IA */}
-          <section className="profile-section">
-            <div className="section-head">
-              <h2>🤖 Insights de Inteligencia Artificial</h2>
-            </div>
-            <div className="ai-insights-grid">
-              {aiInsights.map((insight) => (
-                <div key={insight.id} className={`ai-insight-card ${insight.type}`}>
-                  <div className="insight-header">
-                    <div className="insight-title">{insight.title}</div>
-                    <div className="insight-confidence">{insight.confidence}% confianza</div>
-                  </div>
-                  <div className="insight-description">{insight.description}</div>
-                  <div className="insight-type-badge">{insight.type}</div>
-                </div>
-              ))}
-            </div>
-          </section>
-
-          {/* Planificador Inteligente */}
-          <section className="profile-section">
-            <div className="section-head">
-              <h2>📅 Plan de Estudio Inteligente</h2>
-            </div>
-            <div className="study-plan-container">
-              <div className="plan-overview">
-                <div className="plan-item">
-                  <div className="plan-label">Meta Diaria</div>
-                  <div className="plan-value">{studyPlan.dailyGoal} min</div>
-                </div>
-                <div className="plan-item">
-                  <div className="plan-label">Meta Semanal</div>
-                  <div className="plan-value">{studyPlan.weeklyGoal} min</div>
-                </div>
-                <div className="plan-item">
-                  <div className="plan-label">Racha Actual</div>
-                  <div className="plan-value">{studyPlan.currentStreak} días</div>
-                </div>
-              </div>
-              <div className="next-session">
-                <h3>Próxima Sesión</h3>
-                <div className="session-info">
-                  <div className="session-title">{studyPlan.nextSession}</div>
-                  <div className="session-details">
-                    <span>Tiempo estimado: {studyPlan.estimatedTime} min</span>
-                    <span>Dificultad: {studyPlan.difficulty}</span>
-                  </div>
-                  <div className="session-topics">
-                    {studyPlan.topics.map((topic, index) => (
-                      <span key={index} className="topic-tag">{topic}</span>
-                    ))}
-                  </div>
-                </div>
-              </div>
-            </div>
-          </section>
-
-          {/* Música de Estudio */}
-          <section className="profile-section">
-            <div className="section-head">
-              <h2>🎵 Música de Estudio</h2>
-            </div>
-            <div className="music-player">
-              <div className="current-track">
-                {studyMusic.currentTrack ? (
-                  <div className="track-info">
-                    <div className="track-name">{studyMusic.currentTrack.name}</div>
-                    <div className="track-artist">{studyMusic.currentTrack.artist}</div>
-                    <div className="track-duration">{studyMusic.currentTrack.duration}</div>
-                  </div>
-                ) : (
-                  <div className="no-track">Selecciona una pista</div>
-                )}
-              </div>
-              <div className="music-controls">
-                <button 
-                  onClick={studyMusic.isPlaying ? pauseMusic : () => playMusic(studyMusic.tracks[0])}
-                  className="music-btn"
-                >
-                  {studyMusic.isPlaying ? '⏸️ Pausar' : '▶️ Reproducir'}
-                </button>
-              </div>
-              <div className="music-tracks">
-                {studyMusic.tracks.map((track) => (
-                  <div key={track.id} className="track-item">
-                    <div className="track-details">
-                      <div className="track-name">{track.name}</div>
-                      <div className="track-artist">{track.artist}</div>
-                      <div className="track-genre">{track.genre}</div>
-                    </div>
-                    <div className="track-duration">{track.duration}</div>
-                    <button onClick={() => playMusic(track)} className="play-track-btn">▶️</button>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </section>
-        </>
-      )}
-
-      {/* Tab: Planificador */}
-      {activeTab === 'study-planner' && (
-        <>
           {/* Metas de Estudio */}
-          <section className="profile-section">
-            <div className="section-head">
-              <h2>🎯 Mis Metas de Estudio</h2>
-            </div>
-            <div className="goals-grid">
+          <ProfileCollapsibleSection title={"🎯 My study goals"}>
+<div className="goals-grid">
               {studyGoals.map((goal) => (
                 <div key={goal.id} className={`goal-card ${goal.priority}`}>
                   <div className="goal-header">
@@ -1878,24 +1663,21 @@ export default function ProfilePage() {
                       style={{ width: `${goal.progress}%` }}
                     ></div>
                   </div>
-                  <div className="goal-progress-text">{goal.progress}% completado</div>
-                  <div className="goal-deadline">Fecha límite: {goal.deadline}</div>
+                  <div className="goal-progress-text">{goal.progress}% complete</div>
+                  <div className="goal-deadline">Deadline: {goal.deadline}</div>
                 </div>
               ))}
             </div>
-          </section>
+</ProfileCollapsibleSection>
 
           {/* Hábitos de Estudio */}
-          <section className="profile-section">
-            <div className="section-head">
-              <h2>📈 Hábitos de Estudio</h2>
-            </div>
-            <div className="habits-grid">
+          <ProfileCollapsibleSection title={"📈 Study habits"}>
+<div className="habits-grid">
               {studyHabits.map((habit) => (
                 <div key={habit.id} className="habit-card">
                   <div className="habit-name">{habit.name}</div>
                   <div className="habit-frequency">{habit.frequency}</div>
-                  <div className="habit-streak">Racha: {habit.streak} días</div>
+                  <div className="habit-streak">Streak: {habit.streak} days</div>
                   <div className="habit-difficulty">{habit.difficulty}</div>
                   <div className="habit-progress">
                     <div className="streak-bar">
@@ -1908,44 +1690,41 @@ export default function ProfilePage() {
                 </div>
               ))}
             </div>
-          </section>
+</ProfileCollapsibleSection>
 
           {/* Progreso Detallado */}
-          <section className="profile-section">
-            <div className="section-head">
-              <h2>📊 Progreso Detallado</h2>
-            </div>
-            <div className="progress-stats">
+          <ProfileCollapsibleSection title={"📊 Detailed progress"}>
+<div className="progress-stats">
               <div className="progress-item">
                 <div className="progress-icon">⏱️</div>
                 <div className="progress-content">
-                  <div className="progress-label">Horas Totales</div>
+                  <div className="progress-label">Total hours</div>
                   <div className="progress-value">{studyProgress.totalHours}h</div>
                 </div>
               </div>
               <div className="progress-item">
                 <div className="progress-icon">📈</div>
                 <div className="progress-content">
-                  <div className="progress-label">Tasa de Mejora</div>
+                  <div className="progress-label">Improvement rate</div>
                   <div className="progress-value">+{studyProgress.improvementRate}%</div>
                 </div>
               </div>
               <div className="progress-item">
                 <div className="progress-icon">🎯</div>
                 <div className="progress-content">
-                  <div className="progress-label">Consistencia</div>
+                  <div className="progress-label">Consistency</div>
                   <div className="progress-value">{studyProgress.consistency}%</div>
                 </div>
               </div>
               <div className="progress-item">
                 <div className="progress-icon">🧠</div>
                 <div className="progress-content">
-                  <div className="progress-label">Puntuación de Enfoque</div>
+                  <div className="progress-label">Focus score</div>
                   <div className="progress-value">{studyProgress.focusScore}%</div>
                 </div>
               </div>
             </div>
-          </section>
+</ProfileCollapsibleSection>
         </>
       )}
 
@@ -1953,62 +1732,53 @@ export default function ProfilePage() {
       {activeTab === 'gamification' && (
         <>
           {/* Sistema de Recompensas */}
-          <section className="profile-section">
-            <div className="section-head">
-              <h2>🏆 Sistema de Recompensas</h2>
-            </div>
-            <div className="rewards-grid">
+          <ProfileCollapsibleSection title={"🏆 Rewards system"}>
+<div className="rewards-grid">
               {studyRewards.map((reward) => (
                 <div key={reward.id} className={`reward-card ${reward.earned ? 'earned' : 'locked'}`}>
                   <div className="reward-icon">🏆</div>
                   <div className="reward-name">{reward.name}</div>
                   <div className="reward-description">{reward.description}</div>
-                  <div className="reward-points">{reward.points} puntos</div>
+                  <div className="reward-points">{reward.points} points</div>
                   {reward.earned ? (
-                    <button className="claim-btn">✅ Reclamado</button>
+                    <button className="claim-btn">✅ Claimed</button>
                   ) : (
                     <button onClick={() => claimReward(reward.id)} className="claim-btn">
-                      🎁 Reclamar
+                      🎁 Claim
                     </button>
                   )}
                 </div>
               ))}
             </div>
-          </section>
+</ProfileCollapsibleSection>
 
           {/* Desafíos Especiales */}
-          <section className="profile-section">
-            <div className="section-head">
-              <h2>⚡ Desafíos Especiales</h2>
-            </div>
-            <div className="challenges-special-grid">
+          <ProfileCollapsibleSection title={"⚡ Special challenges"}>
+<div className="challenges-special-grid">
               {studyChallenges.map((challenge) => (
                 <div key={challenge.id} className={`challenge-special-card ${challenge.difficulty.toLowerCase()}`}>
                   <div className="challenge-icon">⚡</div>
                   <div className="challenge-title">{challenge.title}</div>
                   <div className="challenge-description">{challenge.description}</div>
-                  <div className="challenge-reward">Recompensa: {challenge.reward}</div>
+                  <div className="challenge-reward">Reward: {challenge.reward}</div>
                   <div className="challenge-difficulty">{challenge.difficulty}</div>
                   <button onClick={() => startChallenge(challenge.id)} className="start-challenge-btn">
-                    🚀 Iniciar Desafío
+                    🚀 Start challenge
                   </button>
                 </div>
               ))}
             </div>
-          </section>
+</ProfileCollapsibleSection>
 
           {/* Tabla de Clasificación */}
-          <section className="profile-section">
-            <div className="section-head">
-              <h2>🏅 Tabla de Clasificación</h2>
-            </div>
-            <div className="leaderboard">
+          <ProfileCollapsibleSection title={"🏅 Leaderboard"}>
+<div className="leaderboard">
               <div className="leaderboard-header">
                 <div>Rank</div>
-                <div>Usuario</div>
-                <div>Puntuación</div>
-                <div>Nivel</div>
-                <div>Racha</div>
+                <div>User</div>
+                <div>Score</div>
+                <div>Level</div>
+                <div>Streak</div>
               </div>
               {studyLeaderboard.map((player) => (
                 <div key={player.rank} className={`leaderboard-row ${player.name === 'You' ? 'current-user' : ''}`}>
@@ -2016,28 +1786,25 @@ export default function ProfilePage() {
                   <div className="player-name">{player.name}</div>
                   <div className="player-score">{player.score}</div>
                   <div className="player-level">{player.level}</div>
-                  <div className="player-streak">{player.streak} días</div>
+                  <div className="player-streak">{player.streak} days</div>
                 </div>
               ))}
             </div>
-          </section>
+</ProfileCollapsibleSection>
 
           {/* Motivación */}
-          <section className="profile-section">
-            <div className="section-head">
-              <h2>💪 Motivación</h2>
-            </div>
-            <div className="motivation-container">
+          <ProfileCollapsibleSection title={"💪 Motivation"}>
+<div className="motivation-container">
               <div className="motivation-level">
-                <div className="motivation-label">Nivel de Motivación</div>
+                <div className="motivation-label">Motivation level</div>
                 <div className="motivation-value">{studyMotivation.currentLevel}%</div>
-                <div className="motivation-change">+{studyMotivation.weeklyChange}% esta semana</div>
+                <div className="motivation-change">+{studyMotivation.weeklyChange}% this week</div>
               </div>
               <div className="motivational-quote">
                 <div className="quote-text">"{studyMotivation.motivationalQuote}"</div>
               </div>
               <div className="next-milestone">
-                <div className="milestone-label">Próximo Hito</div>
+                <div className="milestone-label">Next milestone</div>
                 <div className="milestone-text">{studyMotivation.nextMilestone}</div>
                 <div className="milestone-progress">
                   <div 
@@ -2048,11 +1815,11 @@ export default function ProfilePage() {
                 <div className="milestone-percentage">{studyMotivation.progressToMilestone}%</div>
               </div>
             </div>
-          </section>
+</ProfileCollapsibleSection>
         </>
       )}
 
-      {/* Tab: Fechas de examen */}
+      {/* Tab: Dates de examen */}
       {activeTab === 'exam-dates' ? (
         <ProfileExamDatesPanel
           key="exam-dates-panel"
@@ -2074,11 +1841,8 @@ export default function ProfilePage() {
       {activeTab === 'community' && (
         <>
           {/* Chat de Grupos */}
-          <section className="profile-section">
-            <div className="section-head">
-              <h2>💬 Chat de Grupos</h2>
-            </div>
-            <div className="chat-container">
+          <ProfileCollapsibleSection title={"💬 Group chat"}>
+<div className="chat-container">
               <div className="chat-messages">
                 {groupChat.map((message) => (
                   <div key={message.id} className={`chat-message ${message.user === 'You' ? 'own-message' : 'other-message'}`}>
@@ -2094,7 +1858,7 @@ export default function ProfilePage() {
               <div className="chat-input">
                 <input 
                   type="text" 
-                  placeholder="Escribe tu mensaje..." 
+                  placeholder="Type your message..." 
                   className="message-input"
                   onKeyPress={(e) => {
                     if (e.key === 'Enter') {
@@ -2106,14 +1870,17 @@ export default function ProfilePage() {
                 <button className="send-btn">📤</button>
               </div>
             </div>
-          </section>
+</ProfileCollapsibleSection>
 
           {/* Flashcards */}
-          <section className="profile-section">
-            <div className="section-head">
-              <h2>🃏 Tarjetas de Memoria</h2>
-              <button onClick={addFlashcard} className="add-flashcard-btn">+ Nueva Tarjeta</button>
-            </div>
+          <ProfileCollapsibleSection
+            title="🃏 Flashcards"
+            actions={
+              <button type="button" onClick={addFlashcard} className="add-flashcard-btn">
+                + New card
+              </button>
+            }
+          >
             <div className="flashcards-grid">
               {flashcards.map((card) => (
                 <div key={card.id} className="flashcard">
@@ -2141,21 +1908,18 @@ export default function ProfilePage() {
                     </div>
                   </div>
                   <div className="flashcard-stats">
-                    <div className="stat">Revisado: {card.reviewed}</div>
-                    <div className="stat">Correcto: {card.correct}</div>
-                    <div className="stat">Precisión: {card.reviewed > 0 ? Math.round((card.correct / card.reviewed) * 100) : 0}%</div>
+                    <div className="stat">Reviewed: {card.reviewed}</div>
+                    <div className="stat">Correct: {card.correct}</div>
+                    <div className="stat">Accuracy: {card.reviewed > 0 ? Math.round((card.correct / card.reviewed) * 100) : 0}%</div>
                   </div>
                 </div>
               ))}
             </div>
-          </section>
+          </ProfileCollapsibleSection>
 
           {/* Temas Visuales */}
-          <section className="profile-section">
-            <div className="section-head">
-              <h2>🎨 Temas Visuales</h2>
-            </div>
-            <div className="themes-grid">
+          <ProfileCollapsibleSection title={"🎨 Visual themes"}>
+<div className="themes-grid">
               {studyThemes.available.map((theme) => (
                 <div 
                   key={theme.id} 
@@ -2170,12 +1934,12 @@ export default function ProfilePage() {
                   ></div>
                   <div className="theme-name">{theme.name}</div>
                   {studyThemes.current === theme.id && (
-                    <div className="theme-active">✓ Activo</div>
+                    <div className="theme-active">✓ Active</div>
                   )}
                 </div>
               ))}
             </div>
-          </section>
+</ProfileCollapsibleSection>
         </>
       )}
         </>
@@ -2204,14 +1968,52 @@ function GlobalStyles() {
       .form-hint{margin:0 0 12px;font-size:14px}
       .form-hint--error{color:#dc2626}
       .form-hint--success{color:#16a34a}
-      .mis-datos-facts{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px 24px;margin:0}
-      .mis-datos-fact dt{font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;color:#64748b;margin:0 0 4px}
-      .mis-datos-fact dd{margin:0;font-size:15px;color:var(--text);font-weight:500}
+      .perfil-page--mis-datos .shell{max-width:1200px;padding-left:32px;padding-right:32px}
+      .mis-datos-panel{width:100%}
+      .mis-datos-panel .profile-section:not(.profile-section--collapsible):not(.profile-collapse){padding:28px 32px}
+      .mis-datos-panel .profile-section.profile-section--collapsible,.mis-datos-panel .profile-collapse{padding:0}
+      .mis-datos-panel .section-head h2,.mis-datos-panel .section-header h2{font-size:24px}
+      .mis-datos-panel .section-desc{font-size:16px;margin-bottom:22px}
+      .mis-datos-facts{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:20px 32px;margin:0}
+      @media (min-width:720px){.mis-datos-facts{grid-template-columns:repeat(4,minmax(0,1fr))}}
+      .mis-datos-fact dt{font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;color:#64748b;margin:0 0 6px}
+      .mis-datos-fact dd{margin:0;font-size:16px;color:var(--text);font-weight:500;line-height:1.4}
       .mis-datos-link{color:#0070f3;font-weight:600;text-decoration:none}
       .mis-datos-link:hover{text-decoration:underline}
+      .mis-datos-subscription__card{display:flex;flex-wrap:wrap;gap:20px 24px;padding:22px 24px;border:1px solid #e2e8f0;border-radius:14px;background:linear-gradient(135deg,#f8fafc 0%,#fff 100%)}
+      .mis-datos-subscription__badge{align-self:flex-start;padding:8px 16px;border-radius:999px;background:#0070f3;color:#fff;font-size:13px;font-weight:700;letter-spacing:.04em;text-transform:uppercase}
+      .mis-datos-subscription__body{flex:1 1 260px;min-width:0}
+      .mis-datos-subscription__plan{margin:0 0 8px;font-size:20px;color:var(--text)}
+      .mis-datos-subscription__text{margin:0 0 14px;font-size:15px;line-height:1.5;color:#64748b}
+      .mis-datos-subscription__features{margin:0;padding-left:1.2rem;font-size:14px;line-height:1.6;color:#475569}
+      .mis-datos-subscription__features li{margin-bottom:4px}
+      .mis-datos-form{display:grid;grid-template-columns:1fr;gap:4px 24px}
+      @media (min-width:640px){
+        .mis-datos-form{grid-template-columns:repeat(2,minmax(0,1fr))}
+        .mis-datos-form .form-group:has(#profile-bio){grid-column:1/-1}
+      }
+      .mis-datos-panel .profile-name-section .form-input{font-size:16px;padding:14px 16px}
+      .mis-datos-panel .profile-name-section textarea.form-input{min-height:120px}
+      .mis-datos-panel .profile-name-section .action-btn{margin-top:8px;padding:14px 24px;font-size:16px}
+      @media (max-width:639px){.mis-datos-facts{grid-template-columns:1fr}}
       .header--mascot{display:flex;flex-wrap:wrap;align-items:center;gap:20px 32px;margin-bottom:8px}
+      .header__avatar{flex:0 0 auto}
+      .header__avatar .profile-avatar__error{max-width:140px;font-size:12px;text-align:center}
       .header__copy{flex:1 1 240px;min-width:0}
       .header__mascot{flex:0 0 auto;line-height:0;filter:drop-shadow(0 8px 18px rgba(0,0,0,.12))}
+
+      .profile-avatar{display:flex;flex-direction:column;align-items:center;gap:6px}
+      .profile-avatar__input{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+      .profile-avatar__button{position:relative;display:block;padding:0;border:3px solid #0070f3;border-radius:50%;background:#e8f2ff;cursor:pointer;overflow:hidden;transition:transform .2s,box-shadow .2s}
+      .profile-avatar__button:hover:not(:disabled){transform:translateY(-2px);box-shadow:0 10px 24px rgba(0,112,243,.28)}
+      .profile-avatar__button:disabled{opacity:.75;cursor:wait}
+      .profile-avatar__img{width:100%;height:100%;object-fit:cover;display:block}
+      .profile-avatar__placeholder{display:flex;align-items:center;justify-content:center;width:100%;height:100%;font-size:1.65rem;font-weight:700;color:#1e40af;background:linear-gradient(145deg,#dbeafe 0%,#bfdbfe 100%)}
+      .profile-avatar__overlay{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(15,23,42,.42);color:#fff;font-size:1.35rem;opacity:0;transition:opacity .2s}
+      .profile-avatar__button:hover .profile-avatar__overlay,.profile-avatar__button:focus-visible .profile-avatar__overlay{opacity:1}
+      .profile-avatar__error{margin:0;font-size:13px;color:#dc2626;text-align:center;line-height:1.4}
+      .profile-avatar-row{display:flex;flex-wrap:wrap;align-items:center;gap:20px 24px;margin-bottom:20px;padding:16px;border:1px solid #e2e8f0;border-radius:12px;background:#f8fafc}
+      .profile-avatar-row__hint{margin:0;flex:1 1 200px;font-size:14px;color:#64748b;line-height:1.5}
       
       .tabs{display:flex;flex-wrap:wrap;gap:8px;padding:16px}
       .tab{padding:12px 20px;border-radius:12px;border:1px solid #eaeaea;background:white;color:var(--text);cursor:pointer;transition:.2s;font-weight:500}
@@ -2227,7 +2029,13 @@ function GlobalStyles() {
       .profile-coming-soon__title{margin:0 0 10px;font-size:22px;color:var(--text)}
       .profile-coming-soon__text{margin:0 auto;max-width:32rem;color:#64748b;line-height:1.55;font-size:15px}
       
+      .profile-tab-panels{display:flex;flex-direction:column;gap:10px;margin:4px 0 28px}
       .profile-section{margin:22px 0;padding:24px;border:1px solid #eaeaea;border-radius:16px;background:var(--card);box-shadow:0 2px 6px rgba(0,0,0,0.1)}
+      .profile-section.profile-section--collapsible,.profile-section.profile-collapse{margin:0;padding:0;background:#fff;border:1px solid rgba(15,23,42,.08);border-radius:12px;box-shadow:0 1px 2px rgba(15,23,42,.04),0 4px 14px rgba(15,23,42,.04)}
+      .profile-section.profile-collapse--open{border-color:rgba(0,112,243,.22);box-shadow:0 1px 2px rgba(0,112,243,.06),0 8px 24px rgba(0,112,243,.08)}
+      .profile-section.profile-section--static{background:#fff;border:1px solid rgba(15,23,42,.08);border-radius:12px;box-shadow:0 1px 2px rgba(15,23,42,.04)}
+      .charts-section{display:flex;flex-direction:column;gap:10px;margin:16px 0 24px}
+      .charts-section .profile-section.profile-section--collapsible{margin:0}
       .section-head{display:flex;align-items:center;gap:8px;margin-bottom:20px}
       .section-head h2{margin:0;font-size:22px;color:var(--text)}
       .section-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px}
@@ -2291,7 +2099,7 @@ function GlobalStyles() {
       .goal-fill{height:100%;background:#0070f3;transition:width .3s}
       .goal-input{padding:8px 12px;border:1px solid #eaeaea;border-radius:8px;width:80px;text-align:center}
       
-      /* Configuración */
+      /* Settings */
       .settings-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px;margin-bottom:20px}
       .setting-item{padding:16px;border:1px solid #eaeaea;border-radius:12px;background:white}
       .setting-label{display:flex;align-items:center;gap:8px;cursor:pointer;font-weight:500}
@@ -2333,7 +2141,7 @@ function GlobalStyles() {
       .note-tags{display:flex;gap:4px}
       .note-tag{padding:2px 6px;background:#e9ecef;border-radius:4px;font-size:10px}
       
-      /* Ejercicios favoritos */
+      /* Exercises favoritos */
       .favorites-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:16px}
       .favorite-card{padding:16px;border:1px solid #eaeaea;border-radius:12px;background:white;transition:transform .2s,box-shadow .2s}
       .favorite-card:hover{transform:translateY(-2px);box-shadow:0 8px 20px rgba(0,0,0,.1)}

@@ -1,5 +1,5 @@
 /**
- * Recomendación orientativa sobre cuándo presentarse al examen Cambridge.
+ * Indicative recommendation on when to take a Cambridge exam.
  * @param {object} params
  * @param {string} [params.levelEstimate] — A2, B1, B2, C1…
  * @param {number} [params.completedExams]
@@ -26,34 +26,34 @@ export function getExamReadinessRecommendation({
   const prep = prepMonthsByLevel[level] || prepMonthsByLevel.B1;
 
   let readiness = 'preparing';
-  let readinessLabel = 'Sigue preparándote';
-  let suggestedWindow = `En unos ${prep.recommended} meses`;
+  let readinessLabel = 'Keep preparing';
+  let suggestedWindow = `In about ${prep.recommended} months`;
   let headline =
-    'Todavía conviene consolidar bases antes de reservar plaza. Prioriza práctica regular y simulacros completos.';
+    'It is still worth consolidating the basics before booking a place. Focus on regular practice and full mock exams.';
 
   const activeLearner = studyStreak >= 5 || completedExams >= 2 || studyHours >= 10;
 
   if (activeLearner && (completedExams >= 5 || studyStreak >= 14) && studyHours >= 20) {
     readiness = 'ready';
-    readinessLabel = 'Buen momento para inscribirte';
-    suggestedWindow = 'Próxima convocatoria disponible (junio, agosto o diciembre)';
+    readinessLabel = 'Good time to register';
+    suggestedWindow = 'Next available session (June, August or December)';
     headline =
-      'Tu constancia y práctica indican que puedes plantearte la próxima convocatoria. Revisa fechas en tu ciudad y reserva con antelación (suelen cerrarse plazas 4–6 semanas antes).';
+      'Your consistency and practice suggest you can target the next exam session. Check dates in your city and book early (places often close 4–6 weeks ahead).';
   } else if (activeLearner && (completedExams >= 2 || studyStreak >= 7)) {
     readiness = 'almost';
-    readinessLabel = 'Casi listo/a';
-    suggestedWindow = `En ${Math.max(prep.minimum, 2)}–${prep.recommended} meses`;
+    readinessLabel = 'Almost ready';
+    suggestedWindow = `In ${Math.max(prep.minimum, 2)}–${prep.recommended} months`;
     headline =
-      'Vas por buen camino. Completa al menos un simulacro por habilidad y revisa Writing/Speaking con feedback antes de fijar la fecha.';
+      'You are on the right track. Complete at least one mock per skill and review Writing/Speaking with feedback before fixing your exam date.';
   } else {
-    suggestedWindow = `En ${prep.recommended} meses (mínimo ${prep.minimum})`;
+    suggestedWindow = `In ${prep.recommended} months (minimum ${prep.minimum})`;
   }
 
   const tips = [
-    'Reserva la fecha solo cuando hayas hecho simulacros completos del nivel objetivo.',
-    'Las convocatorias en papel (junio, agosto, diciembre) suelen agotarse antes — inscríbete pronto si ya te sientes preparado/a.',
-    'La modalidad computer-based ofrece más fechas; consulta el centro de tu ciudad.',
-    `Objetivo sugerido según tu nivel estimado (${level}): ${prep.recommended} meses de preparación constante.`,
+    'Only book your exam date once you have completed full mocks at your target level.',
+    'Paper-based sessions (June, August, December) often sell out early — register soon if you feel ready.',
+    'Computer-based exams offer more dates; check your local centre.',
+    `Suggested target based on your estimated level (${level}): ${prep.recommended} months of steady preparation.`,
   ];
 
   return {

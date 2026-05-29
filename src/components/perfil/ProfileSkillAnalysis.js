@@ -74,7 +74,7 @@ export default function ProfileSkillAnalysis({ userId }) {
     return (
       <>
         <section className="profile-section">
-          <p className="section-desc">Cargando análisis por habilidades…</p>
+          <p className="section-desc">Loading skills analysis…</p>
         </section>
       </>
     );
@@ -92,12 +92,12 @@ export default function ProfileSkillAnalysis({ userId }) {
     <>
       <section className="profile-section">
         <div className="section-head">
-          <h2>🎯 Análisis por Habilidades</h2>
+          <h2>🎯 Skills analysis</h2>
         </div>
         {!hasData ? (
           <p className="section-desc">
-            Aún no hay datos en Levels. Practica en{' '}
-            <a href="/niveles">Niveles</a> para ver tu progreso por habilidad.
+            No Levels data yet. Practise in{' '}
+            <a href="/niveles">Levels</a> to see your progress by skill.
           </p>
         ) : null}
         <div className="skills-grid">
@@ -119,7 +119,7 @@ export default function ProfileSkillAnalysis({ userId }) {
 
       <section className="profile-section">
         <div className="section-head">
-          <h2>📊 Radar de Habilidades</h2>
+          <h2>📊 Skills radar</h2>
         </div>
         <ResponsiveContainer width="100%" height={400}>
           <RadarChart data={radarData}>
@@ -133,7 +133,7 @@ export default function ProfileSkillAnalysis({ userId }) {
               fill="#0070f3"
               fillOpacity={0.3}
             />
-            <Radar name="Objetivo" dataKey="B" stroke="#eaeaea" fill="transparent" />
+            <Radar name="Target" dataKey="B" stroke="#eaeaea" fill="transparent" />
             <Tooltip />
           </RadarChart>
         </ResponsiveContainer>

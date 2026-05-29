@@ -40,7 +40,7 @@ export default function ProfilePrivateTutorPanel({ userRole, accessToken }) {
     });
     const json = await res.json().catch(() => ({}));
     if (!res.ok) {
-      throw new Error(json.error || 'No se pudo cargar tu perfil de clases.');
+      throw new Error(json.error || 'Could not load your tutoring profile.');
     }
     setTablesReady(json.tablesReady !== false);
     applyProfile(json.profile);
@@ -53,7 +53,7 @@ export default function ProfilePrivateTutorPanel({ userRole, accessToken }) {
     });
     const json = await res.json().catch(() => ({}));
     if (!res.ok) {
-      throw new Error(json.error || 'No se pudo cargar la lista de profesores.');
+      throw new Error(json.error || 'Could not load the teacher list.');
     }
     setTablesReady(json.tablesReady !== false);
     setTeachers(json.teachers || []);
@@ -72,7 +72,7 @@ export default function ProfilePrivateTutorPanel({ userRole, accessToken }) {
           await loadTeachersForStudents();
         }
       } catch (err) {
-        if (!cancelled) setError(err.message || 'Error de carga.');
+        if (!cancelled) setError(err.message || 'Load error.');
       } finally {
         if (!cancelled) setLoading(false);
       }
@@ -119,12 +119,12 @@ export default function ProfilePrivateTutorPanel({ userRole, accessToken }) {
       });
       const json = await res.json().catch(() => ({}));
       if (!res.ok) {
-        throw new Error(json.error || 'No se pudo guardar.');
+        throw new Error(json.error || 'Could not save.');
       }
-      setMessage('Perfil de clases guardado. Los alumnos ya pueden reservar contigo.');
+      setMessage('Tutoring profile saved. Students can now book with you.');
       applyProfile(json.profile);
     } catch (err) {
-      setError(err.message || 'Error al guardar.');
+      setError(err.message || 'Error saving.');
     } finally {
       setSaving(false);
     }
@@ -135,7 +135,7 @@ export default function ProfilePrivateTutorPanel({ userRole, accessToken }) {
       <>
         <ProfilePrivateTutorStyles />
         <section className="profile-section">
-          <p className="section-desc">Cargando clases particulares…</p>
+          <p className="section-desc">Loading private tutoring…</p>
         </section>
       </>
     );
@@ -147,11 +147,11 @@ export default function ProfilePrivateTutorPanel({ userRole, accessToken }) {
         <ProfilePrivateTutorStyles />
         <section className="profile-section">
           <div className="section-head">
-            <h2>👨‍🏫 Consigue tu profesor particular</h2>
+            <h2>👨‍🏫 Find your private tutor</h2>
           </div>
           <p className="section-desc">
-            El módulo de reservas aún no está activo en la base de datos. Ejecuta{' '}
-            <code>scripts/profesor_calendly.sql</code> en Supabase.
+            The booking module is not active in the database yet. Run{' '}
+            <code>scripts/profesor_calendly.sql</code> in Supabase.
           </p>
         </section>
       </>
@@ -164,27 +164,27 @@ export default function ProfilePrivateTutorPanel({ userRole, accessToken }) {
         <ProfilePrivateTutorStyles />
         <section className="profile-section">
           <div className="section-head">
-            <h2>👨‍🏫 Clases particulares (online y presenciales)</h2>
+            <h2>👨‍🏫 Private tutoring (online & in person)</h2>
           </div>
           <p className="section-desc">
-            Configura cómo pueden reservarte los alumnos: videollamada con Calendly y/o clases
-            presenciales con enlace de reserva o información de ubicación.
+            Set how students can book you: video calls via Calendly and/or in-person lessons with
+            a booking link or location details.
           </p>
 
           <form onSubmit={handleSave} className="profile-tutor-form">
             <fieldset className="profile-tutor-fieldset">
-              <legend>💻 Clases online</legend>
+              <legend>💻 Online lessons</legend>
               <label className="profile-tutor-checkbox">
                 <input
                   type="checkbox"
                   checked={offersOnline}
                   onChange={(e) => setOffersOnline(e.target.checked)}
                 />
-                <span>Ofrezco clases online personalizadas</span>
+                <span>I offer personalised online lessons</span>
               </label>
               {offersOnline ? (
                 <label className="profile-tutor-field">
-                  <span>Enlace de Calendly (online)</span>
+                  <span>Calendly link (online)</span>
                   <input
                     type="url"
                     value={calendlyUrl}
@@ -196,19 +196,19 @@ export default function ProfilePrivateTutorPanel({ userRole, accessToken }) {
             </fieldset>
 
             <fieldset className="profile-tutor-fieldset">
-              <legend>📍 Clases presenciales</legend>
+              <legend>📍 In-person lessons</legend>
               <label className="profile-tutor-checkbox">
                 <input
                   type="checkbox"
                   checked={offersInPerson}
                   onChange={(e) => setOffersInPerson(e.target.checked)}
                 />
-                <span>Ofrezco clases presenciales</span>
+                <span>I offer in-person lessons</span>
               </label>
               {offersInPerson ? (
                 <>
                   <label className="profile-tutor-field">
-                    <span>Calendly presencial (opcional)</span>
+                    <span>In-person Calendly (optional)</span>
                     <input
                       type="url"
                       value={calendlyUrlInPerson}
@@ -217,12 +217,12 @@ export default function ProfilePrivateTutorPanel({ userRole, accessToken }) {
                     />
                   </label>
                   <label className="profile-tutor-field">
-                    <span>Ciudad, zona y cómo reservar (si no usas Calendly)</span>
+                    <span>City, area and how to book (if not using Calendly)</span>
                     <textarea
                       rows={4}
                       value={inPersonInfo}
                       onChange={(e) => setInPersonInfo(e.target.value)}
-                      placeholder="Ej.: Madrid centro · Clases en academia / a domicilio · Escríbeme a…"
+                      placeholder="E.g. Central Madrid · Academy / home lessons · Email me at…"
                       maxLength={800}
                     />
                   </label>
@@ -231,26 +231,26 @@ export default function ProfilePrivateTutorPanel({ userRole, accessToken }) {
             </fieldset>
 
             <label className="profile-tutor-field">
-              <span>Presentación breve (opcional)</span>
+              <span>Short bio (optional)</span>
               <textarea
                 rows={3}
                 value={presentation}
                 onChange={(e) => setPresentation(e.target.value)}
-                placeholder="Especialidad, niveles Cambridge, experiencia…"
+                placeholder="Specialism, Cambridge levels, experience…"
                 maxLength={600}
               />
             </label>
 
             <label className="profile-tutor-checkbox">
               <input type="checkbox" checked={active} onChange={(e) => setActive(e.target.checked)} />
-              <span>Mostrar mi perfil a los alumnos</span>
+              <span>Show my profile to students</span>
             </label>
 
             {error ? <p className="profile-tutor-error">{error}</p> : null}
             {message ? <p className="profile-tutor-success">{message}</p> : null}
 
             <button type="submit" className="quick-action-btn" disabled={saving}>
-              {saving ? 'Guardando…' : 'Guardar clases online y presenciales'}
+              {saving ? 'Saving…' : 'Save online & in-person lessons'}
             </button>
           </form>
         </section>
@@ -258,10 +258,10 @@ export default function ProfilePrivateTutorPanel({ userRole, accessToken }) {
         {(offersOnline && calendlyUrl) || offersInPerson ? (
           <section className="profile-section">
             <div className="section-head">
-              <h2>👀 Vista previa</h2>
+              <h2>👀 Preview</h2>
             </div>
             <TeacherCard
-              name="Tu perfil"
+              name="Your profile"
               presentation={presentation}
               offersOnline={offersOnline && Boolean(calendlyUrl)}
               offersInPerson={offersInPerson}
@@ -283,11 +283,11 @@ export default function ProfilePrivateTutorPanel({ userRole, accessToken }) {
       <ProfilePrivateTutorStyles />
       <section className="profile-section">
         <div className="section-head">
-          <h2>👨‍🏫 Consigue tu profesor particular</h2>
+          <h2>👨‍🏫 Find your private tutor</h2>
         </div>
         <p className="section-desc">
-          Reserva clases personalizadas con profesores de Dralo: online por videollamada o
-          presenciales según ciudad y disponibilidad.
+          Book personalised lessons with Dralo teachers: online by video call or in person
+          depending on city and availability.
         </p>
       </section>
 
@@ -300,18 +300,18 @@ export default function ProfilePrivateTutorPanel({ userRole, accessToken }) {
       {teachers.length === 0 ? (
         <section className="profile-section">
           <p className="section-desc">
-            Todavía no hay profesores con clases publicadas. Vuelve pronto o contacta con soporte.
+            No teachers have published lessons yet. Check back soon or contact support.
           </p>
         </section>
       ) : (
         <>
           <section className="profile-section">
             <div className="section-head">
-              <h2>💻 Clases online</h2>
+              <h2>💻 Online lessons</h2>
               <span className="count">{onlineTeachers.length}</span>
             </div>
             {onlineTeachers.length === 0 ? (
-              <p className="section-desc">Ningún profesor tiene agenda online publicada aún.</p>
+              <p className="section-desc">No teacher has published an online schedule yet.</p>
             ) : (
               <div className="skills-grid">
                 {onlineTeachers.map((teacher) => (
@@ -323,11 +323,11 @@ export default function ProfilePrivateTutorPanel({ userRole, accessToken }) {
 
           <section className="profile-section">
             <div className="section-head">
-              <h2>📍 Clases presenciales</h2>
+              <h2>📍 In-person lessons</h2>
               <span className="count">{inPersonTeachers.length}</span>
             </div>
             {inPersonTeachers.length === 0 ? (
-              <p className="section-desc">Ningún profesor tiene clases presenciales publicadas aún.</p>
+              <p className="section-desc">No teacher has published in-person lessons yet.</p>
             ) : (
               <div className="skills-grid">
                 {inPersonTeachers.map((teacher) => (
@@ -341,17 +341,17 @@ export default function ProfilePrivateTutorPanel({ userRole, accessToken }) {
 
       <section className="profile-section">
         <div className="section-head">
-          <h2>ℹ️ Cómo funciona</h2>
+          <h2>ℹ️ How it works</h2>
         </div>
         <ul style={{ margin: 0, paddingLeft: '1.25rem', color: '#64748b', lineHeight: 1.55 }}>
           <li>
-            <strong>Online:</strong> pulsa reservar y elige fecha/hora en Calendly del profesor.
+            <strong>Online:</strong> click book and choose a date/time on the teacher&apos;s Calendly.
           </li>
           <li>
-            <strong>Presencial:</strong> reserva por Calendly o sigue las instrucciones de ciudad y
-            contacto del profesor.
+            <strong>In person:</strong> book via Calendly or follow the teacher&apos;s city and
+            contact instructions.
           </li>
-          <li>Tu profesor asignado aparece primero en cada listado.</li>
+          <li>Your assigned teacher appears first in each list.</li>
         </ul>
       </section>
     </>
@@ -378,13 +378,13 @@ function TeacherCard({
     <div className="skill-card profile-tutor-card">
       <div className="skill-name">
         {name}
-        {isAssigned ? <span className="profile-tutor-badge">Tu profesor</span> : null}
+        {isAssigned ? <span className="profile-tutor-badge">Your teacher</span> : null}
       </div>
 
       <div className="profile-tutor-modalities">
         {offersOnline ? <span className="profile-tutor-modality profile-tutor-modality--online">Online</span> : null}
         {offersInPerson ? (
-          <span className="profile-tutor-modality profile-tutor-modality--inperson">Presencial</span>
+          <span className="profile-tutor-modality profile-tutor-modality--inperson">In person</span>
         ) : null}
       </div>
 
@@ -392,7 +392,7 @@ function TeacherCard({
         <p className="profile-tutor-presentation">{presentation}</p>
       ) : (
         <p className="profile-tutor-presentation profile-tutor-presentation--muted">
-          Clases personalizadas de inglés.
+          Personalised English lessons.
         </p>
       )}
 
@@ -417,15 +417,15 @@ function TeacherCard({
                 rel="noopener noreferrer"
                 className="quick-action-btn profile-tutor-action profile-tutor-action--secondary"
               >
-                {preview ? 'Calendly presencial (vista previa)' : 'Reservar clase presencial →'}
+                {preview ? 'In-person Calendly (preview)' : 'Book in-person lesson →'}
               </a>
             ) : null}
             {inPersonInfo ? (
               <p className="profile-tutor-inperson-info">{inPersonInfo}</p>
             ) : null}
             {!calendlyUrlInPerson && inPersonInfo && email && !preview ? (
-              <a href={`mailto:${email}?subject=Clase presencial Dralo`} className="profile-tutor-contact-link">
-                Contactar para reservar presencial →
+              <a href={`mailto:${email}?subject=In-person lesson Dralo`} className="profile-tutor-contact-link">
+                Contact to book in person →
               </a>
             ) : null}
           </>

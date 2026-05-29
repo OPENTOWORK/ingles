@@ -117,7 +117,7 @@ export default function ProfileExamDatesPanel({
   if (!mounted) {
     return (
       <div className={styles.panel}>
-        <div className={styles.panelLoading}>Cargando fechas de examen…</div>
+        <div className={styles.panelLoading}>Loading exam dates…</div>
       </div>
     );
   }
@@ -126,11 +126,11 @@ export default function ProfileExamDatesPanel({
     <div className={styles.panel}>
       <section className="profile-section">
         <div className="section-head">
-          <h2>🎓 ¿Cuándo presentarte al examen?</h2>
+          <h2>🎓 When should you take the exam?</h2>
         </div>
         <p className="section-desc">
-          Recomendación personalizada según tu actividad en Dralo. Las fechas exactas dependen de
-          cada centro autorizado — usa los enlaces para confirmar plazas e inscripción.
+          Personalised recommendation based on your activity on Dralo. Exact dates depend on each
+          authorised centre — use the links below to confirm availability and registration.
         </p>
 
         <div className="stats-grid">
@@ -138,7 +138,7 @@ export default function ProfileExamDatesPanel({
             <div className="stat-icon">📊</div>
             <div className="stat-content">
               <div className="stat-number">{recommendation.level}</div>
-              <div className="stat-label">Nivel estimado</div>
+              <div className="stat-label">Estimated level</div>
             </div>
           </div>
           <div className="stat-card">
@@ -147,7 +147,7 @@ export default function ProfileExamDatesPanel({
               <div className={`stat-number ${styles.statNumberCompact}`}>
                 {recommendation.suggestedWindow}
               </div>
-              <div className="stat-label">Ventana orientativa</div>
+              <div className="stat-label">Suggested window</div>
             </div>
           </div>
           <div className="stat-card">
@@ -162,7 +162,7 @@ export default function ProfileExamDatesPanel({
               <div className={`stat-number ${styles.statNumberCompact}`}>
                 {recommendation.readinessLabel}
               </div>
-              <div className="stat-label">Estado de preparación</div>
+              <div className="stat-label">Readiness</div>
             </div>
           </div>
         </div>
@@ -177,11 +177,11 @@ export default function ProfileExamDatesPanel({
 
       <section className="profile-section">
         <div className="section-head">
-          <h2>📅 Fechas por ciudad</h2>
+          <h2>📅 Dates by city</h2>
         </div>
         <p className="section-desc">
-          {CAMBRIDGE_EXAM_CITIES.length} ciudades en España. Busca la tuya o filtra por comunidad
-          autónoma para ver convocatorias orientativas y enlaces oficiales.
+          {CAMBRIDGE_EXAM_CITIES.length} cities in Spain. Search yours or filter by region to see
+          indicative sessions and official links.
         </p>
 
         <div className={styles.filterBar}>
@@ -192,17 +192,17 @@ export default function ProfileExamDatesPanel({
             <input
               type="search"
               className={styles.searchInput}
-              placeholder="Buscar ciudad… (ej. Málaga, Valencia, Bilbao)"
+              placeholder="Search city… (e.g. Málaga, Valencia, Bilbao)"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              aria-label="Buscar ciudad"
+              aria-label="Search city"
             />
             {searchQuery ? (
               <button
                 type="button"
                 className={styles.searchClear}
                 onClick={() => setSearchQuery('')}
-                aria-label="Borrar búsqueda"
+                aria-label="Clear search"
               >
                 ✕
               </button>
@@ -210,57 +210,54 @@ export default function ProfileExamDatesPanel({
           </label>
 
           <div className={styles.regionRow}>
-            <span className={styles.regionLabel}>Comunidad:</span>
-            <div className={styles.regionChips} role="group" aria-label="Filtrar por comunidad">
-              <button
-                type="button"
-                className={`${styles.regionChip}${regionFilter === 'all' ? ` ${styles.regionChipActive}` : ''}`}
-                onClick={() => setRegionFilter('all')}
-              >
-                Todas
-              </button>
+            <label className={styles.regionLabel} htmlFor="exam-dates-region">
+              Region
+            </label>
+            <select
+              id="exam-dates-region"
+              className={styles.regionSelect}
+              value={regionFilter}
+              onChange={(e) => setRegionFilter(e.target.value)}
+              aria-label="Filter by region"
+            >
+              <option value="all">All regions</option>
               {CAMBRIDGE_EXAM_REGIONS.map((region) => (
-                <button
-                  key={region}
-                  type="button"
-                  className={`${styles.regionChip}${regionFilter === region ? ` ${styles.regionChipActive}` : ''}`}
-                  onClick={() => setRegionFilter(region)}
-                >
+                <option key={region} value={region}>
                   {region}
-                </button>
+                </option>
               ))}
-            </div>
+            </select>
           </div>
 
           <div className={styles.filterMeta}>
             <span>
-              Mostrando <strong>{filteredCities.length}</strong> de {CAMBRIDGE_EXAM_CITIES.length}{' '}
-              ciudades
+              Showing <strong>{filteredCities.length}</strong> of {CAMBRIDGE_EXAM_CITIES.length}{' '}
+              cities.
               {regionFilter !== 'all' ? (
                 <>
                   {' '}
-                  en <strong>{regionFilter}</strong>
+                  In <strong>{regionFilter}</strong>
                 </>
               ) : null}
             </span>
             {hasActiveFilter ? (
               <button type="button" className={styles.clearFiltersBtn} onClick={clearFilters}>
-                Quitar filtros
+                Clear filters
               </button>
             ) : null}
           </div>
         </div>
 
         <p className={styles.cityNote}>
-          Las fechas mostradas son orientativas. Cada centro publica sus plazas reales en Cambridge
-          English o British Council.
+          Dates shown are indicative. Each centre publishes real slots on Cambridge English or
+          British Council.
         </p>
 
         {filteredCities.length === 0 ? (
           <div className={styles.emptyState}>
-            <p>No hay ciudades con ese criterio.</p>
+            <p>No cities match that filter.</p>
             <button type="button" className={styles.clearFiltersBtn} onClick={clearFilters}>
-              Ver todas las ciudades
+              Show all cities
             </button>
           </div>
         ) : (
@@ -274,11 +271,10 @@ export default function ProfileExamDatesPanel({
 
       <section className="profile-section">
         <div className="section-head">
-          <h2>🔗 Recursos oficiales</h2>
+          <h2>🔗 Official resources</h2>
         </div>
         <p className="section-desc">
-          Enlaces verificados a Cambridge English y British Council para consultar plazos, precios e
-          inscripción.
+          Verified links to Cambridge English and British Council for dates, fees and registration.
         </p>
         <div className={styles.officialGrid}>
           {CAMBRIDGE_EXAM_OFFICIAL_LINKS.map((link) => (
@@ -292,7 +288,7 @@ export default function ProfileExamDatesPanel({
             >
               <span className={styles.officialLinkLabel}>{link.label}</span>
               <span className={styles.officialLinkDesc}>{link.description}</span>
-              <span className={styles.officialLinkArrow}>Abrir enlace ↗</span>
+              <span className={styles.officialLinkArrow}>Open link ↗</span>
             </a>
           ))}
         </div>

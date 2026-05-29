@@ -72,12 +72,12 @@ export default function ProfileGoalsPanel({ userId }) {
     setSaving(true);
     localStorage.setItem(storageKey(userId), JSON.stringify(targets));
     setSaving(false);
-    setSaveMsg('Objetivos guardados correctamente.');
+    setSaveMsg('Goals saved successfully.');
     setTimeout(() => setSaveMsg(''), 3000);
   };
 
   if (loading) {
-    return <div className={styles.loading}>Cargando tu progreso hacia los objetivos…</div>;
+    return <div className={styles.loading}>Loading your goal progress…</div>;
   }
 
   return (
@@ -87,11 +87,11 @@ export default function ProfileGoalsPanel({ userId }) {
           <span className={styles.summaryValue}>
             {completedCount}/{totalGoals}
           </span>
-          <span className={styles.summaryLabel}>Objetivos cumplidos</span>
+          <span className={styles.summaryLabel}>Goals completed</span>
         </div>
         <div className={styles.summaryItem}>
           <span className={styles.summaryValue}>{progress?.weekDays ?? 0}</span>
-          <span className={styles.summaryLabel}>Días activos (7 d)</span>
+          <span className={styles.summaryLabel}>Active days (7 d)</span>
         </div>
         <div className={styles.summaryItem}>
           <span className={styles.summaryValue}>{progress?.weekMinutes ?? 0}</span>
@@ -117,8 +117,8 @@ export default function ProfileGoalsPanel({ userId }) {
         }`}
       >
         {completedCount === totalGoals
-          ? '¡Enhorabuena! Has cumplido todos tus objetivos del periodo. Puedes subir las metas y seguir creciendo.'
-          : `Llevas ${completedCount} de ${totalGoals} objetivos en verde.`}
+          ? 'Congratulations! You have completed all goals for this period. Raise your targets and keep going.'
+          : `${completedCount} of ${totalGoals} goals completed.`}
       </div>
 
       <div className={styles.grid}>
@@ -136,7 +136,7 @@ export default function ProfileGoalsPanel({ userId }) {
               </div>
               {goal.done ? (
                 <span className={goal.over ? styles.badgeOver : styles.badge}>
-                  {goal.over ? 'Superado' : 'Cumplido'}
+                  {goal.over ? 'Exceeded' : 'Done'}
                 </span>
               ) : null}
             </div>
@@ -181,7 +181,7 @@ export default function ProfileGoalsPanel({ userId }) {
 
       <div className={styles.footer}>
         <button type="button" className={styles.saveBtn} onClick={handleSave} disabled={saving}>
-          {saving ? 'Guardando…' : '💾 Guardar objetivos'}
+          {saving ? 'Saving…' : '💾 Save goals'}
         </button>
         {saveMsg ? <span className={styles.saveMsg}>{saveMsg}</span> : null}
       </div>

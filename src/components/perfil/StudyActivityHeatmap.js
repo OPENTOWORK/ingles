@@ -6,15 +6,15 @@ import styles from './StudyActivityHeatmap.module.css';
 function formatTooltip(day) {
   if (!day?.date) return '';
   const d = new Date(`${day.date}T12:00:00`);
-  const label = d.toLocaleDateString('es-ES', {
+  const label = d.toLocaleDateString('en-US', {
     weekday: 'long',
     day: 'numeric',
     month: 'long',
     year: 'numeric',
   });
-  if (day.minutes <= 0) return `${label}: sin estudio registrado`;
+  if (day.minutes <= 0) return `${label}: no study logged`;
   const sessions =
-    day.sessions > 0 ? ` · ${day.sessions} sesión${day.sessions === 1 ? '' : 'es'}` : '';
+    day.sessions > 0 ? ` · ${day.sessions} session${day.sessions === 1 ? '' : 's'}` : '';
   const mins =
     day.minutes < 60
       ? `${day.minutes} min`
@@ -41,13 +41,13 @@ export default function StudyActivityHeatmap({ accessToken }) {
         const json = await res.json();
         if (cancelled) return;
         if (!res.ok) {
-          setState({ status: 'error', data: null, error: json.error || 'Error al cargar' });
+          setState({ status: 'error', data: null, error: json.error || 'Failed to load' });
           return;
         }
         setState({ status: 'ready', data: json, error: null });
       } catch {
         if (!cancelled) {
-          setState({ status: 'error', data: null, error: 'No se pudo conectar' });
+          setState({ status: 'error', data: null, error: 'Could not connect' });
         }
       }
     })();
@@ -58,13 +58,13 @@ export default function StudyActivityHeatmap({ accessToken }) {
   }, [accessToken]);
 
   if (state.status === 'loading') {
-    return <div className={styles.loading}>Cargando tu actividad de estudio…</div>;
+    return <div className={styles.loading}>Loading your study activity…</div>;
   }
 
   if (state.status === 'error') {
     return (
       <div className={styles.empty}>
-        {state.error}. Vuelve a intentarlo más tarde.
+        {state.error}. Please try again later.
       </div>
     );
   }
@@ -77,26 +77,26 @@ export default function StudyActivityHeatmap({ accessToken }) {
       <div className={styles.summary}>
         <div className={styles.stat}>
           <span className={styles.statValue}>{summary?.streak ?? 0}</span>
-          <span className={styles.statLabel}>Días seguidos</span>
+          <span className={styles.statLabel}>Current streak</span>
         </div>
         <div className={styles.stat}>
           <span className={styles.statValue}>{summary?.activeDays ?? 0}</span>
-          <span className={styles.statLabel}>Días activos</span>
+          <span className={styles.statLabel}>Active days</span>
         </div>
         <div className={styles.stat}>
           <span className={styles.statValue}>{summary?.last7MinutesLabel ?? '0 min'}</span>
-          <span className={styles.statLabel}>Esta semana</span>
+          <span className={styles.statLabel}>This week</span>
         </div>
         <div className={styles.stat}>
           <span className={styles.statValue}>{summary?.last90MinutesLabel ?? '0 min'}</span>
-          <span className={styles.statLabel}>Últimos 90 días</span>
+          <span className={styles.statLabel}>Last 90 days</span>
         </div>
       </div>
 
       {!hasActivity ? (
         <p className={styles.hint}>
-          Aún no hay actividad registrada. Entra a practicar o haz un examen: cada sesión se
-          sumará aquí automáticamente.
+          No activity logged yet. Start practising or take an exam — each session will show up
+          here automatically.
         </p>
       ) : null}
 
@@ -154,13 +154,13 @@ export default function StudyActivityHeatmap({ accessToken }) {
       </div>
 
       <div className={styles.legend}>
-        <span>Menos</span>
+        <span>Less</span>
         <div className={styles.legendSquares}>
           {[0, 1, 2, 3, 4].map((level) => (
             <span key={level} className={`${styles.legendSquare} ${styles[`legendSquare${level}`]}`} />
           ))}
         </div>
-        <span>Más</span>
+        <span>More</span>
       </div>
     </div>
   );

@@ -68,7 +68,7 @@ export default function ProfileAchievementsCarousel({ userId }) {
   const goNext = () => setPageIndex((i) => Math.min(ACHIEVEMENT_PAGE_COUNT - 1, i + 1));
 
   if (loading) {
-    return <div className={styles.loading}>Cargando logros y badges…</div>;
+    return <div className={styles.loading}>Loading achievements and badges…</div>;
   }
 
   if (error) {
@@ -79,10 +79,10 @@ export default function ProfileAchievementsCarousel({ userId }) {
     <div className={styles.wrap}>
       <div className={styles.summary}>
         <span className={styles.summaryItem}>
-          Desbloqueados: <strong>{earnedTotal}</strong> / {totalBadges}
+          Unlocked: <strong>{earnedTotal}</strong> / {totalBadges}
         </span>
         <span className={styles.summaryItem}>
-          Hoja: <strong>{pageIndex + 1}</strong> / {ACHIEVEMENT_PAGE_COUNT}
+          Page: <strong>{pageIndex + 1}</strong> / {ACHIEVEMENT_PAGE_COUNT}
         </span>
       </div>
 
@@ -90,8 +90,8 @@ export default function ProfileAchievementsCarousel({ userId }) {
         <div>
           <h3 className={styles.pageTitle}>{currentPage?.title}</h3>
           <span className={styles.pageMeta}>
-            {currentPage?.badges?.filter((b) => b.earned).length ?? 0} de {ACHIEVEMENTS_PER_PAGE}{' '}
-            en esta hoja
+            {currentPage?.badges?.filter((b) => b.earned).length ?? 0} of {ACHIEVEMENTS_PER_PAGE}{' '}
+            on this page
           </span>
         </div>
         <div className={styles.controls}>
@@ -100,7 +100,7 @@ export default function ProfileAchievementsCarousel({ userId }) {
             className={styles.navBtn}
             onClick={goPrev}
             disabled={pageIndex === 0}
-            aria-label="Hoja anterior"
+            aria-label="Previous page"
           >
             ‹
           </button>
@@ -109,7 +109,7 @@ export default function ProfileAchievementsCarousel({ userId }) {
             className={styles.navBtn}
             onClick={goNext}
             disabled={pageIndex >= ACHIEVEMENT_PAGE_COUNT - 1}
-            aria-label="Hoja siguiente"
+            aria-label="Next page"
           >
             ›
           </button>

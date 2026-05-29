@@ -4,12 +4,12 @@ import { useEffect, useState } from 'react';
 import styles from './ProfileGeneralStats.module.css';
 
 const KPI_CARDS = [
-  { key: 'completedExams', icon: '📝', label: 'Actividades completadas' },
-  { key: 'totalCorrect', icon: '✅', label: 'Respuestas correctas' },
-  { key: 'trainingCount', icon: '💪', label: 'Sesiones de entrenamiento' },
-  { key: 'levelEstimate', icon: '🎯', label: 'Nivel estimado' },
-  { key: 'studyStreak', icon: '🔥', label: 'Días consecutivos' },
-  { key: 'totalStudyMinutes', icon: '⏱️', label: 'Tiempo de estudio', format: 'time' },
+  { key: 'completedExams', icon: '📝', label: 'Activities completed' },
+  { key: 'totalCorrect', icon: '✅', label: 'Correct answers' },
+  { key: 'trainingCount', icon: '💪', label: 'Training sessions' },
+  { key: 'levelEstimate', icon: '🎯', label: 'Estimated level' },
+  { key: 'studyStreak', icon: '🔥', label: 'Day streak' },
+  { key: 'totalStudyMinutes', icon: '⏱️', label: 'Study time', format: 'time' },
 ];
 
 function formatValue(key, value, format) {
@@ -42,14 +42,14 @@ export default function ProfileGeneralStats({ accessToken, onSummaryLoaded }) {
         const json = await res.json();
         if (cancelled) return;
         if (!res.ok) {
-          setState({ status: 'error', data: null, error: json.error || 'Error al cargar' });
+          setState({ status: 'error', data: null, error: json.error || 'Failed to load' });
           return;
         }
         setState({ status: 'ready', data: json, error: null });
         onSummaryLoaded?.(json.summary);
       } catch {
         if (!cancelled) {
-          setState({ status: 'error', data: null, error: 'No se pudo conectar' });
+          setState({ status: 'error', data: null, error: 'Could not connect' });
         }
       }
     })();
@@ -60,7 +60,7 @@ export default function ProfileGeneralStats({ accessToken, onSummaryLoaded }) {
   }, [accessToken]);
 
   if (state.status === 'loading') {
-    return <div className={styles.loading}>Cargando estadísticas desde tus tablas de progreso…</div>;
+    return <div className={styles.loading}>Loading stats from your progress data…</div>;
   }
 
   if (state.status === 'error') {
@@ -68,7 +68,7 @@ export default function ProfileGeneralStats({ accessToken, onSummaryLoaded }) {
   }
 
   if (state.status === 'empty') {
-    return <div className={styles.loading}>Inicia sesión para ver tus estadísticas.</div>;
+    return <div className={styles.loading}>Sign in to view your statistics.</div>;
   }
 
   const summary = state.data?.summary || {};

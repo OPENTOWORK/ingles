@@ -17,7 +17,7 @@ const LevelsStatsChartsCarousel = dynamic(
     loading: () => (
       <div className="lsp-loading">
         <span className="lsp-loading__spinner" aria-hidden />
-        Cargando gráficas…
+        Loading charts…
       </div>
     ),
   },
@@ -124,7 +124,7 @@ export default function LevelsEstadisticasPanel({ userId }) {
         if (cancelled) return;
 
         if (qErr) {
-          setError(qErr.message || 'No se pudieron cargar las estadísticas.');
+          setError(qErr.message || 'Could not load statistics.');
           setRows([]);
           setPartNames({});
           setPreguntaMeta({});
@@ -165,7 +165,7 @@ export default function LevelsEstadisticasPanel({ userId }) {
         setLevelCatalog(levelsResult.data || []);
       } catch (err) {
         if (!cancelled) {
-          setError(err?.message || 'No se pudieron cargar las estadísticas.');
+          setError(err?.message || 'Could not load statistics.');
           setRows([]);
           setPartNames({});
           setPreguntaMeta({});
@@ -213,21 +213,21 @@ export default function LevelsEstadisticasPanel({ userId }) {
       key: 'correct',
       tone: 'green',
       value: totals.correctas,
-      label: 'Respuestas correctas',
+      label: 'Correct answers',
       icon: 'correct',
     },
     {
       key: 'incorrect',
       tone: 'red',
       value: totals.incorrectas,
-      label: 'Respuestas incorrectas',
+      label: 'Incorrect answers',
       icon: 'incorrect',
     },
     {
       key: 'accuracy',
       tone: 'blue',
       value: pctGlobal != null ? `${pctGlobal}%` : '—',
-      label: 'Porcentaje de acierto total',
+      label: 'Overall accuracy',
       icon: 'accuracy',
       ring: pctGlobal,
     },
@@ -238,7 +238,7 @@ export default function LevelsEstadisticasPanel({ userId }) {
       <header className="lsp-header">
         <div className="lsp-header__copy">
           <h2 id="levels-stats-title" className="lsp-header__title">
-            Tu práctica
+            Your practice
           </h2>
         </div>
         {!loading && !error && rows.length > 0 && pctGlobal != null ? (
@@ -247,11 +247,11 @@ export default function LevelsEstadisticasPanel({ userId }) {
             style={{
               background: `conic-gradient(#2563eb ${pctGlobal * 3.6}deg, #e2e8f0 0deg)`,
             }}
-            aria-label={`Porcentaje de acierto total: ${pctGlobal}%`}
+            aria-label={`Overall accuracy: ${pctGlobal}%`}
           >
             <div className="lsp-header__ring-inner">
               <span className="lsp-header__ring-value">{pctGlobal}%</span>
-              <span className="lsp-header__ring-label">acierto</span>
+              <span className="lsp-header__ring-label">accuracy</span>
             </div>
           </div>
         ) : null}
@@ -260,7 +260,7 @@ export default function LevelsEstadisticasPanel({ userId }) {
       {loading ? (
         <div className="lsp-loading">
           <span className="lsp-loading__spinner" aria-hidden />
-          Cargando estadísticas…
+          Loading statistics…
         </div>
       ) : error ? (
         <p className="lsp-message lsp-message--error">{error}</p>
@@ -268,9 +268,9 @@ export default function LevelsEstadisticasPanel({ userId }) {
         <>
           {!hasAnyLevelData ? (
             <p className="lsp-message lsp-message--empty">
-              Aún no hay datos en Supabase. Practica en{' '}
-              <a href="/niveles">Levels</a> (A2, B1, B2, C1 o C2) y verás aquí tus resultados por
-              parte. Por ahora puedes explorar la estructura de cada nivel abajo.
+              No data in Supabase yet. Practise in{' '}
+              <a href="/niveles">Levels</a> (A2, B1, B2, C1 or C2) and you will see your results by
+              part here. For now you can explore each level structure below.
             </p>
           ) : null}
 

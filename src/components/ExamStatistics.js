@@ -1,9 +1,8 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { supabase } from '@/utils/supabaseClient';
 import { buildExamStatisticsFromLevels } from '@/lib/examStatisticsFromLevels';
-import { fetchLevelsPracticeData } from '@/lib/fetchLevelsPracticeData';
+import { useLevelsPracticeData } from '@/hooks/useLevelsPracticeData';
 import './ExamStatistics.css';
 
 const SECTION_META = {
@@ -14,11 +13,11 @@ const SECTION_META = {
 };
 
 const PERFORMANCE_LEVELS = [
-  { min: 90, label: 'Excelente', bg: '#dcfce7', text: '#166534' },
-  { min: 80, label: 'Muy bueno', bg: '#e0f2fe', text: '#0369a1' },
-  { min: 70, label: 'Bueno', bg: '#fef9c3', text: '#a16207' },
-  { min: 60, label: 'Regular', bg: '#ffedd5', text: '#c2410c' },
-  { min: 0, label: 'En progreso', bg: '#fee2e2', text: '#b91c1c' },
+  { min: 90, label: 'Excellent', bg: '#dcfce7', text: '#166534' },
+  { min: 80, label: 'Very good', bg: '#e0f2fe', text: '#0369a1' },
+  { min: 70, label: 'Good', bg: '#fef9c3', text: '#a16207' },
+  { min: 60, label: 'Fair', bg: '#ffedd5', text: '#c2410c' },
+  { min: 0, label: 'In progress', bg: '#fee2e2', text: '#b91c1c' },
 ];
 
 const EMPTY_STATS = {
@@ -50,43 +49,44 @@ export default function ExamStatistics({ userId }) {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
 
+  const { data: levelsData, loading: levelsLoading, error: levelsError } = useLevelsPracticeData(
+    userId,
+  );
+
   useEffect(() => {
     if (!userId) {
+      setStatistics(EMPTY_STATS);
+      setLoading(false);
+      setError('');
+      return undefined;
+    }
+
+    if (levelsLoading) {
+      setLoading(true);
+      return undefined;
+    }
+
+    if (levelsError) {
+      setError(levelsError);
       setStatistics(EMPTY_STATS);
       setLoading(false);
       return undefined;
     }
 
-    let cancelled = false;
+    if (!levelsData) {
+      setLoading(false);
+      return undefined;
+    }
 
-    (async () => {
-      setLoading(true);
-      setError('');
-
-      try {
-        const data = await fetchLevelsPracticeData(supabase, userId);
-        if (cancelled) return;
-
-        const stats = buildExamStatisticsFromLevels({
-          ...data,
-          timeRange,
-        });
-
-        setStatistics(stats);
-      } catch (err) {
-        if (!cancelled) {
-          setError(err?.message || 'No se pudieron cargar las estadísticas.');
-          setStatistics(EMPTY_STATS);
-        }
-      } finally {
-        if (!cancelled) setLoading(false);
-      }
-    })();
-
-    return () => {
-      cancelled = true;
-    };
-  }, [userId, timeRange]);
+    setError('');
+    setStatistics(
+      buildExamStatisticsFromLevels({
+        ...levelsData,
+        timeRange,
+      }),
+    );
+    setLoading(false);
+  }, [userId, timeRange, levelsData, levelsLoading, levelsError]);
 
   const formatTime = (seconds) => {
     const hours = Math.floor(seconds / 3600);
@@ -103,28 +103,28 @@ export default function ExamStatistics({ userId }) {
       key: 'started',
       icon: '📚',
       value: statistics.totalExams,
-      label: 'Exámenes iniciados',
+      label: 'Exams started',
       tone: 'blue',
     },
     {
       key: 'completed',
       icon: '✅',
       value: statistics.completedExams,
-      label: 'Completados',
+      label: 'Completed',
       tone: 'green',
     },
     {
       key: 'average',
       icon: '🎯',
       value: `${Math.round(statistics.averageScore)}%`,
-      label: 'Puntuación media',
+      label: 'Average score',
       tone: 'violet',
     },
     {
       key: 'best',
       icon: '🏆',
       value: `${Math.round(statistics.bestScore)}%`,
-      label: 'Mejor puntuación',
+      label: 'Best score',
       tone: 'amber',
     },
   ];
@@ -132,7 +132,7 @@ export default function ExamStatistics({ userId }) {
   if (loading) {
     return (
       <section className="exam-stats" aria-labelledby="exam-stats-title">
-        <p className="exam-stats__empty">Cargando estadísticas de exámenes…</p>
+        <p className="exam-stats__empty">Loading exam statistics…</p>
       </section>
     );
   }
@@ -149,19 +149,19 @@ export default function ExamStatistics({ userId }) {
     <section className="exam-stats" aria-labelledby="exam-stats-title">
       <header className="exam-stats__header">
         <div className="exam-stats__title-wrap">
-          <h2 id="exam-stats-title">Estadísticas de exámenes</h2>
+          <h2 id="exam-stats-title">Exam statistics</h2>
         </div>
         <div className="exam-stats__filter">
-          <label htmlFor="exam-stats-range">Periodo</label>
+          <label htmlFor="exam-stats-range">Period</label>
           <select
             id="exam-stats-range"
             value={timeRange}
             onChange={(e) => setTimeRange(e.target.value)}
             className="exam-stats__select"
           >
-            <option value="week">Esta semana</option>
-            <option value="month">Este mes</option>
-            <option value="all">Todo el tiempo</option>
+            <option value="week">This week</option>
+            <option value="month">This month</option>
+            <option value="all">All time</option>
           </select>
         </div>
       </header>
@@ -181,7 +181,7 @@ export default function ExamStatistics({ userId }) {
       </div>
 
       <div className="exam-stats__sections">
-        <h3 className="exam-stats__block-title">Rendimiento por sección</h3>
+        <h3 className="exam-stats__block-title">Performance by section</h3>
         <div className="exam-stats__section-grid">
           {Object.entries(statistics.sections).map(([section, sectionStats]) => {
             const meta = SECTION_META[section] || { label: section, color: '#64748b' };
@@ -215,13 +215,13 @@ export default function ExamStatistics({ userId }) {
                   </div>
                   <div className="exam-stats__metric">
                     <span className="exam-stats__metric-value">{pct}%</span>
-                    <span className="exam-stats__metric-label">Media</span>
+                    <span className="exam-stats__metric-label">Average</span>
                   </div>
                   <div className="exam-stats__metric">
                     <span className="exam-stats__metric-value">
                       {Math.round(sectionStats.bestScore)}%
                     </span>
-                    <span className="exam-stats__metric-label">Mejor</span>
+                    <span className="exam-stats__metric-label">Best</span>
                   </div>
                 </div>
                 <div
@@ -247,7 +247,7 @@ export default function ExamStatistics({ userId }) {
 
       <div className="exam-stats__two-col">
         <div className="exam-stats__panel">
-          <h3>Intentos recientes</h3>
+          <h3>Recent attempts</h3>
           {recent.length > 0 ? (
             <div className="exam-stats__attempts">
               {recent.map((attempt) => {
@@ -257,7 +257,7 @@ export default function ExamStatistics({ userId }) {
                     <div>
                       <div className="exam-stats__attempt-name">{attempt.label}</div>
                       <div className="exam-stats__attempt-date">
-                        {attempt.date.toLocaleDateString('es-ES', {
+                        {attempt.date.toLocaleDateString('en-US', {
                           day: 'numeric',
                           month: 'short',
                           year: 'numeric',
@@ -275,7 +275,7 @@ export default function ExamStatistics({ userId }) {
                         {attempt.totalQuestions > 0
                           ? `${attempt.score}/${attempt.totalQuestions}`
                           : attempt.aprobado
-                            ? 'Aprobado'
+                            ? 'Passed'
                             : '—'}
                       </div>
                     </div>
@@ -287,11 +287,11 @@ export default function ExamStatistics({ userId }) {
           ) : (
             <p className="exam-stats__empty">
               {hasData ? (
-                'No hay intentos recientes en este periodo.'
+                'No recent attempts in this period.'
               ) : (
                 <>
-                  Aún no hay puntuaciones guardadas. Empieza en{' '}
-                  <a href="/niveles">Niveles</a>.
+                  No scores saved yet. Start in{' '}
+                  <a href="/niveles">Levels</a>.
                 </>
               )}
             </p>
@@ -299,10 +299,10 @@ export default function ExamStatistics({ userId }) {
         </div>
 
         <div className="exam-stats__panel">
-          <h3>Análisis de rendimiento</h3>
+          <h3>Performance analysis</h3>
           <div className="exam-stats__insights">
             <div className="exam-stats__insight-card exam-stats__insight-card--strength">
-              <h4>Fortalezas</h4>
+              <h4>Strengths</h4>
               {statistics.strengths.length > 0 ? (
                 <ul className="exam-stats__chip-list">
                   {statistics.strengths.map((strength) => (
@@ -316,12 +316,12 @@ export default function ExamStatistics({ userId }) {
                 </ul>
               ) : (
                 <p className="exam-stats__empty" style={{ padding: '12px', margin: 0 }}>
-                  Completa partes de examen para identificar tus puntos fuertes.
+                  Complete exam parts to identify your strengths.
                 </p>
               )}
             </div>
             <div className="exam-stats__insight-card exam-stats__insight-card--improve">
-              <h4>Áreas de mejora</h4>
+              <h4>Areas to improve</h4>
               <ul className="exam-stats__tip-list">
                 {statistics.improvementAreas.map((area, index) => (
                   <li key={index} className="exam-stats__tip">
