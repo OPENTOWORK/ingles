@@ -74,6 +74,40 @@ export default function AppNav({ session, userRole, onLogout }) {
   const closeMobile = () => {
     setMobileOpen(false);
     setDraloOpen(false);
+    setAdminPanelsMobileOpen(false);
+  };
+
+  const closeDesktopDropdowns = () => {
+    setDraloDesktopOpen(false);
+    setAdminPanelsOpen(false);
+  };
+
+  const toggleDraloDesktop = () => {
+    setDraloDesktopOpen((open) => {
+      if (!open) setAdminPanelsOpen(false);
+      return !open;
+    });
+  };
+
+  const toggleAdminDesktop = () => {
+    setAdminPanelsOpen((open) => {
+      if (!open) setDraloDesktopOpen(false);
+      return !open;
+    });
+  };
+
+  const toggleDraloMobile = () => {
+    setDraloOpen((open) => {
+      if (!open) setAdminPanelsMobileOpen(false);
+      return !open;
+    });
+  };
+
+  const toggleAdminMobile = () => {
+    setAdminPanelsMobileOpen((open) => {
+      if (!open) setDraloOpen(false);
+      return !open;
+    });
   };
 
   const mobileLinkClass = 'app-nav__link app-nav__link--mobile';
@@ -95,7 +129,13 @@ export default function AppNav({ session, userRole, onLogout }) {
 
       <nav className="app-nav app-nav--desktop" aria-label="Main navigation">
         {NAV_LINKS_BEFORE_DRALO.map((item) => (
-          <NavLink key={item.href} href={item.href} className="app-nav__link">
+          <NavLink
+            key={item.href}
+            href={item.href}
+            className="app-nav__link"
+            onClick={closeDesktopDropdowns}
+            {...(item.tourId ? { 'data-tour': item.tourId } : {})}
+          >
             {item.label}
           </NavLink>
         ))}
@@ -105,7 +145,7 @@ export default function AppNav({ session, userRole, onLogout }) {
             type="button"
             className={`app-nav__link app-nav__link--button${draloDesktopOpen ? ' is-active' : ''}`}
             aria-expanded={draloDesktopOpen}
-            onClick={() => setDraloDesktopOpen((v) => !v)}
+            onClick={toggleDraloDesktop}
           >
             Dralo AI <span aria-hidden>▼</span>
           </button>
@@ -117,7 +157,7 @@ export default function AppNav({ session, userRole, onLogout }) {
                   href={item.href}
                   role="menuitem"
                   className="app-nav__dropdown-item"
-                  onClick={() => setDraloDesktopOpen(false)}
+                  onClick={closeDesktopDropdowns}
                 >
                   {item.label}
                 </NavLink>
@@ -126,7 +166,7 @@ export default function AppNav({ session, userRole, onLogout }) {
           ) : null}
         </div>
 
-        <NavLink href={NAV_LINK_CONTACT.href} className="app-nav__link">
+        <NavLink href={NAV_LINK_CONTACT.href} className="app-nav__link" onClick={closeDesktopDropdowns}>
           {NAV_LINK_CONTACT.label}
         </NavLink>
 
@@ -136,24 +176,31 @@ export default function AppNav({ session, userRole, onLogout }) {
               <AdminPanelsNav
                 variant="desktop"
                 open={adminPanelsOpen}
-                onToggle={() => setAdminPanelsOpen((v) => !v)}
-                onClose={() => setAdminPanelsOpen(false)}
+                onToggle={toggleAdminDesktop}
+                onClose={closeDesktopDropdowns}
               />
             ) : null}
             {showStaffLink ? (
-              <NavLink href={staffLink.href} className="app-nav__link">
+              <NavLink href={staffLink.href} className="app-nav__link" onClick={closeDesktopDropdowns}>
                 {staffLink.label}
               </NavLink>
             ) : null}
-            <NavLink href="/perfil" className="app-nav__link">
+            <NavLink href="/perfil" className="app-nav__link" onClick={closeDesktopDropdowns}>
               Profile
             </NavLink>
-            <button type="button" className="app-nav__btn" onClick={onLogout}>
+            <button
+              type="button"
+              className="app-nav__btn"
+              onClick={() => {
+                closeDesktopDropdowns();
+                onLogout();
+              }}
+            >
               Logout
             </button>
           </>
         ) : (
-          <NavLink href="/login" className="app-nav__btn app-nav__btn--ghost">
+          <NavLink href="/login" className="app-nav__btn app-nav__btn--ghost" onClick={closeDesktopDropdowns}>
             Login
           </NavLink>
         )}
@@ -181,7 +228,13 @@ export default function AppNav({ session, userRole, onLogout }) {
 
         <nav className="app-nav__drawer-nav" aria-label="Mobile navigation">
           {NAV_LINKS_BEFORE_DRALO.map((item) => (
-            <NavLink key={item.href} href={item.href} className={mobileLinkClass} onClick={closeMobile}>
+            <NavLink
+              key={item.href}
+              href={item.href}
+              className={mobileLinkClass}
+              onClick={closeMobile}
+              {...(item.tourId ? { 'data-tour': item.tourId } : {})}
+            >
               {item.label}
             </NavLink>
           ))}
@@ -189,7 +242,7 @@ export default function AppNav({ session, userRole, onLogout }) {
           <button
             type="button"
             className={`${mobileLinkClass} app-nav__accordion${draloOpen ? ' is-open' : ''}`}
-            onClick={() => setDraloOpen((v) => !v)}
+            onClick={toggleDraloMobile}
             aria-expanded={draloOpen}
           >
             Dralo AI
@@ -215,7 +268,7 @@ export default function AppNav({ session, userRole, onLogout }) {
                 <AdminPanelsNav
                   variant="mobile"
                   open={adminPanelsMobileOpen}
-                  onToggle={() => setAdminPanelsMobileOpen((v) => !v)}
+                  onToggle={toggleAdminMobile}
                   onClose={closeMobile}
                   linkClassName={mobileLinkClass}
                 />

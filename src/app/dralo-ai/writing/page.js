@@ -1,7 +1,7 @@
 'use client';
 
-import DraloAiSkillTrackHub from '@/components/dralo-ai/DraloAiSkillTrackHub';
+import DraloAiSituationalSkillPage from '@/components/dralo-ai/DraloAiSituationalSkillPage';
 
-export default function DraloAiWritingHubPage() {
-  return <DraloAiSkillTrackHub skillId="writing" />;
+export default function DraloAiWritingPage() {
+  return <DraloAiSituationalSkillPage skillId="writing" />;
 }

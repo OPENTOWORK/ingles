@@ -2,10 +2,17 @@
 
 import Link from 'next/link';
 import SiteMascot from '@/components/SiteMascot';
+import HomeHowItWorks from '@/components/home/HomeHowItWorks';
+import { useGuidedTour } from '@/context/GuidedTourContext';
+import { useUserRole } from '@/context/UserRoleContext';
 
 const FEATURES = ['Interactive', 'Automatic correction', 'Free to use'];
 
 export default function Home() {
+  const { session } = useUserRole();
+  const { startTour } = useGuidedTour();
+  const isRegistered = Boolean(session?.user);
+
   return (
     <main className="home-page">
       <div className="home-page__inner">
@@ -40,6 +47,8 @@ export default function Home() {
           <p>&ldquo;The best preparation for tomorrow is doing your best today.&rdquo;</p>
           <footer>— Your time is now</footer>
         </blockquote>
+
+        {isRegistered ? <HomeHowItWorks onStartTour={startTour} /> : null}
       </div>
     </main>
   );

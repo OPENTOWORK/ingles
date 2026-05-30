@@ -1,7 +1,5 @@
-'use client';
+import { redirect } from 'next/navigation';
 
-import DraloAiSpeakingSituational from '@/components/dralo-ai/DraloAiSpeakingSituational';
-
-export default function DraloAiSpeakingSituationalPage() {
-  return <DraloAiSpeakingSituational />;
+export default function DraloAiSpeakingSituationalRedirect() {
+  redirect('/dralo-ai/speaking');
 }

@@ -49,7 +49,7 @@ export default function DraloAiSpeakingSituational() {
   const startScenario = useCallback(async () => {
     resetChat();
     if (scenarioId === 'custom' && !customSituation.trim()) {
-      setError('Describe la situación que quieres practicar.');
+      setError('Describe the situation you want to practise.');
       return;
     }
     const starter =
@@ -98,7 +98,7 @@ export default function DraloAiSpeakingSituational() {
         setIsSpeaking(true);
         await speakText(reply, { onEnd: () => setIsSpeaking(false) });
       } catch (e) {
-        setError(e.message || 'No se pudo conectar con el coach.');
+        setError(e.message || 'Could not connect to the coach.');
       } finally {
         setBusy(false);
       }
@@ -121,9 +121,7 @@ export default function DraloAiSpeakingSituational() {
           <span aria-hidden> / </span>
           <Link href="/dralo-ai">Dralo AI</Link>
           <span aria-hidden> / </span>
-          <Link href="/dralo-ai/speaking">Speaking</Link>
-          <span aria-hidden> / </span>
-          <span>Situaciones reales</span>
+          <span>Speaking</span>
         </nav>
       </div>
 
@@ -137,13 +135,13 @@ export default function DraloAiSpeakingSituational() {
 
       <div className="dralo-ai-studio">
         <div className="dralo-ai-studio__toolbar">
-          <Link href="/dralo-ai/speaking" className="dralo-ai-back-link">
-            ← Elegir modo
+          <Link href="/dralo-ai" className="dralo-ai-back-link">
+            ← Dralo AI
           </Link>
           <DraloAiLevelFilter levels={config.levels} selectedLevel={level} onChange={setLevel} />
         </div>
 
-        <div className="dralo-ai-activities" role="tablist" aria-label="Escenarios">
+        <div className="dralo-ai-activities" role="tablist" aria-label="Scenarios">
           {situational.scenarios.map((s) => (
             <button
               key={s.id}
@@ -161,7 +159,7 @@ export default function DraloAiSpeakingSituational() {
         {scenarioId === 'custom' && (
           <div className="dralo-ai-panel" style={{ marginBottom: 16 }}>
             <label className="form-label" htmlFor="custom-situation">
-              Describe tu situación
+              Describe your situation
             </label>
             <textarea
               id="custom-situation"
@@ -169,7 +167,7 @@ export default function DraloAiSpeakingSituational() {
               rows={3}
               value={customSituation}
               onChange={(e) => setCustomSituation(e.target.value)}
-              placeholder="Ej.: Me quiero ir de viaje a Canadá. Ayúdame a simular un día en el aeropuerto, pasando el control de pasaportes…"
+              placeholder="e.g. I am travelling to Canada. Help me practise a day at the airport, including passport control…"
             />
           </div>
         )}
@@ -180,11 +178,11 @@ export default function DraloAiSpeakingSituational() {
               <img src={withBase('/dralo-coach.png')} alt="Dralo coach" width={120} height={120} />
             </div>
             <p className="dralo-ai-roleplay__status">
-              {busy ? 'Pensando…' : isSpeaking ? 'Hablando…' : isListening ? 'Escuchando…' : 'Listo'}
+              {busy ? 'Thinking…' : isSpeaking ? 'Speaking…' : isListening ? 'Listening…' : 'Ready'}
             </p>
             {!startedRef.current && (
               <button type="button" className="btn btn-primary" onClick={startScenario}>
-                Empezar role play
+                Start role play
               </button>
             )}
           </div>
@@ -206,7 +204,7 @@ export default function DraloAiSpeakingSituational() {
               <input
                 type="text"
                 className="form-input"
-                placeholder="Escribe en inglés o usa el micrófono…"
+                placeholder="Type in English or use the microphone…"
                 disabled={busy}
                 onKeyDown={(e) => {
                   if (e.key === 'Enter') {
@@ -223,11 +221,11 @@ export default function DraloAiSpeakingSituational() {
                   onClick={isListening ? stopListening : startListening}
                   disabled={busy}
                 >
-                  {isListening ? '⏹ Parar' : '🎤 Hablar'}
+                  {isListening ? '⏹ Stop' : '🎤 Speak'}
                 </button>
               )}
               <button type="button" className="btn" onClick={resetChat}>
-                Reiniciar
+                Restart
               </button>
             </div>
           )}

@@ -13,6 +13,7 @@ import {
   rememberExerciseFingerprint,
 } from '@/lib/draloAiExerciseVariety';
 import DraloAiLevelFilter from '@/components/dralo-ai/DraloAiLevelFilter';
+import { DRALO_AI_SITUATIONAL_EYEBROW } from '@/data/draloAiSituationalConfig';
 import { formatWritingFeedbackDisplay } from '@/lib/formatWritingFeedback';
 
 const ACCENT_SOLID = {
@@ -60,8 +61,10 @@ export default function DraloAiStudio({
   track = 'exam',
   activities: activitiesProp,
   backHref,
+  backLabel = 'Dralo AI',
   pageTitle,
   pageDescription,
+  pageEyebrow,
   breadcrumbTrail,
 }) {
   const activities = activitiesProp || config.activities;
@@ -687,7 +690,7 @@ export default function DraloAiStudio({
       </div>
 
       <PageHero
-        eyebrow={isSituational ? 'Dralo AI · Situaciones reales' : config.eyebrow}
+        eyebrow={pageEyebrow || (isSituational ? DRALO_AI_SITUATIONAL_EYEBROW : config.eyebrow)}
         title={pageTitle || config.title}
         description={pageDescription || config.description}
         accent={config.accent}
@@ -703,7 +706,7 @@ export default function DraloAiStudio({
         <div className="dralo-ai-studio__toolbar">
           {backHref ? (
             <Link href={backHref} className="dralo-ai-back-link">
-              ← Elegir modo
+              ← {backLabel}
             </Link>
           ) : (
             <span className="dralo-ai-studio__badge">✨ Dralo AI</span>
@@ -748,8 +751,10 @@ export default function DraloAiStudio({
               <div className="dralo-ai-empty">
                 <p>
                   {error
-                    ? 'No se pudo generar el ejercicio.'
-                    : 'Selecciona una parte del examen para generar un ejercicio completo al instante.'}
+                    ? 'Could not generate the exercise.'
+                    : isSituational
+                      ? 'Select a scenario to generate a practice task instantly.'
+                      : 'Select an exam part to generate a full exercise instantly.'}
                 </p>
                 {error ? (
                   <button
@@ -757,7 +762,7 @@ export default function DraloAiStudio({
                     className="dralo-ai-btn dralo-ai-btn--primary"
                     onClick={generateExercise}
                   >
-                    Reintentar
+                    Try again
                   </button>
                 ) : null}
               </div>

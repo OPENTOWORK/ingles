@@ -151,7 +151,7 @@ export async function POST(req) {
   try {
     body = await req.json();
   } catch {
-    return NextResponse.json({ error: 'JSON inválido.' }, { status: 400 });
+    return NextResponse.json({ error: 'Invalid JSON.' }, { status: 400 });
   }
 
   const {

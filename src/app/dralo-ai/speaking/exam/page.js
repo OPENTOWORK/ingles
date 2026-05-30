@@ -1,7 +1,5 @@
-'use client';
+import { redirect } from 'next/navigation';
 
-import DraloAiSpeakingStudio from '@/components/dralo-ai/DraloAiSpeakingStudio';
-
-export default function DraloAiSpeakingExamPage() {
-  return <DraloAiSpeakingStudio />;
+export default function DraloAiSpeakingExamRedirect() {
+  redirect('/dralo-ai/speaking');
 }

@@ -202,7 +202,7 @@ export const DRALO_AI_MODES = {
     title: 'Speaking',
     eyebrow: 'Dralo AI · Oral production',
     description:
-      'Practise with your AI coach by voice or text: free conversation, detailed correction, or a full exam simulation with report.',
+      'Practise with your AI voice coach in real-life role plays: airport, hotel, interviews, or your own scenario.',
     accent: 'rose',
     mascotVariant: 5,
     levels: DRALO_AI_CEFR_LEVELS,

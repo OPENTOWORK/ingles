@@ -1,9 +1,9 @@
 /** Enlaces principales antes de Dralo AI (Contact va después del desplegable). */
 export const NAV_LINKS_BEFORE_DRALO = [
   { href: '/', label: 'Home' },
-  { href: '/teoria', label: 'Theory' },
-  { href: '/niveles', label: 'Levels' },
-  { href: '/prueba-nivel', label: 'Placement Test' },
+  { href: '/teoria', label: 'Theory', tourId: 'nav-theory' },
+  { href: '/niveles', label: 'Levels', tourId: 'nav-levels' },
+  { href: '/prueba-nivel', label: 'Placement Test', tourId: 'nav-placement' },
   { href: '/training', label: 'Training' },
 ];
 

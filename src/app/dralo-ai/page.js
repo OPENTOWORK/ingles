@@ -29,7 +29,7 @@ export default function DraloAiHubPage() {
         ]}
       />
 
-      <section className="dralo-ai-hub__grid" aria-label="Apartados Dralo AI">
+      <section className="dralo-ai-hub__grid" aria-label="Dralo AI tools">
         {DRALO_AI_HUB.items.map((item) => (
           <Link
             key={item.id}

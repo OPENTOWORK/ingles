@@ -101,7 +101,7 @@ function parseDictionaryEntries(entries) {
 
 async function fetchBaseEntry(word) {
   const w = normalizeWord(word);
-  if (!w) return { error: 'Escribe una palabra en inglés.' };
+  if (!w) return { error: 'Enter an English word.' };
 
   const res = await fetch(
     `https://api.dictionaryapi.dev/api/v2/entries/en/${encodeURIComponent(w)}`,
@@ -109,16 +109,16 @@ async function fetchBaseEntry(word) {
   );
 
   if (res.status === 404) {
-    return { error: `No encontramos «${w}» en el diccionario.` };
+    return { error: `We couldn't find "${w}" in the dictionary.` };
   }
   if (!res.ok) {
-    return { error: 'El diccionario no está disponible ahora. Inténtalo en un momento.' };
+    return { error: 'The dictionary is unavailable right now. Please try again shortly.' };
   }
 
   const data = await res.json();
   const parsed = parseDictionaryEntries(data);
   if (!parsed?.meanings?.length) {
-    return { error: `No hay definiciones para «${w}».` };
+    return { error: `No definitions found for "${w}".` };
   }
   return { entry: parsed };
 }
@@ -183,13 +183,13 @@ async function lookupWord(word, targetLang) {
 
 async function translatePhrase(text, targetLang) {
   const input = String(text || '').trim();
-  if (!input) return { error: 'Escribe una frase en inglés.' };
-  if (input.length > 2000) return { error: 'La frase es demasiado larga (máx. 2000 caracteres).' };
+  if (!input) return { error: 'Enter an English phrase.' };
+  if (input.length > 2000) return { error: 'The phrase is too long (max 2000 characters).' };
 
   if (!isDraloOpenAIConfigured()) {
     return {
       error:
-        'La traducción avanzada requiere OPENAI_API_KEY en el servidor (motor DRALO AI GPT).',
+        'Advanced translation requires OPENAI_API_KEY on the server (DRALO AI GPT engine).',
     };
   }
 
@@ -208,39 +208,39 @@ async function translatePhrase(text, targetLang) {
     };
   } catch (e) {
     console.error('[dictionary translate]', e?.message || e);
-    return { error: 'No se pudo traducir la frase.' };
+    return { error: 'Could not translate the phrase.' };
   }
 }
 
 async function askDralo(word, question, enrichment) {
   const w = normalizeWord(word) || String(word || '').trim();
   const q = String(question || '').trim();
-  if (!w) return { error: 'No hay palabra en contexto.' };
-  if (!q) return { error: 'Escribe una pregunta para Dralo.' };
+  if (!w) return { error: 'No word in context.' };
+  if (!q) return { error: 'Enter a question for Dralo.' };
 
   if (!isDraloOpenAIConfigured()) {
-    return { error: 'Pregunta a Dralo requiere OPENAI_API_KEY en el servidor (motor DRALO AI GPT).' };
+    return { error: 'Asking Dralo requires OPENAI_API_KEY on the server (DRALO AI GPT engine).' };
   }
 
   try {
     const { text: answer } = await draloChatCompletion({
       system:
-        'Answer vocabulary questions clearly. Reply in Spanish unless the student writes in English. Be concise, with examples.',
+        'Answer vocabulary questions clearly in English. Be concise, with examples.',
       messages: [{ role: 'user', content: buildAskDraloPrompt(w, q, enrichment) }],
       temperature: 0.5,
     });
-    if (!answer) return { error: 'Dralo no devolvió respuesta.' };
+    if (!answer) return { error: 'Dralo returned no response.' };
     return { answer, word: w };
   } catch (e) {
     console.error('[dictionary ask-dralo]', e?.message || e);
-    return { error: 'No se pudo obtener respuesta de Dralo.' };
+    return { error: 'Could not get a response from Dralo.' };
   }
 }
 
 export async function POST(req) {
   const ip = clientIp(req);
   if (!tryConsumeRate(ip)) {
-    return NextResponse.json({ error: 'Demasiadas consultas. Espera un momento.' }, { status: 429 });
+    return NextResponse.json({ error: 'Too many requests. Please wait a moment.' }, { status: 429 });
   }
 
   try {
@@ -265,9 +265,9 @@ export async function POST(req) {
       return NextResponse.json(result, { status });
     }
 
-    return NextResponse.json({ error: 'Acción no válida.' }, { status: 400 });
+    return NextResponse.json({ error: 'Invalid action.' }, { status: 400 });
   } catch (e) {
     console.error('[dralo-ai/dictionary]', e?.message || e);
-    return NextResponse.json({ error: 'Error del servidor.' }, { status: 500 });
+    return NextResponse.json({ error: 'Server error.' }, { status: 500 });
   }
 }

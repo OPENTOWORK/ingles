@@ -32,27 +32,29 @@ export default function LevelHubPage({ config }) {
 
   return (
     <main className={`shell ${pageClass}`}>
-      <PageHero
-        breadcrumb={
-          <nav className="breadcrumb" aria-label="Breadcrumb">
-            <Link href="/niveles">Levels</Link>
-            <span aria-hidden="true">/</span>
-            <span>{config.cefr}</span>
-          </nav>
-        }
-        eyebrow={config.eyebrow}
-        title={config.title}
-        description={config.description}
-        showMascot
-        mascotVariant={config.mascotVariant}
-        mascotWidth={146}
-        accent={config.accent}
-        stats={[{ value: String(topicCount), label: 'Practice topics' }]}
-      />
+      <div data-tour="level-hub-hero">
+        <PageHero
+          breadcrumb={
+            <nav className="breadcrumb" aria-label="Breadcrumb">
+              <Link href="/niveles">Levels</Link>
+              <span aria-hidden="true">/</span>
+              <span>{config.cefr}</span>
+            </nav>
+          }
+          eyebrow={config.eyebrow}
+          title={config.title}
+          description={config.description}
+          showMascot
+          mascotVariant={config.mascotVariant}
+          mascotWidth={146}
+          accent={config.accent}
+          stats={[{ value: String(topicCount), label: 'Practice topics' }]}
+        />
+      </div>
 
       <ExamPracticeSection examLinks={config.examLinks} isStudent={isStudent} />
 
-      <div className="sections">
+      <div className="sections" data-tour="level-skills-sections">
         {Object.entries(config.sections).map(([title, topics]) => (
           <LevelSection
             key={title}
@@ -73,7 +75,7 @@ function ExamPracticeSection({ examLinks = [], isStudent }) {
   if (!examLinks.length) return null;
 
   return (
-    <section className="exam-section">
+    <section className="exam-section" data-tour="level-exam-practice">
       <NivelesSectionHeader
         eyebrow={EXAM_PRACTICE_HEADER.eyebrow}
         title={EXAM_PRACTICE_HEADER.title}
@@ -95,8 +97,15 @@ function ExamPracticeSection({ examLinks = [], isStudent }) {
               </div>
             );
           }
+          const isExamMode =
+            exam.href.includes('exam-mode') || /exam\s*mode/i.test(exam.text);
           return (
-            <Link key={exam.href} href={exam.href} className="exam-card">
+            <Link
+              key={exam.href}
+              href={exam.href}
+              className="exam-card"
+              {...(isExamMode ? { 'data-tour': 'level-exam-mode' } : {})}
+            >
               {exam.text}
             </Link>
           );

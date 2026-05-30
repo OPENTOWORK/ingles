@@ -9,6 +9,7 @@ import { performLogout } from '@/utils/logout';
 import { isPublicPath } from '@/utils/publicRoutes';
 import Link from 'next/link';
 import { UserRoleProvider } from '../context/UserRoleContext';
+import { GuidedTourProvider } from '../context/GuidedTourContext';
 import { PlacementAccessProvider } from '../context/PlacementAccessContext';
 import ExamNavigationGuard from '../components/ExamNavigationGuard';
 import { useActivityHeartbeat } from '@/hooks/useActivityHeartbeat';
@@ -19,13 +20,39 @@ import DeferredAppSideMenu from '@/components/layout/DeferredAppSideMenu';
 import RouteLoadingMascot from '@/components/RouteLoadingMascot';
 import PlacementTestNotice from '@/components/layout/PlacementTestNotice';
 import SiteMascot from '@/components/SiteMascot';
-import { MASCOT_LOGO_VARIANT } from '@/config/mascotAssets';
+import { MASCOT_LOGO_VARIANT, MASCOT_LOGO_WIDTH } from '@/config/mascotAssets';
 
 const Toaster = dynamic(
   () => import('react-hot-toast').then((mod) => ({ default: mod.Toaster })),
   { ssr: false },
 );
 const AppNav = dynamic(() => import('@/components/layout/AppNav'), { ssr: false });
+
+function SiteHeaderBrand({ nav = null }) {
+  return (
+    <header className="site-header">
+      <div className="site-header__bar">
+        <div className="site-header__brand-group">
+          <Link href="/" className="site-header__logo">
+            <img src="/uk-flag.png" alt="UK Flag" className="site-header__flag bandera" />
+            <span>Dralo Academy</span>
+          </Link>
+          <div className="site-header__brand-slot">
+            <Link href="/" className="site-header__center-brand" aria-label="Dralo Academy home">
+              <SiteMascot
+                variant={MASCOT_LOGO_VARIANT}
+                width={MASCOT_LOGO_WIDTH}
+                className="site-header__brand-mascot"
+                style={{ width: '100%', height: '100%', maxWidth: '100%', maxHeight: '100%' }}
+              />
+            </Link>
+          </div>
+        </div>
+        {nav ? <div className="site-header__nav">{nav}</div> : null}
+      </div>
+    </header>
+  );
+}
 
 export default function RootLayoutClient({ children }) {
   /** Solo bloquea hasta conocer la sesión; el rol se resuelve en segundo plano. */
@@ -179,17 +206,7 @@ export default function RootLayoutClient({ children }) {
     return (
       <>
         <Toaster position="top-center" reverseOrder={false} />
-        <header className="site-header">
-          <div className="site-header__bar">
-            <Link href="/" className="site-header__logo">
-              <img src="/uk-flag.png" alt="UK Flag" className="site-header__flag bandera" />
-              <span>Dralo Academy</span>
-              <span className="site-header__brand-mascot" aria-hidden>
-                <SiteMascot variant={MASCOT_LOGO_VARIANT} width={40} />
-              </span>
-            </Link>
-          </div>
-        </header>
+        <SiteHeaderBrand />
         <main className="page-content">
           <RouteLoadingMascot label="Cargando" variant={3} />
         </main>
@@ -201,17 +218,7 @@ export default function RootLayoutClient({ children }) {
     return (
       <>
         <Toaster position="top-center" reverseOrder={false} />
-        <header className="site-header">
-          <div className="site-header__bar">
-            <Link href="/" className="site-header__logo">
-              <img src="/uk-flag.png" alt="UK Flag" className="site-header__flag bandera" />
-              <span>Dralo Academy</span>
-              <span className="site-header__brand-mascot" aria-hidden>
-                <SiteMascot variant={MASCOT_LOGO_VARIANT} width={40} />
-              </span>
-            </Link>
-          </div>
-        </header>
+        <SiteHeaderBrand />
         <main className="page-content">
           <RouteLoadingMascot label="Redirigiendo al login" variant={3} />
         </main>
@@ -268,30 +275,22 @@ export default function RootLayoutClient({ children }) {
     <>
       <Toaster position="top-center" reverseOrder={false} />
 
-      <header className="site-header">
-        <div className="site-header__bar">
-          <Link href="/" className="site-header__logo">
-            <img src="/uk-flag.png" alt="UK Flag" className="site-header__flag bandera" />
-            <span>Dralo Academy</span>
-            <span className="site-header__brand-mascot" aria-hidden>
-              <SiteMascot variant={MASCOT_LOGO_VARIANT} width={40} />
-            </span>
-          </Link>
-
-          <AppNav session={session} userRole={userRole} onLogout={handleLogout} />
-        </div>
-      </header>
+      <SiteHeaderBrand
+        nav={<AppNav session={session} userRole={userRole} onLogout={handleLogout} />}
+      />
 
       <UserRoleProvider userRole={userRole} session={session}>
-        <PlacementAccessProvider session={session} userRole={userRole}>
-          <PlacementTestNotice />
-          <main className="page-content">
-            <ExamNavigationGuard>
-              {children}
-            </ExamNavigationGuard>
-            {pathname === '/' && <DeferredAppSideMenu defaultOpen={false} />}
-          </main>
-        </PlacementAccessProvider>
+        <GuidedTourProvider>
+          <PlacementAccessProvider session={session} userRole={userRole}>
+            <PlacementTestNotice />
+            <main className="page-content">
+              <ExamNavigationGuard>
+                {children}
+              </ExamNavigationGuard>
+              {pathname === '/' && <DeferredAppSideMenu defaultOpen={false} />}
+            </main>
+          </PlacementAccessProvider>
+        </GuidedTourProvider>
       </UserRoleProvider>
 
       <DeferredSiteAssistant enabled={Boolean(session)} />

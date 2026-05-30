@@ -1,5 +1,12 @@
 import { DRALO_AI_MODES } from '@/data/draloAiConfig';
-import { DRALO_AI_SITUATIONAL } from '@/data/draloAiSituationalConfig';
+import {
+  DRALO_AI_EXAM_TRACK,
+  DRALO_AI_SITUATIONAL,
+  DRALO_AI_SITUATIONAL_TRACK,
+} from '@/data/draloAiSituationalConfig';
+
+export const DRALO_AI_EXAM_BREADCRUMB = DRALO_AI_EXAM_TRACK.label;
+export const DRALO_AI_SITUATIONAL_BREADCRUMB = DRALO_AI_SITUATIONAL_TRACK.label;
 
 export function mapScenariosToActivities(skillId) {
   const block = DRALO_AI_SITUATIONAL[skillId];

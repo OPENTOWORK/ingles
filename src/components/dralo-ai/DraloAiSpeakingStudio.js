@@ -7,6 +7,7 @@ import { DRALO_AI_MODES } from '@/data/draloAiConfig';
 import { getSpeakingExamActivities } from '@/data/draloAiSpeakingExam';
 import DraloAiSpeakingExamPractice from '@/components/dralo-ai/DraloAiSpeakingExamPractice';
 import DraloAiLevelFilter from '@/components/dralo-ai/DraloAiLevelFilter';
+import { DRALO_AI_EXAM_EYEBROW, DRALO_AI_EXAM_TRACK } from '@/data/draloAiSituationalConfig';
 
 const ACCENT_SOLID = {
   rose: '#e11d48',
@@ -44,14 +45,14 @@ export default function DraloAiSpeakingStudio() {
           <span aria-hidden> / </span>
           <Link href="/dralo-ai/speaking">{config.title}</Link>
           <span aria-hidden> / </span>
-          <span>Preparación del examen</span>
+          <span>{DRALO_AI_EXAM_TRACK.label}</span>
         </nav>
       </div>
 
       <PageHero
-        eyebrow="Dralo AI · Preparación del examen"
-        title={`${config.title} · Examen`}
-        description="Practica cada parte del Speaking con el examinador de Dralo: escucha el audio real y responde con el micrófono."
+        eyebrow={DRALO_AI_EXAM_EYEBROW}
+        title={`${config.title} · Exam`}
+        description="Practise each Speaking part with the Dralo examiner: listen to real prompts and respond with your microphone."
         accent={config.accent}
         mascotVariant={config.mascotVariant}
         stats={[
@@ -64,7 +65,7 @@ export default function DraloAiSpeakingStudio() {
       <div className="dralo-ai-studio">
         <div className="dralo-ai-studio__toolbar">
           <Link href="/dralo-ai/speaking" className="dralo-ai-back-link">
-            ← Elegir modo
+            ← Choose mode
           </Link>
           <DraloAiLevelFilter
             levels={config.levels}

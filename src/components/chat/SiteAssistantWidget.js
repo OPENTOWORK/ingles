@@ -6,7 +6,7 @@ import SiteMascot from '@/components/SiteMascot';
 import './site-assistant.css';
 
 const WELCOME =
-  '¡Hola! Soy el asistente de Dralo. Pregúntame cómo usar la web: dónde practicar, niveles, teoría, tu cuenta o soporte.';
+  'Hi! I\'m the Dralo assistant. Ask me how to use the site — where to practise, levels, theory, your account, or support. Pick a topic below or type your question.';
 
 const DISMISS_STORAGE_KEY = 'dralo_assistant_dismissed';
 
@@ -35,10 +35,25 @@ export function clearAssistantDismissed() {
   }
 }
 
-const SUGGESTIONS = [
-  '¿Cómo empiezo a practicar?',
-  '¿Dónde está el test de nivel?',
-  '¿Cómo contacto con soporte?',
+const STARTER_TOPICS = [
+  {
+    id: 'practice',
+    label: 'How do I start practising?',
+    hint: 'Levels, skills and exam mode',
+    question: 'How do I start practising on the site?',
+  },
+  {
+    id: 'placement',
+    label: 'Where is the placement test?',
+    hint: 'Find your CEFR starting level',
+    question: 'Where is the placement test?',
+  },
+  {
+    id: 'support',
+    label: 'How do I contact support?',
+    hint: 'Help, account and technical issues',
+    question: 'How do I contact support?',
+  },
 ];
 
 export default function SiteAssistantWidget({ defaultOpen = true } = {}) {
@@ -85,7 +100,7 @@ export default function SiteAssistantWidget({ defaultOpen = true } = {}) {
       });
       const data = await res.json().catch(() => ({}));
       if (!res.ok) {
-        throw new Error(data.error || 'No se pudo obtener respuesta.');
+        throw new Error(data.error || 'Could not get a response.');
       }
       setMessages((prev) => [...prev, { role: 'assistant', content: data.reply }]);
     } catch (err) {
@@ -93,7 +108,7 @@ export default function SiteAssistantWidget({ defaultOpen = true } = {}) {
         ...prev,
         {
           role: 'assistant',
-          content: err.message || 'Error de conexión.',
+          content: err.message || 'Connection error.',
           isError: true,
         },
       ]);
@@ -123,39 +138,48 @@ export default function SiteAssistantWidget({ defaultOpen = true } = {}) {
         <div
           className="site-assistant-panel"
           role="dialog"
-          aria-label="Asistente de ayuda Dralo"
+          aria-label="Dralo help assistant"
         >
           <div className="site-assistant-header">
             <SiteMascot variant={3} width={48} alt="" className="site-assistant-header__mascot" />
             <div>
-              <h2>Asistente Dralo</h2>
-              <p>Ayuda sobre la web</p>
+              <h2>Dralo assistant</h2>
+              <p>Help using the site</p>
             </div>
           </div>
           <div ref={listRef} className="site-assistant-messages">
-            {messages.map((msg, i) => (
-              <div
-                key={`${i}-${msg.role}`}
-                className={`site-assistant-msg site-assistant-msg--${
-                  msg.isError ? 'error' : msg.role === 'user' ? 'user' : 'bot'
-                }`}
-              >
-                {msg.content}
-              </div>
-            ))}
-            {loading && <div className="site-assistant-typing">Escribiendo…</div>}
+            {messages.map((msg, i) => {
+              const isIntro =
+                i === 0 && msg.role === 'assistant' && !msg.isError && messages.length === 1;
+              return (
+                <div
+                  key={`${i}-${msg.role}`}
+                  className={`site-assistant-msg site-assistant-msg--${
+                    msg.isError ? 'error' : msg.role === 'user' ? 'user' : 'bot'
+                  }${isIntro ? ' site-assistant-msg--intro' : ''}`}
+                >
+                  {msg.content}
+                </div>
+              );
+            })}
+            {loading && <div className="site-assistant-typing">Typing…</div>}
             {messages.length === 1 && !loading && (
-              <div className="flex flex-wrap gap-1.5 mt-1">
-                {SUGGESTIONS.map((s) => (
-                  <button
-                    key={s}
-                    type="button"
-                    onClick={() => sendMessage(s)}
-                    className="text-xs px-2 py-1 rounded-full bg-white border border-slate-200 text-slate-700 hover:bg-indigo-50 hover:border-indigo-200"
-                  >
-                    {s}
-                  </button>
-                ))}
+              <div className="site-assistant-starters">
+                <p className="site-assistant-starters__title">Quick topics</p>
+                <ul className="site-assistant-starters__list" role="list">
+                  {STARTER_TOPICS.map((topic) => (
+                    <li key={topic.id}>
+                      <button
+                        type="button"
+                        className="site-assistant-starters__item"
+                        onClick={() => sendMessage(topic.question)}
+                      >
+                        <span className="site-assistant-starters__label">{topic.label}</span>
+                        <span className="site-assistant-starters__hint">{topic.hint}</span>
+                      </button>
+                    </li>
+                  ))}
+                </ul>
               </div>
             )}
           </div>
@@ -172,23 +196,23 @@ export default function SiteAssistantWidget({ defaultOpen = true } = {}) {
                   handleSubmit(e);
                 }
               }}
-              placeholder="Escribe tu duda…"
+              placeholder="Type your question…"
               disabled={loading}
               maxLength={2000}
-              aria-label="Mensaje para el asistente"
+              aria-label="Message for the assistant"
             />
             <button
               type="submit"
               className="site-assistant-send"
               disabled={loading || !input.trim()}
             >
-              Enviar
+              Send
             </button>
           </form>
           <p className="text-center text-[10px] text-slate-400 pb-2 px-2">
-            ¿Problema técnico?{' '}
+            Technical issue?{' '}
             <Link href="/contacto" className="text-indigo-600 hover:underline">
-              Contacto
+              Contact
             </Link>
           </p>
         </div>
@@ -199,7 +223,7 @@ export default function SiteAssistantWidget({ defaultOpen = true } = {}) {
         className={`site-assistant-fab${open ? ' is-open' : ''}`}
         onClick={handleToggle}
         aria-expanded={open}
-        aria-label={open ? 'Cerrar asistente' : 'Abrir asistente de ayuda'}
+        aria-label={open ? 'Close assistant' : 'Open help assistant'}
       >
         {open ? (
           <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden>

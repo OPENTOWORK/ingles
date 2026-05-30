@@ -119,7 +119,7 @@ export default function Niveles() {
       />
 
       <div className="sections">
-        <section className="section">
+        <section className="section" id="niveles-practice" data-tour="niveles-levels">
           <NivelesSectionHeader
             eyebrow="CEFR levels"
             title="Available tests and tips"

@@ -172,7 +172,7 @@ export default function TheoryHub() {
           </ul>
         )
       ) : (
-        <ul className="area-grid theory-hub-area-grid">
+        <ul className="area-grid theory-hub-area-grid" data-tour="theory-sections">
           {THEORY_SECTION_CATALOG.map((area) => {
             const unit = units.find((u) => u.slug === area.slug);
             const unlock = apartadoUnlockBySlug[area.slug];
