@@ -1,10 +1,13 @@
-/** Enlaces principales antes de Dralo AI (Contact va después del desplegable). */
-export const NAV_LINKS_BEFORE_DRALO = [
-  { href: '/', label: 'Home' },
+/** Theory, placement y training: en la home debajo de «How it works», no en la barra superior. */
+export const HOME_MAIN_LINKS = [
   { href: '/teoria', label: 'Theory', tourId: 'nav-theory' },
-  { href: '/niveles', label: 'Levels', tourId: 'nav-levels' },
   { href: '/prueba-nivel', label: 'Placement Test', tourId: 'nav-placement' },
   { href: '/training', label: 'Training' },
+];
+
+/** Enlaces en la barra superior / menú móvil antes de Dralo AI. */
+export const NAV_LINKS_BEFORE_DRALO = [
+  { href: '/niveles', label: 'Exam practice', tourId: 'nav-levels' },
 ];
 
 export const NAV_LINK_CONTACT = { href: '/contacto', label: 'Contact' };
@@ -26,6 +29,7 @@ export const ADMIN_PANEL_MENU_ITEMS = [
   { href: '/soporte', label: 'Panel de soporte' },
   { href: '/informatico', label: 'Panel informático' },
   { href: '/admin/plan-objetivos', label: 'Plan de objetivos' },
+  { href: '/admin/plan-financiero', label: 'Plan financiero' },
 ];
 
 export const TEACHER_PANEL_MENU_ITEMS = [

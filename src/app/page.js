@@ -3,15 +3,23 @@
 import Link from 'next/link';
 import SiteMascot from '@/components/SiteMascot';
 import HomeHowItWorks from '@/components/home/HomeHowItWorks';
+import HomeQuickNav from '@/components/home/HomeQuickNav';
 import { useGuidedTour } from '@/context/GuidedTourContext';
 import { useUserRole } from '@/context/UserRoleContext';
+import { isAdminRole } from '@/utils/authRoles';
 
-const FEATURES = ['Interactive', 'Automatic correction', 'Free to use'];
+const FEATURES = [
+  'Interactive',
+  'Personalized progress',
+  'Instant feedback',
+  'Free to use',
+];
 
 export default function Home() {
-  const { session } = useUserRole();
+  const { session, userRole } = useUserRole();
   const { startTour } = useGuidedTour();
   const isRegistered = Boolean(session?.user);
+  const showAdminHomeLinks = isAdminRole(userRole);
 
   return (
     <main className="home-page">
@@ -49,6 +57,7 @@ export default function Home() {
         </blockquote>
 
         {isRegistered ? <HomeHowItWorks onStartTour={startTour} /> : null}
+        {showAdminHomeLinks ? <HomeQuickNav /> : null}
       </div>
     </main>
   );

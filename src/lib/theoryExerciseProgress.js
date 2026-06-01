@@ -78,3 +78,9 @@ export function countPassedForTopic(userId, topicHref, topicLevelLabel) {
 export function shouldPersistExercisePass(score) {
   return isTheoryExercisePassed(score);
 }
+
+/** Cualquier intento evaluado (acierto o fallo) se guarda en Supabase. */
+export function shouldRecordTheoryExerciseAttempt(score) {
+  const n = Number(score);
+  return Number.isFinite(n) && n >= 0 && n <= 100;
+}

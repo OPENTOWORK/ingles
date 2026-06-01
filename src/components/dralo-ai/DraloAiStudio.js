@@ -13,6 +13,7 @@ import {
   rememberExerciseFingerprint,
 } from '@/lib/draloAiExerciseVariety';
 import DraloAiLevelFilter from '@/components/dralo-ai/DraloAiLevelFilter';
+import LevelsWritingCorrectionPanel from '@/components/niveles/LevelsWritingCorrectionPanel';
 import { DRALO_AI_SITUATIONAL_EYEBROW } from '@/data/draloAiSituationalConfig';
 import { formatWritingFeedbackDisplay } from '@/lib/formatWritingFeedback';
 
@@ -66,10 +67,16 @@ export default function DraloAiStudio({
   pageDescription,
   pageEyebrow,
   breadcrumbTrail,
+  defaultActivityId,
+  writingCorrectionActivityId = 'writing-correction',
 }) {
   const activities = activitiesProp || config.activities;
   const [level, setLevel] = useState(config.defaultLevel || 'B2');
-  const [activityId, setActivityId] = useState(activities[0]?.id || '');
+  const initialActivityId =
+    defaultActivityId && activities.some((a) => a.id === defaultActivityId)
+      ? defaultActivityId
+      : activities[0]?.id || '';
+  const [activityId, setActivityId] = useState(initialActivityId);
   const [exercise, setExercise] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
@@ -89,6 +96,8 @@ export default function DraloAiStudio({
 
   const accentSolid = ACCENT_SOLID[config.accent] || ACCENT_SOLID.indigo;
   const isWriting = config.id === 'writing';
+  const isWritingCorrection =
+    isWriting && activityId === writingCorrectionActivityId;
   const isListening = config.id === 'listening';
   const isUoe = config.id === 'use-of-english';
 
@@ -110,7 +119,7 @@ export default function DraloAiStudio({
   }, []);
 
   const generateExercise = useCallback(async () => {
-    if (!activityId) return;
+    if (!activityId || isWritingCorrection) return;
 
     const requestId = ++generateRequestRef.current;
     setLoading(true);
@@ -156,12 +165,19 @@ export default function DraloAiStudio({
     config.id,
     isSituational,
     isUoe,
+    isWritingCorrection,
     clearExerciseState,
   ]);
 
   useEffect(() => {
+    if (isWritingCorrection) {
+      generateRequestRef.current += 1;
+      clearExerciseState();
+      setLoading(false);
+      return;
+    }
     void generateExercise();
-  }, [generateExercise]);
+  }, [generateExercise, isWritingCorrection, clearExerciseState]);
 
   const checkUoe = async (questionId, userAnswer) => {
     if (!exercise || !String(userAnswer || '').trim()) return;
@@ -745,9 +761,9 @@ export default function DraloAiStudio({
               </div>
             ) : null}
 
-            {loading && !exercise ? <LoadingDralo /> : null}
+            {loading && !exercise && !isWritingCorrection ? <LoadingDralo /> : null}
 
-            {!exercise && !loading ? (
+            {!exercise && !loading && !isWritingCorrection ? (
               <div className="dralo-ai-empty">
                 <p>
                   {error
@@ -768,9 +784,18 @@ export default function DraloAiStudio({
               </div>
             ) : null}
 
+            {isWritingCorrection ? (
+              <LevelsWritingCorrectionPanel
+                variant="dralo-ai"
+                level={level}
+                onLevelChange={setLevel}
+                hideLevelSelector
+              />
+            ) : null}
+
             {exercise && isUoe ? renderUoe() : null}
             {exercise && (config.id === 'reading' || isListening) ? renderReadingListening() : null}
-            {exercise && isWriting ? renderWriting() : null}
+            {exercise && isWriting && !isWritingCorrection ? renderWriting() : null}
 
             {uoeFeedback && !hasFullExam ? (
               <div
@@ -786,7 +811,7 @@ export default function DraloAiStudio({
               </div>
             ) : null}
 
-            {exercise ? (
+            {exercise && !isWritingCorrection ? (
               <div className="dralo-ai-actions">
                 <button
                   type="button"
@@ -806,7 +831,7 @@ export default function DraloAiStudio({
                     Check with Dralo
                   </button>
                 ) : null}
-                {isWriting && !essayFeedback ? (
+                {isWriting && !isWritingCorrection && !essayFeedback ? (
                   <button
                     type="button"
                     className="dralo-ai-btn dralo-ai-btn--primary"

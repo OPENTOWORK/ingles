@@ -45,6 +45,7 @@ import {
   computeTopicExerciseProgressPercent,
   getPassedExerciseKeysForTopic,
   shouldPersistExercisePass,
+  shouldRecordTheoryExerciseAttempt,
   writeLocalPassedExercise,
 } from '@/lib/theoryExerciseProgress';
 import { saveTheoryExercisePass } from '@/lib/saveTheoryExerciseProgress';
@@ -288,19 +289,19 @@ const TheoryLayout = ({
 
   const handleExerciseComplete = useCallback(
     async (exerciseKey, score) => {
-      if (!shouldPersistExercisePass(score)) return;
+      if (!shouldRecordTheoryExerciseAttempt(score)) return;
 
       const userId = session?.user?.id;
       if (!userId || !topicHref) return;
 
-      setPassedExerciseKeys((prev) => {
-        if (prev.has(exerciseKey)) return prev;
-        const next = new Set(prev);
-        next.add(exerciseKey);
-        return next;
-      });
-
-      writeLocalPassedExercise(userId, topicHref, selectedExerciseLevel, exerciseKey);
+      if (shouldPersistExercisePass(score)) {
+        setPassedExerciseKeys((prev) => {
+          if (prev.has(exerciseKey)) return prev;
+          const next = new Set(prev);
+          next.add(exerciseKey);
+          return next;
+        });
+      }
 
       await saveTheoryExercisePass({
         userId,
@@ -675,7 +676,7 @@ const TheoryLayout = ({
                 color: '#64748b',
                 fontSize: '0.92rem',
               }}>
-                Nivel {selectedExerciseLevel} · 20 ejercicios
+                Level {selectedExerciseLevel} · 20 exercises · mixed question types (random order)
               </p>
               
               {exercisesLoading ? (

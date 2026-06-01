@@ -1,61 +1,45 @@
+import { isAdminRole } from '@/utils/authRoles';
+
 /** Level hub used for in-tour demos (exam mode + skills visible for students). */
 export const GUIDED_TOUR_LEVEL_PATH = '/niveles/b2';
 
-/** Registered-user guided tour: spotlight targets + routes. */
-export const GUIDED_TOUR_STEPS = [
+/** Tour for students: Exam practice + Dralo AI (what they see in the menu). */
+export const GUIDED_TOUR_STEPS_STUDENT = [
   {
     id: 'welcome',
     title: 'How it works',
     sectionLabel: 'Home',
     description:
-      'A quick walkthrough of Theory, Exam theory, Levels (skills, tips, exam mode), and the placement test. Use Next to jump to each area.',
+      'A quick tour of what you use every day: Exam practice for Cambridge-style papers and skills, and Dralo AI for feedback on Use of English, Reading, Writing, Listening, Speaking, and more.',
   },
   {
-    id: 'theory-nav',
-    title: 'Theory',
-    sectionLabel: 'Top menu → Theory',
+    id: 'exam-practice-nav',
+    title: 'Exam practice',
+    sectionLabel: 'Top menu → Exam practice',
     description:
-      'Click Theory in the menu to open the study hub. There you work through Grammar, Vocabulary and Pronunciation before exam-style tasks.',
-    target: '[data-tour="nav-theory"]',
-    href: '/teoria',
+      'Open Exam practice in the menu to choose your exam level (A2–C2), try timed papers, exam mode, and part-by-part tips.',
+    target: '[data-tour="nav-levels"]',
+    route: '/',
+    href: '/niveles',
     openNavOnMobile: true,
-  },
-  {
-    id: 'theory-hub',
-    title: 'Theory sections',
-    sectionLabel: 'Theory page → skill areas',
-    description:
-      'On this page, open a card (Grammar, Vocabulary or Pronunciation), then pick topics inside. Finish a section to unlock the next one.',
-    target: '[data-tour="theory-sections"]',
-    route: '/teoria',
-    scrollTarget: true,
-  },
-  {
-    id: 'exam-theory',
-    title: 'Exam theory',
-    sectionLabel: 'Levels → Exam theory block',
-    description:
-      'On the Levels page, each card is an exam skill (Use of English, Reading, Listening, Writing, Speaking). Study a unit here, then practise the matching tasks inside your level.',
-    target: '#exam-theory',
-    route: '/niveles#exam-theory',
-    scrollTarget: true,
   },
   {
     id: 'levels-practice',
     title: 'Choose your level',
-    sectionLabel: 'Levels → CEFR grid',
+    sectionLabel: 'Exam practice → CEFR grid',
     description:
-      'Pick the card for your target exam (A2–C2). You open that level\'s hub with mock papers, part-by-part tips, and exam mode.',
+      'Pick the card for your target exam. Each level opens a hub with mock papers, strategies, and **Exam mode**.',
     target: '[data-tour="niveles-levels"]',
     route: '/niveles',
     scrollTarget: true,
+    href: '/niveles',
   },
   {
     id: 'levels-hub',
     title: 'Inside a level',
     sectionLabel: 'Level hub',
     description:
-      'This is the hub for one CEFR level (here B2 as an example). Use the breadcrumb to return to all levels. Everything below is practice for this exam.',
+      'This is one CEFR level (B2 as an example). Use the breadcrumb to return to all levels. Everything here is practice for that exam.',
     target: '[data-tour="level-hub-hero"]',
     route: GUIDED_TOUR_LEVEL_PATH,
     scrollTarget: true,
@@ -63,10 +47,10 @@ export const GUIDED_TOUR_STEPS = [
   },
   {
     id: 'levels-exam-practice',
-    title: 'Exam Practice',
+    title: 'Timed exam papers',
     sectionLabel: 'Level hub → Exam Practice',
     description:
-      'Timed mock papers by skill: Reading and Use of English, Writing, Listening, and Speaking. Open one paper to practise that skill under exam-style conditions.',
+      'Practice by skill: Reading and Use of English, Writing, Listening, and Speaking — under exam-style timing.',
     target: '[data-tour="level-exam-practice"]',
     route: GUIDED_TOUR_LEVEL_PATH,
     scrollTarget: true,
@@ -76,7 +60,7 @@ export const GUIDED_TOUR_STEPS = [
     title: 'Exam mode',
     sectionLabel: 'Exam Practice → Exam mode',
     description:
-      'Click Exam mode for a full simulation: sections run in order with a countdown, no help until you finish, then a results page with your score per paper.',
+      'Run a full simulation: sections in order, countdown, no help until you finish, then results with your score per paper.',
     target: '[data-tour="level-exam-mode"]',
     route: GUIDED_TOUR_LEVEL_PATH,
     scrollTarget: true,
@@ -87,21 +71,76 @@ export const GUIDED_TOUR_STEPS = [
     title: 'Skills & tips',
     sectionLabel: 'Level hub → skill blocks',
     description:
-      'Each block matches an exam skill (Use of English, Reading, Writing, Listening, Speaking). Open a part for interactive tips — task format, timing, and strategies — before doing the exercises.',
+      'Open a part for interactive tips — task format, timing, and strategies — before doing the exercises.',
     target: '[data-tour="level-skills-sections"]',
     route: GUIDED_TOUR_LEVEL_PATH,
     scrollTarget: true,
-    /** Tall target at page bottom — keep the dialog centred so it stays fully visible. */
     cardPlacement: 'center',
+  },
+  {
+    id: 'dralo-ai-nav',
+    title: 'Dralo AI',
+    sectionLabel: 'Top menu → Dralo AI',
+    description:
+      'Use Dralo AI in the menu for instant help: Use of English, Reading, Writing, Listening, Speaking, Grammar coach, and Dictionary.',
+    target: '[data-tour="nav-dralo-ai"]',
+    route: '/',
+    href: '/dralo-ai',
+    openNavOnMobile: true,
+  },
+  {
+    id: 'dralo-ai-hub',
+    title: 'Dralo AI tools',
+    sectionLabel: 'Dralo AI hub',
+    description:
+      'Each card is a dedicated studio. Pick a skill, follow the prompts, and get AI feedback tailored to Cambridge tasks.',
+    target: '[data-tour="dralo-ai-hub"]',
+    route: '/dralo-ai',
+    scrollTarget: true,
+    href: '/dralo-ai/use-of-english',
+  },
+];
+
+/** Extra steps for admins (Theory, Placement Test, Training on the home page). */
+export const GUIDED_TOUR_STEPS_ADMIN_EXTRA = [
+  {
+    id: 'theory-nav',
+    title: 'Theory',
+    sectionLabel: 'Home → Theory',
+    description:
+      'As an admin you also have Theory on the home page — Grammar, Vocabulary and Pronunciation before exam-style tasks.',
+    target: '[data-tour="nav-theory"]',
+    route: '/',
+    href: '/teoria',
+  },
+  {
+    id: 'theory-hub',
+    title: 'Theory sections',
+    sectionLabel: 'Theory page → skill areas',
+    description:
+      'Open a card (Grammar, Vocabulary or Pronunciation), then pick topics inside. Finish a section to unlock the next one.',
+    target: '[data-tour="theory-sections"]',
+    route: '/teoria',
+    scrollTarget: true,
   },
   {
     id: 'placement-nav',
     title: 'Placement test',
-    sectionLabel: 'Top menu → Placement Test',
+    sectionLabel: 'Home → Placement Test',
     description:
-      'Not sure where to start? Click Placement Test in the menu. Your result recommends a CEFR level and unlocks the right practice path.',
+      'Placement Test recommends a CEFR level and unlocks the right practice path for new learners.',
     target: '[data-tour="nav-placement"]',
+    route: '/',
     href: '/prueba-nivel',
-    openNavOnMobile: true,
   },
 ];
+
+export function getGuidedTourSteps(userRole = 'student') {
+  if (isAdminRole(userRole)) {
+    return [...GUIDED_TOUR_STEPS_STUDENT, ...GUIDED_TOUR_STEPS_ADMIN_EXTRA];
+  }
+  return GUIDED_TOUR_STEPS_STUDENT;
+}
+
+/** @deprecated Use getGuidedTourSteps(userRole) */
+export const GUIDED_TOUR_STEPS = GUIDED_TOUR_STEPS_STUDENT;

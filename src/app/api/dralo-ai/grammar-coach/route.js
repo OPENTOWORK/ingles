@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 import { buildGrammarCoachSystemPrompt } from '@/lib/grammarCoachPrompt';
-import { draloChatCompletion, isDraloOpenAIConfigured } from '@/lib/draloAiEngine';
+import { realLifeChatCompletion, isDraloOpenAIConfigured } from '@/lib/draloAiEngine';
 
 const WINDOW_MS = 60 * 60 * 1000;
 const MAX_PER_IP = 45;
@@ -77,7 +77,7 @@ export async function POST(req) {
   const cefr = validLevels.includes(level) ? level : 'B2';
 
   try {
-    const { text: reply } = await draloChatCompletion({
+    const { text: reply } = await realLifeChatCompletion({
       system: buildGrammarCoachSystemPrompt(cefr),
       messages: history,
       temperature: 0.45,

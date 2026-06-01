@@ -125,7 +125,7 @@ function LevelSkillPracticePageInner({ slug, skillRoute }) {
 
   return (
       <B2ExamPracticeLayout examPracticeOpen={scoring.examPracticeOpen}>
-      {slug === 'a2' && adminFlow.isAdmin ? (
+      {adminFlow.canRegenerateExams ? (
         <A2ExamGenerationStatus
           generating={adminFlow.generating}
           genError={adminFlow.genError}
@@ -140,7 +140,7 @@ function LevelSkillPracticePageInner({ slug, skillRoute }) {
       <B2ExamPracticeChrome
         examSlot={examSlot}
         onSelectExam={(n) => {
-          if (slug === 'a2' && adminFlow.isAdmin) {
+          if (adminFlow.canRegenerateExams) {
             void adminFlow.handleAdminExamSelect(n, (slot) => scoring.handleSelectExam(selectExamSlot, slot));
             return;
           }

@@ -1,16 +1,21 @@
 import { normalizeTopicHref } from '@/lib/normalizeTopicHref';
 
 export const THEORY_EXERCISE_META_PREFIX = 'theory_exercise_meta:';
+export const THEORY_EXERCISE_PASS_SCORE = 100;
 
-/** @param {{ topicHref: string, exerciseKey: string, cefrLevel: string }} meta */
-export function buildTheoryExerciseDescripcion({ topicHref, exerciseKey, cefrLevel }) {
+/** @param {{ topicHref: string, exerciseKey: string, cefrLevel: string, score?: number }} meta */
+export function buildTheoryExerciseDescripcion({ topicHref, exerciseKey, cefrLevel, score }) {
   const href = normalizeTopicHref(topicHref);
-  const label = `${href} · ${cefrLevel} · ${exerciseKey}`;
+  const pts = Math.min(100, Math.max(0, Math.round(Number(score) || 0)));
+  const outcome = pts >= THEORY_EXERCISE_PASS_SCORE ? 'correct' : 'incorrect';
+  const label = `${href} · ${cefrLevel} · ${exerciseKey} · ${outcome}`;
   return `${THEORY_EXERCISE_META_PREFIX}${JSON.stringify({
-    v: 1,
+    v: 2,
     topic_href: href,
     exercise_key: exerciseKey,
     cefr_level: cefrLevel,
+    score: pts,
+    outcome,
   })}|${label}`;
 }
 
@@ -36,7 +41,13 @@ export function theoryExerciseStorageKey(topicHref, cefrLevel, exerciseKey) {
   return `${normalizeTopicHref(topicHref)}|${cefrLevel}|${exerciseKey}`;
 }
 
-export const THEORY_EXERCISE_PASS_SCORE = 100;
+/** Número de parte 1–20 a partir de la key del ejercicio (p. ej. slug-b2-7 → 7). */
+export function theoryExerciseParteNumero(exerciseKey) {
+  const match = String(exerciseKey || '').match(/-(\d+)$/);
+  const n = match ? Number.parseInt(match[1], 10) : 1;
+  if (!Number.isFinite(n)) return 1;
+  return Math.min(20, Math.max(1, n));
+}
 
 export function isTheoryExercisePassed(score) {
   return Number(score) >= THEORY_EXERCISE_PASS_SCORE;

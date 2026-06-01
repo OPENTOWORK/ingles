@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
-import { draloChatCompletion, isDraloOpenAIConfigured } from '@/lib/draloAiEngine';
+import { cambridgeChatCompletion, isDraloOpenAIConfigured } from '@/lib/draloAiEngine';
 import { getSupabaseAnonKey, getSupabaseUrl } from '@/lib/supabaseEnv';
 import { writingPercentToOutcomesScore } from '@/lib/placementOutcomesScoring';
 
@@ -85,7 +85,7 @@ Return JSON:
   "improvements": ["<improvement 1>", "<improvement 2>"]
 }`;
 
-    const { text: raw } = await draloChatCompletion({
+    const { text: raw } = await cambridgeChatCompletion({
       system,
       messages: [{ role: 'user', content: user }],
       temperature: 0.3,

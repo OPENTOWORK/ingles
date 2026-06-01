@@ -81,10 +81,17 @@ function LevelExamModePracticeInner({ slug }) {
 
   const handlePickExam = useCallback(
     (n) => {
+      if (adminFlow.canRegenerateExams) {
+        void adminFlow.handleAdminExamSelect(n, (slot) => {
+          selectExamSlot(slot);
+          setPickedSlot(true);
+        });
+        return;
+      }
       selectExamSlot(n);
       setPickedSlot(true);
     },
-    [selectExamSlot],
+    [selectExamSlot, adminFlow],
   );
 
   const examComplete = session ? isExamModeComplete(session) : false;
@@ -100,7 +107,7 @@ function LevelExamModePracticeInner({ slug }) {
 
   return (
     <B2ExamPracticeLayout examPracticeOpen={pickedSlot}>
-      {slug === 'a2' && adminFlow.isAdmin ? (
+      {adminFlow.canRegenerateExams ? (
         <A2ExamGenerationStatus
           generating={adminFlow.generating}
           genError={adminFlow.genError}

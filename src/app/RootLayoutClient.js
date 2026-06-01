@@ -19,9 +19,6 @@ import { clearAssistantDismissed } from '@/components/chat/SiteAssistantWidget';
 import DeferredAppSideMenu from '@/components/layout/DeferredAppSideMenu';
 import RouteLoadingMascot from '@/components/RouteLoadingMascot';
 import PlacementTestNotice from '@/components/layout/PlacementTestNotice';
-import SiteMascot from '@/components/SiteMascot';
-import { MASCOT_LOGO_VARIANT, MASCOT_LOGO_WIDTH } from '@/config/mascotAssets';
-
 const Toaster = dynamic(
   () => import('react-hot-toast').then((mod) => ({ default: mod.Toaster })),
   { ssr: false },
@@ -32,22 +29,10 @@ function SiteHeaderBrand({ nav = null }) {
   return (
     <header className="site-header">
       <div className="site-header__bar">
-        <div className="site-header__brand-group">
-          <Link href="/" className="site-header__logo">
-            <img src="/uk-flag.png" alt="UK Flag" className="site-header__flag bandera" />
-            <span>Dralo Academy</span>
-          </Link>
-          <div className="site-header__brand-slot">
-            <Link href="/" className="site-header__center-brand" aria-label="Dralo Academy home">
-              <SiteMascot
-                variant={MASCOT_LOGO_VARIANT}
-                width={MASCOT_LOGO_WIDTH}
-                className="site-header__brand-mascot"
-                style={{ width: '100%', height: '100%', maxWidth: '100%', maxHeight: '100%' }}
-              />
-            </Link>
-          </div>
-        </div>
+        <Link href="/" className="site-header__logo">
+          <img src="/uk-flag.png" alt="UK Flag" className="site-header__flag bandera" />
+          <span>Dralo Academy</span>
+        </Link>
         {nav ? <div className="site-header__nav">{nav}</div> : null}
       </div>
     </header>

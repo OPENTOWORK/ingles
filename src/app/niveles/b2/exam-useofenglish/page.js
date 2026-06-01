@@ -1,5 +1,8 @@
 'use client';
 import { Suspense, useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { useLevelsExamAdminFlow, createAdminExamSelectHandler } from '@/hooks/useLevelsExamAdminFlow';
+import A2ExamGenerationStatus from '@/components/niveles/A2ExamGenerationStatus';
+import { invalidateLevelExamCache } from '@/utils/levelsLevelCache';
 import { useSearchParams } from 'next/navigation';
 import LevelsCategoryTimer from '@/components/levels/LevelsCategoryTimer';
 import LevelsPartScorePanel from '@/components/levels/LevelsPartScorePanel';
@@ -218,6 +221,38 @@ function UseOfEnglishExamsPageInner() {
       }
     }
   }, [examSlot]);
+
+  const reloadExamenIds = useCallback(async () => {
+    if (!b2LevelId) return;
+    invalidateLevelExamCache(b2LevelId);
+    const idsBySlot = await getCachedB2ExamenIdsBySlot(supabase, b2LevelId);
+    setExamenIdBySlot(idsBySlot);
+  }, [b2LevelId]);
+
+  const adminFlow = useLevelsExamAdminFlow({
+    slug: 'b2',
+    examenIdBySlot,
+    onCatalogUpdated: () => {
+      void reloadExamenIds();
+      void loadUseOfEnglishData();
+    },
+  });
+
+  const openExamSlot = useCallback(
+    (slot) => {
+      selectExamSlot(slot);
+      setExamPracticeOpen(true);
+      void (async () => {
+        await import('@/utils/ensureAppUserProfile').then((m) => m.ensureAppUserProfile());
+      })();
+    },
+    [selectExamSlot],
+  );
+
+  const handleSelectExam = useMemo(
+    () => createAdminExamSelectHandler(adminFlow, openExamSlot),
+    [adminFlow, openExamSlot],
+  );
 
   useEffect(() => {
     mountedRef.current = true;
@@ -707,14 +742,6 @@ function UseOfEnglishExamsPageInner() {
     return `${saved.correct}/${saved.total}${passed}`;
   };
 
-  const handleSelectExam = (n) => {
-    selectExamSlot(n);
-    setExamPracticeOpen(true);
-    void (async () => {
-      await import('@/utils/ensureAppUserProfile').then((m) => m.ensureAppUserProfile());
-    })();
-  };
-
   useB2AutoOpenExamFromUrl({
     examPracticeOpen,
     handleSelectExam: (_selectExamSlot, n) => handleSelectExam(n),
@@ -763,6 +790,18 @@ function UseOfEnglishExamsPageInner() {
           : {}),
       }}
     >
+      {adminFlow.canRegenerateExams ? (
+        <A2ExamGenerationStatus
+          generating={adminFlow.generating}
+          genError={adminFlow.genError}
+          genProgress={adminFlow.genProgress}
+          genStep={adminFlow.genStep}
+          genTotal={adminFlow.genTotal}
+          genEtaSeconds={adminFlow.genEtaSeconds}
+          genPartLabel={adminFlow.genPartLabel}
+          onDismissError={adminFlow.clearGenError}
+        />
+      ) : null}
       <B2ExamSlotProgressPicker
         value={examSlot}
         onSelect={handleSelectExam}

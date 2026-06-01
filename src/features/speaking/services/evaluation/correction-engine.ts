@@ -1,4 +1,4 @@
-import { draloChatCompletion, isDraloOpenAIConfigured } from '@/lib/draloAiEngine';
+import { cambridgeChatCompletion, isDraloOpenAIConfigured } from '@/lib/draloAiEngine';
 import type { CefrLevel } from '@prisma/client';
 import { correctionReportSchema, type CorrectionReportPayload } from '../../domain/schemas';
 
@@ -30,7 +30,7 @@ export async function runCorrectionEngine(params: {
   let raw = '';
 
   if (isDraloOpenAIConfigured()) {
-    const { text } = await draloChatCompletion({
+    const { text } = await cambridgeChatCompletion({
       system: systemContent,
       messages: [
         {

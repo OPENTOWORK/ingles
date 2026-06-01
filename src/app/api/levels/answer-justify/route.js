@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { draloChatCompletion, isDraloOpenAIConfigured } from '@/lib/draloAiEngine';
+import { cambridgeChatCompletion, isDraloOpenAIConfigured } from '@/lib/draloAiEngine';
 
 const WINDOW_MS = 60 * 60 * 1000;
 const MAX_PER_IP = 40;
@@ -157,7 +157,7 @@ ${
 }`;
 
   try {
-    const { text: raw } = await draloChatCompletion({
+    const { text: raw } = await cambridgeChatCompletion({
       system,
       messages: [{ role: 'user', content: user }],
       temperature: 0.35,

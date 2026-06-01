@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 import { buildExamGeneratePrompt } from '@/lib/draloAiExamPrompts';
-import { draloChatCompletion, isDraloOpenAIConfigured } from '@/lib/draloAiEngine';
+import { realLifeChatCompletion, isDraloOpenAIConfigured } from '@/lib/draloAiEngine';
 import { buildSituationalGeneratePrompt } from '@/lib/draloAiSituationalPrompts';
 
 const WINDOW_MS = 60 * 60 * 1000;
@@ -188,7 +188,7 @@ export async function POST(req) {
             topic,
           });
 
-      const { text } = await draloChatCompletion({
+      const { text } = await realLifeChatCompletion({
         system: taskSystem,
         messages: [{ role: 'user', content: userPrompt }],
         max_tokens: 8192,
@@ -202,7 +202,7 @@ export async function POST(req) {
     }
 
     if (action === 'check') {
-      const { text } = await draloChatCompletion({
+      const { text } = await realLifeChatCompletion({
         system: taskSystem,
         messages: [
           {

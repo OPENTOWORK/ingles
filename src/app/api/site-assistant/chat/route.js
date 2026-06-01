@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
-import { draloChatCompletion, isDraloOpenAIConfigured } from '@/lib/draloAiEngine';
-import { SITE_ASSISTANT_SYSTEM_PROMPT } from '@/lib/siteHelpKnowledge';
+import { realLifeChatCompletion, isDraloOpenAIConfigured } from '@/lib/draloAiEngine';
+import { getSiteAssistantSystemPrompt } from '@/lib/siteHelpKnowledge';
 
 const WINDOW_MS = 60 * 60 * 1000;
 const MAX_PER_IP = 40;
@@ -72,9 +72,11 @@ export async function POST(req) {
     return NextResponse.json({ error: 'Escribe una pregunta.' }, { status: 400 });
   }
 
+  const userRole = String(body?.userRole || 'student').slice(0, 32);
+
   try {
-    const { text: reply } = await draloChatCompletion({
-      system: SITE_ASSISTANT_SYSTEM_PROMPT,
+    const { text: reply } = await realLifeChatCompletion({
+      system: getSiteAssistantSystemPrompt(userRole),
       messages: history,
       temperature: 0.4,
       max_tokens: 700,

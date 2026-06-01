@@ -7,21 +7,44 @@ import { userHasRole } from '@/utils/authRoles';
 import { getCachedLevelBySlug, getCachedExamenIdsBySlot, invalidateLevelExamCache } from '@/utils/levelsLevelCache';
 import { sortLevelsExamenesRows } from '@/utils/b2ResolveExam';
 import { A2_EXAM_PARTS } from '@/lib/a2ExamCatalog';
+import { getLevelExamParts, isExamGenerationSlug } from '@/lib/levelsExamCatalog';
 
-const A2_PART_TOTAL = A2_EXAM_PARTS.length;
+function getPartsForSlug(slug) {
+  const key = String(slug || '').toLowerCase();
+  if (key === 'a2') return A2_EXAM_PARTS;
+  return getLevelExamParts(key) || [];
+}
 
 /**
- * Flujo admin: generar examen A2 en Supabase al elegir slot vacío.
+ * Flujo admin: generar examen en Supabase al elegir slot vacío o regenerar.
+ * A2: regeneración completa con borrado previo. B1–C2 (incl. B2): solo partes sin contenido (no borra lo existente).
  */
+
+/** Envuelve el selector de examen: solo admin ve confirmación y puede generar/regenerar. */
+export function createAdminExamSelectHandler(adminFlow, onSelectSlot) {
+  return (slot) => {
+    if (adminFlow?.canRegenerateExams) {
+      void adminFlow.handleAdminExamSelect(slot, onSelectSlot);
+      return;
+    }
+    onSelectSlot(slot);
+  };
+}
 export function useLevelsExamAdminFlow({ slug = 'a2', examenIdBySlot = {}, onCatalogUpdated }) {
   const [isAdmin, setIsAdmin] = useState(false);
   const [generating, setGenerating] = useState(false);
   const [genError, setGenError] = useState('');
   const [genProgress, setGenProgress] = useState('');
   const [genStep, setGenStep] = useState(0);
-  const [genTotal, setGenTotal] = useState(A2_PART_TOTAL);
+  const [genTotal, setGenTotal] = useState(A2_EXAM_PARTS.length);
   const [genEtaSeconds, setGenEtaSeconds] = useState(null);
   const [genPartLabel, setGenPartLabel] = useState('');
+
+  const examParts = getPartsForSlug(slug);
+  const partTotal = examParts.length;
+  const levelUpper = String(slug || 'a2').toUpperCase();
+  const supportsGeneration = slug === 'a2' || isExamGenerationSlug(slug);
+  const canRegenerateExams = isAdmin && supportsGeneration;
 
   useEffect(() => {
     void (async () => {
@@ -39,19 +62,30 @@ export function useLevelsExamAdminFlow({ slug = 'a2', examenIdBySlot = {}, onCat
   const slotHasContent = useCallback((slot) => Boolean(examenIdBySlot?.[slot]), [examenIdBySlot]);
 
   const generateExam = useCallback(
-    async (slot, { force = false } = {}) => {
+    async (slot, { force = false, preserveExistingParts = false } = {}) => {
+      if (!supportsGeneration) return null;
+
+      const { data: sessionData } = await supabase.auth.getSession();
+      const user = sessionData?.session?.user;
+      if (!user?.id) {
+        throw new Error('Inicia sesión como administrador.');
+      }
+      const admin = await userHasRole(user.id, ['admin', 'administrador'], user.email);
+      if (!admin) {
+        throw new Error('Solo los administradores pueden generar o regenerar exámenes.');
+      }
+
       setGenError('');
       setGenProgress('');
       setGenStep(0);
       setGenEtaSeconds(null);
       setGenPartLabel('');
-      setGenTotal(A2_PART_TOTAL);
+      setGenTotal(partTotal);
       setGenerating(true);
 
       const partDurations = [];
 
       try {
-        const { data: sessionData } = await supabase.auth.getSession();
         const token = sessionData?.session?.access_token;
         if (!token) throw new Error('Inicia sesión como administrador.');
 
@@ -67,17 +101,20 @@ export function useLevelsExamAdminFlow({ slug = 'a2', examenIdBySlot = {}, onCat
             body: JSON.stringify({ slug, slot, resetExam: true }),
           });
           const delPayload = await delRes.json().catch(() => ({}));
+          if (delRes.status === 403) {
+            throw new Error(delPayload.error || 'Solo los administradores pueden generar o regenerar exámenes.');
+          }
           if (!delRes.ok) {
             throw new Error(delPayload.error || 'No se pudo borrar el examen anterior en Supabase.');
           }
           levelId = delPayload.levelId || levelId;
         }
 
-        for (let i = 0; i < A2_EXAM_PARTS.length; i += 1) {
-          const partDef = A2_EXAM_PARTS[i];
+        for (let i = 0; i < examParts.length; i += 1) {
+          const partDef = examParts[i];
           const partNumber = partDef.partNumber;
           setGenStep(i + 1);
-          setGenPartLabel(partDef.title || `Part ${partNumber}`);
+          setGenPartLabel(partDef.title || partDef.section || `Part ${partNumber}`);
           setGenEtaSeconds(null);
 
           const t0 = Date.now();
@@ -91,18 +128,21 @@ export function useLevelsExamAdminFlow({ slug = 'a2', examenIdBySlot = {}, onCat
               slug,
               slot,
               partNumber,
+              preserveExistingParts,
             }),
           });
           const payload = await res.json().catch(() => ({}));
+          if (res.status === 403) {
+            throw new Error(payload.error || 'Solo los administradores pueden generar o regenerar exámenes.');
+          }
           if (!res.ok) throw new Error(payload.error || `Error en parte ${partNumber}.`);
 
           levelId = payload.levelId || levelId;
-          partDurations.push(Date.now() - t0);
+          if (!payload.skipped) partDurations.push(Date.now() - t0);
 
-          const remaining = A2_EXAM_PARTS.length - (i + 1);
+          const remaining = examParts.length - (i + 1);
           if (remaining > 0 && partDurations.length > 0) {
-            const avgMs =
-              partDurations.reduce((sum, ms) => sum + ms, 0) / partDurations.length;
+            const avgMs = partDurations.reduce((sum, ms) => sum + ms, 0) / partDurations.length;
             setGenEtaSeconds(Math.ceil((avgMs * remaining) / 1000));
           } else {
             setGenEtaSeconds(0);
@@ -111,7 +151,11 @@ export function useLevelsExamAdminFlow({ slug = 'a2', examenIdBySlot = {}, onCat
 
         if (levelId) invalidateLevelExamCache(levelId);
         setGenError('');
-        setGenProgress('Examen guardado en Supabase (14 partes).');
+        const msg =
+          preserveExistingParts && !force
+            ? `Examen ${levelUpper} actualizado (solo partes sin contenido; ${partTotal} partes en el formato del nivel).`
+            : `Examen guardado en Supabase (${partTotal} partes).`;
+        setGenProgress(msg);
         onCatalogUpdated?.();
         return { created: true, examSlot: slot, levelId };
       } catch (e) {
@@ -125,23 +169,23 @@ export function useLevelsExamAdminFlow({ slug = 'a2', examenIdBySlot = {}, onCat
         setGenPartLabel('');
       }
     },
-    [slug, onCatalogUpdated],
+    [slug, onCatalogUpdated, examParts, partTotal, levelUpper, supportsGeneration],
   );
 
   const handleAdminExamSelect = useCallback(
     async (slot, onSelectSlot) => {
-      if (!isAdmin) {
+      if (!canRegenerateExams) {
         onSelectSlot(slot);
         return;
       }
 
       if (!slotHasContent(slot)) {
         const ok = window.confirm(
-          `El Examen ${slot} ${slug.toUpperCase()} aún no existe en Supabase.\n\n¿Generarlo ahora con DRALO AI? (14 partes; suele tardar varios minutos)`,
+          `El Examen ${slot} ${levelUpper} aún no existe en Supabase.\n\n¿Generarlo ahora con DRALO AI? (${partTotal} partes; suele tardar varios minutos)`,
         );
         if (!ok) return;
         try {
-          await generateExam(slot);
+          await generateExam(slot, { preserveExistingParts: false });
           onSelectSlot(slot);
         } catch {
           /* genError shown in UI */
@@ -151,7 +195,7 @@ export function useLevelsExamAdminFlow({ slug = 'a2', examenIdBySlot = {}, onCat
 
       if (slug === 'a2') {
         const regen = window.confirm(
-          `El Examen ${slot} ya existe.\n\n¿Regenerarlo completo con DRALO AI?\n\nSe borrará todo el contenido actual de este examen en Supabase y se crearán de nuevo las 14 partes (varios minutos).`,
+          `El Examen ${slot} ya existe.\n\n¿Regenerarlo completo con DRALO AI?\n\nSe borrará todo el contenido actual de este examen en Supabase y se crearán de nuevo las ${partTotal} partes (varios minutos).`,
         );
         if (!regen) {
           onSelectSlot(slot);
@@ -166,9 +210,21 @@ export function useLevelsExamAdminFlow({ slug = 'a2', examenIdBySlot = {}, onCat
         return;
       }
 
-      onSelectSlot(slot);
+      const regen = window.confirm(
+        `El Examen ${slot} ${levelUpper} ya existe.\n\n¿Completar o actualizar con DRALO AI?\n\nSe generarán solo las partes que aún no tienen contenido en Supabase. Las partes que ya tienen preguntas no se borrarán ni cambiarán de formato (${partTotal} partes en total).`,
+      );
+      if (!regen) {
+        onSelectSlot(slot);
+        return;
+      }
+      try {
+        await generateExam(slot, { preserveExistingParts: true });
+        onSelectSlot(slot);
+      } catch {
+        /* genError shown in UI */
+      }
     },
-    [isAdmin, slotHasContent, generateExam, slug],
+    [canRegenerateExams, slotHasContent, generateExam, slug, partTotal, levelUpper],
   );
 
   const clearGenError = useCallback(() => {
@@ -188,6 +244,9 @@ export function useLevelsExamAdminFlow({ slug = 'a2', examenIdBySlot = {}, onCat
     slotHasContent,
     generateExam,
     handleAdminExamSelect,
+    supportsGeneration,
+    /** true solo para rol admin/administrador en niveles con generación (A2–C2) */
+    canRegenerateExams,
   };
 }
 

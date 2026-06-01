@@ -70,7 +70,11 @@ import {
 } from '@/utils/levelsEstadisticas';
 import { resolveB2ExamenId, fetchB2PreguntasByExamen } from '@/utils/b2ResolveExam';
 import { getCachedLevelBySlug } from '@/utils/levelsLevelCache';
-import { useLevelsExamAdminFlow, reloadExamNamesBySlot } from '@/hooks/useLevelsExamAdminFlow';
+import {
+  useLevelsExamAdminFlow,
+  reloadExamNamesBySlot,
+  createAdminExamSelectHandler,
+} from '@/hooks/useLevelsExamAdminFlow';
 import { formatLevelsPartDisplayName } from '@/utils/formatLevelsPartDisplayName';
 import B2ExamPracticeModuleNav from '@/components/b2/B2ExamPracticeModuleNav';
 import A2ExamGenerationStatus from '@/components/niveles/A2ExamGenerationStatus';
@@ -220,20 +224,6 @@ function B2ExamPaperPracticePageInner({
   const [preguntaAudiosError, setPreguntaAudiosError] = useState('');
   const [writingLiveCorrect, setWritingLiveCorrect] = useState(null);
   const [examLabelsBySlot, setExamLabelsBySlot] = useState({});
-
-  const adminFlow = useLevelsExamAdminFlow({
-    slug: levelSlug,
-    examenIdBySlot: scoring.examenIdBySlot,
-    onCatalogUpdated: () => {
-      if (levelSlug === 'a2') {
-        void scoring.reloadExamCatalog?.();
-        void loadData();
-      } else {
-        void reloadExamCatalog?.();
-      }
-      void reloadExamNamesBySlot(levelSlug).then(({ names }) => setExamLabelsBySlot(names));
-    },
-  });
 
   useEffect(() => {
     void reloadExamNamesBySlot(levelSlug).then(({ names }) => setExamLabelsBySlot(names));
@@ -510,6 +500,27 @@ function B2ExamPaperPracticePageInner({
       if (mountedRef.current) setLoading(false);
     }
   }, [emptyErrorMessage, examSlot, partMax, partMin, levelSlug, levelTag]);
+
+  const adminFlow = useLevelsExamAdminFlow({
+    slug: levelSlug,
+    examenIdBySlot: scoring.examenIdBySlot,
+    onCatalogUpdated: () => {
+      if (levelSlug === 'a2') {
+        void scoring.reloadExamCatalog?.();
+      } else if (levelSlug === 'b2') {
+        void scoring.reloadExamenCatalog?.();
+      } else {
+        void reloadExamCatalog?.();
+      }
+      void loadData();
+      void reloadExamNamesBySlot(levelSlug).then(({ names }) => setExamLabelsBySlot(names));
+    },
+  });
+
+  const handleAdminSelectExam = useMemo(
+    () => createAdminExamSelectHandler(adminFlow, (slot) => scoring.handleSelectExam(selectExamSlot, slot)),
+    [adminFlow, scoring, selectExamSlot],
+  );
 
   useEffect(() => {
     mountedRef.current = true;
@@ -1320,7 +1331,7 @@ function B2ExamPaperPracticePageInner({
 
   return (
     <B2ExamPracticeLayout examPracticeOpen={scoring.examPracticeOpen}>
-      {levelSlug === 'a2' && adminFlow.isAdmin ? (
+      {adminFlow.canRegenerateExams ? (
         <A2ExamGenerationStatus
           generating={adminFlow.generating}
           genError={adminFlow.genError}
@@ -1335,16 +1346,7 @@ function B2ExamPaperPracticePageInner({
 
       <B2ExamPracticeChrome
         examSlot={examSlot}
-        onSelectExam={(n) => {
-          if (levelSlug === 'a2' && adminFlow.isAdmin) {
-            void adminFlow.handleAdminExamSelect(n, (slot) => {
-              scoring.handleSelectExam(selectExamSlot, slot);
-              void loadData();
-            });
-            return;
-          }
-          scoring.handleSelectExam(selectExamSlot, n);
-        }}
+        onSelectExam={handleAdminSelectExam}
         progressBySlot={scoring.progressBySlot}
         partsInPaper={scoring.partsInPaper}
         examLabelsBySlot={examLabelsBySlot}

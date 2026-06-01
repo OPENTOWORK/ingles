@@ -9,6 +9,7 @@ import {
   ADMIN_PANEL_MENU_ITEMS,
   DRALO_MENU_ITEMS,
   NAV_LINK_CONTACT,
+  HOME_MAIN_LINKS,
   NAV_LINKS_BEFORE_DRALO,
 } from '@/config/appNavMenu';
 import { performLogout } from '@/utils/logout';
@@ -59,6 +60,7 @@ export default function AppSideMenuPanel({ defaultOpen = true }) {
   const [adminPanelsOpen, setAdminPanelsOpen] = useState(false);
   const staffLink = getRoleLink(userRole);
   const showAdminDropdown = Boolean(session && isAdminRole(userRole));
+  const showAdminHomeLinks = isAdminRole(userRole);
   const showStaffLink = Boolean(staffLink && !showAdminDropdown);
   const linkClass = 'app-side-menu__link';
 
@@ -109,6 +111,13 @@ export default function AppSideMenuPanel({ defaultOpen = true }) {
         </div>
 
         <nav className="app-side-menu__nav">
+          {showAdminHomeLinks
+            ? HOME_MAIN_LINKS.map((item) => (
+                <NavLink key={item.href} href={item.href} className={linkClass}>
+                  {item.label}
+                </NavLink>
+              ))
+            : null}
           {NAV_LINKS_BEFORE_DRALO.map((item) => (
             <NavLink key={item.href} href={item.href} className={linkClass}>
               {item.label}

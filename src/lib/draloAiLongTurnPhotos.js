@@ -1,4 +1,4 @@
-import { getDraloOpenAI, draloChatCompletion } from '@/lib/draloAiEngine';
+import { getDraloOpenAI, cambridgeChatCompletion } from '@/lib/draloAiEngine';
 
 function parseJsonObject(text) {
   const raw = String(text || '').trim();
@@ -41,10 +41,8 @@ function buildImagePrompt(sceneDescription) {
  */
 export async function generateLongTurnPhotoBrief(level = 'B2', excludeTheme = '') {
   const exclude = String(excludeTheme || '').trim();
-  const { text } = await draloChatCompletion({
-    useAssistant: false,
-    system:
-      'You design Cambridge FCE Speaking Part 2 (long turn) photograph pairs for English learners.',
+  const { text } = await cambridgeChatCompletion({
+    system: 'Design one fresh FCE Speaking Part 2 photograph pair. Return JSON only.',
     messages: [
       {
         role: 'user',

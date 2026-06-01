@@ -5,11 +5,13 @@ import {
   generateAndPersistA2ExamPart,
   resetA2ExamContent,
 } from '@/lib/levelsA2ExamGenerator';
+import { resetB2ExamContent } from '@/lib/levelsB2ExamGenerator';
 import {
-  generateAndPersistB2Exam,
-  generateAndPersistB2ExamPart,
-  resetB2ExamContent,
-} from '@/lib/levelsB2ExamGenerator';
+  generateAndPersistLevelExam,
+  generateAndPersistLevelExamPart,
+  resetLevelExamContent,
+} from '@/lib/levelsCambridgeExamGenerator';
+import { isExamGenerationSlug } from '@/lib/levelsExamCatalog';
 import { clampB2ExamSlot } from '@/utils/b2ResolveExam';
 import { getCachedLevelBySlug, invalidateLevelExamCache } from '@/utils/levelsLevelCache';
 
@@ -36,10 +38,11 @@ export async function POST(req) {
   const skipImages = Boolean(body.skipImages);
   const skipAudio = Boolean(body.skipAudio);
   const partNumber = body.partNumber != null ? Number(body.partNumber) : null;
+  const preserveExistingParts = Boolean(body.preserveExistingParts);
 
-  if (slug !== 'a2' && slug !== 'b2') {
+  if (slug !== 'a2' && !isExamGenerationSlug(slug)) {
     return NextResponse.json(
-      { error: 'Solo están implementados los niveles A2 y B2.' },
+      { error: 'Niveles soportados: A2, B1, B2, C1 y C2.' },
       { status: 400 },
     );
   }
@@ -52,44 +55,55 @@ export async function POST(req) {
 
     if (resetExam) {
       const deleted =
-        slug === 'b2'
-          ? await resetB2ExamContent(auth.adminDb, { levelId: levelData.id, examSlot: slot })
-          : await resetA2ExamContent(auth.adminDb, { levelId: levelData.id, examSlot: slot });
+        slug === 'a2'
+          ? await resetA2ExamContent(auth.adminDb, { levelId: levelData.id, examSlot: slot })
+          : slug === 'b2'
+            ? await resetB2ExamContent(auth.adminDb, { levelId: levelData.id, examSlot: slot })
+            : await resetLevelExamContent(auth.adminDb, slug, {
+                levelId: levelData.id,
+                examSlot: slot,
+              });
       invalidateLevelExamCache(levelData.id);
       return NextResponse.json({ ok: true, slot, levelId: levelData.id, ...deleted });
     }
 
     let result;
-    if (slug === 'b2') {
+    if (slug === 'a2') {
       if (partNumber != null && Number.isFinite(partNumber)) {
-        result = await generateAndPersistB2ExamPart(auth.adminDb, {
+        result = await generateAndPersistA2ExamPart(auth.adminDb, {
           levelId: levelData.id,
           examSlot: slot,
           partNumber,
-          skipAudio,
+          reset: reset || force,
+          skipImages,
         });
       } else {
-        result = await generateAndPersistB2Exam(auth.adminDb, {
+        result = await generateAndPersistA2Exam(auth.adminDb, {
           levelId: levelData.id,
           examSlot: slot,
           force,
-          skipAudio,
+          skipImages,
         });
       }
     } else if (partNumber != null && Number.isFinite(partNumber)) {
-      result = await generateAndPersistA2ExamPart(auth.adminDb, {
+      result = await generateAndPersistLevelExamPart(auth.adminDb, {
+        levelSlug: slug,
         levelId: levelData.id,
         examSlot: slot,
         partNumber,
-        reset: reset || force,
-        skipImages,
+        skipAudio,
+        preserveExistingParts,
+        replacePartContent: force,
       });
     } else {
-      result = await generateAndPersistA2Exam(auth.adminDb, {
+      result = await generateAndPersistLevelExam(auth.adminDb, {
+        levelSlug: slug,
         levelId: levelData.id,
         examSlot: slot,
         force,
-        skipImages,
+        skipAudio,
+        preserveExistingParts,
+        replacePartContent: force,
       });
     }
 

@@ -1,114 +1,53 @@
+import { resolveExerciseConfig } from '@/lib/theoryExerciseLevelConfig';
 import {
-  MultipleChoiceExercise,
-  FillBlanksExercise,
-  TrueFalseExercise,
-} from '@/components/theory/ExerciseComponents';
-import {
-  MatchingExercise,
-  FindErrorExercise,
-  SentenceOrderExercise,
-  SelectAllExercise,
-} from '@/components/theory/ExtendedExerciseComponents';
-
-import {
-  resolveExerciseConfig,
-} from '@/lib/theoryExerciseLevelConfig';
+  THEORY_EXERCISE_COUNT,
+  buildRandomTipoSequence,
+  hashTheoryExerciseSeed,
+} from '@/lib/theoryExerciseTypeCatalog';
+import { buildTheoryExerciseElement } from '@/components/theory/buildTheoryExerciseElement';
 
 /**
- * Builds exactly 20 interactive exercises in a fixed order:
- * 5× MC → 3× Fill → 2× T/F → 2× Match → 3× Find error → 3× Order → 2× Select all
+ * Builds 20 theory exercises with types from `levels_teoria_tipos_preguntas`
+ * (Tipo 1–16) in a random order per topic and level.
  */
 export function buildTheoryExercises(slug, config, level = 'B2', primaryLevel = 'B2') {
   const resolved = resolveExerciseConfig(config, level, slug, primaryLevel);
   const levelSlug = String(level || 'B2').toLowerCase();
   const key = (n) => `${slug}-${levelSlug}-${n}`;
-  const {
-    multipleChoice = [],
-    fillBlanks = [],
-    trueFalse = [],
-    matching = [],
-    findError = [],
-    sentenceOrder = [],
-    selectAll = [],
-  } = resolved || {};
+
+  const pools = {
+    multipleChoice: resolved?.multipleChoice ?? [],
+    fillBlanks: resolved?.fillBlanks ?? [],
+    trueFalse: resolved?.trueFalse ?? [],
+    matching: resolved?.matching ?? [],
+    findError: resolved?.findError ?? [],
+    sentenceOrder: resolved?.sentenceOrder ?? [],
+    selectAll: resolved?.selectAll ?? [],
+  };
+
+  const seed = hashTheoryExerciseSeed(slug, level);
+  const tipoSequence = buildRandomTipoSequence(seed);
+  const counters = {
+    multipleChoice: 0,
+    fillBlanks: 0,
+    trueFalse: 0,
+    matching: 0,
+    findError: 0,
+    sentenceOrder: 0,
+    selectAll: 0,
+  };
 
   const exercises = [];
   let n = 1;
 
-  multipleChoice.slice(0, 5).forEach((mc) => {
-    exercises.push(
-      <MultipleChoiceExercise
-        key={key(n++)}
-        question={mc.question}
-        options={mc.options}
-        correctAnswer={mc.correctAnswer}
-        explanation={mc.explanation}
-      />,
-    );
-  });
-
-  fillBlanks.slice(0, 3).forEach((fb) => {
-    exercises.push(
-      <FillBlanksExercise
-        key={key(n++)}
-        text={fb.text}
-        blanks={fb.blanks}
-      />,
-    );
-  });
-
-  trueFalse.slice(0, 2).forEach((tf) => {
-    exercises.push(
-      <TrueFalseExercise key={key(n++)} statements={tf.statements} />,
-    );
-  });
-
-  matching.slice(0, 2).forEach((m) => {
-    exercises.push(
-      <MatchingExercise
-        key={key(n++)}
-        title={m.title}
-        pairs={m.pairs}
-        explanation={m.explanation}
-      />,
-    );
-  });
-
-  findError.slice(0, 3).forEach((fe) => {
-    exercises.push(
-      <FindErrorExercise
-        key={key(n++)}
-        title={fe.title}
-        sentence={fe.sentence}
-        options={fe.options}
-        correctIndex={fe.correctIndex}
-        explanation={fe.explanation}
-      />,
-    );
-  });
-
-  sentenceOrder.slice(0, 3).forEach((so) => {
-    exercises.push(
-      <SentenceOrderExercise
-        key={key(n++)}
-        title={so.title}
-        words={so.words}
-        explanation={so.explanation}
-      />,
-    );
-  });
-
-  selectAll.slice(0, 2).forEach((sa) => {
-    exercises.push(
-      <SelectAllExercise
-        key={key(n++)}
-        title={sa.title}
-        prompt={sa.prompt}
-        options={sa.options}
-        explanation={sa.explanation}
-      />,
-    );
-  });
+  for (const tipoId of tipoSequence) {
+    if (exercises.length >= THEORY_EXERCISE_COUNT) break;
+    const el = buildTheoryExerciseElement(tipoId, pools, counters, key(n), null);
+    if (el) {
+      exercises.push(el);
+      n += 1;
+    }
+  }
 
   return exercises;
 }

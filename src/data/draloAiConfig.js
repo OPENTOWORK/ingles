@@ -28,7 +28,7 @@ export const DRALO_AI_HUB = {
       href: '/dralo-ai/writing',
       label: 'Writing',
       icon: '📝',
-      tagline: 'Guided writing with exam-style correction',
+      tagline: 'Exam Coach correction and real-world writing practice',
       accent: 'amber',
     },
     {

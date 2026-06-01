@@ -1,12 +1,14 @@
 'use client';
 
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import Link from 'next/link';
 import SiteMascot from '@/components/SiteMascot';
+import { useUserRole } from '@/context/UserRoleContext';
+import {
+  getSiteAssistantStarters,
+  getSiteAssistantWelcome,
+} from '@/lib/siteHelpKnowledge';
 import './site-assistant.css';
-
-const WELCOME =
-  'Hi! I\'m the Dralo assistant. Ask me how to use the site — where to practise, levels, theory, your account, or support. Pick a topic below or type your question.';
 
 const DISMISS_STORAGE_KEY = 'dralo_assistant_dismissed';
 
@@ -35,32 +37,15 @@ export function clearAssistantDismissed() {
   }
 }
 
-const STARTER_TOPICS = [
-  {
-    id: 'practice',
-    label: 'How do I start practising?',
-    hint: 'Levels, skills and exam mode',
-    question: 'How do I start practising on the site?',
-  },
-  {
-    id: 'placement',
-    label: 'Where is the placement test?',
-    hint: 'Find your CEFR starting level',
-    question: 'Where is the placement test?',
-  },
-  {
-    id: 'support',
-    label: 'How do I contact support?',
-    hint: 'Help, account and technical issues',
-    question: 'How do I contact support?',
-  },
-];
-
 export default function SiteAssistantWidget({ defaultOpen = true } = {}) {
+  const { userRole } = useUserRole();
+  const welcome = useMemo(() => getSiteAssistantWelcome(userRole), [userRole]);
+  const starterTopics = useMemo(() => getSiteAssistantStarters(userRole), [userRole]);
+
   const [open, setOpen] = useState(() =>
     defaultOpen ? !isAssistantDismissed() : false,
   );
-  const [messages, setMessages] = useState([{ role: 'assistant', content: WELCOME }]);
+  const [messages, setMessages] = useState([{ role: 'assistant', content: welcome }]);
   const [input, setInput] = useState('');
   const [loading, setLoading] = useState(false);
   const listRef = useRef(null);
@@ -79,6 +64,14 @@ export default function SiteAssistantWidget({ defaultOpen = true } = {}) {
     if (open) inputRef.current?.focus();
   }, [open]);
 
+  useEffect(() => {
+    setMessages((prev) => {
+      if (prev.length !== 1 || prev[0]?.role !== 'assistant' || prev[0]?.isError) return prev;
+      if (prev[0].content === welcome) return prev;
+      return [{ role: 'assistant', content: welcome }];
+    });
+  }, [welcome]);
+
   const sendMessage = async (text) => {
     const trimmed = String(text || '').trim();
     if (!trimmed || loading) return;
@@ -96,7 +89,7 @@ export default function SiteAssistantWidget({ defaultOpen = true } = {}) {
       const res = await fetch('/api/site-assistant/chat', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ messages: history }),
+        body: JSON.stringify({ messages: history, userRole }),
       });
       const data = await res.json().catch(() => ({}));
       if (!res.ok) {
@@ -167,7 +160,7 @@ export default function SiteAssistantWidget({ defaultOpen = true } = {}) {
               <div className="site-assistant-starters">
                 <p className="site-assistant-starters__title">Quick topics</p>
                 <ul className="site-assistant-starters__list" role="list">
-                  {STARTER_TOPICS.map((topic) => (
+                  {starterTopics.map((topic) => (
                     <li key={topic.id}>
                       <button
                         type="button"

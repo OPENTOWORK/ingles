@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { draloChatCompletion, isDraloOpenAIConfigured } from '@/lib/draloAiEngine';
+import { realLifeChatCompletion, isDraloOpenAIConfigured } from '@/lib/draloAiEngine';
 import {
   buildAskDraloPrompt,
   buildTranslatePrompt,
@@ -124,7 +124,7 @@ async function fetchBaseEntry(word) {
 }
 
 async function enrichWordWithAi(word, baseEntry, targetLang) {
-  const { text } = await draloChatCompletion({
+  const { text } = await realLifeChatCompletion({
     system:
       'For this lookup only: act as a Cambridge English lexicographer. Return only JSON. Be accurate about CEFR, false friends for Spanish speakers, and grammar labels.',
     messages: [{ role: 'user', content: buildWordEnrichPrompt(word, baseEntry, targetLang) }],
@@ -194,7 +194,7 @@ async function translatePhrase(text, targetLang) {
   }
 
   try {
-    const { text } = await draloChatCompletion({
+    const { text } = await realLifeChatCompletion({
       system: `For this translation only: return only JSON. Target language: ${languageNameForPrompt(targetLang)}.`,
       messages: [{ role: 'user', content: buildTranslatePrompt(input, targetLang) }],
       temperature: 0.35,
@@ -223,7 +223,7 @@ async function askDralo(word, question, enrichment) {
   }
 
   try {
-    const { text: answer } = await draloChatCompletion({
+    const { text: answer } = await realLifeChatCompletion({
       system:
         'Answer vocabulary questions clearly in English. Be concise, with examples.',
       messages: [{ role: 'user', content: buildAskDraloPrompt(w, q, enrichment) }],

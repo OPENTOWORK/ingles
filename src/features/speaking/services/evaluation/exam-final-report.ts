@@ -1,4 +1,8 @@
-import { draloChatCompletion, isDraloOpenAIConfigured } from '@/lib/draloAiEngine';
+import {
+  cambridgeChatCompletion,
+  realLifeChatCompletion,
+  isDraloOpenAIConfigured,
+} from '@/lib/draloAiEngine';
 import type { CefrLevel } from '@prisma/client';
 import { correctionReportSchema, type CorrectionReportPayload } from '../../domain/schemas';
 
@@ -29,7 +33,9 @@ export async function runExamFinalReport(params: {
   let raw = '';
 
   if (isDraloOpenAIConfigured()) {
-    const { text } = await draloChatCompletion({
+    const complete =
+      ctx === 'practice' ? realLifeChatCompletion : cambridgeChatCompletion;
+    const { text } = await complete({
       system: systemContent,
       messages: [
         {

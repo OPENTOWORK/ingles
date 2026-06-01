@@ -4,6 +4,7 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import { supabase } from '@/utils/supabaseClient';
 import { fetchB2PuntuacionesProgress } from '@/utils/levelsPuntuacionesProgress';
 import { getCachedB2Level, getCachedB2ExamenIdsBySlot } from '@/utils/b2LevelCache';
+import { invalidateLevelExamCache } from '@/utils/levelsLevelCache';
 import { getSessionUserId } from '@/utils/levelsEstadisticas';
 import { getB2PartScoring } from '@/utils/levelsB2PartScoring';
 import { saveB2PartPuntuacionIfComplete } from '@/utils/recordLevelsB2PartScore';
@@ -35,15 +36,18 @@ export function useB2ExamScoringSession({ partMin, partMax }) {
     setProgressBySlot(bySlot);
   }, [examenIdBySlot, partMin, partMax, partsInPaper]);
 
-  useEffect(() => {
-    void (async () => {
-      const { data: levelData } = await getCachedB2Level(supabase);
-      if (!levelData?.id) return;
-      setB2LevelId(levelData.id);
-      const idsBySlot = await getCachedB2ExamenIdsBySlot(supabase, levelData.id);
-      setExamenIdBySlot(idsBySlot);
-    })();
+  const reloadExamenCatalog = useCallback(async () => {
+    const { data: levelData } = await getCachedB2Level(supabase);
+    if (!levelData?.id) return;
+    invalidateLevelExamCache(levelData.id);
+    const idsBySlot = await getCachedB2ExamenIdsBySlot(supabase, levelData.id);
+    setExamenIdBySlot(idsBySlot);
+    setB2LevelId(levelData.id);
   }, []);
+
+  useEffect(() => {
+    void reloadExamenCatalog();
+  }, [reloadExamenCatalog]);
 
   useEffect(() => {
     if (!examPracticeOpen || !Object.keys(examenIdBySlot).length) return;
@@ -178,5 +182,6 @@ export function useB2ExamScoringSession({ partMin, partMax }) {
     trySavePartProgress,
     saveWritingOrSpeakingScore,
     resetPartNoticeOnPartChange,
+    reloadExamenCatalog,
   };
 }

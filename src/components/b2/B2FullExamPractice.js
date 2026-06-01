@@ -14,6 +14,8 @@ import { useLevelsCategoryTimer } from '@/hooks/useLevelsCategoryTimer';
 import { supabase } from '@/utils/supabaseClient';
 import { getCachedB2Level, getCachedB2ExamNamesBySlot } from '@/utils/b2LevelCache';
 import { getB2PartScoring, starsFromApprovedPartsCount } from '@/utils/levelsB2PartScoring';
+import { useLevelsExamAdminFlow, createAdminExamSelectHandler } from '@/hooks/useLevelsExamAdminFlow';
+import A2ExamGenerationStatus from '@/components/niveles/A2ExamGenerationStatus';
 export const B2_FULL_EXAM_PART_MIN = 1;
 export const B2_FULL_EXAM_PART_MAX = 17;
 export const B2_FULL_EXAM_PARTS_COUNT = B2_FULL_EXAM_PART_MAX - B2_FULL_EXAM_PART_MIN + 1;
@@ -95,6 +97,20 @@ function B2FullExamPracticeInner() {
     }
   }, []);
 
+  const adminFlow = useLevelsExamAdminFlow({
+    slug: 'b2',
+    examenIdBySlot: scoring.examenIdBySlot,
+    onCatalogUpdated: () => {
+      void scoring.reloadExamenCatalog?.();
+      void loadExamCatalog();
+    },
+  });
+
+  const handleSelectExamSlot = useMemo(
+    () => createAdminExamSelectHandler(adminFlow, (slot) => scoring.handleSelectExam(selectExamSlot, slot)),
+    [adminFlow, scoring, selectExamSlot],
+  );
+
   useEffect(() => {
     void loadExamCatalog();
   }, [loadExamCatalog]);
@@ -129,9 +145,21 @@ function B2FullExamPracticeInner() {
 
   return (
     <B2ExamPracticeLayout examPracticeOpen={scoring.examPracticeOpen}>
+      {adminFlow.canRegenerateExams ? (
+        <A2ExamGenerationStatus
+          generating={adminFlow.generating}
+          genError={adminFlow.genError}
+          genProgress={adminFlow.genProgress}
+          genStep={adminFlow.genStep}
+          genTotal={adminFlow.genTotal}
+          genEtaSeconds={adminFlow.genEtaSeconds}
+          genPartLabel={adminFlow.genPartLabel}
+          onDismissError={adminFlow.clearGenError}
+        />
+      ) : null}
       <B2ExamSlotProgressPicker
         value={examSlot}
-        onSelect={(n) => scoring.handleSelectExam(selectExamSlot, n)}
+        onSelect={handleSelectExamSlot}
         progressBySlot={scoring.progressBySlot}
         partsInPaper={B2_FULL_EXAM_PARTS_COUNT}
         examLabelsBySlot={examNamesBySlot}

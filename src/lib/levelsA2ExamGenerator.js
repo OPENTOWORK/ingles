@@ -1,4 +1,4 @@
-import { draloChatCompletion, isDraloOpenAIConfigured } from '@/lib/draloAiEngine';
+import { cambridgeChatCompletion, isDraloOpenAIConfigured } from '@/lib/draloAiEngine';
 import { A2_EXAM_PARTS } from '@/lib/a2ExamCatalog';
 import {
   buildA2PartGeneratePrompt,
@@ -22,16 +22,15 @@ function parseJsonFromModel(text) {
   } catch {
     const m = raw.match(/\{[\s\S]*\}/);
     if (m) return JSON.parse(m[0]);
-    throw new Error('Invalid JSON from DRALO AI');
+    throw new Error('Invalid JSON from Examenes de Cambridge engine');
   }
 }
 
 async function generatePartJson(partDef, options) {
   const prompt = buildA2PartGeneratePrompt(partDef, options);
-  const { text } = await draloChatCompletion({
-    useAssistant: false,
+  const { text } = await cambridgeChatCompletion({
     system:
-      'You are DRALO AI, an A2 Key (Entry 2) exam writer. Follow official sample-test layout. Output only valid JSON for one exam part.',
+      'Output only valid JSON for one A2 Key exam part. Follow official Cambridge sample-test layout.',
     messages: [{ role: 'user', content: prompt }],
     temperature: 0.88,
     max_tokens: 4096,

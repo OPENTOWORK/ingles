@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect, useCallback, useRef } from 'react';
-import { formatWritingFeedbackDisplay, isWritingFeedbackHeadingLine } from '@/lib/formatWritingFeedback';
+import { formatWritingFeedbackHtml } from '@/lib/formatWritingFeedbackHtml';
 import { buildClientApiUrl, getStaticApiHint } from '@/utils/clientApiUrl';
 
 function countWords(text) {
@@ -9,35 +9,6 @@ function countWords(text) {
     .trim()
     .split(/\s+/)
     .filter(Boolean).length;
-}
-
-/** Líneas de corrección → HTML (emojis en títulos, sin # markdown). */
-function formatCambridgeFeedbackHtml(text) {
-  const normalized = formatWritingFeedbackDisplay(text);
-  const escaped = normalized
-    .replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;');
-
-  return escaped
-    .split('\n')
-    .map((line) => {
-      const trimmed = line.trim();
-      if (!trimmed) return '<br />';
-      if (isWritingFeedbackHeadingLine(trimmed)) {
-        const title = trimmed.replace(/^#{1,6}\s+/, '');
-        return `<h4 class="levels-b2-writing-panel__feedback-heading">${title}</h4>`;
-      }
-      if (/^[-*]\s+/.test(trimmed)) {
-        const item = trimmed.replace(/^[-*]\s+/, '');
-        return `<p class="levels-b2-writing-panel__feedback-li">• ${item}</p>`;
-      }
-      if (/^→/.test(trimmed) || /→/.test(trimmed)) {
-        return `<p class="levels-b2-writing-panel__feedback-correction">${trimmed}</p>`;
-      }
-      return `<p class="levels-b2-writing-panel__feedback-p">${trimmed}</p>`;
-    })
-    .join('');
 }
 
 const CRITERIA = [
@@ -288,7 +259,7 @@ export default function B2WritingLongFormAiPanel({
           </p>
           <div
             className="levels-b2-writing-panel__feedback-body"
-            dangerouslySetInnerHTML={{ __html: formatCambridgeFeedbackHtml(aiFeedback) }}
+            dangerouslySetInnerHTML={{ __html: formatWritingFeedbackHtml(aiFeedback) }}
           />
         </div>
       ) : null}

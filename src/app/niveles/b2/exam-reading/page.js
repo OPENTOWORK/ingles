@@ -1,5 +1,7 @@
 'use client';
 import { Suspense, useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { useLevelsExamAdminFlow, createAdminExamSelectHandler } from '@/hooks/useLevelsExamAdminFlow';
+import A2ExamGenerationStatus from '@/components/niveles/A2ExamGenerationStatus';
 import { usePathname, useSearchParams } from 'next/navigation';
 import { useB2ExamPracticeSlot } from '@/hooks/useB2ExamPracticeSlot';
 import { useB2AutoOpenExamFromUrl } from '@/hooks/useB2AutoOpenExamFromUrl';
@@ -265,6 +267,24 @@ function B2ReadingExamsPageInner() {
       if (mountedRef.current) setLoading(false);
     }
   }, [examSlot, isCombinedPaper, partMin, partMax]);
+
+  const adminFlow = useLevelsExamAdminFlow({
+    slug: 'b2',
+    examenIdBySlot: scoring.examenIdBySlot,
+    onCatalogUpdated: () => {
+      void scoring.reloadExamenCatalog?.();
+      void loadReadingData();
+    },
+  });
+
+  const handleSelectExamSlot = useMemo(
+    () =>
+      createAdminExamSelectHandler(adminFlow, (slot) => {
+        scoring.handleSelectExam(selectExamSlot, slot);
+        void loadReadingData();
+      }),
+    [adminFlow, scoring, selectExamSlot, loadReadingData],
+  );
 
   useEffect(() => {
     mountedRef.current = true;
@@ -871,9 +891,21 @@ function B2ReadingExamsPageInner() {
 
   return (
     <B2ExamPracticeLayout examPracticeOpen={scoring.examPracticeOpen}>
+      {adminFlow.canRegenerateExams ? (
+        <A2ExamGenerationStatus
+          generating={adminFlow.generating}
+          genError={adminFlow.genError}
+          genProgress={adminFlow.genProgress}
+          genStep={adminFlow.genStep}
+          genTotal={adminFlow.genTotal}
+          genEtaSeconds={adminFlow.genEtaSeconds}
+          genPartLabel={adminFlow.genPartLabel}
+          onDismissError={adminFlow.clearGenError}
+        />
+      ) : null}
       <B2ExamPracticeChrome
         examSlot={examSlot}
-        onSelectExam={(n) => scoring.handleSelectExam(selectExamSlot, n)}
+        onSelectExam={handleSelectExamSlot}
         progressBySlot={scoring.progressBySlot}
         partsInPaper={scoring.partsInPaper}
         examPracticeOpen={scoring.examPracticeOpen}

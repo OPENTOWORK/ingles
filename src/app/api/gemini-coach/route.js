@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { draloChatCompletion, isDraloOpenAIConfigured } from '@/lib/draloAiEngine';
+import { realLifeChatCompletion, isDraloOpenAIConfigured } from '@/lib/draloAiEngine';
 import { SYSTEM_PROMPTS } from '../../../../dralo-speaking/prompts/cambridge-prompts';
 
 function mapHistoryToOpenAIMessages(conversationHistory) {
@@ -30,7 +30,7 @@ async function callDraloCoachDualMode({ systemPrompt, mode, conversationHistory,
 
   try {
     if (mode === 'correction') {
-      const jsonResult = await draloChatCompletion({
+      const jsonResult = await realLifeChatCompletion({
         system: taskSystem,
         messages,
         temperature: 0.2,
@@ -39,7 +39,7 @@ async function callDraloCoachDualMode({ systemPrompt, mode, conversationHistory,
         response_format: { type: 'json_object' },
       });
       if (jsonResult.text) return jsonResult.text;
-      const plain = await draloChatCompletion({
+      const plain = await realLifeChatCompletion({
         system: taskSystem,
         messages,
         temperature: 0.2,
@@ -49,7 +49,7 @@ async function callDraloCoachDualMode({ systemPrompt, mode, conversationHistory,
       return plain.text || '';
     }
 
-    const result = await draloChatCompletion({
+    const result = await realLifeChatCompletion({
       system: taskSystem,
       messages,
       temperature: 0.75,

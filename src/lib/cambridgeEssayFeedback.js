@@ -1,4 +1,4 @@
-import { draloChatCompletion, isDraloOpenAIConfigured } from '@/lib/draloAiEngine';
+import { cambridgeChatCompletion, isDraloOpenAIConfigured } from '@/lib/draloAiEngine';
 import { formatWritingFeedbackDisplay } from '@/lib/formatWritingFeedback';
 
 function extractScore(text, category) {
@@ -143,9 +143,9 @@ export async function evaluateCambridgeEssay({
     : buildGenericPrompt(trimmed);
 
   try {
-    const { text: feedback } = await draloChatCompletion({
+    const { text: feedback } = await cambridgeChatCompletion({
       system:
-        'You are a Cambridge B2 First writing examiner. Be precise, constructive, and exam-focused. Use emoji section titles (📝 📋 ✏️ 💬 💪 🎯 📊) — never use # markdown headers.',
+        'Be precise, constructive, and exam-focused. Use emoji section titles (📝 📋 ✏️ 💬 💪 🎯 📊) — never use # markdown headers.',
       messages: [{ role: 'user', content: prompt }],
       temperature: 0.35,
     });

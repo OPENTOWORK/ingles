@@ -1,10 +1,11 @@
 'use client';
 
-import { useCallback, useEffect, useLayoutEffect, useState } from 'react';
+import { useCallback, useEffect, useLayoutEffect, useMemo, useState } from 'react';
 import { createPortal } from 'react-dom';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
-import { GUIDED_TOUR_STEPS } from '@/components/home/homeHowItWorksData';
+import { getGuidedTourSteps } from '@/components/home/homeHowItWorksData';
+import { useUserRole } from '@/context/UserRoleContext';
 import {
   markTutorialCompleted,
   markTutorialDismissed,
@@ -115,8 +116,10 @@ function computeTooltipStyle(rect, step) {
 export default function GuidedTourOverlay({ stepIndex, onStepIndexChange, onClose }) {
   const router = useRouter();
   const pathname = usePathname();
-  const step = GUIDED_TOUR_STEPS[stepIndex];
-  const isLast = stepIndex >= GUIDED_TOUR_STEPS.length - 1;
+  const { userRole } = useUserRole();
+  const steps = useMemo(() => getGuidedTourSteps(userRole), [userRole]);
+  const step = steps[stepIndex];
+  const isLast = stepIndex >= steps.length - 1;
   const [rect, setRect] = useState(null);
   const [targetReady, setTargetReady] = useState(false);
   const [mounted, setMounted] = useState(false);
@@ -280,10 +283,10 @@ export default function GuidedTourOverlay({ stepIndex, onStepIndexChange, onClos
       >
         <p className="guided-tour__section">{step.sectionLabel}</p>
         <p className="guided-tour__step-meta">
-          Step {stepIndex + 1} of {GUIDED_TOUR_STEPS.length}
+          Step {stepIndex + 1} of {steps.length}
         </p>
         <div className="guided-tour__dots" aria-hidden>
-          {GUIDED_TOUR_STEPS.map((s, i) => (
+          {steps.map((s, i) => (
             <span
               key={s.id}
               className={`guided-tour__dot${i === stepIndex ? ' guided-tour__dot--active' : ''}${i < stepIndex ? ' guided-tour__dot--done' : ''}`}
