@@ -4,10 +4,12 @@ import NavLink from '@/components/layout/NavLink';
 import { usePathname } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { isAdminRole, ROLE_ROUTE_MAP } from '@/utils/authRoles';
+import { canViewPricing } from '@/utils/pricingAccess';
 import AdminPanelsNav from '@/components/layout/AdminPanelsNav';
 import {
   DRALO_MENU_ITEMS,
   NAV_LINK_CONTACT,
+  NAV_LINK_PRICING,
   NAV_LINKS_BEFORE_DRALO,
 } from '@/config/appNavMenu';
 
@@ -57,6 +59,7 @@ export default function AppNav({ session, userRole, onLogout }) {
   const staffLink = getRoleLink(userRole);
   const showAdminDropdown = Boolean(session && isAdminRole(userRole));
   const showStaffLink = Boolean(staffLink && !showAdminDropdown);
+  const showPricing = canViewPricing(userRole);
 
   useEffect(() => {
     document.body.classList.toggle('nav-open', mobileOpen);
@@ -182,14 +185,6 @@ export default function AppNav({ session, userRole, onLogout }) {
               </div>
             ) : null}
           </div>
-
-          <NavLink
-            href={NAV_LINK_CONTACT.href}
-            className={desktopLinkClass(NAV_LINK_CONTACT.href)}
-            onClick={closeDesktopDropdowns}
-          >
-            {NAV_LINK_CONTACT.label}
-          </NavLink>
         </div>
 
         <div className="app-nav__account" role="group" aria-label="Account">
@@ -212,6 +207,23 @@ export default function AppNav({ session, userRole, onLogout }) {
                   {staffLink.label}
                 </NavLink>
               ) : null}
+              {showPricing ? (
+                <NavLink
+                  href={NAV_LINK_PRICING.href}
+                  className={desktopLinkClass(NAV_LINK_PRICING.href)}
+                  onClick={closeDesktopDropdowns}
+                  {...(NAV_LINK_PRICING.tourId ? { 'data-tour': NAV_LINK_PRICING.tourId } : {})}
+                >
+                  {NAV_LINK_PRICING.label}
+                </NavLink>
+              ) : null}
+              <NavLink
+                href={NAV_LINK_CONTACT.href}
+                className={desktopLinkClass(NAV_LINK_CONTACT.href)}
+                onClick={closeDesktopDropdowns}
+              >
+                {NAV_LINK_CONTACT.label}
+              </NavLink>
               <NavLink
                 href="/perfil"
                 className={desktopLinkClass('/perfil')}
@@ -231,9 +243,28 @@ export default function AppNav({ session, userRole, onLogout }) {
               </button>
             </>
           ) : (
-            <NavLink href="/login" className="app-nav__btn" onClick={closeDesktopDropdowns}>
-              Login
-            </NavLink>
+            <>
+              {showPricing ? (
+                <NavLink
+                  href={NAV_LINK_PRICING.href}
+                  className={desktopLinkClass(NAV_LINK_PRICING.href)}
+                  onClick={closeDesktopDropdowns}
+                  {...(NAV_LINK_PRICING.tourId ? { 'data-tour': NAV_LINK_PRICING.tourId } : {})}
+                >
+                  {NAV_LINK_PRICING.label}
+                </NavLink>
+              ) : null}
+              <NavLink
+                href={NAV_LINK_CONTACT.href}
+                className={desktopLinkClass(NAV_LINK_CONTACT.href)}
+                onClick={closeDesktopDropdowns}
+              >
+                {NAV_LINK_CONTACT.label}
+              </NavLink>
+              <NavLink href="/login" className="app-nav__btn" onClick={closeDesktopDropdowns}>
+                Login
+              </NavLink>
+            </>
           )}
         </div>
       </nav>
@@ -289,6 +320,17 @@ export default function AppNav({ session, userRole, onLogout }) {
                 </NavLink>
               ))}
             </div>
+          ) : null}
+
+          {showPricing ? (
+            <NavLink
+              href={NAV_LINK_PRICING.href}
+              className={mobileLinkClass}
+              onClick={closeMobile}
+              {...(NAV_LINK_PRICING.tourId ? { 'data-tour': NAV_LINK_PRICING.tourId } : {})}
+            >
+              {NAV_LINK_PRICING.label}
+            </NavLink>
           ) : null}
 
           <NavLink href={NAV_LINK_CONTACT.href} className={mobileLinkClass} onClick={closeMobile}>

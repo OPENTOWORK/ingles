@@ -97,6 +97,11 @@
   background: linear-gradient(145deg, #f0fdf4 0%, #fff 100%);
 }
 
+.levelCard--starter {
+  border-color: #7dd3fc;
+  background: linear-gradient(145deg, #f0f9ff 0%, #fff 100%);
+}
+
 .levelBadge {
   display: inline-block;
   margin-bottom: 0.5rem;
@@ -115,6 +120,11 @@
 
 .levelBadge--free {
   background: #16a34a;
+  color: #fff;
+}
+
+.levelBadge--starter {
+  background: #0284c7;
   color: #fff;
 }
 
@@ -214,4 +224,15 @@
 
 .statusInactive {
   color: #64748b;
+}
+
+.thActions {
+  width: 48px;
+  text-align: right;
+}
+
+.tdActions {
+  text-align: right;
+  vertical-align: middle;
+  white-space: nowrap;
 }

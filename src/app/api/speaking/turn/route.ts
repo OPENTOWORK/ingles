@@ -144,9 +144,14 @@ export async function POST(req: Request) {
       });
     }
 
-    if (mode === 'PRACTICE') {
-      microFeedback = await llm.microFeedback({ cefr, userText });
-    }
+    // microFeedback (sólo PRACTICE) y TTS son independientes entre sí: en paralelo.
+    const [microFeedbackResult, spoken] = await Promise.all([
+      mode === 'PRACTICE'
+        ? llm.microFeedback({ cefr, userText })
+        : Promise.resolve(null),
+      assistantText ? tts.synthesize(assistantText) : Promise.resolve(null),
+    ]);
+    microFeedback = microFeedbackResult;
 
     await saveTurn({
       sessionId,
@@ -158,12 +163,9 @@ export async function POST(req: Request) {
 
     let assistantAudioBase64: string | undefined;
     let assistantAudioMime: string | undefined;
-    if (assistantText) {
-      const spoken = await tts.synthesize(assistantText);
-      if (spoken) {
-        assistantAudioBase64 = spoken.base64;
-        assistantAudioMime = spoken.mime;
-      }
+    if (spoken) {
+      assistantAudioBase64 = spoken.base64;
+      assistantAudioMime = spoken.mime;
     }
 
     return NextResponse.json({

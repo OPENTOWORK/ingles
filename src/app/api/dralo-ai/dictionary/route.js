@@ -1,5 +1,9 @@
 import { NextResponse } from 'next/server';
-import { realLifeChatCompletion, isDraloOpenAIConfigured } from '@/lib/draloAiEngine';
+import {
+  realLifeChatCompletion,
+  isDraloOpenAIConfigured,
+  getDraloFastModel,
+} from '@/lib/draloAiEngine';
 import {
   buildAskDraloPrompt,
   buildTranslatePrompt,
@@ -17,6 +21,34 @@ export const maxDuration = 60;
 
 /** @type {Map<string, { n: number; reset: number }>} */
 const ipBuckets = new Map();
+
+// Caché en memoria de búsquedas de palabras (deterministas por palabra + idioma destino).
+// Evita re-llamar al diccionario externo y a OpenAI para palabras repetidas.
+const LOOKUP_CACHE_TTL_MS = 24 * 60 * 60 * 1000;
+const LOOKUP_CACHE_MAX = 500;
+/** @type {Map<string, { value: object; expires: number }>} */
+const lookupCache = new Map();
+
+function getCachedLookup(key) {
+  const hit = lookupCache.get(key);
+  if (!hit) return null;
+  if (Date.now() > hit.expires) {
+    lookupCache.delete(key);
+    return null;
+  }
+  // Refresca el orden LRU.
+  lookupCache.delete(key);
+  lookupCache.set(key, hit);
+  return hit.value;
+}
+
+function setCachedLookup(key, value) {
+  lookupCache.set(key, { value, expires: Date.now() + LOOKUP_CACHE_TTL_MS });
+  if (lookupCache.size > LOOKUP_CACHE_MAX) {
+    const oldest = lookupCache.keys().next().value;
+    if (oldest !== undefined) lookupCache.delete(oldest);
+  }
+}
 
 function clientIp(req) {
   const xf = req.headers.get('x-forwarded-for');
@@ -130,6 +162,7 @@ async function enrichWordWithAi(word, baseEntry, targetLang) {
     messages: [{ role: 'user', content: buildWordEnrichPrompt(word, baseEntry, targetLang) }],
     temperature: 0.35,
     response_format: { type: 'json_object' },
+    model: getDraloFastModel(),
   });
   return parseJsonFromModel(text || '{}');
 }
@@ -144,6 +177,10 @@ function enrichWithTimeout(word, baseEntry, targetLang) {
 }
 
 async function lookupWord(word, targetLang) {
+  const cacheKey = `${normalizeWord(word)}|${targetLang}`;
+  const cached = getCachedLookup(cacheKey);
+  if (cached) return { entry: cached };
+
   const base = await fetchBaseEntry(word);
   if (base.error) return base;
 
@@ -160,14 +197,14 @@ async function lookupWord(word, targetLang) {
 
   try {
     const ai = await enrichWithTimeout(base.entry.word, base.entry, targetLang);
-    return {
-      entry: {
-        ...base.entry,
-        targetLanguage: targetLang,
-        ai,
-        aiUnavailable: false,
-      },
+    const entry = {
+      ...base.entry,
+      targetLanguage: targetLang,
+      ai,
+      aiUnavailable: false,
     };
+    setCachedLookup(cacheKey, entry);
+    return { entry };
   } catch (e) {
     console.error('[dictionary enrich]', e?.message || e);
     return {
@@ -199,6 +236,7 @@ async function translatePhrase(text, targetLang) {
       messages: [{ role: 'user', content: buildTranslatePrompt(input, targetLang) }],
       temperature: 0.35,
       response_format: { type: 'json_object' },
+      model: getDraloFastModel(),
     });
     const analysis = parseJsonFromModel(text || '{}');
     return {
@@ -228,6 +266,7 @@ async function askDralo(word, question, enrichment) {
         'Answer vocabulary questions clearly in English. Be concise, with examples.',
       messages: [{ role: 'user', content: buildAskDraloPrompt(w, q, enrichment) }],
       temperature: 0.5,
+      model: getDraloFastModel(),
     });
     if (!answer) return { error: 'Dralo returned no response.' };
     return { answer, word: w };

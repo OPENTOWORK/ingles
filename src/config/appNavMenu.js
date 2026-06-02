@@ -7,18 +7,21 @@ export const HOME_MAIN_LINKS = [
 
 /** Enlaces en la barra superior / menú móvil antes de Dralo AI. */
 export const NAV_LINKS_BEFORE_DRALO = [
+  { href: '/teoria', label: 'Theory', tourId: 'nav-theory' },
   { href: '/niveles', label: 'Exam practice', tourId: 'nav-levels' },
 ];
+
+/** Solo visible para administradores (ver pricingAccess.js). */
+export const NAV_LINK_PRICING = { href: '/precios', label: 'Pricing', tourId: 'nav-pricing' };
 
 export const NAV_LINK_CONTACT = { href: '/contacto', label: 'Contact' };
 
 export const DRALO_MENU_ITEMS = [
-  { label: 'Use of English', href: '/dralo-ai/use-of-english' },
-  { label: 'Reading', href: '/dralo-ai/reading' },
   { label: 'Writing', href: '/dralo-ai/writing' },
   { label: 'Listening', href: '/dralo-ai/listening' },
-  { label: 'Speaking', href: '/dralo-ai/speaking' },
+  { label: 'Speaking Coach', href: '/dralo-ai/speaking' },
   { label: 'Grammar coach', href: '/dralo-ai/grammar-coach' },
+  { label: 'Pronunciation coach', href: '/dralo-ai/pronunciation-coach' },
   { label: 'Dictionary', href: '/dralo-ai/dictionary' },
 ];
 
@@ -30,6 +33,7 @@ export const ADMIN_PANEL_MENU_ITEMS = [
   { href: '/informatico', label: 'Panel informático' },
   { href: '/admin/plan-objetivos', label: 'Plan de objetivos' },
   { href: '/admin/plan-financiero', label: 'Plan financiero' },
+  { href: '/admin/ejercicios', label: 'Panel de ejercicios' },
 ];
 
 export const TEACHER_PANEL_MENU_ITEMS = [

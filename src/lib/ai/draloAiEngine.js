@@ -13,6 +13,18 @@ export function getDefaultModel() {
   );
 }
 
+/**
+ * Modelo rápido para tareas ligeras (diccionario, grammar coach, turnos de speaking).
+ * Configurable sin romper la config existente; por defecto gpt-4o-mini (mucho más rápido).
+ */
+export function getFastModel() {
+  return (
+    process.env.DRALO_OPENAI_MODEL_FAST?.trim() ||
+    process.env.OPENAI_MODEL_FAST?.trim() ||
+    'gpt-4o-mini'
+  );
+}
+
 export function isOpenAIConfigured() {
   return Boolean(process.env.OPENAI_API_KEY?.trim());
 }
@@ -46,7 +58,8 @@ function normalizeHistory(conversationHistory = []) {
  * @param {object} [options.response_format]
  * @returns {Promise<string>}
  */
-export async function draloChatCompletion({
+/** Construye los parámetros de Chat Completions (compartido por la llamada normal y la de streaming). */
+function buildChatParams({
   systemPrompt,
   userMessage,
   conversationHistory = [],
@@ -60,7 +73,6 @@ export async function draloChatCompletion({
     throw new Error('OPENAI_API_KEY is missing');
   }
 
-  const client = getClient();
   let history = normalizeHistory(conversationHistory);
   let userContent = userMessage != null ? String(userMessage) : '';
 
@@ -102,9 +114,24 @@ export async function draloChatCompletion({
   };
   if (max_tokens != null) params.max_tokens = max_tokens;
   if (response_format) params.response_format = response_format;
+  return params;
+}
 
+export async function draloChatCompletion(options) {
+  const client = getClient();
+  const params = buildChatParams(options);
   const response = await client.chat.completions.create(params);
   return response.choices?.[0]?.message?.content?.trim() || '';
+}
+
+/**
+ * Variante en streaming: devuelve el stream de OpenAI (async iterable de chunks con delta.content).
+ * Permite que el cliente muestre tokens en vivo en lugar de esperar la respuesta completa.
+ */
+export async function draloChatCompletionStream(options) {
+  const client = getClient();
+  const params = buildChatParams(options);
+  return client.chat.completions.create({ ...params, stream: true });
 }
 
 /** Misma llamada con metadatos (compatibilidad con código legacy). */

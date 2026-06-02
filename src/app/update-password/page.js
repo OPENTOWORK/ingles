@@ -2,6 +2,7 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { supabase } from '../../utils/supabaseClient';
+import PasswordInput from '@/components/PasswordInput';
 
 export default function UpdatePasswordPage() {
   const [newPassword, setNewPassword] = useState('');
@@ -71,12 +72,12 @@ export default function UpdatePasswordPage() {
           <label style={{ display: "block", marginBottom: "0.5rem" }}>
             Introduce tu nueva contraseña
           </label>
-          <input
-            type="password"
+          <PasswordInput
             placeholder="••••••••"
             value={newPassword}
             onChange={(e) => setNewPassword(e.target.value)}
             style={inputStyle}
+            autoComplete="new-password"
           />
           <button type="submit" style={buttonStyle}>Actualizar contraseña</button>
         </form>

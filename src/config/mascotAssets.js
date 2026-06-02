@@ -4,6 +4,9 @@ export const MASCOT_VARIANTS = [1, 2, 3, 4, 5, 6, 7, 8, 10, 11];
 /** 11 = logo Dralo con texto */
 export const MASCOT_LOGO_VARIANT = 11;
 
+/** Pose pensativa (ejercicios de teoría aún no disponibles). */
+export const MASCOT_THINKING_VARIANT = 8;
+
 /** Ancho máx. del logo en el recuadro junto al título (px; el CSS lo escala al slot). */
 export const MASCOT_LOGO_WIDTH = 104;
 

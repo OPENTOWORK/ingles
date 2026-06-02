@@ -8,22 +8,6 @@ export const DRALO_AI_HUB = {
     'Practise every exam skill with exercises generated on demand and instant AI feedback.',
   items: [
     {
-      id: 'use-of-english',
-      href: '/dralo-ai/use-of-english',
-      label: 'Use of English',
-      icon: '✏️',
-      tagline: 'Grammar, transformations and vocabulary in context',
-      accent: 'indigo',
-    },
-    {
-      id: 'reading',
-      href: '/dralo-ai/reading',
-      label: 'Reading',
-      icon: '📖',
-      tagline: 'Short texts with comprehension and vocabulary',
-      accent: 'ocean',
-    },
-    {
       id: 'writing',
       href: '/dralo-ai/writing',
       label: 'Writing',
@@ -42,9 +26,9 @@ export const DRALO_AI_HUB = {
     {
       id: 'speaking',
       href: '/dralo-ai/speaking',
-      label: 'Speaking',
-      icon: '🎤',
-      tagline: 'Oral practice with your AI voice coach',
+      label: 'Speaking Coach',
+      icon: '🎙️',
+      tagline: 'Missions, roleplays and exam speaking with voice or text',
       accent: 'rose',
     },
     {
@@ -54,6 +38,14 @@ export const DRALO_AI_HUB = {
       icon: '💡',
       tagline: 'Clear grammar explanations with examples for your level',
       accent: 'lime',
+    },
+    {
+      id: 'pronunciation-coach',
+      href: '/dralo-ai/pronunciation-coach',
+      label: 'Pronunciation coach',
+      icon: '🔊',
+      tagline: 'Sounds, stress, rhythm and intonation for your level',
+      accent: 'ocean',
     },
     {
       id: 'dictionary',
@@ -67,74 +59,6 @@ export const DRALO_AI_HUB = {
 };
 
 export const DRALO_AI_MODES = {
-  'use-of-english': {
-    id: 'use-of-english',
-    title: 'Use of English',
-    eyebrow: 'Dralo AI · Grammar & vocabulary',
-    description:
-      'Cambridge-style transformations, cloze tasks and multiple choice. Dralo generates each exercise and checks your answer with instant feedback.',
-    accent: 'indigo',
-    mascotVariant: 6,
-    levels: DRALO_AI_CEFR_LEVELS,
-    defaultLevel: 'B2',
-    activities: [
-      {
-        id: 'multiple-choice-cloze',
-        label: 'Multiple-choice cloze',
-        icon: '🎯',
-        hint: 'Choose the correct word from four options (vocabulary and collocations).',
-      },
-      {
-        id: 'open-cloze',
-        label: 'Open cloze',
-        icon: '🕳️',
-        hint: 'One gap per sentence; write ONE word only (no options).',
-      },
-      {
-        id: 'word-formation',
-        label: 'Word formation',
-        icon: '🧩',
-        hint: 'Form the correct word from the stem in capitals.',
-      },
-      {
-        id: 'key-word',
-        label: 'Key word transformation',
-        icon: '🔑',
-        hint: 'Complete the second sentence with the keyword (2–5 words).',
-      },
-    ],
-  },
-  reading: {
-    id: 'reading',
-    title: 'Reading',
-    eyebrow: 'Dralo AI · Comprehension',
-    description:
-      'Cambridge-style reading texts for your level. Answer the questions and get clear feedback in English — whether you are right or wrong.',
-    accent: 'ocean',
-    mascotVariant: 2,
-    levels: DRALO_AI_CEFR_LEVELS,
-    defaultLevel: 'B2',
-    activities: [
-      {
-        id: 'multiple-choice',
-        label: 'Multiple-choice (reading)',
-        icon: '📖',
-        hint: 'Read the text and choose the best answer (A–D) for each question.',
-      },
-      {
-        id: 'gapped-text',
-        label: 'Gapped text',
-        icon: '🧩',
-        hint: 'Choose which sentence fits each gap to rebuild the text logically.',
-      },
-      {
-        id: 'multiple-matching',
-        label: 'Multiple matching',
-        icon: '🔗',
-        hint: 'Match statements to the correct section of the text.',
-      },
-    ],
-  },
   writing: {
     id: 'writing',
     title: 'Writing',
@@ -292,6 +216,67 @@ export const DRALO_AI_MODES = {
         hint: 'Questions, negatives, adverbs and sentence structure.',
         starterQuestion:
           'What is the standard word order in English questions and negative sentences?',
+      },
+    ],
+  },
+  'pronunciation-coach': {
+    id: 'pronunciation-coach',
+    title: 'Pronunciation coach',
+    eyebrow: 'Dralo AI · Pronunciation',
+    description:
+      'Ask Dralo about English sounds, word stress, sentence rhythm and intonation. Paste a word or sentence and get clear guidance for your CEFR level.',
+    accent: 'ocean',
+    mascotVariant: 6,
+    levels: DRALO_AI_CEFR_LEVELS,
+    defaultLevel: 'B2',
+    activities: [
+      {
+        id: 'vowels',
+        label: 'Vowels',
+        icon: '🅰️',
+        hint: 'Short and long vowels, diphthongs and common L1 traps.',
+        starterQuestion:
+          'What are the main English vowel sounds I should master at my level? Give examples.',
+      },
+      {
+        id: 'consonants',
+        label: 'Consonants',
+        icon: '🔤',
+        hint: 'Th, r, l, w, final consonants and voicing.',
+        starterQuestion:
+          'How do I pronounce the "th" sounds in English? Explain with practice tips.',
+      },
+      {
+        id: 'word-stress',
+        label: 'Word stress',
+        icon: 'ˈ◌',
+        hint: 'Which syllable is stressed in multi-syllable words.',
+        starterQuestion:
+          'Where is the stress in the word "photograph" and related words (photography, photographer)?',
+      },
+      {
+        id: 'sentence-stress',
+        label: 'Sentence stress',
+        icon: '📢',
+        hint: 'Content words vs function words in natural speech.',
+        starterQuestion:
+          'Which words are usually stressed in an English sentence? Give a short example.',
+      },
+      {
+        id: 'connected-speech',
+        label: 'Connected speech',
+        icon: '🔗',
+        hint: 'Linking, elision, weak forms and rhythm.',
+        starterQuestion:
+          'What is linking in connected speech? Give two everyday examples.',
+      },
+      {
+        id: 'intonation',
+        label: 'Intonation',
+        icon: '🎵',
+        hint: 'Rising and falling tones for questions and attitude.',
+        starterQuestion:
+          'When does intonation rise or fall in English questions? Explain simply.',
       },
     ],
   },

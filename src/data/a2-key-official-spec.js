@@ -42,7 +42,7 @@ export function getA2OfficialDirections(partDef) {
 
 /** Reglas de formato por parte (para prompts DRALO AI). */
 export const A2_PART_FORMAT_RULES = {
-  1: `Reading & Writing Part 1 (Q1–6): Official QP layout. Each item: LEFT = graphic stimulus (classified ad, smartphone SMS, shop sign, etc.) with readable English text; RIGHT = three full-sentence options A, B, C. Include stimulusType, message (text on image), imageScene (for image generation). Q6 adds "prompt" below the message image. No shared passage.`,
+  1: `Reading & Writing Part 1 (Q1–6): Official QP layout. Each item: LEFT = stimulus box (classified ad, SMS, shop sign, etc.) with readable English text in "message" (images optional later via IMAGE: url); RIGHT = three full-sentence options A, B, C. Include stimulusType and message lines. Q6 adds "prompt" below the message. No shared passage.`,
   2: `Part 2 (Q7–13): Title line (e.g. "Young blog writers") + intro optional. THREE people A, B, C with first names and 60–90 word profiles. SEVEN questions; each question asks about A/B/C with options exactly ["A","B","C"] or ["A) Name","B) Name","C) Name"]. Same person may be correct more than once.`,
   3: `Part 3 (Q14–18): ONE factual narrative 180–220 words. FIVE questions; each has exactly THREE options A, B, C (short phrases, e.g. "A dancer", "B teacher").`,
   4: `Part 4 (Q19–24): ONE factual passage with inline gaps (19)…(24). Below or per gap: three words "A … B … C …". Example gap (0) in directions.`,

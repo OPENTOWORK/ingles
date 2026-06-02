@@ -8,6 +8,7 @@ import { getClientAuth } from '@/utils/getClientAuth';
 import { clearLogoutPending } from '@/utils/logout';
 import toast from 'react-hot-toast';
 import SiteMascot from '@/components/SiteMascot';
+import PasswordInput from '@/components/PasswordInput';
 
 export default function LoginPage() {
   const [email, setEmail] = useState('');
@@ -166,9 +167,8 @@ export default function LoginPage() {
         />
 
         <label htmlFor="password" style={{ ...styles.label, marginTop: "1rem" }}>Password</label>
-        <input
+        <PasswordInput
           id="password"
-          type="password"
           autoComplete="current-password"
           placeholder="••••••••"
           style={styles.input}

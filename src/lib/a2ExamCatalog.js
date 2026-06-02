@@ -34,7 +34,7 @@ export const A2_EXAM_PARTS = [
 
     needsAudio: false,
 
-    needsImages: true,
+    needsImages: false,
 
   },
 

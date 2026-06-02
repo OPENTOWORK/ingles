@@ -1,0 +1,57 @@
+.wrap {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+}
+
+.wrap--sm .star {
+  width: 1.1rem;
+  height: 1.1rem;
+  font-size: 1.1rem;
+}
+
+.wrap--md .star {
+  width: 1.45rem;
+  height: 1.45rem;
+  font-size: 1.45rem;
+}
+
+.wrap--lg .star {
+  width: 2rem;
+  height: 2rem;
+  font-size: 2rem;
+}
+
+.star {
+  position: relative;
+  display: inline-block;
+  line-height: 1;
+}
+
+.starBg,
+.starFg {
+  position: absolute;
+  left: 0;
+  top: 0;
+  line-height: 1;
+}
+
+.starEmpty .starBg {
+  color: #cbd5e1;
+}
+
+.starFull .starFg {
+  position: static;
+  color: #f59e0b;
+  text-shadow: 0 1px 2px rgba(245, 158, 11, 0.35);
+}
+
+.starHalf .starBg {
+  color: #cbd5e1;
+}
+
+.starHalf .starFg {
+  color: #f59e0b;
+  width: 50%;
+  overflow: hidden;
+}

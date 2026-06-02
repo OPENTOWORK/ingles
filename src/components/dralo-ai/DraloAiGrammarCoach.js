@@ -32,6 +32,7 @@ export default function DraloAiGrammarCoach({ config }) {
   ]);
   const [input, setInput] = useState('');
   const [loading, setLoading] = useState(false);
+  const [streaming, setStreaming] = useState(false);
   const [error, setError] = useState('');
   const listRef = useRef(null);
   const inputRef = useRef(null);
@@ -84,9 +85,45 @@ export default function DraloAiGrammarCoach({ config }) {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ messages: history, level }),
       });
-      const data = await res.json().catch(() => ({}));
-      if (!res.ok) throw new Error(data?.error || `Error ${res.status}`);
-      setMessages((prev) => [...prev, { role: 'assistant', content: data.reply }]);
+
+      if (!res.ok) {
+        const data = await res.json().catch(() => ({}));
+        throw new Error(data?.error || `Error ${res.status}`);
+      }
+
+      const reader = res.body?.getReader();
+      if (!reader) {
+        const data = await res.json().catch(() => ({}));
+        setMessages((prev) => [...prev, { role: 'assistant', content: data.reply || '' }]);
+        return;
+      }
+
+      // Stream incremental: muestra los tokens en vivo.
+      setMessages((prev) => [...prev, { role: 'assistant', content: '' }]);
+      setStreaming(true);
+      const decoder = new TextDecoder();
+      let acc = '';
+      for (;;) {
+        const { done, value } = await reader.read();
+        if (done) break;
+        acc += decoder.decode(value, { stream: true });
+        setMessages((prev) => {
+          const copy = [...prev];
+          copy[copy.length - 1] = { role: 'assistant', content: acc };
+          return copy;
+        });
+      }
+      if (!acc.trim()) {
+        setMessages((prev) => {
+          const copy = [...prev];
+          copy[copy.length - 1] = {
+            role: 'assistant',
+            content: 'No response from the coach. Please try again.',
+            isError: true,
+          };
+          return copy;
+        });
+      }
     } catch (e) {
       setError(e.message || 'Could not get a response.');
       setMessages((prev) => [
@@ -98,6 +135,7 @@ export default function DraloAiGrammarCoach({ config }) {
         },
       ]);
     } finally {
+      setStreaming(false);
       setLoading(false);
       inputRef.current?.focus();
     }
@@ -189,7 +227,7 @@ export default function DraloAiGrammarCoach({ config }) {
                   <div className="dralo-ai-coach-bubble__text">{formatMessageContent(m.content)}</div>
                 </div>
               ))}
-              {loading ? (
+              {loading && !streaming ? (
                 <div className="dralo-ai-coach-bubble dralo-ai-coach-bubble--assistant">
                   <span className="dralo-ai-coach-bubble__label">Dralo</span>
                   <div className="dralo-ai-loading">

@@ -54,8 +54,9 @@ export function getPassedExerciseKeysForTopic(userId, topicHref, cefrLevels = nu
 export function computeTopicExerciseProgressPercent({
   passedCount,
   topicLevelLabel,
-  exercisesPerLevel = 20,
+  exercisesPerLevel = 0,
 }) {
+  if (!exercisesPerLevel || exercisesPerLevel <= 0) return 0;
   const levels = parseTopicLevels(topicLevelLabel);
   const total = Math.max(1, levels.length * exercisesPerLevel);
   return Math.min(100, Math.round((passedCount / total) * 100));

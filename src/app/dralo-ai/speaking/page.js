@@ -1,7 +1,7 @@
 'use client';
 
-import DraloAiSpeakingSituational from '@/components/dralo-ai/DraloAiSpeakingSituational';
+import DraloAiSpeakingCoach from '@/components/dralo-ai/DraloAiSpeakingCoach';
 
 export default function DraloAiSpeakingPage() {
-  return <DraloAiSpeakingSituational />;
+  return <DraloAiSpeakingCoach />;
 }

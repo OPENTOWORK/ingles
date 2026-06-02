@@ -30,6 +30,8 @@ import ProfileComingSoon from '@/components/perfil/ProfileComingSoon';
 import ProfileTabsNav from '@/components/perfil/ProfileTabsNav';
 import { PROFILE_TABS, PROFILE_TAB_LABELS } from '@/components/perfil/profileTabsConfig';
 import ProfileAvatarUpload from '@/components/perfil/ProfileAvatarUpload';
+import { authMetadataPlanSlug, getPlanBySlug } from '@/data/financialPlanConfig';
+import { canViewPricing } from '@/utils/pricingAccess';
 
 const ProfileExamDatesPanel = dynamic(
   () => import('@/components/perfil/ProfileExamDatesPanel').then((mod) => mod.default),
@@ -59,6 +61,10 @@ const ProfileGeneralStats = dynamicImport(
   () => import('@/components/perfil/ProfileGeneralStats'),
 );
 
+const UserErrorTrackerPanel = dynamicImport(
+  () => import('@/components/profile/UserErrorTrackerPanel'),
+);
+
 const ProfileSkillAnalysis = dynamicImport(
   () => import('@/components/perfil/ProfileSkillAnalysis'),
 );
@@ -71,6 +77,7 @@ const ProfileGoalsPanel = dynamicImport(
   () => import('@/components/perfil/ProfileGoalsPanel'),
 );
 import SiteMascot from '@/components/SiteMascot';
+import PasswordInput from '@/components/PasswordInput';
 import {
   hydrateProfileMockData,
   PROFILE_MOCK_TABS,
@@ -754,8 +761,9 @@ export default function ProfilePage() {
     user?.email?.split('@')[0] ||
     '';
 
-  const isPremiumSubscription =
-    String(user?.user_metadata?.subscription_plan || 'free').toLowerCase() === 'premium';
+  const subscriptionSlug = authMetadataPlanSlug(user?.user_metadata?.subscription_plan);
+  const subscriptionPlan = getPlanBySlug(subscriptionSlug);
+  const showPricingLink = canViewPricing(userRole);
 
   const tabsProps = {
     tabs: PROFILE_TABS,
@@ -1042,22 +1050,25 @@ export default function ProfilePage() {
           <ProfileCollapsibleSection title="💳 My subscription">
             <div className="mis-datos-subscription__card">
               <div className="mis-datos-subscription__badge">
-                {isPremiumSubscription ? 'Premium' : 'Free'}
+                {subscriptionPlan.badge || subscriptionPlan.nombre}
               </div>
               <div className="mis-datos-subscription__body">
                 <h3 className="mis-datos-subscription__plan">
-                  {isPremiumSubscription ? 'Premium plan' : 'Free plan'}
+                  Plan {subscriptionPlan.nombre}
                 </h3>
-                <p className="mis-datos-subscription__text">
-                  {isPremiumSubscription
-                    ? 'You have full access to premium content and features.'
-                    : 'You have access to Levels, Theory, Training and your profile. Paid plans are coming soon.'}
-                </p>
+                <p className="mis-datos-subscription__text">{subscriptionPlan.descripcionCorta}</p>
                 <ul className="mis-datos-subscription__features">
-                  <li>Levels practice &amp; exams</li>
-                  <li>Theory &amp; Training</li>
-                  <li>Progress tracking</li>
+                  {subscriptionPlan.highlights.slice(0, 5).map((line) => (
+                    <li key={line}>{line}</li>
+                  ))}
                 </ul>
+                {showPricingLink ? (
+                  <p style={{ margin: '12px 0 0' }}>
+                    <Link href="/precios" className="mis-datos-link">
+                      Ver todos los planes y comparativa →
+                    </Link>
+                  </p>
+                ) : null}
               </div>
             </div>
           </ProfileCollapsibleSection>
@@ -1161,12 +1172,12 @@ export default function ProfilePage() {
           <ProfileCollapsibleSection title={"🔐 Security"}>
 <div className="form-group">
               <label className="form-label">New password</label>
-              <input
-                type="password"
+              <PasswordInput
                 value={newPassword}
                 onChange={(e) => setNewPassword(e.target.value)}
                 className="form-input"
                 placeholder="At least 6 characters"
+                autoComplete="new-password"
               />
             </div>
             <button type="button" onClick={handlePasswordChange} className="action-btn">
@@ -1835,6 +1846,10 @@ export default function ProfilePage() {
           userRole={userRole}
           accessToken={layoutSession?.access_token}
         />
+      )}
+
+      {activeTab === 'error-tracker' && (
+        <UserErrorTrackerPanel userId={user?.id ?? null} />
       )}
 
       {/* Tab: Comunidad */}

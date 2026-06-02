@@ -2,6 +2,8 @@ import { NextResponse } from 'next/server';
 import { isOpenAIConfigured, getDefaultModel } from '@/lib/ai/draloAiEngine';
 import { runExamCoach, isValidExamCoachTaskType } from '@/lib/ai/services/examCoachService';
 import { runRealLifeCoach, isValidRealLifeTaskType } from '@/lib/ai/services/realLifeCoachService';
+import { runSpeakingCoach } from '@/lib/ai/services/speakingCoachService';
+import { runErrorExtractor, runErrorExercises } from '@/lib/ai/services/errorTrackerService';
 
 const WINDOW_MS = 60 * 60 * 1000;
 const MAX_PER_IP = 60;
@@ -72,6 +74,74 @@ export async function POST(request) {
 
   try {
     const body = await request.json();
+
+    if (body?.action === 'extract_errors') {
+      const {
+        level = 'B2',
+        source = 'Writing',
+        userText = '',
+        correctedText = '',
+      } = body;
+
+      const result = await runErrorExtractor({
+        level: String(level || 'B2').trim().toUpperCase(),
+        source: clipInput(source, 60),
+        userText: clipInput(userText, 8000),
+        correctedText: clipInput(correctedText, 8000),
+      });
+
+      return NextResponse.json({ success: true, action: 'extract_errors', result });
+    }
+
+    if (body?.action === 'generate_error_exercises') {
+      const { level = 'B2', error = {} } = body;
+      const safeError = error && typeof error === 'object' ? error : {};
+
+      const result = await runErrorExercises({
+        level: String(level || 'B2').trim().toUpperCase(),
+        error: {
+          error_type: clipInput(safeError.error_type, 60),
+          original_text: clipInput(safeError.original_text, 1000),
+          corrected_text: clipInput(safeError.corrected_text, 1000),
+          explanation: clipInput(safeError.explanation, 1500),
+        },
+      });
+
+      return NextResponse.json({ success: true, action: 'generate_error_exercises', result });
+    }
+
+    if (body?.action === 'speaking_ai') {
+      const {
+        level = 'B2',
+        mission = 'General conversation',
+        missionTitle = '',
+        scenario = '',
+        objectives = [],
+        character = 'Dralo Coach',
+        conversation = [],
+        userMessage = '',
+        finish = false,
+      } = body;
+
+      const safeObjectives = (Array.isArray(objectives) ? objectives : [])
+        .slice(0, 8)
+        .map((o) => clipInput(o, 120))
+        .filter(Boolean);
+
+      const result = await runSpeakingCoach({
+        level: String(level || 'B2').trim().toUpperCase(),
+        missionTitle: clipInput(missionTitle || mission, 80),
+        scenario: clipInput(scenario, 600),
+        objectives: safeObjectives,
+        character: clipInput(character, 80),
+        conversation,
+        userMessage: clipInput(userMessage, 4000),
+        finish: Boolean(finish),
+      });
+
+      return NextResponse.json({ success: true, action: 'speaking_ai', result });
+    }
+
     const {
       assistantType,
       taskType,

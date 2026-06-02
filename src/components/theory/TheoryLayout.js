@@ -34,12 +34,17 @@ import { useTeoriaProgress } from '@/hooks/useTeoriaProgress';
 import ExamTheoryLockedNotice from '@/components/niveles/ExamTheoryLockedNotice';
 import { shouldApplySequentialLock } from '@/lib/theoryLockConfig';
 import { saveTheoryProgress } from '@/utils/theoryProgress';
-import TheoryExerciseLevelFilter from '@/components/theory/TheoryExerciseLevelFilter';
 import {
   defaultExerciseLevel,
   getPrimaryHandcraftedLevel,
   parseTopicLevels,
 } from '@/lib/theoryExerciseLevelConfig';
+import { readTheoryTopicLevelStars } from '@/lib/theoryTopicLevelProgress';
+import {
+  topicProgressPercentFromStars,
+  THEORY_TOPIC_LEVEL_COUNT,
+} from '@/lib/theoryTopicLevels';
+import TheoryTopicLevelsExercisePanel from '@/components/theory/TheoryTopicLevelsExercisePanel';
 import {
   THEORY_EXERCISE_PROGRESS_EVENT,
   computeTopicExerciseProgressPercent,
@@ -160,31 +165,28 @@ const TheoryLayout = ({
   }, [pathname, isSectionHub]);
   const primaryHandcraftedLevel = useMemo(() => getPrimaryHandcraftedLevel(level), [level]);
   const applicableLevels = useMemo(() => parseTopicLevels(level), [level]);
-  const [selectedExerciseLevel, setSelectedExerciseLevel] = useState(() =>
-    defaultExerciseLevel(level),
-  );
   const [activeTab, setActiveTab] = useState('theory');
   const [passedExerciseKeys, setPassedExerciseKeys] = useState(new Set());
-  const [loadedExercises, setLoadedExercises] = useState(null);
-  const [loadedExerciseLevel, setLoadedExerciseLevel] = useState(null);
-  const [exercisesLoading, setExercisesLoading] = useState(false);
   const [progressHydrated, setProgressHydrated] = useState(false);
+  const [ladderStarsByLevel, setLadderStarsByLevel] = useState({});
 
-  const exerciseCount = useMemo(() => {
-    if (Array.isArray(exercises) && exercises.length > 0) return exercises.length;
-    if (getExercises) return 20;
-    return 0;
-  }, [exercises, getExercises]);
+  const exerciseTabCount = THEORY_TOPIC_LEVEL_COUNT;
 
   useEffect(() => {
     setActiveTab('theory');
-    setLoadedExercises(null);
-    setLoadedExerciseLevel(null);
-    setExercisesLoading(false);
-    setSelectedExerciseLevel(defaultExerciseLevel(level));
     setPassedExerciseKeys(new Set());
     setProgressHydrated(false);
+    setLadderStarsByLevel({});
   }, [title, level]);
+
+  useEffect(() => {
+    const userId = session?.user?.id;
+    if (!userId || !topicHref) return;
+    const refresh = () => setLadderStarsByLevel(readTheoryTopicLevelStars(userId, topicHref));
+    refresh();
+    window.addEventListener('theory-topic-level-stars-updated', refresh);
+    return () => window.removeEventListener('theory-topic-level-stars-updated', refresh);
+  }, [session?.user?.id, topicHref]);
 
   useEffect(() => {
     const userId = session?.user?.id;
@@ -242,51 +244,6 @@ const TheoryLayout = ({
     };
   }, [session?.user?.id, session?.access_token, topicHref, applicableLevels, title]);
 
-  const resolveExercises = useCallback(
-    (exerciseLevel) => {
-      if (typeof getExercises === 'function') {
-        if (getExercises.length >= 2) {
-          return getExercises(exerciseLevel, primaryHandcraftedLevel);
-        }
-        return getExercises(exerciseLevel);
-      }
-      return exercises;
-    },
-    [getExercises, exercises, primaryHandcraftedLevel],
-  );
-
-  useEffect(() => {
-    if (activeTab !== 'exercises') return undefined;
-    if (loadedExercises && loadedExerciseLevel === selectedExerciseLevel) return undefined;
-
-    let cancelled = false;
-    setExercisesLoading(true);
-
-    const run = () => {
-      if (cancelled) return;
-      try {
-        setLoadedExercises(resolveExercises(selectedExerciseLevel));
-        setLoadedExerciseLevel(selectedExerciseLevel);
-      } finally {
-        if (!cancelled) setExercisesLoading(false);
-      }
-    };
-
-    if (typeof window !== 'undefined' && 'requestIdleCallback' in window) {
-      const id = window.requestIdleCallback(run, { timeout: 800 });
-      return () => {
-        cancelled = true;
-        window.cancelIdleCallback(id);
-      };
-    }
-
-    const t = setTimeout(run, 0);
-    return () => {
-      cancelled = true;
-      clearTimeout(t);
-    };
-  }, [activeTab, loadedExercises, loadedExerciseLevel, resolveExercises, selectedExerciseLevel]);
-
   const handleExerciseComplete = useCallback(
     async (exerciseKey, score) => {
       if (!shouldRecordTheoryExerciseAttempt(score)) return;
@@ -308,21 +265,24 @@ const TheoryLayout = ({
         accessToken: session?.access_token,
         topicHref,
         topicLevelLabel: level,
-        cefrLevel: selectedExerciseLevel,
+        cefrLevel: defaultExerciseLevel(level),
         exerciseKey,
         score,
       });
     },
-    [session, topicHref, selectedExerciseLevel, level],
+    [session, topicHref, level],
   );
 
   const progressPercent = useMemo(() => {
     if (!topicHref) return 0;
+    const ladderPct = topicProgressPercentFromStars(ladderStarsByLevel);
+    if (ladderPct > 0) return ladderPct;
     return computeTopicExerciseProgressPercent({
       passedCount: passedExerciseKeys.size,
       topicLevelLabel: level,
+      exercisesPerLevel: 0,
     });
-  }, [topicHref, level, passedExerciseKeys, progressHydrated]);
+  }, [topicHref, level, passedExerciseKeys, ladderStarsByLevel, progressHydrated]);
 
   const isExercisePassed = useCallback(
     (exerciseKey) => passedExerciseKeys.has(exerciseKey),
@@ -363,8 +323,6 @@ const TheoryLayout = ({
       progresoPct: progressPercent,
     });
   }, [progressPercent, session, topicHref]);
-
-  const displayExercises = loadedExercises ?? (Array.isArray(exercises) ? exercises : []);
 
   if (examUnitLocked) {
     return (
@@ -549,24 +507,14 @@ const TheoryLayout = ({
               >
                 <span className="theory-tab-btn__icon" aria-hidden>🎯</span>
                 <span>Exercises</span>
-                {exerciseCount > 0 && (
-                  <span className="theory-tab-btn__count" aria-label={`${exerciseCount} exercises`}>
-                    {exerciseCount}
-                  </span>
-                )}
+                <span
+                  className="theory-tab-btn__count"
+                  aria-label={`${exerciseTabCount} levels`}
+                >
+                  {exerciseTabCount}
+                </span>
               </button>
             </div>
-
-            {exerciseCount > 0 ? (
-              <TheoryExerciseLevelFilter
-                selectedLevel={selectedExerciseLevel}
-                onChange={(nextLevel) => {
-                  setLoadedExercises(null);
-                  setLoadedExerciseLevel(null);
-                  setSelectedExerciseLevel(nextLevel);
-                }}
-              />
-            ) : null}
           </div>
           <style jsx>{`
             .theory-tabs-row {
@@ -660,49 +608,14 @@ const TheoryLayout = ({
           
           {activeTab === 'exercises' && (
             <div>
-              <h2 style={{
-                fontSize: '1.8rem',
-                fontWeight: 'bold',
-                color: '#2d3748',
-                marginBottom: '0.35rem',
-                display: 'flex',
-                alignItems: 'center',
-                gap: '0.5rem'
-              }}>
-                🎯 Practice Exercises
-              </h2>
-              <p style={{
-                margin: '0 0 1.5rem',
-                color: '#64748b',
-                fontSize: '0.92rem',
-              }}>
-                Level {selectedExerciseLevel} · 20 exercises · mixed question types (random order)
-              </p>
-              
-              {exercisesLoading ? (
-                <div style={{ textAlign: 'center', padding: '3rem', color: '#64748b' }} role="status">
-                  <span className="route-loading__spinner" aria-hidden="true" style={{ display: 'inline-block', marginBottom: '1rem' }} />
-                  <p style={{ margin: 0 }}>Loading exercises…</p>
-                </div>
-              ) : displayExercises.length === 0 ? (
-                <div style={{
-                  textAlign: 'center',
-                  padding: '3rem',
-                  color: '#666'
-                }}>
-                  <div style={{ fontSize: '3rem', marginBottom: '1rem' }}>🎯</div>
-                  <p>No exercises are available for this topic yet.</p>
-                  <p>Interactive exercises coming soon!</p>
-                </div>
-              ) : (
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
-                  {displayExercises.map((exercise, index) => (
-                    <div key={exercise.key || index}>
-                      {wrapExerciseElement(exercise, index)}
-                    </div>
-                  ))}
-                </div>
-              )}
+              <TheoryTopicLevelsExercisePanel
+                topicHref={topicHref || ''}
+                topicTitle={title}
+                topicLevelLabel={level}
+                userId={session?.user?.id}
+                accessToken={session?.access_token}
+                wrapExercise={wrapExerciseElement}
+              />
             </div>
           )}
         </div>
@@ -736,7 +649,7 @@ const TheoryLayout = ({
           ← Back to Theory
         </Link>
         
-        {activeTab === 'theory' && exerciseCount > 0 && (
+        {activeTab === 'theory' && topicHref && (
           <button
             onClick={() => setActiveTab('exercises')}
             style={{

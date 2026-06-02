@@ -66,6 +66,7 @@ export function B2ExamPracticeChrome({
   onSelectPart,
   getPartSavedScoreLabel,
   lang = 'es',
+  workPanelClassName = '',
   children,
 }) {
   const refreshHint =
@@ -111,6 +112,11 @@ export function B2ExamPracticeChrome({
             ) : null}
           </header>
 
+          <div
+            className={['levels-b2-practice__work-panel', workPanelClassName]
+              .filter(Boolean)
+              .join(' ')}
+          >
           <div className="levels-b2-practice__status">
             <LevelsCategoryTimer categoryLabel={sessionLabel} timeLabel={timerLabel} />
 
@@ -173,7 +179,8 @@ export function B2ExamPracticeChrome({
             </div>
           ) : null}
 
-          {children}
+          <div className="levels-b2-practice__work-body">{children}</div>
+          </div>
         </div>
       )}
     </>

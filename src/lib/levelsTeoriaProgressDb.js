@@ -16,7 +16,8 @@ import {
 } from '@/lib/resolveTheoryProgressTables';
 import { SECTIONS } from '@/data/teoriaSections';
 
-const THEORY_EXERCISES_PER_LEVEL = 20;
+/** Sin ejercicios locales (antes 20/tema); el progreso por ejercicios viene de Supabase. */
+const THEORY_EXERCISES_PER_LEVEL = 0;
 const PUNTUACIONES_TABLE = 'levels_teoria_puntuaciones';
 const ESTADISTICAS_TABLE = 'levels_teoria_estadisticas';
 const PREGUNTAS_TABLE = 'levels_teoria_preguntas';
@@ -111,6 +112,7 @@ function resolveUnidadForTopic(topicHref) {
 }
 
 export function computeProgresoPctFromPassedKeys(topicHref, topicLevelLabel, passedStorageKeys) {
+  if (!THEORY_EXERCISES_PER_LEVEL || THEORY_EXERCISES_PER_LEVEL <= 0) return 0;
   const href = normalizeTopicHref(topicHref);
   const levels = parseTopicLevels(topicLevelLabel);
   const total = Math.max(1, levels.length * THEORY_EXERCISES_PER_LEVEL);

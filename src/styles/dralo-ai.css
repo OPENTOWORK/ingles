@@ -1,7 +1,26 @@
 .dralo-ai-page {
-  max-width: 1100px;
+  width: 100%;
+  max-width: min(1040px, 100%);
   margin: 0 auto;
-  padding: 0 16px 48px;
+  padding: clamp(0.75rem, 3vw, 1.5rem) clamp(1rem, 4vw, 2rem) 3rem;
+  box-sizing: border-box;
+  overflow-x: clip;
+  min-width: 0;
+}
+
+.dralo-ai-page .page-hero,
+.dralo-ai-page .page-hero-wrap__breadcrumb {
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+.precios-page .page-hero-wrap__breadcrumb .breadcrumb {
+  color: #64748b;
+}
+
+.precios-page .page-hero-wrap__breadcrumb .breadcrumb a {
+  color: #4f46e5;
 }
 
 .dralo-ai-hub__grid {
@@ -685,6 +704,535 @@
 
 .dralo-ai-coach-foot a:hover {
   text-decoration: underline;
+}
+
+/* ——— Speaking Coach (mission roleplay) ——— */
+.dralo-ai-speaking-setup {
+  margin: 12px 0 18px;
+  padding: 18px 20px;
+  border-radius: 16px;
+  border: 1px solid #e2e8f0;
+  background: linear-gradient(180deg, #fafbfc 0%, #fff 100%);
+  box-shadow: 0 1px 3px rgba(15, 23, 42, 0.04);
+}
+
+.dralo-ai-speaking-controls {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.dralo-ai-speaking-controls__field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 0;
+}
+
+.dralo-ai-speaking-controls__field--scenario {
+  padding-bottom: 4px;
+  border-bottom: 1px solid #f1f5f9;
+}
+
+.dralo-ai-speaking-controls__hint {
+  margin: 2px 0 0;
+  font-size: 0.82rem;
+  line-height: 1.45;
+  color: #64748b;
+  font-weight: 500;
+}
+
+.dralo-ai-speaking-controls__options {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) auto;
+  align-items: end;
+  gap: 14px 16px;
+}
+
+.dralo-ai-speaking-controls__actions {
+  display: flex;
+  align-items: flex-end;
+  justify-content: flex-end;
+}
+
+.dralo-ai-speaking-controls__label {
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  color: #64748b;
+}
+
+.dralo-ai-speaking-controls__select {
+  appearance: none;
+  -webkit-appearance: none;
+  width: 100%;
+  padding: 11px 38px 11px 14px;
+  border-radius: 12px;
+  border: 1px solid #cbd5e1;
+  background: #fff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%2364748b' stroke-width='3'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E") no-repeat right 14px center;
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: #0f172a;
+  cursor: pointer;
+}
+
+.dralo-ai-speaking-controls__select:focus {
+  outline: none;
+  border-color: #db2777;
+  box-shadow: 0 0 0 3px rgba(219, 39, 119, 0.18);
+}
+
+.dralo-ai-speaking-controls__start {
+  flex: 0 0 auto;
+  white-space: nowrap;
+}
+
+.dralo-ai-speaking-head {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  background: var(--mission-bg, linear-gradient(135deg, #6366f1, #db2777));
+  color: #fff;
+  border-bottom: none;
+}
+
+.dralo-ai-speaking-head h2 {
+  margin: 0 0 6px;
+  color: #fff;
+}
+
+.dralo-ai-speaking-head p {
+  margin: 0;
+  color: rgba(255, 255, 255, 0.92);
+  line-height: 1.45;
+}
+
+.dralo-ai-speaking-head__icon {
+  font-size: 2rem;
+  line-height: 1;
+  flex-shrink: 0;
+}
+
+.dralo-ai-speaking-head__text {
+  min-width: 0;
+}
+
+.dralo-ai-speaking-empty {
+  margin: auto;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  padding: 28px 16px;
+  color: #475569;
+}
+
+.dralo-ai-speaking-empty__mascot {
+  filter: drop-shadow(0 8px 20px rgba(99, 102, 241, 0.22));
+}
+
+.dralo-ai-speaking-empty__title {
+  margin: 4px 0 0;
+  font-size: 1.1rem;
+  font-weight: 800;
+  color: #0f172a;
+}
+
+.dralo-ai-speaking-empty__text {
+  margin: 0;
+  max-width: 420px;
+  font-size: 0.92rem;
+  line-height: 1.55;
+}
+
+.dralo-ai-speaking-hud {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: 16px;
+  align-items: center;
+  padding: 14px 16px;
+  border-radius: 14px;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+}
+
+.dralo-ai-speaking-hud__mascot {
+  flex-shrink: 0;
+}
+
+.dralo-ai-speaking-hud__main {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  min-width: 0;
+}
+
+.dralo-ai-speaking-hud__row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+}
+
+.dralo-ai-speaking-hud__pct {
+  font-weight: 900;
+  color: #db2777;
+}
+
+.dralo-ai-speaking-hud__bar {
+  height: 8px;
+  border-radius: 999px;
+  background: #e2e8f0;
+  overflow: hidden;
+}
+
+.dralo-ai-speaking-hud__bar-fill {
+  display: block;
+  height: 100%;
+  border-radius: 999px;
+  background: linear-gradient(90deg, #6366f1, #db2777);
+  transition: width 0.35s ease;
+}
+
+.dralo-ai-speaking-hud__xp {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: #64748b;
+}
+
+.dralo-ai-speaking-hud__xp-val {
+  font-size: 1.1rem;
+  font-weight: 900;
+  color: #0f172a;
+}
+
+.dralo-ai-speaking-chips {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.dralo-ai-speaking-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 0.76rem;
+  font-weight: 600;
+  color: #475569;
+  background: #fff;
+  border: 1px solid #e2e8f0;
+  border-radius: 999px;
+  padding: 4px 10px;
+}
+
+.dralo-ai-speaking-chip.is-done {
+  color: #15803d;
+  border-color: #bbf7d0;
+  background: #f0fdf4;
+  text-decoration: line-through;
+}
+
+.dralo-ai-speaking-mini-scores {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px 12px;
+}
+
+.dralo-ai-speaking-mini-score__top {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: #334155;
+  margin-bottom: 3px;
+}
+
+.dralo-ai-speaking-mini-score__bar {
+  height: 6px;
+  border-radius: 999px;
+  background: #e2e8f0;
+  overflow: hidden;
+}
+
+.dralo-ai-speaking-mini-score__fill {
+  display: block;
+  height: 100%;
+  border-radius: 999px;
+  transition: width 0.35s ease;
+}
+
+.dralo-ai-speaking-xp-toast {
+  position: absolute;
+  top: -4px;
+  right: -4px;
+  background: linear-gradient(135deg, #f59e0b, #db2777);
+  color: #fff;
+  font-size: 0.72rem;
+  font-weight: 800;
+  padding: 5px 10px;
+  border-radius: 999px;
+  box-shadow: 0 6px 16px rgba(219, 39, 119, 0.35);
+  white-space: nowrap;
+}
+
+.dralo-ai-speaking-hud__mascot-wrap {
+  position: relative;
+}
+
+.dralo-ai-speaking-tip {
+  margin-top: 8px;
+  padding: 10px 12px;
+  border-radius: 12px;
+  background: #fffbeb;
+  border: 1px solid #fde68a;
+  font-size: 0.86rem;
+}
+
+.dralo-ai-speaking-tip__head {
+  display: block;
+  font-size: 0.76rem;
+  font-weight: 800;
+  color: #b45309;
+  margin-bottom: 6px;
+}
+
+.dralo-ai-speaking-tip__row {
+  display: flex;
+  gap: 8px;
+  margin-top: 4px;
+}
+
+.dralo-ai-speaking-tip__row dt {
+  flex: 0 0 52px;
+  font-size: 0.66rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  color: #92400e;
+}
+
+.dralo-ai-speaking-tip__row dd {
+  margin: 0;
+  color: #44403c;
+}
+
+.dralo-ai-speaking-tip__original {
+  text-decoration: line-through;
+  color: #b91c1c;
+}
+
+.dralo-ai-speaking-tip__better {
+  color: #15803d;
+  font-weight: 700;
+}
+
+.dralo-ai-btn--accent {
+  color: #fff;
+  background: linear-gradient(135deg, #f59e0b, #db2777);
+  box-shadow: 0 6px 18px rgba(219, 39, 119, 0.28);
+}
+
+.dralo-ai-btn--mic-active {
+  background: #fef2f2;
+  border: 2px solid #f87171;
+  color: #b91c1c;
+}
+
+.dralo-ai-speaking-complete__hero {
+  text-align: center;
+  padding: clamp(24px, 5vw, 40px);
+  border-radius: 20px;
+  color: #fff;
+  background: var(--mission-bg, linear-gradient(135deg, #6366f1, #db2777));
+}
+
+.dralo-ai-speaking-complete__title {
+  margin: 8px 0 0;
+  font-size: clamp(1.6rem, 4vw, 2.4rem);
+  font-weight: 900;
+}
+
+.dralo-ai-speaking-complete__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 14px;
+}
+
+.dralo-ai-speaking-complete__card {
+  padding: 16px;
+  border-radius: 14px;
+  border: 1px solid #e2e8f0;
+  background: #f8fafc;
+}
+
+.dralo-ai-speaking-complete__scores {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+}
+
+.dralo-ai-speaking-complete__score {
+  text-align: center;
+  padding: 10px;
+  border-radius: 12px;
+  background: #fff;
+  border: 1px solid #e2e8f0;
+}
+
+.dralo-ai-speaking-complete__score-num {
+  display: block;
+  font-size: 1.5rem;
+  font-weight: 900;
+}
+
+.dralo-ai-speaking-complete__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: center;
+  padding-top: 8px;
+}
+
+.dralo-ai-speaking-section-label {
+  margin: 0 0 10px;
+  font-size: 0.72rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #64748b;
+}
+
+.dralo-ai-speaking-goals {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.dralo-ai-speaking-goal {
+  display: flex;
+  gap: 8px;
+  font-size: 0.88rem;
+  line-height: 1.4;
+  color: #334155;
+}
+
+.dralo-ai-speaking-goal.is-done {
+  color: #16a34a;
+  text-decoration: line-through;
+}
+
+/* Progress table (topics × XP bars) */
+.dralo-ai-speaking-progress {
+  margin: 0 0 18px;
+  border-radius: 16px;
+  border: 1px solid #e2e8f0;
+  background: #fff;
+  overflow: hidden;
+  box-shadow: 0 4px 18px rgba(15, 23, 42, 0.06);
+}
+
+.dralo-ai-speaking-progress__head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px 20px;
+  padding: 14px 18px;
+  background: linear-gradient(135deg, #faf5ff 0%, #fdf2f8 100%);
+}
+
+.dralo-ai-speaking-progress__head-title {
+  margin: 0;
+  font-size: 0.95rem;
+  font-weight: 800;
+  color: #0f172a;
+}
+
+.dralo-ai-speaking-progress__head-meta {
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: #64748b;
+}
+
+.dralo-ai-speaking-progress__level {
+  flex: 1 1 220px;
+  min-width: 0;
+}
+
+.dralo-ai-speaking-progress__level-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 8px;
+  margin-bottom: 6px;
+}
+
+.dralo-ai-speaking-progress__level-label {
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #7c3aed;
+}
+
+.dralo-ai-speaking-progress__level-xp {
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: #64748b;
+}
+
+.dralo-ai-speaking-progress__bar {
+  height: 10px;
+  border-radius: 999px;
+  background: #e2e8f0;
+  overflow: hidden;
+}
+
+.dralo-ai-speaking-progress__bar-fill {
+  display: block;
+  height: 100%;
+  border-radius: 999px;
+  background: linear-gradient(90deg, #8b5cf6, #db2777);
+  transition: width 0.4s ease;
+}
+
+@media (max-width: 900px) {
+  .dralo-ai-speaking-controls__options {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .dralo-ai-speaking-controls__actions {
+    grid-column: 1 / -1;
+    justify-content: stretch;
+  }
+
+  .dralo-ai-speaking-controls__start {
+    width: 100%;
+  }
+}
+
+@media (max-width: 720px) {
+  .dralo-ai-speaking-hud {
+    grid-template-columns: 1fr;
+    text-align: center;
+  }
+
+  .dralo-ai-speaking-hud__mascot-wrap {
+    justify-self: center;
+  }
+
+  .dralo-ai-speaking-controls__options {
+    grid-template-columns: 1fr;
+  }
 }
 
 .dralo-ai-speaking-embedded {

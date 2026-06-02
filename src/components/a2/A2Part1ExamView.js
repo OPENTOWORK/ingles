@@ -2,6 +2,7 @@
 
 import { A2Part1Stimulus } from '@/components/a2/A2Part1Stimulus';
 import { A2McqFeedback } from '@/components/a2/A2ExamReadingUi';
+import { A2_RW_DIRECTIONS } from '@/data/a2-key-official-spec';
 /**
  * Parte 1 A2 Key — layout tipo hoja de examen oficial.
  */
@@ -16,20 +17,30 @@ export function A2Part1ExamView({
   hideFeedback,
   onOptionSelect,
   aiHintsByKey = {},
+  textOnlyStimulus = true,
 }) {
+  const directionLines = String(directions || A2_RW_DIRECTIONS[1] || '')
+    .replace(/\r\n/g, '\n')
+    .split('\n')
+    .map((l) => l.trim())
+    .filter(Boolean);
+  const partTitle = directionLines[0]?.toLowerCase() === 'part 1' ? directionLines[0] : 'Part 1';
+  const bodyLines =
+    directionLines[0]?.toLowerCase() === 'part 1' ? directionLines.slice(1) : directionLines;
+
   return (
     <div className="a2-p1-paper">
-      {directions ? (
-        <header className="a2-p1-paper__header">
-          <h3 className="a2-p1-paper__part-title">Part 1</h3>
-          <div className="a2-p1-paper__directions">
-            {directions.split('\n').map((line, i) => (
-              <p key={i}>{line}</p>
-            ))}
-          </div>
-          <hr className="a2-p1-paper__rule" />
-        </header>
-      ) : null}
+      <header className="a2-p1-paper__header">
+        <h3 className="a2-p1-paper__part-title">{partTitle}</h3>
+        <div className="a2-p1-paper__directions">
+          {bodyLines.map((line, i) => (
+            <p key={i} className={/^Questions\s/i.test(line) ? 'a2-p1-paper__directions-range' : ''}>
+              {line}
+            </p>
+          ))}
+        </div>
+        <hr className="a2-p1-paper__rule" />
+      </header>
 
       {example ? (
         <section className="a2-p1-paper__example" aria-label="Example">
@@ -74,7 +85,7 @@ export function A2Part1ExamView({
           const correct = group.options?.find((o) => o.correcta);
           const hint = aiHintsByKey[questionKey];
 
-          const hasImage = Boolean(group.stimulusImageUrl);
+          const hasImage = Boolean(group.stimulusImageUrl) && !textOnlyStimulus;
 
           return (
             <article
@@ -87,6 +98,7 @@ export function A2Part1ExamView({
                 message={group.message || group.questionStem}
                 imageUrl={group.stimulusImageUrl}
                 prompt={group.prompt}
+                textOnly={textOnlyStimulus}
               />
               <div
                 className="a2-p1-paper__choices"

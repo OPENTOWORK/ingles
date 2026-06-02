@@ -45,7 +45,9 @@ const ADMIN_EXTRA_SECTIONS = `
 - **Theory** (/teoria): teoría y ejercicios por tema (también enlaces en la home para admin).
 - **Placement Test** (/prueba-nivel): test de nivel inicial.
 - **Training** (/training): entrenamiento por nivel y habilidad.
-- **Plan financiero** (/admin/plan-financiero): monetización, planes premium, suscripciones e ingresos (solo admin).
+- **Precios** (/precios): comparativa de planes (solo administradores, oculto para estudiantes de momento).
+- **Plan financiero** (/admin/plan-financiero): monetización, sincronización del catálogo, suscripciones e ingresos (solo admin).
+- **Panel de ejercicios** (/admin/ejercicios): creación automática de ejercicios de teoría en Supabase (solo admin).
 
 ## Menú staff (si aplica su rol)
 - **Profesor** (/teacher), **Administrador** (/admin), **Soporte** (/soporte), **Informático** (/informatico).

@@ -6,6 +6,7 @@ import { supabase } from '../../utils/supabaseClient';
 import { normalizeEmail } from '@/utils/authRoles';
 import { mapSignupErrorMessage } from '@/utils/authSignupErrors';
 import SiteMascot from '@/components/SiteMascot';
+import PasswordInput from '@/components/PasswordInput';
 import { FORM_LEGAL_SNIPPETS } from '@/lib/legal/legalDocuments';
 
 export default function RegistroPage() {
@@ -240,12 +241,12 @@ export default function RegistroPage() {
         />
 
         <label style={{ display: "block", margin: "1rem 0 0.5rem" }}>Password</label>
-        <input
-          type="password"
+        <PasswordInput
           placeholder="••••••••"
           style={inputStyle}
           value={password}
           onChange={(e) => setPassword(e.target.value)}
+          autoComplete="new-password"
         />
 
         <button

@@ -11,6 +11,7 @@ export const PROFILE_TABS = [
   { id: 'study-tools', label: 'Tools', emoji: '🛠️' },
   { id: 'study-planner', label: 'Planner', emoji: '📅' },
   { id: 'ai-tools', label: 'AI tools', emoji: '🤖' },
+  { id: 'error-tracker', label: 'Error Tracker', emoji: '🧠', studentAllowed: true },
   { id: 'analytics', label: 'Analytics', emoji: '📊' },
   { id: 'settings', label: 'Settings', emoji: '⚙️' },
   { id: 'social', label: 'Social', emoji: '👥' },
@@ -35,7 +36,7 @@ export const PROFILE_TAB_GROUPS = [
     id: 'tools',
     title: 'Tools',
     description: 'Study tools, planner and AI',
-    tabIds: ['study-tools', 'study-planner', 'ai-tools'],
+    tabIds: ['study-tools', 'study-planner', 'ai-tools', 'error-tracker'],
   },
   {
     id: 'more',

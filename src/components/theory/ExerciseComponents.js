@@ -1,14 +1,22 @@
 'use client';
 import { useEffect, useState } from 'react';
+import TheoryExerciseReportError from '@/components/theory/TheoryExerciseReportError';
 
 // Multiple Choice Exercise Component
-export const MultipleChoiceExercise = ({ 
-  question, 
-  options, 
-  correctAnswer, 
-  explanation, 
-  onComplete, 
-  isCompleted = false 
+export const MultipleChoiceExercise = ({
+  question,
+  options,
+  correctAnswer,
+  explanation,
+  onComplete,
+  onAdvance,
+  engagementMode = false,
+  isLastStep = false,
+  isCompleted = false,
+  reportExerciseId = '',
+  reportQuestion = '',
+  topicHref = '',
+  cefrLevel = '',
 }) => {
   const [selected, setSelected] = useState(null);
   const [showResult, setShowResult] = useState(false);
@@ -16,13 +24,22 @@ export const MultipleChoiceExercise = ({
 
   const handleSubmit = () => {
     if (selected === null) return;
-    
+
     const isCorrect = selected === correctAnswer;
     const points = isCorrect ? 100 : 0;
-    
+
     setScore(points);
     setShowResult(true);
+
+    if (!engagementMode) {
+      onComplete?.(points);
+    }
+  };
+
+  const handleContinue = () => {
+    const points = score;
     onComplete?.(points);
+    onAdvance?.(points);
   };
 
   const handleReset = () => {
@@ -132,42 +149,79 @@ export const MultipleChoiceExercise = ({
         </div>
       )}
 
-      <div style={{ display: 'flex', gap: '0.75rem', justifyContent: 'flex-end' }}>
-        {!showResult ? (
-          <button
-            onClick={handleSubmit}
-            disabled={selected === null}
-            style={{
-              padding: '0.75rem 1.5rem',
-              background: selected !== null ? '#667eea' : '#e2e8f0',
-              color: selected !== null ? 'white' : '#a0aec0',
-              border: 'none',
-              borderRadius: '8px',
-              cursor: selected !== null ? 'pointer' : 'not-allowed',
-              fontWeight: '500',
-              transition: 'all 0.2s'
-            }}
-          >
-            Check Answer
-          </button>
-        ) : (
-          <button
-            onClick={handleReset}
-            style={{
-              padding: '0.75rem 1.5rem',
-              background: '#4a5568',
-              color: 'white',
-              border: 'none',
-              borderRadius: '8px',
-              cursor: 'pointer',
-              fontWeight: '500',
-              transition: 'all 0.2s'
-            }}
-          >
-            Try Again
-          </button>
-        )}
+      <div className="theory-exercise-actions">
+        <div className="theory-exercise-actions__primary">
+          {!showResult ? (
+            <button
+              type="button"
+              onClick={handleSubmit}
+              disabled={selected === null}
+              style={{
+                padding: '0.75rem 1.5rem',
+                background: selected !== null ? '#667eea' : '#e2e8f0',
+                color: selected !== null ? 'white' : '#a0aec0',
+                border: 'none',
+                borderRadius: '8px',
+                cursor: selected !== null ? 'pointer' : 'not-allowed',
+                fontWeight: '600',
+                transition: 'all 0.2s',
+              }}
+            >
+              Check Answer
+            </button>
+          ) : engagementMode ? (
+            <button
+              type="button"
+              onClick={handleContinue}
+              style={{
+                padding: '0.75rem 1.75rem',
+                background: score >= 100 ? '#16a34a' : '#dc2626',
+                color: 'white',
+                border: 'none',
+                borderRadius: '10px',
+                cursor: 'pointer',
+                fontWeight: '700',
+                fontSize: '0.95rem',
+                boxShadow:
+                  score >= 100
+                    ? '0 6px 16px rgba(22, 163, 74, 0.35)'
+                    : '0 6px 16px rgba(220, 38, 38, 0.35)',
+                transition: 'transform 0.15s ease, box-shadow 0.15s ease',
+              }}
+            >
+              {isLastStep ? 'Finish ✓' : 'Continue →'}
+            </button>
+          ) : (
+            <button
+              type="button"
+              onClick={handleReset}
+              style={{
+                padding: '0.75rem 1.5rem',
+                background: '#4a5568',
+                color: 'white',
+                border: 'none',
+                borderRadius: '8px',
+                cursor: 'pointer',
+                fontWeight: '500',
+                transition: 'all 0.2s',
+              }}
+            >
+              Try Again
+            </button>
+          )}
+        </div>
       </div>
+
+      {showResult ? (
+        <div className="theory-exercise-report-row">
+          <TheoryExerciseReportError
+            exerciseId={reportExerciseId}
+            question={reportQuestion || question}
+            topicHref={topicHref}
+            cefrLevel={cefrLevel}
+          />
+        </div>
+      ) : null}
     </div>
   );
 };

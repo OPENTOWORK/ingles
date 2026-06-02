@@ -2,10 +2,33 @@
 
 import { cloneElement, isValidElement } from 'react';
 
-export default function TheoryExerciseShell({ typeLabel, children, isCompleted, onComplete }) {
+export default function TheoryExerciseShell({
+  typeLabel,
+  children,
+  isCompleted,
+  onComplete,
+  onAdvance,
+  engagementMode = false,
+  isLastStep = false,
+  reportExerciseId = '',
+  reportQuestion = '',
+  topicHref = '',
+  cefrLevel = '',
+}) {
   const exercise =
-    isValidElement(children) && (onComplete != null || isCompleted != null)
-      ? cloneElement(children, { isCompleted, onComplete })
+    isValidElement(children) &&
+    (onComplete != null || onAdvance != null || isCompleted != null || engagementMode)
+      ? cloneElement(children, {
+          isCompleted,
+          onComplete,
+          onAdvance,
+          engagementMode,
+          isLastStep,
+          reportExerciseId,
+          reportQuestion,
+          topicHref,
+          cefrLevel,
+        })
       : children;
 
   return (

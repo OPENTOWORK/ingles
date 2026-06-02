@@ -6,7 +6,9 @@ import OpenAI from 'openai';
 import {
   draloChatCompletion as draloChatCompletionCore,
   draloChatCompletionResult,
+  draloChatCompletionStream as draloChatCompletionStreamCore,
   getDefaultModel,
+  getFastModel,
   isOpenAIConfigured,
 } from '@/lib/ai/draloAiEngine';
 import { examCoachPrompt } from '@/lib/ai/prompts/examCoachPrompt';
@@ -31,6 +33,10 @@ export {
 
 export function getDraloModel() {
   return getDefaultModel();
+}
+
+export function getDraloFastModel() {
+  return getFastModel();
 }
 
 function assistantsEnabled() {
@@ -181,18 +187,22 @@ export async function draloChatCompletion(options = {}) {
     }
   }
 
+  const explicitModel =
+    typeof options.model === 'string' && options.model.trim() ? options.model.trim() : null;
+
   const { text, model } = await draloChatCompletionResult({
     systemPrompt,
     userMessage,
     conversationHistory,
     model:
-      engine === DRALO_AI_ENGINE.CAMBRIDGE
+      explicitModel ||
+      (engine === DRALO_AI_ENGINE.CAMBRIDGE
         ? process.env.OPENAI_MODEL_CAMBRIDGE?.trim() ||
           process.env.DRALO_OPENAI_MODEL_CAMBRIDGE?.trim() ||
           getDefaultModel()
         : process.env.OPENAI_MODEL_REAL_LIFE?.trim() ||
           process.env.DRALO_OPENAI_MODEL_REAL_LIFE?.trim() ||
-          getDefaultModel(),
+          getDefaultModel()),
     temperature: options.temperature ?? 0.7,
     max_tokens: options.max_tokens,
     response_format: options.response_format,
@@ -213,4 +223,49 @@ export function cambridgeChatCompletion(options = {}) {
 
 export function realLifeChatCompletion(options = {}) {
   return draloChatCompletion({ ...options, engine: DRALO_AI_ENGINE.REAL_LIFE, useAssistant: false });
+}
+
+/**
+ * Streaming para el motor Real-Life (Chat Completions). Construye el mismo system prompt
+ * que realLifeChatCompletion y devuelve el stream de OpenAI para consumo incremental.
+ */
+export function realLifeChatCompletionStream(options = {}) {
+  const incoming = Array.isArray(options.messages) ? options.messages : [];
+  const taskSystem = String(
+    options.system || incoming.find((m) => m.role === 'system')?.content || '',
+  ).trim();
+
+  let systemPrompt = realLifeCoachPrompt;
+  if (options.rawSystem && taskSystem) {
+    systemPrompt = taskSystem;
+  } else if (taskSystem) {
+    systemPrompt = `${systemPrompt}\n\n---\n\n${taskSystem}`;
+  }
+
+  const turns = incoming.filter((m) => m.role === 'user' || m.role === 'assistant');
+  let userMessage = options.userMessage != null ? String(options.userMessage) : '';
+  let conversationHistory = turns;
+  if (!userMessage.trim() && turns.length) {
+    const last = turns[turns.length - 1];
+    if (last.role === 'user') {
+      userMessage = String(last.content);
+      conversationHistory = turns.slice(0, -1);
+    }
+  }
+
+  const explicitModel =
+    typeof options.model === 'string' && options.model.trim() ? options.model.trim() : null;
+
+  return draloChatCompletionStreamCore({
+    systemPrompt,
+    userMessage,
+    conversationHistory,
+    model:
+      explicitModel ||
+      process.env.OPENAI_MODEL_REAL_LIFE?.trim() ||
+      process.env.DRALO_OPENAI_MODEL_REAL_LIFE?.trim() ||
+      getDefaultModel(),
+    temperature: options.temperature ?? 0.7,
+    max_tokens: options.max_tokens,
+  });
 }

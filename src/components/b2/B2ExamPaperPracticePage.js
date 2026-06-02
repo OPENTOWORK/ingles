@@ -43,13 +43,67 @@ import {
   mergeA2Part1Groups,
   parseA2Part1Pack,
 } from '@/utils/a2Part1Parser';
-import { A2Part1ExamView } from '@/components/a2/A2Part1ExamView';
-import { A2Part2ExamView } from '@/components/a2/A2Part2ExamView';
+import {
+  A2_OFFICIAL_PART1_DEMO,
+  getA2OfficialPart1DemoRespuestas,
+  isA2Part1DemoEmpty,
+} from '@/data/a2OfficialPart1Demo';
+import A2Part1ExamShell from '@/components/a2/A2Part1ExamShell';
+import A2Part2ExamShell from '@/components/a2/A2Part2ExamShell';
+import {
+  A2_OFFICIAL_PART2_DEMO,
+  buildA2Part2GroupsFromDemoItems,
+  isA2Part2DemoEmpty,
+} from '@/data/a2OfficialPart2Demo';
+import A2Part3ExamShell from '@/components/a2/A2Part3ExamShell';
+import {
+  A2_OFFICIAL_PART3_DEMO,
+  buildA2Part3GroupsFromDemoItems,
+  isA2Part3DemoEmpty,
+} from '@/data/a2OfficialPart3Demo';
+import A2Part4ExamShell from '@/components/a2/A2Part4ExamShell';
+import {
+  A2_OFFICIAL_PART4_DEMO,
+  buildA2Part4GroupsFromDemoItems,
+  isA2Part4DemoEmpty,
+} from '@/data/a2OfficialPart4Demo';
+import A2Part5ExamShell from '@/components/a2/A2Part5ExamShell';
+import { A2_OFFICIAL_PART5_DEMO } from '@/data/a2OfficialPart5Demo';
+import A2Part8ExamShell from '@/components/a2/A2Part8ExamShell';
+import {
+  A2_OFFICIAL_PART8_DEMO,
+  buildA2Part8GroupsFromDemoItems,
+  isA2Part8DemoEmpty,
+} from '@/data/a2OfficialPart8Demo';
+import A2Part9ExamShell from '@/components/a2/A2Part9ExamShell';
+import { A2_OFFICIAL_PART9_DEMO } from '@/data/a2OfficialPart9Demo';
+import A2Part10ExamShell from '@/components/a2/A2Part10ExamShell';
+import {
+  A2_OFFICIAL_PART10_DEMO,
+  buildA2Part10GroupsFromDemoItems,
+  isA2Part10DemoEmpty,
+} from '@/data/a2OfficialPart10Demo';
+import A2Part11ExamShell from '@/components/a2/A2Part11ExamShell';
+import {
+  A2_OFFICIAL_PART11_DEMO,
+  buildA2Part11GroupsFromDemoItems,
+  isA2Part11DemoEmpty,
+} from '@/data/a2OfficialPart11Demo';
+import A2Part12ExamShell from '@/components/a2/A2Part12ExamShell';
+import { A2_OFFICIAL_PART12_DEMO } from '@/data/a2OfficialPart12Demo';
+import A2Part13ExamShell from '@/components/a2/A2Part13ExamShell';
+import { A2_OFFICIAL_PART13_DEMO } from '@/data/a2OfficialPart13Demo';
+import A2Part14ExamShell from '@/components/a2/A2Part14ExamShell';
+import { A2_OFFICIAL_PART14_DEMO } from '@/data/a2OfficialPart14Demo';
+import { A2WritingTaskCard } from '@/components/a2/A2WritingTaskCard';
+import {
+  getA2WritingDemoByPart,
+  buildA2WritingInstructionsText,
+} from '@/data/a2OfficialPart6Demo';
+import { parseA2Part3Directions, parseA2Part3Passage } from '@/utils/a2Part3Parser';
 import {
   A2McqFeedback,
   A2McqOptionButtons,
-  A2Part3QuestionList,
-  A2Part4ClozeOptions,
   A2ListeningPictureMcq,
 } from '@/components/a2/A2ExamReadingUi';
 import {
@@ -1003,6 +1057,32 @@ function B2ExamPaperPracticePageInner({
     ? `b2-exam-writing-${selectedQuestion?.preguntaId || selectedPart?.id || 'part'}`
     : '';
 
+  const a2WritingDemo = useMemo(() => {
+    if (levelSlug !== 'a2' || !isLongFormWritingPart) return null;
+    const hasRealRowTask = String(selectedQuestion?.enunciado || '').trim().length > 20;
+    if (hasRealRowTask) return null;
+    return getA2WritingDemoByPart(partNumber);
+  }, [levelSlug, isLongFormWritingPart, selectedQuestion?.enunciado, partNumber]);
+
+  const a2WritingDemoInstructions = useMemo(
+    () => (a2WritingDemo ? buildA2WritingInstructionsText(a2WritingDemo) : ''),
+    [a2WritingDemo],
+  );
+
+  const isA2Part7Writing = levelSlug === 'a2' && partNumber === 7;
+  const effectiveWritingWordMin =
+    a2WritingDemo && Number.isFinite(a2WritingDemo.wordMin)
+      ? a2WritingDemo.wordMin
+      : isA2Part7Writing
+        ? 35
+        : writingWordMin;
+  const effectiveWritingWordMax =
+    a2WritingDemo && Number.isFinite(a2WritingDemo.wordMax)
+      ? a2WritingDemo.wordMax
+      : isA2Part7Writing
+        ? 100
+        : writingWordMax;
+
   /** Writing: inputs abiertos; en Listening parte 11 van en el layout por ítems. */
   const useOpenInputUi = Boolean(
     hasOpenAnswerSlots && !useListeningItemLayout && !isLongFormWritingPart,
@@ -1032,7 +1112,14 @@ function B2ExamPaperPracticePageInner({
     ],
   );
 
-  const sectionMaxWidth = showLongWritingWithAi ? 'min(960px, 100%)' : '100%';
+  const sectionMaxWidth = showLongWritingWithAi
+    ? 'min(960px, 100%)'
+      : levelSlug === 'a2' &&
+          ((partNumber >= 1 && partNumber <= 5) || (partNumber >= 8 && partNumber <= 14))
+        ? 'min(920px, 100%)'
+        : '100%';
+
+  const a2EmbeddedReadingPart = levelSlug === 'a2' && partNumber >= 1 && partNumber <= 4;
 
   const passageTextForPanel = useMemo(() => {
     if (levelSlug === 'a2' && partNumber === 1) return '';
@@ -1094,39 +1181,47 @@ function B2ExamPaperPracticePageInner({
 
   const a2McqPartsExpectOptions = partNumber >= 1 && partNumber <= 4;
 
-  const a2EmptyPartHint = useMemo(() => {
-    if (levelSlug !== 'a2' || effectiveMcqGroups.length > 0) return '';
-    return describeA2PartDataGap({
-      partNumber,
+  const useA2Part1OfficialDemo = useMemo(() => {
+    if (levelSlug !== 'a2' || partNumber !== 1) return false;
+    if (!selectedQuestion) return true;
+    return isA2Part1DemoEmpty({
       enunciado: selectedQuestion?.enunciado,
       respuestasCount: selectedQuestion?.respuestas?.length || 0,
+      groupsCount: effectiveMcqGroups.length,
     });
   }, [
     levelSlug,
-    effectiveMcqGroups.length,
     partNumber,
+    selectedQuestion,
     selectedQuestion?.enunciado,
     selectedQuestion?.respuestas?.length,
+    effectiveMcqGroups.length,
   ]);
-
-  const a2Part2ProfileNames = useMemo(() => {
-    if (partNumber !== 2) return [];
-    return parseA2Part2ProfileNames(passageTextForPanel);
-  }, [partNumber, passageTextForPanel]);
 
   const a2Part1Pack = useMemo(() => {
     if (levelSlug !== 'a2' || partNumber !== 1) return null;
-    return parseA2Part1Pack(selectedQuestion?.enunciado || '');
-  }, [levelSlug, partNumber, selectedQuestion?.enunciado]);
+    const parsed = parseA2Part1Pack(selectedQuestion?.enunciado || '');
+    if (useA2Part1OfficialDemo) {
+      return {
+        directions: A2_OFFICIAL_PART1_DEMO.directions,
+        example: A2_OFFICIAL_PART1_DEMO.example,
+        items: A2_OFFICIAL_PART1_DEMO.items,
+      };
+    }
+    return parsed;
+  }, [levelSlug, partNumber, selectedQuestion?.enunciado, useA2Part1OfficialDemo]);
 
   const a2Part1Groups = useMemo(() => {
     if (levelSlug !== 'a2' || partNumber !== 1) return effectiveMcqGroups;
     const items = a2Part1Pack?.items || [];
+    const respuestas = useA2Part1OfficialDemo
+      ? getA2OfficialPart1DemoRespuestas()
+      : selectedQuestion?.respuestas || [];
     if (effectiveMcqGroups.length) {
       return mergeA2Part1Groups(effectiveMcqGroups, items);
     }
     if (items.length) {
-      return buildPart1GroupsFromPackItems(items, selectedQuestion?.respuestas || []);
+      return buildPart1GroupsFromPackItems(items, respuestas);
     }
     return effectiveMcqGroups;
   }, [
@@ -1135,6 +1230,438 @@ function B2ExamPaperPracticePageInner({
     a2Part1Pack,
     effectiveMcqGroups,
     selectedQuestion?.respuestas,
+    useA2Part1OfficialDemo,
+  ]);
+
+  const showA2Part1WithoutSupabaseRow =
+    levelSlug === 'a2' &&
+    partNumber === 1 &&
+    Boolean(selectedPart) &&
+    !selectedQuestion &&
+    a2Part1Groups.length > 0;
+
+  const a2Part2McqGroups = useMemo(() => {
+    if (levelSlug !== 'a2' || partNumber !== 2) return [];
+    return effectiveMcqGroups.filter(
+      (g) => g.questionNumber >= 7 && g.questionNumber <= 13 && g.options?.length >= 2,
+    );
+  }, [levelSlug, partNumber, effectiveMcqGroups]);
+
+  const useA2Part2OfficialDemo = useMemo(() => {
+    if (levelSlug !== 'a2' || partNumber !== 2) return false;
+    if (!selectedQuestion) return true;
+    return isA2Part2DemoEmpty({
+      enunciado: selectedQuestion?.enunciado,
+      respuestasCount: selectedQuestion?.respuestas?.length || 0,
+      part2GroupCount: a2Part2McqGroups.length,
+    });
+  }, [
+    levelSlug,
+    partNumber,
+    selectedQuestion,
+    selectedQuestion?.enunciado,
+    selectedQuestion?.respuestas?.length,
+    a2Part2McqGroups.length,
+  ]);
+
+  const a2Part2Groups = useMemo(() => {
+    if (levelSlug !== 'a2' || partNumber !== 2) return a2Part2McqGroups;
+    if (useA2Part2OfficialDemo) {
+      return buildA2Part2GroupsFromDemoItems(A2_OFFICIAL_PART2_DEMO.items);
+    }
+    return a2Part2McqGroups;
+  }, [levelSlug, partNumber, a2Part2McqGroups, useA2Part2OfficialDemo]);
+
+  const a2Part2PassageText = useMemo(() => {
+    if (levelSlug !== 'a2' || partNumber !== 2) return passageTextForPanel;
+    if (useA2Part2OfficialDemo) return A2_OFFICIAL_PART2_DEMO.passageText;
+    return passageTextForPanel;
+  }, [levelSlug, partNumber, passageTextForPanel, useA2Part2OfficialDemo]);
+
+  const a2Part2Directions = useMemo(() => {
+    if (levelSlug !== 'a2' || partNumber !== 2) return '';
+    if (useA2Part2OfficialDemo) return A2_OFFICIAL_PART2_DEMO.directions;
+    return (
+      parseA2Part2Directions(selectedQuestion?.enunciado || '') ||
+      selectedPart?.descripcion ||
+      ''
+    );
+  }, [
+    levelSlug,
+    partNumber,
+    useA2Part2OfficialDemo,
+    selectedQuestion?.enunciado,
+    selectedPart?.descripcion,
+  ]);
+
+  const a2Part2ProfileNames = useMemo(() => {
+    if (levelSlug !== 'a2' || partNumber !== 2) return [];
+    return parseA2Part2ProfileNames(a2Part2PassageText);
+  }, [levelSlug, partNumber, a2Part2PassageText]);
+
+  const showA2Part2WithoutSupabaseRow =
+    levelSlug === 'a2' &&
+    partNumber === 2 &&
+    Boolean(selectedPart) &&
+    !selectedQuestion &&
+    a2Part2Groups.length > 0;
+
+  const a2Part3McqGroups = useMemo(() => {
+    if (levelSlug !== 'a2' || partNumber !== 3) return [];
+    return effectiveMcqGroups.filter(
+      (g) => g.questionNumber >= 14 && g.questionNumber <= 18 && g.options?.length >= 2,
+    );
+  }, [levelSlug, partNumber, effectiveMcqGroups]);
+
+  const useA2Part3OfficialDemo = useMemo(() => {
+    if (levelSlug !== 'a2' || partNumber !== 3) return false;
+    if (!selectedQuestion) return true;
+    return isA2Part3DemoEmpty({
+      enunciado: selectedQuestion?.enunciado,
+      respuestasCount: selectedQuestion?.respuestas?.length || 0,
+      part3GroupCount: a2Part3McqGroups.length,
+    });
+  }, [
+    levelSlug,
+    partNumber,
+    selectedQuestion,
+    selectedQuestion?.enunciado,
+    selectedQuestion?.respuestas?.length,
+    a2Part3McqGroups.length,
+  ]);
+
+  const a2Part3Groups = useMemo(() => {
+    if (levelSlug !== 'a2' || partNumber !== 3) return a2Part3McqGroups;
+    if (useA2Part3OfficialDemo) {
+      return buildA2Part3GroupsFromDemoItems(A2_OFFICIAL_PART3_DEMO.items);
+    }
+    return a2Part3McqGroups;
+  }, [levelSlug, partNumber, a2Part3McqGroups, useA2Part3OfficialDemo]);
+
+  const a2Part3PassageText = useMemo(() => {
+    if (levelSlug !== 'a2' || partNumber !== 3) return passageTextForPanel;
+    if (useA2Part3OfficialDemo) return A2_OFFICIAL_PART3_DEMO.passageText;
+    return passageTextForPanel;
+  }, [levelSlug, partNumber, passageTextForPanel, useA2Part3OfficialDemo]);
+
+  const a2Part3PassageMeta = useMemo(() => {
+    if (levelSlug !== 'a2' || partNumber !== 3) {
+      return { title: '', paragraphs: [] };
+    }
+    if (useA2Part3OfficialDemo) {
+      return {
+        title: A2_OFFICIAL_PART3_DEMO.passageTitle,
+        paragraphs: A2_OFFICIAL_PART3_DEMO.passageParagraphs,
+      };
+    }
+    return parseA2Part3Passage(a2Part3PassageText);
+  }, [levelSlug, partNumber, useA2Part3OfficialDemo, a2Part3PassageText]);
+
+  const a2Part3Directions = useMemo(() => {
+    if (levelSlug !== 'a2' || partNumber !== 3) return '';
+    if (useA2Part3OfficialDemo) return A2_OFFICIAL_PART3_DEMO.directions;
+    return (
+      parseA2Part3Directions(selectedQuestion?.enunciado || '') ||
+      selectedPart?.descripcion ||
+      ''
+    );
+  }, [
+    levelSlug,
+    partNumber,
+    useA2Part3OfficialDemo,
+    selectedQuestion?.enunciado,
+    selectedPart?.descripcion,
+  ]);
+
+  const showA2Part3WithoutSupabaseRow =
+    levelSlug === 'a2' &&
+    partNumber === 3 &&
+    Boolean(selectedPart) &&
+    !selectedQuestion &&
+    a2Part3Groups.length > 0;
+
+  const a2Part4McqGroups = useMemo(() => {
+    if (levelSlug !== 'a2' || partNumber !== 4) return [];
+    return effectiveMcqGroups.filter(
+      (g) => g.questionNumber >= 19 && g.questionNumber <= 24 && g.options?.length >= 2,
+    );
+  }, [levelSlug, partNumber, effectiveMcqGroups]);
+
+  const useA2Part4OfficialDemo = useMemo(() => {
+    if (levelSlug !== 'a2' || partNumber !== 4) return false;
+    if (!selectedQuestion) return true;
+    return isA2Part4DemoEmpty({
+      enunciado: selectedQuestion?.enunciado,
+      respuestasCount: selectedQuestion?.respuestas?.length || 0,
+      part4GroupCount: a2Part4McqGroups.length,
+    });
+  }, [
+    levelSlug,
+    partNumber,
+    selectedQuestion,
+    selectedQuestion?.enunciado,
+    selectedQuestion?.respuestas?.length,
+    a2Part4McqGroups.length,
+  ]);
+
+  const a2Part4Groups = useMemo(() => {
+    if (levelSlug !== 'a2' || partNumber !== 4) return a2Part4McqGroups;
+    if (useA2Part4OfficialDemo) {
+      return buildA2Part4GroupsFromDemoItems(A2_OFFICIAL_PART4_DEMO.items);
+    }
+    return a2Part4McqGroups;
+  }, [levelSlug, partNumber, a2Part4McqGroups, useA2Part4OfficialDemo]);
+
+  const a2Part4PassageText = useMemo(() => {
+    if (levelSlug !== 'a2' || partNumber !== 4) return passageTextForPanel;
+    if (useA2Part4OfficialDemo) return A2_OFFICIAL_PART4_DEMO.passageText;
+    return passageTextForPanel;
+  }, [levelSlug, partNumber, passageTextForPanel, useA2Part4OfficialDemo]);
+
+  const a2Part4PassageMeta = useMemo(() => {
+    if (levelSlug !== 'a2' || partNumber !== 4) {
+      return { title: '', paragraphs: [] };
+    }
+    if (useA2Part4OfficialDemo) {
+      return {
+        title: A2_OFFICIAL_PART4_DEMO.passageTitle,
+        paragraphs: A2_OFFICIAL_PART4_DEMO.passageParagraphs,
+      };
+    }
+    return parseA2Part3Passage(a2Part4PassageText);
+  }, [levelSlug, partNumber, useA2Part4OfficialDemo, a2Part4PassageText]);
+
+  const a2Part4Directions = useMemo(() => {
+    if (levelSlug !== 'a2' || partNumber !== 4) return '';
+    if (useA2Part4OfficialDemo) return A2_OFFICIAL_PART4_DEMO.directions;
+    return (
+      parseA2Part3Directions(selectedQuestion?.enunciado || '') ||
+      selectedPart?.descripcion ||
+      ''
+    );
+  }, [
+    levelSlug,
+    partNumber,
+    useA2Part4OfficialDemo,
+    selectedQuestion?.enunciado,
+    selectedPart?.descripcion,
+  ]);
+
+  const showA2Part4WithoutSupabaseRow =
+    levelSlug === 'a2' &&
+    partNumber === 4 &&
+    Boolean(selectedPart) &&
+    !selectedQuestion &&
+    a2Part4Groups.length > 0;
+
+  const a2Part8McqGroups = useMemo(() => {
+    if (levelSlug !== 'a2' || partNumber !== 8) return [];
+    return effectiveMcqGroups.filter(
+      (g) => g.questionNumber >= 1 && g.questionNumber <= 5 && g.options?.length >= 2,
+    );
+  }, [levelSlug, partNumber, effectiveMcqGroups]);
+
+  const useA2Part8OfficialDemo = useMemo(() => {
+    if (levelSlug !== 'a2' || partNumber !== 8) return false;
+    if (!selectedQuestion) return true;
+    return isA2Part8DemoEmpty({
+      enunciado: selectedQuestion?.enunciado,
+      respuestasCount: selectedQuestion?.respuestas?.length || 0,
+      part8GroupCount: a2Part8McqGroups.length,
+    });
+  }, [
+    levelSlug,
+    partNumber,
+    selectedQuestion,
+    selectedQuestion?.enunciado,
+    selectedQuestion?.respuestas?.length,
+    a2Part8McqGroups.length,
+  ]);
+
+  const a2Part8Groups = useMemo(() => {
+    if (levelSlug !== 'a2' || partNumber !== 8) return a2Part8McqGroups;
+    if (useA2Part8OfficialDemo) {
+      return buildA2Part8GroupsFromDemoItems(A2_OFFICIAL_PART8_DEMO.items);
+    }
+    return a2Part8McqGroups;
+  }, [levelSlug, partNumber, a2Part8McqGroups, useA2Part8OfficialDemo]);
+
+  const a2Part8Directions = useMemo(() => {
+    if (levelSlug !== 'a2' || partNumber !== 8) return '';
+    if (useA2Part8OfficialDemo) return A2_OFFICIAL_PART8_DEMO.directions;
+    return A2_OFFICIAL_PART8_DEMO.directions || selectedPart?.descripcion || '';
+  }, [levelSlug, partNumber, useA2Part8OfficialDemo, selectedPart?.descripcion]);
+
+  const showA2Part8WithoutSupabaseRow =
+    levelSlug === 'a2' &&
+    partNumber === 8 &&
+    Boolean(selectedPart) &&
+    !selectedQuestion &&
+    a2Part8Groups.length > 0;
+
+  const showA2Part9WithoutSupabaseRow =
+    levelSlug === 'a2' &&
+    partNumber === 9 &&
+    Boolean(selectedPart) &&
+    !selectedQuestion;
+
+  const a2Part10McqGroups = useMemo(() => {
+    if (levelSlug !== 'a2' || partNumber !== 10) return [];
+    return effectiveMcqGroups.filter(
+      (g) => g.questionNumber >= 11 && g.questionNumber <= 15 && g.options?.length >= 2,
+    );
+  }, [levelSlug, partNumber, effectiveMcqGroups]);
+
+  const useA2Part10OfficialDemo = useMemo(() => {
+    if (levelSlug !== 'a2' || partNumber !== 10) return false;
+    if (!selectedQuestion) return true;
+    return isA2Part10DemoEmpty({
+      enunciado: selectedQuestion?.enunciado,
+      respuestasCount: selectedQuestion?.respuestas?.length || 0,
+      part10GroupCount: a2Part10McqGroups.length,
+    });
+  }, [
+    levelSlug,
+    partNumber,
+    selectedQuestion,
+    selectedQuestion?.enunciado,
+    selectedQuestion?.respuestas?.length,
+    a2Part10McqGroups.length,
+  ]);
+
+  const a2Part10Groups = useMemo(() => {
+    if (levelSlug !== 'a2' || partNumber !== 10) return a2Part10McqGroups;
+    if (useA2Part10OfficialDemo) {
+      return buildA2Part10GroupsFromDemoItems(A2_OFFICIAL_PART10_DEMO.items);
+    }
+    return a2Part10McqGroups;
+  }, [levelSlug, partNumber, a2Part10McqGroups, useA2Part10OfficialDemo]);
+
+  const a2Part10Directions = useMemo(() => {
+    if (levelSlug !== 'a2' || partNumber !== 10) return '';
+    if (useA2Part10OfficialDemo) return A2_OFFICIAL_PART10_DEMO.directions;
+    return A2_OFFICIAL_PART10_DEMO.directions || selectedPart?.descripcion || '';
+  }, [levelSlug, partNumber, useA2Part10OfficialDemo, selectedPart?.descripcion]);
+
+  const showA2Part10WithoutSupabaseRow =
+    levelSlug === 'a2' &&
+    partNumber === 10 &&
+    Boolean(selectedPart) &&
+    !selectedQuestion &&
+    a2Part10Groups.length > 0;
+
+  const a2Part11McqGroups = useMemo(() => {
+    if (levelSlug !== 'a2' || partNumber !== 11) return [];
+    return effectiveMcqGroups.filter(
+      (g) => g.questionNumber >= 16 && g.questionNumber <= 20 && g.options?.length >= 2,
+    );
+  }, [levelSlug, partNumber, effectiveMcqGroups]);
+
+  const useA2Part11OfficialDemo = useMemo(() => {
+    if (levelSlug !== 'a2' || partNumber !== 11) return false;
+    if (!selectedQuestion) return true;
+    return isA2Part11DemoEmpty({
+      enunciado: selectedQuestion?.enunciado,
+      respuestasCount: selectedQuestion?.respuestas?.length || 0,
+      part11GroupCount: a2Part11McqGroups.length,
+    });
+  }, [
+    levelSlug,
+    partNumber,
+    selectedQuestion,
+    selectedQuestion?.enunciado,
+    selectedQuestion?.respuestas?.length,
+    a2Part11McqGroups.length,
+  ]);
+
+  const a2Part11Groups = useMemo(() => {
+    if (levelSlug !== 'a2' || partNumber !== 11) return a2Part11McqGroups;
+    if (useA2Part11OfficialDemo) {
+      return buildA2Part11GroupsFromDemoItems(A2_OFFICIAL_PART11_DEMO.items);
+    }
+    return a2Part11McqGroups;
+  }, [levelSlug, partNumber, a2Part11McqGroups, useA2Part11OfficialDemo]);
+
+  const a2Part11Directions = useMemo(() => {
+    if (levelSlug !== 'a2' || partNumber !== 11) return '';
+    if (useA2Part11OfficialDemo) return A2_OFFICIAL_PART11_DEMO.directions;
+    return A2_OFFICIAL_PART11_DEMO.directions || selectedPart?.descripcion || '';
+  }, [levelSlug, partNumber, useA2Part11OfficialDemo, selectedPart?.descripcion]);
+
+  const showA2Part11WithoutSupabaseRow =
+    levelSlug === 'a2' &&
+    partNumber === 11 &&
+    Boolean(selectedPart) &&
+    !selectedQuestion &&
+    a2Part11Groups.length > 0;
+
+  const showA2Part12WithoutSupabaseRow =
+    levelSlug === 'a2' &&
+    partNumber === 12 &&
+    Boolean(selectedPart) &&
+    !selectedQuestion;
+
+  const showA2Part13WithoutSupabaseRow =
+    levelSlug === 'a2' &&
+    partNumber === 13 &&
+    Boolean(selectedPart) &&
+    !selectedQuestion;
+
+  const showA2Part14WithoutSupabaseRow =
+    levelSlug === 'a2' &&
+    partNumber === 14 &&
+    Boolean(selectedPart) &&
+    !selectedQuestion;
+
+  const showA2Part5WithoutSupabaseRow =
+    levelSlug === 'a2' &&
+    partNumber === 5 &&
+    Boolean(selectedPart) &&
+    !selectedQuestion;
+
+  const showA2WritingDemoWithoutRow =
+    levelSlug === 'a2' &&
+    isLongFormWritingPart &&
+    Boolean(selectedPart) &&
+    !selectedQuestion &&
+    Boolean(a2WritingDemo);
+
+  const a2EmptyPartHint = useMemo(() => {
+    if (levelSlug !== 'a2') return '';
+    if (partNumber === 1 && a2Part1Groups.length > 0) return '';
+    if (partNumber === 2 && a2Part2Groups.length > 0) return '';
+    if (partNumber === 3 && a2Part3Groups.length > 0) return '';
+    if (partNumber === 4 && a2Part4Groups.length > 0) return '';
+    if (partNumber === 8 && a2Part8Groups.length > 0) return '';
+    if (partNumber === 9 && showA2Part9WithoutSupabaseRow) return '';
+    if (partNumber === 10 && a2Part10Groups.length > 0) return '';
+    if (partNumber === 11 && a2Part11Groups.length > 0) return '';
+    if (partNumber === 12 && showA2Part12WithoutSupabaseRow) return '';
+    if (partNumber === 13 && showA2Part13WithoutSupabaseRow) return '';
+    if (partNumber === 14 && showA2Part14WithoutSupabaseRow) return '';
+    if (effectiveMcqGroups.length > 0) return '';
+    return describeA2PartDataGap({
+      partNumber,
+      enunciado: selectedQuestion?.enunciado,
+      respuestasCount: selectedQuestion?.respuestas?.length || 0,
+    });
+  }, [
+    levelSlug,
+    effectiveMcqGroups.length,
+    a2Part1Groups.length,
+    a2Part2Groups.length,
+    a2Part3Groups.length,
+    a2Part4Groups.length,
+    a2Part8Groups.length,
+    showA2Part9WithoutSupabaseRow,
+    a2Part10Groups.length,
+    a2Part11Groups.length,
+    showA2Part12WithoutSupabaseRow,
+    showA2Part13WithoutSupabaseRow,
+    showA2Part14WithoutSupabaseRow,
+    partNumber,
+    selectedQuestion?.enunciado,
+    selectedQuestion?.respuestas?.length,
   ]);
 
   const handleA2McqOptionSelect = useCallback(
@@ -1365,6 +1892,11 @@ function B2ExamPaperPracticePageInner({
         onSelectPart={handleSelectPart}
         getPartSavedScoreLabel={(part) => scoring.getPartSavedScoreLabel(part, examSlot)}
         lang={lang}
+        workPanelClassName={
+          levelSlug === 'a2' && partNumber >= 1 && partNumber <= 7
+            ? 'levels-b2-practice__work-panel--a2-rw'
+            : ''
+        }
       >
       {examModeActive && examSection ? (
         <ExamModeSectionBanner
@@ -1385,7 +1917,265 @@ function B2ExamPaperPracticePageInner({
 
         {!loading && !error && (
           <>
-            {selectedPart && !selectedQuestion && (
+            {showA2WritingDemoWithoutRow ? (
+              <div className="levels-exam-split-page levels-exam-a2-writing">
+                <div className="a2-writing-frame">
+                  <p className="a2-writing-frame__demo-note" role="status">
+                    Official Cambridge sample task. An admin can save this to Supabase by
+                    regenerating Exam {examSlot} with DRALO AI.
+                  </p>
+                  <A2WritingTaskCard
+                    partTitle={a2WritingDemo.partTitle}
+                    questionLabel={a2WritingDemo.questionLabel}
+                    scenario={a2WritingDemo.scenario}
+                    bulletsIntro={a2WritingDemo.bulletsIntro}
+                    bullets={a2WritingDemo.bullets}
+                    pictures={a2WritingDemo?.pictures || []}
+                    wordCountNote={a2WritingDemo.wordCountNote}
+                    answerSheetNote={a2WritingDemo.answerSheetNote}
+                  />
+                  <B2WritingLongFormAiPanel
+                    storageKey={longWritingStorageKey}
+                    wordMin={effectiveWritingWordMin}
+                    wordMax={effectiveWritingWordMax}
+                    heading={`Your answer — ${getPartTitle(selectedPart)}`}
+                    partLabel={selectedPart.nombre}
+                    partDescription={selectedPart.descripcion || ''}
+                    taskInstructions={a2WritingDemoInstructions || ''}
+                    taskInputText=""
+                    onScoresReady={handleWritingScoresReady}
+                    lang={lang}
+                  />
+                </div>
+              </div>
+            ) : null}
+
+            {showA2Part5WithoutSupabaseRow ? (
+              <div className="levels-exam-split-page levels-exam-a2-part5">
+                <A2Part5ExamShell
+                  showDemoNote
+                  examSlot={examSlot}
+                  directions={A2_OFFICIAL_PART5_DEMO.directions}
+                  email={A2_OFFICIAL_PART5_DEMO.email}
+                  example={A2_OFFICIAL_PART5_DEMO.example}
+                  bodyParagraphs={A2_OFFICIAL_PART5_DEMO.bodyParagraphs}
+                  answers={A2_OFFICIAL_PART5_DEMO.answers}
+                  hideFeedback={hideFeedback}
+                />
+              </div>
+            ) : null}
+
+            {showA2Part4WithoutSupabaseRow ? (
+              <div className="levels-exam-split-page levels-exam-a2-part4">
+                <A2Part4ExamShell
+                  showDemoNote
+                  examSlot={examSlot}
+                  directions={a2Part4Directions}
+                  passageTitle={a2Part4PassageMeta.title}
+                  passageParagraphs={a2Part4PassageMeta.paragraphs}
+                  passageText={a2Part4PassageText}
+                  groups={a2Part4Groups}
+                  getQuestionKey={getQuestionKey}
+                  selectedPart={selectedPart}
+                  selectedOptions={selectedOptions}
+                  checkedQuestions={checkedQuestions}
+                  hideFeedback={hideFeedback}
+                  onOptionSelect={handleA2McqOptionSelect}
+                  aiHintsByKey={aiHintsByKey}
+                />
+              </div>
+            ) : null}
+
+            {showA2Part8WithoutSupabaseRow ? (
+              <div className="levels-exam-split-page levels-exam-a2-part8">
+                <A2Part8ExamShell
+                  showDemoNote={useA2Part8OfficialDemo}
+                  examSlot={examSlot}
+                  directions={a2Part8Directions}
+                  groups={a2Part8Groups}
+                  getQuestionKey={getQuestionKey}
+                  selectedPart={selectedPart}
+                  selectedOptions={selectedOptions}
+                  checkedQuestions={checkedQuestions}
+                  hideFeedback={hideFeedback}
+                  onOptionSelect={handleA2McqOptionSelect}
+                  aiHintsByKey={aiHintsByKey}
+                />
+              </div>
+            ) : null}
+
+            {showA2Part9WithoutSupabaseRow ? (
+              <div className="levels-exam-split-page levels-exam-a2-part9">
+                <A2Part9ExamShell
+                  showDemoNote
+                  examSlot={examSlot}
+                  directions={A2_OFFICIAL_PART9_DEMO.directions}
+                  intro={A2_OFFICIAL_PART9_DEMO.intro}
+                  noteTitle={A2_OFFICIAL_PART9_DEMO.noteTitle}
+                  rows={A2_OFFICIAL_PART9_DEMO.rows}
+                  answers={A2_OFFICIAL_PART9_DEMO.answers}
+                  hideFeedback={hideFeedback}
+                />
+              </div>
+            ) : null}
+
+            {showA2Part10WithoutSupabaseRow ? (
+              <div className="levels-exam-split-page levels-exam-a2-part10">
+                <A2Part10ExamShell
+                  showDemoNote={useA2Part10OfficialDemo}
+                  examSlot={examSlot}
+                  directions={a2Part10Directions}
+                  intro={useA2Part10OfficialDemo ? A2_OFFICIAL_PART10_DEMO.intro : ''}
+                  groups={a2Part10Groups}
+                  getQuestionKey={getQuestionKey}
+                  selectedPart={selectedPart}
+                  selectedOptions={selectedOptions}
+                  checkedQuestions={checkedQuestions}
+                  hideFeedback={hideFeedback}
+                  onOptionSelect={handleA2McqOptionSelect}
+                  aiHintsByKey={aiHintsByKey}
+                />
+              </div>
+            ) : null}
+
+            {showA2Part11WithoutSupabaseRow ? (
+              <div className="levels-exam-split-page levels-exam-a2-part11">
+                <A2Part11ExamShell
+                  showDemoNote={useA2Part11OfficialDemo}
+                  examSlot={examSlot}
+                  directions={a2Part11Directions}
+                  groups={a2Part11Groups}
+                  getQuestionKey={getQuestionKey}
+                  selectedPart={selectedPart}
+                  selectedOptions={selectedOptions}
+                  checkedQuestions={checkedQuestions}
+                  hideFeedback={hideFeedback}
+                  onOptionSelect={handleA2McqOptionSelect}
+                  aiHintsByKey={aiHintsByKey}
+                />
+              </div>
+            ) : null}
+
+            {showA2Part12WithoutSupabaseRow ? (
+              <div className="levels-exam-split-page levels-exam-a2-part12">
+                <A2Part12ExamShell
+                  showDemoNote
+                  examSlot={examSlot}
+                  directions={A2_OFFICIAL_PART12_DEMO.directions}
+                  introLines={A2_OFFICIAL_PART12_DEMO.introLines}
+                  example={A2_OFFICIAL_PART12_DEMO.example}
+                  people={A2_OFFICIAL_PART12_DEMO.people}
+                  optionPool={A2_OFFICIAL_PART12_DEMO.optionPool}
+                  answers={A2_OFFICIAL_PART12_DEMO.answers}
+                  hideFeedback={hideFeedback}
+                />
+              </div>
+            ) : null}
+
+            {showA2Part13WithoutSupabaseRow ? (
+              <div className="levels-exam-split-page levels-exam-a2-part13">
+                <A2Part13ExamShell
+                  showDemoNote
+                  examSlot={examSlot}
+                  directions={A2_OFFICIAL_PART13_DEMO.directions}
+                  interviewIntro={A2_OFFICIAL_PART13_DEMO.interviewIntro}
+                  interviewPrompts={A2_OFFICIAL_PART13_DEMO.interviewPrompts}
+                  photoTitle={A2_OFFICIAL_PART13_DEMO.photoTitle}
+                  photos={A2_OFFICIAL_PART13_DEMO.photos}
+                />
+              </div>
+            ) : null}
+
+            {showA2Part14WithoutSupabaseRow ? (
+              <div className="levels-exam-split-page levels-exam-a2-part14">
+                <A2Part14ExamShell
+                  showDemoNote
+                  examSlot={examSlot}
+                  directions={A2_OFFICIAL_PART14_DEMO.directions}
+                  taskInstruction={A2_OFFICIAL_PART14_DEMO.taskInstruction}
+                  photoTitle={A2_OFFICIAL_PART14_DEMO.photoTitle}
+                  photos={A2_OFFICIAL_PART14_DEMO.photos}
+                  followUpIntro={A2_OFFICIAL_PART14_DEMO.followUpIntro}
+                  followUpPrompts={A2_OFFICIAL_PART14_DEMO.followUpPrompts}
+                />
+              </div>
+            ) : null}
+
+            {showA2Part3WithoutSupabaseRow ? (
+              <div className="levels-exam-split-page levels-exam-a2-part3">
+                <A2Part3ExamShell
+                  showDemoNote
+                  examSlot={examSlot}
+                  directions={a2Part3Directions}
+                  passageTitle={a2Part3PassageMeta.title}
+                  passageParagraphs={a2Part3PassageMeta.paragraphs}
+                  passageText={a2Part3PassageText}
+                  groups={a2Part3Groups}
+                  getQuestionKey={getQuestionKey}
+                  selectedPart={selectedPart}
+                  selectedOptions={selectedOptions}
+                  checkedQuestions={checkedQuestions}
+                  hideFeedback={hideFeedback}
+                  onOptionSelect={handleA2McqOptionSelect}
+                  aiHintsByKey={aiHintsByKey}
+                />
+              </div>
+            ) : null}
+
+            {showA2Part2WithoutSupabaseRow ? (
+              <div className="levels-exam-split-page levels-exam-a2-part2">
+                <A2Part2ExamShell
+                  showDemoNote
+                  examSlot={examSlot}
+                  directions={a2Part2Directions}
+                  passageText={a2Part2PassageText}
+                  profileNames={a2Part2ProfileNames}
+                  groups={a2Part2Groups}
+                  getQuestionKey={getQuestionKey}
+                  selectedPart={selectedPart}
+                  selectedOptions={selectedOptions}
+                  checkedQuestions={checkedQuestions}
+                  hideFeedback={hideFeedback}
+                  onOptionSelect={handleA2McqOptionSelect}
+                  aiHintsByKey={aiHintsByKey}
+                />
+              </div>
+            ) : null}
+
+            {showA2Part1WithoutSupabaseRow ? (
+              <div className="levels-exam-split-page levels-exam-a2-part1">
+                <A2Part1ExamShell
+                  showDemoNote
+                  examSlot={examSlot}
+                  directions={a2Part1Pack?.directions || selectedPart?.descripcion || ''}
+                  example={a2Part1Pack?.example}
+                  groups={a2Part1Groups}
+                  getQuestionKey={getQuestionKey}
+                  selectedPart={selectedPart}
+                  selectedOptions={selectedOptions}
+                  checkedQuestions={checkedQuestions}
+                  hideFeedback={hideFeedback}
+                  onOptionSelect={handleA2McqOptionSelect}
+                  aiHintsByKey={aiHintsByKey}
+                />
+              </div>
+            ) : null}
+
+            {selectedPart &&
+              !selectedQuestion &&
+              !showA2Part1WithoutSupabaseRow &&
+              !showA2Part2WithoutSupabaseRow &&
+              !showA2Part3WithoutSupabaseRow &&
+              !showA2Part4WithoutSupabaseRow &&
+              !showA2Part5WithoutSupabaseRow &&
+              !showA2Part8WithoutSupabaseRow &&
+              !showA2Part9WithoutSupabaseRow &&
+              !showA2Part10WithoutSupabaseRow &&
+              !showA2Part11WithoutSupabaseRow &&
+              !showA2Part12WithoutSupabaseRow &&
+              !showA2Part13WithoutSupabaseRow &&
+              !showA2Part14WithoutSupabaseRow &&
+              !showA2WritingDemoWithoutRow && (
               <div className="levels-exam-split-page">
                 <div className="levels-exam-split-card">
                   <h2>{getPartTitle(selectedPart)}</h2>
@@ -2000,11 +2790,7 @@ function B2ExamPaperPracticePageInner({
               </div>
               ) : (
               <B2ExamPracticeContent
-                title={
-                  useA2OfficialReadingUi && (partNumber === 1 || partNumber === 2)
-                    ? ''
-                    : getPartTitle(selectedPart)
-                }
+                title={a2EmbeddedReadingPart || a2WritingDemo ? '' : getPartTitle(selectedPart)}
                 directionsText={
                   a2Part1Pack?.directions || selectedPartContent.enunciado
                 }
@@ -2013,27 +2799,20 @@ function B2ExamPaperPracticePageInner({
                 questionsLabel="Questions"
                 passageText={passageTextForPanel}
                 passage={undefined}
-                split={
-                  useA2OfficialReadingUi && (partNumber === 1 || partNumber === 2)
-                    ? false
-                    : 'auto'
-                }
-                showDirections={
-                  !(useA2OfficialReadingUi && (partNumber === 1 || partNumber === 2))
-                }
-                showPassagePanel={
-                  !(useA2OfficialReadingUi && (partNumber === 1 || partNumber === 2))
-                }
-                showQuestionsHeading={
-                  !showLongWritingWithAi &&
-                  !(useA2OfficialReadingUi && (partNumber === 1 || partNumber === 2))
-                }
+                split={a2EmbeddedReadingPart ? false : 'auto'}
+                showDirections={!a2EmbeddedReadingPart}
+                showPassagePanel={!a2EmbeddedReadingPart}
+                showQuestionsHeading={!showLongWritingWithAi && !a2EmbeddedReadingPart}
                 contentClassName={
                   useA2OfficialReadingUi && partNumber === 1
                     ? 'levels-exam-a2-part1'
                     : useA2OfficialReadingUi && partNumber === 2
                       ? 'levels-exam-a2-part2'
-                      : ''
+                      : useA2OfficialReadingUi && partNumber === 3
+                        ? 'levels-exam-a2-part3'
+                        : useA2OfficialReadingUi && partNumber === 4
+                          ? 'levels-exam-a2-part4'
+                          : ''
                 }
                 beforeQuestions={
                   <>
@@ -2148,18 +2927,34 @@ function B2ExamPaperPracticePageInner({
                 questions={
                   <>
                   {showLongWritingWithAi ? (
-                    <B2WritingLongFormAiPanel
-                      storageKey={longWritingStorageKey}
-                      wordMin={writingWordMin}
-                      wordMax={writingWordMax}
-                      heading={`Your answer — ${getPartTitle(selectedPart)}`}
-                      partLabel={selectedPart.nombre}
-                      partDescription={selectedPart.descripcion || ''}
-                      taskInstructions={selectedPartContent.enunciado || ''}
-                      taskInputText={selectedPartContent.texto || ''}
-                      onScoresReady={handleWritingScoresReady}
-                      lang={lang}
-                    />
+                    <>
+                      {a2WritingDemo ? (
+                        <A2WritingTaskCard
+                          partTitle={a2WritingDemo.partTitle}
+                          questionLabel={a2WritingDemo.questionLabel}
+                          scenario={a2WritingDemo.scenario}
+                          bulletsIntro={a2WritingDemo.bulletsIntro}
+                          bullets={a2WritingDemo.bullets}
+                          pictures={a2WritingDemo?.pictures || []}
+                          wordCountNote={a2WritingDemo.wordCountNote}
+                          answerSheetNote={a2WritingDemo.answerSheetNote}
+                        />
+                      ) : null}
+                      <B2WritingLongFormAiPanel
+                        storageKey={longWritingStorageKey}
+                        wordMin={effectiveWritingWordMin}
+                        wordMax={effectiveWritingWordMax}
+                        heading={`Your answer — ${getPartTitle(selectedPart)}`}
+                        partLabel={selectedPart.nombre}
+                        partDescription={selectedPart.descripcion || ''}
+                        taskInstructions={
+                          selectedPartContent.enunciado || a2WritingDemoInstructions || ''
+                        }
+                        taskInputText={selectedPartContent.texto || ''}
+                        onScoresReady={handleWritingScoresReady}
+                        lang={lang}
+                      />
+                    </>
                   ) : null}
 
                   {!showLongWritingWithAi && useOpenInputUi && openQuestionNumbers.length > 0
@@ -2297,8 +3092,10 @@ function B2ExamPaperPracticePageInner({
                           )}
                         </p>
                       ) : null}
-                      {useA2OfficialReadingUi && partNumber === 1 ? (
-                        <A2Part1ExamView
+                      {useA2OfficialReadingUi && partNumber === 1 && a2Part1Groups.length > 0 ? (
+                        <A2Part1ExamShell
+                          showDemoNote={useA2Part1OfficialDemo}
+                          examSlot={examSlot}
                           directions={
                             a2Part1Pack?.directions ||
                             selectedPart?.descripcion ||
@@ -2315,16 +3112,14 @@ function B2ExamPaperPracticePageInner({
                           aiHintsByKey={aiHintsByKey}
                         />
                       ) : null}
-                      {useA2OfficialReadingUi && partNumber === 2 ? (
-                        <A2Part2ExamView
-                          directions={
-                            parseA2Part2Directions(selectedQuestion?.enunciado || '') ||
-                            selectedPart?.descripcion ||
-                            ''
-                          }
-                          passageText={passageTextForPanel}
+                      {useA2OfficialReadingUi && partNumber === 2 && a2Part2Groups.length > 0 ? (
+                        <A2Part2ExamShell
+                          showDemoNote={useA2Part2OfficialDemo}
+                          examSlot={examSlot}
+                          directions={a2Part2Directions}
+                          passageText={a2Part2PassageText}
                           profileNames={a2Part2ProfileNames}
-                          groups={effectiveMcqGroups}
+                          groups={a2Part2Groups}
                           getQuestionKey={getQuestionKey}
                           selectedPart={selectedPart}
                           selectedOptions={selectedOptions}
@@ -2334,23 +3129,57 @@ function B2ExamPaperPracticePageInner({
                           aiHintsByKey={aiHintsByKey}
                         />
                       ) : null}
-                      {useA2OfficialReadingUi && partNumber === 3 ? (
-                        <A2Part3QuestionList
-                          groups={effectiveMcqGroups}
-                          renderQuestionBlock={(group, groupIndex) =>
-                            renderA2McqBlock(group, groupIndex, 'stacked-abc')
-                          }
+                      {useA2OfficialReadingUi && partNumber === 3 && a2Part3Groups.length > 0 ? (
+                        <A2Part3ExamShell
+                          showDemoNote={useA2Part3OfficialDemo}
+                          examSlot={examSlot}
+                          directions={a2Part3Directions}
+                          passageTitle={a2Part3PassageMeta.title}
+                          passageParagraphs={a2Part3PassageMeta.paragraphs}
+                          passageText={a2Part3PassageText}
+                          groups={a2Part3Groups}
+                          getQuestionKey={getQuestionKey}
+                          selectedPart={selectedPart}
+                          selectedOptions={selectedOptions}
+                          checkedQuestions={checkedQuestions}
+                          hideFeedback={hideFeedback}
+                          onOptionSelect={handleA2McqOptionSelect}
+                          aiHintsByKey={aiHintsByKey}
                         />
                       ) : null}
-                      {useA2OfficialReadingUi && partNumber === 4 ? (
-                        <A2Part4ClozeOptions
-                          groups={effectiveMcqGroups}
-                          renderQuestionBlock={(group, groupIndex) =>
-                            renderA2McqBlock(group, groupIndex, 'cloze-row')
-                          }
+                      {useA2OfficialReadingUi && partNumber === 4 && a2Part4Groups.length > 0 ? (
+                        <A2Part4ExamShell
+                          showDemoNote={useA2Part4OfficialDemo}
+                          examSlot={examSlot}
+                          directions={a2Part4Directions}
+                          passageTitle={a2Part4PassageMeta.title}
+                          passageParagraphs={a2Part4PassageMeta.paragraphs}
+                          passageText={a2Part4PassageText}
+                          groups={a2Part4Groups}
+                          getQuestionKey={getQuestionKey}
+                          selectedPart={selectedPart}
+                          selectedOptions={selectedOptions}
+                          checkedQuestions={checkedQuestions}
+                          hideFeedback={hideFeedback}
+                          onOptionSelect={handleA2McqOptionSelect}
+                          aiHintsByKey={aiHintsByKey}
                         />
                       ) : null}
-                      {useA2ListeningPictureUi ? (
+                      {useA2ListeningPictureUi && a2Part8Groups.length > 0 ? (
+                        <A2Part8ExamShell
+                          showDemoNote={useA2Part8OfficialDemo}
+                          examSlot={examSlot}
+                          directions={a2Part8Directions}
+                          groups={a2Part8Groups}
+                          getQuestionKey={getQuestionKey}
+                          selectedPart={selectedPart}
+                          selectedOptions={selectedOptions}
+                          checkedQuestions={checkedQuestions}
+                          hideFeedback={hideFeedback}
+                          onOptionSelect={handleA2McqOptionSelect}
+                          aiHintsByKey={aiHintsByKey}
+                        />
+                      ) : useA2ListeningPictureUi ? (
                         <A2ListeningPictureMcq
                           groups={effectiveMcqGroups}
                           renderQuestionBlock={(group, groupIndex) =>

@@ -1,6 +1,10 @@
 import { NextResponse } from 'next/server';
 import { buildGrammarCoachSystemPrompt } from '@/lib/grammarCoachPrompt';
-import { realLifeChatCompletion, isDraloOpenAIConfigured } from '@/lib/draloAiEngine';
+import {
+  realLifeChatCompletionStream,
+  isDraloOpenAIConfigured,
+  getDraloFastModel,
+} from '@/lib/draloAiEngine';
 
 const WINDOW_MS = 60 * 60 * 1000;
 const MAX_PER_IP = 45;
@@ -77,17 +81,39 @@ export async function POST(req) {
   const cefr = validLevels.includes(level) ? level : 'B2';
 
   try {
-    const { text: reply } = await realLifeChatCompletion({
+    const stream = await realLifeChatCompletionStream({
       system: buildGrammarCoachSystemPrompt(cefr),
       messages: history,
       temperature: 0.45,
       max_tokens: 900,
+      model: getDraloFastModel(),
     });
-    if (!reply) {
-      return NextResponse.json({ error: 'No response from the coach.' }, { status: 502 });
-    }
 
-    return NextResponse.json({ ok: true, reply });
+    const encoder = new TextEncoder();
+    const body = new ReadableStream({
+      async start(controller) {
+        try {
+          for await (const chunk of stream) {
+            const delta = chunk?.choices?.[0]?.delta?.content || '';
+            if (delta) controller.enqueue(encoder.encode(delta));
+          }
+        } catch (err) {
+          console.error('[dralo-ai/grammar-coach stream]', err);
+          controller.error(err);
+          return;
+        }
+        controller.close();
+      },
+    });
+
+    return new Response(body, {
+      status: 200,
+      headers: {
+        'Content-Type': 'text/plain; charset=utf-8',
+        'Cache-Control': 'no-store',
+        'X-Accel-Buffering': 'no',
+      },
+    });
   } catch (err) {
     console.error('[dralo-ai/grammar-coach]', err);
     return NextResponse.json(

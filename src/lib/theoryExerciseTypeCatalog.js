@@ -1,6 +1,6 @@
 /**
  * Exercise types aligned with Supabase `levels_teoria_tipos_preguntas` (Tipo 1–16).
- * Used only in the Theory tab “Practice Exercises” section.
+ * Used when local theory exercises are enabled (currently disabled — see buildTheoryExercises.js).
  */
 
 /** @typedef {'multipleChoice'|'trueFalse'|'fillBlanks'|'matching'|'findError'|'sentenceOrder'|'selectAll'} TheoryExercisePool */

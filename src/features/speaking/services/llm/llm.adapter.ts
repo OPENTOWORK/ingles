@@ -1,5 +1,5 @@
 import type OpenAI from 'openai';
-import { getDraloModel, getDraloOpenAI, mergeDraloSystem } from '@/lib/draloAiEngine';
+import { getDraloFastModel, getDraloOpenAI, mergeDraloSystem } from '@/lib/draloAiEngine';
 import type { CefrLevel, SpeakingMode } from '@prisma/client';
 import type { ExamPartDefinition } from '../../domain/types';
 import type { MicroFeedback } from '../../domain/types';
@@ -98,7 +98,7 @@ export class OpenAILLMAdapter extends MockLLMAdapter {
       { role: 'user', content: p.transcript },
     ];
     const res = await this.client.chat.completions.create({
-      model: getDraloModel(),
+      model: getDraloFastModel(),
       messages,
       temperature: 0.8,
       max_tokens: 300,
@@ -125,7 +125,7 @@ export class OpenAILLMAdapter extends MockLLMAdapter {
       messages.push({ role: 'user', content: p.transcript });
     }
     const res = await this.client.chat.completions.create({
-      model: getDraloModel(),
+      model: getDraloFastModel(),
       messages,
       temperature: 0.5,
       max_tokens: 220,
@@ -135,7 +135,7 @@ export class OpenAILLMAdapter extends MockLLMAdapter {
 
   override async microFeedback(p: { cefr: CefrLevel; userText: string }): Promise<MicroFeedback> {
     const res = await this.client.chat.completions.create({
-      model: getDraloModel(),
+      model: getDraloFastModel(),
       messages: [
         {
           role: 'system',

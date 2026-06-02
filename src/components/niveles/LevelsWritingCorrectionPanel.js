@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { callDraloAi } from '@/lib/ai/draloAiClient';
 import { formatWritingFeedbackHtml } from '@/lib/formatWritingFeedbackHtml';
+import { trackWritingErrors } from '@/lib/errorTracker';
 
 const LEVELS = ['A2', 'B1', 'B2', 'C1', 'C2'];
 
@@ -79,6 +80,14 @@ export default function LevelsWritingCorrectionPanel({
         userInput,
       });
       setResult(text);
+
+      void trackWritingErrors({
+        level,
+        source: 'Writing',
+        skill: 'Writing',
+        userText: trimmed,
+        correctedText: text,
+      }).catch(() => {});
     } catch (err) {
       setError(err?.message || 'Correction request failed. Please try again.');
     } finally {

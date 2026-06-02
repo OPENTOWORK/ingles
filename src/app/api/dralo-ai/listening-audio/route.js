@@ -60,16 +60,18 @@ export async function POST(req) {
     }
 
     /** @type {Buffer[]} */
-    const chunks = [];
+    let chunks = [];
 
     if (useDialogue && turns.length >= 2) {
-      for (let i = 0; i < turns.length; i += 1) {
-        const turn = turns[i];
-        const role = voiceRoleForLabel(turn.label, i);
-        const voice = VOICES[role] || VOICES.narrator;
-        const buf = await synthesize(turn.text, voice);
-        if (buf?.length) chunks.push(buf);
-      }
+      // Sintetiza todos los turnos en paralelo y conserva el orden original.
+      const bufs = await Promise.all(
+        turns.map((turn, i) => {
+          const role = voiceRoleForLabel(turn.label, i);
+          const voice = VOICES[role] || VOICES.narrator;
+          return synthesize(turn.text, voice);
+        }),
+      );
+      chunks = bufs.filter((buf) => buf?.length);
     } else {
       const fullText = turns.map((t) => t.text).join(' ') || script;
       const buf = await synthesize(fullText, VOICES.narrator);

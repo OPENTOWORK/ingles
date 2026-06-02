@@ -1,0 +1,12 @@
+.emptyDralo {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 260px;
+  padding: 2rem 1rem 3rem;
+}
+
+.emptyDraloMascot {
+  line-height: 0;
+  filter: drop-shadow(0 12px 28px rgba(99, 102, 241, 0.12));
+}

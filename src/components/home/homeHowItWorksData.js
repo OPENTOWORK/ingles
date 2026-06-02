@@ -97,7 +97,7 @@ export const GUIDED_TOUR_STEPS_STUDENT = [
     target: '[data-tour="dralo-ai-hub"]',
     route: '/dralo-ai',
     scrollTarget: true,
-    href: '/dralo-ai/use-of-english',
+    href: '/dralo-ai/writing',
   },
 ];
 

@@ -19,6 +19,9 @@ import {
   PREMIUM_EXAM_LEVELS,
   SUBSCRIPTION_STATUS_LABELS,
 } from '@/data/financialPlanConfig';
+import SubscriptionPlansSection from '@/components/subscriptions/SubscriptionPlansSection';
+import AdminPlanEditModal from '@/components/admin/AdminPlanEditModal';
+import AdminPlanRowMenu from '@/components/admin/AdminPlanRowMenu';
 import PanelPageHeader from '@/components/PanelPageHeader';
 import RouteLoadingMascot from '@/components/RouteLoadingMascot';
 import styles from './AdminPlanFinancieroPanel.module.css';
@@ -67,6 +70,9 @@ export default function AdminPlanFinancieroPanel() {
   const [data, setData] = useState(null);
   const [error, setError] = useState('');
   const [actionLoading, setActionLoading] = useState(false);
+  /** null = cerrado; 'create' = nuevo plan; objeto = editar */
+  const [planModal, setPlanModal] = useState(null);
+  const [savingPlan, setSavingPlan] = useState(false);
 
   const load = useCallback(async () => {
     setError('');
@@ -105,14 +111,66 @@ export default function AdminPlanFinancieroPanel() {
     };
   }, [router, load]);
 
-  const seedPlans = async () => {
+  const savePlan = async (payload) => {
+    const isCreate = !payload.id;
+    setSavingPlan(true);
+    setError('');
+    try {
+      const headers = await getAdminFetchHeaders();
+      const res = await fetch('/api/admin/plan-financiero', {
+        method: isCreate ? 'POST' : 'PATCH',
+        headers,
+        body: JSON.stringify(
+          isCreate ? { action: 'create-plan', ...payload } : payload,
+        ),
+      });
+      const json = await res.json().catch(() => ({}));
+      if (!res.ok) throw new Error(json.error || 'No se pudo guardar el plan.');
+      setPlanModal(null);
+      await load();
+    } catch (e) {
+      setError(e.message || 'Error');
+    } finally {
+      setSavingPlan(false);
+    }
+  };
+
+  const deletePlan = async (plan) => {
+    const ok = window.confirm(
+      `¿Eliminar el plan «${plan.nombre}»?\n\nSi tiene suscripciones asociadas se desactivará en lugar de borrarse.`,
+    );
+    if (!ok) return;
+
     setActionLoading(true);
     setError('');
     try {
       const headers = await getAdminFetchHeaders();
-      const res = await fetch('/api/admin/plan-financiero', { method: 'POST', headers });
+      const res = await fetch(`/api/admin/plan-financiero?id=${encodeURIComponent(plan.id)}`, {
+        method: 'DELETE',
+        headers,
+      });
       const json = await res.json().catch(() => ({}));
-      if (!res.ok) throw new Error(json.error || 'No se pudieron crear los planes.');
+      if (!res.ok) throw new Error(json.error || 'No se pudo eliminar el plan.');
+      await load();
+    } catch (e) {
+      setError(e.message || 'Error');
+    } finally {
+      setActionLoading(false);
+    }
+  };
+
+  const syncCatalog = async () => {
+    setActionLoading(true);
+    setError('');
+    try {
+      const headers = await getAdminFetchHeaders();
+      const res = await fetch('/api/admin/plan-financiero', {
+        method: 'POST',
+        headers,
+        body: JSON.stringify({ action: 'sync-catalog' }),
+      });
+      const json = await res.json().catch(() => ({}));
+      if (!res.ok) throw new Error(json.error || 'No se pudo sincronizar el catálogo.');
       await load();
     } catch (e) {
       setError(e.message || 'Error');
@@ -126,7 +184,13 @@ export default function AdminPlanFinancieroPanel() {
   }
 
   const summary = data?.summary || {};
-  const plans = data?.plans || [];
+  const plans = [...(data?.plans || [])]
+    .filter((p) => p.activo !== false)
+    .sort((a, b) => {
+      const oa = a.orden ?? Number(a.precio) ?? 0;
+      const ob = b.orden ?? Number(b.precio) ?? 0;
+      return oa - ob;
+    });
   const subscriptions = data?.subscriptions || [];
   const subsByMonth = data?.subscriptionsByMonth || [];
   const revenueByMonth = data?.revenueByMonth || [];
@@ -184,63 +248,82 @@ export default function AdminPlanFinancieroPanel() {
       <section className={styles.section}>
         <h2 className={styles.sectionTitle}>Niveles premium (Exam practice)</h2>
         <p className={styles.sectionDesc}>
-          Modelo previsto: A2 gratuito; B1–C2 con suscripción. Enlaza con los planes de pago de
-          abajo.
+          A2 en FREE; B1 desde STARTER; B2–C2 desde PREMIUM (PRO incluye todo).
         </p>
         <div className={styles.levelGrid}>
           {PREMIUM_EXAM_LEVELS.map((level) => (
             <article
               key={level.slug}
               className={`${styles.levelCard} ${
-                level.access === 'premium' ? styles['levelCard--premium'] : styles['levelCard--free']
+                level.access === 'free'
+                  ? styles['levelCard--free']
+                  : level.access === 'starter'
+                    ? styles['levelCard--starter']
+                    : styles['levelCard--premium']
               }`}
             >
               <span
                 className={`${styles.levelBadge} ${
-                  level.access === 'premium'
-                    ? styles['levelBadge--premium']
-                    : styles['levelBadge--free']
+                  level.access === 'free'
+                    ? styles['levelBadge--free']
+                    : level.access === 'starter'
+                      ? styles['levelBadge--starter']
+                      : styles['levelBadge--premium']
                 }`}
               >
-                {level.access === 'premium' ? 'Premium' : 'Gratis'}
+                {level.access === 'free'
+                  ? 'FREE'
+                  : level.access === 'starter'
+                    ? 'STARTER+'
+                    : 'PREMIUM+'}
               </span>
               <h3 className={styles.levelLabel}>{level.label}</h3>
-              <p className={styles.levelNote}>{level.note}</p>
+              {level.note ? <p className={styles.levelNote}>{level.note}</p> : null}
             </article>
           ))}
         </div>
       </section>
 
       <section className={styles.section}>
-        <h2 className={styles.sectionTitle}>Planes de monetización</h2>
-        <p className={styles.sectionDesc}>Precios y duración publicados en la web.</p>
+        <h2 className={styles.sectionTitle}>Planes de monetización (catálogo)</h2>
+        <p className={styles.sectionDesc}>
+          Solo se muestran planes activos. Usa <strong>Crear plan</strong> para añadir uno nuevo o ⋮
+          para editar o eliminar.
+        </p>
         <div className={styles.toolbar}>
           <button
             type="button"
             className={`${styles.btn} ${styles.btnPrimary}`}
-            disabled={actionLoading || plans.length > 0}
-            onClick={seedPlans}
+            disabled={actionLoading || savingPlan}
+            onClick={() => setPlanModal('create')}
           >
-            {actionLoading ? 'Creando…' : 'Crear planes por defecto'}
+            Crear plan
+          </button>
+          <button
+            type="button"
+            className={styles.btn}
+            disabled={actionLoading}
+            onClick={syncCatalog}
+          >
+            {actionLoading ? 'Sincronizando…' : 'Sincronizar catálogo (4 planes)'}
           </button>
           <button type="button" className={styles.btn} onClick={() => load()} disabled={actionLoading}>
             Actualizar
           </button>
+          <Link href="/precios" className={styles.btn}>
+            Ver página pública /precios
+          </Link>
         </div>
-        {plans.length === 0 ? (
-          <div className={`${styles.banner} ${styles.bannerWarn}`}>
-            No hay planes en la base de datos. Pulsa «Crear planes por defecto» para cargar la
-            propuesta B2/C1 (editable después en Supabase).
-          </div>
-        ) : null}
         <div className={styles.tableWrap}>
           <table className={styles.table}>
             <thead>
               <tr>
                 <th>Plan</th>
+                <th>Slug</th>
                 <th>Precio</th>
                 <th>Duración</th>
-                <th>Estado</th>
+                <th>Stripe</th>
+                <th className={styles.thActions} aria-label="Acciones" />
               </tr>
             </thead>
             <tbody>
@@ -249,11 +332,19 @@ export default function AdminPlanFinancieroPanel() {
                   <tr key={plan.id}>
                     <td>
                       <strong>{plan.nombre}</strong>
+                      {plan.badge ? (
+                        <div style={{ fontSize: '0.75rem', color: '#6366f1', marginTop: 4 }}>
+                          {plan.badge}
+                        </div>
+                      ) : null}
                       {plan.descripcion ? (
                         <div style={{ fontSize: '0.8rem', color: '#64748b', marginTop: 4 }}>
                           {plan.descripcion}
                         </div>
                       ) : null}
+                    </td>
+                    <td>
+                      <code style={{ fontSize: '0.78rem' }}>{plan.slug || '—'}</code>
                     </td>
                     <td>{formatMoney(plan.precio)}</td>
                     <td>
@@ -262,26 +353,45 @@ export default function AdminPlanFinancieroPanel() {
                         : '—'}
                     </td>
                     <td>
-                      <span
-                        className={
-                          plan.activo !== false ? styles.statusActive : styles.statusInactive
-                        }
-                      >
-                        {plan.activo !== false ? 'Activo' : 'Inactivo'}
+                      <span style={{ fontSize: '0.78rem', color: '#64748b' }}>
+                        {plan.stripe_price_id || '—'}
                       </span>
+                    </td>
+                    <td className={styles.tdActions}>
+                      <AdminPlanRowMenu
+                        plan={plan}
+                        disabled={actionLoading || savingPlan}
+                        onEdit={setPlanModal}
+                        onDelete={deletePlan}
+                      />
                     </td>
                   </tr>
                 ))
               ) : (
                 <tr>
-                  <td colSpan={4} className={styles.empty}>
-                    Sin planes configurados
+                  <td colSpan={6} className={styles.empty}>
+                    Sin planes. Pulsa «Sincronizar catálogo».
                   </td>
                 </tr>
               )}
             </tbody>
           </table>
         </div>
+
+        <SubscriptionPlansSection
+          title="Vista previa — elegir plan"
+          subtitle="Así verán los alumnos la comparativa en /precios y en su perfil."
+          showCta={false}
+        />
+
+        <AdminPlanEditModal
+          mode={planModal === 'create' ? 'create' : 'edit'}
+          plan={planModal === 'create' ? null : planModal}
+          open={planModal !== null}
+          saving={savingPlan}
+          onClose={() => setPlanModal(null)}
+          onSave={savePlan}
+        />
       </section>
 
       <section className={styles.section}>

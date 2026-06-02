@@ -90,7 +90,8 @@ export function useSpeechRecognition({ onResult, onEnd, continuous = false }) {
       setInterimTranscript('');
 
       const errorMessages = {
-        'not-allowed': 'Microphone access denied. Please allow microphone access in your browser settings.',
+        'not-allowed':
+          'Microphone blocked. Click the lock icon in the address bar → Microphone → Allow, then reload. On Windows: Settings → Privacy → Microphone → enable access for your browser.',
         'no-speech': 'No speech detected. Please try speaking louder.',
         'audio-capture': 'No microphone found. Please connect a microphone.',
         'network': 'Speech service network error. You can continue by typing your answer below.',
@@ -108,7 +109,7 @@ export function useSpeechRecognition({ onResult, onEnd, continuous = false }) {
     };
   }, [continuous]);
 
-  const startListening = useCallback(() => {
+  const startListening = useCallback(async () => {
     if (!recognitionRef.current || isListening) return;
     setTranscript('');
     setInterimTranscript('');
@@ -117,11 +118,38 @@ export function useSpeechRecognition({ onResult, onEnd, continuous = false }) {
     latestInterimRef.current = '';
     isManualStopRef.current = false;
 
+    if (typeof window !== 'undefined' && !window.isSecureContext) {
+      setError(
+        'Microphone needs a secure connection. Use http://localhost:3002 (not an IP address) or HTTPS.',
+      );
+      return;
+    }
+
+    try {
+      if (navigator.mediaDevices?.getUserMedia) {
+        const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+        stream.getTracks().forEach((track) => track.stop());
+      }
+    } catch (err) {
+      const name = err?.name || '';
+      if (name === 'NotAllowedError' || name === 'PermissionDeniedError') {
+        setError(
+          'Microphone blocked. In Chrome/Edge: click the lock icon in the address bar → Site settings → Microphone → Allow. Then reload this page. On Windows: Settings → Privacy → Microphone → allow apps to access the microphone.',
+        );
+      } else if (name === 'NotFoundError' || name === 'DevicesNotFoundError') {
+        setError('No microphone found. Connect a microphone and try again.');
+      } else {
+        setError(err?.message || 'Could not access the microphone.');
+      }
+      return;
+    }
+
     try {
       recognitionRef.current.lang = LANG_CANDIDATES[langIndexRef.current];
       recognitionRef.current.start();
     } catch (e) {
-      // Recognition already started — ignore
+      if (String(e?.message || e).includes('already started')) return;
+      setError('Could not start speech recognition. Please try again.');
     }
   }, [isListening]);
 

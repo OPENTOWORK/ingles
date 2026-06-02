@@ -21,20 +21,31 @@ const STIMULUS_ALT = {
 /**
  * Estímulo visual Part 1 — réplica del estilo Cambridge (caja aviso / móvil / cartel).
  */
-export function A2Part1Stimulus({ stimulusType, message, imageUrl, prompt }) {
+export function A2Part1Stimulus({ stimulusType, message, imageUrl, prompt, textOnly = true }) {
   const type = stimulusType || 'notice';
   const lines = String(message || '')
     .split('\n')
     .map((l) => l.trim())
     .filter(Boolean);
 
-  const resolvedImageUrl = resolveStimulusImageUrl(imageUrl);
+  const resolvedImageUrl = textOnly ? '' : resolveStimulusImageUrl(imageUrl);
   const showImage = Boolean(resolvedImageUrl);
-  const showHtml = lines.length > 0 && !showImage;
+  const showHtml = lines.length > 0;
+  const showImageSlot = !textOnly && !showImage;
   const alt = STIMULUS_ALT[type] || STIMULUS_ALT.notice;
 
   return (
-    <figure className={`a2-p1-stimulus a2-p1-stimulus--${type}${showImage ? ' a2-p1-stimulus--has-image' : ''}`}>
+    <figure
+      className={[
+        'a2-p1-stimulus',
+        `a2-p1-stimulus--${type}`,
+        showImage ? 'a2-p1-stimulus--has-image' : '',
+        textOnly ? 'a2-p1-stimulus--text-only' : '',
+        showImageSlot ? 'a2-p1-stimulus--awaiting-image' : '',
+      ]
+        .filter(Boolean)
+        .join(' ')}
+    >
       {showImage ? (
         <div className="a2-p1-stimulus__media">
           <div className="a2-p1-stimulus__img-frame">
@@ -48,9 +59,18 @@ export function A2Part1Stimulus({ stimulusType, message, imageUrl, prompt }) {
           </div>
         </div>
       ) : null}
+      {showImageSlot ? (
+        <div className="a2-p1-stimulus__img-slot" aria-hidden="true">
+          <span>Image</span>
+        </div>
+      ) : null}
       {showHtml ? (
         <div className="a2-p1-stimulus__html">
           <StimulusBody type={type} lines={lines} />
+        </div>
+      ) : !showImage && !showImageSlot ? (
+        <div className="a2-p1-stimulus__html a2-p1-stimulus__html--empty">
+          <p className="a2-p1-stimulus__placeholder">Read the notice or message.</p>
         </div>
       ) : null}
       {prompt ? (
