@@ -12,7 +12,10 @@ function clipText(text, max = 28000) {
   return s.length > max ? `${s.slice(0, max)}\n\n[…truncated]` : s;
 }
 
-function buildTaskPack(taskContext = {}) {
+function buildTaskPack(taskContext = {}, structuredExamContext = '') {
+  const structured = String(structuredExamContext || '').trim();
+  if (structured) return structured;
+
   const tc = taskContext && typeof taskContext === 'object' ? taskContext : {};
   const partLabel = String(tc.partLabel || '').trim();
   const partDescription = String(tc.partDescription || '').trim();
@@ -115,6 +118,7 @@ export async function evaluateCambridgeEssay({
   essay,
   level = 'b2',
   taskContext = {},
+  structuredExamContext = '',
   wordMin = 140,
   wordMax = 190,
 }) {
@@ -134,7 +138,7 @@ export async function evaluateCambridgeEssay({
 
   const examLevel = String(level || '').toLowerCase();
   const isB2First = examLevel === 'b2' || examLevel === 'fce' || examLevel === 'b2first';
-  const taskPack = buildTaskPack(taskContext);
+  const taskPack = buildTaskPack(taskContext, structuredExamContext);
   const wMin = Number.isFinite(Number(wordMin)) ? Number(wordMin) : 140;
   const wMax = Number.isFinite(Number(wordMax)) ? Number(wordMax) : 190;
 

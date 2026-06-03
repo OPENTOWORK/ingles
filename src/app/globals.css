@@ -2422,6 +2422,261 @@ body.nav-open {
   font-size: 0.875rem;
 }
 
+.writing-correction-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin-top: 0.5rem;
+}
+
+.writing-correction-group {
+  margin-top: 0.75rem;
+}
+
+.writing-correction-group:first-child {
+  margin-top: 0.35rem;
+}
+
+.writing-correction-group__title {
+  margin: 0 0 0.65rem;
+  font-size: 0.8125rem;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.writing-correction-group--grammar .writing-correction-group__title {
+  color: #1d4ed8;
+}
+
+.writing-correction-group--vocabulary .writing-correction-group__title {
+  color: #7c3aed;
+}
+
+.writing-correction-group__list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+}
+
+.writing-correction-item {
+  border-radius: 12px;
+  overflow: hidden;
+  border: 1px solid #e2e8f0;
+  background: #ffffff;
+  box-shadow: 0 1px 3px rgba(15, 23, 42, 0.06);
+}
+
+.writing-correction-item__original {
+  padding: 0.85rem 1rem;
+  background: linear-gradient(180deg, #f8fafc 0%, #f1f5f9 100%);
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.writing-correction-item--grammar {
+  border-top: 3px solid #3b82f6;
+}
+
+.writing-correction-item--vocabulary {
+  border-top: 3px solid #8b5cf6;
+}
+
+.writing-correction-item__original-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  margin-bottom: 0.4rem;
+}
+
+.writing-correction-item__label {
+  display: block;
+  font-size: 0.6875rem;
+  font-weight: 700;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  color: #64748b;
+  margin-bottom: 0;
+}
+
+.writing-correction-item__type {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.2rem 0.55rem;
+  border-radius: 999px;
+  font-size: 0.625rem;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.writing-correction-item__type--grammar {
+  color: #1d4ed8;
+  background: #dbeafe;
+  border: 1px solid #93c5fd;
+}
+
+.writing-correction-item__type--vocabulary {
+  color: #6d28d9;
+  background: #ede9fe;
+  border: 1px solid #c4b5fd;
+}
+
+.writing-correction-item__quote {
+  margin: 0;
+  font-size: 0.9375rem;
+  line-height: 1.55;
+  color: #0f172a;
+  font-weight: 700;
+  font-style: normal;
+}
+
+.writing-correction-item__callout {
+  background: #fafafa;
+  border-left: none;
+}
+
+.writing-correction-item__compare {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.writing-correction-item__field {
+  padding: 0.75rem 0.9rem;
+  min-width: 0;
+}
+
+.writing-correction-item__field--problem {
+  background: #fff5f5;
+  border-right: 1px solid #fecaca;
+}
+
+.writing-correction-item__field--correct {
+  background: #f0fdf4;
+}
+
+.writing-correction-item__field .writing-correction-item__label {
+  margin-bottom: 0.35rem;
+}
+
+.writing-correction-item__field-text {
+  margin: 0;
+  font-size: 0.875rem;
+  line-height: 1.5;
+}
+
+.writing-correction-item__field--problem .writing-correction-item__label {
+  color: #b91c1c;
+}
+
+.writing-correction-item__field--correct .writing-correction-item__label {
+  color: #047857;
+}
+
+.writing-correction-item__table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.875rem;
+  table-layout: fixed;
+}
+
+.writing-correction-item__table th {
+  width: 50%;
+  padding: 0.65rem 0.9rem;
+  text-align: left;
+  vertical-align: top;
+  font-weight: 700;
+  font-size: 0.6875rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  border-bottom: 2px solid #e2e8f0;
+  white-space: nowrap;
+}
+
+.writing-correction-item__col-problem {
+  color: #b91c1c;
+  background: #fef2f2;
+  border-right: 1px solid #fecaca;
+}
+
+.writing-correction-item__col-correct {
+  color: #047857;
+  background: #ecfdf5;
+}
+
+.writing-correction-item__table td {
+  width: 50%;
+  padding: 0.75rem 0.9rem;
+  line-height: 1.5;
+  vertical-align: top;
+  border-top: none;
+}
+
+.writing-correction-item__problem {
+  color: #b91c1c;
+  background: #fff5f5;
+  border-right: 1px solid #fecaca;
+  font-weight: 500;
+}
+
+.writing-correction-item__correct {
+  color: #047857;
+  background: #f0fdf4;
+  font-weight: 600;
+}
+
+.writing-correction-item__why {
+  padding: 0.75rem 0.9rem 0.85rem;
+  background: #f8fafc;
+  border-top: 1px solid #e2e8f0;
+}
+
+.writing-correction-item__why-text {
+  margin: 0.35rem 0 0;
+  font-size: 0.875rem;
+  line-height: 1.5;
+  color: #475569;
+}
+
+@media (max-width: 540px) {
+  .writing-correction-item__compare {
+    grid-template-columns: 1fr;
+  }
+
+  .writing-correction-item__field--problem {
+    border-right: none;
+    border-bottom: 1px solid #fecaca;
+  }
+
+  .writing-correction-item__table,
+  .writing-correction-item__table thead,
+  .writing-correction-item__table tbody,
+  .writing-correction-item__table tr,
+  .writing-correction-item__table th,
+  .writing-correction-item__table td {
+    display: block;
+    width: 100%;
+  }
+
+  .writing-correction-item__table th,
+  .writing-correction-item__table td {
+    border-right: none;
+  }
+
+  .writing-correction-item__table td {
+    border-bottom: 1px solid #e2e8f0;
+  }
+}
+
+.dralo-ai-writing-feedback .writing-correction-item__quote,
+.dralo-ai-writing-feedback .writing-correction-item__field-text,
+.dralo-ai-writing-feedback .writing-correction-item__table td {
+  white-space: normal;
+}
+
 .levels-exam-module-nav {
   display: flex;
   align-items: center;
@@ -2943,6 +3198,138 @@ body.nav-open {
 
 .levels-exam-open-cloze-inline .levels-exam-split__questions {
   display: none;
+}
+
+/* Part 1 multiple-choice cloze — options on gap click (full-width text) */
+.levels-exam-mcq-cloze-inline .levels-exam-split__passage-panel,
+.levels-exam-mcq-cloze-inline .levels-exam-split__text {
+  border-right: none;
+  max-height: none;
+}
+
+.levels-exam-mcq-cloze-inline .levels-exam-split__questions {
+  display: none;
+}
+
+.levels-exam-inline-mcq-gap {
+  position: relative;
+  display: inline;
+  vertical-align: baseline;
+}
+
+.levels-exam-inline-mcq-gap--example {
+  margin: 0 0.12rem;
+}
+
+.levels-exam-inline-mcq-gap__marker {
+  font-weight: 700;
+  color: #475569;
+  margin-right: 0.15rem;
+}
+
+.levels-exam-inline-mcq-gap__trigger {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.2rem;
+  margin: 0 0.1rem;
+  padding: 0.12rem 0.45rem;
+  border-radius: 6px;
+  border: 2px solid #eab308;
+  background: #fef9c3;
+  color: #1e293b;
+  font: inherit;
+  font-weight: 600;
+  line-height: 1.35;
+  cursor: pointer;
+  vertical-align: baseline;
+  transition: background 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.levels-exam-inline-mcq-gap__trigger:hover:not(:disabled) {
+  background: #fef08a;
+  border-color: #ca8a04;
+  box-shadow: 0 1px 4px rgba(15, 23, 42, 0.08);
+}
+
+.levels-exam-inline-mcq-gap__trigger--empty .levels-exam-inline-mcq-gap__value {
+  color: #64748b;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+}
+
+.levels-exam-inline-mcq-gap__trigger--example {
+  cursor: default;
+  border-color: #cbd5e1;
+  background: #f1f5f9;
+  color: #334155;
+}
+
+.levels-exam-inline-mcq-gap__trigger--correct {
+  border-color: #16a34a;
+  background: #dcfce7;
+  color: #14532d;
+}
+
+.levels-exam-inline-mcq-gap__trigger--incorrect {
+  border-color: #dc2626;
+  background: #fee2e2;
+  color: #7f1d1d;
+}
+
+.levels-exam-inline-mcq-gap__trigger:disabled {
+  cursor: default;
+}
+
+.levels-exam-inline-mcq-gap--open .levels-exam-inline-mcq-gap__trigger {
+  border-color: #2563eb;
+  background: #dbeafe;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.18);
+}
+
+.levels-exam-inline-mcq-gap__menu {
+  position: absolute;
+  z-index: 30;
+  top: calc(100% + 0.35rem);
+  left: 0;
+  min-width: min(14rem, 72vw);
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  padding: 0.45rem;
+  border-radius: 10px;
+  border: 1px solid #e2e8f0;
+  background: #ffffff;
+  box-shadow: 0 10px 28px rgba(15, 23, 42, 0.14);
+}
+
+.levels-exam-inline-mcq-gap__option {
+  text-align: left;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  padding: 0.55rem 0.7rem;
+  background: #fff;
+  color: #1e293b;
+  font: inherit;
+  font-size: 0.9rem;
+  line-height: 1.35;
+  cursor: pointer;
+  transition: background 0.12s ease, border-color 0.12s ease;
+}
+
+.levels-exam-inline-mcq-gap__option:hover {
+  background: #f8fafc;
+  border-color: #cbd5e1;
+}
+
+.levels-exam-inline-mcq-gap__option--selected {
+  border-color: #2563eb;
+  background: #eff6ff;
+}
+
+.levels-exam-inline-mcq-gap__feedback {
+  display: block;
+  margin: 0.35rem 0 0.5rem;
+  max-width: min(28rem, 90vw);
 }
 
 @media (min-width: 1400px) {
@@ -5303,6 +5690,187 @@ body.nav-open {
   margin: 0.4rem 0 0;
   font-weight: 700;
   color: #4a5568;
+}
+
+/* ——— B2 First Writing Practice ——— */
+.b2-writing-practice__body {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.b2-writing-task {
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 1.15rem 1.25rem;
+  background: #ffffff;
+  box-shadow: 0 1px 3px rgba(15, 23, 42, 0.06);
+}
+
+.b2-writing-task__title {
+  margin: 0 0 0.85rem;
+  font-size: 1.125rem;
+  font-weight: 800;
+  color: #0f172a;
+}
+
+.b2-writing-task__label {
+  margin: 0 0 0.35rem;
+  font-size: 0.6875rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #64748b;
+}
+
+.b2-writing-task__instructions p,
+.b2-writing-task__question-block p {
+  margin: 0;
+  line-height: 1.55;
+  color: #334155;
+}
+
+.b2-writing-task__instructions {
+  margin-bottom: 0.85rem;
+}
+
+.b2-writing-task__question-block {
+  margin-bottom: 0.85rem;
+}
+
+.b2-writing-task__question {
+  font-size: 1rem;
+  font-weight: 700;
+  color: #0f172a;
+}
+
+.b2-writing-task__points-list {
+  margin: 0.35rem 0 0;
+  padding-left: 1.35rem;
+  color: #334155;
+}
+
+.b2-writing-task__points-list li {
+  margin: 0.25rem 0;
+}
+
+.b2-writing-task__word-note {
+  margin: 0.75rem 0 0;
+  font-size: 0.9375rem;
+  color: #1d4ed8;
+}
+
+.b2-writing-part2__options {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.85rem;
+  margin-top: 1rem;
+}
+
+.b2-writing-part2__option-card {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.35rem;
+  padding: 0.9rem 1rem;
+  border: 2px solid #e2e8f0;
+  border-radius: 12px;
+  background: #f8fafc;
+  text-align: left;
+  cursor: pointer;
+  transition: border-color 0.15s ease, background 0.15s ease, box-shadow 0.15s ease;
+}
+
+.b2-writing-part2__option-card:hover {
+  border-color: #93c5fd;
+  background: #eff6ff;
+  box-shadow: 0 2px 8px rgba(59, 130, 246, 0.12);
+}
+
+.b2-writing-part2__option-badge {
+  font-size: 0.6875rem;
+  font-weight: 800;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: #64748b;
+}
+
+.b2-writing-part2__option-type {
+  font-size: 1rem;
+  font-weight: 800;
+  color: #0f172a;
+}
+
+.b2-writing-part2__option-preview {
+  font-size: 0.875rem;
+  line-height: 1.45;
+  color: #475569;
+}
+
+.b2-writing-part2__selected {
+  margin-top: 1rem;
+  padding: 1rem 1.1rem;
+  border: 1px solid #bfdbfe;
+  border-radius: 12px;
+  background: #f0f9ff;
+}
+
+.b2-writing-part2__selected-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem 0.75rem;
+  margin-bottom: 0.65rem;
+}
+
+.b2-writing-part2__change-btn {
+  margin-left: auto;
+  padding: 0.35rem 0.65rem;
+  border: 1px solid #cbd5e1;
+  border-radius: 8px;
+  background: #fff;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: #334155;
+  cursor: pointer;
+}
+
+.b2-writing-part2__change-btn:hover {
+  border-color: #94a3b8;
+  background: #f8fafc;
+}
+
+.b2-writing-part2__context {
+  margin: 0 0 0.5rem;
+  font-weight: 600;
+  color: #1e293b;
+}
+
+.b2-writing-part2__task-body p {
+  margin: 0 0 0.35rem;
+  line-height: 1.55;
+  color: #334155;
+}
+
+.b2-writing-part2__hint {
+  margin: 0.5rem 0 0;
+  padding: 0.85rem 1rem;
+  border-radius: 10px;
+  background: #f1f5f9;
+  color: #475569;
+  font-size: 0.9375rem;
+  text-align: center;
+}
+
+@media (max-width: 720px) {
+  .b2-writing-part2__options {
+    grid-template-columns: 1fr;
+  }
+
+  .b2-writing-part2__change-btn {
+    margin-left: 0;
+    width: 100%;
+  }
 }
 
 /* ——— A2 Key Reading Part 2: perfiles + matching ——— */

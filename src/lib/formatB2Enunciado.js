@@ -1,4 +1,3 @@
-import { getExamDirections } from '@/lib/draloAiExamPartSpecs';
 import { getB2PartDef } from '@/lib/b2ExamCatalog';
 
 export function asGeneratedArray(value) {
@@ -64,24 +63,38 @@ export function buildB2EnunciadoFromGenerated(gen = {}, partNumber) {
   }
 
   if (pn === 8) {
-    if (g.title) lines.push(g.title);
-    if (g.text1Title || g.passageA) {
-      lines.push(`Text 1: ${g.text1Title || 'Text 1'}`);
-      pushLines(lines, g.text1Body || g.passageA || '');
+    lines.push('Writing Part 1 — Essay');
+    if (g.question || g.taskTitle) {
+      lines.push(`Question: ${g.question || g.taskTitle}`);
     }
-    if (g.text2Title || g.passageB) {
-      lines.push(`Text 2: ${g.text2Title || 'Text 2'}`);
-      pushLines(lines, g.text2Body || g.passageB || '');
+    const bullets = asGeneratedArray(g.bulletPoints);
+    if (bullets.length) {
+      lines.push('You should write about:');
+      bullets.forEach((b, i) => lines.push(`${i + 1}. ${b}`));
     }
-    if (g.passage && !g.text1Title && !g.passageA) pushLines(lines, g.passage);
     lines.push('Instructions:');
-    pushLines(lines, g.instructions || g.directions || '');
-    if (g.wordMin) lines.push(`Word limit: ${g.wordMin}–${g.wordMax || g.wordMin + 40} words`);
+    pushLines(
+      lines,
+      g.instructions ||
+        g.directions ||
+        'Write an essay in 140–190 words. You must answer the question and include the three points below.',
+    );
+    lines.push(`Word limit: ${g.wordMin || 140}–${g.wordMax || 190} words`);
     return lines.join('\n').trim();
   }
 
   if (pn === 9) {
-    pushLines(lines, g.instructions || g.directions || getExamDirections('writing', 'part-2'));
+    lines.push('Writing Part 2 — Choose one task');
+    pushLines(
+      lines,
+      g.instructions ||
+        g.directions ||
+        'Choose ONE of the tasks below and write your answer in 140–190 words.',
+    );
+    if (g.wordMin || g.wordMax) {
+      lines.push(`Word limit: ${g.wordMin || 140}–${g.wordMax || 190} words`);
+    }
+    lines.push('');
     for (const q of g.questions) {
       lines.push(String(q.number ?? ''));
       pushLines(lines, q.prompt || q.task || '');

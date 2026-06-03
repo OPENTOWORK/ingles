@@ -38,6 +38,7 @@ import { formatLevelsPartDisplayName } from '@/utils/formatLevelsPartDisplayName
 import { B2ExamPracticeContent, B2ExamQuestionItem } from '@/components/b2/B2ExamPracticeContent';
 import B2ExamInlineOpenClozePassage from '@/components/b2/B2ExamInlineOpenClozePassage';
 import B2ExamInlineKeyWordPassage from '@/components/b2/B2ExamInlineKeyWordPassage';
+import B2ExamInlineMcqClozePassage from '@/components/b2/B2ExamInlineMcqClozePassage';
 import {
   getSessionUserId,
   mergeLevelsEstadisticas,
@@ -556,6 +557,8 @@ function B2ReadingExamsPageInner() {
     selectedQuestion?.preguntaId,
   ]);
 
+  const isPart1McqCloze = isUoePart1 && (part1McqGroups?.length ?? 0) > 0;
+
   const inferredOpenQuestionNumbers = useMemo(() => {
     const promptBlob = [selectedQuestion?.enunciado, selectedPartContent.texto]
       .filter(Boolean)
@@ -799,6 +802,64 @@ function B2ReadingExamsPageInner() {
     ],
   );
 
+  const handlePart1McqOptionSelect = useCallback(
+    ({ group, option, questionKey }) => {
+      const wasChecked = checkedQuestions[questionKey];
+      const nextChecked = { ...checkedQuestions, [questionKey]: true };
+      const nextSelected = { ...selectedOptions, [questionKey]: option.id };
+      setSelectedOptions(nextSelected);
+      setCheckedQuestions(nextChecked);
+      trySavePartAfterAnswer({
+        checkedQuestions: nextChecked,
+        selectedOptions: nextSelected,
+      });
+      if (!wasChecked && !hideFeedback) {
+        const correctOpt = group.options.find((o) => o.correcta);
+        const answersFromDatabase = group.options
+          .map((o) => (o.formattedText || o.respuesta || '').trim())
+          .filter(Boolean)
+          .join('\n');
+        requestAiJustification(questionKey, {
+          partLabel: selectedPart?.nombre || '',
+          questionLabel: group.questionNumber
+            ? `Question ${group.questionNumber}`
+            : 'Item',
+          userChoiceText: option.formattedText || option.respuesta || '',
+          correctChoiceText: correctOpt?.formattedText || correctOpt?.respuesta || '',
+          isCorrect: !!option.correcta,
+          answersFromDatabase: answersFromDatabase || undefined,
+        });
+        void (async () => {
+          const uid = await getSessionUserId();
+          const pid = selectedQuestion?.preguntaId;
+          const parteId = selectedPart?.id;
+          if (!uid || !pid || !parteId) return;
+          const { error } = await recordLevelsAnswerEvaluation({
+            userId: uid,
+            preguntaId: pid,
+            parteId,
+            isCorrect: !!option.correcta,
+            slotLabel: group.questionNumber ? `Question ${group.questionNumber}` : 'Item',
+            userAnswerText: option.formattedText || option.respuesta || '',
+          });
+          if (error) {
+            console.warn('levels eval/puntuacion:', error.message || error);
+          }
+        })();
+      }
+    },
+    [
+      checkedQuestions,
+      selectedOptions,
+      hideFeedback,
+      requestAiJustification,
+      selectedPart?.id,
+      selectedPart?.nombre,
+      selectedQuestion?.preguntaId,
+      trySavePartAfterAnswer,
+    ],
+  );
+
   const handleOpenGapCheck = useCallback(
     (questionNumber, questionKey, currentValue) => {
       if (typeof openChecks[questionKey] === 'boolean') return;
@@ -965,9 +1026,29 @@ function B2ReadingExamsPageInner() {
                 directionsLabel={isUoePart1 ? 'Instructions' : 'Directions'}
                 textLabel="Text"
                 questionsLabel="Questions"
-                passageText={isInlinePassagePart ? '' : selectedPartContent.texto}
+                passageText={isInlinePassagePart || isPart1McqCloze ? '' : selectedPartContent.texto}
                 passage={
-                  isKeyWordPart ? (
+                  isPart1McqCloze ? (
+                    <B2ExamInlineMcqClozePassage
+                      text={selectedPartContent.texto}
+                      mcqGroups={part1McqGroups}
+                      getQuestionKey={(questionNumber) => {
+                        const groupIndex = part1McqGroups.findIndex(
+                          (g) => g.questionNumber === questionNumber,
+                        );
+                        return getQuestionKey(
+                          selectedPart.id,
+                          questionNumber,
+                          `extra-${groupIndex >= 0 ? groupIndex : 'mcq'}`,
+                        );
+                      }}
+                      selectedOptions={selectedOptions}
+                      checkedQuestions={checkedQuestions}
+                      onOptionSelect={handlePart1McqOptionSelect}
+                      hideFeedback={hideFeedback}
+                      aiHintsByKey={aiHintsByKey}
+                    />
+                  ) : isKeyWordPart ? (
                     <B2ExamInlineKeyWordPassage
                       text={selectedPartContent.texto || selectedQuestion?.enunciado || ''}
                       activeQuestionNumbers={openQuestionNumbers}
@@ -1004,11 +1085,17 @@ function B2ReadingExamsPageInner() {
                     />
                   ) : null
                 }
-                split={isInlinePassagePart ? true : 'auto'}
-                contentClassName={isInlinePassagePart ? 'levels-exam-open-cloze-inline' : ''}
-                showQuestionsHeading={!isInlinePassagePart}
+                split={isInlinePassagePart || isPart1McqCloze ? true : 'auto'}
+                contentClassName={
+                  isPart1McqCloze
+                    ? 'levels-exam-mcq-cloze-inline'
+                    : isInlinePassagePart
+                      ? 'levels-exam-open-cloze-inline'
+                      : ''
+                }
+                showQuestionsHeading={!isInlinePassagePart && !isPart1McqCloze}
                 questions={
-                  isInlinePassagePart
+                  isInlinePassagePart || isPart1McqCloze
                     ? null
                     : groupedAnswersForUiAndScore.map((group, groupIndex) => (
                       <B2ExamQuestionItem

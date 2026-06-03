@@ -32,6 +32,7 @@ import { B2ExamSlotProgressPicker } from '@/components/b2/B2ExamSlotProgressPick
 import { B2ExamPracticeContent, B2ExamQuestionItem } from '@/components/b2/B2ExamPracticeContent';
 import B2ExamInlineOpenClozePassage from '@/components/b2/B2ExamInlineOpenClozePassage';
 import B2ExamInlineKeyWordPassage from '@/components/b2/B2ExamInlineKeyWordPassage';
+import B2ExamInlineMcqClozePassage from '@/components/b2/B2ExamInlineMcqClozePassage';
 import B2ExamPracticeModuleNav from '@/components/b2/B2ExamPracticeModuleNav';
 
 const UOE_PAGE_PART_MAX = 4;
@@ -433,6 +434,8 @@ function UseOfEnglishExamsPageInner() {
     selectedQuestion?.preguntaId,
   ]);
 
+  const isPart1McqCloze = partNumberUoe === 1 && (part1McqGroups?.length ?? 0) > 0;
+
   const contextSnippetForAi = useMemo(() => {
     const pack = [selectedPartContent.enunciado, selectedPartContent.texto].filter(Boolean).join('\n\n');
     return pack.slice(0, 5500);
@@ -691,6 +694,62 @@ function UseOfEnglishExamsPageInner() {
     ],
   );
 
+  const handlePart1McqOptionSelect = useCallback(
+    ({ group, option, questionKey }) => {
+      const wasChecked = checkedQuestions[questionKey];
+      const nextChecked = { ...checkedQuestions, [questionKey]: true };
+      const nextSelected = { ...selectedOptions, [questionKey]: option.id };
+      setSelectedOptions(nextSelected);
+      setCheckedQuestions(nextChecked);
+      if (!wasChecked) {
+        const correctOpt = group.options.find((o) => o.correcta);
+        const answersFromDatabase = group.options
+          .map((o) => (o.formattedText || o.respuesta || '').trim())
+          .filter(Boolean)
+          .join('\n');
+        requestAiJustification(questionKey, {
+          partLabel: getSelectedPartTitle(),
+          questionLabel: group.questionNumber
+            ? `Question ${group.questionNumber}`
+            : 'Item',
+          userChoiceText: option.formattedText || option.respuesta || '',
+          correctChoiceText: correctOpt?.formattedText || correctOpt?.respuesta || '',
+          isCorrect: !!option.correcta,
+          answersFromDatabase: answersFromDatabase || undefined,
+        });
+        void (async () => {
+          const uid = await getSessionUserId();
+          const pid = selectedQuestion?.preguntaId;
+          const parteId = selectedPart?.id;
+          if (!uid || !pid || !parteId) return;
+          const { error } = await mergeLevelsEstadisticas({
+            userId: uid,
+            preguntaId: pid,
+            parteId,
+            deltaEvaluadas: 1,
+            deltaCorrectas: option.correcta ? 1 : 0,
+            deltaIncorrectas: option.correcta ? 0 : 1,
+          });
+          if (error) {
+            console.warn('levels_estadisticas (eval):', error.message || error);
+          }
+        })();
+      }
+      void trySavePartAfterAnswer({
+        checkedQuestions: nextChecked,
+        selectedOptions: nextSelected,
+      });
+    },
+    [
+      checkedQuestions,
+      selectedOptions,
+      requestAiJustification,
+      selectedPart?.id,
+      selectedQuestion?.preguntaId,
+      trySavePartAfterAnswer,
+    ],
+  );
+
   const handleOpenGapCheck = useCallback(
     (questionNumber, questionKey, currentValue) => {
       if (typeof openChecks[questionKey] === 'boolean') return;
@@ -918,9 +977,28 @@ function UseOfEnglishExamsPageInner() {
                 title={getSelectedPartTitle()}
                 directionsText={selectedPartContent.enunciado}
                 directionsLabel={isUoePart1 ? 'Instructions' : 'Directions'}
-                passageText={isInlinePassagePart ? '' : selectedPartContent.texto}
+                passageText={isInlinePassagePart || isPart1McqCloze ? '' : selectedPartContent.texto}
                 passage={
-                  isKeyWordPart ? (
+                  isPart1McqCloze ? (
+                    <B2ExamInlineMcqClozePassage
+                      text={selectedPartContent.texto}
+                      mcqGroups={part1McqGroups}
+                      getQuestionKey={(questionNumber) => {
+                        const groupIndex = part1McqGroups.findIndex(
+                          (g) => g.questionNumber === questionNumber,
+                        );
+                        return getQuestionKey(
+                          selectedPart.id,
+                          questionNumber,
+                          `extra-${groupIndex >= 0 ? groupIndex : 'mcq'}`,
+                        );
+                      }}
+                      selectedOptions={selectedOptions}
+                      checkedQuestions={checkedQuestions}
+                      onOptionSelect={handlePart1McqOptionSelect}
+                      aiHintsByKey={aiHintsByKey}
+                    />
+                  ) : isKeyWordPart ? (
                     <B2ExamInlineKeyWordPassage
                       text={selectedPartContent.texto || selectedQuestion?.enunciado || ''}
                       activeQuestionNumbers={openQuestionNumbers}
@@ -954,11 +1032,17 @@ function UseOfEnglishExamsPageInner() {
                     />
                   ) : null
                 }
-                split={isInlinePassagePart ? true : 'auto'}
-                contentClassName={isInlinePassagePart ? 'levels-exam-open-cloze-inline' : ''}
-                showQuestionsHeading={!isInlinePassagePart}
+                split={isInlinePassagePart || isPart1McqCloze ? true : 'auto'}
+                contentClassName={
+                  isPart1McqCloze
+                    ? 'levels-exam-mcq-cloze-inline'
+                    : isInlinePassagePart
+                      ? 'levels-exam-open-cloze-inline'
+                      : ''
+                }
+                showQuestionsHeading={!isInlinePassagePart && !isPart1McqCloze}
                 questions={
-                  isInlinePassagePart
+                  isInlinePassagePart || isPart1McqCloze
                     ? null
                     : groupedAnswersForUiAndScore.map((group, groupIndex) => (
                       <B2ExamQuestionItem

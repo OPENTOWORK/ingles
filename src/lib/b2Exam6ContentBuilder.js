@@ -301,37 +301,44 @@ In the long term, hobbies can reduce stress and widen your social circle. (36) _
   };
 
   parts[8] = {
-    text1Title: 'Text 1 — Festival poster',
-    text1Body: `Our town's Winter Lights Festival returns next month. Organisers promise live music, street food, and workshops for all ages. Local schools will perform on Saturday evening, and a charity market will raise money for the community centre.`,
-    text2Title: 'Text 2 — Letter to the editor',
-    text2Body: `While festivals attract visitors, some residents complain about noise and litter. They argue that councils should invest in everyday services instead of one-week celebrations. Supporters reply that festivals create jobs and bring neighbours together.`,
+    question:
+      'Some people say that fast food is always a bad thing to eat. Do you agree?',
+    bulletPoints: ['health', 'price and convenience', 'your own idea'],
     instructions:
-      'Write an essay discussing both texts. Explain the benefits and drawbacks of town festivals and give your own opinion. Write 140–190 words.',
+      'Write an essay in 140–190 words. You must answer the question and include the three points below.',
     wordMin: 140,
     wordMax: 190,
   };
 
   parts[9] = {
     instructions:
-      'Write an answer to one of the questions 2–4 in this part. Write your answer in 140–190 words in an appropriate style.',
+      'Choose ONE of the tasks below and write your answer in 140–190 words.',
+    wordMin: 140,
+    wordMax: 190,
     questions: [
+      {
+        number: 1,
+        prompt:
+          'You see this announcement on an English-language website:\n\nArticles wanted: Healthy habits for busy students\n\nWhat healthy habits would you recommend to students who have little free time?\n\nWrite an article giving advice and examples.',
+        format: 'article',
+      },
       {
         number: 2,
         prompt:
-          'You see this announcement in an international magazine:\n\nTell us about a volunteer project you know. What does it involve and why is it important?\n\nWrite an article for the magazine.',
-        format: 'article',
+          'You have received an email from your English-speaking friend Sam:\n\nI’m visiting your town next month and I’d like to try some local food. Where should I go and what should I eat?\n\nWrite your email.',
+        format: 'email',
       },
       {
         number: 3,
         prompt:
-          'Your English teacher has asked you to write a report about leisure activities for teenagers in your area.\n\nDescribe what is available and recommend improvements.',
-        format: 'report',
+          'You see this announcement in an English-language magazine:\n\nReviews wanted: A restaurant I would recommend\n\nWrite a review of a restaurant or café you know. Say what the food is like and whether you would recommend it.',
+        format: 'review',
       },
       {
         number: 4,
         prompt:
-          'You recently helped organise a local event. Write an email to a friend explaining what you did and how you felt about the experience.',
-        format: 'email',
+          'Your English teacher has asked you to write a report about food options at your school or college.\n\nWrite a report explaining what is good, what could be improved and making recommendations.',
+        format: 'report',
       },
     ],
   };

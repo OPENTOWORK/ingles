@@ -8,6 +8,7 @@ import { useLevelExamPracticeSlot } from '@/hooks/useLevelExamPracticeSlot';
 import { useB2AutoOpenExamFromUrl } from '@/hooks/useB2AutoOpenExamFromUrl';
 import { B2ExamPracticeChrome, B2ExamPracticeLayout } from '@/components/b2/B2ExamPracticeChrome';
 import { B2ExamPracticeContent, B2ExamQuestionItem } from '@/components/b2/B2ExamPracticeContent';
+import B2ExamInlineMcqClozePassage from '@/components/b2/B2ExamInlineMcqClozePassage';
 import { useB2ExamScoringSession } from '@/hooks/useB2ExamScoringSession';
 import { useLevelExamScoringSession } from '@/hooks/useLevelExamScoringSession';
 import { computeB2PartProgressFromState } from '@/utils/recordLevelsB2PartScore';
@@ -879,6 +880,9 @@ function B2ExamPaperPracticePageInner({
     selectedPartContent.preguntasPart1Parse,
     selectedQuestion?.preguntaId,
   ]);
+
+  const isB2Part1InlineMcq =
+    levelSlug === 'b2' && partNumber === 1 && (b2Part1McqGroups?.length ?? 0) > 0;
 
   const effectiveMcqGroups = useMemo(() => {
     if (b2Part1McqGroups?.length) return b2Part1McqGroups;
@@ -2804,14 +2808,40 @@ function B2ExamPaperPracticePageInner({
                 directionsLabel="Directions"
                 textLabel="Text"
                 questionsLabel="Questions"
-                passageText={passageTextForPanel}
-                passage={undefined}
-                split={a2EmbeddedReadingPart ? false : 'auto'}
+                passageText={isB2Part1InlineMcq ? '' : passageTextForPanel}
+                passage={
+                  isB2Part1InlineMcq ? (
+                    <B2ExamInlineMcqClozePassage
+                      text={selectedPartContent.texto}
+                      mcqGroups={b2Part1McqGroups}
+                      getQuestionKey={(questionNumber) => {
+                        const groupIndex = b2Part1McqGroups.findIndex(
+                          (g) => g.questionNumber === questionNumber,
+                        );
+                        return getQuestionKey(
+                          selectedPart.id,
+                          questionNumber,
+                          `extra-${groupIndex >= 0 ? groupIndex : 'mcq'}`,
+                        );
+                      }}
+                      selectedOptions={selectedOptions}
+                      checkedQuestions={checkedQuestions}
+                      onOptionSelect={handleA2McqOptionSelect}
+                      hideFeedback={hideFeedback}
+                      aiHintsByKey={aiHintsByKey}
+                    />
+                  ) : undefined
+                }
+                split={a2EmbeddedReadingPart || isB2Part1InlineMcq ? false : 'auto'}
                 showDirections={!a2EmbeddedReadingPart}
                 showPassagePanel={!a2EmbeddedReadingPart}
-                showQuestionsHeading={!showLongWritingWithAi && !a2EmbeddedReadingPart}
+                showQuestionsHeading={
+                  !showLongWritingWithAi && !a2EmbeddedReadingPart && !isB2Part1InlineMcq
+                }
                 contentClassName={
-                  useA2OfficialReadingUi && partNumber === 1
+                  isB2Part1InlineMcq
+                    ? 'levels-exam-mcq-cloze-inline'
+                    : useA2OfficialReadingUi && partNumber === 1
                     ? 'levels-exam-a2-part1'
                     : useA2OfficialReadingUi && partNumber === 2
                       ? 'levels-exam-a2-part2'
@@ -3194,7 +3224,7 @@ function B2ExamPaperPracticePageInner({
                           }
                         />
                       ) : null}
-                      {!useA2OfficialReadingUi && !useA2ListeningPictureUi
+                      {!useA2OfficialReadingUi && !useA2ListeningPictureUi && !isB2Part1InlineMcq
                         ? effectiveMcqGroups.map((group, groupIndex) => (
                         <B2ExamQuestionItem
                           key={`group-${selectedQuestion.preguntaId}-${group.questionNumber ?? 'extra'}-${groupIndex}`}

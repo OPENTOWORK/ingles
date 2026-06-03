@@ -147,13 +147,34 @@ ${baseExamSchema(directions, `,"title":"...","setting":"one line context","scrip
   if (mode === 'writing') {
     const wordMin = L === 'A2' ? 80 : L === 'B1' ? 120 : 140;
     const wordMax = L === 'A2' ? 100 : L === 'B1' ? 150 : 190;
+
+    if (activity === 'essay') {
+      return `Create ONE complete Cambridge ${L} Writing Part 1 compulsory ESSAY task (NOT a summary of two texts).
+${variety}
+${SHARED_JSON_RULES}
+Use these official directions (copy into "directions" field):
+${directions}
+The task must include: one clear essay question (question field), exactly three bullet points the candidate must address (bulletPoints array), and word count ${wordMin}–${wordMax}.
+Do NOT include text1/text2 passages or summarising/evaluating instructions.
+Return ONLY JSON with fields: partTitle, directions, question, instructions, bulletPoints (array of 3 strings), wordMin (${wordMin}), wordMax (${wordMax}), register, checklist`;
+    }
+
+    if (activity === 'part-2') {
+      return `Create ONE complete Cambridge ${L} Writing Part 2 task set with FOUR optional tasks (article, email/letter, review, report).
+${variety}
+${SHARED_JSON_RULES}
+Use these official directions (copy into "directions" field):
+${directions}
+Return ONLY JSON with fields: directions, instructions, wordMin (${wordMin}), wordMax (${wordMax}), questions (array of 4 objects with number, prompt, format where format is article|email|review|report)`;
+    }
+
     return `Create ONE complete Cambridge ${L} Writing task: ${activity}.
 ${variety}
 ${SHARED_JSON_RULES}
 Use these official directions (copy into "directions" field):
 ${directions}
-Include directions, a short example opening sentence (example.text + example.explanation), full task instructions, bulletPoints array, and word count.
-Return ONLY JSON with fields: partTitle, directions, example{text,explanation}, taskTitle, instructions, inputNotes, bulletPoints, wordMin (${wordMin}), wordMax (${wordMax}), register, checklist`;
+Include directions, full task instructions, bulletPoints array when relevant, and word count.
+Return ONLY JSON with fields: partTitle, directions, taskTitle, instructions, inputNotes, bulletPoints, wordMin (${wordMin}), wordMax (${wordMax}), register, checklist`;
   }
 
   return 'Return JSON {"error":"unknown mode"}';

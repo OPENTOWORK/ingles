@@ -52,7 +52,17 @@ export async function runExamCoach({
       ? `
 IMPORTANT — WRITING CORRECTION:
 * Follow WRITING CORRECTION — ACCURACY and REQUIRED OUTPUT FORMAT in your system instructions.
-* Use ## Corrections with Original / Problem / Correct / Why blocks for each error.
+* Use ## Corrections with Type / Original / Problem / Correct / Why on separate lines for each error.
+* Type must be exactly "Grammar" or "Vocabulary / Spelling" for every correction block.
+* Spelling → Vocabulary / Spelling; verb form (helps keeping → helps keep) → Grammar; include context in Original when possible.
+* Never use B1+/low B2 when many basic grammar/spelling errors are present — prefer B1 or B1/B1+.
+* Better Vocabulary must not repeat grammar corrections from Corrections (no verb form, articles, passive, lead to/lead a, has become/became fixes).
+* Better Vocabulary must use "original phrase" → "better alternative" pairs — expression upgrades only, not grammar fixes.
+* Do NOT label "Missing subject" when "it/he/she/they" is present — use "Incorrect passive form" for errors like "it is often argue" → "it is often argued".
+* Why must be complete sentences with clean paired quotes — never fragments like not "became. or "is.
+* Never use "---" or merge Problem with Why in Corrections.
+* Never write "Problem Correct" on one line — use separate Problem: and Correct: labels on separate lines.
+* Improved Version must sound natural at Estimated Level (B1/B1+): fix awkward phrasing but avoid C1 vocabulary or syntax. Prefer "very common", "useful when you do not have anything else to eat", "too often" — not "very typical", "save you when".
 * Do NOT invent grammar rules (e.g. never say to add "the" before "lives" in "in their lives").
 * Target practice level: ${level}. Vocabulary must stay appropriate to Estimated Level, not only target level.
 ${

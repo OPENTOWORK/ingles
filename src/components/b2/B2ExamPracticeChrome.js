@@ -6,7 +6,11 @@ import LevelsCategoryTimer from '@/components/levels/LevelsCategoryTimer';
 import LevelsPartScorePanel from '@/components/levels/LevelsPartScorePanel';
 import LevelsPartFinishBanner from '@/components/levels/LevelsPartFinishBanner';
 
-function getPartTabLabel(part, lang) {
+function getPartTabLabel(part, lang, customLabelFn) {
+  if (typeof customLabelFn === 'function') {
+    const custom = customLabelFn(part);
+    if (custom) return custom;
+  }
   const n = Number(
     part?.partNumber ||
       String(part?.nombre || part?.nombre_parte || '').match(/\d+/)?.[0] ||
@@ -68,6 +72,7 @@ export function B2ExamPracticeChrome({
   selectedPartId,
   onSelectPart,
   getPartSavedScoreLabel,
+  getPartTabLabel: getPartTabLabelProp,
   lang = 'es',
   workPanelClassName = '',
   children,
@@ -173,7 +178,7 @@ export function B2ExamPracticeChrome({
                     className={`levels-b2-part-tab${active ? ' levels-b2-part-tab--active' : ''}`}
                     onClick={() => onSelectPart(part)}
                   >
-                    <span>{getPartTabLabel(part, lang)}</span>
+                    <span>{getPartTabLabel(part, lang, getPartTabLabelProp)}</span>
                     {savedScore ? (
                       <span className="levels-b2-part-tab__score">
                         {savedPrefix} {savedScore}

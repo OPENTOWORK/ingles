@@ -7,6 +7,7 @@ export async function POST(req) {
     essay: body.essay,
     level: body.level,
     taskContext: body.taskContext,
+    structuredExamContext: body.structuredExamContext,
     wordMin: body.wordMin,
     wordMax: body.wordMax,
   });

@@ -519,6 +519,14 @@
   white-space: pre-wrap;
 }
 
+.dralo-ai-writing-feedback .writing-correction-list,
+.dralo-ai-writing-feedback .writing-correction-item,
+.dralo-ai-writing-feedback .writing-correction-item__quote,
+.dralo-ai-writing-feedback .writing-correction-item__table,
+.dralo-ai-writing-feedback .writing-correction-item__why-text {
+  white-space: normal;
+}
+
 .dralo-ai-writing-feedback strong {
   font-weight: 700;
   color: #0f172a;

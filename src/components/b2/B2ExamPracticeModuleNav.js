@@ -16,6 +16,7 @@ export default function B2ExamPracticeModuleNav({
   onContinueInPage,
   overviewHref,
   overviewLabel,
+  nextPartLabel,
   lang = 'en',
 }) {
   const levelSlug = String(slug || 'b2').toLowerCase();
@@ -32,9 +33,13 @@ export default function B2ExamPracticeModuleNav({
 
   let continueLabel = '';
   if (nav.continueMode === 'in-page' && nav.nextPartNumber) {
-    continueLabel = isEn
-      ? `Continue — Part ${nav.nextPartNumber}`
-      : `Continuar — Parte ${nav.nextPartNumber}`;
+    continueLabel = nextPartLabel
+      ? isEn
+        ? `Continue — ${nextPartLabel}`
+        : `Continuar — ${nextPartLabel}`
+      : isEn
+        ? `Continue — Part ${nav.nextPartNumber}`
+        : `Continuar — Parte ${nav.nextPartNumber}`;
   } else if (nav.continueMode === 'link' && nav.nextPartNumber && nav.continueModuleTitle) {
     continueLabel = isEn
       ? `Continue — Part ${nav.nextPartNumber}`

@@ -30,6 +30,7 @@ export default function B2WritingLongFormAiPanel({
   taskInputText = '',
   partLabel = '',
   partDescription = '',
+  examContextBuilder,
   onScoresReady,
   lang = 'en',
 }) {
@@ -87,6 +88,9 @@ export default function B2WritingLongFormAiPanel({
       const externalBaseConfigured = Boolean(
         String(process.env.NEXT_PUBLIC_AI_API_BASE_URL || '').trim(),
       );
+      const structuredExamContext =
+        typeof examContextBuilder === 'function' ? examContextBuilder(text) : '';
+
       const res = await fetch(buildClientApiUrl('/api/feedback/essay'), {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -95,12 +99,15 @@ export default function B2WritingLongFormAiPanel({
           level: 'b2',
           wordMin,
           wordMax,
-          taskContext: {
-            partLabel: partLabel || undefined,
-            partDescription: partDescription || undefined,
-            instructions: taskInstructions || undefined,
-            inputText: taskInputText || undefined,
-          },
+          structuredExamContext: structuredExamContext || undefined,
+          taskContext: structuredExamContext
+            ? undefined
+            : {
+                partLabel: partLabel || undefined,
+                partDescription: partDescription || undefined,
+                instructions: taskInstructions || undefined,
+                inputText: taskInputText || undefined,
+              },
         }),
       });
 
