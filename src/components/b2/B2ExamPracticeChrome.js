@@ -50,6 +50,9 @@ export function B2ExamPracticeChrome({
   progressBySlot,
   partsInPaper,
   examLabelsBySlot = {},
+  availableSlots,
+  showNewExamButton = false,
+  onNewExam,
   examPracticeOpen,
   title,
   subtitle,
@@ -85,6 +88,9 @@ export function B2ExamPracticeChrome({
         progressBySlot={progressBySlot}
         partsInPaper={partsInPaper}
         examLabelsBySlot={examLabelsBySlot}
+        availableSlots={availableSlots}
+        showNewExamButton={showNewExamButton}
+        onNewExam={onNewExam}
         lang={lang}
       />
 

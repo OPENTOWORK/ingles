@@ -1848,6 +1848,27 @@ body.nav-open {
   opacity: 0.92;
 }
 
+.levels-b2-exam-picker__empty {
+  margin: 0;
+  padding: 0.75rem 1rem;
+  text-align: center;
+  font-size: 0.875rem;
+  color: #64748b;
+  flex: 1 1 100%;
+}
+
+.levels-b2-exam-picker__slot--new {
+  border-style: dashed;
+  border-color: #93c5fd;
+  background: #eff6ff;
+  color: #1d4ed8;
+}
+
+.levels-b2-exam-picker__slot--new:hover {
+  border-color: #3b82f6;
+  background: #dbeafe;
+}
+
 .levels-exam-practice-root,
 .levels-exam-practice-root .levels-b2-practice,
 .levels-exam-practice-root .levels-b2-exam-picker,

@@ -75,6 +75,9 @@ function StarRow({ filled = 0, max = 3 }) {
  *   progressBySlot?: Record<number, { stars?: number, correct?: number, total?: number, approvedParts?: number }>,
  *   partsInPaper?: number,
  *   examLabelsBySlot?: Record<number, string>,
+ *   availableSlots?: number[],
+ *   showNewExamButton?: boolean,
+ *   onNewExam?: () => void,
  *   lang?: 'es' | 'en',
  * }} props
  */
@@ -84,9 +87,16 @@ export function B2ExamSlotProgressPicker({
   progressBySlot = {},
   partsInPaper = 4,
   examLabelsBySlot = {},
+  availableSlots,
+  showNewExamButton = false,
+  onNewExam,
   lang = 'en',
 }) {
   const en = lang === 'en';
+  const slotsToShow =
+    availableSlots !== undefined
+      ? availableSlots
+      : Array.from({ length: B2_EXAM_SLOT_MAX }, (_, i) => i + 1);
 
   return (
     <section
@@ -95,35 +105,53 @@ export function B2ExamSlotProgressPicker({
     >
       <p className="levels-b2-exam-picker__title">{en ? 'Choose an exam' : 'Elige un examen'}</p>
       <div role="group" className="levels-b2-exam-picker__grid">
-        {Array.from({ length: B2_EXAM_SLOT_MAX }, (_, i) => i + 1).map((n) => {
-          const active = value === n;
-          const prog = progressBySlot[n] || {};
-          const stars = Math.min(3, Math.max(0, Number(prog.stars) || 0));
-          const approvedParts = Number(prog.approvedParts) || 0;
-          const hasScore = approvedParts > 0 || Number(prog.total) > 0;
+        {slotsToShow.length === 0 ? (
+          <p className="levels-b2-exam-picker__empty">
+            {en ? 'No exams available yet.' : 'Aún no hay exámenes disponibles.'}
+          </p>
+        ) : (
+          slotsToShow.map((n) => {
+            const active = value === n;
+            const prog = progressBySlot[n] || {};
+            const stars = Math.min(3, Math.max(0, Number(prog.stars) || 0));
+            const approvedParts = Number(prog.approvedParts) || 0;
+            const hasScore = approvedParts > 0 || Number(prog.total) > 0;
 
-          return (
-            <button
-              key={n}
-              type="button"
-              onClick={() => onSelect(n)}
-              aria-pressed={active}
-              className={`levels-b2-exam-picker__slot${active ? ' levels-b2-exam-picker__slot--active' : ''}`}
-            >
-              <span>{examLabelsBySlot[n] || (en ? `Exam ${n}` : `Examen ${n}`)}</span>
-              <StarRow filled={stars} />
-              {hasScore ? (
-                <span className="levels-b2-exam-picker__slot-meta">
-                  {approvedParts}/{partsInPaper} {en ? 'parts' : 'partes'}
-                </span>
-              ) : (
-                <span className="levels-b2-exam-picker__slot-meta">
-                  {en ? 'No attempts' : 'Sin intentos'}
-                </span>
-              )}
-            </button>
-          );
-        })}
+            return (
+              <button
+                key={n}
+                type="button"
+                onClick={() => onSelect(n)}
+                aria-pressed={active}
+                className={`levels-b2-exam-picker__slot${active ? ' levels-b2-exam-picker__slot--active' : ''}`}
+              >
+                <span>{examLabelsBySlot[n] || (en ? `Exam ${n}` : `Examen ${n}`)}</span>
+                <StarRow filled={stars} />
+                {hasScore ? (
+                  <span className="levels-b2-exam-picker__slot-meta">
+                    {approvedParts}/{partsInPaper} {en ? 'parts' : 'partes'}
+                  </span>
+                ) : (
+                  <span className="levels-b2-exam-picker__slot-meta">
+                    {en ? 'No attempts' : 'Sin intentos'}
+                  </span>
+                )}
+              </button>
+            );
+          })
+        )}
+        {showNewExamButton && onNewExam ? (
+          <button
+            type="button"
+            onClick={onNewExam}
+            className="levels-b2-exam-picker__slot levels-b2-exam-picker__slot--new"
+          >
+            <span>{en ? '+ New exam' : '+ Examen nuevo'}</span>
+            <span className="levels-b2-exam-picker__slot-meta">
+              {en ? 'Auto-generate with DRALO AI' : 'Generar con DRALO AI'}
+            </span>
+          </button>
+        ) : null}
       </div>
     </section>
   );

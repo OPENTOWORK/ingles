@@ -75,10 +75,11 @@ export async function saveB2PartPuntuacionIfComplete({
 
   const profile = await ensureAppUserProfile();
   if (!profile.ok) {
+    if (profile.reason === 'no_session') {
+      return { saved: false, error: null, progress };
+    }
     const msg =
-      profile.reason === 'no_session'
-        ? 'Inicia sesión para guardar tu puntuación.'
-        : 'No se pudo sincronizar tu perfil de usuario.';
+      'No se pudo sincronizar tu perfil de usuario.';
     return { saved: false, error: new Error(msg), progress };
   }
 

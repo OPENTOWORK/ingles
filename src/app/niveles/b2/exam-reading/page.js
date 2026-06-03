@@ -1,6 +1,6 @@
 'use client';
 import { Suspense, useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { useLevelsExamAdminFlow, createAdminExamSelectHandler } from '@/hooks/useLevelsExamAdminFlow';
+import { useLevelsExamAdminFlow, createAdminExamSelectHandler, buildExamSlotPickerProps } from '@/hooks/useLevelsExamAdminFlow';
 import A2ExamGenerationStatus from '@/components/niveles/A2ExamGenerationStatus';
 import { usePathname, useSearchParams } from 'next/navigation';
 import { useB2ExamPracticeSlot } from '@/hooks/useB2ExamPracticeSlot';
@@ -285,6 +285,14 @@ function B2ReadingExamsPageInner() {
       }),
     [adminFlow, scoring, selectExamSlot, loadReadingData],
   );
+  const examSlotPickerProps = buildExamSlotPickerProps({
+    examenIdBySlot: scoring.examenIdBySlot,
+    adminFlow,
+    onSelectSlot: (slot) => {
+      scoring.handleSelectExam(selectExamSlot, slot);
+      void loadReadingData();
+    },
+  });
 
   useEffect(() => {
     mountedRef.current = true;
@@ -909,6 +917,7 @@ function B2ReadingExamsPageInner() {
         progressBySlot={scoring.progressBySlot}
         partsInPaper={scoring.partsInPaper}
         examPracticeOpen={scoring.examPracticeOpen}
+        {...examSlotPickerProps}
         title={isCombinedPaper ? 'B2 Reading and Use of English Practice' : 'B2 Reading Practice'}
         subtitle={isCombinedPaper ? 'Parts 1 to 7' : 'Parts 5 to 7'}
         timerLabel={timerLabel}

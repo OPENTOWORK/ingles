@@ -51,11 +51,7 @@ export function useB2ExamScoringSession({ partMin, partMax }) {
 
   useEffect(() => {
     if (!examPracticeOpen || !Object.keys(examenIdBySlot).length) return;
-    void (async () => {
-      const { ensureAppUserProfile } = await import('@/utils/ensureAppUserProfile');
-      await ensureAppUserProfile();
-      void refreshPuntuacionesProgress();
-    })();
+    void refreshPuntuacionesProgress();
   }, [examPracticeOpen, examenIdBySlot, refreshPuntuacionesProgress]);
 
   const setExamenContext = useCallback((examenId) => {
@@ -115,14 +111,15 @@ export function useB2ExamScoringSession({ partMin, partMax }) {
 
       if (result.saved) {
         lastSavedPartSigRef.current = sig;
-        setPartFinishNotice({
-          passed: progress.passed,
-          correct: progress.correct,
-          total: progress.total,
-          passing: progress.passing,
-        });
         void refreshPuntuacionesProgress();
       }
+
+      setPartFinishNotice({
+        passed: progress.passed,
+        correct: progress.correct,
+        total: progress.total,
+        passing: progress.passing,
+      });
 
       return result;
     },

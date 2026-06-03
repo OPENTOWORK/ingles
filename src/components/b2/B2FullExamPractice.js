@@ -14,7 +14,7 @@ import { useLevelsCategoryTimer } from '@/hooks/useLevelsCategoryTimer';
 import { supabase } from '@/utils/supabaseClient';
 import { getCachedB2Level, getCachedB2ExamNamesBySlot } from '@/utils/b2LevelCache';
 import { getB2PartScoring, starsFromApprovedPartsCount } from '@/utils/levelsB2PartScoring';
-import { useLevelsExamAdminFlow, createAdminExamSelectHandler } from '@/hooks/useLevelsExamAdminFlow';
+import { useLevelsExamAdminFlow, createAdminExamSelectHandler, buildExamSlotPickerProps } from '@/hooks/useLevelsExamAdminFlow';
 import A2ExamGenerationStatus from '@/components/niveles/A2ExamGenerationStatus';
 export const B2_FULL_EXAM_PART_MIN = 1;
 export const B2_FULL_EXAM_PART_MAX = 17;
@@ -110,6 +110,11 @@ function B2FullExamPracticeInner() {
     () => createAdminExamSelectHandler(adminFlow, (slot) => scoring.handleSelectExam(selectExamSlot, slot)),
     [adminFlow, scoring, selectExamSlot],
   );
+  const examSlotPickerProps = buildExamSlotPickerProps({
+    examenIdBySlot: scoring.examenIdBySlot,
+    adminFlow,
+    onSelectSlot: (slot) => scoring.handleSelectExam(selectExamSlot, slot),
+  });
 
   useEffect(() => {
     void loadExamCatalog();
@@ -163,6 +168,7 @@ function B2FullExamPracticeInner() {
         progressBySlot={scoring.progressBySlot}
         partsInPaper={B2_FULL_EXAM_PARTS_COUNT}
         examLabelsBySlot={examNamesBySlot}
+        {...examSlotPickerProps}
       />
 
       {catalogError ? (
@@ -174,7 +180,7 @@ function B2FullExamPracticeInner() {
       {!scoring.examPracticeOpen ? (
         <div style={{ textAlign: 'center', maxWidth: '640px', margin: '1.5rem auto 0', color: '#4a5568' }}>
           <p style={{ margin: 0, lineHeight: 1.55 }}>
-            Elige uno de los <strong>5 exámenes</strong> de Supabase. Cada examen incluye las{' '}
+            Elige uno de los <strong>exámenes disponibles</strong> en Supabase. Cada examen incluye las{' '}
             <strong>17 parts</strong> of B2 First (Reading and Use of English, Writing, Listening and Speaking).
             Tu progreso se guarda automáticamente por parte y examen.
           </p>

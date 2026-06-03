@@ -1,6 +1,6 @@
 'use client';
 import { Suspense, useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { useLevelsExamAdminFlow, createAdminExamSelectHandler } from '@/hooks/useLevelsExamAdminFlow';
+import { useLevelsExamAdminFlow, createAdminExamSelectHandler, buildExamSlotPickerProps } from '@/hooks/useLevelsExamAdminFlow';
 import A2ExamGenerationStatus from '@/components/niveles/A2ExamGenerationStatus';
 import { invalidateLevelExamCache } from '@/utils/levelsLevelCache';
 import { useSearchParams } from 'next/navigation';
@@ -242,9 +242,6 @@ function UseOfEnglishExamsPageInner() {
     (slot) => {
       selectExamSlot(slot);
       setExamPracticeOpen(true);
-      void (async () => {
-        await import('@/utils/ensureAppUserProfile').then((m) => m.ensureAppUserProfile());
-      })();
     },
     [selectExamSlot],
   );
@@ -253,6 +250,11 @@ function UseOfEnglishExamsPageInner() {
     () => createAdminExamSelectHandler(adminFlow, openExamSlot),
     [adminFlow, openExamSlot],
   );
+  const examSlotPickerProps = buildExamSlotPickerProps({
+    examenIdBySlot,
+    adminFlow,
+    onSelectSlot: openExamSlot,
+  });
 
   useEffect(() => {
     mountedRef.current = true;
@@ -636,7 +638,10 @@ function UseOfEnglishExamsPageInner() {
       const uid = await getSessionUserId();
       if (!uid) {
         setPartFinishNotice({
-          error: 'Sign in to save your score.',
+          passed: progress.passed,
+          correct: progress.correct,
+          total: progress.total,
+          passing: progress.passing,
         });
         return;
       }
@@ -750,11 +755,7 @@ function UseOfEnglishExamsPageInner() {
 
   useEffect(() => {
     if (!examPracticeOpen) return;
-    void (async () => {
-      const { ensureAppUserProfile } = await import('@/utils/ensureAppUserProfile');
-      await ensureAppUserProfile();
-      void refreshPuntuacionesProgress();
-    })();
+    void refreshPuntuacionesProgress();
   }, [examPracticeOpen, refreshPuntuacionesProgress]);
 
   const handleContinueInPage = useCallback(() => {
@@ -807,6 +808,7 @@ function UseOfEnglishExamsPageInner() {
         onSelect={handleSelectExam}
         progressBySlot={progressBySlot}
         lang="en"
+        {...examSlotPickerProps}
       />
       {!examPracticeOpen ? null : (
         <div className="levels-b2-practice">

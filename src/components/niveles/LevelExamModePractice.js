@@ -16,7 +16,7 @@ import { getLevelFullExamSections, getNivelesLevelHub } from '@/data/nivelesLeve
 import { supabase } from '@/utils/supabaseClient';
 import { getCachedLevelBySlug, getCachedExamenIdsBySlot } from '@/utils/levelsLevelCache';
 import { sortLevelsExamenesRows } from '@/utils/b2ResolveExam';
-import { useLevelsExamAdminFlow, reloadExamNamesBySlot } from '@/hooks/useLevelsExamAdminFlow';
+import { useLevelsExamAdminFlow, buildExamSlotPickerProps } from '@/hooks/useLevelsExamAdminFlow';
 import A2ExamGenerationStatus from '@/components/niveles/A2ExamGenerationStatus';
 
 function formatMinutes(m) {
@@ -66,12 +66,9 @@ function LevelExamModePracticeInner({ slug }) {
         const row = ordered.find((r) => r.id === id);
         names[Number(slot)] = row?.nombre?.trim() || `Test ${slot}`;
       });
-      for (let s = 1; s <= 5; s += 1) {
-        if (!names[s]) names[s] = `Test ${s}`;
-      }
       setExamNamesBySlot(names);
     } catch {
-      setExamNamesBySlot(Object.fromEntries([1, 2, 3, 4, 5].map((s) => [s, `Test ${s}`])));
+      setExamNamesBySlot({});
     }
   }, [slug]);
 
@@ -79,19 +76,21 @@ function LevelExamModePracticeInner({ slug }) {
     void loadExamCatalog();
   }, [loadExamCatalog]);
 
+  const examSlotPickerProps = buildExamSlotPickerProps({
+    examenIdBySlot,
+    adminFlow,
+    onSelectSlot: (slot) => {
+      selectExamSlot(slot);
+      setPickedSlot(true);
+    },
+  });
+
   const handlePickExam = useCallback(
     (n) => {
-      if (adminFlow.canRegenerateExams) {
-        void adminFlow.handleAdminExamSelect(n, (slot) => {
-          selectExamSlot(slot);
-          setPickedSlot(true);
-        });
-        return;
-      }
       selectExamSlot(n);
       setPickedSlot(true);
     },
-    [selectExamSlot, adminFlow],
+    [selectExamSlot],
   );
 
   const examComplete = session ? isExamModeComplete(session) : false;
@@ -127,13 +126,14 @@ function LevelExamModePracticeInner({ slug }) {
         partsInPaper={sections.length}
         examLabelsBySlot={examNamesBySlot}
         lang="en"
+        {...examSlotPickerProps}
       />
 
       {!pickedSlot ? (
         <div style={{ textAlign: 'center', maxWidth: '640px', margin: '1.5rem auto 0', color: '#4a5568' }}>
           <h1 style={{ margin: '0 0 0.75rem', color: '#1a365d' }}>Exam mode — {config.cefr}</h1>
           <p style={{ margin: 0, lineHeight: 1.55 }}>
-            Choose one of the <strong>5 tests</strong>. You will complete each paper under Cambridge time limits.
+            Choose one of the <strong>available tests</strong>. You will complete each paper under Cambridge time limits.
             Answers are hidden until you finish the full exam. Your progress is saved so you can continue later.
           </p>
         </div>

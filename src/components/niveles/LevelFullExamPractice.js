@@ -18,6 +18,7 @@ import {
 import { supabase } from '@/utils/supabaseClient';
 import { getCachedLevelBySlug, getCachedExamenIdsBySlot } from '@/utils/levelsLevelCache';
 import { sortLevelsExamenesRows } from '@/utils/b2ResolveExam';
+import { getAvailableExamSlots } from '@/hooks/useLevelsExamAdminFlow';
 import { starsFromApprovedPartsCount } from '@/utils/levelsB2PartScoring';
 
 function countApprovedInRange(partsMap, partMin, partMax) {
@@ -61,15 +62,10 @@ function LevelFullExamPracticeInner({ slug }) {
         const row = ordered.find((r) => r.id === id);
         names[Number(slot)] = row?.nombre?.trim() || `Examen ${slot}`;
       });
-      for (let s = 1; s <= 5; s += 1) {
-        if (!names[s]) names[s] = `Examen ${s}`;
-      }
       setExamNamesBySlot(names);
     } catch (e) {
       setCatalogError(e?.message || 'No se pudieron cargar los exámenes.');
-      setExamNamesBySlot(
-        Object.fromEntries([1, 2, 3, 4, 5].map((s) => [s, `Examen ${s}`])),
-      );
+      setExamNamesBySlot({});
     }
   }, [slug]);
 
@@ -129,6 +125,7 @@ function LevelFullExamPracticeInner({ slug }) {
         progressBySlot={scoring.progressBySlot}
         partsInPaper={partsCount}
         examLabelsBySlot={examNamesBySlot}
+        availableSlots={getAvailableExamSlots(scoring.examenIdBySlot)}
       />
 
       {catalogError ? (
@@ -147,7 +144,7 @@ function LevelFullExamPracticeInner({ slug }) {
           }}
         >
           <p style={{ margin: 0, lineHeight: 1.55 }}>
-            Elige uno de los <strong>5 exámenes</strong>. Cada examen incluye las secciones del{' '}
+            Elige uno de los <strong>exámenes disponibles</strong>. Cada examen incluye las secciones del{' '}
             <strong>{config.cefr}</strong> ({config.examName}).
           </p>
         </div>

@@ -49,29 +49,21 @@ export function useLevelExamScoringSession({ slug, partMin, partMax }) {
     void reloadExamCatalog();
   }, [reloadExamCatalog]);
 
-  useEffect(() => {
-    if (!examPracticeOpen) return;
-    void (async () => {
-      const { ensureAppUserProfile } = await import('@/utils/ensureAppUserProfile');
-      await ensureAppUserProfile();
-      void refreshPuntuacionesProgress();
-    })();
-  }, [examPracticeOpen, refreshPuntuacionesProgress]);
-
-  const setExamenContext = useCallback((examenId) => {
-    setCurrentExamenId(examenId);
-    currentExamenIdRef.current = examenId;
-  }, []);
-
   const handleSelectExam = useCallback((selectExamSlot, slot) => {
     selectExamSlot(slot);
     setExamPracticeOpen(true);
     setPartFinishNotice(null);
     lastSavedPartSigRef.current = '';
-    void (async () => {
-      const { ensureAppUserProfile } = await import('@/utils/ensureAppUserProfile');
-      await ensureAppUserProfile();
-    })();
+  }, []);
+
+  useEffect(() => {
+    if (!examPracticeOpen) return;
+    void refreshPuntuacionesProgress();
+  }, [examPracticeOpen, refreshPuntuacionesProgress]);
+
+  const setExamenContext = useCallback((examenId) => {
+    setCurrentExamenId(examenId);
+    currentExamenIdRef.current = examenId;
   }, []);
 
   const resetPartNoticeOnPartChange = useCallback((examSlot, partNumber, progressBySlotLocal) => {

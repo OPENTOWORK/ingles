@@ -17,7 +17,7 @@ import { formatPartsLabel, getExamSkillPartRange } from '@/data/levelExamPartMap
 import { supabase } from '@/utils/supabaseClient';
 import { getCachedLevelBySlug, getCachedExamenIdsBySlot } from '@/utils/levelsLevelCache';
 import { sortLevelsExamenesRows } from '@/utils/b2ResolveExam';
-import { useLevelsExamAdminFlow, reloadExamNamesBySlot } from '@/hooks/useLevelsExamAdminFlow';
+import { useLevelsExamAdminFlow, reloadExamNamesBySlot, buildExamSlotPickerProps } from '@/hooks/useLevelsExamAdminFlow';
 import A2ExamGenerationStatus from '@/components/niveles/A2ExamGenerationStatus';
 
 function parsePartNumber(text) {
@@ -63,11 +63,16 @@ function LevelSkillPracticePageInner({ slug, skillRoute }) {
     examenIdBySlot: scoring.examenIdBySlot,
     onCatalogUpdated: scoring.reloadExamCatalog,
   });
+  const examSlotPickerProps = buildExamSlotPickerProps({
+    examenIdBySlot: scoring.examenIdBySlot,
+    adminFlow,
+    onSelectSlot: (slot) => scoring.handleSelectExam(selectExamSlot, slot),
+  });
   const { label: timerLabel } = useLevelsCategoryTimer();
 
   useEffect(() => {
     void (async () => {
-      const names = Object.fromEntries([1, 2, 3, 4, 5].map((s) => [s, `Examen ${s}`]));
+      const names = {};
       try {
         const { data: levelData } = await getCachedLevelBySlug(supabase, slug);
         if (!levelData?.id) {
@@ -139,16 +144,11 @@ function LevelSkillPracticePageInner({ slug, skillRoute }) {
       ) : null}
       <B2ExamPracticeChrome
         examSlot={examSlot}
-        onSelectExam={(n) => {
-          if (adminFlow.canRegenerateExams) {
-            void adminFlow.handleAdminExamSelect(n, (slot) => scoring.handleSelectExam(selectExamSlot, slot));
-            return;
-          }
-          scoring.handleSelectExam(selectExamSlot, n);
-        }}
+        onSelectExam={(n) => scoring.handleSelectExam(selectExamSlot, n)}
         progressBySlot={scoring.progressBySlot}
         partsInPaper={partRows.length}
         examLabelsBySlot={examNamesBySlot}
+        {...examSlotPickerProps}
         examPracticeOpen={scoring.examPracticeOpen}
         title={title}
         subtitle={scoring.examPracticeOpen ? partsLabel : undefined}
@@ -174,7 +174,7 @@ function LevelSkillPracticePageInner({ slug, skillRoute }) {
             }}
           >
             <p style={{ margin: 0 }}>
-              Elige uno de los <strong>5 exámenes</strong> arriba. Cada examen incluye las{' '}
+              Elige uno de los <strong>exámenes disponibles</strong> arriba. Cada examen incluye las{' '}
               <strong>{partRows.length} partes</strong> de esta sección.
             </p>
           </div>

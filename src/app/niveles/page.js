@@ -1,7 +1,5 @@
 'use client';
 
-import { useEffect } from 'react';
-import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { useUserRole } from '@/context/UserRoleContext';
 import { usePlacementAccess } from '@/context/PlacementAccessContext';
@@ -69,7 +67,6 @@ function LevelCardContent({ nivelData }) {
 }
 
 export default function Niveles() {
-  const router = useRouter();
   const { userRole, session } = useUserRole();
   const {
     loading: placementLoading,
@@ -77,23 +74,8 @@ export default function Niveles() {
     hasPlacementResult,
   } = usePlacementAccess();
 
-  useEffect(() => {
-    if (!session) {
-      router.push('/login');
-    }
-  }, [session, router]);
-
-  if (!session) {
-    return (
-      <main className="shell niveles-page center">
-        <div className="loader" aria-label="Loading" />
-        <NivelesPageStyles />
-        <TeoriaGlobalStyles />
-      </main>
-    );
-  }
-
-  const isStudent = userRole === 'student' || userRole === 'alumno';
+  const isStudent =
+    Boolean(session) && (userRole === 'student' || userRole === 'alumno');
 
   const getLockLabel = (nivel) => {
     if (isNivelesLevelComingSoonForUser(userRole, nivel)) return 'COMING SOON';
@@ -161,8 +143,8 @@ export default function Niveles() {
         </section>
 
         <ExamTheorySection
-          userId={session.user.id}
-          accessToken={session.access_token}
+          userId={session?.user?.id}
+          accessToken={session?.access_token}
           isStudent={isStudent}
         />
       </div>

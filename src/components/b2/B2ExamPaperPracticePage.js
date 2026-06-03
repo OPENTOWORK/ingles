@@ -128,6 +128,7 @@ import {
   useLevelsExamAdminFlow,
   reloadExamNamesBySlot,
   createAdminExamSelectHandler,
+  buildExamSlotPickerProps,
 } from '@/hooks/useLevelsExamAdminFlow';
 import { formatLevelsPartDisplayName } from '@/utils/formatLevelsPartDisplayName';
 import B2ExamPracticeModuleNav from '@/components/b2/B2ExamPracticeModuleNav';
@@ -575,6 +576,11 @@ function B2ExamPaperPracticePageInner({
     () => createAdminExamSelectHandler(adminFlow, (slot) => scoring.handleSelectExam(selectExamSlot, slot)),
     [adminFlow, scoring, selectExamSlot],
   );
+  const examSlotPickerProps = buildExamSlotPickerProps({
+    examenIdBySlot: scoring.examenIdBySlot,
+    adminFlow,
+    onSelectSlot: (slot) => scoring.handleSelectExam(selectExamSlot, slot),
+  });
 
   useEffect(() => {
     mountedRef.current = true;
@@ -1877,6 +1883,7 @@ function B2ExamPaperPracticePageInner({
         progressBySlot={scoring.progressBySlot}
         partsInPaper={scoring.partsInPaper}
         examLabelsBySlot={examLabelsBySlot}
+        {...examSlotPickerProps}
         examPracticeOpen={scoring.examPracticeOpen}
         title={title}
         subtitle={subtitle}

@@ -7,7 +7,36 @@ import { userHasRole } from '@/utils/authRoles';
 import { getCachedLevelBySlug, getCachedExamenIdsBySlot, invalidateLevelExamCache } from '@/utils/levelsLevelCache';
 import { sortLevelsExamenesRows } from '@/utils/b2ResolveExam';
 import { A2_EXAM_PARTS } from '@/lib/a2ExamCatalog';
+import { B2_EXAM_SLOT_MAX } from '@/lib/b2ExamCatalog';
 import { getLevelExamParts, isExamGenerationSlug } from '@/lib/levelsExamCatalog';
+
+/** Slots con examen ya generado en Supabase (ordenados). */
+export function getAvailableExamSlots(examenIdBySlot = {}) {
+  return Object.entries(examenIdBySlot)
+    .filter(([, id]) => Boolean(id))
+    .map(([slot]) => Number(slot))
+    .filter((n) => Number.isFinite(n) && n > 0)
+    .sort((a, b) => a - b);
+}
+
+/** Primer slot libre (1…max) para un examen nuevo. */
+export function findNextEmptyExamSlot(examenIdBySlot = {}, max = B2_EXAM_SLOT_MAX) {
+  for (let s = 1; s <= max; s += 1) {
+    if (!examenIdBySlot[s]) return s;
+  }
+  return null;
+}
+
+/** Props del selector: exámenes existentes + botón «Examen nuevo» (solo admin). */
+export function buildExamSlotPickerProps({ examenIdBySlot = {}, adminFlow, onSelectSlot }) {
+  return {
+    availableSlots: getAvailableExamSlots(examenIdBySlot),
+    showNewExamButton: Boolean(adminFlow?.canRegenerateExams),
+    onNewExam: adminFlow?.canRegenerateExams
+      ? () => void adminFlow.handleCreateNewExam(onSelectSlot)
+      : undefined,
+  };
+}
 
 function getPartsForSlug(slug) {
   const key = String(slug || '').toLowerCase();
@@ -20,13 +49,9 @@ function getPartsForSlug(slug) {
  * A2: regeneración completa con borrado previo. B1–C2 (incl. B2): solo partes sin contenido (no borra lo existente).
  */
 
-/** Envuelve el selector de examen: solo admin ve confirmación y puede generar/regenerar. */
-export function createAdminExamSelectHandler(adminFlow, onSelectSlot) {
+/** Abre el examen elegido sin diálogos de generación (eso va en «Examen nuevo»). */
+export function createAdminExamSelectHandler(_adminFlow, onSelectSlot) {
   return (slot) => {
-    if (adminFlow?.canRegenerateExams) {
-      void adminFlow.handleAdminExamSelect(slot, onSelectSlot);
-      return;
-    }
     onSelectSlot(slot);
   };
 }
@@ -172,59 +197,35 @@ export function useLevelsExamAdminFlow({ slug = 'a2', examenIdBySlot = {}, onCat
     [slug, onCatalogUpdated, examParts, partTotal, levelUpper, supportsGeneration],
   );
 
-  const handleAdminExamSelect = useCallback(
-    async (slot, onSelectSlot) => {
-      if (!canRegenerateExams) {
-        onSelectSlot(slot);
-        return;
-      }
+  const handleAdminExamSelect = useCallback((slot, onSelectSlot) => {
+    onSelectSlot(slot);
+  }, []);
 
-      if (!slotHasContent(slot)) {
-        const ok = window.confirm(
-          `El Examen ${slot} ${levelUpper} aún no existe en Supabase.\n\n¿Generarlo ahora con DRALO AI? (${partTotal} partes; suele tardar varios minutos)`,
+  const handleCreateNewExam = useCallback(
+    async (onSelectSlot) => {
+      if (!canRegenerateExams) return;
+
+      const targetSlot = findNextEmptyExamSlot(examenIdBySlot);
+      if (!targetSlot) {
+        window.alert(
+          `Ya hay ${B2_EXAM_SLOT_MAX} exámenes ${levelUpper}. No se pueden crear más desde aquí.`,
         );
-        if (!ok) return;
-        try {
-          await generateExam(slot, { preserveExistingParts: false });
-          onSelectSlot(slot);
-        } catch {
-          /* genError shown in UI */
-        }
         return;
       }
 
-      if (slug === 'a2') {
-        const regen = window.confirm(
-          `El Examen ${slot} ya existe.\n\n¿Regenerarlo completo con DRALO AI?\n\nSe borrará todo el contenido actual de este examen en Supabase y se crearán de nuevo las ${partTotal} partes (varios minutos).`,
-        );
-        if (!regen) {
-          onSelectSlot(slot);
-          return;
-        }
-        try {
-          await generateExam(slot, { force: true });
-          onSelectSlot(slot);
-        } catch {
-          /* genError shown in UI */
-        }
-        return;
-      }
-
-      const regen = window.confirm(
-        `El Examen ${slot} ${levelUpper} ya existe.\n\n¿Completar o actualizar con DRALO AI?\n\nSe generarán solo las partes que aún no tienen contenido en Supabase. Las partes que ya tienen preguntas no se borrarán ni cambiarán de formato (${partTotal} partes en total).`,
+      const ok = window.confirm(
+        `¿Generar ${levelUpper} Examen ${targetSlot} con DRALO AI?\n\n${partTotal} partes; suele tardar varios minutos.`,
       );
-      if (!regen) {
-        onSelectSlot(slot);
-        return;
-      }
+      if (!ok) return;
+
       try {
-        await generateExam(slot, { preserveExistingParts: true });
-        onSelectSlot(slot);
+        await generateExam(targetSlot, { preserveExistingParts: false });
+        onSelectSlot(targetSlot);
       } catch {
         /* genError shown in UI */
       }
     },
-    [canRegenerateExams, slotHasContent, generateExam, slug, partTotal, levelUpper],
+    [canRegenerateExams, examenIdBySlot, generateExam, partTotal, levelUpper],
   );
 
   const clearGenError = useCallback(() => {
@@ -244,6 +245,7 @@ export function useLevelsExamAdminFlow({ slug = 'a2', examenIdBySlot = {}, onCat
     slotHasContent,
     generateExam,
     handleAdminExamSelect,
+    handleCreateNewExam,
     supportsGeneration,
     /** true solo para rol admin/administrador en niveles con generación (A2–C2) */
     canRegenerateExams,

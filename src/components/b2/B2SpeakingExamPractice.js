@@ -26,7 +26,7 @@ import B2ExamPracticeModuleNav from '@/components/b2/B2ExamPracticeModuleNav';
 import ExamModeSectionBanner from '@/components/niveles/ExamModeSectionBanner';
 import { useExamModeStrict } from '@/hooks/useExamModeStrict';
 import { sitePublicPath } from '@/utils/sitePublicPath';
-import { useLevelsExamAdminFlow, createAdminExamSelectHandler } from '@/hooks/useLevelsExamAdminFlow';
+import { useLevelsExamAdminFlow, createAdminExamSelectHandler, buildExamSlotPickerProps } from '@/hooks/useLevelsExamAdminFlow';
 import A2ExamGenerationStatus from '@/components/niveles/A2ExamGenerationStatus';
 
 const buttonStyle = {
@@ -145,6 +145,11 @@ function B2SpeakingExamPracticeInner({ title, subtitle, loadingLabel, refreshLab
     () => createAdminExamSelectHandler(adminFlow, (slot) => scoring.handleSelectExam(selectExamSlot, slot)),
     [adminFlow, scoring, selectExamSlot],
   );
+  const examSlotPickerProps = buildExamSlotPickerProps({
+    examenIdBySlot: scoring.examenIdBySlot,
+    adminFlow,
+    onSelectSlot: (slot) => scoring.handleSelectExam(selectExamSlot, slot),
+  });
 
   useEffect(() => {
     void loadParts();
@@ -240,6 +245,7 @@ function B2SpeakingExamPracticeInner({ title, subtitle, loadingLabel, refreshLab
         progressBySlot={scoring.progressBySlot}
         partsInPaper={scoring.partsInPaper}
         examPracticeOpen={scoring.examPracticeOpen}
+        {...examSlotPickerProps}
         title={title}
         subtitle={subtitle}
         timerLabel={timerLabel}
