@@ -12,6 +12,11 @@ import {
   filterTheoryPartsByLevel,
   findTheoryPartByHref,
 } from '@/lib/theoryPartsCatalog';
+import {
+  buildTeoriaSuperBatchPlan,
+  filterLevelsForTeoriaAdmin,
+  summarizeTeoriaSuperBatchPlan,
+} from '@/lib/teoriaSuperBatchPlan';
 import AdminEjercicioEditModal from '@/components/admin/AdminEjercicioEditModal';
 import AdminRecentEjerciciosSection from '@/components/admin/AdminRecentEjerciciosSection';
 import styles from './AdminEjerciciosPanel.module.css';
@@ -40,6 +45,8 @@ export default function AdminEjerciciosPanel() {
   const [savingEdit, setSavingEdit] = useState(false);
   const [rowBusyId, setRowBusyId] = useState(null);
   const [bulkDeleting, setBulkDeleting] = useState(false);
+  const [superRunning, setSuperRunning] = useState(false);
+  const [superProgress, setSuperProgress] = useState({ done: 0, total: 0 });
   const [editingExercise, setEditingExercise] = useState(null);
   const [editModalOpen, setEditModalOpen] = useState(false);
   const [error, setError] = useState('');
@@ -87,6 +94,15 @@ export default function AdminEjerciciosPanel() {
     [theoryParts, topicHref],
   );
 
+  const superBatchSummary = useMemo(() => {
+    if (!levels.length || !skills.length || !tipos.length || !theoryParts.length) {
+      return null;
+    }
+    return summarizeTeoriaSuperBatchPlan(
+      buildTeoriaSuperBatchPlan({ theoryParts, levels, skills, tipos }),
+    );
+  }, [theoryParts, levels, skills, tipos]);
+
   const load = useCallback(async () => {
     setError('');
     const headers = await getAdminFetchHeaders();
@@ -94,7 +110,7 @@ export default function AdminEjerciciosPanel() {
     const json = await res.json().catch(() => ({}));
     if (!res.ok) throw new Error(json.error || 'No se pudieron cargar los datos.');
 
-    const levelList = json.levels || [];
+    const levelList = filterLevelsForTeoriaAdmin(json.levels || []);
     const skillList = json.skills || [];
     const tipoList = json.tipos || [];
 
@@ -108,8 +124,13 @@ export default function AdminEjerciciosPanel() {
     setAiConfigured(Boolean(json.aiConfigured));
 
     const defaultNivelId =
-      levelList.find((l) => l.nombre === 'b2')?.id || levelList[0]?.id || '';
-    setNivelId((prev) => prev || defaultNivelId);
+      levelList.find((l) => String(l.nombre).toLowerCase() === 'b2')?.id ||
+      levelList[0]?.id ||
+      '';
+    setNivelId((prev) => {
+      if (prev && levelList.some((l) => l.id === prev)) return prev;
+      return defaultNivelId;
+    });
     setSkillId((prev) => prev || skillList[0]?.id || '');
     setTipoId((prev) => prev || tipoList[0]?.id || '');
 
@@ -152,6 +173,70 @@ export default function AdminEjerciciosPanel() {
     const parts = filterTheoryPartsByLevel(theoryParts, nivel?.nombre);
     if (!parts.some((p) => p.href === topicHref)) {
       setTopicHref(parts[0]?.href || '');
+    }
+  };
+
+  const runSuperBatch = async () => {
+    const summary = superBatchSummary;
+    if (!summary?.total) {
+      setError('No hay combinaciones para generar.');
+      return;
+    }
+
+    const mins = Math.ceil((summary.total * 4) / 60);
+    const ok = window.confirm(
+      `SUPERBOTÓN — se generarán ${summary.total.toLocaleString('es-ES')} ejercicios.\n\n` +
+        `• ${summary.folders} carpetas (Theory + Exam theory)\n` +
+        `• ${summary.topics} temas\n` +
+        `• ${summary.topics} temas × ${summary.cefrLevels} niveles × ${summary.skills} skills × ${summary.tipos} tipos\n\n` +
+        `Fórmula: ${summary.topics} × ${summary.cefrLevels} × ${summary.skills} × ${summary.tipos} = ${summary.total.toLocaleString('es-ES')}.\n\n` +
+        `Puede tardar horas (≈${mins} min con IA). ¿Continuar?`,
+    );
+    if (!ok) return;
+
+    setSuperRunning(true);
+    setCreating(true);
+    setError('');
+    setSuccess('');
+    setSuperProgress({ done: 0, total: summary.total });
+
+    let offset = 0;
+    let createdTotal = 0;
+    let failedTotal = 0;
+
+    try {
+      const headers = await getAdminFetchHeaders();
+
+      while (offset < summary.total) {
+        const res = await fetch('/api/admin/teoria-ejercicios/super-batch', {
+          method: 'POST',
+          headers,
+          body: JSON.stringify({ offset, limit: 5 }),
+        });
+        const json = await res.json().catch(() => ({}));
+        if (!res.ok) throw new Error(json.error || 'Error en el lote del superbotón.');
+
+        createdTotal += json.createdCount ?? 0;
+        failedTotal += json.failedCount ?? 0;
+        offset = json.nextOffset ?? offset + (json.processed ?? 0);
+        setSuperProgress({ done: offset, total: summary.total });
+
+        if (json.recent) setRecent(json.recent);
+        if (json.done) break;
+      }
+
+      setSuccess(
+        `Superbotón completado: ${createdTotal.toLocaleString('es-ES')} creados` +
+          (failedTotal ? `, ${failedTotal} fallos` : '') +
+          ` de ${summary.total.toLocaleString('es-ES')}.`,
+      );
+      await load();
+    } catch (e) {
+      setError(e.message || 'Error');
+    } finally {
+      setSuperRunning(false);
+      setCreating(false);
+      setSuperProgress({ done: 0, total: 0 });
     }
   };
 
@@ -345,6 +430,34 @@ export default function AdminEjerciciosPanel() {
           Elige la parte de teoría (Theory o Exam theory), nivel CEFR, skill y tipo. El
           enlace a la unidad se guarda en la descripción del ejercicio.
         </p>
+
+        {superBatchSummary ? (
+          <div className={styles.superBox}>
+            <div className={styles.superBoxText}>
+              <p className={styles.superBoxTitle}>Superbotón</p>
+              <p className={styles.superBoxDesc}>
+                Genera <strong>{superBatchSummary.total.toLocaleString('es-ES')}</strong>{' '}
+                ejercicios: {superBatchSummary.topics} temas × {superBatchSummary.cefrLevels}{' '}
+                niveles × {superBatchSummary.skills} skills × {superBatchSummary.tipos} tipos (
+                {superBatchSummary.folders} carpetas).
+              </p>
+              {superRunning ? (
+                <p className={styles.superProgress} role="status">
+                  Progreso: {superProgress.done.toLocaleString('es-ES')} /{' '}
+                  {superProgress.total.toLocaleString('es-ES')}
+                </p>
+              ) : null}
+            </div>
+            <button
+              type="button"
+              className={`${styles.btn} ${styles.btnSuper}`}
+              disabled={creating || superRunning || bulkDeleting}
+              onClick={runSuperBatch}
+            >
+              {superRunning ? 'Generando…' : `⚡ Superbotón (${superBatchSummary.total.toLocaleString('es-ES')})`}
+            </button>
+          </div>
+        ) : null}
 
         <div className={styles.toolbar}>
           <label className={`${styles.field} ${styles.fieldPart}`}>

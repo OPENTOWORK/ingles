@@ -1366,7 +1366,7 @@ body.nav-open {
   flex-wrap: wrap;
   gap: 0.65rem;
   justify-content: center;
-  max-width: 640px;
+  max-width: 820px;
 }
 
 .home-quick-nav__link {

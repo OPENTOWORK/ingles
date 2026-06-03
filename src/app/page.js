@@ -3,7 +3,6 @@
 import Link from 'next/link';
 import SiteMascot from '@/components/SiteMascot';
 import HomeHowItWorks from '@/components/home/HomeHowItWorks';
-import HomePricingTeaser from '@/components/home/HomePricingTeaser';
 import HomeQuickNav from '@/components/home/HomeQuickNav';
 import { useGuidedTour } from '@/context/GuidedTourContext';
 import { useUserRole } from '@/context/UserRoleContext';
@@ -56,8 +55,6 @@ export default function Home() {
           <p>&ldquo;The best preparation for tomorrow is doing your best today.&rdquo;</p>
           <footer>— Your time is now</footer>
         </blockquote>
-
-        {showAdminHomeLinks ? <HomePricingTeaser /> : null}
 
         {isRegistered ? <HomeHowItWorks onStartTour={startTour} /> : null}
         {showAdminHomeLinks ? <HomeQuickNav /> : null}

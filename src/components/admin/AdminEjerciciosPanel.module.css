@@ -102,6 +102,60 @@
   background: #4338ca;
 }
 
+.superBox {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 1.25rem;
+  padding: 16px 18px;
+  border-radius: 14px;
+  border: 2px solid #fcd34d;
+  background: linear-gradient(135deg, #fffbeb 0%, #fff 55%);
+  box-shadow: 0 4px 20px rgba(245, 158, 11, 0.12);
+}
+
+.superBoxTitle {
+  margin: 0 0 0.35rem;
+  font-size: 1rem;
+  font-weight: 800;
+  color: #92400e;
+}
+
+.superBoxDesc {
+  margin: 0;
+  font-size: 0.88rem;
+  color: #78350f;
+  line-height: 1.5;
+  max-width: 42rem;
+}
+
+.superProgress {
+  margin: 0.5rem 0 0;
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: #b45309;
+}
+
+.btnSuper {
+  flex-shrink: 0;
+  border-color: #f59e0b;
+  background: linear-gradient(135deg, #fbbf24, #f59e0b);
+  color: #78350f;
+  font-weight: 800;
+  box-shadow: 0 4px 14px rgba(245, 158, 11, 0.35);
+}
+
+.btnSuper:hover {
+  background: linear-gradient(135deg, #fcd34d, #f59e0b);
+}
+
+.btnSuper:disabled {
+  opacity: 0.65;
+  cursor: not-allowed;
+}
+
 .btnPrimary:disabled {
   opacity: 0.6;
   cursor: not-allowed;

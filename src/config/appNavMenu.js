@@ -1,8 +1,9 @@
-/** Theory, placement y training: en la home debajo de «How it works», no en la barra superior. */
+/** Theory, placement, training y planes: en la home (solo admin ve esta fila). */
 export const HOME_MAIN_LINKS = [
   { href: '/teoria', label: 'Theory', tourId: 'nav-theory' },
   { href: '/prueba-nivel', label: 'Placement Test', tourId: 'nav-placement' },
   { href: '/training', label: 'Training' },
+  { href: '/precios', label: 'Planes', tourId: 'nav-pricing' },
 ];
 
 /** Enlaces en la barra superior / menú móvil antes de Dralo AI. */
