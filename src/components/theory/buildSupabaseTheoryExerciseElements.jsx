@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { MultipleChoiceExercise } from '@/components/theory/ExerciseComponents';
 import TheoryExerciseReportError from '@/components/theory/TheoryExerciseReportError';
 import TheoryExerciseShell from '@/components/theory/TheoryExerciseShell';
+import { normalizeTeoriaClosedOpciones } from '@/lib/levelsTeoriaExerciseTypes';
 
 function normalizeForCompare(text) {
   return String(text || '')
@@ -153,13 +154,14 @@ export function buildSupabaseTheoryExerciseElements(exercises) {
   return (exercises || [])
     .map((ex) => {
       const exerciseKey = `supabase:${ex.id}`;
-      const typeLabel = ex.tipoLabel || 'Exercise';
+      const colloquialLabel = ex.tipoColloquialLabel || ex.tipoLabel || 'Exercise';
 
       if (ex.answerMode === 'open') {
       return (
         <TheoryExerciseShell
           key={exerciseKey}
-          typeLabel={typeLabel}
+          typeLabel={colloquialLabel}
+          colloquialLabel={colloquialLabel}
           reportExerciseId={ex.id}
           reportQuestion={ex.pregunta}
         >
@@ -172,7 +174,10 @@ export function buildSupabaseTheoryExerciseElements(exercises) {
       );
       }
 
-      const opciones = (ex.opciones || []).filter((o) => o.text);
+      const opciones = normalizeTeoriaClosedOpciones(
+        ex.tipoNum,
+        (ex.opciones || []).filter((o) => o.text),
+      );
       if (!opciones.length) return null;
 
       const correctIndex = Math.max(
@@ -185,7 +190,8 @@ export function buildSupabaseTheoryExerciseElements(exercises) {
       return (
         <TheoryExerciseShell
           key={exerciseKey}
-          typeLabel={typeLabel}
+          typeLabel={colloquialLabel}
+          colloquialLabel={colloquialLabel}
           reportExerciseId={ex.id}
           reportQuestion={ex.pregunta}
         >

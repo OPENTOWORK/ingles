@@ -60,6 +60,10 @@ export default function TheoryEngagementExerciseFlow({
   );
 
   const currentExercise = exercises[currentIndex] ?? null;
+  const currentTypeLabel =
+    (isValidElement(currentExercise) && currentExercise.props?.colloquialLabel) ||
+    (isValidElement(currentExercise) && currentExercise.props?.typeLabel) ||
+    null;
 
   const goNext = useCallback(() => {
     const hasNext = currentIndex < total - 1;
@@ -155,10 +159,8 @@ export default function TheoryEngagementExerciseFlow({
               {intro.emoji}
             </span>
             <div className={styles.bannerText}>
-              <p className={styles.bannerTitle}>Engagement burst</p>
-              <p className={styles.bannerSubtitle}>
-                {total} quick pop-up{total === 1 ? '' : 's'} · {levelLabel}
-              </p>
+              <p className={styles.bannerTitle}>Dralo Sprint</p>
+              <p className={styles.bannerSubtitle}>{levelLabel}</p>
             </div>
           </div>
           <div className={styles.body}>
@@ -232,8 +234,8 @@ export default function TheoryEngagementExerciseFlow({
             {hook.emoji}
           </span>
           <div className={styles.bannerText}>
-            <p className={styles.bannerTitle}>{hook.title}</p>
-            <p className={styles.bannerSubtitle}>{hook.subtitle}</p>
+            <p className={styles.bannerTitle}>{currentTypeLabel || hook.title}</p>
+            <p className={styles.bannerSubtitle}>{levelLabel}</p>
           </div>
         </div>
 

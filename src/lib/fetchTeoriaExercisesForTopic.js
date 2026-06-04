@@ -1,5 +1,10 @@
 import { normalizeTopicHref } from '@/lib/normalizeTopicHref';
-import { isTeoriaTipoOpen, teoriaTipoLabel } from '@/lib/levelsTeoriaExerciseTypes';
+import {
+  isTeoriaTipoOpen,
+  parseTeoriaTipoNumber,
+  teoriaTipoColloquialLabel,
+  teoriaTipoLabel,
+} from '@/lib/levelsTeoriaExerciseTypes';
 import { parseTopicHrefFromTeoriaDescripcion, parseStudentInstructionFromTeoriaDescripcion } from '@/lib/teoriaExerciseDescripcion';
 
 const PREGUNTAS_TABLE = 'levels_teoria_preguntas';
@@ -12,6 +17,8 @@ const ABIERTAS_TABLE = 'levels_teoria_respuestas_abiertas';
  * @property {string} pregunta
  * @property {string} instruction
  * @property {string} tipoLabel
+ * @property {string} tipoColloquialLabel
+ * @property {number|null} tipoNum
  * @property {'open'|'closed'} answerMode
  * @property {{ text: string, correcta: boolean }[]} opciones
  * @property {string|null} respuestaAbierta
@@ -98,11 +105,15 @@ export async function fetchTeoriaExercisesForTopic(db, {
         String(p.descripcion || '').split(' | ').pop()?.trim() ||
         '';
 
+      const tipoNum = parseTeoriaTipoNumber(tipo);
+
       return {
         id: p.id,
         pregunta: String(p.pregunta || '').trim(),
         instruction,
         tipoLabel: teoriaTipoLabel(tipo),
+        tipoColloquialLabel: teoriaTipoColloquialLabel(tipo),
+        tipoNum,
         answerMode: open ? 'open' : 'closed',
         opciones: opcionesByPregunta[p.id] || [],
         respuestaAbierta: abierta?.respuesta ? String(abierta.respuesta) : null,

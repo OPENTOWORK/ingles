@@ -16,6 +16,7 @@ import {
 } from '@/lib/examTheoryTopicUnlock';
 import { filterTopics } from '@/data/teoriaSections';
 import { SEQUENTIAL_LOCK_FOR_STUDENTS } from '@/lib/theoryLockConfig';
+import ExamTheoryPartTipsSection from '@/components/theory/ExamTheoryPartTipsSection';
 
 export default function ExamTheoryTopicList({
   sectionSlug,
@@ -100,6 +101,18 @@ export default function ExamTheoryTopicList({
         </p>
       </div>
 
+      <ExamTheoryPartTipsSection
+        sectionSlug={sectionSlug}
+        sectionAccent={sectionAccent}
+      />
+
+      <header className="exam-theory-topics-block">
+        <h2 className="exam-theory-topics-block__title">Theory topics</h2>
+        <p className="exam-theory-topics-block__desc">
+          Deep-dive units on strategies, language, and exam techniques for this skill.
+        </p>
+      </header>
+
       <TeoriaFilterToolbar
         query={query}
         onQueryChange={setQuery}
@@ -180,6 +193,22 @@ function EmptyState({ onReset }) {
 function ExamTheoryTopicListStyles() {
   return (
     <style jsx global>{`
+      .exam-theory-topics-page .exam-theory-topics-block {
+        margin: 0 0 14px;
+      }
+      .exam-theory-topics-page .exam-theory-topics-block__title {
+        margin: 0;
+        font-size: 1.15rem;
+        font-weight: 800;
+        letter-spacing: -0.02em;
+        color: var(--text);
+      }
+      .exam-theory-topics-page .exam-theory-topics-block__desc {
+        margin: 6px 0 0;
+        font-size: 0.88rem;
+        color: #64748b;
+        line-height: 1.45;
+      }
       .exam-theory-topics-page .exam-theory-section-progress {
         margin: 0 0 18px;
         padding: 14px 16px;

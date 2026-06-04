@@ -29,10 +29,17 @@ export function isSchemaNotReadyError(error) {
 export async function assertTeacherApiAccess(userId, email = '') {
   const isAdmin = await userHasRole(userId, ['admin', 'administrador'], email);
   const isTeacher = await userHasRole(userId, ['teacher', 'profesor'], email);
-  if (!isAdmin && !isTeacher) {
+  const isCoordinator = await userHasRole(userId, ['coordinador', 'coordinator'], email);
+  if (!isAdmin && !isTeacher && !isCoordinator) {
     return { ok: false, status: 403, error: 'Sin permiso de profesor o administrador.' };
   }
-  return { ok: true, isAdmin, isTeacher, professorId: userId };
+  return {
+    ok: true,
+    isAdmin: isAdmin || isCoordinator,
+    isTeacher,
+    isCoordinator,
+    professorId: userId,
+  };
 }
 
 export function getServiceDb(token) {

@@ -6,6 +6,8 @@ const PATH_LABELS = [
   { prefix: '/admin/usuarios/', label: 'Ficha de usuario' },
   { prefix: '/admin', label: 'Panel de administración' },
   { prefix: '/teacher', label: 'Panel de profesor' },
+  { prefix: '/coordinador', label: 'Panel de coordinador' },
+  { prefix: '/admin/coordinador', label: 'Panel de coordinador' },
   { prefix: '/training', label: 'Training' },
   { prefix: '/niveles', label: 'Niveles' },
   { prefix: '/teoria', label: 'Teoría' },

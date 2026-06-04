@@ -3,7 +3,7 @@
  * Rotan según el índice del ejercicio en la sesión.
  */
 export const THEORY_ENGAGEMENT_HOOKS = [
-  { emoji: '⚡', title: 'Quick burst!', subtitle: 'Break the routine — 30 seconds' },
+  { emoji: '⚡', title: 'Quick burst!', subtitle: 'Break the routine' },
   { emoji: '🎯', title: 'Pop quiz!', subtitle: 'Fast & unexpected — your turn' },
   { emoji: '🔥', title: 'Energy check', subtitle: 'Wake up — one quick win' },
   { emoji: '💬', title: 'Team pulse', subtitle: 'Jump in — every answer counts' },

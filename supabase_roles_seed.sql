@@ -19,7 +19,8 @@ values
   ('group', 'clases/grupos', 'Subdivisiones de usuarios para organizar ensenanza o seguimiento.'),
   ('teacher', 'profesor', 'Usuario encargado de guiar, evaluar y gestionar alumnos.'),
   ('it', 'informatico', 'Perfil tecnico encargado del mantenimiento del sistema.'),
-  ('support', 'soporte', 'Equipo encargado de resolver incidencias y ayudar a los usuarios.')
+  ('support', 'soporte', 'Equipo encargado de resolver incidencias y ayudar a los usuarios.'),
+  ('coordinator', 'coordinador', 'Coordina al equipo de profesores: asignación de alumnos y seguimiento por docente.')
 on conflict (code) do update
 set
   nombre = excluded.nombre,

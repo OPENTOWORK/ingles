@@ -69,11 +69,11 @@ export const GUIDED_TOUR_STEPS_STUDENT = [
   {
     id: 'levels-skills-tips',
     title: 'Skills & tips',
-    sectionLabel: 'Level hub → skill blocks',
+    sectionLabel: 'Exam theory → parts by level',
     description:
-      'Open a part for interactive tips — task format, timing, and strategies — before doing the exercises.',
-    target: '[data-tour="level-skills-sections"]',
-    route: GUIDED_TOUR_LEVEL_PATH,
+      'In Exam theory, open each part for interactive tips — task format, timing, and strategies — before practice.',
+    target: '#exam-theory',
+    route: '/niveles',
     scrollTarget: true,
     cardPlacement: 'center',
   },

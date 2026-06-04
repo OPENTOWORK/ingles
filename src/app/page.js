@@ -52,8 +52,7 @@ export default function Home() {
         </section>
 
         <blockquote className="home-quote">
-          <p>&ldquo;The best preparation for tomorrow is doing your best today.&rdquo;</p>
-          <footer>— Your time is now</footer>
+          <p>Learn. Practise. Improve.</p>
         </blockquote>
 
         {isRegistered ? <HomeHowItWorks onStartTour={startTour} /> : null}

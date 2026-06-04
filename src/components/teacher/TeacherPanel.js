@@ -3,7 +3,11 @@
 import { useCallback, useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { supabase } from '@/utils/supabaseClient';
-import { canAccessTeacherPanel, getRoleNameByUserId } from '@/utils/authRoles';
+import {
+  canAccessAdminTeacherPanelView,
+  canAccessTeacherPanel,
+  getRoleNameByUserId,
+} from '@/utils/authRoles';
 import TeacherActivityCharts from '@/components/teacher/TeacherActivityCharts';
 import PanelPageHeader from '@/components/PanelPageHeader';
 import RouteLoadingMascot from '@/components/RouteLoadingMascot';
@@ -148,7 +152,7 @@ export default function TeacherPanel({ title = 'Panel de Profesor' }) {
           return;
         }
         setUser(u);
-        setIsAdminView(role === 'admin' || role === 'administrador');
+        setIsAdminView(canAccessAdminTeacherPanelView(role));
         await loadStudents();
         await Promise.allSettled([loadTasks(), loadGrades(), loadActivity()]);
       } catch (e) {

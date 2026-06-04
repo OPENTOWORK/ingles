@@ -4,6 +4,7 @@ import { cloneElement, isValidElement } from 'react';
 
 export default function TheoryExerciseShell({
   typeLabel,
+  colloquialLabel,
   children,
   isCompleted,
   onComplete,

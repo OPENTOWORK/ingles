@@ -1148,8 +1148,13 @@ body.nav-open {
 
 .home-quote {
   margin: 0 auto;
-  max-width: 640px;
+  width: min(92%, 680px);
+  max-width: 100%;
+  min-height: clamp(7.25rem, 24vw, 14.25rem);
   padding: clamp(1.25rem, 3vw, 1.75rem);
+  display: flex;
+  align-items: center;
+  justify-content: center;
   font-style: italic;
   font-size: clamp(1rem, 2.5vw, 1.15rem);
   line-height: 1.55;
@@ -1160,6 +1165,7 @@ body.nav-open {
   border-radius: 14px;
   backdrop-filter: blur(10px);
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
+  box-sizing: border-box;
 }
 
 .home-quote p {
@@ -1741,6 +1747,11 @@ body.nav-open {
 
   .home-hero__mascot {
     order: -1;
+  }
+
+  .home-quote {
+    width: min(92%, 680px);
+    min-height: clamp(6.5rem, 28vw, 12rem);
   }
 }
 

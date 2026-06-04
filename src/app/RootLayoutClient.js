@@ -23,7 +23,7 @@ const Toaster = dynamic(
   () => import('react-hot-toast').then((mod) => ({ default: mod.Toaster })),
   { ssr: false },
 );
-const AppNav = dynamic(() => import('@/components/layout/AppNav'), { ssr: false });
+import AppNav from '@/components/layout/AppNav';
 
 function SiteHeaderBrand({ nav = null }) {
   return (

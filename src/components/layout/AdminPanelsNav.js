@@ -1,10 +1,10 @@
 'use client';
 
 import Link from 'next/link';
-import { ADMIN_PANEL_MENU_ITEMS } from '@/config/appNavMenu';
+import { getAdminPanelMenuItems } from '@/config/appNavMenu';
 
 /**
- * Desplegable de paneles staff (solo se muestra cuando el padre comprueba rol admin).
+ * Desplegable de paneles staff (items filtrados por rol en el padre).
  */
 export default function AdminPanelsNav({
   variant = 'desktop',
@@ -13,7 +13,10 @@ export default function AdminPanelsNav({
   onClose,
   linkClassName = 'app-nav__link',
   dropdownItemClassName = 'app-nav__dropdown-item',
+  items,
+  menuLabel = 'Admin',
 }) {
+  const menuItems = items?.length ? items : getAdminPanelMenuItems();
   const isMobile = variant === 'mobile';
   const buttonClass = isMobile
     ? `${linkClassName} app-nav__accordion${open ? ' is-open' : ''}`
@@ -28,12 +31,12 @@ export default function AdminPanelsNav({
           onClick={onToggle}
           aria-expanded={open}
         >
-          Admin
+          {menuLabel}
           <span aria-hidden>{open ? '▲' : '▼'}</span>
         </button>
         {open ? (
           <div className="app-nav__sub" role="menu">
-            {ADMIN_PANEL_MENU_ITEMS.map((item) => (
+            {menuItems.map((item) => (
               <Link
                 key={item.href}
                 href={item.href}
@@ -58,11 +61,11 @@ export default function AdminPanelsNav({
         aria-expanded={open}
         onClick={onToggle}
       >
-        Admin <span aria-hidden>▼</span>
+        {menuLabel} <span aria-hidden>▼</span>
       </button>
       {open ? (
         <div className="app-nav__dropdown" role="menu">
-          {ADMIN_PANEL_MENU_ITEMS.map((item) => (
+          {menuItems.map((item) => (
             <Link
               key={item.href}
               href={item.href}

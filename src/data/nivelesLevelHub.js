@@ -224,7 +224,7 @@ export const NIVELES_LEVEL_HUB = {
     cefr: 'A2',
     examName: 'Key (KET)',
     eyebrow: 'Elementary · A2 Key',
-    title: 'Tips and Exams',
+    title: 'Exams',
     description:
       'A basic level qualification that shows you can use English to communicate in simple everyday situations.',
     mascotVariant: 1,
@@ -314,7 +314,7 @@ export const NIVELES_LEVEL_HUB = {
     cefr: 'B1',
     examName: 'Preliminary (PET)',
     eyebrow: 'Intermediate · B1 Preliminary',
-    title: 'Tips and Exams',
+    title: 'Exams',
     description:
       'An intermediate qualification that shows you can use everyday written and spoken English for work, study and travel.',
     mascotVariant: 2,
@@ -393,7 +393,7 @@ export const NIVELES_LEVEL_HUB = {
     cefr: 'B2',
     examName: 'First (FCE)',
     eyebrow: 'Upper-Intermediate · B2 First',
-    title: 'Tips and Exams',
+    title: 'Exams',
     description:
       'An upper-intermediate qualification that proves you can use everyday written and spoken English for work or study.',
     mascotVariant: 4,
@@ -483,7 +483,7 @@ export const NIVELES_LEVEL_HUB = {
     cefr: 'C1',
     examName: 'Advanced (CAE)',
     eyebrow: 'Advanced · C1 Advanced',
-    title: 'Tips and Exams',
+    title: 'Exams',
     description:
       'An advanced qualification for professional and academic purposes — complex texts, nuance, and fluent expression.',
     mascotVariant: 5,
@@ -583,7 +583,7 @@ export const NIVELES_LEVEL_HUB = {
     cefr: 'C2',
     examName: 'Proficiency (CPE)',
     eyebrow: 'Proficiency · C2 Proficiency',
-    title: 'Tips and Exams',
+    title: 'Exams',
     description:
       'The highest level qualification — mastery of English for demanding academic and professional contexts.',
     mascotVariant: 6,

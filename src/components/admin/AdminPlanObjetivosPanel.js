@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { getClientAuth } from '@/utils/getClientAuth';
-import { userHasRole } from '@/utils/authRoles';
+import { canAccessPlanObjetivosAdminPanel, getRoleNameByUserId } from '@/utils/authRoles';
 import PanelPageHeader from '@/components/PanelPageHeader';
 import RouteLoadingMascot from '@/components/RouteLoadingMascot';
 import StudyPlanSurvey from '@/components/plan-objetivos/StudyPlanSurvey';
@@ -25,8 +25,8 @@ export default function AdminPlanObjetivosPanel() {
         return;
       }
 
-      const isAdmin = await userHasRole(user.id, ['admin', 'administrador'], user.email);
-      if (!isAdmin) {
+      const role = await getRoleNameByUserId(user.id, user.email);
+      if (!canAccessPlanObjetivosAdminPanel(role)) {
         router.push('/perfil');
         return;
       }

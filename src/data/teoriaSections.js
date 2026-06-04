@@ -149,28 +149,31 @@ const EXAM_SECTION_META = [
     key: 'Reading and Use of English',
     slug: 'reading-and-use-of-english',
     description:
-      'Cloze, transformations, reading comprehension, inference, and text organisation.',
+      'Description and interactive tips for every part — grammar, vocabulary in context, and reading comprehension.',
     accent: '#2563eb',
     heroAccent: 'indigo',
   },
   {
     key: 'Listening',
     slug: 'listening',
-    description: 'Listening strategies, dialogues, and audio comprehension.',
+    description:
+      'Description and interactive tips for short extracts, monologues, conversations, and multiple matching.',
     accent: '#d97706',
     heroAccent: 'amber',
   },
   {
     key: 'Writing',
     slug: 'writing',
-    description: 'Text types, cohesion, and writing techniques.',
+    description:
+      'Description and interactive tips for compulsory essays and choice tasks — register, structure, and exam criteria.',
     accent: '#dc2626',
     heroAccent: 'rose',
   },
   {
     key: 'Speaking',
     slug: 'speaking',
-    description: 'Pronunciation, connectors, and conversational strategies.',
+    description:
+      'Description and interactive tips for the interview, long turn, collaborative task, and discussion.',
     accent: '#db2777',
     heroAccent: 'ocean',
   },

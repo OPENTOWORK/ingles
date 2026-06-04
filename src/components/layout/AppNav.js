@@ -3,50 +3,17 @@
 import NavLink from '@/components/layout/NavLink';
 import { usePathname } from 'next/navigation';
 import { useEffect, useState } from 'react';
-import { isAdminRole, ROLE_ROUTE_MAP } from '@/utils/authRoles';
+import { isAdminRole } from '@/utils/authRoles';
 import { canViewPricing } from '@/utils/pricingAccess';
 import AdminPanelsNav from '@/components/layout/AdminPanelsNav';
 import {
   DRALO_MENU_ITEMS,
+  getStaffPanelMenuItemsForRole,
+  getStaffPanelMenuLabel,
   NAV_LINK_CONTACT,
   NAV_LINK_PRICING,
   NAV_LINKS_BEFORE_DRALO,
 } from '@/config/appNavMenu';
-
-const ROLE_LABELS = {
-  admin: 'Admin',
-  administrador: 'Admin',
-  teacher: 'Teacher',
-  profesor: 'Teacher',
-  soporte: 'Support',
-  informatico: 'IT',
-  centro_empresa: 'Centre',
-  'centro/empresa': 'Centre',
-  clases_grupos: 'Classes',
-  'clases/grupos': 'Classes',
-};
-
-const STAFF_ROLES = new Set([
-  'admin',
-  'administrador',
-  'teacher',
-  'profesor',
-  'soporte',
-  'informatico',
-  'centro_empresa',
-  'centro/empresa',
-  'clases_grupos',
-  'clases/grupos',
-]);
-
-function getRoleLink(userRole) {
-  const entry = Object.entries(ROLE_ROUTE_MAP).find(
-    ([role]) => STAFF_ROLES.has(role) && role === userRole
-  );
-  if (!entry) return null;
-  const [role, href] = entry;
-  return { href, label: ROLE_LABELS[role] || 'Panel' };
-}
 
 export default function AppNav({ session, userRole, onLogout }) {
   const pathname = usePathname();
@@ -56,9 +23,10 @@ export default function AppNav({ session, userRole, onLogout }) {
   const [adminPanelsOpen, setAdminPanelsOpen] = useState(false);
   const [adminPanelsMobileOpen, setAdminPanelsMobileOpen] = useState(false);
 
-  const staffLink = getRoleLink(userRole);
-  const showAdminDropdown = Boolean(session && isAdminRole(userRole));
-  const showStaffLink = Boolean(staffLink && !showAdminDropdown);
+  const staffMenuItems = session ? getStaffPanelMenuItemsForRole(userRole) : [];
+  const staffMenuLabel = getStaffPanelMenuLabel(userRole);
+  const showStaffDropdown = staffMenuItems.length > 1;
+  const showStaffSingleLink = staffMenuItems.length === 1;
   const showPricing = canViewPricing(userRole);
 
   useEffect(() => {
@@ -190,21 +158,23 @@ export default function AppNav({ session, userRole, onLogout }) {
         <div className="app-nav__account" role="group" aria-label="Account">
           {session ? (
             <>
-              {showAdminDropdown ? (
+              {showStaffDropdown ? (
                 <AdminPanelsNav
                   variant="desktop"
                   open={adminPanelsOpen}
                   onToggle={toggleAdminDesktop}
                   onClose={closeDesktopDropdowns}
+                  items={staffMenuItems}
+                  menuLabel={staffMenuLabel}
                 />
               ) : null}
-              {showStaffLink ? (
+              {showStaffSingleLink ? (
                 <NavLink
-                  href={staffLink.href}
-                  className={desktopLinkClass(staffLink.href)}
+                  href={staffMenuItems[0].href}
+                  className={desktopLinkClass(staffMenuItems[0].href)}
                   onClick={closeDesktopDropdowns}
                 >
-                  {staffLink.label}
+                  {staffMenuItems[0].label}
                 </NavLink>
               ) : null}
               {showPricing ? (
@@ -339,18 +309,24 @@ export default function AppNav({ session, userRole, onLogout }) {
 
           {session ? (
             <>
-              {showAdminDropdown ? (
+              {showStaffDropdown ? (
                 <AdminPanelsNav
                   variant="mobile"
                   open={adminPanelsMobileOpen}
                   onToggle={toggleAdminMobile}
                   onClose={closeMobile}
                   linkClassName={mobileLinkClass}
+                  items={staffMenuItems}
+                  menuLabel={staffMenuLabel}
                 />
               ) : null}
-              {showStaffLink ? (
-                <NavLink href={staffLink.href} className={mobileLinkClass} onClick={closeMobile}>
-                  {staffLink.label}
+              {showStaffSingleLink ? (
+                <NavLink
+                  href={staffMenuItems[0].href}
+                  className={mobileLinkClass}
+                  onClick={closeMobile}
+                >
+                  {staffMenuItems[0].label}
                 </NavLink>
               ) : null}
               <NavLink href="/perfil" className={mobileLinkClass} onClick={closeMobile}>

@@ -1,9 +1,9 @@
 import { NextResponse } from 'next/server';
-import { authenticateAdminRequest } from '@/lib/adminAccess';
+import { authenticatePlanObjetivosAdminRequest } from '@/lib/adminAccess';
 
 export async function GET(req) {
   try {
-    const auth = await authenticateAdminRequest(req);
+    const auth = await authenticatePlanObjetivosAdminRequest(req);
     if (auth.error) {
       return NextResponse.json({ error: auth.error }, { status: auth.status });
     }

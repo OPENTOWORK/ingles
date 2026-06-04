@@ -11,6 +11,7 @@ import {
 } from '@/components/theory/ExtendedExerciseComponents';
 import TheoryExerciseShell from '@/components/theory/TheoryExerciseShell';
 import { getTheoryExerciseType } from '@/lib/theoryExerciseTypeCatalog';
+import { teoriaTipoColloquialLabel } from '@/lib/levelsTeoriaExerciseTypes';
 
 function nextFromPool(pool, name, counters) {
   const items = pool[name] || [];
@@ -22,7 +23,9 @@ function nextFromPool(pool, name, counters) {
 
 export function buildTheoryExerciseElement(tipoId, pools, counters, reactKey, typeLabel) {
   const type = getTheoryExerciseType(tipoId);
-  const label = typeLabel || type.labelEn;
+  const colloquial =
+    teoriaTipoColloquialLabel({ Nombre: `Tipo ${tipoId}` }) || type.labelEn;
+  const label = typeLabel || colloquial;
   const poolName = type.pool;
 
   let inner = null;
@@ -110,7 +113,7 @@ export function buildTheoryExerciseElement(tipoId, pools, counters, reactKey, ty
   if (!inner) return null;
 
   return (
-    <TheoryExerciseShell key={reactKey} typeLabel={label}>
+    <TheoryExerciseShell key={reactKey} typeLabel={label} colloquialLabel={colloquial}>
       {inner}
     </TheoryExerciseShell>
   );

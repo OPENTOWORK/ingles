@@ -17,8 +17,8 @@ export const translations = {
     // Home page
     welcomeTitle: "Welcome to Dralo",
     welcomeSubtitle: "Prepare for the smart and interactive way to learn English.",
-    quote: "The best preparation for tomorrow is doing your best today.",
-    quoteAuthor: "– Your time is now",
+    quote: "Learn. Practise. Improve.",
+    quoteAuthor: "",
     startPracticing: "Start Practising",
 
     // Buttons and actions with icons
@@ -730,8 +730,8 @@ export const translations = {
     // Home page
     welcomeTitle: "Bienvenido a Dralo",
     welcomeSubtitle: "Prepárate de forma inteligente e interactiva para aprender inglés.",
-    quote: "La mejor preparación para el mañana es hacer lo mejor que puedas hoy.",
-    quoteAuthor: "– Tu momento es ahora",
+    quote: "Learn. Practise. Improve.",
+    quoteAuthor: "",
     startPracticing: "Comenzar a Practicar",
 
     // Buttons and actions with icons

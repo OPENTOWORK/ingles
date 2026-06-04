@@ -4,50 +4,16 @@ import NavLink from '@/components/layout/NavLink';
 import { usePathname } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { useUserRole } from '@/context/UserRoleContext';
-import { isAdminRole, ROLE_ROUTE_MAP } from '@/utils/authRoles';
+import { isAdminRole } from '@/utils/authRoles';
 import {
-  ADMIN_PANEL_MENU_ITEMS,
   DRALO_MENU_ITEMS,
+  getStaffPanelMenuItemsForRole,
+  getStaffPanelMenuLabel,
   NAV_LINK_CONTACT,
   HOME_MAIN_LINKS,
   NAV_LINKS_BEFORE_DRALO,
 } from '@/config/appNavMenu';
 import { performLogout } from '@/utils/logout';
-
-const ROLE_LABELS = {
-  admin: 'Admin',
-  administrador: 'Admin',
-  teacher: 'Teacher',
-  profesor: 'Teacher',
-  soporte: 'Support',
-  informatico: 'IT',
-  centro_empresa: 'Centre',
-  'centro/empresa': 'Centre',
-  clases_grupos: 'Classes',
-  'clases/grupos': 'Classes',
-};
-
-const STAFF_ROLES = new Set([
-  'admin',
-  'administrador',
-  'teacher',
-  'profesor',
-  'soporte',
-  'informatico',
-  'centro_empresa',
-  'centro/empresa',
-  'clases_grupos',
-  'clases/grupos',
-]);
-
-function getRoleLink(userRole) {
-  const entry = Object.entries(ROLE_ROUTE_MAP).find(
-    ([role]) => STAFF_ROLES.has(role) && role === userRole,
-  );
-  if (!entry) return null;
-  const [role, href] = entry;
-  return { href, label: ROLE_LABELS[role] || 'Panel' };
-}
 
 /**
  * Menú lateral derecho desplegable (fondo blanco). No desplaza el contenido de la página.
@@ -58,10 +24,11 @@ export default function AppSideMenuPanel({ defaultOpen = true }) {
   const [open, setOpen] = useState(defaultOpen);
   const [draloOpen, setDraloOpen] = useState(false);
   const [adminPanelsOpen, setAdminPanelsOpen] = useState(false);
-  const staffLink = getRoleLink(userRole);
-  const showAdminDropdown = Boolean(session && isAdminRole(userRole));
+  const staffMenuItems = session ? getStaffPanelMenuItemsForRole(userRole) : [];
+  const staffMenuLabel = getStaffPanelMenuLabel(userRole);
+  const showStaffDropdown = staffMenuItems.length > 1;
+  const showStaffSingleLink = staffMenuItems.length === 1;
   const showAdminHomeLinks = isAdminRole(userRole);
-  const showStaffLink = Boolean(staffLink && !showAdminDropdown);
   const linkClass = 'app-side-menu__link';
 
   useEffect(() => {
@@ -149,7 +116,7 @@ export default function AppSideMenuPanel({ defaultOpen = true }) {
 
           {session ? (
             <>
-              {showAdminDropdown ? (
+              {showStaffDropdown ? (
                 <>
                   <button
                     type="button"
@@ -157,12 +124,12 @@ export default function AppSideMenuPanel({ defaultOpen = true }) {
                     onClick={() => setAdminPanelsOpen((v) => !v)}
                     aria-expanded={adminPanelsOpen}
                   >
-                    Admin
+                    {staffMenuLabel}
                     <span aria-hidden>{adminPanelsOpen ? '▲' : '▼'}</span>
                   </button>
                   {adminPanelsOpen ? (
                     <div className="app-side-menu__sub">
-                      {ADMIN_PANEL_MENU_ITEMS.map((item) => (
+                      {staffMenuItems.map((item) => (
                         <NavLink key={item.href} href={item.href} className={linkClass}>
                           {item.label}
                         </NavLink>
@@ -171,9 +138,9 @@ export default function AppSideMenuPanel({ defaultOpen = true }) {
                   ) : null}
                 </>
               ) : null}
-              {showStaffLink ? (
-                <NavLink href={staffLink.href} className={linkClass}>
-                  {staffLink.label}
+              {showStaffSingleLink ? (
+                <NavLink href={staffMenuItems[0].href} className={linkClass}>
+                  {staffMenuItems[0].label}
                 </NavLink>
               ) : null}
               <NavLink href="/perfil" className={linkClass}>

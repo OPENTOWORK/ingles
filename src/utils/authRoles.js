@@ -28,6 +28,8 @@ export const ROLE_ROUTE_MAP = {
   'clases/grupos': '/clases-grupos',
   clases_grupos: '/clases-grupos',
   group: '/clases-grupos',
+  coordinador: '/coordinador',
+  coordinator: '/coordinador',
 };
 
 export const getRedirectPathByRoleName = (roleName = '') => {
@@ -45,8 +47,35 @@ export function isTeacherRole(roleName = '') {
   return normalized === 'teacher' || normalized === 'profesor';
 }
 
+export function isCoordinatorRole(roleName = '') {
+  const normalized = normalizeRoleName(roleName);
+  return normalized === 'coordinador' || normalized === 'coordinator';
+}
+
+export function isSupportRole(roleName = '') {
+  const normalized = normalizeRoleName(roleName);
+  return normalized === 'soporte' || normalized === 'support';
+}
+
+export function canAccessSupportPanel(roleName = '') {
+  return isAdminRole(roleName) || isSupportRole(roleName);
+}
+
 export function canAccessTeacherPanel(roleName = '') {
-  return isAdminRole(roleName) || isTeacherRole(roleName);
+  return isAdminRole(roleName) || isTeacherRole(roleName) || isCoordinatorRole(roleName);
+}
+
+export function canAccessPlanObjetivosAdminPanel(roleName = '') {
+  return isAdminRole(roleName) || isCoordinatorRole(roleName);
+}
+
+/** Vista «admin» del panel de profesor (todos los alumnos). */
+export function canAccessAdminTeacherPanelView(roleName = '') {
+  return isAdminRole(roleName) || isCoordinatorRole(roleName);
+}
+
+export function canAccessCoordinatorPanel(roleName = '') {
+  return isAdminRole(roleName) || isCoordinatorRole(roleName);
 }
 
 export function isItRole(roleName = '') {

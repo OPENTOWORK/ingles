@@ -1,6 +1,12 @@
 import { normalizeTopicHref } from '@/lib/normalizeTopicHref';
 import { draloChatCompletion, isOpenAIConfigured } from '@/lib/ai/draloAiEngine';
-import { isTeoriaTipoOpen, parseTeoriaTipoNumber, teoriaTipoLabel } from '@/lib/levelsTeoriaExerciseTypes';
+import {
+  isTeoriaTipoOpen,
+  isTeoriaTrueFalseExercise,
+  normalizeTrueFalseOpciones,
+  parseTeoriaTipoNumber,
+  teoriaTipoLabel,
+} from '@/lib/levelsTeoriaExerciseTypes';
 import {
   findTheoryPartByHref,
   getAllTheoryPartOptions,
@@ -35,15 +41,24 @@ function buildFallbackExercise({ nivel, skill, tipo, topicHint }) {
     };
   }
 
+  const tipoNum = parseTeoriaTipoNumber(tipo);
+  const opciones =
+    tipoNum === 2
+      ? [
+          { text: 'True', correcta: true },
+          { text: 'False', correcta: false },
+        ]
+      : [
+          { text: 'Option A (correct)', correcta: true },
+          { text: 'Option B', correcta: false },
+          { text: 'Option C', correcta: false },
+          { text: 'Option D', correcta: false },
+        ];
+
   return {
     pregunta,
     descripcion,
-    opciones: [
-      { text: 'Option A (correct)', correcta: true },
-      { text: 'Option B', correcta: false },
-      { text: 'Option C', correcta: false },
-      { text: 'Option D', correcta: false },
-    ],
+    opciones,
     respuesta_abierta: null,
     respuesta_abierta_descripcion: null,
   };
@@ -61,7 +76,13 @@ Return ONLY valid JSON (no markdown).
 CEFR level: ${levelLabel}
 Skill: ${skillLabel}
 Question type: ${teoriaTipoLabel(tipo)} (Tipo ${tipoNum ?? '?'})
-Answer format: ${open ? 'OPEN (one model answer + short rubric)' : 'CLOSED (exactly 4 options, exactly one with correcta true)'}`;
+Answer format: ${
+    open
+      ? 'OPEN (one model answer + short rubric)'
+      : tipoNum === 2
+        ? 'CLOSED (exactly 2 options: "True" and "False", exactly one with correcta true)'
+        : 'CLOSED (exactly 4 options, exactly one with correcta true)'
+  }`;
 
   const contextTopic = topicHint?.trim() || partLabel;
   const userMessage = `Create one exercise${contextTopic ? ` for the theory unit "${contextTopic}"` : ''}.
@@ -74,7 +95,8 @@ JSON schema:
   "respuesta_abierta_descripcion": "grading rubric or null"
 }
 Rules:
-- For closed types: provide exactly 4 opciones, one correcta true.
+- For Tipo 2 (true/false): exactly 2 opciones with text "True" and "False", one correcta true.
+- For other closed types: exactly 4 opciones, one correcta true.
 - For open types: opciones must be [], fill respuesta_abierta and respuesta_abierta_descripcion.
 - Difficulty appropriate for ${levelLabel}.`;
 
@@ -93,16 +115,20 @@ Rules:
     throw new Error('La IA no devolvió JSON válido.');
   }
 
-  const opciones = Array.isArray(parsed.opciones) ? parsed.opciones : [];
+  const rawOpciones = Array.isArray(parsed.opciones) ? parsed.opciones : [];
+  let opciones = open
+    ? []
+    : rawOpciones.slice(0, 6).map((o) => ({
+        text: String(o.text || o.respuesta || '').trim(),
+        correcta: Boolean(o.correcta),
+      }));
+  if (!open && isTeoriaTrueFalseExercise(tipoNum, opciones)) {
+    opciones = normalizeTrueFalseOpciones(opciones);
+  }
   return {
     pregunta: String(parsed.pregunta || '').trim() || `Exercise (${levelLabel})`,
     descripcion: String(parsed.descripcion || '').trim() || teoriaTipoLabel(tipo),
-    opciones: open
-      ? []
-      : opciones.slice(0, 6).map((o) => ({
-          text: String(o.text || o.respuesta || '').trim(),
-          correcta: Boolean(o.correcta),
-        })),
+    opciones,
     respuesta_abierta: open ? String(parsed.respuesta_abierta || '').trim() : null,
     respuesta_abierta_descripcion: open
       ? String(parsed.respuesta_abierta_descripcion || '').trim()
