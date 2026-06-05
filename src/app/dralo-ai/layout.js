@@ -1,4 +1,5 @@
 import '@/styles/dralo-ai.css';
+import DraloAiShell from '@/components/dralo/DraloAiShell';
 
 export const metadata = {
   title: 'Dralo AI | English Practice',
@@ -7,5 +8,5 @@ export const metadata = {
 };
 
 export default function DraloAiLayout({ children }) {
-  return children;
+  return <DraloAiShell>{children}</DraloAiShell>;
 }

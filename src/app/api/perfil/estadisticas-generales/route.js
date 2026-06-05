@@ -15,13 +15,13 @@ export async function GET(req) {
     const authHeader = req.headers.get('authorization') || '';
     const token = authHeader.startsWith('Bearer ') ? authHeader.slice(7) : null;
     if (!token) {
-      return NextResponse.json({ error: 'No autenticado.' }, { status: 401 });
+      return NextResponse.json({ error: 'Not authenticated.' }, { status: 401 });
     }
 
     const authClient = createClient(supabaseUrl, supabaseAnonKey);
     const { data: authData, error: authError } = await authClient.auth.getUser(token);
     if (authError || !authData?.user) {
-      return NextResponse.json({ error: 'Sesión no válida.' }, { status: 401 });
+      return NextResponse.json({ error: 'Invalid session.' }, { status: 401 });
     }
 
     const userId = authData.user.id;
@@ -48,6 +48,6 @@ export async function GET(req) {
     return NextResponse.json(payload);
   } catch (err) {
     console.error('[perfil/estadisticas-generales]', err);
-    return NextResponse.json({ error: 'Error interno.' }, { status: 500 });
+    return NextResponse.json({ error: 'Internal error.' }, { status: 500 });
   }
 }

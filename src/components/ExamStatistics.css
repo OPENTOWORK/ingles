@@ -18,6 +18,11 @@
   margin-bottom: 24px;
 }
 
+.exam-stats--embedded .exam-stats__header {
+  justify-content: flex-end;
+  margin-bottom: 20px;
+}
+
 .exam-stats__title-wrap h2 {
   margin: 0 0 4px;
   font-size: 1.35rem;

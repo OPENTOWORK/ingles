@@ -14,12 +14,12 @@ export const PROFILE_AVATAR_MIME_TYPES = new Set([
  * @returns {{ ok: true } | { ok: false, error: string }}
  */
 export function validateProfileAvatarFile(file) {
-  if (!file) return { ok: false, error: 'Selecciona una imagen.' };
+  if (!file) return { ok: false, error: 'Select an image.' };
   if (!PROFILE_AVATAR_MIME_TYPES.has(file.type)) {
-    return { ok: false, error: 'Formato no válido. Usa JPG, PNG, WebP o GIF.' };
+    return { ok: false, error: 'Invalid format. Use JPG, PNG, WebP or GIF.' };
   }
   if (file.size > PROFILE_AVATAR_MAX_BYTES) {
-    return { ok: false, error: 'La imagen no puede superar 5 MB.' };
+    return { ok: false, error: 'Image must be 5 MB or smaller.' };
   }
   return { ok: true };
 }

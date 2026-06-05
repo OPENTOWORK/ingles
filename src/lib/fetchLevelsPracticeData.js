@@ -81,7 +81,7 @@ export async function fetchLevelsPracticeData(supabase, userId) {
 
   const examNames = {};
   (examsResult.data || []).forEach((e) => {
-    examNames[e.id] = e.nombre || 'Examen';
+    examNames[e.id] = e.nombre || 'Exam';
   });
 
   return { estadisticas, puntuaciones, partNames, examNames, preguntaLevel };

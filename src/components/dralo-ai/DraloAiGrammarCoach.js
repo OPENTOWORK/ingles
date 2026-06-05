@@ -153,6 +153,11 @@ export default function DraloAiGrammarCoach({ config }) {
 
   return (
     <main className="dralo-ai-page" style={{ '--dralo-accent-solid': accentSolid }}>
+      <div className="dralo-ai-studio__toolbar dralo-ai-studio__toolbar--under-xp">
+        <span className="dralo-ai-studio__badge">✨ Dralo AI</span>
+        <DraloAiLevelFilter levels={config.levels} selectedLevel={level} onChange={setLevel} />
+      </div>
+
       <div className="page-hero-wrap__breadcrumb">
         <nav className="breadcrumb" aria-label="Breadcrumb">
           <Link href="/">Home</Link>
@@ -177,11 +182,6 @@ export default function DraloAiGrammarCoach({ config }) {
       />
 
       <div className="dralo-ai-studio">
-        <div className="dralo-ai-studio__toolbar">
-          <span className="dralo-ai-studio__badge">✨ Dralo AI</span>
-          <DraloAiLevelFilter levels={config.levels} selectedLevel={level} onChange={setLevel} />
-        </div>
-
         <div className="dralo-ai-activities" role="tablist" aria-label="Grammar topics">
           {config.activities.map((a) => (
             <button

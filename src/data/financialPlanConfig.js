@@ -275,6 +275,66 @@ export const SUBSCRIPTION_STATUS_LABELS = {
   expired: 'Expirada',
 };
 
+/** English copy for the profile subscription card (pricing page keeps Spanish). */
+const PROFILE_PLAN_DISPLAY = {
+  free: {
+    descripcionCorta: 'Start learning English for free.',
+    highlights: [
+      'Full access to A2 level',
+      '1 exam per month',
+      '3 Dralo AI queries per day',
+      'Placement Test',
+      'Basic progress tracking',
+    ],
+    badge: null,
+  },
+  starter: {
+    descripcionCorta: 'For students who want steady progress.',
+    highlights: [
+      'Full access to A2 and B1',
+      'Unlimited A2 and B1 exams',
+      'Basic Writing correction',
+      '20 Dralo AI queries per day',
+      'Placement Test',
+    ],
+    badge: null,
+  },
+  premium: {
+    descripcionCorta: 'The most popular option to prepare for exams and improve quickly.',
+    highlights: [
+      'Full access to A2, B1, B2, C1 and C2',
+      'Unlimited exams',
+      'Advanced Writing correction',
+      'Speaking Coach',
+      '60 Dralo AI queries per day',
+      'Advanced progress tracking',
+    ],
+    badge: '🏆 MOST POPULAR',
+  },
+  pro: {
+    descripcionCorta: 'The most complete experience with advanced AI.',
+    highlights: [
+      'Full access to A2, B1, B2, C1 and C2',
+      'Unlimited exams',
+      'AI Personal Tutor',
+      'Pronunciation Coach',
+      'Unlimited Dralo AI queries',
+      'Advanced tracking and priority support',
+    ],
+    badge: '🚀 BEST VALUE',
+  },
+};
+
+export function getPlanProfileDisplay(plan) {
+  const slug = plan?.slug || 'free';
+  const display = PROFILE_PLAN_DISPLAY[slug] || PROFILE_PLAN_DISPLAY.free;
+  return {
+    descripcionCorta: display.descripcionCorta,
+    highlights: display.highlights,
+    badge: display.badge,
+  };
+}
+
 export function getPlanBySlug(slug) {
   const s = String(slug || 'free').toLowerCase();
   return DRALO_SUBSCRIPTION_PLANS.find((p) => p.slug === s) || DRALO_SUBSCRIPTION_PLANS[0];

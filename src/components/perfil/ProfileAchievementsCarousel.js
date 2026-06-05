@@ -44,7 +44,7 @@ export default function ProfileAchievementsCarousel({ userId }) {
         setPages(evaluateAchievementPages(ACHIEVEMENT_PAGES, stats));
       } catch (err) {
         if (!cancelled) {
-          setError(err?.message || 'No se pudieron cargar los logros.');
+          setError(err?.message || 'Could not load achievements.');
           setPages(evaluateAchievementPages(ACHIEVEMENT_PAGES, {}));
         }
       } finally {
@@ -130,7 +130,7 @@ export default function ProfileAchievementsCarousel({ userId }) {
             <span className={styles.name}>{badge.name}</span>
             <span className={styles.desc}>{badge.description}</span>
             {badge.earned && badge.earnedDate ? (
-              <span className={styles.date}>Obtenido: {badge.earnedDate}</span>
+              <span className={styles.date}>Earned: {badge.earnedDate}</span>
             ) : null}
             <span className={styles.categoryTag}>
               {CATEGORY_LABELS[badge.category] || badge.category}
@@ -139,14 +139,14 @@ export default function ProfileAchievementsCarousel({ userId }) {
         ))}
       </div>
 
-      <div className={styles.dots} role="tablist" aria-label="Hojas de logros">
+      <div className={styles.dots} role="tablist" aria-label="Achievement pages">
         {Array.from({ length: ACHIEVEMENT_PAGE_COUNT }, (_, i) => (
           <button
             key={i}
             type="button"
             role="tab"
             aria-selected={i === pageIndex}
-            aria-label={`Hoja ${i + 1}`}
+            aria-label={`Page ${i + 1}`}
             className={`${styles.dot} ${i === pageIndex ? styles.dotActive : ''}`}
             onClick={() => setPageIndex(i)}
           />

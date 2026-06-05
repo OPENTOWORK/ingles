@@ -142,6 +142,7 @@ a:hover {
 .legal-footer {
   text-align: left;
   padding: 1.35rem 1.2rem 1.05rem;
+  margin-top: 0;
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   color: #f2f4f7;
 }
@@ -1047,9 +1048,14 @@ body.nav-open {
 }
 
 /* ——— Home page ——— */
+.page-content:has(> .home-page) {
+  display: flex;
+  flex-direction: column;
+}
+
 .home-page {
-  min-height: calc(100dvh - 64px);
-  padding: clamp(1.5rem, 4vw, 2.5rem) clamp(1rem, 3vw, 1.5rem) clamp(2.5rem, 6vw, 3.5rem);
+  flex: 1;
+  padding: clamp(1.5rem, 4vw, 2.5rem) clamp(1rem, 3vw, 1.5rem) clamp(1.25rem, 3vw, 1.75rem);
   background: linear-gradient(160deg, #667eea 0%, #764ba2 55%, #5b4bb7 100%);
   background-attachment: scroll;
   color: #fff;
@@ -7052,6 +7058,12 @@ body.nav-open {
 .profile-section--nested-levels .levels-panel > h2,
 .profile-section--nested-levels .levels-panel h2:first-child {
   display: none;
+}
+
+.profile-section--exam-practice-combined .profile-collapse__panel-inner {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
 }
 
 body.dark .perfil-page .profile-section.profile-section--collapsible,

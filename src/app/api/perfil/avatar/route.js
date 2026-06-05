@@ -16,19 +16,19 @@ export async function POST(req) {
   try {
     const auth = await getSupabaseUserFromRequest(req);
     if (!auth?.user?.id) {
-      return NextResponse.json({ error: 'No autenticado.' }, { status: 401 });
+      return NextResponse.json({ error: 'Not authenticated.' }, { status: 401 });
     }
 
     const serviceKey = getSupabaseServiceRoleKey();
     const supabaseUrl = getSupabaseUrl();
     if (!serviceKey || !supabaseUrl) {
-      return NextResponse.json({ error: 'Servidor no configurado.' }, { status: 503 });
+      return NextResponse.json({ error: 'Server not configured.' }, { status: 503 });
     }
 
     const formData = await req.formData();
     const file = formData.get('file');
     if (!(file instanceof File)) {
-      return NextResponse.json({ error: 'Falta el archivo de imagen.' }, { status: 400 });
+      return NextResponse.json({ error: 'Image file is missing.' }, { status: 400 });
     }
 
     const validation = validateProfileAvatarFile(file);
@@ -53,9 +53,9 @@ export async function POST(req) {
       });
 
     if (uploadError) {
-      const msg = uploadError.message || 'No se pudo subir la imagen.';
+      const msg = uploadError.message || 'Could not upload the image.';
       const hint = /bucket|not found|does not exist/i.test(msg)
-        ? ' Crea el bucket profile-avatars en Supabase (scripts/setup-profile-avatars-storage.sql).'
+        ? ' Create the profile-avatars bucket in Supabase (scripts/setup-profile-avatars-storage.sql).'
         : '';
       return NextResponse.json({ error: msg + hint }, { status: 500 });
     }
@@ -97,7 +97,7 @@ export async function POST(req) {
         return NextResponse.json(
           {
             error:
-              'No se pudo guardar la URL de la foto en el perfil. Revisa la tabla Usuarios_y_Perfil_profiles.',
+              'Could not save the photo URL to your profile. Check the Usuarios_y_Perfil_profiles table.',
             avatarUrl,
           },
           { status: 500 },
@@ -117,6 +117,6 @@ export async function POST(req) {
     return NextResponse.json({ avatarUrl });
   } catch (err) {
     console.error('[perfil/avatar]', err);
-    return NextResponse.json({ error: 'Error interno al subir la foto.' }, { status: 500 });
+    return NextResponse.json({ error: 'Internal error while uploading photo.' }, { status: 500 });
   }
 }

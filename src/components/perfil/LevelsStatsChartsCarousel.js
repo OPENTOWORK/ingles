@@ -120,8 +120,8 @@ export default function LevelsStatsChartsCarousel({ charts = [] }) {
         <div>
           <h3 className="lsp-chart__title">Performance by part</h3>
           <p className="lsp-chart__subtitle">
-            {current.partMax || chartData.length} partes del examen {current.levelName}. Pasa el
-            cursor sobre cada barra para ver el detalle.
+            {current.partMax || chartData.length} exam parts for {current.levelName}. Hover over
+            each bar for details.
           </p>
         </div>
         <div className="lsp-chart__nav">
@@ -140,7 +140,7 @@ export default function LevelsStatsChartsCarousel({ charts = [] }) {
             className="lsp-chart__nav-btn"
             onClick={() => go(1)}
             disabled={slides.length <= 1}
-            aria-label="Siguiente nivel"
+            aria-label="Next level"
           >
             ›
           </button>
@@ -150,19 +150,19 @@ export default function LevelsStatsChartsCarousel({ charts = [] }) {
       <div className="lsp-chart__summary">
         <div className="lsp-chart__summary-item">
           <span className="lsp-chart__summary-value">{practicedCount}</span>
-          <span className="lsp-chart__summary-label">partes practicadas</span>
+          <span className="lsp-chart__summary-label">parts practised</span>
         </div>
         <div className="lsp-chart__summary-divider" aria-hidden />
         <div className="lsp-chart__summary-item">
           <span className="lsp-chart__summary-value">{current.partMax || chartData.length}</span>
-          <span className="lsp-chart__summary-label">partes del examen</span>
+          <span className="lsp-chart__summary-label">exam parts</span>
         </div>
         {avgScore != null ? (
           <>
             <div className="lsp-chart__summary-divider" aria-hidden />
             <div className="lsp-chart__summary-item">
               <span className="lsp-chart__summary-value">{avgScore}%</span>
-              <span className="lsp-chart__summary-label">media practicadas</span>
+              <span className="lsp-chart__summary-label">average practised</span>
             </div>
           </>
         ) : null}
@@ -188,19 +188,19 @@ export default function LevelsStatsChartsCarousel({ charts = [] }) {
       <div className="lsp-chart__legend">
         <span className="lsp-chart__legend-item">
           <i className="lsp-chart__dot lsp-chart__dot--high" />
-          Excelente ≥80%
+          Excellent ≥80%
         </span>
         <span className="lsp-chart__legend-item">
           <i className="lsp-chart__dot lsp-chart__dot--mid" />
-          En progreso 50–79%
+          In progress 50–79%
         </span>
         <span className="lsp-chart__legend-item">
           <i className="lsp-chart__dot lsp-chart__dot--low" />
-          A reforzar &lt;50%
+          Needs work &lt;50%
         </span>
         <span className="lsp-chart__legend-item">
           <i className="lsp-chart__dot lsp-chart__dot--empty" />
-          Sin datos
+          No data
         </span>
       </div>
 
@@ -216,7 +216,7 @@ export default function LevelsStatsChartsCarousel({ charts = [] }) {
               onClick={() => setIndex(i)}
             >
               {slide.levelName}
-              {!slide.hasData ? <span className="lsp-chart__tab-note">Sin datos</span> : null}
+              {!slide.hasData ? <span className="lsp-chart__tab-note">No data</span> : null}
             </button>
           ))}
         </div>

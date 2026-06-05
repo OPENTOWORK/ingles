@@ -87,7 +87,7 @@ function KpiIcon({ type }) {
   );
 }
 
-export default function LevelsEstadisticasPanel({ userId }) {
+export default function LevelsEstadisticasPanel({ userId, embedded = false }) {
   const [rows, setRows] = useState([]);
   const [partNames, setPartNames] = useState({});
   const [preguntaMeta, setPreguntaMeta] = useState({});
@@ -208,6 +208,9 @@ export default function LevelsEstadisticasPanel({ userId }) {
 
   if (!userId) return null;
 
+  const showAccuracyRing = !loading && !error && rows.length > 0 && pctGlobal != null;
+  const showLspHeader = !embedded || showAccuracyRing;
+
   const kpis = [
     {
       key: 'correct',
@@ -234,28 +237,35 @@ export default function LevelsEstadisticasPanel({ userId }) {
   ];
 
   return (
-    <section className="lsp" aria-labelledby="levels-stats-title">
-      <header className="lsp-header">
-        <div className="lsp-header__copy">
-          <h2 id="levels-stats-title" className="lsp-header__title">
-            Your practice
-          </h2>
-        </div>
-        {!loading && !error && rows.length > 0 && pctGlobal != null ? (
-          <div
-            className="lsp-header__ring"
-            style={{
-              background: `conic-gradient(#2563eb ${pctGlobal * 3.6}deg, #e2e8f0 0deg)`,
-            }}
-            aria-label={`Overall accuracy: ${pctGlobal}%`}
-          >
-            <div className="lsp-header__ring-inner">
-              <span className="lsp-header__ring-value">{pctGlobal}%</span>
-              <span className="lsp-header__ring-label">accuracy</span>
+    <section
+      className={`lsp${embedded ? ' lsp--embedded' : ''}`}
+      aria-labelledby={embedded ? undefined : 'levels-stats-title'}
+    >
+      {showLspHeader ? (
+        <header className="lsp-header">
+          {!embedded ? (
+            <div className="lsp-header__copy">
+              <h2 id="levels-stats-title" className="lsp-header__title">
+                Your practice
+              </h2>
             </div>
-          </div>
-        ) : null}
-      </header>
+          ) : null}
+          {showAccuracyRing ? (
+            <div
+              className="lsp-header__ring"
+              style={{
+                background: `conic-gradient(#2563eb ${pctGlobal * 3.6}deg, #e2e8f0 0deg)`,
+              }}
+              aria-label={`Overall accuracy: ${pctGlobal}%`}
+            >
+              <div className="lsp-header__ring-inner">
+                <span className="lsp-header__ring-value">{pctGlobal}%</span>
+                <span className="lsp-header__ring-label">accuracy</span>
+              </div>
+            </div>
+          ) : null}
+        </header>
+      ) : null}
 
       {loading ? (
         <div className="lsp-loading">
@@ -301,6 +311,23 @@ export default function LevelsEstadisticasPanel({ userId }) {
           background: #ffffff;
           box-shadow: 0 4px 24px rgba(15, 23, 42, 0.06);
           font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+        }
+
+        .lsp--embedded {
+          margin: 28px 0 0;
+          padding: 28px 0 0;
+          border: none;
+          border-radius: 0;
+          background: transparent;
+          box-shadow: none;
+          border-top: 1px solid #e2e8f0;
+        }
+
+        .lsp--embedded .lsp-header {
+          margin-bottom: 20px;
+          padding-bottom: 0;
+          border-bottom: none;
+          justify-content: flex-end;
         }
 
         .lsp-header {

@@ -5,7 +5,7 @@ const META_PREFIX = 'uoe_meta:';
 
 /** @param {{ parteNumero: number, examenId: string, correctas: number, total: number, aprobado: boolean }} meta */
 export function buildUoePartDescripcion(meta) {
-  const label = `Parte ${meta.parteNumero} · ${meta.correctas}/${meta.total} · ${meta.aprobado ? 'aprobado' : 'no aprobado'}`;
+  const label = `Part ${meta.parteNumero} · ${meta.correctas}/${meta.total} · ${meta.aprobado ? 'passed' : 'not passed'}`;
   return `${META_PREFIX}${JSON.stringify({
     v: 1,
     examen_id: meta.examenId,

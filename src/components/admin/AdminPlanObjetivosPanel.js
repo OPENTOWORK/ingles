@@ -71,7 +71,7 @@ export default function AdminPlanObjetivosPanel() {
       ) : (
         <StudyPlanSurvey
           previewMode
-          placementLevel="B2 (ejemplo)"
+          placementLevel="B2 (example)"
           onComplete={(plan) => setPreviewResult(plan)}
         />
       )}

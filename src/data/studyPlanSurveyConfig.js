@@ -1,12 +1,12 @@
-/** Configuración de la encuesta «Plan de objetivos» (alumno tras placement). */
+/** Study plan survey config (student flow after placement test). */
 
 export const STUDY_PLAN_GOALS = [
-  { id: 'travel', name: 'Viajar y comunicarme' },
-  { id: 'work', name: 'Inglés profesional' },
-  { id: 'study', name: 'Estudios académicos' },
-  { id: 'exam', name: 'Aprobar examen Cambridge' },
-  { id: 'conversation', name: 'Conversación fluida' },
-  { id: 'hobby', name: 'Aprendizaje personal' },
+  { id: 'travel', name: 'Travel and communicate' },
+  { id: 'work', name: 'Professional English' },
+  { id: 'study', name: 'Academic studies' },
+  { id: 'exam', name: 'Pass a Cambridge exam' },
+  { id: 'conversation', name: 'Fluent conversation' },
+  { id: 'hobby', name: 'Personal learning' },
 ];
 
 export const STUDY_PLAN_SKILLS = [
@@ -19,43 +19,43 @@ export const STUDY_PLAN_SKILLS = [
 ];
 
 export const STUDY_PLAN_HOUR_OPTIONS = [
-  { value: 3, label: '3 h', hint: 'Ritmo ligero' },
-  { value: 5, label: '5 h', hint: 'Recomendado mínimo' },
-  { value: 7, label: '7 h', hint: '1 h al día' },
-  { value: 10, label: '10 h', hint: 'Intensivo' },
-  { value: 15, label: '15 h', hint: 'Muy intensivo' },
-  { value: 20, label: '20+ h', hint: 'Preparación total' },
+  { value: 3, label: '3 h', hint: 'Light pace' },
+  { value: 5, label: '5 h', hint: 'Recommended minimum' },
+  { value: 7, label: '7 h', hint: '1 h per day' },
+  { value: 10, label: '10 h', hint: 'Intensive' },
+  { value: 15, label: '15 h', hint: 'Very intensive' },
+  { value: 20, label: '20+ h', hint: 'Full preparation' },
 ];
 
 export const STUDY_PLAN_SURVEY_STEPS = [
   {
     id: 'goals',
-    title: '¿Qué quieres lograr?',
-    desc: 'Elige uno o más objetivos con tu inglés.',
+    title: 'What do you want to achieve?',
+    desc: 'Choose one or more goals for your English.',
   },
   {
     id: 'hours',
-    title: 'Tiempo real de estudio',
-    desc: '¿Cuántas horas puedes dedicar cada semana de forma realista?',
+    title: 'Real study time',
+    desc: 'How many hours can you realistically dedicate each week?',
   },
   {
     id: 'exam',
-    title: 'Fecha del examen',
-    desc: '¿Cuándo te gustaría presentarte al examen? (aproximado)',
+    title: 'Exam date',
+    desc: 'When would you like to take the exam? (approximate)',
   },
   {
     id: 'strengths',
-    title: 'Tus fortalezas',
-    desc: '¿En qué habilidades te sientes más cómodo/a?',
+    title: 'Your strengths',
+    desc: 'Which skills do you feel most comfortable with?',
   },
   {
     id: 'weaknesses',
-    title: 'Áreas a mejorar',
-    desc: '¿Qué habilidades quieres priorizar en tu plan?',
+    title: 'Areas to improve',
+    desc: 'Which skills do you want to prioritise in your plan?',
   },
   {
     id: 'notes',
-    title: 'Algo más',
-    desc: 'Horarios, restricciones o comentarios (opcional).',
+    title: 'Anything else',
+    desc: 'Schedules, constraints or comments (optional).',
   },
 ];

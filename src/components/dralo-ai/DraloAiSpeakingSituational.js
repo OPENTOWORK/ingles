@@ -115,6 +115,13 @@ export default function DraloAiSpeakingSituational() {
 
   return (
     <main className="dralo-ai-page" style={{ '--dralo-accent-solid': '#e11d48' }}>
+      <div className="dralo-ai-studio__toolbar dralo-ai-studio__toolbar--under-xp">
+        <Link href="/dralo-ai" className="dralo-ai-back-link">
+          ← Dralo AI
+        </Link>
+        <DraloAiLevelFilter levels={config.levels} selectedLevel={level} onChange={setLevel} />
+      </div>
+
       <div className="page-hero-wrap__breadcrumb">
         <nav className="breadcrumb" aria-label="Breadcrumb">
           <Link href="/">Home</Link>
@@ -134,13 +141,6 @@ export default function DraloAiSpeakingSituational() {
       />
 
       <div className="dralo-ai-studio">
-        <div className="dralo-ai-studio__toolbar">
-          <Link href="/dralo-ai" className="dralo-ai-back-link">
-            ← Dralo AI
-          </Link>
-          <DraloAiLevelFilter levels={config.levels} selectedLevel={level} onChange={setLevel} />
-        </div>
-
         <div className="dralo-ai-activities" role="tablist" aria-label="Scenarios">
           {situational.scenarios.map((s) => (
             <button

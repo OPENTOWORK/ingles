@@ -95,7 +95,7 @@ export default function ProfileGoalsPanel({ userId }) {
         </div>
         <div className={styles.summaryItem}>
           <span className={styles.summaryValue}>{progress?.weekMinutes ?? 0}</span>
-          <span className={styles.summaryLabel}>Minutos (7 d)</span>
+          <span className={styles.summaryLabel}>Minutes (7 d)</span>
         </div>
         <div className={styles.summaryItem}>
           <span className={styles.summaryValue}>{progress?.weekParts ?? 0}</span>
@@ -103,11 +103,11 @@ export default function ProfileGoalsPanel({ userId }) {
         </div>
         <div className={styles.summaryItem}>
           <span className={styles.summaryValue}>{progress?.monthTheoryCorrect ?? 0}</span>
-          <span className={styles.summaryLabel}>Theory (mes)</span>
+          <span className={styles.summaryLabel}>Theory (month)</span>
         </div>
         <div className={styles.summaryItem}>
           <span className={styles.summaryValue}>{progress?.monthTrainingDone ?? 0}</span>
-          <span className={styles.summaryLabel}>Training (mes)</span>
+          <span className={styles.summaryLabel}>Training (month)</span>
         </div>
       </div>
 
@@ -164,7 +164,7 @@ export default function ProfileGoalsPanel({ userId }) {
             <p className={styles.hint}>{goal.hint}</p>
 
             <div className={styles.targetRow}>
-              <span className={styles.targetLabel}>Tu meta</span>
+              <span className={styles.targetLabel}>Your target</span>
               <input
                 type="number"
                 className={styles.targetInput}

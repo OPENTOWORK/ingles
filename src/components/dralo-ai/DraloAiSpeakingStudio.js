@@ -37,6 +37,17 @@ export default function DraloAiSpeakingStudio() {
 
   return (
     <main className="dralo-ai-page" style={{ '--dralo-accent-solid': accentSolid }}>
+      <div className="dralo-ai-studio__toolbar dralo-ai-studio__toolbar--under-xp">
+        <Link href="/dralo-ai/speaking" className="dralo-ai-back-link">
+          ← Choose mode
+        </Link>
+        <DraloAiLevelFilter
+          levels={config.levels}
+          selectedLevel={level}
+          onChange={setLevel}
+        />
+      </div>
+
       <div className="page-hero-wrap__breadcrumb">
         <nav className="breadcrumb" aria-label="Breadcrumb">
           <Link href="/">Home</Link>
@@ -63,17 +74,6 @@ export default function DraloAiSpeakingStudio() {
       />
 
       <div className="dralo-ai-studio">
-        <div className="dralo-ai-studio__toolbar">
-          <Link href="/dralo-ai/speaking" className="dralo-ai-back-link">
-            ← Choose mode
-          </Link>
-          <DraloAiLevelFilter
-            levels={config.levels}
-            selectedLevel={level}
-            onChange={setLevel}
-          />
-        </div>
-
         <div className="dralo-ai-activities" role="tablist" aria-label="Speaking exam parts">
           {activities.map((a) => (
             <button

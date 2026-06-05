@@ -16,13 +16,13 @@ export async function GET(req) {
     const authHeader = req.headers.get('authorization') || '';
     const token = authHeader.startsWith('Bearer ') ? authHeader.slice(7) : null;
     if (!token) {
-      return NextResponse.json({ error: 'No autenticado.' }, { status: 401 });
+      return NextResponse.json({ error: 'Not authenticated.' }, { status: 401 });
     }
 
     const authClient = createClient(supabaseUrl, supabaseAnonKey);
     const { data: authData, error: authError } = await authClient.auth.getUser(token);
     if (authError || !authData?.user) {
-      return NextResponse.json({ error: 'Sesión no válida.' }, { status: 401 });
+      return NextResponse.json({ error: 'Invalid session.' }, { status: 401 });
     }
 
     const userId = authData.user.id;
@@ -52,7 +52,7 @@ export async function GET(req) {
       activityMap = new Map();
     } else if (actError) {
       console.error('[perfil/actividad] select', actError);
-      return NextResponse.json({ error: 'No se pudo cargar la actividad.' }, { status: 500 });
+      return NextResponse.json({ error: 'Could not load activity.' }, { status: 500 });
     }
 
     if (activityMap.size < 3) {
@@ -80,6 +80,6 @@ export async function GET(req) {
     });
   } catch (err) {
     console.error('[perfil/actividad]', err);
-    return NextResponse.json({ error: 'Error interno.' }, { status: 500 });
+    return NextResponse.json({ error: 'Internal error.' }, { status: 500 });
   }
 }

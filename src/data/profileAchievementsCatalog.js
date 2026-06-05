@@ -11,17 +11,17 @@ const ICONS = {
 };
 
 const PAGE_META = [
-  { title: 'Levels · Primeros pasos', category: 'levels', ruleFamily: 'levels_base' },
+  { title: 'Levels · First steps', category: 'levels', ruleFamily: 'levels_base' },
   { title: 'Levels · Reading & UoE', category: 'levels', ruleFamily: 'levels_reading' },
   { title: 'Levels · Writing', category: 'levels', ruleFamily: 'levels_writing' },
   { title: 'Levels · Listening', category: 'levels', ruleFamily: 'levels_listening' },
-  { title: 'Levels · Speaking & exámenes', category: 'levels', ruleFamily: 'levels_exams' },
-  { title: 'Theory · Fundamentos', category: 'theory', ruleFamily: 'theory_base' },
-  { title: 'Theory · Dominio', category: 'theory', ruleFamily: 'theory_mastery' },
-  { title: 'Placement · Test de nivel', category: 'placement', ruleFamily: 'placement_base' },
-  { title: 'Placement · Niveles CEFR', category: 'placement', ruleFamily: 'placement_cefr' },
-  { title: 'Training · Unidades', category: 'training', ruleFamily: 'training_base' },
-  { title: 'Training · Maestría', category: 'training', ruleFamily: 'training_mastery' },
+  { title: 'Levels · Speaking & exams', category: 'levels', ruleFamily: 'levels_exams' },
+  { title: 'Theory · Fundamentals', category: 'theory', ruleFamily: 'theory_base' },
+  { title: 'Theory · Mastery', category: 'theory', ruleFamily: 'theory_mastery' },
+  { title: 'Placement · Level test', category: 'placement', ruleFamily: 'placement_base' },
+  { title: 'Placement · CEFR levels', category: 'placement', ruleFamily: 'placement_cefr' },
+  { title: 'Training · Units', category: 'training', ruleFamily: 'training_base' },
+  { title: 'Training · Mastery', category: 'training', ruleFamily: 'training_mastery' },
 ];
 
 function ruleLevelsBase(i) {
@@ -239,51 +239,51 @@ const RULE_BUILDERS = {
 function badgeName(category, pageTitle, index, rule) {
   const tier = index + 1;
   if (rule.type === 'placement_nivel') {
-    return `Nivel ${rule.nivel}`;
+    return `Level ${rule.nivel}`;
   }
   if (rule.type.includes('best_pct') || rule.type === 'training_accuracy') {
     return `${pageTitle.split('·')[0]?.trim()} · ${rule.min}%`;
   }
   const action =
     rule.type.includes('correct') || rule.type.includes('aprobados')
-      ? 'aciertos'
+      ? 'correct'
       : rule.type.includes('puntuaciones') || rule.type.includes('tests')
-        ? 'registros'
+        ? 'records'
         : rule.type.includes('parts') || rule.type.includes('units')
-          ? 'áreas'
-          : 'progreso';
+          ? 'areas'
+          : 'progress';
   return `${pageTitle.split('·')[0]?.trim()} ${tier} · ${rule.min} ${action}`;
 }
 
 function badgeDescription(category, rule) {
   if (rule.type === 'placement_nivel') {
-    return `Consigue nivel ${rule.nivel} en el placement test.`;
+    return `Reach level ${rule.nivel} on the placement test.`;
   }
   const map = {
-    levels_accesos: 'Accesos a partes en Levels (levels_estadisticas).',
-    levels_intentos: 'Intentos completados en Levels.',
-    levels_correct: 'Respuestas correctas en Levels.',
-    levels_evaluadas: 'Respuestas evaluadas en Levels.',
-    levels_parts: 'Partes distintas practicadas en Levels.',
-    levels_puntuaciones: 'Puntuaciones guardadas (levels_puntuaciones).',
-    levels_aprobados: 'Partes aprobadas en levels_puntuaciones.',
-    levels_best_pct: 'Mejor porcentaje en Levels.',
-    theory_rows: 'Actividad en teoría (levels_teoria_estadisticas).',
-    theory_accesos: 'Accesos a contenido de teoría.',
-    theory_intentos: 'Intentos en teoría.',
-    theory_correct: 'Aciertos en teoría.',
-    theory_evaluadas: 'Respuestas evaluadas en teoría.',
-    theory_parts: 'Bloques de teoría practicados.',
-    theory_best_pct: 'Mejor porcentaje en teoría.',
-    placement_tests: 'Tests de nivel completados (placement_results).',
-    placement_score: 'Puntuación acumulada en placement.',
-    training_units: 'Unidades de training practicadas.',
-    training_hechos: 'Ejercicios hechos en training.',
-    training_correct: 'Ejercicios correctos en training.',
-    training_accuracy: 'Porcentaje de acierto en training.',
+    levels_accesos: 'Part accesses in Levels (levels_estadisticas).',
+    levels_intentos: 'Completed attempts in Levels.',
+    levels_correct: 'Correct answers in Levels.',
+    levels_evaluadas: 'Evaluated answers in Levels.',
+    levels_parts: 'Distinct parts practised in Levels.',
+    levels_puntuaciones: 'Saved scores (levels_puntuaciones).',
+    levels_aprobados: 'Passed parts in levels_puntuaciones.',
+    levels_best_pct: 'Best percentage in Levels.',
+    theory_rows: 'Theory activity (levels_teoria_estadisticas).',
+    theory_accesos: 'Theory content accesses.',
+    theory_intentos: 'Theory attempts.',
+    theory_correct: 'Correct answers in Theory.',
+    theory_evaluadas: 'Evaluated answers in Theory.',
+    theory_parts: 'Theory blocks practised.',
+    theory_best_pct: 'Best percentage in Theory.',
+    placement_tests: 'Placement tests completed (placement_results).',
+    placement_score: 'Cumulative placement score.',
+    training_units: 'Training units practised.',
+    training_hechos: 'Exercises done in Training.',
+    training_correct: 'Correct exercises in Training.',
+    training_accuracy: 'Accuracy percentage in Training.',
   };
-  const hint = map[rule.type] || 'Completa actividades en la plataforma.';
-  return `${hint} Meta: ${rule.min}${rule.nivel ? '' : '+'}.`;
+  const hint = map[rule.type] || 'Complete activities on the platform.';
+  return `${hint} Target: ${rule.min}${rule.nivel ? '' : '+'}.`;
 }
 
 function buildPage(pageIndex) {

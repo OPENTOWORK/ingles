@@ -30,7 +30,7 @@ import ProfileComingSoon from '@/components/perfil/ProfileComingSoon';
 import ProfileTabsNav from '@/components/perfil/ProfileTabsNav';
 import { PROFILE_TABS, PROFILE_TAB_LABELS } from '@/components/perfil/profileTabsConfig';
 import ProfileAvatarUpload from '@/components/perfil/ProfileAvatarUpload';
-import { authMetadataPlanSlug, getPlanBySlug } from '@/data/financialPlanConfig';
+import { authMetadataPlanSlug, getPlanBySlug, getPlanProfileDisplay } from '@/data/financialPlanConfig';
 import { canViewPricing } from '@/utils/pricingAccess';
 
 const ProfileExamDatesPanel = dynamic(
@@ -76,6 +76,17 @@ const ProfileAchievementsCarousel = dynamicImport(
 const ProfileGoalsPanel = dynamicImport(
   () => import('@/components/perfil/ProfileGoalsPanel'),
 );
+const DraloLevelProgressSection = dynamic(
+  () => import('@/components/dralo/DraloLevelProgressSection'),
+  {
+    ssr: false,
+    loading: () => (
+      <div className="dralo-level-card dralo-level-card--loading">
+        <p className="dralo-level-card__status">Loading your Dralo experience…</p>
+      </div>
+    ),
+  },
+);
 import SiteMascot from '@/components/SiteMascot';
 import PasswordInput from '@/components/PasswordInput';
 import {
@@ -91,7 +102,7 @@ export default function ProfilePage() {
   const [statsLoading, setStatsLoading] = useState(false);
   const [fullName, setFullName] = useState('');
   const [birthDate, setBirthDate] = useState('');
-  const [preferredLanguage, setPreferredLanguage] = useState('es');
+  const [preferredLanguage, setPreferredLanguage] = useState('en');
   const [biography, setBiography] = useState('');
   const [avatarUrl, setAvatarUrl] = useState('');
   const [avatarUploading, setAvatarUploading] = useState(false);
@@ -232,7 +243,7 @@ export default function ProfilePage() {
         : {};
       setFullName(userRow?.nombre || authUser?.user_metadata?.name || '');
       setBirthDate(profileRow?.fecha_nacimiento || '');
-      setPreferredLanguage(profileRow?.idioma_preferido || 'es');
+      setPreferredLanguage(profileRow?.idioma_preferido || 'en');
       setBiography(profileRow?.biografia || '');
       setAvatarUrl(
         profileRow?.foto_url ||
@@ -395,7 +406,7 @@ export default function ProfilePage() {
     const { error: profileError } = await supabase.from('profiles').upsert({
       user_id: user.id,
       fecha_nacimiento: birthDate || null,
-      idioma_preferido: preferredLanguage || 'es',
+      idioma_preferido: preferredLanguage || 'en',
       biografia: (biography || '').trim() || null,
       foto_url: avatarUrl || null,
     });
@@ -518,7 +529,7 @@ export default function ProfilePage() {
       });
 
       if (otpError) {
-        throw new Error('Codigo no valido o caducado. Solicita uno nuevo.');
+        throw new Error('Invalid or expired code. Request a new one.');
       }
 
       await supabase.from('user_preferences').delete().eq('user_id', user.id);
@@ -532,7 +543,7 @@ export default function ProfilePage() {
       });
 
       await supabase.auth.signOut();
-      alert('Cuenta eliminada correctamente.');
+      alert('Account deleted successfully.');
       router.push('/registro');
     } catch (error) {
       console.error('Error deleting account:', error);
@@ -763,6 +774,7 @@ export default function ProfilePage() {
 
   const subscriptionSlug = authMetadataPlanSlug(user?.user_metadata?.subscription_plan);
   const subscriptionPlan = getPlanBySlug(subscriptionSlug);
+  const subscriptionDisplay = getPlanProfileDisplay(subscriptionPlan);
   const showPricingLink = canViewPricing(userRole);
 
   const tabsProps = {
@@ -806,6 +818,13 @@ export default function ProfilePage() {
       {/* Tab: Resumen */}
       {activeTab === 'overview' && (
         <div className="profile-tab-panels">
+          <ProfileCollapsibleSection title="✨ Dralo IA — Experience" defaultOpen>
+            <DraloLevelProgressSection
+              accessToken={layoutSession?.access_token}
+              lang="en"
+            />
+          </ProfileCollapsibleSection>
+
           <ProfileCollapsibleSection title="📊 General statistics" defaultOpen>
             <ProfileGeneralStats
               accessToken={layoutSession?.access_token}
@@ -823,16 +842,10 @@ export default function ProfilePage() {
 
           <ProfileCollapsibleSection
             title="📝 Exam statistics"
-            className="profile-section--nested-exam-stats"
+            className="profile-section--nested-exam-stats profile-section--exam-practice-combined"
           >
-            <ExamStatistics userId={user?.id} />
-          </ProfileCollapsibleSection>
-
-          <ProfileCollapsibleSection
-            title="📚 Your practice (Levels)"
-            className="profile-section--nested-levels"
-          >
-            <LevelsEstadisticasPanel userId={user?.id} />
+            <ExamStatistics userId={user?.id} embedded />
+            <LevelsEstadisticasPanel userId={user?.id} embedded />
           </ProfileCollapsibleSection>
 
           <ProfileCollapsibleSection title="📅 Study activity">
@@ -1050,22 +1063,22 @@ export default function ProfilePage() {
           <ProfileCollapsibleSection title="💳 My subscription">
             <div className="mis-datos-subscription__card">
               <div className="mis-datos-subscription__badge">
-                {subscriptionPlan.badge || subscriptionPlan.nombre}
+                {subscriptionDisplay.badge || subscriptionPlan.nombre}
               </div>
               <div className="mis-datos-subscription__body">
                 <h3 className="mis-datos-subscription__plan">
                   Plan {subscriptionPlan.nombre}
                 </h3>
-                <p className="mis-datos-subscription__text">{subscriptionPlan.descripcionCorta}</p>
+                <p className="mis-datos-subscription__text">{subscriptionDisplay.descripcionCorta}</p>
                 <ul className="mis-datos-subscription__features">
-                  {subscriptionPlan.highlights.slice(0, 5).map((line) => (
+                  {subscriptionDisplay.highlights.slice(0, 5).map((line) => (
                     <li key={line}>{line}</li>
                   ))}
                 </ul>
                 {showPricingLink ? (
                   <p style={{ margin: '12px 0 0' }}>
                     <Link href="/precios" className="mis-datos-link">
-                      Ver todos los planes y comparativa →
+                      View all plans and comparison →
                     </Link>
                   </p>
                 ) : null}
@@ -1126,7 +1139,7 @@ export default function ProfilePage() {
                 }}
                 className="form-input"
               >
-                <option value="es">Español</option>
+                <option value="es">Spanish</option>
                 <option value="en">English</option>
               </select>
             </div>
@@ -1269,7 +1282,7 @@ export default function ProfilePage() {
                 value={inviteEmail}
                 onChange={(e) => setInviteEmail(e.target.value)}
                 className="form-input"
-                placeholder="amigo@email.com"
+                placeholder="friend@email.com"
               />
             </div>
             <div className="form-group">
@@ -1413,7 +1426,7 @@ export default function ProfilePage() {
           <ProfileCollapsibleSection title={"📊 Progress comparison"}>
 <div className="comparison-stats">
               <div className="comparison-card">
-                <div className="comparison-label">Tu Score</div>
+                <div className="comparison-label">Your score</div>
                 <div className="comparison-value">{progressComparison.userScore}%</div>
               </div>
               <div className="comparison-card">

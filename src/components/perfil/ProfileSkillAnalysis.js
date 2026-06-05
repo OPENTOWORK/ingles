@@ -46,7 +46,7 @@ export default function ProfileSkillAnalysis({ userId }) {
         setHasData(result.hasData);
       } catch (err) {
         if (!cancelled) {
-          setError(err?.message || 'No se pudieron cargar las habilidades.');
+          setError(err?.message || 'Could not load skills.');
           setSkills(EMPTY_SKILLS);
           setHasData(false);
         }
@@ -110,7 +110,7 @@ export default function ProfileSkillAnalysis({ userId }) {
                 <div className="skill-improvement">
                   {data.improvement > 0 ? `+${data.improvement}%` : '—'}
                 </div>
-                <div className="skill-exercises">{data.exercises} ejercicios</div>
+                <div className="skill-exercises">{data.exercises} exercises</div>
               </div>
             );
           })}
@@ -127,7 +127,7 @@ export default function ProfileSkillAnalysis({ userId }) {
             <PolarAngleAxis dataKey="skill" />
             <PolarRadiusAxis domain={[0, 100]} />
             <Radar
-              name="Tu nivel"
+              name="Your level"
               dataKey="A"
               stroke="#0070f3"
               fill="#0070f3"

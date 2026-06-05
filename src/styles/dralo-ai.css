@@ -103,6 +103,10 @@
   border: 1px solid #e2e8f0;
 }
 
+.dralo-ai-studio__toolbar--under-xp {
+  margin-bottom: 18px;
+}
+
 .dralo-ai-studio__badge {
   display: inline-flex;
   align-items: center;
@@ -2472,4 +2476,214 @@
 
 .dralo-ai-whatsapp__input {
   font-family: system-ui, -apple-system, sans-serif;
+}
+
+/* Dralo IA — global level progress (profile / dashboard) */
+.dralo-level-card {
+  margin: 0;
+  padding: 16px 18px;
+  border-radius: 16px;
+  border: 1px solid #e2e8f0;
+  background: #fff;
+  box-shadow: 0 4px 18px rgba(15, 23, 42, 0.06);
+}
+
+.dralo-level-card--loading,
+.dralo-level-card--error,
+.dralo-level-card--empty {
+  background: linear-gradient(135deg, #faf5ff 0%, #fdf2f8 100%);
+}
+
+.dralo-level-card__head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 8px 16px;
+  margin-bottom: 10px;
+}
+
+.dralo-level-card__title {
+  margin: 0;
+  font-size: 1.05rem;
+  font-weight: 800;
+  color: #0f172a;
+}
+
+.dralo-level-card__xp {
+  margin: 0;
+  font-size: 1.15rem;
+  font-weight: 900;
+  color: #7c3aed;
+}
+
+.dralo-level-card__progress-row {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 6px 12px;
+  margin-bottom: 8px;
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: #64748b;
+}
+
+.dralo-level-card__progress-label {
+  color: #475569;
+}
+
+.dralo-level-card__progress-remaining {
+  color: #7c3aed;
+}
+
+.dralo-level-card__bar {
+  height: 12px;
+  border-radius: 999px;
+  background: #e2e8f0;
+  overflow: hidden;
+}
+
+.dralo-level-card__bar-fill {
+  display: block;
+  height: 100%;
+  border-radius: 999px;
+  background: linear-gradient(90deg, #8b5cf6, #db2777);
+  transition: width 0.4s ease;
+}
+
+.dralo-level-card__max-msg {
+  margin: 10px 0 0;
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: #16a34a;
+}
+
+.dralo-level-card__status,
+.dralo-level-card__meta {
+  margin: 0;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #475569;
+  line-height: 1.5;
+}
+
+.dralo-level-card__meta + .dralo-level-card__meta {
+  margin-top: 6px;
+  font-size: 0.82rem;
+  color: #94a3b8;
+}
+
+/* Sticky XP bar — all Dralo AI sections */
+.dralo-ai-xp-bar {
+  position: sticky;
+  top: 0;
+  z-index: 40;
+  margin: 0 auto 8px;
+  max-width: 1120px;
+  padding: 10px 16px;
+  border-radius: 14px;
+  border: 1px solid #e2e8f0;
+  background: linear-gradient(135deg, #faf5ff 0%, #fff 55%, #fdf2f8 100%);
+  box-shadow: 0 4px 16px rgba(15, 23, 42, 0.06);
+}
+
+.dralo-ai-xp-bar--loading,
+.dralo-ai-xp-bar--muted {
+  text-align: center;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #64748b;
+}
+
+.dralo-ai-xp-bar__main {
+  display: grid;
+  gap: 6px;
+}
+
+.dralo-ai-xp-bar__titles {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 6px 14px;
+}
+
+.dralo-ai-xp-bar__level {
+  font-size: 0.92rem;
+  font-weight: 800;
+  color: #0f172a;
+}
+
+.dralo-ai-xp-bar__xp {
+  font-size: 1rem;
+  font-weight: 900;
+  color: #7c3aed;
+}
+
+.dralo-ai-xp-bar__meta {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 4px 10px;
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: #64748b;
+}
+
+.dralo-ai-xp-bar__next {
+  color: #7c3aed;
+}
+
+.dralo-ai-xp-bar__track {
+  height: 10px;
+  border-radius: 999px;
+  background: #e2e8f0;
+  overflow: hidden;
+}
+
+.dralo-ai-xp-bar__fill {
+  display: block;
+  height: 100%;
+  border-radius: 999px;
+  background: linear-gradient(90deg, #8b5cf6, #db2777);
+  transition: width 0.45s ease;
+}
+
+.dralo-ai-xp-toast {
+  position: fixed;
+  right: 18px;
+  bottom: 22px;
+  z-index: 60;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 14px;
+  border-radius: 12px;
+  background: #0f172a;
+  color: #fff;
+  font-weight: 800;
+  font-size: 0.95rem;
+  box-shadow: 0 8px 24px rgba(15, 23, 42, 0.28);
+  animation: dralo-xp-toast-in 0.35s ease;
+}
+
+.dralo-ai-xp-toast__close {
+  border: none;
+  background: transparent;
+  color: #94a3b8;
+  font-size: 1.2rem;
+  line-height: 1;
+  cursor: pointer;
+  padding: 0 2px;
+}
+
+@keyframes dralo-xp-toast-in {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }

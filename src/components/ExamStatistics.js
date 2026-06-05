@@ -43,7 +43,7 @@ function getPerformance(percentage) {
   return PERFORMANCE_LEVELS.find((l) => percentage >= l.min) || PERFORMANCE_LEVELS.at(-1);
 }
 
-export default function ExamStatistics({ userId }) {
+export default function ExamStatistics({ userId, embedded = false }) {
   const [statistics, setStatistics] = useState(EMPTY_STATS);
   const [timeRange, setTimeRange] = useState('all');
   const [loading, setLoading] = useState(true);
@@ -146,11 +146,16 @@ export default function ExamStatistics({ userId }) {
   }
 
   return (
-    <section className="exam-stats" aria-labelledby="exam-stats-title">
+    <section
+      className={`exam-stats${embedded ? ' exam-stats--embedded' : ''}`}
+      aria-labelledby={embedded ? undefined : 'exam-stats-title'}
+    >
       <header className="exam-stats__header">
-        <div className="exam-stats__title-wrap">
-          <h2 id="exam-stats-title">Exam statistics</h2>
-        </div>
+        {!embedded ? (
+          <div className="exam-stats__title-wrap">
+            <h2 id="exam-stats-title">Exam statistics</h2>
+          </div>
+        ) : null}
         <div className="exam-stats__filter">
           <label htmlFor="exam-stats-range">Period</label>
           <select
@@ -211,7 +216,7 @@ export default function ExamStatistics({ userId }) {
                 <div className="exam-stats__metrics">
                   <div className="exam-stats__metric">
                     <span className="exam-stats__metric-value">{sectionStats.attempts}</span>
-                    <span className="exam-stats__metric-label">Intentos</span>
+                    <span className="exam-stats__metric-label">Attempts</span>
                   </div>
                   <div className="exam-stats__metric">
                     <span className="exam-stats__metric-value">{pct}%</span>
@@ -336,11 +341,11 @@ export default function ExamStatistics({ userId }) {
 
       <div className="exam-stats__time-bar">
         <div className="exam-stats__time-item">
-          <span className="exam-stats__time-label">Tiempo total</span>
+          <span className="exam-stats__time-label">Total time</span>
           <span className="exam-stats__time-value">{formatTime(statistics.totalTime)}</span>
         </div>
         <div className="exam-stats__time-item">
-          <span className="exam-stats__time-label">Media por examen</span>
+          <span className="exam-stats__time-label">Average per exam</span>
           <span className="exam-stats__time-value">
             {statistics.completedExams > 0
               ? formatTime(statistics.totalTime / statistics.completedExams)

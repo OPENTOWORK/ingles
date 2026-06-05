@@ -156,7 +156,7 @@ function padBarsToFullPaper(levelName, bars) {
       fullBars.push({
         ...hit,
         partSort: p,
-        name: `Parte ${p}`,
+        name: `Part ${p}`,
         shortName: String(p),
         skillZone: zone?.label || '',
       });
@@ -164,7 +164,7 @@ function padBarsToFullPaper(levelName, bars) {
       fullBars.push({
         parteId: `empty-${levelName}-${p}`,
         partSort: p,
-        name: `Parte ${p}`,
+        name: `Part ${p}`,
         shortName: String(p),
         scorePct: null,
         accesos: 0,

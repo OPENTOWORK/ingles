@@ -4,11 +4,20 @@ import { parseUoePartDescripcion } from '@/utils/levelsPuntuaciones';
 const SKILLS = ['reading', 'writing', 'listening', 'speaking'];
 
 const IMPROVEMENT_TIPS = {
-  reading: 'Refuerza comprensión lectora y use of English',
-  writing: 'Desarrolla técnicas de escritura y estructura',
-  listening: 'Refuerza la comprensión auditiva con más práctica',
-  speaking: 'Practica fluidez y pronunciación en speaking',
+  reading: 'Strengthen reading comprehension and Use of English',
+  writing: 'Develop writing techniques and structure',
+  listening: 'Strengthen listening comprehension with more practice',
+  speaking: 'Practise fluency and pronunciation in speaking',
 };
+
+function formatExamStatsLabel(text) {
+  return String(text || '')
+    .replace(/\bPregunta\b/gi, 'Question')
+    .replace(/\bParte\b/gi, 'Part')
+    .replace(/\bExamen de práctica\b/gi, 'Practice exam')
+    .replace(/\bno aprobado\b/gi, 'not passed')
+    .replace(/\baprobado\b/gi, 'passed');
+}
 
 function emptySections() {
   return Object.fromEntries(
@@ -174,13 +183,15 @@ export function buildExamStatisticsFromLevels({
       timeSec: 0,
     });
 
-    const examLabel = examNames[examId] || row.descripcion?.split('|').pop()?.trim() || 'Examen de práctica';
-    const partLabel = parteNumero ? `Parte ${parteNumero}` : '';
+    const examLabel = formatExamStatsLabel(
+      examNames[examId] || row.descripcion?.split('|').pop()?.trim() || 'Practice exam',
+    );
+    const partLabel = parteNumero ? `Part ${parteNumero}` : '';
 
     recentAttempts.push({
       id: row.id,
       examId,
-      label: partLabel ? `${examLabel} · ${partLabel}` : examLabel,
+      label: formatExamStatsLabel(partLabel ? `${examLabel} · ${partLabel}` : examLabel),
       score: correct,
       totalQuestions: total,
       percentage: pct,
@@ -207,10 +218,10 @@ export function buildExamStatisticsFromLevels({
   const strengths = sorted.slice(0, 2).map(([k]) => k);
   const weakSkills = sorted.length > 0 ? sorted.slice(-2).map(([k]) => k) : [];
   const improvementAreas = weakSkills.length
-    ? weakSkills.map((k) => IMPROVEMENT_TIPS[k] || `Mejora en ${k}`)
+    ? weakSkills.map((k) => IMPROVEMENT_TIPS[k] || `Improve your ${k}`)
     : [
-        'Practica más ejercicios en Niveles',
-        'Completa partes de examen para ver tu progreso',
+        'Practise more exercises in Levels',
+        'Complete exam parts to track your progress',
       ];
 
   const allPcts = recentAttempts.map((a) => a.percentage).filter((n) => n > 0);

@@ -68,11 +68,11 @@ export default function StudyPlanSurveyAnswers({
           </p>
         )}
         <p className={styles.meta}>
-          Nivel placement: <strong>{plan.placement_level || '—'}</strong>
+          Placement level: <strong>{plan.placement_level || '—'}</strong>
           {plan.completed_at && (
             <>
               {' '}
-              · Respondida el {formatDateTime(plan.completed_at)}
+              · Completed on {formatDateTime(plan.completed_at)}
             </>
           )}
         </p>
@@ -87,7 +87,7 @@ export default function StudyPlanSurveyAnswers({
 
       <dl className={styles.list}>
         <div className={styles.row}>
-          <dt>¿Qué quieres lograr?</dt>
+          <dt>What do you want to achieve?</dt>
           <dd>
             {goals.length > 0 ? (
               <ul className={styles.tags}>
@@ -102,19 +102,19 @@ export default function StudyPlanSurveyAnswers({
         </div>
 
         <div className={styles.row}>
-          <dt>Tiempo real de estudio (horas/semana)</dt>
+          <dt>Real study time (hours/week)</dt>
           <dd>
             <strong>{plan.hours_per_week != null ? `${plan.hours_per_week} h` : '—'}</strong>
           </dd>
         </div>
 
         <div className={styles.row}>
-          <dt>Fecha objetivo del examen</dt>
+          <dt>Target exam date</dt>
           <dd>{formatDate(plan.exam_goal_date)}</dd>
         </div>
 
         <div className={styles.row}>
-          <dt>Fortalezas</dt>
+          <dt>Strengths</dt>
           <dd>
             {strengths.length > 0 ? (
               <ul className={styles.tags}>
@@ -123,13 +123,13 @@ export default function StudyPlanSurveyAnswers({
                 ))}
               </ul>
             ) : (
-              <span className={styles.muted}>No indicadas</span>
+              <span className={styles.muted}>Not specified</span>
             )}
           </dd>
         </div>
 
         <div className={styles.row}>
-          <dt>Áreas a mejorar</dt>
+          <dt>Areas to improve</dt>
           <dd>
             {weaknesses.length > 0 ? (
               <ul className={styles.tags}>
@@ -144,10 +144,10 @@ export default function StudyPlanSurveyAnswers({
         </div>
 
         <div className={styles.row}>
-          <dt>Comentarios adicionales</dt>
+          <dt>Additional comments</dt>
           <dd className={styles.notes}>
             {plan.other_notes?.trim() ? plan.other_notes.trim() : (
-              <span className={styles.muted}>Sin comentarios</span>
+              <span className={styles.muted}>No comments</span>
             )}
           </dd>
         </div>

@@ -207,7 +207,7 @@ export function evaluateAchievementPages(pages, stats) {
         earned,
         earnedAt,
         earnedDate: earnedAt
-          ? new Date(earnedAt).toLocaleDateString('es-ES', {
+          ? new Date(earnedAt).toLocaleDateString('en-GB', {
               day: 'numeric',
               month: 'short',
               year: 'numeric',
