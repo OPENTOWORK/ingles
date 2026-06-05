@@ -43,15 +43,27 @@ function assistantsEnabled() {
   return process.env.DRALO_USE_OPENAI_ASSISTANTS === 'true';
 }
 
+/** ID del Assistant API del GPT «Examenes de cambridge» (asst_…, no el g-… de la URL de ChatGPT). */
+export function getCambridgeExamsAssistantId() {
+  return (
+    process.env.OPENAI_ASSISTANT_ID_CAMBRIDGE_EXAMS?.trim() ||
+    process.env.DRALO_OPENAI_ASSISTANT_CAMBRIDGE?.trim() ||
+    process.env.OPENAI_ASSISTANT_ID_CAMBRIDGE?.trim() ||
+    ''
+  );
+}
+
+export function isCambridgeExamsAssistantConfigured() {
+  return Boolean(getCambridgeExamsAssistantId());
+}
+
 export function getAssistantIdForEngine(engine = DRALO_AI_ENGINE.REAL_LIFE) {
-  if (!assistantsEnabled()) return '';
+  if (!assistantsEnabled()) {
+    if (engine === DRALO_AI_ENGINE.CAMBRIDGE) return '';
+    return '';
+  }
   if (engine === DRALO_AI_ENGINE.CAMBRIDGE) {
-    return (
-      process.env.OPENAI_ASSISTANT_ID_CAMBRIDGE_EXAMS?.trim() ||
-      process.env.DRALO_OPENAI_ASSISTANT_CAMBRIDGE?.trim() ||
-      process.env.OPENAI_ASSISTANT_ID_CAMBRIDGE?.trim() ||
-      ''
-    );
+    return getCambridgeExamsAssistantId();
   }
   return (
     process.env.OPENAI_ASSISTANT_ID_REAL_LIFE?.trim() ||
@@ -219,6 +231,46 @@ export async function draloChatCompletion(options = {}) {
 
 export function cambridgeChatCompletion(options = {}) {
   return draloChatCompletion({ ...options, engine: DRALO_AI_ENGINE.CAMBRIDGE, useAssistant: false });
+}
+
+/**
+ * Generación de exámenes Levels: usa el GPT «Examenes de cambridge» vía Assistants API
+ * cuando OPENAI_ASSISTANT_ID_CAMBRIDGE_EXAMS está configurado; si no, Chat Completions + persona Cambridge.
+ */
+export async function cambridgeExamGenerationCompletion(options = {}) {
+  const assistantId = getCambridgeExamsAssistantId();
+  const client = getDraloOpenAI();
+
+  if (assistantId && client) {
+    const incoming = Array.isArray(options.messages) ? options.messages : [];
+    const taskSystem = String(options.system || '').trim();
+    const userPrompt =
+      options.userMessage != null
+        ? String(options.userMessage)
+        : incoming.filter((m) => m.role === 'user').pop()?.content || '';
+    const fullUserMessage = taskSystem
+      ? `${taskSystem}\n\n${String(userPrompt).trim()}`
+      : String(userPrompt).trim();
+
+    if (!fullUserMessage.trim()) {
+      throw new Error('Empty prompt for Examenes de Cambridge engine.');
+    }
+
+    return assistantCompletion(client, assistantId, {
+      ...options,
+      userMessage: fullUserMessage,
+      messages: [],
+      engine: DRALO_AI_ENGINE.CAMBRIDGE,
+      assistantTimeoutMs: options.assistantTimeoutMs ?? 300000,
+    });
+  }
+
+  return draloChatCompletion({
+    ...options,
+    engine: DRALO_AI_ENGINE.CAMBRIDGE,
+    useAssistant: false,
+    system: mergeCambridgeSystem(options.system || ''),
+  });
 }
 
 export function realLifeChatCompletion(options = {}) {

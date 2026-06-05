@@ -57,6 +57,9 @@ export function B2ExamPracticeChrome({
   availableSlots,
   showNewExamButton = false,
   onNewExam,
+  showAdminMenu = false,
+  onRegenerateExam,
+  onDeleteExam,
   examPracticeOpen,
   title,
   subtitle,
@@ -96,6 +99,9 @@ export function B2ExamPracticeChrome({
         availableSlots={availableSlots}
         showNewExamButton={showNewExamButton}
         onNewExam={onNewExam}
+        showAdminMenu={showAdminMenu}
+        onRegenerateExam={onRegenerateExam}
+        onDeleteExam={onDeleteExam}
         lang={lang}
       />
 

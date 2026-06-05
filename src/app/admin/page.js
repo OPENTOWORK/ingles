@@ -876,6 +876,7 @@ export default function AdminDashboard() {
                       />
                     </th>
                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Usuario</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Cambiar rol</th>
                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Conexión</th>
                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Tiempo sesión</th>
                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Email</th>
@@ -883,7 +884,6 @@ export default function AdminDashboard() {
                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Placement test</th>
                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Nivel placement</th>
                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Rol actual</th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Cambiar rol</th>
                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Comercial</th>
                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Acciones</th>
                   </tr>
@@ -908,6 +908,23 @@ export default function AdminDashboard() {
                         >
                           {item.nombre || 'Sin nombre'}
                         </Link>
+                      </td>
+                      <td className="px-6 py-4 text-sm text-gray-900">
+                        <select
+                          defaultValue={item.rol_id || ''}
+                          onChange={(event) => handleRoleChange(item.id, event.target.value)}
+                          disabled={Boolean(savingByUser[item.id])}
+                          className="border rounded px-3 py-2 text-sm"
+                        >
+                          <option value="" disabled>
+                            Selecciona rol
+                          </option>
+                          {roles.map((role) => (
+                            <option key={role.id} value={role.id}>
+                              {role.nombre}
+                            </option>
+                          ))}
+                        </select>
                       </td>
                       <td className="px-6 py-4 text-sm">
                         {userActivityByUser[item.id]?.online ? (
@@ -951,23 +968,6 @@ export default function AdminDashboard() {
                         )}
                       </td>
                       <td className="px-6 py-4 text-sm text-gray-900">{getRoleNameById(item.rol_id)}</td>
-                      <td className="px-6 py-4 text-sm text-gray-900">
-                        <select
-                          defaultValue={item.rol_id || ''}
-                          onChange={(event) => handleRoleChange(item.id, event.target.value)}
-                          disabled={Boolean(savingByUser[item.id])}
-                          className="border rounded px-3 py-2 text-sm"
-                        >
-                          <option value="" disabled>
-                            Selecciona rol
-                          </option>
-                          {roles.map((role) => (
-                            <option key={role.id} value={role.id}>
-                              {role.nombre}
-                            </option>
-                          ))}
-                        </select>
-                      </td>
                       <td className="px-6 py-4 text-sm">
                         {item.marketingAccepted ? (
                           <span className="inline-flex items-center justify-center w-7 h-7 rounded-full bg-green-100 text-green-700 font-bold">
@@ -1009,7 +1009,7 @@ export default function AdminDashboard() {
                   })}
                   {filteredUsers.length === 0 && (
                     <tr>
-                      <td colSpan={13} className="px-6 py-6 text-center text-sm text-gray-500">
+                      <td colSpan={12} className="px-6 py-6 text-center text-sm text-gray-500">
                         No hay usuarios que coincidan con los filtros.
                       </td>
                     </tr>

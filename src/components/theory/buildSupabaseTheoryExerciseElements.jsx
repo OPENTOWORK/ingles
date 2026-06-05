@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { MultipleChoiceExercise } from '@/components/theory/ExerciseComponents';
+import TheoryCorrectAnswerFeedback from '@/components/theory/TheoryCorrectAnswerFeedback';
 import TheoryExerciseReportError from '@/components/theory/TheoryExerciseReportError';
 import TheoryExerciseShell from '@/components/theory/TheoryExerciseShell';
 import { normalizeTeoriaClosedOpciones } from '@/lib/levelsTeoriaExerciseTypes';
@@ -102,6 +103,13 @@ function OpenTextExercise({
         </button>
       ) : (
         <>
+          {modelAnswer?.trim() ? (
+            <TheoryCorrectAnswerFeedback
+              isCorrect={score >= 100}
+              answer={modelAnswer}
+              explanation={score >= 100 ? '' : rubric}
+            />
+          ) : null}
           <div className="theory-exercise-actions" style={{ marginTop: '1rem' }}>
             {engagementMode ? (
               <button

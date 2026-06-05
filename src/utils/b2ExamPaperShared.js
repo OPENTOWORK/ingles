@@ -1,4 +1,44 @@
-import { parseB2KeyWordTransformItems } from '@/utils/b2ExamTextBlocks';
+import {
+  extractKeyWordDirectionsBlock,
+  extractKeyWordQuestionsBlock,
+  extractTextoBloque,
+  parseB2KeyWordTransformItems,
+} from '@/utils/b2ExamTextBlocks';
+
+/**
+ * Parte 4 (Key Word Transformations): separa instrucciones del bloque Questions.
+ *
+ * @param {{ rawPregunta?: string, descripcion?: string, fallbackEnunciado?: string }} input
+ */
+export function resolveB2KeyWordPartContent({
+  rawPregunta = '',
+  descripcion = '',
+  fallbackEnunciado = '',
+} = {}) {
+  const textoCandidates = [
+    extractTextoBloque(rawPregunta, 4, { levelSlug: 'b2' }),
+    extractKeyWordQuestionsBlock(rawPregunta),
+    String(rawPregunta || '').trim(),
+    extractTextoBloque(descripcion, 4, { levelSlug: 'b2' }),
+    extractKeyWordQuestionsBlock(descripcion),
+  ].filter(Boolean);
+
+  let texto = '';
+  for (const candidate of textoCandidates) {
+    if (parseB2KeyWordTransformItems(candidate).length > 0) {
+      texto = candidate;
+      break;
+    }
+  }
+
+  const enunciado =
+    extractKeyWordDirectionsBlock(descripcion) ||
+    extractKeyWordDirectionsBlock(rawPregunta) ||
+    String(descripcion || '').trim() ||
+    String(fallbackEnunciado || '').trim();
+
+  return { enunciado, texto };
+}
 
 /** @param {string} rawText */
 export function splitEnunciadoAndTextFallback(rawText = '') {

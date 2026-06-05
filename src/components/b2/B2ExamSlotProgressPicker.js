@@ -1,6 +1,10 @@
 'use client';
 
+import { useEffect, useRef, useState } from 'react';
+import { createPortal } from 'react-dom';
 import { B2_EXAM_SLOT_MAX } from '@/utils/b2ResolveExam';
+
+const SLOT_MENU_MIN_WIDTH = 168;
 
 function StarIcon({ state }) {
   const isFull = state === 'full';
@@ -68,6 +72,128 @@ function StarRow({ filled = 0, max = 3 }) {
   );
 }
 
+function ExamSlotAdminMenu({ slot, active, lang, onRegenerate, onDelete, open, onToggle }) {
+  const menuRef = useRef(null);
+  const triggerRef = useRef(null);
+  const dropdownRef = useRef(null);
+  const [dropdownStyle, setDropdownStyle] = useState(null);
+  const en = lang === 'en';
+
+  const updateDropdownPosition = () => {
+    const trigger = triggerRef.current;
+    if (!trigger) return;
+
+    const rect = trigger.getBoundingClientRect();
+    const viewportPadding = 8;
+    let left = rect.right - SLOT_MENU_MIN_WIDTH;
+
+    if (left < viewportPadding) {
+      left = viewportPadding;
+    } else if (left + SLOT_MENU_MIN_WIDTH > window.innerWidth - viewportPadding) {
+      left = window.innerWidth - SLOT_MENU_MIN_WIDTH - viewportPadding;
+    }
+
+    setDropdownStyle({
+      top: rect.bottom + 6,
+      left,
+      minWidth: SLOT_MENU_MIN_WIDTH,
+    });
+  };
+
+  useEffect(() => {
+    if (!open) {
+      setDropdownStyle(null);
+      return undefined;
+    }
+
+    updateDropdownPosition();
+    window.addEventListener('resize', updateDropdownPosition);
+    window.addEventListener('scroll', updateDropdownPosition, true);
+
+    return () => {
+      window.removeEventListener('resize', updateDropdownPosition);
+      window.removeEventListener('scroll', updateDropdownPosition, true);
+    };
+  }, [open]);
+
+  useEffect(() => {
+    if (!open) return undefined;
+
+    const handlePointerDown = (event) => {
+      const target = event.target;
+      if (menuRef.current?.contains(target)) return;
+      if (dropdownRef.current?.contains(target)) return;
+      onToggle(false);
+    };
+
+    document.addEventListener('mousedown', handlePointerDown);
+    return () => document.removeEventListener('mousedown', handlePointerDown);
+  }, [open, onToggle]);
+
+  const dropdown =
+    open && dropdownStyle && typeof document !== 'undefined'
+      ? createPortal(
+          <div
+            ref={dropdownRef}
+            className="levels-b2-exam-picker__slot-menu-dropdown levels-b2-exam-picker__slot-menu-dropdown--portal"
+            style={dropdownStyle}
+            role="menu"
+          >
+            <button
+              type="button"
+              role="menuitem"
+              className="levels-b2-exam-picker__slot-menu-item"
+              onClick={(event) => {
+                event.stopPropagation();
+                onToggle(false);
+                onRegenerate(slot);
+              }}
+            >
+              {en ? 'Regenerate with AI' : 'Regenerar con IA'}
+            </button>
+            <button
+              type="button"
+              role="menuitem"
+              className="levels-b2-exam-picker__slot-menu-item levels-b2-exam-picker__slot-menu-item--danger"
+              onClick={(event) => {
+                event.stopPropagation();
+                onToggle(false);
+                onDelete(slot);
+              }}
+            >
+              {en ? 'Delete' : 'Eliminar'}
+            </button>
+          </div>,
+          document.body,
+        )
+      : null;
+
+  return (
+    <>
+      <div
+        ref={menuRef}
+        className={`levels-b2-exam-picker__slot-menu${active ? ' levels-b2-exam-picker__slot-menu--active' : ''}`}
+      >
+        <button
+          ref={triggerRef}
+          type="button"
+          className="levels-b2-exam-picker__slot-menu-trigger"
+          aria-label={en ? `Exam ${slot} options` : `Opciones del examen ${slot}`}
+          aria-expanded={open}
+          aria-haspopup="menu"
+          onClick={(event) => {
+            event.stopPropagation();
+            onToggle(!open);
+          }}
+        >
+          ⋮
+        </button>
+      </div>
+      {dropdown}
+    </>
+  );
+}
+
 /**
  * @param {{
  *   value: number,
@@ -78,6 +204,9 @@ function StarRow({ filled = 0, max = 3 }) {
  *   availableSlots?: number[],
  *   showNewExamButton?: boolean,
  *   onNewExam?: () => void,
+ *   showAdminMenu?: boolean,
+ *   onRegenerateExam?: (slot: number) => void,
+ *   onDeleteExam?: (slot: number) => void,
  *   lang?: 'es' | 'en',
  * }} props
  */
@@ -90,13 +219,18 @@ export function B2ExamSlotProgressPicker({
   availableSlots,
   showNewExamButton = false,
   onNewExam,
+  showAdminMenu = false,
+  onRegenerateExam,
+  onDeleteExam,
   lang = 'en',
 }) {
   const en = lang === 'en';
+  const [openMenuSlot, setOpenMenuSlot] = useState(null);
   const slotsToShow =
     availableSlots !== undefined
       ? availableSlots
       : Array.from({ length: B2_EXAM_SLOT_MAX }, (_, i) => i + 1);
+  const adminMenuEnabled = showAdminMenu && onRegenerateExam && onDeleteExam;
 
   return (
     <section
@@ -118,25 +252,40 @@ export function B2ExamSlotProgressPicker({
             const hasScore = approvedParts > 0 || Number(prog.total) > 0;
 
             return (
-              <button
+              <div
                 key={n}
-                type="button"
-                onClick={() => onSelect(n)}
-                aria-pressed={active}
-                className={`levels-b2-exam-picker__slot${active ? ' levels-b2-exam-picker__slot--active' : ''}`}
+                className={`levels-b2-exam-picker__slot-wrap${active ? ' levels-b2-exam-picker__slot-wrap--active' : ''}`}
               >
-                <span>{examLabelsBySlot[n] || (en ? `Exam ${n}` : `Examen ${n}`)}</span>
-                <StarRow filled={stars} />
-                {hasScore ? (
-                  <span className="levels-b2-exam-picker__slot-meta">
-                    {approvedParts}/{partsInPaper} {en ? 'parts' : 'partes'}
-                  </span>
-                ) : (
-                  <span className="levels-b2-exam-picker__slot-meta">
-                    {en ? 'No attempts' : 'Sin intentos'}
-                  </span>
-                )}
-              </button>
+                <button
+                  type="button"
+                  onClick={() => onSelect(n)}
+                  aria-pressed={active}
+                  className={`levels-b2-exam-picker__slot${active ? ' levels-b2-exam-picker__slot--active' : ''}`}
+                >
+                  <span>{examLabelsBySlot[n] || (en ? `Exam ${n}` : `Examen ${n}`)}</span>
+                  <StarRow filled={stars} />
+                  {hasScore ? (
+                    <span className="levels-b2-exam-picker__slot-meta">
+                      {approvedParts}/{partsInPaper} {en ? 'parts' : 'partes'}
+                    </span>
+                  ) : (
+                    <span className="levels-b2-exam-picker__slot-meta">
+                      {en ? 'No attempts' : 'Sin intentos'}
+                    </span>
+                  )}
+                </button>
+                {adminMenuEnabled ? (
+                  <ExamSlotAdminMenu
+                    slot={n}
+                    active={active}
+                    lang={lang}
+                    onRegenerate={onRegenerateExam}
+                    onDelete={onDeleteExam}
+                    open={openMenuSlot === n}
+                    onToggle={(next) => setOpenMenuSlot(next ? n : null)}
+                  />
+                ) : null}
+              </div>
             );
           })
         )}

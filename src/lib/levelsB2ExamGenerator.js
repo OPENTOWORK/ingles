@@ -5,6 +5,7 @@ import {
   generateAndPersistLevelExam,
   generateAndPersistLevelExamPart,
   resetLevelExamContent,
+  deleteLevelExam,
   ensureLevelExamenRow,
   ensureLevelParteRow,
   persistCambridgeGeneratedPart,
@@ -22,6 +23,10 @@ export const persistB2GeneratedPart = persistCambridgeGeneratedPart;
 
 export async function resetB2ExamContent(adminDb, { levelId, examSlot }) {
   return resetLevelExamContent(adminDb, 'b2', { levelId, examSlot });
+}
+
+export async function deleteB2Exam(adminDb, { levelId, examSlot }) {
+  return deleteLevelExam(adminDb, 'b2', { levelId, examSlot });
 }
 
 export async function generateAndPersistB2ExamPart(adminDb, options = {}) {

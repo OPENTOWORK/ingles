@@ -36,10 +36,22 @@ export function buildB2EnunciadoFromGenerated(gen = {}, partNumber) {
   if (pn === 4) {
     lines.push('Questions');
     for (const q of g.questions) {
-      lines.push(String(q.number ?? ''));
-      if (q.sentence1) lines.push(q.sentence1);
-      if (q.keyword) lines.push(q.keyword);
-      if (q.sentence2Start) lines.push(q.sentence2Start);
+      const num = q.number ?? '';
+      const sentence1 = String(q.sentence1 || '').trim();
+      const keyword = String(q.keyword || q.keyWord || '').trim();
+      let sentence2 = String(q.sentence2Start || q.sentence2 || '').trim();
+      if (sentence2 && !/_{2,}|\.{4,}/.test(sentence2)) {
+        sentence2 = `${sentence2} __________________`;
+      }
+      if (sentence1 && keyword) {
+        lines.push(`${num}${sentence1}.${keyword}`);
+        if (sentence2) lines.push(sentence2);
+      } else {
+        lines.push(String(num));
+        if (sentence1) lines.push(sentence1);
+        if (keyword) lines.push(keyword);
+        if (sentence2) lines.push(sentence2);
+      }
       lines.push('');
     }
     return lines.join('\n').trim();

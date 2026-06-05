@@ -1,4 +1,4 @@
-import { cambridgeChatCompletion, isDraloOpenAIConfigured } from '@/lib/draloAiEngine';
+import { cambridgeExamGenerationCompletion, isDraloOpenAIConfigured } from '@/lib/draloAiEngine';
 import { A2_EXAM_PARTS } from '@/lib/a2ExamCatalog';
 import {
   buildA2PartGeneratePrompt,
@@ -8,11 +8,13 @@ import {
 } from '@/lib/draloAiA2ExamPrompts';
 import {
   deleteExamenContent,
+  deleteExamenFully,
   deletePartContentForExam,
   ensureA2ExamenRow,
   ensureA2ParteRow,
   examHasPreguntas,
   persistGeneratedPart,
+  resolveA2ExamenId,
 } from '@/lib/levelsExamPersist';
 
 function parseJsonFromModel(text) {
@@ -28,7 +30,7 @@ function parseJsonFromModel(text) {
 
 async function generatePartJson(partDef, options) {
   const prompt = buildA2PartGeneratePrompt(partDef, options);
-  const { text } = await cambridgeChatCompletion({
+  const { text } = await cambridgeExamGenerationCompletion({
     system:
       'Output only valid JSON for one A2 Key exam part. Follow official Cambridge sample-test layout.',
     messages: [{ role: 'user', content: prompt }],
@@ -50,6 +52,13 @@ export async function resetA2ExamContent(adminDb, { levelId, examSlot }) {
   const examenId = await ensureA2ExamenRow(adminDb, levelId, examSlot);
   await deleteExamenContent(adminDb, examenId);
   return { examenId, deleted: true };
+}
+
+/** Elimina contenido + fila levels_examenes del slot A2. */
+export async function deleteA2Exam(adminDb, { levelId, examSlot }) {
+  const examenId = await resolveA2ExamenId(adminDb, levelId, examSlot);
+  if (!examenId) return { deleted: false, examenId: null };
+  return deleteExamenFully(adminDb, examenId);
 }
 
 /**

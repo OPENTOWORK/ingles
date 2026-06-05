@@ -1,4 +1,4 @@
-import { cambridgeChatCompletion, isDraloOpenAIConfigured } from '@/lib/draloAiEngine';
+import { cambridgeExamGenerationCompletion, isDraloOpenAIConfigured } from '@/lib/draloAiEngine';
 import { buildExamGeneratePrompt } from '@/lib/draloAiExamPrompts';
 import {
   getLevelExamLabel,
@@ -13,7 +13,12 @@ import {
   formatMcqRespuestaRow,
   formatOpenRespuestaRow,
 } from '@/lib/formatB2Enunciado';
-import { deleteExamenContent, deletePartContentForExam } from '@/lib/levelsExamPersist';
+import {
+  deleteExamenContent,
+  deleteExamenFully,
+  deletePartContentForExam,
+  resolveLevelExamenId,
+} from '@/lib/levelsExamPersist';
 
 const EXAM_THEMES = [
   'urban life and technology',
@@ -127,7 +132,7 @@ async function generatePartJson(levelLabel, partDef, options) {
     });
   }
 
-  const { text } = await cambridgeChatCompletion({
+  const { text } = await cambridgeExamGenerationCompletion({
     system: `Output only valid JSON for one complete ${CAMBRIDGE_EXAM_NAMES[levelLabel] || levelLabel} exam part.`,
     messages: [{ role: 'user', content: prompt }],
     temperature: 0.9,
@@ -295,6 +300,13 @@ export async function resetLevelExamContent(adminDb, levelSlug, { levelId, examS
   const examenId = await ensureLevelExamenRow(adminDb, levelSlug, levelId, examSlot);
   await deleteExamenContent(adminDb, examenId);
   return { examenId, deleted: true };
+}
+
+/** Elimina contenido + fila levels_examenes del slot (B1–C2). */
+export async function deleteLevelExam(adminDb, levelSlug, { levelId, examSlot }) {
+  const examenId = await resolveLevelExamenId(adminDb, levelSlug, levelId, examSlot);
+  if (!examenId) return { deleted: false, examenId: null };
+  return deleteExamenFully(adminDb, examenId);
 }
 
 /**

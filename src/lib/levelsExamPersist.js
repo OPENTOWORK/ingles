@@ -5,6 +5,7 @@ import {
   formatOpenRespuestaRow,
 } from '@/lib/formatLevelsEnunciado';
 import { parteNameA2, examenNameA2 } from '@/lib/a2ExamCatalog';
+import { examenNameForLevel } from '@/lib/levelsExamCatalog';
 import { getA2ParteAdminDescription } from '@/data/a2-parte-admin-spec';
 import { partInfo as a2ListeningInfo } from '@/data/part-info/a2-listening';
 import { partInfo as a2RwInfo } from '@/data/part-info/a2-reading-and-use-of-english';
@@ -85,6 +86,36 @@ export async function examHasPreguntas(db, examenId, levelId) {
   return (count || 0) > 0;
 }
 
+export async function resolveA2ExamenId(db, levelId, slot) {
+  const nombre = examenNameA2(slot);
+  const { data: existing } = await db
+    .from('levels_examenes')
+    .select('id')
+    .eq('level_id', levelId)
+    .ilike('nombre', nombre)
+    .maybeSingle();
+  return existing?.id || null;
+}
+
+export async function resolveLevelExamenId(db, levelSlug, levelId, slot) {
+  const nombre = examenNameForLevel(levelSlug, slot);
+  const { data: existing } = await db
+    .from('levels_examenes')
+    .select('id')
+    .eq('level_id', levelId)
+    .ilike('nombre', `%Examen ${slot}%`)
+    .maybeSingle();
+  if (existing?.id) return existing.id;
+
+  const { data: byName } = await db
+    .from('levels_examenes')
+    .select('id')
+    .eq('level_id', levelId)
+    .ilike('nombre', nombre)
+    .maybeSingle();
+  return byName?.id || null;
+}
+
 export async function deleteExamenContent(db, examenId) {
   const { data: preguntas } = await db.from('levels_preguntas').select('id').eq('examen_id', examenId);
   const ids = (preguntas || []).map((p) => p.id);
@@ -94,6 +125,16 @@ export async function deleteExamenContent(db, examenId) {
   await db.from('levels_respuestas_abiertas').delete().in('pregunta_id_abierta', ids);
   await db.from('levels_respuestas').delete().in('pregunta_id', ids);
   await db.from('levels_preguntas').delete().eq('examen_id', examenId);
+}
+
+/** Borra contenido del examen y la fila en levels_examenes. */
+export async function deleteExamenFully(db, examenId) {
+  if (!examenId) return { deleted: false, examenId: null };
+
+  await deleteExamenContent(db, examenId);
+  const { error } = await db.from('levels_examenes').delete().eq('id', examenId);
+  if (error) throw new Error(`levels_examenes: ${error.message}`);
+  return { deleted: true, examenId };
 }
 
 /** Borra preguntas previas de una parte en un examen (evita duplicados al regenerar parte a parte). */

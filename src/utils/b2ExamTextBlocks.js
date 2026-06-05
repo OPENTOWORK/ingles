@@ -68,6 +68,12 @@ export function extractTextoBloque(raw, partNumber, options = {}) {
     return body.trim();
   }
 
+  // B2 FCE Part 4: bloque interactivo = sección Questions (preguntas 25–30).
+  if (partNumber === 4) {
+    const questionsBody = extractKeyWordQuestionsBlock(t);
+    if (questionsBody) return questionsBody;
+  }
+
   // B2 FCE Part 7: perfiles A–D (bloque tras "Texts").
   if (partNumber === 7) {
     const txMatch = joined.match(/(?:^|\n)\s*Texts\s*\n/im);
@@ -511,6 +517,56 @@ export function extractListeningMatchingOptionPool(linesOrText) {
 /** Hueco en segunda frase (Key Word Transformation): puntos o guiones bajos. */
 export const KEY_WORD_GAP_RE = /_{2,}|\.{4,}/;
 
+const KEY_WORD_DEFAULT_GAP = '__________________';
+
+/**
+ * Quita la cabecera `Text` si es la primera línea.
+ *
+ * @param {string} raw
+ */
+function stripLeadingTextLine(raw = '') {
+  const lines = String(raw || '').replace(/\r\n/g, '\n').split('\n');
+  if (lines[0]?.trim().toLowerCase() === 'text') {
+    return lines.slice(1).join('\n').trim();
+  }
+  return String(raw || '').replace(/\r\n/g, '\n').trim();
+}
+
+/**
+ * Instrucciones + ejemplo de Parte 4 (todo antes de `Questions`).
+ *
+ * @param {string} raw
+ */
+export function extractKeyWordDirectionsBlock(raw = '') {
+  const body = stripAnswerKeyBlock(stripLeadingTextLine(raw));
+  if (!body) return '';
+  return truncateBeforeLine(body, /^questions$/i).trim();
+}
+
+/**
+ * Bloque `Questions` de Parte 4 para el panel de texto interactivo.
+ *
+ * @param {string} raw
+ */
+export function extractKeyWordQuestionsBlock(raw = '') {
+  const body = stripAnswerKeyBlock(stripLeadingTextLine(raw));
+  if (!body) return '';
+  const m = body.match(/(?:^|\n)\s*Questions\s*\n([\s\S]*)$/im);
+  if (m) return `Questions\n${m[1].trim()}`;
+  if (/^questions$/im.test(body.split('\n')[0]?.trim() || '')) return body.trim();
+  return '';
+}
+
+/**
+ * @param {string} sentence2Line
+ */
+function ensureKeyWordGapInSentence2(sentence2Line = '') {
+  const line = String(sentence2Line || '').trim();
+  if (!line) return KEY_WORD_DEFAULT_GAP;
+  if (KEY_WORD_GAP_RE.test(line)) return line;
+  return `${line.replace(/\s+$/, '')} ${KEY_WORD_DEFAULT_GAP}`;
+}
+
 /**
  * Parsea ítems de Parte 4 (Key Word Transformations) desde el bloque Questions del enunciado.
  *
@@ -544,8 +600,8 @@ export function parseB2KeyWordTransformItems(rawText = '') {
       const questionNumber = Number(numOnly[1]);
       const sentence1 = (scan[i + 1] || '').trim();
       const keywordLine = (scan[i + 2] || '').trim();
-      const sentence2Line = (scan[i + 3] || '').trim();
-      if (!sentence1 || !sentence2Line || !KEY_WORD_GAP_RE.test(sentence2Line)) {
+      const sentence2Line = ensureKeyWordGapInSentence2(scan[i + 3] || '');
+      if (!sentence1 || !sentence2Line) {
         continue;
       }
       const gapMatch = sentence2Line.match(KEY_WORD_GAP_RE);
@@ -568,8 +624,8 @@ export function parseB2KeyWordTransformItems(rawText = '') {
 
     const questionNumber = Number(glued[1]);
     const rest = glued[2].trim();
-    const sentence2Line = (scan[i + 1] || '').trim();
-    if (!sentence2Line || !KEY_WORD_GAP_RE.test(sentence2Line)) continue;
+    const sentence2Line = ensureKeyWordGapInSentence2(scan[i + 1] || '');
+    if (!sentence2Line) continue;
 
     let sentence1 = rest;
     let keyword = '';

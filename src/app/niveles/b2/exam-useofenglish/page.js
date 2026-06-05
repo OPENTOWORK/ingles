@@ -22,7 +22,12 @@ import {
   saveUoePartPuntuacionIfComplete,
 } from '@/utils/recordLevelsUoePartScore';
 import { getUoePartScoring } from '@/utils/levelsUoePartScoring';
-import { getOpenAnswerMap, inferOpenQuestionNumbersFromPrompt, normalizeText } from '@/utils/b2ExamPaperShared';
+import {
+  getOpenAnswerMap,
+  inferOpenQuestionNumbersFromPrompt,
+  normalizeText,
+  resolveB2KeyWordPartContent,
+} from '@/utils/b2ExamPaperShared';
 import { useB2ExamPracticeSlot } from '@/hooks/useB2ExamPracticeSlot';
 import { useB2AutoOpenExamFromUrl } from '@/hooks/useB2AutoOpenExamFromUrl';
 import { fetchUseOfEnglishPuntuacionesProgress } from '@/utils/levelsPuntuacionesProgress';
@@ -356,6 +361,14 @@ function UseOfEnglishExamsPageInner() {
     const rawPregunta = selectedQuestion?.enunciado || '';
     const desc = (selectedPart?.descripcion || '').replace(/\r\n/g, '\n').trim();
     const fallback = splitEnunciadoAndText(rawPregunta);
+    if (partNumberUoe === 4) {
+      const kwt = resolveB2KeyWordPartContent({
+        rawPregunta,
+        descripcion: desc,
+        fallbackEnunciado: fallback.enunciado,
+      });
+      return { ...kwt, preguntasPart1Parse: [] };
+    }
     const textoExtracted = extractTextoBloque(rawPregunta, partNumberUoe, { levelSlug: 'b2' });
     let texto = (textoExtracted || fallback.texto || '').trim();
     /** Parte 1: el pasaje y el bloque Questions suelen ir juntos tras `Text`; mostramos solo el pasaje arriba. */
@@ -1000,7 +1013,7 @@ function UseOfEnglishExamsPageInner() {
                     />
                   ) : isKeyWordPart ? (
                     <B2ExamInlineKeyWordPassage
-                      text={selectedPartContent.texto || selectedQuestion?.enunciado || ''}
+                      text={selectedPartContent.texto}
                       activeQuestionNumbers={openQuestionNumbers}
                       getQuestionKey={(questionNumber) =>
                         getQuestionKey(selectedPart.id, questionNumber, 'open')

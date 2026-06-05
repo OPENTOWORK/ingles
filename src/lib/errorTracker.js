@@ -5,6 +5,44 @@ import { callDraloAi } from '@/lib/ai/draloAiClient';
 const TABLE = 'user_error_tracker';
 
 const FRIENDLY_ERROR = 'Something went wrong while loading your errors. Please try again.';
+const REVIEWED_LS_PREFIX = 'practice-errors-reviewed:';
+
+function readLocalReviewedKeys(userId) {
+  if (typeof window === 'undefined' || !userId) return [];
+  try {
+    const raw = window.localStorage.getItem(`${REVIEWED_LS_PREFIX}${userId}`);
+    const parsed = raw ? JSON.parse(raw) : [];
+    return Array.isArray(parsed) ? parsed : [];
+  } catch {
+    return [];
+  }
+}
+
+function writeLocalReviewedKeys(userId, keys) {
+  if (typeof window === 'undefined' || !userId) return;
+  try {
+    window.localStorage.setItem(`${REVIEWED_LS_PREFIX}${userId}`, JSON.stringify(keys));
+  } catch {
+    /* ignore */
+  }
+}
+
+async function authFetch(path, options = {}) {
+  const { data: sessionData } = await supabase.auth.getSession();
+  const token = sessionData?.session?.access_token;
+  if (!token) throw new Error('You need to be signed in.');
+  const res = await fetch(path, {
+    ...options,
+    headers: {
+      Authorization: `Bearer ${token}`,
+      ...(options.body ? { 'Content-Type': 'application/json' } : {}),
+      ...options.headers,
+    },
+  });
+  const payload = await res.json().catch(() => ({}));
+  if (!res.ok) throw new Error(payload.error || FRIENDLY_ERROR);
+  return payload;
+}
 
 function normalizeText(value) {
   return String(value == null ? '' : value).trim().toLowerCase();
@@ -94,29 +132,74 @@ export async function saveUserError(errorData = {}) {
   }
 }
 
-/** Devuelve los errores del usuario ordenados por frecuencia y actividad reciente. */
-export async function getUserErrors(userId) {
+/** Errores de práctica (puntuación < 50 en levels_puntuaciones y levels_teoria_puntuaciones). */
+export async function getUserPracticeErrors(userId) {
   const user = await getCurrentUser();
   const id = userId || user?.id;
   if (!user?.id || !id || id !== user.id) {
-    return { ok: false, data: [], error: user?.id ? null : 'You need to be signed in.' };
+    return { ok: false, data: [], reviewedKeys: [], error: user?.id ? null : 'You need to be signed in.' };
   }
 
   try {
-    const { data, error } = await supabase
-      .from(TABLE)
-      .select('*')
-      .eq('user_id', user.id)
-      .order('frequency', { ascending: false })
-      .order('updated_at', { ascending: false });
-
-    if (error) {
-      return { ok: false, data: [], error: FRIENDLY_ERROR };
-    }
-    return { ok: true, data: Array.isArray(data) ? data : [] };
-  } catch {
-    return { ok: false, data: [], error: FRIENDLY_ERROR };
+    const payload = await authFetch('/api/profile/error-tracker');
+    const serverKeys = Array.isArray(payload.reviewedKeys) ? payload.reviewedKeys : [];
+    const localKeys = readLocalReviewedKeys(user.id);
+    const reviewedKeys = [...new Set([...serverKeys, ...localKeys])];
+    return {
+      ok: true,
+      data: Array.isArray(payload.data) ? payload.data : [],
+      reviewedKeys,
+      summary: payload.summary || null,
+    };
+  } catch (e) {
+    return { ok: false, data: [], reviewedKeys: readLocalReviewedKeys(user.id), error: e?.message || FRIENDLY_ERROR };
   }
+}
+
+export async function getErrorReviewDetail(errorKey) {
+  const user = await getCurrentUser();
+  if (!user?.id) {
+    return { ok: false, error: 'You need to be signed in.' };
+  }
+  try {
+    const payload = await authFetch(
+      `/api/profile/error-tracker?errorKey=${encodeURIComponent(errorKey)}`,
+    );
+    return { ok: true, data: payload.data };
+  } catch (e) {
+    return { ok: false, error: e?.message || FRIENDLY_ERROR };
+  }
+}
+
+export async function markPracticeErrorReviewed(errorKey, userId) {
+  const user = await getCurrentUser();
+  const id = userId || user?.id;
+  if (!user?.id || !id || id !== user.id) {
+    return { ok: false, error: 'You need to be signed in.' };
+  }
+  if (!errorKey) {
+    return { ok: false, error: 'Missing error id.' };
+  }
+
+  const localKeys = readLocalReviewedKeys(user.id);
+  if (!localKeys.includes(errorKey)) {
+    writeLocalReviewedKeys(user.id, [...localKeys, errorKey]);
+  }
+
+  try {
+    await authFetch('/api/profile/error-tracker', {
+      method: 'POST',
+      body: JSON.stringify({ errorKey }),
+    });
+    return { ok: true };
+  } catch (e) {
+    return { ok: true, localOnly: true, warning: e?.message };
+  }
+}
+
+/** @deprecated Usa getUserPracticeErrors — alias para el panel de perfil. */
+export async function getUserErrors(userId) {
+  return getUserPracticeErrors(userId);
 }
 
 /** Marca un error como dominado. */

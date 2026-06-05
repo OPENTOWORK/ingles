@@ -4,12 +4,14 @@ import {
   generateAndPersistA2Exam,
   generateAndPersistA2ExamPart,
   resetA2ExamContent,
+  deleteA2Exam,
 } from '@/lib/levelsA2ExamGenerator';
-import { resetB2ExamContent } from '@/lib/levelsB2ExamGenerator';
+import { resetB2ExamContent, deleteB2Exam } from '@/lib/levelsB2ExamGenerator';
 import {
   generateAndPersistLevelExam,
   generateAndPersistLevelExamPart,
   resetLevelExamContent,
+  deleteLevelExam,
 } from '@/lib/levelsCambridgeExamGenerator';
 import { isExamGenerationSlug } from '@/lib/levelsExamCatalog';
 import { clampB2ExamSlot } from '@/utils/b2ResolveExam';
@@ -35,6 +37,7 @@ export async function POST(req) {
   const force = Boolean(body.force);
   const reset = Boolean(body.reset);
   const resetExam = Boolean(body.resetExam);
+  const deleteExam = Boolean(body.deleteExam);
   const skipImages = Boolean(body.skipImages);
   const skipAudio = Boolean(body.skipAudio);
   const partNumber = body.partNumber != null ? Number(body.partNumber) : null;
@@ -51,6 +54,20 @@ export async function POST(req) {
     const { data: levelData, error: levelError } = await getCachedLevelBySlug(auth.adminDb, slug);
     if (levelError || !levelData?.id) {
       return NextResponse.json({ error: `Nivel ${slug.toUpperCase()} no encontrado en levels.` }, { status: 404 });
+    }
+
+    if (deleteExam) {
+      const deleted =
+        slug === 'a2'
+          ? await deleteA2Exam(auth.adminDb, { levelId: levelData.id, examSlot: slot })
+          : slug === 'b2'
+            ? await deleteB2Exam(auth.adminDb, { levelId: levelData.id, examSlot: slot })
+            : await deleteLevelExam(auth.adminDb, slug, {
+                levelId: levelData.id,
+                examSlot: slot,
+              });
+      invalidateLevelExamCache(levelData.id);
+      return NextResponse.json({ ok: true, slot, levelId: levelData.id, ...deleted });
     }
 
     if (resetExam) {

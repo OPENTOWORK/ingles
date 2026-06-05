@@ -1,5 +1,6 @@
 'use client';
 import { useEffect, useState } from 'react';
+import TheoryCorrectAnswerFeedback from '@/components/theory/TheoryCorrectAnswerFeedback';
 import TheoryExerciseReportError from '@/components/theory/TheoryExerciseReportError';
 
 // Multiple Choice Exercise Component
@@ -128,26 +129,13 @@ export const MultipleChoiceExercise = ({
         ))}
       </div>
 
-      {showResult && explanation && (
-        <div style={{
-          background: score > 0 ? '#f0fff4' : '#fff5f5',
-          border: `1px solid ${score > 0 ? '#68d391' : '#fc8181'}`,
-          borderRadius: '12px',
-          padding: '1rem',
-          marginBottom: '1rem'
-        }}>
-          <div style={{
-            fontWeight: '600',
-            color: score > 0 ? '#38a169' : '#e53e3e',
-            marginBottom: '0.5rem'
-          }}>
-            {score > 0 ? '🎉 Correct!' : '😔 Incorrect'}
-          </div>
-          <p style={{ margin: 0, color: '#4a5568', lineHeight: 1.5 }}>
-            {explanation}
-          </p>
-        </div>
-      )}
+      {showResult && options[correctAnswer] != null ? (
+        <TheoryCorrectAnswerFeedback
+          isCorrect={score >= 100}
+          answer={options[correctAnswer]}
+          explanation={explanation || ''}
+        />
+      ) : null}
 
       <div className="theory-exercise-actions">
         <div className="theory-exercise-actions__primary">
@@ -359,26 +347,34 @@ export const FillBlanksExercise = ({
         {renderText()}
       </div>
 
-      {showResult && (
-        <div style={{
-          background: score >= 70 ? '#f0fff4' : '#fff5f5',
-          border: `1px solid ${score >= 70 ? '#68d391' : '#fc8181'}`,
-          borderRadius: '12px',
-          padding: '1rem',
-          marginBottom: '1rem'
-        }}>
-          <div style={{
-            fontWeight: '600',
-            color: score >= 70 ? '#38a169' : '#e53e3e',
-            marginBottom: '0.5rem'
-          }}>
-            {score >= 70 ? '🎉 Well done!' : '😔 Keep practicing'}
-          </div>
-          <p style={{ margin: 0, color: '#4a5568' }}>
-            Score: {score}% ({Math.round(score / 100 * blanks.length)} of {blanks.length} correct)
-          </p>
-        </div>
-      )}
+      {showResult ? (
+        <>
+          <TheoryCorrectAnswerFeedback
+            isCorrect={score >= 100}
+            answer={blanks.map((blank, index) => blank.answer).join(' · ')}
+            label="Correct answers"
+            explanation={
+              score >= 100
+                ? ''
+                : `Score: ${score}% (${Math.round((score / 100) * blanks.length)} of ${blanks.length} correct)`
+            }
+          />
+          {score < 100 ? (
+            <ul style={{ margin: '0 0 1rem', paddingLeft: '1.25rem', color: '#475569', fontSize: '0.9rem' }}>
+              {blanks.map((blank, index) => {
+                const ok =
+                  answers[index]?.toLowerCase().trim() === blank.answer.toLowerCase().trim();
+                if (ok) return null;
+                return (
+                  <li key={index}>
+                    Blank {index + 1}: <strong>{blank.answer}</strong>
+                  </li>
+                );
+              })}
+            </ul>
+          ) : null}
+        </>
+      ) : null}
 
       <div style={{ display: 'flex', gap: '0.75rem', justifyContent: 'flex-end' }}>
         {!showResult ? (
@@ -552,7 +548,12 @@ export const TrueFalseExercise = ({
               )}
             </div>
             
-            {showResult && statement.explanation && (
+            {showResult && answers[index] !== statement.isTrue ? (
+              <p style={{ margin: '0.75rem 0 0', fontSize: '0.9rem', color: '#c53030' }}>
+                <strong>Correct answer:</strong> {statement.isTrue ? 'True' : 'False'}
+              </p>
+            ) : null}
+            {showResult && statement.explanation ? (
               <div style={{
                 marginTop: '0.75rem',
                 padding: '0.75rem',
@@ -569,7 +570,7 @@ export const TrueFalseExercise = ({
                   <strong>Explanation:</strong> {statement.explanation}
                 </p>
               </div>
-            )}
+            ) : null}
           </div>
         ))}
       </div>

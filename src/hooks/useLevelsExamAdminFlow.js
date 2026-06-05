@@ -29,12 +29,14 @@ export function findNextEmptyExamSlot(examenIdBySlot = {}, max = B2_EXAM_SLOT_MA
 
 /** Props del selector: exámenes existentes + botón «Examen nuevo» (solo admin). */
 export function buildExamSlotPickerProps({ examenIdBySlot = {}, adminFlow, onSelectSlot }) {
+  const canAdmin = Boolean(adminFlow?.canRegenerateExams);
   return {
     availableSlots: getAvailableExamSlots(examenIdBySlot),
-    showNewExamButton: Boolean(adminFlow?.canRegenerateExams),
-    onNewExam: adminFlow?.canRegenerateExams
-      ? () => void adminFlow.handleCreateNewExam(onSelectSlot)
-      : undefined,
+    showNewExamButton: canAdmin,
+    onNewExam: canAdmin ? () => void adminFlow.handleCreateNewExam(onSelectSlot) : undefined,
+    showAdminMenu: canAdmin,
+    onRegenerateExam: canAdmin ? (slot) => void adminFlow.handleRegenerateExam(slot) : undefined,
+    onDeleteExam: canAdmin ? (slot) => void adminFlow.handleDeleteExam(slot) : undefined,
   };
 }
 
@@ -228,6 +230,89 @@ export function useLevelsExamAdminFlow({ slug = 'a2', examenIdBySlot = {}, onCat
     [canRegenerateExams, examenIdBySlot, generateExam, partTotal, levelUpper],
   );
 
+  const deleteExam = useCallback(
+    async (slot) => {
+      if (!supportsGeneration) return null;
+
+      const { data: sessionData } = await supabase.auth.getSession();
+      const user = sessionData?.session?.user;
+      if (!user?.id) {
+        throw new Error('Inicia sesión como administrador.');
+      }
+      const admin = await userHasRole(user.id, ['admin', 'administrador'], user.email);
+      if (!admin) {
+        throw new Error('Solo los administradores pueden eliminar exámenes.');
+      }
+
+      setGenError('');
+      setGenProgress('');
+
+      const token = sessionData?.session?.access_token;
+      if (!token) throw new Error('Inicia sesión como administrador.');
+
+      const delRes = await fetch(buildClientApiUrl('/api/admin/levels/generate-exam'), {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({ slug, slot, deleteExam: true }),
+      });
+      const delPayload = await delRes.json().catch(() => ({}));
+      if (delRes.status === 403) {
+        throw new Error(delPayload.error || 'Solo los administradores pueden eliminar exámenes.');
+      }
+      if (!delRes.ok) {
+        throw new Error(delPayload.error || 'No se pudo eliminar el examen en Supabase.');
+      }
+
+      const levelId = delPayload.levelId;
+      if (levelId) invalidateLevelExamCache(levelId);
+      onCatalogUpdated?.();
+      return { deleted: true, examSlot: slot, levelId };
+    },
+    [slug, onCatalogUpdated, supportsGeneration],
+  );
+
+  const handleRegenerateExam = useCallback(
+    async (slot) => {
+      if (!canRegenerateExams) return;
+
+      const ok = window.confirm(
+        `¿Regenerar ${levelUpper} Examen ${slot} con DRALO AI?\n\nSe borrará el contenido actual y se generará de nuevo (${partTotal} partes; suele tardar varios minutos).`,
+      );
+      if (!ok) return;
+
+      try {
+        await generateExam(slot, { force: true, preserveExistingParts: false });
+      } catch {
+        /* genError shown in UI */
+      }
+    },
+    [canRegenerateExams, generateExam, partTotal, levelUpper],
+  );
+
+  const handleDeleteExam = useCallback(
+    async (slot) => {
+      if (!canRegenerateExams) return;
+
+      const ok = window.confirm(
+        `¿Eliminar ${levelUpper} Examen ${slot}?\n\nSe borrará todo el contenido del examen en Supabase. Esta acción no se puede deshacer.`,
+      );
+      if (!ok) return;
+
+      try {
+        await deleteExam(slot);
+        setGenError('');
+        setGenProgress(`Examen ${slot} eliminado.`);
+      } catch (e) {
+        setGenProgress('');
+        setGenError(e?.message || 'No se pudo eliminar el examen.');
+      }
+    },
+    [canRegenerateExams, deleteExam],
+  );
+
   const clearGenError = useCallback(() => {
     setGenError('');
   }, []);
@@ -244,8 +329,11 @@ export function useLevelsExamAdminFlow({ slug = 'a2', examenIdBySlot = {}, onCat
     clearGenError,
     slotHasContent,
     generateExam,
+    deleteExam,
     handleAdminExamSelect,
     handleCreateNewExam,
+    handleRegenerateExam,
+    handleDeleteExam,
     supportsGeneration,
     /** true solo para rol admin/administrador en niveles con generación (A2–C2) */
     canRegenerateExams,
