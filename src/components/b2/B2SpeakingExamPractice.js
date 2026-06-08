@@ -309,6 +309,7 @@ function B2SpeakingExamPracticeInner({ title, subtitle, loadingLabel, refreshLab
         hideMascot={isSkillPracticeSession}
         hideSubtitle={isSkillPracticeSession}
         compactSkillHeader={isSkillPracticeSession}
+        skillPracticeTheme={skillNav.skillTheme}
         timerLabel={timerLabel}
         refreshLabel={refreshLabel}
         loading={loading}
@@ -365,6 +366,7 @@ function B2SpeakingExamPracticeInner({ title, subtitle, loadingLabel, refreshLab
         pagePartMax={B2_SPEAKING_PART_MAX}
         examSlot={examSlot}
         skillPracticeMode={isSkillPracticeSession}
+        skillPracticeTheme={skillNav.skillTheme}
         onContinueInPage={isSkillPracticeSession ? handleKeepPracticing : handleContinueInPage}
         lang={lang}
       />

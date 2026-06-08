@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { usePathname } from 'next/navigation';
 import toast from 'react-hot-toast';
 import { supabase } from '@/utils/supabaseClient';
-import { TICKET_STATUS, USER_TYPES } from '@/utils/contactModuleConfig';
+import { DEFAULT_TICKET_TOPIC, TICKET_STATUS, USER_TYPES } from '@/utils/contactModuleConfig';
 
 export default function TheoryExerciseReportError({
   exerciseId = '',
@@ -74,7 +74,7 @@ export default function TheoryExerciseReportError({
           message: body,
           userType: USER_TYPES.CONFIRMED,
           status: TICKET_STATUS.UNANSWERED,
-          topic: 'uso de la plataforma',
+          topic: DEFAULT_TICKET_TOPIC,
         }),
       });
 

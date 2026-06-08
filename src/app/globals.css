@@ -673,6 +673,10 @@ body {
 
 .app-nav__dropdown-wrap {
   position: relative;
+  display: inline-flex;
+  align-items: center;
+  align-self: center;
+  flex-shrink: 0;
 }
 
 .app-nav__dropdown {
@@ -707,6 +711,56 @@ body {
   background: rgba(102, 126, 234, 0.12);
   color: #4f46e5;
   text-decoration: none;
+}
+
+.app-nav__dropdown-item--disabled {
+  cursor: not-allowed;
+  color: #94a3b8;
+  opacity: 0.65;
+  pointer-events: none;
+}
+
+.app-nav__dropdown-item--disabled:hover {
+  background: transparent;
+  color: #94a3b8;
+}
+
+/* Mantener position:absolute del dropdown; relative aquí rompía la barra al abrir. */
+.app-nav__dropdown.app-nav__dropdown--locked {
+  position: absolute;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.app-nav__sub--locked,
+.app-side-menu__sub.app-nav__sub--locked {
+  position: relative;
+  overflow: hidden;
+  min-height: 11.5rem;
+}
+
+.app-nav__coming-soon-ribbon {
+  position: absolute;
+  top: 46%;
+  left: 50%;
+  z-index: 3;
+  transform: translate(-50%, -50%) rotate(-14deg);
+  padding: 0.4rem 1.6rem;
+  border-radius: 6px;
+  background: linear-gradient(135deg, #fff7ed 0%, #fed7aa 100%);
+  border: 1.5px solid #f59e0b;
+  color: #9a3412;
+  font-size: 0.68rem;
+  font-weight: 800;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  box-shadow: 0 6px 18px rgba(245, 158, 11, 0.28);
+  pointer-events: none;
+  white-space: nowrap;
+}
+
+.app-nav__link--locked-preview {
+  opacity: 0.92;
 }
 
 .app-nav__btn {
@@ -2067,6 +2121,154 @@ body.nav-open {
 
 .levels-b2-practice--skill-compact .levels-b2-practice__work-panel {
   padding: 0.85rem 0.95rem 1rem;
+}
+
+/* Skill practice Part 1 only (MCQ cloze): texto a ancho completo. */
+.levels-b2-practice--skill-compact:has(.levels-exam-mcq-cloze-inline) {
+  max-width: min(960px, 100%);
+}
+
+.levels-b2-practice--skill-compact:has(.levels-exam-mcq-cloze-inline) .levels-exam-split-page {
+  max-width: 100%;
+}
+
+.levels-b2-practice--skill-compact .levels-exam-mcq-cloze-inline .levels-exam-split {
+  grid-template-columns: 1fr;
+}
+
+.levels-b2-practice--skill-compact .levels-exam-mcq-cloze-inline .levels-exam-split__text,
+.levels-b2-practice--skill-compact .levels-exam-mcq-cloze-inline .levels-exam-split__passage-panel {
+  width: 100%;
+  max-width: none;
+  max-height: none;
+  border-right: none;
+}
+
+.levels-b2-practice--skill-compact .levels-exam-mcq-cloze-inline .levels-exam-split__enunciado {
+  max-width: none;
+}
+
+/* Skill practice colour themes (exam mode unchanged). */
+.levels-b2-practice--skill-compact[data-skill-theme='reading'] {
+  --skill-accent: #2563eb;
+  --skill-accent-dark: #1d4ed8;
+  --skill-surface: #f8fbff;
+  --skill-surface-2: #eff6ff;
+  --skill-border: #bfdbfe;
+  --skill-ink: #1e3a8a;
+}
+
+.levels-b2-practice--skill-compact[data-skill-theme='writing'] {
+  --skill-accent: #dc2626;
+  --skill-accent-dark: #b91c1c;
+  --skill-surface: #fffafa;
+  --skill-surface-2: #fef2f2;
+  --skill-border: #fecaca;
+  --skill-ink: #7f1d1d;
+}
+
+.levels-b2-practice--skill-compact[data-skill-theme='listening'] {
+  --skill-accent: #d97706;
+  --skill-accent-dark: #b45309;
+  --skill-surface: #fffdf7;
+  --skill-surface-2: #fffbeb;
+  --skill-border: #fde68a;
+  --skill-ink: #78350f;
+}
+
+.levels-b2-practice--skill-compact[data-skill-theme='speaking'] {
+  --skill-accent: #db2777;
+  --skill-accent-dark: #be185d;
+  --skill-surface: #fffbfd;
+  --skill-surface-2: #fdf2f8;
+  --skill-border: #f9a8d4;
+  --skill-ink: #831843;
+}
+
+.levels-b2-practice--skill-compact[data-skill-theme] .levels-b2-practice__title {
+  color: var(--skill-ink);
+}
+
+.levels-b2-practice--skill-compact[data-skill-theme] .levels-b2-practice__work-panel {
+  border-color: var(--skill-border);
+  background: linear-gradient(180deg, #ffffff 0%, var(--skill-surface) 100%);
+  box-shadow: 0 8px 28px color-mix(in srgb, var(--skill-accent) 10%, transparent);
+}
+
+.levels-b2-practice--skill-compact[data-skill-theme] .levels-exam-split-card,
+.levels-b2-practice--skill-compact[data-skill-theme] .levels-exam-split-page {
+  --levels-split-accent: var(--skill-accent);
+  --levels-split-panel: var(--skill-surface-2);
+  --levels-split-border: var(--skill-border);
+}
+
+.levels-b2-practice--skill-compact[data-skill-theme] .levels-b2-practice__refresh-btn {
+  border-color: var(--skill-border);
+  color: var(--skill-accent-dark);
+  background: #fff;
+}
+
+.levels-b2-practice--skill-compact[data-skill-theme] .levels-b2-practice__refresh-btn:hover:not(:disabled) {
+  background: var(--skill-surface-2);
+  border-color: var(--skill-accent);
+}
+
+.levels-b2-practice--skill-compact[data-skill-theme] .levels-b2-timer {
+  border-color: var(--skill-border);
+  background: var(--skill-surface-2);
+}
+
+.levels-exam-module-nav--skill[data-skill-theme='reading'] {
+  --skill-accent: #2563eb;
+  --skill-accent-dark: #1d4ed8;
+  --skill-border: #bfdbfe;
+  --skill-surface-2: #eff6ff;
+}
+
+.levels-exam-module-nav--skill[data-skill-theme='writing'] {
+  --skill-accent: #dc2626;
+  --skill-accent-dark: #b91c1c;
+  --skill-border: #fecaca;
+  --skill-surface-2: #fef2f2;
+}
+
+.levels-exam-module-nav--skill[data-skill-theme='listening'] {
+  --skill-accent: #d97706;
+  --skill-accent-dark: #b45309;
+  --skill-border: #fde68a;
+  --skill-surface-2: #fffbeb;
+}
+
+.levels-exam-module-nav--skill[data-skill-theme='speaking'] {
+  --skill-accent: #db2777;
+  --skill-accent-dark: #be185d;
+  --skill-border: #f9a8d4;
+  --skill-surface-2: #fdf2f8;
+}
+
+.levels-exam-module-nav--skill[data-skill-theme] {
+  border-top-color: var(--skill-border);
+}
+
+.levels-exam-module-nav--skill[data-skill-theme] .levels-exam-module-nav__btn--back {
+  border-color: var(--skill-border);
+  color: var(--skill-accent-dark);
+}
+
+.levels-exam-module-nav--skill[data-skill-theme] .levels-exam-module-nav__btn--back:hover {
+  background: var(--skill-surface-2);
+  border-color: var(--skill-accent);
+  color: var(--skill-accent-dark);
+}
+
+.levels-exam-module-nav--skill[data-skill-theme] .levels-exam-module-nav__btn--continue {
+  background: var(--skill-accent);
+  border-color: var(--skill-accent);
+}
+
+.levels-exam-module-nav--skill[data-skill-theme] .levels-exam-module-nav__btn--continue:hover {
+  background: var(--skill-accent-dark);
+  border-color: var(--skill-accent-dark);
 }
 
 .levels-b2-practice__header {

@@ -1,13 +1,53 @@
 .shell {
+  --skill-accent: #2563eb;
+  --skill-accent-dark: #1d4ed8;
+  --skill-accent-soft: #eff6ff;
+  --skill-surface: #f8fbff;
+  --skill-border: #bfdbfe;
+  --skill-shadow: rgba(37, 99, 235, 0.08);
+  --skill-ink: #1e3a8a;
+  --skill-muted: #475569;
+  --skill-subtle: #64748b;
+
   width: 100%;
   max-width: min(100%, 680px);
   margin: 0 auto 1rem;
   padding: clamp(0.85rem, 2.5vw, 1.1rem);
   border-radius: 14px;
-  border: 1px solid rgba(148, 163, 184, 0.28);
-  background: #fff;
-  box-shadow: 0 4px 18px rgba(15, 23, 42, 0.05);
+  border: 1px solid var(--skill-border);
+  background: linear-gradient(165deg, #fff 0%, var(--skill-surface) 100%);
+  box-shadow: 0 6px 22px var(--skill-shadow);
   box-sizing: border-box;
+}
+
+.shell[data-skill-theme='writing'] {
+  --skill-accent: #dc2626;
+  --skill-accent-dark: #b91c1c;
+  --skill-accent-soft: #fef2f2;
+  --skill-surface: #fffafa;
+  --skill-border: #fecaca;
+  --skill-shadow: rgba(220, 38, 38, 0.08);
+  --skill-ink: #7f1d1d;
+}
+
+.shell[data-skill-theme='listening'] {
+  --skill-accent: #d97706;
+  --skill-accent-dark: #b45309;
+  --skill-accent-soft: #fffbeb;
+  --skill-surface: #fffdf7;
+  --skill-border: #fde68a;
+  --skill-shadow: rgba(217, 119, 6, 0.08);
+  --skill-ink: #78350f;
+}
+
+.shell[data-skill-theme='speaking'] {
+  --skill-accent: #db2777;
+  --skill-accent-dark: #be185d;
+  --skill-accent-soft: #fdf2f8;
+  --skill-surface: #fffbfd;
+  --skill-border: #f9a8d4;
+  --skill-shadow: rgba(219, 39, 119, 0.08);
+  --skill-ink: #831843;
 }
 
 .eyebrow {
@@ -16,7 +56,7 @@
   font-weight: 700;
   letter-spacing: 0.12em;
   text-transform: uppercase;
-  color: #64748b;
+  color: var(--skill-accent);
 }
 
 .title {
@@ -24,7 +64,7 @@
   font-size: clamp(1rem, 2.2vw, 1.15rem);
   font-weight: 700;
   letter-spacing: -0.02em;
-  color: #0f172a;
+  color: var(--skill-ink);
 }
 
 .subtitle {
@@ -32,7 +72,7 @@
   max-width: 34rem;
   font-size: 0.8rem;
   line-height: 1.45;
-  color: #64748b;
+  color: var(--skill-muted);
 }
 
 .stepper {
@@ -48,15 +88,15 @@
   gap: 0.35rem;
   font-size: 0.72rem;
   font-weight: 600;
-  color: #94a3b8;
+  color: var(--skill-subtle);
 }
 
 .step--active {
-  color: #1e40af;
+  color: var(--skill-accent-dark);
 }
 
 .step--done {
-  color: #047857;
+  color: var(--skill-accent);
 }
 
 .stepDot {
@@ -67,31 +107,32 @@
   place-items: center;
   font-size: 0.65rem;
   font-weight: 700;
-  border: 1.5px solid #e2e8f0;
-  background: #f8fafc;
-  color: #64748b;
+  border: 1.5px solid var(--skill-border);
+  background: #fff;
+  color: var(--skill-muted);
 }
 
 .step--active .stepDot {
-  border-color: #3b82f6;
-  background: #eff6ff;
-  color: #1d4ed8;
+  border-color: var(--skill-accent);
+  background: var(--skill-accent-soft);
+  color: var(--skill-accent-dark);
 }
 
 .step--done .stepDot {
-  border-color: #86efac;
-  background: #f0fdf4;
-  color: #047857;
+  border-color: var(--skill-accent);
+  background: var(--skill-accent-soft);
+  color: var(--skill-accent-dark);
 }
 
 .stepLine {
   width: 1.75rem;
   height: 1px;
-  background: #e2e8f0;
+  background: var(--skill-border);
 }
 
 .stepLine--done {
-  background: #93c5fd;
+  background: var(--skill-accent);
+  opacity: 0.45;
 }
 
 .partList {
@@ -108,24 +149,26 @@
   gap: 0.7rem;
   width: 100%;
   padding: 0.65rem 0.75rem;
-  border: 1px solid #e8edf3;
+  border: 1px solid var(--skill-border);
   border-radius: 10px;
-  background: #fafbfc;
+  background: #fff;
   text-align: left;
   cursor: pointer;
   transition:
     border-color 0.15s ease,
-    background 0.15s ease;
+    background 0.15s ease,
+    box-shadow 0.15s ease;
   font-family: inherit;
 }
 
 .partCard:hover {
-  border-color: #bfdbfe;
-  background: #f8fafc;
+  border-color: var(--skill-accent);
+  background: var(--skill-accent-soft);
+  box-shadow: 0 4px 14px var(--skill-shadow);
 }
 
 .partCard:focus-visible {
-  outline: 2px solid #3b82f6;
+  outline: 2px solid var(--skill-accent);
   outline-offset: 2px;
 }
 
@@ -138,9 +181,9 @@
   place-items: center;
   font-size: 0.78rem;
   font-weight: 700;
-  color: #1e40af;
-  background: #eff6ff;
-  border: 1px solid #dbeafe;
+  color: var(--skill-accent-dark);
+  background: var(--skill-accent-soft);
+  border: 1px solid var(--skill-border);
 }
 
 .partBody {
@@ -159,7 +202,7 @@
   margin: 0.12rem 0 0;
   font-size: 0.74rem;
   line-height: 1.35;
-  color: #64748b;
+  color: var(--skill-muted);
   display: -webkit-box;
   -webkit-line-clamp: 1;
   -webkit-box-orient: vertical;
@@ -171,18 +214,19 @@
   display: inline-flex;
   font-size: 0.68rem;
   font-weight: 600;
-  color: #94a3b8;
+  color: var(--skill-subtle);
 }
 
 .partMeta--started {
-  color: #047857;
+  color: var(--skill-accent-dark);
 }
 
 .partArrow {
   flex-shrink: 0;
   font-size: 0.95rem;
   font-weight: 700;
-  color: #cbd5e1;
+  color: var(--skill-accent);
+  opacity: 0.55;
 }
 
 .headerRow {
@@ -198,9 +242,9 @@
   align-items: center;
   padding: 0.35rem 0.7rem;
   border-radius: 8px;
-  border: 1px solid #e2e8f0;
-  background: #f8fafc;
-  color: #475569;
+  border: 1px solid var(--skill-border);
+  background: #fff;
+  color: var(--skill-muted);
   font-size: 0.74rem;
   font-weight: 600;
   cursor: pointer;
@@ -209,7 +253,8 @@
 
 .backBtn:hover,
 .backBtn:focus-visible {
-  background: #f1f5f9;
+  background: var(--skill-accent-soft);
+  color: var(--skill-accent-dark);
   outline: none;
 }
 
@@ -218,7 +263,7 @@
   flex: 1;
   font-size: 0.78rem;
   font-weight: 600;
-  color: #334155;
+  color: var(--skill-ink);
 }
 
 .exerciseGrid {
@@ -245,9 +290,9 @@
   width: 100%;
   min-height: 7.5rem;
   padding: 0.65rem 0.7rem 0.55rem;
-  border: 1px solid #e8edf3;
+  border: 1px solid var(--skill-border);
   border-radius: 10px;
-  background: #fafbfc;
+  background: #fff;
   text-align: left;
   cursor: pointer;
   font-family: inherit;
@@ -258,24 +303,24 @@
 }
 
 .exerciseCard:hover {
-  border-color: #93c5fd;
-  box-shadow: 0 6px 16px rgba(37, 99, 235, 0.08);
+  border-color: var(--skill-accent);
+  box-shadow: 0 6px 16px var(--skill-shadow);
   transform: translateY(-1px);
 }
 
 .exerciseCard:focus-visible {
-  outline: 2px solid #3b82f6;
+  outline: 2px solid var(--skill-accent);
   outline-offset: 2px;
 }
 
 .exerciseCard--active {
-  border-color: #3b82f6;
-  background: linear-gradient(165deg, #eff6ff 0%, #fafbfc 100%);
-  box-shadow: 0 4px 14px rgba(37, 99, 235, 0.1);
+  border-color: var(--skill-accent);
+  background: linear-gradient(165deg, var(--skill-accent-soft) 0%, #fff 100%);
+  box-shadow: 0 4px 14px var(--skill-shadow);
 }
 
 .exerciseCard--attempted {
-  border-color: #dbeafe;
+  border-color: var(--skill-border);
 }
 
 .exerciseCardTop {
@@ -290,7 +335,7 @@
   font-size: 0.68rem;
   font-weight: 700;
   font-variant-numeric: tabular-nums;
-  color: #64748b;
+  color: var(--skill-muted);
 }
 
 .exerciseTitle {
@@ -303,7 +348,7 @@
 .exerciseMeta {
   font-size: 0.66rem;
   font-weight: 500;
-  color: #94a3b8;
+  color: var(--skill-subtle);
   line-height: 1.25;
   display: -webkit-box;
   -webkit-line-clamp: 1;
@@ -315,20 +360,20 @@
   font-size: 0.7rem;
   font-weight: 700;
   font-variant-numeric: tabular-nums;
-  color: #334155;
+  color: var(--skill-ink);
 }
 
 .exerciseScoreMuted {
   font-size: 0.68rem;
   font-weight: 500;
-  color: #94a3b8;
+  color: var(--skill-subtle);
 }
 
 .exerciseAction {
   margin-top: auto;
   font-size: 0.68rem;
   font-weight: 700;
-  color: #2563eb;
+  color: var(--skill-accent);
 }
 
 .empty {
@@ -336,8 +381,8 @@
   padding: 0.85rem;
   text-align: center;
   border-radius: 8px;
-  background: #f8fafc;
-  border: 1px dashed #e2e8f0;
-  color: #64748b;
+  background: var(--skill-accent-soft);
+  border: 1px dashed var(--skill-border);
+  color: var(--skill-muted);
   font-size: 0.8rem;
 }

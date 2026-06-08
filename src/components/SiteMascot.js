@@ -7,7 +7,7 @@ const VALID = new Set(MASCOT_VARIANTS);
 
 /**
  * Mascota Dralo (PNG sin fondo en /public/mascot/).
- * @param {number} variant 1–8, 10 o 11 (logo)
+ * @param {number} variant 1–8, 10–11 (logo), 12–17
  * @param {number} [width] ancho mostrado en px
  */
 export default function SiteMascot({

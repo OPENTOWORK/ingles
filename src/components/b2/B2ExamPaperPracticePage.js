@@ -1960,6 +1960,7 @@ function B2ExamPaperPracticePageInner({
         hideMascot={isSkillPracticeSession}
         hideSubtitle={isSkillPracticeSession}
         compactSkillHeader={isSkillPracticeSession}
+        skillPracticeTheme={skillNav.skillTheme}
         timerLabel={timerLabel}
         refreshLabel={refreshLabel}
         loading={loading}
@@ -3433,6 +3434,7 @@ function B2ExamPaperPracticePageInner({
         pagePartMax={partMax}
         examSlot={examSlot}
         skillPracticeMode={isSkillPracticeSession}
+        skillPracticeTheme={skillNav.skillTheme}
         onContinueInPage={isSkillPracticeSession ? handleKeepPracticing : handleContinueInPage}
         lang={lang}
       />

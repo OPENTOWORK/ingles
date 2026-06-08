@@ -65,6 +65,21 @@ export const DRALO_MENU_ITEMS = [
   { label: 'Dictionary', href: '/dralo-ai/dictionary' },
 ];
 
+/** Dralo AI bloqueado (visible + Coming soon) para estudiantes y visitantes sin rol staff. */
+export function isDraloAiLockedForRole(userRole) {
+  const role = normalizeRoleName(userRole);
+  if (
+    isAdminRole(role) ||
+    isTeacherRole(role) ||
+    isCoordinatorRole(role) ||
+    isSupportRole(role) ||
+    isItRole(role)
+  ) {
+    return false;
+  }
+  return true;
+}
+
 /** Desplegable «Admin» solo para rol administrador. */
 const COORDINATOR_ADMIN_PANEL_ITEM = {
   href: '/admin/coordinador',

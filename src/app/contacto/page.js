@@ -8,7 +8,11 @@ import {
   formatTicketDateTime,
   formatTicketNumber,
 } from '@/lib/supportTicketParse';
-import { FAQ_TOPICS } from '@/utils/contactModuleConfig';
+import {
+  DEFAULT_TICKET_TOPIC,
+  FAQ_TOPICS,
+  TICKET_STATUS_LABELS_EN,
+} from '@/utils/contactModuleConfig';
 import PageHero from '@/components/PageHero';
 import InternalMessagesSection from '@/components/contact/InternalMessagesSection';
 
@@ -23,7 +27,7 @@ export default function ContactPage() {
     email: '',
     subject: '',
     message: '',
-    topic: 'uso de la plataforma',
+    topic: DEFAULT_TICKET_TOPIC,
   });
 
   useEffect(() => {
@@ -78,14 +82,14 @@ export default function ContactPage() {
 
     if (!session?.user?.id) {
       setTicketLoading(false);
-      toast.error('Inicia sesión para crear un ticket de soporte.');
+      toast.error('Please sign in to open a support ticket.');
       return;
     }
 
     const accessToken = session.access_token;
     if (!accessToken) {
       setTicketLoading(false);
-      toast.error('Sesión expirada. Vuelve a iniciar sesión.');
+      toast.error('Your session has expired. Please sign in again.');
       return;
     }
 
@@ -102,18 +106,18 @@ export default function ContactPage() {
     setTicketLoading(false);
 
     if (!res.ok) {
-      toast.error(data.error || 'No se pudo crear el ticket de soporte.');
+      toast.error(data.error || 'Could not create the support ticket.');
       return;
     }
 
     if (!data.emailSent) {
-      toast.success('Ticket guardado en la plataforma.');
+      toast.success('Ticket saved on the platform.');
       toast.error(
         (t) => (
           <span>
-            {data.emailWarning || 'Correo no enviado a draloenglish@gmail.com.'}{' '}
+            {data.emailWarning || 'Email was not sent to draloenglish@gmail.com.'}{' '}
             <a href="/contacto/configurar-correo" style={{ color: '#fff', textDecoration: 'underline' }}>
-              Configurar correo
+              Configure email
             </a>
           </span>
         ),
@@ -121,11 +125,11 @@ export default function ContactPage() {
       );
     } else if (data.ackEmailSent) {
       toast.success(
-        'Te hemos enviado un correo de confirmación. Responderemos en un plazo máximo de 48 horas.',
+        'We have sent you a confirmation email. We will reply within 48 hours at most.',
         { duration: 6000 },
       );
     } else {
-      toast.success('Tu ticket se ha registrado correctamente.');
+      toast.success('Your ticket has been submitted successfully.');
     }
     setTicketForm((prev) => ({
       ...prev,
@@ -138,7 +142,7 @@ export default function ContactPage() {
   if (pageLoading) {
     return (
       <main className="shell contacto-page center">
-        <div className="loader" aria-label="Cargando" />
+        <div className="loader" aria-label="Loading" />
       </main>
     );
   }
@@ -161,13 +165,16 @@ export default function ContactPage() {
       <InternalMessagesSection session={session} />
 
       <section className="contact-section">
-        <h2>Soporte</h2>
-        <p>Sistema de atencion y gestion de incidencias que permite hacer seguimiento de consultas o problemas reportados dentro de la plataforma.</p>
+        <h2>Support</h2>
+        <p>
+          Help desk and issue tracking so you can follow up on questions or problems reported
+          within the platform.
+        </p>
 
         <form onSubmit={handleTicketSubmit} className="contact-form">
           <div className="two-cols">
             <div className="form-group">
-              <label>Nombre</label>
+              <label>Name</label>
               <input className="form-input" name="name" value={ticketForm.name} onChange={handleTicketChange} required />
             </div>
             <div className="form-group">
@@ -177,7 +184,7 @@ export default function ContactPage() {
           </div>
 
           <div className="form-group">
-            <label>Organizacion por temas</label>
+            <label>Topic</label>
             <select className="form-input" name="topic" value={ticketForm.topic} onChange={handleTicketChange}>
               {FAQ_TOPICS.map((topic) => (
                 <option key={topic} value={topic}>{topic}</option>
@@ -186,33 +193,33 @@ export default function ContactPage() {
           </div>
 
           <div className="form-group">
-            <input className="form-input" name="subject" value={ticketForm.subject} onChange={handleTicketChange} placeholder="Asunto" required />
+            <input className="form-input" name="subject" value={ticketForm.subject} onChange={handleTicketChange} placeholder="Subject" required />
           </div>
           <div className="form-group">
-            <textarea className="form-textarea" name="message" value={ticketForm.message} onChange={handleTicketChange} placeholder="Describe tu consulta o incidencia" rows={5} required />
+            <textarea className="form-textarea" name="message" value={ticketForm.message} onChange={handleTicketChange} placeholder="Describe your question or issue" rows={5} required />
           </div>
           <button type="submit" className="submit-btn" disabled={ticketLoading}>
-            {ticketLoading ? 'Enviando...' : 'Crear ticket de soporte'}
+            {ticketLoading ? 'Sending…' : 'Open support ticket'}
           </button>
         </form>
 
         {session?.user?.id && (
           <div className="tickets-table-wrap">
-            <h3>Mis tickets</h3>
+            <h3>My tickets</h3>
             <table className="tickets-table">
               <thead>
                 <tr>
-                  <th className="tickets-table__col-id">Nº ticket</th>
-                  <th>Asunto</th>
-                  <th>Estado</th>
-                  <th>Tiempo del ticket en activo</th>
-                  <th>Creado</th>
+                  <th className="tickets-table__col-id">Ticket #</th>
+                  <th>Subject</th>
+                  <th>Status</th>
+                  <th>Time open</th>
+                  <th>Created</th>
                 </tr>
               </thead>
               <tbody>
                 {myTickets.length === 0 ? (
                   <tr>
-                    <td colSpan={5}>Sin tickets registrados.</td>
+                    <td colSpan={5}>No tickets yet.</td>
                   </tr>
                 ) : (
                   myTickets.map((ticket) => (
@@ -223,9 +230,9 @@ export default function ContactPage() {
                         </span>
                       </td>
                       <td>{ticket.asunto}</td>
-                      <td>{ticket.estado}</td>
+                      <td>{TICKET_STATUS_LABELS_EN[ticket.estado] || ticket.estado}</td>
                       <td>{formatActiveDuration(ticket.creado_en, ticket.cerrado_en)}</td>
-                      <td>{formatTicketDateTime(ticket.creado_en)}</td>
+                      <td>{formatTicketDateTime(ticket.creado_en, 'en-GB')}</td>
                     </tr>
                   ))
                 )}
@@ -237,11 +244,11 @@ export default function ContactPage() {
 
       <section className="contact-section">
         <h2>FAQ</h2>
-        <p>Preguntas frecuentes y definiciones ademas de soluciones.</p>
+        <p>Frequently asked questions, definitions, and quick solutions.</p>
         <ul className="inline-list">
-          <li>Autogestion: Permite al usuario encontrar soluciones de forma inmediata y autonoma.</li>
-          <li>Organizacion por temas: cuenta, pagos, uso de la plataforma, etc.</li>
-          <li>Acceso rapido: Hipervinculos (Facilita la busqueda de informacion relevante sin navegar por toda la plataforma).</li>
+          <li>Self-service: find answers on your own, right away.</li>
+          <li>Topics: account, payments, platform usage, exams, and more.</li>
+          <li>Quick links: jump to relevant information without browsing the whole site.</li>
         </ul>
 
         {faqList.length > 0 && (
@@ -252,7 +259,7 @@ export default function ContactPage() {
                 <p>{faq.answer}</p>
                 <small>{faq.topic}</small>
                 {faq.quick_link && (
-                  <a href={faq.quick_link} target="_blank" rel="noreferrer">Acceso rapido</a>
+                  <a href={faq.quick_link} target="_blank" rel="noreferrer">Quick link</a>
                 )}
               </article>
             ))}

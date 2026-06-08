@@ -9,7 +9,7 @@ import {
   getSupabaseServiceRoleKey,
   getSupabaseUrl,
 } from '@/lib/supabaseEnv';
-import { TICKET_STATUS, USER_TYPES } from '@/utils/contactModuleConfig';
+import { DEFAULT_TICKET_TOPIC, TICKET_STATUS, USER_TYPES } from '@/utils/contactModuleConfig';
 
 const supabaseUrl = getSupabaseUrl();
 const supabaseAnonKey = getSupabaseAnonKey();
@@ -27,13 +27,13 @@ export async function POST(req) {
     const authHeader = req.headers.get('authorization') || '';
     const token = authHeader.startsWith('Bearer ') ? authHeader.slice(7) : null;
     if (!token) {
-      return NextResponse.json({ error: 'Debes iniciar sesión.' }, { status: 401 });
+      return NextResponse.json({ error: 'You must sign in.' }, { status: 401 });
     }
 
     const authClient = createClient(supabaseUrl, supabaseAnonKey);
     const { data: authData, error: authError } = await authClient.auth.getUser(token);
     if (authError || !authData?.user) {
-      return NextResponse.json({ error: 'Sesión no válida.' }, { status: 401 });
+      return NextResponse.json({ error: 'Invalid session.' }, { status: 401 });
     }
 
     const body = await req.json();
@@ -43,19 +43,19 @@ export async function POST(req) {
     const message = String(body?.message || '').trim();
     const userType = String(body?.userType || USER_TYPES.CONFIRMED).trim();
     const status = String(body?.status || TICKET_STATUS.UNANSWERED).trim();
-    const topic = String(body?.topic || 'uso de la plataforma').trim();
+    const topic = String(body?.topic || DEFAULT_TICKET_TOPIC).trim();
 
     if (!name || !subject || !message) {
-      return NextResponse.json({ error: 'Faltan campos obligatorios.' }, { status: 400 });
+      return NextResponse.json({ error: 'Required fields are missing.' }, { status: 400 });
     }
     if (!isValidEmail(email)) {
-      return NextResponse.json({ error: 'El email no es válido.' }, { status: 400 });
+      return NextResponse.json({ error: 'Invalid email address.' }, { status: 400 });
     }
     if (!VALID_STATUSES.has(status)) {
-      return NextResponse.json({ error: 'Estado no válido.' }, { status: 400 });
+      return NextResponse.json({ error: 'Invalid status.' }, { status: 400 });
     }
     if (!VALID_USER_TYPES.has(userType)) {
-      return NextResponse.json({ error: 'Tipo de usuario no válido.' }, { status: 400 });
+      return NextResponse.json({ error: 'Invalid user type.' }, { status: 400 });
     }
 
     const descripcion = [
@@ -105,7 +105,7 @@ export async function POST(req) {
         process.env.NODE_ENV === 'development' ? insertError.message : undefined;
       return NextResponse.json(
         {
-          error: 'No se pudo guardar el ticket de soporte.',
+          error: 'Could not save the support ticket.',
           ...(detail ? { detail } : {}),
         },
         { status: 500 },
@@ -137,7 +137,7 @@ export async function POST(req) {
       const ack = await sendSupportTicketAckEmail({ to: email, name, subject });
       ackEmailSent = ack.sent;
       if (!ack.sent) {
-        ackEmailWarning = ack.error || 'No se pudo enviar el correo de confirmación.';
+        ackEmailWarning = ack.error || 'Could not send the confirmation email.';
         console.error('[contact/tickets] student ack email failed', ack.error);
       }
     }
@@ -156,6 +156,6 @@ export async function POST(req) {
     });
   } catch (err) {
     console.error('[contact/tickets]', err);
-    return NextResponse.json({ error: 'Error interno del servidor.' }, { status: 500 });
+    return NextResponse.json({ error: 'Internal server error.' }, { status: 500 });
   }
 }

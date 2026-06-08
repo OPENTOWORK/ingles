@@ -23,10 +23,10 @@ export function parseDbTimestamp(value) {
   return Number.isNaN(d.getTime()) ? null : d;
 }
 
-export function formatTicketDateTime(value) {
+export function formatTicketDateTime(value, locale = 'es-ES') {
   const d = parseDbTimestamp(value);
   if (!d) return '—';
-  return d.toLocaleString('es-ES', {
+  return d.toLocaleString(locale, {
     timeZone: MADRID_TZ,
     day: '2-digit',
     month: '2-digit',

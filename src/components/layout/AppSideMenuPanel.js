@@ -5,10 +5,11 @@ import { usePathname } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { useUserRole } from '@/context/UserRoleContext';
 import { isAdminRole } from '@/utils/authRoles';
+import { DraloAiComingSoonRibbon, DraloAiNavMenuItems } from '@/components/layout/DraloAiNavMenu';
 import {
-  DRALO_MENU_ITEMS,
   getStaffPanelMenuItemsForRole,
   getStaffPanelMenuLabel,
+  isDraloAiLockedForRole,
   NAV_LINK_CONTACT,
   HOME_QUICK_LINKS,
   HOME_THEORY_LINK,
@@ -28,6 +29,7 @@ export default function AppSideMenuPanel({ defaultOpen = true }) {
   const staffMenuItems = session ? getStaffPanelMenuItemsForRole(userRole) : [];
   const staffMenuLabel = getStaffPanelMenuLabel(userRole);
   const showStaffDropdown = staffMenuItems.length > 1;
+  const draloLocked = isDraloAiLockedForRole(userRole);
   const showStaffSingleLink = staffMenuItems.length === 1;
   const showAdminHomeLinks = isAdminRole(userRole);
   const linkClass = 'app-side-menu__link';
@@ -97,7 +99,9 @@ export default function AppSideMenuPanel({ defaultOpen = true }) {
 
           <button
             type="button"
-            className={`${linkClass} app-side-menu__accordion${draloOpen ? ' is-open' : ''}`}
+            className={`${linkClass} app-side-menu__accordion${draloOpen ? ' is-open' : ''}${
+              draloLocked ? ' app-nav__link--locked-preview' : ''
+            }`}
             onClick={() => setDraloOpen((v) => !v)}
             aria-expanded={draloOpen}
           >
@@ -105,12 +109,13 @@ export default function AppSideMenuPanel({ defaultOpen = true }) {
             <span aria-hidden>{draloOpen ? '▲' : '▼'}</span>
           </button>
           {draloOpen ? (
-            <div className="app-side-menu__sub">
-              {DRALO_MENU_ITEMS.map((item) => (
-                <NavLink key={item.href} href={item.href} className={linkClass}>
-                  {item.label}
-                </NavLink>
-              ))}
+            <div className={`app-side-menu__sub${draloLocked ? ' app-nav__sub--locked' : ''}`}>
+              <DraloAiNavMenuItems
+                locked={draloLocked}
+                variant="side"
+                onNavigate={() => setOpen(false)}
+              />
+              {draloLocked ? <DraloAiComingSoonRibbon /> : null}
             </div>
           ) : null}
 

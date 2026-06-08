@@ -6,10 +6,11 @@ import { Suspense, useEffect, useState } from 'react';
 import { isAdminRole } from '@/utils/authRoles';
 import { canViewPricing } from '@/utils/pricingAccess';
 import AdminPanelsNav from '@/components/layout/AdminPanelsNav';
+import { DraloAiComingSoonRibbon, DraloAiNavMenuItems } from '@/components/layout/DraloAiNavMenu';
 import {
-  DRALO_MENU_ITEMS,
   getStaffPanelMenuItemsForRole,
   getStaffPanelMenuLabel,
+  isDraloAiLockedForRole,
   NAV_LINK_CONTACT,
   NAV_LINK_PRICING,
   isNavLinkActive,
@@ -30,6 +31,7 @@ function AppNavInner({ session, userRole, onLogout }) {
   const showStaffDropdown = staffMenuItems.length > 1;
   const showStaffSingleLink = staffMenuItems.length === 1;
   const showPricing = canViewPricing(userRole);
+  const draloLocked = isDraloAiLockedForRole(userRole);
 
   useEffect(() => {
     document.body.classList.toggle('nav-open', mobileOpen);
@@ -117,12 +119,15 @@ function AppNavInner({ session, userRole, onLogout }) {
             </NavLink>
           ))}
 
-          <div className="app-nav__dropdown-wrap" data-tour="nav-dralo-ai">
+          <div
+            className={`app-nav__dropdown-wrap${draloLocked ? ' app-nav__dropdown-wrap--locked' : ''}`}
+            data-tour="nav-dralo-ai"
+          >
             <button
               type="button"
               className={`app-nav__link app-nav__link--button${
                 draloDesktopOpen || pathname?.startsWith('/dralo-ai') ? ' is-active' : ''
-              }`}
+              }${draloLocked ? ' app-nav__link--locked-preview' : ''}`}
               aria-expanded={draloDesktopOpen}
               onClick={toggleDraloDesktop}
             >
@@ -132,18 +137,16 @@ function AppNavInner({ session, userRole, onLogout }) {
               </span>
             </button>
             {draloDesktopOpen ? (
-              <div className="app-nav__dropdown" role="menu">
-                {DRALO_MENU_ITEMS.map((item) => (
-                  <NavLink
-                    key={item.href}
-                    href={item.href}
-                    role="menuitem"
-                    className="app-nav__dropdown-item"
-                    onClick={closeDesktopDropdowns}
-                  >
-                    {item.label}
-                  </NavLink>
-                ))}
+              <div
+                className={`app-nav__dropdown${draloLocked ? ' app-nav__dropdown--locked' : ''}`}
+                role="menu"
+              >
+                <DraloAiNavMenuItems
+                  locked={draloLocked}
+                  variant="desktop"
+                  onNavigate={closeDesktopDropdowns}
+                />
+                {draloLocked ? <DraloAiComingSoonRibbon /> : null}
               </div>
             ) : null}
           </div>
@@ -268,7 +271,9 @@ function AppNavInner({ session, userRole, onLogout }) {
 
           <button
             type="button"
-            className={`${mobileLinkClass} app-nav__accordion${draloOpen ? ' is-open' : ''}`}
+            className={`${mobileLinkClass} app-nav__accordion${draloOpen ? ' is-open' : ''}${
+              draloLocked ? ' app-nav__link--locked-preview' : ''
+            }`}
             onClick={toggleDraloMobile}
             aria-expanded={draloOpen}
             data-tour="nav-dralo-ai"
@@ -277,12 +282,9 @@ function AppNavInner({ session, userRole, onLogout }) {
             <span aria-hidden>{draloOpen ? '▲' : '▼'}</span>
           </button>
           {draloOpen ? (
-            <div className="app-nav__sub">
-              {DRALO_MENU_ITEMS.map((item) => (
-                <NavLink key={item.href} href={item.href} className={mobileLinkClass} onClick={closeMobile}>
-                  {item.label}
-                </NavLink>
-              ))}
+            <div className={`app-nav__sub${draloLocked ? ' app-nav__sub--locked' : ''}`}>
+              <DraloAiNavMenuItems locked={draloLocked} variant="mobile" onNavigate={closeMobile} />
+              {draloLocked ? <DraloAiComingSoonRibbon /> : null}
             </div>
           ) : null}
 

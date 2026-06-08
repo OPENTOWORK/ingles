@@ -83,6 +83,7 @@ export function B2ExamPracticeChrome({
   hideMascot = false,
   hideSubtitle = false,
   compactSkillHeader = false,
+  skillPracticeTheme = null,
   practiceReady,
   children,
 }) {
@@ -119,6 +120,9 @@ export function B2ExamPracticeChrome({
       {!showPractice ? null : (
         <div
           className={`levels-b2-practice${compactSkillHeader ? ' levels-b2-practice--skill-compact' : ''}`}
+          data-skill-theme={
+            compactSkillHeader && skillPracticeTheme ? skillPracticeTheme : undefined
+          }
         >
           <header className="levels-b2-practice__header">
             <h1 className="levels-b2-practice__title">{title}</h1>

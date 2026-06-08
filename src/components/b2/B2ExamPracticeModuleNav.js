@@ -18,6 +18,7 @@ export default function B2ExamPracticeModuleNav({
   overviewLabel,
   nextPartLabel,
   skillPracticeMode = false,
+  skillPracticeTheme = null,
   lang = 'en',
 }) {
   const levelSlug = String(slug || 'b2').toLowerCase();
@@ -54,7 +55,11 @@ export default function B2ExamPracticeModuleNav({
   }
 
   return (
-    <nav className="levels-exam-module-nav" aria-label={isEn ? 'Module navigation' : 'Navegación del módulo'}>
+    <nav
+      className={`levels-exam-module-nav${skillPracticeMode ? ' levels-exam-module-nav--skill' : ''}`}
+      data-skill-theme={skillPracticeMode && skillPracticeTheme ? skillPracticeTheme : undefined}
+      aria-label={isEn ? 'Module navigation' : 'Navegación del módulo'}
+    >
       <Link href={backHref} className="levels-exam-module-nav__btn levels-exam-module-nav__btn--back">
         <span aria-hidden="true">←</span>
         {backLabel}

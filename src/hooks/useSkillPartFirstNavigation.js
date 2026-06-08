@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { SkillPartFirstNavigation } from '@/components/b2/SkillPartFirstNavigation';
+import { getSkillPracticeThemeKey } from '@/utils/skillPartFirstProgress';
 import { getNivelesLevelHub } from '@/data/nivelesLevelHub';
 import { getExamSkillSectionTitle } from '@/data/levelExamPartMap';
 
@@ -140,6 +141,7 @@ export function useSkillPartFirstNavigation({
         onSelectExam={handleSelectExamForPart}
         progressBySlot={progressBySlot}
         examLabelsBySlot={examLabelsBySlot}
+        skillRoute={skillRoute}
         lang={lang}
         {...skillPickerProps}
       />
@@ -156,6 +158,7 @@ export function useSkillPartFirstNavigation({
     handleSelectExamForPart,
     progressBySlot,
     examLabelsBySlot,
+    skillRoute,
     lang,
     skillPickerProps,
   ]);
@@ -171,5 +174,6 @@ export function useSkillPartFirstNavigation({
     navigation,
     hidePartTabs: active && Boolean(selectedPartNumber),
     setSelectedPartNumber,
+    skillTheme: active ? getSkillPracticeThemeKey(skillRoute) : null,
   };
 }

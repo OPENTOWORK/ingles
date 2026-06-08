@@ -4,6 +4,7 @@ import TheoryLevelStars from '@/components/theory/TheoryLevelStars';
 import {
   aggregatePartProgress,
   filterProgressByPart,
+  getSkillPracticeThemeKey,
   starsFromPartExerciseScore,
 } from '@/utils/skillPartFirstProgress';
 import styles from './SkillPartFirstNavigation.module.css';
@@ -113,9 +114,11 @@ export function SkillPartFirstNavigation({
   progressBySlot = {},
   examLabelsBySlot = {},
   availableSlots,
+  skillRoute = null,
   lang = 'en',
 }) {
   const en = lang === 'en';
+  const skillTheme = getSkillPracticeThemeKey(skillRoute);
   const slots =
     availableSlots ??
     Object.keys(examLabelsBySlot)
@@ -129,7 +132,11 @@ export function SkillPartFirstNavigation({
 
   if (!selectedPartNumber) {
     return (
-      <section className={styles.shell} aria-label={en ? 'Choose a part to practice' : 'Elige una parte'}>
+      <section
+        className={styles.shell}
+        data-skill-theme={skillTheme}
+        aria-label={en ? 'Choose a part to practice' : 'Elige una parte'}
+      >
         <p className={styles.eyebrow}>{en ? 'Skill practice' : 'Práctica por skill'}</p>
         <h2 className={styles.title}>{en ? 'Pick a part' : 'Elige una parte'}</h2>
         <p className={styles.subtitle}>
@@ -181,7 +188,11 @@ export function SkillPartFirstNavigation({
   const partTopic = topicByPart[selectedPartNumber];
 
   return (
-    <section className={styles.shell} aria-label={en ? 'Exercise practice' : 'Práctica de ejercicios'}>
+    <section
+      className={styles.shell}
+      data-skill-theme={skillTheme}
+      aria-label={en ? 'Exercise practice' : 'Práctica de ejercicios'}
+    >
       <div className={styles.headerRow}>
         <button type="button" className={styles.backBtn} onClick={onBackToParts}>
           ← {en ? 'All parts' : 'Todas las partes'}

@@ -51,7 +51,32 @@ export const USER_TYPES = {
   CONFIRMED: 'Usuario confirmado',
 };
 
-export const FAQ_TOPICS = ['cuenta', 'pagos', 'uso de la plataforma', 'otros'];
+export const DEFAULT_TICKET_TOPIC = 'Platform usage';
+
+export const FAQ_TOPICS = [
+  'Account & login',
+  'Payments & subscriptions',
+  'Platform usage',
+  'Exams & practice',
+  'Levels & progress',
+  'Theory & exercises',
+  'Dralo AI',
+  'Speaking & pronunciation',
+  'Technical issue',
+  'Bug report',
+  'Privacy & data',
+  'Teacher / class access',
+  'Billing & invoices',
+  'Other',
+];
+
+/** English labels for ticket status values stored in the database. */
+export const TICKET_STATUS_LABELS_EN = {
+  Abierto: 'Open',
+  'Sin responder': 'Unanswered',
+  Respondido: 'Answered',
+  Cerrado: 'Closed',
+};
 
 export const INTERNAL_MESSAGE_CHANNELS = [
   {

@@ -818,14 +818,14 @@ export default function ProfilePage() {
       {/* Tab: Resumen */}
       {activeTab === 'overview' && (
         <div className="profile-tab-panels">
-          <ProfileCollapsibleSection title="✨ Dralo IA — Experience" defaultOpen>
+          <ProfileCollapsibleSection title="✨ Dralo IA — Experience">
             <DraloLevelProgressSection
               accessToken={layoutSession?.access_token}
               lang="en"
             />
           </ProfileCollapsibleSection>
 
-          <ProfileCollapsibleSection title="📊 General statistics" defaultOpen>
+          <ProfileCollapsibleSection title="📊 General statistics">
             <ProfileGeneralStats
               accessToken={layoutSession?.access_token}
               onSummaryLoaded={(summary) => {
@@ -1025,7 +1025,7 @@ export default function ProfilePage() {
             </div>
           </section>
 
-          <ProfileCollapsibleSection title="📋 Your account" defaultOpen>
+          <ProfileCollapsibleSection title="📋 Your account">
             <dl className="mis-datos-facts">
               <div className="mis-datos-fact">
                 <dt>Email</dt>

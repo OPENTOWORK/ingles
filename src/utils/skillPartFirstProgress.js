@@ -1,5 +1,14 @@
 import { starsFromTheorySessionScore } from '@/lib/theoryTopicLevels';
 
+/** Tema visual de skill practice (no exam mode). */
+export function getSkillPracticeThemeKey(skillRoute) {
+  const route = String(skillRoute || '').toLowerCase();
+  if (route.includes('writing')) return 'writing';
+  if (route.includes('listening')) return 'listening';
+  if (route.includes('speaking')) return 'speaking';
+  return 'reading';
+}
+
 /** Estrellas 0–3 para un ejercicio (parte + variante) desde levels_puntuaciones. */
 export function starsFromPartExerciseScore(part) {
   if (!part?.total) return 0;

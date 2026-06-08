@@ -431,6 +431,7 @@ function B2WritingExamPracticePageInner() {
         hideMascot={isSkillPracticeSession}
         hideSubtitle={isSkillPracticeSession}
         compactSkillHeader={isSkillPracticeSession}
+        skillPracticeTheme={skillNav.skillTheme}
         timerLabel={timerLabel}
         refreshLabel="Refresh Writing"
         loading={loading}
@@ -511,6 +512,7 @@ function B2WritingExamPracticePageInner() {
                 pagePartMax={PART_MAX}
                 examSlot={examSlot}
                 skillPracticeMode={isSkillPracticeSession}
+                skillPracticeTheme={skillNav.skillTheme}
                 onContinueInPage={isSkillPracticeSession ? handleKeepPracticing : handleContinueInPage}
                 nextPartLabel={continuePartLabel}
                 lang="en"

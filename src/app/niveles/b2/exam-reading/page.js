@@ -1070,6 +1070,7 @@ function B2ReadingExamsPageInner() {
         hideMascot={isSkillPracticeSession}
         hideSubtitle={isSkillPracticeSession}
         compactSkillHeader={isSkillPracticeSession}
+        skillPracticeTheme={skillNav.skillTheme}
         timerLabel={timerLabel}
         refreshLabel={
           isCombinedPaper ? 'Refresh Reading and Use of English (1–7)' : 'Refresh Reading (5–7)'
@@ -1324,6 +1325,7 @@ function B2ReadingExamsPageInner() {
         pagePartMax={partMax}
         examSlot={examSlot}
         skillPracticeMode={isSkillPracticeSession}
+        skillPracticeTheme={skillNav.skillTheme}
         onContinueInPage={isSkillPracticeSession ? handleKeepPracticing : handleContinueInPage}
         lang="en"
       />

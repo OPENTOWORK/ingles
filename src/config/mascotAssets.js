@@ -1,5 +1,5 @@
 /** Variantes PNG en /public/mascot/ (sin fondo). */
-export const MASCOT_VARIANTS = [1, 2, 3, 4, 5, 6, 7, 8, 10, 11];
+export const MASCOT_VARIANTS = [1, 2, 3, 4, 5, 6, 7, 8, 10, 11, 12, 13, 14, 15, 16, 17];
 
 /** 11 = logo Dralo con texto */
 export const MASCOT_LOGO_VARIANT = 11;

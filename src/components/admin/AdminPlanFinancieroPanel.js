@@ -200,7 +200,7 @@ export default function AdminPlanFinancieroPanel() {
       <PanelPageHeader
         title="Plan financiero"
         subtitle="Monetización, niveles premium y suscripciones (solo administración)"
-        mascotVariant={9}
+        mascotVariant={15}
         mascotWidth={96}
       >
         <Link href="/admin" className={styles.btn}>
