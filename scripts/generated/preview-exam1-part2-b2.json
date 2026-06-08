@@ -1,0 +1,89 @@
+{
+  "partNumber": 2,
+  "partTitle": "Use of English Part 2 — open cloze",
+  "partLabel": "Use of English Part 2 — open cloze",
+  "generated": {
+    "partTitle": "Part 2: Open Cloze",
+    "title": "Slow Travel on Two Wheels",
+    "directions": "For questions 9–16, read the text below and think of the word which best fits each gap. Use only ONE word in each gap.",
+    "example": {
+      "number": 0,
+      "answer": "by",
+      "explanation": "The fixed expression is travel by bicycle."
+    },
+    "passage": "Many people now prefer to explore a region (0) ___ bicycle rather than by car. Slow travel has become an appealing alternative (9) ___ people who want to see more of a country than a guidebook cover suggests. Rather than rushing from one famous sight to (10) ___, cyclists often follow quieter roads through villages that receive few visitors. The pace may be slower, (11) ___ it allows riders to notice details they would otherwise miss.\n\nOne challenge is planning a route that feels safe enough, especially (12) ___ riders are unfamiliar with local traffic rules. Even so, many find that the effort is worthwhile because they connect with places in a way that is rarely possible (13) ___ inside a car. Hosts in small guesthouses frequently say they appreciate visitors (14) ___ arrive on foot or by bike, as they tend to stay longer and spend locally.\n\nOf course, long-distance cycling is not for everyone, and there is no need to feel guilty (15) ___ you prefer comfort. Nevertheless, those who do try it often report that the experience teaches them patience, and (16) ___ they return home, they remember the journey as clearly as the destinations.",
+    "questions": [
+      {
+        "number": 9
+      },
+      {
+        "number": 10
+      },
+      {
+        "number": 11
+      },
+      {
+        "number": 12
+      },
+      {
+        "number": 13
+      },
+      {
+        "number": 14
+      },
+      {
+        "number": 15
+      },
+      {
+        "number": 16
+      }
+    ],
+    "modelAnswers": [
+      {
+        "id": 9,
+        "answer": "for"
+      },
+      {
+        "id": 10,
+        "answer": "another"
+      },
+      {
+        "id": 11,
+        "answer": "but"
+      },
+      {
+        "id": 12,
+        "answer": "when"
+      },
+      {
+        "id": 13,
+        "answer": "from"
+      },
+      {
+        "id": 14,
+        "answer": "who"
+      },
+      {
+        "id": 15,
+        "answer": "if"
+      },
+      {
+        "id": 16,
+        "answer": "once"
+      }
+    ],
+    "partNumber": 2,
+    "bulletPoints": [],
+    "speakingPrompts": [],
+    "discussionQuestions": [],
+    "collaborativePrompts": [],
+    "sections": [],
+    "sentencePool": []
+  },
+  "validation": {
+    "ok": true,
+    "errors": [],
+    "warnings": []
+  },
+  "enunciadoPreview": "Text\nSlow Travel on Two Wheels\nMany people now prefer to explore a region (0) ___ bicycle rather than by car. Slow travel has become an appealing alternative (9) ___ people who want to see more of a country than a guidebook cover suggests. Rather than rushing from one famous sight to (10) ___, cyclists often follow quieter roads through villages that receive few visitors. The pace may be slower, (11) ___ it allows riders to notice details they would otherwise miss.\nOne challenge is planning a route that feels safe enough, especially (12) ___ riders are unfamiliar with local traffic rules. Even so, many find that the effort is worthwhile because they connect with places in a way that is rarely possible (13) ___ inside a car. Hosts in small guesthouses frequently say they appreciate visitors (14) ___ arrive on foot or by bike, as they tend to stay longer and spend locally.\nOf course, long-distance cycling is not for everyone, and there is no need to feel guilty (15) ___ you prefer comfort. Nevertheless, those who do try it often report that the experience teaches them patience, and (16) ___ they return home, they remember the journey as clearly as the destinations."
+}

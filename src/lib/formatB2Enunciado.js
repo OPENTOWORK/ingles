@@ -13,6 +13,51 @@ function pushLines(lines, text) {
   }
 }
 
+function parseOptionLetterText(opt) {
+  if (typeof opt === 'string') {
+    const m = opt.match(/^([A-H])\)\s*(.*)$/i) || opt.match(/^([A-H])\s+(.*)$/i);
+    if (m) return { letter: m[1].toUpperCase(), text: m[2].trim() };
+  }
+  if (opt && typeof opt === 'object') {
+    const letter = String(opt.letter || opt.id || '')
+      .replace(/[^A-H]/gi, '')
+      .charAt(0)
+      .toUpperCase();
+    const text = String(opt.text || opt.label || opt.sentence || '').trim();
+    if (letter) return { letter, text };
+  }
+  return null;
+}
+
+/** Reading Part 5: one line per question — `31. stem A. opt B. opt C. opt D. opt` */
+function formatReadingMcqQuestionLine(q) {
+  const num = q.number ?? '';
+  const stem = String(q.prompt || q.stem || '').trim();
+  const opts = asGeneratedArray(q.options)
+    .map(parseOptionLetterText)
+    .filter(Boolean);
+  if (!opts.length) return `${num}. ${stem}`.trim();
+  const optPart = opts.map(({ letter, text }) => `${letter}. ${text}`).join(' ');
+  return `${num}. ${stem} ${optPart}`.trim();
+}
+
+/** Sentence pool A–G for gapped text / listening matching. */
+function formatLetterPoolLines(poolItems, letters = 'ABCDEFG') {
+  const lines = [];
+  const arr = asGeneratedArray(poolItems);
+  for (let i = 0; i < letters.length; i += 1) {
+    const letter = letters[i];
+    const raw = arr[i];
+    const parsed = parseOptionLetterText(raw);
+    if (parsed?.text) {
+      lines.push(`${parsed.letter || letter} ${parsed.text}`);
+    } else if (typeof raw === 'string' && raw.trim()) {
+      lines.push(raw.replace(/^([A-G])\)\s*/i, '$1 ').trim());
+    }
+  }
+  return lines;
+}
+
 /**
  * Formato levels_preguntas.enunciado alineado con exámenes B2 existentes en Supabase.
  */
@@ -34,33 +79,61 @@ export function buildB2EnunciadoFromGenerated(gen = {}, partNumber) {
   const pn = Number(partNumber);
 
   if (pn === 4) {
+    if (g.directions) pushLines(lines, g.directions);
     lines.push('Questions');
     for (const q of g.questions) {
       const num = q.number ?? '';
       const sentence1 = String(q.sentence1 || '').trim();
-      const keyword = String(q.keyword || q.keyWord || '').trim();
+      const keyword = String(q.keyword || q.keyWord || '').trim().toUpperCase();
       let sentence2 = String(q.sentence2Start || q.sentence2 || '').trim();
       if (sentence2 && !/_{2,}|\.{4,}/.test(sentence2)) {
         sentence2 = `${sentence2} __________________`;
       }
-      if (sentence1 && keyword) {
-        lines.push(`${num}${sentence1}.${keyword}`);
-        if (sentence2) lines.push(sentence2);
-      } else {
-        lines.push(String(num));
-        if (sentence1) lines.push(sentence1);
-        if (keyword) lines.push(keyword);
-        if (sentence2) lines.push(sentence2);
-      }
+      lines.push(String(num));
+      if (sentence1) lines.push(sentence1);
+      if (keyword) lines.push(keyword);
+      if (sentence2) lines.push(sentence2);
       lines.push('');
     }
     return lines.join('\n').trim();
   }
 
-  if (pn === 7) {
-    if (g.matchingIntro) pushLines(lines, g.matchingIntro);
+  if (pn === 5) {
+    if (g.directions) pushLines(lines, g.directions);
+    lines.push('Text');
+    if (g.title) lines.push(g.title);
+    if (g.passage) pushLines(lines, g.passage);
+    lines.push('');
+    lines.push('Questions');
     for (const q of g.questions) {
-      if (q.prompt) lines.push(q.prompt);
+      lines.push(formatReadingMcqQuestionLine(q));
+    }
+    return lines.join('\n').trim();
+  }
+
+  if (pn === 6) {
+    if (g.directions) pushLines(lines, g.directions);
+    lines.push('Text');
+    if (g.title) lines.push(g.title);
+    if (g.passage) pushLines(lines, g.passage);
+    lines.push('');
+    lines.push('Sentences');
+    const poolLines = formatLetterPoolLines(g.sentencePool);
+    if (poolLines.length) poolLines.forEach((l) => lines.push(l));
+    return lines.join('\n').trim();
+  }
+
+  if (pn === 7) {
+    if (g.directions) pushLines(lines, g.directions);
+    const intro =
+      g.matchingIntro ||
+      'Which person (A–D) … ? For questions 37–46, choose from the people below. The people may be chosen more than once.';
+    pushLines(lines, intro);
+    for (const q of g.questions) {
+      const num = q.number ?? '';
+      const prompt = String(q.prompt || q.stem || '').trim();
+      if (num && prompt) lines.push(`${num} ${prompt}`);
+      else if (prompt) lines.push(prompt);
     }
     lines.push('________________________________________');
     lines.push('Texts');
@@ -70,6 +143,18 @@ export function buildB2EnunciadoFromGenerated(gen = {}, partNumber) {
       lines.push(`${letter} – ${name}`.trim());
       pushLines(lines, sec.text || sec.body || '');
       lines.push('________________________________________');
+    }
+    return lines.join('\n').trim();
+  }
+
+  if (pn === 12 && g.optionPool?.length) {
+    if (g.directions) pushLines(lines, g.directions);
+    if (g.setting) pushLines(lines, g.setting);
+    const poolLines = formatLetterPoolLines(g.optionPool, 'ABCDEFGH');
+    poolLines.forEach((l) => lines.push(l));
+    lines.push('');
+    for (let i = 1; i <= 5; i += 1) {
+      lines.push(`Speaker ${i}`);
     }
     return lines.join('\n').trim();
   }
@@ -147,6 +232,9 @@ export function buildB2EnunciadoFromGenerated(gen = {}, partNumber) {
     if (g.directions) pushLines(lines, g.directions);
     if (g.taskTitle) lines.push(g.taskTitle);
     if (g.instructions) pushLines(lines, g.instructions);
+    lines.push('');
+    lines.push('Assessment criteria: Fluency · Grammar and Vocabulary · Pronunciation · Interactive Communication · Global Achievement');
+    lines.push('Typed speaking practice — write your response if you are not recording audio.');
     if (g.comparePrompt) lines.push(g.comparePrompt);
     if (g.theme) lines.push(`Theme: ${g.theme}`);
     for (const p of g.speakingPrompts) lines.push(p);
@@ -172,7 +260,7 @@ export function buildB2EnunciadoFromGenerated(gen = {}, partNumber) {
     if (g.passage) pushLines(lines, g.passage);
   }
 
-  if (g.questions.length && pn !== 4 && pn !== 8 && pn < 10) {
+  if (g.questions.length && pn !== 4 && pn !== 5 && pn !== 6 && pn !== 7 && pn !== 8 && pn < 10) {
     if (!useTextPanel || pn === 1) lines.push('Questions');
     for (const q of g.questions) {
       if (pn === 1 || pn === 5 || pn === 6) {

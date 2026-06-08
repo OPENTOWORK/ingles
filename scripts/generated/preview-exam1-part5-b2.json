@@ -1,0 +1,113 @@
+{
+  "partNumber": 5,
+  "partTitle": "Reading Part 1 — multiple choice",
+  "partLabel": "Reading Part 1 — multiple choice",
+  "generated": {
+    "partTitle": "Part 5: Multiple choice (reading)",
+    "title": "Beyond the Mainstream: The Appeal of Unusual Hobbies",
+    "directions": "You are going to read a magazine article about unusual hobbies. For questions 31–36, choose the answer (A, B, C or D) which you think fits best according to the text.",
+    "passage": "In an age when leisure time is often filled with predictable pursuits, a growing number of people are turning to hobbies that friends and colleagues find difficult to classify. What may look eccentric from the outside frequently turns out, for those who practise it, to be a carefully chosen counterbalance to routine work and digital distraction.\n\nOne example is competitive jigsaw puzzling, which has developed a serious following in several countries. Enthusiasts gather for timed events where teams race to complete complex images under strict rules. Outsiders sometimes assume the activity is purely relaxing, yet participants describe intense concentration and genuine pride when a difficult design finally fits together. For many, the appeal lies not in winning alone but in sharing a slow, tactile process that contrasts sharply with the instant feedback of screen-based entertainment.\n\nHistorical reenactment offers a different kind of escape. Men and women spend weekends recreating battles or domestic life from past centuries, investing considerable money in authentic costumes and equipment. Critics may question whether such devotion to the past is worthwhile, but reenactors argue that handling reproduction tools and learning forgotten skills gives them a vivid sense of how earlier generations lived. Several groups also visit schools, hoping to make history feel immediate rather than abstract.\n\nThen there are pursuits such as letterboxing and geocaching, in which participants follow clues to locate hidden containers in parks, towns or countryside. The hobby blends navigation, puzzle-solving and mild adventure, and it encourages exploration of places that walkers might otherwise ignore. Unlike some outdoor sports, it rarely demands exceptional fitness; instead, patience and curiosity matter more. Many participants say the greatest reward is discovering a quiet corner of their own region that they had never noticed before.\n\nWhat these activities share is not oddity for its own sake. People often choose them because mainstream options no longer feel stimulating, or because they want a hobby that reflects a particular identity. An office worker who restores vintage radios at night, for instance, may value the feeling of repairing something tangible in a job dominated by emails. Similarly, a teenager who collects and restores mechanical typewriters may enjoy the mechanical rhythm and the surprise of younger friends who have never seen one.\n\nUnusual hobbies can also create communities that cut across age and background. Clubs, festivals and online forums allow beginners to learn from experienced practitioners without facing the pressure of formal competition. The author of a recent survey noted that respondents rarely described their hobbies as attempts to impress others; instead, they emphasised personal challenge, creativity and the pleasure of belonging to a small group that understands a shared obsession.\n\nNone of this suggests that conventional pastimes are inferior. Yoga, team sports and cinema remain popular for good reason. Yet the spread of less familiar hobbies reminds us that leisure is deeply personal. What seems baffling at first glance may simply be someone's deliberate search for meaning, focus and connection in an otherwise hurried world.",
+    "questions": [
+      {
+        "number": 31,
+        "prompt": "What does the writer suggest about many competitive jigsaw enthusiasts?",
+        "options": [
+          "A) They value a slow, hands-on activity that differs from instant digital entertainment.",
+          "B) They take part mainly because timed events offer guaranteed prizes.",
+          "C) They prefer working alone rather than sharing the experience with others.",
+          "D) They treat the hobby as a simple way to relax after demanding work."
+        ]
+      },
+      {
+        "number": 32,
+        "prompt": "How does the writer present historical reenactment?",
+        "options": [
+          "A) As a hobby that professional historians now recommend without reservation.",
+          "B) As an activity that has become less appealing to younger participants.",
+          "C) As a pursuit that depends mainly on expensive equipment rather than skill.",
+          "D) As something critics doubt, although participants believe it has real value."
+        ]
+      },
+      {
+        "number": 33,
+        "prompt": "According to the text, what makes letterboxing and geocaching distinctive?",
+        "options": [
+          "A) They require a level of fitness comparable to serious mountaineering.",
+          "B) They reward patience and curiosity more than exceptional physical strength.",
+          "C) They have declined in popularity since navigation technology became widespread.",
+          "D) They are designed chiefly for people who already know an area extremely well."
+        ]
+      },
+      {
+        "number": 34,
+        "prompt": "The examples of vintage radio restoration and typewriter collecting imply that unusual hobbies can",
+        "options": [
+          "A) remove the need for any challenging aspects of paid employment.",
+          "B) help people recover quickly from long periods of professional stress.",
+          "C) provide a tangible contrast to work that feels largely intangible.",
+          "D) be understood immediately by colleagues without any explanation."
+        ]
+      },
+      {
+        "number": 35,
+        "prompt": "What did the recent survey suggest about people's reasons for choosing unusual hobbies?",
+        "options": [
+          "A) They wanted mainly to impress people outside their hobby group.",
+          "B) They valued personal challenge and belonging to a shared-interest community.",
+          "C) They hoped their hobbies would soon become conventional mainstream activities.",
+          "D) They were chiefly motivated by the prospect of turning the hobby into a career."
+        ]
+      },
+      {
+        "number": 36,
+        "prompt": "Which statement best reflects the writer's overall attitude?",
+        "options": [
+          "A) Mainstream leisure activities are less worthwhile than unusual hobbies.",
+          "B) People who choose unusual hobbies are largely rejecting modern society.",
+          "C) Seemingly strange hobbies may reflect a deliberate search for focus and connection.",
+          "D) Unusual hobbies are likely to disappear as conventional entertainment improves."
+        ]
+      }
+    ],
+    "modelAnswers": [
+      {
+        "id": 31,
+        "answer": "A"
+      },
+      {
+        "id": 32,
+        "answer": "D"
+      },
+      {
+        "id": 33,
+        "answer": "B"
+      },
+      {
+        "id": 34,
+        "answer": "C"
+      },
+      {
+        "id": 35,
+        "answer": "B"
+      },
+      {
+        "id": 36,
+        "answer": "C"
+      }
+    ],
+    "sections": [],
+    "sentencePool": [],
+    "optionPool": [],
+    "matchingAnswers": [],
+    "speakingPrompts": [],
+    "bulletPoints": [],
+    "partNumber": 5,
+    "discussionQuestions": [],
+    "collaborativePrompts": []
+  },
+  "validation": {
+    "ok": true,
+    "errors": [],
+    "warnings": []
+  }
+}

@@ -1,0 +1,511 @@
+{
+  "backedUpAt": "2026-06-08T18:54:08.047Z",
+  "examenId": "5bd3e0d7-29a7-4e07-ac15-a4d195528c65",
+  "levelId": "ae0e85e8-3d63-11f1-b2e3-0b27f7b23431",
+  "parts": [
+    {
+      "partNumber": 12,
+      "parteId": "fb440053-4999-4ce9-b5ff-1fb5c501af09",
+      "parteNombre": "Parte 12 B2",
+      "descripcionParte": "Part:12\r\n\r\nFor questions, choose from the list (A – H) what each speaker liked most about the city they visited. Use the letters only once. There are three extra letters which you do not need to use.",
+      "items": [
+        {
+          "preguntaId": "9535484c-d2da-4c82-9f2e-94442c658cef",
+          "enunciado": "A conversation between two friends discussing new technology in their city.\n\n19\nWhat is the main feature of the new city app mentioned in the conversation?\nA) It offers discounted travel tickets.\nB) It provides real-time public transport updates.\nC) It allows booking taxis directly.\nD) It tracks users’ daily steps.\n\n20\nHow does the app help with crowded buses during rush hour?\nA) It suggests alternative, less crowded routes.\nB) It sends notifications about overcrowding fines.\nC) It limits the number of passengers boarding buses.\nD) It offers live video feeds of bus interiors.\n\n21\nWhat is special about the new street lighting in the city?\nA) It changes colors based on weather conditions.\nB) It adjusts brightness when someone is nearby to save energy.\nC) It is controlled remotely by users through the app.\nD) It has built-in cameras for traffic monitoring.\n\n22\nHow does the city’s initiative help residents avoid pollution?\nA) By providing free masks in high pollution areas.\nB) By sending alerts about pollution levels through the app.\nC) By closing off streets with poor air quality.\nD) By encouraging residents to work from home.\n\n23\nWhat concern do some people have about the new technologies?\nA) That they will be too expensive to maintain.\nB) That the data collected may invade their privacy.\nC) That the technology will replace public transport workers.\nD) That it will increase electricity consumption.",
+          "creado_en": "2026-06-05T08:36:01.157558",
+          "respuestasMcq": [
+            {
+              "id": "ee2453e9-1263-458f-b65d-29a6c3c5e880",
+              "pregunta_id": "9535484c-d2da-4c82-9f2e-94442c658cef",
+              "respuesta": "19 A) It offers discounted travel tickets.",
+              "correcta": false,
+              "creado_en": null
+            },
+            {
+              "id": "4bd48cf1-0f9b-4f0e-badb-cfeb3735d6c9",
+              "pregunta_id": "9535484c-d2da-4c82-9f2e-94442c658cef",
+              "respuesta": "19 B) It provides real-time public transport updates.",
+              "correcta": true,
+              "creado_en": null
+            },
+            {
+              "id": "f1048bc4-eeef-4834-9e93-2c6849af863c",
+              "pregunta_id": "9535484c-d2da-4c82-9f2e-94442c658cef",
+              "respuesta": "19 C) It allows booking taxis directly.",
+              "correcta": false,
+              "creado_en": null
+            },
+            {
+              "id": "d609d2ae-355f-4cc4-b4f2-fa1961ec9d82",
+              "pregunta_id": "9535484c-d2da-4c82-9f2e-94442c658cef",
+              "respuesta": "19 D) It tracks users’ daily steps.",
+              "correcta": false,
+              "creado_en": null
+            },
+            {
+              "id": "2ee0c857-cecc-4f6c-a997-8d8a4ed80b58",
+              "pregunta_id": "9535484c-d2da-4c82-9f2e-94442c658cef",
+              "respuesta": "20 A) It suggests alternative, less crowded routes.",
+              "correcta": true,
+              "creado_en": null
+            },
+            {
+              "id": "959caa30-887c-4b2d-b737-ba1f981d5f1a",
+              "pregunta_id": "9535484c-d2da-4c82-9f2e-94442c658cef",
+              "respuesta": "20 B) It sends notifications about overcrowding fines.",
+              "correcta": false,
+              "creado_en": null
+            },
+            {
+              "id": "8e1b1c81-924e-40fc-a792-28d8c046fa5d",
+              "pregunta_id": "9535484c-d2da-4c82-9f2e-94442c658cef",
+              "respuesta": "20 C) It limits the number of passengers boarding buses.",
+              "correcta": false,
+              "creado_en": null
+            },
+            {
+              "id": "c7f0ffe9-c223-4f52-8cd1-f51547aa2da7",
+              "pregunta_id": "9535484c-d2da-4c82-9f2e-94442c658cef",
+              "respuesta": "20 D) It offers live video feeds of bus interiors.",
+              "correcta": false,
+              "creado_en": null
+            },
+            {
+              "id": "aaee0cb0-925c-4ff3-a4d1-032bb7c59e32",
+              "pregunta_id": "9535484c-d2da-4c82-9f2e-94442c658cef",
+              "respuesta": "21 A) It changes colors based on weather conditions.",
+              "correcta": false,
+              "creado_en": null
+            },
+            {
+              "id": "5279b020-dc7f-4225-b1b7-a6b43c264d7f",
+              "pregunta_id": "9535484c-d2da-4c82-9f2e-94442c658cef",
+              "respuesta": "21 B) It adjusts brightness when someone is nearby to save energy.",
+              "correcta": true,
+              "creado_en": null
+            },
+            {
+              "id": "9128529a-8eba-4749-bfda-c84046e54f52",
+              "pregunta_id": "9535484c-d2da-4c82-9f2e-94442c658cef",
+              "respuesta": "21 C) It is controlled remotely by users through the app.",
+              "correcta": false,
+              "creado_en": null
+            },
+            {
+              "id": "c2845cdd-fcc5-4121-a05b-5bdcf22ce849",
+              "pregunta_id": "9535484c-d2da-4c82-9f2e-94442c658cef",
+              "respuesta": "21 D) It has built-in cameras for traffic monitoring.",
+              "correcta": false,
+              "creado_en": null
+            },
+            {
+              "id": "fb17e403-3a1b-484b-8acb-082e62d61f09",
+              "pregunta_id": "9535484c-d2da-4c82-9f2e-94442c658cef",
+              "respuesta": "22 A) By providing free masks in high pollution areas.",
+              "correcta": false,
+              "creado_en": null
+            },
+            {
+              "id": "67d256c4-187d-4efb-83ad-529bd8ef8ce4",
+              "pregunta_id": "9535484c-d2da-4c82-9f2e-94442c658cef",
+              "respuesta": "22 B) By sending alerts about pollution levels through the app.",
+              "correcta": true,
+              "creado_en": null
+            },
+            {
+              "id": "e3cdd508-6549-4990-a89d-b3c37b33f1cc",
+              "pregunta_id": "9535484c-d2da-4c82-9f2e-94442c658cef",
+              "respuesta": "22 C) By closing off streets with poor air quality.",
+              "correcta": false,
+              "creado_en": null
+            },
+            {
+              "id": "d0f65dd1-1854-4af6-b63b-461fda2fa27e",
+              "pregunta_id": "9535484c-d2da-4c82-9f2e-94442c658cef",
+              "respuesta": "22 D) By encouraging residents to work from home.",
+              "correcta": false,
+              "creado_en": null
+            },
+            {
+              "id": "02113e3d-faac-48ab-a17f-c5b44612a8c1",
+              "pregunta_id": "9535484c-d2da-4c82-9f2e-94442c658cef",
+              "respuesta": "23 A) That they will be too expensive to maintain.",
+              "correcta": false,
+              "creado_en": null
+            },
+            {
+              "id": "9ed5dd1a-c2c6-4e54-9c6b-53b6d57420be",
+              "pregunta_id": "9535484c-d2da-4c82-9f2e-94442c658cef",
+              "respuesta": "23 B) That the data collected may invade their privacy.",
+              "correcta": true,
+              "creado_en": null
+            },
+            {
+              "id": "23814f05-66fb-4760-9b9d-396b5b087f43",
+              "pregunta_id": "9535484c-d2da-4c82-9f2e-94442c658cef",
+              "respuesta": "23 C) That the technology will replace public transport workers.",
+              "correcta": false,
+              "creado_en": null
+            },
+            {
+              "id": "4a802776-fadf-4971-8aef-2fa72163bdc7",
+              "pregunta_id": "9535484c-d2da-4c82-9f2e-94442c658cef",
+              "respuesta": "23 D) That it will increase electricity consumption.",
+              "correcta": false,
+              "creado_en": null
+            }
+          ],
+          "respuestasAbiertas": [],
+          "audios": [
+            {
+              "id": "a071249e-8ff5-4c13-b28d-98f775b26470",
+              "orden": 1,
+              "titulo": "A conversation between two friends discussing new technology in their city.",
+              "audio_url": "https://qnazrzvwvkwhkfbqsbmr.supabase.co/storage/v1/object/public/Levels_Listening/b2/exam-1/part-12/clip-01-v2.mp3",
+              "storagePath": "b2/exam-1/part-12/clip-01-v2.mp3"
+            }
+          ]
+        }
+      ],
+      "mcqRowCount": 20,
+      "openRowCount": 0,
+      "audioClipCount": 1
+    },
+    {
+      "partNumber": 13,
+      "parteId": "5fcfc8e6-318f-46e6-aa84-9ad5d6871eee",
+      "parteNombre": "Parte 13 B2",
+      "descripcionParte": "Part 13: \r\nFor questions, choose the best answer (A, B or C).",
+      "items": [
+        {
+          "preguntaId": "bdb3f9bc-1a00-42cb-ac65-c6e6beea8fc6",
+          "enunciado": "You will hear five people talking about their first experiences of paid work. For questions 24–28, choose from the list (A–H) the opinion each speaker expresses. Use the letters only once. There are three extra letters which you do not need to use.\nFive speakers describe what they learned from their first paid job.\nA feeling disappointed because the job offered fewer learning opportunities than expected\nB being given more responsibility than they had anticipated\nC learning to stay patient when dealing with rude or unreasonable people\nD discovering that getting on with colleagues mattered more than working quickly\nE finding that repetitive tasks became oddly satisfying after a while\nF wishing they had asked for advice before accepting the position\nG recognising that the experience changed their ideas about future study or careers\nH feeling physically exhausted by work they had not taken seriously before\n\nSpeaker 1\nSpeaker 2\nSpeaker 3\nSpeaker 4\nSpeaker 5",
+          "creado_en": "2026-06-08T17:48:23.8698",
+          "respuestasMcq": [
+            {
+              "id": "90af4ee7-c381-42e7-8b4f-457a68479d09",
+              "pregunta_id": "bdb3f9bc-1a00-42cb-ac65-c6e6beea8fc6",
+              "respuesta": "24 A",
+              "correcta": false,
+              "creado_en": null
+            },
+            {
+              "id": "7d23c1c8-374d-4d3b-948a-0ac903ca24aa",
+              "pregunta_id": "bdb3f9bc-1a00-42cb-ac65-c6e6beea8fc6",
+              "respuesta": "24 B",
+              "correcta": false,
+              "creado_en": null
+            },
+            {
+              "id": "a1bf0359-22b9-4f7d-b68c-813702c1c3b6",
+              "pregunta_id": "bdb3f9bc-1a00-42cb-ac65-c6e6beea8fc6",
+              "respuesta": "24 C",
+              "correcta": true,
+              "creado_en": null
+            },
+            {
+              "id": "ac33f464-f8d6-40f5-9985-2092650920e9",
+              "pregunta_id": "bdb3f9bc-1a00-42cb-ac65-c6e6beea8fc6",
+              "respuesta": "24 D",
+              "correcta": false,
+              "creado_en": null
+            },
+            {
+              "id": "8b3dd9e8-1dbe-4d1d-beaf-8fcd2bbb12ad",
+              "pregunta_id": "bdb3f9bc-1a00-42cb-ac65-c6e6beea8fc6",
+              "respuesta": "24 E",
+              "correcta": false,
+              "creado_en": null
+            },
+            {
+              "id": "c6eca386-2ae7-4a66-965f-48d2674cbc2a",
+              "pregunta_id": "bdb3f9bc-1a00-42cb-ac65-c6e6beea8fc6",
+              "respuesta": "24 F",
+              "correcta": false,
+              "creado_en": null
+            },
+            {
+              "id": "e444d918-1daf-4d32-803c-de3b4169331c",
+              "pregunta_id": "bdb3f9bc-1a00-42cb-ac65-c6e6beea8fc6",
+              "respuesta": "24 G",
+              "correcta": false,
+              "creado_en": null
+            },
+            {
+              "id": "8789438e-8553-4ca7-a411-73756b7d3c30",
+              "pregunta_id": "bdb3f9bc-1a00-42cb-ac65-c6e6beea8fc6",
+              "respuesta": "24 H",
+              "correcta": false,
+              "creado_en": null
+            },
+            {
+              "id": "29120dcc-aa45-4c86-ac27-3973020e26a5",
+              "pregunta_id": "bdb3f9bc-1a00-42cb-ac65-c6e6beea8fc6",
+              "respuesta": "25 A",
+              "correcta": false,
+              "creado_en": null
+            },
+            {
+              "id": "a048e7fb-5c37-46c7-be5d-08306ae0b196",
+              "pregunta_id": "bdb3f9bc-1a00-42cb-ac65-c6e6beea8fc6",
+              "respuesta": "25 B",
+              "correcta": false,
+              "creado_en": null
+            },
+            {
+              "id": "3d4157fa-f1a6-4a6d-afea-92e688993787",
+              "pregunta_id": "bdb3f9bc-1a00-42cb-ac65-c6e6beea8fc6",
+              "respuesta": "25 C",
+              "correcta": false,
+              "creado_en": null
+            },
+            {
+              "id": "ea90f316-3436-4519-8f2a-26ea53bfcba2",
+              "pregunta_id": "bdb3f9bc-1a00-42cb-ac65-c6e6beea8fc6",
+              "respuesta": "25 D",
+              "correcta": false,
+              "creado_en": null
+            },
+            {
+              "id": "1104f2f8-71cf-4416-b7fe-950c23c36ced",
+              "pregunta_id": "bdb3f9bc-1a00-42cb-ac65-c6e6beea8fc6",
+              "respuesta": "25 E",
+              "correcta": false,
+              "creado_en": null
+            },
+            {
+              "id": "77e710f4-06e2-4842-a535-f647a49e19bc",
+              "pregunta_id": "bdb3f9bc-1a00-42cb-ac65-c6e6beea8fc6",
+              "respuesta": "25 F",
+              "correcta": false,
+              "creado_en": null
+            },
+            {
+              "id": "df1915de-a503-455d-b408-b8ce02d3d583",
+              "pregunta_id": "bdb3f9bc-1a00-42cb-ac65-c6e6beea8fc6",
+              "respuesta": "25 G",
+              "correcta": false,
+              "creado_en": null
+            },
+            {
+              "id": "c0f0d489-68f2-46d6-a484-d2101ddec12f",
+              "pregunta_id": "bdb3f9bc-1a00-42cb-ac65-c6e6beea8fc6",
+              "respuesta": "25 H",
+              "correcta": true,
+              "creado_en": null
+            },
+            {
+              "id": "4a3c34d4-0290-4929-9c8e-8ed69f3e7ada",
+              "pregunta_id": "bdb3f9bc-1a00-42cb-ac65-c6e6beea8fc6",
+              "respuesta": "26 A",
+              "correcta": false,
+              "creado_en": null
+            },
+            {
+              "id": "9231f76d-882e-47b4-b6a0-ce8e749bc323",
+              "pregunta_id": "bdb3f9bc-1a00-42cb-ac65-c6e6beea8fc6",
+              "respuesta": "26 B",
+              "correcta": true,
+              "creado_en": null
+            },
+            {
+              "id": "559bed42-1b68-49dd-a5c0-4c134491c042",
+              "pregunta_id": "bdb3f9bc-1a00-42cb-ac65-c6e6beea8fc6",
+              "respuesta": "26 C",
+              "correcta": false,
+              "creado_en": null
+            },
+            {
+              "id": "fbc9bc21-b0bf-401a-9baf-da1d6070992d",
+              "pregunta_id": "bdb3f9bc-1a00-42cb-ac65-c6e6beea8fc6",
+              "respuesta": "26 D",
+              "correcta": false,
+              "creado_en": null
+            },
+            {
+              "id": "5bcf95d8-6e4e-406d-8f77-2e19d8c82ebf",
+              "pregunta_id": "bdb3f9bc-1a00-42cb-ac65-c6e6beea8fc6",
+              "respuesta": "26 E",
+              "correcta": false,
+              "creado_en": null
+            },
+            {
+              "id": "cb180eba-b55c-47cf-9118-b505587bca51",
+              "pregunta_id": "bdb3f9bc-1a00-42cb-ac65-c6e6beea8fc6",
+              "respuesta": "26 F",
+              "correcta": false,
+              "creado_en": null
+            },
+            {
+              "id": "54ae2753-782d-47e1-8b81-658e93b92fe9",
+              "pregunta_id": "bdb3f9bc-1a00-42cb-ac65-c6e6beea8fc6",
+              "respuesta": "26 G",
+              "correcta": false,
+              "creado_en": null
+            },
+            {
+              "id": "cc7fa30f-74ca-4032-8419-4ce5f869daa7",
+              "pregunta_id": "bdb3f9bc-1a00-42cb-ac65-c6e6beea8fc6",
+              "respuesta": "26 H",
+              "correcta": false,
+              "creado_en": null
+            },
+            {
+              "id": "bf00059a-32b1-4945-a411-063982879251",
+              "pregunta_id": "bdb3f9bc-1a00-42cb-ac65-c6e6beea8fc6",
+              "respuesta": "27 A",
+              "correcta": false,
+              "creado_en": null
+            },
+            {
+              "id": "891425f5-8cf0-445a-8bdb-ba8c08e95a7d",
+              "pregunta_id": "bdb3f9bc-1a00-42cb-ac65-c6e6beea8fc6",
+              "respuesta": "27 B",
+              "correcta": false,
+              "creado_en": null
+            },
+            {
+              "id": "933cca3c-9f46-427f-91dc-aca34c55a74a",
+              "pregunta_id": "bdb3f9bc-1a00-42cb-ac65-c6e6beea8fc6",
+              "respuesta": "27 C",
+              "correcta": false,
+              "creado_en": null
+            },
+            {
+              "id": "0bb6e8b7-8e77-4777-8ab0-146575121443",
+              "pregunta_id": "bdb3f9bc-1a00-42cb-ac65-c6e6beea8fc6",
+              "respuesta": "27 D",
+              "correcta": false,
+              "creado_en": null
+            },
+            {
+              "id": "702d6a76-34a9-4341-a314-f30386a11818",
+              "pregunta_id": "bdb3f9bc-1a00-42cb-ac65-c6e6beea8fc6",
+              "respuesta": "27 E",
+              "correcta": true,
+              "creado_en": null
+            },
+            {
+              "id": "4c152915-577a-44bf-a21e-8b1725468206",
+              "pregunta_id": "bdb3f9bc-1a00-42cb-ac65-c6e6beea8fc6",
+              "respuesta": "27 F",
+              "correcta": false,
+              "creado_en": null
+            },
+            {
+              "id": "e31aa001-b6bd-4dea-9d18-b6e8eb49a62e",
+              "pregunta_id": "bdb3f9bc-1a00-42cb-ac65-c6e6beea8fc6",
+              "respuesta": "27 G",
+              "correcta": false,
+              "creado_en": null
+            },
+            {
+              "id": "2c54da67-77c5-4b76-b62d-45ed8d5ea0c2",
+              "pregunta_id": "bdb3f9bc-1a00-42cb-ac65-c6e6beea8fc6",
+              "respuesta": "27 H",
+              "correcta": false,
+              "creado_en": null
+            },
+            {
+              "id": "ca32d8c2-ad68-4275-8bcc-fc198af822b3",
+              "pregunta_id": "bdb3f9bc-1a00-42cb-ac65-c6e6beea8fc6",
+              "respuesta": "28 A",
+              "correcta": false,
+              "creado_en": null
+            },
+            {
+              "id": "eecc3208-9bd8-4364-b30a-ac7a695aad80",
+              "pregunta_id": "bdb3f9bc-1a00-42cb-ac65-c6e6beea8fc6",
+              "respuesta": "28 B",
+              "correcta": false,
+              "creado_en": null
+            },
+            {
+              "id": "0ed1a691-b1de-45b1-8a20-ebddbe874516",
+              "pregunta_id": "bdb3f9bc-1a00-42cb-ac65-c6e6beea8fc6",
+              "respuesta": "28 C",
+              "correcta": false,
+              "creado_en": null
+            },
+            {
+              "id": "11ef0640-ded6-48dd-9a8a-1f44d31ad6d1",
+              "pregunta_id": "bdb3f9bc-1a00-42cb-ac65-c6e6beea8fc6",
+              "respuesta": "28 D",
+              "correcta": false,
+              "creado_en": null
+            },
+            {
+              "id": "2c6dff6c-ab74-4465-a714-07142a10e924",
+              "pregunta_id": "bdb3f9bc-1a00-42cb-ac65-c6e6beea8fc6",
+              "respuesta": "28 E",
+              "correcta": false,
+              "creado_en": null
+            },
+            {
+              "id": "7dcb11fb-dbf7-426a-a67d-e58c89ea1300",
+              "pregunta_id": "bdb3f9bc-1a00-42cb-ac65-c6e6beea8fc6",
+              "respuesta": "28 F",
+              "correcta": false,
+              "creado_en": null
+            },
+            {
+              "id": "2c088584-f048-4146-a9a4-6702add8fdea",
+              "pregunta_id": "bdb3f9bc-1a00-42cb-ac65-c6e6beea8fc6",
+              "respuesta": "28 G",
+              "correcta": true,
+              "creado_en": null
+            },
+            {
+              "id": "923fd03d-a2e7-4c1c-87fb-525c34dbb4ef",
+              "pregunta_id": "bdb3f9bc-1a00-42cb-ac65-c6e6beea8fc6",
+              "respuesta": "28 H",
+              "correcta": false,
+              "creado_en": null
+            }
+          ],
+          "respuestasAbiertas": [],
+          "audios": [
+            {
+              "id": "ec2a1c9e-ab2e-468c-82f8-7f6d97fb7636",
+              "orden": 1,
+              "titulo": "Speaker 1",
+              "audio_url": "https://qnazrzvwvkwhkfbqsbmr.supabase.co/storage/v1/object/public/Levels_Listening/b2/exam-1/part-13/speaker-01.mp3",
+              "storagePath": "b2/exam-1/part-13/speaker-01.mp3"
+            },
+            {
+              "id": "281d97a2-dfb0-4d9d-bc81-babfc98f2169",
+              "orden": 2,
+              "titulo": "Speaker 2",
+              "audio_url": "https://qnazrzvwvkwhkfbqsbmr.supabase.co/storage/v1/object/public/Levels_Listening/b2/exam-1/part-13/speaker-02.mp3",
+              "storagePath": "b2/exam-1/part-13/speaker-02.mp3"
+            },
+            {
+              "id": "2b16dc5a-e78e-4f24-876b-49c053925cff",
+              "orden": 3,
+              "titulo": "Speaker 3",
+              "audio_url": "https://qnazrzvwvkwhkfbqsbmr.supabase.co/storage/v1/object/public/Levels_Listening/b2/exam-1/part-13/speaker-03.mp3",
+              "storagePath": "b2/exam-1/part-13/speaker-03.mp3"
+            },
+            {
+              "id": "ede75655-d3a2-41b0-b6be-54178272547c",
+              "orden": 4,
+              "titulo": "Speaker 4",
+              "audio_url": "https://qnazrzvwvkwhkfbqsbmr.supabase.co/storage/v1/object/public/Levels_Listening/b2/exam-1/part-13/speaker-04.mp3",
+              "storagePath": "b2/exam-1/part-13/speaker-04.mp3"
+            },
+            {
+              "id": "e4fc682b-f380-4a55-b548-f37e5704c29e",
+              "orden": 5,
+              "titulo": "Speaker 5",
+              "audio_url": "https://qnazrzvwvkwhkfbqsbmr.supabase.co/storage/v1/object/public/Levels_Listening/b2/exam-1/part-13/speaker-05.mp3",
+              "storagePath": "b2/exam-1/part-13/speaker-05.mp3"
+            }
+          ]
+        }
+      ],
+      "mcqRowCount": 40,
+      "openRowCount": 0,
+      "audioClipCount": 5
+    }
+  ]
+}

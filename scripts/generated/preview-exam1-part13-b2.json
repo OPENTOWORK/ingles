@@ -1,0 +1,101 @@
+{
+  "partNumber": 13,
+  "partTitle": "Listening Part 13 — interview (Q24–30)",
+  "partLabel": "Listening Part 4 — Bringing the Hall Back to Life (community building restoration)",
+  "themeChoice": "Option 4 — restoring an old community building",
+  "note": "Textual preview only — no audio, no Supabase save. Questions/options revised for balanced answer key.",
+  "generated": {
+    "partTitle": "Part 4: Multiple choice (interview)",
+    "title": "Bringing the Hall Back to Life",
+    "directions": "You will hear an interview with a woman called Nina who helped to restore an old market hall in her town. For questions 24–30, choose the best answer (A, B or C).",
+    "setting": "Interview about volunteers restoring a disused Victorian market hall as a community centre.",
+    "script": "A: Today I'm speaking to Nina Ortiz, who has spent the last three years working on a project to reopen the town's old market hall. Nina, what condition was the building in when you first saw it?\nB: Honestly, most people walked past without looking up. The roof leaked, the floorboards were unsafe in places, and pigeons had got in through broken windows. The council had boarded up the main doors years earlier because they said repairs would cost too much.\nA: How did the restoration project actually begin?\nB: It didn't start with a big grant or a famous architect. A handful of residents formed a small trust after a public meeting about empty buildings in the high street. We asked the council for a temporary lease, not ownership, and they agreed because nothing else was happening with the site.\nA: Where did the money come from in the early stages?\nB: People assume we waited for government funding, but the first tools, paint and safety equipment were bought with donations from local businesses and a crowdfunding page. A national heritage body gave us a substantial sum later, once we could show detailed plans and support from architects.\nA: What was the biggest practical difficulty during the work?\nB: Finding skilled volunteers wasn't the problem — we had electricians and carpenters who lived nearby. The headache was the hidden damage behind the walls. Every time we opened a section to check it, we discovered timber that needed replacing, which delayed the timetable and meant reordering materials.\nA: The hall hosts events now. Who uses the space?\nB: We imagined it would mainly be evening classes for adults, but families with young children use it most during the weekend. There's a small café run by a social enterprise, and a charity rents an office at the back, but the busy hours are definitely Saturday and Sunday mornings.\nA: Has the project changed how people see the town centre?\nB: Shopkeepers told us footfall dropped when the hall closed. Now some say customers come specifically because there's a reason to stay longer — not just to collect a parcel and leave. I wouldn't claim we've saved every business, but the street feels less forgotten.\nA: What advice would Nina give to another town thinking of a similar project?\nB: Don't wait until you have a perfect plan on paper. Start with one achievable room, prove the building can be warm and dry, and let the community see progress. If you spend two years only producing reports, volunteers lose heart and the council moves on to other priorities.\nA: Nina, thank you for talking to us.\nB: My pleasure.",
+    "questions": [
+      {
+        "number": 24,
+        "prompt": "What does Nina say about the building when she first saw it?",
+        "options": [
+          "A) The interior had recently been repaired by the council",
+          "B) It had serious structural and weather-related problems",
+          "C) It was still being used for regular farmers' markets"
+        ]
+      },
+      {
+        "number": 25,
+        "prompt": "What arrangement did the project group obtain from the council?",
+        "options": [
+          "A) Immediate transfer of full ownership to the trust",
+          "B) A contract for a private company to redevelop the site",
+          "C) A temporary lease allowing work to begin on the building"
+        ]
+      },
+      {
+        "number": 26,
+        "prompt": "What does Nina say about how the earliest costs were covered?",
+        "options": [
+          "A) They were mainly paid for by local donations before larger grants arrived",
+          "B) The council paid for all equipment and materials from the start",
+          "C) A heritage organisation financed the entire project in one payment"
+        ]
+      },
+      {
+        "number": 27,
+        "prompt": "What caused the most delay during the restoration work?",
+        "options": [
+          "A) Difficulty recruiting electricians and carpenters from outside the town",
+          "B) Damage discovered inside walls that had not been visible earlier",
+          "C) Repeated changes to the colour scheme chosen for the main hall"
+        ]
+      },
+      {
+        "number": 28,
+        "prompt": "Who uses the hall most at present, according to Nina?",
+        "options": [
+          "A) Adults attending weekday evening courses",
+          "B) Office workers using the space at lunchtimes on weekdays",
+          "C) Families with young children at weekends"
+        ]
+      },
+      {
+        "number": 29,
+        "prompt": "What change has Nina noticed in the town centre since the hall reopened?",
+        "options": [
+          "A) Some people now stay in the area longer instead of leaving straight away",
+          "B) Every independent shop has reported a large rise in profits",
+          "C) Most visitors now come only to use the hall café and then go home"
+        ]
+      },
+      {
+        "number": 30,
+        "prompt": "What does Nina suggest towns in a similar situation should do first?",
+        "options": [
+          "A) Publish a complete set of architectural reports before any work starts",
+          "B) Open one practical section of the building so progress is visible",
+          "C) Postpone volunteer work until a national expert agrees to lead the team"
+        ]
+      }
+    ],
+    "modelAnswers": [
+      { "id": 24, "answer": "B" },
+      { "id": 25, "answer": "C" },
+      { "id": 26, "answer": "A" },
+      { "id": 27, "answer": "B" },
+      { "id": 28, "answer": "C" },
+      { "id": 29, "answer": "A" },
+      { "id": 30, "answer": "B" }
+    ],
+    "partNumber": 13,
+    "bulletPoints": [],
+    "speakingPrompts": [],
+    "discussionQuestions": [],
+    "collaborativePrompts": [],
+    "sections": [],
+    "sentencePool": [],
+    "optionPool": [],
+    "matchingAnswers": []
+  },
+  "answerKeySummary": "24B 25C 26A 27B 28C 29A 30B",
+  "answerKeyDistribution": { "A": 2, "B": 3, "C": 2 },
+  "estimatedScriptWords": 548,
+  "estimatedAudioDurationMinutes": "3:30–4:00 at natural interview pace (~140–155 wpm)"
+}

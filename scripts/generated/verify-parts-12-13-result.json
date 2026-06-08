@@ -1,0 +1,165 @@
+{
+  "parts": [
+    {
+      "partNumber": 12,
+      "preguntaId": "14b93176-4055-4568-8646-4d52ade7986a",
+      "mcqRowCount": 40,
+      "questionNumbers": [
+        19,
+        20,
+        21,
+        22,
+        23
+      ],
+      "answerKey": {
+        "19": "C",
+        "20": "H",
+        "21": "B",
+        "22": "E",
+        "23": "G"
+      },
+      "audioClipCount": 5,
+      "audios": [
+        {
+          "orden": 1,
+          "titulo": "Speaker 1",
+          "storagePath": "b2/exam-1/part-12/speaker-01.mp3",
+          "bytes": 549600,
+          "estSec": 34
+        },
+        {
+          "orden": 2,
+          "titulo": "Speaker 2",
+          "storagePath": "b2/exam-1/part-12/speaker-02.mp3",
+          "bytes": 528960,
+          "estSec": 33
+        },
+        {
+          "orden": 3,
+          "titulo": "Speaker 3",
+          "storagePath": "b2/exam-1/part-12/speaker-03.mp3",
+          "bytes": 567840,
+          "estSec": 35
+        },
+        {
+          "orden": 4,
+          "titulo": "Speaker 4",
+          "storagePath": "b2/exam-1/part-12/speaker-04.mp3",
+          "bytes": 578400,
+          "estSec": 36
+        },
+        {
+          "orden": 5,
+          "titulo": "Speaker 5",
+          "storagePath": "b2/exam-1/part-12/speaker-05.mp3",
+          "bytes": 552000,
+          "estSec": 35
+        }
+      ],
+      "poolLinesInEnunciado": 8,
+      "hasSpeakerLabels": true,
+      "letterOnlyMcqCount": 40,
+      "enunciadoPreview": "You will hear five people talking about their first experiences of paid work. For questions 19–23, choose from the list (A–H) the opinion each speaker expresses. Use the letters only once. There are t"
+    },
+    {
+      "partNumber": 13,
+      "preguntaId": "8f73881f-b467-4ea1-a68f-8b93dc9384f9",
+      "mcqRowCount": 21,
+      "questionNumbers": [
+        24,
+        25,
+        26,
+        27,
+        28,
+        29,
+        30
+      ],
+      "answerKey": {
+        "24": "B",
+        "25": "C",
+        "26": "A",
+        "27": "B",
+        "28": "C",
+        "29": "A",
+        "30": "B"
+      },
+      "audioClipCount": 1,
+      "audios": [
+        {
+          "orden": 1,
+          "titulo": "Interview — Bringing the Hall Back to Life",
+          "storagePath": "b2/exam-1/part-13/clip-01.mp3",
+          "bytes": 3162240,
+          "estSec": 198
+        }
+      ],
+      "poolLinesInEnunciado": 0,
+      "hasSpeakerLabels": false,
+      "letterOnlyMcqCount": 0,
+      "enunciadoPreview": "Interview about volunteers restoring a disused Victorian market hall as a community centre.\n\n24\nWhat does Nina say about the building when she first saw it?\nA) The interior had recently been repaired "
+    }
+  ],
+  "checks": [
+    {
+      "name": "Part 12 MCQ rows = 40",
+      "ok": true
+    },
+    {
+      "name": "Part 12 Q19–23",
+      "ok": true
+    },
+    {
+      "name": "Part 12 answer key",
+      "ok": true
+    },
+    {
+      "name": "Part 12 five audios",
+      "ok": true
+    },
+    {
+      "name": "Part 12 all audios > 20s est",
+      "ok": true
+    },
+    {
+      "name": "Part 12 pool A–H in enunciado (8 lines)",
+      "ok": true
+    },
+    {
+      "name": "Part 12 speaker labels",
+      "ok": true
+    },
+    {
+      "name": "Part 12 no letter-only MCQ text",
+      "ok": false
+    },
+    {
+      "name": "Part 13 MCQ rows = 21",
+      "ok": true
+    },
+    {
+      "name": "Part 13 Q24–30",
+      "ok": true
+    },
+    {
+      "name": "Part 13 answer key",
+      "ok": true
+    },
+    {
+      "name": "Part 13 one audio",
+      "ok": true
+    },
+    {
+      "name": "Part 13 audio >= 180s est",
+      "ok": true
+    },
+    {
+      "name": "Part 13 no letter-only MCQ",
+      "ok": true
+    },
+    {
+      "name": "Part 13 no speaker labels in enunciado",
+      "ok": true
+    }
+  ],
+  "allOk": false
+}

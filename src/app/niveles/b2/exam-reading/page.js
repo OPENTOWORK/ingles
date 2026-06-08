@@ -721,8 +721,10 @@ function B2ReadingExamsPageInner() {
           const text = pool[L];
           return {
             id: `reading-${pid}-q${questionNumber}-${L}`,
-            respuesta: `${questionNumber} ${L} ${text}`,
-            formattedText: `${L}) ${text}`,
+            respuesta: `${questionNumber} ${L}`,
+            formattedText: `${L})`,
+            compactLabel: `${L}`,
+            optionText: text,
             correcta: correctL != null ? L === correctL : false,
           };
         });
@@ -1031,8 +1033,16 @@ function B2ReadingExamsPageInner() {
 
   const getPartTitle = (part) => {
     const n = Number(part?.nombre.match(/\d+/)?.[0] || 0);
-    return n ? `Part ${n}` : part?.nombre || '';
+    if (n === 5) return 'Reading Part 5 — Multiple choice';
+    if (n === 6) return 'Reading Part 6 — Gapped text';
+    if (n === 7) return 'Reading Part 7 — Multiple matching';
+    return n ? `Reading Part ${n - 4}` : part?.nombre || '';
   };
+
+  const part6SentencePoolBlock = useMemo(() => {
+    if (partNumberReading !== 6) return '';
+    return extractReadingPart6SentencesBlock(selectedQuestion?.enunciado || '');
+  }, [partNumberReading, selectedQuestion?.enunciado]);
 
   return (
     <B2ExamPracticeLayout examPracticeOpen={layoutPracticeOpen}>
@@ -1187,7 +1197,35 @@ function B2ReadingExamsPageInner() {
                 questions={
                   isInlinePassagePart || isPart1McqCloze
                     ? null
-                    : groupedAnswersForUiAndScore.map((group, groupIndex) => (
+                    : (
+                      <>
+                        {partNumberReading === 6 && part6SentencePoolBlock ? (
+                          <div
+                            style={{
+                              marginBottom: '1.25rem',
+                              padding: '0.85rem 1rem',
+                              background: '#f8fafc',
+                              border: '1px solid #e2e8f0',
+                              borderRadius: '10px',
+                            }}
+                          >
+                            <p style={{ margin: '0 0 0.55rem', fontWeight: 700, color: '#1e293b' }}>
+                              Sentences A–G (choose one per gap)
+                            </p>
+                            <pre
+                              style={{
+                                margin: 0,
+                                whiteSpace: 'pre-wrap',
+                                fontFamily: 'inherit',
+                                lineHeight: 1.6,
+                                color: '#334155',
+                              }}
+                            >
+                              {part6SentencePoolBlock}
+                            </pre>
+                          </div>
+                        ) : null}
+                        {groupedAnswersForUiAndScore.map((group, groupIndex) => (
                       <B2ExamQuestionItem
                         key={`group-${selectedQuestion.preguntaId}-${group.questionNumber ?? 'extra'}-${groupIndex}`}
                       >
@@ -1311,7 +1349,9 @@ function B2ReadingExamsPageInner() {
                           );
                         })()}
                       </B2ExamQuestionItem>
-                    ))
+                        ))}
+                      </>
+                    )
                 }
               />
             )}

@@ -1,0 +1,30 @@
+{
+  "ok": true,
+  "content": {
+    "ok": true,
+    "examenId": "5bd3e0d7-29a7-4e07-ac15-a4d195528c65",
+    "partNumber": 13,
+    "preguntaId": "8f73881f-b467-4ea1-a68f-8b93dc9384f9",
+    "partTitle": "Listening Part 4 — conversation"
+  },
+  "upload": {
+    "ok": true,
+    "preguntaId": "8f73881f-b467-4ea1-a68f-8b93dc9384f9",
+    "partNumber": 13,
+    "clip": {
+      "id": "f2bb530d-8f45-4320-a72a-7371928a879a",
+      "orden": 1,
+      "titulo": "Interview — Bringing the Hall Back to Life",
+      "audio_url": "https://qnazrzvwvkwhkfbqsbmr.supabase.co/storage/v1/object/public/Levels_Listening/b2/exam-1/part-13/clip-01.mp3"
+    },
+    "storagePath": "b2/exam-1/part-13/clip-01.mp3",
+    "bytes": 3162240
+  },
+  "storagePath": "b2/exam-1/part-13/clip-01.mp3",
+  "ttsChars": 2551,
+  "ttsWords": 431,
+  "audioBytes": 3162240,
+  "estDurationSec": 178,
+  "mcqExpected": 21,
+  "answerKey": "24B 25C 26A 27B 28C 29A 30B"
+}

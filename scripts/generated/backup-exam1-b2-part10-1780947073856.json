@@ -1,0 +1,247 @@
+{
+  "backedUpAt": "2026-06-08T19:31:13.853Z",
+  "examenId": "5bd3e0d7-29a7-4e07-ac15-a4d195528c65",
+  "levelId": "ae0e85e8-3d63-11f1-b2e3-0b27f7b23431",
+  "partNumber": 10,
+  "parteId": "be502acc-2e8b-4088-9f86-a9eb6e1ed209",
+  "parteNombre": "Parte 10 B2",
+  "descripcionParte": "Part:10\r\nFor questions, choose the best answer (A, B or C).",
+  "items": [
+    {
+      "preguntaId": "f3a32fe1-d017-4fa7-afab-2d25798ff485",
+      "enunciado": "Various short conversations about life in the city and technology use\n\n1\nWhat benefit does the city app provide?\nA) It offers discounts on bus fares.\nB) It informs users about bus delays.\nC) It helps find taxis quickly.\n\n2\nWhat does the smart home system do?\nA) Automatically adjusts heating based on weather.\nB) Warns about upcoming storms.\nC) Turns off lights when the house is empty.\n\n3\nWhy is the installation of charging stations important?\nA) It will reduce traffic congestion.\nB) It encourages use of electric vehicles.\nC) It provides free electricity to cars.\n\n4\nHow does the speaker feel about the surveillance cameras?\nA) They seem helpful for safety.\nB) They are a useful entertainment feature.\nC) They invade people’s privacy too much.\n\n5\nWhat is the new feature of the community garden?\nA) It offers gardening classes online.\nB) It lets people book garden plots through an app.\nC) It has extended opening hours in spring.\n\n6\nWhat payment method do the speakers prefer?\nA) Cash only.\nB) Digital, especially contactless payments.\nC) Checks.\n\n7\nWhat is the aim of the new city initiative regarding teenagers?\nA) To increase their use of smartphones.\nB) To encourage spending more time outdoors.\nC) To reduce homework assignments.\n\n8\nHow have transport schedules improved?\nA) They allow flexible planning with real-time apps.\nB) They operate 24 hours a day now.\nC) They offer discounts for regular users.",
+      "creado_en": "2026-06-05T08:34:18.974294",
+      "respuestasMcq": [
+        {
+          "id": "022b4a45-4547-49e3-9ea6-687b75caced2",
+          "pregunta_id": "f3a32fe1-d017-4fa7-afab-2d25798ff485",
+          "respuesta": "1 A) It offers discounts on bus fares.",
+          "correcta": false,
+          "creado_en": null
+        },
+        {
+          "id": "70cf74c0-a1ee-4868-9f0a-333e6d974380",
+          "pregunta_id": "f3a32fe1-d017-4fa7-afab-2d25798ff485",
+          "respuesta": "1 B) It informs users about bus delays.",
+          "correcta": true,
+          "creado_en": null
+        },
+        {
+          "id": "c4e39599-a5bb-49d7-8308-cc1b2ed45d30",
+          "pregunta_id": "f3a32fe1-d017-4fa7-afab-2d25798ff485",
+          "respuesta": "1 C) It helps find taxis quickly.",
+          "correcta": false,
+          "creado_en": null
+        },
+        {
+          "id": "c7d0fa51-2abb-40ee-a424-f6e43d148418",
+          "pregunta_id": "f3a32fe1-d017-4fa7-afab-2d25798ff485",
+          "respuesta": "2 A) Automatically adjusts heating based on weather.",
+          "correcta": true,
+          "creado_en": null
+        },
+        {
+          "id": "910b1deb-9a27-475e-b1ea-db3662804bfc",
+          "pregunta_id": "f3a32fe1-d017-4fa7-afab-2d25798ff485",
+          "respuesta": "2 B) Warns about upcoming storms.",
+          "correcta": false,
+          "creado_en": null
+        },
+        {
+          "id": "eb27d05c-26fb-4382-b1fa-a2998eb34b00",
+          "pregunta_id": "f3a32fe1-d017-4fa7-afab-2d25798ff485",
+          "respuesta": "2 C) Turns off lights when the house is empty.",
+          "correcta": false,
+          "creado_en": null
+        },
+        {
+          "id": "ef821ffe-c5d8-4d65-9236-fdd79a43d747",
+          "pregunta_id": "f3a32fe1-d017-4fa7-afab-2d25798ff485",
+          "respuesta": "3 A) It will reduce traffic congestion.",
+          "correcta": false,
+          "creado_en": null
+        },
+        {
+          "id": "4f1d532b-d5b3-421f-a596-43665f2673ea",
+          "pregunta_id": "f3a32fe1-d017-4fa7-afab-2d25798ff485",
+          "respuesta": "3 B) It encourages use of electric vehicles.",
+          "correcta": true,
+          "creado_en": null
+        },
+        {
+          "id": "b85d8b02-4097-45b2-a80e-1c32711b0a84",
+          "pregunta_id": "f3a32fe1-d017-4fa7-afab-2d25798ff485",
+          "respuesta": "3 C) It provides free electricity to cars.",
+          "correcta": false,
+          "creado_en": null
+        },
+        {
+          "id": "bb95114f-baf0-436b-a3b3-55466170b5aa",
+          "pregunta_id": "f3a32fe1-d017-4fa7-afab-2d25798ff485",
+          "respuesta": "4 A) They seem helpful for safety.",
+          "correcta": true,
+          "creado_en": null
+        },
+        {
+          "id": "beccf3d1-dcbf-4e0c-9571-10a373ef62f8",
+          "pregunta_id": "f3a32fe1-d017-4fa7-afab-2d25798ff485",
+          "respuesta": "4 B) They are a useful entertainment feature.",
+          "correcta": false,
+          "creado_en": null
+        },
+        {
+          "id": "a21e3ba0-d471-43ee-9c9a-d4ee295ca067",
+          "pregunta_id": "f3a32fe1-d017-4fa7-afab-2d25798ff485",
+          "respuesta": "4 C) They invade people’s privacy too much.",
+          "correcta": false,
+          "creado_en": null
+        },
+        {
+          "id": "b647b423-d8d6-4873-9c69-db405c243079",
+          "pregunta_id": "f3a32fe1-d017-4fa7-afab-2d25798ff485",
+          "respuesta": "5 A) It offers gardening classes online.",
+          "correcta": false,
+          "creado_en": null
+        },
+        {
+          "id": "6bdf1618-6e2e-48e4-96ac-7cfed29c370f",
+          "pregunta_id": "f3a32fe1-d017-4fa7-afab-2d25798ff485",
+          "respuesta": "5 B) It lets people book garden plots through an app.",
+          "correcta": true,
+          "creado_en": null
+        },
+        {
+          "id": "9ae41510-7f2a-45df-a9a5-d477c95cf555",
+          "pregunta_id": "f3a32fe1-d017-4fa7-afab-2d25798ff485",
+          "respuesta": "5 C) It has extended opening hours in spring.",
+          "correcta": false,
+          "creado_en": null
+        },
+        {
+          "id": "38f7a0cd-2f59-445b-90df-9b7f4a389da5",
+          "pregunta_id": "f3a32fe1-d017-4fa7-afab-2d25798ff485",
+          "respuesta": "6 A) Cash only.",
+          "correcta": false,
+          "creado_en": null
+        },
+        {
+          "id": "b0f537f4-148d-4e55-9bab-9547639196a2",
+          "pregunta_id": "f3a32fe1-d017-4fa7-afab-2d25798ff485",
+          "respuesta": "6 B) Digital, especially contactless payments.",
+          "correcta": true,
+          "creado_en": null
+        },
+        {
+          "id": "0408c161-a28d-4027-898f-0985620b9d2b",
+          "pregunta_id": "f3a32fe1-d017-4fa7-afab-2d25798ff485",
+          "respuesta": "6 C) Checks.",
+          "correcta": false,
+          "creado_en": null
+        },
+        {
+          "id": "2ab60b7b-8d6b-4ecb-af0d-c7738787263a",
+          "pregunta_id": "f3a32fe1-d017-4fa7-afab-2d25798ff485",
+          "respuesta": "7 A) To increase their use of smartphones.",
+          "correcta": false,
+          "creado_en": null
+        },
+        {
+          "id": "6dd9b86e-3675-4f16-a0d6-270f55bb6b3e",
+          "pregunta_id": "f3a32fe1-d017-4fa7-afab-2d25798ff485",
+          "respuesta": "7 B) To encourage spending more time outdoors.",
+          "correcta": true,
+          "creado_en": null
+        },
+        {
+          "id": "844b38ae-31ec-4864-b230-2f07105741f9",
+          "pregunta_id": "f3a32fe1-d017-4fa7-afab-2d25798ff485",
+          "respuesta": "7 C) To reduce homework assignments.",
+          "correcta": false,
+          "creado_en": null
+        },
+        {
+          "id": "b91058c3-c421-40ed-9ae8-8bdeb9b2a61e",
+          "pregunta_id": "f3a32fe1-d017-4fa7-afab-2d25798ff485",
+          "respuesta": "8 A) They allow flexible planning with real-time apps.",
+          "correcta": true,
+          "creado_en": null
+        },
+        {
+          "id": "fa875afe-9acf-48f8-8f00-5af56b1b2a8e",
+          "pregunta_id": "f3a32fe1-d017-4fa7-afab-2d25798ff485",
+          "respuesta": "8 B) They operate 24 hours a day now.",
+          "correcta": false,
+          "creado_en": null
+        },
+        {
+          "id": "e682f4e1-1ecf-48a4-bd68-9eaed39c513b",
+          "pregunta_id": "f3a32fe1-d017-4fa7-afab-2d25798ff485",
+          "respuesta": "8 C) They offer discounts for regular users.",
+          "correcta": false,
+          "creado_en": null
+        }
+      ],
+      "respuestasAbiertas": [],
+      "audios": [
+        {
+          "id": "5cf7aeec-80fd-4afa-acee-34624af088d2",
+          "orden": 1,
+          "titulo": "What benefit does the city app provide?",
+          "audio_url": "https://qnazrzvwvkwhkfbqsbmr.supabase.co/storage/v1/object/public/Levels_Listening/b2/exam-1/part-10/clip-01-v2.mp3",
+          "storagePath": "b2/exam-1/part-10/clip-01-v2.mp3"
+        },
+        {
+          "id": "942e5bf0-574b-41eb-9bd4-7215383970b2",
+          "orden": 2,
+          "titulo": "What does the smart home system do?",
+          "audio_url": "https://qnazrzvwvkwhkfbqsbmr.supabase.co/storage/v1/object/public/Levels_Listening/b2/exam-1/part-10/clip-02-v2.mp3",
+          "storagePath": "b2/exam-1/part-10/clip-02-v2.mp3"
+        },
+        {
+          "id": "f1d47a08-7ded-4c94-9442-f5cd1a5fda01",
+          "orden": 3,
+          "titulo": "Why is the installation of charging stations important?",
+          "audio_url": "https://qnazrzvwvkwhkfbqsbmr.supabase.co/storage/v1/object/public/Levels_Listening/b2/exam-1/part-10/clip-03-v2.mp3",
+          "storagePath": "b2/exam-1/part-10/clip-03-v2.mp3"
+        },
+        {
+          "id": "72c2fc72-f500-4a89-b41c-ae87c08fd101",
+          "orden": 4,
+          "titulo": "How does the speaker feel about the surveillance cameras?",
+          "audio_url": "https://qnazrzvwvkwhkfbqsbmr.supabase.co/storage/v1/object/public/Levels_Listening/b2/exam-1/part-10/clip-04-v2.mp3",
+          "storagePath": "b2/exam-1/part-10/clip-04-v2.mp3"
+        },
+        {
+          "id": "41aecc1b-e6e6-427a-9610-ff0da7a8416f",
+          "orden": 5,
+          "titulo": "What is the new feature of the community garden?",
+          "audio_url": "https://qnazrzvwvkwhkfbqsbmr.supabase.co/storage/v1/object/public/Levels_Listening/b2/exam-1/part-10/clip-05-v2.mp3",
+          "storagePath": "b2/exam-1/part-10/clip-05-v2.mp3"
+        },
+        {
+          "id": "e5239c49-b53d-4fe6-8847-b9c3ffc8901a",
+          "orden": 6,
+          "titulo": "What payment method do the speakers prefer?",
+          "audio_url": "https://qnazrzvwvkwhkfbqsbmr.supabase.co/storage/v1/object/public/Levels_Listening/b2/exam-1/part-10/clip-06-v2.mp3",
+          "storagePath": "b2/exam-1/part-10/clip-06-v2.mp3"
+        },
+        {
+          "id": "6077afd7-5adb-47db-83d3-c5fa4c0906ee",
+          "orden": 7,
+          "titulo": "What is the aim of the new city initiative regarding teenagers?",
+          "audio_url": "https://qnazrzvwvkwhkfbqsbmr.supabase.co/storage/v1/object/public/Levels_Listening/b2/exam-1/part-10/clip-07-v2.mp3",
+          "storagePath": "b2/exam-1/part-10/clip-07-v2.mp3"
+        },
+        {
+          "id": "1310f80d-b32c-4474-bcef-6310ba6a575f",
+          "orden": 8,
+          "titulo": "How have transport schedules improved?",
+          "audio_url": "https://qnazrzvwvkwhkfbqsbmr.supabase.co/storage/v1/object/public/Levels_Listening/b2/exam-1/part-10/clip-08-v2.mp3",
+          "storagePath": "b2/exam-1/part-10/clip-08-v2.mp3"
+        }
+      ]
+    }
+  ],
+  "mcqRowCount": 24,
+  "audioClipCount": 8
+}

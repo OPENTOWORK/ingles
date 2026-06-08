@@ -1,0 +1,49 @@
+{
+  "partNumber": 6,
+  "partTitle": "Reading Part 2 — gapped text",
+  "partLabel": "Reading Part 2 — gapped text",
+  "generated": {
+    "partTitle": "Part 6",
+    "directions": "You are going to read an article about the rise of community projects in modern towns. Six sentences have been removed from the article. Choose from the sentences A–G the one which fits each gap. There is one extra sentence which you do not need to use.",
+    "title": "Beyond the Council: Community Projects in Modern Towns",
+    "passage": "For decades, local problems in towns were often left to municipal authorities alone. Residents might complain at public meetings, yet few expected to play an active role in finding solutions. That attitude has shifted noticeably in recent years. Across many countries, ordinary citizens have begun organising community projects that address issues ranging from neglected green spaces to social isolation among elderly neighbours. (31) ______\n\nThese initiatives rarely replace professional services entirely. Instead, they fill gaps that overstretched councils cannot always cover. A volunteer-run repair café, for example, does not put qualified electricians out of work, but it does keep usable appliances out of landfill and teaches practical skills that schools seldom have time to offer. (32) ______ Such events also create informal meeting places where people who might never cross paths otherwise can exchange advice, tools and local news.\n\nOne reason these projects have multiplied is that digital tools have lowered the cost of coordination. A single online message can summon twenty helpers for a weekend litter pick or a pop-up food bank, and photographs of the results can attract further support within hours. (33) ______ However, organisers quickly discover that enthusiasm alone does not sustain long-term work; without clear roles and regular communication, even promising groups fade away within months.\n\nSuccess often depends on partnerships. Schools, charities and small businesses frequently lend space, equipment or expertise when residents propose a plausible plan. In one coastal town, a closed shopfront became a weekly advice hub after the owner offered it rent-free for twelve months. (34) ______ This shared investment makes participants feel that the project belongs to the whole neighbourhood, not to one determined individual who may eventually move away.\n\nNot every attempt thrives. Some groups struggle with funding, while others disagree about priorities or burn out after an initial burst of energy. (35) ______ Yet where projects endure, they tend to reshape how residents view their town: streets once seen as anonymous become familiar, and complaints about what \"someone else\" should do gradually give way to discussions about what \"we\" could try next.\n\nThe broader impact should not be underestimated. Research in several European cities suggests that areas with active community networks report higher trust between neighbours and a greater willingness to help strangers in minor emergencies. (36) ______ For planners and elected officials, these findings offer a reminder that lasting urban improvement is not solely a matter of infrastructure budgets and zoning regulations.\n\nIn the end, the rise of community projects reflects a wider cultural change. People still expect councils to maintain roads and collect refuse, but many no longer wait passively for institutions to solve every local difficulty. They experiment, collaborate and occasionally fail — and in doing so, they redefine what a modern town can feel like from the inside.",
+    "sentencePool": [
+      "A) For many participants, this marks a shift from simply identifying problems to taking shared responsibility for them.",
+      "B) This hands-on approach turns abstract environmental concerns into everyday action.",
+      "C) As a result, ideas that once required months of planning can now be tested within days.",
+      "D) These contributions may seem modest, yet they allow volunteers to focus on people rather than paperwork.",
+      "E) Even so, many residents remain convinced that small-scale action is worth the effort.",
+      "F) Such outcomes suggest that informal networks deserve a place alongside formal policy.",
+      "G) Yet many young people continue to leave smaller towns in search of better career prospects."
+    ],
+    "questions": [
+      { "number": 31 },
+      { "number": 32 },
+      { "number": 33 },
+      { "number": 34 },
+      { "number": 35 },
+      { "number": 36 }
+    ],
+    "modelAnswers": [
+      { "id": 31, "answer": "A" },
+      { "id": 32, "answer": "B" },
+      { "id": 33, "answer": "C" },
+      { "id": 34, "answer": "D" },
+      { "id": 35, "answer": "E" },
+      { "id": 36, "answer": "F" }
+    ],
+    "sections": [],
+    "optionPool": [],
+    "matchingAnswers": [],
+    "speakingPrompts": [],
+    "bulletPoints": [],
+    "partNumber": 6,
+    "discussionQuestions": [],
+    "collaborativePrompts": []
+  },
+  "validation": {
+    "ok": true,
+    "errors": [],
+    "warnings": []
+  }
+}

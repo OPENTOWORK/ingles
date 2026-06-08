@@ -1,0 +1,89 @@
+{
+  "ok": false,
+  "aborted": true,
+  "reason": "Duration out of acceptable range (23–40s)",
+  "clips": [
+    {
+      "number": 1,
+      "durationSec": 11.3,
+      "bytes": 565440,
+      "storagePath": "b2/exam-1/part-10/clip-01.mp3"
+    },
+    {
+      "number": 2,
+      "durationSec": 13.8,
+      "bytes": 690720,
+      "storagePath": "b2/exam-1/part-10/clip-02.mp3"
+    },
+    {
+      "number": 3,
+      "durationSec": 11.2,
+      "bytes": 559680,
+      "storagePath": "b2/exam-1/part-10/clip-03.mp3"
+    },
+    {
+      "number": 4,
+      "durationSec": 9.9,
+      "bytes": 496800,
+      "storagePath": "b2/exam-1/part-10/clip-04.mp3"
+    },
+    {
+      "number": 5,
+      "durationSec": 10.2,
+      "bytes": 507840,
+      "storagePath": "b2/exam-1/part-10/clip-05.mp3"
+    },
+    {
+      "number": 6,
+      "durationSec": 10.6,
+      "bytes": 528960,
+      "storagePath": "b2/exam-1/part-10/clip-06.mp3"
+    },
+    {
+      "number": 7,
+      "durationSec": 12.4,
+      "bytes": 621600,
+      "storagePath": "b2/exam-1/part-10/clip-07.mp3"
+    },
+    {
+      "number": 8,
+      "durationSec": 10.6,
+      "bytes": 527520,
+      "storagePath": "b2/exam-1/part-10/clip-08.mp3"
+    }
+  ],
+  "failed": [
+    {
+      "number": 1,
+      "durationSec": 11.3
+    },
+    {
+      "number": 2,
+      "durationSec": 13.8
+    },
+    {
+      "number": 3,
+      "durationSec": 11.2
+    },
+    {
+      "number": 4,
+      "durationSec": 9.9
+    },
+    {
+      "number": 5,
+      "durationSec": 10.2
+    },
+    {
+      "number": 6,
+      "durationSec": 10.6
+    },
+    {
+      "number": 7,
+      "durationSec": 12.4
+    },
+    {
+      "number": 8,
+      "durationSec": 10.6
+    }
+  ]
+}

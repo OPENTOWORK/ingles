@@ -27,7 +27,9 @@ export const B2_EXAM_QUESTION_COUNTS = {
   listening: {
     'short-extracts': 8,
     'sentence-completion': 10,
-    conversation: 5,
+    /** B2 Listening Part 4 (Dralo part 13): seven MCQ items Q24–30 */
+    conversation: 7,
+    /** B2 Listening Part 3 (Dralo part 12): five speakers Q19–23 */
     'multiple-matching': 5,
   },
 };
@@ -64,10 +66,10 @@ Read the article in which people talk about their experiences. For each question
 You will hear people talking in eight different situations. For questions 1–8, choose the best answer (A, B or C).`,
     'sentence-completion': `Part 2: Sentence completion
 You will hear a monologue. For questions 9–18, complete the sentences with 1–3 words you hear.`,
-    conversation: `Part 3: Multiple choice (conversation)
-You will hear a conversation. For questions 19–23, choose the best answer (A, B, C or D).`,
-    'multiple-matching': `Part 4: Multiple matching (speakers)
-You will hear five different speakers. Match each speaker to the correct option (A–H).`,
+    conversation: `Part 4: Multiple choice (interview)
+You will hear an interview or conversation between two speakers. For questions 24–30, choose the best answer (A, B or C).`,
+    'multiple-matching': `Part 3: Multiple matching (speakers)
+You will hear five different speakers. For questions 19–23, choose from the list (A–H) what each speaker expresses. Use the letters only once. There are three extra letters which you do not need to use.`,
   },
   writing: {
     essay: `Part 1: Compulsory essay

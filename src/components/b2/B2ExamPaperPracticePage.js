@@ -970,22 +970,39 @@ function B2ExamPaperPracticePageInner({
 
   const isA2ListeningGapPart = levelSlug === 'a2' && partNumber === 9;
   const isListeningGapPart = partNumber === 11 || isA2ListeningGapPart;
+  const isB2ListeningMatchingPart = levelSlug === 'b2' && partNumber === 12;
+  const isB2ListeningInterviewPart = levelSlug === 'b2' && partNumber === 13;
 
   const listeningContextBlocks = useMemo(() => {
     if (isListeningGapPart) {
       return splitListeningOpenGapContextByQuestion(selectedQuestion?.enunciado || '');
     }
-    if (partNumber === 12) {
+    if (isB2ListeningMatchingPart) {
       const blob = textoLinesForDisplay.length
         ? textoLinesForDisplay.join('\n')
         : selectedQuestion?.enunciado || '';
       return splitListeningSpeakerContextByQuestion(blob);
     }
+    if (isB2ListeningInterviewPart) {
+      const blob = textoLinesForDisplay.length
+        ? textoLinesForDisplay
+        : String(selectedQuestion?.enunciado || '')
+            .split('\n')
+            .map((l) => l.trim())
+            .filter(Boolean);
+      return splitListeningMcqContextByQuestion(blob, { stripInlineOptions: true });
+    }
     return splitListeningMcqContextByQuestion(textoLinesForDisplay);
-  }, [isListeningGapPart, partNumber, textoLinesForDisplay, selectedQuestion?.enunciado]);
+  }, [
+    isListeningGapPart,
+    isB2ListeningMatchingPart,
+    isB2ListeningInterviewPart,
+    textoLinesForDisplay,
+    selectedQuestion?.enunciado,
+  ]);
 
   const listeningMatchingPool = useMemo(() => {
-    if (partNumber !== 12) return [];
+    if (!isB2ListeningMatchingPart) return [];
     const blob = textoLinesForDisplay.length
       ? textoLinesForDisplay
       : String(selectedQuestion?.enunciado || '')
@@ -993,7 +1010,7 @@ function B2ExamPaperPracticePageInner({
           .map((l) => l.trim())
           .filter(Boolean);
     return extractListeningMatchingOptionPool(blob);
-  }, [partNumber, textoLinesForDisplay, selectedQuestion?.enunciado]);
+  }, [isB2ListeningMatchingPart, textoLinesForDisplay, selectedQuestion?.enunciado]);
 
   const inferredOpenQuestionNumbers = useMemo(
     () => inferOpenQuestionNumbersFromPrompt(selectedQuestion?.enunciado || '', partNumber),
@@ -1091,13 +1108,13 @@ function B2ExamPaperPracticePageInner({
     return [...s].sort((a, b) => a - b);
   }, [groupedAnswers, listeningContextBlocks, isListeningGapPart, openQuestionNumbers]);
 
-  /** Parte 11 y 13: un único audio por pregunta de examen (monólogo / entrevista). */
+  /** Part 11 (gap-fill) and Part 13 (interview): one audio for the whole part. */
   const listeningMonologueClip = useMemo(() => {
     if (listeningReadyClips.length === 0) return null;
     if (isListeningGapPart) return listeningReadyClips[0];
-    if (partNumber === 13 && listeningReadyClips.length === 1) return listeningReadyClips[0];
+    if (isB2ListeningInterviewPart && listeningReadyClips.length === 1) return listeningReadyClips[0];
     return null;
-  }, [isListeningGapPart, partNumber, listeningReadyClips]);
+  }, [isListeningGapPart, isB2ListeningInterviewPart, listeningReadyClips]);
 
   const writingPartMin = levelSlug === 'a2' ? 6 : 8;
   const writingPartMax = levelSlug === 'a2' ? 7 : 9;
@@ -2753,7 +2770,11 @@ function B2ExamPaperPracticePageInner({
                                 ))}
                               </div>
                             ) : null}
-                            <p style={{ margin: '0 0 0.55rem', fontWeight: 700, color: '#1e293b' }}>Options</p>
+                            <p style={{ margin: '0 0 0.55rem', fontWeight: 700, color: '#1e293b' }}>
+                              {isB2ListeningMatchingPart && listeningMatchingPool.length > 0
+                                ? 'Your answer (choose A–H)'
+                                : 'Options'}
+                            </p>
                             <div style={{ display: 'grid', gap: '0.6rem' }}>
                               {group.options.map((option) => {
                                 const questionKey = getQuestionKey(

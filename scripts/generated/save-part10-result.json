@@ -1,0 +1,203 @@
+{
+  "ok": true,
+  "backupPath": "C:\\Users\\Ramon\\Desktop\\PROYECTOS CURSOR\\english-practice\\english-practice\\scripts\\generated\\backup-exam1-b2-part10-1780947230842.json",
+  "legacyPreguntaId": "f3a32fe1-d017-4fa7-afab-2d25798ff485",
+  "content": {
+    "ok": true,
+    "examenId": "5bd3e0d7-29a7-4e07-ac15-a4d195528c65",
+    "partNumber": 10,
+    "preguntaId": "c736e635-128b-4d9f-a186-27833ef677bd",
+    "partTitle": "Listening Part 1 — short extracts"
+  },
+  "directions": {
+    "ok": true,
+    "parteId": "be502acc-2e8b-4088-9f86-a9eb6e1ed209",
+    "nombre_parte": "Parte 10 B2",
+    "oldDescripcion": "Part:10\r\nFor questions, choose the best answer (A, B or C).",
+    "newDescripcion": "Part:10\r\n\r\nYou will hear people talking in eight different situations. For questions 1–8, choose the best answer (A, B or C)."
+  },
+  "preguntaId": "c736e635-128b-4d9f-a186-27833ef677bd",
+  "mcqExpected": 24,
+  "answerKey": {
+    "1": "C",
+    "2": "B",
+    "3": "A",
+    "4": "C",
+    "5": "B",
+    "6": "A",
+    "7": "B",
+    "8": "C"
+  },
+  "clips": [
+    {
+      "number": 1,
+      "storagePath": "b2/exam-1/part-10/clip-01.mp3",
+      "durationSec": 28.3,
+      "bytes": 566880,
+      "titulo": "Situation 1 — Art gallery"
+    },
+    {
+      "number": 2,
+      "storagePath": "b2/exam-1/part-10/clip-02.mp3",
+      "durationSec": 34.2,
+      "bytes": 684960,
+      "titulo": "Situation 2 — Airport gate"
+    },
+    {
+      "number": 3,
+      "storagePath": "b2/exam-1/part-10/clip-03.mp3",
+      "durationSec": 27.6,
+      "bytes": 552960,
+      "titulo": "Situation 3 — University registry"
+    },
+    {
+      "number": 4,
+      "storagePath": "b2/exam-1/part-10/clip-04.mp3",
+      "durationSec": 24.6,
+      "bytes": 491520,
+      "titulo": "Situation 4 — Theatre box office"
+    },
+    {
+      "number": 5,
+      "storagePath": "b2/exam-1/part-10/clip-05.mp3",
+      "durationSec": 25.3,
+      "bytes": 506880,
+      "titulo": "Situation 5 — Dry cleaner"
+    },
+    {
+      "number": 6,
+      "storagePath": "b2/exam-1/part-10/clip-06.mp3",
+      "durationSec": 26.1,
+      "bytes": 521760,
+      "titulo": "Situation 6 — Cookery demonstration"
+    },
+    {
+      "number": 7,
+      "storagePath": "b2/exam-1/part-10/clip-07.mp3",
+      "durationSec": 31.3,
+      "bytes": 625920,
+      "titulo": "Situation 7 — Botanical garden"
+    },
+    {
+      "number": 8,
+      "storagePath": "b2/exam-1/part-10/clip-08.mp3",
+      "durationSec": 26.1,
+      "bytes": 521760,
+      "titulo": "Situation 8 — Letting agency call"
+    }
+  ],
+  "uploads": [
+    {
+      "ok": true,
+      "preguntaId": "c736e635-128b-4d9f-a186-27833ef677bd",
+      "partNumber": 10,
+      "clip": {
+        "id": "9191c067-2c69-412f-bc93-f9cd9d74bfa2",
+        "orden": 1,
+        "titulo": "Situation 1 — Art gallery",
+        "audio_url": "https://qnazrzvwvkwhkfbqsbmr.supabase.co/storage/v1/object/public/Levels_Listening/b2/exam-1/part-10/clip-01.mp3"
+      },
+      "storagePath": "b2/exam-1/part-10/clip-01.mp3",
+      "bytes": 566880,
+      "durationSec": 28.3
+    },
+    {
+      "ok": true,
+      "preguntaId": "c736e635-128b-4d9f-a186-27833ef677bd",
+      "partNumber": 10,
+      "clip": {
+        "id": "d8b8f25c-63ab-47a0-8239-eb9c91fe6a7a",
+        "orden": 2,
+        "titulo": "Situation 2 — Airport gate",
+        "audio_url": "https://qnazrzvwvkwhkfbqsbmr.supabase.co/storage/v1/object/public/Levels_Listening/b2/exam-1/part-10/clip-02.mp3"
+      },
+      "storagePath": "b2/exam-1/part-10/clip-02.mp3",
+      "bytes": 684960,
+      "durationSec": 34.2
+    },
+    {
+      "ok": true,
+      "preguntaId": "c736e635-128b-4d9f-a186-27833ef677bd",
+      "partNumber": 10,
+      "clip": {
+        "id": "bbceea85-423a-4e28-b4d4-c8aeed601b33",
+        "orden": 3,
+        "titulo": "Situation 3 — University registry",
+        "audio_url": "https://qnazrzvwvkwhkfbqsbmr.supabase.co/storage/v1/object/public/Levels_Listening/b2/exam-1/part-10/clip-03.mp3"
+      },
+      "storagePath": "b2/exam-1/part-10/clip-03.mp3",
+      "bytes": 552960,
+      "durationSec": 27.6
+    },
+    {
+      "ok": true,
+      "preguntaId": "c736e635-128b-4d9f-a186-27833ef677bd",
+      "partNumber": 10,
+      "clip": {
+        "id": "91c25ec9-e221-49ca-b95b-6e7972e74cfa",
+        "orden": 4,
+        "titulo": "Situation 4 — Theatre box office",
+        "audio_url": "https://qnazrzvwvkwhkfbqsbmr.supabase.co/storage/v1/object/public/Levels_Listening/b2/exam-1/part-10/clip-04.mp3"
+      },
+      "storagePath": "b2/exam-1/part-10/clip-04.mp3",
+      "bytes": 491520,
+      "durationSec": 24.6
+    },
+    {
+      "ok": true,
+      "preguntaId": "c736e635-128b-4d9f-a186-27833ef677bd",
+      "partNumber": 10,
+      "clip": {
+        "id": "c5d95ba2-783d-4595-891d-f21c8cb777da",
+        "orden": 5,
+        "titulo": "Situation 5 — Dry cleaner",
+        "audio_url": "https://qnazrzvwvkwhkfbqsbmr.supabase.co/storage/v1/object/public/Levels_Listening/b2/exam-1/part-10/clip-05.mp3"
+      },
+      "storagePath": "b2/exam-1/part-10/clip-05.mp3",
+      "bytes": 506880,
+      "durationSec": 25.3
+    },
+    {
+      "ok": true,
+      "preguntaId": "c736e635-128b-4d9f-a186-27833ef677bd",
+      "partNumber": 10,
+      "clip": {
+        "id": "dab88ea6-91b0-4598-92dc-b6255d58affc",
+        "orden": 6,
+        "titulo": "Situation 6 — Cookery demonstration",
+        "audio_url": "https://qnazrzvwvkwhkfbqsbmr.supabase.co/storage/v1/object/public/Levels_Listening/b2/exam-1/part-10/clip-06.mp3"
+      },
+      "storagePath": "b2/exam-1/part-10/clip-06.mp3",
+      "bytes": 521760,
+      "durationSec": 26.1
+    },
+    {
+      "ok": true,
+      "preguntaId": "c736e635-128b-4d9f-a186-27833ef677bd",
+      "partNumber": 10,
+      "clip": {
+        "id": "59c80768-711d-46b3-82e5-6d090ee02f57",
+        "orden": 7,
+        "titulo": "Situation 7 — Botanical garden",
+        "audio_url": "https://qnazrzvwvkwhkfbqsbmr.supabase.co/storage/v1/object/public/Levels_Listening/b2/exam-1/part-10/clip-07.mp3"
+      },
+      "storagePath": "b2/exam-1/part-10/clip-07.mp3",
+      "bytes": 625920,
+      "durationSec": 31.3
+    },
+    {
+      "ok": true,
+      "preguntaId": "c736e635-128b-4d9f-a186-27833ef677bd",
+      "partNumber": 10,
+      "clip": {
+        "id": "51d35716-2a70-40bc-be06-88b66a633f71",
+        "orden": 8,
+        "titulo": "Situation 8 — Letting agency call",
+        "audio_url": "https://qnazrzvwvkwhkfbqsbmr.supabase.co/storage/v1/object/public/Levels_Listening/b2/exam-1/part-10/clip-08.mp3"
+      },
+      "storagePath": "b2/exam-1/part-10/clip-08.mp3",
+      "bytes": 521760,
+      "durationSec": 26.1
+    }
+  ]
+}

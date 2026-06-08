@@ -1,0 +1,91 @@
+{
+  "backedUpAt": "2026-06-08T20:04:42.766Z",
+  "examenId": "5bd3e0d7-29a7-4e07-ac15-a4d195528c65",
+  "levelId": "ae0e85e8-3d63-11f1-b2e3-0b27f7b23431",
+  "partNumber": 11,
+  "parteId": "c6edc6b8-c923-47de-9bf9-22bdf478a2ee",
+  "parteNombre": "Parte 11 B2",
+  "descripcionParte": "Part:11\r\n\r\nFor questions, complete the sentences with a word or short phrase.",
+  "items": [
+    {
+      "preguntaId": "8dc37fa2-9ea0-4688-8d5e-56bc2eb33b37",
+      "enunciado": "A monologue about technology’s impact on city living\nComplete: Apps have revolutionized public transport by providing ___ that reduce waiting times.\n(9) __________________\n\nComplete: Many city residents rely on smart home devices to improve convenience and ___ .\n(10) __________________\n\nComplete: Privacy concerns are linked to the increasing use of ___ in public areas.\n(11) __________________\n\nComplete: Some cities use AI-driven ___ systems to reduce traffic congestion.\n(12) __________________\n\nComplete: Community platforms help neighbours connect and create a sense of ___.\n(13) __________________\n\nComplete: It is important to balance screen time with ___ activities for mental health.\n(14) __________________\n\nComplete: Electric scooters and bikes are becoming ___ transport options in cities.\n(15) __________________\n\nComplete: Urban infrastructure is adapting to support more ___ modes of transport.\n(16) __________________\n\nComplete: Technology plays a ___ role in shaping everyday urban experiences.\n(17) __________________\n\nComplete: The use of technology in cities aims to create a more ___ urban life.\n(18) __________________",
+      "creado_en": "2026-06-05T08:35:21.367032",
+      "respuestasMcq": [],
+      "respuestasAbiertas": [
+        {
+          "id": "255b00d8-0bc1-470c-8e29-0a555761f9de",
+          "pregunta_id_abierta": "8dc37fa2-9ea0-4688-8d5e-56bc2eb33b37",
+          "created_at": "2026-06-05T08:35:21.457651+00:00",
+          "respuesta_texto": "9 real-time updates"
+        },
+        {
+          "id": "5bce3431-6e51-4522-ab29-2547188d9acb",
+          "pregunta_id_abierta": "8dc37fa2-9ea0-4688-8d5e-56bc2eb33b37",
+          "created_at": "2026-06-05T08:35:21.457651+00:00",
+          "respuesta_texto": "10 energy efficiency"
+        },
+        {
+          "id": "03fa143b-c852-4c34-8250-d88214dcc49b",
+          "pregunta_id_abierta": "8dc37fa2-9ea0-4688-8d5e-56bc2eb33b37",
+          "created_at": "2026-06-05T08:35:21.457651+00:00",
+          "respuesta_texto": "11 surveillance cameras"
+        },
+        {
+          "id": "c419d840-6fac-42d9-8497-a99d4c86fa0a",
+          "pregunta_id_abierta": "8dc37fa2-9ea0-4688-8d5e-56bc2eb33b37",
+          "created_at": "2026-06-05T08:35:21.457651+00:00",
+          "respuesta_texto": "12 traffic"
+        },
+        {
+          "id": "1c3a3312-dac1-4f9c-bc6d-edad7f49600e",
+          "pregunta_id_abierta": "8dc37fa2-9ea0-4688-8d5e-56bc2eb33b37",
+          "created_at": "2026-06-05T08:35:21.457651+00:00",
+          "respuesta_texto": "13 belonging"
+        },
+        {
+          "id": "a0e5391f-3163-455c-87bf-8c4a3cb8c3d6",
+          "pregunta_id_abierta": "8dc37fa2-9ea0-4688-8d5e-56bc2eb33b37",
+          "created_at": "2026-06-05T08:35:21.457651+00:00",
+          "respuesta_texto": "14 outdoor"
+        },
+        {
+          "id": "0a172ddb-9bd9-493d-a53d-398587ee1df5",
+          "pregunta_id_abierta": "8dc37fa2-9ea0-4688-8d5e-56bc2eb33b37",
+          "created_at": "2026-06-05T08:35:21.457651+00:00",
+          "respuesta_texto": "15 popular"
+        },
+        {
+          "id": "106baf7e-dfa5-4269-a1d0-9b95155705fc",
+          "pregunta_id_abierta": "8dc37fa2-9ea0-4688-8d5e-56bc2eb33b37",
+          "created_at": "2026-06-05T08:35:21.457651+00:00",
+          "respuesta_texto": "16 sustainable"
+        },
+        {
+          "id": "899a2f3a-d2f5-4014-a8b4-f76c29262db7",
+          "pregunta_id_abierta": "8dc37fa2-9ea0-4688-8d5e-56bc2eb33b37",
+          "created_at": "2026-06-05T08:35:21.457651+00:00",
+          "respuesta_texto": "17 crucial"
+        },
+        {
+          "id": "48adf492-20c1-4a66-ae3d-56dbb28193f3",
+          "pregunta_id_abierta": "8dc37fa2-9ea0-4688-8d5e-56bc2eb33b37",
+          "created_at": "2026-06-05T08:35:21.457651+00:00",
+          "respuesta_texto": "18 greener"
+        }
+      ],
+      "audios": [
+        {
+          "id": "c44529f0-0b95-4773-af21-d384e22faca2",
+          "orden": 1,
+          "titulo": "A monologue about technology’s impact on city living",
+          "audio_url": "https://qnazrzvwvkwhkfbqsbmr.supabase.co/storage/v1/object/public/Levels_Listening/b2/exam-1/part-11/clip-01-v2.mp3",
+          "storagePath": "b2/exam-1/part-11/clip-01-v2.mp3"
+        }
+      ]
+    }
+  ],
+  "mcqRowCount": 0,
+  "openAnswerCount": 10,
+  "audioClipCount": 1
+}

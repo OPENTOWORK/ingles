@@ -1,0 +1,83 @@
+{
+  "backedUpAt": "2026-06-08T20:07:27.570Z",
+  "examenId": "5bd3e0d7-29a7-4e07-ac15-a4d195528c65",
+  "levelId": "ae0e85e8-3d63-11f1-b2e3-0b27f7b23431",
+  "partNumber": 11,
+  "parteId": "c6edc6b8-c923-47de-9bf9-22bdf478a2ee",
+  "parteNombre": "Parte 11 B2",
+  "descripcionParte": "Part:11\r\n\r\nYou will hear a woman called Elena who volunteers with a mountain rescue team talking about the training new members receive. For questions 9–18, complete the sentences with a word or short phrase.",
+  "items": [
+    {
+      "preguntaId": "c98172d3-0214-44d2-9a5e-76d23385c21a",
+      "enunciado": "Radio interview / talk about mountain rescue volunteer training.\nBefore being accepted, applicants must pass an annual __________ test.\n(9) __________________\n\nIn the classroom, new volunteers learn __________, including map reading and compass work.\n(10) __________________\n\nEach team member carries a __________ to communicate with others when shouting is ineffective.\n(11) __________________\n\nThe initial training course includes an accredited __________ qualification.\n(12) __________________\n\nOutdoor kit must be fully __________ to cope with heavy rain on exposed hills.\n(13) __________________\n\nA __________ is requested when a casualty needs evacuation from a remote ridge.\n(14) __________________\n\nTeam leaders are unpaid and work on a __________ basis.\n(15) __________________\n\nRopes are used most often on __________ ground where a fall would be dangerous.\n(16) __________________\n\nCall-outs frequently happen in poor __________, such as fog or sleet.\n(17) __________________\n\nMany recruits say the training increased their __________ in the mountains.\n(18) __________________",
+      "creado_en": "2026-06-08T20:05:14.909272",
+      "respuestasMcq": [],
+      "respuestasAbiertas": [
+        {
+          "id": "27cc1ee0-bfc7-4476-a60e-9d6d71ef28da",
+          "pregunta_id_abierta": "c98172d3-0214-44d2-9a5e-76d23385c21a",
+          "created_at": "2026-06-08T20:05:15.063117+00:00",
+          "respuesta_texto": "9 fitness"
+        },
+        {
+          "id": "11255587-6e8a-4a51-92c8-2ef9c946c980",
+          "pregunta_id_abierta": "c98172d3-0214-44d2-9a5e-76d23385c21a",
+          "created_at": "2026-06-08T20:05:15.063117+00:00",
+          "respuesta_texto": "10 navigation"
+        },
+        {
+          "id": "5bceca3c-2e37-4ac5-8ae5-e67e907f22f0",
+          "pregunta_id_abierta": "c98172d3-0214-44d2-9a5e-76d23385c21a",
+          "created_at": "2026-06-08T20:05:15.063117+00:00",
+          "respuesta_texto": "11 whistle"
+        },
+        {
+          "id": "f09e21fb-3718-4a40-aa07-dbfed582b133",
+          "pregunta_id_abierta": "c98172d3-0214-44d2-9a5e-76d23385c21a",
+          "created_at": "2026-06-08T20:05:15.063117+00:00",
+          "respuesta_texto": "12 first aid"
+        },
+        {
+          "id": "db4e911d-b4e6-45fa-a6ad-4ac29bc885c9",
+          "pregunta_id_abierta": "c98172d3-0214-44d2-9a5e-76d23385c21a",
+          "created_at": "2026-06-08T20:05:15.063117+00:00",
+          "respuesta_texto": "13 waterproof"
+        },
+        {
+          "id": "71fa00e1-8ecb-44d9-bc46-de63e7261248",
+          "pregunta_id_abierta": "c98172d3-0214-44d2-9a5e-76d23385c21a",
+          "created_at": "2026-06-08T20:05:15.063117+00:00",
+          "respuesta_texto": "14 helicopter"
+        },
+        {
+          "id": "5f25dd98-624f-4177-b915-731d7fcf8195",
+          "pregunta_id_abierta": "c98172d3-0214-44d2-9a5e-76d23385c21a",
+          "created_at": "2026-06-08T20:05:15.063117+00:00",
+          "respuesta_texto": "15 voluntary"
+        },
+        {
+          "id": "01ae2d3d-c116-424f-b161-bc578e711512",
+          "pregunta_id_abierta": "c98172d3-0214-44d2-9a5e-76d23385c21a",
+          "created_at": "2026-06-08T20:05:15.063117+00:00",
+          "respuesta_texto": "16 steep"
+        },
+        {
+          "id": "9b6c1a32-b3da-4a31-9f53-c17d21e6e710",
+          "pregunta_id_abierta": "c98172d3-0214-44d2-9a5e-76d23385c21a",
+          "created_at": "2026-06-08T20:05:15.063117+00:00",
+          "respuesta_texto": "17 visibility"
+        },
+        {
+          "id": "f5bb0f0a-48fb-49fd-8580-84f92bfa5b65",
+          "pregunta_id_abierta": "c98172d3-0214-44d2-9a5e-76d23385c21a",
+          "created_at": "2026-06-08T20:05:15.063117+00:00",
+          "respuesta_texto": "18 confidence"
+        }
+      ],
+      "audios": []
+    }
+  ],
+  "mcqRowCount": 0,
+  "openAnswerCount": 10,
+  "audioClipCount": 0
+}

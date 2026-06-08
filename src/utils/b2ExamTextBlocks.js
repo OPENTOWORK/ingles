@@ -493,8 +493,27 @@ export function splitListeningSpeakerContextByQuestion(text = '') {
   return blocks.sort((a, b) => a.questionNumber - b.questionNumber);
 }
 
+/** @deprecated Use splitListeningSpeakerContextByQuestion (Part 12 → Q19–23). */
+export function splitListeningMatchingSpeakerContext(text = '') {
+  const raw = String(text || '')
+    .replace(/\r\n/g, '\n')
+    .split('\n')
+    .map((l) => l.trim())
+    .filter(Boolean);
+  /** @type {Array<{ questionNumber: number, contextLines: string[] }>} */
+  const blocks = [];
+  for (const line of raw) {
+    const m = line.match(/^Speaker\s+(\d+)\s*[_\s.]*$/i);
+    if (!m) continue;
+    const speakerNum = Number(m[1]);
+    if (!Number.isFinite(speakerNum) || speakerNum < 1) continue;
+    blocks.push({ questionNumber: 23 + speakerNum, contextLines: [line] });
+  }
+  return blocks.sort((a, b) => a.questionNumber - b.questionNumber);
+}
+
 /**
- * Pool A–H (multiple matching) antes de los speakers en Parte 12.
+ * Pool A–H (multiple matching) before the speaker labels in Listening Part 12 (B2).
  *
  * @param {string[]|string} linesOrText
  */

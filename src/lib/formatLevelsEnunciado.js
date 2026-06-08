@@ -12,6 +12,22 @@ function pushBlock(lines, items) {
   }
 }
 
+function parsePoolOptionLetterText(opt) {
+  if (typeof opt === 'string') {
+    const m = opt.match(/^([A-H])\)\s*(.*)$/i) || opt.match(/^([A-H])\s+(.*)$/i);
+    if (m) return { letter: m[1].toUpperCase(), text: m[2].trim() };
+  }
+  if (opt && typeof opt === 'object') {
+    const letter = String(opt.letter || opt.id || '')
+      .replace(/[^A-H]/gi, '')
+      .charAt(0)
+      .toUpperCase();
+    const text = String(opt.text || opt.label || '').trim();
+    if (letter) return { letter, text: text || letter };
+  }
+  return null;
+}
+
 export function buildEnunciadoFromGenerated(gen = {}) {
   const g = {
     ...gen,
@@ -211,13 +227,121 @@ export function buildAnswerRowsFromGenerated(gen = {}) {
     if (ma?.id) answerById[ma.id] = ma.answer;
   }
 
+  const pool = [...asGeneratedArray(gen.optionPool), ...asGeneratedArray(gen.notices)];
+  const sentencePool = asGeneratedArray(gen.sentencePool);
+  const sections = asGeneratedArray(gen.sections);
+  const matchingRows = asGeneratedArray(gen.matchingAnswers);
+
+  /** Gapped text (Reading Part 6): shared A–G pool, letter-only answers in DB. */
+  if (sentencePool.length >= 7 && questions.length >= 4) {
+    const poolTexts = {};
+    sentencePool.forEach((item, i) => {
+      const raw = typeof item === 'string' ? item : item?.text || item?.sentence || '';
+      const m = String(raw).match(/^([A-G])\)\s*(.*)$/i) || String(raw).match(/^([A-G])\s+(.*)$/i);
+      if (m) poolTexts[m[1].toUpperCase()] = m[2].trim();
+      else poolTexts['ABCDEFG'[i] || 'A'] = String(raw).trim();
+    });
+    for (const q of questions) {
+      const num = Number(q.number ?? 0);
+      if (!Number.isFinite(num)) continue;
+      const correctRaw =
+        answerById[q.id] ??
+        modelAnswers.find((m) => m.id === q.id || Number(String(m.id || '').replace(/\D/g, '')) === num)
+          ?.answer ??
+        '';
+      const correctLetter = String(correctRaw).match(/^[A-G]/i)?.[0]?.toUpperCase() || '';
+      for (const L of 'ABCDEFG') {
+        mcq.push({
+          questionNumber: num,
+          letter: L,
+          text: poolTexts[L] || L,
+          correcta: L === correctLetter,
+        });
+      }
+    }
+    return { mcq, open };
+  }
+
+  /** Reading Part 7: match statements to people A–D (letter-only in DB). */
+  if (sections.length >= 4 && questions.length >= 4) {
+    const people = {};
+    for (const sec of sections) {
+      const L = String(sec.letter || sec.id || '')
+        .replace(/[^A-D]/gi, '')
+        .charAt(0)
+        .toUpperCase();
+      if (L) people[L] = String(sec.name || sec.title || L).trim();
+    }
+    const hasPerQuestionOptions = questions.some((q) => asGeneratedArray(q.options).length > 0);
+    if (!hasPerQuestionOptions) {
+      for (const q of questions) {
+        const num = Number(q.number ?? 0);
+        if (!Number.isFinite(num)) continue;
+        const correctRaw =
+          answerById[q.id] ??
+          modelAnswers.find((m) => m.id === q.id || Number(String(m.id || '').replace(/\D/g, '')) === num)
+            ?.answer ??
+          '';
+        const correctLetter = String(correctRaw).match(/^[A-D]/i)?.[0]?.toUpperCase() || '';
+        for (const L of 'ABCD') {
+          mcq.push({
+            questionNumber: num,
+            letter: L,
+            text: people[L] || L,
+            correcta: L === correctLetter,
+          });
+        }
+      }
+      return { mcq, open };
+    }
+  }
+
+  /** Listening multiple matching: shared A–H pool. */
+  if (matchingRows.length && pool.length) {
+    for (const row of matchingRows) {
+      const num = Number(row.number ?? row.questionNumber);
+      const letter = String(row.answer || row.letter || '')
+        .replace(/[^A-H]/gi, '')
+        .charAt(0)
+        .toUpperCase();
+      if (!Number.isFinite(num) || !letter) continue;
+      for (const opt of pool) {
+        const parsed = parsePoolOptionLetterText(opt);
+        const L = parsed?.letter || '';
+        if (!L) continue;
+        const text = parsed?.text || L;
+        mcq.push({
+          questionNumber: num,
+          letter: L,
+          text,
+          correcta: L === letter,
+        });
+      }
+    }
+    return { mcq, open };
+  }
+
   questions.forEach((q, idx) => {
     const num = Number(q.number ?? idx + 1);
     if (!Number.isFinite(num)) return;
 
     if (q.type === 'short' || q.type === 'word-formation' || q.type === 'transformation' || q.type === 'open') {
-      const ans = answerById[q.id] ?? q.answer ?? '';
-      open.push({ questionNumber: num, text: String(ans).trim() });
+      const perQuestionAnswers = asGeneratedArray(q.modelAnswers);
+      const sharedAnswer = modelAnswers.find(
+        (m) =>
+          m.id === q.id ||
+          Number(String(m.id || '').replace(/\D/g, '')) === num ||
+          Number(m.number) === num,
+      )?.answer;
+      const perQuestionRaw = perQuestionAnswers.length
+        ? typeof perQuestionAnswers[0] === 'object' && perQuestionAnswers[0]?.answer != null
+          ? perQuestionAnswers[0].answer
+          : perQuestionAnswers[0]
+        : null;
+      const ans = String(
+        answerById[q.id] ?? q.answer ?? perQuestionRaw ?? sharedAnswer ?? '',
+      ).trim();
+      open.push({ questionNumber: num, text: ans });
       return;
     }
 
@@ -289,45 +413,6 @@ export function buildAnswerRowsFromGenerated(gen = {}) {
       }
     }
   });
-
-  const speakingPrompts = asGeneratedArray(gen.speakingPrompts);
-  if (speakingPrompts.length) {
-    speakingPrompts.forEach((_, i) => {
-      const num = i + 1;
-      const sample =
-        modelAnswers.find((m) => m.id === `q${num}`)?.answer ||
-        modelAnswers[i]?.answer ||
-        'Sample answer for examiner reference.';
-      open.push({ questionNumber: num, text: String(sample).trim() });
-    });
-  }
-
-  const pool = [...asGeneratedArray(gen.optionPool), ...asGeneratedArray(gen.notices)];
-  const matchingRows = asGeneratedArray(gen.matchingAnswers);
-  if (matchingRows.length && pool.length) {
-    for (const row of matchingRows) {
-      const num = Number(row.number ?? row.questionNumber);
-      const letter = String(row.answer || row.letter || '')
-        .replace(/[^A-H]/gi, '')
-        .charAt(0)
-        .toUpperCase();
-      if (!Number.isFinite(num) || !letter) continue;
-      for (const opt of pool) {
-        const L = String(opt.letter || opt.id || '')
-          .replace(/[^A-H]/gi, '')
-          .charAt(0)
-          .toUpperCase();
-        if (!L) continue;
-        const text = String(opt.text || opt.label || L).trim();
-        mcq.push({
-          questionNumber: num,
-          letter: L,
-          text: text || L,
-          correcta: L === letter,
-        });
-      }
-    }
-  }
 
   if (!open.length && modelAnswers.length) {
     for (const ma of modelAnswers) {

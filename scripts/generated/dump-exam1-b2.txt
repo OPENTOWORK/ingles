@@ -1,0 +1,908 @@
+# B2 EXAMEN 1 — dump para validación
+Examen: Examen 1 B2
+ (5bd3e0d7-29a7-4e07-ac15-a4d195528c65)
+Partes con contenido: 17/17
+
+================================================================================
+PARTE 1 — Reading and Use of English / multiple-choice-cloze
+================================================================================
+--- Descripción parte (levels_partes) ---
+Part 1: Multiple Choice Cloze
+For questions 1–8, read the text below and decide which answer (A, B, C or D) best fits each gap. There is an example at the beginning (0).
+
+Example:
+0 I decided to ..... a break after working for several hours.
+A make
+B do
+C take
+D get
+Answer: C
+
+--- ENUNCIADO ---
+Text
+Technology Changing Urban Life
+Modern cities are becoming increasingly (0) ___ integrated ___ with technology that shapes how people live, work, and interact. The rise of smart devices and connected services means many urban residents now expect instant access to information and convenience at their fingertips. For example, public transit systems are equipped with apps that allow users to track buses and trains in (1) ___ real-time ___, reducing wait times and making travel more efficient. Meanwhile, cities have embraced sensor technology to monitor air quality and traffic flows, which helps (2) ___ reduce ___ pollution and congestion. This progress, however, comes with challenges. Some citizens worry about (3) ___ privacy ___, as increased surveillance and data collection raise concerns about how personal information is handled. There’s also the risk that rapid changes (4) ___ widen ___ the gap between different social groups if access to technology is uneven. Despite this, many urban planners believe smarter cities will offer better quality of life by improving safety, sustainability, and connectivity. As technology evolves, it remains (5) ___ essential ___ that cities find the right balance between innovation and human needs. Ultimately, the goal is to create urban environments where technology serves as an aid rather than a barrier to daily life. The future city is one where progress is built on cooperation between technology and community values, making urban living more (6) ___ enjoyable ___ and manageable. Understanding these trends and their impact is key for policymakers who want to shape cities that truly work for everyone (7) ___ involved ___.
+Questions
+
+1
+A frequently
+B real-time
+C delayed
+D occasionally
+
+2
+A accept
+B reduce
+C increase
+D ignore
+
+3
+A security
+B privacy
+C publicity
+D honesty
+
+4
+A close
+B widen
+C balance
+D secure
+
+5
+A difficult
+B essential
+C accidental
+D optional
+
+6
+A stressful
+B enjoyable
+C confusing
+D tiring
+
+7
+A distant
+B involved
+C unaffected
+D retired
+
+--- RESPUESTAS MCQ (correcta=true) ---
+     1 A) frequently
+[OK] 1 B) real-time
+     1 C) delayed
+     1 D) occasionally
+     2 A) accept
+[OK] 2 B) reduce
+     2 C) increase
+     2 D) ignore
+     3 A) security
+[OK] 3 B) privacy
+     3 C) publicity
+     3 D) honesty
+     4 A) close
+[OK] 4 B) widen
+     4 C) balance
+     4 D) secure
+     5 A) difficult
+[OK] 5 B) essential
+     5 C) accidental
+     5 D) optional
+     6 A) stressful
+[OK] 6 B) enjoyable
+     6 C) confusing
+     6 D) tiring
+     7 A) distant
+[OK] 7 B) involved
+     7 C) unaffected
+     7 D) retired
+
+================================================================================
+PARTE 2 — Reading and Use of English / open-cloze
+================================================================================
+--- Descripción parte (levels_partes) ---
+Part 2: Open Cloze
+For questions 9–16, read the text below and think of the word which best fits each gap. Use only ONE word in each gap. There is an example at the beginning (0).
+
+Example:
+She lives in Madrid.
+0 → of
+
+
+--- ENUNCIADO ---
+Text
+City Living and Technology
+Living (0) ___ a city means adapting to many changes, especially those brought about by technology. In recent years, urban areas have become centres (9) ___ innovation where people rely heavily on digital tools. Many residents appreciate how apps make transport easier, allowing them to plan trips (10) ___ real time. However, not all effects of technology on city life are positive. For example, increased screen time can reduce (11) ___ face-to-face interaction among neighbours. Moreover, authorities use surveillance cameras (12) ___ maintain safety, but this raises questions about privacy. Despite these concerns, technology continues to shape urban culture, offering new ways to connect, work, and learn. As smart cities develop, planners need to focus not just (13) ___ infrastructure but also on the quality of life. The goal should be creating spaces where technology supports community rather than replacing it. In this way, cities remain lively places committed (14) ___ both progress and human connection. Ultimately, while technology changes how we live, it cannot replace the value of simple human experiences (15) ___ a vibrant city atmosphere. So, finding a balance between convenience and community is essential (16) ___ all who live in urban centres.
+
+--- RESPUESTAS ABIERTAS ---
+9 of
+10 in
+11 the
+12 to
+13 on
+14 to
+15 in
+16 for
+
+================================================================================
+PARTE 3 — Reading and Use of English / word-formation
+================================================================================
+--- Descripción parte (levels_partes) ---
+Part 3: Word Formation
+For questions 17–24, read the text below. Use the word given in capitals at the end of some of the lines to form a word that fits in the gap in the same line. There is an example at the beginning (0).
+
+Example:
+We should protect ..... to ensure a healthy planet for future generations.
+0 → natural (NATURE)
+
+
+
+--- ENUNCIADO ---
+Text
+Living in the Digital City
+Urban life is becoming increasingly (0) ___ (LOCATE) as smart technologies integrate more deeply into daily routines. Cities now rely on sensors and data collection to improve (17) ___ (EFFICIENT) in areas like traffic management and energy use. However, this rapid (18) ___ (TECHNOLOGY) also raises concerns about privacy and the extent of digital (19) ___ (CONTROL) over citizens’ lives. Many residents appreciate the (20) ___ (CONVENIENT) brought by apps that connect public transport, local services, and social networks seamlessly. Yet, the (21) ___ (DEPEND) on such technology can cause challenges during system failures or cyberattacks, highlighting the need for robust (22) ___ (SECURE) measures. Despite these risks, urban planners focus on (23) ___ (INNOVATE) ways to create sustainable, connected communities. The future of city living depends on balancing technological growth with human (24) ___ (INTERACT) to ensure social cohesion remains strong.
+
+--- RESPUESTAS ABIERTAS ---
+17 efficiency
+18 technological
+19 control
+20 convenience
+21 dependence
+22 security
+23 innovative
+24 interaction
+
+================================================================================
+PARTE 4 — Reading and Use of English / key-word
+================================================================================
+--- Descripción parte (levels_partes) ---
+Part 4: Key Word Transformations
+For questions 25–30, complete the second sentence so that it has a similar meaning to the first sentence, using the word given. Do not change the word given. You must use between two and five words, including the word given. There is an example at the beginning (0).
+
+Example:
+0
+I last saw him two years ago.
+seen
+I haven’t __________________ him for two years.
+Answer: seen
+
+
+
+--- ENUNCIADO ---
+Questions
+25
+Many people use mobile apps to avoid traffic jams in the city.
+HELP
+Mobile apps help many people 
+
+26
+It is impossible to imagine city life without the internet today.
+THINK
+Today, city life 
+
+27
+Smart streetlights reduce electricity consumption in urban areas.
+USED
+Less electricity 
+
+28
+People who live in cities spend more time using technology than in rural areas.
+SPEND
+People in cities 
+
+29
+Technology makes it easier for urban residents to connect with their community.
+HELPS
+Technology helps urban residents 
+
+30
+City planners must consider the effects of new technology on urban life.
+CONSIDERATION
+The effects of new technology
+
+--- RESPUESTAS ABIERTAS ---
+25 Mobile apps help many people avoid traffic jams.
+26 Today, city life is hard to think without the internet.
+27 Less electricity is used by smart streetlights in cities.
+28 People in cities spend more time using technology.
+29 Technology helps urban residents connect with their community.
+30 The effects of new technology need consideration by planners.
+
+================================================================================
+PARTE 5 — Reading and Use of English / multiple-choice
+================================================================================
+--- Descripción parte (levels_partes) ---
+Part 5 – Multiple Choice
+You are going to read a text about learning new skills. For questions 31–36, choose the answer (A, B, C or D) which you think fits best according to the text.
+
+
+--- ENUNCIADO ---
+Text
+Technology Transforming City Life
+In recent years, urban life has been reshaped profoundly by rapid technological advances. Smart devices and apps now help city dwellers navigate complex urban environments with ease. From real-time public transport updates to mobile payment systems and home automation, technology has increased convenience and efficiency. However, this digital transformation brings challenges such as privacy concerns and a growing divide between those with access to technology and those without. City planners are increasingly integrating technology with sustainability goals, using smart sensors to manage energy use and traffic flow more effectively. While technology contributes to making cities 'smarter' and more liveable, it requires thoughtful implementation to ensure equitable benefits for all residents.
+
+31
+According to the text, what is one major benefit technology provides to city residents?
+A) It eliminates all traffic jams in cities.
+B) It helps people move around and live more conveniently.
+C) It guarantees that everyone has access to the latest gadgets.
+D) It prevents privacy concerns in urban areas.
+
+32
+What is a potential problem mentioned about technology in cities?
+A) It reduces the efficiency of public transport.
+B) It creates privacy issues and social divides.
+C) It causes energy to be wasted unnecessarily.
+D) It makes planning cities less sustainable.
+
+33
+How are city planners using technology, according to the passage?
+A) To design more shopping areas.
+B) To manage energy and traffic more effectively.
+C) To increase the number of cars on the streets.
+D) To reduce the use of digital devices by residents.
+
+34
+What does the text suggest about the relationship between technology and sustainability?
+A) They are unrelated and affect different city sectors.
+B) Technology is being combined with sustainability efforts.
+C) Sustainability is becoming less important than technology.
+D) Technology makes sustainability goals harder to achieve.
+
+35
+What does the text imply about access to technology?
+A) Everyone in the city owns a smart device.
+B) Some people may not have access, causing inequality.
+C) Access to technology is no longer an issue in cities.
+D) Only public officials have access to advanced technology.
+
+36
+What is needed for technology to benefit all city residents, according to the passage?
+A) Complete removal of traditional transport methods.
+B) Careful and fair implementation of technological solutions.
+C) Making all citizens buy the same devices.
+D) Avoiding any use of technology in public services.
+
+--- RESPUESTAS MCQ (correcta=true) ---
+     31 A) It eliminates all traffic jams in cities.
+[OK] 31 B) It helps people move around and live more conveniently.
+     31 C) It guarantees that everyone has access to the latest gadgets.
+     31 D) It prevents privacy concerns in urban areas.
+     32 A) It reduces the efficiency of public transport.
+[OK] 32 B) It creates privacy issues and social divides.
+     32 C) It causes energy to be wasted unnecessarily.
+     32 D) It makes planning cities less sustainable.
+     33 A) To design more shopping areas.
+[OK] 33 B) To manage energy and traffic more effectively.
+     33 C) To increase the number of cars on the streets.
+     33 D) To reduce the use of digital devices by residents.
+     34 A) They are unrelated and affect different city sectors.
+[OK] 34 B) Technology is being combined with sustainability efforts.
+     34 C) Sustainability is becoming less important than technology.
+     34 D) Technology makes sustainability goals harder to achieve.
+     35 A) Everyone in the city owns a smart device.
+[OK] 35 B) Some people may not have access, causing inequality.
+     35 C) Access to technology is no longer an issue in cities.
+     35 D) Only public officials have access to advanced technology.
+     36 A) Complete removal of traditional transport methods.
+[OK] 36 B) Careful and fair implementation of technological solutions.
+     36 C) Making all citizens buy the same devices.
+     36 D) Avoiding any use of technology in public services.
+
+================================================================================
+PARTE 6 — Reading and Use of English / gapped-text
+================================================================================
+--- Descripción parte (levels_partes) ---
+Part 6: Gapped Text
+You are going to read an article about developing new hobbies. Six sentences have been removed from the article. Choose from the sentences A–G the one which fits each gap (31–36). There is one extra sentence which you do not need to use.
+
+
+--- ENUNCIADO ---
+Text
+The Changing Face of Urban Life: Technology's Role
+Cities are rapidly evolving spaces transformed by technology, altering how people live, work, and interact. (31) ______ Through innovations like smart sensors and connected devices, urban living has become more convenient and efficient than ever before. However, this shift has brought challenges including concerns about privacy and social isolation. (32) ______ One of the most significant advances is the development of intelligent transportation systems that ease traffic congestion, making commuting less stressful. Moreover, mobile apps now help citizens find parking spaces quickly or choose eco-friendly routes. Yet technology's influence goes beyond daily convenience. (33) ______ Many urban dwellers are now able to monitor their energy use in real-time, leading to more sustainable lifestyles. At the same time, city planners use big data to design public spaces that better meet residents' needs. Despite these positive changes, there are drawbacks. (34) ______ For example, the increasing reliance on digital communication can reduce face-to-face encounters, impacting community cohesion. Additionally, not all residents have equal access to technological benefits, raising issues of inequality. (35) ______ Nonetheless, urban life and technology remain deeply interconnected, shaping each other in a continuing cycle of innovation and adaptation. Looking ahead, further integration of technology promises to make cities more livable, but it requires mindful management to ensure that progress benefits all inhabitants. (36) ______
+
+A) Technology has revolutionized the way we connect with our environment and each other in urban settings.
+B) This represents a major leap toward creating smart cities that address both environmental and social challenges.
+C) Unfortunately, excessive screen time and digital distractions may weaken social bonds among community members.
+D) In practice, these developments depend heavily on cooperation between government, businesses and citizens.
+E) As a result, many urban residents enjoy improved quality of life with greater comfort and access to services.
+F) Furthermore, disparities in access must be addressed to prevent creating a divided digital society.
+G) For many, technology offers new opportunities to engage with their communities in meaningful ways.
+
+31
+Which sentence best fits gap 31?
+A) Technology has revolutionized the way we connect with our environment and each other in urban settings.
+B) This represents a major leap toward creating smart cities that address both environmental and social challenges.
+C) Unfortunately, excessive screen time and digital distractions may weaken social bonds among community members.
+D) In practice, these developments depend heavily on cooperation between government, businesses and citizens.
+
+32
+Which sentence best fits gap 32?
+A) Technology has revolutionized the way we connect with our environment and each other in urban settings.
+B) This represents a major leap toward creating smart cities that address both environmental and social challenges.
+C) Unfortunately, excessive screen time and digital distractions may weaken social bonds among community members.
+D) In practice, these developments depend heavily on cooperation between government, businesses and citizens.
+
+33
+Which sentence best fits gap 33?
+A) Technology has revolutionized the way we connect with our environment and each other in urban settings.
+B) This represents a major leap toward creating smart cities that address both environmental and social challenges.
+C) Unfortunately, excessive screen time and digital distractions may weaken social bonds among community members.
+D) For many, technology offers new opportunities to engage with their communities in meaningful ways.
+
+34
+Which sentence best fits gap 34?
+A) Technology has revolutionized the way we connect with our environment and each other in urban settings.
+B) This represents a major leap toward creating smart cities that address both environmental and social challenges.
+C) Unfortunately, excessive screen time and digital distractions may weaken social bonds among community members.
+D) In practice, these developments depend heavily on cooperation between government, businesses and citizens.
+
+35
+Which sentence best fits gap 35?
+A) Technology has revolutionized the way we connect with our environment and each other in urban settings.
+B) This represents a major leap toward creating smart cities that address both environmental and social challenges.
+C) Furthermore, disparities in access must be addressed to prevent creating a divided digital society.
+D) For many, technology offers new opportunities to engage with their communities in meaningful ways.
+
+36
+Which sentence best fits gap 36?
+A) Technology has revolutionized the way we connect with our environment and each other in urban settings.
+B) This represents a major leap toward creating smart cities that address both environmental and social challenges.
+C) Furthermore, disparities in access must be addressed to prevent creating a divided digital society.
+D) In practice, these developments depend heavily on cooperation between government, businesses and citizens.
+
+--- RESPUESTAS MCQ (correcta=true) ---
+[OK] 31 A) Technology has revolutionized the way we connect with our environment and each other in urban settings.
+     31 B) This represents a major leap toward creating smart cities that address both environmental and social challenges.
+     31 C) Unfortunately, excessive screen time and digital distractions may weaken social bonds among community members.
+     31 D) In practice, these developments depend heavily on cooperation between government, businesses and citizens.
+     32 A) Technology has revolutionized the way we connect with our environment and each other in urban settings.
+[OK] 32 B) This represents a major leap toward creating smart cities that address both environmental and social challenges.
+     32 C) Unfortunately, excessive screen time and digital distractions may weaken social bonds among community members.
+     32 D) In practice, these developments depend heavily on cooperation between government, businesses and citizens.
+     33 A) Technology has revolutionized the way we connect with our environment and each other in urban settings.
+     33 B) This represents a major leap toward creating smart cities that address both environmental and social challenges.
+     33 C) Unfortunately, excessive screen time and digital distractions may weaken social bonds among community members.
+[OK] 33 D) For many, technology offers new opportunities to engage with their communities in meaningful ways.
+     34 A) Technology has revolutionized the way we connect with our environment and each other in urban settings.
+     34 B) This represents a major leap toward creating smart cities that address both environmental and social challenges.
+[OK] 34 C) Unfortunately, excessive screen time and digital distractions may weaken social bonds among community members.
+     34 D) In practice, these developments depend heavily on cooperation between government, businesses and citizens.
+     35 A) Technology has revolutionized the way we connect with our environment and each other in urban settings.
+     35 B) This represents a major leap toward creating smart cities that address both environmental and social challenges.
+     35 C) Furthermore, disparities in access must be addressed to prevent creating a divided digital society.
+     35 D) For many, technology offers new opportunities to engage with their communities in meaningful ways.
+     36 A) Technology has revolutionized the way we connect with our environment and each other in urban settings.
+     36 B) This represents a major leap toward creating smart cities that address both environmental and social challenges.
+     36 C) Furthermore, disparities in access must be addressed to prevent creating a divided digital society.
+[OK] 36 D) In practice, these developments depend heavily on cooperation between government, businesses and citizens.
+
+================================================================================
+PARTE 7 — Reading and Use of English / multiple-matching
+================================================================================
+--- Descripción parte (levels_partes) ---
+Part 7: Multiple Matching
+You are going to read an article in which four people talk about their experiences of learning new skills. For questions 37–42, choose from the people (A–D). The people may be chosen more than once.
+
+
+--- ENUNCIADO ---
+Which person…
+mentions using apps to reduce stress during commuting
+talks about improvements in public safety
+raises concerns about privacy and data collection
+feels overwhelmed by constant connectivity
+mentions the convenience of apps for parking
+expresses worry about the expense of new technologies
+uses environmental sensors to check air quality before exercise
+believes technology fosters better communication within communities
+highlights the unreliability of some technological services
+prefers technology that encourages eco-friendly habits
+________________________________________
+Texts
+A – Sophie
+Since moving to the city three years ago, I have been fascinated by the digital solutions that make daily life easier. For example, using apps to monitor public transport times saves me lots of stress during rush hours. However, I sometimes feel overwhelmed by the constant connectivity. I miss quiet moments without notifications or screens. Despite this, I think technology in urban areas has had a positive effect on community engagement by offering new ways to communicate with neighbours and local authorities.
+________________________________________
+B – James
+I appreciate how the integration of technology in urban spaces has improved safety and security. Installing smart street lights and surveillance cameras helps reduce crime rates. What I enjoy most is the use of environmental sensors that inform the public about air quality in real time—I always check this before jogging. At the same time, I believe it's important to maintain a balance and not rely too much on machines; human presence remains essential in public spaces.
+________________________________________
+C – Maria
+Adapting to smart technology was challenging at first, but now I'm convinced it has changed city living for the better. For instance, I use a smartphone app to find and pay for parking spaces, which is a huge time-saver. On the downside, though, sometimes the technology doesn’t work perfectly, and this can be frustrating especially during busy periods. Also, I worry about data privacy because so much personal information is collected without us always knowing.
+________________________________________
+D – David
+While I see the potential that urban technology offers, I remain skeptical about its effects on social interaction. People seem more connected to their devices than to each other. In addition, the constant updates and new gadgets can be expensive to keep up with, which worries me. Nonetheless, I do use some smart services like bike-sharing apps, which are convenient and encourage a more environmentally friendly lifestyle.
+________________________________________
+
+--- RESPUESTAS MCQ (correcta=true) ---
+[OK] 37 A) Sophie
+     37 B) James
+     37 C) Maria
+     37 D) David
+     38 A) Sophie
+[OK] 38 B) James
+     38 C) Maria
+     38 D) David
+     39 A) Sophie
+     39 B) James
+[OK] 39 C) Maria
+     39 D) David
+[OK] 40 A) Sophie
+     40 B) James
+     40 C) Maria
+     40 D) David
+     41 A) Sophie
+     41 B) James
+[OK] 41 C) Maria
+     41 D) David
+     42 A) Sophie
+     42 B) James
+     42 C) Maria
+[OK] 42 D) David
+     43 A) Sophie
+[OK] 43 B) James
+     43 C) Maria
+     43 D) David
+[OK] 44 A) Sophie
+     44 B) James
+     44 C) Maria
+     44 D) David
+     45 A) Sophie
+     45 B) James
+[OK] 45 C) Maria
+     45 D) David
+     46 A) Sophie
+     46 B) James
+     46 C) Maria
+[OK] 46 D) David
+
+================================================================================
+PARTE 8 — Writing / essay
+================================================================================
+--- Descripción parte (levels_partes) ---
+Part 8: In this part, you will read two short texts. Then, you must write an essay summarising and evaluating the key points from both. Use your own words as much as possible and include your personal opinion.
+
+Your answer should be between 240–280 words. Try to stay clear and organized, and support your ideas with examples where appropriate.
+
+--- ENUNCIADO ---
+Writing Part 1 — Essay
+Question: How has technology changed urban life, and do the benefits outweigh the challenges?
+You should write about:
+1. Describe ways technology has improved daily life in cities
+2. Explain problems technology may cause in urban environments
+3. Give your opinion on whether technology’s benefits are greater than its drawbacks
+Instructions:
+Write an essay using all the notes and give reasons for your point of view.
+Word limit: 140–190 words
+
+================================================================================
+PARTE 9 — Writing / part-2
+================================================================================
+--- Descripción parte (levels_partes) ---
+Part 9:
+Write an answer to one of the questions 2 – 4 in this part. Write your answer in 140 – 190 words in an appropriate style on the separate answer sheet. Put the question number in the box at the top of the answer sheet.
+
+
+--- ENUNCIADO ---
+Writing Part 2 — Choose one task
+Write your text in 140-190 words on the topic of urban life and technology. Choose ONE task from the four options below and make sure to include all the points mentioned in the task.
+Word limit: 140–190 words
+
+1
+Write an article for a city magazine about how technology is changing daily life in urban areas. Include: at least two examples of new technologies used in cities, the benefits these changes bring to residents, and any possible drawbacks.
+Write your article.
+
+2
+Write a letter to the editor of a local newspaper expressing your opinion about the impact of technology on community interaction in your city. Include your views on whether technology helps or hinders social connections, and suggest one action that the city council could take to improve community life.
+Write your email.
+
+3
+Write a report for your local community centre about the use of smart technology in public transport. Include information about how the technology works, the advantages it offers for commuters, and recommendations for further improvements.
+Write your report.
+
+4
+Write a review for an online blog about a recently opened ‘smart café’ in your city that uses high-tech devices and apps. Include details about the technology used, your experience as a customer, and whether you would recommend it to other readers.
+Write your review.
+
+================================================================================
+PARTE 10 — Listening / short-extracts
+================================================================================
+--- Descripción parte (levels_partes) ---
+Part:10
+For questions, choose the best answer (A, B or C).
+
+--- ENUNCIADO ---
+Various short conversations about life in the city and technology use
+
+1
+What benefit does the city app provide?
+A) It offers discounts on bus fares.
+B) It informs users about bus delays.
+C) It helps find taxis quickly.
+
+2
+What does the smart home system do?
+A) Automatically adjusts heating based on weather.
+B) Warns about upcoming storms.
+C) Turns off lights when the house is empty.
+
+3
+Why is the installation of charging stations important?
+A) It will reduce traffic congestion.
+B) It encourages use of electric vehicles.
+C) It provides free electricity to cars.
+
+4
+How does the speaker feel about the surveillance cameras?
+A) They seem helpful for safety.
+B) They are a useful entertainment feature.
+C) They invade people’s privacy too much.
+
+5
+What is the new feature of the community garden?
+A) It offers gardening classes online.
+B) It lets people book garden plots through an app.
+C) It has extended opening hours in spring.
+
+6
+What payment method do the speakers prefer?
+A) Cash only.
+B) Digital, especially contactless payments.
+C) Checks.
+
+7
+What is the aim of the new city initiative regarding teenagers?
+A) To increase their use of smartphones.
+B) To encourage spending more time outdoors.
+C) To reduce homework assignments.
+
+8
+How have transport schedules improved?
+A) They allow flexible planning with real-time apps.
+B) They operate 24 hours a day now.
+C) They offer discounts for regular users.
+
+--- RESPUESTAS MCQ (correcta=true) ---
+     1 A) It offers discounts on bus fares.
+[OK] 1 B) It informs users about bus delays.
+     1 C) It helps find taxis quickly.
+[OK] 2 A) Automatically adjusts heating based on weather.
+     2 B) Warns about upcoming storms.
+     2 C) Turns off lights when the house is empty.
+     3 A) It will reduce traffic congestion.
+[OK] 3 B) It encourages use of electric vehicles.
+     3 C) It provides free electricity to cars.
+[OK] 4 A) They seem helpful for safety.
+     4 B) They are a useful entertainment feature.
+     4 C) They invade people’s privacy too much.
+     5 A) It offers gardening classes online.
+[OK] 5 B) It lets people book garden plots through an app.
+     5 C) It has extended opening hours in spring.
+     6 A) Cash only.
+[OK] 6 B) Digital, especially contactless payments.
+     6 C) Checks.
+     7 A) To increase their use of smartphones.
+[OK] 7 B) To encourage spending more time outdoors.
+     7 C) To reduce homework assignments.
+[OK] 8 A) They allow flexible planning with real-time apps.
+     8 B) They operate 24 hours a day now.
+     8 C) They offer discounts for regular users.
+
+--- AUDIOS ---
+orden 1: What benefit does the city app provide? → https://qnazrzvwvkwhkfbqsbmr.supabase.co/storage/v1/object/public/Levels_Listening/b2/exam-1/part-10/clip-01-v2.mp3
+orden 2: What does the smart home system do? → https://qnazrzvwvkwhkfbqsbmr.supabase.co/storage/v1/object/public/Levels_Listening/b2/exam-1/part-10/clip-02-v2.mp3
+orden 3: Why is the installation of charging stations important? → https://qnazrzvwvkwhkfbqsbmr.supabase.co/storage/v1/object/public/Levels_Listening/b2/exam-1/part-10/clip-03-v2.mp3
+orden 4: How does the speaker feel about the surveillance cameras? → https://qnazrzvwvkwhkfbqsbmr.supabase.co/storage/v1/object/public/Levels_Listening/b2/exam-1/part-10/clip-04-v2.mp3
+orden 5: What is the new feature of the community garden? → https://qnazrzvwvkwhkfbqsbmr.supabase.co/storage/v1/object/public/Levels_Listening/b2/exam-1/part-10/clip-05-v2.mp3
+orden 6: What payment method do the speakers prefer? → https://qnazrzvwvkwhkfbqsbmr.supabase.co/storage/v1/object/public/Levels_Listening/b2/exam-1/part-10/clip-06-v2.mp3
+orden 7: What is the aim of the new city initiative regarding teenagers? → https://qnazrzvwvkwhkfbqsbmr.supabase.co/storage/v1/object/public/Levels_Listening/b2/exam-1/part-10/clip-07-v2.mp3
+orden 8: How have transport schedules improved? → https://qnazrzvwvkwhkfbqsbmr.supabase.co/storage/v1/object/public/Levels_Listening/b2/exam-1/part-10/clip-08-v2.mp3
+
+================================================================================
+PARTE 11 — Listening / sentence-completion
+================================================================================
+--- Descripción parte (levels_partes) ---
+Part:11
+
+For questions, complete the sentences with a word or short phrase.
+
+--- ENUNCIADO ---
+A monologue about technology’s impact on city living
+Complete: Apps have revolutionized public transport by providing ___ that reduce waiting times.
+(9) __________________
+
+Complete: Many city residents rely on smart home devices to improve convenience and ___ .
+(10) __________________
+
+Complete: Privacy concerns are linked to the increasing use of ___ in public areas.
+(11) __________________
+
+Complete: Some cities use AI-driven ___ systems to reduce traffic congestion.
+(12) __________________
+
+Complete: Community platforms help neighbours connect and create a sense of ___.
+(13) __________________
+
+Complete: It is important to balance screen time with ___ activities for mental health.
+(14) __________________
+
+Complete: Electric scooters and bikes are becoming ___ transport options in cities.
+(15) __________________
+
+Complete: Urban infrastructure is adapting to support more ___ modes of transport.
+(16) __________________
+
+Complete: Technology plays a ___ role in shaping everyday urban experiences.
+(17) __________________
+
+Complete: The use of technology in cities aims to create a more ___ urban life.
+(18) __________________
+
+--- RESPUESTAS ABIERTAS ---
+9 real-time updates
+10 energy efficiency
+11 surveillance cameras
+12 traffic
+13 belonging
+14 outdoor
+15 popular
+16 sustainable
+17 crucial
+18 greener
+
+--- AUDIOS ---
+orden 1: A monologue about technology’s impact on city living → https://qnazrzvwvkwhkfbqsbmr.supabase.co/storage/v1/object/public/Levels_Listening/b2/exam-1/part-11/clip-01-v2.mp3
+
+================================================================================
+PARTE 12 — Listening / conversation
+================================================================================
+--- Descripción parte (levels_partes) ---
+Part:12
+
+For questions, choose from the list (A – H) what each speaker liked most about the city they visited. Use the letters only once. There are three extra letters which you do not need to use.
+
+--- ENUNCIADO ---
+A conversation between two friends discussing new technology in their city.
+
+19
+What is the main feature of the new city app mentioned in the conversation?
+A) It offers discounted travel tickets.
+B) It provides real-time public transport updates.
+C) It allows booking taxis directly.
+D) It tracks users’ daily steps.
+
+20
+How does the app help with crowded buses during rush hour?
+A) It suggests alternative, less crowded routes.
+B) It sends notifications about overcrowding fines.
+C) It limits the number of passengers boarding buses.
+D) It offers live video feeds of bus interiors.
+
+21
+What is special about the new street lighting in the city?
+A) It changes colors based on weather conditions.
+B) It adjusts brightness when someone is nearby to save energy.
+C) It is controlled remotely by users through the app.
+D) It has built-in cameras for traffic monitoring.
+
+22
+How does the city’s initiative help residents avoid pollution?
+A) By providing free masks in high pollution areas.
+B) By sending alerts about pollution levels through the app.
+C) By closing off streets with poor air quality.
+D) By encouraging residents to work from home.
+
+23
+What concern do some people have about the new technologies?
+A) That they will be too expensive to maintain.
+B) That the data collected may invade their privacy.
+C) That the technology will replace public transport workers.
+D) That it will increase electricity consumption.
+
+--- RESPUESTAS MCQ (correcta=true) ---
+     19 A) It offers discounted travel tickets.
+[OK] 19 B) It provides real-time public transport updates.
+     19 C) It allows booking taxis directly.
+     19 D) It tracks users’ daily steps.
+[OK] 20 A) It suggests alternative, less crowded routes.
+     20 B) It sends notifications about overcrowding fines.
+     20 C) It limits the number of passengers boarding buses.
+     20 D) It offers live video feeds of bus interiors.
+     21 A) It changes colors based on weather conditions.
+[OK] 21 B) It adjusts brightness when someone is nearby to save energy.
+     21 C) It is controlled remotely by users through the app.
+     21 D) It has built-in cameras for traffic monitoring.
+     22 A) By providing free masks in high pollution areas.
+[OK] 22 B) By sending alerts about pollution levels through the app.
+     22 C) By closing off streets with poor air quality.
+     22 D) By encouraging residents to work from home.
+     23 A) That they will be too expensive to maintain.
+[OK] 23 B) That the data collected may invade their privacy.
+     23 C) That the technology will replace public transport workers.
+     23 D) That it will increase electricity consumption.
+
+--- AUDIOS ---
+orden 1: A conversation between two friends discussing new technology in their city. → https://qnazrzvwvkwhkfbqsbmr.supabase.co/storage/v1/object/public/Levels_Listening/b2/exam-1/part-12/clip-01-v2.mp3
+
+================================================================================
+PARTE 13 — Listening / multiple-matching
+================================================================================
+--- Descripción parte (levels_partes) ---
+Part 13: 
+For questions, choose the best answer (A, B or C).
+
+--- ENUNCIADO ---
+A radio discussion about how technology influences city living
+
+1
+Speaker 1 is mainly talking about…
+A) the benefits of parking apps
+B) issues with public transport payment
+C) concerns about data privacy
+D) environmental impact of transport
+E) Wi-Fi problems in the city
+F) the convenience of e-scooters
+G) remote work challenges
+H) smart home technology
+
+2
+Speaker 2 is mainly talking about…
+A) the benefits of parking apps
+B) issues with public transport payment
+C) concerns about data privacy
+D) environmental impact of transport
+E) Wi-Fi problems in the city
+F) the convenience of e-scooters
+G) remote work challenges
+H) smart home technology
+
+3
+Speaker 3 is mainly talking about…
+A) the benefits of parking apps
+B) issues with public transport payment
+C) concerns about data privacy
+D) environmental impact of transport
+E) Wi-Fi problems in the city
+F) the convenience of e-scooters
+G) remote work challenges
+H) smart home technology
+
+4
+Speaker 4 is mainly talking about…
+A) the benefits of parking apps
+B) issues with public transport payment
+C) concerns about data privacy
+D) environmental impact of transport
+E) Wi-Fi problems in the city
+F) the convenience of e-scooters
+G) remote work challenges
+H) smart home technology
+
+5
+Speaker 5 is mainly talking about…
+A) the benefits of parking apps
+B) issues with public transport payment
+C) concerns about data privacy
+D) environmental impact of transport
+E) Wi-Fi problems in the city
+F) the convenience of e-scooters
+G) remote work challenges
+H) smart home technology
+
+--- RESPUESTAS MCQ (correcta=true) ---
+[OK] 1 A) the benefits of parking apps
+     1 B) issues with public transport payment
+     1 C) concerns about data privacy
+     1 D) environmental impact of transport
+     1 E) Wi-Fi problems in the city
+     1 F) the convenience of e-scooters
+     1 G) remote work challenges
+     1 H) smart home technology
+     2 A) the benefits of parking apps
+[OK] 2 B) issues with public transport payment
+     2 C) concerns about data privacy
+     2 D) environmental impact of transport
+     2 E) Wi-Fi problems in the city
+     2 F) the convenience of e-scooters
+     2 G) remote work challenges
+     2 H) smart home technology
+     3 A) the benefits of parking apps
+     3 B) issues with public transport payment
+[OK] 3 C) concerns about data privacy
+     3 D) environmental impact of transport
+     3 E) Wi-Fi problems in the city
+     3 F) the convenience of e-scooters
+     3 G) remote work challenges
+     3 H) smart home technology
+     4 A) the benefits of parking apps
+     4 B) issues with public transport payment
+     4 C) concerns about data privacy
+     4 D) environmental impact of transport
+     4 E) Wi-Fi problems in the city
+[OK] 4 F) the convenience of e-scooters
+     4 G) remote work challenges
+     4 H) smart home technology
+     5 A) the benefits of parking apps
+     5 B) issues with public transport payment
+     5 C) concerns about data privacy
+     5 D) environmental impact of transport
+[OK] 5 E) Wi-Fi problems in the city
+     5 F) the convenience of e-scooters
+     5 G) remote work challenges
+     5 H) smart home technology
+
+--- AUDIOS ---
+orden 1: A radio discussion about how technology influences city living → https://qnazrzvwvkwhkfbqsbmr.supabase.co/storage/v1/object/public/Levels_Listening/b2/exam-1/part-13/clip-01-v2.mp3
+
+================================================================================
+PARTE 14 — Speaking / interview
+================================================================================
+--- Descripción parte (levels_partes) ---
+Part 14: Presentation with the interviewer. In this part of the test, I'm going to ask you some questions about yourself. Please answer each question as fully as possible, giving reasons and examples where appropriate. You can record your answers using the microphone or type them in the text area.
+
+--- ENUNCIADO ---
+In this part of the test, the examiner will ask you some questions about yourself. Please listen carefully and try to answer each question as fully as you can. Speak clearly and confidently.
+Can you tell me your name and where you are from?
+Do you prefer living in a city or in the countryside? Why?
+What do you like most about urban life?
+Are there any disadvantages to living in a big city?
+How has technology changed the way people spend their free time in your country?
+Do you think smartphones make life more convenient or more complicated?
+How often do you use public transport, and what do you think about it?
+Are there any new technologies that you would like to have in your daily life?
+
+--- RESPUESTAS ABIERTAS ---
+1 Sample answer for examiner reference.
+2 Sample answer for examiner reference.
+3 Sample answer for examiner reference.
+4 Sample answer for examiner reference.
+5 Sample answer for examiner reference.
+6 Sample answer for examiner reference.
+7 Sample answer for examiner reference.
+8 Sample answer for examiner reference.
+
+================================================================================
+PARTE 15 — Speaking / long-turn
+================================================================================
+--- Descripción parte (levels_partes) ---
+Part 15: In this part of the test, I´m going to give each of you two photographs. I´d like you to talk about your photographs on your own for about a minute, and also to answer a question about your partner´s photographs
+
+--- ENUNCIADO ---
+Now, I'm going to give you two photographs. I'd like you to compare the photographs and say what you think the people are doing and how they might be feeling. You should speak for about one minute.
+Look at the two photos and compare how the people are using technology in their urban environments.
+Theme: Urban life and technology
+
+================================================================================
+PARTE 16 — Speaking / collaborative
+================================================================================
+--- Descripción parte (levels_partes) ---
+Part 16: You and your partner will discuss a situation and make a decision together. You need to exchange ideas, give opinions, negotiate, and reach an agreement. This tests your ability to interact with another person, negotiate meaning, and work collaboratively.
+
+
+
+--- ENUNCIADO ---
+You will discuss the questions below together. Share your ideas and try to agree on the best answers.
+Planning a Smart City Community Event
+What types of technology could be showcased at the event to improve urban life?
+How can the event encourage all age groups to participate and benefit from technology?
+What challenges might people face in using new city technologies, and how can the event help?
+How could social media or apps be used to promote the event and keep people informed?
+What activities or demonstrations should be included to make the event interesting and interactive?
+How can the event help reduce environmental issues common in cities using technology?
+What partnerships with local businesses or organizations could support the event?
+• Suggest technology-related activities and demonstrations for the event
+• Discuss how to make the event inclusive and engaging for different groups
+• Decide ways to promote the event using digital tools
+
+================================================================================
+PARTE 17 — Speaking / discussion
+================================================================================
+--- Descripción parte (levels_partes) ---
+Part 17: In this part of the test, you will have a discussion with your partner about the image shown below. You need to discuss the various topics and themes visible in the image, giving your opinions and exchanging ideas. The discussion should last about 4 minutes.
+
+--- ENUNCIADO ---
+In this part of the exam, you will discuss some questions with your partner about the topic of urban life and technology. Try to give detailed answers and support your opinions with examples.
+How has technology changed the way people live in cities?
+What are the advantages and disadvantages of using smart technology in urban areas?
+Do you think public transport in cities will become more efficient with technological advances? Why or why not?
+How can technology help to solve environmental problems in cities?
+In what ways might urban life become more challenging due to increasing reliance on technology?
+Do you prefer living in a city with advanced technology or in a rural area with less technology? Why?

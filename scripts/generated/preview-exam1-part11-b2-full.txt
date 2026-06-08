@@ -1,0 +1,205 @@
+B2 EXAMEN 1 — LISTENING PART 11 (Cambridge Listening Part 2)
+Preview only — NOT saved to production — NO audio generated
+
+Replaces legacy Part 11 (city/technology monologue, audio too short).
+Target preguntaId (when approved): 8dc37fa2-9ea0-4688-8d5e-56bc2eb33b37
+
+================================================================================
+TITLE
+================================================================================
+
+Training with a Mountain Rescue Team
+
+================================================================================
+INSTRUCTIONS
+================================================================================
+
+You will hear a woman called Elena who volunteers with a mountain rescue team
+talking about the training new members receive. For questions 9–18, complete the
+sentences with a word or short phrase.
+
+================================================================================
+SENTENCE COMPLETION (Q9–18)
+================================================================================
+
+ 9. Before being accepted, applicants must pass an annual __________ test.
+
+10. In the classroom, new volunteers learn __________, including map reading and
+    compass work.
+
+11. Each team member carries a __________ to communicate with others when shouting
+    is ineffective.
+
+12. The initial training course includes an accredited __________ qualification.
+
+13. Outdoor kit must be fully __________ to cope with heavy rain on exposed hills.
+
+14. A __________ is requested when a casualty needs evacuation from a remote ridge.
+
+15. Team leaders are unpaid and work on a __________ basis.
+
+16. Ropes are used most often on __________ ground where a fall would be dangerous.
+
+17. Call-outs frequently happen in poor __________, such as fog or sleet.
+
+18. Many recruits say the training increased their __________ in the mountains.
+
+================================================================================
+ANSWER KEY
+================================================================================
+
+  9 → fitness
+ 10 → navigation
+ 11 → whistle
+ 12 → first aid
+ 13 → waterproof
+ 14 → helicopter
+ 15 → voluntary
+ 16 → steep
+ 17 → visibility
+ 18 → confidence
+
+Answer type variety:
+  Nouns: fitness, navigation, whistle, helicopter, visibility, confidence
+  Adjectives: waterproof, voluntary, steep
+  Noun phrase: first aid
+
+================================================================================
+ESTIMATED AUDIO DURATION
+================================================================================
+
+  Script length: 580 words (v2 — recruitment closing removed)
+  Estimated duration: ~3:35–3:50 at clear B2 exam pace (145–155 wpm)
+  Target band: 3:30–3:50 ✓
+
+  Storage plan (when approved):
+    b2/exam-1/part-11/clip-01.mp3  (single monologue)
+
+================================================================================
+TOPIC VARIETY CHECKLIST
+================================================================================
+
+  [✓] Mountain rescue volunteer / training
+  [✓] No city/technology theme
+  [✓] No overlap with Part 12 (first jobs)
+  [✓] No overlap with Part 13 (community building)
+  [✓] No sport/wellbeing (Reading Part 3)
+  [✓] Distinct from Part 10 situations (gallery, airport, university, theatre,
+      dry cleaner, cookery demo, botanical garden, letting agency)
+
+================================================================================
+FULL MONOLOGUE SCRIPT
+================================================================================
+
+Hello. My name's Elena, and for the past four years I've been a volunteer with
+the Lakes Peak Mountain Rescue Team. People often imagine we're out climbing
+every weekend for fun, but most of what we do is training — because when a call
+comes in, there is no time to hesitate.
+
+Before anyone is accepted, they have to pass an annual fitness test. It's not
+about being the fastest runner in the group; the instructors want to see that
+you can keep going uphill with a heavy pack for several hours without becoming
+a liability to the rest of the squad. After that, there's a basic background
+check, and only then do you join the trainee programme.
+
+The programme starts in the classroom. New volunteers learn navigation — map
+reading, compass work, and how to describe a location accurately when you're
+speaking to the police or the ambulance service. I still remember my first night
+exercise in thick cloud on the lower slopes. I thought I knew the path, but
+without proper navigation training I would simply have walked in circles.
+
+Every member carries a whistle, which sounds obvious, but in wind you can't
+rely on shouting. One short blast means "Where are you?" and two means "Come to
+me." We drill those signals until they're automatic, because on a ridge you may
+not be able to see the person ten metres ahead of you.
+
+The initial course also includes an accredited first aid qualification. You're
+taught to treat hypothermia, stabilise a leg injury, and keep someone calm while
+you wait for professional paramedics. The certificate has to be renewed, so we
+run refreshers every spring.
+
+Outdoor kit has to be fully waterproof — not shower-resistant, not "good enough
+for town," but capable of keeping you dry in horizontal rain above the treeline.
+The team publishes a kit list, and leaders check your bag before major
+exercises. Cheap gloves that soak through in twenty minutes are not acceptable.
+
+When someone is seriously injured on a remote ridge, we request a helicopter
+from the national search service. The pilot cannot land on a narrow ledge, so
+we prepare a landing site lower down and carry the casualty on a stretcher to
+meet the aircraft. Those exercises are exhausting, but they teach you how much
+coordination a real rescue requires.
+
+All team leaders are unpaid and work on a voluntary basis. Employers are
+generally supportive because they know the skills — leadership, communication,
+staying calm under pressure — transfer back to the workplace. Even so, balancing
+shift work with sudden call-outs at two in the morning is not easy.
+
+Ropes are used most often on steep ground where a slip would have serious
+consequences. You learn to set up anchors, belay a colleague, and descend
+safely with a load. It's repetitive practice on the same rocky outcrop month
+after month until the procedures feel boring — and that's exactly the point.
+
+Call-outs frequently happen in poor visibility. Fog, sleet, and darkness combine
+to turn a familiar path into something disorientating. GPS helps, but batteries
+fail and screens crack, so we still teach old-fashioned techniques with map and
+compass.
+
+Many recruits tell me the training gave them greater confidence in the mountains.
+Not arrogance — you never stop respecting the weather — but a quiet belief that
+if something went wrong, you would know what to do first, who to contact, and
+how to keep yourself and others safe until help arrives.
+
+================================================================================
+WHY EACH ANSWER WORKS
+================================================================================
+
+9 — fitness
+  Elena states recruits must pass an "annual fitness test" before acceptance.
+  Single common noun; fits "a ___ test" grammatically.
+
+10 — navigation
+  She says "New volunteers learn navigation — map reading, compass work…"
+  The examples clarify the head noun; "map reading" alone would ignore compass
+  work.
+
+11 — whistle
+  Personal signalling device when shouting fails in wind. Radios are not the
+  item "every member carries" for basic team signals.
+
+12 — first aid
+  Accredited qualification on the initial course, distinct from navigation or
+  fitness modules. Standard two-word B2 phrase.
+
+13 — waterproof
+  Kit must be "fully waterproof," not merely shower-resistant. Adjective
+  completes "fully ___" naturally.
+
+14 — helicopter
+  Requested from the national search service for remote ridge evacuations.
+
+15 — voluntary
+  Leaders are unpaid and work on a "voluntary basis." Required adjective form.
+
+16 — steep
+  Ropes used on "steep ground" where falls have serious consequences.
+
+17 — visibility
+  Introduced as "poor visibility" before fog and sleet examples. "Fog" is an
+  instance, not the category named first in the audio.
+
+18 — confidence
+  Training gave recruits "greater confidence in the mountains." Abstract noun;
+  distinct from skills/equipment answers.
+
+================================================================================
+VALIDATION NOTES
+================================================================================
+
+  • 10 open-answer rows expected (Q9–18)
+  • 1 audio clip (monologue only — no questions/options read in TTS)
+  • Answers: max 2 words except where Cambridge allows short phrase (first aid)
+  • No obscure spelling traps
+  • No multiple equally valid answers identified in script
+  • Do NOT touch: Parts 1–7, 8–9, 10, 12–13, 14–17
+
+  JSON source: scripts/generated/preview-exam1-part11-b2.json

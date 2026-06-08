@@ -1,0 +1,101 @@
+{
+  "preguntaId": "0c84ac67-cee6-4da2-aff8-cc858b1135d5",
+  "mcqRowCount": 0,
+  "openAnswerCount": 10,
+  "questionNumbers": [
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18
+  ],
+  "answerKey": {
+    "9": "fitness",
+    "10": "navigation",
+    "11": "whistle",
+    "12": "first aid",
+    "13": "waterproof",
+    "14": "helicopter",
+    "15": "voluntary",
+    "16": "steep",
+    "17": "visibility",
+    "18": "confidence"
+  },
+  "audioClipCount": 1,
+  "audios": [
+    {
+      "orden": 1,
+      "titulo": "Elena — mountain rescue training",
+      "storagePath": "b2/exam-1/part-11/clip-01.mp3",
+      "durationSec": 208.4
+    }
+  ],
+  "descripcionPreview": "Part:11\r\n\r\nYou will hear a woman called Elena who volunteers with a mountain rescue team talking about the training new members receive. For questions 9–18, com",
+  "enunciadoHasQ9to18": true,
+  "enunciadoMountainTheme": true,
+  "untouched": {
+    "part1": true,
+    "part8": true,
+    "part10": true,
+    "part12": true,
+    "part13": true,
+    "part14": true
+  },
+  "legacyV2StillLinked": false,
+  "checks": [
+    {
+      "name": "MCQ rows = 0",
+      "ok": true
+    },
+    {
+      "name": "Open answers = 10",
+      "ok": true
+    },
+    {
+      "name": "Q9–18",
+      "ok": true
+    },
+    {
+      "name": "Answer key",
+      "ok": true
+    },
+    {
+      "name": "1 audio clip",
+      "ok": true
+    },
+    {
+      "name": "clip-01.mp3 linked",
+      "ok": true
+    },
+    {
+      "name": "No legacy clip-01-v2 linked",
+      "ok": true
+    },
+    {
+      "name": "Audio >= 3:25",
+      "ok": true
+    },
+    {
+      "name": "Audio <= 4:15",
+      "ok": true
+    },
+    {
+      "name": "No 0:00 audios",
+      "ok": true
+    },
+    {
+      "name": "Enunciado Q9–18 gaps",
+      "ok": true
+    },
+    {
+      "name": "Parts 1,8,10,12,13,14 untouched",
+      "ok": true
+    }
+  ],
+  "allOk": true
+}

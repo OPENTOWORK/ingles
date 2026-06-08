@@ -46,6 +46,7 @@
     "autoprefixer": "^10.4.20",
     "edge-tts-universal": "^1.4.0",
     "lucide-react": "^1.14.0",
+    "music-metadata": "^11.0.0",
     "next": "^14.0.0",
     "nodemailer": "^8.0.7",
     "openai": "^4.0.0",

@@ -1,0 +1,112 @@
+{
+  "ok": true,
+  "copied": [
+    {
+      "from": "b2/exam-1/part-13/speaker-01.mp3",
+      "to": "b2/exam-1/part-12/speaker-01.mp3",
+      "bytes": 549600
+    },
+    {
+      "from": "b2/exam-1/part-13/speaker-02.mp3",
+      "to": "b2/exam-1/part-12/speaker-02.mp3",
+      "bytes": 528960
+    },
+    {
+      "from": "b2/exam-1/part-13/speaker-03.mp3",
+      "to": "b2/exam-1/part-12/speaker-03.mp3",
+      "bytes": 567840
+    },
+    {
+      "from": "b2/exam-1/part-13/speaker-04.mp3",
+      "to": "b2/exam-1/part-12/speaker-04.mp3",
+      "bytes": 578400
+    },
+    {
+      "from": "b2/exam-1/part-13/speaker-05.mp3",
+      "to": "b2/exam-1/part-12/speaker-05.mp3",
+      "bytes": 552000
+    }
+  ],
+  "content": {
+    "ok": true,
+    "examenId": "5bd3e0d7-29a7-4e07-ac15-a4d195528c65",
+    "partNumber": 12,
+    "preguntaId": "14b93176-4055-4568-8646-4d52ade7986a",
+    "partTitle": "Listening Part 3 — multiple matching"
+  },
+  "uploads": [
+    {
+      "ok": true,
+      "preguntaId": "14b93176-4055-4568-8646-4d52ade7986a",
+      "partNumber": 12,
+      "clip": {
+        "id": "c0ccc102-dc25-4942-983d-369d77df89d9",
+        "orden": 1,
+        "titulo": "Speaker 1",
+        "audio_url": "https://qnazrzvwvkwhkfbqsbmr.supabase.co/storage/v1/object/public/Levels_Listening/b2/exam-1/part-12/speaker-01.mp3"
+      },
+      "storagePath": "b2/exam-1/part-12/speaker-01.mp3",
+      "bytes": 549600
+    },
+    {
+      "ok": true,
+      "preguntaId": "14b93176-4055-4568-8646-4d52ade7986a",
+      "partNumber": 12,
+      "clip": {
+        "id": "32d4aa72-e306-4843-9c0b-5fe27c655859",
+        "orden": 2,
+        "titulo": "Speaker 2",
+        "audio_url": "https://qnazrzvwvkwhkfbqsbmr.supabase.co/storage/v1/object/public/Levels_Listening/b2/exam-1/part-12/speaker-02.mp3"
+      },
+      "storagePath": "b2/exam-1/part-12/speaker-02.mp3",
+      "bytes": 528960
+    },
+    {
+      "ok": true,
+      "preguntaId": "14b93176-4055-4568-8646-4d52ade7986a",
+      "partNumber": 12,
+      "clip": {
+        "id": "74693fab-0492-43f6-aaf0-b555c8b097e0",
+        "orden": 3,
+        "titulo": "Speaker 3",
+        "audio_url": "https://qnazrzvwvkwhkfbqsbmr.supabase.co/storage/v1/object/public/Levels_Listening/b2/exam-1/part-12/speaker-03.mp3"
+      },
+      "storagePath": "b2/exam-1/part-12/speaker-03.mp3",
+      "bytes": 567840
+    },
+    {
+      "ok": true,
+      "preguntaId": "14b93176-4055-4568-8646-4d52ade7986a",
+      "partNumber": 12,
+      "clip": {
+        "id": "e524dd98-ad08-4ac9-8e3b-c18a0b668732",
+        "orden": 4,
+        "titulo": "Speaker 4",
+        "audio_url": "https://qnazrzvwvkwhkfbqsbmr.supabase.co/storage/v1/object/public/Levels_Listening/b2/exam-1/part-12/speaker-04.mp3"
+      },
+      "storagePath": "b2/exam-1/part-12/speaker-04.mp3",
+      "bytes": 578400
+    },
+    {
+      "ok": true,
+      "preguntaId": "14b93176-4055-4568-8646-4d52ade7986a",
+      "partNumber": 12,
+      "clip": {
+        "id": "d797e6cf-b51d-417d-8323-873d65b9b2e0",
+        "orden": 5,
+        "titulo": "Speaker 5",
+        "audio_url": "https://qnazrzvwvkwhkfbqsbmr.supabase.co/storage/v1/object/public/Levels_Listening/b2/exam-1/part-12/speaker-05.mp3"
+      },
+      "storagePath": "b2/exam-1/part-12/speaker-05.mp3",
+      "bytes": 552000
+    }
+  ],
+  "mcqExpected": 40,
+  "answerKey": {
+    "19": "C",
+    "20": "H",
+    "21": "B",
+    "22": "E",
+    "23": "G"
+  }
+}

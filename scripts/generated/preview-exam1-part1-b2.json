@@ -1,0 +1,119 @@
+{
+  "partNumber": 1,
+  "partTitle": "Use of English Part 1 — multiple-choice cloze",
+  "partLabel": "Use of English Part 1 — multiple-choice cloze",
+  "generated": {
+    "partTitle": "Part 1: Multiple-choice cloze",
+    "title": "Learning Beyond the Classroom",
+    "directions": "For questions 1–7, read the text below and choose the best word (A, B, C or D) for each gap. There is an example at the beginning (0).",
+    "passage": "Many students discover that some of the most valuable skills are acquired (0) ___ formal education alone. While schools provide a solid foundation, practical experience often plays an equally important role. For instance, teenagers who volunteer in community kitchens quickly learn to work under pressure and stay calm when things suddenly (1) ___.\n\nEmployers increasingly say they look for candidates who can (2) ___ to new situations rather than simply repeat textbook answers. Workshops that teach basic repair skills, coding or first aid allow learners to (3) ___ theory into practice in a hands-on way.\n\nTeachers who organise short projects outside school notice that reluctant students sometimes (4) ___ more confidence when tasks feel relevant to real life. Parents may worry that such activities will (5) ___ with exam preparation, yet research suggests the opposite can be true: engaged learners often return to their studies with renewed focus.\n\nUltimately, education is not limited to classrooms. Those who seize opportunities to learn in different settings may find they (6) ___ useful habits that last well beyond their school years. The challenge for schools is to (7) ___ a balance between academic requirements and experiences that build confidence in everyday life.",
+    "questions": [
+      {
+        "number": 1,
+        "options": [
+          "A) turn up",
+          "B) go wrong",
+          "C) fall behind",
+          "D) wear off"
+        ]
+      },
+      {
+        "number": 2,
+        "options": [
+          "A) rely",
+          "B) object",
+          "C) apply",
+          "D) adapt"
+        ]
+      },
+      {
+        "number": 3,
+        "options": [
+          "A) put",
+          "B) bring",
+          "C) take",
+          "D) set"
+        ]
+      },
+      {
+        "number": 4,
+        "options": [
+          "A) reach",
+          "B) earn",
+          "C) gain",
+          "D) collect"
+        ]
+      },
+      {
+        "number": 5,
+        "options": [
+          "A) agree",
+          "B) interfere",
+          "C) keep up",
+          "D) call off"
+        ]
+      },
+      {
+        "number": 6,
+        "options": [
+          "A) catch",
+          "B) collect",
+          "C) receive",
+          "D) develop"
+        ]
+      },
+      {
+        "number": 7,
+        "options": [
+          "A) reach",
+          "B) draw",
+          "C) strike",
+          "D) make"
+        ]
+      }
+    ],
+    "modelAnswers": [
+      {
+        "id": 1,
+        "answer": "B"
+      },
+      {
+        "id": 2,
+        "answer": "D"
+      },
+      {
+        "id": 3,
+        "answer": "A"
+      },
+      {
+        "id": 4,
+        "answer": "C"
+      },
+      {
+        "id": 5,
+        "answer": "B"
+      },
+      {
+        "id": 6,
+        "answer": "D"
+      },
+      {
+        "id": 7,
+        "answer": "C"
+      }
+    ],
+    "partNumber": 1,
+    "bulletPoints": [],
+    "speakingPrompts": [],
+    "discussionQuestions": [],
+    "collaborativePrompts": [],
+    "sections": [],
+    "sentencePool": []
+  },
+  "validation": {
+    "ok": true,
+    "errors": [],
+    "warnings": []
+  },
+  "enunciadoPreview": "Text\nLearning Beyond the Classroom\nMany students discover that some of the most valuable skills are acquired (0) ___ formal education alone. While schools provide a solid foundation, practical experience often plays an equally important role. For instance, teenagers who volunteer in community kitchens quickly learn to work under pressure and stay calm when things suddenly (1) ___.\nEmployers increasingly say they look for candidates who can (2) ___ to new situations rather than simply repeat textbook answers. Workshops that teach basic repair skills, coding or first aid allow learners to (3) ___ theory into practice in a hands-on way.\nTeachers who organise short projects outside school notice that reluctant students sometimes (4) ___ more confidence when tasks feel relevant to real life. Parents may worry that such activities will (5) ___ with exam preparation, yet research suggests the opposite can be true: engaged learners often return to their studies with renewed focus.\nUltimately, education is not limited to classrooms. Those who seize opportunities to learn in different settings may find they (6) ___ useful habits that last well beyond their school years. The challenge for schools is to (7) ___ a balance between academic requirements and experiences that build confidence in everyday life.\nQuestions\n\n1\nA turn up\nB go wrong\nC fall behind\nD wear off\n\n2\nA rely\nB object\nC apply\nD adapt\n\n3\nA put\nB bring\nC take\nD set\n\n4\nA reach\nB earn\nC gain\nD collect\n\n5\nA agree\nB interfere\nC keep up\nD call off\n\n6\nA catch\nB collect\nC receive\nD develop\n\n7\nA reach\nB draw\nC strike\nD make"
+}

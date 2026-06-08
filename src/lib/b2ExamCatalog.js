@@ -14,10 +14,14 @@ export const B2_EXAM_PARTS = [
   { partNumber: 7, section: 'Reading and Use of English', mode: 'reading', activity: 'multiple-matching', needsAudio: false },
   { partNumber: 8, section: 'Writing', mode: 'writing', activity: 'essay', needsAudio: false },
   { partNumber: 9, section: 'Writing', mode: 'writing', activity: 'part-2', needsAudio: false },
-  { partNumber: 10, section: 'Listening', mode: 'listening', activity: 'short-extracts', needsAudio: true, audioClips: 8 },
-  { partNumber: 11, section: 'Listening', mode: 'listening', activity: 'sentence-completion', needsAudio: true, audioClips: 1 },
-  { partNumber: 12, section: 'Listening', mode: 'listening', activity: 'conversation', needsAudio: true, audioClips: 1 },
-  { partNumber: 13, section: 'Listening', mode: 'listening', activity: 'multiple-matching', needsAudio: true, audioClips: 1 },
+  /** Cambridge Listening Part 1 — Q1–8, eight short extracts, A/B/C */
+  { partNumber: 10, section: 'Listening', mode: 'listening', activity: 'short-extracts', needsAudio: true, audioClips: 8, questionCount: 8 },
+  /** Cambridge Listening Part 2 — Q9–18, one monologue, sentence completion */
+  { partNumber: 11, section: 'Listening', mode: 'listening', activity: 'sentence-completion', needsAudio: true, audioClips: 1, questionCount: 10 },
+  /** Cambridge Listening Part 3 — Q19–23, five speakers, global pool A–H */
+  { partNumber: 12, section: 'Listening', mode: 'listening', activity: 'multiple-matching', needsAudio: true, audioClips: 5, questionCount: 5 },
+  /** Cambridge Listening Part 4 — Q24–30, one interview, seven MCQ A/B/C */
+  { partNumber: 13, section: 'Listening', mode: 'listening', activity: 'conversation', needsAudio: true, audioClips: 1, questionCount: 7 },
   { partNumber: 14, section: 'Speaking', mode: 'speaking', activity: 'interview', needsAudio: false },
   { partNumber: 15, section: 'Speaking', mode: 'speaking', activity: 'long-turn', needsAudio: false },
   { partNumber: 16, section: 'Speaking', mode: 'speaking', activity: 'collaborative', needsAudio: false },

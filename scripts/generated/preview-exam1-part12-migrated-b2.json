@@ -1,0 +1,98 @@
+{
+  "partNumber": 12,
+  "partTitle": "Listening Part 12 — multiple matching (speakers)",
+  "partLabel": "Listening Part 12 — First Jobs, First Lessons (migrated from Part 13)",
+  "migration": {
+    "sourcePartNumber": 13,
+    "targetPreguntaId": "9535484c-d2da-4c82-9f2e-94442c658cef",
+    "replacePartContent": true,
+    "skipAudio": true,
+    "audioCopyPlan": [
+      { "from": "b2/exam-1/part-13/speaker-01.mp3", "to": "b2/exam-1/part-12/speaker-01.mp3" },
+      { "from": "b2/exam-1/part-13/speaker-02.mp3", "to": "b2/exam-1/part-12/speaker-02.mp3" },
+      { "from": "b2/exam-1/part-13/speaker-03.mp3", "to": "b2/exam-1/part-12/speaker-03.mp3" },
+      { "from": "b2/exam-1/part-13/speaker-04.mp3", "to": "b2/exam-1/part-12/speaker-04.mp3" },
+      { "from": "b2/exam-1/part-13/speaker-05.mp3", "to": "b2/exam-1/part-12/speaker-05.mp3" }
+    ],
+    "legacyToRemove": [
+      "b2/exam-1/part-12/clip-01-v2.mp3 (single city/tech conversation — do not keep linked)"
+    ]
+  },
+  "generated": {
+    "partTitle": "Part 3: Multiple matching (speakers)",
+    "title": "First Jobs, First Lessons",
+    "directions": "You will hear five people talking about their first experiences of paid work. For questions 19–23, choose from the list (A–H) the opinion each speaker expresses. Use the letters only once. There are three extra letters which you do not need to use.",
+    "setting": "Five speakers describe what they learned from their first paid job.",
+    "optionPool": [
+      "A) feeling disappointed because the job offered fewer learning opportunities than expected",
+      "B) being given more responsibility than they had anticipated",
+      "C) learning to stay patient when dealing with rude or unreasonable people",
+      "D) discovering that getting on with colleagues mattered more than working quickly",
+      "E) finding that repetitive tasks became oddly satisfying after a while",
+      "F) wishing they had asked for advice before accepting the position",
+      "G) recognising that the experience changed their ideas about future study or careers",
+      "H) feeling physically exhausted by work they had not taken seriously before"
+    ],
+    "script": "Speaker 1:\nI took a job in a busy city café the summer I turned seventeen. The manager warned me that lunchtime would be intense, but I still thought serving coffee would be straightforward. In fact, the hardest part was keeping my voice calm when customers complained about minor things — wrong milk, a ten-minute wait, a receipt they had already thrown away. Nobody prepares you for that kind of pressure when every table seems to need something at once.\n\nSpeaker 2:\nMy cousin helped me get work in a furniture warehouse during the holidays. On paper, it sounded fine: loading boxes and checking labels. What surprised me was how heavy everything felt by mid-afternoon. I had always mocked people who talked about being tired after “just moving things around,” yet after three days my back ached and I could barely stay awake on the bus home. I now respect anyone who does that job all year round.\n\nSpeaker 3:\nMy first paid job was as a junior leader at a children’s activity camp. I expected to help with games and stay in the background. Instead, the head leader was ill for two days and I had to run an afternoon programme for twenty primary-school children on my own. I was terrified at first, but by the second day I felt proud that parents trusted me to look after their kids. It was the first time an employer — even a temporary one — had treated me like an adult.\n\nSpeaker 4:\nI spent six weeks stacking shelves in a supermarket before university started. At first I hated the monotony: same aisles, same products, same instructions from the supervisor. Yet after a couple of weeks something changed. I started noticing patterns, working faster without thinking, and actually enjoying the moment when a messy section looked neat again. It was strange to feel satisfied by something so ordinary, but it made the shift go surprisingly quickly.\n\nSpeaker 5:\nI worked as a temporary assistant in a small architecture firm because I thought design sounded glamorous. Mostly I answered phones and sorted digital files, but I also sat in on client meetings. Listening to the team explain why a project would not work taught me more than any school brochure. I realised I liked the analytical side of planning, not drawing buildings, and that experience pushed me towards studying engineering instead.",
+    "questions": [
+      { "number": 19, "prompt": "Speaker 1" },
+      { "number": 20, "prompt": "Speaker 2" },
+      { "number": 21, "prompt": "Speaker 3" },
+      { "number": 22, "prompt": "Speaker 4" },
+      { "number": 23, "prompt": "Speaker 5" }
+    ],
+    "matchingAnswers": [
+      { "number": 19, "answer": "C" },
+      { "number": 20, "answer": "H" },
+      { "number": 21, "answer": "B" },
+      { "number": 22, "answer": "E" },
+      { "number": 23, "answer": "G" }
+    ],
+    "modelAnswers": [
+      { "id": 19, "answer": "C" },
+      { "id": 20, "answer": "H" },
+      { "id": 21, "answer": "B" },
+      { "id": 22, "answer": "E" },
+      { "id": 23, "answer": "G" }
+    ],
+    "audioClips": [
+      {
+        "orden": 1,
+        "titulo": "Speaker 1",
+        "text": "I took a job in a busy city café the summer I turned seventeen. The manager warned me that lunchtime would be intense, but I still thought serving coffee would be straightforward. In fact, the hardest part was keeping my voice calm when customers complained about minor things — wrong milk, a ten-minute wait, a receipt they had already thrown away. Nobody prepares you for that kind of pressure when every table seems to need something at once.",
+        "storagePath": "b2/exam-1/part-12/speaker-01.mp3"
+      },
+      {
+        "orden": 2,
+        "titulo": "Speaker 2",
+        "text": "My cousin helped me get work in a furniture warehouse during the holidays. On paper, it sounded fine: loading boxes and checking labels. What surprised me was how heavy everything felt by mid-afternoon. I had always mocked people who talked about being tired after “just moving things around,” yet after three days my back ached and I could barely stay awake on the bus home. I now respect anyone who does that job all year round.",
+        "storagePath": "b2/exam-1/part-12/speaker-02.mp3"
+      },
+      {
+        "orden": 3,
+        "titulo": "Speaker 3",
+        "text": "My first paid job was as a junior leader at a children’s activity camp. I expected to help with games and stay in the background. Instead, the head leader was ill for two days and I had to run an afternoon programme for twenty primary-school children on my own. I was terrified at first, but by the second day I felt proud that parents trusted me to look after their kids. It was the first time an employer — even a temporary one — had treated me like an adult.",
+        "storagePath": "b2/exam-1/part-12/speaker-03.mp3"
+      },
+      {
+        "orden": 4,
+        "titulo": "Speaker 4",
+        "text": "I spent six weeks stacking shelves in a supermarket before university started. At first I hated the monotony: same aisles, same products, same instructions from the supervisor. Yet after a couple of weeks something changed. I started noticing patterns, working faster without thinking, and actually enjoying the moment when a messy section looked neat again. It was strange to feel satisfied by something so ordinary, but it made the shift go surprisingly quickly.",
+        "storagePath": "b2/exam-1/part-12/speaker-04.mp3"
+      },
+      {
+        "orden": 5,
+        "titulo": "Speaker 5",
+        "text": "I worked as a temporary assistant in a small architecture firm because I thought design sounded glamorous. Mostly I answered phones and sorted digital files, but I also sat in on client meetings. Listening to the team explain why a project would not work taught me more than any school brochure. I realised I liked the analytical side of planning, not drawing buildings, and that experience pushed me towards studying engineering instead.",
+        "storagePath": "b2/exam-1/part-12/speaker-05.mp3"
+      }
+    ],
+    "partNumber": 12,
+    "bulletPoints": [],
+    "speakingPrompts": [],
+    "discussionQuestions": [],
+    "collaborativePrompts": [],
+    "sections": [],
+    "sentencePool": []
+  }
+}

@@ -66,6 +66,9 @@ export function useLevelsExamAdminFlow({ slug = 'a2', examenIdBySlot = {}, onCat
   const [genTotal, setGenTotal] = useState(A2_EXAM_PARTS.length);
   const [genEtaSeconds, setGenEtaSeconds] = useState(null);
   const [genPartLabel, setGenPartLabel] = useState('');
+  const [partPreviewLoading, setPartPreviewLoading] = useState(false);
+  const [partPreviewSaving, setPartPreviewSaving] = useState(false);
+  const [partPreview, setPartPreview] = useState(null);
 
   const examParts = getPartsForSlug(slug);
   const partTotal = examParts.length;
@@ -317,6 +320,135 @@ export function useLevelsExamAdminFlow({ slug = 'a2', examenIdBySlot = {}, onCat
     setGenError('');
   }, []);
 
+  const cancelPartPreview = useCallback(() => {
+    setPartPreview(null);
+    setPartPreviewLoading(false);
+    setPartPreviewSaving(false);
+  }, []);
+
+  const previewExamPart = useCallback(
+    async (slot, partNumber) => {
+      if (!supportsGeneration || !canRegenerateExams) return null;
+
+      const { data: sessionData } = await supabase.auth.getSession();
+      const token = sessionData?.session?.access_token;
+      if (!token) throw new Error('Inicia sesión como administrador.');
+
+      setPartPreviewLoading(true);
+      setPartPreview({
+        partNumber,
+        loading: true,
+        partLabel: '',
+        validation: null,
+        payload: null,
+        enunciadoPreview: '',
+        error: '',
+      });
+      setGenError('');
+
+      try {
+        const res = await fetch(buildClientApiUrl('/api/admin/levels/generate-exam-part'), {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify({
+            slug,
+            slot,
+            partNumber,
+            action: 'preview',
+          }),
+        });
+        const payload = await res.json().catch(() => ({}));
+        if (!res.ok) throw new Error(payload.error || 'No se pudo generar la vista previa.');
+
+        const preview = payload.preview || {};
+        setPartPreview({
+          partNumber: preview.partNumber ?? partNumber,
+          partTitle: preview.partTitle,
+          partLabel: preview.partLabel || preview.partTitle,
+          loading: false,
+          validation: preview.validation,
+          payload: preview.payload,
+          enunciadoPreview: preview.enunciadoPreview,
+          error: '',
+          examSlot: slot,
+        });
+        return preview;
+      } catch (e) {
+        const msg = e?.message || 'No se pudo generar la vista previa.';
+        setPartPreview((prev) =>
+          prev
+            ? { ...prev, loading: false, error: msg }
+            : { partNumber, loading: false, error: msg },
+        );
+        setGenError(msg);
+        throw e;
+      } finally {
+        setPartPreviewLoading(false);
+      }
+    },
+    [slug, supportsGeneration, canRegenerateExams],
+  );
+
+  const saveExamPart = useCallback(async () => {
+    if (!partPreview?.payload || !partPreview?.examSlot) return null;
+    if (!partPreview.validation?.ok) {
+      throw new Error('Corrige los errores de validación antes de guardar.');
+    }
+
+    const { data: sessionData } = await supabase.auth.getSession();
+    const token = sessionData?.session?.access_token;
+    if (!token) throw new Error('Inicia sesión como administrador.');
+
+    setPartPreviewSaving(true);
+    setGenError('');
+
+    try {
+      const res = await fetch(buildClientApiUrl('/api/admin/levels/generate-exam-part'), {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          slug,
+          slot: partPreview.examSlot,
+          partNumber: partPreview.partNumber,
+          action: 'save',
+          generated: partPreview.payload,
+        }),
+      });
+      const payload = await res.json().catch(() => ({}));
+      if (!res.ok) throw new Error(payload.error || 'No se pudo guardar la parte.');
+
+      if (payload.levelId) invalidateLevelExamCache(payload.levelId);
+      setGenProgress(
+        `Parte ${partPreview.partLabel || partPreview.partNumber} guardada en Supabase.`,
+      );
+      cancelPartPreview();
+      onCatalogUpdated?.();
+      return payload;
+    } catch (e) {
+      const msg = e?.message || 'No se pudo guardar la parte.';
+      setGenError(msg);
+      throw e;
+    } finally {
+      setPartPreviewSaving(false);
+    }
+  }, [slug, partPreview, cancelPartPreview, onCatalogUpdated]);
+
+  const adminPartFlow = {
+    canRegenerateExams,
+    partPreview,
+    partPreviewLoading,
+    partPreviewSaving,
+    previewExamPart,
+    saveExamPart,
+    cancelPartPreview,
+  };
+
   return {
     isAdmin,
     generating,
@@ -337,6 +469,13 @@ export function useLevelsExamAdminFlow({ slug = 'a2', examenIdBySlot = {}, onCat
     supportsGeneration,
     /** true solo para rol admin/administrador en niveles con generación (A2–C2) */
     canRegenerateExams,
+    adminPartFlow,
+    previewExamPart,
+    saveExamPart,
+    cancelPartPreview,
+    partPreview,
+    partPreviewLoading,
+    partPreviewSaving,
   };
 }
 

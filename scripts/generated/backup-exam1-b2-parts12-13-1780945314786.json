@@ -1,0 +1,518 @@
+{
+  "backedUpAt": "2026-06-08T19:01:54.344Z",
+  "examenId": "5bd3e0d7-29a7-4e07-ac15-a4d195528c65",
+  "levelId": "ae0e85e8-3d63-11f1-b2e3-0b27f7b23431",
+  "parts": [
+    {
+      "partNumber": 12,
+      "parteId": "fb440053-4999-4ce9-b5ff-1fb5c501af09",
+      "parteNombre": "Parte 12 B2",
+      "descripcionParte": "Part:12\r\n\r\nFor questions, choose from the list (A – H) what each speaker liked most about the city they visited. Use the letters only once. There are three extra letters which you do not need to use.",
+      "items": [
+        {
+          "preguntaId": "14b93176-4055-4568-8646-4d52ade7986a",
+          "enunciado": "You will hear five people talking about their first experiences of paid work. For questions 19–23, choose from the list (A–H) the opinion each speaker expresses. Use the letters only once. There are three extra letters which you do not need to use.\nFive speakers describe what they learned from their first paid job.\nA feeling disappointed because the job offered fewer learning opportunities than expected\nB being given more responsibility than they had anticipated\nC learning to stay patient when dealing with rude or unreasonable people\nD discovering that getting on with colleagues mattered more than working quickly\nE finding that repetitive tasks became oddly satisfying after a while\nF wishing they had asked for advice before accepting the position\nG recognising that the experience changed their ideas about future study or careers\nH feeling physically exhausted by work they had not taken seriously before\n\nSpeaker 1\nSpeaker 2\nSpeaker 3\nSpeaker 4\nSpeaker 5",
+          "creado_en": "2026-06-08T18:57:46.895518",
+          "respuestasMcq": [
+            {
+              "id": "14c52352-3d4c-4049-8e22-8a545f6060df",
+              "pregunta_id": "14b93176-4055-4568-8646-4d52ade7986a",
+              "respuesta": "19 A",
+              "correcta": false,
+              "creado_en": null
+            },
+            {
+              "id": "596a4da6-a2f0-4854-b7a7-816177167b01",
+              "pregunta_id": "14b93176-4055-4568-8646-4d52ade7986a",
+              "respuesta": "19 B",
+              "correcta": false,
+              "creado_en": null
+            },
+            {
+              "id": "8daba657-8b67-4459-87e4-30f04940d5ed",
+              "pregunta_id": "14b93176-4055-4568-8646-4d52ade7986a",
+              "respuesta": "19 C",
+              "correcta": true,
+              "creado_en": null
+            },
+            {
+              "id": "e10d1784-80a5-4741-9d31-50acc41ea545",
+              "pregunta_id": "14b93176-4055-4568-8646-4d52ade7986a",
+              "respuesta": "19 D",
+              "correcta": false,
+              "creado_en": null
+            },
+            {
+              "id": "ae15ff5a-19b4-4945-9755-0b50b9fd32ec",
+              "pregunta_id": "14b93176-4055-4568-8646-4d52ade7986a",
+              "respuesta": "19 E",
+              "correcta": false,
+              "creado_en": null
+            },
+            {
+              "id": "b1315008-29a0-4a6a-96c6-817da7c11596",
+              "pregunta_id": "14b93176-4055-4568-8646-4d52ade7986a",
+              "respuesta": "19 F",
+              "correcta": false,
+              "creado_en": null
+            },
+            {
+              "id": "ceac7762-e89c-4a84-9783-62c0ff2389c9",
+              "pregunta_id": "14b93176-4055-4568-8646-4d52ade7986a",
+              "respuesta": "19 G",
+              "correcta": false,
+              "creado_en": null
+            },
+            {
+              "id": "459c331f-4ba2-4f1a-80c6-e3e11f0bde31",
+              "pregunta_id": "14b93176-4055-4568-8646-4d52ade7986a",
+              "respuesta": "19 H",
+              "correcta": false,
+              "creado_en": null
+            },
+            {
+              "id": "46f228ef-1932-46ac-acd8-4483a3147b29",
+              "pregunta_id": "14b93176-4055-4568-8646-4d52ade7986a",
+              "respuesta": "20 A",
+              "correcta": false,
+              "creado_en": null
+            },
+            {
+              "id": "58f65fef-afb6-4381-b11f-7c761519a9dc",
+              "pregunta_id": "14b93176-4055-4568-8646-4d52ade7986a",
+              "respuesta": "20 B",
+              "correcta": false,
+              "creado_en": null
+            },
+            {
+              "id": "32b934ec-8edd-4f82-8649-e31025fe5ef5",
+              "pregunta_id": "14b93176-4055-4568-8646-4d52ade7986a",
+              "respuesta": "20 C",
+              "correcta": false,
+              "creado_en": null
+            },
+            {
+              "id": "05a37399-cb7d-4492-9f78-3e13e40fac0e",
+              "pregunta_id": "14b93176-4055-4568-8646-4d52ade7986a",
+              "respuesta": "20 D",
+              "correcta": false,
+              "creado_en": null
+            },
+            {
+              "id": "0e87b75f-0229-4807-8b64-7e48dfbc97de",
+              "pregunta_id": "14b93176-4055-4568-8646-4d52ade7986a",
+              "respuesta": "20 E",
+              "correcta": false,
+              "creado_en": null
+            },
+            {
+              "id": "df796a04-1420-4323-ac2b-ec1987f7ece9",
+              "pregunta_id": "14b93176-4055-4568-8646-4d52ade7986a",
+              "respuesta": "20 F",
+              "correcta": false,
+              "creado_en": null
+            },
+            {
+              "id": "2d5c327e-427f-4f45-aeeb-0ce8d370771f",
+              "pregunta_id": "14b93176-4055-4568-8646-4d52ade7986a",
+              "respuesta": "20 G",
+              "correcta": false,
+              "creado_en": null
+            },
+            {
+              "id": "e8a29fff-1028-44ec-9707-d61508e363cd",
+              "pregunta_id": "14b93176-4055-4568-8646-4d52ade7986a",
+              "respuesta": "20 H",
+              "correcta": true,
+              "creado_en": null
+            },
+            {
+              "id": "2ae449d1-5699-4d38-bc09-34fe044cc261",
+              "pregunta_id": "14b93176-4055-4568-8646-4d52ade7986a",
+              "respuesta": "21 A",
+              "correcta": false,
+              "creado_en": null
+            },
+            {
+              "id": "d92b711e-f056-42aa-851e-a1d356044358",
+              "pregunta_id": "14b93176-4055-4568-8646-4d52ade7986a",
+              "respuesta": "21 B",
+              "correcta": true,
+              "creado_en": null
+            },
+            {
+              "id": "76ef43fd-f2fb-4d7d-807a-4e6e65e4f9d8",
+              "pregunta_id": "14b93176-4055-4568-8646-4d52ade7986a",
+              "respuesta": "21 C",
+              "correcta": false,
+              "creado_en": null
+            },
+            {
+              "id": "2b18dd0c-adba-43b5-912b-5dbb4a6a781e",
+              "pregunta_id": "14b93176-4055-4568-8646-4d52ade7986a",
+              "respuesta": "21 D",
+              "correcta": false,
+              "creado_en": null
+            },
+            {
+              "id": "81ad0d07-6c80-4e03-9bb5-cd6b920af77a",
+              "pregunta_id": "14b93176-4055-4568-8646-4d52ade7986a",
+              "respuesta": "21 E",
+              "correcta": false,
+              "creado_en": null
+            },
+            {
+              "id": "83ea0150-805e-4b4a-97cb-b844e2f25c06",
+              "pregunta_id": "14b93176-4055-4568-8646-4d52ade7986a",
+              "respuesta": "21 F",
+              "correcta": false,
+              "creado_en": null
+            },
+            {
+              "id": "f67a3139-aec9-4120-848d-c8a0af2534d4",
+              "pregunta_id": "14b93176-4055-4568-8646-4d52ade7986a",
+              "respuesta": "21 G",
+              "correcta": false,
+              "creado_en": null
+            },
+            {
+              "id": "6acba679-8f3e-41b5-adf9-ae4a964cd130",
+              "pregunta_id": "14b93176-4055-4568-8646-4d52ade7986a",
+              "respuesta": "21 H",
+              "correcta": false,
+              "creado_en": null
+            },
+            {
+              "id": "f243eb41-ae86-41b5-80b1-1fdc12ab97e0",
+              "pregunta_id": "14b93176-4055-4568-8646-4d52ade7986a",
+              "respuesta": "22 A",
+              "correcta": false,
+              "creado_en": null
+            },
+            {
+              "id": "d5c4da89-9a26-4edc-8e11-433ea6cb8c38",
+              "pregunta_id": "14b93176-4055-4568-8646-4d52ade7986a",
+              "respuesta": "22 B",
+              "correcta": false,
+              "creado_en": null
+            },
+            {
+              "id": "7eb53453-5612-4bd3-b43b-dd5d38d83e06",
+              "pregunta_id": "14b93176-4055-4568-8646-4d52ade7986a",
+              "respuesta": "22 C",
+              "correcta": false,
+              "creado_en": null
+            },
+            {
+              "id": "e1795013-35fc-4a8e-a54d-aac57e469576",
+              "pregunta_id": "14b93176-4055-4568-8646-4d52ade7986a",
+              "respuesta": "22 D",
+              "correcta": false,
+              "creado_en": null
+            },
+            {
+              "id": "0fb47796-94bf-4585-852b-96ae22d75b46",
+              "pregunta_id": "14b93176-4055-4568-8646-4d52ade7986a",
+              "respuesta": "22 E",
+              "correcta": true,
+              "creado_en": null
+            },
+            {
+              "id": "0d5d910b-188e-4f78-b704-c77ed658edb9",
+              "pregunta_id": "14b93176-4055-4568-8646-4d52ade7986a",
+              "respuesta": "22 F",
+              "correcta": false,
+              "creado_en": null
+            },
+            {
+              "id": "8e03d26e-fb4b-480c-86a3-f7013f593566",
+              "pregunta_id": "14b93176-4055-4568-8646-4d52ade7986a",
+              "respuesta": "22 G",
+              "correcta": false,
+              "creado_en": null
+            },
+            {
+              "id": "2634dac1-b6a6-478f-9612-6a02a4ac0725",
+              "pregunta_id": "14b93176-4055-4568-8646-4d52ade7986a",
+              "respuesta": "22 H",
+              "correcta": false,
+              "creado_en": null
+            },
+            {
+              "id": "7b55387b-b687-40cd-85b3-f8ed5df99392",
+              "pregunta_id": "14b93176-4055-4568-8646-4d52ade7986a",
+              "respuesta": "23 A",
+              "correcta": false,
+              "creado_en": null
+            },
+            {
+              "id": "fcf6cd1e-d02f-493d-8e23-0db3ddb9846f",
+              "pregunta_id": "14b93176-4055-4568-8646-4d52ade7986a",
+              "respuesta": "23 B",
+              "correcta": false,
+              "creado_en": null
+            },
+            {
+              "id": "1d58bad7-d4f1-4df1-9683-9b50ec7accac",
+              "pregunta_id": "14b93176-4055-4568-8646-4d52ade7986a",
+              "respuesta": "23 C",
+              "correcta": false,
+              "creado_en": null
+            },
+            {
+              "id": "47800591-47d4-4e77-bf7e-820f9234fec3",
+              "pregunta_id": "14b93176-4055-4568-8646-4d52ade7986a",
+              "respuesta": "23 D",
+              "correcta": false,
+              "creado_en": null
+            },
+            {
+              "id": "ca9862e3-0492-4298-a05e-287a4c2a6f1c",
+              "pregunta_id": "14b93176-4055-4568-8646-4d52ade7986a",
+              "respuesta": "23 E",
+              "correcta": false,
+              "creado_en": null
+            },
+            {
+              "id": "337a0527-a242-44cc-9703-d7df3e296136",
+              "pregunta_id": "14b93176-4055-4568-8646-4d52ade7986a",
+              "respuesta": "23 F",
+              "correcta": false,
+              "creado_en": null
+            },
+            {
+              "id": "1d67b6a2-18e4-4327-932b-df445f023140",
+              "pregunta_id": "14b93176-4055-4568-8646-4d52ade7986a",
+              "respuesta": "23 G",
+              "correcta": true,
+              "creado_en": null
+            },
+            {
+              "id": "1c8355e8-11d3-43e4-90fc-7b46a9f391e8",
+              "pregunta_id": "14b93176-4055-4568-8646-4d52ade7986a",
+              "respuesta": "23 H",
+              "correcta": false,
+              "creado_en": null
+            }
+          ],
+          "respuestasAbiertas": [],
+          "audios": [
+            {
+              "id": "c0ccc102-dc25-4942-983d-369d77df89d9",
+              "orden": 1,
+              "titulo": "Speaker 1",
+              "audio_url": "https://qnazrzvwvkwhkfbqsbmr.supabase.co/storage/v1/object/public/Levels_Listening/b2/exam-1/part-12/speaker-01.mp3",
+              "storagePath": "b2/exam-1/part-12/speaker-01.mp3"
+            },
+            {
+              "id": "32d4aa72-e306-4843-9c0b-5fe27c655859",
+              "orden": 2,
+              "titulo": "Speaker 2",
+              "audio_url": "https://qnazrzvwvkwhkfbqsbmr.supabase.co/storage/v1/object/public/Levels_Listening/b2/exam-1/part-12/speaker-02.mp3",
+              "storagePath": "b2/exam-1/part-12/speaker-02.mp3"
+            },
+            {
+              "id": "74693fab-0492-43f6-aaf0-b555c8b097e0",
+              "orden": 3,
+              "titulo": "Speaker 3",
+              "audio_url": "https://qnazrzvwvkwhkfbqsbmr.supabase.co/storage/v1/object/public/Levels_Listening/b2/exam-1/part-12/speaker-03.mp3",
+              "storagePath": "b2/exam-1/part-12/speaker-03.mp3"
+            },
+            {
+              "id": "e524dd98-ad08-4ac9-8e3b-c18a0b668732",
+              "orden": 4,
+              "titulo": "Speaker 4",
+              "audio_url": "https://qnazrzvwvkwhkfbqsbmr.supabase.co/storage/v1/object/public/Levels_Listening/b2/exam-1/part-12/speaker-04.mp3",
+              "storagePath": "b2/exam-1/part-12/speaker-04.mp3"
+            },
+            {
+              "id": "d797e6cf-b51d-417d-8323-873d65b9b2e0",
+              "orden": 5,
+              "titulo": "Speaker 5",
+              "audio_url": "https://qnazrzvwvkwhkfbqsbmr.supabase.co/storage/v1/object/public/Levels_Listening/b2/exam-1/part-12/speaker-05.mp3",
+              "storagePath": "b2/exam-1/part-12/speaker-05.mp3"
+            }
+          ]
+        }
+      ],
+      "mcqRowCount": 40,
+      "openRowCount": 0,
+      "audioClipCount": 5
+    },
+    {
+      "partNumber": 13,
+      "parteId": "5fcfc8e6-318f-46e6-aa84-9ad5d6871eee",
+      "parteNombre": "Parte 13 B2",
+      "descripcionParte": "Part 13: \r\nFor questions, choose the best answer (A, B or C).",
+      "items": [
+        {
+          "preguntaId": "8f73881f-b467-4ea1-a68f-8b93dc9384f9",
+          "enunciado": "Interview about volunteers restoring a disused Victorian market hall as a community centre.\n\n24\nWhat does Nina say about the building when she first saw it?\nA) The interior had recently been repaired by the council\nB) It had serious structural and weather-related problems\nC) It was still being used for regular farmers' markets\n\n25\nWhat arrangement did the project group obtain from the council?\nA) Immediate transfer of full ownership to the trust\nB) A contract for a private company to redevelop the site\nC) A temporary lease allowing work to begin on the building\n\n26\nWhat does Nina say about how the earliest costs were covered?\nA) They were mainly paid for by local donations before larger grants arrived\nB) The council paid for all equipment and materials from the start\nC) A heritage organisation financed the entire project in one payment\n\n27\nWhat caused the most delay during the restoration work?\nA) Difficulty recruiting electricians and carpenters from outside the town\nB) Damage discovered inside walls that had not been visible earlier\nC) Repeated changes to the colour scheme chosen for the main hall\n\n28\nWho uses the hall most at present, according to Nina?\nA) Adults attending weekday evening courses\nB) Office workers using the space at lunchtimes on weekdays\nC) Families with young children at weekends\n\n29\nWhat change has Nina noticed in the town centre since the hall reopened?\nA) Some people now stay in the area longer instead of leaving straight away\nB) Every independent shop has reported a large rise in profits\nC) Most visitors now come only to use the hall café and then go home\n\n30\nWhat does Nina suggest towns in a similar situation should do first?\nA) Publish a complete set of architectural reports before any work starts\nB) Open one practical section of the building so progress is visible\nC) Postpone volunteer work until a national expert agrees to lead the team",
+          "creado_en": "2026-06-08T18:58:15.745594",
+          "respuestasMcq": [
+            {
+              "id": "2bae5a92-2d39-44cc-81a9-c507c994db3f",
+              "pregunta_id": "8f73881f-b467-4ea1-a68f-8b93dc9384f9",
+              "respuesta": "24 A) The interior had recently been repaired by the council",
+              "correcta": false,
+              "creado_en": null
+            },
+            {
+              "id": "2f8969b5-e0ac-4805-9e28-036eaa8797cd",
+              "pregunta_id": "8f73881f-b467-4ea1-a68f-8b93dc9384f9",
+              "respuesta": "24 B) It had serious structural and weather-related problems",
+              "correcta": true,
+              "creado_en": null
+            },
+            {
+              "id": "11548c49-dda8-480e-bbe2-6de3329cf5f1",
+              "pregunta_id": "8f73881f-b467-4ea1-a68f-8b93dc9384f9",
+              "respuesta": "24 C) It was still being used for regular farmers' markets",
+              "correcta": false,
+              "creado_en": null
+            },
+            {
+              "id": "1bf0ee21-f3c2-41dd-a30f-8c5f1db79c39",
+              "pregunta_id": "8f73881f-b467-4ea1-a68f-8b93dc9384f9",
+              "respuesta": "25 A) Immediate transfer of full ownership to the trust",
+              "correcta": false,
+              "creado_en": null
+            },
+            {
+              "id": "7d6132ce-7734-47c7-8472-b406ec190a91",
+              "pregunta_id": "8f73881f-b467-4ea1-a68f-8b93dc9384f9",
+              "respuesta": "25 B) A contract for a private company to redevelop the site",
+              "correcta": false,
+              "creado_en": null
+            },
+            {
+              "id": "a2fe1043-eafc-4899-ba15-07554c0884b1",
+              "pregunta_id": "8f73881f-b467-4ea1-a68f-8b93dc9384f9",
+              "respuesta": "25 C) A temporary lease allowing work to begin on the building",
+              "correcta": true,
+              "creado_en": null
+            },
+            {
+              "id": "d9b533dc-df13-4ab0-b0d2-27b1e3edcd25",
+              "pregunta_id": "8f73881f-b467-4ea1-a68f-8b93dc9384f9",
+              "respuesta": "26 A) They were mainly paid for by local donations before larger grants arrived",
+              "correcta": true,
+              "creado_en": null
+            },
+            {
+              "id": "5a38f52a-1c7d-4d70-b54c-45e22db8d26d",
+              "pregunta_id": "8f73881f-b467-4ea1-a68f-8b93dc9384f9",
+              "respuesta": "26 B) The council paid for all equipment and materials from the start",
+              "correcta": false,
+              "creado_en": null
+            },
+            {
+              "id": "22e651c1-067e-4332-bd0a-6ac026a5e63b",
+              "pregunta_id": "8f73881f-b467-4ea1-a68f-8b93dc9384f9",
+              "respuesta": "26 C) A heritage organisation financed the entire project in one payment",
+              "correcta": false,
+              "creado_en": null
+            },
+            {
+              "id": "552cff92-f9b8-4e01-bf2f-5640eca6ebec",
+              "pregunta_id": "8f73881f-b467-4ea1-a68f-8b93dc9384f9",
+              "respuesta": "27 A) Difficulty recruiting electricians and carpenters from outside the town",
+              "correcta": false,
+              "creado_en": null
+            },
+            {
+              "id": "7b3a3909-2626-453f-bc67-20c01bfa73fb",
+              "pregunta_id": "8f73881f-b467-4ea1-a68f-8b93dc9384f9",
+              "respuesta": "27 B) Damage discovered inside walls that had not been visible earlier",
+              "correcta": true,
+              "creado_en": null
+            },
+            {
+              "id": "27b30937-534c-4af1-81c3-c15d01a3b8a2",
+              "pregunta_id": "8f73881f-b467-4ea1-a68f-8b93dc9384f9",
+              "respuesta": "27 C) Repeated changes to the colour scheme chosen for the main hall",
+              "correcta": false,
+              "creado_en": null
+            },
+            {
+              "id": "73a5c12d-3196-4a9e-a96b-6c1b219ac8a5",
+              "pregunta_id": "8f73881f-b467-4ea1-a68f-8b93dc9384f9",
+              "respuesta": "28 A) Adults attending weekday evening courses",
+              "correcta": false,
+              "creado_en": null
+            },
+            {
+              "id": "bfa143a0-9676-4e3e-9016-312e75f36db2",
+              "pregunta_id": "8f73881f-b467-4ea1-a68f-8b93dc9384f9",
+              "respuesta": "28 B) Office workers using the space at lunchtimes on weekdays",
+              "correcta": false,
+              "creado_en": null
+            },
+            {
+              "id": "eb3af368-6ed1-4f4e-98e0-4c13bd943320",
+              "pregunta_id": "8f73881f-b467-4ea1-a68f-8b93dc9384f9",
+              "respuesta": "28 C) Families with young children at weekends",
+              "correcta": true,
+              "creado_en": null
+            },
+            {
+              "id": "84246d3b-649d-4818-b47d-fc1f17aef695",
+              "pregunta_id": "8f73881f-b467-4ea1-a68f-8b93dc9384f9",
+              "respuesta": "29 A) Some people now stay in the area longer instead of leaving straight away",
+              "correcta": true,
+              "creado_en": null
+            },
+            {
+              "id": "d9ecd20a-82c7-4708-a661-94f7ab216e09",
+              "pregunta_id": "8f73881f-b467-4ea1-a68f-8b93dc9384f9",
+              "respuesta": "29 B) Every independent shop has reported a large rise in profits",
+              "correcta": false,
+              "creado_en": null
+            },
+            {
+              "id": "1f3e46bf-bd9f-4328-b3a0-ba421745e714",
+              "pregunta_id": "8f73881f-b467-4ea1-a68f-8b93dc9384f9",
+              "respuesta": "29 C) Most visitors now come only to use the hall café and then go home",
+              "correcta": false,
+              "creado_en": null
+            },
+            {
+              "id": "106c6844-595c-44d7-86e3-9e7edfc8ac96",
+              "pregunta_id": "8f73881f-b467-4ea1-a68f-8b93dc9384f9",
+              "respuesta": "30 A) Publish a complete set of architectural reports before any work starts",
+              "correcta": false,
+              "creado_en": null
+            },
+            {
+              "id": "1bc9a90e-1f07-4ffb-89e2-6ccf69ac1548",
+              "pregunta_id": "8f73881f-b467-4ea1-a68f-8b93dc9384f9",
+              "respuesta": "30 B) Open one practical section of the building so progress is visible",
+              "correcta": true,
+              "creado_en": null
+            },
+            {
+              "id": "de0dc764-a153-4568-9731-2ab11080f704",
+              "pregunta_id": "8f73881f-b467-4ea1-a68f-8b93dc9384f9",
+              "respuesta": "30 C) Postpone volunteer work until a national expert agrees to lead the team",
+              "correcta": false,
+              "creado_en": null
+            }
+          ],
+          "respuestasAbiertas": [],
+          "audios": [
+            {
+              "id": "f2bb530d-8f45-4320-a72a-7371928a879a",
+              "orden": 1,
+              "titulo": "Interview — Bringing the Hall Back to Life",
+              "audio_url": "https://qnazrzvwvkwhkfbqsbmr.supabase.co/storage/v1/object/public/Levels_Listening/b2/exam-1/part-13/clip-01.mp3",
+              "storagePath": "b2/exam-1/part-13/clip-01.mp3"
+            }
+          ]
+        }
+      ],
+      "mcqRowCount": 21,
+      "openRowCount": 0,
+      "audioClipCount": 1
+    }
+  ]
+}

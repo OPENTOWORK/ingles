@@ -16,6 +16,10 @@ import {
   persistGeneratedPart,
   resolveA2ExamenId,
 } from '@/lib/levelsExamPersist';
+import { validateGeneratedExamPart } from '@/lib/examPartValidation';
+import { logExamGeneration } from '@/lib/examGenerationLog';
+import { getExamPartDisplayLabel } from '@/lib/examPartDisplayLabel';
+import { buildEnunciadoFromGenerated } from '@/lib/formatLevelsEnunciado';
 
 function parseJsonFromModel(text) {
   const raw = String(text || '').trim();
@@ -203,5 +207,142 @@ export async function generateAndPersistA2Exam(adminDb, {
     created: true,
     parts: results,
     message: `Examen ${examSlot} A2 generated (${results.length} parts).`,
+  };
+}
+
+/** Generate JSON for one A2 part without persisting (admin preview). */
+export async function previewA2ExamPartGeneration({
+  examSlot,
+  partNumber,
+  varietySeed,
+  topic,
+}) {
+  if (!isDraloOpenAIConfigured()) {
+    throw new Error('OPENAI_API_KEY is not configured.');
+  }
+
+  const partDef = getA2PartDef(partNumber);
+  if (!partDef) throw new Error(`Parte inválida: ${partNumber}`);
+
+  const topics = [
+    'a school trip and hobbies',
+    'food, cooking and restaurants',
+    'sport and outdoor activities',
+    'travel and holidays',
+    'technology and social media',
+  ];
+  const theme = topic || topics[(examSlot - 1) % topics.length];
+  const partIndex = A2_EXAM_PARTS.findIndex((p) => p.partNumber === partDef.partNumber);
+  const seedBase = varietySeed ?? Date.now();
+
+  const t0 = Date.now();
+  let generated = await generatePartJson(partDef, {
+    examSlot,
+    varietySeed: seedBase + partIndex,
+    topic: theme,
+  });
+
+  for (let attempt = 0; attempt < 2; attempt += 1) {
+    const validation = validateGeneratedExamPart('a2', partDef.partNumber, generated);
+    generated = validation.normalized;
+    if (validation.ok) break;
+    generated = await generatePartJson(partDef, {
+      examSlot,
+      varietySeed: seedBase + partIndex + 1000 + attempt * 500,
+      topic: theme,
+    });
+  }
+
+  const validation = validateGeneratedExamPart('a2', partDef.partNumber, generated);
+  const enunciadoPreview = buildEnunciadoFromGenerated(generated);
+  const partTitle = getExamPartDisplayLabel('a2', partDef.partNumber);
+
+  logExamGeneration('part_preview', {
+    level: 'a2',
+    examNumber: examSlot,
+    partNumber: partDef.partNumber,
+    action: 'preview',
+    durationMs: Date.now() - t0,
+    validationOk: validation.ok,
+    saved: false,
+    validationErrors: validation.ok ? null : validation.errors,
+  });
+
+  return {
+    partNumber: partDef.partNumber,
+    partTitle,
+    partLabel: partTitle,
+    generated,
+    enunciadoPreview,
+    validation: {
+      ok: validation.ok,
+      errors: validation.errors,
+      warnings: validation.warnings,
+    },
+  };
+}
+
+/** Persist admin-approved generated JSON for one A2 part. */
+export async function saveA2ExamPartFromPreview(adminDb, {
+  levelId,
+  examSlot,
+  partNumber,
+  generated,
+  skipAudio = false,
+  skipImages = false,
+  replacePartContent = true,
+}) {
+  const partDef = getA2PartDef(partNumber);
+  if (!partDef) throw new Error(`Parte inválida: ${partNumber}`);
+
+  const validation = validateGeneratedExamPart('a2', partDef.partNumber, generated);
+  if (!validation.ok) {
+    logExamGeneration('part_save_validation_failed', {
+      level: 'a2',
+      examNumber: examSlot,
+      partNumber: partDef.partNumber,
+      action: 'save',
+      validationOk: false,
+      saved: false,
+      validationErrors: validation.errors,
+    });
+    throw new Error(`Validation failed: ${validation.errors.join(' ')}`);
+  }
+
+  const examenId = await ensureA2ExamenRow(adminDb, levelId, examSlot);
+  const parteId = await ensureA2ParteRow(adminDb, partDef.partNumber, { refreshDescription: true });
+
+  if (replacePartContent) {
+    await deletePartContentForExam(adminDb, examenId, parteId);
+  }
+
+  const t0 = Date.now();
+  const preguntaId = await persistGeneratedPart(adminDb, {
+    levelId,
+    examenId,
+    parteId,
+    partNumber: partDef.partNumber,
+    examSlot,
+    generated: validation.normalized,
+    partDef,
+    skipAudio,
+    skipImages,
+  });
+
+  logExamGeneration('part_saved', {
+    level: 'a2',
+    examNumber: examSlot,
+    partNumber: partDef.partNumber,
+    action: 'save',
+    durationMs: Date.now() - t0,
+    validationOk: true,
+    saved: true,
+  });
+
+  return {
+    examenId,
+    partNumber: partDef.partNumber,
+    preguntaId,
+    partTitle: getExamPartDisplayLabel('a2', partDef.partNumber),
   };
 }

@@ -1,0 +1,130 @@
+{
+  "partNumber": 7,
+  "partTitle": "Reading Part 3 — multiple matching",
+  "partLabel": "Reading Part 3 — multiple matching",
+  "generated": {
+    "partTitle": "Reading Part 7",
+    "title": "Changing Paths: Four Career Stories",
+    "directions": "You are going to read four short texts about people who changed career. For questions 37–46, choose from the people A–D. The people may be chosen more than once.",
+    "matchingIntro": "Which person…",
+    "sections": [
+      {
+        "letter": "A",
+        "name": "Emma Thomson",
+        "text": "After a decade working as a marketing executive, Emma decided to follow her passion for literature. She left her corporate job to become a freelance writer, even though several colleagues warned her that she was taking a risk. Though the initial phase was challenging — finding clients and managing irregular income — she found joy in crafting stories and articles on her own terms. Emma appreciates the flexibility that comes with freelancing, allowing her to work from anywhere and set her own schedule. Despite the instability, the creative satisfaction she derives from writing outweighs the financial unpredictability, and she has no intention of returning to office life."
+      },
+      {
+        "letter": "B",
+        "name": "Michael Green",
+        "text": "Michael was a successful civil engineer before he decided to pursue a career in education. Motivated by a desire to inspire young minds, he retrained as a secondary school teacher during evenings and weekends while still working full time. The transition was not easy, as it required him to adapt to a completely different work environment and daily schedule. However, Michael finds teaching immensely rewarding, particularly when he sees his students grasp complex concepts for the first time. He values the opportunity to impact future generations positively, and he believes his earlier career gave him useful skills in planning and explaining technical ideas clearly."
+      },
+      {
+        "letter": "C",
+        "name": "Sophia Martinez",
+        "text": "Sophia worked as a software developer for several years before realising that her true calling was in the culinary arts. Leaving a stable job in tech, she enrolled in culinary school to pursue her dream of becoming a chef. Although it was a significant change, Sophia has not looked back since opening her own small restaurant in her home town. She enjoys the hands-on aspect of her new job and the chance to express her creativity through food, despite the long and demanding hours. For her, the physical pace of a kitchen feels more authentic than sitting at a desk, even when service nights are exhausting."
+      },
+      {
+        "letter": "D",
+        "name": "Liam Robinson",
+        "text": "Liam's journey from accountant to interior designer might seem unusual, but for him it was a natural progression. Always passionate about aesthetics and design, he took the bold step of switching careers after ten years in finance. Liam initially worried about the financial implications of starting again in a competitive field, but he ultimately found a niche for himself, blending his analytical skills with creative design. He appreciates how his new career allows him to see the tangible results of his work, transforming rooms and offices to meet clients' needs. Former colleagues sometimes tease him about the change, yet he feels he is finally doing what suits him best."
+      }
+    ],
+    "questions": [
+      {
+        "number": 37,
+        "prompt": "was concerned about the cost of starting again in a competitive field?"
+      },
+      {
+        "number": 38,
+        "prompt": "enjoys seeing a clear physical result from their work?"
+      },
+      {
+        "number": 39,
+        "prompt": "completed training for the new profession while continuing their old job?"
+      },
+      {
+        "number": 40,
+        "prompt": "was warned by people at work that the change could be risky?"
+      },
+      {
+        "number": 41,
+        "prompt": "appreciates not being tied to one workplace or fixed timetable?"
+      },
+      {
+        "number": 42,
+        "prompt": "prefers a practical, physically active job to working at a desk?"
+      },
+      {
+        "number": 43,
+        "prompt": "uses experience from a previous technical career to explain things clearly?"
+      },
+      {
+        "number": 44,
+        "prompt": "feels rewarded when other people understand difficult ideas?"
+      },
+      {
+        "number": 45,
+        "prompt": "accepts tiring working conditions because the work feels more personally meaningful?"
+      },
+      {
+        "number": 46,
+        "prompt": "combines analytical ability from a previous job with creative work?"
+      }
+    ],
+    "modelAnswers": [
+      {
+        "id": 37,
+        "answer": "D"
+      },
+      {
+        "id": 38,
+        "answer": "D"
+      },
+      {
+        "id": 39,
+        "answer": "B"
+      },
+      {
+        "id": 40,
+        "answer": "A"
+      },
+      {
+        "id": 41,
+        "answer": "A"
+      },
+      {
+        "id": 42,
+        "answer": "C"
+      },
+      {
+        "id": 43,
+        "answer": "B"
+      },
+      {
+        "id": 44,
+        "answer": "B"
+      },
+      {
+        "id": 45,
+        "answer": "C"
+      },
+      {
+        "id": 46,
+        "answer": "D"
+      }
+    ],
+    "sentencePool": [],
+    "optionPool": [],
+    "matchingAnswers": [],
+    "speakingPrompts": [],
+    "bulletPoints": [],
+    "partNumber": 7,
+    "discussionQuestions": [],
+    "collaborativePrompts": []
+  },
+  "validation": {
+    "ok": true,
+    "errors": [],
+    "warnings": []
+  }
+}

@@ -1,12 +1,33 @@
 'use client';
 
 /**
- * @param {{ correctCount: number, totalSlots: number, passingCount: number, lang?: 'es' | 'en' }} props
+ * @param {{ correctCount: number, totalSlots: number, passingCount: number, lang?: 'es' | 'en', variant?: 'default' | 'speaking' }} props
  */
-export default function LevelsPartScorePanel({ correctCount, totalSlots, passingCount, lang = 'es' }) {
+export default function LevelsPartScorePanel({
+  correctCount,
+  totalSlots,
+  passingCount,
+  lang = 'es',
+  variant = 'default',
+}) {
   if (!totalSlots || totalSlots < 1) return null;
 
   const en = lang === 'en';
+
+  if (variant === 'speaking') {
+    return (
+      <div className="levels-b2-score">
+        <p className="levels-b2-score__main">
+          {en ? 'Typed speaking practice' : 'Práctica de speaking por escrito'}
+        </p>
+        <p className="levels-b2-score__hint">
+          {en
+            ? 'Assessed on Fluency, Grammar and Vocabulary, Pronunciation, Interactive Communication, and Global Achievement — not on “correct answers”.'
+            : 'Se valora Fluidez, Gramática y vocabulario, Pronunciación, Comunicación interactiva y Logro global — no por “respuestas correctas”.'}
+        </p>
+      </div>
+    );
+  }
 
   return (
     <div className="levels-b2-score">

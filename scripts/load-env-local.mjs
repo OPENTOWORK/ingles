@@ -9,9 +9,16 @@ const ROOT = path.join(path.dirname(fileURLToPath(import.meta.url)), '..');
  */
 export function loadEnvLocal() {
   const p = path.join(ROOT, '.env.local');
-  if (!existsSync(p)) return {};
+  const vercelP = path.join(ROOT, '.env.vercel.local');
   const out = {};
-  const raw = readFileSync(p, 'utf8');
+  for (const file of [p, vercelP]) {
+    if (!existsSync(file)) continue;
+    mergeEnvFile(out, readFileSync(file, 'utf8'));
+  }
+  return out;
+}
+
+function mergeEnvFile(out, raw) {
   for (const line of raw.split(/\r?\n/)) {
     const trimmed = line.trim();
     if (!trimmed || trimmed.startsWith('#')) continue;
@@ -25,10 +32,9 @@ export function loadEnvLocal() {
     ) {
       val = val.slice(1, -1);
     }
-    out[key] = val;
+    if (!out[key]) out[key] = val;
     if (process.env[key] === undefined || process.env[key] === '') {
       process.env[key] = val;
     }
   }
-  return out;
 }

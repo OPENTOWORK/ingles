@@ -1,0 +1,175 @@
+{
+  "partNumber": 10,
+  "cambridgePart": "Listening Part 1 — Short Extracts",
+  "partTitle": "Listening Part 1 — Short Extracts",
+  "partLabel": "B2 Examen 1 — Dralo Part 10 (replacement preview)",
+  "note": "Textual preview only — NO audio generated — NO Supabase save. Replaces legacy city/technology Part 10. Q7 option C revised (v2) — items 1–6, 8 approved.",
+  "targetPreguntaId": "f3a32fe1-d017-4fa7-afab-2d25798ff485",
+  "replacesLegacyTheme": "city/technology short extracts",
+  "generated": {
+    "partTitle": "Part 1: Multiple choice (short extracts)",
+    "title": "Short Extracts",
+    "directions": "You will hear people talking in eight different situations. For questions 1–8, choose the best answer (A, B or C).",
+    "setting": "Eight independent everyday situations: gallery, airport, university, theatre, dry cleaner, cookery demo, botanical garden, rented flat.",
+    "questions": [
+      {
+        "number": 1,
+        "situation": "A visitor is asking about a painting in a local art gallery.",
+        "scriptWordCount": 78,
+        "estimatedDurationSec": 29,
+        "script": "I'm afraid the Constable landscape isn't in the main gallery today. We've lent the original to a partner museum for their spring exhibition, which is why you'll see a high-quality reproduction on the wall. It should return in June when the show closes. If nineteenth-century landscapes interest you, the Turner watercolours in room four are part of our permanent collection — they don't travel, and staff say they're among the most popular works we own.",
+        "prompt": "What does the speaker recommend the visitor do next?",
+        "options": [
+          "A) Book a guided tour before leaving the building",
+          "B) Come back when the borrowed painting has returned",
+          "C) Look at other works displayed in a nearby room"
+        ],
+        "correctAnswer": "C",
+        "whyItWorks": "The speaker directs the visitor to the Turner watercolours in room four as an alternative worth seeing. A is plausible but never offered; B is implied as a long-term option, not the immediate recommendation."
+      },
+      {
+        "number": 2,
+        "situation": "An announcement is being made at an airport departure gate.",
+        "scriptWordCount": 82,
+        "estimatedDurationSec": 31,
+        "script": "Attention passengers travelling to Lisbon on flight TP fourteen twenty-three. Due to a last-minute aircraft change, boarding will now take place at gate twenty-two, not gate nine as shown on your boarding pass. Please make your way to the new gate without delay. Boarding will begin in approximately ten minutes. All checked baggage has already been loaded onto the replacement aircraft. Passengers requiring special assistance should speak to a member of staff at gate twenty-two. We apologise for the late notice and any inconvenience this may cause.",
+        "prompt": "What are passengers told to do?",
+        "options": [
+          "A) Collect their luggage before going to the gate",
+          "B) Go to a different gate from the one on their boarding pass",
+          "C) Wait where they are until the delay is officially over"
+        ],
+        "correctAnswer": "B",
+        "whyItWorks": "Boarding has moved to gate twenty-two instead of gate nine. A misreads baggage as something passengers must collect; C suggests waiting, but the announcement asks them to proceed immediately."
+      },
+      {
+        "number": 3,
+        "situation": "A student is telephoning a university registry office about an official transcript.",
+        "scriptWordCount": 76,
+        "estimatedDurationSec": 28,
+        "script": "Thanks for calling Registry. An official transcript isn't something we can print while you wait — we need a signed application form and a copy of your student ID. Processing normally takes five working days. There is an express service if you're willing to pay an additional fee, but the standard request still has to go through the same approval process. You can download the form from the student portal or collect one from the desk in the lobby.",
+        "prompt": "What must the student do to obtain a transcript?",
+        "options": [
+          "A) Submit a completed application together with identification",
+          "B) Ask their personal tutor to send it directly to an employer",
+          "C) Wait until after graduation before the request can be processed"
+        ],
+        "correctAnswer": "A",
+        "whyItWorks": "The administrator states that a signed form and student ID are required. B and C are common misconceptions about transcripts but are not mentioned as options here."
+      },
+      {
+        "number": 4,
+        "situation": "A customer is speaking to a theatre box-office assistant on the phone.",
+        "scriptWordCount": 74,
+        "estimatedDurationSec": 27,
+        "script": "Front row for Saturday is completely sold out, I'm afraid — those seats went within an hour of release. What I can offer you is two places in the rear stalls on the same night. They're further back, but the sightlines are still clear, and the price is fifteen pounds less per ticket. Alternatively I could add you to the cancellation list, though I can't promise anything will come up before the performance.",
+        "prompt": "What does the assistant offer the customer?",
+        "options": [
+          "A) Tickets for a different performance later in the week",
+          "B) A full refund because the best seats are unavailable",
+          "C) Seats further from the stage at a lower price"
+        ],
+        "correctAnswer": "C",
+        "whyItWorks": "Rear stalls are offered with a clear view at a reduced price. A mentions a different night, which is not proposed; B invents a refund that is never offered."
+      },
+      {
+        "number": 5,
+        "situation": "A customer is at a dry cleaner's counter about a stained jacket.",
+        "scriptWordCount": 71,
+        "estimatedDurationSec": 26,
+        "script": "I've run the jacket through the process twice, but that oil mark on the lining still hasn't lifted completely. Leather and mixed fabrics often need a different solvent, so I'd take it to the specialist on Burton Road — they handle handbags and coats like this every day. I won't charge you for the second attempt here; it simply isn't the right method for this material. Sorry we couldn't finish it for you today.",
+        "prompt": "What does the assistant suggest the customer should do?",
+        "options": [
+          "A) Contact the shop that sold the jacket for compensation",
+          "B) Take the item to a cleaner used to working with that material",
+          "C) Leave the jacket for one more attempt using the same process"
+        ],
+        "correctAnswer": "B",
+        "whyItWorks": "The assistant recommends the specialist on Burton Road for leather and mixed fabrics. A is irrelevant; C is ruled out because a third standard attempt would not help."
+      },
+      {
+        "number": 6,
+        "situation": "A chef is introducing a live cookery demonstration to an audience.",
+        "scriptWordCount": 73,
+        "estimatedDurationSec": 27,
+        "script": "Welcome everyone to today's demonstration. We're not looking at restaurant plating or advanced knife work — the idea is to adapt well-known recipes so they work for one or two people rather than a family of six. I'll show you how to halve ingredients sensibly and swap items you already have in the cupboard. Do bring a notebook if you want to record the substitutions; we won't be handing out printed recipes until the end.",
+        "prompt": "What is the main focus of the session?",
+        "options": [
+          "A) Changing recipes so they suit smaller households",
+          "B) Teaching professional techniques used in restaurant kitchens",
+          "C) Preparing large batches of food suitable for freezing"
+        ],
+        "correctAnswer": "A",
+        "whyItWorks": "The speaker explicitly contrasts restaurant skills with adapting recipes for one or two people. B is what the session is not about; C introduces freezing, which is never mentioned."
+      },
+      {
+        "number": 7,
+        "situation": "A staff member is making an announcement to visitors at a botanical garden.",
+        "scriptWordCount": 79,
+        "estimatedDurationSec": 29,
+        "script": "Good morning. Just to let you know, the tropical glasshouse will stay closed until around noon while engineers repair the heating system. Everything outdoors is open as usual, including the sculpture trail by the lake — it's about forty minutes if you walk the full loop. The café is serving hot drinks, and at eleven there's a short talk in the education centre about winter planting. The orchid display in the main hall is also temporarily covered, but the outdoor beds are worth visiting in this weather.",
+        "prompt": "What can visitors do while the glasshouse is closed?",
+        "options": [
+          "A) Enter the tropical house through a side entrance",
+          "B) Follow the outdoor route past the sculptures",
+          "C) Visit the orchid display in the main hall"
+        ],
+        "correctAnswer": "B",
+        "whyItWorks": "The sculpture trail outdoors remains open. The tropical glasshouse is closed, and the orchid display is temporarily covered."
+      },
+      {
+        "number": 8,
+        "situation": "A tenant receives a phone call from a letting agency about their flat.",
+        "scriptWordCount": 77,
+        "estimatedDurationSec": 28,
+        "script": "Hi, it's Marco from the agency. The plumber can come tomorrow to fix the dripping tap in the kitchen — the slot is between nine and eleven, and someone over eighteen needs to be in the flat to let him in. If that doesn't suit, we'll try for Thursday instead. Also, the building-wide fire alarm test is scheduled for Friday afternoon. It'll only last a few minutes, but I wanted to warn you so you don't think there's a real emergency.",
+        "prompt": "What does the tenant need to arrange?",
+        "options": [
+          "A) Payment of the rent before the end of the week",
+          "B) Permission to redecorate the kitchen themselves",
+          "C) Being at home when the repair visit takes place"
+        ],
+        "correctAnswer": "C",
+        "whyItWorks": "Someone over eighteen must be present for the plumber's visit. A and B introduce topics the caller does not mention."
+      }
+    ],
+    "modelAnswers": [
+      { "id": 1, "answer": "C" },
+      { "id": 2, "answer": "B" },
+      { "id": 3, "answer": "A" },
+      { "id": 4, "answer": "C" },
+      { "id": 5, "answer": "B" },
+      { "id": 6, "answer": "A" },
+      { "id": 7, "answer": "B" },
+      { "id": 8, "answer": "C" }
+    ],
+    "answerKeySummary": "1C 2B 3A 4C 5B 6A 7B 8C",
+    "answerKeyDistribution": { "A": 2, "B": 3, "C": 3 },
+    "audioClips": [
+      { "orden": 1, "titulo": "Situation 1 — Art gallery", "storagePath": "b2/exam-1/part-10/clip-01.mp3", "estimatedDurationSec": 29 },
+      { "orden": 2, "titulo": "Situation 2 — Airport gate", "storagePath": "b2/exam-1/part-10/clip-02.mp3", "estimatedDurationSec": 31 },
+      { "orden": 3, "titulo": "Situation 3 — University registry", "storagePath": "b2/exam-1/part-10/clip-03.mp3", "estimatedDurationSec": 28 },
+      { "orden": 4, "titulo": "Situation 4 — Theatre box office", "storagePath": "b2/exam-1/part-10/clip-04.mp3", "estimatedDurationSec": 27 },
+      { "orden": 5, "titulo": "Situation 5 — Dry cleaner", "storagePath": "b2/exam-1/part-10/clip-05.mp3", "estimatedDurationSec": 26 },
+      { "orden": 6, "titulo": "Situation 6 — Cookery demonstration", "storagePath": "b2/exam-1/part-10/clip-06.mp3", "estimatedDurationSec": 27 },
+      { "orden": 7, "titulo": "Situation 7 — Botanical garden", "storagePath": "b2/exam-1/part-10/clip-07.mp3", "estimatedDurationSec": 29 },
+      { "orden": 8, "titulo": "Situation 8 — Letting agency call", "storagePath": "b2/exam-1/part-10/clip-08.mp3", "estimatedDurationSec": 28 }
+    ],
+    "mcqRowCountExpected": 24,
+    "topicVarietyChecklist": {
+      "artGalleryCulture": true,
+      "airportTravel": true,
+      "universityAdministration": true,
+      "theatreEntertainment": true,
+      "personalServicesDryCleaning": true,
+      "cookeryEducation": true,
+      "botanicalGardenNature": true,
+      "rentedAccommodation": true,
+      "avoidsCityTechnologyTheme": true,
+      "avoidsFirstJobsTheme": true,
+      "avoidsCommunityBuildingRestoration": true,
+      "avoidsSportWellbeingTheme": true,
+      "noRepeatedSituationType": true
+    }
+  }
+}

@@ -149,6 +149,10 @@ function LevelSkillPracticePageInner({ slug, skillRoute }) {
         partsInPaper={partRows.length}
         examLabelsBySlot={examNamesBySlot}
         {...examSlotPickerProps}
+        slug={slug}
+        partMin={partMin}
+        partMax={partMax}
+        adminPartFlow={adminFlow.adminPartFlow}
         examPracticeOpen={scoring.examPracticeOpen}
         title={title}
         subtitle={scoring.examPracticeOpen ? partsLabel : undefined}

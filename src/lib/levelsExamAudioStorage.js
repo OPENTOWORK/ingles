@@ -79,6 +79,7 @@ export function extractListeningClipsFromGenerated(gen, partDef) {
         orden: c.orden ?? i + 1,
         titulo: String(c.titulo || '').trim() || `Clip ${c.orden ?? i + 1}`,
         text: String(c.text || c.script || '').trim(),
+        storagePath: String(c.storagePath || c.storage_path || '').trim(),
       }))
       .filter((c) => c.text);
   }

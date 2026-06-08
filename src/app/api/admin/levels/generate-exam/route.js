@@ -42,6 +42,7 @@ export async function POST(req) {
   const skipAudio = Boolean(body.skipAudio);
   const partNumber = body.partNumber != null ? Number(body.partNumber) : null;
   const preserveExistingParts = Boolean(body.preserveExistingParts);
+  const replacePartContent = Boolean(body.replacePartContent || body.force);
 
   if (slug !== 'a2' && !isExamGenerationSlug(slug)) {
     return NextResponse.json(
@@ -110,7 +111,7 @@ export async function POST(req) {
         partNumber,
         skipAudio,
         preserveExistingParts,
-        replacePartContent: force,
+        replacePartContent,
       });
     } else {
       result = await generateAndPersistLevelExam(auth.adminDb, {
@@ -120,7 +121,7 @@ export async function POST(req) {
         force,
         skipAudio,
         preserveExistingParts,
-        replacePartContent: force,
+        replacePartContent,
       });
     }
 

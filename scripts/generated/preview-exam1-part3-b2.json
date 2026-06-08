@@ -1,0 +1,114 @@
+{
+  "partNumber": 3,
+  "partTitle": "Use of English Part 3 — word formation",
+  "partLabel": "Use of English Part 3 — word formation",
+  "generated": {
+    "partTitle": "Part 3: Word formation",
+    "title": "Sport, Parks and Wellbeing",
+    "directions": "For questions 17–24, read the text below. Use the word given in capitals at the end of some of the lines to form a word that fits in the gap in the same line. There is an example at the beginning (0).",
+    "example": {
+      "number": 0,
+      "stem": "NATURE",
+      "answer": "natural",
+      "explanation": "The adjective natural collocates with spaces in this context."
+    },
+    "passage": "Many city councils now recognise that access to (0) ___ (NATURE) spaces can improve residents' quality of life. As a result, they are investing in (17) ___ (ENVIRONMENT) initiatives that combine outdoor sport with the protection of local wildlife. Regular exercise helps people maintain a (18) ___ (HEALTH) routine, even when work schedules are demanding.\n\nCommunity centres encourage residents to participate (19) ___ (ACTIVE) in local sessions such as running groups, yoga classes and team games. Coaches explain that moderate training can (20) ___ (STRENGTH) muscles without placing unnecessary strain on beginners. For many participants, the main reward is not medals but a sense of (21) ___ (RELAX) after a busy week.\n\n(22) ___ (SUCCESS) programmes depend on volunteers who share (23) ___ (RESPONSIBLE) for organising events and keeping equipment in good condition. Critics worry that sport can become overly (24) ___ (COMPETE), yet most local clubs emphasise enjoyment and social contact rather than winning at all costs.",
+    "questions": [
+      {
+        "number": 17,
+        "type": "word-formation",
+        "stem": "ENVIRONMENT",
+        "answer": "environmental"
+      },
+      {
+        "number": 18,
+        "type": "word-formation",
+        "stem": "HEALTH",
+        "answer": "healthy"
+      },
+      {
+        "number": 19,
+        "type": "word-formation",
+        "stem": "ACTIVE",
+        "answer": "actively"
+      },
+      {
+        "number": 20,
+        "type": "word-formation",
+        "stem": "STRENGTH",
+        "answer": "strengthen"
+      },
+      {
+        "number": 21,
+        "type": "word-formation",
+        "stem": "RELAX",
+        "answer": "relaxation"
+      },
+      {
+        "number": 22,
+        "type": "word-formation",
+        "stem": "SUCCESS",
+        "answer": "successful"
+      },
+      {
+        "number": 23,
+        "type": "word-formation",
+        "stem": "RESPONSIBLE",
+        "answer": "responsibility"
+      },
+      {
+        "number": 24,
+        "type": "word-formation",
+        "stem": "COMPETE",
+        "answer": "competitive"
+      }
+    ],
+    "modelAnswers": [
+      {
+        "id": 17,
+        "answer": "environmental"
+      },
+      {
+        "id": 18,
+        "answer": "healthy"
+      },
+      {
+        "id": 19,
+        "answer": "actively"
+      },
+      {
+        "id": 20,
+        "answer": "strengthen"
+      },
+      {
+        "id": 21,
+        "answer": "relaxation"
+      },
+      {
+        "id": 22,
+        "answer": "successful"
+      },
+      {
+        "id": 23,
+        "answer": "responsibility"
+      },
+      {
+        "id": 24,
+        "answer": "competitive"
+      }
+    ],
+    "partNumber": 3,
+    "bulletPoints": [],
+    "speakingPrompts": [],
+    "discussionQuestions": [],
+    "collaborativePrompts": [],
+    "sections": [],
+    "sentencePool": []
+  },
+  "validation": {
+    "ok": true,
+    "errors": [],
+    "warnings": []
+  },
+  "enunciadoPreview": "Text\nSport, Parks and Wellbeing\nMany city councils now recognise that access to (0) ___ (NATURE) spaces can improve residents' quality of life. As a result, they are investing in (17) ___ (ENVIRONMENT) initiatives that combine outdoor sport with the protection of local wildlife. Regular exercise helps people maintain a (18) ___ (HEALTH) routine, even when work schedules are demanding.\nCommunity centres encourage residents to participate (19) ___ (ACTIVE) in local sessions such as running groups, yoga classes and team games. Coaches explain that moderate training can (20) ___ (STRENGTH) muscles without placing unnecessary strain on beginners. For many participants, the main reward is not medals but a sense of (21) ___ (RELAX) after a busy week.\n(22) ___ (SUCCESS) programmes depend on volunteers who share (23) ___ (RESPONSIBLE) for organising events and keeping equipment in good condition. Critics worry that sport can become overly (24) ___ (COMPETE), yet most local clubs emphasise enjoyment and social contact rather than winning at all costs."
+}
