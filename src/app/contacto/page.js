@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import Link from 'next/link';
 import toast from 'react-hot-toast';
 import { supabase } from '@/utils/supabaseClient';
 import {
@@ -21,7 +22,6 @@ export default function ContactPage() {
   const [pageLoading, setPageLoading] = useState(true);
   const [ticketLoading, setTicketLoading] = useState(false);
   const [myTickets, setMyTickets] = useState([]);
-  const [faqList, setFaqList] = useState([]);
   const [ticketForm, setTicketForm] = useState({
     name: '',
     email: '',
@@ -43,7 +43,7 @@ export default function ContactPage() {
         }));
       }
 
-      await Promise.all([loadMyTickets(currentSession?.user?.id), loadFaq()]);
+      await loadMyTickets(currentSession?.user?.id);
       setPageLoading(false);
     };
 
@@ -66,10 +66,6 @@ export default function ContactPage() {
     if (!error) {
       setMyTickets(data || []);
     }
-  };
-
-  const loadFaq = async () => {
-    setFaqList([]);
   };
 
   const handleTicketChange = (e) => {
@@ -164,7 +160,7 @@ export default function ContactPage() {
 
       <InternalMessagesSection session={session} />
 
-      <section className="contact-section">
+      <section id="support-ticket-form" className="contact-section">
         <h2>Support</h2>
         <p>
           Help desk and issue tracking so you can follow up on questions or problems reported
@@ -242,29 +238,18 @@ export default function ContactPage() {
         )}
       </section>
 
-      <section className="contact-section">
-        <h2>FAQ</h2>
-        <p>Frequently asked questions, definitions, and quick solutions.</p>
-        <ul className="inline-list">
-          <li>Self-service: find answers on your own, right away.</li>
-          <li>Topics: account, payments, platform usage, exams, and more.</li>
-          <li>Quick links: jump to relevant information without browsing the whole site.</li>
-        </ul>
-
-        {faqList.length > 0 && (
-          <div className="faq-grid">
-            {faqList.map((faq) => (
-              <article key={faq.id} className="faq-card">
-                <strong>{faq.question}</strong>
-                <p>{faq.answer}</p>
-                <small>{faq.topic}</small>
-                {faq.quick_link && (
-                  <a href={faq.quick_link} target="_blank" rel="noreferrer">Quick link</a>
-                )}
-              </article>
-            ))}
-          </div>
-        )}
+      <section className="contact-faq-entry" aria-labelledby="contact-faq-entry-title">
+        <div className="contact-faq-entry__copy">
+          <h2 id="contact-faq-entry-title">FAQ</h2>
+          <p>
+            Browse common questions about accounts, exams, billing, and technical issues before
+            opening a ticket.
+          </p>
+        </div>
+        <Link href="/contacto/faq" className="contact-faq-entry__btn">
+          View FAQ
+          <span aria-hidden>→</span>
+        </Link>
       </section>
 
       <GlobalStyles />
@@ -305,11 +290,12 @@ function GlobalStyles() {
       .tickets-table th{background:#fafafa;font-weight:600}
       .tickets-table__col-id{width:1%;white-space:nowrap}
       .tickets-table__ticket-ref{display:inline-block;padding:4px 10px;border-radius:8px;background:#f1f5f9;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:12px;font-weight:600;letter-spacing:0.04em;color:#334155}
-      .faq-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:12px;margin-top:12px}
-      .faq-card{border:1px solid #eaeaea;border-radius:12px;padding:12px;background:#fff;display:grid;gap:6px}
-      .faq-card p{margin:0;color:#333}
-      .faq-card small{color:#666}
-      .faq-card a{color:#0070f3;text-decoration:none}
+      .contact-faq-entry{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:16px 24px;margin:22px 0;padding:22px 24px;border:1px solid #dbeafe;border-radius:16px;background:linear-gradient(135deg,#eff6ff 0%,#fff 55%,#f8fafc 100%);box-shadow:0 4px 18px rgba(37,99,235,.08)}
+      .contact-faq-entry__copy{flex:1 1 240px;min-width:0}
+      .contact-faq-entry h2{margin:0 0 6px;font-size:1.25rem}
+      .contact-faq-entry p{margin:0;color:#64748b;font-size:0.92rem;line-height:1.5;max-width:36rem}
+      .contact-faq-entry__btn{display:inline-flex;align-items:center;gap:8px;padding:12px 20px;border-radius:12px;background:#2563eb;color:#fff;font-size:0.95rem;font-weight:700;text-decoration:none;box-shadow:0 10px 24px rgba(37,99,235,.28);transition:transform .2s,box-shadow .2s}
+      .contact-faq-entry__btn:hover{transform:translateY(-2px);box-shadow:0 14px 32px rgba(37,99,235,.35)}
       .submit-btn{padding:14px 20px;background:#0070f3;color:white;font-weight:600;border:none;border-radius:12px;cursor:pointer;transition:transform .2s,box-shadow .2s;box-shadow:0 10px 24px rgba(0,112,243,.35)}
       .submit-btn:hover:not(:disabled){transform:translateY(-2px);box-shadow:0 18px 40px rgba(0,112,243,.4)}
       .submit-btn:disabled{opacity:0.7;cursor:not-allowed;transform:none}
