@@ -30,8 +30,71 @@ function cleanLinkLabel(text = '') {
     .trim();
 }
 
+function getExamLinkMeta(exam) {
+  const kind = classifyExamLink(exam.href, exam.text);
+  return {
+    kind,
+    label: cleanLinkLabel(exam.text),
+    icon: LINK_ICONS[kind] || '📋',
+    isExamMode: kind === 'exam-mode',
+    kindClass: `exam-practice-hub__card--${kind}`,
+  };
+}
+
+function ExamPracticeCard({ exam, isStudent, variant = 'skill' }) {
+  const blockedForStudent = isStudent && !exam.enabledForStudents;
+  const { kindClass, label, icon, isExamMode } = getExamLinkMeta(exam);
+  const isBanner = variant === 'banner';
+  const cardClass = [
+    'exam-practice-hub__card',
+    kindClass,
+    isBanner ? 'exam-practice-hub__card--banner' : '',
+    isExamMode ? 'exam-practice-hub__card--featured' : '',
+    blockedForStudent ? 'exam-practice-hub__card--disabled' : '',
+  ]
+    .filter(Boolean)
+    .join(' ');
+
+  const inner = isBanner ? (
+    <ExamModeBannerInner
+      icon={icon}
+      label={label}
+      hint="Full timed simulation"
+      badge={blockedForStudent ? 'Coming soon' : null}
+    />
+  ) : (
+    <ExamPracticeCardInner
+      icon={icon}
+      label={label}
+      hint="Practice this paper"
+      badge={blockedForStudent ? 'Coming soon' : null}
+    />
+  );
+
+  if (blockedForStudent) {
+    return (
+      <div className={cardClass} aria-disabled="true">
+        {inner}
+      </div>
+    );
+  }
+
+  return (
+    <Link
+      href={exam.href}
+      className={cardClass}
+      {...(isExamMode ? { 'data-tour': 'level-exam-mode' } : {})}
+    >
+      {inner}
+    </Link>
+  );
+}
+
 export default function ExamPracticeHubSection({ examLinks = [], isStudent }) {
   if (!examLinks.length) return null;
+
+  const examModeLink = examLinks.find((exam) => getExamLinkMeta(exam).isExamMode);
+  const skillLinks = examLinks.filter((exam) => !getExamLinkMeta(exam).isExamMode);
 
   return (
     <section className="exam-practice-hub" data-tour="level-exam-practice">
@@ -42,51 +105,45 @@ export default function ExamPracticeHubSection({ examLinks = [], isStudent }) {
         description={EXAM_PRACTICE_HEADER.description}
       />
 
-      <div className="exam-practice-hub__grid">
-        {examLinks.map((exam) => {
-          const blockedForStudent = isStudent && !exam.enabledForStudents;
-          const kind = classifyExamLink(exam.href, exam.text);
-          const label = cleanLinkLabel(exam.text);
-          const icon = LINK_ICONS[kind] || '📋';
-          const isExamMode = kind === 'exam-mode';
+      {examModeLink ? (
+        <div className="exam-practice-hub__exam-mode">
+          <ExamPracticeCard exam={examModeLink} isStudent={isStudent} variant="banner" />
+        </div>
+      ) : null}
 
-          const kindClass = `exam-practice-hub__card--${kind}`;
-
-          if (blockedForStudent) {
-            return (
-              <div
-                key={exam.href}
-                className={`exam-practice-hub__card exam-practice-hub__card--disabled ${kindClass}${
-                  isExamMode ? ' exam-practice-hub__card--featured' : ''
-                }`}
-                aria-disabled="true"
-              >
-                <ExamPracticeCardInner icon={icon} label={label} badge="Coming soon" />
-              </div>
-            );
-          }
-
-          return (
-            <Link
-              key={exam.href}
-              href={exam.href}
-              className={`exam-practice-hub__card ${kindClass}${
-                isExamMode ? ' exam-practice-hub__card--featured' : ''
-              }`}
-              {...(isExamMode ? { 'data-tour': 'level-exam-mode' } : {})}
-            >
-              <ExamPracticeCardInner
-                icon={icon}
-                label={label}
-                hint={isExamMode ? 'Full timed simulation' : 'Practice this paper'}
-              />
-            </Link>
-          );
-        })}
-      </div>
+      {skillLinks.length > 0 ? (
+        <div className="exam-practice-hub__skills-grid">
+          {skillLinks.map((exam) => (
+            <ExamPracticeCard key={exam.href} exam={exam} isStudent={isStudent} />
+          ))}
+        </div>
+      ) : null}
 
       <ExamPracticeHubStyles />
     </section>
+  );
+}
+
+function ExamModeBannerInner({ icon, label, hint, badge }) {
+  return (
+    <div className="exam-practice-hub__banner-inner">
+      <span className="exam-practice-hub__icon-wrap" aria-hidden>
+        <span className="exam-practice-hub__icon">{icon}</span>
+      </span>
+      <div className="exam-practice-hub__banner-copy">
+        <span className="exam-practice-hub__label">{label}</span>
+        {badge ? (
+          <span className="exam-practice-hub__badge">{badge}</span>
+        ) : hint ? (
+          <span className="exam-practice-hub__hint">{hint}</span>
+        ) : null}
+      </div>
+      {!badge ? (
+        <span className="exam-practice-hub__arrow exam-practice-hub__arrow--banner" aria-hidden>
+          →
+        </span>
+      ) : null}
+    </div>
   );
 }
 
@@ -119,26 +176,56 @@ function ExamPracticeHubStyles() {
         margin-bottom: 0.25rem;
         padding: 6px;
       }
-      .niveles-level-page .exam-practice-hub__grid {
+      .niveles-level-page .exam-practice-hub__exam-mode {
+        margin-bottom: 14px;
+      }
+      .niveles-level-page .exam-practice-hub__skills-grid {
         display: grid;
         gap: 14px;
         grid-template-columns: repeat(1, minmax(0, 1fr));
       }
       @media (min-width: 640px) {
-        .niveles-level-page .exam-practice-hub__grid {
+        .niveles-level-page .exam-practice-hub__skills-grid {
           grid-template-columns: repeat(2, minmax(0, 1fr));
         }
       }
       @media (min-width: 900px) {
-        .niveles-level-page .exam-practice-hub__grid {
-          display: flex;
-          flex-wrap: nowrap;
-          align-items: stretch;
+        .niveles-level-page .exam-practice-hub__skills-grid {
+          grid-template-columns: repeat(4, minmax(0, 1fr));
         }
-        .niveles-level-page .exam-practice-hub__card {
-          flex: 1 1 0;
-          min-width: 0;
-        }
+      }
+      .niveles-level-page .exam-practice-hub__card--banner {
+        width: 100%;
+        min-height: 96px;
+        padding: 18px 22px;
+      }
+      .niveles-level-page .exam-practice-hub__banner-inner {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        width: 100%;
+      }
+      .niveles-level-page .exam-practice-hub__banner-copy {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 4px;
+        min-width: 0;
+      }
+      .niveles-level-page .exam-practice-hub__card--banner .exam-practice-hub__label {
+        font-size: clamp(1.05rem, 2vw, 1.2rem);
+        padding-right: 0;
+      }
+      .niveles-level-page .exam-practice-hub__card--banner .exam-practice-hub__hint {
+        font-size: 0.88rem;
+      }
+      .niveles-level-page .exam-practice-hub__arrow--banner {
+        position: static;
+        flex: 0 0 auto;
+        width: 2.25rem;
+        height: 2.25rem;
+        font-size: 1.05rem;
       }
       .niveles-level-page .exam-practice-hub__card {
         position: relative;

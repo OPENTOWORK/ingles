@@ -6,20 +6,50 @@ import {
   isTeacherRole,
   normalizeRoleName,
 } from '@/utils/authRoles';
+import { getExamUnitSlugFromPathname } from '@/lib/examTheoryUnlock';
 
-/** Theory, placement, training y planes: en la home (solo admin ve esta fila). */
-export const HOME_MAIN_LINKS = [
-  { href: '/teoria', label: 'Theory', tourId: 'nav-theory' },
+/** Theory solo en la home (inferior, oculto para estudiantes). */
+export const HOME_THEORY_LINK = { href: '/teoria', label: 'Theory', tourId: 'nav-theory' };
+
+/** Enlaces inferiores de la home visibles para usuarios registrados. */
+export const HOME_QUICK_LINKS = [
   { href: '/prueba-nivel', label: 'Placement Test', tourId: 'nav-placement' },
   { href: '/training', label: 'Training' },
   { href: '/precios', label: 'Planes', tourId: 'nav-pricing' },
 ];
 
+/** Theory, placement, training y planes: en la home (Theory solo admin). */
+export const HOME_MAIN_LINKS = [HOME_THEORY_LINK, ...HOME_QUICK_LINKS];
+
 /** Enlaces en la barra superior / menú móvil antes de Dralo AI. */
 export const NAV_LINKS_BEFORE_DRALO = [
-  { href: '/teoria', label: 'Theory', tourId: 'nav-theory' },
+  { href: '/niveles?tab=theory', label: 'Exam theory', tourId: 'nav-exam-theory' },
   { href: '/niveles', label: 'Exam practice', tourId: 'nav-levels' },
 ];
+
+/** Estado activo de enlaces del menú principal (incluye pestaña theory y rutas /teoria de examen). */
+export function isNavLinkActive(href, pathname, searchParams) {
+  if (!pathname || !href) return false;
+  const path = pathname.replace(/\/$/, '') || '/';
+
+  if (href === '/niveles?tab=theory') {
+    if (path === '/niveles') {
+      return searchParams?.get('tab') === 'theory';
+    }
+    return Boolean(getExamUnitSlugFromPathname(pathname));
+  }
+
+  if (href === '/niveles') {
+    if (path === '/niveles') {
+      return searchParams?.get('tab') !== 'theory';
+    }
+    return path.startsWith('/niveles/');
+  }
+
+  const target = href.replace(/\/$/, '') || '/';
+  if (target === '/') return path === '/';
+  return path === target || path.startsWith(`${target}/`);
+}
 
 /** Solo visible para administradores (ver pricingAccess.js). */
 export const NAV_LINK_PRICING = { href: '/precios', label: 'Pricing', tourId: 'nav-pricing' };

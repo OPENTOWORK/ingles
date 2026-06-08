@@ -26,7 +26,14 @@ import B2ExamPracticeModuleNav from '@/components/b2/B2ExamPracticeModuleNav';
 import ExamModeSectionBanner from '@/components/niveles/ExamModeSectionBanner';
 import { useExamModeStrict } from '@/hooks/useExamModeStrict';
 import { sitePublicPath } from '@/utils/sitePublicPath';
-import { useLevelsExamAdminFlow, createAdminExamSelectHandler, buildExamSlotPickerProps } from '@/hooks/useLevelsExamAdminFlow';
+import { getSessionUserId } from '@/utils/levelsEstadisticas';
+import {
+  useLevelsExamAdminFlow,
+  createAdminExamSelectHandler,
+  buildExamSlotPickerProps,
+  reloadExamNamesBySlot,
+} from '@/hooks/useLevelsExamAdminFlow';
+import { useSkillPartFirstNavigation } from '@/hooks/useSkillPartFirstNavigation';
 import A2ExamGenerationStatus from '@/components/niveles/A2ExamGenerationStatus';
 
 const buttonStyle = {
@@ -83,16 +90,16 @@ function B2SpeakingExamPracticeInner({ title, subtitle, loadingLabel, refreshLab
   });
   const { examModeActive, reviewMode, section: examSection, handleFinishSection, setSectionRemaining } =
     examMode;
-  useB2AutoOpenExamFromUrl({
-    examPracticeOpen: scoring.examPracticeOpen,
-    handleSelectExam: scoring.handleSelectExam,
-    selectExamSlot,
-  });
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [partsData, setPartsData] = useState([]);
   const [selectedPartId, setSelectedPartId] = useState(null);
+  const [examLabelsBySlot, setExamLabelsBySlot] = useState({});
   const { label: timerLabel } = useLevelsCategoryTimer();
+
+  useEffect(() => {
+    void reloadExamNamesBySlot('b2').then(({ names }) => setExamLabelsBySlot(names));
+  }, [scoring.examenIdBySlot]);
 
   const loadParts = useCallback(async () => {
     setLoading(true);
@@ -151,6 +158,51 @@ function B2SpeakingExamPracticeInner({ title, subtitle, loadingLabel, refreshLab
     onSelectSlot: (slot) => scoring.handleSelectExam(selectExamSlot, slot),
   });
 
+  const skillNav = useSkillPartFirstNavigation({
+    enabled: !examModeActive,
+    slug: 'b2',
+    skillRoute: 'exam-speaking',
+    partMin: B2_SPEAKING_PART_MIN,
+    partMax: B2_SPEAKING_PART_MAX,
+    examPracticeOpen: scoring.examPracticeOpen,
+    examSlot,
+    onSelectExam: handleSelectExamSlot,
+    progressBySlot: scoring.progressBySlot,
+    examLabelsBySlot,
+    examSlotPickerProps,
+    onRefreshProgress: scoring.refreshPuntuacionesProgress,
+    lang,
+  });
+
+  useB2AutoOpenExamFromUrl({
+    examPracticeOpen: scoring.examPracticeOpen,
+    handleSelectExam: scoring.handleSelectExam,
+    selectExamSlot,
+    disabled: skillNav.active,
+  });
+
+  const layoutPracticeOpen = skillNav.active ? skillNav.practiceReady : scoring.examPracticeOpen;
+  const isSkillPracticeSession = skillNav.active && layoutPracticeOpen;
+
+  const handleKeepPracticing = useCallback(() => {
+    scoring.setExamPracticeOpen(false);
+    void scoring.refreshPuntuacionesProgress();
+    if (typeof window !== 'undefined') {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  }, [scoring]);
+
+  const displayPartsData = useMemo(() => {
+    if (!skillNav.active || !skillNav.selectedPartNumber) return partsData;
+    return partsData.filter((p) => p.partNumber === skillNav.selectedPartNumber);
+  }, [partsData, skillNav.active, skillNav.selectedPartNumber]);
+
+  useEffect(() => {
+    if (!skillNav.active || !skillNav.selectedPartNumber || !displayPartsData.length) return;
+    const target = displayPartsData[0];
+    if (target?.id && target.id !== selectedPartId) setSelectedPartId(target.id);
+  }, [skillNav.active, skillNav.selectedPartNumber, displayPartsData, selectedPartId]);
+
   useEffect(() => {
     void loadParts();
   }, [loadParts]);
@@ -167,8 +219,8 @@ function B2SpeakingExamPracticeInner({ title, subtitle, loadingLabel, refreshLab
   useEffect(() => () => stopExaminerAudio(), []);
 
   const selectedPart = useMemo(
-    () => partsData.find((p) => p.id === selectedPartId),
-    [partsData, selectedPartId],
+    () => displayPartsData.find((p) => p.id === selectedPartId),
+    [displayPartsData, selectedPartId],
   );
 
   const partNumber = selectedPart?.partNumber ?? 0;
@@ -216,17 +268,19 @@ function B2SpeakingExamPracticeInner({ title, subtitle, loadingLabel, refreshLab
   }, [handleFinishSection, partNumber, b2PartCfg?.total]);
 
   const handleContinueInPage = useCallback(() => {
-    const sorted = [...partsData].sort((a, b) => a.partNumber - b.partNumber);
+    const sorted = [...displayPartsData].sort((a, b) => a.partNumber - b.partNumber);
     const currentIdx = sorted.findIndex((p) => p.id === selectedPartId);
     if (currentIdx < 0 || currentIdx >= sorted.length - 1) return;
     setSelectedPartId(sorted[currentIdx + 1].id);
     if (typeof window !== 'undefined') {
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
-  }, [partsData, selectedPartId]);
+  }, [displayPartsData, selectedPartId]);
+
+  const chromeSubtitle = isSkillPracticeSession ? null : subtitle;
 
   return (
-    <B2ExamPracticeLayout examPracticeOpen={scoring.examPracticeOpen}>
+    <B2ExamPracticeLayout examPracticeOpen={layoutPracticeOpen}>
       {adminFlow.canRegenerateExams ? (
         <A2ExamGenerationStatus
           generating={adminFlow.generating}
@@ -244,10 +298,17 @@ function B2SpeakingExamPracticeInner({ title, subtitle, loadingLabel, refreshLab
         onSelectExam={handleSelectExamSlot}
         progressBySlot={scoring.progressBySlot}
         partsInPaper={scoring.partsInPaper}
+        examLabelsBySlot={examLabelsBySlot}
         examPracticeOpen={scoring.examPracticeOpen}
-        {...examSlotPickerProps}
+        navigationOverride={skillNav.navigation}
+        hidePartTabs={skillNav.hidePartTabs}
+        practiceReady={layoutPracticeOpen}
+        {...(skillNav.active ? {} : examSlotPickerProps)}
         title={title}
-        subtitle={subtitle}
+        subtitle={chromeSubtitle}
+        hideMascot={isSkillPracticeSession}
+        hideSubtitle={isSkillPracticeSession}
+        compactSkillHeader={isSkillPracticeSession}
         timerLabel={timerLabel}
         refreshLabel={refreshLabel}
         loading={loading}
@@ -255,7 +316,7 @@ function B2SpeakingExamPracticeInner({ title, subtitle, loadingLabel, refreshLab
         partScoreMetrics={scorePanelProps}
         hideScorePanel={examModeActive && !reviewMode}
         partFinishNotice={examModeActive && !reviewMode ? null : scoring.partFinishNotice}
-        partsData={!loading && !error ? partsData : []}
+        partsData={!loading && !error ? displayPartsData : []}
         selectedPartId={selectedPartId}
         onSelectPart={(part) => setSelectedPartId(part.id)}
         getPartSavedScoreLabel={(part) => scoring.getPartSavedScoreLabel(part, examSlot)}
@@ -303,7 +364,8 @@ function B2SpeakingExamPracticeInner({ title, subtitle, loadingLabel, refreshLab
         partNumber={partNumber}
         pagePartMax={B2_SPEAKING_PART_MAX}
         examSlot={examSlot}
-        onContinueInPage={handleContinueInPage}
+        skillPracticeMode={isSkillPracticeSession}
+        onContinueInPage={isSkillPracticeSession ? handleKeepPracticing : handleContinueInPage}
         lang={lang}
       />
       </B2ExamPracticeChrome>

@@ -78,8 +78,15 @@ export function B2ExamPracticeChrome({
   getPartTabLabel: getPartTabLabelProp,
   lang = 'es',
   workPanelClassName = '',
+  navigationOverride = null,
+  hidePartTabs = false,
+  hideMascot = false,
+  hideSubtitle = false,
+  compactSkillHeader = false,
+  practiceReady,
   children,
 }) {
+  const showPractice = practiceReady ?? examPracticeOpen;
   const refreshHint =
     lang === 'en'
       ? 'Reload parts, texts and answers from the server and clear your selections.'
@@ -90,29 +97,39 @@ export function B2ExamPracticeChrome({
 
   return (
     <>
-      <B2ExamSlotProgressPicker
-        value={examSlot}
-        onSelect={onSelectExam}
-        progressBySlot={progressBySlot}
-        partsInPaper={partsInPaper}
-        examLabelsBySlot={examLabelsBySlot}
-        availableSlots={availableSlots}
-        showNewExamButton={showNewExamButton}
-        onNewExam={onNewExam}
-        showAdminMenu={showAdminMenu}
-        onRegenerateExam={onRegenerateExam}
-        onDeleteExam={onDeleteExam}
-        lang={lang}
-      />
+      {!showPractice
+        ? navigationOverride ?? (
+        <B2ExamSlotProgressPicker
+          value={examSlot}
+          onSelect={onSelectExam}
+          progressBySlot={progressBySlot}
+          partsInPaper={partsInPaper}
+          examLabelsBySlot={examLabelsBySlot}
+          availableSlots={availableSlots}
+          showNewExamButton={showNewExamButton}
+          onNewExam={onNewExam}
+          showAdminMenu={showAdminMenu}
+          onRegenerateExam={onRegenerateExam}
+          onDeleteExam={onDeleteExam}
+          lang={lang}
+        />
+        )
+        : null}
 
-      {!examPracticeOpen ? null : (
-        <div className="levels-b2-practice">
+      {!showPractice ? null : (
+        <div
+          className={`levels-b2-practice${compactSkillHeader ? ' levels-b2-practice--skill-compact' : ''}`}
+        >
           <header className="levels-b2-practice__header">
             <h1 className="levels-b2-practice__title">{title}</h1>
-            <div className="levels-b2-practice__mascot" aria-hidden>
-              <SiteMascot variant={10} width={128} alt="" />
-            </div>
-            {subtitle ? <p className="levels-b2-practice__subtitle">{subtitle}</p> : null}
+            {!hideMascot ? (
+              <div className="levels-b2-practice__mascot" aria-hidden>
+                <SiteMascot variant={10} width={128} alt="" />
+              </div>
+            ) : null}
+            {!hideSubtitle && subtitle ? (
+              <p className="levels-b2-practice__subtitle">{subtitle}</p>
+            ) : null}
 
             {showRefresh && onRefresh ? (
               <div className="levels-b2-practice__refresh">
@@ -167,7 +184,7 @@ export function B2ExamPracticeChrome({
             />
           ) : null}
 
-          {partsData?.length > 0 ? (
+          {partsData?.length > 0 && !hidePartTabs ? (
             <div
               className={`levels-b2-part-tabs${partsData.length >= 7 ? ' levels-b2-part-tabs--many' : ''}`}
               role="tablist"

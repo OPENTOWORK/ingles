@@ -10,7 +10,8 @@ import {
   getStaffPanelMenuItemsForRole,
   getStaffPanelMenuLabel,
   NAV_LINK_CONTACT,
-  HOME_MAIN_LINKS,
+  HOME_QUICK_LINKS,
+  HOME_THEORY_LINK,
   NAV_LINKS_BEFORE_DRALO,
 } from '@/config/appNavMenu';
 import { performLogout } from '@/utils/logout';
@@ -78,13 +79,16 @@ export default function AppSideMenuPanel({ defaultOpen = true }) {
         </div>
 
         <nav className="app-side-menu__nav">
-          {showAdminHomeLinks
-            ? HOME_MAIN_LINKS.map((item) => (
-                <NavLink key={item.href} href={item.href} className={linkClass}>
-                  {item.label}
-                </NavLink>
-              ))
-            : null}
+          {showAdminHomeLinks ? (
+            <NavLink href={HOME_THEORY_LINK.href} className={linkClass}>
+              {HOME_THEORY_LINK.label}
+            </NavLink>
+          ) : null}
+          {HOME_QUICK_LINKS.map((item) => (
+            <NavLink key={item.href} href={item.href} className={linkClass}>
+              {item.label}
+            </NavLink>
+          ))}
           {NAV_LINKS_BEFORE_DRALO.map((item) => (
             <NavLink key={item.href} href={item.href} className={linkClass}>
               {item.label}

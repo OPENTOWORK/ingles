@@ -89,6 +89,11 @@ export function getExamSkillPartRange(slug, skillRoute) {
   return getLevelExamSectionRange(key, section);
 }
 
+export function getExamSkillSectionTitle(slug, skillRoute) {
+  const key = String(slug || '').toLowerCase();
+  return SKILL_ROUTE_SECTION[key]?.[skillRoute] || null;
+}
+
 export function formatPartsLabel(partMin, partMax) {
   if (partMin === partMax) return `Parte ${partMin}`;
   return `Partes ${partMin} a ${partMax}`;

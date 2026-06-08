@@ -9,7 +9,7 @@ export default function ExamTheoryLockedNotice({
   requiredPartName,
   partNumber,
   variant = 'unit',
-  backHref = '/niveles#exam-theory',
+  backHref = '/niveles?tab=theory',
   backLabel = 'Back to Exam theory',
 }) {
   const isTopic = variant === 'topic';

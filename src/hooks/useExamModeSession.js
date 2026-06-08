@@ -83,19 +83,24 @@ export function useExamModeSession(slug, examSlot) {
   }, [slug, examSlot, userId]);
 
   const repeatExam = useCallback(
-    (options = {}) => {
-      const { confirm: askConfirm = true } = options;
+    async (options = {}) => {
+      const { confirm: askConfirm = true, examenId = null } = options;
       if (askConfirm) {
         const ok = window.confirm(
           'Start this test again? Your previous answers and scores for this test will be cleared.',
         );
         if (!ok) return false;
       }
+      if (examenId && userId) {
+        const { clearExamSlotPuntuaciones } = await import('@/lib/fetchExamModeSlotStats');
+        const { supabase } = await import('@/utils/supabaseClient');
+        await clearExamSlotPuntuaciones(supabase, { userId, examenId });
+      }
       resetExam();
       router.push(`/niveles/${slug}/exam-mode?examen=${examSlot}`);
       return true;
     },
-    [resetExam, router, slug, examSlot],
+    [resetExam, router, slug, examSlot, userId],
   );
 
   return {

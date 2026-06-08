@@ -17,6 +17,7 @@ export default function B2ExamPracticeModuleNav({
   overviewHref,
   overviewLabel,
   nextPartLabel,
+  skillPracticeMode = false,
   lang = 'en',
 }) {
   const levelSlug = String(slug || 'b2').toLowerCase();
@@ -32,7 +33,9 @@ export default function B2ExamPracticeModuleNav({
   const backHref = overviewHref || nav.overviewHref || overview.href;
 
   let continueLabel = '';
-  if (nav.continueMode === 'in-page' && nav.nextPartNumber) {
+  if (skillPracticeMode) {
+    continueLabel = isEn ? 'Keep practicing' : 'Seguir practicando';
+  } else if (nav.continueMode === 'in-page' && nav.nextPartNumber) {
     continueLabel = nextPartLabel
       ? isEn
         ? `Continue — ${nextPartLabel}`
@@ -57,7 +60,7 @@ export default function B2ExamPracticeModuleNav({
         {backLabel}
       </Link>
 
-      {nav.continueMode === 'in-page' ? (
+      {skillPracticeMode || nav.continueMode === 'in-page' ? (
         <button
           type="button"
           className="levels-exam-module-nav__btn levels-exam-module-nav__btn--continue"

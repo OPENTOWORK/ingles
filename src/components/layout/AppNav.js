@@ -1,8 +1,8 @@
 'use client';
 
 import NavLink from '@/components/layout/NavLink';
-import { usePathname } from 'next/navigation';
-import { useEffect, useState } from 'react';
+import { usePathname, useSearchParams } from 'next/navigation';
+import { Suspense, useEffect, useState } from 'react';
 import { isAdminRole } from '@/utils/authRoles';
 import { canViewPricing } from '@/utils/pricingAccess';
 import AdminPanelsNav from '@/components/layout/AdminPanelsNav';
@@ -12,11 +12,13 @@ import {
   getStaffPanelMenuLabel,
   NAV_LINK_CONTACT,
   NAV_LINK_PRICING,
+  isNavLinkActive,
   NAV_LINKS_BEFORE_DRALO,
 } from '@/config/appNavMenu';
 
-export default function AppNav({ session, userRole, onLogout }) {
+function AppNavInner({ session, userRole, onLogout }) {
   const pathname = usePathname();
+  const searchParams = useSearchParams();
   const [mobileOpen, setMobileOpen] = useState(false);
   const [draloOpen, setDraloOpen] = useState(false);
   const [draloDesktopOpen, setDraloDesktopOpen] = useState(false);
@@ -83,16 +85,8 @@ export default function AppNav({ session, userRole, onLogout }) {
 
   const mobileLinkClass = 'app-nav__link app-nav__link--mobile';
 
-  const isNavActive = (href) => {
-    if (!pathname || !href) return false;
-    const path = pathname.replace(/\/$/, '') || '/';
-    const target = href.replace(/\/$/, '') || '/';
-    if (target === '/') return path === '/';
-    return path === target || path.startsWith(`${target}/`);
-  };
-
   const desktopLinkClass = (href) =>
-    `app-nav__link${isNavActive(href) ? ' is-active' : ''}`;
+    `app-nav__link${isNavLinkActive(href, pathname, searchParams) ? ' is-active' : ''}`;
 
   return (
     <>
@@ -351,5 +345,13 @@ export default function AppNav({ session, userRole, onLogout }) {
         </nav>
       </aside>
     </>
+  );
+}
+
+export default function AppNav(props) {
+  return (
+    <Suspense fallback={null}>
+      <AppNavInner {...props} />
+    </Suspense>
   );
 }

@@ -6,7 +6,6 @@ import HomeHowItWorks from '@/components/home/HomeHowItWorks';
 import HomeQuickNav from '@/components/home/HomeQuickNav';
 import { useGuidedTour } from '@/context/GuidedTourContext';
 import { useUserRole } from '@/context/UserRoleContext';
-import { isAdminRole } from '@/utils/authRoles';
 
 const FEATURES = [
   'Interactive',
@@ -16,11 +15,9 @@ const FEATURES = [
 ];
 
 export default function Home() {
-  const { session, userRole } = useUserRole();
+  const { session } = useUserRole();
   const { startTour } = useGuidedTour();
   const isRegistered = Boolean(session?.user);
-  const showAdminHomeLinks = isAdminRole(userRole);
-
   return (
     <main className="home-page">
       <div className="home-page__inner">
@@ -56,7 +53,7 @@ export default function Home() {
         </blockquote>
 
         {isRegistered ? <HomeHowItWorks onStartTour={startTour} /> : null}
-        {showAdminHomeLinks ? <HomeQuickNav /> : null}
+        {isRegistered ? <HomeQuickNav /> : null}
       </div>
     </main>
   );

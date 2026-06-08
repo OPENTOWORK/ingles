@@ -1,6 +1,8 @@
 'use client';
 
 import Link from 'next/link';
+import { Suspense, useEffect } from 'react';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { useUserRole } from '@/context/UserRoleContext';
 import { usePlacementAccess } from '@/context/PlacementAccessContext';
 import PageHero from '@/components/PageHero';
@@ -66,7 +68,9 @@ function LevelCardContent({ nivelData }) {
   );
 }
 
-export default function Niveles() {
+function NivelesInner() {
+  const router = useRouter();
+  const searchParams = useSearchParams();
   const { userRole, session } = useUserRole();
   const {
     loading: placementLoading,
@@ -76,6 +80,14 @@ export default function Niveles() {
 
   const isStudent =
     Boolean(session) && (userRole === 'student' || userRole === 'alumno');
+  const isTheoryView = searchParams.get('tab') === 'theory';
+
+  useEffect(() => {
+    if (isTheoryView) return;
+    if (typeof window !== 'undefined' && window.location.hash === '#exam-theory') {
+      router.replace('/niveles?tab=theory', { scroll: false });
+    }
+  }, [isTheoryView, router]);
 
   const getLockLabel = (nivel) => {
     if (isNivelesLevelComingSoonForUser(userRole, nivel)) return 'COMING SOON';
@@ -86,72 +98,90 @@ export default function Niveles() {
   };
 
   return (
-    <main className="shell niveles-page">
-      <PageHero
-        eyebrow="CEFR pathway"
-        title="Choose your level"
-        description="Pick your English level and access tailored practice — reading, listening, writing, speaking, and full exam simulations."
-        mascotVariant={1}
-        mascotWidth={168}
-        accent="ocean"
-        stats={[
-          { value: String(NIVELES.length), label: 'Levels' },
-          { value: 'A2–C2', label: 'CEFR range' },
-        ]}
-      />
+    <main className={`shell niveles-page${isTheoryView ? ' niveles-page--theory' : ''}`}>
+      {!isTheoryView ? (
+        <PageHero
+          eyebrow="CEFR pathway"
+          title="Choose your level"
+          description="Pick your English level and access tailored practice — reading, listening, writing, speaking, and full exam simulations."
+          mascotVariant={1}
+          mascotWidth={168}
+          accent="ocean"
+          stats={[
+            { value: String(NIVELES.length), label: 'Levels' },
+            { value: 'A2–C2', label: 'CEFR range' },
+          ]}
+        />
+      ) : null}
 
       <div className="sections">
-        <section className="section" id="niveles-practice" data-tour="niveles-levels">
-          <NivelesSectionHeader
-            eyebrow="CEFR levels"
-            title="Available tests and tips"
-            count={NIVELES.length}
-            description="Choose your level and access tailored mock exams, study tips, and guided practice — from elementary to mastery."
+        {isTheoryView ? (
+          <ExamTheorySection
+            userId={session?.user?.id}
+            accessToken={session?.access_token}
+            isStudent={isStudent}
           />
-          <ul className="area-grid niveles-grid">
-            {NIVELES.map((nivelData) => {
-              const isComingSoon = isNivelesLevelComingSoonForUser(userRole, nivelData.nivel);
-              const isLockedForStudent =
-                isComingSoon ||
-                (isStudent && (placementLoading || isLevelLocked(nivelData.nivel)));
-              const lockLabel = getLockLabel(nivelData.nivel);
+        ) : (
+          <section className="section" id="niveles-practice" data-tour="niveles-levels">
+            <NivelesSectionHeader
+              eyebrow="CEFR levels"
+              title="Available tests and tips"
+              count={NIVELES.length}
+              description="Choose your level and access tailored mock exams, study tips, and guided practice — from elementary to mastery."
+            />
+            <ul className="area-grid niveles-grid">
+              {NIVELES.map((nivelData) => {
+                const isComingSoon = isNivelesLevelComingSoonForUser(userRole, nivelData.nivel);
+                const isLockedForStudent =
+                  isComingSoon ||
+                  (isStudent && (placementLoading || isLevelLocked(nivelData.nivel)));
+                const lockLabel = getLockLabel(nivelData.nivel);
 
-              return (
-                <li
-                  key={nivelData.nivel}
-                  className={isLockedForStudent ? 'level-item is-locked' : 'level-item'}
-                >
-                  {isLockedForStudent ? (
-                    <div className="area-card area-card--disabled" aria-disabled="true">
-                      <LevelCardContent nivelData={nivelData} />
-                    </div>
-                  ) : (
-                    <Link
-                      href={`/niveles/${nivelData.nivel.toLowerCase()}`}
-                      className="area-card"
-                    >
-                      <LevelCardContent nivelData={nivelData} />
-                    </Link>
-                  )}
-                  {isLockedForStudent && lockLabel && (
-                    <div className="level-item__lock">{lockLabel}</div>
-                  )}
-                </li>
-              );
-            })}
-          </ul>
-        </section>
-
-        <ExamTheorySection
-          userId={session?.user?.id}
-          accessToken={session?.access_token}
-          isStudent={isStudent}
-        />
+                return (
+                  <li
+                    key={nivelData.nivel}
+                    className={isLockedForStudent ? 'level-item is-locked' : 'level-item'}
+                  >
+                    {isLockedForStudent ? (
+                      <div className="area-card area-card--disabled" aria-disabled="true">
+                        <LevelCardContent nivelData={nivelData} />
+                      </div>
+                    ) : (
+                      <Link
+                        href={`/niveles/${nivelData.nivel.toLowerCase()}`}
+                        className="area-card"
+                      >
+                        <LevelCardContent nivelData={nivelData} />
+                      </Link>
+                    )}
+                    {isLockedForStudent && lockLabel && (
+                      <div className="level-item__lock">{lockLabel}</div>
+                    )}
+                  </li>
+                );
+              })}
+            </ul>
+          </section>
+        )}
       </div>
 
       <NivelesPageStyles />
       <TeoriaGlobalStyles />
     </main>
+  );
+}
+
+export default function Niveles() {
+  return (
+    <Suspense
+      fallback={
+        <main className="shell niveles-page" style={{ padding: '2rem', textAlign: 'center' }}>
+          <p>Loading levels…</p>
+        </main>
+      }
+    >
+      <NivelesInner />
+    </Suspense>
   );
 }
 

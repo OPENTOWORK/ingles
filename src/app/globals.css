@@ -2052,6 +2052,23 @@ body.nav-open {
   max-width: min(1720px, 100%);
 }
 
+.levels-b2-practice--skill-compact {
+  max-width: min(820px, 100%);
+}
+
+.levels-b2-practice--skill-compact .levels-b2-practice__header {
+  margin-bottom: 0.75rem;
+}
+
+.levels-b2-practice--skill-compact .levels-b2-practice__title {
+  font-size: clamp(1.05rem, 2vw, 1.2rem);
+  font-weight: 600;
+}
+
+.levels-b2-practice--skill-compact .levels-b2-practice__work-panel {
+  padding: 0.85rem 0.95rem 1rem;
+}
+
 .levels-b2-practice__header {
   text-align: center;
   margin-bottom: 1.25rem;

@@ -1,11 +1,19 @@
+'use client';
+
 import Link from 'next/link';
-import { HOME_MAIN_LINKS } from '@/config/appNavMenu';
+import { useUserRole } from '@/context/UserRoleContext';
+import { isAdminRole } from '@/utils/authRoles';
+import { HOME_QUICK_LINKS, HOME_THEORY_LINK } from '@/config/appNavMenu';
 
 export default function HomeQuickNav() {
+  const { userRole } = useUserRole();
+  const showTheory = isAdminRole(userRole);
+  const links = showTheory ? [HOME_THEORY_LINK, ...HOME_QUICK_LINKS] : HOME_QUICK_LINKS;
+
   return (
     <nav className="home-quick-nav" aria-label="Theory, placement test, training and plans">
       <ul className="home-quick-nav__list">
-        {HOME_MAIN_LINKS.map((item) => (
+        {links.map((item) => (
           <li key={item.href}>
             <Link
               href={item.href}

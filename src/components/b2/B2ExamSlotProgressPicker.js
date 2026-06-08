@@ -72,7 +72,18 @@ function StarRow({ filled = 0, max = 3 }) {
   );
 }
 
-function ExamSlotAdminMenu({ slot, active, lang, onRegenerate, onDelete, open, onToggle }) {
+function ExamSlotMenu({
+  slot,
+  active,
+  lang,
+  onViewStatistics,
+  onRepeatExam,
+  onRegenerate,
+  onDelete,
+  showAdminActions,
+  open,
+  onToggle,
+}) {
   const menuRef = useRef(null);
   const triggerRef = useRef(null);
   const dropdownRef = useRef(null);
@@ -139,30 +150,62 @@ function ExamSlotAdminMenu({ slot, active, lang, onRegenerate, onDelete, open, o
             style={dropdownStyle}
             role="menu"
           >
-            <button
-              type="button"
-              role="menuitem"
-              className="levels-b2-exam-picker__slot-menu-item"
-              onClick={(event) => {
-                event.stopPropagation();
-                onToggle(false);
-                onRegenerate(slot);
-              }}
-            >
-              {en ? 'Regenerate with AI' : 'Regenerar con IA'}
-            </button>
-            <button
-              type="button"
-              role="menuitem"
-              className="levels-b2-exam-picker__slot-menu-item levels-b2-exam-picker__slot-menu-item--danger"
-              onClick={(event) => {
-                event.stopPropagation();
-                onToggle(false);
-                onDelete(slot);
-              }}
-            >
-              {en ? 'Delete' : 'Eliminar'}
-            </button>
+            {onViewStatistics ? (
+              <button
+                type="button"
+                role="menuitem"
+                className="levels-b2-exam-picker__slot-menu-item"
+                onClick={(event) => {
+                  event.stopPropagation();
+                  onToggle(false);
+                  onViewStatistics(slot);
+                }}
+              >
+                {en ? 'Statistics' : 'Estadísticas'}
+              </button>
+            ) : null}
+            {onRepeatExam ? (
+              <button
+                type="button"
+                role="menuitem"
+                className="levels-b2-exam-picker__slot-menu-item"
+                onClick={(event) => {
+                  event.stopPropagation();
+                  onToggle(false);
+                  onRepeatExam(slot);
+                }}
+              >
+                {en ? 'Repeat' : 'Repetir'}
+              </button>
+            ) : null}
+            {showAdminActions && onRegenerate ? (
+              <button
+                type="button"
+                role="menuitem"
+                className="levels-b2-exam-picker__slot-menu-item levels-b2-exam-picker__slot-menu-item--admin"
+                onClick={(event) => {
+                  event.stopPropagation();
+                  onToggle(false);
+                  onRegenerate(slot);
+                }}
+              >
+                {en ? 'Regenerate with AI' : 'Regenerar con IA'}
+              </button>
+            ) : null}
+            {showAdminActions && onDelete ? (
+              <button
+                type="button"
+                role="menuitem"
+                className="levels-b2-exam-picker__slot-menu-item levels-b2-exam-picker__slot-menu-item--danger"
+                onClick={(event) => {
+                  event.stopPropagation();
+                  onToggle(false);
+                  onDelete(slot);
+                }}
+              >
+                {en ? 'Delete' : 'Eliminar'}
+              </button>
+            ) : null}
           </div>,
           document.body,
         )
@@ -207,6 +250,8 @@ function ExamSlotAdminMenu({ slot, active, lang, onRegenerate, onDelete, open, o
  *   showAdminMenu?: boolean,
  *   onRegenerateExam?: (slot: number) => void,
  *   onDeleteExam?: (slot: number) => void,
+ *   onViewStatistics?: (slot: number) => void,
+ *   onRepeatExam?: (slot: number) => void,
  *   lang?: 'es' | 'en',
  * }} props
  */
@@ -222,6 +267,8 @@ export function B2ExamSlotProgressPicker({
   showAdminMenu = false,
   onRegenerateExam,
   onDeleteExam,
+  onViewStatistics,
+  onRepeatExam,
   lang = 'en',
 }) {
   const en = lang === 'en';
@@ -231,6 +278,7 @@ export function B2ExamSlotProgressPicker({
       ? availableSlots
       : Array.from({ length: B2_EXAM_SLOT_MAX }, (_, i) => i + 1);
   const adminMenuEnabled = showAdminMenu && onRegenerateExam && onDeleteExam;
+  const slotMenuEnabled = Boolean(onViewStatistics || onRepeatExam || adminMenuEnabled);
 
   return (
     <section
@@ -274,13 +322,16 @@ export function B2ExamSlotProgressPicker({
                     </span>
                   )}
                 </button>
-                {adminMenuEnabled ? (
-                  <ExamSlotAdminMenu
+                {slotMenuEnabled ? (
+                  <ExamSlotMenu
                     slot={n}
                     active={active}
                     lang={lang}
+                    onViewStatistics={onViewStatistics}
+                    onRepeatExam={onRepeatExam}
                     onRegenerate={onRegenerateExam}
                     onDelete={onDeleteExam}
+                    showAdminActions={adminMenuEnabled}
                     open={openMenuSlot === n}
                     onToggle={(next) => setOpenMenuSlot(next ? n : null)}
                   />

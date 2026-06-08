@@ -5,6 +5,7 @@ import B2ExamPaperPracticePage from '@/components/b2/B2ExamPaperPracticePage';
 export default function B2ListeningExamsPage() {
   return (
     <B2ExamPaperPracticePage
+      skillRoute="exam-listening"
       title="B2 Listening Practice"
       subtitle="Parts 10 to 13"
       partMin={10}

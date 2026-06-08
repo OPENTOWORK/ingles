@@ -65,7 +65,7 @@ export default function ExamTheoryTopicList({
       <PageHero
         breadcrumb={
           <nav className="breadcrumb" aria-label="Breadcrumb">
-            <Link href="/niveles#exam-theory">Exam theory</Link>
+            <Link href="/niveles?tab=theory">Exam theory</Link>
             <span aria-hidden>›</span>
             <span>{sectionTitle}</span>
           </nav>

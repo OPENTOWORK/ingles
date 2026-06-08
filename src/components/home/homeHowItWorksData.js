@@ -13,6 +13,17 @@ export const GUIDED_TOUR_STEPS_STUDENT = [
       'A quick tour of what you use every day: Exam practice for Cambridge-style papers and skills, and Dralo AI for feedback on Use of English, Reading, Writing, Listening, Speaking, and more.',
   },
   {
+    id: 'exam-theory-nav',
+    title: 'Exam theory',
+    sectionLabel: 'Top menu → Exam theory',
+    description:
+      'Open Exam theory for interactive tips on Reading and Use of English, Listening, Writing, and Speaking — task format, timing, and strategies.',
+    target: '[data-tour="nav-exam-theory"]',
+    route: '/',
+    href: '/niveles?tab=theory',
+    openNavOnMobile: true,
+  },
+  {
     id: 'exam-practice-nav',
     title: 'Exam practice',
     sectionLabel: 'Top menu → Exam practice',
@@ -74,6 +85,7 @@ export const GUIDED_TOUR_STEPS_STUDENT = [
       'In Exam theory, open each part for interactive tips — task format, timing, and strategies — before practice.',
     target: '#exam-theory',
     route: '/niveles',
+    href: '/niveles?tab=theory',
     scrollTarget: true,
     cardPlacement: 'center',
   },

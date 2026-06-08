@@ -3,9 +3,9 @@
 import { Suspense, useMemo } from 'react';
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
-import { useExamModeSession } from '@/hooks/useExamModeSession';
+import { useExamModeStatistics } from '@/hooks/useExamModeStatistics';
 import { buildExamModePracticeHref } from '@/utils/examModeSession';
-import { getLevelFullExamSections, getNivelesLevelHub } from '@/data/nivelesLevelHub';
+import { getNivelesLevelHub } from '@/data/nivelesLevelHub';
 import styles from './ExamModeResultsView.module.css';
 
 const SECTION_ICON_CLASS = {
@@ -24,7 +24,18 @@ function scoreTone(pct) {
   return 'low';
 }
 
-function ProgressRing({ pct, tone }) {
+function formatDuration(seconds) {
+  const s = Math.max(0, Number(seconds) || 0);
+  if (s < 60) return `${s}s`;
+  const m = Math.floor(s / 60);
+  const rem = s % 60;
+  if (m < 60) return rem ? `${m}m ${rem}s` : `${m}m`;
+  const h = Math.floor(m / 60);
+  const min = m % 60;
+  return min ? `${h}h ${min}m` : `${h}h`;
+}
+
+function ProgressRing({ pct, tone, label = 'Overall' }) {
   const r = 52;
   const c = 2 * Math.PI * r;
   const offset = c - (pct / 100) * c;
@@ -50,18 +61,22 @@ function ProgressRing({ pct, tone }) {
       </svg>
       <div className={styles.ringCenter}>
         <span className={styles.ringPct}>{pct}%</span>
-        <span className={styles.ringLabel}>Overall</span>
+        <span className={styles.ringLabel}>{label}</span>
       </div>
     </div>
   );
 }
 
-function SectionCard({ row, examSlot }) {
+function SectionCard({ row, examSlot, resultsReleased }) {
+  const status = row.status || 'locked';
+  const isCompleted = status === 'completed';
+  const isActive = status === 'active';
   const tone = scoreTone(row.pct);
   const iconClass = SECTION_ICON_CLASS[row.title] || styles['cardIcon--default'];
   const parts = row.scores?.byPart || {};
   const partEntries = Object.entries(parts).sort(([a], [b]) => Number(a) - Number(b));
   const reviewHref = buildExamModePracticeHref(row.href, examSlot, { review: true });
+  const canReview = resultsReleased && isCompleted && row.pct > 0;
 
   return (
     <article className={styles.card}>
@@ -73,8 +88,8 @@ function SectionCard({ row, examSlot }) {
           <div className={styles.cardTitleRow}>
             <h3 className={styles.cardTitle}>{row.title}</h3>
             <p className={styles.cardScore}>
-              {row.scores.correct}
-              <span> / {row.scores.total}</span>
+              {row.scores?.correct ?? 0}
+              <span> / {row.scores?.total ?? 0}</span>
               <span style={{ marginLeft: '0.5rem', color: '#64748b', fontWeight: 700 }}>
                 ({row.pct}%)
               </span>
@@ -87,7 +102,7 @@ function SectionCard({ row, examSlot }) {
                   ? styles['progressFill--zero']
                   : styles[`progressFill--${tone}`]
               }`}
-              style={{ width: `${Math.max(row.pct, row.scores.total > 0 ? 4 : 0)}%` }}
+              style={{ width: `${Math.max(row.pct, row.scores?.total > 0 ? 4 : 0)}%` }}
               role="progressbar"
               aria-valuenow={row.pct}
               aria-valuemin={0}
@@ -95,6 +110,13 @@ function SectionCard({ row, examSlot }) {
               aria-label={`${row.title} score`}
             />
           </div>
+          {!isCompleted ? (
+            <p className={styles.cardPendingHint}>
+              {isActive
+                ? 'Finish this section to update your score.'
+                : 'Complete previous sections first.'}
+            </p>
+          ) : null}
         </div>
       </div>
 
@@ -104,7 +126,8 @@ function SectionCard({ row, examSlot }) {
           <ul className={styles.partsList}>
             {partEntries.map(([partNum, p]) => {
               const passed = p.passing != null && p.correct >= p.passing;
-              const failed = p.passing != null && p.correct < p.passing;
+              const failed = p.passing != null && p.correct < p.passing && p.correct > 0;
+              const pending = p.correct === 0;
               return (
                 <li key={partNum} className={styles.partRow}>
                   <span className={styles.partName}>Part {partNum}</span>
@@ -115,10 +138,14 @@ function SectionCard({ row, examSlot }) {
                     {p.passing != null ? (
                       <span
                         className={`${styles.badge} ${
-                          passed ? styles['badge--pass'] : failed ? styles['badge--fail'] : styles['badge--na']
+                          passed
+                            ? styles['badge--pass']
+                            : failed
+                              ? styles['badge--fail']
+                              : styles['badge--pending']
                         }`}
                       >
-                        {passed ? 'Pass' : failed ? 'Below pass' : '—'}
+                        {passed ? 'Pass' : failed ? 'Below pass' : 'Pending'}
                       </span>
                     ) : null}
                   </span>
@@ -129,12 +156,14 @@ function SectionCard({ row, examSlot }) {
         </div>
       ) : null}
 
-      <div className={styles.cardActions}>
-        <Link href={reviewHref} className={styles.reviewBtn}>
-          Review answers
-          <span aria-hidden="true">→</span>
-        </Link>
-      </div>
+      {canReview ? (
+        <div className={styles.cardActions}>
+          <Link href={reviewHref} className={styles.reviewBtn}>
+            Review answers
+            <span aria-hidden="true">→</span>
+          </Link>
+        </div>
+      ) : null}
     </article>
   );
 }
@@ -143,53 +172,21 @@ function ExamModeResultsViewInner({ slug }) {
   const config = getNivelesLevelHub(slug);
   const searchParams = useSearchParams();
   const examSlot = Math.min(5, Math.max(1, Number(searchParams.get('examen') || 1)));
-  const { session, ready, repeatExam } = useExamModeSession(slug, examSlot);
+  const { rows, stats, estadisticas, session, ready, repeatExam } = useExamModeStatistics(
+    slug,
+    examSlot,
+  );
 
-  const sectionMeta = useMemo(() => {
-    const map = {};
-    for (const s of getLevelFullExamSections(slug)) {
-      map[s.key] = s;
-      map[s.title] = s;
+  const overallTone = scoreTone(stats.pct);
+  const examLabel = `Test ${examSlot}`;
+  const ringLabel = stats.allComplete ? 'Overall' : stats.hasStarted ? 'So far' : 'Overall';
+
+  const dbSummary = useMemo(() => {
+    if (!estadisticas.intentos && !estadisticas.evaluadas && !estadisticas.tiempoSegundos) {
+      return null;
     }
-    return map;
-  }, [slug]);
-
-  const rows = useMemo(() => {
-    if (!session?.sections) return [];
-    return session.sections.map((sec) => {
-      const scores = sec.scores || { correct: 0, total: 0, byPart: {} };
-      const pct = scores.total > 0 ? Math.round((scores.correct / scores.total) * 100) : 0;
-      const meta = sectionMeta[sec.key] || sectionMeta[sec.title] || {};
-      return {
-        ...sec,
-        emoji: sec.emoji || meta.emoji,
-        partsLabel: meta.partsLabel,
-        scores,
-        pct,
-      };
-    });
-  }, [session, sectionMeta]);
-
-  const totals = useMemo(() => {
-    let correct = 0;
-    let total = 0;
-    let sectionsPassed = 0;
-    for (const r of rows) {
-      correct += r.scores.correct || 0;
-      total += r.scores.total || 0;
-      const passing = r.scores.total > 0 && r.pct >= 60;
-      if (passing) sectionsPassed += 1;
-    }
-    return {
-      correct,
-      total,
-      pct: total > 0 ? Math.round((correct / total) * 100) : 0,
-      sectionsPassed,
-      sectionsCount: rows.length,
-    };
-  }, [rows]);
-
-  const overallTone = scoreTone(totals.pct);
+    return estadisticas;
+  }, [estadisticas]);
 
   if (!config) {
     return (
@@ -207,28 +204,6 @@ function ExamModeResultsViewInner({ slug }) {
     );
   }
 
-  if (!session?.resultsReleased) {
-    return (
-      <main className={styles.page}>
-        <div className={styles.inner}>
-          <div className={styles.empty}>
-            <h1>Results not ready yet</h1>
-            <p>
-              Complete every section of the exam to unlock your full score breakdown and answer
-              review.
-            </p>
-            <Link
-              href={`/niveles/${slug}/exam-mode?examen=${examSlot}`}
-              className={`${styles.footerLink} ${styles['footerLink--primary']}`}
-            >
-              Continue exam
-            </Link>
-          </div>
-        </div>
-      </main>
-    );
-  }
-
   return (
     <main className={styles.page}>
       <div className={styles.inner}>
@@ -239,45 +214,151 @@ function ExamModeResultsViewInner({ slug }) {
           <span aria-hidden="true">/</span>
           <Link href={`/niveles/${slug}/exam-mode?examen=${examSlot}`}>Exam mode</Link>
           <span aria-hidden="true">/</span>
-          <span>Results</span>
+          <span>Statistics</span>
         </nav>
 
         <header className={styles.hero}>
-          <p className={styles.eyebrow}>Exam mode · Results</p>
+          <p className={styles.eyebrow}>
+            Exam mode ·{' '}
+            {stats.allComplete ? 'Final results' : stats.hasStarted ? 'Live statistics' : 'Statistics preview'}
+          </p>
           <h1 className={styles.title}>
-            {config.cefr} — Test {examSlot}
+            {config.cefr} — {examLabel}
           </h1>
           <p className={styles.subtitle}>
-            Your answers are shown below. Use review to see correct solutions and explanations.
+            {stats.allComplete
+              ? 'Your full score breakdown and areas to improve before your next attempt.'
+              : stats.hasStarted
+                ? 'Track your progress section by section. Scores update as you finish each paper.'
+                : 'This is what your scores will look like. All values start at zero until you complete each section.'}
           </p>
 
+          {stats.allComplete ? (
+            <div
+              className={`${styles.verdict} ${
+                stats.examPassed ? styles['verdict--pass'] : styles['verdict--fail']
+              }`}
+            >
+              <span className={styles.verdictIcon} aria-hidden="true">
+                {stats.examPassed ? '✓' : '!'}
+              </span>
+              <div>
+                <p className={styles.verdictTitle}>
+                  {stats.examPassed ? 'Exam passed' : 'Exam not passed'}
+                </p>
+                <p className={styles.verdictText}>
+                  {stats.examPassed
+                    ? `You reached at least ${stats.passThreshold}% in all ${stats.sectionsCount} sections.`
+                    : `${stats.sectionsPassed} of ${stats.sectionsCount} sections met the ${stats.passThreshold}% pass mark.`}
+                </p>
+              </div>
+            </div>
+          ) : stats.hasStarted ? (
+            <div className={`${styles.verdict} ${styles['verdict--progress']}`}>
+              <span className={styles.verdictIcon} aria-hidden="true">
+                …
+              </span>
+              <div>
+                <p className={styles.verdictTitle}>Exam in progress</p>
+                <p className={styles.verdictText}>
+                  {stats.sectionsCompleted} of {stats.sectionsCount} sections completed · running
+                  score based on finished papers only
+                </p>
+              </div>
+            </div>
+          ) : (
+            <div className={`${styles.verdict} ${styles['verdict--pending']}`}>
+              <span className={styles.verdictIcon} aria-hidden="true">
+                0
+              </span>
+              <div>
+                <p className={styles.verdictTitle}>Not started yet</p>
+                <p className={styles.verdictText}>
+                  Start the exam to fill in these scores. Pass mark: {stats.passThreshold}% per
+                  section.
+                </p>
+              </div>
+            </div>
+          )}
+
           <div className={styles.summary}>
-            <ProgressRing pct={totals.pct} tone={overallTone} />
+            <ProgressRing pct={stats.pct} tone={overallTone} label={ringLabel} />
             <div className={styles.stats}>
               <div className={styles.stat}>
                 <span className={styles.statValue}>
-                  {totals.correct}/{totals.total}
+                  {stats.correct}/{stats.displayTotal}
                 </span>
                 <span className={styles.statLabel}>Items correct</span>
               </div>
               <div className={styles.stat}>
-                <span className={styles.statValue}>{rows.length}</span>
-                <span className={styles.statLabel}>Sections</span>
+                <span className={styles.statValue}>
+                  {stats.sectionsCompleted}/{stats.sectionsCount}
+                </span>
+                <span className={styles.statLabel}>Sections done</span>
               </div>
               <div className={styles.stat}>
                 <span className={styles.statValue}>
-                  {totals.sectionsPassed}/{totals.sectionsCount}
+                  {stats.sectionsPassed}/{stats.sectionsCount}
                 </span>
-                <span className={styles.statLabel}>Sections ≥ 60%</span>
+                <span className={styles.statLabel}>Sections ≥ {stats.passThreshold}%</span>
               </div>
             </div>
           </div>
+
+          {dbSummary ? (
+            <div className={styles.dbStats}>
+              <p className={styles.dbStatsLabel}>Saved in your account</p>
+              <div className={styles.dbStatsRow}>
+                <span>
+                  <strong>{dbSummary.intentos}</strong> attempts
+                </span>
+                <span>
+                  <strong>
+                    {dbSummary.correctas}/{dbSummary.evaluadas}
+                  </strong>{' '}
+                  items evaluated
+                </span>
+                <span>
+                  <strong>{formatDuration(dbSummary.tiempoSegundos)}</strong> practice time
+                </span>
+              </div>
+            </div>
+          ) : null}
         </header>
+
+        <section className={styles.improve}>
+          <h2 className={styles.sectionsTitle}>What to improve</h2>
+          {stats.improvementTips.length > 0 ? (
+            <ul className={styles.improveList}>
+              {stats.improvementTips.map((item) => (
+                <li key={item.skill} className={styles.improveItem}>
+                  <p className={styles.improveSkill}>{item.title}</p>
+                  <p className={styles.improveTip}>{item.tip}</p>
+                </li>
+              ))}
+            </ul>
+          ) : stats.allComplete && stats.examPassed ? (
+            <p className={styles.improveAllClear}>
+              Strong performance across all sections. Keep practising under exam conditions to stay
+              sharp.
+            </p>
+          ) : (
+            <p className={styles.improvePlaceholder}>
+              Complete each section to unlock personalised tips based on your weakest papers and
+              parts. Scores are saved to your account automatically.
+            </p>
+          )}
+        </section>
 
         <h2 className={styles.sectionsTitle}>Results by paper</h2>
         <div className={styles.grid}>
           {rows.map((row) => (
-            <SectionCard key={row.key} row={row} examSlot={examSlot} />
+            <SectionCard
+              key={row.key}
+              row={row}
+              examSlot={examSlot}
+              resultsReleased={Boolean(session?.resultsReleased)}
+            />
           ))}
         </div>
 
