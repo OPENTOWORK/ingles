@@ -30,7 +30,15 @@ import {
   splitPart1TextoYPreguntas,
   parsePart1QuestionOptions,
   trimListeningPart10DuplicateCycles,
+  formatListeningGapDisplayLines,
+  extractMcqOptionLetter,
 } from '@/utils/b2ExamTextBlocks';
+import B2ListeningPartInstructions from '@/components/b2/B2ListeningPartInstructions';
+import {
+  B2_EXAM1_PART12_MATCHING_POOL,
+  getB2Exam1ListeningPartUx,
+  getB2Exam1Part10Situation,
+} from '@/data/b2Exam1ListeningMeta';
 import {
   buildMcqGroupsFromEnunciado,
   describeA2PartDataGap,
@@ -972,6 +980,18 @@ function B2ExamPaperPracticePageInner({
   const isListeningGapPart = partNumber === 11 || isA2ListeningGapPart;
   const isB2ListeningMatchingPart = levelSlug === 'b2' && partNumber === 12;
   const isB2ListeningInterviewPart = levelSlug === 'b2' && partNumber === 13;
+  const isB2ListeningPart10 = levelSlug === 'b2' && partNumber === 10;
+
+  const b2Exam1ListeningUx = useMemo(
+    () => (levelSlug === 'b2' ? getB2Exam1ListeningPartUx(partNumber, examSlot) : null),
+    [levelSlug, partNumber, examSlot],
+  );
+
+  const [listeningSpeakerNotes, setListeningSpeakerNotes] = useState({});
+
+  useEffect(() => {
+    setListeningSpeakerNotes({});
+  }, [selectedPart?.id, partNumber, examSlot]);
 
   const listeningContextBlocks = useMemo(() => {
     if (isListeningGapPart) {
@@ -1011,6 +1031,18 @@ function B2ExamPaperPracticePageInner({
           .filter(Boolean);
     return extractListeningMatchingOptionPool(blob);
   }, [isB2ListeningMatchingPart, textoLinesForDisplay, selectedQuestion?.enunciado]);
+
+  const listeningMatchingSelectOptions = useMemo(() => {
+    if (!isB2ListeningMatchingPart) return [];
+    if (examSlot === 1 && levelSlug === 'b2') return B2_EXAM1_PART12_MATCHING_POOL;
+    return listeningMatchingPool
+      .map((line) => {
+        const m = String(line).match(/^([A-H])\)\s*(.+)$/i);
+        if (!m) return null;
+        return { letter: m[1].toUpperCase(), text: m[2].trim() };
+      })
+      .filter(Boolean);
+  }, [isB2ListeningMatchingPart, examSlot, levelSlug, listeningMatchingPool]);
 
   const inferredOpenQuestionNumbers = useMemo(
     () => inferOpenQuestionNumbersFromPrompt(selectedQuestion?.enunciado || '', partNumber),
@@ -2319,6 +2351,13 @@ function B2ExamPaperPracticePageInner({
               <div className="levels-exam-split-card">
                 <h2>{getPartTitle(selectedPart)}</h2>
 
+                {b2Exam1ListeningUx ? (
+                  <B2ListeningPartInstructions
+                    instructions={b2Exam1ListeningUx.instructions}
+                    practiceNote={b2Exam1ListeningUx.practiceNote}
+                  />
+                ) : null}
+
                 <div className="levels-exam-split__body levels-exam-split__body--stacked">
                   {selectedPartContent.enunciado ? (
                     <div className="levels-exam-split__enunciado">
@@ -2569,6 +2608,10 @@ function B2ExamPaperPracticePageInner({
                           const questionKey = getQuestionKey(selectedPart.id, qn, 'open');
                           const currentValue = openInputs[questionKey] || '';
                           const checkResult = openChecks[questionKey];
+                          const gapDisplayLines = formatListeningGapDisplayLines(
+                            ctx?.contextLines || [],
+                            qn,
+                          );
                           return (
                             <div
                               key={`listen-item-${selectedQuestion.preguntaId}-${qn}`}
@@ -2588,9 +2631,9 @@ function B2ExamPaperPracticePageInner({
                                   fontSize: '1.05rem',
                                 }}
                               >
-                                Item {qn}
+                                Question {qn}
                               </p>
-                              {ctx?.contextLines?.length ? (
+                              {gapDisplayLines.length ? (
                                 <div
                                   style={{
                                     marginBottom: '0.85rem',
@@ -2600,10 +2643,11 @@ function B2ExamPaperPracticePageInner({
                                     borderRadius: '10px',
                                   }}
                                 >
-                                  {ctx.contextLines.map((line, li) => (
+                                  {gapDisplayLines.map((line, li) => (
                                     <p
                                       key={`ctx-${qn}-${li}`}
-                                      style={{ margin: li === 0 ? '0 0 0.4rem' : '0.4rem 0', lineHeight: 1.65 }}
+                                      className="levels-listening-gap-prompt"
+                                      style={{ margin: li === 0 ? 0 : '0.4rem 0 0' }}
                                     >
                                       {line}
                                     </p>
@@ -2707,6 +2751,65 @@ function B2ExamPaperPracticePageInner({
                           );
                         }
 
+                        const questionKey = getQuestionKey(
+                          selectedPart.id,
+                          group.questionNumber,
+                          `extra-${groupIndex}`,
+                        );
+                        const part10Situation = isB2ListeningPart10
+                          ? getB2Exam1Part10Situation(qn, examSlot)
+                          : null;
+                        const notesKey = `${selectedPart.id}-q${qn}`;
+                        const selectedLetter =
+                          extractMcqOptionLetter(
+                            group.options.find((o) => selectedOptions[questionKey] === o.id) || {},
+                          ) || '';
+
+                        const applyListeningMcqOption = (option) => {
+                          const wasChecked = checkedQuestions[questionKey];
+                          const nextChecked = { ...checkedQuestions, [questionKey]: true };
+                          setSelectedOptions((prev) => ({ ...prev, [questionKey]: option.id }));
+                          setCheckedQuestions(nextChecked);
+                          trySavePartAfterAnswer({ checkedQuestions: nextChecked });
+                          if (!wasChecked && !hideFeedback) {
+                            const correctOpt = group.options.find((o) => o.correcta);
+                            const answersFromDatabase = group.options
+                              .map((o) => (o.formattedText || o.respuesta || '').trim())
+                              .filter(Boolean)
+                              .join('\n');
+                            requestAiJustification(questionKey, {
+                              partLabel: selectedPart?.nombre || '',
+                              questionLabel: group.questionNumber
+                                ? `Question ${group.questionNumber}`
+                                : 'Question',
+                              userChoiceText: option.formattedText || option.respuesta || '',
+                              correctChoiceText:
+                                correctOpt?.formattedText || correctOpt?.respuesta || '',
+                              isCorrect: !!option.correcta,
+                              answersFromDatabase: answersFromDatabase || undefined,
+                            });
+                            void (async () => {
+                              const uid = await getSessionUserId();
+                              const pid = selectedQuestion?.preguntaId;
+                              const parteId = selectedPart?.id;
+                              if (!uid || !pid || !parteId) return;
+                              const { error } = await recordLevelsAnswerEvaluation({
+                                userId: uid,
+                                preguntaId: pid,
+                                parteId,
+                                isCorrect: !!option.correcta,
+                                slotLabel: group.questionNumber
+                                  ? `Question ${group.questionNumber}`
+                                  : 'Question',
+                                userAnswerText: option.formattedText || option.respuesta || '',
+                              });
+                              if (error) {
+                                console.warn('levels eval/puntuacion:', error.message || error);
+                              }
+                            })();
+                          }
+                        };
+
                         return (
                           <div
                             key={`listen-item-${selectedQuestion.preguntaId}-${qn}`}
@@ -2726,8 +2829,11 @@ function B2ExamPaperPracticePageInner({
                                 fontSize: '1.05rem',
                               }}
                             >
-                              Item {qn}
+                              Question {qn}
                             </p>
+                            {part10Situation ? (
+                              <p className="levels-listening-situation">{part10Situation}</p>
+                            ) : null}
                             {clipSrc ? (
                               <div style={{ marginBottom: ctx?.contextLines?.length ? '0.85rem' : 0 }}>
                                 {clipLabel ? (
@@ -2758,7 +2864,7 @@ function B2ExamPaperPracticePageInner({
                                 No hay audio enlazado para este ítem en la base de datos.
                               </p>
                             ) : null}
-                            {ctx?.contextLines?.length ? (
+                            {ctx?.contextLines?.length && !isB2ListeningPart10 ? (
                               <div
                                 style={{
                                   marginBottom: '0.85rem',
@@ -2778,112 +2884,148 @@ function B2ExamPaperPracticePageInner({
                                 ))}
                               </div>
                             ) : null}
-                            <p style={{ margin: '0 0 0.55rem', fontWeight: 700, color: '#1e293b' }}>
-                              {isB2ListeningMatchingPart && listeningMatchingPool.length > 0
-                                ? 'Your answer (choose A–H)'
-                                : 'Options'}
-                            </p>
-                            <div style={{ display: 'grid', gap: '0.6rem' }}>
-                              {group.options.map((option) => {
-                                const questionKey = getQuestionKey(
-                                  selectedPart.id,
-                                  group.questionNumber,
-                                  `extra-${groupIndex}`,
-                                );
-                                const isSelected = selectedOptions[questionKey] === option.id;
-                                const isChecked = checkedQuestions[questionKey];
-                                const isCorrect = !!option.correcta;
-                                const showCorrect = !hideFeedback && isChecked && isCorrect;
-                                const showIncorrect = !hideFeedback && isChecked && isSelected && !isCorrect;
+                            {isB2ListeningPart10 && ctx?.contextLines?.length ? (
+                              <p
+                                style={{
+                                  margin: '0 0 0.85rem',
+                                  lineHeight: 1.65,
+                                  color: '#1e293b',
+                                  fontWeight: 600,
+                                }}
+                              >
+                                {ctx.contextLines.join(' ')}
+                              </p>
+                            ) : null}
+                            {isB2ListeningMatchingPart && listeningMatchingSelectOptions.length > 0 ? (
+                              <>
+                                <label
+                                  htmlFor={`matching-select-${questionKey}`}
+                                  style={{ margin: '0 0 0.35rem', fontWeight: 700, color: '#1e293b' }}
+                                >
+                                  Your answer (choose A–H)
+                                </label>
+                                <select
+                                  id={`matching-select-${questionKey}`}
+                                  className="levels-listening-matching-select"
+                                  value={selectedLetter}
+                                  onChange={(e) => {
+                                    const letter = e.target.value;
+                                    if (!letter) {
+                                      setSelectedOptions((prev) => {
+                                        const next = { ...prev };
+                                        delete next[questionKey];
+                                        return next;
+                                      });
+                                      setCheckedQuestions((prev) => {
+                                        const next = { ...prev };
+                                        delete next[questionKey];
+                                        return next;
+                                      });
+                                      return;
+                                    }
+                                    const opt = group.options.find(
+                                      (o) => extractMcqOptionLetter(o) === letter,
+                                    );
+                                    if (opt) applyListeningMcqOption(opt);
+                                  }}
+                                >
+                                  <option value="">— Choose A–H —</option>
+                                  {listeningMatchingSelectOptions.map(({ letter, text }) => (
+                                    <option key={`${qn}-${letter}`} value={letter}>
+                                      {letter} — {text}
+                                    </option>
+                                  ))}
+                                </select>
+                                <label
+                                  htmlFor={`matching-notes-${notesKey}`}
+                                  className="levels-listening-matching-notes-label"
+                                >
+                                  Notes while listening
+                                </label>
+                                <textarea
+                                  id={`matching-notes-${notesKey}`}
+                                  className="levels-listening-matching-notes"
+                                  rows={2}
+                                  placeholder="Optional — jot down ideas before choosing your answer"
+                                  value={listeningSpeakerNotes[notesKey] || ''}
+                                  onChange={(e) =>
+                                    setListeningSpeakerNotes((prev) => ({
+                                      ...prev,
+                                      [notesKey]: e.target.value,
+                                    }))
+                                  }
+                                />
+                              </>
+                            ) : (
+                              <>
+                                <p style={{ margin: '0 0 0.55rem', fontWeight: 700, color: '#1e293b' }}>
+                                  Options
+                                </p>
+                                <div style={{ display: 'grid', gap: '0.6rem' }}>
+                                  {group.options.map((option) => {
+                                    const isSelected = selectedOptions[questionKey] === option.id;
+                                    const isChecked = checkedQuestions[questionKey];
+                                    const isCorrect = !!option.correcta;
+                                    const showCorrect = !hideFeedback && isChecked && isCorrect;
+                                    const showIncorrect =
+                                      !hideFeedback && isChecked && isSelected && !isCorrect;
 
-                                return (
-                                  <button
-                                    key={option.id}
-                                    type="button"
-                                    onClick={() => {
-                                      const wasChecked = checkedQuestions[questionKey];
-                                      const nextChecked = { ...checkedQuestions, [questionKey]: true };
-                                      setSelectedOptions((prev) => ({ ...prev, [questionKey]: option.id }));
-                                      setCheckedQuestions(nextChecked);
-                                      trySavePartAfterAnswer({ checkedQuestions: nextChecked });
-                                      if (!wasChecked && !hideFeedback) {
-                                        const correctOpt = group.options.find((o) => o.correcta);
-                                        const answersFromDatabase = group.options
-                                          .map((o) => (o.formattedText || o.respuesta || '').trim())
-                                          .filter(Boolean)
-                                          .join('\n');
-                                        requestAiJustification(questionKey, {
-                                          partLabel: selectedPart?.nombre || '',
-                                          questionLabel: group.questionNumber
-                                            ? `Question ${group.questionNumber}`
-                                            : 'Item',
-                                          userChoiceText: option.formattedText || option.respuesta || '',
-                                          correctChoiceText:
-                                            correctOpt?.formattedText || correctOpt?.respuesta || '',
-                                          isCorrect: !!option.correcta,
-                                          answersFromDatabase: answersFromDatabase || undefined,
-                                        });
-                                        void (async () => {
-                                          const uid = await getSessionUserId();
-                                          const pid = selectedQuestion?.preguntaId;
-                                          const parteId = selectedPart?.id;
-                                          if (!uid || !pid || !parteId) return;
-                                          const { error } = await recordLevelsAnswerEvaluation({
-                                            userId: uid,
-                                            preguntaId: pid,
-                                            parteId,
-                                            isCorrect: !!option.correcta,
-                                            slotLabel: group.questionNumber
-                                              ? `Question ${group.questionNumber}`
-                                              : 'Item',
-                                            userAnswerText: option.formattedText || option.respuesta || '',
-                                          });
-                                          if (error) {
-                                            console.warn('levels eval/puntuacion:', error.message || error);
-                                          }
-                                        })();
-                                      }
-                                    }}
-                                    style={{
-                                      textAlign: 'left',
-                                      borderRadius: '8px',
-                                      padding: '0.75rem 1rem',
-                                      border: showCorrect
-                                        ? '2px solid #2f855a'
-                                        : showIncorrect
-                                          ? '2px solid #c53030'
-                                          : isSelected
-                                            ? '2px solid #3182ce'
-                                            : '1px solid #e2e8f0',
-                                      backgroundColor: showCorrect
-                                        ? '#f0fff4'
-                                        : showIncorrect
-                                          ? '#fff5f5'
-                                          : isSelected
-                                            ? '#ebf8ff'
-                                            : '#fff',
-                                      cursor: 'pointer',
-                                    }}
-                                  >
-                                    {option.formattedText || option.respuesta}
-                                  </button>
-                                );
-                              })}
-                            </div>
+                                    return (
+                                      <button
+                                        key={option.id}
+                                        type="button"
+                                        onClick={() => applyListeningMcqOption(option)}
+                                        style={{
+                                          textAlign: 'left',
+                                          borderRadius: '8px',
+                                          padding: '0.75rem 1rem',
+                                          border: showCorrect
+                                            ? '2px solid #2f855a'
+                                            : showIncorrect
+                                              ? '2px solid #c53030'
+                                              : isSelected
+                                                ? '2px solid #3182ce'
+                                                : '1px solid #e2e8f0',
+                                          backgroundColor: showCorrect
+                                            ? '#f0fff4'
+                                            : showIncorrect
+                                              ? '#fff5f5'
+                                              : isSelected
+                                                ? '#ebf8ff'
+                                                : '#fff',
+                                          cursor: 'pointer',
+                                        }}
+                                      >
+                                        {option.formattedText || option.respuesta}
+                                      </button>
+                                    );
+                                  })}
+                                </div>
+                              </>
+                            )}
                             {(() => {
-                              const questionKey = getQuestionKey(
-                                selectedPart.id,
-                                group.questionNumber,
-                                `extra-${groupIndex}`,
-                              );
                               const hasChecked = checkedQuestions[questionKey];
                               if (!hasChecked || hideFeedback) return null;
                               const correct = group.options.find((o) => o.correcta);
+                              const correctLetter = extractMcqOptionLetter(correct || {});
+                              const correctLabel =
+                                isB2ListeningMatchingPart && correctLetter
+                                  ? `${correctLetter}${
+                                      listeningMatchingSelectOptions.find(
+                                        (o) => o.letter === correctLetter,
+                                      )?.text
+                                        ? ` — ${
+                                            listeningMatchingSelectOptions.find(
+                                              (o) => o.letter === correctLetter,
+                                            )?.text
+                                          }`
+                                        : ''
+                                    }`
+                                  : correct?.formattedText || correct?.respuesta || 'Not available';
                               return (
                                 <>
                                   <p style={{ margin: '0.7rem 0 0', fontWeight: 600, color: '#1f2937' }}>
-                                    Correct answer:{' '}
-                                    {correct?.formattedText || correct?.respuesta || 'Not available'}
+                                    Correct answer: {correctLabel}
                                   </p>
                                   <LevelsAnswerJustification hint={aiHintsByKey[questionKey]} />
                                 </>

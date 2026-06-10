@@ -39,11 +39,19 @@ export async function POST(req) {
   const titulo = String(body.titulo || '').trim();
   const storagePath = String(body.storagePath || '').trim();
   const audioBase64 = String(body.audioBase64 || body.base64 || '').trim();
+  const existingAudioUrl = String(body.existingAudioUrl || body.audioUrl || '').trim();
   const replaceExisting = body.replaceExisting !== false;
 
-  if (!Number.isFinite(partNumber) || !Number.isFinite(orden) || !storagePath || !audioBase64) {
+  if (!Number.isFinite(partNumber) || !Number.isFinite(orden) || !storagePath) {
     return NextResponse.json(
-      { error: 'partNumber, orden, storagePath and audioBase64 are required.' },
+      { error: 'partNumber, orden and storagePath are required.' },
+      { status: 400 },
+    );
+  }
+
+  if (!audioBase64 && !existingAudioUrl) {
+    return NextResponse.json(
+      { error: 'audioBase64 or existingAudioUrl is required.' },
       { status: 400 },
     );
   }
@@ -91,12 +99,14 @@ export async function POST(req) {
     await admin.from('levels_preguntas_audios').delete().eq('pregunta_id', qId).eq('orden', orden);
   }
 
-  const buf = Buffer.from(audioBase64, 'base64');
-  const audio_url = await uploadListeningClip(admin, {
-    path: storagePath,
-    audioBuffer: buf,
-    contentType: 'audio/mpeg',
-  });
+  const buf = audioBase64 ? Buffer.from(audioBase64, 'base64') : null;
+  const audio_url = buf
+    ? await uploadListeningClip(admin, {
+        path: storagePath,
+        audioBuffer: buf,
+        contentType: 'audio/mpeg',
+      })
+    : existingAudioUrl;
 
   const { data: row, error } = await admin
     .from('levels_preguntas_audios')
@@ -121,6 +131,7 @@ export async function POST(req) {
     partNumber,
     clip: row,
     storagePath,
-    bytes: buf.length,
+    bytes: buf?.length ?? 0,
+    relinked: !buf && Boolean(existingAudioUrl),
   });
 }

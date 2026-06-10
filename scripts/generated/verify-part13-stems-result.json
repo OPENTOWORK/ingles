@@ -1,0 +1,88 @@
+{
+  "preguntaId": "7612631b-91ad-4154-a06b-4552d61f1cc5",
+  "mcqRowCount": 21,
+  "openAnswerCount": 0,
+  "questionNumbers": [
+    24,
+    25,
+    26,
+    27,
+    28,
+    29,
+    30
+  ],
+  "answerKey": {
+    "24": "B",
+    "25": "C",
+    "26": "A",
+    "27": "B",
+    "28": "C",
+    "29": "A",
+    "30": "B"
+  },
+  "fullTextOptionCount": 21,
+  "letterOnlyMcqCount": 0,
+  "audioClipCount": 1,
+  "audios": [
+    {
+      "orden": 1,
+      "titulo": "Interview — Bringing the Hall Back to Life",
+      "storagePath": "b2/exam-1/part-13/clip-01.mp3",
+      "durationSec": 158.1
+    }
+  ],
+  "enunciadoPreview": "Interview about volunteers restoring a disused Victorian market hall as a community centre.\n\n24\nWhen Nina first saw the building, she noticed that it…\nA) had recently been repaired by the council\nB) had serious structura",
+  "stemsPresent": [
+    "When Nina first saw the building",
+    "The project group was able to start work",
+    "The first stage of funding",
+    "The restoration was delayed most often",
+    "Who uses the hall most at present",
+    "Since the hall reopened",
+    "Nina's advice for other towns"
+  ],
+  "untouched": {
+    "part10": true,
+    "part11": true,
+    "part12": true
+  },
+  "checks": [
+    {
+      "name": "MCQ rows = 21",
+      "ok": true
+    },
+    {
+      "name": "Q24–30",
+      "ok": true
+    },
+    {
+      "name": "Answer key",
+      "ok": true
+    },
+    {
+      "name": "Full-text options (not letter-only)",
+      "ok": true
+    },
+    {
+      "name": "1 audio clip",
+      "ok": true
+    },
+    {
+      "name": "clip-01.mp3 linked",
+      "ok": true
+    },
+    {
+      "name": "Audio not 0:00",
+      "ok": true
+    },
+    {
+      "name": "New stems in enunciado",
+      "ok": true
+    },
+    {
+      "name": "Parts 10–12 untouched",
+      "ok": true
+    }
+  ],
+  "allOk": true
+}

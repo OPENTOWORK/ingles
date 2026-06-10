@@ -470,6 +470,42 @@ export function splitListeningOpenGapContextByQuestion(text = '') {
 }
 
 /**
+ * Part 11: merge lead sentence gap with standalone `(N) ___` line for display.
+ * @param {string[]} contextLines
+ * @param {number} questionNumber
+ * @returns {string[]}
+ */
+export function formatListeningGapDisplayLines(contextLines = [], questionNumber) {
+  const lines = contextLines.map((l) => String(l || '').trim()).filter(Boolean);
+  if (!lines.length) return lines;
+  const gapOnlyRe = new RegExp(`^\\(${questionNumber}\\)\\s*_+$`, 'i');
+  const hasStandaloneGapLine = lines.some((l) => gapOnlyRe.test(l));
+  if (!hasStandaloneGapLine) return lines;
+
+  const result = [];
+  for (const line of lines) {
+    if (gapOnlyRe.test(line)) continue;
+    if (/_{2,}/.test(line) && !new RegExp(`\\(${questionNumber}\\)\\s*_{2,}`).test(line)) {
+      result.push(line.replace(/_{2,}/, `(${questionNumber}) ______`));
+    } else {
+      result.push(line);
+    }
+  }
+  return result.length ? result : lines;
+}
+
+/** Extract MCQ letter from a levels_respuestas row label. */
+export function extractMcqOptionLetter(option = {}) {
+  const raw = String(option.formattedText || option.respuesta || option.text || '').trim();
+  const m =
+    raw.match(/^(\d+)\s+([A-H])\)/i) ||
+    raw.match(/^(\d+)\s+([A-H])\s*$/i) ||
+    raw.match(/^([A-H])\)/i) ||
+    raw.match(/^([A-H])\s/i);
+  return m ? m[m.length - 1].toUpperCase() : '';
+}
+
+/**
  * Parte 12 listening: `Speaker 1` … `Speaker 5` → preguntas 19–23.
  *
  * @param {string} text

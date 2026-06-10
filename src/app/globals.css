@@ -7154,6 +7154,85 @@ body.nav-open {
   object-fit: contain;
 }
 
+/* ——— B2 Listening exam simulation UX (parts 10–12) ——— */
+.levels-listening-instructions {
+  margin: 0 0 1.1rem;
+  padding: 1rem 1.15rem;
+  background: linear-gradient(180deg, #f0f9ff 0%, #e0f2fe 100%);
+  border: 1px solid #7dd3fc;
+  border-radius: 12px;
+}
+
+.levels-listening-instructions__text {
+  margin: 0;
+  line-height: 1.65;
+  color: #0c4a6e;
+  font-weight: 600;
+}
+
+.levels-listening-instructions__practice-note {
+  margin: 0.65rem 0 0;
+  padding-top: 0.65rem;
+  border-top: 1px solid #bae6fd;
+  line-height: 1.55;
+  color: #0369a1;
+  font-size: 0.92rem;
+  font-style: italic;
+}
+
+.levels-listening-situation {
+  margin: 0 0 0.75rem;
+  padding: 0.75rem 0.9rem;
+  background: #fffbeb;
+  border: 1px solid #fde68a;
+  border-radius: 10px;
+  line-height: 1.6;
+  color: #78350f;
+  font-weight: 600;
+}
+
+.levels-listening-gap-prompt {
+  margin: 0 0 0.85rem;
+  line-height: 1.7;
+  color: #1e293b;
+  font-size: 1.02rem;
+}
+
+.levels-listening-matching-select {
+  width: 100%;
+  max-width: 100%;
+  margin-top: 0.35rem;
+  padding: 0.65rem 0.75rem;
+  border: 1px solid #cbd5e1;
+  border-radius: 8px;
+  background: #fff;
+  font-size: 0.95rem;
+  line-height: 1.45;
+  color: #1e293b;
+}
+
+.levels-listening-matching-notes {
+  width: 100%;
+  margin-top: 0.75rem;
+  padding: 0.65rem 0.75rem;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  font-family: inherit;
+  font-size: 0.9rem;
+  line-height: 1.5;
+  resize: vertical;
+  min-height: 3.5rem;
+}
+
+.levels-listening-matching-notes-label {
+  display: block;
+  margin-top: 0.85rem;
+  margin-bottom: 0.35rem;
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: #64748b;
+}
+
 /* ——— Perfil: menú de pestañas agrupadas ——— */
 .perfil-page .perfil-tabs-bar {
   margin: 0 0 22px;

@@ -1,0 +1,37 @@
+{
+  "ok": true,
+  "backupPath": "C:\\Users\\Ramon\\Desktop\\PROYECTOS CURSOR\\english-practice\\english-practice\\scripts\\generated\\backup-exam1-b2-part13-1781088318827.json",
+  "legacyPreguntaId": "8f73881f-b467-4ea1-a68f-8b93dc9384f9",
+  "preguntaId": "7612631b-91ad-4154-a06b-4552d61f1cc5",
+  "content": {
+    "ok": true,
+    "examenId": "5bd3e0d7-29a7-4e07-ac15-a4d195528c65",
+    "partNumber": 13,
+    "preguntaId": "7612631b-91ad-4154-a06b-4552d61f1cc5",
+    "partTitle": "Listening Part 4 — conversation"
+  },
+  "upload": {
+    "ok": true,
+    "preguntaId": "7612631b-91ad-4154-a06b-4552d61f1cc5",
+    "partNumber": 13,
+    "clip": {
+      "id": "0e461ff2-fce7-4ac2-95fd-000fb3b210fd",
+      "orden": 1,
+      "titulo": "Interview — Bringing the Hall Back to Life",
+      "audio_url": "https://qnazrzvwvkwhkfbqsbmr.supabase.co/storage/v1/object/public/Levels_Listening/b2/exam-1/part-13/clip-01.mp3"
+    },
+    "storagePath": "b2/exam-1/part-13/clip-01.mp3",
+    "bytes": 0,
+    "relinked": true
+  },
+  "answerKey": {
+    "24": "B",
+    "25": "C",
+    "26": "A",
+    "27": "B",
+    "28": "C",
+    "29": "A",
+    "30": "B"
+  },
+  "mcqExpected": 21
+}
