@@ -7475,12 +7475,7 @@ body.nav-open {
   border: 1px solid #fde68a;
 }
 
-/* --- Writing practice: strategy panel + checklist --- */
-.levels-writing-strategy {
-  position: static;
-  margin: 1rem 0 0;
-}
-
+/* --- Writing practice: strategy panel + checklist (sticky sidebar like Listening) --- */
 .levels-writing-strategy__check-count {
   margin-left: 0.4rem;
   font-weight: 700;

@@ -476,6 +476,11 @@ function B2WritingExamPracticePageInner() {
     ? getB2WritingStrategyPack(partNumber, part2SelectedOption?.writingType)
     : null;
 
+  // Part 1 always; Part 2 only once a task is chosen (the pack depends on the task type).
+  const showStrategySidebar = Boolean(
+    strategyPack && (partNumber === 8 || part2SelectedOption),
+  );
+
   const writingScorePanelOverride = isPartPracticeMode(practiceMode) ? (
     <B2WritingDraftStatusPanel
       wordCount={draftStats.wordCount}
@@ -561,85 +566,96 @@ function B2WritingExamPracticePageInner() {
             lang="en"
           />
         ) : null}
-        <section className="b2-writing-practice" style={{ maxWidth: 'min(960px, 100%)', margin: '0 auto' }}>
+        <section
+          className="b2-writing-practice"
+          style={{
+            maxWidth: showStrategySidebar ? 'min(1280px, 100%)' : 'min(960px, 100%)',
+            margin: '0 auto',
+          }}
+        >
           {loading && <p style={{ textAlign: 'center' }}>Loading B2 Writing…</p>}
           {!loading && error && (
             <p style={{ textAlign: 'center', color: '#c53030', fontWeight: 600 }}>{error}</p>
           )}
 
           {!loading && !error && selectedPart ? (
-            <div className="b2-writing-practice__body">
-              {partNumber === 8 ? (
-                <>
-                  <B2WritingFirstTaskCard
-                    title={part1Task.title}
-                    instructions={part1Task.instructions}
-                    question={part1Task.question}
-                    points={part1Task.points}
-                    wordMin={part1Task.wordMin || B2_WRITING_WORD_MIN}
-                    wordMax={part1Task.wordMax || B2_WRITING_WORD_MAX}
-                  />
-                  {strategyPack ? <B2WritingStrategyPanel pack={strategyPack} /> : null}
-                  <B2WritingLongFormAiPanel
-                    storageKey={longWritingStorageKey}
-                    wordMin={part1Task.wordMin || B2_WRITING_WORD_MIN}
-                    wordMax={part1Task.wordMax || B2_WRITING_WORD_MAX}
-                    heading="Your answer"
-                    examContextBuilder={examContextBuilder}
-                    onScoresReady={handleWritingScoresReady}
-                    onDraftStats={handleDraftStats}
-                    examMode={writingExamMode}
-                    lang="en"
-                  />
-                </>
-              ) : null}
-
-              {partNumber === 9 ? (
-                <>
-                  <B2WritingPart2TaskPicker
-                    title={part2Task.title}
-                    instructions={part2Task.instructions}
-                    options={part2Task.options}
-                    selectedId={part2SelectedId}
-                    onSelect={handlePart2Select}
-                    wordMin={part2Task.wordMin || B2_WRITING_WORD_MIN}
-                    wordMax={part2Task.wordMax || B2_WRITING_WORD_MAX}
-                    lang="en"
-                  />
-                  {part2SelectedOption && strategyPack ? (
-                    <B2WritingStrategyPanel pack={strategyPack} />
+            <div
+              className={`levels-listening-practice-layout${
+                showStrategySidebar ? ' levels-listening-practice-layout--with-strategy' : ''
+              }`}
+            >
+              <div className="levels-listening-practice-main">
+                <div className="b2-writing-practice__body">
+                  {partNumber === 8 ? (
+                    <>
+                      <B2WritingFirstTaskCard
+                        title={part1Task.title}
+                        instructions={part1Task.instructions}
+                        question={part1Task.question}
+                        points={part1Task.points}
+                        wordMin={part1Task.wordMin || B2_WRITING_WORD_MIN}
+                        wordMax={part1Task.wordMax || B2_WRITING_WORD_MAX}
+                      />
+                      <B2WritingLongFormAiPanel
+                        storageKey={longWritingStorageKey}
+                        wordMin={part1Task.wordMin || B2_WRITING_WORD_MIN}
+                        wordMax={part1Task.wordMax || B2_WRITING_WORD_MAX}
+                        heading="Your answer"
+                        examContextBuilder={examContextBuilder}
+                        onScoresReady={handleWritingScoresReady}
+                        onDraftStats={handleDraftStats}
+                        examMode={writingExamMode}
+                        lang="en"
+                      />
+                    </>
                   ) : null}
-                  {part2SelectedOption ? (
-                    <B2WritingLongFormAiPanel
-                      storageKey={longWritingStorageKey}
-                      wordMin={part2Task.wordMin || B2_WRITING_WORD_MIN}
-                      wordMax={part2Task.wordMax || B2_WRITING_WORD_MAX}
-                      heading="Your answer"
-                      examContextBuilder={examContextBuilder}
-                      onScoresReady={handleWritingScoresReady}
-                      onDraftStats={handleDraftStats}
-                      examMode={writingExamMode}
-                      lang="en"
-                    />
-                  ) : (
-                    <p className="b2-writing-part2__hint" role="status">
-                      Select one task above to open the writing area.
-                    </p>
-                  )}
-                </>
-              ) : null}
 
-              <B2ExamPracticeModuleNav
-                slug="b2"
-                partNumber={partNumber}
-                pagePartMax={PART_MAX}
-                examSlot={examSlot}
-                skillPracticeMode={isSkillPracticeSession}
-                skillPracticeTheme={skillNav.skillTheme}
-                onContinueInPage={isSkillPracticeSession ? handleKeepPracticing : handleContinueInPage}
-                nextPartLabel={continuePartLabel}
-                lang="en"
-              />
+                  {partNumber === 9 ? (
+                    <>
+                      <B2WritingPart2TaskPicker
+                        title={part2Task.title}
+                        instructions={part2Task.instructions}
+                        options={part2Task.options}
+                        selectedId={part2SelectedId}
+                        onSelect={handlePart2Select}
+                        wordMin={part2Task.wordMin || B2_WRITING_WORD_MIN}
+                        wordMax={part2Task.wordMax || B2_WRITING_WORD_MAX}
+                        lang="en"
+                      />
+                      {part2SelectedOption ? (
+                        <B2WritingLongFormAiPanel
+                          storageKey={longWritingStorageKey}
+                          wordMin={part2Task.wordMin || B2_WRITING_WORD_MIN}
+                          wordMax={part2Task.wordMax || B2_WRITING_WORD_MAX}
+                          heading="Your answer"
+                          examContextBuilder={examContextBuilder}
+                          onScoresReady={handleWritingScoresReady}
+                          onDraftStats={handleDraftStats}
+                          examMode={writingExamMode}
+                          lang="en"
+                        />
+                      ) : (
+                        <p className="b2-writing-part2__hint" role="status">
+                          Select one task above to open the writing area.
+                        </p>
+                      )}
+                    </>
+                  ) : null}
+
+                  <B2ExamPracticeModuleNav
+                    slug="b2"
+                    partNumber={partNumber}
+                    pagePartMax={PART_MAX}
+                    examSlot={examSlot}
+                    skillPracticeMode={isSkillPracticeSession}
+                    skillPracticeTheme={skillNav.skillTheme}
+                    onContinueInPage={isSkillPracticeSession ? handleKeepPracticing : handleContinueInPage}
+                    nextPartLabel={continuePartLabel}
+                    lang="en"
+                  />
+                </div>
+              </div>
+              {showStrategySidebar ? <B2WritingStrategyPanel pack={strategyPack} /> : null}
             </div>
           ) : null}
         </section>
