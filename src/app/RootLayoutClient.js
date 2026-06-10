@@ -14,6 +14,9 @@ import { PlacementAccessProvider } from '../context/PlacementAccessContext';
 import ExamNavigationGuard from '../components/ExamNavigationGuard';
 import { useActivityHeartbeat } from '@/hooks/useActivityHeartbeat';
 import { usePageViewTracker } from '@/hooks/usePageViewTracker';
+import { useClarityPageTags } from '@/hooks/useClarityPageTags';
+import MicrosoftClarity from '@/components/analytics/MicrosoftClarity';
+import { isClarityExcludedPath } from '@/lib/clarity';
 import DeferredSiteAssistant from '@/components/chat/DeferredSiteAssistant';
 import { clearAssistantDismissed } from '@/components/chat/SiteAssistantWidget';
 import DeferredAppSideMenu from '@/components/layout/DeferredAppSideMenu';
@@ -64,9 +67,16 @@ export default function RootLayoutClient({ children }) {
     pathname === '/niveles' || (pathname && pathname.startsWith('/niveles/'));
   const allowWithoutAuth = isPublic || isNivelesRoute;
   const heartbeatEnabled = Boolean(session) && !allowWithoutAuth;
+  const clarityProjectId = process.env.NEXT_PUBLIC_CLARITY_PROJECT_ID || '';
+  const clarityAnalyticsEnabled =
+    Boolean(cookieConsent) &&
+    Boolean(cookiePreferences.analytics) &&
+    Boolean(clarityProjectId) &&
+    !isClarityExcludedPath(pathname);
 
   useActivityHeartbeat(session, heartbeatEnabled);
   usePageViewTracker(session, heartbeatEnabled);
+  useClarityPageTags(clarityAnalyticsEnabled);
 
   useEffect(() => {
     if (authPending || allowWithoutAuth || session) return undefined;
@@ -259,6 +269,7 @@ export default function RootLayoutClient({ children }) {
   return (
     <>
       <Toaster position="top-center" reverseOrder={false} />
+      <MicrosoftClarity enabled={clarityAnalyticsEnabled} projectId={clarityProjectId} />
 
       <SiteHeaderBrand
         nav={<AppNav session={session} userRole={userRole} onLogout={handleLogout} />}

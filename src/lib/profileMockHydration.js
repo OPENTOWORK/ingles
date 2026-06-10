@@ -4,7 +4,6 @@
 
 export function hydrateProfileMockData(tabId, setters) {
   const {
-    setStudyNotes,
     setStudyHistory,
     setWeeklyChallenges,
     setStudyRecommendations,
@@ -31,11 +30,6 @@ export function hydrateProfileMockData(tabId, setters) {
 
   switch (tabId) {
     case 'study-tools':
-      setStudyNotes([
-        { id: 1, title: 'Present Perfect vs Past Simple', content: 'Remember: Present Perfect for unfinished time, Past Simple for finished time', date: '2024-01-15', tags: ['grammar', 'tenses'] },
-        { id: 2, title: 'Phrasal Verbs List', content: 'Look up, look after, look forward to, look into', date: '2024-01-14', tags: ['vocabulary', 'phrasal-verbs'] },
-        { id: 3, title: 'Writing Structure', content: 'Introduction -> Body paragraphs -> Conclusion', date: '2024-01-13', tags: ['writing', 'structure'] },
-      ]);
       setStudyHistory([
         { date: '2024-01-15', duration: 45, exercises: 12, score: 85, type: 'Grammar Practice' },
         { date: '2024-01-14', duration: 30, exercises: 8, score: 92, type: 'Reading Comprehension' },

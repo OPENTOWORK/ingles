@@ -8,7 +8,7 @@ export const PROFILE_TABS = [
   { id: 'achievements', label: 'Achievements', emoji: '🏆' },
   { id: 'goals', label: 'Goals', emoji: '🎯' },
   { id: 'integrated', label: 'Integrated stats', emoji: '🔗' },
-  { id: 'study-tools', label: 'Tools', emoji: '🛠️' },
+  { id: 'study-tools', label: 'Tools', emoji: '🛠️', studentAllowed: true },
   { id: 'study-planner', label: 'Planner', emoji: '📅' },
   { id: 'ai-tools', label: 'AI tools', emoji: '🤖' },
   { id: 'error-tracker', label: 'Error Tracker', emoji: '🧠', studentAllowed: true },

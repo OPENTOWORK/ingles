@@ -2271,6 +2271,301 @@ body.nav-open {
   border-color: var(--skill-accent-dark);
 }
 
+/* Exam / skill practice — study notes popover (top bar + overlay) */
+.levels-b2-practice__status .exam-notes-popover {
+  flex: 0 0 auto;
+  margin-left: auto;
+  align-self: flex-start;
+}
+
+.exam-notes-popover__trigger {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.15rem;
+  min-width: 4.5rem;
+  padding: 0.55rem 0.75rem;
+  border: 1px solid #bfdbfe;
+  border-radius: 10px;
+  background: linear-gradient(180deg, #fff 0%, #eff6ff 100%);
+  color: #1d4ed8;
+  font-size: 0.72rem;
+  font-weight: 700;
+  cursor: pointer;
+  font-family: inherit;
+  box-shadow: 0 2px 8px rgba(37, 99, 235, 0.1);
+}
+
+.exam-notes-popover__trigger:hover {
+  border-color: #93c5fd;
+  background: #eff6ff;
+}
+
+.exam-notes-popover--open .exam-notes-popover__trigger {
+  border-color: #2563eb;
+  background: #dbeafe;
+  color: #1e3a8a;
+}
+
+.exam-notes-popover__trigger-icon {
+  font-size: 1.1rem;
+  line-height: 1;
+}
+
+.exam-notes-popover__layer {
+  position: absolute;
+  inset: 0;
+  z-index: 40;
+  pointer-events: none;
+}
+
+.exam-notes-popover__backdrop {
+  position: absolute;
+  inset: 0;
+  border: none;
+  padding: 0;
+  margin: 0;
+  background: rgba(15, 23, 42, 0.14);
+  cursor: pointer;
+  pointer-events: auto;
+}
+
+.exam-notes-popover__panel {
+  position: absolute;
+  top: 0.85rem;
+  right: 0.85rem;
+  width: min(320px, calc(100% - 1.7rem));
+  max-height: calc(100% - 1.7rem);
+  overflow: auto;
+  padding: 0.9rem 1rem 1rem;
+  border: 1px solid #dbeafe;
+  border-radius: 12px;
+  background: #fff;
+  box-shadow:
+    0 12px 40px rgba(15, 23, 42, 0.16),
+    0 0 0 1px rgba(59, 130, 246, 0.08);
+  pointer-events: auto;
+}
+
+.exam-notes-popover__head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.5rem;
+  margin-bottom: 0.75rem;
+}
+
+.exam-notes-popover__title {
+  margin: 0;
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: #0f172a;
+}
+
+.exam-notes-popover__hint {
+  margin: 0.35rem 0 0;
+  font-size: 0.72rem;
+  line-height: 1.45;
+  color: #64748b;
+}
+
+.exam-notes-popover__close {
+  flex-shrink: 0;
+  width: 1.75rem;
+  height: 1.75rem;
+  border: none;
+  border-radius: 8px;
+  background: #f1f5f9;
+  color: #475569;
+  font-size: 1.2rem;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.exam-notes-popover__close:hover {
+  background: #e2e8f0;
+  color: #0f172a;
+}
+
+.exam-notes-popover__signin,
+.exam-notes-popover__loading {
+  margin: 0;
+  font-size: 0.8rem;
+  color: #64748b;
+  line-height: 1.45;
+}
+
+.exam-notes-popover__label {
+  display: block;
+  margin-bottom: 0.35rem;
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: #334155;
+}
+
+.exam-notes-popover__scratch {
+  margin-bottom: 0.85rem;
+}
+
+.exam-notes-popover__textarea {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 0.55rem 0.65rem;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  font-size: 0.8rem;
+  line-height: 1.45;
+  font-family: inherit;
+  resize: vertical;
+  min-height: 4.5rem;
+  color: #0f172a;
+  background: #f8fafc;
+}
+
+.exam-notes-popover__textarea:focus {
+  outline: none;
+  border-color: #93c5fd;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
+  background: #fff;
+}
+
+.exam-notes-popover__textarea--compact {
+  min-height: 3.5rem;
+}
+
+.exam-notes-popover__toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.45rem;
+  margin-bottom: 0.65rem;
+}
+
+.exam-notes-popover__save {
+  border: none;
+  background: #2563eb;
+  color: #fff;
+  padding: 0.38rem 0.7rem;
+  border-radius: 8px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  cursor: pointer;
+  font-family: inherit;
+}
+
+.exam-notes-popover__save:hover:not(:disabled) {
+  background: #1d4ed8;
+}
+
+.exam-notes-popover__save:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.exam-notes-popover__new {
+  border: 1px solid #bfdbfe;
+  background: #eff6ff;
+  color: #1d4ed8;
+  padding: 0.3rem 0.55rem;
+  border-radius: 8px;
+  font-size: 0.68rem;
+  font-weight: 700;
+  cursor: pointer;
+  font-family: inherit;
+}
+
+.exam-notes-popover__list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.55rem;
+}
+
+.exam-notes-popover__item {
+  padding: 0.55rem;
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+  background: #fafbfc;
+}
+
+.exam-notes-popover__item-head {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  margin-bottom: 0.35rem;
+}
+
+.exam-notes-popover__title-input {
+  flex: 1;
+  min-width: 0;
+  border: none;
+  background: transparent;
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: #0f172a;
+  font-family: inherit;
+}
+
+.exam-notes-popover__title-input:focus {
+  outline: none;
+}
+
+.exam-notes-popover__delete {
+  flex-shrink: 0;
+  width: 1.35rem;
+  height: 1.35rem;
+  border: none;
+  border-radius: 6px;
+  background: #fee2e2;
+  color: #b91c1c;
+  font-size: 1rem;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.exam-notes-popover__date {
+  display: block;
+  margin-top: 0.3rem;
+  font-size: 0.65rem;
+  color: #94a3b8;
+}
+
+.exam-notes-popover__profile-link {
+  display: inline-flex;
+  margin-top: 0.75rem;
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: #2563eb;
+  text-decoration: none;
+}
+
+.exam-notes-popover__profile-link:hover {
+  text-decoration: underline;
+}
+
+@media (max-width: 720px) {
+  .levels-b2-practice__status .exam-notes-popover {
+    margin-left: 0;
+    align-self: stretch;
+  }
+
+  .exam-notes-popover__trigger {
+    flex-direction: row;
+    width: 100%;
+    min-width: 0;
+  }
+
+  .exam-notes-popover__panel {
+    top: 0.5rem;
+    right: 0.5rem;
+    width: calc(100% - 1rem);
+    max-height: calc(100% - 1rem);
+  }
+}
+
 .levels-b2-practice__header {
   text-align: center;
   margin-bottom: 1.25rem;
@@ -2339,6 +2634,7 @@ body.nav-open {
 }
 
 .levels-b2-practice__work-panel {
+  position: relative;
   margin-top: 0.35rem;
   padding: 1.1rem 1.2rem 1.35rem;
   border: 2px solid #1e293b;

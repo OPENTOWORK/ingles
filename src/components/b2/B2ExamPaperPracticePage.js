@@ -1995,6 +1995,14 @@ function B2ExamPaperPracticePageInner({
             ? 'levels-b2-practice__work-panel--a2-rw'
             : ''
         }
+        studyNotesContext={{
+          slug: levelSlug,
+          skillRoute,
+          examMode: examModeActive,
+          partNumber,
+          examSlot,
+        }}
+        studyNotesContextLabel={title}
       >
       {examModeActive && examSection ? (
         <ExamModeSectionBanner

@@ -1095,6 +1095,16 @@ function B2ReadingExamsPageInner() {
         selectedPartId={selectedPartId}
         onSelectPart={handleSelectPart}
         getPartSavedScoreLabel={(part) => scoring.getPartSavedScoreLabel(part, examSlot)}
+        studyNotesContext={{
+          slug: 'b2',
+          skillRoute,
+          examMode: examModeActive,
+          partNumber: partNumberReading,
+          examSlot,
+        }}
+        studyNotesContextLabel={
+          isCombinedPaper ? 'B2 Reading and Use of English' : 'B2 Reading'
+        }
       >
       {examModeActive && examSection ? (
         <ExamModeSectionBanner

@@ -1,10 +1,12 @@
 'use client';
 
+import { useRef } from 'react';
 import SiteMascot from '@/components/SiteMascot';
 import { B2ExamSlotProgressPicker } from '@/components/b2/B2ExamSlotProgressPicker';
 import LevelsCategoryTimer from '@/components/levels/LevelsCategoryTimer';
 import LevelsPartScorePanel from '@/components/levels/LevelsPartScorePanel';
 import LevelsPartFinishBanner from '@/components/levels/LevelsPartFinishBanner';
+import ExamStudyNotesSidebar from '@/components/exam/ExamStudyNotesSidebar';
 
 function getPartTabLabel(part, lang, customLabelFn) {
   if (typeof customLabelFn === 'function') {
@@ -84,6 +86,9 @@ export function B2ExamPracticeChrome({
   hideSubtitle = false,
   compactSkillHeader = false,
   skillPracticeTheme = null,
+  showStudyNotes = true,
+  studyNotesContext = null,
+  studyNotesContextLabel = '',
   practiceReady,
   children,
 }) {
@@ -95,6 +100,7 @@ export function B2ExamPracticeChrome({
   const updatingLabel = lang === 'en' ? 'Updating…' : 'Actualizando…';
   const sessionLabel = lang === 'en' ? `Session: ${title}` : `Sesión: ${title}`;
   const savedPrefix = lang === 'en' ? 'Saved:' : 'Guardado:';
+  const workPanelRef = useRef(null);
 
   return (
     <>
@@ -151,6 +157,7 @@ export function B2ExamPracticeChrome({
           </header>
 
           <div
+            ref={workPanelRef}
             className={['levels-b2-practice__work-panel', workPanelClassName]
               .filter(Boolean)
               .join(' ')}
@@ -164,6 +171,15 @@ export function B2ExamPracticeChrome({
                 totalSlots={partScoreMetrics.totalSlots}
                 passingCount={partScoreMetrics.passingCount}
                 lang={lang}
+              />
+            ) : null}
+
+            {showStudyNotes ? (
+              <ExamStudyNotesSidebar
+                overlayContainerRef={workPanelRef}
+                context={studyNotesContext}
+                contextLabel={studyNotesContextLabel || title}
+                lang={lang === 'es' ? 'es' : 'en'}
               />
             ) : null}
           </div>

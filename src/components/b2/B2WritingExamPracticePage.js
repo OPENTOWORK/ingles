@@ -445,6 +445,14 @@ function B2WritingExamPracticePageInner() {
         getPartTabLabel={getPartTabLabel}
         lang="en"
         workPanelClassName="levels-b2-practice__work-panel--b2-writing"
+        studyNotesContext={{
+          slug: 'b2',
+          skillRoute: 'exam-writing',
+          examMode: false,
+          partNumber,
+          examSlot,
+        }}
+        studyNotesContextLabel="B2 Writing Practice"
       >
         <section className="b2-writing-practice" style={{ maxWidth: 'min(960px, 100%)', margin: '0 auto' }}>
           {loading && <p style={{ textAlign: 'center' }}>Loading B2 Writing…</p>}

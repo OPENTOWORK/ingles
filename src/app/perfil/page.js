@@ -26,6 +26,7 @@ const ProfileProgressCharts = dynamicImport(
   () => import('@/components/perfil/ProfileProgressCharts'),
 );
 import ProfileCollapsibleSection from '@/components/perfil/ProfileCollapsibleSection';
+import ProfileStudyNotesPanel from '@/components/perfil/ProfileStudyNotesPanel';
 import ProfileComingSoon from '@/components/perfil/ProfileComingSoon';
 import ProfileTabsNav from '@/components/perfil/ProfileTabsNav';
 import { PROFILE_TABS, PROFILE_TAB_LABELS } from '@/components/perfil/profileTabsConfig';
@@ -127,7 +128,6 @@ export default function ProfilePage() {
   const [showExportModal, setShowExportModal] = useState(false);
   const [notifications, setNotifications] = useState({ email: true, push: true });
   const [theme, setTheme] = useState('light');
-  const [studyNotes, setStudyNotes] = useState([]);
   const [studyTimer, setStudyTimer] = useState({ isRunning: false, time: 0, sessionTime: 0 });
   const [studyHistory, setStudyHistory] = useState([]);
   const [weeklyChallenges, setWeeklyChallenges] = useState([]);
@@ -139,7 +139,7 @@ export default function ProfilePage() {
   const [achievementProgress, setAchievementProgress] = useState({});
   const [flashcards, setFlashcards] = useState([]);
   const [studyPlan, setStudyPlan] = useState({});
-  const [studyMusic, setStudyMusic] = useState({ isPlaying: false, currentTrack: null });
+  const [studyMusic, setStudyMusic] = useState({ isPlaying: false, currentTrack: null, tracks: [] });
   const [studyBreaks, setStudyBreaks] = useState({ enabled: true, interval: 25, breakTime: 5 });
   const [groupChat, setGroupChat] = useState([]);
   const [studyStreaks, setStudyStreaks] = useState({});
@@ -153,6 +153,14 @@ export default function ProfilePage() {
     audioHistory: [],
     performanceMetrics: {}
   });
+
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    const tab = new URLSearchParams(window.location.search).get('tab');
+    if (!tab) return;
+    const valid = PROFILE_TABS.find((t) => t.id === tab);
+    if (valid) setActiveTab(tab);
+  }, []);
 
   const integratedStatsLoadedRef = useRef(false);
   const mockHydratedTabsRef = useRef(new Set());
@@ -303,7 +311,6 @@ export default function ProfilePage() {
     mockHydratedTabsRef.current.add(activeTab);
 
     hydrateProfileMockData(activeTab, {
-      setStudyNotes,
       setStudyHistory,
       setWeeklyChallenges,
       setStudyRecommendations,
@@ -639,30 +646,6 @@ export default function ProfilePage() {
 
   const resetTimer = () => {
     setStudyTimer({ isRunning: false, time: 0, sessionTime: 0 });
-  };
-
-  // Función para añadir nota
-  const addStudyNote = () => {
-    const newNote = {
-      id: Date.now(),
-      title: 'New note',
-      content: 'Write your note here...',
-      date: new Date().toISOString().split('T')[0],
-      tags: []
-    };
-    setStudyNotes(prev => [newNote, ...prev]);
-  };
-
-  // Función para actualizar nota
-  const updateStudyNote = (id, updates) => {
-    setStudyNotes(prev => prev.map(note => 
-      note.id === id ? { ...note, ...updates } : note
-    ));
-  };
-
-  // Función para eliminar nota
-  const deleteStudyNote = (id) => {
-    setStudyNotes(prev => prev.filter(note => note.id !== id));
   };
 
   // Función para añadir ejercicio favorito
@@ -1328,50 +1311,7 @@ export default function ProfilePage() {
             </div>
 </ProfileCollapsibleSection>
 
-          {/* Notas de Estudio */}
-          <ProfileCollapsibleSection
-            title="📝 My study notes"
-            actions={
-              <button type="button" onClick={addStudyNote} className="add-note-btn">
-                + New note
-              </button>
-            }
-          >
-            <div className="notes-grid">
-              {studyNotes.map((note) => (
-                <div key={note.id} className="note-card">
-                  <div className="note-header">
-                    <input
-                      type="text"
-                      value={note.title}
-                      onChange={(e) => updateStudyNote(note.id, { title: e.target.value })}
-                      className="note-title-input"
-                    />
-                    <button 
-                      onClick={() => deleteStudyNote(note.id)}
-                      className="delete-note-btn"
-                    >
-                      🗑️
-                    </button>
-                  </div>
-                  <textarea
-                    value={note.content}
-                    onChange={(e) => updateStudyNote(note.id, { content: e.target.value })}
-                    className="note-content-input"
-                    rows={4}
-                  />
-                  <div className="note-footer">
-                    <div className="note-date">{note.date}</div>
-                    <div className="note-tags">
-                      {note.tags.map((tag, index) => (
-                        <span key={index} className="note-tag">{tag}</span>
-                      ))}
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </ProfileCollapsibleSection>
+          <ProfileStudyNotesPanel lang="en" />
 
           {/* Exercises Favoritos */}
           <ProfileCollapsibleSection title={"⭐ Favourite exercises"}>
@@ -1616,14 +1556,15 @@ export default function ProfilePage() {
               </div>
               <div className="music-controls">
                 <button 
-                  onClick={studyMusic.isPlaying ? pauseMusic : () => playMusic(studyMusic.tracks[0])}
+                  onClick={studyMusic.isPlaying ? pauseMusic : () => playMusic(studyMusic.tracks?.[0])}
+                  disabled={!studyMusic.tracks?.length}
                   className="music-btn"
                 >
                   {studyMusic.isPlaying ? '⏸️ Pause' : '▶️ Play'}
                 </button>
               </div>
               <div className="music-tracks">
-                {studyMusic.tracks.map((track) => (
+                {(studyMusic.tracks || []).map((track) => (
                   <div key={track.id} className="track-item">
                     <div className="track-details">
                       <div className="track-name">{track.name}</div>

@@ -23,6 +23,10 @@ const AdminAnalyticsPanels = dynamic(
   },
 );
 
+const AdminClarityPanel = dynamic(() => import('@/components/admin/AdminClarityPanel'), {
+  ssr: false,
+});
+
 const PERIOD_OPTIONS = ['dias', 'semanas', 'meses', 'anios'];
 
 /** Cabeceras admin: JWT actualizado + cookies para APIs en producción. */
@@ -122,6 +126,9 @@ export default function AdminDashboard() {
     diaPico: '-',
     heatmap: [],
   });
+  const [clarityAnalytics, setClarityAnalytics] = useState(null);
+  const [clarityLoading, setClarityLoading] = useState(false);
+  const [clarityFetchedAt, setClarityFetchedAt] = useState(0);
   const router = useRouter();
 
   useEffect(() => {
@@ -144,7 +151,7 @@ export default function AdminDashboard() {
 
       setUser(currentUser);
       await Promise.all([loadRoles(), loadUsers(), loadPlacementByUser()]);
-      await Promise.all([loadAnalytics(), loadUserActivity(currentUser)]);
+      await Promise.all([loadAnalytics(), loadUserActivity(currentUser), loadClarityAnalytics()]);
     } catch (error) {
       console.error('Error checking user:', error);
       router.push('/login');
@@ -393,6 +400,38 @@ export default function AdminDashboard() {
     const interval = setInterval(() => loadUserActivity(user), 45_000);
     return () => clearInterval(interval);
   }, [user, loadUserActivity]);
+
+  const loadClarityAnalytics = useCallback(async (forceRefresh = false) => {
+    setClarityLoading(true);
+    try {
+      const headers = await getAdminFetchHeaders();
+      const params = new URLSearchParams({ numOfDays: '3' });
+      if (forceRefresh) params.set('refresh', '1');
+
+      const res = await fetch(`/api/admin/clarity-analytics?${params}`, {
+        credentials: 'include',
+        headers,
+      });
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) {
+        setClarityAnalytics({
+          error: data.error || 'api_error',
+          message: data.message || data.error || `HTTP ${res.status}`,
+        });
+        return;
+      }
+      setClarityAnalytics(data);
+      if (data?.fetchedAt) setClarityFetchedAt(data.fetchedAt);
+    } catch (error) {
+      console.error('Error loading Clarity analytics:', error);
+      setClarityAnalytics({ error: 'api_error', message: 'No se pudo cargar Clarity.' });
+    } finally {
+      setClarityLoading(false);
+    }
+  }, []);
+
+  const clarityRefreshDisabled =
+    clarityLoading || (clarityFetchedAt > 0 && Date.now() - clarityFetchedAt < 45 * 60 * 1000);
 
   const getRoleNameById = (roleId) => {
     const role = roles.find((item) => item.id === roleId);
@@ -1036,6 +1075,13 @@ export default function AdminDashboard() {
           setChartEndDate={setChartEndDate}
           sessionChart={sessionChart}
           connectionAnalytics={connectionAnalytics}
+        />
+
+        <AdminClarityPanel
+          data={clarityAnalytics}
+          loading={clarityLoading}
+          onRefresh={() => loadClarityAnalytics(true)}
+          refreshDisabled={clarityRefreshDisabled}
         />
       </div>
     </div>

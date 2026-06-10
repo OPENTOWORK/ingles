@@ -322,6 +322,14 @@ function B2SpeakingExamPracticeInner({ title, subtitle, loadingLabel, refreshLab
         onSelectPart={(part) => setSelectedPartId(part.id)}
         getPartSavedScoreLabel={(part) => scoring.getPartSavedScoreLabel(part, examSlot)}
         lang={lang}
+        studyNotesContext={{
+          slug: 'b2',
+          skillRoute: 'exam-speaking',
+          examMode: examModeActive,
+          partNumber,
+          examSlot,
+        }}
+        studyNotesContextLabel={title}
       >
       {examModeActive && examSection ? (
         <ExamModeSectionBanner
