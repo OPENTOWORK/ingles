@@ -24,6 +24,10 @@ import {
 } from '@/hooks/useLevelsExamAdminFlow';
 import { useSkillPartFirstNavigation } from '@/hooks/useSkillPartFirstNavigation';
 import {
+  resolveExamPracticeMode,
+  isPartPracticeMode,
+} from '@/lib/examPracticeMode';
+import {
   parseB2WritingPart1Task,
   parseB2WritingPart2Task,
   buildB2WritingPart1ExamContext,
@@ -405,6 +409,15 @@ function B2WritingExamPracticePageInner() {
     ? null
     : 'Cambridge B2 First — Writing Parts 8 & 9';
 
+  const practiceMode = resolveExamPracticeMode({
+    examModeActive: false,
+    reviewMode: false,
+    isSkillPracticeSession,
+  });
+
+  const modeBadge =
+    isSkillPracticeSession && isPartPracticeMode(practiceMode) ? 'Practice Mode' : null;
+
   return (
     <B2ExamPracticeLayout examPracticeOpen={layoutPracticeOpen}>
       {adminFlow.showGenerationStatus ? (
@@ -432,6 +445,9 @@ function B2WritingExamPracticePageInner() {
         hideSubtitle={isSkillPracticeSession}
         compactSkillHeader={isSkillPracticeSession}
         skillPracticeTheme={skillNav.skillTheme}
+        practiceMode={practiceMode}
+        timerVariant={isSkillPracticeSession ? 'discrete' : 'prominent'}
+        modeBadge={modeBadge}
         timerLabel={timerLabel}
         refreshLabel="Refresh Writing"
         loading={loading}

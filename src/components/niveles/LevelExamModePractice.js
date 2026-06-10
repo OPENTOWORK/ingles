@@ -169,7 +169,14 @@ function LevelExamModePracticeInner({ slug }) {
 
       {!pickedSlot ? (
         <div style={{ textAlign: 'center', maxWidth: '640px', margin: '1.5rem auto 0', color: '#4a5568' }}>
-          <h1 style={{ margin: '0 0 0.75rem', color: '#1a365d' }}>Exam mode — {config.cefr}</h1>
+          <h1 style={{ margin: '0 0 0.75rem', color: '#1a365d' }}>
+            {slug === 'b2' ? 'B2 Full Exam Simulation' : `Exam mode — ${config.cefr}`}
+          </h1>
+          {slug === 'b2' ? (
+            <p style={{ margin: '0 0 1.25rem', color: '#4a5568', lineHeight: 1.65, maxWidth: '42rem' }}>
+              Complete the exam under timed conditions. Feedback is shown at the end.
+            </p>
+          ) : null}
           <p style={{ margin: 0, lineHeight: 1.55 }}>
             Choose one of the <strong>available tests</strong>. You will complete each paper under Cambridge time limits.
             Answers are hidden until you finish the full exam. Your progress is saved so you can continue later.
@@ -181,9 +188,14 @@ function LevelExamModePracticeInner({ slug }) {
             <p style={{ margin: 0, fontSize: '0.8rem', fontWeight: 700, color: '#2b6cb0', textTransform: 'uppercase' }}>
               Exam mode
             </p>
-            <h1 style={{ margin: '0.35rem 0', color: '#1a365d' }}>{examLabel}</h1>
+            <h1 style={{ margin: '0.35rem 0', color: '#1a365d' }}>
+              {slug === 'b2' ? 'B2 Full Exam Simulation' : `${config.cefr} Exam Simulation`}
+            </h1>
             <p style={{ margin: '0.5rem 0 0', color: '#4a5568', lineHeight: 1.5 }}>
-              Complete each section in order. Once you finish a section, you cannot go back until the exam ends.
+              Complete the exam under timed conditions. Feedback is shown at the end.
+            </p>
+            <p style={{ margin: '0.35rem 0 0', fontSize: '0.9rem', color: '#64748b', lineHeight: 1.5 }}>
+              {examLabel} · Complete each section in order. Once you finish a section, you cannot go back until the exam ends.
             </p>
             <div
               style={{

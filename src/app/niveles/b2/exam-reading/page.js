@@ -50,6 +50,13 @@ import B2ExamPracticeModuleNav from '@/components/b2/B2ExamPracticeModuleNav';
 import ExamModeSectionBanner from '@/components/niveles/ExamModeSectionBanner';
 import { useExamModeStrict } from '@/hooks/useExamModeStrict';
 import { scoreExamModeDrafts } from '@/utils/examModeGradeAnswers';
+import {
+  resolveExamPracticeMode,
+  isPartPracticeMode,
+  isExamSimulationMode,
+  getExamChromeTitle,
+  getExamChromeSubtitle,
+} from '@/lib/examPracticeMode';
 
 function splitEnunciadoAndTextFallback(rawText = '') {
   const normalized = rawText.replace(/\r\n/g, '\n').trim();
@@ -1018,6 +1025,41 @@ function B2ReadingExamsPageInner() {
     }
   }, [partsData, selectedPartId, selectedQuestionByPart]);
 
+  const practiceMode = resolveExamPracticeMode({ examModeActive, reviewMode });
+
+  const modeBadge = useMemo(() => {
+    if (isSkillPracticeSession && isPartPracticeMode(practiceMode)) {
+      return 'Practice Mode';
+    }
+    return null;
+  }, [practiceMode, isSkillPracticeSession]);
+
+  const chromeTitle = useMemo(() => {
+    if (examModeActive || reviewMode) {
+      return getExamChromeTitle({
+        lang: 'en',
+        examModeActive,
+        reviewMode,
+        sectionTitle: isCombinedPaper ? 'Reading and Use of English' : 'Reading',
+        defaultTitle: isCombinedPaper ? 'B2 Reading and Use of English Practice' : 'B2 Reading Practice',
+      });
+    }
+    return isCombinedPaper ? 'B2 Reading and Use of English Practice' : 'B2 Reading Practice';
+  }, [examModeActive, reviewMode, isCombinedPaper]);
+
+  const chromeSubtitleResolved = useMemo(() => {
+    if (examModeActive || reviewMode) {
+      return getExamChromeSubtitle({
+        lang: 'en',
+        examModeActive,
+        reviewMode,
+        defaultSubtitle: isCombinedPaper ? 'Parts 1 to 7' : 'Parts 5 to 7',
+      });
+    }
+    if (isSkillPracticeSession) return null;
+    return isCombinedPaper ? 'Parts 1 to 7' : 'Parts 5 to 7';
+  }, [examModeActive, reviewMode, isCombinedPaper, isSkillPracticeSession]);
+
   const buttonStyle = {
     backgroundColor: '#c1f2cd',
     padding: '0.75rem 1.25rem',
@@ -1069,18 +1111,16 @@ function B2ReadingExamsPageInner() {
         hidePartTabs={skillNav.hidePartTabs}
         practiceReady={layoutPracticeOpen}
         {...(skillNav.active ? {} : examSlotPickerProps)}
-        title={isCombinedPaper ? 'B2 Reading and Use of English Practice' : 'B2 Reading Practice'}
-        subtitle={
-          isSkillPracticeSession
-            ? null
-            : isCombinedPaper
-              ? 'Parts 1 to 7'
-              : 'Parts 5 to 7'
-        }
+        title={chromeTitle}
+        subtitle={chromeSubtitleResolved}
         hideMascot={isSkillPracticeSession}
-        hideSubtitle={isSkillPracticeSession}
+        hideSubtitle={!chromeSubtitleResolved}
         compactSkillHeader={isSkillPracticeSession}
         skillPracticeTheme={skillNav.skillTheme}
+        practiceMode={practiceMode}
+        timerVariant={isSkillPracticeSession && !examModeActive ? 'discrete' : 'prominent'}
+        modeBadge={modeBadge}
+        showRefresh={!isExamSimulationMode(practiceMode)}
         timerLabel={timerLabel}
         refreshLabel={
           isCombinedPaper ? 'Refresh Reading and Use of English (1–7)' : 'Refresh Reading (5–7)'
@@ -1089,8 +1129,8 @@ function B2ReadingExamsPageInner() {
         loading={loading}
         onRefresh={() => loadReadingData()}
         partScoreMetrics={scorePanelProps}
-        hideScorePanel={examModeActive && !reviewMode}
-        partFinishNotice={examModeActive && !reviewMode ? null : scoring.partFinishNotice}
+        hideScorePanel={isExamSimulationMode(practiceMode) && !reviewMode}
+        partFinishNotice={isExamSimulationMode(practiceMode) && !reviewMode ? null : scoring.partFinishNotice}
         partsData={!loading && !error ? displayPartsData : []}
         selectedPartId={selectedPartId}
         onSelectPart={handleSelectPart}

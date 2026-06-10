@@ -89,10 +89,19 @@ export function B2ExamPracticeChrome({
   showStudyNotes = true,
   studyNotesContext = null,
   studyNotesContextLabel = '',
+  practiceMode = 'part-practice',
+  timerVariant = 'prominent',
+  scorePanelVariant = 'default',
+  modeBadge = null,
   practiceReady,
   children,
 }) {
   const showPractice = practiceReady ?? examPracticeOpen;
+  const isExamSimulation = practiceMode === 'exam-simulation';
+  const effectiveShowStudyNotes = showStudyNotes && !isExamSimulation;
+  const effectiveScoreVariant =
+    scorePanelVariant === 'default' && !isExamSimulation ? 'practice' : scorePanelVariant;
+  const effectiveTimerVariant = isExamSimulation ? 'prominent' : timerVariant;
   const refreshHint =
     lang === 'en'
       ? 'Reload parts, texts and answers from the server and clear your selections.'
@@ -131,6 +140,11 @@ export function B2ExamPracticeChrome({
           }
         >
           <header className="levels-b2-practice__header">
+            {modeBadge ? (
+              <p className={`levels-exam-mode-badge levels-exam-mode-badge--${practiceMode}`}>
+                {modeBadge}
+              </p>
+            ) : null}
             <h1 className="levels-b2-practice__title">{title}</h1>
             {!hideMascot ? (
               <div className="levels-b2-practice__mascot" aria-hidden>
@@ -163,7 +177,11 @@ export function B2ExamPracticeChrome({
               .join(' ')}
           >
           <div className="levels-b2-practice__status">
-            <LevelsCategoryTimer categoryLabel={sessionLabel} timeLabel={timerLabel} />
+            <LevelsCategoryTimer
+              categoryLabel={sessionLabel}
+              timeLabel={timerLabel}
+              variant={effectiveTimerVariant}
+            />
 
             {!hideScorePanel && partScoreMetrics ? (
               <LevelsPartScorePanel
@@ -171,10 +189,11 @@ export function B2ExamPracticeChrome({
                 totalSlots={partScoreMetrics.totalSlots}
                 passingCount={partScoreMetrics.passingCount}
                 lang={lang}
+                variant={effectiveScoreVariant}
               />
             ) : null}
 
-            {showStudyNotes ? (
+            {effectiveShowStudyNotes ? (
               <ExamStudyNotesSidebar
                 overlayContainerRef={workPanelRef}
                 context={studyNotesContext}

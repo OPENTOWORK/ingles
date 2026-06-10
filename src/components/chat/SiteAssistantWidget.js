@@ -37,7 +37,7 @@ export function clearAssistantDismissed() {
   }
 }
 
-export default function SiteAssistantWidget({ defaultOpen = true } = {}) {
+export default function SiteAssistantWidget({ defaultOpen = false } = {}) {
   const { userRole } = useUserRole();
   const welcome = useMemo(() => getSiteAssistantWelcome(userRole), [userRole]);
   const starterTopics = useMemo(() => getSiteAssistantStarters(userRole), [userRole]);

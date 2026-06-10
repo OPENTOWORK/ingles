@@ -25,6 +25,13 @@ import { getB2LongTurnPhotoUrls } from '@/data/b2-speaking-long-turn-photos';
 import B2ExamPracticeModuleNav from '@/components/b2/B2ExamPracticeModuleNav';
 import ExamModeSectionBanner from '@/components/niveles/ExamModeSectionBanner';
 import { useExamModeStrict } from '@/hooks/useExamModeStrict';
+import {
+  resolveExamPracticeMode,
+  isExamSimulationMode,
+  isPartPracticeMode,
+  getExamChromeTitle,
+  getExamChromeSubtitle,
+} from '@/lib/examPracticeMode';
 import { sitePublicPath } from '@/utils/sitePublicPath';
 import { getSessionUserId } from '@/utils/levelsEstadisticas';
 import {
@@ -279,6 +286,35 @@ function B2SpeakingExamPracticeInner({ title, subtitle, loadingLabel, refreshLab
 
   const chromeSubtitle = isSkillPracticeSession ? null : subtitle;
 
+  const practiceMode = resolveExamPracticeMode({ examModeActive, reviewMode });
+
+  const modeBadge = useMemo(() => {
+    if (isSkillPracticeSession && isPartPracticeMode(practiceMode)) {
+      return lang === 'en' ? 'Practice Mode' : 'Modo práctica';
+    }
+    return null;
+  }, [practiceMode, isSkillPracticeSession, lang]);
+
+  const chromeTitle = useMemo(() => {
+    if (examModeActive || reviewMode) {
+      return getExamChromeTitle({
+        lang,
+        examModeActive,
+        reviewMode,
+        sectionTitle: 'Speaking',
+        defaultTitle: title,
+      });
+    }
+    return title;
+  }, [examModeActive, reviewMode, lang, title]);
+
+  const chromeSubtitleResolved = useMemo(() => {
+    if (examModeActive || reviewMode) {
+      return getExamChromeSubtitle({ lang, examModeActive, reviewMode, defaultSubtitle: subtitle });
+    }
+    return chromeSubtitle;
+  }, [examModeActive, reviewMode, lang, subtitle, chromeSubtitle]);
+
   return (
     <B2ExamPracticeLayout examPracticeOpen={layoutPracticeOpen}>
       {adminFlow.canRegenerateExams ? (
@@ -304,19 +340,23 @@ function B2SpeakingExamPracticeInner({ title, subtitle, loadingLabel, refreshLab
         hidePartTabs={skillNav.hidePartTabs}
         practiceReady={layoutPracticeOpen}
         {...(skillNav.active ? {} : examSlotPickerProps)}
-        title={title}
-        subtitle={chromeSubtitle}
+        title={chromeTitle}
+        subtitle={chromeSubtitleResolved}
         hideMascot={isSkillPracticeSession}
-        hideSubtitle={isSkillPracticeSession}
+        hideSubtitle={!chromeSubtitleResolved}
         compactSkillHeader={isSkillPracticeSession}
         skillPracticeTheme={skillNav.skillTheme}
+        practiceMode={practiceMode}
+        timerVariant={isSkillPracticeSession && !examModeActive ? 'discrete' : 'prominent'}
+        modeBadge={modeBadge}
+        showRefresh={!isExamSimulationMode(practiceMode)}
         timerLabel={timerLabel}
         refreshLabel={refreshLabel}
         loading={loading}
         onRefresh={() => loadParts()}
         partScoreMetrics={scorePanelProps}
-        hideScorePanel={examModeActive && !reviewMode}
-        partFinishNotice={examModeActive && !reviewMode ? null : scoring.partFinishNotice}
+        hideScorePanel={isExamSimulationMode(practiceMode) && !reviewMode}
+        partFinishNotice={isExamSimulationMode(practiceMode) && !reviewMode ? null : scoring.partFinishNotice}
         partsData={!loading && !error ? displayPartsData : []}
         selectedPartId={selectedPartId}
         onSelectPart={(part) => setSelectedPartId(part.id)}

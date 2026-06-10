@@ -33,7 +33,9 @@ import {
   formatListeningGapDisplayLines,
   extractMcqOptionLetter,
 } from '@/utils/b2ExamTextBlocks';
-import B2ListeningPartInstructions from '@/components/b2/B2ListeningPartInstructions';
+import B2ListeningPracticeBriefing from '@/components/b2/B2ListeningPracticeBriefing';
+import B2ListeningStrategyPanel from '@/components/b2/B2ListeningStrategyPanel';
+import B2ListeningPracticeFeedback from '@/components/b2/B2ListeningPracticeFeedback';
 import {
   B2_EXAM1_PART12_MATCHING_POOL,
   getB2Exam1ListeningPartUx,
@@ -146,6 +148,18 @@ import A2ExamGenerationStatus from '@/components/niveles/A2ExamGenerationStatus'
 import ExamModeSectionBanner from '@/components/niveles/ExamModeSectionBanner';
 import { useExamModeStrict } from '@/hooks/useExamModeStrict';
 import { scoreExamModeDrafts } from '@/utils/examModeGradeAnswers';
+import {
+  resolveExamPracticeMode,
+  isExamSimulationMode,
+  isPartPracticeMode,
+  getExamChromeTitle,
+  getExamChromeSubtitle,
+} from '@/lib/examPracticeMode';
+import {
+  getB2ListeningCambridgePartLabel,
+  getB2ListeningPracticeSubtitle,
+  getB2ListeningStrategyPack,
+} from '@/data/b2ListeningPracticeStrategies';
 
 const B2WritingLongFormAiPanel = dynamic(
   () => import('@/components/b2/B2WritingLongFormAiPanel'),
@@ -1976,7 +1990,74 @@ function B2ExamPaperPracticePageInner({
     }
   }, [partsData, selectedPartId]);
 
-  const chromeSubtitle = isSkillPracticeSession ? null : subtitle;
+  const practiceMode = resolveExamPracticeMode({ examModeActive, reviewMode });
+
+  const isB2ListeningPartPractice =
+    isPartPracticeMode(practiceMode) &&
+    isSkillPracticeSession &&
+    skillRoute === 'exam-listening' &&
+    levelSlug === 'b2' &&
+    partNumber >= 10 &&
+    partNumber <= 13;
+
+  const listeningStrategyPack = useMemo(
+    () => (isB2ListeningPartPractice ? getB2ListeningStrategyPack(partNumber) : null),
+    [isB2ListeningPartPractice, partNumber],
+  );
+
+  const showListeningBriefing =
+    Boolean(b2Exam1ListeningUx) && useListeningItemLayout && isB2ListeningPartPractice;
+  const hideListeningDirectionsDup = showListeningBriefing;
+
+  const chromeTitle = useMemo(() => {
+    if (examModeActive || reviewMode) {
+      return getExamChromeTitle({
+        lang,
+        examModeActive,
+        reviewMode,
+        sectionTitle: title,
+        defaultTitle: title,
+      });
+    }
+    if (isB2ListeningPartPractice) {
+      return `${getB2ListeningCambridgePartLabel(partNumber)} Practice`;
+    }
+    return title;
+  }, [examModeActive, reviewMode, title, lang, isB2ListeningPartPractice, partNumber]);
+
+  const chromeSubtitleResolved = useMemo(() => {
+    if (examModeActive || reviewMode) {
+      return getExamChromeSubtitle({
+        lang,
+        examModeActive,
+        reviewMode,
+        defaultSubtitle: subtitle,
+      });
+    }
+    if (isB2ListeningPartPractice) {
+      return getB2ListeningPracticeSubtitle(partNumber);
+    }
+    if (isSkillPracticeSession) return null;
+    return subtitle;
+  }, [
+    examModeActive,
+    reviewMode,
+    lang,
+    subtitle,
+    isB2ListeningPartPractice,
+    partNumber,
+    isSkillPracticeSession,
+  ]);
+
+  const modeBadge = useMemo(() => {
+    if (isSkillPracticeSession && isPartPracticeMode(practiceMode)) {
+      return lang === 'en' ? 'Practice Mode' : 'Modo práctica';
+    }
+    return null;
+  }, [practiceMode, isSkillPracticeSession, lang]);
+
+  const chromeTimerVariant =
+    isExamSimulationMode(practiceMode) ? 'prominent' : isSkillPracticeSession ? 'discrete' : 'prominent';
 
   return (
     <B2ExamPracticeLayout examPracticeOpen={layoutPracticeOpen}>
@@ -2004,19 +2085,23 @@ function B2ExamPaperPracticePageInner({
         hidePartTabs={skillNav.hidePartTabs}
         practiceReady={layoutPracticeOpen}
         {...(skillNav.active ? {} : examSlotPickerProps)}
-        title={title}
-        subtitle={chromeSubtitle}
+        title={chromeTitle}
+        subtitle={chromeSubtitleResolved}
         hideMascot={isSkillPracticeSession}
-        hideSubtitle={isSkillPracticeSession}
+        hideSubtitle={!chromeSubtitleResolved}
         compactSkillHeader={isSkillPracticeSession}
         skillPracticeTheme={skillNav.skillTheme}
+        practiceMode={practiceMode}
+        timerVariant={chromeTimerVariant}
+        modeBadge={modeBadge}
+        showRefresh={!isExamSimulationMode(practiceMode)}
         timerLabel={timerLabel}
         refreshLabel={refreshLabel}
         loading={loading}
         onRefresh={() => loadData()}
         partScoreMetrics={scorePanelProps}
-        hideScorePanel={examModeActive && !reviewMode}
-        partFinishNotice={examModeActive && !reviewMode ? null : scoring.partFinishNotice}
+        hideScorePanel={isExamSimulationMode(practiceMode) && !reviewMode}
+        partFinishNotice={isExamSimulationMode(practiceMode) && !reviewMode ? null : scoring.partFinishNotice}
         partsData={!loading && !error ? displayPartsData : []}
         selectedPartId={selectedPartId}
         onSelectPart={handleSelectPart}
@@ -2347,19 +2432,23 @@ function B2ExamPaperPracticePageInner({
 
             {selectedPart && selectedQuestion &&
               (useListeningItemLayout ? (
+              <div className={`levels-listening-practice-layout${isB2ListeningPartPractice ? ' levels-listening-practice-layout--with-strategy' : ''}`}>
+              <div className="levels-listening-practice-main">
               <div className="levels-exam-split-page levels-exam-practice-page--narrow">
               <div className="levels-exam-split-card">
                 <h2>{getPartTitle(selectedPart)}</h2>
 
-                {b2Exam1ListeningUx ? (
-                  <B2ListeningPartInstructions
-                    instructions={b2Exam1ListeningUx.instructions}
+                {showListeningBriefing && b2Exam1ListeningUx ? (
+                  <B2ListeningPracticeBriefing
+                    whatYouWillHear={b2Exam1ListeningUx.whatYouWillHear}
+                    whatYouNeedToDo={b2Exam1ListeningUx.whatYouNeedToDo}
                     practiceNote={b2Exam1ListeningUx.practiceNote}
+                    examSimulation={isExamSimulationMode(practiceMode)}
                   />
                 ) : null}
 
                 <div className="levels-exam-split__body levels-exam-split__body--stacked">
-                  {selectedPartContent.enunciado ? (
+                  {selectedPartContent.enunciado && !hideListeningDirectionsDup ? (
                     <div className="levels-exam-split__enunciado">
                       <p className="levels-exam-split__section-title">Directions</p>
                       {getFormattedEnunciado(selectedPartContent.enunciado).map((block, index) => {
@@ -2725,27 +2814,17 @@ function B2ExamPaperPracticePageInner({
                                 ) : null}
                               </div>
                               {!hideFeedback && typeof checkResult === 'boolean' ? (
-                                <>
-                                  <p
-                                    style={{
-                                      margin: '0.7rem 0 0',
-                                      fontWeight: 700,
-                                      color: checkResult ? '#2f855a' : '#c53030',
-                                    }}
-                                  >
-                                    {checkResult ? 'Correcta' : 'Incorrecta'}
-                                  </p>
-                                  {(() => {
+                                <B2ListeningPracticeFeedback
+                                  isCorrect={checkResult}
+                                  correctLabel={(() => {
                                     const expected = openAnswerMap.get(qn);
                                     const list = expected && expected.size > 0 ? [...expected] : [];
-                                    return (
-                                      <p style={{ margin: '0.4rem 0 0', fontWeight: 600, color: '#1f2937' }}>
-                                        Correct answer: {list.length > 0 ? list.join(' · ') : 'Not available'}
-                                      </p>
-                                    );
+                                    return list.length > 0 ? list.join(' · ') : null;
                                   })()}
-                                  <LevelsAnswerJustification hint={aiHintsByKey[questionKey]} />
-                                </>
+                                  hint={aiHintsByKey[questionKey]}
+                                  studyTip={listeningStrategyPack?.studyTip}
+                                  lang={lang}
+                                />
                               ) : null}
                             </div>
                           );
@@ -2766,12 +2845,13 @@ function B2ExamPaperPracticePageInner({
                           ) || '';
 
                         const applyListeningMcqOption = (option) => {
+                          setSelectedOptions((prev) => ({ ...prev, [questionKey]: option.id }));
+                          if (hideFeedback) return;
                           const wasChecked = checkedQuestions[questionKey];
                           const nextChecked = { ...checkedQuestions, [questionKey]: true };
-                          setSelectedOptions((prev) => ({ ...prev, [questionKey]: option.id }));
                           setCheckedQuestions(nextChecked);
                           trySavePartAfterAnswer({ checkedQuestions: nextChecked });
-                          if (!wasChecked && !hideFeedback) {
+                          if (!wasChecked) {
                             const correctOpt = group.options.find((o) => o.correcta);
                             const answersFromDatabase = group.options
                               .map((o) => (o.formattedText || o.respuesta || '').trim())
@@ -2916,11 +2996,13 @@ function B2ExamPaperPracticePageInner({
                                         delete next[questionKey];
                                         return next;
                                       });
-                                      setCheckedQuestions((prev) => {
-                                        const next = { ...prev };
-                                        delete next[questionKey];
-                                        return next;
-                                      });
+                                      if (!hideFeedback) {
+                                        setCheckedQuestions((prev) => {
+                                          const next = { ...prev };
+                                          delete next[questionKey];
+                                          return next;
+                                        });
+                                      }
                                       return;
                                     }
                                     const opt = group.options.find(
@@ -2936,25 +3018,29 @@ function B2ExamPaperPracticePageInner({
                                     </option>
                                   ))}
                                 </select>
-                                <label
-                                  htmlFor={`matching-notes-${notesKey}`}
-                                  className="levels-listening-matching-notes-label"
-                                >
-                                  Notes while listening
-                                </label>
-                                <textarea
-                                  id={`matching-notes-${notesKey}`}
-                                  className="levels-listening-matching-notes"
-                                  rows={2}
-                                  placeholder="Optional — jot down ideas before choosing your answer"
-                                  value={listeningSpeakerNotes[notesKey] || ''}
-                                  onChange={(e) =>
-                                    setListeningSpeakerNotes((prev) => ({
-                                      ...prev,
-                                      [notesKey]: e.target.value,
-                                    }))
-                                  }
-                                />
+                                {!hideFeedback ? (
+                                  <>
+                                    <label
+                                      htmlFor={`matching-notes-${notesKey}`}
+                                      className="levels-listening-matching-notes-label"
+                                    >
+                                      Notes while listening
+                                    </label>
+                                    <textarea
+                                      id={`matching-notes-${notesKey}`}
+                                      className="levels-listening-matching-notes"
+                                      rows={2}
+                                      placeholder="Optional — jot down ideas before choosing your answer"
+                                      value={listeningSpeakerNotes[notesKey] || ''}
+                                      onChange={(e) =>
+                                        setListeningSpeakerNotes((prev) => ({
+                                          ...prev,
+                                          [notesKey]: e.target.value,
+                                        }))
+                                      }
+                                    />
+                                  </>
+                                ) : null}
                               </>
                             ) : (
                               <>
@@ -3022,13 +3108,18 @@ function B2ExamPaperPracticePageInner({
                                         : ''
                                     }`
                                   : correct?.formattedText || correct?.respuesta || 'Not available';
+                              const selectedOpt = group.options.find(
+                                (o) => selectedOptions[questionKey] === o.id,
+                              );
+                              const isCorrectAnswer = !!selectedOpt?.correcta;
                               return (
-                                <>
-                                  <p style={{ margin: '0.7rem 0 0', fontWeight: 600, color: '#1f2937' }}>
-                                    Correct answer: {correctLabel}
-                                  </p>
-                                  <LevelsAnswerJustification hint={aiHintsByKey[questionKey]} />
-                                </>
+                                <B2ListeningPracticeFeedback
+                                  isCorrect={isCorrectAnswer}
+                                  correctLabel={correctLabel}
+                                  hint={aiHintsByKey[questionKey]}
+                                  studyTip={listeningStrategyPack?.studyTip}
+                                  lang={lang}
+                                />
                               );
                             })()}
                           </div>
@@ -3039,6 +3130,14 @@ function B2ExamPaperPracticePageInner({
                 ) : null}
                 </div>
               </div>
+              </div>
+              </div>
+              {isB2ListeningPartPractice ? (
+                <B2ListeningStrategyPanel
+                  pack={listeningStrategyPack}
+                  partLabel={getB2ListeningCambridgePartLabel(partNumber)}
+                />
+              ) : null}
               </div>
               ) : (
               <B2ExamPracticeContent

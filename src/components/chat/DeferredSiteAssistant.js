@@ -11,7 +11,7 @@ const SiteAssistantWidget = dynamic(() => import('@/components/chat/SiteAssistan
 function SiteAssistantDeferred() {
   const ready = useDeferredMount(800);
   if (!ready) return null;
-  return <SiteAssistantWidget defaultOpen />;
+  return <SiteAssistantWidget defaultOpen={false} />;
 }
 
 /** Solo monta el chat si hay sesión (evita carga en rutas públicas). */

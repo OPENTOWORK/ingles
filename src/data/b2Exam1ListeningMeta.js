@@ -26,26 +26,37 @@ export const B2_EXAM1_PART12_MATCHING_POOL = [
 
 const PART_UX = {
   10: {
-    instructions:
-      'You will hear people talking in eight different situations. For questions 1–8, choose the best answer (A, B or C). You will hear each extract twice.',
+    whatYouWillHear: 'Eight short extracts — people talking in everyday situations such as a gallery, airport, or university office.',
+    whatYouNeedToDo:
+      'For questions 1–8, choose the best answer (A, B or C). You will hear each extract twice.',
     practiceNote: 'Practice mode: you can replay each audio before checking your answer.',
   },
   11: {
-    instructions:
-      'You will hear a woman called Elena talking about training with a mountain rescue team. For questions 9–18, complete the sentences with a word or short phrase. You will hear the recording twice.',
+    whatYouWillHear:
+      'A woman called Elena talking about training with a mountain rescue team.',
+    whatYouNeedToDo:
+      'For questions 9–18, complete the sentences with a word or short phrase. You will hear the recording twice.',
     practiceNote: 'Practice mode: you can replay the audio before checking your answers.',
   },
   12: {
-    instructions:
-      'You will hear five people talking about their first experiences of paid work. For questions 19–23, choose from the list (A–H) the opinion each speaker expresses. Use the letters only once. There are three extra letters which you do not need to use. You will hear the recording twice.',
+    whatYouWillHear: 'Five people talking about their first experiences of paid work.',
+    whatYouNeedToDo:
+      'For questions 19–23, choose from the list (A–H) the opinion each speaker expresses. Use the letters only once. There are three extra letters which you do not need to use. You will hear the recording twice.',
     practiceNote: 'Practice mode: you can replay each speaker audio before checking your answers.',
+  },
+  13: {
+    whatYouWillHear:
+      'An interview about a community project to restore a town hall and how local people use it today.',
+    whatYouNeedToDo:
+      'For questions 24–30, choose the best answer (A, B or C). You will hear the recording twice.',
+    practiceNote: 'Practice mode: you can replay the audio before checking your answers.',
   },
 };
 
 /**
  * @param {number} partNumber
  * @param {number} examSlot
- * @returns {{ instructions: string, practiceNote: string } | null}
+ * @returns {{ whatYouWillHear: string, whatYouNeedToDo: string, practiceNote: string } | null}
  */
 export function getB2Exam1ListeningPartUx(partNumber, examSlot = 1) {
   if (Number(examSlot) !== B2_EXAM1_LISTENING_EXAM_SLOT) return null;
