@@ -147,8 +147,9 @@ function validateWritingPart(slug, partDef, gen, errors, warnings) {
   }
 
   if (partDef.activity === 'part-2') {
-    if (gen.questions.length < 4) {
-      errors.push('Writing Part 2 must include four optional tasks.');
+    // Exam-realistic format: 3 options minimum (B2 official style); 4+ allowed for practice sets.
+    if (gen.questions.length < 3) {
+      errors.push('Writing Part 2 must include at least three optional tasks.');
     }
     const formats = new Set();
     gen.questions.forEach((q, i) => {
