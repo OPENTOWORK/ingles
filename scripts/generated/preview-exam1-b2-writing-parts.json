@@ -1,0 +1,30 @@
+{
+  "examenId": "5bd3e0d7-29a7-4e07-ac15-a4d195528c65",
+  "generatedAt": "2026-06-10T12:33:03.293Z",
+  "readOnly": true,
+  "part1Current": {
+    "parteId": "f64f5c5c-010b-43db-b637-5574386f8ac3",
+    "preguntaId": "4bc7fe3e-be54-4897-bfd9-63cac9093113",
+    "enunciado": "Writing Part 1 — Essay\nQuestion: How has technology changed urban life, and do the benefits outweigh the challenges?\nYou should write about:\n1. Describe ways technology has improved daily life in cities\n2. Explain problems technology may cause in urban environments\n3. Give your opinion on whether technology’s benefits are greater than its drawbacks\nInstructions:\nWrite an essay using all the notes and give reasons for your point of view.\nWord limit: 140–190 words"
+  },
+  "part1Proposed": {
+    "enunciado": "Writing Part 1 — Essay\n\nQuestion: Some people believe schools should teach practical life skills, such as cooking or managing money. Do you agree?\n\nNotes:\n1. why practical skills are useful\n2. possible problems with adding them to school subjects\n3. your own idea\n\nInstructions:\nWrite an essay using all the notes and give reasons for your point of view.\n\nWord limit: 140–190 words",
+    "note": "NOT saved to Supabase — preview only."
+  },
+  "part2Current": {
+    "parteId": "66d184e5-b7d8-477f-b087-8a65d243de48",
+    "preguntaId": "7524a8de-de56-4b25-9cc7-d69031d0c246",
+    "enunciado": "Writing Part 2 — Choose one task\nWrite your text in 140-190 words on the topic of urban life and technology. Choose ONE task from the four options below and make sure to include all the points mentioned in the task.\nWord limit: 140–190 words\n\n1\nWrite an article for a city magazine about how technology is changing daily life in urban areas. Include: at least two examples of new technologies used in cities, the benefits these changes bring to residents, and any possible drawbacks.\nWrite your article.\n\n2\nWrite a letter to the editor of a local newspaper expressing your opinion about the impact of technology on community interaction in your city. Include your views on whether technology helps or hinders social connections, and suggest one action that the city council could take to improve community life.\nWrite your email.\n\n3\nWrite a report for your local community centre about the use of smart technology in public transport. Include information about how the technology works, the advantages it offers for commuters, and recommendations for further improvements.\nWrite your report.\n\n4\nWrite a review for an online blog about a recently opened ‘smart café’ in your city that uses high-tech devices and apps. Include details about the technology used, your experience as a customer, and whether you would recommend it to other readers.\nWrite your review."
+  },
+  "part2Proposed": {
+    "enunciado": "Writing Part 2 — Choose one task\nChoose ONE of the tasks below and write your answer in 140–190 words in an appropriate style.\nWord limit: 140–190 words\n\n1\nYou see this announcement in your school’s English-language magazine:\nArticles wanted: Switch off and relax!\nWhat hobby or activity helps young people relax? Describe the hobby or activity, explain why it helps people relax, and say who you would recommend it to.\nWrite your article.\n\n2\nYou have received this email from your English-speaking friend Alex:\nGreat news — I’m coming to stay in your area for a weekend next month! What could we do together while I’m there? And what clothes and other things should I bring? See you soon!\nIn your email, suggest two things you could do together, explain what clothes and things Alex should bring, and offer to help with the plans.\nWrite your email.\n\n3\nThe principal of your college wants to improve the study areas for students, and has asked you to write a report.\nIn your report, describe the problems with the study areas at the moment, suggest some improvements, and explain which change would be the most useful for students.\nWrite your report.",
+    "note": "NOT saved to Supabase — preview only. Exactly 3 options (exam-realistic format)."
+  },
+  "part2ReservedTasks": [
+    {
+      "writingType": "review",
+      "enunciado": "You see this announcement on a website for students:\nReviews wanted! Have you read a book, watched a film or series, or visited a café, museum or other place that young people would enjoy? Describe it briefly, tell us what was good and less good about it, and say whether you would recommend it.\nWrite your review.",
+      "note": "Approved Review task kept for Practice Mode extras or future Examen 2 Part 2. NOT in Examen 1."
+    }
+  ]
+}

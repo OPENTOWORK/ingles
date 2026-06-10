@@ -1028,11 +1028,14 @@ function B2ReadingExamsPageInner() {
   const practiceMode = resolveExamPracticeMode({ examModeActive, reviewMode });
 
   const modeBadge = useMemo(() => {
+    if (isExamSimulationMode(practiceMode)) return 'Exam Mode';
     if (isSkillPracticeSession && isPartPracticeMode(practiceMode)) {
       return 'Practice Mode';
     }
     return null;
   }, [practiceMode, isSkillPracticeSession]);
+
+  const compactChromeHeader = isSkillPracticeSession || isExamSimulationMode(practiceMode);
 
   const chromeTitle = useMemo(() => {
     if (examModeActive || reviewMode) {
@@ -1113,9 +1116,9 @@ function B2ReadingExamsPageInner() {
         {...(skillNav.active ? {} : examSlotPickerProps)}
         title={chromeTitle}
         subtitle={chromeSubtitleResolved}
-        hideMascot={isSkillPracticeSession}
+        hideMascot={compactChromeHeader}
         hideSubtitle={!chromeSubtitleResolved}
-        compactSkillHeader={isSkillPracticeSession}
+        compactSkillHeader={compactChromeHeader}
         skillPracticeTheme={skillNav.skillTheme}
         practiceMode={practiceMode}
         timerVariant={isSkillPracticeSession && !examModeActive ? 'discrete' : 'prominent'}

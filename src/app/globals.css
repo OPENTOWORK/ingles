@@ -4008,6 +4008,63 @@ body.nav-open {
   max-width: min(28rem, 90vw);
 }
 
+/* ——— Part 1 MCQ cloze: explanations below the passage ——— */
+.levels-exam-mcq-explanations {
+  margin-top: 1.5rem;
+  padding-top: 1.1rem;
+  border-top: 2px solid #e2e8f0;
+}
+
+.levels-exam-mcq-explanations__title {
+  margin: 0 0 0.85rem;
+  font-size: 0.8rem;
+  font-weight: 800;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: #475569;
+}
+
+.levels-exam-mcq-explanations__item {
+  margin: 0 0 0.85rem;
+  padding: 0.85rem 1rem;
+  border-radius: 10px;
+  border: 1px solid #e2e8f0;
+  background: #f8fafc;
+}
+
+.levels-exam-mcq-explanations__item--correct {
+  border-color: #a7f3d0;
+  background: #f0fdf4;
+}
+
+.levels-exam-mcq-explanations__item--incorrect {
+  border-color: #fecaca;
+  background: #fff5f5;
+}
+
+.levels-exam-mcq-explanations__head {
+  margin: 0;
+  line-height: 1.55;
+  color: #1f2937;
+}
+
+.levels-exam-mcq-explanations__number {
+  font-weight: 800;
+  color: #0f172a;
+}
+
+.levels-exam-mcq-explanations__verdict {
+  font-weight: 800;
+}
+
+.levels-exam-mcq-explanations__verdict--correct {
+  color: #2f855a;
+}
+
+.levels-exam-mcq-explanations__verdict--incorrect {
+  color: #c53030;
+}
+
 @media (min-width: 1400px) {
   .levels-exam-split-page {
     max-width: min(1720px, 100%);
@@ -7416,6 +7473,118 @@ body.nav-open {
   background: #fffbeb;
   border-radius: 8px;
   border: 1px solid #fde68a;
+}
+
+/* --- Writing practice: strategy panel + checklist --- */
+.levels-writing-strategy {
+  position: static;
+  margin: 1rem 0 0;
+}
+
+.levels-writing-strategy__check-count {
+  margin-left: 0.4rem;
+  font-weight: 700;
+  color: #0f766e;
+  text-transform: none;
+  letter-spacing: 0;
+}
+
+.levels-writing-strategy__checklist {
+  list-style: none;
+  padding-left: 0 !important;
+  margin: 0;
+  display: grid;
+  gap: 0.35rem;
+}
+
+.levels-writing-strategy__check-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.5rem;
+  cursor: pointer;
+}
+
+.levels-writing-strategy__check-item input {
+  margin-top: 0.25rem;
+  accent-color: #0f766e;
+}
+
+.levels-writing-strategy__check-done {
+  color: #94a3b8;
+  text-decoration: line-through;
+}
+
+/* --- Writing practice: draft status panel --- */
+.levels-b2-writing-draft {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+  padding: 0.7rem 1rem;
+  background: #f0fdfa;
+  border: 1px solid #99f6e4;
+  border-radius: 12px;
+  min-width: 180px;
+}
+
+.levels-b2-writing-draft--submitted {
+  background: #ecfdf5;
+  border-color: #6ee7b7;
+}
+
+.levels-b2-writing-draft__title {
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: #0f766e;
+}
+
+.levels-b2-writing-draft__words {
+  font-size: 1.05rem;
+  color: #134e4a;
+}
+
+.levels-b2-writing-draft__state {
+  font-size: 0.85rem;
+  color: #475569;
+}
+
+/* --- Writing exam mode note + CEFR estimate --- */
+.levels-b2-writing-panel__exam-note {
+  margin: 0.75rem 0 0;
+  padding: 0.65rem 0.85rem;
+  background: #eff6ff;
+  border: 1px solid #bfdbfe;
+  border-radius: 10px;
+  color: #1e40af;
+  font-size: 0.9rem;
+  line-height: 1.5;
+}
+
+.levels-b2-writing-panel__cefr {
+  margin: 0 0 0.75rem;
+  padding: 0.5rem 0.85rem;
+  background: #f5f3ff;
+  border: 1px solid #ddd6fe;
+  border-radius: 10px;
+  color: #4c1d95;
+  font-size: 0.95rem;
+}
+
+/* --- Writing corrections: error category chip --- */
+.writing-correction-item__category {
+  display: inline-block;
+  margin-left: 0.5rem;
+  padding: 0.1rem 0.55rem;
+  background: #f1f5f9;
+  border: 1px solid #cbd5f5;
+  border-radius: 999px;
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  color: #475569;
+  vertical-align: middle;
 }
 
 .levels-listening-feedback {

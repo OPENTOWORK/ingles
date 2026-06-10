@@ -72,6 +72,7 @@ export function B2ExamPracticeChrome({
   showRefresh = true,
   partScoreMetrics,
   hideScorePanel = false,
+  scorePanelOverride = null,
   partFinishNotice,
   partsData,
   selectedPartId,
@@ -183,7 +184,9 @@ export function B2ExamPracticeChrome({
               variant={effectiveTimerVariant}
             />
 
-            {!hideScorePanel && partScoreMetrics ? (
+            {!hideScorePanel && scorePanelOverride ? scorePanelOverride : null}
+
+            {!hideScorePanel && !scorePanelOverride && partScoreMetrics ? (
               <LevelsPartScorePanel
                 correctCount={partScoreMetrics.correctCount}
                 totalSlots={partScoreMetrics.totalSlots}

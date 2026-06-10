@@ -218,17 +218,91 @@ export default function B2ExamInlineMcqClozePassage({
                     </span>
                   ) : null}
 
-                  {!hideFeedback && isChecked ? (
-                    <span className="levels-exam-inline-mcq-gap__feedback">
-                      <LevelsAnswerJustification hint={aiHintsByKey[questionKey]} />
-                    </span>
-                  ) : null}
                 </span>
               );
             })}
           </p>
         );
       })}
+
+      {!hideFeedback ? (
+        <McqClozeExplanations
+          mcqGroups={mcqGroups}
+          getQuestionKey={getQuestionKey}
+          selectedOptions={selectedOptions}
+          checkedQuestions={checkedQuestions}
+          aiHintsByKey={aiHintsByKey}
+        />
+      ) : null}
+    </div>
+  );
+}
+
+/** Explanations listed below the passage (one entry per checked gap). */
+function McqClozeExplanations({
+  mcqGroups,
+  getQuestionKey,
+  selectedOptions,
+  checkedQuestions,
+  aiHintsByKey,
+}) {
+  const entries = mcqGroups
+    .filter((group) => group?.questionNumber != null && group.questionNumber !== 0)
+    .map((group) => {
+      const questionKey = getQuestionKey(group.questionNumber);
+      if (!checkedQuestions[questionKey]) return null;
+      const selectedOption = group.options?.find((o) => o.id === selectedOptions[questionKey]);
+      if (!selectedOption) return null;
+      const correctOption = group.options?.find((o) => o.correcta);
+      return {
+        questionNumber: group.questionNumber,
+        questionKey,
+        isCorrect: !!selectedOption.correcta,
+        selectedWord: getOptionWord(selectedOption),
+        correctWord: correctOption ? getOptionWord(correctOption) : '',
+      };
+    })
+    .filter(Boolean)
+    .sort((a, b) => a.questionNumber - b.questionNumber);
+
+  if (!entries.length) return null;
+
+  return (
+    <div className="levels-exam-mcq-explanations">
+      <p className="levels-exam-mcq-explanations__title">Explanations</p>
+      {entries.map((entry) => (
+        <div
+          key={`mcq-explanation-${entry.questionNumber}`}
+          className={`levels-exam-mcq-explanations__item${
+            entry.isCorrect
+              ? ' levels-exam-mcq-explanations__item--correct'
+              : ' levels-exam-mcq-explanations__item--incorrect'
+          }`}
+        >
+          <p className="levels-exam-mcq-explanations__head">
+            <span className="levels-exam-mcq-explanations__number">({entry.questionNumber})</span>{' '}
+            <span
+              className={
+                entry.isCorrect
+                  ? 'levels-exam-mcq-explanations__verdict levels-exam-mcq-explanations__verdict--correct'
+                  : 'levels-exam-mcq-explanations__verdict levels-exam-mcq-explanations__verdict--incorrect'
+              }
+            >
+              {entry.isCorrect ? 'Correct' : 'Incorrect'}
+            </span>
+            {' — '}
+            <span>
+              Your answer: <strong>{entry.selectedWord}</strong>
+            </span>
+            {!entry.isCorrect && entry.correctWord ? (
+              <span>
+                {' · '}Correct answer: <strong>{entry.correctWord}</strong>
+              </span>
+            ) : null}
+          </p>
+          <LevelsAnswerJustification hint={aiHintsByKey[entry.questionKey]} />
+        </div>
+      ))}
     </div>
   );
 }

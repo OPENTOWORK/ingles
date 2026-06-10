@@ -289,11 +289,16 @@ function B2SpeakingExamPracticeInner({ title, subtitle, loadingLabel, refreshLab
   const practiceMode = resolveExamPracticeMode({ examModeActive, reviewMode });
 
   const modeBadge = useMemo(() => {
+    if (isExamSimulationMode(practiceMode)) {
+      return lang === 'en' ? 'Exam Mode' : 'Modo examen';
+    }
     if (isSkillPracticeSession && isPartPracticeMode(practiceMode)) {
       return lang === 'en' ? 'Practice Mode' : 'Modo práctica';
     }
     return null;
   }, [practiceMode, isSkillPracticeSession, lang]);
+
+  const compactChromeHeader = isSkillPracticeSession || isExamSimulationMode(practiceMode);
 
   const chromeTitle = useMemo(() => {
     if (examModeActive || reviewMode) {
@@ -342,9 +347,9 @@ function B2SpeakingExamPracticeInner({ title, subtitle, loadingLabel, refreshLab
         {...(skillNav.active ? {} : examSlotPickerProps)}
         title={chromeTitle}
         subtitle={chromeSubtitleResolved}
-        hideMascot={isSkillPracticeSession}
+        hideMascot={compactChromeHeader}
         hideSubtitle={!chromeSubtitleResolved}
-        compactSkillHeader={isSkillPracticeSession}
+        compactSkillHeader={compactChromeHeader}
         skillPracticeTheme={skillNav.skillTheme}
         practiceMode={practiceMode}
         timerVariant={isSkillPracticeSession && !examModeActive ? 'discrete' : 'prominent'}

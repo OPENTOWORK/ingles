@@ -165,15 +165,48 @@ function inferErrorType(problem, why, original) {
   return 'grammar';
 }
 
-function normalizeErrorType(rawType, problem, why, original) {
-  const t = String(rawType || '').trim().toLowerCase();
+const DETAILED_ERROR_CATEGORIES = [
+  'grammar',
+  'vocabulary',
+  'spelling',
+  'word order',
+  'articles',
+  'prepositions',
+  'verb tense',
+  'subject-verb agreement',
+  'cohesion',
+  'register',
+  'task response',
+];
 
-  if (/naturalness|natural phrasing|colloc|preposition|vocab|spell|lexis|word choice/.test(t)) {
+function normalizeErrorType(rawType, problem, why, original) {
+  const t = String(rawType || '').trim().toLowerCase().replace(/\.$/, '');
+
+  const detailed = DETAILED_ERROR_CATEGORIES.find(
+    (cat) => t === cat || t === cat.replace(/-/g, ' ') || t.replace(/-/g, ' ') === cat,
+  );
+  if (detailed) return detailed;
+
+  if (/subject.verb/.test(t)) return 'subject-verb agreement';
+  if (/tense/.test(t)) return 'verb tense';
+  if (/article/.test(t)) return 'articles';
+  if (/preposition/.test(t)) return 'prepositions';
+  if (/order/.test(t)) return 'word order';
+  if (/cohesion|linking|connector/.test(t)) return 'cohesion';
+  if (/register|formal|informal|tone/.test(t)) return 'register';
+  if (/task|content|relevan/.test(t)) return 'task response';
+  if (/spell|typo|orthograph/.test(t)) return 'spelling';
+  if (/naturalness|natural phrasing|colloc|vocab|lexis|word choice/.test(t)) {
     return 'vocabulary';
   }
   if (/grammar|gramm|verb form|agreement/.test(t)) return 'grammar';
 
   return inferErrorType(problem, why, original);
+}
+
+/** Visual bucket for the correction card colour (grammar-ish vs vocabulary-ish). */
+function errorTypeStyleKey(type) {
+  return type === 'vocabulary' || type === 'spelling' ? 'vocabulary' : 'grammar';
 }
 
 /** Split legacy AI output that merged Problem + Why on one line. */
@@ -308,7 +341,10 @@ function renderCorrectionBlock({ original, problem, correct, why = '', type = 'g
   const problemHtml = escapeHtml(problem);
   const correctHtml = escapeHtml(correct);
   const whyHtml = escapeHtml(why);
-  const typeKey = type === 'vocabulary' ? 'vocabulary' : 'grammar';
+  const typeKey = errorTypeStyleKey(type);
+  const categoryChip = type
+    ? `<span class="writing-correction-item__category">${escapeHtml(type)}</span>`
+    : '';
 
   const whyBlock = whyHtml
     ? `<div class="writing-correction-item__why">
@@ -319,7 +355,7 @@ function renderCorrectionBlock({ original, problem, correct, why = '', type = 'g
 
   return `<article class="writing-correction-item writing-correction-item--${typeKey}">
   <div class="writing-correction-item__original">
-    <span class="writing-correction-item__label">Original</span>
+    <span class="writing-correction-item__label">Original${categoryChip}</span>
     <p class="writing-correction-item__quote">${originalHtml ? `"${originalHtml}"` : '—'}</p>
   </div>
   <div class="writing-correction-item__callout" role="note">
@@ -339,6 +375,13 @@ function renderCorrectionBlock({ original, problem, correct, why = '', type = 'g
 }
 
 function renderCorrectionList(blocks) {
+  const hasDetailedCategories = blocks.some(
+    (b) => b.type && b.type !== 'grammar' && b.type !== 'vocabulary',
+  );
+  if (hasDetailedCategories) {
+    return `<div class="writing-correction-list">${blocks.map(renderCorrectionBlock).join('')}</div>`;
+  }
+
   const grammar = blocks.filter((b) => b.type === 'grammar');
   const vocabulary = blocks.filter((b) => b.type === 'vocabulary');
   let html = '';
@@ -385,6 +428,33 @@ function splitMarkdownSections(text) {
 
 function isCorrectionsSection(heading) {
   return /corrections?/i.test(String(heading || ''));
+}
+
+/** Split feedback that uses emoji headings (📝 🎓 📊 …) instead of markdown #. */
+function splitEmojiSections(text) {
+  const lines = String(text || '').replace(/\r/g, '').split('\n');
+  const sections = [];
+  let heading = null;
+  let buffer = [];
+
+  const flush = () => {
+    const body = buffer.join('\n').trim();
+    if (heading || body) sections.push({ heading, body });
+    buffer = [];
+  };
+
+  for (const line of lines) {
+    const t = line.trim();
+    if (t && isWritingFeedbackHeadingLine(t) && !/^#{1,6}\s+/.test(t)) {
+      flush();
+      heading = t;
+      continue;
+    }
+    buffer.push(line);
+  }
+  flush();
+
+  return sections;
 }
 
 function isBetterVocabularySection(heading) {
@@ -477,6 +547,29 @@ export function formatWritingFeedbackHtml(text) {
   const hasHeadings = sections.some((s) => s.heading);
 
   if (!hasHeadings) {
+    const emojiSections = splitEmojiSections(raw);
+    const hasEmojiHeadings = emojiSections.some((s) => s.heading);
+
+    if (hasEmojiHeadings) {
+      return emojiSections
+        .map(({ heading, body }) => {
+          let html = '';
+          if (heading) {
+            html += `<h4 class="levels-b2-writing-panel__feedback-heading">${escapeHtml(heading)}</h4>`;
+          }
+          if (heading && isCorrectionsSection(heading)) {
+            const blocks = parseWritingCorrectionBlocks(body);
+            if (blocks.length > 0) {
+              html += renderCorrectionList(blocks);
+              return html;
+            }
+          }
+          html += formatPlainLines(body);
+          return html;
+        })
+        .join('');
+    }
+
     const blocks = parseWritingCorrectionBlocks(raw);
     if (blocks.length > 0) {
       return renderCorrectionList(blocks);

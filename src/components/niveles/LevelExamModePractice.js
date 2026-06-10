@@ -178,7 +178,7 @@ function LevelExamModePracticeInner({ slug }) {
             </p>
           ) : null}
           <p style={{ margin: 0, lineHeight: 1.55 }}>
-            Choose one of the <strong>available tests</strong>. You will complete each paper under Cambridge time limits.
+            Choose one of the <strong>available tests</strong>. You will complete each paper under official exam-style time limits.
             Answers are hidden until you finish the full exam. Your progress is saved so you can continue later.
           </p>
         </div>

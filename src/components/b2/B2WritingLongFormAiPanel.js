@@ -19,7 +19,9 @@ const CRITERIA = [
 ];
 
 /**
- * Long-form writing area + Cambridge B2 First AI correction.
+ * Long-form writing area + B2 exam-style AI correction (Dralo).
+ * In `examMode` the panel only offers textarea + word count + autosave:
+ * no Check button, no scores, no feedback until the section is finished.
  */
 export default function B2WritingLongFormAiPanel({
   storageKey,
@@ -32,6 +34,8 @@ export default function B2WritingLongFormAiPanel({
   partDescription = '',
   examContextBuilder,
   onScoresReady,
+  onDraftStats,
+  examMode = false,
   lang = 'en',
 }) {
   const isEn = lang === 'en';
@@ -74,6 +78,13 @@ export default function B2WritingLongFormAiPanel({
 
   const wordCount = countWords(essay);
   const meetsWordRange = wordCount >= wordMin && wordCount <= wordMax;
+  const hasSubmitted = Boolean(aiFeedback || scores);
+
+  useEffect(() => {
+    if (typeof onDraftStats === 'function') {
+      onDraftStats({ wordCount, submitted: hasSubmitted, loading });
+    }
+  }, [wordCount, hasSubmitted, loading, onDraftStats]);
 
   const evaluateEssay = async () => {
     const text = essay.trim();
@@ -167,7 +178,7 @@ export default function B2WritingLongFormAiPanel({
 
       <div className="levels-b2-writing-panel__meta">
         <span>
-          {isEn ? 'Cambridge B2 First length' : 'Extensión B2 First'}:{' '}
+          {isEn ? 'B2 exam-style length' : 'Extensión estilo examen B2'}:{' '}
           <strong>
             {wordMin}–{wordMax} {isEn ? 'words' : 'palabras'}
           </strong>
@@ -177,9 +188,13 @@ export default function B2WritingLongFormAiPanel({
         </span>
         {wordCount > 0 && !meetsWordRange ? (
           <span className="levels-b2-writing-panel__meta-note levels-b2-writing-panel__meta-note--warn">
-            {isEn
-              ? `Outside ${wordMin}–${wordMax} words — you can still submit for Cambridge-style feedback.`
-              : `Fuera de ${wordMin}–${wordMax} palabras — puedes enviar igualmente para corrección.`}
+            {examMode
+              ? isEn
+                ? `Outside ${wordMin}–${wordMax} words.`
+                : `Fuera de ${wordMin}–${wordMax} palabras.`
+              : isEn
+                ? `Outside ${wordMin}–${wordMax} words — you can still submit for feedback.`
+                : `Fuera de ${wordMin}–${wordMax} palabras — puedes enviar igualmente para corrección.`}
           </span>
         ) : null}
         {wordCount > 0 && meetsWordRange ? (
@@ -203,35 +218,49 @@ export default function B2WritingLongFormAiPanel({
         aria-label="B2 writing area"
       />
 
-      <div className="levels-b2-writing-panel__actions">
-        <button
-          type="button"
-          className="levels-b2-writing-panel__submit"
-          onClick={() => void evaluateEssay()}
-          disabled={loading || !essay.trim()}
-          aria-disabled={loading || !essay.trim()}
-        >
-          {loading
-            ? isEn
-              ? 'Checking with Cambridge criteria…'
-              : 'Corrigiendo con criterios Cambridge…'
-            : isEn
-              ? 'Check with Dralo'
-              : 'Corregir con Dralo'}
-        </button>
-      </div>
+      {examMode ? (
+        <p className="levels-b2-writing-panel__exam-note">
+          {isEn
+            ? 'Your text is saved automatically. Feedback will be available after you finish the section.'
+            : 'Tu texto se guarda automáticamente. La corrección estará disponible al terminar la sección.'}
+        </p>
+      ) : (
+        <div className="levels-b2-writing-panel__actions">
+          <button
+            type="button"
+            className="levels-b2-writing-panel__submit"
+            onClick={() => void evaluateEssay()}
+            disabled={loading || !essay.trim()}
+            aria-disabled={loading || !essay.trim()}
+          >
+            {loading
+              ? isEn
+                ? 'Checking with Dralo…'
+                : 'Corrigiendo con Dralo…'
+              : isEn
+                ? 'Check with Dralo'
+                : 'Corregir con Dralo'}
+          </button>
+        </div>
+      )}
 
-      {lastError ? (
+      {!examMode && lastError ? (
         <p className="levels-b2-writing-panel__error" role="alert">
           {lastError}
         </p>
       ) : null}
 
-      {scores ? (
+      {!examMode && scores ? (
         <div className="levels-b2-writing-panel__scores" ref={feedbackRef}>
           <p className="levels-exam-split__section-title">
-            {isEn ? 'Cambridge B2 First — Scores' : 'Cambridge B2 First — Puntuación'}
+            {isEn ? 'Writing scores' : 'Puntuación del writing'}
           </p>
+          {scores.cefr ? (
+            <p className="levels-b2-writing-panel__cefr">
+              {isEn ? 'Estimated CEFR level' : 'Nivel CEFR estimado'}:{' '}
+              <strong>{scores.cefr}</strong>
+            </p>
+          ) : null}
           <div className="levels-b2-writing-panel__scores-grid">
             {CRITERIA.map(({ key, label }) => (
               <div key={key} className="levels-b2-writing-panel__score-card">
@@ -259,10 +288,10 @@ export default function B2WritingLongFormAiPanel({
         </div>
       ) : null}
 
-      {aiFeedback ? (
+      {!examMode && aiFeedback ? (
         <div className="levels-b2-writing-panel__feedback" ref={scores ? undefined : feedbackRef}>
           <p className="levels-exam-split__section-title">
-            {isEn ? 'Cambridge examiner feedback' : 'Corrección del examinador Cambridge'}
+            {isEn ? 'Dralo writing feedback' : 'Corrección de Dralo'}
           </p>
           <div
             className="levels-b2-writing-panel__feedback-body"

@@ -200,7 +200,8 @@ function splitPart2Options(raw) {
     if (!m) continue;
     const number = Number(m[1]);
     const body = m[2].trim();
-    if (number >= 2 && number <= 9 && body.length > 20) {
+    // Options may be numbered 1–4 (Dralo content) or 2–5 (official-style numbering).
+    if (number >= 1 && number <= 9 && body.length > 20) {
       items.push({ number, body });
     }
   }

@@ -2050,6 +2050,9 @@ function B2ExamPaperPracticePageInner({
   ]);
 
   const modeBadge = useMemo(() => {
+    if (isExamSimulationMode(practiceMode)) {
+      return lang === 'en' ? 'Exam Mode' : 'Modo examen';
+    }
     if (isSkillPracticeSession && isPartPracticeMode(practiceMode)) {
       return lang === 'en' ? 'Practice Mode' : 'Modo práctica';
     }
@@ -2058,6 +2061,7 @@ function B2ExamPaperPracticePageInner({
 
   const chromeTimerVariant =
     isExamSimulationMode(practiceMode) ? 'prominent' : isSkillPracticeSession ? 'discrete' : 'prominent';
+  const compactChromeHeader = isSkillPracticeSession || isExamSimulationMode(practiceMode);
 
   return (
     <B2ExamPracticeLayout examPracticeOpen={layoutPracticeOpen}>
@@ -2087,9 +2091,9 @@ function B2ExamPaperPracticePageInner({
         {...(skillNav.active ? {} : examSlotPickerProps)}
         title={chromeTitle}
         subtitle={chromeSubtitleResolved}
-        hideMascot={isSkillPracticeSession}
+        hideMascot={compactChromeHeader}
         hideSubtitle={!chromeSubtitleResolved}
-        compactSkillHeader={isSkillPracticeSession}
+        compactSkillHeader={compactChromeHeader}
         skillPracticeTheme={skillNav.skillTheme}
         practiceMode={practiceMode}
         timerVariant={chromeTimerVariant}

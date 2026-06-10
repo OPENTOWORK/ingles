@@ -9,6 +9,9 @@ import { B2ExamPracticeChrome, B2ExamPracticeLayout } from '@/components/b2/B2Ex
 import B2ExamPracticeModuleNav from '@/components/b2/B2ExamPracticeModuleNav';
 import B2WritingFirstTaskCard from '@/components/b2/B2WritingFirstTaskCard';
 import B2WritingPart2TaskPicker from '@/components/b2/B2WritingPart2TaskPicker';
+import B2WritingStrategyPanel from '@/components/b2/B2WritingStrategyPanel';
+import B2WritingDraftStatusPanel from '@/components/b2/B2WritingDraftStatusPanel';
+import { getB2WritingStrategyPack } from '@/data/b2WritingPracticeStrategies';
 import A2ExamGenerationStatus from '@/components/niveles/A2ExamGenerationStatus';
 import { useLevelsCategoryTimer } from '@/hooks/useLevelsCategoryTimer';
 import { supabase } from '@/utils/supabaseClient';
@@ -23,9 +26,14 @@ import {
   buildExamSlotPickerProps,
 } from '@/hooks/useLevelsExamAdminFlow';
 import { useSkillPartFirstNavigation } from '@/hooks/useSkillPartFirstNavigation';
+import ExamModeSectionBanner from '@/components/niveles/ExamModeSectionBanner';
+import { useExamModeStrict } from '@/hooks/useExamModeStrict';
 import {
   resolveExamPracticeMode,
   isPartPracticeMode,
+  isExamSimulationMode,
+  getExamChromeTitle,
+  getExamChromeSubtitle,
 } from '@/lib/examPracticeMode';
 import {
   parseB2WritingPart1Task,
@@ -52,6 +60,19 @@ function getPartNumber(part) {
 function B2WritingExamPracticePageInner() {
   const { examSlot, selectExamSlot } = useB2ExamPracticeSlot();
   const scoring = useB2ExamScoringSession({ partMin: PART_MIN, partMax: PART_MAX });
+  const examMode = useExamModeStrict({
+    slug: 'b2',
+    partMin: PART_MIN,
+    partMax: PART_MAX,
+    sectionTitle: 'Writing',
+  });
+  const {
+    examModeActive,
+    reviewMode,
+    section: examSection,
+    handleFinishSection,
+    setSectionRemaining,
+  } = examMode;
 
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
@@ -60,6 +81,7 @@ function B2WritingExamPracticePageInner() {
   const [selectedQuestionByPart, setSelectedQuestionByPart] = useState({});
   const [part2SelectedOptionByPart, setPart2SelectedOptionByPart] = useState({});
   const [writingLiveCorrect, setWritingLiveCorrect] = useState(null);
+  const [draftStats, setDraftStats] = useState({ wordCount: 0, submitted: false, loading: false });
   const [examLabelsBySlot, setExamLabelsBySlot] = useState({});
   const mountedRef = useRef(true);
   const partsShellRef = useRef([]);
@@ -215,7 +237,7 @@ function B2WritingExamPracticePageInner() {
   });
 
   const skillNav = useSkillPartFirstNavigation({
-    enabled: true,
+    enabled: !examModeActive,
     slug: 'b2',
     skillRoute: 'exam-writing',
     partMin: PART_MIN,
@@ -349,6 +371,19 @@ function B2WritingExamPracticePageInner() {
     setWritingLiveCorrect(null);
   }, [selectedPart?.id, selectedQuestion?.preguntaId, part2SelectedId]);
 
+  const handleDraftStats = useCallback((stats) => {
+    setDraftStats((prev) => {
+      if (
+        prev.wordCount === stats.wordCount &&
+        prev.submitted === stats.submitted &&
+        prev.loading === stats.loading
+      ) {
+        return prev;
+      }
+      return stats;
+    });
+  }, []);
+
   const handleWritingScoresReady = useCallback(
     (scores) => {
       if (!scores || typeof scores.total !== 'number') return;
@@ -405,18 +440,60 @@ function B2WritingExamPracticePageInner() {
   const continuePartLabel =
     partNumber === 8 ? 'Writing Part 2' : null;
 
-  const chromeSubtitle = isSkillPracticeSession
-    ? null
-    : 'Cambridge B2 First — Writing Parts 8 & 9';
+  const practiceMode = resolveExamPracticeMode({ examModeActive, reviewMode });
 
-  const practiceMode = resolveExamPracticeMode({
-    examModeActive: false,
-    reviewMode: false,
-    isSkillPracticeSession,
+  const chromeTitle = getExamChromeTitle({
+    lang: 'en',
+    examModeActive,
+    reviewMode,
+    sectionTitle: 'Writing',
+    defaultTitle: 'B2 Writing Practice',
   });
 
-  const modeBadge =
-    isSkillPracticeSession && isPartPracticeMode(practiceMode) ? 'Practice Mode' : null;
+  const chromeSubtitle =
+    examModeActive || reviewMode
+      ? getExamChromeSubtitle({
+          lang: 'en',
+          examModeActive,
+          reviewMode,
+          defaultSubtitle: 'B2 Writing — Parts 1 & 2',
+        })
+      : isSkillPracticeSession
+        ? null
+        : 'B2 Writing — Parts 1 & 2';
+
+  const modeBadge = isExamSimulationMode(practiceMode)
+    ? 'Exam Mode'
+    : isSkillPracticeSession && isPartPracticeMode(practiceMode)
+      ? 'Practice Mode'
+      : null;
+
+  const compactChromeHeader = isSkillPracticeSession || isExamSimulationMode(practiceMode);
+
+  const writingExamMode = examModeActive && !reviewMode;
+
+  const strategyPack = isPartPracticeMode(practiceMode)
+    ? getB2WritingStrategyPack(partNumber, part2SelectedOption?.writingType)
+    : null;
+
+  const writingScorePanelOverride = isPartPracticeMode(practiceMode) ? (
+    <B2WritingDraftStatusPanel
+      wordCount={draftStats.wordCount}
+      submitted={draftStats.submitted}
+      checking={draftStats.loading}
+      lastScoreTotal={writingLiveCorrect}
+      lang="en"
+    />
+  ) : null;
+
+  const handleExamModeFinish = useCallback(() => {
+    const total =
+      (getB2PartScoring(8)?.total ?? 20) + (getB2PartScoring(9)?.total ?? 20);
+    handleFinishSection(
+      { writingCompleted: true, storageKey: longWritingStorageKey },
+      { correct: writingLiveCorrect ?? 0, total, byPart: {} },
+    );
+  }, [handleFinishSection, longWritingStorageKey, writingLiveCorrect]);
 
   return (
     <B2ExamPracticeLayout examPracticeOpen={layoutPracticeOpen}>
@@ -439,21 +516,24 @@ function B2WritingExamPracticePageInner() {
         hidePartTabs={skillNav.hidePartTabs}
         practiceReady={layoutPracticeOpen}
         {...(skillNav.active ? {} : examSlotPickerProps)}
-        title="B2 Writing Practice"
+        title={chromeTitle}
         subtitle={chromeSubtitle}
-        hideMascot={isSkillPracticeSession}
-        hideSubtitle={isSkillPracticeSession}
-        compactSkillHeader={isSkillPracticeSession}
+        hideMascot={compactChromeHeader}
+        hideSubtitle={!chromeSubtitle}
+        compactSkillHeader={compactChromeHeader}
         skillPracticeTheme={skillNav.skillTheme}
         practiceMode={practiceMode}
-        timerVariant={isSkillPracticeSession ? 'discrete' : 'prominent'}
+        timerVariant={isSkillPracticeSession && !examModeActive ? 'discrete' : 'prominent'}
         modeBadge={modeBadge}
+        showRefresh={!isExamSimulationMode(practiceMode)}
         timerLabel={timerLabel}
         refreshLabel="Refresh Writing"
         loading={loading}
         onRefresh={() => void loadData()}
         partScoreMetrics={scorePanelProps}
-        partFinishNotice={scoring.partFinishNotice}
+        scorePanelOverride={writingScorePanelOverride}
+        hideScorePanel={isExamSimulationMode(practiceMode) && !reviewMode}
+        partFinishNotice={isExamSimulationMode(practiceMode) && !reviewMode ? null : scoring.partFinishNotice}
         partsData={!loading && !error ? displayPartsData : []}
         selectedPartId={selectedPartId}
         onSelectPart={handleSelectPart}
@@ -464,12 +544,23 @@ function B2WritingExamPracticePageInner() {
         studyNotesContext={{
           slug: 'b2',
           skillRoute: 'exam-writing',
-          examMode: false,
+          examMode: examModeActive,
           partNumber,
           examSlot,
         }}
         studyNotesContextLabel="B2 Writing Practice"
       >
+        {examModeActive && examSection ? (
+          <ExamModeSectionBanner
+            sectionTitle={examSection.title || 'Writing'}
+            durationSeconds={examSection.durationSeconds}
+            initialRemainingSeconds={examSection.remainingSeconds}
+            active={!reviewMode}
+            onTick={(sec) => setSectionRemaining(examSection.key, sec)}
+            onFinish={handleExamModeFinish}
+            lang="en"
+          />
+        ) : null}
         <section className="b2-writing-practice" style={{ maxWidth: 'min(960px, 100%)', margin: '0 auto' }}>
           {loading && <p style={{ textAlign: 'center' }}>Loading B2 Writing…</p>}
           {!loading && error && (
@@ -488,6 +579,7 @@ function B2WritingExamPracticePageInner() {
                     wordMin={part1Task.wordMin || B2_WRITING_WORD_MIN}
                     wordMax={part1Task.wordMax || B2_WRITING_WORD_MAX}
                   />
+                  {strategyPack ? <B2WritingStrategyPanel pack={strategyPack} /> : null}
                   <B2WritingLongFormAiPanel
                     storageKey={longWritingStorageKey}
                     wordMin={part1Task.wordMin || B2_WRITING_WORD_MIN}
@@ -495,6 +587,8 @@ function B2WritingExamPracticePageInner() {
                     heading="Your answer"
                     examContextBuilder={examContextBuilder}
                     onScoresReady={handleWritingScoresReady}
+                    onDraftStats={handleDraftStats}
+                    examMode={writingExamMode}
                     lang="en"
                   />
                 </>
@@ -512,6 +606,9 @@ function B2WritingExamPracticePageInner() {
                     wordMax={part2Task.wordMax || B2_WRITING_WORD_MAX}
                     lang="en"
                   />
+                  {part2SelectedOption && strategyPack ? (
+                    <B2WritingStrategyPanel pack={strategyPack} />
+                  ) : null}
                   {part2SelectedOption ? (
                     <B2WritingLongFormAiPanel
                       storageKey={longWritingStorageKey}
@@ -520,6 +617,8 @@ function B2WritingExamPracticePageInner() {
                       heading="Your answer"
                       examContextBuilder={examContextBuilder}
                       onScoresReady={handleWritingScoresReady}
+                      onDraftStats={handleDraftStats}
+                      examMode={writingExamMode}
                       lang="en"
                     />
                   ) : (
