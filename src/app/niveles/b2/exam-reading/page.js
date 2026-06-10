@@ -47,6 +47,8 @@ import {
   recordLevelsAnswerEvaluation,
 } from '@/utils/levelsEstadisticas';
 import B2ExamPracticeModuleNav from '@/components/b2/B2ExamPracticeModuleNav';
+import B2ReadingStrategyPanel from '@/components/b2/B2ReadingStrategyPanel';
+import { getB2ReadingStrategyPack } from '@/data/b2ReadingPracticeStrategies';
 import ExamModeSectionBanner from '@/components/niveles/ExamModeSectionBanner';
 import { useExamModeStrict } from '@/hooks/useExamModeStrict';
 import { scoreExamModeDrafts } from '@/utils/examModeGradeAnswers';
@@ -1037,6 +1039,11 @@ function B2ReadingExamsPageInner() {
 
   const compactChromeHeader = isSkillPracticeSession || isExamSimulationMode(practiceMode);
 
+  const readingStrategyPack =
+    isSkillPracticeSession && isPartPracticeMode(practiceMode)
+      ? getB2ReadingStrategyPack(partNumberReading)
+      : null;
+
   const chromeTitle = useMemo(() => {
     if (examModeActive || reviewMode) {
       return getExamChromeTitle({
@@ -1160,6 +1167,12 @@ function B2ReadingExamsPageInner() {
           lang="en"
         />
       ) : null}
+      <div
+        className={`levels-listening-practice-layout${
+          readingStrategyPack ? ' levels-listening-practice-layout--with-strategy' : ''
+        }`}
+      >
+      <div className="levels-listening-practice-main">
       <section style={{ margin: '0 auto', width: '100%' }}>
         {loading && (
           <p style={{ textAlign: 'center' }}>
@@ -1422,6 +1435,9 @@ function B2ReadingExamsPageInner() {
         onContinueInPage={isSkillPracticeSession ? handleKeepPracticing : handleContinueInPage}
         lang="en"
       />
+      </div>
+      {readingStrategyPack ? <B2ReadingStrategyPanel pack={readingStrategyPack} /> : null}
+      </div>
       </B2ExamPracticeChrome>
     </B2ExamPracticeLayout>
   );
