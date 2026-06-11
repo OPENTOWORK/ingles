@@ -2,6 +2,7 @@
 
 import Link from 'next/link';
 import SiteMascot from '@/components/SiteMascot';
+import DraloTagline from '@/components/DraloTagline';
 import HomeHowItWorks from '@/components/home/HomeHowItWorks';
 import HomeQuickNav from '@/components/home/HomeQuickNav';
 import { useGuidedTour } from '@/context/GuidedTourContext';
@@ -49,7 +50,7 @@ export default function Home() {
         </section>
 
         <blockquote className="home-quote">
-          <p>Learn. Practise. Improve.</p>
+          <DraloTagline />
         </blockquote>
 
         {isRegistered ? <HomeHowItWorks onStartTour={startTour} /> : null}

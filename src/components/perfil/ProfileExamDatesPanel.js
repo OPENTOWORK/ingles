@@ -7,6 +7,7 @@ import {
   CAMBRIDGE_EXAM_REGIONS,
 } from '@/data/cambridgeExamDatesByCity';
 import { getExamReadinessRecommendation } from '@/utils/examReadinessRecommendation';
+import ProfileCollapsibleSection from '@/components/perfil/ProfileCollapsibleSection';
 import styles from './ProfileExamDatesPanel.module.css';
 
 function normalizeText(value) {
@@ -116,18 +117,17 @@ export default function ProfileExamDatesPanel({
 
   if (!mounted) {
     return (
-      <div className={styles.panel}>
-        <div className={styles.panelLoading}>Loading exam dates…</div>
+      <div className="profile-tab-panels">
+        <ProfileCollapsibleSection title="Exam readiness">
+          <div className={styles.panelLoading}>Loading exam dates…</div>
+        </ProfileCollapsibleSection>
       </div>
     );
   }
 
   return (
-    <div className={styles.panel}>
-      <section className="profile-section">
-        <div className="section-head">
-          <h2>🎓 When should you take the exam?</h2>
-        </div>
+    <div className="profile-tab-panels">
+      <ProfileCollapsibleSection title="When should you take the exam?" defaultOpen>
         <p className="section-desc">
           Personalised recommendation based on your activity on Dralo. Exact dates depend on each
           authorised centre — use the links below to confirm availability and registration.
@@ -173,12 +173,9 @@ export default function ProfileExamDatesPanel({
             <li key={tip}>{tip}</li>
           ))}
         </ul>
-      </section>
+      </ProfileCollapsibleSection>
 
-      <section className="profile-section">
-        <div className="section-head">
-          <h2>📅 Dates by city</h2>
-        </div>
+      <ProfileCollapsibleSection title="Dates by city">
         <p className="section-desc">
           {CAMBRIDGE_EXAM_CITIES.length} cities in Spain. Search yours or filter by region to see
           indicative sessions and official links.
@@ -267,12 +264,9 @@ export default function ProfileExamDatesPanel({
             ))}
           </div>
         )}
-      </section>
+      </ProfileCollapsibleSection>
 
-      <section className="profile-section">
-        <div className="section-head">
-          <h2>🔗 Official resources</h2>
-        </div>
+      <ProfileCollapsibleSection title="Official resources">
         <p className="section-desc">
           Verified links to Cambridge English and British Council for dates, fees and registration.
         </p>
@@ -292,7 +286,7 @@ export default function ProfileExamDatesPanel({
             </a>
           ))}
         </div>
-      </section>
+      </ProfileCollapsibleSection>
     </div>
   );
 }

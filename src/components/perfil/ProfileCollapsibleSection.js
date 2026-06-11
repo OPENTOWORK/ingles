@@ -1,6 +1,10 @@
 'use client';
 
 import { useId, useState } from 'react';
+import {
+  cleanSectionTitle,
+  getProfileSectionIcon,
+} from '@/components/perfil/profileCollapsibleIcons';
 
 function ChevronIcon({ open }) {
   return (
@@ -34,9 +38,12 @@ export default function ProfileCollapsibleSection({
   className = '',
   style,
   actions = null,
+  icon: IconProp = null,
 }) {
   const [open, setOpen] = useState(defaultOpen);
   const panelId = useId();
+  const displayTitle = cleanSectionTitle(title);
+  const Icon = IconProp || getProfileSectionIcon(title);
 
   return (
     <section
@@ -54,8 +61,11 @@ export default function ProfileCollapsibleSection({
           <span className="profile-collapse__chevron-wrap">
             <ChevronIcon open={open} />
           </span>
+          <span className="profile-collapse__icon" aria-hidden>
+            <Icon size={17} strokeWidth={2} />
+          </span>
           <span className="profile-collapse__label">
-            <span className="profile-collapse__title">{title}</span>
+            <span className="profile-collapse__title">{displayTitle}</span>
             {description && !open ? (
               <span className="profile-collapse__preview">{description}</span>
             ) : null}

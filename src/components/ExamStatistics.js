@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import { BarChart3, BookOpen, CircleCheckBig, Trophy } from 'lucide-react';
 import { buildExamStatisticsFromLevels } from '@/lib/examStatisticsFromLevels';
 import { useLevelsPracticeData } from '@/hooks/useLevelsPracticeData';
 import './ExamStatistics.css';
@@ -101,28 +102,28 @@ export default function ExamStatistics({ userId, embedded = false }) {
   const kpis = [
     {
       key: 'started',
-      icon: '📚',
+      Icon: BookOpen,
       value: statistics.totalExams,
       label: 'Exams started',
       tone: 'blue',
     },
     {
       key: 'completed',
-      icon: '✅',
+      Icon: CircleCheckBig,
       value: statistics.completedExams,
       label: 'Completed',
       tone: 'green',
     },
     {
       key: 'average',
-      icon: '🎯',
+      Icon: BarChart3,
       value: `${Math.round(statistics.averageScore)}%`,
       label: 'Average score',
       tone: 'violet',
     },
     {
       key: 'best',
-      icon: '🏆',
+      Icon: Trophy,
       value: `${Math.round(statistics.bestScore)}%`,
       label: 'Best score',
       tone: 'amber',
@@ -172,14 +173,14 @@ export default function ExamStatistics({ userId, embedded = false }) {
       </header>
 
       <div className="exam-stats__kpis">
-        {kpis.map((kpi) => (
-          <article key={kpi.key} className={`exam-stats__kpi exam-stats__kpi--${kpi.tone}`}>
+        {kpis.map(({ key, Icon, value, label, tone }) => (
+          <article key={key} className={`exam-stats__kpi exam-stats__kpi--${tone}`}>
             <span className="exam-stats__kpi-icon" aria-hidden>
-              {kpi.icon}
+              <Icon className="exam-stats__kpi-svg" strokeWidth={2} />
             </span>
             <div className="exam-stats__kpi-body">
-              <span className="exam-stats__kpi-value">{kpi.value}</span>
-              <span className="exam-stats__kpi-label">{kpi.label}</span>
+              <span className="exam-stats__kpi-value">{value}</span>
+              <span className="exam-stats__kpi-label">{label}</span>
             </div>
           </article>
         ))}

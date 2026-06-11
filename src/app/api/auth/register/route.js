@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
 import { getSupabaseServiceRoleKey, getSupabaseUrl } from '@/lib/supabaseEnv';
+import { pickRandomMascotVariant } from '@/lib/profileDefaultAvatar';
 
 const supabaseUrl = getSupabaseUrl();
 const supabaseServiceRoleKey = getSupabaseServiceRoleKey();
@@ -200,6 +201,16 @@ export async function POST(req) {
     }
 
     await persistMarketingConsent(adminClient, userId, email, acceptedMarketing);
+
+    const mascotVariant = pickRandomMascotVariant();
+    await adminClient.from('Usuarios_y_Perfil_profiles').upsert(
+      {
+        user_id: userId,
+        idioma_preferido: 'es',
+        mascot_variant: mascotVariant,
+      },
+      { onConflict: 'user_id', ignoreDuplicates: true },
+    );
 
     return NextResponse.json({
       ok: true,

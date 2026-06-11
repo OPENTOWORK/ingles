@@ -309,7 +309,7 @@ const PROFILE_PLAN_DISPLAY = {
       '60 Dralo AI queries per day',
       'Advanced progress tracking',
     ],
-    badge: '🏆 MOST POPULAR',
+    badge: 'Most popular',
   },
   pro: {
     descripcionCorta: 'The most complete experience with advanced AI.',
@@ -321,7 +321,7 @@ const PROFILE_PLAN_DISPLAY = {
       'Unlimited Dralo AI queries',
       'Advanced tracking and priority support',
     ],
-    badge: '🚀 BEST VALUE',
+    badge: 'Best value',
   },
 };
 

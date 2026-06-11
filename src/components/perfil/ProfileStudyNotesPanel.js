@@ -16,7 +16,7 @@ export default function ProfileStudyNotesPanel({ lang = 'en' }) {
   const savedNotes = useMemo(() => notes.filter(hasNoteContent), [notes]);
 
   const labels = {
-    section: en ? '📝 My study notes' : '📝 Mis notas de estudio',
+    section: en ? 'My study notes' : 'Mis notas de estudio',
     context: en ? 'From exam practice' : 'Desde práctica de examen',
     empty: en
       ? 'No notes yet. Use the Notes panel during exam or skill practice to capture your ideas.'

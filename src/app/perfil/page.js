@@ -5,7 +5,6 @@ import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { supabase } from '@/utils/supabaseClient';
 import { getClientAuth } from '@/utils/getClientAuth';
-import { performLogout } from '@/utils/logout';
 import { useUserRole } from '@/context/UserRoleContext';
 import { getUserProgress } from '@/utils/getUserProgress';
 const dynamicImport = (loader) =>
@@ -26,11 +25,17 @@ const ProfileProgressCharts = dynamicImport(
   () => import('@/components/perfil/ProfileProgressCharts'),
 );
 import ProfileCollapsibleSection from '@/components/perfil/ProfileCollapsibleSection';
+import ProfileSubscriptionCard from '@/components/perfil/ProfileSubscriptionCard';
 import ProfileStudyNotesPanel from '@/components/perfil/ProfileStudyNotesPanel';
 import ProfileComingSoon from '@/components/perfil/ProfileComingSoon';
 import ProfileTabsNav from '@/components/perfil/ProfileTabsNav';
-import { PROFILE_TABS, PROFILE_TAB_LABELS } from '@/components/perfil/profileTabsConfig';
+import { PROFILE_TABS, PROFILE_TAB_LABELS, isStudentHiddenProfileTab, getVisibleProfileTabs } from '@/components/perfil/profileTabsConfig';
 import ProfileAvatarUpload from '@/components/perfil/ProfileAvatarUpload';
+import {
+  getMascotAvatarPath,
+  isCustomProfilePhotoUrl,
+  resolveProfileAvatarDisplay,
+} from '@/lib/profileDefaultAvatar';
 import { authMetadataPlanSlug, getPlanBySlug, getPlanProfileDisplay } from '@/data/financialPlanConfig';
 import { canViewPricing } from '@/utils/pricingAccess';
 
@@ -105,7 +110,8 @@ export default function ProfilePage() {
   const [birthDate, setBirthDate] = useState('');
   const [preferredLanguage, setPreferredLanguage] = useState('en');
   const [biography, setBiography] = useState('');
-  const [avatarUrl, setAvatarUrl] = useState('');
+  const [customAvatarUrl, setCustomAvatarUrl] = useState('');
+  const [mascotVariant, setMascotVariant] = useState(null);
   const [avatarUploading, setAvatarUploading] = useState(false);
   const [avatarError, setAvatarError] = useState('');
   const [placementLevel, setPlacementLevel] = useState(null);
@@ -154,13 +160,24 @@ export default function ProfilePage() {
     performanceMetrics: {}
   });
 
+  const router = useRouter();
+  const { userRole, session: layoutSession } = useUserRole();
+  const isStudent = userRole === 'student' || userRole === 'alumno';
+
   useEffect(() => {
     if (typeof window === 'undefined') return;
     const tab = new URLSearchParams(window.location.search).get('tab');
-    if (!tab) return;
-    const valid = PROFILE_TABS.find((t) => t.id === tab);
-    if (valid) setActiveTab(tab);
-  }, []);
+    if (tab) {
+      const valid = PROFILE_TABS.find((t) => t.id === tab);
+      if (valid && !(isStudent && isStudentHiddenProfileTab(tab, true))) {
+        setActiveTab(tab);
+        return;
+      }
+    }
+    if (isStudent && isStudentHiddenProfileTab(activeTab, true)) {
+      setActiveTab('overview');
+    }
+  }, [isStudent, activeTab]);
 
   const integratedStatsLoadedRef = useRef(false);
   const mockHydratedTabsRef = useRef(new Set());
@@ -213,9 +230,6 @@ export default function ProfilePage() {
   const [studyProgress, setStudyProgress] = useState({});
   const [studyChallenges, setStudyChallenges] = useState([]);
   const [studyLeaderboard, setStudyLeaderboard] = useState([]);
-  const router = useRouter();
-  const { userRole, session: layoutSession } = useUserRole();
-  const isStudent = userRole === 'student' || userRole === 'alumno';
 
   useEffect(() => {
     const fetchData = async () => {
@@ -233,7 +247,7 @@ export default function ProfilePage() {
         supabase.from('user_profiles').select('nombre, email').eq('id', userId).single(),
         supabase
           .from('profiles')
-          .select('id, user_id, fecha_nacimiento, idioma_preferido, biografia, foto_url')
+          .select('id, user_id, fecha_nacimiento, idioma_preferido, biografia, foto_url, mascot_variant')
           .eq('user_id', userId)
           .maybeSingle(),
         supabase.from('user_preferences').select('notificaciones, recordatorios').eq('user_id', userId).single(),
@@ -253,12 +267,31 @@ export default function ProfilePage() {
       setBirthDate(profileRow?.fecha_nacimiento || '');
       setPreferredLanguage(profileRow?.idioma_preferido || 'en');
       setBiography(profileRow?.biografia || '');
-      setAvatarUrl(
-        profileRow?.foto_url ||
-          authUser?.user_metadata?.avatar_url ||
-          authUser?.user_metadata?.foto_url ||
-          '',
-      );
+      const customPhoto =
+        (isCustomProfilePhotoUrl(profileRow?.foto_url) && profileRow.foto_url) || '';
+
+      let assignedMascot = profileRow?.mascot_variant ?? null;
+      if (assignedMascot == null && !customPhoto) {
+        try {
+          const { data: sessionData } = await supabase.auth.getSession();
+          const token = sessionData?.session?.access_token;
+          if (token) {
+            const res = await fetch('/api/perfil/ensure-default-avatar', {
+              method: 'POST',
+              headers: { Authorization: `Bearer ${token}` },
+            });
+            if (res.ok) {
+              const payload = await res.json();
+              assignedMascot = payload?.mascotVariant ?? null;
+            }
+          }
+        } catch {
+          /* fallback below */
+        }
+      }
+
+      setCustomAvatarUrl(customPhoto);
+      setMascotVariant(assignedMascot);
       setPlacementLevel(placementRow?.nivel_asignado || null);
       setNotifications({
         email: Boolean(preferencesRow?.notificaciones ?? true),
@@ -336,10 +369,6 @@ export default function ProfilePage() {
     });
   }, [activeTab, user, loading]);
 
-  const handleLogout = () => {
-    void performLogout();
-  };
-
   const handleSaveProfileName = async () => {
     const trimmed = (fullName || '').trim();
     if (!trimmed) {
@@ -415,7 +444,7 @@ export default function ProfilePage() {
       fecha_nacimiento: birthDate || null,
       idioma_preferido: preferredLanguage || 'en',
       biografia: (biography || '').trim() || null,
-      foto_url: avatarUrl || null,
+      foto_url: customAvatarUrl || null,
     });
 
     setSaving(false);
@@ -459,7 +488,7 @@ export default function ProfilePage() {
       }
 
       if (payload?.avatarUrl) {
-        setAvatarUrl(payload.avatarUrl);
+        setCustomAvatarUrl(payload.avatarUrl);
         setPersonalSaveMessage('Profile photo updated.');
         setPersonalSaveError('');
       }
@@ -758,21 +787,30 @@ export default function ProfilePage() {
   const subscriptionSlug = authMetadataPlanSlug(user?.user_metadata?.subscription_plan);
   const subscriptionPlan = getPlanBySlug(subscriptionSlug);
   const subscriptionDisplay = getPlanProfileDisplay(subscriptionPlan);
-  const showPricingLink = canViewPricing(userRole);
+  const showPricingLink = !isStudent && canViewPricing(userRole);
 
   const tabsProps = {
-    tabs: PROFILE_TABS,
+    tabs: getVisibleProfileTabs(isStudent),
     activeTab,
     onSelectTab: setActiveTab,
     isStudent,
   };
+
+  const avatarDisplay = resolveProfileAvatarDisplay({
+    fotoUrl: customAvatarUrl,
+    mascotVariant,
+  });
+  const mascotFallbackUrl =
+    mascotVariant != null ? getMascotAvatarPath(mascotVariant) : null;
 
   return (
     <main className={`shell perfil-page${activeTab === 'mis-datos' ? ' perfil-page--mis-datos' : ''}`}>
       <ProfileTabsNav {...tabsProps} />
       <header className="header header--mascot">
           <ProfileAvatarUpload
-            avatarUrl={avatarUrl}
+            avatarUrl={avatarDisplay.displayUrl}
+            fallbackAvatarUrl={mascotFallbackUrl}
+            isDefaultMascot={avatarDisplay.isDefaultMascot}
             displayName={displayName}
             onSelectFile={handleAvatarUpload}
             uploading={avatarUploading}
@@ -781,12 +819,7 @@ export default function ProfilePage() {
             className="header__avatar"
           />
           <div className="header__copy">
-            <h1>
-              My Profile
-              {displayName ? (
-                <span className="profile-header__display-name"> — {displayName}</span>
-              ) : null}
-            </h1>
+            <h1>{displayName || user?.email || 'Profile'}</h1>
             <p>Manage your personal information and track your learning progress.</p>
           </div>
           <div className="header__mascot" aria-hidden>
@@ -801,14 +834,16 @@ export default function ProfilePage() {
       {/* Tab: Resumen */}
       {activeTab === 'overview' && (
         <div className="profile-tab-panels">
-          <ProfileCollapsibleSection title="✨ Dralo IA — Experience">
-            <DraloLevelProgressSection
-              accessToken={layoutSession?.access_token}
-              lang="en"
-            />
-          </ProfileCollapsibleSection>
+          {!isStudent ? (
+            <ProfileCollapsibleSection title="Dralo IA — Experience">
+              <DraloLevelProgressSection
+                accessToken={layoutSession?.access_token}
+                lang="en"
+              />
+            </ProfileCollapsibleSection>
+          ) : null}
 
-          <ProfileCollapsibleSection title="📊 General statistics">
+          <ProfileCollapsibleSection title="General statistics">
             <ProfileGeneralStats
               accessToken={layoutSession?.access_token}
               onSummaryLoaded={(summary) => {
@@ -824,57 +859,37 @@ export default function ProfilePage() {
           </ProfileCollapsibleSection>
 
           <ProfileCollapsibleSection
-            title="📝 Exam statistics"
+            title="Exam statistics"
             className="profile-section--nested-exam-stats profile-section--exam-practice-combined"
           >
             <ExamStatistics userId={user?.id} embedded />
             <LevelsEstadisticasPanel userId={user?.id} embedded />
           </ProfileCollapsibleSection>
 
-          <ProfileCollapsibleSection title="📅 Study activity">
+          <ProfileCollapsibleSection title="Study activity">
             <StudyActivityHeatmap accessToken={layoutSession?.access_token} />
-          </ProfileCollapsibleSection>
-
-          <ProfileCollapsibleSection title="🚀 Quick actions">
-            <div className="quick-actions">
-              <Link href="/training" className="quick-action-btn primary">
-                💪 Train
-              </Link>
-              <Link href="/niveles" className="quick-action-btn">
-                📚 View levels
-              </Link>
-              <Link href="/teoria" className="quick-action-btn">
-                📖 Theory
-              </Link>
-              <Link href="/prueba-nivel" className="quick-action-btn">
-                🧪 Placement test
-              </Link>
-            </div>
           </ProfileCollapsibleSection>
         </div>
       )}
 
       {/* Tab: Progreso */}
       {activeTab === 'progress' && (
-        <>
+        <div className="profile-tab-panels">
           <ProfileSkillAnalysis userId={user?.id} />
-
-          {/* Gráficos de progreso */}
           <ProfileProgressCharts stats={stats} loading={statsLoading} />
-
-        </>
+        </div>
       )}
 
       {/* Tab: Logros */}
       {activeTab === 'achievements' && (
-        <ProfileCollapsibleSection title={"🏆 Achievements & badges"}>
+        <ProfileCollapsibleSection title="Achievements & badges">
 <ProfileAchievementsCarousel userId={user?.id} />
 </ProfileCollapsibleSection>
       )}
 
       {/* Tab: Objetivos */}
       {activeTab === 'goals' && (
-        <ProfileCollapsibleSection title={"🎯 My goals"}>
+        <ProfileCollapsibleSection title="My goals">
 <ProfileGoalsPanel userId={user?.id} />
 </ProfileCollapsibleSection>
       )}
@@ -882,17 +897,17 @@ export default function ProfilePage() {
       {activeTab === 'integrated' && (
         <>
           {/* Dashboard de Progreso Integrado */}
-          <ProfileCollapsibleSection title="📊 Progress dashboard">
+          <ProfileCollapsibleSection title="Progress dashboard">
 <ProgressDashboard userId={user?.id} />
 </ProfileCollapsibleSection>
 
           {/* Aprendizaje Adaptativo */}
-          <ProfileCollapsibleSection title="🤖 Adaptive learning">
+          <ProfileCollapsibleSection title="Adaptive learning">
 <AdaptiveLearningDashboard userId={user?.id} />
 </ProfileCollapsibleSection>
 
           {/* Métricas de Rendimiento */}
-          <ProfileCollapsibleSection title="⚡ Performance metrics">
+          <ProfileCollapsibleSection title="Performance metrics">
 <div className="metrics-grid">
               <div className="metric-card">
                 <div className="metric-icon">📚</div>
@@ -922,7 +937,7 @@ export default function ProfilePage() {
 
           {/* Logros Recientes */}
           {integratedStats.achievements && integratedStats.achievements.length > 0 && (
-            <ProfileCollapsibleSection title="🏆 Recent achievements">
+            <ProfileCollapsibleSection title="Recent achievements">
 <div className="achievements-grid">
                 {integratedStats.achievements.slice(0, 6).map((achievement, index) => (
                   <div key={index} className="achievement-card">
@@ -938,7 +953,7 @@ export default function ProfilePage() {
 
           {/* Análisis de Habilidades */}
           {integratedStats.adaptiveData && (
-            <ProfileCollapsibleSection title="📈 Skills analysis">
+            <ProfileCollapsibleSection title="Skills analysis">
 <div className="skill-analysis">
                 <div className="skill-item">
                   <div className="skill-name">Listening</div>
@@ -999,16 +1014,7 @@ export default function ProfilePage() {
 
       {activeTab === 'mis-datos' && (
         <div className="mis-datos-panel">
-          <section className="profile-section profile-section--static">
-            <div className="section-header">
-              <h2>👋 Welcome, {displayName || user.email}</h2>
-              <button onClick={handleLogout} className="logout-btn">
-                🚪 Sign out
-              </button>
-            </div>
-          </section>
-
-          <ProfileCollapsibleSection title="📋 Your account">
+          <ProfileCollapsibleSection title="Your account">
             <dl className="mis-datos-facts">
               <div className="mis-datos-fact">
                 <dt>Email</dt>
@@ -1026,51 +1032,39 @@ export default function ProfilePage() {
                     : '—'}
                 </dd>
               </div>
-              <div className="mis-datos-fact">
-                <dt>Level (placement)</dt>
-                <dd>{placementLevel || 'No placement test yet'}</dd>
-              </div>
-              {placementLevel && (
-                <div className="mis-datos-fact">
-                  <dt>Goals plan</dt>
-                  <dd>
-                    <Link href="/plan-objetivos" className="mis-datos-link">
-                      View or complete survey →
-                    </Link>
-                  </dd>
-                </div>
-              )}
+              {!isStudent ? (
+                <>
+                  <div className="mis-datos-fact">
+                    <dt>Level (placement)</dt>
+                    <dd>{placementLevel || 'No placement test yet'}</dd>
+                  </div>
+                  {placementLevel ? (
+                    <div className="mis-datos-fact">
+                      <dt>Goals plan</dt>
+                      <dd>
+                        <Link href="/plan-objetivos" className="mis-datos-link">
+                          View or complete survey →
+                        </Link>
+                      </dd>
+                    </div>
+                  ) : null}
+                </>
+              ) : null}
             </dl>
           </ProfileCollapsibleSection>
 
-          <ProfileCollapsibleSection title="💳 My subscription">
-            <div className="mis-datos-subscription__card">
-              <div className="mis-datos-subscription__badge">
-                {subscriptionDisplay.badge || subscriptionPlan.nombre}
-              </div>
-              <div className="mis-datos-subscription__body">
-                <h3 className="mis-datos-subscription__plan">
-                  Plan {subscriptionPlan.nombre}
-                </h3>
-                <p className="mis-datos-subscription__text">{subscriptionDisplay.descripcionCorta}</p>
-                <ul className="mis-datos-subscription__features">
-                  {subscriptionDisplay.highlights.slice(0, 5).map((line) => (
-                    <li key={line}>{line}</li>
-                  ))}
-                </ul>
-                {showPricingLink ? (
-                  <p style={{ margin: '12px 0 0' }}>
-                    <Link href="/precios" className="mis-datos-link">
-                      View all plans and comparison →
-                    </Link>
-                  </p>
-                ) : null}
-              </div>
-            </div>
+          <ProfileCollapsibleSection title="My subscription">
+            <ProfileSubscriptionCard
+              plan={subscriptionPlan}
+              description={subscriptionDisplay.descripcionCorta}
+              highlights={subscriptionDisplay.highlights}
+              badge={subscriptionDisplay.badge}
+              showPricingLink={showPricingLink}
+            />
           </ProfileCollapsibleSection>
 
           <ProfileCollapsibleSection
-            title="📝 Personal details"
+            title="Personal details"
             className="profile-name-section"
           >
             <div className="mis-datos-form">
@@ -1107,24 +1101,6 @@ export default function ProfilePage() {
                 }}
                 className="form-input"
               />
-            </div>
-            <div className="form-group">
-              <label className="form-label" htmlFor="profile-language">
-                Interface language
-              </label>
-              <select
-                id="profile-language"
-                value={preferredLanguage}
-                onChange={(e) => {
-                  setPreferredLanguage(e.target.value);
-                  setPersonalSaveMessage('');
-                  setPersonalSaveError('');
-                }}
-                className="form-input"
-              >
-                <option value="es">Spanish</option>
-                <option value="en">English</option>
-              </select>
             </div>
             <div className="form-group">
               <label className="form-label" htmlFor="profile-bio">
@@ -1164,9 +1140,9 @@ export default function ProfilePage() {
       )}
 
       {activeTab === 'settings' && (
-        <>
-          <ProfileCollapsibleSection title={"🔐 Security"}>
-<div className="form-group">
+        <div className="profile-settings-panel">
+          <ProfileCollapsibleSection title="Security">
+            <div className="form-group">
               <label className="form-label">New password</label>
               <PasswordInput
                 value={newPassword}
@@ -1179,55 +1155,10 @@ export default function ProfilePage() {
             <button type="button" onClick={handlePasswordChange} className="action-btn">
               🔑 Update password
             </button>
-</ProfileCollapsibleSection>
+          </ProfileCollapsibleSection>
 
-          <ProfileCollapsibleSection
-            title="🗑️ Delete account"
-            style={{ border: '1px solid #fecaca', background: '#fff5f5' }}
-          >
-<p style={{ marginTop: 0, color: '#7f1d1d' }}>
-              This action cannot be undone. To confirm, we will send a 6-digit code to your account email.
-            </p>
-            <button
-              type="button"
-              onClick={handleSendDeleteCode}
-              className="action-btn"
-              disabled={sendingDeleteCode || deletingAccount}
-              style={{ background: '#b91c1c' }}
-            >
-              {sendingDeleteCode ? 'Sending code...' : 'Send confirmation code'}
-            </button>
-            {deleteFlowActive && (
-              <div className="form-group" style={{ marginTop: '1rem' }}>
-                <label className="form-label">Verification code (6 digits)</label>
-                <input
-                  type="text"
-                  inputMode="numeric"
-                  pattern="[0-9]*"
-                  maxLength={6}
-                  value={deleteCode}
-                  onChange={(e) => setDeleteCode(e.target.value.replace(/\D/g, '').slice(0, 6))}
-                  className="form-input"
-                  placeholder="123456"
-                />
-                <small style={{ color: '#7f1d1d', marginTop: '0.5rem' }}>
-                  Code sent to {user?.email}. {deleteCodeSentAt ? 'If it expires, request a new one.' : ''}
-                </small>
-                <button
-                  type="button"
-                  onClick={handleDeleteAccount}
-                  className="action-btn"
-                  disabled={deletingAccount}
-                  style={{ marginTop: '0.8rem', background: '#991b1b' }}
-                >
-                  {deletingAccount ? 'Deleting...' : 'Confirm account deletion'}
-                </button>
-              </div>
-            )}
-</ProfileCollapsibleSection>
-
-          <ProfileCollapsibleSection title={"🔔 Notifications"}>
-<div className="settings-grid">
+          <ProfileCollapsibleSection title="Notifications">
+            <div className="settings-grid">
               <div className="setting-item">
                 <label className="setting-label">
                   <input
@@ -1252,10 +1183,10 @@ export default function ProfilePage() {
             <button type="button" onClick={handleSettingsUpdate} className="action-btn" disabled={saving}>
               {saving ? 'Saving...' : '💾 Save settings'}
             </button>
-</ProfileCollapsibleSection>
+          </ProfileCollapsibleSection>
 
-          <ProfileCollapsibleSection title={"📨 Invite friends"}>
-<p style={{ marginTop: 0, color: '#334155' }}>
+          <ProfileCollapsibleSection title="Invite friends">
+            <p className="profile-settings-panel__intro">
               Send an email invitation so friends can join you to practise.
             </p>
             <div className="form-group">
@@ -1281,15 +1212,63 @@ export default function ProfilePage() {
             <button type="button" onClick={handleInviteFriend} className="action-btn" disabled={invitingFriend}>
               {invitingFriend ? 'Sending invitation...' : 'Send invitation'}
             </button>
-</ProfileCollapsibleSection>
-        </>
+          </ProfileCollapsibleSection>
+
+          <ProfileCollapsibleSection
+            title="Delete account"
+            className="profile-collapse--danger"
+            description="Permanent — requires email verification"
+          >
+            <p className="profile-settings-panel__danger-intro">
+              This action cannot be undone. To confirm, we will send a 6-digit code to your account email.
+            </p>
+            <div className="profile-settings-panel__danger-actions">
+              <button
+                type="button"
+                onClick={handleSendDeleteCode}
+                className="action-btn profile-settings-panel__danger-btn"
+                disabled={sendingDeleteCode || deletingAccount}
+              >
+                {sendingDeleteCode ? 'Sending code...' : 'Send confirmation code'}
+              </button>
+              {deleteFlowActive && (
+                <div className="profile-settings-panel__danger-form">
+                  <div className="form-group">
+                    <label className="form-label">Verification code (6 digits)</label>
+                    <input
+                      type="text"
+                      inputMode="numeric"
+                      pattern="[0-9]*"
+                      maxLength={6}
+                      value={deleteCode}
+                      onChange={(e) => setDeleteCode(e.target.value.replace(/\D/g, '').slice(0, 6))}
+                      className="form-input"
+                      placeholder="123456"
+                    />
+                    <small className="profile-settings-panel__danger-hint">
+                      Code sent to {user?.email}. {deleteCodeSentAt ? 'If it expires, request a new one.' : ''}
+                    </small>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={handleDeleteAccount}
+                    className="action-btn profile-settings-panel__danger-btn profile-settings-panel__danger-btn--confirm"
+                    disabled={deletingAccount}
+                  >
+                    {deletingAccount ? 'Deleting...' : 'Confirm account deletion'}
+                  </button>
+                </div>
+              )}
+            </div>
+          </ProfileCollapsibleSection>
+        </div>
       )}
 
       {/* Tab: Herramientas de Estudio */}
       {activeTab === 'study-tools' && (
         <>
           {/* Temporizador de Estudio */}
-          <ProfileCollapsibleSection title={"⏱️ Study timer"}>
+          <ProfileCollapsibleSection title="Study timer">
 <div className="timer-container">
               <div className="timer-display">
                 <div className="timer-time">
@@ -1314,7 +1293,7 @@ export default function ProfilePage() {
           <ProfileStudyNotesPanel lang="en" />
 
           {/* Exercises Favoritos */}
-          <ProfileCollapsibleSection title={"⭐ Favourite exercises"}>
+          <ProfileCollapsibleSection title="Favourite exercises">
 <div className="favorites-grid">
               {favoriteExercises.map((exercise) => (
                 <div key={exercise.id} className="favorite-card">
@@ -1334,7 +1313,7 @@ export default function ProfilePage() {
 </ProfileCollapsibleSection>
 
           {/* Historial de Estudio */}
-          <ProfileCollapsibleSection title={"📚 Study history"}>
+          <ProfileCollapsibleSection title="Study history">
 <div className="history-table">
               <div className="history-header">
                 <div>Date</div>
@@ -1363,7 +1342,7 @@ export default function ProfilePage() {
       {activeTab === 'social' && (
         <>
           {/* Comparación de Progreso */}
-          <ProfileCollapsibleSection title={"📊 Progress comparison"}>
+          <ProfileCollapsibleSection title="Progress comparison">
 <div className="comparison-stats">
               <div className="comparison-card">
                 <div className="comparison-label">Your score</div>
@@ -1385,7 +1364,7 @@ export default function ProfilePage() {
 </ProfileCollapsibleSection>
 
           {/* Grupos de Estudio */}
-          <ProfileCollapsibleSection title={"👥 Study groups"}>
+          <ProfileCollapsibleSection title="Study groups">
 <div className="groups-grid">
               {studyGroups.map((group) => (
                 <div key={group.id} className="group-card">
@@ -1400,7 +1379,7 @@ export default function ProfilePage() {
 </ProfileCollapsibleSection>
 
           {/* Desafíos Semanales */}
-          <ProfileCollapsibleSection title={"🏆 Weekly challenges"}>
+          <ProfileCollapsibleSection title="Weekly challenges">
 <div className="challenges-grid">
               {weeklyChallenges.map((challenge) => (
                 <div key={challenge.id} className="challenge-card">
@@ -1428,7 +1407,7 @@ export default function ProfilePage() {
       {activeTab === 'analytics' && (
         <>
           {/* Recomendaciones Inteligentes */}
-          <ProfileCollapsibleSection title={"🤖 Smart recommendations"}>
+          <ProfileCollapsibleSection title="Smart recommendations">
 <div className="recommendations-grid">
               {studyRecommendations.map((rec, index) => (
                 <div key={index} className={`recommendation-card priority-${rec.priority}`}>
@@ -1442,7 +1421,7 @@ export default function ProfilePage() {
 </ProfileCollapsibleSection>
 
           {/* Progreso de Logros */}
-          <ProfileCollapsibleSection title={"🎯 Achievement progress"}>
+          <ProfileCollapsibleSection title="Achievement progress">
 <div className="achievement-progress-grid">
               {Object.entries(achievementProgress).map(([name, progress]) => (
                 <div key={name} className="achievement-progress-card">
@@ -1463,7 +1442,7 @@ export default function ProfilePage() {
 </ProfileCollapsibleSection>
 
           {/* Estadísticas Avanzadas */}
-          <ProfileCollapsibleSection title={"📈 Advanced statistics"}>
+          <ProfileCollapsibleSection title="Advanced statistics">
 <div className="advanced-stats">
               <div className="stat-item">
                 <div className="stat-label">Average time per session</div>
@@ -1490,7 +1469,7 @@ export default function ProfilePage() {
       {activeTab === 'ai-tools' && (
         <>
           {/* Insights de IA */}
-          <ProfileCollapsibleSection title={"🤖 AI insights"}>
+          <ProfileCollapsibleSection title="AI insights">
 <div className="ai-insights-grid">
               {aiInsights.map((insight) => (
                 <div key={insight.id} className={`ai-insight-card ${insight.type}`}>
@@ -1506,7 +1485,7 @@ export default function ProfilePage() {
 </ProfileCollapsibleSection>
 
           {/* Planificador Inteligente */}
-          <ProfileCollapsibleSection title={"📅 Smart study plan"}>
+          <ProfileCollapsibleSection title="Smart study plan">
 <div className="study-plan-container">
               <div className="plan-overview">
                 <div className="plan-item">
@@ -1541,7 +1520,7 @@ export default function ProfilePage() {
 </ProfileCollapsibleSection>
 
           {/* Música de Estudio */}
-          <ProfileCollapsibleSection title={"🎵 Study music"}>
+          <ProfileCollapsibleSection title="Study music">
 <div className="music-player">
               <div className="current-track">
                 {studyMusic.currentTrack ? (
@@ -1584,7 +1563,7 @@ export default function ProfilePage() {
       {/* Tab: Planificador */}
       {activeTab === 'study-planner' && (
         <>
-          <ProfileCollapsibleSection title={"📅 Study calendar"}>
+          <ProfileCollapsibleSection title="Study calendar">
 <div className="calendar-container">
               <div className="calendar-grid">
                 {Array.from({ length: 30 }, (_, i) => {
@@ -1613,7 +1592,7 @@ export default function ProfilePage() {
 </ProfileCollapsibleSection>
 
           {/* Metas de Estudio */}
-          <ProfileCollapsibleSection title={"🎯 My study goals"}>
+          <ProfileCollapsibleSection title="My study goals">
 <div className="goals-grid">
               {studyGoals.map((goal) => (
                 <div key={goal.id} className={`goal-card ${goal.priority}`}>
@@ -1636,7 +1615,7 @@ export default function ProfilePage() {
 </ProfileCollapsibleSection>
 
           {/* Hábitos de Estudio */}
-          <ProfileCollapsibleSection title={"📈 Study habits"}>
+          <ProfileCollapsibleSection title="Study habits">
 <div className="habits-grid">
               {studyHabits.map((habit) => (
                 <div key={habit.id} className="habit-card">
@@ -1658,7 +1637,7 @@ export default function ProfilePage() {
 </ProfileCollapsibleSection>
 
           {/* Progreso Detallado */}
-          <ProfileCollapsibleSection title={"📊 Detailed progress"}>
+          <ProfileCollapsibleSection title="Detailed progress">
 <div className="progress-stats">
               <div className="progress-item">
                 <div className="progress-icon">⏱️</div>
@@ -1697,7 +1676,7 @@ export default function ProfilePage() {
       {activeTab === 'gamification' && (
         <>
           {/* Sistema de Recompensas */}
-          <ProfileCollapsibleSection title={"🏆 Rewards system"}>
+          <ProfileCollapsibleSection title="Rewards system">
 <div className="rewards-grid">
               {studyRewards.map((reward) => (
                 <div key={reward.id} className={`reward-card ${reward.earned ? 'earned' : 'locked'}`}>
@@ -1718,7 +1697,7 @@ export default function ProfilePage() {
 </ProfileCollapsibleSection>
 
           {/* Desafíos Especiales */}
-          <ProfileCollapsibleSection title={"⚡ Special challenges"}>
+          <ProfileCollapsibleSection title="Special challenges">
 <div className="challenges-special-grid">
               {studyChallenges.map((challenge) => (
                 <div key={challenge.id} className={`challenge-special-card ${challenge.difficulty.toLowerCase()}`}>
@@ -1736,7 +1715,7 @@ export default function ProfilePage() {
 </ProfileCollapsibleSection>
 
           {/* Tabla de Clasificación */}
-          <ProfileCollapsibleSection title={"🏅 Leaderboard"}>
+          <ProfileCollapsibleSection title="Leaderboard">
 <div className="leaderboard">
               <div className="leaderboard-header">
                 <div>Rank</div>
@@ -1758,7 +1737,7 @@ export default function ProfilePage() {
 </ProfileCollapsibleSection>
 
           {/* Motivación */}
-          <ProfileCollapsibleSection title={"💪 Motivation"}>
+          <ProfileCollapsibleSection title="Motivation">
 <div className="motivation-container">
               <div className="motivation-level">
                 <div className="motivation-label">Motivation level</div>
@@ -1810,7 +1789,7 @@ export default function ProfilePage() {
       {activeTab === 'community' && (
         <>
           {/* Chat de Grupos */}
-          <ProfileCollapsibleSection title={"💬 Group chat"}>
+          <ProfileCollapsibleSection title="Group chat">
 <div className="chat-container">
               <div className="chat-messages">
                 {groupChat.map((message) => (
@@ -1887,7 +1866,7 @@ export default function ProfilePage() {
           </ProfileCollapsibleSection>
 
           {/* Temas Visuales */}
-          <ProfileCollapsibleSection title={"🎨 Visual themes"}>
+          <ProfileCollapsibleSection title="Visual themes">
 <div className="themes-grid">
               {studyThemes.available.map((theme) => (
                 <div 
@@ -1931,7 +1910,6 @@ function GlobalStyles() {
       .shell{min-height:100svh;max-width:1100px;margin:0 auto;padding:32px 20px}
       .center{display:grid;place-items:center}
       .header h1{font-size:44px;margin:0 0 6px;color:var(--text)}
-      .profile-header__display-name{font-weight:600;color:#0070f3}
       .header p{margin:0;color:#666}
       .section-desc{margin:-8px 0 16px;color:#64748b;font-size:15px;line-height:1.5}
       .form-hint{margin:0 0 12px;font-size:14px}
@@ -1941,7 +1919,7 @@ function GlobalStyles() {
       .mis-datos-panel{width:100%}
       .mis-datos-panel .profile-section:not(.profile-section--collapsible):not(.profile-collapse){padding:28px 32px}
       .mis-datos-panel .profile-section.profile-section--collapsible,.mis-datos-panel .profile-collapse{padding:0}
-      .mis-datos-panel .section-head h2,.mis-datos-panel .section-header h2{font-size:24px}
+      .mis-datos-panel .section-head h2{font-size:24px}
       .mis-datos-panel .section-desc{font-size:16px;margin-bottom:22px}
       .mis-datos-facts{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:20px 32px;margin:0}
       @media (min-width:720px){.mis-datos-facts{grid-template-columns:repeat(4,minmax(0,1fr))}}
@@ -1949,13 +1927,6 @@ function GlobalStyles() {
       .mis-datos-fact dd{margin:0;font-size:16px;color:var(--text);font-weight:500;line-height:1.4}
       .mis-datos-link{color:#0070f3;font-weight:600;text-decoration:none}
       .mis-datos-link:hover{text-decoration:underline}
-      .mis-datos-subscription__card{display:flex;flex-wrap:wrap;gap:20px 24px;padding:22px 24px;border:1px solid #e2e8f0;border-radius:14px;background:linear-gradient(135deg,#f8fafc 0%,#fff 100%)}
-      .mis-datos-subscription__badge{align-self:flex-start;padding:8px 16px;border-radius:999px;background:#0070f3;color:#fff;font-size:13px;font-weight:700;letter-spacing:.04em;text-transform:uppercase}
-      .mis-datos-subscription__body{flex:1 1 260px;min-width:0}
-      .mis-datos-subscription__plan{margin:0 0 8px;font-size:20px;color:var(--text)}
-      .mis-datos-subscription__text{margin:0 0 14px;font-size:15px;line-height:1.5;color:#64748b}
-      .mis-datos-subscription__features{margin:0;padding-left:1.2rem;font-size:14px;line-height:1.6;color:#475569}
-      .mis-datos-subscription__features li{margin-bottom:4px}
       .mis-datos-form{display:grid;grid-template-columns:1fr;gap:4px 24px}
       @media (min-width:640px){
         .mis-datos-form{grid-template-columns:repeat(2,minmax(0,1fr))}
@@ -1977,6 +1948,7 @@ function GlobalStyles() {
       .profile-avatar__button:hover:not(:disabled){transform:translateY(-2px);box-shadow:0 10px 24px rgba(0,112,243,.28)}
       .profile-avatar__button:disabled{opacity:.75;cursor:wait}
       .profile-avatar__img{width:100%;height:100%;object-fit:cover;display:block}
+      .profile-avatar__img--mascot{object-fit:contain;padding:8%;background:linear-gradient(145deg,#eef6ff 0%,#dbeafe 100%)}
       .profile-avatar__placeholder{display:flex;align-items:center;justify-content:center;width:100%;height:100%;font-size:1.65rem;font-weight:700;color:#1e40af;background:linear-gradient(145deg,#dbeafe 0%,#bfdbfe 100%)}
       .profile-avatar__overlay{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(15,23,42,.42);color:#fff;font-size:1.35rem;opacity:0;transition:opacity .2s}
       .profile-avatar__button:hover .profile-avatar__overlay,.profile-avatar__button:focus-visible .profile-avatar__overlay{opacity:1}
@@ -1999,18 +1971,11 @@ function GlobalStyles() {
       .profile-coming-soon__text{margin:0 auto;max-width:32rem;color:#64748b;line-height:1.55;font-size:15px}
       
       .profile-tab-panels{display:flex;flex-direction:column;gap:10px;margin:4px 0 28px}
+      .profile-tab-panels__charts-row{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
       .profile-section{margin:22px 0;padding:24px;border:1px solid #eaeaea;border-radius:16px;background:var(--card);box-shadow:0 2px 6px rgba(0,0,0,0.1)}
       .profile-section.profile-section--collapsible,.profile-section.profile-collapse{margin:0;padding:0;background:#fff;border:1px solid rgba(15,23,42,.08);border-radius:12px;box-shadow:0 1px 2px rgba(15,23,42,.04),0 4px 14px rgba(15,23,42,.04)}
       .profile-section.profile-collapse--open{border-color:rgba(0,112,243,.22);box-shadow:0 1px 2px rgba(0,112,243,.06),0 8px 24px rgba(0,112,243,.08)}
-      .profile-section.profile-section--static{background:#fff;border:1px solid rgba(15,23,42,.08);border-radius:12px;box-shadow:0 1px 2px rgba(15,23,42,.04)}
-      .charts-section{display:flex;flex-direction:column;gap:10px;margin:16px 0 24px}
-      .charts-section .profile-section.profile-section--collapsible{margin:0}
       .section-head{display:flex;align-items:center;gap:8px;margin-bottom:20px}
-      .section-head h2{margin:0;font-size:22px;color:var(--text)}
-      .section-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px}
-      .section-header h2{margin:0;font-size:22px;color:var(--text)}
-      .logout-btn{padding:8px 16px;background:#e74c3c;color:white;border:none;border-radius:8px;cursor:pointer;font-size:14px;transition:transform .2s}
-      .logout-btn:hover{transform:translateY(-1px)}
       
       /* Formularios */
       .form-group{margin-bottom:20px}
@@ -2042,8 +2007,6 @@ function GlobalStyles() {
       .skill-exercises{font-size:12px;color:#666}
       
       /* Gráficos */
-      .charts-section{display:grid;grid-template-columns:repeat(auto-fit,minmax(400px,1fr));gap:22px}
-      .chart-section{min-height:400px}
       .empty-chart{display:grid;place-items:center;text-align:center;padding:48px;border:1px dashed #eaeaea;border-radius:16px;background:white}
       .empty-icon{font-size:36px;margin-bottom:6px}
       
@@ -2073,13 +2036,6 @@ function GlobalStyles() {
       .setting-item{padding:16px;border:1px solid #eaeaea;border-radius:12px;background:white}
       .setting-label{display:flex;align-items:center;gap:8px;cursor:pointer;font-weight:500}
       .setting-label input{margin:0}
-      
-      /* Acciones rápidas */
-      .quick-actions{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px}
-      .quick-action-btn{display:block;padding:16px 20px;text-align:center;text-decoration:none;border:1px solid #eaeaea;border-radius:12px;background:white;color:var(--text);transition:transform .2s,box-shadow .2s,border-color .2s;font-weight:600}
-      .quick-action-btn:hover{transform:translateY(-2px);box-shadow:0 8px 20px rgba(0,0,0,.1);border-color:#0070f3;background:#b0d6fa}
-      .quick-action-btn.primary{background:#0070f3;color:white;border-color:transparent}
-      .quick-action-btn.primary:hover{background:#0056b3;box-shadow:0 18px 40px rgba(0,112,243,.4)}
       
       .btn{margin-top:10px;padding:10px 14px;border-radius:12px;background:#0070f3;border:none;color:white;cursor:pointer;box-shadow:0 10px 24px rgba(0,112,243,.35);text-decoration:none;display:inline-block}
       .loader{width:48px;height:48px;border-radius:50%;border:3px solid rgba(0,112,243,.2);border-top-color:#0070f3;animation:spin 1s linear infinite}
@@ -2207,7 +2163,7 @@ function GlobalStyles() {
         .tabs{flex-direction:column}
         .tab{text-align:center}
         .stats-grid{grid-template-columns:repeat(auto-fit,minmax(150px,1fr))}
-        .charts-section{grid-template-columns:1fr}
+        .profile-tab-panels__charts-row{grid-template-columns:1fr}
         .skills-grid{grid-template-columns:repeat(auto-fit,minmax(120px,1fr))}
         .badges-grid{grid-template-columns:repeat(auto-fit,minmax(150px,1fr))}
         .goals-container{grid-template-columns:1fr}

@@ -11,6 +11,8 @@ import { useEffect, useId, useRef, useState } from 'react';
  *   error?: string,
  *   size?: number,
  *   className?: string,
+ *   isDefaultMascot?: boolean,
+ *   fallbackAvatarUrl?: string | null,
  * }} props
  */
 export default function ProfileAvatarUpload({
@@ -21,10 +23,13 @@ export default function ProfileAvatarUpload({
   error = '',
   size = 88,
   className = '',
+  isDefaultMascot = false,
+  fallbackAvatarUrl = null,
 }) {
   const inputId = useId();
   const inputRef = useRef(null);
   const [previewUrl, setPreviewUrl] = useState(null);
+  const [useFallbackAvatar, setUseFallbackAvatar] = useState(false);
 
   const initials = (displayName || '?')
     .trim()
@@ -33,7 +38,13 @@ export default function ProfileAvatarUpload({
     .map((w) => w[0]?.toUpperCase() || '')
     .join('') || '?';
 
-  const shownUrl = previewUrl || avatarUrl || null;
+  const shownUrl = previewUrl || (useFallbackAvatar ? fallbackAvatarUrl : avatarUrl) || null;
+  const showingMascot = isDefaultMascot || (useFallbackAvatar && Boolean(fallbackAvatarUrl));
+  const imgClassName = `profile-avatar__img${showingMascot ? ' profile-avatar__img--mascot' : ''}`;
+
+  useEffect(() => {
+    setUseFallbackAvatar(false);
+  }, [avatarUrl, fallbackAvatarUrl]);
 
   useEffect(() => {
     if (!avatarUrl || !previewUrl) return;
@@ -75,7 +86,16 @@ export default function ProfileAvatarUpload({
       >
         {shownUrl ? (
           // eslint-disable-next-line @next/next/no-img-element
-          <img src={shownUrl} alt="" className="profile-avatar__img" />
+          <img
+            src={shownUrl}
+            alt=""
+            className={imgClassName}
+            onError={() => {
+              if (fallbackAvatarUrl && !useFallbackAvatar) {
+                setUseFallbackAvatar(true);
+              }
+            }}
+          />
         ) : (
           <span className="profile-avatar__placeholder" aria-hidden>
             {initials}

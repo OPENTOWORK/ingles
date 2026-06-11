@@ -7,8 +7,15 @@ import { HOME_QUICK_LINKS, HOME_THEORY_LINK } from '@/config/appNavMenu';
 
 export default function HomeQuickNav() {
   const { userRole } = useUserRole();
+  const isStudent = userRole === 'student' || userRole === 'alumno';
   const showTheory = isAdminRole(userRole);
-  const links = showTheory ? [HOME_THEORY_LINK, ...HOME_QUICK_LINKS] : HOME_QUICK_LINKS;
+  const showQuickLinks = !isStudent;
+  const links = [
+    ...(showTheory ? [HOME_THEORY_LINK] : []),
+    ...(showQuickLinks ? HOME_QUICK_LINKS : []),
+  ];
+
+  if (links.length === 0) return null;
 
   return (
     <nav className="home-quick-nav" aria-label="Theory, placement test, training and plans">

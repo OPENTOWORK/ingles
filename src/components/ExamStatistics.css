@@ -110,20 +110,28 @@
   display: grid;
   place-items: center;
   border-radius: 10px;
-  font-size: 1.125rem;
+}
+
+.exam-stats__kpi-svg {
+  width: 20px;
+  height: 20px;
 }
 
 .exam-stats__kpi--blue .exam-stats__kpi-icon {
   background: #eff6ff;
+  color: #2563eb;
 }
 .exam-stats__kpi--green .exam-stats__kpi-icon {
   background: #ecfdf5;
+  color: #059669;
 }
 .exam-stats__kpi--violet .exam-stats__kpi-icon {
   background: #f5f3ff;
+  color: #7c3aed;
 }
 .exam-stats__kpi--amber .exam-stats__kpi-icon {
   background: #fffbeb;
+  color: #d97706;
 }
 
 .exam-stats__kpi-body {

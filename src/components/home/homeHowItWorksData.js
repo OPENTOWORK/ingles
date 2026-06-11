@@ -3,35 +3,35 @@ import { isAdminRole } from '@/utils/authRoles';
 /** Level hub used for in-tour demos (exam mode + skills visible for students). */
 export const GUIDED_TOUR_LEVEL_PATH = '/niveles/b2';
 
-/** Tour for students: Exam practice + Dralo AI (what they see in the menu). */
+/** Tour for students: Exam practice and Exam theory. */
 export const GUIDED_TOUR_STEPS_STUDENT = [
   {
     id: 'welcome',
     title: 'How it works',
     sectionLabel: 'Home',
     description:
-      'A quick tour of what you use every day: Exam practice for Cambridge-style papers and skills, and Dralo AI for feedback on Use of English, Reading, Writing, Listening, Speaking, and more.',
-  },
-  {
-    id: 'exam-theory-nav',
-    title: 'Exam theory',
-    sectionLabel: 'Top menu → Exam theory',
-    description:
-      'Open Exam theory for interactive tips on Reading and Use of English, Listening, Writing, and Speaking — task format, timing, and strategies.',
-    target: '[data-tour="nav-exam-theory"]',
-    route: '/',
-    href: '/niveles?tab=theory',
-    openNavOnMobile: true,
+      'A quick tour of what you use every day: Exam practice for timed papers and Exam theory for tips by part and level.',
   },
   {
     id: 'exam-practice-nav',
     title: 'Exam practice',
     sectionLabel: 'Top menu → Exam practice',
     description:
-      'Open Exam practice in the menu to choose your exam level (A2–C2), try timed papers, exam mode, and part-by-part tips.',
+      'Open Exam practice in the menu to choose your exam level (A2–C2), try timed papers, exam mode, and part-by-part practice.',
     target: '[data-tour="nav-levels"]',
     route: '/',
     href: '/niveles',
+    openNavOnMobile: true,
+  },
+  {
+    id: 'exam-theory-nav',
+    title: 'Exam theory',
+    sectionLabel: 'Top menu → Exam theory',
+    description:
+      'Open Exam theory for interactive tips on Reading, Use of English, Listening, Writing, and Speaking — task format, timing, strategies, and common mistakes. Pick a skill, then filter by CEFR level to open each part.',
+    target: '[data-tour="nav-exam-theory"]',
+    route: '/',
+    href: '/niveles?tab=theory',
     openNavOnMobile: true,
   },
   {
@@ -39,7 +39,7 @@ export const GUIDED_TOUR_STEPS_STUDENT = [
     title: 'Choose your level',
     sectionLabel: 'Exam practice → CEFR grid',
     description:
-      'Pick the card for your target exam. Each level opens a hub with mock papers, strategies, and **Exam mode**.',
+      'Pick the card for your target exam. Each level opens a hub with mock papers, strategies, and Exam mode.',
     target: '[data-tour="niveles-levels"]',
     route: '/niveles',
     scrollTarget: true,
@@ -79,37 +79,15 @@ export const GUIDED_TOUR_STEPS_STUDENT = [
   },
   {
     id: 'levels-skills-tips',
-    title: 'Skills & tips',
-    sectionLabel: 'Exam theory → parts by level',
+    title: 'Tips by part',
+    sectionLabel: 'Exam theory → filter by level',
     description:
-      'In Exam theory, open each part for interactive tips — task format, timing, and strategies — before practice.',
+      'Back in Exam theory, choose a skill and a CEFR level to read Description & interactive tips for each exam part — then head to Exam practice to apply them.',
     target: '#exam-theory',
     route: '/niveles',
     href: '/niveles?tab=theory',
     scrollTarget: true,
     cardPlacement: 'center',
-  },
-  {
-    id: 'dralo-ai-nav',
-    title: 'Dralo AI',
-    sectionLabel: 'Top menu → Dralo AI',
-    description:
-      'Use Dralo AI in the menu for instant help: Use of English, Reading, Writing, Listening, Speaking, Grammar coach, and Dictionary.',
-    target: '[data-tour="nav-dralo-ai"]',
-    route: '/',
-    href: '/dralo-ai',
-    openNavOnMobile: true,
-  },
-  {
-    id: 'dralo-ai-hub',
-    title: 'Dralo AI tools',
-    sectionLabel: 'Dralo AI hub',
-    description:
-      'Each card is a dedicated studio. Pick a skill, follow the prompts, and get AI feedback tailored to Cambridge tasks.',
-    target: '[data-tour="dralo-ai-hub"]',
-    route: '/dralo-ai',
-    scrollTarget: true,
-    href: '/dralo-ai/writing',
   },
 ];
 

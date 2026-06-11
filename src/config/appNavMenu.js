@@ -11,7 +11,7 @@ import { getExamUnitSlugFromPathname } from '@/lib/examTheoryUnlock';
 /** Theory solo en la home (inferior, oculto para estudiantes). */
 export const HOME_THEORY_LINK = { href: '/teoria', label: 'Theory', tourId: 'nav-theory' };
 
-/** Enlaces inferiores de la home visibles para usuarios registrados. */
+/** Enlaces inferiores de la home (ocultos para estudiantes). */
 export const HOME_QUICK_LINKS = [
   { href: '/prueba-nivel', label: 'Placement Test', tourId: 'nav-placement' },
   { href: '/training', label: 'Training' },

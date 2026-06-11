@@ -26,8 +26,10 @@ const LEVEL_COLORS = {
 export default function ProfileProgressCharts({ stats, loading = false }) {
   if (loading) {
     return (
-      <div className="charts-section">
-        <p className="section-desc">Loading charts…</p>
+      <div className="profile-tab-panels">
+        <ProfileCollapsibleSection title="Score history">
+          <p className="section-desc">Loading charts…</p>
+        </ProfileCollapsibleSection>
       </div>
     );
   }
@@ -50,8 +52,8 @@ export default function ProfileProgressCharts({ stats, loading = false }) {
   }));
 
   return (
-    <div className="charts-section">
-      <ProfileCollapsibleSection title="📈 Score history" className="chart-section">
+    <div className="profile-tab-panels__charts-row">
+      <ProfileCollapsibleSection title="Score history">
         {chartData.length > 0 ? (
           <ResponsiveContainer width="100%" height={300}>
             <AreaChart data={chartData}>
@@ -79,7 +81,7 @@ export default function ProfileProgressCharts({ stats, loading = false }) {
         )}
       </ProfileCollapsibleSection>
 
-      <ProfileCollapsibleSection title="🎯 Distribution by level" className="chart-section">
+      <ProfileCollapsibleSection title="Distribution by level">
         {levelDistribution.some((item) => item.value > 0) ? (
           <ResponsiveContainer width="100%" height={300}>
             <PieChart>

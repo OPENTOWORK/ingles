@@ -1,6 +1,7 @@
 'use client';
 
 import { useCallback, useEffect, useMemo, useState } from 'react';
+import ProfileCollapsibleSection from '@/components/perfil/ProfileCollapsibleSection';
 import { canAccessTeacherPanel } from '@/utils/authRoles';
 
 export default function ProfilePrivateTutorPanel({ userRole, accessToken }) {
@@ -134,9 +135,11 @@ export default function ProfilePrivateTutorPanel({ userRole, accessToken }) {
     return (
       <>
         <ProfilePrivateTutorStyles />
-        <section className="profile-section">
-          <p className="section-desc">Loading private tutoring…</p>
-        </section>
+        <div className="profile-tab-panels">
+          <ProfileCollapsibleSection title="Private tutor">
+            <p className="section-desc">Loading private tutoring…</p>
+          </ProfileCollapsibleSection>
+        </div>
       </>
     );
   }
@@ -145,15 +148,14 @@ export default function ProfilePrivateTutorPanel({ userRole, accessToken }) {
     return (
       <>
         <ProfilePrivateTutorStyles />
-        <section className="profile-section">
-          <div className="section-head">
-            <h2>👨‍🏫 Find your private tutor</h2>
-          </div>
-          <p className="section-desc">
-            The booking module is not active in the database yet. Run{' '}
-            <code>scripts/profesor_calendly.sql</code> in Supabase.
-          </p>
-        </section>
+        <div className="profile-tab-panels">
+          <ProfileCollapsibleSection title="Find your private tutor">
+            <p className="section-desc">
+              The booking module is not active in the database yet. Run{' '}
+              <code>scripts/profesor_calendly.sql</code> in Supabase.
+            </p>
+          </ProfileCollapsibleSection>
+        </div>
       </>
     );
   }
@@ -162,10 +164,8 @@ export default function ProfilePrivateTutorPanel({ userRole, accessToken }) {
     return (
       <>
         <ProfilePrivateTutorStyles />
-        <section className="profile-section">
-          <div className="section-head">
-            <h2>👨‍🏫 Private tutoring (online & in person)</h2>
-          </div>
+        <div className="profile-tab-panels">
+        <ProfileCollapsibleSection title="Tutoring settings" defaultOpen>
           <p className="section-desc">
             Set how students can book you: video calls via Calendly and/or in-person lessons with
             a booking link or location details.
@@ -253,13 +253,10 @@ export default function ProfilePrivateTutorPanel({ userRole, accessToken }) {
               {saving ? 'Saving…' : 'Save online & in-person lessons'}
             </button>
           </form>
-        </section>
+        </ProfileCollapsibleSection>
 
         {(offersOnline && calendlyUrl) || offersInPerson ? (
-          <section className="profile-section">
-            <div className="section-head">
-              <h2>👀 Preview</h2>
-            </div>
+          <ProfileCollapsibleSection title="Profile preview">
             <TeacherCard
               name="Your profile"
               presentation={presentation}
@@ -272,8 +269,9 @@ export default function ProfilePrivateTutorPanel({ userRole, accessToken }) {
               isAssigned={false}
               preview
             />
-          </section>
+          </ProfileCollapsibleSection>
         ) : null}
+        </div>
       </>
     );
   }
@@ -281,35 +279,29 @@ export default function ProfilePrivateTutorPanel({ userRole, accessToken }) {
   return (
     <>
       <ProfilePrivateTutorStyles />
-      <section className="profile-section">
-        <div className="section-head">
-          <h2>👨‍🏫 Find your private tutor</h2>
-        </div>
+      <div className="profile-tab-panels">
+      <ProfileCollapsibleSection title="Find your private tutor" defaultOpen>
         <p className="section-desc">
           Book personalised lessons with Dralo teachers: online by video call or in person
           depending on city and availability.
         </p>
-      </section>
+      </ProfileCollapsibleSection>
 
       {error ? (
-        <section className="profile-section">
+        <ProfileCollapsibleSection title="Private tutor">
           <p className="profile-tutor-error">{error}</p>
-        </section>
+        </ProfileCollapsibleSection>
       ) : null}
 
       {teachers.length === 0 ? (
-        <section className="profile-section">
+        <ProfileCollapsibleSection title="Available teachers">
           <p className="section-desc">
             No teachers have published lessons yet. Check back soon or contact support.
           </p>
-        </section>
+        </ProfileCollapsibleSection>
       ) : (
         <>
-          <section className="profile-section">
-            <div className="section-head">
-              <h2>💻 Online lessons</h2>
-              <span className="count">{onlineTeachers.length}</span>
-            </div>
+          <ProfileCollapsibleSection title="Online lessons">
             {onlineTeachers.length === 0 ? (
               <p className="section-desc">No teacher has published an online schedule yet.</p>
             ) : (
@@ -319,13 +311,9 @@ export default function ProfilePrivateTutorPanel({ userRole, accessToken }) {
                 ))}
               </div>
             )}
-          </section>
+          </ProfileCollapsibleSection>
 
-          <section className="profile-section">
-            <div className="section-head">
-              <h2>📍 In-person lessons</h2>
-              <span className="count">{inPersonTeachers.length}</span>
-            </div>
+          <ProfileCollapsibleSection title="In-person lessons">
             {inPersonTeachers.length === 0 ? (
               <p className="section-desc">No teacher has published in-person lessons yet.</p>
             ) : (
@@ -335,14 +323,11 @@ export default function ProfilePrivateTutorPanel({ userRole, accessToken }) {
                 ))}
               </div>
             )}
-          </section>
+          </ProfileCollapsibleSection>
         </>
       )}
 
-      <section className="profile-section">
-        <div className="section-head">
-          <h2>ℹ️ How it works</h2>
-        </div>
+      <ProfileCollapsibleSection title="How it works">
         <ul style={{ margin: 0, paddingLeft: '1.25rem', color: '#64748b', lineHeight: 1.55 }}>
           <li>
             <strong>Online:</strong> click book and choose a date/time on the teacher&apos;s Calendly.
@@ -353,7 +338,8 @@ export default function ProfilePrivateTutorPanel({ userRole, accessToken }) {
           </li>
           <li>Your assigned teacher appears first in each list.</li>
         </ul>
-      </section>
+      </ProfileCollapsibleSection>
+      </div>
     </>
   );
 }

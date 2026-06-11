@@ -2,16 +2,57 @@
 
 import { useEffect, useMemo, useState } from 'react';
 import {
+  BarChart3,
+  Bot,
+  Brain,
+  Calendar,
+  CalendarDays,
+  Gamepad2,
+  Globe,
+  GraduationCap,
+  LayoutDashboard,
+  Link2,
+  Settings,
+  Target,
+  Trophy,
+  TrendingUp,
+  User,
+  Users,
+  Wrench,
+} from 'lucide-react';
+import {
   PROFILE_TAB_GROUPS,
-  PROFILE_TABS,
   getProfileGroupForTab,
+  getVisibleProfileTabGroups,
+  getVisibleProfileTabs,
+  getVisibleTabsInGroup,
 } from '@/components/perfil/profileTabsConfig';
+
+const TAB_ICONS = {
+  overview: LayoutDashboard,
+  'mis-datos': User,
+  'exam-dates': Calendar,
+  'private-tutor': GraduationCap,
+  progress: TrendingUp,
+  achievements: Trophy,
+  goals: Target,
+  integrated: Link2,
+  'study-tools': Wrench,
+  'study-planner': CalendarDays,
+  'ai-tools': Bot,
+  'error-tracker': Brain,
+  analytics: BarChart3,
+  settings: Settings,
+  social: Users,
+  community: Globe,
+  gamification: Gamepad2,
+};
 
 /**
  * Category groups + pill submenus (Overview, My details, …).
  */
 export default function ProfileTabsNav({
-  tabs = PROFILE_TABS,
+  tabs = getVisibleProfileTabs(),
   activeTab,
   onSelectTab,
   isStudent,
@@ -23,31 +64,40 @@ export default function ProfileTabsNav({
     [tabs],
   );
 
+  const visibleGroups = useMemo(
+    () => getVisibleProfileTabGroups(isStudent),
+    [isStudent],
+  );
+
   const [activeGroupId, setActiveGroupId] = useState(() =>
-    getProfileGroupForTab(activeTab).id,
+    getProfileGroupForTab(activeTab, isStudent).id,
   );
 
   useEffect(() => {
-    setActiveGroupId(getProfileGroupForTab(activeTab).id);
-  }, [activeTab]);
+    setActiveGroupId(getProfileGroupForTab(activeTab, isStudent).id);
+  }, [activeTab, isStudent]);
+
+  useEffect(() => {
+    if (visibleGroups.some((group) => group.id === activeGroupId)) return;
+    setActiveGroupId(visibleGroups[0]?.id || 'account');
+  }, [visibleGroups, activeGroupId]);
 
   const activeGroup =
-    PROFILE_TAB_GROUPS.find((g) => g.id === activeGroupId) || PROFILE_TAB_GROUPS[0];
+    visibleGroups.find((g) => g.id === activeGroupId) || visibleGroups[0] || PROFILE_TAB_GROUPS[0];
 
-  const visibleTabs = activeGroup.tabIds
-    .map((id) => tabMap[id])
-    .filter(Boolean);
+  const visibleTabs = getVisibleTabsInGroup(activeGroup, isStudent).filter((tab) => tabMap[tab.id]);
 
   const handleSelectGroup = (groupId) => {
-    const group = PROFILE_TAB_GROUPS.find((g) => g.id === groupId);
+    const group = visibleGroups.find((g) => g.id === groupId);
     if (!group) return;
     setActiveGroupId(groupId);
-    if (group.tabIds.includes(activeTab)) return;
+    const visibleIds = getVisibleTabsInGroup(group, isStudent).map((tab) => tab.id);
+    if (visibleIds.includes(activeTab)) return;
     const firstAllowed =
-      group.tabIds.find((id) => {
-        const tab = tabMap[id];
-        return tab && (!isStudent || tab.studentAllowed);
-      }) || group.tabIds[0];
+      getVisibleTabsInGroup(group, isStudent).find((tab) => {
+        if (!tabMap[tab.id]) return false;
+        return !isStudent || tab.studentAllowed;
+      })?.id || getVisibleTabsInGroup(group, isStudent)[0]?.id;
     if (firstAllowed) onSelectTab(firstAllowed);
   };
 
@@ -57,9 +107,9 @@ export default function ProfileTabsNav({
       aria-label={ariaLabel}
     >
       <div className="perfil-tabs-groups" role="tablist" aria-label="Profile categories">
-        {PROFILE_TAB_GROUPS.map((group) => {
+        {visibleGroups.map((group) => {
           const isActiveGroup = group.id === activeGroupId;
-          const hasActiveTab = group.tabIds.includes(activeTab);
+          const hasActiveTab = getVisibleTabsInGroup(group, isStudent).some((t) => t.id === activeTab);
           return (
             <button
               key={group.id}
@@ -70,7 +120,9 @@ export default function ProfileTabsNav({
               onClick={() => handleSelectGroup(group.id)}
             >
               <span className="perfil-tabs-group__title">{group.title}</span>
-              <span className="perfil-tabs-group__meta">{group.tabIds.length} sections</span>
+              <span className="perfil-tabs-group__meta">
+                {getVisibleTabsInGroup(group, isStudent).length} sections
+              </span>
             </button>
           );
         })}
@@ -82,6 +134,7 @@ export default function ProfileTabsNav({
         {visibleTabs.map((tab) => {
           const locked = isStudent && !tab.studentAllowed;
           const isActive = activeTab === tab.id;
+          const TabIcon = TAB_ICONS[tab.id];
           return (
             <button
               key={tab.id}
@@ -93,9 +146,9 @@ export default function ProfileTabsNav({
               aria-disabled={locked || undefined}
               title={locked ? 'Coming soon' : undefined}
             >
-              {tab.emoji ? (
+              {TabIcon ? (
                 <span className="perfil-tab-item__icon" aria-hidden>
-                  {tab.emoji}
+                  <TabIcon size={16} strokeWidth={2} />
                 </span>
               ) : null}
               <span className="perfil-tab-item__label">{tab.label}</span>

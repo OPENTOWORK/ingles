@@ -163,6 +163,8 @@ const TheoryLayout = ({
     if (!pathname?.startsWith('/teoria/') || isSectionHub) return null;
     return normalizeTopicHref(pathname);
   }, [pathname, isSectionHub]);
+  const hideExamTheoryPracticeForStudent =
+    isStudent && Boolean(topicHref) && needsExamProgress && !isSectionHub;
   const primaryHandcraftedLevel = useMemo(() => getPrimaryHandcraftedLevel(level), [level]);
   const applicableLevels = useMemo(() => parseTopicLevels(level), [level]);
   const [activeTab, setActiveTab] = useState('theory');
@@ -459,35 +461,37 @@ const TheoryLayout = ({
           </div>
 
           {/* Progress Bar */}
-          <div style={{ marginBottom: '1.5rem' }}>
-            <div style={{
-              display: 'flex',
-              justifyContent: 'space-between',
-              alignItems: 'center',
-              marginBottom: '0.5rem'
-            }}>
-              <span style={{ fontWeight: '500', color: '#4a5568' }}>
-                Topic Progress
-              </span>
-              <span style={{ fontSize: '0.9rem', color: '#667eea' }}>
-                {progressPercent}%
-              </span>
-            </div>
-            <div style={{
-              width: '100%',
-              height: '8px',
-              background: '#e2e8f0',
-              borderRadius: '4px',
-              overflow: 'hidden'
-            }}>
+          {!hideExamTheoryPracticeForStudent ? (
+            <div style={{ marginBottom: '1.5rem' }}>
               <div style={{
-                width: `${progressPercent}%`,
-                height: '100%',
-                background: 'linear-gradient(90deg, #667eea, #764ba2)',
-                transition: 'width 0.3s ease'
-              }} />
+                display: 'flex',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+                marginBottom: '0.5rem'
+              }}>
+                <span style={{ fontWeight: '500', color: '#4a5568' }}>
+                  Topic Progress
+                </span>
+                <span style={{ fontSize: '0.9rem', color: '#667eea' }}>
+                  {progressPercent}%
+                </span>
+              </div>
+              <div style={{
+                width: '100%',
+                height: '8px',
+                background: '#e2e8f0',
+                borderRadius: '4px',
+                overflow: 'hidden'
+              }}>
+                <div style={{
+                  width: `${progressPercent}%`,
+                  height: '100%',
+                  background: 'linear-gradient(90deg, #667eea, #764ba2)',
+                  transition: 'width 0.3s ease'
+                }} />
+              </div>
             </div>
-          </div>
+          ) : null}
 
           {/* Tabs */}
           <div className="theory-tabs-row">
@@ -500,20 +504,22 @@ const TheoryLayout = ({
                 <span className="theory-tab-btn__icon" aria-hidden>📖</span>
                 <span>Theory</span>
               </button>
-              <button
-                type="button"
-                onClick={() => setActiveTab('exercises')}
-                className={`theory-tab-btn${activeTab === 'exercises' ? ' theory-tab-btn--active' : ''}`}
-              >
-                <span className="theory-tab-btn__icon" aria-hidden>🎯</span>
-                <span>Exercises</span>
-                <span
-                  className="theory-tab-btn__count"
-                  aria-label={`${exerciseTabCount} levels`}
+              {!hideExamTheoryPracticeForStudent ? (
+                <button
+                  type="button"
+                  onClick={() => setActiveTab('exercises')}
+                  className={`theory-tab-btn${activeTab === 'exercises' ? ' theory-tab-btn--active' : ''}`}
                 >
-                  {exerciseTabCount}
-                </span>
-              </button>
+                  <span className="theory-tab-btn__icon" aria-hidden>🎯</span>
+                  <span>Exercises</span>
+                  <span
+                    className="theory-tab-btn__count"
+                    aria-label={`${exerciseTabCount} levels`}
+                  >
+                    {exerciseTabCount}
+                  </span>
+                </button>
+              ) : null}
             </div>
           </div>
           <style jsx>{`
@@ -606,7 +612,7 @@ const TheoryLayout = ({
             </TheorySectionProvider>
           )}
           
-          {activeTab === 'exercises' && (
+          {activeTab === 'exercises' && !hideExamTheoryPracticeForStudent && (
             <div>
               <TheoryTopicLevelsExercisePanel
                 topicHref={topicHref || ''}

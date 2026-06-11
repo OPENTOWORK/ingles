@@ -8,7 +8,7 @@ import { SEQUENTIAL_LOCK_FOR_STUDENTS } from '@/lib/theoryLockConfig';
 import ExamTheoryProgressBar from '@/components/niveles/ExamTheoryProgressBar';
 import NivelesSectionHeader from '@/components/niveles/NivelesSectionHeader';
 
-function ExamTheoryCardContent({ area, initial, percent, unitProgress, count }) {
+function ExamTheoryCardContent({ area, initial, percent, unitProgress, count, showProgress = true }) {
   return (
     <>
       <div className="area-card__head">
@@ -18,14 +18,19 @@ function ExamTheoryCardContent({ area, initial, percent, unitProgress, count }) 
         <span className="area-card__title">{area.key}</span>
       </div>
       <span className="area-card__desc">{area.description}</span>
-      <ExamTheoryProgressBar
-        percent={percent}
-        label={area.key}
-        size="sm"
-        accentColor={area.accent}
-      />
+      {showProgress ? (
+        <ExamTheoryProgressBar
+          percent={percent}
+          label={area.key}
+          size="sm"
+          accentColor={area.accent}
+        />
+      ) : null}
       <span className="area-card__meta">
-        {unitProgress?.completedTopics ?? 0}/{count} temas · {count} topic
+        {showProgress
+          ? `${unitProgress?.completedTopics ?? 0}/${count} temas · `
+          : ''}
+        {count} topic
         {count === 1 ? '' : 's'} →
       </span>
     </>
@@ -38,11 +43,13 @@ export default function ExamTheorySection({ userId, accessToken, isStudent = fal
   const unlockBySlug = Object.fromEntries(unlockStates.map((state) => [state.slug, state]));
 
   const introDescription =
-    `Theory for exam skills — Reading and Use of English, writing, listening, and speaking.${
-      isStudent && SEQUENTIAL_LOCK_FOR_STUDENTS
-        ? ' Complete each part at 100% to unlock the next (students only).'
-        : ''
-    }`;
+    isStudent
+      ? 'Theory for exam skills — Reading and Use of English, writing, listening, and speaking. Open each area for tips by level and part.'
+      : `Theory for exam skills — Reading and Use of English, writing, listening, and speaking.${
+          SEQUENTIAL_LOCK_FOR_STUDENTS
+            ? ' Complete each part at 100% to unlock the next (students only).'
+            : ''
+        }`;
 
   return (
     <section className="section exam-theory-section" id="exam-theory">
@@ -79,6 +86,7 @@ export default function ExamTheorySection({ userId, accessToken, isStudent = fal
                       percent={percent}
                       unitProgress={unitProgress}
                       count={count}
+                      showProgress={!isStudent}
                     />
                     {unlock?.requiredPrevious ? (
                       <p className="exam-theory-card__lock-hint">
@@ -96,6 +104,7 @@ export default function ExamTheorySection({ userId, accessToken, isStudent = fal
                     percent={percent}
                     unitProgress={unitProgress}
                     count={count}
+                    showProgress={!isStudent}
                   />
                 </Link>
               )}
@@ -104,17 +113,19 @@ export default function ExamTheorySection({ userId, accessToken, isStudent = fal
         })}
       </ul>
 
-      <div className="exam-theory-global-progress">
-        <ExamTheoryProgressBar
-          percent={globalPercent}
-          label="Progreso total Exam theory"
-          size="md"
-          accentColor="#1cb0f6"
-        />
-        <p className="exam-theory-global-hint">
-          Media de las 4 unidades según temas completados en teoría.
-        </p>
-      </div>
+      {!isStudent ? (
+        <div className="exam-theory-global-progress">
+          <ExamTheoryProgressBar
+            percent={globalPercent}
+            label="Progreso total Exam theory"
+            size="md"
+            accentColor="#1cb0f6"
+          />
+          <p className="exam-theory-global-hint">
+            Media de las 4 unidades según temas completados en teoría.
+          </p>
+        </div>
+      ) : null}
     </section>
   );
 }

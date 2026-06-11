@@ -1,15 +1,23 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import {
+  CheckCircle2,
+  ClipboardList,
+  Clock,
+  Dumbbell,
+  Flame,
+  TrendingUp,
+} from 'lucide-react';
 import styles from './ProfileGeneralStats.module.css';
 
 const KPI_CARDS = [
-  { key: 'completedExams', icon: '📝', label: 'Activities completed' },
-  { key: 'totalCorrect', icon: '✅', label: 'Correct answers' },
-  { key: 'trainingCount', icon: '💪', label: 'Training sessions' },
-  { key: 'levelEstimate', icon: '🎯', label: 'Estimated level' },
-  { key: 'studyStreak', icon: '🔥', label: 'Day streak' },
-  { key: 'totalStudyMinutes', icon: '⏱️', label: 'Study time', format: 'time' },
+  { key: 'completedExams', Icon: ClipboardList, tone: 'blue', label: 'Activities completed' },
+  { key: 'totalCorrect', Icon: CheckCircle2, tone: 'green', label: 'Correct answers' },
+  { key: 'trainingCount', Icon: Dumbbell, tone: 'slate', label: 'Training sessions' },
+  { key: 'levelEstimate', Icon: TrendingUp, tone: 'violet', label: 'Estimated level' },
+  { key: 'studyStreak', Icon: Flame, tone: 'amber', label: 'Day streak' },
+  { key: 'totalStudyMinutes', Icon: Clock, tone: 'cyan', label: 'Study time', format: 'time' },
 ];
 
 function formatValue(key, value, format) {
@@ -57,7 +65,7 @@ export default function ProfileGeneralStats({ accessToken, onSummaryLoaded }) {
     return () => {
       cancelled = true;
     };
-  }, [accessToken]);
+  }, [accessToken, onSummaryLoaded]);
 
   if (state.status === 'loading') {
     return <div className={styles.loading}>Loading stats from your progress data…</div>;
@@ -74,16 +82,23 @@ export default function ProfileGeneralStats({ accessToken, onSummaryLoaded }) {
   const summary = state.data?.summary || {};
 
   return (
-    <div className={styles.grid}>
-      {KPI_CARDS.map(({ key, icon, label, format }) => (
-        <div key={key} className={styles.card}>
-          <div className={styles.icon}>{icon}</div>
-          <div className={styles.content}>
-            <div className={styles.value}>{formatValue(key, summary[key], format)}</div>
-            <div className={styles.label}>{label}</div>
+    <>
+      <p className={styles.sourceNote}>
+        Live totals from your practice in Levels, Theory and Training (Supabase).
+      </p>
+      <div className={styles.grid}>
+        {KPI_CARDS.map(({ key, Icon, tone, label, format }) => (
+          <div key={key} className={styles.card}>
+            <div className={`${styles.iconWrap} ${styles[`iconWrap--${tone}`]}`} aria-hidden>
+              <Icon className={styles.icon} strokeWidth={2} />
+            </div>
+            <div className={styles.content}>
+              <div className={styles.value}>{formatValue(key, summary[key], format)}</div>
+              <div className={styles.label}>{label}</div>
+            </div>
           </div>
-        </div>
-      ))}
-    </div>
+        ))}
+      </div>
+    </>
   );
 }

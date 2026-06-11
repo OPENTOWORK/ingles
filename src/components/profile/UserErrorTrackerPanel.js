@@ -8,6 +8,7 @@ import {
   markPracticeErrorReviewed,
 } from '@/lib/errorTracker';
 import { summarizePracticeErrors } from '@/lib/fetchUserPracticeErrors';
+import ProfileCollapsibleSection from '@/components/perfil/ProfileCollapsibleSection';
 import styles from './UserErrorTrackerPanel.module.css';
 
 const SOURCE_FILTERS = ['All', 'Exam practice', 'Theory'];
@@ -258,15 +259,11 @@ export default function UserErrorTrackerPanel({ userId = null }) {
   };
 
   return (
-    <section className={styles.panel}>
-      <header className={styles.hero}>
-        <h2 className={styles.title}>
-          <span aria-hidden="true">🧠</span> My Error Tracker
-        </h2>
+    <div className="profile-tab-panels">
+      <ProfileCollapsibleSection title="Error tracker" defaultOpen>
         <p className={styles.subtitle}>
           Review questions and exercises where you scored below 50%. Practise again to improve.
         </p>
-      </header>
 
       {!loading && !loadError && errors.length > 0 ? (
         <div className={styles.stats}>
@@ -452,6 +449,7 @@ export default function UserErrorTrackerPanel({ userId = null }) {
         onMarkLearned={() => void handleMarkLearned()}
         marking={markingLearned}
       />
-    </section>
+      </ProfileCollapsibleSection>
+    </div>
   );
 }

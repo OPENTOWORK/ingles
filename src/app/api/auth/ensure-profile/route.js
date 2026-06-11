@@ -5,6 +5,7 @@ import {
   getSupabaseServiceRoleKey,
   getSupabaseUrl,
 } from '@/lib/supabaseEnv';
+import { pickRandomMascotVariant } from '@/lib/profileDefaultAvatar';
 
 const supabaseUrl = getSupabaseUrl();
 const supabaseAnonKey = getSupabaseAnonKey();
@@ -59,6 +60,20 @@ export async function POST(req) {
       .maybeSingle();
 
     if (existing?.id) {
+      const { data: profileRow } = await adminClient
+        .from('Usuarios_y_Perfil_profiles')
+        .select('mascot_variant')
+        .eq('user_id', user.id)
+        .maybeSingle();
+
+      if (profileRow?.mascot_variant == null) {
+        const mascotVariant = pickRandomMascotVariant();
+        await adminClient
+          .from('Usuarios_y_Perfil_profiles')
+          .update({ mascot_variant: mascotVariant })
+          .eq('user_id', user.id);
+      }
+
       return NextResponse.json({ ok: true, created: false });
     }
 
@@ -76,6 +91,16 @@ export async function POST(req) {
     if (upsertError) {
       return NextResponse.json({ error: upsertError.message }, { status: 500 });
     }
+
+    const mascotVariant = pickRandomMascotVariant();
+    await adminClient.from('Usuarios_y_Perfil_profiles').upsert(
+      {
+        user_id: user.id,
+        idioma_preferido: 'es',
+        mascot_variant: mascotVariant,
+      },
+      { onConflict: 'user_id', ignoreDuplicates: true },
+    );
 
     return NextResponse.json({ ok: true, created: true });
   } catch (err) {

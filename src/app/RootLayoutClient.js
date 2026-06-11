@@ -8,6 +8,7 @@ import { normalizeRoleName, getRoleNameByUserId, peekCachedRoleName } from '@/ut
 import { performLogout } from '@/utils/logout';
 import { isPublicPath } from '@/utils/publicRoutes';
 import Link from 'next/link';
+import DraloTagline from '@/components/DraloTagline';
 import { UserRoleProvider } from '../context/UserRoleContext';
 import { GuidedTourProvider } from '../context/GuidedTourContext';
 import { PlacementAccessProvider } from '../context/PlacementAccessContext';
@@ -418,6 +419,9 @@ export default function RootLayoutClient({ children }) {
                 <Link href="/contacto">Contacta con nosotros</Link>
               </li>
             </ul>
+          </div>
+          <div className="legal-footer-column legal-footer-column--tagline">
+            <DraloTagline className="dralo-tagline--footer" />
           </div>
         </div>
         <p className="legal-footer-copy">

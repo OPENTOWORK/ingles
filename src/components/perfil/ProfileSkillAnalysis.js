@@ -10,6 +10,7 @@ import {
   ResponsiveContainer,
   Tooltip,
 } from 'recharts';
+import ProfileCollapsibleSection from '@/components/perfil/ProfileCollapsibleSection';
 import { supabase } from '@/utils/supabaseClient';
 import { buildSkillAnalysisFromLevels, SKILL_ANALYSIS_KEYS, SKILL_LABELS } from '@/lib/examStatisticsFromLevels';
 import { fetchLevelsPracticeData } from '@/lib/fetchLevelsPracticeData';
@@ -72,28 +73,23 @@ export default function ProfileSkillAnalysis({ userId }) {
 
   if (loading) {
     return (
-      <>
-        <section className="profile-section">
-          <p className="section-desc">Loading skills analysis…</p>
-        </section>
-      </>
+      <ProfileCollapsibleSection title="Skills analysis">
+        <p className="section-desc">Loading skills analysis…</p>
+      </ProfileCollapsibleSection>
     );
   }
 
   if (error) {
     return (
-      <section className="profile-section">
+      <ProfileCollapsibleSection title="Skills analysis">
         <p className="section-desc">{error}</p>
-      </section>
+      </ProfileCollapsibleSection>
     );
   }
 
   return (
     <>
-      <section className="profile-section">
-        <div className="section-head">
-          <h2>🎯 Skills analysis</h2>
-        </div>
+      <ProfileCollapsibleSection title="Skills analysis">
         {!hasData ? (
           <p className="section-desc">
             No Levels data yet. Practise in{' '}
@@ -115,12 +111,9 @@ export default function ProfileSkillAnalysis({ userId }) {
             );
           })}
         </div>
-      </section>
+      </ProfileCollapsibleSection>
 
-      <section className="profile-section">
-        <div className="section-head">
-          <h2>📊 Skills radar</h2>
-        </div>
+      <ProfileCollapsibleSection title="Skills radar">
         <ResponsiveContainer width="100%" height={400}>
           <RadarChart data={radarData}>
             <PolarGrid />
@@ -137,7 +130,7 @@ export default function ProfileSkillAnalysis({ userId }) {
             <Tooltip />
           </RadarChart>
         </ResponsiveContainer>
-      </section>
+      </ProfileCollapsibleSection>
     </>
   );
 }
