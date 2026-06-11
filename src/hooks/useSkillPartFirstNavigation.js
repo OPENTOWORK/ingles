@@ -110,18 +110,22 @@ export function useSkillPartFirstNavigation({
     onRefreshProgress?.();
   }, [active, selectedPartNumber, examPracticeOpen, onRefreshProgress]);
 
+  // El auto-open desde ?examen= es solo para el deep link inicial: una vez
+  // consumido, la navegación manual (Keep practicing / All parts) no debe
+  // volver a abrir el examen automáticamente.
   const handleSelectPart = useCallback((partNumber) => {
     setSelectedPartNumber(partNumber);
-    autoExamRef.current = false;
+    autoExamRef.current = true;
   }, []);
 
   const handleBackToParts = useCallback(() => {
     setSelectedPartNumber(null);
-    autoExamRef.current = false;
+    autoExamRef.current = true;
   }, []);
 
   const handleSelectExamForPart = useCallback(
     (slot) => {
+      autoExamRef.current = true;
       onSelectExam(slot);
     },
     [onSelectExam],
@@ -174,6 +178,7 @@ export function useSkillPartFirstNavigation({
     navigation,
     hidePartTabs: active && Boolean(selectedPartNumber),
     setSelectedPartNumber,
+    backToParts: handleBackToParts,
     skillTheme: active ? getSkillPracticeThemeKey(skillRoute) : null,
   };
 }

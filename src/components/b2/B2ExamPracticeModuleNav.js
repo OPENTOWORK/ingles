@@ -16,6 +16,7 @@ export default function B2ExamPracticeModuleNav({
   onContinueInPage,
   overviewHref,
   overviewLabel,
+  onBackClick,
   nextPartLabel,
   skillPracticeMode = false,
   skillPracticeTheme = null,
@@ -30,7 +31,12 @@ export default function B2ExamPracticeModuleNav({
     slug: levelSlug,
   });
   const overview = getLevelOverviewNav(levelSlug, lang);
-  const backLabel = overviewLabel || overview.label;
+  // Con onBackClick el botón vuelve al menú de partes, no al overview: etiqueta acorde.
+  const backLabel = onBackClick
+    ? isEn
+      ? 'Back to parts'
+      : 'Volver a las partes'
+    : overviewLabel || overview.label;
   const backHref = overviewHref || nav.overviewHref || overview.href;
 
   let continueLabel = '';
@@ -60,10 +66,21 @@ export default function B2ExamPracticeModuleNav({
       data-skill-theme={skillPracticeMode && skillPracticeTheme ? skillPracticeTheme : undefined}
       aria-label={isEn ? 'Module navigation' : 'Navegación del módulo'}
     >
-      <Link href={backHref} className="levels-exam-module-nav__btn levels-exam-module-nav__btn--back">
-        <span aria-hidden="true">←</span>
-        {backLabel}
-      </Link>
+      {onBackClick ? (
+        <button
+          type="button"
+          className="levels-exam-module-nav__btn levels-exam-module-nav__btn--back"
+          onClick={onBackClick}
+        >
+          <span aria-hidden="true">←</span>
+          {backLabel}
+        </button>
+      ) : (
+        <Link href={backHref} className="levels-exam-module-nav__btn levels-exam-module-nav__btn--back">
+          <span aria-hidden="true">←</span>
+          {backLabel}
+        </Link>
+      )}
 
       {skillPracticeMode || nav.continueMode === 'in-page' ? (
         <button

@@ -22,6 +22,11 @@ secrets/
 .env.development.local
 .env.test.local
 .env.production.local
+.env.production.pulled
+.env.vercel.local
+
+# Local test artifacts (writing correction runs, backups)
+scripts/generated/
 
 # Vercel
 .vercel

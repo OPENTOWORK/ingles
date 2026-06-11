@@ -1,6 +1,8 @@
 'use client';
 
+import Link from 'next/link';
 import TheoryLevelStars from '@/components/theory/TheoryLevelStars';
+import { getLevelOverviewNav } from '@/utils/levelOverviewNav';
 import {
   aggregatePartProgress,
   filterProgressByPart,
@@ -130,6 +132,8 @@ export function SkillPartFirstNavigation({
     partTopics.map((t) => [t.partNumber, t.shortLabel || t.displayName]),
   );
 
+  const overview = getLevelOverviewNav('b2', lang);
+
   if (!selectedPartNumber) {
     return (
       <section
@@ -137,6 +141,12 @@ export function SkillPartFirstNavigation({
         data-skill-theme={skillTheme}
         aria-label={en ? 'Choose a part to practice' : 'Elige una parte'}
       >
+        <div className={styles.headerRow}>
+          <Link href={overview.href} className={styles.backBtn}>
+            ← {overview.label}
+          </Link>
+        </div>
+
         <p className={styles.eyebrow}>{en ? 'Skill practice' : 'Práctica por skill'}</p>
         <h2 className={styles.title}>{en ? 'Pick a part' : 'Elige una parte'}</h2>
         <p className={styles.subtitle}>

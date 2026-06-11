@@ -2,11 +2,9 @@
 
 import { useState } from 'react';
 import { useDraloXpOptional } from '@/context/DraloXpContext';
-import { callDraloAi } from '@/lib/ai/draloAiClient';
+import { buildClientApiUrl } from '@/utils/clientApiUrl';
 import { formatWritingFeedbackHtml } from '@/lib/formatWritingFeedbackHtml';
 import { trackWritingErrors } from '@/lib/errorTracker';
-
-const LEVELS = ['A2', 'B1', 'B2', 'C1', 'C2'];
 
 const WRITING_TYPES = [
   'essay',
@@ -14,9 +12,27 @@ const WRITING_TYPES = [
   'article',
   'review',
   'report',
-  'proposal',
-  'story',
-  'message',
+  'formal letter',
+  'SMS / WhatsApp',
+  'social media',
+];
+
+const TARGET_LEVELS = ['B1', 'B1+', 'low B2', 'B2', 'B2+'];
+
+/* Mismo mapa de readiness que el panel de Practice Mode (V2). */
+const READINESS_UI = {
+  'b2-ready': { icon: '✅', label: 'B2-ready', variant: 'pass' },
+  borderline: { icon: '🟡', label: 'Borderline — close to B2', variant: 'warn' },
+  'not-b2-ready': { icon: '🔵', label: 'Not B2-ready yet', variant: 'info' },
+  'needs-improvement': { icon: '🔴', label: 'Needs improvement', variant: 'fail' },
+  'score-pass-unverified': { icon: '✅', label: 'Pass (level not detected)', variant: 'pass' },
+};
+
+const CRITERIA = [
+  { key: 'content', label: 'Content' },
+  { key: 'communication', label: 'Communicative Achievement' },
+  { key: 'organisation', label: 'Organisation' },
+  { key: 'language', label: 'Language' },
 ];
 
 function countWords(text) {
@@ -27,26 +43,29 @@ function countWords(text) {
 }
 
 /**
- * Exam Coach — writing correction via POST /api/dralo-ai/ (no OpenAI en cliente).
+ * Writing Correction sandbox — corrige writings reales con su task original
+ * usando el MISMO motor server-side que Practice Mode (/api/feedback/essay,
+ * Writing Correction V2 detrás de flags de entorno locales).
+ *
+ * No toca Supabase, no afecta a Exam Mode ni al contenido de los exámenes.
  */
 export default function LevelsWritingCorrectionPanel({
   defaultLevel = 'B2',
-  level: levelProp,
-  onLevelChange,
-  hideLevelSelector = false,
+  // Props legacy del studio; se aceptan para no romper, pero el motor usa targetLevel.
+  level: _levelProp,
+  onLevelChange: _onLevelChange,
+  hideLevelSelector: _hideLevelSelector = false,
   variant = 'levels',
 }) {
-  const initialLevel = LEVELS.includes(String(defaultLevel || '').toUpperCase())
-    ? String(defaultLevel).toUpperCase()
-    : 'B2';
-
-  const [internalLevel, setInternalLevel] = useState(initialLevel);
-  const level = levelProp ?? internalLevel;
-  const setLevel = onLevelChange ?? setInternalLevel;
   const isDralo = variant === 'dralo-ai';
   const [writingType, setWritingType] = useState('essay');
+  const [targetLevel, setTargetLevel] = useState(
+    TARGET_LEVELS.includes(defaultLevel) ? defaultLevel : 'B2',
+  );
+  const [taskPrompt, setTaskPrompt] = useState('');
   const [studentWriting, setStudentWriting] = useState('');
   const [result, setResult] = useState('');
+  const [scores, setScores] = useState(null);
   const [error, setError] = useState('');
   const [shortWarning, setShortWarning] = useState('');
   const [loading, setLoading] = useState(false);
@@ -57,6 +76,7 @@ export default function LevelsWritingCorrectionPanel({
     setError('');
     setShortWarning('');
     setResult('');
+    setScores(null);
 
     const trimmed = studentWriting.trim();
     if (!trimmed) {
@@ -66,25 +86,50 @@ export default function LevelsWritingCorrectionPanel({
 
     const words = countWords(trimmed);
     if (words < 10) {
-      setShortWarning(
-        'This text is very short, so the level estimate may be limited.',
-      );
+      setShortWarning('This text is very short, so the level estimate may be limited.');
     }
-
-    const userInput = `Writing type: ${writingType}\n\nStudent writing:\n${trimmed}`;
 
     setLoading(true);
     try {
-      const text = await callDraloAi({
-        assistantType: 'exam',
-        taskType: 'writing_correction',
-        level,
-        userInput,
+      const res = await fetch(buildClientApiUrl('/api/feedback/essay'), {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          essay: trimmed,
+          level: 'b2',
+          wordMin: 140,
+          wordMax: 190,
+          taskContext: {
+            partLabel: `Dralo AI Writing sandbox — ${writingType}`,
+            partDescription: `Task type: ${writingType}. The student's target level is ${targetLevel}.`,
+            instructions: taskPrompt.trim() || undefined,
+          },
+        }),
       });
-      setResult(text);
+
+      const raw = await res.text();
+      let data = {};
+      try {
+        data = raw ? JSON.parse(raw) : {};
+      } catch {
+        throw new Error('Invalid response from the correction service.');
+      }
+      if (!res.ok) {
+        throw new Error(data.error || `Error ${res.status}`);
+      }
+
+      const feedbackText = String(data.feedback || '').trim();
+      if (!feedbackText) {
+        throw new Error('The examiner returned no feedback. Please try again.');
+      }
+
+      setResult(feedbackText);
+      if (data.scores && typeof data.scores === 'object') {
+        setScores(data.scores);
+      }
 
       if (isDralo && draloXp) {
-        void draloXp.awardForCorrectAnswer(`writing-correction-${level}`, {
+        void draloXp.awardForCorrectAnswer(`writing-correction-${targetLevel}`, {
           correct: true,
           kind: 'text',
           scorePercent: words >= 140 ? 82 : words >= 60 ? 68 : 52,
@@ -92,11 +137,11 @@ export default function LevelsWritingCorrectionPanel({
       }
 
       void trackWritingErrors({
-        level,
+        level: targetLevel,
         source: 'Writing',
         skill: 'Writing',
         userText: trimmed,
-        correctedText: text,
+        correctedText: feedbackText,
       }).catch(() => {});
     } catch (err) {
       setError(err?.message || 'Correction request failed. Please try again.');
@@ -131,31 +176,17 @@ export default function LevelsWritingCorrectionPanel({
   const feedbackBodyClass = isDralo
     ? 'dralo-ai-markdown dralo-ai-passage dralo-ai-writing-feedback levels-b2-writing-panel__feedback-body'
     : 'levels-b2-writing-panel__feedback-body';
-  const feedbackTitleClass = isDralo ? 'dralo-ai-writing-correction__feedback-title' : 'levels-exam-split__section-title';
+  const feedbackTitleClass = isDralo
+    ? 'dralo-ai-writing-correction__feedback-title'
+    : 'levels-exam-split__section-title';
+
+  const readinessUi = READINESS_UI[scores?.readiness?.key] || null;
+  const totalVariant = readinessUi ? readinessUi.variant : scores?.passed ? 'pass' : 'fail';
 
   return (
     <form className={formClass} onSubmit={handleSubmit}>
       <div className={rowClass}>
-        {!hideLevelSelector ? (
-          <label className={fieldClass}>
-            <span className={labelClass}>Level</span>
-            <select
-              className={selectClass}
-              value={level}
-              onChange={(e) => setLevel(e.target.value)}
-              disabled={loading}
-              aria-label="CEFR level"
-            >
-              {LEVELS.map((l) => (
-                <option key={l} value={l}>
-                  {l}
-                </option>
-              ))}
-            </select>
-          </label>
-        ) : null}
-
-        <label className={`${fieldClass}${hideLevelSelector ? ` ${fieldClass}--full` : ''}`}>
+        <label className={fieldClass}>
           <span className={labelClass}>Writing type</span>
           <select
             className={selectClass}
@@ -171,7 +202,38 @@ export default function LevelsWritingCorrectionPanel({
             ))}
           </select>
         </label>
+
+        <label className={fieldClass}>
+          <span className={labelClass}>Target level</span>
+          <select
+            className={selectClass}
+            value={targetLevel}
+            onChange={(e) => setTargetLevel(e.target.value)}
+            disabled={loading}
+            aria-label="Target level"
+          >
+            {TARGET_LEVELS.map((l) => (
+              <option key={l} value={l}>
+                {l}
+              </option>
+            ))}
+          </select>
+        </label>
       </div>
+
+      <label className={`${fieldClass} ${isDralo ? '' : 'levels-writing-correction__field--full'}`}>
+        <span className={labelClass}>Task / question</span>
+        <textarea
+          className={textareaClass}
+          rows={4}
+          placeholder="Paste the original task here, e.g. Fast food is always a bad thing to eat. Do you agree? Give reasons for your answer."
+          value={taskPrompt}
+          onChange={(e) => setTaskPrompt(e.target.value)}
+          disabled={loading}
+          spellCheck
+          aria-label="Task or question prompt"
+        />
+      </label>
 
       <label className={`${fieldClass} ${isDralo ? '' : 'levels-writing-correction__field--full'}`}>
         <span className={labelClass}>Your writing</span>
@@ -200,15 +262,43 @@ export default function LevelsWritingCorrectionPanel({
       ) : null}
 
       <div className={actionsClass}>
-        <button
-          type="submit"
-          className={submitClass}
-          disabled={loading}
-          aria-busy={loading}
-        >
-          {loading ? 'Correcting…' : 'Correct writing'}
+        <button type="submit" className={submitClass} disabled={loading} aria-busy={loading}>
+          {loading ? 'Correcting…' : 'Check with Dralo'}
         </button>
       </div>
+
+      {scores ? (
+        <div className="levels-b2-writing-panel__scores">
+          <p className={feedbackTitleClass}>Writing scores</p>
+          {scores.cefr ? (
+            <p className="levels-b2-writing-panel__cefr">
+              Estimated CEFR level: <strong>{scores.cefr}</strong>
+            </p>
+          ) : null}
+          <div className="levels-b2-writing-panel__scores-grid">
+            {CRITERIA.map(({ key, label }) => (
+              <div key={key} className="levels-b2-writing-panel__score-card">
+                <span className="levels-b2-writing-panel__score-label">{label}</span>
+                <strong className="levels-b2-writing-panel__score-value">{scores[key] ?? 0}/5</strong>
+              </div>
+            ))}
+          </div>
+          <div className={`levels-b2-writing-panel__total levels-b2-writing-panel__total--${totalVariant}`}>
+            <span>
+              Total: <strong>{scores.total ?? 0}/20</strong>
+              {' · '}
+              Pass mark: {scores.required ?? 12}/20
+            </span>
+            <span className="levels-b2-writing-panel__readiness">
+              {readinessUi
+                ? `${readinessUi.icon} ${readinessUi.label}`
+                : scores.passed
+                  ? '✅ Pass'
+                  : '❌ Not yet'}
+            </span>
+          </div>
+        </div>
+      ) : null}
 
       {result ? (
         <div className={feedbackWrapClass}>

@@ -294,6 +294,16 @@ function splitCorrectionSections(sectionText) {
   return sections;
 }
 
+/** Normaliza para comparar Original vs Correct: trim, lowercase, puntuación final, espacios. */
+function normalizeCorrectionComparable(text) {
+  return String(text || '')
+    .trim()
+    .toLowerCase()
+    .replace(/["'""'']/g, '')
+    .replace(/[.,;:!?…]+$/, '')
+    .replace(/\s+/g, ' ');
+}
+
 function parseBlocksFromSection(sectionBody, sectionType = null) {
   const text = sanitizeCorrectionsSectionText(sectionBody);
   if (!text) return [];
@@ -317,6 +327,16 @@ function parseBlocksFromSection(sectionBody, sectionType = null) {
 
     if (!original && !problemClean && !correct) continue;
 
+    // Card defectuosa: el modelo a veces repite el texto original como "corrección"
+    // (Original === Correct). Confunde al alumno; se descarta la card entera.
+    if (
+      original &&
+      correct &&
+      normalizeCorrectionComparable(original) === normalizeCorrectionComparable(correct)
+    ) {
+      continue;
+    }
+
     const inferredType = normalizeErrorType(typeRaw, problemClean, whyClean, original);
     blocks.push({
       original,
@@ -333,7 +353,15 @@ function parseBlocksFromSection(sectionBody, sectionType = null) {
 /** Parse Original / Problem / Correct / Why blocks from a corrections section. */
 export function parseWritingCorrectionBlocks(sectionText) {
   const sections = splitCorrectionSections(sectionText);
-  return sections.flatMap(({ type, body }) => parseBlocksFromSection(body, type));
+  const blocks = sections.flatMap(({ type, body }) => parseBlocksFromSection(body, type));
+  // Dedupe: el modelo a veces repite la misma card (mismo Original + Correct).
+  const seen = new Set();
+  return blocks.filter((b) => {
+    const key = `${normalizeCorrectionComparable(b.original)}|${normalizeCorrectionComparable(b.correct)}`;
+    if (seen.has(key)) return false;
+    seen.add(key);
+    return true;
+  });
 }
 
 function renderCorrectionBlock({ original, problem, correct, why = '', type = 'grammar' }) {

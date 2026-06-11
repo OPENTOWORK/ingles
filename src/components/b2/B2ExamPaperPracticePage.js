@@ -639,9 +639,23 @@ function B2ExamPaperPracticePageInner({
     scoring.setExamPracticeOpen(false);
     void scoring.refreshPuntuacionesProgress();
     if (typeof window !== 'undefined') {
+      // Mantener ?part= pero quitar ?examen= para que un refresh se quede en el picker.
+      const url = new URL(window.location.href);
+      url.searchParams.delete('examen');
+      window.history.replaceState(null, '', url.pathname + url.search);
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
   }, [scoring]);
+
+  const handleBackToParts = useCallback(() => {
+    scoring.setExamPracticeOpen(false);
+    skillNav.backToParts();
+    void scoring.refreshPuntuacionesProgress();
+    if (typeof window !== 'undefined') {
+      window.history.replaceState(null, '', window.location.pathname);
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  }, [scoring, skillNav]);
 
   const displayPartsData = useMemo(() => {
     if (!skillNav.active || !skillNav.selectedPartNumber) return partsData;
@@ -3710,6 +3724,7 @@ function B2ExamPaperPracticePageInner({
         skillPracticeMode={isSkillPracticeSession}
         skillPracticeTheme={skillNav.skillTheme}
         onContinueInPage={isSkillPracticeSession ? handleKeepPracticing : handleContinueInPage}
+        onBackClick={isSkillPracticeSession ? handleBackToParts : undefined}
         lang={lang}
       />
       </B2ExamPracticeChrome>

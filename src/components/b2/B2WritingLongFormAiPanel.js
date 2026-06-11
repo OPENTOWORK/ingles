@@ -18,6 +18,15 @@ const CRITERIA = [
   { key: 'language', label: 'Language' },
 ];
 
+/* Mensaje principal por readiness (V2). El binario ✅/❌ queda solo como fallback legacy. */
+const READINESS_UI = {
+  'b2-ready': { icon: '✅', label: 'B2-ready', variant: 'pass' },
+  borderline: { icon: '🟡', label: 'Borderline — close to B2', variant: 'warn' },
+  'not-b2-ready': { icon: '🔵', label: 'Not B2-ready yet', variant: 'info' },
+  'needs-improvement': { icon: '🔴', label: 'Needs improvement', variant: 'fail' },
+  'score-pass-unverified': { icon: '✅', label: 'Pass (level not detected)', variant: 'pass' },
+};
+
 /**
  * Long-form writing area + B2 exam-style AI correction (Dralo).
  * In `examMode` the panel only offers textarea + word count + autosave:
@@ -271,20 +280,30 @@ export default function B2WritingLongFormAiPanel({
               </div>
             ))}
           </div>
-          <div
-            className={`levels-b2-writing-panel__total ${
-              scores.passed
-                ? 'levels-b2-writing-panel__total--pass'
-                : 'levels-b2-writing-panel__total--fail'
-            }`}
-          >
-            <span>
-              {isEn ? 'Total' : 'Total'}: <strong>{scores.total ?? 0}/20</strong>
-              {' · '}
-              {isEn ? 'Pass' : 'Aprobado'}: {scores.required ?? 12}/20
-            </span>
-            <span>{scores.passed ? (isEn ? '✅ Pass' : '✅ Aprobado') : (isEn ? '❌ Not yet' : '❌ Aún no')}</span>
-          </div>
+          {(() => {
+            const readinessUi = READINESS_UI[scores.readiness?.key] || null;
+            const variant = readinessUi ? readinessUi.variant : scores.passed ? 'pass' : 'fail';
+            return (
+              <div className={`levels-b2-writing-panel__total levels-b2-writing-panel__total--${variant}`}>
+                <span>
+                  {isEn ? 'Total' : 'Total'}: <strong>{scores.total ?? 0}/20</strong>
+                  {' · '}
+                  {isEn ? 'Pass mark' : 'Nota de corte'}: {scores.required ?? 12}/20
+                </span>
+                <span className="levels-b2-writing-panel__readiness">
+                  {readinessUi
+                    ? `${readinessUi.icon} ${readinessUi.label}`
+                    : scores.passed
+                      ? isEn
+                        ? '✅ Pass'
+                        : '✅ Aprobado'
+                      : isEn
+                        ? '❌ Not yet'
+                        : '❌ Aún no'}
+                </span>
+              </div>
+            );
+          })()}
         </div>
       ) : null}
 

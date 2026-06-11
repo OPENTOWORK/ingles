@@ -240,6 +240,8 @@
 .backBtn {
   display: inline-flex;
   align-items: center;
+  gap: 0.3rem;
+  text-decoration: none;
   padding: 0.35rem 0.7rem;
   border-radius: 8px;
   border: 1px solid var(--skill-border);
