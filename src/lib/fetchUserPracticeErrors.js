@@ -1,3 +1,4 @@
+import { getLevelExamModules } from '@/data/b2ExamModuleNav';
 import { skillFromPartNumber } from '@/lib/examStatisticsFromLevels';
 import { findTheoryApartadoForTopicHref } from '@/lib/teoriaProgress';
 import { normalizeTopicHref } from '@/lib/normalizeTopicHref';
@@ -44,9 +45,16 @@ function skillFolderForPart(levelSlug, parteNumero) {
 export function buildExamPracticeHref({ levelSlug, parteNumero, examSlot }) {
   const slug = normalizeLevelSlug(levelSlug) || 'b2';
   const part = Number(parteNumero) || 1;
-  const folder = skillFolderForPart(slug, part);
-  const base = `/niveles/${slug}/${folder}/${part}`;
-  return examSlot ? `${base}?examen=${examSlot}` : base;
+  const slot = Number(examSlot) || 1;
+  const modules = getLevelExamModules(slug);
+  const module = modules.find((m) => part >= m.partMin && part <= m.partMax);
+  if (!module?.href) {
+    return `/niveles/${slug}`;
+  }
+  const params = new URLSearchParams();
+  params.set('examen', String(slot));
+  params.set('part', String(part));
+  return `${module.href}?${params.toString()}`;
 }
 
 function findTopicTitle(topicHref) {

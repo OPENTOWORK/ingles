@@ -108,7 +108,7 @@ export default function ExamTheoryPartTipsSection({ sectionSlug, sectionAccent =
                     className="exam-theory-parts__card-cta"
                     style={{ color: sectionAccent }}
                   >
-                    Tips &amp; practice →
+                    Tips →
                   </span>
                 </Link>
               </li>

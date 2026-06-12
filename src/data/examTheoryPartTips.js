@@ -20,6 +20,7 @@ import { partInfo as c2Rue } from '@/data/part-info/c2-reading-and-use-of-englis
 import { partInfo as c2Listening } from '@/data/part-info/c2-listening';
 import { partInfo as c2Writing } from '@/data/part-info/c2-writing';
 import { partInfo as c2Speaking } from '@/data/part-info/c2-speaking';
+import { buildExamTheoryPartTipsHref } from '@/lib/examPartTipsHref';
 
 const PART_INFO_REGISTRY = {
   'a1-reading-and-use-of-english': a1Rue,
@@ -47,16 +48,11 @@ const PART_INFO_REGISTRY = {
 
 const CEFR_ORDER = ['A2', 'B1', 'B2', 'C1', 'C2'];
 
-/**
- * @param {string} href
- * @returns {string|null} exam theory slug (reading-and-use-of-english | writing | listening | speaking)
- */
-export function examTheorySlugFromPartHref(href) {
-  if (!href || href.includes('speaking-lab')) return null;
-  if (/\/writing\//.test(href)) return 'writing';
-  if (/\/listening\//.test(href)) return 'listening';
-  if (/\/speaking\//.test(href)) return 'speaking';
-  if (/\/reading-and-use-of-english\//.test(href)) {
+function examTheorySlugFromSkillPath(skillPath, href) {
+  if (skillPath === 'writing') return 'writing';
+  if (skillPath === 'listening') return 'listening';
+  if (skillPath === 'speaking') return 'speaking';
+  if (skillPath === 'reading-and-use-of-english') {
     const a2WritingPart = /\/a2\/reading-and-use-of-english\/part-[67]\/?$/i.test(href);
     return a2WritingPart ? 'writing' : 'reading-and-use-of-english';
   }
@@ -65,9 +61,32 @@ export function examTheorySlugFromPartHref(href) {
 
 /**
  * @param {string} href
+ * @returns {string|null} exam theory slug (reading-and-use-of-english | writing | listening | speaking)
+ */
+export function examTheorySlugFromPartHref(href) {
+  if (!href || href.includes('speaking-lab')) return null;
+
+  const teoria = href.match(
+    /^\/teoria\/exam-part-tips\/[^/]+\/(reading-and-use-of-english|writing|listening|speaking)\//i,
+  );
+  if (teoria) {
+    return examTheorySlugFromSkillPath(teoria[1], href);
+  }
+
+  if (/\/writing\//.test(href)) return 'writing';
+  if (/\/listening\//.test(href)) return 'listening';
+  if (/\/speaking\//.test(href)) return 'speaking';
+  if (/\/reading-and-use-of-english\//.test(href)) {
+    return examTheorySlugFromSkillPath('reading-and-use-of-english', href);
+  }
+  return null;
+}
+
+/**
+ * @param {string} href
  * @returns {{ levelSlug: string, partKey: string, registryKey: string } | null}
  */
-function parsePartHref(href) {
+export function parsePartHref(href) {
   if (!href) return null;
   const withPart = href.match(
     /^\/niveles\/([a-z0-9]+)\/(reading-and-use-of-english|writing|listening|speaking)\/part-(\d+)\/?$/i,
@@ -92,6 +111,22 @@ function parsePartHref(href) {
     };
   }
   return null;
+}
+
+export function getExamPartTipsMeta(levelSlug, skillFolder, partParam, fallbackTitle = '') {
+  const partKey = String(partParam || '').replace(/^part-/, '');
+  const registryKey = `${levelSlug}-${skillFolder}`;
+  const bank = PART_INFO_REGISTRY[registryKey];
+  const entry = bank?.[partKey] || bank?.[Number(partKey)];
+  if (!entry) {
+    return { title: fallbackTitle || `Part ${partKey}`, description: '', tips: '', commonErrors: '' };
+  }
+  return {
+    title: entry.title || fallbackTitle || `Part ${partKey}`,
+    description: entry.description || '',
+    tips: entry.tips || '',
+    commonErrors: entry.commonErrors || '',
+  };
 }
 
 function lookupPartMeta(href, fallbackTitle) {
@@ -141,7 +176,7 @@ export function getExamTheoryPartGroups(examTheorySectionSlug) {
         }
         byLevel.get(levelKey).parts.push({
           text: topic.text,
-          href: topic.href,
+          href: buildExamTheoryPartTipsHref(topic.href),
           title: meta.title,
           description: meta.description,
           tips: meta.tips,

@@ -35,12 +35,34 @@ const nextConfig = {
   assetPrefix: basePath ? `${basePath}/` : '',
   async redirects() {
     /* Old URLs /niveles/b2/speaking-lab/… → /niveles/speaking-lab/b2/… (path* may be empty for hub) */
+    const examPartTipsRedirects = [
+      'reading-and-use-of-english',
+      'writing',
+      'listening',
+      'speaking',
+    ].flatMap((skill) => {
+      const rules = [
+        {
+          source: `/niveles/:level(a2|b1|b2|c1|c2)/${skill}/part-:part`,
+          destination: `/teoria/exam-part-tips/:level/${skill}/part-:part`,
+        },
+      ];
+      if (skill === 'listening' || skill === 'speaking') {
+        rules.push({
+          source: `/niveles/:level(a2|b1|b2|c1|c2)/${skill}/:part`,
+          destination: `/teoria/exam-part-tips/:level/${skill}/:part`,
+        });
+      }
+      return rules.map((rule) => ({ ...rule, permanent: false }));
+    });
+
     return [
       {
         source: '/niveles/:cefr(a2|b1|b2|c1|c2)/speaking-lab/:path*',
         destination: '/niveles/speaking-lab/:cefr/:path*',
         permanent: false,
       },
+      ...examPartTipsRedirects,
     ];
   },
 };

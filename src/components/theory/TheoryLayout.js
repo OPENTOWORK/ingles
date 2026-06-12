@@ -606,7 +606,10 @@ const TheoryLayout = ({
         }}>
           {activeTab === 'theory' && (
             <TheorySectionProvider key={title}>
-              <TheoryPageShell topicTitle={title} enableInlinePractice={enableInlinePractice}>
+              <TheoryPageShell
+                topicTitle={title}
+                enableInlinePractice={enableInlinePractice && !hideExamTheoryPracticeForStudent}
+              >
                 {theoryContent}
               </TheoryPageShell>
             </TheorySectionProvider>

@@ -2,6 +2,7 @@ import {
   EXAM_THEORY_CATALOG,
   resolveExamTheorySectionSlug,
 } from '@/data/teoriaSections';
+import { examTheorySlugFromPartHref } from '@/data/examTheoryPartTips';
 import { findExamUnitSlugForTopicHref } from '@/lib/examTheoryProgress';
 import { shouldApplySequentialLock } from '@/lib/theoryLockConfig';
 
@@ -15,6 +16,10 @@ export function isExamTheorySectionSlug(slug) {
 
 /** Slug de unidad (use-of-english, reading, …) a partir de la ruta /teoria/… */
 export function getExamUnitSlugFromPathname(pathname) {
+  if (pathname?.startsWith('/teoria/exam-part-tips/')) {
+    return examTheorySlugFromPartHref(pathname);
+  }
+
   if (!pathname?.startsWith('/teoria/')) return null;
 
   const segment = pathname.replace(/^\/teoria\//, '').split('/')[0];

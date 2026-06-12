@@ -158,9 +158,12 @@ a:hover {
 
 .legal-footer-column--tagline {
   display: flex;
-  align-items: center;
-  justify-content: flex-end;
+  flex-direction: column;
+  align-items: flex-end;
+  justify-content: flex-start;
+  gap: 0.45rem;
   min-height: 100%;
+  text-align: right;
 }
 
 @media (max-width: 900px) {
@@ -170,7 +173,8 @@ a:hover {
 
   .legal-footer-column--tagline {
     grid-column: 1 / -1;
-    justify-content: flex-start;
+    align-items: flex-start;
+    text-align: left;
     padding-top: 0.25rem;
   }
 }
@@ -211,11 +215,25 @@ a:hover {
   text-decoration: underline;
 }
 
+.legal-footer-version {
+  margin: 0.85rem 0 0;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.92);
+  letter-spacing: 0.02em;
+}
+
 .legal-footer-copy {
   max-width: 1200px;
   margin: 0.65rem auto 0;
   color: rgba(255, 255, 255, 0.88);
   font-size: 0.74rem;
+}
+
+.legal-footer-copy--tagline {
+  max-width: 280px;
+  margin: 0;
+  line-height: 1.4;
 }
 
 .legal-cookie-settings-link {

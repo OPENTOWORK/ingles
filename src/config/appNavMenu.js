@@ -7,6 +7,7 @@ import {
   normalizeRoleName,
 } from '@/utils/authRoles';
 import { getExamUnitSlugFromPathname } from '@/lib/examTheoryUnlock';
+import { isExamTheoryPartTipsPath } from '@/lib/nivelesPartTipsRoutes';
 
 /** Theory solo en la home (inferior, oculto para estudiantes). */
 export const HOME_THEORY_LINK = { href: '/teoria', label: 'Theory', tourId: 'nav-theory' };
@@ -36,6 +37,7 @@ export function isNavLinkActive(href, pathname, searchParams) {
     if (path === '/niveles') {
       return searchParams?.get('tab') === 'theory';
     }
+    if (isExamTheoryPartTipsPath(pathname)) return true;
     return Boolean(getExamUnitSlugFromPathname(pathname));
   }
 
@@ -43,6 +45,7 @@ export function isNavLinkActive(href, pathname, searchParams) {
     if (path === '/niveles') {
       return searchParams?.get('tab') !== 'theory';
     }
+    if (isExamTheoryPartTipsPath(pathname)) return false;
     return path.startsWith('/niveles/');
   }
 

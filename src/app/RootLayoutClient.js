@@ -419,17 +419,18 @@ export default function RootLayoutClient({ children }) {
                 <Link href="/contacto">Contacta con nosotros</Link>
               </li>
             </ul>
+            <p className="legal-footer-version">versión Alpha</p>
           </div>
           <div className="legal-footer-column legal-footer-column--tagline">
             <DraloTagline className="dralo-tagline--footer" />
+            <p className="legal-footer-copy legal-footer-copy--tagline">
+              Ejercicios diseñados para practicar tus habilidades en inglés.
+            </p>
+            <p className="legal-footer-copy legal-footer-copy--tagline">
+              © {new Date().getFullYear()} Dralo
+            </p>
           </div>
         </div>
-        <p className="legal-footer-copy">
-          Ejercicios diseñados para practicar tus habilidades en inglés.
-        </p>
-        <p className="legal-footer-copy">
-          © {new Date().getFullYear()} Dralo
-        </p>
       </footer>
     </>
   );

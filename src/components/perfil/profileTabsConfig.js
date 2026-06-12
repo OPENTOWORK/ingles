@@ -11,7 +11,7 @@ export const PROFILE_TABS = [
   { id: 'study-tools', label: 'Tools', studentAllowed: true },
   { id: 'study-planner', label: 'Planner' },
   { id: 'ai-tools', label: 'AI tools' },
-  { id: 'error-tracker', label: 'Error Tracker', studentHidden: true },
+  { id: 'error-tracker', label: 'Error Tracker', studentAllowed: true },
   { id: 'analytics', label: 'Analytics' },
   { id: 'settings', label: 'Settings', studentAllowed: true },
   { id: 'social', label: 'Social' },
