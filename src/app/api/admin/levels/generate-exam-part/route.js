@@ -11,6 +11,7 @@ import {
 import { isExamGenerationSlug } from '@/lib/levelsExamCatalog';
 import { clampB2ExamSlot } from '@/utils/b2ResolveExam';
 import { getCachedLevelBySlug, invalidateLevelExamCache } from '@/utils/levelsLevelCache';
+import { fetchDraftSlotSet } from '@/utils/levelsExamVisibility';
 import { logExamGeneration } from '@/lib/examGenerationLog';
 
 export const maxDuration = 300;
@@ -67,6 +68,20 @@ export async function POST(req) {
     if (action === 'save') {
       if (!body.generated || typeof body.generated !== 'object') {
         return NextResponse.json({ error: 'generated payload is required for save.' }, { status: 400 });
+      }
+
+      // Protección de borradores: guardar encima de un slot draft requiere el
+      // flag interno explícito allowDraftWrite (scripts manuales).
+      if (!body.allowDraftWrite) {
+        const draftSlots = await fetchDraftSlotSet(auth.adminDb, levelData.id);
+        if (draftSlots.has(slot)) {
+          return NextResponse.json(
+            {
+              error: `El Examen ${slot} ${slug.toUpperCase()} está reservado como borrador interno (modelo='draft'). No se puede guardar encima desde el flujo admin.`,
+            },
+            { status: 409 },
+          );
+        }
       }
 
       const result =

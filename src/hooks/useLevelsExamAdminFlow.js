@@ -6,6 +6,7 @@ import { buildClientApiUrl } from '@/utils/clientApiUrl';
 import { userHasRole } from '@/utils/authRoles';
 import { getCachedLevelBySlug, getCachedExamenIdsBySlot, invalidateLevelExamCache } from '@/utils/levelsLevelCache';
 import { sortLevelsExamenesRows } from '@/utils/b2ResolveExam';
+import { filterVisibleExamenes, findDraftExamSlots } from '@/utils/levelsExamVisibility';
 import { A2_EXAM_PARTS } from '@/lib/a2ExamCatalog';
 import { B2_EXAM_SLOT_MAX } from '@/lib/b2ExamCatalog';
 import { getLevelExamParts, isExamGenerationSlug } from '@/lib/levelsExamCatalog';
@@ -19,12 +20,35 @@ export function getAvailableExamSlots(examenIdBySlot = {}) {
     .sort((a, b) => a - b);
 }
 
-/** Primer slot libre (1…max) para un examen nuevo. */
-export function findNextEmptyExamSlot(examenIdBySlot = {}, max = B2_EXAM_SLOT_MAX) {
+/**
+ * Primer slot libre (1…max) para un examen nuevo.
+ * Los slots ocupados por exámenes draft (modelo='draft') NUNCA cuentan como
+ * libres aunque el catálogo filtrado no los muestre: crear ahí pisaría el borrador.
+ */
+export function findNextEmptyExamSlot(examenIdBySlot = {}, max = B2_EXAM_SLOT_MAX, draftSlots = new Set()) {
   for (let s = 1; s <= max; s += 1) {
-    if (!examenIdBySlot[s]) return s;
+    if (!examenIdBySlot[s] && !draftSlots.has(s)) return s;
   }
   return null;
+}
+
+/**
+ * Slots reservados por exámenes draft del nivel (consulta sin filtrar:
+ * los slots son posicionales sobre la lista completa).
+ * @returns {Promise<Set<number>>}
+ */
+export async function fetchDraftExamSlots(slug) {
+  try {
+    const { data: levelData } = await getCachedLevelBySlug(supabase, slug);
+    if (!levelData?.id) return new Set();
+    const { data } = await supabase
+      .from('levels_examenes')
+      .select('id, nombre, modelo')
+      .eq('level_id', levelData.id);
+    return findDraftExamSlots(sortLevelsExamenesRows(data));
+  } catch {
+    return new Set();
+  }
 }
 
 /** Props del selector: exámenes existentes + botón «Examen nuevo» (solo admin). */
@@ -94,6 +118,16 @@ export function useLevelsExamAdminFlow({ slug = 'a2', examenIdBySlot = {}, onCat
   const generateExam = useCallback(
     async (slot, { force = false, preserveExistingParts = false } = {}) => {
       if (!supportsGeneration) return null;
+
+      // Protección de borradores: nunca generar/regenerar encima de un slot draft
+      // desde el flujo admin (los drafts se gestionan solo con scripts manuales).
+      const draftSlots = await fetchDraftExamSlots(slug);
+      if (draftSlots.has(Number(slot))) {
+        throw new Error(
+          `El Examen ${slot} ${levelUpper} está reservado como borrador interno (draft). ` +
+            'No se puede generar ni regenerar desde aquí; usa los scripts de generación de exámenes.',
+        );
+      }
 
       const { data: sessionData } = await supabase.auth.getSession();
       const user = sessionData?.session?.user;
@@ -210,10 +244,14 @@ export function useLevelsExamAdminFlow({ slug = 'a2', examenIdBySlot = {}, onCat
     async (onSelectSlot) => {
       if (!canRegenerateExams) return;
 
-      const targetSlot = findNextEmptyExamSlot(examenIdBySlot);
+      const draftSlots = await fetchDraftExamSlots(slug);
+      const targetSlot = findNextEmptyExamSlot(examenIdBySlot, B2_EXAM_SLOT_MAX, draftSlots);
       if (!targetSlot) {
+        const draftNote = draftSlots.size
+          ? ` (slots ${[...draftSlots].sort((a, b) => a - b).join(', ')} reservados como borrador)`
+          : '';
         window.alert(
-          `Ya hay ${B2_EXAM_SLOT_MAX} exámenes ${levelUpper}. No se pueden crear más desde aquí.`,
+          `No hay slots libres para un examen ${levelUpper} nuevo${draftNote}. No se pueden crear más desde aquí.`,
         );
         return;
       }
@@ -230,12 +268,19 @@ export function useLevelsExamAdminFlow({ slug = 'a2', examenIdBySlot = {}, onCat
         /* genError shown in UI */
       }
     },
-    [canRegenerateExams, examenIdBySlot, generateExam, partTotal, levelUpper],
+    [canRegenerateExams, examenIdBySlot, generateExam, partTotal, levelUpper, slug],
   );
 
   const deleteExam = useCallback(
     async (slot) => {
       if (!supportsGeneration) return null;
+
+      const draftSlots = await fetchDraftExamSlots(slug);
+      if (draftSlots.has(Number(slot))) {
+        throw new Error(
+          `El Examen ${slot} ${levelUpper} está reservado como borrador interno (draft) y no puede eliminarse desde aquí.`,
+        );
+      }
 
       const { data: sessionData } = await supabase.auth.getSession();
       const user = sessionData?.session?.user;
@@ -274,7 +319,7 @@ export function useLevelsExamAdminFlow({ slug = 'a2', examenIdBySlot = {}, onCat
       onCatalogUpdated?.();
       return { deleted: true, examSlot: slot, levelId };
     },
-    [slug, onCatalogUpdated, supportsGeneration],
+    [slug, onCatalogUpdated, supportsGeneration, levelUpper],
   );
 
   const handleRegenerateExam = useCallback(
@@ -487,9 +532,9 @@ export async function reloadExamNamesBySlot(slug) {
     if (!levelData?.id) return { names, ids };
     const { data } = await supabase
       .from('levels_examenes')
-      .select('id, nombre')
+      .select('id, nombre, modelo')
       .eq('level_id', levelData.id);
-    const ordered = sortLevelsExamenesRows(data);
+    const ordered = sortLevelsExamenesRows(filterVisibleExamenes(data));
     const idsBySlot = await getCachedExamenIdsBySlot(supabase, levelData.id);
     Object.assign(ids, idsBySlot);
     Object.entries(idsBySlot).forEach(([slot, id]) => {

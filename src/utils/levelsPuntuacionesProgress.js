@@ -1,4 +1,5 @@
 import { B2_EXAM_SLOT_MAX, sortLevelsExamenesRows } from '@/utils/b2ResolveExam';
+import { filterVisibleExamenes } from '@/utils/levelsExamVisibility';
 import { parseUoePartDescripcion } from '@/utils/levelsPuntuaciones';
 import { starsFromApprovedPartsCount } from '@/utils/levelsB2PartScoring';
 
@@ -127,16 +128,16 @@ export async function fetchUseOfEnglishPuntuacionesProgress(supabase, opts) {
   return fetchB2PuntuacionesProgress(supabase, { ...opts, partMin: 1, partMax: 4, partsInPaper: 4 });
 }
 
-/** Mapa slot (1–5) → examen_id para un nivel B2. */
+/** Mapa slot (1–5) → examen_id para un nivel B2 (excluye drafts salvo flag local). */
 export async function resolveB2ExamenIdsBySlot(supabase, levelId) {
   const { data, error } = await supabase
     .from('levels_examenes')
-    .select('id, nombre')
+    .select('id, nombre, modelo')
     .eq('level_id', levelId);
 
   if (error || !data?.length) return {};
 
-  const ordered = sortLevelsExamenesRows(data);
+  const ordered = sortLevelsExamenesRows(filterVisibleExamenes(data));
   return ordered.reduce((acc, row, index) => {
     acc[index + 1] = row.id;
     return acc;

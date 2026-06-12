@@ -17,6 +17,7 @@ import { getLevelFullExamSections, getNivelesLevelHub } from '@/data/nivelesLeve
 import { supabase } from '@/utils/supabaseClient';
 import { getCachedLevelBySlug, getCachedExamenIdsBySlot } from '@/utils/levelsLevelCache';
 import { sortLevelsExamenesRows } from '@/utils/b2ResolveExam';
+import { filterVisibleExamenes } from '@/utils/levelsExamVisibility';
 import { clearExamSlotPuntuaciones } from '@/lib/fetchExamModeSlotStats';
 import { useLevelsExamAdminFlow, buildExamSlotPickerProps } from '@/hooks/useLevelsExamAdminFlow';
 import A2ExamGenerationStatus from '@/components/niveles/A2ExamGenerationStatus';
@@ -61,8 +62,11 @@ function LevelExamModePracticeInner({ slug }) {
     try {
       const { data: levelData } = await getCachedLevelBySlug(supabase, slug);
       if (!levelData?.id) return;
-      const { data } = await supabase.from('levels_examenes').select('id, nombre').eq('level_id', levelData.id);
-      const ordered = sortLevelsExamenesRows(data);
+      const { data } = await supabase
+        .from('levels_examenes')
+        .select('id, nombre, modelo')
+        .eq('level_id', levelData.id);
+      const ordered = sortLevelsExamenesRows(filterVisibleExamenes(data));
       const idsBySlot = await getCachedExamenIdsBySlot(supabase, levelData.id);
       setExamenIdBySlot(idsBySlot);
       const names = {};

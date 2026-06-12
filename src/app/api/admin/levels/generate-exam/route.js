@@ -16,6 +16,7 @@ import {
 import { isExamGenerationSlug } from '@/lib/levelsExamCatalog';
 import { clampB2ExamSlot } from '@/utils/b2ResolveExam';
 import { getCachedLevelBySlug, invalidateLevelExamCache } from '@/utils/levelsLevelCache';
+import { fetchDraftSlotSet } from '@/utils/levelsExamVisibility';
 
 export const maxDuration = 300;
 
@@ -55,6 +56,38 @@ export async function POST(req) {
     const { data: levelData, error: levelError } = await getCachedLevelBySlug(auth.adminDb, slug);
     if (levelError || !levelData?.id) {
       return NextResponse.json({ error: `Nivel ${slug.toUpperCase()} no encontrado en levels.` }, { status: 404 });
+    }
+
+    // Protección de borradores: los slots con modelo='draft' solo se tocan con
+    // el flag interno explícito allowDraftWrite (scripts manuales).
+    if (!body.allowDraftWrite) {
+      const draftSlots = await fetchDraftSlotSet(auth.adminDb, levelData.id);
+      if (draftSlots.has(slot)) {
+        return NextResponse.json(
+          {
+            error: `El Examen ${slot} ${slug.toUpperCase()} está reservado como borrador interno (modelo='draft'). No se puede generar, regenerar ni borrar desde el flujo admin.`,
+          },
+          { status: 409 },
+        );
+      }
+    }
+
+    // B2 está en curación con flujo preview → validate → save (generate-exam-part).
+    // Este endpoint persiste sin quality validator ni gate de ambigüedad, así que la
+    // generación B2 queda deshabilitada salvo override explícito por env var.
+    const isGeneration = !deleteExam && !resetExam;
+    if (
+      isGeneration &&
+      slug === 'b2' &&
+      process.env.DRALO_ALLOW_FULL_EXAM_GENERATION !== 'true'
+    ) {
+      return NextResponse.json(
+        {
+          error:
+            'Full exam generation does not run quality validation. Use part-by-part generation instead (preview → validate → save). Para reactivar temporalmente: DRALO_ALLOW_FULL_EXAM_GENERATION=true.',
+        },
+        { status: 409 },
+      );
     }
 
     if (deleteExam) {

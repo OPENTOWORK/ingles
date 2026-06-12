@@ -17,6 +17,7 @@ import { formatPartsLabel, getExamSkillPartRange } from '@/data/levelExamPartMap
 import { supabase } from '@/utils/supabaseClient';
 import { getCachedLevelBySlug, getCachedExamenIdsBySlot } from '@/utils/levelsLevelCache';
 import { sortLevelsExamenesRows } from '@/utils/b2ResolveExam';
+import { filterVisibleExamenes } from '@/utils/levelsExamVisibility';
 import { useLevelsExamAdminFlow, reloadExamNamesBySlot, buildExamSlotPickerProps } from '@/hooks/useLevelsExamAdminFlow';
 import A2ExamGenerationStatus from '@/components/niveles/A2ExamGenerationStatus';
 
@@ -81,9 +82,9 @@ function LevelSkillPracticePageInner({ slug, skillRoute }) {
         }
         const { data } = await supabase
           .from('levels_examenes')
-          .select('id, nombre')
+          .select('id, nombre, modelo')
           .eq('level_id', levelData.id);
-        const ordered = sortLevelsExamenesRows(data);
+        const ordered = sortLevelsExamenesRows(filterVisibleExamenes(data));
         const idsBySlot = await getCachedExamenIdsBySlot(supabase, levelData.id);
         Object.entries(idsBySlot).forEach(([slot, id]) => {
           const row = ordered.find((r) => r.id === id);

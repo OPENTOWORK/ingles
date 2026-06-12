@@ -18,6 +18,7 @@ import {
 import { supabase } from '@/utils/supabaseClient';
 import { getCachedLevelBySlug, getCachedExamenIdsBySlot } from '@/utils/levelsLevelCache';
 import { sortLevelsExamenesRows } from '@/utils/b2ResolveExam';
+import { filterVisibleExamenes } from '@/utils/levelsExamVisibility';
 import { getAvailableExamSlots } from '@/hooks/useLevelsExamAdminFlow';
 import { starsFromApprovedPartsCount } from '@/utils/levelsB2PartScoring';
 import ExamPracticeReportError from '@/components/exam/ExamPracticeReportError';
@@ -53,10 +54,10 @@ function LevelFullExamPracticeInner({ slug }) {
       }
       const { data, error } = await supabase
         .from('levels_examenes')
-        .select('id, nombre')
+        .select('id, nombre, modelo')
         .eq('level_id', levelData.id);
       if (error) throw error;
-      const ordered = sortLevelsExamenesRows(data);
+      const ordered = sortLevelsExamenesRows(filterVisibleExamenes(data));
       const idsBySlot = await getCachedExamenIdsBySlot(supabase, levelData.id);
       const names = {};
       Object.entries(idsBySlot).forEach(([slot, id]) => {

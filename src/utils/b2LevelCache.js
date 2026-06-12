@@ -1,3 +1,5 @@
+import { filterVisibleExamenes } from '@/utils/levelsExamVisibility';
+
 const LEVEL_TTL_MS = 30 * 60 * 1000;
 const EXAM_IDS_TTL_MS = 30 * 60 * 1000;
 
@@ -56,13 +58,13 @@ export async function getCachedB2ExamCatalog(supabase, levelId) {
 
   const { data, error } = await supabase
     .from('levels_examenes')
-    .select('id, nombre')
+    .select('id, nombre, modelo')
     .eq('level_id', levelId);
 
   const ids = {};
   const names = {};
   if (!error && data?.length) {
-    const ordered = sortExamRows(data);
+    const ordered = sortExamRows(filterVisibleExamenes(data));
     ordered.forEach((row, index) => {
       const slot = index + 1;
       ids[slot] = row.id;
