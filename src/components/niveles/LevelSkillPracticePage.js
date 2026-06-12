@@ -128,6 +128,17 @@ function LevelSkillPracticePageInner({ slug, skillRoute }) {
     passingCount,
   };
 
+  const reportErrorContext = useMemo(() => {
+    if (!scoring.examPracticeOpen || !selectedPart) return null;
+    return {
+      levelSlug: slug,
+      skillRoute,
+      partNumber: selectedPart.partNumber,
+      examSlot,
+      practiceMode: 'part-practice',
+    };
+  }, [scoring.examPracticeOpen, selectedPart, slug, skillRoute, examSlot]);
+
   return (
       <B2ExamPracticeLayout examPracticeOpen={scoring.examPracticeOpen}>
       {adminFlow.canRegenerateExams ? (
@@ -166,6 +177,7 @@ function LevelSkillPracticePageInner({ slug, skillRoute }) {
         selectedPartId={selectedPartId}
         onSelectPart={(part) => setSelectedPartId(part.id)}
         getPartSavedScoreLabel={(part) => scoring.getPartSavedScoreLabel(part, examSlot)}
+        reportErrorContext={reportErrorContext}
       >
         {!scoring.examPracticeOpen ? (
           <div

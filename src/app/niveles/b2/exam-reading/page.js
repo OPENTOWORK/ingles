@@ -1110,6 +1110,37 @@ function B2ReadingExamsPageInner() {
     return extractReadingPart6SentencesBlock(selectedQuestion?.enunciado || '');
   }, [partNumberReading, selectedQuestion?.enunciado]);
 
+  const reportErrorContext = useMemo(() => {
+    if (loading || error || !scoring.examPracticeOpen || !selectedPart) return null;
+    const questionText = selectedQuestion?.enunciado
+      ? String(selectedQuestion.enunciado).replace(/\s+/g, ' ').trim().slice(0, 300)
+      : '';
+    return {
+      levelSlug: 'b2',
+      skillRoute,
+      partNumber: partNumberReading,
+      examSlot,
+      practiceMode,
+      examModeActive,
+      reviewMode,
+      questionId: selectedQuestion?.preguntaId,
+      questionText: questionText || undefined,
+    };
+  }, [
+    loading,
+    error,
+    scoring.examPracticeOpen,
+    selectedPart,
+    skillRoute,
+    partNumberReading,
+    examSlot,
+    practiceMode,
+    examModeActive,
+    reviewMode,
+    selectedQuestion?.preguntaId,
+    selectedQuestion?.enunciado,
+  ]);
+
   return (
     <B2ExamPracticeLayout examPracticeOpen={layoutPracticeOpen}>
       {adminFlow.canRegenerateExams ? (
@@ -1169,6 +1200,7 @@ function B2ReadingExamsPageInner() {
         studyNotesContextLabel={
           isCombinedPaper ? 'B2 Reading and Use of English' : 'B2 Reading'
         }
+        reportErrorContext={reportErrorContext}
       >
       {examModeActive && examSection ? (
         <ExamModeSectionBanner

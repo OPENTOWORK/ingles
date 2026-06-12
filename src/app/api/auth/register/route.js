@@ -2,6 +2,8 @@ import { NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
 import { getSupabaseServiceRoleKey, getSupabaseUrl } from '@/lib/supabaseEnv';
 import { pickRandomMascotVariant } from '@/lib/profileDefaultAvatar';
+import { dispatchAutomatedEmail } from '@/lib/dispatchAutomatedEmail';
+import { AUTOMATED_EMAIL_TRIGGERS } from '@/lib/automatedEmailTriggers';
 
 const supabaseUrl = getSupabaseUrl();
 const supabaseServiceRoleKey = getSupabaseServiceRoleKey();
@@ -212,9 +214,17 @@ export async function POST(req) {
       { onConflict: 'user_id', ignoreDuplicates: true },
     );
 
+    const welcomeMail = await dispatchAutomatedEmail({
+      adminClient,
+      triggerEvent: AUTOMATED_EMAIL_TRIGGERS.USER_REGISTERED,
+      to: email,
+      variables: { email },
+    });
+
     return NextResponse.json({
       ok: true,
       userId,
+      welcomeEmailSent: welcomeMail.sent || welcomeMail.queued,
       message: 'Cuenta creada. Ya puedes iniciar sesión con tu email y contraseña.',
     });
   } catch (err) {

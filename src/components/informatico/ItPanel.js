@@ -6,7 +6,7 @@ import { useRouter } from 'next/navigation';
 import { supabase } from '@/utils/supabaseClient';
 import { canAccessItPanel, getRoleNameByUserId, isAdminRole } from '@/utils/authRoles';
 import TeacherActivityCharts from '@/components/teacher/TeacherActivityCharts';
-import SupportTicketsPanel from '@/components/support/SupportTicketsPanel';
+import SupportHub from '@/components/support/SupportHub';
 import PanelPageHeader from '@/components/PanelPageHeader';
 import RouteLoadingMascot from '@/components/RouteLoadingMascot';
 
@@ -369,7 +369,7 @@ export default function ItPanel() {
 
         {tab === 'tickets' && (
           <div className="bg-white rounded-lg shadow border border-slate-100 p-4 md:p-6">
-            <SupportTicketsPanel />
+            <SupportHub />
           </div>
         )}
 

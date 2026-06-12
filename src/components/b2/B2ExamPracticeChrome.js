@@ -7,6 +7,7 @@ import LevelsCategoryTimer from '@/components/levels/LevelsCategoryTimer';
 import LevelsPartScorePanel from '@/components/levels/LevelsPartScorePanel';
 import LevelsPartFinishBanner from '@/components/levels/LevelsPartFinishBanner';
 import ExamStudyNotesSidebar from '@/components/exam/ExamStudyNotesSidebar';
+import ExamPracticeReportError from '@/components/exam/ExamPracticeReportError';
 
 function getPartTabLabel(part, lang, customLabelFn) {
   if (typeof customLabelFn === 'function') {
@@ -95,6 +96,7 @@ export function B2ExamPracticeChrome({
   scorePanelVariant = 'default',
   modeBadge = null,
   practiceReady,
+  reportErrorContext = null,
   children,
 }) {
   const showPractice = practiceReady ?? examPracticeOpen;
@@ -255,7 +257,14 @@ export function B2ExamPracticeChrome({
             </div>
           ) : null}
 
-          <div className="levels-b2-practice__work-body">{children}</div>
+          <div className="levels-b2-practice__work-body">
+            {children}
+            {showPractice && !loading && reportErrorContext ? (
+              <div className="exam-practice-report-error-footer">
+                <ExamPracticeReportError context={reportErrorContext} />
+              </div>
+            ) : null}
+          </div>
           </div>
         </div>
       )}

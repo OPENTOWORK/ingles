@@ -1,40 +1,26 @@
-import { deliverTransactionalEmail } from '@/lib/emailDelivery';
+import { dispatchAutomatedEmail } from '@/lib/dispatchAutomatedEmail';
+import { AUTOMATED_EMAIL_TRIGGERS } from '@/lib/automatedEmailTriggers';
 
 /**
- * Confirmación al estudiante: hemos recibido el ticket y responderemos en ≤48 h.
+ * Confirmación al estudiante: hemos recibido el ticket.
  */
-export async function sendSupportTicketAckEmail({ to, name, subject }) {
-  const firstName = String(name || '')
-    .trim()
-    .split(/\s+/)[0];
-  const greeting = firstName ? `Hola ${firstName},` : 'Hola,';
-
-  const mailSubject = 'Hemos recibido tu consulta — Dralo English';
-  const text = [
-    greeting,
-    '',
-    'Gracias por contactar con Dralo English. Hemos recibido tu mensaje correctamente.',
-    '',
-    subject ? `Asunto: ${subject}` : null,
-    '',
-    'Nuestro equipo de soporte lo revisará y te responderemos en un plazo no superior a 48 horas.',
-    '',
-    'Si necesitas añadir más detalles, puedes responder a este correo o crear un nuevo ticket desde la sección Contacto de la plataforma.',
-    '',
-    '— Equipo Dralo English',
-    'draloenglish@gmail.com',
-  ]
-    .filter((line) => line !== null)
-    .join('\n');
-
-  const result = await deliverTransactionalEmail({
+export async function sendSupportTicketAckEmail({ to, name, subject, adminClient = null }) {
+  const result = await dispatchAutomatedEmail({
+    adminClient,
+    triggerEvent: AUTOMATED_EMAIL_TRIGGERS.SUPPORT_TICKET_CREATED,
     to,
-    subject: mailSubject,
-    text,
+    variables: {
+      name,
+      ticket_subject: subject || '',
+    },
   });
 
-  if (result.ok) {
-    return { sent: true, channel: result.channel };
+  if (result.sent || result.queued) {
+    return {
+      sent: true,
+      queued: result.queued,
+      channel: result.results?.[0]?.channel,
+    };
   }
 
   return {

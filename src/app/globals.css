@@ -1445,6 +1445,13 @@ body.nav-open {
   color: #15803d;
 }
 
+.exam-practice-report-error-footer {
+  margin-top: 1.25rem;
+  padding-top: 0.75rem;
+  border-top: 1px solid #e2e8f0;
+  text-align: center;
+}
+
 .theory-exercise-actions {
   display: flex;
   align-items: center;

@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { supabase } from '@/utils/supabaseClient';
 import { userHasRole } from '@/utils/authRoles';
-import SupportTicketsPanel from '@/components/support/SupportTicketsPanel';
+import SupportHub from '@/components/support/SupportHub';
 import PageHero from '@/components/PageHero';
 import RouteLoadingMascot from '@/components/RouteLoadingMascot';
 
@@ -44,12 +44,12 @@ export default function SoportePage() {
       <PageHero
         eyebrow="Soporte"
         title="Centro de ayuda"
-        description="Gestiona tickets y consultas de usuarios."
+        description="Gestiona tickets, consultas y correos automáticos de la plataforma."
         mascotVariant={8}
         mascotWidth={130}
         accent="ocean"
       />
-      <SupportTicketsPanel />
+      <SupportHub />
     </main>
   );
 }

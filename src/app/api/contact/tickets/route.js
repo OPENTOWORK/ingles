@@ -134,7 +134,12 @@ export async function POST(req) {
 
     const roleName = await getUserRoleNameServer(authData.user.id, dbClient);
     if (isStudentRole(roleName)) {
-      const ack = await sendSupportTicketAckEmail({ to: email, name, subject });
+      const ack = await sendSupportTicketAckEmail({
+        to: email,
+        name,
+        subject,
+        adminClient: supabaseServiceRoleKey?.trim() ? dbClient : null,
+      });
       ackEmailSent = ack.sent;
       if (!ack.sent) {
         ackEmailWarning = ack.error || 'Could not send the confirmation email.';

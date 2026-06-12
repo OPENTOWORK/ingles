@@ -514,6 +514,39 @@ function B2WritingExamPracticePageInner() {
     );
   }, [handleFinishSection, longWritingStorageKey, writingLiveCorrect]);
 
+  const reportErrorContext = useMemo(() => {
+    if (loading || error || !scoring.examPracticeOpen || !selectedPart) return null;
+    const questionText = selectedQuestion?.enunciado
+      ? String(selectedQuestion.enunciado).replace(/\s+/g, ' ').trim().slice(0, 300)
+      : selectedPart?.descripcion
+        ? String(selectedPart.descripcion).replace(/\s+/g, ' ').trim().slice(0, 300)
+        : '';
+    return {
+      levelSlug: 'b2',
+      skillRoute: 'exam-writing',
+      partNumber,
+      examSlot,
+      practiceMode,
+      examModeActive,
+      reviewMode,
+      questionId: selectedQuestion?.preguntaId,
+      questionText: questionText || undefined,
+    };
+  }, [
+    loading,
+    error,
+    scoring.examPracticeOpen,
+    selectedPart,
+    partNumber,
+    examSlot,
+    practiceMode,
+    examModeActive,
+    reviewMode,
+    selectedQuestion?.preguntaId,
+    selectedQuestion?.enunciado,
+    selectedPart?.descripcion,
+  ]);
+
   return (
     <B2ExamPracticeLayout examPracticeOpen={layoutPracticeOpen}>
       {adminFlow.showGenerationStatus ? (
@@ -568,6 +601,7 @@ function B2WritingExamPracticePageInner() {
           examSlot,
         }}
         studyNotesContextLabel="B2 Writing Practice"
+        reportErrorContext={reportErrorContext}
       >
         {examModeActive && examSection ? (
           <ExamModeSectionBanner

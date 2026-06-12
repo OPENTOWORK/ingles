@@ -47,6 +47,7 @@ export async function POST(req, { params }) {
     ticketSubject: ticket.asunto,
     message,
     agentName,
+    adminClient: auth.adminClient,
   });
 
   const now = new Date().toISOString();

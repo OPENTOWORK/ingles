@@ -20,6 +20,7 @@ import { sortLevelsExamenesRows } from '@/utils/b2ResolveExam';
 import { clearExamSlotPuntuaciones } from '@/lib/fetchExamModeSlotStats';
 import { useLevelsExamAdminFlow, buildExamSlotPickerProps } from '@/hooks/useLevelsExamAdminFlow';
 import A2ExamGenerationStatus from '@/components/niveles/A2ExamGenerationStatus';
+import ExamPracticeReportError from '@/components/exam/ExamPracticeReportError';
 
 function formatMinutes(m) {
   const h = Math.floor(m / 60);
@@ -353,6 +354,19 @@ function LevelExamModePracticeInner({ slug }) {
                         {sec.startedAt ? 'Continue' : 'Start'}
                       </Link>
                     )}
+                  </div>
+                  <div style={{ marginTop: '0.45rem', textAlign: 'right' }}>
+                    <ExamPracticeReportError
+                      context={{
+                        levelSlug: slug,
+                        skillRoute: 'exam-mode',
+                        examSlot,
+                        sectionTitle: sec.title,
+                        practiceMode: 'exam-mode-hub',
+                        hub: true,
+                        url: href,
+                      }}
+                    />
                   </div>
                 </li>
               );

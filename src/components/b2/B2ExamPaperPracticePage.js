@@ -2077,6 +2077,38 @@ function B2ExamPaperPracticePageInner({
     isExamSimulationMode(practiceMode) ? 'prominent' : isSkillPracticeSession ? 'discrete' : 'prominent';
   const compactChromeHeader = isSkillPracticeSession || isExamSimulationMode(practiceMode);
 
+  const reportErrorContext = useMemo(() => {
+    if (loading || error || !scoring.examPracticeOpen || !selectedPart) return null;
+    const questionText = selectedQuestion?.enunciado
+      ? String(selectedQuestion.enunciado).replace(/\s+/g, ' ').trim().slice(0, 300)
+      : '';
+    return {
+      levelSlug,
+      skillRoute,
+      partNumber,
+      examSlot,
+      practiceMode,
+      examModeActive,
+      reviewMode,
+      questionId: selectedQuestion?.preguntaId,
+      questionText: questionText || undefined,
+    };
+  }, [
+    loading,
+    error,
+    scoring.examPracticeOpen,
+    selectedPart,
+    levelSlug,
+    skillRoute,
+    partNumber,
+    examSlot,
+    practiceMode,
+    examModeActive,
+    reviewMode,
+    selectedQuestion?.preguntaId,
+    selectedQuestion?.enunciado,
+  ]);
+
   return (
     <B2ExamPracticeLayout examPracticeOpen={layoutPracticeOpen}>
       {adminFlow.canRegenerateExams ? (
@@ -2138,6 +2170,7 @@ function B2ExamPaperPracticePageInner({
           examSlot,
         }}
         studyNotesContextLabel={title}
+        reportErrorContext={reportErrorContext}
       >
       {examModeActive && examSection ? (
         <ExamModeSectionBanner

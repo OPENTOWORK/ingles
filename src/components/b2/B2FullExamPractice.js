@@ -16,6 +16,7 @@ import { getCachedB2Level, getCachedB2ExamNamesBySlot } from '@/utils/b2LevelCac
 import { getB2PartScoring, starsFromApprovedPartsCount } from '@/utils/levelsB2PartScoring';
 import { useLevelsExamAdminFlow, createAdminExamSelectHandler, buildExamSlotPickerProps } from '@/hooks/useLevelsExamAdminFlow';
 import A2ExamGenerationStatus from '@/components/niveles/A2ExamGenerationStatus';
+import ExamPracticeReportError from '@/components/exam/ExamPracticeReportError';
 export const B2_FULL_EXAM_PART_MIN = 1;
 export const B2_FULL_EXAM_PART_MAX = 17;
 export const B2_FULL_EXAM_PARTS_COUNT = B2_FULL_EXAM_PART_MAX - B2_FULL_EXAM_PART_MIN + 1;
@@ -243,52 +244,69 @@ function B2FullExamPracticeInner() {
               width: '100%',
             }}
           >
-            {sectionCards.map((section) => (
-              <Link
-                key={section.key}
-                href={`${section.href}?examen=${examSlot}`}
-                style={{
-                  display: 'block',
-                  padding: '1.15rem 1.25rem',
-                  borderRadius: '14px',
-                  border: `2px solid ${section.done ? '#059669' : '#a7f3d0'}`,
-                  background: section.done
-                    ? 'linear-gradient(180deg, #d1fae5 0%, #ecfdf5 100%)'
-                    : 'linear-gradient(180deg, #ecfdf5 0%, #ffffff 100%)',
-                  textDecoration: 'none',
-                  color: '#065f46',
-                  boxShadow: '0 2px 10px rgba(4,120,87,.1)',
-                  transition: 'transform 0.15s ease, box-shadow 0.15s ease',
-                }}
-              >
-                <div style={{ fontSize: '1.35rem', marginBottom: '0.35rem' }}>{section.emoji}</div>
-                <h3 style={{ margin: 0, fontSize: '1.1rem', fontWeight: 700 }}>{section.title}</h3>
-                <p style={{ margin: '0.35rem 0 0', fontSize: '0.9rem', color: '#047857' }}>{section.partsLabel}</p>
-                <p
-                  style={{
-                    margin: '0.65rem 0 0',
-                    fontSize: '0.88rem',
-                    fontWeight: 600,
-                    color: section.done ? '#065f46' : '#2f855a',
-                  }}
-                >
-                  {section.done
-                    ? `✓ Completado (${section.approved}/${section.partsInSection})`
-                    : `Progreso: ${section.approved}/${section.partsInSection} partes`}
-                </p>
-                <span
-                  style={{
-                    display: 'inline-block',
-                    marginTop: '0.75rem',
-                    fontSize: '0.85rem',
-                    fontWeight: 700,
-                    color: '#047857',
-                  }}
-                >
-                  Ir a practicar →
-                </span>
-              </Link>
-            ))}
+            {sectionCards.map((section) => {
+              const sectionHref = `${section.href}?examen=${examSlot}`;
+              return (
+                <div key={section.key}>
+                  <Link
+                    href={sectionHref}
+                    style={{
+                      display: 'block',
+                      padding: '1.15rem 1.25rem',
+                      borderRadius: '14px',
+                      border: `2px solid ${section.done ? '#059669' : '#a7f3d0'}`,
+                      background: section.done
+                        ? 'linear-gradient(180deg, #d1fae5 0%, #ecfdf5 100%)'
+                        : 'linear-gradient(180deg, #ecfdf5 0%, #ffffff 100%)',
+                      textDecoration: 'none',
+                      color: '#065f46',
+                      boxShadow: '0 2px 10px rgba(4,120,87,.1)',
+                      transition: 'transform 0.15s ease, box-shadow 0.15s ease',
+                    }}
+                  >
+                    <div style={{ fontSize: '1.35rem', marginBottom: '0.35rem' }}>{section.emoji}</div>
+                    <h3 style={{ margin: 0, fontSize: '1.1rem', fontWeight: 700 }}>{section.title}</h3>
+                    <p style={{ margin: '0.35rem 0 0', fontSize: '0.9rem', color: '#047857' }}>{section.partsLabel}</p>
+                    <p
+                      style={{
+                        margin: '0.65rem 0 0',
+                        fontSize: '0.88rem',
+                        fontWeight: 600,
+                        color: section.done ? '#065f46' : '#2f855a',
+                      }}
+                    >
+                      {section.done
+                        ? `✓ Completado (${section.approved}/${section.partsInSection})`
+                        : `Progreso: ${section.approved}/${section.partsInSection} partes`}
+                    </p>
+                    <span
+                      style={{
+                        display: 'inline-block',
+                        marginTop: '0.75rem',
+                        fontSize: '0.85rem',
+                        fontWeight: 700,
+                        color: '#047857',
+                      }}
+                    >
+                      Ir a practicar →
+                    </span>
+                  </Link>
+                  <div style={{ marginTop: '0.45rem', textAlign: 'right' }}>
+                    <ExamPracticeReportError
+                      context={{
+                        levelSlug: 'b2',
+                        skillRoute: section.key,
+                        examSlot,
+                        sectionTitle: section.title,
+                        practiceMode: 'full-exam-hub',
+                        hub: true,
+                        url: sectionHref,
+                      }}
+                    />
+                  </div>
+                </div>
+              );
+            })}
           </div>
 
           <p style={{ textAlign: 'center', fontSize: '0.88rem', color: '#718096', maxWidth: '640px', margin: '0 auto' }}>

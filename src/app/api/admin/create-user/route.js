@@ -1,30 +1,25 @@
 import { NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
 import { authenticateAdminRequest } from '@/lib/adminAccess';
-import { deliverTransactionalEmail } from '@/lib/emailDelivery';
+import { dispatchAutomatedEmail } from '@/lib/dispatchAutomatedEmail';
+import { AUTOMATED_EMAIL_TRIGGERS } from '@/lib/automatedEmailTriggers';
 import { getSupabaseServiceRoleKey, getSupabaseUrl } from '@/lib/supabaseEnv';
 
 const isValidEmail = (value) =>
   /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(String(value || '').trim().toLowerCase());
 
-async function sendWelcomeEmail({ email, name, temporaryPassword }) {
-  const loginUrl = process.env.NEXT_PUBLIC_APP_URL || process.env.NEXT_PUBLIC_SITE_URL || '';
-  const subject = 'Tu cuenta en Dralo English ha sido creada';
-  const text = [
-    `Hola${name ? ` ${name}` : ''},`,
-    '',
-    'Tu cuenta ha sido creada por un administrador.',
-    `Email: ${email}`,
-    `Contraseña temporal: ${temporaryPassword}`,
-    '',
-    'Te recomendamos cambiar la contraseña en tu perfil tras iniciar sesión.',
-    loginUrl ? `Acceso: ${loginUrl}` : '',
-  ]
-    .filter(Boolean)
-    .join('\n');
-
-  const result = await deliverTransactionalEmail({ to: email, subject, text });
-  return { sent: Boolean(result.ok) };
+async function sendWelcomeEmail(adminClient, { email, name, temporaryPassword }) {
+  const result = await dispatchAutomatedEmail({
+    adminClient,
+    triggerEvent: AUTOMATED_EMAIL_TRIGGERS.ADMIN_USER_CREATED,
+    to: email,
+    variables: {
+      name,
+      email,
+      temporary_password: temporaryPassword,
+    },
+  });
+  return { sent: Boolean(result.sent || result.queued) };
 }
 
 export async function POST(req) {
@@ -75,7 +70,7 @@ export async function POST(req) {
         );
       }
 
-      const mail = await sendWelcomeEmail({ email, name, temporaryPassword });
+      const mail = await sendWelcomeEmail(null, { email, name, temporaryPassword });
       return NextResponse.json({
         success: true,
         userId: fnPayload.userId,
@@ -139,7 +134,7 @@ export async function POST(req) {
       );
     }
 
-    const mail = await sendWelcomeEmail({ email, name, temporaryPassword });
+    const mail = await sendWelcomeEmail(adminClient, { email, name, temporaryPassword });
 
     return NextResponse.json({
       success: true,

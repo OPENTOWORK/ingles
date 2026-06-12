@@ -6,6 +6,8 @@ import {
   getSupabaseUrl,
 } from '@/lib/supabaseEnv';
 import { pickRandomMascotVariant } from '@/lib/profileDefaultAvatar';
+import { dispatchAutomatedEmail } from '@/lib/dispatchAutomatedEmail';
+import { AUTOMATED_EMAIL_TRIGGERS } from '@/lib/automatedEmailTriggers';
 
 const supabaseUrl = getSupabaseUrl();
 const supabaseAnonKey = getSupabaseAnonKey();
@@ -101,6 +103,15 @@ export async function POST(req) {
       },
       { onConflict: 'user_id', ignoreDuplicates: true },
     );
+
+    if (user.email) {
+      await dispatchAutomatedEmail({
+        adminClient,
+        triggerEvent: AUTOMATED_EMAIL_TRIGGERS.USER_REGISTERED,
+        to: user.email,
+        variables: { email: user.email },
+      });
+    }
 
     return NextResponse.json({ ok: true, created: true });
   } catch (err) {

@@ -334,6 +334,34 @@ function B2SpeakingExamPracticeInner({ title, subtitle, loadingLabel, refreshLab
     return chromeSubtitle;
   }, [examModeActive, reviewMode, lang, subtitle, chromeSubtitle]);
 
+  const reportErrorContext = useMemo(() => {
+    if (loading || error || !scoring.examPracticeOpen || !selectedPart) return null;
+    const questionText = selectedPart?.descripcion
+      ? String(selectedPart.descripcion).replace(/\s+/g, ' ').trim().slice(0, 300)
+      : '';
+    return {
+      levelSlug: 'b2',
+      skillRoute: 'exam-speaking',
+      partNumber,
+      examSlot,
+      practiceMode,
+      examModeActive,
+      reviewMode,
+      questionId: selectedPart?.id,
+      questionText: questionText || undefined,
+    };
+  }, [
+    loading,
+    error,
+    scoring.examPracticeOpen,
+    selectedPart,
+    partNumber,
+    examSlot,
+    practiceMode,
+    examModeActive,
+    reviewMode,
+  ]);
+
   return (
     <B2ExamPracticeLayout examPracticeOpen={layoutPracticeOpen}>
       {adminFlow.canRegenerateExams ? (
@@ -389,6 +417,7 @@ function B2SpeakingExamPracticeInner({ title, subtitle, loadingLabel, refreshLab
           examSlot,
         }}
         studyNotesContextLabel={title}
+        reportErrorContext={reportErrorContext}
       >
       {examModeActive && examSection ? (
         <ExamModeSectionBanner
