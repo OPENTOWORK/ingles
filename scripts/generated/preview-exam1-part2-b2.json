@@ -4,86 +4,139 @@
   "partLabel": "Use of English Part 2 — open cloze",
   "generated": {
     "partTitle": "Part 2: Open Cloze",
-    "title": "Slow Travel on Two Wheels",
     "directions": "For questions 9–16, read the text below and think of the word which best fits each gap. Use only ONE word in each gap.",
     "example": {
       "number": 0,
-      "answer": "by",
-      "explanation": "The fixed expression is travel by bicycle."
+      "sentence": "She is fond (0) ___ travelling by train.",
+      "answer": "of",
+      "explanation": "the adjective \"fond\" takes the dependent preposition \"of\""
     },
-    "passage": "Many people now prefer to explore a region (0) ___ bicycle rather than by car. Slow travel has become an appealing alternative (9) ___ people who want to see more of a country than a guidebook cover suggests. Rather than rushing from one famous sight to (10) ___, cyclists often follow quieter roads through villages that receive few visitors. The pace may be slower, (11) ___ it allows riders to notice details they would otherwise miss.\n\nOne challenge is planning a route that feels safe enough, especially (12) ___ riders are unfamiliar with local traffic rules. Even so, many find that the effort is worthwhile because they connect with places in a way that is rarely possible (13) ___ inside a car. Hosts in small guesthouses frequently say they appreciate visitors (14) ___ arrive on foot or by bike, as they tend to stay longer and spend locally.\n\nOf course, long-distance cycling is not for everyone, and there is no need to feel guilty (15) ___ you prefer comfort. Nevertheless, those who do try it often report that the experience teaches them patience, and (16) ___ they return home, they remember the journey as clearly as the destinations.",
+    "title": "The Impact of Technology on City Living",
+    "passage": "In recent years, the role of technology in urban life has become increasingly significant. One (9) ___ the most notable changes is the way people communicate. Smartphones and social media have transformed how we keep (10) ___ touch with friends and family. Another significant change is (11) ___ public transportation systems, which have become more efficient due to technological advancements. Cities that (12) ___ introduced smart grids have improved their energy efficiency, reducing both costs and emissions. However, (13) ___ is a challenge to ensure that technology is accessible to everyone, regardless (14) ___ their income or background. Urban planners must focus (15) ___ creating inclusive spaces where all residents can benefit from technological innovations. While technology can improve quality of life, it is important (16) ___ balance its use with traditional methods to maintain a sustainable environment.",
     "questions": [
       {
-        "number": 9
+        "id": "q1",
+        "number": 9,
+        "type": "short"
       },
       {
-        "number": 10
+        "id": "q2",
+        "number": 10,
+        "type": "short"
       },
       {
-        "number": 11
+        "id": "q3",
+        "number": 11,
+        "type": "short"
       },
       {
-        "number": 12
+        "id": "q4",
+        "number": 12,
+        "type": "short"
       },
       {
-        "number": 13
+        "id": "q5",
+        "number": 13,
+        "type": "short"
       },
       {
-        "number": 14
+        "id": "q6",
+        "number": 14,
+        "type": "short"
       },
       {
-        "number": 15
+        "id": "q7",
+        "number": 15,
+        "type": "short"
       },
       {
-        "number": 16
+        "id": "q8",
+        "number": 16,
+        "type": "short"
       }
     ],
     "modelAnswers": [
       {
-        "id": 9,
-        "answer": "for"
+        "id": "q1",
+        "answer": "of"
       },
       {
-        "id": 10,
-        "answer": "another"
+        "id": "q2",
+        "answer": "in"
       },
       {
-        "id": 11,
-        "answer": "but"
+        "id": "q3",
+        "answer": "that"
       },
       {
-        "id": 12,
-        "answer": "when"
+        "id": "q4",
+        "answer": "have"
       },
       {
-        "id": 13,
-        "answer": "from"
+        "id": "q5",
+        "answer": "there"
       },
       {
-        "id": 14,
-        "answer": "who"
+        "id": "q6",
+        "answer": "of"
       },
       {
-        "id": 15,
-        "answer": "if"
+        "id": "q7",
+        "answer": "on"
       },
       {
-        "id": 16,
-        "answer": "once"
+        "id": "q8",
+        "answer": "to"
       }
     ],
-    "partNumber": 2,
-    "bulletPoints": [],
-    "speakingPrompts": [],
-    "discussionQuestions": [],
-    "collaborativePrompts": [],
     "sections": [],
-    "sentencePool": []
+    "sentencePool": [],
+    "optionPool": [],
+    "matchingAnswers": [],
+    "speakingPrompts": [],
+    "bulletPoints": [],
+    "partNumber": 2,
+    "discussionQuestions": [],
+    "collaborativePrompts": []
   },
+  "enunciadoPreview": "Example:\nShe is fond (0) ___ travelling by train.\nAnswer: 0 → of\nText\nThe Impact of Technology on City Living\nIn recent years, the role of technology in urban life has become increasingly significant. One (9) ___ the most notable changes is the way people communicate. Smartphones and social media have transformed how we keep (10) ___ touch with friends and family. Another significant change is (11) ___ public transportation systems, which have become more efficient due to technological advancements. Cities that (12) ___ introduced smart grids have improved their energy efficiency, reducing both costs and emissions. However, (13) ___ is a challenge to ensure that technology is accessible to everyone, regardless (14) ___ their income or background. Urban planners must focus (15) ___ creating inclusive spaces where all residents can benefit from technological innovations. While technology can improve quality of life, it is important (16) ___ balance its use with traditional methods to maintain a sustainable environment.",
   "validation": {
     "ok": true,
     "errors": [],
-    "warnings": []
+    "warnings": [
+      "Part 2 repeats the same answer word: of.",
+      "Part 2 passage is 122 words; target is around 150–180."
+    ],
+    "needsReview": []
   },
-  "enunciadoPreview": "Text\nSlow Travel on Two Wheels\nMany people now prefer to explore a region (0) ___ bicycle rather than by car. Slow travel has become an appealing alternative (9) ___ people who want to see more of a country than a guidebook cover suggests. Rather than rushing from one famous sight to (10) ___, cyclists often follow quieter roads through villages that receive few visitors. The pace may be slower, (11) ___ it allows riders to notice details they would otherwise miss.\nOne challenge is planning a route that feels safe enough, especially (12) ___ riders are unfamiliar with local traffic rules. Even so, many find that the effort is worthwhile because they connect with places in a way that is rarely possible (13) ___ inside a car. Hosts in small guesthouses frequently say they appreciate visitors (14) ___ arrive on foot or by bike, as they tend to stay longer and spend locally.\nOf course, long-distance cycling is not for everyone, and there is no need to feel guilty (15) ___ you prefer comfort. Nevertheless, those who do try it often report that the experience teaches them patience, and (16) ___ they return home, they remember the journey as clearly as the destinations."
+  "quality": {
+    "ok": true,
+    "errors": [],
+    "warnings": [],
+    "blindSolve": {
+      "mismatches": [],
+      "ambiguous": [],
+      "solvedCount": 8
+    },
+    "rubric": {
+      "cefrLevel": "B2",
+      "textNaturalness": 5,
+      "exampleValid": true,
+      "vocabularyStyleItems": [],
+      "multipleAnswerItems": [],
+      "tooObviousItems": [],
+      "categoriesTested": [
+        "preposition",
+        "relative",
+        "auxiliary",
+        "determiner",
+        "linker",
+        "quantifier"
+      ],
+      "weakItems": [],
+      "realisticB2": true,
+      "issues": [],
+      "verdict": "pass"
+    }
+  }
 }

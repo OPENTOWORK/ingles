@@ -103,6 +103,8 @@ export async function POST(req) {
               generated: body.generated,
               skipAudio,
               replacePartContent: body.replacePartContent !== false,
+              // Override manual explícito para guardar pese a un ambiguity_warning del preview.
+              overrideNeedsReview: body.overrideNeedsReview === true,
             });
 
       invalidateLevelExamCache(levelData.id);

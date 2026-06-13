@@ -84,6 +84,89 @@ Return ONLY JSON with: partTitle, directions, example {number:0, sentence1, keyw
       return `{"id":"${id}","answer":"exact one-word or short phrase answer"}`;
     }).join(',')}]`;
 
+    if (activity === 'multiple-choice-cloze' && L === 'B2') {
+      return `Create ONE complete Cambridge B2 First Reading and Use of English Part 1: multiple-choice cloze.
+${variety}
+${SHARED_JSON_RULES}
+${directions}
+
+TEXT RULES:
+- Natural, realistic exam-style text of 150–180 words with a short title (magazine/website article tone).
+- Solid B2 vocabulary throughout: NOT simple A2/B1 language, NOT academic C1/C2 language.
+- Include the example gap (0) ___ near the start, then gaps (1) ___ through (${n}) ___ in reading order.
+- A gap must NEVER be solvable by grammar alone (e.g. only one option matching the verb form): all four options must fit grammatically, so only meaning, collocation or word partnership decides.
+
+OPTIONS RULES (CRITICAL):
+- Exactly 4 options per question: "A) word", "B) word", "C) word", "D) word".
+- Each option is ONE word only. No phrases, no multi-word options.
+- Exactly ONE correct answer per item. The three distractors must be plausible same-class words that fail on collocation, dependent preposition or precise meaning — never absurd or obviously wrong.
+- Never repeat the same word twice within one item's options.
+- Spread the correct letters across A, B, C and D (no letter more than 3 times).
+
+ITEM VARIETY (CRITICAL — the part must test a MIX of lexical knowledge):
+- collocations: e.g. strike / reach / make / do … a balance
+- fixed expressions: e.g. take / make / have / do … a decision
+- dependent prepositions: e.g. interested in / on / at / for
+- close-meaning verbs: e.g. raise / rise / increase / grow
+- close-meaning nouns, adjectives or adverbs: e.g. valuable / valued / valid / worth
+Across the ${n} items: at MOST 4 items may have all-verb options; include at least 2 items whose options are nouns, adjectives or adverbs; include at least 1 item decided by a dependent preposition or fixed expression.
+
+FORBIDDEN:
+- all 8 items testing verbs
+- options with more than one word
+- items where two options are both defensible
+- distractors that are obviously wrong
+- C1/C2 vocabulary, or B1-trivial gaps
+- testing the same word family or the same collocation twice
+
+Each modelAnswers entry: the single correct letter ("A"–"D").
+Generate exactly ${n} questions numbered 1–${n}.
+${baseExamSchema(directions, `,"title":"short text title","passage":"full 150–180 word text with (0) ___ example and gaps (1) ___ to (${n}) ___",${questionsSchema},${modelAnswersSchema}`)}`;
+    }
+
+    if (activity === 'open-cloze' && L === 'B2') {
+      return `Create ONE complete Cambridge B2 First Reading and Use of English Part 2: open cloze.
+${variety}
+${SHARED_JSON_RULES}
+${directions}
+
+TEXT RULES:
+- Natural, realistic exam-style text of 150–180 words with a short title (magazine/website article tone).
+- Solid B2 vocabulary and grammar: NOT simple A2/B1 language, NOT academic C1/C2 language.
+- Exactly 8 gaps written as (9) ___ through (16) ___ in reading order.
+- The passage must NOT contain a gap (0). The example is SEPARATE (see EXAMPLE RULES).
+- Never write the gap number with a letter "o": always (9)–(16) with digits.
+
+EXAMPLE RULES (CRITICAL):
+- The "example" field is a STANDALONE sentence, not part of the passage.
+- It must contain a real gap written as (0) ___ and have one logical one-word answer.
+- Good example: {"number":0,"sentence":"She is fond (0) ___ travelling by train.","answer":"of","explanation":"the adjective \\"fond\\" takes the dependent preposition \\"of\\""}
+
+ANSWER RULES (CRITICAL):
+- Every answer is exactly ONE word. No phrases, no contractions of two words, no options A/B/C/D.
+- Exactly ONE clear best answer per gap: the grammar and context must make other words wrong.
+- Part 2 tests GRAMMAR and FUNCTION words, not Part 1 vocabulary. Use a MIX of:
+  - prepositions: in / on / at / for / with / by / from / to
+  - relative pronouns: which / that / who / where / whose
+  - auxiliaries and modals: do / does / did / has / have / is / are / been / would
+  - determiners and quantifiers: some / any / each / every / much / many / few / little
+  - linkers and conjunctions: although / while / when / because / despite / unless / however
+  - pronouns and fixed grammar patterns: it / there / what / one / so / such / enough
+- Across the 8 gaps cover at least 4 DIFFERENT categories from the list above.
+
+FORBIDDEN:
+- a (0) gap inside the passage
+- gaps solvable by several equally correct words (e.g. "very/really/extremely")
+- answers that are content vocabulary choices (Part 1 style) instead of grammar/function words
+- multi-word answers, empty answers, answers with spaces
+- testing the same word as the answer in two different gaps
+- B1-trivial gaps or C1/C2 grammar
+
+Each modelAnswers entry: the single correct word (lowercase unless a proper noun).
+Generate exactly 8 questions numbered 9–16.
+Return ONLY JSON with: partTitle, directions, example {number:0, sentence (with the (0) ___ gap), answer, explanation}, title, passage (150–180 words with gaps (9) ___ to (16) ___ and NO (0) gap), questions[{id:"q1"–"q8", number:9–16, type:"short"}], modelAnswers[{id, answer:"one word"}]`;
+    }
+
     let passageRule = '';
     if (activity === 'multiple-choice-cloze') {
       passageRule = `passage: 130–200 word text titled, with example gap (0) ___ filled in context AND gaps (1) ___ through (${n}) ___ in order.`;

@@ -556,15 +556,50 @@ export async function previewLevelExamPartGeneration({
   const enunciadoPreview = buildB2EnunciadoFromGenerated(generated, partDef.partNumber);
   const partTitle = getExamPartDisplayLabel(slug, partDef.partNumber);
 
+  // Validación de calidad IA (B2 Parts 1–2): blind solve + rúbrica. Sus errores bloquean igual que los mecánicos.
+  let quality = null;
+  const qualityErrors = [];
+  const qualityWarnings = [];
+  if (slug === 'b2' && (partDef.partNumber === 1 || partDef.partNumber === 2) && validation.ok) {
+    try {
+      const { validateB2Part1Quality, validateB2Part2Quality } = await import('@/lib/examPartQualityValidator');
+      quality =
+        partDef.partNumber === 1
+          ? await validateB2Part1Quality(generated)
+          : await validateB2Part2Quality(generated);
+      qualityErrors.push(...quality.errors);
+      qualityWarnings.push(...quality.warnings);
+    } catch (e) {
+      qualityWarnings.push(`Quality validator failed to run: ${e?.message || e}`);
+    }
+  }
+
+  // Posible segunda respuesta defendible (blind solve / rúbrica): el preview se permite,
+  // pero el guardado queda bloqueado salvo override manual explícito (ver save).
+  const needsReview = collectAmbiguityFindings(quality);
+  if (needsReview.length) {
+    generated.__needsReview = {
+      status: 'ambiguity_warning',
+      findings: needsReview,
+      detectedAt: new Date().toISOString(),
+    };
+  } else {
+    delete generated.__needsReview;
+  }
+
+  const mergedOk = validation.ok && qualityErrors.length === 0;
+  const mergedErrors = [...validation.errors, ...qualityErrors];
+  const mergedWarnings = [...validation.warnings, ...qualityWarnings];
+
   logExamGeneration('part_preview', {
     level: slug,
     examNumber: examSlot,
     partNumber: partDef.partNumber,
     action: 'preview',
     durationMs: Date.now() - t0,
-    validationOk: validation.ok,
+    validationOk: mergedOk,
     saved: false,
-    validationErrors: validation.ok ? null : validation.errors,
+    validationErrors: mergedOk ? null : mergedErrors,
   });
 
   return {
@@ -574,11 +609,66 @@ export async function previewLevelExamPartGeneration({
     generated,
     enunciadoPreview,
     validation: {
-      ok: validation.ok,
-      errors: validation.errors,
-      warnings: validation.warnings,
+      ok: mergedOk,
+      errors: mergedErrors,
+      warnings: mergedWarnings,
+      needsReview,
     },
+    quality,
   };
+}
+
+/**
+ * Ítems con posible segunda respuesta defendible según el quality validator
+ * (blind solve y rúbrica). No bloquean el preview, pero sí el guardado automático.
+ * @returns {Array<{ itemNumber: number | null, type: string, detail: string }>}
+ */
+function collectAmbiguityFindings(quality) {
+  if (!quality) return [];
+  const findings = [];
+
+  const mismatches = Array.isArray(quality?.blindSolve?.mismatches)
+    ? quality.blindSolve.mismatches
+    : [];
+  for (const m of mismatches) {
+    findings.push({
+      itemNumber: m?.number ?? null,
+      type: 'blind_solve_mismatch',
+      detail: `Blind solver chose "${m?.solver}" but the key says "${m?.key}".`,
+    });
+  }
+
+  const ambiguous = Array.isArray(quality?.blindSolve?.ambiguous)
+    ? quality.blindSolve.ambiguous
+    : [];
+  for (const a of ambiguous) {
+    const alternatives = (a?.letters || a?.words || []).join('/');
+    findings.push({
+      itemNumber: a?.number ?? null,
+      type: 'ambiguity_warning',
+      detail: `Solver considers more than one answer defensible (${alternatives}): ${a?.reason || 'no reason given'}.`,
+    });
+  }
+
+  const multi = Array.isArray(quality?.rubric?.multipleAnswerItems)
+    ? quality.rubric.multipleAnswerItems
+    : [];
+  for (const m of multi) {
+    findings.push({
+      itemNumber: m?.number ?? null,
+      type: 'multiple_answers',
+      detail: `Rubric reviewer accepts several words (${(m?.words || []).join('/')}): ${m?.reason || 'no reason given'}.`,
+    });
+  }
+
+  // De-dup por ítem + tipo (mismatch y ambiguous pueden solaparse).
+  const seen = new Set();
+  return findings.filter((f) => {
+    const key = `${f.itemNumber}::${f.type}`;
+    if (seen.has(key)) return false;
+    seen.add(key);
+    return true;
+  });
 }
 
 /** Persist admin-approved generated JSON for one part. */
@@ -590,10 +680,37 @@ export async function saveLevelExamPartFromPreview(adminDb, {
   generated,
   skipAudio = false,
   replacePartContent = true,
+  overrideNeedsReview = false,
 }) {
   const slug = String(levelSlug || '').toLowerCase();
   const partDef = getLevelExamPartDef(slug, partNumber);
   if (!partDef) throw new Error(`Parte inválida: ${partNumber}`);
+
+  // Ambigüedad sin resolver (segunda respuesta defendible detectada en el preview):
+  // no se persiste salvo override manual explícito.
+  const review = generated?.__needsReview;
+  const reviewFindings = Array.isArray(review?.findings) ? review.findings : [];
+  if (reviewFindings.length && !overrideNeedsReview) {
+    const detail = reviewFindings
+      .map((f) => `Q${f?.itemNumber ?? '?'}: ${f?.detail || f?.type || 'ambiguity'}`)
+      .join(' | ');
+    logExamGeneration('part_save_blocked_needs_review', {
+      level: slug,
+      examNumber: examSlot,
+      partNumber: partDef.partNumber,
+      action: 'save',
+      validationOk: false,
+      saved: false,
+      validationErrors: reviewFindings.map((f) => f?.detail || f?.type),
+    });
+    throw new Error(
+      `Save blocked: the quality validator flagged a possible second defensible answer (${detail}). ` +
+        'Fix the item and regenerate the preview, or save with the explicit overrideNeedsReview flag.',
+    );
+  }
+  if (generated && typeof generated === 'object') {
+    delete generated.__needsReview;
+  }
 
   const validation = validateGeneratedExamPart(slug, partDef.partNumber, generated);
   if (!validation.ok) {

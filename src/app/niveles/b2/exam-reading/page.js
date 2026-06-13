@@ -29,6 +29,8 @@ import {
   parsePart1QuestionOptions,
 } from '@/utils/b2ExamTextBlocks';
 import {
+  composeOpenClozeDirections,
+  extractLegacyPart2InlineExample,
   getOpenAnswerMap,
   inferOpenQuestionNumbersFromPrompt,
   normalizeText,
@@ -491,8 +493,25 @@ function B2ReadingExamsPageInner() {
       texto = split.texto.trim();
       preguntasPart1Parse = parsePart1QuestionOptions(split.preguntas);
     }
+    // Part 2 (open cloze): ejemplo (0) coherente — usa el de la pregunta generada
+    // y descarta el ejemplo sin gap de la Descripción fija.
+    let enunciado =
+      partNumberReading === 2
+        ? composeOpenClozeDirections(desc, rawPregunta) || fallback.enunciado
+        : desc || fallback.enunciado;
+    if (partNumberReading === 2) {
+      // Legacy: pasajes antiguos traen el gap (0) incrustado en el texto; se extrae la
+      // frase al bloque Example y el texto queda solo con los gaps activos 9–16.
+      const legacy = extractLegacyPart2InlineExample(texto);
+      if (legacy) {
+        texto = legacy.cleanedTexto;
+        if (!/^example\s*:/im.test(enunciado)) {
+          enunciado = `${enunciado}\nExample:\n${legacy.exampleSentence}`.trim();
+        }
+      }
+    }
     return {
-      enunciado: desc || fallback.enunciado,
+      enunciado,
       texto,
       preguntasPart1Parse,
     };
@@ -915,21 +934,6 @@ function B2ReadingExamsPageInner() {
         selectedOptions: nextSelected,
       });
       if (!wasChecked && !hideFeedback) {
-        const correctOpt = group.options.find((o) => o.correcta);
-        const answersFromDatabase = group.options
-          .map((o) => (o.formattedText || o.respuesta || '').trim())
-          .filter(Boolean)
-          .join('\n');
-        requestAiJustification(questionKey, {
-          partLabel: selectedPart?.nombre || '',
-          questionLabel: group.questionNumber
-            ? `Question ${group.questionNumber}`
-            : 'Item',
-          userChoiceText: option.formattedText || option.respuesta || '',
-          correctChoiceText: correctOpt?.formattedText || correctOpt?.respuesta || '',
-          isCorrect: !!option.correcta,
-          answersFromDatabase: answersFromDatabase || undefined,
-        });
         void (async () => {
           const uid = await getSessionUserId();
           const pid = selectedQuestion?.preguntaId;
@@ -953,12 +957,36 @@ function B2ReadingExamsPageInner() {
       checkedQuestions,
       selectedOptions,
       hideFeedback,
-      requestAiJustification,
       selectedPart?.id,
-      selectedPart?.nombre,
       selectedQuestion?.preguntaId,
       trySavePartAfterAnswer,
     ],
+  );
+
+  /** Part 1 cloze: la explicación solo se pide cuando el alumno pulsa 💡 Explanation. */
+  const handlePart1ExplanationRequest = useCallback(
+    ({ questionKey, group }) => {
+      const existing = aiHintsByKey[questionKey];
+      if (existing?.loading || existing?.text) return;
+      const selectedId = selectedOptions[questionKey];
+      const option = group?.options?.find((o) => o.id === selectedId);
+      if (!option) return;
+      const correctOpt = group.options.find((o) => o.correcta);
+      const answersFromDatabase = group.options
+        .map((o) => (o.formattedText || o.respuesta || '').trim())
+        .filter(Boolean)
+        .join('\n');
+      requestAiJustification(questionKey, {
+        style: 'cloze',
+        partLabel: selectedPart?.nombre || '',
+        questionLabel: group.questionNumber ? `Question ${group.questionNumber}` : 'Item',
+        userChoiceText: option.formattedText || option.respuesta || '',
+        correctChoiceText: correctOpt?.formattedText || correctOpt?.respuesta || '',
+        isCorrect: !!option.correcta,
+        answersFromDatabase: answersFromDatabase || undefined,
+      });
+    },
+    [aiHintsByKey, selectedOptions, requestAiJustification, selectedPart?.nombre],
   );
 
   const handleOpenGapCheck = useCallback(
@@ -968,17 +996,21 @@ function B2ReadingExamsPageInner() {
       const isCorrect = expectedAnswers.has(normalizeText(currentValue));
       const nextOpenChecks = { ...openChecks, [questionKey]: isCorrect };
       setOpenChecks(nextOpenChecks);
-      const correctChoiceText =
-        [...expectedAnswers].slice(0, 4).join(' · ') || 'model answer';
-      const answersFromDatabase = [...expectedAnswers].join(' · ');
-      requestAiJustification(questionKey, {
-        partLabel: selectedPart?.nombre || '',
-        questionLabel: `Question ${questionNumber}`,
-        userChoiceText: currentValue,
-        correctChoiceText,
-        isCorrect,
-        answersFromDatabase: answersFromDatabase || undefined,
-      });
+      // Open cloze (Parts 2–3): la explicación se pide al pulsar 💡 (lazy),
+      // no automáticamente. Part 4 (key word) conserva el comportamiento previo.
+      if (isKeyWordPart) {
+        const correctChoiceText =
+          [...expectedAnswers].slice(0, 4).join(' · ') || 'model answer';
+        const answersFromDatabase = [...expectedAnswers].join(' · ');
+        requestAiJustification(questionKey, {
+          partLabel: selectedPart?.nombre || '',
+          questionLabel: `Question ${questionNumber}`,
+          userChoiceText: currentValue,
+          correctChoiceText,
+          isCorrect,
+          answersFromDatabase: answersFromDatabase || undefined,
+        });
+      }
       void (async () => {
         const uid = await getSessionUserId();
         const pid = selectedQuestion?.preguntaId;
@@ -1002,10 +1034,33 @@ function B2ReadingExamsPageInner() {
       openChecks,
       openAnswerMap,
       requestAiJustification,
+      isKeyWordPart,
       selectedQuestion?.preguntaId,
       selectedPart?.id,
+      selectedPart?.nombre,
       trySavePartAfterAnswer,
     ],
+  );
+
+  /** Explicación lazy para huecos open cloze: se pide solo al pulsar 💡 Explanation. */
+  const handleOpenGapExplanationRequest = useCallback(
+    ({ questionKey, questionNumber }) => {
+      const existing = aiHintsByKey[questionKey];
+      if (existing?.loading || existing?.text) return;
+      const checkResult = openChecks[questionKey];
+      if (typeof checkResult !== 'boolean') return;
+      const expectedAnswers = openAnswerMap.get(questionNumber) || new Set();
+      requestAiJustification(questionKey, {
+        style: 'open-cloze',
+        partLabel: selectedPart?.nombre || '',
+        questionLabel: `Question ${questionNumber}`,
+        userChoiceText: openInputs[questionKey] || '',
+        correctChoiceText: [...expectedAnswers].slice(0, 4).join(' · ') || 'model answer',
+        isCorrect: checkResult,
+        answersFromDatabase: [...expectedAnswers].join(' · ') || undefined,
+      });
+    },
+    [aiHintsByKey, openChecks, openInputs, openAnswerMap, requestAiJustification, selectedPart?.nombre],
   );
 
   const scorePanelProps = {
@@ -1099,10 +1154,14 @@ function B2ReadingExamsPageInner() {
 
   const getPartTitle = (part) => {
     const n = Number(part?.nombre.match(/\d+/)?.[0] || 0);
+    if (n === 1) return 'Reading Part 1 — Multiple-choice cloze';
+    if (n === 2) return 'Reading Part 2 — Open cloze';
+    if (n === 3) return 'Reading Part 3 — Word formation';
+    if (n === 4) return 'Reading Part 4 — Key word transformations';
     if (n === 5) return 'Reading Part 5 — Multiple choice';
     if (n === 6) return 'Reading Part 6 — Gapped text';
     if (n === 7) return 'Reading Part 7 — Multiple matching';
-    return n ? `Reading Part ${n - 4}` : part?.nombre || '';
+    return n ? `Reading Part ${n}` : part?.nombre || '';
   };
 
   const part6SentencePoolBlock = useMemo(() => {
@@ -1259,6 +1318,7 @@ function B2ReadingExamsPageInner() {
                       onOptionSelect={handlePart1McqOptionSelect}
                       hideFeedback={hideFeedback}
                       aiHintsByKey={aiHintsByKey}
+                      onRequestExplanation={handlePart1ExplanationRequest}
                     />
                   ) : isKeyWordPart ? (
                     <B2ExamInlineKeyWordPassage
@@ -1294,6 +1354,7 @@ function B2ReadingExamsPageInner() {
                       hideFeedback={hideFeedback}
                       inputPlaceholder="Write one word"
                       aiHintsByKey={aiHintsByKey}
+                      onRequestExplanation={handleOpenGapExplanationRequest}
                     />
                   ) : null
                 }

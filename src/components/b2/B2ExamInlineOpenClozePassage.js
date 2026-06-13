@@ -1,5 +1,6 @@
 'use client';
 
+import { useState } from 'react';
 import LevelsAnswerJustification from '@/components/levels/LevelsAnswerJustification';
 
 /** Marcador `(N) ___` / `(N) …` en pasajes Open Cloze, Word Formation, etc. */
@@ -45,6 +46,7 @@ export function parseLineWithOpenGaps(line = '') {
  *   inputPlaceholder?: string,
  *   aiHintsByKey?: Record<string, { loading?: boolean, error?: string | null, text?: string | null }>,
  *   labels?: { check?: string, correct?: string, incorrect?: string, correctAnswer?: string },
+ *   onRequestExplanation?: (info: { questionKey: string, questionNumber: number }) => void,
  * }} props
  */
 export default function B2ExamInlineOpenClozePassage({
@@ -60,7 +62,23 @@ export default function B2ExamInlineOpenClozePassage({
   inputPlaceholder = 'Write one word',
   aiHintsByKey = {},
   labels = {},
+  onRequestExplanation,
 }) {
+  /** Explicaciones ocultas por defecto: solo se muestran (y se piden) al pulsar 💡. */
+  const [openExplanations, setOpenExplanations] = useState({});
+  const lazyExplanations = typeof onRequestExplanation === 'function';
+
+  const toggleExplanation = (questionKey, questionNumber) => {
+    const isOpen = !!openExplanations[questionKey];
+    if (!isOpen) {
+      const hint = aiHintsByKey[questionKey];
+      if (!hint?.text && !hint?.loading) {
+        onRequestExplanation({ questionKey, questionNumber });
+      }
+    }
+    setOpenExplanations((prev) => ({ ...prev, [questionKey]: !isOpen }));
+  };
+
   const activeSet = new Set(activeQuestionNumbers);
   const checkLabel = labels.check ?? 'Check';
   const correctLabel = labels.correct ?? 'Correct';
@@ -202,9 +220,25 @@ export default function B2ExamInlineOpenClozePassage({
                           {correctAnswerLabel}: {expectedList.join(' · ')}
                         </span>
                       ) : null}
+                      {lazyExplanations ? (
+                        <button
+                          type="button"
+                          className={`levels-exam-mcq-explanations__toggle${
+                            openExplanations[questionKey]
+                              ? ' levels-exam-mcq-explanations__toggle--open'
+                              : ''
+                          }`}
+                          aria-expanded={!!openExplanations[questionKey]}
+                          onClick={() => toggleExplanation(questionKey, questionNumber)}
+                        >
+                          💡 Explanation
+                        </button>
+                      ) : null}
                     </span>
                   ) : null}
-                  {!hideFeedback && aiHintsByKey[questionKey] ? (
+                  {!hideFeedback &&
+                  aiHintsByKey[questionKey] &&
+                  (!lazyExplanations || openExplanations[questionKey]) ? (
                     <span className="levels-exam-inline-gap__hint">
                       <LevelsAnswerJustification hint={aiHintsByKey[questionKey]} />
                     </span>

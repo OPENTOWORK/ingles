@@ -104,6 +104,9 @@ export async function POST(req) {
   const correctChoiceText = clip(body?.correctChoiceText);
   const answersFromDatabase = clip(body?.answersFromDatabase);
   const isCorrect = Boolean(body?.isCorrect);
+  const styleParam = String(body?.style || '').toLowerCase();
+  const isOpenClozeStyle = styleParam === 'open-cloze';
+  const isClozeStyle = styleParam === 'cloze' || isOpenClozeStyle;
 
   if (!contextSnippet || !String(userChoiceText || '').trim()) {
     return NextResponse.json({ error: 'Faltan datos para justificar.' }, { status: 400 });
@@ -114,6 +117,53 @@ export async function POST(req) {
       { status: 400 },
     );
   }
+
+  const CLOZE_SHARED = `You are an experienced English teacher explaining ONE multiple-choice cloze gap (Cambridge Use of English Part 1 style).
+
+The options test collocations, phrasal verbs, fixed expressions, dependent prepositions, or close-meaning vocabulary. Your job is to name the EXACT word partnership or meaning difference that decides the answer.
+
+Rules:
+- Quote the exact collocation / fixed expression / preposition pattern (e.g. "strike a balance", "interested in", "raise awareness"). Use double quotation marks ONLY around quoted words/expressions.
+- Be concrete. FORBIDDEN vague wording: "does not fit the context", "is more appropriate", "improves the sentence", "sounds better", "is the best option".
+- Refer to options by their word only (e.g. "strike"), never "Option B".
+- Write in English. Single line, no line breaks. Do not mention the model provider.`;
+
+  const OPEN_CLOZE_SHARED = `You are an experienced English teacher explaining ONE open cloze gap (Cambridge Use of English Part 2 style: ONE word per gap, mainly grammar/function words).
+
+Open cloze gaps test prepositions, relative pronouns, auxiliaries, determiners, quantifiers, linkers/connectors and fixed grammar patterns. Your job is to name the EXACT grammar reason that decides the answer: which preposition the verb/adjective/noun takes, what kind of connector the sentence needs, which auxiliary the tense requires, etc.
+
+Rules:
+- Name the grammar category and the pattern explicitly (e.g. the time connector "when", the dependent preposition in "rely on", the auxiliary "has" for present perfect). Use double quotation marks ONLY around quoted words.
+- Be concrete. FORBIDDEN vague wording: "does not fit the context", "is more appropriate", "improves the sentence", "sounds better", "is the best option".
+- Write in English. Single line, no line breaks. Do not mention the model provider.`;
+
+  const openClozeSystem = isCorrect
+    ? `${OPEN_CLOZE_SHARED}
+
+The student's answer is CORRECT.
+Format (1 sentence, 2 maximum, max 280 characters):
+Correct. "<student's word>" is right because <the exact grammar function it performs in this sentence>.
+Example: Correct. "When" is right because it connects the time of returning home with remembering the journey.`
+    : `${OPEN_CLOZE_SHARED}
+
+The student's answer is WRONG.
+Format (2–3 short sentences, max 420 characters):
+Your answer "<student's word>" is not correct because <exact grammar reason it fails: wrong word class, wrong preposition, refers to people/things, wrong tense…>. The gap needs <the grammar category required>. The correct answer is "<keyed word>" because <its exact function in this sentence>.
+Example: Your answer "who" is not correct because it refers to people. The sentence needs a time connector. "When" is correct because it links the moment of returning home with remembering the journey.`;
+
+  const clozeSystem = isCorrect
+    ? `${CLOZE_SHARED}
+
+The student's answer is CORRECT.
+Format (1 sentence, 2 maximum, max 280 characters):
+Correct. "<student's word>" is the right answer because <the exact collocation / fixed expression / preposition / meaning that makes it right>.
+Example: Correct. "Strike" is the right answer because the natural collocation is "strike a balance".`
+    : `${CLOZE_SHARED}
+
+The student's answer is WRONG.
+Format (2 sentences, max 400 characters):
+Your answer "<student's word>" is incorrect because <exact reason: wrong collocation / wrong preposition / meaning difference, naming the unnatural combination>. The correct answer is "<keyed word>" because <the exact expression or pattern, e.g. the fixed expression is "strike a balance">.
+Example: Your answer "reach" is incorrect because "reach a balance" is not the natural expression in this context. The correct answer is "strike" because the fixed expression is "strike a balance".`;
 
   const system = isCorrect
     ? `You are an experienced English teacher (CEFR) for exam-style reading and use-of-English tasks.
@@ -140,6 +190,27 @@ Write in English only, professional and tied to the CONTEXT.
 Do not mention the model provider.
 Max 520 characters in total. No quotation marks. Single line, no line breaks.`;
 
+  // "A) reach" / "3 B word" → "reach" (cloze style habla solo de palabras, no de letras).
+  const bareWord = (s) =>
+    String(s || '')
+      .replace(/^\d+\s+[A-D]\s+/i, '')
+      .replace(/^[A-D]\)\s*/i, '')
+      .trim();
+
+  const clozeUser = `Part: ${partLabel || '—'}
+Item: ${questionLabel || '—'}
+Result according to the answer key: ${isCorrect ? 'CORRECT' : 'WRONG'}
+
+Sentence/passage context (find the gap this item belongs to):
+${contextSnippet}
+
+${
+    answersFromDatabase
+      ? `${isOpenClozeStyle ? 'Accepted answer(s) for this gap' : 'The four options for this gap'}:\n${answersFromDatabase}\n\n`
+      : ''
+  }Student's word: ${bareWord(userChoiceText)}
+${isCorrect ? '' : `Keyed correct word: ${bareWord(correctChoiceText)}`}`;
+
   const user = `Parte: ${partLabel || '—'}
 Ítem: ${questionLabel || '—'}
 Resultado según la base de datos del ejercicio: ${isCorrect ? 'ACIERTO' : 'FALLO'}
@@ -158,14 +229,17 @@ ${
 
   try {
     const { text: raw } = await cambridgeChatCompletion({
-      system,
-      messages: [{ role: 'user', content: user }],
-      temperature: 0.35,
+      system: isOpenClozeStyle ? openClozeSystem : isClozeStyle ? clozeSystem : system,
+      messages: [{ role: 'user', content: isClozeStyle ? clozeUser : user }],
+      temperature: isClozeStyle ? 0.2 : 0.35,
       max_tokens: isCorrect ? 200 : 280,
     });
     let oneLine = raw.replace(/\s+/g, ' ').trim();
 
-    if (!isCorrect && String(correctChoiceText || '').trim()) {
+    if (isClozeStyle) {
+      // El formato cloze incluye deliberadamente "The correct answer is …": no recortar la coletilla.
+      oneLine = oneLine.slice(0, isCorrect ? 320 : 440);
+    } else if (!isCorrect && String(correctChoiceText || '').trim()) {
       const key = String(correctChoiceText).trim();
       oneLine = stripRedundantKeyedSuffix(oneLine, key);
       oneLine = oneLine.slice(0, 560);

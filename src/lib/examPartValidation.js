@@ -173,6 +173,278 @@ function validateWritingPart(slug, partDef, gen, errors, warnings) {
   }
 }
 
+const PART1_OPTION_REGEX = /^([A-D])\)\s*(.+)$/i;
+
+/**
+ * Strict checks for B2 Reading & Use of English Part 1 (multiple-choice cloze).
+ * Any failure here blocks the save (errors, not warnings).
+ */
+function validateB2Part1Strict(gen, errors, warnings) {
+  const questions = asArray(gen.questions);
+
+  if (questions.length !== 8) {
+    errors.push(`Part 1 must have exactly 8 questions (got ${questions.length}).`);
+  }
+
+  const seenNumbers = new Set();
+  questions.forEach((q, i) => {
+    const label = `Part 1 question ${q?.number ?? i + 1}`;
+    const num = Number(q?.number);
+
+    if (!Number.isInteger(num) || num < 1 || num > 8) {
+      errors.push(`${label}: question number must be 1–8 (got ${q?.number ?? 'none'}).`);
+    } else if (seenNumbers.has(num)) {
+      errors.push(`${label}: duplicate question number ${num}.`);
+    } else {
+      seenNumbers.add(num);
+    }
+
+    const options = asArray(q?.options).map((o) => String(o ?? '').trim());
+    if (options.length !== 4) {
+      errors.push(`${label}: must have exactly 4 options A–D (got ${options.length}).`);
+      return;
+    }
+
+    const letters = [];
+    const words = [];
+    options.forEach((opt, oi) => {
+      const m = opt.match(PART1_OPTION_REGEX);
+      if (!m) {
+        errors.push(`${label}: option ${oi + 1} must use the format "A) word" (got "${opt || 'empty'}").`);
+        return;
+      }
+      const letter = m[1].toUpperCase();
+      const word = m[2].trim();
+      letters.push(letter);
+      if (!word) {
+        errors.push(`${label}: option ${letter} is empty.`);
+        return;
+      }
+      if (/\s/.test(word)) {
+        errors.push(`${label}: option ${letter} must be one word only (got "${word}").`);
+      }
+      words.push(word.toLowerCase());
+    });
+
+    const expectedLetters = ['A', 'B', 'C', 'D'];
+    if (letters.length === 4 && letters.join('') !== expectedLetters.join('')) {
+      errors.push(`${label}: options must be labelled A, B, C, D in order (got ${letters.join(', ')}).`);
+    }
+    if (new Set(words).size !== words.length) {
+      errors.push(`${label}: duplicate option words are not allowed.`);
+    }
+  });
+
+  if (questions.length === 8 && seenNumbers.size === 8) {
+    for (let n = 1; n <= 8; n += 1) {
+      if (!seenNumbers.has(n)) errors.push(`Part 1 is missing question number ${n}.`);
+    }
+  }
+
+  // Answer key: una entrada por pregunta, con letra A–D.
+  const modelAnswers = asArray(gen.modelAnswers);
+  const answerByQuestionId = new Map();
+  modelAnswers.forEach((entry) => {
+    if (entry?.id != null) answerByQuestionId.set(String(entry.id), entry);
+  });
+  const keyLetters = [];
+  questions.forEach((q, i) => {
+    const label = `Part 1 question ${q?.number ?? i + 1}`;
+    const entry = answerByQuestionId.get(String(q?.id)) ?? modelAnswers[i];
+    const answer = String(entry?.answer ?? '').trim().toUpperCase();
+    if (!answer) {
+      errors.push(`${label}: missing answer key entry.`);
+    } else if (!/^[A-D]$/.test(answer)) {
+      errors.push(`${label}: answer key must be a single letter A–D (got "${entry?.answer}").`);
+    } else {
+      keyLetters.push(answer);
+    }
+  });
+
+  // Distribución del key: un examen real reparte las letras (nunca 6+ veces la misma).
+  if (keyLetters.length >= 6) {
+    const counts = {};
+    keyLetters.forEach((l) => {
+      counts[l] = (counts[l] || 0) + 1;
+    });
+    const [topLetter, topCount] = Object.entries(counts).sort((a, b) => b[1] - a[1])[0];
+    if (topCount >= 6) {
+      errors.push(`Answer key is degenerate: "${topLetter}" is correct ${topCount} times. Spread answers across A–D.`);
+    } else if (topCount === 5) {
+      warnings.push(`Answer key uses "${topLetter}" ${topCount} times — consider spreading answers across A–D.`);
+    }
+  }
+
+  // Passage: título, texto y gaps (1)–(8) presentes y sin gaps extra.
+  if (!hasText(gen.title)) errors.push('Part 1 must include a short text title.');
+  const passage = String(gen.passage || '');
+  if (!passage.trim()) {
+    errors.push('Part 1 must include a passage.');
+  } else {
+    const gapNumbers = [...passage.matchAll(/\((\d+)\)\s*_+/g)].map((m) => Number(m[1]));
+    for (let n = 1; n <= 8; n += 1) {
+      const count = gapNumbers.filter((g) => g === n).length;
+      if (count === 0) errors.push(`Part 1 passage is missing gap (${n}) ___.`);
+      if (count > 1) errors.push(`Part 1 passage repeats gap (${n}) ___.`);
+    }
+    const extra = [...new Set(gapNumbers.filter((g) => g > 8))];
+    if (extra.length) {
+      errors.push(`Part 1 passage has unexpected gap numbers: ${extra.join(', ')} (only (0)–(8) allowed).`);
+    }
+
+    const wordCount = passage
+      .replace(/\(\d+\)\s*_+/g, ' ')
+      .split(/\s+/)
+      .filter(Boolean).length;
+    if (wordCount < 140 || wordCount > 190) {
+      warnings.push(`Part 1 passage is ${wordCount} words; target is around 150–180.`);
+    }
+  }
+}
+
+/** Palabra única válida como respuesta de open cloze (letras, apóstrofo o guion). */
+const PART2_ONE_WORD_REGEX = /^[A-Za-z'’-]+$/;
+
+/** Palabras de gramática/función habituales en Part 2 (chequeo orientativo). */
+const PART2_FUNCTION_WORDS = new Set([
+  'in', 'on', 'at', 'for', 'with', 'by', 'from', 'to', 'of', 'into', 'about', 'as', 'out', 'up',
+  'which', 'that', 'who', 'whom', 'whose', 'where', 'when', 'what', 'why', 'how',
+  'do', 'does', 'did', 'has', 'have', 'had', 'is', 'are', 'was', 'were', 'be', 'been', 'being',
+  'will', 'would', 'can', 'could', 'may', 'might', 'must', 'shall', 'should',
+  'some', 'any', 'each', 'every', 'all', 'both', 'either', 'neither', 'no', 'none', 'another', 'other',
+  'much', 'many', 'few', 'little', 'more', 'most', 'less', 'least', 'enough',
+  'although', 'though', 'while', 'whereas', 'because', 'since', 'unless', 'until', 'despite', 'if',
+  'however', 'therefore', 'so', 'such', 'than', 'like', 'unlike',
+  'it', 'there', 'one', 'ones', 'them', 'they', 'this', 'these', 'those', 'whether', 'not', 'only',
+  'a', 'an', 'the', 'and', 'but', 'or', 'nor', 'too', 'also', 'even', 'yet', 'still',
+]);
+
+/**
+ * Strict checks for B2 Reading & Use of English Part 2 (open cloze).
+ * Any failure here blocks the save (errors, not warnings).
+ */
+function validateB2Part2Strict(gen, errors, warnings) {
+  const questions = asArray(gen.questions);
+
+  if (questions.length !== 8) {
+    errors.push(`Part 2 must have exactly 8 questions (got ${questions.length}).`);
+  }
+
+  const seenNumbers = new Set();
+  questions.forEach((q, i) => {
+    const label = `Part 2 question ${q?.number ?? i + 1}`;
+    const num = Number(q?.number);
+
+    if (!Number.isInteger(num) || num < 9 || num > 16) {
+      errors.push(`${label}: question number must be 9–16 (got ${q?.number ?? 'none'}).`);
+    } else if (seenNumbers.has(num)) {
+      errors.push(`${label}: duplicate question number ${num}.`);
+    } else {
+      seenNumbers.add(num);
+    }
+
+    if (asArray(q?.options).length > 0) {
+      errors.push(`${label}: open cloze must NOT have A/B/C/D options (this is not Part 1).`);
+    }
+  });
+
+  if (questions.length === 8 && seenNumbers.size === 8) {
+    for (let n = 9; n <= 16; n += 1) {
+      if (!seenNumbers.has(n)) errors.push(`Part 2 is missing question number ${n}.`);
+    }
+  }
+
+  // Example: frase independiente con gap (0) real y respuesta de una palabra.
+  const example = gen.example && typeof gen.example === 'object' ? gen.example : null;
+  const exampleSentence = String(
+    example?.sentence || example?.text || example?.prompt || '',
+  ).trim();
+  const exampleAnswer = String(example?.answer || '').trim();
+  if (!example || !exampleSentence) {
+    errors.push('Part 2 must include a separate example sentence (example.sentence with a (0) ___ gap).');
+  } else {
+    if (!/\(0\)\s*_+/.test(exampleSentence)) {
+      errors.push(`Part 2 example sentence must contain a real gap "(0) ___" (got "${exampleSentence.slice(0, 80)}").`);
+    }
+    if (!exampleAnswer) {
+      errors.push('Part 2 example must include its answer.');
+    } else if (!PART2_ONE_WORD_REGEX.test(exampleAnswer)) {
+      errors.push(`Part 2 example answer must be one word (got "${exampleAnswer}").`);
+    }
+  }
+
+  // Answer key: una palabra exacta por pregunta 9–16.
+  const modelAnswers = asArray(gen.modelAnswers);
+  const answerByQuestionId = new Map();
+  modelAnswers.forEach((entry) => {
+    if (entry?.id != null) answerByQuestionId.set(String(entry.id), entry);
+  });
+  const answerWords = [];
+  questions.forEach((q, i) => {
+    const label = `Part 2 question ${q?.number ?? i + 1}`;
+    const entry = answerByQuestionId.get(String(q?.id)) ?? modelAnswers[i];
+    const answer = String(entry?.answer ?? '').trim();
+    if (!answer) {
+      errors.push(`${label}: missing answer key entry.`);
+      return;
+    }
+    if (/\s/.test(answer)) {
+      errors.push(`${label}: answer must be ONE word with no spaces (got "${answer}").`);
+      return;
+    }
+    if (!PART2_ONE_WORD_REGEX.test(answer)) {
+      errors.push(`${label}: answer must be a single word (got "${answer}").`);
+      return;
+    }
+    answerWords.push(answer.toLowerCase());
+  });
+
+  const repeated = answerWords.filter((w, i) => answerWords.indexOf(w) !== i);
+  if (repeated.length) {
+    warnings.push(`Part 2 repeats the same answer word: ${[...new Set(repeated)].join(', ')}.`);
+  }
+  if (answerWords.length >= 6) {
+    const functionCount = answerWords.filter((w) => PART2_FUNCTION_WORDS.has(w)).length;
+    if (functionCount < 4) {
+      warnings.push(
+        `Only ${functionCount} of ${answerWords.length} answers look like grammar/function words — Part 2 should not test Part 1 vocabulary.`,
+      );
+    }
+  }
+
+  // Passage: título, gaps (9)–(16) exactos, sin (0) ni "(o)" dentro del texto.
+  if (!hasText(gen.title)) errors.push('Part 2 must include a short text title.');
+  const passage = String(gen.passage || '');
+  if (!passage.trim()) {
+    errors.push('Part 2 must include a passage.');
+  } else {
+    if (/\(0\)\s*(?:_+|\.{2,}|…+)/.test(passage)) {
+      errors.push('Part 2 passage must NOT contain the example gap (0) — the example goes in its own section.');
+    }
+    if (/\(\s*[oO]\s*\)/.test(passage)) {
+      errors.push('Part 2 passage contains "(o)" with the letter o — gap markers must use digits.');
+    }
+    const gapNumbers = [...passage.matchAll(/\((\d+)\)\s*(?:_+|\.{2,}|…+)/g)].map((m) => Number(m[1]));
+    for (let n = 9; n <= 16; n += 1) {
+      const count = gapNumbers.filter((g) => g === n).length;
+      if (count === 0) errors.push(`Part 2 passage is missing gap (${n}) ___.`);
+      if (count > 1) errors.push(`Part 2 passage repeats gap (${n}) ___.`);
+    }
+    const extra = [...new Set(gapNumbers.filter((g) => g < 9 || g > 16))];
+    if (extra.length) {
+      errors.push(`Part 2 passage has unexpected gap numbers: ${extra.join(', ')} (only (9)–(16) allowed).`);
+    }
+
+    const wordCount = passage
+      .replace(/\(\d+\)\s*_+/g, ' ')
+      .split(/\s+/)
+      .filter(Boolean).length;
+    if (wordCount < 140 || wordCount > 190) {
+      warnings.push(`Part 2 passage is ${wordCount} words; target is around 150–180.`);
+    }
+  }
+}
+
 function validateReadingUseOfEnglish(partDef, gen, errors, warnings) {
   if (!hasText(gen.instructions) && !hasText(gen.directions) && partDef.mode !== 'use-of-english') {
     warnings.push('Missing instructions (optional for some cloze parts).');
@@ -282,6 +554,12 @@ export function validateGeneratedExamPart(slug, partNumber, generated) {
       break;
     default:
       validateReadingUseOfEnglish(partDef, normalized, errors, warnings);
+      if (key === 'b2' && partDef.partNumber === 1 && partDef.activity === 'multiple-choice-cloze') {
+        validateB2Part1Strict(normalized, errors, warnings);
+      }
+      if (key === 'b2' && partDef.partNumber === 2 && partDef.activity === 'open-cloze') {
+        validateB2Part2Strict(normalized, errors, warnings);
+      }
       break;
   }
 

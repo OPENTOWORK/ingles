@@ -23,6 +23,8 @@ import {
 } from '@/utils/recordLevelsUoePartScore';
 import { getUoePartScoring } from '@/utils/levelsUoePartScoring';
 import {
+  composeOpenClozeDirections,
+  extractLegacyPart2InlineExample,
   getOpenAnswerMap,
   inferOpenQuestionNumbersFromPrompt,
   normalizeText,
@@ -378,8 +380,25 @@ function UseOfEnglishExamsPageInner() {
       texto = split.texto.trim();
       preguntasPart1Parse = parsePart1QuestionOptions(split.preguntas);
     }
+    // Part 2 (open cloze): ejemplo (0) coherente — usa el de la pregunta generada
+    // y descarta el ejemplo sin gap de la Descripción fija.
+    let enunciado =
+      partNumberUoe === 2
+        ? composeOpenClozeDirections(desc, rawPregunta) || fallback.enunciado
+        : desc || fallback.enunciado;
+    if (partNumberUoe === 2) {
+      // Legacy: pasajes antiguos traen el gap (0) incrustado en el texto; se extrae la
+      // frase al bloque Example y el texto queda solo con los gaps activos 9–16.
+      const legacy = extractLegacyPart2InlineExample(texto);
+      if (legacy) {
+        texto = legacy.cleanedTexto;
+        if (!/^example\s*:/im.test(enunciado)) {
+          enunciado = `${enunciado}\nExample:\n${legacy.exampleSentence}`.trim();
+        }
+      }
+    }
     return {
-      enunciado: desc || fallback.enunciado,
+      enunciado,
       texto,
       preguntasPart1Parse,
     };
@@ -715,21 +734,6 @@ function UseOfEnglishExamsPageInner() {
       setSelectedOptions(nextSelected);
       setCheckedQuestions(nextChecked);
       if (!wasChecked) {
-        const correctOpt = group.options.find((o) => o.correcta);
-        const answersFromDatabase = group.options
-          .map((o) => (o.formattedText || o.respuesta || '').trim())
-          .filter(Boolean)
-          .join('\n');
-        requestAiJustification(questionKey, {
-          partLabel: getSelectedPartTitle(),
-          questionLabel: group.questionNumber
-            ? `Question ${group.questionNumber}`
-            : 'Item',
-          userChoiceText: option.formattedText || option.respuesta || '',
-          correctChoiceText: correctOpt?.formattedText || correctOpt?.respuesta || '',
-          isCorrect: !!option.correcta,
-          answersFromDatabase: answersFromDatabase || undefined,
-        });
         void (async () => {
           const uid = await getSessionUserId();
           const pid = selectedQuestion?.preguntaId;
@@ -756,11 +760,36 @@ function UseOfEnglishExamsPageInner() {
     [
       checkedQuestions,
       selectedOptions,
-      requestAiJustification,
       selectedPart?.id,
       selectedQuestion?.preguntaId,
       trySavePartAfterAnswer,
     ],
+  );
+
+  /** Part 1 cloze: la explicación solo se pide cuando el alumno pulsa 💡 Explanation. */
+  const handlePart1ExplanationRequest = useCallback(
+    ({ questionKey, group }) => {
+      const existing = aiHintsByKey[questionKey];
+      if (existing?.loading || existing?.text) return;
+      const selectedId = selectedOptions[questionKey];
+      const option = group?.options?.find((o) => o.id === selectedId);
+      if (!option) return;
+      const correctOpt = group.options.find((o) => o.correcta);
+      const answersFromDatabase = group.options
+        .map((o) => (o.formattedText || o.respuesta || '').trim())
+        .filter(Boolean)
+        .join('\n');
+      requestAiJustification(questionKey, {
+        style: 'cloze',
+        partLabel: getSelectedPartTitle(),
+        questionLabel: group.questionNumber ? `Question ${group.questionNumber}` : 'Item',
+        userChoiceText: option.formattedText || option.respuesta || '',
+        correctChoiceText: correctOpt?.formattedText || correctOpt?.respuesta || '',
+        isCorrect: !!option.correcta,
+        answersFromDatabase: answersFromDatabase || undefined,
+      });
+    },
+    [aiHintsByKey, selectedOptions, requestAiJustification],
   );
 
   const handleOpenGapCheck = useCallback(
@@ -770,17 +799,21 @@ function UseOfEnglishExamsPageInner() {
       const isCorrect = expectedAnswers.has(normalizeText(currentValue));
       const nextOpenChecks = { ...openChecks, [questionKey]: isCorrect };
       setOpenChecks(nextOpenChecks);
-      const correctChoiceText =
-        [...expectedAnswers].slice(0, 4).join(' · ') || 'model answer';
-      const answersFromDatabase = [...expectedAnswers].join(' · ');
-      requestAiJustification(questionKey, {
-        partLabel: getSelectedPartTitle(),
-        questionLabel: `Question ${questionNumber}`,
-        userChoiceText: currentValue,
-        correctChoiceText,
-        isCorrect,
-        answersFromDatabase: answersFromDatabase || undefined,
-      });
+      // Open cloze (Parts 2–3): la explicación se pide al pulsar 💡 (lazy),
+      // no automáticamente. Part 4 (key word) conserva el comportamiento previo.
+      if (isKeyWordPart) {
+        const correctChoiceText =
+          [...expectedAnswers].slice(0, 4).join(' · ') || 'model answer';
+        const answersFromDatabase = [...expectedAnswers].join(' · ');
+        requestAiJustification(questionKey, {
+          partLabel: getSelectedPartTitle(),
+          questionLabel: `Question ${questionNumber}`,
+          userChoiceText: currentValue,
+          correctChoiceText,
+          isCorrect,
+          answersFromDatabase: answersFromDatabase || undefined,
+        });
+      }
       void (async () => {
         const uid = await getSessionUserId();
         const pid = selectedQuestion?.preguntaId;
@@ -804,10 +837,32 @@ function UseOfEnglishExamsPageInner() {
       openChecks,
       openAnswerMap,
       requestAiJustification,
+      isKeyWordPart,
       selectedQuestion?.preguntaId,
       selectedPart?.id,
       trySavePartAfterAnswer,
     ],
+  );
+
+  /** Explicación lazy para huecos open cloze: se pide solo al pulsar 💡 Explanation. */
+  const handleOpenGapExplanationRequest = useCallback(
+    ({ questionKey, questionNumber }) => {
+      const existing = aiHintsByKey[questionKey];
+      if (existing?.loading || existing?.text) return;
+      const checkResult = openChecks[questionKey];
+      if (typeof checkResult !== 'boolean') return;
+      const expectedAnswers = openAnswerMap.get(questionNumber) || new Set();
+      requestAiJustification(questionKey, {
+        style: 'open-cloze',
+        partLabel: getSelectedPartTitle(),
+        questionLabel: `Question ${questionNumber}`,
+        userChoiceText: openInputs[questionKey] || '',
+        correctChoiceText: [...expectedAnswers].slice(0, 4).join(' · ') || 'model answer',
+        isCorrect: checkResult,
+        answersFromDatabase: [...expectedAnswers].join(' · ') || undefined,
+      });
+    },
+    [aiHintsByKey, openChecks, openInputs, openAnswerMap, requestAiJustification],
   );
 
   const currentExamProgress = progressBySlot[examSlot] || {};
@@ -1010,6 +1065,7 @@ function UseOfEnglishExamsPageInner() {
                       checkedQuestions={checkedQuestions}
                       onOptionSelect={handlePart1McqOptionSelect}
                       aiHintsByKey={aiHintsByKey}
+                      onRequestExplanation={handlePart1ExplanationRequest}
                     />
                   ) : isKeyWordPart ? (
                     <B2ExamInlineKeyWordPassage
@@ -1042,6 +1098,7 @@ function UseOfEnglishExamsPageInner() {
                       onCheckGap={handleOpenGapCheck}
                       openAnswerMap={openAnswerMap}
                       aiHintsByKey={aiHintsByKey}
+                      onRequestExplanation={handleOpenGapExplanationRequest}
                     />
                   ) : null
                 }

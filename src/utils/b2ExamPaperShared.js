@@ -40,6 +40,99 @@ export function resolveB2KeyWordPartContent({
   return { enunciado, texto };
 }
 
+/**
+ * Extrae el bloque "Example:" (hasta la línea "Text") de un enunciado de Part 2.
+ * Solo se considera válido si la frase de ejemplo contiene un gap real "(0) ___".
+ * @param {string} rawText
+ * @returns {string} bloque "Example:\n…" o '' si no hay ejemplo válido
+ */
+export function extractOpenClozeExampleBlock(rawText = '') {
+  const lines = String(rawText || '')
+    .replace(/\r\n/g, '\n')
+    .split('\n')
+    .map((l) => l.trim());
+  const start = lines.findIndex((l) => /^example\s*:?\s*$/i.test(l) || /^example\s*:/i.test(l));
+  if (start === -1) return '';
+  let end = lines.length;
+  for (let i = start + 1; i < lines.length; i += 1) {
+    if (lines[i].toLowerCase() === 'text') {
+      end = i;
+      break;
+    }
+  }
+  const block = lines.slice(start, end).filter(Boolean);
+  const hasRealGap = block.some((l) => /\(0\)\s*(?:_+|\.{2,}|…+)/.test(l));
+  return hasRealGap ? block.join('\n') : '';
+}
+
+/**
+ * Quita el bloque "Example:" final de un texto de instrucciones (Descripción fija).
+ * @param {string} text
+ */
+export function stripTrailingExampleBlock(text = '') {
+  const lines = String(text || '').replace(/\r\n/g, '\n').split('\n');
+  const idx = lines.findIndex((l) => /^example\s*:/i.test(l.trim()));
+  if (idx === -1) return String(text || '').trim();
+  return lines.slice(0, idx).join('\n').trim();
+}
+
+/**
+ * Instrucciones de Part 2 (open cloze) con ejemplo coherente:
+ * - Si la pregunta generada trae su propio bloque "Example:" (con gap (0) real), se usa ese
+ *   y se descarta el de la Descripción fija.
+ * - Si no, y el ejemplo de la Descripción no tiene gap real (legacy "She lives in Madrid."),
+ *   se elimina para no mostrar un ejemplo sin sentido.
+ * @param {string} descripcion Descripción fija de levels_partes
+ * @param {string} rawPregunta levels_preguntas.enunciado
+ */
+export function composeOpenClozeDirections(descripcion = '', rawPregunta = '') {
+  const desc = String(descripcion || '').trim();
+  const questionExample = extractOpenClozeExampleBlock(rawPregunta);
+  if (questionExample) {
+    const base = stripTrailingExampleBlock(desc);
+    return base ? `${base}\n${questionExample}` : questionExample;
+  }
+  if (desc && !extractOpenClozeExampleBlock(desc)) {
+    return stripTrailingExampleBlock(desc);
+  }
+  return desc;
+}
+
+/**
+ * Legacy Part 2: pasajes antiguos con el gap de ejemplo `(0) ___` incrustado en el texto.
+ * Extrae la frase completa que contiene el (0) para mostrarla como bloque Example separado
+ * y devuelve el texto limpio (solo gaps 9–16). Devuelve null si el texto no contiene (0).
+ *
+ * @param {string} texto pasaje mostrado en el panel Text (título + párrafos)
+ * @returns {{ exampleSentence: string, cleanedTexto: string } | null}
+ */
+export function extractLegacyPart2InlineExample(texto = '') {
+  const normalized = String(texto || '').replace(/\r\n/g, '\n');
+  const markerRe = /\(\s*[0oO]\s*\)\s*(?:_+|\.{2,}|…+)/;
+  if (!markerRe.test(normalized)) return null;
+
+  const lines = normalized.split('\n');
+  const lineIdx = lines.findIndex((l) => markerRe.test(l));
+  if (lineIdx === -1) return null;
+
+  const line = lines[lineIdx];
+  // Frases del párrafo (split conservador por . ! ? seguidos de espacio).
+  const sentences = line.split(/(?<=[.!?])\s+/);
+  const sIdx = sentences.findIndex((s) => markerRe.test(s));
+  if (sIdx === -1) return null;
+
+  const exampleSentence = sentences[sIdx].trim();
+  const restOfLine = sentences.filter((_, i) => i !== sIdx).join(' ').trim();
+  const cleanedLines = [...lines];
+  if (restOfLine) cleanedLines[lineIdx] = restOfLine;
+  else cleanedLines.splice(lineIdx, 1);
+
+  return {
+    exampleSentence,
+    cleanedTexto: cleanedLines.join('\n').trim(),
+  };
+}
+
 /** @param {string} rawText */
 export function splitEnunciadoAndTextFallback(rawText = '') {
   const normalized = rawText.replace(/\r\n/g, '\n').trim();

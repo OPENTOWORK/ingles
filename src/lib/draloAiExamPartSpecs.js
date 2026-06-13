@@ -14,7 +14,7 @@ const LEVEL_SCALE = {
 /** B2 First question counts per Dralo activity id */
 export const B2_EXAM_QUESTION_COUNTS = {
   'use-of-english': {
-    'multiple-choice-cloze': 7,
+    'multiple-choice-cloze': 8,
     'open-cloze': 8,
     'word-formation': 8,
     'key-word': 6,
@@ -45,7 +45,7 @@ export function getExamQuestionCount(mode, activity, level = 'B2') {
 export const EXAM_DIRECTIONS = {
   'use-of-english': {
     'multiple-choice-cloze': `Part 1: Multiple-choice cloze
-For questions 1–7, read the text below and choose the best word (A, B, C or D) for each gap. There is an example at the beginning (0).`,
+For questions 1–8, read the text below and choose the best word (A, B, C or D) for each gap. There is an example at the beginning (0).`,
     'open-cloze': `Part 2: Open cloze
 For questions 9–16, read the text below and think of the word which best fits each gap. Use only ONE word in each gap. There is an example at the beginning (0).`,
     'word-formation': `Part 3: Word formation

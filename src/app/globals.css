@@ -4205,6 +4205,32 @@ body.nav-open {
   color: #c53030;
 }
 
+.levels-exam-mcq-explanations__toggle {
+  margin-left: 0.6rem;
+  padding: 0.18rem 0.6rem;
+  border-radius: 999px;
+  border: 1px solid #cbd5e1;
+  background: #fff;
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: #334155;
+  cursor: pointer;
+  white-space: nowrap;
+  vertical-align: middle;
+  transition: background 0.15s ease, border-color 0.15s ease;
+}
+
+.levels-exam-mcq-explanations__toggle:hover {
+  background: #f1f5f9;
+  border-color: #94a3b8;
+}
+
+.levels-exam-mcq-explanations__toggle--open {
+  background: #eef2ff;
+  border-color: #a5b4fc;
+  color: #3730a3;
+}
+
 @media (min-width: 1400px) {
   .levels-exam-split-page {
     max-width: min(1720px, 100%);

@@ -246,6 +246,19 @@ export function buildB2EnunciadoFromGenerated(gen = {}, partNumber) {
 
   const useTextPanel = pn >= 1 && pn <= 6;
   if (useTextPanel) {
+    // Part 2 (open cloze): ejemplo (0) como bloque separado ANTES del texto;
+    // el pasaje no debe contener el gap (0).
+    if (pn === 2 && g.example && typeof g.example === 'object') {
+      const exampleSentence = String(
+        g.example.sentence || g.example.text || g.example.prompt || '',
+      ).trim();
+      const exampleAnswer = String(g.example.answer || '').trim();
+      if (exampleSentence && exampleAnswer) {
+        lines.push('Example:');
+        lines.push(exampleSentence);
+        lines.push(`Answer: 0 → ${exampleAnswer}`);
+      }
+    }
     lines.push('Text');
     if (g.title) lines.push(g.title);
     if (g.passage) pushLines(lines, g.passage);
