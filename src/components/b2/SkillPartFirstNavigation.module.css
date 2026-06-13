@@ -344,7 +344,6 @@
   font-size: 0.76rem;
   font-weight: 700;
   color: #0f172a;
-  line-height: 1.2;
 }
 
 .exerciseMeta {
@@ -387,4 +386,57 @@
   border: 1px dashed var(--skill-border);
   color: var(--skill-muted);
   font-size: 0.8rem;
+}
+
+/* Reading practice night mode */
+:global(body.reading-night-mode) .shell {
+  --skill-accent: #38bdf8;
+  --skill-accent-dark: #0ea5e9;
+  --skill-accent-soft: #1e3a5f;
+  --skill-surface: #1e293b;
+  --skill-border: #475569;
+  --skill-shadow: rgba(0, 0, 0, 0.28);
+  --skill-ink: #e2e8f0;
+  --skill-muted: #94a3b8;
+  --skill-subtle: #64748b;
+  background: linear-gradient(165deg, #1e293b 0%, #0f172a 100%);
+}
+
+:global(body.reading-night-mode) .partCard,
+:global(body.reading-night-mode) .backBtn,
+:global(body.reading-night-mode) .exerciseCard {
+  background: #334155;
+  color: #e2e8f0;
+}
+
+:global(body.reading-night-mode) .partCard:hover,
+:global(body.reading-night-mode) .backBtn:hover,
+:global(body.reading-night-mode) .backBtn:focus-visible,
+:global(body.reading-night-mode) .exerciseCard:hover {
+  background: #475569;
+}
+
+:global(body.reading-night-mode) .partName,
+:global(body.reading-night-mode) .exerciseTitle {
+  color: #f8fafc;
+}
+
+:global(body.reading-night-mode) .stepDot {
+  background: #334155;
+  color: #e2e8f0;
+}
+
+:global(body.reading-night-mode) .step--active .stepDot,
+:global(body.reading-night-mode) .step--done .stepDot {
+  background: #1e3a5f;
+  color: #bae6fd;
+}
+
+:global(body.reading-night-mode) .exerciseCard--active {
+  background: linear-gradient(165deg, #1e3a5f 0%, #334155 100%);
+}
+
+:global(body.reading-night-mode) .empty {
+  background: #1e3a5f;
+  color: #cbd5e1;
 }

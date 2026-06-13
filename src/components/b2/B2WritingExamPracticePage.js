@@ -10,6 +10,9 @@ import B2ExamPracticeModuleNav from '@/components/b2/B2ExamPracticeModuleNav';
 import B2WritingFirstTaskCard from '@/components/b2/B2WritingFirstTaskCard';
 import B2WritingPart2TaskPicker from '@/components/b2/B2WritingPart2TaskPicker';
 import B2WritingStrategyPanel from '@/components/b2/B2WritingStrategyPanel';
+import ExamPracticeProgressPanel from '@/components/exam/ExamPracticeProgressPanel';
+import ExamPracticeSideRail from '@/components/exam/ExamPracticeSideRail';
+import ExamPracticeToolsPanel from '@/components/exam/ExamPracticeToolsPanel';
 import B2WritingDraftStatusPanel from '@/components/b2/B2WritingDraftStatusPanel';
 import { getB2WritingStrategyPack } from '@/data/b2WritingPracticeStrategies';
 import A2ExamGenerationStatus from '@/components/niveles/A2ExamGenerationStatus';
@@ -87,7 +90,7 @@ function B2WritingExamPracticePageInner() {
   const partsShellRef = useRef([]);
   const setExamenContextRef = useRef(scoring.setExamenContext);
   setExamenContextRef.current = scoring.setExamenContext;
-  const { label: timerLabel } = useLevelsCategoryTimer();
+  const categoryTimer = useLevelsCategoryTimer();
 
   useEffect(() => {
     void reloadExamNamesBySlot('b2').then(({ names }) => setExamLabelsBySlot(names));
@@ -495,6 +498,9 @@ function B2WritingExamPracticePageInner() {
     strategyPack && (partNumber === 8 || part2SelectedOption),
   );
 
+  const showPracticeSideRail =
+    isSkillPracticeSession && isPartPracticeMode(practiceMode) && scoring.examPracticeOpen;
+
   const writingScorePanelOverride = isPartPracticeMode(practiceMode) ? (
     <B2WritingDraftStatusPanel
       wordCount={draftStats.wordCount}
@@ -578,7 +584,8 @@ function B2WritingExamPracticePageInner() {
         timerVariant={isSkillPracticeSession && !examModeActive ? 'discrete' : 'prominent'}
         modeBadge={modeBadge}
         showRefresh={!isExamSimulationMode(practiceMode)}
-        timerLabel={timerLabel}
+        timerLabel={categoryTimer.label}
+        timerControls={categoryTimer}
         refreshLabel="Refresh Writing"
         loading={loading}
         onRefresh={() => void loadData()}
@@ -617,7 +624,7 @@ function B2WritingExamPracticePageInner() {
         <section
           className="b2-writing-practice"
           style={{
-            maxWidth: showStrategySidebar ? 'min(1280px, 100%)' : 'min(960px, 100%)',
+            maxWidth: showPracticeSideRail ? 'min(1280px, 100%)' : 'min(960px, 100%)',
             margin: '0 auto',
           }}
         >
@@ -629,7 +636,7 @@ function B2WritingExamPracticePageInner() {
           {!loading && !error && selectedPart ? (
             <div
               className={`levels-listening-practice-layout${
-                showStrategySidebar ? ' levels-listening-practice-layout--with-strategy' : ''
+                showPracticeSideRail ? ' levels-listening-practice-layout--with-strategy' : ''
               }`}
             >
               <div className="levels-listening-practice-main">
@@ -704,7 +711,26 @@ function B2WritingExamPracticePageInner() {
                   />
                 </div>
               </div>
-              {showStrategySidebar ? <B2WritingStrategyPanel pack={strategyPack} /> : null}
+              {showPracticeSideRail ? (
+                <ExamPracticeSideRail
+                  strategy={
+                    showStrategySidebar ? <B2WritingStrategyPanel pack={strategyPack} /> : null
+                  }
+                  progress={
+                    <ExamPracticeProgressPanel
+                      slug="b2"
+                      examSlot={examSlot}
+                      partMin={PART_MIN}
+                      partMax={PART_MAX}
+                      progressSlot={scoring.progressBySlot[examSlot]}
+                      examLabel={examLabelsBySlot[examSlot]}
+                      lang="en"
+                      enabled={scoring.examPracticeOpen}
+                    />
+                  }
+                  tools={<ExamPracticeToolsPanel lang="en" />}
+                />
+              ) : null}
             </div>
           ) : null}
         </section>

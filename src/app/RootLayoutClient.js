@@ -28,6 +28,7 @@ const Toaster = dynamic(
   { ssr: false },
 );
 import AppNav from '@/components/layout/AppNav';
+import SiteNightModeInit from '@/components/layout/SiteNightModeInit';
 
 function SiteHeaderBrand({ nav = null }) {
   return (
@@ -269,6 +270,7 @@ export default function RootLayoutClient({ children }) {
 
   return (
     <>
+      <SiteNightModeInit />
       <Toaster position="top-center" reverseOrder={false} />
       <MicrosoftClarity enabled={clarityAnalyticsEnabled} projectId={clarityProjectId} />
 

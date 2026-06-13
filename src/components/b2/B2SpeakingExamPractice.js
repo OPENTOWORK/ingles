@@ -102,7 +102,7 @@ function B2SpeakingExamPracticeInner({ title, subtitle, loadingLabel, refreshLab
   const [partsData, setPartsData] = useState([]);
   const [selectedPartId, setSelectedPartId] = useState(null);
   const [examLabelsBySlot, setExamLabelsBySlot] = useState({});
-  const { label: timerLabel } = useLevelsCategoryTimer();
+  const categoryTimer = useLevelsCategoryTimer();
 
   useEffect(() => {
     void reloadExamNamesBySlot('b2').then(({ names }) => setExamLabelsBySlot(names));
@@ -397,7 +397,8 @@ function B2SpeakingExamPracticeInner({ title, subtitle, loadingLabel, refreshLab
         timerVariant={isSkillPracticeSession && !examModeActive ? 'discrete' : 'prominent'}
         modeBadge={modeBadge}
         showRefresh={!isExamSimulationMode(practiceMode)}
-        timerLabel={timerLabel}
+        timerLabel={categoryTimer.label}
+        timerControls={categoryTimer}
         refreshLabel={refreshLabel}
         loading={loading}
         onRefresh={() => loadParts()}

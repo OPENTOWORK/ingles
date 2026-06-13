@@ -49,8 +49,13 @@ import {
   recordLevelsAnswerEvaluation,
 } from '@/utils/levelsEstadisticas';
 import B2ExamPracticeModuleNav from '@/components/b2/B2ExamPracticeModuleNav';
-import B2ReadingStrategyPanel from '@/components/b2/B2ReadingStrategyPanel';
+import ReadingPracticeSideRail from '@/components/exam/ReadingPracticeSideRail';
 import { getB2ReadingStrategyPack } from '@/data/b2ReadingPracticeStrategies';
+import { ReadingPracticeSessionProvider } from '@/context/ReadingPracticeSessionContext';
+import ReadingPracticeChrome from '@/components/exam/ReadingPracticeChrome';
+import { useReadingPracticeSession } from '@/context/ReadingPracticeSessionContext';
+import ReadingQuestionFlagButton from '@/components/exam/ReadingQuestionFlagButton';
+import ReadingConfidenceSelector from '@/components/exam/ReadingConfidenceSelector';
 import ExamModeSectionBanner from '@/components/niveles/ExamModeSectionBanner';
 import { useExamModeStrict } from '@/hooks/useExamModeStrict';
 import { scoreExamModeDrafts } from '@/utils/examModeGradeAnswers';
@@ -136,7 +141,8 @@ function B2ReadingExamsPageInner() {
   const [aiHintsByKey, setAiHintsByKey] = useState({});
 
   const mountedRef = useRef(true);
-  const { label: timerLabel } = useLevelsCategoryTimer();
+  const categoryTimer = useLevelsCategoryTimer();
+  const readingSession = useReadingPracticeSession();
 
   const loadReadingData = useCallback(async () => {
     setLoading(true);
@@ -929,6 +935,7 @@ function B2ReadingExamsPageInner() {
       const nextSelected = { ...selectedOptions, [questionKey]: option.id };
       setSelectedOptions(nextSelected);
       setCheckedQuestions(nextChecked);
+      readingSession.incrementCheckAttempts();
       trySavePartAfterAnswer({
         checkedQuestions: nextChecked,
         selectedOptions: nextSelected,
@@ -960,6 +967,7 @@ function B2ReadingExamsPageInner() {
       selectedPart?.id,
       selectedQuestion?.preguntaId,
       trySavePartAfterAnswer,
+      readingSession,
     ],
   );
 
@@ -996,6 +1004,7 @@ function B2ReadingExamsPageInner() {
       const isCorrect = expectedAnswers.has(normalizeText(currentValue));
       const nextOpenChecks = { ...openChecks, [questionKey]: isCorrect };
       setOpenChecks(nextOpenChecks);
+      readingSession.incrementCheckAttempts();
       // Open cloze (Parts 2–3): la explicación se pide al pulsar 💡 (lazy),
       // no automáticamente. Part 4 (key word) conserva el comportamiento previo.
       if (isKeyWordPart) {
@@ -1039,8 +1048,33 @@ function B2ReadingExamsPageInner() {
       selectedPart?.id,
       selectedPart?.nombre,
       trySavePartAfterAnswer,
+      readingSession,
     ],
   );
+
+  const sessionQuestions = useMemo(() => {
+    if (!selectedPart?.id) return [];
+
+    if (isOpenClozePart) {
+      return openQuestionNumbers.map((qn) => ({
+        questionKey: getQuestionKey(selectedPart.id, qn, 'open'),
+        questionNumber: qn,
+      }));
+    }
+
+    return (groupedAnswersForUiAndScore || [])
+      .filter((g) => g.questionNumber != null)
+      .map((g, groupIndex) => ({
+        questionKey: getQuestionKey(selectedPart.id, g.questionNumber, `extra-${groupIndex}`),
+        questionNumber: g.questionNumber,
+      }));
+  }, [
+    selectedPart?.id,
+    isOpenClozePart,
+    openQuestionNumbers,
+    groupedAnswersForUiAndScore,
+    selectedQuestion?.preguntaId,
+  ]);
 
   /** Explicación lazy para huecos open cloze: se pide solo al pulsar 💡 Explanation. */
   const handleOpenGapExplanationRequest = useCallback(
@@ -1112,6 +1146,10 @@ function B2ReadingExamsPageInner() {
     isSkillPracticeSession && isPartPracticeMode(practiceMode)
       ? getB2ReadingStrategyPack(partNumberReading)
       : null;
+
+  const showPracticeSideRail =
+    isSkillPracticeSession && isPartPracticeMode(practiceMode) && scoring.examPracticeOpen;
+
 
   const chromeTitle = useMemo(() => {
     if (examModeActive || reviewMode) {
@@ -1214,7 +1252,7 @@ function B2ReadingExamsPageInner() {
           onDismissError={adminFlow.clearGenError}
         />
       ) : null}
-      <B2ExamPracticeChrome
+      <ReadingPracticeChrome
         examSlot={examSlot}
         onSelectExam={handleSelectExamSlot}
         progressBySlot={scoring.progressBySlot}
@@ -1235,7 +1273,8 @@ function B2ReadingExamsPageInner() {
         timerVariant={isSkillPracticeSession && !examModeActive ? 'discrete' : 'prominent'}
         modeBadge={modeBadge}
         showRefresh={!isExamSimulationMode(practiceMode)}
-        timerLabel={timerLabel}
+        timerLabel={categoryTimer.label}
+        timerControls={categoryTimer}
         refreshLabel={
           isCombinedPaper ? 'Refresh Reading and Use of English (1–7)' : 'Refresh Reading (5–7)'
         }
@@ -1274,10 +1313,13 @@ function B2ReadingExamsPageInner() {
       ) : null}
       <div
         className={`levels-listening-practice-layout${
-          readingStrategyPack ? ' levels-listening-practice-layout--with-strategy' : ''
-        }`}
+          showPracticeSideRail ? ' levels-listening-practice-layout--with-strategy' : ''
+        }${readingSession.focusMode ? ' levels-listening-practice-layout--focus' : ''}`}
       >
-      <div className="levels-listening-practice-main">
+      <div
+        className={`levels-listening-practice-main ${readingSession.readingAreaClassName}`}
+        style={readingSession.readingAreaStyle}
+      >
       <section style={{ margin: '0 auto', width: '100%' }}>
         {loading && (
           <p style={{ textAlign: 'center' }}>
@@ -1398,10 +1440,21 @@ function B2ReadingExamsPageInner() {
                             </pre>
                           </div>
                         ) : null}
-                        {groupedAnswersForUiAndScore.map((group, groupIndex) => (
-                      <B2ExamQuestionItem
+                        {groupedAnswersForUiAndScore.map((group, groupIndex) => {
+                          const questionKey = getQuestionKey(
+                            selectedPart.id,
+                            group.questionNumber,
+                            `extra-${groupIndex}`,
+                          );
+                          const isFlagged = !!readingSession.flaggedQuestions[questionKey];
+                          return (
+                      <div
                         key={`group-${selectedQuestion.preguntaId}-${group.questionNumber ?? 'extra'}-${groupIndex}`}
+                        id={group.questionNumber ? `question-${group.questionNumber}` : undefined}
+                        data-question-number={group.questionNumber ?? undefined}
                       >
+                      <B2ExamQuestionItem>
+                        <div className={`reading-question-header${isFlagged ? ' question-flagged' : ''}`}>
                         <p style={{ margin: '0 0 0.65rem', fontWeight: 700, color: '#2d3748' }}>
                           {!group.questionNumber
                             ? 'Options'
@@ -1414,16 +1467,19 @@ function B2ReadingExamsPageInner() {
                                 )
                               : `Question ${group.questionNumber}`}
                         </p>
+                        {group.questionNumber ? (
+                          <ReadingQuestionFlagButton
+                            questionKey={questionKey}
+                            questionNumber={group.questionNumber}
+                          />
+                        ) : null}
+                        </div>
                         <div style={{ display: 'grid', gap: '0.6rem' }}>
                           {group.options.map((option) => {
-                            const questionKey = getQuestionKey(
-                              selectedPart.id,
-                              group.questionNumber,
-                              `extra-${groupIndex}`,
-                            );
                             const isSelected = selectedOptions[questionKey] === option.id;
                             const isChecked = checkedQuestions[questionKey];
                             const isCorrect = !!option.correcta;
+                            const isEliminated = readingSession.isOptionEliminated(questionKey, option.id);
                             const showCorrect = !hideFeedback && isChecked && isCorrect;
                             const showIncorrect = !hideFeedback && isChecked && isSelected && !isCorrect;
 
@@ -1431,11 +1487,17 @@ function B2ReadingExamsPageInner() {
                               <button
                                 key={option.id}
                                 type="button"
+                                className={`question-option tool-button${isEliminated ? ' eliminated' : ''}`}
                                 onClick={() => {
+                                  if (readingSession.answerEliminatorEnabled) {
+                                    readingSession.toggleEliminatedAnswer(questionKey, option.id);
+                                    return;
+                                  }
                                   const wasChecked = checkedQuestions[questionKey];
                                   const nextChecked = { ...checkedQuestions, [questionKey]: true };
                                   setSelectedOptions((prev) => ({ ...prev, [questionKey]: option.id }));
                                   setCheckedQuestions(nextChecked);
+                                  readingSession.incrementCheckAttempts();
                                   trySavePartAfterAnswer({ checkedQuestions: nextChecked });
                                   if (!wasChecked && !hideFeedback) {
                                     const correctOpt = group.options.find((o) => o.correcta);
@@ -1503,12 +1565,11 @@ function B2ReadingExamsPageInner() {
                           })}
                         </div>
 
+                        {checkedQuestions[questionKey] ? (
+                          <ReadingConfidenceSelector questionKey={questionKey} />
+                        ) : null}
+
                         {(() => {
-                          const questionKey = getQuestionKey(
-                            selectedPart.id,
-                            group.questionNumber,
-                            `extra-${groupIndex}`,
-                          );
                           const hasChecked = checkedQuestions[questionKey];
                           if (!hasChecked || hideFeedback) return null;
                           const correct = group.options.find((option) => option.correcta);
@@ -1522,7 +1583,9 @@ function B2ReadingExamsPageInner() {
                           );
                         })()}
                       </B2ExamQuestionItem>
-                        ))}
+                      </div>
+                          );
+                        })}
                       </>
                     )
                 }
@@ -1544,9 +1607,23 @@ function B2ReadingExamsPageInner() {
         lang="en"
       />
       </div>
-      {readingStrategyPack ? <B2ReadingStrategyPanel pack={readingStrategyPack} /> : null}
+      {showPracticeSideRail ? (
+        <ReadingPracticeSideRail
+          strategyPack={readingStrategyPack}
+          partNumber={partNumberReading}
+          questions={sessionQuestions}
+          checkedQuestions={checkedQuestions}
+          selectedOptions={selectedOptions}
+          groupedAnswers={groupedAnswersForUiAndScore || []}
+          openChecks={openChecks}
+          correctCount={partScoreMetrics.correctCount}
+          totalSlots={b2PartCfg?.total ?? partScoreMetrics.totalSlots}
+          hideFeedback={hideFeedback}
+          lang="en"
+        />
+      ) : null}
       </div>
-      </B2ExamPracticeChrome>
+      </ReadingPracticeChrome>
     </B2ExamPracticeLayout>
   );
 }
@@ -1556,7 +1633,9 @@ export default function B2ReadingExamsPage() {
     <Suspense
       fallback={<main style={{ padding: '2rem', textAlign: 'center', fontFamily: 'Segoe UI, sans-serif' }}>Loading practice…</main>}
     >
-      <B2ReadingExamsPageInner />
+      <ReadingPracticeSessionProvider>
+        <B2ReadingExamsPageInner />
+      </ReadingPracticeSessionProvider>
     </Suspense>
   );
 }

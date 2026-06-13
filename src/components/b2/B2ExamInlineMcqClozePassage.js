@@ -3,6 +3,9 @@
 import { useEffect, useMemo, useState } from 'react';
 import LevelsAnswerJustification from '@/components/levels/LevelsAnswerJustification';
 import { parseLineWithOpenGaps } from '@/components/b2/B2ExamInlineOpenClozePassage';
+import { useReadingPracticeSession } from '@/context/ReadingPracticeSessionContext';
+import ReadingQuestionFlagButton from '@/components/exam/ReadingQuestionFlagButton';
+import ReadingConfidenceSelector from '@/components/exam/ReadingConfidenceSelector';
 
 function getOptionWord(option) {
   const text = option?.formattedText || option?.respuesta || '';
@@ -28,6 +31,7 @@ export default function B2ExamInlineMcqClozePassage({
   onRequestExplanation,
 }) {
   const [openQuestionNumber, setOpenQuestionNumber] = useState(null);
+  const session = useReadingPracticeSession();
 
   const groupByNumber = useMemo(() => {
     const map = new Map();
@@ -157,11 +161,14 @@ export default function B2ExamInlineMcqClozePassage({
                 selectedOption,
                 group,
               );
+              const isFlagged = !!session.flaggedQuestions[questionKey];
 
               return (
                 <span
                   key={`mcq-seg-gap-${lineIdx}-${segIdx}`}
-                  className={`levels-exam-inline-mcq-gap${isOpen ? ' levels-exam-inline-mcq-gap--open' : ''}`}
+                  id={`question-${questionNumber}`}
+                  data-question-number={questionNumber}
+                  className={`levels-exam-inline-mcq-gap${isOpen ? ' levels-exam-inline-mcq-gap--open' : ''}${isFlagged ? ' question-flagged' : ''}`}
                 >
                   <button
                     type="button"
@@ -195,14 +202,19 @@ export default function B2ExamInlineMcqClozePassage({
                     >
                       {group.options.map((option) => {
                         const isSelected = selectedId === option.id;
+                        const isEliminated = session.isOptionEliminated(questionKey, option.id);
                         return (
                           <button
                             key={option.id}
                             type="button"
                             role="option"
                             aria-selected={isSelected}
-                            className={`levels-exam-inline-mcq-gap__option${isSelected ? ' levels-exam-inline-mcq-gap__option--selected' : ''}`}
+                            className={`levels-exam-inline-mcq-gap__option question-option${isSelected ? ' levels-exam-inline-mcq-gap__option--selected' : ''}${isEliminated ? ' eliminated' : ''}`}
                             onClick={() => {
+                              if (session.answerEliminatorEnabled) {
+                                session.toggleEliminatedAnswer(questionKey, option.id);
+                                return;
+                              }
                               setOpenQuestionNumber(null);
                               onOptionSelect?.({
                                 group,
@@ -236,6 +248,22 @@ export default function B2ExamInlineMcqClozePassage({
           onRequestExplanation={onRequestExplanation}
         />
       ) : null}
+
+      <div className="reading-question-meta-list">
+        {mcqGroups
+          .filter((g) => g?.questionNumber != null && g.questionNumber !== 0)
+          .map((group) => {
+            const questionKey = getQuestionKey(group.questionNumber);
+            if (!checkedQuestions[questionKey]) return null;
+            return (
+              <div key={`meta-${group.questionNumber}`} className="reading-question-meta">
+                <span className="reading-question-meta__label">Q{group.questionNumber}</span>
+                <ReadingQuestionFlagButton questionKey={questionKey} questionNumber={group.questionNumber} />
+                <ReadingConfidenceSelector questionKey={questionKey} />
+              </div>
+            );
+          })}
+      </div>
     </div>
   );
 }

@@ -7,6 +7,7 @@ import { isAdminRole } from '@/utils/authRoles';
 import { canViewPricing } from '@/utils/pricingAccess';
 import AdminPanelsNav from '@/components/layout/AdminPanelsNav';
 import { DraloAiComingSoonRibbon, DraloAiNavMenuItems } from '@/components/layout/DraloAiNavMenu';
+import ReadingNightModeToggle from '@/components/exam/ReadingNightModeToggle';
 import {
   getStaffPanelMenuItemsForRole,
   getStaffPanelMenuLabel,
@@ -152,6 +153,8 @@ function AppNavInner({ session, userRole, onLogout }) {
           </div>
         </div>
 
+        <ReadingNightModeToggle variant="desktop" />
+
         <div className="app-nav__account" role="group" aria-label="Account">
           {session ? (
             <>
@@ -287,6 +290,8 @@ function AppNavInner({ session, userRole, onLogout }) {
               {draloLocked ? <DraloAiComingSoonRibbon /> : null}
             </div>
           ) : null}
+
+          <ReadingNightModeToggle variant="mobile" />
 
           {showPricing ? (
             <NavLink

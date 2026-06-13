@@ -37,10 +37,12 @@ export function useStudyNotes() {
   const saveTimersRef = useRef(new Map());
 
   const reload = useCallback(async (uid) => {
+    const effectiveUid = uid || 'guest';
+
     if (!uid) {
-      setNotes([]);
-      setReady(true);
+      setNotes(sortNotesNewestFirst(loadStudyNotes('guest')));
       setUsingDb(false);
+      setReady(true);
       return;
     }
 
@@ -58,7 +60,7 @@ export function useStudyNotes() {
       setUsingDb(true);
     } catch (err) {
       console.warn('[useStudyNotes] Supabase unavailable, using local storage', err);
-      setNotes(sortNotesNewestFirst(loadStudyNotes(uid)));
+      setNotes(sortNotesNewestFirst(loadStudyNotes(effectiveUid)));
       setUsingDb(false);
     } finally {
       setReady(true);
@@ -68,16 +70,25 @@ export function useStudyNotes() {
   useEffect(() => {
     let cancelled = false;
 
-    (async () => {
-      const { data } = await supabase.auth.getUser();
-      const uid = data?.user?.id || null;
+    const applySession = async () => {
+      const { data } = await supabase.auth.getSession();
+      const uid = data?.session?.user?.id || null;
       if (cancelled) return;
       setUserId(uid);
       await reload(uid);
-    })();
+    };
+
+    void applySession();
+
+    const { data: authListener } = supabase.auth.onAuthStateChange((_event, session) => {
+      const uid = session?.user?.id || null;
+      setUserId(uid);
+      void reload(uid);
+    });
 
     return () => {
       cancelled = true;
+      authListener?.subscription?.unsubscribe();
       saveTimersRef.current.forEach((timer) => clearTimeout(timer));
       saveTimersRef.current.clear();
     };
@@ -124,6 +135,16 @@ export function useStudyNotes() {
 
   const addNote = useCallback(
     async (payload = {}) => {
+      const effectiveUid = userId || 'guest';
+      if (!userId && !usingDb) {
+        const draft = createStudyNote(payload);
+        setNotes((prev) => {
+          const next = sortNotesNewestFirst([draft, ...prev]);
+          persistLocal(next, 'guest');
+          return next;
+        });
+        return draft;
+      }
       if (!userId) return null;
       const draft = createStudyNote(payload);
 
@@ -151,7 +172,8 @@ export function useStudyNotes() {
 
   const updateNote = useCallback(
     (id, updates) => {
-      if (!userId || !id) return;
+      const effectiveUid = userId || 'guest';
+      if (!id) return;
 
       setNotes((prev) => {
         const next = sortNotesNewestFirst(
@@ -162,10 +184,10 @@ export function useStudyNotes() {
           ),
         );
 
-        if (usingDb) {
+        if (userId && usingDb) {
           scheduleDbUpdate(id, updates, userId);
         } else {
-          persistLocal(next, userId);
+          persistLocal(next, effectiveUid);
         }
         return next;
       });
@@ -175,7 +197,8 @@ export function useStudyNotes() {
 
   const saveNoteNow = useCallback(
     async (id, updates) => {
-      if (!userId || !id) return null;
+      const effectiveUid = userId || 'guest';
+      if (!id) return null;
 
       const key = String(id);
       const pending = saveTimersRef.current.get(key);
@@ -191,13 +214,13 @@ export function useStudyNotes() {
           ),
         );
 
-        if (!usingDb) {
-          persistLocal(next, userId);
+        if (!userId || !usingDb) {
+          persistLocal(next, effectiveUid);
         }
         return next;
       });
 
-      if (usingDb) {
+      if (userId && usingDb) {
         try {
           const saved = await updateStudyNoteInDb(id, updates);
           setNotes((prev) =>
@@ -219,9 +242,10 @@ export function useStudyNotes() {
 
   const deleteNote = useCallback(
     async (id) => {
-      if (!userId || !id) return;
+      const effectiveUid = userId || 'guest';
+      if (!id) return;
 
-      if (usingDb) {
+      if (userId && usingDb) {
         try {
           await deleteStudyNoteFromDb(id);
           setNotes((prev) => prev.filter((note) => note.id !== id));
@@ -234,7 +258,7 @@ export function useStudyNotes() {
 
       setNotes((prev) => {
         const next = prev.filter((note) => note.id !== id);
-        persistLocal(next, userId);
+        persistLocal(next, effectiveUid);
         return next;
       });
     },
@@ -243,10 +267,10 @@ export function useStudyNotes() {
 
   const getOrCreateScratchNote = useCallback(
     async (context = {}, contextLabel = '') => {
-      if (!userId) return null;
+      const effectiveUid = userId || 'guest';
       const contextKey = buildStudyNotesContextKey(context);
 
-      if (usingDb) {
+      if (userId && usingDb) {
         try {
           const saved = await upsertScratchNoteToDb(userId, context, contextLabel);
           setNotes((prev) => {
@@ -272,7 +296,7 @@ export function useStudyNotes() {
         });
         note.contextKey = contextKey;
         const next = sortNotesNewestFirst([note, ...prev]);
-        persistLocal(next, userId);
+        persistLocal(next, effectiveUid);
         return next;
       });
       return contextKey;

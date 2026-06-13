@@ -148,7 +148,7 @@ export default function LoginPage() {
   };
 
   return (
-    <main style={styles.main}>
+    <main className="login-page" style={styles.main}>
       <div style={{ textAlign: "center", marginBottom: "1rem", lineHeight: 0 }}>
         <SiteMascot variant={3} width={132} alt="Dralo te da la bienvenida" />
       </div>

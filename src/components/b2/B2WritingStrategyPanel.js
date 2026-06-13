@@ -7,7 +7,7 @@ import { useEffect, useState } from 'react';
  * Practice Mode only — never rendered during Exam Mode.
  */
 export default function B2WritingStrategyPanel({ pack }) {
-  const [open, setOpen] = useState(true);
+  const [open, setOpen] = useState(false);
   const [checked, setChecked] = useState({});
 
   useEffect(() => {
@@ -31,7 +31,7 @@ export default function B2WritingStrategyPanel({ pack }) {
         onClick={() => setOpen((v) => !v)}
         aria-expanded={open}
       >
-        <span>Strategy &amp; tips — {pack.label}</span>
+        <span>Strategy and tips</span>
         <span aria-hidden>{open ? '−' : '+'}</span>
       </button>
       {open ? (

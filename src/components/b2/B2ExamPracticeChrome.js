@@ -8,6 +8,7 @@ import LevelsPartScorePanel from '@/components/levels/LevelsPartScorePanel';
 import LevelsPartFinishBanner from '@/components/levels/LevelsPartFinishBanner';
 import ExamStudyNotesSidebar from '@/components/exam/ExamStudyNotesSidebar';
 import ExamPracticeReportError from '@/components/exam/ExamPracticeReportError';
+import { ExamPracticeToolsProvider } from '@/context/ExamPracticeToolsContext';
 
 function getPartTabLabel(part, lang, customLabelFn) {
   if (typeof customLabelFn === 'function') {
@@ -67,6 +68,11 @@ export function B2ExamPracticeChrome({
   title,
   subtitle,
   timerLabel,
+  timerControls = null,
+  timerHidden = false,
+  onToggleTimerHidden = null,
+  focusMode = false,
+  onExitFocusMode = null,
   refreshLabel,
   loading,
   onRefresh,
@@ -137,7 +143,7 @@ export function B2ExamPracticeChrome({
 
       {!showPractice ? null : (
         <div
-          className={`levels-b2-practice${compactSkillHeader ? ' levels-b2-practice--skill-compact' : ''}`}
+          className={`levels-b2-practice${compactSkillHeader ? ' levels-b2-practice--skill-compact' : ''}${focusMode ? ' levels-b2-practice--focus-mode' : ''}`}
           data-skill-theme={
             compactSkillHeader && skillPracticeTheme ? skillPracticeTheme : undefined
           }
@@ -180,10 +186,29 @@ export function B2ExamPracticeChrome({
               .join(' ')}
           >
           <div className="levels-b2-practice__status">
+            {focusMode && onExitFocusMode ? (
+              <button
+                type="button"
+                className="tool-button levels-b2-practice__focus-exit"
+                onClick={onExitFocusMode}
+              >
+                Exit focus mode
+              </button>
+            ) : null}
+            <div className="levels-b2-practice__status-row">
             <LevelsCategoryTimer
               categoryLabel={sessionLabel}
               timeLabel={timerLabel}
               variant={effectiveTimerVariant}
+              lang={lang === 'es' ? 'es' : 'en'}
+              isRunning={timerControls?.isRunning}
+              isPaused={timerControls?.isPaused}
+              isIdle={timerControls?.isIdle}
+              onStart={timerControls?.start}
+              onPause={timerControls?.pause}
+              onResume={timerControls?.resume}
+              timerHidden={timerHidden}
+              onToggleTimerHidden={onToggleTimerHidden}
             />
 
             {!hideScorePanel && scorePanelOverride ? scorePanelOverride : null}
@@ -206,6 +231,7 @@ export function B2ExamPracticeChrome({
                 lang={lang === 'es' ? 'es' : 'en'}
               />
             ) : null}
+            </div>
           </div>
 
           {partFinishNotice && !partFinishNotice.error ? (
@@ -257,14 +283,16 @@ export function B2ExamPracticeChrome({
             </div>
           ) : null}
 
-          <div className="levels-b2-practice__work-body">
-            {children}
-            {showPractice && !loading && reportErrorContext ? (
-              <div className="exam-practice-report-error-footer">
-                <ExamPracticeReportError context={reportErrorContext} />
-              </div>
-            ) : null}
-          </div>
+          <ExamPracticeToolsProvider>
+            <div className="levels-b2-practice__work-body">
+              {children}
+              {showPractice && !loading && reportErrorContext ? (
+                <div className="exam-practice-report-error-footer">
+                  <ExamPracticeReportError context={reportErrorContext} />
+                </div>
+              ) : null}
+            </div>
+          </ExamPracticeToolsProvider>
           </div>
         </div>
       )}

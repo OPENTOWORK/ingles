@@ -69,7 +69,7 @@ function LevelSkillPracticePageInner({ slug, skillRoute }) {
     adminFlow,
     onSelectSlot: (slot) => scoring.handleSelectExam(selectExamSlot, slot),
   });
-  const { label: timerLabel } = useLevelsCategoryTimer();
+  const categoryTimer = useLevelsCategoryTimer();
 
   useEffect(() => {
     void (async () => {
@@ -168,7 +168,8 @@ function LevelSkillPracticePageInner({ slug, skillRoute }) {
         examPracticeOpen={scoring.examPracticeOpen}
         title={title}
         subtitle={scoring.examPracticeOpen ? partsLabel : undefined}
-        timerLabel={timerLabel}
+        timerLabel={categoryTimer.label}
+        timerControls={categoryTimer}
         refreshLabel={`Refrescar ${routeMeta.practiceTitle}`}
         loading={false}
         showRefresh={false}

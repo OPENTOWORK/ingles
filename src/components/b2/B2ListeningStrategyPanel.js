@@ -6,7 +6,7 @@ import { useState } from 'react';
  * Collapsible strategy guidance for Listening part practice.
  */
 export default function B2ListeningStrategyPanel({ pack, partLabel = 'Listening' }) {
-  const [open, setOpen] = useState(true);
+  const [open, setOpen] = useState(false);
   if (!pack) return null;
 
   return (
@@ -17,7 +17,7 @@ export default function B2ListeningStrategyPanel({ pack, partLabel = 'Listening'
         onClick={() => setOpen((v) => !v)}
         aria-expanded={open}
       >
-        <span>Strategy &amp; tips — {partLabel}</span>
+        <span>Strategy and tips</span>
         <span aria-hidden>{open ? '−' : '+'}</span>
       </button>
       {open ? (

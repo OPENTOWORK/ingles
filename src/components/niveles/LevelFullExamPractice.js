@@ -37,7 +37,7 @@ function LevelFullExamPracticeInner({ slug }) {
   const { examSlot, selectExamSlot } = useLevelExamPracticeSlot(slug);
   const { partMin, partMax, partsCount } = getLevelFullExamPartRange(slug);
   const scoring = useLevelExamScoringSession({ slug, partMin, partMax });
-  const { label: timerLabel } = useLevelsCategoryTimer();
+  const categoryTimer = useLevelsCategoryTimer();
   const [examNamesBySlot, setExamNamesBySlot] = useState({});
   const [catalogError, setCatalogError] = useState('');
   const autoOpenedFromUrlRef = useRef(false);
@@ -168,7 +168,13 @@ function LevelFullExamPracticeInner({ slug }) {
 
           <LevelsCategoryTimer
             categoryLabel={`Sesión: Full Exam ${examSlot}`}
-            timeLabel={timerLabel}
+            timeLabel={categoryTimer.label}
+            isRunning={categoryTimer.isRunning}
+            isPaused={categoryTimer.isPaused}
+            isIdle={categoryTimer.isIdle}
+            onStart={categoryTimer.start}
+            onPause={categoryTimer.pause}
+            onResume={categoryTimer.resume}
           />
 
           <LevelsPartScorePanel

@@ -1,0 +1,359 @@
+/* Site-wide night mode — solo estilos visuales, sin ocultar contenido */
+
+body.reading-night-mode {
+  color-scheme: dark;
+  --bg: #0f172a;
+  --text: #e2e8f0;
+  --card: #1e293b;
+  --color-background-primary: #1e293b;
+  --color-background-secondary: #334155;
+  --color-text-primary: #f8fafc;
+  --color-text-secondary: #94a3b8;
+  --color-border-tertiary: #475569;
+  background-color: #0f172a;
+  color: #e2e8f0;
+}
+
+body.reading-night-mode a {
+  color: #60a5fa;
+}
+
+body.reading-night-mode a:hover {
+  color: #93c5fd;
+}
+
+body.reading-night-mode .card {
+  background: #1e293b;
+  border-color: #475569;
+  color: #e2e8f0;
+}
+
+body.reading-night-mode .card:hover {
+  background: #334155;
+}
+
+body.reading-night-mode .route-loading__spinner {
+  border-color: rgba(56, 189, 248, 0.2);
+  border-top-color: #38bdf8;
+}
+
+/* ——— Home ——— */
+body.reading-night-mode .home-page {
+  background: linear-gradient(160deg, #0f172a 0%, #1e293b 45%, #1e1b4b 100%);
+}
+
+body.reading-night-mode .home-page__title {
+  background: linear-gradient(135deg, #f8fafc 0%, #bae6fd 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+}
+
+body.reading-night-mode .home-quote {
+  background: rgba(15, 23, 42, 0.75);
+  border-color: rgba(148, 163, 184, 0.28);
+}
+
+/* ——— Teoría / niveles (styled-jsx global classes) ——— */
+body.reading-night-mode .teoria-page,
+body.reading-night-mode .niveles-page,
+body.reading-night-mode .niveles-level-page,
+body.reading-night-mode .perfil-page {
+  background-color: #0f172a;
+  color: #e2e8f0;
+}
+
+body.reading-night-mode .header p,
+body.reading-night-mode .breadcrumb,
+body.reading-night-mode .area-card__desc,
+body.reading-night-mode .area-card__meta,
+body.reading-night-mode .card__section,
+body.reading-night-mode .empty {
+  color: #94a3b8;
+}
+
+body.reading-night-mode .area-card,
+body.reading-night-mode .card {
+  background: #1e293b;
+  border-color: #475569;
+  color: #e2e8f0;
+}
+
+body.reading-night-mode .area-card:hover,
+body.reading-night-mode .card:hover {
+  border-color: #60a5fa;
+  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.28);
+}
+
+body.reading-night-mode .area-card__title,
+body.reading-night-mode .card__title,
+body.reading-night-mode .header h1 {
+  color: #f8fafc;
+}
+
+body.reading-night-mode .toolbar,
+body.reading-night-mode .search input {
+  background: #1e293b;
+  border-color: #475569;
+  color: #e2e8f0;
+}
+
+body.reading-night-mode .chip {
+  background: #334155;
+  border-color: #64748b;
+  color: #cbd5e1;
+}
+
+body.reading-night-mode .chip--active {
+  background: #1e3a5f;
+  border-color: #38bdf8;
+  color: #bae6fd;
+}
+
+body.reading-night-mode .pill {
+  background: #334155;
+  color: #e2e8f0;
+}
+
+body.reading-night-mode .btn {
+  background: #334155;
+  border-color: #64748b;
+  color: #e2e8f0;
+}
+
+body.reading-night-mode .niveles-page .niveles-section-head,
+body.reading-night-mode .niveles-level-page .niveles-section-head {
+  background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%) !important;
+  border-color: #475569 !important;
+}
+
+body.reading-night-mode .niveles-page .niveles-section-head__title,
+body.reading-night-mode .niveles-level-page .niveles-section-head__title {
+  color: #f8fafc !important;
+}
+
+body.reading-night-mode .niveles-page .niveles-section-head__desc,
+body.reading-night-mode .niveles-level-page .niveles-section-head__desc,
+body.reading-night-mode .niveles-page .niveles-section-head__eyebrow,
+body.reading-night-mode .niveles-level-page .niveles-section-head__eyebrow {
+  color: #94a3b8 !important;
+}
+
+body.reading-night-mode .niveles-page .niveles-section-head__count,
+body.reading-night-mode .niveles-level-page .niveles-section-head__count {
+  background: linear-gradient(135deg, #1e3a5f 0%, #1d4ed8 100%) !important;
+  color: #dbeafe !important;
+}
+
+/* Exam practice hub cards */
+body.reading-night-mode .exam-practice-hub__card {
+  background: #1e293b !important;
+  border-color: #475569 !important;
+  color: #e2e8f0 !important;
+}
+
+body.reading-night-mode .exam-practice-hub__card:hover {
+  border-color: #60a5fa !important;
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.3) !important;
+}
+
+body.reading-night-mode .exam-practice-hub__label,
+body.reading-night-mode .exam-practice-hub__hint {
+  color: #cbd5e1 !important;
+}
+
+body.reading-night-mode .exam-practice-hub__card--featured {
+  background: linear-gradient(135deg, #1e3a5f 0%, #1e293b 100%) !important;
+  border-color: #3b82f6 !important;
+}
+
+/* Theory hub */
+body.reading-night-mode .theory-hub-page,
+body.reading-night-mode .theory-apartado-card,
+body.reading-night-mode .theory-topic-card {
+  background: #1e293b;
+  border-color: #475569;
+  color: #e2e8f0;
+}
+
+body.reading-night-mode .theory-tab-btn {
+  background: #334155;
+  border-color: #64748b;
+  color: #cbd5e1;
+}
+
+body.reading-night-mode .theory-tab-btn--active {
+  background: #1e3a5f;
+  border-color: #38bdf8;
+  color: #bae6fd;
+}
+
+body.reading-night-mode .theory-section-progress__bar {
+  background: #334155;
+}
+
+body.reading-night-mode .theory-correct-answer--ok {
+  background: #14532d;
+  border-color: #22c55e;
+  color: #dcfce7;
+}
+
+body.reading-night-mode .theory-correct-answer--wrong {
+  background: #7f1d1d;
+  border-color: #ef4444;
+  color: #fee2e2;
+}
+
+body.reading-night-mode .theory-ladder-back {
+  background: #334155;
+  border-color: #64748b;
+  color: #e2e8f0;
+}
+
+body.reading-night-mode .theory-ladder-back:hover {
+  background: #475569;
+  color: #f8fafc;
+}
+
+/* Login */
+body.reading-night-mode .login-page {
+  background-color: #1e293b !important;
+  box-shadow: 0 8px 28px rgba(0, 0, 0, 0.35) !important;
+  color: #e2e8f0;
+}
+
+body.reading-night-mode .login-page label {
+  color: #cbd5e1;
+}
+
+body.reading-night-mode .login-page input {
+  background: #334155 !important;
+  border-color: #64748b !important;
+  color: #f8fafc !important;
+}
+
+body.reading-night-mode .login-page p {
+  color: #94a3b8 !important;
+}
+
+body.reading-night-mode .login-page hr {
+  border-color: #475569;
+}
+
+/* Profile — mirror body.dark */
+body.reading-night-mode .profile-settings-panel__intro {
+  color: #cbd5e1;
+}
+
+body.reading-night-mode .profile-settings-panel .profile-collapse--danger {
+  background: linear-gradient(180deg, #2a1518 0%, #1f1214 100%);
+  border-color: rgba(248, 113, 113, 0.28);
+}
+
+body.reading-night-mode .profile-settings-panel__danger-intro,
+body.reading-night-mode .profile-settings-panel__danger-hint {
+  color: #fca5a5;
+}
+
+body.reading-night-mode .perfil-page .profile-section.profile-section--collapsible,
+body.reading-night-mode .perfil-page .profile-collapse {
+  background: #1e293b;
+  border-color: rgba(148, 163, 184, 0.15);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.25);
+}
+
+body.reading-night-mode .profile-section--static {
+  background: #1e293b;
+  border-color: #475569;
+  color: #e2e8f0;
+}
+
+body.reading-night-mode .profile-collapse__title {
+  color: #f1f5f9;
+}
+
+body.reading-night-mode .profile-collapse__preview,
+body.reading-night-mode .profile-collapse__desc {
+  color: #94a3b8;
+}
+
+body.reading-night-mode .profile-collapse__chevron-wrap {
+  background: rgba(148, 163, 184, 0.12);
+  color: #cbd5e1;
+}
+
+body.reading-night-mode .profile-collapse__icon {
+  background: rgba(96, 165, 250, 0.12);
+  color: #93c5fd;
+}
+
+body.reading-night-mode .profile-collapse--open .profile-collapse__chevron-wrap {
+  background: rgba(96, 165, 250, 0.15);
+  color: #60a5fa;
+}
+
+body.reading-night-mode .profile-collapse__trigger:hover {
+  background: rgba(255, 255, 255, 0.04);
+}
+
+body.reading-night-mode .profile-collapse--open .profile-collapse__head {
+  border-bottom-color: rgba(148, 163, 184, 0.12);
+}
+
+body.reading-night-mode .perfil-tabs__btn {
+  background: #334155;
+  border-color: #64748b;
+  color: #cbd5e1;
+}
+
+body.reading-night-mode .perfil-tabs__btn--active {
+  background: #1e3a5f;
+  border-color: #38bdf8;
+  color: #bae6fd;
+}
+
+/* Form controls sitewide */
+body.reading-night-mode input:not([type='checkbox']):not([type='radio']):not([type='range']):not([type='color']),
+body.reading-night-mode textarea,
+body.reading-night-mode select {
+  background: #334155;
+  border-color: #64748b;
+  color: #f8fafc;
+}
+
+body.reading-night-mode input::placeholder,
+body.reading-night-mode textarea::placeholder {
+  color: #64748b;
+}
+
+/* Mobile side menu on home */
+body.reading-night-mode .app-side-menu {
+  background: #1e293b;
+  border-color: #475569;
+}
+
+body.reading-night-mode .app-side-menu__link {
+  color: #e2e8f0;
+}
+
+body.reading-night-mode .app-side-menu__link:hover {
+  background: #334155;
+}
+
+/* Cookie banner */
+body.reading-night-mode .cookie-banner {
+  background: #1e293b;
+  border-top-color: #475569;
+  color: #e2e8f0;
+}
+
+body.reading-night-mode .cookie-settings-panel {
+  background: #1e293b;
+  border-color: #475569;
+  color: #e2e8f0;
+}
+
+body.reading-night-mode .cookie-btn-secondary {
+  background: #334155;
+  border-color: #64748b;
+  color: #e2e8f0;
+}

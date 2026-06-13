@@ -6,9 +6,10 @@ export function studyNotesStorageKey(userId) {
 }
 
 export function loadStudyNotes(userId) {
-  if (typeof window === 'undefined' || !userId) return [];
+  if (typeof window === 'undefined') return [];
+  const key = userId || 'guest';
   try {
-    const raw = localStorage.getItem(studyNotesStorageKey(userId));
+    const raw = localStorage.getItem(studyNotesStorageKey(key));
     if (!raw) return [];
     const parsed = JSON.parse(raw);
     return Array.isArray(parsed) ? parsed : [];
@@ -18,9 +19,10 @@ export function loadStudyNotes(userId) {
 }
 
 export function saveStudyNotes(userId, notes) {
-  if (typeof window === 'undefined' || !userId) return;
-  localStorage.setItem(studyNotesStorageKey(userId), JSON.stringify(notes));
-  window.dispatchEvent(new CustomEvent(STUDY_NOTES_UPDATED_EVENT, { detail: { userId } }));
+  if (typeof window === 'undefined') return;
+  const key = userId || 'guest';
+  localStorage.setItem(studyNotesStorageKey(key), JSON.stringify(notes));
+  window.dispatchEvent(new CustomEvent(STUDY_NOTES_UPDATED_EVENT, { detail: { userId: key } }));
 }
 
 export function createStudyNote({

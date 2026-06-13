@@ -35,6 +35,9 @@ import {
 } from '@/utils/b2ExamTextBlocks';
 import B2ListeningPracticeBriefing from '@/components/b2/B2ListeningPracticeBriefing';
 import B2ListeningStrategyPanel from '@/components/b2/B2ListeningStrategyPanel';
+import ExamPracticeProgressPanel from '@/components/exam/ExamPracticeProgressPanel';
+import ExamPracticeSideRail from '@/components/exam/ExamPracticeSideRail';
+import ExamPracticeToolsPanel from '@/components/exam/ExamPracticeToolsPanel';
 import B2ListeningPracticeFeedback from '@/components/b2/B2ListeningPracticeFeedback';
 import {
   B2_EXAM1_PART12_MATCHING_POOL,
@@ -308,7 +311,7 @@ function B2ExamPaperPracticePageInner({
   const loadedPartsRangeRef = useRef('');
   /** Estructura de partes (sin preguntas) para reutilizar al cambiar de examen. */
   const partsShellRef = useRef([]);
-  const { label: timerLabel } = useLevelsCategoryTimer();
+  const categoryTimer = useLevelsCategoryTimer();
 
   const loadData = useCallback(async () => {
     setLoading(true);
@@ -2019,6 +2022,9 @@ function B2ExamPaperPracticePageInner({
     [isB2ListeningPartPractice, partNumber],
   );
 
+  const showPracticeSideRail =
+    isSkillPracticeSession && isPartPracticeMode(practiceMode) && scoring.examPracticeOpen;
+
   const showListeningBriefing =
     Boolean(b2Exam1ListeningUx) && useListeningItemLayout && isB2ListeningPartPractice;
   const hideListeningDirectionsDup = showListeningBriefing;
@@ -2145,7 +2151,8 @@ function B2ExamPaperPracticePageInner({
         timerVariant={chromeTimerVariant}
         modeBadge={modeBadge}
         showRefresh={!isExamSimulationMode(practiceMode)}
-        timerLabel={timerLabel}
+        timerLabel={categoryTimer.label}
+        timerControls={categoryTimer}
         refreshLabel={refreshLabel}
         loading={loading}
         onRefresh={() => loadData()}
@@ -2483,7 +2490,7 @@ function B2ExamPaperPracticePageInner({
 
             {selectedPart && selectedQuestion &&
               (useListeningItemLayout ? (
-              <div className={`levels-listening-practice-layout${isB2ListeningPartPractice ? ' levels-listening-practice-layout--with-strategy' : ''}`}>
+              <div className={`levels-listening-practice-layout${showPracticeSideRail ? ' levels-listening-practice-layout--with-strategy' : ''}`}>
               <div className="levels-listening-practice-main">
               <div className="levels-exam-split-page levels-exam-practice-page--narrow">
               <div className="levels-exam-split-card">
@@ -3183,10 +3190,29 @@ function B2ExamPaperPracticePageInner({
               </div>
               </div>
               </div>
-              {isB2ListeningPartPractice ? (
-                <B2ListeningStrategyPanel
-                  pack={listeningStrategyPack}
-                  partLabel={getB2ListeningCambridgePartLabel(partNumber)}
+              {showPracticeSideRail ? (
+                <ExamPracticeSideRail
+                  strategy={
+                    listeningStrategyPack ? (
+                      <B2ListeningStrategyPanel
+                        pack={listeningStrategyPack}
+                        partLabel={getB2ListeningCambridgePartLabel(partNumber)}
+                      />
+                    ) : null
+                  }
+                  progress={
+                    <ExamPracticeProgressPanel
+                      slug={levelSlug}
+                      examSlot={examSlot}
+                      partMin={partMin}
+                      partMax={partMax}
+                      progressSlot={scoring.progressBySlot[examSlot]}
+                      examLabel={examLabelsBySlot[examSlot]}
+                      lang={lang === 'es' ? 'es' : 'en'}
+                      enabled={scoring.examPracticeOpen}
+                    />
+                  }
+                  tools={<ExamPracticeToolsPanel lang={lang === 'es' ? 'es' : 'en'} />}
                 />
               ) : null}
               </div>

@@ -74,7 +74,7 @@ function B2FullExamPracticeInner() {
     partMin: B2_FULL_EXAM_PART_MIN,
     partMax: B2_FULL_EXAM_PART_MAX,
   });
-  const { label: timerLabel } = useLevelsCategoryTimer();
+  const categoryTimer = useLevelsCategoryTimer();
   const [examNamesBySlot, setExamNamesBySlot] = useState({});
   const [catalogError, setCatalogError] = useState('');
 
@@ -196,7 +196,13 @@ function B2FullExamPracticeInner() {
 
           <LevelsCategoryTimer
             categoryLabel={`Sesión: Full Exam ${examSlot}`}
-            timeLabel={timerLabel}
+            timeLabel={categoryTimer.label}
+            isRunning={categoryTimer.isRunning}
+            isPaused={categoryTimer.isPaused}
+            isIdle={categoryTimer.isIdle}
+            onStart={categoryTimer.start}
+            onPause={categoryTimer.pause}
+            onResume={categoryTimer.resume}
           />
 
           <LevelsPartScorePanel

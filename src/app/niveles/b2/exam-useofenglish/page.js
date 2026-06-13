@@ -70,7 +70,7 @@ function UseOfEnglishExamsPageInner() {
   const mountedRef = useRef(true);
   const lastSavedPartSigRef = useRef('');
   const currentExamenIdRef = useRef(null);
-  const { label: timerLabel } = useLevelsCategoryTimer();
+  const categoryTimer = useLevelsCategoryTimer();
 
   const loadUseOfEnglishData = useCallback(async () => {
     setLoading(true);
@@ -965,7 +965,14 @@ function UseOfEnglishExamsPageInner() {
       <div className="levels-b2-practice__status">
       <LevelsCategoryTimer
         categoryLabel="Session: B2 Use of English (parts 1–4)"
-        timeLabel={timerLabel}
+        timeLabel={categoryTimer.label}
+        isRunning={categoryTimer.isRunning}
+        isPaused={categoryTimer.isPaused}
+        isIdle={categoryTimer.isIdle}
+        onStart={categoryTimer.start}
+        onPause={categoryTimer.pause}
+        onResume={categoryTimer.resume}
+        lang="en"
       />
       <LevelsPartScorePanel
         correctCount={partScoreMetrics.correctCount}

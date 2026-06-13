@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 
 export function formatElapsedLevelsTimer(totalSeconds) {
   const s = Math.max(0, Math.floor(totalSeconds));
@@ -12,17 +12,32 @@ export function formatElapsedLevelsTimer(totalSeconds) {
 }
 
 /**
- * Cronómetro de sesión para una categoría (p. ej. todo Use of English en una sola visita a la página).
+ * Cronómetro de sesión con pausa / reanudar / empezar.
  */
-export function useLevelsCategoryTimer() {
+export function useLevelsCategoryTimer({ autoStart = true } = {}) {
   const [seconds, setSeconds] = useState(0);
+  const [status, setStatus] = useState(autoStart ? 'running' : 'idle');
 
   useEffect(() => {
+    if (status !== 'running') return undefined;
     const id = window.setInterval(() => {
       setSeconds((prev) => prev + 1);
     }, 1000);
     return () => window.clearInterval(id);
-  }, []);
+  }, [status]);
 
-  return { seconds, label: formatElapsedLevelsTimer(seconds) };
+  const start = useCallback(() => setStatus('running'), []);
+  const pause = useCallback(() => setStatus('paused'), []);
+  const resume = useCallback(() => setStatus('running'), []);
+
+  return {
+    seconds,
+    label: formatElapsedLevelsTimer(seconds),
+    isRunning: status === 'running',
+    isPaused: status === 'paused',
+    isIdle: status === 'idle',
+    start,
+    pause,
+    resume,
+  };
 }

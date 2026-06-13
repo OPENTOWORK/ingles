@@ -35,7 +35,7 @@ export default function ExamStudyNotesSidebar({
   const overlayRoot = overlayContainerRef?.current || null;
 
   useEffect(() => {
-    if (!userId || !context || !open) return;
+    if (!context || !open) return;
     getOrCreateScratchNote(context, contextLabel);
   }, [userId, context, contextLabel, open, getOrCreateScratchNote]);
 
@@ -63,7 +63,9 @@ export default function ExamStudyNotesSidebar({
     saving: en ? 'Saving…' : 'Guardando…',
     saved: en ? 'Saved' : 'Guardada',
     newNote: en ? '+ New note' : '+ Nueva nota',
-    signIn: en ? 'Sign in to save notes to your profile.' : 'Inicia sesión para guardar notas en tu perfil.',
+    signIn: en
+      ? 'Sign in to sync notes to your profile (saved locally on this device until then).'
+      : 'Inicia sesión para sincronizar notas en tu perfil (se guardan en este dispositivo hasta entonces).',
     profile: en ? 'Open in Profile → Tools' : 'Abrir en Perfil → Tools',
     placeholder: en ? 'Write your ideas here…' : 'Escribe tus ideas aquí…',
     titlePh: en ? 'Note title' : 'Título',
@@ -96,12 +98,13 @@ export default function ExamStudyNotesSidebar({
         </button>
       </header>
 
-      {!userId ? (
-        <p className="exam-notes-popover__signin">{labels.signIn}</p>
-      ) : !ready ? (
+      {!ready ? (
         <p className="exam-notes-popover__loading">{en ? 'Loading…' : 'Cargando…'}</p>
       ) : (
         <>
+          {!userId ? (
+            <p className="exam-notes-popover__signin">{labels.signIn}</p>
+          ) : null}
           <div className="exam-notes-popover__scratch">
             <label className="exam-notes-popover__label" htmlFor="exam-notes-scratch">
               {labels.session}
@@ -215,6 +218,12 @@ export default function ExamStudyNotesSidebar({
             overlayRoot,
           )
         : null}
+
+      {open && !overlayRoot ? (
+        <div className="exam-notes-popover__layer exam-notes-popover__layer--inline" role="dialog">
+          {panelContent}
+        </div>
+      ) : null}
     </div>
   );
 }
