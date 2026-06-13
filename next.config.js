@@ -34,6 +34,57 @@ const nextConfig = {
   basePath,
   assetPrefix: basePath ? `${basePath}/` : '',
   async redirects() {
+    const cefr = 'a2|b1|b2|c1|c2';
+
+    /* Old short URLs (/b2, /b2/exam-reading, /speaking-lab/b2, …) → /niveles/… */
+    const legacyLevelRedirects = [
+      {
+        source: `/speaking-lab/:level(${cefr})/:path*`,
+        destination: `/niveles/speaking-lab/:level/:path*`,
+        permanent: true,
+      },
+      {
+        source: `/speaking-lab/:level(${cefr})`,
+        destination: `/niveles/speaking-lab/:level/`,
+        permanent: true,
+      },
+      {
+        source: `/level/:level(${cefr})/:path*`,
+        destination: `/niveles/:level/:path*`,
+        permanent: true,
+      },
+      {
+        source: `/level/:level(${cefr})`,
+        destination: `/niveles/:level/`,
+        permanent: true,
+      },
+      {
+        source: `/nivel/:level(${cefr})/:path*`,
+        destination: `/niveles/:level/:path*`,
+        permanent: true,
+      },
+      {
+        source: `/nivel/:level(${cefr})`,
+        destination: `/niveles/:level/`,
+        permanent: true,
+      },
+      {
+        source: '/levels',
+        destination: '/niveles/',
+        permanent: true,
+      },
+      {
+        source: `/:level(${cefr})/:path*`,
+        destination: `/niveles/:level/:path*`,
+        permanent: true,
+      },
+      {
+        source: `/:level(${cefr})`,
+        destination: `/niveles/:level/`,
+        permanent: true,
+      },
+    ];
+
     /* Old URLs /niveles/b2/speaking-lab/… → /niveles/speaking-lab/b2/… (path* may be empty for hub) */
     const examPartTipsRedirects = [
       'reading-and-use-of-english',
@@ -57,6 +108,7 @@ const nextConfig = {
     });
 
     return [
+      ...legacyLevelRedirects,
       {
         source: '/niveles/:cefr(a2|b1|b2|c1|c2)/speaking-lab/:path*',
         destination: '/niveles/speaking-lab/:cefr/:path*',
