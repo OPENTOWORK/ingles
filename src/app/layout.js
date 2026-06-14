@@ -4,12 +4,15 @@ import '@/styles/mascot.css';
 import RootLayoutClient from './RootLayoutClient';
 import { ExamProvider } from '@/context/ExamContext';
 import { AccessibilityProvider } from '@/components/AccessibilityProvider';
-import { getSiteUrl } from '@/lib/siteSeo';
+import { SEO_PAGE_META } from '@/lib/siteSeo';
 
 export const metadata = {
-  metadataBase: new URL(getSiteUrl()),
-  title: 'English Practice',
-  description: 'Practice English certification exams online',
+  metadataBase: new URL('https://www.dralo.es'),
+  title: {
+    default: SEO_PAGE_META.home.title,
+    template: '%s | Dralo Academy',
+  },
+  description: SEO_PAGE_META.home.description,
   verification: {
     google: 'LEd0Wokm5GitDKhVkVRHhyRNmLRp-xnAaCyPLMCW-8M',
   },

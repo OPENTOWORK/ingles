@@ -1,52 +1,29 @@
-/** Canonical production URL for SEO (sitemap, robots, Open Graph). */
-const DEFAULT_SITE_URL = 'https://www.dralo.es';
+/** Canonical production URL for SEO (metadataBase, Open Graph, canonical). Never vercel.app. */
+export const SITE_URL = 'https://www.dralo.es';
 
-export function getSiteUrl() {
-  const fromEnv =
-    process.env.NEXT_PUBLIC_SITE_URL?.trim() ||
-    process.env.NEXT_PUBLIC_APP_URL?.trim();
-  if (fromEnv) return fromEnv.replace(/\/$/, '');
-
-  if (process.env.VERCEL_URL && process.env.VERCEL === '1') {
-    const host = process.env.VERCEL_URL.replace(/\/$/, '');
-    return host.startsWith('http') ? host : `https://${host}`;
-  }
-
-  return DEFAULT_SITE_URL;
-}
-
-const CEFR_LEVELS = ['a2', 'b1', 'b2', 'c1', 'c2'];
-
-/** Public indexable paths (no login). Matches publicRoutes + level hubs. */
-export function getPublicSitemapPaths() {
-  const paths = new Set([
-    '/',
-    '/niveles',
-    '/teoria',
-    '/contacto',
-    '/login',
-    '/registro',
-    '/reset-password',
-    '/prueba-nivel',
-    '/precios',
-    '/politica-privacidad',
-    '/politica-cookies',
-    '/terminos-condiciones',
-    '/proteccion-datos',
-    '/aviso-legal',
-    '/normas-comunidad',
-    '/politica-reembolsos',
-  ]);
-
-  for (const level of CEFR_LEVELS) {
-    paths.add(`/niveles/${level}`);
-  }
-
-  return [...paths].sort((a, b) => a.localeCompare(b));
-}
-
-export function toSitemapUrl(baseUrl, path) {
-  const base = baseUrl.replace(/\/$/, '');
-  if (path === '/') return `${base}/`;
-  return `${base}${path.startsWith('/') ? path : `/${path}`}/`;
-}
+export const SEO_PAGE_META = {
+  home: {
+    title: 'Dralo Academy | Practica inglés con exámenes e IA',
+    description:
+      'Prepara tu inglés con teoría, práctica de exámenes, corrección de writing y herramientas de IA para mejorar tu nivel.',
+  },
+  examPractice: {
+    title: 'Exam Practice | Practica exámenes de inglés con Dralo',
+    description:
+      'Practica ejercicios de inglés por niveles con actividades de Reading, Use of English, Writing y más.',
+  },
+  examTheory: {
+    title: 'Exam Theory | Teoría y tips para exámenes Cambridge',
+    description:
+      'Aprende formato, estrategias y errores comunes por parte del examen con teoría interactiva por nivel CEFR.',
+  },
+  draloAi: {
+    title: 'Dralo AI | Herramientas de IA para practicar inglés',
+    description:
+      'Writing, listening, speaking, grammar coach y más — practica con IA adaptada a niveles A2–C2.',
+  },
+  contact: {
+    title: 'Contact | Dralo Academy',
+    description: 'Contacta con el equipo de Dralo para soporte, dudas sobre exámenes o la plataforma.',
+  },
+};
