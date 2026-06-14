@@ -161,7 +161,7 @@ export default function B2ExamInlineMcqClozePassage({
                 selectedOption,
                 group,
               );
-              const isFlagged = !!session.flaggedQuestions[questionKey];
+              const isFlagged = hideFeedback && !!session.flaggedQuestions[questionKey];
 
               return (
                 <span
@@ -249,21 +249,23 @@ export default function B2ExamInlineMcqClozePassage({
         />
       ) : null}
 
-      <div className="reading-question-meta-list">
-        {mcqGroups
-          .filter((g) => g?.questionNumber != null && g.questionNumber !== 0)
-          .map((group) => {
-            const questionKey = getQuestionKey(group.questionNumber);
-            if (!checkedQuestions[questionKey]) return null;
-            return (
-              <div key={`meta-${group.questionNumber}`} className="reading-question-meta">
-                <span className="reading-question-meta__label">Q{group.questionNumber}</span>
-                <ReadingQuestionFlagButton questionKey={questionKey} questionNumber={group.questionNumber} />
-                <ReadingConfidenceSelector questionKey={questionKey} />
-              </div>
-            );
-          })}
-      </div>
+      {hideFeedback ? (
+        <div className="reading-question-meta-list">
+          {mcqGroups
+            .filter((g) => g?.questionNumber != null && g.questionNumber !== 0)
+            .map((group) => {
+              const questionKey = getQuestionKey(group.questionNumber);
+              if (!checkedQuestions[questionKey]) return null;
+              return (
+                <div key={`meta-${group.questionNumber}`} className="reading-question-meta">
+                  <span className="reading-question-meta__label">Q{group.questionNumber}</span>
+                  <ReadingQuestionFlagButton questionKey={questionKey} questionNumber={group.questionNumber} />
+                  <ReadingConfidenceSelector questionKey={questionKey} />
+                </div>
+              );
+            })}
+        </div>
+      ) : null}
     </div>
   );
 }

@@ -13,7 +13,7 @@ function getChipState({
   openChecks,
 }) {
   const { questionKey, questionNumber } = question;
-  const isFlagged = !!flaggedQuestions[questionKey];
+  const isFlagged = hideFeedback && !!flaggedQuestions[questionKey];
 
   if (openChecks && typeof openChecks[questionKey] === 'boolean') {
     if (!hideFeedback) {
@@ -119,7 +119,7 @@ export default function ReadingPracticeProgressPanel({
                   hideFeedback,
                   openChecks,
                 });
-                const flagged = !!flaggedQuestions[q.questionKey];
+                const flagged = hideFeedback && !!flaggedQuestions[q.questionKey];
                 return (
                   <button
                     key={q.questionKey}
@@ -144,17 +144,25 @@ export default function ReadingPracticeProgressPanel({
           <section>
             <h3 className="levels-listening-strategy__heading">{en ? 'Current score' : 'Puntuación actual'}</h3>
             <p className="reading-progress-score">
-              <strong>{labels.correct}:</strong> {correctCount}/{totalSlots}
+              <strong>{en ? 'Answered' : 'Respondidas'}:</strong>{' '}
+              {questions.filter((q) => checkedQuestions[q.questionKey]).length}/{totalSlots}
             </p>
-            <p className="reading-progress-score">
-              <strong>{labels.accuracy}:</strong> {accuracy}%
-            </p>
+            {!hideFeedback ? (
+              <>
+                <p className="reading-progress-score">
+                  <strong>{labels.correct}:</strong> {correctCount}/{totalSlots}
+                </p>
+                <p className="reading-progress-score">
+                  <strong>{labels.accuracy}:</strong> {accuracy}%
+                </p>
+              </>
+            ) : null}
             <p className="reading-progress-score">
               <strong>{labels.attempts}:</strong> {checkAttempts}
             </p>
           </section>
 
-          {questions.some((q) => checkedQuestions[q.questionKey]) ? (
+          {hideFeedback && questions.some((q) => checkedQuestions[q.questionKey]) ? (
             <section>
               <h3 className="levels-listening-strategy__heading">{labels.confidence}</h3>
               <p className="levels-listening-strategy__tool-hint">

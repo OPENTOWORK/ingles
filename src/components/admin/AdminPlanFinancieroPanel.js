@@ -248,34 +248,22 @@ export default function AdminPlanFinancieroPanel() {
       <section className={styles.section}>
         <h2 className={styles.sectionTitle}>Niveles premium (Exam practice)</h2>
         <p className={styles.sectionDesc}>
-          A2 en FREE; B1 desde STARTER; B2–C2 desde PREMIUM (PRO incluye todo).
+          A2, B1 y B2 en FREE; C1 y C2 desde PLUS (PREMIUM incluye todo).
         </p>
         <div className={styles.levelGrid}>
           {PREMIUM_EXAM_LEVELS.map((level) => (
             <article
               key={level.slug}
               className={`${styles.levelCard} ${
-                level.access === 'free'
-                  ? styles['levelCard--free']
-                  : level.access === 'starter'
-                    ? styles['levelCard--starter']
-                    : styles['levelCard--premium']
+                level.access === 'free' ? styles['levelCard--free'] : styles['levelCard--premium']
               }`}
             >
               <span
                 className={`${styles.levelBadge} ${
-                  level.access === 'free'
-                    ? styles['levelBadge--free']
-                    : level.access === 'starter'
-                      ? styles['levelBadge--starter']
-                      : styles['levelBadge--premium']
+                  level.access === 'free' ? styles['levelBadge--free'] : styles['levelBadge--premium']
                 }`}
               >
-                {level.access === 'free'
-                  ? 'FREE'
-                  : level.access === 'starter'
-                    ? 'STARTER+'
-                    : 'PREMIUM+'}
+                {level.access === 'free' ? 'FREE' : 'PLUS+'}
               </span>
               <h3 className={styles.levelLabel}>{level.label}</h3>
               {level.note ? <p className={styles.levelNote}>{level.note}</p> : null}

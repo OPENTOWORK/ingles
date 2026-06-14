@@ -1,11 +1,50 @@
 /**
- * Catálogo de suscripciones Dralo (FREE · STARTER · PREMIUM · PRO).
+ * Catálogo de suscripciones Dralo (FREE · PLUS · PREMIUM).
  * Compatible con monetizacion_planes (nombre = slug) y Stripe (stripe_price_id opcional).
  */
 
 export const PLAN_SLUGS = ['free', 'starter', 'premium', 'pro'];
 
 /** @typedef {'free'|'starter'|'premium'|'pro'} PlanSlug */
+
+/** Plan STARTER retirado del catálogo; conservado solo para suscripciones legacy. */
+const STARTER_LEGACY_PLAN = {
+  slug: 'starter',
+  nombre: 'STARTER',
+  precio: 4.99,
+  precioLabel: '4,99€/mes',
+  duracion_dias: 30,
+  descripcionCorta: 'Para estudiantes que quieren progresar de forma constante.',
+  descripcion:
+    'A2 y B1 completos, exámenes ilimitados en esos niveles, corrección Writing básica y 20 consultas Dralo AI al día.',
+  badge: null,
+  badgeVariant: null,
+  recommended: false,
+  stripe_price_id: null,
+  orden: 1,
+  activo: false,
+  highlights: [
+    'Acceso completo a A2 y B1',
+    'Exámenes ilimitados A2 y B1',
+    'Corrección Writing básica',
+    '20 consultas Dralo AI al día',
+    'Placement Test',
+  ],
+  entitlements: {
+    levels: ['a2', 'b1'],
+    examsPerMonth: null,
+    placementTest: true,
+    writingBasic: true,
+    writingAdvanced: false,
+    speakingCoach: false,
+    draloAiDaily: 20,
+    writingCorrectionMonthly: 10,
+    speakingMissionsDaily: 10,
+    progressTracking: 'basic',
+    priorityAccess: false,
+    prioritySupport: false,
+  },
+};
 
 export const DRALO_SUBSCRIPTION_PLANS = [
   {
@@ -16,7 +55,7 @@ export const DRALO_SUBSCRIPTION_PLANS = [
     duracion_dias: 36500,
     descripcionCorta: 'Empieza a aprender inglés gratis.',
     descripcion:
-      'Acceso completo al nivel A2, 1 examen mensual, Placement Test y Dralo AI limitado (3 consultas/día).',
+      'Acceso a A2, B1 y B2, 1 examen mensual, Writing Correction (3/mes), Speaking Coach (5 misiones/día) y 3 consultas Dralo AI al día.',
     badge: null,
     badgeVariant: null,
     recommended: false,
@@ -24,59 +63,24 @@ export const DRALO_SUBSCRIPTION_PLANS = [
     orden: 0,
     activo: true,
     highlights: [
-      'Acceso completo al nivel A2',
+      'Acceso completo a A2, B1 y B2',
       '1 examen mensual',
+      'Writing Correction: 3/mes',
+      'Speaking Coach: 5 misiones/día',
       '3 consultas Dralo AI al día',
       'Placement Test',
       'Seguimiento de progreso básico',
     ],
     entitlements: {
-      levels: ['a2'],
+      levels: ['a2', 'b1', 'b2'],
       examsPerMonth: 1,
-      placementTest: true,
-      writingBasic: false,
-      writingAdvanced: false,
-      speakingCoach: false,
-      aiPersonalTutor: false,
-      pronunciationCoach: false,
-      draloAiDaily: 3,
-      progressTracking: 'basic',
-      priorityAccess: false,
-      prioritySupport: false,
-    },
-  },
-  {
-    slug: 'starter',
-    nombre: 'STARTER',
-    precio: 4.99,
-    precioLabel: '4,99€/mes',
-    duracion_dias: 30,
-    descripcionCorta: 'Para estudiantes que quieren progresar de forma constante.',
-    descripcion:
-      'A2 y B1 completos, exámenes ilimitados en esos niveles, corrección Writing básica y 20 consultas Dralo AI al día.',
-    badge: null,
-    badgeVariant: null,
-    recommended: false,
-    stripe_price_id: null,
-    orden: 1,
-    activo: true,
-    highlights: [
-      'Acceso completo a A2 y B1',
-      'Exámenes ilimitados A2 y B1',
-      'Corrección Writing básica',
-      '20 consultas Dralo AI al día',
-      'Placement Test',
-    ],
-    entitlements: {
-      levels: ['a2', 'b1'],
-      examsPerMonth: null,
       placementTest: true,
       writingBasic: true,
       writingAdvanced: false,
-      speakingCoach: false,
-      aiPersonalTutor: false,
-      pronunciationCoach: false,
-      draloAiDaily: 20,
+      speakingCoach: true,
+      draloAiDaily: 3,
+      writingCorrectionMonthly: 3,
+      speakingMissionsDaily: 5,
       progressTracking: 'basic',
       priorityAccess: false,
       prioritySupport: false,
@@ -84,37 +88,38 @@ export const DRALO_SUBSCRIPTION_PLANS = [
   },
   {
     slug: 'premium',
-    nombre: 'PREMIUM',
+    nombre: 'PLUS',
     precio: 9.99,
     precioLabel: '9,99€/mes',
     duracion_dias: 30,
     descripcionCorta: 'La opción más popular para preparar exámenes y mejorar rápidamente.',
     descripcion:
-      'Todos los niveles A2–C2, exámenes ilimitados, Writing avanzado, Speaking Coach y 60 consultas Dralo AI al día.',
+      'Todos los niveles A2–C2, 10 exámenes mensuales, Writing Correction (10/mes), Speaking Coach (10 misiones/día) y 30 consultas Dralo AI al día.',
     badge: '🏆 MÁS POPULAR',
     badgeVariant: 'popular',
     recommended: true,
     stripe_price_id: null,
-    orden: 2,
+    orden: 1,
     activo: true,
     highlights: [
       'Acceso completo a A2, B1, B2, C1 y C2',
-      'Exámenes ilimitados',
+      '10 exámenes mensuales',
+      'Writing Correction: 10/mes',
+      'Speaking Coach: 10 misiones/día',
       'Corrección avanzada de Writing',
-      'Speaking Coach',
-      '60 consultas Dralo AI al día',
+      '30 consultas Dralo AI al día',
       'Seguimiento de progreso avanzado',
     ],
     entitlements: {
       levels: ['a2', 'b1', 'b2', 'c1', 'c2'],
-      examsPerMonth: null,
+      examsPerMonth: 10,
       placementTest: true,
       writingBasic: true,
       writingAdvanced: true,
       speakingCoach: true,
-      aiPersonalTutor: false,
-      pronunciationCoach: false,
-      draloAiDaily: 60,
+      draloAiDaily: 30,
+      writingCorrectionMonthly: 10,
+      speakingMissionsDaily: 10,
       progressTracking: 'advanced',
       priorityAccess: false,
       prioritySupport: false,
@@ -122,25 +127,25 @@ export const DRALO_SUBSCRIPTION_PLANS = [
   },
   {
     slug: 'pro',
-    nombre: 'PRO',
+    nombre: 'PREMIUM',
     precio: 14.99,
     precioLabel: '14,99€/mes',
     duracion_dias: 30,
-    descripcionCorta: 'La experiencia más completa con IA avanzada.',
+    descripcionCorta: 'La experiencia más completa para preparar exámenes al máximo nivel.',
     descripcion:
-      'Todo lo de Premium más AI Personal Tutor, Pronunciation Coach y conversaciones ilimitadas con Dralo AI.',
+      'Todo lo de Plus con más Writing Correction (20/mes), Speaking Coach (20 misiones/día), 60 consultas Dralo AI al día, exámenes ilimitados y soporte prioritario.',
     badge: '🚀 MEJOR VALOR',
     badgeVariant: 'value',
     recommended: false,
     stripe_price_id: null,
-    orden: 3,
+    orden: 2,
     activo: true,
     highlights: [
       'Acceso completo a A2, B1, B2, C1 y C2',
       'Exámenes ilimitados',
-      'AI Personal Tutor',
-      'Pronunciation Coach',
-      'Consultas Dralo AI ilimitadas',
+      'Writing Correction: 20/mes',
+      'Speaking Coach: 20 misiones/día',
+      '60 consultas Dralo AI al día',
       'Seguimiento avanzado y soporte prioritario',
     ],
     entitlements: {
@@ -150,9 +155,9 @@ export const DRALO_SUBSCRIPTION_PLANS = [
       writingBasic: true,
       writingAdvanced: true,
       speakingCoach: true,
-      aiPersonalTutor: true,
-      pronunciationCoach: true,
-      draloAiDaily: null,
+      draloAiDaily: 60,
+      writingCorrectionMonthly: 20,
+      speakingMissionsDaily: 20,
       progressTracking: 'advanced',
       priorityAccess: true,
       prioritySupport: true,
@@ -160,84 +165,78 @@ export const DRALO_SUBSCRIPTION_PLANS = [
   },
 ];
 
-/** Filas de la tabla comparativa (✅ / ❌ / texto). */
+/** Filas de la tabla comparativa (✅ / ❌ primero, luego texto). */
 export const PLAN_COMPARISON_ROWS = [
-  { id: 'price', label: 'Precio', type: 'text', values: { free: '0€', starter: '4,99€/mes', premium: '9,99€/mes', pro: '14,99€/mes' } },
-  { id: 'a2', label: 'Nivel A2', type: 'bool', values: { free: true, starter: true, premium: true, pro: true } },
-  { id: 'b1', label: 'Nivel B1', type: 'bool', values: { free: false, starter: true, premium: true, pro: true } },
-  { id: 'b2', label: 'Nivel B2', type: 'bool', values: { free: false, starter: false, premium: true, pro: true } },
-  { id: 'c1', label: 'Nivel C1', type: 'bool', values: { free: false, starter: false, premium: true, pro: true } },
-  { id: 'c2', label: 'Nivel C2', type: 'bool', values: { free: false, starter: false, premium: true, pro: true } },
-  { id: 'placement', label: 'Placement Test', type: 'bool', values: { free: true, starter: true, premium: true, pro: true } },
-  {
-    id: 'exams',
-    label: 'Exámenes mensuales',
-    type: 'text',
-    values: { free: '1', starter: 'Ilimitados', premium: 'Ilimitados', pro: 'Ilimitados' },
-  },
+  { id: 'price', label: 'Precio', type: 'text', values: { free: '0€', premium: '9,99€/mes', pro: '14,99€/mes' } },
+  { id: 'a2', label: 'Nivel A2', type: 'bool', values: { free: true, premium: true, pro: true } },
+  { id: 'b1', label: 'Nivel B1', type: 'bool', values: { free: true, premium: true, pro: true } },
+  { id: 'b2', label: 'Nivel B2', type: 'bool', values: { free: true, premium: true, pro: true } },
+  { id: 'c1', label: 'Nivel C1', type: 'bool', values: { free: false, premium: true, pro: true } },
+  { id: 'c2', label: 'Nivel C2', type: 'bool', values: { free: false, premium: true, pro: true } },
+  { id: 'placement', label: 'Placement Test', type: 'bool', values: { free: true, premium: true, pro: true } },
   {
     id: 'writing-basic',
     label: 'Corrección Writing básica',
     type: 'bool',
-    values: { free: false, starter: true, premium: true, pro: true },
+    values: { free: true, premium: true, pro: true },
   },
   {
     id: 'writing-advanced',
     label: 'Corrección Writing avanzada',
     type: 'bool',
-    values: { free: false, starter: false, premium: true, pro: true },
-  },
-  {
-    id: 'speaking',
-    label: 'Speaking Coach',
-    type: 'bool',
-    values: { free: false, starter: false, premium: true, pro: true },
-  },
-  {
-    id: 'ai-tutor',
-    label: 'AI Personal Tutor',
-    type: 'bool',
-    values: { free: false, starter: false, premium: false, pro: true },
-  },
-  {
-    id: 'pronunciation',
-    label: 'Pronunciation Coach',
-    type: 'bool',
-    values: { free: false, starter: false, premium: false, pro: true },
-  },
-  {
-    id: 'dralo-ai',
-    label: 'Consultas Dralo AI',
-    type: 'text',
-    values: { free: '3/día', starter: '20/día', premium: '60/día', pro: 'Ilimitadas' },
-  },
-  {
-    id: 'progress',
-    label: 'Seguimiento de progreso',
-    type: 'text',
-    values: { free: 'Básico', starter: 'Básico', premium: 'Avanzado', pro: 'Avanzado' },
+    values: { free: false, premium: true, pro: true },
   },
   {
     id: 'priority-features',
     label: 'Acceso prioritario a nuevas funciones',
     type: 'bool',
-    values: { free: false, starter: false, premium: false, pro: true },
+    values: { free: false, premium: false, pro: true },
   },
   {
     id: 'priority-support',
     label: 'Soporte prioritario',
     type: 'bool',
-    values: { free: false, starter: false, premium: false, pro: true },
+    values: { free: false, premium: false, pro: true },
+  },
+  {
+    id: 'exams',
+    label: 'Exámenes mensuales',
+    type: 'text',
+    values: { free: '1', premium: '10 exámenes al mes', pro: 'Ilimitados' },
+  },
+  {
+    id: 'writing-correction',
+    label: 'Writing Correction',
+    type: 'text',
+    values: { free: '3/mes', premium: '10/mes', pro: '20/mes' },
+  },
+  {
+    id: 'speaking',
+    label: 'Speaking Coach',
+    type: 'text',
+    values: { free: '5 misiones/día', premium: '10 misiones/día', pro: '20 misiones/día' },
+  },
+  {
+    id: 'dralo-ai',
+    label: 'Consultas Dralo AI',
+    type: 'text',
+    values: { free: '3/día', premium: '30/día', pro: '60/día' },
+  },
+  {
+    id: 'progress',
+    label: 'Seguimiento de progreso',
+    type: 'text',
+    values: { free: 'Básico', premium: 'Avanzado', pro: 'Avanzado' },
   },
 ];
 
 /** Niveles CEFR para panel admin (derivado de PREMIUM / FREE por plan). */
 export const PREMIUM_EXAM_LEVELS = [
   { slug: 'a2', label: 'A2', access: 'free', note: 'Incluido en FREE y todos los planes de pago.' },
-  { slug: 'b1', label: 'B1', access: 'starter', note: 'Desde plan STARTER.' },
-  { slug: 'b2', label: 'B2', access: 'premium', note: 'Desde plan PREMIUM.' },
-  { slug: 'c1', label: 'C1', access: 'premium', note: 'Desde plan PREMIUM.' },
-  { slug: 'c2', label: 'C2', access: 'premium', note: 'Desde plan PREMIUM.' },
+  { slug: 'b1', label: 'B1', access: 'free', note: 'Incluido en FREE y todos los planes de pago.' },
+  { slug: 'b2', label: 'B2', access: 'free', note: 'Incluido en FREE y todos los planes de pago.' },
+  { slug: 'c1', label: 'C1', access: 'premium', note: 'Desde plan PLUS.' },
+  { slug: 'c2', label: 'C2', access: 'premium', note: 'Desde plan PLUS.' },
 ];
 
 /** Plantillas para monetizacion_planes (seed / sync). */
@@ -262,6 +261,8 @@ export const LEGACY_PLAN_NAMES = [
   'Premium B2 anual',
   'Premium C1 mensual',
   'Premium todo acceso',
+  'STARTER',
+  'PRO',
 ];
 
 export const SUBSCRIPTION_STATUS_LABELS = {
@@ -280,8 +281,10 @@ const PROFILE_PLAN_DISPLAY = {
   free: {
     descripcionCorta: 'Start learning English for free.',
     highlights: [
-      'Full access to A2 level',
+      'Full access to A2, B1 and B2',
       '1 exam per month',
+      'Writing Correction: 3/month',
+      'Speaking Coach: 5 missions/day',
       '3 Dralo AI queries per day',
       'Placement Test',
       'Basic progress tracking',
@@ -293,7 +296,8 @@ const PROFILE_PLAN_DISPLAY = {
     highlights: [
       'Full access to A2 and B1',
       'Unlimited A2 and B1 exams',
-      'Basic Writing correction',
+      'Writing Correction: 10/month',
+      'Speaking Coach: 10 missions/day',
       '20 Dralo AI queries per day',
       'Placement Test',
     ],
@@ -303,22 +307,23 @@ const PROFILE_PLAN_DISPLAY = {
     descripcionCorta: 'The most popular option to prepare for exams and improve quickly.',
     highlights: [
       'Full access to A2, B1, B2, C1 and C2',
-      'Unlimited exams',
+      '10 exams per month',
+      'Writing Correction: 10/month',
+      'Speaking Coach: 10 missions/day',
       'Advanced Writing correction',
-      'Speaking Coach',
-      '60 Dralo AI queries per day',
+      '30 Dralo AI queries per day',
       'Advanced progress tracking',
     ],
     badge: 'Most popular',
   },
   pro: {
-    descripcionCorta: 'The most complete experience with advanced AI.',
+    descripcionCorta: 'The most complete experience with the highest daily limits.',
     highlights: [
       'Full access to A2, B1, B2, C1 and C2',
       'Unlimited exams',
-      'AI Personal Tutor',
-      'Pronunciation Coach',
-      'Unlimited Dralo AI queries',
+      'Writing Correction: 20/month',
+      'Speaking Coach: 20 missions/day',
+      '60 Dralo AI queries per day',
       'Advanced tracking and priority support',
     ],
     badge: 'Best value',
@@ -337,7 +342,10 @@ export function getPlanProfileDisplay(plan) {
 
 export function getPlanBySlug(slug) {
   const s = String(slug || 'free').toLowerCase();
-  return DRALO_SUBSCRIPTION_PLANS.find((p) => p.slug === s) || DRALO_SUBSCRIPTION_PLANS[0];
+  const fromCatalog = DRALO_SUBSCRIPTION_PLANS.find((p) => p.slug === s);
+  if (fromCatalog) return fromCatalog;
+  if (s === 'starter') return STARTER_LEGACY_PLAN;
+  return DRALO_SUBSCRIPTION_PLANS[0];
 }
 
 export function planSlugFromDbRow(row) {
@@ -345,12 +353,20 @@ export function planSlugFromDbRow(row) {
   const slug = String(row.slug || '').toLowerCase();
   if (PLAN_SLUGS.includes(slug)) return slug;
   const nombre = String(row.nombre || '').trim().toUpperCase();
+  const nameToSlug = {
+    FREE: 'free',
+    STARTER: 'starter',
+    PLUS: 'premium',
+    PRO: 'pro',
+    PREMIUM: slug === 'pro' ? 'pro' : 'premium',
+  };
+  if (nameToSlug[nombre]) return nameToSlug[nombre];
   const byName = DRALO_SUBSCRIPTION_PLANS.find((p) => p.nombre === nombre);
   return byName?.slug || 'free';
 }
 
 /** Mínimo plan slug que desbloquea un nivel CEFR. */
-const LEVEL_MIN_PLAN = { a2: 'free', b1: 'starter', b2: 'premium', c1: 'premium', c2: 'premium' };
+const LEVEL_MIN_PLAN = { a2: 'free', b1: 'free', b2: 'free', c1: 'premium', c2: 'premium' };
 
 const PLAN_RANK = { free: 0, starter: 1, premium: 2, pro: 3 };
 

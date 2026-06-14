@@ -29,6 +29,10 @@ import {
   buildExamSlotPickerProps,
 } from '@/hooks/useLevelsExamAdminFlow';
 import { useSkillPartFirstNavigation } from '@/hooks/useSkillPartFirstNavigation';
+import {
+  returnToSkillExercisePicker,
+  runKeepPracticingSkillFlow,
+} from '@/utils/skillPracticeNavigation';
 import ExamModeSectionBanner from '@/components/niveles/ExamModeSectionBanner';
 import { useExamModeStrict } from '@/hooks/useExamModeStrict';
 import {
@@ -266,16 +270,20 @@ function B2WritingExamPracticePageInner() {
   const isSkillPracticeSession = skillNav.active && layoutPracticeOpen;
 
   const handleKeepPracticing = useCallback(() => {
-    scoring.setExamPracticeOpen(false);
-    void scoring.refreshPuntuacionesProgress();
-    if (typeof window !== 'undefined') {
-      // Mantener ?part= pero quitar ?examen= para que un refresh se quede en el picker.
-      const url = new URL(window.location.href);
-      url.searchParams.delete('examen');
-      window.history.replaceState(null, '', url.pathname + url.search);
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    }
-  }, [scoring]);
+    runKeepPracticingSkillFlow({
+      examSlot,
+      examenIdBySlot: scoring.examenIdBySlot,
+      onSelectExamSlot: (slot) => {
+        void scoring.refreshPuntuacionesProgress();
+        handleSelectExamSlot(slot);
+      },
+      onReturnToExercisePicker: () =>
+        returnToSkillExercisePicker({
+          setExamPracticeOpen: scoring.setExamPracticeOpen,
+          refreshProgress: scoring.refreshPuntuacionesProgress,
+        }),
+    });
+  }, [examSlot, scoring, handleSelectExamSlot]);
 
   const handleBackToParts = useCallback(() => {
     scoring.setExamPracticeOpen(false);
@@ -621,13 +629,7 @@ function B2WritingExamPracticePageInner() {
             lang="en"
           />
         ) : null}
-        <section
-          className="b2-writing-practice"
-          style={{
-            maxWidth: showPracticeSideRail ? 'min(1280px, 100%)' : 'min(960px, 100%)',
-            margin: '0 auto',
-          }}
-        >
+        <section className="b2-writing-practice">
           {loading && <p style={{ textAlign: 'center' }}>Loading B2 Writing…</p>}
           {!loading && error && (
             <p style={{ textAlign: 'center', color: '#c53030', fontWeight: 600 }}>{error}</p>

@@ -6,20 +6,29 @@ import {
   isTeacherRole,
   normalizeRoleName,
 } from '@/utils/authRoles';
+import { canViewPricing } from '@/utils/pricingAccess';
 import { getExamUnitSlugFromPathname } from '@/lib/examTheoryUnlock';
 import { isExamTheoryPartTipsPath } from '@/lib/nivelesPartTipsRoutes';
 
 /** Theory solo en la home (inferior, oculto para estudiantes). */
 export const HOME_THEORY_LINK = { href: '/teoria', label: 'Theory', tourId: 'nav-theory' };
 
-/** Enlaces inferiores de la home (ocultos para estudiantes). */
+/** Enlaces inferiores de la home (sin pricing; ocultos para estudiantes). */
 export const HOME_QUICK_LINKS = [
   { href: '/prueba-nivel', label: 'Placement Test', tourId: 'nav-placement' },
   { href: '/training', label: 'Training' },
-  { href: '/precios', label: 'Planes', tourId: 'nav-pricing' },
 ];
 
-/** Theory, placement, training y planes: en la home (Theory solo admin). */
+/** Planes: solo administradores (ver pricingAccess.js). */
+export const HOME_PRICING_LINK = { href: '/precios', label: 'Planes', tourId: 'nav-pricing' };
+
+/** Enlaces de home con pricing incluido solo si el rol puede ver precios. */
+export function getHomeQuickLinksForRole(userRole) {
+  if (!canViewPricing(userRole)) return HOME_QUICK_LINKS;
+  return [...HOME_QUICK_LINKS, HOME_PRICING_LINK];
+}
+
+/** Theory, placement, training y planes: en la home (Theory y planes solo admin). */
 export const HOME_MAIN_LINKS = [HOME_THEORY_LINK, ...HOME_QUICK_LINKS];
 
 /** Enlaces en la barra superior / menú móvil antes de Dralo AI. */

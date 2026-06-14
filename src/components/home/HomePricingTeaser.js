@@ -1,7 +1,9 @@
 'use client';
 
 import Link from 'next/link';
+import { useUserRole } from '@/context/UserRoleContext';
 import { DRALO_SUBSCRIPTION_PLANS } from '@/data/financialPlanConfig';
+import { canViewPricing } from '@/utils/pricingAccess';
 import styles from './HomePricingTeaser.module.css';
 
 function formatPrice(plan) {
@@ -14,6 +16,9 @@ function formatPrice(plan) {
 }
 
 export default function HomePricingTeaser() {
+  const { userRole } = useUserRole();
+  if (!canViewPricing(userRole)) return null;
+
   return (
     <section className={styles.section} aria-labelledby="home-pricing-title">
       <div className={styles.head}>
@@ -21,8 +26,7 @@ export default function HomePricingTeaser() {
           Planes para cada etapa
         </h2>
         <p className={styles.desc}>
-          Empieza gratis con A2, sube a STARTER o PREMIUM para preparar el examen, o desbloquea PRO
-          con IA ilimitada.
+          Empieza gratis con A2, B1 y B2; elige PLUS para C1–C2 o desbloquea PREMIUM con más Writing Correction y límites diarios ampliados.
         </p>
       </div>
 

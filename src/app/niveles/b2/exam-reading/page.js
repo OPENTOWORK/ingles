@@ -53,6 +53,10 @@ import ReadingPracticeSideRail from '@/components/exam/ReadingPracticeSideRail';
 import { getB2ReadingStrategyPack } from '@/data/b2ReadingPracticeStrategies';
 import { ReadingPracticeSessionProvider } from '@/context/ReadingPracticeSessionContext';
 import ReadingPracticeChrome from '@/components/exam/ReadingPracticeChrome';
+import {
+  returnToSkillExercisePicker,
+  runKeepPracticingSkillFlow,
+} from '@/utils/skillPracticeNavigation';
 import { useReadingPracticeSession } from '@/context/ReadingPracticeSessionContext';
 import ReadingQuestionFlagButton from '@/components/exam/ReadingQuestionFlagButton';
 import ReadingConfidenceSelector from '@/components/exam/ReadingConfidenceSelector';
@@ -143,6 +147,8 @@ function B2ReadingExamsPageInner() {
   const mountedRef = useRef(true);
   const categoryTimer = useLevelsCategoryTimer();
   const readingSession = useReadingPracticeSession();
+  const hideInstantFeedback =
+    hideFeedback || readingSession.readingSettings.showFeedback === false;
 
   const loadReadingData = useCallback(async () => {
     setLoading(true);
@@ -342,16 +348,20 @@ function B2ReadingExamsPageInner() {
   const isSkillPracticeSession = skillNav.active && layoutPracticeOpen;
 
   const handleKeepPracticing = useCallback(() => {
-    scoring.setExamPracticeOpen(false);
-    void scoring.refreshPuntuacionesProgress();
-    if (typeof window !== 'undefined') {
-      // Mantener ?part= pero quitar ?examen= para que un refresh se quede en el picker.
-      const url = new URL(window.location.href);
-      url.searchParams.delete('examen');
-      window.history.replaceState(null, '', url.pathname + url.search);
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    }
-  }, [scoring]);
+    runKeepPracticingSkillFlow({
+      examSlot,
+      examenIdBySlot: scoring.examenIdBySlot,
+      onSelectExamSlot: (slot) => {
+        void scoring.refreshPuntuacionesProgress();
+        handleSelectExamSlot(slot);
+      },
+      onReturnToExercisePicker: () =>
+        returnToSkillExercisePicker({
+          setExamPracticeOpen: scoring.setExamPracticeOpen,
+          refreshProgress: scoring.refreshPuntuacionesProgress,
+        }),
+    });
+  }, [examSlot, scoring, handleSelectExamSlot]);
 
   const handleBackToParts = useCallback(() => {
     scoring.setExamPracticeOpen(false);
@@ -1358,7 +1368,7 @@ function B2ReadingExamsPageInner() {
                       selectedOptions={selectedOptions}
                       checkedQuestions={checkedQuestions}
                       onOptionSelect={handlePart1McqOptionSelect}
-                      hideFeedback={hideFeedback}
+                      hideFeedback={hideInstantFeedback}
                       aiHintsByKey={aiHintsByKey}
                       onRequestExplanation={handlePart1ExplanationRequest}
                     />
@@ -1376,7 +1386,7 @@ function B2ReadingExamsPageInner() {
                       openChecks={openChecks}
                       onCheckGap={handleOpenGapCheck}
                       openAnswerMap={openAnswerMap}
-                      hideFeedback={hideFeedback}
+                      hideFeedback={hideInstantFeedback}
                       aiHintsByKey={aiHintsByKey}
                     />
                   ) : isInlinePassagePart ? (
@@ -1393,7 +1403,7 @@ function B2ReadingExamsPageInner() {
                       openChecks={openChecks}
                       onCheckGap={handleOpenGapCheck}
                       openAnswerMap={openAnswerMap}
-                      hideFeedback={hideFeedback}
+                      hideFeedback={hideInstantFeedback}
                       inputPlaceholder="Write one word"
                       aiHintsByKey={aiHintsByKey}
                       onRequestExplanation={handleOpenGapExplanationRequest}
@@ -1446,7 +1456,7 @@ function B2ReadingExamsPageInner() {
                             group.questionNumber,
                             `extra-${groupIndex}`,
                           );
-                          const isFlagged = !!readingSession.flaggedQuestions[questionKey];
+                          const isFlagged = hideInstantFeedback && !!readingSession.flaggedQuestions[questionKey];
                           return (
                       <div
                         key={`group-${selectedQuestion.preguntaId}-${group.questionNumber ?? 'extra'}-${groupIndex}`}
@@ -1467,7 +1477,7 @@ function B2ReadingExamsPageInner() {
                                 )
                               : `Question ${group.questionNumber}`}
                         </p>
-                        {group.questionNumber ? (
+                        {group.questionNumber && hideInstantFeedback ? (
                           <ReadingQuestionFlagButton
                             questionKey={questionKey}
                             questionNumber={group.questionNumber}
@@ -1480,8 +1490,8 @@ function B2ReadingExamsPageInner() {
                             const isChecked = checkedQuestions[questionKey];
                             const isCorrect = !!option.correcta;
                             const isEliminated = readingSession.isOptionEliminated(questionKey, option.id);
-                            const showCorrect = !hideFeedback && isChecked && isCorrect;
-                            const showIncorrect = !hideFeedback && isChecked && isSelected && !isCorrect;
+                            const showCorrect = !hideInstantFeedback && isChecked && isCorrect;
+                            const showIncorrect = !hideInstantFeedback && isChecked && isSelected && !isCorrect;
 
                             return (
                               <button
@@ -1565,13 +1575,13 @@ function B2ReadingExamsPageInner() {
                           })}
                         </div>
 
-                        {checkedQuestions[questionKey] ? (
+                        {hideInstantFeedback && checkedQuestions[questionKey] ? (
                           <ReadingConfidenceSelector questionKey={questionKey} />
                         ) : null}
 
                         {(() => {
                           const hasChecked = checkedQuestions[questionKey];
-                          if (!hasChecked || hideFeedback) return null;
+                          if (!hasChecked || hideInstantFeedback) return null;
                           const correct = group.options.find((option) => option.correcta);
                           return (
                             <>
@@ -1618,7 +1628,7 @@ function B2ReadingExamsPageInner() {
           openChecks={openChecks}
           correctCount={partScoreMetrics.correctCount}
           totalSlots={b2PartCfg?.total ?? partScoreMetrics.totalSlots}
-          hideFeedback={hideFeedback}
+          hideFeedback={hideInstantFeedback}
           lang="en"
         />
       ) : null}

@@ -21,7 +21,7 @@ export default function ReadingConfidenceSelector({ questionKey, lang = 'en' }) 
           <button
             key={opt.value}
             type="button"
-            className={`reading-confidence__btn tool-button${current === opt.value ? ' active' : ''}`}
+            className={`reading-confidence__btn reading-confidence__btn--${opt.value.replace(/_/g, '-')} tool-button${current === opt.value ? ' active' : ''}`}
             onClick={() => setConfidence(questionKey, opt.value)}
             aria-pressed={current === opt.value}
           >

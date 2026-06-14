@@ -3,7 +3,7 @@
 import Link from 'next/link';
 import { useUserRole } from '@/context/UserRoleContext';
 import { isAdminRole } from '@/utils/authRoles';
-import { HOME_QUICK_LINKS, HOME_THEORY_LINK } from '@/config/appNavMenu';
+import { getHomeQuickLinksForRole, HOME_THEORY_LINK } from '@/config/appNavMenu';
 
 export default function HomeQuickNav() {
   const { userRole } = useUserRole();
@@ -12,7 +12,7 @@ export default function HomeQuickNav() {
   const showQuickLinks = !isStudent;
   const links = [
     ...(showTheory ? [HOME_THEORY_LINK] : []),
-    ...(showQuickLinks ? HOME_QUICK_LINKS : []),
+    ...(showQuickLinks ? getHomeQuickLinksForRole(userRole) : []),
   ];
 
   if (links.length === 0) return null;

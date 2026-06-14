@@ -1,25 +1,50 @@
-import { buildClientApiUrl, getStaticApiHint } from '@/utils/clientApiUrl';
+import { buildClientApiUrl } from '@/utils/clientApiUrl';
+import { callExplainMistakeFromDb } from '@/lib/ai/draloAiClient';
 
 /**
+ * Explain Mistake — V1 uses pre-stored explanations (no OpenAI).
  * @param {Record<string, unknown>} body
  * @returns {Promise<string>}
  */
 export async function postLevelsAnswerJustification(body) {
-  const externalBaseConfigured = Boolean(
-    String(process.env.NEXT_PUBLIC_AI_API_BASE_URL || '').trim(),
-  );
-  const res = await fetch(buildClientApiUrl('/api/levels/answer-justify/'), {
+  const result = await callExplainMistakeFromDb({
+    questionId: body.questionId || body.preguntaId,
+    wrongAnswer: body.userChoiceText || body.wrongAnswer,
+    userAnswer: body.userChoiceText,
+  });
+
+  if (!result?.found) {
+    return (
+      result?.message ||
+      'Explanation coming soon. For now, review the correct answer and try again.'
+    );
+  }
+
+  const parts = [result.explanation, result.shortExplanation, result.example].filter(Boolean);
+  return parts.join('\n\n') || '—';
+}
+
+/**
+ * @deprecated Use postLevelsAnswerJustification — kept for imports that expect fetch shape.
+ */
+export async function postLevelsAnswerJustificationLegacy(body) {
+  const res = await fetch(buildClientApiUrl('/api/dralo-ai'), {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(body),
+    credentials: 'include',
+    body: JSON.stringify({
+      action: 'explain_mistake_from_db',
+      questionId: body.questionId || body.preguntaId,
+      wrongAnswer: body.userChoiceText,
+    }),
   });
   const data = await res.json().catch(() => ({}));
-  if (!res.ok) {
-    const hint =
-      !externalBaseConfigured && (res.status === 404 || res.status === 405)
-        ? ` ${getStaticApiHint()}`
-        : '';
-    throw new Error((data.error || res.statusText || 'Error') + hint);
+  if (data?.error === true) {
+    throw new Error(data.message || 'Could not load explanation.');
   }
-  return typeof data.justification === 'string' ? data.justification : '';
+  const result = data.result || {};
+  if (!result.found) {
+    return result.message || 'Explanation coming soon. For now, review the correct answer and try again.';
+  }
+  return result.explanation || result.shortExplanation || '—';
 }

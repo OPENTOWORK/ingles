@@ -45,7 +45,7 @@
 
 @media (min-width: 1024px) {
   .cards {
-    grid-template-columns: repeat(4, minmax(0, 1fr));
+    grid-template-columns: repeat(3, minmax(0, 1fr));
   }
 }
 
@@ -129,6 +129,14 @@
   font-size: 0.85rem;
   font-weight: 600;
   color: #64748b;
+}
+
+.cardTrial {
+  display: block;
+  margin-top: 6px;
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: #059669;
 }
 
 .cardTagline {
@@ -290,13 +298,6 @@
   font-weight: 600;
   color: #475569;
   font-size: 0.82rem;
-}
-
-.footnote {
-  margin: 14px 6px 0;
-  font-size: 0.78rem;
-  color: #94a3b8;
-  line-height: 1.5;
 }
 
 @media (max-width: 640px) {

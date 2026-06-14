@@ -34,8 +34,7 @@ export const CONTACT_FAQ_ITEMS = [
     topic: 'Payments & subscriptions',
     question: 'What subscription plans are available?',
     answer:
-      'Visit the Pricing page to compare plans, included levels, and features. Online card payments will be enabled as soon as Stripe is connected; until then, contact support if you need help with access.',
-    quickLink: { href: '/precios', label: 'View pricing' },
+      'Plan details and online checkout are not public yet. Open a support ticket under “Payments & subscriptions” and we will explain what is included in each tier and help with access.',
   },
   {
     id: 'payments-billing',

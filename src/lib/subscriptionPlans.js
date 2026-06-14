@@ -25,6 +25,33 @@ export function getDraloAiDailyLimit(planSlug) {
   return n == null ? Infinity : n;
 }
 
+export function getWritingCorrectionMonthlyLimit(planSlug) {
+  const plan = getPlanBySlug(planSlug);
+  const n = plan.entitlements.writingCorrectionMonthly;
+  return n == null ? Infinity : n;
+}
+
+export function getSpeakingMissionsDailyLimit(planSlug) {
+  const plan = getPlanBySlug(planSlug);
+  const n = plan.entitlements.speakingMissionsDaily;
+  return n == null ? Infinity : n;
+}
+
+export function monthlyLimitLabel(n) {
+  if (n == null || n === Infinity) return 'Ilimitadas';
+  return `${n}/mes`;
+}
+
+export function dailyLimitLabel(n) {
+  if (n == null || n === Infinity) return 'Ilimitadas';
+  return `${n}/día`;
+}
+
+export function speakingMissionsLimitLabel(planSlug) {
+  const n = getSpeakingMissionsDailyLimit(planSlug);
+  return n === Infinity ? 'Ilimitadas' : `${n} misiones/día`;
+}
+
 export function hasEntitlement(planSlug, key) {
   const plan = getPlanBySlug(planSlug);
   const e = plan.entitlements;
@@ -35,10 +62,6 @@ export function hasEntitlement(planSlug, key) {
       return Boolean(e.writingAdvanced);
     case 'speakingCoach':
       return Boolean(e.speakingCoach);
-    case 'aiPersonalTutor':
-      return Boolean(e.aiPersonalTutor);
-    case 'pronunciationCoach':
-      return Boolean(e.pronunciationCoach);
     case 'placementTest':
       return Boolean(e.placementTest);
     case 'priorityAccess':
@@ -52,7 +75,9 @@ export function hasEntitlement(planSlug, key) {
 
 export function examsLimitLabel(planSlug) {
   const n = getPlanBySlug(planSlug).entitlements.examsPerMonth;
-  return n == null ? 'Ilimitados' : String(n);
+  if (n == null) return 'Ilimitados';
+  if (n === 1) return '1';
+  return `${n} exámenes al mes`;
 }
 
 export function rowToDbInsert(plan) {

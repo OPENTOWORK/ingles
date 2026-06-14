@@ -17,6 +17,9 @@ import { isExamGenerationSlug } from '@/lib/levelsExamCatalog';
 import { clampB2ExamSlot } from '@/utils/b2ResolveExam';
 import { getCachedLevelBySlug, invalidateLevelExamCache } from '@/utils/levelsLevelCache';
 import { fetchDraftSlotSet } from '@/utils/levelsExamVisibility';
+import { recordAiUsageSuccess, usageFromTextEstimate } from '@/lib/aiUsageRouteHelpers';
+import { AI_ACTIONS } from '@/lib/aiUsage';
+import { getDefaultModel } from '@/lib/ai/draloAiEngine';
 
 export const maxDuration = 300;
 
@@ -159,6 +162,26 @@ export async function POST(req) {
     }
 
     invalidateLevelExamCache(levelData.id);
+
+    if (isGeneration) {
+      const usage = usageFromTextEstimate(
+        getDefaultModel(),
+        JSON.stringify({ slug, slot, partNumber }),
+        JSON.stringify(result),
+      );
+      await recordAiUsageSuccess({
+        userId: auth.user?.id ?? null,
+        action: AI_ACTIONS.ADMIN_GENERATE_EXAM,
+        model: usage.model,
+        usage,
+        metadata: {
+          examLevel: slug,
+          examPart: partNumber,
+          examTitle: body.title || `Exam ${slot}`,
+          admin: true,
+        },
+      }).catch((err) => console.error('[admin/generate-exam] ai log', err));
+    }
 
     return NextResponse.json({ ok: true, slot, levelId: levelData.id, ...result });
   } catch (err) {

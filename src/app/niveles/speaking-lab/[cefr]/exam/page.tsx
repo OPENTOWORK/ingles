@@ -115,6 +115,7 @@ export default function SpeakingExamPage() {
       const res = await fetch(withBasePath('/api/speaking/evaluate'), {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
         body: JSON.stringify({
           sessionId,
           cefr,
@@ -122,7 +123,19 @@ export default function SpeakingExamPage() {
           combinedTranscript,
         }),
       });
-      const data = (await res.json()) as { report: CorrectionReportPayload };
+      const data = (await res.json()) as {
+        report?: CorrectionReportPayload;
+        error?: boolean | string;
+        code?: string;
+        message?: string;
+      };
+      if (!res.ok || data.error === true) {
+        throw new Error(
+          data.message ||
+            (typeof data.error === 'string' ? data.error : 'Could not generate feedback'),
+        );
+      }
+      if (!data.report) throw new Error('Could not generate feedback');
       setReport(data.report);
       setFinished(true);
     } finally {
@@ -140,6 +153,9 @@ export default function SpeakingExamPage() {
       subtitle={`${cefr} — examiner role only until the final report.`}
       backHref={`/niveles/speaking-lab/${slug}/`}
     >
+      <p className="mb-4 text-sm text-slate-400">
+        Alpha: 3 speaking exam feedbacks per day.
+      </p>
       <ModeTabs cefr={slug} current="exam" />
 
       <div className="mb-6 flex flex-wrap items-center justify-between gap-4">

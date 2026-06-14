@@ -65,6 +65,10 @@ export default function LoginPage() {
 
     const { data: signInData, error } = await supabase.auth.signInWithPassword({ email, password });
 
+    // #region agent log
+    fetch('http://127.0.0.1:7882/ingest/2a697440-281c-4f74-a253-095d80733192',{method:'POST',headers:{'Content-Type':'application/json','X-Debug-Session-Id':'82e3a2'},body:JSON.stringify({sessionId:'82e3a2',runId:'login-debug',hypothesisId:'H1',location:'login/page.js:signIn',message:'signInWithPassword result',data:{hasError:!!error,errorCode:error?.code||null,errorMsg:error?.message?.slice(0,120)||null,hasSession:!!signInData?.session,hasUser:!!signInData?.user},timestamp:Date.now()})}).catch(()=>{});
+    // #endregion
+
     if (error) {
       toast.dismiss(loadingToast);
       setLoading(false);
@@ -94,6 +98,10 @@ export default function LoginPage() {
 
     const result = await completeSignIn(signInData);
 
+    // #region agent log
+    fetch('http://127.0.0.1:7882/ingest/2a697440-281c-4f74-a253-095d80733192',{method:'POST',headers:{'Content-Type':'application/json','X-Debug-Session-Id':'82e3a2'},body:JSON.stringify({sessionId:'82e3a2',runId:'login-debug',hypothesisId:'H2',location:'login/page.js:completeSignIn',message:'completeSignIn result',data:{ok:result.ok,reason:result.reason||null,hasUser:!!result.user},timestamp:Date.now()})}).catch(()=>{});
+    // #endregion
+
     toast.dismiss(loadingToast);
     setLoading(false);
 
@@ -114,6 +122,11 @@ export default function LoginPage() {
     }
 
     const path = await getRedirectPathByUserId(result.user.id, result.user.email);
+
+    // #region agent log
+    fetch('http://127.0.0.1:7882/ingest/2a697440-281c-4f74-a253-095d80733192',{method:'POST',headers:{'Content-Type':'application/json','X-Debug-Session-Id':'82e3a2'},body:JSON.stringify({sessionId:'82e3a2',runId:'login-debug',hypothesisId:'H4',location:'login/page.js:redirect',message:'post-login redirect path',data:{path},timestamp:Date.now()})}).catch(()=>{});
+    // #endregion
+
     window.location.href = path;
   };
 

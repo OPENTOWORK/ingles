@@ -41,6 +41,10 @@ import {
   reloadExamNamesBySlot,
 } from '@/hooks/useLevelsExamAdminFlow';
 import { useSkillPartFirstNavigation } from '@/hooks/useSkillPartFirstNavigation';
+import {
+  returnToSkillExercisePicker,
+  runKeepPracticingSkillFlow,
+} from '@/utils/skillPracticeNavigation';
 import A2ExamGenerationStatus from '@/components/niveles/A2ExamGenerationStatus';
 
 const buttonStyle = {
@@ -192,16 +196,20 @@ function B2SpeakingExamPracticeInner({ title, subtitle, loadingLabel, refreshLab
   const isSkillPracticeSession = skillNav.active && layoutPracticeOpen;
 
   const handleKeepPracticing = useCallback(() => {
-    scoring.setExamPracticeOpen(false);
-    void scoring.refreshPuntuacionesProgress();
-    if (typeof window !== 'undefined') {
-      // Mantener ?part= pero quitar ?examen= para que un refresh se quede en el picker.
-      const url = new URL(window.location.href);
-      url.searchParams.delete('examen');
-      window.history.replaceState(null, '', url.pathname + url.search);
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    }
-  }, [scoring]);
+    runKeepPracticingSkillFlow({
+      examSlot,
+      examenIdBySlot: scoring.examenIdBySlot,
+      onSelectExamSlot: (slot) => {
+        void scoring.refreshPuntuacionesProgress();
+        handleSelectExamSlot(slot);
+      },
+      onReturnToExercisePicker: () =>
+        returnToSkillExercisePicker({
+          setExamPracticeOpen: scoring.setExamPracticeOpen,
+          refreshProgress: scoring.refreshPuntuacionesProgress,
+        }),
+    });
+  }, [examSlot, scoring, handleSelectExamSlot]);
 
   const handleBackToParts = useCallback(() => {
     scoring.setExamPracticeOpen(false);

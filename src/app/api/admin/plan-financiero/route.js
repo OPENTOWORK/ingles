@@ -272,7 +272,7 @@ export async function GET(req) {
   }
 }
 
-/** Crea o sincroniza catálogo FREE · STARTER · PREMIUM · PRO (solo admin). */
+/** Crea o sincroniza catálogo FREE · PLUS · PREMIUM (solo admin). */
 export async function POST(req) {
   try {
     const auth = await authenticateAdminRequest(req);
@@ -291,7 +291,7 @@ export async function POST(req) {
       const stats = await syncCatalog(auth.db);
       return NextResponse.json({
         ok: true,
-        message: 'Catálogo sincronizado: FREE, STARTER, PREMIUM y PRO.',
+        message: 'Catálogo sincronizado: FREE, PLUS y PREMIUM.',
         ...stats,
       });
     }

@@ -11,7 +11,7 @@ import {
   getStaffPanelMenuLabel,
   isDraloAiLockedForRole,
   NAV_LINK_CONTACT,
-  HOME_QUICK_LINKS,
+  getHomeQuickLinksForRole,
   HOME_THEORY_LINK,
   NAV_LINKS_BEFORE_DRALO,
 } from '@/config/appNavMenu';
@@ -86,7 +86,7 @@ export default function AppSideMenuPanel({ defaultOpen = true }) {
               {HOME_THEORY_LINK.label}
             </NavLink>
           ) : null}
-          {HOME_QUICK_LINKS.map((item) => (
+          {getHomeQuickLinksForRole(userRole).map((item) => (
             <NavLink key={item.href} href={item.href} className={linkClass}>
               {item.label}
             </NavLink>

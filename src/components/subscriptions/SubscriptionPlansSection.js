@@ -5,7 +5,13 @@ import {
   DRALO_SUBSCRIPTION_PLANS,
   PLAN_COMPARISON_ROWS,
 } from '@/data/financialPlanConfig';
+import { examsLimitLabel } from '@/lib/subscriptionPlans';
 import styles from './SubscriptionPlansSection.module.css';
+
+function comparisonCellValue(row, planSlug) {
+  if (row.id === 'exams') return examsLimitLabel(planSlug);
+  return row.values[planSlug];
+}
 
 function formatPrice(plan) {
   if (!plan.precio || plan.precio <= 0) return '0€';
@@ -80,6 +86,7 @@ export default function SubscriptionPlansSection({
                   <>
                     <span className={styles.cardPriceAmount}>{formatPrice(plan)}</span>
                     <span className={styles.cardPricePeriod}>/mes</span>
+                    <span className={styles.cardTrial}>7 días de prueba gratuita</span>
                   </>
                 ) : (
                   <span className={styles.cardPriceAmount}>Gratis</span>
@@ -147,7 +154,7 @@ export default function SubscriptionPlansSection({
                       key={p.slug}
                       className={p.recommended ? styles.tdPopular : undefined}
                     >
-                      <CellValue value={row.values[p.slug]} type={row.type} />
+                      <CellValue value={comparisonCellValue(row, p.slug)} type={row.type} />
                     </td>
                   ))}
                 </tr>
@@ -156,11 +163,6 @@ export default function SubscriptionPlansSection({
           </table>
         </div>
       </div>
-
-      <p className={styles.footnote}>
-        Los planes anuales llegarán pronto. Pagos con Stripe en preparación — el catálogo ya está
-        listo para conectar precios.
-      </p>
     </section>
   );
 }

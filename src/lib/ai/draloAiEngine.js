@@ -118,10 +118,28 @@ function buildChatParams({
 }
 
 export async function draloChatCompletion(options) {
+  const full = await draloChatCompletionFull(options);
+  return full.text;
+}
+
+/**
+ * Chat completion returning text + token usage for cost logging.
+ */
+export async function draloChatCompletionFull(options) {
   const client = getClient();
   const params = buildChatParams(options);
   const response = await client.chat.completions.create(params);
-  return response.choices?.[0]?.message?.content?.trim() || '';
+  const text = response.choices?.[0]?.message?.content?.trim() || '';
+  const usage = response.usage || {};
+  return {
+    text,
+    model: params.model,
+    usage: {
+      input_tokens: usage.prompt_tokens ?? 0,
+      output_tokens: usage.completion_tokens ?? 0,
+      total_tokens: usage.total_tokens ?? 0,
+    },
+  };
 }
 
 /**

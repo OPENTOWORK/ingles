@@ -2,7 +2,14 @@
 
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { formatWritingFeedbackHtml } from '@/lib/formatWritingFeedbackHtml';
-import { buildClientApiUrl, getStaticApiHint } from '@/utils/clientApiUrl';
+import {
+  callExamWritingCorrection,
+  dailyLimitMessage,
+  fetchAiUsageStatus,
+  isDailyLimitError,
+} from '@/lib/ai/draloAiClient';
+import { trackWritingErrors } from '@/lib/errorTracker';
+import { writingLimitLabel, LIMIT_REACHED } from '@/lib/aiUsageLimitCopy';
 
 function countWords(text) {
   return String(text || '')
@@ -53,7 +60,52 @@ export default function B2WritingLongFormAiPanel({
   const [scores, setScores] = useState(null);
   const [loading, setLoading] = useState(false);
   const [lastError, setLastError] = useState('');
+  const [usageHint, setUsageHint] = useState('');
+  const [usageLimit, setUsageLimit] = useState(3);
+  const [usageRemaining, setUsageRemaining] = useState(null);
+  const [usageUnlimited, setUsageUnlimited] = useState(false);
   const feedbackRef = useRef(null);
+
+  const refreshUsageHint = useCallback(async () => {
+    const status = await fetchAiUsageStatus();
+    if (!status?.writing) {
+      setUsageHint('');
+      setUsageRemaining(null);
+      setUsageUnlimited(false);
+      return;
+    }
+
+    if (status.writing.unlimited) {
+      setUsageHint('');
+      setUsageRemaining(null);
+      setUsageUnlimited(true);
+      return;
+    }
+
+    const { used, limit, remaining } = status.writing;
+    if (limit == null) {
+      setUsageHint('');
+      setUsageRemaining(null);
+      setUsageUnlimited(false);
+      return;
+    }
+
+    setUsageUnlimited(false);
+    setUsageLimit(limit);
+    const nextRemaining = remaining ?? Math.max(0, limit - (used ?? 0));
+    setUsageRemaining(nextRemaining);
+    setUsageHint(
+      writingLimitLabel(limit, {
+        lang: isEn ? 'en' : 'es',
+        remaining: nextRemaining,
+        used,
+      }),
+    );
+  }, [isEn]);
+
+  useEffect(() => {
+    void refreshUsageHint();
+  }, [refreshUsageHint]);
 
   useEffect(() => {
     if (typeof window === 'undefined' || !storageKey) return;
@@ -88,6 +140,7 @@ export default function B2WritingLongFormAiPanel({
   const wordCount = countWords(essay);
   const meetsWordRange = wordCount >= wordMin && wordCount <= wordMax;
   const hasSubmitted = Boolean(aiFeedback || scores);
+  const limitReached = !usageUnlimited && usageRemaining === 0;
 
   useEffect(() => {
     if (typeof onDraftStats === 'function') {
@@ -105,51 +158,24 @@ export default function B2WritingLongFormAiPanel({
     setScores(null);
 
     try {
-      const externalBaseConfigured = Boolean(
-        String(process.env.NEXT_PUBLIC_AI_API_BASE_URL || '').trim(),
-      );
       const structuredExamContext =
         typeof examContextBuilder === 'function' ? examContextBuilder(text) : '';
 
-      const res = await fetch(buildClientApiUrl('/api/feedback/essay'), {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          essay: text,
-          level: 'b2',
-          wordMin,
-          wordMax,
-          structuredExamContext: structuredExamContext || undefined,
-          taskContext: structuredExamContext
-            ? undefined
-            : {
-                partLabel: partLabel || undefined,
-                partDescription: partDescription || undefined,
-                instructions: taskInstructions || undefined,
-                inputText: taskInputText || undefined,
-              },
-        }),
+      const data = await callExamWritingCorrection({
+        essay: text,
+        level: 'b2',
+        wordMin,
+        wordMax,
+        structuredExamContext: structuredExamContext || undefined,
+        taskContext: structuredExamContext
+          ? undefined
+          : {
+              partLabel: partLabel || undefined,
+              partDescription: partDescription || undefined,
+              instructions: taskInstructions || undefined,
+              inputText: taskInputText || undefined,
+            },
       });
-
-      const raw = await res.text();
-      let data = {};
-      try {
-        data = raw ? JSON.parse(raw) : {};
-      } catch {
-        throw new Error(
-          isEn
-            ? 'Invalid response from the correction service.'
-            : 'Respuesta inválida del servicio de corrección.',
-        );
-      }
-
-      if (!res.ok) {
-        const hint =
-          !externalBaseConfigured && (res.status === 404 || res.status === 405)
-            ? ` ${getStaticApiHint()}`
-            : '';
-        throw new Error((data.error || `Error ${res.status}`) + hint);
-      }
 
       const feedbackText = String(data.feedback || '').trim();
       if (!feedbackText) {
@@ -168,13 +194,41 @@ export default function B2WritingLongFormAiPanel({
         }
       }
 
+      void trackWritingErrors({
+        level: 'B2',
+        source: 'Exam Writing',
+        skill: 'Writing',
+        userText: text,
+        correctedText: feedbackText,
+      }).catch(() => {});
+
+      await refreshUsageHint();
+
       requestAnimationFrame(() => {
         feedbackRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
       });
     } catch (err) {
+      if (isDailyLimitError(err)) {
+        const limit = usageLimit ?? 3;
+        setUsageRemaining(0);
+        setUsageHint(
+          writingLimitLabel(limit, {
+            lang: isEn ? 'en' : 'es',
+            remaining: 0,
+            used: limit,
+          }),
+        );
+      }
       setLastError(
-        err?.message ||
-          (isEn ? 'Could not connect to Dralo for feedback.' : 'No se pudo conectar con Dralo para la corrección.'),
+        isDailyLimitError(err)
+          ? dailyLimitMessage(
+              err,
+              isEn ? LIMIT_REACHED.writing.en : LIMIT_REACHED.writing.es,
+            )
+          : err?.message ||
+              (isEn
+                ? 'Could not connect to Dralo for feedback.'
+                : 'No se pudo conectar con Dralo para la corrección.'),
       );
     } finally {
       setLoading(false);
@@ -235,20 +289,27 @@ export default function B2WritingLongFormAiPanel({
         </p>
       ) : (
         <div className="levels-b2-writing-panel__actions">
+          {usageHint ? (
+            <p className="levels-b2-writing-panel__alpha-limit">{usageHint}</p>
+          ) : null}
           <button
             type="button"
             className="levels-b2-writing-panel__submit"
             onClick={() => void evaluateEssay()}
-            disabled={loading || !essay.trim()}
-            aria-disabled={loading || !essay.trim()}
+            disabled={loading || !essay.trim() || limitReached}
+            aria-disabled={loading || !essay.trim() || limitReached}
           >
             {loading
               ? isEn
                 ? 'Checking with Dralo…'
                 : 'Corrigiendo con Dralo…'
-              : isEn
-                ? 'Check with Dralo'
-                : 'Corregir con Dralo'}
+              : limitReached
+                ? isEn
+                  ? 'Daily limit reached'
+                  : 'Límite diario alcanzado'
+                : isEn
+                  ? 'Check with Dralo'
+                  : 'Corregir con Dralo'}
           </button>
         </div>
       )}

@@ -4,7 +4,10 @@ import { runCorrectionEngine } from '@/features/speaking/services/evaluation/cor
 import { saveEvaluation, completeSession } from '@/features/speaking/services/sessions/speaking-session.service';
 import { prisma } from '@/lib/prisma';
 import { hasDatabaseUrl } from '@/lib/prisma';
-import { runExamFinalReport } from '@/features/speaking/services/evaluation/exam-final-report';
+import { getSupabaseUserFromRequest } from '@/lib/getSupabaseUserFromRequest';
+import { AI_ACTIONS } from '@/lib/aiUsage';
+import { aiErrorJson, runAiPreflight } from '@/lib/aiUsageRouteHelpers';
+import { handleExamSpeakingFeedback } from '@/lib/aiActionHandlers';
 
 export const dynamic = 'force-dynamic';
 
@@ -39,12 +42,44 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: 'No text to evaluate' }, { status: 400 });
     }
 
+    const auth = await getSupabaseUserFromRequest(req);
+    const userId = auth?.user?.id ?? null;
+
     let report;
-    if (mode === 'EXAM' || mode === 'PRACTICE') {
+
+    if (mode === 'EXAM') {
+      if (!userId) {
+        return aiErrorJson(
+          'AUTH_REQUIRED',
+          'Please log in to use this feature.',
+          {},
+          401,
+        );
+      }
+
+      const preflight = await runAiPreflight(userId, AI_ACTIONS.EXAM_SPEAKING_FEEDBACK, {
+        userEmail: auth?.user?.email ?? '',
+      });
+      if (!preflight.ok) return preflight.response;
+
+      const out = await handleExamSpeakingFeedback(userId, {
+        combinedTranscript: text,
+        level: cefr,
+        sessionId,
+        context: 'exam',
+      });
+
+      if (!out.ok) {
+        return NextResponse.json({ error: out.error || 'Evaluation failed' }, { status: out.status || 500 });
+      }
+
+      report = out.result?.report;
+    } else if (mode === 'PRACTICE') {
+      const { runExamFinalReport } = await import('@/features/speaking/services/evaluation/exam-final-report');
       report = await runExamFinalReport({
         cefr,
         combinedTranscript: text,
-        context: mode === 'PRACTICE' ? 'practice' : 'exam',
+        context: 'practice',
       });
     } else {
       const r = await runCorrectionEngine({ cefr, text, taskPrompt });

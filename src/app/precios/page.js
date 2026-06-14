@@ -5,8 +5,21 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import { Suspense, useEffect } from 'react';
 import SubscriptionPlansSection from '@/components/subscriptions/SubscriptionPlansSection';
 import PageHero from '@/components/PageHero';
+import { DRALO_SUBSCRIPTION_PLANS } from '@/data/financialPlanConfig';
 import { useUserRole } from '@/context/UserRoleContext';
 import { canViewPricing } from '@/utils/pricingAccess';
+
+function planHeroStatLabel(plan) {
+  if (!plan.precio || plan.precio <= 0) return 'Gratis';
+  if (plan.recommended) return 'Más popular';
+  if (plan.badgeVariant === 'value') return 'Mejor valor';
+  return plan.precioLabel?.replace('/mes', '') || `${plan.precio}€`;
+}
+
+const PLAN_HERO_STATS = DRALO_SUBSCRIPTION_PLANS.map((plan) => ({
+  value: plan.nombre,
+  label: planHeroStatLabel(plan),
+}));
 
 function PreciosContent() {
   const searchParams = useSearchParams();
@@ -40,21 +53,15 @@ function PreciosContent() {
       <PageHero
         eyebrow="Planes Dralo"
         title="Elige el plan que necesitas"
-        description="Empieza gratis con A2, sube a STARTER o PREMIUM para preparar el examen, o desbloquea PRO con IA ilimitada y coaches avanzados."
         accent="indigo"
         showMascot
         mascotVariant={9}
-        stats={[
-          { value: '4', label: 'Planes' },
-          { value: 'PREMIUM', label: 'Más popular' },
-          { value: 'Stripe', label: 'Próximamente' },
-        ]}
+        stats={PLAN_HERO_STATS}
       />
 
       <SubscriptionPlansSection
         selectedSlug={selected}
         title="Compara y elige"
-        subtitle="Todos los planes incluyen Placement Test. Los pagos online se activarán en cuanto conectemos Stripe."
         showCta
       />
     </main>
