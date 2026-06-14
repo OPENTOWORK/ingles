@@ -4,10 +4,15 @@ import '@/styles/mascot.css';
 import RootLayoutClient from './RootLayoutClient';
 import { ExamProvider } from '@/context/ExamContext';
 import { AccessibilityProvider } from '@/components/AccessibilityProvider';
+import { getSiteUrl } from '@/lib/siteSeo';
 
 export const metadata = {
+  metadataBase: new URL(getSiteUrl()),
   title: 'English Practice',
   description: 'Practice English certification exams online',
+  verification: {
+    google: 'LEd0Wokm5GitDKhVkVRHhyRNmLRp-xnAaCyPLMCW-8M',
+  },
 };
 
 export const viewport = {
