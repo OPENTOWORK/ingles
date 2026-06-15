@@ -1,5 +1,6 @@
 'use client';
 
+import { useState } from 'react';
 import LevelsAnswerJustification from '@/components/levels/LevelsAnswerJustification';
 import { parseB2KeyWordTransformItems } from '@/utils/b2ExamTextBlocks';
 
@@ -18,6 +19,7 @@ import { parseB2KeyWordTransformItems } from '@/utils/b2ExamTextBlocks';
  *   hideFeedback?: boolean,
  *   aiHintsByKey?: Record<string, { loading?: boolean, error?: string | null, text?: string | null }>,
  *   labels?: { check?: string, correct?: string, incorrect?: string, correctAnswer?: string, keyWord?: string },
+ *   onRequestExplanation?: (info: { questionKey: string, questionNumber: number }) => void,
  * }} props
  */
 export default function B2ExamInlineKeyWordPassage({
@@ -32,7 +34,22 @@ export default function B2ExamInlineKeyWordPassage({
   hideFeedback = false,
   aiHintsByKey = {},
   labels = {},
+  onRequestExplanation,
 }) {
+  const [openExplanations, setOpenExplanations] = useState({});
+  const lazyExplanations = typeof onRequestExplanation === 'function';
+
+  const toggleExplanation = (questionKey, questionNumber) => {
+    const isOpen = !!openExplanations[questionKey];
+    if (!isOpen) {
+      const hint = aiHintsByKey[questionKey];
+      if (!hint?.text && !hint?.loading) {
+        onRequestExplanation({ questionKey, questionNumber });
+      }
+    }
+    setOpenExplanations((prev) => ({ ...prev, [questionKey]: !isOpen }));
+  };
+
   const activeSet = new Set(activeQuestionNumbers);
   const items = parseB2KeyWordTransformItems(text);
   const checkLabel = labels.check ?? 'Check';
@@ -75,7 +92,7 @@ export default function B2ExamInlineKeyWordPassage({
             className={`levels-exam-kwt-item${isExample ? ' levels-exam-kwt-item--example' : ''}`}
           >
             <p className="levels-exam-kwt-item__lead">
-              <span className="levels-exam-inline-gap__marker">{questionNumber}</span>
+              <span className="levels-exam-inline-gap__marker">{questionNumber}.</span>{' '}
               <span className="levels-exam-kwt-item__sentence1">{sentence1}</span>
             </p>
             {keyword ? (
@@ -132,9 +149,26 @@ export default function B2ExamInlineKeyWordPassage({
                     {correctAnswerLabel}: {expectedList.join(' · ')}
                   </span>
                 ) : null}
+                {lazyExplanations ? (
+                  <button
+                    type="button"
+                    className={`levels-exam-mcq-explanations__toggle${
+                      openExplanations[questionKey]
+                        ? ' levels-exam-mcq-explanations__toggle--open'
+                        : ''
+                    }`}
+                    aria-expanded={!!openExplanations[questionKey]}
+                    onClick={() => toggleExplanation(questionKey, questionNumber)}
+                  >
+                    💡 Explanation
+                  </button>
+                ) : null}
               </div>
             ) : null}
-            {!hideFeedback && isActive && aiHintsByKey[questionKey] ? (
+            {!hideFeedback &&
+            isActive &&
+            aiHintsByKey[questionKey] &&
+            (!lazyExplanations || openExplanations[questionKey]) ? (
               <div className="levels-exam-inline-gap__hint">
                 <LevelsAnswerJustification hint={aiHintsByKey[questionKey]} />
               </div>

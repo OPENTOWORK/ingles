@@ -96,6 +96,16 @@ export default function B2ExamInlineOpenClozePassage({
 
   if (!lines.length) return null;
 
+  let startIdx = 0;
+  if (lines[0]?.toLowerCase() === 'text') startIdx = 1;
+  const titleLine =
+    startIdx < lines.length &&
+    !parseLineWithOpenGaps(lines[startIdx]).some((s) => s.type === 'gap') &&
+    lines[startIdx].length < 120
+      ? lines[startIdx]
+      : null;
+  const bodyStart = titleLine ? startIdx + 1 : startIdx;
+
   const getInputStateClass = (checkResult, currentValue, isAnswerLocked) => {
     if (typeof checkResult === 'boolean') {
       return checkResult
@@ -110,7 +120,8 @@ export default function B2ExamInlineOpenClozePassage({
 
   return (
     <div className="levels-exam-inline-passage">
-      {lines.map((line, lineIdx) => {
+      {titleLine ? <h3 className="levels-exam-passage-title">{titleLine}</h3> : null}
+      {lines.slice(bodyStart).map((line, lineIdx) => {
         const img = line.match(/^IMAGE:\s*(\S+)/i);
         if (img) {
           return (

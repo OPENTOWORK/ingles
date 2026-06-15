@@ -89,8 +89,8 @@ export function buildB2EnunciadoFromGenerated(gen = {}, partNumber) {
       if (sentence2 && !/_{2,}|\.{4,}/.test(sentence2)) {
         sentence2 = `${sentence2} __________________`;
       }
-      lines.push(String(num));
-      if (sentence1) lines.push(sentence1);
+      if (sentence1) lines.push(`${num}. ${sentence1}`);
+      else lines.push(`${num}.`);
       if (keyword) lines.push(keyword);
       if (sentence2) lines.push(sentence2);
       lines.push('');
@@ -125,10 +125,15 @@ export function buildB2EnunciadoFromGenerated(gen = {}, partNumber) {
 
   if (pn === 7) {
     if (g.directions) pushLines(lines, g.directions);
-    const intro =
-      g.matchingIntro ||
-      'Which person (A–D) … ? For questions 37–46, choose from the people below. The people may be chosen more than once.';
-    pushLines(lines, intro);
+    const defaultIntro =
+      'For questions 43–52, choose from the people A–D below. The people may be chosen more than once.';
+    const intro = g.matchingIntro || defaultIntro;
+    const directionsBlob = String(g.directions || '').toLowerCase();
+    const introRedundant =
+      directionsBlob.includes('choose from the people') &&
+      (directionsBlob.includes('43') || directionsBlob.includes('43–52') || directionsBlob.includes('43-52'));
+    if (!g.directions && intro) pushLines(lines, intro);
+    else if (g.directions && intro && !introRedundant && g.matchingIntro) pushLines(lines, intro);
     for (const q of g.questions) {
       const num = q.number ?? '';
       const prompt = String(q.prompt || q.stem || '').trim();

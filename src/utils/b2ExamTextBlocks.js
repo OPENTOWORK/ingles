@@ -88,6 +88,14 @@ export function extractTextoBloque(raw, partNumber, options = {}) {
     }
   }
 
+  // Una sola línea "Text" tras las instrucciones (Reading 5–6 habitual).
+  if (textLineIdxs.length === 1 && textLineIdxs[0] > 0) {
+    let body = lines.slice(textLineIdxs[0] + 1).join('\n').trim();
+    if (partNumber === 5) body = truncateBeforeLine(body, /^questions$/i);
+    if (partNumber === 6) body = stripPart6SentencesTail(body);
+    return body;
+  }
+
   // Partes 2–4 y 6 (dos líneas "Text": cabecera + pasaje)
   if (textLineIdxs.length >= 2) {
     let body = lines.slice(textLineIdxs[textLineIdxs.length - 1] + 1).join('\n').trim();
@@ -195,17 +203,26 @@ export function extractPart7PromptStemBlob(raw) {
   let t = String(raw || '').replace(/\r\n/g, '\n').trim();
   if (!t) return '';
   t = stripAnswerKeyBlock(t);
-  const wpMatch = t.match(/(?:^|\n)\s*Which person/im);
-  if (!wpMatch) return '';
-  const wp = wpMatch.index + (wpMatch[0].startsWith('\n') ? 1 : 0);
-  const after = t.slice(wp);
-  const tx = after.search(/\n\s*Texts\s*\n/im);
-  let chunk = tx >= 0 ? after.slice(0, tx) : after;
-  chunk = chunk
-    .replace(/^Which person.*?\n+/is, '')
-    .replace(/\n\s*[_=\-–—]{3,}\s*$/g, '')
-    .trim();
-  return chunk;
+  const txIdx = t.search(/\n\s*Texts\s*\n/im);
+  const beforeTexts = txIdx >= 0 ? t.slice(0, txIdx) : t;
+  const wpMatch = beforeTexts.match(/(?:^|\n)\s*(?:Which person|Who)\b/im);
+  if (wpMatch) {
+    const wp = wpMatch.index + (wpMatch[0].startsWith('\n') ? 1 : 0);
+    let chunk = beforeTexts.slice(wp);
+    chunk = chunk
+      .replace(/^(?:Which person|Who).*?\n+/is, '')
+      .replace(/\n\s*[_=\-–—]{3,}\s*$/g, '')
+      .trim();
+    return chunk;
+  }
+  const qStart = beforeTexts.search(/\n\s*(?:4[3-9]|5[0-2])\s+Who\b/im);
+  if (qStart >= 0) {
+    return beforeTexts
+      .slice(qStart + 1)
+      .replace(/\n\s*[_=\-–—]{3,}\s*$/g, '')
+      .trim();
+  }
+  return '';
 }
 
 export function extractPart7ProfilesBlock(raw) {
@@ -671,6 +688,28 @@ export function parseB2KeyWordTransformItems(rawText = '') {
         isExample: questionNumber === 0,
       });
       i += 3;
+      continue;
+    }
+
+    const dottedNum = line.match(/^(\d{1,2})\.\s*(.+)$/);
+    if (dottedNum) {
+      const questionNumber = Number(dottedNum[1]);
+      const sentence1 = dottedNum[2].trim();
+      const keywordLine = (scan[i + 1] || '').trim();
+      const sentence2Line = ensureKeyWordGapInSentence2(scan[i + 2] || '');
+      if (!sentence1 || !sentence2Line) continue;
+      const gapMatch = sentence2Line.match(KEY_WORD_GAP_RE);
+      const gapStart = gapMatch?.index ?? 0;
+      const gapStr = gapMatch?.[0] ?? '';
+      items.push({
+        questionNumber,
+        sentence1,
+        keyword: keywordLine.replace(/^key\s*word\s*:\s*/i, '').trim() || keywordLine,
+        sentence2Before: sentence2Line.slice(0, gapStart),
+        sentence2After: sentence2Line.slice(gapStart + gapStr.length),
+        isExample: questionNumber === 0,
+      });
+      i += 2;
       continue;
     }
 

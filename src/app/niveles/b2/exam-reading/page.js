@@ -157,6 +157,7 @@ function B2ReadingExamsPageInner() {
   const [checkedQuestions, setCheckedQuestions] = useState({});
   const [openInputs, setOpenInputs] = useState({});
   const [openChecks, setOpenChecks] = useState({});
+  const [readingMcqExplanationsOpen, setReadingMcqExplanationsOpen] = useState({});
   /** @type {Record<string, { loading?: boolean, error?: string | null, text?: string | null }>} */
   const [aiHintsByKey, setAiHintsByKey] = useState({});
 
@@ -1097,21 +1098,6 @@ function B2ReadingExamsPageInner() {
       const nextOpenChecks = { ...openChecks, [questionKey]: isCorrect };
       setOpenChecks(nextOpenChecks);
       readingSession.incrementCheckAttempts();
-      // Open cloze (Parts 2–3): la explicación se pide al pulsar 💡 (lazy),
-      // no automáticamente. Part 4 (key word) conserva el comportamiento previo.
-      if (isKeyWordPart) {
-        const correctChoiceText =
-          [...expectedAnswers].slice(0, 4).join(' · ') || 'model answer';
-        const answersFromDatabase = [...expectedAnswers].join(' · ');
-        requestAiJustification(questionKey, {
-          partLabel: selectedPart?.nombre || '',
-          questionLabel: `Question ${questionNumber}`,
-          userChoiceText: currentValue,
-          correctChoiceText,
-          isCorrect,
-          answersFromDatabase: answersFromDatabase || undefined,
-        });
-      }
       void (async () => {
         const uid = await getSessionUserId();
         const pid = selectedQuestion?.preguntaId;
@@ -1251,7 +1237,7 @@ function B2ReadingExamsPageInner() {
     readingSession,
   ]);
 
-  /** Explicación lazy para huecos open cloze: se pide solo al pulsar 💡 Explanation. */
+  /** Explicación lazy para huecos open cloze / word formation / key word. */
   const handleOpenGapExplanationRequest = useCallback(
     ({ questionKey, questionNumber }) => {
       const existing = aiHintsByKey[questionKey];
@@ -1259,8 +1245,14 @@ function B2ReadingExamsPageInner() {
       const checkResult = openChecks[questionKey];
       if (typeof checkResult !== 'boolean') return;
       const expectedAnswers = openAnswerMap.get(questionNumber) || new Set();
+      const style =
+        partNumberReading === 3
+          ? 'word-formation'
+          : partNumberReading === 4
+            ? 'key-word'
+            : 'open-cloze';
       requestAiJustification(questionKey, {
-        style: 'open-cloze',
+        style,
         partLabel: selectedPart?.nombre || '',
         questionLabel: `Question ${questionNumber}`,
         userChoiceText: openInputs[questionKey] || '',
@@ -1269,7 +1261,57 @@ function B2ReadingExamsPageInner() {
         answersFromDatabase: [...expectedAnswers].join(' · ') || undefined,
       });
     },
-    [aiHintsByKey, openChecks, openInputs, openAnswerMap, requestAiJustification, selectedPart?.nombre],
+    [
+      aiHintsByKey,
+      openChecks,
+      openInputs,
+      openAnswerMap,
+      requestAiJustification,
+      selectedPart?.nombre,
+      partNumberReading,
+    ],
+  );
+
+  /** Explicación lazy para MCQ Reading (Parts 5–7). */
+  const handleReadingMcqExplanationRequest = useCallback(
+    ({ questionKey, group }) => {
+      const existing = aiHintsByKey[questionKey];
+      if (existing?.loading || existing?.text) return;
+      if (!checkedQuestions[questionKey]) return;
+      const selectedId = selectedOptions[questionKey];
+      const option = group?.options?.find((o) => o.id === selectedId);
+      if (!option) return;
+      const correctOpt = group.options.find((o) => o.correcta);
+      const answersFromDatabase = group.options
+        .map((o) => (o.formattedText || o.respuesta || '').trim())
+        .filter(Boolean)
+        .join('\n');
+      const style =
+        partNumberReading === 5
+          ? 'reading-mcq'
+          : partNumberReading === 6
+            ? 'gapped-text'
+            : partNumberReading === 7
+              ? 'reading-matching'
+              : '';
+      requestAiJustification(questionKey, {
+        style,
+        partLabel: selectedPart?.nombre || '',
+        questionLabel: group.questionNumber ? `Question ${group.questionNumber}` : 'Item',
+        userChoiceText: option.formattedText || option.respuesta || '',
+        correctChoiceText: correctOpt?.formattedText || correctOpt?.respuesta || '',
+        isCorrect: !!option.correcta,
+        answersFromDatabase: answersFromDatabase || undefined,
+      });
+    },
+    [
+      aiHintsByKey,
+      checkedQuestions,
+      selectedOptions,
+      requestAiJustification,
+      selectedPart?.nombre,
+      partNumberReading,
+    ],
   );
 
   const scorePanelProps = {
@@ -1565,6 +1607,7 @@ function B2ReadingExamsPageInner() {
                       openAnswerMap={openAnswerMap}
                       hideFeedback={hideInstantFeedback}
                       aiHintsByKey={aiHintsByKey}
+                      onRequestExplanation={handleOpenGapExplanationRequest}
                     />
                   ) : isInlinePassagePart ? (
                     <B2ExamInlineOpenClozePassage
@@ -1604,15 +1647,7 @@ function B2ReadingExamsPageInner() {
                     : (
                       <>
                         {partNumberReading === 6 && part6SentencePoolBlock ? (
-                          <div
-                            style={{
-                              marginBottom: '1.25rem',
-                              padding: '0.85rem 1rem',
-                              background: '#f8fafc',
-                              border: '1px solid #e2e8f0',
-                              borderRadius: '10px',
-                            }}
-                          >
+                          <div className="levels-exam-part6-pool-sticky">
                             <p style={{ margin: '0 0 0.55rem', fontWeight: 700, color: '#1e293b' }}>
                               Sentences A–G (choose one per gap)
                             </p>
@@ -1689,22 +1724,6 @@ function B2ReadingExamsPageInner() {
                                   readingSession.incrementCheckAttempts();
                                   trySavePartAfterAnswer({ checkedQuestions: nextChecked });
                                   if (!wasChecked && !hideFeedback) {
-                                    const correctOpt = group.options.find((o) => o.correcta);
-                                    const answersFromDatabase = group.options
-                                      .map((o) => (o.formattedText || o.respuesta || '').trim())
-                                      .filter(Boolean)
-                                      .join('\n');
-                                    requestAiJustification(questionKey, {
-                                      partLabel: selectedPart?.nombre || '',
-                                      questionLabel: group.questionNumber
-                                        ? `Pregunta ${group.questionNumber}`
-                                        : 'Ítem',
-                                      userChoiceText: option.formattedText || option.respuesta || '',
-                                      correctChoiceText:
-                                        correctOpt?.formattedText || correctOpt?.respuesta || '',
-                                      isCorrect: !!option.correcta,
-                                      answersFromDatabase: answersFromDatabase || undefined,
-                                    });
                                     void (async () => {
                                       const uid = await getSessionUserId();
                                       const pid = selectedQuestion?.preguntaId;
@@ -1762,15 +1781,59 @@ function B2ReadingExamsPageInner() {
                           const hasChecked = checkedQuestions[questionKey];
                           if (!hasChecked || hideInstantFeedback) return null;
                           const correct = group.options.find((option) => option.correcta);
+                          const explanationOpen = !!readingMcqExplanationsOpen[questionKey];
                           return (
                             <>
                               <p style={{ margin: '0.7rem 0 0', fontWeight: 600, color: '#1f2937' }}>
                                 Correct answer: {correct?.formattedText || correct?.respuesta || 'Not available'}
                               </p>
-                              <LevelsAnswerJustification hint={aiHintsByKey[questionKey]} />
+                              {partNumberReading >= 5 && partNumberReading <= 7 ? (
+                                <button
+                                  type="button"
+                                  className={`levels-exam-mcq-explanations__toggle${
+                                    explanationOpen ? ' levels-exam-mcq-explanations__toggle--open' : ''
+                                  }`}
+                                  aria-expanded={explanationOpen}
+                                  onClick={() => {
+                                    const nextOpen = !explanationOpen;
+                                    if (nextOpen) {
+                                      handleReadingMcqExplanationRequest({ questionKey, group });
+                                    }
+                                    setReadingMcqExplanationsOpen((prev) => ({
+                                      ...prev,
+                                      [questionKey]: nextOpen,
+                                    }));
+                                  }}
+                                >
+                                  💡 Explanation
+                                </button>
+                              ) : null}
+                              {(partNumberReading < 5 || partNumberReading > 7 || explanationOpen) &&
+                              aiHintsByKey[questionKey] ? (
+                                <LevelsAnswerJustification hint={aiHintsByKey[questionKey]} />
+                              ) : null}
                             </>
                           );
                         })()}
+                        {partNumberReading === 6 && part6SentencePoolBlock ? (
+                          <details className="levels-exam-part6-pool-inline" style={{ marginTop: '0.75rem' }}>
+                            <summary style={{ cursor: 'pointer', fontWeight: 600, color: '#334155' }}>
+                              Show sentences A–G
+                            </summary>
+                            <pre
+                              style={{
+                                margin: '0.5rem 0 0',
+                                whiteSpace: 'pre-wrap',
+                                fontFamily: 'inherit',
+                                lineHeight: 1.55,
+                                fontSize: '0.92rem',
+                                color: '#475569',
+                              }}
+                            >
+                              {part6SentencePoolBlock}
+                            </pre>
+                          </details>
+                        ) : null}
                       </B2ExamQuestionItem>
                       </div>
                           );

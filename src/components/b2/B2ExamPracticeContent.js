@@ -56,9 +56,9 @@ export function B2ExamFormattedEnunciado({ blocks, keyPrefix = 'enunciado' }) {
 }
 
 /**
- * @param {{ text?: string }} props
+ * @param {{ text?: string, showTitle?: boolean }} props
  */
-export function B2ExamPassageText({ text = '' }) {
+export function B2ExamPassageText({ text = '', showTitle = true }) {
   const lines = text
     .split('\n')
     .map((line) => line.trim())
@@ -66,30 +66,46 @@ export function B2ExamPassageText({ text = '' }) {
 
   if (!lines.length) return null;
 
-  return lines.map((line, idx) => {
-    const img = line.match(/^IMAGE:\s*(\S+)/i);
-    if (img) {
-      return (
-        <img
-          key={`passage-img-${idx}`}
-          src={img[1]}
-          alt=""
-          style={{
-            maxWidth: '100%',
-            height: 'auto',
-            margin: '0.5rem 0',
-            borderRadius: '8px',
-            border: '1px solid #e2e8f0',
-          }}
-        />
-      );
-    }
-    return (
-      <p key={`passage-${idx}`} style={{ margin: '0.5rem 0', lineHeight: 1.78 }}>
-        {line}
-      </p>
-    );
-  });
+  let startIdx = 0;
+  if (lines[0]?.toLowerCase() === 'text') startIdx = 1;
+
+  const titleLine =
+    showTitle && startIdx < lines.length && lines[startIdx].length < 120 && !/^IMAGE:/i.test(lines[startIdx])
+      ? lines[startIdx]
+      : null;
+  const bodyStart = titleLine ? startIdx + 1 : startIdx;
+
+  return (
+    <>
+      {titleLine ? (
+        <h3 className="levels-exam-passage-title">{titleLine}</h3>
+      ) : null}
+      {lines.slice(bodyStart).map((line, idx) => {
+        const img = line.match(/^IMAGE:\s*(\S+)/i);
+        if (img) {
+          return (
+            <img
+              key={`passage-img-${idx}`}
+              src={img[1]}
+              alt=""
+              style={{
+                maxWidth: '100%',
+                height: 'auto',
+                margin: '0.5rem 0',
+                borderRadius: '8px',
+                border: '1px solid #e2e8f0',
+              }}
+            />
+          );
+        }
+        return (
+          <p key={`passage-${idx}`} style={{ margin: '0.5rem 0', lineHeight: 1.78 }}>
+            {line}
+          </p>
+        );
+      })}
+    </>
+  );
 }
 
 /**

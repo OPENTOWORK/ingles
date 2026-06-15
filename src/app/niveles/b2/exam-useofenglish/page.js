@@ -885,21 +885,6 @@ function UseOfEnglishExamsPageInner() {
       const isCorrect = expectedAnswers.has(normalizeText(currentValue));
       const nextOpenChecks = { ...openChecks, [questionKey]: isCorrect };
       setOpenChecks(nextOpenChecks);
-      // Open cloze (Parts 2–3): la explicación se pide al pulsar 💡 (lazy),
-      // no automáticamente. Part 4 (key word) conserva el comportamiento previo.
-      if (isKeyWordPart) {
-        const correctChoiceText =
-          [...expectedAnswers].slice(0, 4).join(' · ') || 'model answer';
-        const answersFromDatabase = [...expectedAnswers].join(' · ');
-        requestAiJustification(questionKey, {
-          partLabel: getSelectedPartTitle(),
-          questionLabel: `Question ${questionNumber}`,
-          userChoiceText: currentValue,
-          correctChoiceText,
-          isCorrect,
-          answersFromDatabase: answersFromDatabase || undefined,
-        });
-      }
       void (async () => {
         const uid = await getSessionUserId();
         const pid = selectedQuestion?.preguntaId;
@@ -930,7 +915,7 @@ function UseOfEnglishExamsPageInner() {
     ],
   );
 
-  /** Explicación lazy para huecos open cloze: se pide solo al pulsar 💡 Explanation. */
+  /** Explicación lazy para huecos open cloze / word formation / key word. */
   const handleOpenGapExplanationRequest = useCallback(
     ({ questionKey, questionNumber }) => {
       const existing = aiHintsByKey[questionKey];
@@ -938,8 +923,14 @@ function UseOfEnglishExamsPageInner() {
       const checkResult = openChecks[questionKey];
       if (typeof checkResult !== 'boolean') return;
       const expectedAnswers = openAnswerMap.get(questionNumber) || new Set();
+      const style =
+        partNumberUoe === 3
+          ? 'word-formation'
+          : partNumberUoe === 4
+            ? 'key-word'
+            : 'open-cloze';
       requestAiJustification(questionKey, {
-        style: 'open-cloze',
+        style,
         partLabel: getSelectedPartTitle(),
         questionLabel: `Question ${questionNumber}`,
         userChoiceText: openInputs[questionKey] || '',
@@ -948,7 +939,7 @@ function UseOfEnglishExamsPageInner() {
         answersFromDatabase: [...expectedAnswers].join(' · ') || undefined,
       });
     },
-    [aiHintsByKey, openChecks, openInputs, openAnswerMap, requestAiJustification],
+    [aiHintsByKey, openChecks, openInputs, openAnswerMap, requestAiJustification, partNumberUoe],
   );
 
   const currentExamProgress = progressBySlot[examSlot] || {};
@@ -1177,6 +1168,7 @@ function UseOfEnglishExamsPageInner() {
                       onCheckGap={handleOpenGapCheck}
                       openAnswerMap={openAnswerMap}
                       aiHintsByKey={aiHintsByKey}
+                      onRequestExplanation={handleOpenGapExplanationRequest}
                     />
                   ) : isInlinePassagePart ? (
                     <B2ExamInlineOpenClozePassage

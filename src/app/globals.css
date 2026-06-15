@@ -5049,6 +5049,44 @@ body.reading-night-mode .levels-b2-speaking-panel__usage,
   padding: 1.1rem 1.25rem 1.25rem;
 }
 
+.levels-exam-passage-title {
+  margin: 0 0 0.85rem;
+  font-size: 1.15rem;
+  font-weight: 800;
+  line-height: 1.35;
+  color: #0f172a;
+  letter-spacing: -0.01em;
+}
+
+.levels-exam-part6-pool-sticky {
+  margin-bottom: 1.25rem;
+  padding: 0.85rem 1rem;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+}
+
+@media (min-width: 900px) {
+  .levels-exam-part6-pool-sticky {
+    position: sticky;
+    top: 0.75rem;
+    z-index: 2;
+    max-height: min(42vh, 420px);
+    overflow: auto;
+    box-shadow: 0 4px 14px rgba(15, 23, 42, 0.06);
+  }
+
+  .levels-exam-part6-pool-inline {
+    display: none;
+  }
+}
+
+@media (max-width: 899px) {
+  .levels-exam-part6-pool-sticky {
+    display: none;
+  }
+}
+
 .levels-exam-split__text {
   max-height: calc(100vh - 12.5rem);
   overflow-y: auto;

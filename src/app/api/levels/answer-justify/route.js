@@ -106,7 +106,12 @@ export async function POST(req) {
   const isCorrect = Boolean(body?.isCorrect);
   const styleParam = String(body?.style || '').toLowerCase();
   const isOpenClozeStyle = styleParam === 'open-cloze';
-  const isClozeStyle = styleParam === 'cloze' || isOpenClozeStyle;
+  const isWordFormationStyle = styleParam === 'word-formation';
+  const isKeyWordStyle = styleParam === 'key-word';
+  const isReadingMcqStyle = styleParam === 'reading-mcq';
+  const isGappedTextStyle = styleParam === 'gapped-text';
+  const isReadingMatchingStyle = styleParam === 'reading-matching';
+  const isClozeStyle = styleParam === 'cloze' || isOpenClozeStyle || isWordFormationStyle;
 
   if (!contextSnippet || !String(userChoiceText || '').trim()) {
     return NextResponse.json({ error: 'Faltan datos para justificar.' }, { status: 400 });
@@ -164,6 +169,49 @@ The student's answer is WRONG.
 Format (2 sentences, max 400 characters):
 Your answer "<student's word>" is incorrect because <exact reason: wrong collocation / wrong preposition / meaning difference, naming the unnatural combination>. The correct answer is "<keyed word>" because <the exact expression or pattern, e.g. the fixed expression is "strike a balance">.
 Example: Your answer "reach" is incorrect because "reach a balance" is not the natural expression in this context. The correct answer is "strike" because the fixed expression is "strike a balance".`;
+
+  const WORD_FORMATION_SHARED = `You are an experienced English teacher explaining ONE word-formation gap (Cambridge B2 Part 3: ONE derived word from the base word in capitals).
+
+Rules:
+- ONE short sentence (two at most). Max 220 characters.
+- Name the word class needed (noun, adjective, adverb, verb) and how the base word is transformed.
+- Use double quotation marks ONLY around the correct word and the base word if quoted.
+- Do NOT write long paragraphs or generic praise.
+Example: "Decision" is correct because the sentence needs a noun after "a difficult".`;
+
+  const wordFormationSystem = isCorrect
+    ? `${WORD_FORMATION_SHARED}\nThe student's word is CORRECT.`
+    : `${WORD_FORMATION_SHARED}\nThe student's word is WRONG. Briefly say why it fails (wrong word class/form), then state the keyed word and why it fits.`;
+
+  const KEY_WORD_SHARED = `You are an experienced English teacher explaining ONE key-word transformation (Cambridge B2 Part 4: 2–5 words including the keyword unchanged).
+
+Rules:
+- ONE or TWO short sentences. Max 260 characters.
+- Explain the grammar transformation (passive, reported speech, conditional, etc.).
+- Do NOT write long paragraphs.`;
+
+  const keyWordSystem = isCorrect
+    ? `${KEY_WORD_SHARED}\nThe student's transformation is CORRECT.`
+    : `${KEY_WORD_SHARED}\nThe student's transformation is WRONG. Say what pattern was required and why the keyed answer fits.`;
+
+  const READING_EVIDENCE_SHARED = `You are an experienced English teacher explaining ONE reading comprehension item (Cambridge B2).
+
+Rules:
+- Start with "The correct answer is X." where X is the letter of the keyed option (A, B, C or D).
+- Then quote ONE short phrase from the passage using double quotation marks: The text says: "..."
+- Add ONE brief sentence: This shows that...
+- Max 320 characters total. No long paragraphs. Do not mention the model provider.`;
+
+  const readingEvidenceSystem = `${READING_EVIDENCE_SHARED}\nUse the CONTEXT to find exact textual evidence for the OFFICIAL keyed answer.`;
+
+  const GAPPED_TEXT_SHARED = `You are an experienced English teacher explaining ONE gapped-text choice (Cambridge B2 Part 6).
+
+Rules:
+- Start with "The correct answer is X." (letter A–G).
+- Explain how the sentence links to the idea BEFORE and/or AFTER the gap; quote a short phrase if possible using double quotation marks.
+- Max 340 characters. No long paragraphs.`;
+
+  const gappedTextSystem = `${GAPPED_TEXT_SHARED}\nUse the passage context around the gap.`;
 
   const system = isCorrect
     ? `You are an experienced English teacher (CEFR) for exam-style reading and use-of-English tasks.
@@ -228,10 +276,24 @@ ${
 }`;
 
   try {
+    const resolvedSystem = isWordFormationStyle
+      ? wordFormationSystem
+      : isKeyWordStyle
+        ? keyWordSystem
+        : isReadingMcqStyle || isReadingMatchingStyle
+          ? readingEvidenceSystem
+          : isGappedTextStyle
+            ? gappedTextSystem
+            : isOpenClozeStyle
+              ? openClozeSystem
+              : isClozeStyle
+                ? clozeSystem
+                : system;
+    const resolvedUser = isClozeStyle && !isWordFormationStyle ? clozeUser : user;
     const { text: raw } = await cambridgeChatCompletion({
-      system: isOpenClozeStyle ? openClozeSystem : isClozeStyle ? clozeSystem : system,
-      messages: [{ role: 'user', content: isClozeStyle ? clozeUser : user }],
-      temperature: isClozeStyle ? 0.2 : 0.35,
+      system: resolvedSystem,
+      messages: [{ role: 'user', content: resolvedUser }],
+      temperature: isClozeStyle || isKeyWordStyle || isWordFormationStyle ? 0.2 : 0.35,
       max_tokens: isCorrect ? 200 : 280,
     });
     let oneLine = raw.replace(/\s+/g, ' ').trim();
