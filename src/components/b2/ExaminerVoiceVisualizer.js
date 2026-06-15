@@ -11,9 +11,13 @@ const BAR_COUNT = 40;
 /**
  * Visualizador de voz del examinador (sin texto). Ondas reactivas al audio o animación suave.
  *
- * @param {{ isLoading?: boolean }} props
+ * @param {{ isLoading?: boolean, statusLabel?: string, waitingToStart?: boolean }} props
  */
-export default function ExaminerVoiceVisualizer({ isLoading = false }) {
+export default function ExaminerVoiceVisualizer({
+  isLoading = false,
+  statusLabel,
+  waitingToStart = false,
+}) {
   const [speaking, setSpeaking] = useState({ active: false, mode: 'idle' });
   const [barHeights, setBarHeights] = useState(() => Array(BAR_COUNT).fill(0.12));
   const rafRef = useRef(0);
@@ -147,48 +151,26 @@ export default function ExaminerVoiceVisualizer({ isLoading = false }) {
     };
   }, [speaking.active, speaking.mode]);
 
-  const statusLabel = speaking.active
+  const defaultStatusLabel = speaking.active
     ? 'The examiner is speaking…'
     : isLoading
       ? 'Preparing audio…'
-      : 'Waiting — press Speak to respond';
+      : waitingToStart
+        ? 'Press Play to start the exercise'
+        : 'Waiting — press Speak to respond';
+
+  const resolvedStatusLabel = statusLabel || defaultStatusLabel;
+  const isActive = speaking.active || isLoading;
 
   return (
     <div
       role="region"
-      style={{
-        marginTop: '1rem',
-        borderRadius: '14px',
-        overflow: 'hidden',
-        background: 'linear-gradient(135deg, #0f172a 0%, #1e1b4b 50%, #0f172a 100%)',
-        border: '1px solid #334155',
-        padding: '1.1rem 1.25rem',
-        boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.06)',
-      }}
+      className={`examiner-voice-visualizer${isActive ? ' examiner-voice-visualizer--active' : ''}`}
       aria-live="polite"
-      aria-label={statusLabel}
+      aria-label={resolvedStatusLabel}
     >
-      <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
-        <div
-          style={{
-            flexShrink: 0,
-            width: 52,
-            height: 52,
-            borderRadius: '50%',
-            background:
-              speaking.active || isLoading
-                ? 'linear-gradient(135deg, #ec4899, #8b5cf6, #06b6d4)'
-                : 'linear-gradient(135deg, #475569, #334155)',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            boxShadow:
-              speaking.active || isLoading
-                ? '0 0 24px rgba(236, 72, 153, 0.45)'
-                : 'none',
-            transition: 'box-shadow 0.3s ease',
-          }}
-        >
+      <div className="examiner-voice-visualizer__inner">
+        <div className="examiner-voice-visualizer__icon" aria-hidden="true">
           <svg width="26" height="26" viewBox="0 0 24 24" fill="none" aria-hidden>
             <path
               d="M12 14a3 3 0 0 0 3-3V6a3 3 0 1 0-6 0v5a3 3 0 0 0 3 3Z"
@@ -201,45 +183,21 @@ export default function ExaminerVoiceVisualizer({ isLoading = false }) {
           </svg>
         </div>
 
-        <div
-          style={{
-            flex: 1,
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            gap: 3,
-            height: 72,
-            minWidth: 0,
-          }}
-        >
+        <div className="examiner-voice-visualizer__waveform" aria-hidden="true">
           {barHeights.map((h, i) => (
             <div
               key={i}
+              className="examiner-voice-visualizer__bar"
               style={{
-                width: 4,
                 height: `${Math.round(h * 64)}px`,
-                minHeight: 6,
-                borderRadius: 4,
-                background: `linear-gradient(180deg, #f472b6 0%, #a78bfa 45%, #22d3ee 100%)`,
-                opacity: speaking.active || isLoading ? 0.95 : 0.45,
-                transition: speaking.active ? 'height 0.05s linear' : 'height 0.2s ease',
+                opacity: isActive ? 0.95 : 0.45,
               }}
             />
           ))}
         </div>
       </div>
 
-      <p
-        style={{
-          margin: '0.75rem 0 0',
-          textAlign: 'center',
-          fontSize: '0.82rem',
-          color: '#94a3b8',
-          fontWeight: 500,
-        }}
-      >
-        {statusLabel}
-      </p>
+      <p className="examiner-voice-visualizer__status">{resolvedStatusLabel}</p>
     </div>
   );
 }

@@ -11,7 +11,7 @@ function getOptionWord(option) {
   const text = option?.formattedText || option?.respuesta || '';
   const letterMatch = text.match(/^[A-D]\)\s*(.+)$/i);
   if (letterMatch) return letterMatch[1].trim();
-  const numberedMatch = text.match(/^\d+\s+[A-D]\s+(.+)$/i);
+  const numberedMatch = text.match(/^\d+\s+[A-D]\b\s*\)?\s*(.+)$/i);
   if (numberedMatch) return numberedMatch[1].trim();
   return text.trim();
 }
@@ -29,6 +29,8 @@ export default function B2ExamInlineMcqClozePassage({
   hideFeedback = false,
   aiHintsByKey = {},
   onRequestExplanation,
+  showInlineExample = false,
+  exampleGap0Word = '',
 }) {
   const [openQuestionNumber, setOpenQuestionNumber] = useState(null);
   const session = useReadingPracticeSession();
@@ -114,7 +116,7 @@ export default function B2ExamInlineMcqClozePassage({
           );
         }
 
-        return (
+        const passageLine = (
           <p key={`mcq-passage-line-${lineIdx}`} className="levels-exam-inline-passage__line">
             {segments.map((segment, segIdx) => {
               if (segment.type === 'text') {
@@ -134,13 +136,33 @@ export default function B2ExamInlineMcqClozePassage({
               const isOpen = openQuestionNumber === questionNumber;
 
               if (isExampleGap || !isActiveGap || !group) {
-                const exampleWord =
-                  group?.options?.find((o) => o.correcta)?.formattedText ||
-                  group?.options?.[0]?.formattedText ||
-                  '';
-                const exampleLabel = exampleWord
-                  ? getOptionWord({ formattedText: exampleWord })
-                  : '_______';
+                let exampleLabel = '_______';
+                if (isExampleGap && showInlineExample) {
+                  if (exampleGap0Word) {
+                    exampleLabel = exampleGap0Word;
+                  } else {
+                    const correctOpt = group?.options?.find((o) => o.correcta);
+                    if (correctOpt) {
+                      exampleLabel = getOptionWord(correctOpt);
+                    } else {
+                      const exampleWord =
+                        group?.options?.find((o) => o.correcta)?.formattedText ||
+                        group?.options?.[0]?.formattedText ||
+                        '';
+                      if (exampleWord) {
+                        exampleLabel = getOptionWord({ formattedText: exampleWord });
+                      }
+                    }
+                  }
+                } else if (isExampleGap && group) {
+                  const exampleWord =
+                    group?.options?.find((o) => o.correcta)?.formattedText ||
+                    group?.options?.[0]?.formattedText ||
+                    '';
+                  if (exampleWord) {
+                    exampleLabel = getOptionWord({ formattedText: exampleWord });
+                  }
+                }
                 return (
                   <span
                     key={`mcq-seg-example-${lineIdx}-${segIdx}`}
@@ -236,6 +258,8 @@ export default function B2ExamInlineMcqClozePassage({
             })}
           </p>
         );
+
+        return passageLine;
       })}
 
       {!hideFeedback ? (

@@ -75,8 +75,9 @@ export async function callExplainMistakeFromDb({ questionId, wrongAnswer, userAn
 
 /** Fetch visible alpha daily limits for writing + speaking exam (students + teachers). */
 export async function fetchAiUsageStatus() {
-  const res = await fetch(buildClientApiUrl('/api/ai/usage-status'), {
+  const res = await fetch(buildClientApiUrl(`/api/ai/usage-status?t=${Date.now()}`), {
     credentials: 'include',
+    cache: 'no-store',
   });
   if (!res.ok) return null;
   return res.json().catch(() => null);

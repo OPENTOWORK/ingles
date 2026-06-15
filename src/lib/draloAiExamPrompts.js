@@ -22,7 +22,7 @@ function varietyBlock(options) {
 }
 
 function baseExamSchema(directions, extra = '') {
-  return `"partTitle":"Cambridge part title","directions":${JSON.stringify(directions)},"example":{"number":0,"label":"(0)","answer":"...","explanation":"one short line why this answer fits"}${extra}`;
+  return `"partTitle":"Cambridge part title","directions":${JSON.stringify(directions)},"example":{"number":0,"options":["A) word","B) word","C) word","D) word"],"answer":"C","explanation":"one short line why this answer fits"}${extra}`;
 }
 
 export function buildExamGeneratePrompt(mode, activity, level, options = {}) {
@@ -102,6 +102,11 @@ OPTIONS RULES (CRITICAL):
 - Exactly ONE correct answer per item. The three distractors must be plausible same-class words that fail on collocation, dependent preposition or precise meaning — never absurd or obviously wrong.
 - Never repeat the same word twice within one item's options.
 - Spread the correct letters across A, B, C and D (no letter more than 3 times).
+
+EXAMPLE RULES (CRITICAL):
+- The "example" field must include four options adapted to gap (0) in the passage (same style as items 1–8).
+- example.options: exactly ["A) word","B) word","C) word","D) word"] — ONE word each, plausible distractors for gap (0).
+- example.answer: the single correct letter ("A"–"D") for gap (0).
 
 ITEM VARIETY (CRITICAL — the part must test a MIX of lexical knowledge):
 - collocations: e.g. strike / reach / make / do … a balance

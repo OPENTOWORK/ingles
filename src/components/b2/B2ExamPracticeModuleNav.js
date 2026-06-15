@@ -4,6 +4,27 @@ import Link from 'next/link';
 import { getB2ExamPracticeNavState } from '@/data/b2ExamModuleNav';
 import { getLevelOverviewNav } from '@/utils/levelOverviewNav';
 
+function NavChevron({ direction = 'back' }) {
+  return (
+    <span
+      className={`levels-exam-module-nav__chevron${
+        direction === 'forward' ? ' levels-exam-module-nav__chevron--forward' : ''
+      }`}
+      aria-hidden
+    >
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+        <path
+          d="M15 18l-6-6 6-6"
+          stroke="currentColor"
+          strokeWidth="2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        />
+      </svg>
+    </span>
+  );
+}
+
 /**
  * Footer navigation for level exam practice modules.
  * Back (left) · Continue (right).
@@ -20,6 +41,10 @@ export default function B2ExamPracticeModuleNav({
   nextPartLabel,
   skillPracticeMode = false,
   skillPracticeTheme = null,
+  showCheckAnswersButton = false,
+  onCheckAnswers = null,
+  checkAnswersDisabled = false,
+  checkAnswersLabel,
   lang = 'en',
 }) {
   const levelSlug = String(slug || 'b2').toLowerCase();
@@ -62,7 +87,9 @@ export default function B2ExamPracticeModuleNav({
 
   return (
     <nav
-      className={`levels-exam-module-nav${skillPracticeMode ? ' levels-exam-module-nav--skill' : ''}`}
+      className={`levels-exam-module-nav${
+        skillPracticeMode ? ' levels-exam-module-nav--skill' : ''
+      }${showCheckAnswersButton ? ' levels-exam-module-nav--with-check' : ''}`}
       data-skill-theme={skillPracticeMode && skillPracticeTheme ? skillPracticeTheme : undefined}
       aria-label={isEn ? 'Module navigation' : 'Navegación del módulo'}
     >
@@ -72,15 +99,28 @@ export default function B2ExamPracticeModuleNav({
           className="levels-exam-module-nav__btn levels-exam-module-nav__btn--back"
           onClick={onBackClick}
         >
-          <span aria-hidden="true">←</span>
-          {backLabel}
+          <NavChevron direction="back" />
+          <span className="levels-exam-module-nav__label">{backLabel}</span>
         </button>
       ) : (
         <Link href={backHref} className="levels-exam-module-nav__btn levels-exam-module-nav__btn--back">
-          <span aria-hidden="true">←</span>
-          {backLabel}
+          <NavChevron direction="back" />
+          <span className="levels-exam-module-nav__label">{backLabel}</span>
         </Link>
       )}
+
+      {showCheckAnswersButton && typeof onCheckAnswers === 'function' ? (
+        <button
+          type="button"
+          className="levels-exam-module-nav__btn levels-exam-module-nav__btn--check"
+          onClick={onCheckAnswers}
+          disabled={checkAnswersDisabled}
+        >
+          <span className="levels-exam-module-nav__label">
+            {checkAnswersLabel || (isEn ? 'Check answers' : 'Corregir')}
+          </span>
+        </button>
+      ) : null}
 
       {skillPracticeMode || nav.continueMode === 'in-page' ? (
         <button
@@ -88,15 +128,15 @@ export default function B2ExamPracticeModuleNav({
           className="levels-exam-module-nav__btn levels-exam-module-nav__btn--continue"
           onClick={onContinueInPage}
         >
-          {continueLabel}
-          <span aria-hidden="true">→</span>
+          <span className="levels-exam-module-nav__label">{continueLabel}</span>
+          <NavChevron direction="forward" />
         </button>
       ) : null}
 
       {!skillPracticeMode && nav.continueMode === 'link' && nav.continueHref ? (
         <Link href={nav.continueHref} className="levels-exam-module-nav__btn levels-exam-module-nav__btn--continue">
-          {continueLabel}
-          <span aria-hidden="true">→</span>
+          <span className="levels-exam-module-nav__label">{continueLabel}</span>
+          <NavChevron direction="forward" />
         </Link>
       ) : null}
     </nav>

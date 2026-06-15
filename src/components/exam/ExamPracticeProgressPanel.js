@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { useExamPracticeSlotProgress } from '@/hooks/useExamPracticeSlotProgress';
+import ExamPracticePartScoreHistorySection from '@/components/exam/ExamPracticePartScoreHistorySection';
 
 function pct(correct, total) {
   if (!total) return null;
@@ -18,6 +19,10 @@ export default function ExamPracticeProgressPanel({
   partMax = 7,
   progressSlot = null,
   examLabel = '',
+  focusPartNumber = null,
+  progressBySlot = null,
+  examLabelsBySlot = {},
+  passing = null,
   lang = 'en',
   enabled = true,
 }) {
@@ -76,6 +81,17 @@ export default function ExamPracticeProgressPanel({
             <p className="levels-listening-strategy__muted">{labels.loading}</p>
           ) : (
             <>
+              {focusPartNumber && progressBySlot ? (
+                <ExamPracticePartScoreHistorySection
+                  partNumber={focusPartNumber}
+                  examSlot={examSlot}
+                  progressBySlot={progressBySlot}
+                  examLabelsBySlot={examLabelsBySlot}
+                  passing={passing}
+                  lang={lang}
+                />
+              ) : null}
+
               <section>
                 <h3 className="levels-listening-strategy__heading">{labels.exam}</h3>
                 <p className="levels-listening-strategy__exam-label">

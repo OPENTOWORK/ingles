@@ -47,6 +47,8 @@ export function parseLineWithOpenGaps(line = '') {
  *   aiHintsByKey?: Record<string, { loading?: boolean, error?: string | null, text?: string | null }>,
  *   labels?: { check?: string, correct?: string, incorrect?: string, correctAnswer?: string },
  *   onRequestExplanation?: (info: { questionKey: string, questionNumber: number }) => void,
+ *   showInlineExample?: boolean,
+ *   exampleGap0Word?: string,
  * }} props
  */
 export default function B2ExamInlineOpenClozePassage({
@@ -63,6 +65,8 @@ export default function B2ExamInlineOpenClozePassage({
   aiHintsByKey = {},
   labels = {},
   onRequestExplanation,
+  showInlineExample = false,
+  exampleGap0Word = '',
 }) {
   /** Explicaciones ocultas por defecto: solo se muestran (y se piden) al pulsar 💡. */
   const [openExplanations, setOpenExplanations] = useState({});
@@ -156,14 +160,25 @@ export default function B2ExamInlineOpenClozePassage({
               const expectedList = expected && expected.size > 0 ? [...expected] : [];
 
               if (isExampleGap || !isActiveGap) {
+                const exampleAnswers = openAnswerMap.get(questionNumber);
+                const exampleWord =
+                  showInlineExample && isExampleGap
+                    ? exampleGap0Word ||
+                      (exampleAnswers && exampleAnswers.size > 0 ? [...exampleAnswers][0] : '')
+                    : exampleAnswers && exampleAnswers.size > 0
+                      ? [...exampleAnswers][0]
+                      : '';
                 return (
                   <span
                     key={`seg-gap-static-${lineIdx}-${segIdx}`}
                     className="levels-exam-inline-gap levels-exam-inline-gap--example"
                   >
                     <span className="levels-exam-inline-gap__marker">({questionNumber})</span>
-                    <span className="levels-exam-inline-gap__blank" aria-hidden>
-                      _______
+                    <span
+                      className={`levels-exam-inline-gap__blank${exampleWord ? ' levels-exam-inline-gap__blank--filled' : ''}`}
+                      aria-hidden
+                    >
+                      {exampleWord || '_______'}
                     </span>
                   </span>
                 );

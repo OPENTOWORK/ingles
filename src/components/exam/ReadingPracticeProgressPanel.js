@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { getWeakAreas } from '@/lib/readingPracticeWeakAreas';
+import ExamPracticePartScoreHistorySection from '@/components/exam/ExamPracticePartScoreHistorySection';
 
 function getChipState({
   question,
@@ -57,6 +58,10 @@ export default function ReadingPracticeProgressPanel({
   totalSlots = 0,
   checkAttempts = 0,
   hideFeedback = false,
+  examSlot = 1,
+  progressBySlot = null,
+  examLabelsBySlot = {},
+  passing = null,
   lang = 'en',
 }) {
   const en = lang === 'en';
@@ -106,6 +111,17 @@ export default function ReadingPracticeProgressPanel({
 
       {open ? (
         <div className="levels-listening-strategy__body">
+          {progressBySlot ? (
+            <ExamPracticePartScoreHistorySection
+              partNumber={partNumber}
+              examSlot={examSlot}
+              progressBySlot={progressBySlot}
+              examLabelsBySlot={examLabelsBySlot}
+              passing={passing}
+              lang={lang}
+            />
+          ) : null}
+
           <section>
             <h3 className="levels-listening-strategy__heading">{labels.questions}</h3>
             <div className="reading-progress-chips" role="list">

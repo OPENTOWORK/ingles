@@ -227,6 +227,35 @@ export function buildAnswerRowsFromGenerated(gen = {}) {
     if (ma?.id) answerById[ma.id] = ma.answer;
   }
 
+  if (gen.example && asGeneratedArray(gen.example.options).length >= 2) {
+    const ex = gen.example;
+    const correctLetter = String(ex.answer || '').match(/^[A-D]/i)?.[0]?.toUpperCase() || '';
+    for (const opt of asGeneratedArray(ex.options)) {
+      let letter = '';
+      let text = '';
+      if (typeof opt === 'string') {
+        const m = opt.match(/^([A-D])\)\s*(.*)$/i) || opt.match(/^([A-D])\s+(.*)$/i);
+        if (m) {
+          letter = m[1].toUpperCase();
+          text = m[2].trim();
+        }
+      } else if (opt && typeof opt === 'object') {
+        letter = String(opt.letter || opt.id || '')
+          .replace(/[^A-D]/gi, '')
+          .charAt(0)
+          .toUpperCase();
+        text = String(opt.text || opt.label || opt.option || '').trim();
+      }
+      if (!letter) continue;
+      mcq.push({
+        questionNumber: 0,
+        letter,
+        text: text || letter,
+        correcta: letter === correctLetter,
+      });
+    }
+  }
+
   const pool = [...asGeneratedArray(gen.optionPool), ...asGeneratedArray(gen.notices)];
   const sentencePool = asGeneratedArray(gen.sentencePool);
   const sections = asGeneratedArray(gen.sections);

@@ -1,6 +1,6 @@
 'use client';
 
-import { getFormattedEnunciado } from '@/utils/b2ExamPaperShared';
+import { getFormattedEnunciado, omitPartTitleBlocks } from '@/utils/b2ExamPaperShared';
 
 const blockStyles = {
   label: { margin: '0.7rem 0 0.45rem', fontWeight: 700, color: '#1a365d' },
@@ -140,7 +140,10 @@ export function B2ExamPracticeContent({
   const hasPassage =
     showPassagePanel && (Boolean(passageText?.trim()) || Boolean(passage));
   const useSplit = split === 'auto' ? hasPassage && Boolean(questions) : Boolean(split);
-  const directionBlocks = getFormattedEnunciado(directionsText);
+  const directionBlocks = omitPartTitleBlocks(
+    getFormattedEnunciado(directionsText),
+    Boolean(title?.trim()),
+  );
 
   return (
     <div className={useSplit ? 'levels-exam-split-page' : 'levels-exam-practice-page'}>

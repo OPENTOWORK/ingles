@@ -133,10 +133,25 @@ export function buildDailyUsageStatus(check, action) {
   }
 
   const limit = getDailyLimit(action);
+
+  if (!check.allowed && check.code === 'LIMIT_CHECK_FAILED') {
+    return {
+      action,
+      limit,
+      used: check.used ?? null,
+      remaining: null,
+      unlimited: false,
+      atLimit: false,
+      unavailable: true,
+      role: check.role ?? null,
+    };
+  }
+
   const used = check.used ?? 0;
-  const atLimit = !check.allowed && check.code === 'DAILY_LIMIT_REACHED';
-  const remaining =
-    limit != null ? (atLimit ? 0 : Math.max(0, limit - used)) : null;
+  const atLimit =
+    limit != null &&
+    (used >= limit || (!check.allowed && check.code === 'DAILY_LIMIT_REACHED'));
+  const remaining = limit != null ? (atLimit ? 0 : Math.max(0, limit - used)) : null;
 
   return {
     action,
@@ -147,6 +162,12 @@ export function buildDailyUsageStatus(check, action) {
     atLimit,
     role: check.role ?? null,
   };
+}
+
+/** Snapshot for UI/API — same counters as preflight, without consuming. */
+export async function getDailyUsageSnapshot(userId, action, options = {}) {
+  const check = await checkDailyAiLimit(userId, action, options);
+  return buildDailyUsageStatus(check, action);
 }
 
 async function readDailyUsageCount(db, userId, action, usageDate) {
@@ -167,9 +188,9 @@ async function readDailyUsageCount(db, userId, action, usageDate) {
 
   const dayStart = `${usageDate}T00:00:00.000Z`;
   const dayEnd = `${nextUtcDateString(usageDate)}T00:00:00.000Z`;
-  const { count, error: logError } = await db
+  const { data: logRows, error: logError } = await db
     .from('ai_usage_logs')
-    .select('id', { count: 'exact', head: true })
+    .select('id')
     .eq('user_id', userId)
     .eq('action', action)
     .eq('success', true)
@@ -177,11 +198,11 @@ async function readDailyUsageCount(db, userId, action, usageDate) {
     .lt('created_at', dayEnd);
 
   if (logError) {
-    if (fromLimits > 0) return fromLimits;
-    throw new Error(logError.message);
+    console.warn('[aiUsage] readDailyUsageCount logs', logError.message);
+    return fromLimits;
   }
 
-  return Math.max(fromLimits, count ?? 0);
+  return Math.max(fromLimits, logRows?.length ?? 0);
 }
 
 function currentMonthKey() {

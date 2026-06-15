@@ -39,8 +39,8 @@ export default function LevelsPartScorePanel({
         </p>
         <p className="levels-b2-score__hint">
           {en
-            ? 'Use Check to get instant feedback. Aim for confident answers before moving on.'
-            : 'Usa Check para feedback inmediato. Apunta a responder con seguridad antes de continuar.'}
+            ? `You need at least ${passingCount} correct answers to pass this part.`
+            : `Necesitas al menos ${passingCount} respuestas correctas para aprobar esta parte.`}
         </p>
       </div>
     );

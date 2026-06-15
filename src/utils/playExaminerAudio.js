@@ -31,6 +31,47 @@ export function getActiveExaminerAudio() {
   return activeAudio;
 }
 
+/** Pausa audio del examinador (MP3 o síntesis). */
+export function pauseExaminerAudio() {
+  if (activeAudio && !activeAudio.paused) {
+    activeAudio.pause();
+    notifySpeaking(false);
+    return true;
+  }
+  if (typeof window !== 'undefined' && window.speechSynthesis?.speaking && !window.speechSynthesis.paused) {
+    window.speechSynthesis.pause();
+    notifySpeaking(false);
+    return true;
+  }
+  return false;
+}
+
+/** Reanuda audio del examinador pausado. */
+export function resumeExaminerAudio() {
+  if (activeAudio?.paused) {
+    void activeAudio.play().then(() => {
+      notifySpeaking(true, 'audio');
+    }).catch(() => {});
+    return true;
+  }
+  if (typeof window !== 'undefined' && window.speechSynthesis?.paused) {
+    window.speechSynthesis.resume();
+    notifySpeaking(true, 'synthesis');
+    return true;
+  }
+  return false;
+}
+
+export function isExaminerAudioPaused() {
+  if (activeAudio?.paused) return true;
+  if (typeof window !== 'undefined' && window.speechSynthesis?.paused) return true;
+  return false;
+}
+
+export function isExaminerSpeaking() {
+  return speakingState.active;
+}
+
 /**
  * Detiene cualquier audio del examinador (MP3 o voz del navegador).
  */

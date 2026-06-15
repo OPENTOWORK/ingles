@@ -12,6 +12,7 @@ import B2WritingPart2TaskPicker from '@/components/b2/B2WritingPart2TaskPicker';
 import B2WritingStrategyPanel from '@/components/b2/B2WritingStrategyPanel';
 import ExamPracticeProgressPanel from '@/components/exam/ExamPracticeProgressPanel';
 import ExamPracticeSessionSideRail from '@/components/exam/ExamPracticeSessionSideRail';
+import ExamPracticeFinishNotice from '@/components/exam/ExamPracticeFinishNotice';
 import ReadingPracticeChrome from '@/components/exam/ReadingPracticeChrome';
 import { ReadingPracticeSessionProvider, useReadingPracticeSession } from '@/context/ReadingPracticeSessionContext';
 import B2WritingDraftStatusPanel from '@/components/b2/B2WritingDraftStatusPanel';
@@ -513,6 +514,8 @@ function B2WritingExamPracticePageInner() {
       submitted={draftStats.submitted}
       checking={draftStats.loading}
       lastScoreTotal={writingLiveCorrect}
+      passingCount={partScoringCfg?.passing ?? 12}
+      totalSlots={partScoringCfg?.total ?? 20}
       lang="en"
     />
   ) : null;
@@ -604,6 +607,7 @@ function B2WritingExamPracticePageInner() {
         scorePanelOverride={writingScorePanelOverride}
         hideScorePanel={isExamSimulationMode(practiceMode) && !reviewMode}
         partFinishNotice={isExamSimulationMode(practiceMode) && !reviewMode ? null : scoring.partFinishNotice}
+        partFinishNoticePlacement={showPracticeSideRail ? 'sidebar' : 'main'}
         partsData={!loading && !error ? tabPartsData : []}
         selectedPartId={selectedPartId}
         onSelectPart={handleSelectPart}
@@ -730,10 +734,19 @@ function B2WritingExamPracticePageInner() {
                       partMin={PART_MIN}
                       partMax={PART_MAX}
                       progressSlot={scoring.progressBySlot[examSlot]}
+                      progressBySlot={scoring.progressBySlot}
+                      examLabelsBySlot={examLabelsBySlot}
+                      focusPartNumber={partNumber}
+                      passing={partScoringCfg?.passing}
                       examLabel={examLabelsBySlot[examSlot]}
                       lang="en"
                       enabled={scoring.examPracticeOpen}
                     />
+                  }
+                  finishNotice={
+                    scoring.partFinishNotice ? (
+                      <ExamPracticeFinishNotice notice={scoring.partFinishNotice} lang="en" />
+                    ) : null
                   }
                   lang="en"
                 />

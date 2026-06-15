@@ -84,9 +84,6 @@ export default function RootLayoutClient({ children }) {
     if (authPending || allowWithoutAuth || session) return undefined;
     const timer = window.setTimeout(() => {
       void supabase.auth.getSession().then(({ data: { session: latest } }) => {
-        // #region agent log
-        fetch('http://127.0.0.1:7882/ingest/2a697440-281c-4f74-a253-095d80733192',{method:'POST',headers:{'Content-Type':'application/json','X-Debug-Session-Id':'82e3a2'},body:JSON.stringify({sessionId:'82e3a2',runId:'login-debug',hypothesisId:'H3',location:'RootLayoutClient.js:authRedirect',message:'layout auth redirect check',data:{pathname,hasSession:!!latest,allowWithoutAuth,willRedirectToLogin:!latest},timestamp:Date.now()})}).catch(()=>{});
-        // #endregion
         if (!latest) router.replace('/login');
       });
     }, 800);
@@ -202,6 +199,12 @@ export default function RootLayoutClient({ children }) {
     }
   }, []);
 
+  useEffect(() => {
+    const openCookieSettingsFromEvent = () => setShowCookieSettings(true);
+    window.addEventListener('dralo:open-cookie-settings', openCookieSettingsFromEvent);
+    return () => window.removeEventListener('dralo:open-cookie-settings', openCookieSettingsFromEvent);
+  }, []);
+
   if (!allowWithoutAuth && authPending) {
     return (
       <>
@@ -270,12 +273,6 @@ export default function RootLayoutClient({ children }) {
       'necessary_only'
     );
   };
-
-  useEffect(() => {
-    const openCookieSettingsFromEvent = () => setShowCookieSettings(true);
-    window.addEventListener('dralo:open-cookie-settings', openCookieSettingsFromEvent);
-    return () => window.removeEventListener('dralo:open-cookie-settings', openCookieSettingsFromEvent);
-  }, []);
 
   return (
     <>

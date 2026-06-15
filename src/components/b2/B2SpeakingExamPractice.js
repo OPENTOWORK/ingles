@@ -9,10 +9,11 @@ import { useB2ExamScoringSession } from '@/hooks/useB2ExamScoringSession';
 import { useLevelsCategoryTimer } from '@/hooks/useLevelsCategoryTimer';
 import { getB2PartScoring } from '@/utils/levelsB2PartScoring';
 import { supabase } from '@/utils/supabaseClient';
-import { formatLevelsPartDisplayName } from '@/utils/formatLevelsPartDisplayName';
+import { formatLevelsPartDisplayName, getSkillPartTabLabel } from '@/utils/formatLevelsPartDisplayName';
 import { withBasePath } from '@/lib/base-path';
-import { playExaminerAudio, stopExaminerAudio } from '@/utils/playExaminerAudio';
+import { playExaminerAudio, stopExaminerAudio, pauseExaminerAudio, resumeExaminerAudio, isExaminerAudioPaused } from '@/utils/playExaminerAudio';
 import ExaminerVoiceVisualizer from '@/components/b2/ExaminerVoiceVisualizer';
+import SpeakingExerciseControls from '@/components/b2/SpeakingExerciseControls';
 import { partInfo as b2SpeakingPartInfo } from '@/data/part-info/b2-speaking';
 import {
   B2_SPEAKING_EXAM_PARTS,
@@ -25,6 +26,9 @@ import { getB2LongTurnPhotoUrls } from '@/data/b2-speaking-long-turn-photos';
 import B2ExamPracticeModuleNav from '@/components/b2/B2ExamPracticeModuleNav';
 import ExamPracticeProgressPanel from '@/components/exam/ExamPracticeProgressPanel';
 import ExamPracticeSessionSideRail from '@/components/exam/ExamPracticeSessionSideRail';
+import ExamPracticeFinishNotice from '@/components/exam/ExamPracticeFinishNotice';
+import B2SpeakingStrategyPanel from '@/components/b2/B2SpeakingStrategyPanel';
+import { getB2SpeakingStrategyPack } from '@/data/b2SpeakingPracticeStrategies';
 import ReadingPracticeChrome from '@/components/exam/ReadingPracticeChrome';
 import { ReadingPracticeSessionProvider, useReadingPracticeSession } from '@/context/ReadingPracticeSessionContext';
 import ExamModeSectionBanner from '@/components/niveles/ExamModeSectionBanner';
@@ -49,7 +53,12 @@ import {
   runKeepPracticingSkillFlow,
 } from '@/utils/skillPracticeNavigation';
 import { fetchAiUsageStatus } from '@/lib/ai/draloAiClient';
-import { speakingLimitLabel, LIMIT_REACHED } from '@/lib/aiUsageLimitCopy';
+import { speakingLimitLabel, LIMIT_REACHED, resolveSpeakingUsageDisplay } from '@/lib/aiUsageLimitCopy';
+import {
+  loadSpeakingUsageLocal,
+  mergeSpeakingUsageStatus,
+  saveSpeakingUsageLocal,
+} from '@/lib/speakingUsageStorage';
 import { FeedbackCards } from '@/features/speaking/ui/components/FeedbackCards';
 import A2ExamGenerationStatus from '@/components/niveles/A2ExamGenerationStatus';
 
@@ -324,6 +333,17 @@ function B2SpeakingExamPracticeInner({ title, subtitle, loadingLabel, refreshLab
   const showPracticeSideRail =
     isSkillPracticeSession && isPartPracticeMode(practiceMode) && scoring.examPracticeOpen;
 
+  const isB2SpeakingPartPractice =
+    isSkillPracticeSession &&
+    isPartPracticeMode(practiceMode) &&
+    partNumber >= B2_SPEAKING_PART_MIN &&
+    partNumber <= B2_SPEAKING_PART_MAX;
+
+  const speakingStrategyPack = useMemo(
+    () => (isB2SpeakingPartPractice ? getB2SpeakingStrategyPack(partNumber) : null),
+    [isB2SpeakingPartPractice, partNumber],
+  );
+
   const chromeTitle = useMemo(() => {
     if (examModeActive || reviewMode) {
       return getExamChromeTitle({
@@ -407,6 +427,7 @@ function B2SpeakingExamPracticeInner({ title, subtitle, loadingLabel, refreshLab
         showLevelPicker={isSkillPracticeSession}
         levelSlug="b2"
         skillRoute="exam-speaking"
+        partMinForTabLabels={isSkillPracticeSession ? B2_SPEAKING_PART_MIN : null}
         skillPracticeTheme={skillNav.skillTheme}
         practiceMode={practiceMode}
         timerVariant={isSkillPracticeSession && !examModeActive ? 'discrete' : 'prominent'}
@@ -420,6 +441,7 @@ function B2SpeakingExamPracticeInner({ title, subtitle, loadingLabel, refreshLab
         partScoreMetrics={scorePanelProps}
         hideScorePanel={isExamSimulationMode(practiceMode) && !reviewMode}
         partFinishNotice={isExamSimulationMode(practiceMode) && !reviewMode ? null : scoring.partFinishNotice}
+        partFinishNoticePlacement={showPracticeSideRail ? 'sidebar' : 'main'}
         partsData={!loading && !error ? tabPartsData : []}
         selectedPartId={selectedPartId}
         onSelectPart={(part) => {
@@ -470,7 +492,9 @@ function B2SpeakingExamPracticeInner({ title, subtitle, loadingLabel, refreshLab
           <div className="levels-exam-practice-page levels-exam-practice-page--narrow">
             <div className="levels-exam-split-card">
               <h2>
-                {selectedPart.partNumber ? `Part ${selectedPart.partNumber}` : selectedPart.nombre}
+                {getB2SpeakingPartConfig(selectedPart.partNumber)?.title
+                  || getSkillPartTabLabel(selectedPart, B2_SPEAKING_PART_MIN, lang)
+                  || selectedPart.nombre}
               </h2>
               <div className="levels-exam-split__body levels-exam-split__body--stacked">
           <B2SpeakingPartSession
@@ -500,6 +524,9 @@ function B2SpeakingExamPracticeInner({ title, subtitle, loadingLabel, refreshLab
         </div>
         {showPracticeSideRail ? (
           <ExamPracticeSessionSideRail
+            strategy={
+              speakingStrategyPack ? <B2SpeakingStrategyPanel pack={speakingStrategyPack} /> : null
+            }
             progress={
               <ExamPracticeProgressPanel
                 slug="b2"
@@ -507,10 +534,22 @@ function B2SpeakingExamPracticeInner({ title, subtitle, loadingLabel, refreshLab
                 partMin={B2_SPEAKING_PART_MIN}
                 partMax={B2_SPEAKING_PART_MAX}
                 progressSlot={scoring.progressBySlot[examSlot]}
+                progressBySlot={scoring.progressBySlot}
+                examLabelsBySlot={examLabelsBySlot}
+                focusPartNumber={partNumber}
+                passing={b2PartCfg?.passing}
                 examLabel={examLabelsBySlot[examSlot]}
                 lang={lang === 'es' ? 'es' : 'en'}
                 enabled={scoring.examPracticeOpen}
               />
+            }
+            finishNotice={
+              scoring.partFinishNotice ? (
+                <ExamPracticeFinishNotice
+                  notice={scoring.partFinishNotice}
+                  lang={lang === 'es' ? 'es' : 'en'}
+                />
+              ) : null
             }
             lang={lang === 'es' ? 'es' : 'en'}
           />
@@ -543,10 +582,16 @@ function B2SpeakingPartSession({ part, examSlot, onSavePartScore, partScoring, l
   const [feedbackLoading, setFeedbackLoading] = useState(false);
   const [feedbackReport, setFeedbackReport] = useState(null);
   const [feedbackError, setFeedbackError] = useState('');
+  const [exerciseStarted, setExerciseStarted] = useState(false);
+  const [exercisePaused, setExercisePaused] = useState(false);
+  const [openingReady, setOpeningReady] = useState(false);
+  const [canRepeatExaminer, setCanRepeatExaminer] = useState(false);
   const media = useMediaRecorder();
   /** false al desmontar o cambiar de parte: no actualizar estado ni reproducir audio. */
   const aliveRef = useRef(true);
   const abortRef = useRef(null);
+  const lastAssistantRef = useRef(null);
+  const userIdRef = useRef(null);
 
   const taskContext = part.descripcion || partConfig?.instructions || '';
   const photoUrls = useMemo(
@@ -556,51 +601,73 @@ function B2SpeakingPartSession({ part, examSlot, onSavePartScore, partScoring, l
 
   const isAlive = useCallback(() => aliveRef.current, []);
 
+  const applySpeakingUsage = useCallback(
+    (status) => {
+      const resolved = resolveSpeakingUsageDisplay(status, { lang: isEn ? 'en' : 'es' });
+      setUsageUnlimited(resolved.unlimited);
+      if (resolved.unlimited) {
+        setUsageHint('');
+        setUsageRemaining(null);
+        return;
+      }
+      setUsageLimit(resolved.limit);
+      setUsageRemaining(resolved.remaining);
+      setUsageHint(resolved.hint);
+      if (userIdRef.current) {
+        saveSpeakingUsageLocal(userIdRef.current, {
+          used: resolved.used ?? 0,
+          limit: resolved.limit ?? 3,
+          atLimit: resolved.atLimit,
+        });
+      }
+    },
+    [isEn],
+  );
+
   const refreshUsageHint = useCallback(async () => {
     const status = await fetchAiUsageStatus();
-    if (!status?.speaking) {
-      setUsageHint(speakingLimitLabel(3, { lang: isEn ? 'en' : 'es' }));
-      setUsageRemaining(null);
-      setUsageUnlimited(false);
-      return;
-    }
-
-    if (status.speaking.unlimited) {
-      setUsageHint('');
-      setUsageRemaining(null);
-      setUsageUnlimited(true);
-      return;
-    }
-
-    const { used, limit, remaining } = status.speaking;
-    if (limit == null) {
-      setUsageHint('');
-      setUsageRemaining(null);
-      setUsageUnlimited(false);
-      return;
-    }
-
-    setUsageUnlimited(false);
-    setUsageLimit(limit);
-    const nextRemaining = remaining ?? Math.max(0, limit - (used ?? 0));
-    setUsageRemaining(nextRemaining);
-    setUsageHint(
-      speakingLimitLabel(limit, {
-        lang: isEn ? 'en' : 'es',
-        remaining: nextRemaining,
-        used,
-      }),
-    );
-  }, [isEn]);
+    const local = userIdRef.current ? loadSpeakingUsageLocal(userIdRef.current) : null;
+    applySpeakingUsage(mergeSpeakingUsageStatus(status?.speaking, local));
+  }, [applySpeakingUsage]);
 
   useEffect(() => {
-    void refreshUsageHint();
-  }, [refreshUsageHint]);
+    void getSessionUserId().then((id) => {
+      userIdRef.current = id;
+      if (!id) return;
+      const local = loadSpeakingUsageLocal(id);
+      if (local && (local.atLimit || (local.used ?? 0) >= (local.limit ?? 3))) {
+        applySpeakingUsage(mergeSpeakingUsageStatus(null, local));
+      }
+      void refreshUsageHint();
+    });
+  }, [applySpeakingUsage, refreshUsageHint]);
+
+  const storeAssistantTurn = useCallback((data) => {
+    if (!data?.assistantText) return;
+    lastAssistantRef.current = {
+      assistantText: data.assistantText,
+      assistantAudioBase64: data.assistantAudioBase64,
+      assistantAudioMime: data.assistantAudioMime,
+    };
+    setCanRepeatExaminer(true);
+  }, []);
+
+  const playLastAssistant = useCallback(async () => {
+    const data = lastAssistantRef.current;
+    if (!data?.assistantText || !isAlive()) return;
+    setExercisePaused(false);
+    await playExaminerAudio({
+      base64: data.assistantAudioBase64,
+      mime: data.assistantAudioMime,
+      text: data.assistantText,
+    });
+  }, [isAlive]);
 
   const applyAssistantTurn = useCallback(
     async (data) => {
       if (!isAlive()) return;
       const assistantText = data.assistantText || '';
+      storeAssistantTurn(data);
       setLines((prev) => [...prev, { role: 'assistant', content: assistantText }]);
       setHistory((h) => [...h, { role: 'assistant', content: assistantText }]);
       if (!isAlive()) return;
@@ -610,7 +677,7 @@ function B2SpeakingPartSession({ part, examSlot, onSavePartScore, partScoring, l
         text: assistantText,
       });
     },
-    [isAlive],
+    [isAlive, storeAssistantTurn],
   );
 
   const callTurn = useCallback(
@@ -662,18 +729,22 @@ function B2SpeakingPartSession({ part, examSlot, onSavePartScore, partScoring, l
         if (!isAlive()) return null;
         if (!res.ok) {
           const err = await res.json().catch(() => ({}));
-          throw new Error(err.error || 'Error en el turno de speaking.');
+          throw new Error(
+            err.error || (isEn ? 'Speaking turn failed.' : 'Error en el turno de speaking.'),
+          );
         }
         return await res.json();
       } catch (e) {
         if (e?.name === 'AbortError') return null;
-        if (isAlive()) setApiError(e?.message || 'Error de conexión.');
+        if (isAlive()) {
+          setApiError(e?.message || (isEn ? 'Connection error.' : 'Error de conexión.'));
+        }
         return null;
       } finally {
         if (isAlive()) setLoading(false);
       }
     },
-    [sessionId, history, taskContext, part.partNumber, partConfig?.blueprintIndex, isAlive],
+    [sessionId, history, taskContext, part.partNumber, partConfig?.blueprintIndex, isAlive, isEn],
   );
 
   useEffect(() => {
@@ -691,6 +762,11 @@ function B2SpeakingPartSession({ part, examSlot, onSavePartScore, partScoring, l
     setFeedbackReport(null);
     setFeedbackError('');
     setFeedbackLoading(false);
+    setExerciseStarted(false);
+    setExercisePaused(false);
+    setOpeningReady(false);
+    setCanRepeatExaminer(false);
+    lastAssistantRef.current = null;
     setLoading(true);
 
     const run = async () => {
@@ -701,7 +777,11 @@ function B2SpeakingPartSession({ part, examSlot, onSavePartScore, partScoring, l
           body: JSON.stringify({ mode: 'EXAM', cefr: 'B2' }),
           signal: ac.signal,
         });
-        if (!sessionRes.ok) throw new Error('No se pudo iniciar la sesión de speaking.');
+        if (!sessionRes.ok) {
+          throw new Error(
+            isEn ? 'Could not start the speaking session.' : 'No se pudo iniciar la sesión de speaking.',
+          );
+        }
         const { sessionId: newSid } = await sessionRes.json();
         if (!aliveRef.current) return;
         setSessionId(newSid);
@@ -725,23 +805,22 @@ function B2SpeakingPartSession({ part, examSlot, onSavePartScore, partScoring, l
         });
         if (!turnRes.ok) {
           const err = await turnRes.json().catch(() => ({}));
-          throw new Error(err.error || 'Error al cargar la pregunta del examinador.');
+          throw new Error(
+            err.error ||
+              (isEn ? 'Could not load the examiner question.' : 'Error al cargar la pregunta del examinador.'),
+          );
         }
         const data = await turnRes.json();
         if (!aliveRef.current || !data) return;
 
         if (data.assistantText) {
           const assistantText = data.assistantText;
+          storeAssistantTurn(data);
           setLines([{ role: 'assistant', content: assistantText }]);
           setHistory([{ role: 'assistant', content: assistantText }]);
           if (!aliveRef.current) return;
-          await playExaminerAudio({
-            base64: data.assistantAudioBase64,
-            mime: data.assistantAudioMime,
-            text: assistantText,
-          });
-          if (!aliveRef.current) return;
           setPhase(partConfig?.uiMode === 'long_turn' ? 'await_long_turn' : 'dialogue');
+          setOpeningReady(true);
         }
       } catch (e) {
         if (e?.name === 'AbortError') return;
@@ -767,6 +846,8 @@ function B2SpeakingPartSession({ part, examSlot, onSavePartScore, partScoring, l
     partConfig?.blueprintIndex,
     partConfig?.longTurnSeconds,
     partConfig?.uiMode,
+    storeAssistantTurn,
+    isEn,
   ]);
 
   useEffect(() => {
@@ -845,6 +926,65 @@ function B2SpeakingPartSession({ part, examSlot, onSavePartScore, partScoring, l
     setPhase('dialogue');
   };
 
+  const handleExercisePlay = async () => {
+    if (loading || !sessionId || !openingReady) return;
+    if (exercisePaused) {
+      if (media.isPaused) media.resume();
+      if (isExaminerAudioPaused()) resumeExaminerAudio();
+      setExercisePaused(false);
+      return;
+    }
+    if (!exerciseStarted) setExerciseStarted(true);
+    await playLastAssistant();
+  };
+
+  const handleExercisePause = () => {
+    if (!exerciseStarted || loading) return;
+    let pausedSomething = false;
+    if (media.isActive && !media.isPaused) {
+      media.pause();
+      pausedSomething = true;
+    }
+    if (pauseExaminerAudio()) pausedSomething = true;
+    if (pausedSomething) setExercisePaused(true);
+  };
+
+  const handleExerciseRepeat = async () => {
+    if (loading || !canRepeatExaminer) return;
+    stopExaminerAudio();
+    if (media.isActive) await media.discard();
+    setExercisePaused(false);
+    if (!exerciseStarted) setExerciseStarted(true);
+    await playLastAssistant();
+  };
+
+  const handleNextStep = async () => {
+    if (loading || !sessionId || !openingReady || !exerciseStarted) return;
+    stopExaminerAudio();
+    if (media.isActive) await media.discard();
+    setExercisePaused(false);
+
+    if (partConfig?.uiMode === 'long_turn' && phase === 'await_long_turn') {
+      startLongTurn();
+      return;
+    }
+
+    if (partConfig?.uiMode === 'long_turn' && phase === 'long_turn') {
+      await finishLongTurn();
+      return;
+    }
+
+    const skipText = isEn
+      ? "Let's move on to the next question, please."
+      : 'Pasemos a la siguiente pregunta, por favor.';
+    const nextHistory = [...history, { role: 'user', content: skipText }];
+    setLines((prev) => [...prev, { role: 'user', content: skipText }]);
+    setHistory(nextHistory);
+    const data = await callTurn({ text: skipText }, sessionId, nextHistory);
+    if (!isAlive() || !data?.assistantText) return;
+    await applyAssistantTurn(data);
+  };
+
   const userLines = lines.filter((l) => l.role === 'user');
   const speakingTotal = partScoring?.total ?? 5;
   const speakingPassing = partScoring?.passing ?? 3;
@@ -869,19 +1009,27 @@ function B2SpeakingPartSession({ part, examSlot, onSavePartScore, partScoring, l
       });
       const data = await res.json().catch(() => ({}));
       if (!res.ok || data.error === true) {
-        if (data.code === 'DAILY_LIMIT_REACHED') {
-          const limit = usageLimit ?? 3;
-          setUsageRemaining(0);
-          setUsageHint(
-            speakingLimitLabel(limit, {
-              lang: isEn ? 'en' : 'es',
+        const limitHit =
+          res.status === 429 ||
+          data.code === 'DAILY_LIMIT_REACHED' ||
+          data.code === 'LIMIT_CHECK_FAILED';
+        if (limitHit) {
+          if (data.usage) {
+            applySpeakingUsage(data.usage);
+          } else {
+            const resolvedLimit = data.limit ?? usageLimit ?? 3;
+            const resolvedUsed = data.used ?? resolvedLimit;
+            applySpeakingUsage({
+              unlimited: false,
+              limit: resolvedLimit,
+              used: resolvedUsed,
               remaining: 0,
-              used: limit,
-            }),
-          );
+              atLimit: true,
+            });
+          }
         }
         throw new Error(
-          data.code === 'DAILY_LIMIT_REACHED'
+          limitHit
             ? isEn
               ? LIMIT_REACHED.speaking.en
               : LIMIT_REACHED.speaking.es
@@ -894,7 +1042,11 @@ function B2SpeakingPartSession({ part, examSlot, onSavePartScore, partScoring, l
         throw new Error(isEn ? 'Could not generate feedback.' : 'No se pudo generar el feedback.');
       }
       setFeedbackReport(data.report);
-      await refreshUsageHint();
+      if (data.usage) {
+        applySpeakingUsage(data.usage);
+      } else {
+        await refreshUsageHint();
+      }
     } catch (e) {
       setFeedbackError(e?.message || (isEn ? 'Feedback failed.' : 'Error al obtener feedback.'));
     } finally {
@@ -914,14 +1066,11 @@ function B2SpeakingPartSession({ part, examSlot, onSavePartScore, partScoring, l
 
   return (
     <div className="levels-b2-speaking-session">
-      <p className="levels-exam-split__section-title" style={{ marginTop: 0 }}>
-        {partConfig?.title || 'Speaking'}
-      </p>
-      <p style={{ color: '#4a5568', lineHeight: 1.65, fontSize: '0.95rem', margin: '0 0 0.5rem' }}>
+      <p className="levels-b2-speaking-session__intro">
         {part.descripcion || partConfig?.instructions}
       </p>
       {staticInfo?.tips ? (
-        <p style={{ fontSize: '0.88rem', color: '#64748b', marginTop: '0.75rem' }}>
+        <p className="levels-b2-speaking-session__tip">
           <strong>Tip:</strong> {staticInfo.tips}
         </p>
       ) : null}
@@ -933,29 +1082,19 @@ function B2SpeakingPartSession({ part, examSlot, onSavePartScore, partScoring, l
       ) : null}
 
       {partConfig?.uiMode === 'long_turn' ? (
-        <div style={{ marginTop: '1rem', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.75rem' }}>
+        <div className="levels-b2-speaking-session__photos">
           {[0, 1].map((i) => (
-            <div
-              key={i}
-              style={{
-                border: '1px solid #cbd5e1',
-                borderRadius: '10px',
-                minHeight: '140px',
-                background: '#f8fafc',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                overflow: 'hidden',
-              }}
-            >
+            <div key={i} className="levels-b2-speaking-session__photo">
               {photoUrls[i] ? (
                 <img
                   src={photoUrls[i]}
                   alt={i === 0 ? 'Photograph A' : 'Photograph B'}
-                  style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                  className="levels-b2-speaking-session__photo-img"
                 />
               ) : (
-                <span style={{ color: '#94a3b8', fontWeight: 600 }}>Photo {i === 0 ? 'A' : 'B'}</span>
+                <span className="levels-b2-speaking-session__photo-placeholder">
+                  Photo {i === 0 ? 'A' : 'B'}
+                </span>
               )}
             </div>
           ))}
@@ -963,41 +1102,38 @@ function B2SpeakingPartSession({ part, examSlot, onSavePartScore, partScoring, l
       ) : null}
 
       {partConfig?.uiMode === 'collaborative' ? (
-        <div
-          style={{
-            marginTop: '1rem',
-            padding: '0.85rem',
-            background: '#fffbeb',
-            border: '1px solid #fcd34d',
-            borderRadius: '10px',
-            fontSize: '0.92rem',
-            lineHeight: 1.6,
-          }}
-        >
-          Trabaja con el examinador como si fuera tu compañero: intercambia ideas y intentad llegar a una
-          decisión.
+        <div className="levels-b2-speaking-session__collab">
+          {isEn
+            ? 'Work with the examiner as your partner: exchange ideas and try to reach a decision.'
+            : 'Trabaja con el examinador como si fuera tu compañero: intercambia ideas e intentad llegar a una decisión.'}
         </div>
       ) : null}
 
-      <ExaminerVoiceVisualizer isLoading={loading} />
+      <SpeakingExerciseControls
+        lang={lang}
+        sessionReady={Boolean(sessionId && openingReady)}
+        exerciseStarted={exerciseStarted}
+        exercisePaused={exercisePaused}
+        loading={loading}
+        canRepeat={canRepeatExaminer}
+        onPlay={() => void handleExercisePlay()}
+        onPause={handleExercisePause}
+        onRepeat={() => void handleExerciseRepeat()}
+        onNextStep={() => void handleNextStep()}
+      />
+
+      <ExaminerVoiceVisualizer
+        isLoading={loading && !openingReady}
+        waitingToStart={openingReady && !exerciseStarted}
+      />
 
       {userLines.length > 0 ? (
-        <div
-          style={{
-            marginTop: '1rem',
-            maxHeight: '160px',
-            overflowY: 'auto',
-            border: '1px solid #e2e8f0',
-            borderRadius: '10px',
-            padding: '0.75rem',
-            background: '#f8fafc',
-          }}
-        >
-          <p style={{ margin: '0 0 0.5rem', fontWeight: 700, fontSize: '0.85rem', color: '#475569' }}>
-            Tus respuestas
+        <div className="levels-b2-speaking-session__responses">
+          <p className="levels-b2-speaking-session__responses-title">
+            {isEn ? 'Your answers' : 'Tus respuestas'}
           </p>
           {userLines.map((l, i) => (
-            <p key={`${i}-user`} style={{ margin: '0.35rem 0', fontSize: '0.9rem', color: '#1e293b' }}>
+            <p key={`${i}-user`} className="levels-b2-speaking-session__response-line">
               {l.content}
             </p>
           ))}
@@ -1005,27 +1141,20 @@ function B2SpeakingPartSession({ part, examSlot, onSavePartScore, partScoring, l
       ) : null}
 
       {phase === 'long_turn' ? (
-        <p style={{ marginTop: '0.75rem', fontWeight: 700, fontFamily: 'monospace', fontSize: '1.25rem' }}>
-          Tiempo: {String(Math.floor(longTurnLeft / 60)).padStart(2, '0')}:
+        <p className="levels-b2-speaking-session__countdown">
+          {isEn ? 'Time:' : 'Tiempo:'}{' '}
+          {String(Math.floor(longTurnLeft / 60)).padStart(2, '0')}:
           {String(longTurnLeft % 60).padStart(2, '0')}
         </p>
       ) : null}
 
-      <div style={{ marginTop: '1rem', display: 'flex', flexWrap: 'wrap', gap: '0.65rem', alignItems: 'center' }}>
+      <div className="levels-b2-speaking-session__mic-row">
         {partConfig?.uiMode === 'long_turn' && phase === 'await_long_turn' ? (
           <button
             type="button"
+            className="levels-b2-speaking-session__phase-btn levels-b2-speaking-session__phase-btn--primary"
             onClick={startLongTurn}
-            disabled={loading}
-            style={{
-              padding: '0.65rem 1.1rem',
-              borderRadius: '9999px',
-              border: 'none',
-              background: '#047857',
-              color: '#fff',
-              fontWeight: 700,
-              cursor: 'pointer',
-            }}
+            disabled={loading || !exerciseStarted}
           >
             Start my turn (1 min)
           </button>
@@ -1033,15 +1162,8 @@ function B2SpeakingPartSession({ part, examSlot, onSavePartScore, partScoring, l
         {partConfig?.uiMode === 'long_turn' && phase === 'long_turn' ? (
           <button
             type="button"
+            className="levels-b2-speaking-session__phase-btn"
             onClick={() => finishLongTurn()}
-            style={{
-              padding: '0.65rem 1.1rem',
-              borderRadius: '9999px',
-              border: '1px solid #2f855a',
-              background: '#f0fff4',
-              fontWeight: 600,
-              cursor: 'pointer',
-            }}
           >
             I&apos;m finished
           </button>
@@ -1050,18 +1172,11 @@ function B2SpeakingPartSession({ part, examSlot, onSavePartScore, partScoring, l
           <>
             <button
               type="button"
+              className={`levels-b2-speaking-session__mic-btn${
+                media.isActive ? ' levels-b2-speaking-session__mic-btn--recording' : ''
+              }`}
               onClick={onMicClick}
-              disabled={loading || !sessionId}
-              style={{
-                padding: '0.75rem 1.25rem',
-                borderRadius: '9999px',
-                border: 'none',
-                background: media.isActive ? '#dc2626' : '#0284c7',
-                color: '#fff',
-                fontWeight: 700,
-                cursor: loading ? 'not-allowed' : 'pointer',
-                opacity: loading ? 0.6 : 1,
-              }}
+              disabled={loading || !sessionId || !exerciseStarted}
             >
               {media.isActive
                 ? isEn
@@ -1075,17 +1190,9 @@ function B2SpeakingPartSession({ part, examSlot, onSavePartScore, partScoring, l
               <>
                 <button
                   type="button"
+                  className="levels-b2-speaking-session__secondary-btn"
                   onClick={onPauseClick}
                   disabled={loading}
-                  style={{
-                    padding: '0.65rem 1rem',
-                    borderRadius: '9999px',
-                    border: '1px solid #cbd5e0',
-                    background: '#fff',
-                    color: '#334155',
-                    fontWeight: 600,
-                    cursor: loading ? 'not-allowed' : 'pointer',
-                  }}
                 >
                   {media.isPaused
                     ? isEn
@@ -1097,17 +1204,9 @@ function B2SpeakingPartSession({ part, examSlot, onSavePartScore, partScoring, l
                 </button>
                 <button
                   type="button"
+                  className="levels-b2-speaking-session__secondary-btn"
                   onClick={() => void onRepeatClick()}
                   disabled={loading}
-                  style={{
-                    padding: '0.65rem 1rem',
-                    borderRadius: '9999px',
-                    border: '1px solid #cbd5e0',
-                    background: '#fff',
-                    color: '#334155',
-                    fontWeight: 600,
-                    cursor: loading ? 'not-allowed' : 'pointer',
-                  }}
                 >
                   {isEn ? '↻ Repeat' : '↻ Repetir'}
                 </button>
@@ -1115,7 +1214,7 @@ function B2SpeakingPartSession({ part, examSlot, onSavePartScore, partScoring, l
             ) : null}
           </>
         )}
-        <span style={{ fontSize: '0.88rem', color: '#64748b' }}>
+        <span className="levels-b2-speaking-session__mic-hint">
           {loading
             ? isEn
               ? 'Processing…'
@@ -1129,40 +1228,33 @@ function B2SpeakingPartSession({ part, examSlot, onSavePartScore, partScoring, l
                   ? 'Recording…'
                   : 'Grabando…'
                 : isEn
-                  ? 'Press to respond'
-                  : 'Pulsa para responder'}
+                  ? exerciseStarted
+                    ? 'Press to respond'
+                    : 'Press Play to start'
+                  : exerciseStarted
+                    ? 'Pulsa para responder'
+                    : 'Pulsa Play para empezar'}
         </span>
       </div>
 
       {(partConfig?.uiMode !== 'long_turn' || phase === 'dialogue') && (
-        <div style={{ marginTop: '0.85rem', display: 'flex', gap: '0.5rem', flexWrap: 'wrap' }}>
+        <div className="levels-b2-speaking-session__text-row">
           <input
             type="text"
+            className="levels-b2-speaking-session__text-input"
             value={typed}
             onChange={(e) => setTyped(e.target.value)}
             placeholder="Or type your answer"
-            style={{
-              flex: '1 1 200px',
-              borderRadius: '8px',
-              border: '1px solid #cbd5e0',
-              padding: '0.6rem 0.75rem',
-            }}
+            disabled={!exerciseStarted}
           />
           <button
             type="button"
-            disabled={loading || !typed.trim()}
+            className="levels-b2-speaking-session__text-send"
+            disabled={loading || !typed.trim() || !exerciseStarted}
             onClick={async () => {
               const t = typed.trim();
               setTyped('');
               await submitCandidateTurn(t);
-            }}
-            style={{
-              padding: '0.6rem 1rem',
-              borderRadius: '8px',
-              border: '1px solid #cbd5e0',
-              background: '#fff',
-              fontWeight: 600,
-              cursor: 'pointer',
             }}
           >
             Send text
@@ -1171,10 +1263,10 @@ function B2SpeakingPartSession({ part, examSlot, onSavePartScore, partScoring, l
       )}
 
       {media.error ? (
-        <p style={{ color: '#b45309', marginTop: '0.5rem', fontSize: '0.88rem' }}>{media.error}</p>
+        <p className="levels-b2-speaking-session__warn">{media.error}</p>
       ) : null}
       {apiError ? (
-        <p style={{ color: '#c53030', marginTop: '0.5rem', fontSize: '0.88rem' }}>{apiError}</p>
+        <p className="levels-b2-speaking-session__error">{apiError}</p>
       ) : null}
 
       {onSavePartScore && userLines.length > 0 ? (
@@ -1207,28 +1299,20 @@ function B2SpeakingPartSession({ part, examSlot, onSavePartScore, partScoring, l
           ) : null}
 
           {feedbackReport ? (
-            <div style={{ marginTop: '1rem' }}>
+            <div className="levels-b2-speaking-session__feedback">
               <FeedbackCards report={feedbackReport} />
             </div>
           ) : null}
 
-          <div style={{ marginTop: '1.25rem', textAlign: 'center' }}>
+          <div className="levels-b2-speaking-session__score-block">
           <button
             type="button"
+            className="levels-b2-speaking-session__score-btn"
             onClick={saveSpeakingScore}
-            style={{
-              padding: '0.65rem 1.2rem',
-              borderRadius: '8px',
-              border: '1px solid #2f855a',
-              background: '#f0fff4',
-              color: '#1a202c',
-              fontWeight: 700,
-              cursor: 'pointer',
-            }}
           >
             Save score for this part ({Math.min(speakingTotal, userLines.length)}/{speakingTotal})
           </button>
-          <p style={{ margin: '0.45rem 0 0', fontSize: '0.85rem', color: '#64748b' }}>
+          <p className="levels-b2-speaking-session__score-hint">
             You need at least {speakingPassing} completed interactions to pass (max. {speakingTotal}).
           </p>
           </div>

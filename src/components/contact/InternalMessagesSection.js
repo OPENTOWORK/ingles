@@ -70,6 +70,9 @@ export default function InternalMessagesSection({ session }) {
     setForm((prev) => ({ ...prev, subject: '', message: '' }));
   };
 
+  if (isLoggedIn && roleLoading) return null;
+  if (isStudent) return null;
+
   return (
     <section className="contact-section contact-section--internal">
       <div className="internal-messages__header">
@@ -90,19 +93,7 @@ export default function InternalMessagesSection({ session }) {
           <strong>Sign in required</strong>
           <p>You need to be logged in to send internal messages.</p>
         </div>
-      ) : null}
-
-      {isLoggedIn && !roleLoading && isStudent ? (
-        <div className="internal-messages__coming-soon" role="status">
-          <span className="internal-messages__coming-soon-badge">Coming soon</span>
-          <p>
-            Internal messaging for students will be available soon. For now, use{' '}
-            <strong>Support</strong> below to open a ticket.
-          </p>
-        </div>
-      ) : null}
-
-      {isLoggedIn && (roleLoading || isStudent) ? null : (
+      ) : (
         <>
       <div className="internal-channels" role="radiogroup" aria-label="Message channel">
         {INTERNAL_MESSAGE_CHANNELS.map((channel) => {

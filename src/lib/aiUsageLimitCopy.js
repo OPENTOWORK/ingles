@@ -13,6 +13,61 @@ export function writingLimitLabel(limit, { lang = 'en', remaining, used } = {}) 
   return `Alpha: ${limit} exam writing corrections per day.${suffix}`;
 }
 
+/** Normalize /api/ai/usage-status speaking payload for UI state. */
+export function resolveSpeakingUsageDisplay(status, { lang = 'en', fallbackLimit = 3 } = {}) {
+  if (!status) {
+    return {
+      unlimited: false,
+      limit: fallbackLimit,
+      used: null,
+      remaining: null,
+      atLimit: false,
+      hint: speakingLimitLabel(fallbackLimit, { lang }),
+    };
+  }
+
+  if (status.unlimited) {
+    return {
+      unlimited: true,
+      limit: null,
+      used: null,
+      remaining: null,
+      atLimit: false,
+      hint: '',
+    };
+  }
+
+  if (status.unavailable) {
+    const limit = status.limit ?? fallbackLimit;
+    return {
+      unlimited: false,
+      limit,
+      used: status.used ?? null,
+      remaining: null,
+      atLimit: false,
+      hint: speakingLimitLabel(limit, { lang }),
+    };
+  }
+
+  const limit = status.limit ?? fallbackLimit;
+  const used = status.used ?? 0;
+  const remaining = status.remaining ?? Math.max(0, limit - used);
+  const atLimit = Boolean(status.atLimit || (limit != null && used >= limit) || remaining <= 0);
+
+  return {
+    unlimited: false,
+    limit,
+    used,
+    remaining: atLimit ? 0 : remaining,
+    atLimit,
+    hint: speakingLimitLabel(limit, {
+      lang,
+      remaining: atLimit ? 0 : remaining,
+      used,
+    }),
+  };
+}
+
 export function speakingLimitLabel(limit = 3, { lang = 'en', remaining, used } = {}) {
   let suffix = '';
   if (remaining != null) {

@@ -246,6 +246,20 @@ export function buildB2EnunciadoFromGenerated(gen = {}, partNumber) {
 
   const useTextPanel = pn >= 1 && pn <= 6;
   if (useTextPanel) {
+    // Part 1 (MCQ cloze): opciones del ejemplo (0) antes del texto; el gap (0) va en el pasaje.
+    if (pn === 1 && g.example && typeof g.example === 'object') {
+      const exOpts = asGeneratedArray(g.example.options);
+      if (exOpts.length >= 2) {
+        lines.push('Example:');
+        for (const opt of exOpts) {
+          lines.push(typeof opt === 'string' ? opt : `${opt.letter || ''}) ${opt.text || ''}`.trim());
+        }
+        const ans = String(g.example.answer || '').trim();
+        if (ans) {
+          lines.push(/^[A-D]$/i.test(ans) ? `Answer: ${ans.toUpperCase()}` : `Answer: 0 → ${ans}`);
+        }
+      }
+    }
     // Part 2 (open cloze): ejemplo (0) como bloque separado ANTES del texto;
     // el pasaje no debe contener el gap (0).
     if (pn === 2 && g.example && typeof g.example === 'object') {
@@ -275,7 +289,11 @@ export function buildB2EnunciadoFromGenerated(gen = {}, partNumber) {
 
   if (g.questions.length && pn !== 4 && pn !== 5 && pn !== 6 && pn !== 7 && pn !== 8 && pn < 10) {
     if (!useTextPanel || pn === 1) lines.push('Questions');
-    for (const q of g.questions) {
+    const part1Questions =
+      pn === 1 && g.example?.options?.length
+        ? [{ number: 0, options: g.example.options }, ...g.questions.filter((q) => Number(q.number) !== 0)]
+        : g.questions;
+    for (const q of part1Questions) {
       if (pn === 1 || pn === 5 || pn === 6) {
         lines.push('');
         lines.push(String(q.number ?? ''));

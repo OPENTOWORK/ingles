@@ -77,6 +77,450 @@ export function stripTrailingExampleBlock(text = '') {
 }
 
 /**
+ * Part 1 (MCQ cloze): bloque "Example:" con opciones A–D y Answer.
+ * @returns {{ questionNumber: 0, options: Partial<Record<'A'|'B'|'C'|'D', string>>, answerLetter: string } | null}
+ */
+export function extractMcqClozeExampleBlock(rawText = '') {
+  const lines = String(rawText || '')
+    .replace(/\r\n/g, '\n')
+    .split('\n')
+    .map((l) => l.trim());
+  const start = lines.findIndex((l) => /^example\s*:?\s*$/i.test(l) || /^example\s*:/i.test(l));
+  if (start === -1) return null;
+
+  let end = lines.length;
+  for (let i = start + 1; i < lines.length; i += 1) {
+    if (/^text$/i.test(lines[i])) {
+      end = i;
+      break;
+    }
+  }
+
+  const block = lines.slice(start + 1, end).filter(Boolean);
+  /** @type {Partial<Record<'A'|'B'|'C'|'D', string>>} */
+  const options = {};
+  let answerLetter = '';
+
+  for (const line of block) {
+    if (/^answer\s*:/i.test(line)) {
+      const m = line.match(/answer\s*:\s*(?:0\s*[→\-–]>\s*)?([A-D])\b/i);
+      if (m) answerLetter = m[1].toUpperCase();
+      continue;
+    }
+    const optM = line.match(/^([A-D])\s*\)\s*(.+)$/i) || line.match(/^([A-D])\s+(.+)$/i);
+    if (optM) {
+      const letter = optM[1].toUpperCase();
+      if (letter === 'A' || letter === 'B' || letter === 'C' || letter === 'D') {
+        options[letter] = optM[2].trim();
+      }
+    }
+  }
+
+  if (Object.keys(options).length < 2) return null;
+  return { questionNumber: 0, options, answerLetter };
+}
+
+/** Quita el bloque Example de instrucciones Part 1 (el ejemplo va en el texto). */
+export function stripMcqClozeExampleBlock(text = '') {
+  return stripTrailingExampleBlock(text);
+}
+
+/**
+ * Instrucciones Part 1 sin el bloque Example embebido (ejemplo en el pasaje).
+ * Prioriza ejemplo específico de la pregunta sobre la plantilla fija de levels_partes.
+ */
+export function composeMcqClozeDirections(descripcion = '', rawPregunta = '') {
+  const desc = String(descripcion || '').trim();
+  if (extractMcqClozeExampleBlock(rawPregunta)) {
+    return stripMcqClozeExampleBlock(desc) || stripMcqClozeExampleBlock(rawPregunta) || desc;
+  }
+  return stripMcqClozeExampleBlock(desc) || desc;
+}
+
+/**
+ * Bloque Example UoE (partes 2–4): frase de ejemplo + línea Answer / 0 → …
+ * @returns {{ bodyLines: string[], answerLine: string, sentence: string } | null}
+ */
+export function extractUoeExampleBlock(rawText = '') {
+  const lines = String(rawText || '')
+    .replace(/\r\n/g, '\n')
+    .split('\n')
+    .map((l) => l.trim());
+  const start = lines.findIndex((l) => /^example\s*:?\s*$/i.test(l) || /^example\s*:/i.test(l));
+  if (start === -1) return null;
+
+  let end = lines.length;
+  for (let i = start + 1; i < lines.length; i += 1) {
+    if (/^text$/i.test(lines[i])) {
+      end = i;
+      break;
+    }
+  }
+
+  const block = lines.slice(start + 1, end).filter(Boolean);
+  if (!block.length) return null;
+
+  const bodyLines = [];
+  let answerLine = '';
+  for (const line of block) {
+    if (/^answer\s*:/i.test(line)) {
+      answerLine = line.replace(/^answer\s*:\s*/i, '').trim();
+    } else if (/^0\s*[→\-–>]/i.test(line)) {
+      answerLine = line.trim();
+    } else {
+      bodyLines.push(line);
+    }
+  }
+
+  return {
+    bodyLines,
+    answerLine,
+    sentence: bodyLines.join(' '),
+  };
+}
+
+/** Respuesta modelo del gap (0) desde BD. */
+export function resolveGap0ModelAnswer(respuestas = [], respuestasAbiertas = []) {
+  for (const row of respuestasAbiertas || []) {
+    const num = Number(row?.numero ?? row.questionNumber ?? row.pregunta_numero);
+    if (num === 0) {
+      const t = String(row.respuesta_texto ?? row.respuesta ?? row.texto ?? '').trim();
+      if (t) return t;
+    }
+  }
+  for (const row of respuestas || []) {
+    if (row?.correcta !== true) continue;
+    const parts = parseMcqRespuestaRowParts(row?.respuesta);
+    if (parts?.num === 0 && parts.word) return parts.word;
+    const t = String(row.respuesta || '').trim();
+    const m = t.match(/^0\s+(?:→\s*)?(.+)$/i);
+    if (m) return m[1].trim();
+  }
+  return '';
+}
+
+/**
+ * Instrucciones skill UoE (partes 1–4) sin bloque Example arriba.
+ */
+export function composeSkillUoeDirections(descripcion = '', rawPregunta = '', partNumber = 0) {
+  const pn = Number(partNumber);
+  if (pn === 1) return composeMcqClozeDirections(descripcion, rawPregunta);
+  if (pn >= 2 && pn <= 4) {
+    const desc = stripTrailingExampleBlock(String(descripcion || '').trim());
+    if (desc) return desc;
+    const fallback = splitEnunciadoAndTextFallback(rawPregunta);
+    return stripTrailingExampleBlock(fallback.enunciado) || String(descripcion || '').trim();
+  }
+  return String(descripcion || '').trim();
+}
+
+/**
+ * Ejemplo inline para partes 2–3 en skill practice (fuera de Directions).
+ * @returns {{ bodyLines: string[], answerLine: string, sentence: string, cleanedTexto?: string } | null}
+ */
+export function resolveUoeInlineExample({
+  partNumber = 0,
+  descripcion = '',
+  rawPregunta = '',
+  texto = '',
+  respuestas = [],
+  respuestasAbiertas = [],
+}) {
+  const pn = Number(partNumber);
+  const gap0Answer = resolveGap0ModelAnswer(respuestas, respuestasAbiertas);
+  let block = extractUoeExampleBlock(rawPregunta) || extractUoeExampleBlock(descripcion);
+
+  if (pn === 2) {
+    const legacy = extractLegacyPart2InlineExample(texto);
+    if (legacy) {
+      const answerLine = gap0Answer
+        ? `0 → ${gap0Answer}`
+        : block?.answerLine || '';
+      return {
+        bodyLines: [legacy.exampleSentence],
+        answerLine,
+        sentence: legacy.exampleSentence,
+        cleanedTexto: `${legacy.exampleSentence}\n\n${legacy.cleanedTexto}`.trim(),
+      };
+    }
+  }
+
+  if (!block) return null;
+  if (!block.answerLine && gap0Answer) {
+    block = { ...block, answerLine: `0 → ${gap0Answer}` };
+  }
+  return block;
+}
+
+/** Palabra a mostrar en el hueco (0) a partir de "0 → word (STEM)" o "Answer: …". */
+export function parseExampleAnswerWord(answerLine = '') {
+  const line = String(answerLine || '').trim();
+  if (!line) return '';
+  const arrow = line.match(/^0\s*[→\-–>]\s*(.+)$/i);
+  if (arrow) {
+    const raw = arrow[1].trim();
+    const wordForm = raw.replace(/\s*\([A-Z]{2,}\)\s*$/, '').trim();
+    if (/^[A-D]$/i.test(wordForm)) return '';
+    return wordForm || raw;
+  }
+  const answerMatch = line.match(/^answer\s*:\s*(.+)$/i);
+  if (answerMatch) {
+    const raw = answerMatch[1].trim();
+    if (/^[A-D]$/i.test(raw)) return '';
+    const arrowInAnswer = raw.match(/^0\s*[→\-–>]\s*(.+)$/i);
+    if (arrowInAnswer) return parseExampleAnswerWord(arrowInAnswer[0]);
+    return raw;
+  }
+  return '';
+}
+
+/** Parsea fila levels_respuestas: "1 C) word", "1 C word" o "1 C". */
+export function parseMcqRespuestaRowParts(text = '') {
+  const t = String(text || '').trim();
+  let m = t.match(/^(\d{1,2})\s+([A-D])\b\s*\)?\s+(.+)$/i);
+  if (m) {
+    return { num: Number(m[1]), letter: m[2].toUpperCase(), word: m[3].trim() };
+  }
+  m = t.match(/^(\d{1,2})\s+([A-D])$/i);
+  if (m) {
+    return { num: Number(m[1]), letter: m[2].toUpperCase(), word: '' };
+  }
+  return null;
+}
+
+/** Opciones A–D de una pregunta Part 1 desde levels_respuestas (todas las filas). */
+export function collectPart1OptionsFromRespuestas(respuestas = [], questionNumber = 0) {
+  /** @type {Partial<Record<'A'|'B'|'C'|'D', string>>} */
+  const options = {};
+  for (const row of respuestas) {
+    const parts = parseMcqRespuestaRowParts(row?.respuesta);
+    if (!parts || parts.num !== questionNumber || !parts.word) continue;
+    if (parts.letter === 'A' || parts.letter === 'B' || parts.letter === 'C' || parts.letter === 'D') {
+      options[parts.letter] = parts.word;
+    }
+  }
+  return options;
+}
+
+/** Palabra del hueco (0) en Part 1 MCQ cloze. */
+export function resolveMcqGap0DisplayWord({
+  respuestas = [],
+  respuestasAbiertas = [],
+  correctLetterByQuestion = new Map(),
+  exampleBlock = null,
+  inlineExample = null,
+  mcqGroup0 = null,
+  rawPregunta = '',
+  descripcion = '',
+  parsed = [],
+  texto = '',
+}) {
+  const wordFromOption = (opt) => {
+    const t = String(opt?.formattedText || opt?.respuesta || '');
+    const m = t.match(/^[A-D]\)\s*(.+)$/i) || t.match(/^\d+\s+[A-D]\b\s*\)?\s*(.+)$/i);
+    return m ? m[1].trim() : '';
+  };
+
+  const correctOpt = mcqGroup0?.options?.find((o) => o.correcta);
+  const groupWord = correctOpt ? wordFromOption(correctOpt) : '';
+  if (groupWord) return groupWord;
+
+  const fromPregunta = extractMcqClozeExampleBlock(rawPregunta);
+  const fromTexto = extractMcqClozeExampleBlock(texto);
+  const fromDesc = extractMcqClozeExampleBlock(descripcion);
+  const letter =
+    correctLetterByQuestion.get(0) ||
+    exampleBlock?.answerLetter ||
+    fromPregunta?.answerLetter ||
+    fromTexto?.answerLetter ||
+    fromDesc?.answerLetter ||
+    '';
+
+  const optsFromRows = collectPart1OptionsFromRespuestas(respuestas, 0);
+  const parsed0 = parsed.find((p) => p.questionNumber === 0);
+  const opts = {
+    ...(exampleBlock?.options || {}),
+    ...(parsed0?.options || {}),
+    ...optsFromRows,
+    ...(fromPregunta?.options || {}),
+    ...(fromTexto?.options || {}),
+  };
+  if (letter && opts[letter]) return String(opts[letter]).trim();
+
+  const rowLetters = Object.keys(optsFromRows);
+  if (rowLetters.length === 1) return String(optsFromRows[rowLetters[0]]).trim();
+
+  for (const row of respuestas) {
+    if (row?.correcta !== true) continue;
+    const parts = parseMcqRespuestaRowParts(row?.respuesta);
+    if (parts?.num === 0 && parts.word) return parts.word;
+  }
+
+  if (letter && fromDesc?.options?.[letter]) return String(fromDesc.options[letter]).trim();
+
+  const fromOpen = resolveGap0ModelAnswer(respuestas, respuestasAbiertas);
+  if (fromOpen && !/^[A-D]$/i.test(fromOpen)) return fromOpen;
+
+  const anyGroupWord = mcqGroup0?.options?.map(wordFromOption).find(Boolean);
+  if (anyGroupWord) return anyGroupWord;
+
+  return parseExampleAnswerWord(inlineExample?.answerLine);
+}
+
+/** Si el pasaje no trae (0), antepone la frase de ejemplo con marcador (0). */
+export function ensureExampleGap0InPassage(texto = '', inlineExample = null) {
+  if (!inlineExample?.bodyLines?.length) return String(texto || '').trim();
+  if (/\(0\)/.test(texto)) return String(texto || '').trim();
+
+  let line = inlineExample.bodyLines.join(' ').trim();
+  if (!/\(0\)/.test(line)) {
+    line = line.replace(/\.{3,}|…+/g, '(0) _______');
+  }
+  const body = String(texto || '').trim();
+  return body ? `${line}\n\n${body}` : line;
+}
+
+/**
+ * Opciones A–D de una pregunta Part 1 desde levels_respuestas.
+ */
+export function extractPart1OptionsFromRespuestas(respuestas = [], questionNumber = 0) {
+  const options = collectPart1OptionsFromRespuestas(respuestas, questionNumber);
+  return Object.keys(options).length >= 2 ? options : null;
+}
+
+/**
+ * Bloque de ejemplo (0) adaptado al texto: Questions → enunciado → respuestas → descripción fija.
+ */
+export function resolvePart1ExampleBlock({
+  parsed = [],
+  rawPregunta = '',
+  descripcion = '',
+  respuestas = [],
+  correctLetterByQuestion = new Map(),
+}) {
+  const parsed0 = parsed.find((p) => p.questionNumber === 0);
+  if (parsed0?.options) {
+    return {
+      questionNumber: 0,
+      options: parsed0.options,
+      answerLetter: correctLetterByQuestion.get(0) || '',
+    };
+  }
+  const fromPregunta = extractMcqClozeExampleBlock(rawPregunta);
+  if (fromPregunta) return fromPregunta;
+  const fromRows = collectPart1OptionsFromRespuestas(respuestas, 0);
+  if (Object.keys(fromRows).length >= 1) {
+    return {
+      questionNumber: 0,
+      options: fromRows,
+      answerLetter: correctLetterByQuestion.get(0) || '',
+    };
+  }
+  const fromRespuestas = extractPart1OptionsFromRespuestas(respuestas, 0);
+  if (fromRespuestas) {
+    return {
+      questionNumber: 0,
+      options: fromRespuestas,
+      answerLetter: correctLetterByQuestion.get(0) || '',
+    };
+  }
+  const fromDesc = extractMcqClozeExampleBlock(descripcion);
+  if (fromDesc?.options) return fromDesc;
+  return null;
+}
+
+/** Ejemplo UoE en el pasaje (no en instrucciones): solo skill practice, partes 1–4. */
+export function shouldUseSkillUoeExampleLayout({ skillPractice = false, partNumber = 0 } = {}) {
+  const pn = Number(partNumber);
+  return Boolean(skillPractice) && Number.isFinite(pn) && pn >= 1 && pn <= 4;
+}
+
+/**
+ * Grupos MCQ Part 1 (0–8): incluye ejemplo (0) cuando hay opciones en Questions o en Example.
+ */
+export function buildPart1McqGroups({
+  parsed = [],
+  correctLetterByQuestion = new Map(),
+  preguntaId = '',
+  exampleBlock = null,
+  rawPregunta = '',
+  descripcion = '',
+  respuestas = [],
+  includeExample = true,
+}) {
+  const letters = ['A', 'B', 'C', 'D'];
+  const buildGroup = (questionNumber, optionsByLetter, correctOverride) => {
+    const correctL =
+      correctOverride != null && correctOverride !== ''
+        ? String(correctOverride).toUpperCase()
+        : correctLetterByQuestion.get(questionNumber);
+    const opts = letters
+      .map((L) => {
+        const word = optionsByLetter?.[L];
+        if (!word || !String(word).trim()) return null;
+        return {
+          id: `part1-${preguntaId}-q${questionNumber}-${L}`,
+          respuesta: `${questionNumber} ${L} ${word}`,
+          formattedText: `${L}) ${word}`,
+          correcta: correctL != null ? L === correctL : false,
+        };
+      })
+      .filter(Boolean);
+    if (opts.length < 2) return null;
+    return { questionNumber, options: opts };
+  };
+
+  const groups = [];
+  if (includeExample) {
+    const resolvedExample =
+      exampleBlock ||
+      resolvePart1ExampleBlock({
+        parsed,
+        rawPregunta,
+        descripcion,
+        respuestas,
+        correctLetterByQuestion,
+      });
+    const parsed0 = parsed.find((p) => p.questionNumber === 0);
+    const exampleOptions = parsed0?.options || resolvedExample?.options;
+    if (exampleOptions) {
+      const exGroup = buildGroup(
+        0,
+        exampleOptions,
+        resolvedExample?.answerLetter || correctLetterByQuestion.get(0),
+      );
+      if (exGroup) groups.push(exGroup);
+    } else {
+      for (const row of respuestas) {
+        const parts = parseMcqRespuestaRowParts(row?.respuesta);
+        if (!parts || parts.num !== 0 || !parts.word) continue;
+        const letter = parts.letter;
+        groups.push({
+          questionNumber: 0,
+          options: [
+            {
+              id: `part1-${preguntaId}-q0-${letter}`,
+              respuesta: `0 ${letter}) ${parts.word}`,
+              formattedText: `${letter}) ${parts.word}`,
+              correcta: row?.correcta === true || letter === correctLetterByQuestion.get(0),
+            },
+          ],
+        });
+        break;
+      }
+    }
+  }
+
+  for (const { questionNumber, options } of parsed) {
+    if (questionNumber === 0) continue;
+    const group = buildGroup(questionNumber, options);
+    if (group) groups.push(group);
+  }
+
+  return groups.length ? groups.sort((a, b) => a.questionNumber - b.questionNumber) : null;
+}
+
+/**
  * Instrucciones de Part 2 (open cloze) con ejemplo coherente:
  * - Si la pregunta generada trae su propio bloque "Example:" (con gap (0) real), se usa ese
  *   y se descarta el de la Descripción fija.
@@ -145,6 +589,12 @@ export function splitEnunciadoAndTextFallback(rawText = '') {
     enunciado: lines.slice(0, textIndex).join('\n').trim(),
     texto: lines.slice(textIndex + 1).join('\n').trim(),
   };
+}
+
+/** Drop redundant part-title lines when the card already shows an external heading. */
+export function omitPartTitleBlocks(blocks, externalTitle) {
+  if (!externalTitle || !blocks?.length) return blocks || [];
+  return blocks.filter((block) => block.type !== 'partTitle');
 }
 
 /** @param {string} rawText */

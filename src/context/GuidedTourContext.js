@@ -2,6 +2,7 @@
 
 import {
   createContext,
+  Suspense,
   useCallback,
   useContext,
   useMemo,
@@ -42,11 +43,13 @@ export function GuidedTourProvider({ children }) {
     <GuidedTourContext.Provider value={value}>
       {children}
       {session?.user && active ? (
-        <GuidedTourOverlay
-          stepIndex={stepIndex}
-          onStepIndexChange={setStepIndex}
-          onClose={endTour}
-        />
+        <Suspense fallback={null}>
+          <GuidedTourOverlay
+            stepIndex={stepIndex}
+            onStepIndexChange={setStepIndex}
+            onClose={endTour}
+          />
+        </Suspense>
       ) : null}
     </GuidedTourContext.Provider>
   );

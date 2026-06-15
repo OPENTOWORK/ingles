@@ -12,8 +12,31 @@ import ExamPracticeLevelPicker from '@/components/niveles/ExamPracticeLevelPicke
 import ExamPracticeSkillPicker from '@/components/niveles/ExamPracticeSkillPicker';
 import { getLevelSkillPracticeHref } from '@/data/nivelesLevelHub';
 import { ExamPracticeToolsProvider } from '@/context/ExamPracticeToolsContext';
+import { useUserRole } from '@/context/UserRoleContext';
+import { isAdminRole } from '@/utils/authRoles';
 
-function getPartTabLabel(part, lang, customLabelFn) {
+/** Split chrome titles like "B2 Reading and Use of English Practice" for structured header UI. */
+function parsePracticeChromeTitle(title = '') {
+  const trimmed = String(title || '').trim();
+  if (!trimmed) return { level: null, headline: '', showPracticeLabel: false };
+
+  const levelMatch = trimmed.match(/^(A2|B1|B2|C1|C2)\s+(.+)$/i);
+  const level = levelMatch ? levelMatch[1].toUpperCase() : null;
+  let rest = levelMatch ? levelMatch[2].trim() : trimmed;
+
+  const practiceMatch = rest.match(/^(.+?)\s+Practice$/i);
+  if (practiceMatch) {
+    return {
+      level,
+      headline: practiceMatch[1].trim(),
+      showPracticeLabel: true,
+    };
+  }
+
+  return { level, headline: rest, showPracticeLabel: false };
+}
+
+function getPartTabLabel(part, lang, customLabelFn, partMinForLocalLabels) {
   if (typeof customLabelFn === 'function') {
     const custom = customLabelFn(part);
     if (custom) return custom;
@@ -23,6 +46,12 @@ function getPartTabLabel(part, lang, customLabelFn) {
       String(part?.nombre || part?.nombre_parte || '').match(/\d+/)?.[0] ||
       0,
   );
+  if (partMinForLocalLabels != null && n >= partMinForLocalLabels) {
+    const local = n - partMinForLocalLabels + 1;
+    if (local >= 1) {
+      return lang === 'en' ? `Part ${local}` : `Parte ${local}`;
+    }
+  }
   if (lang === 'en' && n) return `Part ${n}`;
   return part?.nombre || (n ? `Part ${n}` : '');
 }
@@ -84,11 +113,13 @@ export function B2ExamPracticeChrome({
   hideScorePanel = false,
   scorePanelOverride = null,
   partFinishNotice,
+  partFinishNoticePlacement = 'main',
   partsData,
   selectedPartId,
   onSelectPart,
   getPartSavedScoreLabel,
   getPartTabLabel: getPartTabLabelProp,
+  partMinForTabLabels = null,
   lang = 'es',
   workPanelClassName = '',
   navigationOverride = null,
@@ -113,7 +144,10 @@ export function B2ExamPracticeChrome({
   reportErrorContext = null,
   children,
 }) {
+  const { userRole } = useUserRole();
   const showPractice = practiceReady ?? examPracticeOpen;
+  const effectiveShowRefresh = showRefresh && isAdminRole(userRole);
+  const parsedTitle = parsePracticeChromeTitle(title);
   const isExamSimulation = practiceMode === 'exam-simulation';
   const effectiveShowStudyNotes = showStudyNotes && !isExamSimulation;
   const effectiveScoreVariant =
@@ -148,7 +182,7 @@ export function B2ExamPracticeChrome({
               className={`levels-b2-part-tab${active ? ' levels-b2-part-tab--active' : ''}`}
               onClick={() => onSelectPart(part)}
             >
-              <span>{getPartTabLabel(part, lang, getPartTabLabelProp)}</span>
+              <span>{getPartTabLabel(part, lang, getPartTabLabelProp, partMinForTabLabels)}</span>
               {savedScore && partTabsVariant !== 'excel' ? (
                 <span className="levels-b2-part-tab__score">
                   {savedPrefix} {savedScore}
@@ -189,12 +223,34 @@ export function B2ExamPracticeChrome({
           }
         >
           <header className="levels-b2-practice__header">
-            {modeBadge ? (
-              <p className={`levels-exam-mode-badge levels-exam-mode-badge--${practiceMode}`}>
-                {modeBadge}
-              </p>
-            ) : null}
-            <h1 className="levels-b2-practice__title">{title}</h1>
+            {compactSkillHeader ? (
+              <div className="levels-b2-practice__title-block">
+                <div className="levels-b2-practice__title-meta">
+                  {modeBadge ? (
+                    <p className={`levels-exam-mode-badge levels-exam-mode-badge--${practiceMode}`}>
+                      {modeBadge}
+                    </p>
+                  ) : null}
+                  {parsedTitle.level ? (
+                    <span className="levels-b2-practice__title-level">{parsedTitle.level}</span>
+                  ) : null}
+                </div>
+                <h1 className="levels-b2-practice__title">
+                  <span className="levels-b2-practice__title-headline">
+                    {parsedTitle.headline || title}
+                  </span>
+                </h1>
+              </div>
+            ) : (
+              <>
+                {modeBadge ? (
+                  <p className={`levels-exam-mode-badge levels-exam-mode-badge--${practiceMode}`}>
+                    {modeBadge}
+                  </p>
+                ) : null}
+                <h1 className="levels-b2-practice__title">{title}</h1>
+              </>
+            )}
             {!hideMascot ? (
               <div className="levels-b2-practice__mascot" aria-hidden>
                 <SiteMascot variant={10} width={128} alt="" />
@@ -204,7 +260,7 @@ export function B2ExamPracticeChrome({
               <p className="levels-b2-practice__subtitle">{subtitle}</p>
             ) : null}
 
-            {showRefresh && onRefresh ? (
+            {effectiveShowRefresh && onRefresh ? (
               <div className="levels-b2-practice__refresh">
                 <button
                   type="button"
@@ -227,7 +283,7 @@ export function B2ExamPracticeChrome({
           >
           {partTabsVariant === 'excel' ? partTabsEl : null}
 
-          {showLevelPicker && levelSlug && skillRoute ? (
+          {showLevelPicker && levelSlug && skillRoute && !focusMode ? (
             <div className="exam-practice-skill-nav">
               <ExamPracticeLevelPicker
                 variant="strip"
@@ -287,7 +343,7 @@ export function B2ExamPracticeChrome({
             </div>
           </div>
 
-          {partFinishNotice && !partFinishNotice.error ? (
+          {partFinishNoticePlacement === 'main' && partFinishNotice && !partFinishNotice.error ? (
             <LevelsPartFinishBanner
               passed={partFinishNotice.passed}
               correct={partFinishNotice.correct}
@@ -296,7 +352,7 @@ export function B2ExamPracticeChrome({
               lang={lang}
             />
           ) : null}
-          {partFinishNotice?.error ? (
+          {partFinishNoticePlacement === 'main' && partFinishNotice?.error ? (
             <LevelsPartFinishBanner
               passed={false}
               correct={0}

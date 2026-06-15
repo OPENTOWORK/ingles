@@ -37,6 +37,7 @@ import B2ListeningPracticeBriefing from '@/components/b2/B2ListeningPracticeBrie
 import B2ListeningStrategyPanel from '@/components/b2/B2ListeningStrategyPanel';
 import ExamPracticeProgressPanel from '@/components/exam/ExamPracticeProgressPanel';
 import ExamPracticeSessionSideRail from '@/components/exam/ExamPracticeSessionSideRail';
+import ExamPracticeFinishNotice from '@/components/exam/ExamPracticeFinishNotice';
 import ReadingPracticeChrome from '@/components/exam/ReadingPracticeChrome';
 import { ReadingPracticeSessionProvider, useReadingPracticeSession } from '@/context/ReadingPracticeSessionContext';
 import B2ListeningPracticeFeedback from '@/components/b2/B2ListeningPracticeFeedback';
@@ -123,6 +124,7 @@ import {
 } from '@/components/a2/A2ExamReadingUi';
 import {
   getFormattedEnunciado,
+  omitPartTitleBlocks,
   getGroupedAnswers,
   getOpenAnswerMap,
   inferOpenQuestionNumbersFromPrompt,
@@ -131,6 +133,11 @@ import {
   extractFirstAudioUrl,
   isStandaloneAudioLine,
   isUsableQuestionAudioUrl,
+  composeMcqClozeDirections,
+  buildPart1McqGroups,
+  shouldUseSkillUoeExampleLayout,
+  resolveMcqGap0DisplayWord,
+  resolvePart1ExampleBlock,
 } from '@/utils/b2ExamPaperShared';
 import {
   getSessionUserId,
@@ -149,6 +156,12 @@ import { useSkillPartFirstNavigation } from '@/hooks/useSkillPartFirstNavigation
 import {
   runKeepPracticingSkillFlow,
 } from '@/utils/skillPracticeNavigation';
+import {
+  buildBulkAnswerCheckUpdate,
+  practiceHasCheckableAnswers,
+  resolvePracticeHideFeedback,
+  shouldShowCheckAnswersButton,
+} from '@/utils/practiceCheckAnswers';
 import { formatLevelsPartDisplayName } from '@/utils/formatLevelsPartDisplayName';
 import B2ExamPracticeModuleNav from '@/components/b2/B2ExamPracticeModuleNav';
 import A2ExamGenerationStatus from '@/components/niveles/A2ExamGenerationStatus';
@@ -214,6 +227,14 @@ function pickListeningClipForQuestion(clips, questionNumber, partNumber = 0) {
         ? questionNumber - 24
         : questionNumber - 1;
   return clips[idx] || null;
+}
+
+function getListeningMcqOptionClassName({ isSelected, showCorrect, showIncorrect }) {
+  const parts = ['levels-listening-mcq-option'];
+  if (showCorrect) parts.push('levels-listening-mcq-option--correct');
+  else if (showIncorrect) parts.push('levels-listening-mcq-option--incorrect');
+  else if (isSelected) parts.push('levels-listening-mcq-option--selected');
+  return parts.join(' ');
 }
 
 const buttonStyle = {
@@ -642,10 +663,17 @@ function B2ExamPaperPracticePageInner({
   const layoutPracticeOpen = skillNav.active ? skillNav.practiceReady : scoring.examPracticeOpen;
   const isSkillPracticeSession = skillNav.active && layoutPracticeOpen;
   const readingSession = useReadingPracticeSession();
-  const hideFeedbackResolved =
-    hideFeedback ||
-    (isSkillPracticeSession && readingSession.readingSettings.showFeedback === false);
+  const hideFeedbackResolved = resolvePracticeHideFeedback({
+    hideFeedback,
+    showFeedback: readingSession.readingSettings.showFeedback,
+    answersRevealed: readingSession.answersRevealed,
+    respectInstantFeedbackToggle: isSkillPracticeSession,
+  });
   const PracticeChrome = isSkillPracticeSession ? ReadingPracticeChrome : B2ExamPracticeChrome;
+
+  useEffect(() => {
+    readingSession.resetAnswersRevealed();
+  }, [examSlot, selectedPartId, readingSession.resetAnswersRevealed]);
 
   const handleKeepPracticing = useCallback(() => {
     runKeepPracticingSkillFlow({
@@ -778,6 +806,11 @@ function B2ExamPaperPracticePageInner({
     [selectedPart?.nombre],
   );
 
+  const useSkillUoeExampleLayout = shouldUseSkillUoeExampleLayout({
+    skillPractice: isSkillPracticeSession,
+    partNumber,
+  });
+
   const partScoringCfg = getLevelsPartScoring(levelSlug, partNumber);
 
   useEffect(() => {
@@ -807,12 +840,16 @@ function B2ExamPaperPracticePageInner({
     if (partNumber === 10) {
       texto = trimListeningPart10DuplicateCycles(texto);
     }
+    const enunciado =
+      levelSlug === 'b2' && partNumber === 1 && useSkillUoeExampleLayout
+        ? composeMcqClozeDirections(desc, rawPregunta) || fallback.enunciado
+        : desc || fallback.enunciado;
     return {
-      enunciado: desc || fallback.enunciado,
+      enunciado,
       texto,
       preguntasPart1Parse,
     };
-  }, [selectedPart?.descripcion, selectedQuestion?.enunciado, partNumber, levelSlug]);
+  }, [selectedPart?.descripcion, selectedQuestion?.enunciado, partNumber, levelSlug, useSkillUoeExampleLayout]);
 
   const contextSnippetForAi = useMemo(() => {
     const pack = [selectedPartContent.enunciado, selectedPartContent.texto].filter(Boolean).join('\n\n');
@@ -946,38 +983,69 @@ function B2ExamPaperPracticePageInner({
   const b2Part1McqGroups = useMemo(() => {
     if (levelSlug !== 'b2' || partNumber !== 1) return null;
     const parsed = selectedPartContent.preguntasPart1Parse || [];
-    if (!parsed.length || !selectedQuestion?.preguntaId) return null;
-    const pid = selectedQuestion.preguntaId;
-    const letters = ['A', 'B', 'C', 'D'];
-    return parsed
-      .map(({ questionNumber, options: byLetter }) => {
-        const correctL = part1CorrectLetterByQuestion.get(questionNumber);
-        const opts = letters
-          .map((L) => {
-            const word = byLetter[L];
-            if (!word || !String(word).trim()) return null;
-            return {
-              id: `b2-p1-${pid}-q${questionNumber}-${L}`,
-              respuesta: `${questionNumber} ${L} ${word}`,
-              formattedText: `${L}) ${word}`,
-              correcta: correctL != null ? L === correctL : false,
-            };
-          })
-          .filter(Boolean);
-        if (opts.length < 2) return null;
-        return { questionNumber, options: opts };
-      })
-      .filter(Boolean);
+    if (!selectedQuestion?.preguntaId) return null;
+    const rawPregunta = selectedQuestion?.enunciado || '';
+    const desc = (selectedPart?.descripcion || '').replace(/\r\n/g, '\n').trim();
+    if (!parsed.length) return null;
+    return buildPart1McqGroups({
+      parsed,
+      correctLetterByQuestion: part1CorrectLetterByQuestion,
+      preguntaId: selectedQuestion.preguntaId,
+      rawPregunta,
+      descripcion: desc,
+      respuestas: selectedQuestion?.respuestas || [],
+      includeExample: useSkillUoeExampleLayout,
+    });
   }, [
     levelSlug,
     partNumber,
     part1CorrectLetterByQuestion,
     selectedPartContent.preguntasPart1Parse,
     selectedQuestion?.preguntaId,
+    selectedQuestion?.enunciado,
+    selectedQuestion?.respuestas,
+    selectedPart?.descripcion,
+    useSkillUoeExampleLayout,
   ]);
 
   const isB2Part1InlineMcq =
     levelSlug === 'b2' && partNumber === 1 && (b2Part1McqGroups?.length ?? 0) > 0;
+
+  const exampleGap0Word = useMemo(() => {
+    if (!useSkillUoeExampleLayout || levelSlug !== 'b2' || partNumber !== 1) return '';
+    const mcqGroup0 = b2Part1McqGroups?.find((g) => g.questionNumber === 0) || null;
+    const desc = (selectedPart?.descripcion || '').replace(/\r\n/g, '\n').trim();
+    const rawPregunta = selectedQuestion?.enunciado || '';
+    return resolveMcqGap0DisplayWord({
+      respuestas: selectedQuestion?.respuestas || [],
+      respuestasAbiertas: selectedQuestion?.respuestasAbiertas || [],
+      correctLetterByQuestion: part1CorrectLetterByQuestion,
+      exampleBlock: resolvePart1ExampleBlock({
+        parsed: selectedPartContent.preguntasPart1Parse || [],
+        rawPregunta,
+        descripcion: desc,
+        respuestas: selectedQuestion?.respuestas || [],
+        correctLetterByQuestion: part1CorrectLetterByQuestion,
+      }),
+      mcqGroup0,
+      rawPregunta,
+      descripcion: desc,
+      parsed: selectedPartContent.preguntasPart1Parse || [],
+      texto: selectedPartContent.texto || '',
+    });
+  }, [
+    useSkillUoeExampleLayout,
+    levelSlug,
+    partNumber,
+    b2Part1McqGroups,
+    part1CorrectLetterByQuestion,
+    selectedQuestion?.respuestas,
+    selectedQuestion?.respuestasAbiertas,
+    selectedQuestion?.enunciado,
+    selectedPart?.descripcion,
+    selectedPartContent.preguntasPart1Parse,
+    selectedPartContent.texto,
+  ]);
 
   const effectiveMcqGroups = useMemo(() => {
     if (b2Part1McqGroups?.length) return b2Part1McqGroups;
@@ -1859,6 +1927,89 @@ function B2ExamPaperPracticePageInner({
     ],
   );
 
+  const mcqGroupsForBulkCheck = useMemo(() => {
+    const groups = isB2Part1InlineMcq ? b2Part1McqGroups : effectiveMcqGroups;
+    return (groups || []).filter(
+      (g) => g?.questionNumber != null && g.questionNumber !== 0 && g.options?.length,
+    );
+  }, [isB2Part1InlineMcq, b2Part1McqGroups, effectiveMcqGroups]);
+
+  const resolveBulkMcqQuestionKey = useCallback(
+    (group, groupIndex) => {
+      if (isB2Part1InlineMcq) {
+        const idx = b2Part1McqGroups.findIndex((g) => g.questionNumber === group.questionNumber);
+        return getQuestionKey(
+          selectedPart.id,
+          group.questionNumber,
+          `extra-${idx >= 0 ? idx : groupIndex}`,
+        );
+      }
+      return getQuestionKey(selectedPart.id, group.questionNumber, `extra-${groupIndex}`);
+    },
+    [isB2Part1InlineMcq, b2Part1McqGroups, selectedPart?.id, getQuestionKey],
+  );
+
+  const hasCheckableAnswers = useMemo(
+    () =>
+      selectedPart?.id
+        ? practiceHasCheckableAnswers({
+            openQuestionNumbers,
+            openInputs,
+            getOpenQuestionKey: (questionNumber) =>
+              getQuestionKey(selectedPart.id, questionNumber, 'open'),
+            mcqGroups: mcqGroupsForBulkCheck,
+            getMcqQuestionKey: resolveBulkMcqQuestionKey,
+            selectedOptions,
+          })
+        : false,
+    [
+      selectedPart?.id,
+      openQuestionNumbers,
+      openInputs,
+      mcqGroupsForBulkCheck,
+      resolveBulkMcqQuestionKey,
+      selectedOptions,
+      getQuestionKey,
+    ],
+  );
+
+  const handleCheckAllAnswers = useCallback(() => {
+    if (!selectedPart?.id) return;
+
+    const { nextOpenChecks, nextChecked, hasAnyAnswer } = buildBulkAnswerCheckUpdate({
+      openQuestionNumbers,
+      openInputs,
+      openChecks,
+      openAnswerMap,
+      normalizeText,
+      getOpenQuestionKey: (questionNumber) =>
+        getQuestionKey(selectedPart.id, questionNumber, 'open'),
+      mcqGroups: mcqGroupsForBulkCheck,
+      getMcqQuestionKey: resolveBulkMcqQuestionKey,
+      selectedOptions,
+      checkedQuestions,
+    });
+
+    setOpenChecks(nextOpenChecks);
+    setCheckedQuestions(nextChecked);
+    trySavePartAfterAnswer({ openChecks: nextOpenChecks, checkedQuestions: nextChecked });
+    readingSession.revealAnswers();
+    if (hasAnyAnswer) readingSession.incrementCheckAttempts();
+  }, [
+    selectedPart?.id,
+    openQuestionNumbers,
+    openInputs,
+    openChecks,
+    openAnswerMap,
+    mcqGroupsForBulkCheck,
+    resolveBulkMcqQuestionKey,
+    selectedOptions,
+    checkedQuestions,
+    trySavePartAfterAnswer,
+    readingSession,
+    getQuestionKey,
+  ]);
+
   const renderA2McqBlock = useCallback(
     (group, groupIndex, layout) => {
       const questionKey = getQuestionKey(
@@ -2160,6 +2311,7 @@ function B2ExamPaperPracticePageInner({
         showLevelPicker={isSkillPracticeSession}
         levelSlug={slug}
         skillRoute={skillRoute}
+        partMinForTabLabels={isSkillPracticeSession ? partMin : null}
         skillPracticeTheme={skillNav.skillTheme}
         practiceMode={practiceMode}
         timerVariant={chromeTimerVariant}
@@ -2173,6 +2325,7 @@ function B2ExamPaperPracticePageInner({
         partScoreMetrics={scorePanelProps}
         hideScorePanel={isExamSimulationMode(practiceMode) && !reviewMode}
         partFinishNotice={isExamSimulationMode(practiceMode) && !reviewMode ? null : scoring.partFinishNotice}
+        partFinishNoticePlacement={showPracticeSideRail ? 'sidebar' : 'main'}
         partsData={!loading && !error ? tabPartsData : []}
         selectedPartId={selectedPartId}
         onSelectPart={handleSelectPart}
@@ -2526,17 +2679,10 @@ function B2ExamPaperPracticePageInner({
                   {selectedPartContent.enunciado && !hideListeningDirectionsDup ? (
                     <div className="levels-exam-split__enunciado">
                       <p className="levels-exam-split__section-title">Directions</p>
-                      {getFormattedEnunciado(selectedPartContent.enunciado).map((block, index) => {
-                      if (block.type === 'partTitle') {
-                        return (
-                          <p
-                            key={`enunciado-${block.type}-${index}`}
-                            className="levels-exam-enunciado__part-title"
-                          >
-                            {block.text}
-                          </p>
-                        );
-                      }
+                      {omitPartTitleBlocks(
+                        getFormattedEnunciado(selectedPartContent.enunciado),
+                        true,
+                      ).map((block, index) => {
                       if (block.type === 'label') {
                         return (
                           <p
@@ -2729,20 +2875,12 @@ function B2ExamPaperPracticePageInner({
                       </div>
                     ) : null}
                     {listeningMatchingPool.length > 0 ? (
-                      <div
-                        style={{
-                          marginTop: '1rem',
-                          padding: '0.85rem 1rem',
-                          background: '#f8fafc',
-                          border: '1px solid #e2e8f0',
-                          borderRadius: '10px',
-                        }}
-                      >
-                        <p style={{ margin: '0 0 0.55rem', fontWeight: 700, color: '#1e293b' }}>
+                      <div className="levels-listening-options-pool">
+                        <p className="levels-listening-options-pool__title">
                           Options A–H
                         </p>
                         {listeningMatchingPool.map((line, pi) => (
-                          <p key={`pool-${pi}`} style={{ margin: '0.35rem 0', lineHeight: 1.6, color: '#334155' }}>
+                          <p key={`pool-${pi}`} className="levels-listening-options-pool__line">
                             {line}
                           </p>
                         ))}
@@ -2779,39 +2917,17 @@ function B2ExamPaperPracticePageInner({
                           return (
                             <div
                               key={`listen-item-${selectedQuestion.preguntaId}-${qn}`}
-                              style={{
-                                border: '1px solid #cbd5e1',
-                                borderRadius: '12px',
-                                padding: '1rem 1.1rem',
-                                background: '#ffffff',
-                                boxShadow: '0 1px 5px rgba(15, 23, 42, 0.07)',
-                              }}
+                              className="levels-listening-question-card"
                             >
-                              <p
-                                style={{
-                                  margin: '0 0 0.75rem',
-                                  fontWeight: 800,
-                                  color: '#0f172a',
-                                  fontSize: '1.05rem',
-                                }}
-                              >
+                              <p className="levels-listening-question-card__title">
                                 Question {qn}
                               </p>
                               {gapDisplayLines.length ? (
-                                <div
-                                  style={{
-                                    marginBottom: '0.85rem',
-                                    padding: '0.75rem 0.85rem',
-                                    background: '#f8fafc',
-                                    border: '1px solid #e2e8f0',
-                                    borderRadius: '10px',
-                                  }}
-                                >
+                                <div className="levels-listening-context-box">
                                   {gapDisplayLines.map((line, li) => (
                                     <p
                                       key={`ctx-${qn}-${li}`}
                                       className="levels-listening-gap-prompt"
-                                      style={{ margin: li === 0 ? 0 : '0.4rem 0 0' }}
                                     >
                                       {line}
                                     </p>
@@ -2968,22 +3084,9 @@ function B2ExamPaperPracticePageInner({
                         return (
                           <div
                             key={`listen-item-${selectedQuestion.preguntaId}-${qn}`}
-                            style={{
-                              border: '1px solid #cbd5e1',
-                              borderRadius: '12px',
-                              padding: '1rem 1.1rem',
-                              background: '#ffffff',
-                              boxShadow: '0 1px 5px rgba(15, 23, 42, 0.07)',
-                            }}
+                            className="levels-listening-question-card"
                           >
-                            <p
-                              style={{
-                                margin: '0 0 0.75rem',
-                                fontWeight: 800,
-                                color: '#0f172a',
-                                fontSize: '1.05rem',
-                              }}
-                            >
+                            <p className="levels-listening-question-card__title">
                               Question {qn}
                             </p>
                             {part10Situation ? (
@@ -2992,14 +3095,7 @@ function B2ExamPaperPracticePageInner({
                             {clipSrc ? (
                               <div style={{ marginBottom: ctx?.contextLines?.length ? '0.85rem' : 0 }}>
                                 {clipLabel ? (
-                                  <p
-                                    style={{
-                                      margin: '0 0 0.35rem',
-                                      fontSize: '0.9rem',
-                                      color: '#334155',
-                                      fontWeight: 600,
-                                    }}
-                                  >
+                                  <p className="levels-listening-audio-label">
                                     {clipLabel}
                                   </p>
                                 ) : null}
@@ -3008,46 +3104,21 @@ function B2ExamPaperPracticePageInner({
                                 </audio>
                               </div>
                             ) : !listeningMonologueClip ? (
-                              <p
-                                style={{
-                                  margin: '0 0 0.75rem',
-                                  fontSize: '0.88rem',
-                                  color: '#64748b',
-                                  fontStyle: 'italic',
-                                }}
-                              >
+                              <p className="levels-listening-no-audio">
                                 No hay audio enlazado para este ítem en la base de datos.
                               </p>
                             ) : null}
                             {ctx?.contextLines?.length && !isB2ListeningPart10 ? (
-                              <div
-                                style={{
-                                  marginBottom: '0.85rem',
-                                  padding: '0.75rem 0.85rem',
-                                  background: '#f8fafc',
-                                  border: '1px solid #e2e8f0',
-                                  borderRadius: '10px',
-                                }}
-                              >
+                              <div className="levels-listening-context-box">
                                 {ctx.contextLines.map((line, li) => (
-                                  <p
-                                    key={`ctx-${qn}-${li}`}
-                                    style={{ margin: li === 0 ? '0 0 0.4rem' : '0.4rem 0', lineHeight: 1.65 }}
-                                  >
+                                  <p key={`ctx-${qn}-${li}`}>
                                     {line}
                                   </p>
                                 ))}
                               </div>
                             ) : null}
                             {isB2ListeningPart10 && ctx?.contextLines?.length ? (
-                              <p
-                                style={{
-                                  margin: '0 0 0.85rem',
-                                  lineHeight: 1.65,
-                                  color: '#1e293b',
-                                  fontWeight: 600,
-                                }}
-                              >
+                              <p className="levels-listening-context-line">
                                 {ctx.contextLines.join(' ')}
                               </p>
                             ) : null}
@@ -3055,7 +3126,7 @@ function B2ExamPaperPracticePageInner({
                               <>
                                 <label
                                   htmlFor={`matching-select-${questionKey}`}
-                                  style={{ margin: '0 0 0.35rem', fontWeight: 700, color: '#1e293b' }}
+                                  className="levels-listening-matching-select-label"
                                 >
                                   Your answer (choose A–H)
                                 </label>
@@ -3119,10 +3190,10 @@ function B2ExamPaperPracticePageInner({
                               </>
                             ) : (
                               <>
-                                <p style={{ margin: '0 0 0.55rem', fontWeight: 700, color: '#1e293b' }}>
+                                <p className="levels-listening-mcq-options-label">
                                   Options
                                 </p>
-                                <div style={{ display: 'grid', gap: '0.6rem' }}>
+                                <div className="levels-listening-mcq-options-grid">
                                   {group.options.map((option) => {
                                     const isSelected = selectedOptions[questionKey] === option.id;
                                     const isChecked = checkedQuestions[questionKey];
@@ -3136,26 +3207,11 @@ function B2ExamPaperPracticePageInner({
                                         key={option.id}
                                         type="button"
                                         onClick={() => applyListeningMcqOption(option)}
-                                        style={{
-                                          textAlign: 'left',
-                                          borderRadius: '8px',
-                                          padding: '0.75rem 1rem',
-                                          border: showCorrect
-                                            ? '2px solid #2f855a'
-                                            : showIncorrect
-                                              ? '2px solid #c53030'
-                                              : isSelected
-                                                ? '2px solid #3182ce'
-                                                : '1px solid #e2e8f0',
-                                          backgroundColor: showCorrect
-                                            ? '#f0fff4'
-                                            : showIncorrect
-                                              ? '#fff5f5'
-                                              : isSelected
-                                                ? '#ebf8ff'
-                                                : '#fff',
-                                          cursor: 'pointer',
-                                        }}
+                                        className={getListeningMcqOptionClassName({
+                                          isSelected,
+                                          showCorrect,
+                                          showIncorrect,
+                                        })}
                                       >
                                         {option.formattedText || option.respuesta}
                                       </button>
@@ -3224,10 +3280,22 @@ function B2ExamPaperPracticePageInner({
                       partMin={partMin}
                       partMax={partMax}
                       progressSlot={scoring.progressBySlot[examSlot]}
+                      progressBySlot={scoring.progressBySlot}
+                      examLabelsBySlot={examLabelsBySlot}
+                      focusPartNumber={partNumber}
+                      passing={partScoringCfg?.passing}
                       examLabel={examLabelsBySlot[examSlot]}
                       lang={lang === 'es' ? 'es' : 'en'}
                       enabled={scoring.examPracticeOpen}
                     />
+                  }
+                  finishNotice={
+                    scoring.partFinishNotice ? (
+                      <ExamPracticeFinishNotice
+                        notice={scoring.partFinishNotice}
+                        lang={lang === 'es' ? 'es' : 'en'}
+                      />
+                    ) : null
                   }
                   lang={lang === 'es' ? 'es' : 'en'}
                 />
@@ -3263,6 +3331,8 @@ function B2ExamPaperPracticePageInner({
                       onOptionSelect={handleA2McqOptionSelect}
                       hideFeedback={hideFeedbackResolved}
                       aiHintsByKey={aiHintsByKey}
+                      showInlineExample={useSkillUoeExampleLayout}
+                      exampleGap0Word={exampleGap0Word}
                     />
                   ) : undefined
                 }
@@ -3663,15 +3733,15 @@ function B2ExamPaperPracticePageInner({
                         <B2ExamQuestionItem
                           key={`group-${selectedQuestion.preguntaId}-${group.questionNumber ?? 'extra'}-${groupIndex}`}
                         >
-                          <p style={{ margin: '0 0 0.35rem', fontWeight: 700, color: '#2d3748' }}>
+                          <p className="levels-listening-mcq-question-label">
                             {group.questionNumber ? `Question ${group.questionNumber}` : 'Options'}
                           </p>
                           {group.prompt ? (
-                            <p style={{ margin: '0 0 0.65rem', lineHeight: 1.6, color: '#334155' }}>
+                            <p className="levels-listening-mcq-question-prompt">
                               {group.prompt}
                             </p>
                           ) : null}
-                          <div style={{ display: 'grid', gap: '0.6rem' }}>
+                          <div className="levels-listening-mcq-options-grid">
                             {group.options.map((option) => {
                               const questionKey = getQuestionKey(
                                 selectedPart.id,
@@ -3734,26 +3804,11 @@ function B2ExamPaperPracticePageInner({
                                       })();
                                     }
                                   }}
-                                  style={{
-                                    textAlign: 'left',
-                                    borderRadius: '8px',
-                                    padding: '0.75rem 1rem',
-                                    border: showCorrect
-                                      ? '2px solid #2f855a'
-                                      : showIncorrect
-                                        ? '2px solid #c53030'
-                                        : isSelected
-                                          ? '2px solid #3182ce'
-                                          : '1px solid #e2e8f0',
-                                    backgroundColor: showCorrect
-                                      ? '#f0fff4'
-                                      : showIncorrect
-                                        ? '#fff5f5'
-                                        : isSelected
-                                          ? '#ebf8ff'
-                                          : '#fff',
-                                    cursor: 'pointer',
-                                  }}
+                                  className={getListeningMcqOptionClassName({
+                                    isSelected,
+                                    showCorrect,
+                                    showIncorrect,
+                                  })}
                                 >
                                   {option.formattedText || option.respuesta}
                                 </button>
@@ -3772,7 +3827,7 @@ function B2ExamPaperPracticePageInner({
                             const correct = group.options.find((o) => o.correcta);
                             return (
                               <>
-                                <p style={{ margin: '0.7rem 0 0', fontWeight: 600, color: '#1f2937' }}>
+                                <p className="levels-listening-mcq-correct-answer">
                                   Correct answer: {correct?.formattedText || correct?.respuesta || 'Not available'}
                                 </p>
                                 <LevelsAnswerJustification hint={aiHintsByKey[questionKey]} />
@@ -3800,6 +3855,14 @@ function B2ExamPaperPracticePageInner({
         skillPracticeMode={isSkillPracticeSession}
         skillPracticeTheme={skillNav.skillTheme}
         onContinueInPage={isSkillPracticeSession ? handleKeepPracticing : handleContinueInPage}
+        showCheckAnswersButton={shouldShowCheckAnswersButton({
+          skillPracticeMode: isSkillPracticeSession,
+          hideFeedback,
+          showFeedback: readingSession.readingSettings.showFeedback,
+          answersRevealed: readingSession.answersRevealed,
+        })}
+        onCheckAnswers={handleCheckAllAnswers}
+        checkAnswersDisabled={!hasCheckableAnswers}
         lang={lang}
       />
       </PracticeChrome>

@@ -3,54 +3,32 @@ import { isAdminRole } from '@/utils/authRoles';
 /** Level hub used for in-tour demos (exam mode + skills visible for students). */
 export const GUIDED_TOUR_LEVEL_PATH = '/niveles/b2';
 
-/** Tour for students: Exam practice and Exam theory. */
+/** Tour for students: mostly Exam practice, plus a short Exam theory overview. */
 export const GUIDED_TOUR_STEPS_STUDENT = [
   {
     id: 'welcome',
     title: 'How it works',
     sectionLabel: 'Home',
     description:
-      'A quick tour of what you use every day: Exam practice for timed papers and Exam theory for tips by part and level.',
+      'A quick walkthrough of Exam practice — timed mock papers, part-by-part training, and full exam mode. At the end, a short look at Exam theory for tips before you practise.',
   },
   {
     id: 'exam-practice-nav',
     title: 'Exam practice',
     sectionLabel: 'Top menu → Exam practice',
     description:
-      'Open Exam practice in the menu to choose your exam level (A2–C2), try timed papers, exam mode, and part-by-part practice.',
+      'Your main workspace. Open Exam practice to reach mock papers for your level — Reading and Use of English, Writing, Listening, and Speaking.',
     target: '[data-tour="nav-levels"]',
     route: '/',
     href: '/niveles/b2',
     openNavOnMobile: true,
   },
   {
-    id: 'exam-theory-nav',
-    title: 'Exam theory',
-    sectionLabel: 'Top menu → Exam theory',
-    description:
-      'Open Exam theory for interactive tips on Reading, Use of English, Listening, Writing, and Speaking — task format, timing, strategies, and common mistakes. Pick a skill, then filter by CEFR level to open each part.',
-    target: '[data-tour="nav-exam-theory"]',
-    route: '/',
-    href: '/niveles?tab=theory',
-    openNavOnMobile: true,
-  },
-  {
-    id: 'levels-practice',
-    title: 'Choose your level',
-    sectionLabel: 'Exam practice → CEFR grid',
-    description:
-      'Pick the card for your target exam. Each level opens a hub with mock papers, strategies, and Exam mode.',
-    target: '[data-tour="niveles-levels"]',
-    route: '/niveles',
-    scrollTarget: true,
-    href: '/niveles/b2',
-  },
-  {
     id: 'levels-hub',
-    title: 'Inside a level',
-    sectionLabel: 'Level hub',
+    title: 'Your level hub',
+    sectionLabel: 'Exam practice → B2 hub',
     description:
-      'This is one CEFR level (B2 as an example). Use the breadcrumb to return to all levels. Everything here is practice for that exam.',
+      'Each CEFR level has its own hub (B2 shown here). You see the exam name, how many papers are available, and quick access to every practice area.',
     target: '[data-tour="level-hub-hero"]',
     route: GUIDED_TOUR_LEVEL_PATH,
     scrollTarget: true,
@@ -58,36 +36,57 @@ export const GUIDED_TOUR_STEPS_STUDENT = [
   },
   {
     id: 'levels-exam-practice',
-    title: 'Timed exam papers',
+    title: 'Practice by paper',
     sectionLabel: 'Level hub → Exam Practice',
     description:
-      'Practice by skill: Reading and Use of English, Writing, Listening, and Speaking — under exam-style timing.',
+      'Pick a paper to practise on its own: Reading and Use of English, Writing, Listening, or Speaking. Each opens timed tasks with instant feedback when you check your answers.',
     target: '[data-tour="level-exam-practice"]',
     route: GUIDED_TOUR_LEVEL_PATH,
     scrollTarget: true,
+    href: '/niveles/b2/exam-reading-and-use-of-english',
+  },
+  {
+    id: 'exam-practice-by-part',
+    title: 'Practice by part',
+    sectionLabel: 'Inside a paper',
+    description:
+      'Inside a paper, switch between parts (e.g. Parts 1–4 for Use of English, or 5–7 for Reading). Track progress in the side panel, flag tricky questions, and review when you are done.',
+    route: GUIDED_TOUR_LEVEL_PATH,
+    cardPlacement: 'center',
+    href: '/niveles/b2/exam-reading-and-use-of-english',
   },
   {
     id: 'levels-exam-mode',
     title: 'Exam mode',
-    sectionLabel: 'Exam Practice → Exam mode',
+    sectionLabel: 'Level hub → Exam mode',
     description:
-      'Run a full simulation: sections in order, countdown, no help until you finish, then results with your score per paper.',
+      'Run a full mock exam: papers in order, countdown timers, no help until you submit, then a results summary with your score per section.',
     target: '[data-tour="level-exam-mode"]',
     route: GUIDED_TOUR_LEVEL_PATH,
     scrollTarget: true,
-    href: `${GUIDED_TOUR_LEVEL_PATH}/exam-mode`,
+    href: '/niveles/exam-mode',
   },
   {
-    id: 'levels-skills-tips',
-    title: 'Tips by part',
-    sectionLabel: 'Exam theory → filter by level',
+    id: 'exam-theory-nav',
+    title: 'Exam theory',
+    sectionLabel: 'Top menu → Exam theory',
     description:
-      'Back in Exam theory, choose a skill and a CEFR level to read Description & interactive tips for each exam part — then head to Exam practice to apply them.',
-    target: '#exam-theory',
-    route: '/niveles',
+      'Before or after practising, open Exam theory for task formats, timing, strategies, and common mistakes — organised by skill and CEFR level.',
+    target: '[data-tour="nav-exam-theory"]',
+    route: '/',
+    href: '/niveles?tab=theory',
+    openNavOnMobile: true,
+  },
+  {
+    id: 'exam-theory-hub',
+    title: 'Tips by skill & part',
+    sectionLabel: 'Exam theory → skill areas',
+    description:
+      'Choose Reading and Use of English, Writing, Listening, or Speaking. Filter by level, open a part, and read Description & interactive tips — then return to Exam practice to apply them.',
+    target: '[data-tour="exam-theory-hub"]',
+    route: '/niveles?tab=theory',
     href: '/niveles?tab=theory',
     scrollTarget: true,
-    cardPlacement: 'center',
   },
 ];
 

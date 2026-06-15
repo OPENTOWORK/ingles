@@ -24,6 +24,16 @@ import {
 import { getUoePartScoring } from '@/utils/levelsUoePartScoring';
 import {
   composeOpenClozeDirections,
+  composeMcqClozeDirections,
+  composeSkillUoeDirections,
+  buildPart1McqGroups,
+  shouldUseSkillUoeExampleLayout,
+  resolveUoeInlineExample,
+  ensureExampleGap0InPassage,
+  parseExampleAnswerWord,
+  resolveMcqGap0DisplayWord,
+  resolvePart1ExampleBlock,
+  resolveGap0ModelAnswer,
   extractLegacyPart2InlineExample,
   getOpenAnswerMap,
   inferOpenQuestionNumbersFromPrompt,
@@ -335,6 +345,11 @@ function UseOfEnglishExamsPageInner() {
     () => Number(selectedPart?.nombre.match(/\d+/)?.[0] || 0),
     [selectedPart?.nombre],
   );
+  /** Página dedicada Use of English (partes 1–4) = skill practice. */
+  const useSkillUoeExampleLayout = shouldUseSkillUoeExampleLayout({
+    skillPractice: true,
+    partNumber: partNumberUoe,
+  });
 
   const getQuestionKey = (partId, questionNumber, fallbackKey = 'extra') =>
     `${partId}::${selectedQuestion?.preguntaId || 'sin-pregunta'}::${questionNumber ?? fallbackKey}`;
@@ -383,12 +398,31 @@ function UseOfEnglishExamsPageInner() {
     // Part 2 (open cloze): ejemplo (0) coherente — usa el de la pregunta generada
     // y descarta el ejemplo sin gap de la Descripción fija.
     let enunciado =
-      partNumberUoe === 2
-        ? composeOpenClozeDirections(desc, rawPregunta) || fallback.enunciado
-        : desc || fallback.enunciado;
-    if (partNumberUoe === 2) {
-      // Legacy: pasajes antiguos traen el gap (0) incrustado en el texto; se extrae la
-      // frase al bloque Example y el texto queda solo con los gaps activos 9–16.
+      useSkillUoeExampleLayout
+        ? composeSkillUoeDirections(desc, rawPregunta, partNumberUoe) || fallback.enunciado
+        : partNumberUoe === 2
+          ? composeOpenClozeDirections(desc, rawPregunta) || fallback.enunciado
+          : desc || fallback.enunciado;
+
+    let uoeInlineExample = null;
+    if (useSkillUoeExampleLayout && (partNumberUoe === 2 || partNumberUoe === 3)) {
+      const resolved = resolveUoeInlineExample({
+        partNumber: partNumberUoe,
+        descripcion: desc,
+        rawPregunta,
+        texto,
+        respuestas: selectedQuestion?.respuestas || [],
+        respuestasAbiertas: selectedQuestion?.respuestasAbiertas || [],
+      });
+      if (resolved?.cleanedTexto) texto = resolved.cleanedTexto;
+      if (resolved) {
+        uoeInlineExample = {
+          bodyLines: resolved.bodyLines,
+          answerLine: resolved.answerLine,
+        };
+        texto = ensureExampleGap0InPassage(texto, uoeInlineExample);
+      }
+    } else if (partNumberUoe === 2) {
       const legacy = extractLegacyPart2InlineExample(texto);
       if (legacy) {
         texto = legacy.cleanedTexto;
@@ -401,8 +435,16 @@ function UseOfEnglishExamsPageInner() {
       enunciado,
       texto,
       preguntasPart1Parse,
+      uoeInlineExample,
     };
-  }, [selectedPart?.descripcion, selectedQuestion?.enunciado, partNumberUoe]);
+  }, [
+    selectedPart?.descripcion,
+    selectedQuestion?.enunciado,
+    selectedQuestion?.respuestas,
+    selectedQuestion?.respuestasAbiertas,
+    partNumberUoe,
+    useSkillUoeExampleLayout,
+  ]);
 
   const isUoePart1 = partNumberUoe === 1;
   const uoeUiLang = 'en';
@@ -439,34 +481,78 @@ function UseOfEnglishExamsPageInner() {
   const part1McqGroups = useMemo(() => {
     if (partNumberUoe !== 1) return null;
     const parsed = selectedPartContent.preguntasPart1Parse || [];
-    if (!parsed.length || !selectedQuestion?.preguntaId) return null;
-    const pid = selectedQuestion.preguntaId;
-    const letters = ['A', 'B', 'C', 'D'];
-    return parsed.map(({ questionNumber, options: byLetter }) => {
-      const correctL = part1CorrectLetterByQuestion.get(questionNumber);
-      const opts = letters
-        .map((L) => {
-          const word = byLetter[L];
-          if (!word || !String(word).trim()) return null;
-          return {
-            id: `part1-${pid}-q${questionNumber}-${L}`,
-            respuesta: `${questionNumber} ${L} ${word}`,
-            formattedText: `${L}) ${word}`,
-            correcta: correctL != null ? L === correctL : false,
-          };
-        })
-        .filter(Boolean);
-      if (opts.length < 2) return null;
-      return { questionNumber, options: opts };
-    }).filter(Boolean);
+    if (!selectedQuestion?.preguntaId) return null;
+    const rawPregunta = selectedQuestion?.enunciado || '';
+    const desc = (selectedPart?.descripcion || '').replace(/\r\n/g, '\n').trim();
+    if (!parsed.length) return null;
+    return buildPart1McqGroups({
+      parsed,
+      correctLetterByQuestion: part1CorrectLetterByQuestion,
+      preguntaId: selectedQuestion.preguntaId,
+      rawPregunta,
+      descripcion: desc,
+      respuestas: selectedQuestion?.respuestas || [],
+      includeExample: useSkillUoeExampleLayout,
+    });
   }, [
     part1CorrectLetterByQuestion,
     partNumberUoe,
     selectedPartContent.preguntasPart1Parse,
     selectedQuestion?.preguntaId,
+    selectedQuestion?.enunciado,
+    selectedQuestion?.respuestas,
+    selectedPart?.descripcion,
+    useSkillUoeExampleLayout,
   ]);
 
   const isPart1McqCloze = partNumberUoe === 1 && (part1McqGroups?.length ?? 0) > 0;
+
+  const exampleGap0Word = useMemo(() => {
+    if (!useSkillUoeExampleLayout) return '';
+    if (partNumberUoe === 1) {
+      const mcqGroup0 = part1McqGroups?.find((g) => g.questionNumber === 0) || null;
+      return resolveMcqGap0DisplayWord({
+        respuestas: selectedQuestion?.respuestas || [],
+        respuestasAbiertas: selectedQuestion?.respuestasAbiertas || [],
+        correctLetterByQuestion: part1CorrectLetterByQuestion,
+        inlineExample: selectedPartContent.uoeInlineExample,
+        exampleBlock: resolvePart1ExampleBlock({
+          parsed: selectedPartContent.preguntasPart1Parse || [],
+          rawPregunta: selectedQuestion?.enunciado || '',
+          descripcion: (selectedPart?.descripcion || '').replace(/\r\n/g, '\n').trim(),
+          respuestas: selectedQuestion?.respuestas || [],
+          correctLetterByQuestion: part1CorrectLetterByQuestion,
+        }),
+        mcqGroup0,
+        rawPregunta: selectedQuestion?.enunciado || '',
+        descripcion: (selectedPart?.descripcion || '').replace(/\r\n/g, '\n').trim(),
+        parsed: selectedPartContent.preguntasPart1Parse || [],
+        texto: selectedPartContent.texto || '',
+      });
+    }
+    if (partNumberUoe === 2 || partNumberUoe === 3) {
+      return (
+        parseExampleAnswerWord(selectedPartContent.uoeInlineExample?.answerLine) ||
+        resolveGap0ModelAnswer(
+          selectedQuestion?.respuestas || [],
+          selectedQuestion?.respuestasAbiertas || [],
+        )
+      );
+    }
+    return '';
+  }, [
+    useSkillUoeExampleLayout,
+    partNumberUoe,
+    part1McqGroups,
+    part1CorrectLetterByQuestion,
+    selectedQuestion?.respuestas,
+    selectedQuestion?.respuestasAbiertas,
+    selectedQuestion?.enunciado,
+    selectedPart?.descripcion,
+    selectedPartContent.preguntasPart1Parse,
+    selectedPartContent.texto,
+    selectedPartContent.uoeInlineExample,
+  ]);
 
   const contextSnippetForAi = useMemo(() => {
     const pack = [selectedPartContent.enunciado, selectedPartContent.texto].filter(Boolean).join('\n\n');
@@ -1073,6 +1159,8 @@ function UseOfEnglishExamsPageInner() {
                       onOptionSelect={handlePart1McqOptionSelect}
                       aiHintsByKey={aiHintsByKey}
                       onRequestExplanation={handlePart1ExplanationRequest}
+                      showInlineExample={useSkillUoeExampleLayout}
+                      exampleGap0Word={exampleGap0Word}
                     />
                   ) : isKeyWordPart ? (
                     <B2ExamInlineKeyWordPassage
@@ -1106,6 +1194,8 @@ function UseOfEnglishExamsPageInner() {
                       openAnswerMap={openAnswerMap}
                       aiHintsByKey={aiHintsByKey}
                       onRequestExplanation={handleOpenGapExplanationRequest}
+                      showInlineExample={useSkillUoeExampleLayout}
+                      exampleGap0Word={exampleGap0Word}
                     />
                   ) : null
                 }

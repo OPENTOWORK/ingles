@@ -10,22 +10,29 @@ export default function B2WritingDraftStatusPanel({
   submitted = false,
   checking = false,
   lastScoreTotal = null,
+  passingCount = 12,
+  totalSlots = 20,
   lang = 'en',
 }) {
   const isEn = lang === 'en';
+  const passHint = isEn
+    ? `You need at least ${passingCount}/${totalSlots} to pass this part.`
+    : `Necesitas al menos ${passingCount}/${totalSlots} para aprobar esta parte.`;
 
   let statusLabel;
   if (checking) {
     statusLabel = isEn ? 'Checking with Dralo…' : 'Corrigiendo con Dralo…';
   } else if (submitted) {
-    statusLabel =
-      lastScoreTotal != null
-        ? `${isEn ? 'Feedback received' : 'Corrección recibida'} · ${lastScoreTotal}/20`
-        : isEn
-          ? 'Feedback received'
-          : 'Corrección recibida';
+    if (lastScoreTotal != null) {
+      const passed = lastScoreTotal >= passingCount;
+      statusLabel = isEn
+        ? `Feedback received · ${lastScoreTotal}/${totalSlots}${passed ? ' · Passed' : ''}`
+        : `Corrección recibida · ${lastScoreTotal}/${totalSlots}${passed ? ' · Aprobado' : ''}`;
+    } else {
+      statusLabel = isEn ? 'Feedback received' : 'Corrección recibida';
+    }
   } else {
-    statusLabel = isEn ? 'Not submitted yet' : 'Sin enviar todavía';
+    statusLabel = passHint;
   }
 
   return (
@@ -42,6 +49,9 @@ export default function B2WritingDraftStatusPanel({
         {wordCount} {isEn ? 'words' : 'palabras'}
       </strong>
       <span className="levels-b2-writing-draft__state">{statusLabel}</span>
+      {submitted && lastScoreTotal != null && lastScoreTotal < passingCount ? (
+        <span className="levels-b2-writing-draft__hint">{passHint}</span>
+      ) : null}
     </div>
   );
 }

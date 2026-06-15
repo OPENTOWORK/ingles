@@ -18,6 +18,11 @@ export default function ReadingPracticeSideRail({
   correctCount,
   totalSlots,
   hideFeedback,
+  examSlot,
+  progressBySlot,
+  examLabelsBySlot,
+  passing,
+  finishNotice = null,
   lang = 'en',
 }) {
   const session = useReadingPracticeSession();
@@ -43,6 +48,10 @@ export default function ReadingPracticeSideRail({
           totalSlots={totalSlots}
           checkAttempts={session.checkAttempts}
           hideFeedback={hideFeedback}
+          examSlot={examSlot}
+          progressBySlot={progressBySlot}
+          examLabelsBySlot={examLabelsBySlot}
+          passing={passing}
           lang={lang}
         />
       }
@@ -52,6 +61,7 @@ export default function ReadingPracticeSideRail({
           <ReadingPracticeFeedbackToggle lang={lang} />
         </>
       }
+      finishNotice={finishNotice}
     />
   );
 }

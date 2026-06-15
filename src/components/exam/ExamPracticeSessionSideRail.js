@@ -11,6 +11,7 @@ import ReadingPracticeFeedbackToggle from '@/components/exam/ReadingPracticeFeed
 export default function ExamPracticeSessionSideRail({
   strategy = null,
   progress = null,
+  finishNotice = null,
   lang = 'en',
 }) {
   return (
@@ -23,6 +24,7 @@ export default function ExamPracticeSessionSideRail({
           <ReadingPracticeFeedbackToggle lang={lang} />
         </>
       }
+      finishNotice={finishNotice}
     />
   );
 }

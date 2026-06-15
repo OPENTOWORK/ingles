@@ -66,8 +66,8 @@ export function getB2WritingPartLabel(partNumber) {
 
 export function getB2WritingPartTabLabel(part) {
   const n = Number(part?.partNumber || String(part?.nombre || '').match(/\d+/)?.[0] || 0);
-  if (n === 8) return 'Writing Part 1';
-  if (n === 9) return 'Writing Part 2';
+  if (n === 8) return 'Part 1';
+  if (n === 9) return 'Part 2';
   return null;
 }
 

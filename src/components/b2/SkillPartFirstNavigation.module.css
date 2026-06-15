@@ -3,8 +3,8 @@
   --skill-accent-dark: #1d4ed8;
   --skill-accent-soft: #eff6ff;
   --skill-surface: #f8fbff;
-  --skill-border: #bfdbfe;
-  --skill-shadow: rgba(37, 99, 235, 0.08);
+  --skill-border: #dbeafe;
+  --skill-shadow: rgba(37, 99, 235, 0.1);
   --skill-ink: #1e3a8a;
   --skill-muted: #475569;
   --skill-subtle: #64748b;
@@ -12,11 +12,13 @@
   width: 100%;
   max-width: min(100%, 680px);
   margin: 0 auto 1rem;
-  padding: clamp(0.85rem, 2.5vw, 1.1rem);
-  border-radius: 14px;
+  padding: clamp(0.95rem, 2.5vw, 1.15rem);
+  border-radius: 16px;
   border: 1px solid var(--skill-border);
-  background: linear-gradient(165deg, #fff 0%, var(--skill-surface) 100%);
-  box-shadow: 0 6px 22px var(--skill-shadow);
+  background: linear-gradient(180deg, #ffffff 0%, var(--skill-surface) 100%);
+  box-shadow:
+    0 1px 2px rgba(15, 23, 42, 0.04),
+    0 8px 24px var(--skill-shadow);
   box-sizing: border-box;
 }
 
@@ -26,7 +28,7 @@
   --skill-accent-soft: #ecfdf5;
   --skill-surface: #f7fdf9;
   --skill-border: #bbf7d0;
-  --skill-shadow: rgba(5, 150, 105, 0.08);
+  --skill-shadow: rgba(5, 150, 105, 0.1);
   --skill-ink: #14532d;
 }
 
@@ -36,7 +38,7 @@
   --skill-accent-soft: #fffbeb;
   --skill-surface: #fffdf7;
   --skill-border: #fde68a;
-  --skill-shadow: rgba(217, 119, 6, 0.08);
+  --skill-shadow: rgba(217, 119, 6, 0.1);
   --skill-ink: #78350f;
 }
 
@@ -46,47 +48,51 @@
   --skill-accent-soft: #fdf2f8;
   --skill-surface: #fffbfd;
   --skill-border: #f9a8d4;
-  --skill-shadow: rgba(219, 39, 119, 0.08);
+  --skill-shadow: rgba(219, 39, 119, 0.1);
   --skill-ink: #831843;
 }
 
 .eyebrow {
   margin: 0;
-  font-size: 0.62rem;
+  font-size: 0.68rem;
   font-weight: 700;
-  letter-spacing: 0.12em;
+  letter-spacing: 0.1em;
   text-transform: uppercase;
   color: var(--skill-accent);
 }
 
 .title {
-  margin: 0.25rem 0 0;
-  font-size: clamp(1rem, 2.2vw, 1.15rem);
+  margin: 0.3rem 0 0;
+  font-size: clamp(1.02rem, 2.2vw, 1.18rem);
   font-weight: 700;
   letter-spacing: -0.02em;
   color: var(--skill-ink);
 }
 
 .subtitle {
-  margin: 0.35rem 0 0;
+  margin: 0.4rem 0 0;
   max-width: 34rem;
-  font-size: 0.8rem;
-  line-height: 1.45;
+  font-size: 0.82rem;
+  line-height: 1.5;
   color: var(--skill-muted);
 }
 
 .stepper {
   display: flex;
   align-items: center;
-  gap: 0.4rem;
-  margin: 0.85rem 0 0.95rem;
+  gap: 0.45rem;
+  margin: 0.95rem 0 1rem;
+  padding: 0.45rem 0.55rem;
+  border-radius: 12px;
+  border: 1px solid var(--skill-border);
+  background: rgba(255, 255, 255, 0.72);
 }
 
 .step {
   display: flex;
   align-items: center;
-  gap: 0.35rem;
-  font-size: 0.72rem;
+  gap: 0.4rem;
+  font-size: 0.74rem;
   font-weight: 600;
   color: var(--skill-subtle);
 }
@@ -100,12 +106,12 @@
 }
 
 .stepDot {
-  width: 1.35rem;
-  height: 1.35rem;
+  width: 1.4rem;
+  height: 1.4rem;
   border-radius: 999px;
   display: inline-grid;
   place-items: center;
-  font-size: 0.65rem;
+  font-size: 0.66rem;
   font-weight: 700;
   border: 1.5px solid var(--skill-border);
   background: #fff;
@@ -114,8 +120,8 @@
 
 .step--active .stepDot {
   border-color: var(--skill-accent);
-  background: var(--skill-accent-soft);
-  color: var(--skill-accent-dark);
+  background: var(--skill-accent);
+  color: #ffffff;
 }
 
 .step--done .stepDot {
@@ -125,7 +131,7 @@
 }
 
 .stepLine {
-  width: 1.75rem;
+  width: 1.5rem;
   height: 1px;
   background: var(--skill-border);
 }
@@ -140,31 +146,33 @@
   margin: 0;
   padding: 0;
   display: grid;
-  gap: 0.5rem;
+  gap: 0.55rem;
 }
 
 .partCard {
   display: flex;
   align-items: center;
-  gap: 0.7rem;
+  gap: 0.75rem;
   width: 100%;
-  padding: 0.65rem 0.75rem;
+  padding: 0.72rem 0.8rem;
   border: 1px solid var(--skill-border);
-  border-radius: 10px;
-  background: #fff;
+  border-radius: 12px;
+  background: #ffffff;
   text-align: left;
   cursor: pointer;
   transition:
-    border-color 0.15s ease,
-    background 0.15s ease,
-    box-shadow 0.15s ease;
+    border-color 0.18s ease,
+    background 0.18s ease,
+    box-shadow 0.18s ease,
+    transform 0.18s ease;
   font-family: inherit;
 }
 
 .partCard:hover {
   border-color: var(--skill-accent);
-  background: var(--skill-accent-soft);
-  box-shadow: 0 4px 14px var(--skill-shadow);
+  background: color-mix(in srgb, var(--skill-accent-soft) 65%, #ffffff);
+  box-shadow: 0 4px 16px var(--skill-shadow);
+  transform: translateY(-1px);
 }
 
 .partCard:focus-visible {
@@ -174,13 +182,14 @@
 
 .partBadge {
   flex-shrink: 0;
-  width: 2.1rem;
-  height: 2.1rem;
-  border-radius: 8px;
+  width: 2.15rem;
+  height: 2.15rem;
+  border-radius: 10px;
   display: grid;
   place-items: center;
-  font-size: 0.78rem;
+  font-size: 0.76rem;
   font-weight: 700;
+  font-variant-numeric: tabular-nums;
   color: var(--skill-accent-dark);
   background: var(--skill-accent-soft);
   border: 1px solid var(--skill-border);
@@ -193,14 +202,14 @@
 
 .partName {
   margin: 0;
-  font-size: 0.84rem;
+  font-size: 0.86rem;
   font-weight: 700;
   color: #0f172a;
 }
 
 .partDesc {
-  margin: 0.12rem 0 0;
-  font-size: 0.74rem;
+  margin: 0.14rem 0 0;
+  font-size: 0.76rem;
   line-height: 1.35;
   color: var(--skill-muted);
   display: -webkit-box;
@@ -210,23 +219,35 @@
 }
 
 .partMeta {
-  margin-top: 0.25rem;
+  margin-top: 0.28rem;
   display: inline-flex;
-  font-size: 0.68rem;
+  padding: 0.12rem 0.45rem;
+  border-radius: 999px;
+  font-size: 0.66rem;
   font-weight: 600;
   color: var(--skill-subtle);
+  background: #f8fafc;
+  border: 1px solid #eef2f7;
 }
 
 .partMeta--started {
   color: var(--skill-accent-dark);
+  background: var(--skill-accent-soft);
+  border-color: var(--skill-border);
 }
 
 .partArrow {
   flex-shrink: 0;
-  font-size: 0.95rem;
+  display: inline-grid;
+  place-items: center;
+  width: 1.55rem;
+  height: 1.55rem;
+  border-radius: 8px;
+  font-size: 0.82rem;
   font-weight: 700;
   color: var(--skill-accent);
-  opacity: 0.55;
+  background: color-mix(in srgb, var(--skill-accent-soft) 80%, #ffffff);
+  border: 1px solid var(--skill-border);
 }
 
 .headerRow {
@@ -234,29 +255,34 @@
   flex-wrap: wrap;
   align-items: center;
   gap: 0.5rem 0.75rem;
-  margin-bottom: 0.15rem;
+  margin-bottom: 0.2rem;
 }
 
 .backBtn {
   display: inline-flex;
   align-items: center;
-  gap: 0.3rem;
+  gap: 0.35rem;
   text-decoration: none;
-  padding: 0.35rem 0.7rem;
-  border-radius: 8px;
+  padding: 0.4rem 0.75rem;
+  border-radius: 9px;
   border: 1px solid var(--skill-border);
-  background: #fff;
+  background: #ffffff;
   color: var(--skill-muted);
-  font-size: 0.74rem;
+  font-size: 0.76rem;
   font-weight: 600;
   cursor: pointer;
   font-family: inherit;
+  transition:
+    background 0.18s ease,
+    color 0.18s ease,
+    border-color 0.18s ease;
 }
 
 .backBtn:hover,
 .backBtn:focus-visible {
   background: var(--skill-accent-soft);
   color: var(--skill-accent-dark);
+  border-color: var(--skill-accent);
   outline: none;
 }
 
@@ -273,7 +299,7 @@
   margin: 0;
   padding: 0;
   display: grid;
-  gap: 0.55rem;
+  gap: 0.6rem;
   grid-template-columns: repeat(2, minmax(0, 1fr));
 }
 
@@ -288,25 +314,25 @@
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  gap: 0.35rem;
+  gap: 0.38rem;
   width: 100%;
-  min-height: 7.5rem;
-  padding: 0.65rem 0.7rem 0.55rem;
+  min-height: 7.75rem;
+  padding: 0.72rem 0.75rem 0.62rem;
   border: 1px solid var(--skill-border);
-  border-radius: 10px;
-  background: #fff;
+  border-radius: 12px;
+  background: #ffffff;
   text-align: left;
   cursor: pointer;
   font-family: inherit;
   transition:
-    border-color 0.15s ease,
-    box-shadow 0.15s ease,
-    transform 0.15s ease;
+    border-color 0.18s ease,
+    box-shadow 0.18s ease,
+    transform 0.18s ease;
 }
 
 .exerciseCard:hover {
   border-color: var(--skill-accent);
-  box-shadow: 0 6px 16px var(--skill-shadow);
+  box-shadow: 0 6px 18px var(--skill-shadow);
   transform: translateY(-1px);
 }
 
@@ -317,8 +343,10 @@
 
 .exerciseCard--active {
   border-color: var(--skill-accent);
-  background: linear-gradient(165deg, var(--skill-accent-soft) 0%, #fff 100%);
-  box-shadow: 0 4px 14px var(--skill-shadow);
+  background: linear-gradient(165deg, var(--skill-accent-soft) 0%, #ffffff 100%);
+  box-shadow:
+    0 1px 2px rgba(15, 23, 42, 0.04),
+    0 6px 16px var(--skill-shadow);
 }
 
 .exerciseCard--attempted {
@@ -328,7 +356,7 @@
 .exerciseCardTop {
   display: flex;
   align-items: center;
-  gap: 0.4rem;
+  gap: 0.42rem;
   width: 100%;
 }
 
@@ -341,13 +369,13 @@
 }
 
 .exerciseTitle {
-  font-size: 0.76rem;
+  font-size: 0.78rem;
   font-weight: 700;
   color: #0f172a;
 }
 
 .exerciseMeta {
-  font-size: 0.66rem;
+  font-size: 0.68rem;
   font-weight: 500;
   color: var(--skill-subtle);
   line-height: 1.25;
@@ -358,7 +386,7 @@
 }
 
 .exerciseScore {
-  font-size: 0.7rem;
+  font-size: 0.72rem;
   font-weight: 700;
   font-variant-numeric: tabular-nums;
   color: var(--skill-ink);
@@ -379,13 +407,13 @@
 
 .empty {
   margin: 0;
-  padding: 0.85rem;
+  padding: 0.9rem;
   text-align: center;
-  border-radius: 8px;
+  border-radius: 10px;
   background: var(--skill-accent-soft);
   border: 1px dashed var(--skill-border);
   color: var(--skill-muted);
-  font-size: 0.8rem;
+  font-size: 0.82rem;
 }
 
 /* Reading practice night mode */
@@ -409,6 +437,10 @@
   color: #e2e8f0;
 }
 
+:global(body.reading-night-mode) .stepper {
+  background: rgba(15, 23, 42, 0.35);
+}
+
 :global(body.reading-night-mode) .partCard:hover,
 :global(body.reading-night-mode) .backBtn:hover,
 :global(body.reading-night-mode) .backBtn:focus-visible,
@@ -421,12 +453,21 @@
   color: #f8fafc;
 }
 
+:global(body.reading-night-mode) .partMeta {
+  background: #1e293b;
+  border-color: #475569;
+}
+
 :global(body.reading-night-mode) .stepDot {
   background: #334155;
   color: #e2e8f0;
 }
 
-:global(body.reading-night-mode) .step--active .stepDot,
+:global(body.reading-night-mode) .step--active .stepDot {
+  background: #0ea5e9;
+  color: #ffffff;
+}
+
 :global(body.reading-night-mode) .step--done .stepDot {
   background: #1e3a5f;
   color: #bae6fd;
@@ -439,4 +480,9 @@
 :global(body.reading-night-mode) .empty {
   background: #1e3a5f;
   color: #cbd5e1;
+}
+
+:global(body.reading-night-mode) .partArrow {
+  background: #1e3a5f;
+  border-color: #475569;
 }

@@ -52,7 +52,7 @@ export default function ExamTheorySection({ userId, accessToken, isStudent = fal
         }`;
 
   return (
-    <section className="section exam-theory-section" id="exam-theory">
+    <section className="section exam-theory-section" id="exam-theory" data-tour="exam-theory-hub">
       <NivelesSectionHeader
         eyebrow="Exam preparation"
         title="Exam theory"

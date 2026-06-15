@@ -1,17 +1,11 @@
 'use client';
 
 import Link from 'next/link';
+import ExamSkillIcon from '@/components/exam/ExamSkillIcon';
 import { useUserRole } from '@/context/UserRoleContext';
 import { isStudentRole } from '@/constants/studentFeatureAccess';
 import { isStaffRole } from '@/lib/placementLevelAccess';
 import { getLevelSkillNavLinks, skillRoutesMatch } from '@/data/nivelesLevelHub';
-
-const SKILL_ICONS = {
-  reading: '📘',
-  writing: '✍️',
-  listening: '🎧',
-  speaking: '🗣️',
-};
 
 function SkillLockIcon() {
   return (
@@ -55,10 +49,8 @@ export default function ExamPracticeSkillPicker({ levelSlug, activeSkillRoute })
                   aria-label={`${item.label} locked`}
                 >
                   <SkillLockIcon />
-                  <span className="exam-practice-skill-strip__icon" aria-hidden>
-                    {SKILL_ICONS[item.theme] || '📋'}
-                  </span>
-                  {item.label}
+                  <ExamSkillIcon theme={item.theme} />
+                  <span className="exam-practice-skill-strip__text">{item.label}</span>
                 </span>
               ) : (
                 <Link
@@ -68,10 +60,8 @@ export default function ExamPracticeSkillPicker({ levelSlug, activeSkillRoute })
                   }`}
                   aria-current={isActive ? 'page' : undefined}
                 >
-                  <span className="exam-practice-skill-strip__icon" aria-hidden>
-                    {SKILL_ICONS[item.theme] || '📋'}
-                  </span>
-                  {item.label}
+                  <ExamSkillIcon theme={item.theme} />
+                  <span className="exam-practice-skill-strip__text">{item.label}</span>
                 </Link>
               )}
             </li>

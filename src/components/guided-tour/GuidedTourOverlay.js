@@ -3,7 +3,7 @@
 import { useCallback, useEffect, useLayoutEffect, useMemo, useState } from 'react';
 import { createPortal } from 'react-dom';
 import Link from 'next/link';
-import { usePathname, useRouter } from 'next/navigation';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { getGuidedTourSteps } from '@/components/home/homeHowItWorksData';
 import { useUserRole } from '@/context/UserRoleContext';
 import {
@@ -18,16 +18,27 @@ const TARGET_POLL_MS = 80;
 const SPOTLIGHT_PAD = 10;
 
 function parseRoute(route) {
-  if (!route) return { path: null, hash: null };
-  const [path, hash] = route.split('#');
-  return { path: path || null, hash: hash || null };
+  if (!route) return { path: null, hash: null, query: null };
+  const [beforeHash, hash = ''] = route.split('#');
+  const [path, query = ''] = beforeHash.split('?');
+  return {
+    path: path || null,
+    hash: hash || null,
+    query: query || null,
+  };
 }
 
-function pathMatches(pathname, path) {
-  if (!path) return true;
+function pathMatches(pathname, routePath, searchParams, routeQuery) {
+  if (!routePath) return true;
   const norm = pathname?.replace(/\/$/, '') || '';
-  const want = path.replace(/\/$/, '');
-  return norm === want;
+  const want = routePath.replace(/\/$/, '');
+  if (norm !== want) return false;
+  if (!routeQuery) return true;
+  const expected = new URLSearchParams(routeQuery);
+  for (const [key, value] of expected.entries()) {
+    if (searchParams?.get(key) !== value) return false;
+  }
+  return true;
 }
 
 function findVisibleTarget(selector) {
@@ -116,6 +127,7 @@ function computeTooltipStyle(rect, step) {
 export default function GuidedTourOverlay({ stepIndex, onStepIndexChange, onClose }) {
   const router = useRouter();
   const pathname = usePathname();
+  const searchParams = useSearchParams();
   const { userRole } = useUserRole();
   const steps = useMemo(() => getGuidedTourSteps(userRole), [userRole]);
   const step = steps[stepIndex];
@@ -180,13 +192,14 @@ export default function GuidedTourOverlay({ stepIndex, onStepIndexChange, onClos
       closeMobileNavIfOpen();
     }
 
-    const { path, hash } = parseRoute(step.route);
-    if (path && !pathMatches(pathname, path)) {
-      const url = hash ? `${path}#${hash}` : path;
+    const { path, hash, query } = parseRoute(step.route);
+    if (path && !pathMatches(pathname, path, searchParams, query)) {
+      const base = query ? `${path}?${query}` : path;
+      const url = hash ? `${base}#${hash}` : base;
       router.push(url);
       return;
     }
-    if (hash && pathMatches(pathname, path)) {
+    if (hash && pathMatches(pathname, path, searchParams, query)) {
       const applyHash = () => {
         if (window.location.hash !== `#${hash}`) {
           window.location.hash = hash;
@@ -195,7 +208,7 @@ export default function GuidedTourOverlay({ stepIndex, onStepIndexChange, onClos
       applyHash();
       window.setTimeout(applyHash, 120);
     }
-  }, [step, stepIndex, pathname, router]);
+  }, [step, stepIndex, pathname, searchParams, router]);
 
   useEffect(() => {
     if (!step?.target) return undefined;

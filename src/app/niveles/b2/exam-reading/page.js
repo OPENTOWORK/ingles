@@ -30,6 +30,16 @@ import {
 } from '@/utils/b2ExamTextBlocks';
 import {
   composeOpenClozeDirections,
+  composeMcqClozeDirections,
+  composeSkillUoeDirections,
+  buildPart1McqGroups,
+  shouldUseSkillUoeExampleLayout,
+  resolveUoeInlineExample,
+  ensureExampleGap0InPassage,
+  parseExampleAnswerWord,
+  resolveMcqGap0DisplayWord,
+  resolvePart1ExampleBlock,
+  resolveGap0ModelAnswer,
   extractLegacyPart2InlineExample,
   getOpenAnswerMap,
   inferOpenQuestionNumbersFromPrompt,
@@ -50,12 +60,19 @@ import {
 } from '@/utils/levelsEstadisticas';
 import B2ExamPracticeModuleNav from '@/components/b2/B2ExamPracticeModuleNav';
 import ReadingPracticeSideRail from '@/components/exam/ReadingPracticeSideRail';
+import ExamPracticeFinishNotice from '@/components/exam/ExamPracticeFinishNotice';
 import { getB2ReadingStrategyPack } from '@/data/b2ReadingPracticeStrategies';
 import { ReadingPracticeSessionProvider } from '@/context/ReadingPracticeSessionContext';
 import ReadingPracticeChrome from '@/components/exam/ReadingPracticeChrome';
 import {
   runKeepPracticingSkillFlow,
 } from '@/utils/skillPracticeNavigation';
+import {
+  buildBulkAnswerCheckUpdate,
+  practiceHasCheckableAnswers,
+  resolvePracticeHideFeedback,
+  shouldShowCheckAnswersButton,
+} from '@/utils/practiceCheckAnswers';
 import { useReadingPracticeSession } from '@/context/ReadingPracticeSessionContext';
 import ReadingQuestionFlagButton from '@/components/exam/ReadingQuestionFlagButton';
 import ReadingConfidenceSelector from '@/components/exam/ReadingConfidenceSelector';
@@ -146,10 +163,14 @@ function B2ReadingExamsPageInner() {
   const mountedRef = useRef(true);
   const categoryTimer = useLevelsCategoryTimer();
   const readingSession = useReadingPracticeSession();
-  const hideInstantFeedback =
-    hideFeedback || readingSession.readingSettings.showFeedback === false;
+  const hideInstantFeedback = resolvePracticeHideFeedback({
+    hideFeedback,
+    showFeedback: readingSession.readingSettings.showFeedback,
+    answersRevealed: readingSession.answersRevealed,
+  });
 
   const loadReadingData = useCallback(async () => {
+    readingSession.resetAnswersRevealed();
     setLoading(true);
     setError('');
     setSelectedOptions({});
@@ -476,6 +497,10 @@ function B2ReadingExamsPageInner() {
   const isKeyWordPart = isCombinedPaper && partNumberReading === 4;
   const isInlinePassagePart = isOpenClozePart;
   const isUoePart1 = isCombinedPaper && partNumberReading === 1;
+  const useSkillUoeExampleLayout = shouldUseSkillUoeExampleLayout({
+    skillPractice: isSkillPracticeSession,
+    partNumber: partNumberReading,
+  });
 
   /** Mismo formato de panel de texto que Parte 1 (Use of English) para partes 5–7. */
   const shouldStickEnunciado = partNumberReading >= 5 && partNumberReading <= 7;
@@ -500,15 +525,34 @@ function B2ReadingExamsPageInner() {
       texto = split.texto.trim();
       preguntasPart1Parse = parsePart1QuestionOptions(split.preguntas);
     }
-    // Part 2 (open cloze): ejemplo (0) coherente — usa el de la pregunta generada
-    // y descarta el ejemplo sin gap de la Descripción fija.
+    // Part 2–4: en skill practice el Example va en el pasaje, no en Directions.
     let enunciado =
-      partNumberReading === 2
-        ? composeOpenClozeDirections(desc, rawPregunta) || fallback.enunciado
-        : desc || fallback.enunciado;
-    if (partNumberReading === 2) {
-      // Legacy: pasajes antiguos traen el gap (0) incrustado en el texto; se extrae la
-      // frase al bloque Example y el texto queda solo con los gaps activos 9–16.
+      useSkillUoeExampleLayout && partNumberReading >= 1 && partNumberReading <= 4
+        ? composeSkillUoeDirections(desc, rawPregunta, partNumberReading) || fallback.enunciado
+        : partNumberReading === 2
+          ? composeOpenClozeDirections(desc, rawPregunta) || fallback.enunciado
+          : desc || fallback.enunciado;
+
+    let uoeInlineExample = null;
+    if (useSkillUoeExampleLayout && (partNumberReading === 2 || partNumberReading === 3)) {
+      const resolved = resolveUoeInlineExample({
+        partNumber: partNumberReading,
+        descripcion: desc,
+        rawPregunta,
+        texto,
+        respuestas: selectedQuestion?.respuestas || [],
+        respuestasAbiertas: selectedQuestion?.respuestasAbiertas || [],
+      });
+      if (resolved?.cleanedTexto) texto = resolved.cleanedTexto;
+      if (resolved) {
+        uoeInlineExample = {
+          bodyLines: resolved.bodyLines,
+          answerLine: resolved.answerLine,
+        };
+        texto = ensureExampleGap0InPassage(texto, uoeInlineExample);
+      }
+    } else if (partNumberReading === 2) {
+      // Legacy exam mode: gap (0) incrustado → Example en Directions.
       const legacy = extractLegacyPart2InlineExample(texto);
       if (legacy) {
         texto = legacy.cleanedTexto;
@@ -521,13 +565,17 @@ function B2ReadingExamsPageInner() {
       enunciado,
       texto,
       preguntasPart1Parse,
+      uoeInlineExample,
     };
   }, [
     selectedPart?.descripcion,
     selectedQuestion?.enunciado,
+    selectedQuestion?.respuestas,
+    selectedQuestion?.respuestasAbiertas,
     partNumberReading,
     isUoePart1,
     isKeyWordPart,
+    useSkillUoeExampleLayout,
   ]);
 
   const contextSnippetForAi = useMemo(() => {
@@ -643,36 +691,79 @@ function B2ReadingExamsPageInner() {
   const part1McqGroups = useMemo(() => {
     if (!isUoePart1) return null;
     const parsed = selectedPartContent.preguntasPart1Parse || [];
-    if (!parsed.length || !selectedQuestion?.preguntaId) return null;
-    const pid = selectedQuestion.preguntaId;
-    const letters = ['A', 'B', 'C', 'D'];
-    return parsed
-      .map(({ questionNumber, options: byLetter }) => {
-        const correctL = part1CorrectLetterByQuestion.get(questionNumber);
-        const opts = letters
-          .map((L) => {
-            const word = byLetter[L];
-            if (!word || !String(word).trim()) return null;
-            return {
-              id: `part1-${pid}-q${questionNumber}-${L}`,
-              respuesta: `${questionNumber} ${L} ${word}`,
-              formattedText: `${L}) ${word}`,
-              correcta: correctL != null ? L === correctL : false,
-            };
-          })
-          .filter(Boolean);
-        if (opts.length < 2) return null;
-        return { questionNumber, options: opts };
-      })
-      .filter(Boolean);
+    if (!selectedQuestion?.preguntaId) return null;
+    const rawPregunta = selectedQuestion?.enunciado || '';
+    const desc = (selectedPart?.descripcion || '').replace(/\r\n/g, '\n').trim();
+    if (!parsed.length) return null;
+    return buildPart1McqGroups({
+      parsed,
+      correctLetterByQuestion: part1CorrectLetterByQuestion,
+      preguntaId: selectedQuestion.preguntaId,
+      rawPregunta,
+      descripcion: desc,
+      respuestas: selectedQuestion?.respuestas || [],
+      includeExample: useSkillUoeExampleLayout,
+    });
   }, [
     part1CorrectLetterByQuestion,
     isUoePart1,
     selectedPartContent.preguntasPart1Parse,
     selectedQuestion?.preguntaId,
+    selectedQuestion?.enunciado,
+    selectedQuestion?.respuestas,
+    selectedPart?.descripcion,
+    useSkillUoeExampleLayout,
   ]);
 
   const isPart1McqCloze = isUoePart1 && (part1McqGroups?.length ?? 0) > 0;
+
+  const exampleGap0Word = useMemo(() => {
+    if (!useSkillUoeExampleLayout) return '';
+    if (isUoePart1) {
+      const mcqGroup0 = part1McqGroups?.find((g) => g.questionNumber === 0) || null;
+      return resolveMcqGap0DisplayWord({
+        respuestas: selectedQuestion?.respuestas || [],
+        respuestasAbiertas: selectedQuestion?.respuestasAbiertas || [],
+        correctLetterByQuestion: part1CorrectLetterByQuestion,
+        inlineExample: selectedPartContent.uoeInlineExample,
+        exampleBlock: resolvePart1ExampleBlock({
+          parsed: selectedPartContent.preguntasPart1Parse || [],
+          rawPregunta: selectedQuestion?.enunciado || '',
+          descripcion: (selectedPart?.descripcion || '').replace(/\r\n/g, '\n').trim(),
+          respuestas: selectedQuestion?.respuestas || [],
+          correctLetterByQuestion: part1CorrectLetterByQuestion,
+        }),
+        mcqGroup0,
+        rawPregunta: selectedQuestion?.enunciado || '',
+        descripcion: (selectedPart?.descripcion || '').replace(/\r\n/g, '\n').trim(),
+        parsed: selectedPartContent.preguntasPart1Parse || [],
+        texto: selectedPartContent.texto || '',
+      });
+    }
+    if (partNumberReading >= 2 && partNumberReading <= 3) {
+      return (
+        parseExampleAnswerWord(selectedPartContent.uoeInlineExample?.answerLine) ||
+        resolveGap0ModelAnswer(
+          selectedQuestion?.respuestas || [],
+          selectedQuestion?.respuestasAbiertas || [],
+        )
+      );
+    }
+    return '';
+  }, [
+    useSkillUoeExampleLayout,
+    isUoePart1,
+    partNumberReading,
+    part1McqGroups,
+    part1CorrectLetterByQuestion,
+    selectedQuestion?.respuestas,
+    selectedQuestion?.respuestasAbiertas,
+    selectedQuestion?.enunciado,
+    selectedPart?.descripcion,
+    selectedPartContent.preguntasPart1Parse,
+    selectedPartContent.texto,
+    selectedPartContent.uoeInlineExample,
+  ]);
 
   const inferredOpenQuestionNumbers = useMemo(() => {
     const promptBlob = [selectedQuestion?.enunciado, selectedPartContent.texto]
@@ -1077,6 +1168,89 @@ function B2ReadingExamsPageInner() {
     selectedQuestion?.preguntaId,
   ]);
 
+  const mcqGroupsForCheck = useMemo(() => {
+    if (isPart1McqCloze) return part1McqGroups;
+    return readingSyntheticMcqGroups || groupedAnswersForUiAndScore || [];
+  }, [isPart1McqCloze, part1McqGroups, readingSyntheticMcqGroups, groupedAnswersForUiAndScore]);
+
+  const resolveMcqQuestionKey = useCallback(
+    (group, groupIndex) => {
+      if (isPart1McqCloze) {
+        const idx = part1McqGroups.findIndex((g) => g.questionNumber === group.questionNumber);
+        return getQuestionKey(
+          selectedPart.id,
+          group.questionNumber,
+          `extra-${idx >= 0 ? idx : groupIndex}`,
+        );
+      }
+      return getQuestionKey(selectedPart.id, group.questionNumber, `extra-${groupIndex}`);
+    },
+    [isPart1McqCloze, part1McqGroups, selectedPart?.id, getQuestionKey],
+  );
+
+  const hasCheckableAnswers = useMemo(
+    () =>
+      selectedPart?.id
+        ? practiceHasCheckableAnswers({
+            openQuestionNumbers: isOpenClozePart || isKeyWordPart ? openQuestionNumbers : [],
+            openInputs,
+            getOpenQuestionKey: (questionNumber) =>
+              getQuestionKey(selectedPart.id, questionNumber, 'open'),
+            mcqGroups: mcqGroupsForCheck,
+            getMcqQuestionKey: resolveMcqQuestionKey,
+            selectedOptions,
+          })
+        : false,
+    [
+      selectedPart?.id,
+      isOpenClozePart,
+      isKeyWordPart,
+      openQuestionNumbers,
+      openInputs,
+      mcqGroupsForCheck,
+      resolveMcqQuestionKey,
+      selectedOptions,
+    ],
+  );
+
+  const handleCheckAllAnswers = useCallback(() => {
+    if (!selectedPart?.id) return;
+
+    const { nextOpenChecks, nextChecked, hasAnyAnswer } = buildBulkAnswerCheckUpdate({
+      openQuestionNumbers: isOpenClozePart || isKeyWordPart ? openQuestionNumbers : [],
+      openInputs,
+      openChecks,
+      openAnswerMap,
+      normalizeText,
+      getOpenQuestionKey: (questionNumber) =>
+        getQuestionKey(selectedPart.id, questionNumber, 'open'),
+      mcqGroups: mcqGroupsForCheck,
+      getMcqQuestionKey: resolveMcqQuestionKey,
+      selectedOptions,
+      checkedQuestions,
+    });
+
+    setOpenChecks(nextOpenChecks);
+    setCheckedQuestions(nextChecked);
+    trySavePartAfterAnswer({ openChecks: nextOpenChecks, checkedQuestions: nextChecked });
+    readingSession.revealAnswers();
+    if (hasAnyAnswer) readingSession.incrementCheckAttempts();
+  }, [
+    selectedPart?.id,
+    isOpenClozePart,
+    isKeyWordPart,
+    openQuestionNumbers,
+    openInputs,
+    openChecks,
+    openAnswerMap,
+    mcqGroupsForCheck,
+    resolveMcqQuestionKey,
+    selectedOptions,
+    checkedQuestions,
+    trySavePartAfterAnswer,
+    readingSession,
+  ]);
+
   /** Explicación lazy para huecos open cloze: se pide solo al pulsar 💡 Explanation. */
   const handleOpenGapExplanationRequest = useCallback(
     ({ questionKey, questionNumber }) => {
@@ -1294,6 +1468,7 @@ function B2ReadingExamsPageInner() {
         partScoreMetrics={scorePanelProps}
         hideScorePanel={isExamSimulationMode(practiceMode) && !reviewMode}
         partFinishNotice={isExamSimulationMode(practiceMode) && !reviewMode ? null : scoring.partFinishNotice}
+        partFinishNoticePlacement={showPracticeSideRail ? 'sidebar' : 'main'}
         partsData={!loading && !error ? tabPartsData : []}
         selectedPartId={selectedPartId}
         onSelectPart={handleSelectPart}
@@ -1371,6 +1546,8 @@ function B2ReadingExamsPageInner() {
                       hideFeedback={hideInstantFeedback}
                       aiHintsByKey={aiHintsByKey}
                       onRequestExplanation={handlePart1ExplanationRequest}
+                      showInlineExample={useSkillUoeExampleLayout}
+                      exampleGap0Word={exampleGap0Word}
                     />
                   ) : isKeyWordPart ? (
                     <B2ExamInlineKeyWordPassage
@@ -1407,6 +1584,8 @@ function B2ReadingExamsPageInner() {
                       inputPlaceholder="Write one word"
                       aiHintsByKey={aiHintsByKey}
                       onRequestExplanation={handleOpenGapExplanationRequest}
+                      showInlineExample={useSkillUoeExampleLayout}
+                      exampleGap0Word={exampleGap0Word}
                     />
                   ) : null
                 }
@@ -1613,6 +1792,14 @@ function B2ReadingExamsPageInner() {
         skillPracticeMode={isSkillPracticeSession}
         skillPracticeTheme={skillNav.skillTheme}
         onContinueInPage={isSkillPracticeSession ? handleKeepPracticing : handleContinueInPage}
+        showCheckAnswersButton={shouldShowCheckAnswersButton({
+          skillPracticeMode: isSkillPracticeSession,
+          hideFeedback,
+          showFeedback: readingSession.readingSettings.showFeedback,
+          answersRevealed: readingSession.answersRevealed,
+        })}
+        onCheckAnswers={handleCheckAllAnswers}
+        checkAnswersDisabled={!hasCheckableAnswers}
         lang="en"
       />
       </div>
@@ -1628,6 +1815,15 @@ function B2ReadingExamsPageInner() {
           correctCount={partScoreMetrics.correctCount}
           totalSlots={b2PartCfg?.total ?? partScoreMetrics.totalSlots}
           hideFeedback={hideInstantFeedback}
+          examSlot={examSlot}
+          progressBySlot={scoring.progressBySlot}
+          examLabelsBySlot={examLabelsBySlot}
+          passing={b2PartCfg?.passing ?? partScoreMetrics.passingCount}
+          finishNotice={
+            scoring.partFinishNotice ? (
+              <ExamPracticeFinishNotice notice={scoring.partFinishNotice} lang="en" />
+            ) : null
+          }
           lang="en"
         />
       ) : null}

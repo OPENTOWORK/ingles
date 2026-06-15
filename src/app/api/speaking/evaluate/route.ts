@@ -5,7 +5,7 @@ import { saveEvaluation, completeSession } from '@/features/speaking/services/se
 import { prisma } from '@/lib/prisma';
 import { hasDatabaseUrl } from '@/lib/prisma';
 import { getSupabaseUserFromRequest } from '@/lib/getSupabaseUserFromRequest';
-import { AI_ACTIONS } from '@/lib/aiUsage';
+import { AI_ACTIONS, getDailyUsageSnapshot } from '@/lib/aiUsage';
 import { aiErrorJson, runAiPreflight } from '@/lib/aiUsageRouteHelpers';
 import { handleExamSpeakingFeedback } from '@/lib/aiActionHandlers';
 
@@ -46,6 +46,7 @@ export async function POST(req: Request) {
     const userId = auth?.user?.id ?? null;
 
     let report;
+    let usage = null;
 
     if (mode === 'EXAM') {
       if (!userId) {
@@ -57,23 +58,31 @@ export async function POST(req: Request) {
         );
       }
 
-      const preflight = await runAiPreflight(userId, AI_ACTIONS.EXAM_SPEAKING_FEEDBACK, {
+      const aiCtx = {
         userEmail: auth?.user?.email ?? '',
-      });
+        accessToken: auth?.accessToken ?? null,
+      };
+
+      const preflight = await runAiPreflight(userId, AI_ACTIONS.EXAM_SPEAKING_FEEDBACK, aiCtx);
       if (!preflight.ok) return preflight.response;
 
-      const out = await handleExamSpeakingFeedback(userId, {
-        combinedTranscript: text,
-        level: cefr,
-        sessionId,
-        context: 'exam',
-      });
+      const out = await handleExamSpeakingFeedback(
+        userId,
+        {
+          combinedTranscript: text,
+          level: cefr,
+          sessionId,
+          context: 'exam',
+        },
+        aiCtx,
+      );
 
       if (!out.ok) {
         return NextResponse.json({ error: out.error || 'Evaluation failed' }, { status: out.status || 500 });
       }
 
       report = out.result?.report;
+      usage = await getDailyUsageSnapshot(userId, AI_ACTIONS.EXAM_SPEAKING_FEEDBACK, aiCtx);
     } else if (mode === 'PRACTICE') {
       const { runExamFinalReport } = await import('@/features/speaking/services/evaluation/exam-final-report');
       report = await runExamFinalReport({
@@ -94,7 +103,7 @@ export async function POST(req: Request) {
 
     await completeSession(sessionId);
 
-    return NextResponse.json({ report });
+    return NextResponse.json(usage ? { report, usage } : { report });
   } catch (e) {
     console.error(e);
     return NextResponse.json({ error: 'Evaluation failed' }, { status: 500 });

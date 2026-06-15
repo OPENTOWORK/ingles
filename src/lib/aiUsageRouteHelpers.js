@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import {
   AI_ACTIONS,
+  buildDailyUsageStatus,
   checkMonthlyBudget,
   consumeDailyAiLimit,
   getDailyLimit,
@@ -42,7 +43,11 @@ export async function runAiPreflight(userId, action, options = {}) {
       response: aiErrorJson(
         daily.code === 'DAILY_LIMIT_REACHED' ? 'DAILY_LIMIT_REACHED' : daily.code || 'DAILY_LIMIT_REACHED',
         message,
-        { limit: daily.limit, used: daily.used },
+        {
+          limit: daily.limit,
+          used: daily.used,
+          usage: buildDailyUsageStatus(daily, action),
+        },
         429,
       ),
     };

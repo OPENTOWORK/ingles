@@ -23,7 +23,11 @@ export default function ReadingPracticeFeedbackToggle({ lang = 'en' }) {
       <button
         type="button"
         className={`reading-feedback-toggle__btn tool-button${showFeedback ? ' active' : ''}`}
-        onClick={() => session.updateReadingSettings({ showFeedback: !showFeedback })}
+        onClick={() => {
+          const nextShowFeedback = !showFeedback;
+          session.updateReadingSettings({ showFeedback: nextShowFeedback });
+          if (nextShowFeedback) session.resetAnswersRevealed();
+        }}
         aria-pressed={showFeedback}
         title={showFeedback ? labels.on : labels.off}
       >

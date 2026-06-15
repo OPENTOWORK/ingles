@@ -1,17 +1,9 @@
 'use client';
 
 import Link from 'next/link';
+import ExamSkillIcon from '@/components/exam/ExamSkillIcon';
 import NivelesSectionHeader from '@/components/niveles/NivelesSectionHeader';
 import { EXAM_PRACTICE_HEADER } from '@/data/levelHubSectionMeta';
-
-const LINK_ICONS = {
-  'exam-mode': '📝',
-  reading: '📘',
-  writing: '✍️',
-  listening: '🎧',
-  speaking: '🗣️',
-  'reading-writing': '📖',
-};
 
 function classifyExamLink(href = '', text = '') {
   const h = href.toLowerCase();
@@ -35,7 +27,6 @@ function getExamLinkMeta(exam) {
   return {
     kind,
     label: cleanLinkLabel(exam.text),
-    icon: LINK_ICONS[kind] || '📋',
     isExamMode: kind === 'exam-mode',
     kindClass: `exam-practice-hub__card--${kind}`,
   };
@@ -43,7 +34,7 @@ function getExamLinkMeta(exam) {
 
 function ExamPracticeCard({ exam, isStudent, variant = 'skill' }) {
   const blockedForStudent = isStudent && !exam.enabledForStudents;
-  const { kindClass, label, icon, isExamMode } = getExamLinkMeta(exam);
+  const { kind, kindClass, label, isExamMode } = getExamLinkMeta(exam);
   const isBanner = variant === 'banner';
   const cardClass = [
     'exam-practice-hub__card',
@@ -57,14 +48,14 @@ function ExamPracticeCard({ exam, isStudent, variant = 'skill' }) {
 
   const inner = isBanner ? (
     <ExamModeBannerInner
-      icon={icon}
+      kind={kind}
       label={label}
       hint="Full timed simulation"
       badge={blockedForStudent ? 'Coming soon' : null}
     />
   ) : (
     <ExamPracticeCardInner
-      icon={icon}
+      kind={kind}
       label={label}
       hint="Practice this paper"
       badge={blockedForStudent ? 'Coming soon' : null}
@@ -124,11 +115,11 @@ export default function ExamPracticeHubSection({ examLinks = [], isStudent }) {
   );
 }
 
-function ExamModeBannerInner({ icon, label, hint, badge }) {
+function ExamModeBannerInner({ kind, label, hint, badge }) {
   return (
     <div className="exam-practice-hub__banner-inner">
       <span className="exam-practice-hub__icon-wrap" aria-hidden>
-        <span className="exam-practice-hub__icon">{icon}</span>
+        <ExamSkillIcon theme={kind} size="md" />
       </span>
       <div className="exam-practice-hub__banner-copy">
         <span className="exam-practice-hub__label">{label}</span>
@@ -147,11 +138,11 @@ function ExamModeBannerInner({ icon, label, hint, badge }) {
   );
 }
 
-function ExamPracticeCardInner({ icon, label, hint, badge }) {
+function ExamPracticeCardInner({ kind, label, hint, badge }) {
   return (
     <>
       <span className="exam-practice-hub__icon-wrap" aria-hidden>
-        <span className="exam-practice-hub__icon">{icon}</span>
+        <ExamSkillIcon theme={kind} size="md" />
       </span>
       <span className="exam-practice-hub__label">{label}</span>
       {badge ? (
@@ -181,7 +172,7 @@ function ExamPracticeHubStyles() {
       }
       .niveles-level-page .exam-practice-hub__skills-grid {
         display: grid;
-        gap: 14px;
+        gap: 12px;
         grid-template-columns: repeat(1, minmax(0, 1fr));
       }
       @media (min-width: 640px) {
@@ -232,22 +223,22 @@ function ExamPracticeHubStyles() {
         display: flex;
         flex-direction: column;
         align-items: flex-start;
-        gap: 8px;
-        min-height: 118px;
-        padding: 16px 18px 14px;
-        border-radius: 18px;
-        border: 1px solid rgba(226, 232, 240, 0.9);
-        background: linear-gradient(165deg, #ffffff 0%, #f8fafc 100%);
+        gap: 10px;
+        min-height: 112px;
+        padding: 16px 16px 14px;
+        border-radius: 14px;
+        border: 1px solid #e2e8f0;
+        background: #ffffff;
         text-decoration: none;
         color: inherit;
         box-shadow:
-          0 2px 0 rgba(255, 255, 255, 0.9) inset,
-          0 8px 24px rgba(15, 23, 42, 0.07);
+          0 1px 2px rgba(15, 23, 42, 0.04),
+          0 6px 18px rgba(15, 23, 42, 0.05);
         overflow: hidden;
         transition:
-          transform 0.22s ease,
-          box-shadow 0.22s ease,
-          border-color 0.22s ease;
+          transform 0.2s ease,
+          box-shadow 0.2s ease,
+          border-color 0.2s ease;
       }
       .niveles-level-page .exam-practice-hub__card::before {
         content: '';
@@ -255,51 +246,52 @@ function ExamPracticeHubStyles() {
         top: 0;
         left: 0;
         right: 0;
-        height: 4px;
+        height: 3px;
         background: var(--exam-card-accent, #2563eb);
-        opacity: 0.85;
+        opacity: 0.9;
       }
       .niveles-level-page .exam-practice-hub__card:hover {
-        transform: translateY(-4px);
+        transform: translateY(-2px);
+        border-color: color-mix(in srgb, var(--exam-card-accent, #2563eb) 35%, #e2e8f0);
         box-shadow:
-          0 2px 0 rgba(255, 255, 255, 0.95) inset,
-          0 16px 36px color-mix(in srgb, var(--exam-card-accent, #2563eb) 22%, transparent);
+          0 1px 2px rgba(15, 23, 42, 0.04),
+          0 12px 28px color-mix(in srgb, var(--exam-card-accent, #2563eb) 14%, transparent);
       }
       .niveles-level-page .exam-practice-hub__card--exam-mode {
         --exam-card-accent: #4f46e5;
-        background: linear-gradient(155deg, #eef2ff 0%, #ffffff 48%, #f5f3ff 100%);
-        border-color: rgba(99, 102, 241, 0.28);
+        background: linear-gradient(155deg, #f5f7ff 0%, #ffffff 100%);
+        border-color: rgba(99, 102, 241, 0.22);
       }
       .niveles-level-page .exam-practice-hub__card--reading,
       .niveles-level-page .exam-practice-hub__card--reading-writing {
         --exam-card-accent: #2563eb;
-        background: linear-gradient(155deg, #eff6ff 0%, #ffffff 50%, #f0f9ff 100%);
-        border-color: rgba(37, 99, 235, 0.22);
+        background: linear-gradient(155deg, #f8fbff 0%, #ffffff 100%);
+        border-color: rgba(37, 99, 235, 0.18);
       }
       .niveles-level-page .exam-practice-hub__card--writing {
         --exam-card-accent: #059669;
-        background: linear-gradient(155deg, #ecfdf5 0%, #ffffff 50%, #f0fdf4 100%);
-        border-color: rgba(5, 150, 105, 0.22);
+        background: linear-gradient(155deg, #f7fdf9 0%, #ffffff 100%);
+        border-color: rgba(5, 150, 105, 0.18);
       }
       .niveles-level-page .exam-practice-hub__card--listening {
         --exam-card-accent: #d97706;
-        background: linear-gradient(155deg, #fffbeb 0%, #ffffff 50%, #fff7ed 100%);
-        border-color: rgba(217, 119, 6, 0.22);
+        background: linear-gradient(155deg, #fffdf8 0%, #ffffff 100%);
+        border-color: rgba(217, 119, 6, 0.18);
       }
       .niveles-level-page .exam-practice-hub__card--speaking {
         --exam-card-accent: #db2777;
-        background: linear-gradient(155deg, #fdf2f8 0%, #ffffff 50%, #faf5ff 100%);
-        border-color: rgba(219, 39, 119, 0.2);
+        background: linear-gradient(155deg, #fffbfd 0%, #ffffff 100%);
+        border-color: rgba(219, 39, 119, 0.18);
       }
       .niveles-level-page .exam-practice-hub__card--featured {
         box-shadow:
-          0 2px 0 rgba(255, 255, 255, 0.95) inset,
-          0 10px 28px rgba(79, 70, 229, 0.14);
+          0 1px 2px rgba(15, 23, 42, 0.04),
+          0 8px 22px rgba(79, 70, 229, 0.12);
       }
       .niveles-level-page .exam-practice-hub__card--featured:hover {
         box-shadow:
-          0 2px 0 rgba(255, 255, 255, 0.95) inset,
-          0 18px 40px rgba(79, 70, 229, 0.22);
+          0 1px 2px rgba(15, 23, 42, 0.04),
+          0 14px 32px rgba(79, 70, 229, 0.18);
       }
       .niveles-level-page .exam-practice-hub__card--disabled {
         cursor: not-allowed;
@@ -311,31 +303,30 @@ function ExamPracticeHubStyles() {
       .niveles-level-page .exam-practice-hub__icon-wrap {
         display: inline-grid;
         place-items: center;
-        width: 2.85rem;
-        height: 2.85rem;
-        border-radius: 14px;
-        background: color-mix(in srgb, var(--exam-card-accent, #2563eb) 16%, white);
-        border: 1px solid color-mix(in srgb, var(--exam-card-accent, #2563eb) 28%, transparent);
-        box-shadow: 0 6px 14px color-mix(in srgb, var(--exam-card-accent, #2563eb) 18%, transparent);
+        width: 2.5rem;
+        height: 2.5rem;
+        border-radius: 10px;
+        background: color-mix(in srgb, var(--exam-card-accent, #2563eb) 10%, white);
+        border: 1px solid color-mix(in srgb, var(--exam-card-accent, #2563eb) 22%, #e2e8f0);
+        color: var(--exam-card-accent, #2563eb);
       }
-      .niveles-level-page .exam-practice-hub__icon {
-        font-size: 1.65rem;
-        line-height: 1;
+      .niveles-level-page .exam-practice-hub__icon-wrap .exam-skill-icon {
+        --skill-accent: var(--exam-card-accent, #2563eb);
+        color: var(--exam-card-accent, #2563eb);
+        background: transparent;
+        border: none;
       }
       .niveles-level-page .exam-practice-hub__card--featured .exam-practice-hub__icon-wrap {
-        width: 3rem;
-        height: 3rem;
-      }
-      .niveles-level-page .exam-practice-hub__card--featured .exam-practice-hub__icon {
-        font-size: 1.8rem;
+        width: 2.65rem;
+        height: 2.65rem;
       }
       .niveles-level-page .exam-practice-hub__label {
-        font-size: 0.95rem;
-        font-weight: 800;
-        letter-spacing: -0.02em;
+        font-size: 0.92rem;
+        font-weight: 700;
+        letter-spacing: -0.015em;
         color: #0f172a;
-        line-height: 1.25;
-        padding-right: 1.75rem;
+        line-height: 1.3;
+        padding-right: 1.65rem;
       }
       .niveles-level-page .exam-practice-hub__card--featured .exam-practice-hub__label {
         font-size: 1.02rem;
@@ -355,22 +346,23 @@ function ExamPracticeHubStyles() {
       }
       .niveles-level-page .exam-practice-hub__arrow {
         position: absolute;
-        right: 14px;
-        bottom: 14px;
+        right: 12px;
+        bottom: 12px;
         display: inline-grid;
         place-items: center;
-        width: 1.75rem;
-        height: 1.75rem;
-        border-radius: 999px;
-        font-size: 0.95rem;
-        font-weight: 800;
-        color: #fff;
-        background: var(--exam-card-accent, #2563eb);
-        box-shadow: 0 4px 10px color-mix(in srgb, var(--exam-card-accent, #2563eb) 35%, transparent);
-        transition: transform 0.2s ease;
+        width: 1.55rem;
+        height: 1.55rem;
+        border-radius: 8px;
+        font-size: 0.82rem;
+        font-weight: 700;
+        color: var(--exam-card-accent, #2563eb);
+        background: color-mix(in srgb, var(--exam-card-accent, #2563eb) 10%, white);
+        border: 1px solid color-mix(in srgb, var(--exam-card-accent, #2563eb) 18%, #e2e8f0);
+        transition: transform 0.18s ease, background 0.18s ease;
       }
       .niveles-level-page .exam-practice-hub__card:hover .exam-practice-hub__arrow {
-        transform: translateX(2px);
+        transform: translateX(1px);
+        background: color-mix(in srgb, var(--exam-card-accent, #2563eb) 16%, white);
       }
     `}</style>
   );
