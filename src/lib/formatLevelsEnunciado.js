@@ -364,7 +364,7 @@ export function buildAnswerRowsFromGenerated(gen = {}) {
       const perQuestionAnswers = asGeneratedArray(q.modelAnswers);
       const sharedAnswer = modelAnswers.find(
         (m) =>
-          m.id === q.id ||
+          (q.id != null && m.id === q.id) ||
           Number(String(m.id || '').replace(/\D/g, '')) === num ||
           Number(m.number) === num,
       )?.answer;
