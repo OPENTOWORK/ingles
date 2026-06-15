@@ -227,7 +227,13 @@ export function buildAnswerRowsFromGenerated(gen = {}) {
     if (ma?.id) answerById[ma.id] = ma.answer;
   }
 
-  if (gen.example && asGeneratedArray(gen.example.options).length >= 2) {
+  // Part 1 example (0) lives in the Example: block above Text — not scored in levels_respuestas.
+  const skipPart1ExampleRows =
+    gen.partNumber === 1 &&
+    gen.example &&
+    asGeneratedArray(gen.example.options).length >= 2;
+
+  if (gen.example && asGeneratedArray(gen.example.options).length >= 2 && !skipPart1ExampleRows) {
     const ex = gen.example;
     const correctLetter = String(ex.answer || '').match(/^[A-D]/i)?.[0]?.toUpperCase() || '';
     for (const opt of asGeneratedArray(ex.options)) {

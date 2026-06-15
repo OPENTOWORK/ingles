@@ -294,11 +294,8 @@ export function buildB2EnunciadoFromGenerated(gen = {}, partNumber) {
 
   if (g.questions.length && pn !== 4 && pn !== 5 && pn !== 6 && pn !== 7 && pn !== 8 && pn < 10) {
     if (!useTextPanel || pn === 1) lines.push('Questions');
-    const part1Questions =
-      pn === 1 && g.example?.options?.length
-        ? [{ number: 0, options: g.example.options }, ...g.questions.filter((q) => Number(q.number) !== 0)]
-        : g.questions;
-    for (const q of part1Questions) {
+    const part1Questions = g.questions.filter((q) => Number(q.number) !== 0);
+    for (const q of pn === 1 ? part1Questions : g.questions) {
       if (pn === 1 || pn === 5 || pn === 6) {
         lines.push('');
         lines.push(String(q.number ?? ''));

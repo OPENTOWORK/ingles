@@ -62,6 +62,13 @@ export function normalizeGeneratedExamPart(slug, partDef, generated) {
 
   if (partDef.mode !== 'writing') {
     gen.partNumber = partDef.partNumber;
+    if (
+      levelLabel === 'B2' &&
+      partDef.partNumber === 1 &&
+      partDef.activity === 'multiple-choice-cloze'
+    ) {
+      balanceB2Part1McqKeyDistribution(gen);
+    }
     return gen;
   }
 
@@ -175,6 +182,85 @@ function validateWritingPart(slug, partDef, gen, errors, warnings) {
 
 const PART1_OPTION_REGEX = /^([A-D])\)\s*(.+)$/i;
 
+function part1SeedFromGen(gen) {
+  const s = `${gen.title || ''}|${gen.passage || ''}|${gen.questions?.length || 0}`;
+  let h = 0;
+  for (let i = 0; i < s.length; i += 1) h = (h * 31 + s.charCodeAt(i)) >>> 0;
+  return h;
+}
+
+function seededShuffle(arr, seed) {
+  const out = [...arr];
+  let s = seed >>> 0;
+  for (let i = out.length - 1; i > 0; i -= 1) {
+    s = (s * 1664525 + 1013904223) >>> 0;
+    const j = s % (i + 1);
+    [out[i], out[j]] = [out[j], out[i]];
+  }
+  return out;
+}
+
+function buildBalancedLetterSequence(count, seed) {
+  const letters = ['A', 'B', 'C', 'D'];
+  const per = Math.floor(count / letters.length);
+  const pool = [];
+  letters.forEach((L) => {
+    for (let i = 0; i < per; i += 1) pool.push(L);
+  });
+  for (let i = 0; i < count - pool.length; i += 1) pool.push(letters[i]);
+  return seededShuffle(pool, seed);
+}
+
+/** Reorder A–D labels so the answer key is balanced (2/2/2/2 for 8 items) without changing words. */
+export function balanceB2Part1McqKeyDistribution(gen, seed) {
+  if (!gen || typeof gen !== 'object') return gen;
+  const questions = asArray(gen.questions)
+    .filter((q) => Number(q?.number) >= 1 && Number(q?.number) <= 8)
+    .sort((a, b) => Number(a.number) - Number(b.number));
+  if (questions.length !== 8) return gen;
+
+  const targetLetters = buildBalancedLetterSequence(8, seed ?? part1SeedFromGen(gen));
+  const modelAnswers = asArray(gen.modelAnswers);
+  const answerById = new Map(modelAnswers.map((m) => [String(m?.id), m]));
+  const slotLetters = ['A', 'B', 'C', 'D'];
+
+  questions.forEach((q, i) => {
+    const entry = answerById.get(String(q?.id)) ?? modelAnswers[i];
+    const currentLetter = String(entry?.answer || '')
+      .match(/^[A-D]/i)?.[0]
+      ?.toUpperCase();
+    if (!currentLetter) return;
+
+    const parsed = asArray(q.options)
+      .map((opt) => {
+        const m = String(opt).match(PART1_OPTION_REGEX);
+        return m ? { letter: m[1].toUpperCase(), word: m[2].trim() } : null;
+      })
+      .filter(Boolean);
+    if (parsed.length !== 4) return;
+
+    const correct = parsed.find((p) => p.letter === currentLetter);
+    if (!correct) return;
+
+    const distractors = parsed.filter((p) => p.letter !== currentLetter);
+    const targetLetter = targetLetters[i];
+    const targetIdx = slotLetters.indexOf(targetLetter);
+    if (targetIdx < 0) return;
+
+    const newWords = [];
+    let d = 0;
+    for (let li = 0; li < 4; li += 1) {
+      if (li === targetIdx) newWords.push(correct.word);
+      else newWords.push(distractors[d++]?.word ?? '');
+    }
+
+    q.options = slotLetters.map((L, li) => `${L}) ${newWords[li]}`);
+    if (entry) entry.answer = targetLetter;
+  });
+
+  return gen;
+}
+
 /**
  * Strict checks for B2 Reading & Use of English Part 1 (multiple-choice cloze).
  * Any failure here blocks the save (errors, not warnings).
@@ -238,6 +324,37 @@ function validateB2Part1Strict(gen, errors, warnings) {
   if (questions.length === 8 && seenNumbers.size === 8) {
     for (let n = 1; n <= 8; n += 1) {
       if (!seenNumbers.has(n)) errors.push(`Part 1 is missing question number ${n}.`);
+    }
+  }
+
+  const example = gen.example && typeof gen.example === 'object' ? gen.example : null;
+  const exampleOptions = asArray(example?.options);
+  const PLACEHOLDER_WORDS = new Set(['option', 'word', 'answer', 'choice', 'example']);
+  if (exampleOptions.length >= 2) {
+    const exWords = [];
+    exampleOptions.forEach((opt, oi) => {
+      const m = String(opt).match(PART1_OPTION_REGEX);
+      if (!m) {
+        errors.push(`Part 1 example option ${oi + 1} must use the format "A) word".`);
+        return;
+      }
+      const word = m[2].trim().toLowerCase();
+      if (!word || PLACEHOLDER_WORDS.has(word)) {
+        errors.push(`Part 1 example options must be real one-word choices for gap (0), not placeholders.`);
+      }
+      if (/\s/.test(m[2].trim())) {
+        errors.push(`Part 1 example option ${m[1]} must be one word only.`);
+      }
+      exWords.push(word);
+    });
+    if (exWords.length === 4 && new Set(exWords).size !== exWords.length) {
+      errors.push('Part 1 example options must not repeat the same word.');
+    }
+    const exAns = String(example?.answer || '')
+      .match(/^[A-D]/i)?.[0]
+      ?.toUpperCase();
+    if (!exAns) {
+      errors.push('Part 1 example must include answer letter A–D.');
     }
   }
 
@@ -439,7 +556,9 @@ function validateB2Part2Strict(gen, errors, warnings) {
       .replace(/\(\d+\)\s*_+/g, ' ')
       .split(/\s+/)
       .filter(Boolean).length;
-    if (wordCount < 140 || wordCount > 190) {
+    if (wordCount < 145) {
+      errors.push(`Part 2 passage is ${wordCount} words; minimum is 145 (target 150–180).`);
+    } else if (wordCount < 150 || wordCount > 180) {
       warnings.push(`Part 2 passage is ${wordCount} words; target is around 150–180.`);
     }
   }

@@ -68,18 +68,18 @@ addCase('duplicate question number fails', (g) => {
   g.questions[7].number = 7;
   return g;
 }, /duplicate question number/);
-addCase('options out of A–D order fail', (g) => {
+addCase('options out of A–D order are reordered', (g) => {
   g.questions[5].options = ['A) take', 'C) make', 'B) have', 'D) do'];
   return g;
-}, /labelled A, B, C, D in order/);
+}, null);
 addCase('empty option fails', (g) => {
   g.questions[1].options[2] = 'C) ';
   return g;
 }, /must use the format|is empty/);
-addCase('degenerate answer key (6+ same letter) fails', (g) => {
+addCase('degenerate answer key (6+ same letter) is rebalanced', (g) => {
   g.modelAnswers = g.modelAnswers.map((m) => ({ ...m, answer: 'B' }));
   return g;
-}, /degenerate/i);
+}, null);
 
 let failures = 0;
 for (const { name, mutate, expectError } of cases) {

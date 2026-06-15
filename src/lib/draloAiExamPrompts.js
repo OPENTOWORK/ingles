@@ -210,11 +210,11 @@ Return ONLY JSON with: partTitle, directions, title, passage, questions[{number,
 ${variety}
 ${SHARED_JSON_RULES}
 ${directions}
-Generate exactly 6 gaps numbered (31) through (36) in the passage.
+Generate exactly 6 gaps numbered (37) through (42) in the passage.
 Passage length: about 450–600 words (minimum 450 words — count carefully), B2 level, natural magazine/article style with clear paragraph development.
 Include sentencePool: exactly 7 sentences labelled A–G (one extra distractor not used in any gap).
-Questions array: 6 items {number: 31–36} with NO per-question options (global pool only).
-modelAnswers: single letters A–G only, one per gap; use each correct letter once only across gaps 31–36.
+Questions array: 6 items {number: 37–42} with NO per-question options (global pool only).
+modelAnswers: single letters A–G only, one per gap; use each correct letter once only across gaps 37–42.
 
 Cohesion quality (CRITICAL — avoid keyword-matching traps):
 - Each gap must be solvable by discourse cohesion (pronouns this/these/such, contrast however/yet, cause-effect as a result/therefore, examples for instance, paragraph logic), NOT by spotting the same topic word in passage and option.
@@ -232,7 +232,8 @@ Return ONLY JSON with: partTitle, directions, title, passage (with gap markers),
 ${variety}
 ${SHARED_JSON_RULES}
 ${directions}
-Generate exactly 10 statements numbered 37–46.
+Generate exactly 10 statements numbered 43–52.
+Each question prompt MUST start with "Who" (e.g. "Who found that…", "Who felt that…").
 Include matchingIntro starting with "Which person…" explaining candidates choose A–D (people may be chosen more than once).
 sections: exactly 4 people A–D, each with name and paragraph (120–180 words).
 Each question: {number, prompt} with a clear statement to match — NO A/B/C/D option text in questions.
