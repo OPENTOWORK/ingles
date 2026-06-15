@@ -20,13 +20,14 @@ export function getNextExamSlot(currentSlot, examenIdBySlot = {}) {
 }
 
 /**
- * Skill practice footer: advance to the next exam variant, or fall back to the exercise picker.
+ * Skill practice footer: advance to the next exam variant, then the next part if needed.
  */
 export function runKeepPracticingSkillFlow({
   examSlot,
   examenIdBySlot,
   onSelectExamSlot,
   onReturnToExercisePicker,
+  onAdvanceToNextPart,
 }) {
   const nextSlot = getNextExamSlot(examSlot, examenIdBySlot);
   if (nextSlot != null) {
@@ -36,7 +37,14 @@ export function runKeepPracticingSkillFlow({
     }
     return;
   }
-  onReturnToExercisePicker();
+  if (onAdvanceToNextPart) {
+    onAdvanceToNextPart();
+    if (typeof window !== 'undefined') {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+    return;
+  }
+  onReturnToExercisePicker?.();
 }
 
 /** Close practice and keep ?part= but drop ?examen= (exercise picker for current part). */

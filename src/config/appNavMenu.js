@@ -13,29 +13,50 @@ import { isExamTheoryPartTipsPath } from '@/lib/nivelesPartTipsRoutes';
 /** Theory solo en la home (inferior, oculto para estudiantes). */
 export const HOME_THEORY_LINK = { href: '/teoria', label: 'Theory', tourId: 'nav-theory' };
 
-/** Enlaces inferiores de la home (sin pricing; ocultos para estudiantes). */
-export const HOME_QUICK_LINKS = [
-  { href: '/prueba-nivel', label: 'Placement Test', tourId: 'nav-placement' },
-  { href: '/training', label: 'Training' },
-];
+/** Enlaces inferiores de la home (placement/training solo admin). */
+export const NAV_LINK_PLACEMENT = {
+  href: '/prueba-nivel',
+  label: 'Placement Test',
+  tourId: 'nav-placement',
+};
+
+export const NAV_LINK_TRAINING = {
+  href: '/training',
+  label: 'Training',
+  tourId: 'nav-training',
+};
+
+export const NAV_LINKS_LEARNING = [NAV_LINK_PLACEMENT, NAV_LINK_TRAINING];
+
+/** Placement Test y Training: solo administradores (todos los dispositivos). */
+export function canViewPlacementAndTraining(userRole) {
+  return isAdminRole(userRole);
+}
+
+export function getAdminLearningLinks(userRole) {
+  return canViewPlacementAndTraining(userRole) ? NAV_LINKS_LEARNING : [];
+}
 
 /** Planes: solo administradores (ver pricingAccess.js). */
 export const HOME_PRICING_LINK = { href: '/precios', label: 'Planes', tourId: 'nav-pricing' };
 
-/** Enlaces de home con pricing incluido solo si el rol puede ver precios. */
+/** Enlaces de home: placement/training solo admin; planes solo admin. */
 export function getHomeQuickLinksForRole(userRole) {
-  if (!canViewPricing(userRole)) return HOME_QUICK_LINKS;
-  return [...HOME_QUICK_LINKS, HOME_PRICING_LINK];
+  const links = [...getAdminLearningLinks(userRole)];
+  if (canViewPricing(userRole)) links.push(HOME_PRICING_LINK);
+  return links;
 }
 
-/** Theory, placement, training y planes: en la home (Theory y planes solo admin). */
-export const HOME_MAIN_LINKS = [HOME_THEORY_LINK, ...HOME_QUICK_LINKS];
-
-/** Enlaces en la barra superior / menú móvil antes de Dralo AI. */
+/** Enlaces en la barra superior (escritorio) y base del menú móvil. */
 export const NAV_LINKS_BEFORE_DRALO = [
   { href: '/niveles?tab=theory', label: 'Exam theory', tourId: 'nav-exam-theory' },
-  { href: '/niveles', label: 'Exam practice', tourId: 'nav-levels' },
+  { href: '/niveles/b2', label: 'Exam practice', tourId: 'nav-levels' },
 ];
+
+/** Drawer móvil: misma barra que escritorio; placement/training solo si admin. */
+export function getNavLinksForMobileDrawer(userRole) {
+  return [...NAV_LINKS_BEFORE_DRALO, ...getAdminLearningLinks(userRole)];
+}
 
 /** Estado activo de enlaces del menú principal (incluye pestaña theory y rutas /teoria de examen). */
 export function isNavLinkActive(href, pathname, searchParams) {
@@ -50,7 +71,7 @@ export function isNavLinkActive(href, pathname, searchParams) {
     return Boolean(getExamUnitSlugFromPathname(pathname));
   }
 
-  if (href === '/niveles') {
+  if (href === '/niveles/b2') {
     if (path === '/niveles') {
       return searchParams?.get('tab') !== 'theory';
     }

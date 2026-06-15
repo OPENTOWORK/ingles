@@ -222,3 +222,28 @@
     height: 10px;
   }
 }
+
+:global(body.reading-night-mode) .wrap {
+  background: #1e293b;
+  border-color: #475569;
+}
+
+:global(body.reading-night-mode) .summary {
+  border-bottom-color: #334155;
+}
+
+:global(body.reading-night-mode) .statValue {
+  color: #f1f5f9;
+}
+
+:global(body.reading-night-mode) .statLabel,
+:global(body.reading-night-mode) .weekdayLabel,
+:global(body.reading-night-mode) .monthLabel,
+:global(body.reading-night-mode) .legendLabel,
+:global(body.reading-night-mode) .hint {
+  color: #94a3b8;
+}
+
+:global(body.reading-night-mode) .legend {
+  border-top-color: #334155;
+}

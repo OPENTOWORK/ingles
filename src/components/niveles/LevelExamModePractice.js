@@ -21,6 +21,7 @@ import { filterVisibleExamenes } from '@/utils/levelsExamVisibility';
 import { clearExamSlotPuntuaciones } from '@/lib/fetchExamModeSlotStats';
 import { useLevelsExamAdminFlow, buildExamSlotPickerProps } from '@/hooks/useLevelsExamAdminFlow';
 import A2ExamGenerationStatus from '@/components/niveles/A2ExamGenerationStatus';
+import ExamPracticeLevelPicker from '@/components/niveles/ExamPracticeLevelPicker';
 import ExamPracticeReportError from '@/components/exam/ExamPracticeReportError';
 
 function formatMinutes(m) {
@@ -160,20 +161,27 @@ function LevelExamModePracticeInner({ slug }) {
         />
       ) : null}
 
-      <B2ExamSlotProgressPicker
-        value={examSlot}
-        onSelect={handlePickExam}
-        progressBySlot={{}}
-        partsInPaper={sections.length}
-        examLabelsBySlot={examNamesBySlot}
-        lang="en"
-        onViewStatistics={handleViewStatistics}
-        onRepeatExam={handleRepeatExamSlot}
-        {...examSlotPickerProps}
-      />
-
       {!pickedSlot ? (
-        <div style={{ textAlign: 'center', maxWidth: '640px', margin: '1.5rem auto 0', color: '#4a5568' }}>
+        <>
+          <ExamPracticeLevelPicker
+            variant="strip"
+            activeLevel={slug}
+            linkForLevel={(level) => `/niveles/${level.slug}/exam-mode`}
+          />
+
+          <B2ExamSlotProgressPicker
+            value={examSlot}
+            onSelect={handlePickExam}
+            progressBySlot={{}}
+            partsInPaper={sections.length}
+            examLabelsBySlot={examNamesBySlot}
+            lang="en"
+            onViewStatistics={handleViewStatistics}
+            onRepeatExam={handleRepeatExamSlot}
+            {...examSlotPickerProps}
+          />
+
+          <div style={{ textAlign: 'center', maxWidth: '640px', margin: '1.5rem auto 0', color: '#4a5568' }}>
           <h1 style={{ margin: '0 0 0.75rem', color: '#1a365d' }}>
             {slug === 'b2' ? 'B2 Full Exam Simulation' : `Exam mode — ${config.cefr}`}
           </h1>
@@ -187,8 +195,14 @@ function LevelExamModePracticeInner({ slug }) {
             Answers are hidden until you finish the full exam. Your progress is saved so you can continue later.
           </p>
         </div>
+        </>
       ) : (
         <div style={{ maxWidth: '720px', margin: '1.5rem auto 0' }}>
+          <ExamPracticeLevelPicker
+            variant="strip"
+            activeLevel={slug}
+            linkForLevel={(level) => `/niveles/${level.slug}/exam-mode`}
+          />
           <header style={{ textAlign: 'center', marginBottom: '1.5rem' }}>
             <p style={{ margin: 0, fontSize: '0.8rem', fontWeight: 700, color: '#2b6cb0', textTransform: 'uppercase' }}>
               Exam mode
@@ -378,8 +392,8 @@ function LevelExamModePracticeInner({ slug }) {
           </ol>
 
           <p style={{ textAlign: 'center', marginTop: '1.5rem' }}>
-            <Link href={`/niveles/${slug}`} style={{ color: '#4a5568' }}>
-              ← Back to {config.cefr} hub
+            <Link href="/niveles/b2" style={{ color: '#4a5568' }}>
+              ← Back to exam practice
             </Link>
           </p>
         </div>

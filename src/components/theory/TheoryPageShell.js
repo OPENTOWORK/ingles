@@ -10,10 +10,10 @@ const TheoryInlinePractice = dynamic(
 );
 
 export const THEORY_PAGE_WRAPPER_STYLE = {
-  border: '1px solid #bfdbfe',
+  border: '1px solid var(--color-border-tertiary, #bfdbfe)',
   borderRadius: '16px',
   padding: '1rem',
-  background: 'linear-gradient(180deg, #fafbff 0%, #fff 100%)',
+  background: 'var(--card, #ffffff)',
 };
 
 function injectPracticeIntoFirstSection(node, topicTitle) {

@@ -474,3 +474,70 @@
 .exam-stats__empty a:hover {
   text-decoration: underline;
 }
+
+body.reading-night-mode .exam-stats__subtitle,
+body.reading-night-mode .exam-stats__filter label {
+  color: #94a3b8;
+}
+
+body.reading-night-mode .exam-stats__select {
+  background: #334155;
+  border-color: #64748b;
+  color: #f8fafc;
+}
+
+body.reading-night-mode .exam-stats__kpi {
+  background: #1e293b;
+  border-color: #475569;
+}
+
+body.reading-night-mode .exam-stats__kpi-label {
+  color: #94a3b8;
+}
+
+body.reading-night-mode .exam-stats__kpi-value {
+  color: #f1f5f9;
+}
+
+body.reading-night-mode .exam-stats__block-title,
+body.reading-night-mode .exam-stats__section-name,
+body.reading-night-mode .exam-stats__panel h3,
+body.reading-night-mode .exam-stats__attempt-name,
+body.reading-night-mode .exam-stats__insight-card h4 {
+  color: #f1f5f9;
+}
+
+body.reading-night-mode .exam-stats__section-card,
+body.reading-night-mode .exam-stats__metric,
+body.reading-night-mode .exam-stats__panel,
+body.reading-night-mode .exam-stats__attempt,
+body.reading-night-mode .exam-stats__insight-card,
+body.reading-night-mode .exam-stats__chip {
+  background: #1e293b;
+  border-color: #475569;
+}
+
+body.reading-night-mode .exam-stats__metric-label,
+body.reading-night-mode .exam-stats__attempt-date,
+body.reading-night-mode .exam-stats__attempt-detail,
+body.reading-night-mode .exam-stats__attempt-time,
+body.reading-night-mode .exam-stats__time-label,
+body.reading-night-mode .exam-stats__tip {
+  color: #94a3b8;
+}
+
+body.reading-night-mode .exam-stats__metric-value,
+body.reading-night-mode .exam-stats__attempt-score,
+body.reading-night-mode .exam-stats__time-value {
+  color: #e2e8f0;
+}
+
+body.reading-night-mode .exam-stats__progress {
+  background: #334155;
+}
+
+body.reading-night-mode .exam-stats__empty {
+  background: #1e293b;
+  border-color: #475569;
+  color: #94a3b8;
+}

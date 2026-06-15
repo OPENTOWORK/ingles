@@ -1,11 +1,16 @@
 'use client';
 
 type MediaApi = {
-  status: 'idle' | 'recording' | 'stopped';
+  status: 'idle' | 'recording' | 'paused' | 'stopped';
   error: string | null;
   start: () => Promise<void>;
   stop: () => Promise<Blob | null>;
   isRecording: boolean;
+  isPaused?: boolean;
+  isActive?: boolean;
+  pause?: () => void;
+  resume?: () => void;
+  discard?: () => Promise<void>;
 };
 
 type Props = {

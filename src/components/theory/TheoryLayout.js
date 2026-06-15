@@ -373,9 +373,8 @@ const TheoryLayout = ({
   }
 
   return (
-    <div style={{
+    <div className="theory-layout-page" style={{
       minHeight: '100vh',
-      background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
       padding: '2rem 0'
     }}>
       {/* Header */}
@@ -385,11 +384,9 @@ const TheoryLayout = ({
         padding: '0 2rem',
         marginBottom: '2rem'
       }}>
-        <div style={{
-          background: 'white',
+        <div className="theory-layout-card" style={{
           borderRadius: '20px',
           padding: '2rem',
-          boxShadow: '0 20px 40px rgba(0,0,0,0.1)',
           marginBottom: '2rem'
         }}>
           {/* Breadcrumb */}
@@ -399,7 +396,7 @@ const TheoryLayout = ({
             gap: '0.5rem',
             marginBottom: '1rem',
             fontSize: '14px',
-            color: '#666'
+            color: 'var(--color-text-secondary, #666)'
           }}>
             <Link href="/teoria" style={{ color: '#667eea', textDecoration: 'none' }}>
               📚 Theory
@@ -413,7 +410,7 @@ const TheoryLayout = ({
             <h1 style={{
               fontSize: '2.5rem',
               fontWeight: 'bold',
-              color: '#2d3748',
+              color: 'var(--text, #2d3748)',
               margin: '0 0 0.5rem 0',
               lineHeight: 1.2
             }}>
@@ -421,7 +418,7 @@ const TheoryLayout = ({
             </h1>
             <p style={{
               fontSize: '1.1rem',
-              color: '#666',
+              color: 'var(--color-text-secondary, #666)',
               margin: '0 0 1rem 0',
               lineHeight: 1.6
             }}>
@@ -495,7 +492,7 @@ const TheoryLayout = ({
 
           {/* Tabs */}
           <div className="theory-tabs-row">
-            <div className="theory-tabs">
+            <div className="theory-tabs theory-layout-tabs">
               <button
                 type="button"
                 onClick={() => setActiveTab('theory')}
@@ -522,7 +519,7 @@ const TheoryLayout = ({
               ) : null}
             </div>
           </div>
-          <style jsx>{`
+          <style jsx global>{`
             .theory-tabs-row {
               display: flex;
               flex-wrap: wrap;
@@ -533,8 +530,8 @@ const TheoryLayout = ({
               display: inline-flex;
               gap: 6px;
               padding: 6px;
-              background: #f8fafc;
-              border: 1px solid #e2e8f0;
+              background: var(--color-background-secondary, #f8fafc);
+              border: 1px solid var(--color-border-tertiary, #e2e8f0);
               border-radius: 14px;
             }
             .theory-tab-btn {
@@ -554,7 +551,7 @@ const TheoryLayout = ({
                 transform 0.18s ease;
             }
             .theory-tab-btn:hover:not(.theory-tab-btn--active) {
-              background: #fff;
+              background: var(--card, #fff);
               color: #4338ca;
             }
             .theory-tab-btn--active {
@@ -587,6 +584,21 @@ const TheoryLayout = ({
               background: rgba(255, 255, 255, 0.25);
               color: #fff;
             }
+            body.reading-night-mode .theory-layout-tabs {
+              background: #334155 !important;
+              border-color: #64748b !important;
+            }
+            body.reading-night-mode .theory-layout-tabs .theory-tab-btn {
+              color: #cbd5e1;
+            }
+            body.reading-night-mode .theory-layout-tabs .theory-tab-btn:hover:not(.theory-tab-btn--active) {
+              background: #475569 !important;
+              color: #e2e8f0 !important;
+            }
+            body.reading-night-mode .theory-layout-tabs .theory-tab-btn__count {
+              background: rgba(148, 163, 184, 0.25);
+              color: #e2e8f0;
+            }
           `}</style>
         </div>
       </div>
@@ -597,11 +609,9 @@ const TheoryLayout = ({
         margin: '0 auto',
         padding: '0 2rem'
       }}>
-        <div style={{
-          background: 'white',
+        <div className="theory-layout-card" style={{
           borderRadius: '20px',
           padding: '2rem',
-          boxShadow: '0 20px 40px rgba(0,0,0,0.1)',
           minHeight: '600px'
         }}>
           {activeTab === 'theory' && (
@@ -641,16 +651,15 @@ const TheoryLayout = ({
       }}>
         <Link 
           href="/teoria"
+          className="theory-layout-back-link"
           style={{
             display: 'flex',
             alignItems: 'center',
             gap: '0.5rem',
             padding: '0.75rem 1.5rem',
-            background: 'white',
             color: '#667eea',
             textDecoration: 'none',
             borderRadius: '12px',
-            boxShadow: '0 4px 12px rgba(0,0,0,0.1)',
             fontWeight: '500',
             transition: 'all 0.2s'
           }}

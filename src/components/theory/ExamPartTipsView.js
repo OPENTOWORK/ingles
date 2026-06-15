@@ -121,7 +121,7 @@ export default function ExamPartTipsView({
         )}
       </footer>
 
-      <style jsx>{`
+      <style jsx global>{`
         .exam-part-tips-page {
           max-width: 1200px;
           margin: 0 auto;
@@ -237,6 +237,31 @@ export default function ExamPartTipsView({
         }
         .exam-part-tips-nav__home:hover {
           background: #9ae6b4;
+        }
+        body.reading-night-mode .exam-part-tips-page {
+          background-color: #0f172a;
+          color: #e2e8f0;
+        }
+        body.reading-night-mode .exam-part-tips-breadcrumb {
+          color: #94a3b8;
+        }
+        body.reading-night-mode .exam-part-tips-exercises-intro {
+          color: #94a3b8;
+        }
+        body.reading-night-mode .exam-part-tips-exercise-card {
+          background: #1e293b;
+          box-shadow: 0 8px 24px rgba(0, 0, 0, 0.28);
+        }
+        body.reading-night-mode .exam-part-tips-nav__btn {
+          background: #334155;
+          color: #e2e8f0;
+        }
+        body.reading-night-mode .exam-part-tips-nav__home {
+          background: #14532d;
+          color: #dcfce7;
+        }
+        body.reading-night-mode .exam-part-tips-nav__home:hover {
+          background: #166534;
         }
       `}</style>
     </main>

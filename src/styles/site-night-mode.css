@@ -214,6 +214,318 @@ body.reading-night-mode .theory-ladder-back:hover {
   color: #f8fafc;
 }
 
+/* Global page headers (not site nav) */
+body.reading-night-mode .header:not(.site-header) {
+  background-color: transparent;
+  border-bottom-color: transparent;
+  box-shadow: none;
+}
+
+body.reading-night-mode .teoria-page .header p,
+body.reading-night-mode .contacto-page .header p {
+  color: #94a3b8;
+}
+
+/* Teoria shared (TeoriaStyles styled-jsx) */
+body.reading-night-mode .teoria-page .search input {
+  background: #334155;
+  border-color: #64748b;
+  color: #f8fafc;
+}
+
+body.reading-night-mode .teoria-page .level-card {
+  background: #1e293b;
+  border-color: #475569;
+}
+
+body.reading-night-mode .teoria-page .level-description,
+body.reading-night-mode .teoria-page .level-skills,
+body.reading-night-mode .teoria-page .level-skills strong {
+  color: #94a3b8;
+}
+
+body.reading-night-mode .teoria-page .pill {
+  background: #334155;
+  border-color: #64748b;
+  color: #cbd5e1;
+}
+
+body.reading-night-mode .teoria-page .card:hover {
+  background: #334155;
+}
+
+body.reading-night-mode .theory-level-filter {
+  background: #1e293b;
+  border-color: #475569;
+}
+
+body.reading-night-mode .theory-level-filter__btn {
+  background: #334155;
+  border-color: #64748b;
+  color: #cbd5e1;
+}
+
+body.reading-night-mode .theory-level-filter__btn--active {
+  background: #1e3a5f;
+  border-color: #38bdf8;
+  color: #bae6fd;
+}
+
+/* Exam theory topics (Listening, Reading, …) */
+body.reading-night-mode .exam-theory-topics-page .exam-theory-parts {
+  background: linear-gradient(180deg, #1e293b 0%, #0f172a 100%) !important;
+  border-color: #475569 !important;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.28) !important;
+}
+
+body.reading-night-mode .exam-theory-topics-page .exam-theory-parts__filter {
+  background: #334155 !important;
+  border-color: #64748b !important;
+  color: #cbd5e1 !important;
+}
+
+body.reading-night-mode .exam-theory-topics-page .exam-theory-parts__filter:hover {
+  background: #475569 !important;
+  border-color: #93c5fd !important;
+}
+
+body.reading-night-mode .exam-theory-topics-page .exam-theory-parts__filter--active {
+  background: #1e3a5f !important;
+  border-color: #38bdf8 !important;
+  color: #bae6fd !important;
+}
+
+body.reading-night-mode .exam-theory-topics-page .exam-theory-parts__filter-count {
+  background: rgba(148, 163, 184, 0.2) !important;
+}
+
+body.reading-night-mode .exam-theory-topics-page .exam-theory-parts__intro,
+body.reading-night-mode .exam-theory-topics-page .exam-theory-parts__level-title {
+  color: #94a3b8 !important;
+}
+
+body.reading-night-mode .exam-theory-topics-page .exam-theory-parts__title {
+  color: #f8fafc !important;
+}
+
+body.reading-night-mode .exam-theory-topics-page .exam-theory-parts__card {
+  background: #334155 !important;
+  border-color: #64748b !important;
+}
+
+body.reading-night-mode .exam-theory-topics-page .exam-theory-parts__card-desc {
+  color: #94a3b8 !important;
+}
+
+body.reading-night-mode .exam-theory-topics-page .exam-theory-section-progress {
+  background: linear-gradient(180deg, #1e3a5f 0%, #1e293b 100%) !important;
+  border-color: #475569 !important;
+}
+
+body.reading-night-mode .exam-theory-topics-page .exam-theory-section-progress__hint {
+  color: #94a3b8 !important;
+}
+
+/* Theory topic layout (TheoryLayout inline cards) */
+body.reading-night-mode .theory-layout-page {
+  background: linear-gradient(135deg, #1e293b 0%, #312e81 55%, #1e1b4b 100%) !important;
+}
+
+body.reading-night-mode .theory-layout-card {
+  background: #1e293b !important;
+  border: 1px solid #475569;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.35) !important;
+}
+
+body.reading-night-mode .theory-layout-card h1 {
+  color: #f8fafc !important;
+}
+
+body.reading-night-mode .theory-layout-card p,
+body.reading-night-mode .theory-layout-card nav {
+  color: #94a3b8 !important;
+}
+
+body.reading-night-mode .theory-layout-card nav a {
+  color: #93c5fd !important;
+}
+
+body.reading-night-mode .theory-layout-back-link {
+  background: #334155 !important;
+  color: #93c5fd !important;
+}
+
+/* Theory content blocks (TheoryContent.js inline styles) */
+body.reading-night-mode .theory-section {
+  background: #1e293b !important;
+  border-color: #475569 !important;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25) !important;
+}
+
+body.reading-night-mode .theory-section__panel {
+  background: #1e293b !important;
+  border-top-color: #475569 !important;
+  color: #e2e8f0 !important;
+}
+
+body.reading-night-mode .theory-section__panel p,
+body.reading-night-mode .theory-section__panel li,
+body.reading-night-mode .theory-section__panel span,
+body.reading-night-mode .theory-section__panel strong,
+body.reading-night-mode .theory-section__panel h4,
+body.reading-night-mode .theory-section__panel h5 {
+  color: #cbd5e1 !important;
+}
+
+body.reading-night-mode .theory-quick-reference {
+  background: #14532d !important;
+  border-color: #166534 !important;
+}
+
+body.reading-night-mode .theory-quick-reference h4 {
+  color: #6ee7b7 !important;
+}
+
+body.reading-night-mode .theory-quick-reference__item {
+  background: #1e293b !important;
+  border-color: #475569 !important;
+}
+
+body.reading-night-mode .theory-quick-reference__item div,
+body.reading-night-mode .theory-quick-reference__item p,
+body.reading-night-mode .theory-quick-reference__item span {
+  color: #cbd5e1 !important;
+}
+
+body.reading-night-mode .theory-example {
+  background: #334155 !important;
+  border-color: #64748b !important;
+}
+
+body.reading-night-mode .theory-example p,
+body.reading-night-mode .theory-example span {
+  color: #cbd5e1 !important;
+}
+
+body.reading-night-mode .theory-rule {
+  background: #1e293b !important;
+  border-color: #475569 !important;
+}
+
+body.reading-night-mode .theory-rule h4,
+body.reading-night-mode .theory-rule p,
+body.reading-night-mode .theory-rule li,
+body.reading-night-mode .theory-rule strong {
+  color: #cbd5e1 !important;
+}
+
+body.reading-night-mode .theory-tip--info {
+  background: #1e3a5f !important;
+  border-color: #3b82f6 !important;
+}
+
+body.reading-night-mode .theory-tip--warning {
+  background: #422006 !important;
+  border-color: #d97706 !important;
+}
+
+body.reading-night-mode .theory-tip--success {
+  background: #14532d !important;
+  border-color: #22c55e !important;
+}
+
+body.reading-night-mode .theory-tip--error {
+  background: #450a0a !important;
+  border-color: #ef4444 !important;
+}
+
+body.reading-night-mode .theory-tip div {
+  color: #e2e8f0 !important;
+}
+
+body.reading-night-mode .theory-tip__title,
+body.reading-night-mode .theory-tip__desc,
+body.reading-night-mode .theory-tip__list-item {
+  color: #e2e8f0 !important;
+}
+
+/* Contact page */
+body.reading-night-mode .contacto-page {
+  background-color: #0f172a;
+  color: #e2e8f0;
+}
+
+body.reading-night-mode .contact-section {
+  background: #1e293b;
+  border-color: #475569;
+}
+
+body.reading-night-mode .contact-section--internal {
+  background: linear-gradient(180deg, #1e293b 0%, #172033 100%) !important;
+  border-color: #475569 !important;
+}
+
+body.reading-night-mode .internal-messages__coming-soon {
+  background: #334155 !important;
+  border-color: #64748b !important;
+}
+
+body.reading-night-mode .internal-messages__coming-soon p {
+  color: #cbd5e1 !important;
+}
+
+body.reading-night-mode .internal-messages__coming-soon-badge {
+  background: linear-gradient(135deg, #831843 0%, #9d174d 100%) !important;
+  color: #fce7f3 !important;
+}
+
+body.reading-night-mode .internal-channel {
+  background: #334155 !important;
+  border-color: #64748b !important;
+}
+
+body.reading-night-mode .internal-channel--active {
+  background: linear-gradient(180deg, #334155 0%, #1e293b 100%) !important;
+  border-color: #ec4899 !important;
+}
+
+body.reading-night-mode .internal-channel__label {
+  color: #f1f5f9 !important;
+}
+
+body.reading-night-mode .internal-form {
+  background: #1e293b !important;
+  border-color: #475569 !important;
+}
+
+body.reading-night-mode .contact-faq-entry {
+  background: linear-gradient(135deg, #1e3a5f 0%, #1e293b 55%, #0f172a 100%) !important;
+  border-color: #475569 !important;
+}
+
+body.reading-night-mode .contact-faq-entry p {
+  color: #94a3b8 !important;
+}
+
+body.reading-night-mode .tickets-table th {
+  background: #334155;
+  color: #e2e8f0;
+}
+
+body.reading-night-mode .tickets-table td {
+  border-color: #475569;
+  color: #cbd5e1;
+}
+
+body.reading-night-mode .tickets-table__ticket-ref {
+  background: #334155;
+  color: #cbd5e1;
+}
+
+body.reading-night-mode .form-group label {
+  color: #cbd5e1;
+}
+
 /* Login */
 body.reading-night-mode .login-page {
   background-color: #1e293b !important;
@@ -299,6 +611,225 @@ body.reading-night-mode .profile-collapse--open .profile-collapse__head {
   border-bottom-color: rgba(148, 163, 184, 0.12);
 }
 
+/* Profile header — overrides global .header { background: #fff } */
+body.reading-night-mode .perfil-page .header.header--mascot {
+  background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+  border: 1px solid #475569;
+  border-radius: 16px;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.28);
+  padding: 1.25rem 1.5rem;
+}
+
+body.reading-night-mode .perfil-page .header h1 {
+  color: #f8fafc;
+}
+
+body.reading-night-mode .perfil-page .header p {
+  color: #94a3b8;
+}
+
+body.reading-night-mode .perfil-page .section-desc,
+body.reading-night-mode .perfil-page .mis-datos-fact dt {
+  color: #94a3b8;
+}
+
+body.reading-night-mode .perfil-page .mis-datos-fact dd {
+  color: #e2e8f0;
+}
+
+/* Profile tabs bar */
+body.reading-night-mode .perfil-page .perfil-tabs-bar {
+  background: #1e293b;
+  border-color: #475569;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.25);
+}
+
+body.reading-night-mode .perfil-tabs-group {
+  background: #334155;
+  border-color: #64748b;
+  color: #cbd5e1;
+}
+
+body.reading-night-mode .perfil-tabs-group:hover {
+  background: #475569;
+  border-color: #94a3b8;
+}
+
+body.reading-night-mode .perfil-tabs-group--active {
+  background: linear-gradient(180deg, #1e3a5f 0%, #1e293b 100%);
+  border-color: #38bdf8;
+  box-shadow: 0 4px 14px rgba(56, 189, 248, 0.15);
+}
+
+body.reading-night-mode .perfil-tabs-group--has-selection {
+  border-color: #60a5fa;
+}
+
+body.reading-night-mode .perfil-tabs-group__title {
+  color: #f1f5f9;
+}
+
+body.reading-night-mode .perfil-tabs-group--active .perfil-tabs-group__title {
+  color: #bae6fd;
+}
+
+body.reading-night-mode .perfil-tabs-group__meta,
+body.reading-night-mode .perfil-tabs-group-desc {
+  color: #94a3b8;
+}
+
+body.reading-night-mode .perfil-tab-item {
+  background: #334155;
+  border-color: #64748b;
+  color: #cbd5e1;
+}
+
+body.reading-night-mode .perfil-tab-item:hover:not(.perfil-tab-item--locked) {
+  background: #475569;
+  border-color: #93c5fd;
+  color: #e2e8f0;
+}
+
+body.reading-night-mode .perfil-tab-item--active {
+  background: #2563eb;
+  border-color: #2563eb;
+  color: #fff;
+}
+
+body.reading-night-mode .perfil-tab-item--locked {
+  background: #1e293b;
+  border-color: #475569;
+  color: #64748b;
+}
+
+body.reading-night-mode .perfil-tab-item--locked.perfil-tab-item--active {
+  background: #475569;
+  border-color: #64748b;
+  color: #e2e8f0;
+}
+
+body.reading-night-mode .perfil-tab-item__icon {
+  color: #94a3b8;
+}
+
+body.reading-night-mode .perfil-tab-item--active .perfil-tab-item__icon {
+  color: currentColor;
+}
+
+body.reading-night-mode .perfil-tab-item__badge {
+  background: rgba(148, 163, 184, 0.2);
+  color: #cbd5e1;
+}
+
+/* Profile group accordions (Tools tab) */
+body.reading-night-mode .profile-accordion {
+  background: #1e293b;
+  border-color: #475569;
+}
+
+body.reading-night-mode .profile-accordion--open {
+  border-color: #3b82f6;
+  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.28);
+}
+
+body.reading-night-mode .profile-accordion__trigger:hover {
+  background: rgba(255, 255, 255, 0.04);
+}
+
+body.reading-night-mode .profile-accordion--open .profile-accordion__trigger {
+  background: linear-gradient(180deg, #1e3a5f 0%, #1e293b 100%);
+  border-bottom-color: #475569;
+}
+
+body.reading-night-mode .profile-accordion__title {
+  color: #f1f5f9;
+}
+
+body.reading-night-mode .profile-accordion__badge {
+  background: rgba(148, 163, 184, 0.15);
+  color: #94a3b8;
+}
+
+/* Profile avatar */
+body.reading-night-mode .perfil-page .profile-avatar__button {
+  border-color: #60a5fa;
+  background: #1e3a5f;
+}
+
+body.reading-night-mode .perfil-page .profile-avatar__img--mascot,
+body.reading-night-mode .perfil-page .profile-avatar__placeholder {
+  background: linear-gradient(145deg, #1e3a5f 0%, #1e293b 100%);
+  color: #93c5fd;
+}
+
+body.reading-night-mode .perfil-page .profile-avatar-row {
+  background: #1e293b;
+  border-color: #475569;
+}
+
+body.reading-night-mode .perfil-page .profile-avatar-row__hint {
+  color: #94a3b8;
+}
+
+/* Profile cards from styled-jsx in perfil/page.js */
+body.reading-night-mode .perfil-page .stat-card,
+body.reading-night-mode .perfil-page .skill-card,
+body.reading-night-mode .perfil-page .badge-card,
+body.reading-night-mode .perfil-page .goal-card,
+body.reading-night-mode .perfil-page .setting-item,
+body.reading-night-mode .perfil-page .note-card,
+body.reading-night-mode .perfil-page .favorite-card,
+body.reading-night-mode .perfil-page .comparison-card,
+body.reading-night-mode .perfil-page .group-card,
+body.reading-night-mode .perfil-page .challenge-card,
+body.reading-night-mode .perfil-page .recommendation-card,
+body.reading-night-mode .perfil-page .achievement-progress-card,
+body.reading-night-mode .perfil-page .stat-item,
+body.reading-night-mode .perfil-page .ai-insight-card,
+body.reading-night-mode .perfil-page .plan-item,
+body.reading-night-mode .perfil-page .next-session,
+body.reading-night-mode .perfil-page .music-player,
+body.reading-night-mode .perfil-page .track-item,
+body.reading-night-mode .perfil-page .empty-chart,
+body.reading-night-mode .perfil-page .timer-container,
+body.reading-night-mode .perfil-page .calendar-container,
+body.reading-night-mode .perfil-page .calendar-day,
+body.reading-night-mode .perfil-page .history-table,
+body.reading-night-mode .perfil-page .profile-section:not(.profile-section--collapsible):not(.profile-collapse),
+body.reading-night-mode .perfil-page .profile-coming-soon {
+  background: #1e293b;
+  border-color: #475569;
+  color: #e2e8f0;
+}
+
+body.reading-night-mode .perfil-page .stat-label,
+body.reading-night-mode .perfil-page .skill-exercises,
+body.reading-night-mode .perfil-page .badge-description,
+body.reading-night-mode .perfil-page .comparison-label,
+body.reading-night-mode .perfil-page .group-members,
+body.reading-night-mode .perfil-page .challenge-description,
+body.reading-night-mode .perfil-page .recommendation-message,
+body.reading-night-mode .perfil-page .achievement-description,
+body.reading-night-mode .perfil-page .plan-label,
+body.reading-night-mode .perfil-page .profile-coming-soon__text {
+  color: #94a3b8;
+}
+
+body.reading-night-mode .perfil-page .history-header {
+  background: #334155;
+  color: #e2e8f0;
+}
+
+body.reading-night-mode .perfil-page .history-row:hover {
+  background: #334155;
+}
+
+body.reading-night-mode .perfil-page .form-input {
+  background: #334155;
+  border-color: #64748b;
+  color: #f8fafc;
+}
+
 body.reading-night-mode .perfil-tabs__btn {
   background: #334155;
   border-color: #64748b;
@@ -356,4 +887,43 @@ body.reading-night-mode .cookie-btn-secondary {
   background: #334155;
   border-color: #64748b;
   color: #e2e8f0;
+}
+
+/* Footer legal */
+body.reading-night-mode .legal-footer {
+  background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+  border-top: 1px solid #334155;
+  color: #e2e8f0;
+}
+
+body.reading-night-mode .legal-footer-column h3,
+body.reading-night-mode .legal-footer-column a,
+body.reading-night-mode .legal-footer-link-btn,
+body.reading-night-mode .legal-footer-version,
+body.reading-night-mode .legal-footer-copy {
+  color: #e2e8f0;
+}
+
+body.reading-night-mode .legal-footer-column a:hover,
+body.reading-night-mode .legal-footer-link-btn:hover {
+  color: #93c5fd;
+}
+
+body.reading-night-mode .legal-doc-page {
+  background: transparent;
+}
+
+/* Theory layout base (light mode) */
+.theory-layout-page {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+.theory-layout-card {
+  background: #ffffff;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+}
+
+.theory-layout-back-link {
+  background: #ffffff;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }

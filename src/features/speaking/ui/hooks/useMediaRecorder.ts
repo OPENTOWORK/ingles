@@ -1,9 +1,18 @@
 'use client';
 
-import { useCallback, useRef, useState } from 'react';
+import { useCallback, useRef, useState, type MutableRefObject } from 'react';
+
+function releaseStream(
+  streamRef: MutableRefObject<MediaStream | null>,
+  mediaRecorderRef: MutableRefObject<MediaRecorder | null>,
+) {
+  streamRef.current?.getTracks().forEach((t) => t.stop());
+  streamRef.current = null;
+  mediaRecorderRef.current = null;
+}
 
 export function useMediaRecorder() {
-  const [status, setStatus] = useState<'idle' | 'recording' | 'stopped'>('idle');
+  const [status, setStatus] = useState<'idle' | 'recording' | 'paused' | 'stopped'>('idle');
   const [error, setError] = useState<string | null>(null);
   const chunksRef = useRef<Blob[]>([]);
   const mediaRecorderRef = useRef<MediaRecorder | null>(null);
@@ -20,14 +29,32 @@ export function useMediaRecorder() {
       mr.onstop = () => {
         const blob = new Blob(chunksRef.current, { type: mr.mimeType || 'audio/webm' });
         chunksRef.current = [];
-        streamRef.current?.getTracks().forEach((t) => t.stop());
-        streamRef.current = null;
-        mediaRecorderRef.current = null;
+        releaseStream(streamRef, mediaRecorderRef);
         setStatus('idle');
         resolve(blob);
       };
       mr.stop();
       setStatus('stopped');
+    });
+  }, []);
+
+  const discard = useCallback((): Promise<void> => {
+    return new Promise((resolve) => {
+      const mr = mediaRecorderRef.current;
+      if (!mr || mr.state === 'inactive') {
+        chunksRef.current = [];
+        releaseStream(streamRef, mediaRecorderRef);
+        setStatus('idle');
+        resolve();
+        return;
+      }
+      mr.onstop = () => {
+        chunksRef.current = [];
+        releaseStream(streamRef, mediaRecorderRef);
+        setStatus('idle');
+        resolve();
+      };
+      mr.stop();
     });
   }, []);
 
@@ -53,5 +80,36 @@ export function useMediaRecorder() {
     }
   }, []);
 
-  return { status, error, start, stop, isRecording: status === 'recording' };
+  const pause = useCallback(() => {
+    const mr = mediaRecorderRef.current;
+    if (mr?.state === 'recording') {
+      mr.pause();
+      setStatus('paused');
+    }
+  }, []);
+
+  const resume = useCallback(() => {
+    const mr = mediaRecorderRef.current;
+    if (mr?.state === 'paused') {
+      mr.resume();
+      setStatus('recording');
+    }
+  }, []);
+
+  const isRecording = status === 'recording';
+  const isPaused = status === 'paused';
+  const isActive = isRecording || isPaused;
+
+  return {
+    status,
+    error,
+    start,
+    stop,
+    discard,
+    pause,
+    resume,
+    isRecording,
+    isPaused,
+    isActive,
+  };
 }

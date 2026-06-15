@@ -74,7 +74,105 @@ export const LEGAL_DOCUMENTS = {
   },
 };
 
-export const FORM_LEGAL_SNIPPETS = parseFormSnippets(textosFormularios.content);
+/** @deprecated Usar LEGAL_MAIN_MENUS / getLegalMainMenuTree. */
+export const LEGAL_CATEGORY_META = {
+  privacidad: {
+    label: 'Privacidad y datos',
+    order: 1,
+    description: 'Tratamiento de datos, cookies y derechos.',
+  },
+  legal: {
+    label: 'Información legal',
+    order: 2,
+    description: 'Aviso legal y condiciones de uso.',
+  },
+  comunidad: {
+    label: 'Comunidad',
+    order: 3,
+    description: 'Normas de convivencia en la plataforma.',
+  },
+  comercial: {
+    label: 'Condiciones comerciales',
+    order: 4,
+    description: 'Pagos, suscripciones y reembolsos.',
+  },
+};
+
+export const LEGAL_MAIN_MENUS = [
+  {
+    id: 'privacidad',
+    label: 'Privacidad',
+    items: [
+      { type: 'link', slug: 'politica-privacidad' },
+      { type: 'link', slug: 'politica-cookies' },
+      { type: 'link', slug: 'proteccion-datos' },
+      { type: 'action', slug: 'cookie-settings', label: 'Ajustes de cookies', action: 'cookie-settings' },
+    ],
+  },
+  {
+    id: 'legal',
+    label: 'Legal',
+    items: [
+      { type: 'link', slug: 'terminos-condiciones' },
+      { type: 'link', slug: 'aviso-legal' },
+      { type: 'link', slug: 'politica-reembolsos' },
+      { type: 'link', slug: 'normas-comunidad' },
+      { type: 'link', slug: 'contacto', href: '/contacto', label: 'Contacta con nosotros' },
+    ],
+  },
+];
+
+function resolveMainMenuItem(item) {
+  if (item.href) {
+    return {
+      type: 'link',
+      slug: item.slug,
+      href: item.href,
+      label: item.label,
+    };
+  }
+  if (item.action) {
+    return {
+      type: 'action',
+      slug: item.slug,
+      label: item.label,
+      action: item.action,
+    };
+  }
+  const doc = LEGAL_DOCUMENTS[item.slug];
+  if (!doc) return null;
+  return {
+    type: 'link',
+    slug: doc.slug,
+    href: `/${doc.slug}`,
+    label: doc.footerLabel,
+  };
+}
+
+/** Dos menús principales (Privacidad / Legal) con submenús, igual que el footer. */
+export function getLegalMainMenuTree() {
+  return LEGAL_MAIN_MENUS.map((menu) => ({
+    id: menu.id,
+    label: menu.label,
+    items: menu.items.map(resolveMainMenuItem).filter(Boolean),
+  }));
+}
+
+export function getLegalMainMenuLabelForSlug(slug) {
+  const menu = LEGAL_MAIN_MENUS.find((group) =>
+    group.items.some((item) => item.slug === slug),
+  );
+  return menu?.label || 'Legal';
+}
+
+export function getLegalNavigationTree() {
+  return getLegalMainMenuTree();
+}
+
+export function getLegalCategoryLabel(category) {
+  if (category === 'privacidad') return 'Privacidad';
+  return 'Legal';
+}
 
 function parseFormSnippets(raw) {
   const text = stripLegalPreamble(raw);
@@ -97,6 +195,8 @@ function parseFormSnippets(raw) {
 
   return snippets;
 }
+
+export const FORM_LEGAL_SNIPPETS = parseFormSnippets(textosFormularios.content);
 
 export function getLegalDocument(slug) {
   const config = LEGAL_DOCUMENTS[slug];

@@ -11,8 +11,9 @@ import B2WritingFirstTaskCard from '@/components/b2/B2WritingFirstTaskCard';
 import B2WritingPart2TaskPicker from '@/components/b2/B2WritingPart2TaskPicker';
 import B2WritingStrategyPanel from '@/components/b2/B2WritingStrategyPanel';
 import ExamPracticeProgressPanel from '@/components/exam/ExamPracticeProgressPanel';
-import ExamPracticeSideRail from '@/components/exam/ExamPracticeSideRail';
-import ExamPracticeToolsPanel from '@/components/exam/ExamPracticeToolsPanel';
+import ExamPracticeSessionSideRail from '@/components/exam/ExamPracticeSessionSideRail';
+import ReadingPracticeChrome from '@/components/exam/ReadingPracticeChrome';
+import { ReadingPracticeSessionProvider, useReadingPracticeSession } from '@/context/ReadingPracticeSessionContext';
 import B2WritingDraftStatusPanel from '@/components/b2/B2WritingDraftStatusPanel';
 import { getB2WritingStrategyPack } from '@/data/b2WritingPracticeStrategies';
 import A2ExamGenerationStatus from '@/components/niveles/A2ExamGenerationStatus';
@@ -30,7 +31,6 @@ import {
 } from '@/hooks/useLevelsExamAdminFlow';
 import { useSkillPartFirstNavigation } from '@/hooks/useSkillPartFirstNavigation';
 import {
-  returnToSkillExercisePicker,
   runKeepPracticingSkillFlow,
 } from '@/utils/skillPracticeNavigation';
 import ExamModeSectionBanner from '@/components/niveles/ExamModeSectionBanner';
@@ -268,6 +268,8 @@ function B2WritingExamPracticePageInner() {
 
   const layoutPracticeOpen = skillNav.active ? skillNav.practiceReady : scoring.examPracticeOpen;
   const isSkillPracticeSession = skillNav.active && layoutPracticeOpen;
+  const readingSession = useReadingPracticeSession();
+  const PracticeChrome = isSkillPracticeSession ? ReadingPracticeChrome : B2ExamPracticeChrome;
 
   const handleKeepPracticing = useCallback(() => {
     runKeepPracticingSkillFlow({
@@ -277,34 +279,26 @@ function B2WritingExamPracticePageInner() {
         void scoring.refreshPuntuacionesProgress();
         handleSelectExamSlot(slot);
       },
-      onReturnToExercisePicker: () =>
-        returnToSkillExercisePicker({
-          setExamPracticeOpen: scoring.setExamPracticeOpen,
-          refreshProgress: scoring.refreshPuntuacionesProgress,
-        }),
+      onAdvanceToNextPart: () => {
+        void scoring.refreshPuntuacionesProgress();
+        skillNav.advanceToNextPart();
+      },
     });
-  }, [examSlot, scoring, handleSelectExamSlot]);
+  }, [examSlot, scoring, handleSelectExamSlot, skillNav]);
 
-  const handleBackToParts = useCallback(() => {
-    scoring.setExamPracticeOpen(false);
-    skillNav.backToParts();
-    void scoring.refreshPuntuacionesProgress();
-    if (typeof window !== 'undefined') {
-      window.history.replaceState(null, '', window.location.pathname);
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    }
-  }, [scoring, skillNav]);
-
-  const displayPartsData = useMemo(() => {
-    if (!skillNav.active || !skillNav.selectedPartNumber) return partsData;
-    return partsData.filter((p) => getPartNumber(p) === skillNav.selectedPartNumber);
-  }, [partsData, skillNav.active, skillNav.selectedPartNumber]);
+  const tabPartsData = useMemo(() => {
+    if (!skillNav.active) return partsData;
+    return partsData.filter((p) => {
+      const n = getPartNumber(p);
+      return n >= PART_MIN && n <= PART_MAX;
+    });
+  }, [partsData, skillNav.active]);
 
   useEffect(() => {
-    if (!skillNav.active || !skillNav.selectedPartNumber || !displayPartsData.length) return;
-    const target = displayPartsData[0];
+    if (!skillNav.active || !skillNav.selectedPartNumber || !tabPartsData.length) return;
+    const target = tabPartsData.find((p) => getPartNumber(p) === skillNav.selectedPartNumber);
     if (target?.id && target.id !== selectedPartId) setSelectedPartId(target.id);
-  }, [skillNav.active, skillNav.selectedPartNumber, displayPartsData, selectedPartId]);
+  }, [skillNav.active, skillNav.selectedPartNumber, tabPartsData, selectedPartId]);
 
   useEffect(() => {
     mountedRef.current = true;
@@ -315,11 +309,11 @@ function B2WritingExamPracticePageInner() {
   }, [loadData]);
 
   const selectedPart =
-    displayPartsData.find((p) => p.id === selectedPartId) || displayPartsData[0] || null;
+    tabPartsData.find((p) => p.id === selectedPartId) || tabPartsData[0] || null;
   const partNumber = getPartNumber(selectedPart);
 
-  const part8Part = displayPartsData.find((p) => getPartNumber(p) === 8) || null;
-  const part9Part = displayPartsData.find((p) => getPartNumber(p) === 9) || null;
+  const part8Part = tabPartsData.find((p) => getPartNumber(p) === 8) || null;
+  const part9Part = tabPartsData.find((p) => getPartNumber(p) === 9) || null;
 
   const getQuestionForPart = useCallback(
     (part) => {
@@ -431,15 +425,19 @@ function B2WritingExamPracticePageInner() {
 
   const handleSelectPart = (part) => {
     setSelectedPartId(part.id);
+    if (skillNav.active) {
+      const n = getPartNumber(part);
+      if (n) skillNav.selectPartNumber(n);
+    }
     if (part.questions?.length === 1) {
       setSelectedQuestionByPart((prev) => ({ ...prev, [part.id]: part.questions[0].preguntaId }));
     }
   };
 
   const handleContinueInPage = useCallback(() => {
-    const part9 = displayPartsData.find((p) => getPartNumber(p) === 9);
+    const part9 = tabPartsData.find((p) => getPartNumber(p) === 9);
     if (part9) setSelectedPartId(part9.id);
-  }, [displayPartsData]);
+  }, [tabPartsData]);
 
   const longWritingStorageKey = selectedQuestion?.preguntaId
     ? `b2-exam-writing-${selectedQuestion.preguntaId}`
@@ -571,7 +569,7 @@ function B2WritingExamPracticePageInner() {
         />
       ) : null}
 
-      <B2ExamPracticeChrome
+      <PracticeChrome
         examSlot={examSlot}
         onSelectExam={handleSelectExamSlot}
         progressBySlot={scoring.progressBySlot}
@@ -580,6 +578,8 @@ function B2WritingExamPracticePageInner() {
         examPracticeOpen={scoring.examPracticeOpen}
         navigationOverride={skillNav.navigation}
         hidePartTabs={skillNav.hidePartTabs}
+        suppressExamSlotPicker={skillNav.active}
+        partTabsVariant={skillNav.active ? 'excel' : 'default'}
         practiceReady={layoutPracticeOpen}
         {...(skillNav.active ? {} : examSlotPickerProps)}
         title={chromeTitle}
@@ -587,6 +587,9 @@ function B2WritingExamPracticePageInner() {
         hideMascot={compactChromeHeader}
         hideSubtitle={!chromeSubtitle}
         compactSkillHeader={compactChromeHeader}
+        showLevelPicker={isSkillPracticeSession}
+        levelSlug="b2"
+        skillRoute="exam-writing"
         skillPracticeTheme={skillNav.skillTheme}
         practiceMode={practiceMode}
         timerVariant={isSkillPracticeSession && !examModeActive ? 'discrete' : 'prominent'}
@@ -601,7 +604,7 @@ function B2WritingExamPracticePageInner() {
         scorePanelOverride={writingScorePanelOverride}
         hideScorePanel={isExamSimulationMode(practiceMode) && !reviewMode}
         partFinishNotice={isExamSimulationMode(practiceMode) && !reviewMode ? null : scoring.partFinishNotice}
-        partsData={!loading && !error ? displayPartsData : []}
+        partsData={!loading && !error ? tabPartsData : []}
         selectedPartId={selectedPartId}
         onSelectPart={handleSelectPart}
         getPartSavedScoreLabel={(part) => scoring.getPartSavedScoreLabel(part, examSlot)}
@@ -639,9 +642,12 @@ function B2WritingExamPracticePageInner() {
             <div
               className={`levels-listening-practice-layout${
                 showPracticeSideRail ? ' levels-listening-practice-layout--with-strategy' : ''
-              }`}
+              }${readingSession.focusMode ? ' levels-listening-practice-layout--focus' : ''}`}
             >
-              <div className="levels-listening-practice-main">
+              <div
+                className={`levels-listening-practice-main${isSkillPracticeSession ? ` ${readingSession.readingAreaClassName}` : ''}`}
+                style={isSkillPracticeSession ? readingSession.readingAreaStyle : undefined}
+              >
                 <div className="b2-writing-practice__body">
                   {partNumber === 8 ? (
                     <>
@@ -707,14 +713,13 @@ function B2WritingExamPracticePageInner() {
                     skillPracticeMode={isSkillPracticeSession}
                     skillPracticeTheme={skillNav.skillTheme}
                     onContinueInPage={isSkillPracticeSession ? handleKeepPracticing : handleContinueInPage}
-                    onBackClick={isSkillPracticeSession ? handleBackToParts : undefined}
                     nextPartLabel={continuePartLabel}
                     lang="en"
                   />
                 </div>
               </div>
               {showPracticeSideRail ? (
-                <ExamPracticeSideRail
+                <ExamPracticeSessionSideRail
                   strategy={
                     showStrategySidebar ? <B2WritingStrategyPanel pack={strategyPack} /> : null
                   }
@@ -730,13 +735,13 @@ function B2WritingExamPracticePageInner() {
                       enabled={scoring.examPracticeOpen}
                     />
                   }
-                  tools={<ExamPracticeToolsPanel lang="en" />}
+                  lang="en"
                 />
               ) : null}
             </div>
           ) : null}
         </section>
-      </B2ExamPracticeChrome>
+      </PracticeChrome>
     </B2ExamPracticeLayout>
   );
 }
@@ -744,7 +749,9 @@ function B2WritingExamPracticePageInner() {
 export default function B2WritingExamPracticePage() {
   return (
     <Suspense fallback={<p style={{ padding: '2rem', textAlign: 'center' }}>Loading…</p>}>
-      <B2WritingExamPracticePageInner />
+      <ReadingPracticeSessionProvider>
+        <B2WritingExamPracticePageInner />
+      </ReadingPracticeSessionProvider>
     </Suspense>
   );
 }

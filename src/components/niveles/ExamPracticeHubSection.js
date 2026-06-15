@@ -277,9 +277,9 @@ function ExamPracticeHubStyles() {
         border-color: rgba(37, 99, 235, 0.22);
       }
       .niveles-level-page .exam-practice-hub__card--writing {
-        --exam-card-accent: #dc2626;
-        background: linear-gradient(155deg, #fef2f2 0%, #ffffff 50%, #fff7ed 100%);
-        border-color: rgba(220, 38, 38, 0.2);
+        --exam-card-accent: #059669;
+        background: linear-gradient(155deg, #ecfdf5 0%, #ffffff 50%, #f0fdf4 100%);
+        border-color: rgba(5, 150, 105, 0.22);
       }
       .niveles-level-page .exam-practice-hub__card--listening {
         --exam-card-accent: #d97706;

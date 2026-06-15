@@ -16,6 +16,10 @@ import {
   NAV_LINK_PRICING,
   isNavLinkActive,
   NAV_LINKS_BEFORE_DRALO,
+  getNavLinksForMobileDrawer,
+  getAdminLearningLinks,
+  HOME_PRICING_LINK,
+  HOME_THEORY_LINK,
 } from '@/config/appNavMenu';
 
 function AppNavInner({ session, userRole, onLogout }) {
@@ -33,6 +37,7 @@ function AppNavInner({ session, userRole, onLogout }) {
   const showStaffSingleLink = staffMenuItems.length === 1;
   const showPricing = canViewPricing(userRole);
   const draloLocked = isDraloAiLockedForRole(userRole);
+  const mobileDrawerLinks = getNavLinksForMobileDrawer(userRole);
 
   useEffect(() => {
     document.body.classList.toggle('nav-open', mobileOpen);
@@ -260,7 +265,7 @@ function AppNavInner({ session, userRole, onLogout }) {
         </div>
 
         <nav className="app-nav__drawer-nav" aria-label="Mobile navigation">
-          {NAV_LINKS_BEFORE_DRALO.map((item) => (
+          {mobileDrawerLinks.map((item) => (
             <NavLink
               key={item.href}
               href={item.href}

@@ -271,6 +271,12 @@ export default function RootLayoutClient({ children }) {
     );
   };
 
+  useEffect(() => {
+    const openCookieSettingsFromEvent = () => setShowCookieSettings(true);
+    window.addEventListener('dralo:open-cookie-settings', openCookieSettingsFromEvent);
+    return () => window.removeEventListener('dralo:open-cookie-settings', openCookieSettingsFromEvent);
+  }, []);
+
   return (
     <>
       <SiteNightModeInit />
@@ -386,7 +392,7 @@ export default function RootLayoutClient({ children }) {
         <div className="legal-footer-content">
           <div className="legal-footer-column">
             <h3>Privacidad</h3>
-            <ul>
+            <ul className="legal-footer-list">
               <li>
                 <Link href="/politica-privacidad">Política de privacidad</Link>
               </li>
@@ -396,18 +402,20 @@ export default function RootLayoutClient({ children }) {
               <li>
                 <Link href="/proteccion-datos">Protección de datos</Link>
               </li>
+              <li>
+                <button
+                  type="button"
+                  className="legal-footer-link-btn"
+                  onClick={() => setShowCookieSettings(true)}
+                >
+                  Ajustes de cookies
+                </button>
+              </li>
             </ul>
-            <button
-              type="button"
-              className="legal-cookie-settings-link"
-              onClick={() => setShowCookieSettings(true)}
-            >
-              Ajustes de cookies
-            </button>
           </div>
           <div className="legal-footer-column">
             <h3>Legal</h3>
-            <ul>
+            <ul className="legal-footer-list">
               <li>
                 <Link href="/terminos-condiciones">Términos y condiciones</Link>
               </li>

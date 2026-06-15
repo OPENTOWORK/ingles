@@ -97,7 +97,7 @@ export const TheorySection = ({ title, children, icon = '📚', defaultOpen = fa
         </span>
       </div>
       {open ? (
-        <div id={panelId} style={{ padding: '1.5rem', borderTop: '1px solid #e2e8f0' }}>
+        <div id={panelId} className="theory-section__panel" style={{ padding: '1.5rem', borderTop: '1px solid #e2e8f0' }}>
           {children}
         </div>
       ) : null}
@@ -122,7 +122,7 @@ export const Example = ({
   const displayWhy = why || explanation;
 
   return (
-    <div style={{
+    <div className="theory-example" style={{
       background: '#f8fafc',
       border: '1px solid #e2e8f0',
       borderRadius: '12px',
@@ -201,12 +201,12 @@ export const Example = ({
 // Rule Component
 export const Rule = ({ title, description, examples = [] }) => {
   return (
-    <div style={{
+    <div className="theory-rule" style={{
       border: '2px solid #e2e8f0',
       borderRadius: '12px',
       padding: '1.25rem',
       marginBottom: '1rem',
-      background: 'white'
+      background: 'white',
     }}>
       <h4 style={{
         margin: '0 0 0.75rem 0',
@@ -243,39 +243,99 @@ export const Rule = ({ title, description, examples = [] }) => {
   );
 };
 
-// Tip Component
-export const Tip = ({ children, type = "info" }) => {
+// Tip Component — supports children OR title/description/examples (like Rule)
+export const Tip = ({ children, type = 'info', title, description, examples = [] }) => {
   const colors = {
     info: { bg: '#ebf8ff', border: '#bee3f8', text: '#2b6cb0' },
     warning: { bg: '#fffbeb', border: '#fed7aa', text: '#d97706' },
     success: { bg: '#f0fff4', border: '#9ae6b4', text: '#2f855a' },
-    error: { bg: '#fefce8', border: '#fde68a', text: '#92400e' }
+    error: { bg: '#fefce8', border: '#fde68a', text: '#92400e' },
   };
 
   const icons = {
-    info: "💡",
-    warning: "⚠️",
-    success: "✅",
-    error: "❌"
+    info: '💡',
+    warning: '⚠️',
+    success: '✅',
+    error: '❌',
   };
 
-  const color = colors[type];
+  const color = colors[type] || colors.info;
+  const hasStructuredContent = Boolean(title || description || examples.length);
+
+  const shellStyle = {
+    background: color.bg,
+    border: `2px solid ${color.border}`,
+    borderRadius: '12px',
+    padding: '1rem',
+    marginBottom: '1rem',
+    display: 'flex',
+    gap: '0.75rem',
+    alignItems: 'flex-start',
+  };
+
+  if (hasStructuredContent) {
+    return (
+      <div className={`theory-tip theory-tip--${type}`} style={shellStyle}>
+        <span className="theory-tip__icon" style={{ fontSize: '1.2rem', flexShrink: 0 }} aria-hidden>
+          {icons[type]}
+        </span>
+        <div className="theory-tip__body" style={{ color: color.text, lineHeight: 1.5, flex: 1, minWidth: 0 }}>
+          {title ? (
+            <h4
+              className="theory-tip__title"
+              style={{
+                margin: '0 0 0.5rem 0',
+                fontSize: '1.05rem',
+                fontWeight: 600,
+                color: color.text,
+              }}
+            >
+              {title}
+            </h4>
+          ) : null}
+          {description ? (
+            <p
+              className="theory-tip__desc"
+              style={{
+                margin: examples.length ? '0 0 0.75rem 0' : 0,
+                lineHeight: 1.6,
+                color: color.text,
+              }}
+            >
+              {description}
+            </p>
+          ) : null}
+          {examples.length > 0 ? (
+            <ul
+              className="theory-tip__list"
+              style={{ margin: 0, paddingLeft: '1.25rem' }}
+            >
+              {examples.map((example, index) => (
+                <li
+                  key={index}
+                  className="theory-tip__list-item"
+                  style={{
+                    marginBottom: '0.35rem',
+                    lineHeight: 1.5,
+                    color: color.text,
+                  }}
+                >
+                  {example}
+                </li>
+              ))}
+            </ul>
+          ) : null}
+        </div>
+      </div>
+    );
+  }
 
   return (
-    <div style={{
-      background: color.bg,
-      border: `2px solid ${color.border}`,
-      borderRadius: '12px',
-      padding: '1rem',
-      marginBottom: '1rem',
-      display: 'flex',
-      gap: '0.75rem',
-      alignItems: 'flex-start'
-    }}>
-      <span style={{ fontSize: '1.2rem', flexShrink: 0 }}>
+    <div className={`theory-tip theory-tip--${type}`} style={shellStyle}>
+      <span className="theory-tip__icon" style={{ fontSize: '1.2rem', flexShrink: 0 }} aria-hidden>
         {icons[type]}
       </span>
-      <div style={{ color: color.text, lineHeight: 1.5 }}>
+      <div className="theory-tip__body" style={{ color: color.text, lineHeight: 1.5 }}>
         {children}
       </div>
     </div>
@@ -431,6 +491,7 @@ export const QuickReference = ({ items, variant = 'green' }) => {
 
   return (
     <div
+      className="theory-quick-reference"
       style={{
         background: theme.panelBg,
         border: `2px solid ${theme.panelBorder}`,
@@ -459,6 +520,7 @@ export const QuickReference = ({ items, variant = 'green' }) => {
           return (
             <div
               key={index}
+              className="theory-quick-reference__item"
               style={{
                 display: 'flex',
                 alignItems: 'flex-start',

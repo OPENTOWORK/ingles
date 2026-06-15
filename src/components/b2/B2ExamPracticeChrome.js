@@ -8,6 +8,9 @@ import LevelsPartScorePanel from '@/components/levels/LevelsPartScorePanel';
 import LevelsPartFinishBanner from '@/components/levels/LevelsPartFinishBanner';
 import ExamStudyNotesSidebar from '@/components/exam/ExamStudyNotesSidebar';
 import ExamPracticeReportError from '@/components/exam/ExamPracticeReportError';
+import ExamPracticeLevelPicker from '@/components/niveles/ExamPracticeLevelPicker';
+import ExamPracticeSkillPicker from '@/components/niveles/ExamPracticeSkillPicker';
+import { getLevelSkillPracticeHref } from '@/data/nivelesLevelHub';
 import { ExamPracticeToolsProvider } from '@/context/ExamPracticeToolsContext';
 
 function getPartTabLabel(part, lang, customLabelFn) {
@@ -90,9 +93,14 @@ export function B2ExamPracticeChrome({
   workPanelClassName = '',
   navigationOverride = null,
   hidePartTabs = false,
+  suppressExamSlotPicker = false,
+  partTabsVariant = 'default',
   hideMascot = false,
   hideSubtitle = false,
   compactSkillHeader = false,
+  showLevelPicker = false,
+  levelSlug = null,
+  skillRoute = null,
   skillPracticeTheme = null,
   showStudyNotes = true,
   studyNotesContext = null,
@@ -120,9 +128,41 @@ export function B2ExamPracticeChrome({
   const savedPrefix = lang === 'en' ? 'Saved:' : 'Guardado:';
   const workPanelRef = useRef(null);
 
+  const partTabsEl =
+    partsData?.length > 0 && !hidePartTabs ? (
+      <div
+        className={`levels-b2-part-tabs${partsData.length >= 7 ? ' levels-b2-part-tabs--many' : ''}${
+          partTabsVariant === 'excel' ? ' levels-b2-part-tabs--excel' : ''
+        }`}
+        role="tablist"
+      >
+        {partsData.map((part) => {
+          const savedScore = getPartSavedScoreLabel?.(part, examSlot);
+          const active = selectedPartId === part.id;
+          return (
+            <button
+              key={part.id}
+              type="button"
+              role="tab"
+              aria-selected={active}
+              className={`levels-b2-part-tab${active ? ' levels-b2-part-tab--active' : ''}`}
+              onClick={() => onSelectPart(part)}
+            >
+              <span>{getPartTabLabel(part, lang, getPartTabLabelProp)}</span>
+              {savedScore && partTabsVariant !== 'excel' ? (
+                <span className="levels-b2-part-tab__score">
+                  {savedPrefix} {savedScore}
+                </span>
+              ) : null}
+            </button>
+          );
+        })}
+      </div>
+    ) : null;
+
   return (
     <>
-      {!showPractice
+      {!showPractice && !suppressExamSlotPicker
         ? navigationOverride ?? (
         <B2ExamSlotProgressPicker
           value={examSlot}
@@ -185,6 +225,19 @@ export function B2ExamPracticeChrome({
               .filter(Boolean)
               .join(' ')}
           >
+          {partTabsVariant === 'excel' ? partTabsEl : null}
+
+          {showLevelPicker && levelSlug && skillRoute ? (
+            <div className="exam-practice-skill-nav">
+              <ExamPracticeLevelPicker
+                variant="strip"
+                activeLevel={levelSlug}
+                linkForLevel={(level) => getLevelSkillPracticeHref(level.slug, skillRoute)}
+              />
+              <ExamPracticeSkillPicker levelSlug={levelSlug} activeSkillRoute={skillRoute} />
+            </div>
+          ) : null}
+
           <div className="levels-b2-practice__status">
             {focusMode && onExitFocusMode ? (
               <button
@@ -254,34 +307,7 @@ export function B2ExamPracticeChrome({
             />
           ) : null}
 
-          {partsData?.length > 0 && !hidePartTabs ? (
-            <div
-              className={`levels-b2-part-tabs${partsData.length >= 7 ? ' levels-b2-part-tabs--many' : ''}`}
-              role="tablist"
-            >
-              {partsData.map((part) => {
-                const savedScore = getPartSavedScoreLabel?.(part, examSlot);
-                const active = selectedPartId === part.id;
-                return (
-                  <button
-                    key={part.id}
-                    type="button"
-                    role="tab"
-                    aria-selected={active}
-                    className={`levels-b2-part-tab${active ? ' levels-b2-part-tab--active' : ''}`}
-                    onClick={() => onSelectPart(part)}
-                  >
-                    <span>{getPartTabLabel(part, lang, getPartTabLabelProp)}</span>
-                    {savedScore ? (
-                      <span className="levels-b2-part-tab__score">
-                        {savedPrefix} {savedScore}
-                      </span>
-                    ) : null}
-                  </button>
-                );
-              })}
-            </div>
-          ) : null}
+          {partTabsVariant !== 'excel' ? partTabsEl : null}
 
           <ExamPracticeToolsProvider>
             <div className="levels-b2-practice__work-body">

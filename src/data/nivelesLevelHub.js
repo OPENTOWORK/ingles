@@ -161,8 +161,86 @@ export const LEVEL_SECTION_PRACTICE_HREF = {
   },
 };
 
+export function getLevelSkillPracticeHref(levelSlug, skillRoute) {
+  const meta = getLevelExamSkillRoute(levelSlug, skillRoute);
+  if (!meta?.section) return null;
+  return getSectionPracticeHref(levelSlug, meta.section);
+}
+
 export function getSectionPracticeHref(slug, sectionTitle) {
   return LEVEL_SECTION_PRACTICE_HREF[String(slug || '').toLowerCase()]?.[sectionTitle] || null;
+}
+
+const READING_SKILL_ROUTES = new Set([
+  'exam-reading-and-use-of-english',
+  'exam-reading',
+  'exam-useofenglish',
+]);
+
+export function inferSkillRouteFromPracticeHref(href) {
+  const path = String(href || '').toLowerCase();
+  if (path.includes('reading-and-use-of-english')) return 'exam-reading-and-use-of-english';
+  if (path.includes('exam-useofenglish')) return 'exam-useofenglish';
+  if (path.includes('exam-writing')) return 'exam-writing';
+  if (path.includes('exam-listening')) return 'exam-listening';
+  if (path.includes('exam-speaking')) return 'exam-speaking';
+  if (path.includes('exam-reading')) return 'exam-reading';
+  return null;
+}
+
+export function skillRoutesMatch(activeRoute, candidateRoute) {
+  const active = String(activeRoute || '').toLowerCase();
+  const candidate = String(candidateRoute || '').toLowerCase();
+  if (!active || !candidate) return false;
+  if (active === candidate) return true;
+  return READING_SKILL_ROUTES.has(active) && READING_SKILL_ROUTES.has(candidate);
+}
+
+function cleanSkillNavLabel(text = '') {
+  return String(text)
+    .replace(/^[\p{Emoji_Presentation}\p{Extended_Pictographic}\s]+/u, '')
+    .trim();
+}
+
+function getSkillNavTheme(href = '') {
+  const path = String(href).toLowerCase();
+  if (path.includes('writing')) return 'writing';
+  if (path.includes('listening')) return 'listening';
+  if (path.includes('speaking')) return 'speaking';
+  return 'reading';
+}
+
+function getShortSkillLabel(label) {
+  if (/reading and use of english/i.test(label)) return 'Reading';
+  if (/reading & writing/i.test(label)) return 'Reading & Writing';
+  return label;
+}
+
+/** Skill practice links for the in-session nav strip (excludes exam mode). */
+export function getLevelSkillNavLinks(levelSlug) {
+  const hub = getNivelesLevelHub(levelSlug);
+  if (!hub?.examLinks) return [];
+
+  return hub.examLinks
+    .filter((link) => {
+      const href = String(link.href || '').toLowerCase();
+      return (
+        href &&
+        !href.includes('exam-mode') &&
+        !/\/exam-\d+(?:\/|$|\?)/.test(href)
+      );
+    })
+    .map((link) => {
+      const skillRoute = inferSkillRouteFromPracticeHref(link.href);
+      return {
+        href: link.href,
+        label: getShortSkillLabel(cleanSkillNavLabel(link.text)),
+        skillRoute,
+        theme: getSkillNavTheme(link.href),
+        enabledForStudents: link.enabledForStudents !== false,
+      };
+    })
+    .filter((item) => item.skillRoute && item.label);
 }
 
 const SECTION_EMOJI = {
@@ -466,7 +544,7 @@ export const NIVELES_LEVEL_HUB = {
     },
     examContentReady: { 1: true, 2: false, 3: false, 4: false, 5: false },
     examLinks: [
-      { text: '📝 Exam mode', href: '/niveles/b2/exam-mode', enabledForStudents: true },
+      { text: '📝 Exam mode', href: '/niveles/exam-mode', enabledForStudents: true },
       {
         text: '📘 Reading and Use of English',
         href: '/niveles/b2/exam-reading-and-use-of-english',

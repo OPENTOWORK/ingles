@@ -54,7 +54,6 @@ import { getB2ReadingStrategyPack } from '@/data/b2ReadingPracticeStrategies';
 import { ReadingPracticeSessionProvider } from '@/context/ReadingPracticeSessionContext';
 import ReadingPracticeChrome from '@/components/exam/ReadingPracticeChrome';
 import {
-  returnToSkillExercisePicker,
   runKeepPracticingSkillFlow,
 } from '@/utils/skillPracticeNavigation';
 import { useReadingPracticeSession } from '@/context/ReadingPracticeSessionContext';
@@ -355,36 +354,28 @@ function B2ReadingExamsPageInner() {
         void scoring.refreshPuntuacionesProgress();
         handleSelectExamSlot(slot);
       },
-      onReturnToExercisePicker: () =>
-        returnToSkillExercisePicker({
-          setExamPracticeOpen: scoring.setExamPracticeOpen,
-          refreshProgress: scoring.refreshPuntuacionesProgress,
-        }),
+      onAdvanceToNextPart: () => {
+        void scoring.refreshPuntuacionesProgress();
+        skillNav.advanceToNextPart();
+      },
     });
-  }, [examSlot, scoring, handleSelectExamSlot]);
+  }, [examSlot, scoring, handleSelectExamSlot, skillNav]);
 
-  const handleBackToParts = useCallback(() => {
-    scoring.setExamPracticeOpen(false);
-    skillNav.backToParts();
-    void scoring.refreshPuntuacionesProgress();
-    if (typeof window !== 'undefined') {
-      window.history.replaceState(null, '', window.location.pathname);
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    }
-  }, [scoring, skillNav]);
-
-  const displayPartsData = useMemo(() => {
-    if (!skillNav.active || !skillNav.selectedPartNumber) return partsData;
-    return partsData.filter(
-      (p) => Number(p.nombre?.match(/\d+/)?.[0] || 0) === skillNav.selectedPartNumber,
-    );
-  }, [partsData, skillNav.active, skillNav.selectedPartNumber]);
+  const tabPartsData = useMemo(() => {
+    if (!skillNav.active) return partsData;
+    return partsData.filter((p) => {
+      const n = Number(p.nombre?.match(/\d+/)?.[0] || 0);
+      return n >= partMin && n <= partMax;
+    });
+  }, [partsData, skillNav.active, partMin, partMax]);
 
   useEffect(() => {
-    if (!skillNav.active || !skillNav.selectedPartNumber || !displayPartsData.length) return;
-    const target = displayPartsData[0];
+    if (!skillNav.active || !skillNav.selectedPartNumber || !tabPartsData.length) return;
+    const target = tabPartsData.find(
+      (p) => Number(p.nombre?.match(/\d+/)?.[0] || 0) === skillNav.selectedPartNumber,
+    );
     if (target?.id && target.id !== selectedPartId) setSelectedPartId(target.id);
-  }, [skillNav.active, skillNav.selectedPartNumber, displayPartsData, selectedPartId]);
+  }, [skillNav.active, skillNav.selectedPartNumber, tabPartsData, selectedPartId]);
 
   useEffect(() => {
     mountedRef.current = true;
@@ -407,9 +398,9 @@ function B2ReadingExamsPageInner() {
 
   const selectedPart = useMemo(
     () =>
-      displayPartsData.find((part) => part.id === selectedPartId) ??
+      tabPartsData.find((part) => part.id === selectedPartId) ??
       partsData.find((part) => part.id === selectedPartId),
-    [displayPartsData, partsData, selectedPartId],
+    [tabPartsData, partsData, selectedPartId],
   );
 
   const selectedQuestion = useMemo(() => {
@@ -1115,6 +1106,10 @@ function B2ReadingExamsPageInner() {
 
   const handleSelectPart = (part) => {
     setSelectedPartId(part.id);
+    if (skillNav.active) {
+      const n = Number(part.nombre?.match(/\d+/)?.[0] || 0);
+      if (n) skillNav.selectPartNumber(n);
+    }
     if (part.questions.length > 1) {
       const currentSelected = selectedQuestionByPart[part.id];
       const available = part.questions.filter((q) => q.preguntaId !== currentSelected);
@@ -1271,6 +1266,8 @@ function B2ReadingExamsPageInner() {
         examPracticeOpen={scoring.examPracticeOpen}
         navigationOverride={skillNav.navigation}
         hidePartTabs={skillNav.hidePartTabs}
+        suppressExamSlotPicker={skillNav.active}
+        partTabsVariant={skillNav.active ? 'excel' : 'default'}
         practiceReady={layoutPracticeOpen}
         {...(skillNav.active ? {} : examSlotPickerProps)}
         title={chromeTitle}
@@ -1278,6 +1275,9 @@ function B2ReadingExamsPageInner() {
         hideMascot={compactChromeHeader}
         hideSubtitle={!chromeSubtitleResolved}
         compactSkillHeader={compactChromeHeader}
+        showLevelPicker={isSkillPracticeSession}
+        levelSlug="b2"
+        skillRoute="exam-reading-and-use-of-english"
         skillPracticeTheme={skillNav.skillTheme}
         practiceMode={practiceMode}
         timerVariant={isSkillPracticeSession && !examModeActive ? 'discrete' : 'prominent'}
@@ -1294,7 +1294,7 @@ function B2ReadingExamsPageInner() {
         partScoreMetrics={scorePanelProps}
         hideScorePanel={isExamSimulationMode(practiceMode) && !reviewMode}
         partFinishNotice={isExamSimulationMode(practiceMode) && !reviewMode ? null : scoring.partFinishNotice}
-        partsData={!loading && !error ? displayPartsData : []}
+        partsData={!loading && !error ? tabPartsData : []}
         selectedPartId={selectedPartId}
         onSelectPart={handleSelectPart}
         getPartSavedScoreLabel={(part) => scoring.getPartSavedScoreLabel(part, examSlot)}
@@ -1613,7 +1613,6 @@ function B2ReadingExamsPageInner() {
         skillPracticeMode={isSkillPracticeSession}
         skillPracticeTheme={skillNav.skillTheme}
         onContinueInPage={isSkillPracticeSession ? handleKeepPracticing : handleContinueInPage}
-        onBackClick={isSkillPracticeSession ? handleBackToParts : undefined}
         lang="en"
       />
       </div>

@@ -2,7 +2,6 @@
 
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useSearchParams } from 'next/navigation';
-import { SkillPartFirstNavigation } from '@/components/b2/SkillPartFirstNavigation';
 import { getSkillPracticeThemeKey } from '@/utils/skillPartFirstProgress';
 import { getNivelesLevelHub } from '@/data/nivelesLevelHub';
 import { getExamSkillSectionTitle } from '@/data/levelExamPartMap';
@@ -30,7 +29,6 @@ function buildPartTopicsFromHub(slug, partMin, partMax, partTopics = [], section
   }
   if (out.length > 0) return out.sort((a, b) => a.partNumber - b.partNumber);
 
-  // Hub entries often use skill-local Part 1…N (e.g. Writing Part 1 = global Part 8).
   if (sectionTitle && hub.sections[sectionTitle]?.length) {
     return hub.sections[sectionTitle]
       .map((t, i) => {
@@ -46,8 +44,7 @@ function buildPartTopicsFromHub(slug, partMin, partMax, partTopics = [], section
 }
 
 /**
- * Flujo skill: Part 1…N → variantes (carrusel) → práctica.
- * Sin generación IA en el carrusel (eso queda en el picker de examen completo / admin).
+ * Skill practice: open Part 1 + exam variant 1 immediately; part tabs switch sections in-page.
  */
 export function useSkillPartFirstNavigation({
   enabled = true,
@@ -55,7 +52,6 @@ export function useSkillPartFirstNavigation({
   skillRoute = null,
   partMin,
   partMax,
-  partTopics = [],
   examPracticeOpen,
   examSlot,
   onSelectExam,
@@ -67,8 +63,7 @@ export function useSkillPartFirstNavigation({
 }) {
   const searchParams = useSearchParams();
   const [selectedPartNumber, setSelectedPartNumber] = useState(null);
-  const autoPartRef = useRef(false);
-  const autoExamRef = useRef(false);
+  const bootstrapRef = useRef(false);
 
   const active = enabled && !searchParams.get('examMode');
 
@@ -78,94 +73,61 @@ export function useSkillPartFirstNavigation({
   );
 
   const resolvedPartTopics = useMemo(
-    () => buildPartTopicsFromHub(slug, partMin, partMax, partTopics, sectionTitle),
-    [slug, partMin, partMax, partTopics, sectionTitle],
+    () => buildPartTopicsFromHub(slug, partMin, partMax, [], sectionTitle),
+    [slug, partMin, partMax, sectionTitle],
   );
 
-  const skillPickerProps = useMemo(() => {
-    const { showNewExamButton: _n, onNewExam: _e, ...rest } = examSlotPickerProps;
-    return rest;
-  }, [examSlotPickerProps]);
-
   useEffect(() => {
-    if (!active || autoPartRef.current) return;
+    if (!active || bootstrapRef.current) return;
+
     const qPart = searchParams.get('part');
-    if (!qPart) return;
-    const n = Number(qPart);
-    if (!Number.isFinite(n) || n < partMin || n > partMax) return;
-    autoPartRef.current = true;
-    setSelectedPartNumber(n);
-  }, [active, searchParams, partMin, partMax]);
+    let partNum = partMin;
+    if (qPart) {
+      const n = Number(qPart);
+      if (Number.isFinite(n) && n >= partMin && n <= partMax) {
+        partNum = n;
+      }
+    }
+    setSelectedPartNumber(partNum);
 
-  useEffect(() => {
-    if (!active || !selectedPartNumber || autoExamRef.current || examPracticeOpen) return;
     const qExam = searchParams.get('examen');
-    if (!qExam) return;
-    autoExamRef.current = true;
-    onSelectExam(Number(qExam));
-  }, [active, selectedPartNumber, searchParams, examPracticeOpen, onSelectExam]);
+    const slot =
+      qExam && Number.isFinite(Number(qExam)) && Number(qExam) > 0 ? Number(qExam) : 1;
+
+    if (!examPracticeOpen) {
+      onSelectExam(slot);
+    }
+
+    bootstrapRef.current = true;
+  }, [active, searchParams, partMin, partMax, examPracticeOpen, onSelectExam]);
 
   useEffect(() => {
     if (!active || !selectedPartNumber || examPracticeOpen) return;
     onRefreshProgress?.();
   }, [active, selectedPartNumber, examPracticeOpen, onRefreshProgress]);
 
-  // El auto-open desde ?examen= es solo para el deep link inicial: una vez
-  // consumido, la navegación manual (Keep practicing / All parts) no debe
-  // volver a abrir el examen automáticamente.
-  const handleSelectPart = useCallback((partNumber) => {
-    setSelectedPartNumber(partNumber);
-    autoExamRef.current = true;
-  }, []);
-
-  const handleBackToParts = useCallback(() => {
-    setSelectedPartNumber(null);
-    autoExamRef.current = true;
-  }, []);
-
-  const handleSelectExamForPart = useCallback(
-    (slot) => {
-      autoExamRef.current = true;
-      onSelectExam(slot);
+  const selectPartNumber = useCallback(
+    (partNumber) => {
+      const n = Number(partNumber);
+      if (!Number.isFinite(n) || n < partMin || n > partMax) return;
+      setSelectedPartNumber(n);
+      if (typeof window !== 'undefined') {
+        const url = new URL(window.location.href);
+        url.searchParams.set('part', String(n));
+        window.history.replaceState(null, '', url.pathname + url.search);
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
     },
-    [onSelectExam],
+    [partMin, partMax],
   );
 
-  const navigation = useMemo(() => {
-    if (!active) return null;
-    return (
-      <SkillPartFirstNavigation
-        partMin={partMin}
-        partMax={partMax}
-        partTopics={resolvedPartTopics}
-        selectedPartNumber={selectedPartNumber}
-        onSelectPart={handleSelectPart}
-        onBackToParts={handleBackToParts}
-        examSlot={examSlot}
-        onSelectExam={handleSelectExamForPart}
-        progressBySlot={progressBySlot}
-        examLabelsBySlot={examLabelsBySlot}
-        skillRoute={skillRoute}
-        lang={lang}
-        {...skillPickerProps}
-      />
-    );
-  }, [
-    active,
-    partMin,
-    partMax,
-    resolvedPartTopics,
-    selectedPartNumber,
-    handleSelectPart,
-    handleBackToParts,
-    examSlot,
-    handleSelectExamForPart,
-    progressBySlot,
-    examLabelsBySlot,
-    skillRoute,
-    lang,
-    skillPickerProps,
-  ]);
+  const advanceToNextPart = useCallback(() => {
+    const current = selectedPartNumber ?? partMin;
+    const next = current >= partMax ? partMin : current + 1;
+    selectPartNumber(next);
+    onSelectExam(1);
+    return true;
+  }, [selectedPartNumber, partMin, partMax, selectPartNumber, onSelectExam]);
 
   const practiceReady = active
     ? Boolean(selectedPartNumber && examPracticeOpen)
@@ -175,10 +137,17 @@ export function useSkillPartFirstNavigation({
     active,
     selectedPartNumber,
     practiceReady,
-    navigation,
-    hidePartTabs: active && Boolean(selectedPartNumber),
-    setSelectedPartNumber,
-    backToParts: handleBackToParts,
+    navigation: null,
+    hidePartTabs: false,
+    selectPartNumber,
+    advanceToNextPart,
+    setSelectedPartNumber: selectPartNumber,
+    backToParts: () => {},
     skillTheme: active ? getSkillPracticeThemeKey(skillRoute) : null,
+    partTopics: resolvedPartTopics,
+    progressBySlot,
+    examLabelsBySlot,
+    examSlotPickerProps,
+    lang,
   };
 }

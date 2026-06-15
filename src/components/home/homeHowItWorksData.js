@@ -20,7 +20,7 @@ export const GUIDED_TOUR_STEPS_STUDENT = [
       'Open Exam practice in the menu to choose your exam level (A2–C2), try timed papers, exam mode, and part-by-part practice.',
     target: '[data-tour="nav-levels"]',
     route: '/',
-    href: '/niveles',
+    href: '/niveles/b2',
     openNavOnMobile: true,
   },
   {
@@ -43,7 +43,7 @@ export const GUIDED_TOUR_STEPS_STUDENT = [
     target: '[data-tour="niveles-levels"]',
     route: '/niveles',
     scrollTarget: true,
-    href: '/niveles',
+    href: '/niveles/b2',
   },
   {
     id: 'levels-hub',

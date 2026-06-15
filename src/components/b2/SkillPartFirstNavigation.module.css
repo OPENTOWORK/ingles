@@ -21,13 +21,13 @@
 }
 
 .shell[data-skill-theme='writing'] {
-  --skill-accent: #dc2626;
-  --skill-accent-dark: #b91c1c;
-  --skill-accent-soft: #fef2f2;
-  --skill-surface: #fffafa;
-  --skill-border: #fecaca;
-  --skill-shadow: rgba(220, 38, 38, 0.08);
-  --skill-ink: #7f1d1d;
+  --skill-accent: #059669;
+  --skill-accent-dark: #047857;
+  --skill-accent-soft: #ecfdf5;
+  --skill-surface: #f7fdf9;
+  --skill-border: #bbf7d0;
+  --skill-shadow: rgba(5, 150, 105, 0.08);
+  --skill-ink: #14532d;
 }
 
 .shell[data-skill-theme='listening'] {

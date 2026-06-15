@@ -23,6 +23,10 @@ import {
 import { useMediaRecorder } from '@/features/speaking/ui/hooks/useMediaRecorder';
 import { getB2LongTurnPhotoUrls } from '@/data/b2-speaking-long-turn-photos';
 import B2ExamPracticeModuleNav from '@/components/b2/B2ExamPracticeModuleNav';
+import ExamPracticeProgressPanel from '@/components/exam/ExamPracticeProgressPanel';
+import ExamPracticeSessionSideRail from '@/components/exam/ExamPracticeSessionSideRail';
+import ReadingPracticeChrome from '@/components/exam/ReadingPracticeChrome';
+import { ReadingPracticeSessionProvider, useReadingPracticeSession } from '@/context/ReadingPracticeSessionContext';
 import ExamModeSectionBanner from '@/components/niveles/ExamModeSectionBanner';
 import { useExamModeStrict } from '@/hooks/useExamModeStrict';
 import {
@@ -42,9 +46,11 @@ import {
 } from '@/hooks/useLevelsExamAdminFlow';
 import { useSkillPartFirstNavigation } from '@/hooks/useSkillPartFirstNavigation';
 import {
-  returnToSkillExercisePicker,
   runKeepPracticingSkillFlow,
 } from '@/utils/skillPracticeNavigation';
+import { fetchAiUsageStatus } from '@/lib/ai/draloAiClient';
+import { speakingLimitLabel, LIMIT_REACHED } from '@/lib/aiUsageLimitCopy';
+import { FeedbackCards } from '@/features/speaking/ui/components/FeedbackCards';
 import A2ExamGenerationStatus from '@/components/niveles/A2ExamGenerationStatus';
 
 const buttonStyle = {
@@ -194,6 +200,8 @@ function B2SpeakingExamPracticeInner({ title, subtitle, loadingLabel, refreshLab
 
   const layoutPracticeOpen = skillNav.active ? skillNav.practiceReady : scoring.examPracticeOpen;
   const isSkillPracticeSession = skillNav.active && layoutPracticeOpen;
+  const readingSession = useReadingPracticeSession();
+  const PracticeChrome = isSkillPracticeSession ? ReadingPracticeChrome : B2ExamPracticeChrome;
 
   const handleKeepPracticing = useCallback(() => {
     runKeepPracticingSkillFlow({
@@ -203,34 +211,25 @@ function B2SpeakingExamPracticeInner({ title, subtitle, loadingLabel, refreshLab
         void scoring.refreshPuntuacionesProgress();
         handleSelectExamSlot(slot);
       },
-      onReturnToExercisePicker: () =>
-        returnToSkillExercisePicker({
-          setExamPracticeOpen: scoring.setExamPracticeOpen,
-          refreshProgress: scoring.refreshPuntuacionesProgress,
-        }),
+      onAdvanceToNextPart: () => {
+        void scoring.refreshPuntuacionesProgress();
+        skillNav.advanceToNextPart();
+      },
     });
-  }, [examSlot, scoring, handleSelectExamSlot]);
+  }, [examSlot, scoring, handleSelectExamSlot, skillNav]);
 
-  const handleBackToParts = useCallback(() => {
-    scoring.setExamPracticeOpen(false);
-    skillNav.backToParts();
-    void scoring.refreshPuntuacionesProgress();
-    if (typeof window !== 'undefined') {
-      window.history.replaceState(null, '', window.location.pathname);
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    }
-  }, [scoring, skillNav]);
-
-  const displayPartsData = useMemo(() => {
-    if (!skillNav.active || !skillNav.selectedPartNumber) return partsData;
-    return partsData.filter((p) => p.partNumber === skillNav.selectedPartNumber);
-  }, [partsData, skillNav.active, skillNav.selectedPartNumber]);
+  const tabPartsData = useMemo(() => {
+    if (!skillNav.active) return partsData;
+    return partsData.filter(
+      (p) => p.partNumber >= B2_SPEAKING_PART_MIN && p.partNumber <= B2_SPEAKING_PART_MAX,
+    );
+  }, [partsData, skillNav.active]);
 
   useEffect(() => {
-    if (!skillNav.active || !skillNav.selectedPartNumber || !displayPartsData.length) return;
-    const target = displayPartsData[0];
+    if (!skillNav.active || !skillNav.selectedPartNumber || !tabPartsData.length) return;
+    const target = tabPartsData.find((p) => p.partNumber === skillNav.selectedPartNumber);
     if (target?.id && target.id !== selectedPartId) setSelectedPartId(target.id);
-  }, [skillNav.active, skillNav.selectedPartNumber, displayPartsData, selectedPartId]);
+  }, [skillNav.active, skillNav.selectedPartNumber, tabPartsData, selectedPartId]);
 
   useEffect(() => {
     void loadParts();
@@ -248,8 +247,8 @@ function B2SpeakingExamPracticeInner({ title, subtitle, loadingLabel, refreshLab
   useEffect(() => () => stopExaminerAudio(), []);
 
   const selectedPart = useMemo(
-    () => displayPartsData.find((p) => p.id === selectedPartId),
-    [displayPartsData, selectedPartId],
+    () => tabPartsData.find((p) => p.id === selectedPartId),
+    [tabPartsData, selectedPartId],
   );
 
   const partNumber = selectedPart?.partNumber ?? 0;
@@ -297,14 +296,14 @@ function B2SpeakingExamPracticeInner({ title, subtitle, loadingLabel, refreshLab
   }, [handleFinishSection, partNumber, b2PartCfg?.total]);
 
   const handleContinueInPage = useCallback(() => {
-    const sorted = [...displayPartsData].sort((a, b) => a.partNumber - b.partNumber);
+    const sorted = [...tabPartsData].sort((a, b) => a.partNumber - b.partNumber);
     const currentIdx = sorted.findIndex((p) => p.id === selectedPartId);
     if (currentIdx < 0 || currentIdx >= sorted.length - 1) return;
     setSelectedPartId(sorted[currentIdx + 1].id);
     if (typeof window !== 'undefined') {
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
-  }, [displayPartsData, selectedPartId]);
+  }, [tabPartsData, selectedPartId]);
 
   const chromeSubtitle = isSkillPracticeSession ? null : subtitle;
 
@@ -321,6 +320,9 @@ function B2SpeakingExamPracticeInner({ title, subtitle, loadingLabel, refreshLab
   }, [practiceMode, isSkillPracticeSession, lang]);
 
   const compactChromeHeader = isSkillPracticeSession || isExamSimulationMode(practiceMode);
+
+  const showPracticeSideRail =
+    isSkillPracticeSession && isPartPracticeMode(practiceMode) && scoring.examPracticeOpen;
 
   const chromeTitle = useMemo(() => {
     if (examModeActive || reviewMode) {
@@ -384,7 +386,7 @@ function B2SpeakingExamPracticeInner({ title, subtitle, loadingLabel, refreshLab
           onDismissError={adminFlow.clearGenError}
         />
       ) : null}
-      <B2ExamPracticeChrome
+      <PracticeChrome
         examSlot={examSlot}
         onSelectExam={handleSelectExamSlot}
         progressBySlot={scoring.progressBySlot}
@@ -393,6 +395,8 @@ function B2SpeakingExamPracticeInner({ title, subtitle, loadingLabel, refreshLab
         examPracticeOpen={scoring.examPracticeOpen}
         navigationOverride={skillNav.navigation}
         hidePartTabs={skillNav.hidePartTabs}
+        suppressExamSlotPicker={skillNav.active}
+        partTabsVariant={skillNav.active ? 'excel' : 'default'}
         practiceReady={layoutPracticeOpen}
         {...(skillNav.active ? {} : examSlotPickerProps)}
         title={chromeTitle}
@@ -400,6 +404,9 @@ function B2SpeakingExamPracticeInner({ title, subtitle, loadingLabel, refreshLab
         hideMascot={compactChromeHeader}
         hideSubtitle={!chromeSubtitleResolved}
         compactSkillHeader={compactChromeHeader}
+        showLevelPicker={isSkillPracticeSession}
+        levelSlug="b2"
+        skillRoute="exam-speaking"
         skillPracticeTheme={skillNav.skillTheme}
         practiceMode={practiceMode}
         timerVariant={isSkillPracticeSession && !examModeActive ? 'discrete' : 'prominent'}
@@ -413,9 +420,14 @@ function B2SpeakingExamPracticeInner({ title, subtitle, loadingLabel, refreshLab
         partScoreMetrics={scorePanelProps}
         hideScorePanel={isExamSimulationMode(practiceMode) && !reviewMode}
         partFinishNotice={isExamSimulationMode(practiceMode) && !reviewMode ? null : scoring.partFinishNotice}
-        partsData={!loading && !error ? displayPartsData : []}
+        partsData={!loading && !error ? tabPartsData : []}
         selectedPartId={selectedPartId}
-        onSelectPart={(part) => setSelectedPartId(part.id)}
+        onSelectPart={(part) => {
+          setSelectedPartId(part.id);
+          if (skillNav.active && part.partNumber) {
+            skillNav.selectPartNumber(part.partNumber);
+          }
+        }}
         getPartSavedScoreLabel={(part) => scoring.getPartSavedScoreLabel(part, examSlot)}
         lang={lang}
         studyNotesContext={{
@@ -439,6 +451,15 @@ function B2SpeakingExamPracticeInner({ title, subtitle, loadingLabel, refreshLab
           lang={lang}
         />
       ) : null}
+      <div
+        className={`levels-listening-practice-layout${
+          showPracticeSideRail ? ' levels-listening-practice-layout--with-strategy' : ''
+        }${readingSession.focusMode ? ' levels-listening-practice-layout--focus' : ''}`}
+      >
+        <div
+          className={`levels-listening-practice-main${isSkillPracticeSession ? ` ${readingSession.readingAreaClassName}` : ''}`}
+          style={isSkillPracticeSession ? readingSession.readingAreaStyle : undefined}
+        >
       <section style={{ margin: '0 auto', width: '100%' }}>
         {loading && <p style={{ textAlign: 'center' }}>{loadingLabel}</p>}
         {!loading && error && (
@@ -458,6 +479,7 @@ function B2SpeakingExamPracticeInner({ title, subtitle, loadingLabel, refreshLab
             examSlot={examSlot}
             onSavePartScore={handleSaveSpeakingPart}
             partScoring={b2PartCfg}
+            lang={lang}
           />
               </div>
             </div>
@@ -473,16 +495,35 @@ function B2SpeakingExamPracticeInner({ title, subtitle, loadingLabel, refreshLab
         skillPracticeMode={isSkillPracticeSession}
         skillPracticeTheme={skillNav.skillTheme}
         onContinueInPage={isSkillPracticeSession ? handleKeepPracticing : handleContinueInPage}
-        onBackClick={isSkillPracticeSession ? handleBackToParts : undefined}
         lang={lang}
       />
-      </B2ExamPracticeChrome>
+        </div>
+        {showPracticeSideRail ? (
+          <ExamPracticeSessionSideRail
+            progress={
+              <ExamPracticeProgressPanel
+                slug="b2"
+                examSlot={examSlot}
+                partMin={B2_SPEAKING_PART_MIN}
+                partMax={B2_SPEAKING_PART_MAX}
+                progressSlot={scoring.progressBySlot[examSlot]}
+                examLabel={examLabelsBySlot[examSlot]}
+                lang={lang === 'es' ? 'es' : 'en'}
+                enabled={scoring.examPracticeOpen}
+              />
+            }
+            lang={lang === 'es' ? 'es' : 'en'}
+          />
+        ) : null}
+      </div>
+      </PracticeChrome>
     </B2ExamPracticeLayout>
   );
 }
 
-/** @param {{ part: { id: string, nombre: string, descripcion: string, partNumber: number }, examSlot: number, onSavePartScore?: (p: { correct: number, total: number, passed: boolean }) => void, partScoring?: { total: number, passing: number } | null }} props */
-function B2SpeakingPartSession({ part, examSlot, onSavePartScore, partScoring }) {
+/** @param {{ part: { id: string, nombre: string, descripcion: string, partNumber: number }, examSlot: number, onSavePartScore?: (p: { correct: number, total: number, passed: boolean }) => void, partScoring?: { total: number, passing: number } | null, lang?: 'en'|'es' }} props */
+function B2SpeakingPartSession({ part, examSlot, onSavePartScore, partScoring, lang = 'en' }) {
+  const isEn = lang === 'en';
   const partConfig = getB2SpeakingPartConfig(part.partNumber);
   const cambridgeKey = String(part.partNumber - 13);
   const staticInfo = b2SpeakingPartInfo[cambridgeKey];
@@ -495,6 +536,13 @@ function B2SpeakingPartSession({ part, examSlot, onSavePartScore, partScoring })
   const [longTurnLeft, setLongTurnLeft] = useState(partConfig?.longTurnSeconds ?? 60);
   const [typed, setTyped] = useState('');
   const [apiError, setApiError] = useState('');
+  const [usageHint, setUsageHint] = useState('');
+  const [usageLimit, setUsageLimit] = useState(3);
+  const [usageRemaining, setUsageRemaining] = useState(null);
+  const [usageUnlimited, setUsageUnlimited] = useState(false);
+  const [feedbackLoading, setFeedbackLoading] = useState(false);
+  const [feedbackReport, setFeedbackReport] = useState(null);
+  const [feedbackError, setFeedbackError] = useState('');
   const media = useMediaRecorder();
   /** false al desmontar o cambiar de parte: no actualizar estado ni reproducir audio. */
   const aliveRef = useRef(true);
@@ -507,6 +555,47 @@ function B2SpeakingPartSession({ part, examSlot, onSavePartScore, partScoring })
   );
 
   const isAlive = useCallback(() => aliveRef.current, []);
+
+  const refreshUsageHint = useCallback(async () => {
+    const status = await fetchAiUsageStatus();
+    if (!status?.speaking) {
+      setUsageHint(speakingLimitLabel(3, { lang: isEn ? 'en' : 'es' }));
+      setUsageRemaining(null);
+      setUsageUnlimited(false);
+      return;
+    }
+
+    if (status.speaking.unlimited) {
+      setUsageHint('');
+      setUsageRemaining(null);
+      setUsageUnlimited(true);
+      return;
+    }
+
+    const { used, limit, remaining } = status.speaking;
+    if (limit == null) {
+      setUsageHint('');
+      setUsageRemaining(null);
+      setUsageUnlimited(false);
+      return;
+    }
+
+    setUsageUnlimited(false);
+    setUsageLimit(limit);
+    const nextRemaining = remaining ?? Math.max(0, limit - (used ?? 0));
+    setUsageRemaining(nextRemaining);
+    setUsageHint(
+      speakingLimitLabel(limit, {
+        lang: isEn ? 'en' : 'es',
+        remaining: nextRemaining,
+        used,
+      }),
+    );
+  }, [isEn]);
+
+  useEffect(() => {
+    void refreshUsageHint();
+  }, [refreshUsageHint]);
 
   const applyAssistantTurn = useCallback(
     async (data) => {
@@ -599,6 +688,9 @@ function B2SpeakingPartSession({ part, examSlot, onSavePartScore, partScoring })
     setPhase('intro');
     setLongTurnLeft(partConfig?.longTurnSeconds ?? 60);
     setApiError('');
+    setFeedbackReport(null);
+    setFeedbackError('');
+    setFeedbackLoading(false);
     setLoading(true);
 
     const run = async () => {
@@ -665,7 +757,7 @@ function B2SpeakingPartSession({ part, examSlot, onSavePartScore, partScoring })
       aliveRef.current = false;
       ac.abort();
       stopExaminerAudio();
-      if (media.isRecording) void media.stop();
+      if (media.isActive) void media.stop();
     };
   }, [
     part.id,
@@ -707,7 +799,7 @@ function B2SpeakingPartSession({ part, examSlot, onSavePartScore, partScoring })
   );
 
   useEffect(() => {
-    if (phase !== 'long_turn' || longTurnLeft !== 0 || !media.isRecording) return;
+    if (phase !== 'long_turn' || longTurnLeft !== 0 || !media.isActive) return;
     void (async () => {
       if (!aliveRef.current) return;
       const blob = await media.stop();
@@ -715,17 +807,28 @@ function B2SpeakingPartSession({ part, examSlot, onSavePartScore, partScoring })
       await submitCandidateTurn(blob);
       if (aliveRef.current) setPhase('dialogue');
     })();
-  }, [phase, longTurnLeft, media.isRecording, submitCandidateTurn]);
+  }, [phase, longTurnLeft, media.isActive, submitCandidateTurn]);
 
   const onMicClick = async () => {
     if (loading || !sessionId) return;
     if (partConfig?.uiMode === 'long_turn' && phase === 'await_long_turn') return;
-    if (media.isRecording) {
+    if (media.isActive) {
       const blob = await media.stop();
       if (blob?.size) await submitCandidateTurn(blob);
     } else {
       await media.start();
     }
+  };
+
+  const onPauseClick = () => {
+    if (media.isPaused) media.resume();
+    else media.pause();
+  };
+
+  const onRepeatClick = async () => {
+    if (loading || !sessionId) return;
+    await media.discard();
+    await media.start();
   };
 
   const startLongTurn = () => {
@@ -745,6 +848,59 @@ function B2SpeakingPartSession({ part, examSlot, onSavePartScore, partScoring })
   const userLines = lines.filter((l) => l.role === 'user');
   const speakingTotal = partScoring?.total ?? 5;
   const speakingPassing = partScoring?.passing ?? 3;
+  const limitReached = !usageUnlimited && usageRemaining === 0;
+
+  const getFeedbackWithDralo = async () => {
+    if (!sessionId || userLines.length === 0 || limitReached) return;
+    setFeedbackError('');
+    setFeedbackLoading(true);
+    try {
+      const res = await fetch(withBasePath('/api/speaking/evaluate'), {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
+        body: JSON.stringify({
+          sessionId,
+          cefr: 'B2',
+          mode: 'EXAM',
+          combinedTranscript: userLines.map((l) => l.content).join('\n\n'),
+          taskPrompt: taskContext,
+        }),
+      });
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok || data.error === true) {
+        if (data.code === 'DAILY_LIMIT_REACHED') {
+          const limit = usageLimit ?? 3;
+          setUsageRemaining(0);
+          setUsageHint(
+            speakingLimitLabel(limit, {
+              lang: isEn ? 'en' : 'es',
+              remaining: 0,
+              used: limit,
+            }),
+          );
+        }
+        throw new Error(
+          data.code === 'DAILY_LIMIT_REACHED'
+            ? isEn
+              ? LIMIT_REACHED.speaking.en
+              : LIMIT_REACHED.speaking.es
+            : data.message ||
+                (typeof data.error === 'string' ? data.error : null) ||
+                (isEn ? 'Could not generate feedback.' : 'No se pudo generar el feedback.'),
+        );
+      }
+      if (!data.report) {
+        throw new Error(isEn ? 'Could not generate feedback.' : 'No se pudo generar el feedback.');
+      }
+      setFeedbackReport(data.report);
+      await refreshUsageHint();
+    } catch (e) {
+      setFeedbackError(e?.message || (isEn ? 'Feedback failed.' : 'Error al obtener feedback.'));
+    } finally {
+      setFeedbackLoading(false);
+    }
+  };
 
   const saveSpeakingScore = () => {
     if (!onSavePartScore || userLines.length === 0) return;
@@ -767,6 +923,12 @@ function B2SpeakingPartSession({ part, examSlot, onSavePartScore, partScoring })
       {staticInfo?.tips ? (
         <p style={{ fontSize: '0.88rem', color: '#64748b', marginTop: '0.75rem' }}>
           <strong>Tip:</strong> {staticInfo.tips}
+        </p>
+      ) : null}
+
+      {onSavePartScore && !usageUnlimited ? (
+        <p className="levels-b2-writing-panel__alpha-limit levels-b2-speaking-panel__usage">
+          {usageHint || speakingLimitLabel(3, { lang: isEn ? 'en' : 'es' })}
         </p>
       ) : null}
 
@@ -885,26 +1047,90 @@ function B2SpeakingPartSession({ part, examSlot, onSavePartScore, partScoring })
           </button>
         ) : null}
         {(partConfig?.uiMode !== 'long_turn' || phase === 'dialogue') && (
-          <button
-            type="button"
-            onClick={onMicClick}
-            disabled={loading || !sessionId}
-            style={{
-              padding: '0.75rem 1.25rem',
-              borderRadius: '9999px',
-              border: 'none',
-              background: media.isRecording ? '#dc2626' : '#0284c7',
-              color: '#fff',
-              fontWeight: 700,
-              cursor: loading ? 'not-allowed' : 'pointer',
-              opacity: loading ? 0.6 : 1,
-            }}
-          >
-            {media.isRecording ? '■ Stop and send' : '🎤 Speak'}
-          </button>
+          <>
+            <button
+              type="button"
+              onClick={onMicClick}
+              disabled={loading || !sessionId}
+              style={{
+                padding: '0.75rem 1.25rem',
+                borderRadius: '9999px',
+                border: 'none',
+                background: media.isActive ? '#dc2626' : '#0284c7',
+                color: '#fff',
+                fontWeight: 700,
+                cursor: loading ? 'not-allowed' : 'pointer',
+                opacity: loading ? 0.6 : 1,
+              }}
+            >
+              {media.isActive
+                ? isEn
+                  ? '■ Stop and send'
+                  : '■ Parar y enviar'
+                : isEn
+                  ? '🎤 Speak'
+                  : '🎤 Hablar'}
+            </button>
+            {media.isActive ? (
+              <>
+                <button
+                  type="button"
+                  onClick={onPauseClick}
+                  disabled={loading}
+                  style={{
+                    padding: '0.65rem 1rem',
+                    borderRadius: '9999px',
+                    border: '1px solid #cbd5e0',
+                    background: '#fff',
+                    color: '#334155',
+                    fontWeight: 600,
+                    cursor: loading ? 'not-allowed' : 'pointer',
+                  }}
+                >
+                  {media.isPaused
+                    ? isEn
+                      ? '▶ Resume'
+                      : '▶ Reanudar'
+                    : isEn
+                      ? '⏸ Pause'
+                      : '⏸ Pausar'}
+                </button>
+                <button
+                  type="button"
+                  onClick={() => void onRepeatClick()}
+                  disabled={loading}
+                  style={{
+                    padding: '0.65rem 1rem',
+                    borderRadius: '9999px',
+                    border: '1px solid #cbd5e0',
+                    background: '#fff',
+                    color: '#334155',
+                    fontWeight: 600,
+                    cursor: loading ? 'not-allowed' : 'pointer',
+                  }}
+                >
+                  {isEn ? '↻ Repeat' : '↻ Repetir'}
+                </button>
+              </>
+            ) : null}
+          </>
         )}
         <span style={{ fontSize: '0.88rem', color: '#64748b' }}>
-          {loading ? 'Processing…' : media.isRecording ? 'Recording…' : 'Press to respond'}
+          {loading
+            ? isEn
+              ? 'Processing…'
+              : 'Procesando…'
+            : media.isPaused
+              ? isEn
+                ? 'Paused — resume or repeat'
+                : 'En pausa — reanuda o repite'
+              : media.isRecording
+                ? isEn
+                  ? 'Recording…'
+                  : 'Grabando…'
+                : isEn
+                  ? 'Press to respond'
+                  : 'Pulsa para responder'}
         </span>
       </div>
 
@@ -952,7 +1178,41 @@ function B2SpeakingPartSession({ part, examSlot, onSavePartScore, partScoring })
       ) : null}
 
       {onSavePartScore && userLines.length > 0 ? (
-        <div style={{ marginTop: '1.25rem', textAlign: 'center' }}>
+        <>
+          <div className="levels-b2-writing-panel__actions levels-b2-speaking-panel__actions">
+            <button
+              type="button"
+              className="levels-b2-writing-panel__submit"
+              onClick={() => void getFeedbackWithDralo()}
+              disabled={feedbackLoading || limitReached || !sessionId}
+            >
+              {feedbackLoading
+                ? isEn
+                  ? 'Getting feedback…'
+                  : 'Generando feedback…'
+                : limitReached
+                  ? isEn
+                    ? 'Daily limit reached'
+                    : 'Límite diario alcanzado'
+                  : isEn
+                    ? 'Get feedback with Dralo'
+                    : 'Feedback con Dralo'}
+            </button>
+          </div>
+
+          {feedbackError ? (
+            <p className="levels-b2-writing-panel__error" role="alert">
+              {feedbackError}
+            </p>
+          ) : null}
+
+          {feedbackReport ? (
+            <div style={{ marginTop: '1rem' }}>
+              <FeedbackCards report={feedbackReport} />
+            </div>
+          ) : null}
+
+          <div style={{ marginTop: '1.25rem', textAlign: 'center' }}>
           <button
             type="button"
             onClick={saveSpeakingScore}
@@ -971,14 +1231,9 @@ function B2SpeakingPartSession({ part, examSlot, onSavePartScore, partScoring })
           <p style={{ margin: '0.45rem 0 0', fontSize: '0.85rem', color: '#64748b' }}>
             You need at least {speakingPassing} completed interactions to pass (max. {speakingTotal}).
           </p>
-        </div>
+          </div>
+        </>
       ) : null}
-
-      {!process.env.NEXT_PUBLIC_OPENAI_HINT && (
-        <p style={{ marginTop: '0.75rem', fontSize: '0.8rem', color: '#94a3b8' }}>
-          Examiner voice uses OpenAI on the server (OPENAI_API_KEY). Without a key, the browser voice is used.
-        </p>
-      )}
     </div>
   );
 }
@@ -992,7 +1247,9 @@ export default function B2SpeakingExamPractice(props) {
         </main>
       }
     >
-      <B2SpeakingExamPracticeInner {...props} />
+      <ReadingPracticeSessionProvider>
+        <B2SpeakingExamPracticeInner {...props} />
+      </ReadingPracticeSessionProvider>
     </Suspense>
   );
 }

@@ -30,7 +30,7 @@ export default function LevelHubPage({ config }) {
         <PageHero
           breadcrumb={
             <nav className="breadcrumb" aria-label="Breadcrumb">
-              <Link href="/niveles">Levels</Link>
+              <Link href="/niveles/b2">Levels</Link>
               <span aria-hidden="true">/</span>
               <span>{config.cefr}</span>
             </nav>

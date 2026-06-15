@@ -13,10 +13,17 @@ export function writingLimitLabel(limit, { lang = 'en', remaining, used } = {}) 
   return `Alpha: ${limit} exam writing corrections per day.${suffix}`;
 }
 
-export function speakingLimitLabel(limit = 3, lang = 'en') {
-  return lang === 'es'
-    ? `Alpha: ${limit} feedbacks de speaking de examen al día.`
-    : `Alpha: ${limit} speaking exam feedbacks per day.`;
+export function speakingLimitLabel(limit = 3, { lang = 'en', remaining, used } = {}) {
+  let suffix = '';
+  if (remaining != null) {
+    suffix = lang === 'es' ? ` (quedan ${remaining} hoy)` : ` (${remaining} left today)`;
+  } else if (used != null && limit != null) {
+    suffix = lang === 'es' ? ` (${used}/${limit} usadas hoy)` : ` (${used}/${limit} used today)`;
+  }
+  if (lang === 'es') {
+    return `Alpha: ${limit} feedbacks de speaking de examen al día.${suffix}`;
+  }
+  return `Alpha: ${limit} speaking exam feedbacks per day.${suffix}`;
 }
 
 export const LIMIT_REACHED = {

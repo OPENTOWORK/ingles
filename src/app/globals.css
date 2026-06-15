@@ -194,25 +194,38 @@ a:hover {
   color: #ffffff;
 }
 
-.legal-footer-column ul {
+.legal-footer-column ul,
+.legal-footer-list {
   list-style: none;
   margin: 0;
   padding: 0;
 }
 
 .legal-footer-column li {
-  margin: 0.28rem 0;
+  margin: 0.32rem 0;
 }
 
-.legal-footer-column a {
+.legal-footer-column a,
+.legal-footer-link-btn {
   color: #ffffff;
   margin-right: 0;
   text-decoration: none;
   font-size: 0.9rem;
-  line-height: 1.25;
+  line-height: 1.35;
 }
 
-.legal-footer-column a:hover {
+.legal-footer-link-btn {
+  padding: 0;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  font: inherit;
+  font-weight: 600;
+  text-align: left;
+}
+
+.legal-footer-column a:hover,
+.legal-footer-link-btn:hover {
   text-decoration: underline;
 }
 
@@ -237,47 +250,15 @@ a:hover {
   line-height: 1.4;
 }
 
-.legal-cookie-settings-link {
-  margin-top: 0.45rem;
-  padding: 0;
-  border: none;
-  background: transparent;
-  color: #ffffff;
-  cursor: pointer;
-  font-size: 0.84rem;
-  text-decoration: none;
-  font-weight: 600;
-}
-
-.legal-cookie-settings-link:hover {
-  text-decoration: underline;
-}
-
 .legal-doc-page {
-  max-width: 1000px;
+  max-width: 1180px;
   margin: 0 auto;
-  padding: 2rem 1.2rem 3rem;
+  padding: 1.75rem 1.2rem 3rem;
+  overflow: visible;
 }
 
-.legal-doc-page h1 {
-  margin-bottom: 1rem;
-}
-
-.legal-doc-page section {
-  margin-top: 1.4rem;
-  background: #ffffff;
-  border: 1px solid #e5e9f0;
-  border-radius: 12px;
-  padding: 1rem 1.2rem;
-}
-
-.legal-doc-page h2 {
-  margin: 0 0 0.7rem;
-}
-
-.legal-doc-page p,
-.legal-doc-page li {
-  line-height: 1.6;
+.page-content:has(.legal-doc-page) {
+  overflow: visible;
 }
 
 .cookie-banner {
@@ -2333,12 +2314,12 @@ body.nav-open {
 }
 
 .levels-b2-practice--skill-compact[data-skill-theme='writing'] {
-  --skill-accent: #dc2626;
-  --skill-accent-dark: #b91c1c;
-  --skill-surface: #fffafa;
-  --skill-surface-2: #fef2f2;
-  --skill-border: #fecaca;
-  --skill-ink: #7f1d1d;
+  --skill-accent: #059669;
+  --skill-accent-dark: #047857;
+  --skill-surface: #f7fdf9;
+  --skill-surface-2: #ecfdf5;
+  --skill-border: #bbf7d0;
+  --skill-ink: #14532d;
 }
 
 .levels-b2-practice--skill-compact[data-skill-theme='listening'] {
@@ -2400,10 +2381,10 @@ body.nav-open {
 }
 
 .levels-exam-module-nav--skill[data-skill-theme='writing'] {
-  --skill-accent: #dc2626;
-  --skill-accent-dark: #b91c1c;
-  --skill-border: #fecaca;
-  --skill-surface-2: #fef2f2;
+  --skill-accent: #059669;
+  --skill-accent-dark: #047857;
+  --skill-border: #bbf7d0;
+  --skill-surface-2: #ecfdf5;
 }
 
 .levels-exam-module-nav--skill[data-skill-theme='listening'] {
@@ -3077,6 +3058,51 @@ body.nav-open {
   color: #059669;
 }
 
+.levels-b2-part-tabs--excel {
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  justify-content: flex-start;
+  gap: 0;
+  max-width: 100%;
+  margin: 0 0 1rem;
+  padding: 0;
+  border: none;
+  border-bottom: 2px solid #cbd5e1;
+  border-radius: 0;
+  background: #e2e8f0;
+  scrollbar-width: thin;
+}
+
+.levels-b2-part-tabs--excel .levels-b2-part-tab {
+  flex: 0 0 auto;
+  min-width: 5.25rem;
+  margin-bottom: -2px;
+  padding: 0.55rem 0.85rem;
+  border: 1px solid #cbd5e1;
+  border-bottom: none;
+  border-radius: 8px 8px 0 0;
+  background: #f1f5f9;
+  box-shadow: none;
+}
+
+.levels-b2-part-tabs--excel .levels-b2-part-tab:hover {
+  background: #ffffff;
+}
+
+.levels-b2-part-tabs--excel .levels-b2-part-tab--active {
+  background: #ffffff;
+  border-color: #cbd5e1;
+  border-bottom: 2px solid #ffffff;
+  color: #047857;
+  box-shadow: none;
+  position: relative;
+  z-index: 1;
+}
+
+.levels-b2-part-tabs--excel .levels-b2-part-tab__score {
+  font-size: 0.6875rem;
+}
+
 /* Levels — Use of English Part 1: texto | preguntas (layout limpio, estilo examen) */
 .levels-exam-split-page {
   --levels-split-ink: #0f172a;
@@ -3169,12 +3195,201 @@ body.nav-open {
 .levels-b2-writing-panel__actions {
   margin-top: 1rem;
   display: flex;
+  flex-wrap: wrap;
+  align-items: center;
   justify-content: flex-end;
-  position: sticky;
-  bottom: 0;
-  z-index: 2;
-  padding: 0.75rem 0 0.25rem;
-  background: linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, #ffffff 28%);
+  gap: 0.65rem 1rem;
+  padding: 0.25rem 0;
+}
+
+.levels-b2-writing-panel__alpha-limit {
+  margin: 0;
+  flex: 1 1 12rem;
+  text-align: right;
+  font-size: 0.8125rem;
+  line-height: 1.45;
+  color: #64748b;
+}
+
+.levels-b2-speaking-panel__actions {
+  margin-top: 1.25rem;
+}
+
+.levels-b2-speaking-panel__usage {
+  margin-top: 0.85rem;
+  text-align: left;
+}
+
+.exam-practice-level-strip {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.65rem;
+  margin: 0 0 1rem;
+  padding: 0.65rem 0.85rem;
+  border-radius: 12px;
+  border: 1px solid #e2e8f0;
+  background: #f8fafc;
+}
+
+.exam-practice-level-strip__label {
+  font-size: 0.75rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #64748b;
+}
+
+.exam-practice-level-strip__list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.exam-practice-level-strip__pill {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.3rem;
+  min-width: 2.75rem;
+  padding: 0.35rem 0.7rem;
+  border-radius: 999px;
+  border: 1px solid #cbd5e1;
+  background: #fff;
+  color: #334155;
+  font-size: 0.8125rem;
+  font-weight: 800;
+  text-decoration: none;
+  transition: background 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+}
+
+.exam-practice-level-strip__pill:hover {
+  border-color: var(--level-accent, #2563eb);
+  color: var(--level-accent, #2563eb);
+}
+
+.exam-practice-level-strip__pill--active {
+  border-color: var(--level-accent, #2563eb);
+  background: color-mix(in srgb, var(--level-accent, #2563eb) 12%, white);
+  color: var(--level-accent, #2563eb);
+}
+
+.exam-practice-level-strip__pill--locked {
+  opacity: 0.65;
+  cursor: not-allowed;
+  background: #f1f5f9;
+  color: #94a3b8;
+  border-color: #e2e8f0;
+}
+
+.exam-practice-level-strip__lock {
+  flex: 0 0 auto;
+  color: #94a3b8;
+}
+
+.exam-practice-skill-nav {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: stretch;
+  gap: 0.65rem;
+  margin: 0 0 1rem;
+}
+
+.exam-practice-skill-nav .exam-practice-level-strip {
+  flex: 0 1 auto;
+  margin: 0;
+}
+
+.exam-practice-skill-strip {
+  display: flex;
+  flex: 1 1 16rem;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.65rem;
+  min-width: 0;
+  padding: 0.65rem 0.85rem;
+  border-radius: 12px;
+  border: 1px solid #e2e8f0;
+  background: #f8fafc;
+}
+
+.exam-practice-skill-strip__label {
+  font-size: 0.75rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #64748b;
+}
+
+.exam-practice-skill-strip__list {
+  display: flex;
+  flex: 1 1 auto;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  min-width: 0;
+}
+
+.exam-practice-skill-strip__pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.38rem 0.72rem;
+  border-radius: 999px;
+  border: 1px solid #cbd5e1;
+  background: #fff;
+  color: #334155;
+  font-size: 0.78rem;
+  font-weight: 700;
+  text-decoration: none;
+  white-space: nowrap;
+  transition: background 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+}
+
+.exam-practice-skill-strip__icon {
+  font-size: 0.95rem;
+  line-height: 1;
+}
+
+.exam-practice-skill-strip__pill--reading {
+  --skill-accent: #2563eb;
+}
+
+.exam-practice-skill-strip__pill--writing {
+  --skill-accent: #059669;
+}
+
+.exam-practice-skill-strip__pill--listening {
+  --skill-accent: #d97706;
+}
+
+.exam-practice-skill-strip__pill--speaking {
+  --skill-accent: #db2777;
+}
+
+.exam-practice-skill-strip__pill:not(.exam-practice-skill-strip__pill--locked):hover {
+  border-color: var(--skill-accent, #2563eb);
+  color: var(--skill-accent, #2563eb);
+  background: color-mix(in srgb, var(--skill-accent, #2563eb) 8%, white);
+}
+
+.exam-practice-skill-strip__pill--active {
+  border-color: var(--skill-accent, #2563eb);
+  background: color-mix(in srgb, var(--skill-accent, #2563eb) 12%, white);
+  color: var(--skill-accent, #2563eb);
+}
+
+.exam-practice-skill-strip__pill--locked {
+  opacity: 0.65;
+  cursor: not-allowed;
+  background: #f1f5f9;
+  color: #94a3b8;
+  border-color: #e2e8f0;
 }
 
 .levels-b2-writing-panel__submit {
@@ -8985,6 +9200,23 @@ body.reading-night-mode .levels-b2-part-tab--active .levels-b2-part-tab__score {
   color: #94a3b8;
 }
 
+body.reading-night-mode .levels-b2-part-tabs--excel {
+  background: #0f172a;
+  border-bottom-color: #475569;
+}
+
+body.reading-night-mode .levels-b2-part-tabs--excel .levels-b2-part-tab {
+  background: #1e293b;
+  border-color: #475569;
+  color: #cbd5e1;
+}
+
+body.reading-night-mode .levels-b2-part-tabs--excel .levels-b2-part-tab--active {
+  background: #0f172a;
+  border-bottom-color: #0f172a;
+  color: #bae6fd;
+}
+
 body.reading-night-mode .levels-exam-split-page {
   --levels-split-surface: #1e293b;
   --levels-split-panel: #0f172a;
@@ -9530,6 +9762,139 @@ body.focus-mode-active .levels-b2-practice__work-panel {
 .levels-b2-writing-draft__state {
   font-size: 0.85rem;
   color: #475569;
+}
+
+body.reading-night-mode .levels-b2-writing-draft {
+  background: #134e4a;
+  border-color: #14b8a6;
+}
+
+body.reading-night-mode .levels-b2-writing-draft--submitted {
+  background: #14532d;
+  border-color: #22c55e;
+}
+
+body.reading-night-mode .levels-b2-writing-draft__title {
+  color: #5eead4;
+}
+
+body.reading-night-mode .levels-b2-writing-draft__words {
+  color: #ecfdf5;
+}
+
+body.reading-night-mode .levels-b2-writing-draft__state {
+  color: #94a3b8;
+}
+
+body.reading-night-mode .b2-writing-task {
+  background: #1e293b;
+  border-color: #475569;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25);
+}
+
+body.reading-night-mode .b2-writing-task__title {
+  color: #f8fafc;
+}
+
+body.reading-night-mode .b2-writing-task__label {
+  color: #94a3b8;
+}
+
+body.reading-night-mode .b2-writing-task__instructions p,
+body.reading-night-mode .b2-writing-task__question-block p,
+body.reading-night-mode .b2-writing-task__question,
+body.reading-night-mode .b2-writing-task__points-list li {
+  color: #cbd5e1;
+}
+
+body.reading-night-mode .b2-writing-task__word-note {
+  color: #94a3b8;
+}
+
+body.reading-night-mode .levels-b2-writing-panel__meta {
+  background: #334155;
+  border-color: #64748b;
+  color: #cbd5e1;
+}
+
+body.reading-night-mode .levels-b2-writing-panel__meta strong {
+  color: #f1f5f9;
+}
+
+body.reading-night-mode .levels-b2-writing-panel__textarea {
+  background: #334155;
+  border-color: #64748b;
+  color: #f8fafc;
+}
+
+body.reading-night-mode .levels-b2-writing-panel__textarea:focus {
+  border-color: #94a3b8;
+  box-shadow: 0 0 0 3px rgba(148, 163, 184, 0.25);
+}
+
+body.reading-night-mode .levels-b2-writing-panel__actions {
+  /* static row — no sticky gradient */
+}
+
+body.reading-night-mode .levels-b2-writing-panel__alpha-limit {
+  color: #94a3b8;
+}
+
+body.reading-night-mode .levels-b2-writing-panel__submit {
+  background: #14532d;
+  border-color: #22c55e;
+  color: #dcfce7;
+}
+
+body.reading-night-mode .levels-b2-writing-panel__submit:hover:not(:disabled) {
+  background: #166534;
+  border-color: #4ade80;
+}
+
+body.reading-night-mode .levels-b2-writing-panel__feedback {
+  border-top-color: #475569;
+}
+
+body.reading-night-mode .levels-b2-writing-panel__feedback-body {
+  background: #334155;
+  border-color: #64748b;
+  color: #e2e8f0;
+}
+
+body.reading-night-mode .levels-b2-writing-panel__score-card {
+  background: #334155;
+  border-color: #64748b;
+}
+
+body.reading-night-mode .levels-b2-writing-panel__score-value {
+  color: #f8fafc;
+}
+
+body.reading-night-mode .levels-b2-writing-panel__feedback-heading,
+body.reading-night-mode .levels-b2-writing-panel__feedback-p,
+body.reading-night-mode .levels-b2-writing-panel__feedback-li,
+body.reading-night-mode .levels-b2-writing-panel__feedback-correction {
+  color: #e2e8f0;
+}
+
+body.reading-night-mode .levels-b2-writing-panel__exam-note {
+  background: #1e3a5f;
+  border-color: #3b82f6;
+  color: #bfdbfe;
+}
+
+body.reading-night-mode .levels-writing-strategy {
+  background: #1e293b;
+  border-color: #475569;
+}
+
+body.reading-night-mode .levels-writing-strategy__body {
+  background: #1e293b;
+  color: #cbd5e1;
+}
+
+body.reading-night-mode .levels-writing-strategy__check-item {
+  color: #cbd5e1;
 }
 
 /* --- Writing exam mode note + CEFR estimate --- */

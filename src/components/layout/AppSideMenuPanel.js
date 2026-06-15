@@ -5,15 +5,17 @@ import { usePathname } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { useUserRole } from '@/context/UserRoleContext';
 import { isAdminRole } from '@/utils/authRoles';
+import { canViewPricing } from '@/utils/pricingAccess';
 import { DraloAiComingSoonRibbon, DraloAiNavMenuItems } from '@/components/layout/DraloAiNavMenu';
 import {
   getStaffPanelMenuItemsForRole,
   getStaffPanelMenuLabel,
   isDraloAiLockedForRole,
   NAV_LINK_CONTACT,
-  getHomeQuickLinksForRole,
   HOME_THEORY_LINK,
+  HOME_PRICING_LINK,
   NAV_LINKS_BEFORE_DRALO,
+  getAdminLearningLinks,
 } from '@/config/appNavMenu';
 import { performLogout } from '@/utils/logout';
 
@@ -32,6 +34,7 @@ export default function AppSideMenuPanel({ defaultOpen = true }) {
   const draloLocked = isDraloAiLockedForRole(userRole);
   const showStaffSingleLink = staffMenuItems.length === 1;
   const showAdminHomeLinks = isAdminRole(userRole);
+  const showPricing = canViewPricing(userRole);
   const linkClass = 'app-side-menu__link';
 
   useEffect(() => {
@@ -86,7 +89,7 @@ export default function AppSideMenuPanel({ defaultOpen = true }) {
               {HOME_THEORY_LINK.label}
             </NavLink>
           ) : null}
-          {getHomeQuickLinksForRole(userRole).map((item) => (
+          {getAdminLearningLinks(userRole).map((item) => (
             <NavLink key={item.href} href={item.href} className={linkClass}>
               {item.label}
             </NavLink>
@@ -96,6 +99,11 @@ export default function AppSideMenuPanel({ defaultOpen = true }) {
               {item.label}
             </NavLink>
           ))}
+          {showPricing ? (
+            <NavLink href={HOME_PRICING_LINK.href} className={linkClass}>
+              {HOME_PRICING_LINK.label}
+            </NavLink>
+          ) : null}
 
           <button
             type="button"

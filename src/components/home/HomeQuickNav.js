@@ -3,16 +3,18 @@
 import Link from 'next/link';
 import { useUserRole } from '@/context/UserRoleContext';
 import { isAdminRole } from '@/utils/authRoles';
-import { getHomeQuickLinksForRole, HOME_THEORY_LINK } from '@/config/appNavMenu';
+import { canViewPricing } from '@/utils/pricingAccess';
+import {
+  getHomeQuickLinksForRole,
+  HOME_THEORY_LINK,
+} from '@/config/appNavMenu';
 
 export default function HomeQuickNav() {
   const { userRole } = useUserRole();
-  const isStudent = userRole === 'student' || userRole === 'alumno';
   const showTheory = isAdminRole(userRole);
-  const showQuickLinks = !isStudent;
   const links = [
     ...(showTheory ? [HOME_THEORY_LINK] : []),
-    ...(showQuickLinks ? getHomeQuickLinksForRole(userRole) : []),
+    ...getHomeQuickLinksForRole(userRole),
   ];
 
   if (links.length === 0) return null;
