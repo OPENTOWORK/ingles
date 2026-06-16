@@ -3,14 +3,23 @@ import {
   isCambridgeKeyWordWordCountValid,
 } from '@/lib/countCambridgeKeyWordWords';
 import { normalizeB2KeyWordAnswer, tokenizeB2KeyWordAnswer } from '@/lib/normalizeB2KeyWordAnswer';
+import { evaluateB2KeyWordKeywordStatus } from '@/lib/gradeB2KeyWordKeyword';
+import {
+  B2KeyWordAnswerKeyValidationError,
+  validateB2KeyWordAnswerKey,
+} from '@/lib/validateB2KeyWordAnswerKey';
 
-/** @typedef {'full_match' | 'partial_match' | 'no_match' | 'invalid_word_count' | 'keyword_missing' | 'keyword_modified'} GradeReason */
+/** @typedef {'full_match' | 'partial_match' | 'no_match' | 'invalid_word_count' | 'keyword_missing' | 'keyword_modified' | 'invalid_answer_key'} GradeReason */
+
+/**
+ * @typedef {import('@/lib/gradeB2KeyWordKeyword').B2KeyWordKeywordSpec} B2KeyWordKeywordSpec
+ */
 
 /**
  * @typedef {object} B2KeyWordAnswerKey
  * @property {'b2_key_word_transformation'} type
  * @property {number} version
- * @property {string} keyword
+ * @property {B2KeyWordKeywordSpec} keyword
  * @property {string[]} fullAnswers
  * @property {Array<{ id: number, label?: string, accepted: string[] }>} markingPoints
  */
@@ -21,66 +30,21 @@ import { normalizeB2KeyWordAnswer, tokenizeB2KeyWordAnswer } from '@/lib/normali
  * @property {2} maxScore
  * @property {number} wordCount
  * @property {'correct' | 'missing' | 'modified'} keywordStatus
+ * @property {{ required: number, found: number }} keywordOccurrences
  * @property {Array<{ id: number, correct: boolean, matchedVariant: string | null }>} markingPoints
  * @property {string | null} matchedFullAnswer
  * @property {GradeReason} reason
+ * @property {string[]=} validationErrors
  */
 
+export { evaluateB2KeyWordKeywordStatus } from '@/lib/gradeB2KeyWordKeyword';
+export {
+  B2KeyWordAnswerKeyValidationError,
+  validateB2KeyWordAnswerKey,
+} from '@/lib/validateB2KeyWordAnswerKey';
+
 /**
- * @param {string} keyword
  * @param {string[]} tokens
- * @returns {'correct' | 'missing' | 'modified'}
- */
-export function evaluateB2KeyWordKeywordStatus(keyword, tokens) {
-  const kw = normalizeB2KeyWordAnswer(keyword);
-  if (!kw) return 'missing';
-
-  const kwTokens = kw.split(' ').filter(Boolean);
-  if (kwTokens.length === 1) {
-    const target = kwTokens[0];
-    let exact = false;
-    let modified = false;
-
-    for (const token of tokens) {
-      const lower = token.toLowerCase();
-      if (lower === target) {
-        exact = true;
-        break;
-      }
-      if (lower.startsWith(target) && lower.length > target.length) {
-        modified = true;
-      }
-    }
-
-    if (exact) return 'correct';
-    if (modified) return 'modified';
-    return 'missing';
-  }
-
-  // Multi-token keyword: exact contiguous subsequence required.
-  outer: for (let i = 0; i <= tokens.length - kwTokens.length; i += 1) {
-    let ok = true;
-    for (let j = 0; j < kwTokens.length; j += 1) {
-      if (tokens[i + j].toLowerCase() !== kwTokens[j]) {
-        ok = false;
-        break;
-      }
-    }
-    if (ok) return 'correct';
-  }
-
-  for (const token of tokens) {
-    if (token.toLowerCase().includes(kwTokens[0]) && token.toLowerCase() !== kwTokens.join(' ')) {
-      return 'modified';
-    }
-  }
-
-  return 'missing';
-}
-
-/**
- * Find leftmost contiguous token subsequence match.
- * @param {string[]} haystack
  * @param {string[]} needle
  * @returns {{ start: number, end: number } | null}
  */
@@ -118,7 +82,7 @@ function findVariantMatch(tokens, variant) {
  * @param {Array<{ id: number, accepted: string[] }>} markingPoints
  */
 function gradeMarkingPoints(tokens, markingPoints) {
-  /** @type {Array<{ id: number, correct: boolean, matchedVariant: string | null }>} */
+  /** @type {Array<{ id: number, correct: boolean, matchedVariant: string | null, span?: { start: number, end: number } | null }>} */
   const results = [];
   let searchFrom = 0;
 
@@ -148,23 +112,27 @@ function gradeMarkingPoints(tokens, markingPoints) {
     }
 
     if (matchedVariant != null) {
-      results.push({ id: mp.id, correct: true, matchedVariant });
+      results.push({
+        id: mp.id,
+        correct: true,
+        matchedVariant,
+        span: { start: bestStart, end: matchedEnd },
+      });
       searchFrom = matchedEnd + 1;
     } else {
-      results.push({ id: mp.id, correct: false, matchedVariant: null });
+      results.push({ id: mp.id, correct: false, matchedVariant: null, span: null });
     }
   }
 
-  return results;
+  return results.map(({ id, correct, matchedVariant }) => ({ id, correct, matchedVariant }));
 }
 
 /**
- * Both MPs matched in order with no extra tokens outside matched spans.
  * @param {string[]} tokens
  * @param {Array<{ id: number, correct: boolean, matchedVariant: string | null }>} mpResults
  * @param {Array<{ id: number, accepted: string[] }>} markingPoints
  */
-function markingPointsCoverAnswerExactly(tokens, mpResults, markingPoints) {
+export function markingPointsCoverAnswerExactly(tokens, mpResults, markingPoints) {
   const sortedMps = [...markingPoints].sort((a, b) => a.id - b.id);
   if (sortedMps.length !== mpResults.length) return false;
 
@@ -204,12 +172,55 @@ function matchFullAnswer(studentAnswer, fullAnswers) {
 }
 
 /**
+ * @param {object} params
+ * @returns {B2KeyWordGradeResult}
+ */
+function buildBaseResult({
+  score,
+  wordCount,
+  keywordStatus,
+  keywordOccurrences,
+  markingPoints,
+  matchedFullAnswer,
+  reason,
+  validationErrors,
+}) {
+  return {
+    score,
+    maxScore: 2,
+    wordCount,
+    keywordStatus,
+    keywordOccurrences,
+    markingPoints,
+    matchedFullAnswer,
+    reason,
+    ...(validationErrors ? { validationErrors } : {}),
+  };
+}
+
+/**
  * @param {string} studentAnswer
  * @param {B2KeyWordAnswerKey} answerKey
  * @returns {B2KeyWordGradeResult}
  */
 export function gradeB2KeyWordTransformation(studentAnswer, answerKey) {
-  const maxScore = 2;
+  const validation = validateB2KeyWordAnswerKey(answerKey);
+  if (!validation.valid) {
+    if (typeof process !== 'undefined' && process.env.NODE_ENV === 'development') {
+      throw new B2KeyWordAnswerKeyValidationError(validation.errors);
+    }
+    return buildBaseResult({
+      score: 0,
+      wordCount: countCambridgeKeyWordWords(studentAnswer),
+      keywordStatus: 'missing',
+      keywordOccurrences: { required: 1, found: 0 },
+      markingPoints: [],
+      matchedFullAnswer: null,
+      reason: 'invalid_answer_key',
+      validationErrors: validation.errors,
+    });
+  }
+
   const tokens = tokenizeB2KeyWordAnswer(studentAnswer);
   const wordCount = countCambridgeKeyWordWords(studentAnswer);
   const emptyMpResults = (answerKey.markingPoints || []).map((mp) => ({
@@ -219,48 +230,50 @@ export function gradeB2KeyWordTransformation(studentAnswer, answerKey) {
   }));
 
   if (!isCambridgeKeyWordWordCountValid(studentAnswer)) {
-    return {
+    return buildBaseResult({
       score: 0,
-      maxScore,
       wordCount,
       keywordStatus: 'missing',
+      keywordOccurrences: { required: 1, found: 0 },
       markingPoints: emptyMpResults,
       matchedFullAnswer: null,
       reason: 'invalid_word_count',
-    };
+    });
   }
 
-  const keywordStatus = evaluateB2KeyWordKeywordStatus(answerKey.keyword, tokens);
+  const keywordEval = evaluateB2KeyWordKeywordStatus(answerKey.keyword, tokens);
+  const { status: keywordStatus, occurrences: keywordOccurrences } = keywordEval;
+
   if (keywordStatus === 'missing') {
-    return {
+    return buildBaseResult({
       score: 0,
-      maxScore,
       wordCount,
       keywordStatus,
+      keywordOccurrences,
       markingPoints: emptyMpResults,
       matchedFullAnswer: null,
       reason: 'keyword_missing',
-    };
+    });
   }
   if (keywordStatus === 'modified') {
-    return {
+    return buildBaseResult({
       score: 0,
-      maxScore,
       wordCount,
       keywordStatus,
+      keywordOccurrences,
       markingPoints: emptyMpResults,
       matchedFullAnswer: null,
       reason: 'keyword_modified',
-    };
+    });
   }
 
   const matchedFullAnswer = matchFullAnswer(studentAnswer, answerKey.fullAnswers);
   if (matchedFullAnswer) {
-    return {
+    return buildBaseResult({
       score: 2,
-      maxScore,
       wordCount,
       keywordStatus,
+      keywordOccurrences,
       markingPoints: (answerKey.markingPoints || []).map((mp) => ({
         id: mp.id,
         correct: true,
@@ -268,7 +281,7 @@ export function gradeB2KeyWordTransformation(studentAnswer, answerKey) {
       })),
       matchedFullAnswer,
       reason: 'full_match',
-    };
+    });
   }
 
   const mpResults = gradeMarkingPoints(tokens, answerKey.markingPoints || []);
@@ -281,49 +294,38 @@ export function gradeB2KeyWordTransformation(studentAnswer, answerKey) {
       mpResults,
       answerKey.markingPoints || [],
     );
-    if (exactCover) {
-      return {
-        score: 2,
-        maxScore,
-        wordCount,
-        keywordStatus,
-        markingPoints: mpResults,
-        matchedFullAnswer: null,
-        reason: 'partial_match',
-      };
-    }
-    return {
-      score: 1,
-      maxScore,
+    return buildBaseResult({
+      score: exactCover ? 2 : 1,
       wordCount,
       keywordStatus,
+      keywordOccurrences,
       markingPoints: mpResults,
       matchedFullAnswer: null,
       reason: 'partial_match',
-    };
+    });
   }
 
   if (correctCount === 1) {
-    return {
+    return buildBaseResult({
       score: 1,
-      maxScore,
       wordCount,
       keywordStatus,
+      keywordOccurrences,
       markingPoints: mpResults,
       matchedFullAnswer: null,
       reason: 'partial_match',
-    };
+    });
   }
 
-  return {
+  return buildBaseResult({
     score: 0,
-    maxScore,
     wordCount,
     keywordStatus,
+    keywordOccurrences,
     markingPoints: mpResults,
     matchedFullAnswer: null,
     reason: 'no_match',
-  };
+  });
 }
 
 /**
@@ -337,24 +339,24 @@ export function gradeLegacyB2KeyWordTransformation({ studentAnswer, acceptedFull
   const matchedFullAnswer = matchFullAnswer(studentAnswer, acceptedFullAnswers);
 
   if (matchedFullAnswer) {
-    return {
+    return buildBaseResult({
       score: 2,
-      maxScore: 2,
       wordCount,
       keywordStatus: 'correct',
+      keywordOccurrences: { required: 1, found: 1 },
       markingPoints: [],
       matchedFullAnswer,
       reason: 'full_match',
-    };
+    });
   }
 
-  return {
+  return buildBaseResult({
     score: 0,
-    maxScore: 2,
     wordCount,
     keywordStatus: tokens.length ? 'correct' : 'missing',
+    keywordOccurrences: { required: 1, found: 0 },
     markingPoints: [],
     matchedFullAnswer: null,
     reason: 'no_match',
-  };
+  });
 }
