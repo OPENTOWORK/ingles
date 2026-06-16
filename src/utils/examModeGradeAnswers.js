@@ -1,5 +1,11 @@
 import { computeB2PartProgressFromState } from '@/utils/recordLevelsB2PartScore';
-import { getB2PartScoring } from '@/utils/levelsB2PartScoring';
+import { getB2PartScoring, B2_PART_SCORING_V2, B2_PAPER_SCORING_V2 } from '@/utils/levelsB2PartScoring';
+import { isB2ScoringV2Enabled } from '@/lib/b2ScoringV2FeatureFlag';
+import {
+  buildPartScoreMetricsV2,
+  maxPointsForPartRange,
+  sumB2MetricsForParts,
+} from '@/utils/b2ScoringV2Engine';
 import {
   getGroupedAnswers,
   getOpenAnswerMap,
@@ -28,35 +34,90 @@ export function computeSilentOpenChecks(openInputs, openAnswerMap, getQuestionKe
   return checks;
 }
 
+function buildByPartEntryV1(prog, partNumber) {
+  const cfg = getB2PartScoring(partNumber);
+  return {
+    correct: prog.correct,
+    total: prog.total,
+    passing: cfg?.passing ?? prog.passing,
+    complete: prog.complete,
+    scoringVersion: 1,
+  };
+}
+
+function buildByPartEntryV2(prog, partNumber) {
+  const v2 =
+    prog.v2Metrics ||
+    buildPartScoreMetricsV2(
+      partNumber,
+      {
+        correctItems: prog.correct,
+        questionsAnswered: prog.evaluated,
+        totalQuestions: getB2PartScoring(partNumber)?.total,
+      },
+      B2_PART_SCORING_V2,
+    );
+  return {
+    ...v2,
+    complete: prog.complete,
+    passing: getB2PartScoring(partNumber)?.passing,
+  };
+}
+
 /**
  * Aggregate scores for a section snapshot saved at finish time.
  * @param {object} params
  * @param {number} params.partMin
  * @param {number} params.partMax
  * @param {Record<number, object>} params.partSnapshots - keyed by part number
+ * @param {boolean} [params.scoringV2Enabled]
  */
-export function aggregateExamModeSectionScores({ partMin, partMax, partSnapshots }) {
+export function aggregateExamModeSectionScores({ partMin, partMax, partSnapshots, scoringV2Enabled }) {
+  const v2 = scoringV2Enabled ?? isB2ScoringV2Enabled();
+  /** @type {Record<number, object>} */
+  const byPart = {};
   let correct = 0;
   let total = 0;
-  /** @type {Record<number, { correct: number, total: number, passing: number, complete: boolean }>} */
-  const byPart = {};
 
   for (let p = partMin; p <= partMax; p += 1) {
     const snap = partSnapshots[p];
     if (!snap?.progress) continue;
     const prog = snap.progress;
-    const cfg = getB2PartScoring(p);
-    byPart[p] = {
-      correct: prog.correct,
-      total: prog.total,
-      passing: cfg?.passing ?? prog.passing,
-      complete: prog.complete,
-    };
-    correct += prog.correct;
-    total += prog.total;
+    if (v2 && p >= 1 && p <= 7) {
+      byPart[p] = buildByPartEntryV2(prog, p);
+    } else {
+      byPart[p] = buildByPartEntryV1(prog, p);
+    }
+    correct += v2 && p >= 1 && p <= 7 ? byPart[p].pointsEarned : prog.correct;
+    total += v2 && p >= 1 && p <= 7 ? byPart[p].maxPoints : prog.total;
   }
 
-  return { correct, total, byPart };
+  const result = {
+    correct,
+    total,
+    byPart,
+    scoringVersion: v2 ? 2 : 1,
+  };
+
+  if (v2) {
+    const reading = sumB2MetricsForParts(byPart, B2_PAPER_SCORING_V2.reading.parts);
+    const useOfEnglish = sumB2MetricsForParts(byPart, B2_PAPER_SCORING_V2.useOfEnglish.parts);
+    const paper = sumB2MetricsForParts(byPart, B2_PAPER_SCORING_V2.readingAndUseOfEnglish.parts);
+    result.pointsEarned = correct;
+    result.maxPoints = total;
+    result.reading = reading;
+    result.useOfEnglish = useOfEnglish;
+    result.paper = {
+      ...paper,
+      maxPoints: maxPointsForPartRange(
+        Math.min(...B2_PAPER_SCORING_V2.readingAndUseOfEnglish.parts),
+        Math.max(...B2_PAPER_SCORING_V2.readingAndUseOfEnglish.parts),
+        B2_PART_SCORING_V2,
+      ),
+    };
+  }
+
+  return result;
 }
 
 /**
@@ -73,8 +134,9 @@ export function gradePartFromAnswerState(opts) {
  * @param {number} params.partMax
  * @param {Array<{ id: string, nombre: string, questions: Array<{ preguntaId: string, enunciado?: string, respuestas?: unknown[], respuestasAbiertas?: unknown[] }> }>} params.partsData
  * @param {Record<number, { preguntaId?: string, selectedOptions?: Record<string, string>, openInputs?: Record<string, string>, checkedQuestions?: Record<string, boolean> }>} params.draftByPart
+ * @param {boolean} [params.scoringV2Enabled]
  */
-export function scoreExamModeDrafts({ partMin, partMax, partsData, draftByPart }) {
+export function scoreExamModeDrafts({ partMin, partMax, partsData, draftByPart, scoringV2Enabled }) {
   /** @type {Record<number, { draft: object, progress: ReturnType<typeof computeB2PartProgressFromState> }>} */
   const partSnapshots = {};
 
@@ -122,6 +184,11 @@ export function scoreExamModeDrafts({ partMin, partMax, partsData, draftByPart }
 
   return {
     partSnapshots,
-    scores: aggregateExamModeSectionScores({ partMin, partMax, partSnapshots }),
+    scores: aggregateExamModeSectionScores({
+      partMin,
+      partMax,
+      partSnapshots,
+      scoringV2Enabled,
+    }),
   };
 }

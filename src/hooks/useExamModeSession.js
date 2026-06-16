@@ -4,6 +4,10 @@ import { useCallback, useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { getSessionUserId } from '@/utils/levelsEstadisticas';
 import {
+  shouldSyncExamModeSessionToServer,
+  shouldClearExamSlotPuntuacionesOnRepeat,
+} from '@/lib/b2ScoringV2FeatureFlag';
+import {
   completeExamModeSection,
   getOrCreateExamModeSession,
   loadExamModeSession,
@@ -91,7 +95,7 @@ export function useExamModeSession(slug, examSlot) {
         );
         if (!ok) return false;
       }
-      if (examenId && userId) {
+      if (examenId && userId && shouldClearExamSlotPuntuacionesOnRepeat(slug)) {
         const { clearExamSlotPuntuaciones } = await import('@/lib/fetchExamModeSlotStats');
         const { supabase } = await import('@/utils/supabaseClient');
         await clearExamSlotPuntuaciones(supabase, { userId, examenId });
@@ -119,6 +123,7 @@ export function useExamModeSession(slug, examSlot) {
 
 async function syncExamModeToServer(session, userId) {
   if (!userId || !session) return;
+  if (!shouldSyncExamModeSessionToServer(session)) return;
   try {
     await fetch('/api/levels/exam-mode-session', {
       method: 'PUT',

@@ -1,5 +1,10 @@
 import { getLevelFullExamSections } from '@/data/nivelesLevelHub';
 import { getCambridgeSectionDurationSeconds } from '@/data/cambridgeExamTimings';
+import {
+  getActiveScoringVersion,
+  isExamModeSessionScoringCompatible,
+  attachScoringVersionToExamModeScores,
+} from '@/lib/b2ScoringV2FeatureFlag';
 
 export const EXAM_MODE_SESSION_VERSION = 1;
 
@@ -31,6 +36,7 @@ export const EXAM_MODE_SESSION_VERSION = 1;
  * @property {string} updatedAt
  * @property {ExamModeSectionState[]} sections
  * @property {boolean} resultsReleased
+ * @property {1|2} [scoringVersion] — local scoring model; must match active feature flag
  */
 
 function storageKey(slug, examSlot, userId = '') {
@@ -63,6 +69,7 @@ export function createExamModeSession(slug, examSlot) {
     version: EXAM_MODE_SESSION_VERSION,
     slug,
     examSlot,
+    scoringVersion: getActiveScoringVersion(),
     status: 'in_progress',
     createdAt: now,
     updatedAt: now,
@@ -79,6 +86,14 @@ export function loadExamModeSession(slug, examSlot, userId = '') {
     const parsed = JSON.parse(raw);
     if (parsed?.version !== EXAM_MODE_SESSION_VERSION) return null;
     if (parsed.slug !== slug || parsed.examSlot !== examSlot) return null;
+    if (!isExamModeSessionScoringCompatible(parsed)) {
+      try {
+        localStorage.removeItem(storageKey(slug, examSlot, userId));
+      } catch {
+        /* ignore */
+      }
+      return null;
+    }
     return parsed;
   } catch {
     return null;
@@ -87,7 +102,11 @@ export function loadExamModeSession(slug, examSlot, userId = '') {
 
 export function saveExamModeSession(session, userId = '') {
   if (typeof window === 'undefined' || !session) return;
-  const next = { ...session, updatedAt: new Date().toISOString() };
+  const next = {
+    ...session,
+    scoringVersion: session.scoringVersion ?? getActiveScoringVersion(),
+    updatedAt: new Date().toISOString(),
+  };
   try {
     localStorage.setItem(
       storageKey(session.slug, session.examSlot, userId),
@@ -153,7 +172,7 @@ export function completeExamModeSection(session, sectionKey, answers, scores) {
       status: 'completed',
       finishedAt: now,
       answers,
-      scores,
+      scores: attachScoringVersionToExamModeScores(scores),
       remainingSeconds: 0,
     };
   });

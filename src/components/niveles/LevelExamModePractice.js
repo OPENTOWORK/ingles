@@ -19,6 +19,7 @@ import { getCachedLevelBySlug, getCachedExamenIdsBySlot } from '@/utils/levelsLe
 import { sortLevelsExamenesRows } from '@/utils/b2ResolveExam';
 import { filterVisibleExamenes } from '@/utils/levelsExamVisibility';
 import { clearExamSlotPuntuaciones } from '@/lib/fetchExamModeSlotStats';
+import { shouldClearExamSlotPuntuacionesOnRepeat } from '@/lib/b2ScoringV2FeatureFlag';
 import { useLevelsExamAdminFlow, buildExamSlotPickerProps } from '@/hooks/useLevelsExamAdminFlow';
 import A2ExamGenerationStatus from '@/components/niveles/A2ExamGenerationStatus';
 import ExamPracticeLevelPicker from '@/components/niveles/ExamPracticeLevelPicker';
@@ -116,7 +117,7 @@ function LevelExamModePracticeInner({ slug }) {
       );
       if (!ok) return;
       const examenId = examenIdBySlot[slot];
-      if (userId && examenId) {
+      if (userId && examenId && shouldClearExamSlotPuntuacionesOnRepeat(slug)) {
         await clearExamSlotPuntuaciones(supabase, { userId, examenId });
       }
       resetExamModeSession(slug, slot, userId);

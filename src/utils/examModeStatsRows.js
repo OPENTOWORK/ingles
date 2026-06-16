@@ -1,22 +1,82 @@
 import { getLevelFullExamSections } from '@/data/nivelesLevelHub';
 import { getLevelsPartScoring } from '@/utils/levelsA2PartScoring';
 import { parseUoePartDescripcion } from '@/utils/levelsPuntuaciones';
+import { isB2ScoringV2Enabled } from '@/lib/b2ScoringV2FeatureFlag';
+import {
+  B2_PART_SCORING_V2,
+  B2_PAPER_SCORING_V2,
+} from '@/utils/levelsB2PartScoring';
+import { maxPointsForPartRange } from '@/utils/b2ScoringV2Engine';
+
+function partMaxScore(slug, partNumber) {
+  const key = String(slug || '').toLowerCase();
+  if (key === 'b2' && isB2ScoringV2Enabled() && partNumber >= 1 && partNumber <= 7) {
+    return B2_PART_SCORING_V2[partNumber]?.maxPoints ?? getLevelsPartScoring(slug, partNumber)?.total ?? 1;
+  }
+  return getLevelsPartScoring(slug, partNumber)?.total ?? 1;
+}
 
 /** Scores vacíos por sección (todas las partes a 0 con totales del examen). */
 export function buildEmptySectionScores(slug, partMin, partMax) {
   let total = 0;
-  /** @type {Record<number, { correct: number, total: number, passing: number }>} */
+  /** @type {Record<number, { correct: number, total: number, passing: number, maxPoints?: number, pointsEarned?: number, scoringVersion?: number }>} */
   const byPart = {};
 
   for (let p = partMin; p <= partMax; p += 1) {
     const cfg = getLevelsPartScoring(slug, p);
-    const partTotal = cfg?.total ?? 1;
+    const partTotal = partMaxScore(slug, p);
     const passing = cfg?.passing ?? Math.max(1, Math.ceil(partTotal * 0.6));
-    byPart[p] = { correct: 0, total: partTotal, passing };
+    const v2 = String(slug).toLowerCase() === 'b2' && isB2ScoringV2Enabled() && p >= 1 && p <= 7;
+    byPart[p] = {
+      correct: 0,
+      total: partTotal,
+      passing,
+      ...(v2
+        ? {
+            scoringVersion: 2,
+            pointsEarned: 0,
+            maxPoints: partTotal,
+            correctItems: 0,
+            totalQuestions: B2_PART_SCORING_V2[p]?.questionCount ?? partTotal,
+          }
+        : {}),
+    };
     total += partTotal;
   }
 
-  return { correct: 0, total, byPart };
+  const result = { correct: 0, total, byPart, scoringVersion: 1 };
+
+  if (String(slug).toLowerCase() === 'b2' && isB2ScoringV2Enabled()) {
+    result.scoringVersion = 2;
+    result.pointsEarned = 0;
+    result.maxPoints = total;
+    if (partMin <= 7 && partMax >= 1) {
+      const hasReading = B2_PAPER_SCORING_V2.reading.parts.some((p) => p >= partMin && p <= partMax);
+      const hasUoe = B2_PAPER_SCORING_V2.useOfEnglish.parts.some((p) => p >= partMin && p <= partMax);
+      if (hasReading) {
+        result.reading = {
+          pointsEarned: 0,
+          maxPoints: maxPointsForPartRange(
+            Math.max(partMin, 1),
+            Math.min(partMax, 7),
+            B2_PART_SCORING_V2,
+          ),
+        };
+      }
+      if (hasUoe) {
+        result.useOfEnglish = {
+          pointsEarned: 0,
+          maxPoints: maxPointsForPartRange(
+            Math.max(partMin, 2),
+            Math.min(partMax, 4),
+            B2_PART_SCORING_V2,
+          ),
+        };
+      }
+    }
+  }
+
+  return result;
 }
 
 /**
@@ -59,30 +119,61 @@ function applyScoresToRow(row, incoming, slug) {
   const byPart = { ...base.byPart };
   let correct = 0;
   let total = 0;
+  const v2 = incoming?.scoringVersion === 2 || base.scoringVersion === 2;
 
   for (let p = row.partMin; p <= row.partMax; p += 1) {
     const src = incoming?.byPart?.[p];
     if (!src) continue;
     const cfg = getLevelsPartScoring(slug, p);
-    const partTotal = src.total ?? cfg?.total ?? base.byPart[p].total;
-    const partCorrect = Math.max(0, Number(src.correct) || 0);
+    const partTotal =
+      src.maxPoints ?? src.total ?? partMaxScore(slug, p) ?? cfg?.total ?? base.byPart[p].total;
+    const partCorrect = v2
+      ? Math.max(0, Number(src.pointsEarned ?? src.correct) || 0)
+      : Math.max(0, Number(src.correct) || 0);
     const passing = src.passing ?? cfg?.passing ?? base.byPart[p].passing;
-    byPart[p] = { correct: partCorrect, total: partTotal, passing };
+    byPart[p] = {
+      ...base.byPart[p],
+      ...src,
+      correct: v2 ? partCorrect : partCorrect,
+      total: partTotal,
+      passing,
+      ...(v2
+        ? {
+            scoringVersion: 2,
+            pointsEarned: partCorrect,
+            maxPoints: partTotal,
+            correctItems: src.correctItems ?? src.correct ?? 0,
+          }
+        : {}),
+    };
     correct += partCorrect;
     total += partTotal;
   }
 
   if (!incoming?.byPart || Object.keys(incoming.byPart).length === 0) {
     if (incoming?.correct != null || incoming?.total != null) {
-      correct = Math.max(0, Number(incoming.correct) || 0);
-      total = Math.max(0, Number(incoming.total) || row.scores.total);
+      correct = Math.max(0, Number(incoming.pointsEarned ?? incoming.correct) || 0);
+      total = Math.max(0, Number(incoming.maxPoints ?? incoming.total) || row.scores.total);
     }
   }
 
   const pct = total > 0 ? Math.round((correct / total) * 100) : 0;
   return {
     ...row,
-    scores: { correct, total, byPart },
+    scores: {
+      correct,
+      total,
+      byPart,
+      scoringVersion: v2 ? 2 : 1,
+      ...(v2
+        ? {
+            pointsEarned: correct,
+            maxPoints: total,
+            reading: incoming?.reading,
+            useOfEnglish: incoming?.useOfEnglish,
+          }
+        : {}),
+    },
     pct,
   };
 }

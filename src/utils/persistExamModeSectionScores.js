@@ -1,6 +1,10 @@
 import { ensureAppUserProfile } from '@/utils/ensureAppUserProfile';
 import { mergeLevelsEstadisticas } from '@/utils/levelsEstadisticas';
 import { upsertLevelsPartPuntuacion } from '@/utils/levelsPuntuaciones';
+import {
+  isB2ScoringV2Enabled,
+  B2_SCORING_V2_PERSISTENCE_DISABLED_MSG,
+} from '@/lib/b2ScoringV2FeatureFlag';
 
 /**
  * Guarda en Supabase (levels_puntuaciones + levels_estadisticas) las partes terminadas en exam mode.
@@ -11,6 +15,13 @@ import { upsertLevelsPartPuntuacion } from '@/utils/levelsPuntuaciones';
  */
 export async function persistExamModeSectionScores({ userId, examenId, partSnapshots = {} }) {
   if (!userId || !examenId) return { saved: 0, error: null };
+
+  if (isB2ScoringV2Enabled()) {
+    if (typeof console !== 'undefined' && process.env.NODE_ENV === 'development') {
+      console.info(B2_SCORING_V2_PERSISTENCE_DISABLED_MSG);
+    }
+    return { saved: 0, error: null, v2PersistenceSkipped: true };
+  }
 
   const profile = await ensureAppUserProfile();
   if (!profile.ok && profile.reason !== 'no_session') {

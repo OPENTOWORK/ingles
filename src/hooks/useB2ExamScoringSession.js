@@ -8,6 +8,20 @@ import { invalidateLevelExamCache } from '@/utils/levelsLevelCache';
 import { getSessionUserId } from '@/utils/levelsEstadisticas';
 import { getB2PartScoring } from '@/utils/levelsB2PartScoring';
 import { saveB2PartPuntuacionIfComplete } from '@/utils/recordLevelsB2PartScore';
+import { isB2ScoringV2Enabled } from '@/lib/b2ScoringV2FeatureFlag';
+
+function buildPartFinishNotice(progress, partNumber) {
+  const v2 =
+    isB2ScoringV2Enabled() && Number(partNumber) >= 1 && Number(partNumber) <= 7;
+  return {
+    passed: v2 ? false : progress.passed,
+    correct: v2 ? progress.pointsEarned ?? progress.correct : progress.correct,
+    total: v2 ? progress.maxPoints ?? progress.total : progress.total,
+    passing: progress.passing,
+    scoringVersion: progress.scoringVersion ?? 1,
+    v2LocalOnly: v2,
+  };
+}
 
 /**
  * Progreso, guardado y selector de examen compartido (partes partMin–partMax).
@@ -114,12 +128,7 @@ export function useB2ExamScoringSession({ partMin, partMax }) {
         void refreshPuntuacionesProgress();
       }
 
-      setPartFinishNotice({
-        passed: progress.passed,
-        correct: progress.correct,
-        total: progress.total,
-        passing: progress.passing,
-      });
+      setPartFinishNotice(buildPartFinishNotice(progress, partNumber));
 
       return result;
     },
@@ -151,11 +160,13 @@ export function useB2ExamScoringSession({ partMin, partMax }) {
     const saved = progressBySlotLocal?.[examSlot]?.parts?.[partNumber];
     const cfg = getB2PartScoring(partNumber);
     if (saved?.total && cfg) {
+      const v2 = isB2ScoringV2Enabled() && partNumber >= 1 && partNumber <= 7;
       setPartFinishNotice({
-        passed: saved.passed,
+        passed: v2 ? false : saved.passed,
         correct: saved.correct,
         total: saved.total,
         passing: cfg.passing,
+        scoringVersion: v2 ? 2 : 1,
       });
     } else {
       setPartFinishNotice(null);

@@ -9,10 +9,11 @@ import { useB2AutoOpenExamFromUrl } from '@/hooks/useB2AutoOpenExamFromUrl';
 import { B2ExamPracticeChrome, B2ExamPracticeLayout } from '@/components/b2/B2ExamPracticeChrome';
 import { useB2ExamScoringSession } from '@/hooks/useB2ExamScoringSession';
 import { computeB2PartProgressFromState } from '@/utils/recordLevelsB2PartScore';
-import { getB2PartScoring } from '@/utils/levelsB2PartScoring';
+import { getActiveB2RuoePartScoring } from '@/utils/levelsB2PartScoring';
+import { isB2RuoeV2SessionPersistenceBlocked } from '@/lib/b2ScoringV2FeatureFlag';
 import LevelsAnswerJustification from '@/components/levels/LevelsAnswerJustification';
 import { useLevelsCategoryTimer } from '@/hooks/useLevelsCategoryTimer';
-import { computeLevelsPartScore } from '@/utils/levelsPaperScoreMetrics';
+import { computeB2PartScoreMetrics } from '@/utils/levelsPaperScoreMetrics';
 import { postLevelsAnswerJustification } from '@/utils/levelsJustifyClient';
 import { supabase } from '@/utils/supabaseClient';
 import {
@@ -443,6 +444,8 @@ function B2ReadingExamsPageInner() {
     void (async () => {
       const uid = await getSessionUserId();
       if (!uid) return;
+      const pn = Number(selectedPart?.nombre?.match(/\d+/)?.[0] || 0);
+      if (isB2RuoeV2SessionPersistenceBlocked(pn)) return;
       const { error } = await mergeLevelsEstadisticas({
         userId: uid,
         preguntaId,
@@ -914,7 +917,8 @@ function B2ReadingExamsPageInner() {
 
   const partScoreMetrics = useMemo(
     () =>
-      computeLevelsPartScore({
+      computeB2PartScoreMetrics({
+        partNumber: partNumberReading,
         useOpenInputUi: isOpenClozePart,
         openQuestionNumbers,
         openChecks,
@@ -925,6 +929,7 @@ function B2ReadingExamsPageInner() {
         partId: selectedPart?.id,
       }),
     [
+      partNumberReading,
       isOpenClozePart,
       openQuestionNumbers,
       openChecks,
@@ -936,7 +941,7 @@ function B2ReadingExamsPageInner() {
     ],
   );
 
-  const b2PartCfg = getB2PartScoring(partNumberReading);
+  const b2PartCfg = getActiveB2RuoePartScoring(partNumberReading);
 
   useEffect(() => {
     if (!scoring.examPracticeOpen) return;
@@ -1103,6 +1108,7 @@ function B2ReadingExamsPageInner() {
         const pid = selectedQuestion?.preguntaId;
         const parteId = selectedPart?.id;
         if (!uid || !pid || !parteId) return;
+        if (isB2RuoeV2SessionPersistenceBlocked(partNumberReading)) return;
         const { error } = await mergeLevelsEstadisticas({
           userId: uid,
           preguntaId: pid,
@@ -1315,8 +1321,7 @@ function B2ReadingExamsPageInner() {
   );
 
   const scorePanelProps = {
-    correctCount: partScoreMetrics.correctCount,
-    totalSlots: b2PartCfg?.total ?? partScoreMetrics.totalSlots,
+    ...partScoreMetrics,
     passingCount: b2PartCfg?.passing ?? partScoreMetrics.passingCount,
   };
 
@@ -1875,8 +1880,7 @@ function B2ReadingExamsPageInner() {
           selectedOptions={selectedOptions}
           groupedAnswers={groupedAnswersForUiAndScore || []}
           openChecks={openChecks}
-          correctCount={partScoreMetrics.correctCount}
-          totalSlots={b2PartCfg?.total ?? partScoreMetrics.totalSlots}
+          {...partScoreMetrics}
           hideFeedback={hideInstantFeedback}
           examSlot={examSlot}
           progressBySlot={scoring.progressBySlot}

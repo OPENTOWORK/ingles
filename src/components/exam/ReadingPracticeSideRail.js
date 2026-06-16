@@ -24,6 +24,13 @@ export default function ReadingPracticeSideRail({
   passing,
   finishNotice = null,
   lang = 'en',
+  scoringVersion = 1,
+  questionsAnswered,
+  totalQuestions,
+  correctItems,
+  pointsEarned,
+  maxPoints,
+  accuracyByPoints,
 }) {
   const session = useReadingPracticeSession();
 
@@ -46,6 +53,13 @@ export default function ReadingPracticeSideRail({
           partNumber={partNumber}
           correctCount={correctCount}
           totalSlots={totalSlots}
+          scoringVersion={scoringVersion}
+          questionsAnswered={questionsAnswered}
+          totalQuestions={totalQuestions}
+          correctItems={correctItems}
+          pointsEarned={pointsEarned}
+          maxPoints={maxPoints}
+          accuracyByPoints={accuracyByPoints}
           checkAttempts={session.checkAttempts}
           hideFeedback={hideFeedback}
           examSlot={examSlot}

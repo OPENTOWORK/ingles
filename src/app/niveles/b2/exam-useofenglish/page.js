@@ -9,7 +9,9 @@ import LevelsPartScorePanel from '@/components/levels/LevelsPartScorePanel';
 import LevelsPartFinishBanner from '@/components/levels/LevelsPartFinishBanner';
 import LevelsAnswerJustification from '@/components/levels/LevelsAnswerJustification';
 import { useLevelsCategoryTimer } from '@/hooks/useLevelsCategoryTimer';
-import { computeLevelsPartScore } from '@/utils/levelsPaperScoreMetrics';
+import { computeB2PartScoreMetrics } from '@/utils/levelsPaperScoreMetrics';
+import { getActiveB2RuoePartScoring } from '@/utils/levelsB2PartScoring';
+import { isB2ScoringV2Enabled, isB2RuoeV2SessionPersistenceBlocked } from '@/lib/b2ScoringV2FeatureFlag';
 import { postLevelsAnswerJustification } from '@/utils/levelsJustifyClient';
 import { supabase } from '@/utils/supabaseClient';
 import { extractTextoBloque, splitPart1TextoYPreguntas, parsePart1QuestionOptions } from '@/utils/b2ExamTextBlocks';
@@ -21,7 +23,6 @@ import {
   computeUoePartProgressFromState,
   saveUoePartPuntuacionIfComplete,
 } from '@/utils/recordLevelsUoePartScore';
-import { getUoePartScoring } from '@/utils/levelsUoePartScoring';
 import {
   composeOpenClozeDirections,
   composeMcqClozeDirections,
@@ -329,6 +330,8 @@ function UseOfEnglishExamsPageInner() {
     void (async () => {
       const uid = await getSessionUserId();
       if (!uid) return;
+      const pn = Number(selectedPart?.nombre?.match(/\d+/)?.[0] || 0);
+      if (isB2RuoeV2SessionPersistenceBlocked(pn)) return;
       const { error } = await mergeLevelsEstadisticas({
         userId: uid,
         preguntaId,
@@ -687,7 +690,8 @@ function UseOfEnglishExamsPageInner() {
 
   const partScoreMetrics = useMemo(
     () =>
-      computeLevelsPartScore({
+      computeB2PartScoreMetrics({
+        partNumber: partNumberUoe,
         useOpenInputUi: isOpenClozePart,
         openQuestionNumbers,
         openChecks,
@@ -698,6 +702,7 @@ function UseOfEnglishExamsPageInner() {
         partId: selectedPart?.id,
       }),
     [
+      partNumberUoe,
       isOpenClozePart,
       openQuestionNumbers,
       openChecks,
@@ -709,12 +714,12 @@ function UseOfEnglishExamsPageInner() {
     ],
   );
 
-  const uoePartScoring = getUoePartScoring(partNumberUoe);
+  const uoePartScoring = getActiveB2RuoePartScoring(partNumberUoe);
 
   useEffect(() => {
     lastSavedPartSigRef.current = '';
     const saved = progressBySlot[examSlot]?.parts?.[partNumberUoe];
-    const cfg = getUoePartScoring(partNumberUoe);
+    const cfg = getActiveB2RuoePartScoring(partNumberUoe);
     if (saved?.total && cfg) {
       setPartFinishNotice({
         passed: saved.passed,
@@ -759,10 +764,12 @@ function UseOfEnglishExamsPageInner() {
       const uid = await getSessionUserId();
       if (!uid) {
         setPartFinishNotice({
-          passed: progress.passed,
-          correct: progress.correct,
-          total: progress.total,
+          passed: isB2ScoringV2Enabled() ? false : progress.passed,
+          correct: progress.v2Metrics?.pointsEarned ?? progress.correct,
+          total: progress.v2Metrics?.maxPoints ?? progress.total,
           passing: progress.passing,
+          scoringVersion: progress.scoringVersion ?? 1,
+          v2LocalOnly: isB2ScoringV2Enabled(),
         });
         return;
       }
@@ -786,10 +793,12 @@ function UseOfEnglishExamsPageInner() {
       if (result.saved) {
         lastSavedPartSigRef.current = sig;
         setPartFinishNotice({
-          passed: progress.passed,
-          correct: progress.correct,
-          total: progress.total,
+          passed: isB2ScoringV2Enabled() ? false : progress.passed,
+          correct: progress.v2Metrics?.pointsEarned ?? progress.correct,
+          total: progress.v2Metrics?.maxPoints ?? progress.total,
           passing: progress.passing,
+          scoringVersion: progress.scoringVersion ?? 1,
+          v2LocalOnly: isB2ScoringV2Enabled(),
         });
         void refreshPuntuacionesProgress();
       }
@@ -825,6 +834,7 @@ function UseOfEnglishExamsPageInner() {
           const pid = selectedQuestion?.preguntaId;
           const parteId = selectedPart?.id;
           if (!uid || !pid || !parteId) return;
+          if (isB2RuoeV2SessionPersistenceBlocked(partNumberUoe)) return;
           const { error } = await mergeLevelsEstadisticas({
             userId: uid,
             preguntaId: pid,
@@ -890,6 +900,7 @@ function UseOfEnglishExamsPageInner() {
         const pid = selectedQuestion?.preguntaId;
         const parteId = selectedPart?.id;
         if (!uid || !pid || !parteId) return;
+        if (isB2RuoeV2SessionPersistenceBlocked(partNumberUoe)) return;
         const { error } = await mergeLevelsEstadisticas({
           userId: uid,
           preguntaId: pid,
@@ -1052,10 +1063,9 @@ function UseOfEnglishExamsPageInner() {
         lang="en"
       />
       <LevelsPartScorePanel
-        correctCount={partScoreMetrics.correctCount}
-        totalSlots={uoePartScoring?.total ?? partScoreMetrics.totalSlots}
+        {...partScoreMetrics}
         passingCount={uoePartScoring?.passing ?? partScoreMetrics.passingCount}
-        lang={uoeUiLang}
+        lang="en"
       />
       </div>
       {partFinishNotice && !partFinishNotice.error && (
@@ -1263,6 +1273,7 @@ function UseOfEnglishExamsPageInner() {
                                       const pid = selectedQuestion?.preguntaId;
                                       const parteId = selectedPart?.id;
                                       if (!uid || !pid || !parteId) return;
+                                      if (isB2RuoeV2SessionPersistenceBlocked(partNumberUoe)) return;
                                       const { error } = await mergeLevelsEstadisticas({
                                         userId: uid,
                                         preguntaId: pid,

@@ -142,6 +142,7 @@ export function B2ExamPracticeChrome({
   modeBadge = null,
   practiceReady,
   reportErrorContext = null,
+  headerTools = null,
   children,
 }) {
   const { userRole } = useUserRole();
@@ -295,14 +296,8 @@ export function B2ExamPracticeChrome({
           ) : null}
 
           <div className="levels-b2-practice__status">
-            {focusMode && onExitFocusMode ? (
-              <button
-                type="button"
-                className="tool-button levels-b2-practice__focus-exit"
-                onClick={onExitFocusMode}
-              >
-                Exit focus mode
-              </button>
+            {headerTools ? (
+              <div className="levels-b2-practice__study-tools">{headerTools}</div>
             ) : null}
             <div className="levels-b2-practice__status-row">
             <LevelsCategoryTimer
@@ -323,13 +318,7 @@ export function B2ExamPracticeChrome({
             {!hideScorePanel && scorePanelOverride ? scorePanelOverride : null}
 
             {!hideScorePanel && !scorePanelOverride && partScoreMetrics ? (
-              <LevelsPartScorePanel
-                correctCount={partScoreMetrics.correctCount}
-                totalSlots={partScoreMetrics.totalSlots}
-                passingCount={partScoreMetrics.passingCount}
-                lang={lang}
-                variant={effectiveScoreVariant}
-              />
+              <LevelsPartScorePanel {...partScoreMetrics} lang={lang} variant={effectiveScoreVariant} />
             ) : null}
 
             {effectiveShowStudyNotes ? (

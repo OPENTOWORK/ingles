@@ -3,9 +3,17 @@ import { mergeLevelsEstadisticas } from '@/utils/levelsEstadisticas';
 import { upsertLevelsPartPuntuacion } from '@/utils/levelsPuntuaciones';
 import {
   getB2PartScoring,
+  getB2PartScoringV2,
   getPassingForDynamicTotal,
   isB2PartPassed,
 } from '@/utils/levelsB2PartScoring';
+import {
+  isB2ScoringV2Enabled,
+  isB2RuoeV2SessionPersistenceBlocked,
+  B2_SCORING_V2_PERSISTENCE_DISABLED_MSG,
+} from '@/lib/b2ScoringV2FeatureFlag';
+import { buildPartScoreMetricsV2 } from '@/utils/b2ScoringV2Engine';
+import { B2_PART_SCORING_V2 } from '@/utils/levelsB2PartScoring';
 
 /**
  * Progreso de la parte según respuestas ya comprobadas (MCQ / huecos).
@@ -22,6 +30,8 @@ export function computeB2PartProgressFromState({
   partId,
 }) {
   const cfg = getB2PartScoring(partNumber);
+  const v2Cfg = getB2PartScoringV2(partNumber);
+  const v2Active = isB2ScoringV2Enabled() && v2Cfg && partNumber >= 1 && partNumber <= 7;
 
   let evaluated = 0;
   let correct = 0;
@@ -46,18 +56,39 @@ export function computeB2PartProgressFromState({
     });
   }
 
-  const total = cfg?.total ?? Math.max(evaluated, 1);
-  const passing = cfg?.passing ?? getPassingForDynamicTotal(total);
-  const complete = cfg ? evaluated >= cfg.total : evaluated > 0 && evaluated >= total;
-  const passed = complete && (cfg ? isB2PartPassed(correct, partNumber) : correct >= passing);
+  const questionTotal = v2Active ? v2Cfg.questionCount : (cfg?.total ?? Math.max(evaluated, 1));
+  const total = v2Active ? v2Cfg.maxPoints : questionTotal;
+  const passing = cfg?.passing ?? getPassingForDynamicTotal(questionTotal);
+  const complete = v2Active
+    ? evaluated >= v2Cfg.questionCount
+    : cfg
+      ? evaluated >= cfg.total
+      : evaluated > 0 && evaluated >= questionTotal;
+  const passed =
+    !v2Active &&
+    complete &&
+    (cfg ? isB2PartPassed(correct, partNumber) : correct >= passing);
+
+  const v2Metrics = v2Active
+    ? buildPartScoreMetricsV2(
+        partNumber,
+        { correctItems: correct, questionsAnswered: evaluated, totalQuestions: questionTotal },
+        B2_PART_SCORING_V2,
+      )
+    : null;
 
   return {
     evaluated,
     correct,
     total,
+    questionTotal,
     passing,
     complete,
     passed,
+    scoringVersion: v2Active ? 2 : 1,
+    v2Metrics,
+    pointsEarned: v2Metrics?.pointsEarned ?? correct,
+    maxPoints: v2Metrics?.maxPoints ?? total,
   };
 }
 
@@ -71,6 +102,13 @@ export async function saveB2PartPuntuacionIfComplete({
 }) {
   if (!progress?.complete || !userId || !preguntaId || !examenId || !partNumber) {
     return { saved: false, error: null, progress };
+  }
+
+  if (isB2RuoeV2SessionPersistenceBlocked(partNumber)) {
+    if (typeof console !== 'undefined' && process.env.NODE_ENV === 'development') {
+      console.info(B2_SCORING_V2_PERSISTENCE_DISABLED_MSG);
+    }
+    return { saved: false, error: null, progress, v2PersistenceSkipped: true };
   }
 
   const profile = await ensureAppUserProfile();

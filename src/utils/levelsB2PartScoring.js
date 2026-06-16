@@ -1,4 +1,5 @@
 import { passingCorrectCountForTotal } from '@/utils/levelsPracticePassing';
+import { isB2ScoringV2Enabled } from '@/lib/b2ScoringV2FeatureFlag';
 
 /**
  * Umbrales B2 First por parte (1–17), alineados con la estructura del examen.
@@ -25,6 +26,50 @@ export const B2_PART_SCORING = {
   16: { total: 5, passing: 3, kind: 'speaking' },
   17: { total: 5, passing: 3, kind: 'speaking' },
 };
+
+/** Scoring V2 — Cambridge-scale points (R&UoE parts 1–7 only). */
+export const B2_PART_SCORING_V2 = {
+  1: { questionCount: 8, maxPoints: 8, pointsPerCorrect: 1 },
+  2: { questionCount: 8, maxPoints: 8, pointsPerCorrect: 1 },
+  3: { questionCount: 8, maxPoints: 8, pointsPerCorrect: 1 },
+  4: { questionCount: 6, maxPoints: 12, pointsPerCorrect: 2 },
+  5: { questionCount: 6, maxPoints: 12, pointsPerCorrect: 2 },
+  6: { questionCount: 6, maxPoints: 12, pointsPerCorrect: 2 },
+  7: { questionCount: 10, maxPoints: 10, pointsPerCorrect: 1 },
+};
+
+export const B2_PAPER_SCORING_V2 = {
+  reading: { parts: [1, 5, 6, 7], maxPoints: 42 },
+  useOfEnglish: { parts: [2, 3, 4], maxPoints: 28 },
+  readingAndUseOfEnglish: { parts: [1, 2, 3, 4, 5, 6, 7], maxPoints: 70 },
+};
+
+/** @typedef {{ questionCount: number, maxPoints: number, pointsPerCorrect: number }} B2PartScoringV2Entry */
+
+export function getB2PartScoringV2(partNumber) {
+  const n = Number(partNumber);
+  return B2_PART_SCORING_V2[n] || null;
+}
+
+/** Active config for R&UoE UI — V1 unless flag ON (parts 1–7 only). */
+export function getActiveB2RuoePartScoring(partNumber) {
+  const n = Number(partNumber);
+  if (n >= 1 && n <= 7 && isB2ScoringV2Enabled()) {
+    const v2 = getB2PartScoringV2(n);
+    if (v2) {
+      return {
+        scoringVersion: 2,
+        total: v2.maxPoints,
+        questionCount: v2.questionCount,
+        maxPoints: v2.maxPoints,
+        pointsPerCorrect: v2.pointsPerCorrect,
+        passing: B2_PART_SCORING[n]?.passing ?? 0,
+      };
+    }
+  }
+  const v1 = getB2PartScoring(n);
+  return v1 ? { scoringVersion: 1, ...v1 } : null;
+}
 
 export function getB2PartScoring(partNumber) {
   const n = Number(partNumber);
