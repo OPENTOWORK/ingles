@@ -12,6 +12,8 @@ import {
   inferOpenQuestionNumbersFromPrompt,
   normalizeText,
 } from '@/utils/b2ExamPaperShared';
+import { parseB2KeyWordAnswerKeyRows } from '@/lib/parseB2KeyWordAnswerKey';
+import { computeSilentPart4OpenGrades } from '@/lib/b2Part4Grading';
 
 /**
  * Grade open inputs silently (exam mode — no UI feedback until results).
@@ -163,15 +165,35 @@ export function scoreExamModeDrafts({ partMin, partMax, partsData, draftByPart, 
     const useOpen = openNums.length > 0;
     const groupedAnswers = useOpen ? [] : getGroupedAnswers(question.respuestas || []);
 
-    const openChecks = useOpen
-      ? computeSilentOpenChecks(draft.openInputs || {}, openMap, getKey, partId, openNums)
-      : {};
+    const v2Enabled = scoringV2Enabled ?? isB2ScoringV2Enabled();
+    const usePart4V2Grading = v2Enabled && p === 4;
+
+    let openChecks = {};
+    /** @type {Record<string, import('@/lib/b2Part4Grading').B2Part4OpenGrade>} */
+    let openGrades = {};
+
+    if (useOpen) {
+      if (usePart4V2Grading) {
+        const parsedKeys = parseB2KeyWordAnswerKeyRows(question.respuestasAbiertas || []);
+        openGrades = computeSilentPart4OpenGrades(
+          draft.openInputs || {},
+          parsedKeys,
+          getKey,
+          partId,
+          openNums,
+        );
+      } else {
+        openChecks = computeSilentOpenChecks(draft.openInputs || {}, openMap, getKey, partId, openNums);
+      }
+    }
 
     const progress = gradePartFromAnswerState({
       partNumber: p,
       useOpenInputUi: useOpen,
       openQuestionNumbers: openNums,
       openChecks,
+      openGrades,
+      usePart4V2Grading,
       groupedAnswers,
       checkedQuestions: draft.checkedQuestions || {},
       selectedOptions: draft.selectedOptions || {},

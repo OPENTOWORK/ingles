@@ -14,6 +14,7 @@ import {
 } from '@/lib/b2ScoringV2FeatureFlag';
 import { buildPartScoreMetricsV2 } from '@/utils/b2ScoringV2Engine';
 import { B2_PART_SCORING_V2 } from '@/utils/levelsB2PartScoring';
+import { summarizePart4OpenGrades } from '@/lib/b2Part4Grading';
 
 /**
  * Progreso de la parte según respuestas ya comprobadas (MCQ / huecos).
@@ -23,6 +24,8 @@ export function computeB2PartProgressFromState({
   useOpenInputUi,
   openQuestionNumbers,
   openChecks,
+  openGrades,
+  usePart4V2Grading = false,
   groupedAnswers,
   checkedQuestions,
   selectedOptions,
@@ -35,14 +38,23 @@ export function computeB2PartProgressFromState({
 
   let evaluated = 0;
   let correct = 0;
+  /** @type {number | undefined} */
+  let part4PointsEarned;
 
   if (useOpenInputUi) {
-    for (const qn of openQuestionNumbers) {
-      const key = getQuestionKey(partId, qn, 'open');
-      const result = openChecks[key];
-      if (typeof result === 'boolean') {
-        evaluated += 1;
-        if (result) correct += 1;
+    if (usePart4V2Grading) {
+      const summary = summarizePart4OpenGrades(openQuestionNumbers, openGrades || {}, getQuestionKey, partId);
+      evaluated = summary.questionsAnswered;
+      correct = summary.fullyCorrectItems;
+      part4PointsEarned = summary.pointsEarned;
+    } else {
+      for (const qn of openQuestionNumbers) {
+        const key = getQuestionKey(partId, qn, 'open');
+        const result = openChecks[key];
+        if (typeof result === 'boolean') {
+          evaluated += 1;
+          if (result) correct += 1;
+        }
       }
     }
   } else {
@@ -72,7 +84,12 @@ export function computeB2PartProgressFromState({
   const v2Metrics = v2Active
     ? buildPartScoreMetricsV2(
         partNumber,
-        { correctItems: correct, questionsAnswered: evaluated, totalQuestions: questionTotal },
+        {
+          correctItems: correct,
+          questionsAnswered: evaluated,
+          totalQuestions: questionTotal,
+          pointsEarned: usePart4V2Grading ? part4PointsEarned : undefined,
+        },
         B2_PART_SCORING_V2,
       )
     : null;

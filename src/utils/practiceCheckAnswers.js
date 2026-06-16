@@ -27,10 +27,15 @@ export function shouldShowCheckAnswersButton({
   );
 }
 
+import { gradeB2Part4Gap } from '@/lib/b2Part4Grading';
+
 export function buildBulkAnswerCheckUpdate({
   openQuestionNumbers = [],
   openInputs = {},
   openChecks = {},
+  openGrades = {},
+  usePart4V2Grading = false,
+  part4ParsedKeys = null,
   openAnswerMap,
   normalizeText,
   getOpenQuestionKey,
@@ -40,6 +45,7 @@ export function buildBulkAnswerCheckUpdate({
   checkedQuestions = {},
 }) {
   const nextOpenChecks = { ...openChecks };
+  const nextOpenGrades = { ...openGrades };
   const nextChecked = { ...checkedQuestions };
   let hasAnyAnswer = false;
 
@@ -48,6 +54,15 @@ export function buildBulkAnswerCheckUpdate({
     const value = openInputs[questionKey] ?? '';
     if (!String(value).trim()) return;
     hasAnyAnswer = true;
+
+    if (usePart4V2Grading && part4ParsedKeys) {
+      if (nextOpenGrades[questionKey] && typeof nextOpenGrades[questionKey].score === 'number') {
+        return;
+      }
+      nextOpenGrades[questionKey] = gradeB2Part4Gap(value, part4ParsedKeys, questionNumber);
+      return;
+    }
+
     if (typeof nextOpenChecks[questionKey] === 'boolean') return;
     const expected = openAnswerMap?.get?.(questionNumber) || new Set();
     nextOpenChecks[questionKey] = expected.has(normalizeText(value));
@@ -61,7 +76,7 @@ export function buildBulkAnswerCheckUpdate({
     nextChecked[questionKey] = true;
   });
 
-  return { nextOpenChecks, nextChecked, hasAnyAnswer };
+  return { nextOpenChecks, nextOpenGrades, nextChecked, hasAnyAnswer };
 }
 
 export function practiceHasCheckableAnswers({

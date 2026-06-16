@@ -10,7 +10,9 @@ import { B2ExamPracticeChrome, B2ExamPracticeLayout } from '@/components/b2/B2Ex
 import { useB2ExamScoringSession } from '@/hooks/useB2ExamScoringSession';
 import { computeB2PartProgressFromState } from '@/utils/recordLevelsB2PartScore';
 import { getActiveB2RuoePartScoring } from '@/utils/levelsB2PartScoring';
-import { isB2RuoeV2SessionPersistenceBlocked } from '@/lib/b2ScoringV2FeatureFlag';
+import { isB2ScoringV2Enabled, isB2RuoeV2SessionPersistenceBlocked } from '@/lib/b2ScoringV2FeatureFlag';
+import { parseB2KeyWordAnswerKeyRows } from '@/lib/parseB2KeyWordAnswerKey';
+import { gradeB2Part4Gap } from '@/lib/b2Part4Grading';
 import LevelsAnswerJustification from '@/components/levels/LevelsAnswerJustification';
 import { useLevelsCategoryTimer } from '@/hooks/useLevelsCategoryTimer';
 import { computeB2PartScoreMetrics } from '@/utils/levelsPaperScoreMetrics';
@@ -158,6 +160,8 @@ function B2ReadingExamsPageInner() {
   const [checkedQuestions, setCheckedQuestions] = useState({});
   const [openInputs, setOpenInputs] = useState({});
   const [openChecks, setOpenChecks] = useState({});
+  /** @type {Record<string, import('@/lib/b2Part4Grading').B2Part4OpenGrade>} */
+  const [openGrades, setOpenGrades] = useState({});
   const [readingMcqExplanationsOpen, setReadingMcqExplanationsOpen] = useState({});
   /** @type {Record<string, { loading?: boolean, error?: string | null, text?: string | null }>} */
   const [aiHintsByKey, setAiHintsByKey] = useState({});
@@ -179,6 +183,7 @@ function B2ReadingExamsPageInner() {
     setCheckedQuestions({});
     setOpenInputs({});
     setOpenChecks({});
+    setOpenGrades({});
     setAiHintsByKey({});
 
     try {
@@ -485,12 +490,14 @@ function B2ReadingExamsPageInner() {
         setCheckedQuestions({});
       }
       setOpenChecks({});
+      setOpenGrades({});
       setAiHintsByKey({});
       prevExamPartRef.current = pn;
       return;
     }
     setOpenInputs({});
     setOpenChecks({});
+    setOpenGrades({});
     setSelectedOptions({});
     setCheckedQuestions({});
     setAiHintsByKey({});
@@ -499,6 +506,14 @@ function B2ReadingExamsPageInner() {
   const isUoePart = isCombinedPaper && partNumberReading >= 1 && partNumberReading <= 4;
   const isOpenClozePart = isCombinedPaper && partNumberReading >= 2 && partNumberReading <= 4;
   const isKeyWordPart = isCombinedPaper && partNumberReading === 4;
+  const scoringV2Part4 = isB2ScoringV2Enabled() && isKeyWordPart;
+  const part4ParsedKeys = useMemo(
+    () =>
+      scoringV2Part4
+        ? parseB2KeyWordAnswerKeyRows(selectedQuestion?.respuestasAbiertas || [])
+        : new Map(),
+    [scoringV2Part4, selectedQuestion?.respuestasAbiertas, selectedQuestion?.preguntaId],
+  );
   const isInlinePassagePart = isOpenClozePart;
   const isUoePart1 = isCombinedPaper && partNumberReading === 1;
   const useSkillUoeExampleLayout = shouldUseSkillUoeExampleLayout({
@@ -922,6 +937,8 @@ function B2ReadingExamsPageInner() {
         useOpenInputUi: isOpenClozePart,
         openQuestionNumbers,
         openChecks,
+        openGrades,
+        usePart4V2Grading: scoringV2Part4,
         groupedAnswers: groupedAnswersForUiAndScore,
         checkedQuestions,
         selectedOptions,
@@ -931,8 +948,10 @@ function B2ReadingExamsPageInner() {
     [
       partNumberReading,
       isOpenClozePart,
+      scoringV2Part4,
       openQuestionNumbers,
       openChecks,
+      openGrades,
       groupedAnswersForUiAndScore,
       checkedQuestions,
       selectedOptions,
@@ -996,6 +1015,8 @@ function B2ReadingExamsPageInner() {
         useOpenInputUi: isOpenClozePart,
         openQuestionNumbers,
         openChecks: stateOverride.openChecks ?? openChecks,
+        openGrades: stateOverride.openGrades ?? openGrades,
+        usePart4V2Grading: scoringV2Part4,
         groupedAnswers: groupedAnswersForUiAndScore,
         checkedQuestions: stateOverride.checkedQuestions ?? checkedQuestions,
         selectedOptions: stateOverride.selectedOptions ?? selectedOptions,
@@ -1021,8 +1042,10 @@ function B2ReadingExamsPageInner() {
       checkedQuestions,
       selectedOptions,
       isOpenClozePart,
+      scoringV2Part4,
       openQuestionNumbers,
       openChecks,
+      openGrades,
     ],
   );
 
@@ -1097,6 +1120,35 @@ function B2ReadingExamsPageInner() {
 
   const handleOpenGapCheck = useCallback(
     (questionNumber, questionKey, currentValue) => {
+      if (scoringV2Part4) {
+        if (openGrades[questionKey] && typeof openGrades[questionKey].score === 'number') return;
+        const grade = gradeB2Part4Gap(currentValue, part4ParsedKeys, questionNumber);
+        const nextOpenGrades = { ...openGrades, [questionKey]: grade };
+        setOpenGrades(nextOpenGrades);
+        readingSession.incrementCheckAttempts();
+        void (async () => {
+          const uid = await getSessionUserId();
+          const pid = selectedQuestion?.preguntaId;
+          const parteId = selectedPart?.id;
+          if (!uid || !pid || !parteId) return;
+          if (isB2RuoeV2SessionPersistenceBlocked(partNumberReading)) return;
+          const isFullyCorrect = grade.score === 2;
+          const { error } = await mergeLevelsEstadisticas({
+            userId: uid,
+            preguntaId: pid,
+            parteId,
+            deltaEvaluadas: 1,
+            deltaCorrectas: isFullyCorrect ? 1 : 0,
+            deltaIncorrectas: isFullyCorrect ? 0 : 1,
+          });
+          if (error) {
+            console.warn('levels_estadisticas (eval):', error.message || error);
+          }
+        })();
+        trySavePartAfterAnswer({ openGrades: nextOpenGrades });
+        return;
+      }
+
       if (typeof openChecks[questionKey] === 'boolean') return;
       const expectedAnswers = openAnswerMap.get(questionNumber) || new Set();
       const isCorrect = expectedAnswers.has(normalizeText(currentValue));
@@ -1124,13 +1176,14 @@ function B2ReadingExamsPageInner() {
       trySavePartAfterAnswer({ openChecks: nextOpenChecks });
     },
     [
+      scoringV2Part4,
+      openGrades,
+      part4ParsedKeys,
       openChecks,
       openAnswerMap,
-      requestAiJustification,
-      isKeyWordPart,
       selectedQuestion?.preguntaId,
       selectedPart?.id,
-      selectedPart?.nombre,
+      partNumberReading,
       trySavePartAfterAnswer,
       readingSession,
     ],
@@ -1208,10 +1261,13 @@ function B2ReadingExamsPageInner() {
   const handleCheckAllAnswers = useCallback(() => {
     if (!selectedPart?.id) return;
 
-    const { nextOpenChecks, nextChecked, hasAnyAnswer } = buildBulkAnswerCheckUpdate({
+    const bulkUpdate = buildBulkAnswerCheckUpdate({
       openQuestionNumbers: isOpenClozePart || isKeyWordPart ? openQuestionNumbers : [],
       openInputs,
       openChecks,
+      openGrades,
+      usePart4V2Grading: scoringV2Part4,
+      part4ParsedKeys: scoringV2Part4 ? part4ParsedKeys : null,
       openAnswerMap,
       normalizeText,
       getOpenQuestionKey: (questionNumber) =>
@@ -1222,18 +1278,31 @@ function B2ReadingExamsPageInner() {
       checkedQuestions,
     });
 
-    setOpenChecks(nextOpenChecks);
+    const { nextOpenChecks, nextOpenGrades, nextChecked, hasAnyAnswer } = bulkUpdate;
+
+    if (scoringV2Part4) {
+      setOpenGrades(nextOpenGrades);
+    } else {
+      setOpenChecks(nextOpenChecks);
+    }
     setCheckedQuestions(nextChecked);
-    trySavePartAfterAnswer({ openChecks: nextOpenChecks, checkedQuestions: nextChecked });
+    trySavePartAfterAnswer(
+      scoringV2Part4
+        ? { openGrades: nextOpenGrades, checkedQuestions: nextChecked }
+        : { openChecks: nextOpenChecks, checkedQuestions: nextChecked },
+    );
     readingSession.revealAnswers();
     if (hasAnyAnswer) readingSession.incrementCheckAttempts();
   }, [
     selectedPart?.id,
     isOpenClozePart,
     isKeyWordPart,
+    scoringV2Part4,
+    part4ParsedKeys,
     openQuestionNumbers,
     openInputs,
     openChecks,
+    openGrades,
     openAnswerMap,
     mcqGroupsForCheck,
     resolveMcqQuestionKey,
@@ -1248,8 +1317,18 @@ function B2ReadingExamsPageInner() {
     ({ questionKey, questionNumber }) => {
       const existing = aiHintsByKey[questionKey];
       if (existing?.loading || existing?.text) return;
-      const checkResult = openChecks[questionKey];
-      if (typeof checkResult !== 'boolean') return;
+
+      let isCorrect = false;
+      if (scoringV2Part4) {
+        const grade = openGrades[questionKey];
+        if (!grade || typeof grade.score !== 'number') return;
+        isCorrect = grade.score === 2;
+      } else {
+        const checkResult = openChecks[questionKey];
+        if (typeof checkResult !== 'boolean') return;
+        isCorrect = checkResult;
+      }
+
       const expectedAnswers = openAnswerMap.get(questionNumber) || new Set();
       const style =
         partNumberReading === 3
@@ -1263,12 +1342,14 @@ function B2ReadingExamsPageInner() {
         questionLabel: `Question ${questionNumber}`,
         userChoiceText: openInputs[questionKey] || '',
         correctChoiceText: [...expectedAnswers].slice(0, 4).join(' · ') || 'model answer',
-        isCorrect: checkResult,
+        isCorrect,
         answersFromDatabase: [...expectedAnswers].join(' · ') || undefined,
       });
     },
     [
       aiHintsByKey,
+      scoringV2Part4,
+      openGrades,
       openChecks,
       openInputs,
       openAnswerMap,
@@ -1608,6 +1689,8 @@ function B2ReadingExamsPageInner() {
                         setOpenInputs((prev) => ({ ...prev, [questionKey]: value }));
                       }}
                       openChecks={openChecks}
+                      openGrades={openGrades}
+                      scoringV2Part4={scoringV2Part4}
                       onCheckGap={handleOpenGapCheck}
                       openAnswerMap={openAnswerMap}
                       hideFeedback={hideInstantFeedback}
