@@ -229,3 +229,12 @@ export function buildExamModePracticeHref(baseHref, examSlot, { review = false }
   const mode = review ? 'review' : '1';
   return `${baseHref}${sep}examen=${examSlot}&examMode=${mode}`;
 }
+
+/** Footer link back to the exam-mode hub while inside a section. */
+export function getExamModeHubNav(slug, examSlot, lang = 'en') {
+  const slot = Math.min(5, Math.max(1, Number(examSlot) || 1));
+  return {
+    href: `/niveles/${slug}/exam-mode?examen=${slot}`,
+    label: lang === 'en' ? 'Back to exam overview' : 'Volver al simulacro',
+  };
+}
