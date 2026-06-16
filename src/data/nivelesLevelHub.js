@@ -544,7 +544,7 @@ export const NIVELES_LEVEL_HUB = {
     },
     examContentReady: { 1: true, 2: false, 3: false, 4: false, 5: false },
     examLinks: [
-      { text: '📝 Exam mode', href: '/niveles/exam-mode', enabledForStudents: true },
+      { text: '📝 Exam mode', href: '/niveles/b2/exam-mode', enabledForStudents: true },
       {
         text: '📘 Reading and Use of English',
         href: '/niveles/b2/exam-reading-and-use-of-english',

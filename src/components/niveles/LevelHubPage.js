@@ -1,6 +1,5 @@
 'use client';
 
-import Link from 'next/link';
 import { useUserRole } from '@/context/UserRoleContext';
 import { isStaffRole } from '@/lib/placementLevelAccess';
 import { isNivelesLevelComingSoonForUser, isStudentRole } from '@/constants/studentFeatureAccess';
@@ -28,13 +27,6 @@ export default function LevelHubPage({ config }) {
     <main className={`shell ${pageClass}`}>
       <div data-tour="level-hub-hero">
         <PageHero
-          breadcrumb={
-            <nav className="breadcrumb" aria-label="Breadcrumb">
-              <Link href="/niveles/b2">Levels</Link>
-              <span aria-hidden="true">/</span>
-              <span>{config.cefr}</span>
-            </nav>
-          }
           eyebrow={config.eyebrow}
           title={config.title}
           description={config.description}
@@ -66,21 +58,6 @@ function LevelHubStyles() {
         max-width: 1100px;
         margin: 0 auto;
         padding: clamp(20px, 4vw, 32px) clamp(14px, 3vw, 20px);
-      }
-      .niveles-level-page .breadcrumb {
-        display: flex;
-        align-items: center;
-        gap: 0.5rem;
-        font-size: 0.875rem;
-        color: #64748b;
-      }
-      .niveles-level-page .breadcrumb a {
-        color: #0ea5e9;
-        text-decoration: none;
-        font-weight: 600;
-      }
-      .niveles-level-page .breadcrumb a:hover {
-        text-decoration: underline;
       }
       .niveles-level-page .niveles-section-head {
         margin-bottom: 18px;

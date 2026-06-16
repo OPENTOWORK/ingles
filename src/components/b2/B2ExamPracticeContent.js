@@ -134,10 +134,12 @@ export function B2ExamQuestionItem({ children, className = '' }) {
  *   showQuestionsHeading?: boolean,
  *   contentClassName?: string,
  *   footer?: import('react').ReactNode,
+ *   titleActions?: import('react').ReactNode,
  * }} props
  */
 export function B2ExamPracticeContent({
   title,
+  titleActions = null,
   directionsText = '',
   directionsLabel = 'Directions',
   textLabel = 'Text',
@@ -164,7 +166,12 @@ export function B2ExamPracticeContent({
   return (
     <div className={useSplit ? 'levels-exam-split-page' : 'levels-exam-practice-page'}>
       <div className={`levels-exam-split-card${contentClassName ? ` ${contentClassName}` : ''}`}>
-        {title ? <h2>{title}</h2> : null}
+        {title || titleActions ? (
+          <div className="levels-exam-split-card__title-row">
+            {title ? <h2>{title}</h2> : null}
+            {titleActions}
+          </div>
+        ) : null}
 
         <div className={useSplit ? 'levels-exam-split__body' : 'levels-exam-split__body levels-exam-split__body--stacked'}>
           {showDirections && directionBlocks.length > 0 ? (

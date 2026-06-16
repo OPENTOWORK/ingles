@@ -24,7 +24,7 @@
     "db:seed": "node prisma/seed.cjs",
     "db:studio": "prisma studio",
     "analyze": "ANALYZE=true npm run build",
-    "test": "echo 'Tests no implementados aún'",
+    "test": "node --loader ./scripts/alias-loader.mjs --test scripts/test-b2-scoring-v2.mjs",
     "type-check": "tsc --noEmit",
     "postinstall": "prisma generate && node setup.js",
     "supabase:auth-disable-email-confirm": "node scripts/supabase-patch-auth-mailer-autoconfirm.mjs",

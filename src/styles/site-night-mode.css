@@ -526,11 +526,15 @@ body.reading-night-mode .form-group label {
   color: #cbd5e1;
 }
 
-/* Login */
+/* Login / registro / recuperar contraseña */
 body.reading-night-mode .login-page {
   background-color: #1e293b !important;
   box-shadow: 0 8px 28px rgba(0, 0, 0, 0.35) !important;
   color: #e2e8f0;
+}
+
+body.reading-night-mode .login-page h2 {
+  color: #f8fafc;
 }
 
 body.reading-night-mode .login-page label {
@@ -549,6 +553,22 @@ body.reading-night-mode .login-page p {
 
 body.reading-night-mode .login-page hr {
   border-color: #475569;
+}
+
+body.reading-night-mode .login-page__checkbox-label {
+  color: #cbd5e1 !important;
+}
+
+body.reading-night-mode .login-page__footer-note {
+  color: #94a3b8 !important;
+}
+
+body.reading-night-mode .login-page__success {
+  color: #86efac !important;
+}
+
+body.reading-night-mode .login-page__error {
+  color: #fca5a5 !important;
 }
 
 /* Profile — mirror body.dark */

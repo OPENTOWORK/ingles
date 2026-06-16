@@ -33,6 +33,7 @@ import ReadingPracticeChrome from '@/components/exam/ReadingPracticeChrome';
 import { ReadingPracticeSessionProvider, useReadingPracticeSession } from '@/context/ReadingPracticeSessionContext';
 import ExamModeSectionBanner from '@/components/niveles/ExamModeSectionBanner';
 import { useExamModeStrict } from '@/hooks/useExamModeStrict';
+import { useExamModeHubNav } from '@/hooks/useExamModeHubNav';
 import {
   resolveExamPracticeMode,
   isExamSimulationMode,
@@ -114,8 +115,14 @@ function B2SpeakingExamPracticeInner({ title, subtitle, loadingLabel, refreshLab
     partMax: B2_SPEAKING_PART_MAX,
     sectionTitle: 'Speaking',
   });
-  const { examModeActive, reviewMode, section: examSection, handleFinishSection, setSectionRemaining } =
-    examMode;
+  const {
+    examModeActive,
+    reviewMode,
+    examSlot: examModeSlot,
+    section: examSection,
+    handleFinishSection,
+    setSectionRemaining,
+  } = examMode;
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [partsData, setPartsData] = useState([]);
@@ -318,6 +325,14 @@ function B2SpeakingExamPracticeInner({ title, subtitle, loadingLabel, refreshLab
 
   const practiceMode = resolveExamPracticeMode({ examModeActive, reviewMode });
 
+  const examModeHubNav = useExamModeHubNav({
+    slug: 'b2',
+    examSlot: examModeSlot ?? examSlot,
+    examModeActive,
+    reviewMode,
+    lang: lang === 'es' ? 'es' : 'en',
+  });
+
   const modeBadge = useMemo(() => {
     if (isExamSimulationMode(practiceMode)) {
       return lang === 'en' ? 'Exam Mode' : 'Modo examen';
@@ -516,6 +531,8 @@ function B2SpeakingExamPracticeInner({ title, subtitle, loadingLabel, refreshLab
         partNumber={partNumber}
         pagePartMax={B2_SPEAKING_PART_MAX}
         examSlot={examSlot}
+        overviewHref={examModeHubNav?.href}
+        overviewLabel={examModeHubNav?.label}
         skillPracticeMode={isSkillPracticeSession}
         skillPracticeTheme={skillNav.skillTheme}
         onContinueInPage={isSkillPracticeSession ? handleKeepPracticing : handleContinueInPage}

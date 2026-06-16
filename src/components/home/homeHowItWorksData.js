@@ -64,7 +64,7 @@ export const GUIDED_TOUR_STEPS_STUDENT = [
     target: '[data-tour="level-exam-mode"]',
     route: GUIDED_TOUR_LEVEL_PATH,
     scrollTarget: true,
-    href: '/niveles/exam-mode',
+    href: '/niveles/b2/exam-mode',
   },
   {
     id: 'exam-theory-nav',

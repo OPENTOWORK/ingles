@@ -1,16 +1,25 @@
 'use client';
-import { useState, useEffect } from 'react';
-import { useRouter } from 'next/navigation';
+import { useState, useEffect, Suspense } from 'react';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { supabase } from '@/utils/supabaseClient';
 import { getRedirectPathByUserId } from '@/utils/authRoles';
 import { completeSignIn } from '@/utils/completeSignIn';
 import { getClientAuth } from '@/utils/getClientAuth';
 import { clearLogoutPending } from '@/utils/logout';
+import { isPublicPath } from '@/utils/publicRoutes';
 import toast from 'react-hot-toast';
 import SiteMascot from '@/components/SiteMascot';
 import PasswordInput from '@/components/PasswordInput';
 
-export default function LoginPage() {
+function getSafeNextPath(searchParams) {
+  const next = searchParams?.get('next')?.trim();
+  if (!next || !next.startsWith('/') || next.startsWith('//') || isPublicPath(next.split('?')[0])) {
+    return null;
+  }
+  return next;
+}
+
+function LoginPageInner() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
@@ -18,6 +27,7 @@ export default function LoginPage() {
   const [lockoutUntil, setLockoutUntil] = useState(null);
 
   const router = useRouter();
+  const searchParams = useSearchParams();
 
   useEffect(() => {
     let cancelled = false;
@@ -25,13 +35,14 @@ export default function LoginPage() {
       clearLogoutPending();
       const { user } = await getClientAuth();
       if (cancelled || !user) return;
-      const path = await getRedirectPathByUserId(user.id, user.email);
+      const nextPath = getSafeNextPath(searchParams);
+      const path = nextPath || (await getRedirectPathByUserId(user.id, user.email));
       if (!cancelled) router.replace(path);
     })();
     return () => {
       cancelled = true;
     };
-  }, [router]);
+  }, [router, searchParams]);
 
   useEffect(() => {
     if (lockoutUntil && Date.now() >= lockoutUntil) {
@@ -121,7 +132,8 @@ export default function LoginPage() {
       /* no bloquear login */
     }
 
-    const path = await getRedirectPathByUserId(result.user.id, result.user.email);
+    const nextPath = getSafeNextPath(searchParams);
+    const path = nextPath || (await getRedirectPathByUserId(result.user.id, result.user.email));
 
     // #region agent log
     fetch('http://127.0.0.1:7882/ingest/2a697440-281c-4f74-a253-095d80733192',{method:'POST',headers:{'Content-Type':'application/json','X-Debug-Session-Id':'82e3a2'},body:JSON.stringify({sessionId:'82e3a2',runId:'login-debug',hypothesisId:'H4',location:'login/page.js:redirect',message:'post-login redirect path',data:{path},timestamp:Date.now()})}).catch(()=>{});
@@ -260,3 +272,11 @@ const styles = {
   linkText: { marginTop: "1rem", fontSize: "0.9rem", textAlign: "center", color: "#666" },
   link: { color: "#0070f3", textDecoration: "none" }
 };
+
+export default function LoginPage() {
+  return (
+    <Suspense fallback={<main className="login-page" style={{ padding: '2rem', textAlign: 'center' }}>Cargando…</main>}>
+      <LoginPageInner />
+    </Suspense>
+  );
+}

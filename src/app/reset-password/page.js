@@ -26,36 +26,26 @@ export default function ResetPasswordPage() {
   };
 
   return (
-    <main
-      style={{
-        maxWidth: "400px",
-        margin: "4rem auto",
-        padding: "2rem",
-        backgroundColor: "#fff",
-        borderRadius: "8px",
-        boxShadow: "0 2px 8px rgba(0, 0, 0, 0.1)",
-        fontFamily: "Segoe UI, sans-serif",
-      }}
-    >
+    <main className="login-page" style={authMainStyle}>
       <div style={{ textAlign: 'center', marginBottom: '1rem', lineHeight: 0 }}>
         <SiteMascot variant={8} width={120} alt="" />
       </div>
-      <h2 style={{ textAlign: "center", marginBottom: "1.5rem" }}>Recuperar Contraseña</h2>
+      <h2 style={authHeadingStyle}>Recuperar Contraseña</h2>
 
       {!sent ? (
         <form onSubmit={handlePasswordReset}>
-          <label style={{ display: "block", marginBottom: "0.5rem" }}>Email</label>
+          <label style={authLabelStyle}>Email</label>
           <input
             type="email"
             placeholder="you@example.com"
-            style={inputStyle}
+            style={authInputStyle}
             value={email}
             onChange={(e) => setEmail(e.target.value)}
           />
-          <button type="submit" style={buttonStyle}>Enviar enlace</button>
+          <button type="submit" style={authButtonStyle}>Enviar enlace</button>
         </form>
       ) : (
-        <p style={{ textAlign: "center", color: "green" }}>
+        <p className="login-page__success" style={{ textAlign: 'center' }}>
           Enlace enviado. Revisa tu correo.
         </p>
       )}
@@ -63,23 +53,43 @@ export default function ResetPasswordPage() {
   );
 }
 
-const inputStyle = {
-  width: "100%",
-  padding: "0.75rem",
-  fontSize: "1rem",
-  border: "1px solid #ccc",
-  borderRadius: "4px",
-  boxSizing: "border-box",
+const authMainStyle = {
+  maxWidth: '400px',
+  margin: '4rem auto',
+  padding: '2rem',
+  backgroundColor: '#fff',
+  borderRadius: '8px',
+  boxShadow: '0 2px 8px rgba(0, 0, 0, 0.1)',
+  fontFamily: 'Segoe UI, sans-serif',
 };
 
-const buttonStyle = {
-  width: "100%",
-  padding: "0.75rem",
-  marginTop: "1.5rem",
-  backgroundColor: "#0070f3",
-  color: "white",
-  fontWeight: "bold",
-  border: "none",
-  borderRadius: "4px",
-  cursor: "pointer",
+const authHeadingStyle = {
+  textAlign: 'center',
+  marginBottom: '1.5rem',
+};
+
+const authLabelStyle = {
+  display: 'block',
+  marginBottom: '0.5rem',
+};
+
+const authInputStyle = {
+  width: '100%',
+  padding: '0.75rem',
+  fontSize: '1rem',
+  border: '1px solid #ccc',
+  borderRadius: '4px',
+  boxSizing: 'border-box',
+};
+
+const authButtonStyle = {
+  width: '100%',
+  padding: '0.75rem',
+  marginTop: '1.5rem',
+  backgroundColor: '#0070f3',
+  color: 'white',
+  fontWeight: 'bold',
+  border: 'none',
+  borderRadius: '4px',
+  cursor: 'pointer',
 };

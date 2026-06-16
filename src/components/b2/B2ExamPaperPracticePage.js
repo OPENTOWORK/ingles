@@ -15,7 +15,8 @@ import { computeB2PartProgressFromState } from '@/utils/recordLevelsB2PartScore'
 import { getLevelsPartScoring } from '@/utils/levelsA2PartScoring';
 import LevelsAnswerJustification from '@/components/levels/LevelsAnswerJustification';
 import { useLevelsCategoryTimer } from '@/hooks/useLevelsCategoryTimer';
-import { computeLevelsPartScore } from '@/utils/levelsPaperScoreMetrics';
+import { computeB2PartScoreMetrics } from '@/utils/levelsPaperScoreMetrics';
+import { isB2RuoeV2SessionPersistenceBlocked } from '@/lib/b2ScoringV2FeatureFlag';
 import { postLevelsAnswerJustification } from '@/utils/levelsJustifyClient';
 import Link from 'next/link';
 import { supabase } from '@/utils/supabaseClient';
@@ -750,6 +751,7 @@ function B2ExamPaperPracticePageInner({
     void (async () => {
       const uid = await getSessionUserId();
       if (!uid) return;
+      if (levelSlug === 'b2' && isB2RuoeV2SessionPersistenceBlocked(partNumber)) return;
       const { error } = await mergeLevelsEstadisticas({
         userId: uid,
         preguntaId,
@@ -1304,17 +1306,33 @@ function B2ExamPaperPracticePageInner({
 
   const partScoreMetrics = useMemo(
     () =>
-      computeLevelsPartScore({
-        useOpenInputUi: hasOpenAnswerSlots,
-        openQuestionNumbers,
-        openChecks,
-        groupedAnswers: effectiveMcqGroups,
-        checkedQuestions,
-        selectedOptions,
-        getQuestionKey,
-        partId: selectedPart?.id,
-      }),
+      levelSlug === 'b2' && partNumber >= 1 && partNumber <= 7
+        ? computeB2PartScoreMetrics({
+            partNumber,
+            useOpenInputUi: hasOpenAnswerSlots,
+            openQuestionNumbers,
+            openChecks,
+            groupedAnswers: effectiveMcqGroups,
+            checkedQuestions,
+            selectedOptions,
+            getQuestionKey,
+            partId: selectedPart?.id,
+          })
+        : computeB2PartScoreMetrics({
+            partNumber,
+            scoringV2Enabled: false,
+            useOpenInputUi: hasOpenAnswerSlots,
+            openQuestionNumbers,
+            openChecks,
+            groupedAnswers: effectiveMcqGroups,
+            checkedQuestions,
+            selectedOptions,
+            getQuestionKey,
+            partId: selectedPart?.id,
+          }),
     [
+      levelSlug,
+      partNumber,
       hasOpenAnswerSlots,
       openQuestionNumbers,
       openChecks,
@@ -2102,8 +2120,7 @@ function B2ExamPaperPracticePageInner({
         passingCount: partScoringCfg?.passing ?? 12,
       }
     : {
-        correctCount: partScoreMetrics.correctCount,
-        totalSlots: partScoringCfg?.total ?? partScoreMetrics.totalSlots,
+        ...partScoreMetrics,
         passingCount: partScoringCfg?.passing ?? partScoreMetrics.passingCount,
       };
 

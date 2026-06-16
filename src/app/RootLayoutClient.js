@@ -65,9 +65,7 @@ export default function RootLayoutClient({ children }) {
   const lastAccessTokenRef = useRef(null);
 
   const isPublic = isPublicPath(pathname);
-  const isNivelesRoute =
-    pathname === '/niveles' || (pathname && pathname.startsWith('/niveles/'));
-  const allowWithoutAuth = isPublic || isNivelesRoute;
+  const allowWithoutAuth = isPublic;
   const heartbeatEnabled = Boolean(session) && !allowWithoutAuth;
   const clarityProjectId = process.env.NEXT_PUBLIC_CLARITY_PROJECT_ID || '';
   const clarityAnalyticsEnabled =

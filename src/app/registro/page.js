@@ -214,36 +214,26 @@ export default function RegistroPage() {
   };
 
   return (
-    <main
-      style={{
-        maxWidth: "400px",
-        margin: "4rem auto",
-        padding: "2rem",
-        backgroundColor: "#fff",
-        borderRadius: "8px",
-        boxShadow: "0 2px 8px rgba(0, 0, 0, 0.1)",
-        fontFamily: "Segoe UI, sans-serif",
-      }}
-    >
-      <div style={{ textAlign: "center", marginBottom: "0.75rem", lineHeight: 0 }}>
+    <main className="login-page" style={authMainStyle}>
+      <div style={{ textAlign: 'center', marginBottom: '0.75rem', lineHeight: 0 }}>
         <SiteMascot variant={5} width={120} alt="Dralo" />
       </div>
-      <h2 style={{ textAlign: "center", marginBottom: "1.5rem" }}>Crear cuenta</h2>
+      <h2 style={authHeadingStyle}>Crear cuenta</h2>
 
       <form onSubmit={handleRegister}>
-        <label style={{ display: "block", marginBottom: "0.5rem" }}>Email</label>
+        <label style={authLabelStyle}>Email</label>
         <input
           type="email"
           placeholder="you@example.com"
-          style={inputStyle}
+          style={authInputStyle}
           value={email}
           onChange={(e) => setEmail(e.target.value)}
         />
 
-        <label style={{ display: "block", margin: "1rem 0 0.5rem" }}>Password</label>
+        <label style={{ ...authLabelStyle, margin: '1rem 0 0.5rem' }}>Password</label>
         <PasswordInput
           placeholder="••••••••"
-          style={inputStyle}
+          style={authInputStyle}
           value={password}
           onChange={(e) => setPassword(e.target.value)}
           autoComplete="new-password"
@@ -251,14 +241,18 @@ export default function RegistroPage() {
 
         <button
           type="submit"
-          style={submitting ? { ...buttonStyle, opacity: 0.7, cursor: 'not-allowed' } : buttonStyle}
+          style={
+            submitting
+              ? { ...authButtonStyle, opacity: 0.7, cursor: 'not-allowed' }
+              : authButtonStyle
+          }
           disabled={submitting}
         >
           {submitting ? 'Creando cuenta…' : 'Registrarme'}
         </button>
 
         <div style={{ marginTop: '1rem', display: 'grid', gap: '0.75rem' }}>
-          <label style={checkboxLabelStyle}>
+          <label className="login-page__checkbox-label" style={checkboxLabelStyle}>
             <input
               type="checkbox"
               checked={acceptedTerms}
@@ -278,7 +272,7 @@ export default function RegistroPage() {
             </span>
           </label>
 
-          <label style={checkboxLabelStyle}>
+          <label className="login-page__checkbox-label" style={checkboxLabelStyle}>
             <input
               type="checkbox"
               checked={acceptedDataProtection}
@@ -294,7 +288,7 @@ export default function RegistroPage() {
             </span>
           </label>
 
-          <label style={checkboxLabelStyle}>
+          <label className="login-page__checkbox-label" style={checkboxLabelStyle}>
             <input
               type="checkbox"
               checked={acceptedMarketing}
@@ -307,46 +301,69 @@ export default function RegistroPage() {
           </label>
         </div>
 
-        <p style={{ marginTop: "1rem", fontSize: "0.9rem", textAlign: "center", color: "#666" }}>
-          ¿Ya tienes cuenta? <a href="/login" style={{ color: "#0070f3" }}>Inicia sesión</a>
+        <p className="login-page__footer-note" style={footerNoteStyle}>
+          ¿Ya tienes cuenta? <a href="/login" style={linkStyle}>Inicia sesión</a>
         </p>
       </form>
     </main>
   );
 }
 
-const inputStyle = {
-  width: "100%",
-  padding: "0.75rem",
-  fontSize: "1rem",
-  border: "1px solid #ccc",
-  borderRadius: "4px",
-  boxSizing: "border-box",
+const authMainStyle = {
+  maxWidth: '400px',
+  margin: '4rem auto',
+  padding: '2rem',
+  backgroundColor: '#fff',
+  borderRadius: '8px',
+  boxShadow: '0 2px 8px rgba(0, 0, 0, 0.1)',
+  fontFamily: 'Segoe UI, sans-serif',
 };
 
-const buttonStyle = {
-  width: "100%",
-  padding: "0.75rem",
-  marginTop: "1.5rem",
-  backgroundColor: "#0070f3",
-  color: "white",
-  fontWeight: "bold",
-  border: "none",
-  borderRadius: "4px",
-  cursor: "pointer",
+const authHeadingStyle = {
+  textAlign: 'center',
+  marginBottom: '1.5rem',
 };
 
+const authLabelStyle = {
+  display: 'block',
+  marginBottom: '0.5rem',
+};
+
+const authInputStyle = {
+  width: '100%',
+  padding: '0.75rem',
+  fontSize: '1rem',
+  border: '1px solid #ccc',
+  borderRadius: '4px',
+  boxSizing: 'border-box',
+};
+
+const authButtonStyle = {
+  width: '100%',
+  padding: '0.75rem',
+  marginTop: '1.5rem',
+  backgroundColor: '#0070f3',
+  color: 'white',
+  fontWeight: 'bold',
+  border: 'none',
+  borderRadius: '4px',
+  cursor: 'pointer',
+};
 
 const checkboxLabelStyle = {
   display: 'flex',
   alignItems: 'flex-start',
   gap: '0.5rem',
   fontSize: '0.9rem',
-  color: '#333',
   lineHeight: 1.4,
 };
 
+const footerNoteStyle = {
+  marginTop: '1rem',
+  fontSize: '0.9rem',
+  textAlign: 'center',
+};
+
 const linkStyle = {
-  color: '#0070f3',
   textDecoration: 'underline',
 };

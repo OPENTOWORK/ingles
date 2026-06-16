@@ -8,6 +8,8 @@ import LevelsPartFinishBanner from '@/components/levels/LevelsPartFinishBanner';
 export default function ExamPracticeFinishNotice({ notice, lang = 'en' }) {
   if (!notice) return null;
 
+  const en = lang === 'en';
+
   if (notice.error) {
     return (
       <div className="levels-listening-practice-side__finish">
@@ -19,6 +21,28 @@ export default function ExamPracticeFinishNotice({ notice, lang = 'en' }) {
           error={notice.error}
           lang={lang}
         />
+      </div>
+    );
+  }
+
+  if (notice.scoringVersion === 2 || notice.v2LocalOnly) {
+    return (
+      <div className="levels-listening-practice-side__finish">
+        <div role="status" className="levels-b2-result levels-b2-result--v2">
+          <p className="levels-b2-result__title">
+            {en ? 'Part complete' : 'Parte completada'}
+          </p>
+          <p className="levels-b2-result__detail">
+            {en
+              ? `Part score: ${notice.correct} / ${notice.total}`
+              : `Puntuación de la parte: ${notice.correct} / ${notice.total}`}
+          </p>
+          <p className="levels-b2-result__note">
+            {en
+              ? 'Scoring V2 — local practice only (not saved).'
+              : 'Scoring V2 — práctica local (no guardado).'}
+          </p>
+        </div>
       </div>
     );
   }

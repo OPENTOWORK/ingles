@@ -5,13 +5,11 @@ export const PUBLIC_ROUTE_PREFIXES = [
   '/auth/callback',
   '/registro',
   '/reset-password',
+  '/update-password',
   '/contacto',
   '/contact',
   '/exam-practice',
   '/exam-theory',
-  '/dralo-ai',
-  '/speaking',
-  '/teoria',
   '/sitemap.xml',
   '/robots.txt',
   '/favicon.ico',
@@ -26,7 +24,6 @@ export const PUBLIC_ROUTE_PREFIXES = [
 
 export function isPublicPath(pathname = '') {
   if (!pathname) return false;
-  if (pathname === '/niveles' || pathname.startsWith('/niveles/')) return true;
   if (pathname === '/sitemap.xml' || pathname === '/robots.txt' || pathname === '/favicon.ico') {
     return true;
   }

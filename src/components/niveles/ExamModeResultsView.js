@@ -88,8 +88,17 @@ function SectionCard({ row, examSlot, resultsReleased }) {
           <div className={styles.cardTitleRow}>
             <h3 className={styles.cardTitle}>{row.title}</h3>
             <p className={styles.cardScore}>
-              {row.scores?.correct ?? 0}
-              <span> / {row.scores?.total ?? 0}</span>
+              {row.scores?.scoringVersion === 2 ? (
+                <>
+                  {row.scores?.pointsEarned ?? row.scores?.correct ?? 0}
+                  <span> / {row.scores?.maxPoints ?? row.scores?.total ?? 0}</span>
+                </>
+              ) : (
+                <>
+                  {row.scores?.correct ?? 0}
+                  <span> / {row.scores?.total ?? 0}</span>
+                </>
+              )}
               <span style={{ marginLeft: '0.5rem', color: '#64748b', fontWeight: 700 }}>
                 ({row.pct}%)
               </span>
@@ -133,9 +142,11 @@ function SectionCard({ row, examSlot, resultsReleased }) {
                   <span className={styles.partName}>Part {partNum}</span>
                   <span style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
                     <span className={styles.partScore}>
-                      {p.correct}/{p.total}
+                      {p.scoringVersion === 2 || row.scores?.scoringVersion === 2
+                        ? `${p.pointsEarned ?? p.correct}/${p.maxPoints ?? p.total}`
+                        : `${p.correct}/${p.total}`}
                     </span>
-                    {p.passing != null ? (
+                    {p.passing != null && row.scores?.scoringVersion !== 2 ? (
                       <span
                         className={`${styles.badge} ${
                           passed

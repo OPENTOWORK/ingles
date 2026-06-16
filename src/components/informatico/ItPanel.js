@@ -16,6 +16,7 @@ const TABS = [
   { id: 'actividad', label: 'Actividad' },
   { id: 'tickets', label: 'Tickets' },
   { id: 'herramientas', label: 'Herramientas' },
+  { id: 'supabase', label: 'Supabase' },
 ];
 
 async function itFetch(path, options = {}, { soft = false } = {}) {
@@ -87,6 +88,11 @@ export default function ItPanel() {
   const [serviceRoleConfigured, setServiceRoleConfigured] = useState(null);
   const [serviceRoleKey, setServiceRoleKey] = useState('');
   const [savingKey, setSavingKey] = useState(false);
+  const [supabaseTables, setSupabaseTables] = useState([]);
+  const [supabaseTablesLoading, setSupabaseTablesLoading] = useState(false);
+  const [supabaseTablesError, setSupabaseTablesError] = useState('');
+  const [supabaseTableFilter, setSupabaseTableFilter] = useState('');
+  const [supabaseProjectUrl, setSupabaseProjectUrl] = useState(null);
 
   const loadOverview = useCallback(async () => {
     const data = await itFetch('/api/informatico/overview', {}, { soft: true });
@@ -117,6 +123,20 @@ export default function ItPanel() {
       },
     );
   }, [chartPeriod, chartStartDate, chartEndDate]);
+
+  const loadSupabaseTables = useCallback(async () => {
+    setSupabaseTablesLoading(true);
+    setSupabaseTablesError('');
+    const data = await itFetch('/api/informatico/supabase-tables', {}, { soft: true });
+    setSupabaseTablesLoading(false);
+    if (data.error) {
+      setSupabaseTablesError(data.error);
+      setSupabaseTables([]);
+      return;
+    }
+    setSupabaseTables(data.tables || []);
+    setSupabaseProjectUrl(data.projectUrl || null);
+  }, []);
 
   const loadServiceRoleStatus = useCallback(async () => {
     try {
@@ -159,6 +179,12 @@ export default function ItPanel() {
     if (!loading && tab === 'actividad') loadActivity().catch(console.error);
   }, [loading, tab, loadActivity]);
 
+  useEffect(() => {
+    if (!loading && tab === 'supabase' && !supabaseTables.length && !supabaseTablesLoading) {
+      loadSupabaseTables().catch(console.error);
+    }
+  }, [loading, tab, supabaseTables.length, supabaseTablesLoading, loadSupabaseTables]);
+
   const saveServiceRole = async (e) => {
     e.preventDefault();
     setSavingKey(true);
@@ -190,6 +216,22 @@ export default function ItPanel() {
   }
 
   const roleEntries = Object.entries(overview?.roleCounts || {});
+  const filteredSupabaseTables = supabaseTables.filter((table) => {
+    const q = supabaseTableFilter.trim().toLowerCase();
+    if (!q) return true;
+    return table.name.toLowerCase().includes(q) || String(table.schema || '').toLowerCase().includes(q);
+  });
+
+  const supabaseDashboardTablesUrl = (() => {
+    if (!supabaseProjectUrl) return 'https://supabase.com/dashboard';
+    try {
+      const ref = new URL(supabaseProjectUrl).hostname.split('.')[0];
+      if (ref) return `https://supabase.com/dashboard/project/${ref}/editor`;
+    } catch {
+      /* ignore */
+    }
+    return 'https://supabase.com/dashboard';
+  })();
 
   return (
     <div className="min-h-screen bg-slate-50">
@@ -388,11 +430,6 @@ export default function ItPanel() {
             {isAdmin && (
               <>
                 <ToolCard
-                  title="Panel de administración"
-                  description="Usuarios, roles y correos masivos."
-                  href="/admin"
-                />
-                <ToolCard
                   title="Panel de profesor"
                   description="Alumnos, tareas y calificaciones."
                   href="/admin/profesor"
@@ -412,6 +449,102 @@ export default function ItPanel() {
                 alert('Ejecuta scripts/teacher_panel_tables.sql en Supabase SQL Editor.')
               }
             />
+          </div>
+        )}
+
+        {tab === 'supabase' && (
+          <div className="space-y-4">
+            <div className="bg-white rounded-lg shadow p-6 border border-slate-100">
+              <div className="flex flex-wrap justify-between items-start gap-3 mb-4">
+                <div>
+                  <h2 className="text-lg font-semibold text-slate-900">Tablas de Supabase</h2>
+                  <p className="text-sm text-slate-600 mt-1">
+                    Schema <code className="text-xs bg-slate-100 px-1 py-0.5 rounded">public</code>{' '}
+                    expuesto vía PostgREST · {supabaseTables.length} tablas
+                  </p>
+                </div>
+                <div className="flex flex-wrap items-center gap-2">
+                  <a
+                    href={supabaseDashboardTablesUrl}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="text-sm text-sky-600 hover:underline"
+                  >
+                    Abrir en Supabase →
+                  </a>
+                  <button
+                    type="button"
+                    onClick={() => loadSupabaseTables()}
+                    disabled={supabaseTablesLoading}
+                    className="px-3 py-1.5 text-sm rounded border border-slate-200 bg-white hover:bg-slate-50 disabled:opacity-50"
+                  >
+                    {supabaseTablesLoading ? 'Actualizando…' : 'Actualizar'}
+                  </button>
+                </div>
+              </div>
+
+              <input
+                type="search"
+                value={supabaseTableFilter}
+                onChange={(e) => setSupabaseTableFilter(e.target.value)}
+                placeholder="Buscar tabla…"
+                className="w-full max-w-md border border-slate-200 rounded px-3 py-2 text-sm mb-4"
+              />
+
+              {supabaseTablesError ? (
+                <p className="text-sm text-red-700 bg-red-50 border border-red-100 rounded p-3">
+                  {supabaseTablesError}
+                </p>
+              ) : null}
+
+              {supabaseTablesLoading && !supabaseTables.length ? (
+                <p className="text-sm text-slate-500 py-6">Cargando tablas…</p>
+              ) : (
+                <div className="overflow-x-auto">
+                  <table className="min-w-full text-sm">
+                    <thead className="bg-slate-50">
+                      <tr>
+                        <th className="px-3 py-2 text-left">Tabla</th>
+                        <th className="px-3 py-2 text-left">Schema</th>
+                        <th className="px-3 py-2 text-left">Columnas</th>
+                        <th className="px-3 py-2 text-left">Filas (aprox.)</th>
+                        <th className="px-3 py-2 text-left">Acceso API</th>
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y">
+                      {filteredSupabaseTables.map((table) => (
+                        <tr key={table.name}>
+                          <td className="px-3 py-2 font-mono text-slate-800">{table.name}</td>
+                          <td className="px-3 py-2 text-slate-600">{table.schema || 'public'}</td>
+                          <td className="px-3 py-2 text-slate-600">
+                            {table.columnCount ?? '—'}
+                          </td>
+                          <td className="px-3 py-2 text-slate-600">
+                            {table.rowCount != null ? table.rowCount.toLocaleString('es-ES') : '—'}
+                          </td>
+                          <td className="px-3 py-2">
+                            {table.accessible === false ? (
+                              <span className="inline-flex px-2 py-0.5 rounded text-xs font-medium bg-amber-100 text-amber-900">
+                                Revisar
+                              </span>
+                            ) : (
+                              <StatusBadge ok={table.accessible !== false} />
+                            )}
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                  {!filteredSupabaseTables.length && !supabaseTablesLoading ? (
+                    <p className="text-sm text-slate-500 py-4">
+                      {supabaseTableFilter.trim()
+                        ? 'Ninguna tabla coincide con la búsqueda.'
+                        : 'No hay tablas listadas.'}
+                    </p>
+                  ) : null}
+                </div>
+              )}
+            </div>
           </div>
         )}
       </div>

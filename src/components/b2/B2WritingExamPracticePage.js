@@ -36,6 +36,7 @@ import {
 } from '@/utils/skillPracticeNavigation';
 import ExamModeSectionBanner from '@/components/niveles/ExamModeSectionBanner';
 import { useExamModeStrict } from '@/hooks/useExamModeStrict';
+import { useExamModeHubNav } from '@/hooks/useExamModeHubNav';
 import {
   resolveExamPracticeMode,
   isPartPracticeMode,
@@ -77,6 +78,7 @@ function B2WritingExamPracticePageInner() {
   const {
     examModeActive,
     reviewMode,
+    examSlot: examModeSlot,
     section: examSection,
     handleFinishSection,
     setSectionRemaining,
@@ -466,6 +468,14 @@ function B2WritingExamPracticePageInner() {
 
   const practiceMode = resolveExamPracticeMode({ examModeActive, reviewMode });
 
+  const examModeHubNav = useExamModeHubNav({
+    slug: 'b2',
+    examSlot: examModeSlot ?? examSlot,
+    examModeActive,
+    reviewMode,
+    lang: 'en',
+  });
+
   const chromeTitle = getExamChromeTitle({
     lang: 'en',
     examModeActive,
@@ -500,10 +510,8 @@ function B2WritingExamPracticePageInner() {
     ? getB2WritingStrategyPack(partNumber, part2SelectedOption?.writingType)
     : null;
 
-  // Part 1 always; Part 2 only once a task is chosen (the pack depends on the task type).
-  const showStrategySidebar = Boolean(
-    strategyPack && (partNumber === 8 || part2SelectedOption),
-  );
+  // Part 1 always; Part 2 shows general tips before a task is chosen, then type-specific tips.
+  const showStrategySidebar = Boolean(strategyPack);
 
   const showPracticeSideRail =
     isSkillPracticeSession && isPartPracticeMode(practiceMode) && scoring.examPracticeOpen;
@@ -714,6 +722,8 @@ function B2WritingExamPracticePageInner() {
                     partNumber={partNumber}
                     pagePartMax={PART_MAX}
                     examSlot={examSlot}
+                    overviewHref={examModeHubNav?.href}
+                    overviewLabel={examModeHubNav?.label}
                     skillPracticeMode={isSkillPracticeSession}
                     skillPracticeTheme={skillNav.skillTheme}
                     onContinueInPage={isSkillPracticeSession ? handleKeepPracticing : handleContinueInPage}

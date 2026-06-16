@@ -12,10 +12,6 @@ export default function ReadingPracticeToolsPanel({ lang = 'en' }) {
 
   const labels = {
     title: en ? 'Tools' : 'Herramientas',
-    focus: en ? 'Focus mode' : 'Modo concentración',
-    exitFocus: en ? 'Exit focus mode' : 'Salir del modo concentración',
-    eliminator: en ? 'Answer eliminator' : 'Eliminador de respuestas',
-    clearEliminated: en ? 'Clear eliminated' : 'Quitar eliminadas',
     textSettings: en ? 'Text settings' : 'Ajustes de texto',
     fontSize: en ? 'Font size' : 'Tamaño de fuente',
     lineHeight: en ? 'Line height' : 'Interlineado',
@@ -50,46 +46,6 @@ export default function ReadingPracticeToolsPanel({ lang = 'en' }) {
 
       {open ? (
         <div className="levels-listening-strategy__body">
-          <section>
-            <h3 className="levels-listening-strategy__heading">{en ? 'Study tools' : 'Herramientas de estudio'}</h3>
-            <div className="exam-practice-tools__row">
-              <button
-                type="button"
-                className={`tool-button exam-practice-tools__btn exam-practice-tools__btn--wide${session.focusMode ? ' active' : ''}`}
-                onClick={session.toggleFocusMode}
-                aria-pressed={session.focusMode}
-              >
-                {session.focusMode ? labels.exitFocus : labels.focus}
-              </button>
-              <button
-                type="button"
-                className={`tool-button exam-practice-tools__btn exam-practice-tools__btn--wide${session.answerEliminatorEnabled ? ' active' : ''}`}
-                onClick={session.toggleAnswerEliminator}
-                aria-pressed={session.answerEliminatorEnabled}
-              >
-                {labels.eliminator}
-              </button>
-              {session.answerEliminatorEnabled ? (
-                <button
-                  type="button"
-                  className="tool-button exam-practice-tools__btn exam-practice-tools__btn--ghost"
-                  onClick={session.clearEliminatedAnswers}
-                >
-                  {labels.clearEliminated}
-                </button>
-              ) : null}
-            </div>
-            <p className="levels-listening-strategy__tool-hint">
-              {session.answerEliminatorEnabled
-                ? en
-                  ? 'Click options to strike them out without selecting an answer.'
-                  : 'Haz clic en opciones para tacharlas sin seleccionar respuesta.'
-                : en
-                  ? 'Enable Answer eliminator to cross out wrong options.'
-                  : 'Activa el eliminador para tachar opciones incorrectas.'}
-            </p>
-          </section>
-
           <section>
             <h3 className="levels-listening-strategy__heading">{labels.textSettings}</h3>
             <p className="levels-listening-strategy__tool-hint">

@@ -429,10 +429,17 @@ export function resolvePart1ExampleBlock({
   return null;
 }
 
-/** Ejemplo UoE en el pasaje (no en instrucciones): solo skill practice, partes 1–4. */
-export function shouldUseSkillUoeExampleLayout({ skillPractice = false, partNumber = 0 } = {}) {
+/** Ejemplo UoE en el pasaje (no en instrucciones): skill practice partes 1–4; exam mode partes 1–3. */
+export function shouldUseSkillUoeExampleLayout({
+  skillPractice = false,
+  examMode = false,
+  partNumber = 0,
+} = {}) {
   const pn = Number(partNumber);
-  return Boolean(skillPractice) && Number.isFinite(pn) && pn >= 1 && pn <= 4;
+  if (!Number.isFinite(pn) || pn < 1) return false;
+  if (skillPractice && pn <= 4) return true;
+  if (examMode && pn <= 3) return true;
+  return false;
 }
 
 /**

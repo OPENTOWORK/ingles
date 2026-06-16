@@ -63,11 +63,28 @@ export default function ReadingPracticeProgressPanel({
   examLabelsBySlot = {},
   passing = null,
   lang = 'en',
+  scoringVersion = 1,
+  questionsAnswered = null,
+  totalQuestions = null,
+  correctItems = null,
+  pointsEarned = null,
+  maxPoints = null,
+  accuracyByPoints = null,
 }) {
   const en = lang === 'en';
   const [open, setOpen] = useState(false);
 
-  const accuracy = totalSlots ? Math.round((100 * correctCount) / totalSlots) : 0;
+  const isV2 = scoringVersion === 2 && maxPoints > 0;
+  const answeredCount =
+    questionsAnswered ??
+    questions.filter((q) => checkedQuestions[q.questionKey] || typeof openChecks?.[q.questionKey] === 'boolean').length;
+  const totalQ = totalQuestions ?? totalSlots;
+  const fullyCorrect = correctItems ?? correctCount;
+  const accuracy = isV2
+    ? Math.round((accuracyByPoints ?? (maxPoints ? (pointsEarned / maxPoints) * 100 : 0)) * 10) / 10
+    : totalSlots
+      ? Math.round((100 * correctCount) / totalSlots)
+      : 0;
   const weak = getWeakAreas({
     partNumber,
     questions,
@@ -159,20 +176,44 @@ export default function ReadingPracticeProgressPanel({
 
           <section>
             <h3 className="levels-listening-strategy__heading">{en ? 'Current score' : 'Puntuación actual'}</h3>
-            <p className="reading-progress-score">
-              <strong>{en ? 'Answered' : 'Respondidas'}:</strong>{' '}
-              {questions.filter((q) => checkedQuestions[q.questionKey]).length}/{totalSlots}
-            </p>
-            {!hideFeedback ? (
+            {isV2 ? (
               <>
                 <p className="reading-progress-score">
-                  <strong>{labels.correct}:</strong> {correctCount}/{totalSlots}
+                  <strong>{en ? 'Questions answered' : 'Preguntas respondidas'}:</strong> {answeredCount}/{totalQ}
                 </p>
-                <p className="reading-progress-score">
-                  <strong>{labels.accuracy}:</strong> {accuracy}%
-                </p>
+                {!hideFeedback ? (
+                  <>
+                    <p className="reading-progress-score">
+                      <strong>{en ? 'Fully correct items' : 'Ítems totalmente correctos'}:</strong>{' '}
+                      {fullyCorrect}/{totalQ}
+                    </p>
+                    <p className="reading-progress-score">
+                      <strong>{en ? 'Part score' : 'Puntuación de la parte'}:</strong> {pointsEarned}/{maxPoints}
+                    </p>
+                    <p className="reading-progress-score">
+                      <strong>{labels.accuracy}:</strong> {accuracy}%
+                    </p>
+                  </>
+                ) : null}
               </>
-            ) : null}
+            ) : (
+              <>
+                <p className="reading-progress-score">
+                  <strong>{en ? 'Answered' : 'Respondidas'}:</strong>{' '}
+                  {questions.filter((q) => checkedQuestions[q.questionKey]).length}/{totalSlots}
+                </p>
+                {!hideFeedback ? (
+                  <>
+                    <p className="reading-progress-score">
+                      <strong>{labels.correct}:</strong> {correctCount}/{totalSlots}
+                    </p>
+                    <p className="reading-progress-score">
+                      <strong>{labels.accuracy}:</strong> {accuracy}%
+                    </p>
+                  </>
+                ) : null}
+              </>
+            )}
             <p className="reading-progress-score">
               <strong>{labels.attempts}:</strong> {checkAttempts}
             </p>

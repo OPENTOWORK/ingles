@@ -9,39 +9,21 @@ const SLOT_MENU_MIN_WIDTH = 168;
 function StarIcon({ state }) {
   const isFull = state === 'full';
   const isHalf = state === 'half';
-  const color = isFull || isHalf ? '#ca8a04' : '#cbd5e1';
 
   if (isHalf) {
     return (
-      <span
-        style={{
-          position: 'relative',
-          display: 'inline-block',
-          width: '1em',
-          height: '1em',
-          fontSize: '0.9rem',
-          lineHeight: 1,
-        }}
-      >
-        <span style={{ color: '#cbd5e1' }}>★</span>
-        <span
-          style={{
-            position: 'absolute',
-            left: 0,
-            top: 0,
-            width: '50%',
-            overflow: 'hidden',
-            color: '#ca8a04',
-          }}
-        >
-          ★
-        </span>
+      <span className="levels-b2-exam-picker__star levels-b2-exam-picker__star--half" aria-hidden>
+        <span className="levels-b2-exam-picker__star-bg">★</span>
+        <span className="levels-b2-exam-picker__star-fill">★</span>
       </span>
     );
   }
 
   return (
-    <span style={{ color, fontSize: '0.9rem' }}>
+    <span
+      className={`levels-b2-exam-picker__star${isFull ? ' levels-b2-exam-picker__star--full' : ''}`}
+      aria-hidden
+    >
       ★
     </span>
   );
@@ -51,16 +33,7 @@ function StarRow({ filled = 0, max = 3 }) {
   const value = Math.min(max, Math.max(0, Number(filled) || 0));
 
   return (
-    <div
-      aria-hidden
-      style={{
-        display: 'flex',
-        justifyContent: 'center',
-        gap: '0.15rem',
-        marginTop: '0.3rem',
-        alignItems: 'center',
-      }}
-    >
+    <div className="levels-b2-exam-picker__stars" aria-hidden>
       {Array.from({ length: max }, (_, i) => {
         const remainder = value - i;
         let state = 'empty';
@@ -253,6 +226,7 @@ function ExamSlotMenu({
  *   onViewStatistics?: (slot: number) => void,
  *   onRepeatExam?: (slot: number) => void,
  *   lang?: 'es' | 'en',
+ *   className?: string,
  * }} props
  */
 export function B2ExamSlotProgressPicker({
@@ -270,6 +244,7 @@ export function B2ExamSlotProgressPicker({
   onViewStatistics,
   onRepeatExam,
   lang = 'en',
+  className = '',
 }) {
   const en = lang === 'en';
   const [openMenuSlot, setOpenMenuSlot] = useState(null);
@@ -283,7 +258,7 @@ export function B2ExamSlotProgressPicker({
   return (
     <section
       aria-label={en ? 'Choose exam and view progress' : 'Elegir examen y ver progreso'}
-      className="levels-b2-exam-picker"
+      className={['levels-b2-exam-picker', className].filter(Boolean).join(' ')}
     >
       <p className="levels-b2-exam-picker__title">{en ? 'Choose an exam' : 'Elige un examen'}</p>
       <div role="group" className="levels-b2-exam-picker__grid">
@@ -298,6 +273,7 @@ export function B2ExamSlotProgressPicker({
             const stars = Math.min(3, Math.max(0, Number(prog.stars) || 0));
             const approvedParts = Number(prog.approvedParts) || 0;
             const hasScore = approvedParts > 0 || Number(prog.total) > 0;
+            const label = examLabelsBySlot[n] || (en ? `Exam ${n}` : `Examen ${n}`);
 
             return (
               <div
@@ -310,7 +286,8 @@ export function B2ExamSlotProgressPicker({
                   aria-pressed={active}
                   className={`levels-b2-exam-picker__slot${active ? ' levels-b2-exam-picker__slot--active' : ''}`}
                 >
-                  <span>{examLabelsBySlot[n] || (en ? `Exam ${n}` : `Examen ${n}`)}</span>
+                  <span className="levels-b2-exam-picker__slot-number">{String(n).padStart(2, '0')}</span>
+                  <span className="levels-b2-exam-picker__slot-label">{label}</span>
                   <StarRow filled={stars} />
                   {hasScore ? (
                     <span className="levels-b2-exam-picker__slot-meta">

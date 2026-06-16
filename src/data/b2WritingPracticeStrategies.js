@@ -24,6 +24,28 @@ const PART1_ESSAY = {
     'Before checking with Dralo, re-read your essay once and tick the checklist yourself. Finding your own missing note is the fastest way to improve Content scores.',
 };
 
+const PART2_GENERAL = {
+  label: 'Writing Part 2 — Choose one task',
+  strategy:
+    'Read both options before you choose. Pick the task type you feel most confident with (article, email, review, report or story). Plan your structure and target 140–190 words — you cannot write both tasks in the exam.',
+  commonMistakes: [
+    'Choosing without reading both options carefully.',
+    'Starting to write before deciding which task suits you best.',
+    'Trying to combine ideas from both options into one answer.',
+    'Writing far below 140 words or far above 190 words.',
+  ],
+  checklist: [
+    'Both options read and understood',
+    'One task chosen (not both)',
+    'Task type identified (article, email, review, report or story)',
+    'Structure planned before writing',
+    'All points in the chosen prompt covered',
+    'Word count between 140 and 190',
+  ],
+  studyTip:
+    'If you are unsure, pick the option with the clearest bullet points — it is easier to tick off every requirement as you write.',
+};
+
 const PART2_BY_TYPE = {
   article: {
     label: 'Writing Part 2 — Article',
@@ -129,7 +151,9 @@ const PART2_BY_TYPE = {
 export function getB2WritingStrategyPack(partNumber, writingType = '') {
   if (Number(partNumber) === 8) return PART1_ESSAY;
   if (Number(partNumber) === 9) {
-    return PART2_BY_TYPE[String(writingType || '').toLowerCase()] || PART2_BY_TYPE.article;
+    const type = String(writingType || '').toLowerCase();
+    if (!type) return PART2_GENERAL;
+    return PART2_BY_TYPE[type] || PART2_BY_TYPE.article;
   }
   return null;
 }
