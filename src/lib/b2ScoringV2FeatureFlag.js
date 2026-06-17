@@ -34,32 +34,19 @@ export function isB2RuoeSectionPartRange(partMin, partMax) {
 }
 
 /**
- * Sync exam-mode session backup to Supabase.
- * V2 ON + B2: blocked (payload may contain V2 point scores).
- * Other levels / V1: allowed.
+ * Sync exam-mode session backup to Supabase (progress, drafts, section scores JSON).
+ * Independent of Scoring V2 point-column migration — always enabled when a session exists.
  */
-export function shouldSyncExamModeSessionToServer(session, env = typeof process !== 'undefined' ? process.env : {}) {
-  if (!session) return false;
-  if (!isB2ScoringV2Enabled(env)) return true;
-  if (String(session.slug || '').toLowerCase() !== 'b2') return true;
-  if (typeof process !== 'undefined' && process.env.NODE_ENV === 'development') {
-    console.info(B2_SCORING_V2_EXAM_MODE_SYNC_DISABLED_MSG);
-  }
-  return false;
+export function shouldSyncExamModeSessionToServer(session) {
+  return Boolean(session);
 }
 
 /**
  * Clearing levels_puntuaciones on "repeat exam".
- * V2 ON + B2: blocked (must not delete V1 progress).
+ * Exam-mode scores live in the session — skill practice rows must never be deleted here.
  */
-export function shouldClearExamSlotPuntuacionesOnRepeat(slug, env = typeof process !== 'undefined' ? process.env : {}) {
-  if (String(slug || '').toLowerCase() === 'b2' && isB2ScoringV2Enabled(env)) {
-    if (typeof process !== 'undefined' && process.env.NODE_ENV === 'development') {
-      console.info(B2_SCORING_V2_REPEAT_CLEAR_DISABLED_MSG);
-    }
-    return false;
-  }
-  return true;
+export function shouldClearExamSlotPuntuacionesOnRepeat() {
+  return false;
 }
 
 /** Stored session/draft scoringVersion must match active flag version. */

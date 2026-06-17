@@ -9,10 +9,6 @@ import { performLogout } from '@/utils/logout';
 import { isPublicPath } from '@/utils/publicRoutes';
 import Link from 'next/link';
 import DraloTagline from '@/components/DraloTagline';
-import { UserRoleProvider } from '../context/UserRoleContext';
-import { GuidedTourProvider } from '../context/GuidedTourContext';
-import { PlacementAccessProvider } from '../context/PlacementAccessContext';
-import ExamNavigationGuard from '../components/ExamNavigationGuard';
 import { useActivityHeartbeat } from '@/hooks/useActivityHeartbeat';
 import { usePageViewTracker } from '@/hooks/usePageViewTracker';
 import { useClarityPageTags } from '@/hooks/useClarityPageTags';
@@ -20,14 +16,12 @@ import MicrosoftClarity from '@/components/analytics/MicrosoftClarity';
 import { isClarityExcludedPath } from '@/lib/clarity';
 import DeferredSiteAssistant from '@/components/chat/DeferredSiteAssistant';
 import { clearAssistantDismissed } from '@/components/chat/SiteAssistantWidget';
-import DeferredAppSideMenu from '@/components/layout/DeferredAppSideMenu';
 import RouteLoadingMascot from '@/components/RouteLoadingMascot';
-import PlacementTestNotice from '@/components/layout/PlacementTestNotice';
 const Toaster = dynamic(
   () => import('react-hot-toast').then((mod) => ({ default: mod.Toaster })),
   { ssr: false },
 );
-import AppNav from '@/components/layout/AppNav';
+import AuthenticatedAppShell from '@/components/layout/AuthenticatedAppShell';
 import SiteNightModeInit from '@/components/layout/SiteNightModeInit';
 
 function SiteHeaderBrand({ nav = null }) {
@@ -278,23 +272,9 @@ export default function RootLayoutClient({ children }) {
       <Toaster position="top-center" reverseOrder={false} />
       <MicrosoftClarity enabled={clarityAnalyticsEnabled} projectId={clarityProjectId} />
 
-      <SiteHeaderBrand
-        nav={<AppNav session={session} userRole={userRole} onLogout={handleLogout} />}
-      />
-
-      <UserRoleProvider userRole={userRole} session={session}>
-        <GuidedTourProvider>
-          <PlacementAccessProvider session={session} userRole={userRole}>
-            <PlacementTestNotice />
-            <main className="page-content">
-              <ExamNavigationGuard>
-                {children}
-              </ExamNavigationGuard>
-              {pathname === '/' && <DeferredAppSideMenu defaultOpen={false} />}
-            </main>
-          </PlacementAccessProvider>
-        </GuidedTourProvider>
-      </UserRoleProvider>
+      <AuthenticatedAppShell session={session} userRole={userRole} onLogout={handleLogout}>
+        {children}
+      </AuthenticatedAppShell>
 
       <DeferredSiteAssistant enabled={Boolean(session)} />
 

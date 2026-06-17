@@ -1,6 +1,7 @@
 import { B2_EXAM_SLOT_MAX, sortLevelsExamenesRows } from '@/utils/b2ResolveExam';
 import { filterVisibleExamenes } from '@/utils/levelsExamVisibility';
 import { parseUoePartDescripcion } from '@/utils/levelsPuntuaciones';
+import { LEVELS_SCORE_SOURCE, resolveLevelsScoreSource } from '@/utils/levelsScoreSource';
 import { starsFromApprovedPartsCount } from '@/utils/levelsB2PartScoring';
 
 function emptySlotProgress() {
@@ -17,7 +18,14 @@ function isSchemaCacheColumnError(error) {
  */
 export async function fetchB2PuntuacionesProgress(
   supabase,
-  { userId, examenIdBySlot, partMin = 1, partMax = 4, partsInPaper },
+  {
+    userId,
+    examenIdBySlot,
+    partMin = 1,
+    partMax = 4,
+    partsInPaper,
+    scoreSource = LEVELS_SCORE_SOURCE.SKILL_PRACTICE,
+  },
 ) {
   const partsCount = partsInPaper ?? partMax - partMin + 1;
   const empty = () => ({
@@ -41,7 +49,9 @@ export async function fetchB2PuntuacionesProgress(
 
   const fullQuery = await supabase
     .from('levels_puntuaciones')
-    .select('examen_id, parte_numero, correctas, total_preguntas, aprobado, descripcion, created_at')
+    .select(
+      'examen_id, parte_numero, correctas, total_preguntas, aprobado, descripcion, score_source, created_at',
+    )
     .eq('uuid_usuario', userId)
     .in('examen_id', examenIds)
     .not('parte_numero', 'is', null)
@@ -80,6 +90,10 @@ export async function fetchB2PuntuacionesProgress(
   const latestBySlotPart = new Map();
 
   for (const row of rows) {
+    const rowSource =
+      row.score_source || resolveLevelsScoreSource(parseUoePartDescripcion(row.descripcion));
+    if (rowSource !== scoreSource) continue;
+
     let examenId = row.examen_id;
     let partNumber = Number(row.parte_numero);
 

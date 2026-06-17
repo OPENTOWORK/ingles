@@ -44,6 +44,9 @@ import {
   getExamChromeTitle,
   getExamChromeSubtitle,
 } from '@/lib/examPracticeMode';
+import { buildExamModeContinueModuleHref } from '@/utils/buildExamModeContinueModuleHref';
+import { buildExamModeSkillPartSnapshots } from '@/utils/buildExamModeSkillPartSnapshots';
+import { finishExamModeSupabasePersistence } from '@/utils/finishExamModeSupabasePersistence';
 import {
   parseB2WritingPart1Task,
   parseB2WritingPart2Task,
@@ -95,6 +98,7 @@ function B2WritingExamPracticePageInner() {
   const [examLabelsBySlot, setExamLabelsBySlot] = useState({});
   const mountedRef = useRef(true);
   const partsShellRef = useRef([]);
+  const examModePartScoresRef = useRef({});
   const setExamenContextRef = useRef(scoring.setExamenContext);
   setExamenContextRef.current = scoring.setExamenContext;
   const categoryTimer = useLevelsCategoryTimer();
@@ -413,6 +417,14 @@ function B2WritingExamPracticePageInner() {
       if (!scoring.examPracticeOpen || !selectedPart?.id) return;
       const preguntaId =
         selectedQuestion?.preguntaId || selectedPart.questions?.[0]?.preguntaId || selectedPart.id;
+      if (examModeActive && !reviewMode) {
+        examModePartScoresRef.current[partNumber] = {
+          correct: scores.total,
+          total: partScoringCfg?.total ?? 20,
+          preguntaId,
+        };
+        return;
+      }
       void scoring.saveWritingOrSpeakingScore({
         examSlot,
         partNumber,
@@ -423,7 +435,16 @@ function B2WritingExamPracticePageInner() {
         passed: Boolean(scores.passed),
       });
     },
-    [scoring, examSlot, partNumber, selectedPart, selectedQuestion?.preguntaId, partScoringCfg],
+    [
+      scoring,
+      examSlot,
+      partNumber,
+      selectedPart,
+      selectedQuestion?.preguntaId,
+      partScoringCfg,
+      examModeActive,
+      reviewMode,
+    ],
   );
 
   const handleSelectPart = (part) => {
@@ -528,14 +549,45 @@ function B2WritingExamPracticePageInner() {
     />
   ) : null;
 
-  const handleExamModeFinish = useCallback(() => {
-    const total =
-      (getB2PartScoring(8)?.total ?? 20) + (getB2PartScoring(9)?.total ?? 20);
-    handleFinishSection(
-      { writingCompleted: true, storageKey: longWritingStorageKey },
-      { correct: writingLiveCorrect ?? 0, total, byPart: {} },
+  const handleExamModeFinish = useCallback(
+    (redirectTo) => {
+      const { scores, partSnapshots } = buildExamModeSkillPartSnapshots({
+        partMin: PART_MIN,
+        partMax: PART_MAX,
+        partsData: tabPartsData,
+        examModePartScores: examModePartScoresRef.current,
+        resolvePartNumber: getPartNumber,
+      });
+      handleFinishSection(
+        { writingCompleted: true, storageKey: longWritingStorageKey },
+        scores,
+        { redirectTo },
+      );
+      void finishExamModeSupabasePersistence({
+        partSnapshots,
+        examenId: scoring.currentExamenId || scoring.examenIdBySlot?.[examSlot],
+      });
+    },
+    [
+      tabPartsData,
+      scoring.currentExamenId,
+      scoring.examenIdBySlot,
+      examSlot,
+      handleFinishSection,
+      longWritingStorageKey,
+    ],
+  );
+
+  const handleContinueModuleInExamMode = useCallback(() => {
+    handleExamModeFinish(
+      buildExamModeContinueModuleHref({
+        partNumber,
+        pagePartMax: PART_MAX,
+        examSlot,
+        slug: 'b2',
+      }),
     );
-  }, [handleFinishSection, longWritingStorageKey, writingLiveCorrect]);
+  }, [handleExamModeFinish, partNumber, examSlot]);
 
   const reportErrorContext = useMemo(() => {
     if (loading || error || !scoring.examPracticeOpen || !selectedPart) return null;
@@ -635,6 +687,7 @@ function B2WritingExamPracticePageInner() {
       >
         {examModeActive && examSection ? (
           <ExamModeSectionBanner
+            sectionKey={examSection.key}
             sectionTitle={examSection.title || 'Writing'}
             durationSeconds={examSection.durationSeconds}
             initialRemainingSeconds={examSection.remainingSeconds}
@@ -727,6 +780,9 @@ function B2WritingExamPracticePageInner() {
                     skillPracticeMode={isSkillPracticeSession}
                     skillPracticeTheme={skillNav.skillTheme}
                     onContinueInPage={isSkillPracticeSession ? handleKeepPracticing : handleContinueInPage}
+                    onContinueModule={
+                      examModeActive && !reviewMode ? handleContinueModuleInExamMode : undefined
+                    }
                     nextPartLabel={continuePartLabel}
                     lang="en"
                   />

@@ -22,6 +22,9 @@ import { getCachedLevelBySlug, getCachedExamenIdsBySlot } from '@/utils/levelsLe
 import { sortLevelsExamenesRows } from '@/utils/b2ResolveExam';
 import { filterVisibleExamenes } from '@/utils/levelsExamVisibility';
 import { useLevelsExamAdminFlow, reloadExamNamesBySlot, buildExamSlotPickerProps } from '@/hooks/useLevelsExamAdminFlow';
+import { createLevelsExamCatalogUpdatedHandler } from '@/utils/levelsExamRegenerationSync';
+import { invalidateLevelsPracticeCache } from '@/hooks/useLevelsPracticeData';
+import { getSessionUserId } from '@/utils/levelsEstadisticas';
 import A2ExamGenerationStatus from '@/components/niveles/A2ExamGenerationStatus';
 import { getSkillPracticeThemeKey } from '@/utils/skillPartFirstProgress';
 import { runKeepPracticingSkillFlow } from '@/utils/skillPracticeNavigation';
@@ -67,7 +70,13 @@ function LevelSkillPracticePageInner({ slug, skillRoute }) {
   const adminFlow = useLevelsExamAdminFlow({
     slug,
     examenIdBySlot: scoring.examenIdBySlot,
-    onCatalogUpdated: scoring.reloadExamCatalog,
+    onCatalogUpdated: createLevelsExamCatalogUpdatedHandler([
+      scoring.reloadExamCatalog,
+      async () => {
+        const uid = await getSessionUserId();
+        if (uid) invalidateLevelsPracticeCache(uid);
+      },
+    ]),
   });
   const examSlotPickerProps = buildExamSlotPickerProps({
     examenIdBySlot: scoring.examenIdBySlot,

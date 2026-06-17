@@ -9,6 +9,7 @@ import {
 import { canViewPricing } from '@/utils/pricingAccess';
 import { getExamUnitSlugFromPathname } from '@/lib/examTheoryUnlock';
 import { isExamTheoryPartTipsPath } from '@/lib/nivelesPartTipsRoutes';
+import { isStudentRole } from '@/constants/studentFeatureAccess';
 
 /** Theory solo en la home (inferior, oculto para estudiantes). */
 export const HOME_THEORY_LINK = { href: '/teoria', label: 'Theory', tourId: 'nav-theory' };
@@ -53,11 +54,68 @@ export const NAV_LINKS_BEFORE_DRALO = [
   { href: '/niveles/b2', label: 'Exam practice', tourId: 'nav-levels' },
 ];
 
-/** Drawer móvil: misma barra que escritorio; placement/training solo si admin. */
-export function getNavLinksForMobileDrawer(userRole) {
-  return [...NAV_LINKS_BEFORE_DRALO, ...getAdminLearningLinks(userRole)];
+export const NAV_LINK_HOME = { href: '/', label: 'Home' };
+
+/** Visitante sin sesión: solo contacto y login en menús (home vía logo). */
+export function isGuestNavSession(session) {
+  return !session;
 }
 
+/** Extras de home visibles solo para admin en drawer / menú lateral (no barra desktop). */
+export function getAdminDrawerExtraLinks(userRole) {
+  if (!isAdminRole(userRole)) return [];
+  return [HOME_THEORY_LINK, ...getAdminLearningLinks(userRole)];
+}
+
+/**
+ * Enlaces de sección en drawer móvil y menú lateral home.
+ * - Visitante: ninguno (solo contacto + login).
+ * - Alumno/staff: alineado con barra desktop (+ extras admin si aplica).
+ */
+export function getNavLinksForMobileDrawer(userRole, session) {
+  if (isGuestNavSession(session)) return [];
+  return [...getAdminDrawerExtraLinks(userRole), ...NAV_LINKS_BEFORE_DRALO];
+}
+
+/** ¿Mostrar Exam theory, Exam practice y Dralo AI en la barra desktop? */
+export function shouldShowLoggedInPrimaryNav(session) {
+  return Boolean(session);
+}
+
+/** ¿Mostrar Dralo AI en menús? Solo usuarios con sesión. */
+export function shouldShowDraloNav(session) {
+  return Boolean(session);
+}
+
+/**
+ * Modelo unificado de navegación por rol (desktop, drawer móvil y menú lateral).
+ * Prioriza la barra de escritorio como referencia; admin recibe extras en drawer.
+ */
+export function buildAppNavModel(userRole, session) {
+  const guest = isGuestNavSession(session);
+  const admin = isAdminRole(userRole);
+  const showPricing = !guest && canViewPricing(userRole);
+  const staffItems = guest ? [] : getStaffPanelMenuItemsForRole(userRole);
+
+  return {
+    guest,
+    admin,
+    sectionLinks: getNavLinksForMobileDrawer(userRole, session),
+    showPrimaryNav: shouldShowLoggedInPrimaryNav(session),
+    showDralo: shouldShowDraloNav(session),
+    draloLocked: guest || isDraloAiLockedForRole(userRole),
+    showPricing,
+    showContact: true,
+    showLogin: guest,
+    showProfile: !guest,
+    showLogout: !guest,
+    staffItems,
+    staffMenuLabel: getStaffPanelMenuLabel(userRole),
+    showStaffDropdown: staffItems.length > 1,
+    showStaffSingleLink: staffItems.length === 1,
+    isStudent: isStudentRole(userRole),
+  };
+}
 /** Estado activo de enlaces del menú principal (incluye pestaña theory y rutas /teoria de examen). */
 export function isNavLinkActive(href, pathname, searchParams) {
   if (!pathname || !href) return false;

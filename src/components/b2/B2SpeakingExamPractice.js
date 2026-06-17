@@ -62,6 +62,9 @@ import {
 } from '@/lib/speakingUsageStorage';
 import { FeedbackCards } from '@/features/speaking/ui/components/FeedbackCards';
 import A2ExamGenerationStatus from '@/components/niveles/A2ExamGenerationStatus';
+import { buildExamModeContinueModuleHref } from '@/utils/buildExamModeContinueModuleHref';
+import { buildExamModeSkillPartSnapshots } from '@/utils/buildExamModeSkillPartSnapshots';
+import { finishExamModeSupabasePersistence } from '@/utils/finishExamModeSupabasePersistence';
 
 const buttonStyle = {
   backgroundColor: '#c1f2cd',
@@ -128,6 +131,7 @@ function B2SpeakingExamPracticeInner({ title, subtitle, loadingLabel, refreshLab
   const [partsData, setPartsData] = useState([]);
   const [selectedPartId, setSelectedPartId] = useState(null);
   const [examLabelsBySlot, setExamLabelsBySlot] = useState({});
+  const examModePartScoresRef = useRef({});
   const categoryTimer = useLevelsCategoryTimer();
 
   useEffect(() => {
@@ -291,6 +295,14 @@ function B2SpeakingExamPracticeInner({ title, subtitle, loadingLabel, refreshLab
   const handleSaveSpeakingPart = useCallback(
     ({ correct, total, passed }) => {
       if (!selectedPart?.id || !scoring.examPracticeOpen) return;
+      if (examModeActive && !reviewMode) {
+        examModePartScoresRef.current[selectedPart.partNumber] = {
+          correct,
+          total,
+          preguntaId: selectedPart.id,
+        };
+        return;
+      }
       void scoring.saveWritingOrSpeakingScore({
         examSlot,
         partNumber: selectedPart.partNumber,
@@ -301,15 +313,43 @@ function B2SpeakingExamPracticeInner({ title, subtitle, loadingLabel, refreshLab
         passed,
       });
     },
-    [scoring, examSlot, selectedPart],
+    [scoring, examSlot, selectedPart, examModeActive, reviewMode],
   );
 
-  const handleExamModeFinish = useCallback(() => {
-    handleFinishSection(
-      { speakingCompleted: true, partNumber },
-      { correct: 0, total: b2PartCfg?.total ?? 0, byPart: {} },
+  const handleExamModeFinish = useCallback(
+    (redirectTo) => {
+      const { scores, partSnapshots } = buildExamModeSkillPartSnapshots({
+        partMin: B2_SPEAKING_PART_MIN,
+        partMax: B2_SPEAKING_PART_MAX,
+        partsData: tabPartsData,
+        examModePartScores: examModePartScoresRef.current,
+      });
+      handleFinishSection({ speakingCompleted: true, partNumber }, scores, { redirectTo });
+      void finishExamModeSupabasePersistence({
+        partSnapshots,
+        examenId: scoring.currentExamenId || scoring.examenIdBySlot?.[examSlot],
+      });
+    },
+    [
+      tabPartsData,
+      scoring.currentExamenId,
+      scoring.examenIdBySlot,
+      examSlot,
+      handleFinishSection,
+      partNumber,
+    ],
+  );
+
+  const handleContinueModuleInExamMode = useCallback(() => {
+    handleExamModeFinish(
+      buildExamModeContinueModuleHref({
+        partNumber,
+        pagePartMax: B2_SPEAKING_PART_MAX,
+        examSlot,
+        slug: 'b2',
+      }),
     );
-  }, [handleFinishSection, partNumber, b2PartCfg?.total]);
+  }, [handleExamModeFinish, partNumber, examSlot]);
 
   const handleContinueInPage = useCallback(() => {
     const sorted = [...tabPartsData].sort((a, b) => a.partNumber - b.partNumber);
@@ -479,6 +519,7 @@ function B2SpeakingExamPracticeInner({ title, subtitle, loadingLabel, refreshLab
       >
       {examModeActive && examSection ? (
         <ExamModeSectionBanner
+          sectionKey={examSection.key}
           sectionTitle={examSection.title || 'Speaking'}
           durationSeconds={examSection.durationSeconds}
           initialRemainingSeconds={examSection.remainingSeconds}
@@ -536,6 +577,9 @@ function B2SpeakingExamPracticeInner({ title, subtitle, loadingLabel, refreshLab
         skillPracticeMode={isSkillPracticeSession}
         skillPracticeTheme={skillNav.skillTheme}
         onContinueInPage={isSkillPracticeSession ? handleKeepPracticing : handleContinueInPage}
+        onContinueModule={
+          examModeActive && !reviewMode ? handleContinueModuleInExamMode : undefined
+        }
         lang={lang}
       />
         </div>

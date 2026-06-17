@@ -81,34 +81,106 @@ function ExamPracticeCard({ exam, isStudent, variant = 'skill' }) {
   );
 }
 
-export default function ExamPracticeHubSection({ examLinks = [], isStudent }) {
+export default function ExamPracticeHubSection({
+  examLinks = [],
+  isStudent,
+  quadrant = false,
+  skillsQuadrant = false,
+  quadrantFooter = null,
+}) {
   if (!examLinks.length) return null;
 
   const examModeLink = examLinks.find((exam) => getExamLinkMeta(exam).isExamMode);
   const skillLinks = examLinks.filter((exam) => !getExamLinkMeta(exam).isExamMode);
 
+  const hubClass = [
+    'exam-practice-hub',
+    quadrant ? 'exam-practice-hub--quadrant' : '',
+    skillsQuadrant ? 'exam-practice-hub--split' : '',
+  ]
+    .filter(Boolean)
+    .join(' ');
+
+  const skillsGrid =
+    skillLinks.length > 0 ? (
+      <div className="exam-practice-hub__skills-grid">
+        {skillLinks.map((exam) => (
+          <ExamPracticeCard key={exam.href} exam={exam} isStudent={isStudent} />
+        ))}
+      </div>
+    ) : null;
+
+  if (skillsQuadrant) {
+    return (
+      <section className={hubClass} data-tour="level-exam-practice">
+        <NivelesSectionHeader
+          eyebrow={EXAM_PRACTICE_HEADER.eyebrow}
+          title={EXAM_PRACTICE_HEADER.title}
+          count={examLinks.length}
+          description={EXAM_PRACTICE_HEADER.description}
+        />
+
+        {examModeLink ? (
+          <div className="exam-practice-hub__exam-mode-standalone">
+            <ExamPracticeCard exam={examModeLink} isStudent={isStudent} variant="banner" />
+          </div>
+        ) : null}
+
+        <div className="exam-practice-hub__skills-quadrant">
+          <div className="exam-practice-hub__quadrant-inner">
+            {skillsGrid ? <div className="exam-practice-hub__body">{skillsGrid}</div> : null}
+            {quadrantFooter ? (
+              <div className="exam-practice-hub__quadrant-footer">{quadrantFooter}</div>
+            ) : null}
+          </div>
+        </div>
+
+        <ExamPracticeHubStyles />
+      </section>
+    );
+  }
+
   return (
-    <section className="exam-practice-hub" data-tour="level-exam-practice">
-      <NivelesSectionHeader
-        eyebrow={EXAM_PRACTICE_HEADER.eyebrow}
-        title={EXAM_PRACTICE_HEADER.title}
-        count={examLinks.length}
-        description={EXAM_PRACTICE_HEADER.description}
-      />
+    <section className={hubClass} data-tour="level-exam-practice">
+      {quadrant ? (
+        <div className="exam-practice-hub__quadrant-inner">
+          <NivelesSectionHeader
+            eyebrow={EXAM_PRACTICE_HEADER.eyebrow}
+            title={EXAM_PRACTICE_HEADER.title}
+            count={examLinks.length}
+            description={EXAM_PRACTICE_HEADER.description}
+          />
 
-      {examModeLink ? (
-        <div className="exam-practice-hub__exam-mode">
-          <ExamPracticeCard exam={examModeLink} isStudent={isStudent} variant="banner" />
-        </div>
-      ) : null}
+          <div className="exam-practice-hub__body">
+            {examModeLink ? (
+              <div className="exam-practice-hub__exam-mode">
+                <ExamPracticeCard exam={examModeLink} isStudent={isStudent} variant="banner" />
+              </div>
+            ) : null}
 
-      {skillLinks.length > 0 ? (
-        <div className="exam-practice-hub__skills-grid">
-          {skillLinks.map((exam) => (
-            <ExamPracticeCard key={exam.href} exam={exam} isStudent={isStudent} />
-          ))}
+            {skillsGrid}
+          </div>
         </div>
-      ) : null}
+      ) : (
+        <>
+          <NivelesSectionHeader
+            eyebrow={EXAM_PRACTICE_HEADER.eyebrow}
+            title={EXAM_PRACTICE_HEADER.title}
+            count={examLinks.length}
+            description={EXAM_PRACTICE_HEADER.description}
+          />
+
+          <div className="exam-practice-hub__body">
+            {examModeLink ? (
+              <div className="exam-practice-hub__exam-mode">
+                <ExamPracticeCard exam={examModeLink} isStudent={isStudent} variant="banner" />
+              </div>
+            ) : null}
+
+            {skillsGrid}
+          </div>
+        </>
+      )}
 
       <ExamPracticeHubStyles />
     </section>
@@ -167,7 +239,57 @@ function ExamPracticeHubStyles() {
         margin-bottom: 0.25rem;
         padding: 6px;
       }
-      .niveles-level-page .exam-practice-hub__exam-mode {
+      .niveles-level-page .exam-practice-hub--split {
+        margin-top: 1.5rem;
+        padding: 0;
+      }
+      .niveles-level-page .exam-practice-hub--split .exam-practice-hub__exam-mode-standalone {
+        margin: 14px 0 16px;
+      }
+      .niveles-level-page .exam-practice-hub__skills-quadrant {
+        margin-top: 0;
+      }
+      .niveles-level-page .exam-practice-hub--split .exam-practice-hub__skills-quadrant .exam-practice-hub__quadrant-inner {
+        border-radius: 20px;
+        border: 1px solid rgba(226, 232, 240, 0.95);
+        background: linear-gradient(180deg, #ffffff 0%, #f8fafc 100%);
+        box-shadow:
+          0 1px 2px rgba(15, 23, 42, 0.04),
+          0 10px 32px rgba(15, 23, 42, 0.06);
+        overflow: hidden;
+      }
+      .niveles-level-page .exam-practice-hub__quadrant-footer {
+        padding: 0 16px 16px;
+        border-top: 1px solid rgba(226, 232, 240, 0.9);
+        padding-top: 14px;
+        margin-top: 2px;
+      }
+      .niveles-level-page .exam-practice-hub--quadrant {
+        margin-top: 1.5rem;
+        margin-bottom: 0;
+        padding: 0;
+      }
+      .niveles-level-page .exam-practice-hub--quadrant .exam-practice-hub__quadrant-inner {
+        border-radius: 20px;
+        border: 1px solid rgba(226, 232, 240, 0.95);
+        background: linear-gradient(180deg, #ffffff 0%, #f8fafc 100%);
+        box-shadow:
+          0 1px 2px rgba(15, 23, 42, 0.04),
+          0 10px 32px rgba(15, 23, 42, 0.06);
+        overflow: hidden;
+      }
+      .niveles-level-page .exam-practice-hub--quadrant .niveles-section-head {
+        margin-bottom: 0;
+        border-radius: 0;
+        border: none;
+        border-bottom: 1px solid rgba(226, 232, 240, 0.9);
+        box-shadow: none;
+        background: transparent;
+      }
+      .niveles-level-page .exam-practice-hub__body {
+        padding: 16px 18px 18px;
+      }
+      .niveles-level-page .exam-practice-hub--quadrant .exam-practice-hub__exam-mode {
         margin-bottom: 14px;
       }
       .niveles-level-page .exam-practice-hub__skills-grid {
@@ -363,6 +485,22 @@ function ExamPracticeHubStyles() {
       .niveles-level-page .exam-practice-hub__card:hover .exam-practice-hub__arrow {
         transform: translateX(1px);
         background: color-mix(in srgb, var(--exam-card-accent, #2563eb) 16%, white);
+      }
+      body.reading-night-mode .niveles-level-page .exam-practice-hub--split .exam-practice-hub__skills-quadrant .exam-practice-hub__quadrant-inner {
+        background: linear-gradient(180deg, #1e293b 0%, #0f172a 100%);
+        border-color: #475569;
+        box-shadow: 0 10px 32px rgba(0, 0, 0, 0.28);
+      }
+      body.reading-night-mode .niveles-level-page .exam-practice-hub--quadrant .exam-practice-hub__quadrant-inner {
+        background: linear-gradient(180deg, #1e293b 0%, #0f172a 100%);
+        border-color: #475569;
+        box-shadow: 0 10px 32px rgba(0, 0, 0, 0.28);
+      }
+      body.reading-night-mode .niveles-level-page .exam-practice-hub--quadrant .niveles-section-head {
+        border-bottom-color: #475569;
+      }
+      body.reading-night-mode .niveles-level-page .exam-practice-hub--split .exam-practice-hub__quadrant-footer {
+        border-top-color: #475569;
       }
     `}</style>
   );

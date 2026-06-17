@@ -1,6 +1,6 @@
 import { ensureAppUserProfile } from '@/utils/ensureAppUserProfile';
-import { mergeLevelsEstadisticas } from '@/utils/levelsEstadisticas';
-import { upsertLevelsPartPuntuacion } from '@/utils/levelsPuntuaciones';
+import { persistLevelsPartProgress } from '@/utils/persistLevelsPartProgress';
+import { LEVELS_SCORE_SOURCE } from '@/utils/levelsScoreSource';
 import {
   getB2PartScoring,
   getB2PartScoringV2,
@@ -121,26 +121,31 @@ export async function saveB2PartPuntuacionIfComplete({
     return { saved: false, error: new Error(msg), progress };
   }
 
-  const [puntRes] = await Promise.all([
-    upsertLevelsPartPuntuacion({
-      userId,
-      preguntaId,
-      examenId,
-      parteNumero: partNumber,
-      correctas: progress.correct,
-      totalPreguntas: progress.total,
-    }),
-    mergeLevelsEstadisticas({
-      userId,
-      preguntaId,
-      parteId,
-      deltaIntentos: 1,
-    }),
-  ]);
+  const result = await persistLevelsPartProgress({
+    userId,
+    preguntaId,
+    parteId,
+    examenId,
+    partNumber,
+    progress,
+    scoreSource: LEVELS_SCORE_SOURCE.SKILL_PRACTICE,
+    statsMode: 'part-complete',
+  });
 
-  if (puntRes.error) {
-    return { saved: false, error: puntRes.error, progress };
+  if (result.v2PersistenceSkipped) {
+    if (typeof console !== 'undefined' && process.env.NODE_ENV === 'development') {
+      console.info(B2_SCORING_V2_PERSISTENCE_DISABLED_MSG);
+    }
+    return { saved: false, error: null, progress, v2PersistenceSkipped: true };
   }
 
-  return { saved: true, error: null, progress };
+  if (result.error) {
+    return { saved: false, error: result.error, progress };
+  }
+
+  if (result.saved) {
+    return { saved: true, error: null, progress };
+  }
+
+  return { saved: false, error: null, progress };
 }

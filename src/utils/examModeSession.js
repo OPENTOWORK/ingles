@@ -23,6 +23,7 @@ export const EXAM_MODE_SESSION_VERSION = 1;
  * @property {string|null} finishedAt
  * @property {number|null} remainingSeconds
  * @property {object|null} answers
+ * @property {object|null} [sectionDraft]
  * @property {{ correct: number, total: number, byPart: Record<number, { correct: number, total: number, passing: number }> }|null} scores
  */
 
@@ -57,6 +58,7 @@ export function createExamModeSession(slug, examSlot) {
     finishedAt: null,
     remainingSeconds: getCambridgeSectionDurationSeconds(slug, s.title),
     answers: null,
+    sectionDraft: null,
     scores: null,
   }));
 
@@ -172,6 +174,7 @@ export function completeExamModeSection(session, sectionKey, answers, scores) {
       status: 'completed',
       finishedAt: now,
       answers,
+      sectionDraft: null,
       scores: attachScoringVersionToExamModeScores(scores),
       remainingSeconds: 0,
     };
@@ -212,6 +215,14 @@ export function startExamModeSectionTimer(session, sectionKey) {
 export function updateExamModeSectionRemaining(session, sectionKey, remainingSeconds) {
   const sections = session.sections.map((s) =>
     s.key === sectionKey ? { ...s, remainingSeconds: Math.max(0, remainingSeconds) } : s,
+  );
+  return { ...session, sections, updatedAt: new Date().toISOString() };
+}
+
+/** Persist in-progress answers for an active section (explicit save). */
+export function saveExamModeSectionDraft(session, sectionKey, draft) {
+  const sections = session.sections.map((s) =>
+    s.key === sectionKey ? { ...s, sectionDraft: draft ?? null } : s,
   );
   return { ...session, sections, updatedAt: new Date().toISOString() };
 }

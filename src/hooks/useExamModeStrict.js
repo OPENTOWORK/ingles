@@ -38,7 +38,7 @@ export function useExamModeStrict({ slug, partMin, partMax, sectionTitle }) {
     [slug, partMin, partMax],
   );
 
-  const { session, ready, finishSection, touchSectionTimer, setSectionRemaining } =
+  const { session, ready, finishSection, touchSectionTimer, setSectionRemaining, getSectionRemaining, saveSectionDraft, applyExamContentSync } =
     useExamModeSession(slug, examSlot);
 
   const section = useMemo(
@@ -115,10 +115,10 @@ export function useExamModeStrict({ slug, partMin, partMax, sectionTitle }) {
     section?.durationSeconds ?? getCambridgeSectionDurationSeconds(slug, sectionTitle || section?.title || '');
 
   const handleFinishSection = useCallback(
-    (answersSnapshot, scores) => {
+    (answersSnapshot, scores, options = {}) => {
       if (!sectionKey) return;
       finishSection(sectionKey, answersSnapshot, scores);
-      router.push(hubHref);
+      router.push(options.redirectTo || hubHref);
     },
     [sectionKey, finishSection, router, hubHref],
   );
@@ -143,6 +143,9 @@ export function useExamModeStrict({ slug, partMin, partMax, sectionTitle }) {
     durationSeconds,
     handleFinishSection,
     setSectionRemaining,
+    getSectionRemaining,
+    saveSectionDraft,
+    applyExamContentSync,
     getPracticeHref,
     forcePracticeByPart,
     examSimulationFromHub,

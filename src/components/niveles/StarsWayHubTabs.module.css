@@ -1,0 +1,223 @@
+.banner {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: clamp(12px, 3vw, 24px);
+  width: 100%;
+  margin-top: 14px;
+  padding: clamp(16px, 3vw, 22px) clamp(18px, 3.5vw, 28px);
+  border-radius: 20px;
+  border: 1px solid rgba(251, 191, 36, 0.35);
+  background:
+    radial-gradient(ellipse 80% 120% at 0% 50%, rgba(251, 191, 36, 0.22) 0%, transparent 55%),
+    radial-gradient(ellipse 70% 100% at 100% 50%, rgba(37, 99, 235, 0.14) 0%, transparent 50%),
+    linear-gradient(105deg, #fffbeb 0%, #ffffff 42%, #eff6ff 100%);
+  text-decoration: none;
+  color: inherit;
+  overflow: hidden;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.85),
+    0 8px 28px rgba(245, 158, 11, 0.12),
+    0 4px 16px rgba(37, 99, 235, 0.08);
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease,
+    border-color 0.2s ease;
+}
+
+.banner:hover {
+  transform: translateY(-2px);
+  border-color: rgba(245, 158, 11, 0.55);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.85),
+    0 14px 36px rgba(245, 158, 11, 0.18),
+    0 8px 24px rgba(37, 99, 235, 0.12);
+}
+
+.bannerGlow {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.35) 45%,
+    transparent 100%
+  );
+  opacity: 0;
+  transition: opacity 0.25s ease;
+  pointer-events: none;
+}
+
+.banner:hover .bannerGlow {
+  opacity: 1;
+}
+
+.pathDecor {
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  flex: 0 0 auto;
+  padding: 4px 0;
+}
+
+@media (min-width: 640px) {
+  .pathDecor {
+    display: flex;
+  }
+}
+
+.pathNode {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  border: 2px solid #93c5fd;
+  background: #ffffff;
+  box-shadow: 0 2px 6px rgba(37, 99, 235, 0.15);
+}
+
+.pathNodeMid {
+  border-color: #f59e0b;
+  background: #fffbeb;
+}
+
+.pathNodeGold {
+  border-color: #f59e0b;
+  background: linear-gradient(180deg, #fde68a 0%, #f59e0b 100%);
+  box-shadow: 0 2px 8px rgba(245, 158, 11, 0.35);
+}
+
+.pathLine {
+  width: 3px;
+  height: 14px;
+  border-radius: 999px;
+  background: linear-gradient(180deg, #93c5fd 0%, #fbbf24 100%);
+  opacity: 0.65;
+}
+
+.bannerContent {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  z-index: 1;
+}
+
+.bannerEyebrow {
+  font-size: 0.68rem;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #d97706;
+}
+
+.bannerTitle {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: clamp(1.05rem, 2.8vw, 1.35rem);
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  line-height: 1.2;
+  color: #0f172a;
+}
+
+.bannerStar {
+  display: inline-grid;
+  place-items: center;
+  width: 1.65rem;
+  height: 1.65rem;
+  border-radius: 8px;
+  background: linear-gradient(180deg, #fde68a 0%, #fbbf24 100%);
+  color: #ffffff;
+  font-size: 0.95rem;
+  line-height: 1;
+  text-shadow: 0 1px 2px rgba(180, 83, 9, 0.35);
+  box-shadow: 0 2px 8px rgba(245, 158, 11, 0.3);
+}
+
+.bannerDesc {
+  font-size: clamp(0.82rem, 2vw, 0.92rem);
+  font-weight: 600;
+  line-height: 1.45;
+  color: #475569;
+  max-width: 520px;
+}
+
+.bannerAction {
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  z-index: 1;
+}
+
+.bannerActionLabel {
+  display: none;
+  font-size: 0.88rem;
+  font-weight: 800;
+  color: #1d4ed8;
+}
+
+@media (min-width: 720px) {
+  .bannerActionLabel {
+    display: inline;
+  }
+}
+
+.bannerArrow {
+  display: inline-grid;
+  place-items: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 12px;
+  background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+  color: #ffffff;
+  font-size: 1.1rem;
+  font-weight: 800;
+  box-shadow:
+    0 4px 0 #1e3a8a,
+    0 8px 20px rgba(37, 99, 235, 0.28);
+  transition: transform 0.18s ease;
+}
+
+.banner:hover .bannerArrow {
+  transform: translateX(2px);
+}
+
+.bannerEmbedded {
+  margin-top: 0;
+  border-radius: 16px;
+}
+
+:global(body.reading-night-mode) .banner {
+  background:
+    radial-gradient(ellipse 80% 120% at 0% 50%, rgba(245, 158, 11, 0.15) 0%, transparent 55%),
+    radial-gradient(ellipse 70% 100% at 100% 50%, rgba(37, 99, 235, 0.12) 0%, transparent 50%),
+    linear-gradient(105deg, #1e293b 0%, #0f172a 100%);
+  border-color: rgba(245, 158, 11, 0.35);
+  box-shadow: 0 8px 28px rgba(0, 0, 0, 0.28);
+}
+
+:global(body.reading-night-mode) .bannerTitle {
+  color: #f8fafc;
+}
+
+:global(body.reading-night-mode) .bannerDesc {
+  color: #94a3b8;
+}
+
+:global(body.reading-night-mode) .bannerActionLabel {
+  color: #93c5fd;
+}
+
+:global(body.reading-night-mode) .pathNode {
+  background: #334155;
+  border-color: #64748b;
+}
+
+:global(body.reading-night-mode) .pathNodeGold {
+  background: linear-gradient(180deg, #fde68a 0%, #d97706 100%);
+}

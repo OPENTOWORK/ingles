@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
 import { buildUoePartDescripcion } from '@/utils/levelsPuntuaciones';
+import { LEVELS_SCORE_SOURCE } from '@/utils/levelsScoreSource';
 import { isUoePartPassed } from '@/utils/levelsUoePartScoring';
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
@@ -36,6 +37,7 @@ export async function POST(req) {
     const parteNumero = Number(body?.parteNumero);
     const correctas = Math.max(0, Number(body?.correctas) || 0);
     const totalPreguntas = Math.max(1, Number(body?.totalPreguntas) || 1);
+    const scoreSource = body?.scoreSource || LEVELS_SCORE_SOURCE.SKILL_PRACTICE;
 
     if (!preguntaId || !examenId || !parteNumero) {
       return NextResponse.json({ error: 'Faltan datos de la parte.' }, { status: 400 });
@@ -49,6 +51,7 @@ export async function POST(req) {
       correctas,
       total: totalPreguntas,
       aprobado,
+      scoreSource,
     });
 
     const admin = createClient(supabaseUrl, supabaseServiceRoleKey, {
@@ -61,6 +64,7 @@ export async function POST(req) {
       .eq('uuid_usuario', userId)
       .eq('examen_id', examenId)
       .eq('parte_numero', parteNumero)
+      .eq('score_source', scoreSource)
       .maybeSingle();
 
     if (findErr) {
@@ -77,6 +81,7 @@ export async function POST(req) {
       aprobado,
       puntuacion,
       descripcion,
+      score_source: scoreSource,
     };
 
     if (existing?.id) {

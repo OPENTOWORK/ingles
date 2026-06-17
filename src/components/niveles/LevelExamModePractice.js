@@ -10,17 +10,18 @@ import { useExamModeSession } from '@/hooks/useExamModeSession';
 import {
   buildExamModePracticeHref,
   isExamModeComplete,
+  loadExamModeSession,
   resetExamModeSession,
 } from '@/utils/examModeSession';
+import { archiveExamModeAttempt } from '@/utils/examModeAttemptHistory';
 import { getCambridgeSectionDurationMinutes } from '@/data/cambridgeExamTimings';
 import { getLevelFullExamSections, getNivelesLevelHub } from '@/data/nivelesLevelHub';
 import { supabase } from '@/utils/supabaseClient';
 import { getCachedLevelBySlug, getCachedExamenIdsBySlot } from '@/utils/levelsLevelCache';
 import { sortLevelsExamenesRows } from '@/utils/b2ResolveExam';
 import { filterVisibleExamenes } from '@/utils/levelsExamVisibility';
-import { clearExamSlotPuntuaciones } from '@/lib/fetchExamModeSlotStats';
-import { shouldClearExamSlotPuntuacionesOnRepeat } from '@/lib/b2ScoringV2FeatureFlag';
 import { useLevelsExamAdminFlow, buildExamSlotPickerProps } from '@/hooks/useLevelsExamAdminFlow';
+import { useLevelsExamRegenerationListener } from '@/hooks/useLevelsExamRegenerationListener';
 import A2ExamGenerationStatus from '@/components/niveles/A2ExamGenerationStatus';
 import ExamPracticeLevelPicker from '@/components/niveles/ExamPracticeLevelPicker';
 import ExamPracticeReportError from '@/components/exam/ExamPracticeReportError';
@@ -95,6 +96,12 @@ function LevelExamModePracticeInner({ slug }) {
     void loadExamCatalog();
   }, [loadExamCatalog]);
 
+  useLevelsExamRegenerationListener({
+    slug,
+    examSlot,
+    onRegenerated: loadExamCatalog,
+  });
+
   const examSlotPickerProps = buildExamSlotPickerProps({
     examenIdBySlot,
     adminFlow,
@@ -122,12 +129,12 @@ function LevelExamModePracticeInner({ slug }) {
   const handleRepeatExamSlot = useCallback(
     async (slot) => {
       const ok = window.confirm(
-        'Start this test again? Your previous answers and scores for this test will be cleared.',
+        'Start a new attempt? Your current progress will be cleared, but this attempt will be saved in your exam statistics.',
       );
       if (!ok) return;
-      const examenId = examenIdBySlot[slot];
-      if (userId && examenId && shouldClearExamSlotPuntuacionesOnRepeat(slug)) {
-        await clearExamSlotPuntuaciones(supabase, { userId, examenId });
+      const slotSession = loadExamModeSession(slug, slot, userId);
+      if (slotSession) {
+        await archiveExamModeAttempt({ slug, examSlot: slot, userId, session: slotSession });
       }
       resetExamModeSession(slug, slot, userId);
       if (slot === examSlot) {
@@ -137,12 +144,12 @@ function LevelExamModePracticeInner({ slug }) {
       setPickedSlot(true);
       router.push(`/niveles/${slug}/exam-mode?examen=${slot}`);
     },
-    [slug, userId, examSlot, examenIdBySlot, resetExam, selectExamSlot, router],
+    [slug, userId, examSlot, resetExam, selectExamSlot, router],
   );
 
   const repeatCurrentExam = useCallback(() => {
-    void repeatExam({ examenId: examenIdBySlot[examSlot] });
-  }, [repeatExam, examenIdBySlot, examSlot]);
+    void repeatExam();
+  }, [repeatExam]);
 
   const examComplete = session ? isExamModeComplete(session) : false;
   const statsHref = `/niveles/${slug}/exam-mode/results?examen=${examSlot}`;

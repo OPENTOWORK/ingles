@@ -2,24 +2,17 @@
 
 import NavLink from '@/components/layout/NavLink';
 import { usePathname, useSearchParams } from 'next/navigation';
-import { Suspense, useEffect, useState } from 'react';
-import { isAdminRole } from '@/utils/authRoles';
-import { canViewPricing } from '@/utils/pricingAccess';
+import { Suspense, useEffect, useMemo, useState } from 'react';
 import AdminPanelsNav from '@/components/layout/AdminPanelsNav';
 import { DraloAiComingSoonRibbon, DraloAiNavMenuItems } from '@/components/layout/DraloAiNavMenu';
 import ReadingNightModeToggle from '@/components/exam/ReadingNightModeToggle';
+import { AppSharedDrawerNav } from '@/components/layout/AppSharedDrawerNav';
 import {
-  getStaffPanelMenuItemsForRole,
-  getStaffPanelMenuLabel,
-  isDraloAiLockedForRole,
-  NAV_LINK_CONTACT,
-  NAV_LINK_PRICING,
+  buildAppNavModel,
   isNavLinkActive,
   NAV_LINKS_BEFORE_DRALO,
-  getNavLinksForMobileDrawer,
-  getAdminLearningLinks,
-  HOME_PRICING_LINK,
-  HOME_THEORY_LINK,
+  NAV_LINK_CONTACT,
+  NAV_LINK_PRICING,
 } from '@/config/appNavMenu';
 
 function AppNavInner({ session, userRole, onLogout }) {
@@ -31,13 +24,7 @@ function AppNavInner({ session, userRole, onLogout }) {
   const [adminPanelsOpen, setAdminPanelsOpen] = useState(false);
   const [adminPanelsMobileOpen, setAdminPanelsMobileOpen] = useState(false);
 
-  const staffMenuItems = session ? getStaffPanelMenuItemsForRole(userRole) : [];
-  const staffMenuLabel = getStaffPanelMenuLabel(userRole);
-  const showStaffDropdown = staffMenuItems.length > 1;
-  const showStaffSingleLink = staffMenuItems.length === 1;
-  const showPricing = canViewPricing(userRole);
-  const draloLocked = isDraloAiLockedForRole(userRole);
-  const mobileDrawerLinks = getNavLinksForMobileDrawer(userRole);
+  const navModel = useMemo(() => buildAppNavModel(userRole, session), [userRole, session]);
 
   useEffect(() => {
     document.body.classList.toggle('nav-open', mobileOpen);
@@ -113,76 +100,93 @@ function AppNavInner({ session, userRole, onLogout }) {
 
       <nav className="app-nav app-nav--desktop" aria-label="Main navigation">
         <div className="app-nav__primary" role="group" aria-label="Sections">
-          {NAV_LINKS_BEFORE_DRALO.map((item) => (
-            <NavLink
-              key={item.href}
-              href={item.href}
-              className={desktopLinkClass(item.href)}
-              onClick={closeDesktopDropdowns}
-              {...(item.tourId ? { 'data-tour': item.tourId } : {})}
-            >
-              {item.label}
-            </NavLink>
-          ))}
+          {navModel.showPrimaryNav
+            ? NAV_LINKS_BEFORE_DRALO.map((item) => (
+                <NavLink
+                  key={item.href}
+                  href={item.href}
+                  className={desktopLinkClass(item.href)}
+                  onClick={closeDesktopDropdowns}
+                  {...(item.tourId ? { 'data-tour': item.tourId } : {})}
+                >
+                  {item.label}
+                </NavLink>
+              ))
+            : null}
 
-          <div
-            className={`app-nav__dropdown-wrap${draloLocked ? ' app-nav__dropdown-wrap--locked' : ''}`}
-            data-tour="nav-dralo-ai"
-          >
-            <button
-              type="button"
-              className={`app-nav__link app-nav__link--button${
-                draloDesktopOpen || pathname?.startsWith('/dralo-ai') ? ' is-active' : ''
-              }${draloLocked ? ' app-nav__link--locked-preview' : ''}`}
-              aria-expanded={draloDesktopOpen}
-              onClick={toggleDraloDesktop}
+          {navModel.showDralo ? (
+            <div
+              className={`app-nav__dropdown-wrap${navModel.draloLocked ? ' app-nav__dropdown-wrap--locked' : ''}`}
+              data-tour="nav-dralo-ai"
             >
-              Dralo AI
-              <span className="app-nav__chevron" aria-hidden>
-                ▾
-              </span>
-            </button>
-            {draloDesktopOpen ? (
-              <div
-                className={`app-nav__dropdown${draloLocked ? ' app-nav__dropdown--locked' : ''}`}
-                role="menu"
+              <button
+                type="button"
+                className={`app-nav__link app-nav__link--button${
+                  draloDesktopOpen || pathname?.startsWith('/dralo-ai') ? ' is-active' : ''
+                }${navModel.draloLocked ? ' app-nav__link--locked-preview' : ''}`}
+                aria-expanded={draloDesktopOpen}
+                onClick={toggleDraloDesktop}
               >
-                <DraloAiNavMenuItems
-                  locked={draloLocked}
-                  variant="desktop"
-                  onNavigate={closeDesktopDropdowns}
-                />
-                {draloLocked ? <DraloAiComingSoonRibbon /> : null}
-              </div>
-            ) : null}
-          </div>
+                Dralo AI
+                <span className="app-nav__chevron" aria-hidden>
+                  ▾
+                </span>
+              </button>
+              {draloDesktopOpen ? (
+                <div
+                  className={`app-nav__dropdown${navModel.draloLocked ? ' app-nav__dropdown--locked' : ''}`}
+                  role="menu"
+                >
+                  <DraloAiNavMenuItems
+                    locked={navModel.draloLocked}
+                    variant="desktop"
+                    onNavigate={closeDesktopDropdowns}
+                  />
+                  {navModel.draloLocked ? <DraloAiComingSoonRibbon /> : null}
+                </div>
+              ) : null}
+            </div>
+          ) : null}
         </div>
 
         <ReadingNightModeToggle variant="desktop" />
 
         <div className="app-nav__account" role="group" aria-label="Account">
-          {session ? (
+          {navModel.guest ? (
             <>
-              {showStaffDropdown ? (
+              <NavLink
+                href={NAV_LINK_CONTACT.href}
+                className={desktopLinkClass(NAV_LINK_CONTACT.href)}
+                onClick={closeDesktopDropdowns}
+              >
+                {NAV_LINK_CONTACT.label}
+              </NavLink>
+              <NavLink href="/login" className="app-nav__btn" onClick={closeDesktopDropdowns}>
+                Login
+              </NavLink>
+            </>
+          ) : (
+            <>
+              {navModel.showStaffDropdown ? (
                 <AdminPanelsNav
                   variant="desktop"
                   open={adminPanelsOpen}
                   onToggle={toggleAdminDesktop}
                   onClose={closeDesktopDropdowns}
-                  items={staffMenuItems}
-                  menuLabel={staffMenuLabel}
+                  items={navModel.staffItems}
+                  menuLabel={navModel.staffMenuLabel}
                 />
               ) : null}
-              {showStaffSingleLink ? (
+              {navModel.showStaffSingleLink ? (
                 <NavLink
-                  href={staffMenuItems[0].href}
-                  className={desktopLinkClass(staffMenuItems[0].href)}
+                  href={navModel.staffItems[0].href}
+                  className={desktopLinkClass(navModel.staffItems[0].href)}
                   onClick={closeDesktopDropdowns}
                 >
-                  {staffMenuItems[0].label}
+                  {navModel.staffItems[0].label}
                 </NavLink>
               ) : null}
-              {showPricing ? (
+              {navModel.showPricing ? (
                 <NavLink
                   href={NAV_LINK_PRICING.href}
                   className={desktopLinkClass(NAV_LINK_PRICING.href)}
@@ -217,29 +221,6 @@ function AppNavInner({ session, userRole, onLogout }) {
                 Logout
               </button>
             </>
-          ) : (
-            <>
-              {showPricing ? (
-                <NavLink
-                  href={NAV_LINK_PRICING.href}
-                  className={desktopLinkClass(NAV_LINK_PRICING.href)}
-                  onClick={closeDesktopDropdowns}
-                  {...(NAV_LINK_PRICING.tourId ? { 'data-tour': NAV_LINK_PRICING.tourId } : {})}
-                >
-                  {NAV_LINK_PRICING.label}
-                </NavLink>
-              ) : null}
-              <NavLink
-                href={NAV_LINK_CONTACT.href}
-                className={desktopLinkClass(NAV_LINK_CONTACT.href)}
-                onClick={closeDesktopDropdowns}
-              >
-                {NAV_LINK_CONTACT.label}
-              </NavLink>
-              <NavLink href="/login" className="app-nav__btn" onClick={closeDesktopDropdowns}>
-                Login
-              </NavLink>
-            </>
           )}
         </div>
       </nav>
@@ -265,95 +246,16 @@ function AppNavInner({ session, userRole, onLogout }) {
         </div>
 
         <nav className="app-nav__drawer-nav" aria-label="Mobile navigation">
-          {mobileDrawerLinks.map((item) => (
-            <NavLink
-              key={item.href}
-              href={item.href}
-              className={mobileLinkClass}
-              onClick={closeMobile}
-              {...(item.tourId ? { 'data-tour': item.tourId } : {})}
-            >
-              {item.label}
-            </NavLink>
-          ))}
-
-          <button
-            type="button"
-            className={`${mobileLinkClass} app-nav__accordion${draloOpen ? ' is-open' : ''}${
-              draloLocked ? ' app-nav__link--locked-preview' : ''
-            }`}
-            onClick={toggleDraloMobile}
-            aria-expanded={draloOpen}
-            data-tour="nav-dralo-ai"
-          >
-            Dralo AI
-            <span aria-hidden>{draloOpen ? '▲' : '▼'}</span>
-          </button>
-          {draloOpen ? (
-            <div className={`app-nav__sub${draloLocked ? ' app-nav__sub--locked' : ''}`}>
-              <DraloAiNavMenuItems locked={draloLocked} variant="mobile" onNavigate={closeMobile} />
-              {draloLocked ? <DraloAiComingSoonRibbon /> : null}
-            </div>
-          ) : null}
-
-          <ReadingNightModeToggle variant="mobile" />
-
-          {showPricing ? (
-            <NavLink
-              href={NAV_LINK_PRICING.href}
-              className={mobileLinkClass}
-              onClick={closeMobile}
-              {...(NAV_LINK_PRICING.tourId ? { 'data-tour': NAV_LINK_PRICING.tourId } : {})}
-            >
-              {NAV_LINK_PRICING.label}
-            </NavLink>
-          ) : null}
-
-          <NavLink href={NAV_LINK_CONTACT.href} className={mobileLinkClass} onClick={closeMobile}>
-            {NAV_LINK_CONTACT.label}
-          </NavLink>
-
-          {session ? (
-            <>
-              {showStaffDropdown ? (
-                <AdminPanelsNav
-                  variant="mobile"
-                  open={adminPanelsMobileOpen}
-                  onToggle={toggleAdminMobile}
-                  onClose={closeMobile}
-                  linkClassName={mobileLinkClass}
-                  items={staffMenuItems}
-                  menuLabel={staffMenuLabel}
-                />
-              ) : null}
-              {showStaffSingleLink ? (
-                <NavLink
-                  href={staffMenuItems[0].href}
-                  className={mobileLinkClass}
-                  onClick={closeMobile}
-                >
-                  {staffMenuItems[0].label}
-                </NavLink>
-              ) : null}
-              <NavLink href="/perfil" className={mobileLinkClass} onClick={closeMobile}>
-                Profile
-              </NavLink>
-              <button
-                type="button"
-                className="app-nav__btn app-nav__btn--mobile"
-                onClick={() => {
-                  closeMobile();
-                  onLogout();
-                }}
-              >
-                Logout
-              </button>
-            </>
-          ) : (
-            <NavLink href="/login" className="app-nav__btn app-nav__btn--mobile" onClick={closeMobile}>
-              Login
-            </NavLink>
-          )}
+          <AppSharedDrawerNav
+            navModel={navModel}
+            linkClass={mobileLinkClass}
+            onNavigate={closeMobile}
+            draloOpen={draloOpen}
+            onToggleDralo={toggleDraloMobile}
+            adminPanelsOpen={adminPanelsMobileOpen}
+            onToggleAdminPanels={toggleAdminMobile}
+            onLogout={onLogout}
+          />
         </nav>
       </aside>
     </>

@@ -7,6 +7,7 @@ import { userHasRole } from '@/utils/authRoles';
 import { getCachedLevelBySlug, getCachedExamenIdsBySlot, invalidateLevelExamCache } from '@/utils/levelsLevelCache';
 import { sortLevelsExamenesRows } from '@/utils/b2ResolveExam';
 import { filterVisibleExamenes, findDraftExamSlots } from '@/utils/levelsExamVisibility';
+import { notifyLevelsExamRegenerated } from '@/utils/levelsExamRegenerationSync';
 import { A2_EXAM_PARTS } from '@/lib/a2ExamCatalog';
 import { B2_EXAM_SLOT_MAX } from '@/lib/b2ExamCatalog';
 import { getLevelExamParts, isExamGenerationSlug } from '@/lib/levelsExamCatalog';
@@ -174,6 +175,8 @@ export function useLevelsExamAdminFlow({ slug = 'a2', examenIdBySlot = {}, onCat
           levelId = delPayload.levelId || levelId;
         }
 
+        let anyPartWritten = false;
+
         for (let i = 0; i < examParts.length; i += 1) {
           const partDef = examParts[i];
           const partNumber = partDef.partNumber;
@@ -201,8 +204,12 @@ export function useLevelsExamAdminFlow({ slug = 'a2', examenIdBySlot = {}, onCat
           }
           if (!res.ok) throw new Error(payload.error || `Error en parte ${partNumber}.`);
 
+          if (!payload.skipped) {
+            anyPartWritten = true;
+            partDurations.push(Date.now() - t0);
+          }
+
           levelId = payload.levelId || levelId;
-          if (!payload.skipped) partDurations.push(Date.now() - t0);
 
           const remaining = examParts.length - (i + 1);
           if (remaining > 0 && partDurations.length > 0) {
@@ -214,6 +221,9 @@ export function useLevelsExamAdminFlow({ slug = 'a2', examenIdBySlot = {}, onCat
         }
 
         if (levelId) invalidateLevelExamCache(levelId);
+        if (force || anyPartWritten) {
+          notifyLevelsExamRegenerated({ slug, examSlot: slot });
+        }
         setGenError('');
         const msg =
           preserveExistingParts && !force
@@ -316,6 +326,7 @@ export function useLevelsExamAdminFlow({ slug = 'a2', examenIdBySlot = {}, onCat
 
       const levelId = delPayload.levelId;
       if (levelId) invalidateLevelExamCache(levelId);
+      notifyLevelsExamRegenerated({ slug, examSlot: slot });
       onCatalogUpdated?.();
       return { deleted: true, examSlot: slot, levelId };
     },
@@ -469,6 +480,7 @@ export function useLevelsExamAdminFlow({ slug = 'a2', examenIdBySlot = {}, onCat
       if (!res.ok) throw new Error(payload.error || 'No se pudo guardar la parte.');
 
       if (payload.levelId) invalidateLevelExamCache(payload.levelId);
+      notifyLevelsExamRegenerated({ slug, examSlot: partPreview.examSlot });
       setGenProgress(
         `Parte ${partPreview.partLabel || partPreview.partNumber} guardada en Supabase.`,
       );

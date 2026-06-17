@@ -316,28 +316,15 @@ describe('Exam mode sync and repeat guards', () => {
   const b2Session = { slug: 'b2', examSlot: 1, scoringVersion: 2 };
   const c1Session = { slug: 'c1', examSlot: 1, scoringVersion: 2 };
 
-  it('V2 blocks syncExamModeToServer for B2', () => {
-    assert.equal(shouldSyncExamModeSessionToServer(b2Session, envOn), false);
-  });
-
-  it('V2 does not block sync for non-B2 levels', () => {
+  it('always syncs exam-mode session backup when a session exists', () => {
+    assert.equal(shouldSyncExamModeSessionToServer(b2Session, envOn), true);
     assert.equal(shouldSyncExamModeSessionToServer(c1Session, envOn), true);
-  });
-
-  it('flag OFF keeps B2 sync enabled', () => {
     assert.equal(shouldSyncExamModeSessionToServer(b2Session, envOff), true);
+    assert.equal(shouldSyncExamModeSessionToServer(null, envOn), false);
   });
 
-  it('V2 blocks clearExamSlotPuntuaciones for B2', () => {
-    assert.equal(shouldClearExamSlotPuntuacionesOnRepeat('b2', envOn), false);
-  });
-
-  it('V2 does not block clear for non-B2', () => {
-    assert.equal(shouldClearExamSlotPuntuacionesOnRepeat('c1', envOn), true);
-  });
-
-  it('flag OFF keeps B2 clear enabled', () => {
-    assert.equal(shouldClearExamSlotPuntuacionesOnRepeat('b2', envOff), true);
+  it('does not clear skill-practice puntuaciones on repeat (exam scores live in session)', () => {
+    assert.equal(shouldClearExamSlotPuntuacionesOnRepeat(), false);
   });
 });
 

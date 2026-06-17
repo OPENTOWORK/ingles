@@ -143,6 +143,7 @@ export function B2ExamPracticeChrome({
   practiceReady,
   reportErrorContext = null,
   headerTools = null,
+  examModeSaveControls = null,
   children,
 }) {
   const { userRole } = useUserRole();
@@ -153,7 +154,11 @@ export function B2ExamPracticeChrome({
   const effectiveShowStudyNotes = showStudyNotes && !isExamSimulation;
   const effectiveScoreVariant =
     scorePanelVariant === 'default' && !isExamSimulation ? 'practice' : scorePanelVariant;
-  const effectiveTimerVariant = isExamSimulation ? 'prominent' : timerVariant;
+  /** Exam mode uses ExamModeSectionBanner countdown; hide session elapsed timer. */
+  const effectiveTimerVariant = isExamSimulation ? 'hidden' : timerVariant;
+  const showCategoryTimer = effectiveTimerVariant !== 'hidden';
+  const showScorePanel = !hideScorePanel && (scorePanelOverride || partScoreMetrics);
+  const showStatusRow = showCategoryTimer || showScorePanel || effectiveShowStudyNotes;
   const refreshHint =
     lang === 'en'
       ? 'Reload parts, texts and answers from the server and clear your selections.'
@@ -296,40 +301,51 @@ export function B2ExamPracticeChrome({
           ) : null}
 
           <div className="levels-b2-practice__status">
-            {headerTools ? (
-              <div className="levels-b2-practice__study-tools">{headerTools}</div>
+            {headerTools || examModeSaveControls ? (
+              <div className="levels-b2-practice__status-tools-row">
+                {headerTools ? (
+                  <div className="levels-b2-practice__study-tools">{headerTools}</div>
+                ) : null}
+                {examModeSaveControls ? (
+                  <div className="levels-b2-practice__exam-save-tools">{examModeSaveControls}</div>
+                ) : null}
+              </div>
             ) : null}
-            <div className="levels-b2-practice__status-row">
-            <LevelsCategoryTimer
-              categoryLabel={sessionLabel}
-              timeLabel={timerLabel}
-              variant={effectiveTimerVariant}
-              lang={lang === 'es' ? 'es' : 'en'}
-              isRunning={timerControls?.isRunning}
-              isPaused={timerControls?.isPaused}
-              isIdle={timerControls?.isIdle}
-              onStart={timerControls?.start}
-              onPause={timerControls?.pause}
-              onResume={timerControls?.resume}
-              timerHidden={timerHidden}
-              onToggleTimerHidden={onToggleTimerHidden}
-            />
+            {showStatusRow ? (
+              <div className="levels-b2-practice__status-row">
+                {showCategoryTimer ? (
+                  <LevelsCategoryTimer
+                    categoryLabel={sessionLabel}
+                    timeLabel={timerLabel}
+                    variant={effectiveTimerVariant}
+                    lang={lang === 'es' ? 'es' : 'en'}
+                    isRunning={timerControls?.isRunning}
+                    isPaused={timerControls?.isPaused}
+                    isIdle={timerControls?.isIdle}
+                    onStart={timerControls?.start}
+                    onPause={timerControls?.pause}
+                    onResume={timerControls?.resume}
+                    timerHidden={timerHidden}
+                    onToggleTimerHidden={onToggleTimerHidden}
+                  />
+                ) : null}
 
-            {!hideScorePanel && scorePanelOverride ? scorePanelOverride : null}
+                {!hideScorePanel && scorePanelOverride ? scorePanelOverride : null}
 
-            {!hideScorePanel && !scorePanelOverride && partScoreMetrics ? (
-              <LevelsPartScorePanel {...partScoreMetrics} lang={lang} variant={effectiveScoreVariant} />
+                {!hideScorePanel && !scorePanelOverride && partScoreMetrics ? (
+                  <LevelsPartScorePanel {...partScoreMetrics} lang={lang} variant={effectiveScoreVariant} />
+                ) : null}
+
+                {effectiveShowStudyNotes ? (
+                  <ExamStudyNotesSidebar
+                    overlayContainerRef={workPanelRef}
+                    context={studyNotesContext}
+                    contextLabel={studyNotesContextLabel || title}
+                    lang={lang === 'es' ? 'es' : 'en'}
+                  />
+                ) : null}
+              </div>
             ) : null}
-
-            {effectiveShowStudyNotes ? (
-              <ExamStudyNotesSidebar
-                overlayContainerRef={workPanelRef}
-                context={studyNotesContext}
-                contextLabel={studyNotesContextLabel || title}
-                lang={lang === 'es' ? 'es' : 'en'}
-              />
-            ) : null}
-            </div>
           </div>
 
           {partFinishNoticePlacement === 'main' && partFinishNotice && !partFinishNotice.error ? (

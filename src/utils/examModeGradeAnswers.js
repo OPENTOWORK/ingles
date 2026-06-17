@@ -81,15 +81,45 @@ export function aggregateExamModeSectionScores({ partMin, partMax, partSnapshots
 
   for (let p = partMin; p <= partMax; p += 1) {
     const snap = partSnapshots[p];
-    if (!snap?.progress) continue;
-    const prog = snap.progress;
-    if (v2 && p >= 1 && p <= 7) {
-      byPart[p] = buildByPartEntryV2(prog, p);
-    } else {
-      byPart[p] = buildByPartEntryV1(prog, p);
+    const prog = snap?.progress;
+    const cfg = getB2PartScoring(p);
+    const v2Part = v2 && p >= 1 && p <= 7;
+    const emptyPartMax = v2Part
+      ? (B2_PART_SCORING_V2[p]?.maxPoints ?? cfg?.total ?? 0)
+      : (cfg?.total ?? 0);
+
+    if (prog) {
+      if (v2Part) {
+        byPart[p] = buildByPartEntryV2(prog, p);
+        correct += Number(byPart[p].pointsEarned) || 0;
+        total += Number(byPart[p].maxPoints) || emptyPartMax;
+      } else {
+        byPart[p] = buildByPartEntryV1(prog, p);
+        correct += Number(prog.correct) || 0;
+        total += Number(prog.total) || emptyPartMax;
+      }
+      continue;
     }
-    correct += v2 && p >= 1 && p <= 7 ? byPart[p].pointsEarned : prog.correct;
-    total += v2 && p >= 1 && p <= 7 ? byPart[p].maxPoints : prog.total;
+
+    if (v2Part) {
+      byPart[p] = {
+        scoringVersion: 2,
+        pointsEarned: 0,
+        maxPoints: emptyPartMax,
+        correct: 0,
+        total: emptyPartMax,
+        correctItems: 0,
+        passing: cfg?.passing,
+      };
+    } else {
+      byPart[p] = {
+        correct: 0,
+        total: emptyPartMax,
+        passing: cfg?.passing,
+        scoringVersion: 1,
+      };
+    }
+    total += emptyPartMax;
   }
 
   const result = {
@@ -179,7 +209,7 @@ export function scoreExamModeDrafts({ partMin, partMax, partsData, draftByPart, 
       partId,
     });
 
-    partSnapshots[p] = { draft, progress };
+    partSnapshots[p] = { draft: { ...draft, parteId: part.id }, progress };
   }
 
   return {

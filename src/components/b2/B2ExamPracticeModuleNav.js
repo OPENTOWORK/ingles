@@ -35,10 +35,13 @@ export default function B2ExamPracticeModuleNav({
   pagePartMax,
   examSlot = 1,
   onContinueInPage,
+  onPreviousInPage,
+  onContinueModule,
   overviewHref,
   overviewLabel,
   onBackClick,
   nextPartLabel,
+  previousPartLabel,
   skillPracticeMode = false,
   skillPracticeTheme = null,
   showCheckAnswersButton = false,
@@ -56,13 +59,20 @@ export default function B2ExamPracticeModuleNav({
     slug: levelSlug,
   });
   const overview = getLevelOverviewNav(levelSlug, lang);
-  // Con onBackClick el botón vuelve al menú de partes, no al overview: etiqueta acorde.
   const backLabel = onBackClick
     ? isEn
       ? 'Back to parts'
       : 'Volver a las partes'
     : overviewLabel || overview.label;
   const backHref = overviewHref || nav.overviewHref || overview.href;
+
+  const previousLabel =
+    previousPartLabel ||
+    (nav.previousPartNumber
+      ? isEn
+        ? `Back — Part ${nav.previousPartNumber}`
+        : `Volver — Parte ${nav.previousPartNumber}`
+      : '');
 
   let continueLabel = '';
   if (skillPracticeMode) {
@@ -93,52 +103,78 @@ export default function B2ExamPracticeModuleNav({
       data-skill-theme={skillPracticeMode && skillPracticeTheme ? skillPracticeTheme : undefined}
       aria-label={isEn ? 'Module navigation' : 'Navegación del módulo'}
     >
-      {onBackClick ? (
-        <button
-          type="button"
-          className="levels-exam-module-nav__btn levels-exam-module-nav__btn--back"
-          onClick={onBackClick}
-        >
-          <NavChevron direction="back" />
-          <span className="levels-exam-module-nav__label">{backLabel}</span>
-        </button>
-      ) : (
-        <Link href={backHref} className="levels-exam-module-nav__btn levels-exam-module-nav__btn--back">
-          <NavChevron direction="back" />
-          <span className="levels-exam-module-nav__label">{backLabel}</span>
-        </Link>
-      )}
+      <div className="levels-exam-module-nav__start">
+        {onBackClick ? (
+          <button
+            type="button"
+            className="levels-exam-module-nav__btn levels-exam-module-nav__btn--back"
+            onClick={onBackClick}
+          >
+            <NavChevron direction="back" />
+            <span className="levels-exam-module-nav__label">{backLabel}</span>
+          </button>
+        ) : (
+          <Link href={backHref} className="levels-exam-module-nav__btn levels-exam-module-nav__btn--back">
+            <NavChevron direction="back" />
+            <span className="levels-exam-module-nav__label">{backLabel}</span>
+          </Link>
+        )}
 
-      {showCheckAnswersButton && typeof onCheckAnswers === 'function' ? (
-        <button
-          type="button"
-          className="levels-exam-module-nav__btn levels-exam-module-nav__btn--check"
-          onClick={onCheckAnswers}
-          disabled={checkAnswersDisabled}
-        >
-          <span className="levels-exam-module-nav__label">
-            {checkAnswersLabel || (isEn ? 'Check answers' : 'Corregir')}
-          </span>
-        </button>
-      ) : null}
+        {nav.hasPreviousInPage && previousLabel && typeof onPreviousInPage === 'function' ? (
+          <button
+            type="button"
+            className="levels-exam-module-nav__btn levels-exam-module-nav__btn--continue levels-exam-module-nav__btn--prev-part"
+            onClick={onPreviousInPage}
+          >
+            <NavChevron direction="back" />
+            <span className="levels-exam-module-nav__label">{previousLabel}</span>
+          </button>
+        ) : null}
+      </div>
 
-      {skillPracticeMode || nav.continueMode === 'in-page' ? (
-        <button
-          type="button"
-          className="levels-exam-module-nav__btn levels-exam-module-nav__btn--continue"
-          onClick={onContinueInPage}
-        >
-          <span className="levels-exam-module-nav__label">{continueLabel}</span>
-          <NavChevron direction="forward" />
-        </button>
-      ) : null}
+      <div className="levels-exam-module-nav__end">
+        {showCheckAnswersButton && typeof onCheckAnswers === 'function' ? (
+          <button
+            type="button"
+            className="levels-exam-module-nav__btn levels-exam-module-nav__btn--check"
+            onClick={onCheckAnswers}
+            disabled={checkAnswersDisabled}
+          >
+            <span className="levels-exam-module-nav__label">
+              {checkAnswersLabel || (isEn ? 'Check answers' : 'Corregir')}
+            </span>
+          </button>
+        ) : null}
 
-      {!skillPracticeMode && nav.continueMode === 'link' && nav.continueHref ? (
-        <Link href={nav.continueHref} className="levels-exam-module-nav__btn levels-exam-module-nav__btn--continue">
-          <span className="levels-exam-module-nav__label">{continueLabel}</span>
-          <NavChevron direction="forward" />
-        </Link>
-      ) : null}
+        {skillPracticeMode || nav.continueMode === 'in-page' ? (
+          <button
+            type="button"
+            className="levels-exam-module-nav__btn levels-exam-module-nav__btn--continue"
+            onClick={onContinueInPage}
+          >
+            <span className="levels-exam-module-nav__label">{continueLabel}</span>
+            <NavChevron direction="forward" />
+          </button>
+        ) : null}
+
+        {!skillPracticeMode && nav.continueMode === 'link' && (nav.continueHref || onContinueModule) ? (
+          typeof onContinueModule === 'function' ? (
+            <button
+              type="button"
+              className="levels-exam-module-nav__btn levels-exam-module-nav__btn--continue"
+              onClick={onContinueModule}
+            >
+              <span className="levels-exam-module-nav__label">{continueLabel}</span>
+              <NavChevron direction="forward" />
+            </button>
+          ) : (
+            <Link href={nav.continueHref} className="levels-exam-module-nav__btn levels-exam-module-nav__btn--continue">
+              <span className="levels-exam-module-nav__label">{continueLabel}</span>
+              <NavChevron direction="forward" />
+            </Link>
+          )
+        ) : null}
+      </div>
     </nav>
   );
 }

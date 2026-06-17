@@ -1,11 +1,12 @@
 'use client';
 
+import PageHero from '@/components/PageHero';
+import ExamPracticeHubSection from '@/components/niveles/ExamPracticeHubSection';
+import StarsWayHubTabs from '@/components/niveles/StarsWayHubTabs';
 import { useUserRole } from '@/context/UserRoleContext';
 import { isStaffRole } from '@/lib/placementLevelAccess';
 import { isNivelesLevelComingSoonForUser, isStudentRole } from '@/constants/studentFeatureAccess';
 import NivelesComingSoonNotice from '@/components/niveles/NivelesComingSoonNotice';
-import PageHero from '@/components/PageHero';
-import ExamPracticeHubSection from '@/components/niveles/ExamPracticeHubSection';
 
 /**
  * Hub de nivel: PageHero + Exam Practice (simulacros por paper).
@@ -38,7 +39,16 @@ export default function LevelHubPage({ config }) {
         />
       </div>
 
-      <ExamPracticeHubSection examLinks={config.examLinks} isStudent={isStudent} />
+      {config.slug === 'b2' ? (
+        <ExamPracticeHubSection
+          examLinks={config.examLinks}
+          isStudent={isStudent}
+          skillsQuadrant
+          quadrantFooter={<StarsWayHubTabs embedded />}
+        />
+      ) : (
+        <ExamPracticeHubSection examLinks={config.examLinks} isStudent={isStudent} />
+      )}
 
       <LevelHubStyles />
     </main>

@@ -20,6 +20,7 @@ export default function ReadingPracticeChrome(props) {
           <ReadingPracticeHeaderTools lang={props.lang === 'es' ? 'es' : 'en'} />
         ) : null
       }
+      examModeSaveControls={props.examModeSaveControls ?? null}
     />
   );
 }

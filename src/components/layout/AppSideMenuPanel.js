@@ -1,26 +1,15 @@
 'use client';
 
-import NavLink from '@/components/layout/NavLink';
 import { usePathname } from 'next/navigation';
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useUserRole } from '@/context/UserRoleContext';
-import { isAdminRole } from '@/utils/authRoles';
-import { canViewPricing } from '@/utils/pricingAccess';
-import { DraloAiComingSoonRibbon, DraloAiNavMenuItems } from '@/components/layout/DraloAiNavMenu';
-import {
-  getStaffPanelMenuItemsForRole,
-  getStaffPanelMenuLabel,
-  isDraloAiLockedForRole,
-  NAV_LINK_CONTACT,
-  HOME_THEORY_LINK,
-  HOME_PRICING_LINK,
-  NAV_LINKS_BEFORE_DRALO,
-  getAdminLearningLinks,
-} from '@/config/appNavMenu';
+import { buildAppNavModel } from '@/config/appNavMenu';
+import { AppSharedDrawerNav } from '@/components/layout/AppSharedDrawerNav';
 import { performLogout } from '@/utils/logout';
 
 /**
- * Menú lateral derecho desplegable (fondo blanco). No desplaza el contenido de la página.
+ * Menú lateral derecho desplegable (home, móvil/tablet).
+ * Usa el mismo modelo que el drawer móvil de AppNav (prioriza barra desktop).
  */
 export default function AppSideMenuPanel({ defaultOpen = true }) {
   const pathname = usePathname();
@@ -28,13 +17,7 @@ export default function AppSideMenuPanel({ defaultOpen = true }) {
   const [open, setOpen] = useState(defaultOpen);
   const [draloOpen, setDraloOpen] = useState(false);
   const [adminPanelsOpen, setAdminPanelsOpen] = useState(false);
-  const staffMenuItems = session ? getStaffPanelMenuItemsForRole(userRole) : [];
-  const staffMenuLabel = getStaffPanelMenuLabel(userRole);
-  const showStaffDropdown = staffMenuItems.length > 1;
-  const draloLocked = isDraloAiLockedForRole(userRole);
-  const showStaffSingleLink = staffMenuItems.length === 1;
-  const showAdminHomeLinks = isAdminRole(userRole);
-  const showPricing = canViewPricing(userRole);
+  const navModel = useMemo(() => buildAppNavModel(userRole, session), [userRole, session]);
   const linkClass = 'app-side-menu__link';
 
   useEffect(() => {
@@ -46,6 +29,8 @@ export default function AppSideMenuPanel({ defaultOpen = true }) {
     document.body.classList.add('has-home-side-menu');
     return () => document.body.classList.remove('has-home-side-menu');
   }, []);
+
+  const closeMenu = () => setOpen(false);
 
   const handleLogout = () => {
     void performLogout();
@@ -76,7 +61,7 @@ export default function AppSideMenuPanel({ defaultOpen = true }) {
           <button
             type="button"
             className="app-side-menu__close"
-            onClick={() => setOpen(false)}
+            onClick={closeMenu}
             aria-label="Close menu"
           >
             ✕
@@ -84,94 +69,18 @@ export default function AppSideMenuPanel({ defaultOpen = true }) {
         </div>
 
         <nav className="app-side-menu__nav">
-          {showAdminHomeLinks ? (
-            <NavLink href={HOME_THEORY_LINK.href} className={linkClass}>
-              {HOME_THEORY_LINK.label}
-            </NavLink>
-          ) : null}
-          {getAdminLearningLinks(userRole).map((item) => (
-            <NavLink key={item.href} href={item.href} className={linkClass}>
-              {item.label}
-            </NavLink>
-          ))}
-          {NAV_LINKS_BEFORE_DRALO.map((item) => (
-            <NavLink key={item.href} href={item.href} className={linkClass}>
-              {item.label}
-            </NavLink>
-          ))}
-          {showPricing ? (
-            <NavLink href={HOME_PRICING_LINK.href} className={linkClass}>
-              {HOME_PRICING_LINK.label}
-            </NavLink>
-          ) : null}
-
-          <button
-            type="button"
-            className={`${linkClass} app-side-menu__accordion${draloOpen ? ' is-open' : ''}${
-              draloLocked ? ' app-nav__link--locked-preview' : ''
-            }`}
-            onClick={() => setDraloOpen((v) => !v)}
-            aria-expanded={draloOpen}
-          >
-            Dralo AI
-            <span aria-hidden>{draloOpen ? '▲' : '▼'}</span>
-          </button>
-          {draloOpen ? (
-            <div className={`app-side-menu__sub${draloLocked ? ' app-nav__sub--locked' : ''}`}>
-              <DraloAiNavMenuItems
-                locked={draloLocked}
-                variant="side"
-                onNavigate={() => setOpen(false)}
-              />
-              {draloLocked ? <DraloAiComingSoonRibbon /> : null}
-            </div>
-          ) : null}
-
-          <NavLink href={NAV_LINK_CONTACT.href} className={linkClass}>
-            {NAV_LINK_CONTACT.label}
-          </NavLink>
-
-          {session ? (
-            <>
-              {showStaffDropdown ? (
-                <>
-                  <button
-                    type="button"
-                    className={`${linkClass} app-side-menu__accordion${adminPanelsOpen ? ' is-open' : ''}`}
-                    onClick={() => setAdminPanelsOpen((v) => !v)}
-                    aria-expanded={adminPanelsOpen}
-                  >
-                    {staffMenuLabel}
-                    <span aria-hidden>{adminPanelsOpen ? '▲' : '▼'}</span>
-                  </button>
-                  {adminPanelsOpen ? (
-                    <div className="app-side-menu__sub">
-                      {staffMenuItems.map((item) => (
-                        <NavLink key={item.href} href={item.href} className={linkClass}>
-                          {item.label}
-                        </NavLink>
-                      ))}
-                    </div>
-                  ) : null}
-                </>
-              ) : null}
-              {showStaffSingleLink ? (
-                <NavLink href={staffMenuItems[0].href} className={linkClass}>
-                  {staffMenuItems[0].label}
-                </NavLink>
-              ) : null}
-              <NavLink href="/perfil" className={linkClass}>
-                Profile
-              </NavLink>
-              <button type="button" className="app-side-menu__logout" onClick={() => void handleLogout()}>
-                Logout
-              </button>
-            </>
-          ) : (
-            <NavLink href="/login" className="app-side-menu__logout app-side-menu__logout--link">
-              Login
-            </NavLink>
-          )}
+          <AppSharedDrawerNav
+            navModel={navModel}
+            linkClass={linkClass}
+            onNavigate={closeMenu}
+            draloOpen={draloOpen}
+            onToggleDralo={() => setDraloOpen((v) => !v)}
+            adminPanelsOpen={adminPanelsOpen}
+            onToggleAdminPanels={() => setAdminPanelsOpen((v) => !v)}
+            onLogout={handleLogout}
+            showNightMode={false}
+            draloVariant="side"
+          />
         </nav>
       </div>
     </aside>

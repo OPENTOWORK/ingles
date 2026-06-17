@@ -9,6 +9,7 @@ import TeacherActivityCharts from '@/components/teacher/TeacherActivityCharts';
 import SupportHub from '@/components/support/SupportHub';
 import PanelPageHeader from '@/components/PanelPageHeader';
 import RouteLoadingMascot from '@/components/RouteLoadingMascot';
+import ItResponsivePreviewPanel from '@/components/informatico/ItResponsivePreviewPanel';
 
 const TABS = [
   { id: 'resumen', label: 'Resumen' },
@@ -17,6 +18,7 @@ const TABS = [
   { id: 'tickets', label: 'Tickets' },
   { id: 'herramientas', label: 'Herramientas' },
   { id: 'supabase', label: 'Supabase' },
+  { id: 'responsive', label: 'Visualización en móvil y tablet' },
 ];
 
 async function itFetch(path, options = {}, { soft = false } = {}) {
@@ -547,6 +549,8 @@ export default function ItPanel() {
             </div>
           </div>
         )}
+
+        {tab === 'responsive' && <ItResponsivePreviewPanel />}
       </div>
     </div>
   );

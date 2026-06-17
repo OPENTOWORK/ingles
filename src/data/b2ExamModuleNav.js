@@ -67,6 +67,10 @@ export function getB2ExamPracticeNavState({ partNumber, pagePartMax, examSlot = 
   const pageMax = Number(pagePartMax) || n;
   const module = findModuleForPart(n, modules);
   const slotQuery = examSlot ? `?examen=${examSlot}` : '';
+  const modulePartMin = module?.partMin ?? 0;
+
+  const hasPreviousInPage = n > modulePartMin && n > 0;
+  const previousPartNumber = hasPreviousInPage ? n - 1 : null;
 
   const hasNextInPage = n > 0 && n < pageMax;
   const hasNextInModule = module ? n < module.partMax : false;
@@ -96,6 +100,8 @@ export function getB2ExamPracticeNavState({ partNumber, pagePartMax, examSlot = 
 
   return {
     overviewHref: `/niveles/${levelSlug}`,
+    hasPreviousInPage,
+    previousPartNumber,
     hasNextInPage,
     nextPartNumber,
     continueMode,

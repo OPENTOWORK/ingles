@@ -1,6 +1,6 @@
 'use client';
 
-import { Suspense, useMemo } from 'react';
+import { Suspense } from 'react';
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
 import { useExamModeStatistics } from '@/hooks/useExamModeStatistics';
@@ -22,17 +22,6 @@ function scoreTone(pct) {
   if (pct >= 60) return 'high';
   if (pct >= 35) return 'mid';
   return 'low';
-}
-
-function formatDuration(seconds) {
-  const s = Math.max(0, Number(seconds) || 0);
-  if (s < 60) return `${s}s`;
-  const m = Math.floor(s / 60);
-  const rem = s % 60;
-  if (m < 60) return rem ? `${m}m ${rem}s` : `${m}m`;
-  const h = Math.floor(m / 60);
-  const min = m % 60;
-  return min ? `${h}h ${min}m` : `${h}h`;
 }
 
 function ProgressRing({ pct, tone, label = 'Overall' }) {
@@ -179,25 +168,33 @@ function SectionCard({ row, examSlot, resultsReleased }) {
   );
 }
 
+function formatAttemptDate(iso) {
+  if (!iso) return '';
+  try {
+    return new Date(iso).toLocaleDateString(undefined, {
+      day: 'numeric',
+      month: 'short',
+      year: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit',
+    });
+  } catch {
+    return '';
+  }
+}
+
 function ExamModeResultsViewInner({ slug }) {
   const config = getNivelesLevelHub(slug);
   const searchParams = useSearchParams();
   const examSlot = Math.min(5, Math.max(1, Number(searchParams.get('examen') || 1)));
-  const { rows, stats, estadisticas, session, ready, repeatExam } = useExamModeStatistics(
-    slug,
-    examSlot,
-  );
+  const { rows, stats, generalStats, attemptHistory, session, ready, repeatExam } =
+    useExamModeStatistics(slug, examSlot);
 
   const overallTone = scoreTone(stats.pct);
   const examLabel = `Test ${examSlot}`;
   const ringLabel = stats.allComplete ? 'Overall' : stats.hasStarted ? 'So far' : 'Overall';
 
-  const dbSummary = useMemo(() => {
-    if (!estadisticas.intentos && !estadisticas.evaluadas && !estadisticas.tiempoSegundos) {
-      return null;
-    }
-    return estadisticas;
-  }, [estadisticas]);
+  const showGeneralStats = generalStats.totalAttempts > 0;
 
   if (!config) {
     return (
@@ -218,16 +215,6 @@ function ExamModeResultsViewInner({ slug }) {
   return (
     <main className={styles.page}>
       <div className={styles.inner}>
-        <nav className={styles.breadcrumb} aria-label="Breadcrumb">
-          <Link href="/niveles">Levels</Link>
-          <span aria-hidden="true">/</span>
-          <Link href={`/niveles/${slug}`}>{config.cefr}</Link>
-          <span aria-hidden="true">/</span>
-          <Link href={`/niveles/${slug}/exam-mode?examen=${examSlot}`}>Exam mode</Link>
-          <span aria-hidden="true">/</span>
-          <span>Statistics</span>
-        </nav>
-
         <header className={styles.hero}>
           <p className={styles.eyebrow}>
             Exam mode ·{' '}
@@ -316,26 +303,55 @@ function ExamModeResultsViewInner({ slug }) {
             </div>
           </div>
 
-          {dbSummary ? (
+          {showGeneralStats ? (
             <div className={styles.dbStats}>
-              <p className={styles.dbStatsLabel}>Saved in your account</p>
+              <p className={styles.dbStatsLabel}>All attempts (saved in your account)</p>
               <div className={styles.dbStatsRow}>
                 <span>
-                  <strong>{dbSummary.intentos}</strong> attempts
+                  <strong>{generalStats.totalAttempts}</strong> attempts
                 </span>
                 <span>
-                  <strong>
-                    {dbSummary.correctas}/{dbSummary.evaluadas}
-                  </strong>{' '}
-                  items evaluated
+                  <strong>{generalStats.bestPct}%</strong> best score
                 </span>
                 <span>
-                  <strong>{formatDuration(dbSummary.tiempoSegundos)}</strong> practice time
+                  <strong>{generalStats.averagePct}%</strong> average
+                </span>
+                <span>
+                  <strong>{generalStats.completedAttempts}</strong> full exams
                 </span>
               </div>
             </div>
           ) : null}
         </header>
+
+        {attemptHistory.length > 0 ? (
+          <section className={styles.history}>
+            <h2 className={styles.sectionsTitle}>Previous attempts</h2>
+            <ul className={styles.historyList}>
+              {attemptHistory.map((attempt) => (
+                <li key={attempt.id} className={styles.historyItem}>
+                  <div className={styles.historyMain}>
+                    <p className={styles.historyDate}>{formatAttemptDate(attempt.archivedAt)}</p>
+                    <p className={styles.historyScore}>
+                      {attempt.summary?.correct ?? 0}
+                      <span> / {attempt.summary?.displayTotal ?? attempt.summary?.total ?? 0}</span>
+                      <span className={styles.historyPct}> ({attempt.summary?.pct ?? 0}%)</span>
+                    </p>
+                  </div>
+                  <p className={styles.historyMeta}>
+                    {attempt.summary?.sectionsCompleted ?? 0}/{attempt.summary?.sectionsCount ?? 4}{' '}
+                    sections
+                    {attempt.summary?.allComplete
+                      ? attempt.summary?.examPassed
+                        ? ' · Passed'
+                        : ' · Completed'
+                      : ' · Partial'}
+                  </p>
+                </li>
+              ))}
+            </ul>
+          </section>
+        ) : null}
 
         <section className={styles.improve}>
           <h2 className={styles.sectionsTitle}>What to improve</h2>
@@ -353,15 +369,12 @@ function ExamModeResultsViewInner({ slug }) {
               Strong performance across all sections. Keep practising under exam conditions to stay
               sharp.
             </p>
-          ) : (
-            <p className={styles.improvePlaceholder}>
-              Complete each section to unlock personalised tips based on your weakest papers and
-              parts. Scores are saved to your account automatically.
-            </p>
-          )}
+          ) : null}
         </section>
 
-        <h2 className={styles.sectionsTitle}>Results by paper</h2>
+        <h2 className={styles.sectionsTitle}>
+          {stats.hasStarted ? 'Current attempt' : 'Results by paper'}
+        </h2>
         <div className={styles.grid}>
           {rows.map((row) => (
             <SectionCard

@@ -7,6 +7,7 @@ import { useExamModeSectionTimer } from '@/hooks/useExamModeSectionTimer';
  * Sticky banner: Cambridge countdown + finish section (exam mode).
  */
 export default function ExamModeSectionBanner({
+  sectionKey,
   sectionTitle,
   durationSeconds,
   initialRemainingSeconds,
@@ -21,9 +22,12 @@ export default function ExamModeSectionBanner({
     setConfirmOpen(true);
   }, []);
 
+  const timerHydrationKey = sectionKey ?? 'exam-section';
+
   const { remaining, expired, label } = useExamModeSectionTimer({
     active,
     initialSeconds: initialRemainingSeconds ?? durationSeconds,
+    hydrationKey: timerHydrationKey,
     onTick,
     onExpire: handleExpire,
   });

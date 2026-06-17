@@ -42,6 +42,7 @@ import ExamPracticeFinishNotice from '@/components/exam/ExamPracticeFinishNotice
 import ReadingPracticeChrome from '@/components/exam/ReadingPracticeChrome';
 import { ReadingPracticeSessionProvider, useReadingPracticeSession } from '@/context/ReadingPracticeSessionContext';
 import B2ListeningPracticeFeedback from '@/components/b2/B2ListeningPracticeFeedback';
+import B2ListeningInlineGapCard from '@/components/b2/B2ListeningInlineGapCard';
 import {
   B2_EXAM1_PART12_MATCHING_POOL,
   getB2Exam1ListeningPartUx,
@@ -153,6 +154,9 @@ import {
   createAdminExamSelectHandler,
   buildExamSlotPickerProps,
 } from '@/hooks/useLevelsExamAdminFlow';
+import { useLevelsExamRegenerationListener } from '@/hooks/useLevelsExamRegenerationListener';
+import { createLevelsExamCatalogUpdatedHandler } from '@/utils/levelsExamRegenerationSync';
+import { invalidateLevelsPracticeCache } from '@/hooks/useLevelsPracticeData';
 import { useSkillPartFirstNavigation } from '@/hooks/useSkillPartFirstNavigation';
 import {
   runKeepPracticingSkillFlow,
@@ -167,8 +171,15 @@ import { formatLevelsPartDisplayName } from '@/utils/formatLevelsPartDisplayName
 import B2ExamPracticeModuleNav from '@/components/b2/B2ExamPracticeModuleNav';
 import A2ExamGenerationStatus from '@/components/niveles/A2ExamGenerationStatus';
 import ExamModeSectionBanner from '@/components/niveles/ExamModeSectionBanner';
+import { useExamModeSectionDraftControls } from '@/hooks/useExamModeSectionDraftControls';
+import {
+  applyReadingStyleSectionDraft,
+  buildExamModeSectionDraft,
+} from '@/utils/examModeSectionDraft';
 import { useExamModeStrict } from '@/hooks/useExamModeStrict';
 import { scoreExamModeDrafts } from '@/utils/examModeGradeAnswers';
+import { buildExamModeContinueModuleHref } from '@/utils/buildExamModeContinueModuleHref';
+import { finishExamModeSupabasePersistence } from '@/utils/finishExamModeSupabasePersistence';
 import {
   resolveExamPracticeMode,
   isExamSimulationMode,
@@ -310,6 +321,11 @@ function B2ExamPaperPracticePageInner({
     section: examSection,
     handleFinishSection,
     setSectionRemaining,
+    getSectionRemaining,
+    saveSectionDraft,
+    applyExamContentSync,
+    hubHref,
+    sectionKey: examSectionKey,
   } = examMode;
   const examDraftRef = useRef({});
   const prevExamPartRef = useRef(null);
@@ -574,6 +590,7 @@ function B2ExamPaperPracticePageInner({
 
       if (!mountedRef.current) return;
 
+      applyExamContentSync(normalizedParts, examDraftRef);
       setPartsData(normalizedParts);
       setSelectedPartId(normalizedParts[0]?.id || null);
       const pickBestQuestion = (questions) => {
@@ -603,22 +620,30 @@ function B2ExamPaperPracticePageInner({
     } finally {
       if (mountedRef.current) setLoading(false);
     }
-  }, [emptyErrorMessage, examSlot, partMax, partMin, levelSlug, levelTag]);
+  }, [emptyErrorMessage, examSlot, partMax, partMin, levelSlug, levelTag, applyExamContentSync]);
+
+  useLevelsExamRegenerationListener({
+    slug: levelSlug,
+    examSlot,
+    onRegenerated: loadData,
+  });
 
   const adminFlow = useLevelsExamAdminFlow({
     slug: levelSlug,
     examenIdBySlot: scoring.examenIdBySlot,
-    onCatalogUpdated: () => {
-      if (levelSlug === 'a2') {
-        void scoring.reloadExamCatalog?.();
-      } else if (levelSlug === 'b2') {
-        void scoring.reloadExamenCatalog?.();
-      } else {
-        void reloadExamCatalog?.();
-      }
-      void loadData();
-      void reloadExamNamesBySlot(levelSlug).then(({ names }) => setExamLabelsBySlot(names));
-    },
+    onCatalogUpdated: createLevelsExamCatalogUpdatedHandler([
+      () => {
+        if (levelSlug === 'a2') return scoring.reloadExamCatalog?.();
+        if (levelSlug === 'b2') return scoring.reloadExamenCatalog?.();
+        return reloadExamCatalog?.();
+      },
+      loadData,
+      () => reloadExamNamesBySlot(levelSlug).then(({ names }) => setExamLabelsBySlot(names)),
+      async () => {
+        const uid = await getSessionUserId();
+        if (uid) invalidateLevelsPracticeCache(uid);
+      },
+    ]),
   });
 
   const handleSelectExamSlot = useMemo(
@@ -810,6 +835,7 @@ function B2ExamPaperPracticePageInner({
 
   const useSkillUoeExampleLayout = shouldUseSkillUoeExampleLayout({
     skillPractice: isSkillPracticeSession,
+    examMode: examModeActive,
     partNumber,
   });
 
@@ -2069,44 +2095,55 @@ function B2ExamPaperPracticePageInner({
     ],
   );
 
-  const handleExamModeFinish = useCallback(() => {
-    const pn = Number(selectedPart?.nombre.match(/\d+/)?.[0] || 0);
-    if (pn && selectedPart) {
-      examDraftRef.current[pn] = {
-        preguntaId: selectedQuestion?.preguntaId,
-        selectedOptions: { ...selectedOptions },
-        openInputs: { ...openInputs },
-        checkedQuestions: { ...checkedQuestions },
-      };
-    }
-    const { scores, partSnapshots } = scoreExamModeDrafts({
+  const handleExamModeFinish = useCallback(
+    (redirectTo) => {
+      const pn = Number(selectedPart?.nombre.match(/\d+/)?.[0] || 0);
+      if (pn && selectedPart) {
+        examDraftRef.current[pn] = {
+          preguntaId: selectedQuestion?.preguntaId,
+          selectedOptions: { ...selectedOptions },
+          openInputs: { ...openInputs },
+          checkedQuestions: { ...checkedQuestions },
+        };
+      }
+      const { scores, partSnapshots } = scoreExamModeDrafts({
+        partMin,
+        partMax,
+        partsData,
+        draftByPart: examDraftRef.current,
+      });
+      handleFinishSection({ draftByPart: examDraftRef.current }, scores, { redirectTo });
+      void finishExamModeSupabasePersistence({
+        partSnapshots,
+        examenId: scoring.currentExamenId || scoring.examenIdBySlot?.[examSlot],
+      });
+    },
+    [
+      selectedPart,
+      selectedQuestion,
+      selectedOptions,
+      openInputs,
+      checkedQuestions,
       partMin,
       partMax,
       partsData,
-      draftByPart: examDraftRef.current,
-    });
-    handleFinishSection({ draftByPart: examDraftRef.current }, scores);
-    void (async () => {
-      const uid = await getSessionUserId();
-      const examenId = scoring.currentExamenId || scoring.examenIdBySlot?.[examSlot];
-      if (!uid || !examenId) return;
-      const { persistExamModeSectionScores } = await import('@/utils/persistExamModeSectionScores');
-      await persistExamModeSectionScores({ userId: uid, examenId, partSnapshots });
-    })();
-  }, [
-    selectedPart,
-    selectedQuestion,
-    selectedOptions,
-    openInputs,
-    checkedQuestions,
-    partMin,
-    partMax,
-    partsData,
-    handleFinishSection,
-    scoring.currentExamenId,
-    scoring.examenIdBySlot,
-    examSlot,
-  ]);
+      handleFinishSection,
+      scoring.currentExamenId,
+      scoring.examenIdBySlot,
+      examSlot,
+    ],
+  );
+
+  const handleContinueModuleInExamMode = useCallback(() => {
+    handleExamModeFinish(
+      buildExamModeContinueModuleHref({
+        partNumber,
+        pagePartMax: partMax,
+        examSlot,
+        slug: levelSlug,
+      }),
+    );
+  }, [handleExamModeFinish, partNumber, partMax, examSlot, levelSlug]);
 
   useEffect(() => {
     setWritingLiveCorrect(null);
@@ -2182,7 +2219,21 @@ function B2ExamPaperPracticePageInner({
     if (typeof window !== 'undefined') {
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
-  }, [partsData, selectedPartId]);
+  }, [partsData, selectedPartId, handleSelectPart]);
+
+  const handlePreviousInPage = useCallback(() => {
+    const sorted = [...partsData].sort((a, b) => {
+      const an = Number(a.nombre.match(/\d+/)?.[0] || 0);
+      const bn = Number(b.nombre.match(/\d+/)?.[0] || 0);
+      return an - bn;
+    });
+    const currentIdx = sorted.findIndex((p) => p.id === selectedPartId);
+    if (currentIdx <= 0) return;
+    handleSelectPart(sorted[currentIdx - 1]);
+    if (typeof window !== 'undefined') {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  }, [partsData, selectedPartId, handleSelectPart]);
 
   const practiceMode = resolveExamPracticeMode({ examModeActive, reviewMode });
 
@@ -2292,6 +2343,99 @@ function B2ExamPaperPracticePageInner({
     selectedQuestion?.enunciado,
   ]);
 
+  const getExamDraftSnapshot = useCallback(() => {
+    const pn = partNumber;
+    const draftByPart = { ...examDraftRef.current };
+    if (pn && selectedPart) {
+      draftByPart[pn] = {
+        preguntaId: selectedQuestion?.preguntaId,
+        selectedOptions: { ...selectedOptions },
+        openInputs: { ...openInputs },
+        checkedQuestions: { ...checkedQuestions },
+      };
+    }
+    return buildExamModeSectionDraft({
+      draftByPart,
+      selectedQuestionByPart,
+      activePartNumber: pn || null,
+      activePartId: selectedPart?.id ?? null,
+      remainingSeconds: getSectionRemaining(examSectionKey) ?? examSection?.remainingSeconds ?? null,
+    });
+  }, [
+    partNumber,
+    selectedPart,
+    selectedQuestion?.preguntaId,
+    selectedOptions,
+    openInputs,
+    checkedQuestions,
+    selectedQuestionByPart,
+    examSection?.remainingSeconds,
+    getSectionRemaining,
+    examSectionKey,
+  ]);
+
+  const getExamScorePreview = useCallback(() => {
+    const draftByPart = { ...examDraftRef.current };
+    const pn = partNumber;
+    if (pn && selectedPart) {
+      draftByPart[pn] = {
+        preguntaId: selectedQuestion?.preguntaId,
+        selectedOptions: { ...selectedOptions },
+        openInputs: { ...openInputs },
+        checkedQuestions: { ...checkedQuestions },
+      };
+    }
+    return scoreExamModeDrafts({
+      partMin,
+      partMax,
+      partsData,
+      draftByPart,
+    }).scores;
+  }, [
+    partNumber,
+    selectedPart,
+    selectedQuestion?.preguntaId,
+    selectedOptions,
+    openInputs,
+    checkedQuestions,
+    partMin,
+    partMax,
+    partsData,
+  ]);
+
+  const applyExamDraftSnapshot = useCallback(
+    (draft) => {
+      const { activePartNumber } = applyReadingStyleSectionDraft(draft, {
+        examDraftRef,
+        setSelectedQuestionByPart,
+        setSelectedPartId,
+        partsData,
+        setAnswerState: ({ selectedOptions: nextSelected, openInputs: nextOpen, checkedQuestions: nextChecked }) => {
+          setSelectedOptions(nextSelected);
+          setOpenInputs(nextOpen);
+          setCheckedQuestions(nextChecked);
+          setOpenChecks({});
+          setAiHintsByKey({});
+        },
+      });
+      prevExamPartRef.current = activePartNumber;
+    },
+    [partsData],
+  );
+
+  const { examModeSaveControls } = useExamModeSectionDraftControls({
+    enabled: examModeActive && !reviewMode && Boolean(examSectionKey),
+    sectionKey: examSectionKey,
+    section: examSection,
+    hubHref,
+    saveSectionDraft,
+    getDraftSnapshot: getExamDraftSnapshot,
+    getScorePreview: getExamScorePreview,
+    applyDraftSnapshot: applyExamDraftSnapshot,
+    hydrateReady: !loading && partsData.length > 0,
+    lang,
+  });
+
   return (
     <B2ExamPracticeLayout examPracticeOpen={layoutPracticeOpen}>
       {adminFlow.canRegenerateExams ? (
@@ -2362,9 +2506,11 @@ function B2ExamPaperPracticePageInner({
         }}
         studyNotesContextLabel={title}
         reportErrorContext={reportErrorContext}
+        examModeSaveControls={examModeSaveControls}
       >
       {examModeActive && examSection ? (
         <ExamModeSectionBanner
+          sectionKey={examSection.key}
           sectionTitle={examSection.title || title}
           durationSeconds={examSection.durationSeconds}
           initialRemainingSeconds={examSection.remainingSeconds}
@@ -2932,109 +3078,58 @@ function B2ExamPaperPracticePageInner({
                             qn,
                           );
                           return (
-                            <div
+                            <B2ListeningInlineGapCard
                               key={`listen-item-${selectedQuestion.preguntaId}-${qn}`}
-                              className="levels-listening-question-card"
-                            >
-                              <p className="levels-listening-question-card__title">
-                                Question {qn}
-                              </p>
-                              {gapDisplayLines.length ? (
-                                <div className="levels-listening-context-box">
-                                  {gapDisplayLines.map((line, li) => (
-                                    <p
-                                      key={`ctx-${qn}-${li}`}
-                                      className="levels-listening-gap-prompt"
-                                    >
-                                      {line}
-                                    </p>
-                                  ))}
-                                </div>
-                              ) : null}
-                              <div style={{ display: 'flex', gap: '0.6rem', alignItems: 'center', flexWrap: 'wrap' }}>
-                                <input
-                                  type="text"
-                                  value={currentValue}
-                                  onChange={(e) => {
-                                    const value = e.target.value;
-                                    setOpenInputs((prev) => ({ ...prev, [questionKey]: value }));
-                                    setOpenChecks((prev) => ({ ...prev, [questionKey]: undefined }));
-                                  }}
-                                  placeholder="Your answer"
-                                  style={{
-                                    minWidth: '240px',
-                                    flex: '1 1 240px',
-                                    borderRadius: '8px',
-                                    border: '1px solid #cbd5e0',
-                                    padding: '0.65rem 0.75rem',
-                                  }}
-                                />
-                                {!hideFeedbackResolved ? (
-                                <button
-                                  type="button"
-                                  onClick={() => {
-                                    const expectedAnswers = openAnswerMap.get(qn) || new Set();
-                                    const isCorrect = expectedAnswers.has(normalizeText(currentValue));
-                                    const prevResult = openChecks[questionKey];
-                                    setOpenChecks((prev) => ({ ...prev, [questionKey]: isCorrect }));
-                                    if (typeof prevResult !== 'boolean') {
-                                      const correctChoiceText =
-                                        [...expectedAnswers].slice(0, 4).join(' · ') || 'respuesta modelo';
-                                      const answersFromDatabase = [...expectedAnswers].join(' · ');
-                                      requestAiJustification(questionKey, {
-                                        partLabel: selectedPart?.nombre || '',
-                                        questionLabel: `Question ${qn}`,
-                                        userChoiceText: currentValue,
-                                        correctChoiceText,
-                                        isCorrect,
-                                        answersFromDatabase: answersFromDatabase || undefined,
-                                      });
-                                      void (async () => {
-                                        const uid = await getSessionUserId();
-                                        const pid = selectedQuestion?.preguntaId;
-                                        const parteId = selectedPart?.id;
-                                        if (!uid || !pid || !parteId) return;
-                                        const { error } = await recordLevelsAnswerEvaluation({
-                                          userId: uid,
-                                          preguntaId: pid,
-                                          parteId,
-                                          isCorrect,
-                                          slotLabel: `Question ${qn}`,
-                                          userAnswerText: currentValue,
-                                        });
-                                        if (error) {
-                                          console.warn('levels eval/puntuacion:', error.message || error);
-                                        }
-                                      })();
+                              questionNumber={qn}
+                              displayLines={gapDisplayLines}
+                              currentValue={currentValue}
+                              checkResult={checkResult}
+                              hideFeedback={hideFeedbackResolved}
+                              openAnswerMap={openAnswerMap}
+                              aiHint={aiHintsByKey[questionKey]}
+                              studyTip={listeningStrategyPack?.studyTip}
+                              lang={lang}
+                              onInputChange={(value) => {
+                                setOpenInputs((prev) => ({ ...prev, [questionKey]: value }));
+                                setOpenChecks((prev) => ({ ...prev, [questionKey]: undefined }));
+                              }}
+                              onCheck={() => {
+                                const expectedAnswers = openAnswerMap.get(qn) || new Set();
+                                const isCorrect = expectedAnswers.has(normalizeText(currentValue));
+                                const prevResult = openChecks[questionKey];
+                                setOpenChecks((prev) => ({ ...prev, [questionKey]: isCorrect }));
+                                if (typeof prevResult !== 'boolean') {
+                                  const correctChoiceText =
+                                    [...expectedAnswers].slice(0, 4).join(' · ') || 'respuesta modelo';
+                                  const answersFromDatabase = [...expectedAnswers].join(' · ');
+                                  requestAiJustification(questionKey, {
+                                    partLabel: selectedPart?.nombre || '',
+                                    questionLabel: `Question ${qn}`,
+                                    userChoiceText: currentValue,
+                                    correctChoiceText,
+                                    isCorrect,
+                                    answersFromDatabase: answersFromDatabase || undefined,
+                                  });
+                                  void (async () => {
+                                    const uid = await getSessionUserId();
+                                    const pid = selectedQuestion?.preguntaId;
+                                    const parteId = selectedPart?.id;
+                                    if (!uid || !pid || !parteId) return;
+                                    const { error } = await recordLevelsAnswerEvaluation({
+                                      userId: uid,
+                                      preguntaId: pid,
+                                      parteId,
+                                      isCorrect,
+                                      slotLabel: `Question ${qn}`,
+                                      userAnswerText: currentValue,
+                                    });
+                                    if (error) {
+                                      console.warn('levels eval/puntuacion:', error.message || error);
                                     }
-                                  }}
-                                  style={{
-                                    borderRadius: '8px',
-                                    border: '1px solid #2b6cb0',
-                                    background: '#ebf8ff',
-                                    color: '#1a365d',
-                                    padding: '0.6rem 0.9rem',
-                                    cursor: 'pointer',
-                                  }}
-                                >
-                                  Check
-                                </button>
-                                ) : null}
-                              </div>
-                              {!hideFeedbackResolved && typeof checkResult === 'boolean' ? (
-                                <B2ListeningPracticeFeedback
-                                  isCorrect={checkResult}
-                                  correctLabel={(() => {
-                                    const expected = openAnswerMap.get(qn);
-                                    const list = expected && expected.size > 0 ? [...expected] : [];
-                                    return list.length > 0 ? list.join(' · ') : null;
-                                  })()}
-                                  hint={aiHintsByKey[questionKey]}
-                                  studyTip={listeningStrategyPack?.studyTip}
-                                  lang={lang}
-                                />
-                              ) : null}
-                            </div>
+                                  })();
+                                }
+                              }}
+                            />
                           );
                         }
 
@@ -3872,6 +3967,10 @@ function B2ExamPaperPracticePageInner({
         skillPracticeMode={isSkillPracticeSession}
         skillPracticeTheme={skillNav.skillTheme}
         onContinueInPage={isSkillPracticeSession ? handleKeepPracticing : handleContinueInPage}
+        onPreviousInPage={handlePreviousInPage}
+        onContinueModule={
+          examModeActive && !reviewMode ? handleContinueModuleInExamMode : undefined
+        }
         showCheckAnswersButton={shouldShowCheckAnswersButton({
           skillPracticeMode: isSkillPracticeSession,
           hideFeedback,
