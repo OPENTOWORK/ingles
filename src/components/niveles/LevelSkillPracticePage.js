@@ -316,6 +316,11 @@ function LevelSkillPracticePageInner({ slug, skillRoute }) {
             partNumber={selectedPart?.partNumber ?? partMin}
             pagePartMax={partMax}
             examSlot={examSlot}
+            examenIdBySlot={scoring.examenIdBySlot}
+            onSelectExamSlot={(slot) => {
+              void scoring.refreshPuntuacionesProgress();
+              handleSelectExamSlot(slot);
+            }}
             skillPracticeMode
             skillPracticeTheme={skillTheme}
             onContinueInPage={handleKeepPracticing}

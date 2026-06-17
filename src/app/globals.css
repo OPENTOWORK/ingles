@@ -3015,8 +3015,8 @@ body.nav-open {
 }
 
 .levels-b2-practice__study-tools {
-  flex: 1 1 100%;
-  width: 100%;
+  flex: 0 1 auto;
+  width: auto;
   min-width: 0;
 }
 
@@ -3026,10 +3026,10 @@ body.nav-open {
 
 .levels-b2-practice__status-tools-row {
   display: flex;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
   align-items: center;
-  justify-content: space-between;
-  gap: 0.5rem 0.75rem;
+  justify-content: flex-start;
+  gap: 0.5rem 0.65rem;
   width: 100%;
 }
 
@@ -3037,9 +3037,97 @@ body.nav-open {
   justify-content: flex-end;
 }
 
+@media (max-width: 640px) {
+  .levels-b2-practice__status-tools-row {
+    flex-wrap: wrap;
+  }
+}
+
 .levels-b2-practice__exam-save-tools {
   flex: 0 0 auto;
   margin-left: auto;
+}
+
+.levels-b2-practice__exercise-stars {
+  flex: 0 0 auto;
+  margin-left: auto;
+}
+
+.levels-b2-practice__status-tools-row:has(.levels-b2-practice__study-tools)
+  .levels-b2-practice__exercise-stars {
+  margin-left: auto;
+}
+
+.skill-exercise-stars-badge {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.2rem;
+  min-width: 7.25rem;
+  min-height: auto;
+  padding: 0.35rem 0.65rem;
+  border-radius: 10px;
+  border: 1px solid color-mix(in srgb, var(--skill-practice-accent, #2563eb) 22%, #e2e8f0);
+  background: color-mix(in srgb, var(--skill-practice-accent, #2563eb) 6%, #ffffff);
+  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.04);
+}
+
+.skill-exercise-stars-badge--link {
+  text-decoration: none;
+  color: inherit;
+  cursor: pointer;
+  transition:
+    transform 0.18s ease,
+    border-color 0.18s ease,
+    box-shadow 0.18s ease,
+    background 0.18s ease;
+}
+
+.skill-exercise-stars-badge--link:hover {
+  transform: translateY(-1px);
+  border-color: color-mix(in srgb, var(--skill-practice-accent, #2563eb) 40%, #e2e8f0);
+  background: color-mix(in srgb, var(--skill-practice-accent, #2563eb) 12%, #ffffff);
+  box-shadow: 0 4px 14px color-mix(in srgb, var(--skill-practice-accent, #2563eb) 16%, transparent);
+}
+
+.skill-exercise-stars-badge--link:focus-visible {
+  outline: 2px solid var(--skill-practice-accent, #2563eb);
+  outline-offset: 2px;
+}
+
+.skill-exercise-stars-badge__hint {
+  font-size: 0.62rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  color: color-mix(in srgb, var(--skill-practice-accent, #2563eb) 70%, #64748b);
+  line-height: 1.2;
+}
+
+.skill-exercise-stars-badge__label {
+  font-size: 0.68rem;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: color-mix(in srgb, var(--skill-practice-accent, #2563eb) 55%, #64748b);
+  line-height: 1.2;
+  text-align: center;
+}
+
+.levels-b2-practice--skill-compact[data-skill-theme='reading'] .skill-exercise-stars-badge {
+  --skill-practice-accent: #2563eb;
+}
+
+.levels-b2-practice--skill-compact[data-skill-theme='writing'] .skill-exercise-stars-badge {
+  --skill-practice-accent: #059669;
+}
+
+.levels-b2-practice--skill-compact[data-skill-theme='listening'] .skill-exercise-stars-badge {
+  --skill-practice-accent: #d97706;
+}
+
+.levels-b2-practice--skill-compact[data-skill-theme='speaking'] .skill-exercise-stars-badge {
+  --skill-practice-accent: #db2777;
 }
 
 .exam-mode-save-controls {
@@ -3316,6 +3404,20 @@ body.nav-open {
   box-shadow:
     0 1px 2px color-mix(in srgb, var(--skill-accent) 6%, transparent),
     0 6px 18px color-mix(in srgb, var(--skill-accent) 10%, transparent);
+  margin-bottom: 0.35rem;
+}
+
+.levels-b2-practice--skill-compact .levels-b2-practice__status {
+  gap: 0.4rem;
+  margin-bottom: 0.65rem;
+}
+
+.levels-b2-practice--skill-compact .levels-b2-practice__status-row {
+  gap: 0.5rem;
+}
+
+.levels-b2-practice--skill-compact .levels-b2-practice__status > * {
+  flex: initial;
 }
 
 .levels-b2-practice--skill-compact[data-skill-theme] .exam-practice-level-strip,
@@ -4909,6 +5011,15 @@ body.nav-open {
 }
 
 .levels-exam-module-nav__start,
+.levels-exam-module-nav__end,
+.levels-exam-module-nav__zone {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.levels-exam-module-nav__start,
 .levels-exam-module-nav__end {
   display: flex;
   align-items: center;
@@ -4919,6 +5030,41 @@ body.nav-open {
 .levels-exam-module-nav__end {
   margin-left: auto;
   justify-content: flex-end;
+}
+
+.levels-exam-module-nav--balanced {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+  align-items: center;
+  gap: 0.65rem;
+}
+
+.levels-exam-module-nav--balanced:not(:has(.levels-exam-module-nav__zone--center)) {
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+}
+
+.levels-exam-module-nav__zone--back {
+  justify-self: start;
+}
+
+.levels-exam-module-nav__zone--center {
+  justify-self: center;
+}
+
+.levels-exam-module-nav__zone--forward {
+  justify-self: end;
+  justify-content: flex-end;
+  margin-left: 0;
+}
+
+.levels-exam-module-nav--balanced .levels-exam-module-nav__btn--continue {
+  margin-left: 0;
+}
+
+.levels-exam-module-nav__btn--prev-exercise:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+  transform: none;
 }
 
 .levels-exam-module-nav__btn--prev-part .levels-exam-module-nav__chevron {
@@ -5031,22 +5177,27 @@ body.nav-open {
     0 8px 20px rgba(15, 23, 42, 0.18);
 }
 
-.levels-exam-module-nav--with-check {
+.levels-exam-module-nav--with-check.levels-exam-module-nav--balanced {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+}
+
+.levels-exam-module-nav--with-check:not(.levels-exam-module-nav--balanced) {
   display: grid;
   grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
   align-items: center;
   gap: 0.75rem;
 }
 
-.levels-exam-module-nav--with-check .levels-exam-module-nav__btn--back {
+.levels-exam-module-nav--with-check:not(.levels-exam-module-nav--balanced) .levels-exam-module-nav__btn--back {
   justify-self: start;
 }
 
-.levels-exam-module-nav--with-check .levels-exam-module-nav__btn--check {
+.levels-exam-module-nav--with-check:not(.levels-exam-module-nav--balanced) .levels-exam-module-nav__btn--check {
   justify-self: center;
 }
 
-.levels-exam-module-nav--with-check .levels-exam-module-nav__btn--continue {
+.levels-exam-module-nav--with-check:not(.levels-exam-module-nav--balanced) .levels-exam-module-nav__btn--continue {
   margin-left: 0;
   justify-self: end;
 }
@@ -5097,6 +5248,21 @@ body.nav-open {
     gap: 0.55rem;
   }
 
+  .levels-exam-module-nav--balanced {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .levels-exam-module-nav__zone--back,
+  .levels-exam-module-nav__zone--center,
+  .levels-exam-module-nav__zone--forward {
+    width: 100%;
+    justify-self: stretch;
+    flex-direction: column;
+    align-items: stretch;
+  }
+
   .levels-exam-module-nav__start,
   .levels-exam-module-nav__end {
     width: 100%;
@@ -5124,12 +5290,16 @@ body.nav-open {
 
   .levels-exam-module-nav--with-check {
     grid-template-columns: 1fr;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
   }
 
   .levels-exam-module-nav--with-check .levels-exam-module-nav__btn--back,
   .levels-exam-module-nav--with-check .levels-exam-module-nav__btn--check,
   .levels-exam-module-nav--with-check .levels-exam-module-nav__btn--continue {
     justify-self: stretch;
+    width: 100%;
   }
 }
 
@@ -11307,6 +11477,23 @@ body.reading-night-mode .levels-b2-practice--skill-compact[data-skill-theme] .ex
   background: linear-gradient(180deg, #1e293b 0%, #0f172a 100%);
   border-color: #475569;
   box-shadow: 0 4px 18px rgba(0, 0, 0, 0.22);
+}
+
+body.reading-night-mode .levels-b2-practice--skill-compact[data-skill-theme] .skill-exercise-stars-badge {
+  background: color-mix(in srgb, var(--skill-practice-accent, #2563eb) 12%, #0f172a);
+  border-color: color-mix(in srgb, var(--skill-practice-accent, #2563eb) 35%, #475569);
+}
+
+body.reading-night-mode .levels-b2-practice--skill-compact[data-skill-theme] .skill-exercise-stars-badge__label {
+  color: #94a3b8;
+}
+
+body.reading-night-mode .levels-b2-practice--skill-compact[data-skill-theme] .skill-exercise-stars-badge__hint {
+  color: #93c5fd;
+}
+
+body.reading-night-mode .levels-b2-practice--skill-compact[data-skill-theme] .skill-exercise-stars-badge--link:hover {
+  background: color-mix(in srgb, var(--skill-practice-accent, #2563eb) 18%, #0f172a);
 }
 
 body.reading-night-mode .levels-b2-practice--skill-compact[data-skill-theme] .exam-practice-level-strip,

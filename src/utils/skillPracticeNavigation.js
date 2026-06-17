@@ -10,6 +10,15 @@ export function getSortedExamSlots(examenIdBySlot = {}) {
   return Array.from({ length: B2_EXAM_SLOT_MAX }, (_, i) => i + 1);
 }
 
+/** Previous exercise slot before `currentSlot`, or null if none. */
+export function getPreviousExamSlot(currentSlot, examenIdBySlot = {}) {
+  const slots = getSortedExamSlots(examenIdBySlot);
+  const idx = slots.indexOf(currentSlot);
+  if (idx > 0) return slots[idx - 1];
+  const behind = [...slots].reverse().find((s) => s < currentSlot);
+  return behind ?? null;
+}
+
 /** Next exercise slot after `currentSlot`, or null if none. */
 export function getNextExamSlot(currentSlot, examenIdBySlot = {}) {
   const slots = getSortedExamSlots(examenIdBySlot);
@@ -45,6 +54,17 @@ export function runKeepPracticingSkillFlow({
     return;
   }
   onReturnToExercisePicker?.();
+}
+
+/** Go to the previous exam variant within the current part. */
+export function runBackExerciseSkillFlow({ examSlot, examenIdBySlot, onSelectExamSlot }) {
+  const prevSlot = getPreviousExamSlot(examSlot, examenIdBySlot);
+  if (prevSlot == null) return false;
+  onSelectExamSlot?.(prevSlot);
+  if (typeof window !== 'undefined') {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+  return true;
 }
 
 /** Close practice and keep ?part= but drop ?examen= (exercise picker for current part). */

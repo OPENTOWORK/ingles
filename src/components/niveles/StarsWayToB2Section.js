@@ -1,11 +1,13 @@
 'use client';
 
-import { useMemo, useState } from 'react';
+import { Suspense, useEffect, useMemo, useState } from 'react';
 import Link from 'next/link';
+import { useSearchParams } from 'next/navigation';
 import TheoryLevelStars from '@/components/theory/TheoryLevelStars';
 import ExamSkillIcon from '@/components/exam/ExamSkillIcon';
 import {
   B2_STARS_WAY_COLUMNS,
+  getB2StarsWayExerciseFocusId,
   getB2StarsWayExerciseHref,
   getB2StarsWayPartsForColumn,
 } from '@/data/b2StarsWayConfig';
@@ -63,21 +65,25 @@ function PathConnector({ from, to }) {
   );
 }
 
-function ExerciseNode({ exerciseIndex, examSlot, part, column, progressBySlot, align }) {
+function ExerciseNode({ exerciseIndex, examSlot, part, column, progressBySlot, align, isFocused = false }) {
   const score = getExerciseScore(progressBySlot, part.globalPartNumber, examSlot);
   const stars = getExerciseStars(progressBySlot, part.globalPartNumber, examSlot);
   const attempted = Boolean(score?.total);
   const href = getB2StarsWayExerciseHref(column, part.globalPartNumber, examSlot);
   const perfect = stars >= 3;
   const started = attempted && !perfect;
+  const focusId = getB2StarsWayExerciseFocusId(part.globalPartNumber, examSlot);
 
   return (
     <div className={`${styles.pathSegment} ${styles[`pathSegmentAlign${align.charAt(0).toUpperCase()}${align.slice(1)}`]}`}>
       <Link
+        id={focusId}
         href={href}
         className={`${styles.exerciseNode}${perfect ? ` ${styles.exerciseNodePerfect}` : ''}${
           started ? ` ${styles.exerciseNodeStarted}` : ''
-        }${!attempted ? ` ${styles.exerciseNodeLocked}` : ''}`}
+        }${!attempted ? ` ${styles.exerciseNodeLocked}` : ''}${
+          isFocused ? ` ${styles.exerciseNodeFocused}` : ''
+        }`}
         aria-label={`Exercise ${exerciseIndex}, ${stars} of 3 stars${
           attempted ? `, score ${score.correct} of ${score.total}` : ', not tried yet'
         }`}
@@ -128,7 +134,7 @@ function PartMilestone({ part, column, progressBySlot, availableSlots }) {
   );
 }
 
-function SkillPath({ column, parts, progressBySlot, availableSlots }) {
+function SkillPath({ column, parts, progressBySlot, availableSlots, focusPart = 0, focusExam = 0 }) {
   const pathItems = useMemo(
     () => buildPathItems(parts, availableSlots),
     [parts, availableSlots],
@@ -147,6 +153,10 @@ function SkillPath({ column, parts, progressBySlot, availableSlots }) {
         {pathItems.map((item, index) => {
           const align = getPathAlign(index);
           const prevAlign = index > 0 ? getPathAlign(index - 1) : null;
+          const isFocused =
+            item.type === 'exercise' &&
+            item.part.globalPartNumber === focusPart &&
+            item.examSlot === focusExam;
 
           return (
             <div key={`${item.type}-${item.part.globalPartNumber}-${item.examSlot ?? 'm'}`} className={styles.pathStep}>
@@ -166,6 +176,7 @@ function SkillPath({ column, parts, progressBySlot, availableSlots }) {
                   column={column}
                   progressBySlot={progressBySlot}
                   align={align}
+                  isFocused={isFocused}
                 />
               )}
             </div>
@@ -176,12 +187,35 @@ function SkillPath({ column, parts, progressBySlot, availableSlots }) {
   );
 }
 
-export default function StarsWayToB2Section() {
+function StarsWayToB2SectionInner() {
+  const searchParams = useSearchParams();
+  const focusSkillKey = searchParams.get('skill');
+  const focusPart = Number(searchParams.get('part') || 0);
+  const focusExam = Number(searchParams.get('examen') || 0);
+
   const { progressBySlot, availableSlots, loading } = useB2StarsWayProgress();
   const [activeSkillKey, setActiveSkillKey] = useState(null);
 
+  useEffect(() => {
+    if (
+      focusSkillKey &&
+      B2_STARS_WAY_COLUMNS.some((column) => column.key === focusSkillKey)
+    ) {
+      setActiveSkillKey(focusSkillKey);
+    }
+  }, [focusSkillKey]);
+
   const activeColumn = B2_STARS_WAY_COLUMNS.find((col) => col.key === activeSkillKey) ?? null;
   const activeParts = activeColumn ? getB2StarsWayPartsForColumn(activeColumn) : [];
+
+  useEffect(() => {
+    if (loading || !activeColumn || !focusPart || !focusExam) return undefined;
+    const id = getB2StarsWayExerciseFocusId(focusPart, focusExam);
+    const timer = window.setTimeout(() => {
+      document.getElementById(id)?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }, 350);
+    return () => window.clearTimeout(timer);
+  }, [loading, activeColumn, focusPart, focusExam]);
 
   return (
     <section className={styles.section} aria-labelledby="stars-way-title">
@@ -236,9 +270,25 @@ export default function StarsWayToB2Section() {
             parts={activeParts}
             progressBySlot={progressBySlot}
             availableSlots={availableSlots}
+            focusPart={focusPart}
+            focusExam={focusExam}
           />
         </div>
       )}
     </section>
+  );
+}
+
+export default function StarsWayToB2Section() {
+  return (
+    <Suspense
+      fallback={
+        <p className={styles.loading} role="status">
+          Loading your progress…
+        </p>
+      }
+    >
+      <StarsWayToB2SectionInner />
+    </Suspense>
   );
 }

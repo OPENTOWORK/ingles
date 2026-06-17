@@ -1,6 +1,6 @@
 'use client';
 
-import { useRef } from 'react';
+import { useMemo, useRef } from 'react';
 import SiteMascot from '@/components/SiteMascot';
 import { B2ExamSlotProgressPicker } from '@/components/b2/B2ExamSlotProgressPicker';
 import LevelsCategoryTimer from '@/components/levels/LevelsCategoryTimer';
@@ -10,10 +10,16 @@ import ExamStudyNotesSidebar from '@/components/exam/ExamStudyNotesSidebar';
 import ExamPracticeReportError from '@/components/exam/ExamPracticeReportError';
 import ExamPracticeLevelPicker from '@/components/niveles/ExamPracticeLevelPicker';
 import ExamPracticeSkillPicker from '@/components/niveles/ExamPracticeSkillPicker';
+import SkillExerciseStarsBadge from '@/components/exam/SkillExerciseStarsBadge';
 import { getLevelSkillPracticeHref } from '@/data/nivelesLevelHub';
+import {
+  getB2StarsWayColumnBySkillRoute,
+  getB2StarsWayPageHref,
+} from '@/data/b2StarsWayConfig';
 import { ExamPracticeToolsProvider } from '@/context/ExamPracticeToolsContext';
 import { useUserRole } from '@/context/UserRoleContext';
 import { isAdminRole } from '@/utils/authRoles';
+import { starsFromPartExerciseScore } from '@/utils/skillPartFirstProgress';
 
 /** Split chrome titles like "B2 Reading and Use of English Practice" for structured header UI. */
 function parsePracticeChromeTitle(title = '') {
@@ -168,6 +174,36 @@ export function B2ExamPracticeChrome({
   const savedPrefix = lang === 'en' ? 'Saved:' : 'Guardado:';
   const workPanelRef = useRef(null);
 
+  const skillExercisePartNumber = useMemo(() => {
+    if (!showLevelPicker || !selectedPartId || !partsData?.length) return null;
+    const part = partsData.find((p) => p.id === selectedPartId);
+    if (!part) return null;
+    const n = Number(
+      part.partNumber || String(part.nombre || part.nombre_parte || '').match(/\d+/)?.[0] || 0,
+    );
+    return n > 0 ? n : null;
+  }, [showLevelPicker, selectedPartId, partsData]);
+
+  const skillExerciseStars = useMemo(() => {
+    if (!skillExercisePartNumber || !examSlot) return 0;
+    const partScore = progressBySlot?.[examSlot]?.parts?.[skillExercisePartNumber];
+    return starsFromPartExerciseScore(partScore);
+  }, [skillExercisePartNumber, examSlot, progressBySlot]);
+
+  const showSkillExerciseStars =
+    showLevelPicker && compactSkillHeader && Boolean(skillExercisePartNumber);
+
+  const starsWayHref = useMemo(() => {
+    if (!showSkillExerciseStars || !skillRoute || !skillExercisePartNumber || !examSlot) return null;
+    const column = getB2StarsWayColumnBySkillRoute(skillRoute);
+    if (!column) return null;
+    return getB2StarsWayPageHref({
+      skillKey: column.key,
+      globalPartNumber: skillExercisePartNumber,
+      examSlot,
+    });
+  }, [showSkillExerciseStars, skillRoute, skillExercisePartNumber, examSlot]);
+
   const partTabsEl =
     partsData?.length > 0 && !hidePartTabs ? (
       <div
@@ -301,10 +337,19 @@ export function B2ExamPracticeChrome({
           ) : null}
 
           <div className="levels-b2-practice__status">
-            {headerTools || examModeSaveControls ? (
+            {headerTools || examModeSaveControls || showSkillExerciseStars ? (
               <div className="levels-b2-practice__status-tools-row">
                 {headerTools ? (
                   <div className="levels-b2-practice__study-tools">{headerTools}</div>
+                ) : null}
+                {showSkillExerciseStars ? (
+                  <div className="levels-b2-practice__exercise-stars">
+                    <SkillExerciseStarsBadge
+                      stars={skillExerciseStars}
+                      href={starsWayHref}
+                      lang={lang}
+                    />
+                  </div>
                 ) : null}
                 {examModeSaveControls ? (
                   <div className="levels-b2-practice__exam-save-tools">{examModeSaveControls}</div>

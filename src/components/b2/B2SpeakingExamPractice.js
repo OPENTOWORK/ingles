@@ -572,6 +572,15 @@ function B2SpeakingExamPracticeInner({ title, subtitle, loadingLabel, refreshLab
         partNumber={partNumber}
         pagePartMax={B2_SPEAKING_PART_MAX}
         examSlot={examSlot}
+        examenIdBySlot={isSkillPracticeSession ? scoring.examenIdBySlot : undefined}
+        onSelectExamSlot={
+          isSkillPracticeSession
+            ? (slot) => {
+                void scoring.refreshPuntuacionesProgress();
+                handleSelectExamSlot(slot);
+              }
+            : undefined
+        }
         overviewHref={examModeHubNav?.href}
         overviewLabel={examModeHubNav?.label}
         skillPracticeMode={isSkillPracticeSession}

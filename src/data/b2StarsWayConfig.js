@@ -63,3 +63,22 @@ export function getB2StarsWayPartsForColumn(column) {
 export function getB2StarsWayExerciseHref(column, globalPartNumber, examSlot) {
   return `/niveles/b2/${column.skillRoute}?part=${globalPartNumber}&examen=${examSlot}`;
 }
+
+export function getB2StarsWayColumnBySkillRoute(skillRoute = '') {
+  const route = String(skillRoute || '').toLowerCase();
+  return B2_STARS_WAY_COLUMNS.find((col) => col.skillRoute === route) ?? null;
+}
+
+/** Deep link into Stars way — opens the path at a specific exercise node. */
+export function getB2StarsWayPageHref({ skillKey, globalPartNumber, examSlot } = {}) {
+  const params = new URLSearchParams();
+  if (skillKey) params.set('skill', skillKey);
+  if (globalPartNumber) params.set('part', String(globalPartNumber));
+  if (examSlot) params.set('examen', String(examSlot));
+  const query = params.toString();
+  return `/niveles/b2/stars-way${query ? `?${query}` : ''}`;
+}
+
+export function getB2StarsWayExerciseFocusId(globalPartNumber, examSlot) {
+  return `stars-way-exercise-${globalPartNumber}-${examSlot}`;
+}

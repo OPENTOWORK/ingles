@@ -387,6 +387,16 @@
   opacity: 0.92;
 }
 
+.exerciseNodeFocused {
+  position: relative;
+}
+
+.exerciseNodeFocused .exerciseNodeCircle {
+  box-shadow:
+    0 0 0 4px color-mix(in srgb, var(--stars-way-accent, #2563eb) 28%, transparent),
+    0 8px 20px color-mix(in srgb, var(--stars-way-accent, #2563eb) 24%, transparent);
+}
+
 .exerciseNodeLabel {
   font-size: 0.78rem;
   font-weight: 800;

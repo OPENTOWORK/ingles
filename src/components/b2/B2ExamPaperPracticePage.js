@@ -3964,6 +3964,15 @@ function B2ExamPaperPracticePageInner({
         partNumber={partNumber}
         pagePartMax={partMax}
         examSlot={examSlot}
+        examenIdBySlot={isSkillPracticeSession ? scoring.examenIdBySlot : undefined}
+        onSelectExamSlot={
+          isSkillPracticeSession
+            ? (slot) => {
+                void scoring.refreshPuntuacionesProgress();
+                handleSelectExamSlot(slot);
+              }
+            : undefined
+        }
         skillPracticeMode={isSkillPracticeSession}
         skillPracticeTheme={skillNav.skillTheme}
         onContinueInPage={isSkillPracticeSession ? handleKeepPracticing : handleContinueInPage}

@@ -3,6 +3,7 @@
 import Link from 'next/link';
 import { getB2ExamPracticeNavState } from '@/data/b2ExamModuleNav';
 import { getLevelOverviewNav } from '@/utils/levelOverviewNav';
+import { getPreviousExamSlot } from '@/utils/skillPracticeNavigation';
 
 function NavChevron({ direction = 'back' }) {
   return (
@@ -27,13 +28,15 @@ function NavChevron({ direction = 'back' }) {
 
 /**
  * Footer navigation for level exam practice modules.
- * Back (left) · Continue (right).
+ * Back (left) · Check (center, optional) · Back exercise / Continue (right).
  */
 export default function B2ExamPracticeModuleNav({
   slug = 'b2',
   partNumber,
   pagePartMax,
   examSlot = 1,
+  examenIdBySlot = {},
+  onSelectExamSlot = null,
   onContinueInPage,
   onPreviousInPage,
   onContinueModule,
@@ -95,15 +98,34 @@ export default function B2ExamPracticeModuleNav({
       : `Continuar — ${nav.continueModuleTitle}`;
   }
 
+  const previousExerciseSlot =
+    skillPracticeMode && typeof onSelectExamSlot === 'function'
+      ? getPreviousExamSlot(examSlot, examenIdBySlot)
+      : null;
+  const showPreviousExercise = skillPracticeMode && typeof onSelectExamSlot === 'function';
+  const previousExerciseLabel = isEn ? 'Back exercise' : 'Ejercicio anterior';
+
+  const useBalancedLayout = skillPracticeMode || showCheckAnswersButton;
+
+  const handlePreviousExercise = () => {
+    if (previousExerciseSlot == null || typeof onSelectExamSlot !== 'function') return;
+    onSelectExamSlot(previousExerciseSlot);
+    if (typeof window !== 'undefined') {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  };
+
   return (
     <nav
       className={`levels-exam-module-nav${
         skillPracticeMode ? ' levels-exam-module-nav--skill' : ''
-      }${showCheckAnswersButton ? ' levels-exam-module-nav--with-check' : ''}`}
+      }${showCheckAnswersButton ? ' levels-exam-module-nav--with-check' : ''}${
+        useBalancedLayout ? ' levels-exam-module-nav--balanced' : ''
+      }`}
       data-skill-theme={skillPracticeMode && skillPracticeTheme ? skillPracticeTheme : undefined}
       aria-label={isEn ? 'Module navigation' : 'Navegación del módulo'}
     >
-      <div className="levels-exam-module-nav__start">
+      <div className="levels-exam-module-nav__zone levels-exam-module-nav__zone--back">
         {onBackClick ? (
           <button
             type="button"
@@ -120,7 +142,10 @@ export default function B2ExamPracticeModuleNav({
           </Link>
         )}
 
-        {nav.hasPreviousInPage && previousLabel && typeof onPreviousInPage === 'function' ? (
+        {!useBalancedLayout &&
+        nav.hasPreviousInPage &&
+        previousLabel &&
+        typeof onPreviousInPage === 'function' ? (
           <button
             type="button"
             className="levels-exam-module-nav__btn levels-exam-module-nav__btn--continue levels-exam-module-nav__btn--prev-part"
@@ -132,8 +157,8 @@ export default function B2ExamPracticeModuleNav({
         ) : null}
       </div>
 
-      <div className="levels-exam-module-nav__end">
-        {showCheckAnswersButton && typeof onCheckAnswers === 'function' ? (
+      {showCheckAnswersButton && typeof onCheckAnswers === 'function' ? (
+        <div className="levels-exam-module-nav__zone levels-exam-module-nav__zone--center">
           <button
             type="button"
             className="levels-exam-module-nav__btn levels-exam-module-nav__btn--check"
@@ -143,6 +168,34 @@ export default function B2ExamPracticeModuleNav({
             <span className="levels-exam-module-nav__label">
               {checkAnswersLabel || (isEn ? 'Check answers' : 'Corregir')}
             </span>
+          </button>
+        </div>
+      ) : null}
+
+      <div className="levels-exam-module-nav__zone levels-exam-module-nav__zone--forward">
+        {showPreviousExercise ? (
+          <button
+            type="button"
+            className="levels-exam-module-nav__btn levels-exam-module-nav__btn--back levels-exam-module-nav__btn--prev-exercise"
+            onClick={handlePreviousExercise}
+            disabled={previousExerciseSlot == null}
+          >
+            <NavChevron direction="back" />
+            <span className="levels-exam-module-nav__label">{previousExerciseLabel}</span>
+          </button>
+        ) : null}
+
+        {!useBalancedLayout &&
+        nav.hasPreviousInPage &&
+        previousLabel &&
+        typeof onPreviousInPage === 'function' ? (
+          <button
+            type="button"
+            className="levels-exam-module-nav__btn levels-exam-module-nav__btn--continue levels-exam-module-nav__btn--prev-part"
+            onClick={onPreviousInPage}
+          >
+            <NavChevron direction="back" />
+            <span className="levels-exam-module-nav__label">{previousLabel}</span>
           </button>
         ) : null}
 
