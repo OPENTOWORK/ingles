@@ -6303,6 +6303,31 @@ body.reading-night-mode .levels-b2-speaking-panel__usage,
   padding: calc(0.5rem - 1px) calc(0.65rem - 1px);
 }
 
+.levels-exam-inline-gap__input--partial {
+  border: 2px solid #d97706;
+  background: #fffbeb;
+  padding: calc(0.5rem - 1px) calc(0.65rem - 1px);
+}
+
+.levels-exam-inline-gap__status--partial {
+  color: #b45309;
+}
+
+.levels-exam-inline-gap__feedback--v2 .levels-exam-inline-gap__score {
+  display: block;
+  margin-bottom: 0.15rem;
+  font-weight: 700;
+  color: #1e293b;
+}
+
+.levels-exam-inline-gap__feedback--v2 .levels-exam-inline-gap__detail {
+  display: block;
+  margin-top: 0.25rem;
+  color: #475569;
+  font-size: 0.9375rem;
+  line-height: 1.45;
+}
+
 .levels-exam-inline-gap__input--incorrect {
   border: 2px solid #c53030;
   background: #fff5f5;

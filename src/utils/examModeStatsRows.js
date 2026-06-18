@@ -118,8 +118,8 @@ function applyScoresToRow(row, incoming, slug) {
   const base = buildEmptySectionScores(slug, row.partMin, row.partMax);
   const byPart = { ...base.byPart };
   let correct = 0;
+  let total = 0;
   const v2 = incoming?.scoringVersion === 2 || base.scoringVersion === 2;
-  const fullSectionTotal = base.total;
 
   for (let p = row.partMin; p <= row.partMax; p += 1) {
     const src = incoming?.byPart?.[p];
@@ -147,17 +147,16 @@ function applyScoresToRow(row, incoming, slug) {
         : {}),
     };
     correct += partCorrect;
+    total += partTotal;
   }
 
-  if (
-    correct === 0 &&
-    (!incoming?.byPart || Object.keys(incoming.byPart).length === 0) &&
-    (incoming?.correct != null || incoming?.total != null)
-  ) {
-    correct = Math.max(0, Number(incoming.pointsEarned ?? incoming.correct) || 0);
+  if (!incoming?.byPart || Object.keys(incoming.byPart).length === 0) {
+    if (incoming?.correct != null || incoming?.total != null) {
+      correct = Math.max(0, Number(incoming.pointsEarned ?? incoming.correct) || 0);
+      total = Math.max(0, Number(incoming.maxPoints ?? incoming.total) || row.scores.total);
+    }
   }
 
-  const total = fullSectionTotal;
   const pct = total > 0 ? Math.round((correct / total) * 100) : 0;
   return {
     ...row,
@@ -190,18 +189,8 @@ export function applySessionScoresToRows(rows, session, slug) {
     if (!sec) return row;
 
     let next = { ...row, status: sec.status || row.status };
-    const preview = sec.sectionDraft?.scorePreview;
-    let scores = null;
-    if (sec.status === 'completed' && sec.scores) {
-      scores = sec.scores;
-    } else if (preview) {
-      scores = preview;
-    } else if (sec.scores && (sec.scores.correct > 0 || sec.scores.total > 0)) {
-      scores = sec.scores;
-    }
-
-    if (scores) {
-      next = applyScoresToRow(next, scores, slug);
+    if (sec.scores && (sec.status === 'completed' || sec.scores.total > 0)) {
+      next = applyScoresToRow(next, sec.scores, slug);
     }
     return next;
   });
@@ -242,11 +231,6 @@ export function puntuacionesToPartMap(puntuacionesRows = []) {
 
 /** Superpone levels_puntuaciones (Supabase) sobre filas; la sesión local tiene prioridad si ya completó la sección. */
 export function applyPuntuacionesToRows(rows, puntuacionesRows, slug, session = null) {
-  // During an active exam attempt, skill-practice puntuaciones must not bleed into statistics.
-  if (session?.status === 'in_progress') {
-    return rows;
-  }
-
   const partMap = puntuacionesToPartMap(puntuacionesRows);
   const sessionCompletedKeys = new Set(
     (session?.sections || []).filter((s) => s.status === 'completed').map((s) => s.key),
@@ -317,11 +301,11 @@ export function aggregateExamEstadisticas(estadisticasRows = [], puntuacionesRow
 }
 
 /**
- * Combina plantilla y sesión de exam mode.
- * Skill-practice puntuaciones are intentionally excluded — separate attempts.
+ * Combina plantilla, sesión local y Supabase.
  */
 export function mergeExamModeStatsRows({ slug, session, puntuacionesRows = [], estadisticasRows = [] }) {
   let rows = buildDefaultExamModeRows(slug, session);
+  rows = applyPuntuacionesToRows(rows, puntuacionesRows, slug, session);
   rows = applySessionScoresToRows(rows, session, slug);
   const estadisticas = aggregateExamEstadisticas(estadisticasRows, puntuacionesRows);
   return { rows, estadisticas };

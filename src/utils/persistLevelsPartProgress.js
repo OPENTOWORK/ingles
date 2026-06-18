@@ -8,11 +8,27 @@ import { isB2RuoeV2SessionPersistenceBlocked } from '@/lib/b2ScoringV2FeatureFla
  * @param {object} progress
  */
 export function normaliseLevelsPartProgress(progress = {}) {
-  const correct = Math.max(0, Number(progress.pointsEarned ?? progress.correct) || 0);
-  const total = Math.max(1, Number(progress.maxPoints ?? progress.total) || 1);
+  const scoringVersion = Number(progress.scoringVersion) || 1;
+  const isV2 = scoringVersion === 2;
+  const correct = Math.max(
+    0,
+    Number(
+      isV2
+        ? progress.puntosObtenidos ?? progress.pointsEarned ?? progress.correct
+        : progress.pointsEarned ?? progress.correct,
+    ) || 0,
+  );
+  const total = Math.max(
+    1,
+    Number(
+      isV2
+        ? progress.puntosMaximos ?? progress.maxPoints ?? progress.total
+        : progress.maxPoints ?? progress.total,
+    ) || 1,
+  );
   const evaluated = Math.max(0, Number(progress.evaluated) || correct);
   const incorrect = Math.max(0, total - correct);
-  return { correct, total, evaluated, incorrect };
+  return { correct, total, evaluated, incorrect, scoringVersion, isV2 };
 }
 
 /**
@@ -47,17 +63,20 @@ export async function persistLevelsPartProgress({
     return { saved: false, error: null, v2PersistenceSkipped: true };
   }
 
-  const { correct, total, incorrect } = normaliseLevelsPartProgress(progress);
-  const hasAnswers = progress.complete || correct > 0 || (Number(progress.evaluated) || 0) > 0;
+  const { correct, total, incorrect, scoringVersion, isV2 } = normaliseLevelsPartProgress(progress);
+  const itemCorrect = Math.max(0, Number(progress.correct) || 0);
+  const itemTotal = Math.max(1, Number(progress.questionTotal ?? progress.total) || 1);
+  const hasAnswers =
+    progress.complete || correct > 0 || itemCorrect > 0 || (Number(progress.evaluated) || 0) > 0;
   if (!hasAnswers) return { saved: false, error: null };
 
   const statsPayload =
     statsMode === 'section-finish'
       ? {
           deltaIntentos: 1,
-          deltaEvaluadas: total,
-          deltaCorrectas: correct,
-          deltaIncorrectas: incorrect,
+          deltaEvaluadas: isV2 ? itemTotal : total,
+          deltaCorrectas: isV2 ? itemCorrect : correct,
+          deltaIncorrectas: isV2 ? Math.max(0, itemTotal - itemCorrect) : incorrect,
         }
       : {
           deltaIntentos: 1,
@@ -69,9 +88,12 @@ export async function persistLevelsPartProgress({
       preguntaId,
       examenId,
       parteNumero: partNumber,
-      correctas: correct,
-      totalPreguntas: total,
+      correctas: isV2 ? itemCorrect : correct,
+      totalPreguntas: isV2 ? itemTotal : total,
       scoreSource,
+      scoringVersion,
+      puntosObtenidos: isV2 ? correct : undefined,
+      puntosMaximos: isV2 ? total : undefined,
     }),
     mergeLevelsEstadisticas({
       userId,

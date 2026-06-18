@@ -23,7 +23,6 @@ export const EXAM_MODE_SESSION_VERSION = 1;
  * @property {string|null} finishedAt
  * @property {number|null} remainingSeconds
  * @property {object|null} answers
- * @property {object|null} [sectionDraft]
  * @property {{ correct: number, total: number, byPart: Record<number, { correct: number, total: number, passing: number }> }|null} scores
  */
 
@@ -58,7 +57,6 @@ export function createExamModeSession(slug, examSlot) {
     finishedAt: null,
     remainingSeconds: getCambridgeSectionDurationSeconds(slug, s.title),
     answers: null,
-    sectionDraft: null,
     scores: null,
   }));
 
@@ -174,7 +172,6 @@ export function completeExamModeSection(session, sectionKey, answers, scores) {
       status: 'completed',
       finishedAt: now,
       answers,
-      sectionDraft: null,
       scores: attachScoringVersionToExamModeScores(scores),
       remainingSeconds: 0,
     };
@@ -219,14 +216,6 @@ export function updateExamModeSectionRemaining(session, sectionKey, remainingSec
   return { ...session, sections, updatedAt: new Date().toISOString() };
 }
 
-/** Persist in-progress answers for an active section (explicit save). */
-export function saveExamModeSectionDraft(session, sectionKey, draft) {
-  const sections = session.sections.map((s) =>
-    s.key === sectionKey ? { ...s, sectionDraft: draft ?? null } : s,
-  );
-  return { ...session, sections, updatedAt: new Date().toISOString() };
-}
-
 /** Resolve section key from part range. */
 export function resolveExamModeSectionKey(slug, partMin, partMax) {
   const sections = getLevelFullExamSections(slug);
@@ -239,13 +228,4 @@ export function buildExamModePracticeHref(baseHref, examSlot, { review = false }
   const sep = baseHref.includes('?') ? '&' : '?';
   const mode = review ? 'review' : '1';
   return `${baseHref}${sep}examen=${examSlot}&examMode=${mode}`;
-}
-
-/** Footer link back to the exam-mode hub while inside a section. */
-export function getExamModeHubNav(slug, examSlot, lang = 'en') {
-  const slot = Math.min(5, Math.max(1, Number(examSlot) || 1));
-  return {
-    href: `/niveles/${slug}/exam-mode?examen=${slot}`,
-    label: lang === 'en' ? 'Back to exam overview' : 'Volver al simulacro',
-  };
 }

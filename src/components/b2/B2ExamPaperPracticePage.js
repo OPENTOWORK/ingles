@@ -494,7 +494,7 @@ function B2ExamPaperPracticePageInner({
               .in('pregunta_id', questionIds),
             supabase
               .from('levels_respuestas_abiertas')
-              .select('id, pregunta_id_abierta, respuesta_texto')
+              .select('id, pregunta_id_abierta, respuesta_texto, grading_metadata')
               .in('pregunta_id_abierta', questionIds),
           ]);
 

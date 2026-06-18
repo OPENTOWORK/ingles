@@ -168,33 +168,54 @@ describe('B2 Scoring V2 feature flag', () => {
   });
 });
 
-describe('B2 Scoring V2 persistence guard', () => {
-  it('isB2RuoeV2SessionPersistenceBlocked covers parts 1–7 only when flag ON', () => {
+describe('B2 Scoring V2 persistence', () => {
+  it('isB2RuoeV2SessionPersistenceBlocked is always false (persistence enabled)', () => {
     const envOn = { NEXT_PUBLIC_DRALO_B2_SCORING_V2_ENABLED: 'true' };
-    assert.equal(isB2RuoeV2SessionPersistenceBlocked(4, envOn), true);
+    assert.equal(isB2RuoeV2SessionPersistenceBlocked(4, envOn), false);
     assert.equal(isB2RuoeV2SessionPersistenceBlocked(8, envOn), false);
     assert.equal(isB2RuoeV2SessionPersistenceBlocked(4, { NEXT_PUBLIC_DRALO_B2_SCORING_V2_ENABLED: 'false' }), false);
   });
 
-  it('saveB2PartPuntuacionIfComplete skips when V2 enabled', async () => {
-    const original = process.env.NEXT_PUBLIC_DRALO_B2_SCORING_V2_ENABLED;
-    process.env.NEXT_PUBLIC_DRALO_B2_SCORING_V2_ENABLED = 'true';
-    try {
-      const { saveB2PartPuntuacionIfComplete } = await import('../src/utils/recordLevelsB2PartScore.js');
-      const result = await saveB2PartPuntuacionIfComplete({
-        userId: '00000000-0000-4000-8000-000000000001',
-        preguntaId: '00000000-0000-4000-8000-000000000002',
-        parteId: '00000000-0000-4000-8000-000000000003',
-        examenId: '00000000-0000-4000-8000-000000000004',
-        partNumber: 4,
-        progress: { complete: true, correct: 4, total: 6 },
-      });
-      assert.equal(result.saved, false);
-      assert.equal(result.v2PersistenceSkipped, true);
-    } finally {
-      if (original === undefined) delete process.env.NEXT_PUBLIC_DRALO_B2_SCORING_V2_ENABLED;
-      else process.env.NEXT_PUBLIC_DRALO_B2_SCORING_V2_ENABLED = original;
-    }
+  it('buildUoePartDescripcion includes scoring_version for V2', async () => {
+    const { buildUoePartDescripcion, parseUoePartDescripcion } = await import('../src/utils/levelsPuntuaciones.js');
+    const desc = buildUoePartDescripcion({
+      examenId: 'exam-1',
+      parteNumero: 4,
+      correctas: 6,
+      total: 6,
+      aprobado: true,
+      scoringVersion: 2,
+      puntosObtenidos: 12,
+      puntosMaximos: 12,
+    });
+    const meta = parseUoePartDescripcion(desc);
+    assert.equal(meta.scoringVersion, 2);
+    assert.equal(meta.puntosObtenidos, 12);
+    assert.equal(meta.puntosMaximos, 12);
+  });
+
+  it('normaliseLevelsPartProgress prefers V2 point fields', async () => {
+    const { normaliseLevelsPartProgress } = await import('../src/utils/persistLevelsPartProgress.js');
+    const norm = normaliseLevelsPartProgress({
+      scoringVersion: 2,
+      correct: 6,
+      total: 6,
+      puntosObtenidos: 12,
+      puntosMaximos: 12,
+    });
+    assert.equal(norm.correct, 12);
+    assert.equal(norm.total, 12);
+    assert.equal(norm.isV2, true);
+  });
+
+  it('Part 4 perfect V2 score is 12/12 points', () => {
+    const m = buildPartScoreMetricsV2(
+      4,
+      { correctItems: 6, questionsAnswered: 6, totalQuestions: 6, pointsEarned: 12 },
+      B2_PART_SCORING_V2,
+    );
+    assert.equal(m.pointsEarned, 12);
+    assert.equal(m.maxPoints, 12);
   });
 });
 
@@ -276,8 +297,8 @@ describe('Exam Mode V2 aggregation', () => {
   });
 });
 
-describe('V2 progress does not set passed', () => {
-  it('passed is false under V2 even with all correct', () => {
+describe('V2 progress passed uses points threshold', () => {
+  it('passed is true under V2 when points meet cfg.passing mapped to points', () => {
     const original = process.env.NEXT_PUBLIC_DRALO_B2_SCORING_V2_ENABLED;
     process.env.NEXT_PUBLIC_DRALO_B2_SCORING_V2_ENABLED = 'true';
     try {
@@ -300,7 +321,7 @@ describe('V2 progress does not set passed', () => {
         partId: 'p',
       });
       assert.equal(progress.scoringVersion, 2);
-      assert.equal(progress.passed, false);
+      assert.equal(progress.passed, true);
       assert.equal(progress.pointsEarned, 8);
       assert.equal(progress.maxPoints, 8);
     } finally {
@@ -316,15 +337,28 @@ describe('Exam mode sync and repeat guards', () => {
   const b2Session = { slug: 'b2', examSlot: 1, scoringVersion: 2 };
   const c1Session = { slug: 'c1', examSlot: 1, scoringVersion: 2 };
 
-  it('always syncs exam-mode session backup when a session exists', () => {
+  it('V2 allows syncExamModeToServer for B2', () => {
     assert.equal(shouldSyncExamModeSessionToServer(b2Session, envOn), true);
-    assert.equal(shouldSyncExamModeSessionToServer(c1Session, envOn), true);
-    assert.equal(shouldSyncExamModeSessionToServer(b2Session, envOff), true);
-    assert.equal(shouldSyncExamModeSessionToServer(null, envOn), false);
   });
 
-  it('does not clear skill-practice puntuaciones on repeat (exam scores live in session)', () => {
-    assert.equal(shouldClearExamSlotPuntuacionesOnRepeat(), false);
+  it('V2 does not block sync for non-B2 levels', () => {
+    assert.equal(shouldSyncExamModeSessionToServer(c1Session, envOn), true);
+  });
+
+  it('flag OFF keeps B2 sync enabled', () => {
+    assert.equal(shouldSyncExamModeSessionToServer(b2Session, envOff), true);
+  });
+
+  it('V2 blocks clearExamSlotPuntuaciones for B2', () => {
+    assert.equal(shouldClearExamSlotPuntuacionesOnRepeat('b2', envOn), false);
+  });
+
+  it('V2 does not block clear for non-B2', () => {
+    assert.equal(shouldClearExamSlotPuntuacionesOnRepeat('c1', envOn), true);
+  });
+
+  it('flag OFF keeps B2 clear enabled', () => {
+    assert.equal(shouldClearExamSlotPuntuacionesOnRepeat('b2', envOff), true);
   });
 });
 
@@ -432,5 +466,70 @@ describe('Aggregation integrity and edge cases', () => {
   it('Part 8+ persistence not blocked by V2 flag', () => {
     assert.equal(isB2RuoeV2SessionPersistenceBlocked(8, { NEXT_PUBLIC_DRALO_B2_SCORING_V2_ENABLED: 'true' }), false);
     assert.equal(isB2RuoeV2SessionPersistenceBlocked(10, { NEXT_PUBLIC_DRALO_B2_SCORING_V2_ENABLED: 'true' }), false);
+  });
+
+  it('resolvePartScoreFields V1 uses item counts', async () => {
+    const { buildUoePartDescripcion } = await import('../src/utils/levelsPuntuaciones.js');
+    const desc = buildUoePartDescripcion({
+      examenId: 'exam-1',
+      parteNumero: 4,
+      correctas: 4,
+      total: 6,
+      aprobado: true,
+      scoringVersion: 1,
+    });
+    assert.ok(desc.includes('"correctas":4'));
+    assert.ok(!desc.includes('scoring_version'));
+  });
+
+  it('score_source round-trips in descripcion meta JSON', async () => {
+    const { buildUoePartDescripcion, parseUoePartDescripcion } = await import('../src/utils/levelsPuntuaciones.js');
+    const { LEVELS_SCORE_SOURCE } = await import('../src/utils/levelsScoreSource.js');
+    const desc = buildUoePartDescripcion({
+      examenId: 'exam-uuid',
+      parteNumero: 4,
+      correctas: 3,
+      total: 6,
+      aprobado: true,
+      scoreSource: LEVELS_SCORE_SOURCE.EXAM_MODE,
+      scoringVersion: 2,
+      puntosObtenidos: 6,
+      puntosMaximos: 12,
+    });
+    const meta = parseUoePartDescripcion(desc);
+    assert.equal(meta.scoreSource, LEVELS_SCORE_SOURCE.EXAM_MODE);
+    assert.equal(meta.scoringVersion, 2);
+    assert.equal(meta.puntosObtenidos, 6);
+    assert.equal(meta.puntosMaximos, 12);
+  });
+
+  it('fetch filters rows by score_source from descripcion when column absent', async () => {
+    const { resolveLevelsScoreSource } = await import('../src/utils/levelsScoreSource.js');
+    const { parseUoePartDescripcion, buildUoePartDescripcion } = await import('../src/utils/levelsPuntuaciones.js');
+    const { LEVELS_SCORE_SOURCE } = await import('../src/utils/levelsScoreSource.js');
+    const skillDesc = buildUoePartDescripcion({
+      examenId: 'e1',
+      parteNumero: 4,
+      correctas: 3,
+      total: 6,
+      aprobado: false,
+      scoreSource: LEVELS_SCORE_SOURCE.SKILL_PRACTICE,
+      scoringVersion: 2,
+      puntosObtenidos: 8,
+      puntosMaximos: 12,
+    });
+    const examDesc = buildUoePartDescripcion({
+      examenId: 'e1',
+      parteNumero: 4,
+      correctas: 2,
+      total: 6,
+      aprobado: false,
+      scoreSource: LEVELS_SCORE_SOURCE.EXAM_MODE,
+      scoringVersion: 2,
+      puntosObtenidos: 6,
+      puntosMaximos: 12,
+    });
+    assert.equal(resolveLevelsScoreSource(parseUoePartDescripcion(skillDesc)), LEVELS_SCORE_SOURCE.SKILL_PRACTICE);
+    assert.equal(resolveLevelsScoreSource(parseUoePartDescripcion(examDesc)), LEVELS_SCORE_SOURCE.EXAM_MODE);
   });
 });

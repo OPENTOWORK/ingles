@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import LevelsAnswerJustification from '@/components/levels/LevelsAnswerJustification';
+import { getB2Part4V2FeedbackCopy } from '@/lib/b2Part4Grading';
 import { parseB2KeyWordTransformItems } from '@/utils/b2ExamTextBlocks';
 
 /**
@@ -14,6 +15,8 @@ import { parseB2KeyWordTransformItems } from '@/utils/b2ExamTextBlocks';
  *   openInputs: Record<string, string>,
  *   onInputChange: (questionKey: string, value: string) => void,
  *   openChecks: Record<string, boolean | undefined>,
+ *   openGrades?: Record<string, { score?: number, maxScore?: number, reason?: string } | undefined>,
+ *   scoringV2Part4?: boolean,
  *   onCheckGap: (questionNumber: number, questionKey: string, value: string) => void,
  *   openAnswerMap: Map<number, Set<string>>,
  *   hideFeedback?: boolean,
@@ -29,6 +32,8 @@ export default function B2ExamInlineKeyWordPassage({
   openInputs,
   onInputChange,
   openChecks,
+  openGrades = {},
+  scoringV2Part4 = false,
   onCheckGap,
   openAnswerMap,
   hideFeedback = false,
@@ -60,7 +65,12 @@ export default function B2ExamInlineKeyWordPassage({
 
   if (!items.length) return null;
 
-  const getInputStateClass = (checkResult, currentValue, isAnswerLocked) => {
+  const getInputStateClass = (checkResult, grade, currentValue, isAnswerLocked) => {
+    if (scoringV2Part4 && grade && typeof grade.score === 'number') {
+      if (grade.score === 2) return 'levels-exam-inline-gap__input--correct';
+      if (grade.score === 1) return 'levels-exam-inline-gap__input--partial';
+      return 'levels-exam-inline-gap__input--incorrect';
+    }
     if (typeof checkResult === 'boolean') {
       return checkResult
         ? 'levels-exam-inline-gap__input--correct'
@@ -81,10 +91,15 @@ export default function B2ExamInlineKeyWordPassage({
         const questionKey = getQuestionKey(questionNumber);
         const currentValue = openInputs[questionKey] || '';
         const checkResult = openChecks[questionKey];
-        const isAnswerLocked = !hideFeedback && typeof checkResult === 'boolean';
+        const grade = scoringV2Part4 ? openGrades[questionKey] : null;
+        const hasV2Grade = scoringV2Part4 && grade && typeof grade.score === 'number';
+        const isAnswerLocked =
+          !hideFeedback &&
+          (hasV2Grade || typeof checkResult === 'boolean');
         const expected = openAnswerMap.get(questionNumber);
         const expectedList = expected && expected.size > 0 ? [...expected] : [];
-        const inputStateClass = getInputStateClass(checkResult, currentValue, isAnswerLocked);
+        const inputStateClass = getInputStateClass(checkResult, grade, currentValue, isAnswerLocked);
+        const v2Copy = hasV2Grade ? getB2Part4V2FeedbackCopy(grade) : null;
 
         return (
           <div
@@ -133,7 +148,40 @@ export default function B2ExamInlineKeyWordPassage({
               )}
               <span>{sentence2After}</span>
             </p>
-            {!hideFeedback && isActive && typeof checkResult === 'boolean' ? (
+            {!hideFeedback && isActive && hasV2Grade && v2Copy ? (
+              <div className="levels-exam-inline-gap__feedback levels-exam-inline-gap__feedback--v2">
+                <span className="levels-exam-inline-gap__score">{v2Copy.scoreLabel}</span>
+                <span
+                  className={`levels-exam-inline-gap__status${
+                    grade.score === 2
+                      ? ' levels-exam-inline-gap__status--ok'
+                      : grade.score === 1
+                        ? ' levels-exam-inline-gap__status--partial'
+                        : ' levels-exam-inline-gap__status--bad'
+                  }`}
+                >
+                  {v2Copy.headline}
+                </span>
+                {v2Copy.detail ? (
+                  <span className="levels-exam-inline-gap__detail">{v2Copy.detail}</span>
+                ) : null}
+                {lazyExplanations ? (
+                  <button
+                    type="button"
+                    className={`levels-exam-mcq-explanations__toggle${
+                      openExplanations[questionKey]
+                        ? ' levels-exam-mcq-explanations__toggle--open'
+                        : ''
+                    }`}
+                    aria-expanded={!!openExplanations[questionKey]}
+                    onClick={() => toggleExplanation(questionKey, questionNumber)}
+                  >
+                    💡 Explanation
+                  </button>
+                ) : null}
+              </div>
+            ) : null}
+            {!hideFeedback && isActive && !scoringV2Part4 && typeof checkResult === 'boolean' ? (
               <div className="levels-exam-inline-gap__feedback">
                 <span
                   className={`levels-exam-inline-gap__status${

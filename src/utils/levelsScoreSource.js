@@ -4,11 +4,7 @@ import { parseUoePartDescripcion } from '@/utils/levelsPuntuaciones';
  * Score persistence contexts for Levels practice.
  *
  * Exam mode and skill practice may share the same exam slot today, but they are
- * independent attempts. Future versions may use different exam content per skill.
- * Never merge or overwrite scores across sources.
- *
- * When exam content is regenerated (admin), stale drafts must be dropped and both
- * modes must reload via levelsExamRegenerationSync (see notifyLevelsExamRegenerated).
+ * independent attempts. Never merge or overwrite scores across sources.
  */
 export const LEVELS_SCORE_SOURCE = {
   SKILL_PRACTICE: 'skill_practice',

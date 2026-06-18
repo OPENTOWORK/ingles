@@ -1,7 +1,6 @@
 import { ensureAppUserProfile } from '@/utils/ensureAppUserProfile';
 import { persistLevelsPartProgress } from '@/utils/persistLevelsPartProgress';
 import { LEVELS_SCORE_SOURCE } from '@/utils/levelsScoreSource';
-import { isB2RuoeV2SessionPersistenceBlocked } from '@/lib/b2ScoringV2FeatureFlag';
 
 /**
  * Exam-mode section finish: persist each answered part to levels_puntuaciones
@@ -17,17 +16,12 @@ export async function persistExamModeSectionScores({ userId, examenId, partSnaps
   if (!profile.ok) return { saved: 0, error: null };
 
   let saved = 0;
-  let skippedV2Parts = 0;
   let lastError = null;
 
   const entries = Object.entries(partSnapshots);
   await Promise.all(
     entries.map(async ([partKey, snap]) => {
       const partNumber = Number(partKey);
-      if (isB2RuoeV2SessionPersistenceBlocked(partNumber)) {
-        skippedV2Parts += 1;
-        return;
-      }
       const progress = snap?.progress;
       const preguntaId = snap?.draft?.preguntaId;
       const parteId = snap?.draft?.parteId || null;
@@ -44,10 +38,6 @@ export async function persistExamModeSectionScores({ userId, examenId, partSnaps
         statsMode: 'section-finish',
       });
 
-      if (result.v2PersistenceSkipped) {
-        skippedV2Parts += 1;
-        return;
-      }
       if (result.error) {
         lastError = result.error;
         return;
@@ -56,5 +46,5 @@ export async function persistExamModeSectionScores({ userId, examenId, partSnaps
     }),
   );
 
-  return { saved, error: lastError, skippedV2Parts };
+  return { saved, error: lastError };
 }

@@ -12,6 +12,8 @@ import { useLevelsCategoryTimer } from '@/hooks/useLevelsCategoryTimer';
 import { computeB2PartScoreMetrics } from '@/utils/levelsPaperScoreMetrics';
 import { getActiveB2RuoePartScoring } from '@/utils/levelsB2PartScoring';
 import { isB2ScoringV2Enabled, isB2RuoeV2SessionPersistenceBlocked } from '@/lib/b2ScoringV2FeatureFlag';
+import { parseB2KeyWordAnswerKeyRows } from '@/lib/parseB2KeyWordAnswerKey';
+import { gradeB2Part4Gap } from '@/lib/b2Part4Grading';
 import { postLevelsAnswerJustification } from '@/utils/levelsJustifyClient';
 import { supabase } from '@/utils/supabaseClient';
 import { extractTextoBloque, splitPart1TextoYPreguntas, parsePart1QuestionOptions } from '@/utils/b2ExamTextBlocks';
@@ -68,6 +70,8 @@ function UseOfEnglishExamsPageInner() {
   const [checkedQuestions, setCheckedQuestions] = useState({});
   const [openInputs, setOpenInputs] = useState({});
   const [openChecks, setOpenChecks] = useState({});
+  /** @type {Record<string, import('@/lib/b2Part4Grading').B2Part4OpenGrade>} */
+  const [openGrades, setOpenGrades] = useState({});
   /** @type {Record<string, { loading?: boolean, error?: string | null, text?: string | null }>} */
   const [aiHintsByKey, setAiHintsByKey] = useState({});
   const [canSeeRefreshControls, setCanSeeRefreshControls] = useState(false);
@@ -90,6 +94,7 @@ function UseOfEnglishExamsPageInner() {
     setCheckedQuestions({});
     setOpenInputs({});
     setOpenChecks({});
+    setOpenGrades({});
     setAiHintsByKey({});
     setPartFinishNotice(null);
 
@@ -139,7 +144,7 @@ function UseOfEnglishExamsPageInner() {
           .in('pregunta_id', questionIds),
         supabase
           .from('levels_respuestas_abiertas')
-          .select('id, pregunta_id_abierta, respuesta_texto')
+          .select('id, pregunta_id_abierta, respuesta_texto, grading_metadata')
           .in('pregunta_id_abierta', questionIds),
       ]);
 
@@ -646,6 +651,14 @@ function UseOfEnglishExamsPageInner() {
 
   const isOpenClozePart = partNumberUoe >= 2 && partNumberUoe <= 4;
   const isKeyWordPart = partNumberUoe === 4;
+  const scoringV2Part4 = isB2ScoringV2Enabled() && isKeyWordPart;
+  const part4ParsedKeys = useMemo(
+    () =>
+      scoringV2Part4
+        ? parseB2KeyWordAnswerKeyRows(selectedQuestion?.respuestasAbiertas || [])
+        : new Map(),
+    [scoringV2Part4, selectedQuestion?.respuestasAbiertas, selectedQuestion?.preguntaId],
+  );
   const isInlinePassagePart = isOpenClozePart;
   const inferredOpenQuestionNumbers = useMemo(
     () => inferOpenQuestionNumbersFromPrompt(selectedQuestion?.enunciado || '', partNumberUoe),
@@ -695,6 +708,8 @@ function UseOfEnglishExamsPageInner() {
         useOpenInputUi: isOpenClozePart,
         openQuestionNumbers,
         openChecks,
+        openGrades,
+        usePart4V2Grading: scoringV2Part4,
         groupedAnswers: groupedAnswersForUiAndScore,
         checkedQuestions,
         selectedOptions,
@@ -704,8 +719,10 @@ function UseOfEnglishExamsPageInner() {
     [
       partNumberUoe,
       isOpenClozePart,
+      scoringV2Part4,
       openQuestionNumbers,
       openChecks,
+      openGrades,
       groupedAnswersForUiAndScore,
       checkedQuestions,
       selectedOptions,
@@ -749,6 +766,8 @@ function UseOfEnglishExamsPageInner() {
         useOpenInputUi: isOpenClozePart,
         openQuestionNumbers,
         openChecks: stateOverride.openChecks ?? openChecks,
+        openGrades: stateOverride.openGrades ?? openGrades,
+        usePart4V2Grading: scoringV2Part4,
         groupedAnswers: groupedAnswersForUiAndScore,
         checkedQuestions: stateOverride.checkedQuestions ?? checkedQuestions,
         selectedOptions: stateOverride.selectedOptions ?? selectedOptions,
@@ -812,8 +831,10 @@ function UseOfEnglishExamsPageInner() {
       selectedPart?.id,
       selectedQuestion?.preguntaId,
       isOpenClozePart,
+      scoringV2Part4,
       openQuestionNumbers,
       openChecks,
+      openGrades,
       groupedAnswersForUiAndScore,
       checkedQuestions,
       selectedOptions,
@@ -890,6 +911,34 @@ function UseOfEnglishExamsPageInner() {
 
   const handleOpenGapCheck = useCallback(
     (questionNumber, questionKey, currentValue) => {
+      if (scoringV2Part4) {
+        if (openGrades[questionKey] && typeof openGrades[questionKey].score === 'number') return;
+        const grade = gradeB2Part4Gap(currentValue, part4ParsedKeys, questionNumber);
+        const nextOpenGrades = { ...openGrades, [questionKey]: grade };
+        setOpenGrades(nextOpenGrades);
+        void (async () => {
+          const uid = await getSessionUserId();
+          const pid = selectedQuestion?.preguntaId;
+          const parteId = selectedPart?.id;
+          if (!uid || !pid || !parteId) return;
+          if (isB2RuoeV2SessionPersistenceBlocked(partNumberUoe)) return;
+          const isFullyCorrect = grade.score === 2;
+          const { error } = await mergeLevelsEstadisticas({
+            userId: uid,
+            preguntaId: pid,
+            parteId,
+            deltaEvaluadas: 1,
+            deltaCorrectas: isFullyCorrect ? 1 : 0,
+            deltaIncorrectas: isFullyCorrect ? 0 : 1,
+          });
+          if (error) {
+            console.warn('levels_estadisticas (eval):', error.message || error);
+          }
+        })();
+        void trySavePartAfterAnswer({ openGrades: nextOpenGrades });
+        return;
+      }
+
       if (typeof openChecks[questionKey] === 'boolean') return;
       const expectedAnswers = openAnswerMap.get(questionNumber) || new Set();
       const isCorrect = expectedAnswers.has(normalizeText(currentValue));
@@ -916,12 +965,14 @@ function UseOfEnglishExamsPageInner() {
       void trySavePartAfterAnswer({ openChecks: nextOpenChecks });
     },
     [
+      scoringV2Part4,
+      openGrades,
+      part4ParsedKeys,
       openChecks,
       openAnswerMap,
-      requestAiJustification,
-      isKeyWordPart,
       selectedQuestion?.preguntaId,
       selectedPart?.id,
+      partNumberUoe,
       trySavePartAfterAnswer,
     ],
   );
@@ -931,8 +982,18 @@ function UseOfEnglishExamsPageInner() {
     ({ questionKey, questionNumber }) => {
       const existing = aiHintsByKey[questionKey];
       if (existing?.loading || existing?.text) return;
-      const checkResult = openChecks[questionKey];
-      if (typeof checkResult !== 'boolean') return;
+
+      let isCorrect = false;
+      if (scoringV2Part4) {
+        const grade = openGrades[questionKey];
+        if (!grade || typeof grade.score !== 'number') return;
+        isCorrect = grade.score === 2;
+      } else {
+        const checkResult = openChecks[questionKey];
+        if (typeof checkResult !== 'boolean') return;
+        isCorrect = checkResult;
+      }
+
       const expectedAnswers = openAnswerMap.get(questionNumber) || new Set();
       const style =
         partNumberUoe === 3
@@ -946,11 +1007,11 @@ function UseOfEnglishExamsPageInner() {
         questionLabel: `Question ${questionNumber}`,
         userChoiceText: openInputs[questionKey] || '',
         correctChoiceText: [...expectedAnswers].slice(0, 4).join(' · ') || 'model answer',
-        isCorrect: checkResult,
+        isCorrect,
         answersFromDatabase: [...expectedAnswers].join(' · ') || undefined,
       });
     },
-    [aiHintsByKey, openChecks, openInputs, openAnswerMap, requestAiJustification, partNumberUoe],
+    [aiHintsByKey, scoringV2Part4, openGrades, openChecks, openInputs, openAnswerMap, requestAiJustification, partNumberUoe],
   );
 
   const currentExamProgress = progressBySlot[examSlot] || {};
@@ -1175,6 +1236,8 @@ function UseOfEnglishExamsPageInner() {
                         setOpenInputs((prev) => ({ ...prev, [questionKey]: value }));
                       }}
                       openChecks={openChecks}
+                      openGrades={openGrades}
+                      scoringV2Part4={scoringV2Part4}
                       onCheckGap={handleOpenGapCheck}
                       openAnswerMap={openAnswerMap}
                       aiHintsByKey={aiHintsByKey}

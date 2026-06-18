@@ -12,7 +12,10 @@ export function getSkillPracticeThemeKey(skillRoute) {
 /** Estrellas 0–3 para un ejercicio (parte + variante) desde levels_puntuaciones. */
 export function starsFromPartExerciseScore(part) {
   if (!part?.total) return 0;
-  return starsFromTheorySessionScore(part.correct, part.total);
+  const earned =
+    part.scoringVersion === 2 ? (part.puntosObtenidos ?? part.correct) : part.correct;
+  const max = part.scoringVersion === 2 ? (part.puntosMaximos ?? part.total) : part.total;
+  return starsFromTheorySessionScore(earned, max);
 }
 
 export function filterProgressByPart(progressBySlot = {}, partNumber) {
@@ -28,7 +31,16 @@ export function filterProgressByPart(progressBySlot = {}, partNumber) {
       total: part?.total ?? 0,
       approvedParts: part?.passed ? 1 : 0,
       parts: part
-        ? { [pn]: { correct: part.correct, total: part.total, passed: part.passed } }
+        ? {
+            [pn]: {
+              correct: part.correct,
+              total: part.total,
+              passed: part.passed,
+              scoringVersion: part.scoringVersion,
+              puntosObtenidos: part.puntosObtenidos,
+              puntosMaximos: part.puntosMaximos,
+            },
+          }
         : {},
     };
   }

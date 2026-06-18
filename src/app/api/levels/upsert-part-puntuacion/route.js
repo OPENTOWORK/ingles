@@ -1,13 +1,92 @@
 import { NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
-import { buildUoePartDescripcion } from '@/utils/levelsPuntuaciones';
+import { buildUoePartDescripcion, parseUoePartDescripcion } from '@/utils/levelsPuntuaciones';
 import { LEVELS_SCORE_SOURCE } from '@/utils/levelsScoreSource';
-import { isUoePartPassed } from '@/utils/levelsUoePartScoring';
+import {
+  getB2PartScoringV2,
+  isB2PartPassed,
+  isB2PartPassedByPoints,
+} from '@/utils/levelsB2PartScoring';
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
 const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
 const supabaseServiceRoleKey =
   process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.SUPABASE_SECRET_KEY;
+
+function isSchemaCacheColumnError(error) {
+  const msg = String(error?.message || error || '').toLowerCase();
+  const code = String(error?.code || '').toUpperCase();
+  return (
+    msg.includes('schema cache') ||
+    msg.includes('could not find') ||
+    msg.includes('does not exist') ||
+    code === 'PGRST204' ||
+    code === '42703'
+  );
+}
+
+/** @param {import('@supabase/supabase-js').SupabaseClient} admin */
+async function findExistingPartRowServer(admin, userId, examenId, parteNumero, scoreSource) {
+  const { data: row, error } = await admin
+    .from('levels_puntuaciones')
+    .select('id, descripcion, score_source')
+    .eq('uuid_usuario', userId)
+    .eq('examen_id', examenId)
+    .eq('parte_numero', parteNumero)
+    .eq('score_source', scoreSource)
+    .maybeSingle();
+
+  if (!error && row?.id) return row.id;
+  if (error && !isSchemaCacheColumnError(error)) throw error;
+
+  let listRes = await admin
+    .from('levels_puntuaciones')
+    .select('id, descripcion, score_source')
+    .eq('uuid_usuario', userId)
+    .eq('examen_id', examenId)
+    .eq('parte_numero', parteNumero);
+
+  if (listRes.error && isSchemaCacheColumnError(listRes.error)) {
+    listRes = await admin
+      .from('levels_puntuaciones')
+      .select('id, descripcion')
+      .eq('uuid_usuario', userId)
+      .eq('examen_id', examenId)
+      .eq('parte_numero', parteNumero);
+  }
+
+  if (listRes.error) throw listRes.error;
+
+  const match = (listRes.data || []).find((r) => {
+    const meta = parseUoePartDescripcion(r.descripcion);
+    const rowSource = r.score_source || meta?.scoreSource || LEVELS_SCORE_SOURCE.SKILL_PRACTICE;
+    return rowSource === scoreSource;
+  });
+
+  return match?.id ?? null;
+}
+
+function stripScoreSourceFromRow(row) {
+  const { score_source, ...rest } = row;
+  return rest;
+}
+
+/** @param {import('@supabase/supabase-js').SupabaseClient} admin */
+async function writePartRow(admin, existingId, row) {
+  if (existingId) {
+    let { error } = await admin.from('levels_puntuaciones').update(row).eq('id', existingId);
+    if (error && isSchemaCacheColumnError(error) && row.score_source != null) {
+      ({ error } = await admin.from('levels_puntuaciones').update(stripScoreSourceFromRow(row)).eq('id', existingId));
+    }
+    return error;
+  }
+
+  let { error } = await admin.from('levels_puntuaciones').insert(row);
+  if (error && isSchemaCacheColumnError(error) && row.score_source != null) {
+    ({ error } = await admin.from('levels_puntuaciones').insert(stripScoreSourceFromRow(row)));
+  }
+  return error;
+}
 
 export async function POST(req) {
   try {
@@ -38,13 +117,52 @@ export async function POST(req) {
     const correctas = Math.max(0, Number(body?.correctas) || 0);
     const totalPreguntas = Math.max(1, Number(body?.totalPreguntas) || 1);
     const scoreSource = body?.scoreSource || LEVELS_SCORE_SOURCE.SKILL_PRACTICE;
+    const scoringVersion = Number(body?.scoringVersion) || 1;
+    const puntosObtenidos = body?.puntosObtenidos != null ? Math.max(0, Number(body.puntosObtenidos) || 0) : null;
+    const puntosMaximos = body?.puntosMaximos != null ? Math.max(1, Number(body.puntosMaximos) || 1) : null;
 
     if (!preguntaId || !examenId || !parteNumero) {
       return NextResponse.json({ error: 'Faltan datos de la parte.' }, { status: 400 });
     }
 
-    const aprobado = isUoePartPassed(correctas, parteNumero);
-    const puntuacion = aprobado ? 100 : Math.round((100 * correctas) / totalPreguntas);
+    if (scoringVersion !== 1 && scoringVersion !== 2) {
+      return NextResponse.json({ error: 'scoring_version inválida.' }, { status: 400 });
+    }
+
+    if (scoringVersion === 2) {
+      if (puntosObtenidos == null || puntosMaximos == null) {
+        return NextResponse.json(
+          { error: 'Scoring V2 requiere puntosObtenidos y puntosMaximos.' },
+          { status: 400 },
+        );
+      }
+      if (puntosObtenidos > puntosMaximos) {
+        return NextResponse.json(
+          { error: 'puntosObtenidos no puede superar puntosMaximos.' },
+          { status: 400 },
+        );
+      }
+      const expectedMax = getB2PartScoringV2(parteNumero)?.maxPoints;
+      if (expectedMax && puntosMaximos !== expectedMax) {
+        return NextResponse.json(
+          { error: `puntosMaximos debe ser ${expectedMax} para la parte ${parteNumero}.` },
+          { status: 400 },
+        );
+      }
+    }
+
+    const aprobado =
+      scoringVersion === 2
+        ? isB2PartPassedByPoints(puntosObtenidos, parteNumero)
+        : isB2PartPassed(correctas, parteNumero);
+    const puntuacion =
+      scoringVersion === 2
+        ? aprobado
+          ? 100
+          : Math.round((100 * puntosObtenidos) / puntosMaximos)
+        : aprobado
+          ? 100
+          : Math.round((100 * correctas) / totalPreguntas);
     const descripcion = buildUoePartDescripcion({
       examenId,
       parteNumero,
@@ -52,22 +170,19 @@ export async function POST(req) {
       total: totalPreguntas,
       aprobado,
       scoreSource,
+      scoringVersion,
+      puntosObtenidos: puntosObtenidos ?? undefined,
+      puntosMaximos: puntosMaximos ?? undefined,
     });
 
     const admin = createClient(supabaseUrl, supabaseServiceRoleKey, {
       auth: { persistSession: false, autoRefreshToken: false },
     });
 
-    const { data: existing, error: findErr } = await admin
-      .from('levels_puntuaciones')
-      .select('id')
-      .eq('uuid_usuario', userId)
-      .eq('examen_id', examenId)
-      .eq('parte_numero', parteNumero)
-      .eq('score_source', scoreSource)
-      .maybeSingle();
-
-    if (findErr) {
+    let existingId = null;
+    try {
+      existingId = await findExistingPartRowServer(admin, userId, examenId, parteNumero, scoreSource);
+    } catch (findErr) {
       return NextResponse.json({ error: findErr.message }, { status: 500 });
     }
 
@@ -82,15 +197,20 @@ export async function POST(req) {
       puntuacion,
       descripcion,
       score_source: scoreSource,
+      scoring_version: scoringVersion,
     };
+    if (scoringVersion === 2) {
+      row.puntos_obtenidos = puntosObtenidos;
+      row.puntos_maximos = puntosMaximos;
+    }
 
-    if (existing?.id) {
-      const { error: upErr } = await admin.from('levels_puntuaciones').update(row).eq('id', existing.id);
+    if (existingId) {
+      const upErr = await writePartRow(admin, existingId, row);
       if (upErr) return NextResponse.json({ error: upErr.message }, { status: 500 });
       return NextResponse.json({ ok: true, updated: true });
     }
 
-    const { error: insErr } = await admin.from('levels_puntuaciones').insert(row);
+    const insErr = await writePartRow(admin, null, row);
     if (insErr) return NextResponse.json({ error: insErr.message }, { status: 500 });
 
     return NextResponse.json({ ok: true, created: true });

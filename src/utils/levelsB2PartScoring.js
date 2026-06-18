@@ -82,6 +82,21 @@ export function isB2PartPassed(correctCount, partNumber) {
   return Number(correctCount) >= cfg.passing;
 }
 
+/** Minimum points to pass a part under Scoring V2 (maps cfg.passing items → points). */
+export function getB2PartPassingPoints(partNumber) {
+  const cfg = getB2PartScoring(partNumber);
+  const v2 = getB2PartScoringV2(partNumber);
+  if (!cfg || !v2) return 0;
+  return cfg.passing * v2.pointsPerCorrect;
+}
+
+/** Pass check for Scoring V2 rows stored as puntos_obtenidos / puntos_maximos. */
+export function isB2PartPassedByPoints(puntosObtenidos, partNumber) {
+  const passingPoints = getB2PartPassingPoints(partNumber);
+  if (!passingPoints) return false;
+  return Number(puntosObtenidos) >= passingPoints;
+}
+
 /** Estrellas: cada parte aprobada del bloque = 0.5★ (máx. 3★ con 6 partes; usamos partes del paper). */
 export function starsFromApprovedPartsCount(approvedPartsCount, partsInPaper = 4) {
   const maxStars = 3;

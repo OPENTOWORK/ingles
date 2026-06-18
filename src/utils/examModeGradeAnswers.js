@@ -12,6 +12,8 @@ import {
   inferOpenQuestionNumbersFromPrompt,
   normalizeText,
 } from '@/utils/b2ExamPaperShared';
+import { parseB2KeyWordAnswerKeyRows } from '@/lib/parseB2KeyWordAnswerKey';
+import { computeSilentPart4OpenGrades } from '@/lib/b2Part4Grading';
 
 /**
  * Grade open inputs silently (exam mode — no UI feedback until results).
@@ -81,45 +83,15 @@ export function aggregateExamModeSectionScores({ partMin, partMax, partSnapshots
 
   for (let p = partMin; p <= partMax; p += 1) {
     const snap = partSnapshots[p];
-    const prog = snap?.progress;
-    const cfg = getB2PartScoring(p);
-    const v2Part = v2 && p >= 1 && p <= 7;
-    const emptyPartMax = v2Part
-      ? (B2_PART_SCORING_V2[p]?.maxPoints ?? cfg?.total ?? 0)
-      : (cfg?.total ?? 0);
-
-    if (prog) {
-      if (v2Part) {
-        byPart[p] = buildByPartEntryV2(prog, p);
-        correct += Number(byPart[p].pointsEarned) || 0;
-        total += Number(byPart[p].maxPoints) || emptyPartMax;
-      } else {
-        byPart[p] = buildByPartEntryV1(prog, p);
-        correct += Number(prog.correct) || 0;
-        total += Number(prog.total) || emptyPartMax;
-      }
-      continue;
-    }
-
-    if (v2Part) {
-      byPart[p] = {
-        scoringVersion: 2,
-        pointsEarned: 0,
-        maxPoints: emptyPartMax,
-        correct: 0,
-        total: emptyPartMax,
-        correctItems: 0,
-        passing: cfg?.passing,
-      };
+    if (!snap?.progress) continue;
+    const prog = snap.progress;
+    if (v2 && p >= 1 && p <= 7) {
+      byPart[p] = buildByPartEntryV2(prog, p);
     } else {
-      byPart[p] = {
-        correct: 0,
-        total: emptyPartMax,
-        passing: cfg?.passing,
-        scoringVersion: 1,
-      };
+      byPart[p] = buildByPartEntryV1(prog, p);
     }
-    total += emptyPartMax;
+    correct += v2 && p >= 1 && p <= 7 ? byPart[p].pointsEarned : prog.correct;
+    total += v2 && p >= 1 && p <= 7 ? byPart[p].maxPoints : prog.total;
   }
 
   const result = {
@@ -193,15 +165,39 @@ export function scoreExamModeDrafts({ partMin, partMax, partsData, draftByPart, 
     const useOpen = openNums.length > 0;
     const groupedAnswers = useOpen ? [] : getGroupedAnswers(question.respuestas || []);
 
-    const openChecks = useOpen
-      ? computeSilentOpenChecks(draft.openInputs || {}, openMap, getKey, partId, openNums)
-      : {};
+    const v2Enabled = scoringV2Enabled ?? isB2ScoringV2Enabled();
+    const usePart4V2Grading = v2Enabled && p === 4;
+
+    let openChecks = {};
+    /** @type {Record<string, import('@/lib/b2Part4Grading').B2Part4OpenGrade>} */
+    let openGrades = {};
+
+    if (useOpen) {
+      if (usePart4V2Grading) {
+        const openRows = (question.respuestasAbiertas || []).map((row) => ({
+          respuesta_texto: row.respuesta_texto ?? row.respuestaTexto,
+          grading_metadata: row.grading_metadata ?? row.gradingMetadata,
+        }));
+        const parsedKeys = parseB2KeyWordAnswerKeyRows(openRows);
+        openGrades = computeSilentPart4OpenGrades(
+          draft.openInputs || {},
+          parsedKeys,
+          getKey,
+          partId,
+          openNums,
+        );
+      } else {
+        openChecks = computeSilentOpenChecks(draft.openInputs || {}, openMap, getKey, partId, openNums);
+      }
+    }
 
     const progress = gradePartFromAnswerState({
       partNumber: p,
       useOpenInputUi: useOpen,
       openQuestionNumbers: openNums,
       openChecks,
+      openGrades,
+      usePart4V2Grading,
       groupedAnswers,
       checkedQuestions: draft.checkedQuestions || {},
       selectedOptions: draft.selectedOptions || {},
@@ -209,7 +205,7 @@ export function scoreExamModeDrafts({ partMin, partMax, partsData, draftByPart, 
       partId,
     });
 
-    partSnapshots[p] = { draft: { ...draft, parteId: part.id }, progress };
+    partSnapshots[p] = { draft, progress };
   }
 
   return {

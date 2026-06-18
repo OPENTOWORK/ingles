@@ -1,0 +1,1106 @@
+{
+  "version": 1,
+  "description": "B2 Part 4 approved grading metadata for Supabase backfill (Exams 1-3, Q25-30).",
+  "parteId": "d02d4a2a-734c-4a46-8c7e-7b95734ee84d",
+  "summary": {
+    "liveItemCount": 18,
+    "approvedForBackfill": 18
+  },
+  "items": [
+    {
+      "id": "E1Q25",
+      "examSlot": 1,
+      "questionNumber": 25,
+      "classification": "APPROVED_KEY",
+      "includeInBackfill": true,
+      "pedagogyNotes": "Negative/limiting quantifier with HARDLY + subject; third-person singular verb agreement on finds.",
+      "reviewFlags": [],
+      "supabase": {
+        "openAnswerRowId": "19ce1b4c-6657-41a9-b242-6fbc50d97af7",
+        "preguntaId": "4abc080d-ff9c-4112-b96e-025791d59416",
+        "examenId": "5bd3e0d7-29a7-4e07-ac15-a4d195528c65"
+      },
+      "canonicalAnswer": "Hardly anyone finds",
+      "keyword": "HARDLY",
+      "fullAnswers": [
+        "hardly anyone finds",
+        "hardly anybody finds"
+      ],
+      "markingPoints": [
+        {
+          "id": 1,
+          "label": "negative/limiting quantifier with HARDLY",
+          "accepted": [
+            "hardly anyone",
+            "hardly anybody"
+          ]
+        },
+        {
+          "id": 2,
+          "label": "third-person singular verb agreement",
+          "accepted": [
+            "finds"
+          ]
+        }
+      ],
+      "gradingMetadata": {
+        "type": "b2_key_word_transformation",
+        "version": 1,
+        "keyword": "HARDLY",
+        "fullAnswers": [
+          "hardly anyone finds",
+          "hardly anybody finds"
+        ],
+        "markingPoints": [
+          {
+            "id": 1,
+            "label": "negative/limiting quantifier with HARDLY",
+            "accepted": [
+              "hardly anyone",
+              "hardly anybody"
+            ]
+          },
+          {
+            "id": 2,
+            "label": "third-person singular verb agreement",
+            "accepted": [
+              "finds"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "E1Q26",
+      "examSlot": 1,
+      "questionNumber": 26,
+      "classification": "APPROVED_KEY",
+      "includeInBackfill": true,
+      "pedagogyNotes": "Passive agent marker with BY; nominalised phrase the introduction of completing the agent.",
+      "reviewFlags": [],
+      "supabase": {
+        "openAnswerRowId": "b344bdea-0146-4dda-afd8-3662ceb68f15",
+        "preguntaId": "4abc080d-ff9c-4112-b96e-025791d59416",
+        "examenId": "5bd3e0d7-29a7-4e07-ac15-a4d195528c65"
+      },
+      "canonicalAnswer": "by the introduction of",
+      "keyword": "BY",
+      "fullAnswers": [
+        "by the introduction of"
+      ],
+      "markingPoints": [
+        {
+          "id": 1,
+          "label": "passive agent marker with BY",
+          "accepted": [
+            "by"
+          ]
+        },
+        {
+          "id": 2,
+          "label": "nominalised phrase the introduction of",
+          "accepted": [
+            "the introduction of"
+          ]
+        }
+      ],
+      "gradingMetadata": {
+        "type": "b2_key_word_transformation",
+        "version": 1,
+        "keyword": "BY",
+        "fullAnswers": [
+          "by the introduction of"
+        ],
+        "markingPoints": [
+          {
+            "id": 1,
+            "label": "passive agent marker with BY",
+            "accepted": [
+              "by"
+            ]
+          },
+          {
+            "id": 2,
+            "label": "nominalised phrase the introduction of",
+            "accepted": [
+              "the introduction of"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "E1Q27",
+      "examSlot": 1,
+      "questionNumber": 27,
+      "classification": "APPROVED_KEY",
+      "includeInBackfill": true,
+      "pedagogyNotes": "Wish/regret: wishes she had (past perfect frame) + past participle moved.",
+      "reviewFlags": [],
+      "supabase": {
+        "openAnswerRowId": "7df29d70-a32d-4266-abac-22b69a302f9b",
+        "preguntaId": "4abc080d-ff9c-4112-b96e-025791d59416",
+        "examenId": "5bd3e0d7-29a7-4e07-ac15-a4d195528c65"
+      },
+      "canonicalAnswer": "wishes she had moved",
+      "keyword": "WISHES",
+      "fullAnswers": [
+        "wishes she had moved"
+      ],
+      "markingPoints": [
+        {
+          "id": 1,
+          "label": "wish + past perfect frame",
+          "accepted": [
+            "wishes she had"
+          ]
+        },
+        {
+          "id": 2,
+          "label": "past participle",
+          "accepted": [
+            "moved"
+          ]
+        }
+      ],
+      "gradingMetadata": {
+        "type": "b2_key_word_transformation",
+        "version": 1,
+        "keyword": "WISHES",
+        "fullAnswers": [
+          "wishes she had moved"
+        ],
+        "markingPoints": [
+          {
+            "id": 1,
+            "label": "wish + past perfect frame",
+            "accepted": [
+              "wishes she had"
+            ]
+          },
+          {
+            "id": 2,
+            "label": "past participle",
+            "accepted": [
+              "moved"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "E1Q28",
+      "examSlot": 1,
+      "questionNumber": 28,
+      "classification": "APPROVED_KEY",
+      "includeInBackfill": true,
+      "pedagogyNotes": "Comparative quantity: fewer public parks + than linker.",
+      "reviewFlags": [],
+      "supabase": {
+        "openAnswerRowId": "96b8d841-bbaa-4df7-a0fe-ab6705f257b7",
+        "preguntaId": "4abc080d-ff9c-4112-b96e-025791d59416",
+        "examenId": "5bd3e0d7-29a7-4e07-ac15-a4d195528c65"
+      },
+      "canonicalAnswer": "fewer public parks than",
+      "keyword": "FEWER",
+      "fullAnswers": [
+        "fewer public parks than"
+      ],
+      "markingPoints": [
+        {
+          "id": 1,
+          "label": "fewer + noun phrase",
+          "accepted": [
+            "fewer public parks"
+          ]
+        },
+        {
+          "id": 2,
+          "label": "comparative linker",
+          "accepted": [
+            "than"
+          ]
+        }
+      ],
+      "gradingMetadata": {
+        "type": "b2_key_word_transformation",
+        "version": 1,
+        "keyword": "FEWER",
+        "fullAnswers": [
+          "fewer public parks than"
+        ],
+        "markingPoints": [
+          {
+            "id": 1,
+            "label": "fewer + noun phrase",
+            "accepted": [
+              "fewer public parks"
+            ]
+          },
+          {
+            "id": 2,
+            "label": "comparative linker",
+            "accepted": [
+              "than"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "E1Q29",
+      "examSlot": 1,
+      "questionNumber": 29,
+      "classification": "APPROVED_KEY",
+      "includeInBackfill": true,
+      "pedagogyNotes": "Negative necessity: do not/don't need + to-infinitive complement to use.",
+      "reviewFlags": [],
+      "supabase": {
+        "openAnswerRowId": "6b12d503-6acd-4aad-aba7-485830d12b5d",
+        "preguntaId": "4abc080d-ff9c-4112-b96e-025791d59416",
+        "examenId": "5bd3e0d7-29a7-4e07-ac15-a4d195528c65"
+      },
+      "canonicalAnswer": "do not need to use",
+      "keyword": "NEED",
+      "fullAnswers": [
+        "do not need to use",
+        "don't need to use"
+      ],
+      "markingPoints": [
+        {
+          "id": 1,
+          "label": "negative necessity",
+          "accepted": [
+            "do not need",
+            "don't need"
+          ]
+        },
+        {
+          "id": 2,
+          "label": "infinitive complement",
+          "accepted": [
+            "to use"
+          ]
+        }
+      ],
+      "gradingMetadata": {
+        "type": "b2_key_word_transformation",
+        "version": 1,
+        "keyword": "NEED",
+        "fullAnswers": [
+          "do not need to use",
+          "don't need to use"
+        ],
+        "markingPoints": [
+          {
+            "id": 1,
+            "label": "negative necessity",
+            "accepted": [
+              "do not need",
+              "don't need"
+            ]
+          },
+          {
+            "id": 2,
+            "label": "infinitive complement",
+            "accepted": [
+              "to use"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "E1Q30",
+      "examSlot": 1,
+      "questionNumber": 30,
+      "classification": "APPROVED_KEY",
+      "includeInBackfill": true,
+      "pedagogyNotes": "In spite of frame (spite of) + gerund concession clause (the subway being).",
+      "reviewFlags": [],
+      "supabase": {
+        "openAnswerRowId": "456c2a64-14c0-497f-bc9f-a6a8ed625502",
+        "preguntaId": "4abc080d-ff9c-4112-b96e-025791d59416",
+        "examenId": "5bd3e0d7-29a7-4e07-ac15-a4d195528c65"
+      },
+      "canonicalAnswer": "spite of the subway being",
+      "keyword": "SPITE",
+      "fullAnswers": [
+        "spite of the subway being"
+      ],
+      "markingPoints": [
+        {
+          "id": 1,
+          "label": "in spite of frame",
+          "accepted": [
+            "spite of"
+          ]
+        },
+        {
+          "id": 2,
+          "label": "gerund concession clause",
+          "accepted": [
+            "the subway being"
+          ]
+        }
+      ],
+      "gradingMetadata": {
+        "type": "b2_key_word_transformation",
+        "version": 1,
+        "keyword": "SPITE",
+        "fullAnswers": [
+          "spite of the subway being"
+        ],
+        "markingPoints": [
+          {
+            "id": 1,
+            "label": "in spite of frame",
+            "accepted": [
+              "spite of"
+            ]
+          },
+          {
+            "id": 2,
+            "label": "gerund concession clause",
+            "accepted": [
+              "the subway being"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "E2Q25",
+      "examSlot": 2,
+      "questionNumber": 25,
+      "classification": "APPROVED_KEY",
+      "includeInBackfill": true,
+      "pedagogyNotes": "Hardly ever frequency block + main verb travels.",
+      "reviewFlags": [],
+      "supabase": {
+        "openAnswerRowId": "57459e3e-2857-442c-a38d-aa0e2773cfcb",
+        "preguntaId": "d65a2dad-454b-48a6-b9ea-5f8161f43df6",
+        "examenId": null
+      },
+      "canonicalAnswer": "hardly ever travels",
+      "keyword": "HARDLY",
+      "fullAnswers": [
+        "hardly ever travels"
+      ],
+      "markingPoints": [
+        {
+          "id": 1,
+          "label": "hardly ever frequency block",
+          "accepted": [
+            "hardly ever"
+          ]
+        },
+        {
+          "id": 2,
+          "label": "main verb",
+          "accepted": [
+            "travels"
+          ]
+        }
+      ],
+      "gradingMetadata": {
+        "type": "b2_key_word_transformation",
+        "version": 1,
+        "keyword": "HARDLY",
+        "fullAnswers": [
+          "hardly ever travels"
+        ],
+        "markingPoints": [
+          {
+            "id": 1,
+            "label": "hardly ever frequency block",
+            "accepted": [
+              "hardly ever"
+            ]
+          },
+          {
+            "id": 2,
+            "label": "main verb",
+            "accepted": [
+              "travels"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "E2Q26",
+      "examSlot": 2,
+      "questionNumber": 26,
+      "classification": "APPROVED_KEY",
+      "includeInBackfill": true,
+      "pedagogyNotes": "Passive structure with STRICTLY adverb (is strictly) + past participle forbidden expressing prohibition.",
+      "reviewFlags": [],
+      "supabase": {
+        "openAnswerRowId": "edb32978-cfb9-4d9c-94c0-3fa2e89ae281",
+        "preguntaId": "d65a2dad-454b-48a6-b9ea-5f8161f43df6",
+        "examenId": null
+      },
+      "canonicalAnswer": "is strictly forbidden",
+      "keyword": "STRICTLY",
+      "fullAnswers": [
+        "is strictly forbidden"
+      ],
+      "markingPoints": [
+        {
+          "id": 1,
+          "label": "passive structure with the given adverb",
+          "accepted": [
+            "is strictly"
+          ]
+        },
+        {
+          "id": 2,
+          "label": "past participle expressing prohibition",
+          "accepted": [
+            "forbidden"
+          ]
+        }
+      ],
+      "gradingMetadata": {
+        "type": "b2_key_word_transformation",
+        "version": 1,
+        "keyword": "STRICTLY",
+        "fullAnswers": [
+          "is strictly forbidden"
+        ],
+        "markingPoints": [
+          {
+            "id": 1,
+            "label": "passive structure with the given adverb",
+            "accepted": [
+              "is strictly"
+            ]
+          },
+          {
+            "id": 2,
+            "label": "past participle expressing prohibition",
+            "accepted": [
+              "forbidden"
+            ]
+          }
+        ]
+      },
+      "rewriteFromLegacy": {
+        "keyword": "FORBIDDEN",
+        "canonicalAnswer": "forbidden by the guide",
+        "respuestaTexto": "26 forbidden by the guide",
+        "sentence1": "The guide said, 'You must not take photos inside the museum.'",
+        "sentence2": "Taking photos inside the museum is __________________ the guide."
+      },
+      "rewriteTo": {
+        "keyword": "STRICTLY",
+        "canonicalAnswer": "is strictly forbidden",
+        "respuestaTexto": "26 is strictly forbidden",
+        "sentence1": "The guide said, \"Visitors must not take photos inside the museum.\"",
+        "sentence2": "According to the guide, taking photos inside the museum __________________."
+      }
+    },
+    {
+      "id": "E2Q27",
+      "examSlot": 2,
+      "questionNumber": 27,
+      "classification": "APPROVED_KEY",
+      "includeInBackfill": true,
+      "pedagogyNotes": "Modal perfect I could have + past participle attended.",
+      "reviewFlags": [],
+      "supabase": {
+        "openAnswerRowId": "5d33e378-735f-425c-b6e7-525a21a8c6ed",
+        "preguntaId": "d65a2dad-454b-48a6-b9ea-5f8161f43df6",
+        "examenId": null
+      },
+      "canonicalAnswer": "I could have attended",
+      "keyword": "COULD",
+      "fullAnswers": [
+        "I could have attended"
+      ],
+      "markingPoints": [
+        {
+          "id": 1,
+          "label": "subject + modal perfect",
+          "accepted": [
+            "I could have"
+          ]
+        },
+        {
+          "id": 2,
+          "label": "past participle",
+          "accepted": [
+            "attended"
+          ]
+        }
+      ],
+      "gradingMetadata": {
+        "type": "b2_key_word_transformation",
+        "version": 1,
+        "keyword": "COULD",
+        "fullAnswers": [
+          "I could have attended"
+        ],
+        "markingPoints": [
+          {
+            "id": 1,
+            "label": "subject + modal perfect",
+            "accepted": [
+              "I could have"
+            ]
+          },
+          {
+            "id": 2,
+            "label": "past participle",
+            "accepted": [
+              "attended"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "E2Q28",
+      "examSlot": 2,
+      "questionNumber": 28,
+      "classification": "APPROVED_KEY",
+      "includeInBackfill": true,
+      "pedagogyNotes": "Past perfect had never + past participle visited.",
+      "reviewFlags": [],
+      "supabase": {
+        "openAnswerRowId": "91f47eeb-fed9-47b4-8406-f3b293ad5865",
+        "preguntaId": "d65a2dad-454b-48a6-b9ea-5f8161f43df6",
+        "examenId": null
+      },
+      "canonicalAnswer": "had never visited",
+      "keyword": "NEVER",
+      "fullAnswers": [
+        "had never visited"
+      ],
+      "markingPoints": [
+        {
+          "id": 1,
+          "label": "past perfect + never",
+          "accepted": [
+            "had never"
+          ]
+        },
+        {
+          "id": 2,
+          "label": "past participle",
+          "accepted": [
+            "visited"
+          ]
+        }
+      ],
+      "gradingMetadata": {
+        "type": "b2_key_word_transformation",
+        "version": 1,
+        "keyword": "NEVER",
+        "fullAnswers": [
+          "had never visited"
+        ],
+        "markingPoints": [
+          {
+            "id": 1,
+            "label": "past perfect + never",
+            "accepted": [
+              "had never"
+            ]
+          },
+          {
+            "id": 2,
+            "label": "past participle",
+            "accepted": [
+              "visited"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "E2Q29",
+      "examSlot": 2,
+      "questionNumber": 29,
+      "classification": "APPROVED_KEY",
+      "includeInBackfill": true,
+      "pedagogyNotes": "Reporting passive are thought + infinitive marker to.",
+      "reviewFlags": [],
+      "supabase": {
+        "openAnswerRowId": "094e37e9-b8c3-4b0f-b3c1-994f7a474039",
+        "preguntaId": "d65a2dad-454b-48a6-b9ea-5f8161f43df6",
+        "examenId": null
+      },
+      "canonicalAnswer": "are thought to",
+      "keyword": "THOUGHT",
+      "fullAnswers": [
+        "are thought to"
+      ],
+      "markingPoints": [
+        {
+          "id": 1,
+          "label": "passive reporting verb",
+          "accepted": [
+            "are thought"
+          ]
+        },
+        {
+          "id": 2,
+          "label": "infinitive marker",
+          "accepted": [
+            "to"
+          ]
+        }
+      ],
+      "gradingMetadata": {
+        "type": "b2_key_word_transformation",
+        "version": 1,
+        "keyword": "THOUGHT",
+        "fullAnswers": [
+          "are thought to"
+        ],
+        "markingPoints": [
+          {
+            "id": 1,
+            "label": "passive reporting verb",
+            "accepted": [
+              "are thought"
+            ]
+          },
+          {
+            "id": 2,
+            "label": "infinitive marker",
+            "accepted": [
+              "to"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "E2Q30",
+      "examSlot": 2,
+      "questionNumber": 30,
+      "classification": "APPROVED_KEY",
+      "includeInBackfill": true,
+      "pedagogyNotes": "Inversion after No sooner (had we) + past participle completing the past perfect.",
+      "reviewFlags": [],
+      "supabase": {
+        "openAnswerRowId": "d095f661-7ec1-40f5-9ae6-5f8f4e20a692",
+        "preguntaId": "d65a2dad-454b-48a6-b9ea-5f8161f43df6",
+        "examenId": null
+      },
+      "canonicalAnswer": "had we arrived",
+      "keyword": "HAD",
+      "fullAnswers": [
+        "had we arrived"
+      ],
+      "markingPoints": [
+        {
+          "id": 1,
+          "label": "inversion after No sooner",
+          "accepted": [
+            "had we"
+          ]
+        },
+        {
+          "id": 2,
+          "label": "past participle completing the past perfect",
+          "accepted": [
+            "arrived"
+          ]
+        }
+      ],
+      "gradingMetadata": {
+        "type": "b2_key_word_transformation",
+        "version": 1,
+        "keyword": "HAD",
+        "fullAnswers": [
+          "had we arrived"
+        ],
+        "markingPoints": [
+          {
+            "id": 1,
+            "label": "inversion after No sooner",
+            "accepted": [
+              "had we"
+            ]
+          },
+          {
+            "id": 2,
+            "label": "past participle completing the past perfect",
+            "accepted": [
+              "arrived"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "E3Q25",
+      "examSlot": 3,
+      "questionNumber": 25,
+      "classification": "APPROVED_KEY",
+      "includeInBackfill": true,
+      "pedagogyNotes": "Future passive auxiliary will be + informed about (keyword + complement).",
+      "reviewFlags": [],
+      "supabase": {
+        "openAnswerRowId": "2b746340-2018-4791-bad8-0b4a6f11b61d",
+        "preguntaId": "30b130e8-275c-4d72-8f0a-0b7bd55f295a",
+        "examenId": null
+      },
+      "canonicalAnswer": "will be informed about",
+      "keyword": "INFORMED",
+      "fullAnswers": [
+        "will be informed about"
+      ],
+      "markingPoints": [
+        {
+          "id": 1,
+          "label": "future passive auxiliary",
+          "accepted": [
+            "will be"
+          ]
+        },
+        {
+          "id": 2,
+          "label": "past participle + preposition complement",
+          "accepted": [
+            "informed about"
+          ]
+        }
+      ],
+      "gradingMetadata": {
+        "type": "b2_key_word_transformation",
+        "version": 1,
+        "keyword": "INFORMED",
+        "fullAnswers": [
+          "will be informed about"
+        ],
+        "markingPoints": [
+          {
+            "id": 1,
+            "label": "future passive auxiliary",
+            "accepted": [
+              "will be"
+            ]
+          },
+          {
+            "id": 2,
+            "label": "past participle + preposition complement",
+            "accepted": [
+              "informed about"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "E3Q26",
+      "examSlot": 3,
+      "questionNumber": 26,
+      "classification": "APPROVED_KEY",
+      "includeInBackfill": true,
+      "pedagogyNotes": "Conditional unless you + main verb improve.",
+      "reviewFlags": [],
+      "supabase": {
+        "openAnswerRowId": "07b91729-50ce-431a-a39e-ba161a111a92",
+        "preguntaId": "30b130e8-275c-4d72-8f0a-0b7bd55f295a",
+        "examenId": null
+      },
+      "canonicalAnswer": "unless you improve",
+      "keyword": "UNLESS",
+      "fullAnswers": [
+        "unless you improve"
+      ],
+      "markingPoints": [
+        {
+          "id": 1,
+          "label": "unless + subject",
+          "accepted": [
+            "unless you"
+          ]
+        },
+        {
+          "id": 2,
+          "label": "main verb",
+          "accepted": [
+            "improve"
+          ]
+        }
+      ],
+      "gradingMetadata": {
+        "type": "b2_key_word_transformation",
+        "version": 1,
+        "keyword": "UNLESS",
+        "fullAnswers": [
+          "unless you improve"
+        ],
+        "markingPoints": [
+          {
+            "id": 1,
+            "label": "unless + subject",
+            "accepted": [
+              "unless you"
+            ]
+          },
+          {
+            "id": 2,
+            "label": "main verb",
+            "accepted": [
+              "improve"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "E3Q27",
+      "examSlot": 3,
+      "questionNumber": 27,
+      "classification": "APPROVED_KEY",
+      "includeInBackfill": true,
+      "pedagogyNotes": "Present perfect continuous has been + present participle learning.",
+      "reviewFlags": [],
+      "supabase": {
+        "openAnswerRowId": "adcb303d-5aed-4358-b213-3774b40b5db2",
+        "preguntaId": "30b130e8-275c-4d72-8f0a-0b7bd55f295a",
+        "examenId": null
+      },
+      "canonicalAnswer": "has been learning",
+      "keyword": "BEEN",
+      "fullAnswers": [
+        "has been learning"
+      ],
+      "markingPoints": [
+        {
+          "id": 1,
+          "label": "present perfect continuous auxiliary",
+          "accepted": [
+            "has been"
+          ]
+        },
+        {
+          "id": 2,
+          "label": "present participle",
+          "accepted": [
+            "learning"
+          ]
+        }
+      ],
+      "gradingMetadata": {
+        "type": "b2_key_word_transformation",
+        "version": 1,
+        "keyword": "BEEN",
+        "fullAnswers": [
+          "has been learning"
+        ],
+        "markingPoints": [
+          {
+            "id": 1,
+            "label": "present perfect continuous auxiliary",
+            "accepted": [
+              "has been"
+            ]
+          },
+          {
+            "id": 2,
+            "label": "present participle",
+            "accepted": [
+              "learning"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "E3Q28",
+      "examSlot": 3,
+      "questionNumber": 28,
+      "classification": "APPROVED_KEY",
+      "includeInBackfill": true,
+      "pedagogyNotes": "Present perfect negative have not/haven't + been to locative pattern.",
+      "reviewFlags": [],
+      "supabase": {
+        "openAnswerRowId": "d90a154b-3359-41b0-abf7-db286a843707",
+        "preguntaId": "30b130e8-275c-4d72-8f0a-0b7bd55f295a",
+        "examenId": null
+      },
+      "canonicalAnswer": "have not been to",
+      "keyword": "BEEN",
+      "fullAnswers": [
+        "have not been to",
+        "haven't been to"
+      ],
+      "markingPoints": [
+        {
+          "id": 1,
+          "label": "present perfect negative auxiliary",
+          "accepted": [
+            "have not",
+            "haven't"
+          ]
+        },
+        {
+          "id": 2,
+          "label": "been to locative pattern",
+          "accepted": [
+            "been to"
+          ]
+        }
+      ],
+      "gradingMetadata": {
+        "type": "b2_key_word_transformation",
+        "version": 1,
+        "keyword": "BEEN",
+        "fullAnswers": [
+          "have not been to",
+          "haven't been to"
+        ],
+        "markingPoints": [
+          {
+            "id": 1,
+            "label": "present perfect negative auxiliary",
+            "accepted": [
+              "have not",
+              "haven't"
+            ]
+          },
+          {
+            "id": 2,
+            "label": "been to locative pattern",
+            "accepted": [
+              "been to"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "E3Q29",
+      "examSlot": 3,
+      "questionNumber": 29,
+      "classification": "APPROVED_KEY",
+      "includeInBackfill": true,
+      "pedagogyNotes": "Negative past comparison (was not/wasn't) + as hard as comparison block containing the second as.",
+      "reviewFlags": [],
+      "supabase": {
+        "openAnswerRowId": "bb1ec4a5-dc4b-4052-bc50-51a79b3e637f",
+        "preguntaId": "30b130e8-275c-4d72-8f0a-0b7bd55f295a",
+        "examenId": null
+      },
+      "canonicalAnswer": "was not as hard as",
+      "keyword": "AS",
+      "fullAnswers": [
+        "was not as hard as",
+        "wasn't as hard as"
+      ],
+      "markingPoints": [
+        {
+          "id": 1,
+          "label": "negative past comparison",
+          "accepted": [
+            "was not",
+            "wasn't"
+          ]
+        },
+        {
+          "id": 2,
+          "label": "as ... as comparison",
+          "accepted": [
+            "as hard as"
+          ]
+        }
+      ],
+      "gradingMetadata": {
+        "type": "b2_key_word_transformation",
+        "version": 1,
+        "keyword": {
+          "text": "AS",
+          "requiredOccurrences": 1
+        },
+        "fullAnswers": [
+          "was not as hard as",
+          "wasn't as hard as"
+        ],
+        "markingPoints": [
+          {
+            "id": 1,
+            "label": "negative past comparison",
+            "accepted": [
+              "was not",
+              "wasn't"
+            ]
+          },
+          {
+            "id": 2,
+            "label": "as ... as comparison",
+            "accepted": [
+              "as hard as"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "E3Q30",
+      "examSlot": 3,
+      "questionNumber": 30,
+      "classification": "APPROVED_KEY",
+      "includeInBackfill": true,
+      "pedagogyNotes": "Wish/regret wishes she had + past participle chosen.",
+      "reviewFlags": [],
+      "supabase": {
+        "openAnswerRowId": "23fe6c17-ee90-43f0-827c-750e61ada7d2",
+        "preguntaId": "30b130e8-275c-4d72-8f0a-0b7bd55f295a",
+        "examenId": null
+      },
+      "canonicalAnswer": "wishes she had chosen",
+      "keyword": "WISHES",
+      "fullAnswers": [
+        "wishes she had chosen"
+      ],
+      "markingPoints": [
+        {
+          "id": 1,
+          "label": "wish + past perfect frame",
+          "accepted": [
+            "wishes she had"
+          ]
+        },
+        {
+          "id": 2,
+          "label": "past participle",
+          "accepted": [
+            "chosen"
+          ]
+        }
+      ],
+      "gradingMetadata": {
+        "type": "b2_key_word_transformation",
+        "version": 1,
+        "keyword": "WISHES",
+        "fullAnswers": [
+          "wishes she had chosen"
+        ],
+        "markingPoints": [
+          {
+            "id": 1,
+            "label": "wish + past perfect frame",
+            "accepted": [
+              "wishes she had"
+            ]
+          },
+          {
+            "id": 2,
+            "label": "past participle",
+            "accepted": [
+              "chosen"
+            ]
+          }
+        ]
+      }
+    }
+  ]
+}

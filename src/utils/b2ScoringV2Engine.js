@@ -36,7 +36,10 @@ export function buildPartScoreMetricsV2(partNumber, input, cfgByPart) {
   const maxPoints = cfg?.maxPoints ?? totalQuestions;
   const questionsAnswered = Math.max(0, Number(input.questionsAnswered) || 0);
   const correctItems = Math.max(0, Number(input.correctItems) || 0);
-  const pointsEarned = correctItems * (cfg?.pointsPerCorrect ?? 1);
+  const pointsEarned =
+    typeof input.pointsEarned === 'number'
+      ? Math.max(0, input.pointsEarned)
+      : correctItems * (cfg?.pointsPerCorrect ?? 1);
 
   return {
     scoringVersion: 2,
