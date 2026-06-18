@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
-import { buildUoePartDescripcion } from '@/utils/levelsPuntuaciones';
+import { buildUoePartDescripcion, parseUoePartDescripcion } from '@/utils/levelsPuntuaciones';
 import { LEVELS_SCORE_SOURCE } from '@/utils/levelsScoreSource';
 import {
   getB2PartScoringV2,
@@ -12,6 +12,81 @@ const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
 const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
 const supabaseServiceRoleKey =
   process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.SUPABASE_SECRET_KEY;
+
+function isSchemaCacheColumnError(error) {
+  const msg = String(error?.message || error || '').toLowerCase();
+  const code = String(error?.code || '').toUpperCase();
+  return (
+    msg.includes('schema cache') ||
+    msg.includes('could not find') ||
+    msg.includes('does not exist') ||
+    code === 'PGRST204' ||
+    code === '42703'
+  );
+}
+
+/** @param {import('@supabase/supabase-js').SupabaseClient} admin */
+async function findExistingPartRowServer(admin, userId, examenId, parteNumero, scoreSource) {
+  const { data: row, error } = await admin
+    .from('levels_puntuaciones')
+    .select('id, descripcion, score_source')
+    .eq('uuid_usuario', userId)
+    .eq('examen_id', examenId)
+    .eq('parte_numero', parteNumero)
+    .eq('score_source', scoreSource)
+    .maybeSingle();
+
+  if (!error && row?.id) return row.id;
+  if (error && !isSchemaCacheColumnError(error)) throw error;
+
+  let listRes = await admin
+    .from('levels_puntuaciones')
+    .select('id, descripcion, score_source')
+    .eq('uuid_usuario', userId)
+    .eq('examen_id', examenId)
+    .eq('parte_numero', parteNumero);
+
+  if (listRes.error && isSchemaCacheColumnError(listRes.error)) {
+    listRes = await admin
+      .from('levels_puntuaciones')
+      .select('id, descripcion')
+      .eq('uuid_usuario', userId)
+      .eq('examen_id', examenId)
+      .eq('parte_numero', parteNumero);
+  }
+
+  if (listRes.error) throw listRes.error;
+
+  const match = (listRes.data || []).find((r) => {
+    const meta = parseUoePartDescripcion(r.descripcion);
+    const rowSource = r.score_source || meta?.scoreSource || LEVELS_SCORE_SOURCE.SKILL_PRACTICE;
+    return rowSource === scoreSource;
+  });
+
+  return match?.id ?? null;
+}
+
+function stripScoreSourceFromRow(row) {
+  const { score_source, ...rest } = row;
+  return rest;
+}
+
+/** @param {import('@supabase/supabase-js').SupabaseClient} admin */
+async function writePartRow(admin, existingId, row) {
+  if (existingId) {
+    let { error } = await admin.from('levels_puntuaciones').update(row).eq('id', existingId);
+    if (error && isSchemaCacheColumnError(error) && row.score_source != null) {
+      ({ error } = await admin.from('levels_puntuaciones').update(stripScoreSourceFromRow(row)).eq('id', existingId));
+    }
+    return error;
+  }
+
+  let { error } = await admin.from('levels_puntuaciones').insert(row);
+  if (error && isSchemaCacheColumnError(error) && row.score_source != null) {
+    ({ error } = await admin.from('levels_puntuaciones').insert(stripScoreSourceFromRow(row)));
+  }
+  return error;
+}
 
 export async function POST(req) {
   try {
@@ -104,16 +179,10 @@ export async function POST(req) {
       auth: { persistSession: false, autoRefreshToken: false },
     });
 
-    const { data: existing, error: findErr } = await admin
-      .from('levels_puntuaciones')
-      .select('id')
-      .eq('uuid_usuario', userId)
-      .eq('examen_id', examenId)
-      .eq('parte_numero', parteNumero)
-      .eq('score_source', scoreSource)
-      .maybeSingle();
-
-    if (findErr) {
+    let existingId = null;
+    try {
+      existingId = await findExistingPartRowServer(admin, userId, examenId, parteNumero, scoreSource);
+    } catch (findErr) {
       return NextResponse.json({ error: findErr.message }, { status: 500 });
     }
 
@@ -135,13 +204,13 @@ export async function POST(req) {
       row.puntos_maximos = puntosMaximos;
     }
 
-    if (existing?.id) {
-      const { error: upErr } = await admin.from('levels_puntuaciones').update(row).eq('id', existing.id);
+    if (existingId) {
+      const upErr = await writePartRow(admin, existingId, row);
       if (upErr) return NextResponse.json({ error: upErr.message }, { status: 500 });
       return NextResponse.json({ ok: true, updated: true });
     }
 
-    const { error: insErr } = await admin.from('levels_puntuaciones').insert(row);
+    const insErr = await writePartRow(admin, null, row);
     if (insErr) return NextResponse.json({ error: insErr.message }, { status: 500 });
 
     return NextResponse.json({ ok: true, created: true });

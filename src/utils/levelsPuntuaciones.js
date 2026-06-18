@@ -63,6 +63,7 @@ function isSchemaCacheColumnError(error) {
   return (
     msg.includes('schema cache') ||
     msg.includes('could not find') ||
+    msg.includes('does not exist') ||
     code === 'PGRST204' ||
     code === '42703'
   );
@@ -294,25 +295,32 @@ export async function upsertLevelsPartPuntuacion({
     if (findErr) return { error: findErr };
 
     const tryClientWrite = async () => {
-      if (existingId) {
-        let { error: upErr } = await supabase
-          .from('levels_puntuaciones')
-          .update(fullRow)
-          .eq('id', existingId);
+      const attemptWrite = async (payload, existing) => {
+        if (existing) {
+          return supabase.from('levels_puntuaciones').update(payload).eq('id', existing);
+        }
+        return supabase.from('levels_puntuaciones').insert(payload);
+      };
 
+      if (existingId) {
+        let { error: upErr } = await attemptWrite(fullRow, existingId);
+        if (upErr && isSchemaCacheColumnError(upErr) && fullRow.score_source != null) {
+          const { score_source, ...withoutSource } = fullRow;
+          ({ error: upErr } = await attemptWrite(withoutSource, existingId));
+        }
         if (upErr && isSchemaCacheColumnError(upErr)) {
-          ({ error: upErr } = await supabase
-            .from('levels_puntuaciones')
-            .update(minimalRow)
-            .eq('id', existingId));
+          ({ error: upErr } = await attemptWrite(minimalRow, existingId));
         }
         return upErr ?? null;
       }
 
-      let { error: insErr } = await supabase.from('levels_puntuaciones').insert(fullRow);
-
+      let { error: insErr } = await attemptWrite(fullRow, null);
+      if (insErr && isSchemaCacheColumnError(insErr) && fullRow.score_source != null) {
+        const { score_source, ...withoutSource } = fullRow;
+        ({ error: insErr } = await attemptWrite(withoutSource, null));
+      }
       if (insErr && isSchemaCacheColumnError(insErr)) {
-        ({ error: insErr } = await supabase.from('levels_puntuaciones').insert(minimalRow));
+        ({ error: insErr } = await attemptWrite(minimalRow, null));
       }
 
       return insErr ?? null;

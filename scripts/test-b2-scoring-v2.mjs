@@ -481,4 +481,55 @@ describe('Aggregation integrity and edge cases', () => {
     assert.ok(desc.includes('"correctas":4'));
     assert.ok(!desc.includes('scoring_version'));
   });
+
+  it('score_source round-trips in descripcion meta JSON', async () => {
+    const { buildUoePartDescripcion, parseUoePartDescripcion } = await import('../src/utils/levelsPuntuaciones.js');
+    const { LEVELS_SCORE_SOURCE } = await import('../src/utils/levelsScoreSource.js');
+    const desc = buildUoePartDescripcion({
+      examenId: 'exam-uuid',
+      parteNumero: 4,
+      correctas: 3,
+      total: 6,
+      aprobado: true,
+      scoreSource: LEVELS_SCORE_SOURCE.EXAM_MODE,
+      scoringVersion: 2,
+      puntosObtenidos: 6,
+      puntosMaximos: 12,
+    });
+    const meta = parseUoePartDescripcion(desc);
+    assert.equal(meta.scoreSource, LEVELS_SCORE_SOURCE.EXAM_MODE);
+    assert.equal(meta.scoringVersion, 2);
+    assert.equal(meta.puntosObtenidos, 6);
+    assert.equal(meta.puntosMaximos, 12);
+  });
+
+  it('fetch filters rows by score_source from descripcion when column absent', async () => {
+    const { resolveLevelsScoreSource } = await import('../src/utils/levelsScoreSource.js');
+    const { parseUoePartDescripcion, buildUoePartDescripcion } = await import('../src/utils/levelsPuntuaciones.js');
+    const { LEVELS_SCORE_SOURCE } = await import('../src/utils/levelsScoreSource.js');
+    const skillDesc = buildUoePartDescripcion({
+      examenId: 'e1',
+      parteNumero: 4,
+      correctas: 3,
+      total: 6,
+      aprobado: false,
+      scoreSource: LEVELS_SCORE_SOURCE.SKILL_PRACTICE,
+      scoringVersion: 2,
+      puntosObtenidos: 8,
+      puntosMaximos: 12,
+    });
+    const examDesc = buildUoePartDescripcion({
+      examenId: 'e1',
+      parteNumero: 4,
+      correctas: 2,
+      total: 6,
+      aprobado: false,
+      scoreSource: LEVELS_SCORE_SOURCE.EXAM_MODE,
+      scoringVersion: 2,
+      puntosObtenidos: 6,
+      puntosMaximos: 12,
+    });
+    assert.equal(resolveLevelsScoreSource(parseUoePartDescripcion(skillDesc)), LEVELS_SCORE_SOURCE.SKILL_PRACTICE);
+    assert.equal(resolveLevelsScoreSource(parseUoePartDescripcion(examDesc)), LEVELS_SCORE_SOURCE.EXAM_MODE);
+  });
 });
