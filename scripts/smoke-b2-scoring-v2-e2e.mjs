@@ -19,6 +19,7 @@ import { computeB2PartScoreMetrics } from '../src/utils/levelsPaperScoreMetrics.
 import { computeB2PartProgressFromState } from '../src/utils/recordLevelsB2PartScore.js';
 import { LEVELS_SCORE_SOURCE } from '../src/utils/levelsScoreSource.js';
 import { parseUoePartDescripcion } from '../src/utils/levelsPuntuaciones.js';
+import { fetchB2PuntuacionesProgress } from '../src/utils/levelsPuntuacionesProgress.js';
 import { isB2PartPassedByPoints } from '../src/utils/levelsB2PartScoring.js';
 import { starsFromTheorySessionScore } from '../src/lib/theoryTopicLevels.js';
 
@@ -204,7 +205,7 @@ async function main() {
     scoreSourceColumnExists: scoreSourceProbe.exists,
     v2ColumnsOk: !colQuery.error,
     uniqueConstraintNote:
-      'DB has UNIQUE(uuid_usuario, examen_id, parte_numero) unless score_source migration applied',
+      'UNIQUE(uuid_usuario, examen_id, parte_numero, score_source) expected after migration',
   };
 
   // Part 4 live grading
@@ -268,17 +269,37 @@ async function main() {
 
       const allRows = await readUserPartRows(admin, smokeUser.userId, EXAM1_EXAMEN_ID, PART_NUMBER);
       report.persistence.allRowsAfterExamMode = allRows.map(sanitizeRow);
-      report.persistence.separationOk =
-        allRows.length >= 2 &&
-        allRows.some((r) => r.score_source === LEVELS_SCORE_SOURCE.SKILL_PRACTICE || parseUoePartDescripcion(r.descripcion)?.scoreSource === LEVELS_SCORE_SOURCE.SKILL_PRACTICE) &&
-        allRows.some((r) => r.score_source === LEVELS_SCORE_SOURCE.EXAM_MODE || parseUoePartDescripcion(r.descripcion)?.scoreSource === LEVELS_SCORE_SOURCE.EXAM_MODE);
+      const hasSkill = allRows.some((r) => r.score_source === LEVELS_SCORE_SOURCE.SKILL_PRACTICE);
+      const hasExam = allRows.some((r) => r.score_source === LEVELS_SCORE_SOURCE.EXAM_MODE);
+      report.persistence.separationOk = allRows.length >= 2 && hasSkill && hasExam;
+
+      const { bySlot: skillProgress } = await fetchB2PuntuacionesProgress(anon, {
+        userId: smokeUser.userId,
+        examenIdBySlot: { 1: EXAM1_EXAMEN_ID },
+        partMin: 4,
+        partMax: 4,
+        scoreSource: LEVELS_SCORE_SOURCE.SKILL_PRACTICE,
+      });
+      const { bySlot: examProgress } = await fetchB2PuntuacionesProgress(anon, {
+        userId: smokeUser.userId,
+        examenIdBySlot: { 1: EXAM1_EXAMEN_ID },
+        partMin: 4,
+        partMax: 4,
+        scoreSource: LEVELS_SCORE_SOURCE.EXAM_MODE,
+      });
+      report.persistence.filteredReads = {
+        skillPart4: skillProgress[1]?.parts?.[PART_NUMBER] ?? null,
+        examPart4: examProgress[1]?.parts?.[PART_NUMBER] ?? null,
+        readsSeparated:
+          skillProgress[1]?.parts?.[PART_NUMBER]?.correct === 8 &&
+          examProgress[1]?.parts?.[PART_NUMBER]?.correct === 6,
+      };
 
       if (!report.persistence.separationOk) {
-        report.issues.push(
-          scoreSourceProbe.exists === false
-            ? 'exam_mode cannot coexist: missing score_source column + UNIQUE(user,examen,parte) allows overwrite'
-            : 'exam_mode row missing or overwrote skill_practice',
-        );
+        report.issues.push('exam_mode row missing or overwrote skill_practice');
+      }
+      if (!report.persistence.filteredReads.readsSeparated) {
+        report.issues.push('filtered progress reads did not return separate skill vs exam scores');
       }
     }
   } catch (err) {
@@ -311,8 +332,8 @@ async function main() {
   const separationOk = !separationRequired || report.persistence.separationOk === true;
   const persistOk = skillOk && (v1Mode || report.issues.length === 0 || separationOk);
 
-  console.log(JSON.stringify({ ok: gradingOk && skillOk, separationOk, reportPath, report }, null, 2));
-  if (!gradingOk || !skillOk) process.exit(1);
+  console.log(JSON.stringify({ ok: gradingOk && skillOk && separationOk, separationOk, reportPath, report }, null, 2));
+  if (!gradingOk || !skillOk || (separationRequired && !separationOk)) process.exit(1);
 }
 
 function sanitizeRow(row) {
