@@ -4,8 +4,7 @@
   "parteId": "d02d4a2a-734c-4a46-8c7e-7b95734ee84d",
   "summary": {
     "liveItemCount": 18,
-    "approvedForBackfill": 17,
-    "rewriteRequiredLive": 1
+    "approvedForBackfill": 18
   },
   "items": [
     {
@@ -433,61 +432,73 @@
       "id": "E2Q26",
       "examSlot": 2,
       "questionNumber": 26,
-      "classification": "REWRITE_REQUIRED",
-      "includeInBackfill": false,
-      "pedagogyNotes": "Live item kept for reference only. Approved replacement uses STRICTLY → is strictly forbidden (see proposed rewrite).",
-      "reviewFlags": [
-        "live question: forbidden by the guide — weak MP2; see E2Q26_PROPOSED_REWRITE"
-      ],
+      "classification": "APPROVED_KEY",
+      "includeInBackfill": true,
+      "pedagogyNotes": "Passive structure with STRICTLY adverb (is strictly) + past participle forbidden expressing prohibition.",
+      "reviewFlags": [],
       "supabase": {
         "openAnswerRowId": "edb32978-cfb9-4d9c-94c0-3fa2e89ae281",
         "preguntaId": "d65a2dad-454b-48a6-b9ea-5f8161f43df6",
         "examenId": null
       },
-      "canonicalAnswer": "forbidden by the guide",
-      "keyword": "FORBIDDEN",
+      "canonicalAnswer": "is strictly forbidden",
+      "keyword": "STRICTLY",
       "fullAnswers": [
-        "forbidden by the guide"
+        "is strictly forbidden"
       ],
       "markingPoints": [
         {
           "id": 1,
-          "label": "passive adjective + agent preposition",
+          "label": "passive structure with the given adverb",
           "accepted": [
-            "forbidden by"
+            "is strictly"
           ]
         },
         {
           "id": 2,
-          "label": "agent NP (weak — live only)",
+          "label": "past participle expressing prohibition",
           "accepted": [
-            "the guide"
+            "forbidden"
           ]
         }
       ],
       "gradingMetadata": {
         "type": "b2_key_word_transformation",
         "version": 1,
-        "keyword": "FORBIDDEN",
+        "keyword": "STRICTLY",
         "fullAnswers": [
-          "forbidden by the guide"
+          "is strictly forbidden"
         ],
         "markingPoints": [
           {
             "id": 1,
-            "label": "passive adjective + agent preposition",
+            "label": "passive structure with the given adverb",
             "accepted": [
-              "forbidden by"
+              "is strictly"
             ]
           },
           {
             "id": 2,
-            "label": "agent NP (weak — live only)",
+            "label": "past participle expressing prohibition",
             "accepted": [
-              "the guide"
+              "forbidden"
             ]
           }
         ]
+      },
+      "rewriteFromLegacy": {
+        "keyword": "FORBIDDEN",
+        "canonicalAnswer": "forbidden by the guide",
+        "respuestaTexto": "26 forbidden by the guide",
+        "sentence1": "The guide said, 'You must not take photos inside the museum.'",
+        "sentence2": "Taking photos inside the museum is __________________ the guide."
+      },
+      "rewriteTo": {
+        "keyword": "STRICTLY",
+        "canonicalAnswer": "is strictly forbidden",
+        "respuestaTexto": "26 is strictly forbidden",
+        "sentence1": "The guide said, \"Visitors must not take photos inside the museum.\"",
+        "sentence2": "According to the guide, taking photos inside the museum __________________."
       }
     },
     {
@@ -1005,7 +1016,10 @@
       "gradingMetadata": {
         "type": "b2_key_word_transformation",
         "version": 1,
-        "keyword": "AS",
+        "keyword": {
+          "text": "AS",
+          "requiredOccurrences": 1
+        },
         "fullAnswers": [
           "was not as hard as",
           "wasn't as hard as"
@@ -1083,62 +1097,6 @@
             "label": "past participle",
             "accepted": [
               "chosen"
-            ]
-          }
-        ]
-      }
-    }
-  ],
-  "proposedRewrites": [
-    {
-      "id": "E2Q26-PROPOSED",
-      "replacesLiveItemId": "E2Q26",
-      "classification": "APPROVED_KEY",
-      "includeInBackfill": false,
-      "keyword": "STRICTLY",
-      "sentence1": "The guide said, \"Visitors must not take photos inside the museum.\"",
-      "sentence2": "According to the guide, taking photos inside the museum ______.",
-      "pedagogyNotes": "Passive structure with STRICTLY adverb (is strictly) + past participle forbidden expressing prohibition.",
-      "canonicalAnswer": "is strictly forbidden",
-      "fullAnswers": [
-        "is strictly forbidden"
-      ],
-      "markingPoints": [
-        {
-          "id": 1,
-          "label": "passive structure with the given adverb",
-          "accepted": [
-            "is strictly"
-          ]
-        },
-        {
-          "id": 2,
-          "label": "past participle expressing prohibition",
-          "accepted": [
-            "forbidden"
-          ]
-        }
-      ],
-      "gradingMetadata": {
-        "type": "b2_key_word_transformation",
-        "version": 1,
-        "keyword": "STRICTLY",
-        "fullAnswers": [
-          "is strictly forbidden"
-        ],
-        "markingPoints": [
-          {
-            "id": 1,
-            "label": "passive structure with the given adverb",
-            "accepted": [
-              "is strictly"
-            ]
-          },
-          {
-            "id": 2,
-            "label": "past participle expressing prohibition",
-            "accepted": [
-              "forbidden"
             ]
           }
         ]
