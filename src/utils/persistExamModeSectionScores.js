@@ -1,27 +1,13 @@
 import { ensureAppUserProfile } from '@/utils/ensureAppUserProfile';
-import { mergeLevelsEstadisticas } from '@/utils/levelsEstadisticas';
-import { upsertLevelsPartPuntuacion } from '@/utils/levelsPuntuaciones';
-import {
-  isB2ScoringV2Enabled,
-  B2_SCORING_V2_PERSISTENCE_DISABLED_MSG,
-} from '@/lib/b2ScoringV2FeatureFlag';
+import { persistLevelsPartProgress } from '@/utils/persistLevelsPartProgress';
+import { LEVELS_SCORE_SOURCE } from '@/utils/levelsScoreSource';
 
 /**
- * Guarda en Supabase (levels_puntuaciones + levels_estadisticas) las partes terminadas en exam mode.
- * @param {object} params
- * @param {string} params.userId
- * @param {string} params.examenId
- * @param {Record<number, { draft?: { preguntaId?: string }, progress: { correct: number, total: number, complete?: boolean } }>} params.partSnapshots
+ * Exam-mode section finish: persist each answered part to levels_puntuaciones
+ * (exam_mode) and levels_estadisticas.
  */
 export async function persistExamModeSectionScores({ userId, examenId, partSnapshots = {} }) {
   if (!userId || !examenId) return { saved: 0, error: null };
-
-  if (isB2ScoringV2Enabled()) {
-    if (typeof console !== 'undefined' && process.env.NODE_ENV === 'development') {
-      console.info(B2_SCORING_V2_PERSISTENCE_DISABLED_MSG);
-    }
-    return { saved: 0, error: null, v2PersistenceSkipped: true };
-  }
 
   const profile = await ensureAppUserProfile();
   if (!profile.ok && profile.reason !== 'no_session') {
@@ -38,34 +24,25 @@ export async function persistExamModeSectionScores({ userId, examenId, partSnaps
       const partNumber = Number(partKey);
       const progress = snap?.progress;
       const preguntaId = snap?.draft?.preguntaId;
+      const parteId = snap?.draft?.parteId || null;
       if (!preguntaId || !partNumber || !progress) return;
-      const hasAnswers = progress.complete || (Number(progress.evaluated) || 0) > 0;
-      if (!hasAnswers) return;
 
-      const [puntRes] = await Promise.all([
-        upsertLevelsPartPuntuacion({
-          userId,
-          preguntaId,
-          examenId,
-          parteNumero: partNumber,
-          correctas: progress.correct,
-          totalPreguntas: progress.total,
-        }),
-        mergeLevelsEstadisticas({
-          userId,
-          preguntaId,
-          deltaIntentos: 1,
-          deltaEvaluadas: progress.total,
-          deltaCorrectas: progress.correct,
-          deltaIncorrectas: Math.max(0, progress.total - progress.correct),
-        }),
-      ]);
+      const result = await persistLevelsPartProgress({
+        userId,
+        preguntaId,
+        parteId,
+        examenId,
+        partNumber,
+        progress,
+        scoreSource: LEVELS_SCORE_SOURCE.EXAM_MODE,
+        statsMode: 'section-finish',
+      });
 
-      if (puntRes.error) {
-        lastError = puntRes.error;
+      if (result.error) {
+        lastError = result.error;
         return;
       }
-      saved += 1;
+      if (result.saved) saved += 1;
     }),
   );
 

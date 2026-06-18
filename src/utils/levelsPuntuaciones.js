@@ -1,19 +1,35 @@
 import { supabase } from '@/utils/supabaseClient';
-import { isB2PartPassed } from '@/utils/levelsB2PartScoring';
+import {
+  getB2PartScoringV2,
+  isB2PartPassed,
+  isB2PartPassedByPoints,
+} from '@/utils/levelsB2PartScoring';
+import { LEVELS_SCORE_SOURCE } from '@/utils/levelsScoreSource';
 
 const META_PREFIX = 'uoe_meta:';
 
-/** @param {{ parteNumero: number, examenId: string, correctas: number, total: number, aprobado: boolean }} meta */
+/** @param {{ parteNumero: number, examenId: string, correctas: number, total: number, aprobado: boolean, scoreSource?: string, scoringVersion?: number, puntosObtenidos?: number, puntosMaximos?: number }} meta */
 export function buildUoePartDescripcion(meta) {
-  const label = `Part ${meta.parteNumero} · ${meta.correctas}/${meta.total} · ${meta.aprobado ? 'passed' : 'not passed'}`;
-  return `${META_PREFIX}${JSON.stringify({
+  const scoringVersion = Number(meta.scoringVersion) || 1;
+  const isV2 = scoringVersion === 2;
+  const displayCorrect = isV2 ? meta.puntosObtenidos ?? meta.correctas : meta.correctas;
+  const displayTotal = isV2 ? meta.puntosMaximos ?? meta.total : meta.total;
+  const label = `Part ${meta.parteNumero} · ${displayCorrect}/${displayTotal} · ${meta.aprobado ? 'passed' : 'not passed'}`;
+  const payload = {
     v: 1,
     examen_id: meta.examenId,
     parte_numero: meta.parteNumero,
     correctas: meta.correctas,
     total_preguntas: meta.total,
     aprobado: meta.aprobado,
-  })}|${label}`;
+    score_source: meta.scoreSource || LEVELS_SCORE_SOURCE.SKILL_PRACTICE,
+  };
+  if (isV2) {
+    payload.scoring_version = 2;
+    payload.puntos_obtenidos = meta.puntosObtenidos ?? meta.correctas;
+    payload.puntos_maximos = meta.puntosMaximos ?? meta.total;
+  }
+  return `${META_PREFIX}${JSON.stringify(payload)}|${label}`;
 }
 
 /** @param {string | null | undefined} descripcion */
@@ -24,12 +40,17 @@ export function parseUoePartDescripcion(descripcion) {
   try {
     const data = JSON.parse(jsonPart);
     if (!data?.examen_id || !data?.parte_numero) return null;
+    const scoringVersion = Number(data.scoring_version) || 1;
     return {
       examenId: data.examen_id,
       parteNumero: Number(data.parte_numero),
       correctas: Number(data.correctas) || 0,
       total: Number(data.total_preguntas) || 0,
       aprobado: data.aprobado === true,
+      scoreSource: data.score_source || LEVELS_SCORE_SOURCE.SKILL_PRACTICE,
+      scoringVersion,
+      puntosObtenidos: Number(data.puntos_obtenidos) || 0,
+      puntosMaximos: Number(data.puntos_maximos) || 0,
     };
   } catch {
     return null;
@@ -53,6 +74,10 @@ async function upsertPartPuntuacionViaApi({
   parteNumero,
   correctas,
   totalPreguntas,
+  scoreSource = LEVELS_SCORE_SOURCE.SKILL_PRACTICE,
+  scoringVersion = 1,
+  puntosObtenidos,
+  puntosMaximos,
 }) {
   const { data: sessionData } = await supabase.auth.getSession();
   const token = sessionData?.session?.access_token;
@@ -61,19 +86,27 @@ async function upsertPartPuntuacionViaApi({
   }
 
   try {
+    const body = {
+      preguntaId,
+      examenId,
+      parteNumero,
+      correctas,
+      totalPreguntas,
+      scoreSource,
+      scoringVersion,
+    };
+    if (scoringVersion === 2) {
+      body.puntosObtenidos = puntosObtenidos;
+      body.puntosMaximos = puntosMaximos;
+    }
+
     const res = await fetch('/api/levels/upsert-part-puntuacion', {
       method: 'POST',
       headers: {
         Authorization: `Bearer ${token}`,
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({
-        preguntaId,
-        examenId,
-        parteNumero,
-        correctas,
-        totalPreguntas,
-      }),
+      body: JSON.stringify(body),
     });
 
     const payload = await res.json().catch(() => ({}));
@@ -114,16 +147,19 @@ export async function insertLevelsPuntuacion({
   }
 }
 
-async function findExistingPartRow(userId, examenId, parteNumero) {
+async function findExistingPartRow(userId, examenId, parteNumero, scoreSource = LEVELS_SCORE_SOURCE.SKILL_PRACTICE) {
   let { data: row, error } = await supabase
     .from('levels_puntuaciones')
-    .select('id')
+    .select('id, descripcion, score_source')
     .eq('uuid_usuario', userId)
     .eq('examen_id', examenId)
     .eq('parte_numero', parteNumero)
+    .eq('score_source', scoreSource)
     .maybeSingle();
 
-  if (!error && row?.id) return { id: row.id, error: null };
+  if (!error && row?.id) {
+    return { id: row.id, error: null };
+  }
 
   if (error && !isSchemaCacheColumnError(error)) {
     return { id: null, error };
@@ -138,10 +174,41 @@ async function findExistingPartRow(userId, examenId, parteNumero) {
 
   const match = (rows || []).find((r) => {
     const meta = parseUoePartDescripcion(r.descripcion);
-    return meta?.examenId === examenId && Number(meta.parteNumero) === Number(parteNumero);
+    if (!meta) return false;
+    const rowSource = meta.scoreSource || LEVELS_SCORE_SOURCE.SKILL_PRACTICE;
+    return (
+      meta.examenId === examenId &&
+      Number(meta.parteNumero) === Number(parteNumero) &&
+      rowSource === scoreSource
+    );
   });
 
   return { id: match?.id ?? null, error: null };
+}
+
+function resolvePartScoreFields({
+  parteNumero,
+  correctas,
+  totalPreguntas,
+  scoringVersion = 1,
+  puntosObtenidos,
+  puntosMaximos,
+}) {
+  const version = Number(scoringVersion) || 1;
+  const correct = Math.max(0, Number(correctas) || 0);
+  const total = Math.max(1, Number(totalPreguntas) || 1);
+
+  if (version === 2) {
+    const puntos = Math.max(0, Number(puntosObtenidos) || 0);
+    const maxPuntos = Math.max(1, Number(puntosMaximos) || getB2PartScoringV2(parteNumero)?.maxPoints || 1);
+    const aprobado = isB2PartPassedByPoints(puntos, parteNumero);
+    const puntuacion = aprobado ? 100 : Math.round((100 * puntos) / maxPuntos);
+    return { correct, total, puntos, maxPuntos, aprobado, puntuacion, scoringVersion: 2 };
+  }
+
+  const aprobado = isB2PartPassed(correct, parteNumero);
+  const puntuacion = aprobado ? 100 : Math.round((100 * correct) / total);
+  return { correct, total, puntos: null, maxPuntos: null, aprobado, puntuacion, scoringVersion: 1 };
 }
 
 /**
@@ -154,21 +221,42 @@ export async function upsertLevelsPartPuntuacion({
   parteNumero,
   correctas,
   totalPreguntas,
+  scoreSource = LEVELS_SCORE_SOURCE.SKILL_PRACTICE,
+  scoringVersion = 1,
+  puntosObtenidos,
+  puntosMaximos,
 }) {
   if (!userId || !preguntaId || !examenId || !parteNumero) {
     return { error: new Error('Faltan datos para guardar la puntuación de la parte.') };
   }
 
-  const correct = Math.max(0, Number(correctas) || 0);
-  const total = Math.max(1, Number(totalPreguntas) || 1);
-  const aprobado = isB2PartPassed(correct, parteNumero);
-  const puntuacion = aprobado ? 100 : Math.round((100 * correct) / total);
+  const {
+    correct,
+    total,
+    puntos,
+    maxPuntos,
+    aprobado,
+    puntuacion,
+    scoringVersion: resolvedVersion,
+  } = resolvePartScoreFields({
+    parteNumero,
+    correctas,
+    totalPreguntas,
+    scoringVersion,
+    puntosObtenidos,
+    puntosMaximos,
+  });
+
   const descripcion = buildUoePartDescripcion({
     examenId,
     parteNumero,
     correctas: correct,
     total,
     aprobado,
+    scoreSource,
+    scoringVersion: resolvedVersion,
+    puntosObtenidos: puntos ?? undefined,
+    puntosMaximos: maxPuntos ?? undefined,
   });
 
   const fullRow = {
@@ -181,7 +269,13 @@ export async function upsertLevelsPartPuntuacion({
     aprobado,
     puntuacion,
     descripcion,
+    score_source: scoreSource,
+    scoring_version: resolvedVersion,
   };
+  if (resolvedVersion === 2) {
+    fullRow.puntos_obtenidos = puntos;
+    fullRow.puntos_maximos = maxPuntos;
+  }
 
   const minimalRow = {
     id_pregunta: preguntaId,
@@ -195,6 +289,7 @@ export async function upsertLevelsPartPuntuacion({
       userId,
       examenId,
       parteNumero,
+      scoreSource,
     );
     if (findErr) return { error: findErr };
 
@@ -232,6 +327,10 @@ export async function upsertLevelsPartPuntuacion({
       parteNumero,
       correctas: correct,
       totalPreguntas: total,
+      scoreSource,
+      scoringVersion: resolvedVersion,
+      puntosObtenidos: puntos ?? undefined,
+      puntosMaximos: maxPuntos ?? undefined,
     });
   } catch (e) {
     return { error: e };

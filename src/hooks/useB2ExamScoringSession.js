@@ -6,20 +6,22 @@ import { fetchB2PuntuacionesProgress } from '@/utils/levelsPuntuacionesProgress'
 import { getCachedB2Level, getCachedB2ExamenIdsBySlot } from '@/utils/b2LevelCache';
 import { invalidateLevelExamCache } from '@/utils/levelsLevelCache';
 import { getSessionUserId } from '@/utils/levelsEstadisticas';
-import { getB2PartScoring } from '@/utils/levelsB2PartScoring';
+import { getB2PartScoring, getB2PartPassingPoints } from '@/utils/levelsB2PartScoring';
 import { saveB2PartPuntuacionIfComplete } from '@/utils/recordLevelsB2PartScore';
 import { isB2ScoringV2Enabled } from '@/lib/b2ScoringV2FeatureFlag';
 
-function buildPartFinishNotice(progress, partNumber) {
+function buildPartFinishNotice(progress, partNumber, { saved = true } = {}) {
   const v2 =
     isB2ScoringV2Enabled() && Number(partNumber) >= 1 && Number(partNumber) <= 7;
+  const pointsEarned = progress.pointsEarned ?? progress.puntosObtenidos ?? progress.correct;
+  const maxPoints = progress.maxPoints ?? progress.puntosMaximos ?? progress.total;
   return {
-    passed: v2 ? false : progress.passed,
-    correct: v2 ? progress.pointsEarned ?? progress.correct : progress.correct,
-    total: v2 ? progress.maxPoints ?? progress.total : progress.total,
-    passing: progress.passing,
-    scoringVersion: progress.scoringVersion ?? 1,
-    v2LocalOnly: v2,
+    passed: progress.passed,
+    correct: v2 ? pointsEarned : progress.correct,
+    total: v2 ? maxPoints : progress.total,
+    passing: v2 ? getB2PartPassingPoints(partNumber) : progress.passing,
+    scoringVersion: progress.scoringVersion ?? (v2 ? 2 : 1),
+    v2LocalOnly: v2 && !saved,
   };
 }
 
@@ -104,7 +106,11 @@ export function useB2ExamScoringSession({ partMin, partMax }) {
       const uid = await getSessionUserId();
       if (!uid || !preguntaId || !examenId || !partNumber) return { saved: false };
 
-      const sig = `${examSlot}:${partNumber}:${progress.correct}`;
+      const sig = `${examSlot}:${partNumber}:${
+        progress.scoringVersion === 2
+          ? progress.pointsEarned ?? progress.puntosObtenidos ?? progress.correct
+          : progress.correct
+      }`;
       if (lastSavedPartSigRef.current === sig) return { saved: true, progress };
 
       const result = await saveB2PartPuntuacionIfComplete({
@@ -128,7 +134,7 @@ export function useB2ExamScoringSession({ partMin, partMax }) {
         void refreshPuntuacionesProgress();
       }
 
-      setPartFinishNotice(buildPartFinishNotice(progress, partNumber));
+      setPartFinishNotice(buildPartFinishNotice(progress, partNumber, { saved: result.saved }));
 
       return result;
     },
@@ -161,12 +167,14 @@ export function useB2ExamScoringSession({ partMin, partMax }) {
     const cfg = getB2PartScoring(partNumber);
     if (saved?.total && cfg) {
       const v2 = isB2ScoringV2Enabled() && partNumber >= 1 && partNumber <= 7;
+      const pointsEarned = saved.puntosObtenidos ?? saved.correct;
+      const maxPoints = saved.puntosMaximos ?? saved.total;
       setPartFinishNotice({
-        passed: v2 ? false : saved.passed,
-        correct: saved.correct,
-        total: saved.total,
-        passing: cfg.passing,
-        scoringVersion: v2 ? 2 : 1,
+        passed: saved.passed,
+        correct: v2 ? pointsEarned : saved.correct,
+        total: v2 ? maxPoints : saved.total,
+        passing: v2 ? getB2PartPassingPoints(partNumber) : cfg.passing,
+        scoringVersion: saved.scoringVersion ?? (v2 ? 2 : 1),
       });
     } else {
       setPartFinishNotice(null);

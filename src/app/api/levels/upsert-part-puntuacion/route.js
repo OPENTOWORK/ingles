@@ -1,7 +1,12 @@
 import { NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
 import { buildUoePartDescripcion } from '@/utils/levelsPuntuaciones';
-import { isUoePartPassed } from '@/utils/levelsUoePartScoring';
+import { LEVELS_SCORE_SOURCE } from '@/utils/levelsScoreSource';
+import {
+  getB2PartScoringV2,
+  isB2PartPassed,
+  isB2PartPassedByPoints,
+} from '@/utils/levelsB2PartScoring';
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
 const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
@@ -36,19 +41,63 @@ export async function POST(req) {
     const parteNumero = Number(body?.parteNumero);
     const correctas = Math.max(0, Number(body?.correctas) || 0);
     const totalPreguntas = Math.max(1, Number(body?.totalPreguntas) || 1);
+    const scoreSource = body?.scoreSource || LEVELS_SCORE_SOURCE.SKILL_PRACTICE;
+    const scoringVersion = Number(body?.scoringVersion) || 1;
+    const puntosObtenidos = body?.puntosObtenidos != null ? Math.max(0, Number(body.puntosObtenidos) || 0) : null;
+    const puntosMaximos = body?.puntosMaximos != null ? Math.max(1, Number(body.puntosMaximos) || 1) : null;
 
     if (!preguntaId || !examenId || !parteNumero) {
       return NextResponse.json({ error: 'Faltan datos de la parte.' }, { status: 400 });
     }
 
-    const aprobado = isUoePartPassed(correctas, parteNumero);
-    const puntuacion = aprobado ? 100 : Math.round((100 * correctas) / totalPreguntas);
+    if (scoringVersion !== 1 && scoringVersion !== 2) {
+      return NextResponse.json({ error: 'scoring_version inválida.' }, { status: 400 });
+    }
+
+    if (scoringVersion === 2) {
+      if (puntosObtenidos == null || puntosMaximos == null) {
+        return NextResponse.json(
+          { error: 'Scoring V2 requiere puntosObtenidos y puntosMaximos.' },
+          { status: 400 },
+        );
+      }
+      if (puntosObtenidos > puntosMaximos) {
+        return NextResponse.json(
+          { error: 'puntosObtenidos no puede superar puntosMaximos.' },
+          { status: 400 },
+        );
+      }
+      const expectedMax = getB2PartScoringV2(parteNumero)?.maxPoints;
+      if (expectedMax && puntosMaximos !== expectedMax) {
+        return NextResponse.json(
+          { error: `puntosMaximos debe ser ${expectedMax} para la parte ${parteNumero}.` },
+          { status: 400 },
+        );
+      }
+    }
+
+    const aprobado =
+      scoringVersion === 2
+        ? isB2PartPassedByPoints(puntosObtenidos, parteNumero)
+        : isB2PartPassed(correctas, parteNumero);
+    const puntuacion =
+      scoringVersion === 2
+        ? aprobado
+          ? 100
+          : Math.round((100 * puntosObtenidos) / puntosMaximos)
+        : aprobado
+          ? 100
+          : Math.round((100 * correctas) / totalPreguntas);
     const descripcion = buildUoePartDescripcion({
       examenId,
       parteNumero,
       correctas,
       total: totalPreguntas,
       aprobado,
+      scoreSource,
+      scoringVersion,
+      puntosObtenidos: puntosObtenidos ?? undefined,
+      puntosMaximos: puntosMaximos ?? undefined,
     });
 
     const admin = createClient(supabaseUrl, supabaseServiceRoleKey, {
@@ -61,6 +110,7 @@ export async function POST(req) {
       .eq('uuid_usuario', userId)
       .eq('examen_id', examenId)
       .eq('parte_numero', parteNumero)
+      .eq('score_source', scoreSource)
       .maybeSingle();
 
     if (findErr) {
@@ -77,7 +127,13 @@ export async function POST(req) {
       aprobado,
       puntuacion,
       descripcion,
+      score_source: scoreSource,
+      scoring_version: scoringVersion,
     };
+    if (scoringVersion === 2) {
+      row.puntos_obtenidos = puntosObtenidos;
+      row.puntos_maximos = puntosMaximos;
+    }
 
     if (existing?.id) {
       const { error: upErr } = await admin.from('levels_puntuaciones').update(row).eq('id', existing.id);

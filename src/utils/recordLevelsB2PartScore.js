@@ -5,13 +5,11 @@ import {
   getB2PartScoring,
   getB2PartScoringV2,
   getPassingForDynamicTotal,
+  getB2PartPassingPoints,
   isB2PartPassed,
+  isB2PartPassedByPoints,
 } from '@/utils/levelsB2PartScoring';
-import {
-  isB2ScoringV2Enabled,
-  isB2RuoeV2SessionPersistenceBlocked,
-  B2_SCORING_V2_PERSISTENCE_DISABLED_MSG,
-} from '@/lib/b2ScoringV2FeatureFlag';
+import { isB2ScoringV2Enabled } from '@/lib/b2ScoringV2FeatureFlag';
 import { buildPartScoreMetricsV2 } from '@/utils/b2ScoringV2Engine';
 import { B2_PART_SCORING_V2 } from '@/utils/levelsB2PartScoring';
 import { summarizePart4OpenGrades } from '@/lib/b2Part4Grading';
@@ -76,10 +74,6 @@ export function computeB2PartProgressFromState({
     : cfg
       ? evaluated >= cfg.total
       : evaluated > 0 && evaluated >= questionTotal;
-  const passed =
-    !v2Active &&
-    complete &&
-    (cfg ? isB2PartPassed(correct, partNumber) : correct >= passing);
 
   const v2Metrics = v2Active
     ? buildPartScoreMetricsV2(
@@ -94,18 +88,28 @@ export function computeB2PartProgressFromState({
       )
     : null;
 
+  const passed =
+    complete &&
+    (v2Active
+      ? isB2PartPassedByPoints(v2Metrics?.pointsEarned ?? correct * (v2Cfg?.pointsPerCorrect || 1), partNumber)
+      : cfg
+        ? isB2PartPassed(correct, partNumber)
+        : correct >= passing);
+
   return {
     evaluated,
     correct,
     total,
     questionTotal,
-    passing,
+    passing: v2Active ? getB2PartPassingPoints(partNumber) : passing,
     complete,
     passed,
     scoringVersion: v2Active ? 2 : 1,
     v2Metrics,
     pointsEarned: v2Metrics?.pointsEarned ?? correct,
     maxPoints: v2Metrics?.maxPoints ?? total,
+    puntosObtenidos: v2Metrics?.pointsEarned ?? correct,
+    puntosMaximos: v2Metrics?.maxPoints ?? total,
   };
 }
 
@@ -121,13 +125,6 @@ export async function saveB2PartPuntuacionIfComplete({
     return { saved: false, error: null, progress };
   }
 
-  if (isB2RuoeV2SessionPersistenceBlocked(partNumber)) {
-    if (typeof console !== 'undefined' && process.env.NODE_ENV === 'development') {
-      console.info(B2_SCORING_V2_PERSISTENCE_DISABLED_MSG);
-    }
-    return { saved: false, error: null, progress, v2PersistenceSkipped: true };
-  }
-
   const profile = await ensureAppUserProfile();
   if (!profile.ok) {
     if (profile.reason === 'no_session') {
@@ -138,6 +135,7 @@ export async function saveB2PartPuntuacionIfComplete({
     return { saved: false, error: new Error(msg), progress };
   }
 
+  const isV2 = Number(progress.scoringVersion) === 2;
   const [puntRes] = await Promise.all([
     upsertLevelsPartPuntuacion({
       userId,
@@ -145,7 +143,10 @@ export async function saveB2PartPuntuacionIfComplete({
       examenId,
       parteNumero: partNumber,
       correctas: progress.correct,
-      totalPreguntas: progress.total,
+      totalPreguntas: progress.questionTotal ?? progress.total,
+      scoringVersion: progress.scoringVersion ?? 1,
+      puntosObtenidos: isV2 ? progress.puntosObtenidos ?? progress.pointsEarned : undefined,
+      puntosMaximos: isV2 ? progress.puntosMaximos ?? progress.maxPoints : undefined,
     }),
     mergeLevelsEstadisticas({
       userId,

@@ -25,7 +25,7 @@ export default function ExamPracticeFinishNotice({ notice, lang = 'en' }) {
     );
   }
 
-  if (notice.scoringVersion === 2 || notice.v2LocalOnly) {
+  if (notice.v2LocalOnly) {
     return (
       <div className="levels-listening-practice-side__finish">
         <div role="status" className="levels-b2-result levels-b2-result--v2">

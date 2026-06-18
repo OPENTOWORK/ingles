@@ -174,7 +174,11 @@ export function scoreExamModeDrafts({ partMin, partMax, partsData, draftByPart, 
 
     if (useOpen) {
       if (usePart4V2Grading) {
-        const parsedKeys = parseB2KeyWordAnswerKeyRows(question.respuestasAbiertas || []);
+        const openRows = (question.respuestasAbiertas || []).map((row) => ({
+          respuesta_texto: row.respuesta_texto ?? row.respuestaTexto,
+          grading_metadata: row.grading_metadata ?? row.gradingMetadata,
+        }));
+        const parsedKeys = parseB2KeyWordAnswerKeyRows(openRows);
         openGrades = computeSilentPart4OpenGrades(
           draft.openInputs || {},
           parsedKeys,
