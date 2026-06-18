@@ -82,7 +82,7 @@ function ExercisePracticeGrid({
                 </span>
               </div>
               {examLabel ? <span className={styles.exerciseMeta}>{examLabel}</span> : null}
-              <TheoryLevelStars stars={stars} size="sm" />
+              <TheoryLevelStars stars={stars} size="sm" variant="gold" />
               {attempted ? (
                 <span className={styles.exerciseScore}>
                   {partScore.correct}/{partScore.total}

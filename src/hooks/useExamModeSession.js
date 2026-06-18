@@ -1,6 +1,6 @@
 'use client';
 
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { getSessionUserId } from '@/utils/levelsEstadisticas';
 import {
@@ -13,9 +13,15 @@ import {
   loadExamModeSession,
   resetExamModeSession,
   saveExamModeSession,
+  saveExamModeSectionDraft,
   startExamModeSectionTimer,
   updateExamModeSectionRemaining,
 } from '@/utils/examModeSession';
+import {
+  LEVELS_EXAM_REGENERATED_EVENT,
+  reconcileExamModeSessionForContentRevision,
+  syncPracticeSessionWithExamContent,
+} from '@/utils/levelsExamRegenerationSync';
 
 /**
  * Persisted exam-mode session for a level + test slot.
@@ -25,6 +31,11 @@ export function useExamModeSession(slug, examSlot) {
   const [session, setSession] = useState(null);
   const [userId, setUserId] = useState('');
   const [ready, setReady] = useState(false);
+  const sessionRef = useRef(null);
+
+  useEffect(() => {
+    sessionRef.current = session;
+  }, [session]);
 
   useEffect(() => {
     void (async () => {
@@ -107,6 +118,59 @@ export function useExamModeSession(slug, examSlot) {
     [resetExam, router, slug, examSlot, userId],
   );
 
+  const getSectionRemaining = useCallback((sectionKey) => {
+    const current = sessionRef.current;
+    if (!current || !sectionKey) return null;
+    const section = current.sections.find((s) => s.key === sectionKey);
+    return section?.remainingSeconds ?? null;
+  }, []);
+
+  const saveSectionDraft = useCallback(
+    (sectionKey, draft) => {
+      const current = sessionRef.current;
+      if (!current || !sectionKey) return;
+      persist(saveExamModeSectionDraft(current, sectionKey, draft));
+    },
+    [persist],
+  );
+
+  const applyExamContentSync = useCallback(
+    (partsData, examDraftRef = null) => {
+      const current = sessionRef.current;
+      const result = syncPracticeSessionWithExamContent({
+        slug,
+        examSlot,
+        partsData,
+        examModeSession: current,
+        saveExamModeSession: (next, uid) => saveExamModeSession(next, uid || userId),
+        userId,
+        examDraftRef,
+      });
+      if (result.session && result.session !== current) {
+        persist(result.session);
+      }
+    },
+    [slug, examSlot, userId, persist],
+  );
+
+  useEffect(() => {
+    if (!ready || !session) return undefined;
+
+    const handler = (event) => {
+      const detail = event?.detail || {};
+      if (detail.slug !== String(slug || '').toLowerCase()) return;
+      if (Number(detail.examSlot) !== Number(examSlot)) return;
+      const reconciled = reconcileExamModeSessionForContentRevision(
+        sessionRef.current,
+        sessionRef.current?.contentRevision ?? null,
+      );
+      if (reconciled) persist(reconciled);
+    };
+
+    window.addEventListener(LEVELS_EXAM_REGENERATED_EVENT, handler);
+    return () => window.removeEventListener(LEVELS_EXAM_REGENERATED_EVENT, handler);
+  }, [ready, session, slug, examSlot, persist]);
+
   return {
     session,
     ready,
@@ -116,6 +180,9 @@ export function useExamModeSession(slug, examSlot) {
     finishSection,
     touchSectionTimer,
     setSectionRemaining,
+    getSectionRemaining,
+    saveSectionDraft,
+    applyExamContentSync,
     resetExam,
     repeatExam,
   };

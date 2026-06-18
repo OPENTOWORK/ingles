@@ -2,9 +2,8 @@
 import { useState, useEffect, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { supabase } from '@/utils/supabaseClient';
-import { getRedirectPathByUserId } from '@/utils/authRoles';
+import { getRedirectPathByUserId, getRedirectPathByRoleName, peekCachedRoleName } from '@/utils/authRoles';
 import { completeSignIn } from '@/utils/completeSignIn';
-import { getClientAuth } from '@/utils/getClientAuth';
 import { clearLogoutPending } from '@/utils/logout';
 import { isPublicPath } from '@/utils/publicRoutes';
 import toast from 'react-hot-toast';
@@ -17,6 +16,18 @@ function getSafeNextPath(searchParams) {
     return null;
   }
   return next;
+}
+
+async function resolvePostLoginPath(user, searchParams) {
+  const nextPath = getSafeNextPath(searchParams);
+  if (nextPath) return nextPath;
+
+  const cachedRole = peekCachedRoleName(user.id);
+  if (cachedRole) {
+    return getRedirectPathByRoleName(cachedRole);
+  }
+
+  return getRedirectPathByUserId(user.id, user.email);
 }
 
 function LoginPageInner() {
@@ -33,10 +44,9 @@ function LoginPageInner() {
     let cancelled = false;
     (async () => {
       clearLogoutPending();
-      const { user } = await getClientAuth();
-      if (cancelled || !user) return;
-      const nextPath = getSafeNextPath(searchParams);
-      const path = nextPath || (await getRedirectPathByUserId(user.id, user.email));
+      const { data: { session } } = await supabase.auth.getSession();
+      if (cancelled || !session?.user) return;
+      const path = await resolvePostLoginPath(session.user, searchParams);
       if (!cancelled) router.replace(path);
     })();
     return () => {
@@ -76,10 +86,6 @@ function LoginPageInner() {
 
     const { data: signInData, error } = await supabase.auth.signInWithPassword({ email, password });
 
-    // #region agent log
-    fetch('http://127.0.0.1:7882/ingest/2a697440-281c-4f74-a253-095d80733192',{method:'POST',headers:{'Content-Type':'application/json','X-Debug-Session-Id':'82e3a2'},body:JSON.stringify({sessionId:'82e3a2',runId:'login-debug',hypothesisId:'H1',location:'login/page.js:signIn',message:'signInWithPassword result',data:{hasError:!!error,errorCode:error?.code||null,errorMsg:error?.message?.slice(0,120)||null,hasSession:!!signInData?.session,hasUser:!!signInData?.user},timestamp:Date.now()})}).catch(()=>{});
-    // #endregion
-
     if (error) {
       toast.dismiss(loadingToast);
       setLoading(false);
@@ -109,10 +115,6 @@ function LoginPageInner() {
 
     const result = await completeSignIn(signInData);
 
-    // #region agent log
-    fetch('http://127.0.0.1:7882/ingest/2a697440-281c-4f74-a253-095d80733192',{method:'POST',headers:{'Content-Type':'application/json','X-Debug-Session-Id':'82e3a2'},body:JSON.stringify({sessionId:'82e3a2',runId:'login-debug',hypothesisId:'H2',location:'login/page.js:completeSignIn',message:'completeSignIn result',data:{ok:result.ok,reason:result.reason||null,hasUser:!!result.user},timestamp:Date.now()})}).catch(()=>{});
-    // #endregion
-
     toast.dismiss(loadingToast);
     setLoading(false);
 
@@ -125,21 +127,14 @@ function LoginPageInner() {
     toast.success("Inicio de sesión exitoso");
     setFailedAttempts(0);
 
-    try {
-      const { ensureAppUserProfile } = await import('@/utils/ensureAppUserProfile');
-      await ensureAppUserProfile();
-    } catch {
-      /* no bloquear login */
-    }
+    const [path] = await Promise.all([
+      resolvePostLoginPath(result.user, searchParams),
+      import('@/utils/ensureAppUserProfile').then(({ ensureAppUserProfile }) =>
+        ensureAppUserProfile().catch(() => {}),
+      ),
+    ]);
 
-    const nextPath = getSafeNextPath(searchParams);
-    const path = nextPath || (await getRedirectPathByUserId(result.user.id, result.user.email));
-
-    // #region agent log
-    fetch('http://127.0.0.1:7882/ingest/2a697440-281c-4f74-a253-095d80733192',{method:'POST',headers:{'Content-Type':'application/json','X-Debug-Session-Id':'82e3a2'},body:JSON.stringify({sessionId:'82e3a2',runId:'login-debug',hypothesisId:'H4',location:'login/page.js:redirect',message:'post-login redirect path',data:{path},timestamp:Date.now()})}).catch(()=>{});
-    // #endregion
-
-    window.location.href = path;
+    window.location.replace(path);
   };
 
   const handleOAuthLogin = async (provider) => {

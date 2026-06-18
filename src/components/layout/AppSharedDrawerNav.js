@@ -27,6 +27,7 @@ export function AppSharedDrawerNav({
   draloVariant = 'mobile',
 }) {
   const {
+    guest,
     sectionLinks,
     showDralo,
     draloLocked,
@@ -73,6 +74,7 @@ export function AppSharedDrawerNav({
             <div className={`app-nav__sub${draloLocked ? ' app-nav__sub--locked' : ''}`}>
               <DraloAiNavMenuItems
                 locked={draloLocked}
+                guestRequiresLogin={guest}
                 variant={draloVariant}
                 onNavigate={onNavigate}
               />

@@ -6,8 +6,8 @@ import { isB2ScoringV2Enabled } from '@/lib/b2ScoringV2FeatureFlag';
  * total = ítems o puntos máximos de la parte; passing = mínimo para aprobar en práctica.
  */
 export const B2_PART_SCORING = {
-  1: { total: 7, passing: 5 },
-  2: { total: 7, passing: 5 },
+  1: { total: 8, passing: 5 },
+  2: { total: 8, passing: 5 },
   3: { total: 8, passing: 5 },
   4: { total: 6, passing: 4 },
   5: { total: 6, passing: 4 },

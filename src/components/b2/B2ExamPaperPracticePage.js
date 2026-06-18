@@ -38,7 +38,9 @@ import B2ListeningPracticeBriefing from '@/components/b2/B2ListeningPracticeBrie
 import B2ListeningStrategyPanel from '@/components/b2/B2ListeningStrategyPanel';
 import ExamPracticeProgressPanel from '@/components/exam/ExamPracticeProgressPanel';
 import ExamPracticeSessionSideRail from '@/components/exam/ExamPracticeSessionSideRail';
-import ExamPracticeFinishNotice from '@/components/exam/ExamPracticeFinishNotice';
+import ExamPracticeSideRailTop from '@/components/exam/ExamPracticeSideRailTop';
+import ExamStudyNotesSidebar from '@/components/exam/ExamStudyNotesSidebar';
+import ReadingPracticeFeedbackToggle from '@/components/exam/ReadingPracticeFeedbackToggle';
 import ReadingPracticeChrome from '@/components/exam/ReadingPracticeChrome';
 import { ReadingPracticeSessionProvider, useReadingPracticeSession } from '@/context/ReadingPracticeSessionContext';
 import B2ListeningPracticeFeedback from '@/components/b2/B2ListeningPracticeFeedback';
@@ -590,7 +592,9 @@ function B2ExamPaperPracticePageInner({
 
       if (!mountedRef.current) return;
 
-      applyExamContentSync(normalizedParts, examDraftRef);
+      if (typeof applyExamContentSync === 'function') {
+        applyExamContentSync(normalizedParts, examDraftRef);
+      }
       setPartsData(normalizedParts);
       setSelectedPartId(normalizedParts[0]?.id || null);
       const pickBestQuestion = (questions) => {
@@ -1203,12 +1207,7 @@ function B2ExamPaperPracticePageInner({
   const openQuestionNumbers = useMemo(() => {
     const fromAnswers = [...openAnswerMap.keys()].sort((a, b) => a - b);
     const fromPrompt = inferredOpenQuestionNumbers;
-    if (fromPrompt.length > 0 && fromAnswers.length > 0) {
-      const promptSet = new Set(fromPrompt);
-      const intersection = fromAnswers.filter((n) => promptSet.has(n));
-      if (intersection.length > 0) return intersection;
-      return fromPrompt;
-    }
+    if (fromPrompt.length > 0) return fromPrompt;
     if (fromAnswers.length > 0) return fromAnswers;
     if ((selectedQuestion?.respuestasAbiertas?.length ?? 0) > 0) {
       return fromPrompt;
@@ -1924,11 +1923,18 @@ function B2ExamPaperPracticePageInner({
 
   const handleA2McqOptionSelect = useCallback(
     ({ group, groupIndex, option, questionKey }) => {
+      const nextSelected = { ...selectedOptions, [questionKey]: option.id };
+      setSelectedOptions(nextSelected);
+
+      if (hideFeedbackResolved) {
+        trySavePartAfterAnswer({ selectedOptions: nextSelected });
+        return;
+      }
+
       const wasChecked = checkedQuestions[questionKey];
       const nextChecked = { ...checkedQuestions, [questionKey]: true };
-      setSelectedOptions((prev) => ({ ...prev, [questionKey]: option.id }));
       setCheckedQuestions(nextChecked);
-      trySavePartAfterAnswer({ checkedQuestions: nextChecked });
+      trySavePartAfterAnswer({ checkedQuestions: nextChecked, selectedOptions: nextSelected });
       if (!wasChecked && !hideFeedbackResolved) {
         const correctOpt = group.options.find((o) => o.correcta);
         const answersFromDatabase = group.options
@@ -1962,6 +1968,7 @@ function B2ExamPaperPracticePageInner({
     },
     [
       checkedQuestions,
+      selectedOptions,
       hideFeedbackResolved,
       requestAiJustification,
       selectedPart?.id,
@@ -2486,7 +2493,8 @@ function B2ExamPaperPracticePageInner({
         partScoreMetrics={scorePanelProps}
         hideScorePanel={isExamSimulationMode(practiceMode) && !reviewMode}
         partFinishNotice={isExamSimulationMode(practiceMode) && !reviewMode ? null : scoring.partFinishNotice}
-        partFinishNoticePlacement={showPracticeSideRail ? 'sidebar' : 'main'}
+        partFinishNoticePlacement={showPracticeSideRail ? 'header' : 'main'}
+        studyNotesPlacement={showPracticeSideRail ? 'sidebar-top' : 'header'}
         partsData={!loading && !error ? tabPartsData : []}
         selectedPartId={selectedPartId}
         onSelectPart={handleSelectPart}
@@ -3377,6 +3385,23 @@ function B2ExamPaperPracticePageInner({
               </div>
               {showPracticeSideRail ? (
                 <ExamPracticeSessionSideRail
+                  topRail={
+                    <ExamPracticeSideRailTop
+                      studyNotes={
+                        <ExamStudyNotesSidebar
+                          context={{
+                            slug: levelSlug,
+                            skillRoute,
+                            examMode: examModeActive,
+                            partNumber,
+                            examSlot,
+                          }}
+                          contextLabel={title}
+                          lang={lang === 'es' ? 'es' : 'en'}
+                        />
+                      }
+                    />
+                  }
                   strategy={
                     listeningStrategyPack ? (
                       <B2ListeningStrategyPanel
@@ -3401,14 +3426,7 @@ function B2ExamPaperPracticePageInner({
                       enabled={scoring.examPracticeOpen}
                     />
                   }
-                  finishNotice={
-                    scoring.partFinishNotice ? (
-                      <ExamPracticeFinishNotice
-                        notice={scoring.partFinishNotice}
-                        lang={lang === 'es' ? 'es' : 'en'}
-                      />
-                    ) : null
-                  }
+                  finishNotice={null}
                   lang={lang === 'es' ? 'es' : 'en'}
                 />
               ) : null}
@@ -3416,6 +3434,14 @@ function B2ExamPaperPracticePageInner({
               ) : (
               <B2ExamPracticeContent
                 title={a2EmbeddedReadingPart || a2WritingDemo ? '' : getPartTitle(selectedPart)}
+                titleActions={
+                  isSkillPracticeSession ? (
+                    <ReadingPracticeFeedbackToggle
+                      variant="title-row"
+                      lang={lang === 'es' ? 'es' : 'en'}
+                    />
+                  ) : null
+                }
                 directionsText={
                   a2Part1Pack?.directions || selectedPartContent.enunciado
                 }
@@ -3871,50 +3897,12 @@ function B2ExamPaperPracticePageInner({
                                   key={option.id}
                                   type="button"
                                   onClick={() => {
-                                    const wasChecked = checkedQuestions[questionKey];
-                                    const nextChecked = { ...checkedQuestions, [questionKey]: true };
-                                    setSelectedOptions((prev) => ({ ...prev, [questionKey]: option.id }));
-                                    setCheckedQuestions(nextChecked);
-                                    trySavePartAfterAnswer({ checkedQuestions: nextChecked });
-                                    if (!wasChecked && !hideFeedbackResolved) {
-                                      const correctOpt = group.options.find((o) => o.correcta);
-                                      const answersFromDatabase = group.options
-                                        .map((o) => (o.formattedText || o.respuesta || '').trim())
-                                        .filter(Boolean)
-                                        .join('\n');
-                                      requestAiJustification(questionKey, {
-                                        partLabel: selectedPart?.nombre || '',
-                                        questionLabel: group.questionNumber
-                                          ? `Question ${group.questionNumber}`
-                                          : 'Item',
-                                        userChoiceText: option.formattedText || option.respuesta || '',
-                                        correctChoiceText:
-                                          correctOpt?.formattedText || correctOpt?.respuesta || '',
-                                        isCorrect: !!option.correcta,
-                                        answersFromDatabase:
-                                          answersFromDatabase ||
-                                          undefined,
-                                      });
-                                      void (async () => {
-                                        const uid = await getSessionUserId();
-                                        const pid = selectedQuestion?.preguntaId;
-                                        const parteId = selectedPart?.id;
-                                        if (!uid || !pid || !parteId) return;
-                                        const { error } = await recordLevelsAnswerEvaluation({
-                                          userId: uid,
-                                          preguntaId: pid,
-                                          parteId,
-                                          isCorrect: !!option.correcta,
-                                          slotLabel: group.questionNumber
-                                            ? `Question ${group.questionNumber}`
-                                            : 'Item',
-                                          userAnswerText: option.formattedText || option.respuesta || '',
-                                        });
-                                        if (error) {
-                                          console.warn('levels eval/puntuacion:', error.message || error);
-                                        }
-                                      })();
-                                    }
+                                    handleA2McqOptionSelect({
+                                      group,
+                                      groupIndex,
+                                      option,
+                                      questionKey,
+                                    });
                                   }}
                                   className={getListeningMcqOptionClassName({
                                     isSelected,

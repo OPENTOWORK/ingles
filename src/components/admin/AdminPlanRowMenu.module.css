@@ -71,3 +71,28 @@
 .menuItemDanger:hover {
   background: #fef2f2;
 }
+
+:global(body.reading-night-mode) .trigger:hover:not(:disabled) {
+  background: #334155;
+  border-color: #475569;
+  color: #e2e8f0;
+}
+
+:global(body.reading-night-mode) .menu {
+  background: #1e293b;
+  border-color: #475569;
+  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.45);
+}
+
+:global(body.reading-night-mode) .menuItem {
+  color: #e2e8f0;
+}
+
+:global(body.reading-night-mode) .menuItem:hover {
+  background: #334155;
+}
+
+:global(body.reading-night-mode) .menuItemDanger:hover {
+  background: #450a0a;
+}
+

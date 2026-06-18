@@ -3,7 +3,9 @@ import { filterVisibleExamenes } from '@/utils/levelsExamVisibility';
 import { parseUoePartDescripcion } from '@/utils/levelsPuntuaciones';
 import { LEVELS_SCORE_SOURCE, resolveLevelsScoreSource } from '@/utils/levelsScoreSource';
 import { starsFromApprovedPartsCount } from '@/utils/levelsB2PartScoring';
-import { starsFromTheorySessionScore } from '@/lib/theoryTopicLevels';
+import { starsFromLevelsEarnedMax } from '@/lib/levelsStars';
+import { fetchLevelsStarsBySlotPart } from '@/utils/levelsStars';
+import { resolvePartQuestionTotal } from '@/utils/partFinishNoticeDisplay';
 
 function emptySlotProgress() {
   return { stars: 0, correct: 0, total: 0, approvedParts: 0, parts: {} };
@@ -122,6 +124,12 @@ export async function fetchB2PuntuacionesProgress(
 
   if (error || !rows?.length) return empty();
 
+  const starsBySlotPart = await fetchLevelsStarsBySlotPart(supabase, {
+    userId,
+    examenIdBySlot,
+    scoreSource,
+  });
+
   const latestBySlotPart = new Map();
 
   for (const row of rows) {
@@ -156,6 +164,16 @@ export async function fetchB2PuntuacionesProgress(
 
     const meta = parseUoePartDescripcion(row.descripcion);
     const display = resolvePartDisplay(row, meta);
+    const questionTotal = resolvePartQuestionTotal(partNumber, display);
+    display.itemTotal = questionTotal;
+    display.questionTotal = questionTotal;
+    const starsKey = `${slot}:${partNumber}`;
+    const storedStars = starsBySlotPart.get(starsKey);
+    if (storedStars != null) {
+      display.stars = storedStars;
+    } else {
+      display.stars = starsFromLevelsEarnedMax(display.correct, display.total);
+    }
 
     bySlot[slot].parts[partNumber] = display;
     bySlot[slot].correct += display.correct;
@@ -169,7 +187,7 @@ export async function fetchB2PuntuacionesProgress(
     if (v2Parts.length > 0 && v2Parts.length === Object.keys(slotParts).length) {
       const earned = v2Parts.reduce((sum, p) => sum + (p.correct || 0), 0);
       const max = v2Parts.reduce((sum, p) => sum + (p.total || 0), 0);
-      bySlot[slot].stars = starsFromTheorySessionScore(earned, max);
+      bySlot[slot].stars = starsFromLevelsEarnedMax(earned, max);
     } else {
       bySlot[slot].stars = starsFromApprovedPartsCount(bySlot[slot].approvedParts, partsCount);
     }

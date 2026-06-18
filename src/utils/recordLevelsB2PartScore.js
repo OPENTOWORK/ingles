@@ -1,6 +1,7 @@
 import { ensureAppUserProfile } from '@/utils/ensureAppUserProfile';
 import { mergeLevelsEstadisticas } from '@/utils/levelsEstadisticas';
 import { upsertLevelsPartPuntuacion } from '@/utils/levelsPuntuaciones';
+import { computeLevelsStarsFromProgress, upsertLevelsStars } from '@/utils/levelsStars';
 import {
   getB2PartScoring,
   getB2PartScoringV2,
@@ -66,14 +67,20 @@ export function computeB2PartProgressFromState({
     });
   }
 
-  const questionTotal = v2Active ? v2Cfg.questionCount : (cfg?.total ?? Math.max(evaluated, 1));
+  const dynamicQuestionCount = useOpenInputUi
+    ? (openQuestionNumbers?.length || 0)
+    : (groupedAnswers || []).filter((group) => group.options?.length).length;
+
+  const questionTotal =
+    dynamicQuestionCount > 0
+      ? dynamicQuestionCount
+      : v2Active
+        ? v2Cfg.questionCount
+        : (cfg?.total ?? Math.max(evaluated, 1));
   const total = v2Active ? v2Cfg.maxPoints : questionTotal;
   const passing = cfg?.passing ?? getPassingForDynamicTotal(questionTotal);
-  const complete = v2Active
-    ? evaluated >= v2Cfg.questionCount
-    : cfg
-      ? evaluated >= cfg.total
-      : evaluated > 0 && evaluated >= questionTotal;
+  const complete =
+    questionTotal > 0 ? evaluated >= questionTotal : evaluated > 0 && evaluated >= (cfg?.total ?? 1);
 
   const v2Metrics = v2Active
     ? buildPartScoreMetricsV2(
@@ -101,6 +108,9 @@ export function computeB2PartProgressFromState({
     correct,
     total,
     questionTotal,
+    correctItems: correct,
+    itemCorrect: correct,
+    itemTotal: questionTotal,
     passing: v2Active ? getB2PartPassingPoints(partNumber) : passing,
     complete,
     passed,
@@ -153,6 +163,12 @@ export async function saveB2PartPuntuacionIfComplete({
       preguntaId,
       parteId,
       deltaIntentos: 1,
+    }),
+    upsertLevelsStars({
+      userId,
+      examenId,
+      parteNumero: partNumber,
+      stars: computeLevelsStarsFromProgress(progress),
     }),
   ]);
 

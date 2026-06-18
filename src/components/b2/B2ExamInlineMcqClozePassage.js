@@ -279,7 +279,7 @@ export default function B2ExamInlineMcqClozePassage({
             .filter((g) => g?.questionNumber != null && g.questionNumber !== 0)
             .map((group) => {
               const questionKey = getQuestionKey(group.questionNumber);
-              if (!checkedQuestions[questionKey]) return null;
+              if (!selectedOptions[questionKey]) return null;
               return (
                 <div key={`meta-${group.questionNumber}`} className="reading-question-meta">
                   <span className="reading-question-meta__label">Q{group.questionNumber}</span>

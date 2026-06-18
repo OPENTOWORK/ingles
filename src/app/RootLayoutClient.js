@@ -200,6 +200,7 @@ export default function RootLayoutClient({ children }) {
   if (!allowWithoutAuth && authPending) {
     return (
       <>
+        <SiteNightModeInit />
         <Toaster position="top-center" reverseOrder={false} />
         <SiteHeaderBrand />
         <main className="page-content">
@@ -212,6 +213,7 @@ export default function RootLayoutClient({ children }) {
   if (!allowWithoutAuth && !session) {
     return (
       <>
+        <SiteNightModeInit />
         <Toaster position="top-center" reverseOrder={false} />
         <SiteHeaderBrand />
         <main className="page-content">

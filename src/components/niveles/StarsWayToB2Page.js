@@ -1,7 +1,8 @@
 'use client';
 
 import PageHero from '@/components/PageHero';
-import StarsWayToB2Section from '@/components/niveles/StarsWayToB2Section';import { useUserRole } from '@/context/UserRoleContext';
+import StarsWayToB2Section from '@/components/niveles/StarsWayToB2Section';
+import { useUserRole } from '@/context/UserRoleContext';
 import { isNivelesLevelComingSoonForUser } from '@/constants/studentFeatureAccess';
 import NivelesComingSoonNotice from '@/components/niveles/NivelesComingSoonNotice';
 

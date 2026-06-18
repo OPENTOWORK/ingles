@@ -448,3 +448,103 @@ td.colActions {
   font-size: 0.9rem;
   background: #fafbfc;
 }
+
+/* Night mode */
+:global(body.reading-night-mode) .banner {
+  background: #14532d;
+  border-color: #22c55e;
+  color: #dcfce7;
+}
+
+:global(body.reading-night-mode) .bannerWarn {
+  background: #422006;
+  border-color: #d97706;
+  color: #fde68a;
+}
+
+:global(body.reading-night-mode) .toolbar,
+:global(body.reading-night-mode) .tableWrap,
+:global(body.reading-night-mode) .folder,
+:global(body.reading-night-mode) .subfolder,
+:global(body.reading-night-mode) .recentSection,
+:global(body.reading-night-mode) .filterBar,
+:global(body.reading-night-mode) .bulkBar {
+  background: #1e293b;
+  border-color: #475569;
+}
+
+:global(body.reading-night-mode) .superBox {
+  background: linear-gradient(135deg, #422006 0%, #1e293b 55%);
+  border-color: #d97706;
+}
+
+:global(body.reading-night-mode) .superBoxTitle {
+  color: #fde68a;
+}
+
+:global(body.reading-night-mode) .superBoxDesc,
+:global(body.reading-night-mode) .superProgress {
+  color: #fcd34d;
+}
+
+:global(body.reading-night-mode) .sectionTitle,
+:global(body.reading-night-mode) .folderSummary,
+:global(body.reading-night-mode) .subfolderSummary {
+  color: #f8fafc;
+}
+
+:global(body.reading-night-mode) .sectionDesc,
+:global(body.reading-night-mode) .meta,
+:global(body.reading-night-mode) .empty,
+:global(body.reading-night-mode) .folderCount,
+:global(body.reading-night-mode) .bulkHint,
+:global(body.reading-night-mode) .preguntaPreview {
+  color: #94a3b8;
+}
+
+:global(body.reading-night-mode) .folderCount {
+  background: #334155;
+}
+
+:global(body.reading-night-mode) .subfolderSummary {
+  background: #334155;
+}
+
+:global(body.reading-night-mode) .folderBody {
+  border-top-color: #475569;
+}
+
+:global(body.reading-night-mode) .table th {
+  background: #334155;
+  color: #e2e8f0;
+}
+
+:global(body.reading-night-mode) .table td {
+  color: #cbd5e1;
+  border-bottom-color: #475569;
+}
+
+:global(body.reading-night-mode) .rowSelected {
+  background: #312e81;
+}
+
+:global(body.reading-night-mode) .btn {
+  background: #334155;
+  border-color: #64748b;
+  color: #e2e8f0;
+}
+
+:global(body.reading-night-mode) .btn:hover {
+  background: #475569;
+}
+
+:global(body.reading-night-mode) .viewBtn:hover {
+  background: #334155;
+  color: #93c5fd;
+}
+
+:global(body.reading-night-mode) .viewBtnActive {
+  background: #312e81;
+  color: #c4b5fd;
+}
+

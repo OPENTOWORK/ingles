@@ -56,9 +56,22 @@ export const NAV_LINKS_BEFORE_DRALO = [
 
 export const NAV_LINK_HOME = { href: '/', label: 'Home' };
 
-/** Visitante sin sesión: solo contacto y login en menús (home vía logo). */
+/** Visitante sin sesión (no autenticado). */
 export function isGuestNavSession(session) {
   return !session;
+}
+
+/** Enlace a login conservando la ruta de destino tras iniciar sesión. */
+export function getGuestLoginHref(targetHref) {
+  return `/login?next=${encodeURIComponent(targetHref)}`;
+}
+
+/** Href real del ítem de menú: visitantes van a login con `next`. */
+export function resolveNavItemHref(href, session) {
+  if (isGuestNavSession(session)) {
+    return getGuestLoginHref(href);
+  }
+  return href;
 }
 
 /** Extras de home visibles solo para admin en drawer / menú lateral (no barra desktop). */
@@ -69,22 +82,26 @@ export function getAdminDrawerExtraLinks(userRole) {
 
 /**
  * Enlaces de sección en drawer móvil y menú lateral home.
- * - Visitante: ninguno (solo contacto + login).
- * - Alumno/staff: alineado con barra desktop (+ extras admin si aplica).
+ * Visitantes ven Exam theory / Exam practice (→ login); staff/admin reciben extras.
  */
 export function getNavLinksForMobileDrawer(userRole, session) {
-  if (isGuestNavSession(session)) return [];
-  return [...getAdminDrawerExtraLinks(userRole), ...NAV_LINKS_BEFORE_DRALO];
+  const links = isGuestNavSession(session)
+    ? [...NAV_LINKS_BEFORE_DRALO]
+    : [...getAdminDrawerExtraLinks(userRole), ...NAV_LINKS_BEFORE_DRALO];
+  return links.map((item) => ({
+    ...item,
+    href: resolveNavItemHref(item.href, session),
+  }));
 }
 
-/** ¿Mostrar Exam theory, Exam practice y Dralo AI en la barra desktop? */
-export function shouldShowLoggedInPrimaryNav(session) {
-  return Boolean(session);
+/** Exam theory y Exam practice visibles para todos (visitantes → login al pulsar). */
+export function shouldShowLoggedInPrimaryNav(_session) {
+  return true;
 }
 
-/** ¿Mostrar Dralo AI en menús? Solo usuarios con sesión. */
-export function shouldShowDraloNav(session) {
-  return Boolean(session);
+/** Dralo AI visible para todos (visitantes → login al pulsar sub-ítems). */
+export function shouldShowDraloNav(_session) {
+  return true;
 }
 
 /**
@@ -103,7 +120,7 @@ export function buildAppNavModel(userRole, session) {
     sectionLinks: getNavLinksForMobileDrawer(userRole, session),
     showPrimaryNav: shouldShowLoggedInPrimaryNav(session),
     showDralo: shouldShowDraloNav(session),
-    draloLocked: guest || isDraloAiLockedForRole(userRole),
+    draloLocked: !guest && isDraloAiLockedForRole(userRole),
     showPricing,
     showContact: true,
     showLogin: guest,

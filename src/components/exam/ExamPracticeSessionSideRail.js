@@ -2,7 +2,6 @@
 
 import ExamPracticeSideRail from '@/components/exam/ExamPracticeSideRail';
 import ReadingPracticeToolsPanel from '@/components/exam/ReadingPracticeToolsPanel';
-import ReadingPracticeFeedbackToggle from '@/components/exam/ReadingPracticeFeedbackToggle';
 
 /**
  * Side rail for skill practice (listening, writing, speaking, …).
@@ -11,19 +10,16 @@ import ReadingPracticeFeedbackToggle from '@/components/exam/ReadingPracticeFeed
 export default function ExamPracticeSessionSideRail({
   strategy = null,
   progress = null,
+  topRail = null,
   finishNotice = null,
   lang = 'en',
 }) {
   return (
     <ExamPracticeSideRail
+      topRail={topRail}
       strategy={strategy}
       progress={progress}
-      tools={
-        <>
-          <ReadingPracticeToolsPanel lang={lang} />
-          <ReadingPracticeFeedbackToggle lang={lang} />
-        </>
-      }
+      tools={<ReadingPracticeToolsPanel lang={lang} />}
       finishNotice={finishNotice}
     />
   );

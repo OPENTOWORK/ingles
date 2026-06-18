@@ -98,6 +98,7 @@ export default function AdminDashboard() {
   const [newUserName, setNewUserName] = useState('');
   const [newUserRoleId, setNewUserRoleId] = useState('');
   const [creatingUser, setCreatingUser] = useState(false);
+  const [bulkProcessing, setBulkProcessing] = useState(false);
   const [period, setPeriod] = useState('meses');
   const [startDate, setStartDate] = useState('');
   const [endDate, setEndDate] = useState('');
@@ -497,6 +498,64 @@ export default function AdminDashboard() {
       alert('No se pudo eliminar la cuenta.');
     } finally {
       setSavingByUser((prev) => ({ ...prev, [targetUser.id]: false }));
+    }
+  };
+
+  const getBulkActionTargets = () => selectedUsers.filter((item) => item.id !== user?.id);
+
+  const bulkSetUsersActive = async (active) => {
+    const targets = getBulkActionTargets();
+    if (!targets.length) {
+      alert('Selecciona al menos un usuario distinto de tu cuenta de administrador.');
+      return;
+    }
+
+    const verb = active ? 'reactivar' : 'pausar';
+    const confirmed = window.confirm(
+      `¿Quieres ${verb} ${targets.length} cuenta(s)? Las cuentas pausadas no pueden acceder a la plataforma.`,
+    );
+    if (!confirmed) return;
+
+    setBulkProcessing(true);
+    const ids = targets.map((item) => item.id);
+    try {
+      const { error } = await supabase.from('user_profiles').update({ activo: active }).in('id', ids);
+      if (error) throw error;
+      await Promise.all([loadUsers(), loadPlacementByUser(), loadAnalytics()]);
+      alert(`${active ? 'Reactivadas' : 'Pausadas'} ${targets.length} cuenta(s).`);
+    } catch (error) {
+      console.error(`Error bulk ${verb} users:`, error);
+      alert(`No se pudieron ${active ? 'reactivar' : 'pausar'} las cuentas seleccionadas.`);
+    } finally {
+      setBulkProcessing(false);
+    }
+  };
+
+  const bulkDeleteUsers = async () => {
+    const targets = getBulkActionTargets();
+    if (!targets.length) {
+      alert('Selecciona al menos un usuario distinto de tu cuenta de administrador.');
+      return;
+    }
+
+    const confirmed = window.confirm(
+      `Se eliminarán ${targets.length} cuenta(s). Esta acción no se puede deshacer. ¿Continuar?`,
+    );
+    if (!confirmed) return;
+
+    setBulkProcessing(true);
+    const ids = targets.map((item) => item.id);
+    try {
+      const { error } = await supabase.from('user_profiles').delete().in('id', ids);
+      if (error) throw error;
+      setSelectedUserIds((prev) => prev.filter((id) => !ids.includes(id)));
+      await Promise.all([loadUsers(), loadPlacementByUser(), loadAnalytics()]);
+      alert(`Eliminadas ${targets.length} cuenta(s).`);
+    } catch (error) {
+      console.error('Error bulk deleting users:', error);
+      alert('No se pudieron eliminar las cuentas seleccionadas.');
+    } finally {
+      setBulkProcessing(false);
     }
   };
 
@@ -901,6 +960,49 @@ export default function AdminDashboard() {
                 Exportar Excel
               </button>
             </div>
+
+            {selectedUsers.length > 0 ? (
+              <div className="flex flex-wrap items-center gap-3 mb-4 rounded-lg border border-indigo-200 bg-indigo-50 px-4 py-3">
+                <span className="text-sm font-medium text-indigo-900">
+                  {selectedUsers.length} seleccionado(s)
+                  {selectedUsers.some((item) => item.id === user?.id)
+                    ? ' · tu cuenta se excluye de acciones masivas'
+                    : ''}
+                </span>
+                <button
+                  type="button"
+                  onClick={() => bulkSetUsersActive(false)}
+                  disabled={bulkProcessing || getBulkActionTargets().length === 0}
+                  className="px-3 py-2 rounded bg-yellow-100 text-yellow-900 hover:bg-yellow-200 disabled:opacity-50"
+                >
+                  {bulkProcessing ? 'Procesando…' : 'Pausar seleccionados'}
+                </button>
+                <button
+                  type="button"
+                  onClick={() => bulkSetUsersActive(true)}
+                  disabled={bulkProcessing || getBulkActionTargets().length === 0}
+                  className="px-3 py-2 rounded bg-green-100 text-green-900 hover:bg-green-200 disabled:opacity-50"
+                >
+                  {bulkProcessing ? 'Procesando…' : 'Reanudar seleccionados'}
+                </button>
+                <button
+                  type="button"
+                  onClick={bulkDeleteUsers}
+                  disabled={bulkProcessing || getBulkActionTargets().length === 0}
+                  className="px-3 py-2 rounded bg-red-100 text-red-900 hover:bg-red-200 disabled:opacity-50"
+                >
+                  {bulkProcessing ? 'Procesando…' : 'Eliminar seleccionados'}
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setSelectedUserIds([])}
+                  disabled={bulkProcessing}
+                  className="px-3 py-2 rounded bg-white text-gray-700 border border-gray-200 hover:bg-gray-50 disabled:opacity-50"
+                >
+                  Quitar selección
+                </button>
+              </div>
+            ) : null}
 
             <div className="overflow-x-auto">
               <table className="min-w-full divide-y divide-gray-200">

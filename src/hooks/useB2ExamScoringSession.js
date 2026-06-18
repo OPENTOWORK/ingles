@@ -6,24 +6,8 @@ import { fetchB2PuntuacionesProgress } from '@/utils/levelsPuntuacionesProgress'
 import { getCachedB2Level, getCachedB2ExamenIdsBySlot } from '@/utils/b2LevelCache';
 import { invalidateLevelExamCache } from '@/utils/levelsLevelCache';
 import { getSessionUserId } from '@/utils/levelsEstadisticas';
-import { getB2PartScoring, getB2PartPassingPoints } from '@/utils/levelsB2PartScoring';
+import { buildPartFinishNoticeDisplay, formatPartSavedScoreLabel } from '@/utils/partFinishNoticeDisplay';
 import { saveB2PartPuntuacionIfComplete } from '@/utils/recordLevelsB2PartScore';
-import { isB2ScoringV2Enabled } from '@/lib/b2ScoringV2FeatureFlag';
-
-function buildPartFinishNotice(progress, partNumber, { saved = true } = {}) {
-  const v2 =
-    isB2ScoringV2Enabled() && Number(partNumber) >= 1 && Number(partNumber) <= 7;
-  const pointsEarned = progress.pointsEarned ?? progress.puntosObtenidos ?? progress.correct;
-  const maxPoints = progress.maxPoints ?? progress.puntosMaximos ?? progress.total;
-  return {
-    passed: progress.passed,
-    correct: v2 ? pointsEarned : progress.correct,
-    total: v2 ? maxPoints : progress.total,
-    passing: v2 ? getB2PartPassingPoints(partNumber) : progress.passing,
-    scoringVersion: progress.scoringVersion ?? (v2 ? 2 : 1),
-    v2LocalOnly: v2 && !saved,
-  };
-}
 
 /**
  * Progreso, guardado y selector de examen compartido (partes partMin–partMax).
@@ -86,8 +70,8 @@ export function useB2ExamScoringSession({ partMin, partMax }) {
     (part, examSlot) => {
       const partNumber = Number(part.nombre?.match(/\d+/)?.[0] || part.partNumber || 0);
       const saved = progressBySlot[examSlot]?.parts?.[partNumber];
-      if (!saved?.total) return null;
-      return `${saved.correct}/${saved.total}${saved.passed ? ' ✓' : ''}`;
+      if (!saved?.total && !saved?.itemTotal) return null;
+      return formatPartSavedScoreLabel(saved, partNumber);
     },
     [progressBySlot],
   );
@@ -106,12 +90,12 @@ export function useB2ExamScoringSession({ partMin, partMax }) {
       const uid = await getSessionUserId();
       if (!uid || !preguntaId || !examenId || !partNumber) return { saved: false };
 
-      const sig = `${examSlot}:${partNumber}:${
-        progress.scoringVersion === 2
-          ? progress.pointsEarned ?? progress.puntosObtenidos ?? progress.correct
-          : progress.correct
-      }`;
-      if (lastSavedPartSigRef.current === sig) return { saved: true, progress };
+      setPartFinishNotice(buildPartFinishNoticeDisplay(progress, partNumber, { saved: false }));
+
+      const sig = `${examSlot}:${partNumber}:${progress.correct}:${progress.questionTotal}:${progress.scoringVersion ?? 1}`;
+      if (lastSavedPartSigRef.current === sig) {
+        return { saved: true, progress };
+      }
 
       const result = await saveB2PartPuntuacionIfComplete({
         userId: uid,
@@ -134,7 +118,7 @@ export function useB2ExamScoringSession({ partMin, partMax }) {
         void refreshPuntuacionesProgress();
       }
 
-      setPartFinishNotice(buildPartFinishNotice(progress, partNumber, { saved: result.saved }));
+      setPartFinishNotice(buildPartFinishNoticeDisplay(progress, partNumber, { saved: result.saved }));
 
       return result;
     },
@@ -164,18 +148,8 @@ export function useB2ExamScoringSession({ partMin, partMax }) {
   const resetPartNoticeOnPartChange = useCallback((examSlot, partNumber, progressBySlotLocal) => {
     lastSavedPartSigRef.current = '';
     const saved = progressBySlotLocal?.[examSlot]?.parts?.[partNumber];
-    const cfg = getB2PartScoring(partNumber);
-    if (saved?.total && cfg) {
-      const v2 = isB2ScoringV2Enabled() && partNumber >= 1 && partNumber <= 7;
-      const pointsEarned = saved.puntosObtenidos ?? saved.correct;
-      const maxPoints = saved.puntosMaximos ?? saved.total;
-      setPartFinishNotice({
-        passed: saved.passed,
-        correct: v2 ? pointsEarned : saved.correct,
-        total: v2 ? maxPoints : saved.total,
-        passing: v2 ? getB2PartPassingPoints(partNumber) : cfg.passing,
-        scoringVersion: saved.scoringVersion ?? (v2 ? 2 : 1),
-      });
+    if (saved?.total || saved?.itemTotal) {
+      setPartFinishNotice(buildPartFinishNoticeDisplay(saved, partNumber, { saved: true }));
     } else {
       setPartFinishNotice(null);
     }

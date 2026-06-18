@@ -15,3 +15,15 @@
   padding: 0.1rem 0.35rem;
   border-radius: 0.25rem;
 }
+
+:global(body.reading-night-mode) .previewBanner {
+  background: #422006;
+  border-color: #d97706;
+  color: #fde68a;
+}
+
+:global(body.reading-night-mode) .code {
+  background: rgba(255, 255, 255, 0.08);
+  color: #fde68a;
+}
+

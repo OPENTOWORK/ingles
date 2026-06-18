@@ -12,7 +12,8 @@ import B2WritingPart2TaskPicker from '@/components/b2/B2WritingPart2TaskPicker';
 import B2WritingStrategyPanel from '@/components/b2/B2WritingStrategyPanel';
 import ExamPracticeProgressPanel from '@/components/exam/ExamPracticeProgressPanel';
 import ExamPracticeSessionSideRail from '@/components/exam/ExamPracticeSessionSideRail';
-import ExamPracticeFinishNotice from '@/components/exam/ExamPracticeFinishNotice';
+import ExamPracticeSideRailTop from '@/components/exam/ExamPracticeSideRailTop';
+import ExamStudyNotesSidebar from '@/components/exam/ExamStudyNotesSidebar';
 import ReadingPracticeChrome from '@/components/exam/ReadingPracticeChrome';
 import { ReadingPracticeSessionProvider, useReadingPracticeSession } from '@/context/ReadingPracticeSessionContext';
 import B2WritingDraftStatusPanel from '@/components/b2/B2WritingDraftStatusPanel';
@@ -667,7 +668,8 @@ function B2WritingExamPracticePageInner() {
         scorePanelOverride={writingScorePanelOverride}
         hideScorePanel={isExamSimulationMode(practiceMode) && !reviewMode}
         partFinishNotice={isExamSimulationMode(practiceMode) && !reviewMode ? null : scoring.partFinishNotice}
-        partFinishNoticePlacement={showPracticeSideRail ? 'sidebar' : 'main'}
+        partFinishNoticePlacement={showPracticeSideRail ? 'header' : 'main'}
+        studyNotesPlacement={showPracticeSideRail ? 'sidebar-top' : 'header'}
         partsData={!loading && !error ? tabPartsData : []}
         selectedPartId={selectedPartId}
         onSelectPart={handleSelectPart}
@@ -799,6 +801,23 @@ function B2WritingExamPracticePageInner() {
               </div>
               {showPracticeSideRail ? (
                 <ExamPracticeSessionSideRail
+                  topRail={
+                    <ExamPracticeSideRailTop
+                      studyNotes={
+                        <ExamStudyNotesSidebar
+                          context={{
+                            slug: 'b2',
+                            skillRoute: 'exam-writing',
+                            examMode: examModeActive,
+                            partNumber,
+                            examSlot,
+                          }}
+                          contextLabel="B2 Writing Practice"
+                          lang="en"
+                        />
+                      }
+                    />
+                  }
                   strategy={
                     showStrategySidebar ? <B2WritingStrategyPanel pack={strategyPack} /> : null
                   }
@@ -818,11 +837,7 @@ function B2WritingExamPracticePageInner() {
                       enabled={scoring.examPracticeOpen}
                     />
                   }
-                  finishNotice={
-                    scoring.partFinishNotice ? (
-                      <ExamPracticeFinishNotice notice={scoring.partFinishNotice} lang="en" />
-                    ) : null
-                  }
+                  finishNotice={null}
                   lang="en"
                 />
               ) : null}

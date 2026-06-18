@@ -117,3 +117,28 @@
   opacity: 0.6;
   cursor: not-allowed;
 }
+
+:global(body.reading-night-mode) .dialog {
+  background: #1e293b;
+  box-shadow: 0 24px 48px rgba(0, 0, 0, 0.55);
+}
+
+:global(body.reading-night-mode) .header {
+  border-bottom-color: #475569;
+}
+
+:global(body.reading-night-mode) .title,
+:global(body.reading-night-mode) .field {
+  color: #cbd5e1;
+}
+
+:global(body.reading-night-mode) .close:hover {
+  background: #334155;
+}
+
+:global(body.reading-night-mode) .btnSecondary {
+  background: #334155;
+  border-color: #64748b;
+  color: #e2e8f0;
+}
+

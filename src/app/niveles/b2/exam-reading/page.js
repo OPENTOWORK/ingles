@@ -63,7 +63,10 @@ import {
 } from '@/utils/levelsEstadisticas';
 import B2ExamPracticeModuleNav from '@/components/b2/B2ExamPracticeModuleNav';
 import ReadingPracticeSideRail from '@/components/exam/ReadingPracticeSideRail';
-import ExamPracticeFinishNotice from '@/components/exam/ExamPracticeFinishNotice';
+import ExamPracticeSideRailTop from '@/components/exam/ExamPracticeSideRailTop';
+import ExamStudyNotesSidebar from '@/components/exam/ExamStudyNotesSidebar';
+import ReadingPracticeFeedbackToggle from '@/components/exam/ReadingPracticeFeedbackToggle';
+import { buildPartFinishNoticeDisplay } from '@/utils/partFinishNoticeDisplay';
 import { getB2ReadingStrategyPack } from '@/data/b2ReadingPracticeStrategies';
 import { ReadingPracticeSessionProvider } from '@/context/ReadingPracticeSessionContext';
 import ReadingPracticeChrome from '@/components/exam/ReadingPracticeChrome';
@@ -809,13 +812,9 @@ function B2ReadingExamsPageInner() {
     if (!isOpenClozePart) return [];
     const fromAnswers = [...openAnswerMap.keys()].sort((a, b) => a - b);
     const fromPrompt = inferredOpenQuestionNumbers;
-    if (fromPrompt.length > 0 && fromAnswers.length > 0) {
-      const promptSet = new Set(fromPrompt);
-      const intersection = fromAnswers.filter((n) => promptSet.has(n));
-      return intersection.length > 0 ? intersection : fromPrompt;
-    }
+    if (fromPrompt.length > 0) return fromPrompt;
     if (fromAnswers.length > 0) return fromAnswers;
-    return fromPrompt;
+    return [];
   }, [isOpenClozePart, inferredOpenQuestionNumbers, openAnswerMap]);
 
   /** Clave sólo número + letra (BD Reading 5–7).
@@ -965,7 +964,7 @@ function B2ReadingExamsPageInner() {
   useEffect(() => {
     if (!scoring.examPracticeOpen) return;
     scoring.resetPartNoticeOnPartChange(examSlot, partNumberReading, scoring.progressBySlot);
-  }, [examSlot, partNumberReading, selectedPart?.id, scoring.examPracticeOpen]);
+  }, [examSlot, partNumberReading, selectedPart?.id, scoring.examPracticeOpen, scoring.progressBySlot]);
 
   const handleExamModeFinish = useCallback(() => {
     if (partNumberReading && selectedPart) {
@@ -1051,10 +1050,16 @@ function B2ReadingExamsPageInner() {
 
   const handlePart1McqOptionSelect = useCallback(
     ({ group, option, questionKey }) => {
-      const wasChecked = checkedQuestions[questionKey];
-      const nextChecked = { ...checkedQuestions, [questionKey]: true };
       const nextSelected = { ...selectedOptions, [questionKey]: option.id };
       setSelectedOptions(nextSelected);
+
+      if (hideInstantFeedback) {
+        trySavePartAfterAnswer({ selectedOptions: nextSelected });
+        return;
+      }
+
+      const wasChecked = checkedQuestions[questionKey];
+      const nextChecked = { ...checkedQuestions, [questionKey]: true };
       setCheckedQuestions(nextChecked);
       readingSession.incrementCheckAttempts();
       trySavePartAfterAnswer({
@@ -1085,6 +1090,7 @@ function B2ReadingExamsPageInner() {
       checkedQuestions,
       selectedOptions,
       hideFeedback,
+      hideInstantFeedback,
       selectedPart?.id,
       selectedQuestion?.preguntaId,
       trySavePartAfterAnswer,
@@ -1286,6 +1292,24 @@ function B2ReadingExamsPageInner() {
       setOpenChecks(nextOpenChecks);
     }
     setCheckedQuestions(nextChecked);
+    const progressAfterCheck = computeB2PartProgressFromState({
+      partNumber: partNumberReading,
+      useOpenInputUi: isOpenClozePart,
+      openQuestionNumbers,
+      openChecks: scoringV2Part4 ? openChecks : nextOpenChecks,
+      openGrades: scoringV2Part4 ? nextOpenGrades : openGrades,
+      usePart4V2Grading: scoringV2Part4,
+      groupedAnswers: groupedAnswersForUiAndScore,
+      checkedQuestions: nextChecked,
+      selectedOptions,
+      getQuestionKey,
+      partId: selectedPart.id,
+    });
+    if (progressAfterCheck.evaluated > 0) {
+      scoring.setPartFinishNotice(
+        buildPartFinishNoticeDisplay(progressAfterCheck, partNumberReading, { saved: false }),
+      );
+    }
     trySavePartAfterAnswer(
       scoringV2Part4
         ? { openGrades: nextOpenGrades, checkedQuestions: nextChecked }
@@ -1309,6 +1333,10 @@ function B2ReadingExamsPageInner() {
     selectedOptions,
     checkedQuestions,
     trySavePartAfterAnswer,
+    scoring.setPartFinishNotice,
+    partNumberReading,
+    groupedAnswersForUiAndScore,
+    getQuestionKey,
     readingSession,
   ]);
 
@@ -1596,7 +1624,8 @@ function B2ReadingExamsPageInner() {
         partScoreMetrics={scorePanelProps}
         hideScorePanel={isExamSimulationMode(practiceMode) && !reviewMode}
         partFinishNotice={isExamSimulationMode(practiceMode) && !reviewMode ? null : scoring.partFinishNotice}
-        partFinishNoticePlacement={showPracticeSideRail ? 'sidebar' : 'main'}
+        partFinishNoticePlacement={showPracticeSideRail ? 'header' : 'main'}
+        studyNotesPlacement={showPracticeSideRail ? 'sidebar-top' : 'header'}
         partsData={!loading && !error ? tabPartsData : []}
         selectedPartId={selectedPartId}
         onSelectPart={handleSelectPart}
@@ -1648,6 +1677,11 @@ function B2ReadingExamsPageInner() {
             {selectedPart && selectedQuestion && (
               <B2ExamPracticeContent
                 title={getPartTitle(selectedPart)}
+                titleActions={
+                  isSkillPracticeSession ? (
+                    <ReadingPracticeFeedbackToggle variant="title-row" lang="en" />
+                  ) : null
+                }
                 directionsText={selectedPartContent.enunciado}
                 directionsLabel={isUoePart1 ? 'Instructions' : 'Directions'}
                 textLabel="Text"
@@ -1805,33 +1839,12 @@ function B2ReadingExamsPageInner() {
                                     readingSession.toggleEliminatedAnswer(questionKey, option.id);
                                     return;
                                   }
-                                  const wasChecked = checkedQuestions[questionKey];
-                                  const nextChecked = { ...checkedQuestions, [questionKey]: true };
-                                  setSelectedOptions((prev) => ({ ...prev, [questionKey]: option.id }));
-                                  setCheckedQuestions(nextChecked);
-                                  readingSession.incrementCheckAttempts();
-                                  trySavePartAfterAnswer({ checkedQuestions: nextChecked });
-                                  if (!wasChecked && !hideFeedback) {
-                                    void (async () => {
-                                      const uid = await getSessionUserId();
-                                      const pid = selectedQuestion?.preguntaId;
-                                      const parteId = selectedPart?.id;
-                                      if (!uid || !pid || !parteId) return;
-                                      const { error } = await recordLevelsAnswerEvaluation({
-                                        userId: uid,
-                                        preguntaId: pid,
-                                        parteId,
-                                        isCorrect: !!option.correcta,
-                                        slotLabel: group.questionNumber
-                                          ? `Pregunta ${group.questionNumber}`
-                                          : 'Ítem',
-                                        userAnswerText: option.formattedText || option.respuesta || '',
-                                      });
-                                      if (error) {
-                                        console.warn('levels eval/puntuacion:', error.message || error);
-                                      }
-                                    })();
-                                  }
+                                  handlePart1McqOptionSelect({
+                                    group,
+                                    groupIndex,
+                                    option,
+                                    questionKey,
+                                  });
                                 }}
                                 style={{
                                   textAlign: 'left',
@@ -1861,7 +1874,7 @@ function B2ReadingExamsPageInner() {
                           })}
                         </div>
 
-                        {hideInstantFeedback && checkedQuestions[questionKey] ? (
+                        {hideInstantFeedback && selectedOptions[questionKey] ? (
                           <ReadingConfidenceSelector questionKey={questionKey} />
                         ) : null}
 
@@ -1940,6 +1953,15 @@ function B2ReadingExamsPageInner() {
         partNumber={partNumberReading}
         pagePartMax={partMax}
         examSlot={examSlot}
+        examenIdBySlot={isSkillPracticeSession ? scoring.examenIdBySlot : undefined}
+        onSelectExamSlot={
+          isSkillPracticeSession
+            ? (slot) => {
+                void scoring.refreshPuntuacionesProgress();
+                handleSelectExamSlot(slot);
+              }
+            : undefined
+        }
         skillPracticeMode={isSkillPracticeSession}
         skillPracticeTheme={skillNav.skillTheme}
         onContinueInPage={isSkillPracticeSession ? handleKeepPracticing : handleContinueInPage}
@@ -1958,6 +1980,25 @@ function B2ReadingExamsPageInner() {
         <ReadingPracticeSideRail
           strategyPack={readingStrategyPack}
           partNumber={partNumberReading}
+          topRail={
+            <ExamPracticeSideRailTop
+              studyNotes={
+                <ExamStudyNotesSidebar
+                  context={{
+                    slug: 'b2',
+                    skillRoute,
+                    examMode: examModeActive,
+                    partNumber: partNumberReading,
+                    examSlot,
+                  }}
+                  contextLabel={
+                    isCombinedPaper ? 'B2 Reading and Use of English' : 'B2 Reading'
+                  }
+                  lang="en"
+                />
+              }
+            />
+          }
           questions={sessionQuestions}
           checkedQuestions={checkedQuestions}
           selectedOptions={selectedOptions}
@@ -1969,11 +2010,7 @@ function B2ReadingExamsPageInner() {
           progressBySlot={scoring.progressBySlot}
           examLabelsBySlot={examLabelsBySlot}
           passing={b2PartCfg?.passing ?? partScoreMetrics.passingCount}
-          finishNotice={
-            scoring.partFinishNotice ? (
-              <ExamPracticeFinishNotice notice={scoring.partFinishNotice} lang="en" />
-            ) : null
-          }
+          finishNotice={null}
           lang="en"
         />
       ) : null}

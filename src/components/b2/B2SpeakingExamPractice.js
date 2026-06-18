@@ -26,7 +26,8 @@ import { getB2LongTurnPhotoUrls } from '@/data/b2-speaking-long-turn-photos';
 import B2ExamPracticeModuleNav from '@/components/b2/B2ExamPracticeModuleNav';
 import ExamPracticeProgressPanel from '@/components/exam/ExamPracticeProgressPanel';
 import ExamPracticeSessionSideRail from '@/components/exam/ExamPracticeSessionSideRail';
-import ExamPracticeFinishNotice from '@/components/exam/ExamPracticeFinishNotice';
+import ExamPracticeSideRailTop from '@/components/exam/ExamPracticeSideRailTop';
+import ExamStudyNotesSidebar from '@/components/exam/ExamStudyNotesSidebar';
 import B2SpeakingStrategyPanel from '@/components/b2/B2SpeakingStrategyPanel';
 import { getB2SpeakingStrategyPack } from '@/data/b2SpeakingPracticeStrategies';
 import ReadingPracticeChrome from '@/components/exam/ReadingPracticeChrome';
@@ -496,7 +497,8 @@ function B2SpeakingExamPracticeInner({ title, subtitle, loadingLabel, refreshLab
         partScoreMetrics={scorePanelProps}
         hideScorePanel={isExamSimulationMode(practiceMode) && !reviewMode}
         partFinishNotice={isExamSimulationMode(practiceMode) && !reviewMode ? null : scoring.partFinishNotice}
-        partFinishNoticePlacement={showPracticeSideRail ? 'sidebar' : 'main'}
+        partFinishNoticePlacement={showPracticeSideRail ? 'header' : 'main'}
+        studyNotesPlacement={showPracticeSideRail ? 'sidebar-top' : 'header'}
         partsData={!loading && !error ? tabPartsData : []}
         selectedPartId={selectedPartId}
         onSelectPart={(part) => {
@@ -594,6 +596,23 @@ function B2SpeakingExamPracticeInner({ title, subtitle, loadingLabel, refreshLab
         </div>
         {showPracticeSideRail ? (
           <ExamPracticeSessionSideRail
+            topRail={
+              <ExamPracticeSideRailTop
+                studyNotes={
+                  <ExamStudyNotesSidebar
+                    context={{
+                      slug: 'b2',
+                      skillRoute: 'exam-speaking',
+                      examMode: examModeActive,
+                      partNumber,
+                      examSlot,
+                    }}
+                    contextLabel={title}
+                    lang={lang === 'es' ? 'es' : 'en'}
+                  />
+                }
+              />
+            }
             strategy={
               speakingStrategyPack ? <B2SpeakingStrategyPanel pack={speakingStrategyPack} /> : null
             }
@@ -613,14 +632,7 @@ function B2SpeakingExamPracticeInner({ title, subtitle, loadingLabel, refreshLab
                 enabled={scoring.examPracticeOpen}
               />
             }
-            finishNotice={
-              scoring.partFinishNotice ? (
-                <ExamPracticeFinishNotice
-                  notice={scoring.partFinishNotice}
-                  lang={lang === 'es' ? 'es' : 'en'}
-                />
-              ) : null
-            }
+            finishNotice={null}
             lang={lang === 'es' ? 'es' : 'en'}
           />
         ) : null}

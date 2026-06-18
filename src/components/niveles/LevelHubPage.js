@@ -44,7 +44,7 @@ export default function LevelHubPage({ config }) {
           examLinks={config.examLinks}
           isStudent={isStudent}
           skillsQuadrant
-          quadrantFooter={<StarsWayHubTabs embedded />}
+          quadrantFooter={!isStudent ? <StarsWayHubTabs embedded /> : null}
         />
       ) : (
         <ExamPracticeHubSection examLinks={config.examLinks} isStudent={isStudent} />

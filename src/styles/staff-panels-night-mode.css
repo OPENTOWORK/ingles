@@ -1,0 +1,231 @@
+/* Staff / admin panels — night mode (body.reading-night-mode from ReadingNightModeToggle) */
+
+/* ——— Loading screens ——— */
+body.reading-night-mode .route-loading__label {
+  color: #94a3b8;
+}
+
+body.reading-night-mode .route-loading {
+  color: #e2e8f0;
+}
+
+/* ——— Shared panel header (PanelPageHeader) ——— */
+body.reading-night-mode .panel-page-header__title {
+  color: #f8fafc;
+}
+
+body.reading-night-mode .panel-page-header__subtitle {
+  color: #94a3b8;
+}
+
+/* ——— Tailwind surfaces used across admin / teacher / IT panels ——— */
+body.reading-night-mode .bg-gray-50,
+body.reading-night-mode .bg-slate-50 {
+  background-color: #0f172a !important;
+}
+
+body.reading-night-mode .bg-white {
+  background-color: #1e293b !important;
+}
+
+body.reading-night-mode .bg-gray-100,
+body.reading-night-mode .bg-slate-100 {
+  background-color: #334155 !important;
+}
+
+body.reading-night-mode .bg-slate-100\/80 {
+  background-color: rgba(51, 65, 85, 0.85) !important;
+}
+
+body.reading-night-mode .border-slate-900 {
+  border-color: #0f172a !important;
+}
+
+body.reading-night-mode .hover\:bg-gray-50:hover,
+body.reading-night-mode .hover\:bg-gray-100:hover,
+body.reading-night-mode .hover\:bg-slate-50:hover {
+  background-color: #334155 !important;
+}
+
+body.reading-night-mode .border-gray-100,
+body.reading-night-mode .border-gray-200,
+body.reading-night-mode .border-gray-300,
+body.reading-night-mode .border-slate-100,
+body.reading-night-mode .border-slate-200 {
+  border-color: #475569 !important;
+}
+
+body.reading-night-mode .divide-gray-200 > :not([hidden]) ~ :not([hidden]),
+body.reading-night-mode .divide-y > :not([hidden]) ~ :not([hidden]) {
+  border-color: #475569 !important;
+}
+
+body.reading-night-mode .text-gray-900,
+body.reading-night-mode .text-gray-800,
+body.reading-night-mode .text-slate-900,
+body.reading-night-mode .text-slate-800 {
+  color: #f8fafc !important;
+}
+
+body.reading-night-mode .text-gray-700,
+body.reading-night-mode .text-gray-600,
+body.reading-night-mode .text-slate-700,
+body.reading-night-mode .text-slate-600 {
+  color: #cbd5e1 !important;
+}
+
+body.reading-night-mode .text-gray-500,
+body.reading-night-mode .text-slate-500 {
+  color: #94a3b8 !important;
+}
+
+body.reading-night-mode .hover\:text-gray-900:hover,
+body.reading-night-mode .hover\:text-slate-900:hover {
+  color: #f8fafc !important;
+}
+
+body.reading-night-mode .shadow,
+body.reading-night-mode .shadow-sm {
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.35) !important;
+}
+
+body.reading-night-mode .bg-green-100 {
+  background-color: #14532d !important;
+}
+
+body.reading-night-mode .text-green-800 {
+  color: #86efac !important;
+}
+
+body.reading-night-mode .bg-red-100 {
+  background-color: #450a0a !important;
+}
+
+body.reading-night-mode .text-red-800 {
+  color: #fca5a5 !important;
+}
+
+body.reading-night-mode .text-sky-700 {
+  color: #7dd3fc !important;
+}
+
+/* ——— Support panel (styled-jsx scoped classes) ——— */
+body.reading-night-mode .support-panel__title,
+body.reading-night-mode .support-panel__subtitle,
+body.reading-night-mode .auto-emails-panel__title,
+body.reading-night-mode .auto-emails-panel__subtitle {
+  color: #f8fafc;
+}
+
+body.reading-night-mode .support-panel__subtitle,
+body.reading-night-mode .auto-emails-panel__subtitle {
+  color: #94a3b8;
+}
+
+body.reading-night-mode .support-filter,
+body.reading-night-mode .support-hub-tab {
+  background: #334155;
+  border-color: #64748b;
+  color: #cbd5e1;
+}
+
+body.reading-night-mode .support-filter--active,
+body.reading-night-mode .support-hub-tab--active {
+  background: #2563eb;
+  border-color: #2563eb;
+  color: #fff;
+}
+
+body.reading-night-mode .support-list,
+body.reading-night-mode .support-detail,
+body.reading-night-mode .auto-emails-list,
+body.reading-night-mode .auto-emails-editor {
+  background: #1e293b;
+  border-color: #475569;
+  color: #e2e8f0;
+}
+
+body.reading-night-mode .support-ticket-row,
+body.reading-night-mode .auto-emails-row {
+  background: #334155;
+  border-color: #475569;
+  color: #e2e8f0;
+}
+
+body.reading-night-mode .support-ticket-row.is-selected,
+body.reading-night-mode .auto-emails-row.is-selected {
+  background: #1e3a5f;
+  border-color: #3b82f6;
+}
+
+body.reading-night-mode .support-ticket-row__meta,
+body.reading-night-mode .support-ticket-row__footer,
+body.reading-night-mode .support-muted,
+body.reading-night-mode .support-detail__empty {
+  color: #94a3b8;
+}
+
+body.reading-night-mode .support-detail__head h2 {
+  color: #f8fafc;
+}
+
+body.reading-night-mode .support-detail__actions button {
+  background: #334155;
+  border-color: #64748b;
+  color: #e2e8f0;
+}
+
+body.reading-night-mode .support-detail__actions button.danger {
+  background: #450a0a;
+  border-color: #991b1b;
+  color: #fca5a5;
+}
+
+body.reading-night-mode .support-msg--user {
+  background: #334155;
+  color: #e2e8f0;
+}
+
+body.reading-night-mode .support-msg--staff {
+  background: #1e3a5f;
+  color: #dbeafe;
+}
+
+body.reading-night-mode .support-reply label {
+  color: #cbd5e1;
+}
+
+body.reading-night-mode .auto-emails-panel__hint {
+  background: #422006;
+  border-color: #d97706;
+  color: #fde68a;
+}
+
+body.reading-night-mode .auto-emails-row__trigger,
+body.reading-night-mode .auto-emails-row__schedule,
+body.reading-night-mode .auto-emails-row__status,
+body.reading-night-mode .auto-emails-muted,
+body.reading-night-mode .auto-emails-editor__empty,
+body.reading-night-mode .auto-emails-vars ul {
+  color: #94a3b8;
+}
+
+body.reading-night-mode .auto-emails-editor h3 {
+  color: #f8fafc;
+}
+
+body.reading-night-mode .auto-emails-editor__field label {
+  color: #cbd5e1;
+}
+
+body.reading-night-mode .auto-emails-editor__actions button {
+  background: #334155;
+  border-color: #64748b;
+  color: #e2e8f0;
+}
+
+body.reading-night-mode .auto-emails-editor__actions .danger {
+  background: #450a0a;
+  border-color: #991b1b;
+  color: #fca5a5;
+}

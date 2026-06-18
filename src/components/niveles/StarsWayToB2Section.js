@@ -92,7 +92,7 @@ function ExerciseNode({ exerciseIndex, examSlot, part, column, progressBySlot, a
           <span className={styles.exerciseNodeNumber}>{exerciseIndex}</span>
         </span>
         <span className={styles.exerciseNodeLabel}>Exercise {exerciseIndex}</span>
-        <TheoryLevelStars stars={stars} size="sm" />
+        <TheoryLevelStars stars={stars} size="sm" variant="gold" />
         <span className={styles.exerciseNodeScore}>
           {attempted ? (
             <>
@@ -123,7 +123,7 @@ function PartMilestone({ part, column, progressBySlot, availableSlots }) {
           <span className={styles.milestoneBadge}>Part {part.localPartNumber}</span>
           {part.topicLabel ? <p className={styles.milestoneTopic}>{part.topicLabel}</p> : null}
           <div className={styles.milestoneProgress}>
-            <TheoryLevelStars stars={partStars} size="sm" />
+            <TheoryLevelStars stars={partStars} size="sm" variant="gold" />
             <span className={styles.milestoneMeta}>
               {attempts}/{exerciseTotal} exercises · best {partStars}/3 ★
             </span>

@@ -25,6 +25,7 @@ import {
   computeUoePartProgressFromState,
   saveUoePartPuntuacionIfComplete,
 } from '@/utils/recordLevelsUoePartScore';
+import { buildPartFinishNoticeDisplay } from '@/utils/partFinishNoticeDisplay';
 import {
   composeOpenClozeDirections,
   composeMcqClozeDirections,
@@ -685,11 +686,7 @@ function UseOfEnglishExamsPageInner() {
   const openQuestionNumbers = useMemo(() => {
     const fromAnswers = [...openAnswerMap.keys()].sort((a, b) => a - b);
     const fromPrompt = inferredOpenQuestionNumbers;
-    if (fromPrompt.length > 0 && fromAnswers.length > 0) {
-      const promptSet = new Set(fromPrompt);
-      const intersection = fromAnswers.filter((n) => promptSet.has(n));
-      return intersection.length > 0 ? intersection : fromPrompt;
-    }
+    if (fromPrompt.length > 0) return fromPrompt;
     if (fromAnswers.length > 0) return fromAnswers;
     return fromPrompt;
   }, [inferredOpenQuestionNumbers, openAnswerMap]);
@@ -736,14 +733,8 @@ function UseOfEnglishExamsPageInner() {
   useEffect(() => {
     lastSavedPartSigRef.current = '';
     const saved = progressBySlot[examSlot]?.parts?.[partNumberUoe];
-    const cfg = getActiveB2RuoePartScoring(partNumberUoe);
-    if (saved?.total && cfg) {
-      setPartFinishNotice({
-        passed: saved.passed,
-        correct: saved.correct,
-        total: saved.total,
-        passing: cfg.passing,
-      });
+    if (saved?.total || saved?.itemTotal) {
+      setPartFinishNotice(buildPartFinishNoticeDisplay(saved, partNumberUoe, { saved: true }));
     } else {
       setPartFinishNotice(null);
     }
@@ -777,19 +768,14 @@ function UseOfEnglishExamsPageInner() {
 
       if (!progress.complete) return;
 
-      const sig = `${examSlot}:${partNumberUoe}:${progress.correct}`;
+      setPartFinishNotice(buildPartFinishNoticeDisplay(progress, partNumberUoe, { saved: false }));
+
+      const sig = `${examSlot}:${partNumberUoe}:${progress.correct}:${progress.questionTotal}:${progress.scoringVersion ?? 1}`;
       if (lastSavedPartSigRef.current === sig) return;
 
       const uid = await getSessionUserId();
       if (!uid) {
-        setPartFinishNotice({
-          passed: isB2ScoringV2Enabled() ? false : progress.passed,
-          correct: progress.v2Metrics?.pointsEarned ?? progress.correct,
-          total: progress.v2Metrics?.maxPoints ?? progress.total,
-          passing: progress.passing,
-          scoringVersion: progress.scoringVersion ?? 1,
-          v2LocalOnly: isB2ScoringV2Enabled(),
-        });
+        setPartFinishNotice(buildPartFinishNoticeDisplay(progress, partNumberUoe, { saved: false }));
         return;
       }
 
@@ -811,16 +797,10 @@ function UseOfEnglishExamsPageInner() {
 
       if (result.saved) {
         lastSavedPartSigRef.current = sig;
-        setPartFinishNotice({
-          passed: isB2ScoringV2Enabled() ? false : progress.passed,
-          correct: progress.v2Metrics?.pointsEarned ?? progress.correct,
-          total: progress.v2Metrics?.maxPoints ?? progress.total,
-          passing: progress.passing,
-          scoringVersion: progress.scoringVersion ?? 1,
-          v2LocalOnly: isB2ScoringV2Enabled(),
-        });
         void refreshPuntuacionesProgress();
       }
+
+      setPartFinishNotice(buildPartFinishNoticeDisplay(progress, partNumberUoe, { saved: result.saved }));
     },
     [
       examPracticeOpen,

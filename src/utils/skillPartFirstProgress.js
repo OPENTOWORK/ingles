@@ -1,4 +1,4 @@
-import { starsFromTheorySessionScore } from '@/lib/theoryTopicLevels';
+import { starsFromLevelsEarnedMax } from '@/lib/levelsStars';
 
 /** Tema visual de skill practice (no exam mode). */
 export function getSkillPracticeThemeKey(skillRoute) {
@@ -9,13 +9,16 @@ export function getSkillPracticeThemeKey(skillRoute) {
   return 'reading';
 }
 
-/** Estrellas 0–3 para un ejercicio (parte + variante) desde levels_puntuaciones. */
+/** Estrellas 0–3 para un ejercicio (parte + variante) desde levels_stars o levels_puntuaciones. */
 export function starsFromPartExerciseScore(part) {
+  if (part?.stars != null && Number.isFinite(Number(part.stars))) {
+    return Math.min(3, Math.max(0, Number(part.stars)));
+  }
   if (!part?.total) return 0;
   const earned =
     part.scoringVersion === 2 ? (part.puntosObtenidos ?? part.correct) : part.correct;
   const max = part.scoringVersion === 2 ? (part.puntosMaximos ?? part.total) : part.total;
-  return starsFromTheorySessionScore(earned, max);
+  return starsFromLevelsEarnedMax(earned, max);
 }
 
 export function filterProgressByPart(progressBySlot = {}, partNumber) {
@@ -36,6 +39,7 @@ export function filterProgressByPart(progressBySlot = {}, partNumber) {
               correct: part.correct,
               total: part.total,
               passed: part.passed,
+              stars: part.stars,
               scoringVersion: part.scoringVersion,
               puntosObtenidos: part.puntosObtenidos,
               puntosMaximos: part.puntosMaximos,

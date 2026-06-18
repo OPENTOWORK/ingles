@@ -1,5 +1,6 @@
 import { mergeLevelsEstadisticas } from '@/utils/levelsEstadisticas';
 import { upsertLevelsPartPuntuacion } from '@/utils/levelsPuntuaciones';
+import { computeLevelsStarsFromProgress, upsertLevelsStars } from '@/utils/levelsStars';
 import { LEVELS_SCORE_SOURCE } from '@/utils/levelsScoreSource';
 import { isB2RuoeV2SessionPersistenceBlocked } from '@/lib/b2ScoringV2FeatureFlag';
 
@@ -82,7 +83,7 @@ export async function persistLevelsPartProgress({
           deltaIntentos: 1,
         };
 
-  const [puntRes, estRes] = await Promise.all([
+  const [puntRes, estRes, starsRes] = await Promise.all([
     upsertLevelsPartPuntuacion({
       userId,
       preguntaId,
@@ -101,10 +102,17 @@ export async function persistLevelsPartProgress({
       parteId,
       ...statsPayload,
     }),
+    upsertLevelsStars({
+      userId,
+      examenId,
+      parteNumero: partNumber,
+      stars: computeLevelsStarsFromProgress(progress),
+      scoreSource,
+    }),
   ]);
 
-  if (puntRes.error || estRes.error) {
-    return { saved: false, error: puntRes.error || estRes.error };
+  if (puntRes.error || estRes.error || starsRes.error) {
+    return { saved: false, error: puntRes.error || estRes.error || starsRes.error };
   }
 
   return { saved: true, error: null };

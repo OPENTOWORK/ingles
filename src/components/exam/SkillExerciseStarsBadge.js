@@ -21,7 +21,7 @@ export default function SkillExerciseStarsBadge({ stars = 0, href = null, lang =
       <span className="skill-exercise-stars-badge__label">
         {en ? 'Exercise stars' : 'Estrellas del ejercicio'}
       </span>
-      <TheoryLevelStars stars={value} size="md" />
+      <TheoryLevelStars stars={value} size="md" variant="gold" />
       {href ? (
         <span className="skill-exercise-stars-badge__hint">
           {en ? 'Stars way to B2' : 'Stars way to B2'}

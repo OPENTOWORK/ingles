@@ -13,6 +13,7 @@ import {
   NAV_LINKS_BEFORE_DRALO,
   NAV_LINK_CONTACT,
   NAV_LINK_PRICING,
+  resolveNavItemHref,
 } from '@/config/appNavMenu';
 
 function AppNavInner({ session, userRole, onLogout }) {
@@ -104,7 +105,7 @@ function AppNavInner({ session, userRole, onLogout }) {
             ? NAV_LINKS_BEFORE_DRALO.map((item) => (
                 <NavLink
                   key={item.href}
-                  href={item.href}
+                  href={resolveNavItemHref(item.href, session)}
                   className={desktopLinkClass(item.href)}
                   onClick={closeDesktopDropdowns}
                   {...(item.tourId ? { 'data-tour': item.tourId } : {})}
@@ -139,6 +140,7 @@ function AppNavInner({ session, userRole, onLogout }) {
                 >
                   <DraloAiNavMenuItems
                     locked={navModel.draloLocked}
+                    guestRequiresLogin={navModel.guest}
                     variant="desktop"
                     onNavigate={closeDesktopDropdowns}
                   />

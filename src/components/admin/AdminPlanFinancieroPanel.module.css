@@ -236,3 +236,75 @@
   vertical-align: middle;
   white-space: nowrap;
 }
+
+/* Night mode */
+:global(body.reading-night-mode) .banner {
+  background: #1e3a5f;
+  border-color: #3b82f6;
+  color: #dbeafe;
+}
+
+:global(body.reading-night-mode) .bannerWarn {
+  background: #422006;
+  border-color: #d97706;
+  color: #fde68a;
+}
+
+:global(body.reading-night-mode) .kpi,
+:global(body.reading-night-mode) .chartBox,
+:global(body.reading-night-mode) .levelCard,
+:global(body.reading-night-mode) .tableWrap {
+  background: #1e293b;
+  border-color: #475569;
+}
+
+:global(body.reading-night-mode) .levelCard--premium {
+  background: linear-gradient(145deg, #312e81 0%, #1e293b 100%);
+  border-color: #6366f1;
+}
+
+:global(body.reading-night-mode) .levelCard--free {
+  background: linear-gradient(145deg, #14532d 0%, #1e293b 100%);
+  border-color: #22c55e;
+}
+
+:global(body.reading-night-mode) .levelCard--starter {
+  background: linear-gradient(145deg, #0c4a6e 0%, #1e293b 100%);
+  border-color: #38bdf8;
+}
+
+:global(body.reading-night-mode) .kpiLabel,
+:global(body.reading-night-mode) .sectionDesc,
+:global(body.reading-night-mode) .levelNote,
+:global(body.reading-night-mode) .empty,
+:global(body.reading-night-mode) .statusInactive {
+  color: #94a3b8;
+}
+
+:global(body.reading-night-mode) .kpiValue,
+:global(body.reading-night-mode) .sectionTitle,
+:global(body.reading-night-mode) .levelLabel {
+  color: #f8fafc;
+}
+
+:global(body.reading-night-mode) .table th {
+  background: #334155;
+  color: #e2e8f0;
+  border-bottom-color: #475569;
+}
+
+:global(body.reading-night-mode) .table td {
+  border-bottom-color: #475569;
+  color: #cbd5e1;
+}
+
+:global(body.reading-night-mode) .btn {
+  background: #334155;
+  border-color: #64748b;
+  color: #e2e8f0;
+}
+
+:global(body.reading-night-mode) .btn:hover {
+  background: #475569;
+}
+

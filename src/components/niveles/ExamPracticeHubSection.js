@@ -217,16 +217,20 @@ function ExamPracticeCardInner({ kind, label, hint, badge }) {
         <ExamSkillIcon theme={kind} size="md" />
       </span>
       <span className="exam-practice-hub__label">{label}</span>
-      {badge ? (
-        <span className="exam-practice-hub__badge">{badge}</span>
-      ) : hint ? (
-        <span className="exam-practice-hub__hint">{hint}</span>
-      ) : null}
-      {!badge ? (
-        <span className="exam-practice-hub__arrow" aria-hidden>
-          →
-        </span>
-      ) : null}
+      <div className="exam-practice-hub__card-foot">
+        {badge ? (
+          <span className="exam-practice-hub__badge">{badge}</span>
+        ) : hint ? (
+          <span className="exam-practice-hub__hint">{hint}</span>
+        ) : (
+          <span aria-hidden />
+        )}
+        {!badge ? (
+          <span className="exam-practice-hub__arrow" aria-hidden>
+            →
+          </span>
+        ) : null}
+      </div>
     </>
   );
 }
@@ -346,7 +350,7 @@ function ExamPracticeHubStyles() {
         flex-direction: column;
         align-items: flex-start;
         gap: 10px;
-        min-height: 112px;
+        min-height: 132px;
         padding: 16px 16px 14px;
         border-radius: 14px;
         border: 1px solid #e2e8f0;
@@ -443,12 +447,30 @@ function ExamPracticeHubStyles() {
         height: 2.65rem;
       }
       .niveles-level-page .exam-practice-hub__label {
+        flex: 1;
         font-size: 0.92rem;
         font-weight: 700;
         letter-spacing: -0.015em;
         color: #0f172a;
         line-height: 1.3;
-        padding-right: 1.65rem;
+        padding-right: 0;
+      }
+      .niveles-level-page .exam-practice-hub__card-foot {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 10px;
+        width: 100%;
+        margin-top: auto;
+        min-height: 1.55rem;
+      }
+      .niveles-level-page .exam-practice-hub__card-foot .exam-practice-hub__hint {
+        flex: 1;
+        min-width: 0;
+      }
+      .niveles-level-page .exam-practice-hub__card-foot .exam-practice-hub__arrow {
+        position: static;
+        flex: 0 0 auto;
       }
       .niveles-level-page .exam-practice-hub__card--featured .exam-practice-hub__label {
         font-size: 1.02rem;

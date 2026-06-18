@@ -4,7 +4,6 @@ import ExamPracticeSideRail from '@/components/exam/ExamPracticeSideRail';
 import B2ReadingStrategyPanel from '@/components/b2/B2ReadingStrategyPanel';
 import ReadingPracticeProgressPanel from '@/components/exam/ReadingPracticeProgressPanel';
 import ReadingPracticeToolsPanel from '@/components/exam/ReadingPracticeToolsPanel';
-import ReadingPracticeFeedbackToggle from '@/components/exam/ReadingPracticeFeedbackToggle';
 import { useReadingPracticeSession } from '@/context/ReadingPracticeSessionContext';
 
 export default function ReadingPracticeSideRail({
@@ -22,6 +21,7 @@ export default function ReadingPracticeSideRail({
   progressBySlot,
   examLabelsBySlot,
   passing,
+  topRail = null,
   finishNotice = null,
   lang = 'en',
   scoringVersion = 1,
@@ -36,6 +36,7 @@ export default function ReadingPracticeSideRail({
 
   return (
     <ExamPracticeSideRail
+      topRail={topRail}
       strategy={
         strategyPack ? (
           <B2ReadingStrategyPanel pack={strategyPack} partNumber={partNumber} />
@@ -69,12 +70,7 @@ export default function ReadingPracticeSideRail({
           lang={lang}
         />
       }
-      tools={
-        <>
-          <ReadingPracticeToolsPanel lang={lang} />
-          <ReadingPracticeFeedbackToggle lang={lang} />
-        </>
-      }
+      tools={<ReadingPracticeToolsPanel lang={lang} />}
       finishNotice={finishNotice}
     />
   );
