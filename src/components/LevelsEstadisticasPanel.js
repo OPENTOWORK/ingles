@@ -3,12 +3,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import dynamic from 'next/dynamic';
 import { supabase } from '@/utils/supabaseClient';
-import { formatLevelsPartDisplayName } from '@/utils/formatLevelsPartDisplayName';
-import {
-  aggregateLevelsStatsByPart,
-  buildPreguntaMetaMap,
-  ensureAllCefrLevelCharts,
-} from '@/lib/aggregateLevelsStatsByPart';
+import { useExamModeProfileCharts } from '@/hooks/useExamModeProfileCharts';
 
 const LevelsStatsChartsCarousel = dynamic(
   () => import('@/components/perfil/LevelsStatsChartsCarousel'),
@@ -22,36 +17,6 @@ const LevelsStatsChartsCarousel = dynamic(
     ),
   },
 );
-
-async function fetchPreguntaMeta(preguntaIds) {
-  if (!preguntaIds.length) return {};
-
-  const chunkSize = 80;
-  const preguntas = [];
-
-  for (let i = 0; i < preguntaIds.length; i += chunkSize) {
-    const chunk = preguntaIds.slice(i, i + chunkSize);
-    const { data, error } = await supabase
-      .from('levels_preguntas')
-      .select('id, level_id, parte_id')
-      .in('id', chunk);
-    if (error) throw error;
-    if (data?.length) preguntas.push(...data);
-  }
-
-  const levelIds = [...new Set(preguntas.map((p) => p.level_id).filter(Boolean))];
-  let levels = [];
-  if (levelIds.length) {
-    const { data: levelRows, error: levelErr } = await supabase
-      .from('levels')
-      .select('id, nombre')
-      .in('id', levelIds);
-    if (levelErr) throw levelErr;
-    levels = levelRows || [];
-  }
-
-  return buildPreguntaMetaMap(preguntas, levels);
-}
 
 function KpiIcon({ type }) {
   if (type === 'correct') {
@@ -89,18 +54,12 @@ function KpiIcon({ type }) {
 
 export default function LevelsEstadisticasPanel({ userId, embedded = false }) {
   const [rows, setRows] = useState([]);
-  const [partNames, setPartNames] = useState({});
-  const [preguntaMeta, setPreguntaMeta] = useState({});
-  const [levelCatalog, setLevelCatalog] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
 
   useEffect(() => {
     if (!userId) {
       setRows([]);
-      setPartNames({});
-      setPreguntaMeta({});
-      setLevelCatalog([]);
       setLoading(false);
       setError('');
       return undefined;
@@ -126,50 +85,15 @@ export default function LevelsEstadisticasPanel({ userId, embedded = false }) {
         if (qErr) {
           setError(qErr.message || 'Could not load statistics.');
           setRows([]);
-          setPartNames({});
-          setPreguntaMeta({});
-          setLevelCatalog([]);
           setLoading(false);
           return;
         }
 
-        const list = data || [];
-        setRows(list);
-
-        const partIds = [...new Set(list.map((r) => r.parte_id).filter(Boolean))];
-        const preguntaIds = [...new Set(list.map((r) => r.pregunta_id).filter(Boolean))];
-
-        const [partsResult, meta, levelsResult] = await Promise.all([
-          partIds.length
-            ? supabase.from('levels_partes').select('id, nombre_parte').in('id', partIds)
-            : Promise.resolve({ data: [], error: null }),
-          fetchPreguntaMeta(preguntaIds),
-          supabase.from('levels').select('id, nombre'),
-        ]);
-
-        if (cancelled) return;
-
-        if (partsResult.error) {
-          setPartNames({});
-        } else if (partsResult.data?.length) {
-          const map = {};
-          partsResult.data.forEach((p) => {
-            map[p.id] = formatLevelsPartDisplayName(p.nombre_parte) || p.id;
-          });
-          setPartNames(map);
-        } else {
-          setPartNames({});
-        }
-
-        setPreguntaMeta(meta);
-        setLevelCatalog(levelsResult.data || []);
+        setRows(data || []);
       } catch (err) {
         if (!cancelled) {
           setError(err?.message || 'Could not load statistics.');
           setRows([]);
-          setPartNames({});
-          setPreguntaMeta({});
-          setLevelCatalog([]);
         }
       } finally {
         if (!cancelled) setLoading(false);
@@ -181,14 +105,11 @@ export default function LevelsEstadisticasPanel({ userId, embedded = false }) {
     };
   }, [userId]);
 
-  const chartsByLevel = useMemo(
-    () =>
-      ensureAllCefrLevelCharts(
-        aggregateLevelsStatsByPart(rows, { partNames, preguntaMeta }),
-        levelCatalog,
-      ),
-    [rows, partNames, preguntaMeta, levelCatalog],
-  );
+  const {
+    charts: examModeCharts,
+    loading: examModeChartsLoading,
+    error: examModeChartsError,
+  } = useExamModeProfileCharts(userId);
 
   const hasAnyLevelData = rows.length > 0;
 
@@ -298,7 +219,16 @@ export default function LevelsEstadisticasPanel({ userId, embedded = false }) {
             ))}
           </div>
 
-          <LevelsStatsChartsCarousel charts={chartsByLevel} />
+          {examModeChartsLoading ? (
+            <div className="lsp-loading lsp-loading--inline">
+              <span className="lsp-loading__spinner" aria-hidden />
+              Loading exam mode chart…
+            </div>
+          ) : examModeChartsError ? (
+            <p className="lsp-message lsp-message--error">{examModeChartsError}</p>
+          ) : (
+            <LevelsStatsChartsCarousel charts={examModeCharts} variant="exam-mode" />
+          )}
         </>
       )}
 
@@ -521,6 +451,10 @@ export default function LevelsEstadisticasPanel({ userId, embedded = false }) {
 
         .lsp-message--error {
           color: #b91c1c;
+        }
+
+        .lsp-loading--inline {
+          padding: 12px 0 0;
         }
       `}</style>
     </section>

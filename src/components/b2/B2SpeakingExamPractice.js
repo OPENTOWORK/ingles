@@ -9,8 +9,9 @@ import { useB2ExamScoringSession } from '@/hooks/useB2ExamScoringSession';
 import { useLevelsCategoryTimer } from '@/hooks/useLevelsCategoryTimer';
 import { getB2PartScoring } from '@/utils/levelsB2PartScoring';
 import { supabase } from '@/utils/supabaseClient';
-import { formatLevelsPartDisplayName, getSkillPartTabLabel } from '@/utils/formatLevelsPartDisplayName';
+import { formatLevelsPartDisplayName, getSkillLocalPartNumber, getSkillPartTabLabel } from '@/utils/formatLevelsPartDisplayName';
 import { withBasePath } from '@/lib/base-path';
+import { buildClientApiUrl } from '@/utils/clientApiUrl';
 import { playExaminerAudio, stopExaminerAudio, pauseExaminerAudio, resumeExaminerAudio, isExaminerAudioPaused } from '@/utils/playExaminerAudio';
 import ExaminerVoiceVisualizer from '@/components/b2/ExaminerVoiceVisualizer';
 import SpeakingExerciseControls from '@/components/b2/SpeakingExerciseControls';
@@ -26,14 +27,18 @@ import { getB2LongTurnPhotoUrls } from '@/data/b2-speaking-long-turn-photos';
 import B2ExamPracticeModuleNav from '@/components/b2/B2ExamPracticeModuleNav';
 import ExamPracticeProgressPanel from '@/components/exam/ExamPracticeProgressPanel';
 import ExamPracticeSessionSideRail from '@/components/exam/ExamPracticeSessionSideRail';
-import ExamPracticeSideRailTop from '@/components/exam/ExamPracticeSideRailTop';
-import ExamStudyNotesSidebar from '@/components/exam/ExamStudyNotesSidebar';
 import B2SpeakingStrategyPanel from '@/components/b2/B2SpeakingStrategyPanel';
 import { getB2SpeakingStrategyPack } from '@/data/b2SpeakingPracticeStrategies';
 import ReadingPracticeChrome from '@/components/exam/ReadingPracticeChrome';
 import { ReadingPracticeSessionProvider, useReadingPracticeSession } from '@/context/ReadingPracticeSessionContext';
 import ExamModeSectionBanner from '@/components/niveles/ExamModeSectionBanner';
+import { useExamModeSectionDraftControls } from '@/hooks/useExamModeSectionDraftControls';
 import { useExamModeStrict } from '@/hooks/useExamModeStrict';
+import {
+  buildExamModeSectionDraft,
+  resolvePartIdByNumber,
+  EXAM_MODE_SECTION_DRAFT_VERSION,
+} from '@/utils/examModeSectionDraft';
 import { useExamModeHubNav } from '@/hooks/useExamModeHubNav';
 import {
   resolveExamPracticeMode,
@@ -66,6 +71,8 @@ import A2ExamGenerationStatus from '@/components/niveles/A2ExamGenerationStatus'
 import { buildExamModeContinueModuleHref } from '@/utils/buildExamModeContinueModuleHref';
 import { buildExamModeSkillPartSnapshots } from '@/utils/buildExamModeSkillPartSnapshots';
 import { finishExamModeSupabasePersistence } from '@/utils/finishExamModeSupabasePersistence';
+import { LEVELS_SCORE_SOURCE, resolvePracticeScoreSourceFromExamModeParam } from '@/utils/levelsScoreSource';
+import { persistLevelsPartProgress } from '@/utils/persistLevelsPartProgress';
 
 const buttonStyle = {
   backgroundColor: '#c1f2cd',
@@ -109,9 +116,11 @@ function resolveLongTurnPhotos(taskContext, examSlot) {
 function B2SpeakingExamPracticeInner({ title, subtitle, loadingLabel, refreshLabel, lang = 'en' }) {
   const searchParams = useSearchParams();
   const { examSlot, selectExamSlot } = useB2ExamPracticeSlot();
+  const scoreSource = resolvePracticeScoreSourceFromExamModeParam(searchParams.get('examMode'));
   const scoring = useB2ExamScoringSession({
     partMin: B2_SPEAKING_PART_MIN,
     partMax: B2_SPEAKING_PART_MAX,
+    scoreSource,
   });
   const examMode = useExamModeStrict({
     slug: 'b2',
@@ -124,15 +133,22 @@ function B2SpeakingExamPracticeInner({ title, subtitle, loadingLabel, refreshLab
     reviewMode,
     examSlot: examModeSlot,
     section: examSection,
+    sectionKey: examSectionKey,
     handleFinishSection,
     setSectionRemaining,
+    getSectionRemaining,
+    saveSectionDraft,
+    hubHref,
   } = examMode;
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [partsData, setPartsData] = useState([]);
   const [selectedPartId, setSelectedPartId] = useState(null);
   const [examLabelsBySlot, setExamLabelsBySlot] = useState({});
+  const [speakingDraftEpoch, setSpeakingDraftEpoch] = useState(0);
   const examModePartScoresRef = useRef({});
+  const examModePersistedPartsRef = useRef({});
+  const speakingPartSnapshotsRef = useRef({});
   const categoryTimer = useLevelsCategoryTimer();
 
   useEffect(() => {
@@ -293,29 +309,85 @@ function B2SpeakingExamPracticeInner({ title, subtitle, loadingLabel, refreshLab
     passingCount: b2PartCfg?.passing ?? 3,
   };
 
+  const persistSpeakingPartScore = useCallback(
+    async ({ partNumber, preguntaId, parteId, correct, total, passed, scoreSource }) => {
+      if (
+        scoreSource === LEVELS_SCORE_SOURCE.EXAM_MODE &&
+        examModePersistedPartsRef.current[partNumber]
+      ) {
+        return;
+      }
+
+      const uid = await getSessionUserId();
+      const examenId = scoring.currentExamenId || scoring.examenIdBySlot?.[examSlot];
+      if (!uid || !examenId || !preguntaId || !partNumber) return;
+
+      const result = await persistLevelsPartProgress({
+        userId: uid,
+        preguntaId,
+        parteId,
+        examenId,
+        partNumber,
+        progress: {
+          complete: true,
+          correct,
+          total,
+          evaluated: total,
+          passed,
+        },
+        scoreSource,
+        statsMode:
+          scoreSource === LEVELS_SCORE_SOURCE.EXAM_MODE ? 'section-finish' : 'part-complete',
+      });
+
+      if (result.saved) {
+        if (scoreSource === LEVELS_SCORE_SOURCE.EXAM_MODE) {
+          examModePersistedPartsRef.current[partNumber] = true;
+        }
+        void scoring.refreshPuntuacionesProgress();
+      }
+    },
+    [scoring, examSlot],
+  );
+
   const handleSaveSpeakingPart = useCallback(
     ({ correct, total, passed }) => {
       if (!selectedPart?.id || !scoring.examPracticeOpen) return;
-      if (examModeActive && !reviewMode) {
-        examModePartScoresRef.current[selectedPart.partNumber] = {
-          correct,
-          total,
-          preguntaId: selectedPart.id,
-        };
-        return;
-      }
-      void scoring.saveWritingOrSpeakingScore({
-        examSlot,
+
+      const payload = {
         partNumber: selectedPart.partNumber,
         preguntaId: selectedPart.id,
         parteId: selectedPart.id,
         correct,
         total,
         passed,
+      };
+
+      if (examModeActive && !reviewMode) {
+        examModePartScoresRef.current[selectedPart.partNumber] = {
+          correct,
+          total,
+          preguntaId: selectedPart.id,
+        };
+        void persistSpeakingPartScore({
+          ...payload,
+          scoreSource: LEVELS_SCORE_SOURCE.EXAM_MODE,
+        });
+        return;
+      }
+
+      void persistSpeakingPartScore({
+        ...payload,
+        scoreSource: LEVELS_SCORE_SOURCE.SKILL_PRACTICE,
       });
     },
-    [scoring, examSlot, selectedPart, examModeActive, reviewMode],
+    [scoring, selectedPart, examModeActive, reviewMode, persistSpeakingPartScore],
   );
+
+  const handleSpeakingPartSnapshot = useCallback((partNumber, snapshot) => {
+    if (!partNumber || !snapshot?.sessionId) return;
+    speakingPartSnapshotsRef.current[`${examSlot}:${partNumber}`] = snapshot;
+  }, [examSlot]);
 
   const handleExamModeFinish = useCallback(
     (redirectTo) => {
@@ -325,9 +397,14 @@ function B2SpeakingExamPracticeInner({ title, subtitle, loadingLabel, refreshLab
         partsData: tabPartsData,
         examModePartScores: examModePartScoresRef.current,
       });
+      const pendingSnapshots = Object.fromEntries(
+        Object.entries(partSnapshots).filter(
+          ([partKey]) => !examModePersistedPartsRef.current[Number(partKey)],
+        ),
+      );
       handleFinishSection({ speakingCompleted: true, partNumber }, scores, { redirectTo });
       void finishExamModeSupabasePersistence({
-        partSnapshots,
+        partSnapshots: pendingSnapshots,
         examenId: scoring.currentExamenId || scoring.examenIdBySlot?.[examSlot],
       });
     },
@@ -356,8 +433,12 @@ function B2SpeakingExamPracticeInner({ title, subtitle, loadingLabel, refreshLab
     const sorted = [...tabPartsData].sort((a, b) => a.partNumber - b.partNumber);
     const currentIdx = sorted.findIndex((p) => p.id === selectedPartId);
     if (currentIdx < 0 || currentIdx >= sorted.length - 1) return;
-    setSelectedPartId(sorted[currentIdx + 1].id);
+    const next = sorted[currentIdx + 1];
+    setSelectedPartId(next.id);
     if (typeof window !== 'undefined') {
+      const url = new URL(window.location.href);
+      if (next.partNumber) url.searchParams.set('part', String(next.partNumber));
+      window.history.replaceState(null, '', url.pathname + url.search);
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
   }, [tabPartsData, selectedPartId]);
@@ -458,6 +539,61 @@ function B2SpeakingExamPracticeInner({ title, subtitle, loadingLabel, refreshLab
     reviewMode,
   ]);
 
+  const getExamDraftSnapshot = useCallback(() => {
+    const draftByPart = {};
+    for (const part of tabPartsData) {
+      const pn = part.partNumber;
+      if (!pn) continue;
+      const snapshot = speakingPartSnapshotsRef.current[`${examSlot}:${pn}`];
+      if (snapshot) draftByPart[pn] = snapshot;
+    }
+    return buildExamModeSectionDraft({
+      draftByPart,
+      activePartNumber: partNumber || null,
+      activePartId: selectedPart?.id ?? null,
+      remainingSeconds: getSectionRemaining(examSectionKey) ?? examSection?.remainingSeconds ?? null,
+    });
+  }, [
+    tabPartsData,
+    examSlot,
+    partNumber,
+    selectedPart?.id,
+    getSectionRemaining,
+    examSectionKey,
+    examSection?.remainingSeconds,
+  ]);
+
+  const applyExamDraftSnapshot = useCallback(
+    (draft) => {
+      if (!draft || draft.version !== EXAM_MODE_SECTION_DRAFT_VERSION) return;
+      for (const [pn, snapshot] of Object.entries(draft.draftByPart || {})) {
+        if (snapshot && typeof snapshot === 'object') {
+          speakingPartSnapshotsRef.current[`${examSlot}:${Number(pn)}`] = snapshot;
+        }
+      }
+      if (draft.activePartId) {
+        setSelectedPartId(draft.activePartId);
+      } else if (draft.activePartNumber) {
+        const partId = resolvePartIdByNumber(tabPartsData, draft.activePartNumber);
+        if (partId) setSelectedPartId(partId);
+      }
+      setSpeakingDraftEpoch((n) => n + 1);
+    },
+    [examSlot, tabPartsData],
+  );
+
+  const { examModeSaveControls } = useExamModeSectionDraftControls({
+    enabled: examModeActive && !reviewMode && Boolean(examSectionKey),
+    sectionKey: examSectionKey,
+    section: examSection,
+    hubHref,
+    saveSectionDraft,
+    getDraftSnapshot: getExamDraftSnapshot,
+    applyDraftSnapshot: applyExamDraftSnapshot,
+    hydrateReady: !loading && tabPartsData.length > 0,
+    lang: lang === 'es' ? 'es' : 'en',
+  });
+
   return (
     <B2ExamPracticeLayout examPracticeOpen={layoutPracticeOpen}>
       {adminFlow.canRegenerateExams ? (
@@ -493,9 +629,10 @@ function B2SpeakingExamPracticeInner({ title, subtitle, loadingLabel, refreshLab
         showLevelPicker={isSkillPracticeSession}
         levelSlug="b2"
         skillRoute="exam-speaking"
-        partMinForTabLabels={isSkillPracticeSession ? B2_SPEAKING_PART_MIN : null}
+        partMinForTabLabels={B2_SPEAKING_PART_MIN}
         skillPracticeTheme={skillNav.skillTheme}
         practiceMode={practiceMode}
+        showStudyNotes={false}
         timerVariant={isSkillPracticeSession && !examModeActive ? 'discrete' : 'prominent'}
         modeBadge={modeBadge}
         showRefresh={!isExamSimulationMode(practiceMode)}
@@ -508,7 +645,6 @@ function B2SpeakingExamPracticeInner({ title, subtitle, loadingLabel, refreshLab
         hideScorePanel={isExamSimulationMode(practiceMode) && !reviewMode}
         partFinishNotice={isExamSimulationMode(practiceMode) && !reviewMode ? null : scoring.partFinishNotice}
         partFinishNoticePlacement={showPracticeSideRail ? 'header' : 'main'}
-        studyNotesPlacement={showPracticeSideRail ? 'sidebar-top' : 'header'}
         partsData={!loading && !error ? tabPartsData : []}
         selectedPartId={selectedPartId}
         onSelectPart={(part) => {
@@ -519,15 +655,8 @@ function B2SpeakingExamPracticeInner({ title, subtitle, loadingLabel, refreshLab
         }}
         getPartSavedScoreLabel={(part) => scoring.getPartSavedScoreLabel(part, examSlot)}
         lang={lang}
-        studyNotesContext={{
-          slug: 'b2',
-          skillRoute: 'exam-speaking',
-          examMode: examModeActive,
-          partNumber,
-          examSlot,
-        }}
-        studyNotesContextLabel={title}
         reportErrorContext={reportErrorContext}
+        examModeSaveControls={examModeSaveControls}
       >
       {examModeActive && examSection ? (
         <ExamModeSectionBanner
@@ -557,7 +686,7 @@ function B2SpeakingExamPracticeInner({ title, subtitle, loadingLabel, refreshLab
         )}
 
         {!loading && !error && selectedPart ? (
-          <div className="levels-exam-practice-page levels-exam-practice-page--narrow">
+          <div className="levels-exam-practice-page levels-exam-practice-page--speaking">
             <div className="levels-exam-split-card">
               <h2>
                 {getB2SpeakingPartConfig(selectedPart.partNumber)?.title
@@ -566,12 +695,19 @@ function B2SpeakingExamPracticeInner({ title, subtitle, loadingLabel, refreshLab
               </h2>
               <div className="levels-exam-split__body levels-exam-split__body--stacked">
           <B2SpeakingPartSession
-            key={`${selectedPart.id}-${examSlot}`}
+            key={`${selectedPart.id}-${examSlot}-${speakingDraftEpoch}`}
             part={selectedPart}
             examSlot={examSlot}
+            initialSnapshot={
+              speakingPartSnapshotsRef.current[`${examSlot}:${selectedPart.partNumber}`] ?? null
+            }
+            onSnapshotChange={(snapshot) =>
+              handleSpeakingPartSnapshot(selectedPart.partNumber, snapshot)
+            }
             onSavePartScore={handleSaveSpeakingPart}
             partScoring={b2PartCfg}
             lang={lang}
+            examMode={examModeActive && !reviewMode}
           />
               </div>
             </div>
@@ -603,28 +739,12 @@ function B2SpeakingExamPracticeInner({ title, subtitle, loadingLabel, refreshLab
         onContinueModule={
           examModeActive && !reviewMode ? handleContinueModuleInExamMode : undefined
         }
+        partMinForTabLabels={B2_SPEAKING_PART_MIN}
         lang={lang}
       />
         </div>
         {showPracticeSideRail ? (
           <ExamPracticeSessionSideRail
-            topRail={
-              <ExamPracticeSideRailTop
-                studyNotes={
-                  <ExamStudyNotesSidebar
-                    context={{
-                      slug: 'b2',
-                      skillRoute: 'exam-speaking',
-                      examMode: examModeActive,
-                      partNumber,
-                      examSlot,
-                    }}
-                    contextLabel={title}
-                    lang={lang === 'es' ? 'es' : 'en'}
-                  />
-                }
-              />
-            }
             strategy={
               speakingStrategyPack ? <B2SpeakingStrategyPanel pack={speakingStrategyPack} /> : null
             }
@@ -654,19 +774,36 @@ function B2SpeakingExamPracticeInner({ title, subtitle, loadingLabel, refreshLab
   );
 }
 
-/** @param {{ part: { id: string, nombre: string, descripcion: string, partNumber: number }, examSlot: number, onSavePartScore?: (p: { correct: number, total: number, passed: boolean }) => void, partScoring?: { total: number, passing: number } | null, lang?: 'en'|'es' }} props */
-function B2SpeakingPartSession({ part, examSlot, onSavePartScore, partScoring, lang = 'en' }) {
+/** @param {{ part: { id: string, nombre: string, descripcion: string, partNumber: number }, examSlot: number, initialSnapshot?: object | null, onSnapshotChange?: (snapshot: object) => void, onSavePartScore?: (p: { correct: number, total: number, passed: boolean }) => void, partScoring?: { total: number, passing: number } | null, lang?: 'en'|'es', examMode?: boolean }} props */
+function B2SpeakingPartSession({
+  part,
+  examSlot,
+  initialSnapshot = null,
+  onSnapshotChange,
+  onSavePartScore,
+  partScoring,
+  lang = 'en',
+  examMode = false,
+}) {
   const isEn = lang === 'en';
   const partConfig = getB2SpeakingPartConfig(part.partNumber);
   const cambridgeKey = String(part.partNumber - 13);
   const staticInfo = b2SpeakingPartInfo[cambridgeKey];
+  const hasCompleteSnapshot =
+    initialSnapshot?.sessionId &&
+    initialSnapshot?.openingReady &&
+    (initialSnapshot?.lastAssistant?.assistantText ||
+      initialSnapshot?.lines?.some((line) => line.role === 'assistant'));
+  const restoredSnapshot = hasCompleteSnapshot ? initialSnapshot : null;
 
-  const [sessionId, setSessionId] = useState(null);
-  const [lines, setLines] = useState([]);
-  const [history, setHistory] = useState([]);
-  const [loading, setLoading] = useState(false);
-  const [phase, setPhase] = useState('intro');
-  const [longTurnLeft, setLongTurnLeft] = useState(partConfig?.longTurnSeconds ?? 60);
+  const [sessionId, setSessionId] = useState(() => restoredSnapshot?.sessionId ?? null);
+  const [lines, setLines] = useState(() => restoredSnapshot?.lines ?? []);
+  const [history, setHistory] = useState(() => restoredSnapshot?.history ?? []);
+  const [loading, setLoading] = useState(() => !hasCompleteSnapshot);
+  const [phase, setPhase] = useState(() => restoredSnapshot?.phase ?? 'intro');
+  const [longTurnLeft, setLongTurnLeft] = useState(
+    () => restoredSnapshot?.longTurnLeft ?? partConfig?.longTurnSeconds ?? 60,
+  );
   const [typed, setTyped] = useState('');
   const [apiError, setApiError] = useState('');
   const [usageHint, setUsageHint] = useState('');
@@ -676,18 +813,40 @@ function B2SpeakingPartSession({ part, examSlot, onSavePartScore, partScoring, l
   const [feedbackLoading, setFeedbackLoading] = useState(false);
   const [feedbackReport, setFeedbackReport] = useState(null);
   const [feedbackError, setFeedbackError] = useState('');
-  const [exerciseStarted, setExerciseStarted] = useState(false);
-  const [exercisePaused, setExercisePaused] = useState(false);
-  const [openingReady, setOpeningReady] = useState(false);
-  const [canRepeatExaminer, setCanRepeatExaminer] = useState(false);
+  const [exerciseStarted, setExerciseStarted] = useState(() => restoredSnapshot?.exerciseStarted ?? false);
+  const [exercisePaused, setExercisePaused] = useState(() => restoredSnapshot?.exercisePaused ?? false);
+  const [openingReady, setOpeningReady] = useState(() => restoredSnapshot?.openingReady ?? false);
+  const [canRepeatExaminer, setCanRepeatExaminer] = useState(
+    () => restoredSnapshot?.canRepeatExaminer ?? false,
+  );
+  const [partComplete, setPartComplete] = useState(() => restoredSnapshot?.partComplete ?? false);
+  const partCompleteHandledRef = useRef(restoredSnapshot?.partCompleteHandled ?? false);
   const media = useMediaRecorder();
   /** false al desmontar o cambiar de parte: no actualizar estado ni reproducir audio. */
   const aliveRef = useRef(true);
   const abortRef = useRef(null);
-  const lastAssistantRef = useRef(null);
+  const lastAssistantRef = useRef(restoredSnapshot?.lastAssistant ?? null);
   const userIdRef = useRef(null);
+  const liveSnapshotRef = useRef(null);
+
+  liveSnapshotRef.current = {
+    sessionId,
+    lines,
+    history,
+    phase,
+    longTurnLeft,
+    exerciseStarted,
+    exercisePaused,
+    openingReady,
+    canRepeatExaminer,
+    partComplete,
+    partCompleteHandled: partCompleteHandledRef.current,
+    lastAssistant: lastAssistantRef.current,
+  };
 
   const taskContext = part.descripcion || partConfig?.instructions || '';
+  const taskContextRef = useRef(taskContext);
+  taskContextRef.current = taskContext;
   const photoUrls = useMemo(
     () => resolveLongTurnPhotos(taskContext, examSlot),
     [taskContext, examSlot],
@@ -746,16 +905,77 @@ function B2SpeakingPartSession({ part, examSlot, onSavePartScore, partScoring, l
     setCanRepeatExaminer(true);
   }, []);
 
+  const applyOpeningTurn = useCallback(
+    (data) => {
+      if (!data?.assistantText || !isAlive()) return false;
+      const assistantText = data.assistantText;
+      storeAssistantTurn(data);
+      setLines([{ role: 'assistant', content: assistantText }]);
+      setHistory([{ role: 'assistant', content: assistantText }]);
+      setPhase(partConfig?.uiMode === 'long_turn' ? 'await_long_turn' : 'dialogue');
+      setOpeningReady(true);
+      return true;
+    },
+    [isAlive, storeAssistantTurn, partConfig?.uiMode],
+  );
+
+  const fetchOpeningForSession = useCallback(
+    async (sid, signal) => {
+      const ctx = taskContextRef.current;
+      const turnRes = await fetch(buildClientApiUrl('/api/speaking/turn'), {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          sessionId: sid,
+          cefr: 'B2',
+          mode: 'EXAM',
+          prompt: ctx,
+          history: [],
+          text: '',
+          examPartIndex: partConfig?.blueprintIndex ?? 0,
+          b2PartNumber: part.partNumber,
+          taskContext: ctx,
+          isOpening: true,
+        }),
+        signal,
+      });
+      if (!turnRes.ok) {
+        const err = await turnRes.json().catch(() => ({}));
+        throw new Error(
+          err.error ||
+            (isEn ? 'Could not load the examiner question.' : 'Error al cargar la pregunta del examinador.'),
+        );
+      }
+      return turnRes.json();
+    },
+    [part.partNumber, partConfig?.blueprintIndex, isEn],
+  );
+
+  const resolveAssistantPlayback = useCallback(() => {
+    const fromRef = lastAssistantRef.current;
+    if (fromRef?.assistantText) return fromRef;
+    const assistantLine = lines.find((l) => l.role === 'assistant');
+    if (assistantLine?.content) {
+      return { assistantText: assistantLine.content };
+    }
+    return null;
+  }, [lines]);
+
   const playLastAssistant = useCallback(async () => {
-    const data = lastAssistantRef.current;
-    if (!data?.assistantText || !isAlive()) return;
+    const data = resolveAssistantPlayback();
+    if (!data?.assistantText || !isAlive()) return false;
     setExercisePaused(false);
-    await playExaminerAudio({
-      base64: data.assistantAudioBase64,
-      mime: data.assistantAudioMime,
-      text: data.assistantText,
-    });
-  }, [isAlive]);
+    setApiError('');
+    const played = await playExaminerAudio({ text: data.assistantText });
+    if (!played && isAlive()) {
+      setApiError(
+        isEn
+          ? 'Audio is still loading or was blocked. Wait a few seconds and press Play again.'
+          : 'El audio sigue cargando o fue bloqueado. Espera unos segundos y pulsa Play otra vez.',
+      );
+    }
+    return Boolean(played);
+  }, [isAlive, resolveAssistantPlayback, isEn]);
 
   const applyAssistantTurn = useCallback(
     async (data) => {
@@ -765,11 +985,7 @@ function B2SpeakingPartSession({ part, examSlot, onSavePartScore, partScoring, l
       setLines((prev) => [...prev, { role: 'assistant', content: assistantText }]);
       setHistory((h) => [...h, { role: 'assistant', content: assistantText }]);
       if (!isAlive()) return;
-      await playExaminerAudio({
-        base64: data.assistantAudioBase64,
-        mime: data.assistantAudioMime,
-        text: assistantText,
-      });
+      await playExaminerAudio({ text: assistantText });
     },
     [isAlive, storeAssistantTurn],
   );
@@ -778,6 +994,7 @@ function B2SpeakingPartSession({ part, examSlot, onSavePartScore, partScoring, l
     async (payload, sid = sessionId, historySnapshot = history) => {
       if (!sid || !isAlive()) return null;
       const signal = abortRef.current?.signal;
+      const ctx = taskContextRef.current;
       if (isAlive()) {
         setLoading(true);
         setApiError('');
@@ -789,32 +1006,32 @@ function B2SpeakingPartSession({ part, examSlot, onSavePartScore, partScoring, l
           form.set('sessionId', sid);
           form.set('cefr', 'B2');
           form.set('mode', 'EXAM');
-          form.set('prompt', taskContext);
+          form.set('prompt', ctx);
           form.set('history', JSON.stringify(historySnapshot));
           form.set('examPartIndex', String(partConfig?.blueprintIndex ?? 0));
           form.set('b2PartNumber', String(part.partNumber));
-          form.set('taskContext', taskContext);
+          form.set('taskContext', ctx);
           if (payload.isOpening) form.set('isOpening', 'true');
           form.append('audio', payload.audio, 'capture.webm');
-          res = await fetch(withBasePath('/api/speaking/turn'), {
+          res = await fetch(buildClientApiUrl('/api/speaking/turn'), {
             method: 'POST',
             body: form,
             signal,
           });
         } else {
-          res = await fetch(withBasePath('/api/speaking/turn'), {
+          res = await fetch(buildClientApiUrl('/api/speaking/turn'), {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
               sessionId: sid,
               cefr: 'B2',
               mode: 'EXAM',
-              prompt: taskContext,
+              prompt: ctx,
               history: historySnapshot,
               text: payload.text ?? '',
               examPartIndex: partConfig?.blueprintIndex ?? 0,
               b2PartNumber: part.partNumber,
-              taskContext,
+              taskContext: ctx,
               isOpening: Boolean(payload.isOpening),
             }),
             signal,
@@ -838,14 +1055,31 @@ function B2SpeakingPartSession({ part, examSlot, onSavePartScore, partScoring, l
         if (isAlive()) setLoading(false);
       }
     },
-    [sessionId, history, taskContext, part.partNumber, partConfig?.blueprintIndex, isAlive, isEn],
+    [sessionId, history, part.partNumber, partConfig?.blueprintIndex, isAlive, isEn],
   );
 
   useEffect(() => {
     aliveRef.current = true;
     const ac = new AbortController();
     abortRef.current = ac;
-    stopExaminerAudio();
+    // No stopExaminerAudio aquí: cancelaría el audio al re-ejecutar el effect (p. ej. al pulsar Play).
+
+    const persistSnapshot = () => {
+      const snap = liveSnapshotRef.current;
+      if (typeof onSnapshotChange !== 'function' || !snap?.sessionId) return;
+      // Ignore partial inits (React Strict Mode) — they block reopening with Play disabled.
+      if (!snap.openingReady && !snap.exerciseStarted) return;
+      onSnapshotChange(snap);
+    };
+
+    if (restoredSnapshot?.sessionId && restoredSnapshot?.openingReady) {
+      return () => {
+        aliveRef.current = false;
+        ac.abort();
+        if (media.isActive) void media.stop();
+        persistSnapshot();
+      };
+    }
 
     setSessionId(null);
     setLines([]);
@@ -861,11 +1095,13 @@ function B2SpeakingPartSession({ part, examSlot, onSavePartScore, partScoring, l
     setOpeningReady(false);
     setCanRepeatExaminer(false);
     lastAssistantRef.current = null;
+    setPartComplete(false);
+    partCompleteHandledRef.current = false;
     setLoading(true);
 
     const run = async () => {
       try {
-        const sessionRes = await fetch(withBasePath('/api/speaking/session'), {
+        const sessionRes = await fetch(buildClientApiUrl('/api/speaking/session'), {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ mode: 'EXAM', cefr: 'B2' }),
@@ -880,42 +1116,10 @@ function B2SpeakingPartSession({ part, examSlot, onSavePartScore, partScoring, l
         if (!aliveRef.current) return;
         setSessionId(newSid);
 
-        const turnRes = await fetch(withBasePath('/api/speaking/turn'), {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            sessionId: newSid,
-            cefr: 'B2',
-            mode: 'EXAM',
-            prompt: taskContext,
-            history: [],
-            text: '',
-            examPartIndex: partConfig?.blueprintIndex ?? 0,
-            b2PartNumber: part.partNumber,
-            taskContext,
-            isOpening: true,
-          }),
-          signal: ac.signal,
-        });
-        if (!turnRes.ok) {
-          const err = await turnRes.json().catch(() => ({}));
-          throw new Error(
-            err.error ||
-              (isEn ? 'Could not load the examiner question.' : 'Error al cargar la pregunta del examinador.'),
-          );
-        }
-        const data = await turnRes.json();
+        const data = await fetchOpeningForSession(newSid, ac.signal);
         if (!aliveRef.current || !data) return;
 
-        if (data.assistantText) {
-          const assistantText = data.assistantText;
-          storeAssistantTurn(data);
-          setLines([{ role: 'assistant', content: assistantText }]);
-          setHistory([{ role: 'assistant', content: assistantText }]);
-          if (!aliveRef.current) return;
-          setPhase(partConfig?.uiMode === 'long_turn' ? 'await_long_turn' : 'dialogue');
-          setOpeningReady(true);
-        }
+        applyOpeningTurn(data);
       } catch (e) {
         if (e?.name === 'AbortError') return;
         if (aliveRef.current) setApiError(e?.message || 'Error');
@@ -929,19 +1133,21 @@ function B2SpeakingPartSession({ part, examSlot, onSavePartScore, partScoring, l
     return () => {
       aliveRef.current = false;
       ac.abort();
-      stopExaminerAudio();
       if (media.isActive) void media.stop();
+      persistSnapshot();
     };
   }, [
     part.id,
     examSlot,
-    taskContext,
     part.partNumber,
     partConfig?.blueprintIndex,
     partConfig?.longTurnSeconds,
     partConfig?.uiMode,
-    storeAssistantTurn,
+    applyOpeningTurn,
+    fetchOpeningForSession,
     isEn,
+    onSnapshotChange,
+    restoredSnapshot?.sessionId,
   ]);
 
   useEffect(() => {
@@ -950,27 +1156,90 @@ function B2SpeakingPartSession({ part, examSlot, onSavePartScore, partScoring, l
     return () => window.clearTimeout(t);
   }, [phase, longTurnLeft]);
 
+  const speakingTotal = partScoring?.total ?? 5;
+  const speakingPassing = partScoring?.passing ?? 3;
+  const limitReached = !usageUnlimited && usageRemaining === 0;
+  const localPartNumber = getSkillLocalPartNumber(part.partNumber, B2_SPEAKING_PART_MIN);
+  const nextLocalPartNumber =
+    localPartNumber != null && localPartNumber < B2_SPEAKING_PART_MAX - B2_SPEAKING_PART_MIN + 1
+      ? localPartNumber + 1
+      : null;
+  const userLines = lines.filter((l) => l.role === 'user');
+
+  const finishExamModePart = useCallback(
+    (userCount) => {
+      if (!examMode || partCompleteHandledRef.current) return;
+      partCompleteHandledRef.current = true;
+      const correct = Math.min(speakingTotal, userCount);
+      onSavePartScore?.({
+        correct,
+        total: speakingTotal,
+        passed: correct >= speakingPassing,
+      });
+      setPartComplete(true);
+      stopExaminerAudio();
+      if (media.isActive) void media.stop();
+
+      if (nextLocalPartNumber != null) {
+        const voiceText = isEn
+          ? `Now let's move on to Part ${nextLocalPartNumber}.`
+          : nextLocalPartNumber === 2
+            ? 'Ahora pasemos a la segunda parte.'
+            : `Ahora pasemos a la parte ${nextLocalPartNumber}.`;
+        void playExaminerAudio({
+          text: voiceText,
+          speechLang: isEn ? 'en-GB' : 'es-ES',
+        });
+      }
+    },
+    [examMode, speakingTotal, speakingPassing, onSavePartScore, media, nextLocalPartNumber, isEn],
+  );
+
+  const partCompleteMessage = useMemo(() => {
+    if (!partComplete || !examMode) return '';
+    if (nextLocalPartNumber != null) {
+      return isEn
+        ? `Part ${localPartNumber} complete. Use “Continue — Part ${nextLocalPartNumber}” when you are ready.`
+        : `Parte ${localPartNumber} completada. Pulsa «Continue — Part ${nextLocalPartNumber}» cuando quieras.`;
+    }
+    return isEn ? 'Part complete.' : 'Parte completada.';
+  }, [partComplete, examMode, isEn, localPartNumber, nextLocalPartNumber]);
+
   const submitCandidateTurn = useCallback(
     async (audioOrText) => {
-      if (!isAlive()) return;
+      if (!isAlive() || partCompleteHandledRef.current) return;
+      if (examMode && history.filter((l) => l.role === 'user').length >= speakingTotal) return;
+
       let data;
+      let nextHistory = history;
+
       if (audioOrText instanceof Blob) {
         data = await callTurn({ audio: audioOrText });
+        if (!isAlive() || !data) return;
+        if (data.transcript) {
+          nextHistory = [...history, { role: 'user', content: data.transcript }];
+          setLines((prev) => [...prev, { role: 'user', content: data.transcript }]);
+          setHistory(nextHistory);
+        }
       } else {
         const text = String(audioOrText || '').trim();
         if (!text) return;
+        nextHistory = [...history, { role: 'user', content: text }];
         setLines((prev) => [...prev, { role: 'user', content: text }]);
-        setHistory((h) => [...h, { role: 'user', content: text }]);
-        data = await callTurn({ text });
+        setHistory(nextHistory);
+        data = await callTurn({ text }, sessionId, nextHistory);
+        if (!isAlive() || !data) return;
       }
-      if (!isAlive() || !data) return;
-      if (data.transcript && audioOrText instanceof Blob) {
-        setLines((prev) => [...prev, { role: 'user', content: data.transcript }]);
-        setHistory((h) => [...h, { role: 'user', content: data.transcript }]);
+
+      const userCount = nextHistory.filter((l) => l.role === 'user').length;
+      if (examMode && userCount >= speakingTotal) {
+        finishExamModePart(userCount);
+        return;
       }
+
       if (data.assistantText) await applyAssistantTurn(data);
     },
-    [applyAssistantTurn, callTurn, isAlive],
+    [applyAssistantTurn, callTurn, isAlive, history, sessionId, examMode, speakingTotal, finishExamModePart],
   );
 
   useEffect(() => {
@@ -985,7 +1254,7 @@ function B2SpeakingPartSession({ part, examSlot, onSavePartScore, partScoring, l
   }, [phase, longTurnLeft, media.isActive, submitCandidateTurn]);
 
   const onMicClick = async () => {
-    if (loading || !sessionId) return;
+    if (loading || !sessionId || partComplete) return;
     if (partConfig?.uiMode === 'long_turn' && phase === 'await_long_turn') return;
     if (media.isActive) {
       const blob = await media.stop();
@@ -1020,8 +1289,8 @@ function B2SpeakingPartSession({ part, examSlot, onSavePartScore, partScoring, l
     setPhase('dialogue');
   };
 
-  const handleExercisePlay = async () => {
-    if (loading || !sessionId || !openingReady) return;
+  const handleExercisePlay = () => {
+    if (loading || partComplete) return;
     if (exercisePaused) {
       if (media.isPaused) media.resume();
       if (isExaminerAudioPaused()) resumeExaminerAudio();
@@ -1029,7 +1298,51 @@ function B2SpeakingPartSession({ part, examSlot, onSavePartScore, partScoring, l
       return;
     }
     if (!exerciseStarted) setExerciseStarted(true);
-    await playLastAssistant();
+    if (openingReady) {
+      void playLastAssistant();
+      return;
+    }
+
+    void (async () => {
+      if (!isAlive()) return;
+      setLoading(true);
+      setApiError('');
+      try {
+        let sid = sessionId;
+        if (!sid) {
+          const sessionRes = await fetch(buildClientApiUrl('/api/speaking/session'), {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ mode: 'EXAM', cefr: 'B2' }),
+          });
+          if (!sessionRes.ok) {
+            throw new Error(
+              isEn ? 'Could not start the speaking session.' : 'No se pudo iniciar la sesión de speaking.',
+            );
+          }
+          const sessionData = await sessionRes.json();
+          sid = sessionData.sessionId;
+          if (!sid || !isAlive()) return;
+          setSessionId(sid);
+        }
+
+        const data = await fetchOpeningForSession(sid);
+        if (!isAlive()) return;
+        if (!applyOpeningTurn(data)) {
+          setApiError(
+            isEn ? 'Could not load examiner audio.' : 'No se pudo cargar el audio del examinador.',
+          );
+          return;
+        }
+        await playLastAssistant();
+      } catch (e) {
+        if (isAlive()) {
+          setApiError(e?.message || (isEn ? 'Connection error.' : 'Error de conexión.'));
+        }
+      } finally {
+        if (isAlive()) setLoading(false);
+      }
+    })();
   };
 
   const handleExercisePause = () => {
@@ -1049,11 +1362,12 @@ function B2SpeakingPartSession({ part, examSlot, onSavePartScore, partScoring, l
     if (media.isActive) await media.discard();
     setExercisePaused(false);
     if (!exerciseStarted) setExerciseStarted(true);
-    await playLastAssistant();
+    void playLastAssistant();
   };
 
   const handleNextStep = async () => {
-    if (loading || !sessionId || !openingReady || !exerciseStarted) return;
+    if (loading || !sessionId || !openingReady || !exerciseStarted || partComplete) return;
+    if (examMode && history.filter((l) => l.role === 'user').length >= speakingTotal) return;
     stopExaminerAudio();
     if (media.isActive) await media.discard();
     setExercisePaused(false);
@@ -1075,14 +1389,17 @@ function B2SpeakingPartSession({ part, examSlot, onSavePartScore, partScoring, l
     setLines((prev) => [...prev, { role: 'user', content: skipText }]);
     setHistory(nextHistory);
     const data = await callTurn({ text: skipText }, sessionId, nextHistory);
-    if (!isAlive() || !data?.assistantText) return;
+    if (!isAlive()) return;
+
+    const userCount = nextHistory.filter((l) => l.role === 'user').length;
+    if (examMode && userCount >= speakingTotal) {
+      finishExamModePart(userCount);
+      return;
+    }
+
+    if (!data?.assistantText) return;
     await applyAssistantTurn(data);
   };
-
-  const userLines = lines.filter((l) => l.role === 'user');
-  const speakingTotal = partScoring?.total ?? 5;
-  const speakingPassing = partScoring?.passing ?? 3;
-  const limitReached = !usageUnlimited && usageRemaining === 0;
 
   const getFeedbackWithDralo = async () => {
     if (!sessionId || userLines.length === 0 || limitReached) return;
@@ -1169,7 +1486,7 @@ function B2SpeakingPartSession({ part, examSlot, onSavePartScore, partScoring, l
         </p>
       ) : null}
 
-      {onSavePartScore && !usageUnlimited ? (
+      {onSavePartScore && !usageUnlimited && !examMode ? (
         <p className="levels-b2-writing-panel__alpha-limit levels-b2-speaking-panel__usage">
           {usageHint || speakingLimitLabel(3, { lang: isEn ? 'en' : 'es' })}
         </p>
@@ -1203,36 +1520,33 @@ function B2SpeakingPartSession({ part, examSlot, onSavePartScore, partScoring, l
         </div>
       ) : null}
 
+      <div className="levels-b2-speaking-session__workspace">
+        <div className="levels-b2-speaking-session__stage">
       <SpeakingExerciseControls
         lang={lang}
-        sessionReady={Boolean(sessionId && openingReady)}
+        examMode={examMode}
+        sessionReady={Boolean(sessionId && openingReady && !partComplete)}
         exerciseStarted={exerciseStarted}
         exercisePaused={exercisePaused}
         loading={loading}
         canRepeat={canRepeatExaminer}
+        playDisabled={partComplete}
         onPlay={() => void handleExercisePlay()}
         onPause={handleExercisePause}
         onRepeat={() => void handleExerciseRepeat()}
         onNextStep={() => void handleNextStep()}
       />
 
+      {partComplete && examMode && partCompleteMessage ? (
+        <p className="levels-b2-speaking-session__part-complete" role="status">
+          {partCompleteMessage}
+        </p>
+      ) : null}
+
       <ExaminerVoiceVisualizer
         isLoading={loading && !openingReady}
-        waitingToStart={openingReady && !exerciseStarted}
+        waitingToStart={!exerciseStarted && !loading}
       />
-
-      {userLines.length > 0 ? (
-        <div className="levels-b2-speaking-session__responses">
-          <p className="levels-b2-speaking-session__responses-title">
-            {isEn ? 'Your answers' : 'Tus respuestas'}
-          </p>
-          {userLines.map((l, i) => (
-            <p key={`${i}-user`} className="levels-b2-speaking-session__response-line">
-              {l.content}
-            </p>
-          ))}
-        </div>
-      ) : null}
 
       {phase === 'long_turn' ? (
         <p className="levels-b2-speaking-session__countdown">
@@ -1270,7 +1584,7 @@ function B2SpeakingPartSession({ part, examSlot, onSavePartScore, partScoring, l
                 media.isActive ? ' levels-b2-speaking-session__mic-btn--recording' : ''
               }`}
               onClick={onMicClick}
-              disabled={loading || !sessionId || !exerciseStarted}
+              disabled={loading || !sessionId || !exerciseStarted || partComplete}
             >
               {media.isActive
                 ? isEn
@@ -1339,12 +1653,12 @@ function B2SpeakingPartSession({ part, examSlot, onSavePartScore, partScoring, l
             value={typed}
             onChange={(e) => setTyped(e.target.value)}
             placeholder="Or type your answer"
-            disabled={!exerciseStarted}
+            disabled={!exerciseStarted || partComplete}
           />
           <button
             type="button"
             className="levels-b2-speaking-session__text-send"
-            disabled={loading || !typed.trim() || !exerciseStarted}
+            disabled={loading || !typed.trim() || !exerciseStarted || partComplete}
             onClick={async () => {
               const t = typed.trim();
               setTyped('');
@@ -1362,56 +1676,85 @@ function B2SpeakingPartSession({ part, examSlot, onSavePartScore, partScoring, l
       {apiError ? (
         <p className="levels-b2-speaking-session__error">{apiError}</p>
       ) : null}
+        </div>
 
-      {onSavePartScore && userLines.length > 0 ? (
-        <>
-          <div className="levels-b2-writing-panel__actions levels-b2-speaking-panel__actions">
-            <button
-              type="button"
-              className="levels-b2-writing-panel__submit"
-              onClick={() => void getFeedbackWithDralo()}
-              disabled={feedbackLoading || limitReached || !sessionId}
-            >
-              {feedbackLoading
-                ? isEn
-                  ? 'Getting feedback…'
-                  : 'Generando feedback…'
-                : limitReached
-                  ? isEn
-                    ? 'Daily limit reached'
-                    : 'Límite diario alcanzado'
-                  : isEn
-                    ? 'Get feedback with Dralo'
-                    : 'Feedback con Dralo'}
-            </button>
-          </div>
-
-          {feedbackError ? (
-            <p className="levels-b2-writing-panel__error" role="alert">
-              {feedbackError}
+        <aside className="levels-b2-speaking-session__answers-panel" aria-label={isEn ? 'Your answers' : 'Tus respuestas'}>
+          <div className="levels-b2-speaking-session__responses levels-b2-speaking-session__responses--panel">
+            <p className="levels-b2-speaking-session__responses-title">
+              {isEn ? 'Your answers' : 'Tus respuestas'}
+              {examMode ? (
+                <span className="levels-b2-speaking-session__responses-count">
+                  {' '}
+                  ({Math.min(speakingTotal, userLines.length)}/{speakingTotal})
+                </span>
+              ) : null}
             </p>
-          ) : null}
-
-          {feedbackReport ? (
-            <div className="levels-b2-speaking-session__feedback">
-              <FeedbackCards report={feedbackReport} />
-            </div>
-          ) : null}
-
-          <div className="levels-b2-speaking-session__score-block">
-          <button
-            type="button"
-            className="levels-b2-speaking-session__score-btn"
-            onClick={saveSpeakingScore}
-          >
-            Save score for this part ({Math.min(speakingTotal, userLines.length)}/{speakingTotal})
-          </button>
-          <p className="levels-b2-speaking-session__score-hint">
-            You need at least {speakingPassing} completed interactions to pass (max. {speakingTotal}).
-          </p>
+            {userLines.length > 0 ? (
+              userLines.map((l, i) => (
+                <p key={`${i}-user`} className="levels-b2-speaking-session__response-line">
+                  {l.content}
+                </p>
+              ))
+            ) : (
+              <p className="levels-b2-speaking-session__responses-empty">
+                {isEn
+                  ? 'Your answers will appear here as you respond.'
+                  : 'Tus respuestas aparecerán aquí conforme respondas.'}
+              </p>
+            )}
           </div>
-        </>
-      ) : null}
+
+          {onSavePartScore && userLines.length > 0 && !examMode ? (
+            <>
+              <div className="levels-b2-writing-panel__actions levels-b2-speaking-panel__actions">
+                <button
+                  type="button"
+                  className="levels-b2-writing-panel__submit"
+                  onClick={() => void getFeedbackWithDralo()}
+                  disabled={feedbackLoading || limitReached || !sessionId}
+                >
+                  {feedbackLoading
+                    ? isEn
+                      ? 'Getting feedback…'
+                      : 'Generando feedback…'
+                    : limitReached
+                      ? isEn
+                        ? 'Daily limit reached'
+                        : 'Límite diario alcanzado'
+                      : isEn
+                        ? 'Get feedback with Dralo'
+                        : 'Feedback con Dralo'}
+                </button>
+              </div>
+
+              {feedbackError ? (
+                <p className="levels-b2-writing-panel__error" role="alert">
+                  {feedbackError}
+                </p>
+              ) : null}
+
+              {feedbackReport ? (
+                <div className="levels-b2-speaking-session__feedback">
+                  <FeedbackCards report={feedbackReport} />
+                </div>
+              ) : null}
+
+              <div className="levels-b2-speaking-session__score-block">
+                <button
+                  type="button"
+                  className="levels-b2-speaking-session__score-btn"
+                  onClick={saveSpeakingScore}
+                >
+                  Save score for this part ({Math.min(speakingTotal, userLines.length)}/{speakingTotal})
+                </button>
+                <p className="levels-b2-speaking-session__score-hint">
+                  You need at least {speakingPassing} completed interactions to pass (max. {speakingTotal}).
+                </p>
+              </div>
+            </>
+          ) : null}
+        </aside>
+      </div>
     </div>
   );
 }

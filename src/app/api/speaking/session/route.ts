@@ -8,9 +8,22 @@ export const dynamic = 'force-dynamic';
 const MODES: SpeakingMode[] = ['PRACTICE', 'CORRECTION', 'EXAM'];
 const LEVELS: CefrLevel[] = ['A2', 'B1', 'B2', 'C1', 'C2'];
 
+async function readJsonBody<T>(req: Request): Promise<T | null> {
+  try {
+    const text = await req.text();
+    if (!text.trim()) return null;
+    return JSON.parse(text) as T;
+  } catch {
+    return null;
+  }
+}
+
 export async function POST(req: Request) {
   try {
-    const body = (await req.json()) as { mode?: string; cefr?: string };
+    const body = await readJsonBody<{ mode?: string; cefr?: string }>(req);
+    if (!body) {
+      return NextResponse.json({ error: 'Request body required' }, { status: 400 });
+    }
     const mode = (body.mode?.toUpperCase() ?? 'PRACTICE') as SpeakingMode;
     const cefr = (body.cefr?.toUpperCase() ?? 'B2') as CefrLevel;
 

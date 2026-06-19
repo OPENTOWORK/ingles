@@ -1,6 +1,6 @@
 'use client';
 
-import { useCallback, useState } from 'react';
+import { useCallback, useRef, useState } from 'react';
 import { useExamModeSectionTimer } from '@/hooks/useExamModeSectionTimer';
 
 /**
@@ -17,10 +17,13 @@ export default function ExamModeSectionBanner({
   lang = 'en',
 }) {
   const [confirmOpen, setConfirmOpen] = useState(false);
+  const autoFinishRequestedRef = useRef(false);
 
   const handleExpire = useCallback(() => {
-    setConfirmOpen(true);
-  }, []);
+    if (autoFinishRequestedRef.current) return;
+    autoFinishRequestedRef.current = true;
+    onFinish?.();
+  }, [onFinish]);
 
   const timerHydrationKey = sectionKey ?? 'exam-section';
 
@@ -47,8 +50,8 @@ export default function ExamModeSectionBanner({
   const confirmNo = lang === 'en' ? 'Continue' : 'Seguir';
   const expiredNote =
     lang === 'en'
-      ? 'Time is up. Finish the section to continue.'
-      : 'Se acabó el tiempo. Termina la sección para continuar.';
+      ? 'Time is up. Submitting this section…'
+      : 'Se acabó el tiempo. Enviando esta sección…';
 
   return (
     <div
@@ -96,21 +99,23 @@ export default function ExamModeSectionBanner({
             {label}
           </p>
         </div>
-        <button
-          type="button"
-          onClick={() => setConfirmOpen(true)}
-          style={{
-            borderRadius: '8px',
-            border: 'none',
-            background: '#2b6cb0',
-            color: '#fff',
-            padding: '0.65rem 1.1rem',
-            fontWeight: 700,
-            cursor: 'pointer',
-          }}
-        >
-          {finishLabel}
-        </button>
+        {!expired ? (
+          <button
+            type="button"
+            onClick={() => setConfirmOpen(true)}
+            style={{
+              borderRadius: '8px',
+              border: 'none',
+              background: '#2b6cb0',
+              color: '#fff',
+              padding: '0.65rem 1.1rem',
+              fontWeight: 700,
+              cursor: 'pointer',
+            }}
+          >
+            {finishLabel}
+          </button>
+        ) : null}
       </div>
 
       {confirmOpen ? (

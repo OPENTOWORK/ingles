@@ -45,9 +45,11 @@ export function ExamPracticeToolsProvider({ children }) {
   const clearHighlights = useCallback(() => {
     document.querySelectorAll('.exam-practice-text-highlight').forEach((el) => {
       const parent = el.parentNode;
-      if (!parent) return;
+      if (!parent || el.parentNode !== parent) return;
       while (el.firstChild) parent.insertBefore(el.firstChild, el);
-      parent.removeChild(el);
+      if (el.parentNode === parent) {
+        parent.removeChild(el);
+      }
       parent.normalize();
     });
   }, []);

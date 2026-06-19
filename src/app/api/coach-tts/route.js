@@ -1,46 +1,37 @@
 import { NextResponse } from 'next/server';
-import OpenAI from 'openai';
+import { synthesizeExamTtsMp3 } from '@/lib/levelsExamTts';
 
 export const runtime = 'nodejs';
 
 const MAX_CHARS = 4000;
 
-/** Server TTS — works where translate.google TTS / WebSpeech fail (Cursor browser, CSP, autoplay quirks). */
+/** Speaking coach TTS — OpenAI with Edge fallback (British examiner voice). */
 export async function POST(req) {
   try {
-    const key = process.env.OPENAI_API_KEY;
-    if (!key) {
-      return NextResponse.json({ error: 'Missing OPENAI_API_KEY.' }, { status: 503 });
+    let body = {};
+    try {
+      const text = await req.text();
+      if (text.trim()) body = JSON.parse(text);
+    } catch {
+      return NextResponse.json({ error: 'Invalid JSON body.' }, { status: 400 });
     }
 
-    const body = await req.json();
     const raw = String(body?.text ?? '').trim();
     if (!raw) {
       return NextResponse.json({ error: 'Missing text.' }, { status: 400 });
     }
 
-    const input = raw.slice(0, MAX_CHARS);
-    const client = new OpenAI({ apiKey: key });
-
-    let speed = Number(body?.speed);
-    if (!Number.isFinite(speed)) {
-      speed = Number(process.env.OPENAI_TTS_SPEED || 1.08);
+    const spoken = await synthesizeExamTtsMp3(raw.slice(0, MAX_CHARS));
+    if (!spoken?.base64) {
+      return NextResponse.json({ error: 'TTS unavailable.' }, { status: 503 });
     }
-    speed = Math.min(2, Math.max(0.5, speed));
 
-    const mp3 = await client.audio.speech.create({
-      model: process.env.OPENAI_TTS_MODEL || 'tts-1',
-      voice: process.env.OPENAI_TTS_VOICE || 'shimmer',
-      input,
-      speed,
-    });
-
-    const buf = Buffer.from(await mp3.arrayBuffer());
+    const buf = Buffer.from(spoken.base64, 'base64');
 
     return new NextResponse(buf, {
       status: 200,
       headers: {
-        'Content-Type': 'audio/mpeg',
+        'Content-Type': spoken.mime || 'audio/mpeg',
         'Cache-Control': 'no-store',
       },
     });

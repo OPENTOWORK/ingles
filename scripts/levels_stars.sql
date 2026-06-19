@@ -1,57 +1,72 @@
--- Estrellas 0–3 por ejercicio (usuario × examen × parte × origen de puntuación).
--- Ejecutar en Supabase SQL Editor si la tabla aún no existe.
+-- Estrellas 0–3 vinculadas a levels_puntuaciones (exam_mode / skill_practice).
+-- Tabla en Supabase: public."Levels_stars"
+-- exam_or_skill: 1 = exam_mode, 2 = skill_practice
 
 begin;
 
-create table if not exists public.levels_stars (
+create table if not exists public."Levels_stars" (
   id uuid primary key default gen_random_uuid(),
-  uuid_usuario uuid not null references public."Usuarios_y_Perfil_users" (id) on delete cascade,
-  examen_id uuid not null references public.levels_examenes (id) on delete cascade,
-  parte_numero integer not null check (parte_numero >= 1 and parte_numero <= 17),
-  score_source text not null default 'skill_practice',
-  stars smallint not null check (stars >= 0 and stars <= 3),
-  updated_at timestamptz not null default now(),
-  constraint levels_stars_score_source_valid check (
-    score_source in ('skill_practice', 'exam_mode')
-  ),
-  constraint levels_stars_usuario_examen_parte_source_key
-    unique (uuid_usuario, examen_id, parte_numero, score_source)
+  puntuaciones_id uuid references public.levels_puntuaciones (id) on delete cascade,
+  stars bigint check (stars >= 0 and stars <= 3),
+  exam_or_skill smallint check (exam_or_skill is null or exam_or_skill in (1, 2)),
+  descripcion text,
+  created_at timestamptz not null default now()
 );
 
-create index if not exists idx_levels_stars_usuario
-  on public.levels_stars (uuid_usuario);
+create unique index if not exists idx_levels_stars_puntuacion_mode
+  on public."Levels_stars" (puntuaciones_id, exam_or_skill)
+  where puntuaciones_id is not null;
 
-create index if not exists idx_levels_stars_examen
-  on public.levels_stars (examen_id);
+comment on table public."Levels_stars" is
+  'Estrellas 0–3 por intento de parte, enlazadas a levels_puntuaciones.';
+comment on column public."Levels_stars".exam_or_skill is
+  '1 = exam_mode, 2 = skill_practice';
 
-comment on table public.levels_stars is
-  'Estrellas 0–3 por ejercicio de skill practice / exam mode (proporcionales a la puntuación 0–100).';
+alter table public."Levels_stars" enable row level security;
 
-alter table public.levels_stars enable row level security;
-
-drop policy if exists "levels_stars_select_own" on public.levels_stars;
-drop policy if exists "levels_stars_insert_own" on public.levels_stars;
-drop policy if exists "levels_stars_update_own" on public.levels_stars;
+drop policy if exists "levels_stars_select_own" on public."Levels_stars";
+drop policy if exists "levels_stars_insert_own" on public."Levels_stars";
+drop policy if exists "levels_stars_update_own" on public."Levels_stars";
 
 create policy "levels_stars_select_own"
-  on public.levels_stars
+  on public."Levels_stars"
   for select
   to authenticated
-  using (uuid_usuario = auth.uid());
+  using (
+    exists (
+      select 1 from public.levels_puntuaciones lp
+      where lp.id = puntuaciones_id and lp.uuid_usuario = auth.uid()
+    )
+  );
 
 create policy "levels_stars_insert_own"
-  on public.levels_stars
+  on public."Levels_stars"
   for insert
   to authenticated
-  with check (uuid_usuario = auth.uid());
+  with check (
+    exists (
+      select 1 from public.levels_puntuaciones lp
+      where lp.id = puntuaciones_id and lp.uuid_usuario = auth.uid()
+    )
+  );
 
 create policy "levels_stars_update_own"
-  on public.levels_stars
+  on public."Levels_stars"
   for update
   to authenticated
-  using (uuid_usuario = auth.uid())
-  with check (uuid_usuario = auth.uid());
+  using (
+    exists (
+      select 1 from public.levels_puntuaciones lp
+      where lp.id = puntuaciones_id and lp.uuid_usuario = auth.uid()
+    )
+  )
+  with check (
+    exists (
+      select 1 from public.levels_puntuaciones lp
+      where lp.id = puntuaciones_id and lp.uuid_usuario = auth.uid()
+    )
+  );
 
-grant select, insert, update on public.levels_stars to authenticated;
+grant select, insert, update on public."Levels_stars" to authenticated;
 
 commit;

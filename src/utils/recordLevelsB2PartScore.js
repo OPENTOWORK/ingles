@@ -1,7 +1,7 @@
 import { ensureAppUserProfile } from '@/utils/ensureAppUserProfile';
 import { mergeLevelsEstadisticas } from '@/utils/levelsEstadisticas';
 import { upsertLevelsPartPuntuacion } from '@/utils/levelsPuntuaciones';
-import { computeLevelsStarsFromProgress, upsertLevelsStars } from '@/utils/levelsStars';
+import { computeLevelsStarsFromProgress, labelFromLevelsPuntuacionDescripcion, saveLevelStars } from '@/utils/levelsStars';
 import {
   getB2PartScoring,
   getB2PartScoringV2,
@@ -11,9 +11,11 @@ import {
   isB2PartPassedByPoints,
 } from '@/utils/levelsB2PartScoring';
 import { isB2ScoringV2Enabled } from '@/lib/b2ScoringV2FeatureFlag';
+import { LEVELS_SCORE_SOURCE } from '@/utils/levelsScoreSource';
 import { buildPartScoreMetricsV2 } from '@/utils/b2ScoringV2Engine';
 import { B2_PART_SCORING_V2 } from '@/utils/levelsB2PartScoring';
 import { summarizePart4OpenGrades } from '@/lib/b2Part4Grading';
+import { isMcqSelectionCorrect } from '@/utils/b2ExamTextBlocks';
 
 /**
  * Progreso de la parte según respuestas ya comprobadas (MCQ / huecos).
@@ -62,8 +64,7 @@ export function computeB2PartProgressFromState({
       const key = getQuestionKey(partId, group.questionNumber, `extra-${groupIndex}`);
       if (!checkedQuestions[key]) return;
       evaluated += 1;
-      const correctOpt = group.options.find((o) => o.correcta);
-      if (correctOpt && selectedOptions[key] === correctOpt.id) correct += 1;
+      if (isMcqSelectionCorrect(group, selectedOptions[key])) correct += 1;
     });
   }
 
@@ -130,6 +131,7 @@ export async function saveB2PartPuntuacionIfComplete({
   examenId,
   partNumber,
   progress,
+  scoreSource = LEVELS_SCORE_SOURCE.SKILL_PRACTICE,
 }) {
   if (!progress?.complete || !userId || !preguntaId || !examenId || !partNumber) {
     return { saved: false, error: null, progress };
@@ -146,7 +148,7 @@ export async function saveB2PartPuntuacionIfComplete({
   }
 
   const isV2 = Number(progress.scoringVersion) === 2;
-  const [puntRes] = await Promise.all([
+  const [puntRes, estRes] = await Promise.all([
     upsertLevelsPartPuntuacion({
       userId,
       preguntaId,
@@ -154,6 +156,7 @@ export async function saveB2PartPuntuacionIfComplete({
       parteNumero: partNumber,
       correctas: progress.correct,
       totalPreguntas: progress.questionTotal ?? progress.total,
+      scoreSource,
       scoringVersion: progress.scoringVersion ?? 1,
       puntosObtenidos: isV2 ? progress.puntosObtenidos ?? progress.pointsEarned : undefined,
       puntosMaximos: isV2 ? progress.puntosMaximos ?? progress.maxPoints : undefined,
@@ -164,16 +167,35 @@ export async function saveB2PartPuntuacionIfComplete({
       parteId,
       deltaIntentos: 1,
     }),
-    upsertLevelsStars({
-      userId,
-      examenId,
-      parteNumero: partNumber,
-      stars: computeLevelsStarsFromProgress(progress),
-    }),
   ]);
 
   if (puntRes.error) {
     return { saved: false, error: puntRes.error, progress };
+  }
+
+  if (puntRes.id) {
+    const starsRes = await saveLevelStars({
+      puntuacionesId: puntRes.id,
+      stars: computeLevelsStarsFromProgress(progress),
+      scoreSource,
+      descripcion: labelFromLevelsPuntuacionDescripcion(puntRes.descripcion),
+    });
+    if (starsRes.error) {
+      return { saved: false, error: starsRes.error, progress };
+    }
+    if (!starsRes.saved) {
+      const { syncStarsForPuntuacionRow } = await import('@/utils/syncLevelsStars');
+      await syncStarsForPuntuacionRow(supabase, {
+        id: puntRes.id,
+        descripcion: puntRes.descripcion,
+        correctas: progress.correct,
+        total_preguntas: progress.questionTotal ?? progress.total,
+        score_source: scoreSource,
+        scoring_version: progress.scoringVersion ?? 1,
+        puntos_obtenidos: progress.puntosObtenidos ?? progress.pointsEarned,
+        puntos_maximos: progress.puntosMaximos ?? progress.maxPoints,
+      });
+    }
   }
 
   return { saved: true, error: null, progress };

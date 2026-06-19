@@ -90,8 +90,10 @@ import { useExamModeSectionDraftControls } from '@/hooks/useExamModeSectionDraft
 import { scoreExamModeDrafts } from '@/utils/examModeGradeAnswers';
 import {
   applyReadingStyleSectionDraft,
-  getExamModeDraftByPartFromSection,
   buildExamModeSectionDraft,
+  buildSelectedQuestionByPartFromDrafts,
+  cloneExamModeDraftByPart,
+  getExamModeDraftByPartFromSection,
 } from '@/utils/examModeSectionDraft';
 import { buildExamModeContinueModuleHref } from '@/utils/buildExamModeContinueModuleHref';
 import { buildExamModeFinishPayload } from '@/utils/examModePartRepeat';
@@ -102,6 +104,7 @@ import {
   getExamChromeTitle,
   getExamChromeSubtitle,
 } from '@/lib/examPracticeMode';
+import { resolvePracticeScoreSourceFromExamModeParam } from '@/utils/levelsScoreSource';
 
 function splitEnunciadoAndTextFallback(rawText = '') {
   const normalized = rawText.replace(/\r\n/g, '\n').trim();
@@ -146,7 +149,8 @@ function B2ReadingExamsPageInner() {
   const partMax = isCombinedPaper ? 7 : 7;
 
   const { examSlot, selectExamSlot } = useB2ExamPracticeSlot();
-  const scoring = useB2ExamScoringSession({ partMin, partMax });
+  const scoreSource = resolvePracticeScoreSourceFromExamModeParam(searchParams.get('examMode'));
+  const scoring = useB2ExamScoringSession({ partMin, partMax, scoreSource });
   const examMode = useExamModeStrict({
     slug: 'b2',
     partMin,
@@ -516,28 +520,94 @@ function B2ReadingExamsPageInner() {
     }
   }, [examModeActive, reviewMode, partNumberReading, selectedPart?.id, selectedQuestion?.preguntaId]);
 
+  const answerStateRef = useRef({ selectedOptions, openInputs, checkedQuestions });
   useEffect(() => {
-    if (reviewMode && !reviewDraftHydratedRef.current && partsData.length > 0) {
-      const savedByPart = getExamModeDraftByPartFromSection(examSection);
-      if (Object.keys(savedByPart).length > 0) {
-        examDraftRef.current = { ...savedByPart };
-        reviewDraftHydratedRef.current = true;
+    answerStateRef.current = { selectedOptions, openInputs, checkedQuestions };
+  }, [selectedOptions, openInputs, checkedQuestions]);
+
+  useEffect(() => {
+    if (!reviewMode) {
+      reviewDraftHydratedRef.current = false;
+    }
+  }, [reviewMode]);
+
+  useEffect(() => {
+    if (!reviewMode || !partsData.length || !examSection) return;
+
+    const savedByPart = cloneExamModeDraftByPart(getExamModeDraftByPartFromSection(examSection));
+    if (Object.keys(savedByPart).length === 0) return;
+
+    examDraftRef.current = { ...savedByPart };
+
+    if (!reviewDraftHydratedRef.current) {
+      const questionByPart = buildSelectedQuestionByPartFromDrafts(savedByPart, partsData);
+      if (Object.keys(questionByPart).length > 0) {
+        setSelectedQuestionByPart((prev) => ({ ...prev, ...questionByPart }));
       }
+      reviewDraftHydratedRef.current = true;
     }
 
-    if (examModeActive || reviewMode) {
-      const pn = partNumberReading;
-      if (examModeActive && !reviewMode && prevExamPartRef.current != null && prevExamPartRef.current !== pn && selectedPart) {
-        const prevPn = prevExamPartRef.current;
-        const meta = examPartMetaRef.current[prevPn] || {};
-        examDraftRef.current[prevPn] = {
-          preguntaId: meta.preguntaId,
-          parteId: meta.parteId,
-          selectedOptions: { ...selectedOptions },
-          openInputs: { ...openInputs },
-          checkedQuestions: { ...checkedQuestions },
-        };
-      }
+    const pn = partNumberReading;
+    if (!pn || !selectedPart) return;
+
+    const draft = savedByPart[pn];
+    if (!draft) return;
+
+    if (draft.preguntaId && selectedQuestion?.preguntaId !== draft.preguntaId) {
+      setSelectedQuestionByPart((prev) =>
+        prev[selectedPart.id] === draft.preguntaId
+          ? prev
+          : { ...prev, [selectedPart.id]: draft.preguntaId },
+      );
+      return;
+    }
+
+    setSelectedOptions({ ...(draft.selectedOptions || {}) });
+    setOpenInputs({ ...(draft.openInputs || {}) });
+    setCheckedQuestions({ ...(draft.checkedQuestions || {}) });
+    prevExamPartRef.current = pn;
+  }, [
+    reviewMode,
+    partsData,
+    examSection,
+    selectedPart?.id,
+    partNumberReading,
+    selectedQuestion?.preguntaId,
+  ]);
+
+  useEffect(() => {
+    if (reviewMode) return;
+
+    if (!examModeActive && !reviewMode) {
+      setOpenInputs({});
+      setOpenChecks({});
+      setOpenGrades({});
+      setSelectedOptions({});
+      setCheckedQuestions({});
+      setAiHintsByKey({});
+      prevExamPartRef.current = null;
+      return;
+    }
+
+    const pn = partNumberReading;
+    if (!pn || !selectedPart) return;
+
+    const previousPn = prevExamPartRef.current;
+    const partChanged = previousPn != null && previousPn !== pn;
+
+    if (examModeActive && !reviewMode && partChanged) {
+      const meta = examPartMetaRef.current[previousPn] || {};
+      const { selectedOptions: so, openInputs: oi, checkedQuestions: cq } = answerStateRef.current;
+      examDraftRef.current[previousPn] = {
+        preguntaId: meta.preguntaId,
+        parteId: meta.parteId,
+        selectedOptions: { ...so },
+        openInputs: { ...oi },
+        checkedQuestions: { ...cq },
+      };
+    }
+
+    if (previousPn !== pn) {
       const draft = examDraftRef.current[pn];
       if (draft) {
         setSelectedOptions(draft.selectedOptions || {});
@@ -550,7 +620,7 @@ function B2ReadingExamsPageInner() {
               : { ...prev, [selectedPart.id]: draft.preguntaId },
           );
         }
-      } else {
+      } else if (partChanged) {
         setOpenInputs({});
         setSelectedOptions({});
         setCheckedQuestions({});
@@ -559,22 +629,29 @@ function B2ReadingExamsPageInner() {
       setOpenGrades({});
       setAiHintsByKey({});
       prevExamPartRef.current = pn;
-      return;
     }
-    setOpenInputs({});
-    setOpenChecks({});
-    setOpenGrades({});
-    setSelectedOptions({});
-    setCheckedQuestions({});
-    setAiHintsByKey({});
+  }, [selectedPart?.id, examModeActive, reviewMode, partNumberReading]);
+
+  useEffect(() => {
+    if (!examModeActive || reviewMode) return;
+    const pn = partNumberReading;
+    if (!pn || !selectedPart) return;
+    examDraftRef.current[pn] = {
+      preguntaId: selectedQuestion?.preguntaId,
+      parteId: selectedPart.id,
+      selectedOptions: { ...selectedOptions },
+      openInputs: { ...openInputs },
+      checkedQuestions: { ...checkedQuestions },
+    };
   }, [
-    selectedQuestion?.preguntaId,
-    selectedPart?.id,
     examModeActive,
     reviewMode,
     partNumberReading,
-    partsData.length,
-    examSection,
+    selectedPart?.id,
+    selectedQuestion?.preguntaId,
+    selectedOptions,
+    openInputs,
+    checkedQuestions,
   ]);
 
   const isUoePart = isCombinedPaper && partNumberReading >= 1 && partNumberReading <= 4;

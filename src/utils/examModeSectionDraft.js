@@ -132,10 +132,45 @@ export function resolveInitialExamPartSelection(normalizedParts = [], sectionDra
   return { selectedPartId, selectedQuestionByPart };
 }
 
+/** Deep-clone part drafts so session persistence is not tied to in-memory refs. */
+export function cloneExamModeDraftByPart(draftByPart = {}) {
+  /** @type {Record<number, object>} */
+  const out = {};
+  for (const [key, draft] of Object.entries(draftByPart || {})) {
+    if (!draft || typeof draft !== 'object') continue;
+    out[Number(key)] = {
+      ...draft,
+      selectedOptions: { ...(draft.selectedOptions || {}) },
+      openInputs: { ...(draft.openInputs || {}) },
+      checkedQuestions: { ...(draft.checkedQuestions || {}) },
+    };
+  }
+  return out;
+}
+
+/** Merge saved section answers, in-progress draft, and live ref (ref wins on conflicts). */
+export function mergeExamModeDraftSources(examSection, examDraftRef) {
+  return cloneExamModeDraftByPart({
+    ...(examSection?.sectionDraft?.draftByPart || {}),
+    ...(examSection?.answers?.draftByPart || {}),
+    ...(examDraftRef?.current || {}),
+  });
+}
+
 /** Completed-section answers or an in-progress section draft. */
 export function getExamModeDraftByPartFromSection(section) {
   if (!section) return {};
   return section.answers?.draftByPart ?? section.sectionDraft?.draftByPart ?? {};
+}
+
+/** Map saved part drafts to the preguntaId each part used during the exam. */
+export function buildSelectedQuestionByPartFromDrafts(savedByPart = {}, partsData = []) {
+  const out = {};
+  for (const [pn, draft] of Object.entries(savedByPart)) {
+    const partId = resolvePartIdByNumber(partsData, Number(pn));
+    if (partId && draft?.preguntaId) out[partId] = draft.preguntaId;
+  }
+  return out;
 }
 
 export function applyReadingStyleSectionDraft(

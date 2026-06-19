@@ -20,6 +20,7 @@ import {
   normalizeText,
   resolveExamModePartScoringMode,
 } from '@/utils/b2ExamPaperShared';
+import { isMcqSelectionCorrect } from '@/utils/b2ExamTextBlocks';
 import { parseB2KeyWordAnswerKeyRows } from '@/lib/parseB2KeyWordAnswerKey';
 import { computeSilentPart4OpenGrades } from '@/lib/b2Part4Grading';
 
@@ -202,30 +203,35 @@ function remapSelectedOptionsForExamModeScoring(
   return remapped;
 }
 
-/** Match selections by option id so legacy drafts still score after key/metadata drift. */
-function countExamModeMcqProgress(selectedOptions, groupedAnswers) {
+/** Match selections by question key, option id, or letter (Listening matching). */
+function countExamModeMcqProgress(selectedOptions, groupedAnswers, getQuestionKey, partId) {
   let evaluated = 0;
   let correct = 0;
-  const usedKeys = new Set();
 
-  for (const group of groupedAnswers || []) {
-    if (!group.options?.length) continue;
-    const optionIds = new Set(group.options.map((o) => o.id).filter(Boolean));
-    let selectedId = null;
+  (groupedAnswers || []).forEach((group, groupIndex) => {
+    if (!group.options?.length) return;
 
-    for (const [key, value] of Object.entries(selectedOptions || {})) {
-      if (!value || usedKeys.has(key)) continue;
-      if (optionIds.has(value)) {
-        selectedId = value;
-        usedKeys.add(key);
-        break;
+    let selectedValue = null;
+    if (typeof getQuestionKey === 'function' && partId != null) {
+      const key = getQuestionKey(partId, group.questionNumber, `extra-${groupIndex}`);
+      const direct = selectedOptions?.[key];
+      if (direct != null && direct !== '') selectedValue = direct;
+    }
+
+    if (selectedValue == null) {
+      const optionIds = new Set(group.options.map((o) => o.id).filter(Boolean));
+      for (const value of Object.values(selectedOptions || {})) {
+        if (value != null && value !== '' && optionIds.has(value)) {
+          selectedValue = value;
+          break;
+        }
       }
     }
 
-    if (!selectedId) continue;
+    if (selectedValue == null || selectedValue === '') return;
     evaluated += 1;
-    if (group.options.some((o) => o.id === selectedId && o.correcta)) correct += 1;
-  }
+    if (isMcqSelectionCorrect(group, selectedValue)) correct += 1;
+  });
 
   return { evaluated, correct };
 }
@@ -234,8 +240,15 @@ function gradeExamModeMcqPartProgress({
   partNumber,
   groupedAnswers,
   selectedOptions,
+  getQuestionKey,
+  partId,
 }) {
-  const { evaluated, correct } = countExamModeMcqProgress(selectedOptions, groupedAnswers);
+  const { evaluated, correct } = countExamModeMcqProgress(
+    selectedOptions,
+    groupedAnswers,
+    getQuestionKey,
+    partId,
+  );
   const cfg = getB2PartScoring(partNumber);
   const v2Cfg = getB2PartScoringV2(partNumber);
   const v2Active = isB2ScoringV2Enabled() && v2Cfg && partNumber >= 1 && partNumber <= 7;
@@ -296,7 +309,12 @@ function gradeExamModeMcqPartProgress({
  */
 export function gradePartFromAnswerState(opts) {
   if (!opts.useOpenInputUi && opts.groupedAnswers?.length) {
-    const mcq = countExamModeMcqProgress(opts.selectedOptions, opts.groupedAnswers);
+    const mcq = countExamModeMcqProgress(
+      opts.selectedOptions,
+      opts.groupedAnswers,
+      opts.getQuestionKey,
+      opts.partId,
+    );
     if (mcq.evaluated > 0) {
       return gradeExamModeMcqPartProgress(opts);
     }

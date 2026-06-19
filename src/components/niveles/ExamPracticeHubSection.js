@@ -2,8 +2,6 @@
 
 import Link from 'next/link';
 import ExamSkillIcon from '@/components/exam/ExamSkillIcon';
-import NivelesSectionHeader from '@/components/niveles/NivelesSectionHeader';
-import { EXAM_PRACTICE_HEADER } from '@/data/levelHubSectionMeta';
 
 function classifyExamLink(href = '', text = '') {
   const h = href.toLowerCase();
@@ -113,13 +111,6 @@ export default function ExamPracticeHubSection({
   if (skillsQuadrant) {
     return (
       <section className={hubClass} data-tour="level-exam-practice">
-        <NivelesSectionHeader
-          eyebrow={EXAM_PRACTICE_HEADER.eyebrow}
-          title={EXAM_PRACTICE_HEADER.title}
-          count={examLinks.length}
-          description={EXAM_PRACTICE_HEADER.description}
-        />
-
         {examModeLink ? (
           <div className="exam-practice-hub__exam-mode-standalone">
             <ExamPracticeCard exam={examModeLink} isStudent={isStudent} variant="banner" />
@@ -144,13 +135,6 @@ export default function ExamPracticeHubSection({
     <section className={hubClass} data-tour="level-exam-practice">
       {quadrant ? (
         <div className="exam-practice-hub__quadrant-inner">
-          <NivelesSectionHeader
-            eyebrow={EXAM_PRACTICE_HEADER.eyebrow}
-            title={EXAM_PRACTICE_HEADER.title}
-            count={examLinks.length}
-            description={EXAM_PRACTICE_HEADER.description}
-          />
-
           <div className="exam-practice-hub__body">
             {examModeLink ? (
               <div className="exam-practice-hub__exam-mode">
@@ -163,13 +147,6 @@ export default function ExamPracticeHubSection({
         </div>
       ) : (
         <>
-          <NivelesSectionHeader
-            eyebrow={EXAM_PRACTICE_HEADER.eyebrow}
-            title={EXAM_PRACTICE_HEADER.title}
-            count={examLinks.length}
-            description={EXAM_PRACTICE_HEADER.description}
-          />
-
           <div className="exam-practice-hub__body">
             {examModeLink ? (
               <div className="exam-practice-hub__exam-mode">
@@ -261,11 +238,36 @@ function ExamPracticeHubStyles() {
           0 1px 2px rgba(15, 23, 42, 0.04),
           0 10px 32px rgba(15, 23, 42, 0.06);
         overflow: hidden;
+        box-sizing: border-box;
+      }
+      .niveles-level-page .exam-practice-hub--split .exam-practice-hub__body {
+        padding: 18px;
+        box-sizing: border-box;
+      }
+      .niveles-level-page .exam-practice-hub--split .exam-practice-hub__skills-grid {
+        display: grid;
+        width: 100%;
+        gap: 12px;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+      }
+      .niveles-level-page .exam-practice-hub--split .exam-practice-hub__skills-grid .exam-practice-hub__card {
+        width: 100%;
+        min-width: 0;
+        box-sizing: border-box;
+      }
+      @media (max-width: 899px) {
+        .niveles-level-page .exam-practice-hub--split .exam-practice-hub__skills-grid {
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+      }
+      @media (max-width: 639px) {
+        .niveles-level-page .exam-practice-hub--split .exam-practice-hub__skills-grid {
+          grid-template-columns: minmax(0, 1fr);
+        }
       }
       .niveles-level-page .exam-practice-hub__quadrant-footer {
-        padding: 0 16px 16px;
+        padding: 14px 18px 18px;
         border-top: 1px solid rgba(226, 232, 240, 0.9);
-        padding-top: 14px;
         margin-top: 2px;
       }
       .niveles-level-page .exam-practice-hub--quadrant {

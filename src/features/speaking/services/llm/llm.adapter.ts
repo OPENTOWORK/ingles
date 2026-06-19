@@ -3,6 +3,7 @@ import { getDraloFastModel, getDraloOpenAI, mergeDraloSystem } from '@/lib/dralo
 import type { CefrLevel, SpeakingMode } from '@prisma/client';
 import type { ExamPartDefinition } from '../../domain/types';
 import type { MicroFeedback } from '../../domain/types';
+import { SYSTEM_PROMPTS } from '../../../../../dralo-speaking/prompts/cambridge-prompts';
 
 export type PracticeTurnParams = {
   cefr: CefrLevel;
@@ -35,14 +36,29 @@ const examinerSystem = (
   examName: string,
   part: ExamPartDefinition,
   taskContext = '',
-) =>
-  `You are a Cambridge speaking examiner only (${examName}, CEFR ${cefr}). ` +
+) => {
+  const cambridgeExam = SYSTEM_PROMPTS[cefr]?.exam;
+  const partBlock =
+    `You are now on Part ${part.part}: ${part.name} (${examName}, CEFR ${cefr}).\n` +
+    `Part instructions: ${part.instructions}\n` +
+    (taskContext ? `Task material from the exam paper:\n${taskContext}\n` : '') +
+    `Rules: Do not teach or correct the candidate. One question or instruction per message. ` +
+    `British English. Keep each turn under 80 words.`;
+
+  if (cambridgeExam) {
+    return `${cambridgeExam}\n\n${partBlock}`;
+  }
+
+  return (
+    `You are a Cambridge speaking examiner only (${examName}, CEFR ${cefr}). ` +
     `Part ${part.part}: ${part.name}. ` +
     `Examinee instructions: ${part.instructions} ` +
     (taskContext ? `Additional context:\n${taskContext}\n` : '') +
     `Do not teach grammar or correct the candidate during the exam. ` +
     `One question or instruction per message. No feedback on language form. ` +
-    `Speak naturally as an examiner (British English). Keep each turn under 80 words.`;
+    `Speak naturally as an examiner (British English). Keep each turn under 80 words.`
+  );
+};
 
 export class MockLLMAdapter {
   async practiceReply(p: PracticeTurnParams): Promise<string> {

@@ -4,14 +4,8 @@ import { useState, useEffect } from 'react';
 import { BarChart3, BookOpen, CircleCheckBig, Trophy } from 'lucide-react';
 import { buildExamStatisticsFromLevels } from '@/lib/examStatisticsFromLevels';
 import { useLevelsPracticeData } from '@/hooks/useLevelsPracticeData';
+import { EXAM_STATS_SECTION_META as SECTION_META } from '@/data/levelSkillThemeColors';
 import './ExamStatistics.css';
-
-const SECTION_META = {
-  reading: { label: 'Reading', color: '#2563eb' },
-  writing: { label: 'Writing', color: '#7c3aed' },
-  listening: { label: 'Listening', color: '#0891b2' },
-  speaking: { label: 'Speaking', color: '#ea580c' },
-};
 
 const PERFORMANCE_LEVELS = [
   { min: 90, label: 'Excellent', bg: '#dcfce7', text: '#166534' },

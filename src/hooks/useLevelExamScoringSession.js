@@ -10,11 +10,17 @@ import {
   invalidateLevelExamCache,
 } from '@/utils/levelsLevelCache';
 import { getSessionUserId } from '@/utils/levelsEstadisticas';
+import { LEVELS_SCORE_SOURCE } from '@/utils/levelsScoreSource';
 
 /**
  * Progreso y selector de examen (mismo patrón que B2) para cualquier nivel CEFR.
  */
-export function useLevelExamScoringSession({ slug, partMin, partMax }) {
+export function useLevelExamScoringSession({
+  slug,
+  partMin,
+  partMax,
+  scoreSource = LEVELS_SCORE_SOURCE.SKILL_PRACTICE,
+}) {
   const partsInPaper = partMax - partMin + 1;
   const [examenIdBySlot, setExamenIdBySlot] = useState({});
   const [progressBySlot, setProgressBySlot] = useState({});
@@ -33,9 +39,10 @@ export function useLevelExamScoringSession({ slug, partMin, partMax }) {
       partMin,
       partMax,
       partsInPaper,
+      scoreSource,
     });
     setProgressBySlot(bySlot);
-  }, [examenIdBySlot, partMin, partMax, partsInPaper]);
+  }, [examenIdBySlot, partMin, partMax, partsInPaper, scoreSource]);
 
   const reloadExamCatalog = useCallback(async () => {
     const { data: levelData } = await getCachedLevelBySlug(supabase, slug);
@@ -95,6 +102,7 @@ export function useLevelExamScoringSession({ slug, partMin, partMax }) {
         examenId,
         partNumber,
         progress,
+        scoreSource,
       });
       if (result.saved) {
         lastSavedPartSigRef.current = sig;
@@ -102,7 +110,7 @@ export function useLevelExamScoringSession({ slug, partMin, partMax }) {
       }
       return result;
     },
-    [refreshPuntuacionesProgress, slug],
+    [refreshPuntuacionesProgress, scoreSource],
   );
 
   const getPartSavedScoreLabel = useCallback(

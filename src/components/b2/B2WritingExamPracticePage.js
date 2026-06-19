@@ -37,7 +37,15 @@ import {
   runKeepPracticingSkillFlow,
 } from '@/utils/skillPracticeNavigation';
 import ExamModeSectionBanner from '@/components/niveles/ExamModeSectionBanner';
+import { useExamModeSectionDraftControls } from '@/hooks/useExamModeSectionDraftControls';
 import { useExamModeStrict } from '@/hooks/useExamModeStrict';
+import {
+  buildExamModeSectionDraft,
+  collectLocalStorageSnapshots,
+  applyLocalStorageSnapshots,
+  resolvePartIdByNumber,
+  EXAM_MODE_SECTION_DRAFT_VERSION,
+} from '@/utils/examModeSectionDraft';
 import { useExamModeHubNav } from '@/hooks/useExamModeHubNav';
 import {
   resolveExamPracticeMode,
@@ -60,6 +68,7 @@ import {
   B2_WRITING_WORD_MIN,
   B2_WRITING_WORD_MAX,
 } from '@/data/b2WritingTasks';
+import { resolvePracticeScoreSourceFromExamModeParam } from '@/utils/levelsScoreSource';
 
 const B2WritingLongFormAiPanel = dynamic(
   () => import('@/components/b2/B2WritingLongFormAiPanel'),
@@ -73,10 +82,34 @@ function getPartNumber(part) {
   return Number(part?.partNumber || String(part?.nombre || '').match(/\d+/)?.[0] || 0);
 }
 
+function resolveWritingQuestionForPart(part, selectedQuestionByPart) {
+  if (!part?.questions?.length) return null;
+  const selectedQId = selectedQuestionByPart?.[part.id];
+  return (
+    part.questions.find((q) => q.preguntaId === selectedQId) ||
+    part.questions[0] ||
+    null
+  );
+}
+
+function resolveWritingStorageKey(part, selectedQuestionByPart) {
+  const question = resolveWritingQuestionForPart(part, selectedQuestionByPart);
+  if (question?.preguntaId) return `b2-exam-writing-${question.preguntaId}`;
+  if (part?.id) return `b2-exam-writing-${part.id}`;
+  return null;
+}
+
+function resolveWritingPart2ChoiceKey(part, selectedQuestionByPart) {
+  const question = resolveWritingQuestionForPart(part, selectedQuestionByPart);
+  const id = question?.preguntaId || part?.id;
+  return id ? `b2-writing-p2-choice-${id}` : null;
+}
+
 function B2WritingExamPracticePageInner() {
   const searchParams = useSearchParams();
   const { examSlot, selectExamSlot } = useB2ExamPracticeSlot();
-  const scoring = useB2ExamScoringSession({ partMin: PART_MIN, partMax: PART_MAX });
+  const scoreSource = resolvePracticeScoreSourceFromExamModeParam(searchParams.get('examMode'));
+  const scoring = useB2ExamScoringSession({ partMin: PART_MIN, partMax: PART_MAX, scoreSource });
   const examMode = useExamModeStrict({
     slug: 'b2',
     partMin: PART_MIN,
@@ -88,8 +121,12 @@ function B2WritingExamPracticePageInner() {
     reviewMode,
     examSlot: examModeSlot,
     section: examSection,
+    sectionKey: examSectionKey,
     handleFinishSection,
     setSectionRemaining,
+    getSectionRemaining,
+    saveSectionDraft,
+    hubHref,
     resultsHref,
   } = examMode;
 
@@ -105,6 +142,8 @@ function B2WritingExamPracticePageInner() {
   const mountedRef = useRef(true);
   const partsShellRef = useRef([]);
   const examModePartScoresRef = useRef({});
+  const examDraftRef = useRef({});
+  const [writingDraftEpoch, setWritingDraftEpoch] = useState(0);
   const setExamenContextRef = useRef(scoring.setExamenContext);
   setExamenContextRef.current = scoring.setExamenContext;
   const categoryTimer = useLevelsCategoryTimer();
@@ -701,6 +740,100 @@ function B2WritingExamPracticePageInner() {
     );
   }, [handleExamModeFinish, examSection?.redoPart, resultsHref, partNumber, examSlot]);
 
+  const writingDraftStorageKeys = useMemo(() => {
+    const keys = new Set();
+    for (const part of tabPartsData) {
+      const essayKey = resolveWritingStorageKey(part, selectedQuestionByPart);
+      const choiceKey = resolveWritingPart2ChoiceKey(part, selectedQuestionByPart);
+      if (essayKey) keys.add(essayKey);
+      if (choiceKey) keys.add(choiceKey);
+    }
+    return [...keys];
+  }, [tabPartsData, selectedQuestionByPart]);
+
+  const getExamDraftSnapshot = useCallback(() => {
+    const draftByPart = { ...examDraftRef.current };
+    for (const part of tabPartsData) {
+      const pn = getPartNumber(part);
+      if (!pn) continue;
+      const question = resolveWritingQuestionForPart(part, selectedQuestionByPart);
+      draftByPart[pn] = {
+        ...(draftByPart[pn] || {}),
+        preguntaId: question?.preguntaId ?? null,
+        parteId: part.id,
+        part2OptionId: part2SelectedOptionByPart[part.id] ?? null,
+      };
+    }
+    return buildExamModeSectionDraft({
+      draftByPart,
+      selectedQuestionByPart,
+      activePartNumber: partNumber || null,
+      activePartId: selectedPart?.id ?? null,
+      remainingSeconds: getSectionRemaining(examSectionKey) ?? examSection?.remainingSeconds ?? null,
+      localStorageSnapshots: collectLocalStorageSnapshots(writingDraftStorageKeys),
+    });
+  }, [
+    tabPartsData,
+    selectedQuestionByPart,
+    part2SelectedOptionByPart,
+    partNumber,
+    selectedPart?.id,
+    getSectionRemaining,
+    examSectionKey,
+    examSection?.remainingSeconds,
+    writingDraftStorageKeys,
+  ]);
+
+  const applyExamDraftSnapshot = useCallback(
+    (draft) => {
+      if (!draft || draft.version !== EXAM_MODE_SECTION_DRAFT_VERSION) return;
+      examDraftRef.current = { ...(draft.draftByPart || {}) };
+
+      if (draft.selectedQuestionByPart) {
+        setSelectedQuestionByPart(draft.selectedQuestionByPart);
+      }
+
+      const nextPart2Choices = {};
+      for (const part of tabPartsData) {
+        const pn = getPartNumber(part);
+        const partDraft = draft.draftByPart?.[pn];
+        if (partDraft?.part2OptionId != null) {
+          nextPart2Choices[part.id] = partDraft.part2OptionId;
+        }
+      }
+      if (Object.keys(nextPart2Choices).length) {
+        setPart2SelectedOptionByPart((prev) => ({ ...prev, ...nextPart2Choices }));
+      }
+
+      if (draft.activePartId) {
+        setSelectedPartId(draft.activePartId);
+      } else if (draft.activePartNumber) {
+        const partId = resolvePartIdByNumber(tabPartsData, draft.activePartNumber);
+        if (partId) setSelectedPartId(partId);
+      }
+
+      if (draft.localStorageSnapshots) {
+        applyLocalStorageSnapshots(draft.localStorageSnapshots);
+      }
+
+      setWritingDraftEpoch((n) => n + 1);
+    },
+    [tabPartsData],
+  );
+
+  const { examModeSaveControls } = useExamModeSectionDraftControls({
+    enabled: examModeActive && !reviewMode && Boolean(examSectionKey),
+    sectionKey: examSectionKey,
+    section: examSection,
+    hubHref,
+    saveSectionDraft,
+    getDraftSnapshot: getExamDraftSnapshot,
+    applyDraftSnapshot: applyExamDraftSnapshot,
+    localStorageKeysForRevert: writingDraftStorageKeys,
+    hydrateReady: !loading && tabPartsData.length > 0,
+    lang: 'en',
+  });
+
   const reportErrorContext = useMemo(() => {
     if (loading || error || !scoring.examPracticeOpen || !selectedPart) return null;
     const questionText = selectedQuestion?.enunciado
@@ -797,6 +930,7 @@ function B2WritingExamPracticePageInner() {
         }}
         studyNotesContextLabel="B2 Writing Practice"
         reportErrorContext={reportErrorContext}
+        examModeSaveControls={examModeSaveControls}
       >
         {examModeActive && examSection ? (
           <ExamModeSectionBanner
@@ -838,6 +972,7 @@ function B2WritingExamPracticePageInner() {
                         wordMax={part1Task.wordMax || B2_WRITING_WORD_MAX}
                       />
                       <B2WritingLongFormAiPanel
+                        key={`writing-p1-${longWritingStorageKey}-${writingDraftEpoch}`}
                         storageKey={longWritingStorageKey}
                         wordMin={part1Task.wordMin || B2_WRITING_WORD_MIN}
                         wordMax={part1Task.wordMax || B2_WRITING_WORD_MAX}
@@ -866,6 +1001,7 @@ function B2WritingExamPracticePageInner() {
                       />
                       {part2SelectedOption ? (
                         <B2WritingLongFormAiPanel
+                          key={`writing-p2-${longWritingStorageKey}-${writingDraftEpoch}`}
                           storageKey={longWritingStorageKey}
                           wordMin={part2Task.wordMin || B2_WRITING_WORD_MIN}
                           wordMax={part2Task.wordMax || B2_WRITING_WORD_MAX}

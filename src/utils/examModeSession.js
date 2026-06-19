@@ -5,6 +5,7 @@ import {
   isExamModeSessionScoringCompatible,
   attachScoringVersionToExamModeScores,
 } from '@/lib/b2ScoringV2FeatureFlag';
+import { starsFromLevelsEarnedMax } from '@/lib/levelsStars';
 
 export const EXAM_MODE_SESSION_VERSION = 1;
 
@@ -155,6 +156,68 @@ export function getActiveExamModeSection(session) {
 /** @param {ExamModeSession} session */
 export function isExamModeComplete(session) {
   return session?.sections?.every((s) => s.status === 'completed') ?? false;
+}
+
+export function resolveExamModeSectionScoreDisplay(scores) {
+  if (!scores) return { correct: 0, total: 0 };
+  const v2 = Number(scores.scoringVersion) === 2;
+  return {
+    correct: Math.max(
+      0,
+      Number(v2 ? (scores.pointsEarned ?? scores.correct) : scores.correct) || 0,
+    ),
+    total: Math.max(
+      0,
+      Number(v2 ? (scores.maxPoints ?? scores.total) : scores.total) || 0,
+    ),
+  };
+}
+
+/**
+ * @param {ExamModeSession|null|undefined} session
+ * @returns {{ stars: number, correct: number, total: number, approvedParts: number, inProgress: boolean }}
+ */
+export function buildExamModeSlotProgress(session) {
+  const empty = { stars: 0, correct: 0, total: 0, approvedParts: 0, inProgress: false };
+  if (!session?.sections?.length) return empty;
+
+  let correct = 0;
+  let total = 0;
+  let approvedParts = 0;
+
+  for (const sec of session.sections) {
+    if (sec.status !== 'completed' || !sec.scores) continue;
+    approvedParts += 1;
+    const display = resolveExamModeSectionScoreDisplay(sec.scores);
+    correct += display.correct;
+    total += display.total;
+  }
+
+  const inProgress =
+    session.status === 'in_progress' &&
+    session.sections.some((sec) => sec.status === 'active' || sec.status === 'completed' || sec.startedAt);
+
+  return {
+    stars: starsFromLevelsEarnedMax(correct, total),
+    correct,
+    total,
+    approvedParts,
+    inProgress,
+  };
+}
+
+/**
+ * @param {string} slug
+ * @param {string} [userId]
+ * @param {number[]} [slots]
+ */
+export function buildExamModeProgressBySlot(slug, userId = '', slots = []) {
+  const bySlot = {};
+  for (const slot of slots) {
+    const session = loadExamModeSession(slug, slot, userId);
+    bySlot[slot] = buildExamModeSlotProgress(session);
+  }
+  return bySlot;
 }
 
 /**

@@ -16,7 +16,7 @@ import { getCambridgeSectionDurationSeconds } from '@/data/cambridgeExamTimings'
  * - URL has examMode=1|review from the /exam-mode/ hub flow, AND
  * - A valid persisted exam-mode session exists for the section, AND
  * - URL does NOT include ?part= (part query always forces Practice Mode),
- *   except review mode or an active single-part repeat (repeatPart=1).
+ *   except review mode, examMode=1 with ?part=, or an active single-part repeat (repeatPart=1).
  *
  * @param {object} params
  * @param {string} params.slug - e.g. 'b2'
@@ -68,7 +68,10 @@ export function useExamModeStrict({ slug, partMin, partMax, sectionTitle }) {
   }, [ready, session, section, examModeRequested, repeatPartRequested, partParam]);
 
   const forcePracticeByPart =
-    Boolean(searchParams.get('part')) && !reviewModeRequested && !repeatPartMode;
+    Boolean(searchParams.get('part')) &&
+    !examModeRequested &&
+    !reviewModeRequested &&
+    !repeatPartMode;
 
   const examSimulationFromHub = useMemo(() => {
     if (forcePracticeByPart || !ready || !session || !section) return false;
@@ -94,7 +97,10 @@ export function useExamModeStrict({ slug, partMin, partMax, sectionTitle }) {
 
   const reviewMode = examSimulationFromHub && reviewModeRequested;
   const examModeActive = examSimulationFromHub && examModeRequested;
-  const hideFeedback = examModeActive;
+  /** No instant feedback in exam simulation or review (?examMode=1|review). Skills unchanged. */
+  const hideFeedback =
+    !forcePracticeByPart && (examModeRequested || reviewModeRequested);
+  const hidePracticeChecks = examSimulationFromHub;
 
   const hubHref = `/niveles/${slug}/exam-mode?examen=${examSlot}`;
   const resultsHref = `/niveles/${slug}/exam-mode/results?examen=${examSlot}`;
@@ -182,6 +188,8 @@ export function useExamModeStrict({ slug, partMin, partMax, sectionTitle }) {
     reviewMode,
     repeatPartMode,
     hideFeedback,
+    hidePracticeChecks,
+    examSimulationFromHub,
     examSlot,
     slug,
     sectionKey,
@@ -198,6 +206,5 @@ export function useExamModeStrict({ slug, partMin, partMax, sectionTitle }) {
     applyExamContentSync,
     getPracticeHref,
     forcePracticeByPart,
-    examSimulationFromHub,
   };
 }

@@ -8,11 +8,16 @@ import { invalidateLevelExamCache } from '@/utils/levelsLevelCache';
 import { getSessionUserId } from '@/utils/levelsEstadisticas';
 import { buildPartFinishNoticeDisplay, formatPartSavedScoreLabel } from '@/utils/partFinishNoticeDisplay';
 import { saveB2PartPuntuacionIfComplete } from '@/utils/recordLevelsB2PartScore';
+import { LEVELS_SCORE_SOURCE } from '@/utils/levelsScoreSource';
 
 /**
  * Progreso, guardado y selector de examen compartido (partes partMin–partMax).
  */
-export function useB2ExamScoringSession({ partMin, partMax }) {
+export function useB2ExamScoringSession({
+  partMin,
+  partMax,
+  scoreSource = LEVELS_SCORE_SOURCE.SKILL_PRACTICE,
+}) {
   const partsInPaper = partMax - partMin + 1;
   const [b2LevelId, setB2LevelId] = useState(null);
   const [examenIdBySlot, setExamenIdBySlot] = useState({});
@@ -32,9 +37,10 @@ export function useB2ExamScoringSession({ partMin, partMax }) {
       partMin,
       partMax,
       partsInPaper,
+      scoreSource,
     });
     setProgressBySlot(bySlot);
-  }, [examenIdBySlot, partMin, partMax, partsInPaper]);
+  }, [examenIdBySlot, partMin, partMax, partsInPaper, scoreSource]);
 
   const reloadExamenCatalog = useCallback(async () => {
     const { data: levelData } = await getCachedB2Level(supabase);
@@ -104,6 +110,7 @@ export function useB2ExamScoringSession({ partMin, partMax }) {
         examenId,
         partNumber,
         progress,
+        scoreSource,
       });
 
       if (result.error) {
@@ -122,7 +129,7 @@ export function useB2ExamScoringSession({ partMin, partMax }) {
 
       return result;
     },
-    [refreshPuntuacionesProgress],
+    [refreshPuntuacionesProgress, scoreSource],
   );
 
   const saveWritingOrSpeakingScore = useCallback(

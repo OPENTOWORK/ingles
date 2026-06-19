@@ -522,6 +522,23 @@ export function extractMcqOptionLetter(option = {}) {
   return m ? m[m.length - 1].toUpperCase() : '';
 }
 
+/** Resolve a saved MCQ value (option id or letter) to the matching option row. */
+export function resolveSelectedMcqOption(group, selectedValue) {
+  if (selectedValue == null || selectedValue === '' || !group?.options?.length) return null;
+  const byId = group.options.find((o) => o.id === selectedValue);
+  if (byId) return byId;
+  const letter = /^[A-H]$/i.test(String(selectedValue))
+    ? String(selectedValue).toUpperCase()
+    : extractMcqOptionLetter({ formattedText: String(selectedValue) });
+  if (!letter) return null;
+  return group.options.find((o) => extractMcqOptionLetter(o) === letter) || null;
+}
+
+export function isMcqSelectionCorrect(group, selectedValue) {
+  const selected = resolveSelectedMcqOption(group, selectedValue);
+  return Boolean(selected?.correcta);
+}
+
 /**
  * Parte 12 listening: `Speaker 1` … `Speaker 5` → preguntas 19–23.
  *

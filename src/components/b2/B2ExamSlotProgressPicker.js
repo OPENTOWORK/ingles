@@ -272,7 +272,8 @@ export function B2ExamSlotProgressPicker({
             const prog = progressBySlot[n] || {};
             const stars = Math.min(3, Math.max(0, Number(prog.stars) || 0));
             const approvedParts = Number(prog.approvedParts) || 0;
-            const hasScore = approvedParts > 0 || Number(prog.total) > 0;
+            const inProgress = Boolean(prog.inProgress);
+            const hasScore = approvedParts > 0 || Number(prog.total) > 0 || inProgress;
             const label = examLabelsBySlot[n] || (en ? `Exam ${n}` : `Examen ${n}`);
 
             return (
@@ -292,6 +293,9 @@ export function B2ExamSlotProgressPicker({
                   {hasScore ? (
                     <span className="levels-b2-exam-picker__slot-meta">
                       {approvedParts}/{partsInPaper} {en ? 'parts' : 'partes'}
+                      {inProgress && approvedParts < partsInPaper
+                        ? ` · ${en ? 'In progress' : 'En curso'}`
+                        : ''}
                     </span>
                   ) : (
                     <span className="levels-b2-exam-picker__slot-meta">

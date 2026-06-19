@@ -1,9 +1,13 @@
 'use client';
 
 import Link from 'next/link';
+import { useMemo } from 'react';
+import { useSearchParams } from 'next/navigation';
 import { getB2ExamPracticeNavState } from '@/data/b2ExamModuleNav';
 import { getLevelOverviewNav } from '@/utils/levelOverviewNav';
 import { getPreviousExamSlot } from '@/utils/skillPracticeNavigation';
+import { getModuleNavPartLabel } from '@/utils/formatLevelsPartDisplayName';
+import { buildExamModePracticeHref } from '@/utils/examModeSession';
 
 function NavChevron({ direction = 'back' }) {
   return (
@@ -52,17 +56,33 @@ export default function B2ExamPracticeModuleNav({
   checkAnswersDisabled = false,
   checkAnswersLabel,
   lang = 'en',
+  partMinForTabLabels = null,
 }) {
+  const searchParams = useSearchParams();
+  const examModeParam = searchParams.get('examMode');
+  const examFlowFromUrl = examModeParam === '1' || examModeParam === 'review';
+  const inExamFlow = examMode || examFlowFromUrl;
   const levelSlug = String(slug || 'b2').toLowerCase();
   const isEn = lang === 'en';
-  const effectiveSkillPractice = skillPracticeMode && !examMode;
+  const effectiveSkillPractice = skillPracticeMode && !inExamFlow;
   const nav = getB2ExamPracticeNavState({
     partNumber,
     pagePartMax,
     examSlot,
     slug: levelSlug,
   });
+  const resolvedContinueHref = useMemo(() => {
+    if (!nav.continueHref) return null;
+    if (!inExamFlow) return nav.continueHref;
+    const basePath = nav.continueHref.split('?')[0];
+    return buildExamModePracticeHref(basePath, examSlot, {
+      review: examModeParam === 'review',
+      part: nav.nextPartNumber ?? undefined,
+    });
+  }, [nav.continueHref, nav.nextPartNumber, inExamFlow, examSlot, examModeParam]);
   const overview = getLevelOverviewNav(levelSlug, lang);
+  const formatPartLabel = (partNum) =>
+    getModuleNavPartLabel(partNum, partMinForTabLabels, isEn ? 'en' : 'es');
   const backLabel = onBackClick
     ? isEn
       ? 'Back to parts'
@@ -74,8 +94,8 @@ export default function B2ExamPracticeModuleNav({
     previousPartLabel ||
     (nav.previousPartNumber
       ? isEn
-        ? `Back — Part ${nav.previousPartNumber}`
-        : `Volver — Parte ${nav.previousPartNumber}`
+        ? `Back — ${formatPartLabel(nav.previousPartNumber)}`
+        : `Volver — ${formatPartLabel(nav.previousPartNumber)}`
       : '');
 
   let continueLabel = '';
@@ -87,12 +107,12 @@ export default function B2ExamPracticeModuleNav({
         ? `Continue — ${nextPartLabel}`
         : `Continuar — ${nextPartLabel}`
       : isEn
-        ? `Continue — Part ${nav.nextPartNumber}`
-        : `Continuar — Parte ${nav.nextPartNumber}`;
+        ? `Continue — ${formatPartLabel(nav.nextPartNumber)}`
+        : `Continuar — ${formatPartLabel(nav.nextPartNumber)}`;
   } else if (nav.continueMode === 'link' && nav.nextPartNumber && nav.continueModuleTitle) {
     continueLabel = isEn
-      ? `Continue — Part ${nav.nextPartNumber}`
-      : `Continuar — Parte ${nav.nextPartNumber}`;
+      ? `Continue — ${formatPartLabel(nav.nextPartNumber)}`
+      : `Continuar — ${formatPartLabel(nav.nextPartNumber)}`;
   } else if (nav.continueMode === 'link' && nav.continueModuleTitle) {
     continueLabel = isEn
       ? `Continue — ${nav.continueModuleTitle}`
@@ -107,6 +127,85 @@ export default function B2ExamPracticeModuleNav({
   const previousExerciseLabel = isEn ? 'Previous exercise' : 'Volver al ejercicio anterior';
 
   const useBalancedLayout = effectiveSkillPractice || showCheckAnswersButton;
+
+  const showPreviousPartButton =
+    !useBalancedLayout &&
+    nav.hasPreviousInPage &&
+    previousLabel &&
+    typeof onPreviousInPage === 'function';
+
+  const showContinueInPageButton =
+    !useBalancedLayout &&
+    !effectiveSkillPractice &&
+    nav.continueMode === 'in-page' &&
+    continueLabel &&
+    typeof onContinueInPage === 'function';
+
+  const showContinueLinkButton =
+    !useBalancedLayout &&
+    !effectiveSkillPractice &&
+    nav.continueMode === 'link' &&
+    (nav.continueHref || onContinueModule || resolvedContinueHref);
+
+  const renderContinueLinkControl = (className) => {
+    if (typeof onContinueModule === 'function' && inExamFlow) {
+      return (
+        <button type="button" className={className} onClick={onContinueModule}>
+          <span className="levels-exam-module-nav__label">{continueLabel}</span>
+          <NavChevron direction="forward" />
+        </button>
+      );
+    }
+
+    const href = resolvedContinueHref || nav.continueHref;
+    if (!href) return null;
+
+    return (
+      <Link href={href} className={className}>
+        <span className="levels-exam-module-nav__label">{continueLabel}</span>
+        <NavChevron direction="forward" />
+      </Link>
+    );
+  };
+
+  const useCenteredPartNav =
+    !useBalancedLayout &&
+    (showPreviousPartButton || showContinueInPageButton || showContinueLinkButton);
+
+  const previousPartButton = showPreviousPartButton ? (
+    <button
+      type="button"
+      className="levels-exam-module-nav__btn levels-exam-module-nav__btn--continue levels-exam-module-nav__btn--prev-part"
+      onClick={onPreviousInPage}
+    >
+      <NavChevron direction="back" />
+      <span className="levels-exam-module-nav__label">{previousLabel}</span>
+    </button>
+  ) : null;
+
+  const continueInPageButton = showContinueInPageButton ? (
+    <button
+      type="button"
+      className="levels-exam-module-nav__btn levels-exam-module-nav__btn--continue"
+      onClick={onContinueInPage}
+    >
+      <span className="levels-exam-module-nav__label">{continueLabel}</span>
+      <NavChevron direction="forward" />
+    </button>
+  ) : null;
+
+  const continueLinkButton = showContinueLinkButton
+    ? renderContinueLinkControl('levels-exam-module-nav__btn levels-exam-module-nav__btn--continue')
+    : null;
+
+  const partNavPairBlock =
+    useCenteredPartNav && (previousPartButton || continueInPageButton || continueLinkButton) ? (
+      <div className="levels-exam-module-nav__part-pair">
+        {previousPartButton}
+        {continueInPageButton}
+        {continueLinkButton}
+      </div>
+    ) : null;
 
   const handlePreviousExercise = () => {
     if (previousExerciseSlot == null || typeof onSelectExamSlot !== 'function') return;
@@ -174,7 +273,7 @@ export default function B2ExamPracticeModuleNav({
         effectiveSkillPractice ? ' levels-exam-module-nav--skill' : ''
       }${showCheckAnswersButton ? ' levels-exam-module-nav--with-check' : ''}${
         useBalancedLayout ? ' levels-exam-module-nav--balanced' : ''
-      }`}
+      }${useCenteredPartNav ? ' levels-exam-module-nav--centered-parts' : ''}`}
       data-skill-theme={effectiveSkillPractice && skillPracticeTheme ? skillPracticeTheme : undefined}
       aria-label={isEn ? 'Module navigation' : 'Navegación del módulo'}
     >
@@ -195,20 +294,13 @@ export default function B2ExamPracticeModuleNav({
           </Link>
         )}
 
-        {!useBalancedLayout &&
-        nav.hasPreviousInPage &&
-        previousLabel &&
-        typeof onPreviousInPage === 'function' ? (
-          <button
-            type="button"
-            className="levels-exam-module-nav__btn levels-exam-module-nav__btn--continue levels-exam-module-nav__btn--prev-part"
-            onClick={onPreviousInPage}
-          >
-            <NavChevron direction="back" />
-            <span className="levels-exam-module-nav__label">{previousLabel}</span>
-          </button>
-        ) : null}
       </div>
+
+      {useCenteredPartNav && partNavPairBlock ? (
+        <div className="levels-exam-module-nav__zone levels-exam-module-nav__zone--center">
+          {partNavPairBlock}
+        </div>
+      ) : null}
 
       {useBalancedLayout && exercisePairBlock ? (
         <div className="levels-exam-module-nav__zone levels-exam-module-nav__zone--center">
@@ -223,23 +315,10 @@ export default function B2ExamPracticeModuleNav({
       ) : null}
 
       <div className="levels-exam-module-nav__zone levels-exam-module-nav__zone--forward">
-        {!useBalancedLayout &&
-        nav.hasPreviousInPage &&
-        previousLabel &&
-        typeof onPreviousInPage === 'function' ? (
-          <button
-            type="button"
-            className="levels-exam-module-nav__btn levels-exam-module-nav__btn--continue levels-exam-module-nav__btn--prev-part"
-            onClick={onPreviousInPage}
-          >
-            <NavChevron direction="back" />
-            <span className="levels-exam-module-nav__label">{previousLabel}</span>
-          </button>
-        ) : null}
-
         {useBalancedLayout && checkAnswersButton ? checkAnswersButton : null}
 
-        {!useBalancedLayout &&
+        {!useCenteredPartNav &&
+        !useBalancedLayout &&
         !effectiveSkillPractice &&
         nav.continueMode === 'in-page' &&
         continueLabel &&
@@ -254,24 +333,13 @@ export default function B2ExamPracticeModuleNav({
           </button>
         ) : null}
 
-        {!useBalancedLayout && !effectiveSkillPractice && nav.continueMode === 'link' && (nav.continueHref || onContinueModule) ? (
-          typeof onContinueModule === 'function' || examMode ? (
-            <button
-              type="button"
-              className="levels-exam-module-nav__btn levels-exam-module-nav__btn--continue"
-              onClick={onContinueModule}
-              disabled={typeof onContinueModule !== 'function'}
-            >
-              <span className="levels-exam-module-nav__label">{continueLabel}</span>
-              <NavChevron direction="forward" />
-            </button>
-          ) : (
-            <Link href={nav.continueHref} className="levels-exam-module-nav__btn levels-exam-module-nav__btn--continue">
-              <span className="levels-exam-module-nav__label">{continueLabel}</span>
-              <NavChevron direction="forward" />
-            </Link>
-          )
-        ) : null}
+        {!useCenteredPartNav &&
+        !useBalancedLayout &&
+        !effectiveSkillPractice &&
+        nav.continueMode === 'link' &&
+        (nav.continueHref || onContinueModule || resolvedContinueHref)
+          ? renderContinueLinkControl('levels-exam-module-nav__btn levels-exam-module-nav__btn--continue')
+          : null}
       </div>
     </nav>
   );

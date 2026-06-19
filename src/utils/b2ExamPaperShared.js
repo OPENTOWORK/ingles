@@ -836,6 +836,39 @@ export function resolveExamModePartScoringMode(partNumber, question, partDescrip
     }
   }
 
+  /** B2 Listening: MCQ for 10/12/13; sentence completion (open) for 11 only. */
+  if (partNumber >= 10 && partNumber <= 13) {
+    if (partNumber === 11) {
+      const openNums = inferOpenQuestionNumbersFromPrompt(promptBlob, partNumber);
+      const openAnswerMap = getOpenAnswerMap(
+        question?.respuestasAbiertas || [],
+        respuestas,
+        openNums,
+      );
+      const fromAnswers = [...openAnswerMap.keys()].sort((a, b) => a - b);
+      const openQuestionNumbers =
+        openNums.length > 0
+          ? openNums
+          : fromAnswers.length > 0
+            ? fromAnswers
+            : [];
+      return {
+        useOpenInputUi: true,
+        openQuestionNumbers,
+        groupedAnswers: [],
+        promptBlob,
+      };
+    }
+    const groupedAnswers =
+      buildExamModeMcqGroupsForPart(partNumber, question, desc) || getGroupedAnswers(respuestas);
+    return {
+      useOpenInputUi: false,
+      openQuestionNumbers: [],
+      groupedAnswers: groupedAnswers || [],
+      promptBlob,
+    };
+  }
+
   const openNums = inferOpenQuestionNumbersFromPrompt(promptBlob, partNumber);
   if (openNums.length > 0) {
     return {
@@ -982,6 +1015,30 @@ export function omitPartTitleBlocks(blocks, externalTitle) {
   return blocks.filter((block) => block.type !== 'partTitle');
 }
 
+/** Re-label global exam part numbers to local section numbers (e.g. 11 → Part 2 in Listening). */
+export function remapSectionPartNumbersInText(text, partMin, partMax = null) {
+  if (!text || partMin == null) return text;
+  const min = Number(partMin);
+  const max = partMax != null ? Number(partMax) : null;
+  return String(text).replace(/\b(Part|Parte)\s*[:–—-]?\s*(\d+)\b/gi, (full, word, digits) => {
+    const n = Number(digits);
+    if (!Number.isFinite(n) || n < min || (max != null && n > max)) return full;
+    const local = n - min + 1;
+    const sep = /[:–—-]/.test(full.slice(word.length, word.length + 3)) ? ': ' : ' ';
+    return /^parte$/i.test(word) ? `Parte${sep}${local}` : `Part${sep}${local}`;
+  });
+}
+
+/** @param {Array<{ type?: string, text?: string }>} blocks */
+export function remapSectionPartNumbersInEnunciadoBlocks(blocks, partMin, partMax = null) {
+  if (!blocks?.length || partMin == null) return blocks || [];
+  return blocks.map((block) =>
+    block?.text
+      ? { ...block, text: remapSectionPartNumbersInText(block.text, partMin, partMax) }
+      : block,
+  );
+}
+
 /** @param {string} rawText */
 export function getFormattedEnunciado(rawText = '') {
   const normalized = rawText.replace(/\r\n/g, '\n').trim();
@@ -996,7 +1053,7 @@ export function getFormattedEnunciado(rawText = '') {
       if (imageMatch) {
         return { type: 'image', url: imageMatch[1], text: line };
       }
-      if (/^(?:part|parte)\s+\d+\s*(?:[:–—-]|\s)/i.test(line)) {
+      if (/^(?:part|parte)\s*[:–—-]?\s*\d+\b/i.test(line)) {
         return { type: 'partTitle', text: line };
       }
       if (lower.startsWith('example:')) return { type: 'label', text: line };

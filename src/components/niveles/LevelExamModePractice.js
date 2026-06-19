@@ -11,6 +11,7 @@ import {
   buildExamModePracticeHref,
   isExamModeComplete,
   resetExamModeSession,
+  resolveExamModeSectionScoreDisplay,
 } from '@/utils/examModeSession';
 import { getCambridgeSectionDurationMinutes } from '@/data/cambridgeExamTimings';
 import { getLevelFullExamSections, getNivelesLevelHub } from '@/data/nivelesLevelHub';
@@ -20,16 +21,39 @@ import { sortLevelsExamenesRows } from '@/utils/b2ResolveExam';
 import { filterVisibleExamenes } from '@/utils/levelsExamVisibility';
 import { clearExamSlotPuntuaciones } from '@/lib/fetchExamModeSlotStats';
 import { shouldClearExamSlotPuntuacionesOnRepeat } from '@/lib/b2ScoringV2FeatureFlag';
-import { useLevelsExamAdminFlow, buildExamSlotPickerProps } from '@/hooks/useLevelsExamAdminFlow';
+import { useLevelsExamAdminFlow, buildExamSlotPickerProps, getAvailableExamSlots } from '@/hooks/useLevelsExamAdminFlow';
+import { useExamModePickerProgress } from '@/hooks/useExamModePickerProgress';
 import A2ExamGenerationStatus from '@/components/niveles/A2ExamGenerationStatus';
 import ExamPracticeLevelPicker from '@/components/niveles/ExamPracticeLevelPicker';
 import ExamPracticeReportError from '@/components/exam/ExamPracticeReportError';
+import TheoryLevelStars from '@/components/theory/TheoryLevelStars';
+import { starsFromLevelsEarnedMax } from '@/lib/levelsStars';
 
 function formatMinutes(m) {
   const h = Math.floor(m / 60);
   const min = m % 60;
   if (h > 0) return `${h}h ${min}min`;
   return `${min} min`;
+}
+
+function resolveSectionScoreDisplay(scores) {
+  return resolveExamModeSectionScoreDisplay(scores);
+}
+
+function resolveSectionStars(scores) {
+  const { correct, total } = resolveSectionScoreDisplay(scores);
+  return starsFromLevelsEarnedMax(correct, total);
+}
+
+function sectionIconClass(title = '') {
+  const t = title.toLowerCase();
+  if (t.includes('reading') || t.includes('use of english')) {
+    return 'exam-mode-session__icon-wrap--reading';
+  }
+  if (t.includes('writing')) return 'exam-mode-session__icon-wrap--writing';
+  if (t.includes('listening')) return 'exam-mode-session__icon-wrap--listening';
+  if (t.includes('speaking')) return 'exam-mode-session__icon-wrap--speaking';
+  return '';
 }
 
 function LevelExamModePracticeInner({ slug }) {
@@ -51,6 +75,16 @@ function LevelExamModePracticeInner({ slug }) {
   const autoOpenedRef = useRef(false);
 
   const sections = useMemo(() => getLevelFullExamSections(slug), [slug]);
+  const availableSlots = useMemo(() => getAvailableExamSlots(examenIdBySlot), [examenIdBySlot]);
+  const { progressBySlot, refreshProgress } = useExamModePickerProgress({
+    slug,
+    userId,
+    availableSlots,
+  });
+
+  useEffect(() => {
+    refreshProgress();
+  }, [session, pickedSlot, refreshProgress]);
 
   useEffect(() => {
     const q = searchParams.get('examen');
@@ -124,11 +158,12 @@ function LevelExamModePracticeInner({ slug }) {
       if (slot === examSlot) {
         resetExam();
       }
+      refreshProgress();
       selectExamSlot(slot);
       setPickedSlot(true);
       router.push(`/niveles/${slug}/exam-mode?examen=${slot}`);
     },
-    [slug, userId, examSlot, examenIdBySlot, resetExam, selectExamSlot, router],
+    [slug, userId, examSlot, examenIdBySlot, resetExam, selectExamSlot, router, refreshProgress],
   );
 
   const repeatCurrentExam = useCallback(() => {
@@ -138,6 +173,31 @@ function LevelExamModePracticeInner({ slug }) {
   const examComplete = session ? isExamModeComplete(session) : false;
   const statsHref = `/niveles/${slug}/exam-mode/results?examen=${examSlot}`;
   const examLabel = examNamesBySlot[examSlot] || `Test ${examSlot}`;
+
+  const overallExamScore = useMemo(() => {
+    if (!session?.sections?.length) return { correct: 0, total: 0, stars: 0 };
+    let correct = 0;
+    let total = 0;
+    for (const sec of session.sections) {
+      if (sec.status !== 'completed' || !sec.scores) continue;
+      const display = resolveSectionScoreDisplay(sec.scores);
+      correct += display.correct;
+      total += display.total;
+    }
+    return {
+      correct,
+      total,
+      stars: starsFromLevelsEarnedMax(correct, total),
+    };
+  }, [session]);
+
+  const completedSections = useMemo(() => {
+    if (!session?.sections?.length) return 0;
+    return session.sections.filter((sec) => sec.status === 'completed').length;
+  }, [session]);
+
+  const sectionProgressPct =
+    sections.length > 0 ? Math.round((completedSections / sections.length) * 100) : 0;
 
   if (!config) {
     return (
@@ -163,7 +223,7 @@ function LevelExamModePracticeInner({ slug }) {
       ) : null}
 
       {!pickedSlot ? (
-        <>
+        <div className="exam-mode-landing">
           <ExamPracticeLevelPicker
             variant="strip"
             activeLevel={slug}
@@ -173,142 +233,135 @@ function LevelExamModePracticeInner({ slug }) {
           <B2ExamSlotProgressPicker
             value={examSlot}
             onSelect={handlePickExam}
-            progressBySlot={{}}
+            progressBySlot={progressBySlot}
             partsInPaper={sections.length}
             examLabelsBySlot={examNamesBySlot}
             lang="en"
+            className="levels-b2-exam-picker--exam-mode"
             onViewStatistics={handleViewStatistics}
             onRepeatExam={handleRepeatExamSlot}
             {...examSlotPickerProps}
           />
 
-          <div style={{ textAlign: 'center', maxWidth: '640px', margin: '1.5rem auto 0', color: '#4a5568' }}>
-          <h1 style={{ margin: '0 0 0.75rem', color: '#1a365d' }}>
-            {slug === 'b2' ? 'B2 Full Exam Simulation' : `Exam mode — ${config.cefr}`}
-          </h1>
-          {slug === 'b2' ? (
-            <p style={{ margin: '0 0 1.25rem', color: '#4a5568', lineHeight: 1.65, maxWidth: '42rem' }}>
+          <div className="exam-mode-landing__hero">
+            <span className="exam-mode-landing__eyebrow">Exam mode</span>
+            <h1 className="exam-mode-landing__title">
+              {slug === 'b2' ? 'B2 Full Exam Simulation' : `Exam mode — ${config.cefr}`}
+            </h1>
+            <p className="exam-mode-landing__lead">
               Complete the exam under timed conditions. Feedback is shown at the end.
             </p>
-          ) : null}
-          <p style={{ margin: 0, lineHeight: 1.55 }}>
-            Choose one of the <strong>available tests</strong>. You will complete each paper under official exam-style time limits.
-            Answers are hidden until you finish the full exam. Your progress is saved so you can continue later.
+            <ul className="exam-mode-landing__features">
+              <li className="exam-mode-landing__feature">
+                <span className="exam-mode-landing__feature-icon" aria-hidden="true">
+                  ⏱
+                </span>
+                Official time limits
+              </li>
+              <li className="exam-mode-landing__feature">
+                <span className="exam-mode-landing__feature-icon" aria-hidden="true">
+                  🔒
+                </span>
+                Answers hidden until the end
+              </li>
+              <li className="exam-mode-landing__feature">
+                <span className="exam-mode-landing__feature-icon" aria-hidden="true">
+                  💾
+                </span>
+                Progress saved
+              </li>
+            </ul>
+          </div>
+
+          <p className="exam-mode-landing__footnote">
+            Choose one of the <strong>available tests</strong>. You will complete each paper in order
+            under exam-style conditions.
           </p>
         </div>
-        </>
       ) : (
-        <div style={{ maxWidth: '720px', margin: '1.5rem auto 0' }}>
+        <div className="exam-mode-session">
           <ExamPracticeLevelPicker
             variant="strip"
             activeLevel={slug}
             linkForLevel={(level) => `/niveles/${level.slug}/exam-mode`}
           />
-          <header style={{ textAlign: 'center', marginBottom: '1.5rem' }}>
-            <p style={{ margin: 0, fontSize: '0.8rem', fontWeight: 700, color: '#2b6cb0', textTransform: 'uppercase' }}>
-              Exam mode
-            </p>
-            <h1 style={{ margin: '0.35rem 0', color: '#1a365d' }}>
-              {slug === 'b2' ? 'B2 Full Exam Simulation' : `${config.cefr} Exam Simulation`}
-            </h1>
-            <p style={{ margin: '0.5rem 0 0', color: '#4a5568', lineHeight: 1.5 }}>
-              Complete the exam under timed conditions. Feedback is shown at the end.
-            </p>
-            <p style={{ margin: '0.35rem 0 0', fontSize: '0.9rem', color: '#64748b', lineHeight: 1.5 }}>
-              {examLabel} · Complete each section in order. Once you finish a section, you cannot go back until the exam ends.
-            </p>
-            <div
-              style={{
-                display: 'flex',
-                flexWrap: 'wrap',
-                gap: '0.65rem',
-                justifyContent: 'center',
-                marginTop: '1rem',
-              }}
-            >
-              <Link
-                href={statsHref}
-                style={{
-                  display: 'inline-flex',
-                  alignItems: 'center',
-                  gap: '0.35rem',
-                  padding: '0.55rem 1.1rem',
-                  borderRadius: '8px',
-                  background: '#eff6ff',
-                  color: '#1d4ed8',
-                  fontWeight: 700,
-                  fontSize: '0.9rem',
-                  textDecoration: 'none',
-                  border: '1px solid #bfdbfe',
-                }}
-              >
-                Statistics
-              </Link>
-              <button
-                type="button"
-                onClick={repeatCurrentExam}
-                style={{
-                  padding: '0.55rem 1.1rem',
-                  borderRadius: '8px',
-                  background: '#fff',
-                  color: '#1d4ed8',
-                  fontWeight: 700,
-                  fontSize: '0.9rem',
-                  border: '2px solid #2563eb',
-                  cursor: 'pointer',
-                }}
-              >
-                Repeat exam
-              </button>
+
+          <header className="exam-mode-session__header">
+            <div className="exam-mode-session__header-top">
+              <div>
+                <div className="exam-mode-session__badge-row">
+                  <span className="exam-mode-session__eyebrow">Exam mode</span>
+                  <span className="exam-mode-session__exam-tag">{examLabel}</span>
+                </div>
+                <h1 className="exam-mode-session__title">
+                  {slug === 'b2' ? 'B2 Full Exam Simulation' : `${config.cefr} Exam Simulation`}
+                </h1>
+                <p className="exam-mode-session__lead">
+                  Complete each section in order. Once you finish a section, you cannot go back until
+                  the exam ends.
+                </p>
+              </div>
+              {!(examComplete && session?.resultsReleased) ? (
+                <div className="exam-mode-session__actions">
+                  <Link href={statsHref} className="exam-mode-session__btn exam-mode-session__btn--ghost">
+                    Statistics
+                  </Link>
+                  <button
+                    type="button"
+                    onClick={repeatCurrentExam}
+                    className="exam-mode-session__btn exam-mode-session__btn--outline"
+                  >
+                    Repeat exam
+                  </button>
+                </div>
+              ) : null}
             </div>
+
+            {!examComplete ? (
+              <div className="exam-mode-session__progress-wrap">
+                <div className="exam-mode-session__progress-label">
+                  <span>Sections completed</span>
+                  <strong>
+                    {completedSections}/{sections.length}
+                  </strong>
+                </div>
+                <div
+                  className="exam-mode-session__progress-track"
+                  role="progressbar"
+                  aria-valuenow={sectionProgressPct}
+                  aria-valuemin={0}
+                  aria-valuemax={100}
+                  aria-label="Exam progress"
+                >
+                  <div
+                    className="exam-mode-session__progress-fill"
+                    style={{ width: `${sectionProgressPct}%` }}
+                  />
+                </div>
+              </div>
+            ) : null}
           </header>
 
           {examComplete && session?.resultsReleased ? (
-            <div
-              style={{
-                textAlign: 'center',
-                padding: '1.25rem',
-                borderRadius: '12px',
-                background: '#f0fff4',
-                border: '2px solid #68d391',
-                marginBottom: '1.5rem',
-              }}
-            >
-              <p style={{ margin: '0 0 1rem', fontWeight: 600 }}>You have completed this exam.</p>
-              <div
-                style={{
-                  display: 'flex',
-                  flexWrap: 'wrap',
-                  gap: '0.65rem',
-                  justifyContent: 'center',
-                }}
-              >
+            <div className="exam-mode-session__complete-banner">
+              <p>You have completed this exam.</p>
+              <div className="exam-mode-session__complete-score">
+                <TheoryLevelStars stars={overallExamScore.stars} size="md" variant="gold" />
+                <span className="exam-mode-session__complete-score-label">
+                  {overallExamScore.correct}/{overallExamScore.total} items
+                </span>
+              </div>
+              <div className="exam-mode-session__complete-actions">
                 <Link
                   href={`/niveles/${slug}/exam-mode/results?examen=${examSlot}`}
-                  style={{
-                    display: 'inline-block',
-                    padding: '0.75rem 1.5rem',
-                    borderRadius: '8px',
-                    background: '#2f855a',
-                    color: '#fff',
-                    fontWeight: 700,
-                    textDecoration: 'none',
-                  }}
+                  className="exam-mode-session__btn exam-mode-session__btn--success"
                 >
                   View results & review errors
                 </Link>
                 <button
                   type="button"
                   onClick={repeatCurrentExam}
-                  style={{
-                    padding: '0.75rem 1.5rem',
-                    borderRadius: '8px',
-                    background: '#fff',
-                    color: '#1d4ed8',
-                    fontWeight: 700,
-                    border: '2px solid #2563eb',
-                    cursor: 'pointer',
-                  }}
+                  className="exam-mode-session__btn exam-mode-session__btn--outline"
                 >
                   Repeat exam
                 </button>
@@ -316,87 +369,87 @@ function LevelExamModePracticeInner({ slug }) {
             </div>
           ) : null}
 
-          <ol style={{ listStyle: 'none', padding: 0, margin: 0, display: 'grid', gap: '0.85rem' }}>
-            {(ready ? session?.sections : sections.map((s) => ({ ...s, status: 'locked' })))?.map((sec, idx) => {
-              const mins = getCambridgeSectionDurationMinutes(slug, sec.title);
-              const status = sec.status || (idx === 0 ? 'active' : 'locked');
-              const isLocked = status === 'locked';
-              const isDone = status === 'completed';
-              const isActive = status === 'active';
-              const href = buildExamModePracticeHref(sec.href, examSlot);
+          <ol className="exam-mode-session__timeline">
+            {(ready ? session?.sections : sections.map((s) => ({ ...s, status: 'locked' })))?.map(
+              (sec, idx) => {
+                const mins = getCambridgeSectionDurationMinutes(slug, sec.title);
+                const status = sec.status || (idx === 0 ? 'active' : 'locked');
+                const isLocked = status === 'locked';
+                const isDone = status === 'completed';
+                const isActive = status === 'active';
+                const href = buildExamModePracticeHref(sec.href, examSlot);
+                const sectionScore = resolveSectionScoreDisplay(sec.scores);
+                const sectionStars = isDone ? resolveSectionStars(sec.scores) : 0;
+                const cardState = isActive ? 'active' : isDone ? 'completed' : 'locked';
 
-              return (
-                <li key={sec.key}>
-                  <div
-                    style={{
-                      display: 'flex',
-                      alignItems: 'center',
-                      gap: '1rem',
-                      padding: '1rem 1.15rem',
-                      borderRadius: '12px',
-                      border: `2px solid ${isActive ? '#63b3ed' : isDone ? '#68d391' : '#e2e8f0'}`,
-                      background: isActive ? '#ebf8ff' : isDone ? '#f0fff4' : '#f7fafc',
-                      opacity: isLocked ? 0.65 : 1,
-                    }}
+                return (
+                  <li
+                    key={sec.key}
+                    className={`exam-mode-session__timeline-item${
+                      isDone ? ' exam-mode-session__timeline-item--completed' : ''
+                    }`}
                   >
-                    <span style={{ fontSize: '1.75rem' }} aria-hidden="true">
-                      {sec.emoji || '📋'}
-                    </span>
-                    <div style={{ flex: 1 }}>
-                      <p style={{ margin: 0, fontWeight: 700, color: '#1a365d' }}>{sec.title}</p>
-                      <p style={{ margin: '0.2rem 0 0', fontSize: '0.85rem', color: '#4a5568' }}>
-                        {sec.partsLabel || `Parts ${sec.partMin}–${sec.partMax}`} · {formatMinutes(mins)}
-                      </p>
-                      {isDone && sec.scores ? (
-                        <p style={{ margin: '0.35rem 0 0', fontSize: '0.85rem', fontWeight: 600, color: '#2f855a' }}>
-                          Saved — {sec.scores.correct}/{sec.scores.total} items
-                        </p>
-                      ) : null}
-                    </div>
-                    {isLocked ? (
-                      <span style={{ fontSize: '0.8rem', fontWeight: 600, color: '#718096' }}>Locked</span>
-                    ) : isDone ? (
-                      <span style={{ fontSize: '0.8rem', fontWeight: 600, color: '#2f855a' }}>Done ✓</span>
-                    ) : (
-                      <Link
-                        href={href}
-                        style={{
-                          padding: '0.55rem 1rem',
-                          borderRadius: '8px',
-                          background: '#2b6cb0',
-                          color: '#fff',
-                          fontWeight: 700,
-                          textDecoration: 'none',
-                          whiteSpace: 'nowrap',
-                        }}
+                    <div className={`exam-mode-session__card exam-mode-session__card--${cardState}`}>
+                      <div
+                        className={`exam-mode-session__icon-wrap ${sectionIconClass(sec.title)}`.trim()}
                       >
-                        {sec.startedAt ? 'Continue' : 'Start'}
-                      </Link>
-                    )}
-                  </div>
-                  <div style={{ marginTop: '0.45rem', textAlign: 'right' }}>
-                    <ExamPracticeReportError
-                      context={{
-                        levelSlug: slug,
-                        skillRoute: 'exam-mode',
-                        examSlot,
-                        sectionTitle: sec.title,
-                        practiceMode: 'exam-mode-hub',
-                        hub: true,
-                        url: href,
-                      }}
-                    />
-                  </div>
-                </li>
-              );
-            })}
+                        <span aria-hidden="true">{sec.emoji || '📋'}</span>
+                      </div>
+                      <div className="exam-mode-session__body">
+                        <p className="exam-mode-session__section-title">{sec.title}</p>
+                        <p className="exam-mode-session__section-meta">
+                          {sec.partsLabel || `Parts ${sec.partMin}–${sec.partMax}`} ·{' '}
+                          {formatMinutes(mins)}
+                        </p>
+                        {isDone && sec.scores ? (
+                          <p className="exam-mode-session__section-score">
+                            Saved — {sectionScore.correct}/{sectionScore.total} items
+                          </p>
+                        ) : null}
+                      </div>
+                      <div className="exam-mode-session__aside">
+                        {isLocked ? (
+                          <span className="exam-mode-session__status exam-mode-session__status--locked">
+                            Locked
+                          </span>
+                        ) : isDone ? (
+                          <>
+                            <TheoryLevelStars stars={sectionStars} size="sm" variant="gold" />
+                            <span className="exam-mode-session__status exam-mode-session__status--done">
+                              Done ✓
+                            </span>
+                          </>
+                        ) : (
+                          <Link href={href} className="exam-mode-session__cta">
+                            {sec.startedAt ? 'Continue' : 'Start'}
+                          </Link>
+                        )}
+                      </div>
+                    </div>
+                    <div className="exam-mode-session__report">
+                      <ExamPracticeReportError
+                        context={{
+                          levelSlug: slug,
+                          skillRoute: 'exam-mode',
+                          examSlot,
+                          sectionTitle: sec.title,
+                          practiceMode: 'exam-mode-hub',
+                          hub: true,
+                          url: href,
+                        }}
+                      />
+                    </div>
+                  </li>
+                );
+              },
+            )}
           </ol>
 
-          <p style={{ textAlign: 'center', marginTop: '1.5rem' }}>
-            <Link href="/niveles/b2" style={{ color: '#4a5568' }}>
+          <footer className="exam-mode-session__footer">
+            <Link href={`/niveles/${slug}`} className="exam-mode-session__footer-link">
               ← Back to exam practice
             </Link>
-          </p>
+          </footer>
         </div>
       )}
     </B2ExamPracticeLayout>

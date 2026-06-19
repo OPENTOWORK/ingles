@@ -33,10 +33,11 @@ function barFillId(entry, index) {
   return `bar-${scoreTone(entry.scorePct)}-${index}`;
 }
 
-function ChartTooltip({ active, payload }) {
+function ChartTooltip({ active, payload, variant = 'skills' }) {
   if (!active || !payload?.length) return null;
   const d = payload[0]?.payload;
   if (!d) return null;
+  const examMode = variant === 'exam-mode';
   return (
     <div className="lsp-chart-tip">
       <div className="lsp-chart-tip__head">
@@ -44,11 +45,20 @@ function ChartTooltip({ active, payload }) {
         {d.skillZone ? <span className="lsp-chart-tip__zone">{d.skillZone}</span> : null}
       </div>
       {d.scorePct != null ? (
-        <p className="lsp-chart-tip__score">{d.scorePct}% de acierto</p>
+        <>
+          <p className="lsp-chart-tip__score">{d.scorePct}%</p>
+          {examMode && d.evaluadas > 0 ? (
+            <p className="lsp-chart-tip__items">
+              {d.correctas}/{d.evaluadas} items
+            </p>
+          ) : null}
+        </>
       ) : (
-        <p className="lsp-chart-tip__empty">No practice logged yet</p>
+        <p className="lsp-chart-tip__empty">
+          {examMode ? 'Not completed in exam mode yet' : 'No practice logged yet'}
+        </p>
       )}
-      {d.evaluadas > 0 ? (
+      {!examMode && d.evaluadas > 0 ? (
         <p>
           {d.evaluadas} evaluadas ·{' '}
           <span className="lsp-chart-tip__ok">✓ {d.correctas}</span>
@@ -77,7 +87,8 @@ function renderBarLabel(props) {
   );
 }
 
-export default function LevelsStatsChartsCarousel({ charts = [] }) {
+export default function LevelsStatsChartsCarousel({ charts = [], variant = 'skills' }) {
+  const examMode = variant === 'exam-mode';
   const slides = useMemo(() => charts || [], [charts]);
   const [index, setIndex] = useState(0);
 
@@ -114,14 +125,37 @@ export default function LevelsStatsChartsCarousel({ charts = [] }) {
     setIndex((i) => (i + delta + slides.length) % slides.length);
   };
 
+  const copy = examMode
+    ? {
+        title: 'Exam mode performance by part',
+        subtitle: (levelName, partMax) =>
+          `${partMax} exam parts for ${levelName}. Each bar uses the skill colour for that section.`,
+        partsPractised: 'parts completed',
+        examParts: 'exam parts',
+        avgLabel: 'average completed',
+        empty: (levelName) =>
+          `No exam mode attempts logged in ${levelName} yet. Complete a full exam simulation and your scores will appear here.`,
+        hint: 'Scroll horizontally if you cannot see all parts.',
+      }
+    : {
+        title: 'Performance by part',
+        subtitle: (levelName, partMax) =>
+          `${partMax} exam parts for ${levelName}. Hover over each bar for details.`,
+        partsPractised: 'parts practised',
+        examParts: 'exam parts',
+        avgLabel: 'average practised',
+        empty: (levelName) =>
+          `No practice logged in ${levelName} yet. When you practise in Levels, your scores will appear here automatically.`,
+        hint: 'Desliza horizontalmente si no ves todas las partes.',
+      };
+
   return (
-    <div className="lsp-chart">
+    <div className={`lsp-chart${examMode ? ' lsp-chart--exam-mode' : ''}`}>
       <div className="lsp-chart__head">
         <div>
-          <h3 className="lsp-chart__title">Performance by part</h3>
+          <h3 className="lsp-chart__title">{copy.title}</h3>
           <p className="lsp-chart__subtitle">
-            {current.partMax || chartData.length} exam parts for {current.levelName}. Hover over
-            each bar for details.
+            {copy.subtitle(current.levelName, current.partMax || chartData.length)}
           </p>
         </div>
         <div className="lsp-chart__nav">
@@ -150,19 +184,19 @@ export default function LevelsStatsChartsCarousel({ charts = [] }) {
       <div className="lsp-chart__summary">
         <div className="lsp-chart__summary-item">
           <span className="lsp-chart__summary-value">{practicedCount}</span>
-          <span className="lsp-chart__summary-label">parts practised</span>
+          <span className="lsp-chart__summary-label">{copy.partsPractised}</span>
         </div>
         <div className="lsp-chart__summary-divider" aria-hidden />
         <div className="lsp-chart__summary-item">
           <span className="lsp-chart__summary-value">{current.partMax || chartData.length}</span>
-          <span className="lsp-chart__summary-label">exam parts</span>
+          <span className="lsp-chart__summary-label">{copy.examParts}</span>
         </div>
         {avgScore != null ? (
           <>
             <div className="lsp-chart__summary-divider" aria-hidden />
             <div className="lsp-chart__summary-item">
               <span className="lsp-chart__summary-value">{avgScore}%</span>
-              <span className="lsp-chart__summary-label">average practised</span>
+              <span className="lsp-chart__summary-label">{copy.avgLabel}</span>
             </div>
           </>
         ) : null}
@@ -185,24 +219,36 @@ export default function LevelsStatsChartsCarousel({ charts = [] }) {
         </div>
       ) : null}
 
-      <div className="lsp-chart__legend">
-        <span className="lsp-chart__legend-item">
-          <i className="lsp-chart__dot lsp-chart__dot--high" />
-          Excellent ≥80%
-        </span>
-        <span className="lsp-chart__legend-item">
-          <i className="lsp-chart__dot lsp-chart__dot--mid" />
-          In progress 50–79%
-        </span>
-        <span className="lsp-chart__legend-item">
-          <i className="lsp-chart__dot lsp-chart__dot--low" />
-          Needs work &lt;50%
-        </span>
-        <span className="lsp-chart__legend-item">
-          <i className="lsp-chart__dot lsp-chart__dot--empty" />
-          No data
-        </span>
-      </div>
+      {examMode ? null : (
+        <div className="lsp-chart__legend">
+          <span className="lsp-chart__legend-item">
+            <i className="lsp-chart__dot lsp-chart__dot--high" />
+            Excellent ≥80%
+          </span>
+          <span className="lsp-chart__legend-item">
+            <i className="lsp-chart__dot lsp-chart__dot--mid" />
+            In progress 50–79%
+          </span>
+          <span className="lsp-chart__legend-item">
+            <i className="lsp-chart__dot lsp-chart__dot--low" />
+            Needs work &lt;50%
+          </span>
+          <span className="lsp-chart__legend-item">
+            <i className="lsp-chart__dot lsp-chart__dot--empty" />
+            No data
+          </span>
+        </div>
+      )}
+
+      {examMode ? (
+        <div className="lsp-chart__legend lsp-chart__legend--exam">
+          <span className="lsp-chart__legend-item">Solid bar = section completed in exam mode</span>
+          <span className="lsp-chart__legend-item">
+            <i className="lsp-chart__dot lsp-chart__dot--empty" />
+            Not attempted yet
+          </span>
+        </div>
+      ) : null}
 
       {slides.length > 1 ? (
         <div className="lsp-chart__tabs" role="tablist" aria-label="Levels">
@@ -223,28 +269,27 @@ export default function LevelsStatsChartsCarousel({ charts = [] }) {
       ) : null}
 
       {!current.hasData ? (
-        <p className="lsp-chart__no-data">
-          No practice logged in {current.levelName} yet. When you practise in Levels, your scores
-          will appear here automatically.
-        </p>
+        <p className="lsp-chart__no-data">{copy.empty(current.levelName)}</p>
       ) : null}
 
       <div className="lsp-chart__scroll">
         <div className="lsp-chart__canvas" style={{ minWidth: chartWidth }}>
           <ResponsiveContainer width="100%" height={360}>
             <BarChart data={chartData} margin={{ top: 28, right: 8, left: 0, bottom: 4 }}>
-              <defs>
-                {chartData.map((entry, i) => {
-                  const tone = scoreTone(entry.scorePct);
-                  const [c1, c2] = BAR_GRADIENTS[tone];
-                  return (
-                    <linearGradient key={barFillId(entry, i)} id={barFillId(entry, i)} x1="0" y1="0" x2="0" y2="1">
-                      <stop offset="0%" stopColor={c1} />
-                      <stop offset="100%" stopColor={c2} />
-                    </linearGradient>
-                  );
-                })}
-              </defs>
+              {!examMode ? (
+                <defs>
+                  {chartData.map((entry, i) => {
+                    const tone = scoreTone(entry.scorePct);
+                    const [c1, c2] = BAR_GRADIENTS[tone];
+                    return (
+                      <linearGradient key={barFillId(entry, i)} id={barFillId(entry, i)} x1="0" y1="0" x2="0" y2="1">
+                        <stop offset="0%" stopColor={c1} />
+                        <stop offset="100%" stopColor={c2} />
+                      </linearGradient>
+                    );
+                  })}
+                </defs>
+              ) : null}
 
               {(current.skillZones || []).map((zone) => (
                 <ReferenceArea
@@ -288,26 +333,36 @@ export default function LevelsStatsChartsCarousel({ charts = [] }) {
                 axisLine={false}
                 tickLine={false}
               />
-              <Tooltip content={<ChartTooltip />} cursor={{ fill: 'rgba(15, 23, 42, 0.04)' }} />
+              <Tooltip
+                content={<ChartTooltip variant={variant} />}
+                cursor={{ fill: 'rgba(15, 23, 42, 0.04)' }}
+              />
               <Bar dataKey="displayScore" radius={[8, 8, 4, 4]} maxBarSize={32}>
                 <LabelList dataKey="displayScore" content={renderBarLabel} />
-                {chartData.map((entry, i) => (
-                  <Cell
-                    key={entry.parteId}
-                    fill={`url(#${barFillId(entry, i)})`}
-                    fillOpacity={entry.hasScore ? 1 : 0.55}
-                    stroke={entry.hasScore ? 'transparent' : '#94a3b8'}
-                    strokeWidth={entry.hasScore ? 0 : 1}
-                    strokeDasharray={entry.hasScore ? undefined : '4 3'}
-                  />
-                ))}
+                {chartData.map((entry, i) => {
+                  const fill = examMode
+                    ? entry.hasScore
+                      ? entry.zoneBarColor || '#64748b'
+                      : entry.zoneEmptyColor || '#e2e8f0'
+                    : `url(#${barFillId(entry, i)})`;
+                  return (
+                    <Cell
+                      key={entry.parteId}
+                      fill={fill}
+                      fillOpacity={entry.hasScore ? 1 : examMode ? 0.85 : 0.55}
+                      stroke={entry.hasScore ? 'transparent' : examMode ? entry.zoneBarColor || '#94a3b8' : '#94a3b8'}
+                      strokeWidth={entry.hasScore ? 0 : 1}
+                      strokeDasharray={entry.hasScore ? undefined : '4 3'}
+                    />
+                  );
+                })}
               </Bar>
             </BarChart>
           </ResponsiveContainer>
         </div>
       </div>
 
-      <p className="lsp-chart__hint">Desliza horizontalmente si no ves todas las partes.</p>
+      <p className="lsp-chart__hint">{copy.hint}</p>
 
       <style jsx global>{`
         .lsp-chart-tip {
@@ -341,10 +396,11 @@ export default function LevelsStatsChartsCarousel({ charts = [] }) {
           font-weight: 800;
           color: #0f172a;
         }
-        .lsp-chart-tip__empty {
-          margin: 6px 0 0;
-          color: #94a3b8;
-          font-style: italic;
+        .lsp-chart-tip__items {
+          margin: 4px 0 0;
+          font-size: 0.8125rem;
+          color: #475569;
+          font-weight: 600;
         }
         .lsp-chart-tip p {
           margin: 4px 0 0;

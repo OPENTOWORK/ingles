@@ -458,6 +458,10 @@ export function setPreferredBritishVoice(name) {
   setStoredPreferredVoiceName(preferredVoiceName);
 }
 
+export function getSpeakingCoachAudio() {
+  return currentAudio;
+}
+
 // Stop TTS
 export function stopSpeaking() {
   if (openAiTtsAbortController) {

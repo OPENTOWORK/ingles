@@ -36,8 +36,10 @@ export function useExamModeStatistics(slug, examSlot) {
 
   const rescoreTrigger = useMemo(() => buildExamModeRescoreTrigger(session), [session]);
 
-  const loadHistory = useCallback(async () => {
-    setHistoryReady(false);
+  const loadHistory = useCallback(async ({ background = false } = {}) => {
+    if (!background) {
+      setHistoryReady(false);
+    }
     const attempts = await loadExamModeAttemptHistory(slug, examSlot, userId);
     setAttemptHistory(attempts);
     setHistoryReady(true);
@@ -75,7 +77,7 @@ export function useExamModeStatistics(slug, examSlot) {
           setScorePatch(patch);
           const persisted = await applyScoreRescorePatch(patch, snapshotsBySection);
           if (persisted) {
-            void loadHistory();
+            void loadHistory({ background: true });
           }
         }
         lastRescoreTriggerRef.current = rescoreTrigger;
@@ -120,14 +122,14 @@ export function useExamModeStatistics(slug, examSlot) {
   const repeatExam = useCallback(
     async (options = {}) => {
       const ok = await repeatSession(options);
-      if (ok) await loadHistory();
+      if (ok) await loadHistory({ background: true });
       return ok;
     },
     [repeatSession, loadHistory],
   );
 
   const refresh = useCallback(() => {
-    void loadHistory();
+    void loadHistory({ background: true });
   }, [loadHistory]);
 
   return {

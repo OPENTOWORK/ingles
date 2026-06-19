@@ -112,9 +112,9 @@ async function upsertPartPuntuacionViaApi({
 
     const payload = await res.json().catch(() => ({}));
     if (!res.ok) {
-      return { error: new Error(payload?.error || `Error al guardar (${res.status})`) };
+      return { error: new Error(payload?.error || `Error al guardar (${res.status})`), id: null };
     }
-    return { error: null };
+    return { error: null, id: payload?.puntuacionesId ?? null };
   } catch (e) {
     return { error: e };
   }
@@ -228,7 +228,7 @@ export async function upsertLevelsPartPuntuacion({
   puntosMaximos,
 }) {
   if (!userId || !preguntaId || !examenId || !parteNumero) {
-    return { error: new Error('Faltan datos para guardar la puntuación de la parte.') };
+    return { error: new Error('Faltan datos para guardar la puntuación de la parte.'), id: null };
   }
 
   const {
@@ -292,44 +292,50 @@ export async function upsertLevelsPartPuntuacion({
       parteNumero,
       scoreSource,
     );
-    if (findErr) return { error: findErr };
+    if (findErr) return { error: findErr, id: null };
 
     const tryClientWrite = async () => {
       const attemptWrite = async (payload, existing) => {
         if (existing) {
-          return supabase.from('levels_puntuaciones').update(payload).eq('id', existing);
+          const { error } = await supabase.from('levels_puntuaciones').update(payload).eq('id', existing);
+          return { error: error ?? null, id: existing };
         }
-        return supabase.from('levels_puntuaciones').insert(payload);
+        const { data, error } = await supabase
+          .from('levels_puntuaciones')
+          .insert(payload)
+          .select('id')
+          .single();
+        return { error: error ?? null, id: data?.id ?? null };
       };
 
       if (existingId) {
-        let { error: upErr } = await attemptWrite(fullRow, existingId);
+        let { error: upErr, id } = await attemptWrite(fullRow, existingId);
         if (upErr && isSchemaCacheColumnError(upErr) && fullRow.score_source != null) {
           const { score_source, ...withoutSource } = fullRow;
-          ({ error: upErr } = await attemptWrite(withoutSource, existingId));
+          ({ error: upErr, id } = await attemptWrite(withoutSource, existingId));
         }
         if (upErr && isSchemaCacheColumnError(upErr)) {
-          ({ error: upErr } = await attemptWrite(minimalRow, existingId));
+          ({ error: upErr, id } = await attemptWrite(minimalRow, existingId));
         }
-        return upErr ?? null;
+        return { error: upErr ?? null, id: id ?? existingId };
       }
 
-      let { error: insErr } = await attemptWrite(fullRow, null);
+      let { error: insErr, id } = await attemptWrite(fullRow, null);
       if (insErr && isSchemaCacheColumnError(insErr) && fullRow.score_source != null) {
         const { score_source, ...withoutSource } = fullRow;
-        ({ error: insErr } = await attemptWrite(withoutSource, null));
+        ({ error: insErr, id } = await attemptWrite(withoutSource, null));
       }
       if (insErr && isSchemaCacheColumnError(insErr)) {
-        ({ error: insErr } = await attemptWrite(minimalRow, null));
+        ({ error: insErr, id } = await attemptWrite(minimalRow, null));
       }
 
-      return insErr ?? null;
+      return { error: insErr ?? null, id };
     };
 
-    const clientErr = await tryClientWrite();
-    if (!clientErr) return { error: null };
+    const { error: clientErr, id: clientId } = await tryClientWrite();
+    if (!clientErr) return { error: null, id: clientId, descripcion };
 
-    return upsertPartPuntuacionViaApi({
+    const apiRes = await upsertPartPuntuacionViaApi({
       preguntaId,
       examenId,
       parteNumero,
@@ -340,7 +346,8 @@ export async function upsertLevelsPartPuntuacion({
       puntosObtenidos: puntos ?? undefined,
       puntosMaximos: maxPuntos ?? undefined,
     });
+    return { ...apiRes, descripcion };
   } catch (e) {
-    return { error: e };
+    return { error: e, id: null };
   }
 }

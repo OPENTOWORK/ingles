@@ -99,7 +99,7 @@ function ExerciseNode({ exerciseIndex, examSlot, part, column, progressBySlot, a
           {attempted ? (
             <>
               {score.correct}/{score.total}
-              {score.passed ? ' Ô£ô' : ''}
+              {score.passed ? ' ✓' : ''}
             </>
           ) : (
             'Not tried'
@@ -127,7 +127,7 @@ function PartMilestone({ part, column, progressBySlot, availableSlots }) {
           <div className={styles.milestoneProgress}>
             <TheoryLevelStars stars={partStars} size="sm" variant="gold" />
             <span className={styles.milestoneMeta}>
-              {attempts}/{exerciseTotal} exercises ┬À best {partStars}/3 Ôÿà
+              {attempts}/{exerciseTotal} exercises · best {partStars}/3
             </span>
           </div>
         </div>
@@ -227,14 +227,14 @@ function StarsWayToB2SectionInner() {
           Stars way to B2
         </h2>
         <p className={styles.description}>
-          Pick a skill and follow the path. Each circle is an exercise ÔÇö earn up to 3 stars and see
+          Pick a skill and follow the path. Each circle is an exercise — earn up to 3 stars and see
           what you still need to reach the top.
         </p>
       </div>
 
       {loading ? (
         <p className={styles.loading} role="status">
-          Loading your progressÔÇª
+          Loading your progress…
         </p>
       ) : null}
 
@@ -286,7 +286,7 @@ export default function StarsWayToB2Section() {
     <Suspense
       fallback={
         <p className={styles.loading} role="status">
-          Loading your progressÔÇª
+          Loading your progress…
         </p>
       }
     >

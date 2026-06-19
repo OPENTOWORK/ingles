@@ -1,7 +1,7 @@
-/** @type {HTMLAudioElement | null} */
-let activeAudio = null;
+import { speakText, stopSpeaking, getSpeakingCoachAudio } from '../../dralo-speaking/lib/gemini-coach';
+
 /** Incrementa al parar: ignora callbacks de reproducciones antiguas. */
-let playGeneration = 0;
+let playToken = 0;
 
 /** @typedef {'idle' | 'audio' | 'synthesis'} ExaminerVoiceMode */
 
@@ -26,15 +26,14 @@ export function subscribeExaminerSpeaking(listener) {
   return () => speakingListeners.delete(listener);
 }
 
-/** Audio en reproducción (para visualizador con Web Audio API). */
 export function getActiveExaminerAudio() {
-  return activeAudio;
+  return getSpeakingCoachAudio();
 }
 
-/** Pausa audio del examinador (MP3 o síntesis). */
 export function pauseExaminerAudio() {
-  if (activeAudio && !activeAudio.paused) {
-    activeAudio.pause();
+  const audio = getSpeakingCoachAudio();
+  if (audio && !audio.paused) {
+    audio.pause();
     notifySpeaking(false);
     return true;
   }
@@ -46,10 +45,10 @@ export function pauseExaminerAudio() {
   return false;
 }
 
-/** Reanuda audio del examinador pausado. */
 export function resumeExaminerAudio() {
-  if (activeAudio?.paused) {
-    void activeAudio.play().then(() => {
+  const audio = getSpeakingCoachAudio();
+  if (audio?.paused) {
+    void audio.play().then(() => {
       notifySpeaking(true, 'audio');
     }).catch(() => {});
     return true;
@@ -63,7 +62,8 @@ export function resumeExaminerAudio() {
 }
 
 export function isExaminerAudioPaused() {
-  if (activeAudio?.paused) return true;
+  const audio = getSpeakingCoachAudio();
+  if (audio?.paused) return true;
   if (typeof window !== 'undefined' && window.speechSynthesis?.paused) return true;
   return false;
 }
@@ -72,95 +72,45 @@ export function isExaminerSpeaking() {
   return speakingState.active;
 }
 
-/**
- * Detiene cualquier audio del examinador (MP3 o voz del navegador).
- */
 export function stopExaminerAudio() {
-  playGeneration += 1;
+  playToken += 1;
   notifySpeaking(false);
-  if (activeAudio) {
-    try {
-      activeAudio.pause();
-      activeAudio.currentTime = 0;
-      activeAudio.src = '';
-    } catch {
-      /* ignore */
-    }
-    activeAudio = null;
-  }
-  if (typeof window !== 'undefined' && window.speechSynthesis) {
-    window.speechSynthesis.cancel();
-  }
+  stopSpeaking();
 }
 
 /**
- * @param {{ base64?: string, mime?: string, text?: string }} opts
- * @returns {Promise<void>}
+ * Misma cadena que Dralo Speaking Coach: /api/coach-tts → Google TTS → voz del navegador.
+ * @param {{ base64?: string, mime?: string, text?: string, speechLang?: string }} opts
+ * @returns {Promise<boolean>}
  */
-export function playExaminerAudio({ base64, mime = 'audio/mpeg', text = '' } = {}) {
-  stopExaminerAudio();
-  const gen = playGeneration;
-
-  const stillActive = () => gen === playGeneration;
-
-  if (base64) {
-    return new Promise((resolve) => {
-      try {
-        const src = `data:${mime};base64,${base64}`;
-        const audio = new Audio(src);
-        activeAudio = audio;
-        const finish = () => {
-          if (stillActive()) notifySpeaking(false);
-          if (stillActive() && activeAudio === audio) activeAudio = null;
-          resolve();
-        };
-        audio.onplay = () => {
-          if (stillActive()) notifySpeaking(true, 'audio');
-        };
-        audio.onended = finish;
-        audio.onerror = () => {
-          if (!stillActive()) {
-            finish();
-            return;
-          }
-          speakWithBrowser(text, gen).finally(finish);
-        };
-        void audio.play().catch(() => {
-          if (!stillActive()) {
-            finish();
-            return;
-          }
-          speakWithBrowser(text, gen).finally(finish);
-        });
-      } catch {
-        if (!stillActive()) return resolve();
-        speakWithBrowser(text, gen).finally(resolve);
-      }
-    });
-  }
-  return speakWithBrowser(text, gen);
-}
-
-function speakWithBrowser(text, gen) {
+export function playExaminerAudio({ text = '', speechLang = 'en-GB' } = {}) {
   const t = String(text || '').trim();
-  if (!t || typeof window === 'undefined' || !window.speechSynthesis) {
-    return Promise.resolve();
-  }
-  if (gen !== playGeneration) return Promise.resolve();
+  if (!t) return Promise.resolve(false);
 
-  notifySpeaking(true, 'synthesis');
+  stopExaminerAudio();
+  const token = playToken;
 
   return new Promise((resolve) => {
-    window.speechSynthesis.cancel();
-    const u = new SpeechSynthesisUtterance(t);
-    u.lang = 'en-GB';
-    u.rate = 0.95;
-    const finish = () => {
-      if (gen === playGeneration) notifySpeaking(false);
-      resolve();
+    let settled = false;
+    const finish = (ok) => {
+      if (settled) return;
+      settled = true;
+      window.clearTimeout(timeoutId);
+      resolve(ok);
     };
-    u.onend = finish;
-    u.onerror = finish;
-    window.speechSynthesis.speak(u);
+
+    const timeoutId = window.setTimeout(() => finish(false), 25000);
+
+    speakText(t, {
+      lang: speechLang,
+      onStart: () => {
+        if (token !== playToken) return;
+        notifySpeaking(true, 'audio');
+        finish(true);
+      },
+      onEnd: () => {
+        if (token === playToken) notifySpeaking(false);
+      },
+    });
   });
 }

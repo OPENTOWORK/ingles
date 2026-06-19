@@ -33,6 +33,11 @@ import {
   mergeExamModePartRepeat,
   prepareExamModePartRepeat,
 } from '@/utils/examModePartRepeat';
+import { buildClientApiUrl } from '@/utils/clientApiUrl';
+
+/** Timer ticks: localStorage at most every 5s; server sync at most every 30s. */
+const TIMER_LOCAL_SAVE_MS = 5000;
+const TIMER_SERVER_SYNC_MS = 30000;
 
 /**
  * Persisted exam-mode session for a level + test slot.
@@ -43,6 +48,10 @@ export function useExamModeSession(slug, examSlot) {
   const [userId, setUserId] = useState('');
   const [ready, setReady] = useState(false);
   const sessionRef = useRef(null);
+  const pendingSyncRef = useRef(null);
+  const serverSyncTimerRef = useRef(null);
+  const localSaveTimerRef = useRef(null);
+  const lastLocalSaveAtRef = useRef(0);
 
   useEffect(() => {
     sessionRef.current = session;
@@ -58,10 +67,62 @@ export function useExamModeSession(slug, examSlot) {
     })();
   }, [slug, examSlot]);
 
+  const flushServerSync = useCallback(() => {
+    if (serverSyncTimerRef.current) {
+      window.clearTimeout(serverSyncTimerRef.current);
+      serverSyncTimerRef.current = null;
+    }
+    const toSync = pendingSyncRef.current ?? sessionRef.current;
+    pendingSyncRef.current = null;
+    if (toSync) void syncExamModeToServer(toSync, userId);
+  }, [userId]);
+
+  const scheduleServerSync = useCallback(() => {
+    if (serverSyncTimerRef.current) return;
+    serverSyncTimerRef.current = window.setTimeout(() => {
+      serverSyncTimerRef.current = null;
+      flushServerSync();
+    }, TIMER_SERVER_SYNC_MS);
+  }, [flushServerSync]);
+
+  const flushLocalSave = useCallback(() => {
+    if (localSaveTimerRef.current) {
+      window.clearTimeout(localSaveTimerRef.current);
+      localSaveTimerRef.current = null;
+    }
+    const current = sessionRef.current;
+    if (!current) return;
+    const saved = saveExamModeSession(current, userId);
+    sessionRef.current = saved;
+    pendingSyncRef.current = saved;
+    lastLocalSaveAtRef.current = Date.now();
+  }, [userId]);
+
+  const scheduleLocalSave = useCallback(() => {
+    if (localSaveTimerRef.current) return;
+    const elapsed = Date.now() - lastLocalSaveAtRef.current;
+    const delay = Math.max(0, TIMER_LOCAL_SAVE_MS - elapsed);
+    localSaveTimerRef.current = window.setTimeout(() => {
+      localSaveTimerRef.current = null;
+      flushLocalSave();
+    }, delay);
+  }, [flushLocalSave]);
+
   const persist = useCallback(
     (next) => {
+      if (localSaveTimerRef.current) {
+        window.clearTimeout(localSaveTimerRef.current);
+        localSaveTimerRef.current = null;
+      }
+      if (serverSyncTimerRef.current) {
+        window.clearTimeout(serverSyncTimerRef.current);
+        serverSyncTimerRef.current = null;
+      }
       const saved = saveExamModeSession(next, userId);
       setSession(saved);
+      sessionRef.current = saved;
+      pendingSyncRef.current = saved;
+      lastLocalSaveAtRef.current = Date.now();
       void syncExamModeToServer(saved, userId);
       return saved;
     },
@@ -95,10 +156,15 @@ export function useExamModeSession(slug, examSlot) {
 
   const setSectionRemaining = useCallback(
     (sectionKey, remainingSeconds) => {
-      if (!session) return;
-      persist(updateExamModeSectionRemaining(session, sectionKey, remainingSeconds));
+      const current = sessionRef.current;
+      if (!current) return;
+      const next = updateExamModeSectionRemaining(current, sectionKey, remainingSeconds);
+      sessionRef.current = next;
+      pendingSyncRef.current = next;
+      scheduleLocalSave();
+      scheduleServerSync();
     },
-    [session, persist],
+    [scheduleLocalSave, scheduleServerSync],
   );
 
   const resetExam = useCallback(() => {
@@ -219,6 +285,27 @@ export function useExamModeSession(slug, examSlot) {
   );
 
   useEffect(() => {
+    const flushTimerState = () => {
+      flushLocalSave();
+      flushServerSync();
+    };
+
+    window.addEventListener('beforeunload', flushTimerState);
+    const onVisibility = () => {
+      if (document.visibilityState === 'hidden') flushTimerState();
+    };
+    document.addEventListener('visibilitychange', onVisibility);
+
+    return () => {
+      window.removeEventListener('beforeunload', flushTimerState);
+      document.removeEventListener('visibilitychange', onVisibility);
+      flushTimerState();
+      if (serverSyncTimerRef.current) window.clearTimeout(serverSyncTimerRef.current);
+      if (localSaveTimerRef.current) window.clearTimeout(localSaveTimerRef.current);
+    };
+  }, [flushLocalSave, flushServerSync]);
+
+  useEffect(() => {
     if (!ready || !session) return undefined;
 
     const handler = (event) => {
@@ -276,10 +363,11 @@ async function syncExamModeToServer(session, userId) {
   if (!userId || !session) return;
   if (!shouldSyncExamModeSessionToServer(session)) return;
   try {
-    await fetch('/api/levels/exam-mode-session', {
+    await fetch(buildClientApiUrl('/api/levels/exam-mode-session'), {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ session, userId }),
+      keepalive: true,
     });
   } catch {
     /* localStorage remains source of truth */

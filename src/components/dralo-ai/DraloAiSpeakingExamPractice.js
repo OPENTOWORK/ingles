@@ -11,15 +11,6 @@ import { FeedbackCards } from '@/features/speaking/ui/components/FeedbackCards';
 import { playExaminerAudio, stopExaminerAudio } from '@/utils/playExaminerAudio';
 import { buildClientApiUrl } from '@/utils/clientApiUrl';
 
-function withBase(path) {
-  const b =
-    typeof process !== 'undefined' && process.env.NEXT_PUBLIC_BASE_PATH
-      ? String(process.env.NEXT_PUBLIC_BASE_PATH).replace(/\/$/, '')
-      : '';
-  const p = path.startsWith('/') ? path : `/${path}`;
-  return b ? `${b}${p}` : p;
-}
-
 function b2GlobalPartNumber(localPart) {
   const n = Number(localPart);
   if (!Number.isFinite(n) || n < 1) return 0;
@@ -129,11 +120,7 @@ export default function DraloAiSpeakingExamPractice({ level = 'B2', activity }) 
       const text = data.assistantText;
       setAssistantLines((prev) => [...prev, text]);
       setHistory((h) => [...h, { role: 'assistant', content: text }]);
-      const audioPayload = {
-        base64: data.assistantAudioBase64,
-        mime: data.assistantAudioMime,
-        text,
-      };
+      const audioPayload = { text };
       setLastAudio(audioPayload);
       await playExaminerAudio(audioPayload);
     },
@@ -163,9 +150,9 @@ export default function DraloAiSpeakingExamPractice({ level = 'B2', activity }) 
           Object.entries(base).forEach(([k, v]) => form.set(k, String(v)));
           if (payload.isOpening) form.set('isOpening', 'true');
           form.append('audio', payload.audio, 'capture.webm');
-          res = await fetch(withBase('/api/speaking/turn'), { method: 'POST', body: form, signal });
+          res = await fetch(buildClientApiUrl('/api/speaking/turn'), { method: 'POST', body: form, signal });
         } else {
-          res = await fetch(withBase('/api/speaking/turn'), {
+          res = await fetch(buildClientApiUrl('/api/speaking/turn'), {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
@@ -197,7 +184,6 @@ export default function DraloAiSpeakingExamPractice({ level = 'B2', activity }) 
     aliveRef.current = true;
     const ac = new AbortController();
     abortRef.current = ac;
-    stopExaminerAudio();
     setSessionId(null);
     setHistory([]);
     setUserLines([]);
@@ -211,7 +197,7 @@ export default function DraloAiSpeakingExamPractice({ level = 'B2', activity }) 
 
     const run = async () => {
       try {
-        const sessionRes = await fetch(withBase('/api/speaking/session'), {
+        const sessionRes = await fetch(buildClientApiUrl('/api/speaking/session'), {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ mode: 'EXAM', cefr: level }),
@@ -241,7 +227,6 @@ export default function DraloAiSpeakingExamPractice({ level = 'B2', activity }) 
     return () => {
       aliveRef.current = false;
       ac.abort();
-      stopExaminerAudio();
       if (media.isRecording) void media.stop();
     };
   }, [

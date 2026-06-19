@@ -34,3 +34,19 @@ export function getSkillPartTabLabel(part, partMin, lang = 'en') {
   if (!local) return null;
   return lang === 'en' ? `Part ${local}` : `Parte ${local}`;
 }
+
+/** Título de parte en exam mode (Listening 10→1, Writing 8→1, etc.). */
+export function getExamSectionPartTitle(partNumber, partMin, lang = 'en') {
+  const local = getSkillLocalPartNumber(partNumber, partMin);
+  if (!local) return null;
+  return lang === 'en' ? `Part ${local}` : `Parte ${local}`;
+}
+
+/** Etiqueta "Part N" para botones Back/Continue del nav (misma numeración que las pestañas). */
+export function getModuleNavPartLabel(partNumber, partMin, lang = 'en') {
+  const n = Number(partNumber);
+  if (!Number.isFinite(n) || n <= 0) return '';
+  const localTitle = partMin != null ? getExamSectionPartTitle(n, partMin, lang) : null;
+  if (localTitle) return localTitle;
+  return lang === 'en' ? `Part ${n}` : `Parte ${n}`;
+}

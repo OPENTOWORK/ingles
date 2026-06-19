@@ -2645,6 +2645,21 @@ body.nav-open {
   text-align: center;
 }
 
+.exam-mode-session__complete-score {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 0.55rem 0.75rem;
+  margin-bottom: 1rem;
+}
+
+.exam-mode-session__complete-score-label {
+  font-size: 0.92rem;
+  font-weight: 700;
+  color: #15803d;
+}
+
 .exam-mode-session__complete-actions {
   display: flex;
   flex-wrap: wrap;
@@ -2668,6 +2683,10 @@ body.nav-open {
   background: linear-gradient(135deg, #16a34a 0%, #15803d 100%);
   border: none;
   box-shadow: 0 4px 14px rgba(22, 163, 74, 0.22);
+}
+
+.exam-mode-session__btn--success:hover {
+  box-shadow: 0 6px 18px rgba(22, 163, 74, 0.3);
 }
 
 .exam-mode-session__timeline {
@@ -2749,6 +2768,8 @@ body.nav-open {
   height: 3.1rem;
   border-radius: 14px;
   flex-shrink: 0;
+  font-size: 1.45rem;
+  line-height: 1;
 }
 
 .exam-mode-session__icon-wrap--reading {
@@ -3408,8 +3429,8 @@ body.reading-night-mode .levels-exercise-stars--gold .starSvgWrapEmpty .starSvgP
 .levels-b2-practice--skill-compact[data-skill-theme='reading'] {
   --skill-accent: #2563eb;
   --skill-accent-dark: #1d4ed8;
-  --skill-surface: #f8fbff;
-  --skill-surface-2: #eff6ff;
+  --skill-surface: #eef4ff;
+  --skill-surface-2: #dbeafe;
   --skill-border: #bfdbfe;
   --skill-ink: #1e3a8a;
 }
@@ -3417,17 +3438,17 @@ body.reading-night-mode .levels-exercise-stars--gold .starSvgWrapEmpty .starSvgP
 .levels-b2-practice--skill-compact[data-skill-theme='writing'] {
   --skill-accent: #059669;
   --skill-accent-dark: #047857;
-  --skill-surface: #f7fdf9;
-  --skill-surface-2: #ecfdf5;
-  --skill-border: #bbf7d0;
+  --skill-surface: #ecfdf5;
+  --skill-surface-2: #d1fae5;
+  --skill-border: #a7f3d0;
   --skill-ink: #14532d;
 }
 
 .levels-b2-practice--skill-compact[data-skill-theme='listening'] {
   --skill-accent: #d97706;
   --skill-accent-dark: #b45309;
-  --skill-surface: #fffdf7;
-  --skill-surface-2: #fffbeb;
+  --skill-surface: #fffbeb;
+  --skill-surface-2: #fef3c7;
   --skill-border: #fde68a;
   --skill-ink: #78350f;
 }
@@ -3435,17 +3456,28 @@ body.reading-night-mode .levels-exercise-stars--gold .starSvgWrapEmpty .starSvgP
 .levels-b2-practice--skill-compact[data-skill-theme='speaking'] {
   --skill-accent: #db2777;
   --skill-accent-dark: #be185d;
-  --skill-surface: #fffbfd;
-  --skill-surface-2: #fdf2f8;
+  --skill-surface: #fdf2f8;
+  --skill-surface-2: #fce7f3;
   --skill-border: #f9a8d4;
   --skill-ink: #831843;
+}
+
+.levels-b2-practice--skill-compact[data-skill-theme] {
+  padding: 0.35rem;
+  border-radius: 20px;
+  background: linear-gradient(
+    180deg,
+    color-mix(in srgb, var(--skill-surface-2) 55%, #ffffff) 0%,
+    color-mix(in srgb, var(--skill-surface) 75%, #ffffff) 100%
+  );
+  box-shadow: 0 10px 36px color-mix(in srgb, var(--skill-accent) 10%, transparent);
 }
 
 .levels-b2-practice--skill-compact[data-skill-theme] .levels-b2-practice__title-block {
   border-color: var(--skill-border);
   background: linear-gradient(
     165deg,
-    #ffffff 0%,
+    color-mix(in srgb, var(--skill-surface) 82%, #ffffff) 0%,
     var(--skill-surface) 55%,
     var(--skill-surface-2) 100%
   );
@@ -3474,13 +3506,21 @@ body.reading-night-mode .levels-exercise-stars--gold .starSvgWrapEmpty .starSvgP
 
 .levels-b2-practice--skill-compact[data-skill-theme] .levels-b2-practice__work-panel {
   border-color: var(--skill-border);
-  background: linear-gradient(180deg, #ffffff 0%, var(--skill-surface) 100%);
+  background: linear-gradient(180deg, var(--skill-surface) 0%, var(--skill-surface-2) 100%);
   box-shadow: 0 8px 28px color-mix(in srgb, var(--skill-accent) 10%, transparent);
+}
+
+.levels-b2-practice--skill-compact[data-skill-theme] .levels-b2-practice__status {
+  padding: 0.55rem 0.75rem;
+  border-radius: 14px;
+  border: 1px solid color-mix(in srgb, var(--skill-border) 80%, #ffffff);
+  background: color-mix(in srgb, var(--skill-surface) 88%, #ffffff);
+  box-shadow: 0 2px 10px color-mix(in srgb, var(--skill-accent) 6%, transparent);
 }
 
 .levels-b2-practice--skill-compact[data-skill-theme] .exam-practice-skill-nav {
   border-color: var(--skill-border);
-  background: linear-gradient(180deg, #ffffff 0%, var(--skill-surface-2) 100%);
+  background: linear-gradient(180deg, var(--skill-surface) 0%, var(--skill-surface-2) 100%);
   box-shadow:
     0 1px 2px color-mix(in srgb, var(--skill-accent) 6%, transparent),
     0 6px 18px color-mix(in srgb, var(--skill-accent) 10%, transparent);
@@ -3509,8 +3549,10 @@ body.reading-night-mode .levels-exercise-stars--gold .starSvgWrapEmpty .starSvgP
 .levels-b2-practice--skill-compact[data-skill-theme] .levels-exam-split-card,
 .levels-b2-practice--skill-compact[data-skill-theme] .levels-exam-split-page {
   --levels-split-accent: var(--skill-accent);
-  --levels-split-panel: var(--skill-surface-2);
+  --levels-split-panel: var(--skill-surface);
   --levels-split-border: var(--skill-border);
+  background: color-mix(in srgb, var(--skill-surface) 92%, #ffffff);
+  border-color: color-mix(in srgb, var(--skill-border) 85%, #ffffff);
 }
 
 .levels-b2-practice--skill-compact[data-skill-theme] .levels-b2-practice__refresh-btn {
@@ -4458,6 +4500,14 @@ body.reading-night-mode .levels-exercise-stars--gold .starSvgWrapEmpty .starSvgP
   max-width: min(720px, 100%);
 }
 
+.levels-exam-practice-page--speaking {
+  max-width: 100%;
+}
+
+.levels-b2-practice:has(.levels-exam-practice-page--speaking) {
+  max-width: min(1320px, 100%);
+}
+
 .levels-b2-writing-panel {
   margin-top: 0.25rem;
 }
@@ -5247,6 +5297,47 @@ body.reading-night-mode .levels-exercise-stars--gold .starSvgWrapEmpty .starSvgP
   grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
 }
 
+.levels-exam-module-nav--centered-parts {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+  align-items: center;
+  gap: 0.65rem;
+  max-width: 100%;
+  margin-left: 0;
+  margin-right: 0;
+}
+
+.levels-exam-module-nav--centered-parts .levels-exam-module-nav__zone--back {
+  position: static;
+  transform: none;
+  justify-self: start;
+  grid-column: 1;
+}
+
+.levels-exam-module-nav--centered-parts .levels-exam-module-nav__zone--center {
+  grid-column: 2;
+  justify-self: center;
+  justify-content: center;
+}
+
+.levels-exam-module-nav--centered-parts .levels-exam-module-nav__zone--forward {
+  display: block;
+  grid-column: 3;
+  visibility: hidden;
+  pointer-events: none;
+  min-height: 0;
+  padding: 0;
+  margin: 0;
+}
+
+.levels-exam-module-nav__part-pair {
+  display: inline-flex;
+  align-items: center;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
 .levels-exam-module-nav__zone--back {
   justify-self: start;
 }
@@ -5486,6 +5577,23 @@ body.reading-night-mode .levels-exercise-stars--gold .starSvgWrapEmpty .starSvgP
     align-items: stretch;
   }
 
+  .levels-exam-module-nav--centered-parts {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    min-height: 0;
+  }
+
+  .levels-exam-module-nav--centered-parts .levels-exam-module-nav__zone--back {
+    position: static;
+    transform: none;
+    width: 100%;
+  }
+
+  .levels-exam-module-nav--centered-parts .levels-exam-module-nav__zone--forward {
+    display: none;
+  }
+
   .levels-exam-module-nav__zone--back,
   .levels-exam-module-nav__zone--center,
   .levels-exam-module-nav__zone--forward {
@@ -5539,6 +5647,59 @@ body.reading-night-mode .levels-exercise-stars--gold .starSvgWrapEmpty .starSvgP
   width: 100%;
 }
 
+.levels-b2-speaking-session__workspace {
+  display: grid;
+  grid-template-columns: minmax(0, 1.25fr) minmax(300px, 0.75fr);
+  gap: 1.25rem 1.5rem;
+  align-items: start;
+  margin-top: 0.25rem;
+}
+
+.levels-b2-speaking-session__stage {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  min-width: 0;
+}
+
+.levels-b2-speaking-session__answers-panel {
+  position: sticky;
+  top: 0.75rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  min-width: 0;
+  align-self: start;
+}
+
+.levels-b2-speaking-session__responses--panel {
+  max-height: min(520px, calc(100vh - 240px));
+  min-height: 280px;
+  margin-top: 0;
+  flex: 1 1 auto;
+}
+
+.levels-b2-speaking-session__responses-count {
+  color: #64748b;
+  font-weight: 600;
+}
+
+.levels-b2-speaking-session__responses-empty {
+  margin: 0.25rem 0 0;
+  color: #94a3b8;
+  font-size: 0.875rem;
+  line-height: 1.55;
+}
+
+.levels-b2-speaking-session__answers-panel .levels-b2-speaking-session__score-block {
+  margin-top: 0;
+  text-align: left;
+}
+
+.levels-b2-speaking-session__answers-panel .levels-b2-speaking-panel__actions {
+  margin-top: 0;
+}
+
 .speaking-exercise-controls {
   display: flex;
   flex-wrap: wrap;
@@ -5551,6 +5712,12 @@ body.reading-night-mode .levels-exercise-stars--gold .starSvgWrapEmpty .starSvgP
   box-shadow:
     0 1px 2px rgba(219, 39, 119, 0.06),
     inset 0 1px 0 rgba(255, 255, 255, 0.9);
+}
+
+.speaking-exercise-controls--exam {
+  display: inline-flex;
+  width: fit-content;
+  max-width: 100%;
 }
 
 .speaking-exercise-controls__btn {
@@ -5878,6 +6045,19 @@ body.reading-night-mode .levels-exercise-stars--gold .starSvgWrapEmpty .starSvgP
   background: #dcfce7;
 }
 
+.levels-b2-speaking-session__part-complete {
+  margin: 1rem 0 0;
+  padding: 0.85rem 1rem;
+  border: 1px solid #c4b5fd;
+  border-radius: 10px;
+  background: #f5f3ff;
+  color: #5b21b6;
+  font-size: 1rem;
+  font-weight: 600;
+  text-align: center;
+  line-height: 1.45;
+}
+
 .levels-b2-speaking-session__score-hint {
   margin: 0.45rem 0 0;
   color: #64748b;
@@ -5929,6 +6109,10 @@ body.reading-night-mode .levels-exercise-stars--gold .starSvgWrapEmpty .starSvgP
   height: 72px;
 }
 
+.levels-b2-speaking-session__stage .examiner-voice-visualizer__waveform {
+  height: 88px;
+}
+
 .examiner-voice-visualizer__bar {
   width: 4px;
   min-height: 6px;
@@ -5951,15 +6135,30 @@ body.reading-night-mode .levels-exercise-stars--gold .starSvgWrapEmpty .starSvgP
 }
 
 /* Speaking — responsive */
+@media (max-width: 960px) {
+  .levels-b2-speaking-session__workspace {
+    grid-template-columns: 1fr;
+  }
+
+  .levels-b2-speaking-session__answers-panel {
+    position: static;
+  }
+
+  .levels-b2-speaking-session__responses--panel {
+    max-height: 220px;
+    min-height: 0;
+  }
+}
+
 @media (max-width: 768px) {
-  .speaking-exercise-controls {
+  .speaking-exercise-controls:not(.speaking-exercise-controls--exam) {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 0.5rem;
     padding: 0.55rem;
   }
 
-  .speaking-exercise-controls__btn {
+  .speaking-exercise-controls:not(.speaking-exercise-controls--exam) .speaking-exercise-controls__btn {
     width: 100%;
     min-height: 2.5rem;
     padding-inline: 0.65rem;
@@ -6015,7 +6214,7 @@ body.reading-night-mode .levels-exercise-stars--gold .starSvgWrapEmpty .starSvgP
 }
 
 @media (max-width: 420px) {
-  .speaking-exercise-controls {
+  .speaking-exercise-controls:not(.speaking-exercise-controls--exam) {
     grid-template-columns: 1fr;
   }
 
@@ -9512,6 +9711,10 @@ body.reading-night-mode .levels-b2-speaking-panel__usage,
   max-width: min(1320px, 100%);
 }
 
+.levels-exam-practice-root:has(.levels-b2-practice--skill-compact[data-skill-theme]) {
+  background: transparent;
+}
+
 .levels-exam-practice-root:has(.b2-writing-practice) {
   padding: clamp(1rem, 3vw, 2rem);
   box-sizing: border-box;
@@ -9533,10 +9736,10 @@ body.reading-night-mode .levels-b2-speaking-panel__usage,
 }
 
 .b2-writing-task {
-  border: 1px solid #e2e8f0;
+  border: 1px solid var(--skill-border, #e2e8f0);
   border-radius: 12px;
   padding: 1.15rem 1.25rem;
-  background: #ffffff;
+  background: color-mix(in srgb, var(--skill-surface, #ffffff) 88%, #ffffff);
   box-shadow: 0 1px 3px rgba(15, 23, 42, 0.06);
 }
 
@@ -10475,6 +10678,159 @@ body.reading-night-mode .levels-b2-speaking-panel__usage,
   font-size: 0.9rem;
   color: #334155;
   font-weight: 600;
+}
+
+.exam-listening-audio {
+  width: 100%;
+  position: relative;
+}
+
+.exam-listening-audio__bar {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  padding: 0.55rem 0.75rem;
+  border-radius: 999px;
+  background: #e2e8f0;
+  border: 1px solid #cbd5e1;
+}
+
+.exam-listening-audio__play {
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2rem;
+  height: 2rem;
+  border: none;
+  border-radius: 50%;
+  background: #0f172a;
+  color: #fff;
+  font-size: 0.85rem;
+  cursor: pointer;
+  line-height: 1;
+}
+
+.exam-listening-audio__play--static {
+  cursor: default;
+  opacity: 0.85;
+}
+
+.exam-listening-audio__play--active {
+  opacity: 1;
+}
+
+.exam-listening-audio__track-wrap {
+  flex: 1;
+  min-width: 0;
+}
+
+.exam-listening-audio__track {
+  height: 4px;
+  border-radius: 999px;
+  background: #94a3b8;
+  overflow: hidden;
+}
+
+.exam-listening-audio__fill {
+  height: 100%;
+  background: #0f172a;
+  border-radius: inherit;
+  transition: width 0.15s linear;
+}
+
+.exam-listening-audio__times {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 0.25rem;
+  font-size: 0.75rem;
+  color: #475569;
+  font-variant-numeric: tabular-nums;
+}
+
+.exam-listening-audio__hint {
+  margin: 0.45rem 0 0;
+  font-size: 0.8rem;
+  color: #64748b;
+}
+
+.exam-listening-audio__hint--error {
+  color: #b91c1c;
+}
+
+.exam-listening-audio__hint--done {
+  color: #475569;
+  font-weight: 600;
+}
+
+.exam-listening-audio__element {
+  position: absolute;
+  left: -10000px;
+  top: auto;
+  width: 300px;
+  height: 32px;
+  opacity: 0.001;
+  pointer-events: none;
+}
+
+.exam-listening-audio--strict .exam-listening-audio__bar {
+  user-select: none;
+  pointer-events: none;
+}
+
+.exam-listening-audio--strict .exam-listening-audio__play,
+.exam-listening-audio--strict .exam-listening-audio__replay {
+  pointer-events: auto;
+}
+
+.exam-listening-audio__status {
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2rem;
+  height: 2rem;
+  border-radius: 50%;
+  background: #64748b;
+  color: #fff;
+  font-size: 0.75rem;
+  line-height: 1;
+}
+
+.exam-listening-audio__status--playing {
+  background: #0f172a;
+  animation: exam-listening-audio-pulse 1.2s ease-in-out infinite;
+}
+
+.exam-listening-audio__hint--playing {
+  color: #0c4a6e;
+  font-weight: 600;
+}
+
+@keyframes exam-listening-audio-pulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.55;
+  }
+}
+
+.exam-listening-audio__replay {
+  margin-top: 0.55rem;
+  padding: 0.45rem 0.85rem;
+  border-radius: 8px;
+  border: 1px solid #0284c7;
+  background: #e0f2fe;
+  color: #0c4a6e;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.exam-listening-audio__replay:hover {
+  background: #bae6fd;
 }
 
 .levels-listening-no-audio {

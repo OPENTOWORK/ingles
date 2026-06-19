@@ -73,10 +73,10 @@ export function useExamModeSectionTimer({
 
     const tick = () => {
       const next = computeRemaining(endTimeRef.current);
-      setRemaining(next);
 
       if (lastReportedRef.current !== next) {
         lastReportedRef.current = next;
+        setRemaining(next);
         onTickRef.current?.(next);
       }
 
@@ -88,7 +88,7 @@ export function useExamModeSectionTimer({
     };
 
     tick();
-    const id = window.setInterval(tick, 250);
+    const id = window.setInterval(tick, 1000);
 
     return () => window.clearInterval(id);
   }, [active, hydrationKey]);

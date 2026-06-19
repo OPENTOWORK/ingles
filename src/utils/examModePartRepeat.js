@@ -1,6 +1,7 @@
 import { buildEmptySectionScores } from '@/utils/examModeStatsRows';
 import { attachScoringVersionToExamModeScores } from '@/lib/b2ScoringV2FeatureFlag';
 import { getExamModeSection } from '@/utils/examModeSession';
+import { mergeExamModeDraftSources, cloneExamModeDraftByPart } from '@/utils/examModeSectionDraft';
 
 function sumSectionScoresFromByPart(byPart, partMin, partMax, slug, incomingMeta = {}) {
   const v2 =
@@ -53,7 +54,7 @@ export function prepareExamModePartRepeat(session, sectionKey, partNumber, slug 
   const byPart = { ...empty.byPart, ...(section.scores?.byPart || {}) };
   byPart[pn] = { ...empty.byPart[pn] };
 
-  const draftByPart = { ...(section.answers?.draftByPart || {}) };
+  const draftByPart = cloneExamModeDraftByPart(section.answers?.draftByPart || {});
   delete draftByPart[pn];
 
   const writingByPart = { ...(section.answers?.writingByPart || {}) };
@@ -137,29 +138,29 @@ export function buildExamModeFinishPayload({
   answersExtras = null,
 }) {
   const redoPn = examSection?.redoPart;
+  const mergedDraftByPart = mergeExamModeDraftSources(examSection, examDraftRef);
+
   if (redoPn == null) {
     return {
       isPartRepeat: false,
       scorePartMin: partMin,
       scorePartMax: partMax,
-      draftByPartForScore: examDraftRef.current,
-      answersSnapshot: answersExtras ?? { draftByPart: examDraftRef.current },
+      draftByPartForScore: mergedDraftByPart,
+      answersSnapshot: answersExtras ?? {
+        ...(examSection?.answers || {}),
+        draftByPart: mergedDraftByPart,
+      },
       persistPartNumbers: null,
     };
   }
-
-  const mergedDraftByPart = {
-    ...(examSection.answers?.draftByPart || {}),
-    ...examDraftRef.current,
-  };
 
   return {
     isPartRepeat: true,
     scorePartMin: redoPn,
     scorePartMax: redoPn,
-    draftByPartForScore: { [redoPn]: examDraftRef.current[redoPn] },
+    draftByPartForScore: { [redoPn]: mergedDraftByPart[redoPn] },
     answersSnapshot: {
-      ...(examSection.answers || {}),
+      ...(examSection?.answers || {}),
       ...(answersExtras || {}),
       draftByPart: mergedDraftByPart,
     },

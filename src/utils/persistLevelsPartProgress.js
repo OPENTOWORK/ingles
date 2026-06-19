@@ -1,6 +1,11 @@
 import { mergeLevelsEstadisticas } from '@/utils/levelsEstadisticas';
 import { upsertLevelsPartPuntuacion } from '@/utils/levelsPuntuaciones';
-import { computeLevelsStarsFromProgress, upsertLevelsStars } from '@/utils/levelsStars';
+import { supabase } from '@/utils/supabaseClient';
+import {
+  computeLevelsStarsFromProgress,
+  labelFromLevelsPuntuacionDescripcion,
+  saveLevelStars,
+} from '@/utils/levelsStars';
 import { LEVELS_SCORE_SOURCE } from '@/utils/levelsScoreSource';
 import { isB2RuoeV2SessionPersistenceBlocked } from '@/lib/b2ScoringV2FeatureFlag';
 
@@ -83,7 +88,7 @@ export async function persistLevelsPartProgress({
           deltaIntentos: 1,
         };
 
-  const [puntRes, estRes, starsRes] = await Promise.all([
+  const [puntRes, estRes] = await Promise.all([
     upsertLevelsPartPuntuacion({
       userId,
       preguntaId,
@@ -102,18 +107,35 @@ export async function persistLevelsPartProgress({
       parteId,
       ...statsPayload,
     }),
-    upsertLevelsStars({
-      userId,
-      examenId,
-      parteNumero: partNumber,
+  ]);
+
+  let starsRes = { error: null, saved: false };
+  if (puntRes.id) {
+    starsRes = await saveLevelStars({
+      puntuacionesId: puntRes.id,
       stars: computeLevelsStarsFromProgress(progress),
       scoreSource,
-    }),
-  ]);
+      descripcion: labelFromLevelsPuntuacionDescripcion(puntRes.descripcion),
+    });
+
+    if (!starsRes.saved && !starsRes.error) {
+      const { syncStarsForPuntuacionRow } = await import('@/utils/syncLevelsStars');
+      starsRes = await syncStarsForPuntuacionRow(supabase, {
+        id: puntRes.id,
+        descripcion: puntRes.descripcion,
+        correctas: isV2 ? itemCorrect : correct,
+        total_preguntas: isV2 ? itemTotal : total,
+        puntos_obtenidos: isV2 ? correct : undefined,
+        puntos_maximos: isV2 ? total : undefined,
+        score_source: scoreSource,
+        scoring_version: scoringVersion,
+      });
+    }
+  }
 
   if (puntRes.error || estRes.error || starsRes.error) {
     return { saved: false, error: puntRes.error || estRes.error || starsRes.error };
   }
 
-  return { saved: true, error: null };
+  return { saved: true, error: null, starsSaved: Boolean(starsRes.saved) };
 }

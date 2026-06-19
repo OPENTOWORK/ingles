@@ -1,17 +1,13 @@
 'use client';
 
 import { useEffect, useRef, useState } from 'react';
-import {
-  getActiveExaminerAudio,
-  subscribeExaminerSpeaking,
-} from '@/utils/playExaminerAudio';
+import { subscribeExaminerSpeaking } from '@/utils/playExaminerAudio';
 
 const BAR_COUNT = 40;
 
 /**
- * Visualizador de voz del examinador (sin texto). Ondas reactivas al audio o animación suave.
- *
- * @param {{ isLoading?: boolean, statusLabel?: string, waitingToStart?: boolean }} props
+ * Visualizador de voz del examinador (sin texto). Ondas animadas — NO usa Web Audio API
+ * (createMediaElementSource silenciaba el audio en Chrome/Edge).
  */
 export default function ExaminerVoiceVisualizer({
   isLoading = false,
@@ -22,7 +18,6 @@ export default function ExaminerVoiceVisualizer({
   const [barHeights, setBarHeights] = useState(() => Array(BAR_COUNT).fill(0.12));
   const rafRef = useRef(0);
   const phaseRef = useRef(0);
-  const analyserActiveRef = useRef(false);
 
   useEffect(() => subscribeExaminerSpeaking(setSpeaking), []);
 
@@ -33,28 +28,7 @@ export default function ExaminerVoiceVisualizer({
       phaseRef.current += 0.08;
       const t = phaseRef.current;
 
-      if (speaking.active && speaking.mode === 'audio') {
-        const audio = getActiveExaminerAudio();
-        if (audio && !audio.paused && analyserActiveRef.current) {
-          rafRef.current = requestAnimationFrame(tick);
-          return;
-        }
-        if (audio && !audio.paused) {
-          setBarHeights(
-            Array.from({ length: BAR_COUNT }, (_, i) => {
-              const wave =
-                Math.sin(t * 2.2 + i * 0.35) * 0.35 +
-                Math.sin(t * 4.1 + i * 0.18) * 0.25 +
-                0.45;
-              return Math.min(1, Math.max(0.15, wave));
-            }),
-          );
-          rafRef.current = requestAnimationFrame(tick);
-          return;
-        }
-      }
-
-      if (speaking.active && speaking.mode === 'synthesis') {
+      if (speaking.active) {
         setBarHeights(
           Array.from({ length: BAR_COUNT }, (_, i) => {
             const wave =
@@ -91,65 +65,6 @@ export default function ExaminerVoiceVisualizer({
     rafRef.current = requestAnimationFrame(tick);
     return () => cancelAnimationFrame(rafRef.current);
   }, [speaking, isLoading]);
-
-  useEffect(() => {
-    if (!speaking.active || speaking.mode !== 'audio') return;
-
-    const audio = getActiveExaminerAudio();
-    if (!audio) return;
-
-    let ctx;
-    let source;
-    let analyser;
-    let data;
-    let raf;
-    let closed = false;
-
-    const setup = async () => {
-      try {
-        ctx = new AudioContext();
-        await ctx.resume();
-        source = ctx.createMediaElementSource(audio);
-        analyser = ctx.createAnalyser();
-        analyser.fftSize = 128;
-        analyser.smoothingTimeConstant = 0.75;
-        source.connect(analyser);
-        analyser.connect(ctx.destination);
-        data = new Uint8Array(analyser.frequencyBinCount);
-        analyserActiveRef.current = true;
-
-        const draw = () => {
-          if (closed) return;
-          analyser.getByteFrequencyData(data);
-          const step = Math.max(1, Math.floor(data.length / BAR_COUNT));
-          const next = Array.from({ length: BAR_COUNT }, (_, i) => {
-            const v = data[Math.min(i * step, data.length - 1)] / 255;
-            return Math.min(1, Math.max(0.1, v * 1.15));
-          });
-          setBarHeights(next);
-          raf = requestAnimationFrame(draw);
-        };
-        draw();
-      } catch {
-        analyserActiveRef.current = false;
-      }
-    };
-
-    void setup();
-
-    return () => {
-      closed = true;
-      analyserActiveRef.current = false;
-      if (raf) cancelAnimationFrame(raf);
-      try {
-        source?.disconnect();
-        analyser?.disconnect();
-        void ctx?.close();
-      } catch {
-        /* ignore */
-      }
-    };
-  }, [speaking.active, speaking.mode]);
 
   const defaultStatusLabel = speaking.active
     ? 'The examiner is speaking…'

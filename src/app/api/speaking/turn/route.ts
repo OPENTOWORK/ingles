@@ -21,6 +21,16 @@ const EXAM_NAMES: Record<string, string> = {
   PROFICIENCY: 'Cambridge C2 Proficiency',
 };
 
+async function readJsonBody<T>(req: Request): Promise<T | null> {
+  try {
+    const text = await req.text();
+    if (!text.trim()) return null;
+    return JSON.parse(text) as T;
+  } catch {
+    return null;
+  }
+}
+
 export async function POST(req: Request) {
   try {
     const ct = req.headers.get('content-type') ?? '';
@@ -54,7 +64,7 @@ export async function POST(req: Request) {
         audio = { buffer: buf, mimeType: file.type || 'audio/webm', filename: 'audio.webm' };
       }
     } else {
-      const body = (await req.json()) as {
+      const body = await readJsonBody<{
         sessionId: string;
         cefr: CefrLevel;
         mode: SpeakingMode;
@@ -65,7 +75,10 @@ export async function POST(req: Request) {
         isOpening?: boolean;
         taskContext?: string;
         b2PartNumber?: number;
-      };
+      }>(req);
+      if (!body) {
+        return NextResponse.json({ error: 'Request body required' }, { status: 400 });
+      }
       sessionId = body.sessionId;
       cefr = body.cefr;
       mode = body.mode;

@@ -2,7 +2,7 @@ import { NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
 import { buildUoePartDescripcion, parseUoePartDescripcion } from '@/utils/levelsPuntuaciones';
 import { LEVELS_SCORE_SOURCE } from '@/utils/levelsScoreSource';
-import {
+import { saveLevelStars, computeLevelsStarsFromProgress } from '@/utils/levelsStars';import {
   getB2PartScoringV2,
   isB2PartPassed,
   isB2PartPassedByPoints,
@@ -78,14 +78,18 @@ async function writePartRow(admin, existingId, row) {
     if (error && isSchemaCacheColumnError(error) && row.score_source != null) {
       ({ error } = await admin.from('levels_puntuaciones').update(stripScoreSourceFromRow(row)).eq('id', existingId));
     }
-    return error;
+    return { error, id: existingId };
   }
 
-  let { error } = await admin.from('levels_puntuaciones').insert(row);
+  let { data, error } = await admin.from('levels_puntuaciones').insert(row).select('id').single();
   if (error && isSchemaCacheColumnError(error) && row.score_source != null) {
-    ({ error } = await admin.from('levels_puntuaciones').insert(stripScoreSourceFromRow(row)));
+    ({ data, error } = await admin
+      .from('levels_puntuaciones')
+      .insert(stripScoreSourceFromRow(row))
+      .select('id')
+      .single());
   }
-  return error;
+  return { error, id: data?.id ?? null };
 }
 
 export async function POST(req) {
@@ -205,16 +209,42 @@ export async function POST(req) {
     }
 
     if (existingId) {
-      const upErr = await writePartRow(admin, existingId, row);
+      const { error: upErr, id: puntuacionesId } = await writePartRow(admin, existingId, row);
       if (upErr) return NextResponse.json({ error: upErr.message }, { status: 500 });
-      return NextResponse.json({ ok: true, updated: true });
+      await saveLevelStars({
+        puntuacionesId,
+        stars: computeLevelsStarsFromProgress({
+          correct: correctas,
+          total: totalPreguntas,
+          scoringVersion,
+          puntosObtenidos: puntosObtenidos ?? correctas,
+          puntosMaximos: puntosMaximos ?? totalPreguntas,
+        }),
+        scoreSource,
+        descripcion: descripcion.split('|').pop()?.trim() || descripcion,
+        supabaseClient: admin,
+      });
+      return NextResponse.json({ ok: true, updated: true, puntuacionesId });
     }
 
-    const insErr = await writePartRow(admin, null, row);
+    const { error: insErr, id: puntuacionesId } = await writePartRow(admin, null, row);
     if (insErr) return NextResponse.json({ error: insErr.message }, { status: 500 });
 
-    return NextResponse.json({ ok: true, created: true });
-  } catch (err) {
+    await saveLevelStars({
+      puntuacionesId,
+      stars: computeLevelsStarsFromProgress({
+        correct: correctas,
+        total: totalPreguntas,
+        scoringVersion,
+        puntosObtenidos: puntosObtenidos ?? correctas,
+        puntosMaximos: puntosMaximos ?? totalPreguntas,
+      }),
+      scoreSource,
+      descripcion: descripcion.split('|').pop()?.trim() || descripcion,
+      supabaseClient: admin,
+    });
+
+    return NextResponse.json({ ok: true, created: true, puntuacionesId });  } catch (err) {
     console.error('api/levels/upsert-part-puntuacion:', err);
     return NextResponse.json({ error: 'Error interno' }, { status: 500 });
   }

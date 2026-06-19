@@ -12,6 +12,7 @@ export default function B2ListeningInlineGapCard({
   currentValue = '',
   checkResult,
   hideFeedback = false,
+  hideCheck = false,
   onInputChange,
   onCheck,
   openAnswerMap,
@@ -114,7 +115,7 @@ export default function B2ListeningInlineGapCard({
           </p>
         </div>
       )}
-      {!hideFeedback ? (
+      {!hideFeedback && !hideCheck ? (
         <div className="levels-listening-inline-gap-actions">
           <button
             type="button"

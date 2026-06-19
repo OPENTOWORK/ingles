@@ -58,71 +58,85 @@ export default function SpeakingExerciseControls({
   exercisePaused = false,
   loading = false,
   canRepeat = false,
+  playDisabled = false,
+  examMode = false,
   onPlay,
   onPause,
   onRepeat,
   onNextStep,
 }) {
   const isEn = lang === 'en';
-  const playLabel = exercisePaused
+  const playLabel = loading
     ? isEn
-      ? 'Resume'
-      : 'Reanudar'
-    : isEn
-      ? 'Play'
-      : 'Play';
+      ? 'Loading…'
+      : 'Cargando…'
+    : exercisePaused
+      ? isEn
+        ? 'Resume'
+        : 'Reanudar'
+      : isEn
+        ? 'Play'
+        : 'Play';
   const pauseLabel = isEn ? 'Pause' : 'Pausar';
   const repeatLabel = isEn ? 'Repeat' : 'Repetir';
   const nextLabel = isEn ? 'Next step' : 'Siguiente paso';
 
   const busy = loading;
-  const playDisabled = busy || !sessionReady;
+  const playBtnDisabled = busy || playDisabled;
   const pauseDisabled = busy || !exerciseStarted;
   const repeatDisabled = busy || !canRepeat;
   const nextDisabled = busy || !sessionReady || !exerciseStarted;
 
   return (
-    <div className="speaking-exercise-controls" role="toolbar" aria-label={isEn ? 'Exercise controls' : 'Controles del ejercicio'}>
+    <div
+      className={`speaking-exercise-controls${examMode ? ' speaking-exercise-controls--exam' : ''}`}
+      role="toolbar"
+      aria-label={isEn ? 'Exercise controls' : 'Controles del ejercicio'}
+    >
       <button
         type="button"
         className="speaking-exercise-controls__btn speaking-exercise-controls__btn--primary"
         onClick={onPlay}
-        disabled={playDisabled}
+        disabled={playBtnDisabled}
         aria-label={playLabel}
       >
         <ControlIcon name="play" />
         <span>{playLabel}</span>
       </button>
-      <button
-        type="button"
-        className="speaking-exercise-controls__btn"
-        onClick={onPause}
-        disabled={pauseDisabled}
-        aria-label={pauseLabel}
-      >
-        <ControlIcon name="pause" />
-        <span>{pauseLabel}</span>
-      </button>
-      <button
-        type="button"
-        className="speaking-exercise-controls__btn"
-        onClick={onRepeat}
-        disabled={repeatDisabled}
-        aria-label={repeatLabel}
-      >
-        <ControlIcon name="repeat" />
-        <span>{repeatLabel}</span>
-      </button>
-      <button
-        type="button"
-        className="speaking-exercise-controls__btn speaking-exercise-controls__btn--accent"
-        onClick={onNextStep}
-        disabled={nextDisabled}
-        aria-label={nextLabel}
-      >
-        <ControlIcon name="next" />
-        <span>{nextLabel}</span>
-      </button>
+      {!examMode ? (
+        <>
+          <button
+            type="button"
+            className="speaking-exercise-controls__btn"
+            onClick={onPause}
+            disabled={pauseDisabled}
+            aria-label={pauseLabel}
+          >
+            <ControlIcon name="pause" />
+            <span>{pauseLabel}</span>
+          </button>
+          <button
+            type="button"
+            className="speaking-exercise-controls__btn"
+            onClick={onRepeat}
+            disabled={repeatDisabled}
+            aria-label={repeatLabel}
+          >
+            <ControlIcon name="repeat" />
+            <span>{repeatLabel}</span>
+          </button>
+          <button
+            type="button"
+            className="speaking-exercise-controls__btn speaking-exercise-controls__btn--accent"
+            onClick={onNextStep}
+            disabled={nextDisabled}
+            aria-label={nextLabel}
+          >
+            <ControlIcon name="next" />
+            <span>{nextLabel}</span>
+          </button>
+        </>
+      ) : null}
     </div>
   );
 }

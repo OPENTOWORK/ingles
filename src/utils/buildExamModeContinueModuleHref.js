@@ -18,5 +18,7 @@ export function buildExamModeContinueModuleHref({
   });
   if (nav.continueMode !== 'link' || !nav.continueHref) return null;
   const basePath = nav.continueHref.split('?')[0];
-  return buildExamModePracticeHref(basePath, examSlot);
+  return buildExamModePracticeHref(basePath, examSlot, {
+    part: nav.nextPartNumber ?? undefined,
+  });
 }

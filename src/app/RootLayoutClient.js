@@ -23,6 +23,7 @@ const Toaster = dynamic(
 );
 import AuthenticatedAppShell from '@/components/layout/AuthenticatedAppShell';
 import SiteNightModeInit from '@/components/layout/SiteNightModeInit';
+import { useLevelsStarsBackfill } from '@/hooks/useLevelsStarsBackfill';
 
 function SiteHeaderBrand({ nav = null }) {
   return (
@@ -71,6 +72,7 @@ export default function RootLayoutClient({ children }) {
   useActivityHeartbeat(session, heartbeatEnabled);
   usePageViewTracker(session, heartbeatEnabled);
   useClarityPageTags(clarityAnalyticsEnabled);
+  useLevelsStarsBackfill(session);
 
   useEffect(() => {
     if (authPending || allowWithoutAuth || session) return undefined;

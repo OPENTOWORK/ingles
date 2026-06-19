@@ -1,5 +1,6 @@
 import { formatLevelsPartDisplayName } from '@/utils/formatLevelsPartDisplayName';
 import { LEVEL_EXAM_SECTION_RANGES } from '@/data/levelExamPartMap';
+import { buildSkillChartZone } from '@/data/levelSkillThemeColors';
 
 export const LEVELS_ORDER = ['a1', 'a2', 'b1', 'b2', 'c1', 'c2'];
 
@@ -66,35 +67,35 @@ export function ensureAllCefrLevelCharts(charts = [], levelCatalog = []) {
 /** Etiquetas de bloque del paper por nivel (para el gráfico). */
 const LEVEL_SKILL_ZONES = {
   b2: [
-    { from: 1, to: 7, label: 'Reading & UoE', color: '#dbeafe' },
-    { from: 8, to: 9, label: 'Writing', color: '#ede9fe' },
-    { from: 10, to: 13, label: 'Listening', color: '#cffafe' },
-    { from: 14, to: 17, label: 'Speaking', color: '#ffedd5' },
+    buildSkillChartZone(1, 7, 'Reading & UoE', 'reading'),
+    buildSkillChartZone(8, 9, 'Writing', 'writing'),
+    buildSkillChartZone(10, 13, 'Listening', 'listening'),
+    buildSkillChartZone(14, 17, 'Speaking', 'speaking'),
   ],
   b1: [
-    { from: 1, to: 6, label: 'Reading', color: '#dbeafe' },
-    { from: 7, to: 8, label: 'Writing', color: '#ede9fe' },
-    { from: 9, to: 12, label: 'Listening', color: '#cffafe' },
-    { from: 13, to: 16, label: 'Speaking', color: '#ffedd5' },
+    buildSkillChartZone(1, 6, 'Reading', 'reading'),
+    buildSkillChartZone(7, 8, 'Writing', 'writing'),
+    buildSkillChartZone(9, 12, 'Listening', 'listening'),
+    buildSkillChartZone(13, 16, 'Speaking', 'speaking'),
   ],
   a2: [
-    { from: 1, to: 7, label: 'Reading & Writing', color: '#dbeafe' },
-    { from: 8, to: 11, label: 'Listening', color: '#cffafe' },
-    { from: 12, to: 13, label: 'Speaking', color: '#ffedd5' },
+    buildSkillChartZone(1, 7, 'Reading & Writing', 'reading'),
+    buildSkillChartZone(8, 11, 'Listening', 'listening'),
+    buildSkillChartZone(12, 13, 'Speaking', 'speaking'),
   ],
   c1: [
-    { from: 1, to: 4, label: 'Use of English', color: '#dbeafe' },
-    { from: 5, to: 8, label: 'Reading', color: '#e0e7ff' },
-    { from: 9, to: 10, label: 'Writing', color: '#ede9fe' },
-    { from: 11, to: 14, label: 'Listening', color: '#cffafe' },
-    { from: 15, to: 18, label: 'Speaking', color: '#ffedd5' },
+    buildSkillChartZone(1, 4, 'Use of English', 'reading'),
+    buildSkillChartZone(5, 8, 'Reading', 'reading'),
+    buildSkillChartZone(9, 10, 'Writing', 'writing'),
+    buildSkillChartZone(11, 14, 'Listening', 'listening'),
+    buildSkillChartZone(15, 18, 'Speaking', 'speaking'),
   ],
   c2: [
-    { from: 1, to: 4, label: 'Use of English', color: '#dbeafe' },
-    { from: 5, to: 7, label: 'Reading', color: '#e0e7ff' },
-    { from: 8, to: 9, label: 'Writing', color: '#ede9fe' },
-    { from: 10, to: 13, label: 'Listening', color: '#cffafe' },
-    { from: 14, to: 16, label: 'Speaking', color: '#ffedd5' },
+    buildSkillChartZone(1, 4, 'Use of English', 'reading'),
+    buildSkillChartZone(5, 7, 'Reading', 'reading'),
+    buildSkillChartZone(8, 9, 'Writing', 'writing'),
+    buildSkillChartZone(10, 13, 'Listening', 'listening'),
+    buildSkillChartZone(14, 16, 'Speaking', 'speaking'),
   ],
 };
 
@@ -109,7 +110,7 @@ function levelSortIndex(name) {
   return idx === -1 ? 99 : idx;
 }
 
-function getPartMaxForLevel(levelName) {
+export function getPartMaxForLevel(levelName) {
   const key = String(levelName || '').trim().toLowerCase();
   const sections = LEVEL_EXAM_SECTION_RANGES[key];
   if (!sections) return 17;
@@ -121,12 +122,12 @@ export function getSkillZonesForLevel(levelName) {
   return LEVEL_SKILL_ZONES[key] || [];
 }
 
-function skillZoneForPart(levelName, partNumber) {
+export function skillZoneForPart(levelName, partNumber) {
   const zones = getSkillZonesForLevel(levelName);
   return zones.find((z) => partNumber >= z.from && partNumber <= z.to) || null;
 }
 
-function padBarsToFullPaper(levelName, bars) {
+export function padBarsToFullPaper(levelName, bars) {
   const partMax = getPartMaxForLevel(levelName);
   const byPartNum = new Map();
 
@@ -159,6 +160,8 @@ function padBarsToFullPaper(levelName, bars) {
         name: `Part ${p}`,
         shortName: String(p),
         skillZone: zone?.label || '',
+        zoneBarColor: zone?.barColor || '#64748b',
+        zoneEmptyColor: zone?.emptyColor || '#e2e8f0',
       });
     } else {
       fullBars.push({
@@ -172,6 +175,8 @@ function padBarsToFullPaper(levelName, bars) {
         correctas: 0,
         incorrectas: 0,
         skillZone: zone?.label || '',
+        zoneBarColor: zone?.barColor || '#64748b',
+        zoneEmptyColor: zone?.emptyColor || '#e2e8f0',
       });
     }
   }
