@@ -2,6 +2,8 @@
 
 import { useState } from 'react';
 import LevelsAnswerJustification from '@/components/levels/LevelsAnswerJustification';
+import ReadingQuestionFlagButton from '@/components/exam/ReadingQuestionFlagButton';
+import ReadingConfidenceSelector from '@/components/exam/ReadingConfidenceSelector';
 
 /** Marcador `(N) ___` / `(N) …` en pasajes Open Cloze, Word Formation, etc. */
 export const OPEN_GAP_MARKER_RE = /\((\d{1,2})\)\s*(?:_+|\.{2,}|…{2,})/g;
@@ -100,8 +102,10 @@ export default function B2ExamInlineOpenClozePassage({
   if (lines[0]?.toLowerCase() === 'text') startIdx = 1;
   const titleLine =
     startIdx < lines.length &&
+    !/\(\d{1,2}\)/.test(lines[startIdx]) &&
     !parseLineWithOpenGaps(lines[startIdx]).some((s) => s.type === 'gap') &&
-    lines[startIdx].length < 120
+    lines[startIdx].length < 120 &&
+    !/^IMAGE:/i.test(lines[startIdx])
       ? lines[startIdx]
       : null;
   const bodyStart = titleLine ? startIdx + 1 : startIdx;
@@ -205,6 +209,8 @@ export default function B2ExamInlineOpenClozePassage({
                 <span
                   key={`seg-gap-${lineIdx}-${segIdx}`}
                   className="levels-exam-inline-gap"
+                  id={`question-${questionNumber}`}
+                  data-question-number={questionNumber}
                 >
                   <span className="levels-exam-inline-gap__group">
                     <span className="levels-exam-inline-gap__marker">({questionNumber})</span>
@@ -275,6 +281,22 @@ export default function B2ExamInlineOpenClozePassage({
           </p>
         );
       })}
+
+      {hideFeedback && activeQuestionNumbers.some((qn) => openInputs[getQuestionKey(qn)]?.trim()) ? (
+        <div className="reading-question-meta-list">
+          {activeQuestionNumbers.map((questionNumber) => {
+            const questionKey = getQuestionKey(questionNumber);
+            if (!openInputs[questionKey]?.trim()) return null;
+            return (
+              <div key={`meta-open-${questionNumber}`} className="reading-question-meta">
+                <span className="reading-question-meta__label">Q{questionNumber}</span>
+                <ReadingQuestionFlagButton questionKey={questionKey} questionNumber={questionNumber} />
+                <ReadingConfidenceSelector questionKey={questionKey} />
+              </div>
+            );
+          })}
+        </div>
+      ) : null}
     </div>
   );
 }

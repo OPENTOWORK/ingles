@@ -6,7 +6,29 @@ import { useSearchParams } from 'next/navigation';
 import { useExamModeStatistics } from '@/hooks/useExamModeStatistics';
 import { buildExamModePracticeHref } from '@/utils/examModeSession';
 import { getNivelesLevelHub } from '@/data/nivelesLevelHub';
+import { getB2PartPassingPoints } from '@/utils/levelsB2PartScoring';
 import styles from './ExamModeResultsView.module.css';
+
+function resolvePartBadge(partNum, part, sectionScoringV2) {
+  const v2 = part.scoringVersion === 2 || sectionScoringV2;
+  const earned = Math.max(0, Number(v2 ? (part.pointsEarned ?? part.correct) : part.correct) || 0);
+  const passingThreshold = v2 ? getB2PartPassingPoints(Number(partNum)) : part.passing;
+
+  if (passingThreshold == null) return null;
+
+  const attempted =
+    part.complete === true ||
+    part.essaySubmitted === true ||
+    Number(part.evaluated ?? part.questionsAnswered ?? 0) > 0;
+
+  if (earned >= passingThreshold) {
+    return { variant: 'pass', label: 'Pass' };
+  }
+  if (attempted) {
+    return { variant: 'fail', label: 'Not pass' };
+  }
+  return { variant: 'pending', label: 'Pending' };
+}
 
 const SECTION_ICON_CLASS = {
   'Reading and Use of English': styles['cardIcon--reading'],
@@ -56,16 +78,16 @@ function ProgressRing({ pct, tone, label = 'Overall' }) {
   );
 }
 
-function SectionCard({ row, examSlot, resultsReleased }) {
+function SectionCard({ row, examSlot, onRepeatSection, onRepeatPart, rescoreBusy }) {
   const status = row.status || 'locked';
   const isCompleted = status === 'completed';
   const isActive = status === 'active';
   const tone = scoreTone(row.pct);
   const iconClass = SECTION_ICON_CLASS[row.title] || styles['cardIcon--default'];
   const parts = row.scores?.byPart || {};
+  const isWritingSection = row.title === 'Writing';
+  const showWritingRescoreHint = isWritingSection && isCompleted && rescoreBusy;
   const partEntries = Object.entries(parts).sort(([a], [b]) => Number(a) - Number(b));
-  const reviewHref = buildExamModePracticeHref(row.href, examSlot, { review: true });
-  const canReview = resultsReleased && isCompleted && row.pct > 0;
 
   return (
     <article className={styles.card}>
@@ -76,7 +98,17 @@ function SectionCard({ row, examSlot, resultsReleased }) {
         <div className={styles.cardMain}>
           <div className={styles.cardTitleRow}>
             <h3 className={styles.cardTitle}>{row.title}</h3>
-            <p className={styles.cardScore}>
+            <div className={styles.cardTitleActions}>
+              {isCompleted ? (
+                <button
+                  type="button"
+                  className={styles.repeatSectionBtn}
+                  onClick={() => onRepeatSection?.(row.key, row.href)}
+                >
+                  Repetir sección
+                </button>
+              ) : null}
+              <p className={styles.cardScore}>
               {row.scores?.scoringVersion === 2 ? (
                 <>
                   {row.scores?.pointsEarned ?? row.scores?.correct ?? 0}
@@ -92,6 +124,7 @@ function SectionCard({ row, examSlot, resultsReleased }) {
                 ({row.pct}%)
               </span>
             </p>
+            </div>
           </div>
           <div className={styles.progressTrack}>
             <div
@@ -115,6 +148,11 @@ function SectionCard({ row, examSlot, resultsReleased }) {
                 : 'Complete previous sections first.'}
             </p>
           ) : null}
+          {showWritingRescoreHint ? (
+            <p className={styles.cardPendingHint}>
+              Correcting your writing with Dralo AI…
+            </p>
+          ) : null}
         </div>
       </div>
 
@@ -123,29 +161,40 @@ function SectionCard({ row, examSlot, resultsReleased }) {
           <p className={styles.partsLabel}>Breakdown by part</p>
           <ul className={styles.partsList}>
             {partEntries.map(([partNum, p]) => {
-              const passed = p.passing != null && p.correct >= p.passing;
-              const failed = p.passing != null && p.correct < p.passing && p.correct > 0;
-              const pending = p.correct === 0;
+              const badge = resolvePartBadge(partNum, p, row.scores?.scoringVersion === 2);
+              const showReview = isCompleted;
+              const partReviewHref = buildExamModePracticeHref(row.href, examSlot, {
+                review: true,
+                part: Number(partNum),
+              });
               return (
                 <li key={partNum} className={styles.partRow}>
                   <span className={styles.partName}>Part {partNum}</span>
-                  <span style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                  <span className={styles.partRowActions}>
+                    {showReview ? (
+                      <button
+                        type="button"
+                        className={styles.partRepeatBtn}
+                        onClick={() => onRepeatPart?.(row.key, row.href, Number(partNum))}
+                      >
+                        Repetir parte
+                      </button>
+                    ) : null}
+                    {showReview ? (
+                      <Link href={partReviewHref} className={styles.partReviewBtn}>
+                        Revisar
+                      </Link>
+                    ) : null}
                     <span className={styles.partScore}>
                       {p.scoringVersion === 2 || row.scores?.scoringVersion === 2
                         ? `${p.pointsEarned ?? p.correct}/${p.maxPoints ?? p.total}`
                         : `${p.correct}/${p.total}`}
                     </span>
-                    {p.passing != null && row.scores?.scoringVersion !== 2 ? (
+                    {badge ? (
                       <span
-                        className={`${styles.badge} ${
-                          passed
-                            ? styles['badge--pass']
-                            : failed
-                              ? styles['badge--fail']
-                              : styles['badge--pending']
-                        }`}
+                        className={`${styles.badge} ${styles[`badge--${badge.variant}`]}`}
                       >
-                        {passed ? 'Pass' : failed ? 'Below pass' : 'Pending'}
+                        {badge.label}
                       </span>
                     ) : null}
                   </span>
@@ -153,15 +202,6 @@ function SectionCard({ row, examSlot, resultsReleased }) {
               );
             })}
           </ul>
-        </div>
-      ) : null}
-
-      {canReview ? (
-        <div className={styles.cardActions}>
-          <Link href={reviewHref} className={styles.reviewBtn}>
-            Review answers
-            <span aria-hidden="true">→</span>
-          </Link>
         </div>
       ) : null}
     </article>
@@ -187,7 +227,7 @@ function ExamModeResultsViewInner({ slug }) {
   const config = getNivelesLevelHub(slug);
   const searchParams = useSearchParams();
   const examSlot = Math.min(5, Math.max(1, Number(searchParams.get('examen') || 1)));
-  const { rows, stats, generalStats, attemptHistory, session, ready, repeatExam } =
+  const { rows, stats, generalStats, attemptHistory, session, ready, repeatExam, repeatSection, repeatPart, rescoreBusy } =
     useExamModeStatistics(slug, examSlot);
 
   const overallTone = scoreTone(stats.pct);
@@ -381,7 +421,9 @@ function ExamModeResultsViewInner({ slug }) {
               key={row.key}
               row={row}
               examSlot={examSlot}
-              resultsReleased={Boolean(session?.resultsReleased)}
+              onRepeatSection={repeatSection}
+              onRepeatPart={repeatPart}
+              rescoreBusy={rescoreBusy}
             />
           ))}
         </div>

@@ -7,6 +7,7 @@ import {
   B2_PAPER_SCORING_V2,
 } from '@/utils/levelsB2PartScoring';
 import { maxPointsForPartRange } from '@/utils/b2ScoringV2Engine';
+import { isExamModePartDraftAttempted } from '@/utils/examModeGradeAnswers';
 
 function partMaxScore(slug, partNumber) {
   const key = String(slug || '').toLowerCase();
@@ -178,6 +179,22 @@ function applyScoresToRow(row, incoming, slug) {
   };
 }
 
+function enrichSectionScoresFromDrafts(scores, draftByPart, partMin, partMax) {
+  if (!draftByPart || !scores) return scores;
+
+  const byPart = { ...(scores.byPart || {}) };
+  for (let p = partMin; p <= partMax; p += 1) {
+    if (!isExamModePartDraftAttempted(draftByPart[p])) continue;
+    byPart[p] = {
+      ...byPart[p],
+      complete: true,
+      evaluated: Math.max(Number(byPart[p]?.evaluated ?? 0), 1),
+    };
+  }
+
+  return { ...scores, byPart };
+}
+
 /** Aplica puntuaciones de la sesión local (intento actual en exam mode). */
 export function applySessionScoresToRows(rows, session, slug) {
   if (!session?.sections?.length) return rows;
@@ -190,7 +207,13 @@ export function applySessionScoresToRows(rows, session, slug) {
 
     let next = { ...row, status: sec.status || row.status };
     if (sec.scores && (sec.status === 'completed' || sec.scores.total > 0)) {
-      next = applyScoresToRow(next, sec.scores, slug);
+      const scores = enrichSectionScoresFromDrafts(
+        sec.scores,
+        sec.answers?.draftByPart,
+        row.partMin,
+        row.partMax,
+      );
+      next = applyScoresToRow(next, scores, slug);
     }
     return next;
   });

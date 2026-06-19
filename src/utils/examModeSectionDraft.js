@@ -132,6 +132,12 @@ export function resolveInitialExamPartSelection(normalizedParts = [], sectionDra
   return { selectedPartId, selectedQuestionByPart };
 }
 
+/** Completed-section answers or an in-progress section draft. */
+export function getExamModeDraftByPartFromSection(section) {
+  if (!section) return {};
+  return section.answers?.draftByPart ?? section.sectionDraft?.draftByPart ?? {};
+}
+
 export function applyReadingStyleSectionDraft(
   draft,
   {

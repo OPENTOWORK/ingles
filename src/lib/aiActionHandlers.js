@@ -92,7 +92,11 @@ export async function handleExamWritingCorrection(userId, body, ctx = {}) {
     action: AI_ACTIONS.EXAM_WRITING_CORRECTION,
     model: usage.model,
     usage,
-    metadata: { level: body.level, wordCount: result.scores?.wordCount },
+    metadata: {
+      level: body.level,
+      wordCount: result.scores?.wordCount,
+      deferredExamMode: body.deferredExamMode === true,
+    },
   });
 
   return {

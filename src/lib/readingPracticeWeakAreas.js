@@ -8,6 +8,37 @@ const WEAK_AREA_FALLBACKS = {
   7: 'Vocabulary meaning',
 };
 
+/** Weak-area label → /teoria topic the student should review. */
+const WEAK_AREA_THEORY_HREFS = {
+  collocations: '/teoria/collocations-phrasal-verbs',
+  prepositions: '/teoria/5-Prepositions',
+  'verb patterns': '/teoria/10-Infinitive-vs-Gerund',
+  'fixed phrases': '/teoria/Idioms-and-Expressions',
+  'vocabulary meaning': '/teoria/Vocabulary-in-Context',
+  idioms: '/teoria/Idioms-and-Expressions',
+  'phrasal verbs': '/teoria/collocations-phrasal-verbs',
+  connectors: '/teoria/Linking-Words',
+  linkers: '/teoria/Linking-Words',
+  'word formation': '/teoria/Advanced-Word-Formation',
+};
+
+/** B2 RuOE / Reading part → default exam-theory page when the area label is generic. */
+const PART_THEORY_HREFS = {
+  1: '/teoria/Multiple-Choice-Cloze',
+  2: '/teoria/Open-Cloze',
+  3: '/teoria/Advanced-Word-Formation',
+  4: '/teoria/Key-Word-Transformations',
+  5: '/teoria/Multiple-Choice-Questions',
+  6: '/teoria/Gapped-Text',
+  7: '/teoria/Multiple-Matching',
+};
+
+export function getWeakAreaTheoryHref(areaName, partNumber) {
+  const key = String(areaName || '').trim().toLowerCase();
+  if (WEAK_AREA_THEORY_HREFS[key]) return WEAK_AREA_THEORY_HREFS[key];
+  return PART_THEORY_HREFS[Number(partNumber)] || null;
+}
+
 /**
  * @param {object} params
  * @param {number} params.partNumber

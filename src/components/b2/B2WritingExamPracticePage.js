@@ -2,6 +2,7 @@
 
 import dynamic from 'next/dynamic';
 import { Suspense, useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { useSearchParams } from 'next/navigation';
 import { useB2ExamPracticeSlot } from '@/hooks/useB2ExamPracticeSlot';
 import { useB2AutoOpenExamFromUrl } from '@/hooks/useB2AutoOpenExamFromUrl';
 import { useB2ExamScoringSession } from '@/hooks/useB2ExamScoringSession';
@@ -46,8 +47,10 @@ import {
   getExamChromeSubtitle,
 } from '@/lib/examPracticeMode';
 import { buildExamModeContinueModuleHref } from '@/utils/buildExamModeContinueModuleHref';
+import { clearExamModeWritingPartStorage } from '@/utils/examModePartRepeat';
 import { buildExamModeSkillPartSnapshots } from '@/utils/buildExamModeSkillPartSnapshots';
 import { finishExamModeSupabasePersistence } from '@/utils/finishExamModeSupabasePersistence';
+import { scoreExamModeWritingParts, mergeWritingPartScoresWithSubmittedEssays } from '@/utils/examModeWritingScore';
 import {
   parseB2WritingPart1Task,
   parseB2WritingPart2Task,
@@ -71,6 +74,7 @@ function getPartNumber(part) {
 }
 
 function B2WritingExamPracticePageInner() {
+  const searchParams = useSearchParams();
   const { examSlot, selectExamSlot } = useB2ExamPracticeSlot();
   const scoring = useB2ExamScoringSession({ partMin: PART_MIN, partMax: PART_MAX });
   const examMode = useExamModeStrict({
@@ -86,6 +90,7 @@ function B2WritingExamPracticePageInner() {
     section: examSection,
     handleFinishSection,
     setSectionRemaining,
+    resultsHref,
   } = examMode;
 
   const [loading, setLoading] = useState(true);
@@ -303,6 +308,15 @@ function B2WritingExamPracticePageInner() {
   }, [partsData, skillNav.active]);
 
   useEffect(() => {
+    const qPart = searchParams.get('part');
+    if (!qPart || !tabPartsData.length) return;
+    const targetNumber = Number(qPart);
+    if (!Number.isFinite(targetNumber)) return;
+    const target = tabPartsData.find((p) => getPartNumber(p) === targetNumber);
+    if (target) setSelectedPartId(target.id);
+  }, [searchParams, tabPartsData]);
+
+  useEffect(() => {
     if (!skillNav.active || !skillNav.selectedPartNumber || !tabPartsData.length) return;
     const target = tabPartsData.find((p) => getPartNumber(p) === skillNav.selectedPartNumber);
     if (target?.id && target.id !== selectedPartId) setSelectedPartId(target.id);
@@ -396,7 +410,24 @@ function B2WritingExamPracticePageInner() {
 
   useEffect(() => {
     setWritingLiveCorrect(null);
-  }, [selectedPart?.id, selectedQuestion?.preguntaId, part2SelectedId]);
+    if (!reviewMode || !examSection) return;
+    const writingByPart = examSection.answers?.writingByPart;
+    if (writingByPart && Object.keys(writingByPart).length > 0) {
+      examModePartScoresRef.current = { ...writingByPart };
+    }
+    const entry =
+      writingByPart?.[partNumber] ?? examSection.scores?.byPart?.[partNumber];
+    if (entry?.correct != null) {
+      setWritingLiveCorrect(entry.correct);
+    }
+  }, [
+    selectedPart?.id,
+    selectedQuestion?.preguntaId,
+    part2SelectedId,
+    reviewMode,
+    examSection,
+    partNumber,
+  ]);
 
   const handleDraftStats = useCallback((stats) => {
     setDraftStats((prev) => {
@@ -462,6 +493,11 @@ function B2WritingExamPracticePageInner() {
   const handleContinueInPage = useCallback(() => {
     const part9 = tabPartsData.find((p) => getPartNumber(p) === 9);
     if (part9) setSelectedPartId(part9.id);
+  }, [tabPartsData]);
+
+  const handlePreviousInPage = useCallback(() => {
+    const part8 = tabPartsData.find((p) => getPartNumber(p) === 8);
+    if (part8) setSelectedPartId(part8.id);
   }, [tabPartsData]);
 
   const longWritingStorageKey = selectedQuestion?.preguntaId
@@ -550,37 +586,112 @@ function B2WritingExamPracticePageInner() {
     />
   ) : null;
 
+  const writingRepeatClearedRef = useRef(false);
+  useEffect(() => {
+    if (!examSection?.redoPart || examSection.redoPart !== partNumber || writingRepeatClearedRef.current) {
+      return;
+    }
+    writingRepeatClearedRef.current = true;
+    clearExamModeWritingPartStorage(selectedQuestion?.preguntaId, selectedPart?.id);
+  }, [examSection?.redoPart, partNumber, selectedQuestion?.preguntaId, selectedPart?.id]);
+
   const handleExamModeFinish = useCallback(
-    (redirectTo) => {
+    async (redirectTo) => {
+      const redoPn = examSection?.redoPart ?? null;
+      const writingEntries = tabPartsData
+        .map((part) => {
+          const pn = getPartNumber(part);
+          const question = getQuestionForPart(part);
+          if (!pn || !question) return null;
+          return {
+            partNumber: pn,
+            preguntaId: question.preguntaId,
+            partId: part.id,
+            enunciado: question.enunciado,
+          };
+        })
+        .filter(Boolean)
+        .filter((entry) => (redoPn != null ? entry.partNumber === redoPn : true));
+
+      try {
+        const scored = await scoreExamModeWritingParts(writingEntries);
+        const mergedScored = mergeWritingPartScoresWithSubmittedEssays(scored, writingEntries);
+        examModePartScoresRef.current = { ...examModePartScoresRef.current, ...mergedScored };
+      } catch (err) {
+        console.warn('exam mode writing finish score:', err);
+        const fallback = mergeWritingPartScoresWithSubmittedEssays({}, writingEntries);
+        examModePartScoresRef.current = { ...examModePartScoresRef.current, ...fallback };
+      }
+
+      const pn = partNumber;
+      const preguntaId =
+        selectedQuestion?.preguntaId || selectedPart?.questions?.[0]?.preguntaId || selectedPart?.id;
+      if (pn && preguntaId && writingLiveCorrect != null && !examModePartScoresRef.current[pn]) {
+        examModePartScoresRef.current[pn] = {
+          correct: writingLiveCorrect,
+          total: partScoringCfg?.total ?? 20,
+          preguntaId,
+        };
+      }
+
+      const mergedWritingByPart =
+        redoPn != null
+          ? { ...(examSection?.answers?.writingByPart || {}), ...examModePartScoresRef.current }
+          : examModePartScoresRef.current;
+
+      const scorePartMin = redoPn ?? PART_MIN;
+      const scorePartMax = redoPn ?? PART_MAX;
+
       const { scores, partSnapshots } = buildExamModeSkillPartSnapshots({
-        partMin: PART_MIN,
-        partMax: PART_MAX,
+        partMin: scorePartMin,
+        partMax: scorePartMax,
         partsData: tabPartsData,
-        examModePartScores: examModePartScoresRef.current,
+        examModePartScores: mergedWritingByPart,
         resolvePartNumber: getPartNumber,
       });
       handleFinishSection(
-        { writingCompleted: true, storageKey: longWritingStorageKey },
+        {
+          ...(examSection?.answers || {}),
+          writingCompleted: true,
+          writingByPart: mergedWritingByPart,
+        },
         scores,
-        { redirectTo },
+        { redirectTo: redirectTo || (redoPn != null ? resultsHref : undefined) },
       );
+      const snapshots =
+        redoPn != null
+          ? Object.fromEntries(
+              Object.entries(partSnapshots).filter(([key]) => Number(key) === redoPn),
+            )
+          : partSnapshots;
       void finishExamModeSupabasePersistence({
-        partSnapshots,
+        partSnapshots: snapshots,
         examenId: scoring.currentExamenId || scoring.examenIdBySlot?.[examSlot],
       });
     },
     [
       tabPartsData,
+      getQuestionForPart,
       scoring.currentExamenId,
       scoring.examenIdBySlot,
       examSlot,
       handleFinishSection,
-      longWritingStorageKey,
+      partNumber,
+      selectedPart,
+      selectedQuestion?.preguntaId,
+      writingLiveCorrect,
+      partScoringCfg?.total,
+      examSection,
+      resultsHref,
     ],
   );
 
   const handleContinueModuleInExamMode = useCallback(() => {
-    handleExamModeFinish(
+    if (examSection?.redoPart != null) {
+      void handleExamModeFinish(resultsHref);
+      return;
+    }
+    void handleExamModeFinish(
       buildExamModeContinueModuleHref({
         partNumber,
         pagePartMax: PART_MAX,
@@ -588,7 +699,7 @@ function B2WritingExamPracticePageInner() {
         slug: 'b2',
       }),
     );
-  }, [handleExamModeFinish, partNumber, examSlot]);
+  }, [handleExamModeFinish, examSection?.redoPart, resultsHref, partNumber, examSlot]);
 
   const reportErrorContext = useMemo(() => {
     if (loading || error || !scoring.examPracticeOpen || !selectedPart) return null;
@@ -735,6 +846,7 @@ function B2WritingExamPracticePageInner() {
                         onScoresReady={handleWritingScoresReady}
                         onDraftStats={handleDraftStats}
                         examMode={writingExamMode}
+                        reviewExamCorrection={reviewMode}
                         lang="en"
                       />
                     </>
@@ -762,6 +874,7 @@ function B2WritingExamPracticePageInner() {
                           onScoresReady={handleWritingScoresReady}
                           onDraftStats={handleDraftStats}
                           examMode={writingExamMode}
+                          reviewExamCorrection={reviewMode}
                           lang="en"
                         />
                       ) : (
@@ -789,8 +902,10 @@ function B2WritingExamPracticePageInner() {
                     overviewHref={examModeHubNav?.href}
                     overviewLabel={examModeHubNav?.label}
                     skillPracticeMode={isSkillPracticeSession}
+                    examMode={examModeActive && !reviewMode}
                     skillPracticeTheme={skillNav.skillTheme}
                     onContinueInPage={isSkillPracticeSession ? handleKeepPracticing : handleContinueInPage}
+                    onPreviousInPage={handlePreviousInPage}
                     onContinueModule={
                       examModeActive && !reviewMode ? handleContinueModuleInExamMode : undefined
                     }

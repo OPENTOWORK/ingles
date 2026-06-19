@@ -156,7 +156,10 @@ export async function POST(request) {
   }
 
   if (OPENAI_ACTIONS.has(action) && action !== AI_ACTIONS.ADMIN_GENERATE_EXAM) {
-    const preflight = await runAiPreflight(userId, action, aiCtx);
+    const preflight = await runAiPreflight(userId, action, {
+      ...aiCtx,
+      deferredExamMode: body.deferredExamMode === true,
+    });
     if (!preflight.ok) return preflight.response;
   }
 

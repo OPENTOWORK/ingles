@@ -35,6 +35,8 @@ export function buildExamModeSkillPartSnapshots({
     const partMax = cfg?.total ?? 0;
     const correct = Math.max(0, Number(saved?.correct) || 0);
     const total = partMax;
+    const essaySubmitted = Boolean(saved?.essaySubmitted);
+    const wasAttempted = Boolean(saved) && (essaySubmitted || correct > 0 || saved?.pendingCorrection);
 
     if (preguntaId && saved) {
       partSnapshots[p] = {
@@ -42,8 +44,8 @@ export function buildExamModeSkillPartSnapshots({
         progress: {
           correct,
           total: partMax || 1,
-          complete: true,
-          evaluated: partMax || 1,
+          complete: wasAttempted,
+          evaluated: wasAttempted ? partMax || 1 : 0,
         },
       };
     }
@@ -52,6 +54,9 @@ export function buildExamModeSkillPartSnapshots({
       correct,
       total: partMax,
       passing: cfg?.passing,
+      ...(wasAttempted
+        ? { complete: true, evaluated: partMax || 1, essaySubmitted: essaySubmitted || undefined }
+        : {}),
     };
     sectionCorrect += correct;
     sectionTotal += partMax;

@@ -12,16 +12,27 @@ import {
   getOrCreateExamModeSession,
   loadExamModeSession,
   resetExamModeSession,
+  resetExamModeSection,
   saveExamModeSession,
   saveExamModeSectionDraft,
   startExamModeSectionTimer,
   updateExamModeSectionRemaining,
+  buildExamModePracticeHref,
 } from '@/utils/examModeSession';
 import {
   LEVELS_EXAM_REGENERATED_EVENT,
   reconcileExamModeSessionForContentRevision,
   syncPracticeSessionWithExamContent,
 } from '@/utils/levelsExamRegenerationSync';
+import {
+  applyExamModeSessionScorePatch,
+  persistRescoredExamModeSnapshots,
+  scoresPatchDiffersFromSession,
+} from '@/utils/examModeRescoreFromDrafts';
+import {
+  mergeExamModePartRepeat,
+  prepareExamModePartRepeat,
+} from '@/utils/examModePartRepeat';
 
 /**
  * Persisted exam-mode session for a level + test slot.
@@ -118,6 +129,60 @@ export function useExamModeSession(slug, examSlot) {
     [resetExam, router, slug, examSlot, userId],
   );
 
+  const repeatSection = useCallback(
+    (sectionKey, practiceHref) => {
+      if (!session || !sectionKey || !practiceHref) return false;
+      const ok = window.confirm(
+        'Repeat this section? Your saved answers and score for this paper will be cleared.',
+      );
+      if (!ok) return false;
+      const next = resetExamModeSection(session, sectionKey);
+      persist(next);
+      router.push(buildExamModePracticeHref(practiceHref, examSlot, { review: false }));
+      return true;
+    },
+    [session, persist, router, examSlot],
+  );
+
+  const repeatPart = useCallback(
+    (sectionKey, practiceHref, partNumber) => {
+      if (!session || !sectionKey || !practiceHref) return false;
+      const pn = Number(partNumber);
+      if (!Number.isFinite(pn)) return false;
+      const ok = window.confirm(
+        `Repeat Part ${pn}? Only this part will be reset; the rest of your exam stays as it is.`,
+      );
+      if (!ok) return false;
+      const next = prepareExamModePartRepeat(session, sectionKey, pn, slug);
+      persist(next);
+      router.push(
+        buildExamModePracticeHref(practiceHref, examSlot, {
+          review: false,
+          part: pn,
+          repeatPart: true,
+        }),
+      );
+      return true;
+    },
+    [session, persist, router, examSlot, slug],
+  );
+
+  const finishPartRepeat = useCallback(
+    (sectionKey, partNumber, answersSnapshot, partScores) => {
+      if (!session || !sectionKey) return null;
+      const next = mergeExamModePartRepeat(
+        session,
+        sectionKey,
+        partNumber,
+        answersSnapshot,
+        partScores,
+        slug,
+      );
+      return persist(next);
+    },
+    [session, persist, slug],
+  );
+
   const getSectionRemaining = useCallback((sectionKey) => {
     const current = sessionRef.current;
     if (!current || !sectionKey) return null;
@@ -171,6 +236,21 @@ export function useExamModeSession(slug, examSlot) {
     return () => window.removeEventListener(LEVELS_EXAM_REGENERATED_EVENT, handler);
   }, [ready, session, slug, examSlot, persist]);
 
+  const applyScoreRescorePatch = useCallback(
+    async (patch, snapshotsBySection = {}) => {
+      const current = sessionRef.current;
+      if (!current || !patch || !scoresPatchDiffersFromSession(current, patch)) return false;
+      persist(applyExamModeSessionScorePatch(current, patch));
+      if (userId && Object.keys(snapshotsBySection).length) {
+        void persistRescoredExamModeSnapshots(userId, slug, examSlot, snapshotsBySection).catch(
+          (err) => console.warn('exam mode rescore persist:', err),
+        );
+      }
+      return true;
+    },
+    [persist, userId, slug, examSlot],
+  );
+
   return {
     session,
     ready,
@@ -185,6 +265,10 @@ export function useExamModeSession(slug, examSlot) {
     applyExamContentSync,
     resetExam,
     repeatExam,
+    repeatSection,
+    repeatPart,
+    finishPartRepeat,
+    applyScoreRescorePatch,
   };
 }
 

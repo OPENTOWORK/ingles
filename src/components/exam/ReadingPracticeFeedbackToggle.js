@@ -21,7 +21,18 @@ export default function ReadingPracticeFeedbackToggle({ lang = 'en', variant = '
   const toggle = () => {
     const nextShowFeedback = !showFeedback;
     session.updateReadingSettings({ showFeedback: nextShowFeedback });
-    if (nextShowFeedback) session.resetAnswersRevealed();
+    if (nextShowFeedback) {
+      session.resetAnswersRevealed();
+    } else {
+      session.resetAnswersRevealed();
+      if (typeof window !== 'undefined') {
+        window.dispatchEvent(
+          new CustomEvent('dralo-reading-instant-feedback-changed', {
+            detail: { showFeedback: false },
+          }),
+        );
+      }
+    }
   };
 
   if (variant === 'sidebar-top') {

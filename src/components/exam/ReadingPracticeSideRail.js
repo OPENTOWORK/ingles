@@ -23,6 +23,7 @@ export default function ReadingPracticeSideRail({
   passing,
   topRail = null,
   finishNotice = null,
+  hideTools = false,
   lang = 'en',
   scoringVersion = 1,
   questionsAnswered,
@@ -70,7 +71,7 @@ export default function ReadingPracticeSideRail({
           lang={lang}
         />
       }
-      tools={<ReadingPracticeToolsPanel lang={lang} />}
+      tools={hideTools ? null : <ReadingPracticeToolsPanel lang={lang} />}
       finishNotice={finishNotice}
     />
   );

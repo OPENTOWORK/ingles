@@ -55,6 +55,15 @@ export function useExamModeSectionDraftControls({
     showSaveNotice(isEn ? 'Progress saved' : 'Progreso guardado');
   }, [sectionKey, saveSectionDraft, getDraftSnapshot, getScorePreview, showSaveNotice, lang]);
 
+  const handleSaveAndExit = useCallback(() => {
+    if (!sectionKey || typeof saveSectionDraft !== 'function') return;
+    const scorePreview = typeof getScorePreview === 'function' ? getScorePreview() : null;
+    const draft = getDraftSnapshot();
+    if (scorePreview) draft.scorePreview = scorePreview;
+    saveSectionDraft(sectionKey, draft);
+    router.push(hubHref);
+  }, [sectionKey, saveSectionDraft, getDraftSnapshot, getScorePreview, router, hubHref]);
+
   const handleExitWithoutSaving = useCallback(() => {
     const isEn = lang === 'en';
     const ok = window.confirm(
@@ -76,11 +85,12 @@ export function useExamModeSectionDraftControls({
     enabled && sectionKey ? (
       <ExamModeSessionSaveControls
         onSave={handleSave}
+        onSaveAndExit={handleSaveAndExit}
         onExitWithoutSaving={handleExitWithoutSaving}
         saveNotice={saveNotice}
         lang={lang}
       />
     ) : null;
 
-  return { examModeSaveControls, handleSave, handleExitWithoutSaving };
+  return { examModeSaveControls, handleSave, handleSaveAndExit, handleExitWithoutSaving };
 }

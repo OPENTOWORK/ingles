@@ -46,6 +46,7 @@ export default function B2ExamPracticeModuleNav({
   previousPartLabel,
   skillPracticeMode = false,
   skillPracticeTheme = null,
+  examMode = false,
   showCheckAnswersButton = false,
   onCheckAnswers = null,
   checkAnswersDisabled = false,
@@ -54,6 +55,7 @@ export default function B2ExamPracticeModuleNav({
 }) {
   const levelSlug = String(slug || 'b2').toLowerCase();
   const isEn = lang === 'en';
+  const effectiveSkillPractice = skillPracticeMode && !examMode;
   const nav = getB2ExamPracticeNavState({
     partNumber,
     pagePartMax,
@@ -77,7 +79,7 @@ export default function B2ExamPracticeModuleNav({
       : '');
 
   let continueLabel = '';
-  if (skillPracticeMode) {
+  if (effectiveSkillPractice) {
     continueLabel = isEn ? 'Next exercise' : 'Siguiente ejercicio';
   } else if (nav.continueMode === 'in-page' && nav.nextPartNumber) {
     continueLabel = nextPartLabel
@@ -98,13 +100,13 @@ export default function B2ExamPracticeModuleNav({
   }
 
   const previousExerciseSlot =
-    skillPracticeMode && typeof onSelectExamSlot === 'function'
+    effectiveSkillPractice && typeof onSelectExamSlot === 'function'
       ? getPreviousExamSlot(examSlot, examenIdBySlot)
       : null;
-  const showPreviousExercise = skillPracticeMode && typeof onSelectExamSlot === 'function';
+  const showPreviousExercise = effectiveSkillPractice && typeof onSelectExamSlot === 'function';
   const previousExerciseLabel = isEn ? 'Previous exercise' : 'Volver al ejercicio anterior';
 
-  const useBalancedLayout = skillPracticeMode || showCheckAnswersButton;
+  const useBalancedLayout = effectiveSkillPractice || showCheckAnswersButton;
 
   const handlePreviousExercise = () => {
     if (previousExerciseSlot == null || typeof onSelectExamSlot !== 'function') return;
@@ -150,10 +152,10 @@ export default function B2ExamPracticeModuleNav({
     ) : null;
 
   const exercisePairBlock =
-    previousExerciseButton || skillPracticeMode || nav.continueMode === 'in-page' ? (
+    previousExerciseButton || effectiveSkillPractice || nav.continueMode === 'in-page' ? (
       <div className="levels-exam-module-nav__exercise-pair">
         {previousExerciseButton}
-        {skillPracticeMode || nav.continueMode === 'in-page' ? (
+        {effectiveSkillPractice || nav.continueMode === 'in-page' ? (
           <button
             type="button"
             className="levels-exam-module-nav__btn levels-exam-module-nav__btn--continue"
@@ -169,11 +171,11 @@ export default function B2ExamPracticeModuleNav({
   return (
     <nav
       className={`levels-exam-module-nav${
-        skillPracticeMode ? ' levels-exam-module-nav--skill' : ''
+        effectiveSkillPractice ? ' levels-exam-module-nav--skill' : ''
       }${showCheckAnswersButton ? ' levels-exam-module-nav--with-check' : ''}${
         useBalancedLayout ? ' levels-exam-module-nav--balanced' : ''
       }`}
-      data-skill-theme={skillPracticeMode && skillPracticeTheme ? skillPracticeTheme : undefined}
+      data-skill-theme={effectiveSkillPractice && skillPracticeTheme ? skillPracticeTheme : undefined}
       aria-label={isEn ? 'Module navigation' : 'Navegación del módulo'}
     >
       <div className="levels-exam-module-nav__zone levels-exam-module-nav__zone--back">
@@ -237,12 +239,28 @@ export default function B2ExamPracticeModuleNav({
 
         {useBalancedLayout && checkAnswersButton ? checkAnswersButton : null}
 
-        {!useBalancedLayout && !skillPracticeMode && nav.continueMode === 'link' && (nav.continueHref || onContinueModule) ? (
-          typeof onContinueModule === 'function' ? (
+        {!useBalancedLayout &&
+        !effectiveSkillPractice &&
+        nav.continueMode === 'in-page' &&
+        continueLabel &&
+        typeof onContinueInPage === 'function' ? (
+          <button
+            type="button"
+            className="levels-exam-module-nav__btn levels-exam-module-nav__btn--continue"
+            onClick={onContinueInPage}
+          >
+            <span className="levels-exam-module-nav__label">{continueLabel}</span>
+            <NavChevron direction="forward" />
+          </button>
+        ) : null}
+
+        {!useBalancedLayout && !effectiveSkillPractice && nav.continueMode === 'link' && (nav.continueHref || onContinueModule) ? (
+          typeof onContinueModule === 'function' || examMode ? (
             <button
               type="button"
               className="levels-exam-module-nav__btn levels-exam-module-nav__btn--continue"
               onClick={onContinueModule}
+              disabled={typeof onContinueModule !== 'function'}
             >
               <span className="levels-exam-module-nav__label">{continueLabel}</span>
               <NavChevron direction="forward" />

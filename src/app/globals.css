@@ -3205,6 +3205,19 @@ body.reading-night-mode .levels-exercise-stars--gold .starSvgWrapEmpty .starSvgP
   background: linear-gradient(135deg, #1d4ed8 0%, #1e40af 100%);
 }
 
+.exam-mode-save-controls__btn--save-exit {
+  color: #1d4ed8;
+  background: #eff6ff;
+  border-color: #93c5fd;
+  box-shadow: 0 1px 2px rgba(37, 99, 235, 0.12);
+}
+
+.exam-mode-save-controls__btn--save-exit:hover:not(:disabled) {
+  background: #dbeafe;
+  border-color: #60a5fa;
+  color: #1e40af;
+}
+
 .exam-mode-save-controls__btn--exit {
   color: #475569;
   background: #fff;
@@ -6695,6 +6708,51 @@ body.reading-night-mode .levels-b2-speaking-panel__usage,
 .levels-exam-inline-gap__input--kwt {
   min-width: 9rem;
   max-width: min(18rem, 42vw);
+}
+
+/* B2 Use of English parts 1–3 — unified inline layout (exam + skill practice) */
+.levels-exam-uoe-inline .levels-exam-split,
+.levels-exam-open-cloze-inline .levels-exam-split,
+.levels-exam-mcq-cloze-inline .levels-exam-split {
+  grid-template-columns: 1fr;
+}
+
+.levels-exam-uoe-inline .levels-exam-split__passage-panel,
+.levels-exam-uoe-inline .levels-exam-split__text,
+.levels-exam-open-cloze-inline .levels-exam-split__text,
+.levels-exam-mcq-cloze-inline .levels-exam-split__passage-panel,
+.levels-exam-mcq-cloze-inline .levels-exam-split__text {
+  border-right: none;
+  max-height: none;
+  padding-top: 0.35rem;
+}
+
+.levels-exam-uoe-inline .levels-exam-split__questions,
+.levels-exam-open-cloze-inline .levels-exam-split__questions,
+.levels-exam-mcq-cloze-inline .levels-exam-split__questions {
+  display: none;
+}
+
+.levels-exam-uoe-inline .levels-exam-split__enunciado {
+  margin-bottom: 0.15rem;
+}
+
+.levels-exam-uoe-inline .levels-exam-split {
+  margin-top: 0.65rem;
+  border: none;
+  border-radius: 0;
+  background: transparent;
+}
+
+.levels-exam-uoe-inline .levels-exam-split__text,
+.levels-exam-uoe-inline .levels-exam-split__passage-panel {
+  border: none;
+  padding: 0;
+}
+
+.levels-exam-uoe-inline .levels-exam-inline-passage__line,
+.levels-exam-uoe-inline .levels-exam-inline-mcq-cloze .levels-exam-inline-passage__line {
+  line-height: 1.85;
 }
 
 /* Parts 2–4: texto en el mismo panel que Part 1 (columna izquierda del split) */
@@ -10748,6 +10806,24 @@ body.reading-night-mode .levels-b2-speaking-panel__usage,
   width: 100%;
   margin-left: 0;
   align-self: stretch;
+  position: relative;
+}
+
+.levels-listening-practice-side__top-notes .exam-notes-popover__layer--inline {
+  position: static;
+  top: auto;
+  right: auto;
+  width: 100%;
+  margin-top: 0.35rem;
+  z-index: 1;
+}
+
+.levels-listening-practice-side__top-notes .exam-notes-popover__layer--inline .exam-notes-popover__panel {
+  position: static;
+  inset: auto;
+  width: 100%;
+  max-width: none;
+  max-height: min(50vh, 420px);
 }
 
 .levels-listening-practice-side__top-notes .exam-notes-popover__trigger {
@@ -11406,6 +11482,21 @@ body.reading-night-mode .reading-feedback-toggle__btn--sidebar-top.active {
   color: #9a3412;
   font-size: 0.78rem;
   font-weight: 600;
+}
+
+a.reading-weak-areas__chip--link {
+  text-decoration: none;
+  cursor: pointer;
+  transition:
+    background 0.15s ease,
+    border-color 0.15s ease,
+    color 0.15s ease;
+}
+
+a.reading-weak-areas__chip--link:hover {
+  background: #ffedd5;
+  border-color: #f97316;
+  color: #c2410c;
 }
 
 .reading-area {
@@ -12390,6 +12481,18 @@ body.reading-night-mode .exam-mode-save-controls__btn--save {
   color: #fff;
 }
 
+body.reading-night-mode .exam-mode-save-controls__btn--save-exit {
+  background: #1e3a5f;
+  border-color: #3b82f6;
+  color: #bfdbfe;
+}
+
+body.reading-night-mode .exam-mode-save-controls__btn--save-exit:hover:not(:disabled) {
+  background: #1e40af;
+  border-color: #60a5fa;
+  color: #eff6ff;
+}
+
 body.reading-night-mode .exam-mode-save-controls__btn--exit {
   background: #334155;
   border-color: #64748b;
@@ -12652,6 +12755,12 @@ body.reading-night-mode .reading-weak-areas__chip {
   background: #422006;
   border-color: #b45309;
   color: #fde68a;
+}
+
+body.reading-night-mode a.reading-weak-areas__chip--link:hover {
+  background: #78350f;
+  border-color: #f59e0b;
+  color: #fef3c7;
 }
 
 body.reading-night-mode .levels-exam-split__section-title,

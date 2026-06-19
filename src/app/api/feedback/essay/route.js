@@ -22,7 +22,10 @@ export async function POST(req) {
     return aiErrorJson('INVALID_BODY', 'Invalid JSON body.');
   }
 
-  const preflight = await runAiPreflight(userId, AI_ACTIONS.EXAM_WRITING_CORRECTION, aiCtx);
+  const preflight = await runAiPreflight(userId, AI_ACTIONS.EXAM_WRITING_CORRECTION, {
+    ...aiCtx,
+    deferredExamMode: body.deferredExamMode === true,
+  });
   if (!preflight.ok) return preflight.response;
 
   const out = await handleExamWritingCorrection(userId, body, aiCtx);

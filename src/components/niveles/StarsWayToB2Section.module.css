@@ -1,4 +1,4 @@
-.section {
+﻿.section {
   margin-top: 0.5rem;
   width: 100%;
 }
@@ -110,6 +110,9 @@
 /* ── Duolingo-style path track ── */
 
 .pathTrack {
+  --path-x-left: 22%;
+  --path-x-center: 50%;
+  --path-x-right: 78%;
   position: relative;
   width: 100%;
   min-height: 320px;
@@ -181,72 +184,165 @@
   padding-right: clamp(4%, 8vw, 12%);
 }
 
-/* Connectors between nodes */
+/* Connectors between nodes — L-shaped, no diagonals */
 
 .pathConnectorWrap {
-  height: 36px;
   position: relative;
+  height: 40px;
   margin: 2px 0;
 }
 
-.pathConnector {
+.pathLeg {
   position: absolute;
-  top: 0;
-  bottom: 0;
-  width: 4px;
   border-radius: 999px;
   background: color-mix(in srgb, var(--stars-way-accent) 45%, #94a3b8);
   box-shadow: 0 0 0 2px color-mix(in srgb, var(--stars-way-accent) 8%, white);
 }
 
-.connectorStraight {
-  left: 50%;
+.pathConnectorWrap[data-link='straight'] .pathLeg {
+  left: var(--path-x-center);
+  top: 0;
+  bottom: 0;
+  width: 4px;
   transform: translateX(-50%);
-  height: 100%;
 }
 
-.connectorCurveRight {
-  left: 50%;
-  height: 100%;
-  transform: rotate(28deg);
-  transform-origin: top center;
+.pathConnectorWrap[data-link='center-right'] .pathLegA {
+  left: var(--path-x-center);
+  top: 0;
+  height: 50%;
+  width: 4px;
+  transform: translateX(-50%);
 }
 
-.connectorCurveLeft {
-  left: 50%;
-  height: 100%;
-  transform: rotate(-28deg);
-  transform-origin: top center;
-}
-
-.connectorCurveLeftIn {
-  left: calc(50% + 18%);
-  height: 100%;
-  transform: rotate(-28deg);
-  transform-origin: top center;
-}
-
-.connectorCurveRightIn {
-  left: calc(50% - 18%);
-  height: 100%;
-  transform: rotate(28deg);
-  transform-origin: top center;
-}
-
-.connectorWide {
-  left: calc(50% - 22%);
-  width: 44%;
+.pathConnectorWrap[data-link='center-right'] .pathLegB {
+  left: var(--path-x-center);
+  top: calc(50% - 2px);
+  width: calc(var(--path-x-right) - var(--path-x-center));
   height: 4px;
-  top: 50%;
-  transform: translateY(-50%) rotate(-12deg);
 }
 
-.connectorWideReverse {
-  left: calc(50% - 22%);
-  width: 44%;
-  height: 4px;
+.pathConnectorWrap[data-link='center-right'] .pathLegC {
+  left: var(--path-x-right);
   top: 50%;
-  transform: translateY(-50%) rotate(12deg);
+  bottom: 0;
+  width: 4px;
+  transform: translateX(-50%);
+}
+
+.pathConnectorWrap[data-link='right-center'] .pathLegA {
+  left: var(--path-x-right);
+  top: 0;
+  height: 50%;
+  width: 4px;
+  transform: translateX(-50%);
+}
+
+.pathConnectorWrap[data-link='right-center'] .pathLegB {
+  left: var(--path-x-center);
+  top: calc(50% - 2px);
+  width: calc(var(--path-x-right) - var(--path-x-center));
+  height: 4px;
+}
+
+.pathConnectorWrap[data-link='right-center'] .pathLegC {
+  left: var(--path-x-center);
+  top: 50%;
+  bottom: 0;
+  width: 4px;
+  transform: translateX(-50%);
+}
+
+.pathConnectorWrap[data-link='center-left'] .pathLegA {
+  left: var(--path-x-center);
+  top: 0;
+  height: 50%;
+  width: 4px;
+  transform: translateX(-50%);
+}
+
+.pathConnectorWrap[data-link='center-left'] .pathLegB {
+  left: var(--path-x-left);
+  top: calc(50% - 2px);
+  width: calc(var(--path-x-center) - var(--path-x-left));
+  height: 4px;
+}
+
+.pathConnectorWrap[data-link='center-left'] .pathLegC {
+  left: var(--path-x-left);
+  top: 50%;
+  bottom: 0;
+  width: 4px;
+  transform: translateX(-50%);
+}
+
+.pathConnectorWrap[data-link='left-center'] .pathLegA {
+  left: var(--path-x-left);
+  top: 0;
+  height: 50%;
+  width: 4px;
+  transform: translateX(-50%);
+}
+
+.pathConnectorWrap[data-link='left-center'] .pathLegB {
+  left: var(--path-x-left);
+  top: calc(50% - 2px);
+  width: calc(var(--path-x-center) - var(--path-x-left));
+  height: 4px;
+}
+
+.pathConnectorWrap[data-link='left-center'] .pathLegC {
+  left: var(--path-x-center);
+  top: 50%;
+  bottom: 0;
+  width: 4px;
+  transform: translateX(-50%);
+}
+
+.pathConnectorWrap[data-link='right-left'] .pathLegA {
+  left: var(--path-x-right);
+  top: 0;
+  height: 50%;
+  width: 4px;
+  transform: translateX(-50%);
+}
+
+.pathConnectorWrap[data-link='right-left'] .pathLegB {
+  left: var(--path-x-left);
+  top: calc(50% - 2px);
+  width: calc(var(--path-x-right) - var(--path-x-left));
+  height: 4px;
+}
+
+.pathConnectorWrap[data-link='right-left'] .pathLegC {
+  left: var(--path-x-left);
+  top: 50%;
+  bottom: 0;
+  width: 4px;
+  transform: translateX(-50%);
+}
+
+.pathConnectorWrap[data-link='left-right'] .pathLegA {
+  left: var(--path-x-left);
+  top: 0;
+  height: 50%;
+  width: 4px;
+  transform: translateX(-50%);
+}
+
+.pathConnectorWrap[data-link='left-right'] .pathLegB {
+  left: var(--path-x-left);
+  top: calc(50% - 2px);
+  width: calc(var(--path-x-right) - var(--path-x-left));
+  height: 4px;
+}
+
+.pathConnectorWrap[data-link='left-right'] .pathLegC {
+  left: var(--path-x-right);
+  top: 50%;
+  bottom: 0;
+  width: 4px;
+  transform: translateX(-50%);
 }
 
 /* Milestone (part checkpoint) */

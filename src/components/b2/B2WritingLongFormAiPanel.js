@@ -52,6 +52,7 @@ export default function B2WritingLongFormAiPanel({
   onScoresReady,
   onDraftStats,
   examMode = false,
+  reviewExamCorrection = false,
   lang = 'en',
 }) {
   const isEn = lang === 'en';
@@ -140,7 +141,8 @@ export default function B2WritingLongFormAiPanel({
   const wordCount = countWords(essay);
   const meetsWordRange = wordCount >= wordMin && wordCount <= wordMax;
   const hasSubmitted = Boolean(aiFeedback || scores);
-  const limitReached = !usageUnlimited && usageRemaining === 0;
+  const usesDeferredExamCorrection = reviewExamCorrection === true;
+  const limitReached = !usesDeferredExamCorrection && !usageUnlimited && usageRemaining === 0;
 
   useEffect(() => {
     if (typeof onDraftStats === 'function') {
@@ -167,6 +169,7 @@ export default function B2WritingLongFormAiPanel({
         wordMin,
         wordMax,
         structuredExamContext: structuredExamContext || undefined,
+        deferredExamMode: usesDeferredExamCorrection,
         taskContext: structuredExamContext
           ? undefined
           : {
@@ -289,7 +292,13 @@ export default function B2WritingLongFormAiPanel({
         </p>
       ) : (
         <div className="levels-b2-writing-panel__actions">
-          {usageHint ? (
+          {usesDeferredExamCorrection ? (
+            <p className="levels-b2-writing-panel__alpha-limit">
+              {isEn
+                ? 'Exam review correction — does not use your daily practice limit.'
+                : 'Corrección de repaso del examen — no consume tu límite diario de práctica.'}
+            </p>
+          ) : usageHint ? (
             <p className="levels-b2-writing-panel__alpha-limit">{usageHint}</p>
           ) : null}
           <button

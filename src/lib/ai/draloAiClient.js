@@ -51,6 +51,7 @@ export async function callExamWritingCorrection({
   wordMax,
   taskContext,
   structuredExamContext,
+  deferredExamMode = false,
 }) {
   return callDraloAi({
     action: 'exam_writing_correction',
@@ -60,6 +61,7 @@ export async function callExamWritingCorrection({
     wordMax,
     taskContext,
     structuredExamContext,
+    deferredExamMode: deferredExamMode === true,
   });
 }
 

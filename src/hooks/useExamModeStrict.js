@@ -15,7 +15,8 @@ import { getCambridgeSectionDurationSeconds } from '@/data/cambridgeExamTimings'
  * Exam simulation only activates when:
  * - URL has examMode=1|review from the /exam-mode/ hub flow, AND
  * - A valid persisted exam-mode session exists for the section, AND
- * - URL does NOT include ?part= (part query always forces Practice Mode).
+ * - URL does NOT include ?part= (part query always forces Practice Mode),
+ *   except review mode or an active single-part repeat (repeatPart=1).
  *
  * @param {object} params
  * @param {string} params.slug - e.g. 'b2'
@@ -28,9 +29,10 @@ export function useExamModeStrict({ slug, partMin, partMax, sectionTitle }) {
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const examModeParam = searchParams.get('examMode');
-  const forcePracticeByPart = Boolean(searchParams.get('part'));
-  const examModeRequested = examModeParam === '1';
   const reviewModeRequested = examModeParam === 'review';
+  const examModeRequested = examModeParam === '1';
+  const partParam = Number(searchParams.get('part'));
+  const repeatPartRequested = searchParams.get('repeatPart') === '1';
   const examSlot = Math.min(5, Math.max(1, Number(searchParams.get('examen') || searchParams.get('exam') || 1)));
 
   const sectionKey = useMemo(
@@ -38,24 +40,57 @@ export function useExamModeStrict({ slug, partMin, partMax, sectionTitle }) {
     [slug, partMin, partMax],
   );
 
-  const { session, ready, finishSection, touchSectionTimer, setSectionRemaining, getSectionRemaining, saveSectionDraft, applyExamContentSync } =
-    useExamModeSession(slug, examSlot);
+  const {
+    session,
+    ready,
+    finishSection,
+    finishPartRepeat,
+    touchSectionTimer,
+    setSectionRemaining,
+    getSectionRemaining,
+    saveSectionDraft,
+    applyExamContentSync,
+  } = useExamModeSession(slug, examSlot);
 
   const section = useMemo(
     () => (session && sectionKey ? getExamModeSection(session, sectionKey) : null),
     [session, sectionKey],
   );
 
+  const repeatPartMode = useMemo(() => {
+    if (!ready || !session || !section || !examModeRequested || !repeatPartRequested) return false;
+    if (section.redoPart == null) return false;
+    return (
+      section.status === 'completed' &&
+      Number.isFinite(partParam) &&
+      partParam === Number(section.redoPart)
+    );
+  }, [ready, session, section, examModeRequested, repeatPartRequested, partParam]);
+
+  const forcePracticeByPart =
+    Boolean(searchParams.get('part')) && !reviewModeRequested && !repeatPartMode;
+
   const examSimulationFromHub = useMemo(() => {
     if (forcePracticeByPart || !ready || !session || !section) return false;
     if (reviewModeRequested) {
       return section.status === 'completed';
     }
+    if (repeatPartMode) {
+      return true;
+    }
     if (examModeRequested) {
       return section.status === 'active';
     }
     return false;
-  }, [forcePracticeByPart, ready, session, section, reviewModeRequested, examModeRequested]);
+  }, [
+    forcePracticeByPart,
+    ready,
+    session,
+    section,
+    reviewModeRequested,
+    examModeRequested,
+    repeatPartMode,
+  ]);
 
   const reviewMode = examSimulationFromHub && reviewModeRequested;
   const examModeActive = examSimulationFromHub && examModeRequested;
@@ -91,13 +126,13 @@ export function useExamModeStrict({ slug, partMin, partMax, sectionTitle }) {
       return;
     }
 
-    if (sec.status === 'completed' && !reviewMode && !blockedRef.current) {
+    if (sec.status === 'completed' && !reviewMode && !repeatPartMode && !blockedRef.current) {
       blockedRef.current = true;
       router.replace(hubHref);
       return;
     }
 
-    if (sec.status === 'active') {
+    if (sec.status === 'active' || repeatPartMode) {
       touchSectionTimer(sectionKey);
     }
   }, [
@@ -106,6 +141,7 @@ export function useExamModeStrict({ slug, partMin, partMax, sectionTitle }) {
     session,
     sectionKey,
     reviewMode,
+    repeatPartMode,
     router,
     hubHref,
     touchSectionTimer,
@@ -117,10 +153,23 @@ export function useExamModeStrict({ slug, partMin, partMax, sectionTitle }) {
   const handleFinishSection = useCallback(
     (answersSnapshot, scores, options = {}) => {
       if (!sectionKey) return;
+      if (section?.redoPart != null) {
+        finishPartRepeat(sectionKey, section.redoPart, answersSnapshot, scores);
+        router.push(options.redirectTo || resultsHref);
+        return;
+      }
       finishSection(sectionKey, answersSnapshot, scores);
       router.push(options.redirectTo || hubHref);
     },
-    [sectionKey, finishSection, router, hubHref],
+    [
+      sectionKey,
+      section?.redoPart,
+      finishPartRepeat,
+      finishSection,
+      router,
+      resultsHref,
+      hubHref,
+    ],
   );
 
   const getPracticeHref = useCallback(
@@ -131,6 +180,7 @@ export function useExamModeStrict({ slug, partMin, partMax, sectionTitle }) {
   return {
     examModeActive,
     reviewMode,
+    repeatPartMode,
     hideFeedback,
     examSlot,
     slug,

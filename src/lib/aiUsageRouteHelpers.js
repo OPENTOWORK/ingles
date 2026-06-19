@@ -29,28 +29,35 @@ export function aiSuccessJson(payload) {
  * @returns {Promise<{ ok: true } | { ok: false, response: Response }>}
  */
 export async function runAiPreflight(userId, action, options = {}) {
-  const daily = await consumeDailyAiLimit(userId, action, options);
-  if (!daily.allowed) {
-    const message =
-      action === AI_ACTIONS.EXAM_WRITING_CORRECTION
-        ? LIMIT_REACHED.writing.en
-        : action === AI_ACTIONS.EXAM_SPEAKING_FEEDBACK
-          ? LIMIT_REACHED.speaking.en
-          : LIMIT_REACHED.generic.en;
+  const skipDailyLimit =
+    options.deferredExamMode === true && action === AI_ACTIONS.EXAM_WRITING_CORRECTION;
 
-    return {
-      ok: false,
-      response: aiErrorJson(
-        daily.code === 'DAILY_LIMIT_REACHED' ? 'DAILY_LIMIT_REACHED' : daily.code || 'DAILY_LIMIT_REACHED',
-        message,
-        {
-          limit: daily.limit,
-          used: daily.used,
-          usage: buildDailyUsageStatus(daily, action),
-        },
-        429,
-      ),
-    };
+  let daily = skipDailyLimit ? { allowed: true, deferredExamMode: true } : null;
+
+  if (!skipDailyLimit) {
+    daily = await consumeDailyAiLimit(userId, action, options);
+    if (!daily.allowed) {
+      const message =
+        action === AI_ACTIONS.EXAM_WRITING_CORRECTION
+          ? LIMIT_REACHED.writing.en
+          : action === AI_ACTIONS.EXAM_SPEAKING_FEEDBACK
+            ? LIMIT_REACHED.speaking.en
+            : LIMIT_REACHED.generic.en;
+
+      return {
+        ok: false,
+        response: aiErrorJson(
+          daily.code === 'DAILY_LIMIT_REACHED' ? 'DAILY_LIMIT_REACHED' : daily.code || 'DAILY_LIMIT_REACHED',
+          message,
+          {
+            limit: daily.limit,
+            used: daily.used,
+            usage: buildDailyUsageStatus(daily, action),
+          },
+          429,
+        ),
+      };
+    }
   }
 
   const budget = await checkMonthlyBudget();

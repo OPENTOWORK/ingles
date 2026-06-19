@@ -78,6 +78,18 @@ export default function B2ExamInlineMcqClozePassage({
 
   if (!lines.length) return null;
 
+  let startIdx = 0;
+  if (lines[0]?.toLowerCase() === 'text') startIdx = 1;
+  const titleLine =
+    startIdx < lines.length &&
+    !/\(\d{1,2}\)/.test(lines[startIdx]) &&
+    !parseLineWithOpenGaps(lines[startIdx]).some((s) => s.type === 'gap') &&
+    lines[startIdx].length < 120 &&
+    !/^IMAGE:/i.test(lines[startIdx])
+      ? lines[startIdx]
+      : null;
+  const bodyStart = titleLine ? startIdx + 1 : startIdx;
+
   const getTriggerStateClass = (questionKey, isChecked, selectedOption, group) => {
     if (hideFeedback || !isChecked || !selectedOption) return '';
     if (selectedOption.correcta) return 'levels-exam-inline-mcq-gap__trigger--correct';
@@ -86,7 +98,8 @@ export default function B2ExamInlineMcqClozePassage({
 
   return (
     <div className="levels-exam-inline-passage levels-exam-inline-mcq-cloze">
-      {lines.map((line, lineIdx) => {
+      {titleLine ? <h3 className="levels-exam-passage-title">{titleLine}</h3> : null}
+      {lines.slice(bodyStart).map((line, lineIdx) => {
         const img = line.match(/^IMAGE:\s*(\S+)/i);
         if (img) {
           return (
@@ -273,7 +286,11 @@ export default function B2ExamInlineMcqClozePassage({
         />
       ) : null}
 
-      {hideFeedback ? (
+      {hideFeedback &&
+      mcqGroups.some((g) => {
+        if (g?.questionNumber == null || g.questionNumber === 0) return false;
+        return Boolean(selectedOptions[getQuestionKey(g.questionNumber)]);
+      }) ? (
         <div className="reading-question-meta-list">
           {mcqGroups
             .filter((g) => g?.questionNumber != null && g.questionNumber !== 0)

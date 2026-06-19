@@ -1,6 +1,6 @@
 'use client';
 
-import { getFormattedEnunciado, omitPartTitleBlocks } from '@/utils/b2ExamPaperShared';
+import { getFormattedEnunciado, omitPartTitleBlocks, omitExampleEnunciadoBlocks } from '@/utils/b2ExamPaperShared';
 
 const blockStyles = {
   label: { margin: '0.7rem 0 0.45rem', fontWeight: 700, color: '#1a365d' },
@@ -132,6 +132,7 @@ export function B2ExamQuestionItem({ children, className = '' }) {
  *   showDirections?: boolean,
  *   showPassagePanel?: boolean,
  *   showQuestionsHeading?: boolean,
+ *   stripExampleFromDirections?: boolean,
  *   contentClassName?: string,
  *   footer?: import('react').ReactNode,
  *   titleActions?: import('react').ReactNode,
@@ -152,16 +153,20 @@ export function B2ExamPracticeContent({
   showDirections = true,
   showPassagePanel = true,
   showQuestionsHeading = true,
+  stripExampleFromDirections = false,
   contentClassName = '',
   footer = null,
 }) {
   const hasPassage =
     showPassagePanel && (Boolean(passageText?.trim()) || Boolean(passage));
   const useSplit = split === 'auto' ? hasPassage && Boolean(questions) : Boolean(split);
-  const directionBlocks = omitPartTitleBlocks(
+  let directionBlocks = omitPartTitleBlocks(
     getFormattedEnunciado(directionsText),
     Boolean(title?.trim()),
   );
+  if (stripExampleFromDirections) {
+    directionBlocks = omitExampleEnunciadoBlocks(directionBlocks);
+  }
 
   return (
     <div className={useSplit ? 'levels-exam-split-page' : 'levels-exam-practice-page'}>
@@ -187,7 +192,9 @@ export function B2ExamPracticeContent({
             <div className="levels-exam-split">
               {hasPassage ? (
                 <div className="levels-exam-split__panel levels-exam-split__text">
-                  <p className="levels-exam-split__section-title">{textLabel}</p>
+                  {textLabel ? (
+                    <p className="levels-exam-split__section-title">{textLabel}</p>
+                  ) : null}
                   {passage || <B2ExamPassageText text={passageText} />}
                 </div>
               ) : null}
@@ -202,7 +209,9 @@ export function B2ExamPracticeContent({
             <>
               {hasPassage ? (
                 <div className="levels-exam-split__passage-panel">
-                  <p className="levels-exam-split__section-title">{textLabel}</p>
+                  {textLabel ? (
+                    <p className="levels-exam-split__section-title">{textLabel}</p>
+                  ) : null}
                   {passage || <B2ExamPassageText text={passageText} />}
                 </div>
               ) : null}

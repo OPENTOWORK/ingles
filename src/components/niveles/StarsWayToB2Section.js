@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 import { Suspense, useEffect, useMemo, useState } from 'react';
 import Link from 'next/link';
@@ -42,25 +42,27 @@ function buildPathItems(parts, availableSlots) {
   return items;
 }
 
+function getPathLink(from, to) {
+  if (from === to) return 'straight';
+  return `${from}-${to}`;
+}
+
 function PathConnector({ from, to }) {
-  const curveClass =
-    from === to
-      ? styles.connectorStraight
-      : from === 'center' && to === 'right'
-        ? styles.connectorCurveRight
-        : from === 'center' && to === 'left'
-          ? styles.connectorCurveLeft
-          : from === 'right' && to === 'center'
-            ? styles.connectorCurveLeftIn
-            : from === 'left' && to === 'center'
-              ? styles.connectorCurveRightIn
-              : from === 'right' && to === 'left'
-                ? styles.connectorWide
-                : styles.connectorWideReverse;
+  const link = getPathLink(from, to);
+
+  if (link === 'straight') {
+    return (
+      <div className={styles.pathConnectorWrap} data-link={link} aria-hidden>
+        <span className={styles.pathLeg} />
+      </div>
+    );
+  }
 
   return (
-    <div className={styles.pathConnectorWrap} aria-hidden>
-      <div className={`${styles.pathConnector} ${curveClass}`} />
+    <div className={styles.pathConnectorWrap} data-link={link} aria-hidden>
+      <span className={`${styles.pathLeg} ${styles.pathLegA}`} />
+      <span className={`${styles.pathLeg} ${styles.pathLegB}`} />
+      <span className={`${styles.pathLeg} ${styles.pathLegC}`} />
     </div>
   );
 }
@@ -97,7 +99,7 @@ function ExerciseNode({ exerciseIndex, examSlot, part, column, progressBySlot, a
           {attempted ? (
             <>
               {score.correct}/{score.total}
-              {score.passed ? ' ✓' : ''}
+              {score.passed ? ' Ô£ô' : ''}
             </>
           ) : (
             'Not tried'
@@ -125,7 +127,7 @@ function PartMilestone({ part, column, progressBySlot, availableSlots }) {
           <div className={styles.milestoneProgress}>
             <TheoryLevelStars stars={partStars} size="sm" variant="gold" />
             <span className={styles.milestoneMeta}>
-              {attempts}/{exerciseTotal} exercises · best {partStars}/3 ★
+              {attempts}/{exerciseTotal} exercises ┬À best {partStars}/3 Ôÿà
             </span>
           </div>
         </div>
@@ -225,14 +227,14 @@ function StarsWayToB2SectionInner() {
           Stars way to B2
         </h2>
         <p className={styles.description}>
-          Pick a skill and follow the path. Each circle is an exercise — earn up to 3 stars and see
+          Pick a skill and follow the path. Each circle is an exercise ÔÇö earn up to 3 stars and see
           what you still need to reach the top.
         </p>
       </div>
 
       {loading ? (
         <p className={styles.loading} role="status">
-          Loading your progress…
+          Loading your progressÔÇª
         </p>
       ) : null}
 
@@ -284,7 +286,7 @@ export default function StarsWayToB2Section() {
     <Suspense
       fallback={
         <p className={styles.loading} role="status">
-          Loading your progress…
+          Loading your progressÔÇª
         </p>
       }
     >

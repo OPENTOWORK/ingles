@@ -3,6 +3,7 @@
 /** Save / exit controls for exam simulation sections (top bar, right side). */
 export default function ExamModeSessionSaveControls({
   onSave,
+  onSaveAndExit,
   onExitWithoutSaving,
   saveNotice = '',
   lang = 'en',
@@ -28,6 +29,14 @@ export default function ExamModeSessionSaveControls({
         disabled={disabled}
       >
         {isEn ? 'Save' : 'Guardar'}
+      </button>
+      <button
+        type="button"
+        className="exam-mode-save-controls__btn exam-mode-save-controls__btn--save-exit"
+        onClick={onSaveAndExit}
+        disabled={disabled}
+      >
+        {isEn ? 'Save and exit' : 'Guardar y salir'}
       </button>
       <button
         type="button"

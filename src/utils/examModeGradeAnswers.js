@@ -1,5 +1,14 @@
 import { computeB2PartProgressFromState } from '@/utils/recordLevelsB2PartScore';
-import { getB2PartScoring, B2_PART_SCORING_V2, B2_PAPER_SCORING_V2 } from '@/utils/levelsB2PartScoring';
+import {
+  getB2PartScoring,
+  getB2PartScoringV2,
+  getPassingForDynamicTotal,
+  getB2PartPassingPoints,
+  isB2PartPassed,
+  isB2PartPassedByPoints,
+  B2_PART_SCORING_V2,
+  B2_PAPER_SCORING_V2,
+} from '@/utils/levelsB2PartScoring';
 import { isB2ScoringV2Enabled } from '@/lib/b2ScoringV2FeatureFlag';
 import {
   buildPartScoreMetricsV2,
@@ -7,10 +16,9 @@ import {
   sumB2MetricsForParts,
 } from '@/utils/b2ScoringV2Engine';
 import {
-  getGroupedAnswers,
   getOpenAnswerMap,
-  inferOpenQuestionNumbersFromPrompt,
   normalizeText,
+  resolveExamModePartScoringMode,
 } from '@/utils/b2ExamPaperShared';
 import { parseB2KeyWordAnswerKeyRows } from '@/lib/parseB2KeyWordAnswerKey';
 import { computeSilentPart4OpenGrades } from '@/lib/b2Part4Grading';
@@ -43,6 +51,7 @@ function buildByPartEntryV1(prog, partNumber) {
     total: prog.total,
     passing: cfg?.passing ?? prog.passing,
     complete: prog.complete,
+    evaluated: prog.evaluated,
     scoringVersion: 1,
   };
 }
@@ -62,6 +71,7 @@ function buildByPartEntryV2(prog, partNumber) {
   return {
     ...v2,
     complete: prog.complete,
+    evaluated: prog.evaluated,
     passing: getB2PartScoring(partNumber)?.passing,
   };
 }
@@ -125,8 +135,175 @@ export function aggregateExamModeSectionScores({ partMin, partMax, partSnapshots
 /**
  * @param {object} opts - same shape as computeB2PartProgressFromState
  */
+function synthesizeExamModeCheckedQuestions({
+  useOpenInputUi,
+  groupedAnswers,
+  selectedOptions = {},
+  checkedQuestions = {},
+  getQuestionKey,
+  partId,
+}) {
+  if (useOpenInputUi) return checkedQuestions;
+
+  const next = { ...checkedQuestions };
+  (groupedAnswers || []).forEach((group, groupIndex) => {
+    if (!group.options?.length) return;
+    const key = getQuestionKey(partId, group.questionNumber, `extra-${groupIndex}`);
+    if (selectedOptions[key] && !next[key]) {
+      next[key] = true;
+    }
+  });
+  return next;
+}
+
+/** Whether a saved exam-mode part draft contains any student answer. */
+export function isExamModePartDraftAttempted(draft) {
+  if (!draft || typeof draft !== 'object') return false;
+  const { selectedOptions = {}, openInputs = {}, checkedQuestions = {} } = draft;
+  if (Object.values(checkedQuestions).some(Boolean)) return true;
+  if (Object.values(selectedOptions).some((v) => v != null && String(v) !== '')) return true;
+  if (Object.values(openInputs).some((v) => String(v || '').trim() !== '')) return true;
+  return false;
+}
+
+/** Align saved option keys with the keys used during silent rescoring. */
+function remapSelectedOptionsForExamModeScoring(
+  selectedOptions,
+  partId,
+  preguntaId,
+  groupedAnswers,
+  getQuestionKey,
+) {
+  const remapped = { ...(selectedOptions || {}) };
+
+  groupedAnswers.forEach((group, groupIndex) => {
+    const targetKey = getQuestionKey(partId, group.questionNumber, `extra-${groupIndex}`);
+    if (remapped[targetKey]) return;
+
+    const suffixCandidates = new Set([
+      String(group.questionNumber ?? ''),
+      `extra-${groupIndex}`,
+    ]);
+    if (group.questionNumber == null) suffixCandidates.add(`extra-${groupIndex}`);
+
+    for (const [savedKey, value] of Object.entries(selectedOptions || {})) {
+      if (!value) continue;
+      const segments = savedKey.split('::');
+      if (segments.length < 3) continue;
+      const savedSuffix = segments.slice(2).join('::');
+      const normalizedKey = `${partId}::${preguntaId}::${savedSuffix}`;
+      if (suffixCandidates.has(savedSuffix)) {
+        remapped[targetKey] = value;
+        remapped[normalizedKey] = value;
+      }
+    }
+  });
+
+  return remapped;
+}
+
+/** Match selections by option id so legacy drafts still score after key/metadata drift. */
+function countExamModeMcqProgress(selectedOptions, groupedAnswers) {
+  let evaluated = 0;
+  let correct = 0;
+  const usedKeys = new Set();
+
+  for (const group of groupedAnswers || []) {
+    if (!group.options?.length) continue;
+    const optionIds = new Set(group.options.map((o) => o.id).filter(Boolean));
+    let selectedId = null;
+
+    for (const [key, value] of Object.entries(selectedOptions || {})) {
+      if (!value || usedKeys.has(key)) continue;
+      if (optionIds.has(value)) {
+        selectedId = value;
+        usedKeys.add(key);
+        break;
+      }
+    }
+
+    if (!selectedId) continue;
+    evaluated += 1;
+    if (group.options.some((o) => o.id === selectedId && o.correcta)) correct += 1;
+  }
+
+  return { evaluated, correct };
+}
+
+function gradeExamModeMcqPartProgress({
+  partNumber,
+  groupedAnswers,
+  selectedOptions,
+}) {
+  const { evaluated, correct } = countExamModeMcqProgress(selectedOptions, groupedAnswers);
+  const cfg = getB2PartScoring(partNumber);
+  const v2Cfg = getB2PartScoringV2(partNumber);
+  const v2Active = isB2ScoringV2Enabled() && v2Cfg && partNumber >= 1 && partNumber <= 7;
+  const dynamicQuestionCount = (groupedAnswers || []).filter((group) => group.options?.length).length;
+  const questionTotal =
+    dynamicQuestionCount > 0
+      ? dynamicQuestionCount
+      : v2Active
+        ? v2Cfg.questionCount
+        : (cfg?.total ?? Math.max(evaluated, 1));
+  const total = v2Active ? v2Cfg.maxPoints : questionTotal;
+  const passing = v2Active ? getB2PartPassingPoints(partNumber) : (cfg?.passing ?? getPassingForDynamicTotal(questionTotal));
+  const complete =
+    questionTotal > 0 ? evaluated >= questionTotal : evaluated > 0 && evaluated >= (cfg?.total ?? 1);
+
+  const v2Metrics = v2Active
+    ? buildPartScoreMetricsV2(
+        partNumber,
+        {
+          correctItems: correct,
+          questionsAnswered: evaluated,
+          totalQuestions: questionTotal,
+        },
+        B2_PART_SCORING_V2,
+      )
+    : null;
+
+  const passed =
+    complete &&
+    (v2Active
+      ? isB2PartPassedByPoints(v2Metrics?.pointsEarned ?? correct, partNumber)
+      : cfg
+        ? isB2PartPassed(correct, partNumber)
+        : correct >= passing);
+
+  return {
+    evaluated,
+    correct,
+    total,
+    questionTotal,
+    correctItems: correct,
+    itemCorrect: correct,
+    itemTotal: questionTotal,
+    passing,
+    complete,
+    passed,
+    scoringVersion: v2Active ? 2 : 1,
+    v2Metrics,
+    pointsEarned: v2Metrics?.pointsEarned ?? correct,
+    maxPoints: v2Metrics?.maxPoints ?? total,
+    puntosObtenidos: v2Metrics?.pointsEarned ?? correct,
+    puntosMaximos: v2Metrics?.maxPoints ?? total,
+  };
+}
+
+/**
+ * @param {object} opts - same shape as computeB2PartProgressFromState
+ */
 export function gradePartFromAnswerState(opts) {
-  return computeB2PartProgressFromState(opts);
+  if (!opts.useOpenInputUi && opts.groupedAnswers?.length) {
+    const mcq = countExamModeMcqProgress(opts.selectedOptions, opts.groupedAnswers);
+    if (mcq.evaluated > 0) {
+      return gradeExamModeMcqPartProgress(opts);
+    }
+  }
+
+  const checkedQuestions = synthesizeExamModeCheckedQuestions(opts);
+  return computeB2PartProgressFromState({ ...opts, checkedQuestions });
 }
 
 /**
@@ -155,15 +332,17 @@ export function scoreExamModeDrafts({ partMin, partMax, partsData, draftByPart, 
     const getKey = (pid, qn, fb) =>
       `${pid}::${question.preguntaId || 'sin-pregunta'}::${qn ?? fb}`;
 
-    const promptBlob = question.enunciado || '';
-    const openNums = inferOpenQuestionNumbersFromPrompt(promptBlob, p);
+    const {
+      useOpenInputUi: useOpen,
+      openQuestionNumbers: openNums,
+      groupedAnswers,
+    } = resolveExamModePartScoringMode(p, question, part.descripcion || '');
+
     const openMap = getOpenAnswerMap(
       question.respuestasAbiertas || [],
       question.respuestas || [],
       openNums,
     );
-    const useOpen = openNums.length > 0;
-    const groupedAnswers = useOpen ? [] : getGroupedAnswers(question.respuestas || []);
 
     const v2Enabled = scoringV2Enabled ?? isB2ScoringV2Enabled();
     const usePart4V2Grading = v2Enabled && p === 4;
@@ -191,6 +370,14 @@ export function scoreExamModeDrafts({ partMin, partMax, partsData, draftByPart, 
       }
     }
 
+    const remappedSelectedOptions = remapSelectedOptionsForExamModeScoring(
+      draft.selectedOptions || {},
+      partId,
+      question.preguntaId,
+      groupedAnswers,
+      getKey,
+    );
+
     const progress = gradePartFromAnswerState({
       partNumber: p,
       useOpenInputUi: useOpen,
@@ -200,12 +387,12 @@ export function scoreExamModeDrafts({ partMin, partMax, partsData, draftByPart, 
       usePart4V2Grading,
       groupedAnswers,
       checkedQuestions: draft.checkedQuestions || {},
-      selectedOptions: draft.selectedOptions || {},
+      selectedOptions: remappedSelectedOptions,
       getQuestionKey: getKey,
       partId,
     });
 
-    partSnapshots[p] = { draft, progress };
+    partSnapshots[p] = { draft: { ...draft, parteId: draft.parteId || partId }, progress };
   }
 
   return {

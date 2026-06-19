@@ -177,10 +177,12 @@ import { useExamModeSectionDraftControls } from '@/hooks/useExamModeSectionDraft
 import {
   applyReadingStyleSectionDraft,
   buildExamModeSectionDraft,
+  getExamModeDraftByPartFromSection,
 } from '@/utils/examModeSectionDraft';
 import { useExamModeStrict } from '@/hooks/useExamModeStrict';
 import { scoreExamModeDrafts } from '@/utils/examModeGradeAnswers';
 import { buildExamModeContinueModuleHref } from '@/utils/buildExamModeContinueModuleHref';
+import { buildExamModeFinishPayload } from '@/utils/examModePartRepeat';
 import { finishExamModeSupabasePersistence } from '@/utils/finishExamModeSupabasePersistence';
 import {
   resolveExamPracticeMode,
@@ -327,10 +329,13 @@ function B2ExamPaperPracticePageInner({
     saveSectionDraft,
     applyExamContentSync,
     hubHref,
+    resultsHref,
     sectionKey: examSectionKey,
   } = examMode;
   const examDraftRef = useRef({});
   const prevExamPartRef = useRef(null);
+  const examPartMetaRef = useRef({});
+  const reviewDraftHydratedRef = useRef(false);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [partsData, setPartsData] = useState([]);
@@ -705,6 +710,19 @@ function B2ExamPaperPracticePageInner({
     readingSession.resetAnswersRevealed();
   }, [examSlot, selectedPartId, readingSession.resetAnswersRevealed]);
 
+  useEffect(() => {
+    const onInstantFeedbackChanged = (event) => {
+      if (event?.detail?.showFeedback !== false) return;
+      setCheckedQuestions({});
+      setOpenChecks({});
+      setOpenGrades({});
+      setAiHintsByKey({});
+    };
+    window.addEventListener('dralo-reading-instant-feedback-changed', onInstantFeedbackChanged);
+    return () =>
+      window.removeEventListener('dralo-reading-instant-feedback-changed', onInstantFeedbackChanged);
+  }, []);
+
   const handleKeepPracticing = useCallback(() => {
     runKeepPracticingSkillFlow({
       examSlot,
@@ -794,11 +812,34 @@ function B2ExamPaperPracticePageInner({
   }, [selectedQuestion?.preguntaId, selectedPart?.id]);
 
   useEffect(() => {
-    if (examModeActive && !reviewMode) {
+    if (examModeActive && !reviewMode && selectedPart) {
       const pn = Number(selectedPart?.nombre.match(/\d+/)?.[0] || 0);
-      if (prevExamPartRef.current != null && prevExamPartRef.current !== pn && selectedPart) {
-        examDraftRef.current[prevExamPartRef.current] = {
+      if (pn) {
+        examPartMetaRef.current[pn] = {
           preguntaId: selectedQuestion?.preguntaId,
+          parteId: selectedPart?.id,
+        };
+      }
+    }
+  }, [examModeActive, reviewMode, selectedPart?.id, selectedPart?.nombre, selectedQuestion?.preguntaId]);
+
+  useEffect(() => {
+    if (reviewMode && !reviewDraftHydratedRef.current && partsData.length > 0) {
+      const savedByPart = getExamModeDraftByPartFromSection(examSection);
+      if (Object.keys(savedByPart).length > 0) {
+        examDraftRef.current = { ...savedByPart };
+        reviewDraftHydratedRef.current = true;
+      }
+    }
+
+    if (examModeActive || reviewMode) {
+      const pn = Number(selectedPart?.nombre.match(/\d+/)?.[0] || 0);
+      if (examModeActive && !reviewMode && prevExamPartRef.current != null && prevExamPartRef.current !== pn && selectedPart) {
+        const prevPn = prevExamPartRef.current;
+        const meta = examPartMetaRef.current[prevPn] || {};
+        examDraftRef.current[prevPn] = {
+          preguntaId: meta.preguntaId,
+          parteId: meta.parteId,
           selectedOptions: { ...selectedOptions },
           openInputs: { ...openInputs },
           checkedQuestions: { ...checkedQuestions },
@@ -809,6 +850,13 @@ function B2ExamPaperPracticePageInner({
         setSelectedOptions(draft.selectedOptions || {});
         setOpenInputs(draft.openInputs || {});
         setCheckedQuestions(draft.checkedQuestions || {});
+        if (draft.preguntaId && selectedPart?.id) {
+          setSelectedQuestionByPart((prev) =>
+            prev[selectedPart.id] === draft.preguntaId
+              ? prev
+              : { ...prev, [selectedPart.id]: draft.preguntaId },
+          );
+        }
       } else {
         setOpenInputs({});
         setSelectedOptions({});
@@ -830,6 +878,8 @@ function B2ExamPaperPracticePageInner({
     selectedPart?.nombre,
     examModeActive,
     reviewMode,
+    partsData.length,
+    examSection,
   ]);
 
   const partNumber = useMemo(
@@ -2108,20 +2158,36 @@ function B2ExamPaperPracticePageInner({
       if (pn && selectedPart) {
         examDraftRef.current[pn] = {
           preguntaId: selectedQuestion?.preguntaId,
+          parteId: selectedPart?.id,
           selectedOptions: { ...selectedOptions },
           openInputs: { ...openInputs },
           checkedQuestions: { ...checkedQuestions },
         };
       }
-      const { scores, partSnapshots } = scoreExamModeDrafts({
+      const finishPayload = buildExamModeFinishPayload({
+        examSection,
         partMin,
         partMax,
-        partsData,
-        draftByPart: examDraftRef.current,
+        examDraftRef,
       });
-      handleFinishSection({ draftByPart: examDraftRef.current }, scores, { redirectTo });
+      const { scores, partSnapshots } = scoreExamModeDrafts({
+        partMin: finishPayload.scorePartMin,
+        partMax: finishPayload.scorePartMax,
+        partsData,
+        draftByPart: finishPayload.draftByPartForScore,
+      });
+      handleFinishSection(finishPayload.answersSnapshot, scores, {
+        redirectTo: redirectTo || (finishPayload.isPartRepeat ? resultsHref : undefined),
+      });
+      const snapshots = finishPayload.persistPartNumbers
+        ? Object.fromEntries(
+            finishPayload.persistPartNumbers
+              .filter((partKey) => partSnapshots[partKey])
+              .map((partKey) => [partKey, partSnapshots[partKey]]),
+          )
+        : partSnapshots;
       void finishExamModeSupabasePersistence({
-        partSnapshots,
+        partSnapshots: snapshots,
         examenId: scoring.currentExamenId || scoring.examenIdBySlot?.[examSlot],
       });
     },
@@ -2138,10 +2204,16 @@ function B2ExamPaperPracticePageInner({
       scoring.currentExamenId,
       scoring.examenIdBySlot,
       examSlot,
+      examSection,
+      resultsHref,
     ],
   );
 
   const handleContinueModuleInExamMode = useCallback(() => {
+    if (examSection?.redoPart != null) {
+      handleExamModeFinish(resultsHref);
+      return;
+    }
     handleExamModeFinish(
       buildExamModeContinueModuleHref({
         partNumber,
@@ -2150,7 +2222,7 @@ function B2ExamPaperPracticePageInner({
         slug: levelSlug,
       }),
     );
-  }, [handleExamModeFinish, partNumber, partMax, examSlot, levelSlug]);
+  }, [handleExamModeFinish, examSection?.redoPart, resultsHref, partNumber, partMax, examSlot, levelSlug]);
 
   useEffect(() => {
     setWritingLiveCorrect(null);
@@ -2356,6 +2428,7 @@ function B2ExamPaperPracticePageInner({
     if (pn && selectedPart) {
       draftByPart[pn] = {
         preguntaId: selectedQuestion?.preguntaId,
+        parteId: selectedPart?.id,
         selectedOptions: { ...selectedOptions },
         openInputs: { ...openInputs },
         checkedQuestions: { ...checkedQuestions },
@@ -2387,6 +2460,7 @@ function B2ExamPaperPracticePageInner({
     if (pn && selectedPart) {
       draftByPart[pn] = {
         preguntaId: selectedQuestion?.preguntaId,
+        parteId: selectedPart?.id,
         selectedOptions: { ...selectedOptions },
         openInputs: { ...openInputs },
         checkedQuestions: { ...checkedQuestions },
@@ -3962,6 +4036,7 @@ function B2ExamPaperPracticePageInner({
             : undefined
         }
         skillPracticeMode={isSkillPracticeSession}
+        examMode={examModeActive && !reviewMode}
         skillPracticeTheme={skillNav.skillTheme}
         onContinueInPage={isSkillPracticeSession ? handleKeepPracticing : handleContinueInPage}
         onPreviousInPage={handlePreviousInPage}

@@ -362,6 +362,16 @@ function B2SpeakingExamPracticeInner({ title, subtitle, loadingLabel, refreshLab
     }
   }, [tabPartsData, selectedPartId]);
 
+  const handlePreviousInPage = useCallback(() => {
+    const sorted = [...tabPartsData].sort((a, b) => a.partNumber - b.partNumber);
+    const currentIdx = sorted.findIndex((p) => p.id === selectedPartId);
+    if (currentIdx <= 0) return;
+    setSelectedPartId(sorted[currentIdx - 1].id);
+    if (typeof window !== 'undefined') {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  }, [tabPartsData, selectedPartId]);
+
   const chromeSubtitle = isSkillPracticeSession ? null : subtitle;
 
   const practiceMode = resolveExamPracticeMode({ examModeActive, reviewMode });
@@ -586,8 +596,10 @@ function B2SpeakingExamPracticeInner({ title, subtitle, loadingLabel, refreshLab
         overviewHref={examModeHubNav?.href}
         overviewLabel={examModeHubNav?.label}
         skillPracticeMode={isSkillPracticeSession}
+        examMode={examModeActive && !reviewMode}
         skillPracticeTheme={skillNav.skillTheme}
         onContinueInPage={isSkillPracticeSession ? handleKeepPracticing : handleContinueInPage}
+        onPreviousInPage={handlePreviousInPage}
         onContinueModule={
           examModeActive && !reviewMode ? handleContinueModuleInExamMode : undefined
         }

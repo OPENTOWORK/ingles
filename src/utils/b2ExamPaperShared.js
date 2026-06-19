@@ -3,6 +3,16 @@ import {
   extractKeyWordQuestionsBlock,
   extractTextoBloque,
   parseB2KeyWordTransformItems,
+  splitPart1TextoYPreguntas,
+  parsePart1QuestionOptions,
+  extractReadingPart5QuestionsBlock,
+  extractReadingPart6SentencesBlock,
+  extractPart7PromptStemBlob,
+  extractPart7ProfilesBlock,
+  parseReadingAdMcqChunks,
+  parseReadingPart6SentencePool,
+  parsePart7NumberedStems,
+  parsePart7PeopleProfiles,
 } from '@/utils/b2ExamTextBlocks';
 
 /**
@@ -215,6 +225,81 @@ export function composeSkillUoeDirections(descripcion = '', rawPregunta = '', pa
 }
 
 /**
+ * Instrucciones UoE sin Example (nunca devuelve el fallback sin filtrar).
+ */
+export function resolveSkillUoeEnunciado(
+  descripcion = '',
+  rawPregunta = '',
+  partNumber = 0,
+  fallbackEnunciado = '',
+) {
+  const composed = composeSkillUoeDirections(descripcion, rawPregunta, partNumber);
+  if (composed) return composed;
+  const pn = Number(partNumber);
+  const fallback = String(fallbackEnunciado || '').trim();
+  if (pn === 1) {
+    return (
+      stripMcqClozeExampleBlock(fallback) ||
+      stripMcqClozeExampleBlock(descripcion) ||
+      String(descripcion || '').trim()
+    );
+  }
+  return stripTrailingExampleBlock(fallback) || String(descripcion || '').trim();
+}
+
+/** Frase del ejemplo Part 1 MCQ (línea con hueco 0) para incrustar en el pasaje. */
+export function extractMcqExampleSentenceLine(rawText = '') {
+  const lines = String(rawText || '')
+    .replace(/\r\n/g, '\n')
+    .split('\n')
+    .map((l) => l.trim());
+  const start = lines.findIndex((l) => /^example\s*:?\s*$/i.test(l) || /^example\s*:/i.test(l));
+  if (start === -1) return '';
+
+  let end = lines.length;
+  for (let i = start + 1; i < lines.length; i += 1) {
+    if (/^text$/i.test(lines[i])) {
+      end = i;
+      break;
+    }
+  }
+
+  for (const line of lines.slice(start + 1, end)) {
+    if (!line || /^answer\s*:/i.test(line)) continue;
+    if (/^[A-D]\s*\)/i.test(line) || /^[A-D]\s+\S/i.test(line)) continue;
+    if (/^0\b|\(0\)|\.{3,}|…/.test(line)) {
+      if (/\(0\)/.test(line)) return line;
+      const withGap = line.replace(/\.{3,}|…+/g, '(0) _______');
+      if (/\(0\)/.test(withGap)) return withGap;
+      return line.replace(/^0(?:\s+|\b)/, '(0) _______ ').trim();
+    }
+  }
+  return '';
+}
+
+/** Quita bloques Example / opciones del enunciado formateado (UI). */
+export function omitExampleEnunciadoBlocks(blocks = []) {
+  if (!blocks?.length) return [];
+  const result = [];
+  let inExample = false;
+  for (const block of blocks) {
+    if (block.type === 'label' && /^example\s*:/i.test(String(block.text || '').trim())) {
+      inExample = true;
+      continue;
+    }
+    if (inExample) {
+      if (block.type === 'label' && !/^example\s*:/i.test(String(block.text || '').trim())) {
+        inExample = false;
+        result.push(block);
+      }
+      continue;
+    }
+    result.push(block);
+  }
+  return result;
+}
+
+/**
  * Ejemplo inline para partes 2–3 en skill practice (fuera de Directions).
  * @returns {{ bodyLines: string[], answerLine: string, sentence: string, cleanedTexto?: string } | null}
  */
@@ -240,7 +325,7 @@ export function resolveUoeInlineExample({
         bodyLines: [legacy.exampleSentence],
         answerLine,
         sentence: legacy.exampleSentence,
-        cleanedTexto: `${legacy.exampleSentence}\n\n${legacy.cleanedTexto}`.trim(),
+        cleanedTexto: legacy.cleanedTexto,
       };
     }
   }
@@ -367,17 +452,63 @@ export function resolveMcqGap0DisplayWord({
   return parseExampleAnswerWord(inlineExample?.answerLine);
 }
 
-/** Si el pasaje no trae (0), antepone la frase de ejemplo con marcador (0). */
+/**
+ * Índice de la línea título del pasaje (sin huecos numerados).
+ * @param {string[]} lines
+ * @param {number} [startIdx=0]
+ */
+export function findPassageTitleLineIndex(lines = [], startIdx = 0) {
+  for (let i = startIdx; i < lines.length; i += 1) {
+    const candidate = String(lines[i] || '').trim();
+    if (!candidate || candidate.length >= 120 || /^IMAGE:/i.test(candidate)) continue;
+    if (/\(\d{1,2}\)/.test(candidate)) continue;
+    return i;
+  }
+  return -1;
+}
+
+/**
+ * Inserta la frase de ejemplo (hueco 0) después del título del pasaje, dentro del texto.
+ */
+export function insertUoeExampleAfterPassageTitle(texto = '', exampleLine = '') {
+  let line = String(exampleLine || '').trim();
+  const body = String(texto || '').trim();
+  if (!line) return body;
+  if (!body) return line;
+  if (/\(0\)/.test(body)) return body;
+
+  if (!/\(0\)/.test(line)) {
+    line = line.replace(/\.{3,}|…+/g, '(0) _______');
+  }
+
+  const lines = body
+    .split('\n')
+    .map((l) => l.trim())
+    .filter(Boolean);
+  let startIdx = 0;
+  if (lines[0]?.toLowerCase() === 'text') startIdx = 1;
+
+  const titleIdx = findPassageTitleLineIndex(lines, startIdx);
+  if (titleIdx >= 0) {
+    const before = lines.slice(0, titleIdx + 1);
+    const after = lines.slice(titleIdx + 1);
+    return [...before, line, ...after].join('\n\n');
+  }
+
+  if (startIdx > 0) {
+    return [...lines.slice(0, startIdx), line, ...lines.slice(startIdx)].join('\n\n');
+  }
+
+  return `${line}\n\n${body}`;
+}
+
+/** Si el pasaje no trae (0), inserta la frase de ejemplo tras el título del pasaje. */
 export function ensureExampleGap0InPassage(texto = '', inlineExample = null) {
   if (!inlineExample?.bodyLines?.length) return String(texto || '').trim();
   if (/\(0\)/.test(texto)) return String(texto || '').trim();
 
-  let line = inlineExample.bodyLines.join(' ').trim();
-  if (!/\(0\)/.test(line)) {
-    line = line.replace(/\.{3,}|…+/g, '(0) _______');
-  }
-  const body = String(texto || '').trim();
-  return body ? `${line}\n\n${body}` : line;
+  const line = inlineExample.bodyLines.join(' ').trim();
+  return insertUoeExampleAfterPassageTitle(texto, line);
 }
 
 /**
@@ -525,6 +656,253 @@ export function buildPart1McqGroups({
   }
 
   return groups.length ? groups.sort((a, b) => a.questionNumber - b.questionNumber) : null;
+}
+
+function buildCorrectLetterMapFromRespuestas(respuestas, pattern) {
+  const map = new Map();
+  for (const row of respuestas || []) {
+    if (row?.correcta !== true) continue;
+    const m = String(row.respuesta || '').trim().match(pattern);
+    if (m) map.set(Number(m[1]), m[2].toUpperCase());
+  }
+  return map;
+}
+
+/** MCQ groups for Reading parts 5–7 (same IDs as the practice UI). */
+export function buildReadingSyntheticMcqGroups(partNumber, enunciado, preguntaId, respuestas = []) {
+  const raw = enunciado || '';
+  const pid = preguntaId;
+  if (!raw || !pid || partNumber < 5 || partNumber > 7) return null;
+
+  const readingCorrectLetterByQuestion = buildCorrectLetterMapFromRespuestas(
+    respuestas,
+    /^(\d{1,2})\s+([A-G])\s*$/i,
+  );
+
+  if (partNumber === 5) {
+    const block = extractReadingPart5QuestionsBlock(raw);
+    const chunks = parseReadingAdMcqChunks(block);
+    if (!chunks.length) return null;
+    const letters = ['A', 'B', 'C', 'D'];
+    const groups = chunks
+      .map(({ questionNumber, stem, options: byLetter }) => {
+        const correctL = readingCorrectLetterByQuestion.get(questionNumber);
+        const opts = letters
+          .map((L) => {
+            const text = byLetter[L];
+            if (!text || !String(text).trim()) return null;
+            return {
+              id: `reading-${pid}-q${questionNumber}-${L}`,
+              respuesta: `${questionNumber} ${L} ${text}`,
+              formattedText: `${L}) ${text}`,
+              correcta: correctL != null ? L === correctL : false,
+            };
+          })
+          .filter(Boolean);
+        if (!opts.length) return null;
+        return { questionNumber, questionStem: stem || '', options: opts };
+      })
+      .filter(Boolean);
+    return groups.length ? groups : null;
+  }
+
+  if (partNumber === 6) {
+    const block = extractReadingPart6SentencesBlock(raw);
+    const pool = parseReadingPart6SentencePool(block);
+    const letters = [...'ABCDEFG'];
+    if (!letters.every((L) => pool[L] != null && String(pool[L]).trim())) return null;
+    const qnums = [...readingCorrectLetterByQuestion.keys()].sort((a, b) => a - b);
+    if (!qnums.length) return null;
+    return qnums.map((questionNumber) => {
+      const correctL = readingCorrectLetterByQuestion.get(questionNumber);
+      const opts = letters.map((L) => {
+        const text = pool[L];
+        return {
+          id: `reading-${pid}-q${questionNumber}-${L}`,
+          respuesta: `${questionNumber} ${L}`,
+          formattedText: `${L})`,
+          compactLabel: `${L}`,
+          optionText: text,
+          correcta: correctL != null ? L === correctL : false,
+        };
+      });
+      return { questionNumber, questionStem: '', options: opts };
+    });
+  }
+
+  if (partNumber === 7) {
+    const stemBlob = extractPart7PromptStemBlob(raw);
+    const stemsParsed = parsePart7NumberedStems(stemBlob);
+    const stemByNum = new Map(stemsParsed.map((x) => [x.questionNumber, x.stem]));
+    const people = parsePart7PeopleProfiles(extractPart7ProfilesBlock(raw));
+    const letters = ['A', 'B', 'C', 'D'];
+    if (!letters.every((L) => people[L]?.label)) return null;
+    const qnums = [...readingCorrectLetterByQuestion.keys()].sort((a, b) => a - b);
+    if (!qnums.length) return null;
+    return qnums.map((questionNumber) => {
+      const stem = stemByNum.get(questionNumber) || '';
+      const correctL = readingCorrectLetterByQuestion.get(questionNumber);
+      const opts = letters.map((L) => {
+        const { label = '' } = people[L];
+        return {
+          id: `reading-${pid}-q${questionNumber}-${L}`,
+          respuesta: `${questionNumber} ${L}`,
+          formattedText: `${L}) ${label}`,
+          correcta: correctL != null ? L === correctL : false,
+        };
+      });
+      return { questionNumber, questionStem: stem, options: opts };
+    });
+  }
+
+  return null;
+}
+
+/** Texto del pasaje extraído igual que en la UI de práctica (exam mode). */
+export function extractExamModePartTexto(partNumber, rawEnunciado = '') {
+  const textoExtracted = extractTextoBloque(rawEnunciado, partNumber, { levelSlug: 'b2' });
+  const fallback = splitEnunciadoAndTextFallback(rawEnunciado);
+  let texto = (textoExtracted || fallback.texto || '').trim();
+  if (partNumber === 1 && texto) {
+    const split = splitPart1TextoYPreguntas(texto);
+    texto = split.texto.trim();
+  }
+  return texto;
+}
+
+/** Enunciado + pasaje — mismo blob que usa la UI para detectar huecos abiertos. */
+export function buildExamModeScoringPromptBlob(partNumber, question) {
+  const raw = question?.enunciado || '';
+  const texto = extractExamModePartTexto(partNumber, raw);
+  return [raw, texto].filter(Boolean).join('\n');
+}
+
+/**
+ * Decide cómo corregir una parte en exam mode (MCQ vs open cloze), alineado con exam-reading.
+ * @returns {{ useOpenInputUi: boolean, openQuestionNumbers: number[], groupedAnswers: object[], promptBlob: string }}
+ */
+export function resolveExamModePartScoringMode(partNumber, question, partDescripcion = '') {
+  const respuestas = question?.respuestas || [];
+  const preguntaId = question?.preguntaId || question?.id || '';
+  const desc = String(partDescripcion || '').replace(/\r\n/g, '\n').trim();
+  const raw = question?.enunciado || '';
+  const promptBlob = buildExamModeScoringPromptBlob(partNumber, question);
+
+  if (partNumber >= 2 && partNumber <= 4) {
+    const openNumsFromPrompt = inferOpenQuestionNumbersFromPrompt(promptBlob, partNumber);
+    const openAnswerMap = getOpenAnswerMap(
+      question?.respuestasAbiertas || [],
+      respuestas,
+      openNumsFromPrompt,
+    );
+    const fromAnswers = [...openAnswerMap.keys()].sort((a, b) => a - b);
+    const openQuestionNumbers =
+      openNumsFromPrompt.length > 0
+        ? openNumsFromPrompt
+        : fromAnswers.length > 0
+          ? fromAnswers
+          : [];
+    return {
+      useOpenInputUi: true,
+      openQuestionNumbers,
+      groupedAnswers: [],
+      promptBlob,
+    };
+  }
+
+  if (partNumber >= 5 && partNumber <= 7) {
+    const groupedAnswers =
+      buildReadingSyntheticMcqGroups(partNumber, raw, preguntaId, respuestas) ||
+      getGroupedAnswers(respuestas);
+    return {
+      useOpenInputUi: false,
+      openQuestionNumbers: [],
+      groupedAnswers: groupedAnswers || [],
+      promptBlob,
+    };
+  }
+
+  if (partNumber === 1) {
+    const groupedAnswers = buildExamModeMcqGroupsForPart(partNumber, question, desc, {
+      includeExample: true,
+    });
+    if (groupedAnswers?.length) {
+      return {
+        useOpenInputUi: false,
+        openQuestionNumbers: [],
+        groupedAnswers,
+        promptBlob,
+      };
+    }
+  }
+
+  const openNums = inferOpenQuestionNumbersFromPrompt(promptBlob, partNumber);
+  if (openNums.length > 0) {
+    return {
+      useOpenInputUi: true,
+      openQuestionNumbers: openNums,
+      groupedAnswers: [],
+      promptBlob,
+    };
+  }
+
+  const groupedAnswers =
+    buildExamModeMcqGroupsForPart(partNumber, question, desc) || getGroupedAnswers(respuestas);
+  return {
+    useOpenInputUi: false,
+    openQuestionNumbers: [],
+    groupedAnswers: groupedAnswers || [],
+    promptBlob,
+  };
+}
+
+/**
+ * MCQ groups aligned with the exam UI (Part 1 cloze + Reading 5–7 synthetic groups).
+ */
+export function buildExamModeMcqGroupsForPart(
+  partNumber,
+  question,
+  partDescripcion = '',
+  { includeExample = false } = {},
+) {
+  const respuestas = question?.respuestas || [];
+  const raw = question?.enunciado || '';
+  const preguntaId = question?.preguntaId || question?.id || '';
+  const desc = String(partDescripcion || '').replace(/\r\n/g, '\n').trim();
+
+  if (partNumber === 1) {
+    const textoExtracted = extractTextoBloque(raw, 1, { levelSlug: 'b2' });
+    const fallback = splitEnunciadoAndTextFallback(raw);
+    let texto = (textoExtracted || fallback.texto || '').trim();
+    let parsed = [];
+    if (texto) {
+      const split = splitPart1TextoYPreguntas(texto);
+      parsed = parsePart1QuestionOptions(split.preguntas);
+    }
+    if (parsed.length) {
+      const correctLetterByQuestion = buildCorrectLetterMapFromRespuestas(
+        respuestas,
+        /^(\d{1,2})\s+([A-D])\b/i,
+      );
+      const groups = buildPart1McqGroups({
+        parsed,
+        correctLetterByQuestion,
+        preguntaId,
+        rawPregunta: raw,
+        descripcion: desc,
+        respuestas,
+        includeExample,
+      });
+      if (groups?.length) return groups;
+    }
+  }
+
+  if (partNumber >= 5 && partNumber <= 7) {
+    const synthetic = buildReadingSyntheticMcqGroups(partNumber, raw, preguntaId, respuestas);
+    if (synthetic?.length) return synthetic;
+  }
+
+  return getGroupedAnswers(respuestas);
 }
 
 /**

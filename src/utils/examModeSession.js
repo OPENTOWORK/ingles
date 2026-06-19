@@ -25,6 +25,7 @@ export const EXAM_MODE_SESSION_VERSION = 1;
  * @property {object|null} answers
  * @property {object|null} [sectionDraft]
  * @property {{ correct: number, total: number, byPart: Record<number, { correct: number, total: number, passing: number }> }|null} scores
+ * @property {number|null} [redoPart] — single part being re-attempted inside a completed section
  */
 
 /**
@@ -198,6 +199,34 @@ export function completeExamModeSection(session, sectionKey, answers, scores) {
   };
 }
 
+/** Reset one paper so the student can attempt it again in exam mode. */
+export function resetExamModeSection(session, sectionKey) {
+  if (session.sections.findIndex((s) => s.key === sectionKey) < 0) return session;
+
+  const now = new Date().toISOString();
+  const sections = session.sections.map((s) => {
+    if (s.key !== sectionKey) return s;
+    return {
+      ...s,
+      status: /** @type {ExamModeSectionStatus} */ ('active'),
+      startedAt: null,
+      finishedAt: null,
+      answers: null,
+      sectionDraft: null,
+      scores: null,
+      remainingSeconds: s.durationSeconds ?? null,
+    };
+  });
+
+  return {
+    ...session,
+    sections,
+    status: 'in_progress',
+    resultsReleased: false,
+    updatedAt: now,
+  };
+}
+
 /** @param {ExamModeSession} session */
 /** @param {string} sectionKey */
 export function startExamModeSectionTimer(session, sectionKey) {
@@ -234,9 +263,39 @@ export function resolveExamModeSectionKey(slug, partMin, partMax) {
   return match?.key ?? null;
 }
 
-export function buildExamModePracticeHref(baseHref, examSlot, { review = false } = {}) {
+export function buildExamModePracticeHref(
+  baseHref,
+  examSlot,
+  { review = false, part = null, repeatPart = false } = {},
+) {
   if (!baseHref) return baseHref;
   const sep = baseHref.includes('?') ? '&' : '?';
   const mode = review ? 'review' : '1';
-  return `${baseHref}${sep}examen=${examSlot}&examMode=${mode}`;
+  let url = `${baseHref}${sep}examen=${examSlot}&examMode=${mode}`;
+  if (part != null && Number.isFinite(Number(part))) {
+    url += `&part=${Number(part)}`;
+  }
+  if (repeatPart) {
+    url += '&repeatPart=1';
+  }
+  return url;
+}
+
+/**
+ * Footer "back" target while inside an exam-mode section (hub for the current test slot).
+ * @param {string} [slug='b2']
+ * @param {number} [examSlot=1]
+ * @param {'en'|'es'} [lang='en']
+ */
+export function getExamModeHubNav(slug = 'b2', examSlot = 1, lang = 'en') {
+  const key = String(slug || 'b2').toLowerCase();
+  const slot = Math.min(5, Math.max(1, Number(examSlot) || 1));
+  const isEn = lang === 'en';
+  const levelTag = key.toUpperCase();
+  return {
+    href: `/niveles/${key}/exam-mode?examen=${slot}`,
+    label: isEn
+      ? `Back to ${levelTag} exam simulation`
+      : `Volver a simulación examen ${levelTag}`,
+  };
 }

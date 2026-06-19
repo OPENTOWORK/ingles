@@ -1,7 +1,8 @@
 'use client';
 
 import { useState } from 'react';
-import { getWeakAreas } from '@/lib/readingPracticeWeakAreas';
+import Link from 'next/link';
+import { getWeakAreas, getWeakAreaTheoryHref } from '@/lib/readingPracticeWeakAreas';
 import ExamPracticePartScoreHistorySection from '@/components/exam/ExamPracticePartScoreHistorySection';
 
 function getChipState({
@@ -256,11 +257,31 @@ export default function ReadingPracticeProgressPanel({
             <p className="levels-listening-strategy__tool-hint">{weak.message}</p>
             {weak.areas.length ? (
               <div className="reading-weak-areas">
-                {weak.areas.map((area) => (
-                  <span key={area.name} className="reading-weak-areas__chip">
-                    {area.name} ({area.count})
-                  </span>
-                ))}
+                {weak.areas.map((area) => {
+                  const theoryHref = getWeakAreaTheoryHref(area.name, partNumber);
+                  const label = `${area.name} (${area.count})`;
+                  if (!theoryHref) {
+                    return (
+                      <span key={area.name} className="reading-weak-areas__chip">
+                        {label}
+                      </span>
+                    );
+                  }
+                  return (
+                    <Link
+                      key={area.name}
+                      href={theoryHref}
+                      className="reading-weak-areas__chip reading-weak-areas__chip--link"
+                      title={
+                        en
+                          ? `Review theory: ${area.name}`
+                          : `Repasar teoría: ${area.name}`
+                      }
+                    >
+                      {label}
+                    </Link>
+                  );
+                })}
               </div>
             ) : null}
           </section>
