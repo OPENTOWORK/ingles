@@ -3,6 +3,7 @@ import { isB2ScoringV2Enabled } from '@/lib/b2ScoringV2FeatureFlag';
 import { B2_PART_SCORING_V2 } from '@/utils/levelsB2PartScoring';
 import { buildPartScoreMetricsV2 } from '@/utils/b2ScoringV2Engine';
 import { summarizePart4OpenGrades } from '@/lib/b2Part4Grading';
+import { isScorableMcqGroup } from '@/utils/recordLevelsB2PartScore';
 
 /**
  * Raw item counts from the current answer state (same keys as getQuestionKey).
@@ -57,9 +58,9 @@ export function computeLevelsPartScore({
   }
 
   groupedAnswers.forEach((group, groupIndex) => {
+    if (!isScorableMcqGroup(group)) return;
     const qn = group.questionNumber;
     const key = getQuestionKey(partId, qn, `extra-${groupIndex}`);
-    if (group.options.length === 0) return;
     total += 1;
     if (!checkedQuestions[key]) return;
     evaluated += 1;

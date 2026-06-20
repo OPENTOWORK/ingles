@@ -2,6 +2,7 @@ import { ensureAppUserProfile } from '@/utils/ensureAppUserProfile';
 import { mergeLevelsEstadisticas } from '@/utils/levelsEstadisticas';
 import { upsertLevelsPartPuntuacion } from '@/utils/levelsPuntuaciones';
 import { computeLevelsStarsFromProgress, labelFromLevelsPuntuacionDescripcion, saveLevelStars } from '@/utils/levelsStars';
+import { supabase } from '@/utils/supabaseClient';
 import {
   getB2PartScoring,
   getB2PartScoringV2,
@@ -16,6 +17,15 @@ import { buildPartScoreMetricsV2 } from '@/utils/b2ScoringV2Engine';
 import { B2_PART_SCORING_V2 } from '@/utils/levelsB2PartScoring';
 import { summarizePart4OpenGrades } from '@/lib/b2Part4Grading';
 import { isMcqSelectionCorrect } from '@/utils/b2ExamTextBlocks';
+
+/** MCQ example gap (0) is display-only — never counts toward part completion. */
+export function isScorableMcqGroup(group) {
+  return Boolean(group?.options?.length) && group.questionNumber != null && group.questionNumber !== 0;
+}
+
+export function countScorableMcqGroups(groupedAnswers = []) {
+  return (groupedAnswers || []).filter(isScorableMcqGroup).length;
+}
 
 /**
  * Progreso de la parte según respuestas ya comprobadas (MCQ / huecos).
@@ -32,6 +42,7 @@ export function computeB2PartProgressFromState({
   selectedOptions,
   getQuestionKey,
   partId,
+  treatSelectedMcqAsEvaluated = false,
 }) {
   const cfg = getB2PartScoring(partNumber);
   const v2Cfg = getB2PartScoringV2(partNumber);
@@ -60,9 +71,13 @@ export function computeB2PartProgressFromState({
     }
   } else {
     groupedAnswers.forEach((group, groupIndex) => {
-      if (!group.options?.length) return;
+      if (!isScorableMcqGroup(group)) return;
       const key = getQuestionKey(partId, group.questionNumber, `extra-${groupIndex}`);
-      if (!checkedQuestions[key]) return;
+      const hasSelection = Boolean(selectedOptions[key]);
+      const isChecked = Boolean(checkedQuestions[key]);
+      const isEvaluated =
+        isChecked || (treatSelectedMcqAsEvaluated && hasSelection);
+      if (!isEvaluated) return;
       evaluated += 1;
       if (isMcqSelectionCorrect(group, selectedOptions[key])) correct += 1;
     });
@@ -70,7 +85,7 @@ export function computeB2PartProgressFromState({
 
   const dynamicQuestionCount = useOpenInputUi
     ? (openQuestionNumbers?.length || 0)
-    : (groupedAnswers || []).filter((group) => group.options?.length).length;
+    : countScorableMcqGroups(groupedAnswers);
 
   const questionTotal =
     dynamicQuestionCount > 0
@@ -173,6 +188,8 @@ export async function saveB2PartPuntuacionIfComplete({
     return { saved: false, error: puntRes.error, progress };
   }
 
+  let starsError = null;
+
   if (puntRes.id) {
     const starsRes = await saveLevelStars({
       puntuacionesId: puntRes.id,
@@ -181,9 +198,9 @@ export async function saveB2PartPuntuacionIfComplete({
       descripcion: labelFromLevelsPuntuacionDescripcion(puntRes.descripcion),
     });
     if (starsRes.error) {
-      return { saved: false, error: starsRes.error, progress };
-    }
-    if (!starsRes.saved) {
+      starsError = starsRes.error;
+      console.warn('[saveB2PartPuntuacionIfComplete] stars save failed:', starsRes.error.message);
+    } else if (!starsRes.saved) {
       const { syncStarsForPuntuacionRow } = await import('@/utils/syncLevelsStars');
       await syncStarsForPuntuacionRow(supabase, {
         id: puntRes.id,
@@ -198,5 +215,5 @@ export async function saveB2PartPuntuacionIfComplete({
     }
   }
 
-  return { saved: true, error: null, progress };
+  return { saved: true, error: starsError, progress };
 }

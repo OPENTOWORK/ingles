@@ -9,6 +9,7 @@ import { getSessionUserId } from '@/utils/levelsEstadisticas';
 import { buildPartFinishNoticeDisplay, formatPartSavedScoreLabel } from '@/utils/partFinishNoticeDisplay';
 import { saveB2PartPuntuacionIfComplete } from '@/utils/recordLevelsB2PartScore';
 import { LEVELS_SCORE_SOURCE } from '@/utils/levelsScoreSource';
+import { dispatchLevelsPartProgressSaved } from '@/utils/levelsProgressEvents';
 
 /**
  * Progreso, guardado y selector de examen compartido (partes partMin–partMax).
@@ -27,6 +28,11 @@ export function useB2ExamScoringSession({
   const [partFinishNotice, setPartFinishNotice] = useState(null);
   const lastSavedPartSigRef = useRef('');
   const currentExamenIdRef = useRef(null);
+  const examenIdBySlotRef = useRef({});
+
+  useEffect(() => {
+    examenIdBySlotRef.current = examenIdBySlot;
+  }, [examenIdBySlot]);
 
   const refreshPuntuacionesProgress = useCallback(async () => {
     const uid = await getSessionUserId();
@@ -92,7 +98,8 @@ export function useB2ExamScoringSession({
     }) => {
       if (!progress?.complete) return { saved: false };
 
-      const examenId = currentExamenIdRef.current;
+      const examenId =
+        examenIdBySlotRef.current?.[examSlot] ?? currentExamenIdRef.current;
       const uid = await getSessionUserId();
       if (!uid || !preguntaId || !examenId || !partNumber) return { saved: false };
 
@@ -123,6 +130,7 @@ export function useB2ExamScoringSession({
       if (result.saved) {
         lastSavedPartSigRef.current = sig;
         void refreshPuntuacionesProgress();
+        dispatchLevelsPartProgressSaved({ examSlot, partNumber, scoreSource });
       }
 
       setPartFinishNotice(buildPartFinishNoticeDisplay(progress, partNumber, { saved: result.saved }));

@@ -159,7 +159,7 @@ export default function B2ExamInlinePart6Passage({
                       <select
                         className={`levels-exam-inline-part6-gap__select${stateClass ? ` ${stateClass}` : ''}${selectedId ? '' : ' levels-exam-inline-part6-gap__select--empty'}`}
                         value={selectedId}
-                        disabled={hideFeedback && isChecked}
+                        disabled={!hideFeedback && isChecked}
                         aria-label={`Choose sentence for gap ${questionNumber}`}
                         onChange={(event) => {
                           const option = group.options.find((o) => o.id === event.target.value);

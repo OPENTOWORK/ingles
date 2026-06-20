@@ -12,9 +12,9 @@ import B2ExamInlineMcqClozePassage from '@/components/b2/B2ExamInlineMcqClozePas
 import { useB2ExamScoringSession } from '@/hooks/useB2ExamScoringSession';
 import { useLevelExamScoringSession } from '@/hooks/useLevelExamScoringSession';
 import { computeB2PartProgressFromState } from '@/utils/recordLevelsB2PartScore';
-import { getLevelsPartScoring } from '@/utils/levelsA2PartScoring';
+import { getExamSkillSectionTitle } from '@/data/levelExamPartMap';
 import LevelsAnswerJustification from '@/components/levels/LevelsAnswerJustification';
-import { useLevelsCategoryTimer } from '@/hooks/useLevelsCategoryTimer';
+import { usePartPracticeTimer } from '@/hooks/usePartPracticeTimer';
 import { computeB2PartScoreMetrics } from '@/utils/levelsPaperScoreMetrics';
 import { isB2RuoeV2SessionPersistenceBlocked } from '@/lib/b2ScoringV2FeatureFlag';
 import { postLevelsAnswerJustification } from '@/utils/levelsJustifyClient';
@@ -172,7 +172,8 @@ import {
   resolvePracticeHideFeedback,
   shouldShowCheckAnswersButton,
 } from '@/utils/practiceCheckAnswers';
-import { formatLevelsPartDisplayName, getExamSectionPartTitle } from '@/utils/formatLevelsPartDisplayName';
+import { formatLevelsPartDisplayName, getExamSectionPartTitle, getSkillPartPracticeTitle, formatSkillPartPracticeTitle } from '@/utils/formatLevelsPartDisplayName';
+import { formatSkillExerciseLabel } from '@/utils/skillPartFirstProgress';
 import B2ExamPracticeModuleNav from '@/components/b2/B2ExamPracticeModuleNav';
 import A2ExamGenerationStatus from '@/components/niveles/A2ExamGenerationStatus';
 import ExamModeSectionBanner from '@/components/niveles/ExamModeSectionBanner';
@@ -373,7 +374,6 @@ function B2ExamPaperPracticePageInner({
   const loadedPartsRangeRef = useRef('');
   /** Estructura de partes (sin preguntas) para reutilizar al cambiar de examen. */
   const partsShellRef = useRef([]);
-  const categoryTimer = useLevelsCategoryTimer();
 
   const loadData = useCallback(async () => {
     setLoading(true);
@@ -1019,6 +1019,48 @@ function B2ExamPaperPracticePageInner({
     [selectedPart?.nombre],
   );
 
+  const categoryTimer = usePartPracticeTimer({
+    practiceReady: !loading && !error && scoring.examPracticeOpen && Boolean(selectedPart?.id),
+    partKey: selectedPart?.id ? `${examSlot}:${partNumber}:${selectedPart.id}` : null,
+    autoStart: (isSkillPracticeSession || (examModeActive && !reviewMode)) && scoring.examPracticeOpen,
+  });
+
+  const persistPartSessionTime = useCallback(
+    async (progressOverride = null) => {
+      if (levelSlug === 'b2' && isB2RuoeV2SessionPersistenceBlocked(partNumber)) return;
+      const uid = await getSessionUserId();
+      if (!uid || !selectedQuestion?.preguntaId || !selectedPart?.id || !partNumber) return;
+      await categoryTimer.finalizeSession({
+        userId: uid,
+        preguntaId: selectedQuestion.preguntaId,
+        parteId: selectedPart.id,
+        partNumber,
+        examSlot,
+        levelSlug,
+        skillRoute: skillRoute || null,
+        scoreSource,
+        progress: progressOverride,
+        sectionTitle: skillRoute ? getExamSkillSectionTitle(levelSlug, skillRoute) : null,
+      });
+    },
+    [
+      categoryTimer,
+      levelSlug,
+      partNumber,
+      selectedQuestion?.preguntaId,
+      selectedPart?.id,
+      examSlot,
+      skillRoute,
+      scoreSource,
+    ],
+  );
+
+  useEffect(() => {
+    return () => {
+      void persistPartSessionTime();
+    };
+  }, [selectedPart?.id, examSlot, partNumber, persistPartSessionTime]);
+
   const useSkillUoeExampleLayout = shouldUseSkillUoeExampleLayout({
     skillPractice: isSkillPracticeSession,
     examMode: examModeActive,
@@ -1474,6 +1516,59 @@ function B2ExamPaperPracticePageInner({
     return [...s].sort((a, b) => a - b);
   }, [groupedAnswers, listeningContextBlocks, isListeningGapPart, openQuestionNumbers]);
 
+  const [listeningSequentialAudio, setListeningSequentialAudio] = useState({
+    activeKey: null,
+    completedKeys: new Set(),
+  });
+
+  useEffect(() => {
+    setListeningSequentialAudio({ activeKey: null, completedKeys: new Set() });
+  }, [selectedPartId, selectedQuestion?.preguntaId, examSlot, partNumber]);
+
+  const getListeningSequentialClipKey = useCallback(
+    (questionNumber) => `listen-seq-${partNumber}-${questionNumber}`,
+    [partNumber],
+  );
+
+  const resolveListeningSequentialLock = useCallback(
+    (clipKey, questionIndex) => {
+      if (!examListeningAudioStrict) return { locked: false, reason: null };
+      const { activeKey, completedKeys } = listeningSequentialAudio;
+      if (activeKey && activeKey !== clipKey) {
+        return { locked: true, reason: 'other' };
+      }
+      if (questionIndex > 0) {
+        const prevQn = listeningQuestionNumbersOrdered[questionIndex - 1];
+        const prevKey = getListeningSequentialClipKey(prevQn);
+        if (!completedKeys.has(prevKey)) {
+          return { locked: true, reason: 'sequence' };
+        }
+      }
+      return { locked: false, reason: null };
+    },
+    [
+      examListeningAudioStrict,
+      getListeningSequentialClipKey,
+      listeningQuestionNumbersOrdered,
+      listeningSequentialAudio,
+    ],
+  );
+
+  const handleListeningPlaybackStart = useCallback((clipKey) => {
+    setListeningSequentialAudio((prev) => ({ ...prev, activeKey: clipKey }));
+  }, []);
+
+  const handleListeningPlaybackEnd = useCallback((clipKey) => {
+    setListeningSequentialAudio((prev) => {
+      const completedKeys = new Set(prev.completedKeys);
+      completedKeys.add(clipKey);
+      return {
+        activeKey: prev.activeKey === clipKey ? null : prev.activeKey,
+        completedKeys,
+      };
+    });
+  }, []);
+
   /** Part 11 (gap-fill) and Part 13 (interview): one audio for the whole part. */
   const listeningMonologueClip = useMemo(() => {
     if (listeningReadyClips.length === 0) return null;
@@ -1591,14 +1686,36 @@ function B2ExamPaperPracticePageInner({
     partMin != null && (isSkillPracticeSession || examModeActive || reviewMode);
 
   const getPartTitle = (part) => {
+    const n = Number(part?.nombre?.match(/\d+/)?.[0] || partNumber || 0);
+    if (levelSlug === 'b2' && n > 0) {
+      return formatSkillPartPracticeTitle('b2', n, lang === 'es' ? 'es' : 'en');
+    }
     if (useLocalPartLabels) {
-      const n = Number(part?.nombre?.match(/\d+/)?.[0] || partNumber || 0);
       const localTitle = getExamSectionPartTitle(n, partMin, lang === 'es' ? 'es' : 'en');
       if (localTitle) return localTitle;
     }
-    const n = Number(part?.nombre.match(/\d+/)?.[0] || 0);
     return n ? `Part ${n}` : part?.nombre || '';
   };
+
+  const selectedPartTitleParts = useMemo(() => {
+    if (a2EmbeddedReadingPart || a2WritingDemo || !selectedPart) {
+      return { heading: '', subtitle: '' };
+    }
+    const n = Number(selectedPart?.nombre?.match(/\d+/)?.[0] || partNumber || 0);
+    if (levelSlug === 'b2' && n > 0) {
+      return getSkillPartPracticeTitle('b2', n, lang === 'es' ? 'es' : 'en');
+    }
+    return { heading: getPartTitle(selectedPart), subtitle: '' };
+  }, [
+    a2EmbeddedReadingPart,
+    a2WritingDemo,
+    selectedPart,
+    partNumber,
+    levelSlug,
+    lang,
+    useLocalPartLabels,
+    partMin,
+  ]);
 
   const trySavePartAfterAnswer = useCallback(
     (stateOverride = {}) => {
@@ -1616,8 +1733,10 @@ function B2ExamPaperPracticePageInner({
         selectedOptions: stateOverride.selectedOptions ?? selectedOptions,
         getQuestionKey,
         partId: selectedPart.id,
+        treatSelectedMcqAsEvaluated: hideFeedbackResolved,
       });
       if (!progress.complete) return;
+      void persistPartSessionTime(progress);
       void scoring.trySavePartProgress({
         examSlot,
         partNumber,
@@ -1641,6 +1760,8 @@ function B2ExamPaperPracticePageInner({
       selectedOptions,
       examModeActive,
       reviewMode,
+      hideFeedbackResolved,
+      persistPartSessionTime,
     ],
   );
 
@@ -2134,6 +2255,8 @@ function B2ExamPaperPracticePageInner({
 
   const handleA2McqOptionSelect = useCallback(
     ({ group, groupIndex, option, questionKey }) => {
+      if (!hideFeedbackResolved && checkedQuestions[questionKey]) return;
+
       const nextSelected = { ...selectedOptions, [questionKey]: option.id };
       setSelectedOptions(nextSelected);
 
@@ -2255,6 +2378,7 @@ function B2ExamPaperPracticePageInner({
     setOpenChecks(nextOpenChecks);
     setCheckedQuestions(nextChecked);
     trySavePartAfterAnswer({ openChecks: nextOpenChecks, checkedQuestions: nextChecked });
+    void persistPartSessionTime();
     readingSession.revealAnswers();
     if (hasAnyAnswer) readingSession.incrementCheckAttempts();
   }, [
@@ -2268,6 +2392,7 @@ function B2ExamPaperPracticePageInner({
     selectedOptions,
     checkedQuestions,
     trySavePartAfterAnswer,
+    persistPartSessionTime,
     readingSession,
     getQuestionKey,
   ]);
@@ -2315,6 +2440,7 @@ function B2ExamPaperPracticePageInner({
 
   const handleExamModeFinish = useCallback(
     (redirectTo) => {
+      void persistPartSessionTime();
       const pn = Number(selectedPart?.nombre.match(/\d+/)?.[0] || 0);
       if (pn && selectedPart) {
         examDraftRef.current[pn] = {
@@ -2367,6 +2493,7 @@ function B2ExamPaperPracticePageInner({
       examSlot,
       examSection,
       resultsHref,
+      persistPartSessionTime,
     ],
   );
 
@@ -2576,7 +2703,7 @@ function B2ExamPaperPracticePageInner({
   }, [practiceMode, isSkillPracticeSession, lang]);
 
   const chromeTimerVariant =
-    isExamSimulationMode(practiceMode) ? 'prominent' : isSkillPracticeSession ? 'discrete' : 'prominent';
+    isExamSimulationMode(practiceMode) ? 'prominent' : isSkillPracticeSession ? 'session' : 'prominent';
   const compactChromeHeader = isSkillPracticeSession || isExamSimulationMode(practiceMode);
 
   const reportErrorContext = useMemo(() => {
@@ -3325,7 +3452,7 @@ function B2ExamPaperPracticePageInner({
                       </div>
                     ) : null}
                     <div style={{ marginTop: '1rem', display: 'grid', gap: '1.25rem' }}>
-                      {listeningQuestionNumbersOrdered.map((qn) => {
+                      {listeningQuestionNumbersOrdered.map((qn, questionIndex) => {
                         const isOpenGapItem = isListeningGapPart;
                         const group = isOpenGapItem
                           ? null
@@ -3343,6 +3470,11 @@ function B2ExamPaperPracticePageInner({
                             ? resolvePublicOrSiteAudioSrc(String(clip.url), clip.id || `p${partNumber}-q${qn}`)
                             : '';
                         const clipLabel = '';
+                        const sequentialClipKey = getListeningSequentialClipKey(qn);
+                        const sequentialLock = resolveListeningSequentialLock(
+                          sequentialClipKey,
+                          questionIndex,
+                        );
 
                         if (isOpenGapItem) {
                           const questionKey = getQuestionKey(selectedPart.id, qn, 'open');
@@ -3536,6 +3668,10 @@ function B2ExamPaperPracticePageInner({
                                   examMode={examListeningAudioStrict}
                                   clipKey={clipSrc}
                                   lang={lang}
+                                  playLocked={sequentialLock.locked}
+                                  lockReason={sequentialLock.reason}
+                                  onPlaybackStart={() => handleListeningPlaybackStart(sequentialClipKey)}
+                                  onPlaybackEnd={() => handleListeningPlaybackEnd(sequentialClipKey)}
                                 />
                               </div>
                             ) : !listeningMonologueClip ? (
@@ -3726,7 +3862,13 @@ function B2ExamPaperPracticePageInner({
               </div>
               ) : (
               <B2ExamPracticeContent
-                title={a2EmbeddedReadingPart || a2WritingDemo ? '' : getPartTitle(selectedPart)}
+                title={selectedPartTitleParts.heading}
+                titleSubtitle={selectedPartTitleParts.subtitle}
+                exerciseLabel={
+                  isSkillPracticeSession && examSlot
+                    ? formatSkillExerciseLabel(examSlot, lang === 'es' ? 'es' : 'en')
+                    : null
+                }
                 titleActions={
                   isSkillPracticeSession ? (
                     <ReadingPracticeFeedbackToggle

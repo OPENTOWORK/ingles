@@ -66,7 +66,12 @@ export function getB2StarsWayExerciseHref(column, globalPartNumber, examSlot) {
 
 export function getB2StarsWayColumnBySkillRoute(skillRoute = '') {
   const route = String(skillRoute || '').toLowerCase();
-  return B2_STARS_WAY_COLUMNS.find((col) => col.skillRoute === route) ?? null;
+  const direct = B2_STARS_WAY_COLUMNS.find((col) => col.skillRoute === route);
+  if (direct) return direct;
+  if (route === 'exam-reading' || route === 'exam-useofenglish') {
+    return B2_STARS_WAY_COLUMNS.find((col) => col.key === 'reading') ?? null;
+  }
+  return null;
 }
 
 /** Deep link into Stars way — opens the path at a specific exercise node. */

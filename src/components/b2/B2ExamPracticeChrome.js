@@ -1,6 +1,6 @@
 'use client';
 
-import { useMemo, useRef, useEffect } from 'react';
+import { useMemo, useRef, useEffect, useState, useCallback } from 'react';
 import SiteMascot from '@/components/SiteMascot';
 import { B2ExamSlotProgressPicker } from '@/components/b2/B2ExamSlotProgressPicker';
 import LevelsCategoryTimer from '@/components/levels/LevelsCategoryTimer';
@@ -241,6 +241,18 @@ export function B2ExamPracticeChrome({
   const workPanelRef = useRef(null);
   const statusRowRef = useRef(null);
   const workBodyRef = useRef(null);
+  const [internalTimerHidden, setInternalTimerHidden] = useState(false);
+  const sessionTimerHideEnabled = effectiveTimerVariant === 'session';
+  const resolvedTimerHidden = sessionTimerHideEnabled
+    ? onToggleTimerHidden
+      ? timerHidden
+      : internalTimerHidden
+    : timerHidden;
+  const handleToggleTimerHidden = useCallback(() => {
+    if (onToggleTimerHidden) onToggleTimerHidden();
+    else setInternalTimerHidden((prev) => !prev);
+  }, [onToggleTimerHidden]);
+  const showTimerHideToggle = sessionTimerHideEnabled || Boolean(onToggleTimerHidden);
   const showSidebarTopRail =
     compactSkillHeader && studyNotesPlacement === 'sidebar-top';
 
@@ -587,11 +599,13 @@ export function B2ExamPracticeChrome({
                         isRunning={timerControls?.isRunning}
                         isPaused={timerControls?.isPaused}
                         isIdle={timerControls?.isIdle}
+                        isStopped={timerControls?.isStopped}
                         onStart={timerControls?.start}
                         onPause={timerControls?.pause}
                         onResume={timerControls?.resume}
-                        timerHidden={timerHidden}
-                        onToggleTimerHidden={onToggleTimerHidden}
+                        onStop={timerControls?.stop}
+                        timerHidden={resolvedTimerHidden}
+                        onToggleTimerHidden={showTimerHideToggle ? handleToggleTimerHidden : null}
                       />
                     ) : null}
                     <PracticeHeaderFinishNotice notice={partFinishNotice} lang={lang} />
@@ -615,11 +629,13 @@ export function B2ExamPracticeChrome({
                         isRunning={timerControls?.isRunning}
                         isPaused={timerControls?.isPaused}
                         isIdle={timerControls?.isIdle}
+                        isStopped={timerControls?.isStopped}
                         onStart={timerControls?.start}
                         onPause={timerControls?.pause}
                         onResume={timerControls?.resume}
-                        timerHidden={timerHidden}
-                        onToggleTimerHidden={onToggleTimerHidden}
+                        onStop={timerControls?.stop}
+                        timerHidden={resolvedTimerHidden}
+                        onToggleTimerHidden={showTimerHideToggle ? handleToggleTimerHidden : null}
                       />
                     ) : null}
                     {!hideScorePanel && scorePanelOverride ? scorePanelOverride : null}

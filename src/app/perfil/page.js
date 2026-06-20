@@ -18,6 +18,9 @@ import ExamStatistics from '@/components/ExamStatistics';
 const LevelsEstadisticasPanel = dynamicImport(
   () => import('@/components/LevelsEstadisticasPanel'),
 );
+const LevelsPartTimePerformancePanel = dynamicImport(
+  () => import('@/components/LevelsPartTimePerformancePanel'),
+);
 const ProfilePrivateTutorPanel = dynamicImport(
   () => import('@/components/perfil/ProfilePrivateTutorPanel'),
 );
@@ -868,6 +871,10 @@ export default function ProfilePage() {
 
           <ProfileCollapsibleSection title="Study activity">
             <StudyActivityHeatmap accessToken={layoutSession?.access_token} />
+          </ProfileCollapsibleSection>
+
+          <ProfileCollapsibleSection title="Practice times">
+            <LevelsPartTimePerformancePanel userId={user?.id} />
           </ProfileCollapsibleSection>
         </div>
       )}

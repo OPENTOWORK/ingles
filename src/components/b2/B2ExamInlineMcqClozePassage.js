@@ -215,9 +215,9 @@ export default function B2ExamInlineMcqClozePassage({
                         ? `Question ${questionNumber}: ${displayWord}. Click to change.`
                         : `Question ${questionNumber}. Click to choose an answer.`
                     }
-                    disabled={hideFeedback && isChecked}
+                    disabled={!hideFeedback && isChecked}
                     onClick={() => {
-                      if (hideFeedback && isChecked) return;
+                      if (!hideFeedback && isChecked) return;
                       setOpenQuestionNumber((prev) =>
                         prev === questionNumber ? null : questionNumber,
                       );

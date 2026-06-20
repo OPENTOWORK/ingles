@@ -20,7 +20,7 @@ import { ReadingPracticeSessionProvider, useReadingPracticeSession } from '@/con
 import B2WritingDraftStatusPanel from '@/components/b2/B2WritingDraftStatusPanel';
 import { getB2WritingStrategyPack } from '@/data/b2WritingPracticeStrategies';
 import A2ExamGenerationStatus from '@/components/niveles/A2ExamGenerationStatus';
-import { useLevelsCategoryTimer } from '@/hooks/useLevelsCategoryTimer';
+import { usePartPracticeTimer } from '@/hooks/usePartPracticeTimer';
 import { supabase } from '@/utils/supabaseClient';
 import { resolveB2ExamenId, fetchB2PreguntasByExamen } from '@/utils/b2ResolveExam';
 import { getCachedLevelBySlug } from '@/utils/levelsLevelCache';
@@ -68,6 +68,7 @@ import {
   B2_WRITING_WORD_MIN,
   B2_WRITING_WORD_MAX,
 } from '@/data/b2WritingTasks';
+import { getSessionUserId } from '@/utils/levelsEstadisticas';
 import { resolvePracticeScoreSourceFromExamModeParam } from '@/utils/levelsScoreSource';
 
 const B2WritingLongFormAiPanel = dynamic(
@@ -146,7 +147,6 @@ function B2WritingExamPracticePageInner() {
   const [writingDraftEpoch, setWritingDraftEpoch] = useState(0);
   const setExamenContextRef = useRef(scoring.setExamenContext);
   setExamenContextRef.current = scoring.setExamenContext;
-  const categoryTimer = useLevelsCategoryTimer();
 
   useEffect(() => {
     void reloadExamNamesBySlot('b2').then(({ names }) => setExamLabelsBySlot(names));
@@ -389,6 +389,45 @@ function B2WritingExamPracticePageInner() {
   const part9Question = getQuestionForPart(part9Part);
   const selectedQuestion = partNumber === 9 ? part9Question : part8Question;
 
+  const categoryTimer = usePartPracticeTimer({
+    practiceReady: !loading && !error && scoring.examPracticeOpen && Boolean(selectedPart?.id),
+    partKey: selectedPart?.id ? `${examSlot}:${partNumber}:${selectedPart.id}` : null,
+    autoStart: (isSkillPracticeSession || (examModeActive && !reviewMode)) && scoring.examPracticeOpen,
+  });
+
+  const persistPartSessionTime = useCallback(
+    async (progressOverride = null) => {
+      const uid = await getSessionUserId();
+      if (!uid || !selectedQuestion?.preguntaId || !selectedPart?.id || !partNumber) return;
+      await categoryTimer.finalizeSession({
+        userId: uid,
+        preguntaId: selectedQuestion.preguntaId,
+        parteId: selectedPart.id,
+        partNumber,
+        examSlot,
+        levelSlug: 'b2',
+        skillRoute: 'exam-writing',
+        scoreSource,
+        progress: progressOverride,
+        sectionTitle: 'Writing',
+      });
+    },
+    [
+      categoryTimer,
+      selectedQuestion?.preguntaId,
+      selectedPart?.id,
+      partNumber,
+      examSlot,
+      scoreSource,
+    ],
+  );
+
+  useEffect(() => {
+    return () => {
+      void persistPartSessionTime();
+    };
+  }, [selectedPart?.id, examSlot, partNumber, persistPartSessionTime]);
+
   const part1Task = useMemo(
     () => parseB2WritingPart1Task(part8Question?.enunciado || ''),
     [part8Question?.enunciado],
@@ -505,6 +544,12 @@ function B2WritingExamPracticePageInner() {
         total: partScoringCfg?.total ?? 20,
         passed: Boolean(scores.passed),
       });
+      void persistPartSessionTime({
+        complete: true,
+        correct: scores.total,
+        total: partScoringCfg?.total ?? 20,
+        passed: Boolean(scores.passed),
+      });
     },
     [
       scoring,
@@ -515,6 +560,7 @@ function B2WritingExamPracticePageInner() {
       partScoringCfg,
       examModeActive,
       reviewMode,
+      persistPartSessionTime,
     ],
   );
 
@@ -900,7 +946,7 @@ function B2WritingExamPracticePageInner() {
         skillRoute="exam-writing"
         skillPracticeTheme={skillNav.skillTheme}
         practiceMode={practiceMode}
-        timerVariant={isSkillPracticeSession && !examModeActive ? 'discrete' : 'prominent'}
+        timerVariant={isSkillPracticeSession && !examModeActive ? 'session' : 'prominent'}
         modeBadge={modeBadge}
         showRefresh={!isExamSimulationMode(practiceMode)}
         timerLabel={categoryTimer.label}

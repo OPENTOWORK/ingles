@@ -82,6 +82,19 @@ export function getLevelExamSectionRange(slug, sectionTitle) {
   return LEVEL_EXAM_SECTION_RANGES[key]?.[sectionTitle] || { partMin: 1, partMax: 1 };
 }
 
+/** Global paper part number → Cambridge section title (e.g. B2 part 5 → Reading and Use of English). */
+export function inferSectionTitleFromPart(slug, partNumber) {
+  const key = String(slug || '').toLowerCase();
+  const pn = Number(partNumber);
+  if (!Number.isFinite(pn) || pn <= 0) return null;
+  const ranges = LEVEL_EXAM_SECTION_RANGES[key];
+  if (!ranges) return null;
+  for (const [title, { partMin, partMax }] of Object.entries(ranges)) {
+    if (pn >= partMin && pn <= partMax) return title;
+  }
+  return null;
+}
+
 export function getExamSkillPartRange(slug, skillRoute) {
   const key = String(slug || '').toLowerCase();
   const section = SKILL_ROUTE_SECTION[key]?.[skillRoute];

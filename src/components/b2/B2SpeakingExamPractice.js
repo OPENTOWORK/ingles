@@ -6,7 +6,7 @@ import { useB2ExamPracticeSlot } from '@/hooks/useB2ExamPracticeSlot';
 import { useB2AutoOpenExamFromUrl } from '@/hooks/useB2AutoOpenExamFromUrl';
 import { B2ExamPracticeChrome, B2ExamPracticeLayout } from '@/components/b2/B2ExamPracticeChrome';
 import { useB2ExamScoringSession } from '@/hooks/useB2ExamScoringSession';
-import { useLevelsCategoryTimer } from '@/hooks/useLevelsCategoryTimer';
+import { usePartPracticeTimer } from '@/hooks/usePartPracticeTimer';
 import { getB2PartScoring } from '@/utils/levelsB2PartScoring';
 import { supabase } from '@/utils/supabaseClient';
 import { formatLevelsPartDisplayName, getSkillLocalPartNumber, getSkillPartTabLabel } from '@/utils/formatLevelsPartDisplayName';
@@ -149,7 +149,6 @@ function B2SpeakingExamPracticeInner({ title, subtitle, loadingLabel, refreshLab
   const examModePartScoresRef = useRef({});
   const examModePersistedPartsRef = useRef({});
   const speakingPartSnapshotsRef = useRef({});
-  const categoryTimer = useLevelsCategoryTimer();
 
   useEffect(() => {
     void reloadExamNamesBySlot('b2').then(({ names }) => setExamLabelsBySlot(names));
@@ -289,6 +288,41 @@ function B2SpeakingExamPracticeInner({ title, subtitle, loadingLabel, refreshLab
   );
 
   const partNumber = selectedPart?.partNumber ?? 0;
+
+  const categoryTimer = usePartPracticeTimer({
+    practiceReady: !loading && !error && scoring.examPracticeOpen && Boolean(selectedPart?.id),
+    partKey: selectedPart?.id ? `${examSlot}:${partNumber}:${selectedPart.id}` : null,
+    autoStart: (isSkillPracticeSession || (examModeActive && !reviewMode)) && scoring.examPracticeOpen,
+  });
+
+  const persistPartSessionTime = useCallback(
+    async (progressOverride = null) => {
+      if (!selectedPart?.id) return;
+      const uid = await getSessionUserId();
+      if (!uid || !partNumber) return;
+      const preguntaId = progressOverride?.preguntaId || selectedPart.id;
+      await categoryTimer.finalizeSession({
+        userId: uid,
+        preguntaId,
+        parteId: selectedPart.id,
+        partNumber,
+        examSlot,
+        levelSlug: 'b2',
+        skillRoute: 'exam-speaking',
+        scoreSource,
+        progress: progressOverride,
+        sectionTitle: 'Speaking',
+      });
+    },
+    [categoryTimer, selectedPart?.id, partNumber, examSlot, scoreSource],
+  );
+
+  useEffect(() => {
+    return () => {
+      void persistPartSessionTime();
+    };
+  }, [selectedPart?.id, examSlot, partNumber, persistPartSessionTime]);
+
   const b2PartCfg = getB2PartScoring(partNumber);
   const savedPartScore = scoring.progressBySlot[examSlot]?.parts?.[partNumber];
 
@@ -362,6 +396,13 @@ function B2SpeakingExamPracticeInner({ title, subtitle, loadingLabel, refreshLab
         total,
         passed,
       };
+      const progress = {
+        complete: true,
+        correct,
+        total,
+        passed,
+        preguntaId: selectedPart.id,
+      };
 
       if (examModeActive && !reviewMode) {
         examModePartScoresRef.current[selectedPart.partNumber] = {
@@ -373,6 +414,7 @@ function B2SpeakingExamPracticeInner({ title, subtitle, loadingLabel, refreshLab
           ...payload,
           scoreSource: LEVELS_SCORE_SOURCE.EXAM_MODE,
         });
+        void persistPartSessionTime(progress);
         return;
       }
 
@@ -380,8 +422,9 @@ function B2SpeakingExamPracticeInner({ title, subtitle, loadingLabel, refreshLab
         ...payload,
         scoreSource: LEVELS_SCORE_SOURCE.SKILL_PRACTICE,
       });
+      void persistPartSessionTime(progress);
     },
-    [scoring, selectedPart, examModeActive, reviewMode, persistSpeakingPartScore],
+    [scoring, selectedPart, examModeActive, reviewMode, persistSpeakingPartScore, persistPartSessionTime],
   );
 
   const handleSpeakingPartSnapshot = useCallback((partNumber, snapshot) => {
@@ -633,7 +676,7 @@ function B2SpeakingExamPracticeInner({ title, subtitle, loadingLabel, refreshLab
         skillPracticeTheme={skillNav.skillTheme}
         practiceMode={practiceMode}
         showStudyNotes={false}
-        timerVariant={isSkillPracticeSession && !examModeActive ? 'discrete' : 'prominent'}
+        timerVariant={isSkillPracticeSession && !examModeActive ? 'session' : 'prominent'}
         modeBadge={modeBadge}
         showRefresh={!isExamSimulationMode(practiceMode)}
         timerLabel={categoryTimer.label}

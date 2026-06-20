@@ -18,7 +18,7 @@ import { postLevelsAnswerJustification } from '@/utils/levelsJustifyClient';
 import { supabase } from '@/utils/supabaseClient';
 import { extractTextoBloque, splitPart1TextoYPreguntas, parsePart1QuestionOptions } from '@/utils/b2ExamTextBlocks';
 import { fetchB2PreguntasByExamen } from '@/utils/b2ResolveExam';
-import { formatLevelsPartDisplayName } from '@/utils/formatLevelsPartDisplayName';
+import { formatLevelsPartDisplayName, getSkillPartPracticeTitle, formatSkillPartPracticeTitle } from '@/utils/formatLevelsPartDisplayName';
 import { useUserRole } from '@/context/UserRoleContext';
 import { getSessionUserId, mergeLevelsEstadisticas } from '@/utils/levelsEstadisticas';
 import {
@@ -465,10 +465,14 @@ function UseOfEnglishExamsPageInner() {
   };
 
   const getSelectedPartTitle = () => {
-    const n = Number(selectedPart?.nombre.match(/\d+/)?.[0] || 0);
-    if (n) return `Part ${n}`;
-    return selectedPart?.nombre || '';
+    const n = Number(selectedPart?.nombre.match(/\d+/)?.[0] || partNumberUoe || 0);
+    return formatSkillPartPracticeTitle('b2', n, 'en');
   };
+
+  const selectedPartTitleParts = useMemo(() => {
+    const n = Number(selectedPart?.nombre.match(/\d+/)?.[0] || partNumberUoe || 0);
+    return getSkillPartPracticeTitle('b2', n, 'en');
+  }, [selectedPart, partNumberUoe]);
 
 
   /** Mapa pregunta → letra correcta desde `levels_respuestas` (p. ej. `1 C`, `2 B follow`).
@@ -1177,7 +1181,8 @@ function UseOfEnglishExamsPageInner() {
 
             {selectedPart && selectedQuestion && (
               <B2ExamPracticeContent
-                title={getSelectedPartTitle()}
+                title={selectedPartTitleParts.heading}
+                titleSubtitle={selectedPartTitleParts.subtitle}
                 directionsText={selectedPartContent.enunciado}
                 directionsLabel={isUoePart1 ? 'Instructions' : 'Directions'}
                 passageText={isInlinePassagePart || isPart1McqCloze ? '' : selectedPartContent.texto}

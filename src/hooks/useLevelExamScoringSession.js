@@ -29,6 +29,11 @@ export function useLevelExamScoringSession({
   const [currentExamenId, setCurrentExamenId] = useState(null);
   const currentExamenIdRef = useRef(null);
   const lastSavedPartSigRef = useRef('');
+  const examenIdBySlotRef = useRef({});
+
+  useEffect(() => {
+    examenIdBySlotRef.current = examenIdBySlot;
+  }, [examenIdBySlot]);
 
   const refreshPuntuacionesProgress = useCallback(async () => {
     const uid = await getSessionUserId();
@@ -88,7 +93,7 @@ export function useLevelExamScoringSession({
   const trySavePartProgress = useCallback(
     async ({ examSlot, partNumber, preguntaId, parteId, progress }) => {
       if (!progress?.complete) return { saved: false };
-      const examenId = currentExamenIdRef.current;
+      const examenId = examenIdBySlotRef.current?.[examSlot] ?? currentExamenIdRef.current;
       const uid = await getSessionUserId();
       if (!uid || !preguntaId || !examenId || !partNumber) return { saved: false };
 

@@ -1,3 +1,6 @@
+import { getB2PartDef } from '@/lib/b2ExamCatalog';
+import { getExamPartDisplayLabel } from '@/lib/examPartDisplayLabel';
+
 /**
  * Nombre de parte tal como se muestra en la UI (levels_partes.nombre_parte suele incluir " B2").
  * No modifica datos en Supabase.
@@ -49,4 +52,113 @@ export function getModuleNavPartLabel(partNumber, partMin, lang = 'en') {
   const localTitle = partMin != null ? getExamSectionPartTitle(n, partMin, lang) : null;
   if (localTitle) return localTitle;
   return lang === 'en' ? `Part ${n}` : `Parte ${n}`;
+}
+
+const ACTIVITY_SUBTITLES_EN = {
+  'multiple-choice-cloze': 'Multiple-choice cloze',
+  'open-cloze': 'Open cloze',
+  'word-formation': 'Word formation',
+  'key-word': 'Key word transformations',
+  'multiple-choice': 'Multiple choice',
+  'gapped-text': 'Gapped text',
+  'multiple-matching': 'Multiple matching',
+  essay: 'Essay',
+  email: 'Email',
+  'part-2': 'Choose one task',
+  'short-extracts': 'Multiple choice',
+  'sentence-completion': 'Sentence completion',
+  conversation: 'Multiple choice',
+  interview: 'Interview',
+  'long-turn': 'Long turn',
+  collaborative: 'Collaborative task',
+  discussion: 'Discussion',
+};
+
+const ACTIVITY_SUBTITLES_ES = {
+  'multiple-choice-cloze': 'Cloze de opción múltiple',
+  'open-cloze': 'Cloze abierto',
+  'word-formation': 'Formación de palabras',
+  'key-word': 'Transformaciones con palabra clave',
+  'multiple-choice': 'Opción múltiple',
+  'gapped-text': 'Texto con huecos',
+  'multiple-matching': 'Emparejamiento múltiple',
+  essay: 'Ensayo',
+  email: 'Email',
+  'part-2': 'Elige una tarea',
+  'short-extracts': 'Opción múltiple',
+  'sentence-completion': 'Completar frases',
+  conversation: 'Opción múltiple',
+  interview: 'Entrevista',
+  'long-turn': 'Turno largo',
+  collaborative: 'Tarea colaborativa',
+  discussion: 'Discusión',
+};
+
+function getActivitySubtitle(activity, lang = 'en') {
+  const key = String(activity || '').trim();
+  const map = lang === 'es' ? ACTIVITY_SUBTITLES_ES : ACTIVITY_SUBTITLES_EN;
+  if (map[key]) return map[key];
+  return key.replace(/-/g, ' ').replace(/\b\w/g, (char) => char.toUpperCase());
+}
+
+function getB2SkillPartHeading(partNumber, mode, lang = 'en') {
+  const pn = Number(partNumber);
+  const en = lang === 'en';
+  if (mode === 'use-of-english') return en ? `UOE Part ${pn}` : `UOE Parte ${pn}`;
+  if (mode === 'reading') return en ? `Reading Part ${pn}` : `Reading Parte ${pn}`;
+  if (mode === 'writing') {
+    const local = pn - 7;
+    return en ? `Writing Part ${local}` : `Writing Parte ${local}`;
+  }
+  if (mode === 'listening') {
+    const local = pn - 9;
+    return en ? `Listening Part ${local}` : `Listening Parte ${local}`;
+  }
+  if (mode === 'speaking') {
+    const local = pn - 13;
+    return en ? `Speaking Part ${local}` : `Speaking Parte ${local}`;
+  }
+  return en ? `Part ${pn}` : `Parte ${pn}`;
+}
+
+function normalizePracticeHeading(heading) {
+  return String(heading || '').replace(/^Use of English\b/i, 'UOE');
+}
+
+/**
+ * Título de práctica en dos líneas: categoría (UOE Part 1) + tipo de tarea (Multiple-choice cloze).
+ * @returns {{ heading: string, subtitle: string }}
+ */
+export function getSkillPartPracticeTitle(slug = 'b2', partNumber, lang = 'en') {
+  const pn = Number(partNumber);
+  if (!Number.isFinite(pn) || pn <= 0) return { heading: '', subtitle: '' };
+
+  const levelSlug = String(slug || 'b2').toLowerCase();
+  if (levelSlug === 'b2') {
+    const def = getB2PartDef(pn);
+    if (def) {
+      return {
+        heading: getB2SkillPartHeading(pn, def.mode, lang),
+        subtitle: getActivitySubtitle(def.activity, lang),
+      };
+    }
+  }
+
+  const full = getExamPartDisplayLabel(levelSlug, pn);
+  const dashIdx = full.indexOf(' — ');
+  if (dashIdx >= 0) {
+    return {
+      heading: normalizePracticeHeading(full.slice(0, dashIdx)),
+      subtitle: full.slice(dashIdx + 3),
+    };
+  }
+  return { heading: normalizePracticeHeading(full), subtitle: '' };
+}
+
+/** Una sola línea "UOE Part 1 — Multiple-choice cloze" (p. ej. headings auxiliares). */
+export function formatSkillPartPracticeTitle(slug, partNumber, lang = 'en') {
+  const { heading, subtitle } = getSkillPartPracticeTitle(slug, partNumber, lang);
+  if (!heading && !subtitle) return '';
+  if (!subtitle) return heading;
+  return `${heading} — ${subtitle}`;
 }

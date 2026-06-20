@@ -274,6 +274,8 @@ export function B2ExamSlotProgressPicker({
             const approvedParts = Number(prog.approvedParts) || 0;
             const inProgress = Boolean(prog.inProgress);
             const hasScore = approvedParts > 0 || Number(prog.total) > 0 || inProgress;
+            const isComplete = partsInPaper > 0 && approvedParts >= partsInPaper;
+            const showInProgress = inProgress && !isComplete;
             const label = examLabelsBySlot[n] || (en ? `Exam ${n}` : `Examen ${n}`);
 
             return (
@@ -292,14 +294,30 @@ export function B2ExamSlotProgressPicker({
                   <StarRow filled={stars} />
                   {hasScore ? (
                     <span className="levels-b2-exam-picker__slot-meta">
-                      {approvedParts}/{partsInPaper} {en ? 'parts' : 'partes'}
-                      {inProgress && approvedParts < partsInPaper
-                        ? ` · ${en ? 'In progress' : 'En curso'}`
-                        : ''}
+                      <span className="levels-b2-exam-picker__slot-meta-parts">
+                        {approvedParts}/{partsInPaper} {en ? 'parts' : 'partes'}
+                      </span>
+                      {isComplete ? (
+                        <span className="levels-b2-exam-picker__slot-meta-status levels-b2-exam-picker__slot-meta-status--done">
+                          {en ? 'Done' : 'Hecho'}
+                        </span>
+                      ) : showInProgress ? (
+                        <span className="levels-b2-exam-picker__slot-meta-status levels-b2-exam-picker__slot-meta-status--progress">
+                          {en ? 'In progress' : 'En curso'}
+                        </span>
+                      ) : null}
                     </span>
                   ) : (
                     <span className="levels-b2-exam-picker__slot-meta">
-                      {en ? 'No attempts' : 'Sin intentos'}
+                      <span
+                        className="levels-b2-exam-picker__slot-meta-parts levels-b2-exam-picker__slot-meta-parts--placeholder"
+                        aria-hidden="true"
+                      >
+                        {'\u00A0'}
+                      </span>
+                      <span className="levels-b2-exam-picker__slot-meta-status levels-b2-exam-picker__slot-meta-status--empty">
+                        {en ? 'No attempts' : 'Sin intentos'}
+                      </span>
                     </span>
                   )}
                 </button>

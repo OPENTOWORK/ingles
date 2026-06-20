@@ -40,9 +40,6 @@ export default function LevelsPartFinishBanner({ passed, correct, total, passing
           ? `Result: ${correct} / ${total} correct (you need ${passing} to pass)`
           : `Resultado: ${correct} / ${total} correctas (necesitas ${passing} para aprobar)`}
       </p>
-      <p className="levels-b2-result__note">
-        {en ? 'Score saved to your history.' : 'Puntuación guardada en tu historial.'}
-      </p>
     </div>
   );
 }

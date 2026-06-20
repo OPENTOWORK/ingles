@@ -21,6 +21,10 @@ export default function ExamListeningAudioPlayer({
   clipKey = '',
   lang = 'en',
   className = '',
+  playLocked = false,
+  lockReason = null,
+  onPlaybackStart,
+  onPlaybackEnd,
 }) {
   const audioRef = useRef(null);
   const maxTimeRef = useRef(0);
@@ -47,6 +51,7 @@ export default function ExamListeningAudioPlayer({
 
   const finishPlayback = useCallback(() => {
     const audio = audioRef.current;
+    const wasPlaying = playingRef.current;
     playingRef.current = false;
     stopTick();
     setIsPlaying(false);
@@ -55,7 +60,10 @@ export default function ExamListeningAudioPlayer({
       setCurrentTime(audio.duration);
       maxTimeRef.current = audio.duration;
     }
-  }, [stopTick]);
+    if (wasPlaying) {
+      onPlaybackEnd?.();
+    }
+  }, [onPlaybackEnd, stopTick]);
 
   const syncProgressFromAudio = useCallback(() => {
     const audio = audioRef.current;
@@ -141,7 +149,7 @@ export default function ExamListeningAudioPlayer({
 
   const startPlayback = useCallback(async () => {
     const audio = audioRef.current;
-    if (!audio || attemptsUsed >= MAX_PLAYS || playingRef.current) return;
+    if (!audio || playLocked || attemptsUsed >= MAX_PLAYS || playingRef.current) return;
 
     setError(null);
 
@@ -156,6 +164,7 @@ export default function ExamListeningAudioPlayer({
       playingRef.current = true;
       setIsPlaying(true);
       setAttemptsUsed((count) => count + 1);
+      onPlaybackStart?.();
       syncProgressFromAudio();
       startTick();
     } catch {
@@ -164,7 +173,15 @@ export default function ExamListeningAudioPlayer({
       setIsPlaying(false);
       setError(isEn ? 'Playback was blocked.' : 'La reproducción fue bloqueada.');
     }
-  }, [attemptsUsed, isEn, startTick, stopTick, syncProgressFromAudio]);
+  }, [
+    attemptsUsed,
+    isEn,
+    onPlaybackStart,
+    playLocked,
+    startTick,
+    stopTick,
+    syncProgressFromAudio,
+  ]);
 
   if (!src) return null;
 
@@ -177,6 +194,19 @@ export default function ExamListeningAudioPlayer({
   }
 
   const progressPct = duration > 0 ? Math.min(100, (currentTime / duration) * 100) : 0;
+  const playbackBlocked = playLocked && !isPlaying;
+  const lockHint =
+    lockReason === 'sequence'
+      ? isEn
+        ? 'Listen to the previous question first.'
+        : 'Escucha antes el audio de la pregunta anterior.'
+      : lockReason === 'other'
+        ? isEn
+          ? 'Wait until the current audio finishes.'
+          : 'Espera a que termine el audio en curso.'
+        : isEn
+          ? 'Audio locked.'
+          : 'Audio bloqueado.';
 
   return (
     <div className={`exam-listening-audio exam-listening-audio--strict${className ? ` ${className}` : ''}`}>
@@ -192,9 +222,13 @@ export default function ExamListeningAudioPlayer({
         {showFirstPlay ? (
           <button
             type="button"
-            className="exam-listening-audio__play"
+            className={`exam-listening-audio__play${
+              playbackBlocked ? ' exam-listening-audio__play--locked' : ''
+            }`}
             onClick={() => void startPlayback()}
+            disabled={playbackBlocked}
             aria-label={isEn ? 'Play audio' : 'Reproducir audio'}
+            aria-disabled={playbackBlocked}
           >
             ▶
           </button>
@@ -222,6 +256,10 @@ export default function ExamListeningAudioPlayer({
 
       {error ? <p className="exam-listening-audio__hint exam-listening-audio__hint--error">{error}</p> : null}
 
+      {playbackBlocked && (showFirstPlay || showReplay) ? (
+        <p className="exam-listening-audio__hint exam-listening-audio__hint--locked">{lockHint}</p>
+      ) : null}
+
       {isPlaying ? (
         <p className="exam-listening-audio__hint exam-listening-audio__hint--playing">
           {isEn ? 'Playing — cannot be paused.' : 'Reproduciendo — no se puede pausar.'}
@@ -229,7 +267,14 @@ export default function ExamListeningAudioPlayer({
       ) : null}
 
       {showReplay ? (
-        <button type="button" className="exam-listening-audio__replay" onClick={() => void startPlayback()}>
+        <button
+          type="button"
+          className={`exam-listening-audio__replay${
+            playbackBlocked ? ' exam-listening-audio__replay--locked' : ''
+          }`}
+          onClick={() => void startPlayback()}
+          disabled={playbackBlocked}
+        >
           {isEn ? 'Listen again (1 remaining)' : 'Escuchar otra vez (1 restante)'}
         </button>
       ) : null}

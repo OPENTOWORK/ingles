@@ -6,6 +6,7 @@ import { fetchB2PuntuacionesProgress } from '@/utils/levelsPuntuacionesProgress'
 import { getCachedB2Level, getCachedB2ExamenIdsBySlot } from '@/utils/b2LevelCache';
 import { getSessionUserId } from '@/utils/levelsEstadisticas';
 import { B2_EXAM_SLOT_MAX } from '@/utils/b2ResolveExam';
+import { LEVELS_PART_PROGRESS_SAVED_EVENT } from '@/utils/levelsProgressEvents';
 
 /**
  * Progress for all B2 paper parts (1–17) — skill practice scores only.
@@ -63,8 +64,13 @@ export function useB2StarsWayProgress() {
 
   useEffect(() => {
     const onFocus = () => void refresh();
+    const onProgressSaved = () => void refresh();
     window.addEventListener('focus', onFocus);
-    return () => window.removeEventListener('focus', onFocus);
+    window.addEventListener(LEVELS_PART_PROGRESS_SAVED_EVENT, onProgressSaved);
+    return () => {
+      window.removeEventListener('focus', onFocus);
+      window.removeEventListener(LEVELS_PART_PROGRESS_SAVED_EVENT, onProgressSaved);
+    };
   }, [refresh]);
 
   const slotsForProgress = availableSlots.length

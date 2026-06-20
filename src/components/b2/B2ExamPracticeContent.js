@@ -120,6 +120,7 @@ export function B2ExamQuestionItem({ children, className = '' }) {
  *
  * @param {{
  *   title: string,
+ *   titleSubtitle?: string | null,
  *   directionsText?: string,
  *   directionsLabel?: string,
  *   textLabel?: string,
@@ -136,11 +137,14 @@ export function B2ExamQuestionItem({ children, className = '' }) {
  *   contentClassName?: string,
  *   footer?: import('react').ReactNode,
  *   titleActions?: import('react').ReactNode,
+ *   exerciseLabel?: string | null,
  * }} props
  */
 export function B2ExamPracticeContent({
   title,
+  titleSubtitle = null,
   titleActions = null,
+  exerciseLabel = null,
   directionsText = '',
   directionsLabel = 'Directions',
   textLabel = 'Text',
@@ -162,7 +166,7 @@ export function B2ExamPracticeContent({
   const useSplit = split === 'auto' ? hasPassage && Boolean(questions) : Boolean(split);
   let directionBlocks = omitPartTitleBlocks(
     getFormattedEnunciado(directionsText),
-    Boolean(title?.trim()),
+    Boolean(title?.trim() || titleSubtitle?.trim()),
   );
   if (stripExampleFromDirections) {
     directionBlocks = omitExampleEnunciadoBlocks(directionBlocks);
@@ -171,9 +175,23 @@ export function B2ExamPracticeContent({
   return (
     <div className={useSplit ? 'levels-exam-split-page' : 'levels-exam-practice-page'}>
       <div className={`levels-exam-split-card${contentClassName ? ` ${contentClassName}` : ''}`}>
-        {title || titleActions ? (
-          <div className="levels-exam-split-card__title-row">
-            {title ? <h2>{title}</h2> : null}
+        {title || titleSubtitle || exerciseLabel || titleActions ? (
+          <div className="levels-exam-split-card__title-row levels-exam-split-card__title-row--title-mode">
+            {title || titleSubtitle ? (
+              <div className="levels-exam-split-card__part-title-block">
+                {title ? (
+                  <p className="levels-exam-split-card__part-title-category">{title}</p>
+                ) : null}
+                {titleSubtitle ? (
+                  <h1 className="levels-exam-split-card__part-title">{titleSubtitle}</h1>
+                ) : title ? (
+                  <h1 className="levels-exam-split-card__part-title">{title}</h1>
+                ) : null}
+              </div>
+            ) : null}
+            {exerciseLabel ? (
+              <span className="levels-exam-split-card__exercise-label">{exerciseLabel}</span>
+            ) : null}
             {titleActions}
           </div>
         ) : null}

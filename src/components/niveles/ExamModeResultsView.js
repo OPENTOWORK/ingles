@@ -27,20 +27,6 @@ function resolveSectionScoreDisplay(scores) {
   };
 }
 
-function resolveSectionStars(scores) {
-  const { correct, total } = resolveSectionScoreDisplay(scores);
-  return starsFromLevelsEarnedMax(correct, total);
-}
-
-function rowSkillKey(title = '') {
-  const t = title.toLowerCase();
-  if (t.includes('reading') || t.includes('use of english')) return 'reading';
-  if (t.includes('writing')) return 'writing';
-  if (t.includes('listening')) return 'listening';
-  if (t.includes('speaking')) return 'speaking';
-  return 'general';
-}
-
 function resolvePartBadge(partNum, part, sectionScoringV2) {
   const v2 = part.scoringVersion === 2 || sectionScoringV2;
   const earned = Math.max(0, Number(v2 ? (part.pointsEarned ?? part.correct) : part.correct) || 0);
@@ -136,6 +122,7 @@ function HeroStatsSummary({
   ringLabel,
   inline = false,
   hideRing = false,
+  hideStars = false,
   overallStars = null,
 }) {
   const stars =
@@ -145,19 +132,23 @@ function HeroStatsSummary({
     <div
       className={`${styles.summary}${inline ? ` ${styles.summaryInline}` : ''}${
         hideRing ? ` ${styles.summaryNoRing}` : ''
-      }`}
+      }${hideStars && !hideRing ? ` ${styles.summaryRingOnly}` : ''}`}
     >
       {!hideRing ? (
-        <div className={styles.summaryHeroCluster}>
+        hideStars ? (
           <ProgressRing pct={stats.pct} tone={overallTone} label={ringLabel} compact={inline} />
-          <div className={styles.summaryStarsBlock}>
-            <TheoryLevelStars stars={stars} size={inline ? 'sm' : 'md'} variant="gold" />
-            <span className={styles.summaryStarsLabel}>
-              {stats.correct}/{stats.displayTotal} items
-            </span>
+        ) : (
+          <div className={styles.summaryHeroCluster}>
+            <ProgressRing pct={stats.pct} tone={overallTone} label={ringLabel} compact={inline} />
+            <div className={styles.summaryStarsBlock}>
+              <TheoryLevelStars stars={stars} size={inline ? 'sm' : 'md'} variant="gold" />
+              <span className={styles.summaryStarsLabel}>
+                {stats.correct}/{stats.displayTotal} items
+              </span>
+            </div>
           </div>
-        </div>
-      ) : (
+        )
+      ) : hideStars ? null : (
         <div className={styles.summaryStarsOnly}>
           <TheoryLevelStars stars={stars} size="sm" variant="gold" />
         </div>
@@ -196,7 +187,6 @@ function SectionCard({ row, examSlot, onRepeatSection, onRepeatPart, rescoreBusy
   const isWritingSection = row.title === 'Writing';
   const showWritingRescoreHint = isWritingSection && isCompleted && rescoreBusy;
   const partEntries = Object.entries(parts).sort(([a], [b]) => Number(a) - Number(b));
-  const sectionStars = isCompleted ? resolveSectionStars(row.scores) : 0;
 
   return (
     <article
@@ -216,9 +206,6 @@ function SectionCard({ row, examSlot, onRepeatSection, onRepeatPart, rescoreBusy
                 partEntries.length > 0 ? ` ${styles.cardTitleActionsAligned}` : ''
               }`}
             >
-              {isCompleted ? (
-                <TheoryLevelStars stars={sectionStars} size="sm" variant="gold" />
-              ) : null}
               {isCompleted ? (
                 <button
                   type="button"
@@ -375,6 +362,7 @@ function ExamModeResultsViewInner({ slug }) {
   const examLabel = `Test ${examSlot}`;
   const ringLabel = stats.allComplete ? 'Overall' : stats.hasStarted ? 'So far' : 'Overall';
   const showInlineHeroStats = stats.hasStarted && !stats.allComplete;
+  const showHeroTitleRing = stats.hasStarted || stats.allComplete;
 
   const overallScoreDisplay = useMemo(() => {
     let correct = 0;
@@ -390,21 +378,6 @@ function ExamModeResultsViewInner({ slug }) {
       total,
       stars: starsFromLevelsEarnedMax(correct, total),
     };
-  }, [rows]);
-
-  const sectionMetaBySkill = useMemo(() => {
-    const map = {};
-    for (const row of rows) {
-      if (row.status !== 'completed') continue;
-      const skill = rowSkillKey(row.title);
-      const { correct, total } = resolveSectionScoreDisplay(row.scores);
-      map[skill] = {
-        correct,
-        total,
-        stars: starsFromLevelsEarnedMax(correct, total),
-      };
-    }
-    return map;
   }, [rows]);
 
   const showGeneralStats = generalStats.totalAttempts > 0;
@@ -429,50 +402,53 @@ function ExamModeResultsViewInner({ slug }) {
     <main className={styles.page}>
       <div className={styles.inner}>
         <header className={styles.hero}>
-          <p className={styles.eyebrow}>
-            Exam mode ·{' '}
-            {stats.allComplete ? 'Final results' : stats.hasStarted ? 'Live statistics' : 'Statistics preview'}
-          </p>
-          <div className={showInlineHeroStats ? styles.heroTitleRow : undefined}>
-            <h1 className={styles.title}>
-              {config.cefr} — {examLabel}
-            </h1>
-            {showInlineHeroStats ? (
+          {showHeroTitleRing ? (
+            <div className={styles.heroRingCorner}>
               <ProgressRing
                 pct={stats.pct}
                 tone={overallTone}
                 label={ringLabel}
                 compact
               />
-            ) : null}
+            </div>
+          ) : null}
+          <div className={showHeroTitleRing ? `${styles.heroIntro} ${styles.heroIntroWithRing}` : styles.heroIntro}>
+            <p className={styles.eyebrow}>
+              Exam mode ·{' '}
+              {stats.allComplete ? 'Final results' : stats.hasStarted ? 'Live statistics' : 'Statistics preview'}
+            </p>
+            <h1 className={styles.title}>
+              {config.cefr} — {examLabel}
+            </h1>
+            <p className={styles.subtitle}>
+              {stats.allComplete
+                ? 'Your full score breakdown and areas to improve before your next attempt.'
+                : stats.hasStarted
+                  ? 'Track your progress section by section. Scores update as you finish each paper.'
+                  : 'This is what your scores will look like. All values start at zero until you complete each section.'}
+            </p>
           </div>
-          <p className={styles.subtitle}>
-            {stats.allComplete
-              ? 'Your full score breakdown and areas to improve before your next attempt.'
-              : stats.hasStarted
-                ? 'Track your progress section by section. Scores update as you finish each paper.'
-                : 'This is what your scores will look like. All values start at zero until you complete each section.'}
-          </p>
 
           {stats.allComplete ? (
             <div
               className={`${styles.verdict} ${
                 stats.examPassed ? styles['verdict--pass'] : styles['verdict--fail']
-              }`}
+              } ${styles.verdictWithStats}`}
             >
               <span className={styles.verdictIcon} aria-hidden="true">
                 {stats.examPassed ? '✓' : '!'}
               </span>
-              <div>
-                <p className={styles.verdictTitle}>
-                  {stats.examPassed ? 'Exam passed' : 'Exam not passed'}
-                </p>
-                <p className={styles.verdictText}>
-                  {stats.examPassed
-                    ? `You reached at least ${stats.passThreshold}% in all ${stats.sectionsCount} sections.`
-                    : `${stats.sectionsPassed} of ${stats.sectionsCount} sections met the ${stats.passThreshold}% pass mark.`}
-                </p>
-              </div>
+              <p className={styles.verdictTitle}>
+                {stats.examPassed ? 'Exam passed' : 'Exam not passed'}
+              </p>
+              <HeroStatsSummary
+                stats={stats}
+                overallTone={overallTone}
+                ringLabel={ringLabel}
+                inline
+                hideRing
+                hideStars
+              />
             </div>
           ) : stats.hasStarted ? (
             <div className={`${styles.verdict} ${styles['verdict--progress']} ${styles.verdictWithStats}`}>
@@ -504,7 +480,7 @@ function ExamModeResultsViewInner({ slug }) {
             </div>
           )}
 
-          {!showInlineHeroStats ? (
+          {!showInlineHeroStats && !stats.allComplete ? (
             <HeroStatsSummary
               stats={stats}
               overallTone={overallTone}
@@ -576,19 +552,6 @@ function ExamModeResultsViewInner({ slug }) {
                 >
                   <div className={styles.improveHead}>
                     <p className={styles.improveSkill}>{item.title}</p>
-                    {sectionMetaBySkill[item.skill] ? (
-                      <div className={styles.improveStars}>
-                        <TheoryLevelStars
-                          stars={sectionMetaBySkill[item.skill].stars}
-                          size="sm"
-                          variant="gold"
-                        />
-                        <span className={styles.improveScore}>
-                          {sectionMetaBySkill[item.skill].correct}/
-                          {sectionMetaBySkill[item.skill].total}
-                        </span>
-                      </div>
-                    ) : null}
                   </div>
                   <p className={styles.improveTip}>{item.tip}</p>
                 </li>
@@ -619,22 +582,22 @@ function ExamModeResultsViewInner({ slug }) {
         </div>
 
         <footer className={styles.footer}>
+          <Link
+            href={`/niveles/${slug}/exam-mode?examen=${examSlot}`}
+            className={`${styles.footerLink} ${styles['footerLink--secondary']} ${styles.footerStart}`}
+          >
+            Exam menu
+          </Link>
           <button
             type="button"
             onClick={() => repeatExam()}
-            className={`${styles.footerLink} ${styles['footerLink--repeat']}`}
+            className={`${styles.footerLink} ${styles['footerLink--repeat']} ${styles.footerCenter}`}
           >
             Repeat exam
           </button>
           <Link
-            href={`/niveles/${slug}/exam-mode?examen=${examSlot}`}
-            className={`${styles.footerLink} ${styles['footerLink--secondary']}`}
-          >
-            Exam menu
-          </Link>
-          <Link
             href={`/niveles/${slug}`}
-            className={`${styles.footerLink} ${styles['footerLink--primary']}`}
+            className={`${styles.footerLink} ${styles['footerLink--primary']} ${styles.footerEnd}`}
           >
             Back to {config.cefr} hub
           </Link>

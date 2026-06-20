@@ -71,6 +71,7 @@ const SECTION_ICONS = {
   'general-statistics': ClipboardList,
   'exam-statistics': FileText,
   'study-activity': Calendar,
+  'practice-times': Timer,
   'skills-analysis': Target,
   'skills-radar': Crosshair,
   'score-history': LineChart,

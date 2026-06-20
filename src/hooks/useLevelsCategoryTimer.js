@@ -12,7 +12,7 @@ export function formatElapsedLevelsTimer(totalSeconds) {
 }
 
 /**
- * Cronómetro de sesión con pausa / reanudar / empezar.
+ * Cronómetro de sesión con play / pause / stop.
  */
 export function useLevelsCategoryTimer({ autoStart = true } = {}) {
   const [seconds, setSeconds] = useState(0);
@@ -26,9 +26,27 @@ export function useLevelsCategoryTimer({ autoStart = true } = {}) {
     return () => window.clearInterval(id);
   }, [status]);
 
-  const start = useCallback(() => setStatus('running'), []);
-  const pause = useCallback(() => setStatus('paused'), []);
-  const resume = useCallback(() => setStatus('running'), []);
+  const start = useCallback(() => {
+    setStatus('running');
+  }, []);
+
+  const pause = useCallback(() => {
+    setStatus('paused');
+  }, []);
+
+  const resume = useCallback(() => {
+    setStatus('running');
+  }, []);
+
+  const stop = useCallback(() => {
+    setStatus('stopped');
+    return seconds;
+  }, [seconds]);
+
+  const reset = useCallback(() => {
+    setSeconds(0);
+    setStatus('idle');
+  }, []);
 
   return {
     seconds,
@@ -36,8 +54,11 @@ export function useLevelsCategoryTimer({ autoStart = true } = {}) {
     isRunning: status === 'running',
     isPaused: status === 'paused',
     isIdle: status === 'idle',
+    isStopped: status === 'stopped',
     start,
     pause,
     resume,
+    stop,
+    reset,
   };
 }

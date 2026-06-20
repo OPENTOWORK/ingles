@@ -15,6 +15,8 @@ export async function mergeLevelsEstadisticas({
   deltaEvaluadas = 0,
   deltaCorrectas = 0,
   deltaIncorrectas = 0,
+  deltaTiempoSegundos = 0,
+  metadataPatch = null,
   _retry = false,
 }) {
   if (!userId || !preguntaId) return { error: null };
@@ -56,6 +58,49 @@ export async function mergeLevelsEstadisticas({
           ? ultimo_porcentaje
           : Math.max(prevMejor, ultimo_porcentaje);
 
+    const prevMetadata =
+      row?.metadata && typeof row.metadata === 'object' && !Array.isArray(row.metadata)
+        ? { ...row.metadata }
+        : {};
+
+    let metadata = prevMetadata;
+
+    if (metadataPatch && typeof metadataPatch === 'object') {
+      metadata = { ...prevMetadata };
+
+      if (metadataPatch.partTimeHistoryEntry) {
+        const history = Array.isArray(metadata.partTimeHistory) ? [...metadata.partTimeHistory] : [];
+        history.unshift(metadataPatch.partTimeHistoryEntry);
+        metadata.partTimeHistory = history.slice(0, 50);
+      }
+
+      if (metadataPatch.partTimesByPartKey && metadataPatch.partTimesByPartValue) {
+        const partTimesByPart = {
+          ...(metadata.partTimesByPart && typeof metadata.partTimesByPart === 'object'
+            ? metadata.partTimesByPart
+            : {}),
+        };
+        const key = String(metadataPatch.partTimesByPartKey);
+        const prev = partTimesByPart[key] || {};
+        const nextSeconds = Number(metadataPatch.partTimesByPartValue.lastSeconds) || 0;
+        const prevBest = Number(prev.bestSeconds);
+        partTimesByPart[key] = {
+          ...prev,
+          ...metadataPatch.partTimesByPartValue,
+          bestSeconds:
+            Number.isFinite(prevBest) && prevBest > 0
+              ? Math.min(prevBest, nextSeconds)
+              : nextSeconds,
+        };
+        metadata.partTimesByPart = partTimesByPart;
+      }
+    }
+
+    const tiempo_segundos_total = Math.max(
+      0,
+      (row?.tiempo_segundos_total ?? 0) + Math.max(0, Number(deltaTiempoSegundos) || 0),
+    );
+
     const payload = {
       usuario_id: userId,
       pregunta_id: preguntaId,
@@ -67,10 +112,10 @@ export async function mergeLevelsEstadisticas({
       respuestas_incorrectas,
       mejor_porcentaje,
       ultimo_porcentaje,
-      tiempo_segundos_total: row?.tiempo_segundos_total ?? 0,
+      tiempo_segundos_total,
       primera_interaccion: row?.primera_interaccion ?? now,
       ultima_interaccion: now,
-      metadata: row?.metadata && typeof row.metadata === 'object' ? row.metadata : {},
+      metadata,
     };
 
     // Evitar upsert: la tabla tiene PK (id) y UNIQUE (usuario_id, pregunta_id); PostgREST
@@ -110,6 +155,8 @@ export async function mergeLevelsEstadisticas({
         deltaEvaluadas,
         deltaCorrectas,
         deltaIncorrectas,
+        deltaTiempoSegundos,
+        metadataPatch,
         _retry: true,
       });
     }

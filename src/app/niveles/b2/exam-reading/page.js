@@ -14,7 +14,7 @@ import { isB2ScoringV2Enabled, isB2RuoeV2SessionPersistenceBlocked } from '@/lib
 import { parseB2KeyWordAnswerKeyRows } from '@/lib/parseB2KeyWordAnswerKey';
 import { gradeB2Part4Gap } from '@/lib/b2Part4Grading';
 import LevelsAnswerJustification from '@/components/levels/LevelsAnswerJustification';
-import { useLevelsCategoryTimer } from '@/hooks/useLevelsCategoryTimer';
+import { usePartPracticeTimer } from '@/hooks/usePartPracticeTimer';
 import { computeB2PartScoreMetrics } from '@/utils/levelsPaperScoreMetrics';
 import { postLevelsAnswerJustification } from '@/utils/levelsJustifyClient';
 import { supabase } from '@/utils/supabaseClient';
@@ -53,7 +53,8 @@ import {
 } from '@/utils/b2ExamPaperShared';
 import { resolveB2ExamenId, fetchB2PreguntasByExamen } from '@/utils/b2ResolveExam';
 import { getCachedB2Level } from '@/utils/b2LevelCache';
-import { formatLevelsPartDisplayName } from '@/utils/formatLevelsPartDisplayName';
+import { formatLevelsPartDisplayName, getSkillPartPracticeTitle, formatSkillPartPracticeTitle } from '@/utils/formatLevelsPartDisplayName';
+import { formatSkillExerciseLabel } from '@/utils/skillPartFirstProgress';
 import { B2ExamPracticeContent, B2ExamQuestionItem } from '@/components/b2/B2ExamPracticeContent';
 import B2ExamInlineOpenClozePassage from '@/components/b2/B2ExamInlineOpenClozePassage';
 import B2ExamInlineKeyWordPassage from '@/components/b2/B2ExamInlineKeyWordPassage';
@@ -191,7 +192,6 @@ function B2ReadingExamsPageInner() {
   const [aiHintsByKey, setAiHintsByKey] = useState({});
 
   const mountedRef = useRef(true);
-  const categoryTimer = useLevelsCategoryTimer();
   const readingSession = useReadingPracticeSession();
 
   useEffect(() => {
@@ -510,6 +510,46 @@ function B2ReadingExamsPageInner() {
     () => Number(selectedPart?.nombre.match(/\d+/)?.[0] || 0),
     [selectedPart?.nombre],
   );
+
+  const categoryTimer = usePartPracticeTimer({
+    practiceReady: !loading && !error && scoring.examPracticeOpen && Boolean(selectedPart?.id),
+    partKey: selectedPart?.id ? `${examSlot}:${partNumberReading}:${selectedPart.id}` : null,
+    autoStart: (isSkillPracticeSession || (examModeActive && !reviewMode)) && scoring.examPracticeOpen,
+  });
+
+  const persistPartSessionTime = useCallback(
+    async (progressOverride = null) => {
+      const uid = await getSessionUserId();
+      if (!uid || !selectedQuestion?.preguntaId || !selectedPart?.id || !partNumberReading) return;
+      await categoryTimer.finalizeSession({
+        userId: uid,
+        preguntaId: selectedQuestion.preguntaId,
+        parteId: selectedPart.id,
+        partNumber: partNumberReading,
+        examSlot,
+        levelSlug: 'b2',
+        skillRoute,
+        scoreSource,
+        progress: progressOverride,
+        sectionTitle: 'Reading and Use of English',
+      });
+    },
+    [
+      categoryTimer,
+      selectedQuestion?.preguntaId,
+      selectedPart?.id,
+      partNumberReading,
+      examSlot,
+      skillRoute,
+      scoreSource,
+    ],
+  );
+
+  useEffect(() => {
+    return () => {
+      void persistPartSessionTime();
+    };
+  }, [selectedPart?.id, examSlot, partNumberReading, persistPartSessionTime]);
 
   useEffect(() => {
     if (examModeActive && !reviewMode && partNumberReading && selectedPart) {
@@ -1316,8 +1356,10 @@ function B2ReadingExamsPageInner() {
         selectedOptions: stateOverride.selectedOptions ?? selectedOptions,
         getQuestionKey,
         partId: selectedPart.id,
+        treatSelectedMcqAsEvaluated: hideInstantFeedback,
       });
       if (!progress.complete) return;
+      void persistPartSessionTime(progress);
       void scoring.trySavePartProgress({
         examSlot,
         partNumber: partNumberReading,
@@ -1340,11 +1382,15 @@ function B2ReadingExamsPageInner() {
       openQuestionNumbers,
       openChecks,
       openGrades,
+      hideInstantFeedback,
+      persistPartSessionTime,
     ],
   );
 
   const handlePart1McqOptionSelect = useCallback(
     ({ group, option, questionKey }) => {
+      if (!hideInstantFeedback && checkedQuestions[questionKey]) return;
+
       const nextSelected = { ...selectedOptions, [questionKey]: option.id };
       setSelectedOptions(nextSelected);
 
@@ -1610,6 +1656,7 @@ function B2ReadingExamsPageInner() {
         ? { openGrades: nextOpenGrades, checkedQuestions: nextChecked }
         : { openChecks: nextOpenChecks, checkedQuestions: nextChecked },
     );
+    void persistPartSessionTime();
     readingSession.revealAnswers();
     if (hasAnyAnswer) readingSession.incrementCheckAttempts();
   }, [
@@ -1633,6 +1680,7 @@ function B2ReadingExamsPageInner() {
     groupedAnswersForUiAndScore,
     getQuestionKey,
     readingSession,
+    persistPartSessionTime,
   ]);
 
   /** Explicación lazy para huecos open cloze / word formation / key word. */
@@ -1837,20 +1885,23 @@ function B2ReadingExamsPageInner() {
 
   const getPartTitle = (part) => {
     const n = Number(part?.nombre.match(/\d+/)?.[0] || 0);
-    if (n === 1) return 'Reading Part 1 — Multiple-choice cloze';
-    if (n === 2) return 'Reading Part 2 — Open cloze';
-    if (n === 3) return 'Reading Part 3 — Word formation';
-    if (n === 4) return 'Reading Part 4 — Key word transformations';
-    if (n === 5) return 'Reading Part 5 — Multiple choice';
-    if (n === 6) return 'Reading Part 6 — Gapped text';
-    if (n === 7) return 'Reading Part 7 — Multiple matching';
-    return n ? `Reading Part ${n}` : part?.nombre || '';
+    return formatSkillPartPracticeTitle('b2', n, 'en');
+  };
+
+  const getPartTitleParts = (part) => {
+    const n = Number(part?.nombre.match(/\d+/)?.[0] || partNumberReading || 0);
+    return getSkillPartPracticeTitle('b2', n, 'en');
   };
 
   const part6SentencePoolBlock = useMemo(() => {
     if (partNumberReading !== 6) return '';
     return extractReadingPart6SentencesBlock(selectedQuestion?.enunciado || '');
   }, [partNumberReading, selectedQuestion?.enunciado]);
+
+  const selectedPartTitleParts = useMemo(() => {
+    if (!selectedPart) return { heading: '', subtitle: '' };
+    return getPartTitleParts(selectedPart);
+  }, [selectedPart, partNumberReading]);
 
   const reportErrorContext = useMemo(() => {
     if (loading || error || !scoring.examPracticeOpen || !selectedPart) return null;
@@ -1917,10 +1968,10 @@ function B2ReadingExamsPageInner() {
         compactSkillHeader={compactChromeHeader}
         showLevelPicker={isSkillPracticeSession}
         levelSlug="b2"
-        skillRoute="exam-reading-and-use-of-english"
+        skillRoute={skillRoute}
         skillPracticeTheme={skillNav.skillTheme}
         practiceMode={practiceMode}
-        timerVariant={isSkillPracticeSession && !examModeActive ? 'discrete' : 'prominent'}
+        timerVariant={isSkillPracticeSession && !examModeActive ? 'session' : 'prominent'}
         modeBadge={modeBadge}
         showRefresh={!isExamSimulationMode(practiceMode)}
         timerLabel={categoryTimer.label}
@@ -1987,7 +2038,13 @@ function B2ReadingExamsPageInner() {
           <>
             {selectedPart && selectedQuestion && (
               <B2ExamPracticeContent
-                title={getPartTitle(selectedPart)}
+                title={selectedPartTitleParts.heading}
+                titleSubtitle={selectedPartTitleParts.subtitle}
+                exerciseLabel={
+                  isSkillPracticeSession && examSlot
+                    ? formatSkillExerciseLabel(examSlot, 'en')
+                    : null
+                }
                 titleActions={
                   isSkillPracticeSession ? (
                     <ReadingPracticeFeedbackToggle variant="title-row" lang="en" />
@@ -2074,7 +2131,9 @@ function B2ReadingExamsPageInner() {
                       ? 'levels-exam-mcq-cloze-inline'
                       : isInlinePassagePart
                         ? 'levels-exam-open-cloze-inline'
-                        : ''
+                        : partNumberReading === 6 && part6SentencePoolBlock
+                          ? 'levels-exam-part6-split'
+                          : ''
                 }
                 showQuestionsHeading={!isInlinePassagePart && !isPart1McqCloze}
                 questions={
@@ -2100,6 +2159,13 @@ function B2ReadingExamsPageInner() {
                             </pre>
                           </div>
                         ) : null}
+                        <div
+                          className={
+                            partNumberReading === 6 && part6SentencePoolBlock
+                              ? 'levels-exam-part6-answers-scroll'
+                              : undefined
+                          }
+                        >
                         {groupedAnswersForUiAndScore.map((group, groupIndex) => {
                           const questionKey = getQuestionKey(
                             selectedPart.id,
@@ -2143,12 +2209,16 @@ function B2ReadingExamsPageInner() {
                             const showCorrect = !hideInstantFeedback && isChecked && isCorrect;
                             const showIncorrect = !hideInstantFeedback && isChecked && isSelected && !isCorrect;
 
+                            const isLocked = !hideInstantFeedback && isChecked;
+
                             return (
                               <button
                                 key={option.id}
                                 type="button"
                                 className={`question-option tool-button${isEliminated ? ' eliminated' : ''}`}
+                                disabled={isLocked}
                                 onClick={() => {
+                                  if (isLocked) return;
                                   if (readingSession.answerEliminatorEnabled) {
                                     readingSession.toggleEliminatedAnswer(questionKey, option.id);
                                     return;
@@ -2179,7 +2249,8 @@ function B2ReadingExamsPageInner() {
                                       : isSelected
                                         ? '#ebf8ff'
                                         : '#fff',
-                                  cursor: 'pointer',
+                                  cursor: isLocked ? 'not-allowed' : 'pointer',
+                                  opacity: isLocked && !isSelected ? 0.65 : 1,
                                 }}
                               >
                                 {option.formattedText || option.respuesta}
@@ -2253,6 +2324,7 @@ function B2ReadingExamsPageInner() {
                       </div>
                           );
                         })}
+                        </div>
                       </>
                     )
                 }

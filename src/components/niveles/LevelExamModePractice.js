@@ -303,7 +303,7 @@ function LevelExamModePracticeInner({ slug }) {
               </div>
               {!(examComplete && session?.resultsReleased) ? (
                 <div className="exam-mode-session__actions">
-                  <Link href={statsHref} className="exam-mode-session__btn exam-mode-session__btn--ghost">
+                  <Link href={statsHref} className="exam-mode-session__btn exam-mode-session__btn--outline">
                     Statistics
                   </Link>
                   <button

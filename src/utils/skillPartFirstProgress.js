@@ -1,5 +1,12 @@
 import { starsFromLevelsEarnedMax } from '@/lib/levelsStars';
 
+/** User-facing label for a skill-practice exam variant (slot 1 → "Exercise 1"). */
+export function formatSkillExerciseLabel(examSlot, lang = 'en') {
+  const slot = Number(examSlot);
+  if (!slot) return '';
+  return lang === 'es' ? `Ejercicio ${slot}` : `Exercise ${slot}`;
+}
+
 /** Tema visual de skill practice (no exam mode). */
 export function getSkillPracticeThemeKey(skillRoute) {
   const route = String(skillRoute || '').toLowerCase();
