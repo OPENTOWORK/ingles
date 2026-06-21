@@ -11,10 +11,9 @@ import { getB2PartScoring } from '@/utils/levelsB2PartScoring';
 import { supabase } from '@/utils/supabaseClient';
 import SkillPartPracticeHeader from '@/components/exam/SkillPartPracticeHeader';
 import { SkillPartInstructionsPanel } from '@/components/b2/B2ExamPracticeContent';
-import { getFormattedEnunciado } from '@/utils/b2ExamPaperShared';
+import { getFormattedEnunciado, omitSpeakingExaminerQuestionBlocks } from '@/utils/b2ExamPaperShared';
 import { formatLevelsPartDisplayName, getSkillLocalPartNumber, getSkillPartTabLabel, getSkillPartPracticeTitle } from '@/utils/formatLevelsPartDisplayName';
 import { formatSkillExerciseLabel } from '@/utils/skillPartFirstProgress';
-import ReadingPracticeFeedbackToggle from '@/components/exam/ReadingPracticeFeedbackToggle';
 import { withBasePath } from '@/lib/base-path';
 import { buildClientApiUrl } from '@/utils/clientApiUrl';
 import { playExaminerAudio, stopExaminerAudio, pauseExaminerAudio, resumeExaminerAudio, isExaminerAudioPaused } from '@/utils/playExaminerAudio';
@@ -32,6 +31,8 @@ import { getB2LongTurnPhotoUrls } from '@/data/b2-speaking-long-turn-photos';
 import B2ExamPracticeModuleNav from '@/components/b2/B2ExamPracticeModuleNav';
 import ExamPracticeProgressPanel from '@/components/exam/ExamPracticeProgressPanel';
 import ExamPracticeSessionSideRail from '@/components/exam/ExamPracticeSessionSideRail';
+import ExamPracticeSideRailTop from '@/components/exam/ExamPracticeSideRailTop';
+import ExamStudyNotesSidebar from '@/components/exam/ExamStudyNotesSidebar';
 import B2SpeakingStrategyPanel from '@/components/b2/B2SpeakingStrategyPanel';
 import { getB2SpeakingStrategyPack } from '@/data/b2SpeakingPracticeStrategies';
 import ReadingPracticeChrome from '@/components/exam/ReadingPracticeChrome';
@@ -78,6 +79,7 @@ import { buildExamModeSkillPartSnapshots } from '@/utils/buildExamModeSkillPartS
 import { finishExamModeSupabasePersistence } from '@/utils/finishExamModeSupabasePersistence';
 import { LEVELS_SCORE_SOURCE, resolvePracticeScoreSourceFromExamModeParam } from '@/utils/levelsScoreSource';
 import { persistLevelsPartProgress } from '@/utils/persistLevelsPartProgress';
+import { resolveB2ExamenId, fetchB2PreguntasByExamen } from '@/utils/b2ResolveExam';
 
 const buttonStyle = {
   backgroundColor: '#c1f2cd',
@@ -183,8 +185,36 @@ function B2SpeakingExamPracticeInner({ title, subtitle, loadingLabel, refreshLab
             nombre: formatLevelsPartDisplayName(part.nombre_parte),
             descripcion: partDescription(part),
             partNumber: num,
+            preguntaId: null,
           };
         });
+
+      const { data: levelData, error: levelError } = await supabase
+        .from('levels')
+        .select('id')
+        .ilike('nombre', 'b2')
+        .maybeSingle();
+      if (!levelError && levelData?.id) {
+        const { examenId } = await resolveB2ExamenId(supabase, levelData.id, { slot: examSlot });
+        if (examenId) {
+          const { data: rawQuestions } = await fetchB2PreguntasByExamen(supabase, {
+            examenId,
+            levelId: levelData.id,
+          });
+          const byParte = (rawQuestions || []).reduce((acc, question) => {
+            if (!acc[question.parte_id]) acc[question.parte_id] = question;
+            return acc;
+          }, {});
+          for (const part of mapped) {
+            const question = byParte[part.id];
+            if (question?.enunciado) {
+              part.descripcion = question.enunciado;
+              part.preguntaId = question.id;
+            }
+          }
+        }
+      }
+
       setPartsData(mapped);
       setSelectedPartId((prev) => {
         if (prev && mapped.some((p) => p.id === prev)) return prev;
@@ -195,7 +225,7 @@ function B2SpeakingExamPracticeInner({ title, subtitle, loadingLabel, refreshLab
     } finally {
       setLoading(false);
     }
-  }, []);
+  }, [examSlot]);
 
   const adminFlow = useLevelsExamAdminFlow({
     slug: 'b2',
@@ -226,6 +256,7 @@ function B2SpeakingExamPracticeInner({ title, subtitle, loadingLabel, refreshLab
     examSlot,
     onSelectExam: handleSelectExamSlot,
     progressBySlot: scoring.progressBySlot,
+    examenIdBySlot: scoring.examenIdBySlot,
     examLabelsBySlot,
     examSlotPickerProps,
     onRefreshProgress: scoring.refreshPuntuacionesProgress,
@@ -248,6 +279,8 @@ function B2SpeakingExamPracticeInner({ title, subtitle, loadingLabel, refreshLab
     runKeepPracticingSkillFlow({
       examSlot,
       examenIdBySlot: scoring.examenIdBySlot,
+      partNumber: skillNav.selectedPartNumber,
+      progressBySlot: scoring.progressBySlot,
       onSelectExamSlot: (slot) => {
         void scoring.refreshPuntuacionesProgress();
         handleSelectExamSlot(slot);
@@ -257,7 +290,7 @@ function B2SpeakingExamPracticeInner({ title, subtitle, loadingLabel, refreshLab
         skillNav.advanceToNextPart();
       },
     });
-  }, [examSlot, scoring, handleSelectExamSlot, skillNav]);
+  }, [examSlot, skillNav, scoring, handleSelectExamSlot]);
 
   const tabPartsData = useMemo(() => {
     if (!skillNav.active) return partsData;
@@ -295,19 +328,19 @@ function B2SpeakingExamPracticeInner({ title, subtitle, loadingLabel, refreshLab
   const partNumber = selectedPart?.partNumber ?? 0;
 
   const categoryTimer = usePartPracticeTimer({
-    practiceReady: !loading && !error && scoring.examPracticeOpen && Boolean(selectedPart?.id),
-    partKey: selectedPart?.id ? `${examSlot}:${partNumber}:${selectedPart.id}` : null,
-    autoStart: (isSkillPracticeSession || (examModeActive && !reviewMode)) && scoring.examPracticeOpen,
+    practiceReady: !loading && !error && layoutPracticeOpen && Boolean(selectedPart?.id),
+    partKey: selectedPart?.id
+      ? `${examSlot}:${partNumber}:${selectedPart.id}:${selectedPart.id}`
+      : null,
+    autoStart:
+      layoutPracticeOpen && (isSkillPracticeSession || (examModeActive && !reviewMode)),
   });
 
   const persistPartSessionTime = useCallback(
     async (progressOverride = null) => {
-      if (!selectedPart?.id) return;
-      const uid = await getSessionUserId();
-      if (!uid || !partNumber) return;
-      const preguntaId = progressOverride?.preguntaId || selectedPart.id;
+      if (!selectedPart?.id || !partNumber) return;
+      const preguntaId = progressOverride?.preguntaId || selectedPart.preguntaId || selectedPart.id;
       await categoryTimer.finalizeSession({
-        userId: uid,
         preguntaId,
         parteId: selectedPart.id,
         partNumber,
@@ -321,6 +354,31 @@ function B2SpeakingExamPracticeInner({ title, subtitle, loadingLabel, refreshLab
     },
     [categoryTimer, selectedPart?.id, partNumber, examSlot, scoreSource],
   );
+
+  useEffect(() => {
+    void (async () => {
+      if (!selectedPart?.id || !partNumber) {
+        categoryTimer.registerSaveParams(null);
+        return;
+      }
+      const uid = await getSessionUserId();
+      if (!uid) {
+        categoryTimer.registerSaveParams(null);
+        return;
+      }
+      categoryTimer.registerSaveParams({
+        userId: uid,
+        preguntaId: selectedPart.preguntaId || selectedPart.id,
+        parteId: selectedPart.id,
+        partNumber,
+        examSlot,
+        levelSlug: 'b2',
+        skillRoute: 'exam-speaking',
+        scoreSource,
+        sectionTitle: 'Speaking',
+      });
+    })();
+  }, [categoryTimer, selectedPart?.id, partNumber, examSlot, scoreSource]);
 
   useEffect(() => {
     return () => {
@@ -395,7 +453,7 @@ function B2SpeakingExamPracticeInner({ title, subtitle, loadingLabel, refreshLab
 
       const payload = {
         partNumber: selectedPart.partNumber,
-        preguntaId: selectedPart.id,
+        preguntaId: selectedPart.preguntaId || selectedPart.id,
         parteId: selectedPart.id,
         correct,
         total,
@@ -406,14 +464,14 @@ function B2SpeakingExamPracticeInner({ title, subtitle, loadingLabel, refreshLab
         correct,
         total,
         passed,
-        preguntaId: selectedPart.id,
+        preguntaId: selectedPart.preguntaId || selectedPart.id,
       };
 
       if (examModeActive && !reviewMode) {
         examModePartScoresRef.current[selectedPart.partNumber] = {
           correct,
           total,
-          preguntaId: selectedPart.id,
+          preguntaId: selectedPart.preguntaId || selectedPart.id,
         };
         void persistSpeakingPartScore({
           ...payload,
@@ -650,8 +708,11 @@ function B2SpeakingExamPracticeInner({ title, subtitle, loadingLabel, refreshLab
   const speakingInstructionsBlocks = useMemo(() => {
     const raw = selectedPart?.descripcion || '';
     if (!raw.trim()) return [];
-    return getFormattedEnunciado(raw);
-  }, [selectedPart?.descripcion]);
+    return omitSpeakingExaminerQuestionBlocks(
+      getFormattedEnunciado(raw),
+      selectedPart?.partNumber,
+    );
+  }, [selectedPart?.descripcion, selectedPart?.partNumber]);
 
   return (
     <B2ExamPracticeLayout examPracticeOpen={layoutPracticeOpen}>
@@ -691,7 +752,6 @@ function B2SpeakingExamPracticeInner({ title, subtitle, loadingLabel, refreshLab
         partMinForTabLabels={B2_SPEAKING_PART_MIN}
         skillPracticeTheme={skillNav.skillTheme}
         practiceMode={practiceMode}
-        showStudyNotes={false}
         timerVariant={isSkillPracticeSession && !examModeActive ? 'session' : 'prominent'}
         modeBadge={modeBadge}
         showRefresh={!isExamSimulationMode(practiceMode)}
@@ -704,6 +764,7 @@ function B2SpeakingExamPracticeInner({ title, subtitle, loadingLabel, refreshLab
         hideScorePanel={isExamSimulationMode(practiceMode) && !reviewMode}
         partFinishNotice={isExamSimulationMode(practiceMode) && !reviewMode ? null : scoring.partFinishNotice}
         partFinishNoticePlacement={showPracticeSideRail ? 'header' : 'main'}
+        studyNotesPlacement={showPracticeSideRail ? 'sidebar-top' : 'header'}
         partsData={!loading && !error ? tabPartsData : []}
         selectedPartId={selectedPartId}
         onSelectPart={(part) => {
@@ -713,6 +774,14 @@ function B2SpeakingExamPracticeInner({ title, subtitle, loadingLabel, refreshLab
           }
         }}
         getPartSavedScoreLabel={(part) => scoring.getPartSavedScoreLabel(part, examSlot)}
+        studyNotesContext={{
+          slug: 'b2',
+          skillRoute: 'exam-speaking',
+          examMode: examModeActive,
+          partNumber,
+          examSlot,
+        }}
+        studyNotesContextLabel={lang === 'es' ? 'Práctica B2 Speaking' : 'B2 Speaking Practice'}
         lang={lang}
         reportErrorContext={reportErrorContext}
         examModeSaveControls={examModeSaveControls}
@@ -755,14 +824,6 @@ function B2SpeakingExamPracticeInner({ title, subtitle, loadingLabel, refreshLab
                     ? formatSkillExerciseLabel(examSlot, lang === 'es' ? 'es' : 'en')
                     : null
                 }
-                titleActions={
-                  isSkillPracticeSession ? (
-                    <ReadingPracticeFeedbackToggle
-                      variant="title-row"
-                      lang={lang === 'es' ? 'es' : 'en'}
-                    />
-                  ) : null
-                }
               />
               <div className="levels-exam-split__body levels-exam-split__body--stacked">
                 {speakingInstructionsBlocks.length ? (
@@ -785,7 +846,7 @@ function B2SpeakingExamPracticeInner({ title, subtitle, loadingLabel, refreshLab
             partScoring={b2PartCfg}
             lang={lang}
             examMode={examModeActive && !reviewMode}
-            hideTaskIntro={speakingInstructionsBlocks.length > 0}
+            hideTaskIntro={Boolean(selectedPart?.descripcion?.trim())}
           />
               </div>
             </div>
@@ -823,6 +884,25 @@ function B2SpeakingExamPracticeInner({ title, subtitle, loadingLabel, refreshLab
         </div>
         {showPracticeSideRail ? (
           <ExamPracticeSessionSideRail
+            topRail={
+              <ExamPracticeSideRailTop
+                studyNotes={
+                  <ExamStudyNotesSidebar
+                    context={{
+                      slug: 'b2',
+                      skillRoute: 'exam-speaking',
+                      examMode: examModeActive,
+                      partNumber,
+                      examSlot,
+                    }}
+                    contextLabel={
+                      lang === 'es' ? 'Práctica B2 Speaking' : 'B2 Speaking Practice'
+                    }
+                    lang={lang === 'es' ? 'es' : 'en'}
+                  />
+                }
+              />
+            }
             strategy={
               speakingStrategyPack ? <B2SpeakingStrategyPanel pack={speakingStrategyPack} /> : null
             }
@@ -837,6 +917,7 @@ function B2SpeakingExamPracticeInner({ title, subtitle, loadingLabel, refreshLab
                 examLabelsBySlot={examLabelsBySlot}
                 focusPartNumber={partNumber}
                 passing={b2PartCfg?.passing}
+                skillRoute="exam-speaking"
                 examLabel={examLabelsBySlot[examSlot]}
                 lang={lang === 'es' ? 'es' : 'en'}
                 enabled={scoring.examPracticeOpen}

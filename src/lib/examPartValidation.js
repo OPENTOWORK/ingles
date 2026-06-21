@@ -723,7 +723,7 @@ function validateListening(partDef, gen, errors, warnings) {
   validateListeningClipWordCounts(partDef, gen, errors);
 }
 
-function validateSpeaking(gen, errors) {
+function validateSpeaking(gen, errors, warnings, partDef) {
   const hasPrompts =
     gen.speakingPrompts.length ||
     gen.discussionQuestions.length ||
@@ -736,6 +736,40 @@ function validateSpeaking(gen, errors) {
     errors.push('Speaking part must include examiner directions or instructions.');
   }
   if (!hasPrompts) errors.push('Speaking part must include prompts or discussion questions.');
+
+  if (!partDef || partDef.mode !== 'speaking') return;
+
+  if (partDef.partNumber >= 14 && partDef.partNumber <= 17) {
+    switch (partDef.activity) {
+      case 'interview':
+        if (gen.speakingPrompts.length < 3 || gen.speakingPrompts.length > 5) {
+          errors.push('B2 Speaking Part 1 needs 3–4 interview questions.');
+        }
+        break;
+      case 'long-turn':
+        if (!hasText(gen.comparePrompt)) errors.push('B2 Speaking Part 2 needs comparePrompt.');
+        if (!hasText(gen.photoA)) errors.push('B2 Speaking Part 2 needs photoA description.');
+        if (!hasText(gen.photoB)) errors.push('B2 Speaking Part 2 needs photoB description.');
+        if (!hasText(gen.partnerFollowUpQuestion)) {
+          errors.push('B2 Speaking Part 2 needs partnerFollowUpQuestion.');
+        }
+        break;
+      case 'collaborative':
+        if (!hasText(gen.centralQuestion)) errors.push('B2 Speaking Part 3 needs centralQuestion.');
+        if (gen.collaborativePrompts.length !== 5) {
+          errors.push('B2 Speaking Part 3 needs exactly 5 collaborativePrompts.');
+        }
+        if (!hasText(gen.decisionQuestion)) errors.push('B2 Speaking Part 3 needs decisionQuestion.');
+        break;
+      case 'discussion':
+        if (gen.discussionQuestions.length < 4 || gen.discussionQuestions.length > 6) {
+          errors.push('B2 Speaking Part 4 needs 4–6 discussionQuestions.');
+        }
+        break;
+      default:
+        break;
+    }
+  }
 }
 
 /**
@@ -773,7 +807,7 @@ export function validateGeneratedExamPart(slug, partNumber, generated) {
       validateListening(partDef, normalized, errors, warnings);
       break;
     case 'speaking':
-      validateSpeaking(normalized, errors);
+      validateSpeaking(normalized, errors, warnings, partDef);
       break;
     default:
       validateReadingUseOfEnglish(partDef, normalized, errors, warnings);

@@ -5,7 +5,9 @@ import Link from 'next/link';
 import SiteMascot from '@/components/SiteMascot';
 import { useUserRole } from '@/context/UserRoleContext';
 import {
+  getSiteAssistantPlaceholder,
   getSiteAssistantStarters,
+  getSiteAssistantSubtitle,
   getSiteAssistantWelcome,
 } from '@/lib/siteHelpKnowledge';
 import './site-assistant.css';
@@ -40,6 +42,8 @@ export function clearAssistantDismissed() {
 export default function SiteAssistantWidget({ defaultOpen = false } = {}) {
   const { userRole } = useUserRole();
   const welcome = useMemo(() => getSiteAssistantWelcome(userRole), [userRole]);
+  const subtitle = useMemo(() => getSiteAssistantSubtitle(userRole), [userRole]);
+  const placeholder = useMemo(() => getSiteAssistantPlaceholder(userRole), [userRole]);
   const starterTopics = useMemo(() => getSiteAssistantStarters(userRole), [userRole]);
 
   const [open, setOpen] = useState(() =>
@@ -137,7 +141,7 @@ export default function SiteAssistantWidget({ defaultOpen = false } = {}) {
             <SiteMascot variant={3} width={48} alt="" className="site-assistant-header__mascot" />
             <div>
               <h2>Dralo assistant</h2>
-              <p>Help using the site</p>
+              <p>{subtitle}</p>
             </div>
           </div>
           <div ref={listRef} className="site-assistant-messages">
@@ -189,7 +193,7 @@ export default function SiteAssistantWidget({ defaultOpen = false } = {}) {
                   handleSubmit(e);
                 }
               }}
-              placeholder="Type your question…"
+              placeholder={placeholder}
               disabled={loading}
               maxLength={2000}
               aria-label="Message for the assistant"

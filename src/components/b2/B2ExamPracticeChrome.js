@@ -236,9 +236,9 @@ export function B2ExamPracticeChrome({
       ? 'Reload parts, texts and answers from the server and clear your selections.'
       : 'Vuelve a cargar partes, textos y respuestas desde el servidor y limpia tus selecciones.';
   const updatingLabel = lang === 'en' ? 'Updating…' : 'Actualizando…';
-  const sessionLabel = lang === 'en' ? `Session: ${title}` : `Sesión: ${title}`;
   const savedPrefix = lang === 'en' ? 'Saved:' : 'Guardado:';
   const workPanelRef = useRef(null);
+  const statusAreaRef = useRef(null);
   const statusRowRef = useRef(null);
   const workBodyRef = useRef(null);
   const [internalTimerHidden, setInternalTimerHidden] = useState(false);
@@ -293,10 +293,16 @@ export function B2ExamPracticeChrome({
     showSkillExerciseStars && studyNotesPlacement === 'header';
   const showSkillExerciseStarsInSidebar =
     showSkillExerciseStars && studyNotesPlacement === 'sidebar-top';
-  const showSkillExerciseStarsInStatusRow =
-    showSkillExerciseStarsInSidebar && showHeaderFinishNotice;
-  const showSkillExerciseStarsInSidebarTop =
-    showSkillExerciseStarsInSidebar && !showSkillExerciseStarsInStatusRow;
+  const showSkillExerciseStarsInSidebarTop = showSkillExerciseStarsInSidebar;
+
+  const showCombinedToolbar = Boolean(headerTools) && showCategoryTimer;
+  const showLegacyToolsRow =
+    (Boolean(headerTools) || examModeSaveControls || showSkillExerciseStarsInHeader) &&
+    !showCombinedToolbar;
+  const showSecondaryStatusRow =
+    (showCombinedToolbar && (showScorePanel || showStudyNotesInHeader)) ||
+    (!showCombinedToolbar && showStatusRow);
+  const showToolbarFinishNotice = showCombinedToolbar && showHeaderFinishNotice;
 
   const starsWayHref = useMemo(() => {
     if (!showSkillExerciseStars || !skillRoute || !skillExercisePartNumber || !examSlot) {
@@ -325,18 +331,19 @@ export function B2ExamPracticeChrome({
     const shouldSyncStatusHeight = showStatusRow && showHeaderFinishNotice;
     const shouldSyncFinishWidth = showStatusRow && showHeaderFinishNotice;
 
-    if ((!shouldSyncStatusHeight && !shouldSyncFinishWidth) || !statusRowRef.current) {
+    if ((!shouldSyncStatusHeight && !shouldSyncFinishWidth) || !statusAreaRef.current) {
       document.documentElement.style.removeProperty('--exam-practice-status-row-height');
       document.documentElement.style.removeProperty('--exam-practice-header-finish-width');
       return undefined;
     }
 
     const syncMetrics = () => {
-      const row = statusRowRef.current;
-      if (!row) return;
+      const container = statusAreaRef.current;
+      if (!container) return;
 
       if (shouldSyncStatusHeight) {
-        const height = row.getBoundingClientRect().height;
+        const toolbar = container.querySelector('.levels-b2-practice__toolbar-band-main');
+        const height = (toolbar ?? statusRowRef.current ?? container).getBoundingClientRect().height;
         if (height > 0) {
           document.documentElement.style.setProperty(
             '--exam-practice-status-row-height',
@@ -348,7 +355,7 @@ export function B2ExamPracticeChrome({
       }
 
       if (shouldSyncFinishWidth) {
-        const finish = row.querySelector('.levels-b2-practice__header-finish');
+        const finish = container.querySelector('.levels-b2-practice__header-finish');
         const result = finish?.querySelector('.levels-b2-result');
         const widthTarget = result ?? finish;
         const width = widthTarget?.getBoundingClientRect().width;
@@ -365,10 +372,11 @@ export function B2ExamPracticeChrome({
 
     syncMetrics();
     const observer = new ResizeObserver(syncMetrics);
-    observer.observe(statusRowRef.current);
+    observer.observe(statusAreaRef.current);
+    if (statusRowRef.current) observer.observe(statusRowRef.current);
 
     if (shouldSyncFinishWidth) {
-      const finish = statusRowRef.current.querySelector('.levels-b2-practice__header-finish');
+      const finish = statusAreaRef.current.querySelector('.levels-b2-practice__header-finish');
       const result = finish?.querySelector('.levels-b2-result');
       if (finish) observer.observe(finish);
       if (result) observer.observe(result);
@@ -379,14 +387,13 @@ export function B2ExamPracticeChrome({
       document.documentElement.style.removeProperty('--exam-practice-status-row-height');
       document.documentElement.style.removeProperty('--exam-practice-header-finish-width');
     };
-  }, [showHeaderFinishNotice, showStatusRow, partFinishNotice]);
+  }, [showHeaderFinishNotice, showStatusRow, showCombinedToolbar, partFinishNotice]);
 
   useEffect(() => {
     if (
       !showSidebarTopRail ||
       !showStatusRow ||
-      showSkillExerciseStarsInStatusRow ||
-      !statusRowRef.current ||
+      !statusAreaRef.current ||
       !workBodyRef.current
     ) {
       document.documentElement.style.removeProperty('--exam-practice-sidebar-lift');
@@ -394,11 +401,11 @@ export function B2ExamPracticeChrome({
     }
 
     const syncSidebarLift = () => {
-      const statusRow = statusRowRef.current;
+      const statusArea = statusAreaRef.current;
       const workBody = workBodyRef.current;
-      if (!statusRow || !workBody) return;
+      if (!statusArea || !workBody) return;
 
-      const lift = workBody.getBoundingClientRect().top - statusRow.getBoundingClientRect().top;
+      const lift = workBody.getBoundingClientRect().top - statusArea.getBoundingClientRect().top;
       if (lift > 0) {
         document.documentElement.style.setProperty(
           '--exam-practice-sidebar-lift',
@@ -411,7 +418,7 @@ export function B2ExamPracticeChrome({
 
     syncSidebarLift();
     const observer = new ResizeObserver(syncSidebarLift);
-    observer.observe(statusRowRef.current);
+    observer.observe(statusAreaRef.current);
     observer.observe(workBodyRef.current);
     if (workPanelRef.current) observer.observe(workPanelRef.current);
 
@@ -426,8 +433,26 @@ export function B2ExamPracticeChrome({
     partFinishNotice,
     headerTools,
     showLevelPicker,
-    showSkillExerciseStarsInStatusRow,
   ]);
+
+  const categoryTimerEl = showCategoryTimer ? (
+    <LevelsCategoryTimer
+      categoryLabel=""
+      timeLabel={timerLabel}
+      variant={effectiveTimerVariant}
+      lang={lang === 'es' ? 'es' : 'en'}
+      isRunning={timerControls?.isRunning}
+      isPaused={timerControls?.isPaused}
+      isIdle={timerControls?.isIdle}
+      isStopped={timerControls?.isStopped}
+      onStart={timerControls?.start}
+      onPause={timerControls?.pause}
+      onResume={timerControls?.resume}
+      onStop={timerControls?.stop}
+      timerHidden={resolvedTimerHidden}
+      onToggleTimerHidden={showTimerHideToggle ? handleToggleTimerHidden : null}
+    />
+  ) : null;
 
   const partTabsEl =
     partsData?.length > 0 && !hidePartTabs ? (
@@ -561,8 +586,37 @@ export function B2ExamPracticeChrome({
             </div>
           ) : null}
 
-          <div className="levels-b2-practice__status">
-            {headerTools || examModeSaveControls || showSkillExerciseStarsInHeader ? (
+          <div className="levels-b2-practice__status" ref={statusAreaRef}>
+            {showCombinedToolbar ? (
+              <div className="levels-b2-practice__toolbar-band">
+                <div className="levels-b2-practice__toolbar-band-main">
+                  <div className="levels-b2-practice__toolbar-band-start">
+                    <div className="levels-b2-practice__study-tools">{headerTools}</div>
+                    {showSkillExerciseStarsInHeader ? (
+                      <div className="levels-b2-practice__exercise-stars">
+                        <SkillExerciseStarsBadge
+                          stars={skillExerciseStars}
+                          href={starsWayHref}
+                          lang={lang}
+                        />
+                      </div>
+                    ) : null}
+                    {examModeSaveControls ? (
+                      <div className="levels-b2-practice__exam-save-tools">{examModeSaveControls}</div>
+                    ) : null}
+                  </div>
+                  <div className="levels-b2-practice__toolbar-band-end">
+                    {categoryTimerEl}
+                  </div>
+                </div>
+                {showToolbarFinishNotice ? (
+                  <div className="levels-b2-practice__toolbar-band-aside">
+                    <PracticeHeaderFinishNotice notice={partFinishNotice} lang={lang} />
+                  </div>
+                ) : null}
+              </div>
+            ) : null}
+            {showLegacyToolsRow ? (
               <div className="levels-b2-practice__status-tools-row">
                 {headerTools ? (
                   <div className="levels-b2-practice__study-tools">{headerTools}</div>
@@ -581,73 +635,20 @@ export function B2ExamPracticeChrome({
                 ) : null}
               </div>
             ) : null}
-            {showStatusRow ? (
-              <div
-                ref={statusRowRef}
-                className={`levels-b2-practice__status-row${
-                  showHeaderFinishNotice ? ' levels-b2-practice__status-row--with-result' : ''
-                }`}
-              >
-                {showHeaderFinishNotice ? (
-                  <div className="levels-b2-practice__status-main-band">
-                    {showCategoryTimer ? (
-                      <LevelsCategoryTimer
-                        categoryLabel={sessionLabel}
-                        timeLabel={timerLabel}
-                        variant={effectiveTimerVariant}
-                        lang={lang === 'es' ? 'es' : 'en'}
-                        isRunning={timerControls?.isRunning}
-                        isPaused={timerControls?.isPaused}
-                        isIdle={timerControls?.isIdle}
-                        isStopped={timerControls?.isStopped}
-                        onStart={timerControls?.start}
-                        onPause={timerControls?.pause}
-                        onResume={timerControls?.resume}
-                        onStop={timerControls?.stop}
-                        timerHidden={resolvedTimerHidden}
-                        onToggleTimerHidden={showTimerHideToggle ? handleToggleTimerHidden : null}
-                      />
-                    ) : null}
-                    <PracticeHeaderFinishNotice notice={partFinishNotice} lang={lang} />
-                    {!hideScorePanel && scorePanelOverride ? scorePanelOverride : null}
-                    {!hidePracticeScorePanel && !scorePanelOverride && partScoreMetrics ? (
-                      <LevelsPartScorePanel
-                        {...partScoreMetrics}
-                        lang={lang}
-                        variant={effectiveScoreVariant}
-                      />
-                    ) : null}
-                  </div>
-                ) : (
-                  <>
-                    {showCategoryTimer ? (
-                      <LevelsCategoryTimer
-                        categoryLabel={sessionLabel}
-                        timeLabel={timerLabel}
-                        variant={effectiveTimerVariant}
-                        lang={lang === 'es' ? 'es' : 'en'}
-                        isRunning={timerControls?.isRunning}
-                        isPaused={timerControls?.isPaused}
-                        isIdle={timerControls?.isIdle}
-                        isStopped={timerControls?.isStopped}
-                        onStart={timerControls?.start}
-                        onPause={timerControls?.pause}
-                        onResume={timerControls?.resume}
-                        onStop={timerControls?.stop}
-                        timerHidden={resolvedTimerHidden}
-                        onToggleTimerHidden={showTimerHideToggle ? handleToggleTimerHidden : null}
-                      />
-                    ) : null}
-                    {!hideScorePanel && scorePanelOverride ? scorePanelOverride : null}
-                    {!hidePracticeScorePanel && !scorePanelOverride && partScoreMetrics ? (
-                      <LevelsPartScorePanel
-                        {...partScoreMetrics}
-                        lang={lang}
-                        variant={effectiveScoreVariant}
-                      />
-                    ) : null}
-                  </>
-                )}
+            {showSecondaryStatusRow ? (
+              <div ref={statusRowRef} className="levels-b2-practice__status-row">
+                {!showCombinedToolbar ? categoryTimerEl : null}
+                {!showToolbarFinishNotice && showHeaderFinishNotice ? (
+                  <PracticeHeaderFinishNotice notice={partFinishNotice} lang={lang} />
+                ) : null}
+                {!hideScorePanel && scorePanelOverride ? scorePanelOverride : null}
+                {!hidePracticeScorePanel && !scorePanelOverride && partScoreMetrics ? (
+                  <LevelsPartScorePanel
+                    {...partScoreMetrics}
+                    lang={lang}
+                    variant={effectiveScoreVariant}
+                  />
+                ) : null}
 
                 {showStudyNotesInHeader ? (
                   <ExamStudyNotesSidebar
@@ -656,10 +657,6 @@ export function B2ExamPracticeChrome({
                     contextLabel={studyNotesContextLabel || title}
                     lang={lang === 'es' ? 'es' : 'en'}
                   />
-                ) : null}
-
-                {showSkillExerciseStarsInStatusRow ? (
-                  <div className="levels-b2-practice__status-stars">{exerciseStarsBadge}</div>
                 ) : null}
               </div>
             ) : null}

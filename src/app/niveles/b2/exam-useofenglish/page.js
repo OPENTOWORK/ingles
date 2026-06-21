@@ -7,7 +7,8 @@ import { useSearchParams } from 'next/navigation';
 import LevelsCategoryTimer from '@/components/levels/LevelsCategoryTimer';
 import LevelsPartScorePanel from '@/components/levels/LevelsPartScorePanel';
 import LevelsPartFinishBanner from '@/components/levels/LevelsPartFinishBanner';
-import { useLevelsCategoryTimer } from '@/hooks/useLevelsCategoryTimer';
+import { usePartPracticeTimer } from '@/hooks/usePartPracticeTimer';
+import { LEVELS_SCORE_SOURCE } from '@/utils/levelsScoreSource';
 import { computeB2PartScoreMetrics } from '@/utils/levelsPaperScoreMetrics';
 import { getActiveB2RuoePartScoring } from '@/utils/levelsB2PartScoring';
 import { isB2ScoringV2Enabled, isB2RuoeV2SessionPersistenceBlocked } from '@/lib/b2ScoringV2FeatureFlag';
@@ -91,7 +92,6 @@ function UseOfEnglishExamsPageInner() {
   const mountedRef = useRef(true);
   const lastSavedPartSigRef = useRef('');
   const currentExamenIdRef = useRef(null);
-  const categoryTimer = useLevelsCategoryTimer();
 
   const loadUseOfEnglishData = useCallback(async () => {
     setLoading(true);
@@ -359,6 +359,77 @@ function UseOfEnglishExamsPageInner() {
     () => Number(selectedPart?.nombre.match(/\d+/)?.[0] || 0),
     [selectedPart?.nombre],
   );
+
+  const categoryTimer = usePartPracticeTimer({
+    practiceReady: !loading && !error && examPracticeOpen && Boolean(selectedPart?.id),
+    partKey: selectedPart?.id
+      ? `${examSlot}:${partNumberUoe}:${selectedPart.id}:${selectedQuestion?.preguntaId || 'pending'}`
+      : null,
+    autoStart: examPracticeOpen,
+  });
+
+  const persistPartSessionTime = useCallback(
+    async (progressOverride = null) => {
+      if (!selectedQuestion?.preguntaId || !selectedPart?.id || !partNumberUoe) return;
+      if (isB2RuoeV2SessionPersistenceBlocked(partNumberUoe)) return;
+      await categoryTimer.finalizeSession({
+        preguntaId: selectedQuestion.preguntaId,
+        parteId: selectedPart.id,
+        partNumber: partNumberUoe,
+        examSlot,
+        levelSlug: 'b2',
+        skillRoute: 'exam-useofenglish',
+        scoreSource: LEVELS_SCORE_SOURCE.SKILL_PRACTICE,
+        progress: progressOverride,
+        sectionTitle: 'Reading and Use of English',
+      });
+    },
+    [
+      categoryTimer,
+      selectedQuestion?.preguntaId,
+      selectedPart?.id,
+      partNumberUoe,
+      examSlot,
+    ],
+  );
+
+  useEffect(() => {
+    void (async () => {
+      const uid = await getSessionUserId();
+      if (!uid || !selectedQuestion?.preguntaId || !selectedPart?.id || !partNumberUoe) {
+        categoryTimer.registerSaveParams(null);
+        return;
+      }
+      if (isB2RuoeV2SessionPersistenceBlocked(partNumberUoe)) {
+        categoryTimer.registerSaveParams(null);
+        return;
+      }
+      categoryTimer.registerSaveParams({
+        userId: uid,
+        preguntaId: selectedQuestion.preguntaId,
+        parteId: selectedPart.id,
+        partNumber: partNumberUoe,
+        examSlot,
+        levelSlug: 'b2',
+        skillRoute: 'exam-useofenglish',
+        scoreSource: LEVELS_SCORE_SOURCE.SKILL_PRACTICE,
+        sectionTitle: 'Reading and Use of English',
+      });
+    })();
+  }, [
+    categoryTimer,
+    selectedQuestion?.preguntaId,
+    selectedPart?.id,
+    partNumberUoe,
+    examSlot,
+  ]);
+
+  useEffect(() => {
+    return () => {
+      void persistPartSessionTime();
+    };
+  }, [selectedPart?.id, selectedQuestion?.preguntaId, examSlot, partNumberUoe, persistPartSessionTime]);
+
   /** Página dedicada Use of English (partes 1–4) = skill practice. */
   const useSkillUoeExampleLayout = shouldUseSkillUoeExampleLayout({
     skillPractice: true,
@@ -798,6 +869,8 @@ function UseOfEnglishExamsPageInner() {
 
       if (!progress.complete) return;
 
+      void persistPartSessionTime(progress);
+
       setPartFinishNotice(buildPartFinishNoticeDisplay(progress, partNumberUoe, { saved: false }));
 
       const sig = `${examSlot}:${partNumberUoe}:${progress.correct}:${progress.questionTotal}:${progress.scoringVersion ?? 1}`;
@@ -818,7 +891,7 @@ function UseOfEnglishExamsPageInner() {
         progress,
       });
 
-      if (result.error) {
+      if (!result.saved && result.error) {
         const msg = result.error?.message || String(result.error);
         console.warn('levels parte/puntuacion:', msg);
         setPartFinishNotice({ error: msg });
@@ -849,6 +922,7 @@ function UseOfEnglishExamsPageInner() {
       checkedQuestions,
       selectedOptions,
       refreshPuntuacionesProgress,
+      persistPartSessionTime,
     ],
   );
 

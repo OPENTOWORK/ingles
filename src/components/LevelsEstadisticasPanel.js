@@ -175,7 +175,7 @@ export default function LevelsEstadisticasPanel({ userId, embedded = false }) {
             <div
               className="lsp-header__ring"
               style={{
-                background: `conic-gradient(#2563eb ${pctGlobal * 3.6}deg, #e2e8f0 0deg)`,
+                background: `conic-gradient(#2563eb ${pctGlobal * 3.6}deg, var(--lsp-ring-track, #e2e8f0) 0deg)`,
               }}
               aria-label={`Overall accuracy: ${pctGlobal}%`}
             >

@@ -541,3 +541,48 @@ body.reading-night-mode .exam-stats__empty {
   border-color: #475569;
   color: #94a3b8;
 }
+
+body.reading-night-mode .exam-stats__time-bar {
+  background: linear-gradient(135deg, #1e3a5f 0%, #1e293b 100%);
+  border-color: #475569;
+}
+
+body.reading-night-mode .exam-stats__time-value {
+  color: #93c5fd;
+}
+
+body.reading-night-mode .exam-stats__kpi--blue .exam-stats__kpi-icon {
+  background: rgba(37, 99, 235, 0.2);
+  color: #93c5fd;
+}
+
+body.reading-night-mode .exam-stats__kpi--green .exam-stats__kpi-icon {
+  background: rgba(22, 163, 74, 0.2);
+  color: #86efac;
+}
+
+body.reading-night-mode .exam-stats__kpi--violet .exam-stats__kpi-icon {
+  background: rgba(124, 58, 237, 0.2);
+  color: #c4b5fd;
+}
+
+body.reading-night-mode .exam-stats__kpi--amber .exam-stats__kpi-icon {
+  background: rgba(217, 119, 6, 0.2);
+  color: #fcd34d;
+}
+
+body.reading-night-mode .exam-stats__insight-card--strength {
+  background: rgba(22, 101, 52, 0.15);
+  border-color: rgba(34, 197, 94, 0.25);
+}
+
+body.reading-night-mode .exam-stats__insight-card--improve {
+  background: rgba(120, 53, 15, 0.15);
+  border-color: rgba(251, 146, 60, 0.25);
+}
+
+body.reading-night-mode .exam-stats__chip--strength {
+  background: rgba(22, 101, 52, 0.25);
+  border-color: rgba(34, 197, 94, 0.35);
+  color: #86efac;
+}

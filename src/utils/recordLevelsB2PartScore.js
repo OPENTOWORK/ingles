@@ -215,5 +215,5 @@ export async function saveB2PartPuntuacionIfComplete({
     }
   }
 
-  return { saved: true, error: starsError, progress };
+  return { saved: true, error: null, starsWarning: starsError, progress };
 }

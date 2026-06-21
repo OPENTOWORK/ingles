@@ -46,7 +46,6 @@ import ExamPracticeProgressPanel from '@/components/exam/ExamPracticeProgressPan
 import ExamPracticeSessionSideRail from '@/components/exam/ExamPracticeSessionSideRail';
 import ExamPracticeSideRailTop from '@/components/exam/ExamPracticeSideRailTop';
 import ExamStudyNotesSidebar from '@/components/exam/ExamStudyNotesSidebar';
-import ReadingPracticeFeedbackToggle from '@/components/exam/ReadingPracticeFeedbackToggle';
 import ReadingPracticeChrome from '@/components/exam/ReadingPracticeChrome';
 import { ReadingPracticeSessionProvider, useReadingPracticeSession } from '@/context/ReadingPracticeSessionContext';
 import B2ListeningInlineGapCard from '@/components/b2/B2ListeningInlineGapCard';
@@ -766,6 +765,7 @@ function B2ExamPaperPracticePageInner({
     examSlot,
     onSelectExam: handleSelectExamSlot,
     progressBySlot: scoring.progressBySlot,
+    examenIdBySlot: scoring.examenIdBySlot,
     examLabelsBySlot,
     examSlotPickerProps,
     onRefreshProgress: scoring.refreshPuntuacionesProgress,
@@ -816,6 +816,8 @@ function B2ExamPaperPracticePageInner({
     runKeepPracticingSkillFlow({
       examSlot,
       examenIdBySlot: scoring.examenIdBySlot,
+      partNumber,
+      progressBySlot: scoring.progressBySlot,
       onSelectExamSlot: (slot) => {
         void scoring.refreshPuntuacionesProgress();
         handleSelectExamSlot(slot);
@@ -825,7 +827,7 @@ function B2ExamPaperPracticePageInner({
         skillNav.advanceToNextPart();
       },
     });
-  }, [examSlot, scoring, handleSelectExamSlot, skillNav]);
+  }, [examSlot, partNumber, scoring, handleSelectExamSlot, skillNav]);
 
   const tabPartsData = useMemo(() => {
     if (!skillNav.active) return partsData;
@@ -851,11 +853,16 @@ function B2ExamPaperPracticePageInner({
 
   useEffect(() => {
     mountedRef.current = true;
+    if (skillNav.active && !skillNav.practiceReady) {
+      return () => {
+        mountedRef.current = false;
+      };
+    }
     loadData();
     return () => {
       mountedRef.current = false;
     };
-  }, [loadData]);
+  }, [loadData, skillNav.active, skillNav.practiceReady]);
 
   useEffect(() => {
     const qPart = searchParams.get('part');
@@ -1056,18 +1063,19 @@ function B2ExamPaperPracticePageInner({
   );
 
   const categoryTimer = usePartPracticeTimer({
-    practiceReady: !loading && !error && scoring.examPracticeOpen && Boolean(selectedPart?.id),
-    partKey: selectedPart?.id ? `${examSlot}:${partNumber}:${selectedPart.id}` : null,
-    autoStart: (isSkillPracticeSession || (examModeActive && !reviewMode)) && scoring.examPracticeOpen,
+    practiceReady: !loading && !error && layoutPracticeOpen && Boolean(selectedPart?.id),
+    partKey: selectedPart?.id
+      ? `${examSlot}:${partNumber}:${selectedPart.id}:${selectedQuestion?.preguntaId || 'pending'}`
+      : null,
+    autoStart:
+      layoutPracticeOpen && (isSkillPracticeSession || (examModeActive && !reviewMode)),
   });
 
   const persistPartSessionTime = useCallback(
     async (progressOverride = null) => {
       if (levelSlug === 'b2' && isB2RuoeV2SessionPersistenceBlocked(partNumber)) return;
-      const uid = await getSessionUserId();
-      if (!uid || !selectedQuestion?.preguntaId || !selectedPart?.id || !partNumber) return;
+      if (!selectedQuestion?.preguntaId || !selectedPart?.id || !partNumber) return;
       await categoryTimer.finalizeSession({
-        userId: uid,
         preguntaId: selectedQuestion.preguntaId,
         parteId: selectedPart.id,
         partNumber,
@@ -1092,10 +1100,40 @@ function B2ExamPaperPracticePageInner({
   );
 
   useEffect(() => {
+    void (async () => {
+      const uid = await getSessionUserId();
+      if (!uid || !selectedQuestion?.preguntaId || !selectedPart?.id || !partNumber) {
+        categoryTimer.registerSaveParams(null);
+        return;
+      }
+      categoryTimer.registerSaveParams({
+        userId: uid,
+        preguntaId: selectedQuestion.preguntaId,
+        parteId: selectedPart.id,
+        partNumber,
+        examSlot,
+        levelSlug,
+        skillRoute: skillRoute || null,
+        scoreSource,
+        sectionTitle: skillRoute ? getExamSkillSectionTitle(levelSlug, skillRoute) : null,
+      });
+    })();
+  }, [
+    categoryTimer,
+    selectedQuestion?.preguntaId,
+    selectedPart?.id,
+    partNumber,
+    examSlot,
+    levelSlug,
+    skillRoute,
+    scoreSource,
+  ]);
+
+  useEffect(() => {
     return () => {
       void persistPartSessionTime();
     };
-  }, [selectedPart?.id, examSlot, partNumber, persistPartSessionTime]);
+  }, [selectedPart?.id, selectedQuestion?.preguntaId, examSlot, partNumber, persistPartSessionTime]);
 
   const useSkillUoeExampleLayout = shouldUseSkillUoeExampleLayout({
     skillPractice: isSkillPracticeSession,
@@ -1866,7 +1904,7 @@ function B2ExamPaperPracticePageInner({
     }
     const n = Number(selectedPart?.nombre?.match(/\d+/)?.[0] || partNumber || 0);
     if (levelSlug === 'b2' && n > 0) {
-      return getSkillPartPracticeTitle('b2', n, lang === 'es' ? 'es' : 'en');
+      return getSkillPartPracticeTitle('b2', n, lang === 'es' ? 'es' : 'en', examSlot);
     }
     return { heading: getPartTitle(selectedPart), subtitle: '' };
   }, [
@@ -1878,6 +1916,7 @@ function B2ExamPaperPracticePageInner({
     lang,
     useLocalPartLabels,
     partMin,
+    examSlot,
   ]);
 
   const trySavePartAfterAnswer = useCallback(
@@ -2673,7 +2712,6 @@ function B2ExamPaperPracticePageInner({
     setOpenChecks(nextOpenChecks);
     setCheckedQuestions(nextChecked);
     trySavePartAfterAnswer({ openChecks: nextOpenChecks, checkedQuestions: nextChecked });
-    void persistPartSessionTime();
     readingSession.revealAnswers();
     if (hasAnyAnswer) readingSession.incrementCheckAttempts();
   }, [
@@ -2687,7 +2725,6 @@ function B2ExamPaperPracticePageInner({
     selectedOptions,
     checkedQuestions,
     trySavePartAfterAnswer,
-    persistPartSessionTime,
     readingSession,
     getQuestionKey,
   ]);
@@ -3526,17 +3563,9 @@ function B2ExamPaperPracticePageInner({
                   title={selectedPartTitleParts.heading}
                   subtitle={selectedPartTitleParts.subtitle}
                   exerciseLabel={
-                    isSkillPracticeSession && examSlot
+                    isSkillPracticeSession && examSlot && !(levelSlug === 'b2' && partNumber >= 1 && partNumber <= 4)
                       ? formatSkillExerciseLabel(examSlot, lang === 'es' ? 'es' : 'en')
                       : null
-                  }
-                  titleActions={
-                    isSkillPracticeSession ? (
-                      <ReadingPracticeFeedbackToggle
-                        variant="title-row"
-                        lang={lang === 'es' ? 'es' : 'en'}
-                      />
-                    ) : null
                   }
                 />
 
@@ -4048,6 +4077,7 @@ function B2ExamPaperPracticePageInner({
                       examLabelsBySlot={examLabelsBySlot}
                       focusPartNumber={partNumber}
                       passing={partScoringCfg?.passing}
+                      skillRoute={skillRoute}
                       examLabel={examLabelsBySlot[examSlot]}
                       lang={lang === 'es' ? 'es' : 'en'}
                       enabled={scoring.examPracticeOpen}
@@ -4063,17 +4093,9 @@ function B2ExamPaperPracticePageInner({
                 title={selectedPartTitleParts.heading}
                 titleSubtitle={selectedPartTitleParts.subtitle}
                 exerciseLabel={
-                  isSkillPracticeSession && examSlot
+                  isSkillPracticeSession && examSlot && !(levelSlug === 'b2' && partNumber >= 1 && partNumber <= 4)
                     ? formatSkillExerciseLabel(examSlot, lang === 'es' ? 'es' : 'en')
                     : null
-                }
-                titleActions={
-                  isSkillPracticeSession ? (
-                    <ReadingPracticeFeedbackToggle
-                      variant="title-row"
-                      lang={lang === 'es' ? 'es' : 'en'}
-                    />
-                  ) : null
                 }
                 directionsText={displayDirectionsText}
                 directionsLabel={isSkillPracticeSession ? 'Instructions' : 'Directions'}

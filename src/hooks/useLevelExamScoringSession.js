@@ -30,36 +30,56 @@ export function useLevelExamScoringSession({
   const currentExamenIdRef = useRef(null);
   const lastSavedPartSigRef = useRef('');
   const examenIdBySlotRef = useRef({});
+  const refreshInFlightRef = useRef(null);
 
   useEffect(() => {
     examenIdBySlotRef.current = examenIdBySlot;
   }, [examenIdBySlot]);
 
   const refreshPuntuacionesProgress = useCallback(async () => {
-    const uid = await getSessionUserId();
-    if (!uid || !Object.keys(examenIdBySlot).length) return;
-    const { bySlot } = await fetchB2PuntuacionesProgress(supabase, {
-      userId: uid,
-      examenIdBySlot,
-      partMin,
-      partMax,
-      partsInPaper,
-      scoreSource,
-    });
-    setProgressBySlot(bySlot);
+    if (refreshInFlightRef.current) {
+      return refreshInFlightRef.current;
+    }
+
+    const promise = (async () => {
+      const uid = await getSessionUserId();
+      if (!uid || !Object.keys(examenIdBySlot).length) return;
+      const { bySlot } = await fetchB2PuntuacionesProgress(supabase, {
+        userId: uid,
+        examenIdBySlot,
+        partMin,
+        partMax,
+        partsInPaper,
+        scoreSource,
+      });
+      setProgressBySlot(bySlot);
+    })();
+
+    refreshInFlightRef.current = promise;
+    try {
+      await promise;
+    } finally {
+      if (refreshInFlightRef.current === promise) {
+        refreshInFlightRef.current = null;
+      }
+    }
   }, [examenIdBySlot, partMin, partMax, partsInPaper, scoreSource]);
 
-  const reloadExamCatalog = useCallback(async () => {
+  const loadExamCatalog = useCallback(async ({ invalidate = false } = {}) => {
     const { data: levelData } = await getCachedLevelBySlug(supabase, slug);
     if (!levelData?.id) return;
-    invalidateLevelExamCache(levelData.id);
+    if (invalidate) invalidateLevelExamCache(levelData.id);
     const idsBySlot = await getCachedExamenIdsBySlot(supabase, levelData.id);
     setExamenIdBySlot(idsBySlot);
   }, [slug]);
 
+  const reloadExamCatalog = useCallback(async () => {
+    await loadExamCatalog({ invalidate: true });
+  }, [loadExamCatalog]);
+
   useEffect(() => {
-    void reloadExamCatalog();
-  }, [reloadExamCatalog]);
+    void loadExamCatalog();
+  }, [loadExamCatalog]);
 
   const handleSelectExam = useCallback((selectExamSlot, slot) => {
     selectExamSlot(slot);

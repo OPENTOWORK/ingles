@@ -26,6 +26,35 @@ export const correctionCriterionSchema = z.object({
   errors: z.array(speakingErrorItemSchema),
 });
 
+export const b2SpeakingCriterionSchema = z.object({
+  key: z.enum([
+    'grammar_vocabulary',
+    'discourse_management',
+    'pronunciation',
+    'interactive_communication',
+    'global_achievement',
+  ]),
+  label: z.string(),
+  score: z.number().min(0).max(5),
+  max: z.literal(5),
+  multiplier: z.number(),
+});
+
+export const b2SpeakingScoreReportSchema = z.object({
+  criteria: z.array(b2SpeakingCriterionSchema).length(5),
+  total: z.number().min(0).max(60),
+  maxTotal: z.literal(60),
+  estimatedLevel: z.string(),
+  partFeedback: z
+    .array(
+      z.object({
+        part: z.string(),
+        note: z.string(),
+      }),
+    )
+    .optional(),
+});
+
 export const correctionReportSchema = z.object({
   criteria: z.array(correctionCriterionSchema).length(5),
   correctedVersion: z.string(),
@@ -36,6 +65,9 @@ export const correctionReportSchema = z.object({
     feedback: z.string(),
     isEstimated: z.boolean(),
   }),
+  b2Speaking: b2SpeakingScoreReportSchema.optional(),
 });
+
+export type B2SpeakingScoreReportPayload = z.infer<typeof b2SpeakingScoreReportSchema>;
 
 export type CorrectionReportPayload = z.infer<typeof correctionReportSchema>;

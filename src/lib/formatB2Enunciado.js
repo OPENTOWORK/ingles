@@ -235,17 +235,45 @@ export function buildB2EnunciadoFromGenerated(gen = {}, partNumber) {
 
   if (pn >= 14 && pn <= 17) {
     if (g.directions) pushLines(lines, g.directions);
+    if (g.durationNote) lines.push(g.durationNote);
     if (g.taskTitle) lines.push(g.taskTitle);
     if (g.instructions) pushLines(lines, g.instructions);
     lines.push('');
-    lines.push('Assessment criteria: Fluency · Grammar and Vocabulary · Pronunciation · Interactive Communication · Global Achievement');
-    lines.push('Typed speaking practice — write your response if you are not recording audio.');
+    if (g.centralQuestion) {
+      lines.push('Central question');
+      lines.push(g.centralQuestion);
+      lines.push('');
+    }
     if (g.comparePrompt) lines.push(g.comparePrompt);
     if (g.theme) lines.push(`Theme: ${g.theme}`);
+    if (g.photoA) lines.push(`Photo A: ${g.photoA}`);
+    if (g.photoB) lines.push(`Photo B: ${g.photoB}`);
+    if (g.partnerFollowUpQuestion) {
+      lines.push('');
+      lines.push('Partner follow-up (about 30 seconds)');
+      lines.push(g.partnerFollowUpQuestion);
+    }
+    if (g.collaborativePrompts?.length) {
+      lines.push('');
+      lines.push('Task prompts');
+      for (const p of g.collaborativePrompts) lines.push(`• ${p}`);
+    }
+    if (g.decisionQuestion) {
+      lines.push('');
+      lines.push('Decision question');
+      lines.push(g.decisionQuestion);
+    }
+    if (g.part3ThemeLink) {
+      lines.push('');
+      lines.push(g.part3ThemeLink);
+    }
     for (const p of g.speakingPrompts) lines.push(p);
-    for (const p of g.collaborativePrompts) lines.push(p);
     for (const p of g.discussionQuestions) lines.push(p);
     for (const b of g.bulletPoints) lines.push(`• ${b}`);
+    if (g.followUpGuidance) {
+      lines.push('');
+      lines.push(g.followUpGuidance);
+    }
     return lines.join('\n').trim();
   }
 

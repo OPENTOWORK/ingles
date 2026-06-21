@@ -65,6 +65,8 @@ export async function recordPartPracticeSessionTime({
       lastExamSlot: examSlot ?? null,
       lastScoreLabel: historyEntry.scoreLabel,
       lastScoreSource: historyEntry.scoreSource,
+      levelSlug: String(levelSlug || 'b2').toLowerCase(),
+      sectionTitle: historyEntry.sectionTitle,
       updatedAt: new Date().toISOString(),
     },
   };

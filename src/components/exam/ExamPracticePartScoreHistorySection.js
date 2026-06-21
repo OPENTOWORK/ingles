@@ -1,30 +1,34 @@
 'use client';
 
-import { collectPartScoresAcrossSlots } from '@/lib/examPracticePartScoreHistory';
+import Link from 'next/link';
+import {
+  collectPartScoresAcrossSlots,
+  getSkillPartExerciseHref,
+} from '@/lib/examPracticePartScoreHistory';
 
 /**
- * Recent saved scores for the active part (all exam variants).
+ * Lowest saved scores for the active part (skill-practice exercise variants).
  */
 export default function ExamPracticePartScoreHistorySection({
   partNumber,
   examSlot,
   progressBySlot = {},
-  examLabelsBySlot = {},
-  passing = null,
+  slug = 'b2',
+  skillRoute = null,
   lang = 'en',
 }) {
   const en = lang === 'en';
   const entries = collectPartScoresAcrossSlots(progressBySlot, partNumber, {
     examSlot,
-    examLabelsBySlot,
+    lang,
   });
 
   const labels = {
     heading: en ? 'Recent scores for this part' : 'Últimas notas de esta parte',
     empty: en ? 'No saved scores for this part yet.' : 'Aún no hay notas guardadas para esta parte.',
-    current: en ? 'Current test' : 'Examen actual',
     passed: en ? 'Passed' : 'Aprobada',
     notPassed: en ? 'Not passed' : 'No aprobada',
+    openExercise: en ? 'Open exercise' : 'Abrir ejercicio',
   };
 
   return (
@@ -34,34 +38,48 @@ export default function ExamPracticePartScoreHistorySection({
         <p className="levels-listening-strategy__muted">{labels.empty}</p>
       ) : (
         <ul className="levels-listening-strategy__progress-list">
-          {entries.map((entry) => (
-            <li
-              key={entry.slot}
-              className={`levels-listening-strategy__progress-item${
-                entry.isCurrent ? ' levels-listening-strategy__progress-item--current' : ''
-              }`}
-            >
-              <span className="levels-listening-strategy__progress-part">
-                {entry.label}
-                {entry.isCurrent ? ` · ${labels.current}` : ''}
-              </span>
-              <span
-                className={
-                  entry.passed
-                    ? 'levels-listening-strategy__progress-score levels-listening-strategy__progress-score--pass'
-                    : 'levels-listening-strategy__progress-score'
-                }
-              >
-                {entry.correct}/{entry.total}
-                {entry.passed ? ` · ${labels.passed}` : ` · ${labels.notPassed}`}
-                {passing != null && !entry.passed
-                  ? en
-                    ? ` (need ${passing})`
-                    : ` (necesitas ${passing})`
-                  : ''}
-              </span>
-            </li>
-          ))}
+          {entries.map((entry) => {
+            const href = getSkillPartExerciseHref({
+              levelSlug: slug,
+              skillRoute,
+              partNumber,
+              examSlot: entry.slot,
+            });
+            const itemClassName = `levels-listening-strategy__progress-item${
+              entry.isCurrent ? ' levels-listening-strategy__progress-item--current' : ''
+            }`;
+            const content = (
+              <>
+                <span className="levels-listening-strategy__progress-part">{entry.label}</span>
+                <span
+                  className={
+                    entry.passed
+                      ? 'levels-listening-strategy__progress-score levels-listening-strategy__progress-score--pass'
+                      : 'levels-listening-strategy__progress-score levels-listening-strategy__progress-score--fail'
+                  }
+                >
+                  {entry.correct}/{entry.total}
+                  {entry.passed ? ` · ${labels.passed}` : ` · ${labels.notPassed}`}
+                </span>
+              </>
+            );
+
+            return (
+              <li key={entry.slot}>
+                {href ? (
+                  <Link
+                    href={href}
+                    className={`${itemClassName} levels-listening-strategy__progress-item--link`}
+                    aria-label={`${entry.label}. ${labels.openExercise}.`}
+                  >
+                    {content}
+                  </Link>
+                ) : (
+                  <div className={itemClassName}>{content}</div>
+                )}
+              </li>
+            );
+          })}
         </ul>
       )}
     </section>

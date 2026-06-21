@@ -17,6 +17,7 @@ import {
   getBestPartStars,
   getExerciseScore,
   getExerciseStars,
+  isExerciseSlotUnlocked,
 } from '@/utils/b2StarsWayProgress';
 import styles from './StarsWayToB2Section.module.css';
 
@@ -67,7 +68,16 @@ function PathConnector({ from, to }) {
   );
 }
 
-function ExerciseNode({ exerciseIndex, examSlot, part, column, progressBySlot, align, isFocused = false }) {
+function ExerciseNode({
+  exerciseIndex,
+  examSlot,
+  part,
+  column,
+  progressBySlot,
+  availableSlots,
+  align,
+  isFocused = false,
+}) {
   const score = getExerciseScore(progressBySlot, part.globalPartNumber, examSlot);
   const stars = getExerciseStars(progressBySlot, part.globalPartNumber, examSlot);
   const attempted = Boolean(score?.total);
@@ -75,37 +85,69 @@ function ExerciseNode({ exerciseIndex, examSlot, part, column, progressBySlot, a
   const perfect = stars >= 3;
   const started = attempted && !perfect;
   const focusId = getB2StarsWayExerciseFocusId(part.globalPartNumber, examSlot);
+  const sequentialLocked = !isExerciseSlotUnlocked(
+    progressBySlot,
+    part.globalPartNumber,
+    examSlot,
+    availableSlots,
+  );
+
+  const nodeClassName = [
+    styles.exerciseNode,
+    perfect ? styles.exerciseNodePerfect : '',
+    started ? styles.exerciseNodeStarted : '',
+    !attempted && !sequentialLocked ? styles.exerciseNodeLocked : '',
+    sequentialLocked ? styles.exerciseNodeBlocked : '',
+    isFocused ? styles.exerciseNodeFocused : '',
+  ]
+    .filter(Boolean)
+    .join(' ');
+
+  const nodeBody = (
+    <>
+      <span className={styles.exerciseNodeCircle}>
+        <span className={styles.exerciseNodeNumber}>{exerciseIndex}</span>
+      </span>
+      <span className={styles.exerciseNodeLabel}>Exercise {exerciseIndex}</span>
+      <TheoryLevelStars stars={stars} size="sm" variant="gold" />
+      <span className={styles.exerciseNodeScore}>
+        {sequentialLocked ? (
+          'Locked'
+        ) : attempted ? (
+          <>
+            {score.correct}/{score.total}
+            {score.passed ? ' ✓' : ''}
+          </>
+        ) : (
+          'Not tried'
+        )}
+      </span>
+    </>
+  );
 
   return (
     <div className={`${styles.pathSegment} ${styles[`pathSegmentAlign${align.charAt(0).toUpperCase()}${align.slice(1)}`]}`}>
-      <Link
-        id={focusId}
-        href={href}
-        className={`${styles.exerciseNode}${perfect ? ` ${styles.exerciseNodePerfect}` : ''}${
-          started ? ` ${styles.exerciseNodeStarted}` : ''
-        }${!attempted ? ` ${styles.exerciseNodeLocked}` : ''}${
-          isFocused ? ` ${styles.exerciseNodeFocused}` : ''
-        }`}
-        aria-label={`Exercise ${exerciseIndex}, ${stars} of 3 stars${
-          attempted ? `, score ${score.correct} of ${score.total}` : ', not tried yet'
-        }`}
-      >
-        <span className={styles.exerciseNodeCircle}>
-          <span className={styles.exerciseNodeNumber}>{exerciseIndex}</span>
-        </span>
-        <span className={styles.exerciseNodeLabel}>Exercise {exerciseIndex}</span>
-        <TheoryLevelStars stars={stars} size="sm" variant="gold" />
-        <span className={styles.exerciseNodeScore}>
-          {attempted ? (
-            <>
-              {score.correct}/{score.total}
-              {score.passed ? ' ✓' : ''}
-            </>
-          ) : (
-            'Not tried'
-          )}
-        </span>
-      </Link>
+      {sequentialLocked ? (
+        <div
+          id={focusId}
+          className={nodeClassName}
+          aria-label={`Exercise ${exerciseIndex} locked. Earn at least 1 star on the previous exercise to unlock.`}
+          aria-disabled="true"
+        >
+          {nodeBody}
+        </div>
+      ) : (
+        <Link
+          id={focusId}
+          href={href}
+          className={nodeClassName}
+          aria-label={`Exercise ${exerciseIndex}, ${stars} of 3 stars${
+            attempted ? `, score ${score.correct} of ${score.total}` : ', not tried yet'
+          }`}
+        >
+          {nodeBody}
+        </Link>
+      )}
     </div>
   );
 }
@@ -177,6 +219,7 @@ function SkillPath({ column, parts, progressBySlot, availableSlots, focusPart = 
                   part={item.part}
                   column={column}
                   progressBySlot={progressBySlot}
+                  availableSlots={availableSlots}
                   align={align}
                   isFocused={isFocused}
                 />

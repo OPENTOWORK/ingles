@@ -22,6 +22,7 @@ import {
 } from '@/lib/levelsExamPersist';
 import { validateGeneratedExamPart } from '@/lib/examPartValidation';
 import { logExamGeneration } from '@/lib/examGenerationLog';
+import { getExamPartDisplayLabel } from '@/lib/examPartDisplayLabel';
 import { getB2ListeningAudioTargets } from '@/lib/b2ListeningAudioTargets';
 
 const EXAM_THEMES = [
@@ -166,12 +167,122 @@ function normalizeGenerated(gen, partNumber) {
     speakingPrompts: Array.isArray(gen.speakingPrompts)
       ? gen.speakingPrompts
       : Object.values(gen.speakingPrompts || {}),
+    collaborativePrompts: Array.isArray(gen.collaborativePrompts)
+      ? gen.collaborativePrompts
+      : Object.values(gen.collaborativePrompts || {}),
+    discussionQuestions: Array.isArray(gen.discussionQuestions)
+      ? gen.discussionQuestions
+      : Object.values(gen.discussionQuestions || {}),
     bulletPoints: Array.isArray(gen.bulletPoints) ? gen.bulletPoints : Object.values(gen.bulletPoints || {}),
     partNumber,
   };
 }
 
+const B2_LONG_TURN_EXAM1_PHOTOS = {
+  theme: 'Studying',
+  photoA: 'Students studying together in a library',
+  photoB: 'A student studying alone at home',
+  comparePrompt:
+    'Compare the two photographs. Say what you see and why the people might prefer each way of studying.',
+};
+
+const B2_SPEAKING_JSON_RULES = `
+Return ONLY valid JSON (no markdown). All student-facing task text in English.
+Do NOT include modelAnswers, scoring rubrics, or examiner mark sheets.
+Cambridge B2 First Speaking lasts about 14 minutes with 4 parts (normally two candidates).
+Cambridge does NOT award a separate mark per part — performance is assessed across all four parts.`;
+
+function buildB2SpeakingPrompt(partDef, options) {
+  const topic = options.topic || 'everyday life';
+  const seed = options.varietySeed ?? Date.now();
+  const examSlot = Number(options.examSlot) || 1;
+  const meta = `Cambridge B2 First Speaking — Exam set ${examSlot}. Theme: ${topic}. Variety seed: ${seed}.`;
+
+  if (partDef.activity === 'interview') {
+    return `Create B2 First Speaking Part 1 (Interview, about 2 minutes).
+${meta}
+${B2_SPEAKING_JSON_RULES}
+The examiner asks brief personal questions to each candidate (studies, work, free time, travel, plans).
+Generate exactly 3–4 short independent interview questions at B2 level.
+Include guidance for short answers: the examiner may follow up with "Why?", "Why not?" or "Tell me more."
+Return ONLY JSON with keys:
+- partTitle (string)
+- directions (official-style instructions for candidates)
+- durationNote (string, e.g. "About 2 minutes")
+- speakingPrompts (array of exactly 3–4 strings)
+- followUpGuidance (string)
+- followUpExamples (array of 2–3 strings)`;
+  }
+
+  if (partDef.activity === 'long-turn') {
+    const photoContext =
+      examSlot === 1
+        ? `Use these fixed photographs for Exam 1:
+- Photo A: ${B2_LONG_TURN_EXAM1_PHOTOS.photoA}
+- Photo B: ${B2_LONG_TURN_EXAM1_PHOTOS.photoB}
+- Theme: ${B2_LONG_TURN_EXAM1_PHOTOS.theme}
+- Compare prompt must match: "${B2_LONG_TURN_EXAM1_PHOTOS.comparePrompt}"`
+        : `Create two original, related contrasting photographs on theme "${topic}".`;
+
+    return `Create B2 First Speaking Part 2 (Long turn, about 4 minutes total for both candidates).
+${meta}
+${B2_SPEAKING_JSON_RULES}
+Each candidate compares two photographs for about 1 minute. The other candidate then answers a related question for about 30 seconds.
+${photoContext}
+Return ONLY JSON with keys:
+- partTitle
+- directions
+- durationNote
+- theme (string)
+- comparePrompt (one comparative question for the 1-minute long turn)
+- photoA (detailed original scene description for photograph A)
+- photoB (detailed original scene description for photograph B)
+- partnerFollowUpQuestion (short question for the other candidate, ~30 seconds)
+- discourseFocusNote (string: assess Discourse Management — organisation, relevance, development)`;
+  }
+
+  if (partDef.activity === 'collaborative') {
+    return `Create B2 First Speaking Part 3 (Collaborative task, about 4 minutes).
+${meta}
+${B2_SPEAKING_JSON_RULES}
+Candidates receive a central question and exactly 5 written idea prompts. They have 15 seconds to read, discuss for about 2 minutes, then decide in about 1 minute.
+In solo practice the AI plays the partner candidate.
+Return ONLY JSON with keys:
+- partTitle
+- directions (include 15-second reading time, ~2 min discussion, ~1 min decision)
+- durationNote
+- centralQuestion (main situational question)
+- collaborativePrompts (array of EXACTLY 5 idea prompts on the task sheet)
+- setting (brief context)
+- decisionQuestion (final question to reach one decision)
+- interactiveFocusNote (string: assess Interactive Communication — turn-taking, inviting, responding)`;
+  }
+
+  if (partDef.activity === 'discussion') {
+    return `Create B2 First Speaking Part 4 (Discussion, about 4 minutes).
+${meta}
+${B2_SPEAKING_JSON_RULES}
+Deeper discussion on the Part 3 theme. Examiner asks opinion, justification, agreement and disagreement questions.
+Return ONLY JSON with keys:
+- partTitle
+- directions
+- durationNote
+- part3ThemeLink (string linking back to the Part 3 collaborative theme)
+- discussionQuestions (array of 4–6 open questions)
+- dynamicFollowUpGuidance (string: examiner may ask Why?, Do you agree?, What about…?)`;
+  }
+
+  return `Create B2 First Speaking task.
+${meta}
+${B2_SPEAKING_JSON_RULES}
+Return ONLY JSON with directions and appropriate prompts for activity "${partDef.activity}".`;
+}
+
 function buildSpeakingPrompt(levelLabel, partDef, options) {
+  if (levelLabel === 'B2' && partDef.mode === 'speaking') {
+    return buildB2SpeakingPrompt(partDef, options);
+  }
+
   const topic = options.topic || 'everyday life';
   const seed = options.varietySeed ?? Date.now();
   const examName = CAMBRIDGE_EXAM_NAMES[levelLabel] || levelLabel;
@@ -205,6 +316,24 @@ ${meta}`;
 Return ONLY JSON: directions, discussionQuestions (5–6 questions).
 Do NOT include modelAnswers.
 ${meta}`;
+}
+
+function isB2SpeakingPartComplete(gen, partDef) {
+  switch (partDef.activity) {
+    case 'interview':
+      return gen.speakingPrompts?.length >= 3 && gen.speakingPrompts?.length <= 5;
+    case 'long-turn':
+      return Boolean(gen.comparePrompt && gen.photoA && gen.photoB && gen.partnerFollowUpQuestion);
+    case 'collaborative':
+      return (
+        gen.collaborativePrompts?.length === 5 &&
+        Boolean(gen.centralQuestion && gen.decisionQuestion)
+      );
+    case 'discussion':
+      return gen.discussionQuestions?.length >= 4 && gen.discussionQuestions?.length <= 6;
+    default:
+      return false;
+  }
 }
 
 function buildWritingPrompt(levelLabel, partDef, options) {
@@ -281,6 +410,9 @@ function isPartComplete(gen, partDef) {
   const q = gen.questions || [];
   const ma = gen.modelAnswers || [];
   if (partDef.mode === 'speaking') {
+    if (partDef.partNumber >= 14 && partDef.partNumber <= 17) {
+      return isB2SpeakingPartComplete(gen, partDef);
+    }
     return (
       (gen.speakingPrompts?.length ||
         gen.discussionQuestions?.length ||

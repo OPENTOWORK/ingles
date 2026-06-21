@@ -101,10 +101,17 @@ function getActivitySubtitle(activity, lang = 'en') {
   return key.replace(/-/g, ' ').replace(/\b\w/g, (char) => char.toUpperCase());
 }
 
-function getB2SkillPartHeading(partNumber, mode, lang = 'en') {
+function getB2SkillPartHeading(partNumber, mode, lang = 'en', examSlot = null) {
   const pn = Number(partNumber);
   const en = lang === 'en';
-  if (mode === 'use-of-english') return en ? `UOE Part ${pn}` : `UOE Parte ${pn}`;
+  if (mode === 'use-of-english') {
+    const label = en ? 'Use of English' : 'Uso de inglés';
+    const slot = Number(examSlot);
+    if (Number.isFinite(slot) && slot > 0) {
+      return en ? `${label} - Exercise ${slot}` : `${label} - Ejercicio ${slot}`;
+    }
+    return en ? `${label} - Part ${pn}` : `${label} - Parte ${pn}`;
+  }
   if (mode === 'reading') return en ? `Reading Part ${pn}` : `Reading Parte ${pn}`;
   if (mode === 'writing') {
     const local = pn - 7;
@@ -129,7 +136,7 @@ function normalizePracticeHeading(heading) {
  * Título de práctica en dos líneas: categoría (UOE Part 1) + tipo de tarea (Multiple-choice cloze).
  * @returns {{ heading: string, subtitle: string }}
  */
-export function getSkillPartPracticeTitle(slug = 'b2', partNumber, lang = 'en') {
+export function getSkillPartPracticeTitle(slug = 'b2', partNumber, lang = 'en', examSlot = null) {
   const pn = Number(partNumber);
   if (!Number.isFinite(pn) || pn <= 0) return { heading: '', subtitle: '' };
 
@@ -138,7 +145,7 @@ export function getSkillPartPracticeTitle(slug = 'b2', partNumber, lang = 'en') 
     const def = getB2PartDef(pn);
     if (def) {
       return {
-        heading: getB2SkillPartHeading(pn, def.mode, lang),
+        heading: getB2SkillPartHeading(pn, def.mode, lang, examSlot),
         subtitle: getActivitySubtitle(def.activity, lang),
       };
     }

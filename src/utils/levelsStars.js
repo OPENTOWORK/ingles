@@ -15,9 +15,37 @@ function isSchemaCacheColumnError(error) {
     msg.includes('schema cache') ||
     msg.includes('could not find') ||
     msg.includes('does not exist') ||
+    msg.includes('levels_stars') ||
     code === 'PGRST204' ||
+    code === 'PGRST205' ||
     code === '42703'
   );
+}
+
+async function saveLevelStarsViaApi({ puntuacionesId, stars, scoreSource, descripcion }) {
+  const { data: sessionData } = await supabase.auth.getSession();
+  const token = sessionData?.session?.access_token;
+  if (!token) {
+    return { error: new Error('Inicia sesión para guardar estrellas.'), saved: false };
+  }
+
+  try {
+    const res = await fetch('/api/levels/save-star', {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${token}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ puntuacionesId, stars, scoreSource, descripcion }),
+    });
+    const payload = await res.json().catch(() => ({}));
+    if (!res.ok) {
+      return { error: new Error(payload?.error || `Error al guardar estrellas (${res.status})`), saved: false };
+    }
+    return { error: null, saved: true, updated: Boolean(payload?.updated), created: Boolean(payload?.created) };
+  } catch (e) {
+    return { error: e, saved: false };
+  }
 }
 
 /**
@@ -104,6 +132,14 @@ export async function saveLevelStars({
   ({ data: existing, error: findErr } = await tryFindExisting(true));
 
   if (findErr && isSchemaCacheColumnError(findErr)) {
+    const apiRes = await saveLevelStarsViaApi({
+      puntuacionesId,
+      stars: value,
+      scoreSource,
+      descripcion: desc,
+    });
+    if (apiRes.saved) return apiRes;
+
     ({ data: existing, error: findErr } = await tryFindExisting(false));
   }
 
@@ -132,6 +168,15 @@ export async function saveLevelStars({
   }
 
   if (writeRes.error) {
+    if (isSchemaCacheColumnError(writeRes.error)) {
+      const apiRes = await saveLevelStarsViaApi({
+        puntuacionesId,
+        stars: value,
+        scoreSource,
+        descripcion: desc,
+      });
+      if (apiRes.saved) return apiRes;
+    }
     console.warn('[saveLevelStars] write failed:', writeRes.error.message);
     return { error: writeRes.error, saved: false };
   }

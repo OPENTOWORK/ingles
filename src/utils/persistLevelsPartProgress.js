@@ -133,9 +133,14 @@ export async function persistLevelsPartProgress({
     }
   }
 
-  if (puntRes.error || estRes.error || starsRes.error) {
-    return { saved: false, error: puntRes.error || estRes.error || starsRes.error };
+  if (puntRes.error || estRes.error) {
+    return { saved: false, error: puntRes.error || estRes.error };
   }
 
-  return { saved: true, error: null, starsSaved: Boolean(starsRes.saved) };
+  return {
+    saved: true,
+    error: null,
+    starsSaved: Boolean(starsRes.saved),
+    starsWarning: starsRes.error || null,
+  };
 }

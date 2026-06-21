@@ -1,4 +1,5 @@
 import { starsFromPartExerciseScore } from '@/utils/skillPartFirstProgress';
+import { getSortedExamSlots } from '@/utils/skillPracticeNavigation';
 
 /** Best star rating (0–3) for a part across all exam slots. */
 export function getBestPartStars(progressBySlot = {}, partNumber, slots = []) {
@@ -39,4 +40,21 @@ export function getExerciseStars(progressBySlot = {}, partNumber, slot) {
 
 export function getExerciseScore(progressBySlot = {}, partNumber, slot) {
   return progressBySlot[slot]?.parts?.[partNumber] ?? null;
+}
+
+/** Exercise 1 is always open; later slots need ≥1 star on the previous exercise in the part. */
+export function isExerciseSlotUnlocked(
+  progressBySlot = {},
+  partNumber,
+  examSlot,
+  examenIdBySlotOrSlots = {},
+) {
+  const slots = Array.isArray(examenIdBySlotOrSlots)
+    ? [...examenIdBySlotOrSlots].sort((a, b) => a - b)
+    : getSortedExamSlots(examenIdBySlotOrSlots);
+  const slot = Number(examSlot);
+  const idx = slots.indexOf(slot);
+  if (idx <= 0) return true;
+  const prevSlot = slots[idx - 1];
+  return getExerciseStars(progressBySlot, partNumber, prevSlot) >= 1;
 }

@@ -299,6 +299,32 @@ export function omitExampleEnunciadoBlocks(blocks = []) {
   return result;
 }
 
+/** Oculta preguntas del examinador en instrucciones Speaking (se preguntan en vivo con Play). */
+export function omitSpeakingExaminerQuestionBlocks(blocks = [], partNumber = 0) {
+  if (!blocks?.length) return [];
+  const pn = Number(partNumber);
+  if (pn < 14 || pn > 17) return blocks;
+
+  if (pn === 14 || pn === 17) {
+    return blocks.filter((block) => !/\?\s*$/.test(String(block.text || '').trim()));
+  }
+
+  if (pn === 15) {
+    return blocks.filter((block) => {
+      const text = String(block.text || '').trim();
+      const lower = text.toLowerCase();
+      if (/^compare the two photographs/i.test(text)) return false;
+      if (/^theme:/i.test(lower)) return false;
+      if (/^photo [ab]:/i.test(text)) return false;
+      if (/partner follow-up/i.test(lower)) return false;
+      if (/\?\s*$/.test(text)) return false;
+      return true;
+    });
+  }
+
+  return blocks;
+}
+
 /**
  * Ejemplo inline para partes 2–3 en skill practice (fuera de Directions).
  * @returns {{ bodyLines: string[], answerLine: string, sentence: string, cleanedTexto?: string } | null}

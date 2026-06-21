@@ -7,6 +7,7 @@ import { parseUoePartDescripcion } from '@/utils/levelsPuntuaciones';
 import { inferSectionTitleFromPart } from '@/data/levelExamPartMap';
 import { getSkillPartPracticeTitle } from '@/utils/formatLevelsPartDisplayName';
 import { scoreSourceModeLabel } from '@/utils/partSessionSaveHelpers';
+import { formatSkillExerciseLabel } from '@/utils/skillPartFirstProgress';
 
 const LEVEL_ORDER = ['a2', 'b1', 'b2', 'c1', 'c2'];
 
@@ -102,6 +103,88 @@ function buildModeSummary(entries, budgetSeconds) {
   };
 }
 
+function buildExerciseComparisons({
+  partNumber,
+  scoreSource,
+  examComparisons = [],
+  puntuacionesRows = [],
+  examenIdBySlot = {},
+}) {
+  const examenIdToSlot = Object.entries(examenIdBySlot || {}).reduce((acc, [slot, id]) => {
+    if (id) acc[id] = Number(slot);
+    return acc;
+  }, {});
+
+  const scoreBySlot = new Map();
+  for (const row of puntuacionesRows || []) {
+    const meta = parseUoePartDescripcion(row.descripcion);
+    const rowSource = row.score_source || meta?.scoreSource || LEVELS_SCORE_SOURCE.SKILL_PRACTICE;
+    if (rowSource !== scoreSource) continue;
+
+    const examenId = row.examen_id || meta?.examenId;
+    const pn = Number(row.parte_numero ?? meta?.parteNumero);
+    if (!examenId || pn !== partNumber) continue;
+
+    const slot = examenIdToSlot[examenId];
+    if (!slot) continue;
+
+    const scoringVersion = Number(row.scoring_version ?? meta?.scoringVersion) || 1;
+    const isV2 = scoringVersion === 2;
+    const correct = Math.max(
+      0,
+      Number(
+        isV2
+          ? row.puntos_obtenidos ?? meta?.puntosObtenidos
+          : row.correctas ?? meta?.correctas,
+      ) || 0,
+    );
+    const total = Math.max(
+      1,
+      Number(
+        isV2
+          ? row.puntos_maximos ?? meta?.puntosMaximos
+          : row.total_preguntas ?? meta?.total,
+      ) || 0,
+    );
+
+    const existing = scoreBySlot.get(slot);
+    const createdAt = row.created_at ? new Date(row.created_at).getTime() : 0;
+    const existingAt = existing?.createdAt ?? 0;
+    if (existing && existingAt >= createdAt) continue;
+
+    scoreBySlot.set(slot, {
+      correct,
+      total,
+      passed: row.aprobado === true || meta?.aprobado === true,
+      scoreLabel: `${correct}/${total}`,
+      createdAt,
+    });
+  }
+
+  const timeBySlot = new Map();
+  for (const exam of examComparisons) {
+    const slot = Number(exam.examSlot);
+    if (!Number.isFinite(slot) || slot < 1) continue;
+    timeBySlot.set(slot, exam);
+  }
+
+  const slotNumbers = new Set([...scoreBySlot.keys(), ...timeBySlot.keys()]);
+
+  return [...slotNumbers]
+    .sort((a, b) => a - b)
+    .map((slot) => {
+      const time = timeBySlot.get(slot);
+      const score = scoreBySlot.get(slot);
+      return {
+        examSlot: slot,
+        exerciseLabel: formatSkillExerciseLabel(slot, 'en'),
+        scoreLabel: score?.scoreLabel ?? null,
+        passed: score?.passed ?? null,
+        elapsedLabel: time?.elapsedLabel ?? null,
+      };
+    });
+}
+
 function enrichEntryFromPuntuaciones(entry, puntuacionesRows = []) {
   if (entry.scoreLabel) return entry;
 
@@ -150,7 +233,7 @@ function enrichEntryFromPuntuaciones(entry, puntuacionesRows = []) {
  */
 export function buildPracticePerformanceSummary(
   estadisticasRows = [],
-  { puntuacionesRows = [] } = {},
+  { puntuacionesRows = [], examenIdsByLevel = {} } = {},
 ) {
   const entriesByKey = new Map();
 
@@ -167,6 +250,34 @@ export function buildPracticePerformanceSummary(
       const enriched = enrichEntryFromPuntuaciones(entry, puntuacionesRows);
       const key = `${sessionGroupKey(enriched)}:${enriched.recordedAt}:${enriched.examSlot}`;
       entriesByKey.set(key, enriched);
+    }
+
+    const partTimesByPart =
+      metadata.partTimesByPart && typeof metadata.partTimesByPart === 'object'
+        ? metadata.partTimesByPart
+        : null;
+    if (partTimesByPart) {
+      for (const [partKey, summary] of Object.entries(partTimesByPart)) {
+        const partNumber = Number(partKey);
+        const seconds = Math.round(Number(summary?.lastSeconds) || 0);
+        if (!partNumber || seconds < 1) continue;
+        const levelSlug = String(summary?.levelSlug || metadata.levelSlug || 'b2').toLowerCase();
+        const entry = normalizeHistoryEntry({
+          partNumber,
+          seconds,
+          levelSlug,
+          examSlot: summary?.lastExamSlot ?? null,
+          scoreSource: summary?.lastScoreSource ?? null,
+          scoreLabel: summary?.lastScoreLabel ?? null,
+          recordedAt: summary?.updatedAt || null,
+          preguntaId: row.pregunta_id || null,
+          sectionTitle: inferSectionTitleFromPart(levelSlug, partNumber),
+        });
+        if (!entry) continue;
+        const enriched = enrichEntryFromPuntuaciones(entry, puntuacionesRows);
+        const key = `${sessionGroupKey(enriched)}:${enriched.recordedAt}:${enriched.examSlot}:fallback`;
+        if (!entriesByKey.has(key)) entriesByKey.set(key, enriched);
+      }
     }
   }
 
@@ -198,7 +309,17 @@ export function buildPracticePerformanceSummary(
             .map((scoreSource) => {
               const entries = partMap.get(scoreSource) || [];
               if (!entries.length) return null;
-              return buildModeSummary(entries, budgetSeconds);
+              const mode = buildModeSummary(entries, budgetSeconds);
+              return {
+                ...mode,
+                exerciseComparisons: buildExerciseComparisons({
+                  partNumber,
+                  scoreSource,
+                  examComparisons: mode.examComparisons,
+                  puntuacionesRows,
+                  examenIdBySlot: examenIdsByLevel[levelSlug] || {},
+                }),
+              };
             })
             .filter(Boolean),
         }))

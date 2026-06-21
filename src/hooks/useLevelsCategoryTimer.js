@@ -1,6 +1,6 @@
 'use client';
 
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 
 export function formatElapsedLevelsTimer(totalSeconds) {
   const s = Math.max(0, Math.floor(totalSeconds));
@@ -17,6 +17,11 @@ export function formatElapsedLevelsTimer(totalSeconds) {
 export function useLevelsCategoryTimer({ autoStart = true } = {}) {
   const [seconds, setSeconds] = useState(0);
   const [status, setStatus] = useState(autoStart ? 'running' : 'idle');
+  const secondsRef = useRef(0);
+
+  useEffect(() => {
+    secondsRef.current = seconds;
+  }, [seconds]);
 
   useEffect(() => {
     if (status !== 'running') return undefined;
@@ -40,16 +45,18 @@ export function useLevelsCategoryTimer({ autoStart = true } = {}) {
 
   const stop = useCallback(() => {
     setStatus('stopped');
-    return seconds;
-  }, [seconds]);
+    return secondsRef.current;
+  }, []);
 
   const reset = useCallback(() => {
     setSeconds(0);
+    secondsRef.current = 0;
     setStatus('idle');
   }, []);
 
   return {
     seconds,
+    secondsRef,
     label: formatElapsedLevelsTimer(seconds),
     isRunning: status === 'running',
     isPaused: status === 'paused',

@@ -29,37 +29,58 @@ export function useB2ExamScoringSession({
   const lastSavedPartSigRef = useRef('');
   const currentExamenIdRef = useRef(null);
   const examenIdBySlotRef = useRef({});
+  const refreshInFlightRef = useRef(null);
 
   useEffect(() => {
     examenIdBySlotRef.current = examenIdBySlot;
   }, [examenIdBySlot]);
 
   const refreshPuntuacionesProgress = useCallback(async () => {
-    const uid = await getSessionUserId();
-    if (!uid || !Object.keys(examenIdBySlot).length) return;
-    const { bySlot } = await fetchB2PuntuacionesProgress(supabase, {
-      userId: uid,
-      examenIdBySlot,
-      partMin,
-      partMax,
-      partsInPaper,
-      scoreSource,
-    });
-    setProgressBySlot(bySlot);
+    if (refreshInFlightRef.current) {
+      return refreshInFlightRef.current;
+    }
+
+    const promise = (async () => {
+      const uid = await getSessionUserId();
+      if (!uid || !Object.keys(examenIdBySlot).length) return {};
+      const { bySlot } = await fetchB2PuntuacionesProgress(supabase, {
+        userId: uid,
+        examenIdBySlot,
+        partMin,
+        partMax,
+        partsInPaper,
+        scoreSource,
+      });
+      setProgressBySlot(bySlot);
+      return bySlot;
+    })();
+
+    refreshInFlightRef.current = promise;
+    try {
+      return await promise;
+    } finally {
+      if (refreshInFlightRef.current === promise) {
+        refreshInFlightRef.current = null;
+      }
+    }
   }, [examenIdBySlot, partMin, partMax, partsInPaper, scoreSource]);
 
-  const reloadExamenCatalog = useCallback(async () => {
+  const loadExamenCatalog = useCallback(async ({ invalidate = false } = {}) => {
     const { data: levelData } = await getCachedB2Level(supabase);
     if (!levelData?.id) return;
-    invalidateLevelExamCache(levelData.id);
+    if (invalidate) invalidateLevelExamCache(levelData.id);
     const idsBySlot = await getCachedB2ExamenIdsBySlot(supabase, levelData.id);
     setExamenIdBySlot(idsBySlot);
     setB2LevelId(levelData.id);
   }, []);
 
+  const reloadExamenCatalog = useCallback(async () => {
+    await loadExamenCatalog({ invalidate: true });
+  }, [loadExamenCatalog]);
+
   useEffect(() => {
-    void reloadExamenCatalog();
-  }, [reloadExamenCatalog]);
+    void loadExamenCatalog();
+  }, [loadExamenCatalog]);
 
   useEffect(() => {
     if (!examPracticeOpen || !Object.keys(examenIdBySlot).length) return;
@@ -120,7 +141,7 @@ export function useB2ExamScoringSession({
         scoreSource,
       });
 
-      if (result.error) {
+      if (!result.saved && result.error) {
         setPartFinishNotice({
           error: result.error?.message || String(result.error),
         });

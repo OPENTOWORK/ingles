@@ -20,6 +20,8 @@ export default function ReadingPracticeSideRail({
   examSlot,
   progressBySlot,
   examLabelsBySlot,
+  slug = 'b2',
+  skillRoute = null,
   passing,
   topRail = null,
   finishNotice = null,
@@ -67,6 +69,8 @@ export default function ReadingPracticeSideRail({
           examSlot={examSlot}
           progressBySlot={progressBySlot}
           examLabelsBySlot={examLabelsBySlot}
+          slug={slug}
+          skillRoute={skillRoute}
           passing={passing}
           lang={lang}
         />

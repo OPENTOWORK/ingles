@@ -14,12 +14,44 @@ import {
   XAxis,
   YAxis,
 } from 'recharts';
+import { useReadingNightMode } from '@/hooks/useReadingNightMode';
 
 const BAR_GRADIENTS = {
   high: ['#22c55e', '#15803d'],
   mid: ['#60a5fa', '#2563eb'],
   low: ['#f87171', '#dc2626'],
   empty: ['#e2e8f0', '#cbd5e1'],
+};
+
+const BAR_GRADIENTS_NIGHT = {
+  high: ['#22c55e', '#15803d'],
+  mid: ['#60a5fa', '#2563eb'],
+  low: ['#f87171', '#dc2626'],
+  empty: ['#475569', '#334155'],
+};
+
+const CHART_COLORS_LIGHT = {
+  grid: '#e2e8f0',
+  refLine: '#94a3b8',
+  refLabel: '#64748b',
+  xTick: '#475569',
+  yTick: '#94a3b8',
+  axisLine: '#cbd5e1',
+  barLabel: '#334155',
+  cursor: 'rgba(15, 23, 42, 0.04)',
+  emptyBar: '#e2e8f0',
+};
+
+const CHART_COLORS_NIGHT = {
+  grid: '#334155',
+  refLine: '#64748b',
+  refLabel: '#94a3b8',
+  xTick: '#cbd5e1',
+  yTick: '#64748b',
+  axisLine: '#475569',
+  barLabel: '#e2e8f0',
+  cursor: 'rgba(248, 250, 252, 0.06)',
+  emptyBar: '#334155',
 };
 
 function scoreTone(score) {
@@ -70,25 +102,30 @@ function ChartTooltip({ active, payload, variant = 'skills' }) {
   );
 }
 
-function renderBarLabel(props) {
-  const { x, y, width, value, index, payload } = props;
-  if (payload?.scorePct == null || value <= 0) return null;
-  return (
-    <text
-      x={x + width / 2}
-      y={y - 6}
-      fill="#334155"
-      textAnchor="middle"
-      fontSize={10}
-      fontWeight={700}
-    >
-      {payload.scorePct}%
-    </text>
-  );
+function renderBarLabel(barLabelColor) {
+  return function BarLabel(props) {
+    const { x, y, width, value, payload } = props;
+    if (payload?.scorePct == null || value <= 0) return null;
+    return (
+      <text
+        x={x + width / 2}
+        y={y - 6}
+        fill={barLabelColor}
+        textAnchor="middle"
+        fontSize={10}
+        fontWeight={700}
+      >
+        {payload.scorePct}%
+      </text>
+    );
+  };
 }
 
 export default function LevelsStatsChartsCarousel({ charts = [], variant = 'skills' }) {
   const examMode = variant === 'exam-mode';
+  const isNight = useReadingNightMode();
+  const chartColors = isNight ? CHART_COLORS_NIGHT : CHART_COLORS_LIGHT;
+  const barGradients = isNight ? BAR_GRADIENTS_NIGHT : BAR_GRADIENTS;
   const slides = useMemo(() => charts || [], [charts]);
   const [index, setIndex] = useState(0);
 
@@ -280,7 +317,7 @@ export default function LevelsStatsChartsCarousel({ charts = [], variant = 'skil
                 <defs>
                   {chartData.map((entry, i) => {
                     const tone = scoreTone(entry.scorePct);
-                    const [c1, c2] = BAR_GRADIENTS[tone];
+                    const [c1, c2] = barGradients[tone];
                     return (
                       <linearGradient key={barFillId(entry, i)} id={barFillId(entry, i)} x1="0" y1="0" x2="0" y2="1">
                         <stop offset="0%" stopColor={c1} />
@@ -304,30 +341,30 @@ export default function LevelsStatsChartsCarousel({ charts = [], variant = 'skil
                 />
               ))}
 
-              <CartesianGrid strokeDasharray="4 4" vertical={false} stroke="#e2e8f0" />
+              <CartesianGrid strokeDasharray="4 4" vertical={false} stroke={chartColors.grid} />
               <ReferenceLine
                 y={60}
-                stroke="#94a3b8"
+                stroke={chartColors.refLine}
                 strokeDasharray="6 4"
                 label={{
                   value: 'Target 60%',
                   position: 'insideTopRight',
-                  fill: '#64748b',
+                  fill: chartColors.refLabel,
                   fontSize: 10,
                 }}
               />
               <XAxis
                 dataKey="partSort"
                 type="category"
-                tick={{ fontSize: 11, fill: '#475569', fontWeight: 600 }}
+                tick={{ fontSize: 11, fill: chartColors.xTick, fontWeight: 600 }}
                 interval={0}
-                axisLine={{ stroke: '#cbd5e1' }}
+                axisLine={{ stroke: chartColors.axisLine }}
                 tickLine={false}
                 tickFormatter={(v) => String(v)}
               />
               <YAxis
                 domain={[0, 100]}
-                tick={{ fontSize: 10, fill: '#94a3b8' }}
+                tick={{ fontSize: 10, fill: chartColors.yTick }}
                 tickFormatter={(v) => `${v}%`}
                 width={36}
                 axisLine={false}
@@ -335,15 +372,15 @@ export default function LevelsStatsChartsCarousel({ charts = [], variant = 'skil
               />
               <Tooltip
                 content={<ChartTooltip variant={variant} />}
-                cursor={{ fill: 'rgba(15, 23, 42, 0.04)' }}
+                cursor={{ fill: chartColors.cursor }}
               />
               <Bar dataKey="displayScore" radius={[8, 8, 4, 4]} maxBarSize={32}>
-                <LabelList dataKey="displayScore" content={renderBarLabel} />
+                <LabelList dataKey="displayScore" content={renderBarLabel(chartColors.barLabel)} />
                 {chartData.map((entry, i) => {
                   const fill = examMode
                     ? entry.hasScore
                       ? entry.zoneBarColor || '#64748b'
-                      : entry.zoneEmptyColor || '#e2e8f0'
+                      : entry.zoneEmptyColor || chartColors.emptyBar
                     : `url(#${barFillId(entry, i)})`;
                   return (
                     <Cell

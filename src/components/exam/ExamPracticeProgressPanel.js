@@ -22,6 +22,7 @@ export default function ExamPracticeProgressPanel({
   focusPartNumber = null,
   progressBySlot = null,
   examLabelsBySlot = {},
+  skillRoute = null,
   passing = null,
   lang = 'en',
   enabled = true,
@@ -86,8 +87,8 @@ export default function ExamPracticeProgressPanel({
                   partNumber={focusPartNumber}
                   examSlot={examSlot}
                   progressBySlot={progressBySlot}
-                  examLabelsBySlot={examLabelsBySlot}
-                  passing={passing}
+                  slug={slug}
+                  skillRoute={skillRoute}
                   lang={lang}
                 />
               ) : null}

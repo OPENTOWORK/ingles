@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 import { realLifeChatCompletion, isDraloOpenAIConfigured } from '@/lib/draloAiEngine';
-import { getSiteAssistantSystemPrompt } from '@/lib/siteHelpKnowledge';
+import { getSiteAssistantSystemPrompt, isSiteAssistantNavigationOnly } from '@/lib/siteHelpKnowledge';
 
 const WINDOW_MS = 60 * 60 * 1000;
 const MAX_PER_IP = 40;
@@ -73,12 +73,17 @@ export async function POST(req) {
   }
 
   const userRole = String(body?.userRole || 'student').slice(0, 32);
+  const navigationOnly = isSiteAssistantNavigationOnly(userRole);
 
   try {
+    const systemPrompt = navigationOnly
+      ? `${getSiteAssistantSystemPrompt(userRole)}\n\nRecuerda: si el último mensaje del usuario pide ayuda para estudiar o practicar inglés, redirige a la sección web correcta sin responder al contenido académico.`
+      : getSiteAssistantSystemPrompt(userRole);
+
     const { text: reply } = await realLifeChatCompletion({
-      system: getSiteAssistantSystemPrompt(userRole),
+      system: systemPrompt,
       messages: history,
-      temperature: 0.4,
+      temperature: navigationOnly ? 0.25 : 0.4,
       max_tokens: 700,
     });
     if (!reply) {

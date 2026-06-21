@@ -1,4 +1,6 @@
 import { starsFromLevelsEarnedMax } from '@/lib/levelsStars';
+import { getExerciseStars, isExerciseSlotUnlocked } from '@/utils/b2StarsWayProgress';
+import { getSortedExamSlots } from '@/utils/skillPracticeNavigation';
 
 /** User-facing label for a skill-practice exam variant (slot 1 → "Exercise 1"). */
 export function formatSkillExerciseLabel(examSlot, lang = 'en') {
@@ -26,6 +28,41 @@ export function starsFromPartExerciseScore(part) {
     part.scoringVersion === 2 ? (part.puntosObtenidos ?? part.correct) : part.correct;
   const max = part.scoringVersion === 2 ? (part.puntosMaximos ?? part.total) : part.total;
   return starsFromLevelsEarnedMax(earned, max);
+}
+
+/** First unlocked exercise variant (slot) with zero stars for this part. */
+export function findFirstExerciseSlotWithoutStars(
+  progressBySlot = {},
+  partNumber,
+  examenIdBySlot = {},
+) {
+  const slots = getSortedExamSlots(examenIdBySlot);
+  for (const slot of slots) {
+    if (!isExerciseSlotUnlocked(progressBySlot, partNumber, slot, examenIdBySlot)) continue;
+    if (getExerciseStars(progressBySlot, partNumber, slot) === 0) return slot;
+  }
+  for (const slot of slots) {
+    if (isExerciseSlotUnlocked(progressBySlot, partNumber, slot, examenIdBySlot)) return slot;
+  }
+  return slots[0] ?? 1;
+}
+
+/** Keep requested slot when unlocked; otherwise fall back to the first available exercise. */
+export function resolveSkillPracticeExamSlot(
+  progressBySlot = {},
+  partNumber,
+  examenIdBySlot = {},
+  requestedSlot = null,
+) {
+  const slot = Number(requestedSlot);
+  if (
+    Number.isFinite(slot) &&
+    slot > 0 &&
+    isExerciseSlotUnlocked(progressBySlot, partNumber, slot, examenIdBySlot)
+  ) {
+    return slot;
+  }
+  return findFirstExerciseSlotWithoutStars(progressBySlot, partNumber, examenIdBySlot);
 }
 
 export function filterProgressByPart(progressBySlot = {}, partNumber) {

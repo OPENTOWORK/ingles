@@ -16,12 +16,10 @@ import ExamPracticeSessionSideRail from '@/components/exam/ExamPracticeSessionSi
 import ExamPracticeSideRailTop from '@/components/exam/ExamPracticeSideRailTop';
 import ExamStudyNotesSidebar from '@/components/exam/ExamStudyNotesSidebar';
 import ReadingPracticeChrome from '@/components/exam/ReadingPracticeChrome';
-import ReadingPracticeFeedbackToggle from '@/components/exam/ReadingPracticeFeedbackToggle';
 import SkillPartPracticeHeader from '@/components/exam/SkillPartPracticeHeader';
 import { SkillPartInstructionsPanel } from '@/components/b2/B2ExamPracticeContent';
 import { getFormattedEnunciado } from '@/utils/b2ExamPaperShared';
 import { ReadingPracticeSessionProvider, useReadingPracticeSession } from '@/context/ReadingPracticeSessionContext';
-import B2WritingDraftStatusPanel from '@/components/b2/B2WritingDraftStatusPanel';
 import { getB2WritingStrategyPack } from '@/data/b2WritingPracticeStrategies';
 import A2ExamGenerationStatus from '@/components/niveles/A2ExamGenerationStatus';
 import { usePartPracticeTimer } from '@/hooks/usePartPracticeTimer';
@@ -143,7 +141,6 @@ function B2WritingExamPracticePageInner() {
   const [selectedQuestionByPart, setSelectedQuestionByPart] = useState({});
   const [part2SelectedOptionByPart, setPart2SelectedOptionByPart] = useState({});
   const [writingLiveCorrect, setWritingLiveCorrect] = useState(null);
-  const [draftStats, setDraftStats] = useState({ wordCount: 0, submitted: false, loading: false });
   const [examLabelsBySlot, setExamLabelsBySlot] = useState({});
   const mountedRef = useRef(true);
   const partsShellRef = useRef([]);
@@ -310,6 +307,7 @@ function B2WritingExamPracticePageInner() {
     examSlot,
     onSelectExam: handleSelectExamSlot,
     progressBySlot: scoring.progressBySlot,
+    examenIdBySlot: scoring.examenIdBySlot,
     examLabelsBySlot,
     examSlotPickerProps,
     onRefreshProgress: scoring.refreshPuntuacionesProgress,
@@ -332,6 +330,8 @@ function B2WritingExamPracticePageInner() {
     runKeepPracticingSkillFlow({
       examSlot,
       examenIdBySlot: scoring.examenIdBySlot,
+      partNumber: skillNav.selectedPartNumber,
+      progressBySlot: scoring.progressBySlot,
       onSelectExamSlot: (slot) => {
         void scoring.refreshPuntuacionesProgress();
         handleSelectExamSlot(slot);
@@ -341,7 +341,7 @@ function B2WritingExamPracticePageInner() {
         skillNav.advanceToNextPart();
       },
     });
-  }, [examSlot, scoring, handleSelectExamSlot, skillNav]);
+  }, [examSlot, skillNav, scoring, handleSelectExamSlot]);
 
   const tabPartsData = useMemo(() => {
     if (!skillNav.active) return partsData;
@@ -395,17 +395,18 @@ function B2WritingExamPracticePageInner() {
   const selectedQuestion = partNumber === 9 ? part9Question : part8Question;
 
   const categoryTimer = usePartPracticeTimer({
-    practiceReady: !loading && !error && scoring.examPracticeOpen && Boolean(selectedPart?.id),
-    partKey: selectedPart?.id ? `${examSlot}:${partNumber}:${selectedPart.id}` : null,
-    autoStart: (isSkillPracticeSession || (examModeActive && !reviewMode)) && scoring.examPracticeOpen,
+    practiceReady: !loading && !error && layoutPracticeOpen && Boolean(selectedPart?.id),
+    partKey: selectedPart?.id
+      ? `${examSlot}:${partNumber}:${selectedPart.id}:${selectedQuestion?.preguntaId || 'pending'}`
+      : null,
+    autoStart:
+      layoutPracticeOpen && (isSkillPracticeSession || (examModeActive && !reviewMode)),
   });
 
   const persistPartSessionTime = useCallback(
     async (progressOverride = null) => {
-      const uid = await getSessionUserId();
-      if (!uid || !selectedQuestion?.preguntaId || !selectedPart?.id || !partNumber) return;
+      if (!selectedQuestion?.preguntaId || !selectedPart?.id || !partNumber) return;
       await categoryTimer.finalizeSession({
-        userId: uid,
         preguntaId: selectedQuestion.preguntaId,
         parteId: selectedPart.id,
         partNumber,
@@ -428,10 +429,38 @@ function B2WritingExamPracticePageInner() {
   );
 
   useEffect(() => {
+    void (async () => {
+      const uid = await getSessionUserId();
+      if (!uid || !selectedQuestion?.preguntaId || !selectedPart?.id || !partNumber) {
+        categoryTimer.registerSaveParams(null);
+        return;
+      }
+      categoryTimer.registerSaveParams({
+        userId: uid,
+        preguntaId: selectedQuestion.preguntaId,
+        parteId: selectedPart.id,
+        partNumber,
+        examSlot,
+        levelSlug: 'b2',
+        skillRoute: 'exam-writing',
+        scoreSource,
+        sectionTitle: 'Writing',
+      });
+    })();
+  }, [
+    categoryTimer,
+    selectedQuestion?.preguntaId,
+    selectedPart?.id,
+    partNumber,
+    examSlot,
+    scoreSource,
+  ]);
+
+  useEffect(() => {
     return () => {
       void persistPartSessionTime();
     };
-  }, [selectedPart?.id, examSlot, partNumber, persistPartSessionTime]);
+  }, [selectedPart?.id, selectedQuestion?.preguntaId, examSlot, partNumber, persistPartSessionTime]);
 
   const part1Task = useMemo(
     () => parseB2WritingPart1Task(part8Question?.enunciado || ''),
@@ -527,19 +556,6 @@ function B2WritingExamPracticePageInner() {
     examSection,
     partNumber,
   ]);
-
-  const handleDraftStats = useCallback((stats) => {
-    setDraftStats((prev) => {
-      if (
-        prev.wordCount === stats.wordCount &&
-        prev.submitted === stats.submitted &&
-        prev.loading === stats.loading
-      ) {
-        return prev;
-      }
-      return stats;
-    });
-  }, []);
 
   const handleWritingScoresReady = useCallback(
     (scores) => {
@@ -679,18 +695,6 @@ function B2WritingExamPracticePageInner() {
 
   const showPracticeSideRail =
     isSkillPracticeSession && isPartPracticeMode(practiceMode) && scoring.examPracticeOpen;
-
-  const writingScorePanelOverride = isPartPracticeMode(practiceMode) ? (
-    <B2WritingDraftStatusPanel
-      wordCount={draftStats.wordCount}
-      submitted={draftStats.submitted}
-      checking={draftStats.loading}
-      lastScoreTotal={writingLiveCorrect}
-      passingCount={partScoringCfg?.passing ?? 12}
-      totalSlots={partScoringCfg?.total ?? 20}
-      lang="en"
-    />
-  ) : null;
 
   const writingRepeatClearedRef = useRef(false);
   useEffect(() => {
@@ -976,7 +980,6 @@ function B2WritingExamPracticePageInner() {
         loading={loading}
         onRefresh={() => void loadData()}
         partScoreMetrics={scorePanelProps}
-        scorePanelOverride={writingScorePanelOverride}
         hideScorePanel={isExamSimulationMode(practiceMode) && !reviewMode}
         partFinishNotice={isExamSimulationMode(practiceMode) && !reviewMode ? null : scoring.partFinishNotice}
         partFinishNoticePlacement={showPracticeSideRail ? 'header' : 'main'}
@@ -1037,11 +1040,6 @@ function B2WritingExamPracticePageInner() {
                           ? formatSkillExerciseLabel(examSlot, 'en')
                           : null
                       }
-                      titleActions={
-                        isSkillPracticeSession ? (
-                          <ReadingPracticeFeedbackToggle variant="title-row" lang="en" />
-                        ) : null
-                      }
                     />
                     <div className="levels-exam-split__body levels-exam-split__body--stacked">
                       {writingInstructionsBlocks.length ? (
@@ -1070,7 +1068,6 @@ function B2WritingExamPracticePageInner() {
                         heading="Your answer"
                         examContextBuilder={examContextBuilder}
                         onScoresReady={handleWritingScoresReady}
-                        onDraftStats={handleDraftStats}
                         examMode={writingExamMode}
                         reviewExamCorrection={reviewMode}
                         lang="en"
@@ -1100,7 +1097,6 @@ function B2WritingExamPracticePageInner() {
                           heading="Your answer"
                           examContextBuilder={examContextBuilder}
                           onScoresReady={handleWritingScoresReady}
-                          onDraftStats={handleDraftStats}
                           examMode={writingExamMode}
                           reviewExamCorrection={reviewMode}
                           lang="en"
@@ -1177,6 +1173,7 @@ function B2WritingExamPracticePageInner() {
                       examLabelsBySlot={examLabelsBySlot}
                       focusPartNumber={partNumber}
                       passing={partScoringCfg?.passing}
+                      skillRoute="exam-writing"
                       examLabel={examLabelsBySlot[examSlot]}
                       lang="en"
                       enabled={scoring.examPracticeOpen}

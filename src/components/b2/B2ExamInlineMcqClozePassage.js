@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { parseLineWithOpenGaps } from '@/components/b2/B2ExamInlineOpenClozePassage';
 import { useReadingPracticeSession } from '@/context/ReadingPracticeSessionContext';
 import ReadingQuestionFlagButton from '@/components/exam/ReadingQuestionFlagButton';
@@ -32,7 +32,31 @@ export default function B2ExamInlineMcqClozePassage({
   exampleGap0Word = '',
 }) {
   const [openQuestionNumber, setOpenQuestionNumber] = useState(null);
+  const [openMenuStyle, setOpenMenuStyle] = useState(null);
   const session = useReadingPracticeSession();
+
+  const estimateMenuHeight = useCallback((optionCount = 4) => Math.max(168, optionCount * 44 + 24), []);
+
+  const openGapMenu = useCallback(
+    (questionNumber, triggerEl, optionCount) => {
+      if (!triggerEl) return;
+      const rect = triggerEl.getBoundingClientRect();
+      const menuHeight = estimateMenuHeight(optionCount);
+      const spaceBelow = window.innerHeight - rect.bottom;
+      const opensAbove = spaceBelow < menuHeight + 10;
+      const left = Math.min(Math.max(8, rect.left), window.innerWidth - 236);
+      setOpenMenuStyle({
+        position: 'fixed',
+        left,
+        top: opensAbove ? Math.max(8, rect.top - menuHeight - 6) : rect.bottom + 6,
+        minWidth: Math.max(rect.width, 220),
+        maxWidth: Math.min(320, window.innerWidth - 16),
+        zIndex: 10000,
+      });
+      setOpenQuestionNumber(questionNumber);
+    },
+    [estimateMenuHeight],
+  );
 
   const groupByNumber = useMemo(() => {
     const map = new Map();
@@ -53,13 +77,18 @@ export default function B2ExamInlineMcqClozePassage({
   useEffect(() => {
     if (openQuestionNumber == null) return undefined;
 
+    const closeMenu = () => {
+      setOpenQuestionNumber(null);
+      setOpenMenuStyle(null);
+    };
+
     const onPointerDown = (event) => {
       if (event.target?.closest?.('.levels-exam-inline-mcq-gap')) return;
-      setOpenQuestionNumber(null);
+      closeMenu();
     };
 
     const onKeyDown = (event) => {
-      if (event.key === 'Escape') setOpenQuestionNumber(null);
+      if (event.key === 'Escape') closeMenu();
     };
 
     document.addEventListener('mousedown', onPointerDown);
@@ -215,11 +244,14 @@ export default function B2ExamInlineMcqClozePassage({
                         : `Question ${questionNumber}. Click to choose an answer.`
                     }
                     disabled={!hideFeedback && isChecked}
-                    onClick={() => {
+                    onClick={(event) => {
                       if (!hideFeedback && isChecked) return;
-                      setOpenQuestionNumber((prev) =>
-                        prev === questionNumber ? null : questionNumber,
-                      );
+                      if (openQuestionNumber === questionNumber) {
+                        setOpenQuestionNumber(null);
+                        setOpenMenuStyle(null);
+                        return;
+                      }
+                      openGapMenu(questionNumber, event.currentTarget, group.options?.length || 4);
                     }}
                   >
                     <span className="levels-exam-inline-mcq-gap__marker">({questionNumber})</span>
@@ -230,7 +262,8 @@ export default function B2ExamInlineMcqClozePassage({
 
                   {isOpen ? (
                     <span
-                      className="levels-exam-inline-mcq-gap__menu"
+                      className="levels-exam-inline-mcq-gap__menu levels-exam-inline-mcq-gap__menu--fixed"
+                      style={openMenuStyle || undefined}
                       role="listbox"
                       aria-label={`Options for question ${questionNumber}`}
                     >
@@ -250,6 +283,7 @@ export default function B2ExamInlineMcqClozePassage({
                                 return;
                               }
                               setOpenQuestionNumber(null);
+                              setOpenMenuStyle(null);
                               onOptionSelect?.({
                                 group,
                                 groupIndex,

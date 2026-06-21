@@ -62,6 +62,8 @@ export default function ReadingPracticeProgressPanel({
   examSlot = 1,
   progressBySlot = null,
   examLabelsBySlot = {},
+  slug = 'b2',
+  skillRoute = null,
   passing = null,
   lang = 'en',
   scoringVersion = 1,
@@ -134,8 +136,8 @@ export default function ReadingPracticeProgressPanel({
               partNumber={partNumber}
               examSlot={examSlot}
               progressBySlot={progressBySlot}
-              examLabelsBySlot={examLabelsBySlot}
-              passing={passing}
+              slug={slug}
+              skillRoute={skillRoute}
               lang={lang}
             />
           ) : null}

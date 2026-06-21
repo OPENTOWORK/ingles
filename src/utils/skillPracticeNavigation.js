@@ -1,4 +1,5 @@
 import { B2_EXAM_SLOT_MAX } from '@/lib/b2ExamCatalog';
+import { isExerciseSlotUnlocked } from '@/utils/b2StarsWayProgress';
 
 /** Slots 1…N with a linked examen id, or 1…B2_EXAM_SLOT_MAX as fallback. */
 export function getSortedExamSlots(examenIdBySlot = {}) {
@@ -34,12 +35,19 @@ export function getNextExamSlot(currentSlot, examenIdBySlot = {}) {
 export function runKeepPracticingSkillFlow({
   examSlot,
   examenIdBySlot,
+  partNumber = null,
+  progressBySlot = null,
   onSelectExamSlot,
   onReturnToExercisePicker,
   onAdvanceToNextPart,
 }) {
   const nextSlot = getNextExamSlot(examSlot, examenIdBySlot);
-  if (nextSlot != null) {
+  const nextUnlocked =
+    nextSlot != null &&
+    (partNumber == null ||
+      !progressBySlot ||
+      isExerciseSlotUnlocked(progressBySlot, partNumber, nextSlot, examenIdBySlot));
+  if (nextSlot != null && nextUnlocked) {
     onSelectExamSlot(nextSlot);
     if (typeof window !== 'undefined') {
       window.scrollTo({ top: 0, behavior: 'smooth' });

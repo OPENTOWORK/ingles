@@ -35,6 +35,25 @@ export default function ReadingPracticeFeedbackToggle({ lang = 'en', variant = '
     }
   };
 
+  if (variant === 'header-tools') {
+    const titleLabel = en ? 'Instant feedback' : 'Feedback inmediato';
+    const stateLabel = showFeedback ? (en ? 'On' : 'Activado') : en ? 'Off' : 'Desactivado';
+
+    return (
+      <button
+        type="button"
+        className={`reading-practice-header-tools__btn${showFeedback ? ' is-active' : ''}`}
+        onClick={toggle}
+        aria-pressed={showFeedback}
+        title={showFeedback ? labels.hintOn : labels.hintOff}
+        aria-label={`${titleLabel} ${stateLabel}`}
+      >
+        <span className="reading-practice-header-tools__btn-title">{titleLabel}</span>
+        <span className="reading-practice-header-tools__btn-state">{stateLabel}</span>
+      </button>
+    );
+  }
+
   if (variant === 'sidebar-top') {
     return (
       <button

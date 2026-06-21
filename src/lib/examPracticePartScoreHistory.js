@@ -1,10 +1,40 @@
+import { formatSkillExerciseLabel } from '@/utils/skillPartFirstProgress';
+import { getLevelSkillPracticeHref } from '@/data/nivelesLevelHub';
+
+const LOWEST_SCORES_LIMIT = 5;
+
+function scoreRatio(entry) {
+  if (!entry?.total) return 0;
+  return entry.correct / entry.total;
+}
+
+function compareLowestScores(a, b) {
+  const ratioDiff = scoreRatio(a) - scoreRatio(b);
+  if (ratioDiff !== 0) return ratioDiff;
+  if (a.correct !== b.correct) return a.correct - b.correct;
+  return a.slot - b.slot;
+}
+
+export function getSkillPartExerciseHref({ levelSlug, skillRoute, partNumber, examSlot }) {
+  const base = getLevelSkillPracticeHref(levelSlug, skillRoute);
+  const part = Number(partNumber);
+  const slot = Number(examSlot);
+  if (!base || !part || !slot) return null;
+
+  const params = new URLSearchParams();
+  params.set('part', String(part));
+  params.set('examen', String(slot));
+  return `${base}?${params.toString()}`;
+}
+
 /**
- * Saved scores for one part across exam variants (slots).
+ * Saved scores for one part across skill-practice exercise variants (slots).
+ * Returns up to five exercises with the lowest score ratio.
  */
 export function collectPartScoresAcrossSlots(
   progressBySlot,
   partNumber,
-  { examSlot, examLabelsBySlot } = {},
+  { examSlot, lang = 'en', limit = LOWEST_SCORES_LIMIT } = {},
 ) {
   if (!partNumber || !progressBySlot) return [];
 
@@ -19,7 +49,7 @@ export function collectPartScoresAcrossSlots(
 
     entries.push({
       slot,
-      label: examLabelsBySlot?.[slot] || `Test ${slot}`,
+      label: formatSkillExerciseLabel(slot, lang) || `Exercise ${slot}`,
       correct: saved.correct,
       total: saved.total,
       passed: saved.passed,
@@ -27,11 +57,5 @@ export function collectPartScoresAcrossSlots(
     });
   }
 
-  entries.sort((a, b) => {
-    if (a.isCurrent && !b.isCurrent) return -1;
-    if (!a.isCurrent && b.isCurrent) return 1;
-    return b.slot - a.slot;
-  });
-
-  return entries;
+  return entries.sort(compareLowestScores).slice(0, limit);
 }

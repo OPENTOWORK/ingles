@@ -1,6 +1,6 @@
 'use client';
 
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { supabase } from '@/utils/supabaseClient';
 import { fetchB2PuntuacionesProgress } from '@/utils/levelsPuntuacionesProgress';
 import { getCachedB2Level, getCachedB2ExamenIdsBySlot } from '@/utils/b2LevelCache';
@@ -15,6 +15,12 @@ export function useB2StarsWayProgress() {
   const [progressBySlot, setProgressBySlot] = useState({});
   const [examenIdBySlot, setExamenIdBySlot] = useState({});
   const [loading, setLoading] = useState(true);
+  const refreshInFlightRef = useRef(null);
+  const progressBySlotRef = useRef(progressBySlot);
+
+  useEffect(() => {
+    progressBySlotRef.current = progressBySlot;
+  }, [progressBySlot]);
 
   const availableSlots = useMemo(
     () =>
@@ -27,34 +33,51 @@ export function useB2StarsWayProgress() {
   );
 
   const refresh = useCallback(async () => {
-    setLoading(true);
+    if (refreshInFlightRef.current) {
+      return refreshInFlightRef.current;
+    }
+
+    const hasExistingData = Object.keys(progressBySlotRef.current).length > 0;
+    if (!hasExistingData) setLoading(true);
+
+    const promise = (async () => {
+      try {
+        const { data: levelData } = await getCachedB2Level(supabase);
+        if (!levelData?.id) {
+          setExamenIdBySlot({});
+          setProgressBySlot({});
+          return;
+        }
+
+        const idsBySlot = await getCachedB2ExamenIdsBySlot(supabase, levelData.id);
+        setExamenIdBySlot(idsBySlot);
+
+        const uid = await getSessionUserId();
+        if (!uid || !Object.keys(idsBySlot).length) {
+          setProgressBySlot({});
+          return;
+        }
+
+        const { bySlot } = await fetchB2PuntuacionesProgress(supabase, {
+          userId: uid,
+          examenIdBySlot: idsBySlot,
+          partMin: 1,
+          partMax: 17,
+          partsInPaper: 17,
+        });
+        setProgressBySlot(bySlot);
+      } finally {
+        setLoading(false);
+      }
+    })();
+
+    refreshInFlightRef.current = promise;
     try {
-      const { data: levelData } = await getCachedB2Level(supabase);
-      if (!levelData?.id) {
-        setExamenIdBySlot({});
-        setProgressBySlot({});
-        return;
-      }
-
-      const idsBySlot = await getCachedB2ExamenIdsBySlot(supabase, levelData.id);
-      setExamenIdBySlot(idsBySlot);
-
-      const uid = await getSessionUserId();
-      if (!uid || !Object.keys(idsBySlot).length) {
-        setProgressBySlot({});
-        return;
-      }
-
-      const { bySlot } = await fetchB2PuntuacionesProgress(supabase, {
-        userId: uid,
-        examenIdBySlot: idsBySlot,
-        partMin: 1,
-        partMax: 17,
-        partsInPaper: 17,
-      });
-      setProgressBySlot(bySlot);
+      await promise;
     } finally {
-      setLoading(false);
+      if (refreshInFlightRef.current === promise) {
+        refreshInFlightRef.current = null;
+      }
     }
   }, []);
 

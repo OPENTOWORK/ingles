@@ -3141,6 +3141,193 @@ body.nav-open {
   margin-left: auto;
 }
 
+.levels-b2-practice__toolbar-band {
+  width: 100%;
+}
+
+.levels-b2-practice__toolbar-band:has(.levels-b2-practice__toolbar-band-aside) {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: stretch;
+  gap: 0.65rem 1.25rem;
+}
+
+.levels-b2-practice__toolbar-band:has(.levels-b2-practice__toolbar-band-aside)
+  .levels-b2-practice__toolbar-band-main {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.levels-b2-practice__toolbar-band:has(.levels-b2-practice__toolbar-band-aside)
+  .levels-b2-practice__toolbar-band-aside {
+  margin-left: auto;
+}
+
+.levels-b2-practice__toolbar-band-main {
+  display: flex;
+  align-items: stretch;
+  justify-content: space-between;
+  gap: 0.65rem;
+  width: 100%;
+  min-width: 0;
+}
+
+.levels-b2-practice__toolbar-band-start {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: stretch;
+  gap: 0.5rem;
+  min-width: 0;
+  flex: 0 1 auto;
+}
+
+.levels-b2-practice__toolbar-band-main > .levels-b2-timer {
+  flex: 0 0 auto;
+  align-self: stretch;
+  margin-left: auto;
+}
+
+.levels-b2-practice__toolbar-band-end {
+  display: flex;
+  align-items: stretch;
+  gap: 0.65rem;
+  flex: 0 0 auto;
+  margin-left: auto;
+  min-width: 0;
+}
+
+.levels-b2-practice__toolbar-band-end > .levels-b2-timer {
+  margin-left: 0;
+}
+
+.levels-b2-practice__toolbar-band-aside {
+  display: flex;
+  align-items: stretch;
+  min-width: 0;
+  flex: 0 0 auto;
+}
+
+.levels-b2-practice__toolbar-band-aside > .levels-b2-practice__header-finish {
+  flex: 1 1 auto;
+  align-self: stretch;
+  width: 100%;
+  min-width: 0;
+}
+
+.levels-b2-practice__toolbar-band-aside .levels-b2-practice__header-finish .levels-b2-result {
+  height: 100%;
+  min-height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  box-sizing: border-box;
+  width: 100%;
+}
+
+.levels-b2-practice__toolbar-band-main .levels-b2-practice__study-tools .reading-practice-header-tools {
+  align-items: stretch;
+  height: 100%;
+  flex-wrap: nowrap;
+  width: auto;
+}
+
+.levels-b2-practice__toolbar-band-main .reading-practice-header-tools__btn {
+  min-height: 0;
+  height: auto;
+  align-self: stretch;
+  box-sizing: border-box;
+}
+
+.levels-b2-practice__status:has(.levels-b2-practice__toolbar-band) {
+  gap: 0.5rem;
+}
+
+.levels-b2-practice--skill-compact:has(.levels-listening-practice-layout--with-strategy)
+  .levels-b2-practice__toolbar-band {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) var(--exam-practice-sidebar-col);
+  gap: 1.25rem;
+  align-items: stretch;
+}
+
+.levels-b2-practice--skill-compact:has(.levels-listening-practice-layout--with-strategy)
+  .levels-b2-practice__toolbar-band-main {
+  grid-column: 1;
+  min-width: 0;
+  width: 100%;
+}
+
+.levels-b2-practice--skill-compact:has(.levels-listening-practice-layout--with-strategy)
+  .levels-b2-practice__toolbar-band-end {
+  flex: 1 1 auto;
+  min-width: 0;
+  margin-left: 0;
+}
+
+.levels-b2-practice--skill-compact:has(.levels-listening-practice-layout--with-strategy)
+  .levels-b2-practice__toolbar-band-end > .levels-b2-timer {
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.levels-b2-practice--skill-compact:has(.levels-listening-practice-layout--with-strategy)
+  .levels-b2-practice__toolbar-band-aside {
+  grid-column: 2;
+  min-width: 0;
+  width: 100%;
+  max-width: 100%;
+  justify-self: stretch;
+  align-self: stretch;
+  margin-left: 0;
+  flex: none;
+}
+
+.levels-b2-practice--skill-compact[data-skill-theme]:has(.levels-listening-practice-layout--with-strategy)
+  .levels-b2-practice__status:has(.levels-b2-practice__toolbar-band) {
+  padding: 0.55rem;
+}
+
+.levels-b2-practice--skill-compact:has(.levels-listening-practice-layout--with-strategy)
+  .levels-b2-practice__toolbar-band-aside
+  > .levels-b2-practice__header-finish,
+.levels-b2-practice--skill-compact:has(.levels-listening-practice-layout--with-strategy)
+  .levels-b2-practice__toolbar-band-aside
+  .levels-b2-practice__header-finish
+  .levels-b2-result {
+  width: 100%;
+  max-width: 100%;
+  margin-inline: 0;
+  box-sizing: border-box;
+}
+
+@media (max-width: 960px) {
+  .levels-b2-practice--skill-compact:has(.levels-listening-practice-layout--with-strategy)
+    .levels-b2-practice__toolbar-band {
+    grid-template-columns: 1fr;
+  }
+
+  .levels-b2-practice--skill-compact:has(.levels-listening-practice-layout--with-strategy)
+    .levels-b2-practice__toolbar-band-aside {
+    grid-column: 1;
+  }
+}
+
+@media (max-width: 640px) {
+  .levels-b2-practice__toolbar-band-main {
+    flex-wrap: wrap;
+  }
+
+  .levels-b2-practice__toolbar-band-end {
+    margin-left: auto;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+  }
+
+  .levels-b2-practice__toolbar-band-main > .levels-b2-timer {
+    margin-left: auto;
+  }
+}
+
 .skill-exercise-stars-badge {
   display: inline-flex;
   flex-direction: column;
@@ -3189,7 +3376,7 @@ body.nav-open {
   font-size: 0.62rem;
   font-weight: 700;
   letter-spacing: 0.04em;
-  color: color-mix(in srgb, var(--skill-practice-accent, #2563eb) 70%, #64748b);
+  color: var(--skill-practice-accent, #2563eb);
   line-height: 1.2;
 }
 
@@ -3198,7 +3385,7 @@ body.nav-open {
   font-weight: 800;
   letter-spacing: 0.06em;
   text-transform: uppercase;
-  color: color-mix(in srgb, var(--skill-practice-accent, #2563eb) 55%, #64748b);
+  color: var(--skill-practice-accent, #2563eb);
   line-height: 1.2;
   text-align: center;
 }
@@ -3445,55 +3632,95 @@ body.reading-night-mode .levels-exercise-stars--gold .starSvgWrapEmpty .starSvgP
 .reading-practice-header-tools {
   display: flex;
   flex-wrap: wrap;
-  align-items: center;
-  justify-content: center;
+  align-items: stretch;
+  justify-content: flex-start;
   gap: 0.45rem;
-  width: 100%;
+  width: auto;
+}
+
+.reading-practice-header-tools__main {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.45rem;
+  flex: 0 1 auto;
+  min-width: 0;
 }
 
 .reading-practice-header-tools__btn {
   display: inline-flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
+  gap: 0.1rem;
+  width: 100%;
+  min-width: 0;
   min-height: 2.35rem;
-  padding: 0.45rem 0.85rem;
-  border-radius: 999px;
-  border: 1px solid #cbd5e1;
-  background: #ffffff;
-  color: #0f172a;
-  font-size: 0.82rem;
+  padding: 0.55rem 0.5rem;
+  border-radius: 12px;
+  border: 1px solid #e2e8f0;
+  background: linear-gradient(180deg, #ffffff 0%, #f8fafc 100%);
+  color: #475569;
+  font-size: 0.75rem;
   font-weight: 700;
   line-height: 1.2;
+  letter-spacing: 0.02em;
+  text-align: center;
   cursor: pointer;
   transition:
     background-color 0.15s ease,
     border-color 0.15s ease,
     color 0.15s ease,
     box-shadow 0.15s ease;
-  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.06);
+  box-shadow:
+    0 1px 2px rgba(15, 23, 42, 0.04),
+    0 4px 14px rgba(15, 23, 42, 0.04);
+  box-sizing: border-box;
+}
+
+.reading-practice-header-tools__btn-title {
+  display: block;
+  width: 100%;
+  line-height: 1.2;
+}
+
+.reading-practice-header-tools__btn-state {
+  display: block;
+  width: 100%;
+  font-size: 0.62rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  line-height: 1.15;
 }
 
 .reading-practice-header-tools__btn:hover {
-  border-color: #94a3b8;
+  border-color: #cbd5e1;
   background: #f8fafc;
+  color: #0f172a;
 }
 
 .reading-practice-header-tools__btn.is-active {
-  border-color: #2563eb;
-  background: #eff6ff;
-  color: #1d4ed8;
-  box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.12);
+  background: #fef9c3;
+  border-color: #facc15;
+  color: #854d0e;
+  box-shadow: 0 2px 8px rgba(250, 204, 21, 0.2);
 }
 
 .reading-practice-header-tools__btn--ghost {
-  border-style: dashed;
-  background: transparent;
-  color: #475569;
+  flex-direction: row;
+  width: auto;
+  border-style: solid;
+  background: linear-gradient(180deg, #ffffff 0%, #f8fafc 100%);
+  color: #64748b;
   font-weight: 600;
+  box-shadow:
+    0 1px 2px rgba(15, 23, 42, 0.04),
+    0 4px 14px rgba(15, 23, 42, 0.04);
+  padding: 0.65rem 0.85rem;
 }
 
 .reading-practice-header-tools__btn--ghost:hover {
-  border-color: #64748b;
+  border-color: #cbd5e1;
   color: #0f172a;
   background: #f8fafc;
 }
@@ -3536,6 +3763,7 @@ body.reading-night-mode .levels-exercise-stars--gold .starSvgWrapEmpty .starSvgP
 
 .levels-b2-practice--skill-compact .levels-exam-mcq-cloze-inline .levels-exam-split {
   grid-template-columns: 1fr;
+  overflow: visible;
 }
 
 .levels-b2-practice--skill-compact .levels-exam-mcq-cloze-inline .levels-exam-split__text,
@@ -3543,6 +3771,7 @@ body.reading-night-mode .levels-exercise-stars--gold .starSvgWrapEmpty .starSvgP
   width: 100%;
   max-width: none;
   max-height: none;
+  overflow: visible;
   border-right: none;
 }
 
@@ -3694,6 +3923,39 @@ body.reading-night-mode .levels-exercise-stars--gold .starSvgWrapEmpty .starSvgP
 .levels-b2-practice--skill-compact[data-skill-theme] .levels-b2-timer {
   border-color: var(--skill-border);
   background: var(--skill-surface-2);
+}
+
+.levels-b2-practice--skill-compact[data-skill-theme] .reading-practice-header-tools__btn {
+  border-color: #e2e8f0;
+  background: linear-gradient(180deg, #ffffff 0%, #f8fafc 100%);
+  color: #475569;
+  box-shadow:
+    0 1px 2px rgba(15, 23, 42, 0.04),
+    0 4px 14px rgba(15, 23, 42, 0.04);
+}
+
+.levels-b2-practice--skill-compact[data-skill-theme] .reading-practice-header-tools__btn:hover {
+  border-color: #cbd5e1;
+  background: #f8fafc;
+  color: #0f172a;
+}
+
+.levels-b2-practice--skill-compact[data-skill-theme] .reading-practice-header-tools__btn.is-active {
+  background: #fef9c3;
+  border-color: #facc15;
+  color: #854d0e;
+  box-shadow: 0 2px 8px rgba(250, 204, 21, 0.2);
+}
+
+.levels-b2-practice--skill-compact[data-skill-theme] .reading-practice-header-tools__btn--ghost {
+  background: linear-gradient(180deg, #ffffff 0%, #f8fafc 100%);
+  color: #64748b;
+}
+
+.levels-b2-practice--skill-compact[data-skill-theme] .reading-practice-header-tools__btn--ghost:hover {
+  background: #f8fafc;
+  border-color: #cbd5e1;
+  color: #0f172a;
 }
 
 .levels-exam-module-nav--skill[data-skill-theme='reading'] {
@@ -4152,6 +4414,10 @@ body.reading-night-mode .levels-exercise-stars--gold .starSvgWrapEmpty .starSvgP
   overflow-x: clip;
 }
 
+.levels-b2-practice__work-panel:has(.levels-exam-mcq-cloze-inline) {
+  overflow: visible;
+}
+
 .levels-b2-practice__work-panel--a2-rw {
   max-width: min(920px, 100%);
   margin-left: auto;
@@ -4186,6 +4452,10 @@ body.reading-night-mode .levels-exercise-stars--gold .starSvgWrapEmpty .starSvgP
   }
 
   .levels-b2-practice__status:has(.levels-b2-practice__status-tools-row) {
+    flex-direction: column;
+  }
+
+  .levels-b2-practice__status:has(.levels-b2-practice__toolbar-band) {
     flex-direction: column;
   }
 
@@ -4759,8 +5029,9 @@ body.reading-night-mode .levels-exercise-stars--gold .starSvgWrapEmpty .starSvgP
   align-items: center;
   justify-content: center;
   gap: 0.3rem;
-  min-width: 2.65rem;
-  padding: 0.42rem 0.72rem;
+  width: 3.85rem;
+  min-width: 3.85rem;
+  padding: 0.42rem 0.5rem;
   border-radius: 9px;
   border: 1px solid #e2e8f0;
   background: #f8fafc;
@@ -4768,6 +5039,8 @@ body.reading-night-mode .levels-exercise-stars--gold .starSvgWrapEmpty .starSvgP
   font-size: 0.78rem;
   font-weight: 700;
   text-decoration: none;
+  margin: 0;
+  box-sizing: border-box;
   transition:
     background 0.18s ease,
     border-color 0.18s ease,
@@ -7120,6 +7393,15 @@ body.reading-night-mode .levels-b2-speaking-panel__usage,
   padding-top: 0.35rem;
 }
 
+.levels-exam-mcq-cloze-inline .levels-exam-split {
+  overflow: visible;
+}
+
+.levels-exam-mcq-cloze-inline .levels-exam-split__passage-panel,
+.levels-exam-mcq-cloze-inline .levels-exam-split__text {
+  overflow: visible;
+}
+
 .levels-exam-uoe-inline .levels-exam-split__questions,
 .levels-exam-open-cloze-inline .levels-exam-split__questions,
 .levels-exam-mcq-cloze-inline .levels-exam-split__questions {
@@ -7171,10 +7453,44 @@ body.reading-night-mode .levels-b2-speaking-panel__usage,
 .levels-exam-mcq-cloze-inline .levels-exam-split__text {
   border-right: none;
   max-height: none;
+  overflow: visible;
+}
+
+.levels-exam-mcq-cloze-inline .levels-exam-split {
+  overflow: visible;
 }
 
 .levels-exam-mcq-cloze-inline .levels-exam-split__questions {
   display: none;
+}
+
+/* Part 1 MCQ cloze — no inner scroll; gap menus must not clip */
+.levels-b2-practice__work-body:has(.levels-exam-mcq-cloze-inline),
+.levels-listening-practice-main:has(.levels-exam-mcq-cloze-inline),
+.levels-exam-mcq-cloze-inline .levels-exam-split__body,
+.levels-exam-mcq-cloze-inline .levels-exam-split,
+.levels-exam-mcq-cloze-inline .levels-exam-split__panel,
+.levels-exam-mcq-cloze-inline .levels-exam-split__text,
+.levels-exam-mcq-cloze-inline .levels-exam-inline-passage,
+.levels-exam-mcq-cloze-inline .levels-exam-inline-mcq-cloze {
+  max-height: none !important;
+  overflow: visible !important;
+}
+
+.levels-exam-inline-mcq-gap--open {
+  z-index: 40;
+}
+
+.levels-exam-inline-mcq-gap__menu--fixed {
+  position: fixed;
+  top: auto;
+  left: auto;
+  z-index: 10000;
+}
+
+.levels-exam-inline-mcq-gap__menu--above {
+  top: auto;
+  bottom: calc(100% + 0.35rem);
 }
 
 /* Part 6 gapped text — inline A–G dropdowns in passage (exam mode + skills) */
@@ -7583,6 +7899,13 @@ body.reading-night-mode .levels-b2-speaking-panel__usage,
     border-right: none;
     border-bottom: 1px solid var(--levels-split-border);
     font-size: 0.9625rem;
+  }
+
+  .levels-exam-mcq-cloze-inline .levels-exam-split,
+  .levels-exam-mcq-cloze-inline .levels-exam-split__text {
+    max-height: none;
+    overflow: visible;
+    border-bottom: none;
   }
 
   .levels-exam-split__questions {
@@ -11749,6 +12072,25 @@ body.reading-night-mode .reading-feedback-toggle__btn--sidebar-top.active {
   border: 1px solid #e2e8f0;
 }
 
+.levels-listening-strategy__progress-item--link {
+  display: block;
+  text-decoration: none;
+  color: inherit;
+  transition:
+    border-color 0.15s ease,
+    background 0.15s ease;
+}
+
+.levels-listening-strategy__progress-item--link:hover {
+  border-color: #c4b5fd;
+  background: #faf5ff;
+}
+
+.levels-listening-strategy__progress-item--link:focus-visible {
+  outline: 2px solid #7c3aed;
+  outline-offset: 2px;
+}
+
 .levels-listening-strategy__progress-part {
   display: block;
   font-weight: 700;
@@ -11765,6 +12107,11 @@ body.reading-night-mode .reading-feedback-toggle__btn--sidebar-top.active {
 
 .levels-listening-strategy__progress-score--pass {
   color: #15803d;
+  font-weight: 600;
+}
+
+.levels-listening-strategy__progress-score--fail {
+  color: #b91c1c;
   font-weight: 600;
 }
 
@@ -12515,33 +12862,40 @@ body.reading-night-mode .levels-b2-practice__title-headline {
 }
 
 body.reading-night-mode .reading-practice-header-tools__btn {
-  border-color: #64748b;
-  background: #334155;
+  border-color: #475569;
+  background: linear-gradient(180deg, #1e293b 0%, #334155 100%);
   color: #e2e8f0;
-  box-shadow: none;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
 }
 
 body.reading-night-mode .reading-practice-header-tools__btn:hover {
-  border-color: #94a3b8;
-  background: #475569;
+  border-color: #64748b;
+  background: #334155;
   color: #f8fafc;
 }
 
 body.reading-night-mode .reading-practice-header-tools__btn.is-active {
-  border-color: #60a5fa;
-  background: #1e3a5f;
-  color: #dbeafe;
-  box-shadow: 0 0 0 2px rgba(96, 165, 250, 0.18);
+  background: #854d0e;
+  border-color: #facc15;
+  color: #fef9c3;
+  box-shadow: 0 2px 8px rgba(250, 204, 21, 0.22);
 }
 
 body.reading-night-mode .reading-practice-header-tools__btn--ghost {
   color: #94a3b8;
-  background: transparent;
+  background: rgba(30, 41, 59, 0.65);
 }
 
 body.reading-night-mode .reading-practice-header-tools__btn--ghost:hover {
-  color: #e2e8f0;
+  color: #dbeafe;
   background: #334155;
+  border-color: #64748b;
+}
+
+body.reading-night-mode .levels-b2-practice--skill-compact[data-skill-theme] .reading-practice-header-tools__btn {
+  background: linear-gradient(180deg, #1e293b 0%, #334155 100%);
+  border-color: #475569;
+  color: #e2e8f0;
 }
 
 body.reading-night-mode .levels-b2-practice__title-kind {
@@ -13985,7 +14339,7 @@ body.reading-night-mode .levels-exam-split__questions > div > div:not(.levels-ex
   display: flex;
   flex: 1 1 auto;
   flex-wrap: wrap;
-  align-items: stretch;
+  align-items: flex-start;
   gap: 0.75rem;
   min-width: 0;
 }
@@ -13996,7 +14350,8 @@ body.reading-night-mode .levels-exam-split__questions > div > div:not(.levels-ex
 }
 
 .levels-b2-practice__status-row > .levels-b2-timer {
-  flex: 0 1 auto;
+  flex: 0 0 auto;
+  align-self: flex-start;
 }
 
 .levels-b2-practice__status-row > .levels-b2-practice__header-finish {
@@ -14113,6 +14468,30 @@ body.reading-night-mode .levels-exam-split__questions > div > div:not(.levels-ex
   line-height: 1.25;
 }
 
+/* Toolbar + sidebar-top panel titles: unified label typography */
+.levels-b2-practice--skill-compact .reading-practice-header-tools__btn-title,
+.levels-b2-practice--skill-compact .reading-practice-header-tools__btn-state,
+.levels-b2-practice--skill-compact .levels-b2-timer__label,
+.levels-b2-practice--skill-compact .levels-b2-timer__session-tag,
+.levels-b2-practice--skill-compact .levels-b2-practice__header-finish .levels-b2-result__title,
+.levels-b2-practice--skill-compact .skill-exercise-stars-badge__label,
+.levels-b2-practice--skill-compact .exam-notes-popover__trigger-label {
+  font-family: inherit;
+  font-size: 0.68rem;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  line-height: 1.2;
+}
+
+.levels-b2-practice--skill-compact[data-skill-theme] .levels-b2-timer__session-tag,
+.levels-b2-practice--skill-compact[data-skill-theme] .skill-exercise-stars-badge__label,
+.levels-b2-practice--skill-compact[data-skill-theme] .skill-exercise-stars-badge__hint,
+.levels-b2-practice--skill-compact[data-skill-theme] .exam-notes-popover__trigger-label,
+.levels-b2-practice--skill-compact[data-skill-theme] .levels-exam-split__enunciado > .levels-exam-split__section-title {
+  color: var(--skill-accent, #2563eb);
+}
+
 .levels-b2-practice__focus-exit {
   flex: 0 0 auto;
   width: auto;
@@ -14125,7 +14504,7 @@ body.focus-mode-active .levels-b2-practice__status .levels-b2-practice__status-r
   display: none !important;
 }
 
-body.focus-mode-active .levels-b2-practice__status {
+body.focus-mode-active .levels-b2-practice__status:not(:has(.levels-b2-practice__toolbar-band)) {
   flex-direction: column;
   align-items: stretch;
 }
@@ -14134,13 +14513,31 @@ body.focus-mode-active .levels-b2-practice__status-row {
   flex-wrap: nowrap;
 }
 
-body.focus-mode-active .levels-b2-practice__status-row > .levels-b2-timer {
+body.focus-mode-active .levels-b2-practice__status-row > .levels-b2-timer,
+body.focus-mode-active .levels-b2-practice__toolbar-band-main > .levels-b2-timer {
   flex: 1 1 auto;
   min-width: 12rem;
 }
 
-body.focus-mode-active .levels-b2-practice__status .levels-b2-practice__study-tools {
+body.focus-mode-active
+  .levels-b2-practice__status:not(:has(.levels-b2-practice__toolbar-band))
+  .levels-b2-practice__study-tools {
   display: block !important;
+}
+
+body.focus-mode-active .levels-b2-practice__toolbar-band .reading-practice-header-tools {
+  flex-wrap: nowrap;
+  width: auto;
+}
+
+body.focus-mode-active .levels-b2-practice__toolbar-band .levels-b2-practice__study-tools {
+  width: auto;
+  flex: 0 1 auto;
+}
+
+body.focus-mode-active .levels-b2-practice__toolbar-band-main,
+body.focus-mode-active .levels-b2-practice__toolbar-band-start {
+  flex-wrap: nowrap;
 }
 
 body.focus-mode-active .site-header,
@@ -14154,11 +14551,6 @@ body.focus-mode-active .exam-practice-report-error-footer {
   display: none !important;
 }
 
-body.focus-mode-active .levels-b2-practice__work-panel {
-  max-width: 920px;
-  margin: 0 auto;
-}
-
 .levels-b2-practice--focus-mode .levels-b2-practice__status {
   position: sticky;
   top: 0;
@@ -14170,6 +14562,17 @@ body.focus-mode-active .levels-b2-practice__work-panel {
 
 .levels-listening-practice-layout--focus {
   display: block;
+}
+
+/* Writing focus mode — same content width as Reading skill practice (e.g. UOE Part 1). */
+body.focus-mode-active .levels-b2-practice--skill-compact:has(.b2-writing-practice),
+body.focus-mode-active .levels-b2-practice:has(.b2-writing-practice) {
+  max-width: min(960px, 100%);
+}
+
+body.focus-mode-active .b2-writing-practice .levels-exam-practice-page {
+  max-width: 100%;
+  margin-inline: 0;
 }
 
 @media (max-width: 960px) {

@@ -73,7 +73,6 @@ import B2ExamPracticeModuleNav from '@/components/b2/B2ExamPracticeModuleNav';
 import ReadingPracticeSideRail from '@/components/exam/ReadingPracticeSideRail';
 import ExamPracticeSideRailTop from '@/components/exam/ExamPracticeSideRailTop';
 import ExamStudyNotesSidebar from '@/components/exam/ExamStudyNotesSidebar';
-import ReadingPracticeFeedbackToggle from '@/components/exam/ReadingPracticeFeedbackToggle';
 import { buildPartFinishNoticeDisplay } from '@/utils/partFinishNoticeDisplay';
 import { getB2ReadingStrategyPack } from '@/data/b2ReadingPracticeStrategies';
 import { ReadingPracticeSessionProvider } from '@/context/ReadingPracticeSessionContext';
@@ -407,6 +406,7 @@ function B2ReadingExamsPageInner() {
     examSlot,
     onSelectExam: handleSelectExamSlot,
     progressBySlot: scoring.progressBySlot,
+    examenIdBySlot: scoring.examenIdBySlot,
     examLabelsBySlot,
     examSlotPickerProps,
     onRefreshProgress: scoring.refreshPuntuacionesProgress,
@@ -438,6 +438,8 @@ function B2ReadingExamsPageInner() {
     runKeepPracticingSkillFlow({
       examSlot,
       examenIdBySlot: scoring.examenIdBySlot,
+      partNumber: skillNav.selectedPartNumber,
+      progressBySlot: scoring.progressBySlot,
       onSelectExamSlot: (slot) => {
         void scoring.refreshPuntuacionesProgress();
         handleSelectExamSlot(slot);
@@ -447,7 +449,7 @@ function B2ReadingExamsPageInner() {
         skillNav.advanceToNextPart();
       },
     });
-  }, [examSlot, scoring, handleSelectExamSlot, skillNav]);
+  }, [examSlot, skillNav, scoring, handleSelectExamSlot]);
 
   const tabPartsData = useMemo(() => {
     if (!skillNav.active) return partsData;
@@ -473,11 +475,16 @@ function B2ReadingExamsPageInner() {
 
   useEffect(() => {
     mountedRef.current = true;
+    if (skillNav.active && !skillNav.practiceReady) {
+      return () => {
+        mountedRef.current = false;
+      };
+    }
     loadReadingData();
     return () => {
       mountedRef.current = false;
     };
-  }, [loadReadingData]);
+  }, [loadReadingData, skillNav.active, skillNav.practiceReady]);
 
   useEffect(() => {
     const qPart = searchParams.get('part');
@@ -535,17 +542,18 @@ function B2ReadingExamsPageInner() {
   );
 
   const categoryTimer = usePartPracticeTimer({
-    practiceReady: !loading && !error && scoring.examPracticeOpen && Boolean(selectedPart?.id),
-    partKey: selectedPart?.id ? `${examSlot}:${partNumberReading}:${selectedPart.id}` : null,
-    autoStart: (isSkillPracticeSession || (examModeActive && !reviewMode)) && scoring.examPracticeOpen,
+    practiceReady: !loading && !error && layoutPracticeOpen && Boolean(selectedPart?.id),
+    partKey: selectedPart?.id
+      ? `${examSlot}:${partNumberReading}:${selectedPart.id}:${selectedQuestion?.preguntaId || 'pending'}`
+      : null,
+    autoStart:
+      layoutPracticeOpen && (isSkillPracticeSession || (examModeActive && !reviewMode)),
   });
 
   const persistPartSessionTime = useCallback(
     async (progressOverride = null) => {
-      const uid = await getSessionUserId();
-      if (!uid || !selectedQuestion?.preguntaId || !selectedPart?.id || !partNumberReading) return;
+      if (!selectedQuestion?.preguntaId || !selectedPart?.id || !partNumberReading) return;
       await categoryTimer.finalizeSession({
-        userId: uid,
         preguntaId: selectedQuestion.preguntaId,
         parteId: selectedPart.id,
         partNumber: partNumberReading,
@@ -569,10 +577,39 @@ function B2ReadingExamsPageInner() {
   );
 
   useEffect(() => {
+    void (async () => {
+      const uid = await getSessionUserId();
+      if (!uid || !selectedQuestion?.preguntaId || !selectedPart?.id || !partNumberReading) {
+        categoryTimer.registerSaveParams(null);
+        return;
+      }
+      categoryTimer.registerSaveParams({
+        userId: uid,
+        preguntaId: selectedQuestion.preguntaId,
+        parteId: selectedPart.id,
+        partNumber: partNumberReading,
+        examSlot,
+        levelSlug: 'b2',
+        skillRoute,
+        scoreSource,
+        sectionTitle: 'Reading and Use of English',
+      });
+    })();
+  }, [
+    categoryTimer,
+    selectedQuestion?.preguntaId,
+    selectedPart?.id,
+    partNumberReading,
+    examSlot,
+    skillRoute,
+    scoreSource,
+  ]);
+
+  useEffect(() => {
     return () => {
       void persistPartSessionTime();
     };
-  }, [selectedPart?.id, examSlot, partNumberReading, persistPartSessionTime]);
+  }, [selectedPart?.id, selectedQuestion?.preguntaId, examSlot, partNumberReading, persistPartSessionTime]);
 
   useEffect(() => {
     if (examModeActive && !reviewMode && partNumberReading && selectedPart) {
@@ -1701,7 +1738,6 @@ function B2ReadingExamsPageInner() {
         ? { openGrades: nextOpenGrades, checkedQuestions: nextChecked }
         : { openChecks: nextOpenChecks, checkedQuestions: nextChecked },
     );
-    void persistPartSessionTime();
     readingSession.revealAnswers();
     if (hasAnyAnswer) readingSession.incrementCheckAttempts();
   }, [
@@ -1725,7 +1761,6 @@ function B2ReadingExamsPageInner() {
     groupedAnswersForUiAndScore,
     getQuestionKey,
     readingSession,
-    persistPartSessionTime,
   ]);
 
   /** Explicación lazy para huecos open cloze / word formation / key word. */
@@ -2043,7 +2078,7 @@ function B2ReadingExamsPageInner() {
 
   const getPartTitleParts = (part) => {
     const n = Number(part?.nombre.match(/\d+/)?.[0] || partNumberReading || 0);
-    return getSkillPartPracticeTitle('b2', n, 'en');
+    return getSkillPartPracticeTitle('b2', n, 'en', examSlot);
   };
 
   const part6SentencePoolBlock = useMemo(() => {
@@ -2054,7 +2089,7 @@ function B2ReadingExamsPageInner() {
   const selectedPartTitleParts = useMemo(() => {
     if (!selectedPart) return { heading: '', subtitle: '' };
     return getPartTitleParts(selectedPart);
-  }, [selectedPart, partNumberReading]);
+  }, [selectedPart, partNumberReading, examSlot]);
 
   const reportErrorContext = useMemo(() => {
     if (loading || error || !scoring.examPracticeOpen || !selectedPart) return null;
@@ -2194,14 +2229,9 @@ function B2ReadingExamsPageInner() {
                 title={selectedPartTitleParts.heading}
                 titleSubtitle={selectedPartTitleParts.subtitle}
                 exerciseLabel={
-                  isSkillPracticeSession && examSlot
+                  isSkillPracticeSession && examSlot && !isUoePart
                     ? formatSkillExerciseLabel(examSlot, 'en')
                     : null
-                }
-                titleActions={
-                  isSkillPracticeSession ? (
-                    <ReadingPracticeFeedbackToggle variant="title-row" lang="en" />
-                  ) : null
                 }
                 directionsText={selectedPartContent.enunciado}
                 directionsLabel={isUoeExamInlinePart || isUoePart1 ? 'Instructions' : 'Directions'}
@@ -2518,6 +2548,8 @@ function B2ReadingExamsPageInner() {
           examSlot={examSlot}
           progressBySlot={scoring.progressBySlot}
           examLabelsBySlot={examLabelsBySlot}
+          slug="b2"
+          skillRoute={skillRoute}
           passing={b2PartCfg?.passing ?? partScoreMetrics.passingCount}
           finishNotice={null}
           lang="en"
