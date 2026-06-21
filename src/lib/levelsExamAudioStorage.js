@@ -84,9 +84,25 @@ export function extractListeningClipsFromGenerated(gen, partDef) {
       .filter((c) => c.text);
   }
 
+  const questions = Array.isArray(gen.questions) ? gen.questions : [];
+  const perQuestionScripts = questions
+    .map((q, i) => ({
+      orden: q.number ?? i + 1,
+      titulo: String(q.situation || q.prompt || `Extract ${i + 1}`).trim().slice(0, 120),
+      text: String(q.script || q.dialogue || '').trim(),
+    }))
+    .filter((c) => c.text);
+
+  const n = partDef.audioClips || 1;
+  if (
+    partDef.activity === 'short-extracts' &&
+    perQuestionScripts.length >= n
+  ) {
+    return perQuestionScripts.slice(0, n);
+  }
+
   const script = String(gen.script || '').trim();
   const clips = [];
-  const n = partDef.audioClips || 1;
 
   if (n === 1 && script) {
     clips.push({ orden: 1, titulo: gen.setting || gen.title || 'Listening recording', text: script });
@@ -96,23 +112,33 @@ export function extractListeningClipsFromGenerated(gen, partDef) {
   const extractBlocks = script.split(/(?=Extract\s+\d+|Speaker\s+\d+|Question\s+\d+)/i).filter(Boolean);
   if (extractBlocks.length >= n) {
     extractBlocks.slice(0, n).forEach((block, i) => {
+      const text = block.trim();
+      const speakerMatch = text.match(/^Speaker\s+\d+\s*:\s*(.*)$/is);
+      const body = speakerMatch ? speakerMatch[1].trim() : text;
       clips.push({
         orden: i + 1,
-        titulo: (gen.questions?.[i]?.prompt || `Extract ${i + 1}`).slice(0, 120),
-        text: block.trim(),
+        titulo: (questions[i]?.situation || questions[i]?.prompt || `Extract ${i + 1}`).slice(0, 120),
+        text: body.length >= 40 ? body : text,
       });
     });
     return clips;
   }
 
-  const questions = gen.questions || [];
   for (let i = 0; i < n; i += 1) {
     const q = questions[i];
-    const dialogue = q?.script || q?.dialogue || `Extract ${i + 1}.\n${q?.prompt || ''}\n${script.slice(0, 400)}`;
+    const dialogue = q?.script || q?.dialogue;
+    if (dialogue) {
+      clips.push({
+        orden: i + 1,
+        titulo: q?.situation || q?.prompt || `Question ${i + 1}`,
+        text: String(dialogue).trim(),
+      });
+      continue;
+    }
     clips.push({
       orden: i + 1,
       titulo: q?.prompt || `Question ${i + 1}`,
-      text: dialogue,
+      text: `Extract ${i + 1}.\n${q?.prompt || ''}\n${script.slice(0, 400)}`,
     });
   }
   return clips;

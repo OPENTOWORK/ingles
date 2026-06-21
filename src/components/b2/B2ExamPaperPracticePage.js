@@ -7,7 +7,8 @@ import { useB2ExamPracticeSlot } from '@/hooks/useB2ExamPracticeSlot';
 import { useLevelExamPracticeSlot } from '@/hooks/useLevelExamPracticeSlot';
 import { useB2AutoOpenExamFromUrl } from '@/hooks/useB2AutoOpenExamFromUrl';
 import { B2ExamPracticeChrome, B2ExamPracticeLayout } from '@/components/b2/B2ExamPracticeChrome';
-import { B2ExamPracticeContent, B2ExamQuestionItem } from '@/components/b2/B2ExamPracticeContent';
+import { B2ExamPracticeContent, B2ExamQuestionItem, SkillPartInstructionsPanel } from '@/components/b2/B2ExamPracticeContent';
+import SkillPartPracticeHeader from '@/components/exam/SkillPartPracticeHeader';
 import B2ExamInlineMcqClozePassage from '@/components/b2/B2ExamInlineMcqClozePassage';
 import SkillPartExplanationsPanel from '@/components/exam/SkillPartExplanationsPanel';
 import {
@@ -169,6 +170,8 @@ import { invalidateLevelsPracticeCache } from '@/hooks/useLevelsPracticeData';
 import { useSkillPartFirstNavigation } from '@/hooks/useSkillPartFirstNavigation';
 import {
   runKeepPracticingSkillFlow,
+  resolvePartIdAfterExamReload,
+  buildQuestionSelectionAfterExamReload,
 } from '@/utils/skillPracticeNavigation';
 import {
   buildBulkAnswerCheckUpdate,
@@ -375,11 +378,15 @@ function B2ExamPaperPracticePageInner({
   }, [levelSlug, scoring.examenIdBySlot]);
 
   const mountedRef = useRef(true);
+  const partsDataRef = useRef([]);
+  const selectedPartIdRef = useRef(null);
+  const selectedQuestionByPartRef = useRef({});
   const loadedPartsRangeRef = useRef('');
   /** Estructura de partes (sin preguntas) para reutilizar al cambiar de examen. */
   const partsShellRef = useRef([]);
 
-  const loadData = useCallback(async () => {
+  const loadData = useCallback(async (slotOverride) => {
+    const targetSlot = slotOverride ?? examSlot;
     setLoading(true);
     setError('');
     const { reviewMode: isReview, examModeActive: isExam } = examContextRef.current;
@@ -471,7 +478,7 @@ function B2ExamPaperPracticePageInner({
 
       try {
         const { examenId, error: examResolveError } = await resolveB2ExamenId(supabase, levelData.id, {
-          slot: examSlot,
+          slot: targetSlot,
         });
         if (examResolveError || !examenId) {
           throw new Error(
@@ -617,6 +624,18 @@ function B2ExamPaperPracticePageInner({
 
       if (!mountedRef.current) return;
 
+      const prevParts = partsDataRef.current;
+      const prevPartId = selectedPartIdRef.current;
+      const { examModeActive: isExam, reviewMode: isReview } = examContextRef.current;
+      const preservedPartId = resolvePartIdAfterExamReload(normalizedParts, prevPartId, prevParts);
+      const preservedQuestions =
+        !isExam && !isReview
+          ? buildQuestionSelectionAfterExamReload(
+              normalizedParts,
+              selectedQuestionByPartRef.current,
+            )
+          : {};
+
       if (typeof applyExamContentSync === 'function') {
         applyExamContentSync(normalizedParts, examDraftRef);
       }
@@ -628,6 +647,7 @@ function B2ExamPaperPracticePageInner({
       }
 
       setPartsData(normalizedParts);
+      partsDataRef.current = normalizedParts;
 
       const urlPart = Number(searchParams.get('part'));
       const urlPartTarget =
@@ -649,12 +669,14 @@ function B2ExamPaperPracticePageInner({
         activePartId: urlPartTarget?.id ?? null,
       });
 
-      setSelectedPartId(
+      const nextPartId =
         urlPartTarget?.id ||
-          draftPartSelection?.selectedPartId ||
-          normalizedParts[0]?.id ||
-          null,
-      );
+        draftPartSelection?.selectedPartId ||
+        preservedPartId ||
+        normalizedParts[0]?.id ||
+        null;
+      setSelectedPartId(nextPartId);
+      selectedPartIdRef.current = nextPartId;
       prevExamPartRef.current = null;
       const pickBestQuestion = (questions) => {
         if (!questions?.length) return null;
@@ -677,11 +699,14 @@ function B2ExamPaperPracticePageInner({
         acc[part.id] = best.preguntaId;
         return acc;
       }, {});
-      setSelectedQuestionByPart({
+      const nextQuestionByPart = {
         ...initialQuestionSelection,
+        ...preservedQuestions,
         ...draftQuestionSelection,
         ...(draftPartSelection?.selectedQuestionByPart || {}),
-      });
+      };
+      setSelectedQuestionByPart(nextQuestionByPart);
+      selectedQuestionByPartRef.current = nextQuestionByPart;
     } catch (err) {
       if (mountedRef.current) setError(err.message || 'Error cargando datos.');
     } finally {
@@ -713,21 +738,22 @@ function B2ExamPaperPracticePageInner({
     ]),
   });
 
+  const beginExamSlotChange = useCallback(
+    (slot) => {
+      setLoading(true);
+      scoring.handleSelectExam(selectExamSlot, slot);
+    },
+    [scoring, selectExamSlot],
+  );
+
   const handleSelectExamSlot = useMemo(
-    () =>
-      createAdminExamSelectHandler(adminFlow, (slot) => {
-        scoring.handleSelectExam(selectExamSlot, slot);
-        void loadData();
-      }),
-    [adminFlow, scoring, selectExamSlot, loadData],
+    () => createAdminExamSelectHandler(adminFlow, beginExamSlotChange),
+    [adminFlow, beginExamSlotChange],
   );
   const examSlotPickerProps = buildExamSlotPickerProps({
     examenIdBySlot: scoring.examenIdBySlot,
     adminFlow,
-    onSelectSlot: (slot) => {
-      scoring.handleSelectExam(selectExamSlot, slot);
-      void loadData();
-    },
+    onSelectSlot: beginExamSlotChange,
   });
 
   const skillNav = useSkillPartFirstNavigation({
@@ -816,6 +842,12 @@ function B2ExamPaperPracticePageInner({
     );
     if (target?.id && target.id !== selectedPartId) setSelectedPartId(target.id);
   }, [skillNav.active, skillNav.selectedPartNumber, tabPartsData, selectedPartId]);
+
+  useEffect(() => {
+    partsDataRef.current = partsData;
+    selectedPartIdRef.current = selectedPartId;
+    selectedQuestionByPartRef.current = selectedQuestionByPart;
+  }, [partsData, selectedPartId, selectedQuestionByPart]);
 
   useEffect(() => {
     mountedRef.current = true;
@@ -3490,15 +3522,23 @@ function B2ExamPaperPracticePageInner({
               >
               <div className="levels-exam-split-page levels-exam-practice-page--narrow">
               <div className="levels-exam-split-card">
-                <div className="levels-exam-split-card__title-row">
-                  <h2>{getPartTitle(selectedPart)}</h2>
-                  {isSkillPracticeSession ? (
-                    <ReadingPracticeFeedbackToggle
-                      variant="title-row"
-                      lang={lang === 'es' ? 'es' : 'en'}
-                    />
-                  ) : null}
-                </div>
+                <SkillPartPracticeHeader
+                  title={selectedPartTitleParts.heading}
+                  subtitle={selectedPartTitleParts.subtitle}
+                  exerciseLabel={
+                    isSkillPracticeSession && examSlot
+                      ? formatSkillExerciseLabel(examSlot, lang === 'es' ? 'es' : 'en')
+                      : null
+                  }
+                  titleActions={
+                    isSkillPracticeSession ? (
+                      <ReadingPracticeFeedbackToggle
+                        variant="title-row"
+                        lang={lang === 'es' ? 'es' : 'en'}
+                      />
+                    ) : null
+                  }
+                />
 
                 {showListeningBriefing && b2Exam1ListeningUx ? (
                   <B2ListeningPracticeBriefing
@@ -3511,81 +3551,10 @@ function B2ExamPaperPracticePageInner({
 
                 <div className="levels-exam-split__body levels-exam-split__body--stacked">
                   {selectedPartContent.enunciado && !hideListeningDirectionsDup ? (
-                    <div className="levels-exam-split__enunciado">
-                      <p className="levels-exam-split__section-title">Directions</p>
-                      {formatDirectionsBlocks(selectedPartContent.enunciado, true).map((block, index) => {
-                      if (block.type === 'label') {
-                        return (
-                          <p
-                            key={`enunciado-${block.type}-${index}`}
-                            style={{ margin: '0.7rem 0 0.45rem', fontWeight: 700, color: '#1a365d' }}
-                          >
-                            {block.text}
-                          </p>
-                        );
-                      }
-                      if (block.type === 'answer') {
-                        return (
-                          <p
-                            key={`enunciado-${block.type}-${index}`}
-                            style={{
-                              margin: '0.45rem 0',
-                              padding: '0.45rem 0.6rem',
-                              background: '#ebf8ff',
-                              borderRadius: '8px',
-                              fontWeight: 600,
-                            }}
-                          >
-                            {block.text}
-                          </p>
-                        );
-                      }
-                      if (block.type === 'number') {
-                        return (
-                          <p
-                            key={`enunciado-${block.type}-${index}`}
-                            style={{ margin: '0.35rem 0', fontWeight: 700, color: '#2d3748' }}
-                          >
-                            {block.text}
-                          </p>
-                        );
-                      }
-                      if (block.type === 'option') {
-                        return (
-                          <p
-                            key={`enunciado-${block.type}-${index}`}
-                            style={{ margin: '0.2rem 0', paddingLeft: '0.35rem', color: '#334155' }}
-                          >
-                            {block.text}
-                          </p>
-                        );
-                      }
-                      if (block.type === 'image' && block.url) {
-                        return (
-                          <img
-                            key={`enunciado-image-${index}`}
-                            src={block.url}
-                            alt=""
-                            style={{
-                              maxWidth: '100%',
-                              height: 'auto',
-                              margin: '0.5rem 0',
-                              borderRadius: '8px',
-                              border: '1px solid #e2e8f0',
-                            }}
-                          />
-                        );
-                      }
-                      return (
-                        <p
-                          key={`enunciado-${block.type}-${index}`}
-                          style={{ margin: '0.45rem 0', lineHeight: 1.7, color: '#1f2937' }}
-                        >
-                          {block.text}
-                        </p>
-                      );
-                    })}
-                    </div>
+                    <SkillPartInstructionsPanel
+                      label={isSkillPracticeSession ? 'Instructions' : 'Directions'}
+                      blocks={formatDirectionsBlocks(selectedPartContent.enunciado, true)}
+                    />
                   ) : null}
 
                 {showAudioFromEnunciado && preguntaAudiosError ? (
@@ -4107,7 +4076,7 @@ function B2ExamPaperPracticePageInner({
                   ) : null
                 }
                 directionsText={displayDirectionsText}
-                directionsLabel="Directions"
+                directionsLabel={isSkillPracticeSession ? 'Instructions' : 'Directions'}
                 textLabel="Text"
                 questionsLabel="Questions"
                 passageText={isB2Part1InlineMcq ? '' : passageTextForPanel}

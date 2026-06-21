@@ -16,6 +16,10 @@ import ExamPracticeSessionSideRail from '@/components/exam/ExamPracticeSessionSi
 import ExamPracticeSideRailTop from '@/components/exam/ExamPracticeSideRailTop';
 import ExamStudyNotesSidebar from '@/components/exam/ExamStudyNotesSidebar';
 import ReadingPracticeChrome from '@/components/exam/ReadingPracticeChrome';
+import ReadingPracticeFeedbackToggle from '@/components/exam/ReadingPracticeFeedbackToggle';
+import SkillPartPracticeHeader from '@/components/exam/SkillPartPracticeHeader';
+import { SkillPartInstructionsPanel } from '@/components/b2/B2ExamPracticeContent';
+import { getFormattedEnunciado } from '@/utils/b2ExamPaperShared';
 import { ReadingPracticeSessionProvider, useReadingPracticeSession } from '@/context/ReadingPracticeSessionContext';
 import B2WritingDraftStatusPanel from '@/components/b2/B2WritingDraftStatusPanel';
 import { getB2WritingStrategyPack } from '@/data/b2WritingPracticeStrategies';
@@ -24,7 +28,8 @@ import { usePartPracticeTimer } from '@/hooks/usePartPracticeTimer';
 import { supabase } from '@/utils/supabaseClient';
 import { resolveB2ExamenId, fetchB2PreguntasByExamen } from '@/utils/b2ResolveExam';
 import { getCachedLevelBySlug } from '@/utils/levelsLevelCache';
-import { formatLevelsPartDisplayName } from '@/utils/formatLevelsPartDisplayName';
+import { formatLevelsPartDisplayName, getSkillPartPracticeTitle } from '@/utils/formatLevelsPartDisplayName';
+import { formatSkillExerciseLabel } from '@/utils/skillPartFirstProgress';
 import { getB2PartScoring } from '@/utils/levelsB2PartScoring';
 import {
   useLevelsExamAdminFlow,
@@ -444,6 +449,22 @@ function B2WritingExamPracticePageInner() {
       : null;
 
   const part2SelectedOption = part2Task.options.find((o) => o.id === part2SelectedId) || null;
+
+  const selectedPartTitleParts = useMemo(
+    () => getSkillPartPracticeTitle('b2', partNumber, 'en'),
+    [partNumber],
+  );
+
+  const writingInstructionsBlocks = useMemo(() => {
+    const raw =
+      partNumber === 8
+        ? part1Task.instructions
+        : partNumber === 9
+          ? part2Task.instructions
+          : '';
+    if (!raw?.trim()) return [];
+    return getFormattedEnunciado(raw);
+  }, [partNumber, part1Task.instructions, part2Task.instructions]);
 
   useEffect(() => {
     if (partNumber !== 9 || !selectedPart?.id || typeof window === 'undefined') return;
@@ -1006,16 +1027,40 @@ function B2WritingExamPracticePageInner() {
                 className={`levels-listening-practice-main${isSkillPracticeSession ? ` ${readingSession.readingAreaClassName}` : ''}`}
                 style={isSkillPracticeSession ? readingSession.readingAreaStyle : undefined}
               >
-                <div className="b2-writing-practice__body">
+                <div className="b2-writing-practice__body levels-exam-practice-page">
+                  <div className="levels-exam-split-card">
+                    <SkillPartPracticeHeader
+                      title={selectedPartTitleParts.heading}
+                      subtitle={selectedPartTitleParts.subtitle}
+                      exerciseLabel={
+                        isSkillPracticeSession && examSlot
+                          ? formatSkillExerciseLabel(examSlot, 'en')
+                          : null
+                      }
+                      titleActions={
+                        isSkillPracticeSession ? (
+                          <ReadingPracticeFeedbackToggle variant="title-row" lang="en" />
+                        ) : null
+                      }
+                    />
+                    <div className="levels-exam-split__body levels-exam-split__body--stacked">
+                      {writingInstructionsBlocks.length ? (
+                        <SkillPartInstructionsPanel
+                          label="Instructions"
+                          blocks={writingInstructionsBlocks}
+                        />
+                      ) : null}
+
                   {partNumber === 8 ? (
                     <>
                       <B2WritingFirstTaskCard
-                        title={part1Task.title}
                         instructions={part1Task.instructions}
                         question={part1Task.question}
                         points={part1Task.points}
                         wordMin={part1Task.wordMin || B2_WRITING_WORD_MIN}
                         wordMax={part1Task.wordMax || B2_WRITING_WORD_MAX}
+                        hideHeader
+                        hideInstructions
                       />
                       <B2WritingLongFormAiPanel
                         key={`writing-p1-${longWritingStorageKey}-${writingDraftEpoch}`}
@@ -1036,7 +1081,6 @@ function B2WritingExamPracticePageInner() {
                   {partNumber === 9 ? (
                     <>
                       <B2WritingPart2TaskPicker
-                        title={part2Task.title}
                         instructions={part2Task.instructions}
                         options={part2Task.options}
                         selectedId={part2SelectedId}
@@ -1044,6 +1088,8 @@ function B2WritingExamPracticePageInner() {
                         wordMin={part2Task.wordMin || B2_WRITING_WORD_MIN}
                         wordMax={part2Task.wordMax || B2_WRITING_WORD_MAX}
                         lang="en"
+                        hideHeader
+                        hideInstructions
                       />
                       {part2SelectedOption ? (
                         <B2WritingLongFormAiPanel
@@ -1066,6 +1112,8 @@ function B2WritingExamPracticePageInner() {
                       )}
                     </>
                   ) : null}
+                    </div>
+                  </div>
 
                   <B2ExamPracticeModuleNav
                     slug="b2"

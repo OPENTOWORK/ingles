@@ -10014,6 +10014,30 @@ body.reading-night-mode .levels-b2-speaking-panel__usage,
   color: #1d4ed8;
 }
 
+.levels-exam-split-card .b2-writing-task__stimulus,
+.levels-exam-split-card .b2-writing-part2__stimulus {
+  margin-top: 0.85rem;
+  padding: 1.1rem 1.25rem;
+  border: 1px solid var(--levels-split-border, #e2e8f0);
+  border-radius: 12px;
+  background: var(--levels-split-surface, #fff);
+}
+
+.levels-exam-split-card .b2-writing-task__question,
+.levels-exam-split-card .b2-writing-part2__context,
+.levels-exam-split-card .b2-writing-part2__task-body p {
+  font-family: Georgia, 'Times New Roman', serif;
+  line-height: 1.78;
+  text-align: justify;
+  text-align-last: left;
+  text-justify: inter-word;
+}
+
+.levels-exam-split-card .b2-writing-task__points-list li {
+  font-family: Georgia, 'Times New Roman', serif;
+  line-height: 1.65;
+}
+
 .b2-writing-part2__options {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));

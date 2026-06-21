@@ -12,15 +12,17 @@ export default function B2WritingPart2TaskPicker({
   wordMin = 140,
   wordMax = 190,
   lang = 'en',
+  hideHeader = false,
+  hideInstructions = false,
 }) {
   const isEn = lang === 'en';
   const selected = options.find((o) => o.id === selectedId) || null;
 
   return (
     <div className="b2-writing-part2">
-      <h3 className="b2-writing-task__title">{title}</h3>
+      {!hideHeader && title ? <h3 className="b2-writing-task__title">{title}</h3> : null}
 
-      {instructions ? (
+      {!hideInstructions && instructions ? (
         <div className="b2-writing-task__instructions">
           <p className="b2-writing-task__label">Instructions</p>
           <p>{instructions}</p>
@@ -32,7 +34,7 @@ export default function B2WritingPart2TaskPicker({
       </p>
 
       {!selected ? (
-        <div className="b2-writing-part2__options" role="radiogroup" aria-label={title}>
+        <div className="b2-writing-part2__options" role="radiogroup" aria-label={title || 'Writing Part 2'}>
           {options.map((opt, index) => (
             <button
               key={opt.id}
@@ -70,19 +72,21 @@ export default function B2WritingPart2TaskPicker({
             </button>
           </div>
 
-          {selected.context ? (
-            <p className="b2-writing-part2__context">{selected.context}</p>
-          ) : null}
+          <div className="levels-exam-split__passage-panel b2-writing-part2__stimulus">
+            {selected.context ? (
+              <p className="b2-writing-part2__context">{selected.context}</p>
+            ) : null}
 
-          {selected.task ? (
-            <div className="b2-writing-part2__task-body">
-              {String(selected.task)
-                .split('\n')
-                .map((line, i) => (
-                  <p key={i}>{line}</p>
-                ))}
-            </div>
-          ) : null}
+            {selected.task ? (
+              <div className="b2-writing-part2__task-body">
+                {String(selected.task)
+                  .split('\n')
+                  .map((line, i) => (
+                    <p key={i}>{line}</p>
+                  ))}
+              </div>
+            ) : null}
+          </div>
         </div>
       )}
     </div>

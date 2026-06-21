@@ -1,5 +1,6 @@
 'use client';
 
+import SkillPartPracticeHeader from '@/components/exam/SkillPartPracticeHeader';
 import { getFormattedEnunciado, omitPartTitleBlocks, omitExampleEnunciadoBlocks } from '@/utils/b2ExamPaperShared';
 
 const blockStyles = {
@@ -116,6 +117,19 @@ export function B2ExamQuestionItem({ children, className = '' }) {
 }
 
 /**
+ * @param {{ label?: string, blocks?: Array<{ type: string, text: string }> }} props
+ */
+export function SkillPartInstructionsPanel({ label = 'Instructions', blocks = [] }) {
+  if (!blocks?.length) return null;
+  return (
+    <div className="levels-exam-split__enunciado">
+      <p className="levels-exam-split__section-title">{label}</p>
+      <B2ExamFormattedEnunciado blocks={blocks} />
+    </div>
+  );
+}
+
+/**
  * Unified exam practice card — Part 1 UoE visual format for all skills/parts.
  *
  * @param {{
@@ -175,33 +189,16 @@ export function B2ExamPracticeContent({
   return (
     <div className={useSplit ? 'levels-exam-split-page' : 'levels-exam-practice-page'}>
       <div className={`levels-exam-split-card${contentClassName ? ` ${contentClassName}` : ''}`}>
-        {title || titleSubtitle || exerciseLabel || titleActions ? (
-          <div className="levels-exam-split-card__title-row levels-exam-split-card__title-row--title-mode">
-            {title || titleSubtitle ? (
-              <div className="levels-exam-split-card__part-title-block">
-                {title ? (
-                  <p className="levels-exam-split-card__part-title-category">{title}</p>
-                ) : null}
-                {titleSubtitle ? (
-                  <h1 className="levels-exam-split-card__part-title">{titleSubtitle}</h1>
-                ) : title ? (
-                  <h1 className="levels-exam-split-card__part-title">{title}</h1>
-                ) : null}
-              </div>
-            ) : null}
-            {exerciseLabel ? (
-              <span className="levels-exam-split-card__exercise-label">{exerciseLabel}</span>
-            ) : null}
-            {titleActions}
-          </div>
-        ) : null}
+        <SkillPartPracticeHeader
+          title={title}
+          subtitle={titleSubtitle}
+          exerciseLabel={exerciseLabel}
+          titleActions={titleActions}
+        />
 
         <div className={useSplit ? 'levels-exam-split__body' : 'levels-exam-split__body levels-exam-split__body--stacked'}>
           {showDirections && directionBlocks.length > 0 ? (
-            <div className="levels-exam-split__enunciado">
-              <p className="levels-exam-split__section-title">{directionsLabel}</p>
-              <B2ExamFormattedEnunciado blocks={directionBlocks} />
-            </div>
+            <SkillPartInstructionsPanel label={directionsLabel} blocks={directionBlocks} />
           ) : null}
 
           {beforeQuestions}

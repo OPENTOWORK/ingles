@@ -78,3 +78,44 @@ export function returnToSkillExercisePicker({ setExamPracticeOpen, refreshProgre
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 }
+
+function partNumberFromName(nombre = '') {
+  return Number(String(nombre).match(/\d+/)?.[0] || 0);
+}
+
+/**
+ * Keep the same skill part (e.g. Part 1) when switching exam variant (?examen=).
+ * @param {Array<{ id: string, nombre?: string }>} normalizedParts
+ * @param {string | null | undefined} previousPartId
+ * @param {Array<{ id: string, nombre?: string }>} [previousParts]
+ */
+export function resolvePartIdAfterExamReload(normalizedParts, previousPartId, previousParts = []) {
+  if (previousPartId && normalizedParts.some((p) => p.id === previousPartId)) {
+    return previousPartId;
+  }
+  const prevMeta = previousParts.find((p) => p.id === previousPartId);
+  const prevNum = partNumberFromName(prevMeta?.nombre);
+  if (prevNum > 0) {
+    const match = normalizedParts.find((p) => partNumberFromName(p.nombre) === prevNum);
+    if (match) return match.id;
+  }
+  return normalizedParts[0]?.id ?? null;
+}
+
+/**
+ * Keep question picks where still valid; otherwise first question per part.
+ * @param {Array<{ id: string, questions?: Array<{ preguntaId: string }> }>} normalizedParts
+ * @param {Record<string, string>} previousSelection
+ */
+export function buildQuestionSelectionAfterExamReload(normalizedParts, previousSelection = {}) {
+  return normalizedParts.reduce((acc, part) => {
+    if (!part.questions?.length) return acc;
+    const prevId = previousSelection[part.id];
+    if (prevId && part.questions.some((q) => q.preguntaId === prevId)) {
+      acc[part.id] = prevId;
+      return acc;
+    }
+    acc[part.id] = part.questions[0].preguntaId;
+    return acc;
+  }, {});
+}

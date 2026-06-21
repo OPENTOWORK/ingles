@@ -9,7 +9,12 @@ import { useB2ExamScoringSession } from '@/hooks/useB2ExamScoringSession';
 import { usePartPracticeTimer } from '@/hooks/usePartPracticeTimer';
 import { getB2PartScoring } from '@/utils/levelsB2PartScoring';
 import { supabase } from '@/utils/supabaseClient';
-import { formatLevelsPartDisplayName, getSkillLocalPartNumber, getSkillPartTabLabel } from '@/utils/formatLevelsPartDisplayName';
+import SkillPartPracticeHeader from '@/components/exam/SkillPartPracticeHeader';
+import { SkillPartInstructionsPanel } from '@/components/b2/B2ExamPracticeContent';
+import { getFormattedEnunciado } from '@/utils/b2ExamPaperShared';
+import { formatLevelsPartDisplayName, getSkillLocalPartNumber, getSkillPartTabLabel, getSkillPartPracticeTitle } from '@/utils/formatLevelsPartDisplayName';
+import { formatSkillExerciseLabel } from '@/utils/skillPartFirstProgress';
+import ReadingPracticeFeedbackToggle from '@/components/exam/ReadingPracticeFeedbackToggle';
 import { withBasePath } from '@/lib/base-path';
 import { buildClientApiUrl } from '@/utils/clientApiUrl';
 import { playExaminerAudio, stopExaminerAudio, pauseExaminerAudio, resumeExaminerAudio, isExaminerAudioPaused } from '@/utils/playExaminerAudio';
@@ -637,6 +642,17 @@ function B2SpeakingExamPracticeInner({ title, subtitle, loadingLabel, refreshLab
     lang: lang === 'es' ? 'es' : 'en',
   });
 
+  const selectedPartTitleParts = useMemo(
+    () => getSkillPartPracticeTitle('b2', partNumber, lang === 'es' ? 'es' : 'en'),
+    [partNumber, lang],
+  );
+
+  const speakingInstructionsBlocks = useMemo(() => {
+    const raw = selectedPart?.descripcion || '';
+    if (!raw.trim()) return [];
+    return getFormattedEnunciado(raw);
+  }, [selectedPart?.descripcion]);
+
   return (
     <B2ExamPracticeLayout examPracticeOpen={layoutPracticeOpen}>
       {adminFlow.canRegenerateExams ? (
@@ -731,12 +747,30 @@ function B2SpeakingExamPracticeInner({ title, subtitle, loadingLabel, refreshLab
         {!loading && !error && selectedPart ? (
           <div className="levels-exam-practice-page levels-exam-practice-page--speaking">
             <div className="levels-exam-split-card">
-              <h2>
-                {getB2SpeakingPartConfig(selectedPart.partNumber)?.title
-                  || getSkillPartTabLabel(selectedPart, B2_SPEAKING_PART_MIN, lang)
-                  || selectedPart.nombre}
-              </h2>
+              <SkillPartPracticeHeader
+                title={selectedPartTitleParts.heading}
+                subtitle={selectedPartTitleParts.subtitle}
+                exerciseLabel={
+                  isSkillPracticeSession && examSlot
+                    ? formatSkillExerciseLabel(examSlot, lang === 'es' ? 'es' : 'en')
+                    : null
+                }
+                titleActions={
+                  isSkillPracticeSession ? (
+                    <ReadingPracticeFeedbackToggle
+                      variant="title-row"
+                      lang={lang === 'es' ? 'es' : 'en'}
+                    />
+                  ) : null
+                }
+              />
               <div className="levels-exam-split__body levels-exam-split__body--stacked">
+                {speakingInstructionsBlocks.length ? (
+                  <SkillPartInstructionsPanel
+                    label={lang === 'es' ? 'Instrucciones' : 'Instructions'}
+                    blocks={speakingInstructionsBlocks}
+                  />
+                ) : null}
           <B2SpeakingPartSession
             key={`${selectedPart.id}-${examSlot}-${speakingDraftEpoch}`}
             part={selectedPart}
@@ -751,6 +785,7 @@ function B2SpeakingExamPracticeInner({ title, subtitle, loadingLabel, refreshLab
             partScoring={b2PartCfg}
             lang={lang}
             examMode={examModeActive && !reviewMode}
+            hideTaskIntro={speakingInstructionsBlocks.length > 0}
           />
               </div>
             </div>
@@ -827,6 +862,7 @@ function B2SpeakingPartSession({
   partScoring,
   lang = 'en',
   examMode = false,
+  hideTaskIntro = false,
 }) {
   const isEn = lang === 'en';
   const partConfig = getB2SpeakingPartConfig(part.partNumber);
@@ -1520,9 +1556,11 @@ function B2SpeakingPartSession({
 
   return (
     <div className="levels-b2-speaking-session">
-      <p className="levels-b2-speaking-session__intro">
-        {part.descripcion || partConfig?.instructions}
-      </p>
+      {!hideTaskIntro ? (
+        <p className="levels-b2-speaking-session__intro">
+          {part.descripcion || partConfig?.instructions}
+        </p>
+      ) : null}
       {staticInfo?.tips ? (
         <p className="levels-b2-speaking-session__tip">
           <strong>Tip:</strong> {staticInfo.tips}

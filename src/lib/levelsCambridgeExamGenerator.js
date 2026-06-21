@@ -1,4 +1,4 @@
-import { cambridgeExamGenerationCompletion, isDraloOpenAIConfigured } from '@/lib/draloAiEngine';
+import { cambridgeExamGenerationCompletion, isDraloOpenAIConfigured, draloChatCompletion, getDraloFastModel } from '@/lib/draloAiEngine';
 import { buildExamGeneratePrompt } from '@/lib/draloAiExamPrompts';
 import {
   getLevelExamLabel,
@@ -22,7 +22,7 @@ import {
 } from '@/lib/levelsExamPersist';
 import { validateGeneratedExamPart } from '@/lib/examPartValidation';
 import { logExamGeneration } from '@/lib/examGenerationLog';
-import { getExamPartDisplayLabel } from '@/lib/examPartDisplayLabel';
+import { getB2ListeningAudioTargets } from '@/lib/b2ListeningAudioTargets';
 
 const EXAM_THEMES = [
   'urban life and technology',
@@ -49,6 +49,103 @@ function parseJsonFromModel(text) {
     if (m) return JSON.parse(m[0]);
     throw new Error('Invalid JSON from Examenes de Cambridge engine');
   }
+}
+
+function wordCount(text) {
+  return String(text || '')
+    .trim()
+    .split(/\s+/)
+    .filter(Boolean).length;
+}
+
+async function expandScriptToListeningLength(text, { targetMin = 95, targetMax = 115, maxTokens = 900 } = {}) {
+  const trimmed = String(text || '').trim();
+  if (!trimmed || wordCount(trimmed) >= targetMin) return trimmed;
+
+  const { text: out } = await draloChatCompletion({
+    model: getDraloFastModel(),
+    temperature: 0.35,
+    max_tokens: maxTokens,
+    messages: [
+      {
+        role: 'user',
+        content:
+          `Expand the following English listening script to between ${targetMin} and ${targetMax} words. ` +
+          'Keep the same speakers (A:/B: labels if present), meaning, and natural B2 exam style. ' +
+          'Return ONLY the expanded script — no JSON, no commentary.\n\n' +
+          trimmed,
+      },
+    ],
+  });
+
+  const expanded = String(out || '').trim();
+  return wordCount(expanded) >= targetMin - 8 ? expanded : trimmed;
+}
+
+async function expandListeningScriptsInGenerated(generated, partDef) {
+  if (partDef.mode !== 'listening' || !partDef.needsAudio) return generated;
+
+  const targets = getB2ListeningAudioTargets(partDef.partNumber);
+  if (!targets) return generated;
+
+  const gen = { ...generated };
+  const expandOpts = {
+    targetMin: targets.expandMin,
+    targetMax: targets.expandMax,
+    maxTokens: partDef.partNumber === 11 || partDef.partNumber === 13 ? 4096 : 900,
+  };
+
+  if (partDef.activity === 'short-extracts') {
+    const questions = Array.isArray(gen.questions) ? gen.questions : [];
+    gen.questions = await Promise.all(
+      questions.map(async (q) => ({
+        ...q,
+        script: await expandScriptToListeningLength(q.script, expandOpts),
+      })),
+    );
+    gen.audioClips = gen.questions.map((q, i) => ({
+      orden: q.number ?? i + 1,
+      titulo: String(q.situation || q.prompt || `Extract ${i + 1}`).trim(),
+      text: String(q.script || '').trim(),
+    }));
+    gen.script = gen.questions.map((q) => String(q.script || '').trim()).filter(Boolean).join('\n\n');
+  }
+
+  if (partDef.activity === 'multiple-matching') {
+    const clips = Array.isArray(gen.audioClips) ? gen.audioClips : [];
+    if (clips.length) {
+      gen.audioClips = await Promise.all(
+        clips.map(async (clip, i) => ({
+          ...clip,
+          orden: clip.orden ?? i + 1,
+          text: await expandScriptToListeningLength(clip.text || clip.script, expandOpts),
+        })),
+      );
+    } else if (gen.script) {
+      const blocks = String(gen.script)
+        .split(/(?=Speaker\s+\d+\s*:)/i)
+        .map((b) => b.trim())
+        .filter(Boolean);
+      const expanded = await Promise.all(
+        blocks.map((block) => expandScriptToListeningLength(block, expandOpts)),
+      );
+      gen.script = expanded.join('\n\n');
+      gen.audioClips = expanded.map((text, i) => ({
+        orden: i + 1,
+        titulo: `Speaker ${i + 1}`,
+        text,
+      }));
+    }
+  }
+
+  if (
+    (partDef.activity === 'sentence-completion' || partDef.activity === 'conversation') &&
+    gen.script
+  ) {
+    gen.script = await expandScriptToListeningLength(gen.script, expandOpts);
+  }
+
+  return gen;
 }
 
 function normalizeGenerated(gen, partNumber) {
@@ -138,7 +235,8 @@ async function generatePartJsonWithRetries(levelSlug, levelLabel, partDef, optio
 
   let generated = await generatePartJson(levelLabel, partDef, options);
 
-  for (let attempt = 0; attempt < 2; attempt += 1) {
+  const maxAttempts = partDef.mode === 'listening' ? 5 : 2;
+  for (let attempt = 0; attempt < maxAttempts; attempt += 1) {
     const validation = validateGeneratedExamPart(slug, partDef.partNumber, generated);
     generated = validation.normalized;
     if (validation.ok && isPartComplete(generated, partDef)) break;
@@ -174,7 +272,9 @@ async function generatePartJson(levelLabel, partDef, options) {
     max_tokens: 8192,
     response_format: { type: 'json_object' },
   });
-  return normalizeGenerated(parseJsonFromModel(text), partDef.partNumber);
+  let parsed = normalizeGenerated(parseJsonFromModel(text), partDef.partNumber);
+  parsed = await expandListeningScriptsInGenerated(parsed, partDef);
+  return parsed;
 }
 
 function isPartComplete(gen, partDef) {
@@ -205,6 +305,10 @@ function isPartComplete(gen, partDef) {
     return (gen.sections?.length || 0) >= 2 && q.length >= minQ;
   }
   if (partDef.mode === 'listening') {
+    if (partDef.activity === 'short-extracts') {
+      const withScript = q.filter((item) => wordCount(item.script) >= 85);
+      return withScript.length >= (partDef.questionCount || 8);
+    }
     if (partDef.activity === 'multiple-matching') {
       return (
         Boolean(gen.script) &&

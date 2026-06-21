@@ -1,4 +1,5 @@
 import { getLevelExamLabel, getLevelExamPartDef } from '@/lib/levelsExamCatalog';
+import { getB2ListeningAudioTargets } from '@/lib/b2ListeningAudioTargets';
 import { A2_EXAM_PARTS } from '@/lib/a2ExamCatalog';
 import { isA2GeneratedPartComplete } from '@/lib/draloAiA2ExamPrompts';
 
@@ -27,6 +28,82 @@ function asArray(value) {
 
 function hasText(value) {
   return String(value || '').trim().length > 0;
+}
+
+function wordCount(value) {
+  return String(value || '')
+    .trim()
+    .split(/\s+/)
+    .filter(Boolean).length;
+}
+
+/** @deprecated use getB2ListeningAudioTargets(partNumber) */
+const LISTENING_SHORT_CLIP_MIN_WORDS = 85;
+const LISTENING_SHORT_CLIP_MAX_WORDS = 130;
+
+function listeningSpeakerBlocks(script) {
+  return String(script || '')
+    .split(/(?=Speaker\s+\d+\s*:)/i)
+    .map((block) => block.trim())
+    .filter(Boolean);
+}
+
+function validateListeningClipWordCounts(partDef, gen, errors) {
+  if (!partDef?.needsAudio) return;
+
+  const targets = getB2ListeningAudioTargets(partDef.partNumber);
+  const wordMin = targets?.wordMin ?? LISTENING_SHORT_CLIP_MIN_WORDS;
+  const wordMax = targets?.wordMax ?? LISTENING_SHORT_CLIP_MAX_WORDS + 40;
+
+  if (partDef.activity === 'short-extracts') {
+    asArray(gen.questions).forEach((q, i) => {
+      const wc = wordCount(q.script);
+      const label = q.number ?? i + 1;
+      if (wc < wordMin) {
+        errors.push(`Extract ${label} script too short (${wc} words; need at least ${wordMin}).`);
+      }
+      if (wc > wordMax) {
+        errors.push(`Extract ${label} script too long (${wc} words).`);
+      }
+    });
+    return;
+  }
+
+  if (partDef.activity === 'sentence-completion' || partDef.activity === 'conversation') {
+    const wc = wordCount(gen.script);
+    if (wc < wordMin) {
+      errors.push(`Script too short (${wc} words; need at least ${wordMin}).`);
+    }
+    if (wc > wordMax) {
+      errors.push(`Script too long (${wc} words; max ${wordMax}).`);
+    }
+    return;
+  }
+
+  if (partDef.activity === 'multiple-matching' && partDef.mode === 'listening') {
+    const clips = asArray(gen.audioClips);
+    if (clips.length >= 5) {
+      clips.slice(0, 5).forEach((clip, i) => {
+        const wc = wordCount(clip.text || clip.script);
+        if (wc < wordMin) {
+          errors.push(`Speaker ${clip.orden ?? i + 1} clip too short (${wc} words; need at least ${wordMin}).`);
+        }
+        if (wc > wordMax) {
+          errors.push(`Speaker ${clip.orden ?? i + 1} clip too long (${wc} words).`);
+        }
+      });
+      return;
+    }
+
+    listeningSpeakerBlocks(gen.script)
+      .slice(0, 5)
+      .forEach((block, i) => {
+        const wc = wordCount(block);
+        if (wc < wordMin) {
+          errors.push(`Speaker ${i + 1} monologue too short (${wc} words; need at least ${wordMin}).`);
+        }
+      });
+  }
 }
 
 function normalizeWritingFormat(format) {
@@ -59,6 +136,31 @@ export function normalizeGeneratedExamPart(slug, partDef, generated) {
   gen.collaborativePrompts = asArray(gen.collaborativePrompts);
   gen.sections = asArray(gen.sections);
   gen.sentencePool = asArray(gen.sentencePool);
+  gen.optionPool = asArray(gen.optionPool);
+  gen.matchingAnswers = asArray(gen.matchingAnswers);
+  gen.audioClips = asArray(gen.audioClips);
+
+  if (partDef.mode === 'listening' && partDef.activity === 'short-extracts' && !gen.audioClips.length) {
+    gen.audioClips = gen.questions
+      .map((q, i) => ({
+        orden: q.number ?? i + 1,
+        titulo: String(q.situation || q.prompt || `Extract ${i + 1}`).trim(),
+        text: String(q.script || '').trim(),
+      }))
+      .filter((c) => c.text);
+  }
+
+  if (
+    partDef.mode === 'listening' &&
+    partDef.activity === 'multiple-matching' &&
+    !gen.audioClips.length
+  ) {
+    gen.audioClips = listeningSpeakerBlocks(gen.script).map((block, i) => ({
+      orden: i + 1,
+      titulo: `Speaker ${i + 1}`,
+      text: block.trim(),
+    }));
+  }
 
   if (partDef.mode !== 'writing') {
     gen.partNumber = partDef.partNumber;
@@ -617,6 +719,8 @@ function validateListening(partDef, gen, errors, warnings) {
   } else if (partDef.needsAudio) {
     warnings.push('Audio will be synthesized on save unless skipAudio is enabled.');
   }
+
+  validateListeningClipWordCounts(partDef, gen, errors);
 }
 
 function validateSpeaking(gen, errors) {

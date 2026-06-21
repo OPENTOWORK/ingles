@@ -80,6 +80,8 @@ import { ReadingPracticeSessionProvider } from '@/context/ReadingPracticeSession
 import ReadingPracticeChrome from '@/components/exam/ReadingPracticeChrome';
 import {
   runKeepPracticingSkillFlow,
+  resolvePartIdAfterExamReload,
+  buildQuestionSelectionAfterExamReload,
 } from '@/utils/skillPracticeNavigation';
 import {
   buildBulkAnswerCheckUpdate,
@@ -196,6 +198,9 @@ function B2ReadingExamsPageInner() {
   const [aiHintsByKey, setAiHintsByKey] = useState({});
 
   const mountedRef = useRef(true);
+  const partsDataRef = useRef([]);
+  const selectedPartIdRef = useRef(null);
+  const selectedQuestionByPartRef = useRef({});
   const readingSession = useReadingPracticeSession();
 
   useEffect(() => {
@@ -215,7 +220,8 @@ function B2ReadingExamsPageInner() {
       window.removeEventListener('dralo-reading-instant-feedback-changed', onInstantFeedbackChanged);
   }, []);
 
-  const loadReadingData = useCallback(async () => {
+  const loadReadingData = useCallback(async (slotOverride) => {
+    const targetSlot = slotOverride ?? examSlot;
     readingSession.resetAnswersRevealed();
     setLoading(true);
     setError('');
@@ -232,7 +238,7 @@ function B2ReadingExamsPageInner() {
       if (levelError || !levelData) throw new Error('No se pudo obtener el nivel B2.');
 
       const { examenId, error: examResolveError } = await resolveB2ExamenId(supabase, levelData.id, {
-        slot: examSlot,
+        slot: targetSlot,
       });
       if (examResolveError || !examenId) {
         const detail =
@@ -342,15 +348,21 @@ function B2ReadingExamsPageInner() {
 
       if (!mountedRef.current) return;
 
+      const prevParts = partsDataRef.current;
+      const prevPartId = selectedPartIdRef.current;
+      const prevQuestionByPart = selectedQuestionByPartRef.current;
+
       setPartsData(normalizedParts);
-      setSelectedPartId(normalizedParts[0]?.id || null);
-      const initialQuestionSelection = normalizedParts.reduce((acc, part) => {
-        if (part.questions.length === 0) return acc;
-        const randomIndex = Math.floor(Math.random() * part.questions.length);
-        acc[part.id] = part.questions[randomIndex].preguntaId;
-        return acc;
-      }, {});
-      setSelectedQuestionByPart(initialQuestionSelection);
+      partsDataRef.current = normalizedParts;
+      const nextPartId = resolvePartIdAfterExamReload(normalizedParts, prevPartId, prevParts);
+      setSelectedPartId(nextPartId);
+      selectedPartIdRef.current = nextPartId;
+      const nextQuestionSelection = buildQuestionSelectionAfterExamReload(
+        normalizedParts,
+        prevQuestionByPart,
+      );
+      setSelectedQuestionByPart(nextQuestionSelection);
+      selectedQuestionByPartRef.current = nextQuestionSelection;
     } catch (err) {
       if (mountedRef.current) setError(err.message || 'Error cargando Reading.');
     } finally {
@@ -367,21 +379,22 @@ function B2ReadingExamsPageInner() {
     },
   });
 
+  const beginExamSlotChange = useCallback(
+    (slot) => {
+      setLoading(true);
+      scoring.handleSelectExam(selectExamSlot, slot);
+    },
+    [scoring, selectExamSlot],
+  );
+
   const handleSelectExamSlot = useMemo(
-    () =>
-      createAdminExamSelectHandler(adminFlow, (slot) => {
-        scoring.handleSelectExam(selectExamSlot, slot);
-        void loadReadingData();
-      }),
-    [adminFlow, scoring, selectExamSlot, loadReadingData],
+    () => createAdminExamSelectHandler(adminFlow, beginExamSlotChange),
+    [adminFlow, beginExamSlotChange],
   );
   const examSlotPickerProps = buildExamSlotPickerProps({
     examenIdBySlot: scoring.examenIdBySlot,
     adminFlow,
-    onSelectSlot: (slot) => {
-      scoring.handleSelectExam(selectExamSlot, slot);
-      void loadReadingData();
-    },
+    onSelectSlot: beginExamSlotChange,
   });
 
   const skillNav = useSkillPartFirstNavigation({
@@ -451,6 +464,12 @@ function B2ReadingExamsPageInner() {
     );
     if (target?.id && target.id !== selectedPartId) setSelectedPartId(target.id);
   }, [skillNav.active, skillNav.selectedPartNumber, tabPartsData, selectedPartId]);
+
+  useEffect(() => {
+    partsDataRef.current = partsData;
+    selectedPartIdRef.current = selectedPartId;
+    selectedQuestionByPartRef.current = selectedQuestionByPart;
+  }, [partsData, selectedPartId, selectedQuestionByPart]);
 
   useEffect(() => {
     mountedRef.current = true;
@@ -2193,6 +2212,7 @@ function B2ReadingExamsPageInner() {
                 passage={
                   isPart1McqCloze ? (
                     <B2ExamInlineMcqClozePassage
+                      key={`mcq-${examSlot}-${selectedQuestion.preguntaId}`}
                       text={selectedPartContent.texto}
                       mcqGroups={part1McqGroups}
                       getQuestionKey={(questionNumber) => {

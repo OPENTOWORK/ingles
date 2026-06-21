@@ -272,6 +272,23 @@ ${baseExamSchema(directions, `,"title":"text title"${extraFields},${questionsSch
   }
 
   if (mode === 'listening') {
+    if (activity === 'short-extracts' && L === 'B2') {
+      return `Create ONE complete Cambridge B2 First Listening Part 1: multiple choice (eight short extracts).
+${variety}
+${SHARED_JSON_RULES}
+${directions}
+Generate exactly 8 questions numbered 1–8.
+Each question MUST include:
+- number (1–8)
+- situation: one-line context (e.g. "You hear two friends talking about a trip.")
+- prompt: the exam question (e.g. "Why is the woman calling?")
+- options: exactly three strings "A) ...", "B) ...", "C) ..."
+- script: the FULL dialogue for TTS ONLY (MINIMUM 95 words, target 100–120 words; 2–4 lines as "A:" and "B:" dialogue; NO question text inside script; MUST produce 30–40 second audio when read aloud)
+modelAnswers: 8 rows with letter only (A, B, or C).
+Also include a combined "script" field concatenating all eight extract dialogues separated by blank lines (for reference only).
+Return ONLY JSON with: partTitle, title, directions, setting, script, questions[{number,situation,prompt,options[],script}], modelAnswers[]`;
+    }
+
     if (activity === 'multiple-matching' && L === 'B2') {
       return `Create ONE complete Cambridge B2 First Listening Part 3: multiple matching (five speakers).
 ${variety}
@@ -281,8 +298,20 @@ Generate exactly 5 speakers (Speaker 1–Speaker 5) in the script, matched to op
 optionPool: exactly 8 options A–H (each a short description of an opinion/feeling/activity).
 matchingAnswers: 5 rows {number: 19–23, answer: "A"|...|"H"} — one letter per speaker.
 questions: 5 items {number: 19–23, prompt: "Speaker N"} WITHOUT repeating full A–H option text.
-script: five short monologues labelled "Speaker 1:" … "Speaker 5:" (70–100 words each; suitable for 25–35 second clips).
-Return ONLY JSON with: partTitle, directions, setting, script, optionPool ["A) ...",...,"H) ..."], matchingAnswers[], questions[], modelAnswers[] (letters only)`;
+script: five short monologues labelled "Speaker 1:" … "Speaker 5:" (MINIMUM 105 words each, target 110–130 words; suitable for 40–50 second TTS clips).
+audioClips: REQUIRED array of exactly 5 objects {orden:1–5, titulo:"Speaker N", text:"full monologue text for TTS (105–130 words each)"}.
+Return ONLY JSON with: partTitle, directions, setting, script, audioClips[], optionPool ["A) ...",...,"H) ..."], matchingAnswers[], questions[], modelAnswers[] (letters only)`;
+    }
+
+    if (activity === 'sentence-completion' && L === 'B2') {
+      return `Create ONE complete Cambridge B2 First Listening Part 2: sentence completion.
+${variety}
+${SHARED_JSON_RULES}
+${directions}
+Generate exactly 10 questions numbered 9–18 (type "short", prompt with a gap marked ___).
+script: ONE continuous monologue or talk (MINIMUM 530 words, target 530–570 words; about 3 minutes 30 seconds to 3 minutes 50 seconds when read aloud). No speaker labels unless necessary.
+modelAnswers: 10 rows with the missing word or short phrase for each question.
+Return ONLY JSON with: partTitle, title, directions, setting, script, questions[{number,prompt,type:"short"}], modelAnswers[]`;
     }
 
     if (activity === 'conversation' && L === 'B2') {
@@ -292,7 +321,7 @@ ${SHARED_JSON_RULES}
 ${directions}
 Generate exactly 7 questions numbered 24–30.
 Each question must include exactly three options as full strings: "A) ...", "B) ...", "C) ...".
-script: ONE continuous interview or conversation between an Interviewer (A) and a guest (B), 450–650 words total (about 3–4 minutes when read aloud). Use "A:" and "B:" speaker labels throughout.
+script: ONE continuous interview or conversation between an Interviewer (A) and a guest (B), MINIMUM 580 words, target 580–640 words (about 4 minutes when read aloud). Use "A:" and "B:" speaker labels throughout.
 modelAnswers: 7 rows with letter only (A, B, or C) matching questions 24–30.
 Do NOT use an A–H matching pool. Do NOT split into five separate speaker monologues.
 Return ONLY JSON with: partTitle, title, directions, setting, script, questions[{number,prompt,options[]}], modelAnswers[]`;
@@ -325,7 +354,7 @@ Return ONLY JSON with: partTitle, title, directions, setting, script, questions[
     let scriptRule =
       'script: ONE continuous text for TTS — monologue prose, NO speaker labels.';
     if (activity === 'short-extracts') {
-      scriptRule = `script: EIGHT labelled mini-dialogues "Extract 1" through "Extract 8", each 2–4 lines as "A:" and "B:" dialogue (80–120 words total per extract; suitable for 25–35 second clips).`;
+      scriptRule = `script: EIGHT labelled mini-dialogues "Extract 1" through "Extract 8", each 2–4 lines as "A:" and "B:" dialogue (90–110 words total per extract; suitable for 30–40 second TTS clips).`;
     } else if (activity === 'sentence-completion') {
       scriptRule =
         'script: ONE continuous monologue (450–650 words; about 3–4 minutes when read aloud). No speaker labels unless necessary.';

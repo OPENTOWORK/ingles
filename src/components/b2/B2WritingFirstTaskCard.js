@@ -10,33 +10,39 @@ export default function B2WritingFirstTaskCard({
   points = [],
   wordMin = 140,
   wordMax = 190,
+  hideHeader = false,
+  hideInstructions = false,
 }) {
   return (
     <div className="b2-writing-task">
-      <h3 className="b2-writing-task__title">{title}</h3>
+      {!hideHeader && title ? <h3 className="b2-writing-task__title">{title}</h3> : null}
 
-      {instructions ? (
+      {!hideInstructions && instructions ? (
         <div className="b2-writing-task__instructions">
           <p className="b2-writing-task__label">Instructions</p>
           <p>{instructions}</p>
         </div>
       ) : null}
 
-      {question ? (
-        <div className="b2-writing-task__question-block">
-          <p className="b2-writing-task__label">Question</p>
-          <p className="b2-writing-task__question">{question}</p>
-        </div>
-      ) : null}
+      {question || points?.length ? (
+        <div className="levels-exam-split__passage-panel b2-writing-task__stimulus">
+          {question ? (
+            <div className="b2-writing-task__question-block">
+              {!hideHeader ? <p className="b2-writing-task__label">Question</p> : null}
+              <p className="b2-writing-task__question">{question}</p>
+            </div>
+          ) : null}
 
-      {points?.length ? (
-        <div className="b2-writing-task__points">
-          <p className="b2-writing-task__label">You should write about:</p>
-          <ol className="b2-writing-task__points-list">
-            {points.map((point, i) => (
-              <li key={i}>{point}</li>
-            ))}
-          </ol>
+          {points?.length ? (
+            <div className="b2-writing-task__points">
+              <p className="b2-writing-task__label">You should write about:</p>
+              <ol className="b2-writing-task__points-list">
+                {points.map((point, i) => (
+                  <li key={i}>{point}</li>
+                ))}
+              </ol>
+            </div>
+          ) : null}
         </div>
       ) : null}
 
