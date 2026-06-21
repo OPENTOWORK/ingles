@@ -7,7 +7,6 @@ import { useSearchParams } from 'next/navigation';
 import LevelsCategoryTimer from '@/components/levels/LevelsCategoryTimer';
 import LevelsPartScorePanel from '@/components/levels/LevelsPartScorePanel';
 import LevelsPartFinishBanner from '@/components/levels/LevelsPartFinishBanner';
-import LevelsAnswerJustification from '@/components/levels/LevelsAnswerJustification';
 import { useLevelsCategoryTimer } from '@/hooks/useLevelsCategoryTimer';
 import { computeB2PartScoreMetrics } from '@/utils/levelsPaperScoreMetrics';
 import { getActiveB2RuoePartScoring } from '@/utils/levelsB2PartScoring';
@@ -54,6 +53,12 @@ import { B2ExamPracticeContent, B2ExamQuestionItem } from '@/components/b2/B2Exa
 import B2ExamInlineOpenClozePassage from '@/components/b2/B2ExamInlineOpenClozePassage';
 import B2ExamInlineKeyWordPassage from '@/components/b2/B2ExamInlineKeyWordPassage';
 import B2ExamInlineMcqClozePassage from '@/components/b2/B2ExamInlineMcqClozePassage';
+import SkillPartExplanationsPanel from '@/components/exam/SkillPartExplanationsPanel';
+import {
+  buildMcqGroupExplanationEntries,
+  buildOpenClozeExplanationEntries,
+  buildKeyWordExplanationEntries,
+} from '@/utils/buildOpenGapExplanationEntries';
 import B2ExamPracticeModuleNav from '@/components/b2/B2ExamPracticeModuleNav';
 
 const UOE_PAGE_PART_MAX = 4;
@@ -702,6 +707,27 @@ function UseOfEnglishExamsPageInner() {
 
   const groupedAnswersForUiAndScore = part1McqGroups ?? groupedAnswersSelected;
 
+  const uoeSidePanelExplanationEntries = useMemo(
+    () => {
+      if (isInlinePassagePart || isPart1McqCloze) return [];
+      return buildMcqGroupExplanationEntries({
+        mcqGroups: groupedAnswersForUiAndScore || [],
+        getQuestionKey: (questionNumber, _group, groupIndex) =>
+          getQuestionKey(selectedPart?.id, questionNumber, `extra-${groupIndex}`),
+        selectedOptions,
+        checkedQuestions,
+      });
+    },
+    [
+      isInlinePassagePart,
+      isPart1McqCloze,
+      groupedAnswersForUiAndScore,
+      selectedPart?.id,
+      selectedOptions,
+      checkedQuestions,
+    ],
+  );
+
   const partScoreMetrics = useMemo(
     () =>
       computeB2PartScoreMetrics({
@@ -998,6 +1024,104 @@ function UseOfEnglishExamsPageInner() {
     [aiHintsByKey, scoringV2Part4, openGrades, openChecks, openInputs, openAnswerMap, requestAiJustification, partNumberUoe],
   );
 
+  const uoeExplanationFooter = useMemo(() => {
+    if (isPart1McqCloze) {
+      const entries = buildMcqGroupExplanationEntries({
+        mcqGroups: part1McqGroups || [],
+        getQuestionKey: (questionNumber) => {
+          const groupIndex = (part1McqGroups || []).findIndex(
+            (g) => g.questionNumber === questionNumber,
+          );
+          return getQuestionKey(
+            selectedPart?.id,
+            questionNumber,
+            `extra-${groupIndex >= 0 ? groupIndex : 'mcq'}`,
+          );
+        },
+        selectedOptions,
+        checkedQuestions,
+      });
+      if (!entries.length) return null;
+      return (
+        <SkillPartExplanationsPanel
+          entries={entries}
+          aiHintsByKey={aiHintsByKey}
+          onRequestExplanation={handlePart1ExplanationRequest}
+        />
+      );
+    }
+
+    if (isKeyWordPart) {
+      const entries = buildKeyWordExplanationEntries({
+        activeQuestionNumbers: openQuestionNumbers,
+        getQuestionKey: (questionNumber) =>
+          getQuestionKey(selectedPart?.id, questionNumber, 'open'),
+        openInputs,
+        openChecks,
+        openGrades,
+        scoringV2Part4,
+        openAnswerMap,
+      });
+      if (!entries.length) return null;
+      return (
+        <SkillPartExplanationsPanel
+          entries={entries}
+          aiHintsByKey={aiHintsByKey}
+          onRequestExplanation={handleOpenGapExplanationRequest}
+        />
+      );
+    }
+
+    if (isInlinePassagePart) {
+      const entries = buildOpenClozeExplanationEntries({
+        activeQuestionNumbers: openQuestionNumbers,
+        getQuestionKey: (questionNumber) =>
+          getQuestionKey(selectedPart?.id, questionNumber, 'open'),
+        openInputs,
+        openChecks,
+        openAnswerMap,
+      });
+      if (!entries.length) return null;
+      return (
+        <SkillPartExplanationsPanel
+          entries={entries}
+          aiHintsByKey={aiHintsByKey}
+          onRequestExplanation={handleOpenGapExplanationRequest}
+        />
+      );
+    }
+
+    if (uoeSidePanelExplanationEntries.length > 0) {
+      return (
+        <SkillPartExplanationsPanel
+          entries={uoeSidePanelExplanationEntries}
+          aiHintsByKey={aiHintsByKey}
+          onRequestExplanation={handlePart1ExplanationRequest}
+        />
+      );
+    }
+
+    return null;
+  }, [
+    isPart1McqCloze,
+    isKeyWordPart,
+    isInlinePassagePart,
+    part1McqGroups,
+    selectedPart?.id,
+    selectedOptions,
+    checkedQuestions,
+    openQuestionNumbers,
+    openInputs,
+    openChecks,
+    openGrades,
+    scoringV2Part4,
+    openAnswerMap,
+    aiHintsByKey,
+    handlePart1ExplanationRequest,
+    handleOpenGapExplanationRequest,
+    uoeSidePanelExplanationEntries,
+  ]);
+
   const currentExamProgress = progressBySlot[examSlot] || {};
   const getPartSavedScoreLabel = (part) => {
     const partNumber = Number(part.nombre.match(/\d+/)?.[0] || 0);
@@ -1258,10 +1382,13 @@ function UseOfEnglishExamsPageInner() {
                       : ''
                 }
                 showQuestionsHeading={!isInlinePassagePart && !isPart1McqCloze}
+                footer={uoeExplanationFooter}
                 questions={
                   isInlinePassagePart || isPart1McqCloze
                     ? null
-                    : groupedAnswersForUiAndScore.map((group, groupIndex) => (
+                    : (
+                      <>
+                    {groupedAnswersForUiAndScore.map((group, groupIndex) => (
                       <B2ExamQuestionItem
                         key={`group-${selectedQuestion.preguntaId}-${group.questionNumber ?? 'extra'}-${groupIndex}`}
                       >
@@ -1367,28 +1494,10 @@ function UseOfEnglishExamsPageInner() {
                             );
                           })}
                         </div>
-
-                        {(() => {
-                          const questionKey = getQuestionKey(
-                            selectedPart.id,
-                            group.questionNumber,
-                            `extra-${groupIndex}`,
-                          );
-                          const hasChecked = checkedQuestions[questionKey];
-                          if (!hasChecked) return null;
-                          const correct = group.options.find((option) => option.correcta);
-                          return (
-                            <>
-                              <p style={{ margin: '0.7rem 0 0', fontWeight: 600, color: '#1f2937' }}>
-                                Correct answer:{' '}
-                                {correct?.formattedText || correct?.respuesta || 'Not available'}
-                              </p>
-                              <LevelsAnswerJustification hint={aiHintsByKey[questionKey]} />
-                            </>
-                          );
-                        })()}
                       </B2ExamQuestionItem>
-                    ))
+                    ))}
+                      </>
+                    )
                 }
               />
             )}

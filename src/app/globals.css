@@ -6775,6 +6775,15 @@ body.reading-night-mode .levels-b2-speaking-panel__usage,
 
 .levels-exam-split__text p {
   margin: 0.5rem 0;
+  text-align: justify;
+  text-align-last: left;
+  text-justify: inter-word;
+}
+
+.levels-exam-split__passage-panel p {
+  text-align: justify;
+  text-align-last: left;
+  text-justify: inter-word;
 }
 
 .levels-exam-split__questions {
@@ -6841,6 +6850,9 @@ body.reading-night-mode .levels-b2-speaking-panel__usage,
   margin: 0.5rem 0;
   line-height: 1.78;
   color: #1e293b;
+  text-align: justify;
+  text-align-last: left;
+  text-justify: inter-word;
 }
 
 .levels-exam-inline-gap {
@@ -7441,6 +7453,10 @@ body.reading-night-mode .levels-b2-speaking-panel__usage,
   border-top: 2px solid #e2e8f0;
 }
 
+.levels-exam-split__body > .levels-exam-mcq-explanations {
+  margin-top: 1.5rem;
+}
+
 .levels-exam-mcq-explanations__title {
   margin: 0 0 0.85rem;
   font-size: 0.8rem;
@@ -7468,6 +7484,11 @@ body.reading-night-mode .levels-b2-speaking-panel__usage,
   background: #fff5f5;
 }
 
+.levels-exam-mcq-explanations__item--partial {
+  border-color: #fde68a;
+  background: #fffbeb;
+}
+
 .levels-exam-mcq-explanations__head {
   margin: 0;
   line-height: 1.55;
@@ -7489,6 +7510,21 @@ body.reading-night-mode .levels-b2-speaking-panel__usage,
 
 .levels-exam-mcq-explanations__verdict--incorrect {
   color: #c53030;
+}
+
+.levels-exam-mcq-explanations__verdict--partial {
+  color: #b45309;
+}
+
+.levels-exam-mcq-explanations__score {
+  font-weight: 700;
+  color: #475569;
+}
+
+.levels-exam-mcq-explanations__detail {
+  margin: 0.45rem 0 0;
+  line-height: 1.55;
+  color: #475569;
 }
 
 .levels-exam-mcq-explanations__toggle {
@@ -13237,6 +13273,11 @@ body.reading-night-mode .levels-exam-mcq-explanations__item--correct {
 body.reading-night-mode .levels-exam-mcq-explanations__item--incorrect {
   background: #7f1d1d;
   border-color: #ef4444;
+}
+
+body.reading-night-mode .levels-exam-mcq-explanations__item--partial {
+  background: #78350f;
+  border-color: #f59e0b;
 }
 
 body.reading-night-mode .levels-exam-mcq-explanations__head,

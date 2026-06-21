@@ -1,7 +1,5 @@
 'use client';
 
-import { useState } from 'react';
-import LevelsAnswerJustification from '@/components/levels/LevelsAnswerJustification';
 import ReadingQuestionFlagButton from '@/components/exam/ReadingQuestionFlagButton';
 import ReadingConfidenceSelector from '@/components/exam/ReadingConfidenceSelector';
 
@@ -70,26 +68,8 @@ export default function B2ExamInlineOpenClozePassage({
   showInlineExample = false,
   exampleGap0Word = '',
 }) {
-  /** Explicaciones ocultas por defecto: solo se muestran (y se piden) al pulsar 💡. */
-  const [openExplanations, setOpenExplanations] = useState({});
-  const lazyExplanations = typeof onRequestExplanation === 'function';
-
-  const toggleExplanation = (questionKey, questionNumber) => {
-    const isOpen = !!openExplanations[questionKey];
-    if (!isOpen) {
-      const hint = aiHintsByKey[questionKey];
-      if (!hint?.text && !hint?.loading) {
-        onRequestExplanation({ questionKey, questionNumber });
-      }
-    }
-    setOpenExplanations((prev) => ({ ...prev, [questionKey]: !isOpen }));
-  };
-
   const activeSet = new Set(activeQuestionNumbers);
   const checkLabel = labels.check ?? 'Check';
-  const correctLabel = labels.correct ?? 'Correct';
-  const incorrectLabel = labels.incorrect ?? 'Incorrect';
-  const correctAnswerLabel = labels.correctAnswer ?? 'Correct answer';
 
   const lines = text
     .split('\n')
@@ -171,8 +151,6 @@ export default function B2ExamInlineOpenClozePassage({
               const currentValue = openInputs[questionKey] || '';
               const checkResult = openChecks[questionKey];
               const isAnswerLocked = !hideFeedback && typeof checkResult === 'boolean';
-              const expected = openAnswerMap.get(questionNumber);
-              const expectedList = expected && expected.size > 0 ? [...expected] : [];
 
               if (isExampleGap || !isActiveGap) {
                 const exampleAnswers = openAnswerMap.get(questionNumber);
@@ -236,45 +214,6 @@ export default function B2ExamInlineOpenClozePassage({
                       </button>
                     ) : null}
                   </span>
-                  {!hideFeedback && typeof checkResult === 'boolean' ? (
-                    <span className="levels-exam-inline-gap__feedback">
-                      <span
-                        className={`levels-exam-inline-gap__status${
-                          checkResult
-                            ? ' levels-exam-inline-gap__status--ok'
-                            : ' levels-exam-inline-gap__status--bad'
-                        }`}
-                      >
-                        {checkResult ? correctLabel : incorrectLabel}
-                      </span>
-                      {!checkResult && expectedList.length > 0 ? (
-                        <span className="levels-exam-inline-gap__model">
-                          {correctAnswerLabel}: {expectedList.join(' · ')}
-                        </span>
-                      ) : null}
-                      {lazyExplanations ? (
-                        <button
-                          type="button"
-                          className={`levels-exam-mcq-explanations__toggle${
-                            openExplanations[questionKey]
-                              ? ' levels-exam-mcq-explanations__toggle--open'
-                              : ''
-                          }`}
-                          aria-expanded={!!openExplanations[questionKey]}
-                          onClick={() => toggleExplanation(questionKey, questionNumber)}
-                        >
-                          💡 Explanation
-                        </button>
-                      ) : null}
-                    </span>
-                  ) : null}
-                  {!hideFeedback &&
-                  aiHintsByKey[questionKey] &&
-                  (!lazyExplanations || openExplanations[questionKey]) ? (
-                    <span className="levels-exam-inline-gap__hint">
-                      <LevelsAnswerJustification hint={aiHintsByKey[questionKey]} />
-                    </span>
-                  ) : null}
                 </span>
               );
             })}

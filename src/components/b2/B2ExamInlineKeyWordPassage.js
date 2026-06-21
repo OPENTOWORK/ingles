@@ -1,10 +1,7 @@
 'use client';
 
-import { useState } from 'react';
-import LevelsAnswerJustification from '@/components/levels/LevelsAnswerJustification';
 import ReadingQuestionFlagButton from '@/components/exam/ReadingQuestionFlagButton';
 import ReadingConfidenceSelector from '@/components/exam/ReadingConfidenceSelector';
-import { getB2Part4V2FeedbackCopy } from '@/lib/b2Part4Grading';
 import { parseB2KeyWordTransformItems } from '@/utils/b2ExamTextBlocks';
 
 /**
@@ -43,26 +40,9 @@ export default function B2ExamInlineKeyWordPassage({
   labels = {},
   onRequestExplanation,
 }) {
-  const [openExplanations, setOpenExplanations] = useState({});
-  const lazyExplanations = typeof onRequestExplanation === 'function';
-
-  const toggleExplanation = (questionKey, questionNumber) => {
-    const isOpen = !!openExplanations[questionKey];
-    if (!isOpen) {
-      const hint = aiHintsByKey[questionKey];
-      if (!hint?.text && !hint?.loading) {
-        onRequestExplanation({ questionKey, questionNumber });
-      }
-    }
-    setOpenExplanations((prev) => ({ ...prev, [questionKey]: !isOpen }));
-  };
-
   const activeSet = new Set(activeQuestionNumbers);
   const items = parseB2KeyWordTransformItems(text);
   const checkLabel = labels.check ?? 'Check';
-  const correctLabel = labels.correct ?? 'Correct';
-  const incorrectLabel = labels.incorrect ?? 'Incorrect';
-  const correctAnswerLabel = labels.correctAnswer ?? 'Correct answer';
   const keyWordLabel = labels.keyWord ?? 'Key word';
 
   if (!items.length) return null;
@@ -98,10 +78,7 @@ export default function B2ExamInlineKeyWordPassage({
         const isAnswerLocked =
           !hideFeedback &&
           (hasV2Grade || typeof checkResult === 'boolean');
-        const expected = openAnswerMap.get(questionNumber);
-        const expectedList = expected && expected.size > 0 ? [...expected] : [];
         const inputStateClass = getInputStateClass(checkResult, grade, currentValue, isAnswerLocked);
-        const v2Copy = hasV2Grade ? getB2Part4V2FeedbackCopy(grade) : null;
 
         return (
           <div
@@ -150,79 +127,6 @@ export default function B2ExamInlineKeyWordPassage({
               )}
               <span>{sentence2After}</span>
             </p>
-            {!hideFeedback && isActive && hasV2Grade && v2Copy ? (
-              <div className="levels-exam-inline-gap__feedback levels-exam-inline-gap__feedback--v2">
-                <span className="levels-exam-inline-gap__score">{v2Copy.scoreLabel}</span>
-                <span
-                  className={`levels-exam-inline-gap__status${
-                    grade.score === 2
-                      ? ' levels-exam-inline-gap__status--ok'
-                      : grade.score === 1
-                        ? ' levels-exam-inline-gap__status--partial'
-                        : ' levels-exam-inline-gap__status--bad'
-                  }`}
-                >
-                  {v2Copy.headline}
-                </span>
-                {v2Copy.detail ? (
-                  <span className="levels-exam-inline-gap__detail">{v2Copy.detail}</span>
-                ) : null}
-                {lazyExplanations ? (
-                  <button
-                    type="button"
-                    className={`levels-exam-mcq-explanations__toggle${
-                      openExplanations[questionKey]
-                        ? ' levels-exam-mcq-explanations__toggle--open'
-                        : ''
-                    }`}
-                    aria-expanded={!!openExplanations[questionKey]}
-                    onClick={() => toggleExplanation(questionKey, questionNumber)}
-                  >
-                    💡 Explanation
-                  </button>
-                ) : null}
-              </div>
-            ) : null}
-            {!hideFeedback && isActive && !scoringV2Part4 && typeof checkResult === 'boolean' ? (
-              <div className="levels-exam-inline-gap__feedback">
-                <span
-                  className={`levels-exam-inline-gap__status${
-                    checkResult
-                      ? ' levels-exam-inline-gap__status--ok'
-                      : ' levels-exam-inline-gap__status--bad'
-                  }`}
-                >
-                  {checkResult ? correctLabel : incorrectLabel}
-                </span>
-                {!checkResult && expectedList.length > 0 ? (
-                  <span className="levels-exam-inline-gap__model">
-                    {correctAnswerLabel}: {expectedList.join(' · ')}
-                  </span>
-                ) : null}
-                {lazyExplanations ? (
-                  <button
-                    type="button"
-                    className={`levels-exam-mcq-explanations__toggle${
-                      openExplanations[questionKey]
-                        ? ' levels-exam-mcq-explanations__toggle--open'
-                        : ''
-                    }`}
-                    aria-expanded={!!openExplanations[questionKey]}
-                    onClick={() => toggleExplanation(questionKey, questionNumber)}
-                  >
-                    💡 Explanation
-                  </button>
-                ) : null}
-              </div>
-            ) : null}
-            {!hideFeedback &&
-            isActive &&
-            aiHintsByKey[questionKey] &&
-            (!lazyExplanations || openExplanations[questionKey]) ? (
-              <div className="levels-exam-inline-gap__hint">
-                <LevelsAnswerJustification hint={aiHintsByKey[questionKey]} />
-              </div>
-            ) : null}
           </div>
         );
       })}

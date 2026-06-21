@@ -1,7 +1,6 @@
 'use client';
 
 import { parseLineWithOpenGaps } from '@/components/b2/B2ExamInlineOpenClozePassage';
-import B2ListeningPracticeFeedback from '@/components/b2/B2ListeningPracticeFeedback';
 
 /**
  * Listening Part 2 (sentence completion): input inline at (N) gap in the sentence.
@@ -15,10 +14,6 @@ export default function B2ListeningInlineGapCard({
   hideCheck = false,
   onInputChange,
   onCheck,
-  openAnswerMap,
-  aiHint,
-  studyTip,
-  lang,
 }) {
   const inputStateClass = (() => {
     if (typeof checkResult === 'boolean') {
@@ -90,12 +85,6 @@ export default function B2ListeningInlineGapCard({
     );
   };
 
-  const correctLabel = (() => {
-    const expected = openAnswerMap?.get?.(questionNumber);
-    const list = expected && expected.size > 0 ? [...expected] : [];
-    return list.length > 0 ? list.join(' · ') : null;
-  })();
-
   return (
     <div className="levels-listening-question-card">
       <p className="levels-listening-question-card__title">Question {questionNumber}</p>
@@ -125,15 +114,6 @@ export default function B2ListeningInlineGapCard({
             Check
           </button>
         </div>
-      ) : null}
-      {!hideFeedback && typeof checkResult === 'boolean' ? (
-        <B2ListeningPracticeFeedback
-          isCorrect={checkResult}
-          correctLabel={correctLabel}
-          hint={aiHint}
-          studyTip={studyTip}
-          lang={lang}
-        />
       ) : null}
     </div>
   );

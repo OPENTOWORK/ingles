@@ -13,7 +13,6 @@ import { getActiveB2RuoePartScoring } from '@/utils/levelsB2PartScoring';
 import { isB2ScoringV2Enabled, isB2RuoeV2SessionPersistenceBlocked } from '@/lib/b2ScoringV2FeatureFlag';
 import { parseB2KeyWordAnswerKeyRows } from '@/lib/parseB2KeyWordAnswerKey';
 import { gradeB2Part4Gap } from '@/lib/b2Part4Grading';
-import LevelsAnswerJustification from '@/components/levels/LevelsAnswerJustification';
 import { usePartPracticeTimer } from '@/hooks/usePartPracticeTimer';
 import { computeB2PartScoreMetrics } from '@/utils/levelsPaperScoreMetrics';
 import { postLevelsAnswerJustification } from '@/utils/levelsJustifyClient';
@@ -59,6 +58,12 @@ import { B2ExamPracticeContent, B2ExamQuestionItem } from '@/components/b2/B2Exa
 import B2ExamInlineOpenClozePassage from '@/components/b2/B2ExamInlineOpenClozePassage';
 import B2ExamInlineKeyWordPassage from '@/components/b2/B2ExamInlineKeyWordPassage';
 import B2ExamInlineMcqClozePassage from '@/components/b2/B2ExamInlineMcqClozePassage';
+import SkillPartExplanationsPanel from '@/components/exam/SkillPartExplanationsPanel';
+import {
+  buildMcqGroupExplanationEntries,
+  buildOpenClozeExplanationEntries,
+  buildKeyWordExplanationEntries,
+} from '@/utils/buildOpenGapExplanationEntries';
 import {
   getSessionUserId,
   mergeLevelsEstadisticas,
@@ -187,7 +192,6 @@ function B2ReadingExamsPageInner() {
   const [openChecks, setOpenChecks] = useState({});
   /** @type {Record<string, import('@/lib/b2Part4Grading').B2Part4OpenGrade>} */
   const [openGrades, setOpenGrades] = useState({});
-  const [readingMcqExplanationsOpen, setReadingMcqExplanationsOpen] = useState({});
   /** @type {Record<string, { loading?: boolean, error?: string | null, text?: string | null }>} */
   const [aiHintsByKey, setAiHintsByKey] = useState({});
 
@@ -1133,6 +1137,28 @@ function B2ReadingExamsPageInner() {
   const groupedAnswersForUiAndScore =
     readingSyntheticMcqGroups || part1McqGroups || groupedAnswersSelected;
 
+  const readingSidePanelExplanationEntries = useMemo(
+    () => {
+      if (isInlinePassagePart || isPart1McqCloze || hideInstantFeedback) return [];
+      return buildMcqGroupExplanationEntries({
+        mcqGroups: groupedAnswersForUiAndScore || [],
+        getQuestionKey: (questionNumber, _group, groupIndex) =>
+          getQuestionKey(selectedPart?.id, questionNumber, `extra-${groupIndex}`),
+        selectedOptions,
+        checkedQuestions,
+      });
+    },
+    [
+      isInlinePassagePart,
+      isPart1McqCloze,
+      hideInstantFeedback,
+      groupedAnswersForUiAndScore,
+      selectedPart?.id,
+      selectedOptions,
+      checkedQuestions,
+    ],
+  );
+
   const partScoreMetrics = useMemo(
     () =>
       computeB2PartScoreMetrics({
@@ -1772,6 +1798,114 @@ function B2ReadingExamsPageInner() {
     ],
   );
 
+  const uoeInlineExplanationFooter = useMemo(() => {
+    if (hideInstantFeedback) return null;
+
+    if (isPart1McqCloze) {
+      const entries = buildMcqGroupExplanationEntries({
+        mcqGroups: part1McqGroups || [],
+        getQuestionKey: (questionNumber) => {
+          const groupIndex = (part1McqGroups || []).findIndex(
+            (g) => g.questionNumber === questionNumber,
+          );
+          return getQuestionKey(
+            selectedPart?.id,
+            questionNumber,
+            `extra-${groupIndex >= 0 ? groupIndex : 'mcq'}`,
+          );
+        },
+        selectedOptions,
+        checkedQuestions,
+      });
+      if (!entries.length) return null;
+      return (
+        <SkillPartExplanationsPanel
+          entries={entries}
+          aiHintsByKey={aiHintsByKey}
+          onRequestExplanation={handlePart1ExplanationRequest}
+        />
+      );
+    }
+
+    if (isKeyWordPart) {
+      const entries = buildKeyWordExplanationEntries({
+        activeQuestionNumbers: openQuestionNumbers,
+        getQuestionKey: (questionNumber) =>
+          getQuestionKey(selectedPart?.id, questionNumber, 'open'),
+        openInputs,
+        openChecks,
+        openGrades,
+        scoringV2Part4,
+        openAnswerMap,
+      });
+      if (!entries.length) return null;
+      return (
+        <SkillPartExplanationsPanel
+          entries={entries}
+          aiHintsByKey={aiHintsByKey}
+          onRequestExplanation={handleOpenGapExplanationRequest}
+        />
+      );
+    }
+
+    if (isInlinePassagePart) {
+      const entries = buildOpenClozeExplanationEntries({
+        activeQuestionNumbers: openQuestionNumbers,
+        getQuestionKey: (questionNumber) =>
+          getQuestionKey(selectedPart?.id, questionNumber, 'open'),
+        openInputs,
+        openChecks,
+        openAnswerMap,
+      });
+      if (!entries.length) return null;
+      return (
+        <SkillPartExplanationsPanel
+          entries={entries}
+          aiHintsByKey={aiHintsByKey}
+          onRequestExplanation={handleOpenGapExplanationRequest}
+        />
+      );
+    }
+
+    return null;
+  }, [
+    hideInstantFeedback,
+    isPart1McqCloze,
+    isKeyWordPart,
+    isInlinePassagePart,
+    part1McqGroups,
+    selectedPart?.id,
+    selectedOptions,
+    checkedQuestions,
+    openQuestionNumbers,
+    openInputs,
+    openChecks,
+    openGrades,
+    scoringV2Part4,
+    openAnswerMap,
+    aiHintsByKey,
+    handlePart1ExplanationRequest,
+    handleOpenGapExplanationRequest,
+  ]);
+
+  const practiceExplanationFooter = useMemo(() => {
+    if (uoeInlineExplanationFooter) return uoeInlineExplanationFooter;
+    if (hideInstantFeedback || !readingSidePanelExplanationEntries.length) return null;
+    return (
+      <SkillPartExplanationsPanel
+        entries={readingSidePanelExplanationEntries}
+        aiHintsByKey={aiHintsByKey}
+        onRequestExplanation={handleReadingMcqExplanationRequest}
+      />
+    );
+  }, [
+    uoeInlineExplanationFooter,
+    hideInstantFeedback,
+    readingSidePanelExplanationEntries,
+    aiHintsByKey,
+    handleReadingMcqExplanationRequest,
+  ]);
+
   const scorePanelProps = {
     ...partScoreMetrics,
     passingCount: b2PartCfg?.passing ?? partScoreMetrics.passingCount,
@@ -2136,6 +2270,7 @@ function B2ReadingExamsPageInner() {
                           : ''
                 }
                 showQuestionsHeading={!isInlinePassagePart && !isPart1McqCloze}
+                footer={practiceExplanationFooter}
                 questions={
                   isInlinePassagePart || isPart1McqCloze
                     ? null
@@ -2263,44 +2398,6 @@ function B2ReadingExamsPageInner() {
                           <ReadingConfidenceSelector questionKey={questionKey} />
                         ) : null}
 
-                        {(() => {
-                          const hasChecked = checkedQuestions[questionKey];
-                          if (!hasChecked || hideInstantFeedback) return null;
-                          const correct = group.options.find((option) => option.correcta);
-                          const explanationOpen = !!readingMcqExplanationsOpen[questionKey];
-                          return (
-                            <>
-                              <p style={{ margin: '0.7rem 0 0', fontWeight: 600, color: '#1f2937' }}>
-                                Correct answer: {correct?.formattedText || correct?.respuesta || 'Not available'}
-                              </p>
-                              {partNumberReading >= 5 && partNumberReading <= 7 ? (
-                                <button
-                                  type="button"
-                                  className={`levels-exam-mcq-explanations__toggle${
-                                    explanationOpen ? ' levels-exam-mcq-explanations__toggle--open' : ''
-                                  }`}
-                                  aria-expanded={explanationOpen}
-                                  onClick={() => {
-                                    const nextOpen = !explanationOpen;
-                                    if (nextOpen) {
-                                      handleReadingMcqExplanationRequest({ questionKey, group });
-                                    }
-                                    setReadingMcqExplanationsOpen((prev) => ({
-                                      ...prev,
-                                      [questionKey]: nextOpen,
-                                    }));
-                                  }}
-                                >
-                                  💡 Explanation
-                                </button>
-                              ) : null}
-                              {(partNumberReading < 5 || partNumberReading > 7 || explanationOpen) &&
-                              aiHintsByKey[questionKey] ? (
-                                <LevelsAnswerJustification hint={aiHintsByKey[questionKey]} />
-                              ) : null}
-                            </>
-                          );
-                        })()}
                         {partNumberReading === 6 && part6SentencePoolBlock ? (
                           <details className="levels-exam-part6-pool-inline" style={{ marginTop: '0.75rem' }}>
                             <summary style={{ cursor: 'pointer', fontWeight: 600, color: '#334155' }}>

@@ -9,13 +9,18 @@ import { useB2AutoOpenExamFromUrl } from '@/hooks/useB2AutoOpenExamFromUrl';
 import { B2ExamPracticeChrome, B2ExamPracticeLayout } from '@/components/b2/B2ExamPracticeChrome';
 import { B2ExamPracticeContent, B2ExamQuestionItem } from '@/components/b2/B2ExamPracticeContent';
 import B2ExamInlineMcqClozePassage from '@/components/b2/B2ExamInlineMcqClozePassage';
+import SkillPartExplanationsPanel from '@/components/exam/SkillPartExplanationsPanel';
+import {
+  buildOpenClozeExplanationEntries,
+  buildMcqGroupExplanationEntries,
+} from '@/utils/buildOpenGapExplanationEntries';
 import { useB2ExamScoringSession } from '@/hooks/useB2ExamScoringSession';
 import { useLevelExamScoringSession } from '@/hooks/useLevelExamScoringSession';
 import { computeB2PartProgressFromState } from '@/utils/recordLevelsB2PartScore';
 import { getExamSkillSectionTitle } from '@/data/levelExamPartMap';
-import LevelsAnswerJustification from '@/components/levels/LevelsAnswerJustification';
 import { usePartPracticeTimer } from '@/hooks/usePartPracticeTimer';
 import { computeB2PartScoreMetrics } from '@/utils/levelsPaperScoreMetrics';
+import { getLevelsPartScoring } from '@/utils/levelsA2PartScoring';
 import { isB2RuoeV2SessionPersistenceBlocked } from '@/lib/b2ScoringV2FeatureFlag';
 import { postLevelsAnswerJustification } from '@/utils/levelsJustifyClient';
 import Link from 'next/link';
@@ -43,7 +48,6 @@ import ExamStudyNotesSidebar from '@/components/exam/ExamStudyNotesSidebar';
 import ReadingPracticeFeedbackToggle from '@/components/exam/ReadingPracticeFeedbackToggle';
 import ReadingPracticeChrome from '@/components/exam/ReadingPracticeChrome';
 import { ReadingPracticeSessionProvider, useReadingPracticeSession } from '@/context/ReadingPracticeSessionContext';
-import B2ListeningPracticeFeedback from '@/components/b2/B2ListeningPracticeFeedback';
 import B2ListeningInlineGapCard from '@/components/b2/B2ListeningInlineGapCard';
 import ExamListeningAudioPlayer from '@/components/b2/ExamListeningAudioPlayer';
 import {
@@ -1627,6 +1631,133 @@ function B2ExamPaperPracticePageInner({
     hasOpenAnswerSlots && !useListeningItemLayout && !isLongFormWritingPart,
   );
 
+  const paperOpenSidePanelExplanationEntries = useMemo(
+    () => {
+      if (
+        hideFeedbackResolved ||
+        !useOpenInputUi ||
+        isB2Part1InlineMcq ||
+        isListeningGapPart ||
+        !openQuestionNumbers.length
+      ) {
+        return [];
+      }
+      return buildOpenClozeExplanationEntries({
+        activeQuestionNumbers: openQuestionNumbers,
+        getQuestionKey: (questionNumber) =>
+          getQuestionKey(selectedPart?.id, questionNumber, 'open'),
+        openInputs,
+        openChecks,
+        openAnswerMap,
+      });
+    },
+    [
+      hideFeedbackResolved,
+      useOpenInputUi,
+      isB2Part1InlineMcq,
+      isListeningGapPart,
+      openQuestionNumbers,
+      selectedPart?.id,
+      openInputs,
+      openChecks,
+      openAnswerMap,
+    ],
+  );
+
+  const paperMcqSidePanelExplanationEntries = useMemo(
+    () => {
+      if (hideFeedbackResolved || isB2Part1InlineMcq) return [];
+      return buildMcqGroupExplanationEntries({
+        mcqGroups: effectiveMcqGroups,
+        getQuestionKey: (questionNumber, _group, groupIndex) =>
+          getQuestionKey(selectedPart?.id, questionNumber, `extra-${groupIndex}`),
+        selectedOptions,
+        checkedQuestions,
+      });
+    },
+    [
+      hideFeedbackResolved,
+      isB2Part1InlineMcq,
+      effectiveMcqGroups,
+      selectedPart?.id,
+      selectedOptions,
+      checkedQuestions,
+    ],
+  );
+
+  const listeningPracticeExplanationEntries = useMemo(() => {
+    if (!useListeningItemLayout || hideFeedbackResolved) return [];
+    const entries = [];
+    for (const qn of listeningQuestionNumbersOrdered) {
+      if (isListeningGapPart) {
+        const questionKey = getQuestionKey(selectedPart?.id, qn, 'open');
+        const checkResult = openChecks[questionKey];
+        if (typeof checkResult !== 'boolean') continue;
+        const expected = openAnswerMap.get(qn);
+        const expectedList = expected && expected.size > 0 ? [...expected] : [];
+        entries.push({
+          questionNumber: qn,
+          questionKey,
+          isCorrect: checkResult,
+          userAnswer: String(openInputs[questionKey] || '').trim(),
+          correctAnswer: expectedList.length > 0 ? expectedList.join(' · ') : undefined,
+        });
+        continue;
+      }
+      const group = groupedAnswers.find((g) => g.questionNumber === qn);
+      if (!group?.options?.length) continue;
+      const groupIndex = groupedAnswers.indexOf(group);
+      const questionKey = getQuestionKey(selectedPart?.id, qn, `extra-${groupIndex}`);
+      if (!checkedQuestions[questionKey]) continue;
+      const rawMatchingSelection = selectedOptions[questionKey];
+      const selectedLetter = /^[A-H]$/i.test(String(rawMatchingSelection || ''))
+        ? String(rawMatchingSelection).toUpperCase()
+        : extractMcqOptionLetter(
+            group.options.find((o) => rawMatchingSelection === o.id) || {},
+          ) || '';
+      const correctOpt = group.options.find((o) => o.correcta) || group.options[0];
+      const correctLetter = extractMcqOptionLetter(correctOpt || {});
+      const selectedOpt = group.options.find((o) => selectedOptions[questionKey] === o.id);
+      const isCorrectAnswer =
+        isB2ListeningMatchingPart && /^[A-H]$/.test(selectedLetter)
+          ? selectedLetter === correctLetter
+          : !!selectedOpt?.correcta;
+      const poolLine = listeningMatchingSelectOptions.find((o) => o.letter === selectedLetter);
+      const correctPoolLine = listeningMatchingSelectOptions.find((o) => o.letter === correctLetter);
+      const userAnswer =
+        isB2ListeningMatchingPart && poolLine
+          ? `${poolLine.letter} — ${poolLine.text}`
+          : selectedOpt?.formattedText || selectedOpt?.respuesta || selectedLetter;
+      const correctAnswer =
+        isB2ListeningMatchingPart && correctPoolLine
+          ? `${correctPoolLine.letter} — ${correctPoolLine.text}`
+          : correctOpt?.formattedText || correctOpt?.respuesta || correctLetter;
+      entries.push({
+        questionNumber: qn,
+        questionKey,
+        group,
+        isCorrect: isCorrectAnswer,
+        userAnswer,
+        correctAnswer: isCorrectAnswer ? undefined : correctAnswer,
+      });
+    }
+    return entries;
+  }, [
+    useListeningItemLayout,
+    hideFeedbackResolved,
+    listeningQuestionNumbersOrdered,
+    isListeningGapPart,
+    selectedPart?.id,
+    openChecks,
+    openInputs,
+    openAnswerMap,
+    groupedAnswers,
+    checkedQuestions,
+    selectedOptions,
+    isB2ListeningMatchingPart,
+    listeningMatchingSelectOptions,
+  ]);
+
   const partScoreMetrics = useMemo(
     () =>
       levelSlug === 'b2' && partNumber >= 1 && partNumber <= 7
@@ -2311,6 +2442,138 @@ function B2ExamPaperPracticePageInner({
       trySavePartAfterAnswer,
     ],
   );
+
+  const handleSidePanelMcqExplanationRequest = useCallback(
+    ({ questionKey, group }) => {
+      const existing = aiHintsByKey[questionKey];
+      if (existing?.loading || existing?.text) return;
+      if (!checkedQuestions[questionKey]) return;
+      const selectedId = selectedOptions[questionKey];
+      const option = group?.options?.find((o) => o.id === selectedId);
+      if (!option) return;
+      const correctOpt = group.options.find((o) => o.correcta);
+      const answersFromDatabase = group.options
+        .map((o) => (o.formattedText || o.respuesta || '').trim())
+        .filter(Boolean)
+        .join('\n');
+      requestAiJustification(questionKey, {
+        partLabel: selectedPart?.nombre || '',
+        questionLabel: group.questionNumber ? `Question ${group.questionNumber}` : 'Item',
+        userChoiceText: option.formattedText || option.respuesta || '',
+        correctChoiceText: correctOpt?.formattedText || correctOpt?.respuesta || '',
+        isCorrect: !!option.correcta,
+        answersFromDatabase: answersFromDatabase || undefined,
+      });
+    },
+    [
+      aiHintsByKey,
+      checkedQuestions,
+      selectedOptions,
+      requestAiJustification,
+      selectedPart?.nombre,
+    ],
+  );
+
+  const handleOpenGapSidePanelExplanationRequest = useCallback(
+    ({ questionKey, questionNumber }) => {
+      const existing = aiHintsByKey[questionKey];
+      if (existing?.loading || existing?.text) return;
+      const checkResult = openChecks[questionKey];
+      if (typeof checkResult !== 'boolean') return;
+      const expectedAnswers = openAnswerMap.get(questionNumber) || new Set();
+      requestAiJustification(questionKey, {
+        partLabel: selectedPart?.nombre || '',
+        questionLabel: `Question ${questionNumber}`,
+        userChoiceText: openInputs[questionKey] || '',
+        correctChoiceText: [...expectedAnswers].slice(0, 4).join(' · ') || 'model answer',
+        isCorrect: checkResult,
+        answersFromDatabase: [...expectedAnswers].join(' · ') || undefined,
+      });
+    },
+    [
+      aiHintsByKey,
+      openChecks,
+      openInputs,
+      openAnswerMap,
+      requestAiJustification,
+      selectedPart?.nombre,
+    ],
+  );
+
+  const handleListeningExplanationRequest = useCallback(
+    ({ questionKey, questionNumber, group }) => {
+      if (group) {
+        handleSidePanelMcqExplanationRequest({ questionKey, group });
+        return;
+      }
+      handleOpenGapSidePanelExplanationRequest({ questionKey, questionNumber });
+    },
+    [handleSidePanelMcqExplanationRequest, handleOpenGapSidePanelExplanationRequest],
+  );
+
+  const skillPracticeExplanationFooter = useMemo(() => {
+    if (hideFeedbackResolved) return null;
+
+    if (isB2Part1InlineMcq) {
+      const entries = buildMcqGroupExplanationEntries({
+        mcqGroups: b2Part1McqGroups || [],
+        getQuestionKey: (questionNumber) => {
+          const groupIndex = (b2Part1McqGroups || []).findIndex(
+            (g) => g.questionNumber === questionNumber,
+          );
+          return getQuestionKey(
+            selectedPart?.id,
+            questionNumber,
+            `extra-${groupIndex >= 0 ? groupIndex : 'mcq'}`,
+          );
+        },
+        selectedOptions,
+        checkedQuestions,
+      });
+      if (!entries.length) return null;
+      return (
+        <SkillPartExplanationsPanel
+          entries={entries}
+          aiHintsByKey={aiHintsByKey}
+          onRequestExplanation={handleSidePanelMcqExplanationRequest}
+        />
+      );
+    }
+
+    if (paperOpenSidePanelExplanationEntries.length > 0) {
+      return (
+        <SkillPartExplanationsPanel
+          entries={paperOpenSidePanelExplanationEntries}
+          aiHintsByKey={aiHintsByKey}
+          onRequestExplanation={handleOpenGapSidePanelExplanationRequest}
+        />
+      );
+    }
+
+    if (paperMcqSidePanelExplanationEntries.length > 0) {
+      return (
+        <SkillPartExplanationsPanel
+          entries={paperMcqSidePanelExplanationEntries}
+          aiHintsByKey={aiHintsByKey}
+          onRequestExplanation={handleSidePanelMcqExplanationRequest}
+        />
+      );
+    }
+
+    return null;
+  }, [
+    hideFeedbackResolved,
+    isB2Part1InlineMcq,
+    b2Part1McqGroups,
+    selectedPart?.id,
+    selectedOptions,
+    checkedQuestions,
+    paperOpenSidePanelExplanationEntries,
+    paperMcqSidePanelExplanationEntries,
+    aiHintsByKey,
+    handleSidePanelMcqExplanationRequest,
+    handleOpenGapSidePanelExplanationRequest,
+  ]);
 
   const mcqGroupsForBulkCheck = useMemo(() => {
     const groups = isB2Part1InlineMcq ? b2Part1McqGroups : effectiveMcqGroups;
@@ -3493,10 +3756,6 @@ function B2ExamPaperPracticePageInner({
                               checkResult={checkResult}
                               hideFeedback={hideFeedbackResolved}
                               hideCheck={hidePracticeChecks}
-                              openAnswerMap={openAnswerMap}
-                              aiHint={aiHintsByKey[questionKey]}
-                              studyTip={listeningStrategyPack?.studyTip}
-                              lang={lang}
                               onInputChange={(value) => {
                                 setOpenInputs((prev) => ({ ...prev, [questionKey]: value }));
                                 setOpenChecks((prev) => ({ ...prev, [questionKey]: undefined }));
@@ -3765,47 +4024,17 @@ function B2ExamPaperPracticePageInner({
                                 </div>
                               </>
                             )}
-                            {(() => {
-                              const hasChecked = checkedQuestions[questionKey];
-                              if (!hasChecked || hideFeedbackResolved) return null;
-                              const correct = group.options.find((o) => o.correcta);
-                              const correctLetter = extractMcqOptionLetter(correct || {});
-                              const correctLabel =
-                                isB2ListeningMatchingPart && correctLetter
-                                  ? `${correctLetter}${
-                                      listeningMatchingSelectOptions.find(
-                                        (o) => o.letter === correctLetter,
-                                      )?.text
-                                        ? ` — ${
-                                            listeningMatchingSelectOptions.find(
-                                              (o) => o.letter === correctLetter,
-                                            )?.text
-                                          }`
-                                        : ''
-                                    }`
-                                  : correct?.formattedText || correct?.respuesta || 'Not available';
-                              const selectedOpt = group.options.find(
-                                (o) => selectedOptions[questionKey] === o.id,
-                              );
-                              const storedLetter = String(selectedOptions[questionKey] || '').toUpperCase();
-                              const isCorrectAnswer =
-                                isB2ListeningMatchingPart && /^[A-H]$/.test(storedLetter)
-                                  ? storedLetter === correctLetter
-                                  : !!selectedOpt?.correcta;
-                              return (
-                                <B2ListeningPracticeFeedback
-                                  isCorrect={isCorrectAnswer}
-                                  correctLabel={correctLabel}
-                                  hint={aiHintsByKey[questionKey]}
-                                  studyTip={listeningStrategyPack?.studyTip}
-                                  lang={lang}
-                                />
-                              );
-                            })()}
                           </div>
                         );
                       })}
                     </div>
+                    {!hideFeedbackResolved ? (
+                      <SkillPartExplanationsPanel
+                        entries={listeningPracticeExplanationEntries}
+                        aiHintsByKey={aiHintsByKey}
+                        onRequestExplanation={handleListeningExplanationRequest}
+                      />
+                    ) : null}
                   </>
                 ) : null}
                 </div>
@@ -3902,6 +4131,7 @@ function B2ExamPaperPracticePageInner({
                       onOptionSelect={handleA2McqOptionSelect}
                       hideFeedback={hideFeedbackResolved}
                       aiHintsByKey={aiHintsByKey}
+                      onRequestExplanation={handleSidePanelMcqExplanationRequest}
                       showInlineExample={useSkillUoeExampleLayout}
                       exampleGap0Word={exampleGap0Word}
                     />
@@ -3926,6 +4156,7 @@ function B2ExamPaperPracticePageInner({
                           ? 'levels-exam-a2-part4'
                           : ''
                 }
+                footer={skillPracticeExplanationFooter}
                 beforeQuestions={
                   <>
                 {showAudioFromEnunciado && preguntaAudiosError ? (
@@ -4153,31 +4384,6 @@ function B2ExamPaperPracticePageInner({
                               </button>
                               ) : null}
                             </div>
-                            {!hideFeedbackResolved && typeof checkResult === 'boolean' && (
-                              <>
-                                <p
-                                  style={{
-                                    margin: '0.7rem 0 0',
-                                    fontWeight: 700,
-                                    color: checkResult ? '#2f855a' : '#c53030',
-                                  }}
-                                >
-                                  {checkResult ? 'Correcta' : 'Incorrecta'}
-                                </p>
-                                {(() => {
-                                  const expected = openAnswerMap.get(questionNumber);
-                                  const list =
-                                    expected && expected.size > 0 ? [...expected] : [];
-                                  return (
-                                    <p style={{ margin: '0.4rem 0 0', fontWeight: 600, color: '#1f2937' }}>
-                                      Correct answer:{' '}
-                                      {list.length > 0 ? list.join(' · ') : 'Not available'}
-                                    </p>
-                                  );
-                                })()}
-                              </>
-                            )}
-                            <LevelsAnswerJustification hint={aiHintsByKey[questionKey]} />
                           </B2ExamQuestionItem>
                         );
                       })
@@ -4349,25 +4555,6 @@ function B2ExamPaperPracticePageInner({
                               );
                             })}
                           </div>
-
-                          {(() => {
-                            const questionKey = getQuestionKey(
-                              selectedPart.id,
-                              group.questionNumber,
-                              `extra-${groupIndex}`,
-                            );
-                            const hasChecked = checkedQuestions[questionKey];
-                            if (!hasChecked || hideFeedbackResolved) return null;
-                            const correct = group.options.find((o) => o.correcta);
-                            return (
-                              <>
-                                <p className="levels-listening-mcq-correct-answer">
-                                  Correct answer: {correct?.formattedText || correct?.respuesta || 'Not available'}
-                                </p>
-                                <LevelsAnswerJustification hint={aiHintsByKey[questionKey]} />
-                              </>
-                            );
-                          })()}
                         </B2ExamQuestionItem>
                       ))
                         : null}

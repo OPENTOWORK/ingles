@@ -1,7 +1,6 @@
 'use client';
 
 import { useEffect, useMemo, useState } from 'react';
-import LevelsAnswerJustification from '@/components/levels/LevelsAnswerJustification';
 import { parseLineWithOpenGaps } from '@/components/b2/B2ExamInlineOpenClozePassage';
 import { useReadingPracticeSession } from '@/context/ReadingPracticeSessionContext';
 import ReadingQuestionFlagButton from '@/components/exam/ReadingQuestionFlagButton';
@@ -275,17 +274,6 @@ export default function B2ExamInlineMcqClozePassage({
         return passageLine;
       })}
 
-      {!hideFeedback ? (
-        <McqClozeExplanations
-          mcqGroups={mcqGroups}
-          getQuestionKey={getQuestionKey}
-          selectedOptions={selectedOptions}
-          checkedQuestions={checkedQuestions}
-          aiHintsByKey={aiHintsByKey}
-          onRequestExplanation={onRequestExplanation}
-        />
-      ) : null}
-
       {hideFeedback &&
       mcqGroups.some((g) => {
         if (g?.questionNumber == null || g.questionNumber === 0) return false;
@@ -307,109 +295,6 @@ export default function B2ExamInlineMcqClozePassage({
             })}
         </div>
       ) : null}
-    </div>
-  );
-}
-
-/**
- * Explanations listed below the passage (one entry per checked gap).
- * Hidden by default: each entry shows a 💡 button that expands the explanation
- * (and lazily requests it from the AI the first time it is opened).
- */
-function McqClozeExplanations({
-  mcqGroups,
-  getQuestionKey,
-  selectedOptions,
-  checkedQuestions,
-  aiHintsByKey,
-  onRequestExplanation,
-}) {
-  const [openExplanations, setOpenExplanations] = useState({});
-
-  const entries = mcqGroups
-    .filter((group) => group?.questionNumber != null && group.questionNumber !== 0)
-    .map((group) => {
-      const questionKey = getQuestionKey(group.questionNumber);
-      if (!checkedQuestions[questionKey]) return null;
-      const selectedOption = group.options?.find((o) => o.id === selectedOptions[questionKey]);
-      if (!selectedOption) return null;
-      const correctOption = group.options?.find((o) => o.correcta);
-      return {
-        questionNumber: group.questionNumber,
-        questionKey,
-        group,
-        isCorrect: !!selectedOption.correcta,
-        selectedWord: getOptionWord(selectedOption),
-        correctWord: correctOption ? getOptionWord(correctOption) : '',
-      };
-    })
-    .filter(Boolean)
-    .sort((a, b) => a.questionNumber - b.questionNumber);
-
-  if (!entries.length) return null;
-
-  const toggleExplanation = (entry) => {
-    const isOpen = !!openExplanations[entry.questionKey];
-    if (!isOpen) {
-      const hint = aiHintsByKey[entry.questionKey];
-      if (!hint?.text && !hint?.loading && onRequestExplanation) {
-        onRequestExplanation({ questionKey: entry.questionKey, group: entry.group });
-      }
-    }
-    setOpenExplanations((prev) => ({ ...prev, [entry.questionKey]: !isOpen }));
-  };
-
-  return (
-    <div className="levels-exam-mcq-explanations">
-      <p className="levels-exam-mcq-explanations__title">Explanations</p>
-      {entries.map((entry) => {
-        const isOpen = !!openExplanations[entry.questionKey];
-        return (
-          <div
-            key={`mcq-explanation-${entry.questionNumber}`}
-            className={`levels-exam-mcq-explanations__item${
-              entry.isCorrect
-                ? ' levels-exam-mcq-explanations__item--correct'
-                : ' levels-exam-mcq-explanations__item--incorrect'
-            }`}
-          >
-            <p className="levels-exam-mcq-explanations__head">
-              <span className="levels-exam-mcq-explanations__number">({entry.questionNumber})</span>{' '}
-              <span
-                className={
-                  entry.isCorrect
-                    ? 'levels-exam-mcq-explanations__verdict levels-exam-mcq-explanations__verdict--correct'
-                    : 'levels-exam-mcq-explanations__verdict levels-exam-mcq-explanations__verdict--incorrect'
-                }
-              >
-                {entry.isCorrect ? 'Correct' : 'Incorrect'}
-              </span>
-              {' — '}
-              <span>
-                Your answer: <strong>{entry.selectedWord}</strong>
-              </span>
-              {!entry.isCorrect && entry.correctWord ? (
-                <span>
-                  {' · '}Correct answer: <strong>{entry.correctWord}</strong>
-                </span>
-              ) : null}
-              <button
-                type="button"
-                className={`levels-exam-mcq-explanations__toggle${
-                  isOpen ? ' levels-exam-mcq-explanations__toggle--open' : ''
-                }`}
-                aria-expanded={isOpen}
-                onClick={() => toggleExplanation(entry)}
-              >
-                💡 Explanation
-              </button>
-            </p>
-            {isOpen ? (
-              <LevelsAnswerJustification hint={aiHintsByKey[entry.questionKey]} />
-            ) : null}
-          </div>
-        );
-      })}
     </div>
   );
 }
