@@ -2,7 +2,7 @@ import { NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
 import { isSchemaNotReadyError } from '@/lib/teacherAccess';
 import { mapTeacherForStudent, teacherIsBookable, TUTOR_PROFILE_COLUMNS } from '@/lib/tutoringCalendly';
-import { normalizeRoleName } from '@/utils/authRoles';
+import { isAdminRole, isCoordinatorRole, isTeacherRole } from '@/utils/authRoles';
 
 function getAdminClient() {
   const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
@@ -26,9 +26,12 @@ async function getUserFromRequest(request) {
   return data.user;
 }
 
-function isTeacherRoleName(roleName) {
-  const normalized = normalizeRoleName(roleName);
-  return normalized === 'teacher' || normalized === 'profesor';
+function isEligibleTutorRole(roleName) {
+  return (
+    isTeacherRole(roleName) ||
+    isAdminRole(roleName) ||
+    isCoordinatorRole(roleName)
+  );
 }
 
 export async function GET(request) {
@@ -60,9 +63,9 @@ export async function GET(request) {
       return NextResponse.json({ error: profilesRes.error.message }, { status: 500 });
     }
 
-    const teacherRoleIds = new Set(
+    const eligibleRoleIds = new Set(
       (rolesRes.data || [])
-        .filter((row) => isTeacherRoleName(row.nombre))
+        .filter((row) => isEligibleTutorRole(row.nombre))
         .map((row) => row.id),
     );
 
@@ -91,7 +94,7 @@ export async function GET(request) {
       .map((profile) => {
         const meta = usersById[profile.profesor_id];
         if (!meta) return null;
-        if (teacherRoleIds.size && !teacherRoleIds.has(meta.rol_id)) return null;
+        if (eligibleRoleIds.size && !eligibleRoleIds.has(meta.rol_id)) return null;
         return mapTeacherForStudent(profile, meta, assignedSet.has(profile.profesor_id));
       })
       .filter(Boolean)

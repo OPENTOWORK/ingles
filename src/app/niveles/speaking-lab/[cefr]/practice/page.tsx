@@ -78,7 +78,6 @@ export default function SpeakingPracticePage() {
           form.set('cefr', cefr);
           form.set('mode', 'PRACTICE' satisfies SpeakingMode as string);
           form.set('prompt', prompt);
-          form.set('history', JSON.stringify(history));
           form.append('audio', audio, 'capture.webm');
           res = await fetch(withBasePath('/api/speaking/turn'), {
             method: 'POST',
@@ -93,7 +92,6 @@ export default function SpeakingPracticePage() {
               cefr,
               mode: 'PRACTICE' as SpeakingMode,
               prompt,
-              history,
               text,
             }),
           });
@@ -118,7 +116,7 @@ export default function SpeakingPracticePage() {
         setLoading(false);
       }
     },
-    [sessionId, cefr, prompt, history],
+    [sessionId, cefr, prompt],
   );
 
   if (!okSlug) {

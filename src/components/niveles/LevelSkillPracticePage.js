@@ -156,16 +156,19 @@ function LevelSkillPracticePageInner({ slug, skillRoute }) {
   );
 
   const handleKeepPracticing = useCallback(() => {
+    const currentPart =
+      partRows.find((p) => p.id === selectedPartId) || partRows[0];
     runKeepPracticingSkillFlow({
       examSlot,
       examenIdBySlot: scoring.examenIdBySlot,
+      partNumber: currentPart?.partNumber ?? partMin,
+      progressBySlot: scoring.progressBySlot,
       onSelectExamSlot: (slot) => {
         void scoring.refreshPuntuacionesProgress();
         handleSelectExamSlot(slot);
       },
       onAdvanceToNextPart: () => {
-        const selected = partRows.find((p) => p.id === selectedPartId) || partRows[0];
-        const current = selected?.partNumber ?? partRows[0]?.partNumber ?? 1;
+        const current = currentPart?.partNumber ?? partRows[0]?.partNumber ?? 1;
         const idx = partRows.findIndex((p) => p.partNumber === current);
         const next = idx >= 0 && idx < partRows.length - 1 ? partRows[idx + 1] : partRows[0];
         if (next) {
@@ -180,6 +183,7 @@ function LevelSkillPracticePageInner({ slug, skillRoute }) {
     handleSelectExamSlot,
     partRows,
     selectedPartId,
+    partMin,
     handleSelectPart,
   ]);
 
@@ -315,8 +319,10 @@ function LevelSkillPracticePageInner({ slug, skillRoute }) {
             slug={slug}
             partNumber={selectedPart?.partNumber ?? partMin}
             pagePartMax={partMax}
+            pagePartMin={partMin}
             examSlot={examSlot}
             examenIdBySlot={scoring.examenIdBySlot}
+            progressBySlot={scoring.progressBySlot}
             onSelectExamSlot={(slot) => {
               void scoring.refreshPuntuacionesProgress();
               handleSelectExamSlot(slot);

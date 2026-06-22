@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server';
 import { requireSupportAgent } from '@/lib/supportAuth';
 import { DEFAULT_AUTOMATED_EMAIL_TEMPLATES } from '@/lib/automatedEmailDefaults';
 import { AUTOMATED_EMAIL_TRIGGER_OPTIONS } from '@/lib/automatedEmailTriggers';
+import { syncAutomatedEmailSystemTemplates } from '@/lib/syncAutomatedEmailSystemTemplates';
 
 const TABLE = 'soporte_correos_automaticos';
 
@@ -67,8 +68,23 @@ export async function GET(req) {
     return NextResponse.json({ error: error.message }, { status: 500 });
   }
 
+  try {
+    await syncAutomatedEmailSystemTemplates(auth.db);
+  } catch (syncErr) {
+    console.error('[automated-emails] sync system templates', syncErr);
+  }
+
+  const { data: refreshed, error: reloadError } = await auth.db
+    .from(TABLE)
+    .select('*')
+    .order('nombre', { ascending: true });
+
+  if (reloadError) {
+    return NextResponse.json({ error: reloadError.message }, { status: 500 });
+  }
+
   return NextResponse.json({
-    templates: (data || []).map(mapRow),
+    templates: (refreshed || data || []).map(mapRow),
     triggers: AUTOMATED_EMAIL_TRIGGER_OPTIONS,
     usingDefaults: false,
   });

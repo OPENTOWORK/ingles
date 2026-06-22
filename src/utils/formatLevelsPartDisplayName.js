@@ -114,14 +114,29 @@ function getB2SkillPartHeading(partNumber, mode, lang = 'en', examSlot = null) {
   }
   if (mode === 'reading') return en ? `Reading Part ${pn}` : `Reading Parte ${pn}`;
   if (mode === 'writing') {
+    const label = en ? 'Writing' : 'Escritura';
+    const slot = Number(examSlot);
+    if (Number.isFinite(slot) && slot > 0) {
+      return en ? `${label} - Exercise ${slot}` : `${label} - Ejercicio ${slot}`;
+    }
     const local = pn - 7;
     return en ? `Writing Part ${local}` : `Writing Parte ${local}`;
   }
   if (mode === 'listening') {
+    const label = en ? 'Listening' : 'Comprensión auditiva';
+    const slot = Number(examSlot);
+    if (Number.isFinite(slot) && slot > 0) {
+      return en ? `${label} - Exercise ${slot}` : `${label} - Ejercicio ${slot}`;
+    }
     const local = pn - 9;
     return en ? `Listening Part ${local}` : `Listening Parte ${local}`;
   }
   if (mode === 'speaking') {
+    const label = en ? 'Speaking' : 'Expresión oral';
+    const slot = Number(examSlot);
+    if (Number.isFinite(slot) && slot > 0) {
+      return en ? `${label} - Exercise ${slot}` : `${label} - Ejercicio ${slot}`;
+    }
     const local = pn - 13;
     return en ? `Speaking Part ${local}` : `Speaking Parte ${local}`;
   }

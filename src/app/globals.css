@@ -3597,6 +3597,59 @@ body.reading-night-mode .levels-exercise-stars--gold .starSvgWrapEmpty .starSvgP
   max-width: 100%;
 }
 
+.exercise-favorite-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 2.5rem;
+  height: 2.5rem;
+  margin-left: auto;
+  padding: 0;
+  border: 1px solid color-mix(in srgb, var(--levels-split-ink, #0f172a) 14%, #cbd5e1);
+  border-radius: 999px;
+  background: #fff;
+  color: #64748b;
+  cursor: pointer;
+  transition: color 0.15s ease, border-color 0.15s ease, background 0.15s ease;
+}
+
+.exercise-favorite-btn:hover:not(:disabled) {
+  color: #e11d48;
+  border-color: color-mix(in srgb, #e11d48 35%, #cbd5e1);
+  background: #fff1f2;
+}
+
+.exercise-favorite-btn--active {
+  color: #e11d48;
+  border-color: color-mix(in srgb, #e11d48 45%, #cbd5e1);
+  background: #fff1f2;
+}
+
+.exercise-favorite-btn:disabled {
+  opacity: 0.65;
+  cursor: wait;
+}
+
+.profile-favorites-empty {
+  margin: 0;
+  color: #64748b;
+  line-height: 1.55;
+}
+
+.favorite-open-link {
+  display: inline-block;
+  margin: 0.35rem 0 0.65rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #0070f3;
+  text-decoration: none;
+}
+
+.favorite-open-link:hover {
+  text-decoration: underline;
+}
+
 @media (max-width: 720px) {
   .levels-exam-split-card__title-row {
     flex-wrap: wrap;
@@ -4035,6 +4088,16 @@ body.reading-night-mode .levels-exercise-stars--gold .starSvgWrapEmpty .starSvgP
   box-shadow:
     0 1px 2px rgba(15, 23, 42, 0.06),
     0 8px 20px color-mix(in srgb, var(--skill-accent-dark) 32%, transparent);
+}
+
+.levels-exam-module-nav--skill[data-skill-theme] .levels-exam-module-nav__btn--continue:disabled,
+.levels-exam-module-nav--skill[data-skill-theme] .levels-exam-module-nav__btn--next-exercise:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+  transform: none;
+  background: color-mix(in srgb, var(--skill-accent) 55%, #e2e8f0);
+  border-color: color-mix(in srgb, var(--skill-accent) 40%, #cbd5e1);
+  box-shadow: none;
 }
 
 /* Exam / skill practice — study notes popover (top bar + overlay) */
@@ -5691,6 +5754,10 @@ body.reading-night-mode .levels-exercise-stars--gold .starSvgWrapEmpty .starSvgP
   gap: 0.65rem;
 }
 
+.levels-exam-module-nav--balanced:has(.levels-exam-module-nav__next-exercise-hint) {
+  padding-bottom: 2.35rem;
+}
+
 .levels-exam-module-nav--balanced:not(:has(.levels-exam-module-nav__zone--center)) {
   grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
 }
@@ -5762,6 +5829,34 @@ body.reading-night-mode .levels-exercise-stars--gold .starSvgWrapEmpty .starSvgP
   gap: 0.5rem;
 }
 
+.levels-exam-module-nav__next-exercise-wrap {
+  position: relative;
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.levels-exam-module-nav__next-exercise-hint {
+  position: absolute;
+  top: calc(100% + 0.35rem);
+  left: 50%;
+  transform: translateX(-50%);
+  width: max-content;
+  max-width: 15rem;
+  margin: 0;
+  font-size: 0.75rem;
+  font-weight: 500;
+  line-height: 1.35;
+  color: #64748b;
+  text-align: center;
+  pointer-events: none;
+}
+
+.levels-exam-module-nav--skill[data-skill-theme] .levels-exam-module-nav__next-exercise-hint {
+  color: color-mix(in srgb, var(--skill-accent-dark) 62%, #64748b);
+}
+
 .levels-exam-module-nav--balanced .levels-exam-module-nav__btn--continue {
   margin-left: 0;
 }
@@ -5770,6 +5865,13 @@ body.reading-night-mode .levels-exercise-stars--gold .starSvgWrapEmpty .starSvgP
   opacity: 0.45;
   cursor: not-allowed;
   transform: none;
+}
+
+.levels-exam-module-nav__btn--next-exercise:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
 }
 
 .levels-exam-module-nav__btn--prev-part .levels-exam-module-nav__chevron {
@@ -6423,6 +6525,220 @@ body.reading-night-mode .levels-exercise-stars--gold .starSvgWrapEmpty .starSvgP
   margin-top: 1rem;
 }
 
+.levels-b2-speaking-session__feedback-panel {
+  grid-column: 1 / -1;
+  width: 100%;
+  margin-top: 1.5rem;
+}
+
+.speaking-feedback-report {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  width: 100%;
+  padding: 1.35rem 1.5rem;
+  border: 1px solid #cbd5e1;
+  border-radius: 14px;
+  background: linear-gradient(180deg, #f8fafc 0%, #ffffff 100%);
+  box-shadow: 0 8px 24px rgba(15, 23, 42, 0.06);
+}
+
+.speaking-feedback-report__summary {
+  display: grid;
+  grid-template-columns: minmax(200px, 280px) minmax(0, 1fr);
+  gap: 1.25rem 1.75rem;
+  padding: 1.1rem 1.25rem;
+  border-radius: 12px;
+  border: 1px solid #bae6fd;
+  background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+}
+
+.speaking-feedback-report__score-head {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.speaking-feedback-report__score-label {
+  margin: 0;
+  font-size: 0.95rem;
+  color: #0c4a6e;
+}
+
+.speaking-feedback-report__score-label strong {
+  font-size: 1.15rem;
+  font-weight: 800;
+}
+
+.speaking-feedback-report__level {
+  margin: 0;
+  font-size: 1.05rem;
+  color: #0f172a;
+}
+
+.speaking-feedback-report__level strong {
+  font-size: 1.35rem;
+  font-weight: 800;
+  color: #0369a1;
+}
+
+.speaking-feedback-report__b2-criteria {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+  gap: 0.55rem 1rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.speaking-feedback-report__b2-criteria li {
+  display: flex;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding: 0.45rem 0.65rem;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.72);
+  font-size: 0.875rem;
+  color: #0f172a;
+}
+
+.speaking-feedback-report__b2-criterion-label {
+  min-width: 0;
+}
+
+.speaking-feedback-report__b2-criterion-score {
+  flex-shrink: 0;
+  font-weight: 700;
+  color: #0369a1;
+}
+
+.speaking-feedback-report__part-notes {
+  grid-column: 1 / -1;
+  padding-top: 0.85rem;
+  border-top: 1px solid rgba(14, 116, 144, 0.18);
+}
+
+.speaking-feedback-report__part-notes-title {
+  margin: 0 0 0.45rem;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #475569;
+}
+
+.speaking-feedback-report__part-notes ul {
+  margin: 0;
+  padding-left: 1.1rem;
+  color: #334155;
+  font-size: 0.875rem;
+  line-height: 1.55;
+}
+
+.speaking-feedback-report__metrics {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 0.85rem;
+}
+
+.speaking-feedback-report__metric-card {
+  padding: 0.95rem 1rem;
+  border-radius: 12px;
+  border: 1px solid #334155;
+  background: linear-gradient(180deg, #1e293b 0%, #0f172a 100%);
+  color: #e2e8f0;
+}
+
+.speaking-feedback-report__metric-title {
+  margin: 0;
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: capitalize;
+  color: #7dd3fc;
+}
+
+.speaking-feedback-report__metric-score {
+  margin: 0.35rem 0 0;
+  font-size: 1.75rem;
+  font-weight: 800;
+  line-height: 1.1;
+  color: #ffffff;
+}
+
+.speaking-feedback-report__metric-errors {
+  margin: 0.55rem 0 0;
+  padding-left: 1rem;
+  font-size: 0.75rem;
+  line-height: 1.45;
+  color: #cbd5e1;
+}
+
+.speaking-feedback-report__text-columns {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+}
+
+.speaking-feedback-report__text-card {
+  padding: 1rem 1.1rem;
+  border-radius: 12px;
+  border: 1px solid #334155;
+  background: #0f172a;
+}
+
+.speaking-feedback-report__text-title {
+  margin: 0;
+  font-size: 0.82rem;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  color: #7dd3fc;
+}
+
+.speaking-feedback-report__text-body {
+  margin: 0.65rem 0 0;
+  font-size: 0.92rem;
+  line-height: 1.6;
+  color: #e2e8f0;
+  white-space: pre-wrap;
+}
+
+.speaking-feedback-report__footer {
+  padding-top: 0.25rem;
+  font-size: 0.84rem;
+  line-height: 1.55;
+  color: #64748b;
+}
+
+.speaking-feedback-report__footer p {
+  margin: 0;
+}
+
+.speaking-feedback-report__footer p + p {
+  margin-top: 0.45rem;
+}
+
+.speaking-feedback-report__pronunciation {
+  color: #b45309 !important;
+}
+
+.speaking-feedback-report--micro .speaking-feedback-report__metric-card {
+  background: #ffffff;
+  border-color: #e2e8f0;
+  color: #334155;
+}
+
+.speaking-feedback-report--micro .speaking-feedback-report__metric-title {
+  color: #0369a1;
+}
+
+.speaking-feedback-report--micro .speaking-feedback-report__text-body {
+  margin-top: 0.45rem;
+  color: #334155;
+  font-size: 0.875rem;
+}
+
 .levels-b2-speaking-session__score-block {
   margin-top: 1.25rem;
   text-align: center;
@@ -6545,6 +6861,14 @@ body.reading-night-mode .levels-exercise-stars--gold .starSvgWrapEmpty .starSvgP
   .levels-b2-speaking-session__responses--panel {
     max-height: 220px;
     min-height: 0;
+  }
+
+  .speaking-feedback-report__summary {
+    grid-template-columns: 1fr;
+  }
+
+  .speaking-feedback-report__text-columns {
+    grid-template-columns: 1fr;
   }
 }
 
@@ -6730,6 +7054,45 @@ body.reading-night-mode .levels-b2-speaking-session__score-btn,
 body.reading-night-mode .levels-b2-speaking-session__score-btn:hover,
 .reading-area--night .levels-b2-speaking-session__score-btn:hover {
   background: #14532d;
+}
+
+body.reading-night-mode .speaking-feedback-report,
+.reading-area--night .speaking-feedback-report {
+  border-color: #334155;
+  background: linear-gradient(180deg, #0f172a 0%, #1e293b 100%);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
+}
+
+body.reading-night-mode .speaking-feedback-report__summary,
+.reading-area--night .speaking-feedback-report__summary {
+  border-color: #0e7490;
+  background: linear-gradient(135deg, #0c4a6e 0%, #164e63 100%);
+}
+
+body.reading-night-mode .speaking-feedback-report__score-label,
+.reading-area--night .speaking-feedback-report__score-label {
+  color: #bae6fd;
+}
+
+body.reading-night-mode .speaking-feedback-report__level,
+.reading-area--night .speaking-feedback-report__level {
+  color: #e2e8f0;
+}
+
+body.reading-night-mode .speaking-feedback-report__level strong,
+.reading-area--night .speaking-feedback-report__level strong {
+  color: #7dd3fc;
+}
+
+body.reading-night-mode .speaking-feedback-report__b2-criteria li,
+.reading-area--night .speaking-feedback-report__b2-criteria li {
+  background: rgba(15, 23, 42, 0.55);
+  color: #e2e8f0;
+}
+
+body.reading-night-mode .speaking-feedback-report__footer,
+.reading-area--night .speaking-feedback-report__footer {
+  color: #94a3b8;
 }
 
 body.reading-night-mode .speaking-exercise-controls,
@@ -13029,6 +13392,19 @@ body.reading-night-mode .levels-exam-split-card__part-title-category {
   color: #94a3b8;
 }
 
+body.reading-night-mode .exercise-favorite-btn {
+  background: #1e293b;
+  border-color: #475569;
+  color: #94a3b8;
+}
+
+body.reading-night-mode .exercise-favorite-btn:hover:not(:disabled),
+body.reading-night-mode .exercise-favorite-btn--active {
+  color: #fb7185;
+  border-color: color-mix(in srgb, #fb7185 45%, #475569);
+  background: #334155;
+}
+
 /* Overrides skill-compact light theme (higher specificity) */
 body.reading-night-mode .levels-exam-practice-root {
   background: transparent;
@@ -13537,6 +13913,13 @@ body.reading-night-mode
   .levels-exam-module-nav__btn--continue:hover {
   background: var(--skill-accent-dark, #1d4ed8);
   border-color: var(--skill-accent-dark, #2563eb);
+}
+
+body.reading-night-mode .levels-exam-module-nav__next-exercise-hint,
+body.reading-night-mode
+  .levels-exam-module-nav--skill[data-skill-theme]
+  .levels-exam-module-nav__next-exercise-hint {
+  color: #94a3b8;
 }
 
 body.reading-night-mode .levels-exam-module-nav__btn--check,

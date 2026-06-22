@@ -29,6 +29,68 @@ export function getNextExamSlot(currentSlot, examenIdBySlot = {}) {
   return ahead ?? null;
 }
 
+/** Whether the user can open the next exam variant for this part. */
+export function canGoToNextExercise(
+  examSlot,
+  examenIdBySlot = {},
+  partNumber = null,
+  progressBySlot = null,
+) {
+  const nextSlot = getNextExamSlot(examSlot, examenIdBySlot);
+  if (nextSlot == null) return false;
+  if (partNumber == null) return true;
+  if (!progressBySlot) return false;
+  return isExerciseSlotUnlocked(progressBySlot, partNumber, nextSlot, examenIdBySlot);
+}
+
+/** Whether there is a previous exam variant in the catalog. */
+export function canGoToPreviousExercise(examSlot, examenIdBySlot = {}) {
+  return getPreviousExamSlot(examSlot, examenIdBySlot) != null;
+}
+
+/**
+ * Footer nav state for skill practice Previous / Next exercise controls.
+ */
+export function getSkillExerciseNavState({
+  examSlot,
+  examenIdBySlot = {},
+  partNumber = null,
+  partMin = 1,
+  partMax = null,
+  progressBySlot = null,
+}) {
+  const canGoPrevious = canGoToPreviousExercise(examSlot, examenIdBySlot);
+  const nextSlot = getNextExamSlot(examSlot, examenIdBySlot);
+  const pn = Number(partNumber);
+  const hasPartRange = Number.isFinite(pn) && partMax != null && pn >= partMin;
+
+  if (nextSlot != null) {
+    const unlocked = canGoToNextExercise(examSlot, examenIdBySlot, partNumber, progressBySlot);
+    return {
+      canGoPrevious,
+      canGoNext: unlocked,
+      nextAction: unlocked ? 'exercise' : 'none',
+      nextBlockedReason: unlocked ? null : 'need_star',
+      pendingNextSlot: nextSlot,
+      previousSlot: getPreviousExamSlot(examSlot, examenIdBySlot),
+      nextSlot: unlocked ? nextSlot : null,
+    };
+  }
+
+  const canAdvancePart =
+    hasPartRange && (pn < partMax || (pn >= partMax && partMin < partMax));
+
+  return {
+    canGoPrevious,
+    canGoNext: canAdvancePart,
+    nextAction: canAdvancePart ? 'part' : 'none',
+    nextBlockedReason: null,
+    pendingNextSlot: null,
+    previousSlot: getPreviousExamSlot(examSlot, examenIdBySlot),
+    nextSlot: null,
+  };
+}
+
 /**
  * Skill practice footer: advance to the next exam variant, then the next part if needed.
  */
@@ -42,15 +104,19 @@ export function runKeepPracticingSkillFlow({
   onAdvanceToNextPart,
 }) {
   const nextSlot = getNextExamSlot(examSlot, examenIdBySlot);
-  const nextUnlocked =
-    nextSlot != null &&
-    (partNumber == null ||
-      !progressBySlot ||
-      isExerciseSlotUnlocked(progressBySlot, partNumber, nextSlot, examenIdBySlot));
-  if (nextSlot != null && nextUnlocked) {
-    onSelectExamSlot(nextSlot);
-    if (typeof window !== 'undefined') {
-      window.scrollTo({ top: 0, behavior: 'smooth' });
+  if (nextSlot != null) {
+    const nextUnlocked = canGoToNextExercise(
+      examSlot,
+      examenIdBySlot,
+      partNumber,
+      progressBySlot,
+    );
+    if (nextUnlocked) {
+      onSelectExamSlot(nextSlot);
+      if (typeof window !== 'undefined') {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
+      return;
     }
     return;
   }

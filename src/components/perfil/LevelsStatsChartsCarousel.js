@@ -121,7 +121,13 @@ function renderBarLabel(barLabelColor) {
   };
 }
 
-export default function LevelsStatsChartsCarousel({ charts = [], variant = 'skills' }) {
+export default function LevelsStatsChartsCarousel({
+  charts = [],
+  variant = 'skills',
+  activeLevelSlug,
+  onLevelChange,
+  hideLevelChrome = false,
+}) {
   const examMode = variant === 'exam-mode';
   const isNight = useReadingNightMode();
   const chartColors = isNight ? CHART_COLORS_NIGHT : CHART_COLORS_LIGHT;
@@ -129,15 +135,42 @@ export default function LevelsStatsChartsCarousel({ charts = [], variant = 'skil
   const slides = useMemo(() => charts || [], [charts]);
   const [index, setIndex] = useState(0);
 
+  const controlledLevel = activeLevelSlug
+    ? String(activeLevelSlug).trim().toLowerCase()
+    : null;
+
   useEffect(() => {
+    if (controlledLevel && slides.length > 0) {
+      const idx = slides.findIndex(
+        (s) =>
+          String(s.levelSlug || '').toLowerCase() === controlledLevel ||
+          String(s.levelName || '').toLowerCase() === controlledLevel,
+      );
+      if (idx >= 0) {
+        setIndex(idx);
+        return;
+      }
+    }
     const firstWithData = slides.findIndex((s) => s.hasData);
     const b2Idx = slides.findIndex((s) => s.levelSlug === 'b2' || s.levelName === 'B2');
     setIndex(firstWithData >= 0 ? firstWithData : b2Idx >= 0 ? b2Idx : 0);
-  }, [slides]);
+  }, [slides, controlledLevel]);
 
   useEffect(() => {
     if (index >= slides.length) setIndex(0);
   }, [index, slides.length]);
+
+  const selectLevel = (nextIndex) => {
+    setIndex(nextIndex);
+    const slide = slides[nextIndex];
+    if (slide && typeof onLevelChange === 'function') {
+      onLevelChange(slide.levelSlug || String(slide.levelName || '').toLowerCase());
+    }
+  };
+
+  const go = (delta) => {
+    selectLevel((index + delta + slides.length) % slides.length);
+  };
 
   if (slides.length === 0) return null;
 
@@ -157,10 +190,6 @@ export default function LevelsStatsChartsCarousel({ charts = [], variant = 'skil
       : null;
 
   const chartWidth = Math.max(720, chartData.length * 42);
-
-  const go = (delta) => {
-    setIndex((i) => (i + delta + slides.length) % slides.length);
-  };
 
   const copy = examMode
     ? {
@@ -196,25 +225,29 @@ export default function LevelsStatsChartsCarousel({ charts = [], variant = 'skil
           </p>
         </div>
         <div className="lsp-chart__nav">
-          <button
-            type="button"
-            className="lsp-chart__nav-btn"
-            onClick={() => go(-1)}
-            disabled={slides.length <= 1}
-            aria-label="Previous level"
-          >
-            ‹
-          </button>
-          <span className="lsp-chart__level-badge">{current.levelName}</span>
-          <button
-            type="button"
-            className="lsp-chart__nav-btn"
-            onClick={() => go(1)}
-            disabled={slides.length <= 1}
-            aria-label="Next level"
-          >
-            ›
-          </button>
+          {!hideLevelChrome ? (
+            <>
+              <button
+                type="button"
+                className="lsp-chart__nav-btn"
+                onClick={() => go(-1)}
+                disabled={slides.length <= 1}
+                aria-label="Previous level"
+              >
+                ‹
+              </button>
+              <span className="lsp-chart__level-badge">{current.levelName}</span>
+              <button
+                type="button"
+                className="lsp-chart__nav-btn"
+                onClick={() => go(1)}
+                disabled={slides.length <= 1}
+                aria-label="Next level"
+              >
+                ›
+              </button>
+            </>
+          ) : null}
         </div>
       </div>
 
@@ -287,7 +320,7 @@ export default function LevelsStatsChartsCarousel({ charts = [], variant = 'skil
         </div>
       ) : null}
 
-      {slides.length > 1 ? (
+      {slides.length > 1 && !hideLevelChrome ? (
         <div className="lsp-chart__tabs" role="tablist" aria-label="Levels">
           {slides.map((slide, i) => (
             <button
@@ -296,7 +329,7 @@ export default function LevelsStatsChartsCarousel({ charts = [], variant = 'skil
               role="tab"
               aria-selected={i === index}
               className={`lsp-chart__tab${i === index ? ' is-active' : ''}${slide.hasData ? '' : ' is-empty'}`}
-              onClick={() => setIndex(i)}
+              onClick={() => selectLevel(i)}
             >
               {slide.levelName}
               {!slide.hasData ? <span className="lsp-chart__tab-note">No data</span> : null}

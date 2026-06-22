@@ -7,7 +7,7 @@ import {
 /**
  * Envío SMTP directo a la bandeja (draloenglish@gmail.com).
  */
-export async function sendSupportTicketViaSmtp({ to, subject, text, replyTo }) {
+export async function sendSupportTicketViaSmtp({ to, subject, text, html, replyTo }) {
   const user = getSupportSmtpUser();
   const pass = getSupportSmtpPass();
 
@@ -24,11 +24,12 @@ export async function sendSupportTicketViaSmtp({ to, subject, text, replyTo }) {
     });
 
     await transporter.sendMail({
-      from: `Dralo Soporte <${user}>`,
+      from: `Dralo English <${user}>`,
       to,
       replyTo: replyTo || undefined,
       subject,
       text,
+      html: html || undefined,
     });
 
     return { sent: true, deliveredTo: to, channel: 'smtp' };

@@ -118,6 +118,19 @@ export default function AdminDashboard() {
   const [chartPeriod, setChartPeriod] = useState('meses');
   const [chartStartDate, setChartStartDate] = useState('');
   const [chartEndDate, setChartEndDate] = useState('');
+  const [connectionRoleFilter, setConnectionRoleFilter] = useState('all');
+  const [connectionUserIdFilter, setConnectionUserIdFilter] = useState('');
+  const [appliedConnectionRoleFilter, setAppliedConnectionRoleFilter] = useState('all');
+  const [appliedConnectionUserIdFilter, setAppliedConnectionUserIdFilter] = useState('');
+  const [connectionQueryLoading, setConnectionQueryLoading] = useState(false);
+  const [connectionActiveUsers, setConnectionActiveUsers] = useState([]);
+  const [connectionQuery, setConnectionQuery] = useState({
+    period: 'meses',
+    startDate: '',
+    endDate: '',
+    roleId: 'all',
+    userId: '',
+  });
   const [connectionAnalytics, setConnectionAnalytics] = useState({
     totalSessionLabel: '0 s',
     sessionCount: 0,
@@ -127,9 +140,6 @@ export default function AdminDashboard() {
     diaPico: '-',
     heatmap: [],
   });
-  const [clarityAnalytics, setClarityAnalytics] = useState(null);
-  const [clarityLoading, setClarityLoading] = useState(false);
-  const [clarityFetchedAt, setClarityFetchedAt] = useState(0);
   const router = useRouter();
 
   useEffect(() => {
@@ -152,7 +162,7 @@ export default function AdminDashboard() {
 
       setUser(currentUser);
       await Promise.all([loadRoles(), loadUsers(), loadPlacementByUser()]);
-      await Promise.all([loadAnalytics(), loadUserActivity(currentUser), loadClarityAnalytics()]);
+      await Promise.all([loadAnalytics(), loadUserActivity(currentUser)]);
     } catch (error) {
       console.error('Error checking user:', error);
       router.push('/login');
@@ -353,14 +363,21 @@ export default function AdminDashboard() {
   }, [period, startDate, endDate, user]);
 
   const loadUserActivity = useCallback(
-    async (adminUser = user) => {
+    async (adminUser = user, query = connectionQuery) => {
       if (!adminUser) return;
+      setConnectionQueryLoading(true);
       try {
         const headers = await getAdminFetchHeaders();
 
-        const params = new URLSearchParams({ period: chartPeriod });
-        if (chartStartDate) params.set('startDate', chartStartDate);
-        if (chartEndDate) params.set('endDate', chartEndDate);
+        const params = new URLSearchParams({ period: query.period });
+        if (query.startDate) params.set('startDate', query.startDate);
+        if (query.endDate) params.set('endDate', query.endDate);
+        if (query.roleId && query.roleId !== 'all') {
+          params.set('roleId', query.roleId);
+        }
+        if (query.userId) {
+          params.set('userId', query.userId);
+        }
 
         const res = await fetch(`/api/admin/user-activity?${params}`, {
           credentials: 'include',
@@ -384,55 +401,59 @@ export default function AdminDashboard() {
             heatmap: [],
           },
         );
+        setAppliedConnectionRoleFilter(data.appliedRoleId || query.roleId || 'all');
+        setAppliedConnectionUserIdFilter(data.appliedUserId || query.userId || '');
+        setConnectionActiveUsers(data.activeUsers || []);
       } catch (error) {
         console.error('Error loading user activity:', error);
+      } finally {
+        setConnectionQueryLoading(false);
       }
     },
-    [user, chartPeriod, chartStartDate, chartEndDate],
+    [user, connectionQuery],
   );
 
-  useEffect(() => {
-    if (!user) return;
-    loadUserActivity(user);
-  }, [chartPeriod, chartStartDate, chartEndDate, user, loadUserActivity]);
+  const runConnectionQuery = useCallback(() => {
+    const nextQuery = {
+      period: chartPeriod,
+      startDate: chartStartDate,
+      endDate: chartEndDate,
+      roleId: connectionRoleFilter,
+      userId: connectionUserIdFilter.trim(),
+    };
+    setConnectionQuery(nextQuery);
+  }, [chartPeriod, chartStartDate, chartEndDate, connectionRoleFilter, connectionUserIdFilter]);
 
-  useEffect(() => {
-    if (!user) return undefined;
-    const interval = setInterval(() => loadUserActivity(user), 45_000);
-    return () => clearInterval(interval);
-  }, [user, loadUserActivity]);
-
-  const loadClarityAnalytics = useCallback(async (forceRefresh = false) => {
-    setClarityLoading(true);
-    try {
+  const loadConnectionUserPages = useCallback(
+    async (userId) => {
       const headers = await getAdminFetchHeaders();
-      const params = new URLSearchParams({ numOfDays: '3' });
-      if (forceRefresh) params.set('refresh', '1');
+      const params = new URLSearchParams({ navOnly: '1' });
+      if (connectionQuery.startDate) params.set('startDate', connectionQuery.startDate);
+      if (connectionQuery.endDate) params.set('endDate', connectionQuery.endDate);
 
-      const res = await fetch(`/api/admin/clarity-analytics?${params}`, {
+      const res = await fetch(`/api/admin/users/${encodeURIComponent(userId)}?${params}`, {
         credentials: 'include',
         headers,
       });
       const data = await res.json().catch(() => ({}));
       if (!res.ok) {
-        setClarityAnalytics({
-          error: data.error || 'api_error',
-          message: data.message || data.error || `HTTP ${res.status}`,
-        });
-        return;
+        throw new Error(data.error || 'No se pudieron cargar las páginas.');
       }
-      setClarityAnalytics(data);
-      if (data?.fetchedAt) setClarityFetchedAt(data.fetchedAt);
-    } catch (error) {
-      console.error('Error loading Clarity analytics:', error);
-      setClarityAnalytics({ error: 'api_error', message: 'No se pudo cargar Clarity.' });
-    } finally {
-      setClarityLoading(false);
-    }
-  }, []);
+      return data.pageViews || [];
+    },
+    [connectionQuery.startDate, connectionQuery.endDate],
+  );
 
-  const clarityRefreshDisabled =
-    clarityLoading || (clarityFetchedAt > 0 && Date.now() - clarityFetchedAt < 45 * 60 * 1000);
+  useEffect(() => {
+    if (!user) return;
+    loadUserActivity(user, connectionQuery);
+  }, [user, connectionQuery, loadUserActivity]);
+
+  useEffect(() => {
+    if (!user) return undefined;
+    const interval = setInterval(() => loadUserActivity(user, connectionQuery), 45_000);
+    return () => clearInterval(interval);
+  }, [user, connectionQuery, loadUserActivity]);
 
   const getRoleNameById = (roleId) => {
     const role = roles.find((item) => item.id === roleId);
@@ -1177,14 +1198,21 @@ export default function AdminDashboard() {
           setChartEndDate={setChartEndDate}
           sessionChart={sessionChart}
           connectionAnalytics={connectionAnalytics}
+          connectionActiveUsers={connectionActiveUsers}
+          connectionRoleFilter={connectionRoleFilter}
+          setConnectionRoleFilter={setConnectionRoleFilter}
+          connectionUserIdFilter={connectionUserIdFilter}
+          setConnectionUserIdFilter={setConnectionUserIdFilter}
+          appliedConnectionRoleFilter={appliedConnectionRoleFilter}
+          appliedConnectionUserIdFilter={appliedConnectionUserIdFilter}
+          onRunConnectionQuery={runConnectionQuery}
+          onLoadConnectionUserPages={loadConnectionUserPages}
+          connectionQueryKey={`${connectionQuery.period}|${connectionQuery.startDate}|${connectionQuery.endDate}|${connectionQuery.roleId}|${connectionQuery.userId}`}
+          connectionQueryLoading={connectionQueryLoading}
+          roles={roles}
         />
 
-        <AdminClarityPanel
-          data={clarityAnalytics}
-          loading={clarityLoading}
-          onRefresh={() => loadClarityAnalytics(true)}
-          refreshDisabled={clarityRefreshDisabled}
-        />
+        <AdminClarityPanel />
       </div>
     </div>
   );

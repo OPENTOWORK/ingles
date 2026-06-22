@@ -175,6 +175,48 @@ export function groupSessionsByDate(sessions) {
     });
 }
 
+/** Usuarios con sesiones en el rango, agrupados por franja horaria de inicio. */
+export function buildActiveUsersActivityReport(sessions, startDate, endDate) {
+  /** @type {Map<string, { userId: string, totalSeconds: number, sessionCount: number, slotMap: Map<string, { slot: string, count: number, totalSeconds: number }> }>} */
+  const byUser = new Map();
+
+  for (const row of sessions || []) {
+    if (!withinDateRange(row.started_at, startDate, endDate)) continue;
+    if (!row.user_id) continue;
+
+    const userId = String(row.user_id);
+    const sec = Number(row.duration_seconds) || 0;
+
+    if (!byUser.has(userId)) {
+      byUser.set(userId, { userId, totalSeconds: 0, sessionCount: 0, slotMap: new Map() });
+    }
+    const bucket = byUser.get(userId);
+    bucket.totalSeconds += sec;
+    bucket.sessionCount += 1;
+
+    const d = parseDbTimestamp(row.started_at);
+    if (!d) continue;
+    const day = d.toLocaleDateString('es-ES', { weekday: 'short' });
+    const slot = `${day} ${String(d.getHours()).padStart(2, '0')}:00`;
+    const existing = bucket.slotMap.get(slot) || { slot, count: 0, totalSeconds: 0 };
+    existing.count += 1;
+    existing.totalSeconds += sec;
+    bucket.slotMap.set(slot, existing);
+  }
+
+  return Array.from(byUser.values())
+    .map((entry) => ({
+      userId: entry.userId,
+      totalSeconds: entry.totalSeconds,
+      totalLabel: formatSessionDuration(entry.totalSeconds),
+      sessionCount: entry.sessionCount,
+      timeSlots: Array.from(entry.slotMap.values()).sort(
+        (a, b) => b.count - a.count || b.totalSeconds - a.totalSeconds,
+      ),
+    }))
+    .sort((a, b) => b.totalSeconds - a.totalSeconds);
+}
+
 export function buildSessionChartSeries(sessions, period, startDate, endDate) {
   /** @type {Map<string, Map<string, number>>} */
   const bucketUserSeconds = new Map();

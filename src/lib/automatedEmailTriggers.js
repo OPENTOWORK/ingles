@@ -4,6 +4,7 @@ export const AUTOMATED_EMAIL_TRIGGERS = {
   SUPPORT_TICKET_CREATED: 'support_ticket_created',
   ADMIN_USER_CREATED: 'admin_user_created',
   SUPPORT_REPLY_SENT: 'support_reply_sent',
+  FRIEND_INVITED: 'friend_invited',
 };
 
 export const AUTOMATED_EMAIL_TRIGGER_OPTIONS = [
@@ -26,6 +27,11 @@ export const AUTOMATED_EMAIL_TRIGGER_OPTIONS = [
     value: AUTOMATED_EMAIL_TRIGGERS.SUPPORT_REPLY_SENT,
     label: 'Respuesta de soporte',
     description: 'Cuando soporte responde a un ticket desde el panel.',
+  },
+  {
+    value: AUTOMATED_EMAIL_TRIGGERS.FRIEND_INVITED,
+    label: 'Invitar a un amigo',
+    description: 'Cuando un usuario envía una invitación desde su perfil.',
   },
 ];
 

@@ -1,6 +1,7 @@
 'use client';
 
 import SkillPartPracticeHeader from '@/components/exam/SkillPartPracticeHeader';
+import { SkillPartExerciseFavorite } from '@/components/exam/ExerciseFavoriteButton';
 import { getFormattedEnunciado, omitPartTitleBlocks, omitExampleEnunciadoBlocks } from '@/utils/b2ExamPaperShared';
 
 const blockStyles = {
@@ -152,6 +153,10 @@ export function SkillPartInstructionsPanel({ label = 'Instructions', blocks = []
  *   footer?: import('react').ReactNode,
  *   titleActions?: import('react').ReactNode,
  *   exerciseLabel?: string | null,
+ *   showExerciseFavorite?: boolean,
+ *   favoritePreguntaId?: string | null,
+ *   favoriteMeta?: import('@/lib/exerciseFavoriteMeta').ExerciseFavoriteMeta | null,
+ *   favoriteLang?: 'en' | 'es',
  * }} props
  */
 export function B2ExamPracticeContent({
@@ -159,6 +164,10 @@ export function B2ExamPracticeContent({
   titleSubtitle = null,
   titleActions = null,
   exerciseLabel = null,
+  showExerciseFavorite = false,
+  favoritePreguntaId = null,
+  favoriteMeta = null,
+  favoriteLang = 'en',
   directionsText = '',
   directionsLabel = 'Directions',
   textLabel = 'Text',
@@ -193,7 +202,19 @@ export function B2ExamPracticeContent({
           title={title}
           subtitle={titleSubtitle}
           exerciseLabel={exerciseLabel}
-          titleActions={titleActions}
+          titleActions={
+            titleActions || showExerciseFavorite ? (
+              <>
+                {titleActions}
+                <SkillPartExerciseFavorite
+                  show={showExerciseFavorite}
+                  preguntaId={favoritePreguntaId}
+                  meta={favoriteMeta}
+                  lang={favoriteLang}
+                />
+              </>
+            ) : null
+          }
         />
 
         <div className={useSplit ? 'levels-exam-split__body' : 'levels-exam-split__body levels-exam-split__body--stacked'}>

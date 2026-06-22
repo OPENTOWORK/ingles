@@ -69,7 +69,6 @@ export default function SpeakingExamPage() {
           form.set('cefr', cefr);
           form.set('mode', 'EXAM');
           form.set('prompt', promptStub);
-          form.set('history', JSON.stringify(history));
           form.set('examPartIndex', String(partIndex));
           form.append('audio', audio, 'capture.webm');
           res = await fetch(withBasePath('/api/speaking/turn'), { method: 'POST', body: form });
@@ -82,7 +81,6 @@ export default function SpeakingExamPage() {
               cefr,
               mode: 'EXAM' as SpeakingMode,
               prompt: promptStub,
-              history,
               text,
               examPartIndex: partIndex,
             }),
@@ -103,7 +101,7 @@ export default function SpeakingExamPage() {
         setLoading(false);
       }
     },
-    [sessionId, cefr, promptStub, history, partIndex, finished],
+    [sessionId, cefr, promptStub, partIndex, finished],
   );
 
   const finalReport = useCallback(async () => {

@@ -6,6 +6,7 @@ import {
   formatSessionDuration,
   groupSessionsByDate,
   isUserOnline,
+  withinDateRange,
 } from '@/lib/userActivity';
 
 async function loadProfile(db, userId) {
@@ -47,11 +48,52 @@ export async function GET(req, { params }) {
       return NextResponse.json({ error: 'Usuario no válido.' }, { status: 400 });
     }
 
+    const { searchParams } = new URL(req.url);
+    const startDate = searchParams.get('startDate') || '';
+    const endDate = searchParams.get('endDate') || '';
+    const navOnly = searchParams.get('navOnly') === '1';
+
     const { db } = auth;
 
     const profile = await loadProfile(db, userId);
     if (!profile) {
       return NextResponse.json({ error: 'Usuario no encontrado.' }, { status: 404 });
+    }
+
+    if (navOnly) {
+      const navRes = await db
+        .from('usuario_navegacion')
+        .select('id, path, page_title, visited_at, duration_seconds')
+        .eq('user_id', userId)
+        .order('visited_at', { ascending: false })
+        .limit(500);
+
+      const navigationReady = !navRes.error || !isSchemaNotReadyError(navRes.error);
+      const pageViews = ((navigationReady ? navRes.data : null) || [])
+        .filter((row) => withinDateRange(row.visited_at, startDate, endDate))
+        .map((row) => {
+          const visited = row.visited_at ? new Date(row.visited_at) : null;
+          const sec = Number(row.duration_seconds) || 0;
+          return {
+            id: row.id,
+            path: row.path,
+            pageTitle: row.page_title || getPageTitleForPath(row.path),
+            visitedAt: row.visited_at,
+            visitedLabel: visited
+              ? visited.toLocaleString('es-ES', {
+                  day: '2-digit',
+                  month: '2-digit',
+                  year: 'numeric',
+                  hour: '2-digit',
+                  minute: '2-digit',
+                })
+              : '—',
+            durationSeconds: sec,
+            durationLabel: formatSessionDuration(sec),
+          };
+        });
+
+      return NextResponse.json({ pageViews, navigationReady });
     }
 
     const [presenceRes, sessionsRes, placementRes, navRes, rolesRes] = await Promise.all([
@@ -93,7 +135,9 @@ export async function GET(req, { params }) {
     const placementRow = placementRes.data;
 
     const navigationReady = !navRes.error || !isSchemaNotReadyError(navRes.error);
-    const pageViews = ((navigationReady ? navRes.data : null) || []).map((row) => {
+    const pageViews = ((navigationReady ? navRes.data : null) || [])
+      .filter((row) => withinDateRange(row.visited_at, startDate, endDate))
+      .map((row) => {
       const visited = row.visited_at ? new Date(row.visited_at) : null;
       const sec = Number(row.duration_seconds) || 0;
       return {

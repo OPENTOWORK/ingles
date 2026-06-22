@@ -19,6 +19,8 @@ import { supabase } from '@/utils/supabaseClient';
 import { extractTextoBloque, splitPart1TextoYPreguntas, parsePart1QuestionOptions } from '@/utils/b2ExamTextBlocks';
 import { fetchB2PreguntasByExamen } from '@/utils/b2ResolveExam';
 import { formatLevelsPartDisplayName, getSkillPartPracticeTitle, formatSkillPartPracticeTitle } from '@/utils/formatLevelsPartDisplayName';
+import { buildExerciseFavoriteMeta } from '@/lib/exerciseFavoriteMeta';
+import { getExamSkillSectionTitle } from '@/data/levelExamPartMap';
 import { useUserRole } from '@/context/UserRoleContext';
 import { getSessionUserId, mergeLevelsEstadisticas } from '@/utils/levelsEstadisticas';
 import {
@@ -549,6 +551,25 @@ function UseOfEnglishExamsPageInner() {
     const n = Number(selectedPart?.nombre.match(/\d+/)?.[0] || partNumberUoe || 0);
     return getSkillPartPracticeTitle('b2', n, 'en');
   }, [selectedPart, partNumberUoe]);
+
+  const showExerciseFavorite = Boolean(selectedQuestion?.preguntaId);
+
+  const exerciseFavoriteMeta = useMemo(() => {
+    if (!showExerciseFavorite) return null;
+    const n = Number(selectedPart?.nombre.match(/\d+/)?.[0] || partNumberUoe || 0);
+    return buildExerciseFavoriteMeta({
+      levelSlug: 'b2',
+      skillRoute: 'exam-useofenglish',
+      partNumber: n,
+      examSlot,
+      title:
+        selectedPartTitleParts.subtitle ||
+        selectedPartTitleParts.heading ||
+        'Exercise',
+      heading: selectedPartTitleParts.heading || null,
+      sectionTitle: getExamSkillSectionTitle('b2', 'exam-useofenglish'),
+    });
+  }, [showExerciseFavorite, selectedPart, partNumberUoe, examSlot, selectedPartTitleParts]);
 
 
   /** Mapa pregunta → letra correcta desde `levels_respuestas` (p. ej. `1 C`, `2 B follow`).
@@ -1381,6 +1402,10 @@ function UseOfEnglishExamsPageInner() {
               <B2ExamPracticeContent
                 title={selectedPartTitleParts.heading}
                 titleSubtitle={selectedPartTitleParts.subtitle}
+                showExerciseFavorite={showExerciseFavorite}
+                favoritePreguntaId={selectedQuestion?.preguntaId}
+                favoriteMeta={exerciseFavoriteMeta}
+                favoriteLang="en"
                 directionsText={selectedPartContent.enunciado}
                 directionsLabel={isUoePart1 ? 'Instructions' : 'Directions'}
                 passageText={isInlinePassagePart || isPart1McqCloze ? '' : selectedPartContent.texto}

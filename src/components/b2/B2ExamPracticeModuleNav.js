@@ -5,7 +5,11 @@ import { useMemo } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { getB2ExamPracticeNavState } from '@/data/b2ExamModuleNav';
 import { getLevelOverviewNav } from '@/utils/levelOverviewNav';
-import { getPreviousExamSlot } from '@/utils/skillPracticeNavigation';
+import {
+  getSkillExerciseNavState,
+  runBackExerciseSkillFlow,
+} from '@/utils/skillPracticeNavigation';
+import { buildProgressBySlotWithLiveOverlay, formatSkillExerciseLabel } from '@/utils/skillPartFirstProgress';
 import { getModuleNavPartLabel } from '@/utils/formatLevelsPartDisplayName';
 import { buildExamModePracticeHref } from '@/utils/examModeSession';
 
@@ -57,6 +61,9 @@ export default function B2ExamPracticeModuleNav({
   checkAnswersLabel,
   lang = 'en',
   partMinForTabLabels = null,
+  pagePartMin = null,
+  progressBySlot = null,
+  livePartProgress = null,
 }) {
   const searchParams = useSearchParams();
   const examModeParam = searchParams.get('examMode');
@@ -98,9 +105,41 @@ export default function B2ExamPracticeModuleNav({
         : `Volver — ${formatPartLabel(nav.previousPartNumber)}`
       : '');
 
+  const skillExerciseNav = useMemo(() => {
+    if (!effectiveSkillPractice) return null;
+    const effectiveProgress = buildProgressBySlotWithLiveOverlay(
+      progressBySlot,
+      examSlot,
+      partNumber,
+      livePartProgress,
+    );
+    return getSkillExerciseNavState({
+      examSlot,
+      examenIdBySlot,
+      partNumber,
+      partMin: pagePartMin ?? partMinForTabLabels ?? 1,
+      partMax: pagePartMax,
+      progressBySlot: effectiveProgress,
+    });
+  }, [
+    effectiveSkillPractice,
+    examSlot,
+    examenIdBySlot,
+    partNumber,
+    pagePartMin,
+    partMinForTabLabels,
+    pagePartMax,
+    progressBySlot,
+    livePartProgress,
+  ]);
+
   let continueLabel = '';
   if (effectiveSkillPractice) {
-    continueLabel = isEn ? 'Next exercise' : 'Siguiente ejercicio';
+    if (skillExerciseNav?.nextAction === 'part') {
+      continueLabel = isEn ? 'Next part' : 'Siguiente parte';
+    } else {
+      continueLabel = isEn ? 'Next exercise' : 'Siguiente ejercicio';
+    }
   } else if (nav.continueMode === 'in-page' && nav.nextPartNumber) {
     continueLabel = nextPartLabel
       ? isEn
@@ -119,12 +158,24 @@ export default function B2ExamPracticeModuleNav({
       : `Continuar — ${nav.continueModuleTitle}`;
   }
 
-  const previousExerciseSlot =
-    effectiveSkillPractice && typeof onSelectExamSlot === 'function'
-      ? getPreviousExamSlot(examSlot, examenIdBySlot)
-      : null;
   const showPreviousExercise = effectiveSkillPractice && typeof onSelectExamSlot === 'function';
   const previousExerciseLabel = isEn ? 'Previous exercise' : 'Volver al ejercicio anterior';
+  const canGoPreviousExercise = skillExerciseNav?.canGoPrevious ?? false;
+  const showNextExerciseHint =
+    effectiveSkillPractice &&
+    skillExerciseNav?.nextBlockedReason === 'need_star' &&
+    !skillExerciseNav?.canGoNext;
+  const nextExerciseHint = showNextExerciseHint
+    ? isEn
+      ? `Get at least 1 star on this exercise to unlock ${formatSkillExerciseLabel(
+          skillExerciseNav.pendingNextSlot,
+          'en',
+        )}.`
+      : `Consigue al menos 1 estrella en este ejercicio para desbloquear ${formatSkillExerciseLabel(
+          skillExerciseNav.pendingNextSlot,
+          'es',
+        )}.`
+    : '';
 
   const useBalancedLayout = effectiveSkillPractice || showCheckAnswersButton;
 
@@ -208,11 +259,8 @@ export default function B2ExamPracticeModuleNav({
     ) : null;
 
   const handlePreviousExercise = () => {
-    if (previousExerciseSlot == null || typeof onSelectExamSlot !== 'function') return;
-    onSelectExamSlot(previousExerciseSlot);
-    if (typeof window !== 'undefined') {
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    }
+    if (typeof onSelectExamSlot !== 'function') return;
+    runBackExerciseSkillFlow({ examSlot, examenIdBySlot, onSelectExamSlot });
   };
 
   const previousExerciseButton =
@@ -221,7 +269,7 @@ export default function B2ExamPracticeModuleNav({
         type="button"
         className="levels-exam-module-nav__btn levels-exam-module-nav__btn--back levels-exam-module-nav__btn--prev-exercise"
         onClick={handlePreviousExercise}
-        disabled={previousExerciseSlot == null}
+        disabled={!canGoPreviousExercise}
       >
         <NavChevron direction="back" />
         <span className="levels-exam-module-nav__label">{previousExerciseLabel}</span>
@@ -255,14 +303,29 @@ export default function B2ExamPracticeModuleNav({
       <div className="levels-exam-module-nav__exercise-pair">
         {previousExerciseButton}
         {effectiveSkillPractice || nav.continueMode === 'in-page' ? (
-          <button
-            type="button"
-            className="levels-exam-module-nav__btn levels-exam-module-nav__btn--continue"
-            onClick={onContinueInPage}
-          >
-            <span className="levels-exam-module-nav__label">{continueLabel}</span>
-            <NavChevron direction="forward" />
-          </button>
+          <div className="levels-exam-module-nav__next-exercise-wrap">
+            <button
+              type="button"
+              className="levels-exam-module-nav__btn levels-exam-module-nav__btn--continue levels-exam-module-nav__btn--next-exercise"
+              onClick={onContinueInPage}
+              disabled={
+                effectiveSkillPractice && skillExerciseNav ? !skillExerciseNav.canGoNext : false
+              }
+              aria-describedby={showNextExerciseHint ? 'skill-next-exercise-hint' : undefined}
+            >
+              <span className="levels-exam-module-nav__label">{continueLabel}</span>
+              <NavChevron direction="forward" />
+            </button>
+            {showNextExerciseHint ? (
+              <p
+                id="skill-next-exercise-hint"
+                className="levels-exam-module-nav__next-exercise-hint"
+                role="status"
+              >
+                {nextExerciseHint}
+              </p>
+            ) : null}
+          </div>
         ) : null}
       </div>
     ) : null;

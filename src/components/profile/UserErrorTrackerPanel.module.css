@@ -518,3 +518,243 @@
     grid-template-columns: 1fr;
   }
 }
+
+/* Night mode — profile (body.reading-night-mode) */
+:global(body.reading-night-mode) .subtitle {
+  color: #94a3b8;
+}
+
+:global(body.reading-night-mode) .statCard {
+  background: linear-gradient(180deg, #1e293b 0%, #172033 100%);
+  border-color: #475569;
+  box-shadow: none;
+}
+
+:global(body.reading-night-mode) .statValue {
+  color: #f1f5f9;
+}
+
+:global(body.reading-night-mode) .statLabel {
+  color: #94a3b8;
+}
+
+:global(body.reading-night-mode) .statCardLearned {
+  background: linear-gradient(180deg, #052e16 0%, #14532d 100%);
+  border-color: #166534;
+}
+
+:global(body.reading-night-mode) .statCardLearned .statValue {
+  color: #86efac;
+}
+
+:global(body.reading-night-mode) .statCardActive {
+  box-shadow: 0 0 0 2px rgba(96, 165, 250, 0.45);
+}
+
+:global(body.reading-night-mode) .statCardLearned.statCardActive {
+  box-shadow: 0 0 0 2px rgba(74, 222, 128, 0.4);
+}
+
+:global(body.reading-night-mode) .filters {
+  background: #1e293b;
+  border-color: #475569;
+}
+
+:global(body.reading-night-mode) .filterLabel {
+  color: #94a3b8;
+}
+
+:global(body.reading-night-mode) .chip {
+  background: #334155;
+  border-color: #64748b;
+  color: #cbd5e1;
+}
+
+:global(body.reading-night-mode) .chip:hover {
+  border-color: #94a3b8;
+  color: #e2e8f0;
+}
+
+:global(body.reading-night-mode) .chipActive {
+  background: #1e3a5f;
+  border-color: #38bdf8;
+  color: #bae6fd;
+}
+
+:global(body.reading-night-mode) .alert {
+  background: rgba(127, 29, 29, 0.35);
+  color: #fecaca;
+}
+
+:global(body.reading-night-mode) .state {
+  background: #172033;
+  border-color: #475569;
+  color: #94a3b8;
+}
+
+:global(body.reading-night-mode) .stateError {
+  background: rgba(127, 29, 29, 0.35);
+  border-color: #991b1b;
+  color: #fecaca;
+}
+
+:global(body.reading-night-mode) .card {
+  background: #1e293b;
+  border-color: #475569;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+}
+
+:global(body.reading-night-mode) .card:hover {
+  box-shadow: 0 8px 22px rgba(0, 0, 0, 0.28);
+}
+
+:global(body.reading-night-mode) .cardLearned {
+  background: #052e16;
+  border-color: #166534;
+}
+
+:global(body.reading-night-mode) .badgeSourceExam {
+  background: rgba(67, 56, 202, 0.35);
+  color: #c7d2fe;
+}
+
+:global(body.reading-night-mode) .badgeSourceTheory {
+  background: rgba(147, 51, 234, 0.3);
+  color: #e9d5ff;
+}
+
+:global(body.reading-night-mode) .badgeCategory {
+  background: rgba(194, 65, 12, 0.3);
+  color: #fed7aa;
+}
+
+:global(body.reading-night-mode) .badgeLevel {
+  background: rgba(4, 120, 87, 0.35);
+  color: #6ee7b7;
+}
+
+:global(body.reading-night-mode) .badgeLearned {
+  background: rgba(22, 101, 52, 0.45);
+  color: #86efac;
+}
+
+:global(body.reading-night-mode) .scoreRing {
+  color: #fca5a5;
+  background: rgba(127, 29, 29, 0.45);
+  border-color: #991b1b;
+}
+
+:global(body.reading-night-mode) .cardTitle {
+  color: #f1f5f9;
+}
+
+:global(body.reading-night-mode) .cardSubtitle,
+:global(body.reading-night-mode) .contextText {
+  color: #94a3b8;
+}
+
+:global(body.reading-night-mode) .attemptBox {
+  background: rgba(127, 29, 29, 0.3);
+  border-color: #991b1b;
+}
+
+:global(body.reading-night-mode) .attemptLabel {
+  color: #fca5a5;
+}
+
+:global(body.reading-night-mode) .attemptText {
+  color: #fecaca;
+}
+
+:global(body.reading-night-mode) .date {
+  color: #64748b;
+}
+
+:global(body.reading-night-mode) .reviewBtn {
+  background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+}
+
+:global(body.reading-night-mode) .modalBackdrop {
+  background: rgba(2, 6, 23, 0.72);
+}
+
+:global(body.reading-night-mode) .modal {
+  background: #1e293b;
+  border-color: #475569;
+  box-shadow: 0 24px 48px rgba(0, 0, 0, 0.45);
+}
+
+:global(body.reading-night-mode) .modalClose {
+  background: #334155;
+  color: #cbd5e1;
+}
+
+:global(body.reading-night-mode) .modalTitle {
+  color: #f1f5f9;
+}
+
+:global(body.reading-night-mode) .modalSubtitle {
+  color: #94a3b8;
+}
+
+:global(body.reading-night-mode) .modalError {
+  color: #fca5a5;
+}
+
+:global(body.reading-night-mode) .modalBlock {
+  background: #172033;
+  border-color: #475569;
+}
+
+:global(body.reading-night-mode) .modalBlockWrong {
+  background: rgba(127, 29, 29, 0.3);
+  border-color: #991b1b;
+}
+
+:global(body.reading-night-mode) .modalBlockWhy {
+  background: rgba(120, 53, 15, 0.35);
+  border-color: #b45309;
+}
+
+:global(body.reading-night-mode) .modalBlockCorrect {
+  background: rgba(22, 101, 52, 0.35);
+  border-color: #166534;
+}
+
+:global(body.reading-night-mode) .modalBlockLabel {
+  color: #94a3b8;
+}
+
+:global(body.reading-night-mode) .modalBlockWrong .modalBlockLabel {
+  color: #fca5a5;
+}
+
+:global(body.reading-night-mode) .modalBlockWhy .modalBlockLabel {
+  color: #fcd34d;
+}
+
+:global(body.reading-night-mode) .modalBlockCorrect .modalBlockLabel {
+  color: #86efac;
+}
+
+:global(body.reading-night-mode) .modalBlockText {
+  color: #e2e8f0;
+}
+
+:global(body.reading-night-mode) .modalFooter {
+  border-top-color: #475569;
+}
+
+:global(body.reading-night-mode) .learnedBtn {
+  color: #86efac;
+  background: rgba(22, 101, 52, 0.45);
+  border-color: #166534;
+}
+
+:global(body.reading-night-mode) .learnedBtn:hover:not(:disabled) {
+  background: rgba(22, 101, 52, 0.65);
+}
+
+:global(body.reading-night-mode) .practiseLink {
+  color: #93c5fd;
+}

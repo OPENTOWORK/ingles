@@ -9,7 +9,6 @@ export function hydrateProfileMockData(tabId, setters) {
     setStudyRecommendations,
     setStudyCalendar,
     setProgressComparison,
-    setFavoriteExercises,
     setStudyGroups,
     setAchievementProgress,
     setFlashcards,
@@ -37,11 +36,6 @@ export function hydrateProfileMockData(tabId, setters) {
         { date: '2024-01-12', duration: 25, exercises: 6, score: 88, type: 'Vocabulary Quiz' },
         { date: '2024-01-11', duration: 40, exercises: 10, score: 90, type: 'Listening Test' },
       ]);
-      setFavoriteExercises([
-        { id: 1, title: 'Present Perfect Practice', type: 'Grammar', difficulty: 'Medium', lastUsed: '2024-01-15' },
-        { id: 2, title: 'Business Vocabulary', type: 'Vocabulary', difficulty: 'Hard', lastUsed: '2024-01-14' },
-        { id: 3, title: 'Listening Comprehension', type: 'Listening', difficulty: 'Easy', lastUsed: '2024-01-13' },
-      ]);
       setFlashcards([
         { id: 1, front: 'Serendipity', back: 'The occurrence of events by chance in a happy way', category: 'Vocabulary', difficulty: 'Hard', reviewed: 3, correct: 2 },
         { id: 2, front: 'Present Perfect', back: 'Used for actions that started in the past and continue to the present', category: 'Grammar', difficulty: 'Medium', reviewed: 5, correct: 4 },
@@ -58,44 +52,6 @@ export function hydrateProfileMockData(tabId, setters) {
         ],
       });
       break;
-
-    case 'study-planner': {
-      const calendarData = [];
-      for (let i = 0; i < 30; i++) {
-        const date = new Date();
-        date.setDate(date.getDate() + i);
-        if (Math.random() > 0.7) {
-          calendarData.push({
-            date: date.toISOString().split('T')[0],
-            events: [
-              { title: 'Grammar Review', time: '10:00', type: 'study' },
-              { title: 'Vocabulary Quiz', time: '15:00', type: 'quiz' },
-            ],
-          });
-        }
-      }
-      setStudyCalendar(calendarData);
-      setStudyPlan({
-        dailyGoal: 60,
-        weeklyGoal: 420,
-        currentStreak: 7,
-        nextSession: 'Grammar Review',
-        estimatedTime: 25,
-        difficulty: 'Medium',
-        topics: ['Present Perfect', 'Vocabulary', 'Reading Comprehension'],
-      });
-      setStudyGoals([
-        { id: 1, title: 'Complete B2 Level', description: 'Finish all B2 exercises', progress: 65, deadline: '2024-03-15', priority: 'high' },
-        { id: 2, title: 'Daily Study Habit', description: 'Study 30 minutes every day', progress: 80, deadline: '2024-02-28', priority: 'medium' },
-        { id: 3, title: 'Grammar Mastery', description: 'Achieve 90% in grammar tests', progress: 45, deadline: '2024-04-01', priority: 'high' },
-      ]);
-      setStudyRecommendations([
-        { type: 'weakness', skill: 'Speaking', message: 'Your speaking score is lower. Try more speaking exercises!', priority: 'high' },
-        { type: 'strength', skill: 'Listening', message: 'Great listening skills! Consider advanced listening materials.', priority: 'medium' },
-        { type: 'improvement', skill: 'Writing', message: 'Writing improved 8% this week. Keep practicing!', priority: 'low' },
-      ]);
-      break;
-    }
 
     case 'social':
       setStudyGroups([
@@ -127,7 +83,7 @@ export function hydrateProfileMockData(tabId, setters) {
         rank: 'Top 25%',
         improvement: '+12%',
       });
-      setStudyProgress({
+      setStudyProgress?.({
         totalHours: 78,
         averageSession: 42,
         improvementRate: 15,
@@ -149,6 +105,15 @@ export function hydrateProfileMockData(tabId, setters) {
         { id: 2, type: 'weakness', title: 'Grammar Focus Needed', description: 'Spend 20% more time on grammar exercises', confidence: 92 },
         { id: 3, type: 'strength', title: 'Vocabulary Master', description: 'Your vocabulary is improving 15% faster than average', confidence: 78 },
       ]);
+      setStudyPlan({
+        dailyGoal: 60,
+        weeklyGoal: 420,
+        currentStreak: 7,
+        nextSession: 'Grammar Review',
+        estimatedTime: 25,
+        difficulty: 'Medium',
+        topics: ['Present Perfect', 'Vocabulary', 'Reading Comprehension'],
+      });
       setStudyMusic({
         isPlaying: false,
         currentTrack: null,
@@ -184,7 +149,7 @@ export function hydrateProfileMockData(tabId, setters) {
         { id: 2, title: 'Accuracy Challenge', description: 'Get 95% accuracy in 5 consecutive tests', reward: 'Precision Badge', difficulty: 'Medium' },
         { id: 3, title: 'Endurance Challenge', description: 'Study for 2 hours straight', reward: 'Marathon Badge', difficulty: 'Hard' },
       ]);
-      setStudyHabits([
+      setStudyHabits?.([
         { id: 1, name: 'Morning Review', frequency: 'Daily', streak: 12, difficulty: 'Easy' },
         { id: 2, name: 'Vocabulary Practice', frequency: '3x/week', streak: 8, difficulty: 'Medium' },
         { id: 3, name: 'Grammar Focus', frequency: '2x/week', streak: 5, difficulty: 'Hard' },
@@ -208,7 +173,6 @@ export function hydrateProfileMockData(tabId, setters) {
 
 export const PROFILE_MOCK_TABS = new Set([
   'study-tools',
-  'study-planner',
   'social',
   'analytics',
   'ai-tools',

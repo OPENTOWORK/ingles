@@ -12,7 +12,10 @@ import {
 const VARIABLE_HINTS = [
   '{{nombre}} — nombre del destinatario (con espacio previo en saludo)',
   '{{email}} — email del usuario',
-  '{{login_url}} — enlace de acceso a la plataforma',
+  '{{login_url}} — enlace de acceso (se convierte en botón)',
+  '{{app_url}} — URL de la plataforma (invitaciones)',
+  '{{sender_name}} — quien envía la invitación',
+  '{{invite_message}} — mensaje personal del invitador (opcional)',
   '{{ticket_subject}} — asunto del ticket',
   '{{temporary_password}} — contraseña temporal (cuenta admin)',
   '{{message}} — cuerpo de respuesta de soporte',
@@ -315,6 +318,10 @@ export default function AutomatedEmailsPanel() {
                   value={form.cuerpo}
                   onChange={(e) => setForm((f) => ({ ...f, cuerpo: e.target.value }))}
                 />
+                <p className="auto-emails-muted" style={{ marginTop: '0.35rem' }}>
+                  Al enviar, el texto se convierte automáticamente en un correo HTML con marca Dralo.
+                  Usa líneas «Acceso: https://…» o «Únete aquí: https://…» para generar un botón CTA.
+                </p>
               </div>
 
               <details className="auto-emails-vars">

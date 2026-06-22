@@ -8,7 +8,8 @@ import {
   buildB2ExaminerSystemExtra,
   getB2SpeakingPartConfig,
 } from '@/features/speaking/domain/b2-speaking-exam-parts';
-import { saveTurn } from '@/features/speaking/services/sessions/speaking-session.service';
+import { saveTurn, getSessionTurns } from '@/features/speaking/services/sessions/speaking-session.service';
+import { buildLlmHistoryFromStoredTurns } from '@/features/speaking/services/sessions/speaking-turn-context';
 
 export const dynamic = 'force-dynamic';
 export const runtime = 'nodejs';
@@ -38,7 +39,6 @@ export async function POST(req: Request) {
     let cefr: CefrLevel;
     let mode: SpeakingMode;
     let prompt: string;
-    let history: { role: 'user' | 'assistant'; content: string }[];
     let textOverride: string | undefined;
     let examPartIndex = 0;
     let isOpening = false;
@@ -52,7 +52,6 @@ export async function POST(req: Request) {
       cefr = String(form.get('cefr') ?? 'B2').toUpperCase() as CefrLevel;
       mode = String(form.get('mode') ?? 'PRACTICE').toUpperCase() as SpeakingMode;
       prompt = String(form.get('prompt') ?? 'General conversation');
-      history = JSON.parse(String(form.get('history') ?? '[]'));
       textOverride = form.get('text') ? String(form.get('text')) : undefined;
       examPartIndex = Number(form.get('examPartIndex') ?? 0);
       isOpening = form.get('isOpening') === 'true';
@@ -69,7 +68,6 @@ export async function POST(req: Request) {
         cefr: CefrLevel;
         mode: SpeakingMode;
         prompt: string;
-        history: { role: 'user' | 'assistant'; content: string }[];
         text?: string;
         examPartIndex?: number;
         isOpening?: boolean;
@@ -83,7 +81,6 @@ export async function POST(req: Request) {
       cefr = body.cefr;
       mode = body.mode;
       prompt = body.prompt;
-      history = body.history ?? [];
       textOverride = body.text;
       examPartIndex = body.examPartIndex ?? 0;
       isOpening = Boolean(body.isOpening);
@@ -136,6 +133,9 @@ export async function POST(req: Request) {
     const mergedTaskContext = b2Config
       ? buildB2ExaminerSystemExtra(b2Config, taskContext)
       : taskContext.trim();
+
+    const storedTurns = isOpening ? [] : await getSessionTurns(sessionId);
+    const history = buildLlmHistoryFromStoredTurns(storedTurns, { omitLatestUserTurn: true });
 
     if (mode === 'EXAM') {
       assistantText = await llm.examReply({

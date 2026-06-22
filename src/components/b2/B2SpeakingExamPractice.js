@@ -13,7 +13,9 @@ import SkillPartPracticeHeader from '@/components/exam/SkillPartPracticeHeader';
 import { SkillPartInstructionsPanel } from '@/components/b2/B2ExamPracticeContent';
 import { getFormattedEnunciado, omitSpeakingExaminerQuestionBlocks } from '@/utils/b2ExamPaperShared';
 import { formatLevelsPartDisplayName, getSkillLocalPartNumber, getSkillPartTabLabel, getSkillPartPracticeTitle } from '@/utils/formatLevelsPartDisplayName';
-import { formatSkillExerciseLabel } from '@/utils/skillPartFirstProgress';
+import { SkillPartExerciseFavorite } from '@/components/exam/ExerciseFavoriteButton';
+import { buildExerciseFavoriteMeta } from '@/lib/exerciseFavoriteMeta';
+import { getExamSkillSectionTitle } from '@/data/levelExamPartMap';
 import { withBasePath } from '@/lib/base-path';
 import { buildClientApiUrl } from '@/utils/clientApiUrl';
 import { playExaminerAudio, stopExaminerAudio, pauseExaminerAudio, resumeExaminerAudio, isExaminerAudioPaused } from '@/utils/playExaminerAudio';
@@ -495,6 +497,11 @@ function B2SpeakingExamPracticeInner({ title, subtitle, loadingLabel, refreshLab
     speakingPartSnapshotsRef.current[`${examSlot}:${partNumber}`] = snapshot;
   }, [examSlot]);
 
+  const handleSelectedPartSnapshot = useCallback(
+    (snapshot) => handleSpeakingPartSnapshot(selectedPart?.partNumber, snapshot),
+    [handleSpeakingPartSnapshot, selectedPart?.partNumber],
+  );
+
   const handleExamModeFinish = useCallback(
     (redirectTo) => {
       const { scores, partSnapshots } = buildExamModeSkillPartSnapshots({
@@ -701,9 +708,36 @@ function B2SpeakingExamPracticeInner({ title, subtitle, loadingLabel, refreshLab
   });
 
   const selectedPartTitleParts = useMemo(
-    () => getSkillPartPracticeTitle('b2', partNumber, lang === 'es' ? 'es' : 'en'),
-    [partNumber, lang],
+    () =>
+      getSkillPartPracticeTitle(
+        'b2',
+        partNumber,
+        lang === 'es' ? 'es' : 'en',
+        isSkillPracticeSession ? examSlot : null,
+      ),
+    [partNumber, lang, examSlot, isSkillPracticeSession],
   );
+
+  const showExerciseFavorite =
+    isSkillPracticeSession &&
+    !isExamSimulationMode(practiceMode) &&
+    Boolean(selectedPart?.preguntaId);
+
+  const exerciseFavoriteMeta = useMemo(() => {
+    if (!showExerciseFavorite) return null;
+    return buildExerciseFavoriteMeta({
+      levelSlug: 'b2',
+      skillRoute: 'exam-speaking',
+      partNumber,
+      examSlot,
+      title:
+        selectedPartTitleParts.subtitle ||
+        selectedPartTitleParts.heading ||
+        'Exercise',
+      heading: selectedPartTitleParts.heading || null,
+      sectionTitle: getExamSkillSectionTitle('b2', 'exam-speaking'),
+    });
+  }, [showExerciseFavorite, partNumber, examSlot, selectedPartTitleParts]);
 
   const speakingInstructionsBlocks = useMemo(() => {
     const raw = selectedPart?.descripcion || '';
@@ -819,10 +853,13 @@ function B2SpeakingExamPracticeInner({ title, subtitle, loadingLabel, refreshLab
               <SkillPartPracticeHeader
                 title={selectedPartTitleParts.heading}
                 subtitle={selectedPartTitleParts.subtitle}
-                exerciseLabel={
-                  isSkillPracticeSession && examSlot
-                    ? formatSkillExerciseLabel(examSlot, lang === 'es' ? 'es' : 'en')
-                    : null
+                titleActions={
+                  <SkillPartExerciseFavorite
+                    show={showExerciseFavorite}
+                    preguntaId={selectedPart?.preguntaId}
+                    meta={exerciseFavoriteMeta}
+                    lang={lang === 'es' ? 'es' : 'en'}
+                  />
                 }
               />
               <div className="levels-exam-split__body levels-exam-split__body--stacked">
@@ -839,9 +876,7 @@ function B2SpeakingExamPracticeInner({ title, subtitle, loadingLabel, refreshLab
             initialSnapshot={
               speakingPartSnapshotsRef.current[`${examSlot}:${selectedPart.partNumber}`] ?? null
             }
-            onSnapshotChange={(snapshot) =>
-              handleSpeakingPartSnapshot(selectedPart.partNumber, snapshot)
-            }
+            onSnapshotChange={handleSelectedPartSnapshot}
             onSavePartScore={handleSaveSpeakingPart}
             partScoring={b2PartCfg}
             lang={lang}
@@ -858,8 +893,10 @@ function B2SpeakingExamPracticeInner({ title, subtitle, loadingLabel, refreshLab
         slug="b2"
         partNumber={partNumber}
         pagePartMax={B2_SPEAKING_PART_MAX}
+        pagePartMin={B2_SPEAKING_PART_MIN}
         examSlot={examSlot}
         examenIdBySlot={isSkillPracticeSession ? scoring.examenIdBySlot : undefined}
+        progressBySlot={isSkillPracticeSession ? scoring.progressBySlot : undefined}
         onSelectExamSlot={
           isSkillPracticeSession
             ? (slot) => {
@@ -988,6 +1025,8 @@ function B2SpeakingPartSession({
   const lastAssistantRef = useRef(restoredSnapshot?.lastAssistant ?? null);
   const userIdRef = useRef(null);
   const liveSnapshotRef = useRef(null);
+  const onSnapshotChangeRef = useRef(onSnapshotChange);
+  onSnapshotChangeRef.current = onSnapshotChange;
 
   liveSnapshotRef.current = {
     sessionId,
@@ -1066,12 +1105,36 @@ function B2SpeakingPartSession({
   }, []);
 
   const applyOpeningTurn = useCallback(
-    (data) => {
+    (data, { preserveConversation = false } = {}) => {
       if (!data?.assistantText || !isAlive()) return false;
       const assistantText = data.assistantText;
       storeAssistantTurn(data);
-      setLines([{ role: 'assistant', content: assistantText }]);
-      setHistory([{ role: 'assistant', content: assistantText }]);
+      setLines((prev) => {
+        if (!preserveConversation && prev.length === 0) {
+          return [{ role: 'assistant', content: assistantText }];
+        }
+        if (prev.some((line) => line.role === 'user')) return prev;
+        const assistantIdx = prev.findIndex((line) => line.role === 'assistant');
+        if (assistantIdx >= 0) {
+          const next = [...prev];
+          next[assistantIdx] = { role: 'assistant', content: assistantText };
+          return next;
+        }
+        return [{ role: 'assistant', content: assistantText }, ...prev];
+      });
+      setHistory((prev) => {
+        if (!preserveConversation && prev.length === 0) {
+          return [{ role: 'assistant', content: assistantText }];
+        }
+        if (prev.some((line) => line.role === 'user')) return prev;
+        const assistantIdx = prev.findIndex((line) => line.role === 'assistant');
+        if (assistantIdx >= 0) {
+          const next = [...prev];
+          next[assistantIdx] = { role: 'assistant', content: assistantText };
+          return next;
+        }
+        return [{ role: 'assistant', content: assistantText }, ...prev];
+      });
       setPhase(partConfig?.uiMode === 'long_turn' ? 'await_long_turn' : 'dialogue');
       setOpeningReady(true);
       return true;
@@ -1090,7 +1153,6 @@ function B2SpeakingPartSession({
           cefr: 'B2',
           mode: 'EXAM',
           prompt: ctx,
-          history: [],
           text: '',
           examPartIndex: partConfig?.blueprintIndex ?? 0,
           b2PartNumber: part.partNumber,
@@ -1151,7 +1213,7 @@ function B2SpeakingPartSession({
   );
 
   const callTurn = useCallback(
-    async (payload, sid = sessionId, historySnapshot = history) => {
+    async (payload, sid = sessionId) => {
       if (!sid || !isAlive()) return null;
       const signal = abortRef.current?.signal;
       const ctx = taskContextRef.current;
@@ -1167,7 +1229,6 @@ function B2SpeakingPartSession({
           form.set('cefr', 'B2');
           form.set('mode', 'EXAM');
           form.set('prompt', ctx);
-          form.set('history', JSON.stringify(historySnapshot));
           form.set('examPartIndex', String(partConfig?.blueprintIndex ?? 0));
           form.set('b2PartNumber', String(part.partNumber));
           form.set('taskContext', ctx);
@@ -1187,7 +1248,6 @@ function B2SpeakingPartSession({
               cefr: 'B2',
               mode: 'EXAM',
               prompt: ctx,
-              history: historySnapshot,
               text: payload.text ?? '',
               examPartIndex: partConfig?.blueprintIndex ?? 0,
               b2PartNumber: part.partNumber,
@@ -1215,8 +1275,42 @@ function B2SpeakingPartSession({
         if (isAlive()) setLoading(false);
       }
     },
-    [sessionId, history, part.partNumber, partConfig?.blueprintIndex, isAlive, isEn],
+    [sessionId, part.partNumber, partConfig?.blueprintIndex, isAlive, isEn],
   );
+
+  const persistSnapshot = useCallback(() => {
+    const snap = liveSnapshotRef.current;
+    const notify = onSnapshotChangeRef.current;
+    if (typeof notify !== 'function' || !snap?.sessionId) return;
+    // Ignore partial inits (React Strict Mode) — they block reopening with Play disabled.
+    if (!snap.openingReady && !snap.exerciseStarted) return;
+    notify(snap);
+  }, []);
+
+  const hasActiveSpeakingSession = useCallback((snap) => {
+    if (!snap?.sessionId) return false;
+    return Boolean(
+      snap.openingReady ||
+        snap.exerciseStarted ||
+        (Array.isArray(snap.lines) && snap.lines.some((line) => line.role === 'user')),
+    );
+  }, []);
+
+  useEffect(() => {
+    persistSnapshot();
+  }, [
+    persistSnapshot,
+    sessionId,
+    lines,
+    history,
+    phase,
+    longTurnLeft,
+    exerciseStarted,
+    exercisePaused,
+    openingReady,
+    canRepeatExaminer,
+    partComplete,
+  ]);
 
   useEffect(() => {
     aliveRef.current = true;
@@ -1224,15 +1318,12 @@ function B2SpeakingPartSession({
     abortRef.current = ac;
     // No stopExaminerAudio aquí: cancelaría el audio al re-ejecutar el effect (p. ej. al pulsar Play).
 
-    const persistSnapshot = () => {
-      const snap = liveSnapshotRef.current;
-      if (typeof onSnapshotChange !== 'function' || !snap?.sessionId) return;
-      // Ignore partial inits (React Strict Mode) — they block reopening with Play disabled.
-      if (!snap.openingReady && !snap.exerciseStarted) return;
-      onSnapshotChange(snap);
-    };
+    const snap = liveSnapshotRef.current;
+    const canRestore =
+      (restoredSnapshot?.sessionId && restoredSnapshot?.openingReady) ||
+      hasActiveSpeakingSession(snap);
 
-    if (restoredSnapshot?.sessionId && restoredSnapshot?.openingReady) {
+    if (canRestore) {
       return () => {
         aliveRef.current = false;
         ac.abort();
@@ -1305,9 +1396,11 @@ function B2SpeakingPartSession({
     partConfig?.uiMode,
     applyOpeningTurn,
     fetchOpeningForSession,
+    hasActiveSpeakingSession,
     isEn,
-    onSnapshotChange,
+    persistSnapshot,
     restoredSnapshot?.sessionId,
+    restoredSnapshot?.openingReady,
   ]);
 
   useEffect(() => {
@@ -1387,7 +1480,7 @@ function B2SpeakingPartSession({
         nextHistory = [...history, { role: 'user', content: text }];
         setLines((prev) => [...prev, { role: 'user', content: text }]);
         setHistory(nextHistory);
-        data = await callTurn({ text }, sessionId, nextHistory);
+        data = await callTurn({ text });
         if (!isAlive() || !data) return;
       }
 
@@ -1458,7 +1551,11 @@ function B2SpeakingPartSession({
       return;
     }
     if (!exerciseStarted) setExerciseStarted(true);
-    if (openingReady) {
+    const hasConversation =
+      openingReady ||
+      Boolean(lastAssistantRef.current?.assistantText) ||
+      lines.some((line) => line.role === 'assistant' || line.role === 'user');
+    if (hasConversation) {
       void playLastAssistant();
       return;
     }
@@ -1488,7 +1585,8 @@ function B2SpeakingPartSession({
 
         const data = await fetchOpeningForSession(sid);
         if (!isAlive()) return;
-        if (!applyOpeningTurn(data)) {
+        const preserveConversation = lines.some((line) => line.role === 'user');
+        if (!applyOpeningTurn(data, { preserveConversation })) {
           setApiError(
             isEn ? 'Could not load examiner audio.' : 'No se pudo cargar el audio del examinador.',
           );
@@ -1548,7 +1646,7 @@ function B2SpeakingPartSession({
     const nextHistory = [...history, { role: 'user', content: skipText }];
     setLines((prev) => [...prev, { role: 'user', content: skipText }]);
     setHistory(nextHistory);
-    const data = await callTurn({ text: skipText }, sessionId, nextHistory);
+    const data = await callTurn({ text: skipText });
     if (!isAlive()) return;
 
     const userCount = nextHistory.filter((l) => l.role === 'user').length;
@@ -1895,12 +1993,6 @@ function B2SpeakingPartSession({
                 </p>
               ) : null}
 
-              {feedbackReport ? (
-                <div className="levels-b2-speaking-session__feedback">
-                  <FeedbackCards report={feedbackReport} />
-                </div>
-              ) : null}
-
               <div className="levels-b2-speaking-session__score-block">
                 <button
                   type="button"
@@ -1917,6 +2009,12 @@ function B2SpeakingPartSession({
           ) : null}
         </aside>
       </div>
+
+      {feedbackReport ? (
+        <div className="levels-b2-speaking-session__feedback-panel">
+          <FeedbackCards report={feedbackReport} />
+        </div>
+      ) : null}
     </div>
   );
 }

@@ -5,6 +5,38 @@ import { hasDatabaseUrl } from '@/lib/prisma';
 import { getExamBlueprint } from '../../domain/exam-blueprints';
 import type { ExamStateJson } from '../../domain/types';
 
+type StoredTurn = {
+  role: 'USER' | 'ASSISTANT';
+  text: string;
+};
+
+const localSessionTurns = new Map<string, StoredTurn[]>();
+
+function appendLocalTurn(sessionId: string, turn: StoredTurn) {
+  const list = localSessionTurns.get(sessionId) ?? [];
+  list.push(turn);
+  localSessionTurns.set(sessionId, list);
+}
+
+export async function getSessionTurns(sessionId: string): Promise<StoredTurn[]> {
+  if (!sessionId) return [];
+
+  if (!hasDatabaseUrl() || sessionId.startsWith('local_')) {
+    return [...(localSessionTurns.get(sessionId) ?? [])];
+  }
+
+  const rows = await prisma.speakingTurn.findMany({
+    where: { sessionId },
+    orderBy: { createdAt: 'asc' },
+    select: { role: true, text: true },
+  });
+
+  return rows.map((row) => ({
+    role: row.role,
+    text: row.text,
+  }));
+}
+
 function createLocalSpeakingSession(params: {
   userId: string | null;
   mode: SpeakingMode;
@@ -67,9 +99,13 @@ export async function saveTurn(params: {
   audioUrl?: string | null;
   microFeedback?: unknown;
 }) {
+  const stored: StoredTurn = { role: params.role, text: params.text };
+
   if (!hasDatabaseUrl() || params.sessionId.startsWith('local_')) {
+    appendLocalTurn(params.sessionId, stored);
     return { id: `turn_${Date.now()}`, ...params };
   }
+
   return prisma.speakingTurn.create({
     data: {
       sessionId: params.sessionId,

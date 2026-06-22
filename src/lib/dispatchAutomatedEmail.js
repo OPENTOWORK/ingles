@@ -1,4 +1,5 @@
 import { deliverTransactionalEmail } from '@/lib/emailDelivery';
+import { buildBrandedEmailFromPlainText } from '@/lib/emailBrandedLayout';
 import { DEFAULT_AUTOMATED_EMAIL_TEMPLATES } from '@/lib/automatedEmailDefaults';
 import {
   buildDefaultEmailVariables,
@@ -65,7 +66,7 @@ async function enqueueEmail(adminClient, template, to, variables) {
   return { queued: true, sendAt };
 }
 
-async function sendNow(template, to, variables, adminClient) {
+async function sendNow(template, to, variables, adminClient, replyTo) {
   const merged = buildDefaultEmailVariables({
     nombre: formatNombreVariable(variables.name || variables.nombre),
     email: variables.email || to,
@@ -74,8 +75,17 @@ async function sendNow(template, to, variables, adminClient) {
 
   const subject = renderEmailTemplate(template.asunto, merged).trim();
   const text = renderEmailTemplate(template.cuerpo, merged).trim();
+  const { html } = buildBrandedEmailFromPlainText(text, {
+    preheader: subject,
+    ctaLabel:
+      template.trigger_event === 'friend_invited'
+        ? 'Aceptar invitación'
+        : template.trigger_event === 'admin_user_created'
+          ? 'Iniciar sesión'
+          : 'Empezar a practicar',
+  });
 
-  const result = await deliverTransactionalEmail({ to, subject, text });
+  const result = await deliverTransactionalEmail({ to, subject, text, html, replyTo });
 
   await logSend(adminClient, {
     plantilla_id: template.id || null,
@@ -102,8 +112,15 @@ async function sendNow(template, to, variables, adminClient) {
  * @param {string} params.triggerEvent
  * @param {string} params.to
  * @param {Record<string, string>} [params.variables]
+ * @param {string} [params.replyTo]
  */
-export async function dispatchAutomatedEmail({ adminClient, triggerEvent, to, variables = {} }) {
+export async function dispatchAutomatedEmail({
+  adminClient,
+  triggerEvent,
+  to,
+  variables = {},
+  replyTo,
+}) {
   const email = String(to || '').trim().toLowerCase();
   if (!email || !triggerEvent) {
     return { sent: false, error: 'Destinatario o evento no válido.' };
@@ -125,7 +142,7 @@ export async function dispatchAutomatedEmail({ adminClient, triggerEvent, to, va
         continue;
       }
 
-      const r = await sendNow(template, email, variables, adminClient);
+      const r = await sendNow(template, email, variables, adminClient, replyTo);
       results.push({ slug: template.slug, ...r });
     } catch (err) {
       console.error('[dispatchAutomatedEmail]', template.slug, err);

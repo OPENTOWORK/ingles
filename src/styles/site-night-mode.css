@@ -649,6 +649,24 @@ body.reading-night-mode .perfil-page .header p {
   color: #94a3b8;
 }
 
+body.reading-night-mode .perfil-page .header__level {
+  background: #1e293b;
+  border-color: #475569;
+}
+
+body.reading-night-mode .perfil-page .header__level-icon {
+  background: rgba(124, 58, 237, 0.2);
+  color: #c4b5fd;
+}
+
+body.reading-night-mode .perfil-page .header__level-value {
+  color: #f1f5f9;
+}
+
+body.reading-night-mode .perfil-page .header__level-label {
+  color: #94a3b8;
+}
+
 body.reading-night-mode .perfil-page .section-desc,
 body.reading-night-mode .perfil-page .mis-datos-fact dt {
   color: #94a3b8;

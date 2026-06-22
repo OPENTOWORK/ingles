@@ -180,6 +180,8 @@ import {
 } from '@/utils/practiceCheckAnswers';
 import { formatLevelsPartDisplayName, getExamSectionPartTitle, getSkillPartPracticeTitle, formatSkillPartPracticeTitle } from '@/utils/formatLevelsPartDisplayName';
 import { formatSkillExerciseLabel } from '@/utils/skillPartFirstProgress';
+import { SkillPartExerciseFavorite } from '@/components/exam/ExerciseFavoriteButton';
+import { buildExerciseFavoriteMeta } from '@/lib/exerciseFavoriteMeta';
 import B2ExamPracticeModuleNav from '@/components/b2/B2ExamPracticeModuleNav';
 import A2ExamGenerationStatus from '@/components/niveles/A2ExamGenerationStatus';
 import ExamModeSectionBanner from '@/components/niveles/ExamModeSectionBanner';
@@ -741,8 +743,9 @@ function B2ExamPaperPracticePageInner({
     (slot) => {
       setLoading(true);
       scoring.handleSelectExam(selectExamSlot, slot);
+      void loadData(slot);
     },
-    [scoring, selectExamSlot],
+    [scoring, selectExamSlot, loadData],
   );
 
   const handleSelectExamSlot = useMemo(
@@ -811,23 +814,6 @@ function B2ExamPaperPracticePageInner({
     return () =>
       window.removeEventListener('dralo-reading-instant-feedback-changed', onInstantFeedbackChanged);
   }, []);
-
-  const handleKeepPracticing = useCallback(() => {
-    runKeepPracticingSkillFlow({
-      examSlot,
-      examenIdBySlot: scoring.examenIdBySlot,
-      partNumber,
-      progressBySlot: scoring.progressBySlot,
-      onSelectExamSlot: (slot) => {
-        void scoring.refreshPuntuacionesProgress();
-        handleSelectExamSlot(slot);
-      },
-      onAdvanceToNextPart: () => {
-        void scoring.refreshPuntuacionesProgress();
-        skillNav.advanceToNextPart();
-      },
-    });
-  }, [examSlot, partNumber, scoring, handleSelectExamSlot, skillNav]);
 
   const tabPartsData = useMemo(() => {
     if (!skillNav.active) return partsData;
@@ -1061,6 +1047,23 @@ function B2ExamPaperPracticePageInner({
     () => Number(selectedPart?.nombre.match(/\d+/)?.[0] || 0),
     [selectedPart?.nombre],
   );
+
+  const handleKeepPracticing = useCallback(() => {
+    runKeepPracticingSkillFlow({
+      examSlot,
+      examenIdBySlot: scoring.examenIdBySlot,
+      partNumber,
+      progressBySlot: scoring.progressBySlot,
+      onSelectExamSlot: (slot) => {
+        void scoring.refreshPuntuacionesProgress();
+        handleSelectExamSlot(slot);
+      },
+      onAdvanceToNextPart: () => {
+        void scoring.refreshPuntuacionesProgress();
+        skillNav.advanceToNextPart();
+      },
+    });
+  }, [examSlot, partNumber, scoring, handleSelectExamSlot, skillNav]);
 
   const categoryTimer = usePartPracticeTimer({
     practiceReady: !loading && !error && layoutPracticeOpen && Boolean(selectedPart?.id),
@@ -3038,6 +3041,44 @@ function B2ExamPaperPracticePageInner({
     isExamSimulationMode(practiceMode) ? 'prominent' : isSkillPracticeSession ? 'session' : 'prominent';
   const compactChromeHeader = isSkillPracticeSession || isExamSimulationMode(practiceMode);
 
+  const showExerciseFavorite =
+    isSkillPracticeSession &&
+    !isExamSimulationMode(practiceMode) &&
+    Boolean(selectedQuestion?.preguntaId);
+
+  const hideStandaloneExerciseLabel =
+    isSkillPracticeSession &&
+    (skillRoute === 'exam-writing' ||
+      skillRoute === 'exam-listening' ||
+      skillRoute === 'exam-speaking' ||
+      (levelSlug === 'b2' && partNumber >= 1 && partNumber <= 4));
+
+  const exerciseFavoriteMeta = useMemo(() => {
+    if (!showExerciseFavorite) return null;
+    const n = Number(selectedPart?.nombre?.match(/\d+/)?.[0] || partNumber || 0);
+    return buildExerciseFavoriteMeta({
+      levelSlug,
+      skillRoute,
+      partNumber: n,
+      examSlot,
+      title:
+        selectedPartTitleParts.subtitle ||
+        selectedPartTitleParts.heading ||
+        selectedPart?.displayName ||
+        'Exercise',
+      heading: selectedPartTitleParts.heading || null,
+      sectionTitle: skillRoute ? getExamSkillSectionTitle(levelSlug, skillRoute) : null,
+    });
+  }, [
+    showExerciseFavorite,
+    levelSlug,
+    skillRoute,
+    partNumber,
+    examSlot,
+    selectedPart,
+    selectedPartTitleParts,
+  ]);
+
   const reportErrorContext = useMemo(() => {
     if (loading || error || !scoring.examPracticeOpen || !selectedPart) return null;
     const questionText = selectedQuestion?.enunciado
@@ -3563,9 +3604,17 @@ function B2ExamPaperPracticePageInner({
                   title={selectedPartTitleParts.heading}
                   subtitle={selectedPartTitleParts.subtitle}
                   exerciseLabel={
-                    isSkillPracticeSession && examSlot && !(levelSlug === 'b2' && partNumber >= 1 && partNumber <= 4)
+                    isSkillPracticeSession && examSlot && !hideStandaloneExerciseLabel
                       ? formatSkillExerciseLabel(examSlot, lang === 'es' ? 'es' : 'en')
                       : null
+                  }
+                  titleActions={
+                    <SkillPartExerciseFavorite
+                      show={showExerciseFavorite}
+                      preguntaId={selectedQuestion?.preguntaId}
+                      meta={exerciseFavoriteMeta}
+                      lang={lang === 'es' ? 'es' : 'en'}
+                    />
                   }
                 />
 
@@ -4092,8 +4141,12 @@ function B2ExamPaperPracticePageInner({
               <B2ExamPracticeContent
                 title={selectedPartTitleParts.heading}
                 titleSubtitle={selectedPartTitleParts.subtitle}
+                showExerciseFavorite={showExerciseFavorite}
+                favoritePreguntaId={selectedQuestion?.preguntaId}
+                favoriteMeta={exerciseFavoriteMeta}
+                favoriteLang={lang === 'es' ? 'es' : 'en'}
                 exerciseLabel={
-                  isSkillPracticeSession && examSlot && !(levelSlug === 'b2' && partNumber >= 1 && partNumber <= 4)
+                  isSkillPracticeSession && examSlot && !hideStandaloneExerciseLabel
                     ? formatSkillExerciseLabel(examSlot, lang === 'es' ? 'es' : 'en')
                     : null
                 }
@@ -4563,8 +4616,10 @@ function B2ExamPaperPracticePageInner({
         slug={levelSlug}
         partNumber={partNumber}
         pagePartMax={partMax}
+        pagePartMin={partMin}
         examSlot={examSlot}
         examenIdBySlot={isSkillPracticeSession ? scoring.examenIdBySlot : undefined}
+        progressBySlot={isSkillPracticeSession ? scoring.progressBySlot : undefined}
         onSelectExamSlot={
           isSkillPracticeSession
             ? (slot) => {

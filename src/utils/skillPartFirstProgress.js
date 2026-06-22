@@ -65,6 +65,49 @@ export function resolveSkillPracticeExamSlot(
   return findFirstExerciseSlotWithoutStars(progressBySlot, partNumber, examenIdBySlot);
 }
 
+/**
+ * Overlay in-session part progress onto saved progress so footer nav unlock
+ * matches live stars shown in the chrome before Supabase refresh completes.
+ */
+export function buildProgressBySlotWithLiveOverlay(
+  progressBySlot = {},
+  examSlot,
+  partNumber,
+  livePartProgress = null,
+) {
+  if (!livePartProgress?.complete) return progressBySlot;
+
+  const slot = Number(examSlot);
+  const pn = Number(partNumber);
+  if (!Number.isFinite(slot) || slot <= 0 || !Number.isFinite(pn) || pn <= 0) {
+    return progressBySlot;
+  }
+
+  const liveStars = starsFromPartExerciseScore(livePartProgress);
+  if (liveStars <= 0) return progressBySlot;
+
+  const slotEntry = progressBySlot[slot] || { parts: {} };
+  const existing = slotEntry.parts?.[pn];
+  const savedStars = starsFromPartExerciseScore(existing);
+
+  if (liveStars <= savedStars && existing?.total) return progressBySlot;
+
+  return {
+    ...progressBySlot,
+    [slot]: {
+      ...slotEntry,
+      parts: {
+        ...(slotEntry.parts || {}),
+        [pn]: {
+          ...existing,
+          ...livePartProgress,
+          stars: Math.max(liveStars, savedStars),
+        },
+      },
+    },
+  };
+}
+
 export function filterProgressByPart(progressBySlot = {}, partNumber) {
   const pn = Number(partNumber);
   if (!pn) return progressBySlot;

@@ -3,7 +3,8 @@ function normalizePath(path) {
   if (!raw) return '/';
   let normalized = raw.startsWith('/') ? raw : `/${raw}`;
   // Next.js trailingSlash: true — POST to /api/foo redirects to /api/foo/ and drops the body.
-  if (normalized.startsWith('/api/') && !normalized.endsWith('/')) {
+  // Do not append when the path already has a query string (would corrupt ?preguntaId=uuid).
+  if (normalized.startsWith('/api/') && !normalized.endsWith('/') && !normalized.includes('?')) {
     normalized = `${normalized}/`;
   }
   return normalized;

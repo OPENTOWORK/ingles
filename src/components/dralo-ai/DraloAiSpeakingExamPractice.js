@@ -128,7 +128,7 @@ export default function DraloAiSpeakingExamPractice({ level = 'B2', activity }) 
   );
 
   const callTurn = useCallback(
-    async (payload, sid, historySnapshot) => {
+    async (payload, sid) => {
       if (!sid || !isAlive()) return null;
       const signal = abortRef.current?.signal;
       setLoading(true);
@@ -139,7 +139,6 @@ export default function DraloAiSpeakingExamPractice({ level = 'B2', activity }) 
           cefr: level,
           mode: 'EXAM',
           prompt: taskContext,
-          history: historySnapshot,
           examPartIndex,
           b2PartNumber,
           taskContext,
@@ -208,7 +207,7 @@ export default function DraloAiSpeakingExamPractice({ level = 'B2', activity }) 
         if (!aliveRef.current) return;
         setSessionId(sid);
 
-        const data = await callTurn({ isOpening: true, text: '' }, sid, []);
+        const data = await callTurn({ isOpening: true, text: '' }, sid);
         if (!aliveRef.current || !data) return;
         await applyAssistantTurn(data);
         if (!aliveRef.current) return;
@@ -253,14 +252,14 @@ export default function DraloAiSpeakingExamPractice({ level = 'B2', activity }) 
       if (!sessionId || !isAlive()) return;
       let data;
       if (audioOrText instanceof Blob) {
-        data = await callTurn({ audio: audioOrText }, sessionId, history);
+        data = await callTurn({ audio: audioOrText }, sessionId);
       } else {
         const text = String(audioOrText || '').trim();
         if (!text) return;
         setUserLines((prev) => [...prev, text]);
         const nextHistory = [...history, { role: 'user', content: text }];
         setHistory(nextHistory);
-        data = await callTurn({ text }, sessionId, nextHistory);
+        data = await callTurn({ text }, sessionId);
       }
       if (!isAlive() || !data) return;
       if (data.transcript && audioOrText instanceof Blob) {

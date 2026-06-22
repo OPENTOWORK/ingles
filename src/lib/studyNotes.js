@@ -1,3 +1,6 @@
+import { applyExamSlotToHref, getLevelSkillPracticeHref } from '@/data/nivelesLevelHub';
+import { buildExamModePracticeHref } from '@/utils/examModeSession';
+
 const STORAGE_PREFIX = 'dralo_study_notes_';
 export const STUDY_NOTES_UPDATED_EVENT = 'dralo-study-notes-updated';
 
@@ -69,4 +72,38 @@ export function formatStudyNoteDate(iso) {
 
 export function getScratchNoteId(contextKey) {
   return `scratch:${contextKey}`;
+}
+
+/** @param {Record<string, unknown> | null | undefined} context */
+export function buildStudyNotePracticeHref(context) {
+  if (!context || typeof context !== 'object') return null;
+
+  const levelSlug = String(context.slug || context.levelSlug || 'b2').toLowerCase();
+  const skillRoute = context.skillRoute || context.skill || null;
+  const partNumber = Number(context.partNumber);
+  const examSlot = Number(context.examSlot) || 1;
+
+  let base =
+    (skillRoute && getLevelSkillPracticeHref(levelSlug, skillRoute)) ||
+    `/niveles/${levelSlug}`;
+
+  if (context.examMode) {
+    return buildExamModePracticeHref(base, examSlot, {
+      part: Number.isFinite(partNumber) && partNumber > 0 ? partNumber : undefined,
+    });
+  }
+
+  if (Number.isFinite(partNumber) && partNumber > 0) {
+    const sep = base.includes('?') ? '&' : '?';
+    base = `${base}${sep}part=${partNumber}`;
+  }
+
+  if (Number.isFinite(examSlot) && examSlot > 1) {
+    base = applyExamSlotToHref(base, levelSlug, examSlot);
+  } else if (examSlot === 1) {
+    const sep = base.includes('?') ? '&' : '?';
+    if (!base.includes('examen=')) base = `${base}${sep}examen=1`;
+  }
+
+  return base;
 }

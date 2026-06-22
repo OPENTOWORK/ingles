@@ -117,6 +117,7 @@ function pctFromEstadisticaRow(row) {
  * @param {Record<string,string>} opts.examNames — examen_id → nombre
  * @param {Record<string,string>} [opts.preguntaLevel] — pregunta_id → level slug
  * @param {string} [opts.timeRange] — week | month | all
+ * @param {string} [opts.levelFilter] — a2 | b1 | b2 | c1 | c2 (optional)
  */
 export function buildExamStatisticsFromLevels({
   estadisticas = [],
@@ -125,15 +126,18 @@ export function buildExamStatisticsFromLevels({
   examNames = {},
   preguntaLevel = {},
   timeRange = 'all',
+  levelFilter = null,
 }) {
   const sections = emptySections();
   let totalTime = 0;
+  const activeLevel = levelFilter ? normalizeLevelSlug(levelFilter) : null;
 
   for (const row of estadisticas) {
     if (!inTimeRange(row.ultima_interaccion || row.creado_en, timeRange)) continue;
 
     const partLabel = partNames[row.parte_id] || '';
-    const levelSlug = preguntaLevel[row.pregunta_id] || 'b2';
+    const levelSlug = normalizeLevelSlug(preguntaLevel[row.pregunta_id] || 'b2') || 'b2';
+    if (activeLevel && levelSlug !== activeLevel) continue;
     const skill =
       skillFromPartLabel(partLabel) ||
       skillFromPartNumber(parsePartNumberFromLabel(partLabel), levelSlug);
@@ -159,6 +163,7 @@ export function buildExamStatisticsFromLevels({
 
   for (const row of puntuaciones) {
     if (!inTimeRange(row.created_at, timeRange)) continue;
+    if (activeLevel && activeLevel !== 'b2') continue;
 
     const meta = parseUoePartDescripcion(row.descripcion);
     const examId = row.examen_id || meta?.examenId;

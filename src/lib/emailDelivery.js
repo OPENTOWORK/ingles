@@ -25,9 +25,9 @@ export async function canUseResend() {
 }
 
 /**
- * @param {{ to: string, subject: string, text: string, replyTo?: string }} params
+ * @param {{ to: string, subject: string, text: string, html?: string, replyTo?: string }} params
  */
-export async function sendEmailViaResend({ to, subject, text, replyTo }) {
+export async function sendEmailViaResend({ to, subject, text, html, replyTo }) {
   const apiKey = process.env.RESEND_API_KEY?.trim();
   const from = await getResendFromAddress();
   if (!apiKey || !from) {
@@ -38,6 +38,7 @@ export async function sendEmailViaResend({ to, subject, text, replyTo }) {
   let actualTo = to;
   let actualSubject = subject;
   let actualText = text;
+  let actualHtml = html;
 
   if (sandbox) {
     const fallback = process.env.RESEND_DEV_FALLBACK_TO?.trim();
@@ -52,6 +53,10 @@ export async function sendEmailViaResend({ to, subject, text, replyTo }) {
       actualTo = fallback;
       actualSubject = `[Para: ${to}] ${subject}`;
       actualText = `Destinatario previsto: ${to}\n\n${text}`;
+      if (actualHtml) {
+        const safeTo = String(to).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+        actualHtml = `<p style="font-size:13px;color:#64748b;">Destinatario previsto: ${safeTo}</p>${actualHtml}`;
+      }
     }
   }
 
@@ -63,6 +68,7 @@ export async function sendEmailViaResend({ to, subject, text, replyTo }) {
     subject: actualSubject,
     text: actualText,
   };
+  if (actualHtml) payload.html = actualHtml;
   if (replyTo) payload.replyTo = replyTo;
 
   const { error } = await resend.emails.send(payload);
@@ -101,11 +107,11 @@ function buildConfigError() {
 
 /**
  * SMTP (env) → Resend (dominio o sandbox) → error claro.
- * @param {{ to: string, subject: string, text: string, replyTo?: string }} params
+ * @param {{ to: string, subject: string, text: string, html?: string, replyTo?: string }} params
  */
-export async function deliverTransactionalEmail({ to, subject, text, replyTo }) {
+export async function deliverTransactionalEmail({ to, subject, text, html, replyTo }) {
   if (isSupportSmtpReady()) {
-    const smtp = await sendSupportTicketViaSmtp({ to, subject, text, replyTo });
+    const smtp = await sendSupportTicketViaSmtp({ to, subject, text, html, replyTo });
     if (smtp.sent) return { ok: true, channel: 'smtp' };
     if (!smtp.skipped) {
       return { ok: false, error: smtp.error || 'Error SMTP' };
@@ -113,7 +119,7 @@ export async function deliverTransactionalEmail({ to, subject, text, replyTo }) 
   }
 
   if (await canUseResend()) {
-    const resend = await sendEmailViaResend({ to, subject, text, replyTo });
+    const resend = await sendEmailViaResend({ to, subject, text, html, replyTo });
     if (resend.ok) return resend;
     return { ok: false, error: resend.error || 'Error Resend' };
   }

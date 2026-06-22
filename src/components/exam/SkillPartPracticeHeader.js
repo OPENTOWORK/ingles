@@ -1,7 +1,8 @@
 'use client';
 
 /**
- * Title row for skill practice — matches UOE Part 1 (category + subtitle + exercise label).
+ * Title row for skill practice — category + subtitle + optional actions (e.g. favourite).
+ * Exercise variant (Exercise N) belongs in the category line, like Reading / UoE.
  */
 export default function SkillPartPracticeHeader({
   title,

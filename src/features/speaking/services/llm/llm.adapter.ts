@@ -9,6 +9,7 @@ export type PracticeTurnParams = {
   cefr: CefrLevel;
   mode: SpeakingMode;
   prompt: string;
+  /** Current turn only — prior turns are supplied in `history` (server-side window). */
   transcript: string;
   history: { role: 'user' | 'assistant'; content: string }[];
 };
@@ -17,6 +18,7 @@ export type ExamTurnParams = {
   cefr: CefrLevel;
   examName: string;
   part: ExamPartDefinition;
+  /** Current turn only — prior turns are supplied in `history` (server-side window). */
   transcript: string;
   history: { role: 'user' | 'assistant'; content: string }[];
   /** Texto extra (enunciado BD, situación, etc.). */

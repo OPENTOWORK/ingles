@@ -1,0 +1,561 @@
+.intro {
+  margin: 0 0 1rem;
+  color: #64748b;
+  font-size: 0.92rem;
+  line-height: 1.5;
+}
+
+.loading {
+  margin: 0;
+  color: #64748b;
+}
+
+.planOverview {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 0.85rem;
+}
+
+.planField {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  font-size: 0.78rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: #64748b;
+}
+
+.planField input {
+  width: 100%;
+  padding: 0.5rem 0.65rem;
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+  font-size: 1rem;
+  font-weight: 700;
+  color: #0f172a;
+}
+
+.planField em {
+  font-style: normal;
+  font-size: 0.72rem;
+  color: #94a3b8;
+}
+
+.planStat {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  padding: 0.65rem 0.75rem;
+  border-radius: 12px;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+}
+
+.planStatLabel {
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: #94a3b8;
+}
+
+.planStat strong {
+  font-size: 1.15rem;
+  color: #0f172a;
+}
+
+.weeklyBar {
+  margin-top: 1rem;
+  height: 8px;
+  border-radius: 999px;
+  background: #e2e8f0;
+  overflow: hidden;
+}
+
+.weeklyBarFill {
+  height: 100%;
+  border-radius: inherit;
+  background: linear-gradient(90deg, #6366f1, #4f46e5);
+  transition: width 0.25s ease;
+}
+
+.weeklyBarCaption {
+  margin: 0.45rem 0 0;
+  font-size: 0.82rem;
+  color: #64748b;
+}
+
+.weekCaption {
+  margin: 0 0 0.75rem;
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: #475569;
+}
+
+.weekGrid {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  gap: 0.45rem;
+}
+
+.weekDay {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.15rem;
+  padding: 0.55rem 0.35rem;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  background: #fff;
+  cursor: pointer;
+  position: relative;
+  transition: border-color 0.15s ease, background 0.15s ease;
+}
+
+.weekDay:hover {
+  border-color: #c7d2fe;
+  background: #f8fafc;
+}
+
+.weekDaySelected {
+  border-color: #6366f1;
+  background: #eef2ff;
+  box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.2);
+}
+
+.weekDayToday .weekDayNum {
+  color: #4f46e5;
+}
+
+.weekDayName {
+  font-size: 0.68rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: #94a3b8;
+}
+
+.weekDayNum {
+  font-size: 1.05rem;
+  font-weight: 800;
+  color: #0f172a;
+}
+
+.weekDayDot {
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  min-width: 1.1rem;
+  height: 1.1rem;
+  padding: 0 0.2rem;
+  border-radius: 999px;
+  background: #6366f1;
+  color: #fff;
+  font-size: 0.62rem;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.dayPanel {
+  margin-top: 1.1rem;
+  padding: 1rem;
+  border-radius: 14px;
+  border: 1px solid #e2e8f0;
+  background: #f8fafc;
+}
+
+.dayTitle {
+  margin: 0 0 0.75rem;
+  font-size: 1rem;
+  font-weight: 700;
+  color: #0f172a;
+}
+
+.emptyDay {
+  margin: 0 0 0.85rem;
+  color: #94a3b8;
+  font-size: 0.88rem;
+}
+
+.eventList {
+  list-style: none;
+  margin: 0 0 0.85rem;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.55rem;
+}
+
+.eventItem {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.65rem;
+  padding: 0.65rem 0.75rem;
+  border-radius: 10px;
+  background: #fff;
+  border: 1px solid #e2e8f0;
+}
+
+.eventItemDone {
+  opacity: 0.72;
+  background: #f0fdf4;
+  border-color: #bbf7d0;
+}
+
+.eventMain {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.45rem 0.65rem;
+  min-width: 0;
+}
+
+.eventSkill {
+  font-size: 0.68rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  padding: 0.15rem 0.45rem;
+  border-radius: 999px;
+  background: #eef2ff;
+  color: #4338ca;
+}
+
+.eventDuration {
+  font-size: 0.78rem;
+  color: #64748b;
+}
+
+.eventActions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+
+.eventDoneBtn,
+.eventRemoveBtn,
+.habitBtn,
+.textBtn {
+  border: 1px solid #e2e8f0;
+  background: #fff;
+  border-radius: 8px;
+  padding: 0.35rem 0.65rem;
+  font-size: 0.78rem;
+  font-weight: 600;
+  cursor: pointer;
+  color: #475569;
+}
+
+.eventRemoveBtn {
+  color: #b91c1c;
+  border-color: #fecaca;
+}
+
+.addEventForm,
+.addGoalForm {
+  display: grid;
+  grid-template-columns: 1fr auto auto auto;
+  gap: 0.5rem;
+}
+
+.addGoalForm {
+  margin-top: 1rem;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+}
+
+.addEventForm input,
+.addEventForm select,
+.addGoalForm input,
+.addGoalForm select {
+  padding: 0.5rem 0.65rem;
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+  font-size: 0.88rem;
+}
+
+.primaryBtn {
+  border: none;
+  border-radius: 10px;
+  padding: 0.55rem 0.9rem;
+  font-size: 0.84rem;
+  font-weight: 700;
+  color: #fff;
+  background: linear-gradient(135deg, #6366f1, #4f46e5);
+  cursor: pointer;
+}
+
+.goalsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 0.85rem;
+}
+
+.goalCard {
+  padding: 1rem;
+  border-radius: 14px;
+  border: 1px solid #e2e8f0;
+  background: #fff;
+}
+
+.priority_high {
+  border-left: 4px solid #dc2626;
+}
+
+.priority_medium {
+  border-left: 4px solid #eab308;
+}
+
+.priority_low {
+  border-left: 4px solid #16a34a;
+}
+
+.goalHead {
+  display: flex;
+  justify-content: space-between;
+  gap: 0.5rem;
+  align-items: flex-start;
+}
+
+.goalTitle {
+  margin: 0;
+  font-size: 1rem;
+  color: #0f172a;
+}
+
+.goalPriority {
+  font-size: 0.68rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: #64748b;
+}
+
+.goalDesc {
+  margin: 0.45rem 0 0;
+  font-size: 0.86rem;
+  color: #64748b;
+  line-height: 1.45;
+}
+
+.goalProgressLabel {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  margin-top: 0.75rem;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #475569;
+}
+
+.goalDeadline {
+  margin: 0.45rem 0 0;
+  font-size: 0.78rem;
+  color: #94a3b8;
+}
+
+.habitsList {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.55rem;
+}
+
+.habitItem {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.65rem;
+  padding: 0.75rem 0.85rem;
+  border-radius: 12px;
+  border: 1px solid #e2e8f0;
+  background: #fff;
+}
+
+.habitItemDone {
+  background: #f0fdf4;
+  border-color: #bbf7d0;
+}
+
+.habitMeta {
+  display: block;
+  margin-top: 0.15rem;
+  font-size: 0.78rem;
+  color: #64748b;
+}
+
+.habitRight {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.habitStreak {
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: #64748b;
+}
+
+.habitBtnActive {
+  background: #dcfce7;
+  border-color: #86efac;
+  color: #166534;
+}
+
+.progressGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 0.75rem;
+}
+
+.progressCard {
+  padding: 0.85rem;
+  border-radius: 12px;
+  border: 1px solid #e2e8f0;
+  background: #f8fafc;
+}
+
+.progressLabel {
+  display: block;
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: #94a3b8;
+  margin-bottom: 0.25rem;
+}
+
+.progressCard strong {
+  font-size: 1.2rem;
+  color: #0f172a;
+}
+
+.quickLinks {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.65rem;
+  margin-top: 1rem;
+  padding-top: 0.85rem;
+  border-top: 1px solid #e2e8f0;
+}
+
+.quickLinksLabel {
+  font-size: 0.78rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: #94a3b8;
+}
+
+.quickLink {
+  font-size: 0.86rem;
+  font-weight: 700;
+  color: #4f46e5;
+  text-decoration: none;
+}
+
+.quickLink:hover {
+  text-decoration: underline;
+}
+
+@media (max-width: 768px) {
+  .addEventForm {
+    grid-template-columns: 1fr;
+  }
+
+  .weekGrid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+
+:global(body.reading-night-mode) .intro,
+:global(body.reading-night-mode) .loading,
+:global(body.reading-night-mode) .weeklyBarCaption,
+:global(body.reading-night-mode) .weekCaption,
+:global(body.reading-night-mode) .emptyDay,
+:global(body.reading-night-mode) .goalDesc,
+:global(body.reading-night-mode) .habitMeta,
+:global(body.reading-night-mode) .habitStreak,
+:global(body.reading-night-mode) .eventDuration,
+:global(body.reading-night-mode) .goalDeadline {
+  color: #94a3b8;
+}
+
+:global(body.reading-night-mode) .planField,
+:global(body.reading-night-mode) .planStatLabel,
+:global(body.reading-night-mode) .progressLabel,
+:global(body.reading-night-mode) .quickLinksLabel,
+:global(body.reading-night-mode) .goalPriority {
+  color: #94a3b8;
+}
+
+:global(body.reading-night-mode) .planField input,
+:global(body.reading-night-mode) .addEventForm input,
+:global(body.reading-night-mode) .addEventForm select,
+:global(body.reading-night-mode) .addGoalForm input,
+:global(body.reading-night-mode) .addGoalForm select {
+  background: #334155;
+  border-color: #64748b;
+  color: #f1f5f9;
+}
+
+:global(body.reading-night-mode) .planStat,
+:global(body.reading-night-mode) .dayPanel,
+:global(body.reading-night-mode) .progressCard {
+  background: #172033;
+  border-color: #475569;
+}
+
+:global(body.reading-night-mode) .planStat strong,
+:global(body.reading-night-mode) .dayTitle,
+:global(body.reading-night-mode) .goalTitle,
+:global(body.reading-night-mode) .progressCard strong,
+:global(body.reading-night-mode) .weekDayNum {
+  color: #f1f5f9;
+}
+
+:global(body.reading-night-mode) .weeklyBar {
+  background: #334155;
+}
+
+:global(body.reading-night-mode) .weekDay,
+:global(body.reading-night-mode) .eventItem,
+:global(body.reading-night-mode) .goalCard,
+:global(body.reading-night-mode) .habitItem {
+  background: #1e293b;
+  border-color: #475569;
+}
+
+:global(body.reading-night-mode) .weekDaySelected {
+  background: #1e3a5f;
+  border-color: #38bdf8;
+}
+
+:global(body.reading-night-mode) .eventItemDone,
+:global(body.reading-night-mode) .habitItemDone {
+  background: #052e16;
+  border-color: #166534;
+}
+
+:global(body.reading-night-mode) .eventDoneBtn,
+:global(body.reading-night-mode) .eventRemoveBtn,
+:global(body.reading-night-mode) .habitBtn,
+:global(body.reading-night-mode) .textBtn {
+  background: #334155;
+  border-color: #64748b;
+  color: #e2e8f0;
+}
+
+:global(body.reading-night-mode) .quickLinks {
+  border-top-color: #475569;
+}
+
+:global(body.reading-night-mode) .quickLink {
+  color: #93c5fd;
+}

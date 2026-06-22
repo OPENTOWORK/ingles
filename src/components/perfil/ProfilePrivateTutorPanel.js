@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import ProfileCollapsibleSection from '@/components/perfil/ProfileCollapsibleSection';
 import { canAccessTeacherPanel } from '@/utils/authRoles';
+import { isValidCalendlyUrl } from '@/lib/tutoringCalendly';
 
 export default function ProfilePrivateTutorPanel({ userRole, accessToken }) {
   const isTeacher = canAccessTeacherPanel(userRole);
@@ -93,6 +94,22 @@ export default function ProfilePrivateTutorPanel({ userRole, accessToken }) {
     [teachers],
   );
 
+  const bookingReady = useMemo(() => {
+    const onlineOk = !offersOnline || isValidCalendlyUrl(calendlyUrl);
+    const inPersonOk =
+      !offersInPerson ||
+      isValidCalendlyUrl(calendlyUrlInPerson) ||
+      Boolean(inPersonInfo.trim());
+    return active && onlineOk && inPersonOk && (offersOnline || offersInPerson);
+  }, [
+    active,
+    offersOnline,
+    calendlyUrl,
+    offersInPerson,
+    calendlyUrlInPerson,
+    inPersonInfo,
+  ]);
+
   const handleSave = async (event) => {
     event.preventDefault();
     if (!accessToken) return;
@@ -171,6 +188,33 @@ export default function ProfilePrivateTutorPanel({ userRole, accessToken }) {
             a booking link or location details.
           </p>
 
+          <div className="profile-tutor-setup">
+            <p className="profile-tutor-setup__title">How to enable Calendly bookings</p>
+            <ol className="profile-tutor-setup__steps">
+              <li>
+                Create a free account at{' '}
+                <a href="https://calendly.com" target="_blank" rel="noopener noreferrer">
+                  calendly.com
+                </a>{' '}
+                and add an event type (e.g. 30 min online lesson).
+              </li>
+              <li>Copy the <strong>event link</strong> — e.g. <code>https://calendly.com/your-name/online-lesson</code> (not just the homepage).</li>
+              <li>Paste it below, keep &quot;Show my profile to students&quot; checked, and click Save.</li>
+              <li>Students will see a <strong>Book online lesson</strong> button in Profile → Private tutor.</li>
+            </ol>
+          </div>
+
+          <div
+            className={`profile-tutor-status${bookingReady ? ' profile-tutor-status--ready' : ' profile-tutor-status--pending'}`}
+            role="status"
+          >
+            {bookingReady
+              ? '✓ Your profile is ready — students can book with you.'
+              : offersOnline && !isValidCalendlyUrl(calendlyUrl)
+                ? '⚠ Paste your Calendly event link and save to activate online bookings.'
+                : '⚠ Complete the required fields and save to publish your tutoring profile.'}
+          </div>
+
           <form onSubmit={handleSave} className="profile-tutor-form">
             <fieldset className="profile-tutor-fieldset">
               <legend>💻 Online lessons</legend>
@@ -190,7 +234,17 @@ export default function ProfilePrivateTutorPanel({ userRole, accessToken }) {
                     value={calendlyUrl}
                     onChange={(e) => setCalendlyUrl(e.target.value)}
                     placeholder="https://calendly.com/tu-usuario/clase-online"
+                    required
                   />
+                  {calendlyUrl.trim() && !isValidCalendlyUrl(calendlyUrl) ? (
+                    <span className="profile-tutor-field-hint profile-tutor-field-hint--error">
+                      Use a full Calendly URL starting with https://calendly.com/
+                    </span>
+                  ) : (
+                    <span className="profile-tutor-field-hint">
+                      Required for online bookings. Use the link of a specific event, not calendly.com alone.
+                    </span>
+                  )}
                 </label>
               ) : null}
             </fieldset>
@@ -429,6 +483,63 @@ function ProfilePrivateTutorStyles() {
         flex-direction: column;
         gap: 16px;
         max-width: 720px;
+      }
+      .profile-tutor-setup {
+        margin: 0 0 4px;
+        padding: 16px 18px;
+        border-radius: 12px;
+        border: 1px solid #bfdbfe;
+        background: linear-gradient(135deg, #eff6ff 0%, #f8fafc 100%);
+        max-width: 720px;
+      }
+      .profile-tutor-setup__title {
+        margin: 0 0 10px;
+        font-weight: 700;
+        color: #1e40af;
+        font-size: 14px;
+      }
+      .profile-tutor-setup__steps {
+        margin: 0;
+        padding-left: 1.2rem;
+        color: #334155;
+        font-size: 13px;
+        line-height: 1.55;
+      }
+      .profile-tutor-setup__steps code {
+        font-size: 12px;
+        background: #e2e8f0;
+        padding: 1px 5px;
+        border-radius: 4px;
+      }
+      .profile-tutor-setup a {
+        color: #2563eb;
+        font-weight: 600;
+      }
+      .profile-tutor-status {
+        max-width: 720px;
+        padding: 12px 14px;
+        border-radius: 10px;
+        font-size: 14px;
+        font-weight: 600;
+        line-height: 1.45;
+      }
+      .profile-tutor-status--ready {
+        background: #ecfdf5;
+        border: 1px solid #86efac;
+        color: #166534;
+      }
+      .profile-tutor-status--pending {
+        background: #fffbeb;
+        border: 1px solid #fcd34d;
+        color: #92400e;
+      }
+      .profile-tutor-field-hint {
+        font-size: 12px;
+        color: #64748b;
+        line-height: 1.4;
+      }
+      .profile-tutor-field-hint--error {
+        color: #dc2626;
       }
       .profile-tutor-fieldset {
         border: 1px solid #e2e8f0;

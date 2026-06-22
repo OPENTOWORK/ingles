@@ -1,14 +1,6 @@
-.sourceNote {
-  margin: 0 0 12px;
-  font-size: 0.8rem;
-  font-weight: 600;
-  color: #64748b;
-  line-height: 1.45;
-}
-
 .grid {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 14px;
 }
 
@@ -29,48 +21,139 @@
   border-color: #cbd5e1;
 }
 
+.card:hover .iconWrapEpicFlame {
+  animation: flamePulse 0.85s ease-in-out infinite;
+}
+
+.card:hover .epicClock__handMin {
+  animation: clockTick 2.4s linear infinite;
+}
+
 .iconWrap {
   flex-shrink: 0;
-  width: 42px;
-  height: 42px;
+  width: 52px;
+  height: 52px;
   display: grid;
   place-items: center;
-  border-radius: 11px;
-}
-
-.icon {
-  width: 20px;
-  height: 20px;
-}
-
-.iconWrap--blue {
-  background: #eff6ff;
-  color: #2563eb;
-}
-
-.iconWrap--green {
-  background: #ecfdf5;
-  color: #059669;
-}
-
-.iconWrap--slate {
-  background: #f1f5f9;
-  color: #475569;
-}
-
-.iconWrap--violet {
-  background: #f5f3ff;
-  color: #7c3aed;
+  border-radius: 14px;
+  position: relative;
+  overflow: visible;
 }
 
 .iconWrap--amber {
-  background: #fffbeb;
-  color: #d97706;
+  background: linear-gradient(145deg, #fff7ed 0%, #ffedd5 100%);
+  color: #ea580c;
+  box-shadow:
+    0 0 0 1px rgba(249, 115, 22, 0.15),
+    0 6px 18px rgba(249, 115, 22, 0.22);
 }
 
 .iconWrap--cyan {
-  background: #ecfeff;
-  color: #0891b2;
+  background: linear-gradient(145deg, #ecfeff 0%, #e0e7ff 100%);
+  color: #2563eb;
+  box-shadow:
+    0 0 0 1px rgba(59, 130, 246, 0.15),
+    0 6px 18px rgba(59, 130, 246, 0.2);
+}
+
+.iconWrapEpicFlame {
+  animation: flamePulse 1.6s ease-in-out infinite;
+}
+
+.iconWrapEpicClock::after {
+  content: '';
+  position: absolute;
+  inset: -3px;
+  border-radius: 16px;
+  background: conic-gradient(from 0deg, transparent, rgba(99, 102, 241, 0.35), transparent);
+  opacity: 0;
+  animation: clockHaloSpin 4s linear infinite;
+  z-index: 0;
+  pointer-events: none;
+}
+
+.iconWrapEpicClock > svg {
+  position: relative;
+  z-index: 1;
+}
+
+.epicFlame {
+  width: 34px;
+  height: 34px;
+  filter: drop-shadow(0 2px 6px rgba(239, 68, 68, 0.45));
+}
+
+.epicFlame__glow {
+  animation: flameGlow 1.2s ease-in-out infinite alternate;
+}
+
+.epicClock {
+  width: 34px;
+  height: 34px;
+  filter: drop-shadow(0 2px 8px rgba(59, 130, 246, 0.35));
+}
+
+.epicClock__halo {
+  fill: rgba(99, 102, 241, 0.12);
+  transform-origin: 24px 24px;
+  animation: clockHaloPulse 2s ease-in-out infinite;
+}
+
+.epicClock__handMin {
+  transform-origin: 24px 24px;
+}
+
+@keyframes flamePulse {
+  0%,
+  100% {
+    transform: scale(1) translateY(0);
+  }
+  50% {
+    transform: scale(1.06) translateY(-1px);
+  }
+}
+
+@keyframes flameGlow {
+  from {
+    opacity: 0.55;
+    transform: scale(0.92);
+  }
+  to {
+    opacity: 0.95;
+    transform: scale(1.05);
+  }
+}
+
+@keyframes clockHaloPulse {
+  0%,
+  100% {
+    opacity: 0.45;
+    transform: scale(0.94);
+  }
+  50% {
+    opacity: 0.85;
+    transform: scale(1.06);
+  }
+}
+
+@keyframes clockHaloSpin {
+  from {
+    opacity: 0.35;
+    transform: rotate(0deg);
+  }
+  to {
+    opacity: 0.35;
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes clockTick {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 .content {
@@ -102,20 +185,10 @@
   font-size: 14px;
 }
 
-@media (max-width: 720px) {
-  .grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-}
-
 @media (max-width: 420px) {
   .grid {
     grid-template-columns: 1fr;
   }
-}
-
-:global(body.reading-night-mode) .sourceNote {
-  color: #94a3b8;
 }
 
 :global(body.reading-night-mode) .card {
@@ -138,32 +211,16 @@
   color: #94a3b8;
 }
 
-:global(body.reading-night-mode) .iconWrap--blue {
-  background: rgba(37, 99, 235, 0.2);
-  color: #93c5fd;
-}
-
-:global(body.reading-night-mode) .iconWrap--green {
-  background: rgba(5, 150, 105, 0.2);
-  color: #6ee7b7;
-}
-
-:global(body.reading-night-mode) .iconWrap--slate {
-  background: rgba(100, 116, 139, 0.25);
-  color: #cbd5e1;
-}
-
-:global(body.reading-night-mode) .iconWrap--violet {
-  background: rgba(124, 58, 237, 0.2);
-  color: #c4b5fd;
-}
-
 :global(body.reading-night-mode) .iconWrap--amber {
-  background: rgba(217, 119, 6, 0.2);
-  color: #fcd34d;
+  background: linear-gradient(145deg, rgba(234, 88, 12, 0.25) 0%, rgba(251, 146, 60, 0.15) 100%);
+  box-shadow:
+    0 0 0 1px rgba(251, 146, 60, 0.25),
+    0 6px 18px rgba(234, 88, 12, 0.25);
 }
 
 :global(body.reading-night-mode) .iconWrap--cyan {
-  background: rgba(8, 145, 178, 0.2);
-  color: #67e8f9;
+  background: linear-gradient(145deg, rgba(37, 99, 235, 0.22) 0%, rgba(99, 102, 241, 0.15) 100%);
+  box-shadow:
+    0 0 0 1px rgba(96, 165, 250, 0.25),
+    0 6px 18px rgba(37, 99, 235, 0.22);
 }

@@ -15,9 +15,6 @@ const AdaptiveLearningDashboard = dynamicImport(
   () => import('@/components/AdaptiveLearningDashboard'),
 );
 import ExamStatistics from '@/components/ExamStatistics';
-const LevelsEstadisticasPanel = dynamicImport(
-  () => import('@/components/LevelsEstadisticasPanel'),
-);
 const LevelsPartTimePerformancePanel = dynamicImport(
   () => import('@/components/LevelsPartTimePerformancePanel'),
 );
@@ -30,6 +27,8 @@ const ProfileProgressCharts = dynamicImport(
 import ProfileCollapsibleSection from '@/components/perfil/ProfileCollapsibleSection';
 import ProfileSubscriptionCard from '@/components/perfil/ProfileSubscriptionCard';
 import ProfileStudyNotesPanel from '@/components/perfil/ProfileStudyNotesPanel';
+import ProfileFavouriteExercisesPanel from '@/components/perfil/ProfileFavouriteExercisesPanel';
+import ProfileStudyPlannerPanel from '@/components/perfil/ProfileStudyPlannerPanel';
 import ProfileComingSoon from '@/components/perfil/ProfileComingSoon';
 import ProfileTabsNav from '@/components/perfil/ProfileTabsNav';
 import { PROFILE_TABS, PROFILE_TAB_LABELS, isStudentHiddenProfileTab, getVisibleProfileTabs } from '@/components/perfil/profileTabsConfig';
@@ -97,6 +96,7 @@ const DraloLevelProgressSection = dynamic(
   },
 );
 import SiteMascot from '@/components/SiteMascot';
+import { TrendingUp } from 'lucide-react';
 import PasswordInput from '@/components/PasswordInput';
 import {
   hydrateProfileMockData,
@@ -141,13 +141,11 @@ export default function ProfilePage() {
   const [studyHistory, setStudyHistory] = useState([]);
   const [weeklyChallenges, setWeeklyChallenges] = useState([]);
   const [studyRecommendations, setStudyRecommendations] = useState([]);
-  const [studyCalendar, setStudyCalendar] = useState([]);
   const [progressComparison, setProgressComparison] = useState({});
-  const [favoriteExercises, setFavoriteExercises] = useState([]);
   const [studyGroups, setStudyGroups] = useState([]);
   const [achievementProgress, setAchievementProgress] = useState({});
   const [flashcards, setFlashcards] = useState([]);
-  const [studyPlan, setStudyPlan] = useState({});
+  const [studyPlan, setStudyPlan] = useState({ topics: [] });
   const [studyMusic, setStudyMusic] = useState({ isPlaying: false, currentTrack: null, tracks: [] });
   const [studyBreaks, setStudyBreaks] = useState({ enabled: true, interval: 25, breakTime: 5 });
   const [groupChat, setGroupChat] = useState([]);
@@ -227,10 +225,7 @@ export default function ProfilePage() {
       console.warn('Error loading integrated stats:', error);
     }
   };
-  const [studyGoals, setStudyGoals] = useState([]);
-  const [studyHabits, setStudyHabits] = useState([]);
   const [studyMotivation, setStudyMotivation] = useState({});
-  const [studyProgress, setStudyProgress] = useState({});
   const [studyChallenges, setStudyChallenges] = useState([]);
   const [studyLeaderboard, setStudyLeaderboard] = useState([]);
 
@@ -350,9 +345,7 @@ export default function ProfilePage() {
       setStudyHistory,
       setWeeklyChallenges,
       setStudyRecommendations,
-      setStudyCalendar,
       setProgressComparison,
-      setFavoriteExercises,
       setStudyGroups,
       setAchievementProgress,
       setFlashcards,
@@ -363,10 +356,7 @@ export default function ProfilePage() {
       setStudyRewards,
       setStudyThemes,
       setAiInsights,
-      setStudyGoals,
-      setStudyHabits,
       setStudyMotivation,
-      setStudyProgress,
       setStudyChallenges,
       setStudyLeaderboard,
     });
@@ -656,7 +646,13 @@ export default function ProfilePage() {
         throw new Error(payload?.error || 'Could not send invitation.');
       }
 
-      alert('Invitation sent successfully.');
+      if (payload?.sandbox) {
+        alert(
+          `Invitation saved in test mode: ${payload.sandbox}\n\nIn production, with dralo.es verified in Resend, it will reach your friend's inbox.`,
+        );
+      } else {
+        alert('Invitation sent successfully.');
+      }
       setInviteEmail('');
       setInviteMessage('');
     } catch (error) {
@@ -678,18 +674,6 @@ export default function ProfilePage() {
 
   const resetTimer = () => {
     setStudyTimer({ isRunning: false, time: 0, sessionTime: 0 });
-  };
-
-  // Función para añadir ejercicio favorito
-  const toggleFavoriteExercise = (exercise) => {
-    setFavoriteExercises(prev => {
-      const exists = prev.find(fav => fav.id === exercise.id);
-      if (exists) {
-        return prev.filter(fav => fav.id !== exercise.id);
-      } else {
-        return [...prev, { ...exercise, lastUsed: new Date().toISOString().split('T')[0] }];
-      }
-    });
   };
 
   // Funciones de flashcards
@@ -762,12 +746,6 @@ export default function ProfilePage() {
   };
 
   // Funciones de metas
-  const updateGoal = (goalId, updates) => {
-    setStudyGoals(prev => prev.map(goal => 
-      goal.id === goalId ? { ...goal, ...updates } : goal
-    ));
-  };
-
   if (loading) {
     return (
       <main className="shell perfil-page center">
@@ -806,6 +784,8 @@ export default function ProfilePage() {
   const mascotFallbackUrl =
     mascotVariant != null ? getMascotAvatarPath(mascotVariant) : null;
 
+  const estimatedLevel = stats.stats?.levelEstimate || placementLevel || null;
+
   return (
     <main className={`shell perfil-page${activeTab === 'mis-datos' ? ' perfil-page--mis-datos' : ''}`}>
       <ProfileTabsNav {...tabsProps} />
@@ -824,6 +804,15 @@ export default function ProfilePage() {
           <div className="header__copy">
             <h1>{displayName || user?.email || 'Profile'}</h1>
             <p>Manage your personal information and track your learning progress.</p>
+          </div>
+          <div className="header__level" aria-label="Estimated level">
+            <span className="header__level-icon" aria-hidden>
+              <TrendingUp strokeWidth={2} />
+            </span>
+            <div className="header__level-body">
+              <span className="header__level-value">{estimatedLevel ?? '—'}</span>
+              <span className="header__level-label">Estimated level</span>
+            </div>
           </div>
           <div className="header__mascot" aria-hidden>
             <SiteMascot variant={6} width={130} alt="" />
@@ -866,7 +855,6 @@ export default function ProfilePage() {
             className="profile-section--nested-exam-stats profile-section--exam-practice-combined"
           >
             <ExamStatistics userId={user?.id} embedded />
-            <LevelsEstadisticasPanel userId={user?.id} embedded />
           </ProfileCollapsibleSection>
 
           <ProfileCollapsibleSection title="Study activity">
@@ -1299,25 +1287,7 @@ export default function ProfilePage() {
 
           <ProfileStudyNotesPanel lang="en" />
 
-          {/* Exercises Favoritos */}
-          <ProfileCollapsibleSection title="Favourite exercises">
-<div className="favorites-grid">
-              {favoriteExercises.map((exercise) => (
-                <div key={exercise.id} className="favorite-card">
-                  <div className="favorite-title">{exercise.title}</div>
-                  <div className="favorite-type">{exercise.type}</div>
-                  <div className="favorite-difficulty">{exercise.difficulty}</div>
-                  <div className="favorite-last-used">Last used: {exercise.lastUsed}</div>
-                  <button 
-                    onClick={() => toggleFavoriteExercise(exercise)}
-                    className="remove-favorite-btn"
-                  >
-                    ❌ Remove from favourites
-                  </button>
-                </div>
-              ))}
-            </div>
-</ProfileCollapsibleSection>
+          <ProfileFavouriteExercisesPanel lang="en" />
 
           {/* Historial de Estudio */}
           <ProfileCollapsibleSection title="Study history">
@@ -1517,7 +1487,7 @@ export default function ProfilePage() {
                     <span>Difficulty: {studyPlan.difficulty}</span>
                   </div>
                   <div className="session-topics">
-                    {studyPlan.topics.map((topic, index) => (
+                    {(studyPlan.topics || []).map((topic, index) => (
                       <span key={index} className="topic-tag">{topic}</span>
                     ))}
                   </div>
@@ -1567,116 +1537,15 @@ export default function ProfilePage() {
         </>
       )}
 
-      {/* Tab: Planificador */}
       {activeTab === 'study-planner' && (
-        <>
-          <ProfileCollapsibleSection title="Study calendar">
-<div className="calendar-container">
-              <div className="calendar-grid">
-                {Array.from({ length: 30 }, (_, i) => {
-                  const date = new Date();
-                  date.setDate(date.getDate() + i);
-                  const dateStr = date.toISOString().split('T')[0];
-                  const dayEvents = studyCalendar.find(day => day.date === dateStr);
-
-                  return (
-                    <div key={i} className={`calendar-day ${dayEvents ? 'has-events' : ''}`}>
-                      <div className="day-number">{date.getDate()}</div>
-                      {dayEvents && (
-                        <div className="day-events">
-                          {dayEvents.events.map((event, eventIndex) => (
-                            <div key={eventIndex} className={`day-event ${event.type}`}>
-                              {event.title}
-                            </div>
-                          ))}
-                        </div>
-                      )}
-                    </div>
-                  );
-                })}
-              </div>
-            </div>
-</ProfileCollapsibleSection>
-
-          {/* Metas de Estudio */}
-          <ProfileCollapsibleSection title="My study goals">
-<div className="goals-grid">
-              {studyGoals.map((goal) => (
-                <div key={goal.id} className={`goal-card ${goal.priority}`}>
-                  <div className="goal-header">
-                    <div className="goal-title">{goal.title}</div>
-                    <div className="goal-priority">{goal.priority}</div>
-                  </div>
-                  <div className="goal-description">{goal.description}</div>
-                  <div className="goal-progress-bar">
-                    <div 
-                      className="goal-progress-fill" 
-                      style={{ width: `${goal.progress}%` }}
-                    ></div>
-                  </div>
-                  <div className="goal-progress-text">{goal.progress}% complete</div>
-                  <div className="goal-deadline">Deadline: {goal.deadline}</div>
-                </div>
-              ))}
-            </div>
-</ProfileCollapsibleSection>
-
-          {/* Hábitos de Estudio */}
-          <ProfileCollapsibleSection title="Study habits">
-<div className="habits-grid">
-              {studyHabits.map((habit) => (
-                <div key={habit.id} className="habit-card">
-                  <div className="habit-name">{habit.name}</div>
-                  <div className="habit-frequency">{habit.frequency}</div>
-                  <div className="habit-streak">Streak: {habit.streak} days</div>
-                  <div className="habit-difficulty">{habit.difficulty}</div>
-                  <div className="habit-progress">
-                    <div className="streak-bar">
-                      <div 
-                        className="streak-fill" 
-                        style={{ width: `${(habit.streak / 30) * 100}%` }}
-                      ></div>
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </div>
-</ProfileCollapsibleSection>
-
-          {/* Progreso Detallado */}
-          <ProfileCollapsibleSection title="Detailed progress">
-<div className="progress-stats">
-              <div className="progress-item">
-                <div className="progress-icon">⏱️</div>
-                <div className="progress-content">
-                  <div className="progress-label">Total hours</div>
-                  <div className="progress-value">{studyProgress.totalHours}h</div>
-                </div>
-              </div>
-              <div className="progress-item">
-                <div className="progress-icon">📈</div>
-                <div className="progress-content">
-                  <div className="progress-label">Improvement rate</div>
-                  <div className="progress-value">+{studyProgress.improvementRate}%</div>
-                </div>
-              </div>
-              <div className="progress-item">
-                <div className="progress-icon">🎯</div>
-                <div className="progress-content">
-                  <div className="progress-label">Consistency</div>
-                  <div className="progress-value">{studyProgress.consistency}%</div>
-                </div>
-              </div>
-              <div className="progress-item">
-                <div className="progress-icon">🧠</div>
-                <div className="progress-content">
-                  <div className="progress-label">Focus score</div>
-                  <div className="progress-value">{studyProgress.focusScore}%</div>
-                </div>
-              </div>
-            </div>
-</ProfileCollapsibleSection>
-        </>
+        <ProfileStudyPlannerPanel
+          userId={user?.id ?? null}
+          statsSummary={{
+            levelEstimate: stats.stats?.levelEstimate ?? 'B2',
+            studyStreak: stats.stats?.studyStreak ?? 0,
+            totalStudyMinutes: stats.stats?.totalStudyMinutes ?? 0,
+          }}
+        />
       )}
 
       {/* Tab: Gamificación */}
@@ -1947,6 +1816,12 @@ function GlobalStyles() {
       .header__avatar{flex:0 0 auto}
       .header__avatar .profile-avatar__error{max-width:140px;font-size:12px;text-align:center}
       .header__copy{flex:1 1 240px;min-width:0}
+      .header__level{flex:0 0 auto;display:flex;align-items:center;gap:14px;padding:16px 20px;border:1px solid #e2e8f0;border-radius:12px;background:#fff;min-width:148px}
+      .header__level-icon{flex-shrink:0;width:42px;height:42px;display:grid;place-items:center;border-radius:11px;background:#f5f3ff;color:#7c3aed}
+      .header__level-icon svg{width:20px;height:20px}
+      .header__level-body{display:flex;flex-direction:column;gap:2px;min-width:0}
+      .header__level-value{font-size:1.45rem;font-weight:700;color:#0f172a;letter-spacing:-0.02em;line-height:1.15}
+      .header__level-label{font-size:0.8125rem;color:#64748b;font-weight:500;line-height:1.35}
       .header__mascot{flex:0 0 auto;line-height:0;filter:drop-shadow(0 8px 18px rgba(0,0,0,.12))}
 
       .profile-avatar{display:flex;flex-direction:column;align-items:center;gap:6px}

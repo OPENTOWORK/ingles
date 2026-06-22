@@ -27,7 +27,9 @@ import { supabase } from '@/utils/supabaseClient';
 import { resolveB2ExamenId, fetchB2PreguntasByExamen } from '@/utils/b2ResolveExam';
 import { getCachedLevelBySlug } from '@/utils/levelsLevelCache';
 import { formatLevelsPartDisplayName, getSkillPartPracticeTitle } from '@/utils/formatLevelsPartDisplayName';
-import { formatSkillExerciseLabel } from '@/utils/skillPartFirstProgress';
+import { SkillPartExerciseFavorite } from '@/components/exam/ExerciseFavoriteButton';
+import { buildExerciseFavoriteMeta } from '@/lib/exerciseFavoriteMeta';
+import { getExamSkillSectionTitle } from '@/data/levelExamPartMap';
 import { getB2PartScoring } from '@/utils/levelsB2PartScoring';
 import {
   useLevelsExamAdminFlow,
@@ -480,8 +482,14 @@ function B2WritingExamPracticePageInner() {
   const part2SelectedOption = part2Task.options.find((o) => o.id === part2SelectedId) || null;
 
   const selectedPartTitleParts = useMemo(
-    () => getSkillPartPracticeTitle('b2', partNumber, 'en'),
-    [partNumber],
+    () =>
+      getSkillPartPracticeTitle(
+        'b2',
+        partNumber,
+        'en',
+        isSkillPracticeSession ? examSlot : null,
+      ),
+    [partNumber, examSlot, isSkillPracticeSession],
   );
 
   const writingInstructionsBlocks = useMemo(() => {
@@ -683,6 +691,27 @@ function B2WritingExamPracticePageInner() {
       : null;
 
   const compactChromeHeader = isSkillPracticeSession || isExamSimulationMode(practiceMode);
+
+  const showExerciseFavorite =
+    isSkillPracticeSession &&
+    !isExamSimulationMode(practiceMode) &&
+    Boolean(selectedQuestion?.preguntaId);
+
+  const exerciseFavoriteMeta = useMemo(() => {
+    if (!showExerciseFavorite) return null;
+    return buildExerciseFavoriteMeta({
+      levelSlug: 'b2',
+      skillRoute: 'exam-writing',
+      partNumber,
+      examSlot,
+      title:
+        selectedPartTitleParts.subtitle ||
+        selectedPartTitleParts.heading ||
+        'Exercise',
+      heading: selectedPartTitleParts.heading || null,
+      sectionTitle: getExamSkillSectionTitle('b2', 'exam-writing'),
+    });
+  }, [showExerciseFavorite, partNumber, examSlot, selectedPartTitleParts]);
 
   const writingExamMode = examModeActive && !reviewMode;
 
@@ -1035,10 +1064,13 @@ function B2WritingExamPracticePageInner() {
                     <SkillPartPracticeHeader
                       title={selectedPartTitleParts.heading}
                       subtitle={selectedPartTitleParts.subtitle}
-                      exerciseLabel={
-                        isSkillPracticeSession && examSlot
-                          ? formatSkillExerciseLabel(examSlot, 'en')
-                          : null
+                      titleActions={
+                        <SkillPartExerciseFavorite
+                          show={showExerciseFavorite}
+                          preguntaId={selectedQuestion?.preguntaId}
+                          meta={exerciseFavoriteMeta}
+                          lang="en"
+                        />
                       }
                     />
                     <div className="levels-exam-split__body levels-exam-split__body--stacked">
@@ -1115,8 +1147,10 @@ function B2WritingExamPracticePageInner() {
                     slug="b2"
                     partNumber={partNumber}
                     pagePartMax={PART_MAX}
+                    pagePartMin={PART_MIN}
                     examSlot={examSlot}
                     examenIdBySlot={isSkillPracticeSession ? scoring.examenIdBySlot : undefined}
+                    progressBySlot={isSkillPracticeSession ? scoring.progressBySlot : undefined}
                     onSelectExamSlot={
                       isSkillPracticeSession
                         ? (slot) => {

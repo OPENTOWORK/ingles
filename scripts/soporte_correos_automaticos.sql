@@ -100,5 +100,16 @@ values
     true,
     0,
     true
+  ),
+  (
+    'friend_invite',
+    'Invitar a un amigo',
+    'friend_invited',
+    'Se envía cuando un usuario invita a un amigo desde la sección «Invite friends» del perfil.',
+    '{{sender_name}} te invita a practicar en Dralo',
+    E'Hola,\n\n{{sender_name}} quiere que practiques inglés juntos en Dralo — la plataforma para preparar exámenes Cambridge (A2–C2) con ejercicios, simulacros de examen y herramientas de IA.\n\n{{invite_message}}\n\n{{app_url}}\n\nEmpieza con Exam practice, explora Dralo AI para writing y speaking, y sigue tu progreso desde tu perfil.\n\n— Equipo Dralo English',
+    true,
+    0,
+    true
   )
 on conflict (slug) do nothing;

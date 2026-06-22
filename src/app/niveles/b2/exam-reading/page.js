@@ -53,7 +53,9 @@ import {
 import { resolveB2ExamenId, fetchB2PreguntasByExamen } from '@/utils/b2ResolveExam';
 import { getCachedB2Level } from '@/utils/b2LevelCache';
 import { formatLevelsPartDisplayName, getSkillPartPracticeTitle, formatSkillPartPracticeTitle } from '@/utils/formatLevelsPartDisplayName';
-import { formatSkillExerciseLabel } from '@/utils/skillPartFirstProgress';
+import { formatSkillExerciseLabel, buildProgressBySlotWithLiveOverlay } from '@/utils/skillPartFirstProgress';
+import { buildExerciseFavoriteMeta } from '@/lib/exerciseFavoriteMeta';
+import { getExamSkillSectionTitle } from '@/data/levelExamPartMap';
 import { B2ExamPracticeContent, B2ExamQuestionItem } from '@/components/b2/B2ExamPracticeContent';
 import B2ExamInlineOpenClozePassage from '@/components/b2/B2ExamInlineOpenClozePassage';
 import B2ExamInlineKeyWordPassage from '@/components/b2/B2ExamInlineKeyWordPassage';
@@ -382,8 +384,9 @@ function B2ReadingExamsPageInner() {
     (slot) => {
       setLoading(true);
       scoring.handleSelectExam(selectExamSlot, slot);
+      void loadReadingData(slot);
     },
-    [scoring, selectExamSlot],
+    [scoring, selectExamSlot, loadReadingData],
   );
 
   const handleSelectExamSlot = useMemo(
@@ -433,23 +436,6 @@ function B2ReadingExamsPageInner() {
     answersRevealed: readingSession.answersRevealed,
     respectInstantFeedbackToggle: isSkillPracticeSession,
   });
-
-  const handleKeepPracticing = useCallback(() => {
-    runKeepPracticingSkillFlow({
-      examSlot,
-      examenIdBySlot: scoring.examenIdBySlot,
-      partNumber: skillNav.selectedPartNumber,
-      progressBySlot: scoring.progressBySlot,
-      onSelectExamSlot: (slot) => {
-        void scoring.refreshPuntuacionesProgress();
-        handleSelectExamSlot(slot);
-      },
-      onAdvanceToNextPart: () => {
-        void scoring.refreshPuntuacionesProgress();
-        skillNav.advanceToNextPart();
-      },
-    });
-  }, [examSlot, skillNav, scoring, handleSelectExamSlot]);
 
   const tabPartsData = useMemo(() => {
     if (!skillNav.active) return partsData;
@@ -1246,6 +1232,66 @@ function B2ReadingExamsPageInner() {
   );
 
   const b2PartCfg = getActiveB2RuoePartScoring(partNumberReading);
+
+  const livePartProgressForNav = useMemo(() => {
+    if (!isSkillPracticeSession || !selectedPart?.id || !partNumberReading) return null;
+    const progress = computeB2PartProgressFromState({
+      partNumber: partNumberReading,
+      useOpenInputUi: isOpenClozePart,
+      openQuestionNumbers,
+      openChecks,
+      openGrades,
+      usePart4V2Grading: scoringV2Part4,
+      groupedAnswers: groupedAnswersForUiAndScore,
+      checkedQuestions,
+      selectedOptions,
+      getQuestionKey,
+      partId: selectedPart.id,
+      treatSelectedMcqAsEvaluated: hideInstantFeedback,
+    });
+    return progress.complete ? progress : null;
+  }, [
+    isSkillPracticeSession,
+    selectedPart?.id,
+    partNumberReading,
+    isOpenClozePart,
+    openQuestionNumbers,
+    openChecks,
+    openGrades,
+    scoringV2Part4,
+    groupedAnswersForUiAndScore,
+    checkedQuestions,
+    selectedOptions,
+    hideInstantFeedback,
+  ]);
+
+  const skillProgressForNav = useMemo(
+    () =>
+      buildProgressBySlotWithLiveOverlay(
+        scoring.progressBySlot,
+        examSlot,
+        partNumberReading,
+        livePartProgressForNav,
+      ),
+    [scoring.progressBySlot, examSlot, partNumberReading, livePartProgressForNav],
+  );
+
+  const handleKeepPracticing = useCallback(() => {
+    runKeepPracticingSkillFlow({
+      examSlot,
+      examenIdBySlot: scoring.examenIdBySlot,
+      partNumber: partNumberReading,
+      progressBySlot: skillProgressForNav,
+      onSelectExamSlot: (slot) => {
+        void scoring.refreshPuntuacionesProgress();
+        handleSelectExamSlot(slot);
+      },
+      onAdvanceToNextPart: () => {
+        void scoring.refreshPuntuacionesProgress();
+        skillNav.advanceToNextPart();
+      },
+    });
+  }, [examSlot, partNumberReading, skillProgressForNav, skillNav, scoring, handleSelectExamSlot]);
 
   useEffect(() => {
     if (!scoring.examPracticeOpen) return;
@@ -2091,6 +2137,33 @@ function B2ReadingExamsPageInner() {
     return getPartTitleParts(selectedPart);
   }, [selectedPart, partNumberReading, examSlot]);
 
+  const showExerciseFavorite =
+    isSkillPracticeSession &&
+    !isExamSimulationMode(practiceMode) &&
+    Boolean(selectedQuestion?.preguntaId);
+
+  const exerciseFavoriteMeta = useMemo(() => {
+    if (!showExerciseFavorite) return null;
+    return buildExerciseFavoriteMeta({
+      levelSlug: 'b2',
+      skillRoute,
+      partNumber: partNumberReading,
+      examSlot,
+      title:
+        selectedPartTitleParts.subtitle ||
+        selectedPartTitleParts.heading ||
+        'Exercise',
+      heading: selectedPartTitleParts.heading || null,
+      sectionTitle: getExamSkillSectionTitle('b2', skillRoute),
+    });
+  }, [
+    showExerciseFavorite,
+    skillRoute,
+    partNumberReading,
+    examSlot,
+    selectedPartTitleParts,
+  ]);
+
   const reportErrorContext = useMemo(() => {
     if (loading || error || !scoring.examPracticeOpen || !selectedPart) return null;
     const questionText = selectedQuestion?.enunciado
@@ -2228,6 +2301,10 @@ function B2ReadingExamsPageInner() {
               <B2ExamPracticeContent
                 title={selectedPartTitleParts.heading}
                 titleSubtitle={selectedPartTitleParts.subtitle}
+                showExerciseFavorite={showExerciseFavorite}
+                favoritePreguntaId={selectedQuestion?.preguntaId}
+                favoriteMeta={exerciseFavoriteMeta}
+                favoriteLang="en"
                 exerciseLabel={
                   isSkillPracticeSession && examSlot && !isUoePart
                     ? formatSkillExerciseLabel(examSlot, 'en')
@@ -2485,8 +2562,11 @@ function B2ReadingExamsPageInner() {
         slug="b2"
         partNumber={partNumberReading}
         pagePartMax={partMax}
+        pagePartMin={partMin}
         examSlot={examSlot}
         examenIdBySlot={isSkillPracticeSession ? scoring.examenIdBySlot : undefined}
+        progressBySlot={isSkillPracticeSession ? skillProgressForNav : undefined}
+        livePartProgress={isSkillPracticeSession ? livePartProgressForNav : undefined}
         onSelectExamSlot={
           isSkillPracticeSession
             ? (slot) => {

@@ -1,5 +1,6 @@
 'use client';
 
+import { useEffect, useState } from 'react';
 import {
   Bar,
   BarChart,
@@ -21,9 +22,34 @@ const PERIOD_LABELS = {
   anios: 'Años',
 };
 
-function PeriodFilters({ period, setPeriod, startDate, setStartDate, endDate, setEndDate, onClear }) {
+function PeriodFilters({
+  period,
+  setPeriod,
+  startDate,
+  setStartDate,
+  endDate,
+  setEndDate,
+  onClear,
+  roleFilter,
+  setRoleFilter,
+  roles = [],
+  showRoleFilter = false,
+  userIdFilter,
+  setUserIdFilter,
+  onExecute,
+  executing = false,
+}) {
+  const hasUserIdFilter = typeof setUserIdFilter === 'function';
+  const gridCols = showRoleFilter && onExecute
+    ? hasUserIdFilter
+      ? 'md:grid-cols-7'
+      : 'md:grid-cols-6'
+    : showRoleFilter
+      ? 'md:grid-cols-5'
+      : 'md:grid-cols-4';
+
   return (
-    <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+    <div className={`grid grid-cols-1 ${gridCols} gap-4 mb-6`}>
       <div>
         <label className="block text-sm font-medium text-gray-600 mb-1">Periodo</label>
         <select
@@ -56,6 +82,47 @@ function PeriodFilters({ period, setPeriod, startDate, setStartDate, endDate, se
           className="w-full border rounded px-3 py-2 text-sm bg-white"
         />
       </div>
+      {showRoleFilter && typeof setRoleFilter === 'function' ? (
+        <div>
+          <label className="block text-sm font-medium text-gray-600 mb-1">Rol</label>
+          <select
+            value={roleFilter ?? 'all'}
+            onChange={(e) => setRoleFilter(e.target.value)}
+            className="w-full border rounded px-3 py-2 text-sm bg-white"
+          >
+            <option value="all">Todos los roles</option>
+            {roles.map((role) => (
+              <option key={role.id} value={role.id}>
+                {role.nombre}
+              </option>
+            ))}
+          </select>
+        </div>
+      ) : null}
+      {hasUserIdFilter ? (
+        <div>
+          <label className="block text-sm font-medium text-gray-600 mb-1">ID de usuario</label>
+          <input
+            type="text"
+            value={userIdFilter ?? ''}
+            onChange={(e) => setUserIdFilter(e.target.value)}
+            placeholder="Opcional"
+            className="w-full border rounded px-3 py-2 text-sm bg-white font-mono"
+          />
+        </div>
+      ) : null}
+      {onExecute ? (
+        <div className="flex items-end">
+          <button
+            type="button"
+            onClick={onExecute}
+            disabled={executing}
+            className="w-full px-3 py-2 rounded text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 disabled:opacity-60 disabled:cursor-not-allowed"
+          >
+            {executing ? 'Ejecutando…' : 'Ejecutar'}
+          </button>
+        </div>
+      ) : null}
       {onClear && (
         <div className="flex items-end">
           <button
@@ -76,6 +143,127 @@ function KpiCard({ label, value }) {
     <div className="p-4 rounded border bg-gray-50">
       <p className="text-sm text-gray-600">{label}</p>
       <p className="text-2xl font-semibold text-gray-900">{value}</p>
+    </div>
+  );
+}
+
+function ConnectionUsersActivityPanel({
+  users = [],
+  onLoadUserPages,
+  queryKey = '',
+  emptyLabel = 'Sin usuarios con actividad en el rango.',
+}) {
+  const [expandedUserId, setExpandedUserId] = useState(null);
+  const [pagesByUser, setPagesByUser] = useState({});
+  const [loadingUserId, setLoadingUserId] = useState(null);
+  const [loadError, setLoadError] = useState('');
+
+  useEffect(() => {
+    setExpandedUserId(null);
+    setPagesByUser({});
+    setLoadError('');
+  }, [queryKey]);
+
+  const toggleUser = async (userId) => {
+    if (expandedUserId === userId) {
+      setExpandedUserId(null);
+      setLoadError('');
+      return;
+    }
+
+    setExpandedUserId(userId);
+    setLoadError('');
+
+    if (pagesByUser[userId]) return;
+
+    if (typeof onLoadUserPages !== 'function') return;
+
+    setLoadingUserId(userId);
+    try {
+      const pageViews = await onLoadUserPages(userId);
+      setPagesByUser((prev) => ({ ...prev, [userId]: pageViews }));
+    } catch (err) {
+      setLoadError(err?.message || 'Error al cargar las páginas.');
+    } finally {
+      setLoadingUserId(null);
+    }
+  };
+
+  return (
+    <div className="rounded border p-4 h-full flex flex-col min-h-[18rem]">
+      <h3 className="text-md font-semibold mb-1">Usuarios con actividad</h3>
+      <p className="text-xs text-gray-500 mb-3">
+        Franjas horarias de conexión. Pulsa un usuario para ver las páginas visitadas.
+      </p>
+      <div className="flex-1 overflow-y-auto space-y-2 pr-1">
+        {users.length === 0 && <p className="text-sm text-gray-500">{emptyLabel}</p>}
+        {users.map((user) => {
+          const isExpanded = expandedUserId === user.userId;
+          const pages = pagesByUser[user.userId];
+          const isLoading = loadingUserId === user.userId;
+
+          return (
+            <div key={user.userId} className="rounded border border-gray-200 bg-gray-50">
+              <button
+                type="button"
+                onClick={() => toggleUser(user.userId)}
+                className="w-full text-left px-3 py-2 hover:bg-gray-100 rounded transition-colors"
+              >
+                <div className="flex items-start justify-between gap-2">
+                  <div className="min-w-0">
+                    <p className="text-sm font-medium text-gray-900 truncate">
+                      {user.name !== '—' ? user.name : user.email}
+                    </p>
+                    <p className="text-xs text-gray-500 font-mono truncate">{user.userId}</p>
+                    {user.email !== '—' && user.name !== '—' ? (
+                      <p className="text-xs text-gray-500 truncate">{user.email}</p>
+                    ) : null}
+                  </div>
+                  <div className="text-right shrink-0">
+                    <p className="text-sm font-semibold text-gray-900">{user.totalLabel}</p>
+                    <p className="text-xs text-gray-500">{user.sessionCount} sesión(es)</p>
+                  </div>
+                </div>
+                {user.timeSlots?.length > 0 ? (
+                  <p className="text-xs text-gray-600 mt-2">
+                    Franjas:{' '}
+                    {user.timeSlots
+                      .slice(0, 6)
+                      .map((slot) => `${slot.slot} (${slot.count})`)
+                      .join(' · ')}
+                    {user.timeSlots.length > 6 ? '…' : ''}
+                  </p>
+                ) : null}
+              </button>
+
+              {isExpanded ? (
+                <div className="border-t border-gray-200 px-3 py-2 bg-white rounded-b">
+                  {isLoading ? (
+                    <p className="text-sm text-gray-500">Cargando páginas…</p>
+                  ) : loadError && expandedUserId === user.userId ? (
+                    <p className="text-sm text-red-600">{loadError}</p>
+                  ) : pages?.length === 0 ? (
+                    <p className="text-sm text-gray-500">Sin páginas registradas en el rango.</p>
+                  ) : (
+                    <ul className="space-y-1.5 max-h-48 overflow-y-auto">
+                      {(pages || []).map((page) => (
+                        <li key={page.id} className="text-sm border-b border-gray-100 pb-1.5 last:border-0">
+                          <p className="font-medium text-gray-800">{page.pageTitle}</p>
+                          <p className="text-xs text-gray-500 font-mono truncate">{page.path}</p>
+                          <p className="text-xs text-gray-500">
+                            {page.visitedLabel}
+                            {page.durationLabel ? ` · ${page.durationLabel}` : ''}
+                          </p>
+                        </li>
+                      ))}
+                    </ul>
+                  )}
+                </div>
+              ) : null}
+            </div>
+          );
+        })}
+      </div>
     </div>
   );
 }
@@ -119,8 +307,25 @@ export default function AdminAnalyticsPanels({
   setChartEndDate,
   sessionChart,
   connectionAnalytics,
+  connectionActiveUsers = [],
+  connectionRoleFilter,
+  setConnectionRoleFilter,
+  connectionUserIdFilter,
+  setConnectionUserIdFilter,
+  appliedConnectionRoleFilter = 'all',
+  appliedConnectionUserIdFilter = '',
+  onRunConnectionQuery,
+  onLoadConnectionUserPages,
+  connectionQueryLoading = false,
+  connectionQueryKey = '',
+  roles = [],
 }) {
   const totalIncorporaciones = analytics.incorporaciones.reduce((acc, row) => acc + row.total, 0);
+  const selectedConnectionRole =
+    appliedConnectionRoleFilter && appliedConnectionRoleFilter !== 'all'
+      ? roles.find((role) => String(role.id) === String(appliedConnectionRoleFilter))?.nombre
+      : null;
+  const selectedConnectionUserId = appliedConnectionUserIdFilter?.trim() || '';
 
   return (
     <div className="bg-white rounded-lg shadow mb-8">
@@ -194,6 +399,18 @@ export default function AdminAnalyticsPanels({
           <h3 className="text-md font-semibold text-gray-900 mb-1">Tiempo de conexión</h3>
           <p className="text-sm text-gray-600 mb-4">
             Sesiones en la app: usuarios activos por intervalo y tiempo medio por usuario con actividad.
+            {selectedConnectionRole ? (
+              <>
+                {' '}
+                Filtrado por rol: <strong>{selectedConnectionRole}</strong>.
+              </>
+            ) : null}
+            {selectedConnectionUserId ? (
+              <>
+                {' '}
+                Usuario: <strong className="font-mono">{selectedConnectionUserId}</strong>.
+              </>
+            ) : null}
           </p>
           <PeriodFilters
             period={chartPeriod}
@@ -202,6 +419,14 @@ export default function AdminAnalyticsPanels({
             setStartDate={setChartStartDate}
             endDate={chartEndDate}
             setEndDate={setChartEndDate}
+            roleFilter={connectionRoleFilter}
+            setRoleFilter={setConnectionRoleFilter}
+            userIdFilter={connectionUserIdFilter}
+            setUserIdFilter={setConnectionUserIdFilter}
+            roles={roles}
+            showRoleFilter
+            onExecute={onRunConnectionQuery}
+            executing={connectionQueryLoading}
             onClear={() => {
               setChartStartDate('');
               setChartEndDate('');
@@ -264,11 +489,11 @@ export default function AdminAnalyticsPanels({
                 </div>
               )}
             </div>
-            <PatternsPanel
-              horaPico={connectionAnalytics.horaPico}
-              diaPico={connectionAnalytics.diaPico}
-              heatmap={connectionAnalytics.heatmap}
-              emptyLabel="Sin datos de sesión en el rango."
+            <ConnectionUsersActivityPanel
+              users={connectionActiveUsers}
+              onLoadUserPages={onLoadConnectionUserPages}
+              queryKey={connectionQueryKey}
+              emptyLabel="Sin usuarios con actividad en el rango."
             />
           </div>
           <p className="text-xs text-gray-500 mt-4">
