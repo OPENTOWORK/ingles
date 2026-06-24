@@ -5,7 +5,7 @@ import {
   formatOpenRespuestaRow,
 } from '@/lib/formatLevelsEnunciado';
 import { parteNameA2, examenNameA2 } from '@/lib/a2ExamCatalog';
-import { examenNameForLevel } from '@/lib/levelsExamCatalog';
+import { examenNameForLevel, getLevelExamLabel, parteNameForLevel } from '@/lib/levelsExamCatalog';
 import { getA2ParteAdminDescription } from '@/data/a2-parte-admin-spec';
 import { partInfo as a2ListeningInfo } from '@/data/part-info/a2-listening';
 import { partInfo as a2RwInfo } from '@/data/part-info/a2-reading-and-use-of-english';
@@ -116,15 +116,92 @@ export async function resolveLevelExamenId(db, levelSlug, levelId, slot) {
   return byName?.id || null;
 }
 
-export async function deleteExamenContent(db, examenId) {
-  const { data: preguntas } = await db.from('levels_preguntas').select('id').eq('examen_id', examenId);
-  const ids = (preguntas || []).map((p) => p.id);
+async function deletePreguntaRowsByIds(db, ids) {
   if (!ids.length) return;
 
-  await db.from('levels_preguntas_audios').delete().in('pregunta_id', ids);
-  await db.from('levels_respuestas_abiertas').delete().in('pregunta_id_abierta', ids);
-  await db.from('levels_respuestas').delete().in('pregunta_id', ids);
-  await db.from('levels_preguntas').delete().eq('examen_id', examenId);
+  const { data: puntuaciones, error: puntErr } = await db
+    .from('levels_puntuaciones')
+    .select('id')
+    .in('id_pregunta', ids);
+  if (puntErr) throw new Error(`levels_puntuaciones: ${puntErr.message}`);
+
+  const puntuacionIds = (puntuaciones || []).map((row) => row.id);
+  if (puntuacionIds.length) {
+    const { error: starsErr } = await db.from('Levels_stars').delete().in('puntuaciones_id', puntuacionIds);
+    if (starsErr) throw new Error(`Levels_stars: ${starsErr.message}`);
+
+    const { error: delPuntErr } = await db.from('levels_puntuaciones').delete().in('id', puntuacionIds);
+    if (delPuntErr) throw new Error(`levels_puntuaciones: ${delPuntErr.message}`);
+  }
+
+  const tables = [
+    { table: 'levels_preguntas_audios', column: 'pregunta_id' },
+    { table: 'levels_respuestas_abiertas', column: 'pregunta_id_abierta' },
+    { table: 'levels_respuestas', column: 'pregunta_id' },
+  ];
+
+  for (const { table, column } of tables) {
+    const { error } = await db.from(table).delete().in(column, ids);
+    if (error) throw new Error(`${table}: ${error.message}`);
+  }
+
+  const { error } = await db.from('levels_preguntas').delete().in('id', ids);
+  if (error) throw new Error(`levels_preguntas: ${error.message}`);
+}
+
+export function partNumberFromParteName(nombreParte) {
+  const m = String(nombreParte || '').match(/Parte\s+(\d+)/i);
+  return m ? Number(m[1]) : null;
+}
+
+/**
+ * All levels_partes ids for a level part number (canonical name + legacy aliases).
+ * @param {import('@supabase/supabase-js').SupabaseClient} db
+ */
+export async function resolveParteIdsForLevelPart(db, levelSlug, partNumber) {
+  const slug = String(levelSlug || '').toLowerCase();
+  const label = getLevelExamLabel(slug);
+  const canonicalName = parteNameForLevel(slug, partNumber);
+  const ids = new Set();
+
+  const { data: exact, error: exactErr } = await db
+    .from('levels_partes')
+    .select('id, nombre_parte')
+    .eq('nombre_parte', canonicalName);
+  if (exactErr) throw new Error(`levels_partes: ${exactErr.message}`);
+  for (const row of exact || []) ids.add(row.id);
+
+  const { data: aliases, error: aliasErr } = await db
+    .from('levels_partes')
+    .select('id, nombre_parte')
+    .ilike('nombre_parte', `Parte ${partNumber} %`);
+  if (aliasErr) throw new Error(`levels_partes: ${aliasErr.message}`);
+  for (const row of aliases || []) {
+    if (partNumberFromParteName(row.nombre_parte) === Number(partNumber)) {
+      ids.add(row.id);
+    }
+  }
+
+  if (label && label !== slug.toUpperCase()) {
+    const legacyName = `Parte ${partNumber} ${label}`;
+    if (legacyName !== canonicalName) {
+      const { data: legacy, error: legacyErr } = await db
+        .from('levels_partes')
+        .select('id, nombre_parte')
+        .eq('nombre_parte', legacyName);
+      if (legacyErr) throw new Error(`levels_partes: ${legacyErr.message}`);
+      for (const row of legacy || []) ids.add(row.id);
+    }
+  }
+
+  return [...ids];
+}
+
+export async function deleteExamenContent(db, examenId) {
+  const { data: preguntas, error } = await db.from('levels_preguntas').select('id').eq('examen_id', examenId);
+  if (error) throw new Error(`levels_preguntas: ${error.message}`);
+  const ids = (preguntas || []).map((p) => p.id);
+  await deletePreguntaRowsByIds(db, ids);
 }
 
 /** Borra contenido del examen y la fila en levels_examenes. */
@@ -137,20 +214,37 @@ export async function deleteExamenFully(db, examenId) {
   return { deleted: true, examenId };
 }
 
-/** Borra preguntas previas de una parte en un examen (evita duplicados al regenerar parte a parte). */
-export async function deletePartContentForExam(db, examenId, parteId) {
-  const { data: preguntas } = await db
+export async function deletePreguntasByIds(db, preguntaIds) {
+  const ids = [...new Set((preguntaIds || []).filter(Boolean))];
+  await deletePreguntaRowsByIds(db, ids);
+}
+
+/**
+ * Borra preguntas previas de una parte en un examen (evita duplicados al regenerar parte a parte).
+ * When levelSlug + partNumber are provided, deletes rows for every matching levels_partes id
+ * (canonical + legacy aliases), not only the single parteId passed in.
+ */
+export async function deletePartContentForExam(db, examenId, parteId, options = {}) {
+  const { levelSlug, partNumber } = options;
+  const parteIds = new Set();
+  if (parteId) parteIds.add(parteId);
+
+  if (levelSlug != null && partNumber != null) {
+    const resolved = await resolveParteIdsForLevelPart(db, levelSlug, partNumber);
+    for (const id of resolved) parteIds.add(id);
+  }
+
+  if (!parteIds.size) return;
+
+  const { data: preguntas, error } = await db
     .from('levels_preguntas')
     .select('id')
     .eq('examen_id', examenId)
-    .eq('parte_id', parteId);
-  const ids = (preguntas || []).map((p) => p.id);
-  if (!ids.length) return;
+    .in('parte_id', [...parteIds]);
+  if (error) throw new Error(`levels_preguntas: ${error.message}`);
 
-  await db.from('levels_preguntas_audios').delete().in('pregunta_id', ids);
-  await db.from('levels_respuestas_abiertas').delete().in('pregunta_id_abierta', ids);
-  await db.from('levels_respuestas').delete().in('pregunta_id', ids);
-  await db.from('levels_preguntas').delete().in('id', ids);
+  const ids = (preguntas || []).map((p) => p.id);
+  await deletePreguntaRowsByIds(db, ids);
 }
 
 /**

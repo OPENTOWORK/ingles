@@ -665,7 +665,10 @@ export async function generateAndPersistLevelExamPart(adminDb, {
   }
 
   if (replacePartContent || !preserveExistingParts) {
-    await deletePartContentForExam(adminDb, examenId, parteId);
+    await deletePartContentForExam(adminDb, examenId, parteId, {
+      levelSlug: slug,
+      partNumber: partDef.partNumber,
+    });
   }
 
   const preguntaId = await persistCambridgeGeneratedPart(adminDb, {
@@ -966,7 +969,10 @@ export async function saveLevelExamPartFromPreview(adminDb, {
   const parteId = await ensureLevelParteRow(adminDb, slug, partDef.partNumber);
 
   if (replacePartContent) {
-    await deletePartContentForExam(adminDb, examenId, parteId);
+    await deletePartContentForExam(adminDb, examenId, parteId, {
+      levelSlug: slug,
+      partNumber: partDef.partNumber,
+    });
   }
 
   const t0 = Date.now();
