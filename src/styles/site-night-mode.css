@@ -296,6 +296,18 @@ body.reading-night-mode .exam-theory-topics-page .exam-theory-parts__filter--act
   color: #bae6fd !important;
 }
 
+body.reading-night-mode .exam-theory-topics-page .exam-theory-parts__filter--locked {
+  background: #1e293b !important;
+  border-color: #334155 !important;
+  color: #64748b !important;
+  opacity: 0.65 !important;
+}
+
+body.reading-night-mode .exam-theory-topics-page .exam-theory-parts__filter--locked:hover {
+  background: #1e293b !important;
+  border-color: #334155 !important;
+}
+
 body.reading-night-mode .exam-theory-topics-page .exam-theory-parts__filter-count {
   background: rgba(148, 163, 184, 0.2) !important;
 }

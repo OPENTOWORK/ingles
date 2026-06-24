@@ -33,59 +33,99 @@ const nextConfig = {
   trailingSlash: true,
   basePath,
   assetPrefix: basePath ? `${basePath}/` : '',
+  async rewrites() {
+    const examSkillSlugs =
+      'reading-and-use-of-english|writing|listening|speaking|use-of-english|reading';
+
+    return {
+      beforeFiles: [
+        {
+          source: '/exam-practice/:path+',
+          destination: '/niveles/:path+',
+        },
+        {
+          source: '/contact/:path*',
+          destination: '/contacto/:path*',
+        },
+        {
+          source: '/profile/:path*',
+          destination: '/perfil/:path*',
+        },
+        {
+          source: '/exam-strategies/exam-part-tips/:path*',
+          destination: '/teoria/exam-part-tips/:path*',
+        },
+        {
+          source: '/exam-strategies/:skill/:chapter',
+          destination: '/teoria/exam-strategies/:skill/:chapter',
+        },
+        {
+          source: `/exam-strategies/:skill(${examSkillSlugs})`,
+          destination: '/teoria/:skill',
+        },
+      ],
+    };
+  },
   async redirects() {
     const cefr = 'a2|b1|b2|c1|c2';
+    const examSkillSlugs = [
+      'reading-and-use-of-english',
+      'writing',
+      'listening',
+      'speaking',
+      'use-of-english',
+      'reading',
+    ];
 
-    /* Old short URLs (/b2, /b2/exam-reading, /speaking-lab/b2, …) → /niveles/… */
+    /* Old short URLs (/b2, /b2/exam-reading, /speaking-lab/b2, …) → /exam-practice/… */
     const legacyLevelRedirects = [
       {
         source: `/speaking-lab/:level(${cefr})/:path*`,
-        destination: `/niveles/speaking-lab/:level/:path*`,
+        destination: `/exam-practice/speaking-lab/:level/:path*`,
         permanent: true,
       },
       {
         source: `/speaking-lab/:level(${cefr})`,
-        destination: `/niveles/speaking-lab/:level/`,
+        destination: `/exam-practice/speaking-lab/:level/`,
         permanent: true,
       },
       {
         source: `/level/:level(${cefr})/:path*`,
-        destination: `/niveles/:level/:path*`,
+        destination: `/exam-practice/:level/:path*`,
         permanent: true,
       },
       {
         source: `/level/:level(${cefr})`,
-        destination: `/niveles/:level/`,
+        destination: `/exam-practice/:level/`,
         permanent: true,
       },
       {
         source: `/nivel/:level(${cefr})/:path*`,
-        destination: `/niveles/:level/:path*`,
+        destination: `/exam-practice/:level/:path*`,
         permanent: true,
       },
       {
         source: `/nivel/:level(${cefr})`,
-        destination: `/niveles/:level/`,
+        destination: `/exam-practice/:level/`,
         permanent: true,
       },
       {
         source: '/levels',
-        destination: '/niveles/',
+        destination: '/exam-practice/b2/',
         permanent: true,
       },
       {
         source: `/:level(${cefr})/:path*`,
-        destination: `/niveles/:level/:path*`,
+        destination: `/exam-practice/:level/:path*`,
         permanent: true,
       },
       {
         source: `/:level(${cefr})`,
-        destination: `/niveles/:level/`,
+        destination: `/exam-practice/:level/`,
         permanent: true,
       },
     ];
 
-    /* Old URLs /niveles/b2/speaking-lab/… → /niveles/speaking-lab/b2/… (path* may be empty for hub) */
     const examPartTipsRedirects = [
       'reading-and-use-of-english',
       'writing',
@@ -95,24 +135,97 @@ const nextConfig = {
       const rules = [
         {
           source: `/niveles/:level(a2|b1|b2|c1|c2)/${skill}/part-:part`,
-          destination: `/teoria/exam-part-tips/:level/${skill}/part-:part`,
+          destination: `/exam-strategies/exam-part-tips/:level/${skill}/part-:part`,
         },
       ];
       if (skill === 'listening' || skill === 'speaking') {
         rules.push({
           source: `/niveles/:level(a2|b1|b2|c1|c2)/${skill}/:part`,
-          destination: `/teoria/exam-part-tips/:level/${skill}/:part`,
+          destination: `/exam-strategies/exam-part-tips/:level/${skill}/:part`,
         });
       }
-      return rules.map((rule) => ({ ...rule, permanent: false }));
+      return rules.map((rule) => ({ ...rule, permanent: true }));
     });
 
+    const teoriaExamSkillRedirects = examSkillSlugs.map((skill) => ({
+      source: `/teoria/${skill}`,
+      destination: `/exam-strategies/${skill}/`,
+      permanent: true,
+    }));
+
+    const canonicalSectionRedirects = [
+      {
+        source: '/niveles',
+        has: [{ type: 'query', key: 'tab', value: 'theory' }],
+        destination: '/exam-strategies/',
+        permanent: true,
+      },
+      {
+        source: '/niveles/',
+        has: [{ type: 'query', key: 'tab', value: 'theory' }],
+        destination: '/exam-strategies/',
+        permanent: true,
+      },
+      {
+        source: '/niveles',
+        destination: '/exam-practice/b2/',
+        permanent: true,
+      },
+      {
+        source: '/niveles/:path*',
+        destination: '/exam-practice/:path*',
+        permanent: true,
+      },
+      {
+        source: '/teoria/exam-part-tips/:path*',
+        destination: '/exam-strategies/exam-part-tips/:path*',
+        permanent: true,
+      },
+      {
+        source: '/teoria/exam-strategies/:skill/:chapter',
+        destination: '/exam-strategies/:skill/:chapter/',
+        permanent: true,
+      },
+      ...teoriaExamSkillRedirects,
+      {
+        source: '/contacto/:path*',
+        destination: '/contact/:path*',
+        permanent: true,
+      },
+      {
+        source: '/contacto',
+        destination: '/contact/',
+        permanent: true,
+      },
+      {
+        source: '/perfil/:path*',
+        destination: '/profile/:path*',
+        permanent: true,
+      },
+      {
+        source: '/perfil',
+        destination: '/profile/',
+        permanent: true,
+      },
+      {
+        source: '/exam-theory',
+        destination: '/exam-strategies/',
+        permanent: true,
+      },
+      {
+        source: '/exam-theory/:path*',
+        destination: '/exam-strategies/',
+        permanent: true,
+      },
+    ];
+
     return [
+      ...canonicalSectionRedirects,
       ...legacyLevelRedirects,
       {
         source: '/niveles/:cefr(a2|b1|b2|c1|c2)/speaking-lab/:path*',
-        destination: '/niveles/speaking-lab/:cefr/:path*',
-        permanent: false,
+        destination: '/exam-practice/speaking-lab/:cefr/:path*',
+        permanent: true,
       },
       ...examPartTipsRedirects,
     ];

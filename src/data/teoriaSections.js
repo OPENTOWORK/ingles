@@ -1,3 +1,5 @@
+import { EXAM_SKILL_SECTION_META } from '@/data/examSkillTheme';
+
 export const LEVELS = [
   {
     code: 'A2',
@@ -144,40 +146,7 @@ SECTIONS['Reading and Use of English'] = (() => {
   });
 })();
 
-const EXAM_SECTION_META = [
-  {
-    key: 'Reading and Use of English',
-    slug: 'reading-and-use-of-english',
-    description:
-      'Description and interactive tips for every part — grammar, vocabulary in context, and reading comprehension.',
-    accent: '#2563eb',
-    heroAccent: 'indigo',
-  },
-  {
-    key: 'Listening',
-    slug: 'listening',
-    description:
-      'Description and interactive tips for short extracts, monologues, conversations, and multiple matching.',
-    accent: '#d97706',
-    heroAccent: 'amber',
-  },
-  {
-    key: 'Writing',
-    slug: 'writing',
-    description:
-      'Description and interactive tips for compulsory essays and choice tasks — register, structure, and exam criteria.',
-    accent: '#dc2626',
-    heroAccent: 'rose',
-  },
-  {
-    key: 'Speaking',
-    slug: 'speaking',
-    description:
-      'Description and interactive tips for the interview, long turn, collaborative task, and discussion.',
-    accent: '#db2777',
-    heroAccent: 'ocean',
-  },
-];
+const EXAM_SECTION_META = EXAM_SKILL_SECTION_META;
 
 const THEORY_SECTION_META = [
   {

@@ -38,7 +38,7 @@ export default function ExamPartTipsView({
   return (
     <main className="shell exam-part-tips-page">
       <nav className="exam-part-tips-breadcrumb" aria-label="Breadcrumb">
-        <Link href="/niveles?tab=theory">Exam theory</Link>
+        <Link href="/niveles?tab=theory">Exam Strategies</Link>
         <span aria-hidden>›</span>
         <Link href={sectionBackHref}>{sectionLabel(skillFolder)}</Link>
         <span aria-hidden>›</span>
@@ -273,5 +273,5 @@ function sectionLabel(skillFolder) {
   if (skillFolder === 'writing') return 'Writing';
   if (skillFolder === 'listening') return 'Listening';
   if (skillFolder === 'speaking') return 'Speaking';
-  return 'Exam theory';
+  return 'Exam Strategies';
 }

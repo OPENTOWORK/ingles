@@ -39,7 +39,7 @@ export function getAllTheoryPartOptions() {
       options.push({
         href: normalizeTopicHref(topic.href),
         label: topic.text,
-        group: `Exam theory · ${area.key}`,
+        group: `Exam Strategies · ${area.key}`,
         source: 'exam-theory',
         sectionKey: area.key,
         sectionSlug: area.slug,

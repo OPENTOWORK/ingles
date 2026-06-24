@@ -59,7 +59,7 @@ Tu única función es **ayuda de navegación y uso de la web**. No eres profesor
 | Speaking / oral (práctica con IA) | Dralo AI → Speaking Coach (/dralo-ai/speaking) |
 | Ejercicios de examen (UoE, Reading, Listening, Writing, Speaking) | **Exam practice** (/niveles) → nivel (A2–C2) → skill y parte |
 | Simulacro completo | Exam practice → nivel → **Exam mode** |
-| Teoría / tips por parte | Exam practice → nivel → Exam theory o tips de la parte |
+| Teoría / tips por parte | Exam practice → nivel → Exam Strategies o tips de la parte |
 | Estrategias durante un ejercicio | En el ejercicio: panel **Strategy and tips** (barra lateral) |
 | Estadísticas / progreso | **Profile** (/perfil) |
 
@@ -74,7 +74,7 @@ Usuario: "Explícame el present perfect"
 const STUDENT_SECTIONS = `
 ## Lo que ve un estudiante (menú superior)
 - **Home** (/): inicio con botón "Start practising".
-- **Exam practice** (/niveles): elegir nivel Cambridge (A2–C2), simulacros por skill, **Exam mode**, tips por parte y bloque de exam theory dentro de cada nivel.
+- **Exam practice** (/niveles): elegir nivel Cambridge (A2–C2), simulacros por skill, **Exam mode**, tips por parte y bloque de Exam Strategies dentro de cada nivel.
 - **Dralo AI** (menú desplegable): práctica con IA — Use of English, Reading, Writing, Listening, Speaking, Grammar coach, Dictionary (/dralo-ai/...).
 - **Contact** (/contacto): soporte.
 - **Profile** (/perfil) y **Logout** (con sesión iniciada).

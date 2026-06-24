@@ -2,13 +2,13 @@ import { NextResponse } from 'next/server';
 import { isOpenAIConfigured, getDefaultModel } from '@/lib/ai/draloAiEngine';
 import { getSupabaseUserFromRequest } from '@/lib/getSupabaseUserFromRequest';
 import { authenticateAdminRequest } from '@/lib/adminAccess';
+import { getDraloAiAccessFromRequest } from '@/lib/draloAiAccess';
 import {
   AI_ACTIONS,
   AI_ACTION_VALUES,
   isValidAiAction,
   requiresAuth,
   isDraloAiHiddenAction,
-  isDraloAiFeatureEnabled,
   getDailyLimit,
 } from '@/lib/aiUsage';
 import { aiErrorJson, aiSuccessJson, runAiPreflight } from '@/lib/aiUsageRouteHelpers';
@@ -113,9 +113,8 @@ export async function POST(request) {
   }
 
   if (isDraloAiHiddenAction(action)) {
-    const adminAuth = await authenticateAdminRequest(request);
-    const allowed = isDraloAiFeatureEnabled() || !adminAuth.error;
-    if (!allowed) {
+    const access = await getDraloAiAccessFromRequest(request);
+    if (!access.allowed) {
       return aiErrorJson(
         'FEATURE_NOT_AVAILABLE',
         'This feature is not available yet.',

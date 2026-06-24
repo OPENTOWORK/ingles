@@ -7,6 +7,10 @@ const ACCENTS = {
     gradient: 'linear-gradient(135deg, #4f46e5 0%, #7c3aed 48%, #a855f7 100%)',
     glow: 'rgba(99, 102, 241, 0.45)',
   },
+  sky: {
+    gradient: 'linear-gradient(135deg, #38bdf8 0%, #7dd3fc 55%, #bae6fd 100%)',
+    glow: 'rgba(56, 189, 248, 0.38)',
+  },
   ocean: {
     gradient: 'linear-gradient(135deg, #0284c7 0%, #2563eb 52%, #6366f1 100%)',
     glow: 'rgba(37, 99, 235, 0.4)',
@@ -69,9 +73,11 @@ export default function PageHero({
             {stats.length > 0 ? (
               <ul className="page-hero__stats">
                 {stats.map((item) => (
-                  <li key={item.label}>
+                  <li key={item.label || item.value}>
                     <span className="page-hero__stat-value">{item.value}</span>
-                    <span className="page-hero__stat-label">{item.label}</span>
+                    {item.label ? (
+                      <span className="page-hero__stat-label">{item.label}</span>
+                    ) : null}
                   </li>
                 ))}
               </ul>

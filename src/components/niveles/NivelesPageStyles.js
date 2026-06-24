@@ -171,6 +171,9 @@ export default function NivelesPageStyles() {
       .niveles-page .exam-theory-section {
         margin-top: 8px;
       }
+      .niveles-page .exam-theory-section__hero {
+        margin-bottom: 4px;
+      }
       .niveles-page .exam-theory-grid {
         grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
       }
@@ -183,6 +186,20 @@ export default function NivelesPageStyles() {
         display: flex;
         flex-direction: column;
         gap: 10px;
+        --exam-theory-accent: #38bdf8;
+        border: 1px solid color-mix(in srgb, var(--exam-theory-accent) 20%, #e2e8f0);
+        border-top: 3px solid var(--exam-theory-accent);
+        background: linear-gradient(
+          155deg,
+          color-mix(in srgb, var(--exam-theory-accent) 8%, #ffffff) 0%,
+          #ffffff 100%
+        );
+        box-shadow: 0 1px 2px rgba(15, 23, 42, 0.04);
+      }
+      .niveles-page .exam-theory-card:hover {
+        border-color: color-mix(in srgb, var(--exam-theory-accent) 35%, #e2e8f0);
+        border-top-color: var(--exam-theory-accent);
+        box-shadow: 0 8px 24px color-mix(in srgb, var(--exam-theory-accent) 12%, transparent);
       }
       .niveles-page .exam-theory-global-progress {
         margin-top: 18px;
@@ -231,7 +248,7 @@ export default function NivelesPageStyles() {
         margin-bottom: 0.75rem;
       }
       .niveles-page .page-hero-wrap__breadcrumb .breadcrumb a {
-        color: #0ea5e9;
+        color: #38bdf8;
         text-decoration: none;
         font-weight: 600;
       }

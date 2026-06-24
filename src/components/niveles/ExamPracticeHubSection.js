@@ -55,7 +55,7 @@ function ExamPracticeCard({ exam, isStudent, variant = 'skill' }) {
     <ExamPracticeCardInner
       kind={kind}
       label={label}
-      hint="Practice this paper"
+      hint="Practise"
       badge={blockedForStudent ? 'Coming soon' : null}
     />
   );
@@ -375,7 +375,7 @@ function ExamPracticeHubStyles() {
         left: 0;
         right: 0;
         height: 3px;
-        background: var(--exam-card-accent, #2563eb);
+        background: var(--exam-card-accent, #38bdf8);
         opacity: 0.9;
       }
       .niveles-level-page .exam-practice-hub__card:hover {
@@ -392,9 +392,9 @@ function ExamPracticeHubStyles() {
       }
       .niveles-level-page .exam-practice-hub__card--reading,
       .niveles-level-page .exam-practice-hub__card--reading-writing {
-        --exam-card-accent: #2563eb;
-        background: linear-gradient(155deg, #f8fbff 0%, #ffffff 100%);
-        border-color: rgba(37, 99, 235, 0.18);
+        --exam-card-accent: #38bdf8;
+        background: linear-gradient(155deg, #f0f9ff 0%, #ffffff 100%);
+        border-color: rgba(56, 189, 248, 0.22);
       }
       .niveles-level-page .exam-practice-hub__card--writing {
         --exam-card-accent: #059669;

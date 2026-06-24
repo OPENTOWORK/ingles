@@ -47,6 +47,7 @@ export default function ExamTheorySectionGate({ sectionSlug, sectionTitle, topic
         sectionTitle={sectionTitle}
         sectionDescription={sectionMeta?.description}
         sectionAccent={sectionMeta?.accent}
+        sectionHeroAccent={sectionMeta?.heroAccent}
         topics={topics}
       />
     );

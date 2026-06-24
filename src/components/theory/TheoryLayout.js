@@ -342,7 +342,7 @@ const TheoryLayout = ({
         requiredPartName={examTopicLockInfo?.requiredPrevious}
         backHref={examUnitSlug ? `/teoria/${examUnitSlug}` : '/niveles?tab=theory'}
         backLabel={
-          sectionKey ? `Back to ${sectionKey}` : 'Back to Exam theory'
+          sectionKey ? `Back to ${sectionKey}` : 'Back to Exam Strategies'
         }
       />
     );

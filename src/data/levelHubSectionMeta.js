@@ -12,37 +12,31 @@ export const LEVEL_TOPIC_SECTION_HEADERS = {
   'Reading and Writing': {
     eyebrow: 'Papers 1–2',
     description:
-      'Description and interactive tips for reading tasks and short writing at A2 level — signs, messages, and guided production.',
+      'Reading tasks and short writing at A2 level — signs, messages, and guided production.',
   },
   'Reading and Use of English': {
     eyebrow: 'Paper 1',
-    description:
-      'Description and interactive tips for every part — grammar, vocabulary in context, and reading comprehension.',
+    description: 'Grammar, vocabulary in context, and reading comprehension.',
   },
   'Use of English': {
     eyebrow: 'Use of English',
-    description:
-      'Description and interactive tips for cloze tasks, word formation, key word transformations, and related grammar.',
+    description: 'Cloze tasks, word formation, key word transformations, and related grammar.',
   },
   Reading: {
     eyebrow: 'Reading',
-    description:
-      'Description and interactive tips for reading comprehension, gapped text, and multiple matching.',
+    description: 'Reading comprehension, gapped text, and multiple matching.',
   },
   Writing: {
     eyebrow: 'Paper 2',
-    description:
-      'Description and interactive tips for compulsory essays and choice tasks — register, structure, and exam criteria.',
+    description: 'Register, structure, and exam criteria for compulsory essays and choice tasks.',
   },
   Listening: {
     eyebrow: 'Paper 3',
-    description:
-      'Description and interactive tips for short extracts, monologues, conversations, and multiple matching.',
+    description: 'Short extracts, monologues, conversations, and multiple matching.',
   },
   Speaking: {
     eyebrow: 'Paper 4',
-    description:
-      'Description and interactive tips for the interview, long turn, collaborative task, and discussion.',
+    description: 'The interview, long turn, collaborative task, and discussion.',
   },
 };
 
@@ -53,6 +47,6 @@ export function getLevelTopicSectionHeader(title) {
     title,
     description:
       meta?.description ??
-      'Description and interactive tips for this exam skill — strategies, timing, and typical task formats.',
+      'Strategies, timing, and typical task formats for this exam skill.',
   };
 }

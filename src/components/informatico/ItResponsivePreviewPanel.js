@@ -169,7 +169,7 @@ export default function ItResponsivePreviewPanel() {
         <h2 className="text-lg font-semibold text-slate-900">Visualización en móvil y tablet</h2>
         <p className="mt-1 max-w-3xl text-sm text-slate-600">
           Previsualiza la web en móvil y tablet con la misma lógica de acceso que en escritorio:
-          Sin sesión, Exam theory, Exam practice y Dralo AI redirigen al login. Elige un rol para simular
+          Sin sesión, Exam Strategies, Exam practice y Dralo AI redirigen al login. Elige un rol para simular
           menús y accesos; tu sesión real sigue teniendo permisos de admin o informático.
         </p>
 

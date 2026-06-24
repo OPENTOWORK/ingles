@@ -41,7 +41,7 @@ export function DraloAiNavMenuItems({
           return (
             <span
               key={item.href}
-              className={`${itemClass} app-nav__dropdown-item--disabled`}
+              className={`${itemClass} app-nav__dropdown-item--locked`}
               role="menuitem"
               aria-disabled="true"
             >

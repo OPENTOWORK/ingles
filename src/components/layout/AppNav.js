@@ -5,6 +5,7 @@ import { usePathname, useSearchParams } from 'next/navigation';
 import { Suspense, useEffect, useMemo, useState } from 'react';
 import AdminPanelsNav from '@/components/layout/AdminPanelsNav';
 import { DraloAiComingSoonRibbon, DraloAiNavMenuItems } from '@/components/layout/DraloAiNavMenu';
+import { ExamStrategiesNavMenuItems } from '@/components/layout/ExamStrategiesNavMenu';
 import ReadingNightModeToggle from '@/components/exam/ReadingNightModeToggle';
 import { AppSharedDrawerNav } from '@/components/layout/AppSharedDrawerNav';
 import {
@@ -15,17 +16,27 @@ import {
   NAV_LINK_PRICING,
   resolveNavItemHref,
 } from '@/config/appNavMenu';
+import { APP_ROUTES } from '@/config/appRoutes';
 
 function AppNavInner({ session, userRole, onLogout }) {
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [examStrategiesOpen, setExamStrategiesOpen] = useState(false);
   const [draloOpen, setDraloOpen] = useState(false);
-  const [draloDesktopOpen, setDraloDesktopOpen] = useState(false);
   const [adminPanelsOpen, setAdminPanelsOpen] = useState(false);
   const [adminPanelsMobileOpen, setAdminPanelsMobileOpen] = useState(false);
+  const [desktopHoverMenu, setDesktopHoverMenu] = useState(null);
 
   const navModel = useMemo(() => buildAppNavModel(userRole, session), [userRole, session]);
+
+  const bindDesktopHoverMenu = (menuId) => ({
+    onMouseEnter: () => setDesktopHoverMenu(menuId),
+    onMouseLeave: () => setDesktopHoverMenu(null),
+  });
+
+  const desktopHoverMenuClass = (menuId) =>
+    desktopHoverMenu === menuId ? ' is-hover-open' : '';
 
   useEffect(() => {
     document.body.classList.toggle('nav-open', mobileOpen);
@@ -34,47 +45,61 @@ function AppNavInner({ session, userRole, onLogout }) {
 
   useEffect(() => {
     setMobileOpen(false);
+    setExamStrategiesOpen(false);
     setDraloOpen(false);
-    setDraloDesktopOpen(false);
+    setDesktopHoverMenu(null);
     setAdminPanelsOpen(false);
     setAdminPanelsMobileOpen(false);
-  }, [pathname]);
+    if (document.activeElement instanceof HTMLElement) {
+      document.activeElement.blur();
+    }
+  }, [pathname, searchParams.toString()]);
 
   const closeMobile = () => {
     setMobileOpen(false);
+    setExamStrategiesOpen(false);
     setDraloOpen(false);
     setAdminPanelsMobileOpen(false);
   };
 
   const closeDesktopDropdowns = () => {
-    setDraloDesktopOpen(false);
+    setDesktopHoverMenu(null);
     setAdminPanelsOpen(false);
-  };
-
-  const toggleDraloDesktop = () => {
-    setDraloDesktopOpen((open) => {
-      if (!open) setAdminPanelsOpen(false);
-      return !open;
-    });
+    if (document.activeElement instanceof HTMLElement) {
+      document.activeElement.blur();
+    }
   };
 
   const toggleAdminDesktop = () => {
-    setAdminPanelsOpen((open) => {
-      if (!open) setDraloDesktopOpen(false);
+    setAdminPanelsOpen((open) => !open);
+  };
+
+  const toggleExamStrategiesMobile = () => {
+    setExamStrategiesOpen((open) => {
+      if (!open) {
+        setDraloOpen(false);
+        setAdminPanelsMobileOpen(false);
+      }
       return !open;
     });
   };
 
   const toggleDraloMobile = () => {
     setDraloOpen((open) => {
-      if (!open) setAdminPanelsMobileOpen(false);
+      if (!open) {
+        setExamStrategiesOpen(false);
+        setAdminPanelsMobileOpen(false);
+      }
       return !open;
     });
   };
 
   const toggleAdminMobile = () => {
     setAdminPanelsMobileOpen((open) => {
-      if (!open) setDraloOpen(false);
+      if (!open) {
+        setExamStrategiesOpen(false);
+        setDraloOpen(false);
+      }
       return !open;
     });
   };
@@ -102,51 +127,92 @@ function AppNavInner({ session, userRole, onLogout }) {
       <nav className="app-nav app-nav--desktop" aria-label="Main navigation">
         <div className="app-nav__primary" role="group" aria-label="Sections">
           {navModel.showPrimaryNav
-            ? NAV_LINKS_BEFORE_DRALO.map((item) => (
-                <NavLink
-                  key={item.href}
-                  href={resolveNavItemHref(item.href, session)}
-                  className={desktopLinkClass(item.href)}
-                  onClick={closeDesktopDropdowns}
-                  {...(item.tourId ? { 'data-tour': item.tourId } : {})}
-                >
-                  {item.label}
-                </NavLink>
-              ))
+            ? NAV_LINKS_BEFORE_DRALO.map((item) =>
+                item.menuItems ? (
+                  <div
+                    key={item.href}
+                    className={`app-nav__dropdown-wrap app-nav__dropdown-wrap--hover${desktopHoverMenuClass('exam-strategies')}`}
+                    {...bindDesktopHoverMenu('exam-strategies')}
+                    {...(item.tourId ? { 'data-tour': item.tourId } : {})}
+                  >
+                    <NavLink
+                      href={resolveNavItemHref(item.href, session)}
+                      className={`${desktopLinkClass(item.href)} app-nav__link--has-menu`}
+                      onClick={closeDesktopDropdowns}
+                    >
+                      {item.label}
+                      <span className="app-nav__chevron" aria-hidden>
+                        ▾
+                      </span>
+                    </NavLink>
+                    <div className="app-nav__dropdown app-nav__dropdown--hover" role="menu">
+                      <ExamStrategiesNavMenuItems
+                        guestRequiresLogin={navModel.guest}
+                        variant="desktop"
+                        onNavigate={closeDesktopDropdowns}
+                      />
+                    </div>
+                  </div>
+                ) : (
+                  <NavLink
+                    key={item.href}
+                    href={resolveNavItemHref(item.href, session)}
+                    className={desktopLinkClass(item.href)}
+                    onClick={closeDesktopDropdowns}
+                    {...(item.tourId ? { 'data-tour': item.tourId } : {})}
+                  >
+                    {item.label}
+                  </NavLink>
+                ),
+              )
             : null}
 
           {navModel.showDralo ? (
             <div
-              className={`app-nav__dropdown-wrap${navModel.draloLocked ? ' app-nav__dropdown-wrap--locked' : ''}`}
+              className={`app-nav__dropdown-wrap app-nav__dropdown-wrap--hover${desktopHoverMenuClass('dralo-ai')}`}
               data-tour="nav-dralo-ai"
+              {...bindDesktopHoverMenu('dralo-ai')}
             >
-              <button
-                type="button"
-                className={`app-nav__link app-nav__link--button${
-                  draloDesktopOpen || pathname?.startsWith('/dralo-ai') ? ' is-active' : ''
-                }${navModel.draloLocked ? ' app-nav__link--locked-preview' : ''}`}
-                aria-expanded={draloDesktopOpen}
-                onClick={toggleDraloDesktop}
-              >
-                Dralo AI
-                <span className="app-nav__chevron" aria-hidden>
-                  ▾
-                </span>
-              </button>
-              {draloDesktopOpen ? (
-                <div
-                  className={`app-nav__dropdown${navModel.draloLocked ? ' app-nav__dropdown--locked' : ''}`}
-                  role="menu"
+              {navModel.draloLocked ? (
+                <span
+                  className={`app-nav__link app-nav__link--has-menu app-nav__link--locked-preview${
+                    pathname?.startsWith('/dralo-ai') ? ' is-active' : ''
+                  }`}
+                  aria-disabled="true"
                 >
-                  <DraloAiNavMenuItems
-                    locked={navModel.draloLocked}
-                    guestRequiresLogin={navModel.guest}
-                    variant="desktop"
-                    onNavigate={closeDesktopDropdowns}
-                  />
-                  {navModel.draloLocked ? <DraloAiComingSoonRibbon /> : null}
-                </div>
-              ) : null}
+                  Dralo AI
+                  <span className="app-nav__chevron" aria-hidden>
+                    ▾
+                  </span>
+                </span>
+              ) : (
+                <NavLink
+                  href={resolveNavItemHref('/dralo-ai', session)}
+                  className={`app-nav__link app-nav__link--has-menu${
+                    pathname?.startsWith('/dralo-ai') ? ' is-active' : ''
+                  }`}
+                  onClick={closeDesktopDropdowns}
+                >
+                  Dralo AI
+                  <span className="app-nav__chevron" aria-hidden>
+                    ▾
+                  </span>
+                </NavLink>
+              )}
+              <div
+                className={`app-nav__dropdown app-nav__dropdown--hover${
+                  navModel.draloLocked ? ' app-nav__dropdown--locked' : ''
+                }`}
+                role="menu"
+              >
+                <DraloAiNavMenuItems
+                  locked={navModel.draloLocked}
+                  guestRequiresLogin={navModel.guest}
+                  variant="desktop"
+                  onNavigate={closeDesktopDropdowns}
+                />
+                {navModel.draloLocked ? <DraloAiComingSoonRibbon /> : null}
+              </div>
             </div>
           ) : null}
         </div>
@@ -206,8 +272,8 @@ function AppNavInner({ session, userRole, onLogout }) {
                 {NAV_LINK_CONTACT.label}
               </NavLink>
               <NavLink
-                href="/perfil"
-                className={desktopLinkClass('/perfil')}
+                href={APP_ROUTES.profile}
+                className={desktopLinkClass(APP_ROUTES.profile)}
                 onClick={closeDesktopDropdowns}
               >
                 Profile
@@ -252,6 +318,8 @@ function AppNavInner({ session, userRole, onLogout }) {
             navModel={navModel}
             linkClass={mobileLinkClass}
             onNavigate={closeMobile}
+            examStrategiesOpen={examStrategiesOpen}
+            onToggleExamStrategies={toggleExamStrategiesMobile}
             draloOpen={draloOpen}
             onToggleDralo={toggleDraloMobile}
             adminPanelsOpen={adminPanelsMobileOpen}

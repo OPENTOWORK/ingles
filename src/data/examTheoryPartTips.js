@@ -67,7 +67,7 @@ export function examTheorySlugFromPartHref(href) {
   if (!href || href.includes('speaking-lab')) return null;
 
   const teoria = href.match(
-    /^\/teoria\/exam-part-tips\/[^/]+\/(reading-and-use-of-english|writing|listening|speaking)\//i,
+    /^\/(?:teoria\/exam-part-tips|exam-strategies\/exam-part-tips)\/[^/]+\/(reading-and-use-of-english|writing|listening|speaking)\//i,
   );
   if (teoria) {
     return examTheorySlugFromSkillPath(teoria[1], href);
@@ -89,7 +89,7 @@ export function examTheorySlugFromPartHref(href) {
 export function parsePartHref(href) {
   if (!href) return null;
   const withPart = href.match(
-    /^\/niveles\/([a-z0-9]+)\/(reading-and-use-of-english|writing|listening|speaking)\/part-(\d+)\/?$/i,
+    /^\/(?:niveles|exam-practice)\/([a-z0-9]+)\/(reading-and-use-of-english|writing|listening|speaking)\/part-(\d+)\/?$/i,
   );
   if (withPart) {
     const [, levelSlug, skillPath, partNum] = withPart;
@@ -100,7 +100,7 @@ export function parsePartHref(href) {
     };
   }
   const numeric = href.match(
-    /^\/niveles\/([a-z0-9]+)\/(listening|speaking)\/(\d+)\/?$/i,
+    /^\/(?:niveles|exam-practice)\/([a-z0-9]+)\/(listening|speaking)\/(\d+)\/?$/i,
   );
   if (numeric) {
     const [, levelSlug, skillPath, partNum] = numeric;

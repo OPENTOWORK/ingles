@@ -10,7 +10,7 @@ export const GUIDED_TOUR_STEPS_STUDENT = [
     title: 'How it works',
     sectionLabel: 'Home',
     description:
-      'A quick walkthrough of Exam practice — timed mock papers, part-by-part training, and full exam mode. At the end, a short look at Exam theory for tips before you practise.',
+      'A quick walkthrough of Exam practice — timed mock papers, part-by-part training, and full exam mode. At the end, a short look at Exam Strategies for tips before you practise.',
   },
   {
     id: 'exam-practice-nav',
@@ -68,10 +68,10 @@ export const GUIDED_TOUR_STEPS_STUDENT = [
   },
   {
     id: 'exam-theory-nav',
-    title: 'Exam theory',
-    sectionLabel: 'Top menu → Exam theory',
+    title: 'Exam Strategies',
+    sectionLabel: 'Top menu → Exam Strategies',
     description:
-      'Before or after practising, open Exam theory for task formats, timing, strategies, and common mistakes — organised by skill and CEFR level.',
+      'Before or after practising, open Exam Strategies for task formats, timing, strategies, and common mistakes — organised by skill and CEFR level.',
     target: '[data-tour="nav-exam-theory"]',
     route: '/',
     href: '/niveles?tab=theory',
@@ -80,7 +80,7 @@ export const GUIDED_TOUR_STEPS_STUDENT = [
   {
     id: 'exam-theory-hub',
     title: 'Tips by skill & part',
-    sectionLabel: 'Exam theory → skill areas',
+    sectionLabel: 'Exam Strategies → skill areas',
     description:
       'Choose Reading and Use of English, Writing, Listening, or Speaking. Filter by level, open a part, and read Description & interactive tips — then return to Exam practice to apply them.',
     target: '[data-tour="exam-theory-hub"]',

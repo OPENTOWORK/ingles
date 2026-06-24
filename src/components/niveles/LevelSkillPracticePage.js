@@ -16,7 +16,7 @@ import {
   getLevelExamSkillRoute,
   getNivelesLevelHub,
 } from '@/data/nivelesLevelHub';
-import { formatPartsLabel, getExamSkillPartRange } from '@/data/levelExamPartMap';
+import { formatPartsLabel, getExamSkillPartRange, getExamSkillSectionTitle } from '@/data/levelExamPartMap';
 import { supabase } from '@/utils/supabaseClient';
 import { getCachedLevelBySlug, getCachedExamenIdsBySlot } from '@/utils/levelsLevelCache';
 import { sortLevelsExamenesRows } from '@/utils/b2ResolveExam';
@@ -195,7 +195,9 @@ function LevelSkillPracticePageInner({ slug, skillRoute }) {
     );
   }
 
-  const title = `${config.cefr} ${routeMeta.practiceTitle}`;
+  const title = isSkillPracticeSession
+    ? getExamSkillSectionTitle(slug, skillRoute) || routeMeta.practiceTitle
+    : `${config.cefr} ${routeMeta.practiceTitle}`;
   const partsLabel = formatPartsLabel(partMin, partMax);
   const selectedPart = partRows.find((p) => p.id === selectedPartId) || partRows[0];
   const passingCount = Math.max(1, Math.ceil(partRows.length * 0.6));

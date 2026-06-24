@@ -13,9 +13,9 @@ export const SEO_PAGE_META = {
       'Practica ejercicios de inglés por niveles con actividades de Reading, Use of English, Writing y más.',
   },
   examTheory: {
-    title: 'Exam Theory | Teoría y tips para exámenes Cambridge',
+    title: 'Exam Strategies | Estrategias y tips para exámenes Cambridge',
     description:
-      'Aprende formato, estrategias y errores comunes por parte del examen con teoría interactiva por nivel CEFR.',
+      'Aprende formato, estrategias y errores comunes por parte del examen con contenido interactivo por nivel CEFR.',
   },
   draloAi: {
     title: 'Dralo AI | Herramientas de IA para practicar inglés',

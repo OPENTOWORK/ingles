@@ -1,0 +1,27 @@
+{
+  "name": "Dralo Academy",
+  "short_name": "Dralo",
+  "description": "Prepara tu inglés con teoría, práctica de exámenes, corrección de writing y herramientas de IA para mejorar tu nivel.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#6366f1",
+  "icons": [
+    {
+      "src": "/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    },
+    {
+      "src": "/mascot/1.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ]
+}

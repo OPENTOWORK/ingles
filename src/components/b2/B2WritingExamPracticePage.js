@@ -664,13 +664,21 @@ function B2WritingExamPracticePageInner() {
     lang: 'en',
   });
 
-  const chromeTitle = getExamChromeTitle({
-    lang: 'en',
-    examModeActive,
-    reviewMode,
-    sectionTitle: 'Writing',
-    defaultTitle: 'B2 Writing Practice',
-  });
+  const chromeTitle = useMemo(() => {
+    if (examModeActive || reviewMode) {
+      return getExamChromeTitle({
+        lang: 'en',
+        examModeActive,
+        reviewMode,
+        sectionTitle: 'Writing',
+        defaultTitle: 'B2 Writing Practice',
+      });
+    }
+    if (isSkillPracticeSession) {
+      return getExamSkillSectionTitle('b2', 'exam-writing') || 'B2 Writing Practice';
+    }
+    return 'B2 Writing Practice';
+  }, [examModeActive, reviewMode, isSkillPracticeSession]);
 
   const chromeSubtitle =
     examModeActive || reviewMode

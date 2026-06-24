@@ -114,7 +114,7 @@ export async function POST(request) {
     const unidad = body.unidad || findExamUnitSlugForTopicHref(topicHref);
     if (!unidad) {
       return NextResponse.json(
-        { error: 'El tema no pertenece a Exam theory' },
+        { error: 'El tema no pertenece a Exam Strategies' },
         { status: 400 },
       );
     }

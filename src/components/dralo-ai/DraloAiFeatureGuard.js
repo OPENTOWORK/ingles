@@ -1,17 +1,43 @@
 'use client';
 
+import Link from 'next/link';
 import { useEffect, useState } from 'react';
+import { useUserRole } from '@/context/UserRoleContext';
+import { isDraloAiLockedForRole } from '@/config/appNavMenu';
 import { buildClientApiUrl } from '@/utils/clientApiUrl';
 
+function DraloAiBlockedScreen() {
+  return (
+    <main className="dralo-ai-page">
+      <section style={{ padding: '2rem 1.5rem', maxWidth: 520 }}>
+        <h1 style={{ fontSize: '1.25rem', fontWeight: 600, marginBottom: '0.75rem' }}>
+          Coming soon
+        </h1>
+        <p style={{ color: '#4b5563', lineHeight: 1.6, marginBottom: '1rem' }}>
+          Dralo AI is not available for students yet. Keep practising in{' '}
+          <strong>Exam practice</strong> — writing and speaking feedback are there when you need
+          them.
+        </p>
+        <Link href="/niveles/b2" className="home-cta__btn home-cta__btn--inline">
+          Go to Exam practice
+        </Link>
+      </section>
+    </main>
+  );
+}
+
 /**
- * Blocks Dralo AI advanced routes unless NEXT_PUBLIC_ENABLE_DRALO_AI=true or user is admin.
+ * Blocks all /dralo-ai routes for students and other locked roles.
  */
 export default function DraloAiFeatureGuard({ children }) {
-  const [state, setState] = useState('loading');
+  const { userRole, session } = useUserRole();
+  const [apiState, setApiState] = useState('pending');
+
+  const roleLocked = Boolean(session) && isDraloAiLockedForRole(userRole);
 
   useEffect(() => {
-    if (process.env.NEXT_PUBLIC_ENABLE_DRALO_AI === 'true') {
-      setState('allowed');
+    if (roleLocked) {
+      setApiState('blocked');
       return;
     }
 
@@ -21,14 +47,14 @@ export default function DraloAiFeatureGuard({ children }) {
           credentials: 'include',
         });
         const data = await res.json().catch(() => ({}));
-        setState(data.allowed ? 'allowed' : 'blocked');
+        setApiState(data.allowed ? 'allowed' : 'blocked');
       } catch {
-        setState('blocked');
+        setApiState('blocked');
       }
     })();
-  }, []);
+  }, [roleLocked, session, userRole]);
 
-  if (state === 'loading') {
+  if (apiState === 'pending') {
     return (
       <main className="dralo-ai-page">
         <p style={{ padding: 24 }}>Loading…</p>
@@ -36,20 +62,8 @@ export default function DraloAiFeatureGuard({ children }) {
     );
   }
 
-  if (state === 'blocked') {
-    return (
-      <main className="dralo-ai-page">
-        <section style={{ padding: '2rem 1.5rem', maxWidth: 520 }}>
-          <h1 style={{ fontSize: '1.25rem', fontWeight: 600, marginBottom: '0.75rem' }}>
-            Not available yet
-          </h1>
-          <p style={{ color: '#4b5563', lineHeight: 1.6 }}>
-            Dralo AI advanced tools are coming soon. Exam practice (writing and speaking feedback)
-            remains available in the main course areas.
-          </p>
-        </section>
-      </main>
-    );
+  if (apiState === 'blocked') {
+    return <DraloAiBlockedScreen />;
   }
 
   return children;

@@ -15,12 +15,14 @@ export default function AppSideMenuPanel({ defaultOpen = true }) {
   const pathname = usePathname();
   const { userRole, session } = useUserRole();
   const [open, setOpen] = useState(defaultOpen);
+  const [examStrategiesOpen, setExamStrategiesOpen] = useState(false);
   const [draloOpen, setDraloOpen] = useState(false);
   const [adminPanelsOpen, setAdminPanelsOpen] = useState(false);
   const navModel = useMemo(() => buildAppNavModel(userRole, session), [userRole, session]);
   const linkClass = 'app-side-menu__link';
 
   useEffect(() => {
+    setExamStrategiesOpen(false);
     setDraloOpen(false);
     setAdminPanelsOpen(false);
   }, [pathname]);
@@ -73,6 +75,8 @@ export default function AppSideMenuPanel({ defaultOpen = true }) {
             navModel={navModel}
             linkClass={linkClass}
             onNavigate={closeMenu}
+            examStrategiesOpen={examStrategiesOpen}
+            onToggleExamStrategies={() => setExamStrategiesOpen((v) => !v)}
             draloOpen={draloOpen}
             onToggleDralo={() => setDraloOpen((v) => !v)}
             adminPanelsOpen={adminPanelsOpen}

@@ -3,12 +3,14 @@
 import NavLink from '@/components/layout/NavLink';
 import AdminPanelsNav from '@/components/layout/AdminPanelsNav';
 import { DraloAiComingSoonRibbon, DraloAiNavMenuItems } from '@/components/layout/DraloAiNavMenu';
+import { ExamStrategiesNavMenuItems } from '@/components/layout/ExamStrategiesNavMenu';
 import ReadingNightModeToggle from '@/components/exam/ReadingNightModeToggle';
 import {
   NAV_LINK_CONTACT,
   NAV_LINK_PRICING,
   HOME_PRICING_LINK,
 } from '@/config/appNavMenu';
+import { APP_ROUTES } from '@/config/appRoutes';
 
 /**
  * Bloques compartidos del menú drawer (móvil) y menú lateral (home tablet/móvil).
@@ -18,6 +20,8 @@ export function AppSharedDrawerNav({
   navModel,
   linkClass,
   onNavigate,
+  examStrategiesOpen,
+  onToggleExamStrategies,
   draloOpen,
   onToggleDralo,
   adminPanelsOpen,
@@ -44,17 +48,48 @@ export function AppSharedDrawerNav({
 
   return (
     <>
-      {sectionLinks.map((item) => (
-        <NavLink
-          key={item.href}
-          href={item.href}
-          className={linkClass}
-          onClick={onNavigate}
-          {...(item.tourId ? { 'data-tour': item.tourId } : {})}
-        >
-          {item.label}
-        </NavLink>
-      ))}
+      {sectionLinks.map((item) =>
+        item.menuItems ? (
+          <div key={item.href}>
+            <button
+              type="button"
+              className={`${linkClass} app-nav__accordion${examStrategiesOpen ? ' is-open' : ''}`}
+              onClick={onToggleExamStrategies}
+              aria-expanded={examStrategiesOpen}
+              {...(item.tourId ? { 'data-tour': item.tourId } : {})}
+            >
+              {item.label}
+              <span aria-hidden>{examStrategiesOpen ? '▲' : '▼'}</span>
+            </button>
+            {examStrategiesOpen ? (
+              <div className="app-nav__sub">
+                <NavLink
+                  href={item.href}
+                  className={linkClass}
+                  onClick={onNavigate}
+                >
+                  All skills
+                </NavLink>
+                <ExamStrategiesNavMenuItems
+                  guestRequiresLogin={guest}
+                  variant={draloVariant}
+                  onNavigate={onNavigate}
+                />
+              </div>
+            ) : null}
+          </div>
+        ) : (
+          <NavLink
+            key={item.href}
+            href={item.href}
+            className={linkClass}
+            onClick={onNavigate}
+            {...(item.tourId ? { 'data-tour': item.tourId } : {})}
+          >
+            {item.label}
+          </NavLink>
+        ),
+      )}
 
       {showDralo ? (
         <>
@@ -122,7 +157,7 @@ export function AppSharedDrawerNav({
       ) : null}
 
       {showProfile ? (
-        <NavLink href="/perfil" className={linkClass} onClick={onNavigate}>
+        <NavLink href={APP_ROUTES.profile} className={linkClass} onClick={onNavigate}>
           Profile
         </NavLink>
       ) : null}

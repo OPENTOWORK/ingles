@@ -370,6 +370,26 @@ export default function RootLayoutClient({ children }) {
       <footer className="footer legal-footer">
         <div className="legal-footer-content">
           <div className="legal-footer-column">
+            <h3>Legal</h3>
+            <ul className="legal-footer-list">
+              <li>
+                <Link href="/terminos-condiciones">Términos y condiciones</Link>
+              </li>
+              <li>
+                <Link href="/aviso-legal">Aviso legal</Link>
+              </li>
+              <li>
+                <Link href="/politica-reembolsos">Política de reembolsos</Link>
+              </li>
+              <li>
+                <Link href="/normas-comunidad">Normas de comunidad</Link>
+              </li>
+              <li>
+                <Link href="/contact">Contacta con nosotros</Link>
+              </li>
+            </ul>
+          </div>
+          <div className="legal-footer-column">
             <h3>Privacidad</h3>
             <ul className="legal-footer-list">
               <li>
@@ -392,30 +412,12 @@ export default function RootLayoutClient({ children }) {
               </li>
             </ul>
           </div>
-          <div className="legal-footer-column">
-            <h3>Legal</h3>
-            <ul className="legal-footer-list">
-              <li>
-                <Link href="/terminos-condiciones">Términos y condiciones</Link>
-              </li>
-              <li>
-                <Link href="/aviso-legal">Aviso legal</Link>
-              </li>
-              <li>
-                <Link href="/politica-reembolsos">Política de reembolsos</Link>
-              </li>
-              <li>
-                <Link href="/normas-comunidad">Normas de comunidad</Link>
-              </li>
-              <li>
-                <Link href="/contacto">Contacta con nosotros</Link>
-              </li>
-            </ul>
-            <p className="legal-footer-version">versión Alpha</p>
+          <div className="legal-footer-column legal-footer-column--version">
+            <p className="legal-footer-version">Versión Alpha 1.0.0</p>
           </div>
           <div className="legal-footer-column legal-footer-column--tagline">
             <DraloTagline className="dralo-tagline--footer" />
-            <p className="legal-footer-copy legal-footer-copy--tagline">
+            <p className="legal-footer-copy legal-footer-copy--tagline legal-footer-copy--tagline-desc">
               Ejercicios diseñados para practicar tus habilidades en inglés.
             </p>
             <p className="legal-footer-copy legal-footer-copy--tagline">

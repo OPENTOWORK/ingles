@@ -186,7 +186,7 @@ export default function AdminEjerciciosPanel() {
     const mins = Math.ceil((summary.total * 4) / 60);
     const ok = window.confirm(
       `SUPERBOTÓN — se generarán ${summary.total.toLocaleString('es-ES')} ejercicios.\n\n` +
-        `• ${summary.folders} carpetas (Theory + Exam theory)\n` +
+        `• ${summary.folders} carpetas (Theory + Exam Strategies)\n` +
         `• ${summary.topics} temas\n` +
         `• ${summary.topics} temas × ${summary.cefrLevels} niveles × ${summary.skills} skills × ${summary.tipos} tipos\n\n` +
         `Fórmula: ${summary.topics} × ${summary.cefrLevels} × ${summary.skills} × ${summary.tipos} = ${summary.total.toLocaleString('es-ES')}.\n\n` +
@@ -427,7 +427,7 @@ export default function AdminEjerciciosPanel() {
       <section>
         <h2 className={styles.sectionTitle}>Crear ejercicio</h2>
         <p className={styles.sectionDesc}>
-          Elige la parte de teoría (Theory o Exam theory), nivel CEFR, skill y tipo. El
+          Elige la parte de teoría (Theory o Exam Strategies), nivel CEFR, skill y tipo. El
           enlace a la unidad se guarda en la descripción del ejercicio.
         </p>
 

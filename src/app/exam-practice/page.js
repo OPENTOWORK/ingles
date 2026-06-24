@@ -31,7 +31,7 @@ export default function ExamPracticeLandingPage() {
           <li>Elige tu nivel y empieza sin compromiso</li>
         </ul>
         <div className="public-seo-page__actions">
-          <Link href="/niveles/" className="home-cta__btn home-cta__btn--inline">
+          <Link href="/exam-practice/b2/" className="home-cta__btn home-cta__btn--inline">
             Ver niveles disponibles
           </Link>
           <Link href="/login/" className="public-seo-page__secondary-link">
@@ -45,7 +45,7 @@ export default function ExamPracticeLandingPage() {
         <ul className="area-grid niveles-grid">
           {LEVELS.map((level) => (
             <li key={level.code}>
-              <Link href={`/niveles/${level.code.toLowerCase()}/`} className="area-card">
+              <Link href={`/exam-practice/${level.code.toLowerCase()}/`} className="area-card">
                 <div className="area-card__head">
                   <span
                     className="area-card__icon"

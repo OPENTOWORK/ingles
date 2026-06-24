@@ -6,6 +6,8 @@ import PageHero from '@/components/PageHero';
 import TeoriaFilterToolbar from '@/components/theory/TeoriaFilterToolbar';
 import { TeoriaGlobalStyles } from '@/components/theory/TeoriaStyles';
 import ExamTheoryProgressBar from '@/components/niveles/ExamTheoryProgressBar';
+import { APP_ROUTES } from '@/config/appRoutes';
+import { MASCOT_EXAM_STRATEGIES_VARIANT } from '@/config/mascotAssets';
 import { useUserRole } from '@/context/UserRoleContext';
 import { useExamTheoryProgress } from '@/hooks/useExamTheoryProgress';
 import { buildTopicProgressByHref } from '@/lib/examTheoryProgress';
@@ -15,14 +17,17 @@ import {
   getSectionProgressSummary,
 } from '@/lib/examTheoryTopicUnlock';
 import { filterTopics } from '@/data/teoriaSections';
+import { getExamStrategiesStudentIndex } from '@/data/examStrategiesStudentIndex';
 import { SEQUENTIAL_LOCK_FOR_STUDENTS } from '@/lib/theoryLockConfig';
 import ExamTheoryPartTipsSection from '@/components/theory/ExamTheoryPartTipsSection';
+import ExamStrategiesStudentIndex from '@/components/theory/ExamStrategiesStudentIndex';
 
 export default function ExamTheoryTopicList({
   sectionSlug,
   sectionTitle,
   sectionDescription,
-  sectionAccent = '#1cb0f6',
+  sectionAccent = '#38bdf8',
+  sectionHeroAccent = 'sky',
   topics,
 }) {
   const { userRole, session } = useUserRole();
@@ -59,34 +64,37 @@ export default function ExamTheoryTopicList({
   }, []);
 
   const filtered = useMemo(() => filterTopics(topics, { query }), [topics, query]);
+  const studentIndex = useMemo(
+    () => (isStudent ? getExamStrategiesStudentIndex(sectionSlug) : null),
+    [isStudent, sectionSlug],
+  );
 
   return (
     <main className="shell teoria-page exam-theory-topics-page">
       <PageHero
         breadcrumb={
           <nav className="breadcrumb" aria-label="Breadcrumb">
-            <Link href="/niveles?tab=theory">Exam theory</Link>
+            <Link href={APP_ROUTES.examStrategies}>Exam Strategies</Link>
             <span aria-hidden>›</span>
             <span>{sectionTitle}</span>
           </nav>
         }
-        eyebrow={sectionTitle}
+        eyebrow="Strategies"
         title={sectionTitle}
         description={
           sectionDescription ||
           'Search by title and explore topics in this area.'
         }
-        mascotVariant={4}
-        mascotWidth={140}
-        accent="violet"
-        stats={[
-          { value: String(topics.length), label: 'Topics' },
-          { value: String(filtered.length), label: 'Showing' },
-        ]}
+        mascotVariant={MASCOT_EXAM_STRATEGIES_VARIANT}
+        mascotWidth={148}
+        accent={sectionHeroAccent}
       />
 
       {!isStudent ? (
-        <div className="exam-theory-section-progress">
+        <div
+          className="exam-theory-section-progress"
+          style={{ '--section-accent': sectionAccent }}
+        >
           <ExamTheoryProgressBar
             percent={sectionSummary.percent}
             label={`Progreso ${sectionTitle}`}
@@ -103,72 +111,83 @@ export default function ExamTheoryTopicList({
         </div>
       ) : null}
 
-      <ExamTheoryPartTipsSection
-        sectionSlug={sectionSlug}
-        sectionAccent={sectionAccent}
-      />
-
-      <header className="exam-theory-topics-block">
-        <h2 className="exam-theory-topics-block__title">Theory topics</h2>
-        <p className="exam-theory-topics-block__desc">
-          Deep-dive units on strategies, language, and exam techniques for this skill.
-        </p>
-      </header>
-
-      <TeoriaFilterToolbar
-        query={query}
-        onQueryChange={setQuery}
-        onClear={clear}
-        filteredCount={filtered.length}
-        totalCount={topics.length}
-      />
-
-      {filtered.length === 0 ? (
-        <EmptyState onReset={clear} />
+      {isStudent && studentIndex ? (
+        <ExamStrategiesStudentIndex sectionSlug={sectionSlug} sectionAccent={sectionAccent} />
       ) : (
-        <ul className="topic-grid exam-theory-topic-grid">
-          {filtered.map((topic, index) => {
-            const unlock = unlockByHref[topic.href];
-            const isLocked = Boolean(unlock?.locked);
-            const percent = unlock?.percent ?? progressByHref[topic.href] ?? 0;
-
-            return (
-              <li
-                key={`${topic.href}-${index}`}
-                className={isLocked ? 'exam-theory-topic-item is-locked' : 'exam-theory-topic-item'}
-              >
-                {isLocked ? (
-                  <>
-                    <div className="card exam-theory-topic-card card--disabled" aria-disabled="true">
-                      <TopicCardBody
-                        topic={topic}
-                        percent={percent}
-                        accentColor={sectionAccent}
-                        showProgress={!isStudent}
-                      />
-                      {unlock?.requiredPrevious ? (
-                        <p className="exam-theory-topic-card__lock-hint">
-                          Complete {unlock.requiredPrevious} first
-                        </p>
-                      ) : null}
-                    </div>
-                    <div className="exam-theory-topic-item__lock">Blocked</div>
-                  </>
-                ) : (
-                  <Link href={topic.href} className="card exam-theory-topic-card">
-                    <TopicCardBody
-                      topic={topic}
-                      percent={percent}
-                      accentColor={sectionAccent}
-                      showProgress={!isStudent}
-                    />
-                  </Link>
-                )}
-              </li>
-            );
-          })}
-        </ul>
+        <ExamTheoryPartTipsSection
+          sectionSlug={sectionSlug}
+          sectionAccent={sectionAccent}
+          userRole={userRole}
+        />
       )}
+
+      {!isStudent ? (
+        <>
+          <header className="exam-theory-topics-block">
+            <h2 className="exam-theory-topics-block__title">Theory topics</h2>
+            <p className="exam-theory-topics-block__desc">
+              Deep-dive units on strategies, language, and exam techniques for this skill.
+            </p>
+          </header>
+
+          <TeoriaFilterToolbar
+            query={query}
+            onQueryChange={setQuery}
+            onClear={clear}
+            filteredCount={filtered.length}
+            totalCount={topics.length}
+          />
+
+          {filtered.length === 0 ? (
+            <EmptyState onReset={clear} />
+          ) : (
+            <ul className="topic-grid exam-theory-topic-grid">
+              {filtered.map((topic, index) => {
+                const unlock = unlockByHref[topic.href];
+                const isLocked = Boolean(unlock?.locked);
+                const percent = unlock?.percent ?? progressByHref[topic.href] ?? 0;
+
+                return (
+                  <li
+                    key={`${topic.href}-${index}`}
+                    className={
+                      isLocked ? 'exam-theory-topic-item is-locked' : 'exam-theory-topic-item'
+                    }
+                  >
+                    {isLocked ? (
+                      <>
+                        <div className="card exam-theory-topic-card card--disabled" aria-disabled="true">
+                          <TopicCardBody
+                            topic={topic}
+                            percent={percent}
+                            accentColor={sectionAccent}
+                            showProgress
+                          />
+                          {unlock?.requiredPrevious ? (
+                            <p className="exam-theory-topic-card__lock-hint">
+                              Complete {unlock.requiredPrevious} first
+                            </p>
+                          ) : null}
+                        </div>
+                        <div className="exam-theory-topic-item__lock">Blocked</div>
+                      </>
+                    ) : (
+                      <Link href={topic.href} className="card exam-theory-topic-card">
+                        <TopicCardBody
+                          topic={topic}
+                          percent={percent}
+                          accentColor={sectionAccent}
+                          showProgress
+                        />
+                      </Link>
+                    )}
+                  </li>
+                );
+              })}
+            </ul>
+          )}
+        </>
+      ) : null}
 
       <TeoriaGlobalStyles />
       <ExamTheoryTopicListStyles />
@@ -227,8 +246,12 @@ function ExamTheoryTopicListStyles() {
         margin: 0 0 18px;
         padding: 14px 16px;
         border-radius: 16px;
-        background: linear-gradient(180deg, #f0f9ff 0%, #f8fafc 100%);
-        border: 1px solid rgba(28, 176, 246, 0.18);
+        background: linear-gradient(
+          180deg,
+          color-mix(in srgb, var(--section-accent, #38bdf8) 10%, #ffffff) 0%,
+          #f8fafc 100%
+        );
+        border: 1px solid color-mix(in srgb, var(--section-accent, #38bdf8) 22%, #e2e8f0);
       }
       .exam-theory-topics-page .exam-theory-section-progress__hint {
         margin: 8px 0 0;

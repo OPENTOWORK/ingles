@@ -470,12 +470,13 @@ export const NIVELES_LEVEL_HUB = {
     slug: 'b2',
     cefr: 'B2',
     examName: 'First (FCE)',
-    eyebrow: 'Upper-Intermediate · B2 First',
+    eyebrow: 'Exam & skills training',
     title: 'Exams',
     description:
-      'An upper-intermediate qualification that proves you can use everyday written and spoken English for work or study.',
+      'Train with level-based exercises, exam practice and instant feedback to improve your English faster',
+    heroStats: [{ value: 'Choose your practice', label: '' }],
     mascotVariant: 4,
-    accent: 'ocean',
+    accent: 'violet',
     sections: {
       'Reading and Use of English': [
         {

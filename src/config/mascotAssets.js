@@ -7,6 +7,9 @@ export const MASCOT_LOGO_VARIANT = 11;
 /** Pose pensativa (ejercicios de teoría aún no disponibles). */
 export const MASCOT_THINKING_VARIANT = 8;
 
+/** Exam Strategies hub y capítulos (estudio, lupa, tips). */
+export const MASCOT_EXAM_STRATEGIES_VARIANT = 12;
+
 /** Ancho máx. del logo en el recuadro junto al título (px; el CSS lo escala al slot). */
 export const MASCOT_LOGO_WIDTH = 104;
 

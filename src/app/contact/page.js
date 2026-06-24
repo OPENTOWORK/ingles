@@ -18,7 +18,7 @@ export default function ContactLandingPage() {
           ticket de soporte si ya tienes sesión iniciada.
         </p>
         <div className="public-seo-page__actions">
-          <Link href="/contacto/" className="home-cta__btn home-cta__btn--inline">
+          <Link href="/contact/" className="home-cta__btn home-cta__btn--inline">
             Ir al formulario de contacto
           </Link>
           <Link href="/login/" className="public-seo-page__secondary-link">

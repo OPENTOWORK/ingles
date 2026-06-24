@@ -2088,8 +2088,12 @@ function B2ReadingExamsPageInner() {
         defaultTitle: isCombinedPaper ? 'B2 Reading and Use of English Practice' : 'B2 Reading Practice',
       });
     }
+    if (isSkillPracticeSession && skillRoute) {
+      const skillTitle = getExamSkillSectionTitle('b2', skillRoute);
+      if (skillTitle) return skillTitle;
+    }
     return isCombinedPaper ? 'B2 Reading and Use of English Practice' : 'B2 Reading Practice';
-  }, [examModeActive, reviewMode, isCombinedPaper]);
+  }, [examModeActive, reviewMode, isCombinedPaper, isSkillPracticeSession, skillRoute]);
 
   const chromeSubtitleResolved = useMemo(() => {
     if (examModeActive || reviewMode) {

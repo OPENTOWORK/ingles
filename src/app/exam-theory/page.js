@@ -4,27 +4,27 @@ import { SEO_PAGE_META } from '@/lib/siteSeo';
 export const metadata = {
   title: SEO_PAGE_META.examTheory.title,
   description: SEO_PAGE_META.examTheory.description,
-  alternates: { canonical: '/exam-theory/' },
+  alternates: { canonical: '/exam-strategies/' },
 };
 
 export default function ExamTheoryLandingPage() {
   return (
     <main className="shell public-seo-page">
       <header className="public-seo-page__hero">
-        <p className="public-seo-page__eyebrow">Exam theory</p>
-        <h1>Teoría y tips para exámenes Cambridge</h1>
+        <p className="public-seo-page__eyebrow">Exam Strategies</p>
+        <h1>Estrategias y tips para exámenes Cambridge</h1>
         <p className="public-seo-page__lead">
-          Descripción de cada parte del examen, estrategias, timing y errores frecuentes — filtrado
-          por nivel CEFR y por habilidad.
+          Estrategias por parte del examen, timing, formatos de tarea y errores frecuentes —
+          filtrado por nivel CEFR y por habilidad.
         </p>
         <ul className="public-seo-page__benefits">
-          <li>Reading, Use of English, Listening, Writing y Speaking</li>
+          <li>Reading, Use of English, Writing, Listening y Speaking</li>
           <li>Tips interactivos por parte del examen</li>
           <li>Contenido alineado con la práctica de Dralo</li>
         </ul>
         <div className="public-seo-page__actions">
-          <Link href="/niveles/?tab=theory" className="home-cta__btn home-cta__btn--inline">
-            Explorar exam theory
+          <Link href="/exam-strategies/" className="home-cta__btn home-cta__btn--inline">
+            Explorar Exam Strategies
           </Link>
           <Link href="/teoria/" className="public-seo-page__secondary-link">
             Ver teoría general de gramática

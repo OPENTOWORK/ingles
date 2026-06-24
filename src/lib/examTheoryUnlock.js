@@ -5,6 +5,7 @@ import {
 import { examTheorySlugFromPartHref } from '@/data/examTheoryPartTips';
 import { findExamUnitSlugForTopicHref } from '@/lib/examTheoryProgress';
 import { shouldApplySequentialLock } from '@/lib/theoryLockConfig';
+import { APP_ROUTES } from '@/config/appRoutes';
 
 const COMPLETE_PERCENT = 100;
 
@@ -14,10 +15,18 @@ export function isExamTheorySectionSlug(slug) {
   return EXAM_THEORY_SLUGS.includes(resolveExamTheorySectionSlug(slug));
 }
 
-/** Slug de unidad (use-of-english, reading, …) a partir de la ruta /teoria/… */
+/** Slug de unidad (use-of-english, reading, …) a partir de la ruta /teoria/… o /exam-strategies/… */
 export function getExamUnitSlugFromPathname(pathname) {
-  if (pathname?.startsWith('/teoria/exam-part-tips/')) {
+  if (
+    pathname?.startsWith('/teoria/exam-part-tips/') ||
+    pathname?.startsWith(`${APP_ROUTES.examStrategies}/exam-part-tips/`)
+  ) {
     return examTheorySlugFromPartHref(pathname);
+  }
+
+  if (pathname?.startsWith(`${APP_ROUTES.examStrategies}/`)) {
+    const segment = pathname.replace(new RegExp(`^${APP_ROUTES.examStrategies}/`), '').split('/')[0];
+    if (isExamTheorySectionSlug(segment)) return resolveExamTheorySectionSlug(segment);
   }
 
   if (!pathname?.startsWith('/teoria/')) return null;

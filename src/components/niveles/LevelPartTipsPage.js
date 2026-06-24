@@ -177,7 +177,7 @@ export default function LevelPartTipsPage({ slug, skillFolder, exercisesConfig, 
               cursor: 'pointer',
             }}
           >
-            📚 Exam theory
+            📚 Exam Strategies
           </button>
         )}
 

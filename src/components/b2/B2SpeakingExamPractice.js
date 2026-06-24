@@ -614,8 +614,11 @@ function B2SpeakingExamPracticeInner({ title, subtitle, loadingLabel, refreshLab
         defaultTitle: title,
       });
     }
+    if (isSkillPracticeSession) {
+      return getExamSkillSectionTitle('b2', 'exam-speaking') || title;
+    }
     return title;
-  }, [examModeActive, reviewMode, lang, title]);
+  }, [examModeActive, reviewMode, lang, title, isSkillPracticeSession]);
 
   const chromeSubtitleResolved = useMemo(() => {
     if (examModeActive || reviewMode) {

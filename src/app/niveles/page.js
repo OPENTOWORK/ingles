@@ -6,6 +6,7 @@ import { useUserRole } from '@/context/UserRoleContext';
 import { TeoriaGlobalStyles } from '@/components/theory/TeoriaStyles';
 import ExamTheorySection from '@/components/niveles/ExamTheorySection';
 import NivelesPageStyles from '@/components/niveles/NivelesPageStyles';
+import { APP_ROUTES } from '@/config/appRoutes';
 
 function NivelesInner() {
   const router = useRouter();
@@ -18,10 +19,10 @@ function NivelesInner() {
   useEffect(() => {
     if (isTheoryView) return;
     if (typeof window !== 'undefined' && window.location.hash === '#exam-theory') {
-      router.replace('/niveles?tab=theory', { scroll: false });
+      router.replace(APP_ROUTES.examStrategies, { scroll: false });
       return;
     }
-    router.replace('/niveles/b2');
+    router.replace(APP_ROUTES.examPracticeDefaultLevel);
   }, [isTheoryView, router]);
 
   if (!isTheoryView) {

@@ -10,6 +10,8 @@ import { canViewPricing } from '@/utils/pricingAccess';
 import { getExamUnitSlugFromPathname } from '@/lib/examTheoryUnlock';
 import { isExamTheoryPartTipsPath } from '@/lib/nivelesPartTipsRoutes';
 import { isStudentRole } from '@/constants/studentFeatureAccess';
+import { getExamStrategiesMenuItems } from '@/data/examSkillTheme';
+import { APP_ROUTES, isExamPracticeAppPath, isExamStrategiesPath } from '@/config/appRoutes';
 
 /** Theory solo en la home (inferior, oculto para estudiantes). */
 export const HOME_THEORY_LINK = { href: '/teoria', label: 'Theory', tourId: 'nav-theory' };
@@ -49,9 +51,18 @@ export function getHomeQuickLinksForRole(userRole) {
 }
 
 /** Enlaces en la barra superior (escritorio) y base del menú móvil. */
+export const EXAM_STRATEGIES_MENU_ITEMS = getExamStrategiesMenuItems();
+
+export const NAV_LINK_EXAM_STRATEGIES = {
+  href: APP_ROUTES.examStrategies,
+  label: 'Exam Strategies',
+  tourId: 'nav-exam-theory',
+  menuItems: EXAM_STRATEGIES_MENU_ITEMS,
+};
+
 export const NAV_LINKS_BEFORE_DRALO = [
-  { href: '/niveles?tab=theory', label: 'Exam theory', tourId: 'nav-exam-theory' },
-  { href: '/niveles/b2', label: 'Exam practice', tourId: 'nav-levels' },
+  NAV_LINK_EXAM_STRATEGIES,
+  { href: APP_ROUTES.examPracticeDefaultLevel, label: 'Exam practice', tourId: 'nav-levels' },
 ];
 
 export const NAV_LINK_HOME = { href: '/', label: 'Home' };
@@ -138,20 +149,20 @@ export function isNavLinkActive(href, pathname, searchParams) {
   if (!pathname || !href) return false;
   const path = pathname.replace(/\/$/, '') || '/';
 
-  if (href === '/niveles?tab=theory') {
-    if (path === '/niveles') {
-      return searchParams?.get('tab') === 'theory';
-    }
+  if (href === APP_ROUTES.examStrategies) {
+    if (isExamStrategiesPath(path)) return true;
+    if (path === '/niveles' && searchParams?.get('tab') === 'theory') return true;
     if (isExamTheoryPartTipsPath(pathname)) return true;
     return Boolean(getExamUnitSlugFromPathname(pathname));
   }
 
-  if (href === '/niveles/b2') {
-    if (path === '/niveles') {
-      return searchParams?.get('tab') !== 'theory';
-    }
+  if (href === APP_ROUTES.examPracticeDefaultLevel) {
+    if (path === '/niveles' && searchParams?.get('tab') !== 'theory') return true;
+    if (isExamPracticeAppPath(path)) return true;
+    if (path.startsWith('/niveles/')) return true;
     if (isExamTheoryPartTipsPath(pathname)) return false;
-    return path.startsWith('/niveles/');
+    if (getExamUnitSlugFromPathname(pathname)) return false;
+    return false;
   }
 
   const target = href.replace(/\/$/, '') || '/';
@@ -162,7 +173,7 @@ export function isNavLinkActive(href, pathname, searchParams) {
 /** Solo visible para administradores (ver pricingAccess.js). */
 export const NAV_LINK_PRICING = { href: '/precios', label: 'Pricing', tourId: 'nav-pricing' };
 
-export const NAV_LINK_CONTACT = { href: '/contacto', label: 'Contact' };
+export const NAV_LINK_CONTACT = { href: APP_ROUTES.contact, label: 'Contact' };
 
 export const DRALO_MENU_ITEMS = [
   { label: 'Writing', href: '/dralo-ai/writing' },

@@ -100,16 +100,6 @@ export const LEGAL_CATEGORY_META = {
 
 export const LEGAL_MAIN_MENUS = [
   {
-    id: 'privacidad',
-    label: 'Privacidad',
-    items: [
-      { type: 'link', slug: 'politica-privacidad' },
-      { type: 'link', slug: 'politica-cookies' },
-      { type: 'link', slug: 'proteccion-datos' },
-      { type: 'action', slug: 'cookie-settings', label: 'Ajustes de cookies', action: 'cookie-settings' },
-    ],
-  },
-  {
     id: 'legal',
     label: 'Legal',
     items: [
@@ -117,7 +107,17 @@ export const LEGAL_MAIN_MENUS = [
       { type: 'link', slug: 'aviso-legal' },
       { type: 'link', slug: 'politica-reembolsos' },
       { type: 'link', slug: 'normas-comunidad' },
-      { type: 'link', slug: 'contacto', href: '/contacto', label: 'Contacta con nosotros' },
+      { type: 'link', slug: 'contacto', href: '/contact', label: 'Contacta con nosotros' },
+    ],
+  },
+  {
+    id: 'privacidad',
+    label: 'Privacidad',
+    items: [
+      { type: 'link', slug: 'politica-privacidad' },
+      { type: 'link', slug: 'politica-cookies' },
+      { type: 'link', slug: 'proteccion-datos' },
+      { type: 'action', slug: 'cookie-settings', label: 'Ajustes de cookies', action: 'cookie-settings' },
     ],
   },
 ];
@@ -149,7 +149,7 @@ function resolveMainMenuItem(item) {
   };
 }
 
-/** Dos menús principales (Privacidad / Legal) con submenús, igual que el footer. */
+/** Menús principales (Legal / Privacidad) con submenús, igual que el footer. */
 export function getLegalMainMenuTree() {
   return LEGAL_MAIN_MENUS.map((menu) => ({
     id: menu.id,

@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import { getExamTheoryPartGroups } from '@/data/examTheoryPartTips';
+import { isNivelesLevelComingSoonForUser } from '@/constants/studentFeatureAccess';
 
 function truncateDescription(text, max = 160) {
   const t = String(text || '').trim();
@@ -12,21 +13,23 @@ function truncateDescription(text, max = 160) {
   return `${(lastSpace > 80 ? cut.slice(0, lastSpace) : cut).trim()}…`;
 }
 
-export default function ExamTheoryPartTipsSection({ sectionSlug, sectionAccent = '#2563eb' }) {
+export default function ExamTheoryPartTipsSection({
+  sectionSlug,
+  sectionAccent = '#2563eb',
+  userRole = '',
+}) {
   const groups = getExamTheoryPartGroups(sectionSlug);
   const [levelFilter, setLevelFilter] = useState(/** @type {string | null} */ (null));
+
+  const isLevelLockedForUser = (cefr) => isNivelesLevelComingSoonForUser(userRole, cefr);
 
   if (!groups.length) return null;
 
   const totalParts = groups.reduce((n, g) => n + g.parts.length, 0);
-  const visibleGroups =
-    levelFilter === 'ALL'
-      ? groups
-      : levelFilter
-        ? groups.filter((g) => g.cefr === levelFilter)
-        : [];
+  const visibleGroups = levelFilter ? groups.filter((g) => g.cefr === levelFilter) : [];
 
   const toggleLevel = (cefr) => {
+    if (isLevelLockedForUser(cefr)) return;
     setLevelFilter((prev) => (prev === cefr ? null : cefr));
   };
 
@@ -53,33 +56,25 @@ export default function ExamTheoryPartTipsSection({ sectionSlug, sectionAccent =
         role="group"
         aria-label="Filter by exam level"
       >
-        {groups.map((group) => (
-          <button
-            key={group.cefr}
-            type="button"
-            className={`exam-theory-parts__filter${
-              levelFilter === group.cefr ? ' exam-theory-parts__filter--active' : ''
-            }`}
-            aria-pressed={levelFilter === group.cefr}
-            onClick={() => toggleLevel(group.cefr)}
-          >
-            {group.cefr}
-            <span className="exam-theory-parts__filter-count">{group.parts.length}</span>
-          </button>
-        ))}
-        {groups.length > 1 ? (
-          <button
-            type="button"
-            className={`exam-theory-parts__filter exam-theory-parts__filter--all${
-              levelFilter === 'ALL' ? ' exam-theory-parts__filter--active' : ''
-            }`}
-            aria-pressed={levelFilter === 'ALL'}
-            onClick={() => toggleLevel('ALL')}
-          >
-            All levels
-            <span className="exam-theory-parts__filter-count">{totalParts}</span>
-          </button>
-        ) : null}
+        {groups.map((group) => {
+          const locked = isLevelLockedForUser(group.cefr);
+          return (
+            <button
+              key={group.cefr}
+              type="button"
+              className={`exam-theory-parts__filter${
+                levelFilter === group.cefr ? ' exam-theory-parts__filter--active' : ''
+              }${locked ? ' exam-theory-parts__filter--locked' : ''}`}
+              aria-pressed={levelFilter === group.cefr}
+              aria-disabled={locked || undefined}
+              disabled={locked}
+              onClick={() => toggleLevel(group.cefr)}
+            >
+              {group.cefr}
+              <span className="exam-theory-parts__filter-count">{group.parts.length}</span>
+            </button>
+          );
+        })}
       </div>
 
       {!levelFilter ? (
@@ -129,9 +124,13 @@ function ExamTheoryPartTipsStyles({ accent }) {
         margin: 0 0 28px;
         padding: 20px 20px 8px;
         border-radius: 18px;
-        background: linear-gradient(180deg, #ffffff 0%, #f8fafc 100%);
-        border: 1px solid rgba(226, 232, 240, 0.95);
-        box-shadow: 0 4px 24px rgba(15, 23, 42, 0.04);
+        background: linear-gradient(
+          180deg,
+          color-mix(in srgb, ${accent} 8%, #ffffff) 0%,
+          #f8fafc 100%
+        );
+        border: 1px solid color-mix(in srgb, ${accent} 20%, #e2e8f0);
+        box-shadow: 0 4px 24px color-mix(in srgb, ${accent} 8%, transparent);
       }
       .exam-theory-topics-page .exam-theory-parts__head {
         display: flex;
@@ -187,6 +186,18 @@ function ExamTheoryPartTipsStyles({ accent }) {
       }
       .exam-theory-topics-page .exam-theory-parts__filter--active .exam-theory-parts__filter-count {
         background: color-mix(in srgb, ${accent} 22%, white);
+      }
+      .exam-theory-topics-page .exam-theory-parts__filter--locked {
+        cursor: not-allowed;
+        opacity: 0.48;
+        background: #f1f5f9;
+        color: #94a3b8;
+        border-color: #e2e8f0;
+        box-shadow: none;
+      }
+      .exam-theory-topics-page .exam-theory-parts__filter--locked:hover {
+        border-color: #e2e8f0;
+        background: #f1f5f9;
       }
       .exam-theory-topics-page .exam-theory-parts__hint {
         margin: 0 0 8px;

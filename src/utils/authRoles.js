@@ -1,5 +1,5 @@
 import { supabase } from '@/utils/supabaseClient';
-
+import { APP_ROUTES } from '@/config/appRoutes';
 export const ADMIN_EMAIL = 'direccion@opentowork.com';
 export const normalizeEmail = (email = '') => email.trim().toLowerCase();
 
@@ -16,8 +16,8 @@ export const ROLE_ROUTE_MAP = {
   administrador: '/admin',
   teacher: '/teacher',
   profesor: '/teacher',
-  student: '/perfil',
-  alumno: '/perfil',
+  student: APP_ROUTES.profile,
+  alumno: APP_ROUTES.profile,
   soporte: '/soporte',
   support: '/soporte',
   informatico: '/informatico',
@@ -34,7 +34,7 @@ export const ROLE_ROUTE_MAP = {
 
 export const getRedirectPathByRoleName = (roleName = '') => {
   const normalized = normalizeRoleName(roleName);
-  return ROLE_ROUTE_MAP[normalized] || '/perfil';
+  return ROLE_ROUTE_MAP[normalized] || APP_ROUTES.profile;
 };
 
 export function isAdminRole(roleName = '') {

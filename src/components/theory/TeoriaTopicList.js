@@ -6,6 +6,7 @@ import PageHero from '@/components/PageHero';
 import TeoriaFilterToolbar from '@/components/theory/TeoriaFilterToolbar';
 import { TeoriaGlobalStyles } from '@/components/theory/TeoriaStyles';
 import { SECTION_CATALOG, filterTopics } from '@/data/teoriaSections';
+import { APP_ROUTES } from '@/config/appRoutes';
 
 export default function TeoriaTopicList({ sectionTitle, topics }) {
   const [query, setQuery] = useState('');
@@ -23,8 +24,8 @@ export default function TeoriaTopicList({ sectionTitle, topics }) {
       <PageHero
         breadcrumb={
           <nav className="breadcrumb" aria-label="Breadcrumb">
-            <Link href={sectionMeta?.slug && ['use-of-english', 'reading', 'listening', 'writing', 'speaking'].includes(sectionMeta.slug) ? '/niveles?tab=theory' : '/teoria'}>
-              {['use-of-english', 'reading', 'listening', 'writing', 'speaking'].includes(sectionMeta?.slug) ? 'Exam theory' : 'Theory'}
+            <Link href={sectionMeta?.slug && ['use-of-english', 'reading', 'listening', 'writing', 'speaking'].includes(sectionMeta.slug) ? APP_ROUTES.examStrategies : APP_ROUTES.teoria}>
+              {['use-of-english', 'reading', 'listening', 'writing', 'speaking'].includes(sectionMeta?.slug) ? 'Exam Strategies' : 'Theory'}
             </Link>
             <span aria-hidden>›</span>
             <span>{sectionTitle}</span>

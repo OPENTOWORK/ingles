@@ -1,16 +1,13 @@
 import { NextResponse } from 'next/server';
-import { authenticateAdminRequest } from '@/lib/adminAccess';
-import { isDraloAiFeatureEnabled } from '@/lib/aiUsage';
+import { getDraloAiAccessFromRequest } from '@/lib/draloAiAccess';
 
-/** Check if Dralo AI advanced tools are accessible (feature flag or admin). */
+/** Check if Dralo AI is accessible for the current user (staff roles only). */
 export async function GET(req) {
-  const adminAuth = await authenticateAdminRequest(req);
-  const isAdmin = !adminAuth.error;
-  const featureEnabled = isDraloAiFeatureEnabled();
+  const access = await getDraloAiAccessFromRequest(req);
 
   return NextResponse.json({
-    allowed: featureEnabled || isAdmin,
-    featureFlag: featureEnabled,
-    admin: isAdmin,
+    allowed: access.allowed,
+    reason: access.reason,
+    role: access.roleName,
   });
 }

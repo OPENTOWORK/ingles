@@ -9,7 +9,7 @@ export const PUBLIC_ROUTE_PREFIXES = [
   '/contacto',
   '/contact',
   '/exam-practice',
-  '/exam-theory',
+  '/exam-strategies',
   '/sitemap.xml',
   '/robots.txt',
   '/favicon.ico',

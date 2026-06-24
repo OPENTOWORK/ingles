@@ -153,9 +153,14 @@ a:hover {
   max-width: 1200px;
   margin: 0 auto;
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 1.5rem 2rem;
+  grid-template-columns: auto auto auto minmax(0, 1fr);
+  gap: 1.25rem 2rem;
   align-items: start;
+  justify-content: start;
+}
+
+.legal-footer-column--version {
+  min-width: 0;
 }
 
 .legal-footer-column--tagline {
@@ -166,11 +171,18 @@ a:hover {
   gap: 0.45rem;
   min-height: 100%;
   text-align: right;
+  justify-self: end;
+  width: 100%;
+  max-width: 100%;
 }
 
 @media (max-width: 900px) {
   .legal-footer-content {
     grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .legal-footer-column--version {
+    grid-column: auto;
   }
 
   .legal-footer-column--tagline {
@@ -221,7 +233,7 @@ a:hover {
   background: transparent;
   cursor: pointer;
   font: inherit;
-  font-weight: 600;
+  font-weight: inherit;
   text-align: left;
 }
 
@@ -231,9 +243,9 @@ a:hover {
 }
 
 .legal-footer-version {
-  margin: 0.85rem 0 0;
+  margin: 0;
   font-size: 0.9rem;
-  font-weight: 600;
+  font-weight: inherit;
   color: rgba(255, 255, 255, 0.92);
   letter-spacing: 0.02em;
 }
@@ -249,6 +261,18 @@ a:hover {
   max-width: 280px;
   margin: 0;
   line-height: 1.4;
+}
+
+.legal-footer-copy--tagline-desc {
+  max-width: none;
+  white-space: nowrap;
+}
+
+@media (max-width: 900px) {
+  .legal-footer-copy--tagline-desc {
+    white-space: normal;
+    max-width: 280px;
+  }
 }
 
 .legal-doc-page {
@@ -700,6 +724,35 @@ body {
   flex-shrink: 0;
 }
 
+.app-nav__dropdown-wrap--hover .app-nav__dropdown--hover {
+  display: none;
+  pointer-events: none;
+}
+
+.app-nav__dropdown-wrap--hover.is-hover-open .app-nav__dropdown--hover {
+  display: flex;
+  pointer-events: auto;
+}
+
+.app-nav__dropdown-wrap--hover::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 100%;
+  height: 8px;
+}
+
+.app-nav__link--has-menu {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.app-nav__dropdown--hover {
+  min-width: 280px;
+}
+
 .app-nav__dropdown {
   position: absolute;
   top: calc(100% + 6px);
@@ -734,22 +787,23 @@ body {
   text-decoration: none;
 }
 
-.app-nav__dropdown-item--disabled {
-  cursor: not-allowed;
-  color: #94a3b8;
-  opacity: 0.65;
+.app-nav__dropdown-item--disabled,
+.app-nav__dropdown-item--locked {
+  cursor: default;
+  color: #374151;
+  opacity: 1;
   pointer-events: none;
 }
 
-.app-nav__dropdown-item--disabled:hover {
+.app-nav__dropdown-item--disabled:hover,
+.app-nav__dropdown-item--locked:hover {
   background: transparent;
-  color: #94a3b8;
+  color: #374151;
 }
 
 /* Mantener position:absolute del dropdown; relative aquí rompía la barra al abrir. */
 .app-nav__dropdown.app-nav__dropdown--locked {
   position: absolute;
-  pointer-events: none;
   overflow: hidden;
 }
 
@@ -3391,7 +3445,7 @@ body.nav-open {
 }
 
 .levels-b2-practice--skill-compact[data-skill-theme='reading'] .skill-exercise-stars-badge {
-  --skill-practice-accent: #2563eb;
+  --skill-practice-accent: #38bdf8;
 }
 
 .levels-b2-practice--skill-compact[data-skill-theme='writing'] .skill-exercise-stars-badge {
@@ -3834,12 +3888,12 @@ body.reading-night-mode .levels-exercise-stars--gold .starSvgWrapEmpty .starSvgP
 
 /* Skill practice colour themes (exam mode unchanged). */
 .levels-b2-practice--skill-compact[data-skill-theme='reading'] {
-  --skill-accent: #2563eb;
-  --skill-accent-dark: #1d4ed8;
-  --skill-surface: #eef4ff;
-  --skill-surface-2: #dbeafe;
-  --skill-border: #bfdbfe;
-  --skill-ink: #1e3a8a;
+  --skill-accent: #38bdf8;
+  --skill-accent-dark: #0ea5e9;
+  --skill-surface: #f0f9ff;
+  --skill-surface-2: #e0f2fe;
+  --skill-border: #bae6fd;
+  --skill-ink: #0369a1;
 }
 
 .levels-b2-practice--skill-compact[data-skill-theme='writing'] {
@@ -4012,10 +4066,10 @@ body.reading-night-mode .levels-exercise-stars--gold .starSvgWrapEmpty .starSvgP
 }
 
 .levels-exam-module-nav--skill[data-skill-theme='reading'] {
-  --skill-accent: #2563eb;
-  --skill-accent-dark: #1d4ed8;
-  --skill-border: #bfdbfe;
-  --skill-surface-2: #eff6ff;
+  --skill-accent: #38bdf8;
+  --skill-accent-dark: #0ea5e9;
+  --skill-border: #bae6fd;
+  --skill-surface-2: #f0f9ff;
 }
 
 .levels-exam-module-nav--skill[data-skill-theme='writing'] {
@@ -5262,7 +5316,7 @@ body.reading-night-mode .levels-exercise-stars--gold .starSvgWrapEmpty .starSvgP
 }
 
 .exam-practice-skill-strip__pill--reading {
-  --skill-accent: #2563eb;
+  --skill-accent: #38bdf8;
 }
 
 .exam-practice-skill-strip__pill--writing {

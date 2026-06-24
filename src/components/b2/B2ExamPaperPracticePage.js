@@ -2997,11 +2997,12 @@ function B2ExamPaperPracticePageInner({
         defaultTitle: title,
       });
     }
-    if (isB2ListeningPartPractice) {
-      return `${getB2ListeningCambridgePartLabel(partNumber)} Practice`;
+    if (isSkillPracticeSession && skillRoute) {
+      const skillTitle = getExamSkillSectionTitle(levelSlug, skillRoute);
+      if (skillTitle) return skillTitle;
     }
     return title;
-  }, [examModeActive, reviewMode, title, lang, isB2ListeningPartPractice, partNumber]);
+  }, [examModeActive, reviewMode, title, lang, isSkillPracticeSession, skillRoute, levelSlug]);
 
   const chromeSubtitleResolved = useMemo(() => {
     if (examModeActive || reviewMode) {

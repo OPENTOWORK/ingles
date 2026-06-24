@@ -46,9 +46,9 @@ export const CONTACT_FAQ_ITEMS = [
   {
     id: 'platform-exam-practice',
     topic: 'Platform usage',
-    question: 'What is the difference between Exam practice and Exam theory?',
+    question: 'What is the difference between Exam practice and Exam Strategies?',
     answer:
-      'Exam practice lets you train by skill (Reading, Writing, Listening, Speaking) or run full exam-style sessions. Exam theory covers the grammar and strategies you need for each exam part — find it under Exam theory in the main menu or on the levels hub.',
+      'Exam practice lets you train by skill (Reading, Writing, Listening, Speaking) or run full exam-style sessions. Exam Strategies covers the grammar and strategies you need for each exam part — find it under Exam Strategies in the main menu or on the levels hub.',
     quickLink: { href: '/niveles', label: 'Exam practice hub' },
   },
   {
@@ -93,10 +93,10 @@ export const CONTACT_FAQ_ITEMS = [
   {
     id: 'theory-access',
     topic: 'Theory & exercises',
-    question: 'Where can I find grammar and exam theory?',
+    question: 'Where can I find grammar and exam strategies?',
     answer:
-      'General theory topics live under Theory (admin access on the home page). Exam-specific theory for each level is available from Exam theory in the top menu or via the levels hub for the part you are studying.',
-    quickLink: { href: '/niveles?tab=theory', label: 'Exam theory' },
+      'General theory topics live under Theory (admin access on the home page). Exam-specific strategies for each level are available from Exam Strategies in the top menu or via the levels hub for the part you are studying.',
+    quickLink: { href: '/niveles?tab=theory', label: 'Exam Strategies' },
   },
   {
     id: 'theory-report-error',

@@ -61,6 +61,7 @@ export default function TeoriaSectionGate({ sectionSlug, sectionTitle, topics })
         sectionTitle={sectionTitle}
         sectionDescription={examMeta?.description}
         sectionAccent={examMeta?.accent}
+        sectionHeroAccent={examMeta?.heroAccent}
         topics={topics}
       />
     );

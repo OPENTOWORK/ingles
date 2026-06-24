@@ -20,8 +20,6 @@ export default function LevelHubPage({ config }) {
     return <NivelesComingSoonNotice level={config.cefr} />;
   }
 
-  const paperCount = config.examLinks?.length ?? 0;
-
   const pageClass = `niveles-level-page niveles-level-page--${config.slug}`;
 
   return (
@@ -35,7 +33,7 @@ export default function LevelHubPage({ config }) {
           mascotVariant={config.mascotVariant}
           mascotWidth={146}
           accent={config.accent}
-          stats={[{ value: String(paperCount), label: 'Practice papers' }]}
+          stats={config.heroStats ?? [{ value: 'Exam or skills', label: '' }]}
         />
       </div>
 

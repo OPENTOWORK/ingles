@@ -10,7 +10,7 @@ import { useUserRole } from '@/context/UserRoleContext';
 
 const FEATURES = [
   'Interactive',
-  'Personalized progress',
+  'Personalised progress',
   'Instant feedback',
   'Free to use',
 ];

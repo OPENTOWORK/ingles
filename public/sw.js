@@ -10,6 +10,12 @@ const STATIC_ASSETS = [
   '/login',
   '/registro',
   '/manifest.json',
+  '/manifest.webmanifest',
+  '/mascot/1.png',
+  '/apple-touch-icon.png',
+  '/icon-192.png',
+  '/icon-512.png',
+  '/mascot/1.png',
   '/offline.html',
   // Add critical CSS and JS files
   '/_next/static/css/',
