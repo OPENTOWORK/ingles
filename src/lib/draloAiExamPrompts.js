@@ -136,7 +136,7 @@ ${SHARED_JSON_RULES}
 ${directions}
 
 TEXT RULES:
-- Natural, realistic exam-style text of 150–180 words with a short title (magazine/website article tone).
+- Natural, realistic exam-style text of 100–140 words with a short title (magazine/website article tone).
 - Solid B2 vocabulary and grammar: NOT simple A2/B1 language, NOT academic C1/C2 language.
 - Exactly 8 gaps written as (9) ___ through (16) ___ in reading order.
 - The passage must NOT contain a gap (0). The example is SEPARATE (see EXAMPLE RULES).
@@ -169,7 +169,34 @@ FORBIDDEN:
 
 Each modelAnswers entry: the single correct word (lowercase unless a proper noun).
 Generate exactly 8 questions numbered 9–16.
-Return ONLY JSON with: partTitle, directions, example {number:0, sentence (with the (0) ___ gap), answer, explanation}, title, passage (150–180 words with gaps (9) ___ to (16) ___ and NO (0) gap), questions[{id:"q1"–"q8", number:9–16, type:"short"}], modelAnswers[{id, answer:"one word"}]`;
+Return ONLY JSON with: partTitle, directions, example {number:0, sentence (with the (0) ___ gap), answer, explanation}, title, passage (100–140 words with gaps (9) ___ to (16) ___ and NO (0) gap), questions[{id:"q1"–"q8", number:9–16, type:"short"}], modelAnswers[{id, answer:"one word"}]`;
+    }
+
+    if (activity === 'word-formation' && L === 'B2') {
+      return `Create ONE complete B2 First Reading and Use of English Part 3: word formation.
+${variety}
+${SHARED_JSON_RULES}
+${directions}
+
+TEXT RULES:
+- Natural B2-level text of 80–120 words with a short title.
+- Exactly 8 gaps (17) ___ (STEM) through (24) ___ (STEM) — stem in CAPITALS after each gap marker.
+- Include example: {"sentence":"… (0) ___ (NATURE) …","answer":"natural"} (separate from passage).
+
+ANSWER RULES:
+- Each gap requires exactly ONE derived word — no phrases, no two valid derivations.
+- Context must force the grammatical category (noun / adjective / adverb / verb).
+- Include a MIX of B2 transformations: abstract noun, adjective, adverb, derived verb, prefix, suffix.
+- Use frequent, natural derived forms — not rare or archaic words.
+- Do NOT repeat the same suffix pattern for every gap.
+
+FORBIDDEN:
+- stems that allow two equally correct derivations (e.g. both noun and adjective fit)
+- multi-word answers, visible mention of "Cambridge"
+- overused names (Emma) or repeated career-change narratives
+
+Generate exactly 8 questions numbered 17–24.
+Return ONLY JSON with: partTitle, directions, example, title, passage, questions[{id, number:17–24, type:"word-formation", stem:"CAPITALS"}], modelAnswers[{id, answer:"one word"}]`;
     }
 
     let passageRule = '';
@@ -193,16 +220,26 @@ ${baseExamSchema(directions, `,"title":"short text title","passage":"full text w
 
   if (mode === 'reading') {
     if (activity === 'multiple-choice' && L === 'B2') {
-      return `Create ONE complete Cambridge B2 First Reading Part 5: multiple choice.
+      return `Create ONE complete B2 First Reading Part 5: multiple choice.
 ${variety}
 ${SHARED_JSON_RULES}
 ${directions}
 Generate exactly 6 questions numbered 31–36.
-Include a rich B2-level reading passage (about 500–650 words) with title.
-Each question: plausible inference/detail/vocabulary stem (not too literal), four options A–D.
-Distribute correct answers across A, B, C and D (no more than 2 consecutive same letter).
-Avoid absurd distractors like "always", "never", "everyone", "all" unless genuinely justified.
-Return ONLY JSON with: partTitle, directions, title, passage, questions[{number, prompt, options:["A) ...","B) ...","C) ...","D) ..."]}], modelAnswers[{id, answer:"A"|"B"|"C"|"D"}]`;
+
+PASSAGE (CRITICAL):
+- 550–700 words, B2 natural register, clear central theme.
+- High information density: secondary details, contrasts, examples, references, author attitude.
+- Do NOT mention "Cambridge" anywhere student-facing.
+
+QUESTIONS (CRITICAL):
+- Mix questionType values: inference, detail, attitude, purpose, reference, global (at least 2 inferential/attitude/purpose/reference/global).
+- Each question: ONE clearly correct answer; three plausible distractors at similar length/register.
+- Distractors must be wrong by nuance — NOT absurd opposites ("always/never/everyone").
+- Correct answer must NOT be copyable by matching a 4+ word phrase from the passage verbatim.
+- Options should be parallel in structure; avoid one option obviously longer/shorter than others.
+
+Answer key: distribute A–D (no more than 2 consecutive same letter; use at least 3 different letters).
+Return ONLY JSON with: partTitle, directions, title, passage, questions[{number, questionType, prompt, options:["A) ...","B) ...","C) ...","D) ..."]}], modelAnswers[{id, answer:"A"|"B"|"C"|"D"}]`;
     }
 
     if (activity === 'gapped-text' && L === 'B2') {
@@ -228,16 +265,28 @@ Return ONLY JSON with: partTitle, directions, title, passage (with gap markers),
     }
 
     if (activity === 'multiple-matching' && L === 'B2') {
-      return `Create ONE complete Cambridge B2 First Reading Part 7: multiple matching.
+      return `Create ONE complete B2 First Reading Part 7: multiple matching.
 ${variety}
 ${SHARED_JSON_RULES}
 ${directions}
 Generate exactly 10 statements numbered 43–52.
-Each question prompt MUST start with "Who" (e.g. "Who found that…", "Who felt that…").
-Include matchingIntro starting with "Which person…" explaining candidates choose A–D (people may be chosen more than once).
-sections: exactly 4 people A–D, each with name and paragraph (120–180 words).
-Each question: {number, prompt} with a clear statement to match — NO A/B/C/D option text in questions.
-modelAnswers: single letters A–D only.
+
+COMMON THEME: four people (A–D) share ONE topic but with distinct perspectives/experiences/opinions.
+
+TEXTS (CRITICAL):
+- Exactly 4 sections A–D; each 120–150 words.
+- Include temporal markers (initially, since then, meanwhile), linkers (however, although, yet), personal evaluations.
+- Create REAL overlaps: some ideas should seem to fit two texts but only one is correct by nuance/detail.
+- Secondary details must act as plausible distractors across texts.
+- Do NOT use overused names (Emma) or career-change narratives.
+- Do NOT mention "Cambridge" in student-facing text.
+
+QUESTIONS (CRITICAL):
+- Each prompt MUST start with "Who" (e.g. "Who felt that…", "Who mentions…").
+- Require interpretation/inference — NOT solvable by one keyword copied from a single text.
+- ONE unequivocal answer per question; people may be chosen more than once.
+
+matchingIntro: brief line explaining choose A–D, people may be chosen more than once.
 Return ONLY JSON with: partTitle, directions, matchingIntro, sections[{letter, name, text}], questions[{number, prompt}], modelAnswers[{id, answer:"A"|"B"|"C"|"D"}]`;
     }
 

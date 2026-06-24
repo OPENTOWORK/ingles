@@ -2,6 +2,16 @@ import { getLevelExamLabel, getLevelExamPartDef } from '@/lib/levelsExamCatalog'
 import { getB2ListeningAudioTargets } from '@/lib/b2ListeningAudioTargets';
 import { A2_EXAM_PARTS } from '@/lib/a2ExamCatalog';
 import { isA2GeneratedPartComplete } from '@/lib/draloAiA2ExamPrompts';
+import {
+  analyzePart5Quality,
+  analyzePart7Quality,
+  classifyPart2AnswerCategories,
+  classifyPart3Derivation,
+  countPart4AnswerWords,
+  countWords as b2CountWords,
+  findForbiddenCambridge,
+  keywordInPart4Answer,
+} from '@/lib/b2RuoeExamQuality';
 
 const WRITING_PART2_FORMATS = new Set(['article', 'email', 'letter', 'review', 'report']);
 
@@ -654,16 +664,193 @@ function validateB2Part2Strict(gen, errors, warnings) {
       errors.push(`Part 2 passage has unexpected gap numbers: ${extra.join(', ')} (only (9)–(16) allowed).`);
     }
 
-    const wordCount = passage
-      .replace(/\(\d+\)\s*_+/g, ' ')
-      .split(/\s+/)
-      .filter(Boolean).length;
-    if (wordCount < 145) {
-      errors.push(`Part 2 passage is ${wordCount} words; minimum is 145 (target 150–180).`);
-    } else if (wordCount < 150 || wordCount > 180) {
-      warnings.push(`Part 2 passage is ${wordCount} words; target is around 150–180.`);
+    const wordCount = b2CountWords(passage);
+    if (wordCount < 100) {
+      errors.push(`Part 2 passage is ${wordCount} words; minimum is 100 (target 100–140).`);
+    } else if (wordCount > 140) {
+      errors.push(`Part 2 passage is ${wordCount} words; maximum is 140 (target 100–140).`);
+    }
+
+    if (answerWords.length >= 6) {
+      const categories = classifyPart2AnswerCategories(answerWords);
+      if (categories.size < 4) {
+        warnings.push(
+          `Part 2 answers cover only ${categories.size} grammar categories (target at least 4: prepositions, relatives, modals, connectors, etc.).`,
+        );
+      }
+    }
+
+    const cambridge = findForbiddenCambridge(gen, 2);
+    if (cambridge) errors.push(cambridge);
+  }
+}
+
+/** B2 Part 3 word formation — strict mechanical checks. */
+function validateB2Part3Strict(gen, errors, warnings) {
+  const questions = asArray(gen.questions);
+  if (questions.length !== 8) {
+    errors.push(`Part 3 must have exactly 8 questions (got ${questions.length}).`);
+  }
+
+  const seenNumbers = new Set();
+  questions.forEach((q, i) => {
+    const label = `Part 3 question ${q?.number ?? i + 1}`;
+    const num = Number(q?.number);
+    if (!Number.isInteger(num) || num < 17 || num > 24) {
+      errors.push(`${label}: question number must be 17–24 (got ${q?.number ?? 'none'}).`);
+    } else if (seenNumbers.has(num)) {
+      errors.push(`${label}: duplicate question number ${num}.`);
+    } else {
+      seenNumbers.add(num);
+    }
+    const stem = String(q?.stem || '').trim();
+    if (!stem) errors.push(`${label}: missing word-formation stem (CAPITALS).`);
+  });
+
+  const modelAnswers = asArray(gen.modelAnswers);
+  const answerById = new Map(modelAnswers.map((m) => [String(m?.id), m]));
+  const derivations = [];
+  questions.forEach((q, i) => {
+    const label = `Part 3 question ${q?.number ?? i + 1}`;
+    const entry = answerById.get(String(q?.id)) ?? modelAnswers[i];
+    const answer = String(entry?.answer ?? '').trim();
+    if (!answer) {
+      errors.push(`${label}: missing answer key entry.`);
+      return;
+    }
+    if (/\s/.test(answer)) {
+      errors.push(`${label}: answer must be a single derived word (got "${answer}").`);
+      return;
+    }
+    derivations.push({ stem: q?.stem, answer: answer.toLowerCase(), tags: classifyPart3Derivation(q?.stem, answer) });
+  });
+
+  const repeated = derivations.map((d) => d.answer).filter((w, idx, arr) => arr.indexOf(w) !== idx);
+  if (repeated.length) {
+    warnings.push(`Part 3 repeats derived answers: ${[...new Set(repeated)].join(', ')}.`);
+  }
+
+  const passage = String(gen.passage || '');
+  if (!hasText(gen.title)) errors.push('Part 3 must include a short text title.');
+  if (!passage.trim()) {
+    errors.push('Part 3 must include a passage.');
+  } else {
+    const wc = b2CountWords(passage);
+    if (wc < 80) errors.push(`Part 3 passage is ${wc} words; minimum is 80 (target 80–120).`);
+    else if (wc > 120) warnings.push(`Part 3 passage is ${wc} words; target is 80–120.`);
+
+    for (let n = 17; n <= 24; n += 1) {
+      const re = new RegExp(`\\(${n}\\)\\s*(?:_+|\\.{2,}|…+)`);
+      if (!re.test(passage)) errors.push(`Part 3 passage is missing gap (${n}) ___.`);
     }
   }
+
+  const cambridge = findForbiddenCambridge(gen, 3);
+  if (cambridge) errors.push(cambridge);
+}
+
+/** B2 Part 4 key word transformations — strict mechanical checks on generated items. */
+function validateB2Part4Strict(gen, errors, warnings) {
+  const questions = asArray(gen.questions);
+  if (questions.length !== 6) {
+    errors.push(`Part 4 must have exactly 6 questions (got ${questions.length}).`);
+  }
+
+  const seenNumbers = new Set();
+  const modelAnswers = asArray(gen.modelAnswers);
+  const answerById = new Map(modelAnswers.map((m) => [String(m?.id), m]));
+
+  questions.forEach((q, i) => {
+    const label = `Part 4 question ${q?.number ?? i + 1}`;
+    const num = Number(q?.number);
+    if (!Number.isInteger(num) || num < 25 || num > 30) {
+      errors.push(`${label}: question number must be 25–30 (got ${q?.number ?? 'none'}).`);
+    } else if (seenNumbers.has(num)) {
+      errors.push(`${label}: duplicate question number ${num}.`);
+    } else {
+      seenNumbers.add(num);
+    }
+
+    const keyword = String(q?.keyword || q?.keyWord || '').trim();
+    if (!keyword) errors.push(`${label}: missing keyword.`);
+
+    const entry = answerById.get(String(q?.id)) ?? modelAnswers[i];
+    const answer = String(entry?.answer ?? '').trim();
+    if (!answer) {
+      errors.push(`${label}: missing answer key entry.`);
+      return;
+    }
+
+    const wc = countPart4AnswerWords(answer);
+    if (wc < 2 || wc > 5) {
+      errors.push(`${label}: model answer must be 2–5 words (got ${wc}: "${answer}").`);
+    }
+    if (keyword && !keywordInPart4Answer(keyword, answer)) {
+      errors.push(`${label}: model answer must contain keyword "${keyword}" unchanged (got "${answer}").`);
+    }
+  });
+
+  const cambridge = findForbiddenCambridge(gen, 4);
+  if (cambridge) errors.push(cambridge);
+}
+
+/** B2 Part 5 reading multiple choice — strict mechanical + heuristic checks. */
+function validateB2Part5Strict(gen, errors, warnings) {
+  const questions = asArray(gen.questions);
+  if (questions.length !== 6) {
+    errors.push(`Part 5 must have exactly 6 questions (got ${questions.length}).`);
+  }
+
+  const seenNumbers = new Set();
+  questions.forEach((q, i) => {
+    const num = Number(q?.number);
+    if (!Number.isInteger(num) || num < 31 || num > 36) {
+      errors.push(`Part 5 question ${q?.number ?? i + 1}: number must be 31–36.`);
+    } else if (seenNumbers.has(num)) {
+      errors.push(`Part 5 question ${num}: duplicate question number.`);
+    } else {
+      seenNumbers.add(num);
+    }
+  });
+
+  if (!hasText(gen.title)) errors.push('Part 5 must include a passage title.');
+  if (!hasText(gen.passage)) errors.push('Part 5 must include a passage.');
+
+  const analysis = analyzePart5Quality(gen);
+  errors.push(...analysis.errors);
+  warnings.push(...analysis.warnings);
+}
+
+/** B2 Part 7 multiple matching — strict mechanical + heuristic checks. */
+function validateB2Part7Strict(gen, errors, warnings) {
+  const questions = asArray(gen.questions);
+  if (questions.length !== 10) {
+    errors.push(`Part 7 must have exactly 10 questions (got ${questions.length}).`);
+  }
+
+  const seenNumbers = new Set();
+  questions.forEach((q, i) => {
+    const num = Number(q?.number);
+    if (!Number.isInteger(num) || num < 43 || num > 52) {
+      errors.push(`Part 7 question ${q?.number ?? i + 1}: number must be 43–52.`);
+    } else if (seenNumbers.has(num)) {
+      errors.push(`Part 7 question ${num}: duplicate question number.`);
+    } else {
+      seenNumbers.add(num);
+    }
+  });
+
+  const modelAnswers = asArray(gen.modelAnswers);
+  modelAnswers.forEach((m, i) => {
+    const letter = String(m?.answer ?? '').trim().toUpperCase();
+    if (!/^[A-D]$/.test(letter)) {
+      errors.push(`Part 7 model answer ${i + 1}: must be A–D (got "${m?.answer}").`);
+    }
+  });
+
+  const analysis = analyzePart7Quality(gen);
+  errors.push(...analysis.errors);
+  warnings.push(...analysis.warnings);
 }
 
 function validateReadingUseOfEnglish(partDef, gen, errors, warnings) {
@@ -816,6 +1003,18 @@ export function validateGeneratedExamPart(slug, partNumber, generated) {
       }
       if (key === 'b2' && partDef.partNumber === 2 && partDef.activity === 'open-cloze') {
         validateB2Part2Strict(normalized, errors, warnings);
+      }
+      if (key === 'b2' && partDef.partNumber === 3 && partDef.activity === 'word-formation') {
+        validateB2Part3Strict(normalized, errors, warnings);
+      }
+      if (key === 'b2' && partDef.partNumber === 4 && partDef.activity === 'key-word') {
+        validateB2Part4Strict(normalized, errors, warnings);
+      }
+      if (key === 'b2' && partDef.partNumber === 5 && partDef.activity === 'multiple-choice') {
+        validateB2Part5Strict(normalized, errors, warnings);
+      }
+      if (key === 'b2' && partDef.partNumber === 7 && partDef.activity === 'multiple-matching') {
+        validateB2Part7Strict(normalized, errors, warnings);
       }
       break;
   }

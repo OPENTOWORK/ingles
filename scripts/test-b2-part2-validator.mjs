@@ -13,7 +13,7 @@ const {
 
 function makeValidPart2() {
   const answers = ['from', 'to', 'on', 'with', 'to', 'out', 'on', 'to'];
-  const passage = `Working with others is an essential skill in both education and professional life. Many tasks are too complex for one person to complete alone, which is why teamwork plays such an important role in achieving success today. One of the main advantages of teamwork is that it allows people to benefit (9) ___ each other's strengths, because every member of a group can contribute different skills and useful ideas. In addition, working in a team often leads (10) ___ more creative solutions. When people share their opinions, they can build (11) ___ each other's suggestions and develop far better results. However, teamwork can also present challenges. For example, disagreements may arise, and it is important to deal (12) ___ them in a respectful way. Communication is key (13) ___ effective teamwork in any situation. Another important aspect is responsibility, since each member must carry (14) ___ their part of the work. Trust matters too: team members need to rely (15) ___ one another completely. Overall, teamwork is a valuable skill that can lead (16) ___ better outcomes for everyone involved.`;
+  const passage = `Teamwork matters in modern workplaces and classrooms alike. When projects grow complex, groups can benefit (9) ___ sharing skills that no individual possesses alone. Collaborative tasks often lead (10) ___ stronger results when members listen carefully and respect different viewpoints. Disagreements may arise, so teams must work (11) ___ them constructively rather than avoiding difficult conversations. Clear communication is vital (12) ___ success, especially when deadlines approach quickly. Each person should carry (13) ___ their responsibilities reliably, even when tasks seem routine. Colleagues need to depend (14) ___ one another during busy periods and share feedback honestly. Trust grows when people support (15) ___ each other openly instead of competing for recognition. In the long term, cooperation can lead (16) ___ better outcomes for everyone involved.`;
   return {
     partTitle: 'Reading and Use of English Part 2',
     directions:
@@ -81,7 +81,7 @@ addCase('missing gap (16) fails', (g) => {
   return g;
 }, /missing gap \(16\)/);
 addCase('unexpected gap number fails', (g) => {
-  g.passage = g.passage.replace('challenges.', 'challenges (17) ___.');
+  g.passage = g.passage.replace('In the long term,', 'Before that (17) ___. In the long term,');
   return g;
 }, /unexpected gap numbers: 17/);
 addCase('missing answer key entry fails', (g) => {
