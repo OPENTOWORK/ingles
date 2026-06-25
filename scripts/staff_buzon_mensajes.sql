@@ -14,7 +14,11 @@ as $$
     join "Usuarios_y_Perfil_roles" r on r.id = u.rol_id
     where u.id = coalesce(p_user_id, auth.uid())
       and coalesce(u.activo, true) = true
-      and lower(trim(r.nombre)) in (
+      and translate(
+        lower(trim(r.nombre)),
+        'áàäâãéèëêíìïîóòöôõúùüûñ',
+        'aaaaaeeeeiiiiooooouuuun'
+      ) in (
         'admin', 'administrador',
         'coordinador', 'coordinator',
         'informatico', 'it',
@@ -35,3 +39,6 @@ create table if not exists public.staff_buzon_mensajes (
 );
 
 alter table public.staff_buzon_mensajes enable row level security;
+
+-- PostgREST must reload after creating new tables (fixes PGRST205).
+notify pgrst, 'reload schema';

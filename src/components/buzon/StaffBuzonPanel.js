@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import toast from 'react-hot-toast';
 import { supabase } from '@/utils/supabaseClient';
+import { getClientAuth } from '@/utils/getClientAuth';
 import {
   buildConversationSummaries,
   filterThreadMessages,
@@ -17,6 +18,23 @@ function extractRoleName(userRow) {
   const embedded = userRow?.Usuarios_y_Perfil_roles;
   if (Array.isArray(embedded)) return embedded[0]?.nombre || '';
   return embedded?.nombre || '';
+}
+
+async function buzonApiRequest(path, { method = 'GET', body, token }) {
+  const response = await fetch(path, {
+    method,
+    headers: {
+      Authorization: `Bearer ${token}`,
+      ...(body ? { 'Content-Type': 'application/json' } : {}),
+    },
+    ...(body ? { body: JSON.stringify(body) } : {}),
+  });
+
+  const payload = await response.json().catch(() => ({}));
+  if (!response.ok) {
+    throw new Error(payload.error || 'No se pudo completar la operación.');
+  }
+  return payload;
 }
 
 export default function StaffBuzonPanel({ currentUserId }) {
@@ -84,46 +102,43 @@ export default function StaffBuzonPanel({ currentUserId }) {
   }, []);
 
   const loadMessages = useCallback(async () => {
-    const { data, error } = await supabase
-      .from('staff_buzon_mensajes')
-      .select('id, sender_id, recipient_id, body, created_at, read_at')
-      .or(`sender_id.eq.${currentUserId},recipient_id.eq.${currentUserId}`)
-      .order('created_at', { ascending: true })
-      .limit(1000);
+    const { session } = await getClientAuth();
+    if (!session?.access_token) {
+      throw new Error('Sesión no válida.');
+    }
 
-    if (error) throw error;
-    setMessages(data || []);
-  }, [currentUserId]);
+    const payload = await buzonApiRequest('/api/buzon/messages', {
+      token: session.access_token,
+    });
+    setMessages(payload.messages || []);
+  }, []);
 
-  const markThreadAsRead = useCallback(
-    async (partnerId) => {
-      if (!partnerId) return;
+  const markThreadAsRead = useCallback(async (partnerId) => {
+    if (!partnerId) return;
 
-      const readAt = new Date().toISOString();
-      const { data, error } = await supabase
-        .from('staff_buzon_mensajes')
-        .update({ read_at: readAt })
-        .eq('recipient_id', currentUserId)
-        .eq('sender_id', partnerId)
-        .is('read_at', null)
-        .select('id');
+    try {
+      const { session } = await getClientAuth();
+      if (!session?.access_token) return;
 
-      if (error) {
-        console.error('Could not mark messages as read:', error);
-        return;
-      }
+      const payload = await buzonApiRequest('/api/buzon/messages', {
+        method: 'PATCH',
+        token: session.access_token,
+        body: { partner_id: partnerId },
+      });
 
-      const ids = new Set((data || []).map((row) => row.id));
-      if (!ids.size) return;
+      const ids = new Set(payload.ids || []);
+      const readAt = payload.read_at;
+      if (!ids.size || !readAt) return;
 
       setMessages((prev) =>
         prev.map((message) =>
           ids.has(message.id) ? { ...message, read_at: readAt } : message,
         ),
       );
-    },
-    [currentUserId],
-  );
+    } catch (error) {
+      console.error('Could not mark messages as read:', error);
+    }
+  }, []);
 
   useEffect(() => {
     let cancelled = false;
@@ -204,26 +219,33 @@ export default function StaffBuzonPanel({ currentUserId }) {
     if (!body || !selectedPartnerId || sending) return;
 
     setSending(true);
-    const { data, error } = await supabase
-      .from('staff_buzon_mensajes')
-      .insert({
-        sender_id: currentUserId,
-        recipient_id: selectedPartnerId,
-        body,
-      })
-      .select('id, sender_id, recipient_id, body, created_at, read_at')
-      .single();
 
-    setSending(false);
+    try {
+      const { session } = await getClientAuth();
+      if (!session?.access_token) {
+        toast.error('Tu sesión ha expirado. Vuelve a iniciar sesión.');
+        return;
+      }
 
-    if (error) {
-      toast.error('No se pudo enviar el mensaje.');
-      return;
-    }
+      const payload = await buzonApiRequest('/api/buzon/messages', {
+        method: 'POST',
+        token: session.access_token,
+        body: {
+          recipient_id: selectedPartnerId,
+          body,
+        },
+      });
 
-    setDraft('');
-    if (data) {
-      setMessages((prev) => (prev.some((item) => item.id === data.id) ? prev : [...prev, data]));
+      setDraft('');
+      const data = payload.message;
+      if (data) {
+        setMessages((prev) => (prev.some((item) => item.id === data.id) ? prev : [...prev, data]));
+      }
+    } catch (error) {
+      console.error('Could not send buzón message:', error);
+      toast.error(error.message || 'No se pudo enviar el mensaje.');
+    } finally {
+      setSending(false);
     }
   };
 
