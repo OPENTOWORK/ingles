@@ -130,6 +130,11 @@ export function extractTextoBloque(raw, partNumber, options = {}) {
 function stripPart6SentencesTail(text) {
   let body = truncateBeforeLine(text, /^sentences$/i);
   body = body.replace(/\n\s*[_=\-–—]{3,}\s*$/g, '').trimEnd();
+  const lines = body.split('\n');
+  const firstOptionIdx = lines.findIndex((l) => /^[A-G]\)\s+/i.test(l.trim()));
+  if (firstOptionIdx >= 0) {
+    body = lines.slice(0, firstOptionIdx).join('\n').trim();
+  }
   return body;
 }
 
@@ -197,6 +202,168 @@ export function extractReadingPart6SentencesBlock(raw) {
   t = stripAnswerKeyBlock(t);
   const m = t.match(/\n\s*Sentences\s*\n([\s\S]*)$/im);
   return m ? m[1].trim() : '';
+}
+
+/** Part 6 gaps: `(37)`, `(37) ___`, or `(37) …` before the next word. */
+export const PART6_GAP_MARKER_RE = /\((\d{1,2})\)(?:\s*(?:_+|\.{2,}|…{2,}))?\s*/g;
+
+/**
+ * Scan passage / enunciado for Part 6 gap numbers (typically 31–42 in B2).
+ * @param {string} passageText
+ * @param {string} [rawEnunciado]
+ * @returns {number[]}
+ */
+export function inferPart6QuestionNumbersFromPassage(passageText = '', rawEnunciado = '') {
+  const blob = [passageText, rawEnunciado].filter(Boolean).join('\n');
+  if (!blob) return [];
+  const nums = [...blob.matchAll(PART6_GAP_MARKER_RE)]
+    .map((m) => Number(m[1]))
+    .filter((n) => Number.isFinite(n) && n >= 31 && n <= 42);
+  return [...new Set(nums)].sort((a, b) => a - b);
+}
+
+/**
+ * Pool lines like `A) sentence…` / `A. sentence…` (skills layout).
+ * @returns {Partial<Record<string, string>>}
+ */
+export function parseReadingPart6SentencePoolFromOptionLines(text = '') {
+  const pool = {};
+  const lines = String(text || '')
+    .replace(/\r\n/g, '\n')
+    .split('\n')
+    .map((l) => l.trim())
+    .filter(Boolean);
+  for (const line of lines) {
+    const m =
+      line.match(/^([A-G])\)\s*(.+)$/i) ||
+      line.match(/^([A-G])\.\s*(.+)$/i) ||
+      line.match(/^([A-G])\s+(.{3,})$/i);
+    if (m) pool[m[1].toUpperCase()] = m[2].trim();
+  }
+  if (Object.keys(pool).length >= 7) return pool;
+  return {};
+}
+
+/** Lines `A) …` anywhere in the enunciado (typical skills layout). */
+export function extractReadingPart6OptionLinesBlock(raw = '') {
+  const lines = String(raw || '')
+    .replace(/\r\n/g, '\n')
+    .split('\n')
+    .map((l) => l.trim())
+    .filter((l) => /^[A-G]\)\s+\S/.test(l));
+  if (lines.length >= 7) return lines.join('\n');
+  return '';
+}
+
+/**
+ * Global A–G pool before the Questions block (skills layout: sentences after Text, not under "Sentences").
+ * @returns {Partial<Record<string, string>>}
+ */
+export function extractReadingPart6GlobalPoolFromRaw(raw = '') {
+  const lines = String(raw || '')
+    .replace(/\r\n/g, '\n')
+    .split('\n')
+    .map((l) => l.trim());
+  const questionsIdx = lines.findIndex((l) => /^questions$/i.test(l));
+  const searchLines = questionsIdx >= 0 ? lines.slice(0, questionsIdx) : lines;
+  /** @type {Partial<Record<string, string>>} */
+  const pool = {};
+  for (const line of searchLines) {
+    const m =
+      line.match(/^([A-G])\)\s*(.+)$/i) ||
+      line.match(/^([A-G])\.\s*(.+)$/i) ||
+      line.match(/^([A-G])\s+(.{3,})$/i);
+    if (!m) continue;
+    const L = m[1].toUpperCase();
+    const text = m[2].trim();
+    if (pool[L] || !isValidPart6PoolSentence(text, L)) continue;
+    pool[L] = text;
+  }
+  return isCompletePart6Pool(pool) ? pool : {};
+}
+
+function isValidPart6PoolSentence(text, letter) {
+  const t = String(text || '').trim();
+  return t.length > 2 && t.toUpperCase() !== String(letter).toUpperCase();
+}
+
+function isCompletePart6Pool(pool) {
+  return [...'ABCDEFG'].every((L) => isValidPart6PoolSentence(pool[L], L));
+}
+
+export { isCompletePart6Pool, isValidPart6PoolSentence };
+
+/**
+ * Build pool map from synthetic MCQ groups (optionText on each letter).
+ * @param {Array<{ options?: Array<{ optionText?: string, formattedText?: string, respuesta?: string, compactLabel?: string }> }>} groups
+ */
+export function buildPart6PoolFromMcqGroups(groups = []) {
+  const pool = {};
+  const first = groups.find((g) => g?.options?.length >= 7);
+  if (!first) return pool;
+  for (const L of 'ABCDEFG') {
+    const opt = first.options.find((o) => {
+      if (String(o?.compactLabel || '').toUpperCase() === L) return true;
+      const t = String(o?.formattedText || o?.respuesta || '').trim();
+      return new RegExp(`^${L}\\)?\\b`, 'i').test(t);
+    });
+    const text = String(opt?.optionText || '').trim();
+    if (isValidPart6PoolSentence(text, L)) pool[L] = text;
+  }
+  return pool;
+}
+
+/**
+ * Resolve the global A–G sentence pool from any Part 6 enunciado layout.
+ * @returns {Partial<Record<string, string>>}
+ */
+export function resolveReadingPart6SentencePool(raw = '', passageText = '', mcqGroups = []) {
+  const block = extractReadingPart6SentencesBlock(raw);
+  const optionLinesBlock = extractReadingPart6OptionLinesBlock(raw);
+
+  const trySources = [
+    () => extractReadingPart6GlobalPoolFromRaw(raw),
+    () => parseReadingPart6SentencePool(block),
+    () => parseReadingPart6SentencePoolFromOptionLines(block),
+    () => parseReadingPart6SentencePoolFromOptionLines(optionLinesBlock),
+    () => parseReadingPart6SentencePoolFromOptionLines(raw),
+    () => parseReadingPart6SentencePoolFromOptionLines(passageText),
+    () => buildPart6PoolFromMcqGroups(mcqGroups),
+  ];
+
+  for (const fn of trySources) {
+    const pool = fn();
+    if (isCompletePart6Pool(pool)) return pool;
+  }
+
+  const fallback = buildPart6PoolFromMcqGroups(mcqGroups);
+  if (Object.keys(fallback).length > 0) return fallback;
+
+  return parseReadingPart6SentencePool(block);
+}
+
+/**
+ * Human-readable sentences block for display (skills + exam).
+ */
+export function formatReadingPart6SentencesDisplay(raw = '', pool = {}, mcqGroups = []) {
+  const resolved = isCompletePart6Pool(pool)
+    ? pool
+    : resolveReadingPart6SentencePool(raw, '', mcqGroups);
+  const lines = [...'ABCDEFG']
+    .map((L) => {
+      const text = resolved[L]?.trim();
+      return text ? `${L}  ${text}` : '';
+    })
+    .filter(Boolean);
+  if (lines.length >= 7) return lines.join('\n');
+
+  const block = extractReadingPart6SentencesBlock(raw);
+  if (block) return block;
+
+  const optionBlock = extractReadingPart6OptionLinesBlock(raw);
+  if (optionBlock) return optionBlock.replace(/^([A-G])\)\s*/gim, '$1  ');
+
+  return '';
 }
 
 export function extractPart7PromptStemBlob(raw) {

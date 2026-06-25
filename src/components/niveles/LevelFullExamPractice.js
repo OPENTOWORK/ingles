@@ -19,6 +19,7 @@ import { supabase } from '@/utils/supabaseClient';
 import { getCachedLevelBySlug, getCachedExamenIdsBySlot } from '@/utils/levelsLevelCache';
 import { sortLevelsExamenesRows } from '@/utils/b2ResolveExam';
 import { filterVisibleExamenes } from '@/utils/levelsExamVisibility';
+import { formatExamSlotDisplayLabel } from '@/utils/formatExamDisplayLabel';
 import { getAvailableExamSlots } from '@/hooks/useLevelsExamAdminFlow';
 import { starsFromApprovedPartsCount } from '@/utils/levelsB2PartScoring';
 import ExamPracticeReportError from '@/components/exam/ExamPracticeReportError';
@@ -62,7 +63,7 @@ function LevelFullExamPracticeInner({ slug }) {
       const names = {};
       Object.entries(idsBySlot).forEach(([slot, id]) => {
         const row = ordered.find((r) => r.id === id);
-        names[Number(slot)] = row?.nombre?.trim() || `Examen ${slot}`;
+        names[Number(slot)] = formatExamSlotDisplayLabel(row?.nombre, slot);
       });
       setExamNamesBySlot(names);
     } catch (e) {
@@ -95,7 +96,7 @@ function LevelFullExamPracticeInner({ slug }) {
   const totalCorrect = Number(slotProgress.correct) || 0;
   const totalItems = Number(slotProgress.total) || 0;
   const examComplete = approvedParts >= partsCount;
-  const examLabel = examNamesBySlot[examSlot] || `Examen ${examSlot}`;
+  const examLabel = examNamesBySlot[examSlot] || formatExamSlotDisplayLabel(null, examSlot);
 
   const sectionCards = useMemo(
     () =>

@@ -2,11 +2,11 @@ import { starsFromLevelsEarnedMax } from '@/lib/levelsStars';
 import { getExerciseStars, isExerciseSlotUnlocked } from '@/utils/b2StarsWayProgress';
 import { getSortedExamSlots } from '@/utils/skillPracticeNavigation';
 
-/** User-facing label for a skill-practice exam variant (slot 1 → "Exercise 1"). */
+/** User-facing label for a skill-practice exam variant (slot 1 → "Test 1"). */
 export function formatSkillExerciseLabel(examSlot, lang = 'en') {
   const slot = Number(examSlot);
   if (!slot) return '';
-  return lang === 'es' ? `Ejercicio ${slot}` : `Exercise ${slot}`;
+  return `Test ${slot}`;
 }
 
 /** Tema visual de skill practice (no exam mode). */

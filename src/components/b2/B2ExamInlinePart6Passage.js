@@ -2,7 +2,7 @@
 
 import { useMemo, useState } from 'react';
 import LevelsAnswerJustification from '@/components/levels/LevelsAnswerJustification';
-import { parseLineWithOpenGaps } from '@/components/b2/B2ExamInlineOpenClozePassage';
+import { PART6_GAP_MARKER_RE } from '@/utils/b2ExamTextBlocks';
 import ReadingQuestionFlagButton from '@/components/exam/ReadingQuestionFlagButton';
 import ReadingConfidenceSelector from '@/components/exam/ReadingConfidenceSelector';
 import { useReadingPracticeSession } from '@/context/ReadingPracticeSessionContext';
@@ -15,13 +15,42 @@ function getOptionLetter(option) {
   return text.trim();
 }
 
+function parseLineWithPart6Gaps(line, activeQuestionNumbers) {
+  const activeSet = new Set(activeQuestionNumbers);
+  const parts = [];
+  let lastIndex = 0;
+
+  for (const match of line.matchAll(PART6_GAP_MARKER_RE)) {
+    const index = match.index ?? 0;
+    const questionNumber = Number(match[1]);
+    if (!activeSet.has(questionNumber)) continue;
+
+    if (index > lastIndex) {
+      parts.push({ type: 'text', text: line.slice(lastIndex, index) });
+    }
+    parts.push({ type: 'gap', questionNumber });
+    lastIndex = index + match[0].length;
+  }
+
+  if (lastIndex < line.length) {
+    parts.push({ type: 'text', text: line.slice(lastIndex) });
+  }
+
+  if (parts.length === 0 && line) {
+    parts.push({ type: 'text', text: line });
+  }
+
+  return parts;
+}
+
 /**
- * Part 6 gapped text — letter dropdown (A–G) inline at each gap, like Part 1 MCQ cloze.
+ * Part 6 gapped text — sentences A–G band on top, passage with letter dropdowns below.
  */
 export default function B2ExamInlinePart6Passage({
   text = '',
   mcqGroups = [],
   sentencePool = {},
+  sentencesDisplay = '',
   getQuestionKey,
   selectedOptions = {},
   checkedQuestions = {},
@@ -50,10 +79,37 @@ export default function B2ExamInlinePart6Passage({
 
   const poolEntries = useMemo(() => {
     const letters = [...'ABCDEFG'];
+    const fromDisplay = String(sentencesDisplay || '')
+      .replace(/\r\n/g, '\n')
+      .split('\n')
+      .map((line) => line.trim())
+      .filter(Boolean)
+      .map((line) => {
+        const m =
+          line.match(/^([A-G])\s{1,3}(.+)$/i) ||
+          line.match(/^([A-G])\)\s*(.+)$/i) ||
+          line.match(/^([A-G])\.\s*(.+)$/i);
+        return m ? { letter: m[1].toUpperCase(), text: m[2].trim() } : null;
+      })
+      .filter(Boolean);
+
+    if (fromDisplay.length >= 7) return fromDisplay;
+
     return letters
-      .map((L) => ({ letter: L, text: sentencePool[L] || mcqGroups[0]?.options?.find((o) => getOptionLetter(o) === L)?.optionText || '' }))
-      .filter((entry) => entry.text && String(entry.text).trim());
-  }, [sentencePool, mcqGroups]);
+      .map((L) => {
+        const opt = mcqGroups[0]?.options?.find((o) => getOptionLetter(o) === L);
+        const fromOpt = String(opt?.optionText || '').trim();
+        const fromPool = String(sentencePool[L] || '').trim();
+        const sentenceText =
+          fromOpt.length > 2 && fromOpt.toUpperCase() !== L
+            ? fromOpt
+            : fromPool.length > 2 && fromPool.toUpperCase() !== L
+              ? fromPool
+              : fromOpt || fromPool;
+        return { letter: L, text: sentenceText };
+      })
+      .filter((entry) => entry.text && entry.text.toUpperCase() !== entry.letter);
+  }, [sentencePool, mcqGroups, sentencesDisplay]);
 
   const lines = text
     .split('\n')
@@ -62,11 +118,23 @@ export default function B2ExamInlinePart6Passage({
 
   if (!lines.length) return null;
 
+  let startIdx = 0;
+  if (lines[0]?.toLowerCase() === 'text') startIdx = 1;
+  const titleLine =
+    startIdx < lines.length &&
+    !parseLineWithPart6Gaps(lines[startIdx], activeQuestionNumbers).some((s) => s.type === 'gap') &&
+    lines[startIdx].length < 120 &&
+    !/^IMAGE:/i.test(lines[startIdx])
+      ? lines[startIdx]
+      : null;
+  const bodyStart = titleLine ? startIdx + 1 : startIdx;
+  const bodyLines = lines.slice(bodyStart);
+
   return (
     <div className="levels-exam-inline-part6">
       {poolEntries.length > 0 ? (
         <div className="levels-exam-part6-pool-sticky levels-exam-part6-pool--inline-passage">
-          <p className="levels-exam-part6-pool__title">Sentences A–G (choose one per gap)</p>
+          <p className="levels-exam-part6-pool__title">Sentences A–G</p>
           <div className="levels-exam-part6-pool__list">
             {poolEntries.map(({ letter, text: sentenceText }) => (
               <p key={letter} className="levels-exam-part6-pool__item">
@@ -79,7 +147,8 @@ export default function B2ExamInlinePart6Passage({
       ) : null}
 
       <div className="levels-exam-inline-passage levels-exam-inline-part6__passage">
-        {lines.map((line, lineIdx) => {
+        {titleLine ? <h3 className="levels-exam-passage-title">{titleLine}</h3> : null}
+        {bodyLines.map((line, lineIdx) => {
           const img = line.match(/^IMAGE:\s*(\S+)/i);
           if (img) {
             return (
@@ -98,7 +167,7 @@ export default function B2ExamInlinePart6Passage({
             );
           }
 
-          const segments = parseLineWithOpenGaps(line);
+          const segments = parseLineWithPart6Gaps(line, activeQuestionNumbers);
           const hasGap = segments.some((s) => s.type === 'gap');
 
           if (!hasGap) {
@@ -175,9 +244,8 @@ export default function B2ExamInlinePart6Passage({
                         <option value="">—</option>
                         {group.options.map((option) => {
                           const letter = getOptionLetter(option);
-                          const sentence = option.optionText || '';
                           return (
-                            <option key={option.id} value={option.id} title={sentence}>
+                            <option key={option.id} value={option.id}>
                               {letter}
                             </option>
                           );
@@ -268,7 +336,7 @@ function Part6Explanations({
   };
 
   return (
-    <div className="levels-exam-mcq-explanations">
+    <div className="levels-exam-mcq-explanations levels-exam-inline-part6__explanations">
       <p className="levels-exam-mcq-explanations__title">Explanations</p>
       {entries.map((entry) => (
         <div

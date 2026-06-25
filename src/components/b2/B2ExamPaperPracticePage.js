@@ -3066,7 +3066,7 @@ function B2ExamPaperPracticePageInner({
         selectedPartTitleParts.subtitle ||
         selectedPartTitleParts.heading ||
         selectedPart?.displayName ||
-        'Exercise',
+        'Test',
       heading: selectedPartTitleParts.heading || null,
       sectionTitle: skillRoute ? getExamSkillSectionTitle(levelSlug, skillRoute) : null,
     });

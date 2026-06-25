@@ -100,7 +100,7 @@ export default function ProfileFavouriteExercisesPanel({ lang = 'en' }) {
     signIn: en ? 'Sign in to see your favourite exercises.' : 'Inicia sesión para ver tus ejercicios favoritos.',
     loading: en ? 'Loading favourites…' : 'Cargando favoritos…',
     remove: en ? 'Remove from favourites' : 'Quitar de favoritos',
-    open: en ? 'Open exercise' : 'Abrir ejercicio',
+    open: en ? 'Open test' : 'Abrir test',
     lastUsed: en ? 'Saved' : 'Guardado',
   };
 

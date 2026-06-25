@@ -3,6 +3,8 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { useUserRole } from '@/context/UserRoleContext';
+import { canViewPlacementAndTraining } from '@/config/appNavMenu';
+import RouteLoadingMascot from '@/components/RouteLoadingMascot';
 import { usePlacementAccess } from '@/context/PlacementAccessContext';
 import SiteMascot from '@/components/SiteMascot';
 import StudyPlanSurvey from '@/components/plan-objetivos/StudyPlanSurvey';
@@ -100,9 +102,25 @@ function countWords(text) {
 
 export default function PlacementTestPage() {
   const router = useRouter();
-  const { session } = useUserRole();
+  const { session, userRole } = useUserRole();
+  const canAccessPlacement = canViewPlacementAndTraining(userRole);
+
+  useEffect(() => {
+    if (userRole && !canAccessPlacement) {
+      router.replace('/niveles/b2');
+    }
+  }, [userRole, canAccessPlacement, router]);
+
   const { refreshPlacementAccess, hasPlacementResult, loading: placementAccessLoading } =
     usePlacementAccess();
+
+  if (userRole && !canAccessPlacement) {
+    return (
+      <main className="page-content py-12">
+        <RouteLoadingMascot label="Redirigiendo…" variant={3} />
+      </main>
+    );
+  }
 
   // Estado principal
   const [answers, setAnswers] = useState({}); // { [qid]: value }

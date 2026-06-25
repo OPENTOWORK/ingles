@@ -27,7 +27,7 @@ export default function StarsWayHubTabs({ embedded = false }) {
           Stars way to B2
         </span>
         <span className={styles.bannerDesc}>
-          Follow the path skill by skill · earn up to 3 stars on every exercise
+          Follow the path skill by skill · earn up to 3 stars on every test
         </span>
       </span>
 

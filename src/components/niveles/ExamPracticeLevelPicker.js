@@ -2,12 +2,10 @@
 
 import Link from 'next/link';
 import { useUserRole } from '@/context/UserRoleContext';
-import { usePlacementAccess } from '@/context/PlacementAccessContext';
-import { isStudentRole } from '@/constants/studentFeatureAccess';
 import { isStaffRole } from '@/lib/placementLevelAccess';
 import { EXAM_PRACTICE_LEVELS } from '@/data/examPracticeLevels';
 
-function resolveLevelLock({ level, userRole, isStudent, placementLoading, isLevelLocked, hasPlacementResult }) {
+function resolveLevelLock({ level, userRole }) {
   if (isStaffRole(userRole)) {
     return { locked: false, label: null };
   }
@@ -16,13 +14,6 @@ function resolveLevelLock({ level, userRole, isStudent, placementLoading, isLeve
     return { locked: true, label: 'Coming soon' };
   }
 
-  if (!isStudent) {
-    return { locked: false, label: null };
-  }
-
-  if (placementLoading) return { locked: true, label: 'Checking…' };
-  if (!hasPlacementResult) return { locked: true, label: 'Placement required' };
-  if (isLevelLocked(level.nivel)) return { locked: true, label: 'Level blocked' };
   return { locked: false, label: null };
 }
 
@@ -86,8 +77,6 @@ export default function ExamPracticeLevelPicker({
   linkForLevel,
 }) {
   const { userRole } = useUserRole();
-  const { loading: placementLoading, isLevelLocked, hasPlacementResult } = usePlacementAccess();
-  const isStudent = isStudentRole(userRole) && !isStaffRole(userRole);
   const activeSlug = String(activeLevel || '').toLowerCase();
 
   if (variant === 'strip') {
@@ -99,10 +88,6 @@ export default function ExamPracticeLevelPicker({
             const { locked, label } = resolveLevelLock({
               level,
               userRole,
-              isStudent,
-              placementLoading,
-              isLevelLocked,
-              hasPlacementResult,
             });
             const href = !locked ? linkForLevel(level) : null;
             const isActive = activeSlug === level.slug;
@@ -147,10 +132,6 @@ export default function ExamPracticeLevelPicker({
         const { locked, label } = resolveLevelLock({
           level,
           userRole,
-          isStudent,
-          placementLoading,
-          isLevelLocked,
-          hasPlacementResult,
         });
         const href = !locked ? linkForLevel(level) : null;
         const isActive = activeSlug === level.slug;

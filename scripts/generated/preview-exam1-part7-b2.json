@@ -1,130 +1,304 @@
 {
+  "levelSlug": "b2",
+  "examSlot": 1,
   "partNumber": 7,
-  "partTitle": "Reading Part 3 — multiple matching",
-  "partLabel": "Reading Part 3 — multiple matching",
   "generated": {
-    "partTitle": "Reading Part 7",
-    "title": "Changing Paths: Four Career Stories",
-    "directions": "You are going to read four short texts about people who changed career. For questions 37–46, choose from the people A–D. The people may be chosen more than once.",
-    "matchingIntro": "Which person…",
+    "partTitle": "Reading and Use of English Part 7",
+    "directions": "You are going to read four short texts about people learning a musical instrument. For questions 43–52, choose from the people A–D. The people may be chosen more than once.",
+    "matchingIntro": "Which person (A–D) …? The people may be chosen more than once.",
     "sections": [
       {
         "letter": "A",
-        "name": "Emma Thomson",
-        "text": "After a decade working as a marketing executive, Emma decided to follow her passion for literature. She left her corporate job to become a freelance writer, even though several colleagues warned her that she was taking a risk. Though the initial phase was challenging — finding clients and managing irregular income — she found joy in crafting stories and articles on her own terms. Emma appreciates the flexibility that comes with freelancing, allowing her to work from anywhere and set her own schedule. Despite the instability, the creative satisfaction she derives from writing outweighs the financial unpredictability, and she has no intention of returning to office life."
+        "name": "Nora Chen",
+        "text": "Until last year, Nora's evenings were dominated by project deadlines in a busy design studio. Although she had loved listening to her mother practise the violin as a child, she had never believed she had time to learn. When a colleague suggested they attend a community class together, Nora agreed mainly because she hoped it would help her unwind after stressful weeks. Initially she found reading notation painfully slow, yet she persisted because each small improvement felt tangible. She still becomes anxious before playing in front of others, even at informal gatherings, and prefers practising alone in her kitchen before she feels ready to join the group. Looking back, she says the instrument has become a way of rebuilding confidence rather than proving talent."
       },
       {
         "letter": "B",
-        "name": "Michael Green",
-        "text": "Michael was a successful civil engineer before he decided to pursue a career in education. Motivated by a desire to inspire young minds, he retrained as a secondary school teacher during evenings and weekends while still working full time. The transition was not easy, as it required him to adapt to a completely different work environment and daily schedule. However, Michael finds teaching immensely rewarding, particularly when he sees his students grasp complex concepts for the first time. He values the opportunity to impact future generations positively, and he believes his earlier career gave him useful skills in planning and explaining technical ideas clearly."
+        "name": "Rafael Ortiz",
+        "text": "Rafael played drums in a school band, but after leaving university he sold his kit and focused on office work. A decade later, hearing a live jazz set reminded him how much he missed the physical rhythm of playing. He bought a second-hand kit and joined an evening ensemble, discovering that rehearsing with other musicians motivated him far more than solitary practice ever had. Although he occasionally watches tutorial videos when a passage is tricky, he relies mainly on the conductor's feedback. Rafael admits that fitting rehearsals around family life is demanding; nevertheless, he values the discipline of arriving prepared each week. Since returning to drumming, he has noticed he listens more attentively to subtle details in everyday sounds. He now encourages his daughter to try percussion at school, though he insists she should choose her own instrument."
       },
       {
         "letter": "C",
-        "name": "Sophia Martinez",
-        "text": "Sophia worked as a software developer for several years before realising that her true calling was in the culinary arts. Leaving a stable job in tech, she enrolled in culinary school to pursue her dream of becoming a chef. Although it was a significant change, Sophia has not looked back since opening her own small restaurant in her home town. She enjoys the hands-on aspect of her new job and the chance to express her creativity through food, despite the long and demanding hours. For her, the physical pace of a kitchen feels more authentic than sitting at a desk, even when service nights are exhausting."
+        "name": "Priya Kapoor",
+        "text": "Priya began piano lessons at seven and recently decided to prepare for a graded exam after a long break from formal study. Her teachers are encouraging, yet she often feels intimidated when classmates perform fluently from memory. To balance exam requirements with enjoyment, she sets aside twenty minutes each morning for scales and spends longer weekend sessions on pieces she chooses herself. Priya appreciates the structure exams provide, though she worries that focusing on assessment criteria may narrow her repertoire. Meanwhile, she has started accompanying a local choir, an experience that has taught her to adapt when singers change tempo. She hopes the qualification will confirm progress she can already hear, even if performance nerves remain. Her parents attend recitals whenever they can, which helps her feel less alone on stage."
       },
       {
         "letter": "D",
-        "name": "Liam Robinson",
-        "text": "Liam's journey from accountant to interior designer might seem unusual, but for him it was a natural progression. Always passionate about aesthetics and design, he took the bold step of switching careers after ten years in finance. Liam initially worried about the financial implications of starting again in a competitive field, but he ultimately found a niche for himself, blending his analytical skills with creative design. He appreciates how his new career allows him to see the tangible results of his work, transforming rooms and offices to meet clients' needs. Former colleagues sometimes tease him about the change, yet he feels he is finally doing what suits him best."
+        "name": "Jonas Lindholm",
+        "text": "Jonas taught himself guitar using online platforms after a friend lent him an inexpensive instrument. Without a fixed teacher, he progressed unevenly: chord changes came quickly, but theory remained confusing until he discovered a structured video series. He enjoys composing short pieces more than reproducing famous songs, and he records ideas on his phone during commutes. Although he considered joining a class, he prefers learning at his own pace and revisiting difficult sections without embarrassment. Jonas occasionally compares his progress with professional musicians online, which can be discouraging; however, he reminds himself that he plays primarily for relaxation. Recently he uploaded a collaboration with a singer he met through a forum, a step that surprised friends who knew him as reserved."
       }
     ],
     "questions": [
       {
-        "number": 37,
-        "prompt": "was concerned about the cost of starting again in a competitive field?"
-      },
-      {
-        "number": 38,
-        "prompt": "enjoys seeing a clear physical result from their work?"
-      },
-      {
-        "number": 39,
-        "prompt": "completed training for the new profession while continuing their old job?"
-      },
-      {
-        "number": 40,
-        "prompt": "was warned by people at work that the change could be risky?"
-      },
-      {
-        "number": 41,
-        "prompt": "appreciates not being tied to one workplace or fixed timetable?"
-      },
-      {
-        "number": 42,
-        "prompt": "prefers a practical, physically active job to working at a desk?"
-      },
-      {
+        "id": "q43",
         "number": 43,
-        "prompt": "uses experience from a previous technical career to explain things clearly?"
+        "type": "matching",
+        "prompt": "Who took up an instrument again after leaving it aside for many years?"
       },
       {
+        "id": "q44",
         "number": 44,
-        "prompt": "feels rewarded when other people understand difficult ideas?"
+        "type": "matching",
+        "prompt": "Who depends most on self-directed online material rather than a regular teacher?"
       },
       {
+        "id": "q45",
         "number": 45,
-        "prompt": "accepts tiring working conditions because the work feels more personally meaningful?"
+        "type": "matching",
+        "prompt": "Who is working towards a formal qualification in their instrument?"
       },
       {
+        "id": "q46",
         "number": 46,
-        "prompt": "combines analytical ability from a previous job with creative work?"
+        "type": "matching",
+        "prompt": "Who still feels uneasy about playing when others are listening?"
+      },
+      {
+        "id": "q47",
+        "number": 47,
+        "type": "matching",
+        "prompt": "Who highlights the bodily aspect of making music?"
+      },
+      {
+        "id": "q48",
+        "number": 48,
+        "type": "matching",
+        "prompt": "Who was reminded of the instrument through a family member's playing?"
+      },
+      {
+        "id": "q49",
+        "number": 49,
+        "type": "matching",
+        "prompt": "Who is especially motivated by practising alongside other musicians?"
+      },
+      {
+        "id": "q50",
+        "number": 50,
+        "type": "matching",
+        "prompt": "Who tries to combine structured requirements with pieces chosen for pleasure?"
+      },
+      {
+        "id": "q51",
+        "number": 51,
+        "type": "matching",
+        "prompt": "Who is more interested in writing original music than copying existing works?"
+      },
+      {
+        "id": "q52",
+        "number": 52,
+        "type": "matching",
+        "prompt": "Who describes learning mainly as a way to recover confidence after pressure at work?"
       }
     ],
     "modelAnswers": [
       {
-        "id": 37,
-        "answer": "D"
-      },
-      {
-        "id": 38,
-        "answer": "D"
-      },
-      {
-        "id": 39,
+        "id": "q43",
+        "number": 43,
         "answer": "B"
       },
       {
-        "id": 40,
-        "answer": "A"
+        "id": "q44",
+        "number": 44,
+        "answer": "D"
       },
       {
-        "id": 41,
-        "answer": "A"
-      },
-      {
-        "id": 42,
+        "id": "q45",
+        "number": 45,
         "answer": "C"
       },
       {
-        "id": 43,
+        "id": "q46",
+        "number": 46,
+        "answer": "A"
+      },
+      {
+        "id": "q47",
+        "number": 47,
         "answer": "B"
       },
       {
-        "id": 44,
+        "id": "q48",
+        "number": 48,
+        "answer": "A"
+      },
+      {
+        "id": "q49",
+        "number": 49,
         "answer": "B"
       },
       {
-        "id": 45,
+        "id": "q50",
+        "number": 50,
         "answer": "C"
       },
       {
-        "id": 46,
+        "id": "q51",
+        "number": 51,
         "answer": "D"
+      },
+      {
+        "id": "q52",
+        "number": 52,
+        "answer": "A"
       }
-    ],
-    "sentencePool": [],
-    "optionPool": [],
-    "matchingAnswers": [],
-    "speakingPrompts": [],
-    "bulletPoints": [],
-    "partNumber": 7,
-    "discussionQuestions": [],
-    "collaborativePrompts": []
+    ]
   },
   "validation": {
     "ok": true,
     "errors": [],
-    "warnings": []
+    "warnings": [
+      "Part 7 question 46: may be solvable by keyword matching in section A.",
+      "Part 7 question 48: may be solvable by keyword matching in section B."
+    ],
+    "normalized": {
+      "partTitle": "Reading and Use of English Part 7",
+      "directions": "You are going to read four short texts about people learning a musical instrument. For questions 43–52, choose from the people A–D. The people may be chosen more than once.",
+      "matchingIntro": "Which person (A–D) …? The people may be chosen more than once.",
+      "sections": [
+        {
+          "letter": "A",
+          "name": "Nora Chen",
+          "text": "Until last year, Nora's evenings were dominated by project deadlines in a busy design studio. Although she had loved listening to her mother practise the violin as a child, she had never believed she had time to learn. When a colleague suggested they attend a community class together, Nora agreed mainly because she hoped it would help her unwind after stressful weeks. Initially she found reading notation painfully slow, yet she persisted because each small improvement felt tangible. She still becomes anxious before playing in front of others, even at informal gatherings, and prefers practising alone in her kitchen before she feels ready to join the group. Looking back, she says the instrument has become a way of rebuilding confidence rather than proving talent."
+        },
+        {
+          "letter": "B",
+          "name": "Rafael Ortiz",
+          "text": "Rafael played drums in a school band, but after leaving university he sold his kit and focused on office work. A decade later, hearing a live jazz set reminded him how much he missed the physical rhythm of playing. He bought a second-hand kit and joined an evening ensemble, discovering that rehearsing with other musicians motivated him far more than solitary practice ever had. Although he occasionally watches tutorial videos when a passage is tricky, he relies mainly on the conductor's feedback. Rafael admits that fitting rehearsals around family life is demanding; nevertheless, he values the discipline of arriving prepared each week. Since returning to drumming, he has noticed he listens more attentively to subtle details in everyday sounds. He now encourages his daughter to try percussion at school, though he insists she should choose her own instrument."
+        },
+        {
+          "letter": "C",
+          "name": "Priya Kapoor",
+          "text": "Priya began piano lessons at seven and recently decided to prepare for a graded exam after a long break from formal study. Her teachers are encouraging, yet she often feels intimidated when classmates perform fluently from memory. To balance exam requirements with enjoyment, she sets aside twenty minutes each morning for scales and spends longer weekend sessions on pieces she chooses herself. Priya appreciates the structure exams provide, though she worries that focusing on assessment criteria may narrow her repertoire. Meanwhile, she has started accompanying a local choir, an experience that has taught her to adapt when singers change tempo. She hopes the qualification will confirm progress she can already hear, even if performance nerves remain. Her parents attend recitals whenever they can, which helps her feel less alone on stage."
+        },
+        {
+          "letter": "D",
+          "name": "Jonas Lindholm",
+          "text": "Jonas taught himself guitar using online platforms after a friend lent him an inexpensive instrument. Without a fixed teacher, he progressed unevenly: chord changes came quickly, but theory remained confusing until he discovered a structured video series. He enjoys composing short pieces more than reproducing famous songs, and he records ideas on his phone during commutes. Although he considered joining a class, he prefers learning at his own pace and revisiting difficult sections without embarrassment. Jonas occasionally compares his progress with professional musicians online, which can be discouraging; however, he reminds himself that he plays primarily for relaxation. Recently he uploaded a collaboration with a singer he met through a forum, a step that surprised friends who knew him as reserved."
+        }
+      ],
+      "questions": [
+        {
+          "id": "q43",
+          "number": 43,
+          "type": "matching",
+          "prompt": "Who took up an instrument again after leaving it aside for many years?"
+        },
+        {
+          "id": "q44",
+          "number": 44,
+          "type": "matching",
+          "prompt": "Who depends most on self-directed online material rather than a regular teacher?"
+        },
+        {
+          "id": "q45",
+          "number": 45,
+          "type": "matching",
+          "prompt": "Who is working towards a formal qualification in their instrument?"
+        },
+        {
+          "id": "q46",
+          "number": 46,
+          "type": "matching",
+          "prompt": "Who still feels uneasy about playing when others are listening?"
+        },
+        {
+          "id": "q47",
+          "number": 47,
+          "type": "matching",
+          "prompt": "Who highlights the bodily aspect of making music?"
+        },
+        {
+          "id": "q48",
+          "number": 48,
+          "type": "matching",
+          "prompt": "Who was reminded of the instrument through a family member's playing?"
+        },
+        {
+          "id": "q49",
+          "number": 49,
+          "type": "matching",
+          "prompt": "Who is especially motivated by practising alongside other musicians?"
+        },
+        {
+          "id": "q50",
+          "number": 50,
+          "type": "matching",
+          "prompt": "Who tries to combine structured requirements with pieces chosen for pleasure?"
+        },
+        {
+          "id": "q51",
+          "number": 51,
+          "type": "matching",
+          "prompt": "Who is more interested in writing original music than copying existing works?"
+        },
+        {
+          "id": "q52",
+          "number": 52,
+          "type": "matching",
+          "prompt": "Who describes learning mainly as a way to recover confidence after pressure at work?"
+        }
+      ],
+      "modelAnswers": [
+        {
+          "id": "q43",
+          "number": 43,
+          "answer": "B"
+        },
+        {
+          "id": "q44",
+          "number": 44,
+          "answer": "D"
+        },
+        {
+          "id": "q45",
+          "number": 45,
+          "answer": "C"
+        },
+        {
+          "id": "q46",
+          "number": 46,
+          "answer": "A"
+        },
+        {
+          "id": "q47",
+          "number": 47,
+          "answer": "B"
+        },
+        {
+          "id": "q48",
+          "number": 48,
+          "answer": "A"
+        },
+        {
+          "id": "q49",
+          "number": 49,
+          "answer": "B"
+        },
+        {
+          "id": "q50",
+          "number": 50,
+          "answer": "C"
+        },
+        {
+          "id": "q51",
+          "number": 51,
+          "answer": "D"
+        },
+        {
+          "id": "q52",
+          "number": 52,
+          "answer": "A"
+        }
+      ],
+      "bulletPoints": [],
+      "speakingPrompts": [],
+      "discussionQuestions": [],
+      "collaborativePrompts": [],
+      "sentencePool": [],
+      "optionPool": [],
+      "matchingAnswers": [],
+      "audioClips": [],
+      "partNumber": 7
+    }
   }
 }

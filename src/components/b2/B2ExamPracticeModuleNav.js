@@ -138,7 +138,7 @@ export default function B2ExamPracticeModuleNav({
     if (skillExerciseNav?.nextAction === 'part') {
       continueLabel = isEn ? 'Next part' : 'Siguiente parte';
     } else {
-      continueLabel = isEn ? 'Next exercise' : 'Siguiente ejercicio';
+      continueLabel = isEn ? 'Next test' : 'Siguiente test';
     }
   } else if (nav.continueMode === 'in-page' && nav.nextPartNumber) {
     continueLabel = nextPartLabel
@@ -159,7 +159,7 @@ export default function B2ExamPracticeModuleNav({
   }
 
   const showPreviousExercise = effectiveSkillPractice && typeof onSelectExamSlot === 'function';
-  const previousExerciseLabel = isEn ? 'Previous exercise' : 'Volver al ejercicio anterior';
+  const previousExerciseLabel = isEn ? 'Previous test' : 'Test anterior';
   const canGoPreviousExercise = skillExerciseNav?.canGoPrevious ?? false;
   const showNextExerciseHint =
     effectiveSkillPractice &&
@@ -167,11 +167,11 @@ export default function B2ExamPracticeModuleNav({
     !skillExerciseNav?.canGoNext;
   const nextExerciseHint = showNextExerciseHint
     ? isEn
-      ? `Get at least 1 star on this exercise to unlock ${formatSkillExerciseLabel(
+      ? `Get at least 1 star on this test to unlock ${formatSkillExerciseLabel(
           skillExerciseNav.pendingNextSlot,
           'en',
         )}.`
-      : `Consigue al menos 1 estrella en este ejercicio para desbloquear ${formatSkillExerciseLabel(
+      : `Consigue al menos 1 estrella en este test para desbloquear ${formatSkillExerciseLabel(
           skillExerciseNav.pendingNextSlot,
           'es',
         )}.`

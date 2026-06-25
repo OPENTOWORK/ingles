@@ -3,6 +3,8 @@
 import { useMemo, useState } from 'react';
 import Link from 'next/link';
 import { CONTACT_FAQ_ITEMS, CONTACT_FAQ_TOPIC_ORDER } from '@/data/contactFaq';
+import { useUserRole } from '@/context/UserRoleContext';
+import { canViewPlacementAndTraining } from '@/config/appNavMenu';
 
 function FaqItem({ item, open, onToggle }) {
   const panelId = `faq-${item.id}`;
@@ -41,21 +43,29 @@ export default function ContactFaqSection({
   supportTicketHref = '#support-ticket-form',
   supportTicketHint = 'above',
 }) {
+  const { userRole } = useUserRole();
   const [activeTopic, setActiveTopic] = useState('All');
-  const [openId, setOpenId] = useState(CONTACT_FAQ_ITEMS[0]?.id ?? null);
+  const faqItems = useMemo(
+    () =>
+      canViewPlacementAndTraining(userRole)
+        ? CONTACT_FAQ_ITEMS
+        : CONTACT_FAQ_ITEMS.filter((item) => item.id !== 'platform-placement'),
+    [userRole],
+  );
+  const [openId, setOpenId] = useState(faqItems[0]?.id ?? null);
 
   const filtered = useMemo(() => {
-    if (activeTopic === 'All') return CONTACT_FAQ_ITEMS;
-    return CONTACT_FAQ_ITEMS.filter((item) => item.topic === activeTopic);
-  }, [activeTopic]);
+    if (activeTopic === 'All') return faqItems;
+    return faqItems.filter((item) => item.topic === activeTopic);
+  }, [activeTopic, faqItems]);
 
   const topicCounts = useMemo(() => {
-    const counts = { All: CONTACT_FAQ_ITEMS.length };
-    for (const item of CONTACT_FAQ_ITEMS) {
+    const counts = { All: faqItems.length };
+    for (const item of faqItems) {
       counts[item.topic] = (counts[item.topic] || 0) + 1;
     }
     return counts;
-  }, []);
+  }, [faqItems]);
 
   return (
     <section className="contact-section contact-section--faq">

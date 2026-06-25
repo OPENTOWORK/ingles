@@ -14,149 +14,169 @@
       "activity": "multiple-choice-cloze",
       "items": [
         {
-          "preguntaId": "539220ad-e7ad-40ef-8303-f0c0712485a0",
+          "preguntaId": "c974c705-aa79-4f61-a00d-5eaa223bcc6a",
           "parteNombre": "Parte 1 B2",
           "descripcionParte": "Part 1: Multiple Choice Cloze\r\nFor questions 1–8, read the text below and decide which answer (A, B, C or D) best fits each gap. There is an example at the beginning (0).\r\n\r\nExample:\r\n0 I decided to ..... a break after working for several hours.\r\nA make\r\nB do\r\nC take\r\nD get\r\nAnswer: C",
-          "enunciado": "Text\nLearning Beyond the Classroom\nMany students discover that some of the most valuable skills are acquired (0) ___ formal education alone. While schools provide a solid foundation, practical experience often plays an equally important role. For instance, teenagers who volunteer in community kitchens quickly learn to work under pressure and stay calm when things suddenly (1) ___.\nEmployers increasingly say they look for candidates who can (2) ___ to new situations rather than simply repeat textbook answers. Workshops that teach basic repair skills, coding or first aid allow learners to (3) ___ theory into practice in a hands-on way.\nTeachers who organise short projects outside school notice that reluctant students sometimes (4) ___ more confidence when tasks feel relevant to real life. Parents may worry that such activities will (5) ___ with exam preparation, yet research suggests the opposite can be true: engaged learners often return to their studies with renewed focus.\nUltimately, education is not limited to classrooms. Those who seize opportunities to learn in different settings may find they (6) ___ useful habits that last well beyond their school years. The challenge for schools is to (7) ___ a balance between academic requirements and experiences that build confidence in everyday life.\nQuestions\n\n1\nA turn up\nB go wrong\nC fall behind\nD wear off\n\n2\nA rely\nB object\nC apply\nD adapt\n\n3\nA put\nB bring\nC take\nD set\n\n4\nA reach\nB earn\nC gain\nD collect\n\n5\nA agree\nB interfere\nC keep up\nD call off\n\n6\nA catch\nB collect\nC receive\nD develop\n\n7\nA reach\nB draw\nC strike\nD make",
+          "enunciado": "Text\nThe Wonders of Marine Life\nThe ocean has always held a great (0) ___ for scientists and enthusiasts alike. Its vast and mysterious nature has prompted numerous expeditions and studies to (1) ___ a deeper understanding of what lies beneath its surface. Marine biology, a field dedicated to the study of oceanic life, has (2) ___ significant advancements over the years. Researchers are particularly interested in coral reefs, which are often referred to as the 'rainforests of the sea' because of their (3) ___ biodiversity. These reefs not only support a wide variety of marine species but also (4) ___ crucial protection for coastlines against erosion and storms. However, climate change poses a serious threat to these ecosystems. Rising sea temperatures and ocean acidification are (5) ___ coral bleaching, a phenomenon that weakens reefs and reduces their ability to (6) ___ marine life. Conservationists and scientists are working tirelessly to (7) ___ awareness about the importance of preserving these natural wonders. Through education and responsible practices, they hope to (8) ___ the future of our oceans.\nQuestions\n\n1\nA hold\nB gain\nC reach\nD seek\n\n2\nA achieved\nB made\nC done\nD created\n\n3\nA wide\nB rich\nC vast\nD full\n\n4\nA offer\nB provide\nC bring\nD deliver\n\n5\nA causing\nB leading\nC resulting\nD giving\n\n6\nA accommodate\nB sustain\nC hold\nD carry\n\n7\nA increase\nB raise\nC lift\nD boost\n\n8\nA assure\nB ensure\nC confirm\nD secure",
           "respuestasMcq": [
             {
-              "pregunta_id": "539220ad-e7ad-40ef-8303-f0c0712485a0",
-              "respuesta": "1 A) turn up",
+              "pregunta_id": "c974c705-aa79-4f61-a00d-5eaa223bcc6a",
+              "respuesta": "1 A) hold",
               "correcta": false
             },
             {
-              "pregunta_id": "539220ad-e7ad-40ef-8303-f0c0712485a0",
-              "respuesta": "1 B) go wrong",
+              "pregunta_id": "c974c705-aa79-4f61-a00d-5eaa223bcc6a",
+              "respuesta": "1 B) gain",
               "correcta": true
             },
             {
-              "pregunta_id": "539220ad-e7ad-40ef-8303-f0c0712485a0",
-              "respuesta": "1 C) fall behind",
+              "pregunta_id": "c974c705-aa79-4f61-a00d-5eaa223bcc6a",
+              "respuesta": "1 C) reach",
               "correcta": false
             },
             {
-              "pregunta_id": "539220ad-e7ad-40ef-8303-f0c0712485a0",
-              "respuesta": "1 D) wear off",
+              "pregunta_id": "c974c705-aa79-4f61-a00d-5eaa223bcc6a",
+              "respuesta": "1 D) seek",
               "correcta": false
             },
             {
-              "pregunta_id": "539220ad-e7ad-40ef-8303-f0c0712485a0",
-              "respuesta": "2 A) rely",
-              "correcta": false
-            },
-            {
-              "pregunta_id": "539220ad-e7ad-40ef-8303-f0c0712485a0",
-              "respuesta": "2 B) object",
-              "correcta": false
-            },
-            {
-              "pregunta_id": "539220ad-e7ad-40ef-8303-f0c0712485a0",
-              "respuesta": "2 C) apply",
-              "correcta": false
-            },
-            {
-              "pregunta_id": "539220ad-e7ad-40ef-8303-f0c0712485a0",
-              "respuesta": "2 D) adapt",
+              "pregunta_id": "c974c705-aa79-4f61-a00d-5eaa223bcc6a",
+              "respuesta": "2 A) achieved",
               "correcta": true
             },
             {
-              "pregunta_id": "539220ad-e7ad-40ef-8303-f0c0712485a0",
-              "respuesta": "3 A) put",
+              "pregunta_id": "c974c705-aa79-4f61-a00d-5eaa223bcc6a",
+              "respuesta": "2 B) made",
+              "correcta": false
+            },
+            {
+              "pregunta_id": "c974c705-aa79-4f61-a00d-5eaa223bcc6a",
+              "respuesta": "2 C) done",
+              "correcta": false
+            },
+            {
+              "pregunta_id": "c974c705-aa79-4f61-a00d-5eaa223bcc6a",
+              "respuesta": "2 D) created",
+              "correcta": false
+            },
+            {
+              "pregunta_id": "c974c705-aa79-4f61-a00d-5eaa223bcc6a",
+              "respuesta": "3 A) wide",
+              "correcta": false
+            },
+            {
+              "pregunta_id": "c974c705-aa79-4f61-a00d-5eaa223bcc6a",
+              "respuesta": "3 B) rich",
               "correcta": true
             },
             {
-              "pregunta_id": "539220ad-e7ad-40ef-8303-f0c0712485a0",
-              "respuesta": "3 B) bring",
+              "pregunta_id": "c974c705-aa79-4f61-a00d-5eaa223bcc6a",
+              "respuesta": "3 C) vast",
               "correcta": false
             },
             {
-              "pregunta_id": "539220ad-e7ad-40ef-8303-f0c0712485a0",
-              "respuesta": "3 C) take",
+              "pregunta_id": "c974c705-aa79-4f61-a00d-5eaa223bcc6a",
+              "respuesta": "3 D) full",
               "correcta": false
             },
             {
-              "pregunta_id": "539220ad-e7ad-40ef-8303-f0c0712485a0",
-              "respuesta": "3 D) set",
+              "pregunta_id": "c974c705-aa79-4f61-a00d-5eaa223bcc6a",
+              "respuesta": "4 A) offer",
               "correcta": false
             },
             {
-              "pregunta_id": "539220ad-e7ad-40ef-8303-f0c0712485a0",
-              "respuesta": "4 A) reach",
-              "correcta": false
-            },
-            {
-              "pregunta_id": "539220ad-e7ad-40ef-8303-f0c0712485a0",
-              "respuesta": "4 B) earn",
-              "correcta": false
-            },
-            {
-              "pregunta_id": "539220ad-e7ad-40ef-8303-f0c0712485a0",
-              "respuesta": "4 C) gain",
+              "pregunta_id": "c974c705-aa79-4f61-a00d-5eaa223bcc6a",
+              "respuesta": "4 B) provide",
               "correcta": true
             },
             {
-              "pregunta_id": "539220ad-e7ad-40ef-8303-f0c0712485a0",
-              "respuesta": "4 D) collect",
+              "pregunta_id": "c974c705-aa79-4f61-a00d-5eaa223bcc6a",
+              "respuesta": "4 C) bring",
               "correcta": false
             },
             {
-              "pregunta_id": "539220ad-e7ad-40ef-8303-f0c0712485a0",
-              "respuesta": "5 A) agree",
+              "pregunta_id": "c974c705-aa79-4f61-a00d-5eaa223bcc6a",
+              "respuesta": "4 D) deliver",
               "correcta": false
             },
             {
-              "pregunta_id": "539220ad-e7ad-40ef-8303-f0c0712485a0",
-              "respuesta": "5 B) interfere",
+              "pregunta_id": "c974c705-aa79-4f61-a00d-5eaa223bcc6a",
+              "respuesta": "5 A) causing",
               "correcta": true
             },
             {
-              "pregunta_id": "539220ad-e7ad-40ef-8303-f0c0712485a0",
-              "respuesta": "5 C) keep up",
+              "pregunta_id": "c974c705-aa79-4f61-a00d-5eaa223bcc6a",
+              "respuesta": "5 B) leading",
               "correcta": false
             },
             {
-              "pregunta_id": "539220ad-e7ad-40ef-8303-f0c0712485a0",
-              "respuesta": "5 D) call off",
+              "pregunta_id": "c974c705-aa79-4f61-a00d-5eaa223bcc6a",
+              "respuesta": "5 C) resulting",
               "correcta": false
             },
             {
-              "pregunta_id": "539220ad-e7ad-40ef-8303-f0c0712485a0",
-              "respuesta": "6 A) catch",
+              "pregunta_id": "c974c705-aa79-4f61-a00d-5eaa223bcc6a",
+              "respuesta": "5 D) giving",
               "correcta": false
             },
             {
-              "pregunta_id": "539220ad-e7ad-40ef-8303-f0c0712485a0",
-              "respuesta": "6 B) collect",
+              "pregunta_id": "c974c705-aa79-4f61-a00d-5eaa223bcc6a",
+              "respuesta": "6 A) accommodate",
               "correcta": false
             },
             {
-              "pregunta_id": "539220ad-e7ad-40ef-8303-f0c0712485a0",
-              "respuesta": "6 C) receive",
-              "correcta": false
-            },
-            {
-              "pregunta_id": "539220ad-e7ad-40ef-8303-f0c0712485a0",
-              "respuesta": "6 D) develop",
+              "pregunta_id": "c974c705-aa79-4f61-a00d-5eaa223bcc6a",
+              "respuesta": "6 B) sustain",
               "correcta": true
             },
             {
-              "pregunta_id": "539220ad-e7ad-40ef-8303-f0c0712485a0",
-              "respuesta": "7 A) reach",
+              "pregunta_id": "c974c705-aa79-4f61-a00d-5eaa223bcc6a",
+              "respuesta": "6 C) hold",
               "correcta": false
             },
             {
-              "pregunta_id": "539220ad-e7ad-40ef-8303-f0c0712485a0",
-              "respuesta": "7 B) draw",
+              "pregunta_id": "c974c705-aa79-4f61-a00d-5eaa223bcc6a",
+              "respuesta": "6 D) carry",
               "correcta": false
             },
             {
-              "pregunta_id": "539220ad-e7ad-40ef-8303-f0c0712485a0",
-              "respuesta": "7 C) strike",
+              "pregunta_id": "c974c705-aa79-4f61-a00d-5eaa223bcc6a",
+              "respuesta": "7 A) increase",
+              "correcta": false
+            },
+            {
+              "pregunta_id": "c974c705-aa79-4f61-a00d-5eaa223bcc6a",
+              "respuesta": "7 B) raise",
               "correcta": true
             },
             {
-              "pregunta_id": "539220ad-e7ad-40ef-8303-f0c0712485a0",
-              "respuesta": "7 D) make",
+              "pregunta_id": "c974c705-aa79-4f61-a00d-5eaa223bcc6a",
+              "respuesta": "7 C) lift",
+              "correcta": false
+            },
+            {
+              "pregunta_id": "c974c705-aa79-4f61-a00d-5eaa223bcc6a",
+              "respuesta": "7 D) boost",
+              "correcta": false
+            },
+            {
+              "pregunta_id": "c974c705-aa79-4f61-a00d-5eaa223bcc6a",
+              "respuesta": "8 A) assure",
+              "correcta": false
+            },
+            {
+              "pregunta_id": "c974c705-aa79-4f61-a00d-5eaa223bcc6a",
+              "respuesta": "8 B) ensure",
+              "correcta": true
+            },
+            {
+              "pregunta_id": "c974c705-aa79-4f61-a00d-5eaa223bcc6a",
+              "respuesta": "8 C) confirm",
+              "correcta": false
+            },
+            {
+              "pregunta_id": "c974c705-aa79-4f61-a00d-5eaa223bcc6a",
+              "respuesta": "8 D) secure",
               "correcta": false
             }
           ],
@@ -171,20 +191,20 @@
       "activity": "open-cloze",
       "items": [
         {
-          "preguntaId": "92e78894-9f7a-4864-ba74-2a6da9ac75e0",
+          "preguntaId": "2df1f5d5-b5ac-48bd-8636-b13829a51cb8",
           "parteNombre": "Parte 2 B2",
-          "descripcionParte": "Part 2: Open Cloze\nFor questions 9–16, read the text below and think of the word which best fits each gap. Use only ONE word in each gap. There is an example at the beginning (0).\n\nExample:\nShe lives in Madrid.\n0 → of\n",
-          "enunciado": "Text\nSlow Travel on Two Wheels\nMany people now prefer to explore a region (0) ___ bicycle rather than by car. Slow travel has become an appealing alternative (9) ___ people who want to see more of a country than a guidebook cover suggests. Rather than rushing from one famous sight to (10) ___, cyclists often follow quieter roads through villages that receive few visitors. The pace may be slower, (11) ___ it allows riders to notice details they would otherwise miss.\nOne challenge is planning a route that feels safe enough, especially (12) ___ riders are unfamiliar with local traffic rules. Even so, many find that the effort is worthwhile because they connect with places in a way that is rarely possible (13) ___ inside a car. Hosts in small guesthouses frequently say they appreciate visitors (14) ___ arrive on foot or by bike, as they tend to stay longer and spend locally.\nOf course, long-distance cycling is not for everyone, and there is no need to feel guilty (15) ___ you prefer comfort. Nevertheless, those who do try it often report that the experience teaches them patience, and (16) ___ they return home, they remember the journey as clearly as the destinations.",
+          "descripcionParte": "Part 2: Open Cloze\r\nFor questions 9–16, read the text and think of the word which best fits each gap. Use only one word in each gap. There is an example at the beginning.\r\n",
+          "enunciado": "Example:\nShe is fond (0) ___ travelling by train.\nAnswer: 0 → of\nText\nThe Impact of Technology on City Living\nIn recent years, the role of technology in urban life has become increasingly significant. One (9) ___ the most notable changes is the way people communicate. Smartphones and social media have transformed how we keep (10) ___ touch with friends and family. Another significant change is (11) ___ public transportation systems, which have become more efficient due to technological advancements. Cities that (12) ___ introduced smart grids have improved their energy efficiency, reducing both costs and emissions. However, (13) ___ is a challenge to ensure that technology is accessible to everyone, regardless (14) ___ their income or background. Urban planners must focus (15) ___ creating inclusive spaces where all residents can benefit from technological innovations. While technology can improve quality of life, it is important (16) ___ balance its use with traditional methods to maintain a sustainable environment.",
           "respuestasMcq": [],
           "respuestasAbiertas": [
-            "9 for",
-            "10 another",
-            "11 but",
-            "12 when",
-            "13 from",
-            "14 who",
-            "15 if",
-            "16 once"
+            "9 of",
+            "10 in",
+            "11 that",
+            "12 have",
+            "13 there",
+            "14 of",
+            "15 on",
+            "16 to"
           ],
           "audios": []
         }
@@ -196,7 +216,7 @@
       "activity": "word-formation",
       "items": [
         {
-          "preguntaId": "5756a847-883c-490c-879c-a22542d21b9b",
+          "preguntaId": "144ab56f-5f6a-447f-b398-3dbc3899100e",
           "parteNombre": "Parte 3 B2",
           "descripcionParte": "Part 3: Word Formation\r\nFor questions 17–24, read the text below. Use the word given in capitals at the end of some of the lines to form a word that fits in the gap in the same line. There is an example at the beginning (0).\r\n\r\nExample:\r\nWe should protect ..... to ensure a healthy planet for future generations.\r\n0 → natural (NATURE)\r\n\r\n",
           "enunciado": "Text\nSport, Parks and Wellbeing\nMany city councils now recognise that access to (0) ___ (NATURE) spaces can improve residents' quality of life. As a result, they are investing in (17) ___ (ENVIRONMENT) initiatives that combine outdoor sport with the protection of local wildlife. Regular exercise helps people maintain a (18) ___ (HEALTH) routine, even when work schedules are demanding.\nCommunity centres encourage residents to participate (19) ___ (ACTIVE) in local sessions such as running groups, yoga classes and team games. Coaches explain that moderate training can (20) ___ (STRENGTH) muscles without placing unnecessary strain on beginners. For many participants, the main reward is not medals but a sense of (21) ___ (RELAX) after a busy week.\n(22) ___ (SUCCESS) programmes depend on volunteers who share (23) ___ (RESPONSIBLE) for organising events and keeping equipment in good condition. Critics worry that sport can become overly (24) ___ (COMPETE), yet most local clubs emphasise enjoyment and social contact rather than winning at all costs.",
@@ -221,10 +241,10 @@
       "activity": "key-word",
       "items": [
         {
-          "preguntaId": "69745500-0f2f-4f50-b510-2b307c4a5b98",
+          "preguntaId": "4abc080d-ff9c-4112-b96e-025791d59416",
           "parteNombre": "Parte 4 B2",
           "descripcionParte": "Part 4: Key Word Transformations\r\nFor questions 25–30, complete the second sentence so that it has a similar meaning to the first sentence, using the word given. Do not change the word given. You must use between two and five words, including the word given. There is an example at the beginning (0).\r\n\r\nExample:\r\n0\r\nI last saw him two years ago.\r\nseen\r\nI haven’t __________________ him for two years.\r\nAnswer: seen\r\n\r\n",
-          "enunciado": "For questions 25–30, complete the second sentence so that it has a similar meaning to the first sentence, using the word given. Do not change the word given. You must use between two and five words, including the word given.\nQuestions\n25\nNot many people find it easy to adjust to life in a big city.\nHARDLY\n____________________ it easy to adjust to life in a big city.\n\n26\nThe city has introduced new laws to reduce pollution.\nBY\nPollution is being reduced ____________________ new laws.\n\n27\nShe regrets not moving to the city when she had the chance.\nWISHES\nShe ____________________ to the city when she had the chance.\n\n28\nThere aren't as many public parks in this city as in my hometown.\nFEWER\nThis city has ____________________ my hometown.\n\n29\nIt isn't necessary to use a smartphone for this task.\nNEED\nYou ____________________ a smartphone for this task.\n\n30\nEven though the subway is crowded, it is still the fastest way to travel.\nSPITE\nIn ____________________ crowded, it is still the fastest way to travel.",
+          "enunciado": "For questions 25–30, complete the second sentence so that it has a similar meaning to the first sentence, using the word given. Do not change the word given. You must use between two and five words, including the word given. There is an example at the beginning (0).\nExample:\n0. I last saw him two years ago.\nseen\nI haven't __________________ him for two years.\nAnswer: haven't seen\nQuestions\n25. Not many people find it easy to adjust to life in a big city.\nHARDLY\n____________________ it easy to adjust to life in a big city.\n\n26. The city has introduced new laws to reduce pollution.\nBY\nPollution is being reduced ____________________ new laws.\n\n27. She regrets not moving to the city when she had the chance.\nWISHES\nShe ____________________ to the city when she had the chance.\n\n28. There aren't as many public parks in this city as in my hometown.\nFEWER\nThis city has ____________________ my hometown.\n\n29. It isn't necessary to use a smartphone for this task.\nNEED\nYou ____________________ a smartphone for this task.\n\n30. Even though the subway is crowded, it is still the fastest way to travel.\nSPITE\nIn ____________________ crowded, it is still the fastest way to travel.",
           "respuestasMcq": [],
           "respuestasAbiertas": [
             "25 Hardly anyone finds",
@@ -244,132 +264,141 @@
       "activity": "multiple-choice",
       "items": [
         {
-          "preguntaId": "da8bcb47-c6e7-495c-852a-3ffe7b848e41",
+          "preguntaId": "3c8a7acc-0f13-4c42-a397-595a86d30819",
           "parteNombre": "Parte 5 B2",
           "descripcionParte": "Part 5 – Multiple Choice\r\nYou are going to read a text about learning new skills. For questions 31–36, choose the answer (A, B, C or D) which you think fits best according to the text.\r\n",
-          "enunciado": "You are going to read a magazine article about unusual hobbies. For questions 31–36, choose the answer (A, B, C or D) which you think fits best according to the text.\nText\nBeyond the Mainstream: The Appeal of Unusual Hobbies\nIn an age when leisure time is often filled with predictable pursuits, a growing number of people are turning to hobbies that friends and colleagues find difficult to classify. What may look eccentric from the outside frequently turns out, for those who practise it, to be a carefully chosen counterbalance to routine work and digital distraction.\nOne example is competitive jigsaw puzzling, which has developed a serious following in several countries. Enthusiasts gather for timed events where teams race to complete complex images under strict rules. Outsiders sometimes assume the activity is purely relaxing, yet participants describe intense concentration and genuine pride when a difficult design finally fits together. For many, the appeal lies not in winning alone but in sharing a slow, tactile process that contrasts sharply with the instant feedback of screen-based entertainment.\nHistorical reenactment offers a different kind of escape. Men and women spend weekends recreating battles or domestic life from past centuries, investing considerable money in authentic costumes and equipment. Critics may question whether such devotion to the past is worthwhile, but reenactors argue that handling reproduction tools and learning forgotten skills gives them a vivid sense of how earlier generations lived. Several groups also visit schools, hoping to make history feel immediate rather than abstract.\nThen there are pursuits such as letterboxing and geocaching, in which participants follow clues to locate hidden containers in parks, towns or countryside. The hobby blends navigation, puzzle-solving and mild adventure, and it encourages exploration of places that walkers might otherwise ignore. Unlike some outdoor sports, it rarely demands exceptional fitness; instead, patience and curiosity matter more. Many participants say the greatest reward is discovering a quiet corner of their own region that they had never noticed before.\nWhat these activities share is not oddity for its own sake. People often choose them because mainstream options no longer feel stimulating, or because they want a hobby that reflects a particular identity. An office worker who restores vintage radios at night, for instance, may value the feeling of repairing something tangible in a job dominated by emails. Similarly, a teenager who collects and restores mechanical typewriters may enjoy the mechanical rhythm and the surprise of younger friends who have never seen one.\nUnusual hobbies can also create communities that cut across age and background. Clubs, festivals and online forums allow beginners to learn from experienced practitioners without facing the pressure of formal competition. The author of a recent survey noted that respondents rarely described their hobbies as attempts to impress others; instead, they emphasised personal challenge, creativity and the pleasure of belonging to a small group that understands a shared obsession.\nNone of this suggests that conventional pastimes are inferior. Yoga, team sports and cinema remain popular for good reason. Yet the spread of less familiar hobbies reminds us that leisure is deeply personal. What seems baffling at first glance may simply be someone's deliberate search for meaning, focus and connection in an otherwise hurried world.\n\nQuestions\n31. What does the writer suggest about many competitive jigsaw enthusiasts? A. They value a slow, hands-on activity that differs from instant digital entertainment. B. They take part mainly because timed events offer guaranteed prizes. C. They prefer working alone rather than sharing the experience with others. D. They treat the hobby as a simple way to relax after demanding work.\n32. How does the writer present historical reenactment? A. As a hobby that professional historians now recommend without reservation. B. As an activity that has become less appealing to younger participants. C. As a pursuit that depends mainly on expensive equipment rather than skill. D. As something critics doubt, although participants believe it has real value.\n33. According to the text, what makes letterboxing and geocaching distinctive? A. They require a level of fitness comparable to serious mountaineering. B. They reward patience and curiosity more than exceptional physical strength. C. They have declined in popularity since navigation technology became widespread. D. They are designed chiefly for people who already know an area extremely well.\n34. The examples of vintage radio restoration and typewriter collecting imply that unusual hobbies can A. remove the need for any challenging aspects of paid employment. B. help people recover quickly from long periods of professional stress. C. provide a tangible contrast to work that feels largely intangible. D. be understood immediately by colleagues without any explanation.\n35. What did the recent survey suggest about people's reasons for choosing unusual hobbies? A. They wanted mainly to impress people outside their hobby group. B. They valued personal challenge and belonging to a shared-interest community. C. They hoped their hobbies would soon become conventional mainstream activities. D. They were chiefly motivated by the prospect of turning the hobby into a career.\n36. Which statement best reflects the writer's overall attitude? A. Mainstream leisure activities are less worthwhile than unusual hobbies. B. People who choose unusual hobbies are largely rejecting modern society. C. Seemingly strange hobbies may reflect a deliberate search for focus and connection. D. Unusual hobbies are likely to disappear as conventional entertainment improves.",
+          "enunciado": "You are going to read an article about urban wildlife. For questions 31–36, choose the answer (A, B, C or D) which you think fits best according to the text.\nText\nWhen Cities Make Room for Wild Neighbours\nFor decades, urban planners treated wildlife as something that belonged elsewhere. Parks were manicured, rivers were channelled, and any fox or hawk appearing on a housing estate was treated as an amusing anomaly. Yet in the past fifteen years, a quieter shift has taken place. Biologists, architects and community groups have begun asking whether cities can function as habitats rather than obstacles — and whether residents might benefit from sharing space with species they once only saw on television.\nThe change is partly practical. As green belts shrink and commuting patterns alter where people live, many municipalities face rising temperatures and flash flooding. Strategically planted trees, pocket meadows and restored wetlands do not merely attract birds; they retain rainwater, filter air and reduce the need for expensive drainage upgrades. In Rotterdam, engineers have linked rooftop gardens with corridors of native planting so that pollinators can move across districts that would otherwise be deserts of concrete. Similar schemes in Bristol and Lyon were initially dismissed as cosmetic, yet monitoring has shown measurable increases in insect diversity within three seasons.\nNot every initiative succeeds, and the author of a recent municipal review cautions against treating biodiversity as a branding exercise. When councils install a single \"bee hotel\" beside a car park while continuing to spray pesticides on roadside verges, residents quickly notice the contradiction. Genuine progress, the review argues, depends on long-term maintenance budgets and staff training, not on one-off publicity events. Even so, several neighbourhoods that committed to five-year plans report that volunteers who joined planting days later became advocates for slower traffic and darker night lighting — issues they had not previously connected with ecology.\nPublic attitudes are more nuanced than headlines suggest. Some homeowners welcome hedgehogs under their sheds; others worry about litter from feeding stations or the legal implications if a protected species nests on their property. Apartment dwellers without gardens often feel excluded from discussions that assume everyone has a lawn to rewild. Community organisers in Manchester addressed this by converting unused garage plots into shared beds, with evening workshops explaining which plants support which insects. Attendance was highest among parents who wanted children to recognise species names, though a minority attended primarily because the sessions offered a social alternative to screen-based leisure.\nScientists emphasise that urban wildlife is not a nostalgic novelty. Species adapting to cities can evolve different behaviours within a few generations, providing living laboratories for research that would be impossible in remote reserves. One ornithologist interviewed for the article noted that city blackbirds sing at higher pitches to compete with traffic noise — a detail that illustrates how intimately human infrastructure shapes evolution. Meanwhile, epidemiologists monitor whether greater contact with animals increases certain health risks, reminding policymakers that coexistence requires data as well as enthusiasm. Several cities now publish annual biodiversity audits alongside budget statements, a practice the writer welcomes as a sign that ecology is being treated as infrastructure rather than ornament. Even sceptical councillors admit that residents increasingly ask for planting plans when new housing is proposed.\nThe writer concludes that the most promising projects share a modest ambition: they do not promise to return cities to pre-industrial wilderness, but to weave small, resilient patches of life through places dominated by pavement. Whether that satisfies romantic expectations is doubtful; whether it improves everyday urban experience may be easier to demonstrate.\n\nQuestions\n31. What can be inferred about early scepticism towards urban green corridors? A. Experts believed pollinators could not survive above street level. B. Critics assumed the schemes were mainly decorative rather than functional. C. Residents feared that any planting would attract dangerous predators. D. Architects refused to cooperate because of strict height regulations.\n32. The writer's attitude towards one-off publicity projects is best described as A. enthusiastic, because they raise awareness quickly. B. neutral, because outcomes depend on local leadership. C. sympathetic, because councils lack scientific expertise. D. critical, because they may mask a lack of sustained commitment.\n33. In the third paragraph, what does \"the contradiction\" refer to? A. Claiming to support wildlife while continuing harmful maintenance practices. B. Spending on drainage upgrades instead of community workshops. C. Encouraging volunteers but refusing to reduce traffic speed. D. Promoting rooftop gardens that cannot retain rainwater.\n34. What point is made about the Manchester workshops? A. They were designed exclusively for professional gardeners. B. They replaced all pesticide use within one season. C. They attracted some participants mainly for social reasons. D. They focused on legal advice for protected species.\n35. Why does the writer include the example of city blackbirds? A. To argue that traffic noise should be eliminated immediately. B. To show how urban infrastructure can directly influence animal behaviour. C. To prove that remote reserves are no longer necessary for research. D. To suggest that residents should avoid feeding birds near roads.\n36. Which statement best summarises the writer's overall view? A. Cities should aim to recreate untouched natural landscapes. B. Urban wildlife projects are doomed without national legislation. C. Small, well-maintained habitats may realistically improve city life. D. Public enthusiasm is the only factor that determines success.",
           "respuestasMcq": [
             {
-              "pregunta_id": "da8bcb47-c6e7-495c-852a-3ffe7b848e41",
-              "respuesta": "31 A) They value a slow, hands-on activity that differs from instant digital entertainment.",
+              "pregunta_id": "3c8a7acc-0f13-4c42-a397-595a86d30819",
+              "respuesta": "31 A) Experts believed pollinators could not survive above street level.",
+              "correcta": false
+            },
+            {
+              "pregunta_id": "3c8a7acc-0f13-4c42-a397-595a86d30819",
+              "respuesta": "31 B) Critics assumed the schemes were mainly decorative rather than functional.",
               "correcta": true
             },
             {
-              "pregunta_id": "da8bcb47-c6e7-495c-852a-3ffe7b848e41",
-              "respuesta": "31 B) They take part mainly because timed events offer guaranteed prizes.",
+              "pregunta_id": "3c8a7acc-0f13-4c42-a397-595a86d30819",
+              "respuesta": "31 C) Residents feared that any planting would attract dangerous predators.",
               "correcta": false
             },
             {
-              "pregunta_id": "da8bcb47-c6e7-495c-852a-3ffe7b848e41",
-              "respuesta": "31 C) They prefer working alone rather than sharing the experience with others.",
+              "pregunta_id": "3c8a7acc-0f13-4c42-a397-595a86d30819",
+              "respuesta": "31 D) Architects refused to cooperate because of strict height regulations.",
               "correcta": false
             },
             {
-              "pregunta_id": "da8bcb47-c6e7-495c-852a-3ffe7b848e41",
-              "respuesta": "31 D) They treat the hobby as a simple way to relax after demanding work.",
+              "pregunta_id": "3c8a7acc-0f13-4c42-a397-595a86d30819",
+              "respuesta": "32 A) enthusiastic, because they raise awareness quickly.",
               "correcta": false
             },
             {
-              "pregunta_id": "da8bcb47-c6e7-495c-852a-3ffe7b848e41",
-              "respuesta": "32 A) As a hobby that professional historians now recommend without reservation.",
+              "pregunta_id": "3c8a7acc-0f13-4c42-a397-595a86d30819",
+              "respuesta": "32 B) neutral, because outcomes depend on local leadership.",
               "correcta": false
             },
             {
-              "pregunta_id": "da8bcb47-c6e7-495c-852a-3ffe7b848e41",
-              "respuesta": "32 B) As an activity that has become less appealing to younger participants.",
+              "pregunta_id": "3c8a7acc-0f13-4c42-a397-595a86d30819",
+              "respuesta": "32 C) sympathetic, because councils lack scientific expertise.",
               "correcta": false
             },
             {
-              "pregunta_id": "da8bcb47-c6e7-495c-852a-3ffe7b848e41",
-              "respuesta": "32 C) As a pursuit that depends mainly on expensive equipment rather than skill.",
-              "correcta": false
-            },
-            {
-              "pregunta_id": "da8bcb47-c6e7-495c-852a-3ffe7b848e41",
-              "respuesta": "32 D) As something critics doubt, although participants believe it has real value.",
+              "pregunta_id": "3c8a7acc-0f13-4c42-a397-595a86d30819",
+              "respuesta": "32 D) critical, because they may mask a lack of sustained commitment.",
               "correcta": true
             },
             {
-              "pregunta_id": "da8bcb47-c6e7-495c-852a-3ffe7b848e41",
-              "respuesta": "33 A) They require a level of fitness comparable to serious mountaineering.",
-              "correcta": false
-            },
-            {
-              "pregunta_id": "da8bcb47-c6e7-495c-852a-3ffe7b848e41",
-              "respuesta": "33 B) They reward patience and curiosity more than exceptional physical strength.",
+              "pregunta_id": "3c8a7acc-0f13-4c42-a397-595a86d30819",
+              "respuesta": "33 A) Claiming to support wildlife while continuing harmful maintenance practices.",
               "correcta": true
             },
             {
-              "pregunta_id": "da8bcb47-c6e7-495c-852a-3ffe7b848e41",
-              "respuesta": "33 C) They have declined in popularity since navigation technology became widespread.",
+              "pregunta_id": "3c8a7acc-0f13-4c42-a397-595a86d30819",
+              "respuesta": "33 B) Spending on drainage upgrades instead of community workshops.",
               "correcta": false
             },
             {
-              "pregunta_id": "da8bcb47-c6e7-495c-852a-3ffe7b848e41",
-              "respuesta": "33 D) They are designed chiefly for people who already know an area extremely well.",
+              "pregunta_id": "3c8a7acc-0f13-4c42-a397-595a86d30819",
+              "respuesta": "33 C) Encouraging volunteers but refusing to reduce traffic speed.",
               "correcta": false
             },
             {
-              "pregunta_id": "da8bcb47-c6e7-495c-852a-3ffe7b848e41",
-              "respuesta": "34 A) remove the need for any challenging aspects of paid employment.",
+              "pregunta_id": "3c8a7acc-0f13-4c42-a397-595a86d30819",
+              "respuesta": "33 D) Promoting rooftop gardens that cannot retain rainwater.",
               "correcta": false
             },
             {
-              "pregunta_id": "da8bcb47-c6e7-495c-852a-3ffe7b848e41",
-              "respuesta": "34 B) help people recover quickly from long periods of professional stress.",
+              "pregunta_id": "3c8a7acc-0f13-4c42-a397-595a86d30819",
+              "respuesta": "34 A) They were designed exclusively for professional gardeners.",
               "correcta": false
             },
             {
-              "pregunta_id": "da8bcb47-c6e7-495c-852a-3ffe7b848e41",
-              "respuesta": "34 C) provide a tangible contrast to work that feels largely intangible.",
+              "pregunta_id": "3c8a7acc-0f13-4c42-a397-595a86d30819",
+              "respuesta": "34 B) They replaced all pesticide use within one season.",
+              "correcta": false
+            },
+            {
+              "pregunta_id": "3c8a7acc-0f13-4c42-a397-595a86d30819",
+              "respuesta": "34 C) They attracted some participants mainly for social reasons.",
               "correcta": true
             },
             {
-              "pregunta_id": "da8bcb47-c6e7-495c-852a-3ffe7b848e41",
-              "respuesta": "34 D) be understood immediately by colleagues without any explanation.",
+              "pregunta_id": "3c8a7acc-0f13-4c42-a397-595a86d30819",
+              "respuesta": "34 D) They focused on legal advice for protected species.",
               "correcta": false
             },
             {
-              "pregunta_id": "da8bcb47-c6e7-495c-852a-3ffe7b848e41",
-              "respuesta": "35 A) They wanted mainly to impress people outside their hobby group.",
+              "pregunta_id": "3c8a7acc-0f13-4c42-a397-595a86d30819",
+              "respuesta": "35 A) To argue that traffic noise should be eliminated immediately.",
               "correcta": false
             },
             {
-              "pregunta_id": "da8bcb47-c6e7-495c-852a-3ffe7b848e41",
-              "respuesta": "35 B) They valued personal challenge and belonging to a shared-interest community.",
+              "pregunta_id": "3c8a7acc-0f13-4c42-a397-595a86d30819",
+              "respuesta": "35 B) To show how urban infrastructure can directly influence animal behaviour.",
               "correcta": true
             },
             {
-              "pregunta_id": "da8bcb47-c6e7-495c-852a-3ffe7b848e41",
-              "respuesta": "35 C) They hoped their hobbies would soon become conventional mainstream activities.",
+              "pregunta_id": "3c8a7acc-0f13-4c42-a397-595a86d30819",
+              "respuesta": "35 C) To prove that remote reserves are no longer necessary for research.",
               "correcta": false
             },
             {
-              "pregunta_id": "da8bcb47-c6e7-495c-852a-3ffe7b848e41",
-              "respuesta": "35 D) They were chiefly motivated by the prospect of turning the hobby into a career.",
+              "pregunta_id": "3c8a7acc-0f13-4c42-a397-595a86d30819",
+              "respuesta": "35 D) To suggest that residents should avoid feeding birds near roads.",
               "correcta": false
             },
             {
-              "pregunta_id": "da8bcb47-c6e7-495c-852a-3ffe7b848e41",
-              "respuesta": "36 A) Mainstream leisure activities are less worthwhile than unusual hobbies.",
+              "pregunta_id": "3c8a7acc-0f13-4c42-a397-595a86d30819",
+              "respuesta": "36 A) Cities should aim to recreate untouched natural landscapes.",
               "correcta": false
             },
             {
-              "pregunta_id": "da8bcb47-c6e7-495c-852a-3ffe7b848e41",
-              "respuesta": "36 B) People who choose unusual hobbies are largely rejecting modern society.",
+              "pregunta_id": "3c8a7acc-0f13-4c42-a397-595a86d30819",
+              "respuesta": "36 B) Urban wildlife projects are doomed without national legislation.",
               "correcta": false
             },
             {
-              "pregunta_id": "da8bcb47-c6e7-495c-852a-3ffe7b848e41",
-              "respuesta": "36 C) Seemingly strange hobbies may reflect a deliberate search for focus and connection.",
+              "pregunta_id": "3c8a7acc-0f13-4c42-a397-595a86d30819",
+              "respuesta": "36 C) Small, well-maintained habitats may realistically improve city life.",
               "correcta": true
             },
             {
-              "pregunta_id": "da8bcb47-c6e7-495c-852a-3ffe7b848e41",
-              "respuesta": "36 D) Unusual hobbies are likely to disappear as conventional entertainment improves.",
+              "pregunta_id": "3c8a7acc-0f13-4c42-a397-595a86d30819",
+              "respuesta": "36 D) Public enthusiasm is the only factor that determines success.",
               "correcta": false
             }
           ],
+          "respuestasAbiertas": [],
+          "audios": []
+        },
+        {
+          "preguntaId": "4a624b0f-324e-49a4-8cb9-543d1ca77781",
+          "parteNombre": "Parte 5 B2",
+          "descripcionParte": "Part 5 – Multiple Choice\r\nYou are going to read a text about learning new skills. For questions 31–36, choose the answer (A, B, C or D) which you think fits best according to the text.\r\n",
+          "enunciado": "You are going to read a magazine article about unusual hobbies. For questions 31–36, choose the answer (A, B, C or D) which you think fits best according to the text.\nText\nBeyond the Mainstream: The Appeal of Unusual Hobbies\nIn an age when leisure time is often filled with predictable pursuits, a growing number of people are turning to hobbies that friends and colleagues find difficult to classify. What may look eccentric from the outside frequently turns out, for those who practise it, to be a carefully chosen counterbalance to routine work and digital distraction.\nOne example is competitive jigsaw puzzling, which has developed a serious following in several countries. Enthusiasts gather for timed events where teams race to complete complex images under strict rules. Outsiders sometimes assume the activity is purely relaxing, yet participants describe intense concentration and genuine pride when a difficult design finally fits together. For many, the appeal lies not in winning alone but in sharing a slow, tactile process that contrasts sharply with the instant feedback of screen-based entertainment.\nHistorical reenactment offers a different kind of escape. Men and women spend weekends recreating battles or domestic life from past centuries, investing considerable money in authentic costumes and equipment. Critics may question whether such devotion to the past is worthwhile, but reenactors argue that handling reproduction tools and learning forgotten skills gives them a vivid sense of how earlier generations lived. Several groups also visit schools, hoping to make history feel immediate rather than abstract.\nThen there are pursuits such as letterboxing and geocaching, in which participants follow clues to locate hidden containers in parks, towns or countryside. The hobby blends navigation, puzzle-solving and mild adventure, and it encourages exploration of places that walkers might otherwise ignore. Unlike some outdoor sports, it rarely demands exceptional fitness; instead, patience and curiosity matter more. Many participants say the greatest reward is discovering a quiet corner of their own region that they had never noticed before.\nWhat these activities share is not oddity for its own sake. People often choose them because mainstream options no longer feel stimulating, or because they want a hobby that reflects a particular identity. An office worker who restores vintage radios at night, for instance, may value the feeling of repairing something tangible in a job dominated by emails. Similarly, a teenager who collects and restores mechanical typewriters may enjoy the mechanical rhythm and the surprise of younger friends who have never seen one.\nUnusual hobbies can also create communities that cut across age and background. Clubs, festivals and online forums allow beginners to learn from experienced practitioners without facing the pressure of formal competition. The author of a recent survey noted that respondents rarely described their hobbies as attempts to impress others; instead, they emphasised personal challenge, creativity and the pleasure of belonging to a small group that understands a shared obsession.\nNone of this suggests that conventional pastimes are inferior. Yoga, team sports and cinema remain popular for good reason. Yet the spread of less familiar hobbies reminds us that leisure is deeply personal. What seems baffling at first glance may simply be someone's deliberate search for meaning, focus and connection in an otherwise hurried world.\n\nQuestions\n31. What does the writer suggest about many competitive jigsaw enthusiasts? A. They value a slow, hands-on activity that differs from instant digital entertainment. B. They take part mainly because timed events offer guaranteed prizes. C. They prefer working alone rather than sharing the experience with others. D. They treat the hobby as a simple way to relax after demanding work.\n32. How does the writer present historical reenactment? A. As a hobby that professional historians now recommend without reservation. B. As an activity that has become less appealing to younger participants. C. As a pursuit that depends mainly on expensive equipment rather than skill. D. As something critics doubt, although participants believe it has real value.\n33. According to the text, what makes letterboxing and geocaching distinctive? A. They require a level of fitness comparable to serious mountaineering. B. They reward patience and curiosity more than exceptional physical strength. C. They have declined in popularity since navigation technology became widespread. D. D. They are designed chiefly for people who already know an area extremely well.\n34. The examples of vintage radio restoration and typewriter collecting imply that unusual hobbies can A. remove the need for any challenging aspects of paid employment. B. help people recover quickly from long periods of professional stress. C. provide a tangible contrast to work that feels largely intangible. D. be understood immediately by colleagues without any explanation.\n35. What did the recent survey suggest about people's reasons for choosing unusual hobbies? A. They wanted mainly to impress people outside their hobby group. B. They valued personal challenge and belonging to a shared-interest community. C. They hoped their hobbies would soon become conventional mainstream activities. D. They were chiefly motivated by the prospect of turning the hobby into a career.\n36. Which statement best reflects the writer's overall attitude? A. Mainstream leisure activities are less worthwhile than unusual hobbies. B. People who choose unusual hobbies are largely rejecting modern society. C. Seemingly strange hobbies may reflect a deliberate search for focus and connection. D. Unusual hobbies are likely to disappear as conventional entertainment improves.",
+          "respuestasMcq": [],
           "respuestasAbiertas": [],
           "audios": []
         }
@@ -381,219 +410,219 @@
       "activity": "gapped-text",
       "items": [
         {
-          "preguntaId": "4f250688-d314-4e20-a271-e523d5e8e4ef",
+          "preguntaId": "43c2c61d-99e4-4411-bf14-0dc6142c8049",
           "parteNombre": "Parte 6 B2",
-          "descripcionParte": "Part 6: Gapped Text\r\nYou are going to read an article about developing new hobbies. Six sentences have been removed from the article. Choose from the sentences A–G the one which fits each gap (31–36). There is one extra sentence which you do not need to use.\r\n",
-          "enunciado": "You are going to read an article about the rise of community projects in modern towns. Six sentences have been removed from the article. Choose from the sentences A–G the one which fits each gap. There is one extra sentence which you do not need to use.\nText\nBeyond the Council: Community Projects in Modern Towns\nFor decades, local problems in towns were often left to municipal authorities alone. Residents might complain at public meetings, yet few expected to play an active role in finding solutions. That attitude has shifted noticeably in recent years. Across many countries, ordinary citizens have begun organising community projects that address issues ranging from neglected green spaces to social isolation among elderly neighbours. (31) ______\nThese initiatives rarely replace professional services entirely. Instead, they fill gaps that overstretched councils cannot always cover. A volunteer-run repair café, for example, does not put qualified electricians out of work, but it does keep usable appliances out of landfill and teaches practical skills that schools seldom have time to offer. (32) ______ Such events also create informal meeting places where people who might never cross paths otherwise can exchange advice, tools and local news.\nOne reason these projects have multiplied is that digital tools have lowered the cost of coordination. A single online message can summon twenty helpers for a weekend litter pick or a pop-up food bank, and photographs of the results can attract further support within hours. (33) ______ However, organisers quickly discover that enthusiasm alone does not sustain long-term work; without clear roles and regular communication, even promising groups fade away within months.\nSuccess often depends on partnerships. Schools, charities and small businesses frequently lend space, equipment or expertise when residents propose a plausible plan. In one coastal town, a closed shopfront became a weekly advice hub after the owner offered it rent-free for twelve months. (34) ______ This shared investment makes participants feel that the project belongs to the whole neighbourhood, not to one determined individual who may eventually move away.\nNot every attempt thrives. Some groups struggle with funding, while others disagree about priorities or burn out after an initial burst of energy. (35) ______ Yet where projects endure, they tend to reshape how residents view their town: streets once seen as anonymous become familiar, and complaints about what \"someone else\" should do gradually give way to discussions about what \"we\" could try next.\nThe broader impact should not be underestimated. Research in several European cities suggests that areas with active community networks report higher trust between neighbours and a greater willingness to help strangers in minor emergencies. (36) ______ For planners and elected officials, these findings offer a reminder that lasting urban improvement is not solely a matter of infrastructure budgets and zoning regulations.\nIn the end, the rise of community projects reflects a wider cultural change. People still expect councils to maintain roads and collect refuse, but many no longer wait passively for institutions to solve every local difficulty. They experiment, collaborate and occasionally fail — and in doing so, they redefine what a modern town can feel like from the inside.\n\nSentences\nA For many participants, this marks a shift from simply identifying problems to taking shared responsibility for them.\nB This hands-on approach turns abstract environmental concerns into everyday action.\nC As a result, ideas that once required months of planning can now be tested within days.\nD These contributions may seem modest, yet they allow volunteers to focus on people rather than paperwork.\nE Even so, many residents remain convinced that small-scale action is worth the effort.\nF Such outcomes suggest that informal networks deserve a place alongside formal policy.\nG Yet many young people continue to leave smaller towns in search of better career prospects.",
+          "descripcionParte": "Part 6: Gapped Text\r\nFor questions 37–42, choose which sentence fits each gap. There is one extra sentence which you do not need to use.\r\n",
+          "enunciado": "You are going to read an article about the rise of community projects in modern towns. Six sentences have been removed from the article. Choose from the sentences A–G the one which fits each gap (37–42). There is one extra sentence which you do not need to use.\nText\nBeyond the Council: Community Projects in Modern Towns\nFor decades, local problems in towns were often left to municipal authorities alone. Residents might complain at public meetings, yet few expected to play an active role in finding solutions. That attitude has shifted noticeably in recent years. Across many countries, ordinary citizens have begun organising community projects that address issues ranging from neglected green spaces to social isolation among elderly neighbours. (37) ______\nThese initiatives rarely replace professional services entirely. Instead, they fill gaps that overstretched councils cannot always cover. A volunteer-run repair café, for example, does not put qualified electricians out of work, but it does keep usable appliances out of landfill and teaches practical skills that schools seldom have time to offer. (38) ______ Such events also create informal meeting places where people who might never cross paths otherwise can exchange advice, tools and local news.\nOne reason these projects have multiplied is that digital tools have lowered the cost of coordination. A single online message can summon twenty helpers for a weekend litter pick or a pop-up food bank, and photographs of the results can attract further support within hours. (39) ______ However, organisers quickly discover that enthusiasm alone does not sustain long-term work; without clear roles and regular communication, even promising groups fade away within months.\nSuccess often depends on partnerships. Schools, charities and small businesses frequently lend space, equipment or expertise when residents propose a plausible plan. In one coastal town, a closed shopfront became a weekly advice hub after the owner offered it rent-free for twelve months. (40) ______ This shared investment makes participants feel that the project belongs to the whole neighbourhood, not to one determined individual who may eventually move away.\nNot every attempt thrives. Some groups struggle with funding, while others disagree about priorities or burn out after an initial burst of energy. (41) ______ Yet where projects endure, they tend to reshape how residents view their town: streets once seen as anonymous become familiar, and complaints about what \"someone else\" should do gradually give way to discussions about what \"we\" could try next.\nThe broader impact should not be underestimated. Research in several European cities suggests that areas with active community networks report higher trust between neighbours and a greater willingness to help strangers in minor emergencies. (42) ______ For planners and elected officials, these findings offer a reminder that lasting urban improvement is not solely a matter of infrastructure budgets and zoning regulations.\nIn the end, the rise of community projects reflects a wider cultural change. People still expect councils to maintain roads and collect refuse, but many no longer wait passively for institutions to solve every local difficulty. They experiment, collaborate and occasionally fail — and in doing so, they redefine what a modern town can feel like from the inside.\n\nSentences\nA For many participants, this marks a shift from simply identifying problems to taking shared responsibility for them.\nB This hands-on approach turns abstract environmental concerns into everyday action.\nC As a result, ideas that once required months of planning can now be tested within days.\nD These contributions may seem modest, yet they allow volunteers to focus on people rather than paperwork.\nE Even so, many residents remain convinced that small-scale action is worth the effort.\nF Such outcomes suggest that informal networks deserve a place alongside formal policy.\nG Yet many young people continue to leave smaller towns in search of better career prospects.",
           "respuestasMcq": [
             {
-              "pregunta_id": "4f250688-d314-4e20-a271-e523d5e8e4ef",
-              "respuesta": "31 A",
+              "pregunta_id": "43c2c61d-99e4-4411-bf14-0dc6142c8049",
+              "respuesta": "37 A",
               "correcta": true
             },
             {
-              "pregunta_id": "4f250688-d314-4e20-a271-e523d5e8e4ef",
-              "respuesta": "31 B",
+              "pregunta_id": "43c2c61d-99e4-4411-bf14-0dc6142c8049",
+              "respuesta": "37 B",
               "correcta": false
             },
             {
-              "pregunta_id": "4f250688-d314-4e20-a271-e523d5e8e4ef",
-              "respuesta": "31 C",
+              "pregunta_id": "43c2c61d-99e4-4411-bf14-0dc6142c8049",
+              "respuesta": "37 C",
               "correcta": false
             },
             {
-              "pregunta_id": "4f250688-d314-4e20-a271-e523d5e8e4ef",
-              "respuesta": "31 D",
+              "pregunta_id": "43c2c61d-99e4-4411-bf14-0dc6142c8049",
+              "respuesta": "37 D",
               "correcta": false
             },
             {
-              "pregunta_id": "4f250688-d314-4e20-a271-e523d5e8e4ef",
-              "respuesta": "31 E",
+              "pregunta_id": "43c2c61d-99e4-4411-bf14-0dc6142c8049",
+              "respuesta": "37 E",
               "correcta": false
             },
             {
-              "pregunta_id": "4f250688-d314-4e20-a271-e523d5e8e4ef",
-              "respuesta": "31 F",
+              "pregunta_id": "43c2c61d-99e4-4411-bf14-0dc6142c8049",
+              "respuesta": "37 F",
               "correcta": false
             },
             {
-              "pregunta_id": "4f250688-d314-4e20-a271-e523d5e8e4ef",
-              "respuesta": "31 G",
+              "pregunta_id": "43c2c61d-99e4-4411-bf14-0dc6142c8049",
+              "respuesta": "37 G",
               "correcta": false
             },
             {
-              "pregunta_id": "4f250688-d314-4e20-a271-e523d5e8e4ef",
-              "respuesta": "32 A",
+              "pregunta_id": "43c2c61d-99e4-4411-bf14-0dc6142c8049",
+              "respuesta": "38 A",
               "correcta": false
             },
             {
-              "pregunta_id": "4f250688-d314-4e20-a271-e523d5e8e4ef",
-              "respuesta": "32 B",
+              "pregunta_id": "43c2c61d-99e4-4411-bf14-0dc6142c8049",
+              "respuesta": "38 B",
               "correcta": true
             },
             {
-              "pregunta_id": "4f250688-d314-4e20-a271-e523d5e8e4ef",
-              "respuesta": "32 C",
+              "pregunta_id": "43c2c61d-99e4-4411-bf14-0dc6142c8049",
+              "respuesta": "38 C",
               "correcta": false
             },
             {
-              "pregunta_id": "4f250688-d314-4e20-a271-e523d5e8e4ef",
-              "respuesta": "32 D",
+              "pregunta_id": "43c2c61d-99e4-4411-bf14-0dc6142c8049",
+              "respuesta": "38 D",
               "correcta": false
             },
             {
-              "pregunta_id": "4f250688-d314-4e20-a271-e523d5e8e4ef",
-              "respuesta": "32 E",
+              "pregunta_id": "43c2c61d-99e4-4411-bf14-0dc6142c8049",
+              "respuesta": "38 E",
               "correcta": false
             },
             {
-              "pregunta_id": "4f250688-d314-4e20-a271-e523d5e8e4ef",
-              "respuesta": "32 F",
+              "pregunta_id": "43c2c61d-99e4-4411-bf14-0dc6142c8049",
+              "respuesta": "38 F",
               "correcta": false
             },
             {
-              "pregunta_id": "4f250688-d314-4e20-a271-e523d5e8e4ef",
-              "respuesta": "32 G",
+              "pregunta_id": "43c2c61d-99e4-4411-bf14-0dc6142c8049",
+              "respuesta": "38 G",
               "correcta": false
             },
             {
-              "pregunta_id": "4f250688-d314-4e20-a271-e523d5e8e4ef",
-              "respuesta": "33 A",
+              "pregunta_id": "43c2c61d-99e4-4411-bf14-0dc6142c8049",
+              "respuesta": "39 A",
               "correcta": false
             },
             {
-              "pregunta_id": "4f250688-d314-4e20-a271-e523d5e8e4ef",
-              "respuesta": "33 B",
+              "pregunta_id": "43c2c61d-99e4-4411-bf14-0dc6142c8049",
+              "respuesta": "39 B",
               "correcta": false
             },
             {
-              "pregunta_id": "4f250688-d314-4e20-a271-e523d5e8e4ef",
-              "respuesta": "33 C",
+              "pregunta_id": "43c2c61d-99e4-4411-bf14-0dc6142c8049",
+              "respuesta": "39 C",
               "correcta": true
             },
             {
-              "pregunta_id": "4f250688-d314-4e20-a271-e523d5e8e4ef",
-              "respuesta": "33 D",
+              "pregunta_id": "43c2c61d-99e4-4411-bf14-0dc6142c8049",
+              "respuesta": "39 D",
               "correcta": false
             },
             {
-              "pregunta_id": "4f250688-d314-4e20-a271-e523d5e8e4ef",
-              "respuesta": "33 E",
+              "pregunta_id": "43c2c61d-99e4-4411-bf14-0dc6142c8049",
+              "respuesta": "39 E",
               "correcta": false
             },
             {
-              "pregunta_id": "4f250688-d314-4e20-a271-e523d5e8e4ef",
-              "respuesta": "33 F",
+              "pregunta_id": "43c2c61d-99e4-4411-bf14-0dc6142c8049",
+              "respuesta": "39 F",
               "correcta": false
             },
             {
-              "pregunta_id": "4f250688-d314-4e20-a271-e523d5e8e4ef",
-              "respuesta": "33 G",
+              "pregunta_id": "43c2c61d-99e4-4411-bf14-0dc6142c8049",
+              "respuesta": "39 G",
               "correcta": false
             },
             {
-              "pregunta_id": "4f250688-d314-4e20-a271-e523d5e8e4ef",
-              "respuesta": "34 A",
+              "pregunta_id": "43c2c61d-99e4-4411-bf14-0dc6142c8049",
+              "respuesta": "40 A",
               "correcta": false
             },
             {
-              "pregunta_id": "4f250688-d314-4e20-a271-e523d5e8e4ef",
-              "respuesta": "34 B",
+              "pregunta_id": "43c2c61d-99e4-4411-bf14-0dc6142c8049",
+              "respuesta": "40 B",
               "correcta": false
             },
             {
-              "pregunta_id": "4f250688-d314-4e20-a271-e523d5e8e4ef",
-              "respuesta": "34 C",
+              "pregunta_id": "43c2c61d-99e4-4411-bf14-0dc6142c8049",
+              "respuesta": "40 C",
               "correcta": false
             },
             {
-              "pregunta_id": "4f250688-d314-4e20-a271-e523d5e8e4ef",
-              "respuesta": "34 D",
+              "pregunta_id": "43c2c61d-99e4-4411-bf14-0dc6142c8049",
+              "respuesta": "40 D",
               "correcta": true
             },
             {
-              "pregunta_id": "4f250688-d314-4e20-a271-e523d5e8e4ef",
-              "respuesta": "34 E",
+              "pregunta_id": "43c2c61d-99e4-4411-bf14-0dc6142c8049",
+              "respuesta": "40 E",
               "correcta": false
             },
             {
-              "pregunta_id": "4f250688-d314-4e20-a271-e523d5e8e4ef",
-              "respuesta": "34 F",
+              "pregunta_id": "43c2c61d-99e4-4411-bf14-0dc6142c8049",
+              "respuesta": "40 F",
               "correcta": false
             },
             {
-              "pregunta_id": "4f250688-d314-4e20-a271-e523d5e8e4ef",
-              "respuesta": "34 G",
+              "pregunta_id": "43c2c61d-99e4-4411-bf14-0dc6142c8049",
+              "respuesta": "40 G",
               "correcta": false
             },
             {
-              "pregunta_id": "4f250688-d314-4e20-a271-e523d5e8e4ef",
-              "respuesta": "35 A",
+              "pregunta_id": "43c2c61d-99e4-4411-bf14-0dc6142c8049",
+              "respuesta": "41 A",
               "correcta": false
             },
             {
-              "pregunta_id": "4f250688-d314-4e20-a271-e523d5e8e4ef",
-              "respuesta": "35 B",
+              "pregunta_id": "43c2c61d-99e4-4411-bf14-0dc6142c8049",
+              "respuesta": "41 B",
               "correcta": false
             },
             {
-              "pregunta_id": "4f250688-d314-4e20-a271-e523d5e8e4ef",
-              "respuesta": "35 C",
+              "pregunta_id": "43c2c61d-99e4-4411-bf14-0dc6142c8049",
+              "respuesta": "41 C",
               "correcta": false
             },
             {
-              "pregunta_id": "4f250688-d314-4e20-a271-e523d5e8e4ef",
-              "respuesta": "35 D",
+              "pregunta_id": "43c2c61d-99e4-4411-bf14-0dc6142c8049",
+              "respuesta": "41 D",
               "correcta": false
             },
             {
-              "pregunta_id": "4f250688-d314-4e20-a271-e523d5e8e4ef",
-              "respuesta": "35 E",
+              "pregunta_id": "43c2c61d-99e4-4411-bf14-0dc6142c8049",
+              "respuesta": "41 E",
               "correcta": true
             },
             {
-              "pregunta_id": "4f250688-d314-4e20-a271-e523d5e8e4ef",
-              "respuesta": "35 F",
+              "pregunta_id": "43c2c61d-99e4-4411-bf14-0dc6142c8049",
+              "respuesta": "41 F",
               "correcta": false
             },
             {
-              "pregunta_id": "4f250688-d314-4e20-a271-e523d5e8e4ef",
-              "respuesta": "35 G",
+              "pregunta_id": "43c2c61d-99e4-4411-bf14-0dc6142c8049",
+              "respuesta": "41 G",
               "correcta": false
             },
             {
-              "pregunta_id": "4f250688-d314-4e20-a271-e523d5e8e4ef",
-              "respuesta": "36 A",
+              "pregunta_id": "43c2c61d-99e4-4411-bf14-0dc6142c8049",
+              "respuesta": "42 A",
               "correcta": false
             },
             {
-              "pregunta_id": "4f250688-d314-4e20-a271-e523d5e8e4ef",
-              "respuesta": "36 B",
+              "pregunta_id": "43c2c61d-99e4-4411-bf14-0dc6142c8049",
+              "respuesta": "42 B",
               "correcta": false
             },
             {
-              "pregunta_id": "4f250688-d314-4e20-a271-e523d5e8e4ef",
-              "respuesta": "36 C",
+              "pregunta_id": "43c2c61d-99e4-4411-bf14-0dc6142c8049",
+              "respuesta": "42 C",
               "correcta": false
             },
             {
-              "pregunta_id": "4f250688-d314-4e20-a271-e523d5e8e4ef",
-              "respuesta": "36 D",
+              "pregunta_id": "43c2c61d-99e4-4411-bf14-0dc6142c8049",
+              "respuesta": "42 D",
               "correcta": false
             },
             {
-              "pregunta_id": "4f250688-d314-4e20-a271-e523d5e8e4ef",
-              "respuesta": "36 E",
+              "pregunta_id": "43c2c61d-99e4-4411-bf14-0dc6142c8049",
+              "respuesta": "42 E",
               "correcta": false
             },
             {
-              "pregunta_id": "4f250688-d314-4e20-a271-e523d5e8e4ef",
-              "respuesta": "36 F",
+              "pregunta_id": "43c2c61d-99e4-4411-bf14-0dc6142c8049",
+              "respuesta": "42 F",
               "correcta": true
             },
             {
-              "pregunta_id": "4f250688-d314-4e20-a271-e523d5e8e4ef",
-              "respuesta": "36 G",
+              "pregunta_id": "43c2c61d-99e4-4411-bf14-0dc6142c8049",
+              "respuesta": "42 G",
               "correcta": false
             }
           ],
@@ -608,212 +637,221 @@
       "activity": "multiple-matching",
       "items": [
         {
-          "preguntaId": "61b61fc0-cfb4-4e87-9a6b-b26aa9825ee1",
+          "preguntaId": "b49e0fad-1f53-451f-b9f2-5feab83502a5",
           "parteNombre": "Parte 7 B2",
-          "descripcionParte": "Part 7: Multiple Matching\r\nYou are going to read an article in which four people talk about their experiences of learning new skills. For questions 37–42, choose from the people (A–D). The people may be chosen more than once.\r\n",
-          "enunciado": "You are going to read four short texts about people who changed career. For questions 37–46, choose from the people A–D. The people may be chosen more than once.\nWhich person…\n37 was concerned about the cost of starting again in a competitive field?\n38 enjoys seeing a clear physical result from their work?\n39 completed training for the new profession while continuing their old job?\n40 was warned by people at work that the change could be risky?\n41 appreciates not being tied to one workplace or fixed timetable?\n42 prefers a practical, physically active job to working at a desk?\n43 uses experience from a previous technical career to explain things clearly?\n44 feels rewarded when other people understand difficult ideas?\n45 accepts tiring working conditions because the work feels more personally meaningful?\n46 combines analytical ability from a previous job with creative work?\n________________________________________\nTexts\nA – Emma Thomson\nAfter a decade working as a marketing executive, Emma decided to follow her passion for literature. She left her corporate job to become a freelance writer, even though several colleagues warned her that she was taking a risk. Though the initial phase was challenging — finding clients and managing irregular income — she found joy in crafting stories and articles on her own terms. Emma appreciates the flexibility that comes with freelancing, allowing her to work from anywhere and set her own schedule. Despite the instability, the creative satisfaction she derives from writing outweighs the financial unpredictability, and she has no intention of returning to office life.\n________________________________________\nB – Michael Green\nMichael was a successful civil engineer before he decided to pursue a career in education. Motivated by a desire to inspire young minds, he retrained as a secondary school teacher during evenings and weekends while still working full time. The transition was not easy, as it required him to adapt to a completely different work environment and daily schedule. However, Michael finds teaching immensely rewarding, particularly when he sees his students grasp complex concepts for the first time. He values the opportunity to impact future generations positively, and he believes his earlier career gave him useful skills in planning and explaining technical ideas clearly.\n________________________________________\nC – Sophia Martinez\nSophia worked as a software developer for several years before realising that her true calling was in the culinary arts. Leaving a stable job in tech, she enrolled in culinary school to pursue her dream of becoming a chef. Although it was a significant change, Sophia has not looked back since opening her own small restaurant in her home town. She enjoys the hands-on aspect of her new job and the chance to express her creativity through food, despite the long and demanding hours. For her, the physical pace of a kitchen feels more authentic than sitting at a desk, even when service nights are exhausting.\n________________________________________\nD – Liam Robinson\nLiam's journey from accountant to interior designer might seem unusual, but for him it was a natural progression. Always passionate about aesthetics and design, he took the bold step of switching careers after ten years in finance. Liam initially worried about the financial implications of starting again in a competitive field, but he ultimately found a niche for himself, blending his analytical skills with creative design. He appreciates how his new career allows him to see the tangible results of his work, transforming rooms and offices to meet clients' needs. Former colleagues sometimes tease him about the change, yet he feels he is finally doing what suits him best.\n________________________________________",
+          "descripcionParte": "Part 7: Multiple Matching\r\nFor questions 43–52, read the texts and choose the person who matches each statement. The people may be chosen more than once.\r\n",
+          "enunciado": "You are going to read four short texts about people learning a musical instrument. For questions 43–52, choose from the people A–D. The people may be chosen more than once.\n43 Who took up an instrument again after leaving it aside for many years?\n44 Who depends most on self-directed online material rather than a regular teacher?\n45 Who is working towards a formal qualification in their instrument?\n46 Who still feels uneasy about playing when others are listening?\n47 Who highlights the bodily aspect of making music?\n48 Who was reminded of the instrument through a family member's playing?\n49 Who is especially motivated by practising alongside other musicians?\n50 Who tries to combine structured requirements with pieces chosen for pleasure?\n51 Who is more interested in writing original music than copying existing works?\n52 Who describes learning mainly as a way to recover confidence after pressure at work?\n________________________________________\nTexts\nA – Nora Chen\nUntil last year, Nora's evenings were dominated by project deadlines in a busy design studio. Although she had loved listening to her mother practise the violin as a child, she had never believed she had time to learn. When a colleague suggested they attend a community class together, Nora agreed mainly because she hoped it would help her unwind after stressful weeks. Initially she found reading notation painfully slow, yet she persisted because each small improvement felt tangible. She still becomes anxious before playing in front of others, even at informal gatherings, and prefers practising alone in her kitchen before she feels ready to join the group. Looking back, she says the instrument has become a way of rebuilding confidence rather than proving talent.\n________________________________________\nB – Rafael Ortiz\nRafael played drums in a school band, but after leaving university he sold his kit and focused on office work. A decade later, hearing a live jazz set reminded him how much he missed the physical rhythm of playing. He bought a second-hand kit and joined an evening ensemble, discovering that rehearsing with other musicians motivated him far more than solitary practice ever had. Although he occasionally watches tutorial videos when a passage is tricky, he relies mainly on the conductor's feedback. Rafael admits that fitting rehearsals around family life is demanding; nevertheless, he values the discipline of arriving prepared each week. Since returning to drumming, he has noticed he listens more attentively to subtle details in everyday sounds. He now encourages his daughter to try percussion at school, though he insists she should choose her own instrument.\n________________________________________\nC – Priya Kapoor\nPriya began piano lessons at seven and recently decided to prepare for a graded exam after a long break from formal study. Her teachers are encouraging, yet she often feels intimidated when classmates perform fluently from memory. To balance exam requirements with enjoyment, she sets aside twenty minutes each morning for scales and spends longer weekend sessions on pieces she chooses herself. Priya appreciates the structure exams provide, though she worries that focusing on assessment criteria may narrow her repertoire. Meanwhile, she has started accompanying a local choir, an experience that has taught her to adapt when singers change tempo. She hopes the qualification will confirm progress she can already hear, even if performance nerves remain. Her parents attend recitals whenever they can, which helps her feel less alone on stage.\n________________________________________\nD – Jonas Lindholm\nJonas taught himself guitar using online platforms after a friend lent him an inexpensive instrument. Without a fixed teacher, he progressed unevenly: chord changes came quickly, but theory remained confusing until he discovered a structured video series. He enjoys composing short pieces more than reproducing famous songs, and he records ideas on his phone during commutes. Although he considered joining a class, he prefers learning at his own pace and revisiting difficult sections without embarrassment. Jonas occasionally compares his progress with professional musicians online, which can be discouraging; however, he reminds himself that he plays primarily for relaxation. Recently he uploaded a collaboration with a singer he met through a forum, a step that surprised friends who knew him as reserved.\n________________________________________",
           "respuestasMcq": [
             {
-              "pregunta_id": "61b61fc0-cfb4-4e87-9a6b-b26aa9825ee1",
-              "respuesta": "37 A",
-              "correcta": false
-            },
-            {
-              "pregunta_id": "61b61fc0-cfb4-4e87-9a6b-b26aa9825ee1",
-              "respuesta": "37 B",
-              "correcta": false
-            },
-            {
-              "pregunta_id": "61b61fc0-cfb4-4e87-9a6b-b26aa9825ee1",
-              "respuesta": "37 C",
-              "correcta": false
-            },
-            {
-              "pregunta_id": "61b61fc0-cfb4-4e87-9a6b-b26aa9825ee1",
-              "respuesta": "37 D",
-              "correcta": true
-            },
-            {
-              "pregunta_id": "61b61fc0-cfb4-4e87-9a6b-b26aa9825ee1",
-              "respuesta": "38 A",
-              "correcta": false
-            },
-            {
-              "pregunta_id": "61b61fc0-cfb4-4e87-9a6b-b26aa9825ee1",
-              "respuesta": "38 B",
-              "correcta": false
-            },
-            {
-              "pregunta_id": "61b61fc0-cfb4-4e87-9a6b-b26aa9825ee1",
-              "respuesta": "38 C",
-              "correcta": false
-            },
-            {
-              "pregunta_id": "61b61fc0-cfb4-4e87-9a6b-b26aa9825ee1",
-              "respuesta": "38 D",
-              "correcta": true
-            },
-            {
-              "pregunta_id": "61b61fc0-cfb4-4e87-9a6b-b26aa9825ee1",
-              "respuesta": "39 A",
-              "correcta": false
-            },
-            {
-              "pregunta_id": "61b61fc0-cfb4-4e87-9a6b-b26aa9825ee1",
-              "respuesta": "39 B",
-              "correcta": true
-            },
-            {
-              "pregunta_id": "61b61fc0-cfb4-4e87-9a6b-b26aa9825ee1",
-              "respuesta": "39 C",
-              "correcta": false
-            },
-            {
-              "pregunta_id": "61b61fc0-cfb4-4e87-9a6b-b26aa9825ee1",
-              "respuesta": "39 D",
-              "correcta": false
-            },
-            {
-              "pregunta_id": "61b61fc0-cfb4-4e87-9a6b-b26aa9825ee1",
-              "respuesta": "40 A",
-              "correcta": true
-            },
-            {
-              "pregunta_id": "61b61fc0-cfb4-4e87-9a6b-b26aa9825ee1",
-              "respuesta": "40 B",
-              "correcta": false
-            },
-            {
-              "pregunta_id": "61b61fc0-cfb4-4e87-9a6b-b26aa9825ee1",
-              "respuesta": "40 C",
-              "correcta": false
-            },
-            {
-              "pregunta_id": "61b61fc0-cfb4-4e87-9a6b-b26aa9825ee1",
-              "respuesta": "40 D",
-              "correcta": false
-            },
-            {
-              "pregunta_id": "61b61fc0-cfb4-4e87-9a6b-b26aa9825ee1",
-              "respuesta": "41 A",
-              "correcta": true
-            },
-            {
-              "pregunta_id": "61b61fc0-cfb4-4e87-9a6b-b26aa9825ee1",
-              "respuesta": "41 B",
-              "correcta": false
-            },
-            {
-              "pregunta_id": "61b61fc0-cfb4-4e87-9a6b-b26aa9825ee1",
-              "respuesta": "41 C",
-              "correcta": false
-            },
-            {
-              "pregunta_id": "61b61fc0-cfb4-4e87-9a6b-b26aa9825ee1",
-              "respuesta": "41 D",
-              "correcta": false
-            },
-            {
-              "pregunta_id": "61b61fc0-cfb4-4e87-9a6b-b26aa9825ee1",
-              "respuesta": "42 A",
-              "correcta": false
-            },
-            {
-              "pregunta_id": "61b61fc0-cfb4-4e87-9a6b-b26aa9825ee1",
-              "respuesta": "42 B",
-              "correcta": false
-            },
-            {
-              "pregunta_id": "61b61fc0-cfb4-4e87-9a6b-b26aa9825ee1",
-              "respuesta": "42 C",
-              "correcta": true
-            },
-            {
-              "pregunta_id": "61b61fc0-cfb4-4e87-9a6b-b26aa9825ee1",
-              "respuesta": "42 D",
-              "correcta": false
-            },
-            {
-              "pregunta_id": "61b61fc0-cfb4-4e87-9a6b-b26aa9825ee1",
+              "pregunta_id": "b49e0fad-1f53-451f-b9f2-5feab83502a5",
               "respuesta": "43 A",
               "correcta": false
             },
             {
-              "pregunta_id": "61b61fc0-cfb4-4e87-9a6b-b26aa9825ee1",
+              "pregunta_id": "b49e0fad-1f53-451f-b9f2-5feab83502a5",
               "respuesta": "43 B",
               "correcta": true
             },
             {
-              "pregunta_id": "61b61fc0-cfb4-4e87-9a6b-b26aa9825ee1",
+              "pregunta_id": "b49e0fad-1f53-451f-b9f2-5feab83502a5",
               "respuesta": "43 C",
               "correcta": false
             },
             {
-              "pregunta_id": "61b61fc0-cfb4-4e87-9a6b-b26aa9825ee1",
+              "pregunta_id": "b49e0fad-1f53-451f-b9f2-5feab83502a5",
               "respuesta": "43 D",
               "correcta": false
             },
             {
-              "pregunta_id": "61b61fc0-cfb4-4e87-9a6b-b26aa9825ee1",
+              "pregunta_id": "b49e0fad-1f53-451f-b9f2-5feab83502a5",
               "respuesta": "44 A",
               "correcta": false
             },
             {
-              "pregunta_id": "61b61fc0-cfb4-4e87-9a6b-b26aa9825ee1",
+              "pregunta_id": "b49e0fad-1f53-451f-b9f2-5feab83502a5",
               "respuesta": "44 B",
-              "correcta": true
+              "correcta": false
             },
             {
-              "pregunta_id": "61b61fc0-cfb4-4e87-9a6b-b26aa9825ee1",
+              "pregunta_id": "b49e0fad-1f53-451f-b9f2-5feab83502a5",
               "respuesta": "44 C",
               "correcta": false
             },
             {
-              "pregunta_id": "61b61fc0-cfb4-4e87-9a6b-b26aa9825ee1",
+              "pregunta_id": "b49e0fad-1f53-451f-b9f2-5feab83502a5",
               "respuesta": "44 D",
-              "correcta": false
+              "correcta": true
             },
             {
-              "pregunta_id": "61b61fc0-cfb4-4e87-9a6b-b26aa9825ee1",
+              "pregunta_id": "b49e0fad-1f53-451f-b9f2-5feab83502a5",
               "respuesta": "45 A",
               "correcta": false
             },
             {
-              "pregunta_id": "61b61fc0-cfb4-4e87-9a6b-b26aa9825ee1",
+              "pregunta_id": "b49e0fad-1f53-451f-b9f2-5feab83502a5",
               "respuesta": "45 B",
               "correcta": false
             },
             {
-              "pregunta_id": "61b61fc0-cfb4-4e87-9a6b-b26aa9825ee1",
+              "pregunta_id": "b49e0fad-1f53-451f-b9f2-5feab83502a5",
               "respuesta": "45 C",
               "correcta": true
             },
             {
-              "pregunta_id": "61b61fc0-cfb4-4e87-9a6b-b26aa9825ee1",
+              "pregunta_id": "b49e0fad-1f53-451f-b9f2-5feab83502a5",
               "respuesta": "45 D",
               "correcta": false
             },
             {
-              "pregunta_id": "61b61fc0-cfb4-4e87-9a6b-b26aa9825ee1",
+              "pregunta_id": "b49e0fad-1f53-451f-b9f2-5feab83502a5",
               "respuesta": "46 A",
-              "correcta": false
+              "correcta": true
             },
             {
-              "pregunta_id": "61b61fc0-cfb4-4e87-9a6b-b26aa9825ee1",
+              "pregunta_id": "b49e0fad-1f53-451f-b9f2-5feab83502a5",
               "respuesta": "46 B",
               "correcta": false
             },
             {
-              "pregunta_id": "61b61fc0-cfb4-4e87-9a6b-b26aa9825ee1",
+              "pregunta_id": "b49e0fad-1f53-451f-b9f2-5feab83502a5",
               "respuesta": "46 C",
               "correcta": false
             },
             {
-              "pregunta_id": "61b61fc0-cfb4-4e87-9a6b-b26aa9825ee1",
+              "pregunta_id": "b49e0fad-1f53-451f-b9f2-5feab83502a5",
               "respuesta": "46 D",
+              "correcta": false
+            },
+            {
+              "pregunta_id": "b49e0fad-1f53-451f-b9f2-5feab83502a5",
+              "respuesta": "47 A",
+              "correcta": false
+            },
+            {
+              "pregunta_id": "b49e0fad-1f53-451f-b9f2-5feab83502a5",
+              "respuesta": "47 B",
               "correcta": true
+            },
+            {
+              "pregunta_id": "b49e0fad-1f53-451f-b9f2-5feab83502a5",
+              "respuesta": "47 C",
+              "correcta": false
+            },
+            {
+              "pregunta_id": "b49e0fad-1f53-451f-b9f2-5feab83502a5",
+              "respuesta": "47 D",
+              "correcta": false
+            },
+            {
+              "pregunta_id": "b49e0fad-1f53-451f-b9f2-5feab83502a5",
+              "respuesta": "48 A",
+              "correcta": true
+            },
+            {
+              "pregunta_id": "b49e0fad-1f53-451f-b9f2-5feab83502a5",
+              "respuesta": "48 B",
+              "correcta": false
+            },
+            {
+              "pregunta_id": "b49e0fad-1f53-451f-b9f2-5feab83502a5",
+              "respuesta": "48 C",
+              "correcta": false
+            },
+            {
+              "pregunta_id": "b49e0fad-1f53-451f-b9f2-5feab83502a5",
+              "respuesta": "48 D",
+              "correcta": false
+            },
+            {
+              "pregunta_id": "b49e0fad-1f53-451f-b9f2-5feab83502a5",
+              "respuesta": "49 A",
+              "correcta": false
+            },
+            {
+              "pregunta_id": "b49e0fad-1f53-451f-b9f2-5feab83502a5",
+              "respuesta": "49 B",
+              "correcta": true
+            },
+            {
+              "pregunta_id": "b49e0fad-1f53-451f-b9f2-5feab83502a5",
+              "respuesta": "49 C",
+              "correcta": false
+            },
+            {
+              "pregunta_id": "b49e0fad-1f53-451f-b9f2-5feab83502a5",
+              "respuesta": "49 D",
+              "correcta": false
+            },
+            {
+              "pregunta_id": "b49e0fad-1f53-451f-b9f2-5feab83502a5",
+              "respuesta": "50 A",
+              "correcta": false
+            },
+            {
+              "pregunta_id": "b49e0fad-1f53-451f-b9f2-5feab83502a5",
+              "respuesta": "50 B",
+              "correcta": false
+            },
+            {
+              "pregunta_id": "b49e0fad-1f53-451f-b9f2-5feab83502a5",
+              "respuesta": "50 C",
+              "correcta": true
+            },
+            {
+              "pregunta_id": "b49e0fad-1f53-451f-b9f2-5feab83502a5",
+              "respuesta": "50 D",
+              "correcta": false
+            },
+            {
+              "pregunta_id": "b49e0fad-1f53-451f-b9f2-5feab83502a5",
+              "respuesta": "51 A",
+              "correcta": false
+            },
+            {
+              "pregunta_id": "b49e0fad-1f53-451f-b9f2-5feab83502a5",
+              "respuesta": "51 B",
+              "correcta": false
+            },
+            {
+              "pregunta_id": "b49e0fad-1f53-451f-b9f2-5feab83502a5",
+              "respuesta": "51 C",
+              "correcta": false
+            },
+            {
+              "pregunta_id": "b49e0fad-1f53-451f-b9f2-5feab83502a5",
+              "respuesta": "51 D",
+              "correcta": true
+            },
+            {
+              "pregunta_id": "b49e0fad-1f53-451f-b9f2-5feab83502a5",
+              "respuesta": "52 A",
+              "correcta": true
+            },
+            {
+              "pregunta_id": "b49e0fad-1f53-451f-b9f2-5feab83502a5",
+              "respuesta": "52 B",
+              "correcta": false
+            },
+            {
+              "pregunta_id": "b49e0fad-1f53-451f-b9f2-5feab83502a5",
+              "respuesta": "52 C",
+              "correcta": false
+            },
+            {
+              "pregunta_id": "b49e0fad-1f53-451f-b9f2-5feab83502a5",
+              "respuesta": "52 D",
+              "correcta": false
             }
           ],
+          "respuestasAbiertas": [],
+          "audios": []
+        },
+        {
+          "preguntaId": "8fec0825-61f4-46c8-a70d-923195010cdc",
+          "parteNombre": "Parte 7 B2",
+          "descripcionParte": "Part 7: Multiple Matching\r\nFor questions 43–52, read the texts and choose the person who matches each statement. The people may be chosen more than once.\r\n",
+          "enunciado": "You are going to read four short texts about people who changed career. For questions 43–52, choose from the people A–D. The people may be chosen more than once.\n43 Who was concerned about the cost of starting again in a competitive field?\n44 Who enjoys seeing a clear physical result from their work?\n45 Who completed training for the new profession while continuing their old job?\n46 Who was warned by people at work that the change could be risky?\n47 Who appreciates not being tied to one workplace or fixed timetable?\n48 Who prefers a practical, physically active job to working at a desk?\n49 Who uses experience from a previous technical career to explain things clearly?\n50 Who feels rewarded when other people understand difficult ideas?\n51 Who accepts tiring working conditions because the work feels more personally meaningful?\n52 Who combines analytical ability from a previous job with creative work?\n________________________________________\nTexts\nA – Emma Thomson\nAfter a decade working as a marketing executive, Emma decided to follow her passion for literature. She left her corporate job to become a freelance writer, even though several colleagues warned her that she was taking a risk. Though the initial phase was challenging — finding clients and managing irregular income — she found joy in crafting stories and articles on her own terms. Emma appreciates the flexibility that comes with freelancing, allowing her to work from anywhere and set her own schedule. Despite the instability, the creative satisfaction she derives from writing outweighs the financial unpredictability, and she has no intention of returning to office life.\n________________________________________\nB – Michael Green\nMichael was a successful civil engineer before he decided to pursue a career in education. Motivated by a desire to inspire young minds, he retrained as a secondary school teacher during evenings and weekends while still working full time. The transition was not easy, as it required him to adapt to a completely different work environment and daily schedule. However, Michael finds teaching immensely rewarding, particularly when he sees his students grasp complex concepts for the first time. He values the opportunity to impact future generations positively, and he believes his earlier career gave him useful skills in planning and explaining technical ideas clearly.\n________________________________________\nC – Sophia Martinez\nSophia worked as a software developer for several years before realising that her true calling was in the culinary arts. Leaving a stable job in tech, she enrolled in culinary school to pursue her dream of becoming a chef. Although it was a significant change, Sophia has not looked back since opening her own small restaurant in her home town. She enjoys the hands-on aspect of her new job and the chance to express her creativity through food, despite the long and demanding hours. For her, the physical pace of a kitchen feels more authentic than sitting at a desk, even when service nights are exhausting.\n________________________________________\nD – Liam Robinson\nLiam's journey from accountant to interior designer might seem unusual, but for him it was a natural progression. Always passionate about aesthetics and design, he took the bold step of switching careers after ten years in finance. Liam initially worried about the financial implications of starting again in a competitive field, but he ultimately found a niche for himself, blending his analytical skills with creative design. He appreciates how his new career allows him to see the tangible results of his work, transforming rooms and offices to meet clients' needs. Former colleagues sometimes tease him about the change, yet he feels he is finally doing what suits him best.\n________________________________________\n________________________________________",
+          "respuestasMcq": [],
           "respuestasAbiertas": [],
           "audios": []
         }
@@ -825,10 +863,10 @@
       "activity": "essay",
       "items": [
         {
-          "preguntaId": "4bc7fe3e-be54-4897-bfd9-63cac9093113",
+          "preguntaId": "b9b64515-5027-4c37-ba4d-deb973fc589c",
           "parteNombre": "Parte 8 B2",
           "descripcionParte": "Part 8: In this part, you will read two short texts. Then, you must write an essay summarising and evaluating the key points from both. Use your own words as much as possible and include your personal opinion.\r\n\r\nYour answer should be between 240–280 words. Try to stay clear and organized, and support your ideas with examples where appropriate.",
-          "enunciado": "Writing Part 1 — Essay\nQuestion: How has technology changed urban life, and do the benefits outweigh the challenges?\nYou should write about:\n1. Describe ways technology has improved daily life in cities\n2. Explain problems technology may cause in urban environments\n3. Give your opinion on whether technology’s benefits are greater than its drawbacks\nInstructions:\nWrite an essay using all the notes and give reasons for your point of view.\nWord limit: 140–190 words",
+          "enunciado": "Writing Part 1 — Essay\nQuestion: Some people believe schools should teach practical life skills, such as cooking or managing money. Do you agree?\nYou should write about:\n1. why practical skills are useful\n2. possible problems with adding them to school subjects\n3. your own idea\nInstructions:\nWrite an essay using all the notes and give reasons for your point of view.\nWord limit: 140–190 words",
           "respuestasMcq": [],
           "respuestasAbiertas": [],
           "audios": []
@@ -841,10 +879,10 @@
       "activity": "part-2",
       "items": [
         {
-          "preguntaId": "7524a8de-de56-4b25-9cc7-d69031d0c246",
+          "preguntaId": "bd503c0e-6ced-42b8-b425-4ee335c29629",
           "parteNombre": "Parte 9 B2",
           "descripcionParte": "Part 9:\r\nWrite an answer to one of the questions 2 – 4 in this part. Write your answer in 140 – 190 words in an appropriate style on the separate answer sheet. Put the question number in the box at the top of the answer sheet.\r\n",
-          "enunciado": "Writing Part 2 — Choose one task\nWrite your text in 140-190 words on the topic of urban life and technology. Choose ONE task from the four options below and make sure to include all the points mentioned in the task.\nWord limit: 140–190 words\n\n1\nWrite an article for a city magazine about how technology is changing daily life in urban areas. Include: at least two examples of new technologies used in cities, the benefits these changes bring to residents, and any possible drawbacks.\nWrite your article.\n\n2\nWrite a letter to the editor of a local newspaper expressing your opinion about the impact of technology on community interaction in your city. Include your views on whether technology helps or hinders social connections, and suggest one action that the city council could take to improve community life.\nWrite your email.\n\n3\nWrite a report for your local community centre about the use of smart technology in public transport. Include information about how the technology works, the advantages it offers for commuters, and recommendations for further improvements.\nWrite your report.\n\n4\nWrite a review for an online blog about a recently opened ‘smart café’ in your city that uses high-tech devices and apps. Include details about the technology used, your experience as a customer, and whether you would recommend it to other readers.\nWrite your review.",
+          "enunciado": "Writing Part 2 — Choose one task\nChoose ONE of the tasks below and write your answer in 140–190 words in an appropriate style.\nWord limit: 140–190 words\n\n1\nYou see this announcement in your school’s English-language magazine:\nArticles wanted: Switch off and relax!\nWhat hobby or activity helps young people relax? Describe the hobby or activity, explain why it helps people relax, and say who you would recommend it to.\nWrite your article.\n\n2\nYou have received this email from your English-speaking friend Alex:\nGreat news — I’m coming to stay in your area for a weekend next month! What could we do together while I’m there? And what clothes and other things should I bring? See you soon!\nIn your email, suggest two things you could do together, explain what clothes and things Alex should bring, and offer to help with the plans.\nWrite your email.\n\n3\nThe principal of your college wants to improve the study areas for students, and has asked you to write a report.\nIn your report, describe the problems with the study areas at the moment, suggest some improvements, and explain which change would be the most useful for students.\nWrite your report.",
           "respuestasMcq": [],
           "respuestasAbiertas": [],
           "audios": []
@@ -857,173 +895,173 @@
       "activity": "short-extracts",
       "items": [
         {
-          "preguntaId": "f3a32fe1-d017-4fa7-afab-2d25798ff485",
+          "preguntaId": "c736e635-128b-4d9f-a186-27833ef677bd",
           "parteNombre": "Parte 10 B2",
-          "descripcionParte": "Part:10\r\nFor questions, choose the best answer (A, B or C).",
-          "enunciado": "Various short conversations about life in the city and technology use\n\n1\nWhat benefit does the city app provide?\nA) It offers discounts on bus fares.\nB) It informs users about bus delays.\nC) It helps find taxis quickly.\n\n2\nWhat does the smart home system do?\nA) Automatically adjusts heating based on weather.\nB) Warns about upcoming storms.\nC) Turns off lights when the house is empty.\n\n3\nWhy is the installation of charging stations important?\nA) It will reduce traffic congestion.\nB) It encourages use of electric vehicles.\nC) It provides free electricity to cars.\n\n4\nHow does the speaker feel about the surveillance cameras?\nA) They seem helpful for safety.\nB) They are a useful entertainment feature.\nC) They invade people’s privacy too much.\n\n5\nWhat is the new feature of the community garden?\nA) It offers gardening classes online.\nB) It lets people book garden plots through an app.\nC) It has extended opening hours in spring.\n\n6\nWhat payment method do the speakers prefer?\nA) Cash only.\nB) Digital, especially contactless payments.\nC) Checks.\n\n7\nWhat is the aim of the new city initiative regarding teenagers?\nA) To increase their use of smartphones.\nB) To encourage spending more time outdoors.\nC) To reduce homework assignments.\n\n8\nHow have transport schedules improved?\nA) They allow flexible planning with real-time apps.\nB) They operate 24 hours a day now.\nC) They offer discounts for regular users.",
+          "descripcionParte": "Part:10\r\n\r\nYou will hear people talking in eight different situations. For questions 1–8, choose the best answer (A, B or C).",
+          "enunciado": "Eight independent everyday situations: gallery, airport, university, theatre, dry cleaner, cookery demo, botanical garden, rented flat.\n\n1\nWhat does the speaker recommend the visitor do next?\nA) Book a guided tour before leaving the building\nB) Come back when the borrowed painting has returned\nC) Look at other works displayed in a nearby room\n\n2\nWhat are passengers told to do?\nA) Collect their luggage before going to the gate\nB) Go to a different gate from the one on their boarding pass\nC) Wait where they are until the delay is officially over\n\n3\nWhat must the student do to obtain a transcript?\nA) Submit a completed application together with identification\nB) Ask their personal tutor to send it directly to an employer\nC) Wait until after graduation before the request can be processed\n\n4\nWhat does the assistant offer the customer?\nA) Tickets for a different performance later in the week\nB) A full refund because the best seats are unavailable\nC) Seats further from the stage at a lower price\n\n5\nWhat does the assistant suggest the customer should do?\nA) Contact the shop that sold the jacket for compensation\nB) Take the item to a cleaner used to working with that material\nC) Leave the jacket for one more attempt using the same process\n\n6\nWhat is the main focus of the session?\nA) Changing recipes so they suit smaller households\nB) Teaching professional techniques used in restaurant kitchens\nC) Preparing large batches of food suitable for freezing\n\n7\nWhat can visitors do while the glasshouse is closed?\nA) Enter the tropical house through a side entrance\nB) Follow the outdoor route past the sculptures\nC) Visit the orchid display in the main hall\n\n8\nWhat does the tenant need to arrange?\nA) Payment of the rent before the end of the week\nB) Permission to redecorate the kitchen themselves\nC) Being at home when the repair visit takes place",
           "respuestasMcq": [
             {
-              "pregunta_id": "f3a32fe1-d017-4fa7-afab-2d25798ff485",
-              "respuesta": "1 A) It offers discounts on bus fares.",
+              "pregunta_id": "c736e635-128b-4d9f-a186-27833ef677bd",
+              "respuesta": "1 A) Book a guided tour before leaving the building",
               "correcta": false
             },
             {
-              "pregunta_id": "f3a32fe1-d017-4fa7-afab-2d25798ff485",
-              "respuesta": "1 B) It informs users about bus delays.",
+              "pregunta_id": "c736e635-128b-4d9f-a186-27833ef677bd",
+              "respuesta": "1 B) Come back when the borrowed painting has returned",
+              "correcta": false
+            },
+            {
+              "pregunta_id": "c736e635-128b-4d9f-a186-27833ef677bd",
+              "respuesta": "1 C) Look at other works displayed in a nearby room",
               "correcta": true
             },
             {
-              "pregunta_id": "f3a32fe1-d017-4fa7-afab-2d25798ff485",
-              "respuesta": "1 C) It helps find taxis quickly.",
+              "pregunta_id": "c736e635-128b-4d9f-a186-27833ef677bd",
+              "respuesta": "2 A) Collect their luggage before going to the gate",
               "correcta": false
             },
             {
-              "pregunta_id": "f3a32fe1-d017-4fa7-afab-2d25798ff485",
-              "respuesta": "2 A) Automatically adjusts heating based on weather.",
+              "pregunta_id": "c736e635-128b-4d9f-a186-27833ef677bd",
+              "respuesta": "2 B) Go to a different gate from the one on their boarding pass",
               "correcta": true
             },
             {
-              "pregunta_id": "f3a32fe1-d017-4fa7-afab-2d25798ff485",
-              "respuesta": "2 B) Warns about upcoming storms.",
+              "pregunta_id": "c736e635-128b-4d9f-a186-27833ef677bd",
+              "respuesta": "2 C) Wait where they are until the delay is officially over",
               "correcta": false
             },
             {
-              "pregunta_id": "f3a32fe1-d017-4fa7-afab-2d25798ff485",
-              "respuesta": "2 C) Turns off lights when the house is empty.",
-              "correcta": false
-            },
-            {
-              "pregunta_id": "f3a32fe1-d017-4fa7-afab-2d25798ff485",
-              "respuesta": "3 A) It will reduce traffic congestion.",
-              "correcta": false
-            },
-            {
-              "pregunta_id": "f3a32fe1-d017-4fa7-afab-2d25798ff485",
-              "respuesta": "3 B) It encourages use of electric vehicles.",
+              "pregunta_id": "c736e635-128b-4d9f-a186-27833ef677bd",
+              "respuesta": "3 A) Submit a completed application together with identification",
               "correcta": true
             },
             {
-              "pregunta_id": "f3a32fe1-d017-4fa7-afab-2d25798ff485",
-              "respuesta": "3 C) It provides free electricity to cars.",
+              "pregunta_id": "c736e635-128b-4d9f-a186-27833ef677bd",
+              "respuesta": "3 B) Ask their personal tutor to send it directly to an employer",
               "correcta": false
             },
             {
-              "pregunta_id": "f3a32fe1-d017-4fa7-afab-2d25798ff485",
-              "respuesta": "4 A) They seem helpful for safety.",
+              "pregunta_id": "c736e635-128b-4d9f-a186-27833ef677bd",
+              "respuesta": "3 C) Wait until after graduation before the request can be processed",
+              "correcta": false
+            },
+            {
+              "pregunta_id": "c736e635-128b-4d9f-a186-27833ef677bd",
+              "respuesta": "4 A) Tickets for a different performance later in the week",
+              "correcta": false
+            },
+            {
+              "pregunta_id": "c736e635-128b-4d9f-a186-27833ef677bd",
+              "respuesta": "4 B) A full refund because the best seats are unavailable",
+              "correcta": false
+            },
+            {
+              "pregunta_id": "c736e635-128b-4d9f-a186-27833ef677bd",
+              "respuesta": "4 C) Seats further from the stage at a lower price",
               "correcta": true
             },
             {
-              "pregunta_id": "f3a32fe1-d017-4fa7-afab-2d25798ff485",
-              "respuesta": "4 B) They are a useful entertainment feature.",
+              "pregunta_id": "c736e635-128b-4d9f-a186-27833ef677bd",
+              "respuesta": "5 A) Contact the shop that sold the jacket for compensation",
               "correcta": false
             },
             {
-              "pregunta_id": "f3a32fe1-d017-4fa7-afab-2d25798ff485",
-              "respuesta": "4 C) They invade people’s privacy too much.",
-              "correcta": false
-            },
-            {
-              "pregunta_id": "f3a32fe1-d017-4fa7-afab-2d25798ff485",
-              "respuesta": "5 A) It offers gardening classes online.",
-              "correcta": false
-            },
-            {
-              "pregunta_id": "f3a32fe1-d017-4fa7-afab-2d25798ff485",
-              "respuesta": "5 B) It lets people book garden plots through an app.",
+              "pregunta_id": "c736e635-128b-4d9f-a186-27833ef677bd",
+              "respuesta": "5 B) Take the item to a cleaner used to working with that material",
               "correcta": true
             },
             {
-              "pregunta_id": "f3a32fe1-d017-4fa7-afab-2d25798ff485",
-              "respuesta": "5 C) It has extended opening hours in spring.",
+              "pregunta_id": "c736e635-128b-4d9f-a186-27833ef677bd",
+              "respuesta": "5 C) Leave the jacket for one more attempt using the same process",
               "correcta": false
             },
             {
-              "pregunta_id": "f3a32fe1-d017-4fa7-afab-2d25798ff485",
-              "respuesta": "6 A) Cash only.",
-              "correcta": false
-            },
-            {
-              "pregunta_id": "f3a32fe1-d017-4fa7-afab-2d25798ff485",
-              "respuesta": "6 B) Digital, especially contactless payments.",
+              "pregunta_id": "c736e635-128b-4d9f-a186-27833ef677bd",
+              "respuesta": "6 A) Changing recipes so they suit smaller households",
               "correcta": true
             },
             {
-              "pregunta_id": "f3a32fe1-d017-4fa7-afab-2d25798ff485",
-              "respuesta": "6 C) Checks.",
+              "pregunta_id": "c736e635-128b-4d9f-a186-27833ef677bd",
+              "respuesta": "6 B) Teaching professional techniques used in restaurant kitchens",
               "correcta": false
             },
             {
-              "pregunta_id": "f3a32fe1-d017-4fa7-afab-2d25798ff485",
-              "respuesta": "7 A) To increase their use of smartphones.",
+              "pregunta_id": "c736e635-128b-4d9f-a186-27833ef677bd",
+              "respuesta": "6 C) Preparing large batches of food suitable for freezing",
               "correcta": false
             },
             {
-              "pregunta_id": "f3a32fe1-d017-4fa7-afab-2d25798ff485",
-              "respuesta": "7 B) To encourage spending more time outdoors.",
+              "pregunta_id": "c736e635-128b-4d9f-a186-27833ef677bd",
+              "respuesta": "7 A) Enter the tropical house through a side entrance",
+              "correcta": false
+            },
+            {
+              "pregunta_id": "c736e635-128b-4d9f-a186-27833ef677bd",
+              "respuesta": "7 B) Follow the outdoor route past the sculptures",
               "correcta": true
             },
             {
-              "pregunta_id": "f3a32fe1-d017-4fa7-afab-2d25798ff485",
-              "respuesta": "7 C) To reduce homework assignments.",
+              "pregunta_id": "c736e635-128b-4d9f-a186-27833ef677bd",
+              "respuesta": "7 C) Visit the orchid display in the main hall",
               "correcta": false
             },
             {
-              "pregunta_id": "f3a32fe1-d017-4fa7-afab-2d25798ff485",
-              "respuesta": "8 A) They allow flexible planning with real-time apps.",
+              "pregunta_id": "c736e635-128b-4d9f-a186-27833ef677bd",
+              "respuesta": "8 A) Payment of the rent before the end of the week",
+              "correcta": false
+            },
+            {
+              "pregunta_id": "c736e635-128b-4d9f-a186-27833ef677bd",
+              "respuesta": "8 B) Permission to redecorate the kitchen themselves",
+              "correcta": false
+            },
+            {
+              "pregunta_id": "c736e635-128b-4d9f-a186-27833ef677bd",
+              "respuesta": "8 C) Being at home when the repair visit takes place",
               "correcta": true
-            },
-            {
-              "pregunta_id": "f3a32fe1-d017-4fa7-afab-2d25798ff485",
-              "respuesta": "8 B) They operate 24 hours a day now.",
-              "correcta": false
-            },
-            {
-              "pregunta_id": "f3a32fe1-d017-4fa7-afab-2d25798ff485",
-              "respuesta": "8 C) They offer discounts for regular users.",
-              "correcta": false
             }
           ],
           "respuestasAbiertas": [],
           "audios": [
             {
               "orden": 1,
-              "titulo": "What benefit does the city app provide?",
-              "url": "https://qnazrzvwvkwhkfbqsbmr.supabase.co/storage/v1/object/public/Levels_Listening/b2/exam-1/part-10/clip-01-v2.mp3"
+              "titulo": "Situation 1 — Art gallery",
+              "url": "https://qnazrzvwvkwhkfbqsbmr.supabase.co/storage/v1/object/public/Levels_Listening/b2/exam-1/part-10/clip-01.mp3"
             },
             {
               "orden": 2,
-              "titulo": "What does the smart home system do?",
-              "url": "https://qnazrzvwvkwhkfbqsbmr.supabase.co/storage/v1/object/public/Levels_Listening/b2/exam-1/part-10/clip-02-v2.mp3"
+              "titulo": "Situation 2 — Airport gate",
+              "url": "https://qnazrzvwvkwhkfbqsbmr.supabase.co/storage/v1/object/public/Levels_Listening/b2/exam-1/part-10/clip-02.mp3"
             },
             {
               "orden": 3,
-              "titulo": "Why is the installation of charging stations important?",
-              "url": "https://qnazrzvwvkwhkfbqsbmr.supabase.co/storage/v1/object/public/Levels_Listening/b2/exam-1/part-10/clip-03-v2.mp3"
+              "titulo": "Situation 3 — University registry",
+              "url": "https://qnazrzvwvkwhkfbqsbmr.supabase.co/storage/v1/object/public/Levels_Listening/b2/exam-1/part-10/clip-03.mp3"
             },
             {
               "orden": 4,
-              "titulo": "How does the speaker feel about the surveillance cameras?",
-              "url": "https://qnazrzvwvkwhkfbqsbmr.supabase.co/storage/v1/object/public/Levels_Listening/b2/exam-1/part-10/clip-04-v2.mp3"
+              "titulo": "Situation 4 — Theatre box office",
+              "url": "https://qnazrzvwvkwhkfbqsbmr.supabase.co/storage/v1/object/public/Levels_Listening/b2/exam-1/part-10/clip-04.mp3"
             },
             {
               "orden": 5,
-              "titulo": "What is the new feature of the community garden?",
-              "url": "https://qnazrzvwvkwhkfbqsbmr.supabase.co/storage/v1/object/public/Levels_Listening/b2/exam-1/part-10/clip-05-v2.mp3"
+              "titulo": "Situation 5 — Dry cleaner",
+              "url": "https://qnazrzvwvkwhkfbqsbmr.supabase.co/storage/v1/object/public/Levels_Listening/b2/exam-1/part-10/clip-05.mp3"
             },
             {
               "orden": 6,
-              "titulo": "What payment method do the speakers prefer?",
-              "url": "https://qnazrzvwvkwhkfbqsbmr.supabase.co/storage/v1/object/public/Levels_Listening/b2/exam-1/part-10/clip-06-v2.mp3"
+              "titulo": "Situation 6 — Cookery demonstration",
+              "url": "https://qnazrzvwvkwhkfbqsbmr.supabase.co/storage/v1/object/public/Levels_Listening/b2/exam-1/part-10/clip-06.mp3"
             },
             {
               "orden": 7,
-              "titulo": "What is the aim of the new city initiative regarding teenagers?",
-              "url": "https://qnazrzvwvkwhkfbqsbmr.supabase.co/storage/v1/object/public/Levels_Listening/b2/exam-1/part-10/clip-07-v2.mp3"
+              "titulo": "Situation 7 — Botanical garden",
+              "url": "https://qnazrzvwvkwhkfbqsbmr.supabase.co/storage/v1/object/public/Levels_Listening/b2/exam-1/part-10/clip-07.mp3"
             },
             {
               "orden": 8,
-              "titulo": "How have transport schedules improved?",
-              "url": "https://qnazrzvwvkwhkfbqsbmr.supabase.co/storage/v1/object/public/Levels_Listening/b2/exam-1/part-10/clip-08-v2.mp3"
+              "titulo": "Situation 8 — Letting agency call",
+              "url": "https://qnazrzvwvkwhkfbqsbmr.supabase.co/storage/v1/object/public/Levels_Listening/b2/exam-1/part-10/clip-08.mp3"
             }
           ]
         }
@@ -1035,28 +1073,28 @@
       "activity": "sentence-completion",
       "items": [
         {
-          "preguntaId": "8dc37fa2-9ea0-4688-8d5e-56bc2eb33b37",
+          "preguntaId": "0c84ac67-cee6-4da2-aff8-cc858b1135d5",
           "parteNombre": "Parte 11 B2",
-          "descripcionParte": "Part:11\r\n\r\nFor questions, complete the sentences with a word or short phrase.",
-          "enunciado": "A monologue about technology’s impact on city living\nComplete: Apps have revolutionized public transport by providing ___ that reduce waiting times.\n(9) __________________\n\nComplete: Many city residents rely on smart home devices to improve convenience and ___ .\n(10) __________________\n\nComplete: Privacy concerns are linked to the increasing use of ___ in public areas.\n(11) __________________\n\nComplete: Some cities use AI-driven ___ systems to reduce traffic congestion.\n(12) __________________\n\nComplete: Community platforms help neighbours connect and create a sense of ___.\n(13) __________________\n\nComplete: It is important to balance screen time with ___ activities for mental health.\n(14) __________________\n\nComplete: Electric scooters and bikes are becoming ___ transport options in cities.\n(15) __________________\n\nComplete: Urban infrastructure is adapting to support more ___ modes of transport.\n(16) __________________\n\nComplete: Technology plays a ___ role in shaping everyday urban experiences.\n(17) __________________\n\nComplete: The use of technology in cities aims to create a more ___ urban life.\n(18) __________________",
+          "descripcionParte": "Part:11\r\n\r\nYou will hear a woman called Elena who volunteers with a mountain rescue team talking about the training new members receive. For questions 9–18, complete the sentences with a word or short phrase.",
+          "enunciado": "Radio interview / talk about mountain rescue volunteer training.\nBefore being accepted, applicants must pass an annual __________ test.\n(9) __________________\n\nIn the classroom, new volunteers learn __________, including map reading and compass work.\n(10) __________________\n\nEach team member carries a __________ to communicate with others when shouting is ineffective.\n(11) __________________\n\nThe initial training course includes an accredited __________ qualification.\n(12) __________________\n\nOutdoor kit must be fully __________ to cope with heavy rain on exposed hills.\n(13) __________________\n\nA __________ is requested when a casualty needs evacuation from a remote ridge.\n(14) __________________\n\nTeam leaders are unpaid and work on a __________ basis.\n(15) __________________\n\nRopes are used most often on __________ ground where a fall would be dangerous.\n(16) __________________\n\nCall-outs frequently happen in poor __________, such as fog or sleet.\n(17) __________________\n\nMany recruits say the training increased their __________ in the mountains.\n(18) __________________",
           "respuestasMcq": [],
           "respuestasAbiertas": [
-            "9 real-time updates",
-            "10 energy efficiency",
-            "11 surveillance cameras",
-            "12 traffic",
-            "13 belonging",
-            "14 outdoor",
-            "15 popular",
-            "16 sustainable",
-            "17 crucial",
-            "18 greener"
+            "9 fitness",
+            "10 navigation",
+            "11 whistle",
+            "12 first aid",
+            "13 waterproof",
+            "14 helicopter",
+            "15 voluntary",
+            "16 steep",
+            "17 visibility",
+            "18 confidence"
           ],
           "audios": [
             {
               "orden": 1,
-              "titulo": "A monologue about technology’s impact on city living",
-              "url": "https://qnazrzvwvkwhkfbqsbmr.supabase.co/storage/v1/object/public/Levels_Listening/b2/exam-1/part-11/clip-01-v2.mp3"
+              "titulo": "Elena — mountain rescue training",
+              "url": "https://qnazrzvwvkwhkfbqsbmr.supabase.co/storage/v1/object/public/Levels_Listening/b2/exam-1/part-11/clip-01.mp3"
             }
           ]
         }
@@ -1068,109 +1106,209 @@
       "activity": "multiple-matching",
       "items": [
         {
-          "preguntaId": "9535484c-d2da-4c82-9f2e-94442c658cef",
+          "preguntaId": "14b93176-4055-4568-8646-4d52ade7986a",
           "parteNombre": "Parte 12 B2",
-          "descripcionParte": "Part:12\r\n\r\nFor questions, choose from the list (A – H) what each speaker liked most about the city they visited. Use the letters only once. There are three extra letters which you do not need to use.",
-          "enunciado": "A conversation between two friends discussing new technology in their city.\n\n19\nWhat is the main feature of the new city app mentioned in the conversation?\nA) It offers discounted travel tickets.\nB) It provides real-time public transport updates.\nC) It allows booking taxis directly.\nD) It tracks users’ daily steps.\n\n20\nHow does the app help with crowded buses during rush hour?\nA) It suggests alternative, less crowded routes.\nB) It sends notifications about overcrowding fines.\nC) It limits the number of passengers boarding buses.\nD) It offers live video feeds of bus interiors.\n\n21\nWhat is special about the new street lighting in the city?\nA) It changes colors based on weather conditions.\nB) It adjusts brightness when someone is nearby to save energy.\nC) It is controlled remotely by users through the app.\nD) It has built-in cameras for traffic monitoring.\n\n22\nHow does the city’s initiative help residents avoid pollution?\nA) By providing free masks in high pollution areas.\nB) By sending alerts about pollution levels through the app.\nC) By closing off streets with poor air quality.\nD) By encouraging residents to work from home.\n\n23\nWhat concern do some people have about the new technologies?\nA) That they will be too expensive to maintain.\nB) That the data collected may invade their privacy.\nC) That the technology will replace public transport workers.\nD) That it will increase electricity consumption.",
+          "descripcionParte": "Part:12\r\n\r\nYou will hear five people talking about their first experiences of paid work. For questions 19–23, choose from the list (A–H) the opinion each speaker expresses. Use the letters only once. There are three extra letters which you do not need to use.",
+          "enunciado": "You will hear five people talking about their first experiences of paid work. For questions 19–23, choose from the list (A–H) the opinion each speaker expresses. Use the letters only once. There are three extra letters which you do not need to use.\nFive speakers describe what they learned from their first paid job.\nA feeling disappointed because the job offered fewer learning opportunities than expected\nB being given more responsibility than they had anticipated\nC learning to stay patient when dealing with rude or unreasonable people\nD discovering that getting on with colleagues mattered more than working quickly\nE finding that repetitive tasks became oddly satisfying after a while\nF wishing they had asked for advice before accepting the position\nG recognising that the experience changed their ideas about future study or careers\nH feeling physically exhausted by work they had not taken seriously before\n\nSpeaker 1\nSpeaker 2\nSpeaker 3\nSpeaker 4\nSpeaker 5",
           "respuestasMcq": [
             {
-              "pregunta_id": "9535484c-d2da-4c82-9f2e-94442c658cef",
-              "respuesta": "19 A) It offers discounted travel tickets.",
+              "pregunta_id": "14b93176-4055-4568-8646-4d52ade7986a",
+              "respuesta": "19 A",
               "correcta": false
             },
             {
-              "pregunta_id": "9535484c-d2da-4c82-9f2e-94442c658cef",
-              "respuesta": "19 B) It provides real-time public transport updates.",
+              "pregunta_id": "14b93176-4055-4568-8646-4d52ade7986a",
+              "respuesta": "19 B",
+              "correcta": false
+            },
+            {
+              "pregunta_id": "14b93176-4055-4568-8646-4d52ade7986a",
+              "respuesta": "19 C",
               "correcta": true
             },
             {
-              "pregunta_id": "9535484c-d2da-4c82-9f2e-94442c658cef",
-              "respuesta": "19 C) It allows booking taxis directly.",
+              "pregunta_id": "14b93176-4055-4568-8646-4d52ade7986a",
+              "respuesta": "19 D",
               "correcta": false
             },
             {
-              "pregunta_id": "9535484c-d2da-4c82-9f2e-94442c658cef",
-              "respuesta": "19 D) It tracks users’ daily steps.",
+              "pregunta_id": "14b93176-4055-4568-8646-4d52ade7986a",
+              "respuesta": "19 E",
               "correcta": false
             },
             {
-              "pregunta_id": "9535484c-d2da-4c82-9f2e-94442c658cef",
-              "respuesta": "20 A) It suggests alternative, less crowded routes.",
+              "pregunta_id": "14b93176-4055-4568-8646-4d52ade7986a",
+              "respuesta": "19 F",
+              "correcta": false
+            },
+            {
+              "pregunta_id": "14b93176-4055-4568-8646-4d52ade7986a",
+              "respuesta": "19 G",
+              "correcta": false
+            },
+            {
+              "pregunta_id": "14b93176-4055-4568-8646-4d52ade7986a",
+              "respuesta": "19 H",
+              "correcta": false
+            },
+            {
+              "pregunta_id": "14b93176-4055-4568-8646-4d52ade7986a",
+              "respuesta": "20 A",
+              "correcta": false
+            },
+            {
+              "pregunta_id": "14b93176-4055-4568-8646-4d52ade7986a",
+              "respuesta": "20 B",
+              "correcta": false
+            },
+            {
+              "pregunta_id": "14b93176-4055-4568-8646-4d52ade7986a",
+              "respuesta": "20 C",
+              "correcta": false
+            },
+            {
+              "pregunta_id": "14b93176-4055-4568-8646-4d52ade7986a",
+              "respuesta": "20 D",
+              "correcta": false
+            },
+            {
+              "pregunta_id": "14b93176-4055-4568-8646-4d52ade7986a",
+              "respuesta": "20 E",
+              "correcta": false
+            },
+            {
+              "pregunta_id": "14b93176-4055-4568-8646-4d52ade7986a",
+              "respuesta": "20 F",
+              "correcta": false
+            },
+            {
+              "pregunta_id": "14b93176-4055-4568-8646-4d52ade7986a",
+              "respuesta": "20 G",
+              "correcta": false
+            },
+            {
+              "pregunta_id": "14b93176-4055-4568-8646-4d52ade7986a",
+              "respuesta": "20 H",
               "correcta": true
             },
             {
-              "pregunta_id": "9535484c-d2da-4c82-9f2e-94442c658cef",
-              "respuesta": "20 B) It sends notifications about overcrowding fines.",
+              "pregunta_id": "14b93176-4055-4568-8646-4d52ade7986a",
+              "respuesta": "21 A",
               "correcta": false
             },
             {
-              "pregunta_id": "9535484c-d2da-4c82-9f2e-94442c658cef",
-              "respuesta": "20 C) It limits the number of passengers boarding buses.",
-              "correcta": false
-            },
-            {
-              "pregunta_id": "9535484c-d2da-4c82-9f2e-94442c658cef",
-              "respuesta": "20 D) It offers live video feeds of bus interiors.",
-              "correcta": false
-            },
-            {
-              "pregunta_id": "9535484c-d2da-4c82-9f2e-94442c658cef",
-              "respuesta": "21 A) It changes colors based on weather conditions.",
-              "correcta": false
-            },
-            {
-              "pregunta_id": "9535484c-d2da-4c82-9f2e-94442c658cef",
-              "respuesta": "21 B) It adjusts brightness when someone is nearby to save energy.",
+              "pregunta_id": "14b93176-4055-4568-8646-4d52ade7986a",
+              "respuesta": "21 B",
               "correcta": true
             },
             {
-              "pregunta_id": "9535484c-d2da-4c82-9f2e-94442c658cef",
-              "respuesta": "21 C) It is controlled remotely by users through the app.",
+              "pregunta_id": "14b93176-4055-4568-8646-4d52ade7986a",
+              "respuesta": "21 C",
               "correcta": false
             },
             {
-              "pregunta_id": "9535484c-d2da-4c82-9f2e-94442c658cef",
-              "respuesta": "21 D) It has built-in cameras for traffic monitoring.",
+              "pregunta_id": "14b93176-4055-4568-8646-4d52ade7986a",
+              "respuesta": "21 D",
               "correcta": false
             },
             {
-              "pregunta_id": "9535484c-d2da-4c82-9f2e-94442c658cef",
-              "respuesta": "22 A) By providing free masks in high pollution areas.",
+              "pregunta_id": "14b93176-4055-4568-8646-4d52ade7986a",
+              "respuesta": "21 E",
               "correcta": false
             },
             {
-              "pregunta_id": "9535484c-d2da-4c82-9f2e-94442c658cef",
-              "respuesta": "22 B) By sending alerts about pollution levels through the app.",
+              "pregunta_id": "14b93176-4055-4568-8646-4d52ade7986a",
+              "respuesta": "21 F",
+              "correcta": false
+            },
+            {
+              "pregunta_id": "14b93176-4055-4568-8646-4d52ade7986a",
+              "respuesta": "21 G",
+              "correcta": false
+            },
+            {
+              "pregunta_id": "14b93176-4055-4568-8646-4d52ade7986a",
+              "respuesta": "21 H",
+              "correcta": false
+            },
+            {
+              "pregunta_id": "14b93176-4055-4568-8646-4d52ade7986a",
+              "respuesta": "22 A",
+              "correcta": false
+            },
+            {
+              "pregunta_id": "14b93176-4055-4568-8646-4d52ade7986a",
+              "respuesta": "22 B",
+              "correcta": false
+            },
+            {
+              "pregunta_id": "14b93176-4055-4568-8646-4d52ade7986a",
+              "respuesta": "22 C",
+              "correcta": false
+            },
+            {
+              "pregunta_id": "14b93176-4055-4568-8646-4d52ade7986a",
+              "respuesta": "22 D",
+              "correcta": false
+            },
+            {
+              "pregunta_id": "14b93176-4055-4568-8646-4d52ade7986a",
+              "respuesta": "22 E",
               "correcta": true
             },
             {
-              "pregunta_id": "9535484c-d2da-4c82-9f2e-94442c658cef",
-              "respuesta": "22 C) By closing off streets with poor air quality.",
+              "pregunta_id": "14b93176-4055-4568-8646-4d52ade7986a",
+              "respuesta": "22 F",
               "correcta": false
             },
             {
-              "pregunta_id": "9535484c-d2da-4c82-9f2e-94442c658cef",
-              "respuesta": "22 D) By encouraging residents to work from home.",
+              "pregunta_id": "14b93176-4055-4568-8646-4d52ade7986a",
+              "respuesta": "22 G",
               "correcta": false
             },
             {
-              "pregunta_id": "9535484c-d2da-4c82-9f2e-94442c658cef",
-              "respuesta": "23 A) That they will be too expensive to maintain.",
+              "pregunta_id": "14b93176-4055-4568-8646-4d52ade7986a",
+              "respuesta": "22 H",
               "correcta": false
             },
             {
-              "pregunta_id": "9535484c-d2da-4c82-9f2e-94442c658cef",
-              "respuesta": "23 B) That the data collected may invade their privacy.",
+              "pregunta_id": "14b93176-4055-4568-8646-4d52ade7986a",
+              "respuesta": "23 A",
+              "correcta": false
+            },
+            {
+              "pregunta_id": "14b93176-4055-4568-8646-4d52ade7986a",
+              "respuesta": "23 B",
+              "correcta": false
+            },
+            {
+              "pregunta_id": "14b93176-4055-4568-8646-4d52ade7986a",
+              "respuesta": "23 C",
+              "correcta": false
+            },
+            {
+              "pregunta_id": "14b93176-4055-4568-8646-4d52ade7986a",
+              "respuesta": "23 D",
+              "correcta": false
+            },
+            {
+              "pregunta_id": "14b93176-4055-4568-8646-4d52ade7986a",
+              "respuesta": "23 E",
+              "correcta": false
+            },
+            {
+              "pregunta_id": "14b93176-4055-4568-8646-4d52ade7986a",
+              "respuesta": "23 F",
+              "correcta": false
+            },
+            {
+              "pregunta_id": "14b93176-4055-4568-8646-4d52ade7986a",
+              "respuesta": "23 G",
               "correcta": true
             },
             {
-              "pregunta_id": "9535484c-d2da-4c82-9f2e-94442c658cef",
-              "respuesta": "23 C) That the technology will replace public transport workers.",
-              "correcta": false
-            },
-            {
-              "pregunta_id": "9535484c-d2da-4c82-9f2e-94442c658cef",
-              "respuesta": "23 D) That it will increase electricity consumption.",
+              "pregunta_id": "14b93176-4055-4568-8646-4d52ade7986a",
+              "respuesta": "23 H",
               "correcta": false
             }
           ],
@@ -1178,8 +1316,28 @@
           "audios": [
             {
               "orden": 1,
-              "titulo": "A conversation between two friends discussing new technology in their city.",
-              "url": "https://qnazrzvwvkwhkfbqsbmr.supabase.co/storage/v1/object/public/Levels_Listening/b2/exam-1/part-12/clip-01-v2.mp3"
+              "titulo": "Speaker 1",
+              "url": "https://qnazrzvwvkwhkfbqsbmr.supabase.co/storage/v1/object/public/Levels_Listening/b2/exam-1/part-12/speaker-01.mp3"
+            },
+            {
+              "orden": 2,
+              "titulo": "Speaker 2",
+              "url": "https://qnazrzvwvkwhkfbqsbmr.supabase.co/storage/v1/object/public/Levels_Listening/b2/exam-1/part-12/speaker-02.mp3"
+            },
+            {
+              "orden": 3,
+              "titulo": "Speaker 3",
+              "url": "https://qnazrzvwvkwhkfbqsbmr.supabase.co/storage/v1/object/public/Levels_Listening/b2/exam-1/part-12/speaker-03.mp3"
+            },
+            {
+              "orden": 4,
+              "titulo": "Speaker 4",
+              "url": "https://qnazrzvwvkwhkfbqsbmr.supabase.co/storage/v1/object/public/Levels_Listening/b2/exam-1/part-12/speaker-04.mp3"
+            },
+            {
+              "orden": 5,
+              "titulo": "Speaker 5",
+              "url": "https://qnazrzvwvkwhkfbqsbmr.supabase.co/storage/v1/object/public/Levels_Listening/b2/exam-1/part-12/speaker-05.mp3"
             }
           ]
         }
@@ -1191,209 +1349,114 @@
       "activity": "conversation",
       "items": [
         {
-          "preguntaId": "bdb3f9bc-1a00-42cb-ac65-c6e6beea8fc6",
+          "preguntaId": "7612631b-91ad-4154-a06b-4552d61f1cc5",
           "parteNombre": "Parte 13 B2",
           "descripcionParte": "Part 13: \r\nFor questions, choose the best answer (A, B or C).",
-          "enunciado": "You will hear five people talking about their first experiences of paid work. For questions 24–28, choose from the list (A–H) the opinion each speaker expresses. Use the letters only once. There are three extra letters which you do not need to use.\nFive speakers describe what they learned from their first paid job.\nA feeling disappointed because the job offered fewer learning opportunities than expected\nB being given more responsibility than they had anticipated\nC learning to stay patient when dealing with rude or unreasonable people\nD discovering that getting on with colleagues mattered more than working quickly\nE finding that repetitive tasks became oddly satisfying after a while\nF wishing they had asked for advice before accepting the position\nG recognising that the experience changed their ideas about future study or careers\nH feeling physically exhausted by work they had not taken seriously before\n\nSpeaker 1\nSpeaker 2\nSpeaker 3\nSpeaker 4\nSpeaker 5",
+          "enunciado": "Interview about volunteers restoring a disused Victorian market hall as a community centre.\n\n24\nWhen Nina first saw the building, she noticed that it…\nA) had recently been repaired by the council\nB) had serious structural problems, including a leaking roof\nC) was still being used for regular farmers' markets\n\n25\nThe project group was able to start work because the council…\nA) gave them full ownership of the site straight away\nB) hired a private company to redevelop the building\nC) agreed to a temporary lease on the building\n\n26\nThe first stage of funding depended mainly on…\nA) donations from local businesses and crowdfunding\nB) the council paying for all tools and materials\nC) one large payment from a national heritage organisation\n\n27\nThe restoration was delayed most often because…\nA) the team could not find enough skilled volunteers\nB) unexpected damage was found behind the walls\nC) the team kept changing the colour scheme for the main hall\n\n28\nWho uses the hall most at present, according to Nina?\nA) adults attending evening classes on weekdays\nB) office workers at lunchtime during the week\nC) families with young children at weekends\n\n29\nSince the hall reopened, Nina has noticed that some people in the town centre…\nA) stay in the area longer instead of leaving immediately\nB) have stopped visiting independent shops completely\nC) only come to use the café and then go home\n\n30\nNina's advice for other towns in a similar situation is to…\nA) prepare detailed architectural reports before doing any work\nB) open one practical section of the building so progress is visible\nC) wait for a national expert to lead the project before volunteers start",
           "respuestasMcq": [
             {
-              "pregunta_id": "bdb3f9bc-1a00-42cb-ac65-c6e6beea8fc6",
-              "respuesta": "24 A",
+              "pregunta_id": "7612631b-91ad-4154-a06b-4552d61f1cc5",
+              "respuesta": "24 A) had recently been repaired by the council",
               "correcta": false
             },
             {
-              "pregunta_id": "bdb3f9bc-1a00-42cb-ac65-c6e6beea8fc6",
-              "respuesta": "24 B",
-              "correcta": false
-            },
-            {
-              "pregunta_id": "bdb3f9bc-1a00-42cb-ac65-c6e6beea8fc6",
-              "respuesta": "24 C",
+              "pregunta_id": "7612631b-91ad-4154-a06b-4552d61f1cc5",
+              "respuesta": "24 B) had serious structural problems, including a leaking roof",
               "correcta": true
             },
             {
-              "pregunta_id": "bdb3f9bc-1a00-42cb-ac65-c6e6beea8fc6",
-              "respuesta": "24 D",
+              "pregunta_id": "7612631b-91ad-4154-a06b-4552d61f1cc5",
+              "respuesta": "24 C) was still being used for regular farmers' markets",
               "correcta": false
             },
             {
-              "pregunta_id": "bdb3f9bc-1a00-42cb-ac65-c6e6beea8fc6",
-              "respuesta": "24 E",
+              "pregunta_id": "7612631b-91ad-4154-a06b-4552d61f1cc5",
+              "respuesta": "25 A) gave them full ownership of the site straight away",
               "correcta": false
             },
             {
-              "pregunta_id": "bdb3f9bc-1a00-42cb-ac65-c6e6beea8fc6",
-              "respuesta": "24 F",
+              "pregunta_id": "7612631b-91ad-4154-a06b-4552d61f1cc5",
+              "respuesta": "25 B) hired a private company to redevelop the building",
               "correcta": false
             },
             {
-              "pregunta_id": "bdb3f9bc-1a00-42cb-ac65-c6e6beea8fc6",
-              "respuesta": "24 G",
-              "correcta": false
-            },
-            {
-              "pregunta_id": "bdb3f9bc-1a00-42cb-ac65-c6e6beea8fc6",
-              "respuesta": "24 H",
-              "correcta": false
-            },
-            {
-              "pregunta_id": "bdb3f9bc-1a00-42cb-ac65-c6e6beea8fc6",
-              "respuesta": "25 A",
-              "correcta": false
-            },
-            {
-              "pregunta_id": "bdb3f9bc-1a00-42cb-ac65-c6e6beea8fc6",
-              "respuesta": "25 B",
-              "correcta": false
-            },
-            {
-              "pregunta_id": "bdb3f9bc-1a00-42cb-ac65-c6e6beea8fc6",
-              "respuesta": "25 C",
-              "correcta": false
-            },
-            {
-              "pregunta_id": "bdb3f9bc-1a00-42cb-ac65-c6e6beea8fc6",
-              "respuesta": "25 D",
-              "correcta": false
-            },
-            {
-              "pregunta_id": "bdb3f9bc-1a00-42cb-ac65-c6e6beea8fc6",
-              "respuesta": "25 E",
-              "correcta": false
-            },
-            {
-              "pregunta_id": "bdb3f9bc-1a00-42cb-ac65-c6e6beea8fc6",
-              "respuesta": "25 F",
-              "correcta": false
-            },
-            {
-              "pregunta_id": "bdb3f9bc-1a00-42cb-ac65-c6e6beea8fc6",
-              "respuesta": "25 G",
-              "correcta": false
-            },
-            {
-              "pregunta_id": "bdb3f9bc-1a00-42cb-ac65-c6e6beea8fc6",
-              "respuesta": "25 H",
+              "pregunta_id": "7612631b-91ad-4154-a06b-4552d61f1cc5",
+              "respuesta": "25 C) agreed to a temporary lease on the building",
               "correcta": true
             },
             {
-              "pregunta_id": "bdb3f9bc-1a00-42cb-ac65-c6e6beea8fc6",
-              "respuesta": "26 A",
-              "correcta": false
-            },
-            {
-              "pregunta_id": "bdb3f9bc-1a00-42cb-ac65-c6e6beea8fc6",
-              "respuesta": "26 B",
+              "pregunta_id": "7612631b-91ad-4154-a06b-4552d61f1cc5",
+              "respuesta": "26 A) donations from local businesses and crowdfunding",
               "correcta": true
             },
             {
-              "pregunta_id": "bdb3f9bc-1a00-42cb-ac65-c6e6beea8fc6",
-              "respuesta": "26 C",
+              "pregunta_id": "7612631b-91ad-4154-a06b-4552d61f1cc5",
+              "respuesta": "26 B) the council paying for all tools and materials",
               "correcta": false
             },
             {
-              "pregunta_id": "bdb3f9bc-1a00-42cb-ac65-c6e6beea8fc6",
-              "respuesta": "26 D",
+              "pregunta_id": "7612631b-91ad-4154-a06b-4552d61f1cc5",
+              "respuesta": "26 C) one large payment from a national heritage organisation",
               "correcta": false
             },
             {
-              "pregunta_id": "bdb3f9bc-1a00-42cb-ac65-c6e6beea8fc6",
-              "respuesta": "26 E",
+              "pregunta_id": "7612631b-91ad-4154-a06b-4552d61f1cc5",
+              "respuesta": "27 A) the team could not find enough skilled volunteers",
               "correcta": false
             },
             {
-              "pregunta_id": "bdb3f9bc-1a00-42cb-ac65-c6e6beea8fc6",
-              "respuesta": "26 F",
-              "correcta": false
-            },
-            {
-              "pregunta_id": "bdb3f9bc-1a00-42cb-ac65-c6e6beea8fc6",
-              "respuesta": "26 G",
-              "correcta": false
-            },
-            {
-              "pregunta_id": "bdb3f9bc-1a00-42cb-ac65-c6e6beea8fc6",
-              "respuesta": "26 H",
-              "correcta": false
-            },
-            {
-              "pregunta_id": "bdb3f9bc-1a00-42cb-ac65-c6e6beea8fc6",
-              "respuesta": "27 A",
-              "correcta": false
-            },
-            {
-              "pregunta_id": "bdb3f9bc-1a00-42cb-ac65-c6e6beea8fc6",
-              "respuesta": "27 B",
-              "correcta": false
-            },
-            {
-              "pregunta_id": "bdb3f9bc-1a00-42cb-ac65-c6e6beea8fc6",
-              "respuesta": "27 C",
-              "correcta": false
-            },
-            {
-              "pregunta_id": "bdb3f9bc-1a00-42cb-ac65-c6e6beea8fc6",
-              "respuesta": "27 D",
-              "correcta": false
-            },
-            {
-              "pregunta_id": "bdb3f9bc-1a00-42cb-ac65-c6e6beea8fc6",
-              "respuesta": "27 E",
+              "pregunta_id": "7612631b-91ad-4154-a06b-4552d61f1cc5",
+              "respuesta": "27 B) unexpected damage was found behind the walls",
               "correcta": true
             },
             {
-              "pregunta_id": "bdb3f9bc-1a00-42cb-ac65-c6e6beea8fc6",
-              "respuesta": "27 F",
+              "pregunta_id": "7612631b-91ad-4154-a06b-4552d61f1cc5",
+              "respuesta": "27 C) the team kept changing the colour scheme for the main hall",
               "correcta": false
             },
             {
-              "pregunta_id": "bdb3f9bc-1a00-42cb-ac65-c6e6beea8fc6",
-              "respuesta": "27 G",
+              "pregunta_id": "7612631b-91ad-4154-a06b-4552d61f1cc5",
+              "respuesta": "28 A) adults attending evening classes on weekdays",
               "correcta": false
             },
             {
-              "pregunta_id": "bdb3f9bc-1a00-42cb-ac65-c6e6beea8fc6",
-              "respuesta": "27 H",
+              "pregunta_id": "7612631b-91ad-4154-a06b-4552d61f1cc5",
+              "respuesta": "28 B) office workers at lunchtime during the week",
               "correcta": false
             },
             {
-              "pregunta_id": "bdb3f9bc-1a00-42cb-ac65-c6e6beea8fc6",
-              "respuesta": "28 A",
-              "correcta": false
-            },
-            {
-              "pregunta_id": "bdb3f9bc-1a00-42cb-ac65-c6e6beea8fc6",
-              "respuesta": "28 B",
-              "correcta": false
-            },
-            {
-              "pregunta_id": "bdb3f9bc-1a00-42cb-ac65-c6e6beea8fc6",
-              "respuesta": "28 C",
-              "correcta": false
-            },
-            {
-              "pregunta_id": "bdb3f9bc-1a00-42cb-ac65-c6e6beea8fc6",
-              "respuesta": "28 D",
-              "correcta": false
-            },
-            {
-              "pregunta_id": "bdb3f9bc-1a00-42cb-ac65-c6e6beea8fc6",
-              "respuesta": "28 E",
-              "correcta": false
-            },
-            {
-              "pregunta_id": "bdb3f9bc-1a00-42cb-ac65-c6e6beea8fc6",
-              "respuesta": "28 F",
-              "correcta": false
-            },
-            {
-              "pregunta_id": "bdb3f9bc-1a00-42cb-ac65-c6e6beea8fc6",
-              "respuesta": "28 G",
+              "pregunta_id": "7612631b-91ad-4154-a06b-4552d61f1cc5",
+              "respuesta": "28 C) families with young children at weekends",
               "correcta": true
             },
             {
-              "pregunta_id": "bdb3f9bc-1a00-42cb-ac65-c6e6beea8fc6",
-              "respuesta": "28 H",
+              "pregunta_id": "7612631b-91ad-4154-a06b-4552d61f1cc5",
+              "respuesta": "29 A) stay in the area longer instead of leaving immediately",
+              "correcta": true
+            },
+            {
+              "pregunta_id": "7612631b-91ad-4154-a06b-4552d61f1cc5",
+              "respuesta": "29 B) have stopped visiting independent shops completely",
+              "correcta": false
+            },
+            {
+              "pregunta_id": "7612631b-91ad-4154-a06b-4552d61f1cc5",
+              "respuesta": "29 C) only come to use the café and then go home",
+              "correcta": false
+            },
+            {
+              "pregunta_id": "7612631b-91ad-4154-a06b-4552d61f1cc5",
+              "respuesta": "30 A) prepare detailed architectural reports before doing any work",
+              "correcta": false
+            },
+            {
+              "pregunta_id": "7612631b-91ad-4154-a06b-4552d61f1cc5",
+              "respuesta": "30 B) open one practical section of the building so progress is visible",
+              "correcta": true
+            },
+            {
+              "pregunta_id": "7612631b-91ad-4154-a06b-4552d61f1cc5",
+              "respuesta": "30 C) wait for a national expert to lead the project before volunteers start",
               "correcta": false
             }
           ],
@@ -1401,28 +1464,8 @@
           "audios": [
             {
               "orden": 1,
-              "titulo": "Speaker 1",
-              "url": "https://qnazrzvwvkwhkfbqsbmr.supabase.co/storage/v1/object/public/Levels_Listening/b2/exam-1/part-13/speaker-01.mp3"
-            },
-            {
-              "orden": 2,
-              "titulo": "Speaker 2",
-              "url": "https://qnazrzvwvkwhkfbqsbmr.supabase.co/storage/v1/object/public/Levels_Listening/b2/exam-1/part-13/speaker-02.mp3"
-            },
-            {
-              "orden": 3,
-              "titulo": "Speaker 3",
-              "url": "https://qnazrzvwvkwhkfbqsbmr.supabase.co/storage/v1/object/public/Levels_Listening/b2/exam-1/part-13/speaker-03.mp3"
-            },
-            {
-              "orden": 4,
-              "titulo": "Speaker 4",
-              "url": "https://qnazrzvwvkwhkfbqsbmr.supabase.co/storage/v1/object/public/Levels_Listening/b2/exam-1/part-13/speaker-04.mp3"
-            },
-            {
-              "orden": 5,
-              "titulo": "Speaker 5",
-              "url": "https://qnazrzvwvkwhkfbqsbmr.supabase.co/storage/v1/object/public/Levels_Listening/b2/exam-1/part-13/speaker-05.mp3"
+              "titulo": "Interview — Bringing the Hall Back to Life",
+              "url": "https://qnazrzvwvkwhkfbqsbmr.supabase.co/storage/v1/object/public/Levels_Listening/b2/exam-1/part-13/clip-01.mp3"
             }
           ]
         }
@@ -1434,21 +1477,12 @@
       "activity": "interview",
       "items": [
         {
-          "preguntaId": "a909437e-dd62-4874-a7da-2055b2e9f8da",
+          "preguntaId": "56d1d428-8b51-4773-abf8-ffe15341355a",
           "parteNombre": "Parte 14 B2",
           "descripcionParte": "Part 14: Presentation with the interviewer. In this part of the test, I'm going to ask you some questions about yourself. Please answer each question as fully as possible, giving reasons and examples where appropriate. You can record your answers using the microphone or type them in the text area.",
-          "enunciado": "In this part of the test, the examiner will ask you some questions about yourself. Please listen carefully and try to answer each question as fully as you can. Speak clearly and confidently.\nCan you tell me your name and where you are from?\nDo you prefer living in a city or in the countryside? Why?\nWhat do you like most about urban life?\nAre there any disadvantages to living in a big city?\nHow has technology changed the way people spend their free time in your country?\nDo you think smartphones make life more convenient or more complicated?\nHow often do you use public transport, and what do you think about it?\nAre there any new technologies that you would like to have in your daily life?",
+          "enunciado": "The examiner will ask you some questions about yourself. Please answer briefly but clearly.\nAbout 2 minutes\n\nDo you enjoy living in a city or a smaller town? Why?\nHow often do you use technology in your daily life?\nWhat are some advantages and disadvantages of city life?\nDo you prefer to spend your free time using technology or doing outdoor activities?\n\nThe examiner may ask you to explain your answers or give more details.",
           "respuestasMcq": [],
-          "respuestasAbiertas": [
-            "1 Sample answer for examiner reference.",
-            "2 Sample answer for examiner reference.",
-            "3 Sample answer for examiner reference.",
-            "4 Sample answer for examiner reference.",
-            "5 Sample answer for examiner reference.",
-            "6 Sample answer for examiner reference.",
-            "7 Sample answer for examiner reference.",
-            "8 Sample answer for examiner reference."
-          ],
+          "respuestasAbiertas": [],
           "audios": []
         }
       ]
@@ -1459,10 +1493,10 @@
       "activity": "long-turn",
       "items": [
         {
-          "preguntaId": "d2709093-b6bb-47d4-9e5e-a03b094c6c7d",
+          "preguntaId": "577d77d9-7f10-4b8d-805e-492a3739171c",
           "parteNombre": "Parte 15 B2",
           "descripcionParte": "Part 15: In this part of the test, I´m going to give each of you two photographs. I´d like you to talk about your photographs on your own for about a minute, and also to answer a question about your partner´s photographs",
-          "enunciado": "Now, I'm going to give you two photographs. I'd like you to compare the photographs and say what you think the people are doing and how they might be feeling. You should speak for about one minute.\nLook at the two photos and compare how the people are using technology in their urban environments.\nTheme: Urban life and technology",
+          "enunciado": "Candidate A: You have one minute to compare the two photographs and answer the question. Candidate B: After Candidate A finishes, you will answer the follow-up question.\nApproximately 4 minutes in total: 1 minute for Candidate A's long turn and about 30 seconds for Candidate B's follow-up answer, repeated for the other candidate.\n\nCompare the two photographs. Say what you see and why the people might prefer each way of studying.\nTheme: Studying\nPhoto A: The photograph shows a group of students sitting together in a library. They are surrounded by bookshelves filled with books. The students are engaged in discussion, some taking notes while others look at a laptop. The environment is quiet but collaborative, with natural light coming through large windows.\nPhoto B: The photograph depicts a student studying alone at home. The student sits at a desk with a computer and several books. The room is cozy and decorated with personal items like photos and plants. The student appears focused and comfortable in a private space, with soft lighting creating a calm atmosphere.\n\nPartner follow-up (about 30 seconds)\nDo you think studying alone or with others is more effective for most students? Why?",
           "respuestasMcq": [],
           "respuestasAbiertas": [],
           "audios": []
@@ -1475,10 +1509,10 @@
       "activity": "collaborative",
       "items": [
         {
-          "preguntaId": "f0f41107-f127-48c7-b818-ccee6b494a13",
+          "preguntaId": "40aabf02-cae3-4471-908d-5c87b44ee886",
           "parteNombre": "Parte 16 B2",
           "descripcionParte": "Part 16: You and your partner will discuss a situation and make a decision together. You need to exchange ideas, give opinions, negotiate, and reach an agreement. This tests your ability to interact with another person, negotiate meaning, and work collaboratively.\r\n\r\n",
-          "enunciado": "You will discuss the questions below together. Share your ideas and try to agree on the best answers.\nPlanning a Smart City Community Event\nWhat types of technology could be showcased at the event to improve urban life?\nHow can the event encourage all age groups to participate and benefit from technology?\nWhat challenges might people face in using new city technologies, and how can the event help?\nHow could social media or apps be used to promote the event and keep people informed?\nWhat activities or demonstrations should be included to make the event interesting and interactive?\nHow can the event help reduce environmental issues common in cities using technology?\nWhat partnerships with local businesses or organizations could support the event?\n• Suggest technology-related activities and demonstrations for the event\n• Discuss how to make the event inclusive and engaging for different groups\n• Decide ways to promote the event using digital tools",
+          "enunciado": "You have 15 seconds to read the task sheet with ideas. Then discuss the topic with your partner for about 2 minutes. Finally, spend about 1 minute to reach a decision together.\nTotal time: approximately 4 minutes\n\nCentral question\nHow can cities use technology to improve the daily lives of their residents?\n\n\nTask prompts\n• Use apps to make public transport easier and more efficient\n• Install smart sensors to monitor air quality and reduce pollution\n• Create free Wi-Fi zones in public areas to increase connectivity\n• Use technology to improve safety, such as smart street lighting or surveillance\n• Encourage use of electric vehicles through charging points and smart parking\n\nDecision question\nWhich two of these ideas should the city prioritize to improve life for its residents?",
           "respuestasMcq": [],
           "respuestasAbiertas": [],
           "audios": []
@@ -1491,10 +1525,10 @@
       "activity": "discussion",
       "items": [
         {
-          "preguntaId": "4b13d737-43e5-4716-aee1-66ba44fba5ab",
+          "preguntaId": "0350ef08-ee0f-46f9-933b-b1ac2f8c2ded",
           "parteNombre": "Parte 17 B2",
           "descripcionParte": "Part 17: In this part of the test, you will have a discussion with your partner about the image shown below. You need to discuss the various topics and themes visible in the image, giving your opinions and exchanging ideas. The discussion should last about 4 minutes.",
-          "enunciado": "In this part of the exam, you will discuss some questions with your partner about the topic of urban life and technology. Try to give detailed answers and support your opinions with examples.\nHow has technology changed the way people live in cities?\nWhat are the advantages and disadvantages of using smart technology in urban areas?\nDo you think public transport in cities will become more efficient with technological advances? Why or why not?\nHow can technology help to solve environmental problems in cities?\nIn what ways might urban life become more challenging due to increasing reliance on technology?\nDo you prefer living in a city with advanced technology or in a rural area with less technology? Why?",
+          "enunciado": "Now, let's discuss some questions about urban life and technology. Please share your opinions and listen to your partner's ideas. Try to explain your reasons clearly and respond to each other's points.\nThe discussion lasts about 4 minutes.\n\n\nIn Part 3, you talked together about the advantages and disadvantages of living in busy cities and how technology influences urban living.\nHow do you think technology has changed the way people live in cities compared to the past?\nWhat are some problems that new technologies might cause in urban areas?\nDo you believe that technology can improve safety and security in cities? Why or why not?\nHow can urban planners use technology to make cities better places to live?\nIn your opinion, is it more important to develop technology for comfort or to protect the environment in cities?\nDo you think people living in cities rely too much on technology? Explain your answer.",
           "respuestasMcq": [],
           "respuestasAbiertas": [],
           "audios": []

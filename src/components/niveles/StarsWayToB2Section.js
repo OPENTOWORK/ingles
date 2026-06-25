@@ -19,6 +19,7 @@ import {
   getExerciseStars,
   isExerciseSlotUnlocked,
 } from '@/utils/b2StarsWayProgress';
+import { formatSkillExerciseLabel } from '@/utils/skillPartFirstProgress';
 import styles from './StarsWayToB2Section.module.css';
 
 const PATH_ALIGNS = ['center', 'right', 'center', 'left'];
@@ -108,7 +109,7 @@ function ExerciseNode({
       <span className={styles.exerciseNodeCircle}>
         <span className={styles.exerciseNodeNumber}>{exerciseIndex}</span>
       </span>
-      <span className={styles.exerciseNodeLabel}>Exercise {exerciseIndex}</span>
+      <span className={styles.exerciseNodeLabel}>{formatSkillExerciseLabel(examSlot, 'en')}</span>
       <TheoryLevelStars stars={stars} size="sm" variant="gold" />
       <span className={styles.exerciseNodeScore}>
         {sequentialLocked ? (
@@ -131,7 +132,7 @@ function ExerciseNode({
         <div
           id={focusId}
           className={nodeClassName}
-          aria-label={`Exercise ${exerciseIndex} locked. Earn at least 1 star on the previous exercise to unlock.`}
+          aria-label={`Test ${exerciseIndex} locked. Earn at least 1 star on the previous test to unlock.`}
           aria-disabled="true"
         >
           {nodeBody}
@@ -141,7 +142,7 @@ function ExerciseNode({
           id={focusId}
           href={href}
           className={nodeClassName}
-          aria-label={`Exercise ${exerciseIndex}, ${stars} of 3 stars${
+          aria-label={`Test ${exerciseIndex}, ${stars} of 3 stars${
             attempted ? `, score ${score.correct} of ${score.total}` : ', not tried yet'
           }`}
         >
@@ -169,7 +170,7 @@ function PartMilestone({ part, column, progressBySlot, availableSlots }) {
           <div className={styles.milestoneProgress}>
             <TheoryLevelStars stars={partStars} size="sm" variant="gold" />
             <span className={styles.milestoneMeta}>
-              {attempts}/{exerciseTotal} exercises · best {partStars}/3
+              {attempts}/{exerciseTotal} tests · best {partStars}/3
             </span>
           </div>
         </div>
@@ -270,7 +271,7 @@ function StarsWayToB2SectionInner() {
           Stars way to B2
         </h2>
         <p className={styles.description}>
-          Pick a skill and follow the path. Each circle is an exercise — earn up to 3 stars and see
+          Pick a skill and follow the path. Each circle is a test — earn up to 3 stars and see
           what you still need to reach the top.
         </p>
       </div>

@@ -44,71 +44,14 @@ export function isStaffRole(roleName = '') {
 }
 
 /**
- * @param {object} options
- * @param {boolean} options.isStudent — alumno / student
- * @param {boolean} options.hasPlacementResult — fila en placement_results
- * @param {string|null} options.assignedLevel — valor de nivel_asignado
- * @param {string} options.targetLevel — A2, B1, …
+ * Placement gating disabled: students can access all niveles without a placement result.
  */
-export function isNivelesLevelLocked({
-  isStudent,
-  hasPlacementResult,
-  assignedLevel,
-  targetLevel,
-}) {
-  if (UNLOCK_ALL_NIVELES_LEVELS) return false;
-  if (!isStudent) return false;
-
-  const target = parseAssignedCefrLevel(targetLevel) || cefrSlugToLevel(targetLevel);
-  if (!target || !NIVELES_CEFR_ORDER.includes(target)) return true;
-
-  const targetIdx = NIVELES_CEFR_ORDER.indexOf(target);
-
-  if (!hasPlacementResult) {
-    return target !== 'A2';
-  }
-
-  const assigned = parseAssignedCefrLevel(assignedLevel);
-  if (!assigned || !NIVELES_CEFR_ORDER.includes(assigned)) {
-    return target !== 'A2';
-  }
-
-  const assignedIdx = NIVELES_CEFR_ORDER.indexOf(assigned);
-  return targetIdx > assignedIdx;
+export function isNivelesLevelLocked() {
+  return false;
 }
 
-export function getPlacementLockReason({
-  isStudent,
-  hasPlacementResult,
-  assignedLevel,
-  targetLevel,
-}) {
-  if (
-    !isStudent ||
-    !isNivelesLevelLocked({
-      isStudent,
-      hasPlacementResult,
-      assignedLevel,
-      targetLevel,
-    })
-  ) {
-    return null;
-  }
-
-  if (!hasPlacementResult) {
-    return {
-      variant: 'no-placement',
-      message:
-        'Para acceder a este nivel debes completar el placement test. Mientras tanto solo está disponible A2.',
-    };
-  }
-
-  const assigned = parseAssignedCefrLevel(assignedLevel) || '—';
-  return {
-    variant: 'above-assigned',
-    assignedLevel: assigned,
-    message: `Tu nivel asignado es ${assigned}. Los niveles superiores permanecen bloqueados hasta que actualices tu placement.`,
-  };
+export function getPlacementLockReason() {
+  return null;
 }
 
 /** Extrae el slug CEFR de rutas /niveles/b2/… o /niveles/speaking-lab/b2/… */

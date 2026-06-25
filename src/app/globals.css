@@ -7929,11 +7929,27 @@ body.reading-night-mode .levels-b2-speaking-panel__usage,
 .levels-exam-inline-part6 {
   display: flex;
   flex-direction: column;
-  gap: 1rem;
+  gap: 1.25rem;
 }
 
 .levels-exam-part6-pool--inline-passage {
   margin-bottom: 0;
+  width: 100%;
+  position: sticky;
+  top: 0;
+  z-index: 2;
+}
+
+.levels-exam-part6-pool--inline-passage .levels-exam-part6-pool__list {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0.45rem;
+}
+
+@media (max-width: 899px) {
+  .levels-exam-part6-pool-sticky.levels-exam-part6-pool--inline-passage {
+    display: block;
+  }
 }
 
 .levels-exam-part6-pool__title {
@@ -14207,7 +14223,7 @@ body.reading-night-mode .levels-exam-inline-part6-gap__select--correct {
 
 body.reading-night-mode .levels-exam-inline-part6-gap__select--incorrect {
   border-color: #f87171;
-  background: #450a0a;
+  background: #7f1d1d;
   color: #fecaca;
 }
 

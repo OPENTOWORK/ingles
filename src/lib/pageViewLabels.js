@@ -8,6 +8,7 @@ const PATH_LABELS = [
   { prefix: '/teacher', label: 'Panel de profesor' },
   { prefix: '/coordinador', label: 'Panel de coordinador' },
   { prefix: '/admin/coordinador', label: 'Panel de coordinador' },
+  { prefix: '/buzon', label: 'Buzón' },
   { prefix: '/training', label: 'Training' },
   { prefix: '/niveles', label: 'Niveles' },
   { prefix: '/teoria', label: 'Teoría' },

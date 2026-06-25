@@ -30,7 +30,7 @@ export default function ReadingPracticeHeaderTools({ lang = 'en', showInstantFee
     focus: en ? 'Focus mode' : 'Modo concentración',
     eliminator: en ? 'Answer eliminator' : 'Eliminador de respuestas',
     clearEliminated: en ? 'Clear eliminated' : 'Quitar eliminadas',
-    focusHint: en ? 'Hide distractions and focus on the exercise.' : 'Oculta distracciones y céntrate en el ejercicio.',
+    focusHint: en ? 'Hide distractions and focus on the test.' : 'Oculta distracciones y céntrate en el test.',
     eliminatorHint: en
       ? 'Cross out answer options you think are wrong.'
       : 'Tacha las opciones que creas incorrectas.',

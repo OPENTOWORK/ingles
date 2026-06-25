@@ -87,6 +87,17 @@ export function canAccessItPanel(roleName = '') {
   return isAdminRole(roleName) || isItRole(roleName);
 }
 
+/** Buzón interno: mensajería instantánea entre staff. */
+export function canAccessStaffBuzon(roleName = '') {
+  return (
+    isAdminRole(roleName) ||
+    isCoordinatorRole(roleName) ||
+    isTeacherRole(roleName) ||
+    isSupportRole(roleName) ||
+    isItRole(roleName)
+  );
+}
+
 /** Evita múltiples lecturas en paralelo para el mismo usuario (mismo resultado). */
 const roleFetchInflight = new Map();
 

@@ -715,7 +715,7 @@ function B2WritingExamPracticePageInner() {
       title:
         selectedPartTitleParts.subtitle ||
         selectedPartTitleParts.heading ||
-        'Exercise',
+        'Test',
       heading: selectedPartTitleParts.heading || null,
       sectionTitle: getExamSkillSectionTitle('b2', 'exam-writing'),
     });

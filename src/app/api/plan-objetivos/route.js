@@ -85,14 +85,7 @@ export async function POST(req) {
       .limit(1)
       .maybeSingle();
 
-    if (!placementRow) {
-      return NextResponse.json(
-        { error: 'Debes completar el placement test antes de crear tu plan.' },
-        { status: 403 },
-      );
-    }
-
-    const level = placementLevel || placementRow.nivel_asignado;
+    const level = placementLevel || placementRow?.nivel_asignado || null;
     const planDocument = buildStudyPlanDocument({
       placementLevel: level,
       examGoalDate: examGoalDate || null,

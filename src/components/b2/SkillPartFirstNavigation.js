@@ -6,16 +6,18 @@ import { getLevelOverviewNav } from '@/utils/levelOverviewNav';
 import {
   aggregatePartProgress,
   filterProgressByPart,
+  formatSkillExerciseLabel,
   getSkillPracticeThemeKey,
   starsFromPartExerciseScore,
 } from '@/utils/skillPartFirstProgress';
+import { formatExamSlotDisplayLabel } from '@/utils/formatExamDisplayLabel';
 import styles from './SkillPartFirstNavigation.module.css';
 
 function StepIndicator({ step, lang }) {
   const en = lang === 'en';
   const steps = [
     { n: 1, label: en ? 'Choose part' : 'Elige parte' },
-    { n: 2, label: en ? 'Exercise practice' : 'Práctica' },
+    { n: 2, label: en ? 'Test practice' : 'Práctica de tests' },
   ];
 
   return (
@@ -58,13 +60,14 @@ function ExercisePracticeGrid({
   const en = lang === 'en';
 
   return (
-    <ul className={styles.exerciseGrid} aria-label={en ? 'Exercise practice list' : 'Lista de ejercicios'}>
+    <ul className={styles.exerciseGrid} aria-label={en ? 'Test practice list' : 'Lista de tests'}>
       {slots.map((slot, index) => {
         const partScore = examProgress[slot]?.parts?.[selectedPartNumber];
         const stars = starsFromPartExerciseScore(partScore);
         const attempted = Boolean(partScore?.total);
         const isActive = examSlot === slot;
-        const examLabel = examLabelsBySlot[slot];
+        const rawExamLabel = examLabelsBySlot[slot];
+        const examLabel = rawExamLabel ? formatExamSlotDisplayLabel(rawExamLabel, slot) : null;
 
         return (
           <li key={slot}>
@@ -78,7 +81,7 @@ function ExercisePracticeGrid({
               <div className={styles.exerciseCardTop}>
                 <span className={styles.exerciseIndex}>{String(index + 1).padStart(2, '0')}</span>
                 <span className={styles.exerciseTitle}>
-                  {en ? 'Exercise practice' : 'Práctica'}
+                  {formatSkillExerciseLabel(slot, lang)}
                 </span>
               </div>
               {examLabel ? <span className={styles.exerciseMeta}>{examLabel}</span> : null}
@@ -151,8 +154,8 @@ export function SkillPartFirstNavigation({
         <h2 className={styles.title}>{en ? 'Pick a part' : 'Elige una parte'}</h2>
         <p className={styles.subtitle}>
           {en
-            ? 'Select one exam part, then work through six exercise variants at your own pace.'
-            : 'Elige una parte y practica sus seis variantes de ejercicio.'}
+            ? 'Select one exam part, then work through six test variants at your own pace.'
+            : 'Elige una parte y practica sus seis variantes de test.'}
         </p>
 
         <StepIndicator step={1} lang={lang} />
@@ -175,11 +178,11 @@ export function SkillPartFirstNavigation({
                     >
                       {started
                         ? en
-                          ? `${attempted}/${examCount} exercises`
-                          : `${attempted}/${examCount} ejercicios`
+                          ? `${attempted}/${examCount} tests`
+                          : `${attempted}/${examCount} tests`
                         : en
-                          ? `${examCount} exercises`
-                          : `${examCount} ejercicios`}
+                          ? `${examCount} tests`
+                          : `${examCount} tests`}
                     </span>
                   </span>
                   <span className={styles.partArrow} aria-hidden>
@@ -201,7 +204,7 @@ export function SkillPartFirstNavigation({
     <section
       className={styles.shell}
       data-skill-theme={skillTheme}
-      aria-label={en ? 'Exercise practice' : 'Práctica de ejercicios'}
+      aria-label={en ? 'Test practice' : 'Práctica de tests'}
     >
       <div className={styles.headerRow}>
         <button type="button" className={styles.backBtn} onClick={onBackToParts}>
@@ -214,18 +217,18 @@ export function SkillPartFirstNavigation({
       </div>
 
       <p className={styles.eyebrow}>{en ? 'Skill practice' : 'Práctica por skill'}</p>
-      <h2 className={styles.title}>{en ? 'Exercise practice' : 'Práctica de ejercicios'}</h2>
+      <h2 className={styles.title}>{en ? 'Test practice' : 'Práctica de tests'}</h2>
       <p className={styles.subtitle}>
         {en
-          ? `${slots.length} exercises for this part. Stars reflect your saved scores.`
-          : `${slots.length} ejercicios para esta parte. Las estrellas reflejan tu puntuación guardada.`}
+          ? `${slots.length} tests for this part. Stars reflect your saved scores.`
+          : `${slots.length} tests para esta parte. Las estrellas reflejan tu puntuación guardada.`}
       </p>
 
       <StepIndicator step={2} lang={lang} />
 
       {slots.length === 0 ? (
         <p className={styles.empty}>
-          {en ? 'No exercises available yet.' : 'Aún no hay ejercicios disponibles.'}
+          {en ? 'No tests available yet.' : 'Aún no hay tests disponibles.'}
         </p>
       ) : (
         <ExercisePracticeGrid

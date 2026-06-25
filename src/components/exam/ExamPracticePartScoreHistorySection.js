@@ -7,7 +7,7 @@ import {
 } from '@/lib/examPracticePartScoreHistory';
 
 /**
- * Lowest saved scores for the active part (skill-practice exercise variants).
+ * Lowest saved scores for the active part (skill-practice test variants).
  */
 export default function ExamPracticePartScoreHistorySection({
   partNumber,
@@ -28,7 +28,7 @@ export default function ExamPracticePartScoreHistorySection({
     empty: en ? 'No saved scores for this part yet.' : 'Aún no hay notas guardadas para esta parte.',
     passed: en ? 'Passed' : 'Aprobada',
     notPassed: en ? 'Not passed' : 'No aprobada',
-    openExercise: en ? 'Open exercise' : 'Abrir ejercicio',
+    openExercise: en ? 'Open test' : 'Abrir test',
   };
 
   return (

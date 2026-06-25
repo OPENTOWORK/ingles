@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { useExamPracticeSlotProgress } from '@/hooks/useExamPracticeSlotProgress';
+import { formatExamSlotDisplayLabel } from '@/utils/formatExamDisplayLabel';
 import ExamPracticePartScoreHistorySection from '@/components/exam/ExamPracticePartScoreHistorySection';
 
 function pct(correct, total) {
@@ -96,7 +97,7 @@ export default function ExamPracticeProgressPanel({
               <section>
                 <h3 className="levels-listening-strategy__heading">{labels.exam}</h3>
                 <p className="levels-listening-strategy__exam-label">
-                  {examLabel || `${en ? 'Test' : 'Examen'} ${examSlot}`}
+                  {examLabel || formatExamSlotDisplayLabel(null, examSlot)}
                 </p>
               </section>
 

@@ -28,7 +28,7 @@ export default function ProfileStudyNotesPanel({ lang = 'en' }) {
       : 'Aún no hay notas. Usa el panel de notas durante la práctica de examen o skill.',
     signIn: en ? 'Sign in to see your study notes.' : 'Inicia sesión para ver tus notas.',
     loading: en ? 'Loading notes…' : 'Cargando notas…',
-    open: en ? 'Open exercise' : 'Abrir ejercicio',
+    open: en ? 'Open test' : 'Abrir test',
     edit: en ? 'Edit note' : 'Editar nota',
     save: en ? 'Save changes' : 'Guardar cambios',
     cancel: en ? 'Cancel' : 'Cancelar',

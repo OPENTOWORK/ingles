@@ -205,7 +205,13 @@ const COORDINATOR_ADMIN_PANEL_ITEM = {
   label: 'Panel de coordinador',
 };
 
+const STAFF_BUZON_PANEL_ITEM = {
+  href: '/buzon',
+  label: 'Buzón',
+};
+
 export const ADMIN_PANEL_MENU_ITEMS = [
+  STAFF_BUZON_PANEL_ITEM,
   { href: '/admin', label: 'Panel de administración' },
   { href: '/admin/profesor', label: 'Panel de profesor' },
   COORDINATOR_ADMIN_PANEL_ITEM,
@@ -246,6 +252,7 @@ const STAFF_PANEL_BY_KEY = {
   coordinador: { href: '/coordinador', label: 'Panel de coordinador' },
   soporte: { href: '/soporte', label: 'Panel de soporte' },
   informatico: { href: '/informatico', label: 'Panel informático' },
+  buzon: STAFF_BUZON_PANEL_ITEM,
   planObjetivos: { href: '/admin/plan-objetivos', label: 'Plan de objetivos' },
   planFinanciero: { href: '/admin/plan-financiero', label: 'Plan financiero' },
   ejercicios: { href: '/admin/ejercicios', label: 'Panel de ejercicios' },
@@ -265,20 +272,21 @@ export function getStaffPanelMenuItemsForRole(roleName = '') {
   }
   if (isCoordinatorRole(roleName)) {
     return [
+      STAFF_PANEL_BY_KEY.buzon,
       STAFF_PANEL_BY_KEY.profesorAdmin,
       STAFF_PANEL_BY_KEY.coordinador,
       STAFF_PANEL_BY_KEY.planObjetivos,
     ];
   }
   if (isTeacherRole(roleName)) {
-    return [STAFF_PANEL_BY_KEY.profesor];
+    return [STAFF_PANEL_BY_KEY.buzon, STAFF_PANEL_BY_KEY.profesor];
   }
   const role = normalizeRoleName(roleName);
   if (isSupportRole(roleName)) {
-    return [STAFF_PANEL_BY_KEY.soporte];
+    return [STAFF_PANEL_BY_KEY.buzon, STAFF_PANEL_BY_KEY.soporte];
   }
   if (isItRole(roleName)) {
-    return [STAFF_PANEL_BY_KEY.informatico];
+    return [STAFF_PANEL_BY_KEY.buzon, STAFF_PANEL_BY_KEY.informatico];
   }
   if (role === 'centro_empresa' || role === 'centro/empresa') {
     return [{ href: '/centro-empresa', label: 'Panel centro/empresa' }];

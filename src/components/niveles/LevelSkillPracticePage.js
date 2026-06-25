@@ -27,6 +27,7 @@ import { invalidateLevelsPracticeCache } from '@/hooks/useLevelsPracticeData';
 import { getSessionUserId } from '@/utils/levelsEstadisticas';
 import A2ExamGenerationStatus from '@/components/niveles/A2ExamGenerationStatus';
 import { getSkillPracticeThemeKey } from '@/utils/skillPartFirstProgress';
+import { formatExamSlotDisplayLabel } from '@/utils/formatExamDisplayLabel';
 import { runKeepPracticingSkillFlow } from '@/utils/skillPracticeNavigation';
 
 function parsePartNumber(text) {
@@ -104,7 +105,7 @@ function LevelSkillPracticePageInner({ slug, skillRoute }) {
         const idsBySlot = await getCachedExamenIdsBySlot(supabase, levelData.id);
         Object.entries(idsBySlot).forEach(([slot, id]) => {
           const row = ordered.find((r) => r.id === id);
-          names[Number(slot)] = row?.nombre?.trim() || `Examen ${slot}`;
+          names[Number(slot)] = formatExamSlotDisplayLabel(row?.nombre, slot);
         });
       } catch {
         /* fallback names */
@@ -294,7 +295,7 @@ function LevelSkillPracticePageInner({ slug, skillRoute }) {
                 <h2 style={{ marginTop: 0 }}>{selectedPart.displayName}</h2>
                 <p style={{ margin: '0 0 1rem', color: '#4a5568', lineHeight: 1.55 }}>
                   Practice content for this part opens from the dedicated exercise view. Use the tabs
-                  above to switch parts and <strong>Next exercise</strong> to try another variant.
+                  above to switch parts and <strong>Next test</strong> to try another variant.
                 </p>
                 <div style={{ marginTop: '1.25rem', textAlign: 'center' }}>
                   <a

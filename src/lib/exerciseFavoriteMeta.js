@@ -15,7 +15,7 @@ import { applyExamSlotToHref, getLevelSkillPracticeHref } from '@/data/nivelesLe
 /** @param {ExerciseFavoriteMeta} meta */
 export function serializeExerciseFavoriteMeta(meta) {
   return JSON.stringify({
-    title: meta.title || 'Exercise',
+    title: meta.title || 'Test',
     heading: meta.heading || null,
     levelSlug: meta.levelSlug || 'b2',
     skillRoute: meta.skillRoute || null,
@@ -27,7 +27,7 @@ export function serializeExerciseFavoriteMeta(meta) {
 
 /** @param {string | null | undefined} raw */
 export function parseExerciseFavoriteMeta(raw) {
-  if (!raw) return { title: 'Exercise' };
+  if (!raw) return { title: 'Test' };
   try {
     const parsed = JSON.parse(raw);
     if (parsed && typeof parsed === 'object') return parsed;
@@ -66,7 +66,7 @@ export function buildExerciseFavoritePracticeHref(meta) {
 /** @param {ExerciseFavoriteMeta} meta */
 export function buildExerciseFavoriteMeta(meta) {
   return {
-    title: meta.title || meta.heading || 'Exercise',
+    title: meta.title || meta.heading || 'Test',
     heading: meta.heading || null,
     levelSlug: String(meta.levelSlug || 'b2').toLowerCase(),
     skillRoute: meta.skillRoute || null,

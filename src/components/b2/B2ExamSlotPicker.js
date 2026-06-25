@@ -1,6 +1,7 @@
 'use client';
 
 import { B2_EXAM_SLOT_MAX } from '@/utils/b2ResolveExam';
+import { formatExamSlotDisplayLabel } from '@/utils/formatExamDisplayLabel';
 
 /**
  * @param {{ value: number, onSelect: (n: number) => void, lang?: 'en' | 'es' }} props
@@ -22,7 +23,7 @@ export function B2ExamSlotPicker({ value, onSelect, lang = 'en' }) {
       }}
     >
       <span style={{ fontSize: '0.9rem', fontWeight: 600, color: '#374151' }}>
-        {en ? 'Exam' : 'Examen'}
+        Exam
       </span>
       {Array.from({ length: B2_EXAM_SLOT_MAX }, (_, i) => i + 1).map((n) => {
         const active = value === n;
@@ -44,7 +45,7 @@ export function B2ExamSlotPicker({ value, onSelect, lang = 'en' }) {
               boxShadow: active ? '0 2px 8px rgba(4,120,87,.35)' : 'none',
             }}
           >
-            {en ? `Exam ${n}` : `Examen ${n}`}
+            {formatExamSlotDisplayLabel(null, n)}
           </button>
         );
       })}

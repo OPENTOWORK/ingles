@@ -2,7 +2,6 @@
 
 import { useCallback, useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import Link from 'next/link';
 import { getClientAuth } from '@/utils/getClientAuth';
 import { usePlacementAccess } from '@/context/PlacementAccessContext';
 import RouteLoadingMascot from '@/components/RouteLoadingMascot';
@@ -12,7 +11,7 @@ import SiteMascot from '@/components/SiteMascot';
 
 export default function PlanObjetivosPage() {
   const router = useRouter();
-  const { hasPlacementResult, assignedLevel, loading: placementLoading } = usePlacementAccess();
+  const { assignedLevel, loading: placementLoading } = usePlacementAccess();
   const [session, setSession] = useState(null);
   const [plan, setPlan] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -62,26 +61,8 @@ export default function PlanObjetivosPage() {
     );
   }
 
-  if (!hasPlacementResult) {
-    return (
-      <main className="page-content max-w-lg mx-auto py-12 px-4 text-center">
-        <SiteMascot variant={6} width={100} alt="" />
-        <h1 className="text-2xl font-bold mt-4 text-slate-800">Plan de estudios</h1>
-        <p className="text-slate-600 mt-2">
-          Primero debes completar el{' '}
-          <Link href="/prueba-nivel" className="text-indigo-600 font-medium underline">
-            placement test
-          </Link>
-          . Después podrás crear tu plan personalizado.
-        </p>
-        <Link href="/prueba-nivel" className="btn btn-primary mt-6 inline-block">
-          Ir al placement test
-        </Link>
-      </main>
-    );
-  }
-
   const showSurvey = editing || !plan?.completed_at;
+  const levelLabel = assignedLevel || plan?.placement_level || '—';
 
   return (
     <main className="page-content max-w-3xl mx-auto py-8 px-4">
@@ -90,7 +71,7 @@ export default function PlanObjetivosPage() {
         <div>
           <h1 className="text-2xl font-bold text-slate-900">Plan de objetivos</h1>
           <p className="text-slate-600 text-sm mt-1">
-            Encuesta de objetivos según tu placement ({assignedLevel}). Tu plan de estudios personalizado llegará pronto.
+            Encuesta de objetivos{assignedLevel ? ` (nivel ${levelLabel})` : ''}. Tu plan de estudios personalizado llegará pronto.
           </p>
         </div>
       </div>

@@ -736,7 +736,7 @@ function B2SpeakingExamPracticeInner({ title, subtitle, loadingLabel, refreshLab
       title:
         selectedPartTitleParts.subtitle ||
         selectedPartTitleParts.heading ||
-        'Exercise',
+        'Test',
       heading: selectedPartTitleParts.heading || null,
       sectionTitle: getExamSkillSectionTitle('b2', 'exam-speaking'),
     });

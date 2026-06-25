@@ -49,7 +49,7 @@ export function collectPartScoresAcrossSlots(
 
     entries.push({
       slot,
-      label: formatSkillExerciseLabel(slot, lang) || `Exercise ${slot}`,
+      label: formatSkillExerciseLabel(slot, lang) || `Test ${slot}`,
       correct: saved.correct,
       total: saved.total,
       passed: saved.passed,

@@ -11,6 +11,7 @@ import { notifyLevelsExamRegenerated } from '@/utils/levelsExamRegenerationSync'
 import { A2_EXAM_PARTS } from '@/lib/a2ExamCatalog';
 import { B2_EXAM_SLOT_MAX } from '@/lib/b2ExamCatalog';
 import { getLevelExamParts, isExamGenerationSlug } from '@/lib/levelsExamCatalog';
+import { formatExamNamesBySlot, formatExamSlotDisplayLabel } from '@/utils/formatExamDisplayLabel';
 
 /** Slots con examen ya generado en Supabase (ordenados). */
 export function getAvailableExamSlots(examenIdBySlot = {}) {
@@ -537,7 +538,7 @@ export function useLevelsExamAdminFlow({ slug = 'a2', examenIdBySlot = {}, onCat
 }
 
 export async function reloadExamNamesBySlot(slug) {
-  const names = Object.fromEntries([1, 2, 3, 4, 5].map((s) => [s, `Examen ${s}`]));
+  const names = Object.fromEntries([1, 2, 3, 4, 5].map((s) => [s, formatExamSlotDisplayLabel(null, s)]));
   const ids = {};
   try {
     const { data: levelData } = await getCachedLevelBySlug(supabase, slug);
@@ -551,10 +552,10 @@ export async function reloadExamNamesBySlot(slug) {
     Object.assign(ids, idsBySlot);
     Object.entries(idsBySlot).forEach(([slot, id]) => {
       const row = ordered.find((r) => r.id === id);
-      names[Number(slot)] = row?.nombre?.trim() || `Examen ${slot}`;
+      names[Number(slot)] = formatExamSlotDisplayLabel(row?.nombre, slot);
     });
   } catch {
     /* defaults */
   }
-  return { names, ids };
+  return { names: formatExamNamesBySlot(names), ids };
 }

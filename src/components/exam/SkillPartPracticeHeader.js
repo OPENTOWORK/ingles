@@ -2,7 +2,7 @@
 
 /**
  * Title row for skill practice — category + subtitle + optional actions (e.g. favourite).
- * Exercise variant (Exercise N) belongs in the category line, like Reading / UoE.
+ * Test variant (Test N) belongs in the category line, like Reading / UoE.
  */
 export default function SkillPartPracticeHeader({
   title,

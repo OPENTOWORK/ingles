@@ -11,6 +11,11 @@ import {
   extractPart7ProfilesBlock,
   parseReadingAdMcqChunks,
   parseReadingPart6SentencePool,
+  resolveReadingPart6SentencePool,
+  inferPart6QuestionNumbersFromPassage,
+  buildPart6PoolFromMcqGroups,
+  isCompletePart6Pool,
+  formatReadingPart6SentencesDisplay,
   parsePart7NumberedStems,
   parsePart7PeopleProfiles,
 } from '@/utils/b2ExamTextBlocks';
@@ -695,7 +700,13 @@ function buildCorrectLetterMapFromRespuestas(respuestas, pattern) {
 }
 
 /** MCQ groups for Reading parts 5–7 (same IDs as the practice UI). */
-export function buildReadingSyntheticMcqGroups(partNumber, enunciado, preguntaId, respuestas = []) {
+export function buildReadingSyntheticMcqGroups(
+  partNumber,
+  enunciado,
+  preguntaId,
+  respuestas = [],
+  passageTextOverride = '',
+) {
   const raw = enunciado || '';
   const pid = preguntaId;
   if (!raw || !pid || partNumber < 5 || partNumber > 7) return null;
@@ -733,16 +744,18 @@ export function buildReadingSyntheticMcqGroups(partNumber, enunciado, preguntaId
   }
 
   if (partNumber === 6) {
-    const block = extractReadingPart6SentencesBlock(raw);
-    const pool = parseReadingPart6SentencePool(block);
+    const passageText = passageTextOverride || extractExamModePartTexto(partNumber, raw);
+    const pool = resolveReadingPart6SentencePool(raw, passageText);
     const letters = [...'ABCDEFG'];
-    if (!letters.every((L) => pool[L] != null && String(pool[L]).trim())) return null;
-    const qnums = [...readingCorrectLetterByQuestion.keys()].sort((a, b) => a - b);
+    let qnums = [...readingCorrectLetterByQuestion.keys()].sort((a, b) => a - b);
+    if (!qnums.length) {
+      qnums = inferPart6QuestionNumbersFromPassage(passageText, raw);
+    }
     if (!qnums.length) return null;
     return qnums.map((questionNumber) => {
       const correctL = readingCorrectLetterByQuestion.get(questionNumber);
       const opts = letters.map((L) => {
-        const text = pool[L];
+        const text = pool[L] || '';
         return {
           id: `reading-${pid}-q${questionNumber}-${L}`,
           respuesta: `${questionNumber} ${L}`,
@@ -782,6 +795,91 @@ export function buildReadingSyntheticMcqGroups(partNumber, enunciado, preguntaId
   }
 
   return null;
+}
+
+/** Fallback Part 6 groups from DB letter-only answers (skills layout). */
+export function buildPart6McqGroupsFromGroupedAnswers(
+  groupedAnswers = [],
+  preguntaId,
+  passageText = '',
+  rawEnunciado = '',
+  respuestas = [],
+) {
+  const pid = preguntaId;
+  if (!pid) return null;
+  const groups = (groupedAnswers || []).filter((g) => g?.questionNumber != null);
+  if (!groups.length) return null;
+
+  const readingCorrectLetterByQuestion = buildCorrectLetterMapFromRespuestas(
+    respuestas,
+    /^(\d{1,2})\s+([A-G])\s*$/i,
+  );
+  const pool = resolveReadingPart6SentencePool(rawEnunciado, passageText);
+  const letters = [...'ABCDEFG'];
+
+  let qnums = groups.map((g) => g.questionNumber).sort((a, b) => a - b);
+  if (!qnums.length) {
+    qnums = inferPart6QuestionNumbersFromPassage(passageText, rawEnunciado);
+  }
+  if (!qnums.length) return null;
+
+  const groupByNum = new Map(groups.map((g) => [g.questionNumber, g]));
+
+  return qnums.map((questionNumber) => {
+    const group = groupByNum.get(questionNumber);
+    const options = group?.options || [];
+    const correctFromDb = readingCorrectLetterByQuestion.get(questionNumber);
+    const correctFromOpts = options.find((o) => o.correcta);
+    const correctLetter =
+      correctFromDb ||
+      String(correctFromOpts?.formattedText || correctFromOpts?.respuesta || '')
+        .match(/^([A-G])\)?/i)?.[1]
+        ?.toUpperCase() ||
+      '';
+
+    const opts = letters.map((L) => {
+      const existing = options.find((o) => {
+        const t = String(o.formattedText || o.respuesta || '').trim();
+        const m = t.match(/^([A-G])\)?(?:\s|$)/i);
+        return m && m[1].toUpperCase() === L;
+      });
+      return {
+        id: existing?.id || `reading-${pid}-q${questionNumber}-${L}`,
+        respuesta: existing?.respuesta || `${questionNumber} ${L}`,
+        formattedText: `${L})`,
+        compactLabel: L,
+        optionText: pool[L] || '',
+        correcta: existing?.correcta ?? (correctLetter ? L === correctLetter : false),
+      };
+    });
+
+    return { questionNumber, questionStem: '', options: opts };
+  });
+}
+
+/** Part 6 MCQ groups for exam mode + skills (synthetic first, then DB fallback). */
+export function buildPart6ReadingMcqGroups({
+  enunciado = '',
+  passageText = '',
+  preguntaId,
+  respuestas = [],
+  groupedAnswers = [],
+}) {
+  const synthetic = buildReadingSyntheticMcqGroups(
+    6,
+    enunciado,
+    preguntaId,
+    respuestas,
+    passageText,
+  );
+  if (synthetic?.length) return synthetic;
+  return buildPart6McqGroupsFromGroupedAnswers(
+    groupedAnswers,
+    preguntaId,
+    passageText,
+    enunciado,
+    respuestas,
+  );
 }
 
 /** Texto del pasaje extraído igual que en la UI de práctica (exam mode). */

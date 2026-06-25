@@ -16,6 +16,7 @@ import { getCachedB2Level, getCachedB2ExamNamesBySlot } from '@/utils/b2LevelCac
 import { getB2PartScoring, starsFromApprovedPartsCount } from '@/utils/levelsB2PartScoring';
 import { useLevelsExamAdminFlow, createAdminExamSelectHandler, buildExamSlotPickerProps } from '@/hooks/useLevelsExamAdminFlow';
 import A2ExamGenerationStatus from '@/components/niveles/A2ExamGenerationStatus';
+import { formatExamSlotDisplayLabel } from '@/utils/formatExamDisplayLabel';
 import ExamPracticeReportError from '@/components/exam/ExamPracticeReportError';
 export const B2_FULL_EXAM_PART_MIN = 1;
 export const B2_FULL_EXAM_PART_MAX = 17;
@@ -136,7 +137,7 @@ function B2FullExamPracticeInner() {
   const totalCorrect = Number(slotProgress.correct) || 0;
   const totalItems = Number(slotProgress.total) || 0;
   const examComplete = approvedParts >= B2_FULL_EXAM_PARTS_COUNT;
-  const examLabel = examNamesBySlot[examSlot] || `Examen ${examSlot}`;
+  const examLabel = examNamesBySlot[examSlot] || formatExamSlotDisplayLabel(null, examSlot);
 
   const sectionCards = useMemo(
     () =>

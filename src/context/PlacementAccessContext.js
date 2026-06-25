@@ -9,11 +9,8 @@ import {
   useState,
 } from 'react';
 import { supabase } from '@/utils/supabaseClient';
-import {
-  isNivelesLevelLocked,
-  isStaffRole,
-  parseAssignedCefrLevel,
-} from '@/lib/placementLevelAccess';
+import { parseAssignedCefrLevel } from '@/lib/placementLevelAccess';
+import { isAdminRole } from '@/utils/authRoles';
 
 const PlacementAccessContext = createContext({
   loading: true,
@@ -25,15 +22,14 @@ const PlacementAccessContext = createContext({
 });
 
 export function PlacementAccessProvider({ session, userRole, children }) {
-  const [loading, setLoading] = useState(Boolean(session?.user?.id));
+  const [loading, setLoading] = useState(
+    Boolean(session?.user?.id && isAdminRole(userRole)),
+  );
   const [hasPlacementResult, setHasPlacementResult] = useState(false);
   const [assignedLevel, setAssignedLevel] = useState(null);
 
-  const isStudent = userRole === 'student' || userRole === 'alumno';
-  const staff = isStaffRole(userRole);
-
   const loadPlacement = useCallback(async (userId) => {
-    if (!userId) {
+    if (!userId || !isAdminRole(userRole)) {
       setHasPlacementResult(false);
       setAssignedLevel(null);
       setLoading(false);
@@ -70,7 +66,7 @@ export function PlacementAccessProvider({ session, userRole, children }) {
     } finally {
       setLoading(false);
     }
-  }, []);
+  }, [userRole]);
 
   useEffect(() => {
     const userId = session?.user?.id;
@@ -83,23 +79,9 @@ export function PlacementAccessProvider({ session, userRole, children }) {
     void loadPlacement(userId);
   }, [session?.user?.id, loadPlacement]);
 
-  const isLevelLocked = useCallback(
-    (targetLevel) => {
-      if (staff || !isStudent) return false;
-      return isNivelesLevelLocked({
-        isStudent: true,
-        hasPlacementResult,
-        assignedLevel,
-        targetLevel,
-      });
-    },
-    [staff, isStudent, hasPlacementResult, assignedLevel],
-  );
+  const isLevelLocked = useCallback(() => false, []);
 
-  const isLevelUnlocked = useCallback(
-    (targetLevel) => !isLevelLocked(targetLevel),
-    [isLevelLocked],
-  );
+  const isLevelUnlocked = useCallback(() => true, []);
 
   const value = useMemo(
     () => ({

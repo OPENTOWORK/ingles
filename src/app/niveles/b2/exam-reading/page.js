@@ -23,10 +23,13 @@ import {
   extractPart7PromptStemBlob,
   extractReadingPart5QuestionsBlock,
   extractReadingPart6SentencesBlock,
+  extractReadingPart6OptionLinesBlock,
   parsePart7NumberedStems,
   parsePart7PeopleProfiles,
   parseReadingAdMcqChunks,
   parseReadingPart6SentencePool,
+  resolveReadingPart6SentencePool,
+  formatReadingPart6SentencesDisplay,
   splitPart1TextoYPreguntas,
   parsePart1QuestionOptions,
 } from '@/utils/b2ExamTextBlocks';
@@ -49,6 +52,8 @@ import {
   inferOpenQuestionNumbersFromPrompt,
   normalizeText,
   resolveB2KeyWordPartContent,
+  buildReadingSyntheticMcqGroups,
+  buildPart6ReadingMcqGroups,
 } from '@/utils/b2ExamPaperShared';
 import { resolveB2ExamenId, fetchB2PreguntasByExamen } from '@/utils/b2ResolveExam';
 import { getCachedB2Level } from '@/utils/b2LevelCache';
@@ -60,6 +65,7 @@ import { B2ExamPracticeContent, B2ExamQuestionItem } from '@/components/b2/B2Exa
 import B2ExamInlineOpenClozePassage from '@/components/b2/B2ExamInlineOpenClozePassage';
 import B2ExamInlineKeyWordPassage from '@/components/b2/B2ExamInlineKeyWordPassage';
 import B2ExamInlineMcqClozePassage from '@/components/b2/B2ExamInlineMcqClozePassage';
+import B2ExamInlinePart6Passage from '@/components/b2/B2ExamInlinePart6Passage';
 import SkillPartExplanationsPanel from '@/components/exam/SkillPartExplanationsPanel';
 import {
   buildMcqGroupExplanationEntries,
@@ -1067,121 +1073,84 @@ function B2ReadingExamsPageInner() {
     return [];
   }, [isOpenClozePart, inferredOpenQuestionNumbers, openAnswerMap]);
 
-  /** Clave sólo número + letra (BD Reading 5–7).
-   *  Sólo se consideran filas con `correcta === true`; en caso contrario, al iterar las 4
-   *  opciones (A–D / A–G) el `map.set` quedaría sobrescrito por la última letra vista. */
-  const readingCorrectLetterByQuestion = useMemo(() => {
-    const map = new Map();
-    for (const row of selectedQuestion?.respuestas || []) {
-      if (row?.correcta !== true) continue;
-      const t = String(row.respuesta || '').trim();
-      const m = t.match(/^(\d{1,2})\s+([A-G])\s*$/i);
-      if (m) map.set(Number(m[1]), m[2].toUpperCase());
-    }
-    return map;
-  }, [selectedQuestion?.preguntaId, selectedQuestion?.respuestas]);
-
   /**
    * Reconstruye 4 opciones (5 y 7) o A–G (6) desde el enunciado; la BD suele tener sólo «31 B».
    */
-  const readingSyntheticMcqGroups = useMemo(() => {
-    const raw = selectedQuestion?.enunciado || '';
-    const pid = selectedQuestion?.preguntaId;
-    if (!raw || !pid || partNumberReading < 5 || partNumberReading > 7) return null;
+  const readingSyntheticMcqGroups = useMemo(
+    () =>
+      partNumberReading === 6
+        ? null
+        : buildReadingSyntheticMcqGroups(
+            partNumberReading,
+            selectedQuestion?.enunciado || '',
+            selectedQuestion?.preguntaId,
+            selectedQuestion?.respuestas || [],
+            selectedPartContent.texto || '',
+          ),
+    [
+      partNumberReading,
+      selectedQuestion?.enunciado,
+      selectedQuestion?.preguntaId,
+      selectedQuestion?.respuestas,
+      selectedPartContent.texto,
+    ],
+  );
 
-    if (partNumberReading === 5) {
-      const block = extractReadingPart5QuestionsBlock(raw);
-      const chunks = parseReadingAdMcqChunks(block);
-      if (!chunks.length) return null;
-      const letters = ['A', 'B', 'C', 'D'];
-      const groups = chunks
-        .map(({ questionNumber, stem, options: byLetter }) => {
-          const correctL = readingCorrectLetterByQuestion.get(questionNumber);
-          const opts = letters
-            .map((L) => {
-              const text = byLetter[L];
-              if (!text || !String(text).trim()) return null;
-              return {
-                id: `reading-${pid}-q${questionNumber}-${L}`,
-                respuesta: `${questionNumber} ${L} ${text}`,
-                formattedText: `${L}) ${text}`,
-                correcta: correctL != null ? L === correctL : false,
-              };
-            })
-            .filter(Boolean);
-          if (!opts.length) return null;
-          return { questionNumber, questionStem: stem || '', options: opts };
-        })
-        .filter(Boolean);
-      return groups.length ? groups : null;
-    }
+  const part6ContextRaw = useMemo(
+    () =>
+      [selectedQuestion?.enunciado, selectedPart?.descripcion].filter(Boolean).join('\n\n'),
+    [selectedQuestion?.enunciado, selectedPart?.descripcion],
+  );
 
-    if (partNumberReading === 6) {
-      const block = extractReadingPart6SentencesBlock(raw);
-      const pool = parseReadingPart6SentencePool(block);
-      const letters = [...'ABCDEFG'];
-      if (!letters.every((L) => pool[L] != null && String(pool[L]).trim())) return null;
-      const qnums = [...readingCorrectLetterByQuestion.keys()].sort((a, b) => a - b);
-      if (!qnums.length) return null;
-      const groups = qnums.map((questionNumber) => {
-        const correctL = readingCorrectLetterByQuestion.get(questionNumber);
-        const opts = letters.map((L) => {
-          const text = pool[L];
-          return {
-            id: `reading-${pid}-q${questionNumber}-${L}`,
-            respuesta: `${questionNumber} ${L}`,
-            formattedText: `${L})`,
-            compactLabel: `${L}`,
-            optionText: text,
-            correcta: correctL != null ? L === correctL : false,
-          };
-        });
-        return { questionNumber, questionStem: '', options: opts };
-      });
-      return groups;
-    }
-
-    if (partNumberReading === 7) {
-      const stemBlob = extractPart7PromptStemBlob(raw);
-      const stemsParsed = parsePart7NumberedStems(stemBlob);
-      const stemByNum = new Map(stemsParsed.map((x) => [x.questionNumber, x.stem]));
-      const people = parsePart7PeopleProfiles(extractPart7ProfilesBlock(raw));
-      const letters = ['A', 'B', 'C', 'D'];
-      if (!letters.every((L) => people[L]?.label)) return null;
-      const qnums = [...readingCorrectLetterByQuestion.keys()].sort((a, b) => a - b);
-      if (!qnums.length) return null;
-      const groups = qnums.map((questionNumber) => {
-        const stem = stemByNum.get(questionNumber) || '';
-        const correctL = readingCorrectLetterByQuestion.get(questionNumber);
-        const opts = letters.map((L) => {
-          const { label = '' } = people[L];
-          const formattedText = `${L}) ${label}`;
-          return {
-            id: `reading-${pid}-q${questionNumber}-${L}`,
-            respuesta: `${questionNumber} ${L}`,
-            formattedText,
-            correcta: correctL != null ? L === correctL : false,
-          };
-        });
-        return { questionNumber, questionStem: stem, options: opts };
-      });
-      return groups;
-    }
-
-    return null;
+  const part6McqGroups = useMemo(() => {
+    if (partNumberReading !== 6) return null;
+    return buildPart6ReadingMcqGroups({
+      enunciado: part6ContextRaw,
+      passageText: selectedPartContent.texto || '',
+      preguntaId: selectedQuestion?.preguntaId,
+      respuestas: selectedQuestion?.respuestas || [],
+      groupedAnswers: groupedAnswersSelected,
+    });
   }, [
     partNumberReading,
-    readingCorrectLetterByQuestion,
-    selectedQuestion?.enunciado,
+    part6ContextRaw,
+    selectedPartContent.texto,
     selectedQuestion?.preguntaId,
+    selectedQuestion?.respuestas,
+    groupedAnswersSelected,
   ]);
 
   const groupedAnswersForUiAndScore =
-    readingSyntheticMcqGroups || part1McqGroups || groupedAnswersSelected;
+    part6McqGroups || readingSyntheticMcqGroups || part1McqGroups || groupedAnswersSelected;
+
+  const part6SentencePool = useMemo(() => {
+    if (partNumberReading !== 6) return {};
+    return resolveReadingPart6SentencePool(
+      part6ContextRaw,
+      selectedPartContent.texto,
+      part6McqGroups || [],
+    );
+  }, [
+    partNumberReading,
+    part6ContextRaw,
+    selectedPartContent.texto,
+    part6McqGroups,
+  ]);
+
+  const part6SentencesDisplay = useMemo(() => {
+    if (partNumberReading !== 6) return '';
+    return (
+      formatReadingPart6SentencesDisplay(part6ContextRaw, part6SentencePool, part6McqGroups || []) ||
+      extractReadingPart6SentencesBlock(part6ContextRaw) ||
+      extractReadingPart6OptionLinesBlock(part6ContextRaw)
+    );
+  }, [partNumberReading, part6ContextRaw, part6SentencePool, part6McqGroups]);
+
+  const isPart6GappedText = partNumberReading === 6 && (part6McqGroups?.length ?? 0) > 0;
 
   const readingSidePanelExplanationEntries = useMemo(
     () => {
-      if (isInlinePassagePart || isPart1McqCloze || hideInstantFeedback) return [];
+      if (isInlinePassagePart || isPart1McqCloze || isPart6GappedText || hideInstantFeedback) return [];
       return buildMcqGroupExplanationEntries({
         mcqGroups: groupedAnswersForUiAndScore || [],
         getQuestionKey: (questionNumber, _group, groupIndex) =>
@@ -1193,6 +1162,7 @@ function B2ReadingExamsPageInner() {
     [
       isInlinePassagePart,
       isPart1McqCloze,
+      isPart6GappedText,
       hideInstantFeedback,
       groupedAnswersForUiAndScore,
       selectedPart?.id,
@@ -2156,7 +2126,7 @@ function B2ReadingExamsPageInner() {
       title:
         selectedPartTitleParts.subtitle ||
         selectedPartTitleParts.heading ||
-        'Exercise',
+        'Test',
       heading: selectedPartTitleParts.heading || null,
       sectionTitle: getExamSkillSectionTitle('b2', skillRoute),
     });
@@ -2316,12 +2286,40 @@ function B2ReadingExamsPageInner() {
                 }
                 directionsText={selectedPartContent.enunciado}
                 directionsLabel={isUoeExamInlinePart || isUoePart1 ? 'Instructions' : 'Directions'}
-                textLabel={isUoeExamInlinePart ? null : 'Text'}
+                textLabel={isUoeExamInlinePart || isPart6GappedText ? null : 'Text'}
                 questionsLabel="Questions"
                 stripExampleFromDirections={isUoeExamInlinePart}
-                passageText={isInlinePassagePart || isPart1McqCloze ? '' : selectedPartContent.texto}
+                passageText={
+                  isInlinePassagePart || isPart1McqCloze || isPart6GappedText
+                    ? ''
+                    : selectedPartContent.texto
+                }
                 passage={
-                  isPart1McqCloze ? (
+                  isPart6GappedText ? (
+                    <B2ExamInlinePart6Passage
+                      key={`part6-${examSlot}-${selectedQuestion.preguntaId}`}
+                      text={selectedPartContent.texto}
+                      mcqGroups={part6McqGroups}
+                      sentencePool={part6SentencePool}
+                      sentencesDisplay={part6SentencesDisplay}
+                      getQuestionKey={(questionNumber) => {
+                        const groupIndex = part6McqGroups.findIndex(
+                          (g) => g.questionNumber === questionNumber,
+                        );
+                        return getQuestionKey(
+                          selectedPart.id,
+                          questionNumber,
+                          `extra-${groupIndex >= 0 ? groupIndex : 'part6'}`,
+                        );
+                      }}
+                      selectedOptions={selectedOptions}
+                      checkedQuestions={checkedQuestions}
+                      onOptionSelect={handlePart1McqOptionSelect}
+                      hideFeedback={hideInstantFeedback}
+                      aiHintsByKey={aiHintsByKey}
+                      onRequestExplanation={handleReadingMcqExplanationRequest}
+                    />
+                  ) : isPart1McqCloze ? (
                     <B2ExamInlineMcqClozePassage
                       key={`mcq-${examSlot}-${selectedQuestion.preguntaId}`}
                       text={selectedPartContent.texto}
@@ -2388,22 +2386,24 @@ function B2ReadingExamsPageInner() {
                     />
                   ) : null
                 }
-                split={isInlinePassagePart || isPart1McqCloze ? true : 'auto'}
+                split={isInlinePassagePart || isPart1McqCloze || isPart6GappedText ? true : 'auto'}
                 contentClassName={
                   isUoeExamInlinePart
                     ? 'levels-exam-uoe-inline'
-                    : isPart1McqCloze
-                      ? 'levels-exam-mcq-cloze-inline'
-                      : isInlinePassagePart
-                        ? 'levels-exam-open-cloze-inline'
-                        : partNumberReading === 6 && part6SentencePoolBlock
-                          ? 'levels-exam-part6-split'
-                          : ''
+                    : isPart6GappedText
+                      ? 'levels-exam-part6-inline'
+                      : isPart1McqCloze
+                        ? 'levels-exam-mcq-cloze-inline'
+                        : isInlinePassagePart
+                          ? 'levels-exam-open-cloze-inline'
+                          : partNumberReading === 6 && part6SentencePoolBlock
+                            ? 'levels-exam-part6-split'
+                            : ''
                 }
-                showQuestionsHeading={!isInlinePassagePart && !isPart1McqCloze}
+                showQuestionsHeading={!isInlinePassagePart && !isPart1McqCloze && !isPart6GappedText}
                 footer={practiceExplanationFooter}
                 questions={
-                  isInlinePassagePart || isPart1McqCloze
+                  isInlinePassagePart || isPart1McqCloze || isPart6GappedText
                     ? null
                     : (
                       <>

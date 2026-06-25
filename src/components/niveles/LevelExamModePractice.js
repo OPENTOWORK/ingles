@@ -26,6 +26,7 @@ import { useExamModePickerProgress } from '@/hooks/useExamModePickerProgress';
 import A2ExamGenerationStatus from '@/components/niveles/A2ExamGenerationStatus';
 import ExamPracticeLevelPicker from '@/components/niveles/ExamPracticeLevelPicker';
 import ExamPracticeReportError from '@/components/exam/ExamPracticeReportError';
+import { formatExamSlotDisplayLabel } from '@/utils/formatExamDisplayLabel';
 import TheoryLevelStars from '@/components/theory/TheoryLevelStars';
 import { starsFromLevelsEarnedMax } from '@/lib/levelsStars';
 
@@ -108,7 +109,7 @@ function LevelExamModePracticeInner({ slug }) {
       const names = {};
       Object.entries(idsBySlot).forEach(([slot, id]) => {
         const row = ordered.find((r) => r.id === id);
-        names[Number(slot)] = row?.nombre?.trim() || `Test ${slot}`;
+        names[Number(slot)] = formatExamSlotDisplayLabel(row?.nombre, slot);
       });
       setExamNamesBySlot(names);
     } catch {
@@ -172,7 +173,7 @@ function LevelExamModePracticeInner({ slug }) {
 
   const examComplete = session ? isExamModeComplete(session) : false;
   const statsHref = `/niveles/${slug}/exam-mode/results?examen=${examSlot}`;
-  const examLabel = examNamesBySlot[examSlot] || `Test ${examSlot}`;
+  const examLabel = examNamesBySlot[examSlot] || formatExamSlotDisplayLabel(null, examSlot);
 
   const overallExamScore = useMemo(() => {
     if (!session?.sections?.length) return { correct: 0, total: 0, stars: 0 };

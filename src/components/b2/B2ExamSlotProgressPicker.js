@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { B2_EXAM_SLOT_MAX } from '@/utils/b2ResolveExam';
+import { formatExamSlotDisplayLabel } from '@/utils/formatExamDisplayLabel';
 
 const SLOT_MENU_MIN_WIDTH = 168;
 
@@ -276,7 +277,7 @@ export function B2ExamSlotProgressPicker({
             const hasScore = approvedParts > 0 || Number(prog.total) > 0 || inProgress;
             const isComplete = partsInPaper > 0 && approvedParts >= partsInPaper;
             const showInProgress = inProgress && !isComplete;
-            const label = examLabelsBySlot[n] || (en ? `Exam ${n}` : `Examen ${n}`);
+            const label = formatExamSlotDisplayLabel(examLabelsBySlot[n], n);
 
             return (
               <div

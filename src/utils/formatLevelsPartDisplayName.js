@@ -1,5 +1,6 @@
 import { getB2PartDef } from '@/lib/b2ExamCatalog';
 import { getExamPartDisplayLabel } from '@/lib/examPartDisplayLabel';
+import { formatSkillExerciseLabel } from '@/utils/skillPartFirstProgress';
 
 /**
  * Nombre de parte tal como se muestra en la UI (levels_partes.nombre_parte suele incluir " B2").
@@ -108,7 +109,7 @@ function getB2SkillPartHeading(partNumber, mode, lang = 'en', examSlot = null) {
     const label = en ? 'Use of English' : 'Uso de inglés';
     const slot = Number(examSlot);
     if (Number.isFinite(slot) && slot > 0) {
-      return en ? `${label} - Exercise ${slot}` : `${label} - Ejercicio ${slot}`;
+      return `${label} - ${formatSkillExerciseLabel(slot, lang)}`;
     }
     return en ? `${label} - Part ${pn}` : `${label} - Parte ${pn}`;
   }
@@ -117,7 +118,7 @@ function getB2SkillPartHeading(partNumber, mode, lang = 'en', examSlot = null) {
     const label = en ? 'Writing' : 'Escritura';
     const slot = Number(examSlot);
     if (Number.isFinite(slot) && slot > 0) {
-      return en ? `${label} - Exercise ${slot}` : `${label} - Ejercicio ${slot}`;
+      return `${label} - ${formatSkillExerciseLabel(slot, lang)}`;
     }
     const local = pn - 7;
     return en ? `Writing Part ${local}` : `Writing Parte ${local}`;
@@ -126,7 +127,7 @@ function getB2SkillPartHeading(partNumber, mode, lang = 'en', examSlot = null) {
     const label = en ? 'Listening' : 'Comprensión auditiva';
     const slot = Number(examSlot);
     if (Number.isFinite(slot) && slot > 0) {
-      return en ? `${label} - Exercise ${slot}` : `${label} - Ejercicio ${slot}`;
+      return `${label} - ${formatSkillExerciseLabel(slot, lang)}`;
     }
     const local = pn - 9;
     return en ? `Listening Part ${local}` : `Listening Parte ${local}`;
@@ -135,7 +136,7 @@ function getB2SkillPartHeading(partNumber, mode, lang = 'en', examSlot = null) {
     const label = en ? 'Speaking' : 'Expresión oral';
     const slot = Number(examSlot);
     if (Number.isFinite(slot) && slot > 0) {
-      return en ? `${label} - Exercise ${slot}` : `${label} - Ejercicio ${slot}`;
+      return `${label} - ${formatSkillExerciseLabel(slot, lang)}`;
     }
     const local = pn - 13;
     return en ? `Speaking Part ${local}` : `Speaking Parte ${local}`;

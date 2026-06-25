@@ -1,113 +1,400 @@
 {
+  "levelSlug": "b2",
+  "examSlot": 1,
   "partNumber": 5,
-  "partTitle": "Reading Part 1 — multiple choice",
-  "partLabel": "Reading Part 1 — multiple choice",
   "generated": {
-    "partTitle": "Part 5: Multiple choice (reading)",
-    "title": "Beyond the Mainstream: The Appeal of Unusual Hobbies",
-    "directions": "You are going to read a magazine article about unusual hobbies. For questions 31–36, choose the answer (A, B, C or D) which you think fits best according to the text.",
-    "passage": "In an age when leisure time is often filled with predictable pursuits, a growing number of people are turning to hobbies that friends and colleagues find difficult to classify. What may look eccentric from the outside frequently turns out, for those who practise it, to be a carefully chosen counterbalance to routine work and digital distraction.\n\nOne example is competitive jigsaw puzzling, which has developed a serious following in several countries. Enthusiasts gather for timed events where teams race to complete complex images under strict rules. Outsiders sometimes assume the activity is purely relaxing, yet participants describe intense concentration and genuine pride when a difficult design finally fits together. For many, the appeal lies not in winning alone but in sharing a slow, tactile process that contrasts sharply with the instant feedback of screen-based entertainment.\n\nHistorical reenactment offers a different kind of escape. Men and women spend weekends recreating battles or domestic life from past centuries, investing considerable money in authentic costumes and equipment. Critics may question whether such devotion to the past is worthwhile, but reenactors argue that handling reproduction tools and learning forgotten skills gives them a vivid sense of how earlier generations lived. Several groups also visit schools, hoping to make history feel immediate rather than abstract.\n\nThen there are pursuits such as letterboxing and geocaching, in which participants follow clues to locate hidden containers in parks, towns or countryside. The hobby blends navigation, puzzle-solving and mild adventure, and it encourages exploration of places that walkers might otherwise ignore. Unlike some outdoor sports, it rarely demands exceptional fitness; instead, patience and curiosity matter more. Many participants say the greatest reward is discovering a quiet corner of their own region that they had never noticed before.\n\nWhat these activities share is not oddity for its own sake. People often choose them because mainstream options no longer feel stimulating, or because they want a hobby that reflects a particular identity. An office worker who restores vintage radios at night, for instance, may value the feeling of repairing something tangible in a job dominated by emails. Similarly, a teenager who collects and restores mechanical typewriters may enjoy the mechanical rhythm and the surprise of younger friends who have never seen one.\n\nUnusual hobbies can also create communities that cut across age and background. Clubs, festivals and online forums allow beginners to learn from experienced practitioners without facing the pressure of formal competition. The author of a recent survey noted that respondents rarely described their hobbies as attempts to impress others; instead, they emphasised personal challenge, creativity and the pleasure of belonging to a small group that understands a shared obsession.\n\nNone of this suggests that conventional pastimes are inferior. Yoga, team sports and cinema remain popular for good reason. Yet the spread of less familiar hobbies reminds us that leisure is deeply personal. What seems baffling at first glance may simply be someone's deliberate search for meaning, focus and connection in an otherwise hurried world.",
+    "partTitle": "Reading and Use of English Part 5",
+    "directions": "You are going to read an article about urban wildlife. For questions 31–36, choose the answer (A, B, C or D) which you think fits best according to the text.",
+    "title": "When Cities Make Room for Wild Neighbours",
+    "passage": "For decades, urban planners treated wildlife as something that belonged elsewhere. Parks were manicured, rivers were channelled, and any fox or hawk appearing on a housing estate was treated as an amusing anomaly. Yet in the past fifteen years, a quieter shift has taken place. Biologists, architects and community groups have begun asking whether cities can function as habitats rather than obstacles — and whether residents might benefit from sharing space with species they once only saw on television.\n\nThe change is partly practical. As green belts shrink and commuting patterns alter where people live, many municipalities face rising temperatures and flash flooding. Strategically planted trees, pocket meadows and restored wetlands do not merely attract birds; they retain rainwater, filter air and reduce the need for expensive drainage upgrades. In Rotterdam, engineers have linked rooftop gardens with corridors of native planting so that pollinators can move across districts that would otherwise be deserts of concrete. Similar schemes in Bristol and Lyon were initially dismissed as cosmetic, yet monitoring has shown measurable increases in insect diversity within three seasons.\n\nNot every initiative succeeds, and the author of a recent municipal review cautions against treating biodiversity as a branding exercise. When councils install a single \"bee hotel\" beside a car park while continuing to spray pesticides on roadside verges, residents quickly notice the contradiction. Genuine progress, the review argues, depends on long-term maintenance budgets and staff training, not on one-off publicity events. Even so, several neighbourhoods that committed to five-year plans report that volunteers who joined planting days later became advocates for slower traffic and darker night lighting — issues they had not previously connected with ecology.\n\nPublic attitudes are more nuanced than headlines suggest. Some homeowners welcome hedgehogs under their sheds; others worry about litter from feeding stations or the legal implications if a protected species nests on their property. Apartment dwellers without gardens often feel excluded from discussions that assume everyone has a lawn to rewild. Community organisers in Manchester addressed this by converting unused garage plots into shared beds, with evening workshops explaining which plants support which insects. Attendance was highest among parents who wanted children to recognise species names, though a minority attended primarily because the sessions offered a social alternative to screen-based leisure.\n\nScientists emphasise that urban wildlife is not a nostalgic novelty. Species adapting to cities can evolve different behaviours within a few generations, providing living laboratories for research that would be impossible in remote reserves. One ornithologist interviewed for the article noted that city blackbirds sing at higher pitches to compete with traffic noise — a detail that illustrates how intimately human infrastructure shapes evolution. Meanwhile, epidemiologists monitor whether greater contact with animals increases certain health risks, reminding policymakers that coexistence requires data as well as enthusiasm. Several cities now publish annual biodiversity audits alongside budget statements, a practice the writer welcomes as a sign that ecology is being treated as infrastructure rather than ornament. Even sceptical councillors admit that residents increasingly ask for planting plans when new housing is proposed.\n\nThe writer concludes that the most promising projects share a modest ambition: they do not promise to return cities to pre-industrial wilderness, but to weave small, resilient patches of life through places dominated by pavement. Whether that satisfies romantic expectations is doubtful; whether it improves everyday urban experience may be easier to demonstrate.",
     "questions": [
       {
+        "id": "q31",
         "number": 31,
-        "prompt": "What does the writer suggest about many competitive jigsaw enthusiasts?",
+        "type": "multiple-choice",
+        "questionType": "inference",
+        "prompt": "What can be inferred about early scepticism towards urban green corridors?",
         "options": [
-          "A) They value a slow, hands-on activity that differs from instant digital entertainment.",
-          "B) They take part mainly because timed events offer guaranteed prizes.",
-          "C) They prefer working alone rather than sharing the experience with others.",
-          "D) They treat the hobby as a simple way to relax after demanding work."
+          {
+            "letter": "A",
+            "text": "Experts believed pollinators could not survive above street level."
+          },
+          {
+            "letter": "B",
+            "text": "Critics assumed the schemes were mainly decorative rather than functional."
+          },
+          {
+            "letter": "C",
+            "text": "Residents feared that any planting would attract dangerous predators."
+          },
+          {
+            "letter": "D",
+            "text": "Architects refused to cooperate because of strict height regulations."
+          }
         ]
       },
       {
+        "id": "q32",
         "number": 32,
-        "prompt": "How does the writer present historical reenactment?",
+        "type": "multiple-choice",
+        "questionType": "attitude",
+        "prompt": "The writer's attitude towards one-off publicity projects is best described as",
         "options": [
-          "A) As a hobby that professional historians now recommend without reservation.",
-          "B) As an activity that has become less appealing to younger participants.",
-          "C) As a pursuit that depends mainly on expensive equipment rather than skill.",
-          "D) As something critics doubt, although participants believe it has real value."
+          {
+            "letter": "A",
+            "text": "enthusiastic, because they raise awareness quickly."
+          },
+          {
+            "letter": "B",
+            "text": "neutral, because outcomes depend on local leadership."
+          },
+          {
+            "letter": "C",
+            "text": "sympathetic, because councils lack scientific expertise."
+          },
+          {
+            "letter": "D",
+            "text": "critical, because they may mask a lack of sustained commitment."
+          }
         ]
       },
       {
+        "id": "q33",
         "number": 33,
-        "prompt": "According to the text, what makes letterboxing and geocaching distinctive?",
+        "type": "multiple-choice",
+        "questionType": "reference",
+        "prompt": "In the third paragraph, what does \"the contradiction\" refer to?",
         "options": [
-          "A) They require a level of fitness comparable to serious mountaineering.",
-          "B) They reward patience and curiosity more than exceptional physical strength.",
-          "C) They have declined in popularity since navigation technology became widespread.",
-          "D) They are designed chiefly for people who already know an area extremely well."
+          {
+            "letter": "A",
+            "text": "Claiming to support wildlife while continuing harmful maintenance practices."
+          },
+          {
+            "letter": "B",
+            "text": "Spending on drainage upgrades instead of community workshops."
+          },
+          {
+            "letter": "C",
+            "text": "Encouraging volunteers but refusing to reduce traffic speed."
+          },
+          {
+            "letter": "D",
+            "text": "Promoting rooftop gardens that cannot retain rainwater."
+          }
         ]
       },
       {
+        "id": "q34",
         "number": 34,
-        "prompt": "The examples of vintage radio restoration and typewriter collecting imply that unusual hobbies can",
+        "type": "multiple-choice",
+        "questionType": "detail",
+        "prompt": "What point is made about the Manchester workshops?",
         "options": [
-          "A) remove the need for any challenging aspects of paid employment.",
-          "B) help people recover quickly from long periods of professional stress.",
-          "C) provide a tangible contrast to work that feels largely intangible.",
-          "D) be understood immediately by colleagues without any explanation."
+          {
+            "letter": "A",
+            "text": "They were designed exclusively for professional gardeners."
+          },
+          {
+            "letter": "B",
+            "text": "They replaced all pesticide use within one season."
+          },
+          {
+            "letter": "C",
+            "text": "They attracted some participants mainly for social reasons."
+          },
+          {
+            "letter": "D",
+            "text": "They focused on legal advice for protected species."
+          }
         ]
       },
       {
+        "id": "q35",
         "number": 35,
-        "prompt": "What did the recent survey suggest about people's reasons for choosing unusual hobbies?",
+        "type": "multiple-choice",
+        "questionType": "purpose",
+        "prompt": "Why does the writer include the example of city blackbirds?",
         "options": [
-          "A) They wanted mainly to impress people outside their hobby group.",
-          "B) They valued personal challenge and belonging to a shared-interest community.",
-          "C) They hoped their hobbies would soon become conventional mainstream activities.",
-          "D) They were chiefly motivated by the prospect of turning the hobby into a career."
+          {
+            "letter": "A",
+            "text": "To argue that traffic noise should be eliminated immediately."
+          },
+          {
+            "letter": "B",
+            "text": "To show how urban infrastructure can directly influence animal behaviour."
+          },
+          {
+            "letter": "C",
+            "text": "To prove that remote reserves are no longer necessary for research."
+          },
+          {
+            "letter": "D",
+            "text": "To suggest that residents should avoid feeding birds near roads."
+          }
         ]
       },
       {
+        "id": "q36",
         "number": 36,
-        "prompt": "Which statement best reflects the writer's overall attitude?",
+        "type": "multiple-choice",
+        "questionType": "global",
+        "prompt": "Which statement best summarises the writer's overall view?",
         "options": [
-          "A) Mainstream leisure activities are less worthwhile than unusual hobbies.",
-          "B) People who choose unusual hobbies are largely rejecting modern society.",
-          "C) Seemingly strange hobbies may reflect a deliberate search for focus and connection.",
-          "D) Unusual hobbies are likely to disappear as conventional entertainment improves."
+          {
+            "letter": "A",
+            "text": "Cities should aim to recreate untouched natural landscapes."
+          },
+          {
+            "letter": "B",
+            "text": "Urban wildlife projects are doomed without national legislation."
+          },
+          {
+            "letter": "C",
+            "text": "Small, well-maintained habitats may realistically improve city life."
+          },
+          {
+            "letter": "D",
+            "text": "Public enthusiasm is the only factor that determines success."
+          }
         ]
       }
     ],
     "modelAnswers": [
       {
-        "id": 31,
-        "answer": "A"
+        "id": "q31",
+        "number": 31,
+        "answer": "B"
       },
       {
-        "id": 32,
+        "id": "q32",
+        "number": 32,
         "answer": "D"
       },
       {
-        "id": 33,
-        "answer": "B"
+        "id": "q33",
+        "number": 33,
+        "answer": "A"
       },
       {
-        "id": 34,
+        "id": "q34",
+        "number": 34,
         "answer": "C"
       },
       {
-        "id": 35,
+        "id": "q35",
+        "number": 35,
         "answer": "B"
       },
       {
-        "id": 36,
+        "id": "q36",
+        "number": 36,
         "answer": "C"
       }
-    ],
-    "sections": [],
-    "sentencePool": [],
-    "optionPool": [],
-    "matchingAnswers": [],
-    "speakingPrompts": [],
-    "bulletPoints": [],
-    "partNumber": 5,
-    "discussionQuestions": [],
-    "collaborativePrompts": []
+    ]
   },
   "validation": {
     "ok": true,
     "errors": [],
-    "warnings": []
+    "warnings": [],
+    "normalized": {
+      "partTitle": "Reading and Use of English Part 5",
+      "directions": "You are going to read an article about urban wildlife. For questions 31–36, choose the answer (A, B, C or D) which you think fits best according to the text.",
+      "title": "When Cities Make Room for Wild Neighbours",
+      "passage": "For decades, urban planners treated wildlife as something that belonged elsewhere. Parks were manicured, rivers were channelled, and any fox or hawk appearing on a housing estate was treated as an amusing anomaly. Yet in the past fifteen years, a quieter shift has taken place. Biologists, architects and community groups have begun asking whether cities can function as habitats rather than obstacles — and whether residents might benefit from sharing space with species they once only saw on television.\n\nThe change is partly practical. As green belts shrink and commuting patterns alter where people live, many municipalities face rising temperatures and flash flooding. Strategically planted trees, pocket meadows and restored wetlands do not merely attract birds; they retain rainwater, filter air and reduce the need for expensive drainage upgrades. In Rotterdam, engineers have linked rooftop gardens with corridors of native planting so that pollinators can move across districts that would otherwise be deserts of concrete. Similar schemes in Bristol and Lyon were initially dismissed as cosmetic, yet monitoring has shown measurable increases in insect diversity within three seasons.\n\nNot every initiative succeeds, and the author of a recent municipal review cautions against treating biodiversity as a branding exercise. When councils install a single \"bee hotel\" beside a car park while continuing to spray pesticides on roadside verges, residents quickly notice the contradiction. Genuine progress, the review argues, depends on long-term maintenance budgets and staff training, not on one-off publicity events. Even so, several neighbourhoods that committed to five-year plans report that volunteers who joined planting days later became advocates for slower traffic and darker night lighting — issues they had not previously connected with ecology.\n\nPublic attitudes are more nuanced than headlines suggest. Some homeowners welcome hedgehogs under their sheds; others worry about litter from feeding stations or the legal implications if a protected species nests on their property. Apartment dwellers without gardens often feel excluded from discussions that assume everyone has a lawn to rewild. Community organisers in Manchester addressed this by converting unused garage plots into shared beds, with evening workshops explaining which plants support which insects. Attendance was highest among parents who wanted children to recognise species names, though a minority attended primarily because the sessions offered a social alternative to screen-based leisure.\n\nScientists emphasise that urban wildlife is not a nostalgic novelty. Species adapting to cities can evolve different behaviours within a few generations, providing living laboratories for research that would be impossible in remote reserves. One ornithologist interviewed for the article noted that city blackbirds sing at higher pitches to compete with traffic noise — a detail that illustrates how intimately human infrastructure shapes evolution. Meanwhile, epidemiologists monitor whether greater contact with animals increases certain health risks, reminding policymakers that coexistence requires data as well as enthusiasm. Several cities now publish annual biodiversity audits alongside budget statements, a practice the writer welcomes as a sign that ecology is being treated as infrastructure rather than ornament. Even sceptical councillors admit that residents increasingly ask for planting plans when new housing is proposed.\n\nThe writer concludes that the most promising projects share a modest ambition: they do not promise to return cities to pre-industrial wilderness, but to weave small, resilient patches of life through places dominated by pavement. Whether that satisfies romantic expectations is doubtful; whether it improves everyday urban experience may be easier to demonstrate.",
+      "questions": [
+        {
+          "id": "q31",
+          "number": 31,
+          "type": "multiple-choice",
+          "questionType": "inference",
+          "prompt": "What can be inferred about early scepticism towards urban green corridors?",
+          "options": [
+            {
+              "letter": "A",
+              "text": "Experts believed pollinators could not survive above street level."
+            },
+            {
+              "letter": "B",
+              "text": "Critics assumed the schemes were mainly decorative rather than functional."
+            },
+            {
+              "letter": "C",
+              "text": "Residents feared that any planting would attract dangerous predators."
+            },
+            {
+              "letter": "D",
+              "text": "Architects refused to cooperate because of strict height regulations."
+            }
+          ]
+        },
+        {
+          "id": "q32",
+          "number": 32,
+          "type": "multiple-choice",
+          "questionType": "attitude",
+          "prompt": "The writer's attitude towards one-off publicity projects is best described as",
+          "options": [
+            {
+              "letter": "A",
+              "text": "enthusiastic, because they raise awareness quickly."
+            },
+            {
+              "letter": "B",
+              "text": "neutral, because outcomes depend on local leadership."
+            },
+            {
+              "letter": "C",
+              "text": "sympathetic, because councils lack scientific expertise."
+            },
+            {
+              "letter": "D",
+              "text": "critical, because they may mask a lack of sustained commitment."
+            }
+          ]
+        },
+        {
+          "id": "q33",
+          "number": 33,
+          "type": "multiple-choice",
+          "questionType": "reference",
+          "prompt": "In the third paragraph, what does \"the contradiction\" refer to?",
+          "options": [
+            {
+              "letter": "A",
+              "text": "Claiming to support wildlife while continuing harmful maintenance practices."
+            },
+            {
+              "letter": "B",
+              "text": "Spending on drainage upgrades instead of community workshops."
+            },
+            {
+              "letter": "C",
+              "text": "Encouraging volunteers but refusing to reduce traffic speed."
+            },
+            {
+              "letter": "D",
+              "text": "Promoting rooftop gardens that cannot retain rainwater."
+            }
+          ]
+        },
+        {
+          "id": "q34",
+          "number": 34,
+          "type": "multiple-choice",
+          "questionType": "detail",
+          "prompt": "What point is made about the Manchester workshops?",
+          "options": [
+            {
+              "letter": "A",
+              "text": "They were designed exclusively for professional gardeners."
+            },
+            {
+              "letter": "B",
+              "text": "They replaced all pesticide use within one season."
+            },
+            {
+              "letter": "C",
+              "text": "They attracted some participants mainly for social reasons."
+            },
+            {
+              "letter": "D",
+              "text": "They focused on legal advice for protected species."
+            }
+          ]
+        },
+        {
+          "id": "q35",
+          "number": 35,
+          "type": "multiple-choice",
+          "questionType": "purpose",
+          "prompt": "Why does the writer include the example of city blackbirds?",
+          "options": [
+            {
+              "letter": "A",
+              "text": "To argue that traffic noise should be eliminated immediately."
+            },
+            {
+              "letter": "B",
+              "text": "To show how urban infrastructure can directly influence animal behaviour."
+            },
+            {
+              "letter": "C",
+              "text": "To prove that remote reserves are no longer necessary for research."
+            },
+            {
+              "letter": "D",
+              "text": "To suggest that residents should avoid feeding birds near roads."
+            }
+          ]
+        },
+        {
+          "id": "q36",
+          "number": 36,
+          "type": "multiple-choice",
+          "questionType": "global",
+          "prompt": "Which statement best summarises the writer's overall view?",
+          "options": [
+            {
+              "letter": "A",
+              "text": "Cities should aim to recreate untouched natural landscapes."
+            },
+            {
+              "letter": "B",
+              "text": "Urban wildlife projects are doomed without national legislation."
+            },
+            {
+              "letter": "C",
+              "text": "Small, well-maintained habitats may realistically improve city life."
+            },
+            {
+              "letter": "D",
+              "text": "Public enthusiasm is the only factor that determines success."
+            }
+          ]
+        }
+      ],
+      "modelAnswers": [
+        {
+          "id": "q31",
+          "number": 31,
+          "answer": "B"
+        },
+        {
+          "id": "q32",
+          "number": 32,
+          "answer": "D"
+        },
+        {
+          "id": "q33",
+          "number": 33,
+          "answer": "A"
+        },
+        {
+          "id": "q34",
+          "number": 34,
+          "answer": "C"
+        },
+        {
+          "id": "q35",
+          "number": 35,
+          "answer": "B"
+        },
+        {
+          "id": "q36",
+          "number": 36,
+          "answer": "C"
+        }
+      ],
+      "bulletPoints": [],
+      "speakingPrompts": [],
+      "discussionQuestions": [],
+      "collaborativePrompts": [],
+      "sections": [],
+      "sentencePool": [],
+      "optionPool": [],
+      "matchingAnswers": [],
+      "audioClips": [],
+      "partNumber": 5
+    }
   }
 }

@@ -1,4 +1,5 @@
 import { filterVisibleExamenes } from '@/utils/levelsExamVisibility';
+import { formatExamSlotDisplayLabel } from '@/utils/formatExamDisplayLabel';
 
 const LEVEL_TTL_MS = 30 * 60 * 1000;
 const EXAM_IDS_TTL_MS = 30 * 60 * 1000;
@@ -68,7 +69,7 @@ export async function getCachedB2ExamCatalog(supabase, levelId) {
     ordered.forEach((row, index) => {
       const slot = index + 1;
       ids[slot] = row.id;
-      names[slot] = row.nombre?.trim() || `Examen ${slot}`;
+      names[slot] = formatExamSlotDisplayLabel(row.nombre, slot);
     });
   }
 
