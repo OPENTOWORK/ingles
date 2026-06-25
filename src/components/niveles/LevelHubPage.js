@@ -6,6 +6,7 @@ import StarsWayHubTabs from '@/components/niveles/StarsWayHubTabs';
 import { useUserRole } from '@/context/UserRoleContext';
 import { isStaffRole } from '@/lib/placementLevelAccess';
 import { isNivelesLevelComingSoonForUser, isStudentRole } from '@/constants/studentFeatureAccess';
+import { isAdminRole } from '@/utils/authRoles';
 import NivelesComingSoonNotice from '@/components/niveles/NivelesComingSoonNotice';
 
 /**
@@ -15,6 +16,7 @@ import NivelesComingSoonNotice from '@/components/niveles/NivelesComingSoonNotic
 export default function LevelHubPage({ config }) {
   const { userRole: roleName } = useUserRole();
   const isStudent = isStudentRole(roleName) && !isStaffRole(roleName);
+  const showStarsWayHub = isAdminRole(roleName);
 
   if (isNivelesLevelComingSoonForUser(roleName, config.cefr)) {
     return <NivelesComingSoonNotice level={config.cefr} />;
@@ -42,7 +44,7 @@ export default function LevelHubPage({ config }) {
           examLinks={config.examLinks}
           isStudent={isStudent}
           skillsQuadrant
-          quadrantFooter={!isStudent ? <StarsWayHubTabs embedded /> : null}
+          quadrantFooter={showStarsWayHub ? <StarsWayHubTabs embedded /> : null}
         />
       ) : (
         <ExamPracticeHubSection examLinks={config.examLinks} isStudent={isStudent} />

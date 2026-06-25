@@ -1,33 +1,32 @@
 'use client';
 
-import Link from 'next/link';
-import { getAdminPanelMenuItems } from '@/config/appNavMenu';
+import { useState } from 'react';
+import NavLink from '@/components/layout/NavLink';
+import { STAFF_PANELS_HUB_PATH } from '@/config/staffPanelHub';
+import { StaffPanelsNavMenuItems } from '@/components/layout/StaffPanelsNavMenu';
 
 /**
- * Desplegable de paneles staff (items filtrados por rol en el padre).
+ * Admin / Paneles: mismo patrón hover que Exam Strategies y Dralo AI (desktop)
+ * y acordeón en móvil / menú lateral.
  */
 export default function AdminPanelsNav({
   variant = 'desktop',
-  open,
+  open = false,
   onToggle,
-  onClose,
-  linkClassName = 'app-nav__link',
-  dropdownItemClassName = 'app-nav__dropdown-item',
-  items,
+  onNavigate,
+  items = [],
   menuLabel = 'Admin',
+  isActive = false,
+  linkClassName = 'app-nav__link',
 }) {
-  const menuItems = items?.length ? items : getAdminPanelMenuItems();
-  const isMobile = variant === 'mobile';
-  const buttonClass = isMobile
-    ? `${linkClassName} app-nav__accordion${open ? ' is-open' : ''}`
-    : `${linkClassName} app-nav__link--button${open ? ' is-active' : ''}`;
+  const [hoverOpen, setHoverOpen] = useState(false);
 
-  if (isMobile) {
+  if (variant === 'mobile' || variant === 'side') {
     return (
       <>
         <button
           type="button"
-          className={buttonClass}
+          className={`${linkClassName} app-nav__accordion${open ? ' is-open' : ''}`}
           onClick={onToggle}
           aria-expanded={open}
         >
@@ -35,18 +34,12 @@ export default function AdminPanelsNav({
           <span aria-hidden>{open ? '▲' : '▼'}</span>
         </button>
         {open ? (
-          <div className="app-nav__sub" role="menu">
-            {menuItems.map((item) => (
-              <Link
-                key={item.href}
-                href={item.href}
-                role="menuitem"
-                className={linkClassName}
-                onClick={onClose}
-              >
-                {item.label}
-              </Link>
-            ))}
+          <div className="app-nav__sub">
+            <StaffPanelsNavMenuItems
+              items={items}
+              variant={variant}
+              onNavigate={onNavigate}
+            />
           </div>
         ) : null}
       </>
@@ -54,30 +47,30 @@ export default function AdminPanelsNav({
   }
 
   return (
-    <div className="app-nav__dropdown-wrap">
-      <button
-        type="button"
-        className={buttonClass}
-        aria-expanded={open}
-        onClick={onToggle}
+    <div
+      className={`app-nav__dropdown-wrap app-nav__dropdown-wrap--hover app-nav__dropdown-wrap--account${
+        hoverOpen ? ' is-hover-open' : ''
+      }`}
+      onMouseEnter={() => setHoverOpen(true)}
+      onMouseLeave={() => setHoverOpen(false)}
+    >
+      <NavLink
+        href={STAFF_PANELS_HUB_PATH}
+        className={`${linkClassName} app-nav__link--has-menu${isActive ? ' is-active' : ''}`}
+        onClick={onNavigate}
       >
-        {menuLabel} <span aria-hidden>▼</span>
-      </button>
-      {open ? (
-        <div className="app-nav__dropdown" role="menu">
-          {menuItems.map((item) => (
-            <Link
-              key={item.href}
-              href={item.href}
-              role="menuitem"
-              className={dropdownItemClassName}
-              onClick={onClose}
-            >
-              {item.label}
-            </Link>
-          ))}
-        </div>
-      ) : null}
+        {menuLabel}
+        <span className="app-nav__chevron" aria-hidden>
+          ▾
+        </span>
+      </NavLink>
+      <div className="app-nav__dropdown app-nav__dropdown--hover app-nav__dropdown--account" role="menu">
+        <StaffPanelsNavMenuItems
+          items={items}
+          variant="desktop"
+          onNavigate={onNavigate}
+        />
+      </div>
     </div>
   );
 }

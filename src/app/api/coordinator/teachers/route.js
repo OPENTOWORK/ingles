@@ -4,10 +4,17 @@ import {
   listTeachersWithStats,
   isSchemaNotReadyError,
 } from '@/lib/coordinatorAccess';
+import { authenticateStaffTasksRequest } from '@/lib/staffTasksAccess';
+
+async function authenticateTeachersListRequest(req) {
+  const staffAuth = await authenticateStaffTasksRequest(req);
+  if (!staffAuth.error) return staffAuth;
+  return authenticateCoordinatorRequest(req);
+}
 
 export async function GET(req) {
   try {
-    const auth = await authenticateCoordinatorRequest(req);
+    const auth = await authenticateTeachersListRequest(req);
     if (auth.error) {
       return NextResponse.json({ error: auth.error }, { status: auth.status });
     }

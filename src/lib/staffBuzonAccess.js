@@ -31,6 +31,33 @@ export async function userIsStaffBuzonRecipient(userId, dbClient) {
   return isStaffBuzonRole(roleName || '');
 }
 
+export async function userIsGroupCreator(dbClient, userId, groupId) {
+  if (!userId || !groupId || !dbClient) return false;
+
+  const { data, error } = await dbClient
+    .from('staff_buzon_grupos')
+    .select('created_by')
+    .eq('id', groupId)
+    .maybeSingle();
+
+  if (error) throw error;
+  return data?.created_by === userId;
+}
+
+export async function userIsGroupMember(dbClient, userId, groupId) {
+  if (!userId || !groupId || !dbClient) return false;
+
+  const { data, error } = await dbClient
+    .from('staff_buzon_grupo_miembros')
+    .select('group_id')
+    .eq('user_id', userId)
+    .eq('group_id', groupId)
+    .maybeSingle();
+
+  if (error) throw error;
+  return Boolean(data);
+}
+
 export async function requireStaffBuzonAccess(req) {
   const { user, token, error } = await getAuthUserFromRequest(req);
   if (!user) {

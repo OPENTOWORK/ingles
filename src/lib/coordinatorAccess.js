@@ -57,6 +57,61 @@ export async function getStudentRoleId(db) {
   return ids[0] || null;
 }
 
+export const STAFF_TASK_EXCLUDED_ROLES = ['student', 'alumno'];
+
+export async function getStaffRoleIds(db) {
+  const { data: roles, error } = await db.from('Usuarios_y_Perfil_roles').select('id, nombre');
+  if (error) throw error;
+  const excluded = new Set(STAFF_TASK_EXCLUDED_ROLES.map((name) => normalizeRoleName(name)));
+  return (roles || [])
+    .filter((r) => !excluded.has(normalizeRoleName(r.nombre)))
+    .map((r) => r.id);
+}
+
+export async function listStaffAssignees(db) {
+  const staffRoleIds = await getStaffRoleIds(db);
+  if (!staffRoleIds.length) return { assignees: [] };
+
+  const { data: users, error } = await db
+    .from('Usuarios_y_Perfil_users')
+    .select('id, email, nombre, activo, rol_id, Usuarios_y_Perfil_roles ( nombre )')
+    .in('rol_id', staffRoleIds)
+    .order('nombre', { ascending: true });
+
+  if (error) throw error;
+
+  return {
+    assignees: (users || []).map((u) => ({
+      id: u.id,
+      email: u.email,
+      nombre: u.nombre,
+      activo: u.activo,
+      rol_id: u.rol_id,
+      roleName: u.Usuarios_y_Perfil_roles?.nombre || '',
+    })),
+  };
+}
+
+export async function assertStaffAssigneeId(db, assigneeId) {
+  const staffRoleIds = await getStaffRoleIds(db);
+  const { data: row, error } = await db
+    .from('Usuarios_y_Perfil_users')
+    .select('id, email, nombre, rol_id, activo, Usuarios_y_Perfil_roles ( nombre )')
+    .eq('id', assigneeId)
+    .maybeSingle();
+  if (error) throw error;
+  if (!row?.id || !staffRoleIds.includes(row.rol_id)) {
+    return { ok: false, error: 'Destinatario no válido. Solo personal (no estudiantes).' };
+  }
+  return {
+    ok: true,
+    assignee: {
+      ...row,
+      roleName: row.Usuarios_y_Perfil_roles?.nombre || '',
+    },
+  };
+}
+
 export async function authenticateCoordinatorRequest(req) {
   const auth = await getSupabaseUserFromRequest(req);
   if (!auth?.user) {

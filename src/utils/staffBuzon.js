@@ -106,3 +106,43 @@ export function getDisplayName(user) {
   if (email) return email.split('@')[0];
   return 'Usuario';
 }
+
+export const BUZON_STATUS_VALUES = ['disponible', 'reunion', 'ocupado'];
+
+export const BUZON_STATUS_LABELS = {
+  disponible: 'Disponible',
+  reunion: 'En reunión',
+  ocupado: 'Ocupado',
+};
+
+export function getBuzonStatusLabel(status = 'disponible') {
+  return BUZON_STATUS_LABELS[status] || BUZON_STATUS_LABELS.disponible;
+}
+
+export function formatBuzonPresence(presence) {
+  if (!presence) return getBuzonStatusLabel('disponible');
+  const label = getBuzonStatusLabel(presence.status);
+  const activity = String(presence.activity || '').trim();
+  if (activity) return `${label} · ${activity}`;
+  return label;
+}
+
+export function buildGroupConversationSummaries(messages, groupId) {
+  const groupMessages = messages
+    .filter((message) => message.group_id === groupId)
+    .sort((a, b) => new Date(a.created_at) - new Date(b.created_at));
+
+  if (!groupMessages.length) return null;
+  return groupMessages[groupMessages.length - 1];
+}
+
+export function filterGroupThreadMessages(messages, groupId) {
+  return messages
+    .filter((message) => message.group_id === groupId)
+    .sort((a, b) => new Date(a.created_at) - new Date(b.created_at));
+}
+
+export function getThreadKey(selection) {
+  if (!selection) return null;
+  return `${selection.type}:${selection.id}`;
+}

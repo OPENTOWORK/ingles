@@ -1,8 +1,8 @@
 import {
-  canAccessItPanel,
-  canAccessSupportPanel,
-  canAccessTeacherPanel,
   canAccessCoordinatorPanel,
+  canAccessItPanel,
+  canAccessStaffTasks,
+  canAccessSupportPanel,
   isAdminRole,
   isItRole,
   isTeacherRole,
@@ -51,6 +51,8 @@ const PRESET_ROUTES = [
   { label: 'Panel coordinador', path: '/coordinador', roles: ['coordinator'] },
   { label: 'Panel soporte', path: '/soporte', roles: ['support', 'admin'] },
   { label: 'Panel informático', path: '/informatico', roles: ['informatico', 'admin'] },
+  { label: 'Panel tareas', path: '/tareas', roles: ['teacher', 'coordinator', 'support', 'informatico', 'admin'] },
+  { label: 'Hub paneles', path: '/paneles', roles: ['teacher', 'coordinator', 'support', 'informatico', 'admin'] },
   { label: 'Panel administración', path: '/admin', roles: ['admin'] },
 ];
 
@@ -110,6 +112,8 @@ export function isItPreviewPathAccessible(path, roleId = 'student') {
     return false;
   }
 
+  if (pathname === '/tareas' && !canAccessStaffTasks(roleId)) return false;
+  if (pathname === '/paneles' && !canAccessStaffTasks(roleId)) return false;
   if (pathname === '/teacher' && !isTeacherRole(roleId)) return false;
   if (pathname === '/coordinador' && !canAccessCoordinatorPanel(roleId)) return false;
   if (pathname === '/soporte' && !canAccessSupportPanel(roleId)) return false;

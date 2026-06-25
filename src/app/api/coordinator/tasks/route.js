@@ -1,126 +1,80 @@
 import { NextResponse } from 'next/server';
+import { isSchemaNotReadyError } from '@/lib/coordinatorAccess';
+import { authenticateStaffTasksRequest } from '@/lib/staffTasksAccess';
+import { canDeleteStaffTask } from '@/lib/staffTasksPermissions';
+import { filterTasksClientSide } from '@/lib/staffTaskHelpers';
 import {
-  authenticateCoordinatorRequest,
-  getTeacherRoleIds,
-  isSchemaNotReadyError,
-} from '@/lib/coordinatorAccess';
+  buildTaskInsertRow,
+  buildTaskUpdatePatch,
+  buildTasksQuery,
+  computeTaskMetrics,
+  enrichTasksList,
+  probeStaffTasksTable,
+  validateAssigneeAndStudent,
+  validateTaskPayload,
+} from '@/lib/staffTasksServer';
+import { getRoleNameByUserId } from '@/utils/authRoles';
 
-async function assertTeacherId(db, profesorId) {
-  const teacherRoleIds = await getTeacherRoleIds(db);
-  const { data: row, error } = await db
-    .from('Usuarios_y_Perfil_users')
-    .select('id, email, nombre, rol_id, activo')
-    .eq('id', profesorId)
-    .maybeSingle();
-  if (error) throw error;
-  if (!row?.id || !teacherRoleIds.includes(row.rol_id)) {
-    return { ok: false, error: 'Profesor no válido.' };
-  }
-  return { ok: true, teacher: row };
-}
-
-async function assertStudentAssignedToTeacher(db, profesorId, alumnoId) {
-  const { data, error } = await db
-    .from('profesor_alumnos')
-    .select('id')
-    .eq('profesor_id', profesorId)
-    .eq('alumno_id', alumnoId)
-    .maybeSingle();
-  if (error && !isSchemaNotReadyError(error)) throw error;
-  return Boolean(data?.id);
-}
-
-async function enrichTasks(db, tasks) {
-  const alumnoIds = [...new Set((tasks || []).map((t) => t.alumno_id).filter(Boolean))];
-  const profesorIds = [...new Set((tasks || []).map((t) => t.profesor_id).filter(Boolean))];
-  const userIds = [...new Set([...alumnoIds, ...profesorIds])];
-
-  let profilesById = {};
-  if (userIds.length) {
-    const { data: profiles } = await db
-      .from('Usuarios_y_Perfil_users')
-      .select('id, email, nombre')
-      .in('id', userIds);
-    profilesById = Object.fromEntries((profiles || []).map((p) => [p.id, p]));
-  }
-
-  return (tasks || []).map((t) => ({
-    ...t,
-    alumno: t.alumno_id ? profilesById[t.alumno_id] || null : null,
-    profesor: profilesById[t.profesor_id] || null,
-  }));
-}
+const TASKS_TABLE = 'staff_tareas';
 
 export async function GET(req) {
   try {
-    const auth = await authenticateCoordinatorRequest(req);
+    const auth = await authenticateStaffTasksRequest(req);
     if (auth.error) {
       return NextResponse.json({ error: auth.error }, { status: auth.status });
     }
 
     const { searchParams } = new URL(req.url);
-    const profesorId = String(searchParams.get('profesorId') || '').trim();
+    const assigneeId = String(searchParams.get('assigneeId') || '').trim();
     const estado = String(searchParams.get('estado') || '').trim();
+    const faseId = String(searchParams.get('faseId') || '').trim();
+    const subfaseId = String(searchParams.get('subfaseId') || '').trim();
+    const prioridad = String(searchParams.get('prioridad') || '').trim();
+    const mineOnly = String(searchParams.get('mineOnly') || '').trim() === '1';
+    const search = String(searchParams.get('search') || '').trim();
+    const rol = String(searchParams.get('rol') || '').trim();
+    const fechaLimite = String(searchParams.get('fechaLimite') || '').trim();
 
-    const tablesProbe = await auth.db.from('profesor_tareas').select('id').limit(1);
+    const tablesProbe = await probeStaffTasksTable(auth.db);
     if (isSchemaNotReadyError(tablesProbe.error)) {
-      return NextResponse.json({ tasks: [], tablesReady: false });
+      return NextResponse.json({ tasks: [], tablesReady: false, summary: computeTaskMetrics([]) });
     }
 
-    let query = auth.db
-      .from('profesor_tareas')
-      .select(
-        'id, profesor_id, titulo, descripcion, enlace, fecha_limite, estado, creado_en, alumno_id',
-      )
-      .order('creado_en', { ascending: false })
-      .limit(500);
+    const built = await buildTasksQuery(auth.db, {
+      assigneeId,
+      mineOnly,
+      userId: auth.user.id,
+      estado: estado === 'vencida' ? '' : estado,
+      faseId,
+      subfaseId,
+      prioridad,
+    });
 
-    if (profesorId) {
-      const teacherCheck = await assertTeacherId(auth.db, profesorId);
-      if (!teacherCheck.ok) {
-        return NextResponse.json({ error: teacherCheck.error }, { status: 404 });
-      }
-      query = query.eq('profesor_id', profesorId);
-    } else {
-      const teacherRoleIds = await getTeacherRoleIds(auth.db);
-      if (!teacherRoleIds.length) {
-        return NextResponse.json({ tasks: [], tablesReady: true });
-      }
-      const { data: teachers } = await auth.db
-        .from('Usuarios_y_Perfil_users')
-        .select('id')
-        .in('rol_id', teacherRoleIds);
-      const teacherIds = (teachers || []).map((t) => t.id);
-      if (!teacherIds.length) {
-        return NextResponse.json({ tasks: [], tablesReady: true });
-      }
-      query = query.in('profesor_id', teacherIds);
+    if (built.error) {
+      return NextResponse.json({ error: built.error }, { status: built.status });
     }
 
-    if (estado && ['pendiente', 'completada', 'cancelada'].includes(estado)) {
-      query = query.eq('estado', estado);
-    }
-
-    const { data, error } = await query;
+    const { data, error } = await built.query;
     if (error) {
       if (isSchemaNotReadyError(error)) {
-        return NextResponse.json({ tasks: [], tablesReady: false });
+        return NextResponse.json({ tasks: [], tablesReady: false, summary: computeTaskMetrics([]) });
       }
       return NextResponse.json({ error: error.message }, { status: 500 });
     }
 
-    const tasks = await enrichTasks(auth.db, data || []);
-    const pendingCount = tasks.filter((t) => t.estado === 'pendiente').length;
+    let tasks = await enrichTasksList(auth.db, data || []);
+
+    tasks = filterTasksClientSide(tasks, {
+      search,
+      rol,
+      fechaLimite,
+      estado,
+    });
 
     return NextResponse.json({
       tasks,
       tablesReady: true,
-      summary: {
-        total: tasks.length,
-        pending: pendingCount,
-        completed: tasks.filter((t) => t.estado === 'completada').length,
-        cancelled: tasks.filter((t) => t.estado === 'cancelada').length,
-      },
+      summary: computeTaskMetrics(tasks),
     });
   } catch (err) {
     console.error('[coordinator/tasks GET]', err);
@@ -130,118 +84,146 @@ export async function GET(req) {
 
 export async function POST(req) {
   try {
-    const auth = await authenticateCoordinatorRequest(req);
+    const auth = await authenticateStaffTasksRequest(req);
     if (auth.error) {
       return NextResponse.json({ error: auth.error }, { status: auth.status });
     }
 
     const body = await req.json();
     const action = String(body?.action || 'create').trim();
-    const profesorId = String(body?.profesorId || '').trim();
-
-    if (!profesorId) {
-      return NextResponse.json({ error: 'profesorId es obligatorio.' }, { status: 400 });
-    }
-
-    const teacherCheck = await assertTeacherId(auth.db, profesorId);
-    if (!teacherCheck.ok) {
-      return NextResponse.json({ error: teacherCheck.error }, { status: 404 });
-    }
 
     if (action === 'create') {
-      const titulo = String(body?.titulo || '').trim();
-      const descripcion = String(body?.descripcion || '').trim() || null;
-      const enlace = String(body?.enlace || '').trim() || null;
-      const fecha_limite = body?.fecha_limite || null;
-      const alumno_id = body?.alumno_id ? String(body.alumno_id) : null;
-
-      if (!titulo) {
-        return NextResponse.json({ error: 'Título obligatorio.' }, { status: 400 });
+      const validated = validateTaskPayload(body);
+      if (!validated.ok) {
+        return NextResponse.json({ error: validated.error }, { status: 400 });
       }
 
-      if (alumno_id) {
-        const assigned = await assertStudentAssignedToTeacher(auth.db, profesorId, alumno_id);
-        if (!assigned) {
+      if (validated.data.asignado_id) {
+        const assigneeCheck = await validateAssigneeAndStudent(
+          auth.db,
+          validated.data.asignado_id,
+          validated.data.alumno_id,
+        );
+        if (!assigneeCheck.ok) {
           return NextResponse.json(
-            { error: 'Ese alumno no está asignado a este profesor.' },
-            { status: 403 },
+            { error: assigneeCheck.error },
+            { status: assigneeCheck.status || 400 },
           );
         }
       }
 
-      const { data, error } = await auth.db
-        .from('profesor_tareas')
-        .insert({
-          profesor_id: profesorId,
-          alumno_id,
-          titulo,
-          descripcion,
-          enlace,
-          fecha_limite,
+      const row = buildTaskInsertRow(validated.data, auth.user.id);
+      const { data, error } = await auth.db.from(TASKS_TABLE).insert(row).select().single();
+
+      if (error) {
+        return NextResponse.json(
+          {
+            error: isSchemaNotReadyError(error)
+              ? 'Ejecuta scripts/staff_tasks_system.sql en Supabase.'
+              : error.message,
+          },
+          { status: isSchemaNotReadyError(error) ? 503 : 500 },
+        );
+      }
+
+      const [task] = await enrichTasksList(auth.db, [data]);
+      return NextResponse.json({ success: true, task });
+    }
+
+    const id = String(body?.id || '').trim();
+    if (!id) return NextResponse.json({ error: 'id obligatorio.' }, { status: 400 });
+
+    if (action === 'delete') {
+      const role = await getRoleNameByUserId(auth.user.id, auth.user.email);
+      if (!canDeleteStaffTask(role)) {
+        return NextResponse.json(
+          { error: 'Solo administración puede eliminar tareas. Marca la tarea como cancelada.' },
+          { status: 403 },
+        );
+      }
+
+      const { error } = await auth.db.from(TASKS_TABLE).delete().eq('id', id);
+      if (error) {
+        return NextResponse.json({ error: error.message }, { status: 500 });
+      }
+      return NextResponse.json({ success: true });
+    }
+
+    if (action === 'duplicate') {
+      const { data: source, error: readErr } = await auth.db
+        .from(TASKS_TABLE)
+        .select('*')
+        .eq('id', id)
+        .maybeSingle();
+      if (readErr || !source) {
+        return NextResponse.json({ error: 'Tarea no encontrada.' }, { status: 404 });
+      }
+      const duplicate = buildTaskInsertRow(
+        {
+          titulo: `${source.titulo} (copia)`,
+          descripcion: source.descripcion,
           estado: 'pendiente',
-        })
+          prioridad: source.prioridad,
+          fase_id: source.fase_id,
+          subfase_id: source.subfase_id,
+          asignado_id: source.asignado_id,
+          asignado_rol: source.asignado_rol,
+          alumno_id: source.alumno_id,
+          fecha_limite: source.fecha_limite,
+          enlace: source.enlace,
+          notas: source.notas,
+          bloqueada_motivo: null,
+          checklist: source.checklist || [],
+        },
+        auth.user.id,
+      );
+      const { data, error } = await auth.db.from(TASKS_TABLE).insert(duplicate).select().single();
+      if (error) {
+        return NextResponse.json({ error: error.message }, { status: 500 });
+      }
+      const [task] = await enrichTasksList(auth.db, [data]);
+      return NextResponse.json({ success: true, task });
+    }
+
+    if (action === 'update' || action === 'updateEstado') {
+      if (action === 'update') {
+        const validated = validateTaskPayload(body);
+        if (!validated.ok) {
+          return NextResponse.json({ error: validated.error }, { status: 400 });
+        }
+        if (validated.data.asignado_id) {
+          const assigneeCheck = await validateAssigneeAndStudent(
+            auth.db,
+            validated.data.asignado_id,
+            validated.data.alumno_id,
+          );
+          if (!assigneeCheck.ok) {
+            return NextResponse.json(
+              { error: assigneeCheck.error },
+              { status: assigneeCheck.status || 400 },
+            );
+          }
+        }
+      }
+
+      const patch =
+        action === 'updateEstado'
+          ? buildTaskUpdatePatch({ estado: body.estado })
+          : buildTaskUpdatePatch(body);
+
+      const { data, error } = await auth.db
+        .from(TASKS_TABLE)
+        .update(patch)
+        .eq('id', id)
         .select()
         .single();
 
       if (error) {
-        return NextResponse.json(
-          {
-            error: isSchemaNotReadyError(error)
-              ? 'Ejecuta scripts/teacher_panel_tables.sql en Supabase.'
-              : error.message,
-          },
-          { status: isSchemaNotReadyError(error) ? 503 : 500 },
-        );
+        return NextResponse.json({ error: error.message }, { status: 500 });
       }
 
-      return NextResponse.json({ success: true, task: data });
-    }
-
-    const id = String(body?.id || '').trim();
-    if (!id) {
-      return NextResponse.json({ error: 'id obligatorio.' }, { status: 400 });
-    }
-
-    if (action === 'delete') {
-      const { error } = await auth.db
-        .from('profesor_tareas')
-        .delete()
-        .eq('id', id)
-        .eq('profesor_id', profesorId);
-      if (error) {
-        return NextResponse.json(
-          {
-            error: isSchemaNotReadyError(error)
-              ? 'Ejecuta scripts/teacher_panel_tables.sql en Supabase.'
-              : error.message,
-          },
-          { status: isSchemaNotReadyError(error) ? 503 : 500 },
-        );
-      }
-      return NextResponse.json({ success: true });
-    }
-
-    if (action === 'update') {
-      const estado = body?.estado ? String(body.estado) : undefined;
-      if (!estado || !['pendiente', 'completada', 'cancelada'].includes(estado)) {
-        return NextResponse.json({ error: 'Estado no válido.' }, { status: 400 });
-      }
-      const { error } = await auth.db
-        .from('profesor_tareas')
-        .update({ estado })
-        .eq('id', id)
-        .eq('profesor_id', profesorId);
-      if (error) {
-        return NextResponse.json(
-          {
-            error: isSchemaNotReadyError(error)
-              ? 'Ejecuta scripts/teacher_panel_tables.sql en Supabase.'
-              : error.message,
-          },
-          { status: isSchemaNotReadyError(error) ? 503 : 500 },
-        );
-      }
-      return NextResponse.json({ success: true });
+      const [task] = await enrichTasksList(auth.db, [data]);
+      return NextResponse.json({ success: true, task });
     }
 
     return NextResponse.json({ error: 'Acción no válida.' }, { status: 400 });

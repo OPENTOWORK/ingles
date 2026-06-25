@@ -11,6 +11,7 @@ import { AppSharedDrawerNav } from '@/components/layout/AppSharedDrawerNav';
 import {
   buildAppNavModel,
   isNavLinkActive,
+  isStaffPanelsNavActive,
   NAV_LINKS_BEFORE_DRALO,
   NAV_LINK_CONTACT,
   NAV_LINK_PRICING,
@@ -24,7 +25,6 @@ function AppNavInner({ session, userRole, onLogout }) {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [examStrategiesOpen, setExamStrategiesOpen] = useState(false);
   const [draloOpen, setDraloOpen] = useState(false);
-  const [adminPanelsOpen, setAdminPanelsOpen] = useState(false);
   const [adminPanelsMobileOpen, setAdminPanelsMobileOpen] = useState(false);
   const [desktopHoverMenu, setDesktopHoverMenu] = useState(null);
 
@@ -47,9 +47,8 @@ function AppNavInner({ session, userRole, onLogout }) {
     setMobileOpen(false);
     setExamStrategiesOpen(false);
     setDraloOpen(false);
-    setDesktopHoverMenu(null);
-    setAdminPanelsOpen(false);
     setAdminPanelsMobileOpen(false);
+    setDesktopHoverMenu(null);
     if (document.activeElement instanceof HTMLElement) {
       document.activeElement.blur();
     }
@@ -64,14 +63,9 @@ function AppNavInner({ session, userRole, onLogout }) {
 
   const closeDesktopDropdowns = () => {
     setDesktopHoverMenu(null);
-    setAdminPanelsOpen(false);
     if (document.activeElement instanceof HTMLElement) {
       document.activeElement.blur();
     }
-  };
-
-  const toggleAdminDesktop = () => {
-    setAdminPanelsOpen((open) => !open);
   };
 
   const toggleExamStrategiesMobile = () => {
@@ -108,6 +102,12 @@ function AppNavInner({ session, userRole, onLogout }) {
 
   const desktopLinkClass = (href) =>
     `app-nav__link${isNavLinkActive(href, pathname, searchParams) ? ' is-active' : ''}`;
+
+  const staffPanelsNavActive = isStaffPanelsNavActive(
+    pathname,
+    searchParams,
+    navModel.staffItems,
+  );
 
   return (
     <>
@@ -238,11 +238,10 @@ function AppNavInner({ session, userRole, onLogout }) {
               {navModel.showStaffDropdown ? (
                 <AdminPanelsNav
                   variant="desktop"
-                  open={adminPanelsOpen}
-                  onToggle={toggleAdminDesktop}
-                  onClose={closeDesktopDropdowns}
                   items={navModel.staffItems}
                   menuLabel={navModel.staffMenuLabel}
+                  isActive={staffPanelsNavActive}
+                  onNavigate={closeDesktopDropdowns}
                 />
               ) : null}
               {navModel.showStaffSingleLink ? (

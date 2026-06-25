@@ -192,6 +192,270 @@
   font-weight: 700;
 }
 
+.tabs {
+  display: flex;
+  gap: 0.35rem;
+  margin-bottom: 0.75rem;
+  padding: 0.25rem;
+  border-radius: 12px;
+  background: #e2e8f0;
+}
+
+.tab {
+  flex: 1;
+  border: none;
+  border-radius: 10px;
+  padding: 0.5rem 0.35rem;
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: #64748b;
+  background: transparent;
+  cursor: pointer;
+  transition: background 0.15s ease, color 0.15s ease;
+}
+
+.tabActive {
+  background: #fff;
+  color: #4f46e5;
+  box-shadow: 0 4px 12px rgba(15, 23, 42, 0.08);
+}
+
+.myPresence {
+  margin-bottom: 0.85rem;
+  padding: 0.75rem;
+  border-radius: 14px;
+  background: #fff;
+  border: 1px solid #e2e8f0;
+}
+
+.presenceLabel {
+  display: block;
+  margin-bottom: 0.35rem;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: #64748b;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.presenceRow {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.presenceSelect,
+.presenceActivity,
+.modalInput {
+  width: 100%;
+  border: 1px solid #cbd5e1;
+  border-radius: 10px;
+  padding: 0.55rem 0.7rem;
+  font: inherit;
+  font-size: 0.88rem;
+  background: #fff;
+}
+
+.presenceSave {
+  border: none;
+  border-radius: 10px;
+  padding: 0.55rem 0.75rem;
+  background: #4f46e5;
+  color: #fff;
+  font-weight: 700;
+  font-size: 0.82rem;
+  cursor: pointer;
+}
+
+.presenceSave:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.presenceBadge {
+  padding: 0.35rem 0.7rem;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  white-space: nowrap;
+  max-width: min(100%, 18rem);
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.statusDisponible {
+  background: #ecfdf5;
+  color: #047857;
+}
+
+.statusReunion {
+  background: #fffbeb;
+  color: #b45309;
+}
+
+.statusOcupado {
+  background: #fef2f2;
+  color: #b91c1c;
+}
+
+.presenceDot {
+  position: absolute;
+  right: -1px;
+  bottom: -1px;
+  width: 11px;
+  height: 11px;
+  border-radius: 999px;
+  border: 2px solid #f8fafc;
+}
+
+.avatarWrap {
+  position: relative;
+  display: inline-flex;
+}
+
+.groupAvatar {
+  background: linear-gradient(135deg, #0ea5e9 0%, #6366f1 100%);
+}
+
+.createGroupBtn {
+  width: 100%;
+  margin-bottom: 0.65rem;
+  border: 1px dashed #94a3b8;
+  border-radius: 12px;
+  padding: 0.55rem 0.75rem;
+  background: #fff;
+  color: #4f46e5;
+  font-weight: 700;
+  font-size: 0.85rem;
+  cursor: pointer;
+}
+
+.emptyListHint {
+  padding: 1rem;
+  color: #94a3b8;
+  font-size: 0.88rem;
+  text-align: center;
+}
+
+.starListIcon {
+  font-size: 1.1rem;
+  color: #f59e0b;
+  line-height: 1;
+}
+
+.messageSender {
+  display: block;
+  margin-bottom: 0.25rem;
+  font-size: 0.72rem;
+  font-weight: 700;
+  opacity: 0.85;
+}
+
+.starBtn {
+  margin-left: auto;
+  border: none;
+  background: transparent;
+  color: inherit;
+  font-size: 0.95rem;
+  cursor: pointer;
+  opacity: 0.75;
+  padding: 0;
+}
+
+.starBtn:hover,
+.starBtnActive {
+  opacity: 1;
+  color: #fbbf24;
+}
+
+.messageRowMine .starBtnActive {
+  color: #fde68a;
+}
+
+.modalBackdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  display: grid;
+  place-items: center;
+  padding: 1rem;
+  background: rgba(15, 23, 42, 0.45);
+}
+
+.modal {
+  width: min(100%, 28rem);
+  max-height: min(90vh, 560px);
+  overflow: auto;
+  padding: 1.25rem;
+  border-radius: 18px;
+  background: #fff;
+  box-shadow: 0 24px 60px rgba(15, 23, 42, 0.2);
+}
+
+.modal h3 {
+  margin: 0 0 1rem;
+  font-size: 1.1rem;
+  color: #0f172a;
+}
+
+.modalLabel {
+  display: block;
+  margin: 0.75rem 0 0.35rem;
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: #475569;
+}
+
+.memberPicker {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  max-height: 220px;
+  overflow-y: auto;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+}
+
+.memberOption {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 0.35rem 0.65rem;
+  align-items: center;
+  padding: 0.65rem 0.75rem;
+  border-bottom: 1px solid #f1f5f9;
+  cursor: pointer;
+}
+
+.memberOption:last-child {
+  border-bottom: none;
+}
+
+.modalActions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.65rem;
+  margin-top: 1rem;
+}
+
+.modalActions button[type='submit'] {
+  border: none;
+  border-radius: 10px;
+  padding: 0.65rem 1rem;
+  background: #4f46e5;
+  color: #fff;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.modalActions button[type='button'] {
+  border: 1px solid #cbd5e1;
+  border-radius: 10px;
+  padding: 0.65rem 1rem;
+  background: #fff;
+  cursor: pointer;
+}
+
 .messageList {
   flex: 1;
   overflow-y: auto;
@@ -259,6 +523,199 @@
   background: #fff;
 }
 
+.composerMain {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.composerActions {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  align-self: end;
+}
+
+.hiddenFileInput {
+  display: none;
+}
+
+.attachBtn {
+  border: 1px solid #cbd5e1;
+  border-radius: 12px;
+  padding: 0.65rem 0.85rem;
+  background: #fff;
+  cursor: pointer;
+  font-size: 1rem;
+}
+
+.attachBtn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.pendingAttachment {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  padding: 0.45rem 0.65rem;
+  border-radius: 10px;
+  background: #eef2ff;
+  color: #3730a3;
+  font-size: 0.82rem;
+}
+
+.pendingAttachment button {
+  border: none;
+  background: transparent;
+  font-size: 1.1rem;
+  cursor: pointer;
+  color: inherit;
+}
+
+.messageImageLink {
+  display: block;
+  margin-bottom: 0.35rem;
+}
+
+.messageImageLink img {
+  display: block;
+  max-width: min(100%, 280px);
+  max-height: 220px;
+  border-radius: 12px;
+  object-fit: cover;
+}
+
+.messageDocLink {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  margin-bottom: 0.35rem;
+  padding: 0.45rem 0.65rem;
+  border-radius: 10px;
+  background: #f1f5f9;
+  color: #0f172a;
+  text-decoration: none;
+  font-size: 0.88rem;
+  font-weight: 600;
+}
+
+.messageDocLinkMine {
+  background: rgba(255, 255, 255, 0.18);
+  color: #fff;
+}
+
+.threadHeaderActions {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+}
+
+.groupSettingsBtn {
+  border: 1px solid #cbd5e1;
+  border-radius: 999px;
+  padding: 0.35rem 0.75rem;
+  background: #fff;
+  color: #4f46e5;
+  font-size: 0.78rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.modalHeaderRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  margin-bottom: 0.75rem;
+}
+
+.modalHeaderRow h3 {
+  margin: 0;
+}
+
+.modalClose {
+  border: none;
+  background: transparent;
+  font-size: 1.5rem;
+  line-height: 1;
+  cursor: pointer;
+  color: #64748b;
+}
+
+.modalTextarea,
+.groupSettingsModal .modalInput {
+  width: 100%;
+  border: 1px solid #cbd5e1;
+  border-radius: 10px;
+  padding: 0.55rem 0.7rem;
+  font: inherit;
+  font-size: 0.88rem;
+  background: #fff;
+}
+
+.groupSettingsModal {
+  width: min(100%, 34rem);
+}
+
+.groupReadonlyMeta {
+  margin-bottom: 1rem;
+}
+
+.groupReadonlyMeta p {
+  margin: 0.35rem 0 0;
+  color: #64748b;
+  line-height: 1.45;
+}
+
+.memberRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding: 0.65rem 0.75rem;
+  border-bottom: 1px solid #f1f5f9;
+}
+
+.memberRow:last-child {
+  border-bottom: none;
+}
+
+.addMemberRow {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 0.5rem;
+  margin-top: 0.75rem;
+}
+
+.addMemberRow button {
+  border: none;
+  border-radius: 10px;
+  padding: 0.55rem 0.85rem;
+  background: #4f46e5;
+  color: #fff;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.dangerBtn {
+  border: 1px solid #fecaca;
+  border-radius: 10px;
+  padding: 0.4rem 0.65rem;
+  background: #fff;
+  color: #b91c1c;
+  font-size: 0.78rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.dangerZone {
+  margin-top: 1.25rem;
+  padding-top: 1rem;
+  border-top: 1px solid #fee2e2;
+}
+
 .composer textarea {
   resize: vertical;
   min-height: 52px;
@@ -269,7 +726,7 @@
   font: inherit;
 }
 
-.composer button {
+.composer button[type='submit'] {
   align-self: end;
   border: none;
   border-radius: 12px;
@@ -280,7 +737,7 @@
   cursor: pointer;
 }
 
-.composer button:disabled {
+.composer button[type='submit']:disabled {
   opacity: 0.6;
   cursor: not-allowed;
 }

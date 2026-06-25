@@ -5,7 +5,29 @@ import {
 } from '@/lib/staffBuzonAccess';
 
 const MESSAGE_SELECT =
-  'id, sender_id, recipient_id, body, created_at, read_at';
+  'id, sender_id, recipient_id, group_id, body, created_at, read_at, attachment_url, attachment_name, attachment_mime, attachment_kind';
+
+async function getUserGroupIds(db, userId) {
+  const { data, error } = await db
+    .from('staff_buzon_grupo_miembros')
+    .select('group_id')
+    .eq('user_id', userId);
+
+  if (error) throw error;
+  return [...new Set((data || []).map((row) => row.group_id))];
+}
+
+async function userIsGroupMember(db, userId, groupId) {
+  const { data, error } = await db
+    .from('staff_buzon_grupo_miembros')
+    .select('group_id')
+    .eq('user_id', userId)
+    .eq('group_id', groupId)
+    .maybeSingle();
+
+  if (error) throw error;
+  return Boolean(data);
+}
 
 export async function GET(req) {
   try {
@@ -15,19 +37,39 @@ export async function GET(req) {
     }
 
     const { user, db } = auth;
+    const groupIds = await getUserGroupIds(db, user.id);
+
+    const orParts = [`sender_id.eq.${user.id}`, `recipient_id.eq.${user.id}`];
+    if (groupIds.length) {
+      orParts.push(`group_id.in.(${groupIds.join(',')})`);
+    }
+
     const { data, error } = await db
       .from('staff_buzon_mensajes')
       .select(MESSAGE_SELECT)
-      .or(`sender_id.eq.${user.id},recipient_id.eq.${user.id}`)
+      .or(orParts.join(','))
       .order('created_at', { ascending: true })
-      .limit(1000);
+      .limit(2000);
 
     if (error) {
       console.error('[buzon/messages GET]', error);
       return NextResponse.json({ error: 'No se pudieron cargar los mensajes.' }, { status: 500 });
     }
 
-    return NextResponse.json({ messages: data || [] });
+    const { data: stars, error: starsError } = await db
+      .from('staff_buzon_mensajes_destacados')
+      .select('message_id')
+      .eq('user_id', user.id);
+
+    if (starsError) {
+      console.error('[buzon/messages GET stars]', starsError);
+      return NextResponse.json({ error: 'No se pudieron cargar los mensajes.' }, { status: 500 });
+    }
+
+    return NextResponse.json({
+      messages: data || [],
+      starred_ids: (stars || []).map((row) => row.message_id),
+    });
   } catch (error) {
     console.error('[buzon/messages GET]', error);
     return NextResponse.json({ error: 'Error interno.' }, { status: 500 });
@@ -44,30 +86,73 @@ export async function POST(req) {
     const { user, db } = auth;
     const body = await req.json().catch(() => ({}));
     const recipientId = String(body?.recipient_id || '').trim();
+    const groupId = String(body?.group_id || '').trim();
     const messageBody = String(body?.body || '').trim();
+    const attachmentUrl = String(body?.attachment_url || '').trim() || null;
+    const attachmentName = String(body?.attachment_name || '').trim() || null;
+    const attachmentMime = String(body?.attachment_mime || '').trim() || null;
+    const attachmentKind = String(body?.attachment_kind || '').trim() || null;
 
-    if (!recipientId) {
-      return NextResponse.json({ error: 'Destinatario obligatorio.' }, { status: 400 });
-    }
-    if (!messageBody) {
-      return NextResponse.json({ error: 'El mensaje no puede estar vacío.' }, { status: 400 });
-    }
-    if (recipientId === user.id) {
-      return NextResponse.json({ error: 'No puedes enviarte un mensaje a ti mismo.' }, { status: 400 });
+    if (!messageBody && !attachmentUrl) {
+      return NextResponse.json({ error: 'Escribe un mensaje o adjunta un archivo.' }, { status: 400 });
     }
 
-    const recipientAllowed = await userIsStaffBuzonRecipient(recipientId, db);
-    if (!recipientAllowed) {
-      return NextResponse.json({ error: 'Destinatario no válido.' }, { status: 400 });
+    if (attachmentUrl && !['image', 'document'].includes(attachmentKind || '')) {
+      return NextResponse.json({ error: 'Tipo de adjunto no válido.' }, { status: 400 });
+    }
+
+    const attachmentFields = attachmentUrl
+      ? {
+          attachment_url: attachmentUrl,
+          attachment_name: attachmentName,
+          attachment_mime: attachmentMime,
+          attachment_kind: attachmentKind,
+        }
+      : {
+          attachment_url: null,
+          attachment_name: null,
+          attachment_mime: null,
+          attachment_kind: null,
+        };
+
+    const finalBody = messageBody || attachmentName || (attachmentKind === 'image' ? 'Imagen' : 'Documento');
+
+    let insertRow = null;
+
+    if (groupId) {
+      const isMember = await userIsGroupMember(db, user.id, groupId);
+      if (!isMember) {
+        return NextResponse.json({ error: 'No perteneces a este grupo.' }, { status: 403 });
+      }
+      insertRow = {
+        sender_id: user.id,
+        group_id: groupId,
+        recipient_id: null,
+        body: finalBody,
+        ...attachmentFields,
+      };
+    } else if (recipientId) {
+      if (recipientId === user.id) {
+        return NextResponse.json({ error: 'No puedes enviarte un mensaje a ti mismo.' }, { status: 400 });
+      }
+      const recipientAllowed = await userIsStaffBuzonRecipient(recipientId, db);
+      if (!recipientAllowed) {
+        return NextResponse.json({ error: 'Destinatario no válido.' }, { status: 400 });
+      }
+      insertRow = {
+        sender_id: user.id,
+        recipient_id: recipientId,
+        group_id: null,
+        body: finalBody,
+        ...attachmentFields,
+      };
+    } else {
+      return NextResponse.json({ error: 'Destinatario o grupo obligatorio.' }, { status: 400 });
     }
 
     const { data, error } = await db
       .from('staff_buzon_mensajes')
-      .insert({
-        sender_id: user.id,
-        recipient_id: recipientId,
-        body: messageBody,
-      })
+      .insert(insertRow)
       .select(MESSAGE_SELECT)
       .single();
 
@@ -103,6 +188,7 @@ export async function PATCH(req) {
       .update({ read_at: readAt })
       .eq('recipient_id', user.id)
       .eq('sender_id', partnerId)
+      .is('group_id', null)
       .is('read_at', null)
       .select('id');
 

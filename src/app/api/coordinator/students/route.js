@@ -4,6 +4,7 @@ import {
   getTeacherRoleIds,
   isSchemaNotReadyError,
 } from '@/lib/coordinatorAccess';
+import { authenticateStaffTasksRequest } from '@/lib/staffTasksAccess';
 import { normalizeRoleName } from '@/utils/authRoles';
 import { formatSessionDuration, isUserOnline } from '@/lib/userActivity';
 
@@ -23,7 +24,7 @@ async function assertTeacherId(db, profesorId) {
 
 export async function GET(req) {
   try {
-    const auth = await authenticateCoordinatorRequest(req);
+    const auth = await authenticateStaffTasksRequest(req);
     if (auth.error) {
       return NextResponse.json({ error: auth.error }, { status: auth.status });
     }

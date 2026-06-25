@@ -98,6 +98,12 @@ export function canAccessStaffBuzon(roleName = '') {
   );
 }
 
+/** Tareas de profesor/alumnos: todo el staff excepto estudiantes. */
+export function canAccessStaffTasks(roleName = '') {
+  const role = normalizeRoleName(roleName);
+  return role !== 'student' && role !== 'alumno' && Boolean(role);
+}
+
 /** Evita múltiples lecturas en paralelo para el mismo usuario (mismo resultado). */
 const roleFetchInflight = new Map();
 

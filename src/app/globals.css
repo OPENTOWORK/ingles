@@ -880,6 +880,14 @@ body {
   font-weight: 600;
 }
 
+/* Admin dropdown alineado a la derecha (zona account) */
+.app-nav__dropdown-wrap--account .app-nav__dropdown--account {
+  left: auto;
+  right: 0;
+  transform: none;
+  min-width: 240px;
+}
+
 .app-nav__night-mode {
   display: inline-flex;
   align-items: center;

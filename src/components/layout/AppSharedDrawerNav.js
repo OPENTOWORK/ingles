@@ -1,6 +1,7 @@
 'use client';
 
 import NavLink from '@/components/layout/NavLink';
+import { usePathname, useSearchParams } from 'next/navigation';
 import AdminPanelsNav from '@/components/layout/AdminPanelsNav';
 import { DraloAiComingSoonRibbon, DraloAiNavMenuItems } from '@/components/layout/DraloAiNavMenu';
 import { ExamStrategiesNavMenuItems } from '@/components/layout/ExamStrategiesNavMenu';
@@ -9,6 +10,7 @@ import {
   NAV_LINK_CONTACT,
   NAV_LINK_PRICING,
   HOME_PRICING_LINK,
+  isStaffPanelsNavActive,
 } from '@/config/appNavMenu';
 import { APP_ROUTES } from '@/config/appRoutes';
 
@@ -30,6 +32,8 @@ export function AppSharedDrawerNav({
   showNightMode = true,
   draloVariant = 'mobile',
 }) {
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
   const {
     guest,
     sectionLinks,
@@ -45,6 +49,8 @@ export function AppSharedDrawerNav({
     showStaffDropdown,
     showStaffSingleLink,
   } = navModel;
+
+  const staffPanelsNavActive = isStaffPanelsNavActive(pathname, searchParams, staffItems);
 
   return (
     <>
@@ -140,13 +146,14 @@ export function AppSharedDrawerNav({
 
       {showStaffDropdown ? (
         <AdminPanelsNav
-          variant="mobile"
+          variant={draloVariant === 'side' ? 'side' : 'mobile'}
           open={adminPanelsOpen}
           onToggle={onToggleAdminPanels}
-          onClose={onNavigate}
           linkClassName={linkClass}
           items={staffItems}
           menuLabel={staffMenuLabel}
+          isActive={staffPanelsNavActive}
+          onNavigate={onNavigate}
         />
       ) : null}
 

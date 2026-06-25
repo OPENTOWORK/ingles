@@ -1,0 +1,130 @@
+.staffPanelsHub {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(11rem, 1fr));
+  gap: 1rem;
+}
+
+@media (min-width: 640px) {
+  .staffPanelsHub {
+    grid-template-columns: repeat(auto-fill, minmax(12.5rem, 1fr));
+    gap: 1.25rem;
+  }
+}
+
+.card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 0.75rem;
+  padding: 1.25rem 1rem 1.1rem;
+  border-radius: 1rem;
+  border: 1px solid rgb(229 231 235);
+  background: #fff;
+  box-shadow: 0 1px 2px rgb(0 0 0 / 0.04);
+  transition: transform 0.15s ease, box-shadow 0.15s ease, border-color 0.15s ease;
+  min-height: 10.5rem;
+}
+
+.card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgb(91 33 182 / 0.12);
+  border-color: rgb(196 181 253);
+}
+
+.iconWrap {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 3.25rem;
+  height: 3.25rem;
+  border-radius: 0.9rem;
+  color: rgb(91 33 182);
+}
+
+.iconWrap svg {
+  width: 1.75rem;
+  height: 1.75rem;
+}
+
+.accentSky {
+  background: rgb(224 242 254);
+  color: rgb(3 105 161);
+}
+
+.accentViolet {
+  background: rgb(237 233 254);
+  color: rgb(109 40 217);
+}
+
+.accentIndigo {
+  background: rgb(224 231 255);
+  color: rgb(67 56 202);
+}
+
+.accentEmerald {
+  background: rgb(209 250 229);
+  color: rgb(5 150 105);
+}
+
+.accentPurple {
+  background: rgb(243 232 255);
+  color: rgb(126 34 206);
+}
+
+.accentAmber {
+  background: rgb(254 243 199);
+  color: rgb(180 83 9);
+}
+
+.accentCyan {
+  background: rgb(207 250 254);
+  color: rgb(8 145 178);
+}
+
+.accentRose {
+  background: rgb(255 228 230);
+  color: rgb(190 18 60);
+}
+
+.accentLime {
+  background: rgb(236 252 203);
+  color: rgb(77 124 15);
+}
+
+.accentOrange {
+  background: rgb(255 237 213);
+  color: rgb(194 65 12);
+}
+
+.accentSlate {
+  background: rgb(241 245 249);
+  color: rgb(51 65 85);
+}
+
+.accentTeal {
+  background: rgb(204 251 241);
+  color: rgb(15 118 110);
+}
+
+.label {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: rgb(17 24 39);
+  line-height: 1.35;
+}
+
+.description {
+  font-size: 0.75rem;
+  color: rgb(107 114 128);
+  line-height: 1.4;
+}
+
+.empty {
+  border-radius: 0.75rem;
+  border: 1px dashed rgb(209 213 219);
+  padding: 2rem;
+  text-align: center;
+  color: rgb(107 114 128);
+  font-size: 0.9rem;
+}
