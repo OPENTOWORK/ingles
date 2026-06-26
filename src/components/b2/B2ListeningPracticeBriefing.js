@@ -1,7 +1,9 @@
 'use client';
 
+import { SkillPartInstructionsPanel } from '@/components/b2/B2ExamPracticeContent';
+
 /**
- * Single briefing block for Listening part practice (replaces duplicate Directions + blue banner).
+ * Listening part practice briefing — same Instructions panel as Reading / Writing.
  */
 export default function B2ListeningPracticeBriefing({
   whatYouWillHear,
@@ -11,29 +13,25 @@ export default function B2ListeningPracticeBriefing({
 }) {
   if (!whatYouNeedToDo && !whatYouWillHear) return null;
 
-  return (
-    <div
-      className={`levels-listening-briefing${examSimulation ? ' levels-listening-briefing--exam' : ''}`}
-    >
-      {whatYouWillHear ? (
-        <div className="levels-listening-briefing__block">
-          <p className="levels-listening-briefing__label">What you will hear</p>
-          <p className="levels-listening-briefing__text">{whatYouWillHear}</p>
-        </div>
-      ) : null}
-      <div className="levels-listening-briefing__block">
-        <p className="levels-listening-briefing__label">What you need to do</p>
-        <p className="levels-listening-briefing__text">{whatYouNeedToDo}</p>
-      </div>
-      {!examSimulation && practiceNote ? (
-        <p className="levels-listening-briefing__practice-note">{practiceNote}</p>
-      ) : null}
-      {examSimulation ? (
-        <p className="levels-listening-briefing__exam-note">
-          Exam simulation: each recording will play twice when strict playback is enabled. Do not check
-          answers until you finish the section.
-        </p>
-      ) : null}
-    </div>
-  );
+  /** @type {Array<{ type: string, text: string }>} */
+  const blocks = [];
+
+  if (whatYouWillHear) {
+    blocks.push({ type: 'paragraph', text: whatYouWillHear });
+  }
+  if (whatYouNeedToDo) {
+    blocks.push({ type: 'paragraph', text: whatYouNeedToDo });
+  }
+  if (!examSimulation && practiceNote) {
+    blocks.push({ type: 'paragraph', text: practiceNote });
+  }
+  if (examSimulation) {
+    blocks.push({
+      type: 'paragraph',
+      text:
+        'Exam simulation: each recording will play twice when strict playback is enabled. Do not check answers until you finish the section.',
+    });
+  }
+
+  return <SkillPartInstructionsPanel label="Instructions" blocks={blocks} />;
 }

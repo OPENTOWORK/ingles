@@ -210,7 +210,6 @@ import {
 } from '@/lib/examPracticeMode';
 import {
   getB2ListeningCambridgePartLabel,
-  getB2ListeningPracticeSubtitle,
   getB2ListeningStrategyPack,
 } from '@/data/b2ListeningPracticeStrategies';
 import { resolvePracticeScoreSourceFromExamModeParam } from '@/utils/levelsScoreSource';
@@ -3013,9 +3012,6 @@ function B2ExamPaperPracticePageInner({
         defaultSubtitle: subtitle,
       });
     }
-    if (isB2ListeningPartPractice) {
-      return getB2ListeningPracticeSubtitle(partNumber);
-    }
     if (isSkillPracticeSession) return null;
     return subtitle;
   }, [
@@ -3023,8 +3019,6 @@ function B2ExamPaperPracticePageInner({
     reviewMode,
     lang,
     subtitle,
-    isB2ListeningPartPractice,
-    partNumber,
     isSkillPracticeSession,
   ]);
 
@@ -3957,12 +3951,15 @@ function B2ExamPaperPracticePageInner({
                             key={`listen-item-${selectedQuestion.preguntaId}-${qn}`}
                             className="levels-listening-question-card"
                           >
-                            <p className="levels-listening-question-card__title">
-                              Question {qn}
-                            </p>
                             {part10Situation ? (
-                              <p className="levels-listening-situation">{part10Situation}</p>
-                            ) : null}
+                              <p className="levels-listening-situation">
+                                Question {qn} - {part10Situation}
+                              </p>
+                            ) : (
+                              <p className="levels-listening-question-card__title">
+                                Question {qn}
+                              </p>
+                            )}
                             {clipSrc ? (
                               <div style={{ marginBottom: ctx?.contextLines?.length ? '0.85rem' : 0 }}>
                                 {clipLabel ? (

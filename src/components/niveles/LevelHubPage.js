@@ -34,7 +34,7 @@ export default function LevelHubPage({ config }) {
           mascotVariant={config.mascotVariant}
           mascotWidth={146}
           accent={config.accent}
-          stats={config.heroStats ?? [{ value: 'Exam or skills', label: '' }]}
+          stats={config.heroStats ?? (config.slug === 'b2' ? [] : [{ value: 'Exam or skills', label: '' }])}
         />
       </div>
 
@@ -43,6 +43,7 @@ export default function LevelHubPage({ config }) {
           examLinks={config.examLinks}
           isStudent={isStudent}
           skillsQuadrant
+          sectionTitle={config.practiceSectionTitle}
           quadrantFooter={showStarsWayHub ? <StarsWayHubTabs embedded /> : null}
         />
       ) : (
@@ -123,6 +124,10 @@ function LevelHubStyles() {
         font-size: 0.96rem;
         line-height: 1.55;
         color: #5a6b7d;
+      }
+      .niveles-level-page--b2 .page-hero__desc {
+        max-width: 100%;
+        text-wrap: balance;
       }
     `}</style>
   );

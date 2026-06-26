@@ -54,6 +54,7 @@ export default function ExamPracticeHubSection({
   isStudent,
   quadrant = false,
   skillsQuadrant = false,
+  sectionTitle = null,
   quadrantFooter = null,
 }) {
   if (!examLinks.length) return null;
@@ -82,15 +83,21 @@ export default function ExamPracticeHubSection({
   if (skillsQuadrant) {
     return (
       <section className={hubClass} data-tour="level-exam-practice">
-        {examModeLink ? (
-          <div className="exam-practice-hub__exam-mode-standalone">
-            <ExamPracticeCard exam={examModeLink} isStudent={isStudent} variant="banner" />
-          </div>
-        ) : null}
-
         <div className="exam-practice-hub__skills-quadrant">
           <div className="exam-practice-hub__quadrant-inner">
-            {skillsGrid ? <div className="exam-practice-hub__body">{skillsGrid}</div> : null}
+            {sectionTitle ? (
+              <div className="exam-practice-hub__section-head">
+                <span className="page-hero__eyebrow exam-practice-hub__section-eyebrow">{sectionTitle}</span>
+              </div>
+            ) : null}
+            <div className="exam-practice-hub__body">
+              {examModeLink ? (
+                <div className="exam-practice-hub__exam-mode">
+                  <ExamPracticeCard exam={examModeLink} isStudent={isStudent} />
+                </div>
+              ) : null}
+              {skillsGrid}
+            </div>
             {quadrantFooter ? (
               <div className="exam-practice-hub__quadrant-footer">{quadrantFooter}</div>
             ) : null}
@@ -149,8 +156,12 @@ function ExamPracticeHubLayoutStyles() {
         margin-top: 1.5rem;
         padding: 0;
       }
-      .niveles-level-page .exam-practice-hub--split .exam-practice-hub__exam-mode-standalone {
-        margin: 14px 0 16px;
+      .niveles-level-page .exam-practice-hub--split .exam-practice-hub__exam-mode {
+        margin-bottom: 14px;
+      }
+      .niveles-level-page .exam-practice-hub--split .exam-practice-hub__exam-mode .exam-practice-hub__card {
+        width: 100%;
+        box-sizing: border-box;
       }
       .niveles-level-page .exam-practice-hub__skills-quadrant {
         margin-top: 0;
@@ -165,9 +176,30 @@ function ExamPracticeHubLayoutStyles() {
         overflow: hidden;
         box-sizing: border-box;
       }
+      .niveles-level-page .exam-practice-hub--split .exam-practice-hub__section-head {
+        padding: 18px 20px 16px;
+        border-bottom: 1px solid rgba(226, 232, 240, 0.9);
+      }
+      .niveles-level-page .exam-practice-hub--split .exam-practice-hub__section-eyebrow {
+        margin-bottom: 0;
+        color: #4338ca;
+        background: rgba(99, 102, 241, 0.12);
+        border: 1px solid rgba(99, 102, 241, 0.22);
+      }
       .niveles-level-page .exam-practice-hub--split .exam-practice-hub__body {
         padding: 18px;
         box-sizing: border-box;
+      }
+      .niveles-level-page .exam-practice-hub--split .exam-practice-hub__card {
+        height: 132px;
+        min-height: 132px;
+      }
+      .niveles-level-page .exam-practice-hub--split .exam-practice-hub__label {
+        font-size: 1.02rem;
+        line-height: 1.25;
+      }
+      .niveles-level-page .exam-practice-hub--split .exam-practice-hub__card--featured .exam-practice-hub__label {
+        font-size: 1.02rem;
       }
       .niveles-level-page .exam-practice-hub--split .exam-practice-hub__skills-grid {
         display: grid;
@@ -233,6 +265,9 @@ function ExamPracticeHubLayoutStyles() {
       }
       body.reading-night-mode .niveles-level-page .exam-practice-hub--split .exam-practice-hub__quadrant-footer {
         border-top-color: #475569;
+      }
+      body.reading-night-mode .niveles-level-page .exam-practice-hub--split .exam-practice-hub__section-head {
+        border-bottom-color: #475569;
       }
     `}</style>
   );

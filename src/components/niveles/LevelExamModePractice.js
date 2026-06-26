@@ -225,25 +225,6 @@ function LevelExamModePracticeInner({ slug }) {
 
       {!pickedSlot ? (
         <div className="exam-mode-landing">
-          <ExamPracticeLevelPicker
-            variant="strip"
-            activeLevel={slug}
-            linkForLevel={(level) => `/niveles/${level.slug}/exam-mode`}
-          />
-
-          <B2ExamSlotProgressPicker
-            value={examSlot}
-            onSelect={handlePickExam}
-            progressBySlot={progressBySlot}
-            partsInPaper={sections.length}
-            examLabelsBySlot={examNamesBySlot}
-            lang="en"
-            className="levels-b2-exam-picker--exam-mode"
-            onViewStatistics={handleViewStatistics}
-            onRepeatExam={handleRepeatExamSlot}
-            {...examSlotPickerProps}
-          />
-
           <div className="exam-mode-landing__hero">
             <span className="exam-mode-landing__eyebrow">Exam mode</span>
             <h1 className="exam-mode-landing__title">
@@ -274,10 +255,25 @@ function LevelExamModePracticeInner({ slug }) {
             </ul>
           </div>
 
-          <p className="exam-mode-landing__footnote">
-            Choose one of the <strong>available tests</strong>. You will complete each paper in order
-            under exam-style conditions.
-          </p>
+          <ExamPracticeLevelPicker
+            variant="strip"
+            activeLevel={slug}
+            linkForLevel={(level) => `/niveles/${level.slug}/exam-mode`}
+          />
+
+          <B2ExamSlotProgressPicker
+            value={examSlot}
+            onSelect={handlePickExam}
+            progressBySlot={progressBySlot}
+            partsInPaper={sections.length}
+            examLabelsBySlot={examNamesBySlot}
+            lang="en"
+            className="levels-b2-exam-picker--exam-mode"
+            onViewStatistics={handleViewStatistics}
+            onRepeatExam={handleRepeatExamSlot}
+            {...examSlotPickerProps}
+          />
+
         </div>
       ) : (
         <div className="exam-mode-session">

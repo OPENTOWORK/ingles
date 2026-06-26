@@ -474,7 +474,7 @@ export const NIVELES_LEVEL_HUB = {
     title: 'Exams',
     description:
       'Train with level-based exercises, exam practice and instant feedback to improve your English faster',
-    heroStats: [{ value: 'Choose your practice', label: '' }],
+    practiceSectionTitle: 'Choose your practice',
     mascotVariant: 4,
     accent: 'violet',
     sections: {
