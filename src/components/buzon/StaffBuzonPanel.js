@@ -522,7 +522,10 @@ export default function StaffBuzonPanel({ currentUserId }) {
   }
 
   return (
-    <div className={`staff-buzon-panel ${styles.layout}`}>
+    <div
+      className={`staff-buzon-panel ${styles.layout}`}
+      data-has-selection={selection ? 'true' : 'false'}
+    >
       <aside className={`staff-buzon-sidebar ${styles.sidebar}`}>
         <div className={`staff-buzon-sidebar-header ${styles.sidebarHeader}`}>
           <h2>Conversaciones</h2>
@@ -747,7 +750,14 @@ export default function StaffBuzonPanel({ currentUserId }) {
           </div>
         ) : (
           <>
-            <header className={styles.threadHeader}>
+            <header className={`staff-buzon-thread-header ${styles.threadHeader}`}>
+              <button
+                type="button"
+                className="staff-buzon-mobile-back"
+                onClick={() => setSelection(null)}
+              >
+                ← Conversaciones
+              </button>
               <div>
                 {selection.type === 'direct' && selectedPartner ? (
                   <>
