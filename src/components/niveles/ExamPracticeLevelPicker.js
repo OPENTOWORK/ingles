@@ -2,11 +2,11 @@
 
 import Link from 'next/link';
 import { useUserRole } from '@/context/UserRoleContext';
-import { isStaffRole } from '@/lib/placementLevelAccess';
+import { usesStudentContentRestrictions } from '@/constants/studentFeatureAccess';
 import { EXAM_PRACTICE_LEVELS } from '@/data/examPracticeLevels';
 
 function resolveLevelLock({ level, userRole }) {
-  if (isStaffRole(userRole)) {
+  if (!usesStudentContentRestrictions(userRole)) {
     return { locked: false, label: null };
   }
 

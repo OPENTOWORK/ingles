@@ -6,12 +6,12 @@ export const STAFF_PANEL_HUB_META = {
   '/buzon': {
     icon: 'inbox',
     accent: 'sky',
-    description: 'Mensajería interna del equipo',
+    description: 'Mensajería interna y reuniones del equipo',
   },
   '/tareas': {
     icon: 'tasks',
     accent: 'violet',
-    description: 'Tareas, fases y reuniones',
+    description: 'Tareas y fases del proyecto',
   },
   '/admin': {
     icon: 'admin',

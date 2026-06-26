@@ -153,14 +153,10 @@ a:hover {
   max-width: 1200px;
   margin: 0 auto;
   display: grid;
-  grid-template-columns: auto auto auto minmax(0, 1fr);
+  grid-template-columns: auto auto minmax(0, 1fr);
   gap: 1.25rem 2rem;
   align-items: start;
   justify-content: start;
-}
-
-.legal-footer-column--version {
-  min-width: 0;
 }
 
 .legal-footer-column--tagline {
@@ -179,10 +175,6 @@ a:hover {
 @media (max-width: 900px) {
   .legal-footer-content {
     grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-
-  .legal-footer-column--version {
-    grid-column: auto;
   }
 
   .legal-footer-column--tagline {
@@ -244,10 +236,23 @@ a:hover {
 
 .legal-footer-version {
   margin: 0;
-  font-size: 0.9rem;
+  font-size: inherit;
   font-weight: inherit;
-  color: rgba(255, 255, 255, 0.92);
+  color: inherit;
   letter-spacing: 0.02em;
+}
+
+.legal-footer-meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 0.35rem 0.5rem;
+  white-space: nowrap;
+}
+
+.legal-footer-meta__sep {
+  opacity: 0.72;
 }
 
 .legal-footer-copy {
@@ -272,6 +277,11 @@ a:hover {
   .legal-footer-copy--tagline-desc {
     white-space: normal;
     max-width: 280px;
+  }
+
+  .legal-footer-meta {
+    justify-content: flex-start;
+    white-space: normal;
   }
 }
 

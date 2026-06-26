@@ -7,13 +7,13 @@ import { TeoriaGlobalStyles } from '@/components/theory/TeoriaStyles';
 import ExamTheorySection from '@/components/niveles/ExamTheorySection';
 import NivelesPageStyles from '@/components/niveles/NivelesPageStyles';
 import { APP_ROUTES } from '@/config/appRoutes';
+import { usesStudentContentRestrictions } from '@/constants/studentFeatureAccess';
 
 function NivelesInner() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const { session, userRole } = useUserRole();
-  const isStudent =
-    Boolean(session) && (userRole === 'student' || userRole === 'alumno');
+  const isStudent = Boolean(session) && usesStudentContentRestrictions(userRole);
   const isTheoryView = searchParams.get('tab') === 'theory';
 
   useEffect(() => {

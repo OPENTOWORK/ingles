@@ -19,10 +19,11 @@ import ExamTheoryLockedNotice from '@/components/niveles/ExamTheoryLockedNotice'
 import ExamTheoryTopicList from '@/components/theory/ExamTheoryTopicList';
 import TheoryTopicList from '@/components/theory/TheoryTopicList';
 import TeoriaTopicList from '@/components/theory/TeoriaTopicList';
+import { usesStudentContentRestrictions } from '@/constants/studentFeatureAccess';
 
 export default function TeoriaSectionGate({ sectionSlug, sectionTitle, topics }) {
   const { userRole, session } = useUserRole();
-  const isStudent = userRole === 'student' || userRole === 'alumno';
+  const isStudent = usesStudentContentRestrictions(userRole);
   const isExam = isExamTheorySectionSlug(sectionSlug);
   const isTheory = isTheorySectionSlug(sectionSlug);
   const examProgress = useExamTheoryProgress(

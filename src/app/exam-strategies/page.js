@@ -5,11 +5,11 @@ import { useUserRole } from '@/context/UserRoleContext';
 import { TeoriaGlobalStyles } from '@/components/theory/TeoriaStyles';
 import ExamTheorySection from '@/components/niveles/ExamTheorySection';
 import NivelesPageStyles from '@/components/niveles/NivelesPageStyles';
+import { usesStudentContentRestrictions } from '@/constants/studentFeatureAccess';
 
 function ExamStrategiesInner() {
   const { session, userRole } = useUserRole();
-  const isStudent =
-    Boolean(session) && (userRole === 'student' || userRole === 'alumno');
+  const isStudent = Boolean(session) && usesStudentContentRestrictions(userRole);
 
   return (
     <main className="shell niveles-page niveles-page--theory">

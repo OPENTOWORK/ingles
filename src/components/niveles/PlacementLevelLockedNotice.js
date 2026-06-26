@@ -4,11 +4,12 @@ import Link from 'next/link';
 import { getPlacementLockReason } from '@/lib/placementLevelAccess';
 import { usePlacementAccess } from '@/context/PlacementAccessContext';
 import { useUserRole } from '@/context/UserRoleContext';
+import { usesStudentContentRestrictions } from '@/constants/studentFeatureAccess';
 
 export default function PlacementLevelLockedNotice({ level }) {
   const { userRole } = useUserRole();
   const { hasPlacementResult, assignedLevel } = usePlacementAccess();
-  const isStudent = userRole === 'student' || userRole === 'alumno';
+  const isStudent = usesStudentContentRestrictions(userRole);
 
   const reason = getPlacementLockReason({
     isStudent,

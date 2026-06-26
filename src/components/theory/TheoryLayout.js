@@ -55,6 +55,7 @@ import {
 } from '@/lib/theoryExerciseProgress';
 import { saveTheoryExercisePass } from '@/lib/saveTheoryExerciseProgress';
 import { normalizeTopicHref } from '@/lib/normalizeTopicHref';
+import { usesStudentContentRestrictions } from '@/constants/studentFeatureAccess';
 
 const TheoryLayout = ({ 
   title, 
@@ -82,7 +83,7 @@ const TheoryLayout = ({
     Boolean(pathname?.startsWith('/teoria/')) && !needsTeoriaProgress && !needsExamProgress;
 
   const { session, userRole } = useUserRole();
-  const isStudent = userRole === 'student' || userRole === 'alumno';
+  const isStudent = usesStudentContentRestrictions(userRole);
   const examProgressUserId =
     needsExamProgress || needsBothProgress ? session?.user?.id : null;
   const teoriaProgressUserId =

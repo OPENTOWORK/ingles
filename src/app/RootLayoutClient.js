@@ -412,16 +412,17 @@ export default function RootLayoutClient({ children }) {
               </li>
             </ul>
           </div>
-          <div className="legal-footer-column legal-footer-column--version">
-            <p className="legal-footer-version">Versión Alpha 1.0.0</p>
-          </div>
           <div className="legal-footer-column legal-footer-column--tagline">
             <DraloTagline className="dralo-tagline--footer" />
             <p className="legal-footer-copy legal-footer-copy--tagline legal-footer-copy--tagline-desc">
               Ejercicios diseñados para practicar tus habilidades en inglés.
             </p>
-            <p className="legal-footer-copy legal-footer-copy--tagline">
-              © {new Date().getFullYear()} Dralo
+            <p className="legal-footer-copy legal-footer-copy--tagline legal-footer-meta">
+              <span>© {new Date().getFullYear()} Dralo</span>
+              <span className="legal-footer-meta__sep" aria-hidden="true">
+                ·
+              </span>
+              <span className="legal-footer-version">Versión Alpha 1.0.0</span>
             </p>
           </div>
         </div>

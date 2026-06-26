@@ -3,8 +3,7 @@
 import Link from 'next/link';
 import ExamSkillIcon from '@/components/exam/ExamSkillIcon';
 import { useUserRole } from '@/context/UserRoleContext';
-import { isStudentRole } from '@/constants/studentFeatureAccess';
-import { isStaffRole } from '@/lib/placementLevelAccess';
+import { usesStudentContentRestrictions } from '@/constants/studentFeatureAccess';
 import { getLevelSkillNavLinks, skillRoutesMatch } from '@/data/nivelesLevelHub';
 
 function SkillLockIcon() {
@@ -26,7 +25,7 @@ function SkillLockIcon() {
  */
 export default function ExamPracticeSkillPicker({ levelSlug, activeSkillRoute }) {
   const { userRole } = useUserRole();
-  const isStudent = isStudentRole(userRole) && !isStaffRole(userRole);
+  const isStudent = usesStudentContentRestrictions(userRole);
   const links = getLevelSkillNavLinks(levelSlug);
 
   if (!links.length) return null;

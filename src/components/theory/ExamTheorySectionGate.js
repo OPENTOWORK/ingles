@@ -12,10 +12,11 @@ import { EXAM_THEORY_CATALOG } from '@/data/teoriaSections';
 import ExamTheoryLockedNotice from '@/components/niveles/ExamTheoryLockedNotice';
 import ExamTheoryTopicList from '@/components/theory/ExamTheoryTopicList';
 import TeoriaTopicList from '@/components/theory/TeoriaTopicList';
+import { usesStudentContentRestrictions } from '@/constants/studentFeatureAccess';
 
 export default function ExamTheorySectionGate({ sectionSlug, sectionTitle, topics }) {
   const { userRole, session } = useUserRole();
-  const isStudent = userRole === 'student' || userRole === 'alumno';
+  const isStudent = usesStudentContentRestrictions(userRole);
   const { units } = useExamTheoryProgress(
     session?.user?.id,
     session?.access_token,

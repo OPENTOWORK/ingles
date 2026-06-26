@@ -32,6 +32,7 @@ import ProfileStudyPlannerPanel from '@/components/perfil/ProfileStudyPlannerPan
 import ProfileComingSoon from '@/components/perfil/ProfileComingSoon';
 import ProfileTabsNav from '@/components/perfil/ProfileTabsNav';
 import { PROFILE_TABS, PROFILE_TAB_LABELS, isStudentHiddenProfileTab, getVisibleProfileTabs } from '@/components/perfil/profileTabsConfig';
+import { usesStudentContentRestrictions } from '@/constants/studentFeatureAccess';
 import ProfileAvatarUpload from '@/components/perfil/ProfileAvatarUpload';
 import {
   getMascotAvatarPath,
@@ -163,7 +164,7 @@ export default function ProfilePage() {
 
   const router = useRouter();
   const { userRole, session: layoutSession } = useUserRole();
-  const isStudent = userRole === 'student' || userRole === 'alumno';
+  const isStudent = usesStudentContentRestrictions(userRole);
 
   useEffect(() => {
     if (typeof window === 'undefined') return;

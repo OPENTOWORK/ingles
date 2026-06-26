@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { supabase } from '@/utils/supabaseClient';
 import { canAccessStaffBuzon, getRoleNameByUserId } from '@/utils/authRoles';
-import StaffBuzonPanel from '@/components/buzon/StaffBuzonPanel';
+import StaffBuzonPanelPage from '@/components/buzon/StaffBuzonPanelPage';
 import PageHero from '@/components/PageHero';
 import RouteLoadingMascot from '@/components/RouteLoadingMascot';
 
@@ -40,7 +40,7 @@ export default function BuzonPage() {
   if (loading) {
     return (
       <main className="max-w-6xl mx-auto p-4 md:p-8">
-        <RouteLoadingMascot label="Cargando Buzón…" variant={3} />
+        <RouteLoadingMascot label="Cargando buzón y reuniones…" variant={3} />
       </main>
     );
   }
@@ -49,13 +49,13 @@ export default function BuzonPage() {
     <main className="max-w-6xl mx-auto p-4 md:p-8">
       <PageHero
         eyebrow="Comunicación interna"
-        title="Buzón"
-        description="Mensajes instantáneos entre admin, coordinación, soporte, informática y profesorado."
+        title="Buzón y reuniones"
+        description="Mensajería instantánea del equipo y planificación de reuniones con orden del día."
         mascotVariant={3}
         mascotWidth={120}
         accent="violet"
       />
-      <StaffBuzonPanel currentUserId={userId} />
+      <StaffBuzonPanelPage currentUserId={userId} />
     </main>
   );
 }

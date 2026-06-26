@@ -14,6 +14,7 @@ import {
   getTeoriaSectionTopicUnlockStates,
 } from '@/lib/teoriaTopicUnlock';
 import { SEQUENTIAL_LOCK_FOR_STUDENTS } from '@/lib/theoryLockConfig';
+import { usesStudentContentRestrictions } from '@/constants/studentFeatureAccess';
 
 export default function TheoryTopicList({
   sectionSlug,
@@ -23,7 +24,7 @@ export default function TheoryTopicList({
   topics,
 }) {
   const { userRole, session } = useUserRole();
-  const isStudent = userRole === 'student' || userRole === 'alumno';
+  const isStudent = usesStudentContentRestrictions(userRole);
   const { topicProgressByHref } = useTeoriaProgress(
     session?.user?.id,
     session?.access_token,

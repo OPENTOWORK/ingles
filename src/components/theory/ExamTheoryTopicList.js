@@ -21,6 +21,7 @@ import { getExamStrategiesStudentIndex } from '@/data/examStrategiesStudentIndex
 import { SEQUENTIAL_LOCK_FOR_STUDENTS } from '@/lib/theoryLockConfig';
 import ExamTheoryPartTipsSection from '@/components/theory/ExamTheoryPartTipsSection';
 import ExamStrategiesStudentIndex from '@/components/theory/ExamStrategiesStudentIndex';
+import { usesStudentContentRestrictions } from '@/constants/studentFeatureAccess';
 
 export default function ExamTheoryTopicList({
   sectionSlug,
@@ -31,7 +32,7 @@ export default function ExamTheoryTopicList({
   topics,
 }) {
   const { userRole, session } = useUserRole();
-  const isStudent = userRole === 'student' || userRole === 'alumno';
+  const isStudent = usesStudentContentRestrictions(userRole);
   const { topicProgressByHref: globalTopicProgress } = useExamTheoryProgress(
     session?.user?.id,
     session?.access_token,

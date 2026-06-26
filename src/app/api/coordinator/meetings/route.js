@@ -1,6 +1,8 @@
 import { NextResponse } from 'next/server';
 import { isSchemaNotReadyError } from '@/lib/coordinatorAccess';
 import { authenticateStaffTasksRequest } from '@/lib/staffTasksAccess';
+import { broadcastMeetingToStaffBuzon } from '@/lib/staffBuzonMeetingsBroadcast';
+import { loadProfilesByIds } from '@/lib/staffTasksServer';
 import {
   normalizeDepartamentos,
   normalizePuntosDia,
@@ -124,7 +126,25 @@ export async function POST(req) {
         );
       }
 
-      return NextResponse.json({ success: true, meeting: mapMeeting(data) });
+      const mapped = mapMeeting(data);
+      const profiles = await loadProfilesByIds(auth.db, [auth.user.id]);
+      const creatorName = profiles[auth.user.id]?.nombre || auth.user.email || '';
+      const buzon = await broadcastMeetingToStaffBuzon(auth.db, {
+        meeting: mapped,
+        senderId: auth.user.id,
+        creatorName,
+      });
+
+      if (!buzon.sent && !buzon.skipped && buzon.error) {
+        console.warn('[coordinator/meetings create] buzón broadcast:', buzon.error);
+      }
+
+      return NextResponse.json({
+        success: true,
+        meeting: mapped,
+        buzonNotified: Boolean(buzon.sent),
+        buzonError: buzon.sent ? null : buzon.error || null,
+      });
     }
 
     const id = String(body?.id || '').trim();

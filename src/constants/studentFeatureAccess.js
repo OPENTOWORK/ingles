@@ -1,4 +1,9 @@
-import { isStaffRole } from '@/lib/placementLevelAccess';
+import {
+  isAdminRole,
+  isCoordinatorRole,
+  isTeacherRole,
+  normalizeRoleName,
+} from '@/utils/authRoles';
 
 /** When true, Training paths show COMING SOON for students only. */
 export const STUDENT_TRAINING_COMING_SOON = true;
@@ -7,19 +12,28 @@ export const STUDENT_TRAINING_COMING_SOON = true;
 export const STUDENT_NIVELES_COMING_SOON_LEVELS = new Set(['A2', 'B1', 'C1', 'C2']);
 
 export function isStudentRole(userRole = '') {
-  return userRole === 'student' || userRole === 'alumno';
+  const role = normalizeRoleName(userRole);
+  return role === 'student' || role === 'alumno';
+}
+
+/**
+ * Alumno y coordinador: misma experiencia de contenido (coming soon, locks, perfil, etc.).
+ * Admin y profesor conservan acceso completo al contenido pedagógico.
+ */
+export function usesStudentContentRestrictions(userRole = '') {
+  if (isAdminRole(userRole)) return false;
+  if (isCoordinatorRole(userRole)) return true;
+  if (isTeacherRole(userRole)) return false;
+  return isStudentRole(userRole);
 }
 
 export function isTrainingLockedForUser(userRole = '') {
   if (!STUDENT_TRAINING_COMING_SOON) return false;
-  if (!isStudentRole(userRole)) return false;
-  if (isStaffRole(userRole)) return false;
-  return true;
+  return usesStudentContentRestrictions(userRole);
 }
 
 export function isNivelesLevelComingSoonForUser(userRole = '', level = '') {
-  if (!isStudentRole(userRole)) return false;
-  if (isStaffRole(userRole)) return false;
+  if (!usesStudentContentRestrictions(userRole)) return false;
   const normalized = String(level || '')
     .trim()
     .toUpperCase();

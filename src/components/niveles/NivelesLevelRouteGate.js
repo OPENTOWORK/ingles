@@ -2,8 +2,8 @@
 
 import { usePathname } from 'next/navigation';
 import { useUserRole } from '@/context/UserRoleContext';
-import { cefrSlugFromNivelesPath, isStaffRole } from '@/lib/placementLevelAccess';
-import { isNivelesLevelComingSoonForUser } from '@/constants/studentFeatureAccess';
+import { cefrSlugFromNivelesPath } from '@/lib/placementLevelAccess';
+import { isNivelesLevelComingSoonForUser, usesStudentContentRestrictions } from '@/constants/studentFeatureAccess';
 import { isExamTheoryPartTipsPath } from '@/lib/nivelesPartTipsRoutes';
 import NivelesComingSoonNotice from '@/components/niveles/NivelesComingSoonNotice';
 
@@ -15,8 +15,7 @@ export default function NivelesLevelRouteGate({ children }) {
   const { userRole, session } = useUserRole();
 
   const level = cefrSlugFromNivelesPath(pathname);
-  const isStudent = userRole === 'student' || userRole === 'alumno';
-  const staff = isStaffRole(userRole);
+  const isStudentView = usesStudentContentRestrictions(userRole);
   const isPartTipsRoute = isExamTheoryPartTipsPath(pathname);
 
   if (!level) {
@@ -25,8 +24,7 @@ export default function NivelesLevelRouteGate({ children }) {
 
   if (
     session &&
-    isStudent &&
-    !staff &&
+    isStudentView &&
     !isPartTipsRoute &&
     isNivelesLevelComingSoonForUser(userRole, level)
   ) {

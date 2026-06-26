@@ -9,7 +9,7 @@ import {
 import { canViewPricing } from '@/utils/pricingAccess';
 import { getExamUnitSlugFromPathname } from '@/lib/examTheoryUnlock';
 import { isExamTheoryPartTipsPath } from '@/lib/nivelesPartTipsRoutes';
-import { isStudentRole } from '@/constants/studentFeatureAccess';
+import { usesStudentContentRestrictions } from '@/constants/studentFeatureAccess';
 import { getExamStrategiesMenuItems } from '@/data/examSkillTheme';
 import { APP_ROUTES, isExamPracticeAppPath, isExamStrategiesPath } from '@/config/appRoutes';
 import { STAFF_PANELS_HUB_PATH } from '@/config/staffPanelHub';
@@ -63,7 +63,7 @@ export const NAV_LINK_EXAM_STRATEGIES = {
 
 export const NAV_LINKS_BEFORE_DRALO = [
   NAV_LINK_EXAM_STRATEGIES,
-  { href: APP_ROUTES.examPracticeDefaultLevel, label: 'Exam practice', tourId: 'nav-levels' },
+  { href: APP_ROUTES.examPracticeDefaultLevel, label: 'Exam Practice', tourId: 'nav-levels' },
 ];
 
 export const NAV_LINK_HOME = { href: '/', label: 'Home' };
@@ -142,7 +142,7 @@ export function buildAppNavModel(userRole, session) {
     staffMenuLabel: getStaffPanelMenuLabel(userRole),
     showStaffDropdown: staffItems.length > 1,
     showStaffSingleLink: staffItems.length === 1,
-    isStudent: isStudentRole(userRole),
+    isStudent: usesStudentContentRestrictions(userRole),
   };
 }
 /** Estado activo de enlaces del menú principal (incluye pestaña theory y rutas /teoria de examen). */
@@ -216,7 +216,7 @@ const COORDINATOR_ADMIN_PANEL_ITEM = {
 
 const STAFF_BUZON_PANEL_ITEM = {
   href: '/buzon',
-  label: 'Buzón',
+  label: 'Buzón y reuniones',
 };
 
 const STAFF_TASKS_PANEL_ITEM = {

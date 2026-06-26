@@ -5,13 +5,14 @@ import { useParams, usePathname, useRouter } from 'next/navigation';
 import { getLevelPartNavLinks } from '@/data/levelExamPartMap';
 import { useUserRole } from '@/context/UserRoleContext';
 import { examTheoryBackHrefFromPartTipsPath } from '@/lib/nivelesPartTipsRoutes';
+import { usesStudentContentRestrictions } from '@/constants/studentFeatureAccess';
 
 export default function LevelPartTipsPage({ slug, skillFolder, exercisesConfig, getExercise, partInfo }) {
   const params = useParams();
   const pathname = usePathname();
   const router = useRouter();
   const { userRole } = useUserRole();
-  const isStudent = userRole === 'student' || userRole === 'alumno';
+  const isStudent = usesStudentContentRestrictions(userRole);
   const part = parseInt(params.part, 10);
   const [selected, setSelected] = useState(0);
 

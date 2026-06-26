@@ -7,6 +7,7 @@ import { getLevelPartNavLinks } from '@/data/levelExamPartMap';
 import { useUserRole } from '@/context/UserRoleContext';
 import { buildTeoriaExamPartTipsHref } from '@/lib/examPartTipsHref';
 import { examTheoryBackHrefFromPartTipsPath } from '@/lib/nivelesPartTipsRoutes';
+import { usesStudentContentRestrictions } from '@/constants/studentFeatureAccess';
 
 export default function ExamPartTipsView({
   levelSlug,
@@ -19,7 +20,7 @@ export default function ExamPartTipsView({
 }) {
   const router = useRouter();
   const { userRole } = useUserRole();
-  const isStudent = userRole === 'student' || userRole === 'alumno';
+  const isStudent = usesStudentContentRestrictions(userRole);
 
   const partNum = parseInt(String(partParam).replace(/^part-/, ''), 10);
   const sectionBackHref = examTheoryBackHrefFromPartTipsPath(pathname);

@@ -1,9 +1,14 @@
 'use client';
 
 import { useState } from 'react';
-import Link from 'next/link';
 import { getExamTheoryPartGroups } from '@/data/examTheoryPartTips';
 import { isNivelesLevelComingSoonForUser } from '@/constants/studentFeatureAccess';
+import ExamPartNavCard from '@/components/exam/ExamPartNavCard';
+import cardStyles from '@/components/exam/ExamPartNavCard.module.css';
+import {
+  formatExamPartNavLabels,
+  getExamSectionSkillTheme,
+} from '@/utils/examPartNavTheme';
 
 function truncateDescription(text, max = 160) {
   const t = String(text || '').trim();
@@ -22,6 +27,8 @@ export default function ExamTheoryPartTipsSection({
   const [levelFilter, setLevelFilter] = useState(/** @type {string | null} */ (null));
 
   const isLevelLockedForUser = (cefr) => isNivelesLevelComingSoonForUser(userRole, cefr);
+
+  const skillTheme = getExamSectionSkillTheme(sectionSlug);
 
   if (!groups.length) return null;
 
@@ -87,27 +94,22 @@ export default function ExamTheoryPartTipsSection({
             <span className="exam-theory-parts__level-badge">{group.cefr}</span>
             {group.cefr} · {group.parts.length} part{group.parts.length === 1 ? '' : 's'}
           </h3>
-          <ul className="exam-theory-parts__grid">
-            {group.parts.map((part) => (
-              <li key={part.href}>
-                <Link href={part.href} className="exam-theory-parts__card">
-                  <span className="exam-theory-parts__card-title">
-                    {part.title || part.text}
-                  </span>
-                  {part.description ? (
-                    <p className="exam-theory-parts__card-desc">
-                      {truncateDescription(part.description)}
-                    </p>
-                  ) : null}
-                  <span
-                    className="exam-theory-parts__card-cta"
-                    style={{ color: sectionAccent }}
-                  >
-                    Tips →
-                  </span>
-                </Link>
-              </li>
-            ))}
+          <ul className={`${cardStyles.partList} exam-theory-parts__list`}>
+            {group.parts.map((part) => {
+              const labels = formatExamPartNavLabels(part, truncateDescription);
+              return (
+                <li key={part.href}>
+                  <ExamPartNavCard
+                    href={part.href}
+                    partNumber={labels.partNumber}
+                    partName={labels.partName}
+                    partDesc={labels.partDesc}
+                    meta="Tips & strategies"
+                    skillTheme={skillTheme}
+                  />
+                </li>
+              );
+            })}
           </ul>
         </div>
       ))}
@@ -269,60 +271,8 @@ function ExamTheoryPartTipsStyles({ accent }) {
         font-weight: 800;
         letter-spacing: 0.04em;
       }
-      .exam-theory-topics-page .exam-theory-parts__grid {
-        list-style: none;
-        margin: 0;
-        padding: 0;
-        display: grid;
-        gap: 12px;
-        grid-template-columns: repeat(1, minmax(0, 1fr));
-      }
-      @media (min-width: 640px) {
-        .exam-theory-topics-page .exam-theory-parts__grid {
-          grid-template-columns: repeat(2, minmax(0, 1fr));
-        }
-      }
-      @media (min-width: 980px) {
-        .exam-theory-topics-page .exam-theory-parts__grid {
-          grid-template-columns: repeat(3, minmax(0, 1fr));
-        }
-      }
-      .exam-theory-topics-page .exam-theory-parts__card {
-        display: flex;
-        flex-direction: column;
-        gap: 8px;
-        height: 100%;
-        padding: 16px 18px;
-        border-radius: 14px;
-        border: 1px solid #e2e8f0;
-        background: #fff;
-        text-decoration: none;
-        transition:
-          transform 0.2s,
-          box-shadow 0.2s,
-          border-color 0.2s;
-      }
-      .exam-theory-topics-page .exam-theory-parts__card:hover {
-        transform: translateY(-2px);
-        border-color: color-mix(in srgb, ${accent} 45%, #e2e8f0);
-        box-shadow: 0 12px 28px rgba(15, 23, 42, 0.08);
-      }
-      .exam-theory-topics-page .exam-theory-parts__card-title {
-        font-size: 0.98rem;
-        font-weight: 700;
-        line-height: 1.3;
-        color: var(--text);
-      }
-      .exam-theory-topics-page .exam-theory-parts__card-desc {
-        margin: 0;
-        flex: 1;
-        font-size: 0.84rem;
-        line-height: 1.5;
-        color: #64748b;
-      }
-      .exam-theory-topics-page .exam-theory-parts__card-cta {
-        font-size: 0.8rem;
-        font-weight: 700;
+      .exam-theory-topics-page .exam-theory-parts__list {
+        max-width: min(100%, 680px);
       }
     `}</style>
   );

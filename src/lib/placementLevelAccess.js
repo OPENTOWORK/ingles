@@ -1,4 +1,4 @@
-import { canAccessCoordinatorPanel, canAccessTeacherPanel, isAdminRole } from '@/utils/authRoles';
+import { isAdminRole, isTeacherRole } from '@/utils/authRoles';
 
 /** Niveles CEFR disponibles en /niveles (orden ascendente). */
 export const NIVELES_CEFR_ORDER = ['A2', 'B1', 'B2', 'C1', 'C2'];
@@ -36,11 +36,7 @@ export function cefrSlugToLevel(slug) {
 }
 
 export function isStaffRole(roleName = '') {
-  return (
-    isAdminRole(roleName) ||
-    canAccessTeacherPanel(roleName) ||
-    canAccessCoordinatorPanel(roleName)
-  );
+  return isAdminRole(roleName) || isTeacherRole(roleName);
 }
 
 /**

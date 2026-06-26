@@ -238,7 +238,7 @@ export default function StaffMeetingsPanel() {
   const saveMeeting = async () => {
     setSaving(true);
     try {
-      await meetingsFetch('/api/coordinator/meetings', {
+      const result = await meetingsFetch('/api/coordinator/meetings', {
         method: 'POST',
         body: JSON.stringify({
           action: editingId ? 'update' : 'create',
@@ -248,6 +248,9 @@ export default function StaffMeetingsPanel() {
       });
       setModalOpen(false);
       await loadMeetings();
+      if (!editingId && result.buzonNotified === false && result.buzonError) {
+        alert(`Reunión guardada, pero no se pudo avisar en el buzón: ${result.buzonError}`);
+      }
     } catch (e) {
       alert(e.message);
     } finally {
@@ -279,7 +282,8 @@ export default function StaffMeetingsPanel() {
         <div>
           <h2 className="text-xl font-bold text-gray-900">Reuniones</h2>
           <p className="text-sm text-gray-600 mt-1 max-w-2xl">
-            Planifica reuniones del equipo: fecha, departamentos implicados y orden del día.
+            Planifica reuniones del equipo: fecha, departamentos implicados y orden del día. Al crear
+            una reunión se avisa a todo el staff en el buzón (grupo «Reuniones del equipo»).
           </p>
         </div>
         <button

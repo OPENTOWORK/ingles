@@ -4,8 +4,7 @@ import PageHero from '@/components/PageHero';
 import ExamPracticeHubSection from '@/components/niveles/ExamPracticeHubSection';
 import StarsWayHubTabs from '@/components/niveles/StarsWayHubTabs';
 import { useUserRole } from '@/context/UserRoleContext';
-import { isStaffRole } from '@/lib/placementLevelAccess';
-import { isNivelesLevelComingSoonForUser, isStudentRole } from '@/constants/studentFeatureAccess';
+import { isNivelesLevelComingSoonForUser, usesStudentContentRestrictions } from '@/constants/studentFeatureAccess';
 import { isAdminRole } from '@/utils/authRoles';
 import NivelesComingSoonNotice from '@/components/niveles/NivelesComingSoonNotice';
 
@@ -15,7 +14,7 @@ import NivelesComingSoonNotice from '@/components/niveles/NivelesComingSoonNotic
  */
 export default function LevelHubPage({ config }) {
   const { userRole: roleName } = useUserRole();
-  const isStudent = isStudentRole(roleName) && !isStaffRole(roleName);
+  const isStudent = usesStudentContentRestrictions(roleName);
   const showStarsWayHub = isAdminRole(roleName);
 
   if (isNivelesLevelComingSoonForUser(roleName, config.cefr)) {

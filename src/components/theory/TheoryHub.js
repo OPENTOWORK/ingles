@@ -17,13 +17,14 @@ import {
 import { getTeoriaApartadoUnlockStates } from '@/lib/teoriaUnlock';
 import { buildAllTeoriaTopicUnlockMap } from '@/lib/teoriaTopicUnlock';
 import { SEQUENTIAL_LOCK_FOR_STUDENTS } from '@/lib/theoryLockConfig';
+import { usesStudentContentRestrictions } from '@/constants/studentFeatureAccess';
 
 const ALL_TOPICS = buildTheoryTopicsFlat();
 const TOPIC_COUNT = ALL_TOPICS.length;
 
 export default function TheoryHub() {
   const { userRole, session } = useUserRole();
-  const isStudent = userRole === 'student' || userRole === 'alumno';
+  const isStudent = usesStudentContentRestrictions(userRole);
   const { globalPercent, units, topicProgressByHref } = useTeoriaProgress(
     session?.user?.id,
     session?.access_token,

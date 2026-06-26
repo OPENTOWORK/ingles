@@ -11,6 +11,8 @@ import {
   starsFromPartExerciseScore,
 } from '@/utils/skillPartFirstProgress';
 import { formatExamSlotDisplayLabel } from '@/utils/formatExamDisplayLabel';
+import ExamPartNavCard from '@/components/exam/ExamPartNavCard';
+import cardStyles from '@/components/exam/ExamPartNavCard.module.css';
 import styles from './SkillPartFirstNavigation.module.css';
 
 function StepIndicator({ step, lang }) {
@@ -160,7 +162,7 @@ export function SkillPartFirstNavigation({
 
         <StepIndicator step={1} lang={lang} />
 
-        <ul className={styles.partList}>
+        <ul className={cardStyles.partList}>
           {Array.from({ length: partMax - partMin + 1 }, (_, i) => partMin + i).map((n) => {
             const { attempted, examCount } = aggregatePartProgress(progressBySlot, n, slots);
             const label = topicByPart[n];
@@ -168,27 +170,19 @@ export function SkillPartFirstNavigation({
 
             return (
               <li key={n}>
-                <button type="button" className={styles.partCard} onClick={() => onSelectPart(n)}>
-                  <span className={styles.partBadge}>{String(n).padStart(2, '0')}</span>
-                  <span className={styles.partBody}>
-                    <p className={styles.partName}>{en ? `Part ${n}` : `Parte ${n}`}</p>
-                    {label ? <p className={styles.partDesc}>{label}</p> : null}
-                    <span
-                      className={`${styles.partMeta}${started ? ` ${styles['partMeta--started']}` : ''}`}
-                    >
-                      {started
-                        ? en
-                          ? `${attempted}/${examCount} tests`
-                          : `${attempted}/${examCount} tests`
-                        : en
-                          ? `${examCount} tests`
-                          : `${examCount} tests`}
-                    </span>
-                  </span>
-                  <span className={styles.partArrow} aria-hidden>
-                    →
-                  </span>
-                </button>
+                <ExamPartNavCard
+                  partNumber={n}
+                  partName={en ? `Part ${n}` : `Parte ${n}`}
+                  partDesc={label || null}
+                  meta={
+                    started
+                      ? `${attempted}/${examCount} tests`
+                      : `${examCount} tests`
+                  }
+                  metaStarted={started}
+                  skillTheme={skillTheme}
+                  onClick={() => onSelectPart(n)}
+                />
               </li>
             );
           })}

@@ -321,15 +321,6 @@ body.reading-night-mode .exam-theory-topics-page .exam-theory-parts__title {
   color: #f8fafc !important;
 }
 
-body.reading-night-mode .exam-theory-topics-page .exam-theory-parts__card {
-  background: #334155 !important;
-  border-color: #64748b !important;
-}
-
-body.reading-night-mode .exam-theory-topics-page .exam-theory-parts__card-desc {
-  color: #94a3b8 !important;
-}
-
 body.reading-night-mode .exam-theory-topics-page .exam-theory-section-progress {
   background: linear-gradient(180deg, #1e3a5f 0%, #1e293b 100%) !important;
   border-color: #475569 !important;
