@@ -39,14 +39,14 @@ export default function BuzonPage() {
 
   if (loading) {
     return (
-      <main className="max-w-6xl mx-auto p-4 md:p-8">
+      <main className="max-w-6xl mx-auto p-4 md:p-8 staff-buzon-page">
         <RouteLoadingMascot label="Cargando buzón y reuniones…" variant={3} />
       </main>
     );
   }
 
   return (
-    <main className="max-w-6xl mx-auto p-4 md:p-8">
+    <main className="max-w-6xl mx-auto p-4 md:p-8 staff-buzon-page">
       <PageHero
         eyebrow="Comunicación interna"
         title="Buzón y reuniones"

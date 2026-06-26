@@ -11,6 +11,7 @@ import { UserRoleProvider } from '@/context/UserRoleContext';
 import { GuidedTourProvider } from '@/context/GuidedTourContext';
 import { PlacementAccessProvider } from '@/context/PlacementAccessContext';
 import { useItPreviewRole } from '@/hooks/useItPreviewRole';
+import { useItPreviewAdminBuzonLayout } from '@/hooks/useItPreviewAdminBuzonLayout';
 
 function SiteHeaderBrand({ nav = null }) {
   return (
@@ -29,6 +30,7 @@ function SiteHeaderBrand({ nav = null }) {
 function AuthenticatedAppShellInner({ session, userRole, onLogout, children }) {
   const pathname = usePathname();
   const preview = useItPreviewRole(userRole, session);
+  useItPreviewAdminBuzonLayout();
 
   return (
     <>

@@ -522,9 +522,9 @@ export default function StaffBuzonPanel({ currentUserId }) {
   }
 
   return (
-    <div className={styles.layout}>
-      <aside className={styles.sidebar}>
-        <div className={styles.sidebarHeader}>
+    <div className={`staff-buzon-panel ${styles.layout}`}>
+      <aside className={`staff-buzon-sidebar ${styles.sidebar}`}>
+        <div className={`staff-buzon-sidebar-header ${styles.sidebarHeader}`}>
           <h2>Conversaciones</h2>
           <p>Mensajería interna entre el equipo.</p>
 
@@ -604,7 +604,7 @@ export default function StaffBuzonPanel({ currentUserId }) {
         </div>
 
         {activeTab === 'direct' ? (
-          <ul className={styles.contactList} aria-label="Contactos del equipo">
+          <ul className={`staff-buzon-contacts ${styles.contactList}`} aria-label="Contactos del equipo">
             {visibleContacts.map((user) => {
               const active = selection?.type === 'direct' && selection.id === user.id;
               const unread = getUnreadForPartner(user.id);
@@ -653,7 +653,7 @@ export default function StaffBuzonPanel({ currentUserId }) {
         ) : null}
 
         {activeTab === 'groups' ? (
-          <ul className={styles.contactList} aria-label="Grupos">
+          <ul className={`staff-buzon-contacts ${styles.contactList}`} aria-label="Grupos">
             {visibleGroups.length === 0 ? (
               <li className={styles.emptyListHint}>Aún no hay grupos. Crea uno arriba.</li>
             ) : (
@@ -695,7 +695,7 @@ export default function StaffBuzonPanel({ currentUserId }) {
         ) : null}
 
         {activeTab === 'starred' ? (
-          <ul className={styles.contactList} aria-label="Mensajes destacados">
+          <ul className={`staff-buzon-contacts ${styles.contactList}`} aria-label="Mensajes destacados">
             {starredMessages.length === 0 ? (
               <li className={styles.emptyListHint}>
                 Marca mensajes con la estrella para encontrarlos aquí.
@@ -739,7 +739,7 @@ export default function StaffBuzonPanel({ currentUserId }) {
         ) : null}
       </aside>
 
-      <section className={styles.thread} aria-label="Hilo de conversación">
+      <section className={`staff-buzon-thread ${styles.thread}`} aria-label="Hilo de conversación">
         {!selection ? (
           <div className={styles.emptyThread}>
             <strong>Selecciona una conversación</strong>

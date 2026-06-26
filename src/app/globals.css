@@ -16301,3 +16301,88 @@ body.dark .profile-collapse--open .profile-collapse__head {
 .it-preview-role-banner strong {
   font-weight: 700;
 }
+
+/*
+ * IT panel device preview — /buzon in mobile/tablet iframe only.
+ * Class it-preview-buzon-frame is toggled by useItPreviewAdminBuzonLayout.
+ */
+@media (max-width: 1024px) {
+  html.it-preview-buzon-frame,
+  html.it-preview-buzon-frame body {
+    height: auto !important;
+    min-height: 100%;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  html.it-preview-buzon-frame body .page-content {
+    overflow-y: visible;
+    padding-bottom: 0;
+  }
+
+  html.it-preview-buzon-frame .legal-footer {
+    display: none;
+  }
+
+  html.it-preview-buzon-frame .site-assistant-fab {
+    display: none;
+  }
+
+  html.it-preview-buzon-frame .staff-buzon-page {
+    padding-bottom: 2.5rem;
+  }
+
+  html.it-preview-buzon-frame .staff-buzon-page .page-hero {
+    margin-bottom: 0.75rem;
+  }
+
+  html.it-preview-buzon-frame .staff-buzon-page .page-hero__inner {
+    padding: 1.1rem 1rem;
+    gap: 0.75rem;
+  }
+
+  html.it-preview-buzon-frame .staff-buzon-page .page-hero__mascot {
+    display: none;
+  }
+
+  html.it-preview-buzon-frame .staff-buzon-panel {
+    display: flex;
+    flex-direction: column;
+    overflow: visible;
+    min-height: 0;
+    margin-bottom: 1.25rem;
+    box-shadow:
+      0 1px 2px rgba(15, 23, 42, 0.04),
+      0 12px 28px rgba(15, 23, 42, 0.08);
+  }
+
+  html.it-preview-buzon-frame .staff-buzon-sidebar {
+    flex: 0 0 auto;
+    max-height: min(46vh, 360px);
+    min-height: 0;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+  }
+
+  html.it-preview-buzon-frame .staff-buzon-sidebar-header {
+    flex: 0 0 auto;
+  }
+
+  html.it-preview-buzon-frame .staff-buzon-contacts {
+    flex: 1 1 auto;
+    min-height: 0;
+    max-height: none;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  html.it-preview-buzon-frame .staff-buzon-thread {
+    flex: 1 1 auto;
+    min-height: 11rem;
+    max-height: none;
+    padding-bottom: 1.25rem;
+    border-bottom-left-radius: 18px;
+    border-bottom-right-radius: 18px;
+  }
+}
