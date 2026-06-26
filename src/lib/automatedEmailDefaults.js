@@ -119,6 +119,33 @@ export const DEFAULT_AUTOMATED_EMAIL_TEMPLATES = [
     delay_minutos: 0,
     es_sistema: true,
   },
+  {
+    slug: 'staff_task_assigned',
+    nombre: 'Asignación de tarea (staff)',
+    trigger_event: AUTOMATED_EMAIL_TRIGGERS.STAFF_TASK_ASSIGNED,
+    trigger_reason:
+      'Se envía a la persona asignada cuando se crea una tarea en el panel de tareas del equipo.',
+    asunto: 'Nueva tarea asignada: {{task_titulo}}',
+    cuerpo: [
+      'Hola{{nombre}},',
+      '',
+      '{{creator_name}} te ha asignado una nueva tarea en el panel de tareas:',
+      '',
+      'Título: {{task_titulo}}',
+      'Prioridad: {{task_prioridad}}',
+      '{{task_fase_line}}',
+      '{{task_subfase_line}}',
+      '{{task_fecha_line}}',
+      '{{task_descripcion_line}}',
+      '',
+      '{{tasks_url}}',
+      '',
+      '— Equipo Dralo English',
+    ].join('\n'),
+    activo: true,
+    delay_minutos: 0,
+    es_sistema: true,
+  },
 ];
 
 export function getDefaultTemplatesByTrigger(triggerEvent) {

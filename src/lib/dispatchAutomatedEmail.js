@@ -82,7 +82,9 @@ async function sendNow(template, to, variables, adminClient, replyTo) {
         ? 'Aceptar invitación'
         : template.trigger_event === 'admin_user_created'
           ? 'Iniciar sesión'
-          : 'Empezar a practicar',
+          : template.trigger_event === 'staff_task_assigned'
+            ? 'Ver tareas'
+            : 'Empezar a practicar',
   });
 
   const result = await deliverTransactionalEmail({ to, subject, text, html, replyTo });

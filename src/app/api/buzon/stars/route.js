@@ -1,4 +1,5 @@
 import { NextResponse } from 'next/server';
+import { isSchemaNotReadyError } from '@/lib/coordinatorAccess';
 import { requireStaffBuzonAccess } from '@/lib/staffBuzonAccess';
 
 export async function POST(req) {
@@ -25,6 +26,12 @@ export async function POST(req) {
 
     if (existingError) {
       console.error('[buzon/stars POST lookup]', existingError);
+      if (isSchemaNotReadyError(existingError)) {
+        return NextResponse.json(
+          { error: 'Ejecuta scripts/staff_buzon_groups_presence_stars.sql en Supabase.' },
+          { status: 503 },
+        );
+      }
       return NextResponse.json({ error: 'No se pudo actualizar el destacado.' }, { status: 500 });
     }
 
@@ -50,6 +57,12 @@ export async function POST(req) {
 
     if (insertError) {
       console.error('[buzon/stars POST insert]', insertError);
+      if (isSchemaNotReadyError(insertError)) {
+        return NextResponse.json(
+          { error: 'Ejecuta scripts/staff_buzon_groups_presence_stars.sql en Supabase.' },
+          { status: 503 },
+        );
+      }
       return NextResponse.json({ error: 'No se pudo destacar el mensaje.' }, { status: 500 });
     }
 

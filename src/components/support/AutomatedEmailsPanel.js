@@ -21,6 +21,14 @@ const VARIABLE_HINTS = [
   '{{message}} — cuerpo de respuesta de soporte',
   '{{agent_name}} — nombre del agente de soporte',
   '{{support_email}} — email de contacto soporte',
+  '{{creator_name}} — quien asigna la tarea',
+  '{{task_titulo}} — título de la tarea',
+  '{{task_prioridad}} — prioridad (Baja, Media, Alta…)',
+  '{{task_fase_line}} — línea con la fase (vacía si no hay)',
+  '{{task_subfase_line}} — línea con la subfase',
+  '{{task_fecha_line}} — línea con fecha límite',
+  '{{task_descripcion_line}} — línea con descripción',
+  '{{tasks_url}} — enlace al panel /tareas/',
 ];
 
 async function apiFetch(path, options = {}) {

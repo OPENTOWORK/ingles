@@ -3,12 +3,14 @@ import { isSchemaNotReadyError } from '@/lib/coordinatorAccess';
 import { authenticateStaffTasksRequest } from '@/lib/staffTasksAccess';
 import { canDeleteStaffTask } from '@/lib/staffTasksPermissions';
 import { filterTasksClientSide } from '@/lib/staffTaskHelpers';
+import { sendStaffTaskAssignedEmail } from '@/lib/sendStaffTaskAssignedEmail';
 import {
   buildTaskInsertRow,
   buildTaskUpdatePatch,
   buildTasksQuery,
   computeTaskMetrics,
   enrichTasksList,
+  loadProfilesByIds,
   probeStaffTasksTable,
   validateAssigneeAndStudent,
   validateTaskPayload,
@@ -16,6 +18,22 @@ import {
 import { getRoleNameByUserId } from '@/utils/authRoles';
 
 const TASKS_TABLE = 'staff_tareas';
+
+async function notifyTaskAssignee(auth, task) {
+  if (!task?.asignado?.email) {
+    return { sent: false, skipped: true };
+  }
+
+  const profiles = await loadProfilesByIds(auth.db, [auth.user.id]);
+  const creator = profiles[auth.user.id];
+  const creatorName = creator?.nombre || auth.user.email || 'Un miembro del equipo';
+
+  return sendStaffTaskAssignedEmail({
+    adminClient: auth.db,
+    task,
+    creatorName,
+  });
+}
 
 export async function GET(req) {
   try {
@@ -127,7 +145,15 @@ export async function POST(req) {
       }
 
       const [task] = await enrichTasksList(auth.db, [data]);
-      return NextResponse.json({ success: true, task });
+      const mail = await notifyTaskAssignee(auth, task);
+      if (!mail.sent && !mail.skipped && mail.error) {
+        console.warn('[coordinator/tasks create] assignment email:', mail.error);
+      }
+      return NextResponse.json({
+        success: true,
+        task,
+        emailSent: Boolean(mail.sent || mail.queued),
+      });
     }
 
     const id = String(body?.id || '').trim();
@@ -182,7 +208,15 @@ export async function POST(req) {
         return NextResponse.json({ error: error.message }, { status: 500 });
       }
       const [task] = await enrichTasksList(auth.db, [data]);
-      return NextResponse.json({ success: true, task });
+      const mail = await notifyTaskAssignee(auth, task);
+      if (!mail.sent && !mail.skipped && mail.error) {
+        console.warn('[coordinator/tasks duplicate] assignment email:', mail.error);
+      }
+      return NextResponse.json({
+        success: true,
+        task,
+        emailSent: Boolean(mail.sent || mail.queued),
+      });
     }
 
     if (action === 'update' || action === 'updateEstado') {

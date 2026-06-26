@@ -23,6 +23,7 @@ import {
   isImageAttachment,
   validateBuzonAttachmentFile,
 } from '@/lib/staffBuzonAttachments';
+import { buzonApiRequest, buzonUploadRequest } from '@/lib/staffBuzonClient';
 import StaffBuzonGroupSettings from '@/components/buzon/StaffBuzonGroupSettings';
 import styles from './StaffBuzonPanel.module.css';
 
@@ -36,36 +37,6 @@ function extractRoleName(userRow) {
   const embedded = userRow?.Usuarios_y_Perfil_roles;
   if (Array.isArray(embedded)) return embedded[0]?.nombre || '';
   return embedded?.nombre || '';
-}
-
-async function buzonApiRequest(path, { method = 'GET', body, token }) {
-  const response = await fetch(path, {
-    method,
-    headers: {
-      Authorization: `Bearer ${token}`,
-      ...(body ? { 'Content-Type': 'application/json' } : {}),
-    },
-    ...(body ? { body: JSON.stringify(body) } : {}),
-  });
-
-  const payload = await response.json().catch(() => ({}));
-  if (!response.ok) {
-    throw new Error(payload.error || 'No se pudo completar la operación.');
-  }
-  return payload;
-}
-
-async function buzonUploadRequest(path, { token, formData }) {
-  const response = await fetch(path, {
-    method: 'POST',
-    headers: { Authorization: `Bearer ${token}` },
-    body: formData,
-  });
-  const payload = await response.json().catch(() => ({}));
-  if (!response.ok) {
-    throw new Error(payload.error || 'No se pudo subir el archivo.');
-  }
-  return payload;
 }
 
 function MessageAttachmentContent({ message, mine }) {
@@ -446,6 +417,14 @@ export default function StaffBuzonPanel({ currentUserId }) {
   };
 
   const handleToggleStar = async (messageId) => {
+    const wasStarred = starredIds.has(messageId);
+    setStarredIds((prev) => {
+      const next = new Set(prev);
+      if (wasStarred) next.delete(messageId);
+      else next.add(messageId);
+      return next;
+    });
+
     try {
       const token = await getAccessToken();
       const payload = await buzonApiRequest('/api/buzon/stars', {
@@ -460,6 +439,12 @@ export default function StaffBuzonPanel({ currentUserId }) {
         return next;
       });
     } catch (error) {
+      setStarredIds((prev) => {
+        const next = new Set(prev);
+        if (wasStarred) next.add(messageId);
+        else next.delete(messageId);
+        return next;
+      });
       toast.error(error.message || 'No se pudo destacar el mensaje.');
     }
   };
@@ -838,7 +823,10 @@ export default function StaffBuzonPanel({ currentUserId }) {
                           <button
                             type="button"
                             className={`${styles.starBtn}${starred ? ` ${styles.starBtnActive}` : ''}`}
-                            onClick={() => void handleToggleStar(message.id)}
+                            onClick={(event) => {
+                              event.stopPropagation();
+                              void handleToggleStar(message.id);
+                            }}
                             aria-label={starred ? 'Quitar destacado' : 'Destacar mensaje'}
                             title={starred ? 'Quitar destacado' : 'Destacar'}
                           >

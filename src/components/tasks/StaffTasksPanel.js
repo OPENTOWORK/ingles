@@ -1,7 +1,6 @@
 'use client';
 
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import { isTeacherRole } from '@/utils/authRoles';
 import { getStaffRoleLabel } from '@/utils/staffBuzon';
 import { staffTasksFetch } from '@/lib/staffTasksClient';
 import {
@@ -34,6 +33,10 @@ import {
   ProgressBar,
   TaskEstadoBadge,
   TaskPrioridadBadge,
+  TaskTableAssigneeCell,
+  TaskTableDeadlineCell,
+  TaskTableLocationCell,
+  TaskTableTitleCell,
 } from '@/components/tasks/StaffTaskBadges';
 
 function MetricCard({ label, value, hint, accent = 'violet' }) {
@@ -70,7 +73,6 @@ function taskToForm(task) {
     subfase_id: task.subfase_id || '',
     asignado_id: task.asignado_id || '',
     asignado_rol: task.asignado_rol || '',
-    alumno_id: task.alumno_id || '',
     fecha_limite: task.fecha_limite
       ? new Date(task.fecha_limite).toISOString().slice(0, 16)
       : '',
@@ -170,7 +172,6 @@ export default function StaffTasksPanel({ currentUserId, userRole, embedded = fa
   const [taskModalOpen, setTaskModalOpen] = useState(false);
   const [taskForm, setTaskForm] = useState({ ...EMPTY_TASK_FORM });
   const [editingTaskId, setEditingTaskId] = useState(null);
-  const [taskStudents, setTaskStudents] = useState([]);
 
   const [phaseModalOpen, setPhaseModalOpen] = useState(false);
   const [phaseForm, setPhaseForm] = useState({ ...EMPTY_FASE_FORM });
@@ -267,18 +268,6 @@ export default function StaffTasksPanel({ currentUserId, userRole, embedded = fa
     () => assignees.find((u) => u.id === taskForm.asignado_id),
     [assignees, taskForm.asignado_id],
   );
-  const taskAssigneeIsTeacher = isTeacherRole(taskAssignee?.roleName || '');
-
-  useEffect(() => {
-    if (!taskForm.asignado_id || !taskAssigneeIsTeacher) {
-      setTaskStudents([]);
-      return;
-    }
-    const params = new URLSearchParams({ profesorId: taskForm.asignado_id });
-    staffTasksFetch(`/api/coordinator/students?${params}`, {}, { soft: true }).then((data) => {
-      if (!data.error) setTaskStudents(data.students || []);
-    });
-  }, [taskForm.asignado_id, taskAssigneeIsTeacher]);
 
   const openNewTask = (template = null) => {
     const base = {
@@ -317,7 +306,7 @@ export default function StaffTasksPanel({ currentUserId, userRole, embedded = fa
         fase_id: form.fase_id || null,
         subfase_id: form.subfase_id || null,
         asignado_id: form.asignado_id || null,
-        alumno_id: form.alumno_id || null,
+        alumno_id: null,
         asignado_rol:
           form.asignado_rol ||
           (taskAssignee ? getStaffDepartmentLabel(taskAssignee.roleName) : ''),
@@ -925,31 +914,25 @@ export default function StaffTasksPanel({ currentUserId, userRole, embedded = fa
       <section className="rounded-xl border bg-white shadow-sm overflow-hidden">
         <div className="overflow-x-auto">
           <table className="min-w-full text-sm">
-            <thead className="bg-gray-50 text-left text-xs font-medium text-gray-600 uppercase tracking-wide">
+            <thead className="bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wide border-b">
               <tr>
-                <th className="px-4 py-3">Estado</th>
-                <th className="px-4 py-3">Prioridad</th>
-                <th className="px-4 py-3">Título</th>
-                <th className="px-4 py-3">Fase</th>
-                <th className="px-4 py-3">Asignado a</th>
-                <th className="px-4 py-3">Depto.</th>
-                <th className="px-4 py-3">Fecha límite</th>
-                <th className="px-4 py-3">Tiempo</th>
-                <th className="px-4 py-3">Cumplim.</th>
-                <th className="px-4 py-3">Enlace</th>
-                <th className="px-4 py-3 text-right">Acciones</th>
+                <th className="px-5 py-3.5 w-[28%]">Tarea</th>
+                <th className="px-4 py-3.5 w-[18%]">Ubicación</th>
+                <th className="px-4 py-3.5 w-[16%]">Asignado</th>
+                <th className="px-4 py-3.5 w-[14%]">Plazo</th>
+                <th className="px-4 py-3.5 w-[24%] text-right">Acciones</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-100">
               {loading && !tasks.length ? (
                 <tr>
-                  <td colSpan={11} className="px-4 py-12 text-center text-gray-500">
+                  <td colSpan={5} className="px-5 py-12 text-center text-gray-500">
                     Cargando tareas…
                   </td>
                 </tr>
               ) : tasks.length === 0 ? (
                 <tr>
-                  <td colSpan={11} className="px-4 py-12 text-center">
+                  <td colSpan={5} className="px-5 py-12 text-center">
                     <p className="text-gray-500">No hay tareas con estos filtros.</p>
                     <button
                       type="button"
@@ -962,105 +945,75 @@ export default function StaffTasksPanel({ currentUserId, userRole, embedded = fa
                 </tr>
               ) : (
                 tasks.map((task) => (
-                  <tr key={task.id} className="hover:bg-violet-50/30">
-                    <td className="px-4 py-3">
-                      <TaskEstadoBadge estado={task.displayEstado || task.estado} />
+                  <tr key={task.id} className="hover:bg-violet-50/30 align-top">
+                    <td className="px-5 py-4">
+                      <TaskTableTitleCell task={task} onOpen={() => setDetailTask(task)} />
                     </td>
-                    <td className="px-4 py-3">
-                      <TaskPrioridadBadge prioridad={task.prioridad} />
+                    <td className="px-4 py-4">
+                      <TaskTableLocationCell fase={task.fase} subfase={task.subfase} />
                     </td>
-                    <td className="px-4 py-3 max-w-[200px]">
-                      <button
-                        type="button"
-                        onClick={() => setDetailTask(task)}
-                        className="font-medium text-gray-900 hover:text-violet-700 text-left"
-                      >
-                        {task.titulo}
-                      </button>
-                      {task.descripcion ? (
-                        <p className="text-xs text-gray-500 line-clamp-1 mt-0.5">{task.descripcion}</p>
-                      ) : null}
+                    <td className="px-4 py-4">
+                      <TaskTableAssigneeCell task={task} />
                     </td>
-                    <td className="px-4 py-3 text-gray-700">
-                      {task.fase?.nombre || '—'}
-                      {task.subfase?.nombre ? (
-                        <p className="text-xs text-indigo-600 mt-0.5">{task.subfase.nombre}</p>
-                      ) : null}
+                    <td className="px-4 py-4">
+                      <TaskTableDeadlineCell
+                        fechaLabel={
+                          task.fecha_limite ? formatStaffDateTimeLabel(task.fecha_limite) : ''
+                        }
+                        timeRemaining={task.timeRemaining}
+                        isOverdue={task.isOverdue}
+                        cumplimiento={task.cumplimiento}
+                      />
                     </td>
-                    <td className="px-4 py-3">
-                      {task.asignado?.nombre || task.asignado?.email || '—'}
-                    </td>
-                    <td className="px-4 py-3 text-gray-600 text-xs">{task.asignado_rol || '—'}</td>
-                    <td className="px-4 py-3 whitespace-nowrap text-xs">
-                      {task.fecha_limite ? formatStaffDateTimeLabel(task.fecha_limite) : '—'}
-                    </td>
-                    <td className="px-4 py-3 text-xs whitespace-nowrap">
-                      <span className={task.isOverdue ? 'text-orange-700 font-medium' : 'text-gray-600'}>
-                        {task.timeRemaining}
-                      </span>
-                    </td>
-                    <td className="px-4 py-3">
-                      <CumplimientoBadge cumplimiento={task.cumplimiento} />
-                    </td>
-                    <td className="px-4 py-3">
-                      {task.enlace ? (
-                        <a
-                          href={task.enlace}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="text-violet-600 hover:underline text-xs"
+                    <td className="px-4 py-4">
+                      <div className="flex flex-col items-end gap-2.5 min-w-[9rem]">
+                        <select
+                          value={task.estado}
+                          disabled={saving}
+                          onChange={(e) => void quickEstado(task, e.target.value)}
+                          className="w-full max-w-[9.5rem] text-xs border border-gray-200 rounded-lg px-2.5 py-1.5 bg-white text-gray-700 shadow-sm focus:outline-none focus:ring-2 focus:ring-violet-200 focus:border-violet-400"
+                          title="Cambiar estado"
                         >
-                          Abrir
-                        </a>
-                      ) : (
-                        '—'
-                      )}
-                    </td>
-                    <td className="px-4 py-3 text-right whitespace-nowrap">
-                      <select
-                        value={task.estado}
-                        disabled={saving}
-                        onChange={(e) => void quickEstado(task, e.target.value)}
-                        className="border rounded px-1 py-0.5 text-xs mr-1 max-w-[100px]"
-                        title="Cambiar estado"
-                      >
-                        {TASK_ESTADOS.map((s) => (
-                          <option key={s} value={s}>
-                            {TASK_ESTADO_LABELS[s]}
-                          </option>
-                        ))}
-                      </select>
-                      <button
-                        type="button"
-                        onClick={() => openEditTask(task)}
-                        className="text-violet-600 hover:underline text-xs mr-1"
-                      >
-                        Editar
-                      </button>
-                      <button
-                        type="button"
-                        onClick={() => void duplicateTask(task)}
-                        className="text-gray-600 hover:underline text-xs mr-1"
-                      >
-                        Dup.
-                      </button>
-                      {canDelete ? (
-                        <button
-                          type="button"
-                          onClick={() => void deleteTask(task)}
-                          className="text-red-600 hover:underline text-xs"
-                        >
-                          Elim.
-                        </button>
-                      ) : canCancel && task.estado !== 'cancelada' ? (
-                        <button
-                          type="button"
-                          onClick={() => void quickEstado(task, 'cancelada')}
-                          className="text-amber-700 hover:underline text-xs"
-                        >
-                          Cancelar
-                        </button>
-                      ) : null}
+                          {TASK_ESTADOS.map((s) => (
+                            <option key={s} value={s}>
+                              {TASK_ESTADO_LABELS[s]}
+                            </option>
+                          ))}
+                        </select>
+                        <div className="flex flex-wrap justify-end gap-x-3 gap-y-1">
+                          <button
+                            type="button"
+                            onClick={() => openEditTask(task)}
+                            className="text-xs font-medium text-violet-600 hover:text-violet-800"
+                          >
+                            Editar
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => void duplicateTask(task)}
+                            className="text-xs font-medium text-gray-600 hover:text-gray-900"
+                          >
+                            Duplicar
+                          </button>
+                          {canDelete ? (
+                            <button
+                              type="button"
+                              onClick={() => void deleteTask(task)}
+                              className="text-xs font-medium text-red-600 hover:text-red-800"
+                            >
+                              Eliminar
+                            </button>
+                          ) : canCancel && task.estado !== 'cancelada' ? (
+                            <button
+                              type="button"
+                              onClick={() => void quickEstado(task, 'cancelada')}
+                              className="text-xs font-medium text-amber-700 hover:text-amber-900"
+                            >
+                              Cancelar
+                            </button>
+                          ) : null}
+                        </div>
+                      </div>
                     </td>
                   </tr>
                 ))
@@ -1162,8 +1115,6 @@ export default function StaffTasksPanel({ currentUserId, userRole, embedded = fa
         phases={phases}
         subphases={subphases}
         assignees={canPickAssignee ? assignees : assignees.filter((u) => u.id === currentUserId)}
-        students={taskStudents}
-        assigneeIsTeacher={taskAssigneeIsTeacher}
         onAssigneeChange={setTaskForm}
         saving={saving}
         title={editingTaskId ? 'Editar tarea' : 'Nueva tarea'}

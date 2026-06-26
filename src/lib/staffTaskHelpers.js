@@ -230,8 +230,8 @@ export function validateTaskPayload(body = {}) {
   const prioridad = String(body.prioridad || 'media').trim();
 
   if (!titulo) return { ok: false, error: 'El título es obligatorio.' };
-  if (!asignado_id && !asignado_rol) {
-    return { ok: false, error: 'Indica persona asignada o rol/departamento.' };
+  if (!asignado_id) {
+    return { ok: false, error: 'Indica la persona asignada.' };
   }
   if (!TASK_ESTADOS.includes(estado)) {
     return { ok: false, error: 'Estado no válido.' };

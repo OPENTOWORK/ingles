@@ -45,8 +45,6 @@ export default function StaffTaskFormModal({
   phases = [],
   subphases = [],
   assignees = [],
-  students = [],
-  assigneeIsTeacher,
   onAssigneeChange,
   saving,
   title = 'Nueva tarea',
@@ -84,8 +82,8 @@ export default function StaffTaskFormModal({
           />
         </div>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Persona asignada</label>
+          <div className="sm:col-span-2">
+            <label className="block text-sm font-medium text-gray-700 mb-1">Persona asignada *</label>
             <select
               value={form.asignado_id}
               onChange={(e) => {
@@ -93,32 +91,17 @@ export default function StaffTaskFormModal({
                 onAssigneeChange({
                   ...form,
                   asignado_id: e.target.value,
-                  asignado_rol: user?.roleName ? getStaffDepartmentLabel(user.roleName) : form.asignado_rol,
-                  alumno_id: '',
+                  asignado_rol: user?.roleName ? getStaffDepartmentLabel(user.roleName) : '',
                 });
               }}
               className="border rounded-lg px-3 py-2 text-sm w-full"
+              required
             >
-              <option value="">Sin persona concreta</option>
+              <option value="">Selecciona persona…</option>
               {assignees.map((u) => (
                 <option key={u.id} value={u.id}>
                   {u.nombre || u.email}
-                </option>
-              ))}
-            </select>
-          </div>
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Rol / departamento *</label>
-            <select
-              value={form.asignado_rol}
-              onChange={(e) => onAssigneeChange({ ...form, asignado_rol: e.target.value })}
-              className="border rounded-lg px-3 py-2 text-sm w-full"
-              required={!form.asignado_id}
-            >
-              <option value="">Selecciona rol…</option>
-              {ROL_OPTIONS.map((r) => (
-                <option key={r.value} value={r.label}>
-                  {r.label}
+                  {u.roleName ? ` (${getStaffDepartmentLabel(u.roleName)})` : ''}
                 </option>
               ))}
             </select>
@@ -201,24 +184,7 @@ export default function StaffTaskFormModal({
               className="border rounded-lg px-3 py-2 text-sm w-full"
             />
           </div>
-          {assigneeIsTeacher ? (
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Alumno (opcional)</label>
-              <select
-                value={form.alumno_id}
-                onChange={(e) => onAssigneeChange({ ...form, alumno_id: e.target.value })}
-                className="border rounded-lg px-3 py-2 text-sm w-full"
-              >
-                <option value="">Todos sus alumnos</option>
-                {students.map((s) => (
-                  <option key={s.id} value={s.id}>
-                    {s.nombre || s.email}
-                  </option>
-                ))}
-              </select>
-            </div>
-          ) : null}
-          <div className={assigneeIsTeacher ? '' : 'sm:col-span-2'}>
+          <div className="sm:col-span-2">
             <label className="block text-sm font-medium text-gray-700 mb-1">Enlace</label>
             <input
               value={form.enlace}

@@ -3,26 +3,13 @@
 import { useMemo, useState } from 'react';
 import toast from 'react-hot-toast';
 import { getDisplayName, getStaffRoleLabel } from '@/utils/staffBuzon';
+import { buzonApiRequest } from '@/lib/staffBuzonClient';
 import styles from './StaffBuzonPanel.module.css';
 
 function extractRoleName(userRow) {
   const embedded = userRow?.Usuarios_y_Perfil_roles;
   if (Array.isArray(embedded)) return embedded[0]?.nombre || '';
   return embedded?.nombre || '';
-}
-
-async function buzonApiRequest(path, { method = 'GET', body, token }) {
-  const response = await fetch(path, {
-    method,
-    headers: {
-      Authorization: `Bearer ${token}`,
-      ...(body ? { 'Content-Type': 'application/json' } : {}),
-    },
-    ...(body ? { body: JSON.stringify(body) } : {}),
-  });
-  const payload = await response.json().catch(() => ({}));
-  if (!response.ok) throw new Error(payload.error || 'No se pudo completar la operación.');
-  return payload;
 }
 
 export default function StaffBuzonGroupSettings({

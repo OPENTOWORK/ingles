@@ -1,10 +1,9 @@
 import { supabase } from '@/utils/supabaseClient';
+import { withApiTrailingSlash } from '@/lib/staffBuzonClient';
 
 /** Next.js usa `trailingSlash: true`; sin barra final el 308 puede romper Authorization. */
 function withTrailingSlash(path = '') {
-  const [base, query = ''] = path.split('?');
-  const normalized = base.endsWith('/') ? base : `${base}/`;
-  return query ? `${normalized}?${query}` : normalized;
+  return withApiTrailingSlash(path);
 }
 
 export async function staffTasksFetch(path, options = {}, { soft = false } = {}) {

@@ -5,6 +5,7 @@ export const AUTOMATED_EMAIL_TRIGGERS = {
   ADMIN_USER_CREATED: 'admin_user_created',
   SUPPORT_REPLY_SENT: 'support_reply_sent',
   FRIEND_INVITED: 'friend_invited',
+  STAFF_TASK_ASSIGNED: 'staff_task_assigned',
 };
 
 export const AUTOMATED_EMAIL_TRIGGER_OPTIONS = [
@@ -32,6 +33,11 @@ export const AUTOMATED_EMAIL_TRIGGER_OPTIONS = [
     value: AUTOMATED_EMAIL_TRIGGERS.FRIEND_INVITED,
     label: 'Invitar a un amigo',
     description: 'Cuando un usuario envía una invitación desde su perfil.',
+  },
+  {
+    value: AUTOMATED_EMAIL_TRIGGERS.STAFF_TASK_ASSIGNED,
+    label: 'Tarea asignada (staff)',
+    description: 'Cuando se crea una tarea y se asigna a una persona del equipo.',
   },
 ];
 

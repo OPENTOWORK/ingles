@@ -42,6 +42,22 @@ export const FASE_ESTADO_LABELS = {
   bloqueada: 'Bloqueada',
 };
 
+export const FASE_ESTADO_COLORS = {
+  no_iniciada: 'bg-slate-100 text-slate-700',
+  en_progreso: 'bg-blue-100 text-blue-800',
+  en_revision: 'bg-amber-100 text-amber-800',
+  completada: 'bg-emerald-100 text-emerald-800',
+  bloqueada: 'bg-red-100 text-red-800',
+};
+
+export const FASE_ESTADO_BORDER = {
+  no_iniciada: 'border-slate-200',
+  en_progreso: 'border-blue-200',
+  en_revision: 'border-amber-200',
+  completada: 'border-emerald-200',
+  bloqueada: 'border-red-200',
+};
+
 export const TASK_ESTADO_COLORS = {
   pendiente: 'bg-slate-100 text-slate-700',
   en_progreso: 'bg-blue-100 text-blue-800',
