@@ -16304,7 +16304,7 @@ body.dark .profile-collapse--open .profile-collapse__head {
 
 /*
  * IT panel device preview — /buzon in mobile/tablet iframe only.
- * Class it-preview-buzon-frame is toggled by useItPreviewAdminBuzonLayout.
+ * Keep the same two-column layout as desktop (sidebar + thread), not stacked.
  */
 @media (max-width: 1024px) {
   html.it-preview-buzon-frame,
@@ -16329,7 +16329,7 @@ body.dark .profile-collapse--open .profile-collapse__head {
   }
 
   html.it-preview-buzon-frame .staff-buzon-page {
-    padding-bottom: 2.5rem;
+    padding-bottom: 1.5rem;
   }
 
   html.it-preview-buzon-frame .staff-buzon-page .page-hero {
@@ -16346,43 +16346,73 @@ body.dark .profile-collapse--open .profile-collapse__head {
   }
 
   html.it-preview-buzon-frame .staff-buzon-panel {
-    display: flex;
-    flex-direction: column;
-    overflow: visible;
-    min-height: 0;
-    margin-bottom: 1.25rem;
-    box-shadow:
-      0 1px 2px rgba(15, 23, 42, 0.04),
-      0 12px 28px rgba(15, 23, 42, 0.08);
+    display: grid !important;
+    grid-template-columns: minmax(152px, 38%) minmax(0, 1fr) !important;
+    grid-template-rows: minmax(0, 1fr);
+    align-items: stretch;
+    min-height: clamp(480px, calc(100dvh - 10.5rem), 560px);
+    max-height: none;
+    overflow: hidden;
+    margin-bottom: 1rem;
   }
 
   html.it-preview-buzon-frame .staff-buzon-sidebar {
-    flex: 0 0 auto;
-    max-height: min(46vh, 360px);
-    min-height: 0;
-    overflow: hidden;
     display: flex;
     flex-direction: column;
+    max-height: none !important;
+    height: 100%;
+    min-height: 0;
+    overflow: hidden;
+    border-right: 1px solid #e2e8f0 !important;
+    border-bottom: none !important;
   }
 
   html.it-preview-buzon-frame .staff-buzon-sidebar-header {
     flex: 0 0 auto;
+    padding: 0.85rem 0.65rem 0.75rem;
+  }
+
+  html.it-preview-buzon-frame .staff-buzon-sidebar-header h2 {
+    font-size: 0.92rem;
+  }
+
+  html.it-preview-buzon-frame .staff-buzon-sidebar-header p {
+    font-size: 0.72rem;
+    margin-bottom: 0.55rem;
   }
 
   html.it-preview-buzon-frame .staff-buzon-contacts {
     flex: 1 1 auto;
     min-height: 0;
-    max-height: none;
+    max-height: none !important;
     overflow-y: auto;
     -webkit-overflow-scrolling: touch;
   }
 
   html.it-preview-buzon-frame .staff-buzon-thread {
-    flex: 1 1 auto;
-    min-height: 11rem;
+    display: flex;
+    flex-direction: column;
+    min-height: 0 !important;
+    height: 100%;
     max-height: none;
-    padding-bottom: 1.25rem;
-    border-bottom-left-radius: 18px;
-    border-bottom-right-radius: 18px;
+  }
+}
+
+@media (min-width: 640px) and (max-width: 1024px) {
+  html.it-preview-buzon-frame .staff-buzon-panel {
+    grid-template-columns: minmax(260px, 320px) minmax(0, 1fr) !important;
+  }
+
+  html.it-preview-buzon-frame .staff-buzon-sidebar-header {
+    padding: 1.25rem 1rem 1rem;
+  }
+
+  html.it-preview-buzon-frame .staff-buzon-sidebar-header h2 {
+    font-size: 1.1rem;
+  }
+
+  html.it-preview-buzon-frame .staff-buzon-sidebar-header p {
+    font-size: 0.85rem;
+    margin-bottom: 0.85rem;
   }
 }
