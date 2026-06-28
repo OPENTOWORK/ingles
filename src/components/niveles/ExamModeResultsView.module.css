@@ -6,7 +6,7 @@
 }
 
 .inner {
-  max-width: 880px;
+  max-width: var(--levels-b2-page-max-width);
   margin: 0 auto;
 }
 
@@ -683,8 +683,8 @@
 }
 
 .verdict--fail {
-  background: #fff7ed;
-  border: 1px solid #fdba74;
+  background: #fef2f2;
+  border: 1px solid #fca5a5;
 }
 
 .verdict--progress {
@@ -779,8 +779,12 @@
 }
 
 .verdict--fail .verdictIcon {
-  background: #f97316;
+  background: #ef4444;
   color: #fff;
+}
+
+.verdict--fail .verdictTitle {
+  color: #991b1b;
 }
 
 .verdict--pending .verdictIcon {

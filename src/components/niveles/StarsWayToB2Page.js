@@ -26,7 +26,6 @@ export default function StarsWayToB2Page({ config }) {
           mascotVariant={config.mascotVariant}
           mascotWidth={146}
           accent={config.accent}
-          stats={[{ value: '17', label: 'Exam parts' }]}
         />
       </div>
 

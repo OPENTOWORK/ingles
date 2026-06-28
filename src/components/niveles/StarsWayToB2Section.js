@@ -264,7 +264,7 @@ function StarsWayToB2SectionInner() {
   }, [loading, activeColumn, focusPart, focusExam]);
 
   return (
-    <section className={styles.section} aria-labelledby="stars-way-title">
+    <section className={`stars-way-to-b2 ${styles.section}`} aria-labelledby="stars-way-title">
       <div className={styles.header}>
         <p className={styles.eyebrow}>Your path to B2</p>
         <h2 id="stars-way-title" className={styles.title}>

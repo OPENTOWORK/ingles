@@ -22,9 +22,10 @@ export default function LevelHubPage({ config }) {
   }
 
   const pageClass = `niveles-level-page niveles-level-page--${config.slug}`;
+  const isB2Hub = config.slug === 'b2';
 
-  return (
-    <main className={`shell ${pageClass}`}>
+  const hubBody = (
+    <>
       <div data-tour="level-hub-hero">
         <PageHero
           eyebrow={config.eyebrow}
@@ -34,11 +35,11 @@ export default function LevelHubPage({ config }) {
           mascotVariant={config.mascotVariant}
           mascotWidth={146}
           accent={config.accent}
-          stats={config.heroStats ?? (config.slug === 'b2' ? [] : [{ value: 'Exam or skills', label: '' }])}
+          stats={config.heroStats ?? (isB2Hub ? [] : [{ value: 'Exam or skills', label: '' }])}
         />
       </div>
 
-      {config.slug === 'b2' ? (
+      {isB2Hub ? (
         <ExamPracticeHubSection
           examLinks={config.examLinks}
           isStudent={isStudent}
@@ -49,6 +50,12 @@ export default function LevelHubPage({ config }) {
       ) : (
         <ExamPracticeHubSection examLinks={config.examLinks} isStudent={isStudent} />
       )}
+    </>
+  );
+
+  return (
+    <main className={`shell ${pageClass}`}>
+      {isB2Hub ? <div className="levels-b2-page-content">{hubBody}</div> : hubBody}
 
       <LevelHubStyles />
     </main>
@@ -68,6 +75,12 @@ function LevelHubStyles() {
         max-width: 1100px;
         margin: 0 auto;
         padding: clamp(20px, 4vw, 32px) clamp(14px, 3vw, 20px);
+      }
+      .niveles-level-page--b2.shell {
+        max-width: none;
+        width: 100%;
+        padding: var(--levels-b2-page-padding-y) var(--levels-b2-page-padding-x);
+        box-sizing: border-box;
       }
       .niveles-level-page .niveles-section-head {
         margin-bottom: 18px;

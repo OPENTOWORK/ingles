@@ -29,6 +29,7 @@ import ExamPracticeReportError from '@/components/exam/ExamPracticeReportError';
 import { formatExamSlotDisplayLabel } from '@/utils/formatExamDisplayLabel';
 import TheoryLevelStars from '@/components/theory/TheoryLevelStars';
 import { starsFromLevelsEarnedMax } from '@/lib/levelsStars';
+import { PASS_THRESHOLD } from '@/utils/examModeStats';
 
 function formatMinutes(m) {
   const h = Math.floor(m / 60);
@@ -192,6 +193,17 @@ function LevelExamModePracticeInner({ slug }) {
     };
   }, [session]);
 
+  const examPassed = useMemo(() => {
+    if (!session?.sections?.length) return false;
+    const allComplete = session.sections.every((sec) => sec.status === 'completed');
+    if (!allComplete) return false;
+    return session.sections.every((sec) => {
+      const { correct, total } = resolveSectionScoreDisplay(sec.scores);
+      if (total <= 0) return false;
+      return Math.round((correct / total) * 100) >= PASS_THRESHOLD;
+    });
+  }, [session]);
+
   const completedSections = useMemo(() => {
     if (!session?.sections?.length) return 0;
     return session.sections.filter((sec) => sec.status === 'completed').length;
@@ -224,7 +236,7 @@ function LevelExamModePracticeInner({ slug }) {
       ) : null}
 
       {!pickedSlot ? (
-        <div className="exam-mode-landing">
+        <div className="exam-mode-landing levels-b2-page-content">
           <div className="exam-mode-landing__hero">
             <span className="exam-mode-landing__eyebrow">Exam mode</span>
             <h1 className="exam-mode-landing__title">
@@ -288,14 +300,10 @@ function LevelExamModePracticeInner({ slug }) {
               <div>
                 <div className="exam-mode-session__badge-row">
                   <span className="exam-mode-session__eyebrow">Exam mode</span>
-                  <span className="exam-mode-session__exam-tag">{examLabel}</span>
                 </div>
-                <h1 className="exam-mode-session__title">
-                  {slug === 'b2' ? 'B2 Full Exam Simulation' : `${config.cefr} Exam Simulation`}
-                </h1>
+                <h1 className="exam-mode-session__title">{examLabel}</h1>
                 <p className="exam-mode-session__lead">
-                  Complete each section in order. Once you finish a section, you cannot go back until
-                  the exam ends.
+                  Complete each section in order. Once you finish a section, you cannot go back until the exam ends.
                 </p>
               </div>
               {!(examComplete && session?.resultsReleased) ? (
@@ -340,8 +348,12 @@ function LevelExamModePracticeInner({ slug }) {
           </header>
 
           {examComplete && session?.resultsReleased ? (
-            <div className="exam-mode-session__complete-banner">
-              <p>You have completed this exam.</p>
+            <div
+              className={`exam-mode-session__complete-banner${
+                examPassed ? '' : ' exam-mode-session__complete-banner--failed'
+              }`}
+            >
+              <p>{examPassed ? 'You have completed this exam.' : 'Exam not passed'}</p>
               <div className="exam-mode-session__complete-score">
                 <TheoryLevelStars stars={overallExamScore.stars} size="md" variant="gold" />
                 <span className="exam-mode-session__complete-score-label">
@@ -351,14 +363,14 @@ function LevelExamModePracticeInner({ slug }) {
               <div className="exam-mode-session__complete-actions">
                 <Link
                   href={`/niveles/${slug}/exam-mode/results?examen=${examSlot}`}
-                  className="exam-mode-session__btn exam-mode-session__btn--success"
+                  className="exam-mode-session__btn exam-mode-session__btn--review"
                 >
                   View results & review errors
                 </Link>
                 <button
                   type="button"
                   onClick={repeatCurrentExam}
-                  className="exam-mode-session__btn exam-mode-session__btn--outline"
+                  className="exam-mode-session__btn exam-mode-session__btn--repeat"
                 >
                   Repeat exam
                 </button>

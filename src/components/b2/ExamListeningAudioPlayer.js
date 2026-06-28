@@ -4,6 +4,17 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 
 const MAX_PLAYS = 2;
 
+/** Only one listening clip may play at a time across the page. */
+const activeListeningAudios = new Set();
+
+function pauseOtherListeningAudios(current) {
+  for (const audio of activeListeningAudios) {
+    if (audio !== current && !audio.paused) {
+      audio.pause();
+    }
+  }
+}
+
 function formatTime(seconds) {
   if (!Number.isFinite(seconds) || seconds < 0) return '0:00';
   const m = Math.floor(seconds / 60);
@@ -129,6 +140,36 @@ export default function ExamListeningAudioPlayer({
 
   useEffect(() => {
     const audio = audioRef.current;
+    if (!audio) return undefined;
+
+    activeListeningAudios.add(audio);
+
+    if (examMode) {
+      return () => {
+        activeListeningAudios.delete(audio);
+      };
+    }
+
+    const onPlay = () => {
+      pauseOtherListeningAudios(audio);
+      onPlaybackStart?.();
+    };
+    const onEnded = () => {
+      onPlaybackEnd?.();
+    };
+
+    audio.addEventListener('play', onPlay);
+    audio.addEventListener('ended', onEnded);
+
+    return () => {
+      audio.removeEventListener('play', onPlay);
+      audio.removeEventListener('ended', onEnded);
+      activeListeningAudios.delete(audio);
+    };
+  }, [examMode, src, clipKey, onPlaybackStart, onPlaybackEnd]);
+
+  useEffect(() => {
+    const audio = audioRef.current;
     if (!audio || !examMode) return undefined;
 
     const onMeta = () => {
@@ -154,6 +195,7 @@ export default function ExamListeningAudioPlayer({
     setError(null);
 
     try {
+      pauseOtherListeningAudios(audio);
       audio.pause();
       audio.currentTime = 0;
       maxTimeRef.current = 0;
@@ -187,7 +229,7 @@ export default function ExamListeningAudioPlayer({
 
   if (!examMode) {
     return (
-      <audio controls src={src} className={className} style={{ width: '100%' }}>
+      <audio ref={audioRef} controls src={src} className={className} style={{ width: '100%' }}>
         <track kind="captions" />
       </audio>
     );

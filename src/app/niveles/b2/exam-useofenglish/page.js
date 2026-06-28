@@ -1255,7 +1255,6 @@ function UseOfEnglishExamsPageInner() {
     <main
       className="levels-exam-practice-root"
       style={{
-        padding: '2rem',
         fontFamily: 'Arial, Helvetica, sans-serif',
         ...(!examPracticeOpen
           ? {

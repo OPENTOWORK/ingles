@@ -214,7 +214,7 @@ function SectionCard({ row, examSlot, onRepeatSection, onRepeatPart, rescoreBusy
                   }`}
                   onClick={() => onRepeatSection?.(row.key, row.href)}
                 >
-                  Repetir sección
+                  Repeat section
                 </button>
               ) : null}
               {partEntries.length > 0 ? (
@@ -280,7 +280,6 @@ function SectionCard({ row, examSlot, onRepeatSection, onRepeatPart, rescoreBusy
 
       {partEntries.length > 0 ? (
         <div className={styles.parts}>
-          <p className={styles.partsLabel}>Breakdown by part</p>
           <ul className={styles.partsList}>
             {partEntries.map(([partNum, p]) => {
               const badge = resolvePartBadge(partNum, p, row.scores?.scoringVersion === 2);
@@ -300,14 +299,14 @@ function SectionCard({ row, examSlot, onRepeatSection, onRepeatPart, rescoreBusy
                       className={styles.partRepeatBtn}
                       onClick={() => onRepeatPart?.(row.key, row.href, Number(partNum))}
                     >
-                      Repetir parte
+                      Repeat part
                     </button>
                   ) : (
                     <span className={styles.partCellEmpty} aria-hidden="true" />
                   )}
                   {showReview ? (
                     <Link href={partReviewHref} className={styles.partReviewBtn}>
-                      Revisar
+                      Review
                     </Link>
                   ) : (
                     <span className={styles.partCellEmpty} aria-hidden="true" />

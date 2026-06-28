@@ -453,6 +453,9 @@ a:hover {
   --color-text-primary: #111111;
   --color-text-secondary: #666666;
   --color-border-tertiary: #e0e0e0;
+  --levels-b2-page-max-width: min(1320px, 100%);
+  --levels-b2-page-padding-y: clamp(20px, 4vw, 32px);
+  --levels-b2-page-padding-x: clamp(1rem, 3vw, 2rem);
 }
 
 body.light {
@@ -2459,7 +2462,6 @@ body.nav-open {
 /* Exam mode — landing (choose test) */
 .exam-mode-landing {
   width: 100%;
-  max-width: min(100%, 920px);
   margin: 0 auto;
   display: flex;
   flex-direction: column;
@@ -2552,22 +2554,21 @@ body.nav-open {
   justify-content: flex-start !important;
   align-items: stretch !important;
   width: 100% !important;
-  max-width: 1100px !important;
+  max-width: none !important;
   margin-left: auto !important;
   margin-right: auto !important;
-  padding: clamp(20px, 4vw, 32px) clamp(14px, 3vw, 20px) !important;
+  padding: var(--levels-b2-page-padding-y) var(--levels-b2-page-padding-x) !important;
   min-height: 100svh !important;
   box-sizing: border-box !important;
 }
 
 .levels-exam-practice-root:has(.exam-mode-landing) .exam-mode-landing {
   width: 100%;
-  max-width: none;
 }
 
 .levels-exam-practice-root:has(.exam-mode-landing) .exam-mode-landing > :not(.exam-mode-landing__hero) {
   width: 100%;
-  max-width: min(100%, 920px);
+  max-width: none;
   margin-left: auto;
   margin-right: auto;
 }
@@ -2716,6 +2717,14 @@ body.nav-open {
   padding: 18px;
   border-top: 1px solid rgba(226, 232, 240, 0.9);
   box-sizing: border-box;
+  justify-content: stretch;
+  width: 100%;
+}
+
+.levels-b2-exam-picker--exam-mode .levels-b2-exam-picker__slot-wrap {
+  flex: 1 1 0;
+  min-width: 0;
+  max-width: none;
 }
 
 .levels-b2-exam-picker--exam-mode .levels-b2-exam-picker__slot {
@@ -2725,7 +2734,7 @@ body.nav-open {
 /* Exam mode — active session (section timeline) */
 .exam-mode-session {
   width: 100%;
-  max-width: min(100%, 720px);
+  max-width: var(--levels-b2-page-max-width);
   margin: 0 auto;
   display: flex;
   flex-direction: column;
@@ -2733,16 +2742,92 @@ body.nav-open {
   padding-bottom: 2rem;
 }
 
+.exam-mode-session > .exam-practice-level-strip {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  align-items: center;
+  gap: 12px;
+  margin: 0;
+  width: 100%;
+  padding: 18px 20px;
+  border-radius: 20px;
+  border: 1px solid rgba(226, 232, 240, 0.95);
+  background: linear-gradient(180deg, #ffffff 0%, #f8fafc 100%);
+  box-shadow:
+    0 1px 2px rgba(15, 23, 42, 0.04),
+    0 10px 32px rgba(15, 23, 42, 0.06);
+  overflow: hidden;
+  box-sizing: border-box;
+}
+
+.exam-mode-session > .exam-practice-level-strip .exam-practice-level-strip__label {
+  display: inline-flex;
+  align-items: center;
+  flex: 0 0 auto;
+  margin: 0;
+  padding: 6px 14px;
+  border-radius: 9999px;
+  font-family: 'Segoe UI', sans-serif;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #4338ca;
+  background: rgba(99, 102, 241, 0.12);
+  border: 1px solid rgba(99, 102, 241, 0.22);
+}
+
+.exam-mode-session > .exam-practice-level-strip .exam-practice-level-strip__list {
+  display: flex;
+  flex: 1 1 auto;
+  flex-wrap: nowrap;
+  gap: 12px;
+  width: auto;
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  border-top: none;
+  box-sizing: border-box;
+  list-style: none;
+}
+
+.exam-mode-session > .exam-practice-level-strip .exam-practice-level-strip__list > li {
+  flex: 1 1 0;
+  min-width: 0;
+}
+
+.exam-mode-session > .exam-practice-level-strip .exam-practice-level-strip__pill {
+  width: 100%;
+  min-width: 0;
+  padding: 0.55rem 0.5rem;
+}
+
 .exam-mode-session__header {
   padding: 1.65rem 1.5rem 1.45rem;
   border-radius: 20px;
-  border: 1px solid rgba(148, 163, 184, 0.28);
-  background:
-    radial-gradient(ellipse 90% 70% at 50% -30%, rgba(59, 130, 246, 0.12), transparent 65%),
-    linear-gradient(165deg, #ffffff 0%, #f8fafc 55%, #f1f5f9 100%);
+  border: 1px solid transparent;
+  background: linear-gradient(145deg, #1e3a8a 0%, #2563eb 52%, #1d4ed8 100%);
   box-shadow:
-    0 1px 2px rgba(15, 23, 42, 0.04),
-    0 14px 36px rgba(15, 23, 42, 0.07);
+    0 4px 6px rgba(29, 78, 216, 0.18),
+    0 12px 28px rgba(29, 78, 216, 0.22);
+}
+
+.exam-mode-session__header .exam-mode-session__eyebrow {
+  color: rgba(255, 255, 255, 0.95);
+  background: rgba(255, 255, 255, 0.16);
+  border-color: rgba(255, 255, 255, 0.28);
+}
+
+.exam-mode-session__header .exam-mode-session__btn--outline {
+  color: #ffffff;
+  border-color: rgba(255, 255, 255, 0.45);
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.exam-mode-session__header .exam-mode-session__btn--outline:hover {
+  background: rgba(255, 255, 255, 0.18);
+  border-color: rgba(255, 255, 255, 0.55);
 }
 
 .exam-mode-session__header-top {
@@ -2796,12 +2881,21 @@ body.nav-open {
   color: #0f172a;
 }
 
+.exam-mode-session__header .exam-mode-session__title {
+  color: #ffffff;
+}
+
 .exam-mode-session__lead {
   margin: 0.55rem 0 0;
   font-size: 0.95rem;
   line-height: 1.55;
   color: #64748b;
   max-width: 36rem;
+}
+
+.exam-mode-session__header .exam-mode-session__lead {
+  color: rgba(255, 255, 255, 0.88);
+  max-width: none;
 }
 
 .exam-mode-session__actions {
@@ -2927,11 +3021,32 @@ body.nav-open {
   color: #15803d;
 }
 
+.exam-mode-session__complete-banner--failed {
+  border: 1px solid #fca5a5;
+  background: linear-gradient(135deg, #fef2f2 0%, #fff1f2 100%);
+  box-shadow: 0 4px 16px rgba(239, 68, 68, 0.08);
+}
+
+.exam-mode-session__complete-banner--failed p {
+  color: #991b1b;
+}
+
+.exam-mode-session__complete-banner--failed .exam-mode-session__complete-score-label {
+  color: #b91c1c;
+}
+
 .exam-mode-session__complete-actions {
-  display: flex;
-  flex-wrap: wrap;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 0.55rem;
-  justify-content: center;
+  width: min(100%, 34rem);
+  margin-inline: auto;
+}
+
+.exam-mode-session__complete-actions .exam-mode-session__btn {
+  width: 100%;
+  box-sizing: border-box;
+  text-align: center;
 }
 
 .exam-mode-session__btn--primary {
@@ -2954,6 +3069,32 @@ body.nav-open {
 
 .exam-mode-session__btn--success:hover {
   box-shadow: 0 6px 18px rgba(22, 163, 74, 0.3);
+}
+
+.exam-mode-session__btn--review {
+  color: #b91c1c;
+  background: #fef2f2;
+  border: 1px solid #fca5a5;
+  box-shadow: none;
+}
+
+.exam-mode-session__btn--review:hover {
+  background: #fee2e2;
+  border-color: #f87171;
+  box-shadow: none;
+}
+
+.exam-mode-session__btn--repeat {
+  color: #166534;
+  background: #f0fdf4;
+  border: 1px solid #86efac;
+  box-shadow: none;
+}
+
+.exam-mode-session__btn--repeat:hover {
+  background: #dcfce7;
+  border-color: #4ade80;
+  box-shadow: none;
 }
 
 .exam-mode-session__timeline {
@@ -3177,6 +3318,11 @@ body.nav-open {
     flex-direction: column;
   }
 
+  .exam-mode-session__complete-actions {
+    grid-template-columns: 1fr;
+    width: min(100%, 20rem);
+  }
+
   .exam-mode-session__actions {
     width: 100%;
   }
@@ -3217,23 +3363,56 @@ body.nav-open {
   font-family: Arial, Helvetica, sans-serif;
 }
 
+.levels-exam-practice-root {
+  width: 100%;
+  box-sizing: border-box;
+  padding: var(--levels-b2-page-padding-y) var(--levels-b2-page-padding-x);
+}
+
+.levels-b2-page-content {
+  width: 100%;
+  max-width: var(--levels-b2-page-max-width);
+  margin-inline: auto;
+  box-sizing: border-box;
+}
+
+.niveles-level-page--b2.shell {
+  max-width: none;
+  width: 100%;
+  padding: var(--levels-b2-page-padding-y) var(--levels-b2-page-padding-x);
+  box-sizing: border-box;
+}
+
+.niveles-level-page--b2 .levels-b2-page-content .page-hero,
+.niveles-level-page--b2 .levels-b2-page-content .exam-practice-hub--split {
+  width: 100%;
+  max-width: none;
+  margin-inline: 0;
+}
+
+.niveles-level-page--b2 .stars-way-to-b2 {
+  width: 100%;
+  max-width: var(--levels-b2-page-max-width);
+  margin-inline: auto;
+}
+
 .levels-b2-practice {
   width: 100%;
-  max-width: min(960px, 100%);
+  max-width: var(--levels-b2-page-max-width);
   margin: 0 auto;
   font-family: Arial, Helvetica, sans-serif;
 }
 
 .levels-b2-practice:has(.levels-exam-split-page) {
-  max-width: min(1720px, 100%);
+  max-width: var(--levels-b2-page-max-width);
 }
 
 .levels-b2-practice--skill-compact {
-  max-width: min(820px, 100%);
+  max-width: var(--levels-b2-page-max-width);
 }
 
 .levels-b2-practice--skill-compact:has(.levels-exam-split-page) {
-  max-width: min(1720px, 100%);
+  max-width: var(--levels-b2-page-max-width);
 }
 
 .levels-b2-practice--skill-compact .levels-b2-practice__work-panel .levels-b2-part-tabs--excel {
@@ -4021,7 +4200,7 @@ body.reading-night-mode .levels-exercise-stars--gold .starSvgWrapEmpty .starSvgP
 
 /* Skill practice Part 1 only (MCQ cloze): texto a ancho completo. */
 .levels-b2-practice--skill-compact:has(.levels-exam-mcq-cloze-inline) {
-  max-width: min(960px, 100%);
+  max-width: var(--levels-b2-page-max-width);
 }
 
 .levels-b2-practice--skill-compact:has(.levels-exam-mcq-cloze-inline) .levels-exam-split-page {
@@ -4195,6 +4374,14 @@ body.reading-night-mode .levels-exercise-stars--gold .starSvgWrapEmpty .starSvgP
   color: #fff;
   text-shadow: 0 2px 24px rgba(0, 0, 0, 0.12);
   text-align: left;
+  font-family: 'Segoe UI', sans-serif;
+}
+
+.levels-b2-practice--skill-compact .levels-exam-split-card__title-row--title-mode .levels-exam-split-card__part-title {
+  font-size: clamp(1.65rem, 4vw, 2.35rem);
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  line-height: 1.1;
   font-family: 'Segoe UI', sans-serif;
 }
 
@@ -5180,8 +5367,8 @@ body.reading-night-mode .levels-exercise-stars--gold .starSvgWrapEmpty .starSvgP
 }
 
 .levels-b2-result--failed {
-  border-color: #fdba74;
-  background: #fff7ed;
+  border-color: #fca5a5;
+  background: #fef2f2;
 }
 
 .levels-b2-result--error {
@@ -5202,7 +5389,11 @@ body.reading-night-mode .levels-exercise-stars--gold .starSvgWrapEmpty .starSvgP
 }
 
 .levels-b2-result--failed .levels-b2-result__title {
-  color: #9a3412;
+  color: #991b1b;
+}
+
+.levels-b2-result--failed .levels-b2-result__detail {
+  color: #b91c1c;
 }
 
 .levels-b2-result__detail {
@@ -8365,6 +8556,21 @@ body.reading-night-mode .levels-b2-speaking-panel__usage,
   display: none;
 }
 
+/* Part 1 MCQ cloze — same line-height on every line of the passage */
+.levels-exam-mcq-cloze-inline .levels-exam-inline-passage__line {
+  margin: 0;
+  line-height: 2.75;
+}
+
+.levels-exam-mcq-cloze-inline .levels-exam-inline-mcq-gap__trigger {
+  height: 1.2em;
+  max-height: 1.2em;
+  line-height: 1.2em;
+  padding: 0 0.45rem;
+  vertical-align: baseline;
+  box-sizing: border-box;
+}
+
 /* Part 1 MCQ cloze — no inner scroll; gap menus must not clip */
 .levels-b2-practice__work-body:has(.levels-exam-mcq-cloze-inline),
 .levels-listening-practice-main:has(.levels-exam-mcq-cloze-inline),
@@ -8788,7 +8994,7 @@ body.reading-night-mode .levels-b2-speaking-panel__usage,
 
 @media (min-width: 1400px) {
   .levels-exam-split-page {
-    max-width: min(1720px, 100%);
+    max-width: var(--levels-b2-page-max-width);
   }
 
   .levels-exam-split-card {
@@ -11162,11 +11368,11 @@ body.reading-night-mode .levels-b2-speaking-panel__usage,
 }
 
 .levels-b2-practice:has(.b2-writing-practice) {
-  max-width: min(1320px, 100%);
+  max-width: var(--levels-b2-page-max-width);
 }
 
 .levels-b2-practice--skill-compact:has(.b2-writing-practice) {
-  max-width: min(1320px, 100%);
+  max-width: var(--levels-b2-page-max-width);
 }
 
 .levels-b2-practice--skill-compact:has(.b2-writing-practice):has(.levels-listening-practice-layout--with-strategy) {
@@ -11178,7 +11384,7 @@ body.reading-night-mode .levels-b2-speaking-panel__usage,
 }
 
 .levels-exam-practice-root:has(.b2-writing-practice) {
-  padding: clamp(1rem, 3vw, 2rem);
+  padding: var(--levels-b2-page-padding-y) var(--levels-b2-page-padding-x);
   box-sizing: border-box;
 }
 
@@ -12028,13 +12234,13 @@ body.reading-night-mode .levels-b2-speaking-panel__usage,
 
 .levels-listening-situation {
   margin: 0 0 0.75rem;
-  padding: 0.75rem 0.9rem;
-  background: #fffbeb;
-  border: 1px solid #fde68a;
-  border-radius: 10px;
+  padding: 0;
+  background: transparent;
+  border: none;
+  border-radius: 0;
   line-height: 1.6;
-  color: #78350f;
-  font-weight: 600;
+  color: #1e293b;
+  font-weight: 700;
 }
 
 .levels-listening-gap-prompt {
@@ -12154,8 +12360,12 @@ body.reading-night-mode .levels-b2-speaking-panel__usage,
 
 .levels-listening-context-line {
   margin: 0 0 0.85rem;
-  line-height: 1.65;
-  color: #1e293b;
+  padding: 0.75rem 0.9rem;
+  background: #fffbeb;
+  border: 1px solid #fde68a;
+  border-radius: 10px;
+  line-height: 1.6;
+  color: #78350f;
   font-weight: 600;
 }
 
@@ -12341,10 +12551,15 @@ body.reading-night-mode .levels-b2-speaking-panel__usage,
   border-radius: 10px;
 }
 
-.levels-listening-options-pool__title,
-.levels-listening-mcq-options-label {
+.levels-listening-options-pool__title {
   margin: 0 0 0.55rem;
   font-weight: 700;
+  color: #1e293b;
+}
+
+.levels-listening-mcq-options-label {
+  margin: 0 0 0.55rem;
+  font-weight: 400;
   color: #1e293b;
 }
 
@@ -13524,6 +13739,28 @@ a.reading-weak-areas__chip--link:hover {
   letter-spacing: var(--reading-letter-spacing, 0);
 }
 
+/* Part 1 MCQ cloze — override reading-area so every passage line shares one line-height */
+.levels-listening-practice-main.reading-area .levels-exam-mcq-cloze-inline .levels-exam-inline-passage__line,
+.reading-area .levels-exam-mcq-cloze-inline .levels-exam-split__text p.levels-exam-inline-passage__line,
+.reading-area .levels-exam-mcq-cloze-inline .levels-exam-inline-passage__line {
+  margin: 0;
+  line-height: 2.75;
+}
+
+.levels-listening-practice-main.reading-area .levels-exam-mcq-cloze-inline .levels-exam-inline-mcq-gap__trigger,
+.reading-area .levels-exam-mcq-cloze-inline .levels-exam-inline-mcq-gap__trigger {
+  height: 1.2em;
+  max-height: 1.2em;
+  line-height: 1.2em;
+  padding: 0 0.45rem;
+  vertical-align: baseline;
+  box-sizing: border-box;
+}
+
+.reading-area--wide-spacing .levels-exam-mcq-cloze-inline .levels-exam-inline-passage__line {
+  margin-bottom: 0;
+}
+
 .reading-area--dyslexia-font,
 .reading-area--dyslexia-font *,
 .reading-area--dyslexia-font .levels-exam-split__text,
@@ -14543,8 +14780,8 @@ body.reading-night-mode .levels-b2-result--passed {
 }
 
 body.reading-night-mode .levels-b2-result--failed {
-  background: #7c2d12;
-  border-color: #f97316;
+  background: #7f1d1d;
+  border-color: #ef4444;
 }
 
 body.reading-night-mode .levels-b2-result--error {
@@ -14562,7 +14799,7 @@ body.reading-night-mode .levels-b2-result--passed .levels-b2-result__title {
 }
 
 body.reading-night-mode .levels-b2-result--failed .levels-b2-result__title {
-  color: #fed7aa;
+  color: #fecaca;
 }
 
 body.reading-night-mode .levels-b2-result__detail,
@@ -15114,14 +15351,19 @@ body.reading-night-mode .levels-listening-briefing__exam-note {
 }
 
 body.reading-night-mode .levels-listening-situation {
-  background: #422006;
-  border-color: #b45309;
-  color: #fde68a;
+  background: transparent;
+  border: none;
+  color: #f8fafc;
 }
 
-body.reading-night-mode .levels-listening-gap-prompt,
-body.reading-night-mode .levels-listening-context-line {
+body.reading-night-mode .levels-listening-gap-prompt {
   color: #e2e8f0;
+}
+
+body.reading-night-mode .levels-listening-context-line {
+  background: #422006;
+  border: 1px solid #b45309;
+  color: #fde68a;
 }
 
 body.reading-night-mode .levels-listening-inline-gap-actions__check {
@@ -15413,20 +15655,66 @@ body.reading-night-mode .levels-exam-split__questions > div > div:not(.levels-ex
   line-height: 1.25;
 }
 
-/* Toolbar + sidebar-top panel titles: unified label typography */
+/* Skill practice chrome controls: unified label typography (case preserved per element) */
+.levels-b2-practice--skill-compact .levels-b2-part-tabs--excel .levels-b2-part-tab,
+.levels-b2-practice--skill-compact .exam-practice-level-strip__label,
+.levels-b2-practice--skill-compact .exam-practice-level-strip__pill,
+.levels-b2-practice--skill-compact .exam-practice-skill-strip__label,
+.levels-b2-practice--skill-compact .exam-practice-skill-strip__pill,
+.levels-b2-practice--skill-compact .exam-practice-skill-strip__text,
 .levels-b2-practice--skill-compact .reading-practice-header-tools__btn-title,
 .levels-b2-practice--skill-compact .reading-practice-header-tools__btn-state,
 .levels-b2-practice--skill-compact .levels-b2-timer__label,
 .levels-b2-practice--skill-compact .levels-b2-timer__session-tag,
+.levels-b2-practice--skill-compact .levels-b2-timer__btn--ghost,
 .levels-b2-practice--skill-compact .levels-b2-practice__header-finish .levels-b2-result__title,
 .levels-b2-practice--skill-compact .skill-exercise-stars-badge__label,
-.levels-b2-practice--skill-compact .exam-notes-popover__trigger-label {
-  font-family: inherit;
+.levels-b2-practice--skill-compact .exam-notes-popover__trigger-label,
+.levels-b2-practice--skill-compact .levels-exam-split-card__part-title-category,
+.levels-b2-practice--skill-compact .levels-listening-strategy__toggle {
+  font-family: Arial, Helvetica, sans-serif;
   font-size: 0.68rem;
   font-weight: 800;
   letter-spacing: 0.06em;
-  text-transform: uppercase;
   line-height: 1.2;
+}
+
+.levels-b2-practice--skill-compact .exam-practice-level-strip__label,
+.levels-b2-practice--skill-compact .exam-practice-skill-strip__label,
+.levels-b2-practice--skill-compact .reading-practice-header-tools__btn-title,
+.levels-b2-practice--skill-compact .reading-practice-header-tools__btn-state,
+.levels-b2-practice--skill-compact .levels-b2-timer__label,
+.levels-b2-practice--skill-compact .levels-b2-timer__session-tag,
+.levels-b2-practice--skill-compact .levels-b2-timer__btn--ghost,
+.levels-b2-practice--skill-compact .levels-b2-practice__header-finish .levels-b2-result__title,
+.levels-b2-practice--skill-compact .skill-exercise-stars-badge__label,
+.levels-b2-practice--skill-compact .exam-notes-popover__trigger-label,
+.levels-b2-practice--skill-compact .levels-exam-split-card__part-title-category {
+  text-transform: uppercase;
+}
+
+.levels-b2-practice--skill-compact .levels-listening-strategy__toggle {
+  font-size: 0.75rem;
+}
+
+.levels-b2-practice--skill-compact .levels-exam-split__enunciado,
+.levels-b2-practice--skill-compact .levels-exam-split__enunciado > .levels-exam-split__section-title,
+.levels-b2-practice--skill-compact .levels-exam-split__enunciado p {
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+.levels-b2-practice--skill-compact .levels-exam-split__text,
+.levels-b2-practice--skill-compact .levels-exam-split__text p,
+.levels-b2-practice--skill-compact .levels-exam-split__passage-panel,
+.levels-b2-practice--skill-compact .levels-exam-split__passage-panel p,
+.levels-b2-practice--skill-compact .levels-exam-passage-title,
+.levels-b2-practice--skill-compact .levels-exam-inline-passage,
+.levels-b2-practice--skill-compact .levels-exam-inline-passage__line,
+.levels-b2-practice--skill-compact .levels-exam-inline-mcq-cloze,
+.levels-b2-practice--skill-compact .levels-exam-inline-mcq-gap__trigger,
+.levels-b2-practice--skill-compact .levels-exam-inline-mcq-gap__value,
+.levels-b2-practice--skill-compact .levels-exam-inline-mcq-gap__option {
+  font-family: Arial, Helvetica, sans-serif;
 }
 
 .levels-b2-practice--skill-compact[data-skill-theme] .levels-b2-timer__session-tag,

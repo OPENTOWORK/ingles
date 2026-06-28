@@ -4038,11 +4038,7 @@ function B2ExamPaperPracticePageInner({
                                 </select>
                               </>
                             ) : (
-                              <>
-                                <p className="levels-listening-mcq-options-label">
-                                  Options
-                                </p>
-                                <div className="levels-listening-mcq-options-grid">
+                              <div className="levels-listening-mcq-options-grid">
                                   {group.options.map((option) => {
                                     const isSelected = selectedOptions[questionKey] === option.id;
                                     const isChecked = checkedQuestions[questionKey];
@@ -4067,7 +4063,6 @@ function B2ExamPaperPracticePageInner({
                                     );
                                   })}
                                 </div>
-                              </>
                             )}
                           </div>
                         );
