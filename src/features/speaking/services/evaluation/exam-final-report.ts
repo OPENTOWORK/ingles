@@ -51,6 +51,8 @@ export async function runExamFinalReport(params: {
             '- correctedVersion, modelAnswer, shortExplanation',
             '- pronunciation: { score, feedback, isEstimated: true }',
             'Provide partFeedback notes for Parts 1–4 but official scoring is holistic only.',
+            'Also include: strengths (array), mainErrors (array), improvedPhrases ([{original, improved, note}]), recommendations (array), practicePlan (array).',
+            'If the transcript indicates missing or incomplete parts, set isPartialEvaluation: true and partialEvaluationNote explaining what was not assessed.',
           ].join(' ')
         : [
             'You are a Cambridge speaking examiner reviewing the full exam.',

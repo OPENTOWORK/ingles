@@ -88,6 +88,62 @@ export function FeedbackCards({ micro, report }: Props) {
 
         <footer className="speaking-feedback-report__footer">
           <p>{report.shortExplanation}</p>
+          {report.isPartialEvaluation && report.partialEvaluationNote ? (
+            <p className="speaking-feedback-report__partial">{report.partialEvaluationNote}</p>
+          ) : null}
+          {report.strengths?.length ? (
+            <div className="speaking-feedback-report__list-block">
+              <p className="speaking-feedback-report__list-title">Strengths</p>
+              <ul>
+                {report.strengths.map((s, i) => (
+                  <li key={i}>{s}</li>
+                ))}
+              </ul>
+            </div>
+          ) : null}
+          {report.mainErrors?.length ? (
+            <div className="speaking-feedback-report__list-block">
+              <p className="speaking-feedback-report__list-title">Main errors</p>
+              <ul>
+                {report.mainErrors.map((s, i) => (
+                  <li key={i}>{s}</li>
+                ))}
+              </ul>
+            </div>
+          ) : null}
+          {report.improvedPhrases?.length ? (
+            <div className="speaking-feedback-report__list-block">
+              <p className="speaking-feedback-report__list-title">Improved phrases</p>
+              <ul>
+                {report.improvedPhrases.map((item, i) => (
+                  <li key={i}>
+                    <em>{item.original}</em> → {item.improved}
+                    {item.note ? ` (${item.note})` : ''}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ) : null}
+          {report.recommendations?.length ? (
+            <div className="speaking-feedback-report__list-block">
+              <p className="speaking-feedback-report__list-title">Recommendations</p>
+              <ul>
+                {report.recommendations.map((s, i) => (
+                  <li key={i}>{s}</li>
+                ))}
+              </ul>
+            </div>
+          ) : null}
+          {report.practicePlan?.length ? (
+            <div className="speaking-feedback-report__list-block">
+              <p className="speaking-feedback-report__list-title">Practice plan</p>
+              <ul>
+                {report.practicePlan.map((s, i) => (
+                  <li key={i}>{s}</li>
+                ))}
+              </ul>
+            </div>
+          ) : null}
           <p className="speaking-feedback-report__pronunciation">
             Pronunciation: {report.pronunciation.score}/5 — {report.pronunciation.feedback}{' '}
             {report.pronunciation.isEstimated ? '(estimated from transcript)' : ''}

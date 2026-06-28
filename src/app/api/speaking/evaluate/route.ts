@@ -20,6 +20,8 @@ export async function POST(req: Request) {
       text?: string;
       combinedTranscript?: string;
       taskPrompt?: string;
+      examId?: string;
+      isPartialEvaluation?: boolean;
     };
 
     const { sessionId, cefr, mode, taskPrompt } = body;
@@ -98,7 +100,22 @@ export async function POST(req: Request) {
     await saveEvaluation({
       sessionId,
       turnId: null,
-      payload: report,
+      payload: {
+        ...report,
+        meta: {
+          examId: body.examId ?? null,
+          sessionId,
+          cefr,
+          savedAt: new Date().toISOString(),
+          speakingScoreTotal: report?.b2Speaking?.total ?? null,
+          estimatedLevel: report?.b2Speaking?.estimatedLevel ?? null,
+          source: 'ai_feedback',
+          isPartialEvaluation:
+            body.isPartialEvaluation ??
+            report?.isPartialEvaluation ??
+            /\[Not completed|may be missing or incomplete/i.test(text),
+        },
+      },
     });
 
     await completeSession(sessionId);

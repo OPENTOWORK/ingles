@@ -66,6 +66,21 @@ export const correctionReportSchema = z.object({
     isEstimated: z.boolean(),
   }),
   b2Speaking: b2SpeakingScoreReportSchema.optional(),
+  strengths: z.array(z.string()).optional(),
+  mainErrors: z.array(z.string()).optional(),
+  improvedPhrases: z
+    .array(
+      z.object({
+        original: z.string(),
+        improved: z.string(),
+        note: z.string().optional(),
+      }),
+    )
+    .optional(),
+  recommendations: z.array(z.string()).optional(),
+  practicePlan: z.array(z.string()).optional(),
+  isPartialEvaluation: z.boolean().optional(),
+  partialEvaluationNote: z.string().optional(),
 });
 
 export type B2SpeakingScoreReportPayload = z.infer<typeof b2SpeakingScoreReportSchema>;
