@@ -13,8 +13,10 @@ import {
   formatB2ExamTranscript,
   getScriptLineAt,
   isExamFullyComplete,
+  isPart1ToPart2Transition,
   resolveStepsFromEngine,
   B2_LONG_TURN_SECONDS,
+  B2_PART1_QUESTION_COUNT,
 } from '@/features/speaking/domain/b2-speaking-exam-engine';
 import { B2_SPEAKING_MAX_CANDIDATE_TURNS } from '@/features/speaking/domain/b2-speaking-exam-bank.types';
 import { fetchAiUsageStatus } from '@/lib/ai/draloAiClient';
@@ -31,6 +33,16 @@ const PART_LABELS = {
   2: 'Part 2: Long turn',
   3: 'Part 3: Collaborative task',
   4: 'Part 4: Discussion',
+};
+
+const PART1_HEADER = {
+  en: 'Part 1: Interview · About 2 minutes',
+  es: 'Part 1: Entrevista · Unos 2 minutos',
+};
+
+const PART1_ANSWER_TIME = {
+  en: 'Suggested answer time: 20–30 seconds',
+  es: 'Tiempo recomendado por respuesta: 20–30 segundos',
 };
 
 /**
@@ -70,6 +82,7 @@ export default function B2SpeakingFullExamSimulation({
   const [usageRemaining, setUsageRemaining] = useState(null);
   const [usageUnlimited, setUsageUnlimited] = useState(false);
   const [showTranscriptReview, setShowTranscriptReview] = useState(false);
+  const [part1QuestionProgress, setPart1QuestionProgress] = useState(null);
 
   const media = useMediaRecorder();
   const userIdRef = useRef(null);
@@ -152,6 +165,7 @@ export default function B2SpeakingFullExamSimulation({
       let photosStep = null;
       let longTurn = null;
       let awaitCandidate = false;
+      let part1Progress = null;
 
       for (const step of steps) {
         if (step.kind === 'photos') {
@@ -166,6 +180,12 @@ export default function B2SpeakingFullExamSimulation({
           longTurn = step.seconds;
         } else if (step.kind === 'await_candidate') {
           awaitCandidate = true;
+          if (step.partNumber === 1 && step.questionNumber && step.totalQuestions) {
+            part1Progress = {
+              current: step.questionNumber,
+              total: step.totalQuestions,
+            };
+          }
         } else if (step.kind === 'exam_finished') {
           setPhase('summary');
           onExamComplete?.({ sessionId, examId: exam.id });
@@ -177,6 +197,7 @@ export default function B2SpeakingFullExamSimulation({
       setCurrentLines(displayLines);
       setAwaitingCandidate(awaitCandidate);
       setLongTurnLeft(longTurn);
+      setPart1QuestionProgress(part1Progress);
 
       for (const line of displayLines) {
         pushTranscriptLine({ ...line, transcriptSource: 'SCRIPT' });
@@ -212,6 +233,7 @@ export default function B2SpeakingFullExamSimulation({
     setFeedbackError('');
     setTranscript([]);
     setTurnIndex(0);
+    setPart1QuestionProgress(null);
     scriptBootstrappedRef.current = false;
 
     try {
@@ -312,6 +334,12 @@ export default function B2SpeakingFullExamSimulation({
       setEngineState(nextState);
       setDraftText('');
       setLongTurnLeft(null);
+      setPart1QuestionProgress(null);
+
+      if (isPart1ToPart2Transition(engineState, nextState)) {
+        setPhase('part1_complete');
+        return;
+      }
 
       if (isExamFullyComplete(nextState)) {
         setPhase('summary');
@@ -394,7 +422,12 @@ export default function B2SpeakingFullExamSimulation({
           {isEn ? 'min' : 'min'}
         </p>
         <ul className="levels-b2-speaking-full-exam__parts-list">
-          {[1, 2, 3, 4].map((n) => (
+          <li>
+            {isEn
+              ? `Part 1: Interview · ${B2_PART1_QUESTION_COUNT} questions · ~2 minutes`
+              : `Part 1: Entrevista · ${B2_PART1_QUESTION_COUNT} preguntas · ~2 minutos`}
+          </li>
+          {[2, 3, 4].map((n) => (
             <li key={n}>{PART_LABELS[n]}</li>
           ))}
         </ul>
@@ -417,6 +450,35 @@ export default function B2SpeakingFullExamSimulation({
             : isEn
               ? 'Start exam'
               : 'Empezar examen'}
+        </button>
+      </div>
+    );
+  }
+
+  if (phase === 'part1_complete') {
+    return (
+      <div className="levels-b2-speaking-full-exam levels-b2-speaking-full-exam--part1-complete">
+        <h2 className="levels-b2-speaking-full-exam__title">
+          {isEn ? 'Part 1 complete' : 'Part 1 completada'}
+        </h2>
+        <p className="levels-b2-speaking-full-exam__meta">
+          {isEn
+            ? `You answered all ${B2_PART1_QUESTION_COUNT} interview questions.`
+            : `Has respondido las ${B2_PART1_QUESTION_COUNT} preguntas de la entrevista.`}
+        </p>
+        <p className="levels-b2-speaking-full-exam__meta">
+          {isEn ? 'Next: Part 2 — Long turn (~1 minute).' : 'Siguiente: Part 2 — Turno largo (~1 minuto).'}
+        </p>
+        <button
+          type="button"
+          className="levels-b2-speaking-session__phase-btn levels-b2-speaking-session__phase-btn--primary"
+          disabled={loading}
+          onClick={() => {
+            setPhase('active');
+            void playCurrentScriptStep(engineState);
+          }}
+        >
+          {isEn ? 'Continue to Part 2' : 'Continuar a Part 2'}
         </button>
       </div>
     );
@@ -491,16 +553,35 @@ export default function B2SpeakingFullExamSimulation({
     );
   }
 
+  const activePartNumber = engineState?.partNumber ?? 1;
+  const partHeaderLabel =
+    activePartNumber === 1 ? (isEn ? PART1_HEADER.en : PART1_HEADER.es) : PART_LABELS[activePartNumber];
+
   return (
     <div className="levels-b2-speaking-full-exam levels-b2-speaking-full-exam--active">
       <div className="levels-b2-speaking-full-exam__header">
-        <span className="levels-b2-speaking-full-exam__part-badge">
-          {PART_LABELS[engineState?.partNumber ?? 1]}
-        </span>
+        <span className="levels-b2-speaking-full-exam__part-badge">{partHeaderLabel}</span>
         <span className="levels-b2-speaking-full-exam__turn-count">
           {isEn ? 'Your answers:' : 'Tus respuestas:'} {candidateCount}/{B2_SPEAKING_MAX_CANDIDATE_TURNS}
         </span>
       </div>
+
+      {part1QuestionProgress ? (
+        <div className="levels-b2-speaking-full-exam__part1-progress" aria-live="polite">
+          <p className="levels-b2-speaking-full-exam__part1-question">
+            {isEn
+              ? `Question ${part1QuestionProgress.current} of ${part1QuestionProgress.total}`
+              : `Pregunta ${part1QuestionProgress.current} de ${part1QuestionProgress.total}`}
+          </p>
+          <p className="levels-b2-speaking-full-exam__part1-time">
+            {isEn ? PART1_ANSWER_TIME.en : PART1_ANSWER_TIME.es}
+          </p>
+          <p className="levels-b2-speaking-full-exam__part1-progress-bar" role="status">
+            {isEn ? 'Interview progress:' : 'Progreso de la entrevista:'}{' '}
+            {part1QuestionProgress.current}/{part1QuestionProgress.total}
+          </p>
+        </div>
+      ) : null}
 
       {currentLines.map((line, i) => (
         <div

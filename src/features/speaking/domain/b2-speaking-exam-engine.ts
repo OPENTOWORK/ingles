@@ -7,6 +7,8 @@ import type {
 } from './b2-speaking-exam-bank.types';
 
 export const B2_LONG_TURN_SECONDS = 60;
+/** Cambridge Part 1 interview — fixed question count per exam script. */
+export const B2_PART1_QUESTION_COUNT = 5;
 
 type ScriptLine = {
   partNumber: 1 | 2 | 3 | 4;
@@ -76,10 +78,11 @@ function buildScript(exam: B2SpeakingExamContent): ScriptLine[] {
 const scriptCache = new Map<string, ScriptLine[]>();
 
 export function getExamScript(exam: B2SpeakingExamContent): ScriptLine[] {
-  const cached = scriptCache.get(exam.id);
+  const cacheKey = `${exam.id}:p1-${exam.part1_questions.length}`;
+  const cached = scriptCache.get(cacheKey);
   if (cached) return cached;
   const built = buildScript(exam);
-  scriptCache.set(exam.id, built);
+  scriptCache.set(cacheKey, built);
   return built;
 }
 
@@ -137,10 +140,55 @@ export function resolveStepsFromEngine(
   }
 
   if (line.awaitCandidate) {
-    steps.push({ kind: 'await_candidate', partNumber: line.partNumber });
+    const questionNumber =
+      line.partNumber === 1 ? getPart1QuestionNumberForStep(exam, state.stepIndex) : null;
+    steps.push({
+      kind: 'await_candidate',
+      partNumber: line.partNumber,
+      ...(questionNumber != null
+        ? { questionNumber, totalQuestions: B2_PART1_QUESTION_COUNT }
+        : {}),
+    });
   }
 
   return steps;
+}
+
+/** 1-based index of the Part 1 interview question at this script step. */
+export function getPart1QuestionNumberForStep(
+  exam: B2SpeakingExamContent,
+  stepIndex: number,
+): number | null {
+  const script = getExamScript(exam);
+  const line = script[stepIndex];
+  if (!line || line.partNumber !== 1 || !line.awaitCandidate) return null;
+
+  let questionNumber = 0;
+  for (let i = 0; i <= stepIndex; i += 1) {
+    const row = script[i];
+    if (row?.partNumber === 1 && row.awaitCandidate) questionNumber += 1;
+  }
+  return questionNumber > 0 ? questionNumber : null;
+}
+
+export function isPart1CompleteState(
+  exam: B2SpeakingExamContent,
+  state: B2SpeakingExamEngineState,
+): boolean {
+  return state.partsCompleted.includes(1) || state.partNumber > 1;
+}
+
+/** True when the candidate has just finished the last Part 1 question. */
+export function isPart1ToPart2Transition(
+  prev: B2SpeakingExamEngineState,
+  next: B2SpeakingExamEngineState,
+): boolean {
+  return (
+    prev.partNumber === 1 &&
+    !prev.partsCompleted.includes(1) &&
+    next.partsCompleted.includes(1) &&
+    next.partNumber >= 2
+  );
 }
 
 export function advanceEnginePastDisplayOnly(

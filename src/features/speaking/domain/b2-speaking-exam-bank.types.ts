@@ -64,7 +64,13 @@ export type B2SpeakingExamEngineStep =
   | { kind: 'display'; speakerRole: B2SpeakingSpeakerRole; text: string; partNumber: number }
   | { kind: 'photos'; imageA: string; imageB: string; prompt: string; partNumber: 2 }
   | { kind: 'long_turn_start'; seconds: number; partNumber: 2 }
-  | { kind: 'await_candidate'; partNumber: number }
+  | {
+      kind: 'await_candidate';
+      partNumber: number;
+      /** Part 1 only — 1-based question index within the interview. */
+      questionNumber?: number;
+      totalQuestions?: number;
+    }
   | { kind: 'part_transition'; nextPart: number; message: string }
   | { kind: 'exam_finished' };
 
