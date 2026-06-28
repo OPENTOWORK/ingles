@@ -1,28 +1,8 @@
 /**
- * Improved B2 Reading Part 5 & Part 7 content for exams 1–3.
+ * Improved B2 Reading Part 5 & Part 7 content for exams 1–6.
  */
-
-function mcq(num, questionType, prompt, options, answer) {
-  return {
-    id: `q${num}`,
-    number: num,
-    type: 'multiple-choice',
-    questionType,
-    prompt,
-    options: ['A', 'B', 'C', 'D'].map((L) => ({ letter: L, text: options[L] })),
-    answer,
-  };
-}
-
-function match(num, prompt, answer) {
-  return { id: `q${num}`, number: num, type: 'matching', prompt, answer };
-}
-
-const PART5_DIRECTIONS =
-  'You are going to read a magazine article. For questions 31–36, choose the answer (A, B, C or D) which you think fits best according to the text.';
-
-const PART7_INTRO =
-  'Which person (A–D) …? The people may be chosen more than once.';
+import { mcq, match, PART7_INTRO } from './b2ReadingContentHelpers.mjs';
+import { EXAMS_456_READING } from './b2ReadingExams456Content.mjs';
 
 export const IMPROVED_B2_READING = {
   1: {
@@ -271,7 +251,7 @@ The concluding tone is cautiously optimistic. Repair will not single-handedly re
 };
 
 export function getImprovedPart(examSlot, partNumber) {
-  const exam = IMPROVED_B2_READING[examSlot];
+  const exam = IMPROVED_B2_READING[examSlot] || EXAMS_456_READING[examSlot];
   if (!exam) return null;
   const part = partNumber === 5 ? exam.part5 : partNumber === 7 ? exam.part7 : null;
   if (!part) return null;
