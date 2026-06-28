@@ -4,6 +4,9 @@ import type { CorrectionReportPayload } from '@/features/speaking/domain/schemas
 import type { MicroFeedback } from '@/features/speaking/domain/types';
 import { formatB2SpeakingScoreLine } from '@/features/speaking/domain/b2-speaking-score';
 
+const PRONUNCIATION_TRANSCRIPT_DISCLAIMER =
+  'Pronunciation is estimated from the transcript and may not reflect actual pronunciation accuracy.';
+
 type Props = {
   micro?: MicroFeedback | null;
   report?: CorrectionReportPayload | null;
@@ -14,6 +17,8 @@ export function FeedbackCards({ micro, report }: Props) {
 
   if (report) {
     const b2 = report.b2Speaking;
+    const showLegacyCriteria = !b2 && report.criteria.length > 0;
+    const showLegacyPronunciationFooter = !b2 && report.pronunciation;
 
     return (
       <section className="speaking-feedback-report" aria-label="Speaking feedback">
@@ -21,14 +26,20 @@ export function FeedbackCards({ micro, report }: Props) {
           <div className="speaking-feedback-report__summary">
             <div className="speaking-feedback-report__score-head">
               <p className="speaking-feedback-report__score-label">
-                Speaking score:{' '}
+                Dralo estimated Cambridge-style score:{' '}
                 <strong>
                   {b2.total}/{b2.maxTotal}
                 </strong>
               </p>
+              <small className="speaking-feedback-report__training-note">
+                This is an estimated training score, not an official Cambridge result.
+              </small>
               <p className="speaking-feedback-report__level">
                 Estimated level: <strong>{b2.estimatedLevel}</strong>
               </p>
+              {b2.shortSummary ? (
+                <p className="speaking-feedback-report__short-summary">{b2.shortSummary}</p>
+              ) : null}
             </div>
             <ul className="speaking-feedback-report__b2-criteria">
               {b2.criteria.map((c) => (
@@ -40,9 +51,14 @@ export function FeedbackCards({ micro, report }: Props) {
                 </li>
               ))}
             </ul>
+            {report.pronunciation.isEstimated ? (
+              <p className="speaking-feedback-report__pronunciation">
+                {PRONUNCIATION_TRANSCRIPT_DISCLAIMER}
+              </p>
+            ) : null}
             {b2.partFeedback?.length ? (
               <div className="speaking-feedback-report__part-notes">
-                <p className="speaking-feedback-report__part-notes-title">Part feedback</p>
+                <p className="speaking-feedback-report__part-notes-title">Diagnostic feedback by part</p>
                 <ul>
                   {b2.partFeedback.map((item) => (
                     <li key={item.part}>
@@ -55,7 +71,7 @@ export function FeedbackCards({ micro, report }: Props) {
           </div>
         ) : null}
 
-        {report.criteria.length > 0 ? (
+        {showLegacyCriteria ? (
           <div className="speaking-feedback-report__metrics">
             {report.criteria.map((c) => (
               <article key={c.criterion} className="speaking-feedback-report__metric-card">
@@ -87,7 +103,7 @@ export function FeedbackCards({ micro, report }: Props) {
         </div>
 
         <footer className="speaking-feedback-report__footer">
-          <p>{report.shortExplanation}</p>
+          {!b2 && report.shortExplanation ? <p>{report.shortExplanation}</p> : null}
           {report.isPartialEvaluation && report.partialEvaluationNote ? (
             <p className="speaking-feedback-report__partial">{report.partialEvaluationNote}</p>
           ) : null}
@@ -144,10 +160,12 @@ export function FeedbackCards({ micro, report }: Props) {
               </ul>
             </div>
           ) : null}
-          <p className="speaking-feedback-report__pronunciation">
-            Pronunciation: {report.pronunciation.score}/5 — {report.pronunciation.feedback}{' '}
-            {report.pronunciation.isEstimated ? '(estimated from transcript)' : ''}
-          </p>
+          {showLegacyPronunciationFooter ? (
+            <p className="speaking-feedback-report__pronunciation">
+              Pronunciation: {report.pronunciation.score}/5 — {report.pronunciation.feedback}{' '}
+              {report.pronunciation.isEstimated ? PRONUNCIATION_TRANSCRIPT_DISCLAIMER : ''}
+            </p>
+          ) : null}
         </footer>
       </section>
     );

@@ -44,13 +44,16 @@ export async function runExamFinalReport(params: {
             '- interactive_communication (Interactive Communication — especially Part 3 collaborative task)',
             '- global_achievement (Global Achievement)',
             'Output JSON only with keys:',
-            '- b2Speaking: { criteria: [{ key, label, score (0–5, half points ok), max: 5, multiplier }], partFeedback: [{ part, note }] }',
+            '- b2Speaking: { criteria: [{ key, label, score (0–5, half points ok), max: 5, multiplier }], shortSummary, partFeedback: [{ part, note }] }',
+            '  shortSummary: 2–4 sentences covering estimated level, overall performance, and the main improvement priority (no per-part scores).',
             '  Use multipliers: grammar_vocabulary 2, discourse_management 2, pronunciation 2, interactive_communication 2, global_achievement 4.',
             '  Do NOT compute total — the app will compute total/60.',
             '- criteria: legacy array of 5 items (taskAchievement, grammar, vocabulary, fluency, pronunciation) with score 1–5 for backward compatibility',
             '- correctedVersion, modelAnswer, shortExplanation',
-            '- pronunciation: { score, feedback, isEstimated: true }',
-            'Provide partFeedback notes for Parts 1–4 but official scoring is holistic only.',
+            '- pronunciation: { score, feedback, isEstimated: true } — always set isEstimated true (transcript-only).',
+            'partFeedback is diagnostic only — no scores per part. Use exactly these part labels:',
+            '"Part 1: Interview", "Part 2: Long turn", "Part 3: Collaborative task", "Part 4: Discussion".',
+            'Official scoring is holistic across all parts only.',
             'Also include: strengths (array), mainErrors (array), improvedPhrases ([{original, improved, note}]), recommendations (array), practicePlan (array).',
             'If the transcript indicates missing or incomplete parts, set isPartialEvaluation: true and partialEvaluationNote explaining what was not assessed.',
           ].join(' ')
@@ -107,6 +110,7 @@ function attachB2SpeakingTotals(parsed: Record<string, unknown>, isB2Exam: boole
   const raw = parsed.b2Speaking as {
     criteria?: Array<{ key?: string; score?: number }>;
     partFeedback?: B2SpeakingScoreReportPayload['partFeedback'];
+    shortSummary?: string;
   };
 
   const scores: Partial<Record<B2SpeakingCriterionKey, number>> = {};
@@ -117,9 +121,19 @@ function attachB2SpeakingTotals(parsed: Record<string, unknown>, isB2Exam: boole
   }
 
   const report = buildB2SpeakingScoreReport(scores, raw.partFeedback);
+  const shortSummary =
+    typeof raw.shortSummary === 'string' && raw.shortSummary.trim()
+      ? raw.shortSummary.trim()
+      : typeof parsed.shortExplanation === 'string' && parsed.shortExplanation.trim()
+        ? parsed.shortExplanation.trim()
+        : `Your performance is currently around ${report.estimatedLevel}. Review the criteria and recommendations below for your main improvement priorities.`;
+
   return {
     ...parsed,
-    b2Speaking: report,
+    b2Speaking: {
+      ...report,
+      shortSummary,
+    },
   };
 }
 
@@ -144,15 +158,26 @@ function mockExamReport(cefr: CefrLevel, isB2Exam = false): CorrectionReportPayl
   };
 
   if (isB2Exam) {
+    const b2Core = buildB2SpeakingScoreReport({
+      grammar_vocabulary: 3.5,
+      discourse_management: 3.5,
+      pronunciation: 4,
+      interactive_communication: 3,
+      global_achievement: 3.5,
+    });
     return correctionReportSchema.parse({
       ...base,
-      b2Speaking: buildB2SpeakingScoreReport({
-        grammar_vocabulary: 3.5,
-        discourse_management: 3.5,
-        pronunciation: 4,
-        interactive_communication: 3,
-        global_achievement: 3.5,
-      }),
+      b2Speaking: {
+        ...b2Core,
+        shortSummary:
+          'Your performance is currently around B2. You communicate your ideas clearly, but you need more precise grammar and better development of longer answers.',
+        partFeedback: [
+          { part: 'Part 1: Interview', note: 'Answers are relevant but could be extended with more detail.' },
+          { part: 'Part 2: Long turn', note: 'Organise the long turn with a clearer opening and closing.' },
+          { part: 'Part 3: Collaborative task', note: 'Respond more directly to your partner’s suggestions.' },
+          { part: 'Part 4: Discussion', note: 'Support opinions with examples and link back to earlier points.' },
+        ],
+      },
     });
   }
 

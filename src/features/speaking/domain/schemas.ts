@@ -45,6 +45,7 @@ export const b2SpeakingScoreReportSchema = z.object({
   total: z.number().min(0).max(60),
   maxTotal: z.literal(60),
   estimatedLevel: z.string(),
+  shortSummary: z.string(),
   partFeedback: z
     .array(
       z.object({
