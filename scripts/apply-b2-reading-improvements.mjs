@@ -1,6 +1,6 @@
 /**
  * Validate improved Part 5/7 previews and save to Supabase.
- * Usage: node --loader ./scripts/alias-loader.mjs scripts/apply-b2-reading-improvements.mjs [1] [2] [3]
+ * Usage: node --loader ./scripts/alias-loader.mjs scripts/apply-b2-reading-improvements.mjs [1] [2] [3] [4] [5] [6]
  */
 import { writeFileSync, mkdirSync } from 'fs';
 import path from 'path';
