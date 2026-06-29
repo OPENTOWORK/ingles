@@ -2,12 +2,11 @@ import { NextResponse } from 'next/server';
 import type { CefrLevel, SpeakingMode } from '@prisma/client';
 import { runCorrectionEngine } from '@/features/speaking/services/evaluation/correction-engine';
 import { saveEvaluation, completeSession } from '@/features/speaking/services/sessions/speaking-session.service';
-import { prisma } from '@/lib/prisma';
-import { hasDatabaseUrl } from '@/lib/prisma';
 import { getSupabaseUserFromRequest } from '@/lib/getSupabaseUserFromRequest';
 import { AI_ACTIONS, getDailyUsageSnapshot } from '@/lib/aiUsage';
 import { aiErrorJson, runAiPreflight } from '@/lib/aiUsageRouteHelpers';
 import { handleExamSpeakingFeedback } from '@/lib/aiActionHandlers';
+import { resolveSpeakingExamTranscript } from '@/features/speaking/services/evaluation/resolve-speaking-exam-transcript';
 
 export const dynamic = 'force-dynamic';
 
@@ -41,13 +40,12 @@ export async function POST(req: Request) {
 
     let text = body.combinedTranscript?.trim() || body.text?.trim() || '';
 
-    if (mode === 'EXAM' && !text && hasDatabaseUrl() && !sessionId.startsWith('local_')) {
-      const turns = await prisma.speakingTurn.findMany({
-        where: { sessionId },
-        orderBy: { createdAt: 'asc' },
+    if (mode === 'EXAM' && sessionId) {
+      text = await resolveSpeakingExamTranscript({
+        sessionId,
+        examId: body.examId ?? null,
+        combinedTranscript: text,
       });
-      const userLines = turns.filter((t) => t.role === 'USER').map((t) => t.text);
-      text = userLines.join('\n\n');
     }
 
     if (!text) {

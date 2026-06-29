@@ -32,11 +32,40 @@ export type SpeakingEvidenceReport = {
 };
 
 const PART_HEADERS: Record<number, RegExp> = {
-  1: /^Part 1 - Interview/im,
-  2: /^Part 2 - Long turn/im,
-  3: /^Part 3 - Collaborative task/im,
-  4: /^Part 4 - Discussion/im,
+  1: /^Part\s*1\s*[-–—:]\s*Interview/im,
+  2: /^Part\s*2\s*[-–—:]\s*Long turn/im,
+  3: /^Part\s*3\s*[-–—:]\s*Collaborative task/im,
+  4: /^Part\s*4\s*[-–—:]\s*Discussion/im,
 };
+
+const CANDIDATE_LINE_RE =
+  /^(?:Candidate|Student|User|Learner|CANDIDATE|STUDENT|USER):\s*(.*)$/i;
+
+export function extractCandidateTextFromLine(line: string): string | null {
+  const trimmed = line.replace(/\r$/, '').trim();
+  if (!trimmed) return null;
+  const labeled = trimmed.match(CANDIDATE_LINE_RE);
+  if (labeled) return labeled[1]?.trim() || null;
+  if (/^role:\s*candidate\b/i.test(trimmed)) {
+    return trimmed.replace(/^role:\s*candidate\s*[-–—:]?\s*/i, '').trim() || null;
+  }
+  return null;
+}
+
+export function countCandidateLinesInTranscript(transcript: string): number {
+  return transcript
+    .split('\n')
+    .map((line) => extractCandidateTextFromLine(line))
+    .filter(Boolean).length;
+}
+
+export function countCandidateWordsInTranscript(transcript: string): number {
+  return transcript
+    .split('\n')
+    .map((line) => extractCandidateTextFromLine(line))
+    .filter(Boolean)
+    .reduce((sum, line) => sum + countWords(line ?? ''), 0);
+}
 
 const MIN_PART1_TURNS = 5;
 const MIN_PART2_WORDS = 80;
@@ -61,13 +90,11 @@ export function detectNonEnglishInTranscript(text: string): boolean {
   if (!sample) return false;
   if (SPANISH_HINT.test(sample)) return true;
   const lines = sample.split(/\n+/).filter(Boolean);
-  let nonEnglishLines = 0;
   for (const line of lines) {
-    const candidate = line.replace(/^Candidate:\s*/i, '').trim();
-    if (!candidate) continue;
-    if (SPANISH_HINT.test(candidate)) nonEnglishLines += 1;
+    const candidate = extractCandidateTextFromLine(line);
+    if (candidate && SPANISH_HINT.test(candidate)) return true;
   }
-  return nonEnglishLines > 0;
+  return false;
 }
 
 type ParsedPart = {
@@ -93,12 +120,12 @@ function parseFormattedTranscript(transcript: string): ParsedPart[] {
     }
     if (!partNumber) continue;
 
-    const notCompleted = /\[Not completed/i.test(trimmed);
     const candidateLines = trimmed
       .split('\n')
-      .filter((line) => /^Candidate:\s*/i.test(line))
-      .map((line) => line.replace(/^Candidate:\s*/i, '').trim())
-      .filter(Boolean);
+      .map((line) => extractCandidateTextFromLine(line))
+      .filter((line): line is string => Boolean(line));
+
+    const notCompleted = candidateLines.length === 0 && /\[Not completed/i.test(trimmed);
 
     parts.push({ partNumber, candidateLines, notCompleted });
   }
@@ -152,7 +179,10 @@ export function buildSpeakingEvidenceReport(
     .filter((p) => p.candidateLines.length > 0 && !p.notCompleted)
     .map((p) => p.partNumber);
   const partsMissing = [1, 2, 3, 4].filter((p) => !partsPresent.includes(p));
-  const totalCandidateWordCount = Object.values(candidateWordCountByPart).reduce((a, b) => a + b, 0);
+  const totalCandidateWordCount =
+    parsed.length > 0
+      ? Object.values(candidateWordCountByPart).reduce((a, b) => a + b, 0)
+      : countCandidateWordsInTranscript(transcript);
   const nonEnglishDetected = detectNonEnglishInTranscript(transcript);
 
   const completedMeta = metadata.partsCompleted ?? [];

@@ -9,6 +9,7 @@ import {
   getPart1QuestionNumberForStep,
   isExamFullyComplete,
   isPart1ToPart2Transition,
+  ensurePastPart1IfComplete,
   B2_PART1_QUESTION_COUNT,
 } from '../src/features/speaking/domain/b2-speaking-exam-engine.ts';
 
@@ -66,6 +67,15 @@ test('Part 1 ends after exactly five candidate answers and transitions to Part 2
   }
 
   assert.equal(part1Answers, B2_PART1_QUESTION_COUNT);
+});
+
+test('ensurePastPart1IfComplete skips any remaining Part 1 script steps', () => {
+  const exam = getB2SpeakingExamBySlot(1);
+  let state = createB2ExamEngineState(exam.id);
+  state = { ...state, stepIndex: 0, partsCompleted: [1], partNumber: 1 };
+  const fixed = ensurePastPart1IfComplete(exam, state);
+  assert.equal(fixed.partNumber, 2);
+  assert.ok(fixed.stepIndex > 0);
 });
 
 test('formatB2ExamTranscript labels parts and roles', () => {

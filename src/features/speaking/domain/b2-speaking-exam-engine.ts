@@ -109,7 +109,8 @@ export function resolveStepsFromEngine(
   state: B2SpeakingExamEngineState,
 ): B2SpeakingExamEngineStep[] {
   const script = getExamScript(exam);
-  const line = script[state.stepIndex];
+  const normalizedState = ensurePastPart1IfComplete(exam, state);
+  const line = script[normalizedState.stepIndex];
   if (!line) {
     return [{ kind: 'exam_finished' }];
   }
@@ -141,7 +142,7 @@ export function resolveStepsFromEngine(
 
   if (line.awaitCandidate) {
     const questionNumber =
-      line.partNumber === 1 ? getPart1QuestionNumberForStep(exam, state.stepIndex) : null;
+      line.partNumber === 1 ? getPart1QuestionNumberForStep(exam, normalizedState.stepIndex) : null;
     steps.push({
       kind: 'await_candidate',
       partNumber: line.partNumber,
@@ -169,6 +170,39 @@ export function getPart1QuestionNumberForStep(
     if (row?.partNumber === 1 && row.awaitCandidate) questionNumber += 1;
   }
   return questionNumber > 0 ? questionNumber : null;
+}
+
+/** If Part 1 is marked complete, never render further Part 1 script steps. */
+export function ensurePastPart1IfComplete(
+  exam: B2SpeakingExamContent,
+  state: B2SpeakingExamEngineState,
+): B2SpeakingExamEngineState {
+  if (!state.partsCompleted.includes(1)) return state;
+  const script = getExamScript(exam);
+  const current = script[state.stepIndex];
+  if (!current || current.partNumber > 1) return state;
+
+  let idx = state.stepIndex;
+  while (idx < script.length && (script[idx]?.partNumber ?? 1) === 1) {
+    idx += 1;
+  }
+  const nextLine = script[idx];
+  if (!nextLine) return state;
+
+  return {
+    ...state,
+    stepIndex: idx,
+    partNumber: nextLine.partNumber,
+    phase: nextLine.startLongTurn
+      ? 'long_turn_recording'
+      : nextLine.awaitCandidate
+        ? 'await_candidate'
+        : 'intro',
+  };
+}
+
+export function countPart1CandidateTurns(turns: B2SpeakingExamTurn[]): number {
+  return turns.filter((t) => t.partNumber === 1 && t.speakerRole === 'candidate').length;
 }
 
 export function isPart1CompleteState(
@@ -242,23 +276,38 @@ export function advanceEngineAfterCandidate(
 
   const nextLine = script[nextIndex];
   const nextPart = nextLine?.partNumber ?? partNumber;
-  if (nextPart !== partNumber && !partsCompleted.includes(partNumber)) {
+  if (partNumber === 1 && current?.awaitCandidate) {
+    const part1QuestionsAnswered = script
+      .slice(0, state.stepIndex + 1)
+      .filter((row) => row.partNumber === 1 && row.awaitCandidate).length;
+    if (part1QuestionsAnswered >= B2_PART1_QUESTION_COUNT && nextPart === 1) {
+      let forcedIndex = nextIndex;
+      while (forcedIndex < script.length && (script[forcedIndex]?.partNumber ?? 1) === 1) {
+        forcedIndex += 1;
+      }
+      nextIndex = forcedIndex;
+    }
+  }
+
+  const forcedLine = script[nextIndex];
+  const forcedPart = forcedLine?.partNumber ?? nextPart;
+  if (forcedPart !== partNumber && !partsCompleted.includes(partNumber)) {
     partsCompleted.push(partNumber);
   }
 
   let phase = state.phase;
-  if (nextLine?.startLongTurn) phase = 'long_turn_recording';
-  else if (nextLine?.awaitCandidate) phase = 'await_candidate';
+  if (forcedLine?.startLongTurn) phase = 'long_turn_recording';
+  else if (forcedLine?.awaitCandidate) phase = 'await_candidate';
   else phase = 'intro';
 
   return {
     ...state,
     stepIndex: nextIndex,
-    partNumber: nextPart,
+    partNumber: forcedPart,
     phase,
     candidateTurnCount: state.candidateTurnCount + 1,
     partsCompleted,
-    longTurnSecondsLeft: nextLine?.startLongTurn ? B2_LONG_TURN_SECONDS : null,
+    longTurnSecondsLeft: forcedLine?.startLongTurn ? B2_LONG_TURN_SECONDS : null,
   };
 }
 

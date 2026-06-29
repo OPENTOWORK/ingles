@@ -17,6 +17,7 @@ import {
   resolveStepsFromEngine,
   B2_LONG_TURN_SECONDS,
   B2_PART1_QUESTION_COUNT,
+  countPart1CandidateTurns,
 } from '@/features/speaking/domain/b2-speaking-exam-engine';
 import { B2_SPEAKING_MAX_CANDIDATE_TURNS } from '@/features/speaking/domain/b2-speaking-exam-bank.types';
 import { fetchAiUsageStatus } from '@/lib/ai/draloAiClient';
@@ -49,6 +50,33 @@ const SAVE_WARNING = {
   en: 'We had a problem saving this answer, but you can continue. Your local transcript is still available for feedback.',
   es: 'Hubo un problema al guardar esta respuesta, pero puedes continuar. Tu transcript local sigue disponible para el feedback.',
 };
+
+function countCandidateTurns(turns) {
+  return turns.filter((line) => line.speakerRole === 'candidate').length;
+}
+
+function countCandidateWords(turns) {
+  return turns
+    .filter((line) => line.speakerRole === 'candidate')
+    .reduce((sum, line) => sum + String(line.text || '').trim().split(/\s+/).filter(Boolean).length, 0);
+}
+
+function detectPartsWithCandidate(turns) {
+  return [...new Set(turns.filter((line) => line.speakerRole === 'candidate').map((line) => line.partNumber))].sort(
+    (a, b) => a - b,
+  );
+}
+
+function logDevEvaluatePayload(formatted, turns, partsCompleted) {
+  if (process.env.NODE_ENV !== 'development') return;
+  console.log('[B2 Speaking exam] evaluate payload preview', {
+    candidateLineCount: countCandidateTurns(turns),
+    candidateWordCount: countCandidateWords(turns),
+    partsWithCandidate: detectPartsWithCandidate(turns),
+    partsCompleted,
+    combinedTranscriptPreview: formatted.slice(0, 1200),
+  });
+}
 
 /**
  * @param {{
@@ -100,6 +128,33 @@ export default function B2SpeakingFullExamSimulation({
   const examStartedAtRef = useRef(null);
   const turnTimestampsRef = useRef([]);
   const answerStartedAtRef = useRef(null);
+  const transcriptRef = useRef([]);
+
+  const resetLocalExamState = useCallback(() => {
+    transcriptRef.current = [];
+    setTranscript([]);
+    turnIndexRef.current = 0;
+    setTurnIndex(0);
+    setEngineState(null);
+    setSessionId(null);
+    setCurrentLines([]);
+    setPhotos(null);
+    setAwaitingCandidate(false);
+    setLongTurnLeft(null);
+    setDraftText('');
+    setEditableTranscript('');
+    setPart1QuestionProgress(null);
+    setFeedbackReport(null);
+    setFeedbackError('');
+    setSaveWarning('');
+    setError('');
+    setShowTranscriptReview(false);
+    setInteractionStatus('ready');
+    scriptBootstrappedRef.current = false;
+    examStartedAtRef.current = null;
+    turnTimestampsRef.current = [];
+    answerStartedAtRef.current = null;
+  }, []);
 
   const beginBackgroundSave = useCallback(() => {
     setPendingSaveCount((n) => n + 1);
@@ -211,7 +266,11 @@ export default function B2SpeakingFullExamSimulation({
   }, []);
 
   const pushTranscriptLine = useCallback((line) => {
-    setTranscript((prev) => [...prev, line]);
+    setTranscript((prev) => {
+      const next = [...prev, line];
+      transcriptRef.current = next;
+      return next;
+    });
   }, []);
 
   const playCurrentScriptStep = useCallback(
@@ -299,19 +358,8 @@ export default function B2SpeakingFullExamSimulation({
 
   const startExam = useCallback(async () => {
     setStartingExam(true);
-    setError('');
-    setSaveWarning('');
-    setFeedbackReport(null);
-    setFeedbackError('');
-    setTranscript([]);
-    turnIndexRef.current = 0;
-    setTurnIndex(0);
-    setPart1QuestionProgress(null);
-    setInteractionStatus('ready');
-    scriptBootstrappedRef.current = false;
-    examStartedAtRef.current = new Date().toISOString();
-    turnTimestampsRef.current = [];
-    answerStartedAtRef.current = null;
+    resetLocalExamState();
+    setPhase('starting');
 
     try {
       const res = await fetch(buildClientApiUrl('/api/speaking/b2-exam/session'), {
@@ -323,6 +371,7 @@ export default function B2SpeakingFullExamSimulation({
       if (!res.ok) throw new Error(isEn ? 'Could not start exam session.' : 'No se pudo iniciar la sesión.');
       const data = await res.json();
       const initialState = createB2ExamEngineState(exam.id);
+      examStartedAtRef.current = new Date().toISOString();
       setSessionId(data.sessionId);
       setEngineState(initialState);
       setPhase('active');
@@ -334,7 +383,7 @@ export default function B2SpeakingFullExamSimulation({
     } finally {
       setStartingExam(false);
     }
-  }, [exam, examSlot, isEn, playCurrentScriptStep]);
+  }, [exam, examSlot, isEn, playCurrentScriptStep, resetLocalExamState]);
 
   useEffect(() => {
     if (autoStart && phase === 'starting') {
@@ -406,7 +455,16 @@ export default function B2SpeakingFullExamSimulation({
       answerStartedAtRef.current = null;
 
       const prevState = engineState;
-      const nextState = advanceEngineAfterCandidate(exam, engineState);
+      let nextState = advanceEngineAfterCandidate(exam, engineState);
+
+      if (countPart1CandidateTurns(transcriptRef.current) + 1 >= B2_PART1_QUESTION_COUNT) {
+        if (!nextState.partsCompleted.includes(1)) {
+          nextState = {
+            ...nextState,
+            partsCompleted: [...new Set([...nextState.partsCompleted, 1])],
+          };
+        }
+      }
 
       pushTranscriptLine({
         partNumber,
@@ -460,8 +518,21 @@ export default function B2SpeakingFullExamSimulation({
     setFeedbackLoading(true);
     setFeedbackError('');
 
+    const transcriptLines = transcriptRef.current;
     const partsCompleted = engineState?.partsCompleted ?? [];
-    const formatted = formatB2ExamTranscript(transcript, exam, partsCompleted);
+    const formatted = formatB2ExamTranscript(transcriptLines, exam, partsCompleted);
+    logDevEvaluatePayload(formatted, transcriptLines, partsCompleted);
+
+    if (countCandidateTurns(transcriptLines) === 0) {
+      setFeedbackError(
+        isEn
+          ? 'No candidate answers found in the transcript. Start a new full exam and submit each answer with Send.'
+          : 'No hay respuestas del candidato en el transcript. Empieza un examen nuevo y envía cada respuesta con Enviar.',
+      );
+      setFeedbackLoading(false);
+      return;
+    }
+
     const isPartial = !isExamFullyComplete(engineState ?? createB2ExamEngineState(exam.id));
 
     try {
@@ -540,6 +611,11 @@ export default function B2SpeakingFullExamSimulation({
             : 'Beta gratuita: 3 feedbacks de speaking exam al día.'}
         </p>
         {error ? <p className="levels-b2-speaking-session__error">{error}</p> : null}
+        <p className="levels-b2-writing-panel__alpha-limit" style={{ marginTop: '0.75rem' }}>
+          {isEn
+            ? 'Tip: if the exam behaves oddly, use Start new full exam to reset local state (no localStorage is used for this simulation).'
+            : 'Consejo: si el examen se comporta raro, usa Empezar un examen nuevo para resetear el estado local (esta simulación no usa localStorage).'}
+        </p>
         <button
           type="button"
           className="levels-b2-speaking-session__phase-btn levels-b2-speaking-session__phase-btn--primary"
@@ -559,6 +635,7 @@ export default function B2SpeakingFullExamSimulation({
   }
 
   if (phase === 'part1_complete') {
+    const part1Candidates = countPart1CandidateTurns(transcriptRef.current);
     return (
       <div className="levels-b2-speaking-full-exam levels-b2-speaking-full-exam--part1-complete">
         <h2 className="levels-b2-speaking-full-exam__title">
@@ -566,11 +643,18 @@ export default function B2SpeakingFullExamSimulation({
         </h2>
         <p className="levels-b2-speaking-full-exam__meta">
           {isEn
-            ? `You answered all ${B2_PART1_QUESTION_COUNT} interview questions.`
-            : `Has respondido las ${B2_PART1_QUESTION_COUNT} preguntas de la entrevista.`}
+            ? 'You have completed the interview section.'
+            : 'Has completado la sección de entrevista.'}
         </p>
         <p className="levels-b2-speaking-full-exam__meta">
-          {isEn ? 'Next: Part 2 — Long turn (~1 minute).' : 'Siguiente: Part 2 — Turno largo (~1 minuto).'}
+          {isEn
+            ? 'Next: Part 2 — Long turn with photographs'
+            : 'Siguiente: Part 2 — Turno largo con fotografías'}
+        </p>
+        <p className="levels-b2-speaking-full-exam__meta">
+          {isEn
+            ? `${part1Candidates} answers saved for Part 1.`
+            : `${part1Candidates} respuestas guardadas en Part 1.`}
         </p>
         <button
           type="button"
@@ -582,6 +666,34 @@ export default function B2SpeakingFullExamSimulation({
           }}
         >
           {isEn ? 'Continue to Part 2' : 'Continuar a Part 2'}
+        </button>
+        <button
+          type="button"
+          className="levels-b2-speaking-session__secondary-btn"
+          style={{ marginTop: '0.75rem' }}
+          disabled={feedbackLoading || limitReached || part1Candidates === 0}
+          onClick={() => void requestFeedback()}
+        >
+          {feedbackLoading
+            ? isEn
+              ? 'Getting feedback…'
+              : 'Generando feedback…'
+            : isEn
+              ? 'Get partial feedback (Part 1 only)'
+              : 'Obtener feedback parcial (solo Part 1)'}
+        </button>
+        {feedbackError ? <p className="levels-b2-speaking-session__error">{feedbackError}</p> : null}
+        {feedbackReport ? <FeedbackCards report={feedbackReport} /> : null}
+        <button
+          type="button"
+          className="levels-b2-speaking-session__secondary-btn"
+          style={{ marginTop: '0.75rem' }}
+          onClick={() => {
+            resetLocalExamState();
+            setPhase('intro');
+          }}
+        >
+          {isEn ? 'Start new full exam' : 'Empezar un examen nuevo'}
         </button>
       </div>
     );
@@ -612,7 +724,7 @@ export default function B2SpeakingFullExamSimulation({
               type="button"
               className="levels-b2-writing-panel__submit"
               onClick={() => void requestFeedback()}
-              disabled={feedbackLoading || limitReached || transcript.length === 0}
+              disabled={feedbackLoading || limitReached || countCandidateTurns(transcriptRef.current) === 0}
             >
               {feedbackLoading
                 ? isEn
@@ -652,6 +764,17 @@ export default function B2SpeakingFullExamSimulation({
           </pre>
         ) : null}
         {feedbackReport ? <FeedbackCards report={feedbackReport} /> : null}
+        <button
+          type="button"
+          className="levels-b2-speaking-session__secondary-btn"
+          style={{ marginTop: '1rem' }}
+          onClick={() => {
+            resetLocalExamState();
+            setPhase('intro');
+          }}
+        >
+          {isEn ? 'Start new full exam' : 'Empezar un examen nuevo'}
+        </button>
       </div>
     );
   }

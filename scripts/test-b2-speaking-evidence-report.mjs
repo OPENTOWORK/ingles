@@ -87,3 +87,46 @@ test('capped level never exceeds B1 for very short output', () => {
   assert.ok((evidence.maxTotalCap ?? 60) <= 30);
   assert.ok(estimateB2LevelFromSpeakingTotal(Math.min(report.total, evidence.maxTotalCap ?? 30)) !== 'B2');
 });
+
+test('Part 1 only transcript detects candidate words and missing parts 2-4', () => {
+  const transcript = [
+    `Part 1 - Interview
+Examiner: Let's begin. Do you work or are you a student at the moment?
+Candidate: I work like an engineer in a company.
+Examiner: Can you tell me about the town or city where you live?
+Candidate: I am from Madrid. It is big and there are many people.
+Examiner: What do you enjoy doing in your free time?
+Candidate: I like watch TV and sometimes I play football.
+Examiner: How do people usually get around in your area?
+Candidate: People go by car and metro. It is normal.
+Examiner: Is there anything new you would like to learn or achieve?
+Candidate: I want learn more English because it is important for my job.`,
+    'Part 2 - Long turn\n[Not completed — no transcript for this part.]',
+    'Part 3 - Collaborative task\n[Not completed — no transcript for this part.]',
+    'Part 4 - Discussion\n[Not completed — no transcript for this part.]',
+  ].join('\n\n');
+
+  const evidence = buildSpeakingEvidenceReport(transcript, { partsCompleted: [1] });
+
+  assert.ok(evidence.partsPresent.includes(1));
+  assert.equal(evidence.candidateTurnCountByPart[1], 5);
+  assert.ok(evidence.totalCandidateWordCount > 0);
+  assert.deepEqual(evidence.partsMissing, [2, 3, 4]);
+  assert.ok(!evidence.partsMissing.includes(1));
+  assert.equal(evidence.canProvideFullScore, false);
+});
+
+test('Student and User labels are recognized as candidate speech', () => {
+  const transcript = [
+    `Part 1 - Interview
+Examiner: Hello
+Student: I am from Madrid.`,
+    'Part 2 - Long turn\n[Not completed — no transcript for this part.]',
+    'Part 3 - Collaborative task\n[Not completed — no transcript for this part.]',
+    'Part 4 - Discussion\n[Not completed — no transcript for this part.]',
+  ].join('\n\n');
+
+  const evidence = buildSpeakingEvidenceReport(transcript, {});
+  assert.ok(evidence.totalCandidateWordCount > 0);
+  assert.ok(evidence.partsPresent.includes(1));
+});
