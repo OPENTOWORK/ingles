@@ -22,6 +22,16 @@ export async function POST(req: Request) {
       taskPrompt?: string;
       examId?: string;
       isPartialEvaluation?: boolean;
+      evidenceMetadata?: {
+        partsCompleted?: number[];
+        startedAt?: string;
+        endedAt?: string;
+        responseDurationsSec?: number[];
+      };
+      partsCompleted?: number[];
+      startedAt?: string;
+      endedAt?: string;
+      responseDurationsSec?: number[];
     };
 
     const { sessionId, cefr, mode, taskPrompt } = body;
@@ -75,6 +85,12 @@ export async function POST(req: Request) {
           level: cefr,
           sessionId,
           context: 'exam',
+          evidenceMetadata: body.evidenceMetadata ?? {
+            partsCompleted: body.partsCompleted,
+            startedAt: body.startedAt,
+            endedAt: body.endedAt,
+            responseDurationsSec: body.responseDurationsSec,
+          },
         },
         aiCtx,
       );
@@ -113,7 +129,9 @@ export async function POST(req: Request) {
           isPartialEvaluation:
             body.isPartialEvaluation ??
             report?.isPartialEvaluation ??
+            report?.partialFeedback ??
             /\[Not completed|may be missing or incomplete/i.test(text),
+          canProvideFullScore: report?.canProvideFullScore ?? null,
         },
       },
     });

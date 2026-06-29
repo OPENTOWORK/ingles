@@ -97,6 +97,9 @@ export default function B2SpeakingFullExamSimulation({
   const userIdRef = useRef(null);
   const scriptBootstrappedRef = useRef(false);
   const turnIndexRef = useRef(0);
+  const examStartedAtRef = useRef(null);
+  const turnTimestampsRef = useRef([]);
+  const answerStartedAtRef = useRef(null);
 
   const beginBackgroundSave = useCallback(() => {
     setPendingSaveCount((n) => n + 1);
@@ -249,6 +252,9 @@ export default function B2SpeakingFullExamSimulation({
       setPhotos(photosStep);
       setCurrentLines(displayLines);
       setAwaitingCandidate(awaitCandidate);
+      if (awaitCandidate) {
+        answerStartedAtRef.current = Date.now();
+      }
       setLongTurnLeft(longTurn);
       setPart1QuestionProgress(part1Progress);
       setInteractionStatus('ready');
@@ -303,6 +309,9 @@ export default function B2SpeakingFullExamSimulation({
     setPart1QuestionProgress(null);
     setInteractionStatus('ready');
     scriptBootstrappedRef.current = false;
+    examStartedAtRef.current = new Date().toISOString();
+    turnTimestampsRef.current = [];
+    answerStartedAtRef.current = null;
 
     try {
       const res = await fetch(buildClientApiUrl('/api/speaking/b2-exam/session'), {
@@ -386,6 +395,16 @@ export default function B2SpeakingFullExamSimulation({
       }
 
       const partNumber = engineState.partNumber;
+      const responseDurationSec = answerStartedAtRef.current
+        ? Math.max(1, Math.round((Date.now() - answerStartedAtRef.current) / 1000))
+        : undefined;
+      turnTimestampsRef.current.push({
+        partNumber,
+        at: new Date().toISOString(),
+        responseDurationSec,
+      });
+      answerStartedAtRef.current = null;
+
       const prevState = engineState;
       const nextState = advanceEngineAfterCandidate(exam, engineState);
 
@@ -457,6 +476,14 @@ export default function B2SpeakingFullExamSimulation({
           combinedTranscript: formatted,
           examId: exam.id,
           isPartialEvaluation: isPartial,
+          evidenceMetadata: {
+            partsCompleted,
+            startedAt: examStartedAtRef.current,
+            endedAt: new Date().toISOString(),
+            responseDurationsSec: turnTimestampsRef.current
+              .map((entry) => entry.responseDurationSec)
+              .filter((value) => typeof value === 'number' && value > 0),
+          },
         }),
       });
       const data = await res.json().catch(() => ({}));

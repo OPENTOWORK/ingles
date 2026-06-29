@@ -17,23 +17,71 @@ export function FeedbackCards({ micro, report }: Props) {
 
   if (report) {
     const b2 = report.b2Speaking;
+    const canProvideFullScore = report.canProvideFullScore ?? report.speakingEvidence?.canProvideFullScore ?? true;
+    const speakingEvidence = report.speakingEvidence;
     const showLegacyCriteria = !b2 && report.criteria.length > 0;
     const showLegacyPronunciationFooter = !b2 && report.pronunciation;
 
     return (
       <section className="speaking-feedback-report" aria-label="Speaking feedback">
+        {!canProvideFullScore ? (
+          <div className="speaking-feedback-report__partial-banner" role="status">
+            <p className="speaking-feedback-report__partial-title">
+              <strong>Partial feedback only</strong>
+            </p>
+            <p className="speaking-feedback-report__partial">
+              {report.partialEvaluationNote ||
+                'This is partial feedback. Complete all four parts to receive a full estimated Cambridge-style score.'}
+            </p>
+            {speakingEvidence?.message ? (
+              <p className="speaking-feedback-report__partial">{speakingEvidence.message}</p>
+            ) : null}
+            {speakingEvidence?.partsMissing?.length ? (
+              <p className="speaking-feedback-report__partial">
+                Missing parts: {speakingEvidence.partsMissing.join(', ')}.
+              </p>
+            ) : null}
+            {speakingEvidence?.evidenceNotes?.length ? (
+              <ul className="speaking-feedback-report__partial-list">
+                {speakingEvidence.evidenceNotes.map((note, i) => (
+                  <li key={i}>{note}</li>
+                ))}
+              </ul>
+            ) : null}
+            <p className="speaking-feedback-report__partial">
+              Complete the full exam to receive a full estimated score.
+            </p>
+          </div>
+        ) : null}
+
         {b2 ? (
           <div className="speaking-feedback-report__summary">
             <div className="speaking-feedback-report__score-head">
-              <p className="speaking-feedback-report__score-label">
-                Dralo estimated Cambridge-style score:{' '}
-                <strong>
-                  {b2.total}/{b2.maxTotal}
-                </strong>
-              </p>
-              <small className="speaking-feedback-report__training-note">
-                This is an estimated training score, not an official Cambridge result.
-              </small>
+              {canProvideFullScore ? (
+                <>
+                  <p className="speaking-feedback-report__score-label">
+                    Dralo estimated Cambridge-style score:{' '}
+                    <strong>
+                      {b2.total}/{b2.maxTotal}
+                    </strong>
+                  </p>
+                  <small className="speaking-feedback-report__training-note">
+                    This is an estimated training score, not an official Cambridge result.
+                  </small>
+                </>
+              ) : (
+                <>
+                  <p className="speaking-feedback-report__score-label">
+                    Indicative score (partial exam):{' '}
+                    <strong>
+                      {b2.total}/{b2.maxTotal}
+                    </strong>
+                  </p>
+                  <small className="speaking-feedback-report__training-note">
+                    Not a full exam estimate — complete all four parts for a full Cambridge-style score.
+                  </small>
+                </>
+              )}
               <p className="speaking-feedback-report__level">
                 Estimated level: <strong>{b2.estimatedLevel}</strong>
               </p>

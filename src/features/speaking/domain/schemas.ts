@@ -82,6 +82,21 @@ export const correctionReportSchema = z.object({
   practicePlan: z.array(z.string()).optional(),
   isPartialEvaluation: z.boolean().optional(),
   partialEvaluationNote: z.string().optional(),
+  canProvideFullScore: z.boolean().optional(),
+  partialFeedback: z.boolean().optional(),
+  isCompleteExam: z.boolean().optional(),
+  speakingEvidence: z
+    .object({
+      isCompleteExam: z.boolean(),
+      canProvideFullScore: z.boolean(),
+      partialFeedback: z.boolean(),
+      message: z.string(),
+      partsMissing: z.array(z.number()).optional(),
+      evidenceNotes: z.array(z.string()).optional(),
+      totalCandidateWordCount: z.number().optional(),
+      nonEnglishDetected: z.boolean().optional(),
+    })
+    .optional(),
 });
 
 export type B2SpeakingScoreReportPayload = z.infer<typeof b2SpeakingScoreReportSchema>;
