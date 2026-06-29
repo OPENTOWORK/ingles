@@ -265,6 +265,10 @@ export async function saveB2ExamTurn(params: {
     await updateB2ExamSessionState(params.sessionId, params.examState);
   }
 
+  if (params.examState?.candidateTurnCount != null) {
+    return { candidateTurnCount: params.examState.candidateTurnCount };
+  }
+
   const updated = await getB2ExamSessionState(params.sessionId);
   return { candidateTurnCount: updated?.examState.candidateTurnCount ?? 0 };
 }

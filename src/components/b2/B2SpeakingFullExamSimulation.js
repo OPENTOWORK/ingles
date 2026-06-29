@@ -45,6 +45,11 @@ const PART1_ANSWER_TIME = {
   es: 'Tiempo recomendado por respuesta: 20–30 segundos',
 };
 
+const SAVE_WARNING = {
+  en: 'We had a problem saving this answer, but you can continue. Your local transcript is still available for feedback.',
+  es: 'Hubo un problema al guardar esta respuesta, pero puedes continuar. Tu transcript local sigue disponible para el feedback.',
+};
+
 /**
  * @param {{
  *   examSlot: number,
@@ -73,7 +78,11 @@ export default function B2SpeakingFullExamSimulation({
   const [longTurnLeft, setLongTurnLeft] = useState(null);
   const [draftText, setDraftText] = useState('');
   const [editableTranscript, setEditableTranscript] = useState('');
-  const [loading, setLoading] = useState(false);
+  const [startingExam, setStartingExam] = useState(false);
+  /** @type {['ready'|'transcribing'|'saving'|'recording', Function]} */
+  const [interactionStatus, setInteractionStatus] = useState('ready');
+  const [pendingSaveCount, setPendingSaveCount] = useState(0);
+  const [saveWarning, setSaveWarning] = useState('');
   const [error, setError] = useState('');
   const [feedbackReport, setFeedbackReport] = useState(null);
   const [feedbackLoading, setFeedbackLoading] = useState(false);
@@ -87,6 +96,34 @@ export default function B2SpeakingFullExamSimulation({
   const media = useMediaRecorder();
   const userIdRef = useRef(null);
   const scriptBootstrappedRef = useRef(false);
+  const turnIndexRef = useRef(0);
+
+  const beginBackgroundSave = useCallback(() => {
+    setPendingSaveCount((n) => n + 1);
+    setInteractionStatus((prev) => (prev === 'transcribing' || prev === 'recording' ? prev : 'saving'));
+  }, []);
+
+  const endBackgroundSave = useCallback(() => {
+    setPendingSaveCount((n) => {
+      const next = Math.max(0, n - 1);
+      if (next === 0) {
+        setInteractionStatus((prev) => (prev === 'saving' ? 'ready' : prev));
+      }
+      return next;
+    });
+  }, []);
+
+  const onPersistFailure = useCallback(
+    (err) => {
+      const code = err?.code;
+      if (code === 'SPEAKING_SESSION_TURN_LIMIT_REACHED') {
+        setError(err.message || 'Turn limit reached');
+        return;
+      }
+      setSaveWarning(isEn ? SAVE_WARNING.en : SAVE_WARNING.es);
+    },
+    [isEn],
+  );
 
   const applyUsage = useCallback(
     (status) => {
@@ -124,8 +161,9 @@ export default function B2SpeakingFullExamSimulation({
   }, [applyUsage]);
 
   const persistTurn = useCallback(
-    async ({ speakerRole, text, partNumber, transcriptSource, nextEngineState }) => {
+    async ({ speakerRole, text, partNumber, transcriptSource, nextEngineState, turnIndex: explicitIndex }) => {
       if (!sessionId) return null;
+      const idx = explicitIndex ?? turnIndexRef.current;
       const res = await fetch(buildClientApiUrl('/api/speaking/b2-exam/turn'), {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -134,32 +172,47 @@ export default function B2SpeakingFullExamSimulation({
           sessionId,
           examId: exam.id,
           partNumber,
-          turnIndex,
+          turnIndex: idx,
           speakerRole,
           text,
           transcriptSource,
-          examState: nextEngineState ?? engineState,
+          examState: nextEngineState ?? null,
         }),
       });
       const data = await res.json().catch(() => ({}));
       if (!res.ok) {
-        if (data.code === 'SPEAKING_SESSION_TURN_LIMIT_REACHED') {
-          throw new Error(data.error || data.message);
-        }
-        throw new Error(data.error || 'Failed to save turn');
+        const err = new Error(data.error || data.message || 'Failed to save turn');
+        err.code = data.code;
+        throw err;
       }
-      setTurnIndex((n) => n + 1);
       return data;
     },
-    [sessionId, exam.id, turnIndex, engineState],
+    [sessionId, exam.id],
   );
+
+  const persistTurnBackground = useCallback(
+    (params) => {
+      beginBackgroundSave();
+      void persistTurn(params)
+        .catch(onPersistFailure)
+        .finally(endBackgroundSave);
+    },
+    [beginBackgroundSave, endBackgroundSave, onPersistFailure, persistTurn],
+  );
+
+  const allocateTurnIndex = useCallback(() => {
+    const idx = turnIndexRef.current;
+    turnIndexRef.current += 1;
+    setTurnIndex(turnIndexRef.current);
+    return idx;
+  }, []);
 
   const pushTranscriptLine = useCallback((line) => {
     setTranscript((prev) => [...prev, line]);
   }, []);
 
   const playCurrentScriptStep = useCallback(
-    async (state) => {
+    (state) => {
       const steps = resolveStepsFromEngine(exam, state);
       const displayLines = [];
       let photosStep = null;
@@ -198,42 +251,57 @@ export default function B2SpeakingFullExamSimulation({
       setAwaitingCandidate(awaitCandidate);
       setLongTurnLeft(longTurn);
       setPart1QuestionProgress(part1Progress);
+      setInteractionStatus('ready');
 
       for (const line of displayLines) {
         pushTranscriptLine({ ...line, transcriptSource: 'SCRIPT' });
-        await persistTurn({
+        const idx = allocateTurnIndex();
+        persistTurnBackground({
           speakerRole: line.speakerRole,
           text: line.text,
           partNumber: line.partNumber,
           transcriptSource: 'SCRIPT',
           nextEngineState: state,
+          turnIndex: idx,
         });
       }
 
       if (longTurn != null) {
         setPhase('long_turn');
-        void media.start();
+        void media.start().then(() => setInteractionStatus('recording'));
       } else if (awaitCandidate) {
         setPhase('awaiting');
       } else {
         const advanced = advanceEnginePastDisplayOnly(exam, state);
         setEngineState(advanced);
         if (getScriptLineAt(exam, advanced.stepIndex)) {
-          await playCurrentScriptStep(advanced);
+          playCurrentScriptStep(advanced);
         }
       }
     },
-    [exam, media, onExamComplete, persistTurn, pushTranscriptLine, sessionId, exam.id],
+    [
+      exam,
+      media,
+      onExamComplete,
+      persistTurnBackground,
+      pushTranscriptLine,
+      allocateTurnIndex,
+      sessionId,
+      exam.id,
+    ],
   );
 
   const startExam = useCallback(async () => {
-    setLoading(true);
+    setStartingExam(true);
     setError('');
+    setSaveWarning('');
     setFeedbackReport(null);
     setFeedbackError('');
     setTranscript([]);
+    turnIndexRef.current = 0;
     setTurnIndex(0);
     setPart1QuestionProgress(null);
+    setInteractionStatus('ready');
     scriptBootstrappedRef.current = false;
 
     try {
@@ -250,12 +318,12 @@ export default function B2SpeakingFullExamSimulation({
       setEngineState(initialState);
       setPhase('active');
       scriptBootstrappedRef.current = true;
-      await playCurrentScriptStep(initialState);
+      playCurrentScriptStep(initialState);
     } catch (e) {
       setError(e?.message || 'Error');
       setPhase('intro');
     } finally {
-      setLoading(false);
+      setStartingExam(false);
     }
   }, [exam, examSlot, isEn, playCurrentScriptStep]);
 
@@ -282,18 +350,21 @@ export default function B2SpeakingFullExamSimulation({
 
   const submitCandidateResponse = async (audioOrText) => {
     if (!engineState || !sessionId) return;
-    setLoading(true);
+    if (interactionStatus === 'transcribing') return;
+
     setError('');
+    setSaveWarning('');
+
+    let text = '';
+    let transcriptSource = 'TYPED';
 
     try {
-      let text = '';
-      let transcriptSource = 'TYPED';
-
       if (audioOrText instanceof Blob) {
+        setInteractionStatus('transcribing');
         const form = new FormData();
         form.append('audio', audioOrText, 'capture.webm');
-        if (sessionId) form.set('sessionId', sessionId);
-        form.set('partNumber', String(engineState?.partNumber ?? 1));
+        form.set('sessionId', sessionId);
+        form.set('partNumber', String(engineState.partNumber ?? 1));
         const tr = await fetch(buildClientApiUrl('/api/speaking/b2-exam/transcribe'), {
           method: 'POST',
           credentials: 'include',
@@ -310,33 +381,38 @@ export default function B2SpeakingFullExamSimulation({
 
       if (!text) {
         setError(isEn ? 'Please say or type an answer.' : 'Di o escribe una respuesta.');
+        setInteractionStatus('ready');
         return;
       }
 
-      setEditableTranscript(text);
       const partNumber = engineState.partNumber;
-      const candidateLine = {
+      const prevState = engineState;
+      const nextState = advanceEngineAfterCandidate(exam, engineState);
+
+      pushTranscriptLine({
         partNumber,
         speakerRole: 'candidate',
         text,
         transcriptSource,
-      };
-      pushTranscriptLine(candidateLine);
+      });
+      setEditableTranscript(text);
+      setDraftText('');
+      setLongTurnLeft(null);
+      setPart1QuestionProgress(null);
+      setEngineState(nextState);
+      setInteractionStatus('ready');
 
-      const nextState = advanceEngineAfterCandidate(exam, engineState);
-      await persistTurn({
+      const turnIdx = allocateTurnIndex();
+      persistTurnBackground({
         speakerRole: 'candidate',
         text,
         partNumber,
         transcriptSource,
         nextEngineState: nextState,
+        turnIndex: turnIdx,
       });
-      setEngineState(nextState);
-      setDraftText('');
-      setLongTurnLeft(null);
-      setPart1QuestionProgress(null);
 
-      if (isPart1ToPart2Transition(engineState, nextState)) {
+      if (isPart1ToPart2Transition(prevState, nextState)) {
         setPhase('part1_complete');
         return;
       }
@@ -353,11 +429,10 @@ export default function B2SpeakingFullExamSimulation({
         return;
       }
 
-      await playCurrentScriptStep(nextState);
+      playCurrentScriptStep(nextState);
     } catch (e) {
       setError(e?.message || 'Error');
-    } finally {
-      setLoading(false);
+      setInteractionStatus('ready');
     }
   };
 
@@ -410,6 +485,7 @@ export default function B2SpeakingFullExamSimulation({
 
   const limitReached = !usageUnlimited && usageRemaining === 0;
   const candidateCount = engineState?.candidateTurnCount ?? 0;
+  const inputBlocked = interactionStatus === 'transcribing' || startingExam;
 
   if (phase === 'intro' || phase === 'starting') {
     return (
@@ -441,9 +517,9 @@ export default function B2SpeakingFullExamSimulation({
           type="button"
           className="levels-b2-speaking-session__phase-btn levels-b2-speaking-session__phase-btn--primary"
           onClick={() => void startExam()}
-          disabled={loading}
+          disabled={startingExam}
         >
-          {loading
+          {startingExam
             ? isEn
               ? 'Starting…'
               : 'Iniciando…'
@@ -472,10 +548,10 @@ export default function B2SpeakingFullExamSimulation({
         <button
           type="button"
           className="levels-b2-speaking-session__phase-btn levels-b2-speaking-session__phase-btn--primary"
-          disabled={loading}
+          disabled={inputBlocked}
           onClick={() => {
             setPhase('active');
-            void playCurrentScriptStep(engineState);
+            playCurrentScriptStep(engineState);
           }}
         >
           {isEn ? 'Continue to Part 2' : 'Continuar a Part 2'}
@@ -566,6 +642,22 @@ export default function B2SpeakingFullExamSimulation({
         </span>
       </div>
 
+      {interactionStatus === 'transcribing' ? (
+        <p className="levels-b2-speaking-full-exam__status" role="status">
+          {isEn ? 'Transcribing your answer…' : 'Transcribiendo tu respuesta…'}
+        </p>
+      ) : null}
+      {interactionStatus === 'recording' ? (
+        <p className="levels-b2-speaking-full-exam__status" role="status">
+          {isEn ? 'Recording…' : 'Grabando…'}
+        </p>
+      ) : null}
+      {pendingSaveCount > 0 ? (
+        <p className="levels-b2-speaking-full-exam__status levels-b2-speaking-full-exam__status--muted">
+          {isEn ? 'Saving…' : 'Guardando…'}
+        </p>
+      ) : null}
+
       {part1QuestionProgress ? (
         <div className="levels-b2-speaking-full-exam__part1-progress" aria-live="polite">
           <p className="levels-b2-speaking-full-exam__part1-question">
@@ -633,13 +725,15 @@ export default function B2SpeakingFullExamSimulation({
             className={`levels-b2-speaking-session__mic-btn${
               media.isActive ? ' levels-b2-speaking-session__mic-btn--recording' : ''
             }`}
-            disabled={loading}
+            disabled={inputBlocked || interactionStatus === 'recording'}
             onClick={async () => {
               if (media.isActive) {
                 const blob = await media.stop();
                 if (blob?.size) await submitCandidateResponse(blob);
+                else setInteractionStatus('ready');
               } else {
                 await media.start();
+                setInteractionStatus('recording');
               }
             }}
           >
@@ -662,12 +756,12 @@ export default function B2SpeakingFullExamSimulation({
             value={draftText}
             onChange={(e) => setDraftText(e.target.value)}
             placeholder={isEn ? 'Or type your answer' : 'O escribe tu respuesta'}
-            disabled={loading}
+            disabled={inputBlocked}
           />
           <button
             type="button"
             className="levels-b2-speaking-session__text-send"
-            disabled={loading || !draftText.trim()}
+            disabled={inputBlocked || !draftText.trim()}
             onClick={() => void submitCandidateResponse(draftText)}
           >
             {isEn ? 'Send' : 'Enviar'}
@@ -682,6 +776,11 @@ export default function B2SpeakingFullExamSimulation({
         </p>
       ) : null}
 
+      {saveWarning ? (
+        <p className="levels-b2-speaking-session__warn" role="status">
+          {saveWarning}
+        </p>
+      ) : null}
       {error ? <p className="levels-b2-speaking-session__error">{error}</p> : null}
       {media.error ? <p className="levels-b2-speaking-session__warn">{media.error}</p> : null}
     </div>
