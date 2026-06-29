@@ -325,13 +325,22 @@ export default function StaffMeetingsPanel() {
           </p>
           <ul className="mt-2 list-disc list-inside space-y-1 text-xs font-mono text-gray-600">
             <li>NOTION_API_KEY</li>
-            <li>NOTION_MEETINGS_DATABASE_ID</li>
+            <li>NOTION_MEETINGS_PAGE_ID (página English Department)</li>
+            <li>o NOTION_MEETINGS_DATABASE_ID (si usas una base de datos)</li>
           </ul>
           <p className="mt-2 text-xs text-gray-500">
-            Crea una integración en notion.so/my-integrations, comparte la base de datos con ella y
-            copia el ID de la base (32 caracteres en la URL). Opcional:{' '}
-            <code className="bg-white px-1 rounded">scripts/staff_reuniones_notion.sql</code> en
-            Supabase.
+            En Notion: abre la página{' '}
+            <a
+              href="https://app.notion.com/p/English-Department-3608519385d180ce8077ef1f55144e82"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-violet-700 underline"
+            >
+              English Department
+            </a>
+            , menú ⋯ → <strong>Connections</strong> → añade la integración «Dralo Reuniones». El ID
+            son los 32 caracteres de la URL (
+            <code className="bg-white px-1 rounded">3608519385d180ce8077ef1f55144e82</code>).
           </p>
         </div>
       ) : null}
@@ -346,7 +355,9 @@ export default function StaffMeetingsPanel() {
         <div className="rounded-lg border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm text-emerald-900 flex flex-wrap items-center justify-between gap-2">
           <span>
             <strong>Notion conectado</strong>
-            {notionStatus.databaseId ? ` · base ${notionStatus.databaseId}` : null}
+            {notionStatus.parentTitle ? ` · ${notionStatus.parentTitle}` : null}
+            {notionStatus.parentType ? ` (${notionStatus.parentType})` : null}
+            {notionStatus.parentId ? ` · ${notionStatus.parentId}` : null}
           </span>
           <span className="text-xs text-emerald-700">Nuevas reuniones se publican en Notion al guardar.</span>
         </div>

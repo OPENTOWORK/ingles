@@ -1,12 +1,25 @@
 const NOTION_VERSION = '2022-06-28';
 
+export function normalizeNotionId(id = '') {
+  const raw = String(id).replace(/-/g, '').trim();
+  if (raw.length !== 32) return String(id).trim();
+  return `${raw.slice(0, 8)}-${raw.slice(8, 12)}-${raw.slice(12, 16)}-${raw.slice(16, 20)}-${raw.slice(20)}`;
+}
+
 function notionConfig() {
   const apiKey = process.env.NOTION_API_KEY?.trim();
+  const pageId = process.env.NOTION_MEETINGS_PAGE_ID?.trim();
   const databaseId = process.env.NOTION_MEETINGS_DATABASE_ID?.trim();
+  const parentId = pageId || databaseId || null;
+  const parentType = process.env.NOTION_MEETINGS_PARENT_TYPE?.trim().toLowerCase() || 'auto';
+
   return {
     apiKey: apiKey || null,
-    databaseId: databaseId || null,
-    configured: Boolean(apiKey && databaseId),
+    pageId: pageId ? normalizeNotionId(pageId) : null,
+    databaseId: databaseId ? normalizeNotionId(databaseId) : null,
+    parentId: parentId ? normalizeNotionId(parentId) : null,
+    parentType,
+    configured: Boolean(apiKey && parentId),
     titleProp: process.env.NOTION_MEETINGS_TITLE_PROP?.trim() || null,
     dateProp: process.env.NOTION_MEETINGS_DATE_PROP?.trim() || null,
     departmentsProp: process.env.NOTION_MEETINGS_DEPARTMENTS_PROP?.trim() || null,
@@ -27,7 +40,8 @@ export function getNotionMeetingsStatus() {
   const cfg = notionConfig();
   return {
     configured: cfg.configured,
-    databaseId: cfg.databaseId ? `${cfg.databaseId.slice(0, 8)}…` : null,
+    parentId: cfg.parentId ? `${cfg.parentId.replace(/-/g, '').slice(0, 8)}…` : null,
+    parentType: cfg.pageId ? 'page' : cfg.databaseId ? 'database' : cfg.parentType,
   };
 }
 
@@ -55,19 +69,7 @@ async function notionRequest(path, options = {}) {
   return data;
 }
 
-async function resolveDatabaseProps() {
-  const cfg = notionConfig();
-  if (!cfg.databaseId) return null;
-
-  if (cfg.titleProp && cfg.dateProp) {
-    return {
-      titleProp: cfg.titleProp,
-      dateProp: cfg.dateProp,
-      departmentsProp: cfg.departmentsProp,
-    };
-  }
-
-  const db = await notionRequest(`/databases/${cfg.databaseId}`);
+function extractDatabaseSchema(db, cfg) {
   const props = db?.properties || {};
   let titleProp = cfg.titleProp;
   let dateProp = cfg.dateProp;
@@ -84,6 +86,53 @@ async function resolveDatabaseProps() {
   }
 
   return { titleProp, dateProp, departmentsProp };
+}
+
+async function resolveParent() {
+  const cfg = notionConfig();
+  if (!cfg.parentId) return null;
+
+  const tryDatabase = async () => {
+    const db = await notionRequest(`/databases/${cfg.parentId}`);
+    return {
+      type: 'database',
+      id: cfg.parentId,
+      schema: extractDatabaseSchema(db, cfg),
+      title: db?.title?.[0]?.plain_text || null,
+    };
+  };
+
+  const tryPage = async () => {
+    const page = await notionRequest(`/pages/${cfg.parentId}`);
+    return {
+      type: 'page',
+      id: cfg.parentId,
+      schema: { titleProp: 'title', dateProp: null, departmentsProp: null },
+      title: page?.properties?.title?.title?.[0]?.plain_text || null,
+    };
+  };
+
+  if (cfg.parentType === 'database') return tryDatabase();
+  if (cfg.parentType === 'page') return tryPage();
+
+  if (cfg.pageId) return tryPage();
+  if (cfg.databaseId) {
+    try {
+      return await tryDatabase();
+    } catch (error) {
+      const message = String(error?.message || '');
+      if (!message.includes('Could not find database')) throw error;
+      return tryPage();
+    }
+  }
+
+  try {
+    return await tryDatabase();
+  } catch (error) {
+    const message = String(error?.message || '');
+    if (!message.includes('Could not find database')) throw error;
+    return tryPage();
+  }
 }
 
 function richText(content) {
@@ -108,9 +157,7 @@ function buildMeetingProperties(meeting, schema) {
   };
 
   if (schema.dateProp && meeting.fecha) {
-    const start = meeting.hora
-      ? `${meeting.fecha}T${meeting.hora}:00`
-      : meeting.fecha;
+    const start = meeting.hora ? `${meeting.fecha}T${meeting.hora}:00` : meeting.fecha;
     properties[schema.dateProp] = {
       date: { start },
     };
@@ -125,16 +172,48 @@ function buildMeetingProperties(meeting, schema) {
   return properties;
 }
 
-function buildAgendaBlocks(meeting) {
-  const blocks = [
-    {
+function buildPageModeMetaBlocks(meeting) {
+  const blocks = [];
+
+  if (meeting.fecha) {
+    const when = meeting.hora ? `${meeting.fecha} · ${meeting.hora}` : meeting.fecha;
+    blocks.push({
       object: 'block',
-      type: 'heading_2',
-      heading_2: {
-        rich_text: [{ type: 'text', text: { content: 'Orden del día' } }],
+      type: 'paragraph',
+      paragraph: {
+        rich_text: [{ type: 'text', text: { content: `Cuándo: ${when}` } }],
       },
+    });
+  }
+
+  if (meeting.departamentos?.length) {
+    blocks.push({
+      object: 'block',
+      type: 'paragraph',
+      paragraph: {
+        rich_text: [
+          {
+            type: 'text',
+            text: { content: `Departamentos: ${meeting.departamentos.join(', ')}` },
+          },
+        ],
+      },
+    });
+  }
+
+  return blocks;
+}
+
+function buildAgendaBlocks(meeting, { includePageMeta = false } = {}) {
+  const blocks = includePageMeta ? buildPageModeMetaBlocks(meeting) : [];
+
+  blocks.push({
+    object: 'block',
+    type: 'heading_2',
+    heading_2: {
+      rich_text: [{ type: 'text', text: { content: 'Orden del día' } }],
     },
-  ];
+  });
 
   for (const punto of meeting.puntos_dia || []) {
     const text = String(punto?.text || '').trim();
@@ -206,10 +285,11 @@ async function replacePageChildren(pageId, blocks) {
 export async function syncMeetingToNotion(meeting, existingPageId = null) {
   if (!isNotionMeetingsConfigured()) return null;
 
-  const cfg = notionConfig();
-  const schema = await resolveDatabaseProps();
-  const properties = buildMeetingProperties(meeting, schema);
-  const blocks = buildAgendaBlocks(meeting);
+  const parent = await resolveParent();
+  if (!parent) return null;
+
+  const properties = buildMeetingProperties(meeting, parent.schema);
+  const blocks = buildAgendaBlocks(meeting, { includePageMeta: parent.type === 'page' });
 
   let pageId = existingPageId || meeting.notion_page_id || null;
 
@@ -220,10 +300,15 @@ export async function syncMeetingToNotion(meeting, existingPageId = null) {
     });
     await replacePageChildren(pageId, blocks);
   } else {
+    const parentPayload =
+      parent.type === 'page'
+        ? { page_id: parent.id }
+        : { database_id: parent.id };
+
     const created = await notionRequest('/pages', {
       method: 'POST',
       body: JSON.stringify({
-        parent: { database_id: cfg.databaseId },
+        parent: parentPayload,
         properties,
         children: blocks.slice(0, 100),
       }),
@@ -244,12 +329,28 @@ export async function archiveMeetingInNotion(pageId) {
 
 export async function testNotionMeetingsConnection() {
   if (!isNotionMeetingsConfigured()) {
-    return { ok: false, error: 'Faltan NOTION_API_KEY o NOTION_MEETINGS_DATABASE_ID.' };
+    return {
+      ok: false,
+      error: 'Faltan NOTION_API_KEY y NOTION_MEETINGS_PAGE_ID o NOTION_MEETINGS_DATABASE_ID.',
+    };
   }
   try {
-    const schema = await resolveDatabaseProps();
-    return { ok: true, schema };
+    const parent = await resolveParent();
+    return {
+      ok: true,
+      parentType: parent.type,
+      parentTitle: parent.title,
+      schema: parent.schema,
+    };
   } catch (err) {
-    return { ok: false, error: err?.message || 'No se pudo conectar con Notion.' };
+    const message = err?.message || 'No se pudo conectar con Notion.';
+    if (message.includes('shared with your integration')) {
+      return {
+        ok: false,
+        error:
+          'La integración «Dralo Reuniones» no tiene acceso. En Notion abre English Department → ⋯ → Connections → añade la integración.',
+      };
+    }
+    return { ok: false, error: message };
   }
 }
