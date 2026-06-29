@@ -83,19 +83,18 @@ export function isItRole(roleName = '') {
   return n === 'informatico' || n === 'it';
 }
 
+export function isStudentRole(roleName = '') {
+  const role = normalizeRoleName(roleName);
+  return role === 'student' || role === 'alumno';
+}
+
 export function canAccessItPanel(roleName = '') {
   return isAdminRole(roleName) || isItRole(roleName);
 }
 
-/** Buzón interno: mensajería instantánea entre staff. */
+/** Buzón interno: mensajería instantánea — todo el staff excepto estudiantes. */
 export function canAccessStaffBuzon(roleName = '') {
-  return (
-    isAdminRole(roleName) ||
-    isCoordinatorRole(roleName) ||
-    isTeacherRole(roleName) ||
-    isSupportRole(roleName) ||
-    isItRole(roleName)
-  );
+  return canAccessStaffTasks(roleName);
 }
 
 /** Tareas de profesor/alumnos: todo el staff excepto estudiantes. */

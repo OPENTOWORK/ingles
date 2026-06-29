@@ -18,13 +18,7 @@ as $$
         lower(trim(r.nombre)),
         'áàäâãéèëêíìïîóòöôõúùüûñ',
         'aaaaaeeeeiiiiooooouuuun'
-      ) in (
-        'admin', 'administrador',
-        'coordinador', 'coordinator',
-        'informatico', 'it',
-        'soporte', 'support',
-        'teacher', 'profesor'
-      )
+      ) not in ('student', 'alumno', 'estudiante')
   );
 $$;
 

@@ -1,5 +1,6 @@
-import { normalizeRoleName } from '@/utils/authRoles';
+import { isStudentRole, normalizeRoleName } from '@/utils/authRoles';
 
+/** @deprecated Lista histórica; usar isStaffBuzonRole (todos los roles excepto alumno). */
 export const STAFF_BUZON_ROLE_NAMES = new Set([
   'admin',
   'administrador',
@@ -11,10 +12,15 @@ export const STAFF_BUZON_ROLE_NAMES = new Set([
   'support',
   'teacher',
   'profesor',
+  'centro_empresa',
+  'centro/empresa',
+  'clases_grupos',
+  'clases/grupos',
 ]);
 
 export function isStaffBuzonRole(roleName = '') {
-  return STAFF_BUZON_ROLE_NAMES.has(normalizeRoleName(roleName));
+  const role = normalizeRoleName(roleName);
+  return Boolean(role) && !isStudentRole(role);
 }
 
 export function getStaffRoleLabel(roleName = '') {
@@ -30,6 +36,10 @@ export function getStaffRoleLabel(roleName = '') {
     support: 'Soporte',
     teacher: 'Profesor',
     profesor: 'Profesor',
+    centro_empresa: 'Centro / empresa',
+    'centro/empresa': 'Centro / empresa',
+    clases_grupos: 'Clases / grupos',
+    'clases/grupos': 'Clases / grupos',
   };
   return labels[role] || roleName || 'Staff';
 }

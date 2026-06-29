@@ -9,15 +9,17 @@ export default function LevelsAnswerJustification({ hint }) {
   if (hint.loading) {
     return (
       <p style={{ margin: '0.55rem 0 0', fontSize: '0.92rem', color: '#718096', fontStyle: 'italic' }}>
-        Dralo is thinking...
+        Generating explanation...
       </p>
     );
   }
 
   if (hint.error) {
     return (
-      <p style={{ margin: '0.55rem 0 0', fontSize: '0.88rem', color: '#c05621' }}>
-        {hint.error}
+      <p style={{ margin: '0.55rem 0 0', fontSize: '0.88rem', color: '#718096', fontStyle: 'italic' }}>
+        {hint.error === true || !hint.error
+          ? 'Explanation temporarily unavailable.'
+          : hint.error}
       </p>
     );
   }

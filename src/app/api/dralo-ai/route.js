@@ -12,6 +12,7 @@ import {
   getDailyLimit,
 } from '@/lib/aiUsage';
 import { aiErrorJson, aiSuccessJson, runAiPreflight } from '@/lib/aiUsageRouteHelpers';
+import { findLevelsJustificacion } from '@/lib/levelsJustificacionesServer';
 import {
   normalizeAction,
   handleExamWritingCorrection,
@@ -19,6 +20,7 @@ import {
   handleExtractErrors,
   handleGenerateErrorExercises,
   handleExplainMistakeFromDb,
+  handleExplainCorrectAnswer,
   handleDraloAiSpeakingMission,
   handleDraloAiWritingCoach,
   handleAdminGenerateExamLog,
@@ -56,6 +58,7 @@ const OPENAI_ACTIONS = new Set([
   AI_ACTIONS.DRALO_AI_WRITING_COACH,
   AI_ACTIONS.EXTRACT_ERRORS,
   AI_ACTIONS.GENERATE_ERROR_EXERCISES,
+  AI_ACTIONS.EXPLAIN_CORRECT_ANSWER,
   AI_ACTIONS.ADMIN_GENERATE_EXAM,
 ]);
 
@@ -70,6 +73,7 @@ export async function GET() {
       exam_speaking_feedback: getDailyLimit(AI_ACTIONS.EXAM_SPEAKING_FEEDBACK),
       extract_errors: getDailyLimit(AI_ACTIONS.EXTRACT_ERRORS),
       generate_error_exercises: getDailyLimit(AI_ACTIONS.GENERATE_ERROR_EXERCISES),
+      explain_correct_answer: getDailyLimit(AI_ACTIONS.EXPLAIN_CORRECT_ANSWER),
     },
   });
 }
@@ -142,6 +146,57 @@ export async function POST(request) {
       return aiSuccessJson({ action, result: out.result });
     } catch (err) {
       return aiErrorJson('DB_ERROR', err?.message || 'Could not load explanation.', {}, 500);
+    }
+  }
+
+  if (action === AI_ACTIONS.EXPLAIN_CORRECT_ANSWER) {
+    const respuestaId = body.respuestaId || body.respuesta_id || null;
+    const respuestaAbiertaId = body.respuestaAbiertaId || body.respuesta_abierta_id || null;
+    const preguntaId = body.preguntaId || body.pregunta_id || body.questionId || null;
+    const itemNum =
+      body.questionNumber != null
+        ? Number(body.questionNumber)
+        : body.itemNum != null
+          ? Number(body.itemNum)
+          : null;
+
+    try {
+      const cached = await findLevelsJustificacion({
+        respuestaId,
+        respuestaAbiertaId,
+        preguntaId,
+        itemNum,
+      });
+      if (cached?.justificacion) {
+        return aiSuccessJson({
+          action,
+          result: { found: true, explanation: cached.justificacion, cached: true },
+        });
+      }
+
+      if (!isOpenAIConfigured()) {
+        return aiErrorJson(
+          'OPENAI_NOT_CONFIGURED',
+          'Explanation temporarily unavailable.',
+          {},
+          503,
+        );
+      }
+
+      const preflight = await runAiPreflight(userId, action, aiCtx);
+      if (!preflight.ok) return preflight.response;
+
+      const out = await handleExplainCorrectAnswer(userId, body, aiCtx);
+      return aiSuccessJson({ action, result: out.result });
+    } catch (err) {
+      return aiSuccessJson({
+        action,
+        result: {
+          found: false,
+          message: 'Explanation temporarily unavailable.',
+          error: err?.message,
+        },
+      });
     }
   }
 

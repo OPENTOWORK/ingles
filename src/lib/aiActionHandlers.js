@@ -21,6 +21,11 @@ import {
   buildErrorExercisesPrompt,
   buildErrorExercisesUserMessage,
 } from '@/lib/ai/prompts/errorTrackerPrompt';
+import {
+  findLevelsJustificacion,
+  generateLevelsJustificacionWithOpenAI,
+  saveLevelsJustificacion,
+} from '@/lib/levelsJustificacionesServer';
 
 function clip(text, max = 12000) {
   const t = String(text || '').trim();
@@ -241,6 +246,72 @@ export async function handleGenerateErrorExercises(userId, body, ctx = {}) {
     });
     const fallback = await runErrorExercises({ level, error });
     return { ok: true, result: fallback };
+  }
+}
+
+export async function handleExplainCorrectAnswer(userId, body, ctx = {}) {
+  const respuestaId = body.respuestaId || body.respuesta_id || null;
+  const respuestaAbiertaId = body.respuestaAbiertaId || body.respuesta_abierta_id || null;
+  const preguntaId = body.preguntaId || body.pregunta_id || body.questionId || null;
+  const itemNum =
+    body.questionNumber != null
+      ? Number(body.questionNumber)
+      : body.itemNum != null
+        ? Number(body.itemNum)
+        : null;
+
+  if (!body.correctChoiceText && !body.answerOptions && !body.answersFromDatabase) {
+    return {
+      ok: true,
+      result: { found: false, message: 'Explanation temporarily unavailable.' },
+    };
+  }
+
+  try {
+    const explanation = await generateLevelsJustificacionWithOpenAI({
+      ...body,
+      exerciseType: body.exerciseType || body.style,
+      questionText: body.questionText || body.contextSnippet,
+      answerOptions: body.answerOptions || body.answersFromDatabase,
+    });
+
+    await saveLevelsJustificacion({
+      respuestaId,
+      respuestaAbiertaId,
+      preguntaId,
+      itemNum,
+      justificacion: explanation,
+    });
+
+    const usage = usageFromTextEstimate(
+      getFastModel(),
+      JSON.stringify(body),
+      explanation,
+    );
+
+    await recordAiUsageSuccess({
+      userId,
+      userEmail: ctx.userEmail,
+      accessToken: ctx.accessToken,
+      action: AI_ACTIONS.EXPLAIN_CORRECT_ANSWER,
+      model: usage.model,
+      usage,
+      metadata: { preguntaId, respuestaId, respuestaAbiertaId, cached: false },
+    });
+
+    return { ok: true, result: { found: true, explanation, cached: false } };
+  } catch (err) {
+    await recordAiUsageFailure({
+      userId,
+      action: AI_ACTIONS.EXPLAIN_CORRECT_ANSWER,
+      model: getFastModel(),
+      errorCode: 'EXPLAIN_CORRECT_ANSWER_FAILED',
+      metadata: { preguntaId, message: err?.message },
+    });
+    return {
+      ok: true,
+      result: { found: false, message: 'Explanation temporarily unavailable.' },
+    };
   }
 }
 

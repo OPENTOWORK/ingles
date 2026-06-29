@@ -1,5 +1,4 @@
-import { normalizeRoleName } from '@/utils/authRoles';
-import { STAFF_BUZON_ROLE_NAMES } from '@/utils/staffBuzon';
+import { isStudentRole } from '@/utils/authRoles';
 import { formatMeetingDate } from '@/lib/staffMeetingsConstants';
 import { isSchemaNotReadyError } from '@/lib/coordinatorAccess';
 
@@ -17,7 +16,7 @@ export async function loadStaffBuzonUserIds(db) {
   if (rolesError) throw rolesError;
 
   const staffRoleIds = (roles || [])
-    .filter((row) => STAFF_BUZON_ROLE_NAMES.has(normalizeRoleName(row.nombre)))
+    .filter((row) => !isStudentRole(row.nombre))
     .map((row) => row.id);
 
   if (!staffRoleIds.length) return [];

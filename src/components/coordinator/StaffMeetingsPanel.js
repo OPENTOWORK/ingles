@@ -200,6 +200,7 @@ function meetingToForm(meeting) {
 
 export default function StaffMeetingsPanel() {
   const [meetings, setMeetings] = useState([]);
+  const [notionStatus, setNotionStatus] = useState(null);
   const [tablesReady, setTablesReady] = useState(null);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
@@ -213,6 +214,7 @@ export default function StaffMeetingsPanel() {
       const data = await meetingsFetch('/api/coordinator/meetings', {}, { soft: true });
       if (data.error) return;
       setMeetings(data.meetings || []);
+      if (data.notion) setNotionStatus(data.notion);
       if (typeof data.tablesReady === 'boolean') setTablesReady(data.tablesReady);
     } finally {
       setLoading(false);
@@ -251,6 +253,9 @@ export default function StaffMeetingsPanel() {
       if (!editingId && result.buzonNotified === false && result.buzonError) {
         alert(`Reunión guardada, pero no se pudo avisar en el buzón: ${result.buzonError}`);
       }
+      if (result.notionSync?.error) {
+        alert(`Reunión guardada en Dralo, pero Notion no se actualizó: ${result.notionSync.error}`);
+      }
     } catch (e) {
       alert(e.message);
     } finally {
@@ -276,6 +281,9 @@ export default function StaffMeetingsPanel() {
 
   const schemaHint = shouldShowSchemaSetupHint(tablesReady);
 
+  const notionPageUrl = (pageId) =>
+    pageId ? `https://www.notion.so/${String(pageId).replace(/-/g, '')}` : null;
+
   return (
     <div className="space-y-6">
       <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4">
@@ -284,6 +292,9 @@ export default function StaffMeetingsPanel() {
           <p className="text-sm text-gray-600 mt-1 max-w-2xl">
             Planifica reuniones del equipo: fecha, departamentos implicados y orden del día. Al crear
             una reunión se avisa a todo el staff en el buzón (grupo «Reuniones del equipo»).
+            {notionStatus?.configured && notionStatus?.ok
+              ? ' Las reuniones se sincronizan automáticamente con Notion.'
+              : null}
           </p>
         </div>
         <button
@@ -302,6 +313,44 @@ export default function StaffMeetingsPanel() {
           Supabase.
         </div>
       )}
+
+      {notionStatus && !notionStatus.configured ? (
+        <div className="rounded-xl border border-gray-200 bg-gray-50 px-4 py-4 text-sm text-gray-700">
+          <p className="font-semibold text-gray-900 flex items-center gap-2">
+            <span aria-hidden>📓</span> Conectar Notion
+          </p>
+          <p className="mt-2">
+            Puedes sincronizar las reuniones con una base de datos de Notion. Añade en el servidor
+            (Vercel / <code className="bg-white px-1 rounded">.env.local</code>):
+          </p>
+          <ul className="mt-2 list-disc list-inside space-y-1 text-xs font-mono text-gray-600">
+            <li>NOTION_API_KEY</li>
+            <li>NOTION_MEETINGS_DATABASE_ID</li>
+          </ul>
+          <p className="mt-2 text-xs text-gray-500">
+            Crea una integración en notion.so/my-integrations, comparte la base de datos con ella y
+            copia el ID de la base (32 caracteres en la URL). Opcional:{' '}
+            <code className="bg-white px-1 rounded">scripts/staff_reuniones_notion.sql</code> en
+            Supabase.
+          </p>
+        </div>
+      ) : null}
+
+      {notionStatus?.configured && !notionStatus?.ok ? (
+        <div className="rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-900">
+          Notion configurado pero no conectado: {notionStatus.error || 'revisa la API key y el ID de la base.'}
+        </div>
+      ) : null}
+
+      {notionStatus?.configured && notionStatus?.ok ? (
+        <div className="rounded-lg border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm text-emerald-900 flex flex-wrap items-center justify-between gap-2">
+          <span>
+            <strong>Notion conectado</strong>
+            {notionStatus.databaseId ? ` · base ${notionStatus.databaseId}` : null}
+          </span>
+          <span className="text-xs text-emerald-700">Nuevas reuniones se publican en Notion al guardar.</span>
+        </div>
+      ) : null}
 
       {loading ? (
         <p className="text-sm text-gray-500 py-8 text-center">Cargando reuniones…</p>
@@ -332,7 +381,17 @@ export default function StaffMeetingsPanel() {
                     {meeting.titulo || 'Reunión de equipo'}
                   </h3>
                 </div>
-                <div className="flex gap-2 shrink-0">
+                <div className="flex gap-2 shrink-0 items-start">
+                  {meeting.notion_page_id ? (
+                    <a
+                      href={notionPageUrl(meeting.notion_page_id)}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-xs text-gray-600 hover:text-gray-900 border border-gray-200 rounded px-2 py-1 bg-gray-50"
+                    >
+                      Notion ↗
+                    </a>
+                  ) : null}
                   <button
                     type="button"
                     onClick={() => openEdit(meeting)}

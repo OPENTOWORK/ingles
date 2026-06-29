@@ -278,9 +278,10 @@ const STAFF_PANEL_BY_KEY = {
  * Paneles visibles en el menú según rol:
  * - admin: todos
  * - coordinador: profesor, coordinador, plan de objetivos
- * - profesor: solo panel de profesor
- * - soporte / informático: su panel
- * - alumno y otros: ninguno
+ * - profesor: panel de profesor + buzón + tareas
+ * - soporte / informático: su panel + buzón + tareas
+ * - centro/empresa, clases/grupos: su panel + buzón + tareas
+ * - alumno y otros sin rol: ninguno
  */
 export function getStaffPanelMenuItemsForRole(roleName = '') {
   if (isAdminRole(roleName)) {
@@ -307,12 +308,14 @@ export function getStaffPanelMenuItemsForRole(roleName = '') {
   }
   if (role === 'centro_empresa' || role === 'centro/empresa') {
     return [
+      STAFF_PANEL_BY_KEY.buzon,
       STAFF_PANEL_BY_KEY.tareas,
       { href: '/centro-empresa', label: 'Panel centro/empresa' },
     ];
   }
   if (role === 'clases_grupos' || role === 'clases/grupos') {
     return [
+      STAFF_PANEL_BY_KEY.buzon,
       STAFF_PANEL_BY_KEY.tareas,
       { href: '/clases-grupos', label: 'Panel clases/grupos' },
     ];

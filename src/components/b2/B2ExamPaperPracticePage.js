@@ -24,6 +24,10 @@ import { computeB2PartScoreMetrics } from '@/utils/levelsPaperScoreMetrics';
 import { getLevelsPartScoring } from '@/utils/levelsA2PartScoring';
 import { isB2RuoeV2SessionPersistenceBlocked } from '@/lib/b2ScoringV2FeatureFlag';
 import { postLevelsAnswerJustification } from '@/utils/levelsJustifyClient';
+import {
+  buildLevelsJustificationPayload,
+  resolveCorrectAnswerRowIds,
+} from '@/utils/levelsJustifyPayload';
 import Link from 'next/link';
 import { supabase } from '@/utils/supabaseClient';
 import {
@@ -1268,18 +1272,28 @@ function B2ExamPaperPracticePageInner({
   const requestAiJustification = useCallback(
     (storageKey, payload) => {
       setAiHintsByKey((prev) => ({ ...prev, [storageKey]: { loading: true, error: null, text: null } }));
+      const enriched = buildLevelsJustificationPayload({
+        ...payload,
+        preguntaId: payload.preguntaId || selectedQuestion?.preguntaId,
+        level: levelTag,
+        partNumber,
+        partLabel: payload.partLabel || selectedPart?.nombre || '',
+        exerciseType:
+          payload.exerciseType ||
+          payload.style ||
+          (skillRoute === 'listening' ? 'listening' : undefined),
+        questionText: payload.questionText || contextSnippetForAi,
+        contextSnippet: contextSnippetForAi,
+      });
       void (async () => {
         try {
-          const text = await postLevelsAnswerJustification({
-            ...payload,
-            contextSnippet: contextSnippetForAi,
-          });
+          const text = await postLevelsAnswerJustification(enriched);
           setAiHintsByKey((prev) => ({
             ...prev,
             [storageKey]: { loading: false, error: null, text: text || '—' },
           }));
         } catch (e) {
-          const msg = e?.message || 'No se pudo obtener la explicación.';
+          const msg = e?.message || 'Explanation temporarily unavailable.';
           setAiHintsByKey((prev) => ({
             ...prev,
             [storageKey]: { loading: false, error: msg, text: null },
@@ -1287,7 +1301,14 @@ function B2ExamPaperPracticePageInner({
         }
       })();
     },
-    [contextSnippetForAi],
+    [
+      contextSnippetForAi,
+      selectedQuestion?.preguntaId,
+      selectedPart?.nombre,
+      levelTag,
+      partNumber,
+      skillRoute,
+    ],
   );
 
   const groupedAnswers = useMemo(
@@ -2482,6 +2503,9 @@ function B2ExamPaperPracticePageInner({
         requestAiJustification(questionKey, {
           partLabel: selectedPart?.nombre || '',
           questionLabel: group.questionNumber ? `Question ${group.questionNumber}` : 'Item',
+          questionNumber: group.questionNumber,
+          respuestaId: correctOpt?.id,
+          style: 'multiple-choice',
           userChoiceText: option.formattedText || option.respuesta || '',
           correctChoiceText: correctOpt?.formattedText || correctOpt?.respuesta || '',
           isCorrect: !!option.correcta,
@@ -2532,6 +2556,9 @@ function B2ExamPaperPracticePageInner({
       requestAiJustification(questionKey, {
         partLabel: selectedPart?.nombre || '',
         questionLabel: group.questionNumber ? `Question ${group.questionNumber}` : 'Item',
+        questionNumber: group.questionNumber,
+        respuestaId: correctOpt?.id,
+        style: 'multiple-choice',
         userChoiceText: option.formattedText || option.respuesta || '',
         correctChoiceText: correctOpt?.formattedText || correctOpt?.respuesta || '',
         isCorrect: !!option.correcta,
@@ -2557,6 +2584,13 @@ function B2ExamPaperPracticePageInner({
       requestAiJustification(questionKey, {
         partLabel: selectedPart?.nombre || '',
         questionLabel: `Question ${questionNumber}`,
+        questionNumber,
+        ...resolveCorrectAnswerRowIds(
+          selectedQuestion?.respuestasAbiertas,
+          selectedQuestion?.respuestas,
+          questionNumber,
+        ),
+        style: 'open-answer',
         userChoiceText: openInputs[questionKey] || '',
         correctChoiceText: [...expectedAnswers].slice(0, 4).join(' · ') || 'model answer',
         isCorrect: checkResult,
@@ -3814,6 +3848,13 @@ function B2ExamPaperPracticePageInner({
                                   requestAiJustification(questionKey, {
                                     partLabel: selectedPart?.nombre || '',
                                     questionLabel: `Question ${qn}`,
+                                    questionNumber: qn,
+                                    ...resolveCorrectAnswerRowIds(
+                                      selectedQuestion?.respuestasAbiertas,
+                                      selectedQuestion?.respuestas,
+                                      qn,
+                                    ),
+                                    style: 'listening-gap',
                                     userChoiceText: currentValue,
                                     correctChoiceText,
                                     isCorrect,
@@ -3875,6 +3916,9 @@ function B2ExamPaperPracticePageInner({
                               questionLabel: group.questionNumber
                                 ? `Question ${group.questionNumber}`
                                 : 'Question',
+                              questionNumber: group.questionNumber,
+                              respuestaId: correctOpt?.id,
+                              style: 'listening-mcq',
                               userChoiceText: option.formattedText || option.respuesta || '',
                               correctChoiceText:
                                 correctOpt?.formattedText || correctOpt?.respuesta || '',
@@ -3935,6 +3979,9 @@ function B2ExamPaperPracticePageInner({
                               questionLabel: group.questionNumber
                                 ? `Question ${group.questionNumber}`
                                 : 'Question',
+                              questionNumber: group.questionNumber,
+                              respuestaId: correctOpt?.id,
+                              style: 'listening-matching',
                               userChoiceText: poolLine
                                 ? `${poolLine.letter} — ${poolLine.text}`
                                 : normalizedLetter,
@@ -3942,6 +3989,9 @@ function B2ExamPaperPracticePageInner({
                                 ? `${correctPoolLine.letter} — ${correctPoolLine.text}`
                                 : correctLetter,
                               isCorrect: normalizedLetter === correctLetter,
+                              answersFromDatabase: listeningMatchingSelectOptions
+                                .map((o) => `${o.letter}) ${o.text}`)
+                                .join('\n'),
                             });
                           }
                         };
@@ -4384,6 +4434,13 @@ function B2ExamPaperPracticePageInner({
                                     requestAiJustification(questionKey, {
                                       partLabel: selectedPart?.nombre || '',
                                       questionLabel: `Question ${questionNumber}`,
+                                      questionNumber,
+                                      ...resolveCorrectAnswerRowIds(
+                                        selectedQuestion?.respuestasAbiertas,
+                                        selectedQuestion?.respuestas,
+                                        questionNumber,
+                                      ),
+                                      style: 'open-answer',
                                       userChoiceText: currentValue,
                                       correctChoiceText,
                                       isCorrect,

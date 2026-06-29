@@ -7,6 +7,12 @@ import {
   normalizeDepartamentos,
   normalizePuntosDia,
 } from '@/lib/staffMeetingsConstants';
+import {
+  archiveMeetingInNotion,
+  getNotionMeetingsStatus,
+  syncMeetingToNotion,
+  testNotionMeetingsConnection,
+} from '@/lib/notionMeetings';
 
 const TABLE = 'staff_reuniones';
 
@@ -19,6 +25,7 @@ function mapMeeting(row) {
     departamentos: normalizeDepartamentos(row.departamentos),
     puntos_dia: normalizePuntosDia(row.puntos_dia),
     notas: row.notas || '',
+    notion_page_id: row.notion_page_id || null,
     created_by: row.created_by,
     created_at: row.created_at,
     updated_at: row.updated_at,
@@ -63,7 +70,14 @@ export async function GET(req) {
 
     const probe = await auth.db.from(TABLE).select('id').limit(1);
     if (isSchemaNotReadyError(probe.error)) {
-      return NextResponse.json({ meetings: [], tablesReady: false });
+      return NextResponse.json({
+        meetings: [],
+        tablesReady: false,
+        notion: {
+          ...getNotionMeetingsStatus(),
+          ...(await testNotionMeetingsConnection()),
+        },
+      });
     }
 
     const { data, error } = await auth.db
@@ -82,6 +96,10 @@ export async function GET(req) {
     return NextResponse.json({
       meetings: (data || []).map(mapMeeting),
       tablesReady: true,
+      notion: {
+        ...getNotionMeetingsStatus(),
+        ...(await testNotionMeetingsConnection()),
+      },
     });
   } catch (err) {
     console.error('[coordinator/meetings GET]', err);
@@ -135,6 +153,24 @@ export async function POST(req) {
         creatorName,
       });
 
+      let notionSync = null;
+      try {
+        notionSync = await syncMeetingToNotion(mapped);
+        if (notionSync?.pageId) {
+          await auth.db
+            .from(TABLE)
+            .update({
+              notion_page_id: notionSync.pageId,
+              updated_at: new Date().toISOString(),
+            })
+            .eq('id', mapped.id);
+          mapped.notion_page_id = notionSync.pageId;
+        }
+      } catch (notionErr) {
+        console.warn('[coordinator/meetings create] notion:', notionErr?.message || notionErr);
+        notionSync = { error: notionErr?.message || 'Error al sincronizar con Notion.' };
+      }
+
       if (!buzon.sent && !buzon.skipped && buzon.error) {
         console.warn('[coordinator/meetings create] buzón broadcast:', buzon.error);
       }
@@ -144,6 +180,7 @@ export async function POST(req) {
         meeting: mapped,
         buzonNotified: Boolean(buzon.sent),
         buzonError: buzon.sent ? null : buzon.error || null,
+        notionSync,
       });
     }
 
@@ -151,10 +188,25 @@ export async function POST(req) {
     if (!id) return NextResponse.json({ error: 'id obligatorio.' }, { status: 400 });
 
     if (action === 'delete') {
+      const { data: existing } = await auth.db
+        .from(TABLE)
+        .select('notion_page_id')
+        .eq('id', id)
+        .maybeSingle();
+
       const { error } = await auth.db.from(TABLE).delete().eq('id', id);
       if (error) {
         return NextResponse.json({ error: error.message }, { status: 500 });
       }
+
+      if (existing?.notion_page_id) {
+        try {
+          await archiveMeetingInNotion(existing.notion_page_id);
+        } catch (notionErr) {
+          console.warn('[coordinator/meetings delete] notion:', notionErr?.message || notionErr);
+        }
+      }
+
       return NextResponse.json({ success: true });
     }
 
@@ -178,7 +230,23 @@ export async function POST(req) {
         return NextResponse.json({ error: error.message }, { status: 500 });
       }
 
-      return NextResponse.json({ success: true, meeting: mapMeeting(data) });
+      const mapped = mapMeeting(data);
+      let notionSync = null;
+      try {
+        notionSync = await syncMeetingToNotion(mapped, mapped.notion_page_id);
+        if (notionSync?.pageId && notionSync.pageId !== mapped.notion_page_id) {
+          await auth.db
+            .from(TABLE)
+            .update({ notion_page_id: notionSync.pageId })
+            .eq('id', mapped.id);
+          mapped.notion_page_id = notionSync.pageId;
+        }
+      } catch (notionErr) {
+        console.warn('[coordinator/meetings update] notion:', notionErr?.message || notionErr);
+        notionSync = { error: notionErr?.message || 'Error al sincronizar con Notion.' };
+      }
+
+      return NextResponse.json({ success: true, meeting: mapped, notionSync });
     }
 
     return NextResponse.json({ error: 'Acción no válida.' }, { status: 400 });

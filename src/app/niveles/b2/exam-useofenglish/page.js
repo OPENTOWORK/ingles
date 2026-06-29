@@ -15,6 +15,10 @@ import { isB2ScoringV2Enabled, isB2RuoeV2SessionPersistenceBlocked } from '@/lib
 import { parseB2KeyWordAnswerKeyRows } from '@/lib/parseB2KeyWordAnswerKey';
 import { gradeB2Part4Gap } from '@/lib/b2Part4Grading';
 import { postLevelsAnswerJustification } from '@/utils/levelsJustifyClient';
+import {
+  buildLevelsJustificationPayload,
+  resolveCorrectAnswerRowIds,
+} from '@/utils/levelsJustifyPayload';
 import { supabase } from '@/utils/supabaseClient';
 import { extractTextoBloque, splitPart1TextoYPreguntas, parsePart1QuestionOptions } from '@/utils/b2ExamTextBlocks';
 import { fetchB2PreguntasByExamen } from '@/utils/b2ResolveExam';
@@ -672,18 +676,24 @@ function UseOfEnglishExamsPageInner() {
   const requestAiJustification = useCallback(
     (storageKey, payload) => {
       setAiHintsByKey((prev) => ({ ...prev, [storageKey]: { loading: true, error: null, text: null } }));
+      const enriched = buildLevelsJustificationPayload({
+        ...payload,
+        preguntaId: payload.preguntaId || selectedQuestion?.preguntaId,
+        level: 'B2',
+        partNumber: partNumberUoe,
+        partLabel: payload.partLabel || getSelectedPartTitle(),
+        questionText: payload.questionText || contextSnippetForAi,
+        contextSnippet: contextSnippetForAi,
+      });
       void (async () => {
         try {
-          const text = await postLevelsAnswerJustification({
-            ...payload,
-            contextSnippet: contextSnippetForAi,
-          });
+          const text = await postLevelsAnswerJustification(enriched);
           setAiHintsByKey((prev) => ({
             ...prev,
             [storageKey]: { loading: false, error: null, text: text || '—' },
           }));
         } catch (e) {
-          const msg = e?.message || 'Could not load the explanation.';
+          const msg = e?.message || 'Explanation temporarily unavailable.';
           setAiHintsByKey((prev) => ({
             ...prev,
             [storageKey]: { loading: false, error: msg, text: null },
@@ -691,7 +701,7 @@ function UseOfEnglishExamsPageInner() {
         }
       })();
     },
-    [contextSnippetForAi],
+    [contextSnippetForAi, selectedQuestion?.preguntaId, partNumberUoe],
   );
 
   const getGroupedAnswers = (answers = []) => {
@@ -1005,6 +1015,8 @@ function UseOfEnglishExamsPageInner() {
         style: 'cloze',
         partLabel: getSelectedPartTitle(),
         questionLabel: group.questionNumber ? `Question ${group.questionNumber}` : 'Item',
+        questionNumber: group.questionNumber,
+        respuestaId: correctOpt?.id,
         userChoiceText: option.formattedText || option.respuesta || '',
         correctChoiceText: correctOpt?.formattedText || correctOpt?.respuesta || '',
         isCorrect: !!option.correcta,
@@ -1110,13 +1122,19 @@ function UseOfEnglishExamsPageInner() {
         style,
         partLabel: getSelectedPartTitle(),
         questionLabel: `Question ${questionNumber}`,
+        questionNumber,
+        ...resolveCorrectAnswerRowIds(
+          selectedQuestion?.respuestasAbiertas,
+          selectedQuestion?.respuestas,
+          questionNumber,
+        ),
         userChoiceText: openInputs[questionKey] || '',
         correctChoiceText: [...expectedAnswers].slice(0, 4).join(' · ') || 'model answer',
         isCorrect,
         answersFromDatabase: [...expectedAnswers].join(' · ') || undefined,
       });
     },
-    [aiHintsByKey, scoringV2Part4, openGrades, openChecks, openInputs, openAnswerMap, requestAiJustification, partNumberUoe],
+    [aiHintsByKey, scoringV2Part4, openGrades, openChecks, openInputs, openAnswerMap, requestAiJustification, partNumberUoe, selectedQuestion?.respuestas, selectedQuestion?.respuestasAbiertas],
   );
 
   const uoeExplanationFooter = useMemo(() => {
@@ -1531,10 +1549,13 @@ function UseOfEnglishExamsPageInner() {
                                       .filter(Boolean)
                                       .join('\n');
                                     requestAiJustification(questionKey, {
+                                      style: 'cloze',
                                       partLabel: getSelectedPartTitle(),
                                       questionLabel: group.questionNumber
                                         ? `Question ${group.questionNumber}`
                                         : 'Item',
+                                      questionNumber: group.questionNumber,
+                                      respuestaId: correctOpt?.id,
                                       userChoiceText: option.formattedText || option.respuesta || '',
                                       correctChoiceText:
                                         correctOpt?.formattedText || correctOpt?.respuesta || '',

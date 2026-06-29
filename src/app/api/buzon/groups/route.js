@@ -1,4 +1,7 @@
 import { NextResponse } from 'next/server';
+import { isSchemaNotReadyError } from '@/lib/coordinatorAccess';
+import { ensureStaffBuzonDepartmentMembershipsForUser } from '@/lib/staffBuzonDepartmentGroups';
+import { ensureStaffMeetingsBuzonGroup } from '@/lib/staffBuzonMeetingsBroadcast';
 import {
   requireStaffBuzonAccess,
   userIsStaffBuzonRecipient,
@@ -12,6 +15,15 @@ export async function GET(req) {
     }
 
     const { user, db } = auth;
+
+    try {
+      await ensureStaffMeetingsBuzonGroup(db, user.id);
+      await ensureStaffBuzonDepartmentMembershipsForUser(db, user.id);
+    } catch (error) {
+      if (!isSchemaNotReadyError(error)) {
+        console.error('[buzon/groups GET ensure memberships]', error);
+      }
+    }
 
     const { data: memberships, error: memberError } = await db
       .from('staff_buzon_grupo_miembros')

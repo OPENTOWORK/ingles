@@ -1,6 +1,7 @@
 import {
   canAccessCoordinatorPanel,
   canAccessItPanel,
+  canAccessStaffBuzon,
   canAccessStaffTasks,
   canAccessSupportPanel,
   isAdminRole,
@@ -114,6 +115,7 @@ export function isItPreviewPathAccessible(path, roleId = 'student') {
 
   if (pathname === '/tareas' && !canAccessStaffTasks(roleId)) return false;
   if (pathname === '/paneles' && !canAccessStaffTasks(roleId)) return false;
+  if (pathname === '/buzon' && !canAccessStaffBuzon(roleId)) return false;
   if (pathname === '/teacher' && !isTeacherRole(roleId)) return false;
   if (pathname === '/coordinador' && !canAccessCoordinatorPanel(roleId)) return false;
   if (pathname === '/soporte' && !canAccessSupportPanel(roleId)) return false;

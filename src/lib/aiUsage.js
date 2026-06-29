@@ -12,6 +12,7 @@ export const AI_ACTIONS = {
   EXTRACT_ERRORS: 'extract_errors',
   GENERATE_ERROR_EXERCISES: 'generate_error_exercises',
   EXPLAIN_MISTAKE_FROM_DB: 'explain_mistake_from_db',
+  EXPLAIN_CORRECT_ANSWER: 'explain_correct_answer',
   ADMIN_GENERATE_EXAM: 'admin_generate_exam',
 };
 
@@ -22,6 +23,7 @@ const DAILY_LIMITS = {
   [AI_ACTIONS.EXAM_SPEAKING_FEEDBACK]: 3,
   [AI_ACTIONS.EXTRACT_ERRORS]: 5,
   [AI_ACTIONS.GENERATE_ERROR_EXERCISES]: 3,
+  [AI_ACTIONS.EXPLAIN_CORRECT_ANSWER]: 50,
 };
 
 const PRODUCT_AREA_BY_ACTION = {
@@ -32,6 +34,7 @@ const PRODUCT_AREA_BY_ACTION = {
   [AI_ACTIONS.EXTRACT_ERRORS]: 'internal',
   [AI_ACTIONS.GENERATE_ERROR_EXERCISES]: 'internal',
   [AI_ACTIONS.EXPLAIN_MISTAKE_FROM_DB]: 'db',
+  [AI_ACTIONS.EXPLAIN_CORRECT_ANSWER]: 'exam_practice',
   [AI_ACTIONS.ADMIN_GENERATE_EXAM]: 'admin',
 };
 

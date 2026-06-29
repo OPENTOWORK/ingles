@@ -15,7 +15,6 @@ import {
   formatBuzonTime,
   getDisplayName,
   getStaffRoleLabel,
-  isStaffBuzonRole,
 } from '@/utils/staffBuzon';
 import {
   getMessagePreview,
@@ -175,14 +174,10 @@ export default function StaffBuzonPanel({ currentUserId }) {
   }, []);
 
   const loadStaffUsers = useCallback(async () => {
-    const { data, error } = await supabase
-      .from('Usuarios_y_Perfil_users')
-      .select('id, nombre, email, activo, Usuarios_y_Perfil_roles ( nombre )')
-      .eq('activo', true);
-
-    if (error) throw error;
-    setStaffUsers((data || []).filter((row) => isStaffBuzonRole(extractRoleName(row))));
-  }, []);
+    const token = await getAccessToken();
+    const payload = await buzonApiRequest('/api/buzon/contacts', { token });
+    setStaffUsers(payload.contacts || []);
+  }, [getAccessToken]);
 
   const loadMessages = useCallback(async () => {
     const token = await getAccessToken();
@@ -608,6 +603,11 @@ export default function StaffBuzonPanel({ currentUserId }) {
 
         {activeTab === 'direct' ? (
           <ul className={`staff-buzon-contacts ${styles.contactList}`} aria-label="Contactos del equipo">
+            {visibleContacts.length === 0 ? (
+              <li className={styles.emptyListHint}>
+                No hay compañeros del equipo todavía. Si acabas de entrar, recarga en unos segundos.
+              </li>
+            ) : null}
             {visibleContacts.map((user) => {
               const active = selection?.type === 'direct' && selection.id === user.id;
               const unread = getUnreadForPartner(user.id);
