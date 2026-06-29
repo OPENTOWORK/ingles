@@ -76,6 +76,25 @@ model SpeakingTask {
   @@map("speaking_tasks")
 }
 
+model SpeakingExam {
+  id                       String    @id @default(cuid())
+  cefr                     CefrLevel
+  title                    String
+  theme                    String
+  content                  Json
+  estimatedDurationMinutes Int       @default(14) @map("estimated_duration_minutes")
+  examSlot                 Int?      @map("exam_slot")
+  isActive                 Boolean   @default(true) @map("is_active")
+  createdAt                DateTime  @default(now()) @map("created_at")
+  updatedAt                DateTime  @updatedAt @map("updated_at")
+
+  sessions SpeakingSession[]
+
+  @@index([cefr, isActive])
+  @@index([examSlot])
+  @@map("speaking_exams")
+}
+
 model SpeakingSession {
   id                   String        @id @default(cuid())
   userId               String?       @map("user_id")
@@ -85,6 +104,8 @@ model SpeakingSession {
   state                SessionState  @default(ACTIVE)
   examBlueprintVersion String        @default("1") @map("exam_blueprint_version")
   examState            Json?         @map("exam_state")
+  speakingExamId       String?       @map("speaking_exam_id")
+  speakingExam         SpeakingExam? @relation(fields: [speakingExamId], references: [id], onDelete: SetNull)
   startedAt            DateTime      @default(now()) @map("started_at")
   endedAt              DateTime?     @map("ended_at")
 
@@ -93,6 +114,7 @@ model SpeakingSession {
 
   @@index([userId, startedAt])
   @@index([cefr, mode])
+  @@index([speakingExamId])
   @@map("speaking_sessions")
 }
 
@@ -105,11 +127,15 @@ model SpeakingTurn {
   transcriptSource TranscriptSource @default(MOCK) @map("transcript_source")
   audioUrl         String?          @map("audio_url")
   microFeedback    Json?            @map("micro_feedback")
+  partNumber       Int?             @map("part_number")
+  turnIndex        Int?             @map("turn_index")
+  speakerRole      String?          @map("speaker_role")
   createdAt        DateTime         @default(now()) @map("created_at")
 
   evaluations SpeakingEvaluation[]
 
   @@index([sessionId, createdAt])
+  @@index([sessionId, partNumber])
   @@map("speaking_turns")
 }
 

@@ -45,6 +45,7 @@ export const b2SpeakingScoreReportSchema = z.object({
   total: z.number().min(0).max(60),
   maxTotal: z.literal(60),
   estimatedLevel: z.string(),
+  shortSummary: z.string(),
   partFeedback: z
     .array(
       z.object({
@@ -66,6 +67,36 @@ export const correctionReportSchema = z.object({
     isEstimated: z.boolean(),
   }),
   b2Speaking: b2SpeakingScoreReportSchema.optional(),
+  strengths: z.array(z.string()).optional(),
+  mainErrors: z.array(z.string()).optional(),
+  improvedPhrases: z
+    .array(
+      z.object({
+        original: z.string(),
+        improved: z.string(),
+        note: z.string().optional(),
+      }),
+    )
+    .optional(),
+  recommendations: z.array(z.string()).optional(),
+  practicePlan: z.array(z.string()).optional(),
+  isPartialEvaluation: z.boolean().optional(),
+  partialEvaluationNote: z.string().optional(),
+  canProvideFullScore: z.boolean().optional(),
+  partialFeedback: z.boolean().optional(),
+  isCompleteExam: z.boolean().optional(),
+  speakingEvidence: z
+    .object({
+      isCompleteExam: z.boolean(),
+      canProvideFullScore: z.boolean(),
+      partialFeedback: z.boolean(),
+      message: z.string(),
+      partsMissing: z.array(z.number()).optional(),
+      evidenceNotes: z.array(z.string()).optional(),
+      totalCandidateWordCount: z.number().optional(),
+      nonEnglishDetected: z.boolean().optional(),
+    })
+    .optional(),
 });
 
 export type B2SpeakingScoreReportPayload = z.infer<typeof b2SpeakingScoreReportSchema>;

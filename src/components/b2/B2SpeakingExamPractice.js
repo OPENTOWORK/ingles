@@ -75,6 +75,7 @@ import {
   saveSpeakingUsageLocal,
 } from '@/lib/speakingUsageStorage';
 import { FeedbackCards } from '@/features/speaking/ui/components/FeedbackCards';
+import B2SpeakingFullExamSimulation from '@/components/b2/B2SpeakingFullExamSimulation';
 import A2ExamGenerationStatus from '@/components/niveles/A2ExamGenerationStatus';
 import { buildExamModeContinueModuleHref } from '@/utils/buildExamModeContinueModuleHref';
 import { buildExamModeSkillPartSnapshots } from '@/utils/buildExamModeSkillPartSnapshots';
@@ -155,6 +156,7 @@ function B2SpeakingExamPracticeInner({ title, subtitle, loadingLabel, refreshLab
   const [selectedPartId, setSelectedPartId] = useState(null);
   const [examLabelsBySlot, setExamLabelsBySlot] = useState({});
   const [speakingDraftEpoch, setSpeakingDraftEpoch] = useState(0);
+  const [fullExamSimOpen, setFullExamSimOpen] = useState(false);
   const examModePartScoresRef = useRef({});
   const examModePersistedPartsRef = useRef({});
   const speakingPartSnapshotsRef = useRef({});
@@ -742,6 +744,14 @@ function B2SpeakingExamPracticeInner({ title, subtitle, loadingLabel, refreshLab
     });
   }, [showExerciseFavorite, partNumber, examSlot, selectedPartTitleParts]);
 
+  useEffect(() => {
+    if (examModeActive && !reviewMode) {
+      setFullExamSimOpen(true);
+    }
+  }, [examModeActive, reviewMode]);
+
+  const showFullExamSimulation = fullExamSimOpen && (examModeActive ? !reviewMode : true);
+
   const speakingInstructionsBlocks = useMemo(() => {
     const raw = selectedPart?.descripcion || '';
     if (!raw.trim()) return [];
@@ -850,8 +860,47 @@ function B2SpeakingExamPracticeInner({ title, subtitle, loadingLabel, refreshLab
           <p style={{ textAlign: 'center', color: '#c53030', fontWeight: 600 }}>{error}</p>
         )}
 
-        {!loading && !error && selectedPart ? (
+        {!loading && !error && showFullExamSimulation ? (
           <div className="levels-exam-practice-page levels-exam-practice-page--speaking">
+            <B2SpeakingFullExamSimulation
+              examSlot={examSlot}
+              lang={lang === 'es' ? 'es' : 'en'}
+              autoStart={examModeActive && !reviewMode}
+              onExamComplete={() => {
+                void scoring.refreshPuntuacionesProgress();
+              }}
+            />
+            {!examModeActive ? (
+              <button
+                type="button"
+                className="levels-b2-speaking-session__secondary-btn"
+                style={{ marginTop: '1rem' }}
+                onClick={() => setFullExamSimOpen(false)}
+              >
+                {lang === 'es' ? '← Volver a práctica por partes' : '← Back to part practice'}
+              </button>
+            ) : null}
+          </div>
+        ) : null}
+
+        {!loading && !error && !showFullExamSimulation && selectedPart ? (
+          <div className="levels-exam-practice-page levels-exam-practice-page--speaking">
+            {!examModeActive ? (
+              <div className="levels-b2-speaking-full-exam__hub-cta" style={{ marginBottom: '1rem' }}>
+                <button
+                  type="button"
+                  className="levels-b2-speaking-session__phase-btn levels-b2-speaking-session__phase-btn--primary"
+                  onClick={() => setFullExamSimOpen(true)}
+                >
+                  {lang === 'es' ? 'Simulación completa B2 Speaking (4 partes)' : 'Full B2 Speaking exam simulation (4 parts)'}
+                </button>
+                <p className="levels-b2-writing-panel__alpha-limit" style={{ marginTop: '0.5rem' }}>
+                  {lang === 'es'
+                    ? 'Beta gratuita: 3 feedbacks de speaking exam al día.'
+                    : 'Free beta: 3 speaking exam feedbacks per day.'}
+                </p>
+              </div>
+            ) : null}
             <div className="levels-exam-split-card">
               <SkillPartPracticeHeader
                 title={selectedPartTitleParts.heading}
@@ -883,7 +932,7 @@ function B2SpeakingExamPracticeInner({ title, subtitle, loadingLabel, refreshLab
             onSavePartScore={handleSaveSpeakingPart}
             partScoring={b2PartCfg}
             lang={lang}
-            examMode={examModeActive && !reviewMode}
+            examMode={false}
             hideTaskIntro={Boolean(selectedPart?.descripcion?.trim())}
           />
               </div>

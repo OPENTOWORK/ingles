@@ -7,6 +7,8 @@ import { getUserRoleNameServer } from '@/lib/userRoleServer';
 export const AI_ACTIONS = {
   EXAM_WRITING_CORRECTION: 'exam_writing_correction',
   EXAM_SPEAKING_FEEDBACK: 'exam_speaking_feedback',
+  /** Internal cost tracking only — no daily limit shown to students. */
+  EXAM_SPEAKING_TRANSCRIPTION: 'exam_speaking_transcription',
   DRALO_AI_SPEAKING_MISSION: 'dralo_ai_speaking_mission',
   DRALO_AI_WRITING_COACH: 'dralo_ai_writing_coach',
   EXTRACT_ERRORS: 'extract_errors',
@@ -29,6 +31,7 @@ const DAILY_LIMITS = {
 const PRODUCT_AREA_BY_ACTION = {
   [AI_ACTIONS.EXAM_WRITING_CORRECTION]: 'exam_practice',
   [AI_ACTIONS.EXAM_SPEAKING_FEEDBACK]: 'exam_practice',
+  [AI_ACTIONS.EXAM_SPEAKING_TRANSCRIPTION]: 'exam_practice',
   [AI_ACTIONS.DRALO_AI_SPEAKING_MISSION]: 'dralo_ai',
   [AI_ACTIONS.DRALO_AI_WRITING_COACH]: 'dralo_ai',
   [AI_ACTIONS.EXTRACT_ERRORS]: 'internal',

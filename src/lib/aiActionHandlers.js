@@ -125,6 +125,12 @@ export async function handleExamSpeakingFeedback(userId, body, ctx = {}) {
       cefr,
       combinedTranscript: transcript,
       context: body.context === 'practice' ? 'practice' : 'exam',
+      evidenceMetadata: body.evidenceMetadata ?? {
+        partsCompleted: body.partsCompleted,
+        startedAt: body.startedAt,
+        endedAt: body.endedAt,
+        responseDurationsSec: body.responseDurationsSec,
+      },
     });
 
     const usage = usageFromTextEstimate(getDefaultModel(), transcript, JSON.stringify(report));

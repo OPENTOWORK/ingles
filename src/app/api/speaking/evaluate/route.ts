@@ -2,12 +2,11 @@ import { NextResponse } from 'next/server';
 import type { CefrLevel, SpeakingMode } from '@prisma/client';
 import { runCorrectionEngine } from '@/features/speaking/services/evaluation/correction-engine';
 import { saveEvaluation, completeSession } from '@/features/speaking/services/sessions/speaking-session.service';
-import { prisma } from '@/lib/prisma';
-import { hasDatabaseUrl } from '@/lib/prisma';
 import { getSupabaseUserFromRequest } from '@/lib/getSupabaseUserFromRequest';
 import { AI_ACTIONS, getDailyUsageSnapshot } from '@/lib/aiUsage';
 import { aiErrorJson, runAiPreflight } from '@/lib/aiUsageRouteHelpers';
 import { handleExamSpeakingFeedback } from '@/lib/aiActionHandlers';
+import { resolveSpeakingExamTranscript } from '@/features/speaking/services/evaluation/resolve-speaking-exam-transcript';
 
 export const dynamic = 'force-dynamic';
 
@@ -20,6 +19,18 @@ export async function POST(req: Request) {
       text?: string;
       combinedTranscript?: string;
       taskPrompt?: string;
+      examId?: string;
+      isPartialEvaluation?: boolean;
+      evidenceMetadata?: {
+        partsCompleted?: number[];
+        startedAt?: string;
+        endedAt?: string;
+        responseDurationsSec?: number[];
+      };
+      partsCompleted?: number[];
+      startedAt?: string;
+      endedAt?: string;
+      responseDurationsSec?: number[];
     };
 
     const { sessionId, cefr, mode, taskPrompt } = body;
@@ -29,13 +40,12 @@ export async function POST(req: Request) {
 
     let text = body.combinedTranscript?.trim() || body.text?.trim() || '';
 
-    if (mode === 'EXAM' && !text && hasDatabaseUrl() && !sessionId.startsWith('local_')) {
-      const turns = await prisma.speakingTurn.findMany({
-        where: { sessionId },
-        orderBy: { createdAt: 'asc' },
+    if (mode === 'EXAM' && sessionId) {
+      text = await resolveSpeakingExamTranscript({
+        sessionId,
+        examId: body.examId ?? null,
+        combinedTranscript: text,
       });
-      const userLines = turns.filter((t) => t.role === 'USER').map((t) => t.text);
-      text = userLines.join('\n\n');
     }
 
     if (!text) {
@@ -73,6 +83,12 @@ export async function POST(req: Request) {
           level: cefr,
           sessionId,
           context: 'exam',
+          evidenceMetadata: body.evidenceMetadata ?? {
+            partsCompleted: body.partsCompleted,
+            startedAt: body.startedAt,
+            endedAt: body.endedAt,
+            responseDurationsSec: body.responseDurationsSec,
+          },
         },
         aiCtx,
       );
@@ -98,7 +114,24 @@ export async function POST(req: Request) {
     await saveEvaluation({
       sessionId,
       turnId: null,
-      payload: report,
+      payload: {
+        ...report,
+        meta: {
+          examId: body.examId ?? null,
+          sessionId,
+          cefr,
+          savedAt: new Date().toISOString(),
+          speakingScoreTotal: report?.b2Speaking?.total ?? null,
+          estimatedLevel: report?.b2Speaking?.estimatedLevel ?? null,
+          source: 'ai_feedback',
+          isPartialEvaluation:
+            body.isPartialEvaluation ??
+            report?.isPartialEvaluation ??
+            report?.partialFeedback ??
+            /\[Not completed|may be missing or incomplete/i.test(text),
+          canProvideFullScore: report?.canProvideFullScore ?? null,
+        },
+      },
     });
 
     await completeSession(sessionId);
