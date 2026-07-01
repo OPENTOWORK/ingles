@@ -3235,6 +3235,46 @@ function B2ExamPaperPracticePageInner({
     lang,
   });
 
+  const moduleNavEl = (
+    <B2ExamPracticeModuleNav
+      slug={levelSlug}
+      partNumber={partNumber}
+      pagePartMax={partMax}
+      pagePartMin={partMin}
+      examSlot={examSlot}
+      examenIdBySlot={isSkillPracticeSession ? scoring.examenIdBySlot : undefined}
+      progressBySlot={isSkillPracticeSession ? scoring.progressBySlot : undefined}
+      onSelectExamSlot={
+        isSkillPracticeSession
+          ? (slot) => {
+              void scoring.refreshPuntuacionesProgress();
+              handleSelectExamSlot(slot);
+            }
+          : undefined
+      }
+      skillPracticeMode={isSkillPracticeSession}
+      examMode={examModeActive && !reviewMode}
+      skillPracticeTheme={skillNav.skillTheme}
+      onContinueInPage={isSkillPracticeSession ? handleKeepPracticing : handleContinueInPage}
+      onPreviousInPage={handlePreviousInPage}
+      onContinueModule={
+        examModeActive && !reviewMode ? handleContinueModuleInExamMode : undefined
+      }
+      showCheckAnswersButton={shouldShowCheckAnswersButton({
+        skillPracticeMode: isSkillPracticeSession,
+        hideFeedback,
+        showFeedback: readingSession.readingSettings.showFeedback,
+        answersRevealed: readingSession.answersRevealed,
+      })}
+      onCheckAnswers={handleCheckAllAnswers}
+      checkAnswersDisabled={!hasCheckableAnswers}
+      lang={lang}
+      partMinForTabLabels={
+        isSkillPracticeSession || isExamSimulationMode(practiceMode) ? partMin : null
+      }
+    />
+  );
+
   return (
     <B2ExamPracticeLayout examPracticeOpen={layoutPracticeOpen}>
       {adminFlow.canRegenerateExams ? (
@@ -4130,6 +4170,7 @@ function B2ExamPaperPracticePageInner({
                 </div>
               </div>
               </div>
+              {moduleNavEl}
               </div>
               {showPracticeSideRail ? (
                 <ExamPracticeSessionSideRail
@@ -4662,43 +4703,7 @@ function B2ExamPaperPracticePageInner({
         )}
       </section>
 
-      <B2ExamPracticeModuleNav
-        slug={levelSlug}
-        partNumber={partNumber}
-        pagePartMax={partMax}
-        pagePartMin={partMin}
-        examSlot={examSlot}
-        examenIdBySlot={isSkillPracticeSession ? scoring.examenIdBySlot : undefined}
-        progressBySlot={isSkillPracticeSession ? scoring.progressBySlot : undefined}
-        onSelectExamSlot={
-          isSkillPracticeSession
-            ? (slot) => {
-                void scoring.refreshPuntuacionesProgress();
-                handleSelectExamSlot(slot);
-              }
-            : undefined
-        }
-        skillPracticeMode={isSkillPracticeSession}
-        examMode={examModeActive && !reviewMode}
-        skillPracticeTheme={skillNav.skillTheme}
-        onContinueInPage={isSkillPracticeSession ? handleKeepPracticing : handleContinueInPage}
-        onPreviousInPage={handlePreviousInPage}
-        onContinueModule={
-          examModeActive && !reviewMode ? handleContinueModuleInExamMode : undefined
-        }
-        showCheckAnswersButton={shouldShowCheckAnswersButton({
-          skillPracticeMode: isSkillPracticeSession,
-          hideFeedback,
-          showFeedback: readingSession.readingSettings.showFeedback,
-          answersRevealed: readingSession.answersRevealed,
-        })}
-        onCheckAnswers={handleCheckAllAnswers}
-        checkAnswersDisabled={!hasCheckableAnswers}
-        lang={lang}
-        partMinForTabLabels={
-          isSkillPracticeSession || isExamSimulationMode(practiceMode) ? partMin : null
-        }
-      />
+      {!(selectedPart && selectedQuestion && useListeningItemLayout) ? moduleNavEl : null}
       </PracticeChrome>
     </B2ExamPracticeLayout>
   );

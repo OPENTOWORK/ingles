@@ -137,6 +137,13 @@ export function formatBuzonPresence(presence) {
   return label;
 }
 
+export function getDirectContactPreview(conversation, presence, messagePreviewFn) {
+  if (conversation?.lastMessage && typeof messagePreviewFn === 'function') {
+    return messagePreviewFn(conversation.lastMessage);
+  }
+  return formatBuzonPresence(presence);
+}
+
 export function buildGroupConversationSummaries(messages, groupId) {
   const groupMessages = messages
     .filter((message) => message.group_id === groupId)

@@ -66,6 +66,8 @@ export const correctionReportSchema = z.object({
     isEstimated: z.boolean(),
   }),
   b2Speaking: b2SpeakingScoreReportSchema.optional(),
+  /** DRALO 7-block B2 feedback (grammar, vocabulary, discourse, pronunciation, interaction, overall). */
+  draloB2Feedback: z.record(z.unknown()).optional(),
 });
 
 export type B2SpeakingScoreReportPayload = z.infer<typeof b2SpeakingScoreReportSchema>;

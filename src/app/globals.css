@@ -3389,6 +3389,27 @@ body.nav-open {
   margin-inline: 0;
 }
 
+.staff-buzon-page .page-hero__desc {
+  max-width: none;
+  white-space: nowrap;
+}
+
+.staff-buzon-page .levels-b2-page-content {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.staff-buzon-page .page-hero {
+  margin-bottom: 0;
+}
+
+@media (max-width: 900px) {
+  .staff-buzon-page .page-hero__desc {
+    white-space: normal;
+  }
+}
+
 .niveles-level-page--b2 .stars-way-to-b2 {
   width: 100%;
   max-width: var(--levels-b2-page-max-width);
@@ -4765,13 +4786,21 @@ body.reading-night-mode .levels-exercise-stars--gold .starSvgWrapEmpty .starSvgP
 
 .levels-exam-module-nav--skill[data-skill-theme] {
   margin-top: 1.75rem;
-  padding: 0.85rem 0.95rem 0.85rem;
+  max-width: none;
+  width: 100%;
+  box-sizing: border-box;
+  padding: 0.85rem 0.95rem;
+  min-height: calc(2.75rem + 1.7rem);
   border-top: none;
   border-radius: 14px;
   background: linear-gradient(180deg, rgba(255, 255, 255, 0.72) 0%, rgba(248, 250, 252, 0.92) 100%);
   box-shadow:
     inset 0 1px 0 rgba(255, 255, 255, 0.85),
     0 -1px 0 var(--skill-border);
+}
+
+.levels-exam-module-nav--skill[data-skill-theme].levels-exam-module-nav--next-hint .levels-exam-module-nav__zone {
+  flex-wrap: nowrap;
 }
 
 .levels-exam-module-nav--skill[data-skill-theme] .levels-exam-module-nav__btn--back {
@@ -6482,10 +6511,6 @@ body.reading-night-mode .levels-exercise-stars--gold .starSvgWrapEmpty .starSvgP
   gap: 0.65rem;
 }
 
-.levels-exam-module-nav--balanced:has(.levels-exam-module-nav__next-exercise-hint) {
-  padding-bottom: 2.35rem;
-}
-
 .levels-exam-module-nav--balanced:not(:has(.levels-exam-module-nav__zone--center)) {
   grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
 }
@@ -6545,9 +6570,24 @@ body.reading-night-mode .levels-exercise-stars--gold .starSvgWrapEmpty .starSvgP
 }
 
 .levels-exam-module-nav__zone--forward {
-  justify-self: end;
+  justify-self: stretch;
   justify-content: flex-end;
   margin-left: 0;
+}
+
+.levels-exam-module-nav--balanced .levels-exam-module-nav__zone--forward {
+  width: 100%;
+}
+
+.levels-exam-module-nav--next-hint.levels-exam-module-nav--balanced {
+  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+}
+
+.levels-exam-module-nav--next-hint .levels-exam-module-nav__zone--forward {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 0.65rem;
 }
 
 .levels-exam-module-nav__exercise-pair {
@@ -6558,27 +6598,26 @@ body.reading-night-mode .levels-exercise-stars--gold .starSvgWrapEmpty .starSvgP
 }
 
 .levels-exam-module-nav__next-exercise-wrap {
-  position: relative;
   display: inline-flex;
-  flex-direction: column;
   align-items: center;
   flex-shrink: 0;
 }
 
 .levels-exam-module-nav__next-exercise-hint {
-  position: absolute;
-  top: calc(100% + 0.35rem);
-  left: 50%;
-  transform: translateX(-50%);
-  width: max-content;
-  max-width: 15rem;
   margin: 0;
   font-size: 0.75rem;
   font-weight: 500;
-  line-height: 1.35;
+  line-height: 1.2;
   color: #64748b;
-  text-align: center;
+  text-align: right;
+  white-space: nowrap;
   pointer-events: none;
+}
+
+.levels-exam-module-nav__zone--forward .levels-exam-module-nav__next-exercise-hint {
+  flex: 1 1 auto;
+  min-width: 0;
+  max-width: none;
 }
 
 .levels-exam-module-nav--skill[data-skill-theme] .levels-exam-module-nav__next-exercise-hint {
@@ -6854,6 +6893,11 @@ body.reading-night-mode .levels-exercise-stars--gold .starSvgWrapEmpty .starSvgP
   .levels-exam-module-nav--skill[data-skill-theme] {
     padding-left: 0.75rem;
     padding-right: 0.75rem;
+  }
+
+  .levels-exam-module-nav--next-hint .levels-exam-module-nav__next-exercise-hint {
+    white-space: normal;
+    text-align: center;
   }
 
   .levels-exam-module-nav--with-check {

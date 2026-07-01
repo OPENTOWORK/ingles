@@ -115,6 +115,64 @@ async function pollAssistantRun(client, threadId, runId, maxMs = 120000) {
   return run;
 }
 
+function normalizeAssistantHistory(conversationHistory = []) {
+  return (Array.isArray(conversationHistory) ? conversationHistory : [])
+    .filter((m) => m && (m.role === 'user' || m.role === 'assistant') && m.content != null)
+    .map((m) => ({ role: m.role, content: String(m.content) }));
+}
+
+function buildCambridgeAssistantUserMessage(options = {}) {
+  const incoming = Array.isArray(options.messages) ? options.messages : [];
+  const taskSystem = String(
+    options.system || incoming.find((m) => m?.role === 'system')?.content || '',
+  ).trim();
+  const userPrompt =
+    options.userMessage != null
+      ? String(options.userMessage)
+      : incoming.filter((m) => m?.role === 'user').pop()?.content || '';
+
+  return taskSystem
+    ? `${taskSystem}\n\n${String(userPrompt).trim()}`
+    : String(userPrompt).trim();
+}
+
+/**
+ * DRALO EXAM CAMBRIDGE assistant when OPENAI_ASSISTANT_ID_CAMBRIDGE_EXAMS is set;
+ * otherwise Chat Completions + examCoachPrompt.
+ */
+async function cambridgeViaAssistantOrChat(options = {}) {
+  const assistantId = getCambridgeExamsAssistantId();
+  const client = getDraloOpenAI();
+
+  if (options.requireAssistant && (!assistantId || !client)) {
+    throw new Error(
+      'OPENAI_ASSISTANT_ID_CAMBRIDGE_EXAMS is required for B2 speaking (DRALO EXAM CAMBRIDGE assistant).',
+    );
+  }
+
+  if (assistantId && client && options.useAssistant !== false) {
+    const fullUserMessage = buildCambridgeAssistantUserMessage(options);
+    if (!fullUserMessage.trim()) {
+      throw new Error('Empty prompt for DRALO EXAM CAMBRIDGE assistant.');
+    }
+
+    return assistantCompletion(client, assistantId, {
+      ...options,
+      userMessage: fullUserMessage,
+      messages: normalizeAssistantHistory(options.conversationHistory || []),
+      engine: DRALO_AI_ENGINE.CAMBRIDGE,
+      assistantTimeoutMs: options.assistantTimeoutMs ?? 120000,
+    });
+  }
+
+  return draloChatCompletion({
+    ...options,
+    engine: DRALO_AI_ENGINE.CAMBRIDGE,
+    useAssistant: false,
+    system: options.system ? mergeCambridgeSystem(options.system) : options.system,
+  });
+}
+
 async function assistantCompletion(client, assistantId, options) {
   const thread = await client.beta.threads.create();
   const history = Array.isArray(options.messages) ? options.messages : [];
@@ -137,9 +195,11 @@ async function assistantCompletion(client, assistantId, options) {
     role: 'user',
     content: String(userContent),
   });
-  const run = await client.beta.threads.runs.create(thread.id, {
-    assistant_id: assistantId,
-  });
+  const runParams = { assistant_id: assistantId };
+  if (options.response_format) {
+    runParams.response_format = options.response_format;
+  }
+  const run = await client.beta.threads.runs.create(thread.id, runParams);
   await pollAssistantRun(client, thread.id, run.id, options.assistantTimeoutMs);
   const listed = await client.beta.threads.messages.list(thread.id, { order: 'desc', limit: 1 });
   const text =
@@ -229,47 +289,34 @@ export async function draloChatCompletion(options = {}) {
   };
 }
 
-export function cambridgeChatCompletion(options = {}) {
-  return draloChatCompletion({ ...options, engine: DRALO_AI_ENGINE.CAMBRIDGE, useAssistant: false });
+/** Live B2 speaking examiner turns (skills + exam mode) — DRALO EXAM CAMBRIDGE assistant only. */
+export function cambridgeSpeakingExaminerTurn(options = {}) {
+  return cambridgeViaAssistantOrChat({
+    ...options,
+    requireAssistant: true,
+    assistantTimeoutMs: options.assistantTimeoutMs ?? 90000,
+  });
 }
 
-/**
- * Generación de exámenes Levels: usa el GPT «Examenes de cambridge» vía Assistants API
- * cuando OPENAI_ASSISTANT_ID_CAMBRIDGE_EXAMS está configurado; si no, Chat Completions + persona Cambridge.
- */
-export async function cambridgeExamGenerationCompletion(options = {}) {
-  const assistantId = getCambridgeExamsAssistantId();
-  const client = getDraloOpenAI();
-
-  if (assistantId && client) {
-    const incoming = Array.isArray(options.messages) ? options.messages : [];
-    const taskSystem = String(options.system || '').trim();
-    const userPrompt =
-      options.userMessage != null
-        ? String(options.userMessage)
-        : incoming.filter((m) => m.role === 'user').pop()?.content || '';
-    const fullUserMessage = taskSystem
-      ? `${taskSystem}\n\n${String(userPrompt).trim()}`
-      : String(userPrompt).trim();
-
-    if (!fullUserMessage.trim()) {
-      throw new Error('Empty prompt for Examenes de Cambridge engine.');
-    }
-
-    return assistantCompletion(client, assistantId, {
-      ...options,
-      userMessage: fullUserMessage,
-      messages: [],
-      engine: DRALO_AI_ENGINE.CAMBRIDGE,
-      assistantTimeoutMs: options.assistantTimeoutMs ?? 300000,
-    });
-  }
-
-  return draloChatCompletion({
+/** B2 speaking session feedback (skills + exam mode) — DRALO EXAM CAMBRIDGE assistant only. */
+export function cambridgeSpeakingFeedbackCompletion(options = {}) {
+  return cambridgeViaAssistantOrChat({
     ...options,
-    engine: DRALO_AI_ENGINE.CAMBRIDGE,
-    useAssistant: false,
-    system: mergeCambridgeSystem(options.system || ''),
+    requireAssistant: true,
+    assistantTimeoutMs: options.assistantTimeoutMs ?? 120000,
+  });
+}
+
+/** Writing, speaking feedback, answer justify, etc. — uses DRALO EXAM CAMBRIDGE assistant when configured. */
+export function cambridgeChatCompletion(options = {}) {
+  return cambridgeViaAssistantOrChat(options);
+}
+
+/** Generación/regeneración de exámenes Levels (timeout largo). */
+export async function cambridgeExamGenerationCompletion(options = {}) {
+  return cambridgeViaAssistantOrChat({
+    ...options,
+    assistantTimeoutMs: options.assistantTimeoutMs ?? 300000,
   });
 }
 

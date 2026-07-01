@@ -316,15 +316,6 @@ export default function B2ExamPracticeModuleNav({
               <span className="levels-exam-module-nav__label">{continueLabel}</span>
               <NavChevron direction="forward" />
             </button>
-            {showNextExerciseHint ? (
-              <p
-                id="skill-next-exercise-hint"
-                className="levels-exam-module-nav__next-exercise-hint"
-                role="status"
-              >
-                {nextExerciseHint}
-              </p>
-            ) : null}
           </div>
         ) : null}
       </div>
@@ -336,7 +327,9 @@ export default function B2ExamPracticeModuleNav({
         effectiveSkillPractice ? ' levels-exam-module-nav--skill' : ''
       }${showCheckAnswersButton ? ' levels-exam-module-nav--with-check' : ''}${
         useBalancedLayout ? ' levels-exam-module-nav--balanced' : ''
-      }${useCenteredPartNav ? ' levels-exam-module-nav--centered-parts' : ''}`}
+      }${useCenteredPartNav ? ' levels-exam-module-nav--centered-parts' : ''}${
+        showNextExerciseHint ? ' levels-exam-module-nav--next-hint' : ''
+      }`}
       data-skill-theme={effectiveSkillPractice && skillPracticeTheme ? skillPracticeTheme : undefined}
       aria-label={isEn ? 'Module navigation' : 'Navegación del módulo'}
     >
@@ -379,6 +372,15 @@ export default function B2ExamPracticeModuleNav({
 
       <div className="levels-exam-module-nav__zone levels-exam-module-nav__zone--forward">
         {useBalancedLayout && checkAnswersButton ? checkAnswersButton : null}
+        {showNextExerciseHint ? (
+          <p
+            id="skill-next-exercise-hint"
+            className="levels-exam-module-nav__next-exercise-hint"
+            role="status"
+          >
+            {nextExerciseHint}
+          </p>
+        ) : null}
 
         {!useCenteredPartNav &&
         !useBalancedLayout &&

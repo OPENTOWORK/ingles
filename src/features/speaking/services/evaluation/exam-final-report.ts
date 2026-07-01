@@ -1,9 +1,11 @@
+import type { CefrLevel } from '@prisma/client';
+import { runDraloB2SpeakingFeedback } from './dralo-b2-speaking-feedback';
+import { B2_SPEAKING_PART_MIN } from '../../domain/b2-speaking-exam-parts';
 import {
-  cambridgeChatCompletion,
+  cambridgeSpeakingFeedbackCompletion,
   realLifeChatCompletion,
   isDraloOpenAIConfigured,
 } from '@/lib/draloAiEngine';
-import type { CefrLevel } from '@prisma/client';
 import {
   correctionReportSchema,
   type CorrectionReportPayload,
@@ -18,13 +20,27 @@ import {
 export async function runExamFinalReport(params: {
   cefr: CefrLevel;
   combinedTranscript: string;
+  sessionId?: string | null;
+  /** Global levels part (14 = B2 Speaking Part 1). DRALO 7-block + audio feedback only for Part 1. */
+  b2PartNumber?: number | null;
   /** Practice = friendly wrap-up after a conversational session with the coach */
   context?: 'exam' | 'practice';
 }): Promise<CorrectionReportPayload> {
   const ctx = params.context ?? 'exam';
-  const isB2Exam = params.cefr === 'B2' && ctx === 'exam';
+  const partNumber = Number(params.b2PartNumber) || 0;
+  const useDraloPart1Feedback =
+    params.cefr === 'B2' && partNumber === B2_SPEAKING_PART_MIN;
 
-  const systemContent =
+  if (useDraloPart1Feedback) {
+    return runDraloB2SpeakingFeedback({
+      cefr: params.cefr,
+      sessionId: params.sessionId,
+      combinedTranscript: params.combinedTranscript,
+      b2PartNumber: partNumber,
+    });
+  }
+
+  const isB2Exam = params.cefr === 'B2' && ctx === 'exam';  const systemContent =
     ctx === 'practice'
       ? [
           'You are a Cambridge-style speaking coach wrapping up after a conversational practice session (not an exam).',
@@ -63,7 +79,7 @@ export async function runExamFinalReport(params: {
 
   if (isDraloOpenAIConfigured()) {
     const complete =
-      ctx === 'practice' ? realLifeChatCompletion : cambridgeChatCompletion;
+      ctx === 'practice' ? realLifeChatCompletion : cambridgeSpeakingFeedbackCompletion;
     const { text } = await complete({
       system: systemContent,
       messages: [

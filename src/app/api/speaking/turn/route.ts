@@ -8,8 +8,14 @@ import {
   buildB2ExaminerSystemExtra,
   getB2SpeakingPartConfig,
 } from '@/features/speaking/domain/b2-speaking-exam-parts';
+import { hasDedicatedB2ExaminerPrompt } from '@/features/speaking/domain/b2-examiner-prompts';
 import { saveTurn, getSessionTurns } from '@/features/speaking/services/sessions/speaking-session.service';
 import { buildLlmHistoryFromStoredTurns } from '@/features/speaking/services/sessions/speaking-turn-context';
+import { optionalUserId } from '@/server/speaking/authorize';
+import {
+  linkSpeakingRespuestaToTurn,
+  persistSpeakingRespuestaAudio,
+} from '@/lib/speakingRespuestasServer';
 
 export const dynamic = 'force-dynamic';
 export const runtime = 'nodejs';
@@ -92,6 +98,8 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: 'sessionId required' }, { status: 400 });
     }
 
+    const userId = await optionalUserId();
+
     const stt = createSttAdapter();
     const llm = createLlmAdapter();
     const tts = createTtsAdapter();
@@ -110,12 +118,40 @@ export async function POST(req: Request) {
         transcriptSource = 'MOCK';
       }
 
-      await saveTurn({
+      let audioUrl: string | null = null;
+      let respuestaId: string | null = null;
+
+      if (audio?.buffer?.length) {
+        const persisted = await persistSpeakingRespuestaAudio({
+          userId,
+          sessionId,
+          mode,
+          cefr,
+          b2PartNumber,
+          examPartIndex,
+          transcript: userText,
+          transcriptSource,
+          buffer: audio.buffer,
+          mimeType: audio.mimeType,
+          filename: audio.filename,
+        });
+        if (persisted) {
+          audioUrl = persisted.audioUrl;
+          respuestaId = persisted.id;
+        }
+      }
+
+      const userTurn = await saveTurn({
         sessionId,
         role: 'USER',
         text: userText,
         transcriptSource,
+        audioUrl,
       });
+
+      if (respuestaId && userTurn?.id) {
+        await linkSpeakingRespuestaToTurn(String(userTurn.id), respuestaId);
+      }
     }
 
     let assistantText: string;
@@ -130,9 +166,11 @@ export async function POST(req: Request) {
     const examKey = blueprint.exam;
     const examName = EXAM_NAMES[examKey] ?? examKey;
 
-    const mergedTaskContext = b2Config
-      ? buildB2ExaminerSystemExtra(b2Config, taskContext)
-      : taskContext.trim();
+    const rawTaskContext = taskContext.trim();
+    const mergedTaskContext =
+      b2Config && !hasDedicatedB2ExaminerPrompt(b2PartNumber)
+        ? buildB2ExaminerSystemExtra(b2Config, rawTaskContext)
+        : rawTaskContext;
 
     const storedTurns = isOpening ? [] : await getSessionTurns(sessionId);
     const history = buildLlmHistoryFromStoredTurns(storedTurns, { omitLatestUserTurn: true });
@@ -146,6 +184,7 @@ export async function POST(req: Request) {
         history,
         taskContext: mergedTaskContext,
         isOpening,
+        b2PartNumber: b2PartNumber >= 14 ? b2PartNumber : undefined,
       });
     } else {
       assistantText = await llm.practiceReply({

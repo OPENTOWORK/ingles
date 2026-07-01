@@ -271,7 +271,7 @@ export function B2ExamPracticeChrome({
     const partScore = progressBySlot?.[examSlot]?.parts?.[skillExercisePartNumber];
     const savedStars = starsFromPartExerciseScore(partScore);
 
-    if (partScoreMetrics?.questionsAnswered > 0) {
+    if (partScoreMetrics?.questionsAnswered > 0 || partScoreMetrics?.correctCount > 0) {
       const isV2 = Number(partScoreMetrics.scoringVersion) === 2;
       const earned = isV2
         ? partScoreMetrics.pointsEarned ?? partScoreMetrics.correctCount

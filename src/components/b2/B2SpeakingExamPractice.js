@@ -81,6 +81,7 @@ import { buildExamModeSkillPartSnapshots } from '@/utils/buildExamModeSkillPartS
 import { finishExamModeSupabasePersistence } from '@/utils/finishExamModeSupabasePersistence';
 import { LEVELS_SCORE_SOURCE, resolvePracticeScoreSourceFromExamModeParam } from '@/utils/levelsScoreSource';
 import { persistLevelsPartProgress } from '@/utils/persistLevelsPartProgress';
+import { speakingProgressFromFeedbackReport } from '@/lib/speakingPartScoreFromFeedback';
 import { resolveB2ExamenId, fetchB2PreguntasByExamen } from '@/utils/b2ResolveExam';
 
 const buttonStyle = {
@@ -390,6 +391,11 @@ function B2SpeakingExamPracticeInner({ title, subtitle, loadingLabel, refreshLab
 
   const b2PartCfg = getB2PartScoring(partNumber);
   const savedPartScore = scoring.progressBySlot[examSlot]?.parts?.[partNumber];
+  const [speakingLiveScore, setSpeakingLiveScore] = useState(null);
+
+  useEffect(() => {
+    setSpeakingLiveScore(null);
+  }, [selectedPart?.id, examSlot, speakingDraftEpoch]);
 
   useEffect(() => {
     if (!scoring.examPracticeOpen) return;
@@ -403,9 +409,11 @@ function B2SpeakingExamPracticeInner({ title, subtitle, loadingLabel, refreshLab
   }, [examSlot, partNumber, selectedPart?.id, scoring.examPracticeOpen]);
 
   const scorePanelProps = {
-    correctCount: savedPartScore?.correct ?? 0,
-    totalSlots: b2PartCfg?.total ?? 5,
+    correctCount: speakingLiveScore?.correct ?? savedPartScore?.correct ?? 0,
+    totalSlots: speakingLiveScore?.total ?? savedPartScore?.total ?? b2PartCfg?.total ?? 5,
     passingCount: b2PartCfg?.passing ?? 3,
+    questionsAnswered:
+      speakingLiveScore?.correct != null || savedPartScore?.correct != null ? 1 : 0,
   };
 
   const persistSpeakingPartScore = useCallback(
@@ -452,6 +460,8 @@ function B2SpeakingExamPracticeInner({ title, subtitle, loadingLabel, refreshLab
   const handleSaveSpeakingPart = useCallback(
     ({ correct, total, passed }) => {
       if (!selectedPart?.id || !scoring.examPracticeOpen) return;
+
+      setSpeakingLiveScore({ correct, total, passed });
 
       const payload = {
         partNumber: selectedPart.partNumber,
@@ -1422,49 +1432,180 @@ function B2SpeakingPartSession({
       : null;
   const userLines = lines.filter((l) => l.role === 'user');
 
-  const finishExamModePart = useCallback(
-    (userCount) => {
-      if (!examMode || partCompleteHandledRef.current) return;
+  const getFeedbackWithDralo = useCallback(
+    async (answerLines) => {
+      const answers = answerLines ?? userLines;
+      if (!sessionId || answers.length === 0 || limitReached) return;
+      setFeedbackError('');
+      setFeedbackLoading(true);
+      try {
+        const res = await fetch(withBasePath('/api/speaking/evaluate'), {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          credentials: 'include',
+          body: JSON.stringify({
+            sessionId,
+            cefr: 'B2',
+            mode: 'EXAM',
+            combinedTranscript: answers.map((l) => l.content).join('\n\n'),
+            taskPrompt: taskContext,
+            b2PartNumber: part.partNumber,
+          }),
+        });
+        const data = await res.json().catch(() => ({}));
+        if (!res.ok || data.error === true) {
+          const limitHit =
+            res.status === 429 ||
+            data.code === 'DAILY_LIMIT_REACHED' ||
+            data.code === 'LIMIT_CHECK_FAILED';
+          if (limitHit) {
+            if (data.usage) {
+              applySpeakingUsage(data.usage);
+            } else {
+              const resolvedLimit = data.limit ?? usageLimit ?? 3;
+              const resolvedUsed = data.used ?? resolvedLimit;
+              applySpeakingUsage({
+                unlimited: false,
+                limit: resolvedLimit,
+                used: resolvedUsed,
+                remaining: 0,
+                atLimit: true,
+              });
+            }
+          }
+          throw new Error(
+            limitHit
+              ? isEn
+                ? LIMIT_REACHED.speaking.en
+                : LIMIT_REACHED.speaking.es
+              : data.message ||
+                  (typeof data.error === 'string' ? data.error : null) ||
+                  (isEn ? 'Could not generate feedback.' : 'No se pudo generar el feedback.'),
+          );
+        }
+        if (!data.report) {
+          throw new Error(isEn ? 'Could not generate feedback.' : 'No se pudo generar el feedback.');
+        }
+        setFeedbackReport(data.report);
+        const progress = speakingProgressFromFeedbackReport(data.report, partScoring);
+        if (progress && onSavePartScore) {
+          onSavePartScore(progress);
+        }
+        if (data.usage) {
+          applySpeakingUsage(data.usage);
+        } else {
+          await refreshUsageHint();
+        }
+      } catch (e) {
+        setFeedbackError(e?.message || (isEn ? 'Feedback failed.' : 'Error al obtener feedback.'));
+      } finally {
+        setFeedbackLoading(false);
+      }
+    },
+    [
+      sessionId,
+      userLines,
+      limitReached,
+      taskContext,
+      part.partNumber,
+      partScoring,
+      onSavePartScore,
+      applySpeakingUsage,
+      refreshUsageHint,
+      usageLimit,
+      isEn,
+    ],
+  );
+
+  const finishSpeakingPart = useCallback(
+    async (userCount, userAnswerContents) => {
+      if (partCompleteHandledRef.current) return;
       partCompleteHandledRef.current = true;
-      const correct = Math.min(speakingTotal, userCount);
-      onSavePartScore?.({
-        correct,
-        total: speakingTotal,
-        passed: correct >= speakingPassing,
-      });
+
+      if (examMode) {
+        const correct = Math.min(speakingTotal, userCount);
+        onSavePartScore?.({
+          correct,
+          total: speakingTotal,
+          passed: correct >= speakingPassing,
+        });
+      }
+
       setPartComplete(true);
       stopExaminerAudio();
       if (media.isActive) void media.stop();
 
-      if (nextLocalPartNumber != null) {
+      const closingText =
+        localPartNumber === 1
+          ? isEn
+            ? 'Thank you. That is the end of Part 1.'
+            : 'Gracias. Esto es el final de la Parte 1.'
+          : isEn
+            ? `Thank you. That is the end of Part ${localPartNumber}.`
+            : `Gracias. Esto es el final de la Parte ${localPartNumber}.`;
+
+      const appendAssistantLine = (text) => {
+        setLines((prev) => [...prev, { role: 'assistant', content: text }]);
+        setHistory((prev) => [...prev, { role: 'assistant', content: text }]);
+        lastAssistantRef.current = { assistantText: text };
+        setCanRepeatExaminer(true);
+      };
+
+      appendAssistantLine(closingText);
+      if (isAlive()) {
+        await playExaminerAudio({ text: closingText, speechLang: isEn ? 'en-GB' : 'es-ES' });
+      }
+
+      if (nextLocalPartNumber != null && isAlive()) {
         const voiceText = isEn
           ? `Now let's move on to Part ${nextLocalPartNumber}.`
           : nextLocalPartNumber === 2
             ? 'Ahora pasemos a la segunda parte.'
             : `Ahora pasemos a la parte ${nextLocalPartNumber}.`;
-        void playExaminerAudio({
-          text: voiceText,
-          speechLang: isEn ? 'en-GB' : 'es-ES',
-        });
+        appendAssistantLine(voiceText);
+        await playExaminerAudio({ text: voiceText, speechLang: isEn ? 'en-GB' : 'es-ES' });
+      }
+
+      if (!examMode && isAlive()) {
+        if (limitReached) {
+          setFeedbackError(isEn ? LIMIT_REACHED.speaking.en : LIMIT_REACHED.speaking.es);
+        } else {
+          const answersForFeedback =
+            userAnswerContents?.map((content) => ({ role: 'user', content })) ?? userLines;
+          await getFeedbackWithDralo(answersForFeedback);
+        }
       }
     },
-    [examMode, speakingTotal, speakingPassing, onSavePartScore, media, nextLocalPartNumber, isEn],
+    [
+      examMode,
+      speakingTotal,
+      speakingPassing,
+      onSavePartScore,
+      media,
+      localPartNumber,
+      nextLocalPartNumber,
+      isEn,
+      isAlive,
+      userLines,
+      getFeedbackWithDralo,
+      limitReached,
+    ],
   );
 
   const partCompleteMessage = useMemo(() => {
-    if (!partComplete || !examMode) return '';
+    if (!partComplete) return '';
     if (nextLocalPartNumber != null) {
       return isEn
         ? `Part ${localPartNumber} complete. Use “Continue — Part ${nextLocalPartNumber}” when you are ready.`
         : `Parte ${localPartNumber} completada. Pulsa «Continue — Part ${nextLocalPartNumber}» cuando quieras.`;
     }
     return isEn ? 'Part complete.' : 'Parte completada.';
-  }, [partComplete, examMode, isEn, localPartNumber, nextLocalPartNumber]);
+  }, [partComplete, isEn, localPartNumber, nextLocalPartNumber]);
 
   const submitCandidateTurn = useCallback(
     async (audioOrText) => {
       if (!isAlive() || partCompleteHandledRef.current) return;
-      if (examMode && history.filter((l) => l.role === 'user').length >= speakingTotal) return;
+      if (history.filter((l) => l.role === 'user').length >= speakingTotal) return;
 
       let data;
       let nextHistory = history;
@@ -1488,14 +1629,15 @@ function B2SpeakingPartSession({
       }
 
       const userCount = nextHistory.filter((l) => l.role === 'user').length;
-      if (examMode && userCount >= speakingTotal) {
-        finishExamModePart(userCount);
+      if (userCount >= speakingTotal) {
+        const userContents = nextHistory.filter((l) => l.role === 'user').map((l) => l.content);
+        await finishSpeakingPart(userCount, userContents);
         return;
       }
 
       if (data.assistantText) await applyAssistantTurn(data);
     },
-    [applyAssistantTurn, callTurn, isAlive, history, sessionId, examMode, speakingTotal, finishExamModePart],
+    [applyAssistantTurn, callTurn, isAlive, history, speakingTotal, finishSpeakingPart],
   );
 
   useEffect(() => {
@@ -1628,7 +1770,7 @@ function B2SpeakingPartSession({
 
   const handleNextStep = async () => {
     if (loading || !sessionId || !openingReady || !exerciseStarted || partComplete) return;
-    if (examMode && history.filter((l) => l.role === 'user').length >= speakingTotal) return;
+    if (history.filter((l) => l.role === 'user').length >= speakingTotal) return;
     stopExaminerAudio();
     if (media.isActive) await media.discard();
     setExercisePaused(false);
@@ -1653,8 +1795,9 @@ function B2SpeakingPartSession({
     if (!isAlive()) return;
 
     const userCount = nextHistory.filter((l) => l.role === 'user').length;
-    if (examMode && userCount >= speakingTotal) {
-      finishExamModePart(userCount);
+    if (userCount >= speakingTotal) {
+      const userContents = nextHistory.filter((l) => l.role === 'user').map((l) => l.content);
+      await finishSpeakingPart(userCount, userContents);
       return;
     }
 
@@ -1662,72 +1805,13 @@ function B2SpeakingPartSession({
     await applyAssistantTurn(data);
   };
 
-  const getFeedbackWithDralo = async () => {
-    if (!sessionId || userLines.length === 0 || limitReached) return;
-    setFeedbackError('');
-    setFeedbackLoading(true);
-    try {
-      const res = await fetch(withBasePath('/api/speaking/evaluate'), {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        credentials: 'include',
-        body: JSON.stringify({
-          sessionId,
-          cefr: 'B2',
-          mode: 'EXAM',
-          combinedTranscript: userLines.map((l) => l.content).join('\n\n'),
-          taskPrompt: taskContext,
-        }),
-      });
-      const data = await res.json().catch(() => ({}));
-      if (!res.ok || data.error === true) {
-        const limitHit =
-          res.status === 429 ||
-          data.code === 'DAILY_LIMIT_REACHED' ||
-          data.code === 'LIMIT_CHECK_FAILED';
-        if (limitHit) {
-          if (data.usage) {
-            applySpeakingUsage(data.usage);
-          } else {
-            const resolvedLimit = data.limit ?? usageLimit ?? 3;
-            const resolvedUsed = data.used ?? resolvedLimit;
-            applySpeakingUsage({
-              unlimited: false,
-              limit: resolvedLimit,
-              used: resolvedUsed,
-              remaining: 0,
-              atLimit: true,
-            });
-          }
-        }
-        throw new Error(
-          limitHit
-            ? isEn
-              ? LIMIT_REACHED.speaking.en
-              : LIMIT_REACHED.speaking.es
-            : data.message ||
-                (typeof data.error === 'string' ? data.error : null) ||
-                (isEn ? 'Could not generate feedback.' : 'No se pudo generar el feedback.'),
-        );
-      }
-      if (!data.report) {
-        throw new Error(isEn ? 'Could not generate feedback.' : 'No se pudo generar el feedback.');
-      }
-      setFeedbackReport(data.report);
-      if (data.usage) {
-        applySpeakingUsage(data.usage);
-      } else {
-        await refreshUsageHint();
-      }
-    } catch (e) {
-      setFeedbackError(e?.message || (isEn ? 'Feedback failed.' : 'Error al obtener feedback.'));
-    } finally {
-      setFeedbackLoading(false);
-    }
-  };
-
   const saveSpeakingScore = () => {
     if (!onSavePartScore || userLines.length === 0) return;
+    const fromFeedback = speakingProgressFromFeedbackReport(feedbackReport, partScoring);
+    if (fromFeedback) {
+      onSavePartScore(fromFeedback);
+      return;
+    }
     const correct = Math.min(speakingTotal, userLines.length);
     onSavePartScore({
       correct,
@@ -1800,7 +1884,7 @@ function B2SpeakingPartSession({
         onNextStep={() => void handleNextStep()}
       />
 
-      {partComplete && examMode && partCompleteMessage ? (
+      {partComplete && partCompleteMessage ? (
         <p className="levels-b2-speaking-session__part-complete" role="status">
           {partCompleteMessage}
         </p>
@@ -1945,12 +2029,10 @@ function B2SpeakingPartSession({
           <div className="levels-b2-speaking-session__responses levels-b2-speaking-session__responses--panel">
             <p className="levels-b2-speaking-session__responses-title">
               {isEn ? 'Your answers' : 'Tus respuestas'}
-              {examMode ? (
-                <span className="levels-b2-speaking-session__responses-count">
-                  {' '}
-                  ({Math.min(speakingTotal, userLines.length)}/{speakingTotal})
-                </span>
-              ) : null}
+              <span className="levels-b2-speaking-session__responses-count">
+                {' '}
+                ({Math.min(speakingTotal, userLines.length)}/{speakingTotal})
+              </span>
             </p>
             {userLines.length > 0 ? (
               userLines.map((l, i) => (
@@ -1974,7 +2056,7 @@ function B2SpeakingPartSession({
                   type="button"
                   className="levels-b2-writing-panel__submit"
                   onClick={() => void getFeedbackWithDralo()}
-                  disabled={feedbackLoading || limitReached || !sessionId}
+                  disabled={feedbackLoading || limitReached || !sessionId || partComplete}
                 >
                   {feedbackLoading
                     ? isEn

@@ -1,6 +1,6 @@
 'use client';
 
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import toast from 'react-hot-toast';
 import { supabase } from '@/utils/supabaseClient';
 import { getClientAuth } from '@/utils/getClientAuth';
@@ -13,11 +13,13 @@ import {
   filterThreadMessages,
   formatBuzonPresence,
   formatBuzonTime,
+  getDirectContactPreview,
   getDisplayName,
   getStaffRoleLabel,
 } from '@/utils/staffBuzon';
 import {
   getMessagePreview,
+  isAudioAttachment,
   isDocumentAttachment,
   isImageAttachment,
   validateBuzonAttachmentFile,
@@ -25,6 +27,7 @@ import {
 import { buzonApiRequest, buzonUploadRequest } from '@/lib/staffBuzonClient';
 import { splitMessageWithLinks } from '@/lib/linkifyMessageText';
 import StaffBuzonGroupSettings from '@/components/buzon/StaffBuzonGroupSettings';
+import StaffBuzonComposer from '@/components/buzon/StaffBuzonComposer';
 import styles from './StaffBuzonPanel.module.css';
 
 const TABS = [
@@ -65,6 +68,22 @@ function MessageAttachmentContent({ message, mine }) {
       </a>
     );
   }
+  if (isAudioAttachment(message)) {
+    return (
+      <div className={styles.messageAudioWrap}>
+        <audio
+          key={message.id}
+          controls
+          preload="metadata"
+          src={message.attachment_url}
+          className={styles.messageAudio}
+        />
+        {message.attachment_name ? (
+          <span className={styles.messageAudioName}>{message.attachment_name}</span>
+        ) : null}
+      </div>
+    );
+  }
   return null;
 }
 
@@ -92,10 +111,22 @@ function MessageBodyText({ text, mine }) {
   );
 }
 
+function isAutoAttachmentBody(message) {
+  if (!message.body?.trim()) return true;
+  if (message.body === 'Imagen' || message.body === 'Documento' || message.body === 'Audio') {
+    return true;
+  }
+  return message.body === message.attachment_name;
+}
+
 function statusClass(status) {
   if (status === 'reunion') return styles.statusReunion;
   if (status === 'ocupado') return styles.statusOcupado;
   return styles.statusDisponible;
+}
+
+function presenceDotClass(online) {
+  return online ? styles.presenceDotOnline : styles.presenceDotOffline;
 }
 
 export default function StaffBuzonPanel({ currentUserId }) {
@@ -122,8 +153,7 @@ export default function StaffBuzonPanel({ currentUserId }) {
   const [uploadingAttachment, setUploadingAttachment] = useState(false);
   const [showGroupSettings, setShowGroupSettings] = useState(false);
   const [settingsToken, setSettingsToken] = useState(null);
-  const fileInputRef = useRef(null);
-  const threadEndRef = useRef(null);
+  const messageListRef = useRef(null);
 
   const staffById = useMemo(() => {
     const map = new Map();
@@ -275,6 +305,13 @@ export default function StaffBuzonPanel({ currentUserId }) {
   }, [loadGroups, loadMessages, loadPresence, loadStaffUsers]);
 
   useEffect(() => {
+    const intervalId = window.setInterval(() => {
+      void loadPresence();
+    }, 60_000);
+    return () => window.clearInterval(intervalId);
+  }, [loadPresence]);
+
+  useEffect(() => {
     const channel = supabase
       .channel(`staff_buzon_${currentUserId}`)
       .on(
@@ -319,7 +356,16 @@ export default function StaffBuzonPanel({ currentUserId }) {
         (payload) => {
           const row = payload.new;
           if (!row?.user_id) return;
-          setPresenceMap((prev) => new Map(prev).set(row.user_id, row));
+          setPresenceMap((prev) => {
+            const next = new Map(prev);
+            const existing = next.get(row.user_id);
+            next.set(row.user_id, {
+              ...existing,
+              ...row,
+              online: existing?.online ?? false,
+            });
+            return next;
+          });
         },
       )
       .subscribe();
@@ -334,31 +380,33 @@ export default function StaffBuzonPanel({ currentUserId }) {
     void markThreadAsRead(selection.id);
   }, [selection, threadMessages.length, markThreadAsRead]);
 
-  useEffect(() => {
-    threadEndRef.current?.scrollIntoView({ behavior: 'smooth' });
-  }, [threadMessages.length, selection]);
+  useLayoutEffect(() => {
+    if (!selection) return;
+    const list = messageListRef.current;
+    if (!list?.isConnected) return;
+    list.scrollTop = list.scrollHeight;
+  }, [threadMessages.length, selection?.id, selection?.type]);
 
-  const handleSavePresence = async () => {
-    setSavingPresence(true);
-    try {
-      const token = await getAccessToken();
-      const payload = await buzonApiRequest('/api/buzon/presence', {
-        method: 'PUT',
-        token,
-        body: { status: myStatus, activity: myActivity.trim() || null },
-      });
-      if (payload.presence) {
-        setPresenceMap((prev) => new Map(prev).set(currentUserId, payload.presence));
-      }
-      toast.success('Estado actualizado');
-    } catch (error) {
-      toast.error(error.message || 'No se pudo guardar el estado.');
-    } finally {
-      setSavingPresence(false);
+  const uploadAttachmentFile = useCallback(async (file) => {
+    const validation = validateBuzonAttachmentFile(file);
+    if (!validation.ok) {
+      toast.error(validation.error);
+      throw new Error(validation.error);
     }
-  };
 
-  const handleSend = async (event) => {
+    const token = await getAccessToken();
+    const formData = new FormData();
+    formData.append('file', file);
+    const payload = await buzonUploadRequest('/api/buzon/attachments', { token, formData });
+    setPendingAttachment({
+      attachment_url: payload.attachment_url,
+      attachment_name: payload.attachment_name,
+      attachment_mime: payload.attachment_mime,
+      attachment_kind: payload.attachment_kind,
+    });
+  }, [getAccessToken]);
+
+  const handleSend = useCallback(async (event) => {
     event.preventDefault();
     const body = draft.trim();
     if ((!body && !pendingAttachment) || !selection || sending) return;
@@ -390,39 +438,33 @@ export default function StaffBuzonPanel({ currentUserId }) {
     } finally {
       setSending(false);
     }
-  };
+  }, [
+    draft,
+    pendingAttachment,
+    selection,
+    sending,
+    getAccessToken,
+  ]);
 
-  const handlePickAttachment = () => {
-    fileInputRef.current?.click();
-  };
-
-  const handleAttachmentChange = async (event) => {
-    const file = event.target.files?.[0];
-    event.target.value = '';
-    if (!file) return;
-
-    const validation = validateBuzonAttachmentFile(file);
-    if (!validation.ok) {
-      toast.error(validation.error);
-      return;
-    }
-
-    setUploadingAttachment(true);
+  const handleSavePresence = async () => {
+    setSavingPresence(true);
     try {
       const token = await getAccessToken();
-      const formData = new FormData();
-      formData.append('file', file);
-      const payload = await buzonUploadRequest('/api/buzon/attachments', { token, formData });
-      setPendingAttachment({
-        attachment_url: payload.attachment_url,
-        attachment_name: payload.attachment_name,
-        attachment_mime: payload.attachment_mime,
-        attachment_kind: payload.attachment_kind,
+      const payload = await buzonApiRequest('/api/buzon/presence', {
+        method: 'PUT',
+        token,
+        body: { status: myStatus, activity: myActivity.trim() || null },
       });
+      if (payload.presence) {
+        setPresenceMap((prev) =>
+          new Map(prev).set(currentUserId, { ...payload.presence, online: true }),
+        );
+      }
+      toast.success('Estado actualizado');
     } catch (error) {
-      toast.error(error.message || 'No se pudo subir el archivo.');
+      toast.error(error.message || 'No se pudo guardar el estado.');
     } finally {
-      setUploadingAttachment(false);
+      setSavingPresence(false);
     }
   };
 
@@ -536,6 +578,7 @@ export default function StaffBuzonPanel({ currentUserId }) {
   if (loading) {
     return (
       <div className={styles.loading} role="status">
+        <span className={styles.loadingSpinner} aria-hidden />
         Cargando conversaciones…
       </div>
     );
@@ -636,11 +679,10 @@ export default function StaffBuzonPanel({ currentUserId }) {
             {visibleContacts.map((user) => {
               const active = selection?.type === 'direct' && selection.id === user.id;
               const unread = getUnreadForPartner(user.id);
-              const conversation = dmConversations.find((item) => item.partnerId === user.id);
-              const preview = conversation?.lastMessage
-                ? getMessagePreview(conversation.lastMessage)
-                : 'Sin mensajes todavía';
               const presence = presenceMap.get(user.id);
+              const conversation = dmConversations.find((item) => item.partnerId === user.id);
+              const preview = getDirectContactPreview(conversation, presence, getMessagePreview);
+              const isOnline = presence?.online === true;
 
               return (
                 <li key={user.id}>
@@ -654,7 +696,8 @@ export default function StaffBuzonPanel({ currentUserId }) {
                         {getDisplayName(user).slice(0, 1).toUpperCase()}
                       </span>
                       <span
-                        className={`${styles.presenceDot} ${statusClass(presence?.status || 'disponible')}`}
+                        className={`${styles.presenceDot} ${presenceDotClass(isOnline)}`}
+                        title={isOnline ? 'Conectado' : 'Desconectado'}
                         aria-hidden
                       />
                     </span>
@@ -770,33 +813,49 @@ export default function StaffBuzonPanel({ currentUserId }) {
       <section className={`staff-buzon-thread ${styles.thread}`} aria-label="Hilo de conversación">
         {!selection ? (
           <div className={styles.emptyThread}>
+            <div className={styles.emptyThreadIcon} aria-hidden>
+              💬
+            </div>
             <strong>Selecciona una conversación</strong>
-            <p>Elige un contacto, un grupo o un mensaje destacado.</p>
+            <p>Elige un contacto, un grupo o un mensaje destacado para empezar a chatear.</p>
           </div>
         ) : (
           <>
             <header className={`staff-buzon-thread-header ${styles.threadHeader}`}>
               <button
                 type="button"
-                className="staff-buzon-mobile-back"
+                className={`staff-buzon-mobile-back ${styles.mobileBack}`}
                 onClick={() => setSelection(null)}
               >
                 ← Conversaciones
               </button>
-              <div>
+              <div className={styles.threadHeaderMain}>
                 {selection.type === 'direct' && selectedPartner ? (
                   <>
-                    <h3>{getDisplayName(selectedPartner)}</h3>
-                    <p>{getStaffRoleLabel(extractRoleName(selectedPartner))}</p>
+                    <span className={styles.threadHeaderAvatar} aria-hidden>
+                      {getDisplayName(selectedPartner).slice(0, 1).toUpperCase()}
+                    </span>
+                    <div>
+                      <h3>{getDisplayName(selectedPartner)}</h3>
+                      <p>{getStaffRoleLabel(extractRoleName(selectedPartner))}</p>
+                    </div>
                   </>
                 ) : null}
                 {selection.type === 'group' && selectedGroup ? (
                   <>
-                    <h3>{selectedGroup.name}</h3>
-                    <p>
-                      {selectedGroup.member_ids?.length || 0} miembros
-                      {selectedGroup.description ? ` · ${selectedGroup.description}` : ''}
-                    </p>
+                    <span
+                      className={`${styles.threadHeaderAvatar} ${styles.threadHeaderAvatarGroup}`}
+                      aria-hidden
+                    >
+                      G
+                    </span>
+                    <div>
+                      <h3>{selectedGroup.name}</h3>
+                      <p>
+                        {selectedGroup.member_ids?.length || 0} miembros
+                        {selectedGroup.description ? ` · ${selectedGroup.description}` : ''}
+                      </p>
+                    </div>
                   </>
                 ) : null}
               </div>
@@ -816,7 +875,7 @@ export default function StaffBuzonPanel({ currentUserId }) {
               </div>
             </header>
 
-            <div className={styles.messageList}>
+            <div ref={messageListRef} className={styles.messageList}>
               {threadMessages.length === 0 ? (
                 <p className={styles.threadHint}>Aún no hay mensajes. Escribe el primero.</p>
               ) : (
@@ -827,11 +886,7 @@ export default function StaffBuzonPanel({ currentUserId }) {
                     selection.type === 'group'
                       ? staffById.get(message.sender_id)
                       : null;
-                  const autoBody =
-                    !message.body?.trim() ||
-                    message.body === 'Imagen' ||
-                    message.body === 'Documento' ||
-                    message.body === message.attachment_name;
+                  const autoBody = isAutoAttachmentBody(message);
                   const showBody =
                     message.body?.trim() && !(message.attachment_url && autoBody);
 
@@ -873,65 +928,20 @@ export default function StaffBuzonPanel({ currentUserId }) {
                   );
                 })
               )}
-              <div ref={threadEndRef} />
+
             </div>
 
-            <form className={styles.composer} onSubmit={handleSend}>
-              <input
-                ref={fileInputRef}
-                type="file"
-                className={styles.hiddenFileInput}
-                accept="image/jpeg,image/png,image/webp,image/gif,.pdf,.doc,.docx,.xls,.xlsx,.txt,.zip"
-                onChange={(event) => void handleAttachmentChange(event)}
-              />
-              <div className={styles.composerMain}>
-                {pendingAttachment ? (
-                  <div className={styles.pendingAttachment}>
-                    <span>
-                      {pendingAttachment.attachment_kind === 'image' ? '🖼' : '📎'}{' '}
-                      {pendingAttachment.attachment_name}
-                    </span>
-                    <button
-                      type="button"
-                      onClick={() => setPendingAttachment(null)}
-                      aria-label="Quitar adjunto"
-                    >
-                      ×
-                    </button>
-                  </div>
-                ) : null}
-                <textarea
-                  value={draft}
-                  onChange={(event) => setDraft(event.target.value)}
-                  placeholder="Escribe un mensaje…"
-                  rows={2}
-                  aria-label="Mensaje"
-                  onKeyDown={(event) => {
-                    if (event.key === 'Enter' && !event.shiftKey) {
-                      event.preventDefault();
-                      void handleSend(event);
-                    }
-                  }}
-                />
-              </div>
-              <div className={styles.composerActions}>
-                <button
-                  type="button"
-                  className={styles.attachBtn}
-                  onClick={handlePickAttachment}
-                  disabled={uploadingAttachment || sending}
-                  title="Adjuntar imagen o documento"
-                >
-                  {uploadingAttachment ? '…' : '📎'}
-                </button>
-                <button
-                  type="submit"
-                  disabled={sending || uploadingAttachment || (!draft.trim() && !pendingAttachment)}
-                >
-                  {sending ? 'Enviando…' : 'Enviar'}
-                </button>
-              </div>
-            </form>
+            <StaffBuzonComposer
+              draft={draft}
+              setDraft={setDraft}
+              pendingAttachment={pendingAttachment}
+              setPendingAttachment={setPendingAttachment}
+              uploadingAttachment={uploadingAttachment}
+              setUploadingAttachment={setUploadingAttachment}
+              sending={sending}
+              onSend={handleSend}
+              onUploadFile={uploadAttachmentFile}
+            />
           </>
         )}
       </section>

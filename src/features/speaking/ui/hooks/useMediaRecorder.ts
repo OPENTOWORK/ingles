@@ -96,6 +96,21 @@ export function useMediaRecorder() {
     }
   }, []);
 
+  /** Detiene pistas y limpia refs sin setState (seguro en unmount). */
+  const release = useCallback(() => {
+    const mr = mediaRecorderRef.current;
+    if (mr && mr.state !== 'inactive') {
+      try {
+        mr.onstop = null;
+        mr.stop();
+      } catch {
+        /* already stopped */
+      }
+    }
+    chunksRef.current = [];
+    releaseStream(streamRef, mediaRecorderRef);
+  }, []);
+
   const isRecording = status === 'recording';
   const isPaused = status === 'paused';
   const isActive = isRecording || isPaused;
@@ -106,6 +121,7 @@ export function useMediaRecorder() {
     start,
     stop,
     discard,
+    release,
     pause,
     resume,
     isRecording,

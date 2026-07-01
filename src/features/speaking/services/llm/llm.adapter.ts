@@ -1,9 +1,19 @@
 import type OpenAI from 'openai';
-import { getDraloFastModel, getDraloOpenAI, mergeDraloSystem } from '@/lib/draloAiEngine';
+import {
+  cambridgeSpeakingExaminerTurn,
+  getDraloFastModel,
+  getDraloOpenAI,
+  mergeDraloSystem,
+} from '@/lib/draloAiEngine';
 import type { CefrLevel, SpeakingMode } from '@prisma/client';
 import type { ExamPartDefinition } from '../../domain/types';
 import type { MicroFeedback } from '../../domain/types';
 import { SYSTEM_PROMPTS } from '../../../../../dralo-speaking/prompts/cambridge-prompts';
+import {
+  B2_PART_1_OPENING_USER_MESSAGE,
+  buildB2ExaminerSystemPrompt,
+} from '../../domain/b2-examiner-prompts';
+import { B2_SPEAKING_PART_MIN } from '../../domain/b2-speaking-exam-parts';
 
 export type PracticeTurnParams = {
   cefr: CefrLevel;
@@ -25,6 +35,8 @@ export type ExamTurnParams = {
   taskContext?: string;
   /** Primera intervención del examinador sin respuesta del candidato. */
   isOpening?: boolean;
+  /** B2 global part (14–17) when using dedicated examiner prompts. */
+  b2PartNumber?: number;
 };
 
 const practiceSystem = (cefr: CefrLevel, prompt: string) =>
@@ -33,7 +45,27 @@ const practiceSystem = (cefr: CefrLevel, prompt: string) =>
     `Keep replies concise (2-5 sentences) as spoken dialogue. ` +
     `Topic context: ${prompt}`;
 
-const examinerSystem = (
+function resolveExaminerSystem(p: ExamTurnParams): string {
+  if (p.cefr === 'B2' && p.b2PartNumber) {
+    const dedicated = buildB2ExaminerSystemPrompt(p.b2PartNumber, p.taskContext);
+    if (dedicated) return dedicated;
+  }
+  return mergeDraloSystem(
+    examinerSystemLegacy(p.cefr, p.examName, p.part, p.taskContext ?? ''),
+  );
+}
+
+function openingUserMessage(p: ExamTurnParams): string {
+  if (p.isOpening && p.cefr === 'B2' && p.b2PartNumber === B2_SPEAKING_PART_MIN) {
+    return B2_PART_1_OPENING_USER_MESSAGE;
+  }
+  if (p.isOpening) {
+    return 'The speaking test for this part is starting now. Greet the candidate briefly and give the first instruction or question only.';
+  }
+  return p.transcript;
+}
+
+const examinerSystemLegacy = (
   cefr: CefrLevel,
   examName: string,
   part: ExamPartDefinition,
@@ -75,7 +107,7 @@ export class MockLLMAdapter {
     await delay(250);
     if (p.isOpening) {
       const openers: Record<number, string> = {
-        1: 'Good morning. Can you tell me your name and where you come from?',
+        1: 'Good morning. My name is Emma. And what is your name?',
         2: 'Now, in this part I\'d like you to talk about these photographs. Compare them and say why the people might be enjoying these activities.',
         3: 'Now, talk together about the situation and decide which option would be best.',
         4: 'Thank you. Now I\'d like to ask you some questions related to what we discussed.',
@@ -125,30 +157,13 @@ export class OpenAILLMAdapter extends MockLLMAdapter {
   }
 
   override async examReply(p: ExamTurnParams): Promise<string> {
-    const system = mergeDraloSystem(examinerSystem(p.cefr, p.examName, p.part, p.taskContext));
-    const messages: OpenAI.Chat.ChatCompletionMessageParam[] = [
-      { role: 'system', content: system },
-      ...p.history.map((h) => ({
-        role: h.role,
-        content: h.content,
-      })) as OpenAI.Chat.ChatCompletionMessageParam[],
-    ];
-    if (p.isOpening) {
-      messages.push({
-        role: 'user',
-        content:
-          'The speaking test for this part is starting now. Greet the candidate briefly and give the first instruction or question only.',
-      });
-    } else {
-      messages.push({ role: 'user', content: p.transcript });
-    }
-    const res = await this.client.chat.completions.create({
-      model: getDraloFastModel(),
-      messages,
-      temperature: 0.5,
-      max_tokens: 220,
+    const system = resolveExaminerSystem(p);
+    const { text } = await cambridgeSpeakingExaminerTurn({
+      system,
+      userMessage: openingUserMessage(p),
+      conversationHistory: p.history,
     });
-    return res.choices[0]?.message?.content?.trim() ?? (await super.examReply(p));
+    return text?.trim() || (await super.examReply(p));
   }
 
   override async microFeedback(p: { cefr: CefrLevel; userText: string }): Promise<MicroFeedback> {

@@ -20,9 +20,10 @@ export async function POST(req: Request) {
       text?: string;
       combinedTranscript?: string;
       taskPrompt?: string;
+      b2PartNumber?: number;
     };
 
-    const { sessionId, cefr, mode, taskPrompt } = body;
+    const { sessionId, cefr, mode, taskPrompt, b2PartNumber } = body;
     if (!sessionId) {
       return NextResponse.json({ error: 'sessionId required' }, { status: 400 });
     }
@@ -72,6 +73,7 @@ export async function POST(req: Request) {
           combinedTranscript: text,
           level: cefr,
           sessionId,
+          b2PartNumber: b2PartNumber ?? null,
           context: 'exam',
         },
         aiCtx,
@@ -88,6 +90,8 @@ export async function POST(req: Request) {
       report = await runExamFinalReport({
         cefr,
         combinedTranscript: text,
+        sessionId,
+        b2PartNumber: b2PartNumber ?? null,
         context: 'practice',
       });
     } else {

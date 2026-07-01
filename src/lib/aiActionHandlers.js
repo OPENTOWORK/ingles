@@ -124,6 +124,8 @@ export async function handleExamSpeakingFeedback(userId, body, ctx = {}) {
     const report = await runExamFinalReport({
       cefr,
       combinedTranscript: transcript,
+      sessionId: body.sessionId || null,
+      b2PartNumber: body.b2PartNumber ?? null,
       context: body.context === 'practice' ? 'practice' : 'exam',
     });
 

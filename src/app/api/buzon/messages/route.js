@@ -3,6 +3,7 @@ import {
   requireStaffBuzonAccess,
   userIsStaffBuzonRecipient,
 } from '@/lib/staffBuzonAccess';
+import { getBuzonAttachmentDefaultBody } from '@/lib/staffBuzonAttachments';
 
 const MESSAGE_SELECT =
   'id, sender_id, recipient_id, group_id, body, created_at, read_at, attachment_url, attachment_name, attachment_mime, attachment_kind';
@@ -97,7 +98,7 @@ export async function POST(req) {
       return NextResponse.json({ error: 'Escribe un mensaje o adjunta un archivo.' }, { status: 400 });
     }
 
-    if (attachmentUrl && !['image', 'document'].includes(attachmentKind || '')) {
+    if (attachmentUrl && !['image', 'document', 'audio'].includes(attachmentKind || '')) {
       return NextResponse.json({ error: 'Tipo de adjunto no válido.' }, { status: 400 });
     }
 
@@ -115,7 +116,10 @@ export async function POST(req) {
           attachment_kind: null,
         };
 
-    const finalBody = messageBody || attachmentName || (attachmentKind === 'image' ? 'Imagen' : 'Documento');
+    const finalBody =
+      messageBody ||
+      attachmentName ||
+      getBuzonAttachmentDefaultBody(attachmentKind || 'document');
 
     let insertRow = null;
 

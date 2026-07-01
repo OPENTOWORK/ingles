@@ -39,23 +39,28 @@ export default function BuzonPage() {
 
   if (loading) {
     return (
-      <main className="max-w-6xl mx-auto p-4 md:p-8 staff-buzon-page">
-        <RouteLoadingMascot label="Cargando buzón y reuniones…" variant={3} />
+      <main className="niveles-level-page niveles-level-page--b2 shell staff-buzon-page">
+        <div className="levels-b2-page-content">
+          <RouteLoadingMascot label="Cargando buzón y reuniones…" variant={3} />
+        </div>
       </main>
     );
   }
 
   return (
-    <main className="max-w-6xl mx-auto p-4 md:p-8 staff-buzon-page">
-      <PageHero
-        eyebrow="Comunicación interna"
-        title="Buzón y reuniones"
-        description="Mensajería instantánea del equipo y planificación de reuniones con orden del día."
-        mascotVariant={3}
-        mascotWidth={120}
-        accent="violet"
-      />
-      <StaffBuzonPanelPage currentUserId={userId} />
+    <main className="niveles-level-page niveles-level-page--b2 shell staff-buzon-page">
+      <div className="levels-b2-page-content">
+        <PageHero
+          eyebrow="Comunicación interna"
+          title="Buzón y reuniones"
+          description="Mensajería instantánea del equipo y planificación de reuniones con orden del día."
+          showMascot
+          mascotVariant={3}
+          mascotWidth={146}
+          accent="violet"
+        />
+        <StaffBuzonPanelPage currentUserId={userId} />
+      </div>
     </main>
   );
 }
