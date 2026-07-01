@@ -14,6 +14,14 @@ export default function StaffBuzonPanelPage({ currentUserId }) {
 
   return (
     <div className="space-y-6">
+      <div className="rounded-lg border border-sky-200 bg-sky-50 px-4 py-3 text-sm text-sky-900">
+        <p className="font-medium">Resumen diario por correo</p>
+        <p className="mt-1 text-sky-800/90">
+          Cada día (~21:00, hora peninsular) recibes un email con el resumen de tus chats directos y
+          grupos del Buzón cuando ha habido mensajes.
+        </p>
+      </div>
+
       <nav className="flex flex-wrap gap-2 border-b border-gray-200 pb-2">
         {TABS.map((item) => (
           <button

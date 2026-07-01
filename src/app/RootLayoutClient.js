@@ -75,14 +75,12 @@ export default function RootLayoutClient({ children }) {
   useLevelsStarsBackfill(session);
 
   useEffect(() => {
-    if (authPending || allowWithoutAuth || session) return undefined;
-    const timer = window.setTimeout(() => {
-      void supabase.auth.getSession().then(({ data: { session: latest } }) => {
-        if (!latest) router.replace('/login');
-      });
-    }, 800);
-    return () => window.clearTimeout(timer);
-  }, [authPending, allowWithoutAuth, session, router, pathname]);
+    if (allowWithoutAuth || authPending || session) return undefined;
+    const search = typeof window !== 'undefined' ? window.location.search : '';
+    const next = encodeURIComponent(`${pathname}${search}`);
+    router.replace(`/login?next=${next}`);
+    return undefined;
+  }, [allowWithoutAuth, authPending, session, pathname, router]);
 
   useEffect(() => {
     if (allowWithoutAuth) setAuthPending(false);

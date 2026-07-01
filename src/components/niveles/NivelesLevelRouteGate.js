@@ -26,7 +26,7 @@ export default function NivelesLevelRouteGate({ children }) {
     session &&
     isStudentView &&
     !isPartTipsRoute &&
-    isNivelesLevelComingSoonForUser(userRole, level)
+    isNivelesLevelComingSoonForUser(userRole, level, session?.user?.email)
   ) {
     return <NivelesComingSoonNotice level={level} />;
   }

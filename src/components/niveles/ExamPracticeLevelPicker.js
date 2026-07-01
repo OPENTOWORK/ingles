@@ -1,12 +1,16 @@
 'use client';
 
+import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { useUserRole } from '@/context/UserRoleContext';
-import { usesStudentContentRestrictions } from '@/constants/studentFeatureAccess';
+import { hasFullNivelesLevelAccess } from '@/constants/studentFeatureAccess';
 import { EXAM_PRACTICE_LEVELS } from '@/data/examPracticeLevels';
+import { userHasRole } from '@/utils/authRoles';
 
-function resolveLevelLock({ level, userRole }) {
-  if (!usesStudentContentRestrictions(userRole)) {
+const STAFF_LEVEL_ROLES = ['admin', 'administrador', 'teacher', 'profesor', 'informatico', 'it'];
+
+function resolveLevelLock({ level, userRole, email = '', staffUnlock = false }) {
+  if (staffUnlock || hasFullNivelesLevelAccess(userRole, email)) {
     return { locked: false, label: null };
   }
 
@@ -76,8 +80,31 @@ export default function ExamPracticeLevelPicker({
   activeLevel = '',
   linkForLevel,
 }) {
-  const { userRole } = useUserRole();
+  const { userRole, session } = useUserRole();
+  const userEmail = session?.user?.email || '';
+  const [staffUnlock, setStaffUnlock] = useState(() =>
+    hasFullNivelesLevelAccess(userRole, userEmail),
+  );
   const activeSlug = String(activeLevel || '').toLowerCase();
+
+  useEffect(() => {
+    if (hasFullNivelesLevelAccess(userRole, userEmail)) {
+      setStaffUnlock(true);
+      return undefined;
+    }
+    const uid = session?.user?.id;
+    if (!uid) {
+      setStaffUnlock(false);
+      return undefined;
+    }
+    let cancelled = false;
+    void userHasRole(uid, STAFF_LEVEL_ROLES, userEmail).then((ok) => {
+      if (!cancelled) setStaffUnlock(ok);
+    });
+    return () => {
+      cancelled = true;
+    };
+  }, [userRole, userEmail, session?.user?.id]);
 
   if (variant === 'strip') {
     return (
@@ -88,13 +115,17 @@ export default function ExamPracticeLevelPicker({
             const { locked, label } = resolveLevelLock({
               level,
               userRole,
+              email: userEmail,
+              staffUnlock,
             });
-            const href = !locked ? linkForLevel(level) : null;
+            const href = locked
+              ? null
+              : linkForLevel(level) || `/niveles/${level.slug}`;
             const isActive = activeSlug === level.slug;
 
             return (
               <li key={level.slug}>
-                {locked || !href ? (
+                {locked ? (
                   <span
                     className={`exam-practice-level-strip__pill exam-practice-level-strip__pill--locked${
                       isActive ? ' exam-practice-level-strip__pill--active' : ''
@@ -132,14 +163,18 @@ export default function ExamPracticeLevelPicker({
         const { locked, label } = resolveLevelLock({
           level,
           userRole,
+          email: userEmail,
+          staffUnlock,
         });
-        const href = !locked ? linkForLevel(level) : null;
+        const href = locked
+          ? null
+          : linkForLevel(level) || `/niveles/${level.slug}`;
         const isActive = activeSlug === level.slug;
         const lockLabel = label || 'Coming soon';
 
         return (
           <li key={level.slug} className={locked ? 'level-item is-locked' : 'level-item'}>
-            {locked || !href ? (
+            {locked ? (
               <div className="area-card area-card--disabled" aria-disabled="true">
                 <LevelLockBadge label={lockLabel} />
                 <LevelCardContent level={level} locked />

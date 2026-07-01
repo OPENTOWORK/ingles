@@ -13,11 +13,11 @@ import NivelesComingSoonNotice from '@/components/niveles/NivelesComingSoonNotic
  * Tips por parte → /niveles → Exam theory.
  */
 export default function LevelHubPage({ config }) {
-  const { userRole: roleName } = useUserRole();
+  const { userRole: roleName, session } = useUserRole();
   const isStudent = usesStudentContentRestrictions(roleName);
   const showStarsWayHub = isAdminRole(roleName);
 
-  if (isNivelesLevelComingSoonForUser(roleName, config.cefr)) {
+  if (isNivelesLevelComingSoonForUser(roleName, config.cefr, session?.user?.email)) {
     return <NivelesComingSoonNotice level={config.cefr} />;
   }
 

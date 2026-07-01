@@ -161,21 +161,38 @@ export const LEVEL_SECTION_PRACTICE_HREF = {
   },
 };
 
-export function getLevelSkillPracticeHref(levelSlug, skillRoute) {
-  const meta = getLevelExamSkillRoute(levelSlug, skillRoute);
-  if (!meta?.section) return null;
-  return getSectionPracticeHref(levelSlug, meta.section);
-}
-
-export function getSectionPracticeHref(slug, sectionTitle) {
-  return LEVEL_SECTION_PRACTICE_HREF[String(slug || '').toLowerCase()]?.[sectionTitle] || null;
-}
-
 const READING_SKILL_ROUTES = new Set([
   'exam-reading-and-use-of-english',
   'exam-reading',
   'exam-useofenglish',
 ]);
+
+const READING_SKILL_ROUTE_FALLBACKS = [
+  'exam-reading-and-use-of-english',
+  'exam-useofenglish',
+  'exam-reading',
+];
+
+export function getLevelSkillPracticeHref(levelSlug, skillRoute) {
+  const slug = String(levelSlug || '').toLowerCase();
+  const route = String(skillRoute || '').toLowerCase();
+  if (!route) return null;
+
+  let meta = getLevelExamSkillRoute(slug, route);
+  if (!meta?.section && READING_SKILL_ROUTES.has(route)) {
+    for (const candidate of READING_SKILL_ROUTE_FALLBACKS) {
+      meta = getLevelExamSkillRoute(slug, candidate);
+      if (meta?.section) break;
+    }
+  }
+
+  if (!meta?.section) return null;
+  return getSectionPracticeHref(slug, meta.section);
+}
+
+export function getSectionPracticeHref(slug, sectionTitle) {
+  return LEVEL_SECTION_PRACTICE_HREF[String(slug || '').toLowerCase()]?.[sectionTitle] || null;
+}
 
 export function inferSkillRouteFromPracticeHref(href) {
   const path = String(href || '').toLowerCase();

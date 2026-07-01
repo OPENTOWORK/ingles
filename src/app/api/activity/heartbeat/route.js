@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
 import { HEARTBEAT_INTERVAL_MS, SESSION_GAP_MS } from '@/lib/userActivity';
+import { isValidClientDeviceType } from '@/lib/clientDeviceType';
 import { getSupabaseAnonKey, getSupabaseServiceRoleKey, getSupabaseUrl } from '@/lib/supabaseEnv';
 
 const supabaseUrl = getSupabaseUrl();
@@ -59,6 +60,7 @@ export async function POST(req) {
       Math.max(Number(body?.deltaSeconds) || Math.round(HEARTBEAT_INTERVAL_MS / 1000), 5),
       120,
     );
+    const deviceType = isValidClientDeviceType(body?.deviceType) ? body.deviceType : null;
 
     const serviceKey = getSupabaseServiceRoleKey()?.trim();
     const db = serviceKey
@@ -104,6 +106,7 @@ export async function POST(req) {
           user_id: userId,
           started_at: nowIso,
           duration_seconds: deltaSeconds,
+          ...(deviceType ? { device_type: deviceType } : {}),
         })
         .select('id')
         .single();
@@ -134,6 +137,7 @@ export async function POST(req) {
           user_id: userId,
           started_at: nowIso,
           duration_seconds: deltaSeconds,
+          ...(deviceType ? { device_type: deviceType } : {}),
         })
         .select('id')
         .single();

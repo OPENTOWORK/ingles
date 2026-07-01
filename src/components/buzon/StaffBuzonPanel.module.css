@@ -506,6 +506,28 @@
   line-height: 1.45;
 }
 
+.messageLink {
+  color: #2563eb;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  word-break: break-all;
+}
+
+.messageLink:hover {
+  color: #1d4ed8;
+}
+
+.messageLinkMine {
+  color: #bfdbfe;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  word-break: break-all;
+}
+
+.messageLinkMine:hover {
+  color: #dbeafe;
+}
+
 .messageBubble footer {
   margin-top: 0.45rem;
   display: flex;

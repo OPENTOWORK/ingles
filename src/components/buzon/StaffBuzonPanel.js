@@ -23,6 +23,7 @@ import {
   validateBuzonAttachmentFile,
 } from '@/lib/staffBuzonAttachments';
 import { buzonApiRequest, buzonUploadRequest } from '@/lib/staffBuzonClient';
+import { splitMessageWithLinks } from '@/lib/linkifyMessageText';
 import StaffBuzonGroupSettings from '@/components/buzon/StaffBuzonGroupSettings';
 import styles from './StaffBuzonPanel.module.css';
 
@@ -65,6 +66,30 @@ function MessageAttachmentContent({ message, mine }) {
     );
   }
   return null;
+}
+
+function MessageBodyText({ text, mine }) {
+  const parts = splitMessageWithLinks(text);
+
+  return (
+    <p>
+      {parts.map((part, index) =>
+        part.type === 'link' ? (
+          <a
+            key={`link-${index}-${part.value}`}
+            href={part.value}
+            target="_blank"
+            rel="noopener noreferrer"
+            className={mine ? styles.messageLinkMine : styles.messageLink}
+          >
+            {part.value}
+          </a>
+        ) : (
+          <span key={`text-${index}`}>{part.value}</span>
+        ),
+      )}
+    </p>
+  );
 }
 
 function statusClass(status) {
@@ -822,7 +847,7 @@ export default function StaffBuzonPanel({ currentUserId }) {
                           </span>
                         ) : null}
                         <MessageAttachmentContent message={message} mine={mine} />
-                        {showBody ? <p>{message.body}</p> : null}
+                        {showBody ? <MessageBodyText text={message.body} mine={mine} /> : null}
                         <footer>
                           <time dateTime={message.created_at}>
                             {formatBuzonTime(message.created_at)}

@@ -1,5 +1,7 @@
-import LevelSkillPracticePage from '@/components/niveles/LevelSkillPracticePage';
+'use client';
+
+import LevelExamPaperPracticePage from '@/components/niveles/LevelExamPaperPracticePage';
 
 export default function A2WritingExamPage() {
-  return <LevelSkillPracticePage slug="a2" skillRoute="exam-writing" />;
+  return <LevelExamPaperPracticePage slug="a2" skillRoute="exam-writing" />;
 }

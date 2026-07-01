@@ -169,9 +169,16 @@ export default function AdminStudentProfilePage() {
                       key={session.id}
                       className="flex flex-wrap justify-between gap-2 text-sm text-gray-700 rounded-md bg-gray-50 px-3 py-2"
                     >
-                      <span>
-                        {session.startedLabel}
-                        {session.endedAt ? '' : ' (sesión activa o sin cierre)'}
+                      <span className="inline-flex flex-wrap items-center gap-2">
+                        <span>
+                          {session.startedLabel}
+                          {session.endedAt ? '' : ' (sesión activa o sin cierre)'}
+                        </span>
+                        {session.deviceLabel && session.deviceLabel !== '—' ? (
+                          <span className="inline-flex items-center rounded-full border border-gray-200 bg-white px-2 py-0.5 text-xs font-medium text-gray-600">
+                            {session.deviceLabel}
+                          </span>
+                        ) : null}
                       </span>
                       <span className="font-medium text-gray-900">{session.durationLabel}</span>
                     </li>

@@ -184,8 +184,6 @@ export function buildUserDigestSummary({
   let unreadDirectTotal = 0;
 
   for (const message of messages) {
-    if (message.sender_id === userId) continue;
-
     if (message.group_id) {
       const memberGroups = groupsByUser.get(userId);
       if (!memberGroups?.has(message.group_id)) continue;
@@ -195,13 +193,20 @@ export function buildUserDigestSummary({
       continue;
     }
 
-    if (message.recipient_id !== userId) continue;
+    const partnerId =
+      message.sender_id === userId
+        ? message.recipient_id
+        : message.recipient_id === userId
+          ? message.sender_id
+          : null;
+    if (!partnerId) continue;
 
-    const partnerId = message.sender_id;
     if (!directByPartner.has(partnerId)) directByPartner.set(partnerId, []);
     directByPartner.get(partnerId).push(message);
 
-    if (!message.read_at) unreadDirectTotal += 1;
+    if (message.recipient_id === userId && message.sender_id !== userId && !message.read_at) {
+      unreadDirectTotal += 1;
+    }
   }
 
   const directConversations = [...directByPartner.entries()]
@@ -291,7 +296,9 @@ export function buildDigestEmail({ userName, digestDateKey, summary }) {
   lines.push(
     `Total del día: ${summary.totalCount} mensaje${summary.totalCount === 1 ? '' : 's'}. ${unreadLine}`.trim(),
     '',
-    buzonUrl,
+    `Abrir el Buzón: ${buzonUrl}`,
+    '',
+    'Recibirás este resumen automáticamente al final de cada día en el que haya actividad en tus chats y grupos.',
     '',
     '— Dralo English · Mensajería interna',
   );

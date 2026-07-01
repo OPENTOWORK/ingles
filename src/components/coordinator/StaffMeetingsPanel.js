@@ -8,6 +8,7 @@ import {
   STAFF_DEPARTMENTS,
 } from '@/lib/staffMeetingsConstants';
 import { shouldShowSchemaSetupHint } from '@/lib/staffTasksPermissions';
+import StaffMeetingPollsSection from '@/components/coordinator/StaffMeetingPollsSection';
 
 async function meetingsFetch(path, options = {}, { soft = false } = {}) {
   const { data: sessionData } = await supabase.auth.getSession();
@@ -290,8 +291,9 @@ export default function StaffMeetingsPanel() {
         <div>
           <h2 className="text-xl font-bold text-gray-900">Reuniones</h2>
           <p className="text-sm text-gray-600 mt-1 max-w-2xl">
-            Planifica reuniones del equipo: fecha, departamentos implicados y orden del día. Al crear
-            una reunión se avisa a todo el staff en el buzón (grupo «Reuniones del equipo»).
+            Planifica reuniones del equipo: encuestas de fecha, departamentos implicados y orden del
+            día. Al crear una reunión se avisa a todo el staff en el buzón (grupo «Reuniones del
+            equipo»).
             {notionStatus?.configured && notionStatus?.ok
               ? ' Las reuniones se sincronizan automáticamente con Notion.'
               : null}
@@ -362,6 +364,15 @@ export default function StaffMeetingsPanel() {
           <span className="text-xs text-emerald-700">Nuevas reuniones se publican en Notion al guardar.</span>
         </div>
       ) : null}
+
+      <StaffMeetingPollsSection onMeetingCreated={loadMeetings} />
+
+      <div className="border-t border-gray-200 pt-2">
+        <h3 className="text-lg font-semibold text-gray-900">Reuniones confirmadas</h3>
+        <p className="text-sm text-gray-600 mt-1 mb-4">
+          Reuniones ya acordadas con fecha, departamentos y orden del día.
+        </p>
+      </div>
 
       {loading ? (
         <p className="text-sm text-gray-500 py-8 text-center">Cargando reuniones…</p>

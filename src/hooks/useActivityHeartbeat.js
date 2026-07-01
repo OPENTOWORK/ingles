@@ -3,12 +3,16 @@
 import { useEffect, useRef } from 'react';
 import { supabase } from '@/utils/supabaseClient';
 import { HEARTBEAT_INTERVAL_MS, HEARTBEAT_INITIAL_DELAY_MS } from '@/lib/userActivity';
+import { detectClientDeviceType } from '@/lib/clientDeviceType';
 
 export function useActivityHeartbeat(session, enabled = true) {
   const lastPingRef = useRef(Date.now());
+  const deviceTypeRef = useRef(null);
 
   useEffect(() => {
     if (!enabled || !session?.access_token) return undefined;
+
+    deviceTypeRef.current = detectClientDeviceType();
 
     let intervalId = null;
     let cancelled = false;
@@ -30,7 +34,10 @@ export function useActivityHeartbeat(session, enabled = true) {
             'Content-Type': 'application/json',
             Authorization: `Bearer ${session.access_token}`,
           },
-          body: JSON.stringify({ deltaSeconds }),
+          body: JSON.stringify({
+            deltaSeconds,
+            deviceType: deviceTypeRef.current,
+          }),
           keepalive: true,
         });
       } catch {

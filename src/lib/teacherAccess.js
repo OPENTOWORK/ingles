@@ -20,8 +20,10 @@ export function isSchemaNotReadyError(error) {
     code === '42P01' ||
     code === 'PGRST205' ||
     code === 'PGRST200' ||
+    code === 'PGRST204' ||
     msg.includes('does not exist') ||
     msg.includes('could not find the table') ||
+    msg.includes('could not find the') ||
     msg.includes('schema cache')
   );
 }

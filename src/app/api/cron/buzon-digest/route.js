@@ -43,3 +43,7 @@ export async function GET(req) {
 
   return NextResponse.json(result);
 }
+
+export async function POST(req) {
+  return GET(req);
+}

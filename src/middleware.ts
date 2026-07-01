@@ -5,7 +5,7 @@ import { isPublicPath } from '@/utils/publicRoutes';
 
 /**
  * Server-side auth gate — same rules on mobile, tablet and desktop.
- * Public SEO/legal pages stay open; app content requires a Supabase session.
+ * Only home, contact and login are public; everything else requires a session.
  */
 export async function middleware(request: NextRequest) {
   const pathname = request.nextUrl.pathname;

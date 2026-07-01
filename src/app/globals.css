@@ -2717,18 +2717,17 @@ body.nav-open {
   padding: 18px;
   border-top: 1px solid rgba(226, 232, 240, 0.9);
   box-sizing: border-box;
-  justify-content: stretch;
-  width: 100%;
-}
-
-.levels-b2-exam-picker--exam-mode .levels-b2-exam-picker__slot-wrap {
-  flex: 1 1 0;
-  min-width: 0;
-  max-width: none;
 }
 
 .levels-b2-exam-picker--exam-mode .levels-b2-exam-picker__slot {
   min-height: 124px;
+}
+
+.levels-b2-exam-picker--exam-mode .levels-b2-exam-picker__slot--new {
+  flex: 1 1 0;
+  min-width: 118px;
+  max-width: 168px;
+  width: auto;
 }
 
 /* Exam mode — active session (section timeline) */

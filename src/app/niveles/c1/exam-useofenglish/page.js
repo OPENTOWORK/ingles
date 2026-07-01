@@ -1,5 +1,7 @@
-import LevelSkillPracticePage from '@/components/niveles/LevelSkillPracticePage';
+'use client';
+
+import LevelExamPaperPracticePage from '@/components/niveles/LevelExamPaperPracticePage';
 
 export default function C1UseOfEnglishExamPage() {
-  return <LevelSkillPracticePage slug="c1" skillRoute="exam-useofenglish" />;
+  return <LevelExamPaperPracticePage slug="c1" skillRoute="exam-useofenglish" />;
 }

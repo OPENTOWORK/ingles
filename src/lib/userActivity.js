@@ -7,6 +7,19 @@ export const SESSION_GAP_MS = 5 * 60 * 1000;
 /** Intervalo de heartbeat en cliente (ms). */
 export const HEARTBEAT_INTERVAL_MS = 60 * 1000;
 
+/** @type {Record<string, string>} */
+export const DEVICE_TYPE_LABELS = {
+  mobile: 'Móvil',
+  tablet: 'Tablet',
+  desktop: 'Ordenador',
+};
+
+/** @param {string | null | undefined} deviceType */
+export function formatDeviceTypeLabel(deviceType) {
+  if (!deviceType) return '—';
+  return DEVICE_TYPE_LABELS[deviceType] || '—';
+}
+
 /** Retraso del primer ping para no ralentizar la carga inicial. */
 export const HEARTBEAT_INITIAL_DELAY_MS = 20 * 1000;
 
@@ -151,6 +164,8 @@ export function groupSessionsByDate(sessions) {
       endedAt: row.ended_at || null,
       durationSeconds: sec,
       durationLabel: formatSessionDuration(sec),
+      deviceType: row.device_type || null,
+      deviceLabel: formatDeviceTypeLabel(row.device_type),
       startedLabel: started.toLocaleString('es-ES', {
         hour: '2-digit',
         minute: '2-digit',

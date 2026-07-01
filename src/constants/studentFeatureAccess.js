@@ -1,7 +1,10 @@
 import {
+  ADMIN_EMAIL,
   isAdminRole,
   isCoordinatorRole,
+  isItRole,
   isTeacherRole,
+  normalizeEmail,
   normalizeRoleName,
 } from '@/utils/authRoles';
 
@@ -18,12 +21,19 @@ export function isStudentRole(userRole = '') {
 
 /**
  * Alumno y coordinador: misma experiencia de contenido (coming soon, locks, perfil, etc.).
- * Admin y profesor conservan acceso completo al contenido pedagógico.
+ * Admin, profesor e informático: acceso completo al contenido pedagógico.
  */
+export function hasFullNivelesLevelAccess(userRole = '', email = '') {
+  if (normalizeEmail(email) === normalizeEmail(ADMIN_EMAIL)) return true;
+  if (isAdminRole(userRole)) return true;
+  if (isTeacherRole(userRole)) return true;
+  if (isItRole(userRole)) return true;
+  return false;
+}
+
 export function usesStudentContentRestrictions(userRole = '') {
-  if (isAdminRole(userRole)) return false;
+  if (hasFullNivelesLevelAccess(userRole)) return false;
   if (isCoordinatorRole(userRole)) return true;
-  if (isTeacherRole(userRole)) return false;
   return isStudentRole(userRole);
 }
 
@@ -32,7 +42,8 @@ export function isTrainingLockedForUser(userRole = '') {
   return usesStudentContentRestrictions(userRole);
 }
 
-export function isNivelesLevelComingSoonForUser(userRole = '', level = '') {
+export function isNivelesLevelComingSoonForUser(userRole = '', level = '', email = '') {
+  if (hasFullNivelesLevelAccess(userRole, email)) return false;
   if (!usesStudentContentRestrictions(userRole)) return false;
   const normalized = String(level || '')
     .trim()

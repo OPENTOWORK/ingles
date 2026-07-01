@@ -4,6 +4,7 @@ import { getPageTitleForPath } from '@/lib/pageViewLabels';
 import { isSchemaNotReadyError } from '@/lib/teacherAccess';
 import {
   formatSessionDuration,
+  formatDeviceTypeLabel,
   groupSessionsByDate,
   isUserOnline,
   withinDateRange,
@@ -104,7 +105,7 @@ export async function GET(req, { params }) {
         .maybeSingle(),
       db
         .from('usuario_sesiones_app')
-        .select('id, started_at, ended_at, duration_seconds')
+        .select('id, started_at, ended_at, duration_seconds, device_type')
         .eq('user_id', userId)
         .order('started_at', { ascending: false })
         .limit(500),
@@ -188,6 +189,8 @@ export async function GET(req, { params }) {
         endedAt: s.ended_at,
         durationSeconds: Number(s.duration_seconds) || 0,
         durationLabel: formatSessionDuration(s.duration_seconds),
+        deviceType: s.device_type || null,
+        deviceLabel: formatDeviceTypeLabel(s.device_type),
       })),
       sessionsByDate: groupSessionsByDate(sessions),
       pageViews,

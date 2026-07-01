@@ -1,5 +1,6 @@
 import { isStudentRole } from '@/utils/authRoles';
 import { formatMeetingDate } from '@/lib/staffMeetingsConstants';
+import { buildPollBuzonMessage } from '@/lib/staffMeetingPolls';
 import { isSchemaNotReadyError } from '@/lib/coordinatorAccess';
 
 export const STAFF_MEETINGS_BUZON_GROUP_NAME = 'Reuniones del equipo';
@@ -117,6 +118,43 @@ export function buildMeetingBuzonMessage(meeting, creatorName = '') {
   );
 
   return lines.join('\n');
+}
+
+export async function broadcastPollToStaffBuzon(db, { poll, senderId, creatorName }) {
+  if (!db || !senderId || !poll) {
+    return { sent: false, error: 'Datos insuficientes para anunciar la encuesta.' };
+  }
+
+  try {
+    const probe = await db.from(MESSAGES_TABLE).select('id').limit(1);
+    if (isSchemaNotReadyError(probe.error)) {
+      return { sent: false, skipped: true, error: 'Buzón no configurado.' };
+    }
+
+    const groupId = await ensureStaffMeetingsBuzonGroup(db, senderId);
+    const body = buildPollBuzonMessage(poll, creatorName);
+
+    const { data, error } = await db
+      .from(MESSAGES_TABLE)
+      .insert({
+        sender_id: senderId,
+        group_id: groupId,
+        recipient_id: null,
+        body,
+      })
+      .select('id')
+      .single();
+
+    if (error) {
+      console.error('[broadcastPollToStaffBuzon]', error);
+      return { sent: false, error: error.message };
+    }
+
+    return { sent: true, messageId: data?.id, groupId };
+  } catch (err) {
+    console.error('[broadcastPollToStaffBuzon]', err);
+    return { sent: false, error: err.message || 'Error al anunciar en el buzón.' };
+  }
 }
 
 export async function broadcastMeetingToStaffBuzon(db, { meeting, senderId, creatorName }) {
