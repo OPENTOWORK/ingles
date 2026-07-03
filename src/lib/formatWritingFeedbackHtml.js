@@ -1,4 +1,9 @@
 import { formatWritingFeedbackDisplay, isWritingFeedbackHeadingLine } from '@/lib/formatWritingFeedback';
+import {
+  isAnnotatedTextSection,
+  renderAnnotatedWritingHtml,
+  renderWritingAnnotationLegendHtml,
+} from '@/lib/writingAnnotatedMarkup';
 
 function escapeHtml(text) {
   return String(text || '')
@@ -137,16 +142,22 @@ function getField(block, name) {
 
 function inferErrorType(problem, why, original) {
   const text = `${problem} ${why} ${original}`.toLowerCase();
+  const p = String(problem || '').trim().toLowerCase();
 
-  if (
-    /spell|misspell|typo|orthograph|wrong spelling|everywere|allways|serius/.test(text) ||
-    /\b(everywere|allways|serius|lifes)\b/.test(text)
-  ) {
+  if (/^ww\b|^ww[—–-]|rep\.?\s*vocab|wrong word|word choice|colloc|awkward|unnatural|register|lexis|style upgrade|flat adjective/.test(p)) {
     return 'vocabulary';
   }
 
+  if (/tell me which|needs more developing|right concept|mentioned in passing|only mentioned|too generic|underdeveloped|not specific/.test(text)) {
+    return 'task response';
+  }
+
+  if (/spell|misspell|typo|orthograph|spelling\s*[⇒=>]/.test(text)) {
+    return 'spelling';
+  }
+
   if (
-    /subject-verb|agreement|missing subject|passive|participle|past participle|tense|article|gerund|infinitive|grammar|auxiliary|word order|contraction|apostrophe|third person|verb form|helps keeping|help \+ -ing|base verb|on the other hand|in the other hand/.test(
+    /subject-verb|agreement|missing subject|passive form|participle|past participle|tense|article|gerund|infinitive|grammar|auxiliary|word order|contraction|apostrophe|third person|verb form|helps keeping|help \+ -ing|base verb|on the other hand|in the other hand|too long|clunk|break the sentence/.test(
       text,
     ) ||
     /\b(dont|doesnt|wont|cant|isnt|helps keeping|help keeping)\b/.test(text)
@@ -155,7 +166,7 @@ function inferErrorType(problem, why, original) {
   }
 
   if (
-    /wrong word|word choice|collocation|awkward phrasing|unnatural|preposition|vocabular|lexis|spelling|transparent with|transparent about|linker|naturalness/.test(
+    /wrong word|word choice|collocation|awkward phrasing|unnatural|preposition|vocabular|lexis|transparent with|transparent about|linker|naturalness/.test(
       text,
     )
   ) {
@@ -319,6 +330,7 @@ function parseBlocksFromSection(sectionBody, sectionType = null) {
     const problemRaw = getField(chunk, 'Problem');
     const correct = getField(chunk, 'Correct');
     const whyRaw = getField(chunk, 'Why');
+    const severityRaw = getField(chunk, 'Severity');
     const typeRaw = getField(chunk, 'Type');
     const { problem, why } = normalizeProblemWhy(problemRaw, whyRaw);
     const problemNormalized = normalizeProblemDescription(problem, original, correct, why);
@@ -343,6 +355,7 @@ function parseBlocksFromSection(sectionBody, sectionType = null) {
       problem: problemClean,
       correct,
       why: whyClean,
+      severity: severityRaw ? String(severityRaw).trim().toLowerCase() : '',
       type: typeRaw ? inferredType : sectionType || inferredType,
     });
   }
@@ -485,8 +498,186 @@ function splitEmojiSections(text) {
   return sections;
 }
 
+function isStrengthsSection(heading) {
+  return /main strengths|strengths/i.test(String(heading || ''));
+}
+
+function isProblemsSection(heading) {
+  return /main problems|areas for improvement|problems/i.test(String(heading || ''));
+}
+
+function sectionSortKey(heading) {
+  const h = String(heading || '').toLowerCase();
+  if (/dralo writing feedback|^📝/.test(h)) return 0;
+  if (/main strengths|💪/.test(h)) return 10;
+  if (/main problems|🎯/.test(h)) return 20;
+  if (/annotated text|🔍/.test(h)) return 22;
+  if (/estimated cefr|🎓/.test(h)) return 30;
+  if (/task check|📋/.test(h)) return 40;
+  if (/scores|📊/.test(h)) return 50;
+  if (/corrections|✏️/.test(h)) return 60;
+  if (/improved version|📈/.test(h)) return 80;
+  if (/stronger b2|🚀/.test(h)) return 90;
+  if (/study plan|📚/.test(h)) return 100;
+  if (/^✅|^🟡|^❌/.test(h)) return 110;
+  return 55;
+}
+
+function reorderFeedbackSections(sections) {
+  return [...sections].sort((a, b) => sectionSortKey(a.heading) - sectionSortKey(b.heading));
+}
+
+function formatStrengthsOrProblemsBody(body) {
+  const normalized = formatWritingFeedbackDisplay(body);
+  const escaped = normalized
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;');
+
+  const items = escaped
+    .split('\n')
+    .map((line) => line.trim())
+    .filter((line) => line && !/^Problem\s+\/?\s*Correct/i.test(line))
+    .map((line) => line.replace(/^[-*•]\s+/, ''));
+
+  if (items.length) {
+    return `<ul class="writing-feedback-block__list">${items
+      .map((item) => `<li>${item}</li>`)
+      .join('')}</ul>`;
+  }
+
+  return `<ul class="writing-feedback-block__list"><li>—</li></ul>`;
+}
+
+function shouldUseParagraphLayout(heading) {
+  return /improved version|stronger b2/i.test(String(heading || ''));
+}
+
+function formatParagraphBody(body) {
+  const normalized = formatWritingFeedbackDisplay(body);
+  const escaped = normalized
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;');
+
+  return escaped
+    .split(/\n{2,}/)
+    .map((para) => {
+      const t = para.trim();
+      if (!t) return '';
+      return `<p class="levels-b2-writing-panel__feedback-paragraph">${t.replace(/\n/g, '<br />')}</p>`;
+    })
+    .filter(Boolean)
+    .join('');
+}
+
+function formatBulletLines(body) {
+  const normalized = formatWritingFeedbackDisplay(body);
+  const escaped = normalized
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;');
+
+  const lines = escaped.split('\n').map((l) => l.trim()).filter(Boolean);
+  if (!lines.length) return '';
+
+  let html = '';
+  let openList = false;
+  const closeList = () => {
+    if (openList) {
+      html += '</ul>';
+      openList = false;
+    }
+  };
+
+  for (const trimmed of lines) {
+    if (/^Problem\s+\/?\s*Correct/i.test(trimmed)) continue;
+
+    if (/^(✅|🟡|❌)/.test(trimmed)) {
+      closeList();
+      html += `<p class="levels-b2-writing-panel__feedback-readiness">${trimmed}</p>`;
+      continue;
+    }
+
+    if (/^(Grammar|Vocabulary|Strategy):$/i.test(trimmed)) {
+      closeList();
+      html += `<p class="writing-feedback-subheading">${trimmed}</p>`;
+      continue;
+    }
+
+    if (/^→/.test(trimmed) || (/→/.test(trimmed) && !/^[-*•]/.test(trimmed))) {
+      closeList();
+      html += `<p class="levels-b2-writing-panel__feedback-correction">${trimmed}</p>`;
+      continue;
+    }
+
+    const item = trimmed.replace(/^[-*•]\s+/, '').replace(/^\*\*Total Score:/i, 'Total Score:');
+    if (!openList) {
+      html += '<ul class="writing-feedback-block__list levels-b2-writing-panel__feedback-ul">';
+      openList = true;
+    }
+    html += `<li>${item}</li>`;
+  }
+
+  closeList();
+  return html;
+}
+
+function renderStrengthsOrProblemsSection(heading, body) {
+  const display = formatWritingFeedbackDisplay(`## ${heading.replace(/^#{1,6}\s+/, '')}`);
+  const variant = isStrengthsSection(heading) ? 'strengths' : 'problems';
+  return `<section class="writing-feedback-block writing-feedback-block--${variant}">
+    <h4 class="writing-feedback-block__title">${escapeHtml(display)}</h4>
+    ${formatStrengthsOrProblemsBody(body, variant)}
+  </section>`;
+}
+
+function renderAnnotatedSection(body) {
+  return `<section class="writing-annotated-section">
+    ${renderWritingAnnotationLegendHtml(true)}
+    <div class="writing-annotated-text">${renderAnnotatedWritingHtml(body)}</div>
+  </section>`;
+}
+
 function isBetterVocabularySection(heading) {
   return /better vocabular/i.test(String(heading || ''));
+}
+
+function renderFeedbackSection({ heading, body }) {
+  let html = '';
+
+  if (heading) {
+    if (isStrengthsSection(heading) || isProblemsSection(heading)) {
+      return renderStrengthsOrProblemsSection(heading, body);
+    }
+    if (isAnnotatedTextSection(heading)) {
+      html += `<h4 class="levels-b2-writing-panel__feedback-heading">${escapeHtml(formatWritingFeedbackDisplay(`## ${heading.replace(/^#{1,6}\s+/, '')}`))}</h4>`;
+      html += renderAnnotatedSection(body);
+      return html;
+    }
+    html += formatSectionHeading(heading.replace(/^#{1,6}\s+/, ''));
+  }
+
+  if (heading && isCorrectionsSection(heading)) {
+    const blocks = parseWritingCorrectionBlocks(body);
+    if (blocks.length > 0) {
+      html += renderCorrectionList(blocks);
+      return html;
+    }
+  }
+
+  if (heading && isBetterVocabularySection(heading)) {
+    html += formatBulletLines(body);
+    return html;
+  }
+
+  if (shouldUseParagraphLayout(heading)) {
+    html += formatParagraphBody(body);
+    return html;
+  }
+
+  html += formatBulletLines(body);
+  return html;
 }
 
 function normalizeVocabArrowLine(line) {
@@ -566,8 +757,15 @@ function formatSectionHeading(heading) {
   return `<h4 class="levels-b2-writing-panel__feedback-heading">${escapeHtml(display)}</h4>`;
 }
 
+/** Render one feedback section to HTML (exported for React wrapper). */
+export function renderFeedbackSectionHtml(heading, body, options = {}) {
+  if (options.skipCorrections && isCorrectionsSection(heading)) return '';
+  if (options.skipAnnotated && isAnnotatedTextSection(heading)) return '';
+  return renderFeedbackSection({ heading, body });
+}
+
 /** Líneas de corrección → HTML (emojis en títulos, bloques estructurados en Corrections). */
-export function formatWritingFeedbackHtml(text) {
+export function formatWritingFeedbackHtml(text, options = {}) {
   const raw = String(text || '').trim();
   if (!raw) return '';
 
@@ -579,22 +777,10 @@ export function formatWritingFeedbackHtml(text) {
     const hasEmojiHeadings = emojiSections.some((s) => s.heading);
 
     if (hasEmojiHeadings) {
-      return emojiSections
-        .map(({ heading, body }) => {
-          let html = '';
-          if (heading) {
-            html += `<h4 class="levels-b2-writing-panel__feedback-heading">${escapeHtml(heading)}</h4>`;
-          }
-          if (heading && isCorrectionsSection(heading)) {
-            const blocks = parseWritingCorrectionBlocks(body);
-            if (blocks.length > 0) {
-              html += renderCorrectionList(blocks);
-              return html;
-            }
-          }
-          html += formatPlainLines(body);
-          return html;
-        })
+      return reorderFeedbackSections(emojiSections)
+        .map(({ heading, body }) =>
+          renderFeedbackSectionHtml(heading, body, options),
+        )
         .join('');
     }
 
@@ -602,32 +788,10 @@ export function formatWritingFeedbackHtml(text) {
     if (blocks.length > 0) {
       return renderCorrectionList(blocks);
     }
-    return formatPlainLines(raw);
+    return formatBulletLines(raw);
   }
 
-  return sections
-    .map(({ heading, body }) => {
-      let html = '';
-
-      if (heading) {
-        html += formatSectionHeading(heading);
-      }
-
-      if (heading && isCorrectionsSection(heading)) {
-        const blocks = parseWritingCorrectionBlocks(body);
-        if (blocks.length > 0) {
-          html += renderCorrectionList(blocks);
-          return html;
-        }
-      }
-
-      if (heading && isBetterVocabularySection(heading)) {
-        html += formatBetterVocabularyLines(body);
-        return html;
-      }
-
-      html += formatPlainLines(body);
-      return html;
-    })
+  return reorderFeedbackSections(sections)
+    .map(({ heading, body }) => renderFeedbackSectionHtml(heading, body, options))
     .join('');
 }

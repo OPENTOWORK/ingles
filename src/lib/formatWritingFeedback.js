@@ -4,7 +4,10 @@ const SECTION_EMOJI = {
   'language corrections': '✏️',
   'general feedback': '💬',
   strengths: '💪',
+  'main strengths': '💪',
   'areas for improvement': '🎯',
+  'main problems': '🎯',
+  'annotated text': '🔍',
   scores: '📊',
   'scores (cambridge subscales)': '📊',
 };
@@ -35,5 +38,5 @@ export function isWritingFeedbackHeadingLine(line) {
   const t = String(line || '').trim();
   if (!t) return false;
   if (/^#{1,6}\s+/.test(t)) return true;
-  return /^(📝|📋|✏️|💬|💪|🎯|📊|🎓|📈|🚀|📚|▫️)\s/.test(t);
+  return /^(📝|📋|✏️|💬|💪|🎯|📊|🎓|📈|🚀|📚|🔍|▫️)\s/.test(t);
 }

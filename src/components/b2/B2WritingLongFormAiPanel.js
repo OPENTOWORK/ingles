@@ -1,13 +1,12 @@
 'use client';
 
 import { useState, useEffect, useCallback, useRef } from 'react';
-import { formatWritingFeedbackHtml } from '@/lib/formatWritingFeedbackHtml';
-import {
-  callExamWritingCorrection,
+import { callExamWritingCorrection,
   dailyLimitMessage,
   fetchAiUsageStatus,
   isDailyLimitError,
 } from '@/lib/ai/draloAiClient';
+import WritingFeedbackBody from '@/components/writing/WritingFeedbackBody';
 import { trackWritingErrors } from '@/lib/errorTracker';
 import { writingLimitLabel, LIMIT_REACHED } from '@/lib/aiUsageLimitCopy';
 
@@ -329,17 +328,24 @@ export default function B2WritingLongFormAiPanel({
         </p>
       ) : null}
 
+      {!examMode && aiFeedback ? (
+        <div className="levels-b2-writing-panel__feedback" ref={scores ? undefined : feedbackRef}>
+          <p className="levels-exam-split__section-title">
+            {isEn ? 'Dralo writing feedback' : 'Corrección de Dralo'}
+          </p>
+          <WritingFeedbackBody
+            feedback={aiFeedback}
+            lang={lang}
+            className="levels-b2-writing-panel__feedback-body"
+          />
+        </div>
+      ) : null}
+
       {!examMode && scores ? (
         <div className="levels-b2-writing-panel__scores" ref={feedbackRef}>
           <p className="levels-exam-split__section-title">
             {isEn ? 'Writing scores' : 'Puntuación del writing'}
           </p>
-          {scores.cefr ? (
-            <p className="levels-b2-writing-panel__cefr">
-              {isEn ? 'Estimated CEFR level' : 'Nivel CEFR estimado'}:{' '}
-              <strong>{scores.cefr}</strong>
-            </p>
-          ) : null}
           <div className="levels-b2-writing-panel__scores-grid">
             {CRITERIA.map(({ key, label }) => (
               <div key={key} className="levels-b2-writing-panel__score-card">
@@ -374,18 +380,6 @@ export default function B2WritingLongFormAiPanel({
               </div>
             );
           })()}
-        </div>
-      ) : null}
-
-      {!examMode && aiFeedback ? (
-        <div className="levels-b2-writing-panel__feedback" ref={scores ? undefined : feedbackRef}>
-          <p className="levels-exam-split__section-title">
-            {isEn ? 'Dralo writing feedback' : 'Corrección de Dralo'}
-          </p>
-          <div
-            className="levels-b2-writing-panel__feedback-body"
-            dangerouslySetInnerHTML={{ __html: formatWritingFeedbackHtml(aiFeedback) }}
-          />
         </div>
       ) : null}
     </div>

@@ -6189,6 +6189,308 @@ body.reading-night-mode .levels-exercise-stars--gold .starSvgWrapEmpty .starSvgP
   font-weight: 700;
 }
 
+.levels-b2-writing-panel__feedback-body {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.writing-feedback-block {
+  border-radius: 12px;
+  padding: 1rem 1.1rem;
+  border: 1px solid #e2e8f0;
+}
+
+.writing-feedback-block--strengths {
+  background: linear-gradient(180deg, #f0fdf4 0%, #ecfdf5 100%);
+  border-color: #86efac;
+}
+
+.writing-feedback-block--problems {
+  background: linear-gradient(180deg, #fff7ed 0%, #ffedd5 100%);
+  border-color: #fdba74;
+}
+
+.writing-feedback-block__title {
+  margin: 0 0 0.65rem;
+  font-size: 1rem;
+  font-weight: 800;
+  color: #0f172a;
+}
+
+.writing-feedback-block__list {
+  margin: 0;
+  padding-left: 1.2rem;
+  color: #334155;
+}
+
+.writing-feedback-block__list li {
+  margin: 0.35rem 0;
+  line-height: 1.55;
+  list-style-type: disc;
+}
+
+.writing-annotated-section {
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+}
+
+.writing-annotation-legend {
+  border: 1px solid #cbd5e1;
+  border-radius: 12px;
+  padding: 0.85rem 1rem;
+  background: #ffffff;
+  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.05);
+}
+
+.writing-annotation-legend__title {
+  margin: 0 0 0.65rem;
+  font-size: 0.75rem;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #475569;
+}
+
+.writing-annotation-legend__list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 0.55rem 0.85rem;
+}
+
+.writing-annotation-legend__item {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 0.55rem;
+  align-items: center;
+  padding: 0.45rem 0.55rem;
+  border-radius: 8px;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+}
+
+.writing-annotation-legend__swatch {
+  display: inline-flex;
+  flex-shrink: 0;
+  min-width: 5.5rem;
+  justify-content: center;
+  align-items: center;
+  padding: 0.35rem 0.6rem;
+  border-radius: 999px;
+  font-size: 0.8125rem;
+  font-weight: 700;
+  text-align: center;
+  text-decoration: none;
+  box-shadow: 0 1px 0 rgba(15, 23, 42, 0.06);
+}
+
+.writing-annotation-legend__hint {
+  font-size: 0.75rem;
+  color: #64748b;
+  line-height: 1.35;
+}
+
+.writing-annotated-text {
+  border: 2px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 1.15rem 1.25rem;
+  background: #fffdf8;
+  font-family: Georgia, 'Times New Roman', serif;
+  font-size: 1.02rem;
+  line-height: 1.85;
+}
+
+.writing-annotated-text__body {
+  margin: 0;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+  overflow-wrap: anywhere;
+}
+
+.writing-annotated-text__line {
+  margin: 0;
+}
+
+.writing-mark {
+  padding: 0.08rem 0.2rem;
+  border-radius: 4px;
+  font-weight: 700;
+  text-decoration: underline;
+  text-decoration-thickness: 2.5px;
+  text-underline-offset: 3px;
+  box-decoration-break: clone;
+  -webkit-box-decoration-break: clone;
+}
+
+.writing-mark--voc {
+  background: #fef08a;
+  color: #713f12;
+  text-decoration-color: #ca8a04;
+}
+
+.writing-mark--spell {
+  background: #bfdbfe;
+  color: #1e3a8a;
+  text-decoration-color: #2563eb;
+}
+
+.writing-mark--gram {
+  background: #fecaca;
+  color: #7f1d1d;
+  text-decoration-color: #dc2626;
+}
+
+.writing-mark--cont {
+  background: #e9d5ff;
+  color: #581c87;
+  text-decoration-color: #9333ea;
+}
+
+.writing-mark--good {
+  background: #bbf7d0;
+  color: #14532d;
+  text-decoration-color: #16a34a;
+}
+
+.writing-mark--clickable {
+  cursor: pointer;
+  border: none;
+  padding: 0.08rem 0.2rem;
+  font: inherit;
+  font-family: inherit;
+  transition: box-shadow 0.15s ease, transform 0.12s ease;
+}
+
+.writing-mark--clickable:hover,
+.writing-mark--clickable:focus-visible {
+  box-shadow: 0 0 0 2px rgba(15, 23, 42, 0.18);
+  transform: translateY(-1px);
+  outline: none;
+}
+
+.writing-mark--clickable.writing-mark-popup-open,
+.writing-mark--clickable:active {
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.35);
+}
+
+.writing-annotated-text__hint,
+.writing-feedback-body__note {
+  margin: 0 0 0.75rem;
+  font-size: 0.8125rem;
+  color: #64748b;
+  font-style: italic;
+}
+
+.writing-feedback-body__section + .writing-feedback-body__section {
+  margin-top: 0.85rem;
+}
+
+.writing-feedback-body__note {
+  margin-top: 0.5rem;
+  margin-bottom: 0;
+}
+
+.writing-mark-popup {
+  width: min(340px, calc(100vw - 24px));
+  border-radius: 12px;
+  border: 1px solid #cbd5e1;
+  background: #ffffff;
+  box-shadow: 0 16px 40px rgba(15, 23, 42, 0.18);
+  padding: 0.75rem 0.85rem 0.85rem;
+}
+
+.writing-mark-popup__arrow {
+  position: absolute;
+  left: 50%;
+  bottom: -7px;
+  width: 14px;
+  height: 14px;
+  background: #ffffff;
+  border-right: 1px solid #cbd5e1;
+  border-bottom: 1px solid #cbd5e1;
+  transform: translateX(-50%) rotate(45deg);
+}
+
+.writing-mark-popup__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  margin-bottom: 0.55rem;
+}
+
+.writing-mark-popup__chip {
+  font-size: 0.75rem;
+  padding: 0.15rem 0.55rem;
+  border-radius: 999px;
+  text-decoration: none;
+}
+
+.writing-mark-popup__close {
+  border: none;
+  background: transparent;
+  color: #64748b;
+  font-size: 1.25rem;
+  line-height: 1;
+  cursor: pointer;
+  padding: 0.1rem 0.35rem;
+}
+
+.writing-mark-popup__quote {
+  margin: 0 0 0.45rem;
+  font-family: Georgia, 'Times New Roman', serif;
+  font-style: italic;
+  color: #0f172a;
+}
+
+.writing-mark-popup__row {
+  margin: 0.35rem 0 0;
+  font-size: 0.875rem;
+  line-height: 1.45;
+  color: #334155;
+}
+
+.writing-mark-popup__arrow-fix {
+  margin: 0.35rem 0 0;
+  font-size: 0.9375rem;
+  color: #166534;
+}
+
+.writing-mark-popup__note {
+  margin: 0.45rem 0 0;
+  font-size: 0.8125rem;
+  line-height: 1.45;
+  color: #475569;
+}
+
+.writing-feedback-subheading {
+  margin: 0.65rem 0 0.25rem;
+  font-size: 0.8125rem;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: #475569;
+}
+
+.levels-b2-writing-panel__feedback-ul {
+  margin-top: 0.15rem;
+}
+
+.levels-b2-writing-panel__feedback-paragraph {
+  margin: 0.5rem 0;
+  line-height: 1.65;
+  color: #334155;
+}
+
+.levels-b2-writing-panel__feedback-readiness {
+  margin: 0.75rem 0 0;
+  font-weight: 700;
+}
+
 .levels-b2-writing-panel__feedback-heading {
   margin: 1rem 0 0.45rem;
   font-size: 0.9375rem;
@@ -11493,8 +11795,45 @@ body.reading-night-mode .levels-b2-speaking-panel__usage,
 
 .b2-writing-task__points-list {
   margin: 0.35rem 0 0;
-  padding-left: 1.35rem;
+  padding-left: 0;
+  list-style: none;
   color: #334155;
+}
+
+.b2-writing-task__points-list--bullets li {
+  position: relative;
+  padding-left: 1.1rem;
+  margin: 0.35rem 0;
+}
+
+.b2-writing-task__points-list--bullets li::before {
+  content: '•';
+  position: absolute;
+  left: 0;
+  color: #0f172a;
+  font-weight: 700;
+}
+
+.b2-writing-task__context-block,
+.b2-writing-task__question-block {
+  margin-bottom: 0.85rem;
+}
+
+.b2-writing-task__context {
+  margin: 0;
+  line-height: 1.55;
+  color: #334155;
+}
+
+.b2-writing-task__title-note {
+  margin: 0.65rem 0 0;
+  font-size: 0.875rem;
+  color: #475569;
+  font-style: italic;
+}
+
+.b2-writing-part2__context-block {
+  margin-bottom: 0.85rem;
 }
 
 .b2-writing-task__points-list li {

@@ -1,5 +1,11 @@
 import { cambridgeChatCompletion, isDraloOpenAIConfigured } from '@/lib/draloAiEngine';
 import { formatWritingFeedbackDisplay } from '@/lib/formatWritingFeedback';
+import { injectServerAnnotatedText } from '@/lib/writingAnnotatedTextBuilder';
+import {
+  ensureMissingTitleProblem,
+  ensureUnclearOpinionTaskCheck,
+  stripStrongerB2SkipPlaceholder,
+} from '@/lib/writingFeedbackPostProcess';
 
 function extractScore(text, category) {
   // Acepta decimales ("2.5/5") porque el modelo a veces los genera pese al
@@ -85,7 +91,7 @@ export function dedupeCorrectionCards(feedback) {
     const t = lines[i].trim();
     if (start === -1) {
       if (t.startsWith('✏️')) start = i;
-    } else if (/^(📈|🚀|📚|📊|🎓|💪|🎯|📋|📝)/.test(t)) {
+    } else if (/^(📈|🚀|📚|📊|🎓|💪|🎯|📋|📝|🔍)/.test(t)) {
       end = i;
       break;
     }
@@ -329,7 +335,7 @@ function buildTaskPack(taskContext = {}, structuredExamContext = '') {
     .join('\n\n');
 }
 
-function buildB2FirstPrompt({ essay, taskPack, wordMin, wordMax, wordCount, calibrationBlock = '', v2 = false }) {
+export function buildB2FirstPrompt({ essay, taskPack, wordMin, wordMax, wordCount, calibrationBlock = '', v2 = false }) {
   const lengthBlock = v2
     ? buildWordCountRules({ wordCount, wordMin, wordMax })
     : `Target length when relevant: **${wordMin}–${wordMax} words**.`;
@@ -349,7 +355,7 @@ function buildB2FirstPrompt({ essay, taskPack, wordMin, wordMax, wordCount, cali
     : '';
 
   return `
-You are an experienced, encouraging English teacher marking a B2-level exam-style writing task. Give clear teacher-style feedback. Mark using four subscales (0–5 each, total /20).
+You are an experienced Cambridge B2 First writing examiner marking like a real teacher on paper: direct, precise, and constructive — not overly kind. Praise only what genuinely works. Penalise vague content, unnatural phrasing, missing task points, and missing essay title. Estimate the student's REAL level honestly; do NOT inflate scores.
 
 ${taskPack ? `**EXACT TASK SET TO THE CANDIDATE** — you MUST evaluate task fulfilment against this:\n---\n${taskPack}\n---\n` : 'No separate task sheet was supplied; infer a typical B2 Part 1 (essay) or Part 2 task from the answer.\n'}
 ${
@@ -381,15 +387,25 @@ Assessment scale:
 - **Language**: Good range of vocabulary and grammar; errors do not impede communication.
 
 CRITICAL marking rules:
-- Estimate the student's REAL level honestly. Do NOT inflate the level.
-- Do NOT overcorrect: focus on the 3–8 most important problems.
-- The improved version must stay at the student's CURRENT level (do not turn a B1 text into a C1 text).
-- Be specific and constructive, like a teacher writing on a student's paper.${v2Guardrails}
+- Mark using four subscales (0–5 each, total /20). Be realistic: good structure with weak task coverage is normally Content 3/5, not 4/5.
+- Focus on the 8–12 most important issues; explain WHY each error matters and give a natural alternative.
+- Do NOT mark connectors (However, Moreover, Whereas…) as strengths if they are misused, awkwardly placed, or create grammar problems.
+- Do NOT praise vague phrases ("many things", "specific benefits", "towards it", "for your own good") — mark them as vocabulary or content problems.
+- Acceptable B1+/low B2 essays with several language problems: Language 3/5, total often 12–13/20 — not B2-ready unless control is consistently strong.
+- The improved version MUST be materially different from the original: add a title, clarify the opinion, develop weak notes, fix errors — not a near-copy with two word changes.
+- The Stronger B2 version MUST always be written for any complete essay (140+ words of real content). NEVER write "Not needed yet".${v2Guardrails}
 ${calibrationBlock ? `\n${calibrationBlock}\n` : ''}
 
 **Required response format (in English). Do NOT use markdown headers (#, ##, ###). Use these emoji section titles exactly, in this order:**
 
 📝 Dralo writing feedback
+
+💪 Main strengths
+- 1–3 bullet points ONLY for genuine strengths (clear paragraphing, relevant attempt, one good structure) — skip this section item if nothing is truly strong.
+
+🎯 Main problems
+- 3–5 bullet points on what most limits the mark (task coverage, missing title, vague content, unnatural phrases, grammar breakdown).
+- For Part 1 essays: if there is NO title at the top, this MUST appear here and Communicative Achievement must lose at least 1 point.
 
 🎓 Estimated CEFR level
 Level: <exactly ONE label from: A2, A2+, B1, B1+, low B2, B2, B2+, C1 — NEVER a combination or range such as "B1/B1+", "B1 or B1+", "B1-B2" or "between B1 and B2". If you hesitate between two labels, choose the LOWER one.>
@@ -399,6 +415,11 @@ ${
     ? `
 📋 Task check
 Task match: <exactly one of: ON TASK / PARTLY OFF TASK / OFF TASK> — one short sentence; if PARTLY OFF TASK or OFF TASK, name exactly which task point(s) are not (fully) answered.
+Title included: <yes / no>
+Clear opinion: <yes / no / partial / n/a> — for "Do you agree?" essays, "partial" or "no" if the stance is not direct.
+All notes covered: <yes / partial / no> — name any underdeveloped note (e.g. services, own idea).
+Word count ok: <yes / no>
+Paragraphing: <weak / acceptable / good>
 `
     : ''
 }
@@ -410,19 +431,30 @@ Task match: <exactly one of: ON TASK / PARTLY OFF TASK / OFF TASK> — one short
 **Total Score: X/20**
 Each x MUST be a whole number from 0 to 5 — never use decimals or halves (no 2.5/5, no 3,5/5).
 
-💪 Main strengths
-- 2–4 bullet points.
-
-🎯 Main problems
-- 2–4 bullet points (the issues that most limit the mark).
-
 ✏️ Corrections
-For each of the 3–8 most important errors, output a block in exactly this format (each field on its own line):
+Mark like an FCE teacher on paper (see colour guide). Minimum 8 cards covering grammar, vocabulary, spelling (if any), content, and at most 1–2 genuine strengths.
+
+MANDATORY colour mix (count your cards before finishing):
+- At least 2 YELLOW vocabulary cards (Type: vocabulary, Problem: "WW" or "rep. vocab.")
+- At least 2 PURPLE content cards (Type: task response, Problem: purple labels below)
+- At least 2 RED grammar cards (Type: grammar/cohesion)
+- At least 1 BLUE spelling card if any real misspelling exists (Type: spelling)
+- At most 2 GREEN strength cards — ONLY if genuinely good in context (never misused Moreover/However/Whereas)
+
+TEACHER LABELS BY COLOUR (Problem field MUST start with these — Type MUST match the colour):
+- YELLOW vocabulary → Problem: "WW" or "WW — …" OR "rep. vocab." · Type: vocabulary (NEVER grammar)
+- BLUE spelling → Problem: "spelling ⇒ <correct form>" · Type: spelling
+- RED grammar → Problem: "Too long…", "clunky", "break the sentence.", "need an object here", "subject-verb agreement", "sounds translated from Spanish" · Type: grammar or cohesion
+- PURPLE content → Problem: "needs more developing", "tell me which!", "is this the right concept?", "too generic", "only mentioned in passing" · Type: task response (NEVER grammar)
+- GREEN strengths → Problem: "clear paragraphing ✓", "good contrast ✓", "relevant example ✓" — NOT "good connector!" unless the connector is perfect
+
+For each error/strength, output a block in exactly this format (each field on its own line):
 Original: "exact phrase from the student's text"
-Problem: short description of what is wrong — the label MUST accurately match the error (e.g. a faulty "not only… but also" sentence is a connector/structure problem with a missing subject, NEVER "passive form"). If you are not sure of the exact grammar term, describe the error in plain words instead of using a wrong label.
-Correct: "corrected phrase"
-Why: brief teacher-style explanation
-Type: <one of: grammar, vocabulary, spelling, word order, articles, prepositions, verb tense, subject-verb agreement, cohesion, register, task response>${
+Problem: <teacher label from above — SHORT like margin notes on paper>
+Correct: "corrected phrase" (for green strengths, repeat the good phrase)
+Why: one short sentence explaining why it is wrong and what natural English would do
+Severity: <major | medium | minor>
+Type: <MUST match the colour — see above>${
     v2
       ? `
 Correction card selection rules:
@@ -437,8 +469,18 @@ Correction card selection rules:
       : ''
   }
 
+🔍 Annotated text
+Reproduce the student's FULL text (including title). Mark EVERY Original phrase from ✏️ Corrections with the matching tag — yellow for WW/rep.vocab., purple for task response, red for grammar, blue for spelling, green for strengths:
+- [[voc]]…[[/voc]] yellow vocabulary · [[spell]]…[[/spell]] spelling · [[gram]]…[[/gram]] grammar · [[cont]]…[[/cont]] content · [[good]]…[[/good]] strengths
+Never mark a vocabulary (WW) or content (tell me which!) phrase as [[gram]].
+
 📈 Improved version (your level)
-Rewrite the student's full text with the corrections applied, staying at the student's current level. Same ideas, same voice — just accurate.${
+Rewrite the student's essay at their CURRENT level (${wordMin}–${wordMax} words). It MUST:
+- include a suitable title;
+- answer “Do you agree?” clearly if that is the task;
+- develop the underdeveloped notes (especially services and own idea);
+- fix the main errors you marked;
+- read noticeably better than the original — NOT a near-copy.${
     v2 && taskPack
       ? `\nMANDATORY if your Task match is PARTLY OFF TASK: the rewrite must REPAIR the missed or misunderstood task point — add one or two short, natural sentences that actually answer it, at the student's level, tone and register (e.g. if the task asked what to bring for a trip, suggest clothes or useful items for the trip). Never leave that task point unanswered in the rewrite.
 If a task point was only IMPLIED or stated unclearly in the original (e.g. a recommendation or an opinion), make it explicit in the rewrite with one short sentence at the student's level, using a clear opinion marker (e.g. "That is why I would recommend it to everyone." or "In my opinion, loyalty is the most important quality in a good friend.").
@@ -454,7 +496,8 @@ For reviews, upgrade flat adjectives to natural review vocabulary at the student
   }
 
 🚀 Stronger B2 version
-Only include a rewritten version here if the student is close to B2 and it is genuinely useful. Otherwise write exactly: "Not needed yet — focus on the corrections above first."
+You MUST always write a full Stronger B2 version here (${wordMin}–${wordMax} words) when the student submitted a complete essay. NEVER write "Not needed yet" or skip this section.
+The Stronger B2 version must: sound natural (not C1 artificial); include a title; answer the task directly; cover all notes clearly; use B2 connectors only where they fit; stay within the word limit.
 
 📚 Study plan
 Before your next writing, practise:
@@ -570,7 +613,7 @@ function ensureStudyPlanLine(feedback, line, presentRegex) {
     const t = lines[i].trim();
     if (start === -1) {
       if (t.startsWith('📚')) start = i;
-    } else if (/^(✅|🟡|❌|📝|🎓|📊|💪|🎯|✏️|📈|🚀)/.test(t)) {
+    } else if (/^(✅|🟡|❌|📝|🎓|📊|💪|🎯|✏️|📈|🚀|🔍)/.test(t)) {
       end = i;
       break;
     }
@@ -655,7 +698,7 @@ function locateCorrectionsSection(feedback) {
     const t = lines[i].trim();
     if (start === -1) {
       if (t.startsWith('✏️')) start = i;
-    } else if (/^(📈|🚀|📚|📊|🎓|💪|🎯|📋|📝)/.test(t)) {
+    } else if (/^(📈|🚀|📚|📊|🎓|💪|🎯|📋|📝|🔍)/.test(t)) {
       end = i;
       break;
     }
@@ -784,7 +827,7 @@ async function ensureMinimumCorrectionCards({ feedback, essay, minCards = 3, unc
       messages: [
         {
           role: 'user',
-          content: `This is a student's exam writing:\n---\n${essay}\n---\nThese errors are already covered (do NOT repeat them):\n${existingOriginals.map((o) => `- ${o}`).join('\n')}\n${priorityBlock}\nFind up to ${needed} ADDITIONAL clear, useful errors in the text (priority: basic grammar errors, repeated errors, errors easy to understand; vocabulary/style upgrades count too). For each one output a block in exactly this format and nothing else:\nOriginal: "exact phrase copied verbatim from the student's text"\nProblem: short accurate description\nCorrect: "corrected phrase"\nWhy: brief teacher-style explanation\nType: <one of: grammar, vocabulary, spelling, word order, articles, prepositions, verb tense, subject-verb agreement, cohesion, register>\n\nIf the text genuinely has no more real errors, output exactly: NONE`,
+          content: `This is a student's exam writing:\n---\n${essay}\n---\nThese errors are already covered (do NOT repeat them):\n${existingOriginals.map((o) => `- ${o}`).join('\n')}\n${priorityBlock}\nFind up to ${needed} ADDITIONAL clear, useful errors. Prioritise vocabulary (WW, unnatural collocation), content/task gaps, and grammar — not only connectors.\nFor each one output a block in exactly this format and nothing else:\nOriginal: "exact phrase copied verbatim from the student's text"\nProblem: <teacher label: WW | rep. vocab. | tell me which! | needs more developing | Too long… | clunky | spelling ⇒ word>\nCorrect: "corrected phrase"\nWhy: brief teacher-style explanation\nSeverity: <major | medium | minor>\nType: <vocabulary | task response | grammar | spelling | cohesion | register>\n\nIf the text genuinely has no more real errors, output exactly: NONE`,
         },
       ],
       temperature: 0.2,
@@ -1014,9 +1057,9 @@ export async function evaluateCambridgeEssay({
   try {
     const { text: rawFeedback } = await cambridgeChatCompletion({
       system:
-        'Be precise, constructive, and exam-focused, like a supportive teacher. Use emoji section titles (📝 🎓 📊 💪 🎯 ✏️ 📈 🚀 📚) — never use # markdown headers.',
+        'Be precise and exam-focused like a strict but fair Cambridge writing teacher. Do not flatter weak work. Use emoji section titles (📝 💪 🎯 🎓 📊 🔍 ✏️ 📈 🚀 📚) — never use # markdown headers.',
       messages: [{ role: 'user', content: prompt }],
-      temperature: 0.35,
+      temperature: 0.25,
     });
     if (!rawFeedback) {
       return { ok: false, status: 502, error: 'The examiner returned an empty response. Please try again.' };
@@ -1111,8 +1154,24 @@ export async function evaluateCambridgeEssay({
         });
         lengthCheckedFeedback = ensured.feedback;
       }
-      // Si un área sigue sin respaldo, se quita del study plan (nunca se inventa).
       lengthCheckedFeedback = removeUnbackedStudyPlanAreas(lengthCheckedFeedback);
+    }
+
+    if (isB2First) {
+      lengthCheckedFeedback = injectServerAnnotatedText(lengthCheckedFeedback, String(essay ?? ''));
+    }
+
+    if (v2 && isB2First && !isOffTask) {
+      lengthCheckedFeedback = ensureMissingTitleProblem(lengthCheckedFeedback, trimmed);
+      lengthCheckedFeedback = ensureUnclearOpinionTaskCheck(
+        lengthCheckedFeedback,
+        trimmed,
+        taskPack,
+      );
+      lengthCheckedFeedback = stripStrongerB2SkipPlaceholder(
+        lengthCheckedFeedback,
+        essayWordCount,
+      );
     }
 
     const total = content + communication + organisation + language;

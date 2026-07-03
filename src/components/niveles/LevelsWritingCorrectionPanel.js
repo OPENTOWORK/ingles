@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import { useDraloXpOptional } from '@/context/DraloXpContext';
 import { buildClientApiUrl } from '@/utils/clientApiUrl';
-import { formatWritingFeedbackHtml } from '@/lib/formatWritingFeedbackHtml';
+import WritingFeedbackBody from '@/components/writing/WritingFeedbackBody';
 import { trackWritingErrors } from '@/lib/errorTracker';
 
 const WRITING_TYPES = [
@@ -267,14 +267,16 @@ export default function LevelsWritingCorrectionPanel({
         </button>
       </div>
 
+      {result ? (
+        <div className={feedbackWrapClass}>
+          <p className={feedbackTitleClass}>Exam Coach feedback</p>
+          <WritingFeedbackBody feedback={result} className={feedbackBodyClass} />
+        </div>
+      ) : null}
+
       {scores ? (
         <div className="levels-b2-writing-panel__scores">
           <p className={feedbackTitleClass}>Writing scores</p>
-          {scores.cefr ? (
-            <p className="levels-b2-writing-panel__cefr">
-              Estimated CEFR level: <strong>{scores.cefr}</strong>
-            </p>
-          ) : null}
           <div className="levels-b2-writing-panel__scores-grid">
             {CRITERIA.map(({ key, label }) => (
               <div key={key} className="levels-b2-writing-panel__score-card">
@@ -297,16 +299,6 @@ export default function LevelsWritingCorrectionPanel({
                   : '❌ Not yet'}
             </span>
           </div>
-        </div>
-      ) : null}
-
-      {result ? (
-        <div className={feedbackWrapClass}>
-          <p className={feedbackTitleClass}>Exam Coach feedback</p>
-          <div
-            className={feedbackBodyClass}
-            dangerouslySetInnerHTML={{ __html: formatWritingFeedbackHtml(result) }}
-          />
         </div>
       ) : null}
     </form>
