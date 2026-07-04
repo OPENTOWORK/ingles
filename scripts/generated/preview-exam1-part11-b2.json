@@ -1,116 +1,121 @@
 {
-  "partNumber": 11,
-  "cambridgePart": "Listening Part 2 — Sentence Completion",
-  "partTitle": "Listening Part 2 — Mountain Rescue Training",
-  "partLabel": "B2 Examen 1 — Dralo Part 11 (replacement preview)",
-  "note": "Textual preview only — NO audio generated — NO Supabase save. v2: closing recruitment paragraph removed for ~3:30–3:50 target.",
-  "targetPreguntaId": "8dc37fa2-9ea0-4688-8d5e-56bc2eb33b37",
-  "replacesLegacyTheme": "technology's impact on city living",
   "generated": {
-    "partTitle": "Part 2: Sentence completion",
-    "title": "Training with a Mountain Rescue Team",
-    "directions": "You will hear a woman called Elena who volunteers with a mountain rescue team talking about the training new members receive. For questions 9–18, complete the sentences with a word or short phrase.",
-    "setting": "Radio interview / talk about mountain rescue volunteer training.",
-    "scriptWordCount": 580,
-    "estimatedDurationMinutes": "3:35–3:50 at ~145–155 wpm",
-    "script": "Hello. My name's Elena, and for the past four years I've been a volunteer with the Lakes Peak Mountain Rescue Team. People often imagine we're out climbing every weekend for fun, but most of what we do is training — because when a call comes in, there is no time to hesitate.\n\nBefore anyone is accepted, they have to pass an annual fitness test. It's not about being the fastest runner in the group; the instructors want to see that you can keep going uphill with a heavy pack for several hours without becoming a liability to the rest of the squad. After that, there's a basic background check, and only then do you join the trainee programme.\n\nThe programme starts in the classroom. New volunteers learn navigation — map reading, compass work, and how to describe a location accurately when you're speaking to the police or the ambulance service. I still remember my first night exercise in thick cloud on the lower slopes. I thought I knew the path, but without proper navigation training I would simply have walked in circles.\n\nEvery member carries a whistle, which sounds obvious, but in wind you can't rely on shouting. One short blast means \"Where are you?\" and two means \"Come to me.\" We drill those signals until they're automatic, because on a ridge you may not be able to see the person ten metres ahead of you.\n\nThe initial course also includes an accredited first aid qualification. You're taught to treat hypothermia, stabilise a leg injury, and keep someone calm while you wait for professional paramedics. The certificate has to be renewed, so we run refreshers every spring.\n\nOutdoor kit has to be fully waterproof — not shower-resistant, not \"good enough for town,\" but capable of keeping you dry in horizontal rain above the treeline. The team publishes a kit list, and leaders check your bag before major exercises. Cheap gloves that soak through in twenty minutes are not acceptable.\n\nWhen someone is seriously injured on a remote ridge, we request a helicopter from the national search service. The pilot cannot land on a narrow ledge, so we prepare a landing site lower down and carry the casualty on a stretcher to meet the aircraft. Those exercises are exhausting, but they teach you how much coordination a real rescue requires.\n\nAll team leaders are unpaid and work on a voluntary basis. Employers are generally supportive because they know the skills — leadership, communication, staying calm under pressure — transfer back to the workplace. Even so, balancing shift work with sudden call-outs at two in the morning is not easy.\n\nRopes are used most often on steep ground where a slip would have serious consequences. You learn to set up anchors, belay a colleague, and descend safely with a load. It's repetitive practice on the same rocky outcrop month after month until the procedures feel boring — and that's exactly the point.\n\nCall-outs frequently happen in poor visibility. Fog, sleet, and darkness combine to turn a familiar path into something disorientating. GPS helps, but batteries fail and screens crack, so we still teach old-fashioned techniques with map and compass.\n\nMany recruits tell me the training gave them greater confidence in the mountains. Not arrogance — you never stop respecting the weather — but a quiet belief that if something went wrong, you would know what to do first, who to contact, and how to keep yourself and others safe until help arrives.",
+    "partTitle": "Listening Part 2: Sentence completion",
+    "title": "Mountain rescue volunteer training",
+    "directions": "You will hear a radio presenter interviewing a woman called Elena who trains volunteers for a mountain rescue team. For questions 9–18, complete the sentences with a word or short phrase.",
+    "setting": "Radio interview about training for a mountain rescue team.",
+    "script": "A: Good morning. You're listening to Mountain Rescue Monthly, and today I'm joined by Elena, who helps train new volunteers. Elena, thanks for coming in. What happens before someone is actually allowed to join the team?\nB: Thanks for having me. Well, before being accepted, every applicant must pass an annual fitness test. It's demanding, but it keeps people safe on the hill, and we don't make exceptions.\nA: And once they're in, what do they study indoors before they go out in all weathers?\nB: In the classroom, trainees learn basic navigation — map reading, compass work, that sort of thing. We also talk through typical scenarios so nobody panics when a real call comes in.\nA: Out on a call-out, how do team members stay in contact when the weather turns nasty?\nB: Each volunteer carries a whistle, because shouting doesn't always work in wind or across a ridge. Radios help too, of course, but the whistle is simple and reliable.\nA: Is there any formal medical training, or is that left to the ambulance service?\nB: Yes, definitely. The initial course includes an accredited first aid qualification, and we refresh it regularly. You might be hours from a road, so those skills really matter.\nA: What about clothing and kit — do people bring their own?\nB: Outdoor equipment must be fully waterproof. People underestimate rain on exposed slopes — damp kit quickly becomes a safety problem, especially if you're waiting with a casualty.\nA: When injuries are serious, how are casualties moved off the mountain?\nB: If someone is badly hurt, rescuers sometimes request a helicopter. It's not every call, but on steep ground it can be the only realistic option when time is short.\nA: Are team leaders paid for this work, or is it entirely voluntary?\nB: No, team leaders are unpaid and work on a voluntary basis, like everyone else. They give up evenings and weekends because they care about the community.\nA: Where is rope work most common — is it every rescue?\nB: Ropes are used most often on steep terrain, where a slip would have serious consequences. We practise those techniques again and again until they feel automatic.\nA: What conditions make rescues hardest for newer volunteers?\nB: Many call-outs happen in poor visibility — fog, sleet, low cloud. You might know the area well, but you still have to move carefully and trust your training.\nA: Finally, what do recruits say they gain from all this preparation?\nB: Most recruits say the training gave them more confidence in the mountains. They still respect the risks, but they feel prepared to help when it counts.\nA: Elena, that's been really helpful — thank you for explaining how new members are prepared.",
     "questions": [
       {
         "number": 9,
-        "lead": "Before being accepted, applicants must pass an annual __________ test.",
-        "answer": "fitness",
-        "whyItWorks": "Elena states recruits must pass an \"annual fitness test\" before acceptance. Single common noun; no plausible alternative fits the grammar (\"medical\" is mentioned later as separate)."
+        "lead": "Before being accepted, every applicant must pass an annual",
+        "prompt": "Before being accepted, every applicant must pass an annual ___",
+        "type": "short"
       },
       {
         "number": 10,
-        "lead": "In the classroom, new volunteers learn __________, including map reading and compass work.",
-        "answer": "navigation",
-        "whyItWorks": "She explicitly says \"New volunteers learn navigation — map reading, compass work…\" The gap paraphrases the list that follows."
+        "lead": "In the classroom, trainees learn basic",
+        "prompt": "In the classroom, trainees learn basic ___",
+        "type": "short"
       },
       {
         "number": 11,
-        "lead": "Each team member carries a __________ to communicate with others when shouting is ineffective.",
-        "answer": "whistle",
-        "whyItWorks": "Elena explains every member carries a whistle because shouting fails in wind. \"Radio\" appears later but is not the personal signal device described here."
+        "lead": "Each volunteer carries a",
+        "prompt": "Each volunteer carries a ___",
+        "type": "short"
       },
       {
         "number": 12,
-        "lead": "The initial training course includes an accredited __________ qualification.",
-        "answer": "first aid",
-        "whyItWorks": "She names an \"accredited first aid qualification\" on the initial course. Two-word phrase allowed at B2; distractors like \"navigation\" or \"fitness\" refer to other modules."
+        "lead": "The initial course includes an accredited",
+        "prompt": "The initial course includes an accredited ___",
+        "type": "short"
       },
       {
         "number": 13,
-        "lead": "Outdoor kit must be fully __________ to cope with heavy rain on exposed hills.",
-        "answer": "waterproof",
-        "whyItWorks": "She insists kit must be \"fully waterproof,\" contrasting with shower-resistant town clothing. Adjective answer adds variety."
+        "lead": "Outdoor equipment must be fully",
+        "prompt": "Outdoor equipment must be fully ___",
+        "type": "short"
       },
       {
         "number": 14,
-        "lead": "A __________ is requested when a casualty needs evacuation from a remote ridge.",
-        "answer": "helicopter",
-        "whyItWorks": "Serious ridge injuries trigger a request for a helicopter from the national search service."
+        "lead": "Rescuers sometimes request a",
+        "prompt": "Rescuers sometimes request a ___",
+        "type": "short"
       },
       {
         "number": 15,
-        "lead": "Team leaders are unpaid and work on a __________ basis.",
-        "answer": "voluntary",
-        "whyItWorks": "Elena says leaders work on a \"voluntary basis.\" Adjective form required by \"a ___ basis\" pattern."
+        "lead": "Team leaders are unpaid and work on a",
+        "prompt": "Team leaders are unpaid and work on a ___",
+        "type": "short"
       },
       {
         "number": 16,
-        "lead": "Ropes are used most often on __________ ground where a fall would be dangerous.",
-        "answer": "steep",
-        "whyItWorks": "She states ropes are used on \"steep ground where a slip would have serious consequences.\" Adjective answer."
+        "lead": "Ropes are used most often on",
+        "prompt": "Ropes are used most often on ___",
+        "type": "short"
       },
       {
         "number": 17,
-        "lead": "Call-outs frequently happen in poor __________, such as fog or sleet.",
-        "answer": "visibility",
-        "whyItWorks": "She introduces the idea with \"poor visibility\" before listing fog and sleet. \"Weather\" would be too broad; fog is given as an example, not the head noun."
+        "lead": "Many call-outs happen in poor",
+        "prompt": "Many call-outs happen in poor ___",
+        "type": "short"
       },
       {
         "number": 18,
-        "lead": "Many recruits say the training increased their __________ in the mountains.",
-        "answer": "confidence",
-        "whyItWorks": "Closing section: \"greater confidence in the mountains.\" Abstract noun; distinct from equipment/skills answers."
+        "lead": "Most recruits say the training gave them more",
+        "prompt": "Most recruits say the training gave them more ___",
+        "type": "short"
       }
     ],
     "modelAnswers": [
-      { "id": 9, "answer": "fitness" },
-      { "id": 10, "answer": "navigation" },
-      { "id": 11, "answer": "whistle" },
-      { "id": 12, "answer": "first aid" },
-      { "id": 13, "answer": "waterproof" },
-      { "id": 14, "answer": "helicopter" },
-      { "id": 15, "answer": "voluntary" },
-      { "id": 16, "answer": "steep" },
-      { "id": 17, "answer": "visibility" },
-      { "id": 18, "answer": "confidence" }
+      {
+        "number": 9,
+        "answer": "fitness"
+      },
+      {
+        "number": 10,
+        "answer": "navigation"
+      },
+      {
+        "number": 11,
+        "answer": "whistle"
+      },
+      {
+        "number": 12,
+        "answer": "first aid"
+      },
+      {
+        "number": 13,
+        "answer": "waterproof"
+      },
+      {
+        "number": 14,
+        "answer": "helicopter"
+      },
+      {
+        "number": 15,
+        "answer": "voluntary"
+      },
+      {
+        "number": 16,
+        "answer": "steep"
+      },
+      {
+        "number": 17,
+        "answer": "visibility"
+      },
+      {
+        "number": 18,
+        "answer": "confidence"
+      }
     ],
-    "answerKeySummary": "9 fitness | 10 navigation | 11 whistle | 12 first aid | 13 waterproof | 14 helicopter | 15 voluntary | 16 steep | 17 visibility | 18 confidence",
-    "answerTypeVariety": {
-      "nouns": ["fitness", "navigation", "whistle", "helicopter", "visibility", "confidence"],
-      "adjectives": ["waterproof", "voluntary", "steep"],
-      "nounPhrases": ["first aid"]
-    },
     "audioClips": [
       {
         "orden": 1,
-        "titulo": "Elena — mountain rescue training",
-        "storagePath": "b2/exam-1/part-11/clip-01.mp3",
-        "estimatedDurationSec": "215–230"
+        "titulo": "Elena — mountain rescue training (radio interview)",
+        "text": "A: Good morning. You're listening to Mountain Rescue Monthly, and today I'm joined by Elena, who helps train new volunteers. Elena, thanks for coming in. What happens before someone is actually allowed to join the team?\nB: Thanks for having me. Well, before being accepted, every applicant must pass an annual fitness test. It's demanding, but it keeps people safe on the hill, and we don't make exceptions.\nA: And once they're in, what do they study indoors before they go out in all weathers?\nB: In the classroom, trainees learn basic navigation — map reading, compass work, that sort of thing. We also talk through typical scenarios so nobody panics when a real call comes in.\nA: Out on a call-out, how do team members stay in contact when the weather turns nasty?\nB: Each volunteer carries a whistle, because shouting doesn't always work in wind or across a ridge. Radios help too, of course, but the whistle is simple and reliable.\nA: Is there any formal medical training, or is that left to the ambulance service?\nB: Yes, definitely. The initial course includes an accredited first aid qualification, and we refresh it regularly. You might be hours from a road, so those skills really matter.\nA: What about clothing and kit — do people bring their own?\nB: Outdoor equipment must be fully waterproof. People underestimate rain on exposed slopes — damp kit quickly becomes a safety problem, especially if you're waiting with a casualty.\nA: When injuries are serious, how are casualties moved off the mountain?\nB: If someone is badly hurt, rescuers sometimes request a helicopter. It's not every call, but on steep ground it can be the only realistic option when time is short.\nA: Are team leaders paid for this work, or is it entirely voluntary?\nB: No, team leaders are unpaid and work on a voluntary basis, like everyone else. They give up evenings and weekends because they care about the community.\nA: Where is rope work most common — is it every rescue?\nB: Ropes are used most often on steep terrain, where a slip would have serious consequences. We practise those techniques again and again until they feel automatic.\nA: What conditions make rescues hardest for newer volunteers?\nB: Many call-outs happen in poor visibility — fog, sleet, low cloud. You might know the area well, but you still have to move carefully and trust your training.\nA: Finally, what do recruits say they gain from all this preparation?\nB: Most recruits say the training gave them more confidence in the mountains. They still respect the risks, but they feel prepared to help when it counts.\nA: Elena, that's been really helpful — thank you for explaining how new members are prepared.",
+        "storagePath": "b2/exam-1/part-11/clip-01-v4.mp3"
       }
-    ],
-    "openAnswerCountExpected": 10,
-    "topicVarietyChecklist": {
-      "mountainRescueVolunteer": true,
-      "avoidsCityTechnology": true,
-      "avoidsFirstJobs": true,
-      "avoidsCommunityBuildingRestoration": true,
-      "avoidsSportWellbeingTheme": true,
-      "avoidsPart10Situations": true,
-      "distinctFromPart12And13": true
-    }
+    ]
   }
 }

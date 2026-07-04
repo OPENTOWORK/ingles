@@ -23,7 +23,9 @@ const admin = createClient(
 );
 
 const EXAMEN_ID = '5bd3e0d7-29a7-4e07-ac15-a4d195528c65';
-const EXPECTED_KEY = { 1: 'C', 2: 'B', 3: 'A', 4: 'C', 5: 'B', 6: 'A', 7: 'B', 8: 'C' };
+const EXPECTED_KEY = { 1: 'B', 2: 'A', 3: 'C', 4: 'A', 5: 'B', 6: 'B', 7: 'A', 8: 'C' };
+const COMBINED_MIN_SEC = 240;
+const COMBINED_MAX_SEC = 420;
 const UNTOUCHED = {
   11: '8dc37fa2-9ea0-4688-8d5e-56bc2eb33b37',
   12: '14b93176-4055-4568-8646-4d52ade7986a',
@@ -117,9 +119,14 @@ const report = {
     { name: 'MCQ rows = 24', ok: mcqRows.length === 24 },
     { name: 'Q1–8', ok: JSON.stringify(qNums.sort((a, b) => a - b)) === JSON.stringify([1, 2, 3, 4, 5, 6, 7, 8]) },
     { name: 'Answer key', ok: keyMatch(key, EXPECTED_KEY) },
-    { name: '8 audios', ok: audioRows.length === 8 },
-    { name: 'All audios >= 23s', ok: audioDetails.every((a) => a.durationSec >= 23) },
-    { name: 'All audios <= 40s', ok: audioDetails.every((a) => a.durationSec <= 40) },
+    { name: '1 combined audio', ok: audioRows.length === 1 },
+    {
+      name: 'Combined audio duration',
+      ok:
+        audioDetails.length === 1 &&
+        audioDetails[0].durationSec >= COMBINED_MIN_SEC &&
+        audioDetails[0].durationSec <= COMBINED_MAX_SEC,
+    },
     { name: 'No 0:00 audios', ok: audioDetails.every((a) => a.durationSec > 5) },
     { name: 'Full-text MCQ options', ok: letterOnly.length === 0 },
     { name: 'No legacy -v2 linked', ok: !legacyLinked },

@@ -880,170 +880,255 @@
           "preguntaId": "c34918ab-32ac-46a7-8999-b28622b19503",
           "parteNombre": "Parte 10 B2",
           "descripcionParte": "Part:10\r\n\r\nYou will hear people talking in eight different situations. For questions 1–8, choose the best answer (A, B or C).",
-          "enunciado": "Various locations in an urban environment.\n\n1\nWhat does the app provide?\nA) Weather forecasts\nB) Traffic updates\nC) Restaurant recommendations\n\n2\nWhat is highlighted about the smart home devices?\nA) They are affordable.\nB) They can control multiple systems.\nC) They require special installation.\n\n3\nWhat do they like about their neighbourhood?\nA) Its quietness\nB) Its liveliness\nC) Its affordability\n\n4\nWhat is one benefit of an electric bike?\nA) It has a large capacity.\nB) It is eco-friendly.\nC) It's more expensive.\n\n5\nWhat feature does the coworking space offer?\nA) Free coffee\nB) High-speed internet\nC) Private offices\n\n6\nWhat does one friend find overwhelming?\nA) Online meetings\nB) Social media\nC) Text messaging\n\n7\nWhat is the purpose of installing more streetlights?\nA) To save energy\nB) To improve safety\nC) To reduce costs\n\n8\nWhat type of cuisine does the restaurant offer?\nA) Mexican\nB) Fusion\nC) Italian",
+          "enunciado": "You will hear people talking in eight different everyday situations in an urban environment.\n\n1\nWhat does the app help users with when they are travelling around the city?\nA) Finding empty parking spaces quickly\nB) Avoiding traffic problems on their route\nC) Checking daily weather forecasts\n\n2\nWhat does the woman highlight about the devices?\nA) You can control several home systems from one app\nB) They are the cheapest devices on the market\nC) Each appliance needs a separate specialist installation\n\n3\nWhat do they like most about their neighbourhood?\nA) How quiet the streets are at night\nB) How affordable the local shops are\nC) How energetic and busy the area feels\n\n4\nWhich advantage of e-bikes do they mention?\nA) They are better for the environment\nB) They can carry heavier loads than ordinary bikes\nC) They always cost less than public transport\n\n5\nWhat especially impresses them about the coworking space?\nA) The free drinks available all day\nB) The quality and speed of the internet connection\nC) That everyone gets their own private office\n\n6\nWhat do both speakers find difficult to cope with?\nA) Arranging meetings online\nB) Keeping up with everything on social media\nC) Sending messages on their phones\n\n7\nWhy are more streetlights being installed in the area?\nA) To help residents feel safer after dark\nB) To reduce the council’s electricity bills\nC) To make the streets look more attractive to tourists\n\n8\nWhat kind of food does the new restaurant serve?\nA) Authentic Mexican cooking\nB) Traditional Italian pasta dishes\nC) Dishes that combine different culinary styles",
           "respuestasMcq": [
             {
               "pregunta_id": "c34918ab-32ac-46a7-8999-b28622b19503",
-              "respuesta": "1 A) Weather forecasts",
+              "respuesta": "1 A) Finding empty parking spaces quickly",
               "correcta": false
             },
             {
               "pregunta_id": "c34918ab-32ac-46a7-8999-b28622b19503",
-              "respuesta": "1 B) Traffic updates",
+              "respuesta": "1 A) Finding empty parking spaces quickly",
+              "correcta": false
+            },
+            {
+              "pregunta_id": "c34918ab-32ac-46a7-8999-b28622b19503",
+              "respuesta": "1 B) Avoiding traffic problems on their route",
               "correcta": true
             },
             {
               "pregunta_id": "c34918ab-32ac-46a7-8999-b28622b19503",
-              "respuesta": "1 C) Restaurant recommendations",
-              "correcta": false
-            },
-            {
-              "pregunta_id": "c34918ab-32ac-46a7-8999-b28622b19503",
-              "respuesta": "2 A) They are affordable.",
-              "correcta": false
-            },
-            {
-              "pregunta_id": "c34918ab-32ac-46a7-8999-b28622b19503",
-              "respuesta": "2 B) They can control multiple systems.",
+              "respuesta": "1 B) Avoiding traffic problems on their route",
               "correcta": true
             },
             {
               "pregunta_id": "c34918ab-32ac-46a7-8999-b28622b19503",
-              "respuesta": "2 C) They require special installation.",
+              "respuesta": "1 C) Checking daily weather forecasts",
               "correcta": false
             },
             {
               "pregunta_id": "c34918ab-32ac-46a7-8999-b28622b19503",
-              "respuesta": "3 A) Its quietness",
+              "respuesta": "1 C) Checking daily weather forecasts",
               "correcta": false
             },
             {
               "pregunta_id": "c34918ab-32ac-46a7-8999-b28622b19503",
-              "respuesta": "3 B) Its liveliness",
+              "respuesta": "2 A) You can control several home systems from one app",
               "correcta": true
             },
             {
               "pregunta_id": "c34918ab-32ac-46a7-8999-b28622b19503",
-              "respuesta": "3 C) Its affordability",
-              "correcta": false
-            },
-            {
-              "pregunta_id": "c34918ab-32ac-46a7-8999-b28622b19503",
-              "respuesta": "4 A) It has a large capacity.",
-              "correcta": false
-            },
-            {
-              "pregunta_id": "c34918ab-32ac-46a7-8999-b28622b19503",
-              "respuesta": "4 B) It is eco-friendly.",
+              "respuesta": "2 A) You can control several home systems from one app",
               "correcta": true
             },
             {
               "pregunta_id": "c34918ab-32ac-46a7-8999-b28622b19503",
-              "respuesta": "4 C) It's more expensive.",
+              "respuesta": "2 B) They are the cheapest devices on the market",
               "correcta": false
             },
             {
               "pregunta_id": "c34918ab-32ac-46a7-8999-b28622b19503",
-              "respuesta": "5 A) Free coffee",
+              "respuesta": "2 B) They are the cheapest devices on the market",
               "correcta": false
             },
             {
               "pregunta_id": "c34918ab-32ac-46a7-8999-b28622b19503",
-              "respuesta": "5 B) High-speed internet",
+              "respuesta": "2 C) Each appliance needs a separate specialist installation",
+              "correcta": false
+            },
+            {
+              "pregunta_id": "c34918ab-32ac-46a7-8999-b28622b19503",
+              "respuesta": "2 C) Each appliance needs a separate specialist installation",
+              "correcta": false
+            },
+            {
+              "pregunta_id": "c34918ab-32ac-46a7-8999-b28622b19503",
+              "respuesta": "3 A) How quiet the streets are at night",
+              "correcta": false
+            },
+            {
+              "pregunta_id": "c34918ab-32ac-46a7-8999-b28622b19503",
+              "respuesta": "3 A) How quiet the streets are at night",
+              "correcta": false
+            },
+            {
+              "pregunta_id": "c34918ab-32ac-46a7-8999-b28622b19503",
+              "respuesta": "3 B) How affordable the local shops are",
+              "correcta": false
+            },
+            {
+              "pregunta_id": "c34918ab-32ac-46a7-8999-b28622b19503",
+              "respuesta": "3 B) How affordable the local shops are",
+              "correcta": false
+            },
+            {
+              "pregunta_id": "c34918ab-32ac-46a7-8999-b28622b19503",
+              "respuesta": "3 C) How energetic and busy the area feels",
               "correcta": true
             },
             {
               "pregunta_id": "c34918ab-32ac-46a7-8999-b28622b19503",
-              "respuesta": "5 C) Private offices",
-              "correcta": false
-            },
-            {
-              "pregunta_id": "c34918ab-32ac-46a7-8999-b28622b19503",
-              "respuesta": "6 A) Online meetings",
-              "correcta": false
-            },
-            {
-              "pregunta_id": "c34918ab-32ac-46a7-8999-b28622b19503",
-              "respuesta": "6 B) Social media",
+              "respuesta": "3 C) How energetic and busy the area feels",
               "correcta": true
             },
             {
               "pregunta_id": "c34918ab-32ac-46a7-8999-b28622b19503",
-              "respuesta": "6 C) Text messaging",
-              "correcta": false
-            },
-            {
-              "pregunta_id": "c34918ab-32ac-46a7-8999-b28622b19503",
-              "respuesta": "7 A) To save energy",
-              "correcta": false
-            },
-            {
-              "pregunta_id": "c34918ab-32ac-46a7-8999-b28622b19503",
-              "respuesta": "7 B) To improve safety",
+              "respuesta": "4 A) They are better for the environment",
               "correcta": true
             },
             {
               "pregunta_id": "c34918ab-32ac-46a7-8999-b28622b19503",
-              "respuesta": "7 C) To reduce costs",
-              "correcta": false
-            },
-            {
-              "pregunta_id": "c34918ab-32ac-46a7-8999-b28622b19503",
-              "respuesta": "8 A) Mexican",
-              "correcta": false
-            },
-            {
-              "pregunta_id": "c34918ab-32ac-46a7-8999-b28622b19503",
-              "respuesta": "8 B) Fusion",
+              "respuesta": "4 A) They are better for the environment",
               "correcta": true
             },
             {
               "pregunta_id": "c34918ab-32ac-46a7-8999-b28622b19503",
-              "respuesta": "8 C) Italian",
+              "respuesta": "4 B) They can carry heavier loads than ordinary bikes",
               "correcta": false
+            },
+            {
+              "pregunta_id": "c34918ab-32ac-46a7-8999-b28622b19503",
+              "respuesta": "4 B) They can carry heavier loads than ordinary bikes",
+              "correcta": false
+            },
+            {
+              "pregunta_id": "c34918ab-32ac-46a7-8999-b28622b19503",
+              "respuesta": "4 C) They always cost less than public transport",
+              "correcta": false
+            },
+            {
+              "pregunta_id": "c34918ab-32ac-46a7-8999-b28622b19503",
+              "respuesta": "4 C) They always cost less than public transport",
+              "correcta": false
+            },
+            {
+              "pregunta_id": "c34918ab-32ac-46a7-8999-b28622b19503",
+              "respuesta": "5 A) The free drinks available all day",
+              "correcta": false
+            },
+            {
+              "pregunta_id": "c34918ab-32ac-46a7-8999-b28622b19503",
+              "respuesta": "5 A) The free drinks available all day",
+              "correcta": false
+            },
+            {
+              "pregunta_id": "c34918ab-32ac-46a7-8999-b28622b19503",
+              "respuesta": "5 B) The quality and speed of the internet connection",
+              "correcta": true
+            },
+            {
+              "pregunta_id": "c34918ab-32ac-46a7-8999-b28622b19503",
+              "respuesta": "5 B) The quality and speed of the internet connection",
+              "correcta": true
+            },
+            {
+              "pregunta_id": "c34918ab-32ac-46a7-8999-b28622b19503",
+              "respuesta": "5 C) That everyone gets their own private office",
+              "correcta": false
+            },
+            {
+              "pregunta_id": "c34918ab-32ac-46a7-8999-b28622b19503",
+              "respuesta": "5 C) That everyone gets their own private office",
+              "correcta": false
+            },
+            {
+              "pregunta_id": "c34918ab-32ac-46a7-8999-b28622b19503",
+              "respuesta": "6 A) Arranging meetings online",
+              "correcta": false
+            },
+            {
+              "pregunta_id": "c34918ab-32ac-46a7-8999-b28622b19503",
+              "respuesta": "6 A) Arranging meetings online",
+              "correcta": false
+            },
+            {
+              "pregunta_id": "c34918ab-32ac-46a7-8999-b28622b19503",
+              "respuesta": "6 B) Keeping up with everything on social media",
+              "correcta": true
+            },
+            {
+              "pregunta_id": "c34918ab-32ac-46a7-8999-b28622b19503",
+              "respuesta": "6 B) Keeping up with everything on social media",
+              "correcta": true
+            },
+            {
+              "pregunta_id": "c34918ab-32ac-46a7-8999-b28622b19503",
+              "respuesta": "6 C) Sending messages on their phones",
+              "correcta": false
+            },
+            {
+              "pregunta_id": "c34918ab-32ac-46a7-8999-b28622b19503",
+              "respuesta": "6 C) Sending messages on their phones",
+              "correcta": false
+            },
+            {
+              "pregunta_id": "c34918ab-32ac-46a7-8999-b28622b19503",
+              "respuesta": "7 A) To help residents feel safer after dark",
+              "correcta": true
+            },
+            {
+              "pregunta_id": "c34918ab-32ac-46a7-8999-b28622b19503",
+              "respuesta": "7 A) To help residents feel safer after dark",
+              "correcta": true
+            },
+            {
+              "pregunta_id": "c34918ab-32ac-46a7-8999-b28622b19503",
+              "respuesta": "7 B) To reduce the council’s electricity bills",
+              "correcta": false
+            },
+            {
+              "pregunta_id": "c34918ab-32ac-46a7-8999-b28622b19503",
+              "respuesta": "7 B) To reduce the council’s electricity bills",
+              "correcta": false
+            },
+            {
+              "pregunta_id": "c34918ab-32ac-46a7-8999-b28622b19503",
+              "respuesta": "7 C) To make the streets look more attractive to tourists",
+              "correcta": false
+            },
+            {
+              "pregunta_id": "c34918ab-32ac-46a7-8999-b28622b19503",
+              "respuesta": "7 C) To make the streets look more attractive to tourists",
+              "correcta": false
+            },
+            {
+              "pregunta_id": "c34918ab-32ac-46a7-8999-b28622b19503",
+              "respuesta": "8 A) Authentic Mexican cooking",
+              "correcta": false
+            },
+            {
+              "pregunta_id": "c34918ab-32ac-46a7-8999-b28622b19503",
+              "respuesta": "8 A) Authentic Mexican cooking",
+              "correcta": false
+            },
+            {
+              "pregunta_id": "c34918ab-32ac-46a7-8999-b28622b19503",
+              "respuesta": "8 B) Traditional Italian pasta dishes",
+              "correcta": false
+            },
+            {
+              "pregunta_id": "c34918ab-32ac-46a7-8999-b28622b19503",
+              "respuesta": "8 B) Traditional Italian pasta dishes",
+              "correcta": false
+            },
+            {
+              "pregunta_id": "c34918ab-32ac-46a7-8999-b28622b19503",
+              "respuesta": "8 C) Dishes that combine different culinary styles",
+              "correcta": true
+            },
+            {
+              "pregunta_id": "c34918ab-32ac-46a7-8999-b28622b19503",
+              "respuesta": "8 C) Dishes that combine different culinary styles",
+              "correcta": true
             }
           ],
           "respuestasAbiertas": [],
           "audios": [
             {
               "orden": 1,
-              "titulo": "You hear two friends discussing a new app.",
-              "url": "https://qnazrzvwvkwhkfbqsbmr.supabase.co/storage/v1/object/public/Levels_Listening/b2/exam-1/part-10/clip-01-v2.mp3"
-            },
-            {
-              "orden": 2,
-              "titulo": "You listen to a presenter at a technology fair.",
-              "url": "https://qnazrzvwvkwhkfbqsbmr.supabase.co/storage/v1/object/public/Levels_Listening/b2/exam-1/part-10/clip-02-v2.mp3"
-            },
-            {
-              "orden": 3,
-              "titulo": "You overhear a conversation between two neighbours.",
-              "url": "https://qnazrzvwvkwhkfbqsbmr.supabase.co/storage/v1/object/public/Levels_Listening/b2/exam-1/part-10/clip-03-v2.mp3"
-            },
-            {
-              "orden": 4,
-              "titulo": "You listen to two friends discussing transport options.",
-              "url": "https://qnazrzvwvkwhkfbqsbmr.supabase.co/storage/v1/object/public/Levels_Listening/b2/exam-1/part-10/clip-04-v2.mp3"
-            },
-            {
-              "orden": 5,
-              "titulo": "You hear a person explaining a coworking space.",
-              "url": "https://qnazrzvwvkwhkfbqsbmr.supabase.co/storage/v1/object/public/Levels_Listening/b2/exam-1/part-10/clip-05-v2.mp3"
-            },
-            {
-              "orden": 6,
-              "titulo": "You hear two friends discussing technology's impact on communication.",
-              "url": "https://qnazrzvwvkwhkfbqsbmr.supabase.co/storage/v1/object/public/Levels_Listening/b2/exam-1/part-10/clip-06-v2.mp3"
-            },
-            {
-              "orden": 7,
-              "titulo": "You hear a community meeting announcement.",
-              "url": "https://qnazrzvwvkwhkfbqsbmr.supabase.co/storage/v1/object/public/Levels_Listening/b2/exam-1/part-10/clip-07-v2.mp3"
-            },
-            {
-              "orden": 8,
-              "titulo": "You hear two people discussing a new restaurant.",
-              "url": "https://qnazrzvwvkwhkfbqsbmr.supabase.co/storage/v1/object/public/Levels_Listening/b2/exam-1/part-10/clip-08-v2.mp3"
+              "titulo": "Various locations in an urban environment.",
+              "url": "https://qnazrzvwvkwhkfbqsbmr.supabase.co/storage/v1/object/public/Levels_Listening/b2/exam-1/part-10/full-v3.mp3"
             }
           ]
         }
@@ -1055,10 +1140,10 @@
       "activity": "sentence-completion",
       "items": [
         {
-          "preguntaId": "0c84ac67-cee6-4da2-aff8-cc858b1135d5",
+          "preguntaId": "a338b4c2-a83b-4fdc-9bd0-4beabd3dc0cf",
           "parteNombre": "Parte 11 B2",
-          "descripcionParte": "Part:11\r\n\r\nYou will hear a woman called Elena who volunteers with a mountain rescue team talking about the training new members receive. For questions 9–18, complete the sentences with a word or short phrase.",
-          "enunciado": "Radio interview / talk about mountain rescue volunteer training.\nBefore being accepted, applicants must pass an annual __________ test.\n(9) __________________\n\nIn the classroom, new volunteers learn __________, including map reading and compass work.\n(10) __________________\n\nEach team member carries a __________ to communicate with others when shouting is ineffective.\n(11) __________________\n\nThe initial training course includes an accredited __________ qualification.\n(12) __________________\n\nOutdoor kit must be fully __________ to cope with heavy rain on exposed hills.\n(13) __________________\n\nA __________ is requested when a casualty needs evacuation from a remote ridge.\n(14) __________________\n\nTeam leaders are unpaid and work on a __________ basis.\n(15) __________________\n\nRopes are used most often on __________ ground where a fall would be dangerous.\n(16) __________________\n\nCall-outs frequently happen in poor __________, such as fog or sleet.\n(17) __________________\n\nMany recruits say the training increased their __________ in the mountains.\n(18) __________________",
+          "descripcionParte": "Part:11\r\n\r\nYou will hear a woman called Elena talking about the training that new mountain rescue volunteers receive. For questions 9–18, complete the sentences with a word or short phrase.",
+          "enunciado": "A talk about preparing new members of a mountain rescue team.\nElena makes it clear that no one is allowed to join the team until they have passed a demanding annual (9) ___ test.\n\nBefore volunteers go out on the hills, classroom sessions focus on map work and other basic (10) ___ skills.\n\nOn exposed ridges, where shouting is useless, each member is expected to carry a (11) ___ .\n\nDuring their first few months, every trainee must obtain an accredited (12) ___ qualification.\n\nElena insists that clothing taken on exercises has to be completely (13) ___ , even when the weather looks mild.\n\nWhen a casualty cannot be moved on foot, the team may have to arrange a (14) ___ evacuation.\n\nShe points out that senior coordinators are unpaid and the whole service runs on a (15) ___ basis.\n\nMost rope practice takes place on (16) ___ ground, where a simple slip could have serious consequences.\n\nA large number of call-outs occur when mist or sleet reduces (17) ___ to almost nothing.\n\nMany recruits say that by the end of the course they feel much greater (18) ___ on the mountains.",
           "respuestasMcq": [],
           "respuestasAbiertas": [
             "9 fitness",
@@ -1075,8 +1160,8 @@
           "audios": [
             {
               "orden": 1,
-              "titulo": "Elena — mountain rescue training",
-              "url": "https://qnazrzvwvkwhkfbqsbmr.supabase.co/storage/v1/object/public/Levels_Listening/b2/exam-1/part-11/clip-01.mp3"
+              "titulo": "Elena — mountain rescue training (radio interview)",
+              "url": "https://qnazrzvwvkwhkfbqsbmr.supabase.co/storage/v1/object/public/Levels_Listening/b2/exam-1/part-11/clip-01-v6.mp3"
             }
           ]
         }
@@ -1298,28 +1383,8 @@
           "audios": [
             {
               "orden": 1,
-              "titulo": "Speaker 1",
-              "url": "https://qnazrzvwvkwhkfbqsbmr.supabase.co/storage/v1/object/public/Levels_Listening/b2/exam-1/part-12/speaker-01.mp3"
-            },
-            {
-              "orden": 2,
-              "titulo": "Speaker 2",
-              "url": "https://qnazrzvwvkwhkfbqsbmr.supabase.co/storage/v1/object/public/Levels_Listening/b2/exam-1/part-12/speaker-02.mp3"
-            },
-            {
-              "orden": 3,
-              "titulo": "Speaker 3",
-              "url": "https://qnazrzvwvkwhkfbqsbmr.supabase.co/storage/v1/object/public/Levels_Listening/b2/exam-1/part-12/speaker-03.mp3"
-            },
-            {
-              "orden": 4,
-              "titulo": "Speaker 4",
-              "url": "https://qnazrzvwvkwhkfbqsbmr.supabase.co/storage/v1/object/public/Levels_Listening/b2/exam-1/part-12/speaker-04.mp3"
-            },
-            {
-              "orden": 5,
-              "titulo": "Speaker 5",
-              "url": "https://qnazrzvwvkwhkfbqsbmr.supabase.co/storage/v1/object/public/Levels_Listening/b2/exam-1/part-12/speaker-05.mp3"
+              "titulo": "Part 3: Multiple matching (questions 19–23)",
+              "url": "https://qnazrzvwvkwhkfbqsbmr.supabase.co/storage/v1/object/public/Levels_Listening/b2/exam-1/part-12/full-v2.mp3"
             }
           ]
         }

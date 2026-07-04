@@ -391,16 +391,17 @@ ${variety}
 ${SHARED_JSON_RULES}
 ${directions}
 Generate exactly 10 questions numbered 9–18 (type "short"; each prompt is an incomplete sentence with a gap marked ___).
-script: ONE continuous monologue — lecture, talk or interview-style speech (380–520 words; ~2:30–3:30 minutes when read aloud). No speaker labels unless necessary. ONE audio for the whole part.
+script: ONE continuous monologue — a talk or personal account by ONE main speaker (380–520 words; ~2:30–3:30 minutes when read aloud). No interviewer unless the whole recording is still one uninterrupted monologue. ONE audio for the whole part.
 
 Quality rules (strict):
-- Monologue must be fluent and coherent — not a list of disconnected facts
+- Monologue must be fluent and coherent — not a list of disconnected facts or obvious Q→A pairs
 - Information appears in LINEAR order matching questions 9→18
-- Use authentic spoken English: natural connectors, reformulation, hedging — not written prose
-- B2 vocabulary and structures only
+- Use authentic spoken English: natural connectors, reformulation, hedging, mild repetition — like real FCE recordings (e.g. a teacher describing their career)
+- B2 vocabulary and structures throughout — avoid A2/B1 textbook phrasing
 - Each gap has exactly ONE possible answer (1–3 words copied literally from the audio)
 - modelAnswers must be exact words/phrases as spoken (no paraphrase, no inference)
-- Question sentences must PARAPHRASE the audio — do NOT copy long stretches verbatim from the script
+- Question sentences must PARAPHRASE the audio heavily — use third-person summary framing ("The speaker admits…", "She explains…", "Another thing she mentions is…")
+- CRITICAL: gap sentences must NOT reuse 4+ consecutive words from the script; restructure grammar and vocabulary like real Cambridge papers
 - Completed sentences must be grammatically correct once the gap is filled
 - Avoid unnecessary spelling traps, ambiguous gaps, or answers requiring more than 3 words
 - Do NOT require the candidate to infer — the missing words must be heard clearly once

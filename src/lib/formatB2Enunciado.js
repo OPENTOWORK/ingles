@@ -214,9 +214,13 @@ export function buildB2EnunciadoFromGenerated(gen = {}, partNumber) {
     if (pn === 11) {
       for (const q of g.questions) {
         const num = q.number ?? '';
-        const lead = q.lead || q.prompt || q.stem || '';
-        if (lead) lines.push(lead);
-        lines.push(`(${num}) __________________`);
+        const lead = String(q.lead || q.prompt || q.stem || '').trim();
+        const hasInlineGap = /\(\d{1,2}\)\s*(?:_+|\.{2,}|…{2,})/.test(lead);
+        if (lead) {
+          lines.push(hasInlineGap ? lead : `${lead} (${num}) ___`);
+        } else {
+          lines.push(`(${num}) ___`);
+        }
         lines.push('');
       }
       return lines.join('\n').trim();

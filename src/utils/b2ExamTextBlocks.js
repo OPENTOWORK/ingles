@@ -663,18 +663,26 @@ export function formatListeningGapDisplayLines(contextLines = [], questionNumber
   const lines = contextLines.map((l) => String(l || '').trim()).filter(Boolean);
   if (!lines.length) return lines;
   const gapOnlyRe = new RegExp(`^\\(${questionNumber}\\)\\s*_+$`, 'i');
+  const inlineGapRe = new RegExp(`\\(${questionNumber}\\)\\s*(?:_+|\\.{2,}|…{2,})`, 'i');
   const hasStandaloneGapLine = lines.some((l) => gapOnlyRe.test(l));
   if (!hasStandaloneGapLine) return lines;
 
   const result = [];
+
   for (const line of lines) {
     if (gapOnlyRe.test(line)) continue;
-    if (/_{2,}/.test(line) && !new RegExp(`\\(${questionNumber}\\)\\s*_{2,}`).test(line)) {
-      result.push(line.replace(/_{2,}/, `(${questionNumber}) ______`));
+    if (/_{2,}/.test(line) && !inlineGapRe.test(line)) {
+      result.push(line.replace(/_{2,}/, `(${questionNumber}) ___`));
     } else {
       result.push(line);
     }
   }
+
+  if (result.length && !result.some((l) => inlineGapRe.test(l))) {
+    const lastIdx = result.length - 1;
+    result[lastIdx] = `${result[lastIdx]} (${questionNumber}) ___`.trim();
+  }
+
   return result.length ? result : lines;
 }
 
@@ -704,14 +712,8 @@ export function buildListeningGapPassageLines(text = '') {
 
   for (const block of blocks) {
     const formatted = formatListeningGapDisplayLines(block.contextLines, block.questionNumber);
-    const gapOnlyRe = new RegExp(`^\\(${block.questionNumber}\\)\\s*_+$`, 'i');
-
     for (const line of formatted) {
-      if (gapOnlyRe.test(line.trim())) continue;
-      let out = line.trim();
-      if (/_{2,}/.test(out) && !new RegExp(`\\(${block.questionNumber}\\)\\s*_{2,}`).test(out)) {
-        out = out.replace(/_{2,}/, `(${block.questionNumber}) ___`);
-      }
+      const out = line.trim();
       if (out) lines.push(out);
     }
   }

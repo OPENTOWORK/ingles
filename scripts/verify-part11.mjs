@@ -45,8 +45,8 @@ const UNTOUCHED = {
   14: 'a909437e-dd62-4874-a7da-2055b2e9f8da',
 };
 
-const MIN_DURATION_SEC = 205;
-const MAX_DURATION_SEC = 255;
+const MIN_DURATION_SEC = 150;
+const MAX_DURATION_SEC = 210;
 
 async function fetchDuration(url) {
   const res = await fetch(url);
@@ -115,7 +115,7 @@ for (const a of audioRows) {
 }
 
 const legacyLinked = audioDetails.some((a) => /clip-01-v2\.mp3/.test(a.storagePath || ''));
-const hasClip01 = audioDetails.some((a) => /part-11\/clip-01\.mp3/.test(a.storagePath || ''));
+const hasClip01 = audioDetails.some((a) => /part-11\/clip-01-v6\.mp3/.test(a.storagePath || ''));
 
 const enunciado = String(q.enunciado || '');
 const hasGapLines = [9, 10, 11, 12, 13, 14, 15, 16, 17, 18].every((n) =>
@@ -153,10 +153,10 @@ const report = {
     { name: 'Q9–18', ok: JSON.stringify(qNums.sort((a, b) => a - b)) === JSON.stringify([9, 10, 11, 12, 13, 14, 15, 16, 17, 18]) },
     { name: 'Answer key', ok: keyMatch(key, EXPECTED_KEY) },
     { name: '1 audio clip', ok: audioRows.length === 1 },
-    { name: 'clip-01.mp3 linked', ok: hasClip01 },
+    { name: 'clip-01-v6.mp3 linked', ok: hasClip01 },
     { name: 'No legacy clip-01-v2 linked', ok: !legacyLinked },
-    { name: 'Audio >= 3:25', ok: audioDetails.every((a) => a.durationSec >= MIN_DURATION_SEC) },
-    { name: 'Audio <= 4:15', ok: audioDetails.every((a) => a.durationSec <= MAX_DURATION_SEC) },
+    { name: 'Audio >= 2:30', ok: audioDetails.every((a) => a.durationSec >= MIN_DURATION_SEC) },
+    { name: 'Audio <= 3:30', ok: audioDetails.every((a) => a.durationSec <= MAX_DURATION_SEC) },
     { name: 'No 0:00 audios', ok: audioDetails.every((a) => a.durationSec > 5) },
     { name: 'Enunciado Q9–18 gaps', ok: hasGapLines },
     { name: 'Parts 1,8,10,12,13,14 untouched', ok: Object.values(untouchedStatus).every(Boolean) },

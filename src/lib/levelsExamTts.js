@@ -2,6 +2,7 @@ import OpenAI from 'openai';
 import { EdgeTTS } from 'edge-tts-universal';
 import {
   getExtractVoiceProfile,
+  getPart2InterviewVoiceProfile,
   parseDialogueSegments,
 } from '@/lib/listeningTtsVoices';
 
@@ -92,6 +93,44 @@ export async function synthesizeListeningClipMp3(text, options = {}) {
   for (const segment of segments) {
     const speaker = segment.speaker || 'A';
     const voice = profile.speakers[speaker] || profile.mono;
+    const result = await synthesizeExamTtsMp3(segment.text, {
+      edgeVoice: voice.edge,
+      openaiVoice: voice.openai,
+      preferEdge: true,
+    });
+    if (result?.base64) {
+      buffers.push(Buffer.from(result.base64, 'base64'));
+    }
+  }
+
+  if (!buffers.length) return null;
+  return {
+    base64: Buffer.concat(buffers).toString('base64'),
+    mime: 'audio/mpeg',
+  };
+}
+
+/**
+ * Listening Part 2: one recording with host (A) + guest (B) — same Edge TTS stack as Part 1 extracts.
+ * @param {string} text — script with "A:" / "B:" lines
+ */
+export async function synthesizePart2ListeningMp3(text) {
+  const profile = getPart2InterviewVoiceProfile();
+  const segments = parseDialogueSegments(text);
+
+  if (segments.length <= 1) {
+    const guest = profile.speakers.B;
+    return synthesizeExamTtsMp3(segments[0]?.text || text, {
+      edgeVoice: guest.edge,
+      openaiVoice: guest.openai,
+      preferEdge: true,
+    });
+  }
+
+  const buffers = [];
+  for (const segment of segments) {
+    const speaker = segment.speaker || 'B';
+    const voice = profile.speakers[speaker] || profile.speakers.B;
     const result = await synthesizeExamTtsMp3(segment.text, {
       edgeVoice: voice.edge,
       openaiVoice: voice.openai,

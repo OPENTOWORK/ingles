@@ -34,16 +34,17 @@ const PART_UX = {
   },
   11: {
     whatYouWillHear:
-      'A woman called Elena talking about training with a mountain rescue team.',
+      'A woman called Elena talking about how new mountain rescue volunteers are trained.',
     whatYouNeedToDo:
       'For questions 9–18, complete the sentences with a word or short phrase. You will hear the recording twice.',
     practiceNote: 'Practice mode: you can replay the audio before checking your answers.',
   },
   12: {
-    whatYouWillHear: 'Five people talking about their first experiences of paid work.',
+    whatYouWillHear:
+      'Five people talking about their first experiences of paid work (~3–3½ minutes in one recording).',
     whatYouNeedToDo:
       'For questions 19–23, choose from the list (A–H) the opinion each speaker expresses. Use the letters only once. There are three extra letters which you do not need to use. You will hear the recording twice.',
-    practiceNote: 'Practice mode: you can replay each speaker audio before checking your answers.',
+    practiceNote: 'Practice mode: you can replay the audio before checking your answers.',
   },
   13: {
     whatYouWillHear:

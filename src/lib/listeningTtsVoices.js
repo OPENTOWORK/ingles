@@ -93,6 +93,19 @@ export function getExtractVoiceProfile(extractIndex = 0) {
   return profiles[idx % profiles.length];
 }
 
+/** Part 2 (sentence completion): radio interview — British host (A) + female guest (B). */
+export const PART2_INTERVIEW_VOICE = {
+  label: 'Part 2 radio interview — British host + female guest',
+  speakers: {
+    A: { edge: 'en-GB-RyanNeural', openai: 'onyx' },
+    B: { edge: 'en-GB-SoniaNeural', openai: 'nova' },
+  },
+};
+
+export function getPart2InterviewVoiceProfile() {
+  return PART2_INTERVIEW_VOICE;
+}
+
 /**
  * Split script into speaker segments ("A:" / "B:" / "C:" lines).
  * Returns one monologue segment if no labels are found.

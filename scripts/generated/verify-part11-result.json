@@ -1,5 +1,5 @@
 {
-  "preguntaId": "0c84ac67-cee6-4da2-aff8-cc858b1135d5",
+  "preguntaId": "a338b4c2-a83b-4fdc-9bd0-4beabd3dc0cf",
   "mcqRowCount": 0,
   "openAnswerCount": 10,
   "questionNumbers": [
@@ -30,21 +30,21 @@
   "audios": [
     {
       "orden": 1,
-      "titulo": "Elena — mountain rescue training",
-      "storagePath": "b2/exam-1/part-11/clip-01.mp3",
-      "durationSec": 208.4
+      "titulo": "Elena — mountain rescue training (radio interview)",
+      "storagePath": "b2/exam-1/part-11/clip-01-v6.mp3",
+      "durationSec": 176.3
     }
   ],
-  "descripcionPreview": "Part:11\r\n\r\nYou will hear a woman called Elena who volunteers with a mountain rescue team talking about the training new members receive. For questions 9–18, com",
+  "descripcionPreview": "Part:11\r\n\r\nYou will hear a woman called Elena talking about the training that new mountain rescue volunteers receive. For questions 9–18, complete the sentences",
   "enunciadoHasQ9to18": true,
   "enunciadoMountainTheme": true,
   "untouched": {
-    "part1": true,
-    "part8": true,
-    "part10": true,
+    "part1": false,
+    "part8": false,
+    "part10": false,
     "part12": true,
-    "part13": true,
-    "part14": true
+    "part13": false,
+    "part14": false
   },
   "legacyV2StillLinked": false,
   "checks": [
@@ -69,7 +69,7 @@
       "ok": true
     },
     {
-      "name": "clip-01.mp3 linked",
+      "name": "clip-01-v6.mp3 linked",
       "ok": true
     },
     {
@@ -77,11 +77,11 @@
       "ok": true
     },
     {
-      "name": "Audio >= 3:25",
+      "name": "Audio >= 2:30",
       "ok": true
     },
     {
-      "name": "Audio <= 4:15",
+      "name": "Audio <= 3:30",
       "ok": true
     },
     {
@@ -94,8 +94,8 @@
     },
     {
       "name": "Parts 1,8,10,12,13,14 untouched",
-      "ok": true
+      "ok": false
     }
   ],
-  "allOk": true
+  "allOk": false
 }

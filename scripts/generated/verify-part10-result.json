@@ -1,6 +1,6 @@
 {
-  "preguntaId": "c736e635-128b-4d9f-a186-27833ef677bd",
-  "mcqRowCount": 24,
+  "preguntaId": "c34918ab-32ac-46a7-8999-b28622b19503",
+  "mcqRowCount": 48,
   "questionNumbers": [
     1,
     2,
@@ -12,78 +12,36 @@
     8
   ],
   "answerKey": {
-    "1": "C",
-    "2": "B",
-    "3": "A",
-    "4": "C",
+    "1": "B",
+    "2": "A",
+    "3": "C",
+    "4": "A",
     "5": "B",
-    "6": "A",
-    "7": "B",
+    "6": "B",
+    "7": "A",
     "8": "C"
   },
-  "audioClipCount": 8,
+  "audioClipCount": 1,
   "audios": [
     {
       "orden": 1,
-      "titulo": "Situation 1 — Art gallery",
-      "storagePath": "b2/exam-1/part-10/clip-01.mp3",
-      "durationSec": 28.3
-    },
-    {
-      "orden": 2,
-      "titulo": "Situation 2 — Airport gate",
-      "storagePath": "b2/exam-1/part-10/clip-02.mp3",
-      "durationSec": 34.2
-    },
-    {
-      "orden": 3,
-      "titulo": "Situation 3 — University registry",
-      "storagePath": "b2/exam-1/part-10/clip-03.mp3",
-      "durationSec": 27.6
-    },
-    {
-      "orden": 4,
-      "titulo": "Situation 4 — Theatre box office",
-      "storagePath": "b2/exam-1/part-10/clip-04.mp3",
-      "durationSec": 24.6
-    },
-    {
-      "orden": 5,
-      "titulo": "Situation 5 — Dry cleaner",
-      "storagePath": "b2/exam-1/part-10/clip-05.mp3",
-      "durationSec": 25.3
-    },
-    {
-      "orden": 6,
-      "titulo": "Situation 6 — Cookery demonstration",
-      "storagePath": "b2/exam-1/part-10/clip-06.mp3",
-      "durationSec": 26.1
-    },
-    {
-      "orden": 7,
-      "titulo": "Situation 7 — Botanical garden",
-      "storagePath": "b2/exam-1/part-10/clip-07.mp3",
-      "durationSec": 31.3
-    },
-    {
-      "orden": 8,
-      "titulo": "Situation 8 — Letting agency call",
-      "storagePath": "b2/exam-1/part-10/clip-08.mp3",
-      "durationSec": 26.1
+      "titulo": "Various locations in an urban environment.",
+      "storagePath": "b2/exam-1/part-10/full-v3.mp3",
+      "durationSec": 275.7
     }
   ],
   "letterOnlyMcqCount": 0,
   "descripcionPreview": "Part:10\r\n\r\nYou will hear people talking in eight different situations. For questions 1–8, choose the best answer (A, B o",
   "untouched": {
-    "part11": true,
+    "part11": false,
     "part12": true,
-    "part13": true
+    "part13": false
   },
   "legacyV2StillLinked": false,
   "checks": [
     {
       "name": "MCQ rows = 24",
-      "ok": true
+      "ok": false
     },
     {
       "name": "Q1–8",
@@ -94,15 +52,11 @@
       "ok": true
     },
     {
-      "name": "8 audios",
+      "name": "1 combined audio",
       "ok": true
     },
     {
-      "name": "All audios >= 23s",
-      "ok": true
-    },
-    {
-      "name": "All audios <= 40s",
+      "name": "Combined audio duration",
       "ok": true
     },
     {
@@ -119,8 +73,8 @@
     },
     {
       "name": "Parts 11–13 untouched",
-      "ok": true
+      "ok": false
     }
   ],
-  "allOk": true
+  "allOk": false
 }

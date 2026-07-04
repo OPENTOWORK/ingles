@@ -1,4 +1,4 @@
-import { synthesizeListeningClipMp3 } from '@/lib/levelsExamTts';
+import { synthesizeListeningClipMp3, synthesizePart2ListeningMp3 } from '@/lib/levelsExamTts';
 import { getSupabaseUrl } from '@/lib/supabaseEnv';
 
 const BUCKET = 'Levels_Listening';
@@ -117,7 +117,11 @@ export async function synthesizeAndUploadListeningClips(adminDb, params) {
   for (const clip of params.clips) {
     const text = String(clip.text || '').trim();
     if (!text) continue;
-    const result = await synthesizeListeningClipMp3(text, {
+    const synth =
+      params.partDef?.activity === 'sentence-completion'
+        ? synthesizePart2ListeningMp3
+        : synthesizeListeningClipMp3;
+    const result = await synth(text, {
       extractIndex: (Number(clip.orden) || rows.length + 1) - 1,
     });
     if (!result?.base64) {
