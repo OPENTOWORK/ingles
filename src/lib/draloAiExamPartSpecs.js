@@ -65,11 +65,11 @@ Read the article in which people talk about their experiences. For each question
     'short-extracts': `Part 1: Multiple choice (short extracts)
 You will hear people talking in eight different situations. For questions 1–8, choose the best answer (A, B or C).`,
     'sentence-completion': `Part 2: Sentence completion
-You will hear a monologue. For questions 9–18, complete the sentences with 1–3 words you hear.`,
-    conversation: `Part 4: Multiple choice (interview)
-You will hear an interview or conversation between two speakers. For questions 24–30, choose the best answer (A, B or C).`,
-    'multiple-matching': `Part 3: Multiple matching (speakers)
-You will hear five different speakers. For questions 19–23, choose from the list (A–H) what each speaker expresses. Use the letters only once. There are three extra letters which you do not need to use.`,
+You will hear a talk or lecture. For questions 9–18, complete the sentences with one to three words you hear.`,
+    conversation: `Part 4: Multiple choice (interview / discussion)
+You will hear an interview or discussion between two or three speakers. For questions 24–30, choose the best answer (A, B or C).`,
+    'multiple-matching': `Part 3: Multiple matching
+You will hear five different people talking about a related topic. For questions 19–23, choose from the list (A–H) the option which best matches what each speaker says. Use each letter only once. There are three extra options which you do not need to use.`,
   },
   writing: {
     essay: `Part 1: Compulsory essay

@@ -9,21 +9,21 @@ const localPartInfo = {
   },
   "2": {
     "title": "Part 2: Sentence completion (monologue)",
-    "description": "You will hear a longer monologue (speech, interview, etc.) and see ten incomplete sentences. You need to complete each sentence with 1-3 words that you hear in the recording. This tests your ability to follow longer listening texts and extract specific information.",
-    "tips": "Read the incomplete sentences first to know what information you're looking for. Listen for the exact words mentioned in the recording. Write clearly and check your spelling. Use capital letters for names and places. You will hear the monologue twice.",
-    "commonErrors": "Not reading the sentences first, paraphrasing instead of writing exact words, writing more than 3 words, or not using the second listening to check your answers"
+    "description": "You will hear one longer monologue (a lecture, talk or interview-style speech, about 2½–3½ minutes) and see ten incomplete sentences numbered 9–18. Complete each gap with 1–3 words taken literally from the recording. The sentences paraphrase what you hear — the answers follow the order of the audio.",
+    "tips": "Read all the sentences before you listen so you know what to expect. Write the exact words you hear (1–3 words only). The information appears in linear order — question 9 comes before question 10 in the audio. Check spelling on the second listen. Use capital letters for names and places.",
+    "commonErrors": "Paraphrasing instead of copying exact words, writing more than 3 words, inferring an answer that was not said, or losing track because the sentences on screen do not match the audio word-for-word"
   },
   "3": {
-    "title": "Part 3: Multiple choice (conversation)",
-    "description": "You will hear a conversation between two or more speakers and answer five multiple-choice questions about it. The questions test your understanding of the speakers' opinions, attitudes, and specific information. This tests your ability to understand longer conversations and different speakers.",
-    "tips": "Read the questions first to know what information you're looking for. Listen for the speakers' opinions and attitudes, not just facts. Pay attention to all speakers' views and how they interact. You will hear the conversation twice.",
-    "commonErrors": "Not reading the questions first, focusing only on facts rather than opinions, or not paying attention to all speakers' views and interactions"
+    "title": "Part 3: Multiple matching",
+    "description": "You will hear five short monologues (~30–35 seconds each) from different speakers on the same general topic. For questions 19–23, match each speaker to one of eight options (A–H). Each letter is used once; three options are distractors. This tests gist, attitude and paraphrase — not keyword matching.",
+    "tips": "Read all eight options before the first speaker. Note the main point of each monologue, not one detail. Eliminate letters you are sure about after each speaker. Options paraphrase the audio — the exact words on screen rarely appear in the recording.",
+    "commonErrors": "Matching on a single word from the audio, reusing a letter for two speakers, choosing an option that fits two speakers equally well, or picking a distractor that was mentioned but is not the speaker's main message"
   },
   "4": {
-    "title": "Part 4: Multiple choice (multiple speakers)",
-    "description": "You will hear five different speakers talking about the same topic. You need to match each speaker to one of eight options (A-H). Each option is used once, and some options may not be used. This tests your ability to understand different speakers' views and match them to specific options.",
-    "tips": "Read all the options first to understand what you're looking for. Listen for each speaker's main point and attitude. Look for paraphrasing and different ways of expressing the same idea. Don't match too quickly based on individual words - understand the complete meaning.",
-    "commonErrors": "Not reading all the options first, matching too quickly based on word similarity, or not understanding the complete meaning of what each speaker says"
+    "title": "Part 4: Multiple choice (interview / discussion)",
+    "description": "You will hear one long interview or discussion (~3–4 minutes) between two or three speakers. For questions 24–30, choose the best answer (A, B or C). Questions test opinion, attitude, purpose and inference — not literal word-matching. You will hear the recording twice.",
+    "tips": "Read each question before that section of the audio. Note who says what, especially agreement and disagreement. The correct option usually paraphrases the recording. Eliminate distractors that mention something true but do not answer the question.",
+    "commonErrors": "Keyword matching from the audio, choosing an answer without listening, confusing which speaker holds which view, or picking an option that is partly true but not the best answer"
   }
 };
 

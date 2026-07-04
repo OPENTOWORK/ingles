@@ -222,6 +222,12 @@ function mockDraloReport(cefr: CefrLevel): CorrectionReportPayload {
   );
 }
 
+type SpeakingRespuestaRow = {
+  transcript?: string | null;
+  audio_url?: string | null;
+  mime_type?: string | null;
+};
+
 export async function runDraloB2SpeakingFeedback(params: {
   cefr: CefrLevel;
   sessionId?: string | null;
@@ -244,7 +250,7 @@ export async function runDraloB2SpeakingFeedback(params: {
 
   const audioList =
     ctx.respuestas.length > 0
-      ? ctx.respuestas
+      ? (ctx.respuestas as SpeakingRespuestaRow[])
           .map(
             (r, i) =>
               `Recording ${i + 1}: transcript="${r.transcript}" | url=${r.audio_url} | mime=${r.mime_type}`,

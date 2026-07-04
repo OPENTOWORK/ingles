@@ -48,8 +48,8 @@ function wordCount(value) {
 }
 
 /** @deprecated use getB2ListeningAudioTargets(partNumber) */
-const LISTENING_SHORT_CLIP_MIN_WORDS = 85;
-const LISTENING_SHORT_CLIP_MAX_WORDS = 130;
+const LISTENING_SHORT_CLIP_MIN_WORDS = 70;
+const LISTENING_SHORT_CLIP_MAX_WORDS = 100;
 
 function listeningSpeakerBlocks(script) {
   return String(script || '')
@@ -883,6 +883,205 @@ function validateReadingUseOfEnglish(partDef, gen, errors, warnings) {
   }
 }
 
+function countAnswerWords(text) {
+  return String(text || '')
+    .trim()
+    .split(/\s+/)
+    .filter(Boolean).length;
+}
+
+function validateListeningPart2SentenceCompletion(partDef, gen, errors, warnings) {
+  if (partDef?.partNumber !== 11 || partDef?.activity !== 'sentence-completion') return;
+
+  const questions = asArray(gen.questions);
+  const modelAnswers = asArray(gen.modelAnswers);
+
+  if (questions.length !== 10) {
+    errors.push(`Listening Part 2 needs exactly 10 questions (got ${questions.length}).`);
+  }
+
+  for (let n = 9; n <= 18; n += 1) {
+    if (!questions.some((q) => Number(q.number) === n)) {
+      errors.push(`Listening Part 2 is missing question ${n}.`);
+    }
+  }
+
+  questions.forEach((q, i) => {
+    const num = Number(q.number ?? i + 9);
+    const prompt = String(q.prompt || '');
+    if (!/_{2,}/.test(prompt) && !prompt.includes('___')) {
+      warnings.push(`Question ${num} prompt may be missing a gap marker (___).`);
+    }
+  });
+
+  const answersByNumber = new Map();
+  modelAnswers.forEach((ma, i) => {
+    let num = Number(ma.number);
+    if (!Number.isFinite(num) && ma.id) {
+      num = Number(String(ma.id).replace(/\D/g, ''));
+    }
+    if (!Number.isFinite(num)) num = i + 9;
+    const ans = String(ma.answer ?? ma.text ?? (typeof ma === 'string' ? ma : '')).trim();
+    if (num >= 9 && num <= 18 && ans) answersByNumber.set(num, ans);
+  });
+
+  for (let n = 9; n <= 18; n += 1) {
+    const ans = answersByNumber.get(n);
+    if (!ans) {
+      errors.push(`Listening Part 2 is missing model answer for question ${n}.`);
+      continue;
+    }
+    const wc = countAnswerWords(ans);
+    if (wc < 1 || wc > 3) {
+      errors.push(`Question ${n} answer must be 1–3 words (got ${wc}: "${ans.slice(0, 40)}").`);
+    }
+  }
+}
+
+function validateListeningPart3MultipleMatching(partDef, gen, errors, warnings) {
+  if (partDef?.partNumber !== 12 || partDef?.activity !== 'multiple-matching') return;
+
+  const questions = asArray(gen.questions);
+  const pool = asArray(gen.optionPool);
+  const matching = asArray(gen.matchingAnswers);
+  const modelAnswers = asArray(gen.modelAnswers);
+  const clips = asArray(gen.audioClips);
+
+  if (questions.length !== 5) {
+    errors.push(`Listening Part 3 needs exactly 5 questions (got ${questions.length}).`);
+  }
+
+  for (let n = 19; n <= 23; n += 1) {
+    if (!questions.some((q) => Number(q.number) === n)) {
+      errors.push(`Listening Part 3 is missing question ${n}.`);
+    }
+  }
+
+  if (pool.length !== 8) {
+    errors.push(`Listening Part 3 needs exactly 8 options A–H (got ${pool.length}).`);
+  } else {
+    const letters = pool.map((opt, i) => {
+      const raw = typeof opt === 'string' ? opt : String(opt.text || opt.option || opt.label || '');
+      const m = raw.trim().match(/^([A-H])\)/i);
+      return (m?.[1] || String.fromCharCode(65 + i)).toUpperCase();
+    });
+    const expected = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H'];
+    expected.forEach((letter, i) => {
+      if (letters[i] && letters[i] !== letter) {
+        warnings.push(`Option pool item ${i + 1} should start with "${letter})" (got "${letters[i]}").`);
+      }
+    });
+  }
+
+  if (matching.length !== 5) {
+    errors.push(`Listening Part 3 needs exactly 5 matchingAnswers for Q19–23 (got ${matching.length}).`);
+  }
+
+  const usedLetters = new Set();
+  for (let n = 19; n <= 23; n += 1) {
+    const row =
+      matching.find((m) => Number(m.number) === n) ||
+      modelAnswers.find((m) => Number(m.number) === n);
+    const letter = String(row?.answer ?? row?.letter ?? '')
+      .trim()
+      .toUpperCase()
+      .replace(/[^A-H]/g, '')
+      .slice(0, 1);
+    if (!letter) {
+      errors.push(`Listening Part 3 is missing matching answer for question ${n}.`);
+      continue;
+    }
+    if (!/^[A-H]$/.test(letter)) {
+      errors.push(`Question ${n} matching answer must be A–H (got "${row?.answer ?? row?.letter}").`);
+      continue;
+    }
+    if (usedLetters.has(letter)) {
+      errors.push(`Listening Part 3 letter "${letter}" is reused — each option may be used only once.`);
+    }
+    usedLetters.add(letter);
+  }
+
+  if (clips.length !== 5) {
+    errors.push(`Listening Part 3 needs exactly 5 audioClips (got ${clips.length}).`);
+  }
+
+  if (!hasText(gen.setting)) {
+    warnings.push('Listening Part 3 should include a setting line describing the shared theme.');
+  }
+}
+
+function validateListeningPart4Interview(partDef, gen, errors, warnings) {
+  if (partDef?.partNumber !== 13 || partDef?.activity !== 'conversation') return;
+
+  const questions = asArray(gen.questions);
+  const modelAnswers = asArray(gen.modelAnswers);
+  const script = String(gen.script || '');
+
+  if (questions.length !== 7) {
+    errors.push(`Listening Part 4 needs exactly 7 questions (got ${questions.length}).`);
+  }
+
+  for (let n = 24; n <= 30; n += 1) {
+    if (!questions.some((q) => Number(q.number) === n)) {
+      errors.push(`Listening Part 4 is missing question ${n}.`);
+    }
+  }
+
+  questions.forEach((q, i) => {
+    const num = Number(q.number ?? i + 24);
+    if (num < 24 || num > 30) return;
+    const options = asArray(q.options);
+    if (options.length !== 3) {
+      errors.push(`Question ${num} must have exactly 3 options A/B/C (got ${options.length}).`);
+      return;
+    }
+    ['A', 'B', 'C'].forEach((letter, oi) => {
+      const raw = String(options[oi] || '').trim();
+      const m = raw.match(/^([A-C])\)/i);
+      if (!m || m[1].toUpperCase() !== letter) {
+        warnings.push(`Question ${num} option ${oi + 1} should start with "${letter})".`);
+      }
+    });
+  });
+
+  const answersByNumber = new Map();
+  modelAnswers.forEach((ma, i) => {
+    let num = Number(ma.number);
+    if (!Number.isFinite(num) && ma.id) {
+      num = Number(String(ma.id).replace(/\D/g, ''));
+    }
+    if (!Number.isFinite(num)) num = i + 24;
+    const letter = String(ma.answer ?? ma.letter ?? '')
+      .trim()
+      .toUpperCase()
+      .replace(/[^A-C]/g, '')
+      .slice(0, 1);
+    if (num >= 24 && num <= 30 && letter) answersByNumber.set(num, letter);
+  });
+
+  for (let n = 24; n <= 30; n += 1) {
+    const letter = answersByNumber.get(n);
+    if (!letter) {
+      errors.push(`Listening Part 4 is missing model answer for question ${n}.`);
+    } else if (!/^[A-C]$/.test(letter)) {
+      errors.push(`Question ${n} model answer must be A, B or C (got "${letter}").`);
+    }
+  }
+
+  const speakerLabels = script.match(/^[A-C]\s*:/gm) || [];
+  if (speakerLabels.length < 4) {
+    warnings.push('Listening Part 4 script should use "A:" / "B:" (and optionally "C:") speaker labels throughout.');
+  }
+
+  if (asArray(gen.optionPool).length) {
+    warnings.push('Listening Part 4 should not include an A–H matching pool.');
+  }
+
+  if (asArray(gen.audioClips).length > 1) {
+    warnings.push('Listening Part 4 should use one continuous audio, not multiple clips.');
+  }
+}
+
 function validateListening(partDef, gen, errors, warnings) {
   if (!hasText(gen.script)) errors.push('Listening part must include a script.');
   if (!gen.questions.length && !gen.modelAnswers.length) {
@@ -894,19 +1093,15 @@ function validateListening(partDef, gen, errors, warnings) {
     if (pool.length < 8) errors.push('Listening Part 3 matching needs an A–H option pool (8 items).');
     if (matching.length < 5) errors.push('Listening Part 3 matching needs five matchingAnswers (Q19–23).');
   }
-  if (partDef.activity === 'conversation' && partDef.mode === 'listening' && partDef.partNumber === 13) {
-    const mcq = asArray(gen.questions).filter((q) => asArray(q.options).length >= 3);
-    if (mcq.length < 7) errors.push('Listening Part 4 needs seven MCQ questions (Q24–30) with A/B/C options.');
-    if (asArray(gen.optionPool).length) {
-      warnings.push('Part 13 should not include an A–H matching pool (use per-question A/B/C options).');
-    }
-  }
   if (partDef.needsAudio && !hasText(gen.script)) {
     errors.push('Audio generation requires a script.');
   } else if (partDef.needsAudio) {
     warnings.push('Audio will be synthesized on save unless skipAudio is enabled.');
   }
 
+  validateListeningPart2SentenceCompletion(partDef, gen, errors, warnings);
+  validateListeningPart3MultipleMatching(partDef, gen, errors, warnings);
+  validateListeningPart4Interview(partDef, gen, errors, warnings);
   validateListeningClipWordCounts(partDef, gen, errors);
 }
 

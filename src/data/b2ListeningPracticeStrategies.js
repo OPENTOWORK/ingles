@@ -39,61 +39,77 @@ const DEFAULT_STRATEGY = {
 const LISTENING_STRATEGIES = {
   10: {
     strategy:
-      'Before each extract plays, read the question and all three options. Listen for the option that matches the whole idea — not just one word you hear.',
+      'You will hear eight short extracts (~33–38 seconds each) in one recording (~4½–5 minutes). Each extract is a different scenario with different speakers and accents. Read the question and all three options before each extract. Choose the answer that matches the whole idea — inference, not a single word from the audio.',
     commonTraps: [
-      'A word from the audio appears in a wrong option (keyword trap).',
+      'Keyword trap: a word from the audio appears in a wrong option.',
       'The speaker mentions all three topics but only one is the main point.',
       'Choosing the first thing you hear before the speaker changes their mind.',
+      'Answering without listening — the question should not give away the answer.',
+      'Two options seem valid because the distractor was mentioned in the audio.',
     ],
     listenFor: [
       'Purpose and recommendation (what should the listener do?).',
       'Attitude (surprised, annoyed, relieved).',
-      'Specific details that answer the question directly.',
+      'Speaker intent — what they mean, not just what they say.',
+      'Context clues from register (formal announcement vs casual chat).',
     ],
-    studyTip: 'Use the situation line to predict context — gallery, airport, university, etc.',
+    studyTip:
+      'Use the situation line to predict context. After the first listen, eliminate one distractor that clearly echoes the audio but misses the point.',
   },
   11: {
     strategy:
-      'Follow the sentence on screen while you listen. The missing word is usually a single content word (noun, adjective or short phrase) said clearly in the monologue.',
+      'You will hear one long monologue (~2:30–3:30). Read all ten sentences first, then listen for the exact 1–3 words that fill each gap. The sentences paraphrase the audio — the answer is not always the same wording you read on screen.',
     commonTraps: [
-      'Writing a word that fits grammar but was not said.',
-      'Missing compound answers such as "first aid".',
-      'Spelling a word differently — check British spelling if unsure.',
+      'Paraphrasing the answer instead of writing the exact words from the audio.',
+      'Writing more than three words or copying the whole sentence.',
+      'Choosing a word that fits grammar but was not said.',
+      'Missing compound answers such as "first aid" or "traffic lights".',
+      'Jumping ahead — answers follow the order of the recording (Q9→Q18).',
     ],
     listenFor: [
-      'Signpost phrases: "before anyone is accepted", "the initial course", "most often".',
-      'Exact nouns and adjectives after paraphrased lead-ins.',
+      'Signpost phrases before the key detail ("the main reason", "what surprised me").',
+      'Exact nouns, adjectives and short phrases after paraphrased question stems.',
+      'Linear progression — if you miss one gap, note the topic and keep listening.',
     ],
-    studyTip: 'Write only the missing words — do not repeat the whole sentence.',
+    studyTip:
+      'Write only the missing words. Check spelling on the second listen — British spelling if names or places appear.',
   },
   12: {
     strategy:
-      'Use the notes box while each speaker talks. Match the overall opinion — not one detail. Each letter can be used only once.',
+      'Five speakers (~30–35 s each) share one theme. Read all eight options (A–H) first. Match each speaker’s overall message — not one phrase. Each letter is used once; three options are unused distractors.',
     commonTraps: [
-      'Two speakers mention work but express different opinions.',
-      'Choosing a letter because one phrase sounds similar.',
-      'Reusing a letter for two speakers.',
+      'Literal match: an option repeats a word from the audio but is not the speaker’s main point.',
+      'Two speakers mention the same topic but with different attitudes — only one option fits each.',
+      'Reusing a letter because two options seem possible for one speaker.',
+      'Distractor that was briefly mentioned but is not what the speaker emphasises.',
+      'Choosing before the speaker finishes — attitude may shift at the end.',
     ],
     listenFor: [
-      'First vs final attitude (did their feeling change?).',
-      'Contrast signals: "but", "however", "what surprised me".',
-      'The speaker\'s main lesson, not the job title.',
+      'The speaker’s main lesson, feeling or conclusion (not their job title or setting).',
+      'Contrast signals: "but", "however", "what surprised me", "the real reason".',
+      'First vs final attitude — did their view change by the end of the monologue?',
+      'Subtle overlap: unused options may echo a detail from another speaker.',
     ],
-    studyTip: 'Eliminate letters you are sure about, then compare the remaining options for the last speaker.',
+    studyTip:
+      'After the first listen, cross out two or three letters you are sure about, then compare the remaining options for the last speaker.',
   },
   13: {
     strategy:
-      'Read the question stem before the interview moves on. Interviewers often paraphrase — the correct option may use different words from the audio.',
+      'One long interview or discussion (~3–4 min). Read question 24 before listening, then follow the order of the audio. Answers test attitude, opinion and inference — the correct option rarely repeats exact words from the recording.',
     commonTraps: [
-      'An option mentions something true in the interview but does not answer the question.',
-      'Extreme words: "every", "only", "all" when the speaker was more cautious.',
-      'Confusing who did what (council vs volunteers vs heritage body).',
+      'Keyword trap: a word from the audio appears in a wrong option.',
+      'An option is true in the interview but does not answer the question asked.',
+      'Two options seem valid because speakers disagree — check who said what.',
+      'Extreme wording ("always", "never", "only") when the speaker was hedging.',
+      'Answering from the situation line without listening to the whole exchange.',
     ],
     listenFor: [
-      'Cause and effect (why did delays happen?).',
-      'Who uses the hall now vs what was expected.',
-      'Advice at the end — what should towns do first?',
+      'Agreement vs disagreement between speakers ("but", "I\'m not sure", "actually").',
+      'Attitude and purpose — why someone says something, not just what happened.',
+      'Hedging and reformulation ("what I mean is", "sort of", "to be honest").',
+      'Signpost moments before each answer (new topic, summary, recommendation).',
     ],
-    studyTip: 'Eliminate one clearly wrong option per question to improve your odds under time pressure.',
+    studyTip:
+      'On the second listen, confirm one eliminated option per question and note which speaker supports the correct answer.',
   },
 };

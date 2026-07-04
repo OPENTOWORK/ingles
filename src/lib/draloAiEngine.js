@@ -156,13 +156,22 @@ async function cambridgeViaAssistantOrChat(options = {}) {
       throw new Error('Empty prompt for DRALO EXAM CAMBRIDGE assistant.');
     }
 
-    return assistantCompletion(client, assistantId, {
-      ...options,
-      userMessage: fullUserMessage,
-      messages: normalizeAssistantHistory(options.conversationHistory || []),
-      engine: DRALO_AI_ENGINE.CAMBRIDGE,
-      assistantTimeoutMs: options.assistantTimeoutMs ?? 120000,
-    });
+    try {
+      return await assistantCompletion(client, assistantId, {
+        ...options,
+        userMessage: fullUserMessage,
+        messages: normalizeAssistantHistory(options.conversationHistory || []),
+        engine: DRALO_AI_ENGINE.CAMBRIDGE,
+        assistantTimeoutMs: options.assistantTimeoutMs ?? 120000,
+      });
+    } catch (err) {
+      const msg = String(err?.message || err || '');
+      const assistantMissing = /404|no assistant found/i.test(msg);
+      if (options.requireAssistant || !assistantMissing) throw err;
+      console.warn(
+        `[draloAiEngine] Cambridge assistant unavailable (${msg.slice(0, 120)}); falling back to Chat Completions.`,
+      );
+    }
   }
 
   return draloChatCompletion({

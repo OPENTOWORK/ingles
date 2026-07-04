@@ -678,6 +678,47 @@ export function formatListeningGapDisplayLines(contextLines = [], questionNumber
   return result.length ? result : lines;
 }
 
+/**
+ * All Part 11 sentences in one passage (setting line + numbered inline gaps).
+ * @param {string} text
+ * @returns {string[]}
+ */
+export function buildListeningGapPassageLines(text = '') {
+  const t = String(text || '').replace(/\r\n/g, '\n').trim();
+  if (!t) return [];
+
+  const blocks = splitListeningOpenGapContextByQuestion(t);
+  if (!blocks.length) {
+    return t.split('\n').map((l) => l.trim()).filter(Boolean);
+  }
+
+  const lines = [];
+  const firstBlockStart = t.indexOf(blocks[0].contextLines[0]);
+  if (firstBlockStart > 0) {
+    const intro = t.slice(0, firstBlockStart).trim();
+    intro.split('\n').forEach((l) => {
+      const s = l.trim();
+      if (s) lines.push(s);
+    });
+  }
+
+  for (const block of blocks) {
+    const formatted = formatListeningGapDisplayLines(block.contextLines, block.questionNumber);
+    const gapOnlyRe = new RegExp(`^\\(${block.questionNumber}\\)\\s*_+$`, 'i');
+
+    for (const line of formatted) {
+      if (gapOnlyRe.test(line.trim())) continue;
+      let out = line.trim();
+      if (/_{2,}/.test(out) && !new RegExp(`\\(${block.questionNumber}\\)\\s*_{2,}`).test(out)) {
+        out = out.replace(/_{2,}/, `(${block.questionNumber}) ___`);
+      }
+      if (out) lines.push(out);
+    }
+  }
+
+  return lines;
+}
+
 /** Extract MCQ letter from a levels_respuestas row label. */
 export function extractMcqOptionLetter(option = {}) {
   const raw = String(option.formattedText || option.respuesta || option.text || '').trim();

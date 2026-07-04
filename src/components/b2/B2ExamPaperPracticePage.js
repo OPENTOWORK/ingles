@@ -41,7 +41,7 @@ import {
   splitPart1TextoYPreguntas,
   parsePart1QuestionOptions,
   trimListeningPart10DuplicateCycles,
-  formatListeningGapDisplayLines,
+  buildListeningGapPassageLines,
   extractMcqOptionLetter,
 } from '@/utils/b2ExamTextBlocks';
 import B2ListeningPracticeBriefing from '@/components/b2/B2ListeningPracticeBriefing';
@@ -52,7 +52,7 @@ import ExamPracticeSideRailTop from '@/components/exam/ExamPracticeSideRailTop';
 import ExamStudyNotesSidebar from '@/components/exam/ExamStudyNotesSidebar';
 import ReadingPracticeChrome from '@/components/exam/ReadingPracticeChrome';
 import { ReadingPracticeSessionProvider, useReadingPracticeSession } from '@/context/ReadingPracticeSessionContext';
-import B2ListeningInlineGapCard from '@/components/b2/B2ListeningInlineGapCard';
+import B2ListeningInlineGapPassage from '@/components/b2/B2ListeningInlineGapPassage';
 import ExamListeningAudioPlayer from '@/components/b2/ExamListeningAudioPlayer';
 import {
   B2_EXAM1_PART12_MATCHING_POOL,
@@ -1472,6 +1472,11 @@ function B2ExamPaperPracticePageInner({
     selectedQuestion?.enunciado,
   ]);
 
+  const listeningGapPassageLines = useMemo(() => {
+    if (!isListeningGapPart) return [];
+    return buildListeningGapPassageLines(selectedQuestion?.enunciado || '');
+  }, [isListeningGapPart, selectedQuestion?.enunciado]);
+
   const listeningMatchingPool = useMemo(() => {
     if (!isB2ListeningMatchingPart) return [];
     const blob = textoLinesForDisplay.length
@@ -1511,6 +1516,61 @@ function B2ExamPaperPracticePageInner({
       selectedQuestion?.respuestasAbiertas,
       selectedQuestion?.respuestas,
       inferredOpenQuestionNumbers,
+    ],
+  );
+
+  const handleListeningGapCheck = useCallback(
+    (qn, questionKey, currentValue) => {
+      const expectedAnswers = openAnswerMap.get(qn) || new Set();
+      const isCorrect = expectedAnswers.has(normalizeText(currentValue));
+      const prevResult = openChecks[questionKey];
+      setOpenChecks((prev) => ({ ...prev, [questionKey]: isCorrect }));
+      if (typeof prevResult !== 'boolean') {
+        const correctChoiceText = [...expectedAnswers].slice(0, 4).join(' · ') || 'respuesta modelo';
+        const answersFromDatabase = [...expectedAnswers].join(' · ');
+        requestAiJustification(questionKey, {
+          partLabel: selectedPart?.nombre || '',
+          questionLabel: `Question ${qn}`,
+          questionNumber: qn,
+          ...resolveCorrectAnswerRowIds(
+            selectedQuestion?.respuestasAbiertas,
+            selectedQuestion?.respuestas,
+            qn,
+          ),
+          style: 'listening-gap',
+          userChoiceText: currentValue,
+          correctChoiceText,
+          isCorrect,
+          answersFromDatabase: answersFromDatabase || undefined,
+        });
+        void (async () => {
+          const uid = await getSessionUserId();
+          const pid = selectedQuestion?.preguntaId;
+          const parteId = selectedPart?.id;
+          if (!uid || !pid || !parteId) return;
+          const { error } = await recordLevelsAnswerEvaluation({
+            userId: uid,
+            preguntaId: pid,
+            parteId,
+            isCorrect,
+            slotLabel: `Question ${qn}`,
+            userAnswerText: currentValue,
+          });
+          if (error) {
+            console.warn('levels eval/puntuacion:', error.message || error);
+          }
+        })();
+      }
+    },
+    [
+      openAnswerMap,
+      openChecks,
+      requestAiJustification,
+      selectedPart?.id,
+      selectedPart?.nombre,
+      selectedQuestion?.preguntaId,
+      selectedQuestion?.respuestasAbiertas,
+      selectedQuestion?.respuestas,
     ],
   );
 
@@ -1666,13 +1726,21 @@ function B2ExamPaperPracticePageInner({
     });
   }, []);
 
-  /** Part 11 (gap-fill) and Part 13 (interview): one audio for the whole part. */
+  /** Part 10 (extracts), Part 11 (gap-fill), Part 12 (matching), Part 13 (interview): one audio when a single clip is stored. */
   const listeningMonologueClip = useMemo(() => {
     if (listeningReadyClips.length === 0) return null;
     if (isListeningGapPart) return listeningReadyClips[0];
+    if (isB2ListeningPart10 && listeningReadyClips.length === 1) return listeningReadyClips[0];
+    if (isB2ListeningMatchingPart && listeningReadyClips.length === 1) return listeningReadyClips[0];
     if (isB2ListeningInterviewPart && listeningReadyClips.length === 1) return listeningReadyClips[0];
     return null;
-  }, [isListeningGapPart, isB2ListeningInterviewPart, listeningReadyClips]);
+  }, [
+    isListeningGapPart,
+    isB2ListeningPart10,
+    isB2ListeningMatchingPart,
+    isB2ListeningInterviewPart,
+    listeningReadyClips,
+  ]);
 
   const writingPartMin = levelSlug === 'a2' ? 6 : 8;
   const writingPartMax = levelSlug === 'a2' ? 7 : 9;
@@ -3830,18 +3898,36 @@ function B2ExamPaperPracticePageInner({
                         ))}
                       </div>
                     ) : null}
+                    {isListeningGapPart && listeningGapPassageLines.length > 0 ? (
+                      <div style={{ marginTop: '1rem' }}>
+                        <B2ListeningInlineGapPassage
+                          lines={listeningGapPassageLines}
+                          questionNumbers={listeningQuestionNumbersOrdered}
+                          getQuestionKey={(questionNumber) =>
+                            getQuestionKey(selectedPart.id, questionNumber, 'open')
+                          }
+                          openInputs={openInputs}
+                          openChecks={openChecks}
+                          hideFeedback={hideFeedbackResolved}
+                          hideCheck={hidePracticeChecks}
+                          onInputChange={(questionKey, value) => {
+                            setOpenInputs((prev) => ({ ...prev, [questionKey]: value }));
+                            setOpenChecks((prev) => ({ ...prev, [questionKey]: undefined }));
+                          }}
+                          onCheckGap={handleListeningGapCheck}
+                        />
+                      </div>
+                    ) : (
                     <div style={{ marginTop: '1rem', display: 'grid', gap: '1.25rem' }}>
                       {listeningQuestionNumbersOrdered.map((qn, questionIndex) => {
-                        const isOpenGapItem = isListeningGapPart;
-                        const group = isOpenGapItem
-                          ? null
-                          : groupedAnswers.find((g) => g.questionNumber === qn);
-                        if (!isOpenGapItem && (!group || !group.options?.length)) return null;
+                        if (isListeningGapPart) return null;
+                        const group = groupedAnswers.find((g) => g.questionNumber === qn);
+                        if (!group || !group.options?.length) return null;
 
-                        const groupIndex = group ? groupedAnswers.indexOf(group) : -1;
+                        const groupIndex = groupedAnswers.indexOf(group);
                         const ctx = listeningContextBlocks.find((b) => b.questionNumber === qn);
                         const hidePerItemAudio = Boolean(listeningMonologueClip);
-                        const clip = isOpenGapItem || hidePerItemAudio
+                        const clip = hidePerItemAudio
                           ? null
                           : pickListeningClipForQuestion(listeningReadyClips, qn, partNumber);
                         const clipSrc =
@@ -3854,74 +3940,6 @@ function B2ExamPaperPracticePageInner({
                           sequentialClipKey,
                           questionIndex,
                         );
-
-                        if (isOpenGapItem) {
-                          const questionKey = getQuestionKey(selectedPart.id, qn, 'open');
-                          const currentValue = openInputs[questionKey] || '';
-                          const checkResult = openChecks[questionKey];
-                          const gapDisplayLines = formatListeningGapDisplayLines(
-                            ctx?.contextLines || [],
-                            qn,
-                          );
-                          return (
-                            <B2ListeningInlineGapCard
-                              key={`listen-item-${selectedQuestion.preguntaId}-${qn}`}
-                              questionNumber={qn}
-                              displayLines={gapDisplayLines}
-                              currentValue={currentValue}
-                              checkResult={checkResult}
-                              hideFeedback={hideFeedbackResolved}
-                              hideCheck={hidePracticeChecks}
-                              onInputChange={(value) => {
-                                setOpenInputs((prev) => ({ ...prev, [questionKey]: value }));
-                                setOpenChecks((prev) => ({ ...prev, [questionKey]: undefined }));
-                              }}
-                              onCheck={() => {
-                                const expectedAnswers = openAnswerMap.get(qn) || new Set();
-                                const isCorrect = expectedAnswers.has(normalizeText(currentValue));
-                                const prevResult = openChecks[questionKey];
-                                setOpenChecks((prev) => ({ ...prev, [questionKey]: isCorrect }));
-                                if (typeof prevResult !== 'boolean') {
-                                  const correctChoiceText =
-                                    [...expectedAnswers].slice(0, 4).join(' · ') || 'respuesta modelo';
-                                  const answersFromDatabase = [...expectedAnswers].join(' · ');
-                                  requestAiJustification(questionKey, {
-                                    partLabel: selectedPart?.nombre || '',
-                                    questionLabel: `Question ${qn}`,
-                                    questionNumber: qn,
-                                    ...resolveCorrectAnswerRowIds(
-                                      selectedQuestion?.respuestasAbiertas,
-                                      selectedQuestion?.respuestas,
-                                      qn,
-                                    ),
-                                    style: 'listening-gap',
-                                    userChoiceText: currentValue,
-                                    correctChoiceText,
-                                    isCorrect,
-                                    answersFromDatabase: answersFromDatabase || undefined,
-                                  });
-                                  void (async () => {
-                                    const uid = await getSessionUserId();
-                                    const pid = selectedQuestion?.preguntaId;
-                                    const parteId = selectedPart?.id;
-                                    if (!uid || !pid || !parteId) return;
-                                    const { error } = await recordLevelsAnswerEvaluation({
-                                      userId: uid,
-                                      preguntaId: pid,
-                                      parteId,
-                                      isCorrect,
-                                      slotLabel: `Question ${qn}`,
-                                      userAnswerText: currentValue,
-                                    });
-                                    if (error) {
-                                      console.warn('levels eval/puntuacion:', error.message || error);
-                                    }
-                                  })();
-                                }
-                              }}
-                            />
-                          );
-                        }
 
                         const questionKey = getQuestionKey(
                           selectedPart.id,
@@ -4158,6 +4176,7 @@ function B2ExamPaperPracticePageInner({
                         );
                       })}
                     </div>
+                    )}
                     {!hideFeedbackResolved ? (
                       <SkillPartExplanationsPanel
                         entries={listeningPracticeExplanationEntries}

@@ -438,17 +438,25 @@ function isPartComplete(gen, partDef) {
   }
   if (partDef.mode === 'listening') {
     if (partDef.activity === 'short-extracts') {
-      const withScript = q.filter((item) => wordCount(item.script) >= 85);
+      const withScript = q.filter((item) => wordCount(item.script) >= 80);
       return withScript.length >= (partDef.questionCount || 8);
     }
     if (partDef.activity === 'multiple-matching') {
+      const minClips = partDef.partNumber === 12 ? 5 : 0;
+      const clipCount = asGeneratedArray(gen.audioClips).length;
+      const matchingCount = asGeneratedArray(gen.matchingAnswers).length;
+      const poolCount = asGeneratedArray(gen.optionPool).length;
       return (
         Boolean(gen.script) &&
-        (asGeneratedArray(gen.matchingAnswers).length >= 5 || asGeneratedArray(gen.optionPool).length >= 8)
+        matchingCount >= 5 &&
+        poolCount >= 8 &&
+        (minClips ? clipCount >= minClips : true)
       );
     }
     if (partDef.activity === 'conversation' && partDef.partNumber === 13) {
-      const mcq = asGeneratedArray(gen.questions).filter((item) => asGeneratedArray(item.options).length >= 3);
+      const mcq = asGeneratedArray(gen.questions).filter(
+        (item) => asGeneratedArray(item.options).length === 3,
+      );
       return Boolean(gen.script) && mcq.length >= 7;
     }
     return Boolean(gen.script) && (q.length >= 2 || ma.length >= 2);
@@ -562,7 +570,7 @@ export async function persistCambridgeGeneratedPart(db, {
   }
 
   if (partDef.needsAudio && !skipAudio && (generated.script || asGeneratedArray(generated.audioClips).length)) {
-    const { extractListeningClipsFromGenerated, synthesizeAndUploadListeningClips } = await import(
+    const { extractListeningClipsFromGenerated, synthesizeAndUploadListeningClips, listeningCombinedDefaultTitle } = await import(
       '@/lib/levelsExamAudioStorage'
     );
     const clipSpecs = extractListeningClipsFromGenerated(generated, partDef);
@@ -572,6 +580,11 @@ export async function persistCambridgeGeneratedPart(db, {
       levelLabel,
       script: generated.script,
       clips: clipSpecs,
+      partDef,
+      combinedTitle: listeningCombinedDefaultTitle(
+        partNumber,
+        generated.setting || generated.title,
+      ),
     });
     if (audioRows.length) {
       const { error } = await db.from('levels_preguntas_audios').insert(

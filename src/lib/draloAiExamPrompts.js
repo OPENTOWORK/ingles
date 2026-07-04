@@ -326,15 +326,29 @@ ${baseExamSchema(directions, `,"title":"text title"${extraFields},${questionsSch
 ${variety}
 ${SHARED_JSON_RULES}
 ${directions}
-Generate exactly 8 questions numbered 1–8.
+Generate exactly 8 questions numbered 1–8 in ONE shared audio (~4½–5 minutes total).
 Each question MUST include:
 - number (1–8)
 - situation: one-line context (e.g. "You hear two friends talking about a trip.")
 - prompt: the exam question (e.g. "Why is the woman calling?")
 - options: exactly three strings "A) ...", "B) ...", "C) ..."
-- script: the FULL dialogue for TTS ONLY (MINIMUM 95 words, target 100–120 words; 2–4 lines as "A:" and "B:" dialogue; NO question text inside script; MUST produce 30–40 second audio when read aloud)
+- script: the FULL extract for TTS ONLY (85–95 words; monologue OR dialogue with "A:" / "B:" labels for each speaker; self-contained; NO question text inside script; ~33–38 seconds when read aloud)
+
+Quality rules (strict):
+- Each extract is a DIFFERENT scenario — independent and self-contained (conversation, announcement, interview, voicemail, etc.)
+- Do NOT make extracts too similar in setting or speaker type
+- Vary speakers, gender and accents across extracts (British, American, Australian, Irish, etc.) — each extract should feel like a new voice cast
+- In dialogues, use "A:" / "B:" labels so each speaker has a distinct voice in TTS
+- Match register to context; use authentic spoken English (contractions, hedging, natural emphasis) — not written prose
+- B2 vocabulary and structures only
+- Exactly one correct answer per question; three plausible A/B/C options
+- Questions must test inference/deduction — NOT keyword matching from the audio
+- Each distractor should echo something mentioned in the audio but NOT be the correct answer
+- The question/prompt must NOT reveal the answer before listening
+- Avoid: obvious/irrelevant distractors, multiple equally valid options, artificial or overly formal language
+
 modelAnswers: 8 rows with letter only (A, B, or C).
-Also include a combined "script" field concatenating all eight extract dialogues separated by blank lines (for reference only).
+Also include a combined "script" field concatenating all eight extract scripts separated by blank lines (for reference only).
 Return ONLY JSON with: partTitle, title, directions, setting, script, questions[{number,situation,prompt,options[],script}], modelAnswers[]`;
     }
 
@@ -343,12 +357,31 @@ Return ONLY JSON with: partTitle, title, directions, setting, script, questions[
 ${variety}
 ${SHARED_JSON_RULES}
 ${directions}
-Generate exactly 5 speakers (Speaker 1–Speaker 5) in the script, matched to options A–H.
-optionPool: exactly 8 options A–H (each a short description of an opinion/feeling/activity).
-matchingAnswers: 5 rows {number: 19–23, answer: "A"|...|"H"} — one letter per speaker.
-questions: 5 items {number: 19–23, prompt: "Speaker N"} WITHOUT repeating full A–H option text.
-script: five short monologues labelled "Speaker 1:" … "Speaker 5:" (MINIMUM 105 words each, target 110–130 words; suitable for 40–50 second TTS clips).
-audioClips: REQUIRED array of exactly 5 objects {orden:1–5, titulo:"Speaker N", text:"full monologue text for TTS (105–130 words each)"}.
+Generate exactly 5 speakers (Speaker 1–Speaker 5) on ONE shared theme, matched to options A–H.
+
+Structure:
+- setting: one line describing the shared topic (e.g. "Five people talk about learning a new skill.")
+- optionPool: exactly 8 options A–H (each a short paraphrased description of an opinion, feeling or experience — NOT copied verbatim from the audio)
+- matchingAnswers: 5 rows {number: 19–23, answer: "A"|…|"H"} — one unique letter per speaker; exactly 3 letters remain unused as distractors
+- questions: 5 items {number: 19–23, prompt: "Speaker N"} WITHOUT repeating full A–H option text
+- script: five short monologues labelled "Speaker 1:" … "Speaker 5:" (70–95 words each; ~30–35 seconds TTS per clip; ~3–4 minutes total)
+- audioClips: REQUIRED array of exactly 5 objects {orden:1–5, titulo:"Speaker N", text:"full monologue text for TTS (75–90 words each)"}
+
+Audio / script quality (strict):
+- All 5 speakers share the same general theme but each has a distinct perspective or experience
+- Subtle overlaps between speakers so unused options sound plausible (functional distractors)
+- Authentic spoken English with differentiated idiolects; similar B2 register across speakers
+- No speaker states the correct option text literally — paraphrase is mandatory
+- Vary tone and attitude; avoid five near-identical monologues
+
+Questions / options quality (strict):
+- Questions numbered 19–23 only; exactly 8 options A–H
+- Exactly one correct option per speaker; no option should fit two speakers equally well
+- Options paraphrase what you hear — do NOT lift phrases verbatim from the audio
+- Distractors must be credible: mentioned or hinted in the audio but not the speaker's main point
+- Three unused options must still have some basis in the recordings (not invented out of context)
+
+modelAnswers: 5 rows with letter only (A–H), matching matchingAnswers.
 Return ONLY JSON with: partTitle, directions, setting, script, audioClips[], optionPool ["A) ...",...,"H) ..."], matchingAnswers[], questions[], modelAnswers[] (letters only)`;
     }
 
@@ -357,23 +390,58 @@ Return ONLY JSON with: partTitle, directions, setting, script, audioClips[], opt
 ${variety}
 ${SHARED_JSON_RULES}
 ${directions}
-Generate exactly 10 questions numbered 9–18 (type "short", prompt with a gap marked ___).
-script: ONE continuous monologue or talk (MINIMUM 530 words, target 530–570 words; about 3 minutes 30 seconds to 3 minutes 50 seconds when read aloud). No speaker labels unless necessary.
-modelAnswers: 10 rows with the missing word or short phrase for each question.
+Generate exactly 10 questions numbered 9–18 (type "short"; each prompt is an incomplete sentence with a gap marked ___).
+script: ONE continuous monologue — lecture, talk or interview-style speech (380–520 words; ~2:30–3:30 minutes when read aloud). No speaker labels unless necessary. ONE audio for the whole part.
+
+Quality rules (strict):
+- Monologue must be fluent and coherent — not a list of disconnected facts
+- Information appears in LINEAR order matching questions 9→18
+- Use authentic spoken English: natural connectors, reformulation, hedging — not written prose
+- B2 vocabulary and structures only
+- Each gap has exactly ONE possible answer (1–3 words copied literally from the audio)
+- modelAnswers must be exact words/phrases as spoken (no paraphrase, no inference)
+- Question sentences must PARAPHRASE the audio — do NOT copy long stretches verbatim from the script
+- Completed sentences must be grammatically correct once the gap is filled
+- Avoid unnecessary spelling traps, ambiguous gaps, or answers requiring more than 3 words
+- Do NOT require the candidate to infer — the missing words must be heard clearly once
+
+modelAnswers: 10 rows {number: 9–18, answer: "1–3 words exactly as in audio"}.
 Return ONLY JSON with: partTitle, title, directions, setting, script, questions[{number,prompt,type:"short"}], modelAnswers[]`;
     }
 
     if (activity === 'conversation' && L === 'B2') {
-      return `Create ONE complete Cambridge B2 First Listening Part 4: multiple choice (interview or conversation).
+      return `Create ONE complete Cambridge B2 First Listening Part 4: multiple choice (long interview or discussion).
 ${variety}
 ${SHARED_JSON_RULES}
 ${directions}
 Generate exactly 7 questions numbered 24–30.
-Each question must include exactly three options as full strings: "A) ...", "B) ...", "C) ...".
-script: ONE continuous interview or conversation between an Interviewer (A) and a guest (B), MINIMUM 580 words, target 580–640 words (about 4 minutes when read aloud). Use "A:" and "B:" speaker labels throughout.
-modelAnswers: 7 rows with letter only (A, B, or C) matching questions 24–30.
-Do NOT use an A–H matching pool. Do NOT split into five separate speaker monologues.
-Return ONLY JSON with: partTitle, title, directions, setting, script, questions[{number,prompt,options[]}], modelAnswers[]`;
+
+Structure:
+- setting: one line describing the interview/discussion context
+- script: ONE continuous recording (~3–4 minutes; 450–620 words) — an interview or discussion between TWO or THREE clearly differentiated speakers. Use "A:", "B:" and optionally "C:" labels throughout. ONE audio for the whole part.
+- questions: 7 items {number: 24–30, prompt: "…", options: ["A) …", "B) …", "C) …"]}
+- modelAnswers: 7 rows with letter only (A, B, or C)
+
+Audio / script quality (strict):
+- Natural conversation: interruptions, agreement, partial disagreement, follow-up questions
+- Two or three distinct voices (roles clear from labels and idiolect)
+- Semi-formal or informal register suited to the context — not written prose
+- Authentic spoken English: hedging ("I suppose", "sort of"), emphasis, reformulation, mild disagreement
+- Sustained B2 level throughout
+- Enough information in the script to answer all seven questions fairly
+
+Questions quality (strict):
+- Exactly one correct answer per question; three plausible A/B/C options
+- Test opinion, attitude, purpose or inference — NOT literal factual recall or keyword matching
+- Options must PARAPHRASE the audio — do NOT lift A/B/C wording verbatim from the script
+- Questions must not be answerable without listening (avoid giveaway context in the prompt)
+- Avoid two equally valid options; distractors may echo the audio but miss the point
+- Questions follow the approximate order of the recording (Q24 early → Q30 near the end)
+- Vary comprehension types across the seven items (attitude, reason, implication, recommendation, etc.)
+- Exploit disagreements and nuances between speakers where relevant
+
+Do NOT use an A–H matching pool. Do NOT split into separate monologue clips.
+Return ONLY JSON with: partTitle, title, directions, setting, script, questions[{number,prompt,options[]}], modelAnswers[] (letters only)`;
     }
 
     const questionsSchema = `"questions":[${Array.from({ length: n }, (_, i) => {
@@ -403,16 +471,19 @@ Return ONLY JSON with: partTitle, title, directions, setting, script, questions[
     let scriptRule =
       'script: ONE continuous text for TTS — monologue prose, NO speaker labels.';
     if (activity === 'short-extracts') {
-      scriptRule = `script: EIGHT labelled mini-dialogues "Extract 1" through "Extract 8", each 2–4 lines as "A:" and "B:" dialogue (90–110 words total per extract; suitable for 30–40 second TTS clips).`;
+      scriptRule = `script: EIGHT labelled extracts "Extract 1" through "Extract 8" in one audio (~4½–5 min total). Each extract: 85–95 words, monologue or "A:" / "B:" dialogue, self-contained, ~33–38 seconds TTS. Each extract = different scenario and voice cast; vary accents (GB/US/AU/IE). MCQ answers require inference, not keyword matching; distractors echo the audio but are wrong.`;
     } else if (activity === 'sentence-completion') {
-      scriptRule =
-        'script: ONE continuous monologue (450–650 words; about 3–4 minutes when read aloud). No speaker labels unless necessary.';
+      scriptRule = `script: ONE continuous monologue (380–520 words; ~2:30–3:30 min TTS). Linear information order for gaps 9–18. Question sentences paraphrase the audio; answers are 1–3 literal words from the recording.`;
     } else if (activity === 'multiple-matching') {
       scriptRule =
-        'script: five short speaker blocks "Speaker 1:" … "Speaker 5:" (70–100 words each).';
+        L === 'B2'
+          ? 'script: five speaker monologues "Speaker 1:" … "Speaker 5:" on one shared theme (70–95 words each; ~30–35 s TTS; ~3–4 min total). Distinct perspectives; paraphrase in options — no literal option wording in audio.'
+          : 'script: five short speaker blocks "Speaker 1:" … "Speaker 5:" (70–100 words each).';
     } else if (activity === 'conversation') {
       scriptRule =
-        'script: dialogue with "A:" and "B:" lines for an interview or conversation (450–650 words for B2 Part 4).';
+        L === 'B2'
+          ? 'script: ONE continuous interview/discussion (450–620 words; ~3–4 min TTS) with "A:" / "B:" / optional "C:" labels. Natural turn-taking; MCQ tests attitude/inference — options paraphrase, no literal word-matching.'
+          : 'script: dialogue with "A:" and "B:" lines for an interview or conversation (450–650 words for B2 Part 4).';
     }
 
     return `Create ONE complete Cambridge ${L} Listening task: ${activity}.

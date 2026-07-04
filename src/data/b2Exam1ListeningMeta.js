@@ -3,14 +3,14 @@
 export const B2_EXAM1_LISTENING_EXAM_SLOT = 1;
 
 export const B2_EXAM1_PART10_SITUATIONS = {
-  1: 'You hear a visitor asking about a painting in a local art gallery.',
-  2: 'You hear an announcement at an airport departure gate.',
-  3: 'You hear a student calling a university registry office about an official transcript.',
-  4: 'You hear a customer speaking to a theatre box-office assistant on the phone.',
-  5: "You hear a customer at a dry cleaner's counter about a stained jacket.",
-  6: 'You hear a chef introducing a live cookery demonstration to an audience.',
-  7: 'You hear a staff member making an announcement to visitors at a botanical garden.',
-  8: 'You hear a tenant receiving a phone call from a letting agency about their flat.',
+  1: 'You hear two friends discussing a mobile app.',
+  2: 'You hear a conversation about smart home technology.',
+  3: 'You hear two neighbours talking about where they live.',
+  4: 'You hear two people discussing electric bikes.',
+  5: 'You hear two visitors in a shared office space.',
+  6: 'You hear two friends talking about technology.',
+  7: 'You hear people at a community meeting.',
+  8: 'You hear a couple planning a meal out.',
 };
 
 export const B2_EXAM1_PART12_MATCHING_POOL = [
@@ -26,10 +26,11 @@ export const B2_EXAM1_PART12_MATCHING_POOL = [
 
 const PART_UX = {
   10: {
-    whatYouWillHear: 'Eight short extracts — people talking in everyday situations such as a gallery, airport, or university office.',
+    whatYouWillHear:
+      'Eight short extracts — friends chatting, a sales pitch, a community meeting, and other everyday urban situations (~4½ minutes in one recording).',
     whatYouNeedToDo:
       'For questions 1–8, choose the best answer (A, B or C). You will hear each extract twice.',
-    practiceNote: 'Practice mode: you can replay each audio before checking your answer.',
+    practiceNote: 'Practice mode: you can replay the audio before checking your answers.',
   },
   11: {
     whatYouWillHear:

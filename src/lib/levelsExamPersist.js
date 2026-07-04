@@ -322,7 +322,7 @@ export async function persistGeneratedPart(db, {
   }
 
   if (partDef.needsAudio && !skipAudio) {
-    const { extractListeningClipsFromGenerated, synthesizeAndUploadListeningClips } = await import(
+    const { extractListeningClipsFromGenerated, synthesizeAndUploadListeningClips, listeningCombinedDefaultTitle } = await import(
       '@/lib/levelsExamAudioStorage'
     );
     const clipSpecs = extractListeningClipsFromGenerated(payload, partDef);
@@ -332,6 +332,8 @@ export async function persistGeneratedPart(db, {
       levelLabel: 'A2',
       script: payload.script,
       clips: clipSpecs,
+      partDef,
+      combinedTitle: listeningCombinedDefaultTitle(partNumber, payload.setting || payload.title),
     });
     if (audioRows.length) {
       const { error } = await db.from('levels_preguntas_audios').insert(

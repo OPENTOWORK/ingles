@@ -1,4 +1,4 @@
-import { synthesizeExamTtsMp3 } from '@/lib/levelsExamTts';
+import { synthesizeListeningClipMp3 } from '@/lib/levelsExamTts';
 import { getSupabaseUrl } from '@/lib/supabaseEnv';
 
 const BUCKET = 'Levels_Listening';
@@ -30,15 +30,96 @@ export function listeningClipStoragePath({ levelLabel = 'B2', examSlot, partNumb
   return `${level}/exam-${slot}/part-${part}/clip-${String(ord).padStart(2, '0')}-${revision}.mp3`;
 }
 
+/** Single MP3 for Listening Part 1 (all short extracts in one recording). */
+export function listeningCombinedStoragePath({ levelLabel = 'B2', examSlot, partNumber, revision = 'v2' }) {
+  const slot = Number(examSlot) || 1;
+  const part = Number(partNumber) || 0;
+  const level = String(levelLabel || 'B2').toLowerCase();
+  return `${level}/exam-${slot}/part-${part}/full-${revision}.mp3`;
+}
+
+/** @param {Buffer[]} buffers */
+export function concatMp3Buffers(buffers) {
+  const parts = (buffers || []).filter((b) => b?.length);
+  if (!parts.length) return Buffer.alloc(0);
+  return Buffer.concat(parts);
+}
+
+/** Whether listening clips for this part should be merged into one MP3 (Part 1 extracts, Part 3 speakers). */
+export function shouldCombineListeningClips(partDef) {
+  if (partDef?.mode !== 'listening') return false;
+  if (partDef.activity === 'short-extracts') return true;
+  if (partDef.activity === 'multiple-matching' && (partDef.audioClips || 0) > 1) return true;
+  return false;
+}
+
+export function listeningCombinedDefaultTitle(partNumber, setting) {
+  const fromSetting = String(setting || '').trim();
+  if (fromSetting) return fromSetting;
+  switch (Number(partNumber)) {
+    case 10:
+      return 'Part 1: Short extracts (questions 1–8)';
+    case 12:
+      return 'Part 3: Multiple matching (questions 19–23)';
+    default:
+      return 'Listening recording';
+  }
+}
+
 export async function synthesizeAndUploadListeningClips(adminDb, params) {
   const rows = [];
   const levelLabel = params.levelLabel || 'A2';
   const revision = params.revision || 'v2';
+  const combineClips =
+    params.combineClips ?? params.combineShortExtracts ?? shouldCombineListeningClips(params.partDef);
+
+  if (combineClips && params.clips?.length > 1) {
+    const buffers = [];
+    for (let i = 0; i < params.clips.length; i += 1) {
+      const clip = params.clips[i];
+      const text = String(clip.text || '').trim();
+      if (!text) continue;
+      const result = await synthesizeListeningClipMp3(text, {
+        extractIndex: (Number(clip.orden) || i + 1) - 1,
+      });
+      if (!result?.base64) {
+        console.warn('[levelsExamAudio] TTS skipped for combined clip extract', clip.orden);
+        continue;
+      }
+      buffers.push(Buffer.from(result.base64, 'base64'));
+    }
+    if (!buffers.length) return rows;
+
+    const combined = concatMp3Buffers(buffers);
+    const fileName =
+      params.combinedStoragePath ||
+      listeningCombinedStoragePath({
+        levelLabel,
+        examSlot: params.examSlot,
+        partNumber: params.partNumber,
+        revision,
+      });
+    const url = await uploadListeningClip(adminDb, {
+      path: fileName,
+      audioBuffer: combined,
+      contentType: 'audio/mpeg',
+    });
+    rows.push({
+      orden: 1,
+      titulo:
+        String(params.combinedTitle || '').trim() ||
+        listeningCombinedDefaultTitle(params.partNumber, params.setting),
+      audio_url: url,
+    });
+    return rows;
+  }
 
   for (const clip of params.clips) {
     const text = String(clip.text || '').trim();
     if (!text) continue;
-    const result = await synthesizeExamTtsMp3(text);
+    const result = await synthesizeListeningClipMp3(text, {
+      extractIndex: (Number(clip.orden) || rows.length + 1) - 1,
+    });
     if (!result?.base64) {
       console.warn('[levelsExamAudio] TTS skipped for clip', clip.orden);
       continue;

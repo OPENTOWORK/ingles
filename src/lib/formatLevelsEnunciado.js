@@ -356,6 +356,29 @@ export function buildAnswerRowsFromGenerated(gen = {}) {
     return { mcq, open };
   }
 
+  const resolveMcqCorrectRaw = (num, idx, q) => {
+    const qId = q?.id;
+    if (qId && answerById[qId] != null) return answerById[qId];
+    if (answerById[`q${num}`] != null) return answerById[`q${num}`];
+    if (q?.answer != null) return q.answer;
+
+    const byMeta = modelAnswers.find(
+      (m) =>
+        (qId != null && m?.id === qId) ||
+        Number(String(m?.id || '').replace(/\D/g, '')) === num ||
+        Number(m?.number) === num,
+    );
+    if (byMeta?.answer != null) return byMeta.answer;
+    if (byMeta?.letter != null) return byMeta.letter;
+
+    const byIndex = modelAnswers[idx] ?? modelAnswers[num - 1];
+    if (typeof byIndex === 'string') return byIndex;
+    if (byIndex?.answer != null) return byIndex.answer;
+    if (byIndex?.letter != null) return byIndex.letter;
+
+    return '';
+  };
+
   questions.forEach((q, idx) => {
     const num = Number(q.number ?? idx + 1);
     if (!Number.isFinite(num)) return;
@@ -380,12 +403,7 @@ export function buildAnswerRowsFromGenerated(gen = {}) {
       return;
     }
 
-    const correctRaw =
-      answerById[q.id] ??
-      answerById[`q${num}`] ??
-      q.answer ??
-      modelAnswers.find((m) => Number(String(m.id || '').replace(/\D/g, '')) === num)?.answer ??
-      '';
+    const correctRaw = resolveMcqCorrectRaw(num, idx, q);
     const correctLetter = String(correctRaw).match(/^[A-H]/i)?.[0]?.toUpperCase() || '';
 
     const imageOpts = asGeneratedArray(q.imageOptions);

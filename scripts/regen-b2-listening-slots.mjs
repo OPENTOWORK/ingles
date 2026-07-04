@@ -3,10 +3,10 @@
  * Usa OPENAI_ASSISTANT_ID_CAMBRIDGE_EXAMS vía cambridgeExamGenerationCompletion.
  *
  * Duraciones objetivo (Listening Cambridge):
- *   Part 10 — Part 1: 30–40 s por clip (×8)
- *   Part 11 — Part 2: 3:30–3:50 (un audio)
- *   Part 12 — Part 3: 40–50 s por clip (×5)
- *   Part 13 — Part 4: ~4 min (un audio)
+ *   Part 10 — Part 1: ~33–38 s por clip (×8), ~4½–5 min total, voces distintas por extracto
+ *   Part 11 — Part 2: 2:30–3:30 (un monólogo, huecos 9–18)
+ *   Part 12 — Part 3: 30–35 s por clip (×5), ~3–4 min total
+ *   Part 13 — Part 4: 3–4 min (entrevista / discusión, preguntas 24–30)
  *
  * Uso:
  *   node --loader ./scripts/alias-loader.mjs scripts/regen-b2-listening-slots.mjs 2 3
@@ -132,6 +132,9 @@ for (const examSlot of slots) {
             .eq('pregunta_id', result.preguntaId)
             .order('orden');
 
+          const isCombinedListeningPart =
+            (partNumber === 10 || partNumber === 12) && (audioRows?.length === 1);
+
           for (const row of audioRows || []) {
             let durationSec = null;
             let clipOk = null;
@@ -140,7 +143,13 @@ for (const examSlot of slots) {
               if (res.ok) {
                 const buf = Buffer.from(await res.arrayBuffer());
                 durationSec = await getMp3DurationSec(buf);
-                clipOk = durationSec >= targets.minSec && durationSec <= targets.maxSec;
+                if (isCombinedListeningPart) {
+                  clipOk =
+                    durationSec >= (targets.totalMinSec ?? targets.minSec) &&
+                    durationSec <= (targets.totalMaxSec ?? targets.maxSec * 5);
+                } else {
+                  clipOk = durationSec >= targets.minSec && durationSec <= targets.maxSec;
+                }
                 if (!clipOk) durationOk = false;
               }
             } catch (err) {
