@@ -124,7 +124,7 @@ async function generateScripts({ setting, questions, correctByNum }) {
         content: `Setting: ${setting || 'Various everyday situations in an urban environment.'}
 
 For each question below, write ONE listening extract script:
-- MINIMUM 85 words, target 88–95 words (~33–38 seconds spoken at natural pace)
+- MINIMUM 105 words, target 108–120 words (~30–45 seconds spoken at a natural, unhurried pace)
 - Each extract = a DIFFERENT scenario (friends chatting, announcement, interview, phone call, etc.)
 - Use monologue OR dialogue with "A:" / "B:" labels (use dialogue for at least 4 extracts)
 - Authentic spoken B2 English; contractions; no written/formal tone

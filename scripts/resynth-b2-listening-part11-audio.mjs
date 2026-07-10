@@ -22,7 +22,7 @@ import { PART2_INTERVIEW_VOICE } from '../src/lib/listeningTtsVoices.js';
 
 const examSlot = Number(process.argv[2] || 1);
 const partNumber = 11;
-const STORAGE_PATH = `b2/exam-${examSlot}/part-11/clip-01-v6.mp3`;
+const STORAGE_PATH = `b2/exam-${examSlot}/part-11/clip-01-v7.mp3`;
 const env = loadEnvLocal();
 
 if (!env.NEXT_PUBLIC_SUPABASE_URL || !env.SUPABASE_SERVICE_ROLE_KEY) {

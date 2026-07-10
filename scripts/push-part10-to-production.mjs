@@ -16,8 +16,8 @@ await register(pathToFileURL(path.join(scriptsDir, 'alias-loader.mjs')).href, {
 
 const { synthesizeExamTtsMp3 } = await import('../src/lib/levelsExamTts.js');
 
-const MIN_DURATION_SEC = 23;
-const MAX_DURATION_SEC = 40;
+const MIN_DURATION_SEC = 30;
+const MAX_DURATION_SEC = 45;
 const PART_DIRECTIONS =
   'Part:10\r\n\r\nYou will hear people talking in eight different situations. For questions 1–8, choose the best answer (A, B or C).';
 

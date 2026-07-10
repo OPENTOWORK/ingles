@@ -1,6 +1,6 @@
 /**
  * Post-save verification for B2 Exam 1 Part 12 (Listening Part 3).
- * Usage: node scripts/verify-part12.mjs
+ * Usage: node --loader ./scripts/alias-loader.mjs scripts/verify-part12.mjs
  */
 import { writeFileSync } from 'fs';
 import path from 'path';
@@ -18,10 +18,8 @@ const admin = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL, process.env.SUP
 
 const EXAMEN_ID = '5bd3e0d7-29a7-4e07-ac15-a4d195528c65';
 const EXPECTED_KEY = { 19: 'C', 20: 'H', 21: 'B', 22: 'E', 23: 'G' };
-const CLIP_MIN_SEC = 30;
-const CLIP_MAX_SEC = 40;
-const TOTAL_MIN_SEC = 180;
-const TOTAL_MAX_SEC = 240;
+const TOTAL_MIN_SEC = 480;
+const TOTAL_MAX_SEC = 600;
 
 async function fetchDuration(url) {
   const res = await fetch(url);
@@ -71,7 +69,7 @@ for (const a of audioRows) {
   audioDetails.push({ orden: a.orden, titulo: a.titulo, storagePath, durationSec });
 }
 
-const hasFullV3 = audioDetails.some((a) => /part-12\/full-v3\.mp3/.test(a.storagePath || ''));
+const hasFullV5 = audioDetails.some((a) => /part-12\/full-v5\.mp3/.test(a.storagePath || ''));
 const enunciado = String(q.enunciado || '');
 const poolCount = (enunciado.match(/\n[A-H]\)/g) || enunciado.match(/\n[A-H] /g) || []).length;
 
@@ -92,16 +90,16 @@ const report = {
     { name: 'Q19–23', ok: JSON.stringify(qNums.sort((a, b) => a - b)) === JSON.stringify([19, 20, 21, 22, 23]) },
     { name: 'Answer key', ok: keyMatch(key, EXPECTED_KEY) },
     { name: '1 combined audio', ok: audioRows.length === 1 },
-    { name: 'full-v3.mp3 linked', ok: hasFullV3 },
+    { name: 'full-v5.mp3 linked', ok: hasFullV5 },
     {
-      name: 'Combined duration 3:00–4:00',
+      name: 'Combined duration 8:00–10:00',
       ok:
         audioDetails.length === 1 &&
         audioDetails[0].durationSec >= TOTAL_MIN_SEC &&
         audioDetails[0].durationSec <= TOTAL_MAX_SEC,
     },
     { name: '8 options A–H in enunciado', ok: poolCount >= 8 },
-    { name: 'Directions mention paid work', ok: /paid work/i.test(enunciado) },
+    { name: 'Directions mention paid work', ok: /paid work|first experiences/i.test(enunciado) },
   ],
 };
 

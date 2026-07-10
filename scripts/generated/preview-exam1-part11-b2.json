@@ -1,120 +1,106 @@
 {
+  "meta": {
+    "level": "B2",
+    "examSlot": 1,
+    "partNumber": 11,
+    "cambridgePart": 2,
+    "activity": "sentence-completion",
+    "status": "preview"
+  },
   "generated": {
     "partTitle": "Listening Part 2: Sentence completion",
-    "title": "Mountain rescue volunteer training",
-    "directions": "You will hear a radio presenter interviewing a woman called Elena who trains volunteers for a mountain rescue team. For questions 9–18, complete the sentences with a word or short phrase.",
-    "setting": "Radio interview about training for a mountain rescue team.",
-    "script": "A: Good morning. You're listening to Mountain Rescue Monthly, and today I'm joined by Elena, who helps train new volunteers. Elena, thanks for coming in. What happens before someone is actually allowed to join the team?\nB: Thanks for having me. Well, before being accepted, every applicant must pass an annual fitness test. It's demanding, but it keeps people safe on the hill, and we don't make exceptions.\nA: And once they're in, what do they study indoors before they go out in all weathers?\nB: In the classroom, trainees learn basic navigation — map reading, compass work, that sort of thing. We also talk through typical scenarios so nobody panics when a real call comes in.\nA: Out on a call-out, how do team members stay in contact when the weather turns nasty?\nB: Each volunteer carries a whistle, because shouting doesn't always work in wind or across a ridge. Radios help too, of course, but the whistle is simple and reliable.\nA: Is there any formal medical training, or is that left to the ambulance service?\nB: Yes, definitely. The initial course includes an accredited first aid qualification, and we refresh it regularly. You might be hours from a road, so those skills really matter.\nA: What about clothing and kit — do people bring their own?\nB: Outdoor equipment must be fully waterproof. People underestimate rain on exposed slopes — damp kit quickly becomes a safety problem, especially if you're waiting with a casualty.\nA: When injuries are serious, how are casualties moved off the mountain?\nB: If someone is badly hurt, rescuers sometimes request a helicopter. It's not every call, but on steep ground it can be the only realistic option when time is short.\nA: Are team leaders paid for this work, or is it entirely voluntary?\nB: No, team leaders are unpaid and work on a voluntary basis, like everyone else. They give up evenings and weekends because they care about the community.\nA: Where is rope work most common — is it every rescue?\nB: Ropes are used most often on steep terrain, where a slip would have serious consequences. We practise those techniques again and again until they feel automatic.\nA: What conditions make rescues hardest for newer volunteers?\nB: Many call-outs happen in poor visibility — fog, sleet, low cloud. You might know the area well, but you still have to move carefully and trust your training.\nA: Finally, what do recruits say they gain from all this preparation?\nB: Most recruits say the training gave them more confidence in the mountains. They still respect the risks, but they feel prepared to help when it counts.\nA: Elena, that's been really helpful — thank you for explaining how new members are prepared.",
+    "title": "Coastal seabird monitoring — radio interview",
+    "directions": "You will hear an interview with Dr Priya Shah, who coordinates a citizen science programme monitoring seabird colonies on the Northumberland coast. For questions 9–18, complete the sentences with a word or short phrase.",
+    "setting": "A radio interview about training and volunteering on a coastal seabird monitoring programme.",
+    "listeningIntro": {
+      "text": "Listening Test. Part Two. You will hear a speaker giving a talk about a specific topic. For questions 9 to 18, complete the sentences with a word or short phrase from the recording. You will hear the recording twice. Before the recording starts, you will have some time to read the questions. Now look at questions 9 to 18.",
+      "storageNote": "Generate intro audio once with TTS; subsequent builds fetch from Supabase at b2/shared/listening-part-2-intro.mp3"
+    },
+    "audioAssembly": {
+      "singleFile": true,
+      "introFromSupabase": "b2/shared/listening-part-2-intro.mp3",
+      "introPauseSec": 10,
+      "betweenPassesPauseSec": 22,
+      "passes": 2,
+      "listeningTtsRate": "-18%",
+      "passDurationTargetSec": { "min": 130, "max": 175 },
+      "totalDurationTargetSec": { "min": 330, "max": 420 },
+      "combinedStoragePath": "b2/exam-1/part-11/full-v2.mp3"
+    },
     "questions": [
       {
         "number": 9,
-        "lead": "Before being accepted, every applicant must pass an annual",
-        "prompt": "Before being accepted, every applicant must pass an annual ___",
-        "type": "short"
+        "lead": "Before regular monitors receive any kit, they must pass a basic annual (9) ___ assessment.",
+        "languageFocus": ["take seriously", "hand out", "distractors: stamina, paperwork"]
       },
       {
         "number": 10,
-        "lead": "In the classroom, trainees learn basic",
-        "prompt": "In the classroom, trainees learn basic ___",
-        "type": "short"
+        "lead": "Only after that do volunteers brush up on (10) ___ skills during classroom sessions.",
+        "languageFocus": ["brush up on", "distractors: map reading, GPS"]
       },
       {
         "number": 11,
-        "lead": "Each volunteer carries a",
-        "prompt": "Each volunteer carries a ___",
-        "type": "short"
+        "lead": "Recruits are told to turn up wearing sturdy (11) ___ because trainers fall apart on shingle.",
+        "languageFocus": ["turn up", "fall apart", "distractors: trainers, binoculars"]
       },
       {
         "number": 12,
-        "lead": "The initial course includes an accredited",
-        "prompt": "The initial course includes an accredited ___",
-        "type": "short"
+        "lead": "Field notebooks provided by the project are fully (12) ___ .",
+        "languageFocus": ["issue", "distractors: windproof, GPS trackers"]
       },
       {
         "number": 13,
-        "lead": "Outdoor equipment must be fully",
-        "prompt": "Outdoor equipment must be fully ___",
-        "type": "short"
+        "lead": "Within the first month, each volunteer must pick up an accredited (13) ___ qualification.",
+        "languageFocus": ["pick up", "distractors: paramedic, ambulance"]
       },
       {
         "number": 14,
-        "lead": "Rescuers sometimes request a",
-        "prompt": "Rescuers sometimes request a ___",
-        "type": "short"
+        "lead": "Core running costs are covered through local (14) ___ from businesses in the area.",
+        "languageFocus": ["chip in", "distractors: grants, government"]
       },
       {
         "number": 15,
-        "lead": "Team leaders are unpaid and work on a",
-        "prompt": "Team leaders are unpaid and work on a ___",
-        "type": "short"
+        "lead": "Coordinators work on a (15) ___ basis with no paid overtime on the roster.",
+        "languageFocus": ["on the roster", "distractors: salary, overtime"]
       },
       {
         "number": 16,
-        "lead": "Ropes are used most often on",
-        "prompt": "Ropes are used most often on ___",
-        "type": "short"
+        "lead": "Fog on the coast often cuts (16) ___ and can wipe out an entire survey morning.",
+        "languageFocus": ["wipe out", "distractors: downloads, daylight"]
       },
       {
         "number": 17,
-        "lead": "Many call-outs happen in poor",
-        "prompt": "Many call-outs happen in poor ___",
-        "type": "short"
+        "lead": "Many volunteers report a real boost in (17) ___ after carrying out a solo watch.",
+        "languageFocus": ["carry out", "distractors: experience, competence"]
       },
       {
         "number": 18,
-        "lead": "Most recruits say the training gave them more",
-        "prompt": "Most recruits say the training gave them more ___",
-        "type": "short"
+        "lead": "Newcomers are advised to talk things through with a (18) ___ at the open evening.",
+        "languageFocus": ["talk through", "talk yourself out of", "distractors: casualties, volunteers"]
       }
     ],
     "modelAnswers": [
-      {
-        "number": 9,
-        "answer": "fitness"
-      },
-      {
-        "number": 10,
-        "answer": "navigation"
-      },
-      {
-        "number": 11,
-        "answer": "whistle"
-      },
-      {
-        "number": 12,
-        "answer": "first aid"
-      },
-      {
-        "number": 13,
-        "answer": "waterproof"
-      },
-      {
-        "number": 14,
-        "answer": "helicopter"
-      },
-      {
-        "number": 15,
-        "answer": "voluntary"
-      },
-      {
-        "number": 16,
-        "answer": "steep"
-      },
-      {
-        "number": 17,
-        "answer": "visibility"
-      },
-      {
-        "number": 18,
-        "answer": "confidence"
-      }
+      { "number": 9, "answer": "fitness" },
+      { "number": 10, "answer": "identification" },
+      { "number": 11, "answer": "boots" },
+      { "number": 12, "answer": "waterproof" },
+      { "number": 13, "answer": "first aid" },
+      { "number": 14, "answer": "sponsorship" },
+      { "number": 15, "answer": "voluntary" },
+      { "number": 16, "answer": "visibility" },
+      { "number": 17, "answer": "confidence" },
+      { "number": 18, "answer": "coordinator" }
     ],
+    "alternateAnswers": [
+      { "number": 11, "answer": "sturdy boots" },
+      { "number": 13, "answer": "first-aid" }
+    ],
+    "script": "A: Welcome to Coastal Voices. Dr Priya Shah runs a seabird monitoring programme on the Northumberland coast. How did you get involved, Priya?\nB: By accident, really — I'd been plugging away in academic research for years but wanted something more hands-on. A friend talked me into a beach clean-up and I ended up signing up volunteers every single weekend.\nA: What's required before monitors go to the offshore stacks?\nB: Every regular must pass a basic fitness test before we hand out kit. Then they brush up on identification skills indoors. Stamina on wet boulders still matters.\nA: What kit should people bring?\nB: We lend binoculars, but everyone needs sturdy boots — trainers fall apart on shingle. We issue waterproof notebooks too. Some expect GPS trackers; we rely on map reading when mist rolls in.\nA: Communication on cliffs?\nB: When wind whips up, shouting's pointless — teams carry a whistle and use hand signals. Radios fail when batteries die; flares are useless on busy beaches.\nA: Medical training?\nB: Within the first month each volunteer picks up an accredited first aid qualification — it's non-negotiable. Paramedic cover is hours away on the coast, so you can't wait for an ambulance at a remote cove.\nA: How's it funded?\nB: Core costs come through local sponsorship — businesses chip in, not government grants. Coordinators work on a voluntary basis with no paid overtime.\nA: The survey data?\nB: Counts feed a national breeding database. Fog cuts visibility and can wipe out a morning — rookies confuse app downloads with the paper logs we file.\nA: What do volunteers gain?\nB: Most report a boost in confidence after a solo watch. Rocky ground catches newcomers out — flatter beaches don't teach what you need.\nA: Any advice?\nB: Come to an open evening and talk it through with a coordinator. Don't talk yourself out of it — we need competent volunteers, not casualties on the rocks.",
     "audioClips": [
       {
         "orden": 1,
-        "titulo": "Elena — mountain rescue training (radio interview)",
-        "text": "A: Good morning. You're listening to Mountain Rescue Monthly, and today I'm joined by Elena, who helps train new volunteers. Elena, thanks for coming in. What happens before someone is actually allowed to join the team?\nB: Thanks for having me. Well, before being accepted, every applicant must pass an annual fitness test. It's demanding, but it keeps people safe on the hill, and we don't make exceptions.\nA: And once they're in, what do they study indoors before they go out in all weathers?\nB: In the classroom, trainees learn basic navigation — map reading, compass work, that sort of thing. We also talk through typical scenarios so nobody panics when a real call comes in.\nA: Out on a call-out, how do team members stay in contact when the weather turns nasty?\nB: Each volunteer carries a whistle, because shouting doesn't always work in wind or across a ridge. Radios help too, of course, but the whistle is simple and reliable.\nA: Is there any formal medical training, or is that left to the ambulance service?\nB: Yes, definitely. The initial course includes an accredited first aid qualification, and we refresh it regularly. You might be hours from a road, so those skills really matter.\nA: What about clothing and kit — do people bring their own?\nB: Outdoor equipment must be fully waterproof. People underestimate rain on exposed slopes — damp kit quickly becomes a safety problem, especially if you're waiting with a casualty.\nA: When injuries are serious, how are casualties moved off the mountain?\nB: If someone is badly hurt, rescuers sometimes request a helicopter. It's not every call, but on steep ground it can be the only realistic option when time is short.\nA: Are team leaders paid for this work, or is it entirely voluntary?\nB: No, team leaders are unpaid and work on a voluntary basis, like everyone else. They give up evenings and weekends because they care about the community.\nA: Where is rope work most common — is it every rescue?\nB: Ropes are used most often on steep terrain, where a slip would have serious consequences. We practise those techniques again and again until they feel automatic.\nA: What conditions make rescues hardest for newer volunteers?\nB: Many call-outs happen in poor visibility — fog, sleet, low cloud. You might know the area well, but you still have to move carefully and trust your training.\nA: Finally, what do recruits say they gain from all this preparation?\nB: Most recruits say the training gave them more confidence in the mountains. They still respect the risks, but they feel prepared to help when it counts.\nA: Elena, that's been really helpful — thank you for explaining how new members are prepared.",
-        "storagePath": "b2/exam-1/part-11/clip-01-v4.mp3"
+        "titulo": "Coastal Voices — interview with Dr Priya Shah",
+        "text": "See script field"
       }
     ]
   }

@@ -1,7 +1,7 @@
 {
-  "preguntaId": "a338b4c2-a83b-4fdc-9bd0-4beabd3dc0cf",
+  "preguntaId": "cb6798cf-9353-4394-9c44-60a0df19d77c",
   "mcqRowCount": 0,
-  "openAnswerCount": 10,
+  "openAnswerCount": 12,
   "questionNumbers": [
     9,
     10,
@@ -16,44 +16,35 @@
   ],
   "answerKey": {
     "9": "fitness",
-    "10": "navigation",
-    "11": "whistle",
-    "12": "first aid",
-    "13": "waterproof",
-    "14": "helicopter",
+    "10": "identification",
+    "11": "boots",
+    "12": "waterproof",
+    "13": "first aid",
+    "14": "sponsorship",
     "15": "voluntary",
-    "16": "steep",
-    "17": "visibility",
-    "18": "confidence"
+    "16": "visibility",
+    "17": "confidence",
+    "18": "coordinator"
   },
   "audioClipCount": 1,
   "audios": [
     {
       "orden": 1,
-      "titulo": "Elena — mountain rescue training (radio interview)",
-      "storagePath": "b2/exam-1/part-11/clip-01-v6.mp3",
-      "durationSec": 176.3
+      "titulo": "A radio interview about training and volunteering on a coastal seabird monitoring programme.",
+      "storagePath": "b2/exam-1/part-11/full-v2.mp3",
+      "durationSec": 332.4
     }
   ],
-  "descripcionPreview": "Part:11\r\n\r\nYou will hear a woman called Elena talking about the training that new mountain rescue volunteers receive. For questions 9–18, complete the sentences",
+  "descripcionPreview": "Part:11\r\n\r\nYou will hear an interview with Dr Priya Shah, who coordinates a citizen science programme monitoring seabird colonies on the Northumberland coast. F",
   "enunciadoHasQ9to18": true,
-  "enunciadoMountainTheme": true,
-  "untouched": {
-    "part1": false,
-    "part8": false,
-    "part10": false,
-    "part12": true,
-    "part13": false,
-    "part14": false
-  },
-  "legacyV2StillLinked": false,
+  "enunciadoCoastalTheme": true,
   "checks": [
     {
       "name": "MCQ rows = 0",
       "ok": true
     },
     {
-      "name": "Open answers = 10",
+      "name": "Open answers >= 10",
       "ok": true
     },
     {
@@ -65,23 +56,19 @@
       "ok": true
     },
     {
-      "name": "1 audio clip",
+      "name": "1 combined audio",
       "ok": true
     },
     {
-      "name": "clip-01-v6.mp3 linked",
+      "name": "full-vN.mp3 linked",
       "ok": true
     },
     {
-      "name": "No legacy clip-01-v2 linked",
+      "name": "Audio >= 5:30",
       "ok": true
     },
     {
-      "name": "Audio >= 2:30",
-      "ok": true
-    },
-    {
-      "name": "Audio <= 3:30",
+      "name": "Audio <= 7:00",
       "ok": true
     },
     {
@@ -91,11 +78,7 @@
     {
       "name": "Enunciado Q9–18 gaps",
       "ok": true
-    },
-    {
-      "name": "Parts 1,8,10,12,13,14 untouched",
-      "ok": false
     }
   ],
-  "allOk": false
+  "allOk": true
 }

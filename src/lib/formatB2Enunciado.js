@@ -210,7 +210,8 @@ export function buildB2EnunciadoFromGenerated(gen = {}, partNumber) {
   }
 
   if (pn >= 10 && pn <= 13 && g.questions.length) {
-    if (g.setting) pushLines(lines, g.setting);
+    if (g.directions) pushLines(lines, g.directions);
+    else if (g.setting) pushLines(lines, g.setting);
     if (pn === 11) {
       for (const q of g.questions) {
         const num = q.number ?? '';
@@ -228,6 +229,7 @@ export function buildB2EnunciadoFromGenerated(gen = {}, partNumber) {
     for (const q of g.questions) {
       lines.push('');
       lines.push(String(q.number ?? ''));
+      if (q.situation) lines.push(q.situation);
       if (q.prompt) lines.push(q.prompt);
       if (q.stem) lines.push(q.stem);
       for (const opt of asGeneratedArray(q.options)) {

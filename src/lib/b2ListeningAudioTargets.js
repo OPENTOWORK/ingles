@@ -7,36 +7,38 @@ export function getB2ListeningAudioTargets(partNumber) {
     case 10:
       return {
         label: 'Listening Part 1 (short extracts)',
-        minSec: 33,
-        maxSec: 38,
-        totalMinSec: 270,
-        totalMaxSec: 300,
-        wordMin: 80,
-        wordMax: 98,
-        expandMin: 85,
-        expandMax: 95,
+        minSec: 30,
+        maxSec: 45,
+        totalMinSec: 570,
+        totalMaxSec: 720,
+        wordMin: 95,
+        wordMax: 140,
+        expandMin: 100,
+        expandMax: 125,
       };
     case 11:
       return {
-        label: 'Listening Part 2 (sentence completion)',
-        minSec: 150,
-        maxSec: 210,
-        wordMin: 380,
-        wordMax: 520,
-        expandMin: 430,
-        expandMax: 500,
+        label: 'Listening Part 2 (sentence completion — interview)',
+        minSec: 130,
+        maxSec: 175,
+        totalMinSec: 330,
+        totalMaxSec: 420,
+        wordMin: 270,
+        wordMax: 340,
+        expandMin: 280,
+        expandMax: 320,
       };
     case 12:
       return {
         label: 'Listening Part 3 (multiple matching)',
         minSec: 30,
-        maxSec: 35,
-        totalMinSec: 180,
-        totalMaxSec: 240,
-        wordMin: 70,
-        wordMax: 95,
-        expandMin: 75,
-        expandMax: 90,
+        maxSec: 45,
+        totalMinSec: 480,
+        totalMaxSec: 600,
+        wordMin: 85,
+        wordMax: 125,
+        expandMin: 100,
+        expandMax: 125,
       };
     case 13:
       return {

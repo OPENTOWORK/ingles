@@ -134,6 +134,19 @@ async function deletePreguntaRowsByIds(db, ids) {
     if (delPuntErr) throw new Error(`levels_puntuaciones: ${delPuntErr.message}`);
   }
 
+  const { data: mcqRows } = await db.from('levels_respuestas').select('id').in('pregunta_id', ids);
+  const respuestaIds = (mcqRows || []).map((row) => row.id);
+  if (respuestaIds.length) {
+    const { error: justErr } = await db
+      .from('levels_justificaciones')
+      .delete()
+      .in('id_respuesta', respuestaIds);
+    if (justErr) throw new Error(`levels_justificaciones: ${justErr.message}`);
+  }
+
+  const { error: justPregErr } = await db.from('levels_justificaciones').delete().in('pregunta_id', ids);
+  if (justPregErr) throw new Error(`levels_justificaciones: ${justPregErr.message}`);
+
   const tables = [
     { table: 'levels_preguntas_audios', column: 'pregunta_id' },
     { table: 'levels_respuestas_abiertas', column: 'pregunta_id_abierta' },

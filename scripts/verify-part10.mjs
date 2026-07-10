@@ -23,9 +23,9 @@ const admin = createClient(
 );
 
 const EXAMEN_ID = '5bd3e0d7-29a7-4e07-ac15-a4d195528c65';
-const EXPECTED_KEY = { 1: 'B', 2: 'A', 3: 'C', 4: 'A', 5: 'B', 6: 'B', 7: 'A', 8: 'C' };
-const COMBINED_MIN_SEC = 240;
-const COMBINED_MAX_SEC = 420;
+const EXPECTED_KEY = { 1: 'C', 2: 'A', 3: 'A', 4: 'C', 5: 'B', 6: 'A', 7: 'B', 8: 'B' };
+const COMBINED_MIN_SEC = 570;
+const COMBINED_MAX_SEC = 720;
 const UNTOUCHED = {
   11: '8dc37fa2-9ea0-4688-8d5e-56bc2eb33b37',
   12: '14b93176-4055-4568-8646-4d52ade7986a',

@@ -8,8 +8,12 @@ import {
 
 const EDGE_VOICE = process.env.EDGE_TTS_VOICE || 'en-GB-SoniaNeural';
 
-async function synthesizeWithEdge(text, voice = EDGE_VOICE) {
-  const tts = new EdgeTTS(text, voice);
+async function synthesizeWithEdge(text, voice = EDGE_VOICE, prosody = {}) {
+  const tts = new EdgeTTS(text, voice, {
+    rate: prosody.rate ?? '+0%',
+    volume: prosody.volume ?? '+0%',
+    pitch: prosody.pitch ?? '+0Hz',
+  });
   const result = await tts.synthesize();
   const buf = Buffer.from(await result.audio.arrayBuffer());
   return { base64: buf.toString('base64'), mime: 'audio/mpeg' };
@@ -29,10 +33,11 @@ export async function synthesizeExamTtsMp3(text, options = {}) {
   const edgeVoice = options.edgeVoice?.trim() || null;
   const openaiVoice = options.openaiVoice || process.env.OPENAI_TTS_VOICE || 'nova';
   const preferEdge = options.preferEdge !== false && Boolean(edgeVoice);
+  const prosody = options.prosody || {};
 
   if (preferEdge && edgeVoice) {
     try {
-      return await synthesizeWithEdge(trimmed, edgeVoice);
+      return await synthesizeWithEdge(trimmed, edgeVoice, prosody);
     } catch (err) {
       console.warn('[levelsExamTts] Edge TTS failed, trying OpenAI:', err?.message || err);
     }
@@ -63,7 +68,7 @@ export async function synthesizeExamTtsMp3(text, options = {}) {
   }
 
   try {
-    return await synthesizeWithEdge(trimmed, edgeVoice || EDGE_VOICE);
+    return await synthesizeWithEdge(trimmed, edgeVoice || EDGE_VOICE, prosody);
   } catch (err) {
     console.warn('[levelsExamTts] Edge TTS failed:', err?.message || err);
     return null;
@@ -79,6 +84,8 @@ export async function synthesizeExamTtsMp3(text, options = {}) {
 export async function synthesizeListeningClipMp3(text, options = {}) {
   const profile = getExtractVoiceProfile(options.extractIndex ?? 0);
   const segments = parseDialogueSegments(text);
+  const listeningRate = options.prosody?.rate ?? process.env.LISTENING_TTS_RATE ?? '-12%';
+  const prosody = { rate: listeningRate, ...options.prosody };
 
   if (segments.length <= 1) {
     const mono = profile.mono;
@@ -86,6 +93,7 @@ export async function synthesizeListeningClipMp3(text, options = {}) {
       edgeVoice: mono.edge,
       openaiVoice: mono.openai,
       preferEdge: true,
+      prosody,
     });
   }
 
@@ -97,6 +105,7 @@ export async function synthesizeListeningClipMp3(text, options = {}) {
       edgeVoice: voice.edge,
       openaiVoice: voice.openai,
       preferEdge: true,
+      prosody,
     });
     if (result?.base64) {
       buffers.push(Buffer.from(result.base64, 'base64'));

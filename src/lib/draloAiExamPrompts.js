@@ -332,7 +332,7 @@ Each question MUST include:
 - situation: one-line context (e.g. "You hear two friends talking about a trip.")
 - prompt: the exam question (e.g. "Why is the woman calling?")
 - options: exactly three strings "A) ...", "B) ...", "C) ..."
-- script: the FULL extract for TTS ONLY (85–95 words; monologue OR dialogue with "A:" / "B:" labels for each speaker; self-contained; NO question text inside script; ~33–38 seconds when read aloud)
+- script: the FULL extract for TTS ONLY (105–120 words; monologue OR dialogue with "A:" / "B:" labels for each speaker; self-contained; NO question text inside script; ~30–45 seconds when read aloud at a natural, unhurried pace)
 
 Quality rules (strict):
 - Each extract is a DIFFERENT scenario — independent and self-contained (conversation, announcement, interview, voicemail, etc.)
@@ -340,10 +340,11 @@ Quality rules (strict):
 - Vary speakers, gender and accents across extracts (British, American, Australian, Irish, etc.) — each extract should feel like a new voice cast
 - In dialogues, use "A:" / "B:" labels so each speaker has a distinct voice in TTS
 - Match register to context; use authentic spoken English (contractions, hedging, natural emphasis) — not written prose
-- B2 vocabulary and structures only
+- B2 vocabulary and structures only — the exam must feel genuinely challenging at B2 level
+- Each extract MUST include at least THREE phrasal verbs or idiomatic chunks and at least TWO natural collocations (e.g. "at short notice", "draw a blank", "get to the bottom of")
 - Exactly one correct answer per question; three plausible A/B/C options
 - Questions must test inference/deduction — NOT keyword matching from the audio
-- Each distractor should echo something mentioned in the audio but NOT be the correct answer
+- Each distractor should echo something mentioned in the audio but NOT be the correct answer (mention weather when the answer is equipment; mention lane four when told to stay inside; mention a tariff when the purpose is membership status)
 - The question/prompt must NOT reveal the answer before listening
 - Avoid: obvious/irrelevant distractors, multiple equally valid options, artificial or overly formal language
 
@@ -360,29 +361,29 @@ ${directions}
 Generate exactly 5 speakers (Speaker 1–Speaker 5) on ONE shared theme, matched to options A–H.
 
 Structure:
-- setting: one line describing the shared topic (e.g. "Five people talk about learning a new skill.")
+- setting: one line describing the shared topic (e.g. "Five people talk about their first paid job.")
+- listeningIntro.text: "Listening Test. Part Three. You will hear five short extracts. In each extract, a different speaker is talking about the same general topic. For questions 19 to 23, choose from the list A to H what each speaker says. Use each letter only once. There are three extra options which you do not need to use. You will hear the recording twice. Before the recording starts, you will have some time to read the options. Now look at questions 19 to 23."
+- audioAssembly: { introFromSupabase: "b2/shared/listening-part-3-intro.mp3", introPauseSec: 5, betweenExtractPauseSec: 3, betweenPassesPauseSec: 15, passes: 2, totalDurationTargetSec: { min: 480, max: 600 } }
 - optionPool: exactly 8 options A–H (each a short paraphrased description of an opinion, feeling or experience — NOT copied verbatim from the audio)
 - matchingAnswers: 5 rows {number: 19–23, answer: "A"|…|"H"} — one unique letter per speaker; exactly 3 letters remain unused as distractors
 - questions: 5 items {number: 19–23, prompt: "Speaker N"} WITHOUT repeating full A–H option text
-- script: five short monologues labelled "Speaker 1:" … "Speaker 5:" (70–95 words each; ~30–35 seconds TTS per clip; ~3–4 minutes total)
-- audioClips: REQUIRED array of exactly 5 objects {orden:1–5, titulo:"Speaker N", text:"full monologue text for TTS (75–90 words each)"}
+- script: five monologues labelled "Speaker 1:" … "Speaker 5:" (100–125 words each; ~30–45 seconds TTS per extract)
+- audioClips: REQUIRED array of exactly 5 objects {orden:1–5, titulo:"Speaker N", text:"full monologue for TTS"}
 
 Audio / script quality (strict):
-- All 5 speakers share the same general theme but each has a distinct perspective or experience
-- Subtle overlaps between speakers so unused options sound plausible (functional distractors)
-- Authentic spoken English with differentiated idiolects; similar B2 register across speakers
-- No speaker states the correct option text literally — paraphrase is mandatory
-- Vary tone and attitude; avoid five near-identical monologues
+- ONE combined MP3: intro → 5 s pause → pass 1 (5 speakers) → 15 s pause → pass 2 (same speakers); total 8:00–10:00
+- All 5 speakers share the same general theme but each has a distinct perspective
+- Use predominantly UK voices/accents; each speaker must sound different (varied gender, region, tone)
+- Abundant phrasal verbs (get to grips with, brush aside, muck in, fall through, wipe out, etc.) and natural collocations
+- Subtle overlaps so unused options sound plausible — each unused A–H option must be hinted in at least one recording but not be any speaker's main message
+- Authentic spoken B2 English; no speaker states the correct option text literally — paraphrase is mandatory
 
 Questions / options quality (strict):
-- Questions numbered 19–23 only; exactly 8 options A–H
 - Exactly one correct option per speaker; no option should fit two speakers equally well
-- Options paraphrase what you hear — do NOT lift phrases verbatim from the audio
 - Distractors must be credible: mentioned or hinted in the audio but not the speaker's main point
-- Three unused options must still have some basis in the recordings (not invented out of context)
 
 modelAnswers: 5 rows with letter only (A–H), matching matchingAnswers.
-Return ONLY JSON with: partTitle, directions, setting, script, audioClips[], optionPool ["A) ...",...,"H) ..."], matchingAnswers[], questions[], modelAnswers[] (letters only)`;
+Return ONLY JSON with: partTitle, directions, setting, listeningIntro, audioAssembly, script, audioClips[], optionPool ["A) ...",...,"H) ..."], matchingAnswers[], questions[], modelAnswers[] (letters only)`;
     }
 
     if (activity === 'sentence-completion' && L === 'B2') {
@@ -391,23 +392,28 @@ ${variety}
 ${SHARED_JSON_RULES}
 ${directions}
 Generate exactly 10 questions numbered 9–18 (type "short"; each prompt is an incomplete sentence with a gap marked ___).
-script: ONE continuous monologue — a talk or personal account by ONE main speaker (380–520 words; ~2:30–3:30 minutes when read aloud). No interviewer unless the whole recording is still one uninterrupted monologue. ONE audio for the whole part.
+script: ONE continuous recording — a radio-style INTERVIEW between two speakers labelled "A:" (host) and "B:" (guest) (~270–320 words; ~2:10–2:55 per pass when read aloud at a natural pace). ONE combined audio file is assembled as: shared intro → 5 s pause → pass 1 → 10 s pause → pass 2 (total target 5:30–7:00).
+
+Include in JSON:
+- listeningIntro.text: "Listening Test. Part Two. You will hear a speaker giving a talk about a specific topic. For questions 9 to 18, complete the sentences with a word or short phrase from the recording. You will hear the recording twice. Before the recording starts, you will have some time to read the questions. Now look at questions 9 to 18."
+- audioAssembly: { introFromSupabase: "b2/shared/listening-part-2-intro.mp3", introPauseSec: 5, betweenPassesPauseSec: 10, passes: 2, totalDurationTargetSec: { min: 330, max: 420 } }
+- alternateAnswers: optional extra accepted variants (e.g. "sturdy boots" when primary answer is "boots")
 
 Quality rules (strict):
-- Monologue must be fluent and coherent — not a list of disconnected facts or obvious Q→A pairs
+- Format MUST be A:/B: dialogue — host interviews guest; use predominantly UK accents (varied regions: Yorkshire, Welsh, Scottish, Irish, Midlands, etc.)
+- Monologue-only scripts are NOT acceptable for B2 Exam 1 Part 2
 - Information appears in LINEAR order matching questions 9→18
-- Use authentic spoken English: natural connectors, reformulation, hedging, mild repetition — like real FCE recordings (e.g. a teacher describing their career)
-- B2 vocabulary and structures throughout — avoid A2/B1 textbook phrasing
-- Each gap has exactly ONE possible answer (1–3 words copied literally from the audio)
-- modelAnswers must be exact words/phrases as spoken (no paraphrase, no inference)
-- Question sentences must PARAPHRASE the audio heavily — use third-person summary framing ("The speaker admits…", "She explains…", "Another thing she mentions is…")
-- CRITICAL: gap sentences must NOT reuse 4+ consecutive words from the script; restructure grammar and vocabulary like real Cambridge papers
+- Use authentic spoken English: natural connectors, reformulation, hedging — like real FCE recordings
+- B2 vocabulary throughout — abundant phrasal verbs (brush up on, fall into, talk into, chip in, wipe out, carry out, talk through, etc.) and collocations (accredited qualification, voluntary basis, sturdy boots, cuts visibility)
+- For EACH gap, mention at least one plausible distractor in the audio (GPS near navigation context, ambulance near first aid, grants near sponsorship, trainers near boots) — words heard but wrong for the gap sentence
+- Each gap has exactly ONE primary answer (1–3 words copied literally from the audio)
+- alternateAnswers may list fuller phrases when a single-word answer is also accepted
+- Question sentences must PARAPHRASE the audio heavily — third-person summary framing; do NOT reuse 4+ consecutive words from the script
 - Completed sentences must be grammatically correct once the gap is filled
-- Avoid unnecessary spelling traps, ambiguous gaps, or answers requiring more than 3 words
-- Do NOT require the candidate to infer — the missing words must be heard clearly once
+- Do NOT require inference — missing words must be heard clearly
 
 modelAnswers: 10 rows {number: 9–18, answer: "1–3 words exactly as in audio"}.
-Return ONLY JSON with: partTitle, title, directions, setting, script, questions[{number,prompt,type:"short"}], modelAnswers[]`;
+Return ONLY JSON with: partTitle, title, directions, setting, listeningIntro, audioAssembly, script, questions[{number,lead}], modelAnswers[], alternateAnswers[]`;
     }
 
     if (activity === 'conversation' && L === 'B2') {
@@ -419,6 +425,8 @@ Generate exactly 7 questions numbered 24–30.
 
 Structure:
 - setting: one line describing the interview/discussion context
+- listeningIntro.text: Cambridge-style spoken intro naming the interviewee and topic, e.g. "Listening Test. Part Four. You will hear an interview with [name/role], who [brief topic]. For questions 24 to 30, choose the best answer: A, B or C. You will hear the interview twice. Before the recording starts, you will have some time to read the questions. Now look at questions 24 to 30." — MUST match directions/setting (same person and project; do not use a generic unrelated topic)
+- audioAssembly: { introFromSupabase: "b2/shared/listening-part-4-intro.mp3", introPauseSec: 5, betweenPassesPauseSec: 25, passes: 2, totalDurationTargetSec: { min: 420, max: 480 } }
 - script: ONE continuous recording (~3–4 minutes; 450–620 words) — an interview or discussion between TWO or THREE clearly differentiated speakers. Use "A:", "B:" and optionally "C:" labels throughout. ONE audio for the whole part.
 - questions: 7 items {number: 24–30, prompt: "…", options: ["A) …", "B) …", "C) …"]}
 - modelAnswers: 7 rows with letter only (A, B, or C)
@@ -442,7 +450,7 @@ Questions quality (strict):
 - Exploit disagreements and nuances between speakers where relevant
 
 Do NOT use an A–H matching pool. Do NOT split into separate monologue clips.
-Return ONLY JSON with: partTitle, title, directions, setting, script, questions[{number,prompt,options[]}], modelAnswers[] (letters only)`;
+Return ONLY JSON with: partTitle, title, directions, setting, listeningIntro, audioAssembly, script, questions[{number,prompt,options[]}], modelAnswers[] (letters only)`;
     }
 
     const questionsSchema = `"questions":[${Array.from({ length: n }, (_, i) => {

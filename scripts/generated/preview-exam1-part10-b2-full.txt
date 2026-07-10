@@ -1,309 +1,359 @@
-B2 EXAMEN 1 — LISTENING PART 10 (Cambridge Listening Part 1)
-Preview only — NOT saved to production — NO audio generated
+B2 EXAMEN 1 — LISTENING PART 1 (Dralo Part 10 / Cambridge Listening Part 1)
+Preview — content ready for TTS + Supabase save
 
-Replaces legacy Part 10 (city/technology theme, clips too short).
-Target preguntaId (when approved): f3a32fe1-d017-4fa7-afab-2d25798ff485
-
-================================================================================
-TITLE
-================================================================================
-
-Listening Part 1 — Short Extracts
+Target preguntaId: f3a32fe1-d017-4fa7-afab-2d25798ff485
+JSON source: scripts/generated/preview-exam1-part10-b2.json
 
 ================================================================================
-INSTRUCTIONS
+LISTENING INTRO (stored in Supabase after first TTS — b2/shared/listening-part-1-intro.mp3)
+================================================================================
+
+Listening Test. Part One. You are going to hear eight short recordings. For each
+recording, there is one question with three options: A, B and C. Choose the option
+which best answers the question. You will hear each recording twice. Before each
+recording, you will have some time to read the question and the options. Now look
+at question one.
+
+================================================================================
+AUDIO ASSEMBLY (single MP3 — b2/exam-1/part-10/full-v4.mp3)
+================================================================================
+
+  [Intro from Supabase]                    ~35 s
+  Pause                                    5 s
+  ── FIRST PASS ──
+  Extract 1                                ~36 s
+  Pause                                    3 s
+  Extract 2                                ~38 s
+  Pause                                    3 s
+  Extract 3                                ~35 s
+  Pause                                    3 s
+  Extract 4                                ~39 s
+  Pause                                    3 s
+  Extract 5                                ~37 s
+  Pause                                    3 s
+  Extract 6                                ~38 s
+  Pause                                    3 s
+  Extract 7                                ~39 s
+  Pause                                    3 s
+  Extract 8                                ~41 s
+  Pause between passes                    10 s
+  ── SECOND PASS (extracts 1–8, same pauses) ──
+  ─────────────────────────────────────────────
+  ESTIMATED TOTAL                          ~10:05 (within 9:30–11:00 target)
+
+  Build: node --loader ./scripts/alias-loader.mjs scripts/build-b2-listening-part10-full-audio.mjs
+
+================================================================================
+INSTRUCTIONS (on-screen)
 ================================================================================
 
 You will hear people talking in eight different situations. For questions 1–8,
 choose the best answer (A, B or C).
 
 ================================================================================
-ANSWER KEY FINAL (1–8)
+ANSWER KEY (1–8)
 ================================================================================
 
   1 → C     5 → B
-  2 → B     6 → A
+  2 → A     6 → A
   3 → A     7 → B
-  4 → C     8 → C
+  4 → C     8 → B
 
-Distribution: A × 2 | B × 3 | C × 3
-
-================================================================================
-ESTIMATED DURATION PER CLIP
-================================================================================
-
-  Clip 1  ~29 s   (78 words)
-  Clip 2  ~31 s   (82 words)
-  Clip 3  ~28 s   (76 words)
-  Clip 4  ~27 s   (74 words)
-  Clip 5  ~26 s   (71 words)
-  Clip 6  ~27 s   (73 words)
-  Clip 7  ~29 s   (79 words)
-  Clip 8  ~28 s   (77 words)
-
-  Total listening time (approx.): ~3 min 45 s
-  Pace assumed: ~160 wpm (clear B2 exam delivery)
-
-  Storage plan (when approved):
-    b2/exam-1/part-10/clip-01.mp3 … clip-08.mp3
+Distribution: A × 3 | B × 3 | C × 2
 
 ================================================================================
-TOPIC VARIETY CHECKLIST
+TOPIC VARIETY + OVERLAP CHECK
 ================================================================================
 
-  [✓] Art gallery / culture              (Q1)
-  [✓] Airport / travel                   (Q2)
-  [✓] University administration          (Q3)
-  [✓] Theatre / entertainment            (Q4)
-  [✓] Personal services (dry cleaning)   (Q5)
-  [✓] Cookery / practical education      (Q6)
-  [✓] Botanical garden / nature visit    (Q7)
-  [✓] Rented accommodation / agency      (Q8)
+  [✓] Outdoor leisure / walking trip         (Q1)  F/F dialogue
+  [✓] Travel / ferry terminal                (Q2)  Monologue announcement
+  [✓] Healthcare / dental surgery            (Q3)  M/F phone call
+  [✓] Rented accommodation / appliances      (Q4)  M/M dialogue
+  [✓] Fitness / gym membership               (Q5)  Voicemail monologue
+  [✓] Retail / bookshop                      (Q6)  M/F dialogue
+  [✓] Charity / fundraising                  (Q7)  F/F dialogue
+  [✓] Letting agency / neighbour dispute     (Q8)  F/M phone call
 
-  Avoidance checks:
-  [✓] No city/technology as main theme
+  Avoidance:
+  [✓] No city/technology theme (replaces legacy Part 10)
+  [✓] No overlap with Part 11 (mountain rescue)
   [✓] No overlap with Part 12 (first jobs)
-  [✓] No overlap with Part 13 (community building restoration)
-  [✓] No sport & wellbeing theme (Reading Part 3)
-  [✓] Eight independent situations — no single narrative thread
+  [✓] No overlap with Part 13 (town hall restoration)
+
+  Voice mix: 4 dialogues (F/F ×2, M/M ×1, M/F ×2, F/M ×1) + 2 monologues
+  Accents: Yorkshire, Southern England, Welsh, Northern, Liverpool, London, Irish,
+           Scottish, Midlands — predominantly UK/Ireland
 
 ================================================================================
 QUESTION 1
 ================================================================================
 
 Situation:
-  A visitor is asking about a painting in a local art gallery.
+  You hear two friends discussing a weekend walking trip.
 
-Audio script (~78 words | est. ~29 s):
-  I'm afraid the Constable landscape isn't in the main gallery today. We've lent
-  the original to a partner museum for their spring exhibition, which is why
-  you'll see a high-quality reproduction on the wall. It should return in June
-  when the show closes. If nineteenth-century landscapes interest you, the Turner
-  watercolours in room four are part of our permanent collection — they don't
-  travel, and staff say they're among the most popular works we own.
+Audio script (~88 words | est. ~36 s):
+  A: I'm gasping for a weekend away — work's been piling up and I can't switch off.
+  B: Same, though if the mist rolls in on Sunday, we may have to call the ridge walk off.
+  A: The forecast looks settled enough. What bothers me is we still haven't sorted out
+     who's bringing the stove.
+  B: Liam was going to look into hiring one from the outdoor shop on Mill Lane.
+  A: He's had to pull out at short notice — his dad's been taken into hospital — so
+     unless one of us steps in, we'll be stuck with cold food on the summit.
 
 Question:
-  What does the speaker recommend the visitor do next?
+  What has caused a difficulty for the women's plans?
 
-  A) Book a guided tour before leaving the building
-  B) Come back when the borrowed painting has returned
-  C) Look at other works displayed in a nearby room
+  A) Unexpectedly bad weather in the forecast
+  B) A problem with transport to the starting point
+  C) The person who was going to provide equipment can no longer do so
 
 Correct answer: C
 
 Why the answer works:
-  The speaker points the visitor toward the Turner watercolours in room four as
-  something worth seeing now. A is never offered; B is a long-term possibility,
-  not the immediate recommendation. Correct option paraphrases “room four” rather
-  than repeating “Turner watercolours”.
+  Liam was arranging the stove but has pulled out. A mentions possible mist but says
+  the forecast looks settled; B is never mentioned. "Equipment" paraphrases "stove".
+
+Language focus: call off, sort out, look into, pull out, at short notice, steps in
 
 ================================================================================
 QUESTION 2
 ================================================================================
 
 Situation:
-  An announcement is being made at an airport departure gate.
+  You hear an announcement at a ferry terminal.
 
-Audio script (~82 words | est. ~31 s):
-  Attention passengers travelling to Lisbon on flight TP fourteen twenty-three.
-  Due to a last-minute aircraft change, boarding will now take place at gate
-  twenty-two, not gate nine as shown on your boarding pass. Please make your way
-  to the new gate without delay. Boarding will begin in approximately ten minutes.
-  All checked baggage has already been loaded onto the replacement aircraft.
-  Passengers requiring special assistance should speak to a member of staff at
-  gate twenty-two. We apologise for the late notice and any inconvenience this
-  may cause.
+Audio script (~78 words | est. ~38 s):
+  Attention passengers travelling on the midday Dover crossing. Please note that
+  check-in will not open until twelve o'clock due to temporary staffing shortages.
+  Remain inside the terminal building and do not proceed to lane four, where queuing
+  is not permitted at this time. Updated departure information will be announced
+  once boarding begins. Vehicle passengers must ensure passports are ready for
+  inspection at the desk. We apologise for the inconvenience and thank you for
+  your patience.
 
 Question:
   What are passengers told to do?
 
-  A) Collect their luggage before going to the gate
-  B) Go to a different gate from the one on their boarding pass
-  C) Wait where they are until the delay is officially over
+  A) Stay in the terminal until check-in opens
+  B) Join the queue at lane four as quickly as possible
+  C) Collect their vehicles from the car park before midday
 
-Correct answer: B
+Correct answer: A
 
 Why the answer works:
-  Boarding moves from gate nine to gate twenty-two. A misreads baggage handling
-  (bags are already loaded); C contradicts “make your way … without delay”.
+  They must remain inside until check-in opens. B contradicts "do not proceed to
+  lane four"; C invents car-park collection.
+
+Language focus: proceed to, queuing, due to, ensure
 
 ================================================================================
 QUESTION 3
 ================================================================================
 
 Situation:
-  A student is telephoning a university registry office about an official transcript.
+  You hear a woman telephoning a dental surgery.
 
-Audio script (~76 words | est. ~28 s):
-  Thanks for calling Registry. An official transcript isn't something we can print
-  while you wait — we need a signed application form and a copy of your student ID.
-  Processing normally takes five working days. There is an express service if you're
-  willing to pay an additional fee, but the standard request still has to go
-  through the same approval process. You can download the form from the student
-  portal or collect one from the desk in the lobby.
+Audio script (~88 words | est. ~35 s):
+  A: Good morning, Riverside Dental — how can I help?
+  B: Hi, it's Rachel Masters. I need to make an appointment — I've been putting off
+     a check-up for ages, and I've got a sharp pain when I bite down.
+  A: The earliest routine slot is three weeks away. I can put you down for emergency
+     triage tomorrow at half past four, but bring your NHS number.
+  B: Tomorrow works — I'd rather get it sorted properly than have something temporary
+     done.
+  A: The dentist will decide when she sees you. Could you arrive ten minutes early
+     to fill in a form?
 
 Question:
-  What must the student do to obtain a transcript?
+  Why is the woman calling?
 
-  A) Submit a completed application together with identification
-  B) Ask their personal tutor to send it directly to an employer
-  C) Wait until after graduation before the request can be processed
+  A) To arrange to be seen about a dental problem she has been ignoring
+  B) To cancel an appointment she can no longer attend
+  C) To complain about a temporary repair that has come loose
 
 Correct answer: A
 
 Why the answer works:
-  Form plus ID are explicitly required. B and C reflect common assumptions but are
-  not stated. “Identification” paraphrases “student ID”.
+  She has put off a check-up and now has pain. B and C are not the purpose of the call;
+  "temporary" refers to treatment she wants to avoid, not a failed repair.
+
+Language focus: putting off, put you down for, get it sorted, bite down
 
 ================================================================================
 QUESTION 4
 ================================================================================
 
 Situation:
-  A customer is speaking to a theatre box-office assistant on the phone.
+  You hear two flatmates talking about their washing machine.
 
-Audio script (~74 words | est. ~27 s):
-  Front row for Saturday is completely sold out, I'm afraid — those seats went
-  within an hour of release. What I can offer you is two places in the rear stalls
-  on the same night. They're further back, but the sightlines are still clear,
-  and the price is fifteen pounds less per ticket. Alternatively I could add you
-  to the cancellation list, though I can't promise anything will come up before
-  the performance.
+Audio script (~103 words | est. ~39 s):
+  A: Have you seen the washing machine? It cut out mid-cycle again last night.
+  B: I noticed — it left my gym kit sitting in soapy water for hours.
+  A: I had a look at the filter, but I can't get the panel off without the right tool.
+     I rang the agency, and they said minor breakdowns are down to us to sort out.
+  B: Great. I suppose we could try that repair shop on Garston Road — they fixed my
+     mate's dryer last year, and he said they didn't rip him off.
+  A: Worth a shot. Just don't go ahead and order a new one online — we can't afford
+     to shell out for that right now.
 
 Question:
-  What does the assistant offer the customer?
+  What do the men decide to do about the washing machine?
 
-  A) Tickets for a different performance later in the week
-  B) A full refund because the best seats are unavailable
-  C) Seats further from the stage at a lower price
+  A) Report the fault and wait for the agency to send someone official
+  B) Look online for a replacement appliance they can install themselves
+  C) Try getting it repaired locally rather than buying a new one
 
 Correct answer: C
 
 Why the answer works:
-  Rear stalls on the same night at a reduced price. A changes the date; B invents
-  a refund. “Further from the stage” paraphrases “rear stalls”.
+  They choose the Garston Road repair shop. A reflects what the agency said, not their
+  decision; A explicitly rules out ordering online (B).
+
+Language focus: cut out, down to us, sort out, rip off, shell out, go ahead
 
 ================================================================================
 QUESTION 5
 ================================================================================
 
 Situation:
-  A customer is at a dry cleaner's counter about a stained jacket.
+  You hear a recorded message from a gym.
 
-Audio script (~71 words | est. ~26 s):
-  I've run the jacket through the process twice, but that oil mark on the lining
-  still hasn't lifted completely. Leather and mixed fabrics often need a different
-  solvent, so I'd take it to the specialist on Burton Road — they handle handbags
-  and coats like this every day. I won't charge you for the second attempt here;
-  it simply isn't the right method for this material. Sorry we couldn't finish it
-  for you today.
+Audio script (~95 words | est. ~37 s):
+  Hi, it's Grace from FitWorks. Your membership comes up for renewal next Friday.
+  We've brought in a new off-peak tariff that works out cheaper if you mainly train
+  before six in the evening. I know you mentioned you'd let your contract run out
+  because you were relocating, but your file still shows your old address. If you're
+  staying in the area, pop in and we can talk you through the options — otherwise,
+  give us a ring so we don't keep charging you by mistake. Either way, could you get
+  back to us before the end of the week?
 
 Question:
-  What does the assistant suggest the customer should do?
+  What is the purpose of the message?
 
-  A) Contact the shop that sold the jacket for compensation
-  B) Take the item to a cleaner used to working with that material
-  C) Leave the jacket for one more attempt using the same process
+  A) To confirm that the woman's membership has already been cancelled
+  B) To find out whether the woman still intends to remain a member
+  C) To tell her about a lower-cost membership she may want to consider
 
 Correct answer: B
 
 Why the answer works:
-  Specialist on Burton Road is recommended for leather/mixed fabrics. C is ruled
-  out by “isn't the right method”; A is irrelevant.
+  Grace needs to know if the member is relocating or staying (renewal/charging). A is
+  false; C mentions the tariff but the main purpose is clarifying membership status.
+  Distractor C echoes "off-peak tariff" without being the primary aim.
+
+Language focus: comes up for renewal, works out cheaper, run out, talk you through
 
 ================================================================================
 QUESTION 6
 ================================================================================
 
 Situation:
-  A chef is introducing a live cookery demonstration to an audience.
+  You hear a conversation in a bookshop.
 
-Audio script (~73 words | est. ~27 s):
-  Welcome everyone to today's demonstration. We're not looking at restaurant plating
-  or advanced knife work — the idea is to adapt well-known recipes so they work
-  for one or two people rather than a family of six. I'll show you how to halve
-  ingredients sensibly and swap items you already have in the cupboard. Do bring
-  a notebook if you want to record the substitutions; we won't be handing out
-  printed recipes until the end.
+Audio script (~102 words | est. ~38 s):
+  A: Can I help at all?
+  B: I'm trying to track down a novel for my mum — she read a review in the paper,
+     but I've drawn a blank online.
+  A: Do you recall whether it was historical fiction? We've got a table of new releases
+     by the window.
+  B: It's set in Belfast during the seventies, I think — the title had the word
+     "bridge" in it, but I might be mixing it up with something else.
+  A: That rings a bell — we sold out last week, but I could order a copy in. It
+     usually takes four or five days to come in.
+  B: Perfect — she'll be chuffed if it arrives before her birthday.
 
 Question:
-  What is the main focus of the session?
+  What does the man offer to do?
 
-  A) Changing recipes so they suit smaller households
-  B) Teaching professional techniques used in restaurant kitchens
-  C) Preparing large batches of food suitable for freezing
+  A) Order a book that is not currently available in the shop
+  B) Check whether another branch has the book in stock today
+  C) Recommend a similar novel from the display by the window
 
 Correct answer: A
 
 Why the answer works:
-  Speaker contrasts restaurant skills with adapting recipes for one or two people.
-  B is explicitly excluded; C introduces freezing, which is not mentioned.
+  The book sold out; he offers to order a copy. B (another branch) is never offered;
+  C (window display) is a misread of the historical-fiction table mention.
+
+Language focus: track down, drawn a blank, rings a bell, sold out, order in
 
 ================================================================================
 QUESTION 7
 ================================================================================
 
 Situation:
-  A staff member is making an announcement to visitors at a botanical garden.
+  You hear two colleagues talking about a charity run.
 
-Audio script (~79 words | est. ~29 s):
-  Good morning. Just to let you know, the tropical glasshouse will stay closed until
-  around noon while engineers repair the heating system. Everything outdoors is open
-  as usual, including the sculpture trail by the lake — it's about forty minutes if
-  you walk the full loop. The café is serving hot drinks, and at eleven there's a
-  short talk in the education centre about winter planting. The orchid display in
-  the main hall is also temporarily covered, but the outdoor beds are worth visiting
-  in this weather.
+Audio script (~98 words | est. ~39 s):
+  A: Are you still up for the charity run next month? I only signed up because you
+     talked me into it.
+  B: Definitely — I've been building up my distance gradually. The tricky bit is
+     hitting the fundraising target they're expecting.
+  A: I put off setting up my sponsorship page, if I'm honest. People kept asking for
+     the link and I had nothing to share.
+  B: Same here. If we set up a joint page, we can get the message out on social media
+     in one go — that way nobody feels they're pestering the same friends twice.
+  A: Good shout. I'll get on to that tonight before I talk myself out of it.
 
 Question:
-  What can visitors do while the glasshouse is closed?
+  What do the women agree to do?
 
-  A) Enter the tropical house through a side entrance
-  B) Follow the outdoor route past the sculptures
-  C) Visit the orchid display in the main hall
+  A) Train together every weekend until the day of the event
+  B) Share one online page to collect donations from supporters
+  C) Ask their employer to match whatever they manage to raise
 
 Correct answer: B
 
 Why the answer works:
-  The sculpture trail outdoors remains open. The tropical glasshouse is closed,
-  and the orchid display is temporarily covered.
+  They agree on a joint sponsorship page. A (training together) is not agreed; C
+  (employer matching) is never mentioned.
+
+Language focus: talked me into, building up, put off, in one go, get on to
 
 ================================================================================
 QUESTION 8
 ================================================================================
 
 Situation:
-  A tenant receives a phone call from a letting agency about their flat.
+  You hear a tenant speaking to a letting agent on the phone.
 
-Audio script (~77 words | est. ~28 s):
-  Hi, it's Marco from the agency. The plumber can come tomorrow to fix the dripping
-  tap in the kitchen — the slot is between nine and eleven, and someone over
-  eighteen needs to be in the flat to let him in. If that doesn't suit, we'll try
-  for Thursday instead. Also, the building-wide fire alarm test is scheduled for
-  Friday afternoon. It'll only last a few minutes, but I wanted to warn you so
-  you don't think there's a real emergency.
+Audio script (~108 words | est. ~41 s):
+  A: Hi, it's Priya from the agency. I'm following up on your email about the noise
+     from next door.
+  B: Thanks for ringing back. It's mostly bass through the wall late at night — it's
+     hard to get to sleep.
+  A: I've spoken to your neighbour. He's willing to turn the volume down after eleven,
+     but he won't rip the speakers out altogether.
+  B: That's a start, I suppose, though it doesn't really get to the bottom of it.
+  A: Legally we can't evict someone over a stereo unless it's formally logged over
+     several weeks. I'd suggest keeping a written record, and we'll review it at the
+     month-end inspection.
+  B: OK — I'll note down the dates and times.
 
 Question:
-  What does the tenant need to arrange?
+  What does the agent advise the tenant to do?
 
-  A) Payment of the rent before the end of the week
-  B) Permission to redecorate the kitchen themselves
-  C) Being at home when the repair visit takes place
+  A) Withhold part of the rent until the neighbour removes the equipment
+  B) Keep a written record of when the disturbance happens
+  C) Arrange a meeting with the neighbour without involving the agency
 
-Correct answer: C
+Correct answer: B
 
 Why the answer works:
-  Someone over eighteen must be present for the plumber. A and B introduce topics
-  not mentioned in the call.
+  Priya explicitly suggests keeping a written record. A (withhold rent) and C (private
+  meeting) are not advised.
+
+Language focus: following up, ringing back, get to the bottom of, formally logged
 
 ================================================================================
-PIPELINE NOTES (for future save — NOT executed)
+PIPELINE NOTES
 ================================================================================
 
   MCQ rows expected: 24 (8 questions × 3 options)
   Question numbers: 1–8
   Activity: short-extracts
-  Audio clips: 8 (one per question)
-  Do NOT touch: Parts 1–7, 8–9, 11–13, 14–17
+  Audio: 1 combined MP3 (intro + 2 passes × 8 extracts with pauses)
+  Do NOT touch: Parts 1–9, 11–13, 14–17
 
-  JSON source: scripts/generated/preview-exam1-part10-b2.json
+  Save content: node scripts/push-part10-to-production.mjs
+  Build audio:  node --loader ./scripts/alias-loader.mjs scripts/build-b2-listening-part10-full-audio.mjs

@@ -1,101 +1,119 @@
 {
-  "partNumber": 13,
-  "partTitle": "Listening Part 13 — interview (Q24–30)",
-  "partLabel": "Listening Part 4 — Bringing the Hall Back to Life (community building restoration)",
-  "themeChoice": "Option 4 — restoring an old community building",
-  "note": "Textual preview only — no audio, no Supabase save. Questions/options revised for balanced answer key.",
+  "meta": {
+    "level": "B2",
+    "examSlot": 1,
+    "partNumber": 13,
+    "cambridgePart": 4,
+    "activity": "conversation",
+    "status": "preview"
+  },
   "generated": {
-    "partTitle": "Part 4: Multiple choice (interview)",
-    "title": "Bringing the Hall Back to Life",
-    "directions": "You will hear an interview with a woman called Nina who helped to restore an old market hall in her town. For questions 24–30, choose the best answer (A, B or C).",
-    "setting": "Interview about volunteers restoring a disused Victorian market hall as a community centre.",
-    "script": "A: Today I'm speaking to Nina Ortiz, who has spent the last three years working on a project to reopen the town's old market hall. Nina, what condition was the building in when you first saw it?\nB: Honestly, most people walked past without looking up. The roof leaked, the floorboards were unsafe in places, and pigeons had got in through broken windows. The council had boarded up the main doors years earlier because they said repairs would cost too much.\nA: How did the restoration project actually begin?\nB: It didn't start with a big grant or a famous architect. A handful of residents formed a small trust after a public meeting about empty buildings in the high street. We asked the council for a temporary lease, not ownership, and they agreed because nothing else was happening with the site.\nA: Where did the money come from in the early stages?\nB: People assume we waited for government funding, but the first tools, paint and safety equipment were bought with donations from local businesses and a crowdfunding page. A national heritage body gave us a substantial sum later, once we could show detailed plans and support from architects.\nA: What was the biggest practical difficulty during the work?\nB: Finding skilled volunteers wasn't the problem — we had electricians and carpenters who lived nearby. The headache was the hidden damage behind the walls. Every time we opened a section to check it, we discovered timber that needed replacing, which delayed the timetable and meant reordering materials.\nA: The hall hosts events now. Who uses the space?\nB: We imagined it would mainly be evening classes for adults, but families with young children use it most during the weekend. There's a small café run by a social enterprise, and a charity rents an office at the back, but the busy hours are definitely Saturday and Sunday mornings.\nA: Has the project changed how people see the town centre?\nB: Shopkeepers told us footfall dropped when the hall closed. Now some say customers come specifically because there's a reason to stay longer — not just to collect a parcel and leave. I wouldn't claim we've saved every business, but the street feels less forgotten.\nA: What advice would Nina give to another town thinking of a similar project?\nB: Don't wait until you have a perfect plan on paper. Start with one achievable room, prove the building can be warm and dry, and let the community see progress. If you spend two years only producing reports, volunteers lose heart and the council moves on to other priorities.\nA: Nina, thank you for talking to us.\nB: My pleasure.",
+    "partTitle": "Listening Part 4",
+    "title": "Listening Part 4 — Multiple choice (interview)",
+    "directions": "You will hear an interview with a landscape architect called Tom Fletcher, who has been involved in a project to turn an old canal basin into a wetland park. For questions 24–30, choose the best answer (A, B or C).",
+    "setting": "You will hear an interview with landscape architect Tom Fletcher about converting a disused industrial canal basin into a community wetland park.",
+    "listeningIntro": {
+      "text": "Listening Test. Part Four. You will hear an interview with a landscape architect called Tom Fletcher, who has been involved in a project to turn an old canal basin into a wetland park. For questions 24 to 30, choose the best answer: A, B or C. You will hear the interview twice. Before the recording starts, you will have some time to read the questions. Now look at questions 24 to 30.",
+      "storageNote": "Generate once; reuse from Supabase b2/shared/listening-part-4-intro.mp3"
+    },
+    "audioAssembly": {
+      "singleFile": true,
+      "introFromSupabase": "b2/shared/listening-part-4-intro.mp3",
+      "introPauseSec": 5,
+      "betweenPassesPauseSec": 25,
+      "passes": 2,
+      "totalDurationTargetSec": { "min": 420, "max": 480 },
+      "listeningTtsRate": "-18%",
+      "combinedStoragePath": "b2/exam-1/part-13/full-v2.mp3"
+    },
+    "script": "A: On our arts and environment programme today, I'm joined by Tom Fletcher, a landscape architect who's been steering a project to turn an old canal basin into a wetland park. Tom, how did you end up heading this scheme?\nB: Well, the council actually came to our practice — they'd seen what we'd done with a former railway siding in Leeds, turning it into a pocket park. This basin had been fenced off for years, basically a dumping ground, and they wanted something that would pull people back to the waterfront without pretending the industrial past hadn't happened.\nA: What kind of reaction did you get when you first presented the plans?\nB: Honestly? People were less bothered about losing a few parking spots than we expected. What kept coming up in the consultation was smell and mosquitoes — as if we'd be creating a swamp in the middle of the city. We had to keep explaining that a properly designed wetland actually filters water rather than letting it sit and go stagnant.\nA: And the planting — how did you decide what to put in?\nB: We stuck with native species throughout, partly because they're built to cope with the heavy metals still lurking in the soil. There's an industrial legacy here, so we'd have been foolish to ship in exotic plants that look pretty but don't survive. The idea was to set up habitats that dragonflies and small fish could move into within a couple of seasons.\nA: You've relied quite heavily on volunteers, haven't you?\nB: Yeah, and I'll admit I didn't think we'd fill every muddy Saturday session. We've had retired engineers, university students, even a few teenagers who initially turned up for something to put on their applications — though plenty of them kept coming back once they got stuck in. It's knackering work, but there's something satisfying about seeing a bare edge turn green within weeks.\nA: Funding hasn't all been straightforward though?\nB: We had to trim back one of the boardwalk sections when a national grant fell through — that was a blow. The capital phase is more or less done now, but keeping the pumps and planting maintained is going to depend on continued council backing, and I don't take that for granted given how budgets get reshuffled every year.\nA: Have schools made use of the space?\nB: Absolutely — biology groups come down throughout the year to sample water quality and track which birds have moved in. We did put safety rails along the deeper channels, but it's not a playground with swings; it's deliberately a place where you observe rather than charge around.\nA: If you could press ahead with one thing, what would it be?\nB: I'd love to extend the wetland footprint along the rest of the canal that's still choked with reed and rubbish. We've proved the model works here — why stop at one basin when you could stitch a whole corridor together for wildlife and walkers alike?\nA: Tom Fletcher, thank you for talking to us.",
     "questions": [
       {
         "number": 24,
-        "prompt": "What does Nina say about the building when she first saw it?",
+        "type": "mcq",
+        "prompt": "How did Tom come to lead this project?",
         "options": [
-          "A) The interior had recently been repaired by the council",
-          "B) It had serious structural and weather-related problems",
-          "C) It was still being used for regular farmers' markets"
+          "A) Local residents appointed him directly.",
+          "B) The council contacted him after seeing his previous work.",
+          "C) He volunteered when a site near his childhood home was threatened."
         ]
       },
       {
         "number": 25,
-        "prompt": "What arrangement did the project group obtain from the council?",
+        "type": "mcq",
+        "prompt": "During the public consultation, what concern was raised most often?",
         "options": [
-          "A) Immediate transfer of full ownership to the trust",
-          "B) A contract for a private company to redevelop the site",
-          "C) A temporary lease allowing work to begin on the building"
+          "A) The loss of parking near the basin.",
+          "B) Unpleasant odours and insects from the wetland.",
+          "C) Low turnout at the meetings."
         ]
       },
       {
         "number": 26,
-        "prompt": "What does Nina say about how the earliest costs were covered?",
+        "type": "mcq",
+        "prompt": "Why were particular plants selected for the site?",
         "options": [
-          "A) They were mainly paid for by local donations before larger grants arrived",
-          "B) The council paid for all equipment and materials from the start",
-          "C) A heritage organisation financed the entire project in one payment"
+          "A) They would provide bright flowers to attract the public.",
+          "B) They could grow in soil contaminated by industry.",
+          "C) They were imported species known for rapid growth."
         ]
       },
       {
         "number": 27,
-        "prompt": "What caused the most delay during the restoration work?",
+        "type": "mcq",
+        "prompt": "What is Tom's attitude towards the volunteer scheme?",
         "options": [
-          "A) Difficulty recruiting electricians and carpenters from outside the town",
-          "B) Damage discovered inside walls that had not been visible earlier",
-          "C) Repeated changes to the colour scheme chosen for the main hall"
+          "A) He is surprised by the level of enthusiasm for hard outdoor work.",
+          "B) He worries volunteers are not given adequate instruction.",
+          "C) He regrets that younger people no longer take part."
         ]
       },
       {
         "number": 28,
-        "prompt": "Who uses the hall most at present, according to Nina?",
+        "type": "mcq",
+        "prompt": "What does Tom suggest about the future of the site?",
         "options": [
-          "A) Adults attending weekday evening courses",
-          "B) Office workers using the space at lunchtimes on weekdays",
-          "C) Families with young children at weekends"
+          "A) Private sponsors will probably cover most upkeep costs.",
+          "B) Long-term maintenance is likely to rely on council funding.",
+          "C) The original budget was sufficient for all planned features."
         ]
       },
       {
         "number": 29,
-        "prompt": "What change has Nina noticed in the town centre since the hall reopened?",
+        "type": "mcq",
+        "prompt": "What does Tom say about school pupils and the wetland?",
         "options": [
-          "A) Some people now stay in the area longer instead of leaving straight away",
-          "B) Every independent shop has reported a large rise in profits",
-          "C) Most visitors now come only to use the hall café and then go home"
+          "A) They visit regularly for hands-on science activities.",
+          "B) They are banned from approaching the water without staff.",
+          "C) Special play equipment was installed for them."
         ]
       },
       {
         "number": 30,
-        "prompt": "What does Nina suggest towns in a similar situation should do first?",
+        "type": "mcq",
+        "prompt": "What would Tom most like to do in the future?",
         "options": [
-          "A) Publish a complete set of architectural reports before any work starts",
-          "B) Open one practical section of the building so progress is visible",
-          "C) Postpone volunteer work until a national expert agrees to lead the team"
+          "A) Construct a dedicated education building on the site.",
+          "B) Repeat the approach along other stretches of the canal.",
+          "C) Transfer day-to-day control entirely to local groups."
         ]
       }
     ],
     "modelAnswers": [
-      { "id": 24, "answer": "B" },
-      { "id": 25, "answer": "C" },
-      { "id": 26, "answer": "A" },
-      { "id": 27, "answer": "B" },
-      { "id": 28, "answer": "C" },
-      { "id": 29, "answer": "A" },
-      { "id": 30, "answer": "B" }
+      { "number": 24, "answer": "B" },
+      { "number": 25, "answer": "B" },
+      { "number": 26, "answer": "B" },
+      { "number": 27, "answer": "A" },
+      { "number": 28, "answer": "B" },
+      { "number": 29, "answer": "A" },
+      { "number": 30, "answer": "B" }
     ],
-    "partNumber": 13,
-    "bulletPoints": [],
-    "speakingPrompts": [],
-    "discussionQuestions": [],
-    "collaborativePrompts": [],
-    "sections": [],
-    "sentencePool": [],
-    "optionPool": [],
-    "matchingAnswers": []
-  },
-  "answerKeySummary": "24B 25C 26A 27B 28C 29A 30B",
-  "answerKeyDistribution": { "A": 2, "B": 3, "C": 2 },
-  "estimatedScriptWords": 548,
-  "estimatedAudioDurationMinutes": "3:30–4:00 at natural interview pace (~140–155 wpm)"
+    "audioClips": [
+      {
+        "orden": 1,
+        "titulo": "Interview — canal basin wetland park (Tom Fletcher)",
+        "text": "See script field"
+      }
+    ]
+  }
 }

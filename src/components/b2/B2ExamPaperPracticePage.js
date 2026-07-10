@@ -3947,8 +3947,21 @@ function B2ExamPaperPracticePageInner({
                           `extra-${groupIndex}`,
                         );
                         const part10Situation = isB2ListeningPart10
-                          ? getB2Exam1Part10Situation(qn, examSlot)
+                          ? (() => {
+                              const first = String(ctx?.contextLines?.[0] || '').trim();
+                              if (/^you\s+hear\b/i.test(first)) return first;
+                              return getB2Exam1Part10Situation(qn, examSlot);
+                            })()
                           : null;
+                        const part10Prompt = isB2ListeningPart10
+                          ? (() => {
+                              const lines = (ctx?.contextLines || []).map((l) => String(l || '').trim()).filter(Boolean);
+                              if (lines.length >= 2 && /^you\s+hear\b/i.test(lines[0])) return lines[1];
+                              if (lines.length === 1 && !/^you\s+hear\b/i.test(lines[0])) return lines[0];
+                              const groupPrompt = group.options?.[0]?.pregunta || '';
+                              return String(groupPrompt || '').trim();
+                            })()
+                          : '';
                         const rawMatchingSelection = selectedOptions[questionKey];
                         const selectedLetter = /^[A-H]$/i.test(String(rawMatchingSelection || ''))
                           ? String(rawMatchingSelection).toUpperCase()
@@ -4068,6 +4081,14 @@ function B2ExamPaperPracticePageInner({
                                 Question {qn}
                               </p>
                             )}
+                            {isB2ListeningPart10 && part10Prompt ? (
+                              <p className="levels-listening-context-line">{part10Prompt}</p>
+                            ) : null}
+                            {isB2ListeningPart10 ? (
+                              <p className="levels-listening-mcq-hint">
+                                Choose the best answer (A, B or C).
+                              </p>
+                            ) : null}
                             {clipSrc ? (
                               <div style={{ marginBottom: ctx?.contextLines?.length ? '0.85rem' : 0 }}>
                                 {clipLabel ? (
@@ -4099,11 +4120,6 @@ function B2ExamPaperPracticePageInner({
                                   </p>
                                 ))}
                               </div>
-                            ) : null}
-                            {isB2ListeningPart10 && ctx?.contextLines?.length ? (
-                              <p className="levels-listening-context-line">
-                                {ctx.contextLines.join(' ')}
-                              </p>
                             ) : null}
                             {isB2ListeningMatchingPart && listeningMatchingSelectOptions.length > 0 ? (
                               <>
