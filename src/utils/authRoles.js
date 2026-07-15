@@ -69,6 +69,10 @@ export function canAccessPlanObjetivosAdminPanel(roleName = '') {
   return isAdminRole(roleName) || isCoordinatorRole(roleName);
 }
 
+export function canAccessBlogAdminPanel(roleName = '') {
+  return isAdminRole(roleName) || isCoordinatorRole(roleName);
+}
+
 /** Vista «admin» del panel de profesor (todos los alumnos). */
 export function canAccessAdminTeacherPanelView(roleName = '') {
   return isAdminRole(roleName) || isCoordinatorRole(roleName);

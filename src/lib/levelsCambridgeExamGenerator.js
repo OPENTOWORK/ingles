@@ -356,6 +356,61 @@ ${meta}`;
   });
 }
 
+export function getLevelExamPartSystemPrompt(levelLabel) {
+  return `Output only valid JSON for one complete ${CAMBRIDGE_EXAM_NAMES[levelLabel] || levelLabel} exam part.`;
+}
+
+export function buildLevelExamPartUserPrompt(levelLabel, partDef, options = {}) {
+  if (partDef.mode === 'speaking') {
+    return buildSpeakingPrompt(levelLabel, partDef, options);
+  }
+  if (partDef.mode === 'writing' && partDef.activity === 'email') {
+    return buildWritingPrompt(levelLabel, partDef, options);
+  }
+  return buildExamGeneratePrompt(partDef.mode, partDef.activity, levelLabel, {
+    topic: options.topic,
+    varietySeed: options.varietySeed,
+    partNumber: partDef.partNumber,
+    questionCount: partDef.questionCount,
+  });
+}
+
+export function resolveDefaultLevelExamPartPrompt({
+  levelSlug,
+  partNumber,
+  examSlot = 1,
+  topic,
+  varietySeed,
+}) {
+  const slug = String(levelSlug || '').toLowerCase();
+  const levelLabel = getLevelExamLabel(slug);
+  const partDef = getLevelExamPartDef(slug, partNumber);
+  if (!partDef) throw new Error(`Parte inválida: ${partNumber}`);
+
+  const theme = topic || EXAM_THEMES[(Number(examSlot) - 1) % EXAM_THEMES.length];
+  const parts = getLevelExamParts(slug) || [];
+  const partIndex = parts.findIndex((p) => p.partNumber === partDef.partNumber);
+  const seedBase = varietySeed ?? Date.now() + Number(examSlot) * 1000;
+  const seed = seedBase + Math.max(partIndex, 0);
+
+  return {
+    system: getLevelExamPartSystemPrompt(levelLabel),
+    user: buildLevelExamPartUserPrompt(levelLabel, partDef, {
+      examSlot,
+      topic: theme,
+      varietySeed: seed,
+    }),
+    meta: {
+      levelSlug: slug,
+      partNumber: partDef.partNumber,
+      partTitle: getExamPartDisplayLabel(slug, partDef.partNumber),
+      examSlot: Number(examSlot),
+      topic: theme,
+      varietySeed: seed,
+    },
+  };
+}
+
 async function generatePartJsonWithRetries(levelSlug, levelLabel, partDef, options) {
   const slug = String(levelSlug || '').toLowerCase();
   const parts = getLevelExamParts(slug) || [];
@@ -380,22 +435,13 @@ async function generatePartJsonWithRetries(levelSlug, levelLabel, partDef, optio
 }
 
 async function generatePartJson(levelLabel, partDef, options) {
-  let prompt;
-  if (partDef.mode === 'speaking') {
-    prompt = buildSpeakingPrompt(levelLabel, partDef, options);
-  } else if (partDef.mode === 'writing' && partDef.activity === 'email') {
-    prompt = buildWritingPrompt(levelLabel, partDef, options);
-  } else {
-    prompt = buildExamGeneratePrompt(partDef.mode, partDef.activity, levelLabel, {
-      topic: options.topic,
-      varietySeed: options.varietySeed,
-      partNumber: partDef.partNumber,
-      questionCount: partDef.questionCount,
-    });
-  }
+  const prompt =
+    options.userPrompt ||
+    buildLevelExamPartUserPrompt(levelLabel, partDef, options);
+  const system = options.systemPrompt || getLevelExamPartSystemPrompt(levelLabel);
 
   const { text } = await cambridgeExamGenerationCompletion({
-    system: `Output only valid JSON for one complete ${CAMBRIDGE_EXAM_NAMES[levelLabel] || levelLabel} exam part.`,
+    system,
     messages: [{ role: 'user', content: prompt }],
     temperature: 0.9,
     max_tokens: 8192,
@@ -658,10 +704,21 @@ export async function generateAndPersistLevelExamPart(adminDb, {
   const partIndex = parts.findIndex((p) => p.partNumber === partDef.partNumber);
 
   const t0 = Date.now();
+  const { resolveEffectiveExamPartGenerationPrompt } = await import('@/lib/examPartGenerationPrompt');
+  const generationPrompt = await resolveEffectiveExamPartGenerationPrompt(adminDb, {
+    levelSlug: slug,
+    partNumber: partDef.partNumber,
+    examSlot,
+    topic: theme,
+    varietySeed: seedBase + partIndex,
+  });
+
   const { generated, validation } = await generatePartJsonWithRetries(slug, levelLabel, partDef, {
     examSlot,
     varietySeed: seedBase + partIndex,
     topic: theme,
+    userPrompt: generationPrompt.user,
+    systemPrompt: generationPrompt.system,
   });
 
   if (!validation.ok) {
@@ -783,6 +840,7 @@ export async function previewLevelExamPartGeneration({
   partNumber,
   varietySeed,
   topic,
+  adminDb,
 }) {
   if (!isDraloOpenAIConfigured()) {
     throw new Error('OPENAI_API_KEY is not configured.');
@@ -798,11 +856,22 @@ export async function previewLevelExamPartGeneration({
   const seedBase = varietySeed ?? Date.now() + examSlot * 1000;
   const partIndex = parts.findIndex((p) => p.partNumber === partDef.partNumber);
 
+  const { resolveEffectiveExamPartGenerationPrompt } = await import('@/lib/examPartGenerationPrompt');
+  const generationPrompt = await resolveEffectiveExamPartGenerationPrompt(adminDb, {
+    levelSlug: slug,
+    partNumber,
+    examSlot,
+    topic: theme,
+    varietySeed: seedBase + partIndex,
+  });
+
   const t0 = Date.now();
   const { generated, validation } = await generatePartJsonWithRetries(slug, levelLabel, partDef, {
     examSlot,
     varietySeed: seedBase + partIndex,
     topic: theme,
+    userPrompt: generationPrompt.user,
+    systemPrompt: generationPrompt.system,
   });
 
   const enunciadoPreview = buildB2EnunciadoFromGenerated(generated, partDef.partNumber);
@@ -867,6 +936,7 @@ export async function previewLevelExamPartGeneration({
       needsReview,
     },
     quality,
+    generationPrompt,
   };
 }
 

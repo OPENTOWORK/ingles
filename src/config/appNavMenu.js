@@ -235,6 +235,7 @@ export const ADMIN_PANEL_MENU_ITEMS = [
   { href: '/admin/plan-objetivos', label: 'Plan de objetivos' },
   { href: '/admin/plan-financiero', label: 'Plan financiero' },
   { href: '/admin/ejercicios', label: 'Panel de ejercicios' },
+  { href: '/admin/blog', label: 'Blog' },
 ];
 
 /** Lista completa del desplegable Admin (incluye coordinador si faltara en caché antigua). */
@@ -272,12 +273,13 @@ const STAFF_PANEL_BY_KEY = {
   planObjetivos: { href: '/admin/plan-objetivos', label: 'Plan de objetivos' },
   planFinanciero: { href: '/admin/plan-financiero', label: 'Plan financiero' },
   ejercicios: { href: '/admin/ejercicios', label: 'Panel de ejercicios' },
+  blog: { href: '/admin/blog', label: 'Blog' },
 };
 
 /**
  * Paneles visibles en el menú según rol:
  * - admin: todos
- * - coordinador: profesor, coordinador, plan de objetivos
+ * - coordinador: profesor, coordinador, plan de objetivos, blog
  * - profesor: panel de profesor + buzón + tareas
  * - soporte / informático: su panel + buzón + tareas
  * - centro/empresa, clases/grupos: su panel + buzón + tareas
@@ -294,6 +296,7 @@ export function getStaffPanelMenuItemsForRole(roleName = '') {
       STAFF_PANEL_BY_KEY.profesorAdmin,
       STAFF_PANEL_BY_KEY.coordinador,
       STAFF_PANEL_BY_KEY.planObjetivos,
+      STAFF_PANEL_BY_KEY.blog,
     ];
   }
   if (isTeacherRole(roleName)) {

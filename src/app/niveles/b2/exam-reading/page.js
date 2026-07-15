@@ -85,6 +85,7 @@ import { buildPartFinishNoticeDisplay } from '@/utils/partFinishNoticeDisplay';
 import { getB2ReadingStrategyPack } from '@/data/b2ReadingPracticeStrategies';
 import { ReadingPracticeSessionProvider } from '@/context/ReadingPracticeSessionContext';
 import ReadingPracticeChrome from '@/components/exam/ReadingPracticeChrome';
+import AdminExamPartPromptBox from '@/components/admin/AdminExamPartPromptBox';
 import {
   runKeepPracticingSkillFlow,
   resolvePartIdAfterExamReload,
@@ -2561,6 +2562,14 @@ function B2ReadingExamsPageInner() {
           </>
         )}
       </section>
+
+      <AdminExamPartPromptBox
+        enabled={adminFlow.isAdmin}
+        slug="b2"
+        partNumber={partNumberReading}
+        examSlot={examSlot}
+        lang="en"
+      />
 
       <B2ExamPracticeModuleNav
         slug="b2"

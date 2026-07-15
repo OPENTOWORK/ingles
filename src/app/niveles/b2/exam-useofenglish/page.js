@@ -2,6 +2,7 @@
 import { Suspense, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useLevelsExamAdminFlow, createAdminExamSelectHandler, buildExamSlotPickerProps } from '@/hooks/useLevelsExamAdminFlow';
 import A2ExamGenerationStatus from '@/components/niveles/A2ExamGenerationStatus';
+import AdminExamPartPromptBox from '@/components/admin/AdminExamPartPromptBox';
 import { invalidateLevelExamCache } from '@/utils/levelsLevelCache';
 import { useSearchParams } from 'next/navigation';
 import LevelsCategoryTimer from '@/components/levels/LevelsCategoryTimer';
@@ -1623,6 +1624,14 @@ function UseOfEnglishExamsPageInner() {
           </>
         )}
       </section>
+
+      <AdminExamPartPromptBox
+        enabled={adminFlow.isAdmin}
+        slug="b2"
+        partNumber={partNumberUoe}
+        examSlot={examSlot}
+        lang="en"
+      />
 
       <B2ExamPracticeModuleNav
         slug="b2"

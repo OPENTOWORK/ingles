@@ -38,6 +38,7 @@ import ExamStudyNotesSidebar from '@/components/exam/ExamStudyNotesSidebar';
 import B2SpeakingStrategyPanel from '@/components/b2/B2SpeakingStrategyPanel';
 import { getB2SpeakingStrategyPack } from '@/data/b2SpeakingPracticeStrategies';
 import ReadingPracticeChrome from '@/components/exam/ReadingPracticeChrome';
+import AdminExamPartPromptBox from '@/components/admin/AdminExamPartPromptBox';
 import { ReadingPracticeSessionProvider, useReadingPracticeSession } from '@/context/ReadingPracticeSessionContext';
 import ExamModeSectionBanner from '@/components/niveles/ExamModeSectionBanner';
 import { useExamModeSectionDraftControls } from '@/hooks/useExamModeSectionDraftControls';
@@ -901,6 +902,14 @@ function B2SpeakingExamPracticeInner({ title, subtitle, loadingLabel, refreshLab
           </div>
         ) : null}
       </section>
+
+      <AdminExamPartPromptBox
+        enabled={adminFlow.isAdmin}
+        slug="b2"
+        partNumber={partNumber}
+        examSlot={examSlot}
+        lang={lang}
+      />
 
       <B2ExamPracticeModuleNav
         slug="b2"

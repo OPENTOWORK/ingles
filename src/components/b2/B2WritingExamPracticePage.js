@@ -16,6 +16,7 @@ import ExamPracticeSessionSideRail from '@/components/exam/ExamPracticeSessionSi
 import ExamPracticeSideRailTop from '@/components/exam/ExamPracticeSideRailTop';
 import ExamStudyNotesSidebar from '@/components/exam/ExamStudyNotesSidebar';
 import ReadingPracticeChrome from '@/components/exam/ReadingPracticeChrome';
+import AdminExamPartPromptBox from '@/components/admin/AdminExamPartPromptBox';
 import SkillPartPracticeHeader from '@/components/exam/SkillPartPracticeHeader';
 import { SkillPartInstructionsPanel } from '@/components/b2/B2ExamPracticeContent';
 import { getFormattedEnunciado } from '@/utils/b2ExamPaperShared';
@@ -1228,6 +1229,13 @@ function B2WritingExamPracticePageInner() {
             </div>
           ) : null}
         </section>
+        <AdminExamPartPromptBox
+          enabled={adminFlow.isAdmin}
+          slug="b2"
+          partNumber={partNumber}
+          examSlot={examSlot}
+          lang="en"
+        />
       </PracticeChrome>
     </B2ExamPracticeLayout>
   );

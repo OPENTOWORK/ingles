@@ -83,3 +83,38 @@ export async function authenticatePlanObjetivosAdminRequest(req) {
 
   return { user: auth.user, token, db, isAdmin, isCoordinator };
 }
+
+/** Admin o coordinador (gestión del blog). */
+export async function authenticateBlogAdminRequest(req) {
+  const auth = await getSupabaseUserFromRequest(req);
+  if (!auth?.user) {
+    return {
+      error: 'Sesión no válida. Cierra sesión y vuelve a entrar en www.dralo.es.',
+      status: 401,
+    };
+  }
+
+  const supabaseUrl = getSupabaseUrl();
+  const serviceKey = getSupabaseServiceRoleKey()?.trim();
+  const supabaseAnonKey = getSupabaseAnonKey();
+  const token = auth.accessToken || '';
+
+  const db = serviceKey
+    ? createClient(supabaseUrl, serviceKey, {
+        auth: { autoRefreshToken: false, persistSession: false },
+      })
+    : createClient(supabaseUrl, supabaseAnonKey, {
+        global: token ? { headers: { Authorization: `Bearer ${token}` } } : {},
+        auth: { autoRefreshToken: false, persistSession: false },
+      });
+
+  const isAdmin = await userIsAdmin(auth.user, db);
+  const roleName = await getUserRoleNameServer(auth.user.id, db);
+  const isCoordinator = isCoordinatorRole(roleName);
+
+  if (!isAdmin && !isCoordinator) {
+    return { error: 'Sin permiso.', status: 403 };
+  }
+
+  return { user: auth.user, token, db, isAdmin, isCoordinator };
+}

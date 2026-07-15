@@ -110,6 +110,12 @@ export function isItPreviewPathAccessible(path, roleId = 'student') {
   if (pathname.startsWith('/admin') && !isAdminRole(roleId) && roleId !== 'coordinador') {
     if (roleId === 'coordinator' && pathname === '/admin/profesor') return true;
     if (roleId === 'coordinador' && pathname.startsWith('/admin/plan-objetivos')) return true;
+    if (
+      (roleId === 'coordinator' || roleId === 'coordinador') &&
+      pathname.startsWith('/admin/blog')
+    ) {
+      return true;
+    }
     return false;
   }
 

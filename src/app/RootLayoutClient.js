@@ -400,6 +400,9 @@ export default function RootLayoutClient({ children }) {
                 <Link href="/proteccion-datos">Protección de datos</Link>
               </li>
               <li>
+                <Link href="/blog">Blog</Link>
+              </li>
+              <li>
                 <button
                   type="button"
                   className="legal-footer-link-btn"

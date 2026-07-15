@@ -51,6 +51,7 @@ import ExamPracticeSessionSideRail from '@/components/exam/ExamPracticeSessionSi
 import ExamPracticeSideRailTop from '@/components/exam/ExamPracticeSideRailTop';
 import ExamStudyNotesSidebar from '@/components/exam/ExamStudyNotesSidebar';
 import ReadingPracticeChrome from '@/components/exam/ReadingPracticeChrome';
+import AdminExamPartPromptBox from '@/components/admin/AdminExamPartPromptBox';
 import { ReadingPracticeSessionProvider, useReadingPracticeSession } from '@/context/ReadingPracticeSessionContext';
 import B2ListeningInlineGapPassage from '@/components/b2/B2ListeningInlineGapPassage';
 import ExamListeningAudioPlayer from '@/components/b2/ExamListeningAudioPlayer';
@@ -4737,6 +4738,14 @@ function B2ExamPaperPracticePageInner({
           </>
         )}
       </section>
+
+      <AdminExamPartPromptBox
+        enabled={adminFlow.isAdmin}
+        slug={levelSlug}
+        partNumber={partNumber}
+        examSlot={examSlot}
+        lang={lang}
+      />
 
       {!(selectedPart && selectedQuestion && useListeningItemLayout) ? moduleNavEl : null}
       </PracticeChrome>

@@ -130,6 +130,7 @@ export async function POST(req) {
             partNumber,
             varietySeed: body.varietySeed,
             topic: body.topic,
+            adminDb: auth.adminDb,
           })
         : await previewLevelExamPartGeneration({
             levelSlug: slug,
@@ -137,6 +138,7 @@ export async function POST(req) {
             partNumber,
             varietySeed: body.varietySeed,
             topic: body.topic,
+            adminDb: auth.adminDb,
           });
 
     return NextResponse.json({
@@ -152,6 +154,7 @@ export async function POST(req) {
         enunciadoPreview: preview.enunciadoPreview,
         payload: preview.generated,
         validation: preview.validation,
+        generationPrompt: preview.generationPrompt || null,
       },
     });
   } catch (err) {

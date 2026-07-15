@@ -16,6 +16,7 @@ const PUBLIC_PATHS = [
   '/politica-privacidad',
   '/politica-cookies',
   '/terminos-condiciones',
+  '/blog',
   ...CEFR_LEVELS.map((level) => `/exam-practice/${level}`),
 ];
 

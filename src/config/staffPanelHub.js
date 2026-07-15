@@ -63,6 +63,11 @@ export const STAFF_PANEL_HUB_META = {
     accent: 'orange',
     description: 'Catálogo y edición de ejercicios',
   },
+  '/admin/blog': {
+    icon: 'panel',
+    accent: 'violet',
+    description: 'Noticias y artículos del blog',
+  },
   '/centro-empresa': {
     icon: 'building',
     accent: 'slate',

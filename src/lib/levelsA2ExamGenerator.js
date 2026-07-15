@@ -33,10 +33,14 @@ function parseJsonFromModel(text) {
 }
 
 async function generatePartJson(partDef, options) {
-  const prompt = buildA2PartGeneratePrompt(partDef, options);
+  const prompt =
+    options.userPrompt || buildA2PartGeneratePrompt(partDef, options);
+  const system =
+    options.systemPrompt ||
+    'Output only valid JSON for one A2 Key exam part. Follow official Cambridge sample-test layout.';
+
   const { text } = await cambridgeExamGenerationCompletion({
-    system:
-      'Output only valid JSON for one A2 Key exam part. Follow official Cambridge sample-test layout.',
+    system,
     messages: [{ role: 'user', content: prompt }],
     temperature: 0.88,
     max_tokens: 4096,
@@ -47,6 +51,50 @@ async function generatePartJson(partDef, options) {
 }
 
 export const A2_EXAM_PART_COUNT = A2_EXAM_PARTS.length;
+
+const A2_EXAM_THEMES = [
+  'a school trip and hobbies',
+  'food, cooking and restaurants',
+  'sport and outdoor activities',
+  'travel and holidays',
+  'technology and social media',
+];
+
+export function getA2ExamPartSystemPrompt() {
+  return 'Output only valid JSON for one A2 Key exam part. Follow official Cambridge sample-test layout.';
+}
+
+export function resolveDefaultA2ExamPartPrompt({
+  partNumber,
+  examSlot = 1,
+  topic,
+  varietySeed,
+}) {
+  const partDef = getA2PartDef(partNumber);
+  if (!partDef) throw new Error(`Parte inválida: ${partNumber}`);
+
+  const theme = topic || A2_EXAM_THEMES[(Number(examSlot) - 1) % A2_EXAM_THEMES.length];
+  const partIndex = A2_EXAM_PARTS.findIndex((p) => p.partNumber === partDef.partNumber);
+  const seedBase = varietySeed ?? Date.now();
+  const seed = seedBase + Math.max(partIndex, 0);
+
+  return {
+    system: getA2ExamPartSystemPrompt(),
+    user: buildA2PartGeneratePrompt(partDef, {
+      examSlot,
+      topic: theme,
+      varietySeed: seed,
+    }),
+    meta: {
+      levelSlug: 'a2',
+      partNumber: partDef.partNumber,
+      partTitle: getExamPartDisplayLabel('a2', partDef.partNumber),
+      examSlot: Number(examSlot),
+      topic: theme,
+      varietySeed: seed,
+    },
+  };
+}
 
 /**
  * Elimina todo el contenido del examen A2 en Supabase (preguntas, respuestas, audios).
@@ -216,6 +264,7 @@ export async function previewA2ExamPartGeneration({
   partNumber,
   varietySeed,
   topic,
+  adminDb,
 }) {
   if (!isDraloOpenAIConfigured()) {
     throw new Error('OPENAI_API_KEY is not configured.');
@@ -224,22 +273,26 @@ export async function previewA2ExamPartGeneration({
   const partDef = getA2PartDef(partNumber);
   if (!partDef) throw new Error(`Parte inválida: ${partNumber}`);
 
-  const topics = [
-    'a school trip and hobbies',
-    'food, cooking and restaurants',
-    'sport and outdoor activities',
-    'travel and holidays',
-    'technology and social media',
-  ];
-  const theme = topic || topics[(examSlot - 1) % topics.length];
+  const theme = topic || A2_EXAM_THEMES[(examSlot - 1) % A2_EXAM_THEMES.length];
   const partIndex = A2_EXAM_PARTS.findIndex((p) => p.partNumber === partDef.partNumber);
   const seedBase = varietySeed ?? Date.now();
+
+  const { resolveEffectiveExamPartGenerationPrompt } = await import('@/lib/examPartGenerationPrompt');
+  const generationPrompt = await resolveEffectiveExamPartGenerationPrompt(adminDb, {
+    levelSlug: 'a2',
+    partNumber,
+    examSlot,
+    topic: theme,
+    varietySeed: seedBase + partIndex,
+  });
 
   const t0 = Date.now();
   let generated = await generatePartJson(partDef, {
     examSlot,
     varietySeed: seedBase + partIndex,
     topic: theme,
+    userPrompt: generationPrompt.user,
+    systemPrompt: generationPrompt.system,
   });
 
   for (let attempt = 0; attempt < 2; attempt += 1) {
@@ -250,6 +303,8 @@ export async function previewA2ExamPartGeneration({
       examSlot,
       varietySeed: seedBase + partIndex + 1000 + attempt * 500,
       topic: theme,
+      userPrompt: generationPrompt.user,
+      systemPrompt: generationPrompt.system,
     });
   }
 
@@ -279,6 +334,7 @@ export async function previewA2ExamPartGeneration({
       errors: validation.errors,
       warnings: validation.warnings,
     },
+    generationPrompt,
   };
 }
 
