@@ -23,6 +23,10 @@ export const PART5_QUESTION_TYPES = new Set([
   'reference',
   'global',
   'vocabulary',
+  'opinion',
+  'tone',
+  'main-idea',
+  'main_idea',
 ]);
 
 export const PART5_ABSURD_DISTRACTOR_PATTERNS = [
@@ -139,21 +143,28 @@ export function isAbsurdPart5Option(text) {
 export function checkPart5LetterBalance(answers) {
   const letters = answers.filter((l) => /^[A-D]$/.test(l));
   const warnings = [];
-  if (letters.length !== 6) return warnings;
+  const errors = [];
+  if (letters.length !== 6) return { warnings, errors };
   const counts = { A: 0, B: 0, C: 0, D: 0 };
-  letters.forEach((l) => { counts[l] += 1; });
+  letters.forEach((l) => {
+    counts[l] += 1;
+  });
   const used = Object.values(counts).filter((c) => c > 0).length;
-  if (used < 3) warnings.push(`Part 5 answer key uses only ${used} different letters (target: spread across A–D).`);
+  if (used < 3) {
+    warnings.push(`Part 5 answer key uses only ${used} different letters (target: spread across A–D).`);
+  }
   let consecutive = 1;
   for (let i = 1; i < letters.length; i += 1) {
     if (letters[i] === letters[i - 1]) consecutive += 1;
     else consecutive = 1;
     if (consecutive > 2) {
-      warnings.push(`Part 5 answer key has ${consecutive} consecutive "${letters[i]}" answers.`);
+      errors.push(
+        `Part 5 answer key has ${consecutive} consecutive "${letters[i]}" answers — max 2 consecutive same letter.`,
+      );
       break;
     }
   }
-  return warnings;
+  return { warnings, errors };
 }
 
 export function collectVisibleStudentText(gen, partNumber) {
@@ -166,7 +177,7 @@ export function collectVisibleStudentText(gen, partNumber) {
     gen.matchingIntro,
   ];
   asArray(gen.questions).forEach((q) => {
-    chunks.push(q.prompt, q.stem, q.sentence1, q.sentence2Start, q.sentence2);
+    chunks.push(q.prompt, q.question, q.stem, q.sentence1, q.sentence2Start, q.sentence2);
     asArray(q.options).forEach((o) => chunks.push(extractMcqOptionText(o)));
   });
   asArray(gen.sections).forEach((s) => {
@@ -202,14 +213,15 @@ export function analyzePart5Quality(gen) {
   const passage = String(gen.passage || '');
   metrics.wordCount = countWords(passage);
   if (metrics.wordCount < 550) {
-    errors.push(`Part 5 passage is ${metrics.wordCount} words; minimum is 550 (target 550–700).`);
-  } else if (metrics.wordCount > 700) {
-    warnings.push(`Part 5 passage is ${metrics.wordCount} words; target is 550–700.`);
+    errors.push(`Part 5 passage is ${metrics.wordCount} words; minimum is 550 (target 550–650).`);
+  } else if (metrics.wordCount > 650) {
+    errors.push(`Part 5 passage is ${metrics.wordCount} words; maximum is 650 (target 550–650).`);
   }
 
   const questions = asArray(gen.questions);
   const modelAnswers = asArray(gen.modelAnswers);
   const answerLetters = [];
+  const PLACEHOLDER_RE = /\b(placeholder|lorem ipsum|TODO|option text|question text)\b/i;
 
   questions.forEach((q, i) => {
     const label = `Part 5 question ${q?.number ?? i + 1}`;
@@ -217,8 +229,30 @@ export function analyzePart5Quality(gen) {
     if (!letter) errors.push(`${label}: missing valid A–D answer key.`);
     else answerLetters.push(letter);
 
+    const stem = String(q?.prompt || q?.question || q?.stem || '').trim();
+    if (!stem) errors.push(`${label}: missing question stem (prompt/question).`);
+    if (PLACEHOLDER_RE.test(stem)) errors.push(`${label}: placeholder text in question stem.`);
+
     const opts = asArray(q.options);
     if (opts.length !== 4) errors.push(`${label}: must have exactly 4 options (got ${opts.length}).`);
+
+    const seenOptLetters = new Set();
+    opts.forEach((o, oi) => {
+      const optLetter = extractMcqLetter(o) || 'ABCD'[oi];
+      const t = extractMcqOptionText(o);
+      if (!/^[A-D]$/.test(optLetter || '')) {
+        errors.push(`${label}: option ${oi + 1} must be labelled A–D.`);
+      } else if (seenOptLetters.has(optLetter)) {
+        errors.push(`${label}: duplicate option letter ${optLetter}.`);
+      } else {
+        seenOptLetters.add(optLetter);
+      }
+      if (!t) errors.push(`${label}: option ${optLetter || oi + 1} is empty.`);
+      if (PLACEHOLDER_RE.test(t)) errors.push(`${label}: placeholder text in option ${optLetter}.`);
+      if (isAbsurdPart5Option(t)) {
+        warnings.push(`${label}: option may be an absurd distractor ("${t.slice(0, 50)}").`);
+      }
+    });
 
     const qType = String(q.questionType || q.skillType || '').toLowerCase();
     if (qType) metrics.questionTypes.push(qType);
@@ -235,25 +269,35 @@ export function analyzePart5Quality(gen) {
       const literal = detectLiteralPart5Match(passage, correctText);
       if (literal) {
         metrics.literalMatches.push({ number: q.number, phrase: literal });
-        warnings.push(`${label}: correct option may be solvable by word matching ("${literal.slice(0, 60)}…").`);
+        warnings.push(
+          `${label}: correct option may be solvable by word matching ("${literal.slice(0, 60)}…").`,
+        );
       }
     }
-
-    opts.forEach((o) => {
-      const t = extractMcqOptionText(o);
-      if (isAbsurdPart5Option(t)) {
-        warnings.push(`${label}: option may be an absurd distractor ("${t.slice(0, 50)}").`);
-      }
-    });
   });
 
-  warnings.push(...checkPart5LetterBalance(answerLetters));
+  const balance = checkPart5LetterBalance(answerLetters);
+  warnings.push(...balance.warnings);
+  errors.push(...balance.errors);
 
   const inferential = metrics.questionTypes.filter((t) =>
-    ['inference', 'attitude', 'purpose', 'reference', 'global'].includes(t),
+    ['inference', 'attitude', 'purpose', 'reference', 'global', 'opinion', 'tone', 'main-idea', 'main_idea'].includes(
+      t,
+    ),
   );
   if (questions.length === 6 && inferential.length < 2) {
-    warnings.push(`Part 5 has only ${inferential.length} inferential/attitude/purpose/reference/global questions (target at least 2).`);
+    warnings.push(
+      `Part 5 has only ${inferential.length} inferential/attitude/purpose/reference/global questions (target at least 2).`,
+    );
+  }
+  const detailCount = metrics.questionTypes.filter((t) => t === 'detail').length;
+  if (questions.length === 6 && detailCount >= 5) {
+    warnings.push(`Part 5 looks heavily detail-based (${detailCount}/6) — soft check.`);
+  }
+  if (questions.length === 6 && new Set(metrics.questionTypes).size < 3 && metrics.questionTypes.length >= 4) {
+    warnings.push(
+      `Part 5 questionType variety is low (${[...new Set(metrics.questionTypes)].join(', ') || 'none'}) — soft check.`,
+    );
   }
 
   warnings.push(...findOverusedPatterns(gen));

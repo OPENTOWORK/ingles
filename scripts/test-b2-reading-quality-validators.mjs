@@ -219,7 +219,7 @@ for (const slot of [1, 2, 3]) {
   const val = validateGeneratedExamPart('b2', 5, gen);
   check(`Part 5 exam ${slot} improved content passes`, val.ok, val.errors?.join('; '));
   const wc = countWords(gen.passage);
-  check(`Part 5 exam ${slot} word count 550–700`, wc >= 550 && wc <= 700, String(wc));
+  check(`Part 5 exam ${slot} word count 550–650`, wc >= 550 && wc <= 650, String(wc));
 }
 
 const literalPassage = 'Many readers valued patience and curiosity above physical strength when exploring new areas.';

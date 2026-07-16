@@ -123,17 +123,17 @@ Opposition to change is predictable. Retailers fear dimmer streets will reduce e
           D: 'They focused exclusively on domestic security lighting.',
         }, 'B'),
         mcq(34, 'purpose', "Why does the writer mention the teacher's hill trip?", {
-          A: 'To prove that children no longer use digital devices outdoors.',
-          B: 'To illustrate how direct experience can alter attitudes towards the night sky.',
+          A: 'To illustrate how direct experience can alter attitudes towards the night sky.',
+          B: 'To prove that children no longer use digital devices outdoors.',
           C: 'To argue that schools should replace science lessons with astronomy.',
           D: 'To show that rural areas are unaffected by skyglow.',
-        }, 'B'),
+        }, 'A'),
         mcq(35, 'reference', 'In the final paragraph, what does "such steps" refer to?', {
           A: 'Turning off all public lighting immediately.',
-          B: 'Gradual measures like trials and revised guidelines.',
+          B: 'Installing brighter lamps with motion sensors.',
           C: 'Banning sports floodlighting nationwide.',
-          D: 'Installing brighter lamps with motion sensors.',
-        }, 'B'),
+          D: 'Gradual measures like trials and revised guidelines.',
+        }, 'D'),
         mcq(36, 'global', "Which title best captures the writer's main argument?", {
           A: 'Why cities should eliminate artificial light entirely',
           B: 'How retailers profit from brighter streets',

@@ -32,7 +32,7 @@ function parseOptionLetterText(opt) {
 /** Reading Part 5: one line per question — `31. stem A. opt B. opt C. opt D. opt` */
 function formatReadingMcqQuestionLine(q) {
   const num = q.number ?? '';
-  const stem = String(q.prompt || q.stem || '').trim();
+  const stem = String(q.prompt || q.question || q.stem || '').trim();
   const opts = asGeneratedArray(q.options)
     .map(parseOptionLetterText)
     .filter(Boolean);

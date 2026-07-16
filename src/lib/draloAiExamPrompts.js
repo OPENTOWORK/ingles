@@ -384,26 +384,71 @@ ${baseExamSchema(directions, `,"title":"short text title","passage":"full text w
 
   if (mode === 'reading') {
     if (activity === 'multiple-choice' && L === 'B2') {
-      return `Create ONE complete B2 First Reading Part 5: multiple choice.
+      return `Create ONE complete B2 Reading Part 5: Multiple choice (Q31–36).
+The task should match official B2 First style, difficulty, wording and item design.
 ${variety}
 ${SHARED_JSON_RULES}
 ${directions}
-Generate exactly 6 questions numbered 31–36.
 
-PASSAGE (CRITICAL):
-- 550–700 words, B2 natural register, clear central theme.
-- High information density: secondary details, contrasts, examples, references, author attitude.
+FORMAT (CRITICAL):
+- Exactly 6 scored questions numbered 31–36.
+- Four options per question: "A) ...", "B) ...", "C) ...", "D) ...".
+- Directions must be: Read the text and choose the answer (A, B, C or D) which you think fits best according to the text.
+- No example gap (0). No questions outside 31–36.
+
+TEXT REQUIREMENTS:
+- Natural published-style article of 550–650 words with a short title.
+- STRICT word count: minimum 550 words, maximum 650 words. Count carefully. Do NOT exceed 650.
+- Prefer ~580–620 words. Write enough developed paragraphs. If the draft is shorter than 550, add 1–2 full paragraphs before returning JSON. If longer than 650, cut redundant clauses.
+- Style similar to a magazine, newspaper, website or popular science article.
+- Authentic B2-level British English.
+- Difficulty should come from: inference; lexical precision; understanding of ideas; writer attitude; writer purpose; reference and implication.
+- Avoid: simple A2/B1 language; unnecessarily academic C1/C2 vocabulary; repetitive AI-style writing; unnatural paragraph structure; texts that feel like textbook passages; texts that are too short; texts answerable by scanning for keywords.
 - Do NOT mention "Cambridge" anywhere student-facing.
 
-QUESTIONS (CRITICAL):
-- Mix questionType values: inference, detail, attitude, purpose, reference, global (at least 2 inferential/attitude/purpose/reference/global).
-- Each question: ONE clearly correct answer; three plausible distractors at similar length/register.
-- Distractors must be wrong by nuance — NOT absurd opposites ("always/never/everyone").
-- Correct answer must NOT be copyable by matching a 4+ word phrase from the passage verbatim.
-- Options should be parallel in structure; avoid one option obviously longer/shorter than others.
+QUESTION DESIGN (CRITICAL):
+- Generate exactly 6 multiple-choice questions numbered 31–36.
+- Questions must follow the order in which the relevant information appears in the passage.
+- Assess understanding of ideas rather than simple word matching.
+- Require the surrounding paragraph and wider context; avoid being answerable by locating a single sentence.
+- Use natural Cambridge-style stems (field "prompt" or "question").
+- Across the 6 questions include a balanced MIX of questionType values such as:
+  - main-idea / global
+  - detail
+  - inference
+  - attitude / opinion / tone
+  - purpose
+  - reference
+  - vocabulary
+- Do NOT make all questions simple detail questions.
+- Include at least 2 inferential/attitude/purpose/reference/global questions.
+- Avoid direct copying from the passage into stems or options.
 
-Answer key: distribute A–D (no more than 2 consecutive same letter; use at least 3 different letters).
-Return ONLY JSON with: partTitle, directions, title, passage, questions[{number, questionType, prompt, options:["A) ...","B) ...","C) ...","D) ..."]}], modelAnswers[{id, answer:"A"|"B"|"C"|"D"}]`;
+ANSWER OPTIONS (CRITICAL):
+- Exactly 4 options per question: "A) ...", "B) ...", "C) ...", "D) ...".
+- Exactly ONE option must be correct and fully supported by the passage.
+- Distractors must be plausible and based on ideas actually present in the text.
+- Distractors should fail because they: misinterpret the text; overgeneralise; distort the writer's meaning; confuse cause/effect; confuse attitude or purpose; focus on a secondary detail.
+- Avoid: absurd distractors; options that are obviously wrong; extreme words like always/never/everyone/all unless genuinely justified; options copied as complete phrases from the passage; correct answers obvious by keyword matching.
+- Options should be parallel in structure and similar length/register.
+- Distribute correct answers across A, B, C and D.
+- No more than 2 consecutive questions may have the same correct letter.
+- Use at least 3 different letters across the 6 answers.
+
+INTERNAL QUALITY METADATA (for review/validation; not student-facing UI copy):
+- Each question should include: questionType, evidence (short passage support), rationale (why the correct option is correct and why distractors fail).
+
+FORBIDDEN:
+- fewer or more than 6 questions
+- question numbers outside 31–36
+- passage under 550 or over 650 words
+- missing options or non A–D answers
+- placeholder text
+- visible "Cambridge" in student-facing fields
+
+Each modelAnswers entry: {id, number:31–36, answer:"A"|"B"|"C"|"D"}.
+Generate exactly 6 questions numbered 31–36.
+Return ONLY JSON with: partTitle, directions, title, passage (550–650 words), questions[{id, number, questionType, prompt, options:["A) ...","B) ...","C) ...","D) ..."], evidence, rationale}], modelAnswers[]`;
     }
 
     if (activity === 'gapped-text' && L === 'B2') {

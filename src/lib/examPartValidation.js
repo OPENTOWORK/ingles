@@ -1220,6 +1220,12 @@ function validateB2Part5Strict(gen, errors, warnings) {
     }
   });
 
+  if (questions.length === 6 && seenNumbers.size === 6) {
+    for (let n = 31; n <= 36; n += 1) {
+      if (!seenNumbers.has(n)) errors.push(`Part 5 is missing question number ${n}.`);
+    }
+  }
+
   if (!hasText(gen.title)) errors.push('Part 5 must include a passage title.');
   if (!hasText(gen.passage)) errors.push('Part 5 must include a passage.');
 
