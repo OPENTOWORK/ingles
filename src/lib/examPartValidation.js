@@ -490,27 +490,69 @@ function validateB2Part1Strict(gen, errors, warnings) {
     }
   });
 
-  // Distribución del key: un examen real reparte las letras (nunca 6+ veces la misma).
-  if (keyLetters.length >= 6) {
+  // Distribución del key: ninguna letra más de 3 veces en Q1–8.
+  if (keyLetters.length >= 4) {
     const counts = {};
     keyLetters.forEach((l) => {
       counts[l] = (counts[l] || 0) + 1;
     });
     const [topLetter, topCount] = Object.entries(counts).sort((a, b) => b[1] - a[1])[0];
-    if (topCount >= 6) {
-      errors.push(`Answer key is degenerate: "${topLetter}" is correct ${topCount} times. Spread answers across A–D.`);
-    } else if (topCount === 5) {
-      warnings.push(`Answer key uses "${topLetter}" ${topCount} times — consider spreading answers across A–D.`);
+    if (topCount > 3) {
+      errors.push(
+        `Answer key uses "${topLetter}" ${topCount} times — no letter may be correct more than 3 times across Q1–8.`,
+      );
     }
   }
 
-  // Passage: título, texto y gaps (1)–(8) presentes y sin gaps extra.
+  // Soft variety hints (warnings only — hard to detect perfectly).
+  const COMMON_VERBS = new Set([
+    'make', 'take', 'have', 'do', 'get', 'give', 'put', 'set', 'keep', 'bring',
+    'raise', 'rise', 'increase', 'grow', 'reduce', 'strike', 'reach', 'find',
+    'come', 'go', 'look', 'turn', 'run', 'hold', 'carry', 'leave', 'become',
+    'seem', 'appear', 'remain', 'prove', 'show', 'offer', 'provide', 'allow',
+  ]);
+  const PREPOSITION_LIKE = new Set([
+    'in', 'on', 'at', 'for', 'of', 'to', 'with', 'from', 'by', 'about',
+    'into', 'onto', 'over', 'under', 'through', 'across', 'against', 'towards',
+  ]);
+  let allVerbOptionSets = 0;
+  let nonVerbOptionSets = 0;
+  let prepositionLikeSets = 0;
+  questions.forEach((q) => {
+    const words = asArray(q?.options)
+      .map((opt) => String(opt).match(PART1_OPTION_REGEX)?.[2]?.trim().toLowerCase())
+      .filter(Boolean);
+    if (words.length !== 4) return;
+    const verbHits = words.filter((w) => COMMON_VERBS.has(w)).length;
+    const prepHits = words.filter((w) => PREPOSITION_LIKE.has(w)).length;
+    if (verbHits >= 3) allVerbOptionSets += 1;
+    if (verbHits <= 1) nonVerbOptionSets += 1;
+    if (prepHits >= 2) prepositionLikeSets += 1;
+  });
+  if (questions.length === 8 && allVerbOptionSets >= 7) {
+    warnings.push('Part 1 looks heavily verb-based — include at least 2 noun/adjective/adverb items.');
+  } else if (questions.length === 8 && nonVerbOptionSets < 2) {
+    warnings.push('Part 1 should include at least 2 items whose options are nouns, adjectives or adverbs.');
+  }
+  if (questions.length === 8 && prepositionLikeSets < 1) {
+    warnings.push(
+      'Part 1 should include at least 1 item decided by a dependent preposition or fixed expression (soft check).',
+    );
+  }
+
+  // Passage: título, texto, example gap (0) y gaps (1)–(8) presentes y sin gaps extra.
   if (!hasText(gen.title)) errors.push('Part 1 must include a short text title.');
   const passage = String(gen.passage || '');
   if (!passage.trim()) {
     errors.push('Part 1 must include a passage.');
   } else {
     const gapNumbers = [...passage.matchAll(/\((\d+)\)\s*_+/g)].map((m) => Number(m[1]));
+    const exampleGapCount = gapNumbers.filter((g) => g === 0).length;
+    if (exampleGapCount === 0) {
+      errors.push('Part 1 passage is missing example gap (0) ___.');
+    } else if (exampleGapCount > 1) {
+      errors.push('Part 1 passage repeats example gap (0) ___.');
+    }
     for (let n = 1; n <= 8; n += 1) {
       const count = gapNumbers.filter((g) => g === n).length;
       if (count === 0) errors.push(`Part 1 passage is missing gap (${n}) ___.`);
@@ -520,6 +562,9 @@ function validateB2Part1Strict(gen, errors, warnings) {
     if (extra.length) {
       errors.push(`Part 1 passage has unexpected gap numbers: ${extra.join(', ')} (only (0)–(8) allowed).`);
     }
+    if (gapNumbers.some((g) => g === 9)) {
+      errors.push('Part 1 must use Q1–8 only — gap (9) is not allowed.');
+    }
 
     const wordCount = passage
       .replace(/\(\d+\)\s*_+/g, ' ')
@@ -528,6 +573,14 @@ function validateB2Part1Strict(gen, errors, warnings) {
     if (wordCount < 140 || wordCount > 190) {
       warnings.push(`Part 1 passage is ${wordCount} words; target is around 150–180.`);
     }
+  }
+
+  // Example must not count as a scored question.
+  if (asArray(gen.questions).some((q) => Number(q?.number) === 0)) {
+    errors.push('Part 1 scored questions must be 1–8 only — do not put example (0) in questions[].');
+  }
+  if (asArray(gen.modelAnswers).some((m) => Number(m?.number) === 0)) {
+    errors.push('Part 1 modelAnswers must cover Q1–8 only — example (0) belongs in example.answer.');
   }
 }
 

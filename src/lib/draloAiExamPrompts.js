@@ -85,48 +85,71 @@ Return ONLY JSON with: partTitle, directions, example {number:0, sentence1, keyw
     }).join(',')}]`;
 
     if (activity === 'multiple-choice-cloze' && L === 'B2') {
-      return `Create ONE complete Cambridge B2 First Reading and Use of English Part 1: multiple-choice cloze.
+      return `Create ONE complete B2 Reading and Use of English Part 1: multiple-choice cloze (Q1–8).
+The task should match official B2 First style, difficulty and item design.
 ${variety}
 ${SHARED_JSON_RULES}
 ${directions}
 
-TEXT RULES:
-- Natural, realistic exam-style text of 150–180 words with a short title (magazine/website article tone).
-- Solid B2 vocabulary throughout: NOT simple A2/B1 language, NOT academic C1/C2 language.
-- Include the example gap (0) ___ near the start, then gaps (1) ___ through (${n}) ___ in reading order.
-- A gap must NEVER be solvable by grammar alone (e.g. only one option matching the verb form): all four options must fit grammatically, so only meaning, collocation or word partnership decides.
+FORMAT (CRITICAL — do not invent Q1–9):
+- Example gap (0) near the start of the passage — not scored.
+- Exactly 8 scored gaps: (1) ___ through (8) ___ in reading order.
+- Questions numbered 1–8 only. Do NOT create question 9.
+- Directions must be: For questions 1–8, read the text below and choose the best word (A, B, C or D) for each gap. There is an example at the beginning (0).
+
+TEXT REQUIREMENTS:
+- Natural, realistic exam-style text of 150–180 words with a short title.
+- Style similar to a magazine, newspaper, website or popular science article.
+- Authentic B2-level British English.
+- Difficulty should come from: collocations; lexical precision; natural language use; fixed expressions; dependent prepositions; phrasal verbs; common near-synonyms.
+- Avoid: simple A2/B1 language; unnecessarily academic C1/C2 vocabulary; repetitive AI-style writing; unnatural paragraph structure; unnatural sentences created only to force a gap.
+- Include the example gap (0) ___ near the start, then gaps (1) ___ through (8) ___ in reading order.
+- Every gap must occur naturally in the text.
+
+QUESTION DESIGN:
+- Each gap must require the surrounding sentence and wider context.
+- A gap must NEVER be solvable by grammar alone: all four options must fit grammatically.
+- The correct choice is decided by meaning, collocation, dependent preposition, word partnership or lexical precision.
 
 OPTIONS RULES (CRITICAL):
 - Exactly 4 options per question: "A) word", "B) word", "C) word", "D) word".
 - Each option is ONE word only. No phrases, no multi-word options.
-- Exactly ONE correct answer per item. The three distractors must be plausible same-class words that fail on collocation, dependent preposition or precise meaning — never absurd or obviously wrong.
+- Exactly ONE correct answer per item. The three distractors must be plausible same-class words that fail on collocation, dependent preposition, precise meaning or word partnership — never absurd or obviously wrong.
 - Never repeat the same word twice within one item's options.
-- Spread the correct letters across A, B, C and D (no letter more than 3 times).
+- Spread the correct letters across A, B, C and D — no letter may be correct more than 3 times across Q1–8.
 
 EXAMPLE RULES (CRITICAL):
 - The "example" field must include four options adapted to gap (0) in the passage (same style as items 1–8).
 - example.options: exactly ["A) word","B) word","C) word","D) word"] — ONE word each, plausible distractors for gap (0).
 - example.answer: the single correct letter ("A"–"D") for gap (0).
+- example.number must be 0.
 
 ITEM VARIETY (CRITICAL — the part must test a MIX of lexical knowledge):
-- collocations: e.g. strike / reach / make / do … a balance
-- fixed expressions: e.g. take / make / have / do … a decision
-- dependent prepositions: e.g. interested in / on / at / for
-- close-meaning verbs: e.g. raise / rise / increase / grow
-- close-meaning nouns, adjectives or adverbs: e.g. valuable / valued / valid / worth
-Across the ${n} items: at MOST 4 items may have all-verb options; include at least 2 items whose options are nouns, adjectives or adverbs; include at least 1 item decided by a dependent preposition or fixed expression.
+- collocations
+- fixed expressions
+- dependent prepositions
+- close-meaning verbs
+- close-meaning nouns
+- phrasal verbs
+- adjectives
+- adverbs
+- Do NOT make all 8 items verb-based.
+- Include at least 2 items whose options are nouns, adjectives or adverbs.
+- Include at least 1 item decided by a dependent preposition or fixed expression.
+- Avoid repeating the same lexical pattern, word family or collocation type excessively.
 
 FORBIDDEN:
+- creating 9 scored questions or gaps beyond (8)
 - all 8 items testing verbs
 - options with more than one word
 - items where two options are both defensible
 - distractors that are obviously wrong
-- C1/C2 vocabulary, or B1-trivial gaps
-- testing the same word family or the same collocation twice
+- C1/C2 obscure vocabulary, or B1-trivial gaps
+- testing the same word family or the same collocation type twice without clear justification
 
-Each modelAnswers entry: the single correct letter ("A"–"D").
-Generate exactly ${n} questions numbered 1–${n}.
-${baseExamSchema(directions, `,"title":"short text title","passage":"full 150–180 word text with (0) ___ example and gaps (1) ___ to (${n}) ___",${questionsSchema},${modelAnswersSchema}`)}`;
+Each modelAnswers entry: the single correct letter ("A"–"D") for questions 1–8 only (not for example 0).
+Generate exactly 8 questions numbered 1–8.
+${baseExamSchema(directions, `,"title":"short text title","passage":"full 150–180 word text with (0) ___ example and gaps (1) ___ to (8) ___",${questionsSchema},${modelAnswersSchema}`)}`;
     }
 
     if (activity === 'open-cloze' && L === 'B2') {
