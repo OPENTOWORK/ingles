@@ -142,5 +142,22 @@ if (analysis.errors.length) {
   failures += 1;
 }
 
+// Assert dry-run does not artificially pad passage length.
+{
+  const { readFileSync } = await import('fs');
+  const { fileURLToPath } = await import('url');
+  const { dirname, join } = await import('path');
+  const dryRunPath = join(dirname(fileURLToPath(import.meta.url)), 'dry-run-b2-part6-prompt.mjs');
+  const dryRunSrc = readFileSync(dryRunPath, 'utf8');
+  const hasForbiddenPadHelper =
+    /\bLENGTH_PAD\b/.test(dryRunSrc) || /\bexpandPassageToMinWords\b/.test(dryRunSrc);
+  const declaresNoPad = /paddingApplied:\s*false/.test(dryRunSrc);
+  const padOk = !hasForbiddenPadHelper && declaresNoPad;
+  console.log(
+    `${padOk ? 'PASS' : 'FAIL'} — dry-run Part 6 must not use local length padding`,
+  );
+  if (!padOk) failures += 1;
+}
+
 console.log(failures === 0 ? '\nAll Part 6 validator tests passed.' : `\n${failures} test(s) failed.`);
 process.exit(failures === 0 ? 0 : 1);

@@ -1,5 +1,7 @@
 /**
  * Local dry-run: generate ONE B2 Reading Part 6 with the code prompt (no Supabase write).
+ * Does NOT pad/expand the passage after generation — length must come from the model
+ * (with optional full regeneration retries only).
  *
  * Usage:
  *   node --loader ./scripts/alias-loader.mjs scripts/dry-run-b2-part6-prompt.mjs
@@ -34,42 +36,27 @@ const userPrompt = buildExamGeneratePrompt('reading', 'gapped-text', 'B2', {
   questionCount: 6,
 });
 
-const systemPrompt =
-  'Output only valid JSON for one complete B2 Reading Part 6 (gapped text). The passage MUST contain at least 520 words and at most 600 words (target ~540–560). Count carefully before returning. Exactly 6 gaps numbered (37)–(42). Exactly 7 sentencePool sentences A)–G). modelAnswers use 6 different letters A–G with exactly one unused. Questions have numbers only (no per-question options). Cohesion-based gaps, not keyword matching. No placeholders. No student-facing Cambridge.';
+const modelName =
+  process.env.OPENAI_MODEL?.trim() ||
+  process.env.DRALO_OPENAI_MODEL?.trim() ||
+  process.env.OPENAI_MODEL_CAMBRIDGE?.trim() ||
+  'gpt-4o';
 
-console.error('Generating Part 6 dry-run (no Supabase)…');
+const systemPrompt =
+  'Output only valid JSON for one complete B2 Reading Part 6 (gapped text). CRITICAL LENGTH: the passage field MUST be 500–600 words (target 540–570). Count every word in the passage before returning and set passageWordCount to that integer. Reject drafts under 500 words — expand paragraphs first. Prefer about seven paragraphs of ~70–90 words each. Exactly 6 gaps numbered (37)–(42). Exactly 7 sentencePool sentences A)–G). modelAnswers use 6 different letters A–G with exactly one unused. Questions have numbers only (no per-question options). Cohesion-based gaps, not keyword matching. No placeholders. No student-facing Cambridge.';
+
+console.error(`Generating Part 6 dry-run (model=${modelName}, no Supabase, no length padding)…`);
 const openai = new OpenAI({ apiKey: env.OPENAI_API_KEY });
 
-const LENGTH_PAD =
-  ' Local organisers emphasise that small, consistent changes often matter more than dramatic one-off campaigns, and that residents notice when maintenance budgets disappear after the first season of publicity. ';
+/** Schema-only normalisation — NEVER mutates passage text/length. */
+function normalizeSchemaOnly(generated) {
+  const out = { ...generated };
+  const rawPassage = String(out.passage || '');
 
-function expandPassageToMinWords(generated, minWords = 520, maxWords = 600) {
-  let passage = String(generated.passage || '');
-  let wc = countWords(passage);
-  if (wc >= minWords && wc <= maxWords) {
-    generated.passage = passage;
-    return generated;
-  }
-  if (wc < minWords) {
-    while (countWords(passage) < minWords) {
-      passage = `${passage.trim()}${LENGTH_PAD}`;
-    }
-  }
-  // Soft trim if overshoot from padding (unlikely with short pad).
-  while (countWords(passage) > maxWords) {
-    const trimmed = passage.replace(LENGTH_PAD, '');
-    if (trimmed === passage) break;
-    passage = trimmed;
-  }
-  generated.passage = passage.trim();
-  return generated;
-}
-
-function normalizeSentencePool(generated) {
-  let pool = Array.isArray(generated.sentencePool)
-    ? generated.sentencePool
-    : Array.isArray(generated.options)
-      ? generated.options
+  let pool = Array.isArray(out.sentencePool)
+    ? out.sentencePool
+    : Array.isArray(out.options)
+      ? out.options
       : [];
   const cleaned = [];
   const seen = new Set();
@@ -82,60 +69,39 @@ function normalizeSentencePool(generated) {
     cleaned.push(`${letter}) ${text}`);
     seen.add(letter);
   }
-  // Fill missing letters with placeholders only if model under-produced (validator will catch).
-  for (const L of 'ABCDEFG') {
-    if (seen.has(L)) continue;
-    cleaned.push(`${L}) This spare sentence relates to the topic but does not fit any gap.`);
-    seen.add(L);
-  }
-  cleaned.sort((a, b) => extractPoolLetter(a).localeCompare(extractPoolLetter(b)));
-  generated.sentencePool = cleaned.slice(0, 7);
-  delete generated.options;
-  return generated;
-}
+  out.sentencePool = cleaned;
+  delete out.options;
 
-function ensureGapQuestions(generated) {
-  const questions = Array.isArray(generated.questions) ? [...generated.questions] : [];
+  const questions = Array.isArray(out.questions) ? [...out.questions] : [];
   const byNum = new Map(questions.map((q) => [Number(q.number), q]));
-  const next = [];
+  out.questions = [];
   for (let n = 37; n <= 42; n += 1) {
     const existing = byNum.get(n) || {};
-    next.push({
+    out.questions.push({
       id: existing.id || `q${n - 36}`,
       number: n,
       type: 'gapped-text',
     });
   }
-  generated.questions = next;
 
-  let modelAnswers = Array.isArray(generated.modelAnswers) ? [...generated.modelAnswers] : [];
-  modelAnswers = modelAnswers
-    .map((m, i) => ({
-      id: m.id || next[i]?.id || `q${i + 1}`,
-      number: Number(m.number) || 37 + i,
-      answer: String(m.answer || '')
-        .trim()
-        .toUpperCase()
-        .replace(/[^A-G]/g, '')
-        .charAt(0),
-    }))
-    .filter((m) => /^[A-G]$/.test(m.answer));
+  const modelAnswers = Array.isArray(out.modelAnswers) ? out.modelAnswers : [];
+  out.modelAnswers = out.questions.map((q, i) => {
+    const entry =
+      modelAnswers.find((m) => Number(m?.number) === q.number) ||
+      modelAnswers.find((m) => String(m?.id) === String(q.id)) ||
+      modelAnswers[i] ||
+      {};
+    const answer = String(entry.answer || '')
+      .trim()
+      .toUpperCase()
+      .replace(/[^A-G]/g, '')
+      .charAt(0);
+    return { id: q.id, number: q.number, answer: answer || '' };
+  });
 
-  // If duplicates, keep first occurrence of each letter and reassign later gaps.
-  const used = new Set();
-  const fixed = [];
-  for (let i = 0; i < 6; i += 1) {
-    const preferred = modelAnswers[i]?.answer;
-    let letter = preferred && !used.has(preferred) ? preferred : null;
-    if (!letter) {
-      letter = [...'ABCDEFG'].find((L) => !used.has(L)) || 'A';
-    }
-    used.add(letter);
-    fixed.push({ id: next[i].id, number: 37 + i, answer: letter });
-  }
-  // Ensure exactly one unused: if somehow 7 unique, trim; if fewer unique after fill, already filled.
-  generated.modelAnswers = fixed;
-  return generated;
+  // Assert: passage must be byte-identical to the raw model passage (no padding).
+  out.passage = rawPassage;
+  return out;
 }
 
 function evaluateGenerated(generated) {
@@ -147,7 +113,7 @@ function evaluateGenerated(generated) {
   const nums = questions.map((q) => Number(q.number)).sort((a, b) => a - b);
   const passageWordCount = countWords(normalized.passage);
   const letters = modelAnswers.map((m) => String(m.answer || '').trim().toUpperCase());
-  const uniqueLetters = new Set(letters);
+  const uniqueLetters = new Set(letters.filter((l) => /^[A-G]$/.test(l)));
   const unused = [...'ABCDEFG'].filter((L) => !uniqueLetters.has(L));
   const PLACEHOLDER = /\b(placeholder|lorem ipsum|TODO|option text|question text|extra sentence\.\.\.)\b/i;
   const noPlaceholders = !PLACEHOLDER.test(JSON.stringify(normalized));
@@ -165,7 +131,7 @@ function evaluateGenerated(generated) {
     { name: 'Exactly 7 sentencePool', ok: pool.length === 7 },
     {
       name: 'Pool letters A–G once',
-      ok: poolLetters.sort().join('') === 'ABCDEFG',
+      ok: [...poolLetters].sort().join('') === 'ABCDEFG',
     },
     {
       name: 'Answer key 6 unique A–G',
@@ -182,6 +148,7 @@ function evaluateGenerated(generated) {
       ok: Boolean(String(normalized.title || '').trim() && String(normalized.passage || '').trim()),
     },
     { name: 'No placeholders', ok: noPlaceholders },
+    { name: 'No length padding', ok: true },
   ];
 
   return {
@@ -197,7 +164,10 @@ function evaluateGenerated(generated) {
 let attempt = 0;
 let lastEval = null;
 let lastGenerated = null;
+let lastRawWordCount = null;
+let lastRawPassage = null;
 const MAX_ATTEMPTS = 8;
+const attemptLog = [];
 
 while (attempt < MAX_ATTEMPTS) {
   attempt += 1;
@@ -207,25 +177,26 @@ while (attempt < MAX_ATTEMPTS) {
   const onlyLength =
     lastEval &&
     !lastEval.allChecksOk &&
-    prevFailed.every((n) => n === 'Passage 500–600 words' || n === 'Validator ok') &&
+    prevFailed.every((n) => n === 'Passage 500–600 words' || n === 'Validator ok' || n === 'No length padding') &&
     prevErrors.every((e) => /words; minimum is 500|words; maximum is 600/.test(e));
   const repairHint =
     attempt > 1
       ? onlyLength
-        ? `\n\nRETRY NOTE: Length only failed (${lastEval.passageWordCount} words). KEEP the same title, gaps, sentencePool and answers. Adjust the passage to 520–580 words. Do not exceed 600.`
+        ? `\n\nRETRY NOTE: Length only failed (previous passage had ${lastRawWordCount} words). Regenerate the FULL passage to 540–570 words (min 500, max 600). Use ~seven paragraphs of 70–90 words each. Do NOT return a short article. Keep gaps (37)–(42), sentencePool A–G, and a valid unique answer key.`
         : `\n\nRETRY NOTE: Previous output failed.
 Failed checks: ${prevFailed.join(', ') || 'unknown'}.
 Errors: ${prevErrors.join(' | ') || 'none'}.
 HARD REQUIREMENTS:
-1) Passage MUST be 520–580 words (min 500, max 600).
+1) Passage MUST be 540–570 words (min 500, max 600). About seven paragraphs of 70–90 words each.
 2) Gaps (37)–(42) in the passage; questions numbered 37–42.
 3) sentencePool exactly 7 sentences A)–G); six unique answers; one unused letter.
 4) Cohesion-based fits; no placeholders; no Cambridge.`
       : '';
 
   const completion = await openai.chat.completions.create({
-    model: process.env.OPENAI_MODEL || 'gpt-4o-mini',
-    temperature: attempt === 1 ? 0.55 : 0.35,
+    model: modelName,
+    temperature: attempt === 1 ? 0.9 : onlyLength ? 0.7 : 0.5,
+    max_tokens: 8192,
     response_format: { type: 'json_object' },
     messages: [
       { role: 'system', content: systemPrompt },
@@ -233,54 +204,122 @@ HARD REQUIREMENTS:
     ],
   });
 
+  const finishReason = completion.choices?.[0]?.finish_reason;
   const raw = completion.choices?.[0]?.message?.content || '';
+  let parsed;
   try {
-    lastGenerated = JSON.parse(raw);
+    parsed = JSON.parse(raw);
   } catch {
     const failPath = path.join(outDir, `b2-part6-dry-run-parse-fail-${Date.now()}.txt`);
     writeFileSync(failPath, raw, 'utf8');
-    console.error('JSON parse failed. Raw saved to', failPath);
+    console.error('JSON parse failed. Raw saved to', failPath, 'finish_reason=', finishReason);
+    attemptLog.push({ attempt, parseOk: false, finishReason });
     continue;
   }
 
-  lastGenerated = normalizeSentencePool(lastGenerated);
-  lastGenerated = ensureGapQuestions(lastGenerated);
-  lastEval = evaluateGenerated(lastGenerated);
+  lastRawPassage = String(parsed.passage || '');
+  lastRawWordCount = countWords(lastRawPassage);
+  const initialGenerationWordCount = lastRawWordCount;
 
-  // If the only hard failure is passage length, expand locally (no Supabase).
-  if (!lastEval.allChecksOk) {
-    const hardFails = lastEval.checks.filter((c) => !c.ok).map((c) => c.name);
-    const onlyLength =
-      hardFails.every((n) => n === 'Passage 500–600 words' || n === 'Validator ok') &&
-      (lastEval.validation.errors || []).every((e) =>
-        /words; minimum is 500|words; maximum is 600/.test(e),
+  // Model-only length repair (second generation pass) — never local string padding.
+  let lengthRepairViaModel = false;
+  if (lastRawWordCount < 500 || lastRawWordCount > 600) {
+    console.error(`  length out of range (${lastRawWordCount}); requesting model rewrite of passage only…`);
+    const expandCompletion = await openai.chat.completions.create({
+      model: modelName,
+      temperature: 0.55,
+      max_tokens: 8192,
+      response_format: { type: 'json_object' },
+      messages: [
+        {
+          role: 'system',
+          content:
+            'You rewrite ONE B2 Part 6 article passage. Return JSON {"passage":"...","passageWordCount":N}. Keep ALL gap markers (37) (38) (39) (40) (41) (42) exactly once each. Expand or trim so the passage is 540–570 words (min 500, max 600). Use about seven paragraphs of 70–90 words. Do not invent new gap numbers. British English magazine style.',
+        },
+        {
+          role: 'user',
+          content: `Current passage is ${lastRawWordCount} words (invalid). Rewrite/expand to 540–570 words.\n\nTITLE: ${parsed.title || ''}\n\nPASSAGE:\n${lastRawPassage}`,
+        },
+      ],
+    });
+    try {
+      const expanded = JSON.parse(expandCompletion.choices?.[0]?.message?.content || '{}');
+      const newPassage = String(expanded.passage || '');
+      const newWc = countWords(newPassage);
+      const markersOk = [37, 38, 39, 40, 41, 42].every((n) =>
+        new RegExp(`\\(${n}\\)`).test(newPassage),
       );
-    if (onlyLength) {
-      lastGenerated = expandPassageToMinWords(lastGenerated);
-      lastEval = evaluateGenerated(lastGenerated);
-      console.error(`  length-pad → words=${lastEval.passageWordCount} ok=${lastEval.allChecksOk}`);
+      if (newPassage && markersOk && newWc >= 500 && newWc <= 600) {
+        parsed.passage = newPassage;
+        parsed.passageWordCount = newWc;
+        lastRawPassage = newPassage;
+        lastRawWordCount = newWc;
+        lengthRepairViaModel = true;
+        console.error(`  model length repair → ${newWc} words`);
+      } else {
+        console.error(
+          `  model length repair rejected (words=${newWc}, markersOk=${markersOk})`,
+        );
+      }
+    } catch {
+      console.error('  model length repair JSON parse failed');
     }
   }
 
+  lastGenerated = normalizeSchemaOnly(parsed);
+
+  // Hard assert: schema normalisation must not alter passage text.
+  if (String(lastGenerated.passage || '') !== lastRawPassage) {
+    console.error('FATAL: dry-run mutated passage text (padding forbidden).');
+    process.exit(2);
+  }
+  if (countWords(lastGenerated.passage) !== lastRawWordCount) {
+    console.error('FATAL: dry-run mutated passage word count (padding forbidden).');
+    process.exit(2);
+  }
+
+  lastEval = evaluateGenerated(lastGenerated);
+  attemptLog.push({
+    attempt,
+    parseOk: true,
+    finishReason,
+    initialGenerationWordCount,
+    rawWordCount: lastRawWordCount,
+    finalWordCount: lastEval.passageWordCount,
+    paddingApplied: false,
+    lengthRepairViaModel,
+    ok: lastEval.allChecksOk,
+    errors: lastEval.validation.errors.slice(0, 5),
+  });
+
   console.error(
-    `  words=${lastEval.passageWordCount} ok=${lastEval.allChecksOk} errors=${lastEval.validation.errors.length} warnings=${lastEval.validation.warnings.length}`,
+    `  initialWords=${initialGenerationWordCount} rawWords=${lastRawWordCount} finalWords=${lastEval.passageWordCount} paddingApplied=false lengthRepairViaModel=${lengthRepairViaModel} ok=${lastEval.allChecksOk} errors=${lastEval.validation.errors.length} warnings=${lastEval.validation.warnings.length}`,
   );
   if (lastEval.allChecksOk) break;
 }
 
+const lastAttemptMeta = attemptLog.filter((a) => a.parseOk).at(-1) || {};
 const stamp = new Date().toISOString().replace(/[:.]/g, '-');
 const reportPath = path.join(outDir, `b2-part6-dry-run-${stamp}.json`);
 const report = {
   generatedAt: new Date().toISOString(),
-  model: process.env.OPENAI_MODEL || 'gpt-4o-mini',
+  model: modelName,
   attempts: attempt,
+  retried: attempt > 1,
+  paddingApplied: false,
+  lengthRepairViaModel: Boolean(lastAttemptMeta.lengthRepairViaModel),
+  initialGenerationWordCount: lastAttemptMeta.initialGenerationWordCount ?? null,
+  rawModelWordCount: lastRawWordCount,
+  finalValidatedWordCount: lastEval?.passageWordCount ?? null,
   promptSnippet: {
     mentionsQ37to42: /37/.test(userPrompt) && /42/.test(userPrompt),
     wordCountTarget: /500\s*[–-]\s*600/.test(userPrompt),
+    strictMin500: /500 words is the STRICT minimum/i.test(userPrompt),
+    target540570: /540\s*[–-]\s*570/.test(userPrompt),
     cohesionFocus: /discourse cohesion/i.test(userPrompt),
   },
-  passageWordCount: lastEval?.passageWordCount ?? null,
   unusedLetter: lastEval?.unusedLetter ?? null,
+  attemptLog,
   validation: {
     ok: lastEval?.validation?.ok ?? false,
     errors: lastEval?.validation?.errors ?? [],
@@ -292,5 +331,21 @@ const report = {
 };
 
 writeFileSync(reportPath, JSON.stringify(report, null, 2), 'utf8');
-console.log(JSON.stringify({ reportPath, allChecksOk: report.allChecksOk, attempts: attempt }, null, 2));
+console.log(
+  JSON.stringify(
+    {
+      reportPath,
+      allChecksOk: report.allChecksOk,
+      attempts: attempt,
+      retried: attempt > 1,
+      initialGenerationWordCount: report.initialGenerationWordCount,
+      rawModelWordCount: lastRawWordCount,
+      finalValidatedWordCount: lastEval?.passageWordCount ?? null,
+      paddingApplied: false,
+      lengthRepairViaModel: report.lengthRepairViaModel,
+    },
+    null,
+    2,
+  ),
+);
 if (!report.allChecksOk) process.exit(1);

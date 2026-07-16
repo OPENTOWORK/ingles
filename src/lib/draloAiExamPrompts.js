@@ -468,8 +468,11 @@ FORMAT (CRITICAL):
 
 TEXT REQUIREMENTS:
 - Natural published-style article of 500–600 words with a short title.
-- STRICT word count: minimum 500 words, maximum 600 words (count the passage only; do not count sentencePool). Prefer ~520–580.
-- Write enough developed paragraphs. If a draft is under 500 words, add 2–3 full paragraphs of article content (without new gaps) before returning JSON. If over 600, cut redundant clauses.
+- 500 words is the STRICT minimum. Do NOT produce a short article.
+- Target 540–570 words. Absolute maximum 600 words.
+- Count the final article passage only (exclude sentencePool A–G). The passage must be 500–600 words.
+- Structure: around seven paragraphs; each paragraph should normally be about 70–90 words so the whole article reaches 500+ without padding tricks.
+- Before returning JSON, count the passage words. If under 500, expand 1–2 paragraphs with genuine article content (no new gaps). If over 600, cut redundant clauses.
 - Style similar to a magazine, newspaper, website or popular science article.
 - Authentic B2-level British English.
 - Difficulty should come from: discourse cohesion; logical progression; understanding of ideas; reference; paragraph development.
@@ -477,7 +480,8 @@ TEXT REQUIREMENTS:
 - Do NOT mention "Cambridge" anywhere student-facing.
 
 PASSAGE STRUCTURE:
-- Create a coherent article with natural paragraphing (around seven paragraphs is ideal).
+- Create a coherent article with natural paragraphing (around seven paragraphs).
+- Aim for roughly 70–90 words per paragraph so the full passage lands in 540–570 words.
 - Remove one complete sentence from six paragraphs / positions, leaving gaps (37)–(42).
 - Each gap must sit where the missing sentence connects naturally with: the sentence before; the sentence after; the wider paragraph; the wider article progression.
 - Prefer gaps inside paragraphs (not all at paragraph endings) so surrounding context is clear.
@@ -508,13 +512,15 @@ FORBIDDEN:
 - fewer or more than 6 gaps
 - gap numbers outside 37–42
 - passage under 500 or over 600 words
+- shorter articles of ~300–450 words (REJECT and expand before returning)
 - fewer or more than 7 sentencePool items
 - duplicate or missing letters A–G in the pool
 - duplicate answer letters or unused count ≠ 1
 - placeholder text
 - visible "Cambridge" in student-facing fields
 
-Return ONLY JSON with: partTitle, directions, title, passage (500–600 words with markers (37)–(42)), sentencePool ["A) ...","B) ...","C) ...","D) ...","E) ...","F) ...","G) ..."], questions[{id, number}], modelAnswers[{id, number, answer:"A"|...|"G"}]`;
+Also include integer field passageWordCount with your counted passage words (must be 500–600).
+Return ONLY JSON with: partTitle, directions, title, passage (500–600 words with markers (37)–(42)), passageWordCount, sentencePool ["A) ...","B) ...","C) ...","D) ...","E) ...","F) ...","G) ..."], questions[{id, number}], modelAnswers[{id, number, answer:"A"|...|"G"}]`;
     }
 
     if (activity === 'multiple-matching' && L === 'B2') {
