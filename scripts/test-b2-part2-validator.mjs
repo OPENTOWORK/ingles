@@ -1,6 +1,6 @@
 /**
  * Unit tests (sin IA, sin DB) del validador mecánico estricto de B2 Part 2 (open cloze)
- * y del builder de enunciado (ejemplo separado del texto).
+ * y del builder de enunciado (ejemplo 0 + pasaje con (0)).
  * Usage: node --loader ./scripts/alias-loader.mjs scripts/test-b2-part2-validator.mjs
  */
 const { validateGeneratedExamPart } = await import('../src/lib/examPartValidation.js');
@@ -12,22 +12,22 @@ const {
 } = await import('../src/utils/b2ExamPaperShared.js');
 
 function makeValidPart2() {
-  const answers = ['from', 'to', 'on', 'with', 'to', 'out', 'on', 'to'];
-  const passage = `Teamwork matters in modern workplaces and classrooms alike. When projects grow complex, groups can benefit (9) ___ sharing skills that no individual possesses alone. Collaborative tasks often lead (10) ___ stronger results when members listen carefully and respect different viewpoints. Disagreements may arise, so teams must work (11) ___ them constructively rather than avoiding difficult conversations. Clear communication is vital (12) ___ success, especially when deadlines approach quickly. Each person should carry (13) ___ their responsibilities reliably, even when tasks seem routine. Colleagues need to depend (14) ___ one another during busy periods and share feedback honestly. Trust grows when people support (15) ___ each other openly instead of competing for recognition. In the long term, cooperation can lead (16) ___ better outcomes for everyone involved.`;
+  const answers = ['who', 'have', 'to', 'although', 'their', 'on', 'enough', 'for'];
+  // ~160 words excluding gap markers (validated by b2CountWords).
+  const passage = `Finding time outdoors
+Many people spend most (0) ___ their free hours indoors, often looking at screens after a long day at work. Research shows that even short walks can improve mood, especially among adults (9) ___ live in busy cities with little green space. Doctors often say that people who (10) ___ already adopted outdoor habits sleep better and feel calmer during the week. Families may decide (11) ___ visit a park together on Sundays rather than stay at home. (12) ___ the weather is cold, warm clothes make the outing pleasant for children and adults alike. Neighbours sometimes organise shared activities so that (13) ___ local streets feel safer and more welcoming. Local councils also put pressure (14) ___ businesses to create outdoor seating and plant trees. With (15) ___ planning and a little motivation, most residents can build routines that support both energy and calm. Small improvements each month matter more than dramatic starts that disappear after two weeks of travel or heavy schedules (16) ___ people at the office.`;
   return {
-    partTitle: 'Reading and Use of English Part 2',
+    partTitle: 'Part 2: Open cloze',
     directions:
       'For questions 9–16, read the text below and think of the word which best fits each gap. Use only ONE word in each gap. There is an example at the beginning (0).',
     example: {
       number: 0,
-      sentence: 'She is fond (0) ___ travelling by train.',
       answer: 'of',
-      explanation: 'the adjective "fond" takes the dependent preposition "of"',
     },
-    title: 'The Value of Teamwork',
+    title: 'Finding time outdoors',
     passage,
     questions: answers.map((_, i) => ({ id: `q${i + 1}`, number: 9 + i, type: 'short' })),
-    modelAnswers: answers.map((w, i) => ({ id: `q${i + 1}`, answer: w })),
+    modelAnswers: answers.map((w, i) => ({ id: `q${i + 1}`, number: 9 + i, answer: w })),
   };
 }
 
@@ -41,7 +41,7 @@ addCase('valid part 2 passes', (g) => g, null);
 addCase('7 questions fails', (g) => {
   g.questions = g.questions.slice(0, 7);
   g.modelAnswers = g.modelAnswers.slice(0, 7);
-  g.passage = g.passage.replace('(16) ___', 'to');
+  g.passage = g.passage.replace('(16) ___', 'enough');
   return g;
 }, /exactly 8 questions/);
 addCase('question number outside 9–16 fails', (g) => {
@@ -59,31 +59,27 @@ addCase('A/B/C/D options fail (not Part 1)', (g) => {
 addCase('missing example fails', (g) => {
   delete g.example;
   return g;
-}, /separate example sentence/);
-addCase('example without (0) gap fails', (g) => {
-  g.example.sentence = 'She lives in Madrid.';
-  return g;
-}, /must contain a real gap/);
+}, /must include example/);
 addCase('example with multi-word answer fails', (g) => {
   g.example.answer = 'of the';
   return g;
 }, /example answer must be one word/);
-addCase('gap (0) inside passage fails', (g) => {
-  g.passage = `Many people now prefer to explore a region (0) ___ bicycle. ${g.passage}`;
+addCase('missing gap (0) in passage fails', (g) => {
+  g.passage = g.passage.replace('(0) ___', 'of');
   return g;
-}, /must NOT contain the example gap \(0\)/);
+}, /missing example gap \(0\)/);
 addCase('letter "(o)" typo inside passage fails', (g) => {
   g.passage = g.passage.replace('(9) ___', '(o) ___ (9) ___');
   return g;
 }, /contains "\(o\)" with the letter o/);
 addCase('missing gap (16) fails', (g) => {
-  g.passage = g.passage.replace('(16) ___', 'to');
+  g.passage = g.passage.replace('(16) ___', 'enough');
   return g;
 }, /missing gap \(16\)/);
 addCase('unexpected gap number fails', (g) => {
-  g.passage = g.passage.replace('In the long term,', 'Before that (17) ___. In the long term,');
+  g.passage = g.passage.replace('Small improvements', 'Before that (17) ___. Small improvements');
   return g;
-}, /unexpected gap numbers: 17/);
+}, /unexpected gap numbers: 17|gap \(17\)/);
 addCase('missing answer key entry fails', (g) => {
   g.modelAnswers = g.modelAnswers.slice(0, 7);
   return g;
@@ -104,6 +100,17 @@ addCase('missing passage fails', (g) => {
   g.passage = '';
   return g;
 }, /must include a passage/);
+addCase('passage under 150 words fails', (g) => {
+  g.passage = `Short title
+People spend most (0) ___ their free hours indoors. Adults (9) ___ live in cities can (10) ___ already noticed benefits. They decide (11) ___ walk more. (12) ___ it rains, they still go out. Neighbours share (13) ___ ideas and put pressure (14) ___ councils. With (15) ___ effort, habits last (16) ___ for years.`;
+  return g;
+}, /minimum is 150/);
+addCase('passage over 180 words fails', (g) => {
+  const filler =
+    ' Extra detail about parks, trees, benches, cycling routes, weekend markets, outdoor cafes, community gardens, school trips, workplace walking clubs, and seasonal festivals appears again and again in every paragraph without adding new grammar gaps.';
+  g.passage = `${g.passage}${filler}${filler}`;
+  return g;
+}, /maximum is 180/);
 
 let failures = 0;
 for (const { name, mutate, expectError } of cases) {
@@ -121,7 +128,7 @@ for (const { name, mutate, expectError } of cases) {
   if (!pass) failures += 1;
 }
 
-/* ---------- enunciado builder: Example separado antes de "Text" ---------- */
+/* ---------- enunciado builder: Example answer + Text with (0) ---------- */
 
 const gen = makeValidPart2();
 const enunciado = buildB2EnunciadoFromGenerated(gen, 2);
@@ -133,15 +140,12 @@ function check(name, ok, detail = '') {
 }
 
 check('enunciado starts with Example: block', lines[0] === 'Example:');
-check(
-  'example sentence with (0) gap present',
-  lines[1].includes('(0) ___') && lines[1].includes('fond'),
-);
-check('example answer line uses "Answer: 0 → of"', lines[2] === 'Answer: 0 → of');
-check('Text line separates example from passage', lines[3] === 'Text');
-check('title after Text', lines[4] === 'The Value of Teamwork');
-const textoPart = lines.slice(4).join('\n');
-check('no (0) gap inside the main text', !/\(0\)\s*_+/.test(textoPart));
+check('example answer line uses "Answer: 0 → of"', lines[1] === 'Answer: 0 → of');
+check('Text line separates example from passage', lines[2] === 'Text');
+check('title after Text', lines[3] === 'Finding time outdoors');
+const textoPart = lines.slice(3).join('\n');
+check('gap (0) present inside the main text', /\(0\)\s*_+/.test(textoPart));
+check('scored gaps 9–16 present in text', [9, 10, 11, 12, 13, 14, 15, 16].every((n) => textoPart.includes(`(${n}) ___`)));
 
 /* ---------- composeOpenClozeDirections (UI) ---------- */
 
@@ -162,10 +166,13 @@ check('legacy directions keep the Part 2 instructions', composedLegacy.includes(
 
 const composedNew = composeOpenClozeDirections(legacyDesc, enunciado);
 check(
-  'new question example replaces the broken one',
-  composedNew.includes('She is fond (0) ___ travelling by train.') &&
-    !composedNew.includes('She lives in Madrid'),
+  'answer-only example block does not reintroduce broken legacy sentence',
+  !composedNew.includes('She lives in Madrid') && composedNew.includes('For questions 9–16'),
   composedNew,
+);
+check(
+  'enunciado itself keeps Answer: 0 → of',
+  enunciado.includes('Answer: 0 → of'),
 );
 check('extractOpenClozeExampleBlock requires a real (0) gap', extractOpenClozeExampleBlock(legacyDesc) === '');
 

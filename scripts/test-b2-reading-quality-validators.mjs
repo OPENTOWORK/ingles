@@ -16,19 +16,21 @@ function check(name, ok, detail = '') {
   if (!ok) failures += 1;
 }
 
-/* ---------- Part 2: one word per gap, 100–140 words ---------- */
+/* ---------- Part 2: one word per gap, 150–180 words, (0)+(9)–(16) in passage ---------- */
 
 function makeValidPart2() {
-  const answers = ['from', 'to', 'on', 'with', 'to', 'out', 'on', 'to'];
-  const passage = `Teamwork matters in modern workplaces and classrooms alike. When projects grow complex, groups can benefit (9) ___ sharing skills that no individual possesses alone. Collaborative tasks often lead (10) ___ stronger results when members listen carefully and respect different viewpoints. Disagreements may arise, so teams must work (11) ___ them constructively rather than avoiding difficult conversations. Clear communication is vital (12) ___ success, especially when deadlines approach quickly. Each person should carry (13) ___ their responsibilities reliably, even when tasks seem routine. Colleagues need to depend (14) ___ one another during busy periods and share feedback honestly. Trust grows when people support (15) ___ each other openly instead of competing for recognition. In the long term, cooperation can lead (16) ___ better outcomes for everyone involved.`;
+  const answers = ['who', 'have', 'to', 'although', 'their', 'on', 'enough', 'for'];
+  const passage = `Finding time outdoors
+Many people spend most (0) ___ their free hours indoors, often looking at screens after a long day at work. Research shows that even short walks can improve mood, especially among adults (9) ___ live in busy cities with little green space. Doctors often say that people who (10) ___ already adopted outdoor habits sleep better and feel calmer during the week. Families may decide (11) ___ visit a park together on Sundays rather than stay at home. (12) ___ the weather is cold, warm clothes make the outing pleasant for children and adults alike. Neighbours sometimes organise shared activities so that (13) ___ local streets feel safer and more welcoming. Local councils also put pressure (14) ___ businesses to create outdoor seating and plant trees. With (15) ___ planning and a little motivation, most residents can build routines that support both energy and calm. Small improvements each month matter more than dramatic starts that disappear after two weeks of travel or heavy schedules (16) ___ people at the office.`;
   return {
-    partTitle: 'Reading and Use of English Part 2',
-    directions: 'For questions 9–16…',
-    example: { number: 0, sentence: 'She is fond (0) ___ travelling by train.', answer: 'of' },
-    title: 'The Value of Teamwork',
+    partTitle: 'Part 2: Open cloze',
+    directions:
+      'For questions 9–16, read the text below and think of the word which best fits each gap. Use only ONE word in each gap. There is an example at the beginning (0).',
+    example: { number: 0, answer: 'of' },
+    title: 'Finding time outdoors',
     passage,
     questions: answers.map((_, i) => ({ id: `q${i + 1}`, number: 9 + i, type: 'short' })),
-    modelAnswers: answers.map((w, i) => ({ id: `q${i + 1}`, answer: w })),
+    modelAnswers: answers.map((w, i) => ({ id: `q${i + 1}`, number: 9 + i, answer: w })),
   };
 }
 

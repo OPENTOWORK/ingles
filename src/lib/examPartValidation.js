@@ -627,6 +627,10 @@ function validateB2Part2Strict(gen, errors, warnings) {
       seenNumbers.add(num);
     }
 
+    if (Number(q?.number) === 0) {
+      errors.push(`${label}: example (0) must not appear in questions[] — only Q9–16 are scored.`);
+    }
+
     if (asArray(q?.options).length > 0) {
       errors.push(`${label}: open cloze must NOT have A/B/C/D options (this is not Part 1).`);
     }
@@ -638,27 +642,36 @@ function validateB2Part2Strict(gen, errors, warnings) {
     }
   }
 
-  // Example: frase independiente con gap (0) real y respuesta de una palabra.
+  // Example (0): one-word answer; not scored. Gap (0) lives in the passage.
   const example = gen.example && typeof gen.example === 'object' ? gen.example : null;
+  const exampleAnswer = String(example?.answer || '').trim();
   const exampleSentence = String(
     example?.sentence || example?.text || example?.prompt || '',
   ).trim();
-  const exampleAnswer = String(example?.answer || '').trim();
-  if (!example || !exampleSentence) {
-    errors.push('Part 2 must include a separate example sentence (example.sentence with a (0) ___ gap).');
+  if (!example || !exampleAnswer) {
+    errors.push('Part 2 must include example {number:0, answer:"one word"} for gap (0).');
   } else {
-    if (!/\(0\)\s*_+/.test(exampleSentence)) {
-      errors.push(`Part 2 example sentence must contain a real gap "(0) ___" (got "${exampleSentence.slice(0, 80)}").`);
+    if (example.number != null && Number(example.number) !== 0) {
+      errors.push(`Part 2 example.number must be 0 (got ${example.number}).`);
     }
-    if (!exampleAnswer) {
-      errors.push('Part 2 example must include its answer.');
-    } else if (!PART2_ONE_WORD_REGEX.test(exampleAnswer)) {
+    if (/\s/.test(exampleAnswer) || !PART2_ONE_WORD_REGEX.test(exampleAnswer)) {
       errors.push(`Part 2 example answer must be one word (got "${exampleAnswer}").`);
+    }
+    if (exampleSentence && !/\(0\)\s*(?:_+|\.{2,}|…+)/.test(exampleSentence)) {
+      errors.push(
+        `Part 2 example.sentence, if present, must contain a real gap "(0) ___" (got "${exampleSentence.slice(0, 80)}").`,
+      );
+    }
+    if (asArray(example?.options).length > 0) {
+      errors.push('Part 2 example must NOT have A/B/C/D options (open cloze).');
     }
   }
 
   // Answer key: una palabra exacta por pregunta 9–16.
   const modelAnswers = asArray(gen.modelAnswers);
+  if (modelAnswers.some((m) => Number(m?.number) === 0)) {
+    errors.push('Part 2 modelAnswers must cover Q9–16 only — example (0) belongs in example.answer.');
+  }
   const answerByQuestionId = new Map();
   modelAnswers.forEach((entry) => {
     if (entry?.id != null) answerByQuestionId.set(String(entry.id), entry);
@@ -696,34 +709,42 @@ function validateB2Part2Strict(gen, errors, warnings) {
     }
   }
 
-  // Passage: título, gaps (9)–(16) exactos, sin (0) ni "(o)" dentro del texto.
+  // Passage: título, gap (0) + gaps (9)–(16), 150–180 words.
   if (!hasText(gen.title)) errors.push('Part 2 must include a short text title.');
   const passage = String(gen.passage || '');
   if (!passage.trim()) {
     errors.push('Part 2 must include a passage.');
   } else {
-    if (/\(0\)\s*(?:_+|\.{2,}|…+)/.test(passage)) {
-      errors.push('Part 2 passage must NOT contain the example gap (0) — the example goes in its own section.');
-    }
     if (/\(\s*[oO]\s*\)/.test(passage)) {
       errors.push('Part 2 passage contains "(o)" with the letter o — gap markers must use digits.');
     }
     const gapNumbers = [...passage.matchAll(/\((\d+)\)\s*(?:_+|\.{2,}|…+)/g)].map((m) => Number(m[1]));
+    const exampleGapCount = gapNumbers.filter((g) => g === 0).length;
+    if (exampleGapCount === 0) {
+      errors.push('Part 2 passage is missing example gap (0) ___.');
+    } else if (exampleGapCount > 1) {
+      errors.push('Part 2 passage repeats example gap (0) ___.');
+    }
     for (let n = 9; n <= 16; n += 1) {
       const count = gapNumbers.filter((g) => g === n).length;
       if (count === 0) errors.push(`Part 2 passage is missing gap (${n}) ___.`);
       if (count > 1) errors.push(`Part 2 passage repeats gap (${n}) ___.`);
     }
-    const extra = [...new Set(gapNumbers.filter((g) => g < 9 || g > 16))];
+    const extra = [...new Set(gapNumbers.filter((g) => g !== 0 && (g < 9 || g > 16)))];
     if (extra.length) {
-      errors.push(`Part 2 passage has unexpected gap numbers: ${extra.join(', ')} (only (9)–(16) allowed).`);
+      errors.push(
+        `Part 2 passage has unexpected gap numbers: ${extra.join(', ')} (only (0) and (9)–(16) allowed).`,
+      );
+    }
+    if (gapNumbers.some((g) => g >= 17)) {
+      errors.push('Part 2 must use Q9–16 only — gap (17) or higher is not allowed.');
     }
 
     const wordCount = b2CountWords(passage);
-    if (wordCount < 100) {
-      errors.push(`Part 2 passage is ${wordCount} words; minimum is 100 (target 100–140).`);
-    } else if (wordCount > 140) {
-      errors.push(`Part 2 passage is ${wordCount} words; maximum is 140 (target 100–140).`);
+    if (wordCount < 150) {
+      errors.push(`Part 2 passage is ${wordCount} words; minimum is 150 (target 150–180).`);
+    } else if (wordCount > 180) {
+      errors.push(`Part 2 passage is ${wordCount} words; maximum is 180 (target 150–180).`);
     }
 
     if (answerWords.length >= 6) {
@@ -731,6 +752,15 @@ function validateB2Part2Strict(gen, errors, warnings) {
       if (categories.size < 4) {
         warnings.push(
           `Part 2 answers cover only ${categories.size} grammar categories (target at least 4: prepositions, relatives, modals, connectors, etc.).`,
+        );
+      }
+      const PREP_LIKE = new Set([
+        'in', 'on', 'at', 'for', 'with', 'by', 'from', 'to', 'of', 'into', 'about', 'as', 'out', 'up',
+      ]);
+      const prepCount = answerWords.filter((w) => PREP_LIKE.has(w)).length;
+      if (prepCount >= 6) {
+        warnings.push(
+          `Part 2 has ${prepCount} preposition-like answers — aim for more grammatical variety (soft check).`,
         );
       }
     }

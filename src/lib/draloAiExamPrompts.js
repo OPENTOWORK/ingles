@@ -157,46 +157,70 @@ ${baseExamSchema(directions, `,"title":"short text title","passage":"full 150–
     }
 
     if (activity === 'open-cloze' && L === 'B2') {
-      return `Create ONE complete Cambridge B2 First Reading and Use of English Part 2: open cloze.
+      return `Create ONE complete B2 Reading and Use of English Part 2: Open cloze (Q9–16).
+The task should match official B2 First style, difficulty, wording and item design.
 ${variety}
 ${SHARED_JSON_RULES}
 ${directions}
 
-TEXT RULES:
-- Natural, realistic exam-style text of 100–140 words with a short title (magazine/website article tone).
-- Solid B2 vocabulary and grammar: NOT simple A2/B1 language, NOT academic C1/C2 language.
-- Exactly 8 gaps written as (9) ___ through (16) ___ in reading order.
-- The passage must NOT contain a gap (0). The example is SEPARATE (see EXAMPLE RULES).
-- Never write the gap number with a letter "o": always (9)–(16) with digits.
+FORMAT (CRITICAL):
+- Example gap (0) ___ near the start of the passage — not scored.
+- Exactly 8 scored gaps: (9) ___ through (16) ___ in reading order.
+- The passage MUST contain all of these markers literally: (0) ___ (9) ___ (10) ___ (11) ___ (12) ___ (13) ___ (14) ___ (15) ___ (16) ___.
+- Questions/gaps numbered 9–16 only. Do NOT create gap (17) or above.
+- Directions must be: For questions 9–16, read the text below and think of the word which best fits each gap. Use only ONE word in each gap. There is an example at the beginning (0).
+- Never write a gap number with the letter "o": always digits.
+
+TEXT REQUIREMENTS:
+- Natural published-style article of 150–180 words with a short title.
+- STRICT word count: minimum 150 words, maximum 180 words. Count carefully. Do NOT exceed 180.
+- Prefer ~160–170 words. If the draft is longer than 180, cut redundant clauses before returning JSON.
+- Style similar to a magazine, newspaper, website or popular science article.
+- Authentic B2-level British English.
+- Difficulty should come from grammar and functional language typically tested in B2 First rather than obscure vocabulary.
+- Avoid: simple A2/B1 language; unnecessarily academic C1/C2 language; repetitive AI-style writing; unnatural paragraph structure; unnatural sentences created only to force a gap; vocabulary-content gaps that belong to Part 1.
+- Include the example gap (0) ___ near the start, then gaps (9) ___ through (16) ___ in reading order.
+- Every gap must occur naturally. The completed text with the correct answers must sound completely natural.
+
+GAP DESIGN (CRITICAL):
+- Each gap contains exactly ONE missing word and has exactly ONE correct answer.
+- Gaps test grammatical knowledge or functional language, not lexical content (that is Part 1).
+- Require the surrounding sentence and wider context where possible.
+- Across the 8 scored gaps include a balanced MIX of typical answer types:
+  - articles
+  - determiners
+  - quantifiers
+  - pronouns
+  - auxiliary verbs
+  - modal verbs
+  - prepositions
+  - conjunctions
+  - relative pronouns
+  - infinitive marker "to"
+  - particles
+  - common grammatical fixed expressions
+- Cover at least 4 DIFFERENT categories from the list above.
 
 EXAMPLE RULES (CRITICAL):
-- The "example" field is a STANDALONE sentence, not part of the passage.
-- It must contain a real gap written as (0) ___ and have one logical one-word answer.
-- Good example: {"number":0,"sentence":"She is fond (0) ___ travelling by train.","answer":"of","explanation":"the adjective \\"fond\\" takes the dependent preposition \\"of\\""}
-
-ANSWER RULES (CRITICAL):
-- Every answer is exactly ONE word. No phrases, no contractions of two words, no options A/B/C/D.
-- Exactly ONE clear best answer per gap: the grammar and context must make other words wrong.
-- Part 2 tests GRAMMAR and FUNCTION words, not Part 1 vocabulary. Use a MIX of:
-  - prepositions: in / on / at / for / with / by / from / to
-  - relative pronouns: which / that / who / where / whose
-  - auxiliaries and modals: do / does / did / has / have / is / are / been / would
-  - determiners and quantifiers: some / any / each / every / much / many / few / little
-  - linkers and conjunctions: although / while / when / because / despite / unless / however
-  - pronouns and fixed grammar patterns: it / there / what / one / so / such / enough
-- Across the 8 gaps cover at least 4 DIFFERENT categories from the list above.
+- The "example" field is for gap (0) in the passage (not scored).
+- example.number must be 0.
+- example.answer must be the single correct ONE-word answer for gap (0).
+- Do NOT put example (0) inside questions[] or modelAnswers[].
+- No options A/B/C/D for the example or for any scored gap.
 
 FORBIDDEN:
-- a (0) gap inside the passage
-- gaps solvable by several equally correct words (e.g. "very/really/extremely")
-- answers that are content vocabulary choices (Part 1 style) instead of grammar/function words
-- multi-word answers, empty answers, answers with spaces
-- testing the same word as the answer in two different gaps
-- B1-trivial gaps or C1/C2 grammar
+- multi-word answers
+- content-word vocabulary gaps like Part 1
+- ambiguous gaps with two equally valid answers
+- gaps where the answer is only a rare or obscure word
+- more than 8 scored gaps, missing gap numbers, or gap (17)+
+- any Part 3-style word formation item
+- any multiple-choice options
+- passage shorter than 150 or longer than 180 words
 
-Each modelAnswers entry: the single correct word (lowercase unless a proper noun).
+Each modelAnswers entry: the single correct word (lowercase unless a proper noun) for questions 9–16 only.
 Generate exactly 8 questions numbered 9–16.
-Return ONLY JSON with: partTitle, directions, example {number:0, sentence (with the (0) ___ gap), answer, explanation}, title, passage (100–140 words with gaps (9) ___ to (16) ___ and NO (0) gap), questions[{id:"q1"–"q8", number:9–16, type:"short"}], modelAnswers[{id, answer:"one word"}]`;
+Return ONLY JSON with: partTitle, directions, example {number:0, answer:"one word"}, title, passage (150–180 words with (0) ___ and gaps (9) ___ to (16) ___), questions[{id:"q1"–"q8", number:9–16, type:"short"}], modelAnswers[{id, number:9–16, answer:"one word"}]`;
     }
 
     if (activity === 'word-formation' && L === 'B2') {
