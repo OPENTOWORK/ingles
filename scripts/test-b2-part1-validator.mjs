@@ -16,7 +16,7 @@ function makeValidPart1() {
     ['benefit', 'profit', 'advantage', 'gain'],
   ];
   const passage = `Finding the right routine
-Many people find it hard to (0) ___ time for exercise. Experts say we must (1) ___ a balance between work and rest. Those (2) ___ in sports tend to (3) ___ their fitness gradually, which is a (4) ___ habit. Making a good (5) ___ early helps you (6) ___ a decision that is (7) ___ recommended and brings a clear (8) ___ over time.`;
+Many people find it hard to (0) ___ time for exercise when work and family fill every hour of the day. Experts say we must (1) ___ a balance between effort and rest if we want habits that last for years. Those who are (2) ___ in sports tend to (3) ___ their fitness gradually, which is a (4) ___ habit rather than a sudden change. Making a good (5) ___ early helps you (6) ___ a decision that is (7) ___ recommended by coaches and brings a clear (8) ___ over time. In practice, short sessions several times a week usually beat rare long workouts that leave people exhausted. Friends can help keep you accountable, but the key is choosing activities you enjoy enough to repeat without constant pressure. With patience and a realistic plan, most adults can build routines that support both energy and calm in everyday life. Small improvements each month matter more than dramatic starts that disappear after two weeks of busy schedules and travel.`;
   return {
     partTitle: 'Part 1: Multiple-choice cloze',
     directions:
@@ -119,6 +119,21 @@ addCase('example multi-word option fails', (g) => {
   g.example.options[1] = 'B) spend time';
   return g;
 }, /example option .* must be one word only/);
+addCase('passage over 180 words fails', (g) => {
+  const filler =
+    ' Extra detail about schedules, commuting, family duties and weekend plans appears again and again in surveys of busy adults who want healthier lifestyles yet struggle to protect free time.';
+  // Pad until clearly above 180 words while keeping gaps intact.
+  while (
+    g.passage.replace(/\(\d+\)\s*_+/g, ' ').split(/\s+/).filter(Boolean).length < 194
+  ) {
+    g.passage += filler;
+  }
+  return g;
+}, /maximum is 180/);
+addCase('passage under 150 words fails', (g) => {
+  g.passage = `Short text (0) ___ (1) ___ (2) ___ (3) ___ (4) ___ (5) ___ (6) ___ (7) ___ (8) ___ end.`;
+  return g;
+}, /minimum is 150/);
 
 let failures = 0;
 for (const { name, mutate, expectError } of cases) {

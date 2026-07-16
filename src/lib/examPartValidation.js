@@ -570,8 +570,10 @@ function validateB2Part1Strict(gen, errors, warnings) {
       .replace(/\(\d+\)\s*_+/g, ' ')
       .split(/\s+/)
       .filter(Boolean).length;
-    if (wordCount < 140 || wordCount > 190) {
-      warnings.push(`Part 1 passage is ${wordCount} words; target is around 150–180.`);
+    if (wordCount < 150) {
+      errors.push(`Part 1 passage is ${wordCount} words; minimum is 150 (target 150–180).`);
+    } else if (wordCount > 180) {
+      errors.push(`Part 1 passage is ${wordCount} words; maximum is 180 (target 150–180).`);
     }
   }
 

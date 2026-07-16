@@ -94,11 +94,14 @@ ${directions}
 FORMAT (CRITICAL — do not invent Q1–9):
 - Example gap (0) near the start of the passage — not scored.
 - Exactly 8 scored gaps: (1) ___ through (8) ___ in reading order.
+- The passage MUST contain all of these markers literally: (0) ___ (1) ___ (2) ___ (3) ___ (4) ___ (5) ___ (6) ___ (7) ___ (8) ___ — never stop at (4) or omit later gaps.
 - Questions numbered 1–8 only. Do NOT create question 9.
 - Directions must be: For questions 1–8, read the text below and choose the best word (A, B, C or D) for each gap. There is an example at the beginning (0).
 
 TEXT REQUIREMENTS:
 - Natural, realistic exam-style text of 150–180 words with a short title.
+- STRICT word count: minimum 150 words, maximum 180 words. Count carefully. Do NOT exceed 180.
+- Prefer ~160–170 words. If the draft is longer than 180, cut redundant clauses before returning JSON.
 - Style similar to a magazine, newspaper, website or popular science article.
 - Authentic B2-level British English.
 - Difficulty should come from: collocations; lexical precision; natural language use; fixed expressions; dependent prepositions; phrasal verbs; common near-synonyms.
@@ -140,6 +143,7 @@ ITEM VARIETY (CRITICAL — the part must test a MIX of lexical knowledge):
 
 FORBIDDEN:
 - creating 9 scored questions or gaps beyond (8)
+- passage longer than 180 words or shorter than 150 words
 - all 8 items testing verbs
 - options with more than one word
 - items where two options are both defensible

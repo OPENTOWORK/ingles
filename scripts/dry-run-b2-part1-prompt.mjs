@@ -30,7 +30,7 @@ const userPrompt = buildExamGeneratePrompt('use-of-english', 'multiple-choice-cl
 });
 
 const systemPrompt =
-  'Output only valid JSON for one complete B2 Reading and Use of English Part 1 (multiple-choice cloze).';
+  'Output only valid JSON for one complete B2 Reading and Use of English Part 1 (multiple-choice cloze). The passage MUST be between 150 and 180 words inclusive. Never exceed 180 words.';
 
 console.error('Generating Part 1 dry-run (no Supabase)…');
 const openai = new OpenAI({ apiKey: env.OPENAI_API_KEY });
@@ -54,6 +54,10 @@ function evaluateGenerated(generated) {
     .filter(Boolean);
   const PLACEHOLDER_WORDS = new Set(['word', 'option', 'answer', 'choice', 'example', 'placeholder']);
   const hasPlaceholder = optionWords.some((w) => PLACEHOLDER_WORDS.has(w));
+  const passageWordCount = passage
+    .replace(/\(\d+\)\s*_+/g, ' ')
+    .split(/\s+/)
+    .filter(Boolean).length;
 
   const checks = [
     { name: 'JSON parses', ok: true },
@@ -76,26 +80,41 @@ function evaluateGenerated(generated) {
     },
     { name: 'No placeholders', ok: !hasPlaceholder },
     { name: 'Has title + passage', ok: Boolean(String(normalized.title || '').trim() && passage.trim()) },
+    {
+      name: 'Passage 150–180 words',
+      ok: passageWordCount >= 150 && passageWordCount <= 180,
+      detail: `${passageWordCount} words`,
+    },
   ];
 
-  return { validation, normalized, checks, allChecksOk: checks.every((c) => c.ok) };
+  return {
+    validation,
+    normalized,
+    checks,
+    passageWordCount,
+    allChecksOk: checks.every((c) => c.ok),
+  };
 }
 
 let attempt = 0;
 let lastEval = null;
 let lastGenerated = null;
-const MAX_ATTEMPTS = 3;
+const MAX_ATTEMPTS = 6;
 
 while (attempt < MAX_ATTEMPTS) {
   attempt += 1;
   console.error(`Attempt ${attempt}/${MAX_ATTEMPTS}…`);
+  const repairHint =
+    attempt > 1
+      ? `\n\nRETRY NOTE: Previous output failed validation. You MUST include gaps (0) ___ (1) ___ (2) ___ (3) ___ (4) ___ (5) ___ (6) ___ (7) ___ (8) ___ literally in the passage, keep exactly 8 questions, and keep the passage between 150 and 180 words.`
+      : '';
   const completion = await openai.chat.completions.create({
     model: process.env.OPENAI_MODEL || 'gpt-4o-mini',
-    temperature: 0.7,
+    temperature: attempt === 1 ? 0.7 : 0.45,
     response_format: { type: 'json_object' },
     messages: [
       { role: 'system', content: systemPrompt },
-      { role: 'user', content: userPrompt },
+      { role: 'user', content: userPrompt + repairHint },
     ],
   });
 
@@ -110,6 +129,9 @@ while (attempt < MAX_ATTEMPTS) {
   }
 
   lastEval = evaluateGenerated(lastGenerated);
+  console.error(
+    `Attempt ${attempt}: ${lastEval.passageWordCount} words, ok=${lastEval.allChecksOk}`,
+  );
   if (lastEval.allChecksOk) break;
   console.error(`Attempt ${attempt} failed:`, lastEval.validation.errors);
 }
@@ -128,7 +150,9 @@ const report = {
     mentionsQ1to8: /Q1–8|questions numbered 1–8|exactly 8 questions/i.test(userPrompt),
     forbidsQ9: /Do NOT create question 9|beyond \(8\)/i.test(userPrompt),
     wordCountTarget: /150–180 words/i.test(userPrompt),
+    strictMax180: /maximum 180|Do NOT exceed 180/i.test(userPrompt),
   },
+  passageWordCount: lastEval.passageWordCount,
   validation: {
     ok: validation.ok,
     errors: validation.errors,
