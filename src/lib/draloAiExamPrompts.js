@@ -36,27 +36,92 @@ export function buildExamGeneratePrompt(mode, activity, level, options = {}) {
 
   if (mode === 'use-of-english') {
     if (activity === 'key-word' && L === 'B2') {
-      return `Create ONE complete Cambridge B2 First Use of English Part 4: Key word transformations.
+      return `Create ONE complete B2 Reading and Use of English Part 4: Key word transformations (Q25–30).
+The task should match official B2 First style, difficulty, wording and item design.
 ${variety}
 ${SHARED_JSON_RULES}
 ${directions}
-Generate exactly ${n} transformations numbered 25–${24 + n}, plus example item 0 in the "example" field.
-Each question object must include:
+
+FORMAT (CRITICAL):
+- Example item 0 in the "example" field — not scored.
+- Exactly 6 scored transformations numbered 25–30.
+- Directions must be: For questions 25–30, complete the second sentence so that it has a similar meaning to the first sentence, using the word given. Do not change the word given. You must use between two and five words, including the word given. There is an example at the beginning (0).
+
+EACH SCORED QUESTION MUST INCLUDE:
 - number (25–30)
 - type: "transformation"
 - sentence1: complete first sentence (meaning source)
-- keyword: ONE given word in CAPITALS (must appear unchanged in the answer)
-- sentence2Start: second sentence START only, ending with gap "__________________" (candidate completes 2–5 words including keyword)
+- keyword: ONE given word in CAPITALS (must appear unchanged in every full answer)
+- sentence2Start OR sentence2: second sentence with exactly ONE gap written as __________________
+- answer: ONE primary correct gap completion (2–5 Cambridge words including the keyword)
+- grading_metadata: object required for Dralo's deterministic 0/1/2 grader (see below)
 
-Each modelAnswers entry: full correct second sentence (2–5 words total including keyword unchanged).
+EXAMPLE RULES:
+- example.number must be 0
+- example must include sentence1, keyword (CAPITALS), sentence2Start/sentence2 with a gap, and answer (2–5 words including keyword)
+- Do NOT put example 0 inside questions[] or modelAnswers[]
 
-Quality rules:
-- Keep the same meaning as sentence1; change grammar/structure (passive, conditional, wish, reported speech, comparatives, etc.)
-- Answers must be 2–5 words including the keyword exactly as given
-- Do NOT copy sentence1 wording into the answer
-- Avoid trivial answers or incomplete fragments
-- Vary transformation types across the ${n} items
-Return ONLY JSON with: partTitle, directions, example {number:0, sentence1, keyword, sentence2Start, answer, explanation}, questions[], modelAnswers[]`;
+GRADING METADATA (CRITICAL — required on every scored question):
+Each question.grading_metadata MUST be:
+{
+  "type": "b2_key_word_transformation",
+  "version": 1,
+  "keyword": "SAME_AS_QUESTION_KEYWORD",
+  "fullAnswers": ["primary answer", "optional contraction variant"],
+  "markingPoints": [
+    { "id": 1, "label": "structure/grammar element", "accepted": ["variant A", "variant B"] },
+    { "id": 2, "label": "lexical/complement element", "accepted": ["variant C"] }
+  ]
+}
+
+MARKING POINT RULES:
+- Exactly TWO marking points per item (id 1 and id 2), each worth 1 point.
+- Normally: one grammar/structure element + one lexical/complement/preposition/meaning element.
+- Each marking point needs at least one accepted variant.
+- Marking points must be meaningful and non-overlapping (do not share identical accepted strings).
+- CRITICAL: the two marking points must PARTITION each fullAnswer in order — every word of the fullAnswer must belong to MP1 then MP2, with no leftover words and no gaps.
+- Good example for answer "do not need to use":
+  fullAnswers: ["do not need to use", "don't need to use"]
+  markingPoints: [
+    { "id": 1, "label": "negative need structure", "accepted": ["do not need", "don't need"] },
+    { "id": 2, "label": "infinitive complement", "accepted": ["to use"] }
+  ]
+- Bad: MP1="IMPORTANT" and MP2="to book" for fullAnswer "IMPORTANT to book your tickets" (leftover words → fails).
+- fullAnswers must be consistent with the marking points: each fullAnswer must score 2/2 when graded by marking points alone.
+- Every fullAnswer must be 2–5 words by Cambridge word-count rules (don't / didn't count as TWO words; can't / cannot count as ONE).
+- Write fullAnswers in normal sentence case/lowercase (not ALL CAPS). The keyword appears naturally inside the answer (e.g. keyword NEED → "do not need to use").
+- The keyword must appear unchanged in EVERY fullAnswer.
+- Allow only controlled superficial variants (do not / don't, is not / isn't, was not / wasn't, have not / haven't, cannot / can't).
+- Do NOT allow two different grammatical transformation routes as separate answers (bad: "wish I had gone" vs "regret not going").
+
+QUALITY RULES:
+- The two sentences must express the same meaning.
+- Do NOT copy sentence1 wording into the answer unnecessarily.
+- Avoid trivial answers or incomplete fragments.
+- The keyword must be essential to the answer.
+- Exactly one main correct grammatical solution per item.
+- Choose common B2 grammatical/lexical keywords.
+- Do NOT generate an item that cannot be split naturally into two marking points.
+
+ITEM VARIETY (across Q25–30):
+Include a balanced mix such as: passive voice; reported speech; conditionals; wishes/regrets; modal verbs; comparatives; infinitive/gerund patterns; phrasal verbs; fixed expressions; verb patterns; dependent prepositions; emphasis structures; relative clauses; quantifiers.
+- Do not overuse the same transformation type.
+- Do not repeat the same keyword across the 6 scored items.
+- Do not create all 6 items from the same grammar area.
+- Do not use C1/C2 obscure structures or B1-trivial items.
+
+FORBIDDEN:
+- more or fewer than 6 scored questions
+- question numbers outside 25–30
+- multiple-choice options
+- answers under 2 or over 5 Cambridge words
+- missing grading_metadata / missing marking points
+- keyword changed, split, or omitted
+- two equally valid different transformation routes
+
+Each modelAnswers entry: {id, number:25–30, answer:"2–5 word primary answer"} matching the question answer.
+Generate exactly 6 questions numbered 25–30.
+Return ONLY JSON with: partTitle, directions, example {number:0, sentence1, keyword, sentence2Start, answer}, questions[{id, number, type:"transformation", sentence1, keyword, sentence2Start, answer, grading_metadata}], modelAnswers[]`;
     }
 
     const questionsSchema = `"questions":[${Array.from({ length: n }, (_, i) => {

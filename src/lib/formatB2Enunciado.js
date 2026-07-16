@@ -80,6 +80,25 @@ export function buildB2EnunciadoFromGenerated(gen = {}, partNumber) {
 
   if (pn === 4) {
     if (g.directions) pushLines(lines, g.directions);
+    if (g.example && typeof g.example === 'object') {
+      const exSentence1 = String(g.example.sentence1 || '').trim();
+      const exKeyword = String(g.example.keyword || g.example.keyWord || '')
+        .trim()
+        .toUpperCase();
+      let exSentence2 = String(g.example.sentence2Start || g.example.sentence2 || '').trim();
+      if (exSentence2 && !/_{2,}|\.{4,}/.test(exSentence2)) {
+        exSentence2 = `${exSentence2} __________________`;
+      }
+      const exAnswer = String(g.example.answer || '').trim();
+      if (exSentence1 || exKeyword || exSentence2) {
+        lines.push('Example:');
+        if (exSentence1) lines.push(`0. ${exSentence1}`);
+        if (exKeyword) lines.push(exKeyword);
+        if (exSentence2) lines.push(exSentence2);
+        if (exAnswer) lines.push(`Answer: 0 → ${exAnswer}`);
+        lines.push('');
+      }
+    }
     lines.push('Questions');
     for (const q of g.questions) {
       const num = q.number ?? '';

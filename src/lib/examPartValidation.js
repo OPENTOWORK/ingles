@@ -12,6 +12,9 @@ import {
   findForbiddenCambridge,
   keywordInPart4Answer,
 } from '@/lib/b2RuoeExamQuality';
+import { countCambridgeKeyWordWords } from '@/lib/countCambridgeKeyWordWords';
+import { validateB2KeyWordAnswerKey } from '@/lib/validateB2KeyWordAnswerKey';
+import { gradeB2KeyWordTransformation } from '@/lib/gradeB2KeyWordTransformation';
 
 const WRITING_PART2_FORMATS = new Set(['article', 'email', 'letter', 'review', 'report']);
 
@@ -992,7 +995,21 @@ function validateB2Part3Strict(gen, errors, warnings) {
   }
 }
 
-/** B2 Part 4 key word transformations — strict mechanical checks on generated items. */
+/** B2 Part 4 key word transformations — strict mechanical + grading-metadata checks. */
+function resolvePart4Sentence2(q) {
+  return String(q?.sentence2Start || q?.sentence2 || '').trim();
+}
+
+function resolvePart4GradingMetadata(q, answerEntry) {
+  return (
+    q?.grading_metadata ||
+    q?.gradingMetadata ||
+    answerEntry?.grading_metadata ||
+    answerEntry?.gradingMetadata ||
+    null
+  );
+}
+
 function validateB2Part4Strict(gen, errors, warnings) {
   const questions = asArray(gen.questions);
   if (questions.length !== 6) {
@@ -1000,8 +1017,54 @@ function validateB2Part4Strict(gen, errors, warnings) {
   }
 
   const seenNumbers = new Set();
-  const modelAnswers = asArray(gen.modelAnswers);
-  const answerById = new Map(modelAnswers.map((m) => [String(m?.id), m]));
+  const seenKeywords = new Set();
+  const modelAnswers = asArray(gen.modelAnswers).map((entry) =>
+    typeof entry === 'string' ? { answer: entry } : entry,
+  );
+  const answerById = new Map();
+  modelAnswers.forEach((entry) => {
+    if (entry?.id != null) answerById.set(String(entry.id), entry);
+  });
+  const answerByNumber = new Map();
+  modelAnswers.forEach((entry) => {
+    if (entry?.number != null) answerByNumber.set(Number(entry.number), entry);
+  });
+
+  // Example 0 (not scored).
+  const example = gen.example && typeof gen.example === 'object' ? gen.example : null;
+  if (!example) {
+    errors.push('Part 4 must include example item 0 (example field).');
+  } else {
+    if (example.number != null && Number(example.number) !== 0) {
+      errors.push(`Part 4 example.number must be 0 (got ${example.number}).`);
+    }
+    const exSentence1 = String(example.sentence1 || '').trim();
+    const exKeyword = String(example.keyword || example.keyWord || '').trim();
+    const exSentence2 = resolvePart4Sentence2(example);
+    const exAnswer = String(example.answer || '').trim();
+    if (!exSentence1) errors.push('Part 4 example must include sentence1.');
+    if (!exKeyword) {
+      errors.push('Part 4 example must include keyword in CAPITALS.');
+    } else if (exKeyword !== exKeyword.toUpperCase()) {
+      errors.push(`Part 4 example keyword must be CAPITAL LETTERS (got "${exKeyword}").`);
+    }
+    if (!exSentence2) {
+      errors.push('Part 4 example must include sentence2Start/sentence2 with a gap.');
+    } else if (!/_{2,}|\.{4,}|…{3,}/.test(exSentence2)) {
+      errors.push('Part 4 example sentence2 must contain a gap (__________________).');
+    }
+    if (!exAnswer) {
+      errors.push('Part 4 example must include answer.');
+    } else {
+      const exWc = countCambridgeKeyWordWords(exAnswer);
+      if (exWc < 2 || exWc > 5) {
+        errors.push(`Part 4 example answer must be 2–5 Cambridge words (got ${exWc}: "${exAnswer}").`);
+      }
+      if (exKeyword && !keywordInPart4Answer(exKeyword, exAnswer)) {
+        errors.push(`Part 4 example answer must contain keyword "${exKeyword}" unchanged.`);
+      }
+    }
+  }
 
   questions.forEach((q, i) => {
     const label = `Part 4 question ${q?.number ?? i + 1}`;
@@ -1014,27 +1077,128 @@ function validateB2Part4Strict(gen, errors, warnings) {
       seenNumbers.add(num);
     }
 
-    const keyword = String(q?.keyword || q?.keyWord || '').trim();
-    if (!keyword) errors.push(`${label}: missing keyword.`);
+    if (Number(q?.number) === 0) {
+      errors.push(`${label}: example (0) must not appear in questions[] — only Q25–30 are scored.`);
+    }
 
-    const entry = answerById.get(String(q?.id)) ?? modelAnswers[i];
-    const answer = String(entry?.answer ?? '').trim();
+    if (asArray(q?.options).length > 0) {
+      errors.push(`${label}: key-word transformations must NOT have A/B/C/D options.`);
+    }
+
+    if (!String(q?.sentence1 || '').trim()) {
+      errors.push(`${label}: missing sentence1.`);
+    }
+
+    const keyword = String(q?.keyword || q?.keyWord || '').trim();
+    if (!keyword) {
+      errors.push(`${label}: missing keyword.`);
+    } else if (keyword !== keyword.toUpperCase()) {
+      errors.push(`${label}: keyword must be CAPITAL LETTERS (got "${keyword}").`);
+    } else {
+      const kwKey = keyword.toUpperCase();
+      if (seenKeywords.has(kwKey)) {
+        errors.push(`${label}: repeated keyword "${kwKey}" — each item needs a distinct keyword.`);
+      } else {
+        seenKeywords.add(kwKey);
+      }
+    }
+
+    const sentence2 = resolvePart4Sentence2(q);
+    if (!sentence2) {
+      errors.push(`${label}: missing sentence2Start/sentence2 with a gap.`);
+    } else if (!/_{2,}|\.{4,}|…{3,}/.test(sentence2)) {
+      errors.push(`${label}: sentence2 must contain a gap (__________________).`);
+    }
+
+    const answerEntry =
+      answerById.get(String(q?.id)) ?? answerByNumber.get(Number(q?.number)) ?? modelAnswers[i];
+    const answer = String(q?.answer || answerEntry?.answer || '').trim();
     if (!answer) {
       errors.push(`${label}: missing answer key entry.`);
       return;
     }
 
-    const wc = countPart4AnswerWords(answer);
+    const wc = countCambridgeKeyWordWords(answer);
     if (wc < 2 || wc > 5) {
-      errors.push(`${label}: model answer must be 2–5 words (got ${wc}: "${answer}").`);
+      errors.push(`${label}: model answer must be 2–5 Cambridge words (got ${wc}: "${answer}").`);
     }
     if (keyword && !keywordInPart4Answer(keyword, answer)) {
       errors.push(`${label}: model answer must contain keyword "${keyword}" unchanged (got "${answer}").`);
     }
+
+    const metaRaw = resolvePart4GradingMetadata(q, answerEntry);
+    if (!metaRaw || typeof metaRaw !== 'object') {
+      errors.push(`${label}: missing grading_metadata for 0/1/2 scoring.`);
+      return;
+    }
+
+    const meta = {
+      ...metaRaw,
+      type: metaRaw.type || 'b2_key_word_transformation',
+      version: metaRaw.version ?? 1,
+      keyword: metaRaw.keyword || keyword,
+    };
+
+    const keyValidation = validateB2KeyWordAnswerKey(meta);
+    if (!keyValidation.valid) {
+      errors.push(`${label}: invalid grading_metadata — ${keyValidation.errors.join('; ')}`);
+      return;
+    }
+
+    const metaKeyword = String(
+      typeof meta.keyword === 'object' ? meta.keyword.text : meta.keyword || '',
+    ).trim();
+    if (keyword && metaKeyword && metaKeyword.toUpperCase() !== keyword.toUpperCase()) {
+      errors.push(
+        `${label}: grading_metadata.keyword "${metaKeyword}" must match question keyword "${keyword}".`,
+      );
+    }
+
+    const fullAnswers = asArray(meta.fullAnswers).map((a) => String(a || '').trim()).filter(Boolean);
+    if (!fullAnswers.some((fa) => fa.toLowerCase() === answer.toLowerCase())) {
+      // Soft-ish but still hard: primary answer should be listed in fullAnswers.
+      errors.push(
+        `${label}: primary answer "${answer}" must appear in grading_metadata.fullAnswers.`,
+      );
+    }
+
+    fullAnswers.forEach((fa) => {
+      const faWc = countCambridgeKeyWordWords(fa);
+      if (faWc < 2 || faWc > 5) {
+        errors.push(`${label}: fullAnswer must be 2–5 Cambridge words (got ${faWc}: "${fa}").`);
+      }
+      if (keyword && !keywordInPart4Answer(keyword, fa)) {
+        errors.push(`${label}: fullAnswer must contain keyword "${keyword}" unchanged (got "${fa}").`);
+      }
+      // Bypass fullAnswers short-circuit so we verify marking-point coverage.
+      const grade = gradeB2KeyWordTransformation(fa, {
+        ...meta,
+        fullAnswers: ['__no_full_match_placeholder__'],
+      });
+      if (grade.score !== 2) {
+        errors.push(
+          `${label}: fullAnswer "${fa}" does not score 2/2 against marking points (got ${grade.score}).`,
+        );
+      }
+    });
   });
+
+  if (questions.length === 6 && seenNumbers.size === 6) {
+    for (let n = 25; n <= 30; n += 1) {
+      if (!seenNumbers.has(n)) errors.push(`Part 4 is missing question number ${n}.`);
+    }
+  }
+
+  if (modelAnswers.some((m) => Number(m?.number) === 0)) {
+    errors.push('Part 4 modelAnswers must cover Q25–30 only — example (0) belongs in example.answer.');
+  }
 
   const cambridge = findForbiddenCambridge(gen, 4);
   if (cambridge) errors.push(cambridge);
+
+  // Keep simple-split helper referenced for legacy soft checks if needed.
+  void countPart4AnswerWords;
+  void warnings;
 }
 
 /** B2 Part 5 reading multiple choice — strict mechanical + heuristic checks. */

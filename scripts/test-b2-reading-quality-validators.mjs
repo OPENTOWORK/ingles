@@ -85,33 +85,131 @@ const p3bad = structuredClone(part3);
 p3bad.modelAnswers[0] = { id: 'q1', answer: 'fit and well' };
 check('Part 3 rejects multi-word derivation', !validateGeneratedExamPart('b2', 3, p3bad).ok);
 
-/* ---------- Part 4: keyword unchanged, 2–5 words ---------- */
+/* ---------- Part 4: keyword unchanged, 2–5 Cambridge words + grading_metadata ---------- */
 
-const part4 = {
-  directions: 'For questions 25–30…',
-  questions: [
-    { id: 'q25', number: 25, type: 'transformation', sentence1: 'A', keyword: 'HARDLY', sentence2Start: 'B __________________' },
-    { id: 'q26', number: 26, type: 'transformation', sentence1: 'A', keyword: 'BY', sentence2Start: 'B __________________' },
-    { id: 'q27', number: 27, type: 'transformation', sentence1: 'A', keyword: 'WISHES', sentence2Start: 'B __________________' },
-    { id: 'q28', number: 28, type: 'transformation', sentence1: 'A', keyword: 'FEWER', sentence2Start: 'B __________________' },
-    { id: 'q29', number: 29, type: 'transformation', sentence1: 'A', keyword: 'NEED', sentence2Start: 'B __________________' },
-    { id: 'q30', number: 30, type: 'transformation', sentence1: 'A', keyword: 'SPITE', sentence2Start: 'B __________________' },
-  ],
-  modelAnswers: [
-    { id: 'q25', answer: 'Hardly anyone finds' },
-    { id: 'q26', answer: 'by the introduction of' },
-    { id: 'q27', answer: 'wishes she had moved' },
-    { id: 'q28', answer: 'fewer public parks than' },
-    { id: 'q29', answer: 'do not need to use' },
-    { id: 'q30', answer: 'spite of the subway being' },
-  ],
-};
+function makeValidPart4() {
+  const meta = (keyword, fullAnswers, mp1, mp2) => ({
+    type: 'b2_key_word_transformation',
+    version: 1,
+    keyword,
+    fullAnswers,
+    markingPoints: [
+      { id: 1, label: 'mp1', accepted: mp1 },
+      { id: 2, label: 'mp2', accepted: mp2 },
+    ],
+  });
+  const items = [
+    {
+      id: 'q25',
+      number: 25,
+      type: 'transformation',
+      sentence1: 'It is not necessary for you to use a password every time.',
+      keyword: 'NEED',
+      sentence2Start: 'You __________________ a password every time.',
+      answer: 'do not need to use',
+      grading_metadata: meta(
+        'NEED',
+        ['do not need to use', "don't need to use"],
+        ['do not need', "don't need"],
+        ['to use'],
+      ),
+    },
+    {
+      id: 'q26',
+      number: 26,
+      type: 'transformation',
+      sentence1: 'I did not intend to delete the file.',
+      keyword: 'MEAN',
+      sentence2Start: 'I __________________ the file.',
+      answer: "didn't mean to delete",
+      grading_metadata: meta(
+        'MEAN',
+        ["didn't mean to delete", 'did not mean to delete'],
+        ["didn't mean", 'did not mean'],
+        ['to delete'],
+      ),
+    },
+    {
+      id: 'q27',
+      number: 27,
+      type: 'transformation',
+      sentence1: 'The exam was less difficult than I expected.',
+      keyword: 'AS',
+      sentence2Start: 'The exam __________________ I expected.',
+      answer: 'was not as hard as',
+      grading_metadata: meta(
+        'AS',
+        ['was not as hard as', "wasn't as hard as"],
+        ['was not', "wasn't"],
+        ['as hard as'],
+      ),
+    },
+    {
+      id: 'q28',
+      number: 28,
+      type: 'transformation',
+      sentence1: 'She has never visited Rome before.',
+      keyword: 'HAD',
+      sentence2Start: 'Never before __________________ Rome.',
+      answer: 'had she visited',
+      grading_metadata: meta('HAD', ['had she visited'], ['had she'], ['visited']),
+    },
+    {
+      id: 'q29',
+      number: 29,
+      type: 'transformation',
+      sentence1: 'People say that the museum opens at nine.',
+      keyword: 'THOUGHT',
+      sentence2Start: 'The museum __________________ at nine.',
+      answer: 'is thought to open',
+      grading_metadata: meta('THOUGHT', ['is thought to open'], ['is thought'], ['to open']),
+    },
+    {
+      id: 'q30',
+      number: 30,
+      type: 'transformation',
+      sentence1: 'I am excited about hearing from you soon.',
+      keyword: 'FORWARD',
+      sentence2Start: 'I am __________________ from you soon.',
+      answer: 'looking forward to hearing',
+      grading_metadata: meta(
+        'FORWARD',
+        ['looking forward to hearing'],
+        ['looking forward'],
+        ['to hearing'],
+      ),
+    },
+  ];
+  return {
+    directions:
+      'For questions 25–30, complete the second sentence so that it has a similar meaning to the first sentence, using the word given. Do not change the word given. You must use between two and five words, including the word given. There is an example at the beginning (0).',
+    example: {
+      number: 0,
+      sentence1: 'You must do the washing-up tonight.',
+      keyword: 'HAVE',
+      sentence2Start: 'You __________________ the washing-up tonight.',
+      answer: 'have to do',
+    },
+    questions: items,
+    modelAnswers: items.map((item) => ({
+      id: item.id,
+      number: item.number,
+      answer: item.answer,
+    })),
+  };
+}
+
+const part4 = makeValidPart4();
 check('Part 4 valid fixture passes', validateGeneratedExamPart('b2', 4, part4).ok);
 const p4bad = structuredClone(part4);
-p4bad.modelAnswers[0] = { id: 'q25', answer: 'No one really finds it easy at all today' };
+p4bad.questions[0].answer = 'No one really finds it easy at all today';
+p4bad.modelAnswers[0].answer = 'No one really finds it easy at all today';
+p4bad.questions[0].grading_metadata.fullAnswers = ['No one really finds it easy at all today'];
 check('Part 4 rejects answer over 5 words', !validateGeneratedExamPart('b2', 4, p4bad).ok);
 const p4kw = structuredClone(part4);
-p4kw.modelAnswers[0] = { id: 'q25', answer: 'No one finds it easy' };
+p4kw.questions[0].answer = 'do not have to use';
+p4kw.modelAnswers[0].answer = 'do not have to use';
+p4kw.questions[0].grading_metadata.fullAnswers = ['do not have to use'];
 check('Part 4 rejects missing keyword', !validateGeneratedExamPart('b2', 4, p4kw).ok);
 
 /* ---------- Part 5: inference, no literal match ---------- */
