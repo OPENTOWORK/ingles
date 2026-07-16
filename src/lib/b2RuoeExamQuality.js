@@ -101,6 +101,40 @@ export function extractMcqLetter(option) {
   return null;
 }
 
+/** A–G sentence-pool helpers (B2 Part 6 gapped text). */
+export function extractPoolSentenceText(option) {
+  if (typeof option === 'string') {
+    const m =
+      option.match(/^[A-G]\)\s*(.*)$/i) ||
+      option.match(/^[A-G]\.\s*(.*)$/i) ||
+      option.match(/^[A-G]\s+(.*)$/i);
+    return (m ? m[1] : option).trim();
+  }
+  if (option && typeof option === 'object') {
+    return String(option.text || option.sentence || option.label || '').trim();
+  }
+  return String(option || '').trim();
+}
+
+export function extractPoolLetter(option) {
+  if (typeof option === 'string') {
+    const m = option.match(/^([A-G])(?:\)|\.|[\s])/i) || option.match(/^([A-G])$/i);
+    return m ? m[1].toUpperCase() : null;
+  }
+  if (option?.letter) {
+    const L = String(option.letter).replace(/[^A-Ga-g]/g, '').charAt(0).toUpperCase();
+    return /^[A-G]$/.test(L) ? L : null;
+  }
+  return null;
+}
+
+export function isCompleteSentenceText(text) {
+  const t = String(text || '').trim();
+  if (t.length < 12) return false;
+  if (!/[.!?]"?$/.test(t)) return false;
+  return countWords(t) >= 5;
+}
+
 function asArray(value) {
   if (Array.isArray(value)) return value;
   if (value && typeof value === 'object') return Object.values(value);
@@ -305,6 +339,225 @@ export function analyzePart5Quality(gen) {
   if (cambridge) errors.push(cambridge);
 
   return { errors, warnings, metrics };
+}
+
+const PART6_COHESION_HINTS =
+  /\b(this|these|that|those|such|however|although|though|yet|nevertheless|therefore|thus|consequently|meanwhile|instead|for example|for instance|in addition|moreover|furthermore|similarly|likewise|as a result|because|since|while|whereas|then|next|later|previously|above all|after all)\b/i;
+
+const PART6_PLACEHOLDER_RE =
+  /\b(placeholder|lorem ipsum|TODO|option text|question text|extra sentence\.\.\.)\b/i;
+
+function answerLetterForPart6Gap(q, modelAnswers, index) {
+  const fromQ = String(q?.answer || '').trim().toUpperCase();
+  if (/^[A-G]$/.test(fromQ)) return fromQ;
+  const byId = modelAnswers.find((m) => String(m?.id) === String(q?.id));
+  const byNum = modelAnswers.find((m) => Number(m?.number) === Number(q?.number));
+  const entry = byId || byNum || modelAnswers[index];
+  const letter = String(entry?.answer || '').trim().toUpperCase();
+  return /^[A-G]$/.test(letter) ? letter : null;
+}
+
+function gapContextSnippet(passage, gapNumber, radius = 90) {
+  const re = new RegExp(`\\(${gapNumber}\\)`, 'i');
+  const m = String(passage || '').match(re);
+  if (!m || m.index == null) return '';
+  const start = Math.max(0, m.index - radius);
+  const end = Math.min(passage.length, m.index + String(m[0]).length + radius);
+  return passage.slice(start, end);
+}
+
+function detectPart6KeywordOverlap(context, sentenceText) {
+  const ctxWords = significantWords(context, 5);
+  const sentWords = significantWords(sentenceText, 5);
+  if (ctxWords.length < 2 || sentWords.length < 2) return null;
+  const shared = sentWords.filter((w) => ctxWords.includes(w));
+  if (shared.length >= 3) return shared.slice(0, 4).join(', ');
+  return null;
+}
+
+/**
+ * Mechanical + soft heuristic checks for B2 Part 6 gapped text.
+ */
+export function analyzePart6Quality(gen) {
+  const errors = [];
+  const warnings = [];
+  const metrics = {
+    wordCount: 0,
+    gapMarkers: [],
+    usedLetters: [],
+    unusedLetters: [],
+    poolWordCounts: [],
+  };
+
+  const passage = String(gen.passage || '');
+  metrics.wordCount = countWords(passage);
+  if (metrics.wordCount < 500) {
+    errors.push(`Part 6 passage is ${metrics.wordCount} words; minimum is 500 (target 500–600).`);
+  } else if (metrics.wordCount > 600) {
+    errors.push(`Part 6 passage is ${metrics.wordCount} words; maximum is 600 (target 500–600).`);
+  }
+
+  if (!hasTextLocal(gen.title)) errors.push('Part 6 must include a passage title.');
+  if (!hasTextLocal(passage)) errors.push('Part 6 must include a passage.');
+
+  for (let n = 37; n <= 42; n += 1) {
+    const re = new RegExp(`\\(${n}\\)`);
+    if (!re.test(passage)) errors.push(`Part 6 passage is missing gap marker (${n}).`);
+    else metrics.gapMarkers.push(n);
+  }
+
+  const highGaps = [...passage.matchAll(/\((\d{2,})\)/g)]
+    .map((m) => Number(m[1]))
+    .filter((n) => n >= 43);
+  if (highGaps.length) {
+    errors.push(`Part 6 passage must not contain gap markers 43+ (found ${[...new Set(highGaps)].join(', ')}).`);
+  }
+
+  const wrongLowGaps = [...passage.matchAll(/\((\d{2,})\)/g)]
+    .map((m) => Number(m[1]))
+    .filter((n) => n >= 31 && n <= 36);
+  if (wrongLowGaps.length) {
+    errors.push(
+      `Part 6 passage must use gaps 37–42 only (found legacy markers ${[...new Set(wrongLowGaps)].join(', ')}).`,
+    );
+  }
+
+  let pool = asArray(gen.sentencePool);
+  if (!pool.length && asArray(gen.options).length) pool = asArray(gen.options);
+
+  if (pool.length !== 7) {
+    errors.push(`Part 6 must have exactly 7 sentencePool options A–G (got ${pool.length}).`);
+  }
+
+  const poolByLetter = {};
+  const seenPoolLetters = new Set();
+  pool.forEach((item, i) => {
+    const letter = extractPoolLetter(item) || 'ABCDEFG'[i];
+    const text = extractPoolSentenceText(item);
+    const label = `Part 6 option ${letter || i + 1}`;
+    if (!/^[A-G]$/.test(letter || '')) {
+      errors.push(`${label}: letter must be A–G.`);
+    } else if (seenPoolLetters.has(letter)) {
+      errors.push(`${label}: duplicate option letter ${letter}.`);
+    } else {
+      seenPoolLetters.add(letter);
+      poolByLetter[letter] = text;
+    }
+    if (!text) errors.push(`${label}: empty sentence text.`);
+    if (PART6_PLACEHOLDER_RE.test(text)) errors.push(`${label}: placeholder text.`);
+    if (text && !isCompleteSentenceText(text)) {
+      errors.push(`${label}: must be a complete sentence.`);
+    }
+    const wc = countWords(text);
+    metrics.poolWordCounts.push({ letter, wc });
+    if (wc > 0 && (wc < 6 || wc > 40)) {
+      warnings.push(`${label}: unusual length (${wc} words) — soft check.`);
+    }
+  });
+
+  for (const L of 'ABCDEFG') {
+    if (!seenPoolLetters.has(L) && pool.length === 7) {
+      errors.push(`Part 6 sentencePool is missing option ${L}.`);
+    }
+  }
+
+  const questions = asArray(gen.questions);
+  const modelAnswers = asArray(gen.modelAnswers);
+  const answerLetters = [];
+
+  questions.forEach((q, i) => {
+    const label = `Part 6 gap ${q?.number ?? i + 1}`;
+    if (asArray(q?.options).length > 0) {
+      // Per-question A–D options are wrong for Part 6; warn only if they look like full MCQ stems.
+      const looksLikeMcq = asArray(q.options).some((o) => extractMcqLetter(o) && extractMcqOptionText(o).length > 8);
+      if (looksLikeMcq) {
+        warnings.push(`${label}: has per-question options; Part 6 should use a global A–G sentencePool only.`);
+      }
+    }
+    const letter = answerLetterForPart6Gap(q, modelAnswers, i);
+    if (!letter) errors.push(`${label}: missing valid A–G answer key.`);
+    else answerLetters.push(letter);
+
+    if (letter && poolByLetter[letter]) {
+      const ctx = gapContextSnippet(passage, Number(q?.number) || 37 + i);
+      const overlap = detectPart6KeywordOverlap(ctx, poolByLetter[letter]);
+      if (overlap) {
+        warnings.push(
+          `${label}: correct sentence may rely on keyword overlap with nearby text (${overlap}) — soft check.`,
+        );
+      }
+      if (!PART6_COHESION_HINTS.test(`${ctx} ${poolByLetter[letter]}`)) {
+        warnings.push(`${label}: weak cohesion clues near gap — soft check.`);
+      }
+    }
+  });
+
+  // Prefer modelAnswers length when questions omit answers.
+  if (answerLetters.length === 0 && modelAnswers.length) {
+    modelAnswers.forEach((m, i) => {
+      const letter = String(m?.answer || '').trim().toUpperCase();
+      if (!/^[A-G]$/.test(letter)) {
+        errors.push(`Part 6 model answer ${i + 1}: must be A–G (got "${m?.answer}").`);
+      } else {
+        answerLetters.push(letter);
+      }
+    });
+  } else {
+    modelAnswers.forEach((m, i) => {
+      const letter = String(m?.answer || '').trim().toUpperCase();
+      if (letter && !/^[A-G]$/.test(letter)) {
+        errors.push(`Part 6 model answer ${i + 1}: must be A–G (got "${m?.answer}").`);
+      }
+    });
+  }
+
+  metrics.usedLetters = answerLetters;
+  if (answerLetters.length === 6) {
+    const unique = new Set(answerLetters);
+    if (unique.size !== 6) {
+      errors.push(
+        `Part 6 answer key must use 6 different letters (got ${answerLetters.join(', ')} — duplicates).`,
+      );
+    }
+    const unused = [...'ABCDEFG'].filter((L) => !unique.has(L));
+    metrics.unusedLetters = unused;
+    if (unused.length !== 1) {
+      errors.push(
+        `Part 6 must leave exactly one unused option (extra sentence); unused=[${unused.join(',') || 'none'}].`,
+      );
+    }
+  } else if (questions.length === 6 || modelAnswers.length === 6) {
+    errors.push(`Part 6 answer key must have exactly 6 A–G letters (got ${answerLetters.length}).`);
+  }
+
+  // Soft: too many gaps at paragraph endings (gap as last content before blank line / end).
+  const paraEndGaps = [...passage.matchAll(/\(\d{2}\)\s*(?:_{2,}|\.{2,}|…+)?\s*(?:\n\s*\n|$)/g)];
+  if (paraEndGaps.length >= 5) {
+    warnings.push(
+      `Part 6 has ${paraEndGaps.length} gaps that look like paragraph endings — prefer some mid-paragraph gaps.`,
+    );
+  }
+
+  const cohesionHits = answerLetters.filter((L) => PART6_COHESION_HINTS.test(poolByLetter[L] || '')).length;
+  if (answerLetters.length === 6 && cohesionHits < 2) {
+    warnings.push(
+      `Part 6 options show little cohesive-device variety in correct sentences (${cohesionHits}/6) — soft check.`,
+    );
+  }
+
+  if (PART6_PLACEHOLDER_RE.test(passage) || PART6_PLACEHOLDER_RE.test(String(gen.title || ''))) {
+    errors.push('Part 6 contains placeholder text.');
+  }
+
+  warnings.push(...findOverusedPatterns(gen));
+  const cambridge = findForbiddenCambridge(gen, 6);
+  if (cambridge) errors.push(cambridge);
+
+  return { errors, warnings, metrics };
+}
+
+function hasTextLocal(value) {
+  return String(value || '').trim().length > 0;
 }
 
 export function computeSectionPairOverlap(sections) {

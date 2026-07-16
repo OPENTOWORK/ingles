@@ -452,25 +452,69 @@ Return ONLY JSON with: partTitle, directions, title, passage (550–650 words), 
     }
 
     if (activity === 'gapped-text' && L === 'B2') {
-      return `Create ONE complete Cambridge B2 First Reading Part 6: gapped text.
+      return `Create ONE complete B2 Reading and Use of English Part 6: Gapped text (Q37–42).
+The task should match official B2 First style, difficulty, wording and item design.
 ${variety}
 ${SHARED_JSON_RULES}
 ${directions}
-Generate exactly 6 gaps numbered (37) through (42) in the passage.
-Passage length: about 450–600 words (minimum 450 words — count carefully), B2 level, natural magazine/article style with clear paragraph development.
-Include sentencePool: exactly 7 sentences labelled A–G (one extra distractor not used in any gap).
-Questions array: 6 items {number: 37–42} with NO per-question options (global pool only).
-modelAnswers: single letters A–G only, one per gap; use each correct letter once only across gaps 37–42.
 
-Cohesion quality (CRITICAL — avoid keyword-matching traps):
-- Each gap must be solvable by discourse cohesion (pronouns this/these/such, contrast however/yet, cause-effect as a result/therefore, examples for instance, paragraph logic), NOT by spotting the same topic word in passage and option.
-- Distractor sentences must be plausible in topic but wrong for reference/contrast/cause-effect in that position.
-- Do NOT make options match gaps only because they share words like "communication", "transport", "access", "work", etc.
-- At least 3 gaps should rely on anaphora or logical connectors in the sentences before/after the gap.
-- Vary sentence openings in the pool; avoid seven options starting the same way.
+FORMAT (CRITICAL):
+- Exactly 6 numbered gaps in the passage: (37) (38) (39) (40) (41) (42).
+- Exactly 7 candidate sentences A–G in sentencePool (global pool only).
+- One sentence is EXTRA and is not used in any gap.
+- Directions must be: Six sentences have been removed from the article. Choose from the sentences A–G the one which fits each gap. There is one extra sentence which you do not need to use.
+- Questions array: exactly 6 items {id, number:37–42} with NO per-question A–D options.
+- Do NOT use multiple-choice A–D question format. Do NOT number gaps 31–36 or 43+.
 
-Passage must be coherent; each removed sentence should fit exactly one gap only.
-Return ONLY JSON with: partTitle, directions, title, passage (with gap markers), sentencePool ["A) ...","B) ...",...,"G) ..."], questions[{number}], modelAnswers[{id, answer:"A"|...|"G"}]`;
+TEXT REQUIREMENTS:
+- Natural published-style article of 500–600 words with a short title.
+- STRICT word count: minimum 500 words, maximum 600 words (count the passage only; do not count sentencePool). Prefer ~520–580.
+- Write enough developed paragraphs. If a draft is under 500 words, add 2–3 full paragraphs of article content (without new gaps) before returning JSON. If over 600, cut redundant clauses.
+- Style similar to a magazine, newspaper, website or popular science article.
+- Authentic B2-level British English.
+- Difficulty should come from: discourse cohesion; logical progression; understanding of ideas; reference; paragraph development.
+- Avoid: simple A2/B1 language; unnecessarily academic C1/C2 vocabulary; repetitive AI-style writing; unnatural paragraph structure; textbook-style passages; sentences inserted only to create artificial gaps; tasks solvable by repeated keywords.
+- Do NOT mention "Cambridge" anywhere student-facing.
+
+PASSAGE STRUCTURE:
+- Create a coherent article with natural paragraphing (around seven paragraphs is ideal).
+- Remove one complete sentence from six paragraphs / positions, leaving gaps (37)–(42).
+- Each gap must sit where the missing sentence connects naturally with: the sentence before; the sentence after; the wider paragraph; the wider article progression.
+- Prefer gaps inside paragraphs (not all at paragraph endings) so surrounding context is clear.
+- Passage must remain coherent when the correct sentences are restored.
+
+QUESTION / GAP DESIGN (CRITICAL):
+- The correct answer for each gap must depend primarily on discourse cohesion and logic, not keyword matching.
+- Use a balanced range of cohesive devices across the six gaps, including: pronouns; demonstratives (this/these/that/those); substitution; linking expressions; sequencing; contrast; cause/effect; addition; exemplification; logical progression.
+- Candidates should need the paragraph and article development, not simply matching repeated topic words.
+- At least 3 gaps should rely on anaphora, demonstratives, or logical connectors in the sentences before/after the gap.
+
+CANDIDATE SENTENCES A–G (CRITICAL):
+- Exactly 7 complete sentences labelled "A) ...", "B) ...", … "G) ...".
+- Each must have a natural length and resemble an authentic removed sentence.
+- The correct sentence for each gap must fit continuous prose and connect clearly with surrounding context.
+- The EXTRA sentence must be topic-plausible but fail every gap because of meaning, reference, logic or cohesion.
+- Several incorrect sentences may look partially suitable for a gap, but only ONE must fit perfectly.
+- Avoid: obviously wrong options; options that fit more than one gap defensibly; options that rely only on repeated keywords; unexplained references; options that make the article illogical.
+- Vary sentence openings; do not start all seven the same way.
+
+ANSWER KEY (CRITICAL):
+- modelAnswers: exactly 6 entries for gaps 37–42.
+- Each answer is a single letter A–G.
+- Use six DIFFERENT letters; leave exactly ONE letter unused (the extra sentence).
+- No duplicate answer letters. No answers outside A–G.
+
+FORBIDDEN:
+- fewer or more than 6 gaps
+- gap numbers outside 37–42
+- passage under 500 or over 600 words
+- fewer or more than 7 sentencePool items
+- duplicate or missing letters A–G in the pool
+- duplicate answer letters or unused count ≠ 1
+- placeholder text
+- visible "Cambridge" in student-facing fields
+
+Return ONLY JSON with: partTitle, directions, title, passage (500–600 words with markers (37)–(42)), sentencePool ["A) ...","B) ...","C) ...","D) ...","E) ...","F) ...","G) ..."], questions[{id, number}], modelAnswers[{id, number, answer:"A"|...|"G"}]`;
     }
 
     if (activity === 'multiple-matching' && L === 'B2') {

@@ -288,7 +288,9 @@ const part6Gen = {
     { id: 'q38', answer: 'B' },
   ],
 };
-check('Part 6 generic validation still accepts minimal fixture', validateGeneratedExamPart('b2', 6, part6Gen).ok !== undefined);
+const part6Result = validateGeneratedExamPart('b2', 6, part6Gen);
+check('Part 6 strict validation runs (returns ok boolean)', typeof part6Result.ok === 'boolean');
+check('Part 6 minimal incomplete fixture fails strict checks', part6Result.ok === false);
 
 console.log(failures === 0 ? '\nAll B2 reading quality validator tests passed.' : `\n${failures} test(s) failed.`);
 process.exit(failures === 0 ? 0 : 1);

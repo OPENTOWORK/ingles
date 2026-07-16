@@ -4,6 +4,7 @@ import { A2_EXAM_PARTS } from '@/lib/a2ExamCatalog';
 import { isA2GeneratedPartComplete } from '@/lib/draloAiA2ExamPrompts';
 import {
   analyzePart5Quality,
+  analyzePart6Quality,
   analyzePart7Quality,
   classifyPart2AnswerCategories,
   classifyPart3Derivation,
@@ -152,6 +153,16 @@ export function normalizeGeneratedExamPart(slug, partDef, generated) {
   gen.optionPool = asArray(gen.optionPool);
   gen.matchingAnswers = asArray(gen.matchingAnswers);
   gen.audioClips = asArray(gen.audioClips);
+
+  // Part 6: accept `options` as alias for global A–G sentencePool when pool is empty.
+  if (
+    partDef.mode === 'reading' &&
+    partDef.activity === 'gapped-text' &&
+    !gen.sentencePool.length &&
+    asArray(gen.options).length
+  ) {
+    gen.sentencePool = asArray(gen.options);
+  }
 
   if (partDef.mode === 'listening' && partDef.activity === 'short-extracts' && !gen.audioClips.length) {
     gen.audioClips = gen.questions
@@ -1234,6 +1245,36 @@ function validateB2Part5Strict(gen, errors, warnings) {
   warnings.push(...analysis.warnings);
 }
 
+/** B2 Part 6 gapped text — strict mechanical + heuristic checks. */
+function validateB2Part6Strict(gen, errors, warnings) {
+  const questions = asArray(gen.questions);
+  if (questions.length !== 6) {
+    errors.push(`Part 6 must have exactly 6 questions/gaps (got ${questions.length}).`);
+  }
+
+  const seenNumbers = new Set();
+  questions.forEach((q, i) => {
+    const num = Number(q?.number);
+    if (!Number.isInteger(num) || num < 37 || num > 42) {
+      errors.push(`Part 6 question ${q?.number ?? i + 1}: number must be 37–42.`);
+    } else if (seenNumbers.has(num)) {
+      errors.push(`Part 6 question ${num}: duplicate question number.`);
+    } else {
+      seenNumbers.add(num);
+    }
+  });
+
+  if (questions.length === 6 && seenNumbers.size === 6) {
+    for (let n = 37; n <= 42; n += 1) {
+      if (!seenNumbers.has(n)) errors.push(`Part 6 is missing question number ${n}.`);
+    }
+  }
+
+  const analysis = analyzePart6Quality(gen);
+  errors.push(...analysis.errors);
+  warnings.push(...analysis.warnings);
+}
+
 /** B2 Part 7 multiple matching — strict mechanical + heuristic checks. */
 function validateB2Part7Strict(gen, errors, warnings) {
   const questions = asArray(gen.questions);
@@ -1620,6 +1661,9 @@ export function validateGeneratedExamPart(slug, partNumber, generated) {
       }
       if (key === 'b2' && partDef.partNumber === 5 && partDef.activity === 'multiple-choice') {
         validateB2Part5Strict(normalized, errors, warnings);
+      }
+      if (key === 'b2' && partDef.partNumber === 6 && partDef.activity === 'gapped-text') {
+        validateB2Part6Strict(normalized, errors, warnings);
       }
       if (key === 'b2' && partDef.partNumber === 7 && partDef.activity === 'multiple-matching') {
         validateB2Part7Strict(normalized, errors, warnings);
