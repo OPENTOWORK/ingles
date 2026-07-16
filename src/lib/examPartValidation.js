@@ -770,7 +770,20 @@ function validateB2Part2Strict(gen, errors, warnings) {
   }
 }
 
-/** B2 Part 3 word formation — strict mechanical checks. */
+/** Palabra única válida como respuesta de word formation. */
+const PART3_ONE_WORD_REGEX = /^[A-Za-z'’-]+$/;
+
+/** Stem/baseWord en mayúsculas (letras; guion opcional). */
+const PART3_STEM_REGEX = /^[A-Z]+(?:-[A-Z]+)?$/;
+
+function resolvePart3Stem(qOrExample) {
+  return String(qOrExample?.stem || qOrExample?.baseWord || '').trim();
+}
+
+/**
+ * Strict checks for B2 Reading & Use of English Part 3 (word formation).
+ * Any failure here blocks the save (errors, not warnings).
+ */
 function validateB2Part3Strict(gen, errors, warnings) {
   const questions = asArray(gen.questions);
   if (questions.length !== 8) {
@@ -778,6 +791,7 @@ function validateB2Part3Strict(gen, errors, warnings) {
   }
 
   const seenNumbers = new Set();
+  const stems = [];
   questions.forEach((q, i) => {
     const label = `Part 3 question ${q?.number ?? i + 1}`;
     const num = Number(q?.number);
@@ -788,16 +802,81 @@ function validateB2Part3Strict(gen, errors, warnings) {
     } else {
       seenNumbers.add(num);
     }
-    const stem = String(q?.stem || '').trim();
-    if (!stem) errors.push(`${label}: missing word-formation stem (CAPITALS).`);
+
+    if (Number(q?.number) === 0) {
+      errors.push(`${label}: example (0) must not appear in questions[] — only Q17–24 are scored.`);
+    }
+
+    if (asArray(q?.options).length > 0) {
+      errors.push(`${label}: word formation must NOT have A/B/C/D options.`);
+    }
+
+    const stem = resolvePart3Stem(q);
+    if (!stem) {
+      errors.push(`${label}: missing word-formation stem/baseWord (CAPITALS).`);
+    } else if (!PART3_STEM_REGEX.test(stem)) {
+      errors.push(`${label}: stem/baseWord must be CAPITAL LETTERS (got "${stem}").`);
+    } else {
+      stems.push(stem);
+    }
   });
 
-  const modelAnswers = asArray(gen.modelAnswers);
-  const answerById = new Map(modelAnswers.map((m) => [String(m?.id), m]));
+  if (questions.length === 8 && seenNumbers.size === 8) {
+    for (let n = 17; n <= 24; n += 1) {
+      if (!seenNumbers.has(n)) errors.push(`Part 3 is missing question number ${n}.`);
+    }
+  }
+
+  const stemFamilies = stems.map((s) => s.toLowerCase());
+  const repeatedStems = stemFamilies.filter((w, idx, arr) => arr.indexOf(w) !== idx);
+  if (repeatedStems.length) {
+    warnings.push(`Part 3 repeats stem/word family: ${[...new Set(repeatedStems)].join(', ')}.`);
+  }
+
+  // Example (0): stem + one-word derived answer; not scored. Gap (0) lives in the passage.
+  const example = gen.example && typeof gen.example === 'object' ? gen.example : null;
+  const exampleAnswer = String(example?.answer || '').trim();
+  const exampleStem = resolvePart3Stem(example || {});
+  if (!example || !exampleAnswer) {
+    errors.push('Part 3 must include example {number:0, stem:"CAPITALS", answer:"one word"} for gap (0).');
+  } else {
+    if (example.number != null && Number(example.number) !== 0) {
+      errors.push(`Part 3 example.number must be 0 (got ${example.number}).`);
+    }
+    if (!exampleStem) {
+      errors.push('Part 3 example must include stem/baseWord in CAPITAL LETTERS.');
+    } else if (!PART3_STEM_REGEX.test(exampleStem)) {
+      errors.push(`Part 3 example stem/baseWord must be CAPITAL LETTERS (got "${exampleStem}").`);
+    }
+    if (/\s/.test(exampleAnswer) || !PART3_ONE_WORD_REGEX.test(exampleAnswer)) {
+      errors.push(`Part 3 example answer must be one derived word (got "${exampleAnswer}").`);
+    }
+    if (asArray(example?.options).length > 0) {
+      errors.push('Part 3 example must NOT have A/B/C/D options.');
+    }
+  }
+
+  const modelAnswers = asArray(gen.modelAnswers).map((entry) =>
+    typeof entry === 'string' ? { answer: entry } : entry,
+  );
+  if (modelAnswers.some((m) => Number(m?.number) === 0)) {
+    errors.push('Part 3 modelAnswers must cover Q17–24 only — example (0) belongs in example.answer.');
+  }
+  const answerById = new Map();
+  modelAnswers.forEach((entry) => {
+    if (entry?.id != null) answerById.set(String(entry.id), entry);
+  });
+  const answerByNumber = new Map();
+  modelAnswers.forEach((entry) => {
+    if (entry?.number != null) answerByNumber.set(Number(entry.number), entry);
+  });
   const derivations = [];
   questions.forEach((q, i) => {
     const label = `Part 3 question ${q?.number ?? i + 1}`;
-    const entry = answerById.get(String(q?.id)) ?? modelAnswers[i];
+    const entry =
+      answerById.get(String(q?.id)) ??
+      answerByNumber.get(Number(q?.number)) ??
+      modelAnswers[i];
     const answer = String(entry?.answer ?? '').trim();
     if (!answer) {
       errors.push(`${label}: missing answer key entry.`);
@@ -807,7 +886,16 @@ function validateB2Part3Strict(gen, errors, warnings) {
       errors.push(`${label}: answer must be a single derived word (got "${answer}").`);
       return;
     }
-    derivations.push({ stem: q?.stem, answer: answer.toLowerCase(), tags: classifyPart3Derivation(q?.stem, answer) });
+    if (!PART3_ONE_WORD_REGEX.test(answer)) {
+      errors.push(`${label}: answer must be a single word (got "${answer}").`);
+      return;
+    }
+    const stem = resolvePart3Stem(q);
+    derivations.push({
+      stem,
+      answer: answer.toLowerCase(),
+      tags: classifyPart3Derivation(stem, answer),
+    });
   });
 
   const repeated = derivations.map((d) => d.answer).filter((w, idx, arr) => arr.indexOf(w) !== idx);
@@ -815,23 +903,93 @@ function validateB2Part3Strict(gen, errors, warnings) {
     warnings.push(`Part 3 repeats derived answers: ${[...new Set(repeated)].join(', ')}.`);
   }
 
+  if (derivations.length >= 6) {
+    const tagSets = derivations.map((d) => new Set(d.tags));
+    const uniqueTagKinds = new Set(derivations.flatMap((d) => d.tags));
+    if (uniqueTagKinds.size < 3) {
+      warnings.push(
+        `Part 3 looks low on transformation variety (detected tags: ${[...uniqueTagKinds].join(', ') || 'none'}) — soft check.`,
+      );
+    }
+    const nounish = derivations.filter((d) =>
+      /(?:tion|sion|ness|ment|ity|ance|ence)$/i.test(d.answer),
+    ).length;
+    if (nounish >= 6) {
+      warnings.push(`Part 3 has ${nounish} noun-like answers — aim for more word-class variety (soft check).`);
+    }
+    const lyCount = derivations.filter((d) => d.answer.endsWith('ly')).length;
+    if (lyCount >= 4) {
+      warnings.push(`Part 3 overuses -ly adverbs (${lyCount}) — soft check.`);
+    }
+    // Same dominant suffix pattern on most items.
+    const suffixHits = {};
+    derivations.forEach((d) => {
+      const m = d.answer.match(/(tion|sion|ness|ment|ity|able|ible|ful|less|ous|ive|al|ance|ence|er|or|ly)$/i);
+      if (m) suffixHits[m[1].toLowerCase()] = (suffixHits[m[1].toLowerCase()] || 0) + 1;
+    });
+    const topSuffix = Object.entries(suffixHits).sort((a, b) => b[1] - a[1])[0];
+    if (topSuffix && topSuffix[1] >= 5) {
+      warnings.push(
+        `Part 3 repeats suffix "-${topSuffix[0]}" on ${topSuffix[1]} answers — soft check.`,
+      );
+    }
+    void tagSets;
+  }
+
   const passage = String(gen.passage || '');
   if (!hasText(gen.title)) errors.push('Part 3 must include a short text title.');
   if (!passage.trim()) {
     errors.push('Part 3 must include a passage.');
   } else {
-    const wc = b2CountWords(passage);
-    if (wc < 80) errors.push(`Part 3 passage is ${wc} words; minimum is 80 (target 80–120).`);
-    else if (wc > 120) warnings.push(`Part 3 passage is ${wc} words; target is 80–120.`);
-
-    for (let n = 17; n <= 24; n += 1) {
-      const re = new RegExp(`\\(${n}\\)\\s*(?:_+|\\.{2,}|…+)`);
-      if (!re.test(passage)) errors.push(`Part 3 passage is missing gap (${n}) ___.`);
+    const gapNumbers = [...passage.matchAll(/\((\d+)\)\s*(?:_+|\.{2,}|…+)/g)].map((m) => Number(m[1]));
+    const exampleGapCount = gapNumbers.filter((g) => g === 0).length;
+    if (exampleGapCount === 0) {
+      errors.push('Part 3 passage is missing example gap (0) ___.');
+    } else if (exampleGapCount > 1) {
+      errors.push('Part 3 passage repeats example gap (0) ___.');
     }
-  }
+    for (let n = 17; n <= 24; n += 1) {
+      const count = gapNumbers.filter((g) => g === n).length;
+      if (count === 0) errors.push(`Part 3 passage is missing gap (${n}) ___.`);
+      if (count > 1) errors.push(`Part 3 passage repeats gap (${n}) ___.`);
+    }
+    const extra = [...new Set(gapNumbers.filter((g) => g !== 0 && (g < 17 || g > 24)))];
+    if (extra.length) {
+      errors.push(
+        `Part 3 passage has unexpected gap numbers: ${extra.join(', ')} (only (0) and (17)–(24) allowed).`,
+      );
+    }
+    if (gapNumbers.some((g) => g >= 25)) {
+      errors.push('Part 3 must use Q17–24 only — gap (25) or higher is not allowed.');
+    }
 
-  const cambridge = findForbiddenCambridge(gen, 3);
-  if (cambridge) errors.push(cambridge);
+    // Stems should appear in CAPITALS near gaps when present in passage (soft if missing — questions carry stem).
+    const passageStems = [...passage.matchAll(/\(\d+\)\s*(?:_+|\.{2,}|…+)\s*\(([A-Z][A-Z-]*)\)/g)].map(
+      (m) => m[1],
+    );
+    if (passageStems.length > 0 && passageStems.length < 8) {
+      warnings.push(
+        `Part 3 passage shows only ${passageStems.length} CAPITAL stems next to gaps (expected 8–9 including example) — soft check.`,
+      );
+    }
+
+    // Count content words; gap blanks do not count, but CAPITAL stems do (written beside gaps).
+    const wc = String(passage)
+      .replace(/\(\d+\)\s*(?:_+|\.{2,}|…+)/g, ' ')
+      .replace(/\(([A-Z][A-Z-]*)\)/g, ' $1 ')
+      .replace(/\([^)]*\)/g, ' ')
+      .trim()
+      .split(/\s+/)
+      .filter(Boolean).length;
+    if (wc < 150) {
+      errors.push(`Part 3 passage is ${wc} words; minimum is 150 (target 150–180).`);
+    } else if (wc > 180) {
+      errors.push(`Part 3 passage is ${wc} words; maximum is 180 (target 150–180).`);
+    }
+
+    const cambridge = findForbiddenCambridge(gen, 3);
+    if (cambridge) errors.push(cambridge);
+  }
 }
 
 /** B2 Part 4 key word transformations — strict mechanical checks on generated items. */

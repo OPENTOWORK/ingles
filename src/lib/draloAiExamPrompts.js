@@ -224,30 +224,78 @@ Return ONLY JSON with: partTitle, directions, example {number:0, answer:"one wor
     }
 
     if (activity === 'word-formation' && L === 'B2') {
-      return `Create ONE complete B2 First Reading and Use of English Part 3: word formation.
+      return `Create ONE complete B2 Reading and Use of English Part 3: Word formation (Q17–24).
+The task should match official B2 First style, difficulty, wording and item design.
 ${variety}
 ${SHARED_JSON_RULES}
 ${directions}
 
-TEXT RULES:
-- Natural B2-level text of 80–120 words with a short title.
-- Exactly 8 gaps (17) ___ (STEM) through (24) ___ (STEM) — stem in CAPITALS after each gap marker.
-- Include example: {"sentence":"… (0) ___ (NATURE) …","answer":"natural"} (separate from passage).
+FORMAT (CRITICAL):
+- Example gap (0) ___ (STEM) near the start of the passage — not scored. STEM is the base word in CAPITAL LETTERS after the gap marker.
+- Exactly 8 scored gaps: (17) ___ (STEM) through (24) ___ (STEM) in reading order.
+- The passage MUST contain all of these markers literally: (0) ___ (STEM) (17) ___ (STEM) (18) ___ (STEM) (19) ___ (STEM) (20) ___ (STEM) (21) ___ (STEM) (22) ___ (STEM) (23) ___ (STEM) (24) ___ (STEM).
+- Questions/gaps numbered 17–24 only. Do NOT create gap (25) or above.
+- Directions must be: For questions 17–24, read the text below. Use the word given in capitals at the end of each line to form a word that fits in the gap. There is an example at the beginning (0).
 
-ANSWER RULES:
-- Each gap requires exactly ONE derived word — no phrases, no two valid derivations.
-- Context must force the grammatical category (noun / adjective / adverb / verb).
-- Include a MIX of B2 transformations: abstract noun, adjective, adverb, derived verb, prefix, suffix.
-- Use frequent, natural derived forms — not rare or archaic words.
-- Do NOT repeat the same suffix pattern for every gap.
+TEXT REQUIREMENTS:
+- Natural published-style article of 150–180 words with a short title.
+- STRICT word count: minimum 150 words, maximum 180 words. Count carefully. Do NOT exceed 180.
+- Prefer ~165 words. If the draft is shorter than 150, add one natural sentence before returning JSON. If longer than 180, cut redundant clauses.
+- Style similar to a magazine, newspaper, website or popular science article.
+- Authentic B2-level British English.
+- Difficulty should come from accurate word formation and lexical precision, not obscure vocabulary.
+- Avoid: simple A2/B1 language; unnecessarily academic C1/C2 vocabulary; repetitive AI-style writing; unnatural paragraph structure; unnatural sentences created only to force a gap; obscure dictionary words; spelling-trick-only items.
+- Include the example gap (0) ___ (STEM) near the start, then gaps (17) ___ (STEM) through (24) ___ (STEM) in reading order.
+- Every gap must occur naturally. The completed text with the correct answers must sound completely natural.
+
+GAP DESIGN (CRITICAL):
+- Each gap contains ONE missing word and provides ONE base word in CAPITAL LETTERS (field "stem", also acceptable as "baseWord").
+- The candidate must transform the base word into ONE correctly formed word that fits grammatically and semantically.
+- Require genuine understanding of word formation, not only mechanical suffix addition.
+- Exactly ONE defensible derived answer per gap.
+- Across the 8 scored items include a balanced MIX of transformations:
+  - noun → adjective
+  - adjective → noun
+  - adjective → adverb
+  - verb → noun
+  - verb → adjective
+  - noun → verb
+  - singular/plural where appropriate
+  - positive/negative forms
+  - prefix changes
+  - suffix changes
+  - combined prefix + suffix changes
+
+ITEM VARIETY (CRITICAL):
+- Include a genuine mix of: prefixes; suffixes; changes of word class; positive and negative forms; abstract nouns; adjectives; adverbs; verbs.
+- Do not overuse any single transformation type.
+- Do not repeat the same word family.
+- Do not repeat the same transformation pattern excessively.
+- Keep base words within expected B2 Cambridge-style vocabulary range.
+
+EXAMPLE RULES (CRITICAL):
+- The "example" field is for gap (0) in the passage (not scored).
+- example.number must be 0.
+- example.stem (or example.baseWord) must be the CAPITALS base word for gap (0).
+- example.answer must be the single correct ONE-word derived form for gap (0).
+- Do NOT put example (0) inside questions[] or modelAnswers[].
+- No options A/B/C/D.
 
 FORBIDDEN:
-- stems that allow two equally correct derivations (e.g. both noun and adjective fit)
-- multi-word answers, visible mention of "Cambridge"
-- overused names (Emma) or repeated career-change narratives
+- more than 8 scored gaps, missing gap numbers, or gap (25)+
+- multiple-choice options
+- Part 2-style open cloze with no base word
+- Part 4-style key-word transformations
+- multi-word answers
+- base words that are too obscure, or answers requiring C1/C2 vocabulary
+- repeated word families
+- two equally valid derived answers
+- passage shorter than 150 or longer than 180 words
 
+Each questions entry: {id:"q1"–"q8", number:17–24, type:"word-formation", stem:"CAPITALS"}.
+Each modelAnswers entry MUST be an object: {id:"q1"–"q8", number:17–24, answer:"one derived word"} — never a bare string array.
 Generate exactly 8 questions numbered 17–24.
-Return ONLY JSON with: partTitle, directions, example, title, passage, questions[{id, number:17–24, type:"word-formation", stem:"CAPITALS"}], modelAnswers[{id, answer:"one word"}]`;
+Return ONLY JSON with: partTitle, directions, example {number:0, stem:"CAPITALS", answer:"one derived word"}, title, passage (150–180 words with (0) ___ (STEM) and gaps (17) ___ (STEM) to (24) ___ (STEM)), questions[], modelAnswers[]`;
     }
 
     let passageRule = '';

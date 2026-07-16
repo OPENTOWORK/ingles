@@ -311,6 +311,16 @@ export function buildB2EnunciadoFromGenerated(gen = {}, partNumber) {
         lines.push(`Answer: 0 → ${exampleAnswer}`);
       }
     }
+    // Part 3 (word formation): stem + answer for gap (0); gap (0) lives in the passage.
+    if (pn === 3 && g.example && typeof g.example === 'object') {
+      const exampleAnswer = String(g.example.answer || '').trim();
+      const exampleStem = String(g.example.stem || g.example.baseWord || '').trim();
+      if (exampleAnswer) {
+        lines.push('Example:');
+        if (exampleStem) lines.push(`(0) ___ (${exampleStem.toUpperCase()})`);
+        lines.push(`Answer: 0 → ${exampleAnswer}`);
+      }
+    }
     lines.push('Text');
     if (g.title) lines.push(g.title);
     if (g.passage) pushLines(lines, g.passage);

@@ -42,32 +42,47 @@ check(
   !validateGeneratedExamPart('b2', 2, p2multi).ok,
 );
 
-/* ---------- Part 3: single derivation ---------- */
+/* ---------- Part 3: single derivation, 150–180 words, (0)+(17)–(24) ---------- */
 
-const part3 = {
-  title: 'Healthy Living',
-  passage: `Many people today are rediscovering the value of regular physical activity. Doctors argue that consistent movement improves overall (17) ___ (FIT) and helps maintain (18) ___ (STRONG) muscles throughout adulthood. Team sports also build (19) ___ (CONFIDENT), while gentle stretching encourages (20) ___ (RELAX) after stressful days. Coaches insist that (21) ___ (RESPONSIBLE) behaviour matters as much as talent, especially when athletes (22) ___ (COMPETE) in regional events. Nutrition plays a role too: balanced meals support long-term (23) ___ (HEALTH) and keep teenagers (24) ___ (ACTIVE) without extreme diets. Schools that promote these habits report fewer absences and better concentration in class, although changing routines requires patience from families as well as teachers.`,
-  example: { sentence: 'We need (0) ___ (NATURE) spaces.', answer: 'natural' },
-  questions: [17, 18, 19, 20, 21, 22, 23, 24].map((n) => ({
-    id: `q${n}`,
-    number: n,
-    type: 'word-formation',
-    stem: ['FIT', 'STRONG', 'CONFIDENT', 'RELAX', 'RESPONSIBLE', 'COMPETE', 'HEALTH', 'ACTIVE'][n - 17],
-  })),
-  modelAnswers: [
-    { id: 'q17', answer: 'fitness' },
-    { id: 'q18', answer: 'stronger' },
-    { id: 'q19', answer: 'confidence' },
-    { id: 'q20', answer: 'relaxation' },
-    { id: 'q21', answer: 'responsibility' },
-    { id: 'q22', answer: 'compete' },
-    { id: 'q23', answer: 'healthier' },
-    { id: 'q24', answer: 'active' },
-  ],
-};
+function makeValidPart3() {
+  const stems = ['FIT', 'STRONG', 'CONFIDENT', 'RELAX', 'RESPONSIBLE', 'COMPETE', 'HEALTH', 'ACTIVE'];
+  const answers = [
+    'fitness',
+    'stronger',
+    'confidence',
+    'relaxation',
+    'responsibility',
+    'compete',
+    'healthier',
+    'active',
+  ];
+  const passage = `Finding balance outdoors
+Many people today are rediscovering the (0) ___ (NATURE) benefits of regular outdoor activity after long hours indoors at desks and screens. Doctors argue that consistent movement improves overall (17) ___ (FIT) and helps maintain (18) ___ (STRONG) muscles throughout adulthood without extreme training plans. Team sports also build (19) ___ (CONFIDENT), while gentle stretching encourages (20) ___ (RELAX) after stressful days at work or college. Coaches insist that (21) ___ (RESPONSIBLE) behaviour matters as much as talent, especially when athletes (22) ___ (COMPETE) in regional events at weekends. Nutrition plays a role too: balanced meals support long-term (23) ___ (HEALTH) and keep teenagers (24) ___ (ACTIVE) without extreme diets or risky supplements. Schools that promote these habits report fewer absences and better concentration in class, although changing routines requires patience from families as well as teachers over several months of practice. Local parks and quiet riverside paths make it easier for busy adults to start small and keep going. Even twenty minutes outdoors most days can improve mood, focus and long-term wellbeing for people of all ages.`;
+  return {
+    partTitle: 'Part 3: Word formation',
+    directions:
+      'For questions 17–24, read the text below. Use the word given in capitals at the end of each line to form a word that fits in the gap. There is an example at the beginning (0).',
+    example: { number: 0, stem: 'NATURE', answer: 'natural' },
+    title: 'Finding balance outdoors',
+    passage,
+    questions: stems.map((stem, i) => ({
+      id: `q${i + 1}`,
+      number: 17 + i,
+      type: 'word-formation',
+      stem,
+    })),
+    modelAnswers: answers.map((answer, i) => ({
+      id: `q${i + 1}`,
+      number: 17 + i,
+      answer,
+    })),
+  };
+}
+
+const part3 = makeValidPart3();
 check('Part 3 valid fixture passes', validateGeneratedExamPart('b2', 3, part3).ok);
 const p3bad = structuredClone(part3);
-p3bad.modelAnswers[0] = { id: 'q17', answer: 'fit and well' };
+p3bad.modelAnswers[0] = { id: 'q1', answer: 'fit and well' };
 check('Part 3 rejects multi-word derivation', !validateGeneratedExamPart('b2', 3, p3bad).ok);
 
 /* ---------- Part 4: keyword unchanged, 2–5 words ---------- */
