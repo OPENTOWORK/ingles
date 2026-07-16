@@ -155,7 +155,7 @@ export function buildB2EnunciadoFromGenerated(gen = {}, partNumber) {
     else if (g.directions && intro && !introRedundant && g.matchingIntro) pushLines(lines, intro);
     for (const q of g.questions) {
       const num = q.number ?? '';
-      const prompt = String(q.prompt || q.stem || '').trim();
+      const prompt = String(q.prompt || q.question || q.stem || '').trim();
       if (num && prompt) lines.push(`${num} ${prompt}`);
       else if (prompt) lines.push(prompt);
     }

@@ -524,29 +524,66 @@ Return ONLY JSON with: partTitle, directions, title, passage (500–600 words wi
     }
 
     if (activity === 'multiple-matching' && L === 'B2') {
-      return `Create ONE complete B2 First Reading Part 7: multiple matching.
+      return `Create ONE complete B2 Reading and Use of English Part 7: Multiple matching (Q43–52).
+The task should match official B2 First style, difficulty, wording and item design.
 ${variety}
 ${SHARED_JSON_RULES}
 ${directions}
-Generate exactly 10 statements numbered 43–52.
 
-COMMON THEME: four people (A–D) share ONE topic but with distinct perspectives/experiences/opinions.
+FORMAT (CRITICAL):
+- Exactly four separate short texts/people: A, B, C, D (field "sections").
+- Exactly 10 matching questions/statements numbered 43–52.
+- The same text/person may be chosen more than once.
+- Directions must be: Read the article in which people talk about their experiences. For each question, choose from the people (A–D). The people may be chosen more than once.
+- matchingIntro: brief line such as "Which person…? The people may be chosen more than once."
+- Do NOT use gaps, sentence pools, or A–D multiple-choice options per question.
 
-TEXTS (CRITICAL):
-- Exactly 4 sections A–D; each 120–150 words.
-- Include temporal markers (initially, since then, meanwhile), linkers (however, although, yet), personal evaluations.
-- Create REAL overlaps: some ideas should seem to fit two texts but only one is correct by nuance/detail.
-- Secondary details must act as plausible distractors across texts.
-- Do NOT use overused names (Emma) or career-change narratives.
-- Do NOT mention "Cambridge" in student-facing text.
+TEXT REQUIREMENTS (CRITICAL):
+- Exactly 4 sections A–D; each approximately 120–150 words (STRICT: minimum 120, maximum 150). Count each section carefully.
+- Prefer ~125–140 words per section. If a section is under 120, expand with genuine detail before returning JSON; if over 150, cut redundant clauses.
+- All four texts discuss the SAME general topic but express different experiences, opinions, perspectives or situations.
+- Resemble authentic material from magazines, newspapers, websites, blogs or interviews.
+- Authentic B2-level British English with a clearly distinguishable voice per person; realistic and natural.
+- Include temporal markers (initially, since then, meanwhile), linkers (however, although, yet), and personal evaluations.
+- Avoid: fictional adventure stories; classroom/textbook extracts; simple A2/B1 language; unnecessarily academic C1/C2 vocabulary; repetitive AI-style writing; unnatural paragraph structure; nearly identical viewpoints.
+- Do NOT use overused names (Emma) or repeated career-change narratives unless explicitly requested.
+- Do NOT mention "Cambridge" anywhere student-facing.
 
-QUESTIONS (CRITICAL):
-- Each prompt MUST start with "Who" (e.g. "Who felt that…", "Who mentions…").
-- Require interpretation/inference — NOT solvable by one keyword copied from a single text.
-- ONE unequivocal answer per question; people may be chosen more than once.
+OVERLAP AND COMPARISON (CRITICAL):
+- The four texts must contain overlapping themes, contrasting viewpoints, shared experiences, different motivations, and similar vocabulary used in different contexts.
+- Include details that seem to fit more than one text until read carefully.
+- The task must require genuine comparison across texts, not simple information retrieval.
+- Several texts may appear partially suitable for a question, but only ONE is the best answer.
 
-matchingIntro: brief line explaining choose A–D, people may be chosen more than once.
-Return ONLY JSON with: partTitle, directions, matchingIntro, sections[{letter, name, text}], questions[{number, prompt}], modelAnswers[{id, answer:"A"|"B"|"C"|"D"}]`;
+QUESTION DESIGN (CRITICAL):
+- Generate exactly 10 questions numbered 43–52.
+- Each question stem (field "prompt" or "question") MUST start with "Who" (e.g. Who felt that…, Who mentions…, Who prefers…).
+- Assess understanding of: opinions; attitudes; experiences; intentions; preferences; motivations; feelings; specific details; comparisons; implications.
+- Questions must require candidates to compare information across multiple texts.
+- Not answerable by simple keyword matching or one isolated sentence.
+- Paraphrase naturally; do NOT copy wording directly from the texts.
+- Use concise B2 exam-style statements.
+- ONE unequivocal best answer per question.
+- Avoid: obvious clues; repeated keywords; trivial factual questions; one mechanical question per paragraph; copied sentences; more than one defensible answer; questions that only ask for surface details.
+
+ANSWER KEY (CRITICAL):
+- modelAnswers: exactly 10 entries for Q43–Q52.
+- Each answer is a single letter A–D.
+- The same letter may be used more than once.
+- All four texts should normally be used at least once.
+- Avoid extreme imbalance (e.g. one text correct for 6 or more questions).
+- No answers outside A–D.
+
+FORBIDDEN:
+- fewer or more than 10 questions
+- question numbers outside 43–52
+- fewer or more than 4 sections
+- any section under 120 or over 150 words
+- prompts that do not start with Who
+- placeholder text
+- visible "Cambridge" in student-facing fields
+
+Return ONLY JSON with: partTitle, directions, matchingIntro, sections[{letter, name, text}], questions[{id, number, prompt}], modelAnswers[{id, number, answer:"A"|"B"|"C"|"D"}]`;
     }
 
     const startNum = activity === 'multiple-matching' ? 37 : activity === 'gapped-text' ? 31 : 31;

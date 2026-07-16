@@ -584,43 +584,133 @@ export function detectPart7KeywordMatch(prompt, sections) {
   return null;
 }
 
+const PART7_PLACEHOLDER_RE = /\b(placeholder|lorem ipsum|TODO|question text|option text)\b/i;
+
+function answerLetterForPart7(q, modelAnswers, index) {
+  const fromQ = String(q?.answer || '').trim().toUpperCase();
+  if (/^[A-D]$/.test(fromQ)) return fromQ;
+  const byId = modelAnswers.find((m) => String(m?.id) === String(q?.id));
+  const byNum = modelAnswers.find((m) => Number(m?.number) === Number(q?.number));
+  const entry = byId || byNum || modelAnswers[index];
+  const letter = String(entry?.answer || '').trim().toUpperCase();
+  return /^[A-D]$/.test(letter) ? letter : null;
+}
+
 export function analyzePart7Quality(gen) {
   const errors = [];
   const warnings = [];
-  const metrics = { sectionWordCounts: [], overlaps: [], keywordMatches: [] };
+  const metrics = {
+    sectionWordCounts: [],
+    overlaps: [],
+    keywordMatches: [],
+    answerLetters: [],
+    letterCounts: { A: 0, B: 0, C: 0, D: 0 },
+  };
 
-  const sections = asArray(gen.sections);
+  let sections = asArray(gen.sections);
+  if (!sections.length && asArray(gen.texts).length) sections = asArray(gen.texts);
+
   if (sections.length !== 4) {
     errors.push(`Part 7 must have exactly 4 sections (got ${sections.length}).`);
   }
 
+  const seenLetters = new Set();
   sections.forEach((s, i) => {
-    const wc = countWords(s.text || s.body || '');
-    metrics.sectionWordCounts.push(wc);
-    const label = `Part 7 section ${s.letter || i + 1}`;
+    const letter = String(s.letter || s.id || 'ABCD'[i] || '')
+      .replace(/[^A-Da-d]/g, '')
+      .charAt(0)
+      .toUpperCase();
+    const text = String(s.text || s.body || '').trim();
+    const name = String(s.name || s.title || '').trim();
+    const wc = countWords(text);
+    metrics.sectionWordCounts.push({ letter, wc });
+    const label = `Part 7 section ${letter || i + 1}`;
+
+    if (!/^[A-D]$/.test(letter)) {
+      errors.push(`${label}: letter must be A–D.`);
+    } else if (seenLetters.has(letter)) {
+      errors.push(`${label}: duplicate section letter ${letter}.`);
+    } else {
+      seenLetters.add(letter);
+    }
+
+    if (!name) warnings.push(`${label}: missing person name — soft check.`);
+    if (!text) errors.push(`${label}: empty text.`);
+    if (PART7_PLACEHOLDER_RE.test(text) || PART7_PLACEHOLDER_RE.test(name)) {
+      errors.push(`${label}: placeholder text.`);
+    }
     if (wc < 120) errors.push(`${label} is ${wc} words; minimum is 120 (target 120–150).`);
-    else if (wc > 150) warnings.push(`${label} is ${wc} words; target is 120–150.`);
+    else if (wc > 150) errors.push(`${label} is ${wc} words; maximum is 150 (target 120–150).`);
   });
+
+  for (const L of 'ABCD') {
+    if (sections.length === 4 && !seenLetters.has(L)) {
+      errors.push(`Part 7 is missing section ${L}.`);
+    }
+  }
 
   metrics.overlaps = computeSectionPairOverlap(sections);
   const weakOverlap = metrics.overlaps.every((p) => p.sharedCount < 3);
   if (sections.length === 4 && weakOverlap) {
-    warnings.push('Part 7 sections show weak lexical overlap — matching may be too easy without nuanced distractors.');
+    warnings.push(
+      'Part 7 sections show weak lexical overlap — matching may be too easy without nuanced distractors.',
+    );
   }
 
   const questions = asArray(gen.questions);
+  const modelAnswers = asArray(gen.modelAnswers);
+  const answerLetters = [];
+
   questions.forEach((q, i) => {
     const label = `Part 7 question ${q?.number ?? i + 1}`;
-    const prompt = String(q.prompt || q.stem || '').trim();
-    if (!/^who\b/i.test(prompt)) {
+    const prompt = String(q.prompt || q.question || q.stem || '').trim();
+    if (!prompt) errors.push(`${label}: missing question stem (prompt/question).`);
+    if (PART7_PLACEHOLDER_RE.test(prompt)) errors.push(`${label}: placeholder text in stem.`);
+    if (prompt && !/^who\b/i.test(prompt)) {
       errors.push(`${label}: prompt must start with "Who" (got "${prompt.slice(0, 40)}").`);
     }
+    const letter = answerLetterForPart7(q, modelAnswers, i);
+    if (!letter) errors.push(`${label}: missing valid A–D answer key.`);
+    else {
+      answerLetters.push(letter);
+      metrics.letterCounts[letter] += 1;
+    }
+
     const kw = detectPart7KeywordMatch(prompt, sections);
     if (kw) {
       metrics.keywordMatches.push({ number: q.number, section: kw.letter, words: kw.matched });
       warnings.push(`${label}: may be solvable by keyword matching in section ${kw.letter}.`);
     }
+
+    // Soft: stem shares a long phrase with a section (copied wording).
+    if (prompt.length >= 24) {
+      const stemNorm = normalizeForMatch(prompt).replace(/^who\s+/, '');
+      const copied = sections.some((s) => {
+        const t = normalizeForMatch(s.text || s.body || '');
+        return stemNorm.length >= 18 && t.includes(stemNorm.slice(0, Math.min(40, stemNorm.length)));
+      });
+      if (copied) warnings.push(`${label}: stem may copy wording from a text — soft check.`);
+    }
   });
+
+  metrics.answerLetters = answerLetters;
+  if (answerLetters.length === 10) {
+    const used = new Set(answerLetters);
+    for (const L of 'ABCD') {
+      if (!used.has(L)) {
+        warnings.push(`Part 7 answer key never uses section ${L} — soft check (normally use all four).`);
+      }
+    }
+    for (const L of 'ABCD') {
+      if (metrics.letterCounts[L] >= 6) {
+        errors.push(
+          `Part 7 answer key uses letter ${L} ${metrics.letterCounts[L]} times — max 5 without strong justification.`,
+        );
+      } else if (metrics.letterCounts[L] >= 5) {
+        warnings.push(`Part 7 answer key leans heavily on ${L} (${metrics.letterCounts[L]}/10) — soft check.`);
+      }
+    }
+  }
 
   warnings.push(...findOverusedPatterns(gen));
   const cambridge = findForbiddenCambridge(gen, 7);

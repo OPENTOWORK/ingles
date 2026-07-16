@@ -164,6 +164,16 @@ export function normalizeGeneratedExamPart(slug, partDef, generated) {
     gen.sentencePool = asArray(gen.options);
   }
 
+  // Part 7: accept `texts` as alias for sections A–D.
+  if (
+    partDef.mode === 'reading' &&
+    partDef.activity === 'multiple-matching' &&
+    !gen.sections.length &&
+    asArray(gen.texts).length
+  ) {
+    gen.sections = asArray(gen.texts);
+  }
+
   if (partDef.mode === 'listening' && partDef.activity === 'short-extracts' && !gen.audioClips.length) {
     gen.audioClips = gen.questions
       .map((q, i) => ({
@@ -1293,6 +1303,12 @@ function validateB2Part7Strict(gen, errors, warnings) {
       seenNumbers.add(num);
     }
   });
+
+  if (questions.length === 10 && seenNumbers.size === 10) {
+    for (let n = 43; n <= 52; n += 1) {
+      if (!seenNumbers.has(n)) errors.push(`Part 7 is missing question number ${n}.`);
+    }
+  }
 
   const modelAnswers = asArray(gen.modelAnswers);
   modelAnswers.forEach((m, i) => {
