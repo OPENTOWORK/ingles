@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { requireAdminFromRequest } from '@/lib/adminApiAuth';
+import { requireExamPartPromptAccessFromRequest } from '@/lib/adminApiAuth';
 import {
   getExamPartPromptForAdmin,
   resetExamPartPromptForAdmin,
@@ -15,7 +15,7 @@ function parsePartNumber(value) {
 }
 
 export async function GET(req) {
-  const auth = await requireAdminFromRequest(req);
+  const auth = await requireExamPartPromptAccessFromRequest(req);
   if (!auth.ok) {
     return NextResponse.json({ error: auth.error }, { status: auth.status });
   }
@@ -50,7 +50,7 @@ export async function GET(req) {
 }
 
 export async function PUT(req) {
-  const auth = await requireAdminFromRequest(req);
+  const auth = await requireExamPartPromptAccessFromRequest(req);
   if (!auth.ok) {
     return NextResponse.json({ error: auth.error }, { status: auth.status });
   }
@@ -92,7 +92,7 @@ export async function PUT(req) {
 }
 
 export async function DELETE(req) {
-  const auth = await requireAdminFromRequest(req);
+  const auth = await requireExamPartPromptAccessFromRequest(req);
   if (!auth.ok) {
     return NextResponse.json({ error: auth.error }, { status: auth.status });
   }

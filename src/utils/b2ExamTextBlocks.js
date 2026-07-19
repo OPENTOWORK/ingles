@@ -723,13 +723,23 @@ export function buildListeningGapPassageLines(text = '') {
 
 /** Extract MCQ letter from a levels_respuestas row label. */
 export function extractMcqOptionLetter(option = {}) {
-  const raw = String(option.formattedText || option.respuesta || option.text || '').trim();
-  const m =
-    raw.match(/^(\d+)\s+([A-H])\)/i) ||
-    raw.match(/^(\d+)\s+([A-H])\s*$/i) ||
-    raw.match(/^([A-H])\)/i) ||
-    raw.match(/^([A-H])\s/i);
-  return m ? m[m.length - 1].toUpperCase() : '';
+  // Prefer formattedText, but also try respuesta: matching keys are often stored as
+  // "19 C" while getGroupedAnswers sets formattedText to bare "C", which older
+  // patterns missed (needed "C)" or "C …").
+  const candidates = [option.formattedText, option.respuesta, option.text]
+    .map((v) => String(v || '').trim())
+    .filter(Boolean);
+
+  for (const raw of candidates) {
+    const m =
+      raw.match(/^(\d+)\s+([A-H])\)/i) ||
+      raw.match(/^(\d+)\s+([A-H])\s*$/i) ||
+      raw.match(/^([A-H])\)/i) ||
+      raw.match(/^([A-H])\s/i) ||
+      raw.match(/^([A-H])$/i);
+    if (m) return m[m.length - 1].toUpperCase();
+  }
+  return '';
 }
 
 /** Resolve a saved MCQ value (option id or letter) to the matching option row. */

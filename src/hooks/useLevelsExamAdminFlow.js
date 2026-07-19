@@ -177,6 +177,7 @@ export function useLevelsExamAdminFlow({ slug = 'a2', examenIdBySlot = {}, onCat
         }
 
         let anyPartWritten = false;
+        const partFailures = [];
 
         for (let i = 0; i < examParts.length; i += 1) {
           const partDef = examParts[i];
@@ -197,15 +198,29 @@ export function useLevelsExamAdminFlow({ slug = 'a2', examenIdBySlot = {}, onCat
               slot,
               partNumber,
               preserveExistingParts,
+              // Regeneración / examen nuevo: siempre reemplaza.
+              // RUOE 1–7: no guardar si falla validación (evita huecos rotos / textos vacíos).
+              replacePartContent: force || !preserveExistingParts,
+              force: force || !preserveExistingParts,
+              persistDespiteValidation: !(
+                String(slug || '').toLowerCase() === 'b2' &&
+                Number(partNumber) >= 1 &&
+                Number(partNumber) <= 7
+              ),
+              skipAudio: true,
             }),
           });
           const payload = await res.json().catch(() => ({}));
           if (res.status === 403) {
             throw new Error(payload.error || 'Solo los administradores pueden generar o regenerar exámenes.');
           }
-          if (!res.ok) throw new Error(payload.error || `Error en parte ${partNumber}.`);
-
-          if (!payload.skipped) {
+          if (!res.ok) {
+            partFailures.push({
+              partNumber,
+              error: payload.error || `Error en parte ${partNumber}.`,
+            });
+            partDurations.push(Date.now() - t0);
+          } else if (!payload.skipped) {
             anyPartWritten = true;
             partDurations.push(Date.now() - t0);
           }
@@ -225,14 +240,30 @@ export function useLevelsExamAdminFlow({ slug = 'a2', examenIdBySlot = {}, onCat
         if (force || anyPartWritten) {
           notifyLevelsExamRegenerated({ slug, examSlot: slot });
         }
-        setGenError('');
+
+        if (!anyPartWritten && partFailures.length) {
+          throw new Error(
+            partFailures.map((f) => `Parte ${f.partNumber}: ${f.error}`).join(' ') ||
+              'No se pudo generar ninguna parte del examen.',
+          );
+        }
+
+        setGenError(
+          partFailures.length
+            ? `Examen ${slot}: ${anyPartWritten ? 'guardado' : 'incompleto'}. Fallaron ${partFailures.length} parte(s): ${partFailures
+                .map((f) => f.partNumber)
+                .join(', ')}.`
+            : '',
+        );
         const msg =
           preserveExistingParts && !force
             ? `Examen ${levelUpper} actualizado (solo partes sin contenido; ${partTotal} partes en el formato del nivel).`
-            : `Examen guardado en Supabase (${partTotal} partes).`;
+            : partFailures.length
+              ? `Examen ${slot} regenerado con prompts actuales (${partTotal - partFailures.length}/${partTotal} partes OK).`
+              : `Examen guardado en Supabase (${partTotal} partes).`;
         setGenProgress(msg);
         onCatalogUpdated?.();
-        return { created: true, examSlot: slot, levelId };
+        return { created: true, examSlot: slot, levelId, partFailures };
       } catch (e) {
         const msg = e?.message || 'No se pudo generar el examen.';
         setGenProgress('');

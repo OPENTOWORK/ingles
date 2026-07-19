@@ -4740,7 +4740,7 @@ function B2ExamPaperPracticePageInner({
       </section>
 
       <AdminExamPartPromptBox
-        enabled={adminFlow.isAdmin}
+        enabled
         slug={levelSlug}
         partNumber={partNumber}
         examSlot={examSlot}

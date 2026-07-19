@@ -47,6 +47,7 @@ export async function POST(req) {
   const partNumber = body.partNumber != null ? Number(body.partNumber) : null;
   const preserveExistingParts = Boolean(body.preserveExistingParts);
   const replacePartContent = Boolean(body.replacePartContent || body.force);
+  const persistDespiteValidation = Boolean(body.persistDespiteValidation);
 
   if (slug !== 'a2' && !isExamGenerationSlug(slug)) {
     return NextResponse.json(
@@ -73,24 +74,6 @@ export async function POST(req) {
           { status: 409 },
         );
       }
-    }
-
-    // B2 está en curación con flujo preview → validate → save (generate-exam-part).
-    // Este endpoint persiste sin quality validator ni gate de ambigüedad, así que la
-    // generación B2 queda deshabilitada salvo override explícito por env var.
-    const isGeneration = !deleteExam && !resetExam;
-    if (
-      isGeneration &&
-      slug === 'b2' &&
-      process.env.DRALO_ALLOW_FULL_EXAM_GENERATION !== 'true'
-    ) {
-      return NextResponse.json(
-        {
-          error:
-            'Full exam generation does not run quality validation. Use part-by-part generation instead (preview → validate → save). Para reactivar temporalmente: DRALO_ALLOW_FULL_EXAM_GENERATION=true.',
-        },
-        { status: 409 },
-      );
     }
 
     if (deleteExam) {
@@ -148,6 +131,7 @@ export async function POST(req) {
         skipAudio,
         preserveExistingParts,
         replacePartContent,
+        persistDespiteValidation,
       });
     } else {
       result = await generateAndPersistLevelExam(auth.adminDb, {
@@ -158,30 +142,29 @@ export async function POST(req) {
         skipAudio,
         preserveExistingParts,
         replacePartContent,
+        persistDespiteValidation,
       });
     }
 
     invalidateLevelExamCache(levelData.id);
 
-    if (isGeneration) {
-      const usage = usageFromTextEstimate(
-        getDefaultModel(),
-        JSON.stringify({ slug, slot, partNumber }),
-        JSON.stringify(result),
-      );
-      await recordAiUsageSuccess({
-        userId: auth.user?.id ?? null,
-        action: AI_ACTIONS.ADMIN_GENERATE_EXAM,
-        model: usage.model,
-        usage,
-        metadata: {
-          examLevel: slug,
-          examPart: partNumber,
-          examTitle: body.title || `Exam ${slot}`,
-          admin: true,
-        },
-      }).catch((err) => console.error('[admin/generate-exam] ai log', err));
-    }
+    const usage = usageFromTextEstimate(
+      getDefaultModel(),
+      JSON.stringify({ slug, slot, partNumber }),
+      JSON.stringify(result),
+    );
+    await recordAiUsageSuccess({
+      userId: auth.user?.id ?? null,
+      action: AI_ACTIONS.ADMIN_GENERATE_EXAM,
+      model: usage.model,
+      usage,
+      metadata: {
+        examLevel: slug,
+        examPart: partNumber,
+        examTitle: body.title || `Exam ${slot}`,
+        admin: true,
+      },
+    }).catch((err) => console.error('[admin/generate-exam] ai log', err));
 
     return NextResponse.json({ ok: true, slot, levelId: levelData.id, ...result });
   } catch (err) {

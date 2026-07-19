@@ -132,6 +132,79 @@ function normalizeWritingFormat(format) {
   return f || 'article';
 }
 
+/**
+ * Canonical gap marker is `(N) ___`. Models sometimes emit `___(N)___` or `(N)___`,
+ * which breaks UI parsing (stray underscores) and validation.
+ */
+export function normalizePassageGapMarkers(text) {
+  return String(text || '')
+    .replace(/_+\((\d{1,2})\)_+/g, '($1) ___')
+    .replace(/\((\d{1,2})\)_{2,}/g, '($1) ___')
+    .replace(/\((\d{1,2})\)\s*\.{3,}/g, '($1) ___')
+    .replace(/\((\d{1,2})\)\s*…+/g, '($1) ___');
+}
+
+/**
+ * Part 3 word-formation: canonical marker is `(N) ___ (STEM)`.
+ * Models often emit `___(17)  PERFORM` or `(17) ___ PERFORM`.
+ */
+export function normalizePart3PassageGaps(text) {
+  let t = normalizePassageGapMarkers(text);
+  // ___(17) STEM / ___(17)  STEM → (17) ___ (STEM)
+  t = t.replace(/_+\((\d{1,2})\)\s+([A-Z][A-Z-]{1,})\b/g, '($1) ___ ($2)');
+  // (17) ___ STEM → (17) ___ (STEM) when STEM is bare capitals
+  t = t.replace(
+    /\((\d{1,2})\)\s*(?:_+|\.{2,}|…+)\s+(?!\()([A-Z][A-Z-]{1,})\b/g,
+    '($1) ___ ($2)',
+  );
+  // (17) STEM → (17) ___ (STEM)  (but not if already "(17) ___")
+  t = t.replace(/\((\d{1,2})\)(?!\s*(?:_+|\.{2,}|…+))\s+(?!\()([A-Z][A-Z-]{2,})\b/g, '($1) ___ ($2)');
+  // "(17) (STEM)" without blank → "(17) ___ (STEM)"
+  t = t.replace(/\((\d{1,2})\)\s+\(([A-Z][A-Z-]*)\)/g, '($1) ___ ($2)');
+  // Collapse duplicated stems: (STEM)_ (STEM) / (STEM) (STEM)
+  t = t.replace(/\(([A-Z][A-Z-]*)\)(?:_+\s*|\s+)\(\1\)/g, '($1)');
+  // Trailing underscore glued to stem close-paren: (STEM)_ → (STEM)
+  t = t.replace(/\(([A-Z][A-Z-]*)\)_+(?=\s|$|[.,;:!?])/g, '($1)');
+  return t;
+}
+
+/** If passage has (N) ___ without stem, attach stem from questions/example. */
+export function injectPart3StemsIntoPassage(gen) {
+  if (!gen || typeof gen.passage !== 'string') return gen;
+  const stemByNum = new Map();
+  const exampleStem = resolvePart3Stem(gen.example || {});
+  if (exampleStem && PART3_STEM_REGEX.test(exampleStem) && !/^(CAPITALS?|STEM|ROOT|BASE|WORD)$/i.test(exampleStem)) {
+    stemByNum.set(0, exampleStem.toUpperCase());
+  }
+  asArray(gen.questions).forEach((q) => {
+    const num = Number(q?.number);
+    const stem = resolvePart3Stem(q);
+    if (Number.isInteger(num) && stem && PART3_STEM_REGEX.test(stem)) {
+      stemByNum.set(num, stem.toUpperCase());
+    }
+  });
+  if (!stemByNum.size) return gen;
+
+  let passage = gen.passage;
+  passage = passage.replace(/\((\d{1,2})\)\s*(?:_+|\.{2,}|…+)(?!\s*\()/g, (full, n) => {
+    const stem = stemByNum.get(Number(n));
+    return stem ? `(${n}) ___ (${stem})` : full;
+  });
+  return { ...gen, passage };
+}
+
+/** Content words only: gap blanks + CAPITAL stems do not count toward 150–180. */
+export function countPart3PassageWords(passage) {
+  return String(passage || '')
+    .replace(/\(\d+\)\s*(?:_+|\.{2,}|…+)\s*(?:\([A-Z][A-Z-]*\))?/g, ' ')
+    .replace(/_+\(\d+\)\s+[A-Z][A-Z-]*/g, ' ')
+    .replace(/\(([A-Z][A-Z-]*)\)/g, ' ')
+    .replace(/\([^)]*\)/g, ' ')
+    .trim()
+    .split(/\s+/)
+    .filter(Boolean).length;
+}
+
 /** Fix common B2 Writing AI mistakes before validation/persist. */
 export function normalizeGeneratedExamPart(slug, partDef, generated) {
   if (!generated || typeof generated !== 'object' || !partDef) return generated;
@@ -153,6 +226,35 @@ export function normalizeGeneratedExamPart(slug, partDef, generated) {
   gen.optionPool = asArray(gen.optionPool);
   gen.matchingAnswers = asArray(gen.matchingAnswers);
   gen.audioClips = asArray(gen.audioClips);
+
+  if (typeof gen.passage === 'string' && gen.passage) {
+    const isPart3WordFormation =
+      partDef.activity === 'word-formation' ||
+      (levelLabel === 'B2' && partDef.partNumber === 3);
+    gen.passage = isPart3WordFormation
+      ? normalizePart3PassageGaps(gen.passage)
+      : normalizePassageGapMarkers(gen.passage);
+    if (isPart3WordFormation) {
+      const withStems = injectPart3StemsIntoPassage(gen);
+      gen.passage = withStems.passage;
+    }
+  }
+  if (gen.example && typeof gen.example === 'object') {
+    for (const key of ['sentence', 'text', 'prompt', 'sentence1', 'sentence2', 'sentence2Start']) {
+      if (typeof gen.example[key] === 'string' && gen.example[key]) {
+        gen.example[key] = normalizePassageGapMarkers(gen.example[key]);
+      }
+    }
+  }
+  if (gen.sections?.length) {
+    gen.sections = gen.sections.map((sec) => {
+      if (!sec || typeof sec !== 'object') return sec;
+      const next = { ...sec };
+      if (typeof next.text === 'string') next.text = normalizePassageGapMarkers(next.text);
+      if (typeof next.body === 'string') next.body = normalizePassageGapMarkers(next.body);
+      return next;
+    });
+  }
 
   // Part 6: accept `options` as alias for global A–G sentencePool when pool is empty.
   if (
@@ -596,8 +698,12 @@ function validateB2Part1Strict(gen, errors, warnings) {
       .filter(Boolean).length;
     if (wordCount < 150) {
       errors.push(`Part 1 passage is ${wordCount} words; minimum is 150 (target 150–180).`);
+    } else if (wordCount > 200) {
+      errors.push(`Part 1 passage is ${wordCount} words; maximum is 200 (target 150–180).`);
     } else if (wordCount > 180) {
-      errors.push(`Part 1 passage is ${wordCount} words; maximum is 180 (target 150–180).`);
+      warnings.push(
+        `Part 1 passage is ${wordCount} words; target is 150–180 (accepted up to 200 for generation).`,
+      );
     }
   }
 
@@ -767,8 +873,12 @@ function validateB2Part2Strict(gen, errors, warnings) {
     const wordCount = b2CountWords(passage);
     if (wordCount < 150) {
       errors.push(`Part 2 passage is ${wordCount} words; minimum is 150 (target 150–180).`);
+    } else if (wordCount > 200) {
+      errors.push(`Part 2 passage is ${wordCount} words; maximum is 200 (target 150–180).`);
     } else if (wordCount > 180) {
-      errors.push(`Part 2 passage is ${wordCount} words; maximum is 180 (target 150–180).`);
+      warnings.push(
+        `Part 2 passage is ${wordCount} words; target is 150–180 (accepted up to 200 for generation).`,
+      );
     }
 
     if (answerWords.length >= 6) {
@@ -840,6 +950,8 @@ function validateB2Part3Strict(gen, errors, warnings) {
       errors.push(`${label}: missing word-formation stem/baseWord (CAPITALS).`);
     } else if (!PART3_STEM_REGEX.test(stem)) {
       errors.push(`${label}: stem/baseWord must be CAPITAL LETTERS (got "${stem}").`);
+    } else if (/^(CAPITALS?|STEM|ROOT|BASE|WORD)$/i.test(stem)) {
+      errors.push(`${label}: stem must be a real base word, not a placeholder ("${stem}").`);
     } else {
       stems.push(stem);
     }
@@ -871,6 +983,8 @@ function validateB2Part3Strict(gen, errors, warnings) {
       errors.push('Part 3 example must include stem/baseWord in CAPITAL LETTERS.');
     } else if (!PART3_STEM_REGEX.test(exampleStem)) {
       errors.push(`Part 3 example stem/baseWord must be CAPITAL LETTERS (got "${exampleStem}").`);
+    } else if (/^(CAPITALS?|STEM|ROOT|BASE|WORD)$/i.test(exampleStem)) {
+      errors.push(`Part 3 example stem must be a real base word, not a placeholder ("${exampleStem}").`);
     }
     if (/\s/.test(exampleAnswer) || !PART3_ONE_WORD_REGEX.test(exampleAnswer)) {
       errors.push(`Part 3 example answer must be one derived word (got "${exampleAnswer}").`);
@@ -928,21 +1042,25 @@ function validateB2Part3Strict(gen, errors, warnings) {
   }
 
   if (derivations.length >= 6) {
-    const tagSets = derivations.map((d) => new Set(d.tags));
     const uniqueTagKinds = new Set(derivations.flatMap((d) => d.tags));
     if (uniqueTagKinds.size < 3) {
       warnings.push(
-        `Part 3 looks low on transformation variety (detected tags: ${[...uniqueTagKinds].join(', ') || 'none'}) — soft check.`,
+        `Part 3 transformation variety is low (detected tags: ${[...uniqueTagKinds].join(', ') || 'none'}) — soft check.`,
       );
     }
     const nounish = derivations.filter((d) =>
-      /(?:tion|sion|ness|ment|ity|ance|ence)$/i.test(d.answer),
+      /(?:tion|sion|ness|ment|ity|ance|ence|ship|hood|ism|ure|age)$/i.test(d.answer),
     ).length;
-    if (nounish >= 6) {
-      warnings.push(`Part 3 has ${nounish} noun-like answers — aim for more word-class variety (soft check).`);
+    const nonNoun = derivations.length - nounish;
+    if (nounish >= 6 || nonNoun < 2) {
+      errors.push(
+        `Part 3 answers are too noun-heavy (${nounish}/8) — include at least 2 adjectives, adverbs or verbs (e.g. useful, actively, strengthen).`,
+      );
     }
     const lyCount = derivations.filter((d) => d.answer.endsWith('ly')).length;
-    if (lyCount >= 4) {
+    if (lyCount === 0) {
+      warnings.push('Part 3 has no -ly adverb — include at least one when natural (soft check).');
+    } else if (lyCount >= 4) {
       warnings.push(`Part 3 overuses -ly adverbs (${lyCount}) — soft check.`);
     }
     // Same dominant suffix pattern on most items.
@@ -953,11 +1071,8 @@ function validateB2Part3Strict(gen, errors, warnings) {
     });
     const topSuffix = Object.entries(suffixHits).sort((a, b) => b[1] - a[1])[0];
     if (topSuffix && topSuffix[1] >= 5) {
-      warnings.push(
-        `Part 3 repeats suffix "-${topSuffix[0]}" on ${topSuffix[1]} answers — soft check.`,
-      );
+      warnings.push(`Part 3 repeats suffix "-${topSuffix[0]}" on ${topSuffix[1]} answers — soft check.`);
     }
-    void tagSets;
   }
 
   const passage = String(gen.passage || '');
@@ -987,28 +1102,22 @@ function validateB2Part3Strict(gen, errors, warnings) {
       errors.push('Part 3 must use Q17–24 only — gap (25) or higher is not allowed.');
     }
 
-    // Stems should appear in CAPITALS near gaps when present in passage (soft if missing — questions carry stem).
+    // Stems must appear in CAPITALS next to each gap: (N) ___ (STEM)
     const passageStems = [...passage.matchAll(/\(\d+\)\s*(?:_+|\.{2,}|…+)\s*\(([A-Z][A-Z-]*)\)/g)].map(
       (m) => m[1],
     );
-    if (passageStems.length > 0 && passageStems.length < 8) {
-      warnings.push(
-        `Part 3 passage shows only ${passageStems.length} CAPITAL stems next to gaps (expected 8–9 including example) — soft check.`,
+    if (passageStems.length < 9) {
+      errors.push(
+        `Part 3 passage must show CAPITAL stems next to gaps as (N) ___ (STEM) — found ${passageStems.length}/9 (including example).`,
       );
     }
 
-    // Count content words; gap blanks do not count, but CAPITAL stems do (written beside gaps).
-    const wc = String(passage)
-      .replace(/\(\d+\)\s*(?:_+|\.{2,}|…+)/g, ' ')
-      .replace(/\(([A-Z][A-Z-]*)\)/g, ' $1 ')
-      .replace(/\([^)]*\)/g, ' ')
-      .trim()
-      .split(/\s+/)
-      .filter(Boolean).length;
+    // Count content words only: blanks and CAPITAL stems do not count.
+    const wc = countPart3PassageWords(passage);
     if (wc < 150) {
-      errors.push(`Part 3 passage is ${wc} words; minimum is 150 (target 150–180).`);
+      errors.push(`Part 3 passage is ${wc} words; minimum is 150 (target 150–180; stems/blanks excluded).`);
     } else if (wc > 180) {
-      errors.push(`Part 3 passage is ${wc} words; maximum is 180 (target 150–180).`);
+      errors.push(`Part 3 passage is ${wc} words; maximum is 180 (stems/blanks excluded).`);
     }
 
     const cambridge = findForbiddenCambridge(gen, 3);
@@ -1212,6 +1321,27 @@ function validateB2Part4Strict(gen, errors, warnings) {
 
   if (modelAnswers.some((m) => Number(m?.number) === 0)) {
     errors.push('Part 4 modelAnswers must cover Q25–30 only — example (0) belongs in example.answer.');
+  }
+
+  // Prefer near the Cambridge 5-word maximum: at least 3 answers with 4–5 words.
+  if (questions.length === 6) {
+    const lengths = questions.map((q, i) => {
+      const answerEntry =
+        answerById.get(String(q?.id)) ?? answerByNumber.get(Number(q?.number)) ?? modelAnswers[i];
+      const answer = String(q?.answer || answerEntry?.answer || '').trim();
+      return answer ? countCambridgeKeyWordWords(answer) : 0;
+    });
+    const longCount = lengths.filter((n) => n >= 4).length;
+    const shortCount = lengths.filter((n) => n > 0 && n <= 3).length;
+    if (longCount < 2) {
+      errors.push(
+        `Part 4: at least 2 of 6 answers must use 4–5 Cambridge words (got ${longCount} long / ${shortCount} short). Prefer near the 5-word limit; avoid almost only 2–3 word answers.`,
+      );
+    } else if (longCount < 3) {
+      warnings.push(
+        `Part 4: only ${longCount}/6 answers use 4–5 words — aim for at least 3 near the Cambridge maximum (soft check).`,
+      );
+    }
   }
 
   const cambridge = findForbiddenCambridge(gen, 4);

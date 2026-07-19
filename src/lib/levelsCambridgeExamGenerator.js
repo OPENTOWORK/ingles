@@ -417,21 +417,64 @@ async function generatePartJsonWithRetries(levelSlug, levelLabel, partDef, optio
   const partIndex = parts.findIndex((p) => p.partNumber === partDef.partNumber);
   const seedBase = options.varietySeed ?? Date.now();
 
-  let generated = await generatePartJson(levelLabel, partDef, options);
+  // RUOE B2 (partes 1–7) falla a menudo por límites de palabras / gaps: más reintentos + repair.
+  const isB2Ruoe = slug === 'b2' && partDef.partNumber >= 1 && partDef.partNumber <= 7;
+  const maxAttempts = partDef.mode === 'listening' ? 5 : isB2Ruoe ? 8 : 3;
 
-  const maxAttempts = partDef.mode === 'listening' ? 5 : 2;
+  const baseUserPrompt =
+    options.userPrompt ||
+    buildLevelExamPartUserPrompt(levelLabel, partDef, {
+      examSlot: options.examSlot,
+      topic: options.topic,
+      varietySeed: seedBase + Math.max(partIndex, 0),
+    });
+
+  let generated = null;
+  let validation = { ok: false, errors: [], warnings: [], normalized: null };
+
   for (let attempt = 0; attempt < maxAttempts; attempt += 1) {
-    const validation = validateGeneratedExamPart(slug, partDef.partNumber, generated);
-    generated = validation.normalized;
-    if (validation.ok && isPartComplete(generated, partDef)) break;
+    let repairSuffix = '';
+    if (attempt > 0 && Array.isArray(validation.errors) && validation.errors.length) {
+      const pn = partDef.partNumber;
+      let lengthHint =
+        'CRITICAL length: for cloze Parts 1–3, passage must be 150–180 words (prefer ~160–170). If too long, cut clauses; if too short, add natural detail. Keep all required gaps.';
+      if (pn === 5) {
+        lengthHint =
+          'CRITICAL length: Part 5 passage MUST be 550–650 words (never under 500). Expand with detail, examples and contrast — do not return a short summary.';
+      } else if (pn === 6) {
+        lengthHint =
+          'CRITICAL length: Part 6 passage MUST be 500–600 words with gaps (37)–(42). Expand substantially; short passages fail.';
+      } else if (pn === 7) {
+        lengthHint =
+          'CRITICAL length: each Part 7 section A–D MUST be 120–150 words. Expand every person text.';
+      } else if (pn === 4) {
+        lengthHint =
+          'CRITICAL Part 4: every question needs grading_metadata with exactly 2 markingPoints; at least 2 answers must be 4–5 Cambridge words; keyword must appear unchanged in every answer.';
+      } else if (pn === 3) {
+        lengthHint =
+          'CRITICAL Part 3: passage markers must be exactly (N) ___ (STEM) for (0) and (17)–(24); include adjectives/adverbs/verbs among answers (not only nouns); stems/blanks do not count toward 150–180 words.';
+      }
+      repairSuffix = `
+
+PREVIOUS ATTEMPT FAILED VALIDATION — return a NEW complete JSON that fixes ALL of these:
+${validation.errors.map((e) => `- ${e}`).join('\n')}
+${lengthHint}`;
+    }
+
     generated = await generatePartJson(levelLabel, partDef, {
       ...options,
-      varietySeed: seedBase + partIndex + 5000 + (attempt + 1) * 2000,
+      userPrompt: `${baseUserPrompt}${repairSuffix}`,
+      varietySeed: seedBase + Math.max(partIndex, 0) + attempt * 3000,
     });
+
+    validation = validateGeneratedExamPart(slug, partDef.partNumber, generated);
+    generated = validation.normalized;
+    if (validation.ok && isPartComplete(generated, partDef)) {
+      return { generated, validation };
+    }
   }
 
-  const validation = validateGeneratedExamPart(slug, partDef.partNumber, generated);
-  return { generated: validation.normalized, validation };
+  return { generated: validation.normalized || generated, validation };
 }
 
 async function generatePartJson(levelLabel, partDef, options) {
@@ -440,11 +483,14 @@ async function generatePartJson(levelLabel, partDef, options) {
     buildLevelExamPartUserPrompt(levelLabel, partDef, options);
   const system = options.systemPrompt || getLevelExamPartSystemPrompt(levelLabel);
 
+  const readingHeavy =
+    partDef.mode === 'reading' ||
+    (partDef.partNumber >= 5 && partDef.partNumber <= 7);
   const { text } = await cambridgeExamGenerationCompletion({
     system,
     messages: [{ role: 'user', content: prompt }],
     temperature: 0.9,
-    max_tokens: 8192,
+    max_tokens: readingHeavy ? 12288 : 8192,
     response_format: { type: 'json_object' },
   });
   let parsed = normalizeGenerated(parseJsonFromModel(text), partDef.partNumber);
@@ -674,6 +720,8 @@ export async function generateAndPersistLevelExamPart(adminDb, {
   topic,
   preserveExistingParts = true,
   replacePartContent = false,
+  persistDespiteValidation = false,
+  useCodePrompts = false,
 }) {
   if (!isDraloOpenAIConfigured()) {
     throw new Error('OPENAI_API_KEY is not configured.');
@@ -704,14 +752,25 @@ export async function generateAndPersistLevelExamPart(adminDb, {
   const partIndex = parts.findIndex((p) => p.partNumber === partDef.partNumber);
 
   const t0 = Date.now();
-  const { resolveEffectiveExamPartGenerationPrompt } = await import('@/lib/examPartGenerationPrompt');
-  const generationPrompt = await resolveEffectiveExamPartGenerationPrompt(adminDb, {
-    levelSlug: slug,
-    partNumber: partDef.partNumber,
-    examSlot,
-    topic: theme,
-    varietySeed: seedBase + partIndex,
-  });
+  const {
+    resolveEffectiveExamPartGenerationPrompt,
+    resolveDefaultExamPartGenerationPrompt,
+  } = await import('@/lib/examPartGenerationPrompt');
+  const generationPrompt = useCodePrompts
+    ? resolveDefaultExamPartGenerationPrompt({
+        levelSlug: slug,
+        partNumber: partDef.partNumber,
+        examSlot,
+        topic: theme,
+        varietySeed: seedBase + partIndex,
+      })
+    : await resolveEffectiveExamPartGenerationPrompt(adminDb, {
+        levelSlug: slug,
+        partNumber: partDef.partNumber,
+        examSlot,
+        topic: theme,
+        varietySeed: seedBase + partIndex,
+      });
 
   const { generated, validation } = await generatePartJsonWithRetries(slug, levelLabel, partDef, {
     examSlot,
@@ -731,7 +790,13 @@ export async function generateAndPersistLevelExamPart(adminDb, {
       saved: false,
       validationErrors: validation.errors,
     });
-    throw new Error(`Validation failed: ${validation.errors.join(' ')}`);
+    if (!persistDespiteValidation) {
+      throw new Error(`Validation failed: ${validation.errors.join(' ')}`);
+    }
+    console.warn(
+      `[generateAndPersistLevelExamPart] Part ${partDef.partNumber}: persisting despite validation errors:`,
+      validation.errors.join(' | '),
+    );
   }
 
   if (replacePartContent || !preserveExistingParts) {
@@ -779,6 +844,7 @@ export async function generateAndPersistLevelExam(adminDb, {
   skipAudio = false,
   preserveExistingParts = true,
   replacePartContent = false,
+  persistDespiteValidation = false,
   onProgress,
 }) {
   if (!isDraloOpenAIConfigured()) {
@@ -813,6 +879,7 @@ export async function generateAndPersistLevelExam(adminDb, {
       topic,
       preserveExistingParts: force ? false : preserveExistingParts,
       replacePartContent: force ? true : replacePartContent,
+      persistDespiteValidation,
     });
     results.push({
       partNumber: row.partNumber,

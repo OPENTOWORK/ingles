@@ -120,12 +120,12 @@ addCase('passage under 150 words fails', (g) => {
 The (0) ___ (NATURE) park helps (17) ___ (FIT) and (18) ___ (STRONG) work. It builds (19) ___ (CONFIDENT) and (20) ___ (RELAX). Then (21) ___ (RESPONSIBLE) teens (22) ___ (COMPETE) for (23) ___ (HEALTH) and stay (24) ___ (ACTIVE).`;
   return g;
 }, /minimum is 150/);
-addCase('passage over 180 words fails', (g) => {
+addCase('passage over 200 words fails', (g) => {
   const filler =
     ' Extra commentary about parks, trails, weekend clubs, workplace walking groups, school gardens, outdoor festivals, community sports, cycling routes, weekend markets, and riverside benches appears again without adding new formation gaps.';
-  g.passage = `${g.passage}${filler}${filler}${filler}`;
+  g.passage = `${g.passage}${filler}${filler}${filler}${filler}`;
   return g;
-}, /maximum is 180/);
+}, /maximum is 200/);
 addCase('baseWord alias accepted on question', (g) => {
   g.questions[0] = { ...g.questions[0], baseWord: 'FIT' };
   delete g.questions[0].stem;

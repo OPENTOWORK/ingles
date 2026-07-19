@@ -904,7 +904,7 @@ function B2SpeakingExamPracticeInner({ title, subtitle, loadingLabel, refreshLab
       </section>
 
       <AdminExamPartPromptBox
-        enabled={adminFlow.isAdmin}
+        enabled
         slug="b2"
         partNumber={partNumber}
         examSlot={examSlot}

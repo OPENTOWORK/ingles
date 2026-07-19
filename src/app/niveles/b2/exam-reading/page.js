@@ -2564,7 +2564,7 @@ function B2ReadingExamsPageInner() {
       </section>
 
       <AdminExamPartPromptBox
-        enabled={adminFlow.isAdmin}
+        enabled
         slug="b2"
         partNumber={partNumberReading}
         examSlot={examSlot}

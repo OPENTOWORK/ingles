@@ -1230,7 +1230,7 @@ function B2WritingExamPracticePageInner() {
           ) : null}
         </section>
         <AdminExamPartPromptBox
-          enabled={adminFlow.isAdmin}
+          enabled
           slug="b2"
           partNumber={partNumber}
           examSlot={examSlot}

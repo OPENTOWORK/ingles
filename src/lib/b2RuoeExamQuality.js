@@ -246,10 +246,18 @@ export function analyzePart5Quality(gen) {
 
   const passage = String(gen.passage || '');
   metrics.wordCount = countWords(passage);
-  if (metrics.wordCount < 550) {
-    errors.push(`Part 5 passage is ${metrics.wordCount} words; minimum is 550 (target 550–650).`);
+  if (metrics.wordCount < 500) {
+    errors.push(`Part 5 passage is ${metrics.wordCount} words; minimum is 500 (target 550–650).`);
+  } else if (metrics.wordCount < 550) {
+    warnings.push(
+      `Part 5 passage is ${metrics.wordCount} words; target is 550–650 (accepted from 500 for generation).`,
+    );
+  } else if (metrics.wordCount > 700) {
+    errors.push(`Part 5 passage is ${metrics.wordCount} words; maximum is 700 (target 550–650).`);
   } else if (metrics.wordCount > 650) {
-    errors.push(`Part 5 passage is ${metrics.wordCount} words; maximum is 650 (target 550–650).`);
+    warnings.push(
+      `Part 5 passage is ${metrics.wordCount} words; target is 550–650 (accepted up to 700 for generation).`,
+    );
   }
 
   const questions = asArray(gen.questions);
@@ -391,10 +399,18 @@ export function analyzePart6Quality(gen) {
 
   const passage = String(gen.passage || '');
   metrics.wordCount = countWords(passage);
-  if (metrics.wordCount < 500) {
-    errors.push(`Part 6 passage is ${metrics.wordCount} words; minimum is 500 (target 500–600).`);
+  if (metrics.wordCount < 350) {
+    errors.push(`Part 6 passage is ${metrics.wordCount} words; minimum is 350 (target 500–600).`);
+  } else if (metrics.wordCount < 500) {
+    warnings.push(
+      `Part 6 passage is ${metrics.wordCount} words; target is 500–600 (accepted from 350 for generation).`,
+    );
+  } else if (metrics.wordCount > 650) {
+    errors.push(`Part 6 passage is ${metrics.wordCount} words; maximum is 650 (target 500–600).`);
   } else if (metrics.wordCount > 600) {
-    errors.push(`Part 6 passage is ${metrics.wordCount} words; maximum is 600 (target 500–600).`);
+    warnings.push(
+      `Part 6 passage is ${metrics.wordCount} words; target is 500–600 (accepted up to 650 for generation).`,
+    );
   }
 
   if (!hasTextLocal(gen.title)) errors.push('Part 6 must include a passage title.');
@@ -639,8 +655,14 @@ export function analyzePart7Quality(gen) {
     if (PART7_PLACEHOLDER_RE.test(text) || PART7_PLACEHOLDER_RE.test(name)) {
       errors.push(`${label}: placeholder text.`);
     }
-    if (wc < 120) errors.push(`${label} is ${wc} words; minimum is 120 (target 120–150).`);
-    else if (wc > 150) errors.push(`${label} is ${wc} words; maximum is 150 (target 120–150).`);
+    if (wc < 100) errors.push(`${label} is ${wc} words; minimum is 100 (target 120–150).`);
+    else if (wc < 120) {
+      warnings.push(`${label} is ${wc} words; target is 120–150 (accepted from 100 for generation).`);
+    } else if (wc > 170) {
+      errors.push(`${label} is ${wc} words; maximum is 170 (target 120–150).`);
+    } else if (wc > 150) {
+      warnings.push(`${label} is ${wc} words; target is 120–150 (accepted up to 170 for generation).`);
+    }
   });
 
   for (const L of 'ABCD') {

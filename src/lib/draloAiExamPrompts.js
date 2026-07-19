@@ -21,6 +21,51 @@ function varietyBlock(options) {
   return `Topic/theme: ${topic}. Variety seed: ${seed}. Create completely NEW content.${avoidBlock}`;
 }
 
+/**
+ * Expande placeholders que a veces se guardan literales en overrides de Supabase
+ * (`{variety}`, `{SHARED_JSON_RULES}`, `{directions}`).
+ */
+export function expandExamPartPromptTemplate(userPrompt, options = {}) {
+  const variety = varietyBlock(options);
+  const directions = String(options.directions || '').trim();
+  return String(userPrompt || '')
+    .replace(/^\s*Prompt complete:\s*/i, '')
+    .replace(/\{variety\}/gi, variety)
+    .replace(/\{SHARED_JSON_RULES\}/gi, SHARED_JSON_RULES.trim())
+    .replace(/\{directions\}/gi, directions);
+}
+
+/**
+ * Si el prompt custom no trae schema JSON usable, añade el pie del prompt por defecto del código.
+ */
+export function ensureExamPartJsonSchemaFooter(customUser, defaultUser) {
+  const custom = String(customUser || '').trim();
+  const def = String(defaultUser || '').trim();
+  if (!custom) return def;
+  const hasSchema =
+    /"partTitle"\s*:/.test(custom) ||
+    /Return ONLY JSON with:/i.test(custom) ||
+    (/"questions"\s*:/.test(custom) && /modelAnswers/i.test(custom));
+  if (hasSchema) return custom;
+
+  let footer = '';
+  const retIdx = def.search(/Return ONLY JSON with:/i);
+  if (retIdx >= 0) {
+    footer = def.slice(retIdx).trim();
+  } else {
+    const genIdx = def.search(/Generate exactly \d+ questions[\s\S]*$/i);
+    if (genIdx >= 0) footer = def.slice(genIdx).trim();
+    else {
+      const ptIdx = def.search(/"partTitle"\s*:/);
+      if (ptIdx >= 0) {
+        footer = `Return ONLY JSON with fields:\n${def.slice(ptIdx).trim()}`;
+      }
+    }
+  }
+  if (!footer) return custom;
+  return `${custom}\n\n${footer}`;
+}
+
 function baseExamSchema(directions, extra = '') {
   return `"partTitle":"Cambridge part title","directions":${JSON.stringify(directions)},"example":{"number":0,"options":["A) word","B) word","C) word","D) word"],"answer":"C","explanation":"one short line why this answer fits"}${extra}`;
 }
@@ -55,6 +100,12 @@ EACH SCORED QUESTION MUST INCLUDE:
 - sentence2Start OR sentence2: second sentence with exactly ONE gap written as __________________
 - answer: ONE primary correct gap completion (2–5 Cambridge words including the keyword)
 - grading_metadata: object required for Dralo's deterministic 0/1/2 grader (see below)
+
+ANSWER LENGTH (CRITICAL — match real FCE Part 4):
+- Prefer answers of 4 or 5 Cambridge words. Most items should use nearly the full 2–5 word allowance.
+- At least 2 of the 6 scored answers MUST be 4–5 words; aim for 3+.
+- Avoid a paper where almost every answer is only 2–3 words — that is too easy/simple for B2 First.
+- Still stay within 2–5 words; never exceed 5.
 
 EXAMPLE RULES:
 - example.number must be 0
@@ -98,6 +149,7 @@ QUALITY RULES:
 - The two sentences must express the same meaning.
 - Do NOT copy sentence1 wording into the answer unnecessarily.
 - Avoid trivial answers or incomplete fragments.
+- Prefer multi-clause / multi-element transformations typical of FCE (e.g. "is said to have been", "not as easy as", "in spite of having").
 - The keyword must be essential to the answer.
 - Exactly one main correct grammatical solution per item.
 - Choose common B2 grammatical/lexical keywords.
@@ -115,6 +167,7 @@ FORBIDDEN:
 - question numbers outside 25–30
 - multiple-choice options
 - answers under 2 or over 5 Cambridge words
+- a set where fewer than 3 answers use 4–5 words
 - missing grading_metadata / missing marking points
 - keyword changed, split, or omitted
 - two equally valid different transformation routes

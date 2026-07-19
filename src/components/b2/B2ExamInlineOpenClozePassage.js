@@ -3,8 +3,13 @@
 import ReadingQuestionFlagButton from '@/components/exam/ReadingQuestionFlagButton';
 import ReadingConfidenceSelector from '@/components/exam/ReadingConfidenceSelector';
 
-/** Marcador `(N) ___` / `(N) …` en pasajes Open Cloze, Word Formation, etc. */
-export const OPEN_GAP_MARKER_RE = /\((\d{1,2})\)\s*(?:_+|\.{2,}|…{2,})/g;
+/**
+ * Marcadores de hueco:
+ * - canónico: `(N) ___` / `(N) …`
+ * - variantes del modelo: `___(N)___`, `(N)___`
+ */
+export const OPEN_GAP_MARKER_RE =
+  /(?:_+)?\((\d{1,2})\)(?:\s*(?:_+|\.{2,}|…{2,})|_+)/g;
 
 /**
  * @param {string} line

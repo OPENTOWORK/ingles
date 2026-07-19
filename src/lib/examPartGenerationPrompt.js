@@ -1,6 +1,13 @@
 import { resolveDefaultA2ExamPartPrompt } from '@/lib/levelsA2ExamGenerator';
 import { resolveDefaultLevelExamPartPrompt } from '@/lib/levelsCambridgeExamGenerator';
 import {
+  expandExamPartPromptTemplate,
+  ensureExamPartJsonSchemaFooter,
+} from '@/lib/draloAiExamPrompts';
+import { getExamDirections } from '@/lib/draloAiExamPartSpecs';
+import { getA2PartDef } from '@/lib/draloAiA2ExamPrompts';
+import { getLevelExamPartDef } from '@/lib/levelsExamCatalog';
+import {
   fetchExamPartPromptOverride,
   saveExamPartPromptOverride,
 } from '@/lib/examPartPromptOverrides';
@@ -25,10 +32,42 @@ export function resolveDefaultExamPartGenerationPrompt({
   });
 }
 
+/** Convierte HTML del editor de prompts a texto plano para la IA. */
+export function promptHtmlToPlainText(value = '') {
+  const raw = String(value || '');
+  if (!raw.trim()) return '';
+  if (!/<[a-z][\s\S]*>/i.test(raw)) return raw;
+
+  return raw
+    .replace(/\r\n/g, '\n')
+    .replace(/<\s*br\s*\/?>/gi, '\n')
+    .replace(/<\/\s*p\s*>/gi, '\n')
+    .replace(/<\/\s*div\s*>/gi, '\n')
+    .replace(/<\/\s*li\s*>/gi, '\n')
+    .replace(/<[^>]+>/g, '')
+    .replace(/&nbsp;/gi, ' ')
+    .replace(/&amp;/gi, '&')
+    .replace(/&lt;/gi, '<')
+    .replace(/&gt;/gi, '>')
+    .replace(/&quot;/gi, '"')
+    .replace(/&#39;/gi, "'")
+    .replace(/\n{3,}/g, '\n\n')
+    .trim();
+}
+
+/** Ignora tema/seed embebidos: cambian en cada GET (Date.now) y no indican edición real. */
+function stripVarietyNoise(text) {
+  return promptHtmlToPlainText(text)
+    .replace(/Topic\/theme:[^\n.]*(?:\.[^\n]*)?/gi, '')
+    .replace(/Variety seed:\s*\d+\.?/gi, '')
+    .replace(/\s+/g, ' ')
+    .trim();
+}
+
 function promptsMatchStored(defaults, system, user) {
   return (
-    String(user || '').trim() === defaults.user.trim() &&
-    String(system || '').trim() === defaults.system.trim()
+    stripVarietyNoise(user) === stripVarietyNoise(defaults.user) &&
+    stripVarietyNoise(system) === stripVarietyNoise(defaults.system)
   );
 }
 
@@ -83,6 +122,28 @@ export async function ensureExamPartPromptStored(adminDb, options, userId = null
 }
 
 /**
+ * Si el prompt guardado trae Topic/theme + Variety seed, sustituye esa línea
+ * por la variedad pedida en esta generación (sin perder el resto del prompt).
+ */
+function applyFreshVariety(userPrompt, topic, varietySeed) {
+  const raw = String(userPrompt || '');
+  if (!raw.trim()) return raw;
+  if (topic == null && varietySeed == null) return raw;
+
+  const theme = topic || 'general everyday life';
+  const seed = varietySeed ?? Date.now();
+  const varietyLine = `Topic/theme: ${theme}. Variety seed: ${seed}. Create completely NEW content.`;
+
+  if (/Topic\/theme:/i.test(raw)) {
+    return raw.replace(
+      /Topic\/theme:[^\n]*Variety seed:[^\n]*/i,
+      varietyLine,
+    );
+  }
+  return raw;
+}
+
+/**
  * @param {import('@supabase/supabase-js').SupabaseClient | null | undefined} adminDb
  */
 export async function resolveEffectiveExamPartGenerationPrompt(adminDb, options) {
@@ -118,8 +179,28 @@ export async function resolveEffectiveExamPartGenerationPrompt(adminDb, options)
     };
   }
 
-  const system = String(row.system_prompt || '').trim() || defaults.system;
-  const user = String(row.user_prompt).trim();
+  const system = promptHtmlToPlainText(
+    String(row.system_prompt || '').trim() || defaults.system,
+  );
+  const userPlain = promptHtmlToPlainText(String(row.user_prompt).trim());
+  const slug = defaults.meta.levelSlug;
+  const partNumber = defaults.meta.partNumber;
+  const partDef =
+    slug === 'a2' ? getA2PartDef(partNumber) : getLevelExamPartDef(slug, partNumber);
+  const directions = partDef
+    ? getExamDirections(partDef.mode, partDef.activity)
+    : '';
+  const expanded = expandExamPartPromptTemplate(userPlain, {
+    topic: options?.topic ?? defaults.meta.topic,
+    varietySeed: options?.varietySeed ?? defaults.meta.varietySeed,
+    directions,
+  });
+  const withSchema = ensureExamPartJsonSchemaFooter(expanded, defaults.user);
+  const user = applyFreshVariety(
+    withSchema,
+    options?.topic ?? defaults.meta.topic,
+    options?.varietySeed ?? defaults.meta.varietySeed,
+  );
 
   return {
     system,
@@ -127,7 +208,7 @@ export async function resolveEffectiveExamPartGenerationPrompt(adminDb, options)
     defaultSystem: defaults.system,
     defaultUser: defaults.user,
     meta: defaults.meta,
-    isCustom: !promptsMatchStored(defaults, system, user),
+    isCustom: !promptsMatchStored(defaults, system, String(row.user_prompt).trim()),
     updatedAt: row.updated_at || null,
   };
 }
@@ -141,7 +222,7 @@ export async function getExamPartPromptForAdmin(adminDb, options, userId = null)
 export async function saveExamPartPromptForAdmin(adminDb, payload, userId) {
   const defaults = resolveDefaultExamPartGenerationPrompt(payload);
   const userPrompt = String(payload.userPrompt ?? '').trim();
-  if (!userPrompt) {
+  if (!promptHtmlToPlainText(userPrompt)) {
     throw new Error('El prompt de usuario no puede estar vacío. Usa «Empezar en blanco» y escribe uno nuevo.');
   }
 

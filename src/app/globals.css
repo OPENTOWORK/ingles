@@ -17440,7 +17440,70 @@ body.dark .profile-collapse--open .profile-collapse__head {
 .admin-exam-prompt-box__actions {
   display: flex;
   flex-wrap: wrap;
+  align-items: center;
   gap: 0.5rem;
+}
+
+.admin-exam-prompt-box__colors {
+  display: inline-flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.3rem;
+  margin-left: auto;
+  padding: 0.35rem 0.55rem;
+  border: 1px solid #c7d2fe;
+  border-radius: 10px;
+  background: #f8fafc;
+}
+
+.admin-exam-prompt-box__colors-label {
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: #64748b;
+  margin-right: 0.2rem;
+}
+
+.admin-exam-prompt-box__swatch {
+  width: 1.1rem;
+  height: 1.1rem;
+  border-radius: 999px;
+  border: 1px solid rgba(15, 23, 42, 0.18);
+  padding: 0;
+  cursor: pointer;
+}
+
+.admin-exam-prompt-box__swatch:hover {
+  transform: scale(1.12);
+  box-shadow: 0 0 0 2px #c7d2fe;
+}
+
+.admin-exam-prompt-box__custom-color {
+  display: inline-flex;
+  align-items: center;
+}
+
+.admin-exam-prompt-box__custom-color input[type='color'] {
+  width: 1.85rem;
+  height: 1.6rem;
+  padding: 0;
+  border: 1px solid #cbd5e1;
+  border-radius: 6px;
+  background: #fff;
+  cursor: pointer;
+}
+
+.admin-exam-prompt-box__sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
 }
 
 .admin-exam-prompt-box__btn {

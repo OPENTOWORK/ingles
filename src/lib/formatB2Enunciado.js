@@ -1,4 +1,8 @@
 import { getB2PartDef } from '@/lib/b2ExamCatalog';
+import {
+  normalizePassageGapMarkers,
+  normalizePart3PassageGaps,
+} from '@/lib/examPartValidation';
 
 export function asGeneratedArray(value) {
   if (Array.isArray(value)) return value;
@@ -121,7 +125,7 @@ export function buildB2EnunciadoFromGenerated(gen = {}, partNumber) {
     if (g.directions) pushLines(lines, g.directions);
     lines.push('Text');
     if (g.title) lines.push(g.title);
-    if (g.passage) pushLines(lines, g.passage);
+    if (g.passage) pushLines(lines, normalizePassageGapMarkers(g.passage));
     lines.push('');
     lines.push('Questions');
     for (const q of g.questions) {
@@ -134,7 +138,7 @@ export function buildB2EnunciadoFromGenerated(gen = {}, partNumber) {
     if (g.directions) pushLines(lines, g.directions);
     lines.push('Text');
     if (g.title) lines.push(g.title);
-    if (g.passage) pushLines(lines, g.passage);
+    if (g.passage) pushLines(lines, normalizePassageGapMarkers(g.passage));
     lines.push('');
     lines.push('Sentences');
     const poolLines = formatLetterPoolLines(g.sentencePool);
@@ -342,7 +346,11 @@ export function buildB2EnunciadoFromGenerated(gen = {}, partNumber) {
     }
     lines.push('Text');
     if (g.title) lines.push(g.title);
-    if (g.passage) pushLines(lines, g.passage);
+    if (g.passage) {
+      const passageText =
+        pn === 3 ? normalizePart3PassageGaps(g.passage) : normalizePassageGapMarkers(g.passage);
+      pushLines(lines, passageText);
+    }
     if (pn === 6 && g.sentencePool.length) {
       lines.push('');
       for (const s of g.sentencePool) {
@@ -351,7 +359,7 @@ export function buildB2EnunciadoFromGenerated(gen = {}, partNumber) {
     }
   } else if (g.title) {
     lines.push(g.title);
-    if (g.passage) pushLines(lines, g.passage);
+    if (g.passage) pushLines(lines, normalizePassageGapMarkers(g.passage));
   }
 
   if (g.questions.length && pn !== 4 && pn !== 5 && pn !== 6 && pn !== 7 && pn !== 8 && pn < 10) {

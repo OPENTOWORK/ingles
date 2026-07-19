@@ -105,12 +105,12 @@ addCase('passage under 150 words fails', (g) => {
 People spend most (0) ___ their free hours indoors. Adults (9) ___ live in cities can (10) ___ already noticed benefits. They decide (11) ___ walk more. (12) ___ it rains, they still go out. Neighbours share (13) ___ ideas and put pressure (14) ___ councils. With (15) ___ effort, habits last (16) ___ for years.`;
   return g;
 }, /minimum is 150/);
-addCase('passage over 180 words fails', (g) => {
+addCase('passage over 200 words fails', (g) => {
   const filler =
     ' Extra detail about parks, trees, benches, cycling routes, weekend markets, outdoor cafes, community gardens, school trips, workplace walking clubs, and seasonal festivals appears again and again in every paragraph without adding new grammar gaps.';
-  g.passage = `${g.passage}${filler}${filler}`;
+  g.passage = `${g.passage}${filler}${filler}${filler}`;
   return g;
-}, /maximum is 180/);
+}, /maximum is 200/);
 
 let failures = 0;
 for (const { name, mutate, expectError } of cases) {

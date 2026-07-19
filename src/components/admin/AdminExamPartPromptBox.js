@@ -1,9 +1,12 @@
 'use client';
 
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { supabase } from '@/utils/supabaseClient';
 import { buildClientApiUrl } from '@/utils/clientApiUrl';
-import { userHasRole } from '@/utils/authRoles';
+import { canAccessExamPartPrompts, getRoleNameByUserId } from '@/utils/authRoles';
+import PromptColoredTextEditor, {
+  TEXT_COLORS,
+} from '@/components/admin/PromptColoredTextEditor';
 
 async function getAdminHeaders() {
   const { data: sessionData } = await supabase.auth.getSession();
@@ -13,8 +16,13 @@ async function getAdminHeaders() {
   return headers;
 }
 
+function preventToolbarBlur(event) {
+  event.preventDefault();
+}
+
 /**
- * Recuadro admin debajo de cada parte: muestra el prompt actual (Supabase) y permite editarlo.
+ * Recuadro debajo de cada parte: muestra el prompt actual (Supabase) y permite editarlo.
+ * Visible para admin, coordinador y profesor.
  */
 export default function AdminExamPartPromptBox({
   enabled = false,
@@ -23,7 +31,7 @@ export default function AdminExamPartPromptBox({
   examSlot = 1,
   lang = 'es',
 }) {
-  const [isAdmin, setIsAdmin] = useState(false);
+  const [canAccess, setCanAccess] = useState(false);
   const [collapsed, setCollapsed] = useState(false);
   const [loading, setLoading] = useState(false);
   const [saving, setSaving] = useState(false);
@@ -34,24 +42,25 @@ export default function AdminExamPartPromptBox({
   const [userPrompt, setUserPrompt] = useState('');
   const [isCustom, setIsCustom] = useState(false);
   const [dirty, setDirty] = useState(false);
+  const userEditorRef = useRef(null);
 
   const isEn = lang === 'en';
   const part = Number(partNumber);
 
   useEffect(() => {
     if (!enabled) {
-      setIsAdmin(false);
+      setCanAccess(false);
       return;
     }
     void (async () => {
       const { data } = await supabase.auth.getSession();
       const user = data?.session?.user;
       if (!user?.id) {
-        setIsAdmin(false);
+        setCanAccess(false);
         return;
       }
-      const admin = await userHasRole(user.id, ['admin', 'administrador'], user.email);
-      setIsAdmin(admin);
+      const role = await getRoleNameByUserId(user.id, user.email);
+      setCanAccess(canAccessExamPartPrompts(role));
     })();
   }, [enabled]);
 
@@ -64,7 +73,7 @@ export default function AdminExamPartPromptBox({
   }, []);
 
   const loadPrompt = useCallback(async () => {
-    if (!isAdmin || !Number.isFinite(part) || part <= 0) return;
+    if (!canAccess || !Number.isFinite(part) || part <= 0) return;
     setLoading(true);
     setError('');
     setSuccess('');
@@ -87,12 +96,12 @@ export default function AdminExamPartPromptBox({
     } finally {
       setLoading(false);
     }
-  }, [isAdmin, slug, part, examSlot, applyPrompt]);
+  }, [canAccess, slug, part, examSlot, applyPrompt]);
 
   useEffect(() => {
-    if (!isAdmin) return;
+    if (!canAccess) return;
     void loadPrompt();
-  }, [isAdmin, loadPrompt]);
+  }, [canAccess, loadPrompt]);
 
   const handleSave = async () => {
     setSaving(true);
@@ -161,7 +170,13 @@ export default function AdminExamPartPromptBox({
     setError('');
   };
 
-  if (!enabled || !isAdmin || !Number.isFinite(part) || part <= 0) return null;
+  const userPromptIsEmpty =
+    !String(userPrompt || '')
+      .replace(/<[^>]*>/g, '')
+      .replace(/&nbsp;/gi, ' ')
+      .trim();
+
+  if (!enabled || !canAccess || !Number.isFinite(part) || part <= 0) return null;
 
   return (
     <div className="admin-exam-prompt-box">
@@ -198,8 +213,8 @@ export default function AdminExamPartPromptBox({
         <div className="admin-exam-prompt-box__body">
           <p className="admin-exam-prompt-box__hint">
             {isEn
-              ? 'This is the prompt DRALO AI uses to generate this part. It is stored in Supabase so you can review, fix or rewrite it. Changes apply when you regenerate the part.'
-              : 'Este es el prompt que DRALO AI usa para generar esta parte. Está guardado en Supabase para que puedas revisarlo, corregirlo o reescribirlo. Los cambios se aplican al regenerar la parte.'}
+              ? 'This is the prompt DRALO AI uses to generate this part. It is stored in Supabase so you can review, fix or rewrite it. Changes apply when you regenerate the part. Text colors are for editing only — the AI receives plain text.'
+              : 'Este es el prompt que DRALO AI usa para generar esta parte. Está guardado en Supabase para que puedas revisarlo, corregirlo o reescribirlo. Los cambios se aplican al regenerar la parte. Los colores son solo para editar: la IA recibe texto plano.'}
           </p>
 
           {meta?.topic ? (
@@ -226,25 +241,33 @@ export default function AdminExamPartPromptBox({
                 />
               </label>
 
-              <label className="admin-exam-prompt-box__label">
-                {isEn ? 'User prompt (main)' : 'Prompt de usuario (principal)'}
-                <textarea
-                  className="admin-exam-prompt-box__textarea"
-                  rows={16}
+              <div className="admin-exam-prompt-box__label">
+                <span>{isEn ? 'User prompt (main)' : 'Prompt de usuario (principal)'}</span>
+                <PromptColoredTextEditor
+                  ref={userEditorRef}
                   value={userPrompt}
-                  onChange={(e) => {
-                    setUserPrompt(e.target.value);
+                  rows={16}
+                  lang={lang}
+                  enableTranslate
+                  ariaLabel={isEn ? 'User prompt' : 'Prompt de usuario'}
+                  placeholder={
+                    isEn
+                      ? 'Select text and choose a color…'
+                      : 'Selecciona texto y elige un color…'
+                  }
+                  onChange={(html) => {
+                    setUserPrompt(html);
                     setDirty(true);
                   }}
                 />
-              </label>
+              </div>
 
               <div className="admin-exam-prompt-box__actions">
                 <button
                   type="button"
                   className="admin-exam-prompt-box__btn admin-exam-prompt-box__btn--primary"
                   onClick={handleSave}
-                  disabled={saving || !userPrompt.trim()}
+                  disabled={saving || userPromptIsEmpty}
                 >
                   {saving ? (isEn ? 'Saving…' : 'Guardando…') : isEn ? 'Save changes' : 'Guardar cambios'}
                 </button>
@@ -272,6 +295,40 @@ export default function AdminExamPartPromptBox({
                 >
                   {isEn ? 'Reload' : 'Recargar'}
                 </button>
+
+                <div
+                  className="admin-exam-prompt-box__colors"
+                  role="group"
+                  aria-label={isEn ? 'Text color' : 'Color de texto'}
+                >
+                  <span className="admin-exam-prompt-box__colors-label">
+                    {isEn ? 'Color' : 'Color'}
+                  </span>
+                  {TEXT_COLORS.map((c) => (
+                    <button
+                      key={c.value}
+                      type="button"
+                      className="admin-exam-prompt-box__swatch"
+                      style={{ background: c.value }}
+                      title={c.label}
+                      aria-label={c.label}
+                      onMouseDown={preventToolbarBlur}
+                      onClick={() => userEditorRef.current?.applyColor(c.value)}
+                    />
+                  ))}
+                  <label className="admin-exam-prompt-box__custom-color">
+                    <span className="admin-exam-prompt-box__sr-only">
+                      {isEn ? 'Custom color' : 'Color personalizado'}
+                    </span>
+                    <input
+                      type="color"
+                      defaultValue="#4f46e5"
+                      onMouseDown={preventToolbarBlur}
+                      onChange={(e) => userEditorRef.current?.applyColor(e.target.value)}
+                      title={isEn ? 'More colors' : 'Más colores'}
+                    />
+                  </label>
+                </div>
               </div>
             </>
           )}

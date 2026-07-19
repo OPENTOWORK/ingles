@@ -1626,7 +1626,7 @@ function UseOfEnglishExamsPageInner() {
       </section>
 
       <AdminExamPartPromptBox
-        enabled={adminFlow.isAdmin}
+        enabled
         slug="b2"
         partNumber={partNumberUoe}
         examSlot={examSlot}

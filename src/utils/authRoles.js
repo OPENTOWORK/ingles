@@ -73,6 +73,11 @@ export function canAccessBlogAdminPanel(roleName = '') {
   return isAdminRole(roleName) || isCoordinatorRole(roleName);
 }
 
+/** Prompts de generación de partes de examen (lectura/edición). */
+export function canAccessExamPartPrompts(roleName = '') {
+  return isAdminRole(roleName) || isCoordinatorRole(roleName) || isTeacherRole(roleName);
+}
+
 /** Vista «admin» del panel de profesor (todos los alumnos). */
 export function canAccessAdminTeacherPanelView(roleName = '') {
   return isAdminRole(roleName) || isCoordinatorRole(roleName);
