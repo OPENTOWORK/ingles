@@ -1,4 +1,8 @@
-import { formatWritingFeedbackDisplay, isWritingFeedbackHeadingLine } from '@/lib/formatWritingFeedback';
+import {
+  cleanWritingFeedbackHeading,
+  formatWritingFeedbackDisplay,
+  isWritingFeedbackHeadingLine,
+} from '@/lib/formatWritingFeedback';
 import {
   isAnnotatedTextSection,
   renderAnnotatedWritingHtml,
@@ -624,7 +628,7 @@ function formatBulletLines(body) {
 }
 
 function renderStrengthsOrProblemsSection(heading, body) {
-  const display = formatWritingFeedbackDisplay(`## ${heading.replace(/^#{1,6}\s+/, '')}`);
+  const display = cleanWritingFeedbackHeading(heading);
   const variant = isStrengthsSection(heading) ? 'strengths' : 'problems';
   return `<section class="writing-feedback-block writing-feedback-block--${variant}">
     <h4 class="writing-feedback-block__title">${escapeHtml(display)}</h4>
@@ -651,11 +655,11 @@ function renderFeedbackSection({ heading, body }) {
       return renderStrengthsOrProblemsSection(heading, body);
     }
     if (isAnnotatedTextSection(heading)) {
-      html += `<h4 class="levels-b2-writing-panel__feedback-heading">${escapeHtml(formatWritingFeedbackDisplay(`## ${heading.replace(/^#{1,6}\s+/, '')}`))}</h4>`;
+      html += formatSectionHeading(heading);
       html += renderAnnotatedSection(body);
       return html;
     }
-    html += formatSectionHeading(heading.replace(/^#{1,6}\s+/, ''));
+    html += formatSectionHeading(heading);
   }
 
   if (heading && isCorrectionsSection(heading)) {
@@ -737,8 +741,7 @@ function formatPlainLines(body) {
       if (!trimmed) return '<br />';
       if (/^Problem\s+\/?\s*Correct\s*:?\s*$/i.test(trimmed)) return '';
       if (isWritingFeedbackHeadingLine(trimmed)) {
-        const title = trimmed.replace(/^#{1,6}\s+/, '');
-        return `<h4 class="levels-b2-writing-panel__feedback-heading">${title}</h4>`;
+        return formatSectionHeading(trimmed);
       }
       if (/^[-*]\s+/.test(trimmed)) {
         const item = trimmed.replace(/^[-*]\s+/, '');
@@ -753,7 +756,8 @@ function formatPlainLines(body) {
 }
 
 function formatSectionHeading(heading) {
-  const display = formatWritingFeedbackDisplay(`## ${heading}`);
+  const display = cleanWritingFeedbackHeading(heading);
+  if (!display) return '';
   return `<h4 class="levels-b2-writing-panel__feedback-heading">${escapeHtml(display)}</h4>`;
 }
 

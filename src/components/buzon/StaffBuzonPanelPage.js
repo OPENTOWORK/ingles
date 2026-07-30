@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import BuzonPushNotifications from '@/components/buzon/BuzonPushNotifications';
 import StaffBuzonPanel from '@/components/buzon/StaffBuzonPanel';
 import StaffMeetingsPanel from '@/components/coordinator/StaffMeetingsPanel';
 import styles from './StaffBuzonPanelPage.module.css';
@@ -27,6 +28,8 @@ export default function StaffBuzonPanelPage({ currentUserId }) {
           </p>
         </div>
       </div>
+
+      <BuzonPushNotifications />
 
       <nav className={styles.tabNav} aria-label="Secciones del buzón y reuniones">
         {TABS.map((item) => (

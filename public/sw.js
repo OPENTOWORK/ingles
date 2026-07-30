@@ -1,7 +1,7 @@
 // Service Worker for English Practice App
-const CACHE_NAME = 'english-practice-v1';
-const STATIC_CACHE_NAME = 'english-practice-static-v1';
-const DYNAMIC_CACHE_NAME = 'english-practice-dynamic-v1';
+const CACHE_NAME = 'english-practice-v2';
+const STATIC_CACHE_NAME = 'english-practice-static-v2';
+const DYNAMIC_CACHE_NAME = 'english-practice-dynamic-v2';
 
 // Files to cache immediately
 const STATIC_ASSETS = [
@@ -293,55 +293,57 @@ async function syncProgressData() {
 
 // Push notifications
 self.addEventListener('push', (event) => {
-  console.log('Push notification received:', event);
-  
-  const options = {
-    body: event.data ? event.data.text() : 'New exercise available!',
-    icon: '/uk-flag.png',
-    badge: '/uk-flag.png',
-    vibrate: [100, 50, 100],
-    data: {
-      dateOfArrival: Date.now(),
-      primaryKey: 1
-    },
-    actions: [
-      {
-        action: 'explore',
-        title: 'Start Practice',
-        icon: '/images/start-icon.png'
+  event.waitUntil((async () => {
+    let payload = {};
+    try {
+      payload = event.data ? event.data.json() : {};
+    } catch {
+      payload = { body: event.data ? event.data.text() : 'Tienes un mensaje nuevo.' };
+    }
+
+    const appClients = await self.clients.matchAll({
+      type: 'window',
+      includeUncontrolled: true,
+    });
+    const buzonIsVisible = appClients.some((client) => {
+      const url = new URL(client.url);
+      return client.visibilityState === 'visible' && url.pathname.startsWith('/buzon');
+    });
+    if (buzonIsVisible) return;
+
+    await self.registration.showNotification(payload.title || 'Nuevo mensaje en Dralo', {
+      body: payload.body || 'Tienes un mensaje nuevo.',
+      icon: payload.icon || '/icon-192.png',
+      badge: payload.badge || '/icon-192.png',
+      vibrate: [120, 60, 120],
+      tag: payload.tag || 'dralo-buzon',
+      renotify: true,
+      data: {
+        url: payload.url || '/buzon/',
+        messageId: payload.messageId || null,
       },
-      {
-        action: 'close',
-        title: 'Close',
-        icon: '/images/close-icon.png'
-      }
-    ]
-  };
-  
-  event.waitUntil(
-    self.registration.showNotification('English Practice', options)
-  );
+    });
+  })());
 });
 
 // Notification click
 self.addEventListener('notificationclick', (event) => {
-  console.log('Notification clicked:', event);
-  
   event.notification.close();
-  
-  if (event.action === 'explore') {
-    event.waitUntil(
-      clients.openWindow('/training')
-    );
-  } else if (event.action === 'close') {
-    // Just close the notification
-    return;
-  } else {
-    // Default action - open the app
-    event.waitUntil(
-      clients.openWindow('/')
-    );
-  }
+
+  event.waitUntil((async () => {
+    const targetUrl = new URL(event.notification.data?.url || '/buzon/', self.location.origin).href;
+    const appClients = await self.clients.matchAll({
+      type: 'window',
+      includeUncontrolled: true,
+    });
+    const existing = appClients.find((client) => new URL(client.url).origin === self.location.origin);
+
+    if (existing) {
+      if ('navigate' in existing) await existing.navigate(targetUrl);
+      return existing.focus();
+    }
+    return self.clients.openWindow(targetUrl);
+  })());
 });
 
 // Helper functions for IndexedDB operations

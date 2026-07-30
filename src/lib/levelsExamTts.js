@@ -23,7 +23,7 @@ async function synthesizeWithEdge(text, voice = EDGE_VOICE, prosody = {}) {
  * TTS for a single utterance.
  * When `edgeVoice` is set, Edge TTS is preferred (better accent variety for listening).
  * @param {string} text
- * @param {{ edgeVoice?: string, openaiVoice?: string, preferEdge?: boolean }} [options]
+ * @param {{ edgeVoice?: string, openaiVoice?: string, preferEdge?: boolean, edgeOnly?: boolean, openaiOnly?: boolean }} [options]
  * @returns {Promise<{ base64: string, mime: string } | null>}
  */
 export async function synthesizeExamTtsMp3(text, options = {}) {
@@ -33,12 +33,18 @@ export async function synthesizeExamTtsMp3(text, options = {}) {
   const edgeVoice = options.edgeVoice?.trim() || null;
   const openaiVoice = options.openaiVoice || process.env.OPENAI_TTS_VOICE || 'nova';
   const preferEdge = options.preferEdge !== false && Boolean(edgeVoice);
+  const edgeOnly = options.edgeOnly === true;
+  const openaiOnly = options.openaiOnly === true;
   const prosody = options.prosody || {};
 
   if (preferEdge && edgeVoice) {
     try {
       return await synthesizeWithEdge(trimmed, edgeVoice, prosody);
     } catch (err) {
+      if (edgeOnly) {
+        console.warn('[levelsExamTts] Fixed Edge voice unavailable:', err?.message || err);
+        return null;
+      }
       console.warn('[levelsExamTts] Edge TTS failed, trying OpenAI:', err?.message || err);
     }
   }
@@ -58,6 +64,10 @@ export async function synthesizeExamTtsMp3(text, options = {}) {
       return { base64: buf.toString('base64'), mime: 'audio/mpeg' };
     } catch (err) {
       const code = err?.code || err?.error?.code;
+      if (openaiOnly) {
+        console.warn('[levelsExamTts] Fixed OpenAI voice unavailable:', err?.message || err);
+        return null;
+      }
       if (code !== 'insufficient_quota' && err?.status !== 429) {
         if (!edgeVoice) throw err;
         console.warn('[levelsExamTts] OpenAI TTS failed:', err?.message || err);
@@ -66,6 +76,8 @@ export async function synthesizeExamTtsMp3(text, options = {}) {
       }
     }
   }
+
+  if (openaiOnly) return null;
 
   try {
     return await synthesizeWithEdge(trimmed, edgeVoice || EDGE_VOICE, prosody);

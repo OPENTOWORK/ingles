@@ -1185,8 +1185,10 @@ function B2SpeakingPartSession({
       });
       if (!turnRes.ok) {
         const err = await turnRes.json().catch(() => ({}));
+        const detail = typeof err.detail === 'string' ? err.detail.trim() : '';
         throw new Error(
-          err.error ||
+          detail ||
+            err.error ||
             (isEn ? 'Could not load the examiner question.' : 'Error al cargar la pregunta del examinador.'),
         );
       }
@@ -1245,6 +1247,11 @@ function B2SpeakingPartSession({
       }
       try {
         let res;
+        const assistantHistory = history
+          .filter((line) => line.role === 'assistant')
+          .map((line) => String(line.content || '').trim())
+          .filter(Boolean)
+          .slice(-8);
         if (payload.audio) {
           const form = new FormData();
           form.set('sessionId', sid);
@@ -1254,6 +1261,8 @@ function B2SpeakingPartSession({
           form.set('examPartIndex', String(partConfig?.blueprintIndex ?? 0));
           form.set('b2PartNumber', String(part.partNumber));
           form.set('taskContext', ctx);
+          form.set('lastAssistantText', lastAssistantRef.current?.assistantText || '');
+          form.set('assistantHistory', JSON.stringify(assistantHistory));
           if (payload.isOpening) form.set('isOpening', 'true');
           form.append('audio', payload.audio, 'capture.webm');
           res = await fetch(buildClientApiUrl('/api/speaking/turn'), {
@@ -1274,6 +1283,8 @@ function B2SpeakingPartSession({
               examPartIndex: partConfig?.blueprintIndex ?? 0,
               b2PartNumber: part.partNumber,
               taskContext: ctx,
+              lastAssistantText: lastAssistantRef.current?.assistantText || '',
+              assistantHistory,
               isOpening: Boolean(payload.isOpening),
             }),
             signal,
@@ -1282,8 +1293,11 @@ function B2SpeakingPartSession({
         if (!isAlive()) return null;
         if (!res.ok) {
           const err = await res.json().catch(() => ({}));
+          const detail = typeof err.detail === 'string' ? err.detail.trim() : '';
           throw new Error(
-            err.error || (isEn ? 'Speaking turn failed.' : 'Error en el turno de speaking.'),
+            detail ||
+              err.error ||
+              (isEn ? 'Speaking turn failed.' : 'Error en el turno de speaking.'),
           );
         }
         return await res.json();
@@ -1297,7 +1311,7 @@ function B2SpeakingPartSession({
         if (isAlive()) setLoading(false);
       }
     },
-    [sessionId, part.partNumber, partConfig?.blueprintIndex, isAlive, isEn],
+    [sessionId, part.partNumber, partConfig?.blueprintIndex, history, isAlive, isEn],
   );
 
   const persistSnapshot = useCallback(() => {
@@ -1561,19 +1575,19 @@ function B2SpeakingPartSession({
       };
 
       appendAssistantLine(closingText);
-      if (isAlive()) {
-        await playExaminerAudio({ text: closingText, speechLang: isEn ? 'en-GB' : 'es-ES' });
-      }
 
       if (nextLocalPartNumber != null && isAlive()) {
-        const voiceText = isEn
+        const transitionText = isEn
           ? `Now let's move on to Part ${nextLocalPartNumber}.`
           : nextLocalPartNumber === 2
             ? 'Ahora pasemos a la segunda parte.'
             : `Ahora pasemos a la parte ${nextLocalPartNumber}.`;
-        appendAssistantLine(voiceText);
-        await playExaminerAudio({ text: voiceText, speechLang: isEn ? 'en-GB' : 'es-ES' });
+        appendAssistantLine(transitionText);
       }
+
+      // Once the part is complete, keep the examiner silent. Feedback and
+      // results are rendered in FeedbackCards below, as in Test 1.
+      stopExaminerAudio();
 
       if (!examMode && isAlive()) {
         if (limitReached) {
@@ -1622,7 +1636,7 @@ function B2SpeakingPartSession({
       if (audioOrText instanceof Blob) {
         data = await callTurn({ audio: audioOrText });
         if (!isAlive() || !data) return;
-        if (data.transcript) {
+        if (data.transcript && data.answerAccepted !== false) {
           nextHistory = [...history, { role: 'user', content: data.transcript }];
           setLines((prev) => [...prev, { role: 'user', content: data.transcript }]);
           setHistory(nextHistory);
@@ -1630,11 +1644,13 @@ function B2SpeakingPartSession({
       } else {
         const text = String(audioOrText || '').trim();
         if (!text) return;
-        nextHistory = [...history, { role: 'user', content: text }];
-        setLines((prev) => [...prev, { role: 'user', content: text }]);
-        setHistory(nextHistory);
         data = await callTurn({ text });
         if (!isAlive() || !data) return;
+        if (data.answerAccepted !== false) {
+          nextHistory = [...history, { role: 'user', content: text }];
+          setLines((prev) => [...prev, { role: 'user', content: text }]);
+          setHistory(nextHistory);
+        }
       }
 
       const userCount = nextHistory.filter((l) => l.role === 'user').length;
@@ -1648,6 +1664,30 @@ function B2SpeakingPartSession({
     },
     [applyAssistantTurn, callTurn, isAlive, history, speakingTotal, finishSpeakingPart],
   );
+
+  const submitTypedAnswer = useCallback(async () => {
+    const text = typed.trim();
+    if (loading || !text || !exerciseStarted || partComplete) return;
+    const completingLongTurn =
+      partConfig?.uiMode === 'long_turn' && phase !== 'dialogue';
+    if (completingLongTurn && media.isActive) {
+      await media.discard();
+    }
+    setTyped('');
+    await submitCandidateTurn(text);
+    if (completingLongTurn && isAlive()) setPhase('dialogue');
+  }, [
+    typed,
+    loading,
+    exerciseStarted,
+    partComplete,
+    partConfig?.uiMode,
+    phase,
+    media.isActive,
+    media.discard,
+    submitCandidateTurn,
+    isAlive,
+  ]);
 
   useEffect(() => {
     if (phase !== 'long_turn' || longTurnLeft !== 0 || !media.isActive) return;
@@ -2001,13 +2041,17 @@ function B2SpeakingPartSession({
         </span>
       </div>
 
-      {(partConfig?.uiMode !== 'long_turn' || phase === 'dialogue') && (
-        <div className="levels-b2-speaking-session__text-row">
+      <div className="levels-b2-speaking-session__text-row">
           <input
             type="text"
             className="levels-b2-speaking-session__text-input"
             value={typed}
             onChange={(e) => setTyped(e.target.value)}
+            onKeyDown={(e) => {
+              if (e.key !== 'Enter' || e.nativeEvent.isComposing) return;
+              e.preventDefault();
+              void submitTypedAnswer();
+            }}
             placeholder="Or type your answer"
             disabled={!exerciseStarted || partComplete}
           />
@@ -2015,16 +2059,11 @@ function B2SpeakingPartSession({
             type="button"
             className="levels-b2-speaking-session__text-send"
             disabled={loading || !typed.trim() || !exerciseStarted || partComplete}
-            onClick={async () => {
-              const t = typed.trim();
-              setTyped('');
-              await submitCandidateTurn(t);
-            }}
+            onClick={() => void submitTypedAnswer()}
           >
             Send text
           </button>
-        </div>
-      )}
+      </div>
 
       {media.error ? (
         <p className="levels-b2-speaking-session__warn">{media.error}</p>

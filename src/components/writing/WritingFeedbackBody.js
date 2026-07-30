@@ -1,7 +1,7 @@
 'use client';
 
 import { useMemo } from 'react';
-import { formatWritingFeedbackDisplay } from '@/lib/formatWritingFeedback';
+import { cleanWritingFeedbackHeading } from '@/lib/formatWritingFeedback';
 import {
   parseWritingCorrectionBlocks,
   renderFeedbackSectionHtml,
@@ -19,7 +19,7 @@ import WritingInteractiveAnnotatedText, {
 } from '@/components/writing/WritingInteractiveAnnotatedText';
 
 function sectionTitle(heading) {
-  return formatWritingFeedbackDisplay(String(heading || '').replace(/^#{1,6}\s+/, ''));
+  return cleanWritingFeedbackHeading(heading);
 }
 
 export default function WritingFeedbackBody({ feedback = '', lang = 'en', className = '' }) {

@@ -149,6 +149,10 @@ async function playSpeechPipeline(cleanText, options = {}) {
       }
       currentAudio = null;
       openAiTtsAbortController = null;
+      if (options.allowFallback === false) {
+        options.onError?.();
+        return;
+      }
       playChunks(splitTextIntoChunks(cleanText, 200), 0, options, true);
     };
 
@@ -162,6 +166,10 @@ async function playSpeechPipeline(cleanText, options = {}) {
     }
     openAiTtsAbortController = null;
     currentAudio = null;
+    if (options.allowFallback === false) {
+      options.onError?.();
+      return;
+    }
     playChunks(splitTextIntoChunks(cleanText, 200), 0, options, true);
   }
 }

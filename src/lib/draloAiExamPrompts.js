@@ -44,12 +44,13 @@ export function ensureExamPartJsonSchemaFooter(customUser, defaultUser) {
   if (!custom) return def;
   const hasSchema =
     /"partTitle"\s*:/.test(custom) ||
-    /Return ONLY JSON with:/i.test(custom) ||
+    /Return ONLY JSON with(?:\s+keys)?:/i.test(custom) ||
+    /speakingPrompts\s*\(/i.test(custom) ||
     (/"questions"\s*:/.test(custom) && /modelAnswers/i.test(custom));
   if (hasSchema) return custom;
 
   let footer = '';
-  const retIdx = def.search(/Return ONLY JSON with:/i);
+  const retIdx = def.search(/Return ONLY JSON with(?:\s+keys)?:/i);
   if (retIdx >= 0) {
     footer = def.slice(retIdx).trim();
   } else {

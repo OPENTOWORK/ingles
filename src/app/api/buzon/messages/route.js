@@ -4,6 +4,9 @@ import {
   userIsStaffBuzonRecipient,
 } from '@/lib/staffBuzonAccess';
 import { getBuzonAttachmentDefaultBody } from '@/lib/staffBuzonAttachments';
+import { sendBuzonMessagePushNotifications } from '@/lib/staffBuzonPush';
+
+export const runtime = 'nodejs';
 
 const MESSAGE_SELECT =
   'id, sender_id, recipient_id, group_id, body, created_at, read_at, attachment_url, attachment_name, attachment_mime, attachment_kind';
@@ -163,6 +166,35 @@ export async function POST(req) {
     if (error) {
       console.error('[buzon/messages POST]', error);
       return NextResponse.json({ error: 'No se pudo enviar el mensaje.' }, { status: 500 });
+    }
+
+    try {
+      const [senderResult, groupResult] = await Promise.all([
+        db
+          .from('Usuarios_y_Perfil_users')
+          .select('nombre, email')
+          .eq('id', user.id)
+          .maybeSingle(),
+        data.group_id
+          ? db.from('staff_buzon_grupos').select('name').eq('id', data.group_id).maybeSingle()
+          : Promise.resolve({ data: null, error: null }),
+      ]);
+
+      if (senderResult.error) throw senderResult.error;
+      if (groupResult.error) throw groupResult.error;
+
+      await sendBuzonMessagePushNotifications({
+        db,
+        message: data,
+        senderName:
+          senderResult.data?.nombre?.trim() ||
+          senderResult.data?.email?.split('@')[0] ||
+          'Dralo',
+        groupName: groupResult.data?.name || '',
+      });
+    } catch (pushError) {
+      // The chat message is already saved; a push failure must not turn a successful send into an error.
+      console.error('[buzon/messages POST push]', pushError);
     }
 
     return NextResponse.json({ message: data });

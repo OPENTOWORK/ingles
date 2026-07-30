@@ -49,6 +49,60 @@
   opacity: 0.88;
 }
 
+.pushCard {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+  padding: 1rem 1.15rem;
+  border-radius: 16px;
+  border: 1px solid rgba(99, 102, 241, 0.18);
+  background: #fff;
+  box-shadow: 0 8px 24px rgba(79, 70, 229, 0.08);
+}
+
+.pushBody {
+  flex: 1;
+  min-width: 0;
+}
+
+.pushButton,
+.pushButtonSecondary {
+  flex-shrink: 0;
+  border: 0;
+  border-radius: 11px;
+  padding: 0.68rem 1rem;
+  font-size: 0.84rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition:
+    transform 0.18s ease,
+    box-shadow 0.18s ease,
+    opacity 0.18s ease;
+}
+
+.pushButton {
+  color: #fff;
+  background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+  box-shadow: 0 5px 14px rgba(79, 70, 229, 0.25);
+}
+
+.pushButtonSecondary {
+  color: #4338ca;
+  background: #eef2ff;
+  border: 1px solid rgba(99, 102, 241, 0.2);
+}
+
+.pushButton:hover:not(:disabled),
+.pushButtonSecondary:hover:not(:disabled) {
+  transform: translateY(-1px);
+}
+
+.pushButton:disabled,
+.pushButtonSecondary:disabled {
+  cursor: not-allowed;
+  opacity: 0.55;
+}
+
 .tabNav {
   display: inline-flex;
   flex-wrap: wrap;
@@ -97,6 +151,18 @@
 
 .panelWrap {
   animation: buzonPanelFadeIn 0.35s ease;
+}
+
+@media (max-width: 640px) {
+  .pushCard {
+    align-items: flex-start;
+    flex-wrap: wrap;
+  }
+
+  .pushButton,
+  .pushButtonSecondary {
+    width: 100%;
+  }
 }
 
 @keyframes buzonPanelFadeIn {

@@ -1,34 +1,25 @@
-/** Emojis por sección de la corrección Cambridge Writing */
-const SECTION_EMOJI = {
-  'task fulfilment': '📋',
-  'language corrections': '✏️',
-  'general feedback': '💬',
-  strengths: '💪',
-  'main strengths': '💪',
-  'areas for improvement': '🎯',
-  'main problems': '🎯',
-  'annotated text': '🔍',
-  scores: '📊',
-  'scores (cambridge subscales)': '📊',
-};
-
-const MAIN_TITLE_EMOJI = '📝';
+/** Emojis used as section markers in Cambridge writing feedback */
+const SECTION_HEADING_EMOJI =
+  /^(?:📝|📋|✏️|💬|💪|🎯|📊|🎓|📈|🚀|📚|🔍|▫️|✨)\s*/u;
 
 /**
- * Quita cabeceras markdown (#, ##, ###) y las sustituye por emojis.
+ * Display title for a feedback section: strip markdown hashes and leading section emojis.
+ */
+export function cleanWritingFeedbackHeading(heading) {
+  let t = String(heading || '').trim().replace(/^#{1,6}\s+/, '');
+  while (SECTION_HEADING_EMOJI.test(t)) {
+    t = t.replace(SECTION_HEADING_EMOJI, '');
+  }
+  return t.trim();
+}
+
+/**
+ * Normalize feedback text for display: strip markdown heading markers (keep plain titles).
  */
 export function formatWritingFeedbackDisplay(text) {
   let s = String(text || '');
 
-  s = s.replace(/^###\s+(.+)$/gim, (_, title) => {
-    const key = title.trim().toLowerCase();
-    const emoji = SECTION_EMOJI[key] || '▫️';
-    return `${emoji} ${title.trim()}`;
-  });
-
-  s = s.replace(/^##\s+(.+)$/gim, (_, title) => `${MAIN_TITLE_EMOJI} ${title.trim()}`);
-
-  s = s.replace(/^#\s+(.+)$/gim, (_, title) => `${MAIN_TITLE_EMOJI} ${title.trim()}`);
+  s = s.replace(/^#{1,6}\s+(.+)$/gim, (_, title) => cleanWritingFeedbackHeading(title));
 
   return s.trim();
 }
@@ -38,5 +29,5 @@ export function isWritingFeedbackHeadingLine(line) {
   const t = String(line || '').trim();
   if (!t) return false;
   if (/^#{1,6}\s+/.test(t)) return true;
-  return /^(📝|📋|✏️|💬|💪|🎯|📊|🎓|📈|🚀|📚|🔍|▫️)\s/.test(t);
+  return /^(📝|📋|✏️|💬|💪|🎯|📊|🎓|📈|🚀|📚|🔍|▫️|✨)\s/.test(t);
 }

@@ -4,6 +4,7 @@ import Link from 'next/link';
 import SiteMascot from '@/components/SiteMascot';
 import DraloTagline from '@/components/DraloTagline';
 import HomeHowItWorks from '@/components/home/HomeHowItWorks';
+import HomeInstallAppButton from '@/components/home/HomeInstallAppButton';
 import HomeQuickNav from '@/components/home/HomeQuickNav';
 import { useGuidedTour } from '@/context/GuidedTourContext';
 import { useUserRole } from '@/context/UserRoleContext';
@@ -23,6 +24,8 @@ export default function Home() {
     <main className="home-page">
       <div className="home-page__inner">
         <section className="home-hero" aria-labelledby="home-title">
+          <HomeInstallAppButton />
+
           <div className="home-hero__copy">
             <h1 id="home-title" className="home-page__title">
               Welcome to Dralo

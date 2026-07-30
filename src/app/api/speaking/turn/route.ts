@@ -2,13 +2,15 @@ import { NextResponse } from 'next/server';
 import type { CefrLevel, SpeakingMode } from '@prisma/client';
 import { createLlmAdapter } from '@/features/speaking/services/llm/llm.adapter';
 import { createSttAdapter } from '@/features/speaking/services/speech/stt.adapter';
-import { createTtsAdapter } from '@/features/speaking/services/speech/tts.adapter';
 import { getExamBlueprint } from '@/features/speaking/domain/exam-blueprints';
 import {
   buildB2ExaminerSystemExtra,
   getB2SpeakingPartConfig,
 } from '@/features/speaking/domain/b2-speaking-exam-parts';
-import { hasDedicatedB2ExaminerPrompt } from '@/features/speaking/domain/b2-examiner-prompts';
+import {
+  assessB2Part1AnswerLanguage,
+  hasDedicatedB2ExaminerPrompt,
+} from '@/features/speaking/domain/b2-examiner-prompts';
 import { saveTurn, getSessionTurns } from '@/features/speaking/services/sessions/speaking-session.service';
 import { buildLlmHistoryFromStoredTurns } from '@/features/speaking/services/sessions/speaking-turn-context';
 import { optionalUserId } from '@/server/speaking/authorize';
@@ -50,6 +52,8 @@ export async function POST(req: Request) {
     let isOpening = false;
     let taskContext = '';
     let b2PartNumber = 0;
+    let lastAssistantText = '';
+    let clientAssistantHistory: string[] = [];
     let audio: { buffer: Buffer; mimeType: string; filename: string } | null = null;
 
     if (ct.includes('multipart/form-data')) {
@@ -63,6 +67,13 @@ export async function POST(req: Request) {
       isOpening = form.get('isOpening') === 'true';
       taskContext = String(form.get('taskContext') ?? '');
       b2PartNumber = Number(form.get('b2PartNumber') ?? 0);
+      lastAssistantText = String(form.get('lastAssistantText') ?? '');
+      try {
+        const parsed = JSON.parse(String(form.get('assistantHistory') ?? '[]'));
+        if (Array.isArray(parsed)) clientAssistantHistory = parsed.map(String);
+      } catch {
+        clientAssistantHistory = [];
+      }
       const file = form.get('audio');
       if (file instanceof Blob) {
         const buf = Buffer.from(await file.arrayBuffer());
@@ -79,6 +90,8 @@ export async function POST(req: Request) {
         isOpening?: boolean;
         taskContext?: string;
         b2PartNumber?: number;
+        lastAssistantText?: string;
+        assistantHistory?: string[];
       }>(req);
       if (!body) {
         return NextResponse.json({ error: 'Request body required' }, { status: 400 });
@@ -92,6 +105,10 @@ export async function POST(req: Request) {
       isOpening = Boolean(body.isOpening);
       taskContext = String(body.taskContext ?? '');
       b2PartNumber = Number(body.b2PartNumber ?? 0);
+      lastAssistantText = String(body.lastAssistantText ?? '');
+      clientAssistantHistory = Array.isArray(body.assistantHistory)
+        ? body.assistantHistory.map(String)
+        : [];
     }
 
     if (!sessionId) {
@@ -102,7 +119,6 @@ export async function POST(req: Request) {
 
     const stt = createSttAdapter();
     const llm = createLlmAdapter();
-    const tts = createTtsAdapter();
 
     let userText = textOverride?.trim() ?? '';
     let transcriptSource: 'STT' | 'TYPED' | 'MOCK' = 'TYPED';
@@ -174,6 +190,30 @@ export async function POST(req: Request) {
 
     const storedTurns = isOpening ? [] : await getSessionTurns(sessionId);
     const history = buildLlmHistoryFromStoredTurns(storedTurns, { omitLatestUserTurn: true });
+    for (const text of clientAssistantHistory.slice(-8)) {
+      const content = text.trim().slice(0, 500);
+      if (
+        content &&
+        !history.some(
+          (turn) =>
+            turn.role === 'assistant' &&
+            turn.content.trim() === content,
+        )
+      ) {
+        history.push({ role: 'assistant', content });
+      }
+    }
+    const clientAssistantText = lastAssistantText.trim().slice(0, 500);
+    if (
+      clientAssistantText &&
+      !history.some(
+        (turn) =>
+          turn.role === 'assistant' &&
+          turn.content.trim() === clientAssistantText,
+      )
+    ) {
+      history.push({ role: 'assistant', content: clientAssistantText });
+    }
 
     if (mode === 'EXAM') {
       assistantText = await llm.examReply({
@@ -196,41 +236,46 @@ export async function POST(req: Request) {
       });
     }
 
-    // microFeedback (sólo PRACTICE) y TTS son independientes entre sí: en paralelo.
-    const [microFeedbackResult, spoken] = await Promise.all([
+    // Do not synthesize audio here: waiting for TTS delayed every exam turn.
+    // The client starts its non-blocking /api/coach-tts pipeline as soon as it
+    // receives assistantText, with browser speech synthesis as fallback.
+    microFeedback =
       mode === 'PRACTICE'
-        ? llm.microFeedback({ cefr, userText })
-        : Promise.resolve(null),
-      assistantText ? tts.synthesize(assistantText) : Promise.resolve(null),
-    ]);
-    microFeedback = microFeedbackResult;
+        ? await llm.microFeedback({ cefr, userText }).catch((err) => {
+            console.warn('[speaking/turn] microFeedback failed:', err?.message || err);
+            return null;
+          })
+        : null;
 
-    await saveTurn({
-      sessionId,
-      role: 'ASSISTANT',
-      text: assistantText,
-      transcriptSource: 'MOCK',
-      microFeedback: microFeedback ?? undefined,
-    });
-
-    let assistantAudioBase64: string | undefined;
-    let assistantAudioMime: string | undefined;
-    if (spoken) {
-      assistantAudioBase64 = spoken.base64;
-      assistantAudioMime = spoken.mime;
+    try {
+      await saveTurn({
+        sessionId,
+        role: 'ASSISTANT',
+        text: assistantText,
+        transcriptSource: 'MOCK',
+        microFeedback: microFeedback ?? undefined,
+      });
+    } catch (err) {
+      console.warn('[speaking/turn] saveTurn assistant failed:', (err as Error)?.message || err);
     }
 
     return NextResponse.json({
       transcript: isOpening ? '' : userText,
       transcriptSource: isOpening ? 'MOCK' : transcriptSource,
       assistantText,
-      assistantAudioBase64,
-      assistantAudioMime,
+      answerAccepted:
+        isOpening ||
+        b2PartNumber !== 14 ||
+        assessB2Part1AnswerLanguage(userText) !== 'non-english',
       microFeedback,
       examPartLabel: mode === 'EXAM' ? part.name : undefined,
     });
   } catch (e) {
-    console.error(e);
-    return NextResponse.json({ error: 'Turn failed' }, { status: 500 });
+    const message = e instanceof Error ? e.message : String(e || 'Turn failed');
+    console.error('[speaking/turn]', e);
+    return NextResponse.json(
+      { error: 'Turn failed', detail: message.slice(0, 240) },
+      { status: 500 },
+    );
   }
 }

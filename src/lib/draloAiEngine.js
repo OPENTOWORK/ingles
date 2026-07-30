@@ -166,8 +166,9 @@ async function cambridgeViaAssistantOrChat(options = {}) {
       });
     } catch (err) {
       const msg = String(err?.message || err || '');
+      // Deleted / invalid assistant IDs must not hard-break speaking turns.
       const assistantMissing = /404|no assistant found/i.test(msg);
-      if (options.requireAssistant || !assistantMissing) throw err;
+      if (!assistantMissing) throw err;
       console.warn(
         `[draloAiEngine] Cambridge assistant unavailable (${msg.slice(0, 120)}); falling back to Chat Completions.`,
       );

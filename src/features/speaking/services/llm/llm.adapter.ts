@@ -12,6 +12,8 @@ import { SYSTEM_PROMPTS } from '../../../../../dralo-speaking/prompts/cambridge-
 import {
   B2_PART_1_OPENING_USER_MESSAGE,
   buildB2ExaminerSystemPrompt,
+  buildB2Part1TurnUserMessage,
+  resolveB2Part1ExaminerReply,
 } from '../../domain/b2-examiner-prompts';
 import { B2_SPEAKING_PART_MIN } from '../../domain/b2-speaking-exam-parts';
 
@@ -56,8 +58,15 @@ function resolveExaminerSystem(p: ExamTurnParams): string {
 }
 
 function openingUserMessage(p: ExamTurnParams): string {
-  if (p.isOpening && p.cefr === 'B2' && p.b2PartNumber === B2_SPEAKING_PART_MIN) {
-    return B2_PART_1_OPENING_USER_MESSAGE;
+  if (p.cefr === 'B2' && p.b2PartNumber === B2_SPEAKING_PART_MIN) {
+    const steered = buildB2Part1TurnUserMessage({
+      isOpening: Boolean(p.isOpening),
+      transcript: p.transcript,
+      taskContext: p.taskContext,
+      history: p.history,
+    });
+    if (steered) return steered;
+    if (p.isOpening) return B2_PART_1_OPENING_USER_MESSAGE;
   }
   if (p.isOpening) {
     return 'The speaking test for this part is starting now. Greet the candidate briefly and give the first instruction or question only.';
@@ -105,6 +114,14 @@ export class MockLLMAdapter {
 
   async examReply(p: ExamTurnParams): Promise<string> {
     await delay(250);
+    if (p.cefr === 'B2' && p.b2PartNumber === B2_SPEAKING_PART_MIN) {
+      return resolveB2Part1ExaminerReply({
+        isOpening: p.isOpening,
+        transcript: p.transcript,
+        taskContext: p.taskContext,
+        history: p.history,
+      });
+    }
     if (p.isOpening) {
       const openers: Record<number, string> = {
         1: 'Good morning. My name is Emma. And what is your name?',
@@ -157,6 +174,14 @@ export class OpenAILLMAdapter extends MockLLMAdapter {
   }
 
   override async examReply(p: ExamTurnParams): Promise<string> {
+    if (p.cefr === 'B2' && p.b2PartNumber === B2_SPEAKING_PART_MIN) {
+      return resolveB2Part1ExaminerReply({
+        isOpening: p.isOpening,
+        transcript: p.transcript,
+        taskContext: p.taskContext,
+        history: p.history,
+      });
+    }
     const system = resolveExaminerSystem(p);
     const { text } = await cambridgeSpeakingExaminerTurn({
       system,

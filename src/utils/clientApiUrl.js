@@ -2,10 +2,15 @@ function normalizePath(path) {
   const raw = String(path || '').trim();
   if (!raw) return '/';
   let normalized = raw.startsWith('/') ? raw : `/${raw}`;
-  // Next.js trailingSlash: true — POST to /api/foo redirects to /api/foo/ and drops the body.
-  // Do not append when the path already has a query string (would corrupt ?preguntaId=uuid).
-  if (normalized.startsWith('/api/') && !normalized.endsWith('/') && !normalized.includes('?')) {
-    normalized = `${normalized}/`;
+
+  // Next.js trailingSlash: true — requests without a trailing slash 308-redirect.
+  // That redirect drops Authorization headers, so admin GETs (with ?query) fail as 401
+  // and look like "empty / FROM CODE" prompts even when Supabase has the row.
+  const qIndex = normalized.indexOf('?');
+  const pathname = qIndex >= 0 ? normalized.slice(0, qIndex) : normalized;
+  const query = qIndex >= 0 ? normalized.slice(qIndex) : '';
+  if (pathname.startsWith('/api/') && !pathname.endsWith('/')) {
+    return `${pathname}/${query}`;
   }
   return normalized;
 }

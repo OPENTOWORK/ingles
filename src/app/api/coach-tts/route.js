@@ -5,7 +5,7 @@ export const runtime = 'nodejs';
 
 const MAX_CHARS = 4000;
 
-/** Speaking coach TTS — OpenAI with Edge fallback (British examiner voice). */
+/** Speaking coach TTS — one fixed British examiner voice for the whole session. */
 export async function POST(req) {
   try {
     let body = {};
@@ -21,7 +21,11 @@ export async function POST(req) {
       return NextResponse.json({ error: 'Missing text.' }, { status: 400 });
     }
 
-    const spoken = await synthesizeExamTtsMp3(raw.slice(0, MAX_CHARS));
+    const spoken = await synthesizeExamTtsMp3(raw.slice(0, MAX_CHARS), {
+      openaiVoice: 'nova',
+      preferEdge: false,
+      openaiOnly: true,
+    });
     if (!spoken?.base64) {
       return NextResponse.json({ error: 'TTS unavailable.' }, { status: 503 });
     }

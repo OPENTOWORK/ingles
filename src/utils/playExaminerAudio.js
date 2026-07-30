@@ -103,11 +103,15 @@ export function playExaminerAudio({ text = '', speechLang = 'en-GB' } = {}) {
 
     speakText(t, {
       lang: speechLang,
+      // Keep one examiner voice throughout the session. If the fixed voice is
+      // unavailable, report failure instead of switching speaker/provider.
+      allowFallback: false,
       onStart: () => {
         if (token !== playToken) return;
         notifySpeaking(true, 'audio');
         finish(true);
       },
+      onError: () => finish(false),
       onEnd: () => {
         if (token === playToken) notifySpeaking(false);
       },

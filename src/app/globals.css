@@ -1299,6 +1299,69 @@ body.nav-open {
   text-align: center;
 }
 
+.home-install-app {
+  display: none;
+}
+
+.home-install-app__button {
+  min-width: 190px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.55rem;
+  padding: 0.72rem 1.2rem;
+  border: 1px solid rgba(255, 255, 255, 0.7);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.96);
+  color: #5541a5;
+  box-shadow: 0 8px 24px rgba(34, 24, 74, 0.2);
+  font: inherit;
+  font-size: 0.92rem;
+  font-weight: 800;
+  cursor: pointer;
+  transition:
+    transform 0.18s ease,
+    box-shadow 0.18s ease,
+    background 0.18s ease;
+}
+
+.home-install-app__button:hover {
+  transform: translateY(-2px);
+  background: #fff;
+  box-shadow: 0 12px 28px rgba(34, 24, 74, 0.27);
+}
+
+.home-install-app__button:focus-visible {
+  outline: 3px solid rgba(255, 255, 255, 0.55);
+  outline-offset: 3px;
+}
+
+.home-install-app__icon {
+  display: grid;
+  place-items: center;
+  width: 1.35rem;
+  height: 1.35rem;
+  border-radius: 50%;
+  background: #6552bd;
+  color: #fff;
+  font-size: 1rem;
+  line-height: 1;
+}
+
+.home-install-app__instructions {
+  max-width: 38rem;
+  margin: 0;
+  padding: 0.65rem 0.9rem;
+  border: 1px solid rgba(255, 255, 255, 0.24);
+  border-radius: 12px;
+  background: rgba(38, 27, 80, 0.42);
+  color: rgba(255, 255, 255, 0.96);
+  font-size: 0.8rem;
+  line-height: 1.45;
+  text-align: center;
+  backdrop-filter: blur(8px);
+}
+
 .home-page__title {
   margin: 0 0 0.75rem;
   font-size: clamp(2rem, 6vw, 3.25rem);
@@ -2024,6 +2087,20 @@ body.nav-open {
 @media (min-width: 900px) {
   .home-page__cards {
     grid-template-columns: repeat(5, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 1024px) {
+  .home-install-app {
+    grid-column: 1 / -1;
+    order: -2;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-self: center;
+    gap: 0.65rem;
+    width: min(100%, 620px);
+    margin-bottom: -0.65rem;
   }
 }
 
@@ -6221,10 +6298,24 @@ body.reading-night-mode .levels-exercise-stars--gold .starSvgWrapEmpty .starSvgP
 }
 
 .writing-feedback-block__title {
-  margin: 0 0 0.65rem;
-  font-size: 1rem;
-  font-weight: 800;
-  color: #0f172a;
+  margin: 0 0 0.75rem;
+  padding: 0.1rem 0 0.1rem 0.7rem;
+  border-left: 3px solid #0f766e;
+  font-size: 0.8125rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: #334155;
+}
+
+.writing-feedback-block--strengths .writing-feedback-block__title {
+  border-left-color: #16a34a;
+  color: #14532d;
+}
+
+.writing-feedback-block--problems .writing-feedback-block__title {
+  border-left-color: #ea580c;
+  color: #9a3412;
 }
 
 .writing-feedback-block__list {
@@ -6501,13 +6592,22 @@ body.reading-night-mode .levels-exercise-stars--gold .starSvgWrapEmpty .starSvgP
 }
 
 .levels-b2-writing-panel__feedback-heading {
-  margin: 1rem 0 0.45rem;
-  font-size: 0.9375rem;
+  margin: 1.35rem 0 0.65rem;
+  padding: 0.15rem 0 0.15rem 0.75rem;
+  border-left: 3px solid #0f766e;
+  font-size: 0.8125rem;
   font-weight: 700;
-  color: #0f172a;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: #334155;
+  line-height: 1.35;
 }
 
 .levels-b2-writing-panel__feedback-heading:first-child {
+  margin-top: 0;
+}
+
+.writing-feedback-body__section:first-child .levels-b2-writing-panel__feedback-heading {
   margin-top: 0;
 }
 
@@ -16408,6 +16508,11 @@ body.reading-night-mode .levels-b2-writing-panel__score-value {
 }
 
 body.reading-night-mode .levels-b2-writing-panel__feedback-heading,
+body.reading-night-mode .writing-feedback-block__title {
+  color: #cbd5e1;
+  border-left-color: #5eead4;
+}
+
 body.reading-night-mode .levels-b2-writing-panel__feedback-p,
 body.reading-night-mode .levels-b2-writing-panel__feedback-li,
 body.reading-night-mode .levels-b2-writing-panel__feedback-correction {
