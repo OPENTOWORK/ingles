@@ -231,6 +231,15 @@ export async function POST(req) {
       }
 
       const mapped = mapMeeting(data);
+      const profiles = await loadProfilesByIds(auth.db, [auth.user.id]);
+      const editorName = profiles[auth.user.id]?.nombre || auth.user.email || '';
+      const buzon = await broadcastMeetingToStaffBuzon(auth.db, {
+        meeting: mapped,
+        senderId: auth.user.id,
+        creatorName: editorName,
+        eventType: 'updated',
+      });
+
       let notionSync = null;
       try {
         notionSync = await syncMeetingToNotion(mapped, mapped.notion_page_id);
@@ -246,7 +255,17 @@ export async function POST(req) {
         notionSync = { error: notionErr?.message || 'Error al sincronizar con Notion.' };
       }
 
-      return NextResponse.json({ success: true, meeting: mapped, notionSync });
+      if (!buzon.sent && !buzon.skipped && buzon.error) {
+        console.warn('[coordinator/meetings update] buzón broadcast:', buzon.error);
+      }
+
+      return NextResponse.json({
+        success: true,
+        meeting: mapped,
+        buzonNotified: Boolean(buzon.sent),
+        buzonError: buzon.sent ? null : buzon.error || null,
+        notionSync,
+      });
     }
 
     return NextResponse.json({ error: 'Acción no válida.' }, { status: 400 });

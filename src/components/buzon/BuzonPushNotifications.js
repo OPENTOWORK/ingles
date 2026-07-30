@@ -33,6 +33,7 @@ export default function BuzonPushNotifications() {
   const [subscribed, setSubscribed] = useState(false);
   const [busy, setBusy] = useState(true);
   const [publicKey, setPublicKey] = useState('');
+  const [developmentMode, setDevelopmentMode] = useState(false);
 
   const syncExistingSubscription = useCallback(async () => {
     if (
@@ -42,6 +43,20 @@ export default function BuzonPushNotifications() {
       !('Notification' in window)
     ) {
       setSupported(false);
+      setBusy(false);
+      return;
+    }
+
+    if (process.env.NODE_ENV !== 'production') {
+      setDevelopmentMode(true);
+      const registrations = await navigator.serviceWorker.getRegistrations();
+      await Promise.all(registrations.map((registration) => registration.unregister()));
+      if ('caches' in window) {
+        const cacheNames = await window.caches.keys();
+        await Promise.all(cacheNames.map((cacheName) => window.caches.delete(cacheName)));
+      }
+      setConfigured(false);
+      setSubscribed(false);
       setBusy(false);
       return;
     }
@@ -145,7 +160,9 @@ export default function BuzonPushNotifications() {
       <div className={styles.pushBody}>
         <p className={styles.digestTitle}>Notificaciones de mensajes</p>
         <p className={styles.digestText}>
-          {!configured
+          {developmentMode
+            ? 'Las notificaciones están disponibles en la aplicación publicada.'
+            : !configured
             ? 'Falta configurar las claves de notificación en el servidor.'
             : supported
             ? subscribed

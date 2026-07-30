@@ -26,6 +26,7 @@ export default function HomeInstallAppButton() {
     window.addEventListener('beforeinstallprompt', handleInstallPrompt);
     window.addEventListener('appinstalled', handleInstalled);
     if (
+      process.env.NODE_ENV === 'production' &&
       'serviceWorker' in navigator &&
       window.matchMedia('(max-width: 1024px)').matches
     ) {

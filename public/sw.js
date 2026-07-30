@@ -2,6 +2,8 @@
 const CACHE_NAME = 'english-practice-v2';
 const STATIC_CACHE_NAME = 'english-practice-static-v2';
 const DYNAMIC_CACHE_NAME = 'english-practice-dynamic-v2';
+const IS_LOCAL_DEVELOPMENT =
+  self.location.hostname === 'localhost' || self.location.hostname === '127.0.0.1';
 
 // Files to cache immediately
 const STATIC_ASSETS = [
@@ -35,6 +37,11 @@ const DYNAMIC_ASSETS = [
 // Install event - cache static assets
 self.addEventListener('install', (event) => {
   console.log('Service Worker installing...');
+
+  if (IS_LOCAL_DEVELOPMENT) {
+    event.waitUntil(self.skipWaiting());
+    return;
+  }
   
   event.waitUntil(
     caches.open(STATIC_CACHE_NAME)
@@ -55,6 +62,15 @@ self.addEventListener('install', (event) => {
 // Activate event - clean up old caches
 self.addEventListener('activate', (event) => {
   console.log('Service Worker activating...');
+
+  if (IS_LOCAL_DEVELOPMENT) {
+    event.waitUntil(
+      caches.keys()
+        .then((cacheNames) => Promise.all(cacheNames.map((cacheName) => caches.delete(cacheName))))
+        .then(() => self.clients.claim())
+    );
+    return;
+  }
   
   event.waitUntil(
     caches.keys()
@@ -77,6 +93,10 @@ self.addEventListener('activate', (event) => {
 
 // Fetch event - serve from cache or network
 self.addEventListener('fetch', (event) => {
+  if (IS_LOCAL_DEVELOPMENT) {
+    return;
+  }
+
   const { request } = event;
   const url = new URL(request.url);
 

@@ -24,6 +24,7 @@ import {
   isImageAttachment,
   validateBuzonAttachmentFile,
 } from '@/lib/staffBuzonAttachments';
+import { BUZON_REACTION_EMOJIS } from '@/lib/staffBuzonEmojis';
 import { buzonApiRequest, buzonUploadRequest } from '@/lib/staffBuzonClient';
 import { splitMessageWithLinks } from '@/lib/linkifyMessageText';
 import StaffBuzonGroupSettings from '@/components/buzon/StaffBuzonGroupSettings';
@@ -129,12 +130,35 @@ function presenceDotClass(online) {
   return online ? styles.presenceDotOnline : styles.presenceDotOffline;
 }
 
+function sameReaction(left, right) {
+  return (
+    left?.message_id === right?.message_id &&
+    left?.user_id === right?.user_id &&
+    left?.emoji === right?.emoji
+  );
+}
+
+function summarizeMessageReactions(reactions, messageId, currentUserId) {
+  return BUZON_REACTION_EMOJIS.map((emoji) => {
+    const rows = reactions.filter(
+      (reaction) => reaction.message_id === messageId && reaction.emoji === emoji,
+    );
+    return {
+      emoji,
+      count: rows.length,
+      mine: rows.some((reaction) => reaction.user_id === currentUserId),
+    };
+  }).filter((reaction) => reaction.count > 0);
+}
+
 export default function StaffBuzonPanel({ currentUserId }) {
   const [staffUsers, setStaffUsers] = useState([]);
   const [messages, setMessages] = useState([]);
   const [groups, setGroups] = useState([]);
   const [presenceMap, setPresenceMap] = useState(new Map());
   const [starredIds, setStarredIds] = useState(new Set());
+  const [reactions, setReactions] = useState([]);
+  const [reactionPickerMessageId, setReactionPickerMessageId] = useState(null);
   const [activeTab, setActiveTab] = useState('direct');
   const [selection, setSelection] = useState(null);
   const [draft, setDraft] = useState('');
@@ -239,6 +263,7 @@ export default function StaffBuzonPanel({ currentUserId }) {
     const payload = await buzonApiRequest('/api/buzon/messages', { token });
     setMessages(payload.messages || []);
     setStarredIds(new Set(payload.starred_ids || []));
+    setReactions(payload.reactions || []);
   }, [getAccessToken]);
 
   const loadGroups = useCallback(async () => {
@@ -348,6 +373,22 @@ export default function StaffBuzonPanel({ currentUserId }) {
           setMessages((prev) =>
             prev.map((item) => (item.id === message.id ? { ...item, ...message } : item)),
           );
+        },
+      )
+      .on(
+        'postgres_changes',
+        { event: '*', schema: 'public', table: 'staff_buzon_mensaje_reacciones' },
+        (payload) => {
+          const reaction = payload.eventType === 'DELETE' ? payload.old : payload.new;
+          if (!reaction?.message_id || !reaction?.user_id || !reaction?.emoji) return;
+
+          setReactions((prev) => {
+            if (payload.eventType === 'DELETE') {
+              return prev.filter((item) => !sameReaction(item, reaction));
+            }
+            if (prev.some((item) => sameReaction(item, reaction))) return prev;
+            return [...prev, reaction];
+          });
         },
       )
       .on(
@@ -508,6 +549,36 @@ export default function StaffBuzonPanel({ currentUserId }) {
         return next;
       });
       toast.error(error.message || 'No se pudo destacar el mensaje.');
+    }
+  };
+
+  const handleToggleReaction = async (messageId, emoji) => {
+    const reaction = { message_id: messageId, user_id: currentUserId, emoji };
+    const alreadyReacted = reactions.some((item) => sameReaction(item, reaction));
+
+    setReactions((prev) =>
+      alreadyReacted
+        ? prev.filter((item) => !sameReaction(item, reaction))
+        : [...prev, reaction],
+    );
+
+    try {
+      const token = await getAccessToken();
+      const payload = await buzonApiRequest('/api/buzon/reactions', {
+        method: 'POST',
+        token,
+        body: { message_id: messageId, emoji },
+      });
+      setReactions((prev) => {
+        const withoutMine = prev.filter((item) => !sameReaction(item, reaction));
+        return payload.reacted ? [...withoutMine, payload.reaction || reaction] : withoutMine;
+      });
+    } catch (error) {
+      setReactions((prev) => {
+        const withoutMine = prev.filter((item) => !sameReaction(item, reaction));
+        return alreadyReacted ? [...withoutMine, reaction] : withoutMine;
+      });
+      toast.error(error.message || 'No se pudo actualizar la reacción.');
     }
   };
 
@@ -889,6 +960,11 @@ export default function StaffBuzonPanel({ currentUserId }) {
                   const autoBody = isAutoAttachmentBody(message);
                   const showBody =
                     message.body?.trim() && !(message.attachment_url && autoBody);
+                  const messageReactions = summarizeMessageReactions(
+                    reactions,
+                    message.id,
+                    currentUserId,
+                  );
 
                   return (
                     <div
@@ -903,6 +979,29 @@ export default function StaffBuzonPanel({ currentUserId }) {
                         ) : null}
                         <MessageAttachmentContent message={message} mine={mine} />
                         {showBody ? <MessageBodyText text={message.body} mine={mine} /> : null}
+                        {messageReactions.length ? (
+                          <div className={styles.reactionArea}>
+                            {messageReactions.map((reaction) => (
+                              <button
+                                key={reaction.emoji}
+                                type="button"
+                                className={`${styles.reactionChip}${reaction.mine ? ` ${styles.reactionChipActive}` : ''}`}
+                                onClick={() =>
+                                  void handleToggleReaction(message.id, reaction.emoji)
+                                }
+                                aria-pressed={reaction.mine}
+                                title={
+                                  reaction.mine
+                                    ? `Quitar reacción ${reaction.emoji}`
+                                    : `Reaccionar con ${reaction.emoji}`
+                                }
+                              >
+                                <span>{reaction.emoji}</span>
+                                <strong>{reaction.count}</strong>
+                              </button>
+                            ))}
+                          </div>
+                        ) : null}
                         <footer>
                           <time dateTime={message.created_at}>
                             {formatBuzonTime(message.created_at)}
@@ -910,6 +1009,43 @@ export default function StaffBuzonPanel({ currentUserId }) {
                           {mine && selection.type === 'direct' ? (
                             <span>{message.read_at ? 'Leído' : 'Enviado'}</span>
                           ) : null}
+                          <div className={styles.reactionPickerWrap}>
+                            <button
+                              type="button"
+                              className={styles.addReactionBtn}
+                              onClick={() =>
+                                setReactionPickerMessageId((current) =>
+                                  current === message.id ? null : message.id,
+                                )
+                              }
+                              aria-label="Añadir reacción"
+                              aria-expanded={reactionPickerMessageId === message.id}
+                              title="Añadir reacción"
+                            >
+                              😊
+                            </button>
+                            {reactionPickerMessageId === message.id ? (
+                              <div
+                                className={styles.reactionPicker}
+                                role="dialog"
+                                aria-label="Seleccionar reacción"
+                              >
+                                {BUZON_REACTION_EMOJIS.map((emoji) => (
+                                  <button
+                                    key={emoji}
+                                    type="button"
+                                    onClick={() => {
+                                      setReactionPickerMessageId(null);
+                                      void handleToggleReaction(message.id, emoji);
+                                    }}
+                                    aria-label={`Reaccionar con ${emoji}`}
+                                  >
+                                    {emoji}
+                                  </button>
+                                ))}
+                              </div>
+                            ) : null}
+                          </div>
                           <button
                             type="button"
                             className={`${styles.starBtn}${starred ? ` ${styles.starBtnActive}` : ''}`}

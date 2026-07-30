@@ -2,6 +2,7 @@ import { isStudentRole } from '@/utils/authRoles';
 import { formatMeetingDate } from '@/lib/staffMeetingsConstants';
 import { buildPollBuzonMessage } from '@/lib/staffMeetingPolls';
 import { isSchemaNotReadyError } from '@/lib/coordinatorAccess';
+import { sendBuzonMessagePushNotifications } from '@/lib/staffBuzonPush';
 
 export const STAFF_MEETINGS_BUZON_GROUP_NAME = 'Reuniones del equipo';
 
@@ -86,7 +87,7 @@ export async function ensureStaffMeetingsBuzonGroup(db, creatorId) {
   return groupId;
 }
 
-export function buildMeetingBuzonMessage(meeting, creatorName = '') {
+export function buildMeetingBuzonMessage(meeting, creatorName = '', eventType = 'created') {
   const title = meeting?.titulo || 'Reunión del equipo';
   const when = formatMeetingDate(meeting?.fecha, meeting?.hora);
   const depts = (meeting?.departamentos || []).join(', ');
@@ -98,11 +99,12 @@ export function buildMeetingBuzonMessage(meeting, creatorName = '') {
     .filter(Boolean)
     .join('\n');
   const convocante = String(creatorName || '').trim() || 'Un miembro del equipo';
+  const isUpdate = eventType === 'updated';
 
   const lines = [
-    '📅 Nueva reunión convocada',
+    isUpdate ? '🔄 Reunión modificada' : '📅 Nueva reunión convocada',
     '',
-    `Convoca: ${convocante}`,
+    `${isUpdate ? 'Modifica' : 'Convoca'}: ${convocante}`,
     `Título: ${title}`,
     `Cuándo: ${when}`,
   ];
@@ -111,11 +113,10 @@ export function buildMeetingBuzonMessage(meeting, creatorName = '') {
   if (puntos) lines.push('', 'Orden del día:', puntos);
   if (meeting?.notas) lines.push('', `Notas: ${meeting.notas}`);
 
-  lines.push(
-    '',
-    '¿Te interesa unirte? Responde en este hilo para confirmar tu asistencia.',
-    'Detalles en Buzón → Reuniones.',
-  );
+  lines.push('', isUpdate
+    ? 'Revisa los cambios en Buzón → Reuniones.'
+    : '¿Te interesa unirte? Responde en este hilo para confirmar tu asistencia.');
+  if (!isUpdate) lines.push('Detalles en Buzón → Reuniones.');
 
   return lines.join('\n');
 }
@@ -157,7 +158,10 @@ export async function broadcastPollToStaffBuzon(db, { poll, senderId, creatorNam
   }
 }
 
-export async function broadcastMeetingToStaffBuzon(db, { meeting, senderId, creatorName }) {
+export async function broadcastMeetingToStaffBuzon(
+  db,
+  { meeting, senderId, creatorName, eventType = 'created' },
+) {
   if (!db || !senderId || !meeting) {
     return { sent: false, error: 'Datos insuficientes para anunciar la reunión.' };
   }
@@ -169,7 +173,7 @@ export async function broadcastMeetingToStaffBuzon(db, { meeting, senderId, crea
     }
 
     const groupId = await ensureStaffMeetingsBuzonGroup(db, senderId);
-    const body = buildMeetingBuzonMessage(meeting, creatorName);
+    const body = buildMeetingBuzonMessage(meeting, creatorName, eventType);
 
     const { data, error } = await db
       .from(MESSAGES_TABLE)
@@ -179,7 +183,7 @@ export async function broadcastMeetingToStaffBuzon(db, { meeting, senderId, crea
         recipient_id: null,
         body,
       })
-      .select('id')
+      .select('id, sender_id, recipient_id, group_id, body')
       .single();
 
     if (error) {
@@ -187,7 +191,24 @@ export async function broadcastMeetingToStaffBuzon(db, { meeting, senderId, crea
       return { sent: false, error: error.message };
     }
 
-    return { sent: true, messageId: data?.id, groupId };
+    let push = null;
+    try {
+      push = await sendBuzonMessagePushNotifications({
+        db,
+        message: data,
+        senderName: creatorName || 'Dralo',
+        groupName: STAFF_MEETINGS_BUZON_GROUP_NAME,
+      });
+    } catch (pushError) {
+      console.error('[broadcastMeetingToStaffBuzon push]', pushError);
+    }
+
+    return {
+      sent: true,
+      messageId: data?.id,
+      groupId,
+      pushSent: push?.sent || 0,
+    };
   } catch (err) {
     console.error('[broadcastMeetingToStaffBuzon]', err);
     return { sent: false, error: err.message || 'Error al anunciar en el buzón.' };

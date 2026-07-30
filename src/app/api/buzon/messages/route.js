@@ -70,9 +70,24 @@ export async function GET(req) {
       return NextResponse.json({ error: 'No se pudieron cargar los mensajes.' }, { status: 500 });
     }
 
+    const messageIds = (data || []).map((message) => message.id);
+    let reactions = [];
+    if (messageIds.length) {
+      const { data: reactionRows, error: reactionsError } = await db
+        .from('staff_buzon_mensaje_reacciones')
+        .select('message_id, user_id, emoji, created_at')
+        .in('message_id', messageIds);
+      if (reactionsError) {
+        console.error('[buzon/messages GET reactions]', reactionsError);
+        return NextResponse.json({ error: 'No se pudieron cargar las reacciones.' }, { status: 500 });
+      }
+      reactions = reactionRows || [];
+    }
+
     return NextResponse.json({
       messages: data || [],
       starred_ids: (stars || []).map((row) => row.message_id),
+      reactions,
     });
   } catch (error) {
     console.error('[buzon/messages GET]', error);
