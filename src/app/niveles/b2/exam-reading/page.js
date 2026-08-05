@@ -1253,6 +1253,7 @@ function B2ReadingExamsPageInner() {
       examenIdBySlot: scoring.examenIdBySlot,
       partNumber: partNumberReading,
       progressBySlot: skillProgressForNav,
+      bypassStarGating: skillNav.bypassStarGating,
       onSelectExamSlot: (slot) => {
         void scoring.refreshPuntuacionesProgress();
         handleSelectExamSlot(slot);

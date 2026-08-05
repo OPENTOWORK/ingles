@@ -42,13 +42,18 @@ export function getExerciseScore(progressBySlot = {}, partNumber, slot) {
   return progressBySlot[slot]?.parts?.[partNumber] ?? null;
 }
 
-/** Exercise 1 is always open; later slots need ≥1 star on the previous exercise in the part. */
+/**
+ * Exercise 1 is always open; later slots need ≥1 star on the previous exercise in the part.
+ * `bypassStarGating` opens every slot (see `bypassesExamStarGating`).
+ */
 export function isExerciseSlotUnlocked(
   progressBySlot = {},
   partNumber,
   examSlot,
   examenIdBySlotOrSlots = {},
+  { bypassStarGating = false } = {},
 ) {
+  if (bypassStarGating) return true;
   const slots = Array.isArray(examenIdBySlotOrSlots)
     ? [...examenIdBySlotOrSlots].sort((a, b) => a - b)
     : getSortedExamSlots(examenIdBySlotOrSlots);

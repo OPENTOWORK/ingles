@@ -29,6 +29,7 @@ import A2ExamGenerationStatus from '@/components/niveles/A2ExamGenerationStatus'
 import { getSkillPracticeThemeKey } from '@/utils/skillPartFirstProgress';
 import { formatExamSlotDisplayLabel } from '@/utils/formatExamDisplayLabel';
 import { runKeepPracticingSkillFlow } from '@/utils/skillPracticeNavigation';
+import { useExamStarGatingBypass } from '@/hooks/useExamStarGatingBypass';
 
 function parsePartNumber(text) {
   const m = String(text || '').match(/Part\s*(\d+)/i);
@@ -39,6 +40,7 @@ function LevelSkillPracticePageInner({ slug, skillRoute }) {
   const config = getNivelesLevelHub(slug);
   const routeMeta = getLevelExamSkillRoute(slug, skillRoute);
   const searchParams = useSearchParams();
+  const bypassStarGating = useExamStarGatingBypass();
   const { examSlot, selectExamSlot } = useLevelExamPracticeSlot(slug);
   const [selectedPartId, setSelectedPartId] = useState(null);
   const [examNamesBySlot, setExamNamesBySlot] = useState({});
@@ -164,6 +166,7 @@ function LevelSkillPracticePageInner({ slug, skillRoute }) {
       examenIdBySlot: scoring.examenIdBySlot,
       partNumber: currentPart?.partNumber ?? partMin,
       progressBySlot: scoring.progressBySlot,
+      bypassStarGating,
       onSelectExamSlot: (slot) => {
         void scoring.refreshPuntuacionesProgress();
         handleSelectExamSlot(slot);
@@ -186,6 +189,7 @@ function LevelSkillPracticePageInner({ slug, skillRoute }) {
     selectedPartId,
     partMin,
     handleSelectPart,
+    bypassStarGating,
   ]);
 
   if (!config || !routeMeta) {

@@ -335,6 +335,7 @@ function B2WritingExamPracticePageInner() {
       examenIdBySlot: scoring.examenIdBySlot,
       partNumber: skillNav.selectedPartNumber,
       progressBySlot: scoring.progressBySlot,
+      bypassStarGating: skillNav.bypassStarGating,
       onSelectExamSlot: (slot) => {
         void scoring.refreshPuntuacionesProgress();
         handleSelectExamSlot(slot);

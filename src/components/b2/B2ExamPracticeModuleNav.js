@@ -12,6 +12,7 @@ import {
 import { buildProgressBySlotWithLiveOverlay, formatSkillExerciseLabel } from '@/utils/skillPartFirstProgress';
 import { getModuleNavPartLabel } from '@/utils/formatLevelsPartDisplayName';
 import { buildExamModePracticeHref } from '@/utils/examModeSession';
+import { useExamStarGatingBypass } from '@/hooks/useExamStarGatingBypass';
 
 function NavChevron({ direction = 'back' }) {
   return (
@@ -66,6 +67,7 @@ export default function B2ExamPracticeModuleNav({
   livePartProgress = null,
 }) {
   const searchParams = useSearchParams();
+  const bypassStarGating = useExamStarGatingBypass();
   const examModeParam = searchParams.get('examMode');
   const examFlowFromUrl = examModeParam === '1' || examModeParam === 'review';
   const inExamFlow = examMode || examFlowFromUrl;
@@ -120,6 +122,7 @@ export default function B2ExamPracticeModuleNav({
       partMin: pagePartMin ?? partMinForTabLabels ?? 1,
       partMax: pagePartMax,
       progressBySlot: effectiveProgress,
+      bypassStarGating,
     });
   }, [
     effectiveSkillPractice,
@@ -131,6 +134,7 @@ export default function B2ExamPracticeModuleNav({
     pagePartMax,
     progressBySlot,
     livePartProgress,
+    bypassStarGating,
   ]);
 
   let continueLabel = '';

@@ -37,6 +37,14 @@ export function usesStudentContentRestrictions(userRole = '') {
   return isStudentRole(userRole);
 }
 
+/**
+ * El profesorado necesita abrir cualquier test de cualquier parte para preparar clases,
+ * así que se salta el desbloqueo secuencial por estrellas.
+ */
+export function bypassesExamStarGating(userRole = '', email = '') {
+  return hasFullNivelesLevelAccess(userRole, email);
+}
+
 export function isTrainingLockedForUser(userRole = '') {
   if (!STUDENT_TRAINING_COMING_SOON) return false;
   return usesStudentContentRestrictions(userRole);

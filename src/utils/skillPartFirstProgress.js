@@ -35,14 +35,17 @@ export function findFirstExerciseSlotWithoutStars(
   progressBySlot = {},
   partNumber,
   examenIdBySlot = {},
+  options = {},
 ) {
   const slots = getSortedExamSlots(examenIdBySlot);
   for (const slot of slots) {
-    if (!isExerciseSlotUnlocked(progressBySlot, partNumber, slot, examenIdBySlot)) continue;
+    if (!isExerciseSlotUnlocked(progressBySlot, partNumber, slot, examenIdBySlot, options)) continue;
     if (getExerciseStars(progressBySlot, partNumber, slot) === 0) return slot;
   }
   for (const slot of slots) {
-    if (isExerciseSlotUnlocked(progressBySlot, partNumber, slot, examenIdBySlot)) return slot;
+    if (isExerciseSlotUnlocked(progressBySlot, partNumber, slot, examenIdBySlot, options)) {
+      return slot;
+    }
   }
   return slots[0] ?? 1;
 }
@@ -53,16 +56,17 @@ export function resolveSkillPracticeExamSlot(
   partNumber,
   examenIdBySlot = {},
   requestedSlot = null,
+  options = {},
 ) {
   const slot = Number(requestedSlot);
   if (
     Number.isFinite(slot) &&
     slot > 0 &&
-    isExerciseSlotUnlocked(progressBySlot, partNumber, slot, examenIdBySlot)
+    isExerciseSlotUnlocked(progressBySlot, partNumber, slot, examenIdBySlot, options)
   ) {
     return slot;
   }
-  return findFirstExerciseSlotWithoutStars(progressBySlot, partNumber, examenIdBySlot);
+  return findFirstExerciseSlotWithoutStars(progressBySlot, partNumber, examenIdBySlot, options);
 }
 
 /**

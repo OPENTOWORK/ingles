@@ -4,6 +4,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { getSkillPracticeThemeKey, resolveSkillPracticeExamSlot } from '@/utils/skillPartFirstProgress';
 import { getSortedExamSlots } from '@/utils/skillPracticeNavigation';
+import { useExamStarGatingBypass } from '@/hooks/useExamStarGatingBypass';
 import { clampB2ExamSlot } from '@/utils/b2ResolveExam';
 import { getNivelesLevelHub } from '@/data/nivelesLevelHub';
 import { getExamSkillSectionTitle } from '@/data/levelExamPartMap';
@@ -69,6 +70,7 @@ export function useSkillPartFirstNavigation({
   lang = 'en',
 }) {
   const searchParams = useSearchParams();
+  const bypassStarGating = useExamStarGatingBypass();
   const [selectedPartNumber, setSelectedPartNumber] = useState(null);
   const partBootstrapRef = useRef(false);
   const slotBootstrapRef = useRef(false);
@@ -183,6 +185,7 @@ export function useSkillPartFirstNavigation({
       selectedPartNumber,
       examenIdBySlot,
       requestedSlot,
+      { bypassStarGating },
     );
 
     const resolutionKey = `${selectedPartNumber}:${allowedSlot}`;
@@ -211,6 +214,7 @@ export function useSkillPartFirstNavigation({
     examPracticeOpen,
     examSlot,
     onSelectExam,
+    bypassStarGating,
   ]);
 
   const selectPartNumber = useCallback(
@@ -256,6 +260,7 @@ export function useSkillPartFirstNavigation({
     progressBySlot,
     examLabelsBySlot,
     examSlotPickerProps,
+    bypassStarGating,
     lang,
   };
 }
