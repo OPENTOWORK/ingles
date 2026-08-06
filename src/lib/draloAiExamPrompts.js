@@ -676,7 +676,13 @@ ${baseExamSchema(directions, `,"title":"text title"${extraFields},${questionsSch
 ${variety}
 ${SHARED_JSON_RULES}
 ${directions}
-Generate exactly 8 questions numbered 1–8 in ONE shared audio (~4½–5 minutes total).
+Generate exactly 8 questions numbered 1–8 in ONE shared audio.
+ONE combined MP3 is assembled as: shared intro → 5 s pause → pass 1 (8 extracts, 3 s between) → 10 s pause → pass 2 (same extracts).
+
+Include in JSON:
+- listeningIntro.text: "Listening Test. Part One. You will hear people talking in eight different situations. For questions 1 to 8, choose the best answer: A, B or C. You will hear each extract twice. Before the recording starts, you will have some time to read the questions. Now look at question 1."
+- audioAssembly: { introFromSupabase: "b2/shared/listening-part-1-intro.mp3", introPauseSec: 5, betweenExtractPauseSec: 3, betweenPassesPauseSec: 10, passes: 2, totalDurationTargetSec: { min: 570, max: 960 } }
+
 Each question MUST include:
 - number (1–8)
 - situation: one-line context (e.g. "You hear two friends talking about a trip.")
@@ -700,7 +706,7 @@ Quality rules (strict):
 
 modelAnswers: 8 rows with letter only (A, B, or C).
 Also include a combined "script" field concatenating all eight extract scripts separated by blank lines (for reference only).
-Return ONLY JSON with: partTitle, title, directions, setting, script, questions[{number,situation,prompt,options[],script}], modelAnswers[]`;
+Return ONLY JSON with: partTitle, title, directions, setting, listeningIntro, audioAssembly, script, questions[{number,situation,prompt,options[],script}], modelAnswers[]`;
     }
 
     if (activity === 'multiple-matching' && L === 'B2') {
@@ -742,7 +748,7 @@ ${variety}
 ${SHARED_JSON_RULES}
 ${directions}
 Generate exactly 10 questions numbered 9–18 (type "short"; each prompt is an incomplete sentence with a gap marked ___).
-script: ONE continuous recording — a radio-style INTERVIEW between two speakers labelled "A:" (host) and "B:" (guest) (~270–320 words; ~2:10–2:55 per pass when read aloud at a natural pace). ONE combined audio file is assembled as: shared intro → 5 s pause → pass 1 → 10 s pause → pass 2 (total target 5:30–7:00).
+script: ONE continuous recording — a radio-style INTERVIEW between two speakers labelled "A:" (host) and "B:" (guest) (350–400 words; ~2:20–2:50 per pass when read aloud at a natural pace). ONE combined audio file is assembled as: shared intro → 5 s pause → pass 1 → 10 s pause → pass 2 (total target 5:30–7:00).
 
 Include in JSON:
 - listeningIntro.text: "Listening Test. Part Two. You will hear a speaker giving a talk about a specific topic. For questions 9 to 18, complete the sentences with a word or short phrase from the recording. You will hear the recording twice. Before the recording starts, you will have some time to read the questions. Now look at questions 9 to 18."

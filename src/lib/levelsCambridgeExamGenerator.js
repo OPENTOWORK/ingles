@@ -149,6 +149,20 @@ async function expandListeningScriptsInGenerated(generated, partDef) {
   return gen;
 }
 
+/**
+ * El modelo a veces devuelve las respuestas como letras sueltas (["B","A",…]) en lugar de
+ * {number, answer}. Se reasocian por posición con los números de pregunta.
+ */
+function normalizeAnswerRows(value, questions) {
+  const rows = Array.isArray(value) ? value : Object.values(value || {});
+  return rows.map((row, i) => {
+    if (row && typeof row === 'object') {
+      return { ...row, number: row.number ?? questions[i]?.number ?? i + 1 };
+    }
+    return { number: questions[i]?.number ?? i + 1, answer: String(row ?? '').trim() };
+  });
+}
+
 function normalizeGenerated(gen, partNumber) {
   if (!gen || typeof gen !== 'object') return gen;
   const questions = (Array.isArray(gen.questions) ? gen.questions : Object.values(gen.questions || {})).map(
@@ -160,10 +174,8 @@ function normalizeGenerated(gen, partNumber) {
     sections: Array.isArray(gen.sections) ? gen.sections : Object.values(gen.sections || {}),
     sentencePool: Array.isArray(gen.sentencePool) ? gen.sentencePool : Object.values(gen.sentencePool || {}),
     optionPool: Array.isArray(gen.optionPool) ? gen.optionPool : Object.values(gen.optionPool || {}),
-    matchingAnswers: Array.isArray(gen.matchingAnswers)
-      ? gen.matchingAnswers
-      : Object.values(gen.matchingAnswers || {}),
-    modelAnswers: Array.isArray(gen.modelAnswers) ? gen.modelAnswers : Object.values(gen.modelAnswers || {}),
+    matchingAnswers: normalizeAnswerRows(gen.matchingAnswers, questions),
+    modelAnswers: normalizeAnswerRows(gen.modelAnswers, questions),
     speakingPrompts: Array.isArray(gen.speakingPrompts)
       ? gen.speakingPrompts
       : Object.values(gen.speakingPrompts || {}),
@@ -665,6 +677,9 @@ export async function persistCambridgeGeneratedPart(db, {
     const { extractListeningClipsFromGenerated, synthesizeAndUploadListeningClips, listeningCombinedDefaultTitle } = await import(
       '@/lib/levelsExamAudioStorage'
     );
+    const { getB2ListeningAudioAssembly } = await import('@/lib/b2ListeningAudioTargets');
+    const defaultAssembly =
+      String(levelSlug || '').toLowerCase() === 'b2' ? getB2ListeningAudioAssembly(partNumber) : null;
     const clipSpecs = extractListeningClipsFromGenerated(generated, partDef);
     const audioRows = await synthesizeAndUploadListeningClips(db, {
       partNumber,
@@ -673,6 +688,8 @@ export async function persistCambridgeGeneratedPart(db, {
       script: generated.script,
       clips: clipSpecs,
       partDef,
+      audioAssembly: { ...(defaultAssembly || {}), ...(generated.audioAssembly || {}) },
+      listeningIntro: generated.listeningIntro,
       combinedTitle: listeningCombinedDefaultTitle(
         partNumber,
         generated.setting || generated.title,

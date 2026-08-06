@@ -65,7 +65,7 @@ const listeningParts = B2_EXAM_PARTS.filter((p) => p.needsAudio)
   .map((p) => p.partNumber)
   .filter((pn) => !partFilter?.length || partFilter.includes(pn));
 
-const MAX_PART_ATTEMPTS = 6;
+const MAX_PART_ATTEMPTS = 3;
 
 const admin = createClient(url, key, {
   auth: { autoRefreshToken: false, persistSession: false },
@@ -94,7 +94,9 @@ for (const examSlot of slots) {
   for (const partNumber of listeningParts) {
     const targets = getB2ListeningAudioTargets(partNumber);
     console.error(
-      `\n→ Part ${partNumber} (${targets?.label || 'listening'}) — objetivo ${formatDurationSec(targets?.minSec)}–${formatDurationSec(targets?.maxSec)}…`,
+      `\n→ Part ${partNumber} (${targets?.label || 'listening'}) — objetivo grabación completa ${formatDurationSec(
+        targets?.totalMinSec,
+      )}–${formatDurationSec(targets?.totalMaxSec)}…`,
     );
     let partOk = false;
     let lastError = null;
@@ -132,8 +134,8 @@ for (const examSlot of slots) {
             .eq('pregunta_id', result.preguntaId)
             .order('orden');
 
-          const isCombinedListeningPart =
-            (partNumber === 10 || partNumber === 12) && (audioRows?.length === 1);
+          // Una sola fila = grabación ensamblada (intro + pasada 1 + pausa + pasada 2).
+          const isCombinedListeningPart = audioRows?.length === 1;
 
           for (const row of audioRows || []) {
             let durationSec = null;

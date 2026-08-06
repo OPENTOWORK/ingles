@@ -346,6 +346,8 @@ export async function persistGeneratedPart(db, {
       script: payload.script,
       clips: clipSpecs,
       partDef,
+      audioAssembly: payload.audioAssembly,
+      listeningIntro: payload.listeningIntro,
       combinedTitle: listeningCombinedDefaultTitle(partNumber, payload.setting || payload.title),
     });
     if (audioRows.length) {

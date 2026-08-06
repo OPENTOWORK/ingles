@@ -383,7 +383,14 @@ export function buildAnswerRowsFromGenerated(gen = {}) {
     const num = Number(q.number ?? idx + 1);
     if (!Number.isFinite(num)) return;
 
-    if (q.type === 'short' || q.type === 'word-formation' || q.type === 'transformation' || q.type === 'open') {
+    // Sentence completion: el modelo omite a veces `type`, pero un `lead` sin opciones
+    // solo puede ser un hueco a rellenar.
+    const isOpenType =
+      q.type === 'short' || q.type === 'word-formation' || q.type === 'transformation' || q.type === 'open';
+    const looksLikeGap =
+      q.lead != null && !asGeneratedArray(q.options).length && !asGeneratedArray(q.imageOptions).length;
+
+    if (isOpenType || looksLikeGap) {
       const perQuestionAnswers = asGeneratedArray(q.modelAnswers);
       const sharedAnswer = modelAnswers.find(
         (m) =>

@@ -1,4 +1,5 @@
-import { synthesizeListeningClipMp3, synthesizePart2ListeningMp3 } from '@/lib/levelsExamTts';
+import { synthesizeListeningClipMp3, synthesizePart2ListeningMp3, synthesizeExamTtsMp3 } from '@/lib/levelsExamTts';
+import { concatMp3BuffersNormalized, makeSilenceMp3 } from '@/lib/listeningAudioFfmpeg';
 import { getSupabaseUrl } from '@/lib/supabaseEnv';
 
 const BUCKET = 'Levels_Listening';
@@ -66,12 +67,129 @@ export function listeningCombinedDefaultTitle(partNumber, setting) {
   }
 }
 
+function listeningClipSynthesizer(partDef) {
+  return partDef?.activity === 'sentence-completion'
+    ? synthesizePart2ListeningMp3
+    : synthesizeListeningClipMp3;
+}
+
+async function synthesizeListeningClipBuffers(clips, partDef) {
+  const buffers = [];
+  const synth = listeningClipSynthesizer(partDef);
+  for (let i = 0; i < clips.length; i += 1) {
+    const clip = clips[i];
+    const text = String(clip.text || '').trim();
+    if (!text) continue;
+    const result = await synth(text, { extractIndex: (Number(clip.orden) || i + 1) - 1 });
+    if (!result?.base64) {
+      console.warn('[levelsExamAudio] TTS skipped for clip', clip.orden);
+      continue;
+    }
+    buffers.push(Buffer.from(result.base64, 'base64'));
+  }
+  return buffers;
+}
+
+/** Descarga la intro hablada compartida (b2/shared/listening-part-N-intro.mp3). */
+export async function fetchSharedListeningIntro(storagePath) {
+  const base = getSupabaseUrl()?.replace(/\/$/, '');
+  if (!base || !storagePath) return null;
+  const encoded = String(storagePath)
+    .split('/')
+    .map((s) => encodeURIComponent(s))
+    .join('/');
+  try {
+    const res = await fetch(`${base}/storage/v1/object/public/${BUCKET}/${encoded}`);
+    if (!res.ok) return null;
+    return Buffer.from(await res.arrayBuffer());
+  } catch {
+    return null;
+  }
+}
+
+async function resolveListeningIntroBuffer(assembly, listeningIntro) {
+  const fromStorage = await fetchSharedListeningIntro(assembly?.introFromSupabase);
+  if (fromStorage?.length) return fromStorage;
+
+  const text = String(listeningIntro?.text || listeningIntro || '').trim();
+  if (!text) return null;
+  const tts = await synthesizeExamTtsMp3(text, {
+    edgeVoice: 'en-GB-SoniaNeural',
+    preferEdge: true,
+  });
+  return tts?.base64 ? Buffer.from(tts.base64, 'base64') : null;
+}
+
+/**
+ * Monta la grabación completa al estilo del Examen 1 B2:
+ * intro → pausa → pasada 1 → pausa → pasada 2.
+ * Las pasadas reutilizan el mismo audio, igual que en un examen real.
+ * @param {{ clipBuffers: Buffer[], assembly?: object, introBuffer?: Buffer|null }} params
+ */
+export function assembleListeningFullRecording({ clipBuffers = [], assembly = {}, introBuffer = null }) {
+  const usable = clipBuffers.filter((b) => b?.length);
+  if (!usable.length) return Buffer.alloc(0);
+
+  const passes = Math.max(1, Number(assembly.passes) || 1);
+  const introPauseSec = Number(assembly.introPauseSec ?? 5);
+  const betweenExtractPauseSec = Number(assembly.betweenExtractPauseSec ?? 3);
+  const betweenPassesPauseSec = Number(assembly.betweenPassesPauseSec ?? 10);
+
+  const pass = usable.flatMap((buf, i) =>
+    i === 0 ? [buf] : [makeSilenceMp3(betweenExtractPauseSec), buf],
+  );
+
+  const segments = [];
+  if (introBuffer?.length) segments.push(introBuffer, makeSilenceMp3(introPauseSec));
+  for (let p = 0; p < passes; p += 1) {
+    if (p > 0) segments.push(makeSilenceMp3(betweenPassesPauseSec));
+    segments.push(...pass);
+  }
+  return concatMp3BuffersNormalized(segments);
+}
+
 export async function synthesizeAndUploadListeningClips(adminDb, params) {
   const rows = [];
   const levelLabel = params.levelLabel || 'A2';
   const revision = params.revision || 'v2';
+  const assembly = params.audioAssembly;
   const combineClips =
     params.combineClips ?? params.combineShortExtracts ?? shouldCombineListeningClips(params.partDef);
+
+  if (assembly && Number(assembly.passes) > 1 && params.clips?.length) {
+    const clipBuffers = await synthesizeListeningClipBuffers(params.clips, params.partDef);
+    if (!clipBuffers.length) return rows;
+
+    const combined = assembleListeningFullRecording({
+      clipBuffers,
+      assembly,
+      introBuffer: await resolveListeningIntroBuffer(assembly, params.listeningIntro),
+    });
+    if (!combined.length) return rows;
+
+    const fileName =
+      params.combinedStoragePath ||
+      assembly.combinedStoragePath ||
+      listeningCombinedStoragePath({
+        levelLabel,
+        examSlot: params.examSlot,
+        partNumber: params.partNumber,
+        revision,
+      });
+    const url = await uploadListeningClip(adminDb, {
+      path: fileName,
+      audioBuffer: combined,
+      contentType: 'audio/mpeg',
+    });
+    rows.push({
+      orden: 1,
+      titulo:
+        String(params.combinedTitle || '').trim() ||
+        listeningCombinedDefaultTitle(params.partNumber, params.setting),
+      audio_url: url,
+    });
+    return rows;
+  }
 
   if (combineClips && params.clips?.length > 1) {
     const buffers = [];
