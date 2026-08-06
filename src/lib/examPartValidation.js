@@ -62,6 +62,24 @@ function listeningSpeakerBlocks(script) {
     .filter(Boolean);
 }
 
+/**
+ * Part 1: la interfaz pinta la situación encima de la pregunta. Si el modelo omite
+ * cualquiera de las dos, el ítem queda en pantalla con las opciones sueltas.
+ */
+function validateListeningShortExtractText(partDef, gen, errors) {
+  if (partDef?.activity !== 'short-extracts') return;
+
+  asArray(gen.questions).forEach((q, i) => {
+    const label = q.number ?? i + 1;
+    if (!hasText(q.situation)) {
+      errors.push(`Extract ${label} is missing the situation line (e.g. "You hear…").`);
+    }
+    if (!hasText(q.prompt)) {
+      errors.push(`Extract ${label} is missing the question.`);
+    }
+  });
+}
+
 function validateListeningClipWordCounts(partDef, gen, errors) {
   if (!partDef?.needsAudio) return;
 
@@ -1703,6 +1721,7 @@ function validateListening(partDef, gen, errors, warnings) {
   validateListeningPart3MultipleMatching(partDef, gen, errors, warnings);
   validateListeningPart4Interview(partDef, gen, errors, warnings);
   validateListeningClipWordCounts(partDef, gen, errors);
+  validateListeningShortExtractText(partDef, gen, errors);
 }
 
 function validateSpeaking(gen, errors, warnings, partDef) {

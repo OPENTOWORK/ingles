@@ -629,6 +629,26 @@ export function splitListeningMcqContextByQuestion(lines, opts = {}) {
 }
 
 /**
+ * Parte 10 listening: cada ítem lleva la situación y debajo la pregunta, pero el enunciado
+ * no las etiqueta y la situación no siempre empieza por "You hear" ("You overhear…",
+ * "Two colleagues discuss…"). Se reparten por posición: con dos o más líneas la primera es
+ * la situación; con una sola, el interrogante final indica que es la pregunta.
+ *
+ * @param {string[]} contextLines
+ * @returns {{ situation: string, prompt: string }}
+ */
+export function splitListeningItemContext(contextLines = []) {
+  const lines = (contextLines || []).map((l) => String(l || '').trim()).filter(Boolean);
+  if (!lines.length) return { situation: '', prompt: '' };
+  if (lines.length === 1) {
+    return /\?\s*$/.test(lines[0])
+      ? { situation: '', prompt: lines[0] }
+      : { situation: lines[0], prompt: '' };
+  }
+  return { situation: lines[0], prompt: lines.slice(1).join(' ') };
+}
+
+/**
  * Parte 11 listening: huecos `(9) ___` con la frase de contexto en el mismo párrafo.
  *
  * @param {string} text
