@@ -1,0 +1,25 @@
+{
+  "case_id": "G-11",
+  "label": "Music article E",
+  "source_family": "paper",
+  "source_reference": "167791-b2-first-handbook.pdf pp.48–49 paper Candidate E; task from 178516 Writing 2022 Part 2 Q3",
+  "sample_identity": "Paper sample · Question 3 · Candidate E",
+  "task_type": "article",
+  "task_prompt": "You see this announcement on an English-language website:\n\nArticles wanted\nMUSIC AND ME\nWhen do you listen to music? How do you choose what to listen to at different times?\nWrite us an article answering these questions.\nThe best articles will be posted on our website.\n\nWrite your article.",
+  "candidate_response": "I always listen to music, wherever I go I have my headphones on my ears. Listening to what I like satisfy’s me and makes me calm all the time. When the bus is taking me to school I listen to the music so I could wake up.\nI love to listen to classical music, jazz, rock, hip-hop, dubstep, pop music. But I can’t listen to Serbian folk, any rap, techno or K-pop music. It just anoy’s me. Of all the songs I can listen, I adore pop and dubstep the most. I’m glad that my parents listened to rock and ninetees serbian songs which I like to listen sometimes.\nEverybody has his own taste for music, somebody likes rock, somebody likes rap or something else, and that’s ok. I’m proud of myself that I’m listening to what I’m listening.",
+  "expected_marks": {
+    "content": 4,
+    "communicative_achievement": 3,
+    "organisation": 2,
+    "language": 2
+  },
+  "marks_source": "167791 handbook paper Candidate E examiner marks",
+  "examiner_commentary": "Underdeveloped task relationship + list-like organisation + narrow range.",
+  "task_prompt_checksum": "250fa3aebd4a4f08da793dea88961dea2dd4d9d62b09af50169e47993c39371e",
+  "candidate_response_checksum": "f89a616f62a63cb8b00e008ea08ac3dcc1d76ecb2865cee5ffd6f1060ab894f0",
+  "source_verification": {
+    "task_prompt": "verified",
+    "candidate_response": "verified",
+    "marks_source": "167791 handbook paper Candidate E examiner marks"
+  }
+}

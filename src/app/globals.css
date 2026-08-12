@@ -18673,3 +18673,1047 @@ body.dark .profile-collapse--open .profile-collapse__head {
     margin-bottom: 0.85rem;
   }
 }
+
+/* ==========================================================================
+   Writing v3 — Interactive Writing Map and Cambridge feedback (Phase 8, Doc 04)
+   ==========================================================================
+   Additive only: nothing above this block is modified, and the legacy
+   `.writing-mark--*` / `.writing-mark-popup` rules keep serving the legacy
+   correction path untouched.
+
+   PROVISIONAL — REQUIRES R6 VISUAL APPROVAL
+   The six category colours below are derived from the existing DRALO writing
+   tokens (skill accent #059669 / surface #ecfdf5) and the legacy annotation
+   hues, so the interface can be reviewed in context. They are NOT product
+   approved. Category meaning is also carried by the legend, the accessible
+   label and the underline style, so a palette change is a CSS-only change: no
+   payload, schema or stored row has ever held a colour.
+   ========================================================================== */
+
+.writing-v3 {
+  --writing-v3-ink: #0f172a;
+  --writing-v3-muted: #64748b;
+  --writing-v3-border: #e2e8f0;
+  --writing-v3-panel: #f8fafc;
+  --writing-v3-accent: #047857;
+  --writing-v3-accent-soft: #ecfdf5;
+
+  /* PROVISIONAL palette — R6 */
+  --writing-map-grammar-ink: #7f1d1d;
+  --writing-map-grammar-wash: #fee2e2;
+  --writing-map-grammar-line: #dc2626;
+  --writing-map-vocabulary-ink: #713f12;
+  --writing-map-vocabulary-wash: #fef3c7;
+  --writing-map-vocabulary-line: #ca8a04;
+  --writing-map-spelling-ink: #1e3a8a;
+  --writing-map-spelling-wash: #dbeafe;
+  --writing-map-spelling-line: #2563eb;
+  --writing-map-organisation-ink: #5b21b6;
+  --writing-map-organisation-wash: #ede9fe;
+  --writing-map-organisation-line: #7c3aed;
+  --writing-map-content-ink: #155e75;
+  --writing-map-content-wash: #cffafe;
+  --writing-map-content-line: #0891b2;
+  --writing-map-strength-ink: #14532d;
+  --writing-map-strength-wash: #dcfce7;
+  --writing-map-strength-line: #059669;
+
+  display: flex;
+  flex-direction: column;
+  gap: 1.15rem;
+  color: var(--writing-v3-ink);
+}
+
+.writing-v3__header {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.writing-v3__title {
+  margin: 0;
+  font-size: 1.15rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+
+.writing-v3__task {
+  border: 1px solid var(--writing-v3-border);
+  border-radius: 10px;
+  background: var(--writing-v3-panel);
+  padding: 0.5rem 0.75rem;
+  font-size: 0.85rem;
+}
+
+.writing-v3__task summary {
+  cursor: pointer;
+  color: var(--writing-v3-muted);
+  font-weight: 600;
+}
+
+.writing-v3__task-text {
+  margin: 0.6rem 0 0;
+  white-space: pre-wrap;
+  font-family: inherit;
+  font-size: 0.85rem;
+  line-height: 1.6;
+  color: var(--writing-v3-ink);
+}
+
+/* --- Result strip -------------------------------------------------------- */
+
+.writing-result {
+  border: 1px solid var(--writing-v3-border);
+  border-radius: 12px;
+  background: var(--writing-v3-panel);
+  padding: 0.8rem 1rem 0.85rem;
+}
+
+.writing-result__row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+  margin-top: 0.5rem;
+}
+
+.writing-result__criteria {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem 1.35rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.writing-result__criterion {
+  display: flex;
+  align-items: baseline;
+  gap: 0.4rem;
+  font-size: 0.875rem;
+}
+
+.writing-result__criterion-label {
+  color: var(--writing-v3-muted);
+}
+
+.writing-result__criterion-mark {
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+
+.writing-result__total {
+  display: flex;
+  align-items: baseline;
+  gap: 0.35rem;
+  margin: 0;
+  padding: 0;
+  border-radius: 0;
+  background: transparent;
+  border: 0;
+  color: var(--writing-v3-muted);
+  font-size: 0.875rem;
+}
+
+.writing-result__total-label {
+  font-size: 0.75rem;
+  font-weight: 500;
+  letter-spacing: 0;
+  text-transform: none;
+}
+
+.writing-result__total-value {
+  font-size: 0.875rem;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  color: var(--writing-v3-ink);
+}
+
+.writing-result__disclaimer {
+  margin: 0.6rem 0 0;
+  font-size: 0.75rem;
+  line-height: 1.5;
+  color: var(--writing-v3-muted);
+}
+
+.writing-result__sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* --- Opening strengths --------------------------------------------------- */
+
+.writing-strengths__list {
+  margin: 0.35rem 0 0;
+  padding: 0;
+  list-style: none;
+  display: grid;
+  gap: 0.35rem;
+}
+
+.writing-strengths__item {
+  display: flex;
+  gap: 0.45rem;
+  align-items: flex-start;
+  border: 1px solid var(--writing-v3-border);
+  border-left: 2px solid #86efac;
+  background: #fafafa;
+  border-radius: 8px;
+  padding: 0.4rem 0.65rem;
+}
+
+.writing-strengths__marker {
+  color: #059669;
+  font-size: 0.75rem;
+  line-height: 1.45;
+}
+
+.writing-strengths__body {
+  display: flex;
+  flex-direction: column;
+  gap: 0.1rem;
+}
+
+.writing-strengths__headline {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--writing-v3-ink);
+}
+
+.writing-strengths__explanation {
+  font-size: 0.8125rem;
+  line-height: 1.5;
+  color: #475569;
+}
+
+/* --- Interactive Writing Map --------------------------------------------- */
+
+.writing-map__header {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.writing-map__hint {
+  margin: 0;
+  font-size: 0.8rem;
+  color: var(--writing-v3-muted);
+}
+
+.writing-map__legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem 0.65rem;
+  margin: 0.45rem 0 0.6rem;
+  padding: 0;
+  list-style: none;
+}
+
+.writing-map__legend-item {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  font-size: 0.6875rem;
+}
+
+.writing-map__legend-swatch {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 1.15rem;
+  height: 1.15rem;
+  padding: 0 0.2rem;
+  border-radius: 4px;
+  font-weight: 700;
+  font-size: 0.625rem;
+}
+
+.writing-map__legend-label {
+  font-weight: 600;
+  color: var(--writing-v3-muted);
+}
+
+.writing-map__canvas {
+  position: relative;
+  border: 2px solid var(--writing-v3-border);
+  border-radius: 12px;
+  background: #fffdf8;
+  padding: 1.15rem 1.25rem;
+}
+
+.writing-map__text {
+  font-family: inherit;
+  font-size: 1.02rem;
+  line-height: 2.05;
+  white-space: pre-wrap;
+  color: #1f2937;
+}
+
+.writing-map__anchor {
+  position: relative;
+}
+
+.writing-map__mark {
+  font: inherit;
+  color: inherit;
+  background: transparent;
+  border: 0;
+  padding: 0.05em 0.1em;
+  margin: 0 -0.1em;
+  border-radius: 3px;
+  cursor: pointer;
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.2em;
+  transition: background-color 120ms ease, text-decoration-thickness 120ms ease;
+}
+
+.writing-map__mark:focus {
+  outline: none;
+}
+
+.writing-map__mark:focus-visible {
+  outline: 3px solid #0f766e;
+  outline-offset: 2px;
+}
+
+.writing-map__mark--open {
+  text-decoration-thickness: 2px;
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, currentColor 35%, transparent);
+}
+
+.writing-map__mark--overlapping {
+  text-decoration-line: underline;
+  border-bottom: 1px dotted currentColor;
+}
+
+/* Colour is one signal; the underline style is a second, and the legend and
+   accessible label are the third and fourth. */
+.writing-map-mark--grammar {
+  background: color-mix(in srgb, var(--writing-map-grammar-wash) 45%, white);
+  color: color-mix(in srgb, var(--writing-map-grammar-ink) 70%, #374151);
+  text-decoration-color: color-mix(in srgb, var(--writing-map-grammar-line) 55%, #94a3b8);
+  text-decoration-style: solid;
+}
+
+.writing-map-mark--vocabulary {
+  background: color-mix(in srgb, var(--writing-map-vocabulary-wash) 45%, white);
+  color: color-mix(in srgb, var(--writing-map-vocabulary-ink) 70%, #374151);
+  text-decoration-color: color-mix(in srgb, var(--writing-map-vocabulary-line) 55%, #94a3b8);
+  text-decoration-style: double;
+}
+
+.writing-map-mark--spelling {
+  background: color-mix(in srgb, var(--writing-map-spelling-wash) 45%, white);
+  color: color-mix(in srgb, var(--writing-map-spelling-ink) 70%, #374151);
+  text-decoration-color: color-mix(in srgb, var(--writing-map-spelling-line) 55%, #94a3b8);
+  text-decoration-style: wavy;
+}
+
+.writing-map-mark--organisation {
+  background: color-mix(in srgb, var(--writing-map-organisation-wash) 45%, white);
+  color: color-mix(in srgb, var(--writing-map-organisation-ink) 70%, #374151);
+  text-decoration-color: color-mix(in srgb, var(--writing-map-organisation-line) 55%, #94a3b8);
+  text-decoration-style: dashed;
+}
+
+.writing-map-mark--content {
+  background: color-mix(in srgb, var(--writing-map-content-wash) 45%, white);
+  color: color-mix(in srgb, var(--writing-map-content-ink) 70%, #374151);
+  text-decoration-color: color-mix(in srgb, var(--writing-map-content-line) 55%, #94a3b8);
+  text-decoration-style: dotted;
+}
+
+.writing-map-mark--strength {
+  background: color-mix(in srgb, var(--writing-map-strength-wash) 40%, white);
+  color: color-mix(in srgb, var(--writing-map-strength-ink) 70%, #374151);
+  text-decoration-color: color-mix(in srgb, var(--writing-map-strength-line) 55%, #94a3b8);
+  text-decoration-style: solid;
+}
+
+.writing-map__mark--open.writing-map-mark--grammar {
+  background: var(--writing-map-grammar-wash);
+  color: var(--writing-map-grammar-ink);
+  text-decoration-color: var(--writing-map-grammar-line);
+}
+
+.writing-map__mark--open.writing-map-mark--vocabulary {
+  background: var(--writing-map-vocabulary-wash);
+  color: var(--writing-map-vocabulary-ink);
+  text-decoration-color: var(--writing-map-vocabulary-line);
+}
+
+.writing-map__mark--open.writing-map-mark--spelling {
+  background: var(--writing-map-spelling-wash);
+  color: var(--writing-map-spelling-ink);
+  text-decoration-color: var(--writing-map-spelling-line);
+}
+
+.writing-map__mark--open.writing-map-mark--organisation {
+  background: var(--writing-map-organisation-wash);
+  color: var(--writing-map-organisation-ink);
+  text-decoration-color: var(--writing-map-organisation-line);
+}
+
+.writing-map__mark--open.writing-map-mark--content {
+  background: var(--writing-map-content-wash);
+  color: var(--writing-map-content-ink);
+  text-decoration-color: var(--writing-map-content-line);
+}
+
+.writing-map__mark--open.writing-map-mark--strength {
+  background: var(--writing-map-strength-wash);
+  color: var(--writing-map-strength-ink);
+  text-decoration-color: var(--writing-map-strength-line);
+}
+
+/* --- Desktop bubble ------------------------------------------------------ */
+
+.writing-map__bubble {
+  position: absolute;
+  top: calc(100% + 0.45rem);
+  left: 0;
+  z-index: 40;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  width: max-content;
+  max-width: min(320px, 72vw);
+  padding: 0.5rem 0.65rem 0.55rem;
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+  background: #ffffff;
+  box-shadow: 0 10px 28px rgba(15, 23, 42, 0.12);
+  font-family: 'Segoe UI', sans-serif;
+  font-size: 0.8125rem;
+  line-height: 1.5;
+  color: var(--writing-v3-ink);
+  text-align: left;
+  animation: writing-map-bubble-in 120ms ease-out;
+}
+
+.writing-map__bubble--flipped {
+  left: auto;
+  right: 0;
+}
+
+@keyframes writing-map-bubble-in {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.writing-map__bubble-arrow {
+  position: absolute;
+  top: -5px;
+  left: 1rem;
+  width: 10px;
+  height: 10px;
+  background: #ffffff;
+  border-left: 1px solid #cbd5e1;
+  border-top: 1px solid #cbd5e1;
+  transform: rotate(45deg);
+}
+
+.writing-map__bubble--flipped .writing-map__bubble-arrow {
+  left: auto;
+  right: 1rem;
+}
+
+.writing-map__bubble-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.5rem;
+}
+
+.writing-map__bubble-quote {
+  font-family: inherit;
+  font-size: 0.85rem;
+  color: var(--writing-v3-muted);
+}
+
+.writing-map__bubble-close {
+  flex: none;
+  border: 0;
+  background: transparent;
+  color: var(--writing-v3-muted);
+  font-size: 1.05rem;
+  line-height: 1;
+  cursor: pointer;
+  padding: 0.1rem 0.25rem;
+  border-radius: 6px;
+}
+
+.writing-map__bubble-close:focus-visible,
+.writing-map__sheet-close:focus-visible {
+  outline: 3px solid #0f766e;
+  outline-offset: 2px;
+}
+
+.writing-map__feedback-list,
+.writing-map__feedback {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.writing-map__feedback + .writing-map__feedback {
+  border-top: 1px dashed var(--writing-v3-border);
+  padding-top: 0.5rem;
+}
+
+.writing-map__feedback-tag {
+  align-self: flex-start;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0;
+  border-radius: 0;
+  font-size: 0.6875rem;
+  font-weight: 600;
+  text-transform: none;
+  letter-spacing: 0;
+  text-decoration: none;
+  color: var(--writing-v3-muted);
+  background: transparent;
+}
+
+.writing-map__feedback-tag-label {
+  font-size: 0.6875rem;
+}
+
+.writing-map__feedback-text {
+  font-size: 0.8125rem;
+  line-height: 1.5;
+}
+
+.writing-map__feedback-marker {
+  font-size: 0.75rem;
+}
+
+.writing-map__feedback-fix {
+  display: flex;
+  align-items: baseline;
+  gap: 0.4rem;
+  padding: 0.35rem 0.5rem;
+  border-radius: 8px;
+  background: var(--writing-v3-accent-soft);
+}
+
+.writing-map__feedback-fix-label {
+  font-size: 0.65rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #065f46;
+}
+
+.writing-map__feedback-fix-value {
+  font-family: inherit;
+  color: #065f46;
+}
+
+.writing-map__feedback-prompt {
+  font-style: italic;
+  color: var(--writing-v3-muted);
+}
+
+/* --- Mobile bottom sheet ------------------------------------------------- */
+
+.writing-map__sheet-layer {
+  position: fixed;
+  inset: 0;
+  z-index: 1200;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+}
+
+.writing-map__sheet-scrim {
+  position: absolute;
+  inset: 0;
+  border: 0;
+  padding: 0;
+  background: rgba(15, 23, 42, 0.35);
+  cursor: pointer;
+}
+
+.writing-map__sheet {
+  position: relative;
+  max-height: 62vh;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem 1.1rem;
+  border-radius: 16px 16px 0 0;
+  background: #ffffff;
+  box-shadow: 0 -12px 32px rgba(15, 23, 42, 0.25);
+  animation: writing-map-sheet-in 160ms ease-out;
+}
+
+@keyframes writing-map-sheet-in {
+  from {
+    transform: translateY(18%);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+
+.writing-map__sheet-grip {
+  width: 44px;
+  height: 4px;
+  border-radius: 999px;
+  background: #cbd5e1;
+  margin: 0.15rem auto 0.35rem;
+}
+
+.writing-map__sheet-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+
+.writing-map__sheet-quote {
+  margin: 0;
+  font-family: inherit;
+  font-size: 0.9rem;
+  color: var(--writing-v3-muted);
+}
+
+.writing-map__sheet-close {
+  flex: none;
+  min-height: 44px;
+  padding: 0 0.9rem;
+  border: 1px solid var(--writing-v3-border);
+  border-radius: 999px;
+  background: #ffffff;
+  color: var(--writing-v3-ink);
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.writing-map__sheet-body {
+  overflow-y: auto;
+  font-size: 0.88rem;
+  line-height: 1.6;
+}
+
+/* --- Criterion cards ----------------------------------------------------- */
+
+.writing-v3__criteria-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.7rem;
+  margin-top: 0.55rem;
+  align-items: start;
+}
+
+.writing-criterion {
+  border: 1px solid var(--writing-v3-border);
+  border-radius: 12px;
+  background: #ffffff;
+  padding: 0.7rem 0.85rem 0.8rem;
+}
+
+.writing-criterion--expanded {
+  grid-column: 1 / -1;
+  border-color: #cbd5e1;
+  background: #fcfcfd;
+}
+
+.writing-criterion__heading {
+  margin: 0;
+  font-size: inherit;
+  font-weight: inherit;
+}
+
+.writing-criterion__toggle {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  border: 0;
+  background: transparent;
+  padding: 0;
+  cursor: pointer;
+  text-align: left;
+  color: inherit;
+}
+
+.writing-criterion__toggle:focus-visible {
+  outline: 3px solid #0f766e;
+  outline-offset: 3px;
+  border-radius: 6px;
+}
+
+.writing-criterion__name {
+  flex: 1 1 auto;
+  font-size: 0.9rem;
+  font-weight: 700;
+}
+
+.writing-criterion__mark {
+  font-size: 0.95rem;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  color: var(--writing-v3-accent);
+}
+
+.writing-criterion__chevron {
+  width: 1.35rem;
+  height: 1.35rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 999px;
+  border: 1px solid var(--writing-v3-border);
+  color: var(--writing-v3-muted);
+  font-size: 0.9rem;
+  line-height: 1;
+}
+
+.writing-criterion__summary {
+  margin: 0.45rem 0 0;
+  font-size: 0.85rem;
+  line-height: 1.6;
+  color: #334155;
+}
+
+.writing-criterion__detail {
+  margin: 0.7rem 0 0;
+  display: grid;
+  gap: 0.15rem;
+  font-size: 0.85rem;
+  line-height: 1.6;
+}
+
+.writing-criterion__detail dt {
+  font-size: 0.6875rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--writing-v3-muted);
+  margin-top: 0.5rem;
+}
+
+.writing-criterion__detail dd {
+  margin: 0;
+  color: #1f2937;
+}
+
+.writing-criterion__evidence {
+  margin: 0;
+  padding-left: 1rem;
+  font-family: inherit;
+  color: #334155;
+}
+
+/* --- Review next and CTA ------------------------------------------------- */
+
+.writing-review__list {
+  margin: 0.5rem 0 0;
+  padding: 0;
+  list-style: none;
+  display: grid;
+  gap: 0.45rem;
+}
+
+.writing-review__item {
+  display: flex;
+  flex-direction: column;
+  gap: 0.1rem;
+  border-left: 3px solid var(--writing-v3-border);
+  padding: 0.15rem 0 0.15rem 0.7rem;
+  font-size: 0.85rem;
+  line-height: 1.55;
+}
+
+.writing-review__concept {
+  font-size: 0.875rem;
+}
+
+.writing-review__reason {
+  color: var(--writing-v3-muted);
+}
+
+.writing-v3__cta {
+  display: flex;
+  justify-content: flex-end;
+  border-top: 1px solid var(--writing-v3-border);
+  padding-top: 0.9rem;
+}
+
+.writing-v3__cta-button {
+  min-height: 44px;
+  padding: 0 1.35rem;
+  border: 0;
+  border-radius: 10px;
+  background: var(--writing-v3-accent);
+  color: #ffffff;
+  font-size: 0.9rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.writing-v3__cta-button:hover {
+  background: #065f46;
+}
+
+.writing-v3__cta-button:focus-visible {
+  outline: 3px solid #0f766e;
+  outline-offset: 3px;
+}
+
+/* --- Desktop scale (Phase 8 R6 — does not constrain mobile) --------------- */
+
+@media (min-width: 901px) {
+  .shell:has(.writing-v3-harness),
+  .shell:has(.writing-v3) {
+    max-width: min(1240px, 100%);
+    padding: clamp(1.5rem, 3vw, 2.25rem) clamp(1.25rem, 3vw, 2rem);
+  }
+
+  .writing-v3-harness {
+    max-width: none;
+    padding: 1.5rem 0 3rem;
+  }
+
+  .writing-v3.levels-exam-split-card {
+    padding: 1.75rem 2rem 2rem;
+  }
+
+  .writing-v3 {
+    gap: 1.5rem;
+  }
+
+  .writing-v3__title {
+    font-size: 1.5rem;
+    line-height: 1.25;
+    letter-spacing: -0.02em;
+  }
+
+  .writing-v3 .levels-exam-split__section-title {
+    font-size: 0.8125rem;
+    letter-spacing: 0.12em;
+    margin-bottom: 0.85rem;
+  }
+
+  .writing-result {
+    padding: 1rem 1.25rem 1.1rem;
+  }
+
+  .writing-result__criterion {
+    font-size: 1rem;
+  }
+
+  .writing-result__criterion-mark {
+    font-size: 1.0625rem;
+  }
+
+  .writing-result__total {
+    font-size: 1rem;
+  }
+
+  .writing-result__total-value {
+    font-size: 1rem;
+  }
+
+  .writing-result__disclaimer {
+    font-size: 0.8125rem;
+  }
+
+  .writing-strengths__headline {
+    font-size: 0.95rem;
+  }
+
+  .writing-strengths__explanation {
+    font-size: 0.9rem;
+  }
+
+  .writing-map {
+    max-width: 52rem;
+  }
+
+  .writing-map__hint {
+    font-size: 0.9rem;
+  }
+
+  .writing-map__canvas {
+    padding: 1.35rem 1.5rem 1.45rem;
+  }
+
+  .writing-map__text {
+    font-size: 1.15rem;
+    line-height: 1.9;
+  }
+
+  .writing-criterion {
+    padding: 0.9rem 1rem 1rem;
+  }
+
+  .writing-criterion__name {
+    font-size: 1rem;
+  }
+
+  .writing-criterion__mark {
+    font-size: 1.0625rem;
+  }
+
+  .writing-criterion__summary {
+    font-size: 0.9375rem;
+    line-height: 1.65;
+  }
+
+  .writing-criterion__detail {
+    font-size: 0.9375rem;
+  }
+
+  .writing-criterion__detail dt {
+    font-size: 0.75rem;
+  }
+
+  .writing-review__item {
+    font-size: 0.9375rem;
+  }
+
+  .writing-review__concept {
+    font-size: 0.95rem;
+  }
+}
+
+/* --- Responsive --------------------------------------------------------- */
+
+@media (max-width: 900px) {
+  .writing-v3__criteria-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+@media (max-width: 640px) {
+  .writing-map__canvas {
+    padding: 0.9rem 0.85rem;
+  }
+
+  .writing-map__text {
+    font-size: 1rem;
+    line-height: 1.95;
+  }
+
+  .writing-map__mark {
+    padding: 0.12em 0.12em;
+  }
+
+  .writing-result__row {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 0.6rem;
+  }
+
+  .writing-strengths__list {
+    gap: 0.4rem;
+  }
+
+  .writing-v3__cta {
+    justify-content: stretch;
+  }
+
+  .writing-v3__cta-button {
+    width: 100%;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .writing-map__bubble,
+  .writing-map__sheet {
+    animation: none;
+  }
+}
+
+/* --- Writing v3 internal preview harness (Phase 8, development only) ------ */
+
+.writing-v3-harness {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  padding: 1.25rem 0 2.5rem;
+  max-width: min(1100px, 100%);
+  margin: 0 auto;
+}
+
+.writing-v3-harness__bar {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  border: 1px dashed #94a3b8;
+  border-radius: 10px;
+  background: #f8fafc;
+  padding: 0.7rem 0.9rem;
+}
+
+.writing-v3-harness__title {
+  margin: 0;
+  font-size: 0.6875rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: #64748b;
+}
+
+.writing-v3-harness__tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+}
+
+.writing-v3-harness__tab {
+  border: 1px solid #cbd5e1;
+  border-radius: 999px;
+  background: #ffffff;
+  padding: 0.25rem 0.75rem;
+  font-size: 0.75rem;
+  cursor: pointer;
+}
+
+.writing-v3-harness__tab--active {
+  border-color: #047857;
+  background: #ecfdf5;
+  color: #065f46;
+  font-weight: 700;
+}
+
+.writing-v3-harness__note {
+  margin: 0;
+  font-size: 0.75rem;
+  color: #64748b;
+}
+
+.writing-v3-harness--loading {
+  border: 1px dashed #94a3b8;
+  border-radius: 10px;
+  background: #f8fafc;
+  padding: 1rem 1.1rem;
+}
+
+.writing-v3-harness__hint {
+  margin: 0.35rem 0 0;
+  font-size: 0.8125rem;
+  line-height: 1.45;
+  color: #475569;
+}

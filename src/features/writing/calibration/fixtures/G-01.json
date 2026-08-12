@@ -1,0 +1,25 @@
+{
+  "case_id": "G-01",
+  "label": "Environmental essay A",
+  "source_family": "digital",
+  "source_reference": "167791-b2-first-handbook.pdf pp.37–38 digital Candidate A; task from 174037 B2 First sample paper 1 Writing 2022.pdf Part 1 Q1",
+  "sample_identity": "Digital sample · Question 1 · Candidate A",
+  "task_type": "essay",
+  "task_prompt": "In your English class you have been talking about the environment. Now, your English\nteacher has asked you to write an essay.\n\nWrite an essay using all the notes and giving reasons for your point of view.\n\nEvery country in the world has problems with pollution and damage to the environment.\nDo you think these problems can be solved?\n\nNotes\nWrite about:\n1. transport\n2. rivers and seas\n3. ...................................... (your own idea)",
+  "candidate_response": "To begin with pollution and damage to the environment is the most serious and difficult problem for countries of all over the world. Scientists of different countries predict a global ecocatastrophe if people won’t change their attitude to our planet.\nFirst of all a huge damage to the environment brings a transport. People can’t imagine their living without cars, buses, trains, ships and planes. But it’s an open secret that one of disadvantage of these accustomed things is harmful exhaust. Needless to say that use of environment friendly engines helps us to save atmosphere from pollution.\nIn addition to this our rivers and seas are in not less danger situation. It’s a fact of common knowledge that numerous factories and plants pour off their waste to ponds. Obviously that cleaning manufacturing water helps to avoid extinction of ocean residents.\nApart from this I’m inclined to believe that every person can and must contribute to solving this important problem. Doing a little steps for protection our environment every day we will be able to save our Earth. And it’s a task of each of us.",
+  "expected_marks": {
+    "content": 4,
+    "communicative_achievement": 3,
+    "organisation": 3,
+    "language": 3
+  },
+  "marks_source": "167791 handbook digital Candidate A examiner marks",
+  "examiner_commentary": "Near-complete Content stops at 4 when third aspect/full solutions are missing.",
+  "task_prompt_checksum": "55b5def94eff75ba4a8972c9899421ad8aa76d7ba48f959531abb7b13f1b4a63",
+  "candidate_response_checksum": "8864b466c0295a2269177719614998d616f4048ee1f5a1f2954f175c0d6057e5",
+  "source_verification": {
+    "task_prompt": "verified",
+    "candidate_response": "verified",
+    "marks_source": "167791 handbook digital Candidate A examiner marks"
+  }
+}

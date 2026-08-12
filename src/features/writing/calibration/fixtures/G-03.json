@@ -1,0 +1,25 @@
+{
+  "case_id": "G-03",
+  "label": "Environmental essay C",
+  "source_family": "digital",
+  "source_reference": "167791-b2-first-handbook.pdf pp.39–40 digital Candidate C; task from 174037 Writing 2022 Part 1 Q1",
+  "sample_identity": "Digital sample · Question 1 · Candidate C",
+  "task_type": "essay",
+  "task_prompt": "In your English class you have been talking about the environment. Now, your English\nteacher has asked you to write an essay.\n\nWrite an essay using all the notes and giving reasons for your point of view.\n\nEvery country in the world has problems with pollution and damage to the environment.\nDo you think these problems can be solved?\n\nNotes\nWrite about:\n1. transport\n2. rivers and seas\n3. ...................................... (your own idea)",
+  "candidate_response": "DEVELOPMENT VS ENVIRONMENT\nIf we surf the web looking for pollution and environmental catastrophes, we will find out that every country in the world suffers them. This is a natural consequence of the struggle between development and environment.\nIf a country decided to live isolated from the rest of the world, living on what it can naturally grow and produce, it surely wouldn’t be highly polluted. But we all want exotic food and technological items from all over the world, so we have to pay the price.\nInvesting on electrical transport would benefit the environment a lot. Even more if this electricity came from a natural source of energy like wind, rivers and solar boards. It’s difficult to achieve this because petrol companies will fight against these actions.\nWe also have to take care of our rivers and seas. We all have heard about factories throwing highly toxic substances to rivers, without minimizing their poisoning effects. A really strict law should be applied to fine these factories and make them change their policy.\nBut what about ourselves? We also can do a lot! If, when possible, we bought larger packs of food, we would be producing less rubbish. And this is only an example!",
+  "expected_marks": {
+    "content": 5,
+    "communicative_achievement": 5,
+    "organisation": 4,
+    "language": 5
+  },
+  "marks_source": "167791 handbook digital Candidate C examiner marks",
+  "examiner_commentary": "High performance can still have Organisation 4.",
+  "task_prompt_checksum": "55b5def94eff75ba4a8972c9899421ad8aa76d7ba48f959531abb7b13f1b4a63",
+  "candidate_response_checksum": "7a3f91df0830bcb4dd80ae0f47a42810fc3abb32471ac2f1e8cd73c83991166f",
+  "source_verification": {
+    "task_prompt": "verified",
+    "candidate_response": "verified",
+    "marks_source": "167791 handbook digital Candidate C examiner marks"
+  }
+}

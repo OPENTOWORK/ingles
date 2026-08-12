@@ -1,0 +1,252 @@
+{
+  "fixture_name": "standard",
+  "description": "Realistic B2 essay, 13/20, two genuine strengths, five local annotations, one global register issue and one punctuation observation with no local mark.",
+  "candidate_response": "Nowadays, fast food is more popular than ever, especially among young people who live in big cities. Some people claim that it is always a bad thing to eat, but I do not completely agree with this opinion.\n\nFirstly, it is true that eating fast food every day is harmful for our health. My friend eat hamburgers three times a week and he always feels tired in the afternoon. Doctors say that too much salt and sugar can cause serious problems.\n\nHowever, we must also considerate the price and the convenience. For a student who works and studies, a cheap meal that arrives in ten minutes is sometimes the only realistic option.\n\nIn my opinion, the problem is not fast food itself but how often we eat it. If we cook at home during the week and enjoy a burger ocassionally, we can have a balanced life without giving up the things we like.",
+  "task_prompt": "In your English class you have been talking about food and health.\nYour teacher has asked you to write an essay.\n\nWrite an essay using all the notes and give reasons for your point of view.\n\nSome people say that fast food is always a bad thing to eat. Do you agree?\n\nNotes:\n- health\n- price and convenience\n- your own idea\n\nWrite your essay in 140–190 words.",
+  "word_count": 154,
+  "feedback_payload": {
+    "engine_version": "3.0.0",
+    "schema_version": "1.0.0",
+    "provenance": {
+      "engine_version": "3.0.0",
+      "schema_version": "1.0.0",
+      "doc_versions": {
+        "task_requirements": "1.0",
+        "teacher_dna": "1.0",
+        "cambridge_assessment": "1.0",
+        "feedback_ux": "1.0",
+        "technical_handoff": "1.0",
+        "acceptance_validation": "1.0"
+      },
+      "prompt_versions": {
+        "task_analysis": "1.0.0",
+        "observation_assessment": "1.0.0",
+        "cambridge_assessment": "1.0.0",
+        "feedback_composition": "1.0.0"
+      },
+      "model_config": {
+        "model": "gpt-4o-2024-08-06",
+        "snapshot_id": "gpt-4o-2024-08-06",
+        "temperature": 0,
+        "response_format": "json_schema"
+      }
+    },
+    "global_result": {
+      "criteria": {
+        "content": 4,
+        "communicative_achievement": 3,
+        "organisation": 3,
+        "language": 3
+      },
+      "raw_total": 13,
+      "max_total": 20,
+      "level_indicator": null,
+      "single_task_scale_claim_allowed": false,
+      "disclaimer": "This is a DRALO correction based on the Cambridge B2 First assessment criteria. It is not an official Cambridge result."
+    },
+    "criterion_feedback": [
+      {
+        "criterion": "content",
+        "mark": 4,
+        "summary": "You cover everything the task asks for; the health point needs a concrete consequence.",
+        "expanded": {
+          "what_worked": "All three notes are addressed and the own idea is genuinely the writer’s own.",
+          "what_limited_the_band": "The health argument is asserted rather than developed with a concrete consequence.",
+          "evidence": [
+            {
+              "quote": "Doctors say that too much salt and sugar can cause serious problems",
+              "occurrence_index": 0,
+              "span_start": 374,
+              "span_end": 441,
+              "bound_text": "Doctors say that too much salt and sugar can cause serious problems"
+            }
+          ],
+          "next_focus": "Develop important claims with a specific consequence or example so the reader sees why they matter."
+        }
+      },
+      {
+        "criterion": "communicative_achievement",
+        "mark": 3,
+        "summary": "Your opinion is clear from the start, but the closing drifts below essay register.",
+        "expanded": {
+          "what_worked": "The essay register is held and the opinion is signalled early and clearly.",
+          "what_limited_the_band": "The closing sentence slips towards the conversational.",
+          "evidence": [
+            {
+              "quote": "but I do not completely agree with this opinion",
+              "occurrence_index": 0,
+              "span_start": 157,
+              "span_end": 204,
+              "bound_text": "but I do not completely agree with this opinion"
+            }
+          ],
+          "next_focus": "Keep closing lines in the same neutral essay register you use in the body."
+        }
+      },
+      {
+        "criterion": "organisation",
+        "mark": 3,
+        "summary": "The essay shape is easy to follow, but one sequencing signpost is left unfinished.",
+        "expanded": {
+          "what_worked": "Paragraphing is clear and the conclusion returns to the question.",
+          "what_limited_the_band": "A sequencing marker is opened and never completed.",
+          "evidence": [
+            {
+              "quote": "Firstly,",
+              "occurrence_index": 0,
+              "span_start": 207,
+              "span_end": 215,
+              "bound_text": "Firstly,"
+            }
+          ],
+          "next_focus": "When you open a sequence like \"Firstly\", name the next step clearly in the following paragraph."
+        }
+      },
+      {
+        "criterion": "language",
+        "mark": 3,
+        "summary": "You try useful B2 structures, but agreement, word form and spelling slips still show.",
+        "expanded": {
+          "what_worked": "A good range of structures for the level, including a conditional in the conclusion.",
+          "what_limited_the_band": "Slips in verb agreement, word form and spelling remain visible.",
+          "evidence": [
+            {
+              "quote": "My friend eat hamburgers",
+              "occurrence_index": 0,
+              "span_start": 286,
+              "span_end": 310,
+              "bound_text": "My friend eat hamburgers"
+            }
+          ],
+          "next_focus": "Before submitting, read once for subject-verb agreement, word form and spelling slips."
+        }
+      }
+    ],
+    "opening_strengths": [
+      {
+        "strength_id": "str_1",
+        "observation_id": "obs_66a3256963c0",
+        "headline": "Your opinion is clear and qualified.",
+        "explanation": "\"I do not completely agree\" answers the question and leaves room for the argument you then build."
+      },
+      {
+        "strength_id": "str_2",
+        "observation_id": "obs_94c5f7490bd3",
+        "headline": "Your own idea reframes the question.",
+        "explanation": "Saying the problem is frequency rather than the food itself gives the essay a position of its own."
+      }
+    ],
+    "annotations": [
+      {
+        "annotation_id": "ann_1",
+        "observation_id": "obs_66a3256963c0",
+        "category_key": "strength",
+        "span_start": 157,
+        "span_end": 204,
+        "original_text": "but I do not completely agree with this opinion",
+        "feedback_kind": "strength",
+        "local_explanation": "This is the move the task is asking for: a position that answers the question without flattening it."
+      },
+      {
+        "annotation_id": "ann_2",
+        "observation_id": "obs_0a47bab5df2d",
+        "category_key": "organisation",
+        "span_start": 207,
+        "span_end": 215,
+        "original_text": "Firstly,",
+        "feedback_kind": "teaching_prompt",
+        "local_explanation": "You open a sequence here. Reading your next paragraph, where does the reader expect the second step to appear?",
+        "teaching_prompt": "Reread this sentence and decide what the reader still needs to know."
+      },
+      {
+        "annotation_id": "ann_3",
+        "observation_id": "obs_472fae3864c0",
+        "category_key": "grammar",
+        "span_start": 286,
+        "span_end": 310,
+        "original_text": "My friend eat hamburgers",
+        "feedback_kind": "correction",
+        "local_explanation": "After a singular subject the present simple takes -s. You use this form correctly elsewhere, so this is a slip worth a final check.",
+        "suggested_change": "My friend eats hamburgers"
+      },
+      {
+        "annotation_id": "ann_4",
+        "observation_id": "obs_4e7db1a2fbde",
+        "category_key": "content",
+        "span_start": 374,
+        "span_end": 441,
+        "original_text": "Doctors say that too much salt and sugar can cause serious problems",
+        "feedback_kind": "teaching_prompt",
+        "local_explanation": "You bring doctors in to support the argument. What single consequence could you add so the reader feels why it matters?",
+        "teaching_prompt": "Reread this sentence and decide what the reader still needs to know."
+      },
+      {
+        "annotation_id": "ann_5",
+        "observation_id": "obs_e4bff548211f",
+        "category_key": "vocabulary",
+        "span_start": 453,
+        "span_end": 477,
+        "original_text": "we must also considerate",
+        "feedback_kind": "correction",
+        "local_explanation": "\"Considerate\" describes a kind person. The verb you need here is \"consider\", and the rest of the sentence already works.",
+        "suggested_change": "we must also consider"
+      },
+      {
+        "annotation_id": "ann_6",
+        "observation_id": "obs_94c5f7490bd3",
+        "category_key": "strength",
+        "span_start": 643,
+        "span_end": 702,
+        "original_text": "the problem is not fast food itself but how often we eat it",
+        "feedback_kind": "strength",
+        "local_explanation": "The contrast structure carries a genuinely original point, and it lands in one sentence."
+      },
+      {
+        "annotation_id": "ann_7",
+        "observation_id": "obs_dbe960a078d5",
+        "category_key": "spelling",
+        "span_start": 758,
+        "span_end": 770,
+        "original_text": "ocassionally",
+        "feedback_kind": "correction",
+        "local_explanation": "Two c’s and one s: occasionally. The word is right, only the letters slipped.",
+        "suggested_change": "occasionally"
+      }
+    ],
+    "review_next": [
+      {
+        "review_id": "rev_1",
+        "concept": "Completing a sequence you have opened",
+        "reason": "An unfinished sequence leaves the reader waiting for a step you promised to give.",
+        "source": "observation",
+        "source_ids": [
+          "obs_0a47bab5df2d"
+        ],
+        "resource_key": null
+      },
+      {
+        "review_id": "rev_2",
+        "concept": "Present simple: third person -s",
+        "reason": "Third-person -s is a small form that examiners notice quickly when it slips in a controlled script.",
+        "source": "observation",
+        "source_ids": [
+          "obs_472fae3864c0"
+        ],
+        "resource_key": null
+      },
+      {
+        "review_id": "rev_3",
+        "concept": "Developing a claim with one consequence",
+        "reason": "Claims that name a problem without showing its effect read thinner than fully developed arguments.",
+        "source": "observation",
+        "source_ids": [
+          "obs_4e7db1a2fbde"
+        ],
+        "resource_key": null
+      }
+    ],
+    "final_cta": "Write another task",
+    "resource_key": null,
+    "learner_history_applied": false
+  }
+}

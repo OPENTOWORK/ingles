@@ -1,0 +1,25 @@
+{
+  "case_id": "G-04",
+  "label": "Book review D",
+  "source_family": "digital",
+  "source_reference": "167791-b2-first-handbook.pdf pp.40–41 digital Candidate D; task from 174037 Writing 2022 Part 2 Q2",
+  "sample_identity": "Digital sample · Question 2 · Candidate D",
+  "task_type": "review",
+  "task_prompt": "You see this announcement in your college English-language magazine.\n\nBook reviews wanted\nHave you read a book in which the main character behaved in a surprising way?\nWrite us a review of the book, explaining what the main character did and why it was surprising.\nTell us whether or not you would recommend this book to other people.\nThe best reviews will be published in the magazine.\n\nWrite your review.",
+  "candidate_response": "“Life of Buddah”: A Book Review\nWhat would you do if you were born as a prince with all the exclusive fasilities to enjoy this material world? yes, most of people will celebrate and enjoy every single right that they have as a son of a king. Beautiful women, money, parties and all senses’ gratification stuff. Surprisingly, it didn’t work that way for little Gautama who in the future would be a Buddah.\nIn the book “Life of Buddha”, it is told that Gautama was born as a prince. He got all the facilities to make him being comfortable staying in the palace. The king didn’t allow him to get out from the palace for outside of the palace is the place of real life happened.\nOne day, the king asked him to get married but the prince rejected it and decided to leave the palace instead. There, he started his spiritual journey and later on had self realization and became a buddha.\nThis book is suitable for you who like to read about someone’s autobiography and life’s lesson. As a reader I can say that I learn a lot from this book. High recommended as something to read before going to bed!",
+  "expected_marks": {
+    "content": 5,
+    "communicative_achievement": 3,
+    "organisation": 3,
+    "language": 3
+  },
+  "marks_source": "167791 handbook digital Candidate D examiner marks",
+  "examiner_commentary": "Complete task fulfilment can coexist with straightforward Band 3 execution.",
+  "task_prompt_checksum": "a46d8804831d4dfde77ac160595ad7c3fb50abb39558bb514a855dd8336ad044",
+  "candidate_response_checksum": "85949e2bd85bb9010257197d1b33ff1a47956f2cb45d6d2be88d6aa15bfd18e0",
+  "source_verification": {
+    "task_prompt": "verified",
+    "candidate_response": "verified",
+    "marks_source": "167791 handbook digital Candidate D examiner marks"
+  }
+}

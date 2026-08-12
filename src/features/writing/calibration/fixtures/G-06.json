@@ -1,0 +1,25 @@
+{
+  "case_id": "G-06",
+  "label": "Informal email F",
+  "source_family": "digital",
+  "source_reference": "167791-b2-first-handbook.pdf pp.42–43 digital Candidate F; task from 174037 Writing 2022 Part 2 Q4",
+  "sample_identity": "Digital sample · Question 4 · Candidate F",
+  "task_type": "informal_email",
+  "task_prompt": "You have received this email from your English-speaking friend David.\n\nFrom: David\nSubject: touring holiday\n\nSome college friends of mine are visiting your area soon for a week's touring holiday. They would\nlike to travel around and learn about your local area and its history.\n\nCan you tell me about some of the places they could visit? What’s the best way to travel around –\ncar, bike or coach?\n\nThanks,\nDavid\n\nWrite your email.",
+  "candidate_response": "Dear David,\nI’m glad your friends are visiting my area soon for a week’s touring holiday. I have many ideas what I can show them and tell about.\nIn my opinion the best way to travel around will be by bike because of small distances between the places and views are amazing.\nMy area includes also beautiful Baltic Sea which many tourist visit especially in summer. Your friends could sunbath or swim if they would like but the water is quite cold in this season. Beautiful sightseeing of sunrise is the best memorise!\nYou wrote that they are intrested in history of my local area. That’s great! We have museum of our local history where I can go with them. Tickets are not so expensive and I can think about some discount.\nWhat do you think about it? Would you mind send me some your ideas?\nI look forward to hearing from you soon.\nBest wishes,\nSam",
+  "expected_marks": {
+    "content": 5,
+    "communicative_achievement": 3,
+    "organisation": 4,
+    "language": 3
+  },
+  "marks_source": "167791 handbook digital Candidate F examiner marks",
+  "examiner_commentary": "Strong structure/reference can produce Organisation 4.",
+  "task_prompt_checksum": "77f925c7e807170198ec715135e4e2547fb02064c7610991c5a4668754225043",
+  "candidate_response_checksum": "0354497f654b03f2851b61c495fa417742c0433b4b44232cbc997e7108f2b18e",
+  "source_verification": {
+    "task_prompt": "verified",
+    "candidate_response": "verified",
+    "marks_source": "167791 handbook digital Candidate F examiner marks"
+  }
+}

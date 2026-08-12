@@ -167,28 +167,45 @@ export function clearAllRoleCaches() {
 }
 
 async function fetchRoleNameFromDb(userId) {
-  const { data, error } = await supabase
-    .from('user_profiles')
+  // Real tables: Usuarios_y_Perfil_users (rol_id) and Usuarios_y_Perfil_profiles.
+  // Do not depend on the TABLE_NAME_MAP alias `user_profiles` alone — query the
+  // physical relation names so server and remapped-client paths stay consistent.
+  const { data: userRow, error: userError } = await supabase
+    .from('Usuarios_y_Perfil_users')
     .select('rol_id, Usuarios_y_Perfil_roles ( nombre )')
     .eq('id', userId)
     .maybeSingle();
 
-  const embedded = data?.Usuarios_y_Perfil_roles;
+  const embedded = userRow?.Usuarios_y_Perfil_roles;
   const embeddedName = Array.isArray(embedded) ? embedded[0]?.nombre : embedded?.nombre;
-  if (!error && embeddedName) return embeddedName;
+  if (!userError && embeddedName) return embeddedName;
 
-  const { data: userRow, error: userError } = await supabase
-    .from('user_profiles')
-    .select('rol_id')
-    .eq('id', userId)
-    .single();
+  let rolId = userRow?.rol_id ?? null;
+  if (!rolId) {
+    const { data: profileRow } = await supabase
+      .from('Usuarios_y_Perfil_profiles')
+      .select('rol_id')
+      .eq('user_id', userId)
+      .maybeSingle();
+    rolId = profileRow?.rol_id ?? null;
+  }
 
-  if (userError || !userRow?.rol_id) return 'student';
+  if (!rolId) {
+    // Legacy alias path (maps to Usuarios_y_Perfil_users in supabaseClient).
+    const { data: aliasRow } = await supabase
+      .from('user_profiles')
+      .select('rol_id')
+      .eq('id', userId)
+      .maybeSingle();
+    rolId = aliasRow?.rol_id ?? null;
+  }
+
+  if (!rolId) return 'student';
 
   const { data: roleRow, error: roleError } = await supabase
     .from('Usuarios_y_Perfil_roles')
     .select('nombre')
-    .eq('id', userRow.rol_id)
+    .eq('id', rolId)
     .single();
 
   if (roleError || !roleRow?.nombre) return 'student';

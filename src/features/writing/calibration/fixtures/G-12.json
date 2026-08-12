@@ -1,0 +1,25 @@
+{
+  "case_id": "G-12",
+  "label": "Course review F",
+  "source_family": "paper",
+  "source_reference": "182410-first-writing-sample-answers-and-examiner-comments-2015.pdf Question 4 Candidate F; task from 178516 Writing 2022 Part 2 Q4",
+  "sample_identity": "Paper sample · Question 4 · Candidate F",
+  "task_type": "review",
+  "task_prompt": "You see this announcement on an English-language website:\n\nReviews wanted\nCourses\nHave you been on a course recently? Please tell us about it! It could be any type of\ncourse, like a sports course, photography course or language course. What were the\nclasses like? What was the most interesting thing you learned? Would you recommend\nthe course to other people?\nThe best reviews will be published in next month’s magazine.\n\nWrite your review.",
+  "candidate_response": "The course I have been recently is a language course. In september I went to a Italian course for improving my level of Italian, with a native teacher, Andrea.\nThe classes were very funny. Everyday when we arrived to the class he gave us a song in which there were gaps which we had to filling them while we listened the song. After that we did differents exercise, the majority of them for improving our vocabulary. For instance we spoke about restaurant, shops, cinema and so on.\nThe most interesting thing that I learned was how to prepare a theater play, and it was fantastic. During a week we wrote a play based on a book, and the last day of the week we interpreted it. Everyone had a different paper on it. For me it was an unforgetable experience, because I spent a wonderful time doing it and I learned a lot of idioms.\nI would recommend this course because Andrea is a nice person who teach you with interesting exercise. Learning Italian isn’t boring with him.",
+  "expected_marks": {
+    "content": 5,
+    "communicative_achievement": 3,
+    "organisation": 4,
+    "language": 3
+  },
+  "marks_source": "182410 sample answers 2015 Question 4 Candidate F examiner marks",
+  "examiner_commentary": "Clear paragraph functions/reference support Organisation 4.",
+  "task_prompt_checksum": "315fe04b080b0a13ee643ec799aedefb5dd494ace023bdef2b2e6bf380c8dfb1",
+  "candidate_response_checksum": "af63b794651638c15b4c2d3c8f71286e2a23604962a929f40bb6890ca413ebde",
+  "source_verification": {
+    "task_prompt": "verified",
+    "candidate_response": "verified",
+    "marks_source": "182410 sample answers 2015 Question 4 Candidate F examiner marks"
+  }
+}

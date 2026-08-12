@@ -26,6 +26,12 @@ import {
   generateLevelsJustificacionWithOpenAI,
   saveLevelsJustificacion,
 } from '@/lib/levelsJustificacionesServer';
+import {
+  isWritingEngineV3FlagEnabled,
+  logWritingV3FlagBootOnce,
+} from '@/features/writing/config/writing-v3-flags';
+import { resolveWritingV3AccessForUser } from '@/features/writing/services/orchestration/writing-v3-access.server';
+import { evaluateWritingV3 } from '@/features/writing/services/orchestration/evaluate-writing-v3.server';
 
 function clip(text, max = 12000) {
   const t = String(text || '').trim();
@@ -64,6 +70,154 @@ export async function handleExamWritingCorrection(userId, body, ctx = {}) {
     return { ok: false, status: 400, error: 'essay is required' };
   }
 
+  logWritingV3FlagBootOnce();
+
+  const level = String(body.level || 'b2').trim().toLowerCase();
+  // Client cannot force engine choice — only the server kill switch decides.
+  void body.forceWritingV3;
+  void body.engine;
+  void body.forceLegacy;
+
+  if (isWritingEngineV3FlagEnabled() && level === 'b2') {
+    const access = await resolveWritingV3AccessForUser({
+      userId,
+      email: ctx.userEmail,
+    });
+    if (access.allowed) {
+      const v3 = await evaluateWritingV3({
+        user_id: userId,
+        candidate_response: essay,
+        structured_exam_context: body.structuredExamContext ?? null,
+        task_context: body.taskContext ?? null,
+        writing_type: body.writingType ?? null,
+        submission_source:
+          body.deferredExamMode === true ? 'exam_mode' : 'skill_practice',
+        pregunta_id: body.pregunta_id ?? null,
+        examen_id: body.examen_id ?? null,
+        parte_numero: body.parte_numero ?? null,
+      });
+
+      if (v3.ok) {
+        const usage = v3.usage_summary;
+        await recordAiUsageSuccess({
+          userId,
+          userEmail: ctx.userEmail,
+          accessToken: ctx.accessToken,
+          action: AI_ACTIONS.EXAM_WRITING_CORRECTION,
+          model: usage?.actual_models?.assessment || 'gpt-4o-2024-08-06',
+          usage: usage
+            ? {
+                model: usage.actual_models.assessment || 'gpt-4o-2024-08-06',
+                input_tokens: usage.input_tokens,
+                output_tokens: usage.output_tokens,
+                total_tokens: usage.total_tokens,
+              }
+            : undefined,
+          metadata: {
+            engine: 'v3',
+            level,
+            execution_id: v3.execution_id,
+            submission_id: v3.submission_id,
+            wordCount: v3.scores?.wordCount,
+            deferredExamMode: body.deferredExamMode === true,
+            token_source: 'provider_reported',
+            cost_usd: usage?.cost_usd,
+            latency_ms: usage?.latency_ms,
+            retry_count: v3.usage?.filter((u) => u.retry).length ?? 0,
+            // Compatibility: scores.total = raw_total for levels_puntuaciones writers.
+            // Examiner does not apply the >=12 rule; progression adapters may.
+            levels_puntuaciones: 'raw_total_via_scores_total',
+          },
+        });
+
+        return {
+          ok: true,
+          result: {
+            engine: 'v3',
+            feedback: '',
+            scores: v3.scores,
+            feedback_payload: v3.feedback_payload,
+            candidate_response: v3.candidate_response,
+            task_prompt_snapshot: v3.task_prompt_snapshot,
+            submission_id: v3.submission_id,
+            execution_id: v3.execution_id,
+            learner_history_applied: v3.learner_history_applied,
+          },
+        };
+      }
+
+      // Invalid/incomplete v3: never invent marks. Persist provenance already done.
+      // Operational fallback: legacy once, only when no completed v3 assessment exists.
+      await recordAiUsageFailure({
+        userId,
+        action: AI_ACTIONS.EXAM_WRITING_CORRECTION,
+        model: v3.usage_summary?.actual_models?.assessment || 'gpt-4o-2024-08-06',
+        errorCode: v3.code || 'WRITING_V3_FAILED',
+        metadata: {
+          engine: 'v3',
+          level,
+          execution_id: v3.execution_id,
+          validation_status: v3.validation_status,
+          fallback: 'legacy_once',
+        },
+      });
+
+      const legacy = await evaluateCambridgeEssay({
+        essay,
+        level: body.level,
+        taskContext: body.taskContext,
+        structuredExamContext: body.structuredExamContext,
+        wordMin: body.wordMin,
+        wordMax: body.wordMax,
+      });
+
+      if (!legacy.ok) {
+        return {
+          ok: false,
+          status: v3.status || legacy.status || 500,
+          error: v3.error || legacy.error,
+          code: v3.code || 'WRITING_V3_AND_LEGACY_FAILED',
+          diagnostics: v3.diagnostics,
+        };
+      }
+
+      const usage = usageFromTextEstimate(
+        getDefaultModel(),
+        essay + JSON.stringify(body.taskContext || body.structuredExamContext || ''),
+        legacy.feedback || '',
+      );
+      await recordAiUsageSuccess({
+        userId,
+        userEmail: ctx.userEmail,
+        accessToken: ctx.accessToken,
+        action: AI_ACTIONS.EXAM_WRITING_CORRECTION,
+        model: usage.model,
+        usage,
+        metadata: {
+          engine: 'legacy',
+          fallback_from: 'v3',
+          v3_execution_id: v3.execution_id,
+          v3_error: v3.code,
+          level,
+          // Single score path returned to client — prevents duplicate progression writes.
+          progression_source: 'legacy_fallback_only',
+          deferredExamMode: body.deferredExamMode === true,
+        },
+      });
+
+      return {
+        ok: true,
+        result: {
+          engine: 'legacy',
+          fallback_from: 'v3',
+          v3_execution_id: v3.execution_id,
+          feedback: legacy.feedback,
+          scores: legacy.scores,
+        },
+      };
+    }
+  }
+
   const result = await evaluateCambridgeEssay({
     essay,
     level: body.level,
@@ -79,7 +233,7 @@ export async function handleExamWritingCorrection(userId, body, ctx = {}) {
       action: AI_ACTIONS.EXAM_WRITING_CORRECTION,
       model: getDefaultModel(),
       errorCode: 'ESSAY_EVAL_FAILED',
-      metadata: { level: body.level },
+      metadata: { level: body.level, engine: 'legacy' },
     });
     return { ok: false, status: result.status || 500, error: result.error };
   }
@@ -99,14 +253,16 @@ export async function handleExamWritingCorrection(userId, body, ctx = {}) {
     usage,
     metadata: {
       level: body.level,
+      engine: 'legacy',
       wordCount: result.scores?.wordCount,
       deferredExamMode: body.deferredExamMode === true,
+      kill_switch: !isWritingEngineV3FlagEnabled() ? 'off' : undefined,
     },
   });
 
   return {
     ok: true,
-    result: { feedback: result.feedback, scores: result.scores },
+    result: { engine: 'legacy', feedback: result.feedback, scores: result.scores },
   };
 }
 

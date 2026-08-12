@@ -7,6 +7,7 @@ import { supabase } from '@/utils/supabaseClient';
 import { normalizeRoleName, getRoleNameByUserId, peekCachedRoleName } from '@/utils/authRoles';
 import { performLogout } from '@/utils/logout';
 import { isPublicPath } from '@/utils/publicRoutes';
+import { isWritingV3PreviewPath } from '@/utils/writingV3Preview';
 import Link from 'next/link';
 import DraloTagline from '@/components/DraloTagline';
 import { useActivityHeartbeat } from '@/hooks/useActivityHeartbeat';
@@ -43,7 +44,8 @@ export default function RootLayoutClient({ children }) {
   /** Solo bloquea hasta conocer la sesión; el rol se resuelve en segundo plano. */
   const [authPending, setAuthPending] = useState(() => {
     if (typeof window === 'undefined') return true;
-    return !isPublicPath(window.location.pathname);
+    const path = window.location.pathname;
+    return !isPublicPath(path) && !isWritingV3PreviewPath(path);
   });
   const [session, setSession] = useState(null);
   const [userRole, setUserRole] = useState('student');
@@ -60,7 +62,8 @@ export default function RootLayoutClient({ children }) {
   const lastAccessTokenRef = useRef(null);
 
   const isPublic = isPublicPath(pathname);
-  const allowWithoutAuth = isPublic;
+  /** Superficie interna de Writing v3: solo existe fuera de producción (Fase 8). */
+  const allowWithoutAuth = isPublic || isWritingV3PreviewPath(pathname);
   const heartbeatEnabled = Boolean(session) && !allowWithoutAuth;
   const clarityProjectId = process.env.NEXT_PUBLIC_CLARITY_PROJECT_ID || '';
   const clarityAnalyticsEnabled =
@@ -195,6 +198,25 @@ export default function RootLayoutClient({ children }) {
     const openCookieSettingsFromEvent = () => setShowCookieSettings(true);
     window.addEventListener('dralo:open-cookie-settings', openCookieSettingsFromEvent);
     return () => window.removeEventListener('dralo:open-cookie-settings', openCookieSettingsFromEvent);
+  }, []);
+
+  /**
+   * Un SW registrado en localhost sirve bundles cacheados y rompe el HMR, lo que
+   * acaba en errores de DOM de React. Se limpia en cualquier página, no solo en el buzón.
+   */
+  useEffect(() => {
+    if (process.env.NODE_ENV === 'production') return;
+    if (typeof navigator === 'undefined' || !('serviceWorker' in navigator)) return;
+
+    void navigator.serviceWorker.getRegistrations().then(async (registrations) => {
+      if (!registrations.length) return;
+      await Promise.all(registrations.map((registration) => registration.unregister()));
+      if ('caches' in window) {
+        const names = await window.caches.keys();
+        await Promise.all(names.map((name) => window.caches.delete(name)));
+      }
+      window.location.reload();
+    });
   }, []);
 
   if (!allowWithoutAuth && authPending) {

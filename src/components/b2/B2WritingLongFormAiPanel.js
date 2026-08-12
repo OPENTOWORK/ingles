@@ -7,6 +7,7 @@ import { callExamWritingCorrection,
   isDailyLimitError,
 } from '@/lib/ai/draloAiClient';
 import WritingFeedbackBody from '@/components/writing/WritingFeedbackBody';
+import WritingFeedbackPage from '@/components/writing/v3/WritingFeedbackPage';
 import { trackWritingErrors } from '@/lib/errorTracker';
 import { writingLimitLabel, LIMIT_REACHED } from '@/lib/aiUsageLimitCopy';
 
@@ -58,6 +59,7 @@ export default function B2WritingLongFormAiPanel({
   const [essay, setEssay] = useState('');
   const [aiFeedback, setAiFeedback] = useState('');
   const [scores, setScores] = useState(null);
+  const [v3Payload, setV3Payload] = useState(null);
   const [loading, setLoading] = useState(false);
   const [lastError, setLastError] = useState('');
   const [usageHint, setUsageHint] = useState('');
@@ -117,6 +119,7 @@ export default function B2WritingLongFormAiPanel({
     }
     setAiFeedback('');
     setScores(null);
+    setV3Payload(null);
     setLastError('');
   }, [storageKey]);
 
@@ -139,7 +142,7 @@ export default function B2WritingLongFormAiPanel({
 
   const wordCount = countWords(essay);
   const meetsWordRange = wordCount >= wordMin && wordCount <= wordMax;
-  const hasSubmitted = Boolean(aiFeedback || scores);
+  const hasSubmitted = Boolean(aiFeedback || scores || v3Payload);
   const usesDeferredExamCorrection = reviewExamCorrection === true;
   const limitReached = !usesDeferredExamCorrection && !usageUnlimited && usageRemaining === 0;
 
@@ -157,6 +160,7 @@ export default function B2WritingLongFormAiPanel({
     setLoading(true);
     setAiFeedback('');
     setScores(null);
+    setV3Payload(null);
 
     try {
       const structuredExamContext =
@@ -179,30 +183,45 @@ export default function B2WritingLongFormAiPanel({
             },
       });
 
-      const feedbackText = String(data.feedback || '').trim();
-      if (!feedbackText) {
-        throw new Error(
-          isEn
-            ? 'The examiner returned no feedback. Please try again.'
-            : 'El examinador no devolvió corrección. Inténtalo de nuevo.',
-        );
-      }
-
-      setAiFeedback(feedbackText);
-      if (data.scores && typeof data.scores === 'object') {
-        setScores(data.scores);
-        if (typeof onScoresReady === 'function') {
-          onScoresReady(data.scores);
+      if (data?.engine === 'v3' && data?.feedback_payload) {
+        // Validated v3 payload only — never invent or show partial Cambridge marks.
+        setV3Payload({
+          feedback_payload: data.feedback_payload,
+          candidate_response: data.candidate_response || text,
+          task_prompt_snapshot: data.task_prompt_snapshot || structuredExamContext || '',
+        });
+        if (data.scores && typeof data.scores === 'object') {
+          setScores(data.scores);
+          if (typeof onScoresReady === 'function') {
+            onScoresReady(data.scores);
+          }
         }
-      }
+      } else {
+        const feedbackText = String(data.feedback || '').trim();
+        if (!feedbackText) {
+          throw new Error(
+            isEn
+              ? 'The examiner returned no feedback. Please try again.'
+              : 'El examinador no devolvió corrección. Inténtalo de nuevo.',
+          );
+        }
 
-      void trackWritingErrors({
-        level: 'B2',
-        source: 'Exam Writing',
-        skill: 'Writing',
-        userText: text,
-        correctedText: feedbackText,
-      }).catch(() => {});
+        setAiFeedback(feedbackText);
+        if (data.scores && typeof data.scores === 'object') {
+          setScores(data.scores);
+          if (typeof onScoresReady === 'function') {
+            onScoresReady(data.scores);
+          }
+        }
+
+        void trackWritingErrors({
+          level: 'B2',
+          source: 'Exam Writing',
+          skill: 'Writing',
+          userText: text,
+          correctedText: feedbackText,
+        }).catch(() => {});
+      }
 
       await refreshUsageHint();
 
@@ -328,7 +347,23 @@ export default function B2WritingLongFormAiPanel({
         </p>
       ) : null}
 
-      {!examMode && aiFeedback ? (
+      {!examMode && v3Payload ? (
+        <div className="levels-b2-writing-panel__feedback" ref={feedbackRef}>
+          <WritingFeedbackPage
+            candidateResponse={v3Payload.candidate_response}
+            feedbackPayload={v3Payload.feedback_payload}
+            taskPrompt={v3Payload.task_prompt_snapshot || null}
+            onWriteAnother={() => {
+              setV3Payload(null);
+              setScores(null);
+              setAiFeedback('');
+              setLastError('');
+            }}
+          />
+        </div>
+      ) : null}
+
+      {!examMode && !v3Payload && aiFeedback ? (
         <div className="levels-b2-writing-panel__feedback" ref={scores ? undefined : feedbackRef}>
           <p className="levels-exam-split__section-title">
             {isEn ? 'Dralo writing feedback' : 'Corrección de Dralo'}
@@ -341,7 +376,7 @@ export default function B2WritingLongFormAiPanel({
         </div>
       ) : null}
 
-      {!examMode && scores ? (
+      {!examMode && !v3Payload && scores ? (
         <div className="levels-b2-writing-panel__scores" ref={feedbackRef}>
           <p className="levels-exam-split__section-title">
             {isEn ? 'Writing scores' : 'Puntuación del writing'}

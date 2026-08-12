@@ -1,0 +1,229 @@
+{
+  "id": "e2e-live",
+  "label": "Phase 10 real E2E (not a golden fixture)",
+  "candidate_response": "Technology is everywhere today and many people believe it makes life easier. In my opinion, technology helps us in many ways, but it also creates some problems.\n\nFirstly, communication is faster than ever. We can send messages to friends in other countries in seconds, and video calls let families stay in contact. This saves time and money.\n\nSecondly, technology is useful for work. People can work from home, share documents online and find information quickly. For students, online dictionaries and translation tools are also helpful.\n\nHowever, technology can make us lazy. Some people spend too many hours looking at screens and forget about exercise or meeting friends face to face. Also, when systems fail, people do not know what to do.\n\nIn conclusion, technology makes many tasks easier, but we should use it carefully so it does not control our free time.",
+  "task_prompt": "Write an essay in 140–190 words.\n\nIn your English class you have been talking about technology.\nNow your English teacher has asked you to write an essay.\n\nWrite an essay using all the notes and give reasons for your point of view.\n\nNotes\nWrite about:\n1. communication\n2. work\n3. ................... (your own idea)\n\nEssay question: Is technology making our lives easier?",
+  "feedback_payload": {
+    "engine_version": "3.0.0",
+    "schema_version": "1.0.0",
+    "provenance": {
+      "engine_version": "3.0.0",
+      "schema_version": "1.0.0",
+      "doc_versions": {
+        "task_requirements": "1.0",
+        "teacher_dna": "1.0",
+        "cambridge_assessment": "1.0",
+        "feedback_ux": "1.0",
+        "technical_handoff": "1.0",
+        "acceptance_validation": "1.0"
+      },
+      "prompt_versions": {
+        "task_analysis": "1.0.0",
+        "observation_assessment": "1.0.0",
+        "cambridge_assessment": "1.0.0",
+        "feedback_composition": "1.0.0"
+      },
+      "model_config": {
+        "model": "gpt-4o-2024-08-06",
+        "snapshot_id": "gpt-4o-2024-08-06",
+        "temperature": 0,
+        "response_format": "json_schema"
+      }
+    },
+    "global_result": {
+      "criteria": {
+        "content": 5,
+        "communicative_achievement": 3,
+        "organisation": 3,
+        "language": 3
+      },
+      "raw_total": 14,
+      "max_total": 20,
+      "level_indicator": null,
+      "single_task_scale_claim_allowed": false,
+      "disclaimer": "This is a DRALO correction based on the Cambridge B2 First assessment criteria. It is not an official Cambridge result."
+    },
+    "criterion_feedback": [
+      {
+        "criterion": "content",
+        "mark": 5,
+        "summary": "The content is fully developed and informative.",
+        "expanded": {
+          "what_worked": "You effectively addressed all the required points: communication, work, and your own idea about technology making people lazy. Your essay presents a clear point of view on whether technology makes life easier, supported by relevant examples and reasoning.",
+          "what_limited_the_band": "There were no limitations in this criterion as you met the highest band requirements.",
+          "evidence": [
+            {
+              "quote": "Firstly, communication is faster than ever. We can send messages to friends in other countries in seconds, and video calls let families stay in contact. This saves time and money.",
+              "occurrence_index": 0,
+              "span_start": 162,
+              "span_end": 341,
+              "bound_text": "Firstly, communication is faster than ever. We can send messages to friends in other countries in seconds, and video calls let families stay in contact. This saves time and money."
+            },
+            {
+              "quote": "Secondly, technology is useful for work. People can work from home, share documents online and find information quickly. For students, online dictionaries and translation tools are also helpful.",
+              "occurrence_index": 0,
+              "span_start": 343,
+              "span_end": 537,
+              "bound_text": "Secondly, technology is useful for work. People can work from home, share documents online and find information quickly. For students, online dictionaries and translation tools are also helpful."
+            },
+            {
+              "quote": "However, technology can make us lazy. Some people spend too many hours looking at screens and forget about exercise or meeting friends face to face.",
+              "occurrence_index": 0,
+              "span_start": 539,
+              "span_end": 687,
+              "bound_text": "However, technology can make us lazy. Some people spend too many hours looking at screens and forget about exercise or meeting friends face to face."
+            },
+            {
+              "quote": "In my opinion, technology helps us in many ways, but it also creates some problems.",
+              "occurrence_index": 0,
+              "span_start": 77,
+              "span_end": 160,
+              "bound_text": "In my opinion, technology helps us in many ways, but it also creates some problems."
+            },
+            {
+              "quote": "This saves time and money.",
+              "occurrence_index": 0,
+              "span_start": 315,
+              "span_end": 341,
+              "bound_text": "This saves time and money."
+            }
+          ],
+          "next_focus": "Continue to ensure all content points are addressed and developed with clear examples and reasoning."
+        }
+      },
+      {
+        "criterion": "communicative_achievement",
+        "mark": 3,
+        "summary": "The essay communicates straightforward ideas effectively.",
+        "expanded": {
+          "what_worked": "You used the conventions of an essay to communicate your ideas clearly, maintaining a neutral to semi-formal register appropriate for the task.",
+          "what_limited_the_band": "The essay mainly communicates straightforward ideas and does not explore more complex arguments or perspectives.",
+          "evidence": [
+            {
+              "quote": "Technology is everywhere today and many people believe it makes life easier.",
+              "occurrence_index": 0,
+              "span_start": 0,
+              "span_end": 76,
+              "bound_text": "Technology is everywhere today and many people believe it makes life easier."
+            },
+            {
+              "quote": "In conclusion, technology makes many tasks easier, but we should use it carefully so it does not control our free time.",
+              "occurrence_index": 0,
+              "span_start": 745,
+              "span_end": 864,
+              "bound_text": "In conclusion, technology makes many tasks easier, but we should use it carefully so it does not control our free time."
+            }
+          ],
+          "next_focus": "Work on developing more complex ideas and arguments to enhance the depth of your essays."
+        }
+      },
+      {
+        "criterion": "organisation",
+        "mark": 3,
+        "summary": "The organisation is clear but relies on basic structures.",
+        "expanded": {
+          "what_worked": "Your essay is well-organised with a clear introduction, body, and conclusion. You used linking words like 'Firstly', 'Secondly', and 'However' to structure your argument.",
+          "what_limited_the_band": "The organisation relies on conventional linking words and lacks more sophisticated organisational patterns.",
+          "evidence": [
+            {
+              "quote": "Firstly, communication is faster than ever.",
+              "occurrence_index": 0,
+              "span_start": 162,
+              "span_end": 205,
+              "bound_text": "Firstly, communication is faster than ever."
+            },
+            {
+              "quote": "Secondly, technology is useful for work.",
+              "occurrence_index": 0,
+              "span_start": 343,
+              "span_end": 383,
+              "bound_text": "Secondly, technology is useful for work."
+            },
+            {
+              "quote": "However, technology can make us lazy.",
+              "occurrence_index": 0,
+              "span_start": 539,
+              "span_end": 576,
+              "bound_text": "However, technology can make us lazy."
+            }
+          ],
+          "next_focus": "Experiment with a variety of cohesive devices and organisational patterns to create more sophisticated text structures."
+        }
+      },
+      {
+        "criterion": "language",
+        "mark": 3,
+        "summary": "The language is clear but lacks complexity.",
+        "expanded": {
+          "what_worked": "You used everyday vocabulary appropriately and controlled simple grammatical forms well.",
+          "what_limited_the_band": "There is limited use of less common vocabulary and complex grammatical structures.",
+          "evidence": [
+            {
+              "quote": "Technology is everywhere today and many people believe it makes life easier.",
+              "occurrence_index": 0,
+              "span_start": 0,
+              "span_end": 76,
+              "bound_text": "Technology is everywhere today and many people believe it makes life easier."
+            },
+            {
+              "quote": "People can work from home, share documents online and find information quickly.",
+              "occurrence_index": 0,
+              "span_start": 384,
+              "span_end": 463,
+              "bound_text": "People can work from home, share documents online and find information quickly."
+            }
+          ],
+          "next_focus": "Expand your use of less common vocabulary and complex grammatical structures to add variety and depth to your writing."
+        }
+      }
+    ],
+    "opening_strengths": [],
+    "annotations": [],
+    "review_next": [
+      {
+        "review_id": "rev_1",
+        "concept": "developing complex ideas",
+        "reason": "Your essay communicates straightforward ideas effectively, but developing more complex arguments will enhance the depth of your writing.",
+        "source": "assessment_limitation",
+        "source_ids": [
+          "communicative_achievement"
+        ],
+        "resource_key": null
+      },
+      {
+        "review_id": "rev_2",
+        "concept": "using a variety of cohesive devices",
+        "reason": "Your essay relies on basic linking words. Using a wider range of cohesive devices will improve the sophistication of your organisation.",
+        "source": "assessment_limitation",
+        "source_ids": [
+          "organisation"
+        ],
+        "resource_key": null
+      },
+      {
+        "review_id": "rev_3",
+        "concept": "expanding vocabulary and grammar",
+        "reason": "Incorporating less common vocabulary and complex grammatical structures will add variety and depth to your writing.",
+        "source": "assessment_limitation",
+        "source_ids": [
+          "language"
+        ],
+        "resource_key": null
+      }
+    ],
+    "final_cta": "Write another task",
+    "resource_key": null,
+    "learner_history_applied": false
+  },
+  "provenance": {
+    "execution_id": "b1464521-4108-46d9-b941-45cddf16c716",
+    "model": {
+      "model": "gpt-4o-2024-08-06",
+      "snapshot_id": "gpt-4o-2024-08-06",
+      "temperature": 0,
+      "response_format": "json_schema"
+    },
+    "generated_at": "2026-08-12T10:31:17.134Z",
+    "persistence": "memory"
+  }
+}

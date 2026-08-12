@@ -2,6 +2,7 @@ import { createServerClient } from '@supabase/ssr';
 import { NextResponse, type NextRequest } from 'next/server';
 import { getSupabaseAnonKey, getSupabaseUrl } from '@/lib/supabaseEnv';
 import { isPublicPath } from '@/utils/publicRoutes';
+import { isWritingV3PreviewPath } from '@/utils/writingV3Preview';
 
 /**
  * Server-side auth gate — same rules on mobile, tablet and desktop.
@@ -11,6 +12,14 @@ export async function middleware(request: NextRequest) {
   const pathname = request.nextUrl.pathname;
 
   if (isPublicPath(pathname)) {
+    return NextResponse.next();
+  }
+
+  // Writing v3 fixture surface (Phase 8). It renders static fixtures, reaches no
+  // database and no model, and exists ONLY outside production: in a production
+  // build the route itself refuses to render and this bypass never applies, so it
+  // is not a public path and no student can reach it.
+  if (isWritingV3PreviewPath(pathname)) {
     return NextResponse.next();
   }
 

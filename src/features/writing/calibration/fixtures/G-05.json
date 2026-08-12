@@ -1,0 +1,25 @@
+{
+  "case_id": "G-05",
+  "label": "Useful-thing article E",
+  "source_family": "digital",
+  "source_reference": "167791-b2-first-handbook.pdf pp.41–42 digital Candidate E; task from 174037 Writing 2022 Part 2 Q3",
+  "sample_identity": "Digital sample · Question 3 · Candidate E",
+  "task_type": "article",
+  "task_prompt": "You see this announcement on an English-language website.\n\nArticles wanted\nThe most useful thing I have ever learned.\nWhat is the most useful thing you have learned?\nWho did you learn it from? Why is it useful?\nWrite us an article answering these questions.\nWe will publish the best articles on our website.\n\nWrite your article.",
+  "candidate_response": "The most useful thing I have ever learned\nThe most useful thing i have learned is surely speaking English. I’ve been studing English for nine years till now. I used to take regular classes in these language which i found very interesting. Also, i learn English in school, my teacher is awesome but strict, so i have to study constantly. But most of all, i learn English, watching movies, TV shows. Allso cartoons when i was younger. When i came across a movie which was subtitled i turned the subtitle off. I enjoy wathing TV and movies on English.\nEnglish is the most spoken language across the world. It is studied all over the world. In order to get in a conversation with a stranger from other country, you need to speak English. I’m a swimmer, so i go on competissions in many countries, and in all of those countries i speak English. I want to study abroad when i finish highschool, so i’ll defenetly need English.\nAll in all, i enjoy speaking it, writing it, and I’m very glad I got to learn it, i find it very useful.",
+  "expected_marks": {
+    "content": 5,
+    "communicative_achievement": 3,
+    "organisation": 3,
+    "language": 3
+  },
+  "marks_source": "167791 handbook digital Candidate E examiner marks",
+  "examiner_commentary": "Detailed task completion does not automatically raise other criteria.",
+  "task_prompt_checksum": "254ed42d397114b94d761e36c8fdb894f0a037108a51366e3179baaee718d0f8",
+  "candidate_response_checksum": "1d7c93976fa802005147b2217bb11565ab63e30a2ee6c70e7e399f0f89231297",
+  "source_verification": {
+    "task_prompt": "verified",
+    "candidate_response": "verified",
+    "marks_source": "167791 handbook digital Candidate E examiner marks"
+  }
+}

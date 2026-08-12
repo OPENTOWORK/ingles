@@ -1,0 +1,25 @@
+{
+  "case_id": "G-09",
+  "label": "Fashion essay C",
+  "source_family": "paper",
+  "source_reference": "167791-b2-first-handbook.pdf pp.46–47 paper Candidate C; task from 178516 Writing 2022 Part 1 Q1",
+  "sample_identity": "Paper sample · Question 1 · Candidate C",
+  "task_type": "essay",
+  "task_prompt": "In your English class you have been talking about the fashion industry. Now, your English\nteacher has asked you to write an essay.\n\nWrite an essay using all the notes and giving reasons for your point of view.\n\nSome people say the fashion industry has a bad effect on people’s lives.\nDo you agree?\n\nNotes\nWrite about:\n1. whether people’s appearance is important\n2. the price of clothes\n3. …………………… (your own idea)",
+  "candidate_response": "The society we live today is characterised by technology in constant development, fast speed processes, information travelling and getting to people at a blink of an eye and a complex web of social networking. In this context, the fashion industry is becoming increasingly important and having a more and more paramount role in our lives.\nOn one hand, the fashion industry is undeniably a source of profit and income. It hires millions of people all over the world and generates millions of dollars every year. Furthermore, such profitable business is also believed to be able to spread and make known the culture of a people, encouraging and enhancing a better understanding of each other.\nNevertheless, for those who are neither impressed nor motivated by numbers and figures, the fashion industry is seen as one which segregates people, isolating those who not fit their laws and commands. It is stated that people place too much importance on appearance and the material, world, sadly true, and the fashion industry just spurs on such situation. Moreover, not only are the costs of fashion item unrealistically high, it is thought to be a money better spent on more pressing issues, such as poverty and hunger.\nI do believe that the fashion industry, as it is today, has a harmful effect, because it values a minority of people in detriment to the majority. However, it has such a wide reach that, it put into a good use, it can save lives.",
+  "expected_marks": {
+    "content": 5,
+    "communicative_achievement": 5,
+    "organisation": 5,
+    "language": 5
+  },
+  "marks_source": "167791 handbook paper Candidate C examiner marks",
+  "examiner_commentary": "Full high-band profile.",
+  "task_prompt_checksum": "f425c92e7d1905990e18c6351ce83d45b50bfee5b3d2b6a2b166e5e82b321109",
+  "candidate_response_checksum": "94a8316bf7be9ca932838a198f98df863a453a58c47bc9c568cdd2cb53c09fe8",
+  "source_verification": {
+    "task_prompt": "verified",
+    "candidate_response": "verified",
+    "marks_source": "167791 handbook paper Candidate C examiner marks"
+  }
+}

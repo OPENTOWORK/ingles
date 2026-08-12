@@ -1,0 +1,25 @@
+{
+  "case_id": "G-02",
+  "label": "Environmental essay B",
+  "source_family": "digital",
+  "source_reference": "167791-b2-first-handbook.pdf pp.38–39 digital Candidate B; task from 174037 Writing 2022 Part 1 Q1",
+  "sample_identity": "Digital sample · Question 1 · Candidate B",
+  "task_type": "essay",
+  "task_prompt": "In your English class you have been talking about the environment. Now, your English\nteacher has asked you to write an essay.\n\nWrite an essay using all the notes and giving reasons for your point of view.\n\nEvery country in the world has problems with pollution and damage to the environment.\nDo you think these problems can be solved?\n\nNotes\nWrite about:\n1. transport\n2. rivers and seas\n3. ...................................... (your own idea)",
+  "candidate_response": "I think that my country has problems with pollution to the environment like all other countries. This problem is normal for Russia. We have big problems with transport because there are too much cars in our country. And because of that we have problems with atmospeer, air in my city and in all Russia is really dirty and sometimes I can’t make a sigh because it smells around me and of course around that cars on the road. I’ve heard about tradition of one country. They don’t go anywhere by car one day a month or a year, they just use bycicle or their feet. I think it could be very good if we had a tradition like that.\nSo, what about the rivers and the seas? Yeah, there are some really good and clean rivers and seas where you can go, but there are not many of them. Once I saw the river OB in my city, it was about two years ago but I stil remember that in some places it was not blue, it was green or purple I didn’t really understand because it had different colours.\nI don’t know what should we do. Maybe we should just open our eyes and look what we did. But Russian people don’t care about the world around them many people care only about themselves an that’s all.\nSo, the best idea is look around and try to do something good for our planet and for us and our children.",
+  "expected_marks": {
+    "content": 3,
+    "communicative_achievement": 3,
+    "organisation": 3,
+    "language": 3
+  },
+  "marks_source": "167791 handbook digital Candidate B examiner marks",
+  "examiner_commentary": "Relevant discussion does not fully answer the central question.",
+  "task_prompt_checksum": "55b5def94eff75ba4a8972c9899421ad8aa76d7ba48f959531abb7b13f1b4a63",
+  "candidate_response_checksum": "6c959b1eff06083e2c1938c940b6f2abfbe6873a2e7240daff4289d84be57fb4",
+  "source_verification": {
+    "task_prompt": "verified",
+    "candidate_response": "verified",
+    "marks_source": "167791 handbook digital Candidate B examiner marks"
+  }
+}

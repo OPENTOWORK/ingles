@@ -36,5 +36,12 @@ export async function POST(req) {
   return aiSuccessJson({
     feedback: out.result.feedback,
     scores: out.result.scores,
+    engine: out.result.engine || 'legacy',
+    feedback_payload: out.result.feedback_payload,
+    candidate_response: out.result.candidate_response,
+    task_prompt_snapshot: out.result.task_prompt_snapshot,
+    submission_id: out.result.submission_id,
+    execution_id: out.result.execution_id,
+    learner_history_applied: out.result.learner_history_applied,
   });
 }
