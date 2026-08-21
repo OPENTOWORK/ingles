@@ -11,6 +11,11 @@ import { isWritingV3PreviewPath } from '@/utils/writingV3Preview';
 export async function middleware(request: NextRequest) {
   const pathname = request.nextUrl.pathname;
 
+  // Google Search Console (and similar) HTML verification files in /public.
+  if (/^\/google[a-z0-9]+\.html\/?$/i.test(pathname)) {
+    return NextResponse.next();
+  }
+
   if (isPublicPath(pathname)) {
     return NextResponse.next();
   }
