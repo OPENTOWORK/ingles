@@ -2,8 +2,10 @@ import BlogAdminCta from '@/components/blog/BlogAdminCta';
 import BlogCategorySection from '@/components/blog/BlogCategorySection';
 import BlogDiscoverBanner from '@/components/blog/BlogDiscoverBanner';
 import BlogFeaturedHero from '@/components/blog/BlogFeaturedHero';
+import BlogMasthead from '@/components/blog/BlogMasthead';
 import BlogTopicNav from '@/components/blog/BlogTopicNav';
 import { fetchPublishedBlogArticles } from '@/lib/blogArticles';
+import { unstable_noStore as noStore } from 'next/cache';
 import {
   BLOG_CONTENT_TYPE_META,
   BLOG_TYPE_ARTICLE,
@@ -32,6 +34,7 @@ function pickFeaturedPost(items) {
 }
 
 export default async function BlogPage() {
+  noStore();
   let items = [];
   let loadError = '';
 
@@ -47,57 +50,53 @@ export default async function BlogPage() {
   );
   const newsMeta = BLOG_CONTENT_TYPE_META[BLOG_TYPE_NEWS];
   const articleMeta = BLOG_CONTENT_TYPE_META[BLOG_TYPE_ARTICLE];
-  const featured = pickFeaturedPost(items);
 
   return (
     <main className="blog-mag">
-      <header className="blog-mag__masthead blog-mag__shell">
-        <p className="blog-mag__masthead-eyebrow">Blog Dralo</p>
-        <h1 className="blog-mag__masthead-title">
-          Reflexiones, consejos e ideas para aprender inglés
-        </h1>
-        <p className="blog-mag__masthead-lead">
-          Novedades de la plataforma, recursos para estudiantes y contenido en profundidad del
-          equipo Dralo. Practica, mejora y mantente al día.
-        </p>
-      </header>
+      <BlogMasthead />
 
       <div className="blog-mag__shell blog-mag__body">
         <BlogAdminCta />
-        <BlogTopicNav />
 
         {loadError ? (
           <p className="blog-page__empty" role="alert">
             {loadError}
           </p>
         ) : (
-          <>
-            <BlogFeaturedHero post={featured} />
-
-            <BlogCategorySection
-              id="blog-noticias"
-              title={newsMeta.labelPlural}
-              subtitle="Anuncios breves, lanzamientos y novedades de Dralo."
-              items={news}
-              emptyTitle={newsMeta.emptyTitle}
-              emptyText={newsMeta.emptyText}
-              previewLimit={3}
-            />
-
-            <BlogDiscoverBanner variant="practice" />
-
-            <BlogCategorySection
-              id="blog-articulos"
-              title={articleMeta.labelPlural}
-              subtitle="Guías, estrategias y recursos para practicar reading, listening, writing y speaking."
-              items={articles}
-              emptyTitle={articleMeta.emptyTitle}
-              emptyText={articleMeta.emptyText}
-              previewLimit={6}
-            />
-
-            <BlogDiscoverBanner variant="community" />
-          </>
+          <BlogTopicNav
+            newsPanel={
+              <>
+                {news.length > 0 ? <BlogFeaturedHero post={pickFeaturedPost(news)} /> : null}
+                <BlogCategorySection
+                  id="blog-noticias"
+                  title={newsMeta.labelPlural}
+                  subtitle="Anuncios breves, lanzamientos y novedades de Dralo."
+                  items={news}
+                  emptyTitle={newsMeta.emptyTitle}
+                  emptyText={newsMeta.emptyText}
+                  previewLimit={3}
+                  hideHead
+                />
+                <BlogDiscoverBanner variant="practice" />
+              </>
+            }
+            articlesPanel={
+              <>
+                {articles.length > 0 ? <BlogFeaturedHero post={pickFeaturedPost(articles)} /> : null}
+                <BlogCategorySection
+                  id="blog-articulos"
+                  title={articleMeta.labelPlural}
+                  subtitle="Guías, estrategias y recursos para practicar reading, listening, writing y speaking."
+                  items={articles}
+                  emptyTitle={articleMeta.emptyTitle}
+                  emptyText={articleMeta.emptyText}
+                  previewLimit={6}
+                  hideHead
+                />
+                <BlogDiscoverBanner variant="community" />
+              </>
+            }
+          />
         )}
       </div>
     </main>

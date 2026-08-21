@@ -1,3 +1,4 @@
+import BlogDraloBrand from '@/components/blog/BlogDraloBrand';
 import BlogPostGrid from '@/components/blog/BlogPostGrid';
 
 /**
@@ -9,6 +10,8 @@ import BlogPostGrid from '@/components/blog/BlogPostGrid';
  *   emptyTitle: string,
  *   emptyText: string,
  *   previewLimit?: number,
+ *   hideTitle?: boolean,
+ *   hideHead?: boolean,
  * }} props
  */
 export default function BlogCategorySection({
@@ -19,25 +22,43 @@ export default function BlogCategorySection({
   emptyTitle,
   emptyText,
   previewLimit = 6,
+  hideTitle = false,
+  hideHead = false,
 }) {
   const preview = items.slice(0, previewLimit);
   const hasMore = items.length > previewLimit;
 
   return (
-    <section className="blog-mag__category" id={id} aria-labelledby={`${id}-heading`}>
-      <div className="blog-mag__category-head">
-        <div>
-          <h2 id={`${id}-heading`} className="blog-mag__category-title">
-            {title}
-          </h2>
-          <p className="blog-mag__category-subtitle">{subtitle}</p>
+    <section
+      className="blog-mag__category"
+      id={id}
+      aria-labelledby={hideHead || hideTitle ? undefined : `${id}-heading`}
+      aria-label={hideHead || hideTitle ? title : undefined}
+    >
+      {hideHead ? null : (
+        <div className="blog-mag__category-head">
+          <div>
+            {hideTitle ? (
+              <>
+                <BlogDraloBrand variant="section" />
+                <p className="blog-mag__category-subtitle">{subtitle}</p>
+              </>
+            ) : (
+              <>
+                <h2 id={`${id}-heading`} className="blog-mag__category-title">
+                  {title}
+                </h2>
+                <p className="blog-mag__category-subtitle">{subtitle}</p>
+              </>
+            )}
+          </div>
+          {hasMore ? (
+            <a href={`#${id}-all`} className="blog-mag__category-link">
+              Ver todo
+            </a>
+          ) : null}
         </div>
-        {hasMore ? (
-          <a href={`#${id}-all`} className="blog-mag__category-link">
-            Ver todo
-          </a>
-        ) : null}
-      </div>
+      )}
 
       {items.length === 0 ? (
         <div className="blog-page__empty-state blog-page__empty-state--compact">

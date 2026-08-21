@@ -27,6 +27,14 @@ export function slugifyBlogTitle(title = '') {
 function getPublicDb() {
   return createClient(getSupabaseUrl(), getSupabaseAnonKey(), {
     auth: { autoRefreshToken: false, persistSession: false },
+    global: {
+      fetch: (url, options = {}) =>
+        fetch(url, {
+          ...options,
+          cache: 'no-store',
+          next: { revalidate: 0, ...(options.next || {}) },
+        }),
+    },
   });
 }
 

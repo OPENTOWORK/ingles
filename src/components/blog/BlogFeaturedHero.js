@@ -1,4 +1,6 @@
 import Link from 'next/link';
+import BlogAdminEditLink from '@/components/blog/BlogAdminEditLink';
+import BlogDraloBrand from '@/components/blog/BlogDraloBrand';
 import { formatBlogDate } from '@/lib/blogArticles';
 import { blogTypeMeta, normalizeBlogContentType } from '@/lib/blogContentTypes';
 
@@ -9,7 +11,9 @@ export default function BlogFeaturedHero({ post }) {
   if (!post) {
     return (
       <section className="blog-mag__featured blog-mag__featured--empty" aria-label="Destacado">
-        <div className="blog-mag__featured-visual blog-mag__featured-visual--placeholder" aria-hidden="true" />
+        <div className="blog-mag__featured-visual blog-mag__featured-visual--placeholder" aria-hidden="true">
+          <BlogDraloBrand variant="placeholder" />
+        </div>
         <div className="blog-mag__featured-copy">
           <p className="blog-mag__kicker">Blog Dralo</p>
           <h2 className="blog-mag__featured-title">Próximamente nuevas publicaciones</h2>
@@ -45,9 +49,16 @@ export default function BlogFeaturedHero({ post }) {
           <Link href={`/blog/${post.slug}`}>{post.title}</Link>
         </h2>
         {post.excerpt ? <p className="blog-mag__featured-excerpt">{post.excerpt}</p> : null}
-        <Link href={`/blog/${post.slug}`} className="blog-mag__featured-cta">
-          {meta.readCta}
-        </Link>
+        <div className="blog-mag__featured-actions">
+          <Link href={`/blog/${post.slug}`} className="blog-mag__featured-cta">
+            {meta.readCta}
+          </Link>
+          <BlogAdminEditLink
+            articleId={post.id}
+            contentType={post.content_type}
+            variant="hero"
+          />
+        </div>
       </div>
     </section>
   );

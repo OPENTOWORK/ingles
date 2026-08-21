@@ -177,61 +177,57 @@ export default function BlogArticleEditor({
             />
           </label>
 
-          {isArticle ? (
-            <div className={styles.coverBlock}>
-              <span className={styles.labelText}>Imagen de portada</span>
-              {form.coverImageUrl ? (
-                <div className={styles.coverPreview}>
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img src={form.coverImageUrl} alt="Portada del artículo" />
-                  <button
-                    type="button"
-                    className={styles.textBtn}
-                    onClick={() => onChange({ coverImageUrl: '' })}
-                  >
-                    Quitar portada
-                  </button>
-                </div>
-              ) : (
-                <p className={styles.coverEmpty}>Sin imagen de portada.</p>
-              )}
-              <label className={styles.uploadBtn}>
-                {uploading ? 'Subiendo…' : 'Subir portada'}
-                <input
-                  type="file"
-                  accept="image/jpeg,image/png,image/webp,image/gif"
-                  className={styles.fileInput}
-                  disabled={uploading}
-                  onChange={handleCoverUpload}
-                />
-              </label>
-            </div>
-          ) : null}
+          <div className={styles.coverBlock}>
+            <span className={styles.labelText}>Imagen de portada</span>
+            {form.coverImageUrl ? (
+              <div className={styles.coverPreview}>
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img src={form.coverImageUrl} alt={`Portada del ${meta.label.toLowerCase()}`} />
+                <button
+                  type="button"
+                  className={styles.textBtn}
+                  onClick={() => onChange({ coverImageUrl: '' })}
+                >
+                  Quitar portada
+                </button>
+              </div>
+            ) : (
+              <p className={styles.coverEmpty}>Sin imagen de portada.</p>
+            )}
+            <label className={styles.uploadBtn}>
+              {uploading ? 'Subiendo…' : 'Subir portada'}
+              <input
+                type="file"
+                accept="image/jpeg,image/png,image/webp,image/gif"
+                className={styles.fileInput}
+                disabled={uploading}
+                onChange={handleCoverUpload}
+              />
+            </label>
+          </div>
 
           <div className={styles.contentBlock}>
             <span className={styles.labelText}>Contenido del {meta.label.toLowerCase()}</span>
             <p className={styles.editorHint}>
               Selecciona texto y usa la barra como en Word: fuente, tamaño, negrita, cursiva,
-              hipervínculos{isArticle ? ' e imágenes' : ''}.
+              hipervínculos e imágenes.
             </p>
             <BlogRichTextEditor
               ref={richEditorRef}
               value={form.content}
               onChange={(content) => onChange({ content })}
-              onInsertImage={isArticle ? handleInlineImagePick : undefined}
+              onInsertImage={handleInlineImagePick}
               uploading={uploading}
               placeholder={meta.contentPlaceholder}
             />
-            {isArticle ? (
-              <input
-                ref={inlineImageInputRef}
-                type="file"
-                accept="image/jpeg,image/png,image/webp,image/gif"
-                className={styles.fileInput}
-                disabled={uploading}
-                onChange={handleInlineImage}
-              />
-            ) : null}
+            <input
+              ref={inlineImageInputRef}
+              type="file"
+              accept="image/jpeg,image/png,image/webp,image/gif"
+              className={styles.fileInput}
+              disabled={uploading}
+              onChange={handleInlineImage}
+            />
           </div>
 
           <label className={styles.checkbox}>
@@ -242,6 +238,12 @@ export default function BlogArticleEditor({
             />
             {meta.publishLabel}
           </label>
+          {!form.published ? (
+            <p className={styles.draftNotice} role="status">
+              Borrador: esta {meta.label.toLowerCase()} no se mostrará en /blog hasta que actives esta casilla y
+              guardes.
+            </p>
+          ) : null}
         </div>
       ) : (
         <div className={styles.panel}>

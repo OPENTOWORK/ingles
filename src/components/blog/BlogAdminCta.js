@@ -1,26 +1,11 @@
 'use client';
 
-import { useEffect, useState } from 'react';
 import Link from 'next/link';
-import { getClientAuth } from '@/utils/getClientAuth';
-import { canAccessBlogAdminPanel, getRoleNameByUserId } from '@/utils/authRoles';
+import useCanManageBlog from '@/hooks/useCanManageBlog';
 import { BLOG_CONTENT_TYPE_META, BLOG_TYPE_ARTICLE, BLOG_TYPE_NEWS } from '@/lib/blogContentTypes';
 
 export default function BlogAdminCta() {
-  const [canManageBlog, setCanManageBlog] = useState(false);
-
-  useEffect(() => {
-    let cancelled = false;
-    (async () => {
-      const { session, user } = await getClientAuth();
-      if (!session?.user || !user) return;
-      const role = await getRoleNameByUserId(user.id, user.email);
-      if (!cancelled) setCanManageBlog(canAccessBlogAdminPanel(role));
-    })();
-    return () => {
-      cancelled = true;
-    };
-  }, []);
+  const canManageBlog = useCanManageBlog();
 
   if (!canManageBlog) return null;
 
@@ -29,7 +14,7 @@ export default function BlogAdminCta() {
 
   return (
     <div className="blog-page__admin-cta">
-      <p>¿Eres administrador o coordinador? Crea noticias y artículos desde el panel del blog.</p>
+      <p>Panel de administrador: crea o edita noticias y artículos del blog.</p>
       <div className="blog-page__admin-cta-actions">
         <Link href={`/admin/blog?tipo=${newsMeta.queryParam}`} className="blog-page__admin-cta-btn">
           {newsMeta.createLabel}
@@ -39,6 +24,18 @@ export default function BlogAdminCta() {
           className="blog-page__admin-cta-btn blog-page__admin-cta-btn--secondary"
         >
           {articleMeta.createLabel}
+        </Link>
+        <Link
+          href={`/admin/blog?tipo=${newsMeta.queryParam}&accion=editar`}
+          className="blog-page__admin-cta-btn blog-page__admin-cta-btn--secondary"
+        >
+          {newsMeta.editPluralLabel}
+        </Link>
+        <Link
+          href={`/admin/blog?tipo=${articleMeta.queryParam}&accion=editar`}
+          className="blog-page__admin-cta-btn blog-page__admin-cta-btn--secondary"
+        >
+          {articleMeta.editPluralLabel}
         </Link>
       </div>
     </div>

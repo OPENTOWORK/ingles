@@ -42,9 +42,11 @@ async function getAdminFetchHeaders() {
 }
 
 function emptyFormForType(contentType) {
+  const type = normalizeBlogContentType(contentType);
   return {
     ...BLOG_EMPTY_FORM,
-    contentType: normalizeBlogContentType(contentType),
+    contentType: type,
+    published: type === BLOG_TYPE_NEWS,
   };
 }
 
@@ -63,6 +65,7 @@ export default function AdminBlogPanel() {
   const [slugTouched, setSlugTouched] = useState(false);
   const editorRef = useRef(null);
   const handledCreateParam = useRef(false);
+  const handledIdParam = useRef('');
 
   const load = useCallback(async () => {
     setError('');
@@ -102,19 +105,48 @@ export default function AdminBlogPanel() {
   }, [router, load]);
 
   useEffect(() => {
+    const id = searchParams.get('id');
     const tipo = searchParams.get('tipo');
-    if (!tipo || handledCreateParam.current) return;
+    const accion = searchParams.get('accion');
+    if (handledCreateParam.current) return;
+    if (!tipo && !id) return;
     handledCreateParam.current = true;
-    const nextType = blogTypeFromQueryParam(tipo);
-    setActiveType(nextType);
-    setForm(emptyFormForType(nextType));
-    setSlugTouched(false);
+
+    if (tipo) {
+      const nextType = blogTypeFromQueryParam(tipo);
+      setActiveType(nextType);
+      if (!id && accion !== 'editar') {
+        setForm(emptyFormForType(nextType));
+        setSlugTouched(false);
+        setSuccess('');
+        setError('');
+        requestAnimationFrame(() => {
+          editorRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        });
+      }
+    }
+  }, [searchParams]);
+
+  useEffect(() => {
+    const id = searchParams.get('id');
+    if (!id || loading || !articles.length || handledIdParam.current === id) return;
+    const article = articles.find((item) => item.id === id);
+    if (!article) {
+      handledIdParam.current = id;
+      setError('No se encontró el contenido a editar.');
+      return;
+    }
+    handledIdParam.current = id;
+    const mapped = mapArticleToClientForm(article);
+    setForm(mapped);
+    setActiveType(mapped.contentType);
+    setSlugTouched(true);
     setSuccess('');
     setError('');
     requestAnimationFrame(() => {
       editorRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
     });
-  }, [searchParams]);
+  }, [searchParams, loading, articles]);
 
   const patchForm = (patch) => setForm((prev) => ({ ...prev, ...patch }));
 
@@ -180,7 +212,14 @@ export default function AdminBlogPanel() {
       const json = await res.json().catch(() => ({}));
       if (!res.ok) throw new Error(json.error || `No se pudo guardar el ${meta.label.toLowerCase()}.`);
 
-      setSuccess(isEdit ? meta.updatedLabel : meta.createdLabel);
+      const saved = json.article ? mapArticleToClientForm(json.article) : form;
+      setSuccess(
+        `${isEdit ? meta.updatedLabel : meta.createdLabel}${
+          saved.published
+            ? ' Ya es visible en /blog.'
+            : ' Guardada como borrador: no aparecerá en /blog hasta que marques «Publicar».'
+        }`,
+      );
       if (!isEdit && json.article) {
         const mapped = mapArticleToClientForm(json.article);
         setForm(mapped);

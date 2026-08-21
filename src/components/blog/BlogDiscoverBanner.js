@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import BlogDraloBrand from '@/components/blog/BlogDraloBrand';
 
 /**
  * @param {{ variant?: 'practice' | 'community' }} props
@@ -7,6 +8,7 @@ export default function BlogDiscoverBanner({ variant = 'practice' }) {
   if (variant === 'community') {
     return (
       <aside className="blog-mag__discover blog-mag__discover--community">
+        <BlogDraloBrand variant="discover" />
         <div className="blog-mag__discover-inner">
           <p className="blog-mag__discover-kicker">Comunidad Dralo</p>
           <h3 className="blog-mag__discover-title">¿Tienes dudas o sugerencias?</h3>
@@ -24,6 +26,7 @@ export default function BlogDiscoverBanner({ variant = 'practice' }) {
 
   return (
     <aside className="blog-mag__discover">
+      <BlogDraloBrand variant="discover" />
       <div className="blog-mag__discover-inner">
         <p className="blog-mag__discover-kicker">Pon en práctica lo que lees</p>
         <h3 className="blog-mag__discover-title">Entrena inglés con exámenes por partes en Dralo</h3>
