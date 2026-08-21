@@ -2,6 +2,7 @@
 
 import { useRef, useState } from 'react';
 import BlogRichTextEditor from '@/components/admin/BlogRichTextEditor';
+import { upsertBlogSlotImage } from '@/lib/blogContent';
 import {
   BLOG_TYPE_ARTICLE,
   BLOG_TYPE_NEWS,
@@ -57,6 +58,7 @@ export default function BlogArticleEditor({
   const [tab, setTab] = useState('content');
   const richEditorRef = useRef(null);
   const inlineImageInputRef = useRef(null);
+  const slotMenuRef = useRef(null);
 
   const contentType = normalizeBlogContentType(form.contentType);
   const meta = blogTypeMeta(contentType);
@@ -79,6 +81,28 @@ export default function BlogArticleEditor({
       );
       const snippet = `<figure><img src="${url}" alt="${(alt || '').replace(/"/g, '')}" loading="lazy" /></figure>`;
       richEditorRef.current?.insertHtml(snippet);
+    } catch {
+      /* parent shows error */
+    }
+  };
+
+  const closeSlotMenu = () => {
+    if (slotMenuRef.current) slotMenuRef.current.open = false;
+  };
+
+  const handleSlotImage = async (event, slot) => {
+    const file = event.target.files?.[0];
+    event.target.value = '';
+    closeSlotMenu();
+    if (!file) return;
+    try {
+      const url = await onUploadImage(file, 'inline');
+      const alt = window.prompt(
+        `Texto alternativo de la imagen ${slot} (SEO):`,
+        form.title || `Imagen ${slot} del ${meta.label.toLowerCase()}`,
+      );
+      const next = upsertBlogSlotImage(form.content, slot, url, alt || '');
+      onChange({ content: next });
     } catch {
       /* parent shows error */
     }
@@ -194,16 +218,41 @@ export default function BlogArticleEditor({
             ) : (
               <p className={styles.coverEmpty}>Sin imagen de portada.</p>
             )}
-            <label className={styles.uploadBtn}>
-              {uploading ? 'Subiendo…' : 'Subir portada'}
-              <input
-                type="file"
-                accept="image/jpeg,image/png,image/webp,image/gif"
-                className={styles.fileInput}
-                disabled={uploading}
-                onChange={handleCoverUpload}
-              />
-            </label>
+            <div className={styles.coverActions}>
+              <label className={styles.uploadBtn}>
+                {uploading ? 'Subiendo…' : 'Subir portada'}
+                <input
+                  type="file"
+                  accept="image/jpeg,image/png,image/webp,image/gif"
+                  className={styles.fileInput}
+                  disabled={uploading}
+                  onChange={handleCoverUpload}
+                />
+              </label>
+              <details ref={slotMenuRef} className={styles.imageMenu}>
+                <summary className={styles.imageMenuSummary}>
+                  Imágenes 1–3
+                </summary>
+                <div className={styles.imageMenuList} role="menu">
+                  {[1, 2, 3].map((slot) => (
+                    <label key={slot} className={styles.imageMenuItem} role="menuitem">
+                      Subir imagen {slot}
+                      <input
+                        type="file"
+                        accept="image/jpeg,image/png,image/webp,image/gif"
+                        className={styles.fileInput}
+                        disabled={uploading}
+                        onChange={(event) => handleSlotImage(event, slot)}
+                      />
+                    </label>
+                  ))}
+                </div>
+              </details>
+            </div>
+            <p className={styles.hint}>
+              La portada se ve en el listado. Las imágenes 1, 2 y 3 van dentro del texto, en ese
+              orden.
+            </p>
           </div>
 
           <div className={styles.contentBlock}>

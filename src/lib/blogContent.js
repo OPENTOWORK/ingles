@@ -80,6 +80,41 @@ function sanitizeImage(tagHtml) {
   return `<img src="${src.replace(/"/g, '&quot;')}" alt="${String(alt).replace(/"/g, '&quot;')}" loading="lazy" />`;
 }
 
+function slotFigureHtml(slot, url, alt = '') {
+  const safeAlt = String(alt || '').replace(/"/g, '');
+  const safeUrl = String(url || '').replace(/"/g, '&quot;');
+  return `<figure data-blog-image="${slot}"><img src="${safeUrl}" alt="${safeAlt}" loading="lazy" /></figure>`;
+}
+
+/**
+ * Inserta o sustituye la imagen 1, 2 o 3 dentro del HTML del artículo/noticia.
+ * @param {string} html
+ * @param {1 | 2 | 3} slot
+ * @param {string} url
+ * @param {string} [alt]
+ */
+export function upsertBlogSlotImage(html, slot, url, alt = '') {
+  const index = Number(slot);
+  if (![1, 2, 3].includes(index) || !url) return String(html || '');
+  const figure = slotFigureHtml(index, url, alt);
+  const raw = String(html || '');
+  const marked = new RegExp(
+    `<figure\\b[^>]*data-blog-image=["']${index}["'][^>]*>[\\s\\S]*?<\\/figure>`,
+    'i',
+  );
+  if (marked.test(raw)) return raw.replace(marked, figure);
+
+  const figures = [...raw.matchAll(/<figure\b[\s\S]*?<\/figure>/gi)];
+  const existing = figures[index - 1];
+  if (existing && typeof existing.index === 'number') {
+    const start = existing.index;
+    return `${raw.slice(0, start)}${figure}${raw.slice(start + existing[0].length)}`;
+  }
+
+  const spacer = raw.trim() ? '<div><br /></div>' : '';
+  return `${raw}${spacer}${figure}`;
+}
+
 /**
  * Sanitiza HTML de artículos del blog (lista blanca básica).
  * @param {string} html
