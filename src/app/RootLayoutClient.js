@@ -14,6 +14,7 @@ import { useActivityHeartbeat } from '@/hooks/useActivityHeartbeat';
 import { usePageViewTracker } from '@/hooks/usePageViewTracker';
 import { useClarityPageTags } from '@/hooks/useClarityPageTags';
 import MicrosoftClarity from '@/components/analytics/MicrosoftClarity';
+import GoogleAnalytics from '@/components/analytics/GoogleAnalytics';
 import { isClarityExcludedPath } from '@/lib/clarity';
 import DeferredSiteAssistant from '@/components/chat/DeferredSiteAssistant';
 import { clearAssistantDismissed } from '@/components/chat/SiteAssistantWidget';
@@ -66,10 +67,15 @@ export default function RootLayoutClient({ children }) {
   const allowWithoutAuth = isPublic || isWritingV3PreviewPath(pathname);
   const heartbeatEnabled = Boolean(session) && !allowWithoutAuth;
   const clarityProjectId = process.env.NEXT_PUBLIC_CLARITY_PROJECT_ID || '';
+  const gaMeasurementId = process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID || 'G-ELSL12SBGQ';
+  const analyticsCookiesEnabled = Boolean(cookieConsent) && Boolean(cookiePreferences.analytics);
   const clarityAnalyticsEnabled =
-    Boolean(cookieConsent) &&
-    Boolean(cookiePreferences.analytics) &&
+    analyticsCookiesEnabled &&
     Boolean(clarityProjectId) &&
+    !isClarityExcludedPath(pathname);
+  const googleAnalyticsEnabled =
+    analyticsCookiesEnabled &&
+    Boolean(gaMeasurementId) &&
     !isClarityExcludedPath(pathname);
 
   useActivityHeartbeat(session, heartbeatEnabled);
@@ -295,6 +301,7 @@ export default function RootLayoutClient({ children }) {
       <SiteNightModeInit />
       <Toaster position="top-center" reverseOrder={false} />
       <MicrosoftClarity enabled={clarityAnalyticsEnabled} projectId={clarityProjectId} />
+      <GoogleAnalytics enabled={googleAnalyticsEnabled} measurementId={gaMeasurementId} />
 
       <AuthenticatedAppShell session={session} userRole={userRole} onLogout={handleLogout}>
         {children}
