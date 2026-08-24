@@ -15,6 +15,7 @@ import { usePageViewTracker } from '@/hooks/usePageViewTracker';
 import { useClarityPageTags } from '@/hooks/useClarityPageTags';
 import MicrosoftClarity from '@/components/analytics/MicrosoftClarity';
 import GoogleAnalytics from '@/components/analytics/GoogleAnalytics';
+import MetaPixel from '@/components/analytics/MetaPixel';
 import { isClarityExcludedPath } from '@/lib/clarity';
 import DeferredSiteAssistant from '@/components/chat/DeferredSiteAssistant';
 import { clearAssistantDismissed } from '@/components/chat/SiteAssistantWidget';
@@ -68,7 +69,10 @@ export default function RootLayoutClient({ children }) {
   const heartbeatEnabled = Boolean(session) && !allowWithoutAuth;
   const clarityProjectId = process.env.NEXT_PUBLIC_CLARITY_PROJECT_ID || '';
   const gaMeasurementId = process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID || 'G-ELSL12SBGQ';
+  const metaPixelId = process.env.NEXT_PUBLIC_META_PIXEL_ID || '';
   const analyticsCookiesEnabled = Boolean(cookieConsent) && Boolean(cookiePreferences.analytics);
+  const personalizationCookiesEnabled =
+    Boolean(cookieConsent) && Boolean(cookiePreferences.personalization);
   const clarityAnalyticsEnabled =
     analyticsCookiesEnabled &&
     Boolean(clarityProjectId) &&
@@ -76,6 +80,10 @@ export default function RootLayoutClient({ children }) {
   const googleAnalyticsEnabled =
     analyticsCookiesEnabled &&
     Boolean(gaMeasurementId) &&
+    !isClarityExcludedPath(pathname);
+  const metaPixelEnabled =
+    personalizationCookiesEnabled &&
+    Boolean(metaPixelId) &&
     !isClarityExcludedPath(pathname);
 
   useActivityHeartbeat(session, heartbeatEnabled);
@@ -302,6 +310,7 @@ export default function RootLayoutClient({ children }) {
       <Toaster position="top-center" reverseOrder={false} />
       <MicrosoftClarity enabled={clarityAnalyticsEnabled} projectId={clarityProjectId} />
       <GoogleAnalytics enabled={googleAnalyticsEnabled} measurementId={gaMeasurementId} />
+      <MetaPixel enabled={metaPixelEnabled} pixelId={metaPixelId} />
 
       <AuthenticatedAppShell session={session} userRole={userRole} onLogout={handleLogout}>
         {children}
